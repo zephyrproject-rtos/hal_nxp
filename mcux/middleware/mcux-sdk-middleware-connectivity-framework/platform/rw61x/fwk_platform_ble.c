@@ -17,8 +17,7 @@
 
 #include "fsl_loader.h"
 #include "fsl_power.h"
-#include "fsl_adapter_rpmsg.h"
-#include "fsl_adapter_rfimu.h"
+#include "fsl_adapter_imu.h"
 #include "fsl_os_abstraction.h"
 
 #include "fwk_config.h"
@@ -194,14 +193,14 @@ static bool PLATFORM_IsHciLinkReady(void);
 static bool PLATFORM_IsBleAwake(void);
 
 /*!
- * \brief RPMSG Rx callback used to receive HCI messages from Controller
+ * \brief IMUMC Rx callback used to receive HCI messages from Controller
  *
  * \param[in] param Usually NULL
  * \param[in] data pointer to data buffer
  * \param[in] len size of the data
- * \return hal_rpmsg_return_status_t tells RPMSG to free or hold the buffer
+ * \return hal_imumc_return_status_t tells IMUMC to free or hold the buffer
  */
-static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_t *data, uint32_t len);
+static hal_imumc_return_status_t PLATFORM_HciImumcRxCallback(void *param, uint8_t *data, uint32_t len);
 
 /*!
  * \brief Set BT Cal Data to Controller
@@ -254,12 +253,12 @@ static void PLATFORM_FillInHciCmdMsg(uint8_t *pbuf, uint16_t opcode, uint8_t msg
 /*                               Private memory                               */
 /* -------------------------------------------------------------------------- */
 
-static RPMSG_HANDLE_DEFINE(hci_rpmsg_handle);
-static hal_rpmsg_config_t hci_rpmsg_config = {
+static IMUMC_HANDLE_DEFINE(hci_imumc_handle);
+static hal_imumc_config_t hci_imumc_config = {
     .local_addr  = 30,
     .remote_addr = 40,
     .imuLink     = (uint8_t)kIMU_LinkCpu2Cpu3,
-    .callback    = PLATFORM_HciRpmsgRxCallback,
+    .callback    = &PLATFORM_HciImumcRxCallback,
     .param       = NULL,
 };
 
@@ -568,8 +567,8 @@ int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
             break;
         }
 
-        /* Send HCI Packet through RPMSG channel */
-        if (HAL_RpmsgSend(hci_rpmsg_handle, msg, len) != kStatus_HAL_RpmsgSuccess)
+        /* Send HCI Packet through IMUMC channel */
+        if (HAL_ImumcSend(hci_imumc_handle, msg, len) != kStatus_HAL_ImumcSuccess)
         {
             ret = -2;
             break;
@@ -724,8 +723,8 @@ static int PLATFORM_InitHciLink(void)
 
     do
     {
-        /* Init RPMSG/IMU Channel */
-        if (HAL_RpmsgInit((hal_rpmsg_handle_t)hci_rpmsg_handle, &hci_rpmsg_config) != kStatus_HAL_RpmsgSuccess)
+        /* Init IMUMC Channel */
+        if (HAL_ImumcInit((hal_imumc_handle_t)hci_imumc_handle, &hci_imumc_config) != kStatus_HAL_ImumcSuccess)
         {
             ret = -1;
             break;
@@ -745,14 +744,14 @@ static int PLATFORM_TerminateHciLink(void)
         PMU_EnableBleWakeup(0x1U);
 
         /* Deinitialize IMU first
-         * Ignoring return value because kStatus_HAL_RpmsgError means it was already deinitialize */
+         * Ignoring return value because kStatus_HAL_ImumcError means it was already deinitialize */
         (void)HAL_ImuDeinit(kIMU_LinkCpu2Cpu3, 0);
 
         /* Clear CPU2 wake up bit after HAL_ImuDeinit() */
         PMU_DisableBleWakeup(0x1U);
 
-        /* Deinitialize RPMSG first */
-        if (HAL_RpmsgDeinit(hci_rpmsg_handle) != kStatus_HAL_RpmsgSuccess)
+        /* Deinitialize IMUMC first */
+        if (HAL_ImumcDeinit(hci_imumc_handle) != kStatus_HAL_ImumcSuccess)
         {
             ret = -2;
             break;
@@ -764,7 +763,7 @@ static int PLATFORM_TerminateHciLink(void)
 
 static bool PLATFORM_IsHciLinkReady(void)
 {
-    return (HAL_ImuLinkIsUp(hci_rpmsg_config.imuLink) == kStatus_HAL_RpmsgSuccess);
+    return (HAL_ImuLinkIsUp(hci_imumc_config.imuLink) == kStatus_HAL_ImumcSuccess);
 }
 
 static bool PLATFORM_IsBleAwake(void)
@@ -772,7 +771,7 @@ static bool PLATFORM_IsBleAwake(void)
     return (blePowerState != ble_asleep_state);
 }
 
-static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
+static hal_imumc_return_status_t PLATFORM_HciImumcRxCallback(void *param, uint8_t *data, uint32_t len)
 {
     bool    handled    = false;
     uint8_t packetType = data[0];
