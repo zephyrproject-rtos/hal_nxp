@@ -59,3 +59,10 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4/raw/MCUX_2.16.100/bin/mcxw71/mcxw71_nbu_ble_15_4_dyn_1_0_17_2.sb3
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
+  - path: imx-boot-firmware/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
+    sha256: ce9618f16d0898fb377ddedccdf5fec0fd1bdc6363b7b0cadc7e77e1d0f2d9c6
+    type: img
+    version: '0.1'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
+    description: "Boot firmware for imx95-19x19-lpddr5-evk board"
