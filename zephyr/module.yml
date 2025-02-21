@@ -39,11 +39,11 @@ blobs:
     description: "WiFi firmware for RW612 A2 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.0.0/readme.txt
   - path: mcxw71/mcxw71_nbu_ble.sb3
-    sha256: 4da8eee6dbc14ef52ec3b1ed678d024a4df78151e350490aaa468ffd1b07f64c
+    sha256: f952d3df86b781982586d0737f29d46c4b7480b6b6e7905c002625f807ac60f4
     type: img
-    version: '1.9.14.0'
-    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-bluetooth-controller/raw/refs/tags/MCUX_2.16.000/bin/mcxw71_nbu_ble_1_9_14_0.sb3
+    version: '24.12.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/36fec038f52171d46a0804434144c600c4233e9f/bin/mcxw71_nbu_ble_hosted.sb3
     description: "BLE Controller for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_ble_all_hosted.bin
     sha256: 753705fa39971bc0350ed2db220814b702792f42db2ea0047f7f8bfb8bf09830
