@@ -1,8 +1,6 @@
-/*
- * Copyright 2021-2022 NXP
+/* SPDX-License-Identifier: BSD-3-Clause
+ * Copyright 2021-2024 NXP
  * All rights reserved.
- *
- * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _BOARD_H_
@@ -20,7 +18,7 @@
 /* The UART to use for debug messages. */
 #define BOARD_USE_LPUART
 #define BOARD_DEBUG_UART_TYPE     kSerialPort_Uart
-#define BOARD_DEBUG_UART_BASEADDR (uint32_t) LPUART1
+#define BOARD_DEBUG_UART_BASEADDR ((uint32_t) LPUART1)
 #define BOARD_DEBUG_UART_INSTANCE 1U
 #define BOARD_DEBUG_UART_CLK_FREQ (CLOCK_GetFreq(kCLOCK_ScgSircClk))
 
@@ -65,26 +63,38 @@
 #define BOARD_LED3_GPIO_PIN 21U
 #endif
 
-#define LED1_INIT(output)                                        \
-    GPIO_PinWrite(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PIN, output); \
-    BOARD_LED1_GPIO->PDDR |= (1U << BOARD_LED1_GPIO_PIN)                          /*!< Enable target LED1 */
-#define LED1_ON()     GPIO_PortSet(BOARD_LED1_GPIO, 1U << BOARD_LED1_GPIO_PIN)    /*!< Turn on target LED1 */
-#define LED1_OFF()    GPIO_PortClear(BOARD_LED1_GPIO, 1U << BOARD_LED1_GPIO_PIN)  /*!< Turn off target LED1 */
-#define LED1_TOGGLE() GPIO_PortToggle(BOARD_LED1_GPIO, 1U << BOARD_LED1_GPIO_PIN) /*!< Toggle on target LED1 */
+#define LED1_INIT(output) do {                                               \
+		GPIO_PinWrite(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PIN, output); \
+		BOARD_LED1_GPIO->PDDR |= (1U << BOARD_LED1_GPIO_PIN);        \
+	} while (0) /*!< Enable target LED1 */
+#define LED1_ON()     GPIO_PortSet(BOARD_LED1_GPIO, 1U << BOARD_LED1_GPIO_PIN)
+	/*!< Turn on target LED1 */
+#define LED1_OFF()    GPIO_PortClear(BOARD_LED1_GPIO, 1U << BOARD_LED1_GPIO_PIN)
+	/*!< Turn off target LED1 */
+#define LED1_TOGGLE() GPIO_PortToggle(BOARD_LED1_GPIO, 1U << BOARD_LED1_GPIO_PIN)
+	/*!< Toggle on target LED1 */
 
-#define LED2_INIT(output)                                        \
-    GPIO_PinWrite(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PIN, output); \
-    BOARD_LED2_GPIO->PDDR |= (1U << BOARD_LED2_GPIO_PIN)                          /*!< Enable target LED2 */
-#define LED2_ON()     GPIO_PortSet(BOARD_LED2_GPIO, 1U << BOARD_LED2_GPIO_PIN)    /*!< Turn on target LED2 */
-#define LED2_OFF()    GPIO_PortClear(BOARD_LED2_GPIO, 1U << BOARD_LED2_GPIO_PIN)  /*!< Turn off target LED2 */
-#define LED2_TOGGLE() GPIO_PortToggle(BOARD_LED2_GPIO, 1U << BOARD_LED2_GPIO_PIN) /*!< Toggle on target LED2 */
+#define LED2_INIT(output) do {                                                \
+		GPIO_PinWrite(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PIN, output); \
+		BOARD_LED2_GPIO->PDDR |= (1U << BOARD_LED2_GPIO_PIN);        \
+	} while (0) /*!< Enable target LED2 */
+#define LED2_ON()     GPIO_PortSet(BOARD_LED2_GPIO, 1U << BOARD_LED2_GPIO_PIN)
+	/*!< Turn on target LED2 */
+#define LED2_OFF()    GPIO_PortClear(BOARD_LED2_GPIO, 1U << BOARD_LED2_GPIO_PIN)
+	/*!< Turn off target LED2 */
+#define LED2_TOGGLE() GPIO_PortToggle(BOARD_LED2_GPIO, 1U << BOARD_LED2_GPIO_PIN)
+	/*!< Toggle on target LED2 */
 
-#define LED3_INIT(output)                                        \
-    GPIO_PinWrite(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PIN, output); \
-    BOARD_LED3_GPIO->PDDR |= (1U << BOARD_LED3_GPIO_PIN)                          /*!< Enable target LED3 */
-#define LED3_ON()     GPIO_PortSet(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)    /*!< Turn on target LED3 */
-#define LED3_OFF()    GPIO_PortClear(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)  /*!< Turn off target LED3 */
-#define LED3_TOGGLE() GPIO_PortToggle(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN) /*!< Toggle on target LED3 */
+#define LED3_INIT(output) do {                                               \
+		GPIO_PinWrite(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PIN, output); \
+		BOARD_LED3_GPIO->PDDR |= (1U << BOARD_LED3_GPIO_PIN);        \
+	} while (0) /*!< Enable target LED3 */
+#define LED3_ON()     GPIO_PortSet(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)
+	/*!< Turn on target LED3 */
+#define LED3_OFF()    GPIO_PortClear(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)
+	/*!< Turn off target LED3 */
+#define LED3_TOGGLE() GPIO_PortToggle(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)
+	/*!< Toggle on target LED3 */
 
 #define BOARD_SW2_NAME        "SW2"
 #define BOARD_SW2_GPIO        GPIOD
