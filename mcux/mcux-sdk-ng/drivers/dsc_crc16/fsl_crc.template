@@ -1,0 +1,11 @@
+    /* Software reset Cyclic ${PERIPHERAL}$. */
+    SIM->PSWR2 |= SIM_PSWR2_CYC${PERIPHERAL}$_MASK;
+    SIM->PSWR2 &= ~SIM_PSWR2_CYC${PERIPHERAL}$_MASK;
+#if defined(${VPREFIX}$_CRCH_INIT)
+    ${PERIPHERAL}$->CRCH = ${VPREFIX}$_CRCH_INIT;
+#endif /* ${VPREFIX}$_CRCH_INIT */ 
+#if defined(${VPREFIX}$_CRCL_INIT)
+    ${PERIPHERAL}$->CRCL = ${VPREFIX}$_CRCL_INIT;
+#endif /* ${VPREFIX}$_CRCL_INIT */  
+
+

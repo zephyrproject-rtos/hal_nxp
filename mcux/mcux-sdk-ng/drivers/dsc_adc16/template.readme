@@ -1,0 +1,12 @@
+1. This template is for ADC peripheral.
+
+2. This init function should do as below
+    function declaration
+    {
+        insert fsl_adc.template
+        insert fsl_adc_conversion.template (Use the placeholder ${CONVERSION_INDEX}$ to represnet dedicate conversion sequence. )
+    }
+
+3. Macro definition
+    fsl_adc_conversion.template
+        ${CONVERSION_INDEX}$ must be digital value and do not add any suffix for the value, say 0U is not owed.

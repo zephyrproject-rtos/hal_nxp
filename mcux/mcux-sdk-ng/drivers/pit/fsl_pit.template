@@ -1,0 +1,5 @@
+#if defined(${VPREFIX}$_MCR_INIT)
+    ${PERIPHERAL}$->MCR = ${VPREFIX}$_MCR_INIT;
+#endif
+
+   

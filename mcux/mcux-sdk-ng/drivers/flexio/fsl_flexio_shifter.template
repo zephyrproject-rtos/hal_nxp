@@ -1,0 +1,16 @@
+  /* Shifter control register SHIFTCTLn initialization, SHIFTER is the shifter index */
+#ifdef ${VPREFIX}$_SHIFTCTL${SHIFTER}$_INIT
+  ${PERIPHERAL}$->SHIFTCTL[${SHIFTER}$] = ${VPREFIX}$_SHIFTCTL${SHIFTER}$_INIT;
+#else
+  ${PERIPHERAL}$->SHIFTCTL[${SHIFTER}$] = 0x0U;
+#endif /* ${VPREFIX}$_SHIFTCTL${SHIFTER}$_INIT */
+
+  /* Shifter configuration register SHIFTCFGn initialization, SHIFTER is the shifter index */
+#ifdef ${VPREFIX}$_SHIFTCFG${SHIFTER}$_INIT
+  ${PERIPHERAL}$->SHIFTCFG[${SHIFTER}$] = ${VPREFIX}$_SHIFTCFG${SHIFTER}$_INIT;
+#else
+  ${PERIPHERAL}$->SHIFTCFG[${SHIFTER}$] = 0x0U;
+#endif /* ${VPREFIX}$_SHIFTCFG${SHIFTER}$_INIT */
+
+  /* Clear the shifter buffer register, SHIFTER is the shifter index */
+  (void)${PERIPHERAL}$->SHIFTBUF[${SHIFTER}$];

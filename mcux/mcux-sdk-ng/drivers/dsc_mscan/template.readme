@@ -1,0 +1,7 @@
+1. This template is for MSCAN pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert fsl_mscan.template
+   }

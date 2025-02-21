@@ -1,0 +1,13 @@
+if (CONFIG_MCUX_COMPONENT_driver.edma_soc)
+    mcux_component_version(2.1.0)
+
+    mcux_add_source(
+        SOURCES fsl_edma_soc.c
+                fsl_edma_soc.h
+    )
+
+    mcux_add_include(
+        INCLUDES .
+    )
+
+endif()
