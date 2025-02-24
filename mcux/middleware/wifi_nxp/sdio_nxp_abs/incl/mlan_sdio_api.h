@@ -45,16 +45,6 @@
 #define sdio_d(...)
 #endif /* CONFIG_WIFI_SDIO_DEBUG */
 
-#define SDIO_GO_IDLE_STATE      ((uint8_t)0)
-#define SDIO_SET_REL_ADDR       ((uint8_t)3)
-#define SDIO_SDIO_SEN_OP_COND   ((uint8_t)5)
-#define SDIO_SEL_DESEL_CARD     ((uint8_t)7)
-#define SDIO_RW_DIRECT          ((uint8_t)52)
-#define SDIO_RW_DIRECT_EXTENDED ((uint8_t)53)
-
-/* Depends on DMA_BUFSZ */
-#define DMA_BOUNDARY_SIZE (512 * 1024)
-
 /** Read Card Register
  *
  * This is used to read card register using CMD52.
