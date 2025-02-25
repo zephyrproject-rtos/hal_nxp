@@ -74,29 +74,24 @@ extern "C"{
 #endif
 
 /*==================================================================================================
-                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
+*                                            CONSTANTS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                        LOCAL MACROS
+*                                       DEFINES AND MACROS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       LOCAL CONSTANTS
+*                                              ENUMS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       LOCAL VARIABLES
+*                                  STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       GLOBAL CONSTANTS
+*                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
-
-/*==================================================================================================
-                                       GLOBAL VARIABLES
-==================================================================================================*/
-
 
 #define MCU_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Mcu_MemMap.h"
@@ -410,7 +405,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 20U
     {
         ETH1_RX_MII_CLK,                    /* Clock name associated to selector */
-        COREPLL_DFS3_CLK,                    /* Name of the selected input source */
+        ETH1_EXT_RX_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -825,7 +820,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 11U
     {
         ETH1_REF_RMII_CLK,                    /* name */
-        10U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -835,7 +830,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 12U
     {
         ETH1_RX_MII_CLK,                    /* name */
-        20U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -845,7 +840,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 13U
     {
         ETH1_RX_RGMII_CLK,                    /* name */
-        10U,                              /* value */
+        1U,                              /* value */
         {
             0U,
         }
@@ -2923,15 +2918,7 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
 
 
 /*==================================================================================================
-                                   LOCAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-/*==================================================================================================
-                                       LOCAL FUNCTIONS
-==================================================================================================*/
-
-/*==================================================================================================
-                                       GLOBAL FUNCTIONS
+*                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
 
 #ifdef __cplusplus
@@ -2939,3 +2926,4 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
 #endif
 
 /** @} */
+
