@@ -485,7 +485,7 @@ endif()
 if(CONFIG_NXP_RF_IMU)
   if(CONFIG_SOC_SERIES_RW6XX)
       list(APPEND CMAKE_MODULE_PATH
-          ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg
+          ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/imu_adapter
           ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/imu
           ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/gdma
       )
