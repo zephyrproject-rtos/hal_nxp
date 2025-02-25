@@ -1,0 +1,113 @@
+---
+#####################################################################################
+# This file is placed under devices/<deivce>
+#
+# The following components(manifest_content) are translated from the devices/<deivce>.meta
+# and devices/<deivce>_device.meta
+#
+# They are used contained the information for manifest generation usage. Currently, they are
+# not related to SW components actions
+#
+# The naming for this component must be consistent in all devices. Generator can get the contents
+# of them directly from the name.
+#
+#####################################################################################
+
+# automatically, from fromChipModel
+device.hardware_data:
+  section-type: "manifest_content"
+  contents:
+    generated_from_chip_model: "yes"
+    devices:
+      - id: "KW45B41Z83xxxA"
+        full_name: "KW45B41Z83xxxA"
+        name: "KW45B41Z83"
+        platform: "Kinetis"
+        series: "W"
+        family: "KW4x"
+        subfamily: "KW45"
+        core:
+          - name: "Cortex-M33"
+            type: "cm33"
+            id: "cm33"
+            description: ""
+            fpu: "SP_FPU"
+            dsp: true
+            mpu: true
+            sau: true
+            frequency_mhz: 96
+        memory:
+          memoryBlock:
+            - id: "PROGRAM_FLASH"
+              name: "PROGRAM_FLASH"
+              addr: 0x0
+              size: 0x100000
+              type: "Flash"
+              access: "RO"
+              default: true
+            - id: "TCM_SYS"
+              name: "TCM_SYS"
+              addr: 0x20000000
+              size: 0x1c000
+              type: "RAM"
+              access: "RW"
+              default: true
+            - id: "TCM_CODE"
+              name: "TCM_CODE"
+              addr: 0x4000000
+              size: 0x4000
+              type: "RAM"
+              access: "RW"
+              default: true
+        total_memory:
+          ram_size_kb: 128
+          flash_size_kb: 1024
+        part:
+          - name: "KW45B41Z83AFTA"
+          - name: "KW45B41Z83AFPA"
+        ips:
+          - "DriverFeature_FLEXCAN_DMA"
+          - "DriverFeature_RTC_RTC"
+          - "DriverFeature_WDOG_WDOG32"
+          - "DriverType_AIPS"
+          - "DriverType_AXBS"
+          - "DriverType_BTLE_RF"
+          - "DriverType_CCM32K"
+          - "DriverType_CMC"
+          - "DriverType_CRC"
+          - "DriverType_DMA3"
+          - "DriverType_EWM"
+          - "DriverType_FLEXCAN"
+          - "DriverType_FLEXIO"
+          - "DriverType_GPIO"
+          - "DriverType_IMU"
+          - "DriverType_LPADC"
+          - "DriverType_LPCMP"
+          - "DriverType_LPC_I3C"
+          - "DriverType_LPI2C"
+          - "DriverType_LPIT"
+          - "DriverType_LPSPI"
+          - "DriverType_LPTMR"
+          - "DriverType_LPUART"
+          - "DriverType_LTC"
+          - "DriverType_MCM"
+          - "DriverType_MSCM"
+          - "DriverType_PORT"
+          - "DriverType_RTC"
+          - "DriverType_SCG"
+          - "DriverType_SEMA42"
+          - "DriverType_SFA"
+          - "DriverType_SMSCM"
+          - "DriverType_SNT"
+          - "DriverType_SPC"
+          - "DriverType_SYSPM"
+          - "DriverType_TPM"
+          - "DriverType_TRDC"
+          - "DriverType_TRGMUX"
+          - "DriverType_TSTMR"
+          - "DriverType_VBAT"
+          - "DriverType_VREF"
+          - "DriverType_WDOG"
+          - "DriverType_WUU"
+        modules:
+...
