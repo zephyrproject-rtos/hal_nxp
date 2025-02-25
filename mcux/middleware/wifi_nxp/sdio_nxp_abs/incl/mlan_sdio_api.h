@@ -49,7 +49,7 @@
 #define SDIO_SET_REL_ADDR       ((uint8_t)3)
 #define SDIO_SDIO_SEN_OP_COND   ((uint8_t)5)
 #define SDIO_SEL_DESEL_CARD     ((uint8_t)7)
-#define SDIO_RW_DIRECT          ((uint8_t)52)
+//#define SDIO_RW_DIRECT          ((uint8_t)52)
 #define SDIO_RW_DIRECT_EXTENDED ((uint8_t)53)
 
 /* Depends on DMA_BUFSZ */

@@ -4101,7 +4101,7 @@ static void test_wlan_set_mac_address(int argc, char **argv)
     wlan_set_mac_addr(raw_mac);
 }
 
-#if defined(RW610) && (CONFIG_WIFI_RESET)
+#if CONFIG_WIFI_RESET
 static void test_wlan_reset(int argc, char **argv)
 {
     int option;
@@ -8871,7 +8871,7 @@ static struct cli_command tests[] = {
 #if CONFIG_WMM
     {"wlan-wmm-stat", "<bss_type>", test_wlan_wmm_tx_stats},
 #endif
-#if defined(RW610) && (CONFIG_WIFI_RESET)
+#if CONFIG_WIFI_RESET
     {"wlan-reset", NULL, test_wlan_reset},
 #endif
 #if CONFIG_ECSA
