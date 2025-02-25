@@ -117,10 +117,10 @@ typedef struct {
   __IO uint32_t PL2_PLMASK_HI;                     /**< Pretended Networking Payload High Filter 2 low order bits / Payload High Mask register, offset: 0xB24 */
   uint8_t RESERVED_7[24];
   struct {                                         /* offset: 0xB40, array step: 0x10 */
-    __I  uint32_t WMBn_CS;                           /**< Wake Up Message Buffer register for C/S, array offset: 0xB40, array step: 0x10 */
-    __I  uint32_t WMBn_ID;                           /**< Wake Up Message Buffer Register for ID, array offset: 0xB44, array step: 0x10 */
-    __I  uint32_t WMBn_D03;                          /**< Wake Up Message Buffer Register for Data 0-3, array offset: 0xB48, array step: 0x10 */
-    __I  uint32_t WMBn_D47;                          /**< Wake Up Message Buffer Register Data 4-7, array offset: 0xB4C, array step: 0x10 */
+    __I  uint32_t CS;                              /**< Wake Up Message Buffer register for C/S, array offset: 0xB40, array step: 0x10 */
+    __I  uint32_t ID;                              /**< Wake Up Message Buffer Register for ID, array offset: 0xB44, array step: 0x10 */
+    __I  uint32_t D03;                             /**< Wake Up Message Buffer Register for Data 0-3, array offset: 0xB48, array step: 0x10 */
+    __I  uint32_t D47;                             /**< Wake Up Message Buffer Register Data 4-7, array offset: 0xB4C, array step: 0x10 */
   } WMB[CAN_WMB_COUNT];
   uint8_t RESERVED_8[128];
   __IO uint32_t FDCTRL;                            /**< CAN FD Control Register, offset: 0xC00 */
