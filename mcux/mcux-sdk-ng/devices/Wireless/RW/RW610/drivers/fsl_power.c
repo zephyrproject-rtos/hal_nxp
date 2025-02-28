@@ -52,6 +52,10 @@
         *((volatile uint32_t *)(addr)) = (val); \
     } while (false)
 
+#define POWER_SAVED_GDET_CLOCK_SOURCE (s_gdetCfgData.TRIM0 & CLKCTL0_ELS_GDET_CLK_SEL_SEL_MASK)
+#define POWER_GDET_CLOCK_SOURCE_64MHZ (CLKCTL0_ELS_GDET_CLK_SEL_SEL(2U))
+#define POWER_GDET_CLOCK_SOURCE_32MHZ (CLKCTL0_ELS_GDET_CLK_SEL_SEL(3U))
+
 typedef struct _power_nvic_context
 {
     uint32_t PriorityGroup;
@@ -1229,6 +1233,8 @@ void Power_InitLoadGdetCfg(power_load_gdet_cfg loadFunc, const power_gdet_data_t
 
     s_gdetCfgloadFunc = loadFunc;
     (void)memcpy(&s_gdetCfgData, data, sizeof(power_gdet_data_t));
+    /* Save GDET clock source on startup */
+    s_gdetCfgData.TRIM0  = CLKCTL0->ELS_GDET_CLK_SEL;
     s_gdetCfgData.CFG[3] = POWER_TrimSvc(data->CFG[3], pack);
 }
 
@@ -1426,24 +1432,36 @@ uint32_t POWER_TrimSvc(uint32_t gdetTrim, uint32_t pack)
         /* A2 */
         /* Autotrim value at [7:0] */
         x = (int32_t)(uint32_t)(gdetTrim & 0xFFUL);
-        if (pack == 0U)
+        if (POWER_SAVED_GDET_CLOCK_SOURCE == POWER_GDET_CLOCK_SOURCE_64MHZ)
         {
-            /* QFN */
-            y1 = (18 * x * x) + (801 * x) + 437290;
-            y3 = y1 / 10000;
+            if (pack == 0U)
+            {
+                /* QFN */
+                y1 = (18 * x * x) + (801 * x) + 437290;
+                y3 = y1 / 10000;
+            }
+            else if (pack == 1U)
+            {
+                /* CSP */
+                y1 = (82 * x * x) - (5171 * x) + 559320;
+                y3 = y1 / 10000;
+            }
+            else
+            {
+                /* BGA */
+                assert(pack == 2U);
+                y1 = (25 * x * x) + (1337 * x) + 381140;
+                y3 = y1 / 10000;
+            }
         }
-        else if (pack == 1U)
+        else if (POWER_SAVED_GDET_CLOCK_SOURCE == POWER_GDET_CLOCK_SOURCE_32MHZ)
         {
-            /* CSP */
-            y1 = (82 * x * x) - (5171 * x) + 559320;
+            y1 = (-63 * x * x) + (10961 * x) + 265000;
             y3 = y1 / 10000;
         }
         else
         {
-            /* BGA */
-            assert(pack == 2U);
-            y1 = (25 * x * x) + (1337 * x) + 381140;
-            y3 = y1 / 10000;
+            assert(false);
         }
 
         trimSvc = ((uint32_t)y3) << 24;
