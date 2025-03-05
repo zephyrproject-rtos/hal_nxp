@@ -1421,7 +1421,8 @@ bool POWER_EnableGDetVSensors(void)
 uint32_t POWER_TrimSvc(uint32_t gdetTrim, uint32_t pack)
 {
     int32_t x;
-    int32_t y1, y3;
+    int32_t y1;
+    int32_t y3 = 0;
     uint32_t trimSvc = gdetTrim;
     uint32_t clk;
     uint32_t rst;
