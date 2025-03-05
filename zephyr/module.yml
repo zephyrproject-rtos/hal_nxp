@@ -66,3 +66,7 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
     description: "Boot firmware for imx95-19x19-lpddr5-evk board"
+package-managers:
+  pip:
+    requirement-files:
+      - zephyr/scripts/requirements.txt
