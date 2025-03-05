@@ -70,3 +70,5 @@ package-managers:
   pip:
     requirement-files:
       - zephyr/scripts/requirements.txt
+runners:
+  - file: zephyr/scripts/spsdk.py
