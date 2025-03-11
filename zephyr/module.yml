@@ -59,3 +59,55 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4/raw/MCUX_2.16.100/bin/mcxw71/mcxw71_nbu_ble_15_4_dyn_1_0_17_2.sb3
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
+
+#For NW61x
+  - path: nw61x/sd_nw61x.bin.se
+    sha256: A0AA4A6761B1105C1F3CCB58EAB2A52D010ED8E228E55BFE5C090DDC33395DBB
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/nw61x/sd_nw61x.bin.se
+    description: "Wi-Fi firmware for NW61x A1 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+  - path: nw61x/uart_nw61x.bin.se
+    sha256: A47E5DE79CBC4D1838D13414A6854C8F2F664CB61F9287546BF3776FC9205B21
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/nw61x/uart_nw61x.bin.se
+    description: "BT firmware for NW61x A1 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+  - path: nw61x/sduart_nw61x.bin.se
+    sha256: D8B33EE84C0F411D296FC20CBD8823EBEBAA4703379AECB5ACB5579B66F719A0
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/nw61x/sduart_nw61x.bin.se
+    description: "Combo firmware for NW61x A1 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+
+#For IW416
+  - path: IW416/sdIW416_wlan.bin
+    sha256: 8D451D19237D25B6EE5976CC0793D66B801A1FEAF191A43B5F314B61F40ACCEE
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/IW416/sdIW416_wlan.bin
+    description: "Wi-Fi firmware for IW416 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+  - path: IW416/uartIW416_bt.bin
+    sha256: 8EF68C3E7AC879D35605D784317936C2D9AEA279EDC4D66729AB1973FBE701C3
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/IW416/uartIW416_bt.bin
+    description: "BT firmware for IW416 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+  - path: IW416/sduartIW416_wlan_bt.bin
+    sha256: B06206ABBAFC08D6E8F883A7D4A975AE19E0AB3CF7E3FE794284F5C6A2FA0E41
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/IW416/sduartIW416_wlan_bt.bin
+    description: "Combo firmware for IW416 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
