@@ -188,12 +188,6 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
     uint8_t idxStart = 0U;
     uint8_t ring;
 
-    /* Setup Tx/Rx buffer descriptor rings. */
-    if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
-    {
-        /* For management ENETC, the SI 0 hardware Tx ring index 0 has been keep for direct switch enqueue feature */
-        idxStart = 1;
-    }
     for (ring = 0; ring < config->siConfig.txRingUse; ring++)
     {
         if (NETC_SIConfigTxBDR(handle->hw.si, ring + idxStart, &bdrConfig->txBdrConfig[ring]) != kStatus_Success)
@@ -1026,13 +1020,6 @@ void EP_ReclaimTxDescriptor(ep_handle_t *handle, uint8_t ring)
     assert(ring < handle->cfg.txRingUse);
     netc_tx_frame_info_t *frameInfo;
     uint8_t hwRing = ring;
-
-    if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
-    {
-        /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
-         * 1 */
-        hwRing = ring + 1U;
-    }
 
     do
     {

@@ -192,3 +192,4 @@ Patch List:
   - mcux-sdk-middleware-ieee_802.15.4: adapt code to be supported with Zephyr
   - mcux-sdk-middleware-usb: Disable the control endpoint ZLT (Zero Length Transaction) of MCUX hal USB controller drivers
     (usb_device_ehci.c and usb_device_lpcip3511.c) in Zephyr environment.
+  - mcux-sdk-ng: drivers: netc: do not limit using ring0 in EP driver
