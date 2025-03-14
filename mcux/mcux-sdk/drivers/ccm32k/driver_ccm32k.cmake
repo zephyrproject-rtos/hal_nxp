@@ -1,4 +1,4 @@
-#Description: GPIO Driver; user_visible: True
+#Description: CCM32K Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ccm32k component is included.")
 
