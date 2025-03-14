@@ -1,0 +1,37 @@
+  if((${PERIPHERAL}$->FMS & FTM_FMS_WPEN_MASK) != 0U)
+  {
+	/* Disable write protection */
+    ${PERIPHERAL}$->MODE |= FTM_MODE_WPDIS_MASK;	
+  }	
+#ifdef ${VPREFIX}$_POL_INIT
+  ${PERIPHERAL}$->POL = ${VPREFIX}$_POL_INIT & ${VPREFIX}$_OUT_INIT_MASK;
+#else
+  ${PERIPHERAL}$->POL = 0x0U;
+#endif /*${VPREFIX}$_POL_INIT*/
+  /* Mask the channel output before the channel init. */
+  ${PERIPHERAL}$->SYNC &= ~FTM_SYNC_SYNCHOM_MASK;
+  ${PERIPHERAL}$->OUTMASK = ${VPREFIX}$_OUT_INIT_MASK;
+  /* Disable the FTM counter */
+  ${PERIPHERAL}$->SC = 0x0U;
+  /* Disable the Quadrature mode first if select it */
+#ifdef ${VPREFIX}$_QDCTRL_INIT
+  ${PERIPHERAL}$->QDCTRL = 0x0U;
+#endif /*${VPREFIX}$_QDCTRL_INIT*/
+#ifdef ${VPREFIX}$_MOD_INIT
+  ${PERIPHERAL}$->MOD = ${VPREFIX}$_MOD_INIT;
+#else
+  ${PERIPHERAL}$->MOD = 0x0U;
+#endif /*${VPREFIX}$_MOD_INIT*/
+#ifdef ${VPREFIX}$_CNTIN_INIT
+  ${PERIPHERAL}$->CNTIN = ${VPREFIX}$_CNTIN_INIT;
+#else
+  ${PERIPHERAL}$->CNTIN = 0x0U;
+#endif /*${VPREFIX}$_CNTIN_INIT*/
+#ifdef ${VPREFIX}$_COMBINE_INIT
+  ${PERIPHERAL}$->COMBINE = ${VPREFIX}$_COMBINE_INIT & ${VPREFIX}$_COMBINE_INIT_MASK;
+#else
+  ${PERIPHERAL}$->COMBINE = 0x0U;
+#endif /*${VPREFIX}$_COMBINE_INIT*/
+#ifdef ${VPREFIX}$_SC_INIT
+  ${PERIPHERAL}$->SC = ${VPREFIX}$_SC_INIT & (~FTM_SC_CLKS_MASK);
+#endif /*${VPREFIX}$_SC_INIT*/

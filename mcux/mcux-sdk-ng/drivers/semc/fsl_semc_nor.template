@@ -1,0 +1,27 @@
+#if defined(${VPREFIX}$_IOCR_INIT)
+    ${PERIPHERAL}$->IOCR = ${VPREFIX}$_IOCR_INIT;
+#endif
+#if defined(${VPREFIX}$_MCR_INIT)
+    ${PERIPHERAL}$->MCR = ${VPREFIX}$_MCR_INIT;
+#endif
+#if defined(${VPREFIX}$_BR5_INIT)
+    ${PERIPHERAL}$->BR[5] = ${VPREFIX}$_BR5_INIT;
+#endif
+#if defined(${VPREFIX}$_NORCR0_INIT)
+    ${PERIPHERAL}$->NORCR0 = ${VPREFIX}$_NORCR0_INIT;
+#endif
+#if defined(${VPREFIX}$_DCCR_INIT)
+    ${PERIPHERAL}$->DCCR = ${VPREFIX}$_DCCR_INIT;
+#endif
+#if defined(${VPREFIX}$_NORCR1_INIT)
+    ${PERIPHERAL}$->NORCR1 = ${VPREFIX}$_NORCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_NORCR2_INIT)
+    ${PERIPHERAL}$->NORCR2 = ${VPREFIX}$_NORCR2_INIT;
+#endif
+#if defined(${VPREFIX}$_IPCR1_INIT)
+    ${PERIPHERAL}$->IPCR1 = ${VPREFIX}$_IPCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_IPCR2_INIT)
+    ${PERIPHERAL}$->IPCR2 = ${VPREFIX}$_IPCR2_INIT;
+#endif

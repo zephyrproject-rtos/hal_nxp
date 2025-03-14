@@ -1,0 +1,13 @@
+if (CONFIG_MCUX_COMPONENT_driver.clock)
+    mcux_component_version(2.1.4)
+
+    mcux_add_source(
+        SOURCES fsl_clock.h
+                fsl_clock.c
+    )
+
+    mcux_add_include(
+        INCLUDES .
+    )
+
+endif()

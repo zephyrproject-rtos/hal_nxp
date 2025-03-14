@@ -1,0 +1,312 @@
+/* Software reset ${PERIPHERAL}$. */
+${PERIPHERAL}$->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+${PERIPHERAL}$->MCR0 |= FLEXSPI_MCR0_SWRESET_MASK;
+while(0UL == (${PERIPHERAL}$->MCR0 & FLEXSPI_MCR0_SWRESET_MASK))
+{
+}
+
+#if defined(${VPREFIX}$_MCR0_INIT)
+    ${PERIPHERAL}$->MCR0 = ${VPREFIX}$_MCR0_INIT;
+#endif
+#if defined(${VPREFIX}$_MCR1_INIT)
+    ${PERIPHERAL}$->MCR1 = ${VPREFIX}$_MCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_MCR2_INIT)
+    ${PERIPHERAL}$->MCR2 = ${VPREFIX}$_MCR2_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBCR_INIT)
+    ${PERIPHERAL}$->AHBCR = ${VPREFIX}$_AHBCR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF0CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[0] = ${VPREFIX}$_AHBRXBUF0CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF1CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[1] = ${VPREFIX}$_AHBRXBUF1CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF2CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[2] = ${VPREFIX}$_AHBRXBUF2CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF3CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[3] = ${VPREFIX}$_AHBRXBUF3CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF4CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[4] = ${VPREFIX}$_AHBRXBUF4CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF5CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[5] = ${VPREFIX}$_AHBRXBUF5CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF6CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[6] = ${VPREFIX}$_AHBRXBUF6CR_INIT;
+#endif
+#if defined(${VPREFIX}$_AHBRXBUF7CR_INIT)
+    ${PERIPHERAL}$->AHBRXBUFCR0[7] = ${VPREFIX}$_AHBRXBUF7CR_INIT;
+#endif
+#if defined(${VPREFIX}$_IPRXFCR_INIT)
+    ${PERIPHERAL}$->IPRXFCR = ${VPREFIX}$_IPRXFCR_INIT;
+#endif
+#if defined(${VPREFIX}$_IPTXFCR_INIT)
+    ${PERIPHERAL}$->IPTXFCR = ${VPREFIX}$_IPTXFCR_INIT;
+#endif
+
+${PERIPHERAL}$->FLSHCR0[0] = 0U;
+${PERIPHERAL}$->FLSHCR0[1] = 0U;
+${PERIPHERAL}$->FLSHCR0[2] = 0U;
+${PERIPHERAL}$->FLSHCR0[3] = 0U;
+
+/* Wait for bus to be idle before use it access to external flash. */
+while(!((0U != (${PERIPHERAL}$->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (${PERIPHERAL}$->STS0 & FLEXSPI_STS0_SEQIDLE_MASK))))
+{
+}
+
+#if defined(${VPREFIX}$_FLSHCR0_INIT)
+    ${PERIPHERAL}$->FLSHCR0[${PORT}$] = ${VPREFIX}$_FLSHCR0_INIT;
+#endif
+#if defined(${VPREFIX}$_FLSHCR1_INIT)
+    ${PERIPHERAL}$->FLSHCR1[${PORT}$] = ${VPREFIX}$_FLSHCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_FLSHCR2_INIT)
+    ${PERIPHERAL}$->FLSHCR2[${PORT}$] = ${VPREFIX}$_FLSHCR2_INIT;
+#endif
+
+/* Wait for bus to be idle before use it access to external flash. */
+while(!((0U != (${PERIPHERAL}$->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (${PERIPHERAL}$->STS0 & FLEXSPI_STS0_SEQIDLE_MASK))))
+{
+}
+
+#if defined(${VPREFIX}$_DLLCR_INIT)
+    ${PERIPHERAL}$->DLLCR[${PORT}$ >> 1U] = ${VPREFIX}$_DLLCR_INIT;
+#endif
+${PERIPHERAL}$->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+#if defined(${VPREFIX}$_DLLCR_INIT)
+#if ((${VPREFIX}$_DLLCR_DLLEN_MASK & ${VPREFIX}$_DLLCR_INIT) != 0UL)
+  uint32_t tmp32 = ((${PORT}$ >> 1U) == 0U) ? (0x1U | 0x2U) : (0x10000U | 0x20000U);
+
+  while(tmp32 != (${PERIPHERAL}$->STS2 & tmp32))
+  {
+  }
+  /* Wait at least 100 NOPs. */
+  for (tmp32 = 100U; tmp32 > 0U; tmp32--)
+  {
+      __NOP();
+  }
+#endif
+#endif
+
+${PERIPHERAL}$->MCR0 != FLEXSPI_MCR0_MDIS_MASK;
+#if defined(${VPREFIX}$_FLSHCR4_INIT)
+    ${PERIPHERAL}$->FLSHCR4 = ${VPREFIX}$_FLSHCR4_INIT;
+#endif
+${PERIPHERAL}$->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+
+/* Wait for bus to be idle before use it access to external flash. */
+while(!((0U != (${PERIPHERAL}$->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (${PERIPHERAL}$->STS0 & FLEXSPI_STS0_SEQIDLE_MASK))))
+{
+}
+
+/* Unlock LUT for update. */
+${PERIPHERAL}$->LUTKEY = FLEXSPI_LUT_KEY_VAL;
+${PERIPHERAL}$->LUTCR = 0x2U;
+
+#if defined(${VPREFIX}$_LUT0_INIT)
+    ${PERIPHERAL}$->LUT[0] = ${VPREFIX}$_LUT0_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT1_INIT)
+    ${PERIPHERAL}$->LUT[1] = ${VPREFIX}$_LUT1_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT2_INIT)
+    ${PERIPHERAL}$->LUT[2] = ${VPREFIX}$_LUT2_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT3_INIT)
+    ${PERIPHERAL}$->LUT[3] = ${VPREFIX}$_LUT3_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT4_INIT)
+    ${PERIPHERAL}$->LUT[4] = ${VPREFIX}$_LUT4_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT5_INIT)
+    ${PERIPHERAL}$->LUT[5] = ${VPREFIX}$_LUT5_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT6_INIT)
+    ${PERIPHERAL}$->LUT[6] = ${VPREFIX}$_LUT6_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT7_INIT)
+    ${PERIPHERAL}$->LUT[7] = ${VPREFIX}$_LUT7_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT8_INIT)
+    ${PERIPHERAL}$->LUT[8] = ${VPREFIX}$_LUT8_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT9_INIT)
+    ${PERIPHERAL}$->LUT[9] = ${VPREFIX}$_LUT9_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT10_INIT)
+    ${PERIPHERAL}$->LUT[10] = ${VPREFIX}$_LUT10_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT11_INIT)
+    ${PERIPHERAL}$->LUT[11] = ${VPREFIX}$_LUT11_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT12_INIT)
+    ${PERIPHERAL}$->LUT[12] = ${VPREFIX}$_LUT12_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT13_INIT)
+    ${PERIPHERAL}$->LUT[13] = ${VPREFIX}$_LUT13_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT14_INIT)
+    ${PERIPHERAL}$->LUT[14] = ${VPREFIX}$_LUT14_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT15_INIT)
+    ${PERIPHERAL}$->LUT[15] = ${VPREFIX}$_LUT15_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT16_INIT)
+    ${PERIPHERAL}$->LUT[16] = ${VPREFIX}$_LUT16_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT17_INIT)
+    ${PERIPHERAL}$->LUT[17] = ${VPREFIX}$_LUT17_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT18_INIT)
+    ${PERIPHERAL}$->LUT[18] = ${VPREFIX}$_LUT18_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT19_INIT)
+    ${PERIPHERAL}$->LUT[19] = ${VPREFIX}$_LUT19_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT20_INIT)
+    ${PERIPHERAL}$->LUT[20] = ${VPREFIX}$_LUT20_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT21_INIT)
+    ${PERIPHERAL}$->LUT[21] = ${VPREFIX}$_LUT21_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT22_INIT)
+    ${PERIPHERAL}$->LUT[22] = ${VPREFIX}$_LUT22_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT23_INIT)
+    ${PERIPHERAL}$->LUT[23] = ${VPREFIX}$_LUT23_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT24_INIT)
+    ${PERIPHERAL}$->LUT[24] = ${VPREFIX}$_LUT24_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT25_INIT)
+    ${PERIPHERAL}$->LUT[25] = ${VPREFIX}$_LUT25_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT26_INIT)
+    ${PERIPHERAL}$->LUT[26] = ${VPREFIX}$_LUT26_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT27_INIT)
+    ${PERIPHERAL}$->LUT[27] = ${VPREFIX}$_LUT27_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT28_INIT)
+    ${PERIPHERAL}$->LUT[28] = ${VPREFIX}$_LUT28_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT29_INIT)
+    ${PERIPHERAL}$->LUT[29] = ${VPREFIX}$_LUT29_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT30_INIT)
+    ${PERIPHERAL}$->LUT[30] = ${VPREFIX}$_LUT30_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT31_INIT)
+    ${PERIPHERAL}$->LUT[31] = ${VPREFIX}$_LUT31_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT32_INIT)
+    ${PERIPHERAL}$->LUT[32] = ${VPREFIX}$_LUT32_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT33_INIT)
+    ${PERIPHERAL}$->LUT[33] = ${VPREFIX}$_LUT33_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT34_INIT)
+    ${PERIPHERAL}$->LUT[34] = ${VPREFIX}$_LUT34_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT35_INIT)
+    ${PERIPHERAL}$->LUT[35] = ${VPREFIX}$_LUT35_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT36_INIT)
+    ${PERIPHERAL}$->LUT[36] = ${VPREFIX}$_LUT36_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT37_INIT)
+    ${PERIPHERAL}$->LUT[37] = ${VPREFIX}$_LUT37_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT38_INIT)
+    ${PERIPHERAL}$->LUT[38] = ${VPREFIX}$_LUT38_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT39_INIT)
+    ${PERIPHERAL}$->LUT[39] = ${VPREFIX}$_LUT39_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT40_INIT)
+    ${PERIPHERAL}$->LUT[40] = ${VPREFIX}$_LUT40_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT41_INIT)
+    ${PERIPHERAL}$->LUT[41] = ${VPREFIX}$_LUT41_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT42_INIT)
+    ${PERIPHERAL}$->LUT[42] = ${VPREFIX}$_LUT42_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT43_INIT)
+    ${PERIPHERAL}$->LUT[43] = ${VPREFIX}$_LUT43_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT44_INIT)
+    ${PERIPHERAL}$->LUT[44] = ${VPREFIX}$_LUT44_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT45_INIT)
+    ${PERIPHERAL}$->LUT[45] = ${VPREFIX}$_LUT45_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT46_INIT)
+    ${PERIPHERAL}$->LUT[46] = ${VPREFIX}$_LUT46_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT47_INIT)
+    ${PERIPHERAL}$->LUT[47] = ${VPREFIX}$_LUT47_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT48_INIT)
+    ${PERIPHERAL}$->LUT[48] = ${VPREFIX}$_LUT48_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT49_INIT)
+    ${PERIPHERAL}$->LUT[49] = ${VPREFIX}$_LUT49_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT50_INIT)
+    ${PERIPHERAL}$->LUT[50] = ${VPREFIX}$_LUT50_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT51_INIT)
+    ${PERIPHERAL}$->LUT[51] = ${VPREFIX}$_LUT51_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT52_INIT)
+    ${PERIPHERAL}$->LUT[52] = ${VPREFIX}$_LUT52_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT53_INIT)
+    ${PERIPHERAL}$->LUT[53] = ${VPREFIX}$_LUT53_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT54_INIT)
+    ${PERIPHERAL}$->LUT[54] = ${VPREFIX}$_LUT54_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT55_INIT)
+    ${PERIPHERAL}$->LUT[55] = ${VPREFIX}$_LUT55_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT56_INIT)
+    ${PERIPHERAL}$->LUT[56] = ${VPREFIX}$_LUT56_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT57_INIT)
+    ${PERIPHERAL}$->LUT[57] = ${VPREFIX}$_LUT57_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT58_INIT)
+    ${PERIPHERAL}$->LUT[58] = ${VPREFIX}$_LUT58_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT59_INIT)
+    ${PERIPHERAL}$->LUT[59] = ${VPREFIX}$_LUT59_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT60_INIT)
+    ${PERIPHERAL}$->LUT[60] = ${VPREFIX}$_LUT60_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT61_INIT)
+    ${PERIPHERAL}$->LUT[61] = ${VPREFIX}$_LUT61_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT62_INIT)
+    ${PERIPHERAL}$->LUT[62] = ${VPREFIX}$_LUT62_INIT;
+#endif
+#if defined(${VPREFIX}$_LUT63_INIT)
+    ${PERIPHERAL}$->LUT[63] = ${VPREFIX}$_LUT63_INIT;
+#endif
+
+/* Lock LUT. */
+${PERIPHERAL}$->LUTKEY = FLEXSPI_LUT_KEY_VAL;
+${PERIPHERAL}$->LUTCR = 0x1U;
+
+/* Software reset ${PERIPHERAL}$. */
+${PERIPHERAL}$->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+${PERIPHERAL}$->MCR0 |= FLEXSPI_MCR0_SWRESET_MASK;
+while(0UL == (${PERIPHERAL}$->MCR0 & FLEXSPI_MCR0_SWRESET_MASK))
+{
+}

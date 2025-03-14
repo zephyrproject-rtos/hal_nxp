@@ -1,0 +1,44 @@
+#if defined(${VPREFIX}$_IOCR_INIT)
+    ${PERIPHERAL}$->IOCR = ${VPREFIX}$_IOCR_INIT;
+#endif
+
+#if defined(${VPREFIX}$_BR6_INIT)
+    ${PERIPHERAL}$->BR[6] = ${VPREFIX}$_BR6_INIT;
+#endif
+#if defined(${VPREFIX}$_BR9_INIT)
+    ${PERIPHERAL}$->BR9 = ${VPREFIX}$_BR9_INIT;
+#endif
+#if defined(${VPREFIX}$_BR10_INIT)
+    ${PERIPHERAL}$->BR10 = ${VPREFIX}$_BR10_INIT;
+#endif
+#if defined(${VPREFIX}$_BR11_INIT)
+    ${PERIPHERAL}$->BR11 = ${VPREFIX}$_BR11_INIT;
+#endif
+
+/* CS0 */
+#if defined(${VPREFIX}$_SRAMCR0_INIT)
+    ${PERIPHERAL}$->SRAMCR0 = ${VPREFIX}$_SRAMCR0_INIT;
+#endif
+/* CS1~CS3 */
+#if defined(${VPREFIX}$_SRAMCR4_INIT)
+    ${PERIPHERAL}$->SRAMCR4 = ${VPREFIX}$_SRAMCR4_INIT;
+#endif
+
+#if defined(${VPREFIX}$_DCCR_INIT)
+    ${PERIPHERAL}$->DCCR = ${VPREFIX}$_DCCR_INIT;
+#endif
+
+/* CS0 */
+#if defined(${VPREFIX}$_SRAMCR1_INIT)
+    ${PERIPHERAL}$->SRAMCR1 = ${VPREFIX}$_SRAMCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_SRAMCR2_INIT)
+    ${PERIPHERAL}$->SRAMCR2 = ${VPREFIX}$_SRAMCR2_INIT;
+#endif
+/* CS1~CS3 */
+#if defined(${VPREFIX}$_SRAMCR5_INIT)
+    ${PERIPHERAL}$->SRAMCR5 = ${VPREFIX}$_SRAMCR5_INIT;
+#endif
+#if defined(${VPREFIX}$_SRAMCR6_INIT)
+    ${PERIPHERAL}$->SRAMCR6 = ${VPREFIX}$_SRAMCR6_INIT;
+#endif

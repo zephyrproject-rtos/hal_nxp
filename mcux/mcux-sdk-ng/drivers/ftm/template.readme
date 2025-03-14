@@ -1,0 +1,60 @@
+1. This template is for FTM pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert fsl_ftm_mode.template
+      insert several fsl_ftm_channel.template (optional, the max channel value need get from FSL_FEATURE_FTM_CHANNEL_COUNTn(base) macro.)
+      insert fsl_ftm.template
+   }
+
+3. Macro definition.
+      fsl_ftm_mode.template:
+          ${VPREFIX}$_OUT_INIT_MASK rule:
+              mask = 0x0;
+              if(CHANNEL0_Init) mask |= 0x1U;
+              if(CHANNEL1_Init) mask |= 0x2U;
+              if(CHANNEL2_Init) mask |= 0x4U;
+              if(CHANNEL3_Init) mask |= 0x8U;
+              if(CHANNEL4_Init) mask |= 0x10U;
+              if(CHANNEL5_Init) mask |= 0x20U;
+              if(CHANNEL6_Init) mask |= 0x40U;
+              if(CHANNEL7_Init) mask |= 0x80U;
+              ${VPREFIX}$_OUT_INIT_MASK = mask;
+          ${VPREFIX}$_COMBINE_INIT_MASK rule:
+              mask = 0x0;
+              if(CHANNEL0_Init || CHANNEL1_Init) mask |= 0x7FU;
+              if(CHANNEL2_Init || CHANNEL3_Init) mask |= 0x7F00U;
+              if(CHANNEL4_Init || CHANNEL5_Init) mask |= 0x7F0000U;
+              if(CHANNEL6_Init || CHANNEL7_Init) mask |= 0x7F000000U;
+              ${VPREFIX}$_COMBINE_INIT_MASK = mask;
+      fsl_ftm_channel.template
+          ${CHANNEL}$ must be 0, 1, 2 ..., don't add any suffix for the number, say 0U or 1U is not allowed.
+      fsl_ftm.template:
+          ${VPREFIX}$_OUT_INIT_MASK rule:
+              mask = 0x0;
+              if(CHANNEL0_Init) mask |= 0x1U;
+              if(CHANNEL1_Init) mask |= 0x2U;
+              if(CHANNEL2_Init) mask |= 0x4U;
+              if(CHANNEL3_Init) mask |= 0x8U;
+              if(CHANNEL4_Init) mask |= 0x10U;
+              if(CHANNEL5_Init) mask |= 0x20U;
+              if(CHANNEL6_Init) mask |= 0x40U;
+              if(CHANNEL7_Init) mask |= 0x80U;
+              ${VPREFIX}$_OUT_INIT_MASK = mask;
+          ${VPREFIX}$_INVCTRL_INIT_MASK rule:
+              mask = 0x0;
+              if(CHANNEL0_Init || CHANNEL1_Init) mask |= 0x1U;
+              if(CHANNEL2_Init || CHANNEL3_Init) mask |= 0x2U;
+              if(CHANNEL4_Init || CHANNEL5_Init) mask |= 0x4U;
+              if(CHANNEL6_Init || CHANNEL7_Init) mask |= 0x8U;
+              ${VPREFIX}$_INVCTRL_INIT_MASK = mask;
+          ${VPREFIX}$_FILTER_INIT_MASK rule:
+              mask = 0x0;
+              if(CHANNEL0_Init) mask |= 0xFU;
+              if(CHANNEL1_Init) mask |= 0xF0U;
+              if(CHANNEL2_Init) mask |= 0xF00U;
+              if(CHANNEL3_Init) mask |= 0xF000U;
+              ${VPREFIX}$_FILTER_INIT_MASK = mask;
+
+
