@@ -20,9 +20,33 @@
  * Definitions
  ******************************************************************************/
 
+/*! @brief Used to control whether SAI_RxSetFifoConfig()/SAI_TxSetFifoConfig()
+ * allows a NULL FIFO watermark.
+ *
+ * If this macro is set to 0 then SAI_RxSetFifoConfig()/SAI_TxSetFifoConfig()
+ * will set the watermark to half of the FIFO's depth if passed a NULL
+ * watermark.
+ */
+#ifndef MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK
+#define MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK 0
+#endif /* MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK */
+
+/*! @brief Disable implicit channel data configuration within SAI_TxSetConfig()/SAI_RxSetConfig().
+ *
+ * Use this macro to control whether SAI_RxSetConfig()/SAI_TxSetConfig() will
+ * attempt to implicitly configure the channel data. By channel data we mean
+ * the startChannel, channelMask, endChannel, and channelNums fields from the
+ * sai_transciever_t structure. By default, SAI_TxSetConfig()/SAI_RxSetConfig()
+ * will attempt to compute these fields, which may not be desired in cases where
+ * the user wants to set them before the call to said functions.
+ */
+#ifndef MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG
+#define MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG 0
+#endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
+
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3 */
 /*! @} */
 
 /*! @brief _sai_status_t, SAI return status.*/
@@ -245,12 +269,10 @@ typedef enum _sai_data_pin_state
 /*! @brief sai fifo combine mode definition */
 typedef enum _sai_fifo_combine
 {
-    kSAI_FifoCombineDisabled               = 0U, /*!< sai TX/RX fifo combine mode disabled */
-    kSAI_FifoCombineModeEnabledOnRead      = 1U, /*!< sai TX fifo combine mode enabled on FIFO reads */
-    kSAI_FifoCombineModeEnabledOnWrite     = 2U, /*!< sai TX fifo combine mode enabled on FIFO write */
-    kSAI_RxFifoCombineModeEnabledOnWrite   = 1U, /*!< sai RX fifo combine mode enabled on FIFO write */
-    kSAI_RXFifoCombineModeEnabledOnRead    = 2U, /*!< sai RX fifo combine mode enabled on FIFO reads */
-    kSAI_FifoCombineModeEnabledOnReadWrite = 3U, /*!< sai TX/RX fifo combined mode enabled on FIFO read/writes */
+    kSAI_FifoCombineDisabled = 0U,          /*!< sai fifo combine mode disabled */
+    kSAI_FifoCombineModeEnabledOnWrite,     /*!< sai fifo combine mode enabled on FIFO write */
+    kSAI_FifoCombineModeEnabledOnRead,      /*!< sai fifo combine mode enabled on FIFO reads */
+    kSAI_FifoCombineModeEnabledOnReadWrite, /*!< sai fifo combined mode enabled on FIFO read/writes */
 } sai_fifo_combine_t;
 #endif
 
