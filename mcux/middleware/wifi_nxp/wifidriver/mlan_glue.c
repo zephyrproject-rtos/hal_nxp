@@ -3,7 +3,7 @@
  *  @brief This file acts as a glue between legacy wlan code and mlan based wlan
  *  code
  *
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -1820,17 +1820,280 @@ bool wrapper_wlan_11d_support_is_enabled(void)
     return wlan_11d_support_is_enabled(pmpriv);
 }
 
+#define WLAN_RSN_AKM_UNSPEC_802_1X "\x00\x0f\xac\x01"
+#define WLAN_RSN_AKM_PSK_OVER_802_1X "\x00\x0f\xac\x02"
+#define WLAN_RSN_AKM_FT_802_1X "\x00\x0f\xac\x03"
+#define WLAN_RSN_AKM_FT_PSK "\x00\x0f\xac\x04"
+#define WLAN_RSN_AKM_802_1X_SHA256 "\x00\x0f\xac\x05"
+#define WLAN_RSN_AKM_PSK_SHA256 "\x00\x0f\xac\x06"
+
+#define WLAN_RSN_AKM_SAE "\x00\x0f\xac\x08"
+#define WLAN_RSN_AKM_FT_SAE "\x00\x0f\xac\x09"
+
+#define WLAN_RSN_AKM_802_1X_SUITE_B "\x00\x0f\xac\x0b"
+#define WLAN_RSN_AKM_802_1X_SUITE_B_192 "\x00\x0f\xac\x0c"
+
+#define WLAN_RSN_AKM_OWE "\x00\x0f\xac\x12"
+
+#define WLAN_RSN_AKM_SAE_EXT_KEY "\x00\x0f\xac\x18"
+
+/* use WLAN_RSN_SUITE_LEN for memcmp as sizeof macro is 5 with 0 end */
+#define WLAN_RSN_SUITE_LEN 4
+
+static t_u32 wifi_rsn_to_key_map(t_u8 *rsn_ie)
+{
+    t_u8 *pos = rsn_ie;
+    t_u16 count;
+    int i;
+    t_u32 val = 0;
+
+    /*  2 bytes header + 2 bytes version + 4 bytes group_cipher_suite +
+     *  2 bytes pairwise_cipher_count + pairwise_cipher_count *
+     * PAIRWISE_CIPHER_SUITE_LEN (4) + 2 bytes akm_suite_count +
+     * akm_suite_count * AKM_SUITE_LEN (4)
+     */
+    pos += 2 + 2 + WLAN_RSN_SUITE_LEN;
+    count = *(t_u16 *)(void *)pos;
+    count = wlan_le16_to_cpu(count);
+
+    pos += 2 + (count * WLAN_RSN_SUITE_LEN);
+    count = *(t_u16 *)(void *)pos;
+    count = wlan_le16_to_cpu(count);
+    pos += 2;
+
+    /* move to akm_suite list and parse to key mgmt bitfield */
+    for (i = 0; i < count; i++)
+    {
+        /* most likely AKM suite PSK, SAE and SAE EXT KEY come first */
+        if (!memcmp(pos, WLAN_RSN_AKM_PSK_OVER_802_1X, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_PSK;
+        else if (!memcmp(pos, WLAN_RSN_AKM_SAE, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_SAE;
+        else if (!memcmp(pos, WLAN_RSN_AKM_SAE_EXT_KEY, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_SAE_EXT_KEY;
+        else if (!memcmp(pos, WLAN_RSN_AKM_UNSPEC_802_1X, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_IEEE8021X;
+        else if (!memcmp(pos, WLAN_RSN_AKM_FT_802_1X, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_FT_IEEE8021X;
+        else if (!memcmp(pos, WLAN_RSN_AKM_FT_PSK, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_FT_PSK;
+        else if (!memcmp(pos, WLAN_RSN_AKM_802_1X_SHA256, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_IEEE8021X_SHA256;
+        else if (!memcmp(pos, WLAN_RSN_AKM_PSK_SHA256, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_PSK_SHA256;
+        else if (!memcmp(pos, WLAN_RSN_AKM_FT_SAE, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_FT_SAE;
+        else if (!memcmp(pos, WLAN_RSN_AKM_802_1X_SUITE_B, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_IEEE8021X_SUITE_B;
+        else if (!memcmp(pos, WLAN_RSN_AKM_802_1X_SUITE_B_192, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_IEEE8021X_SUITE_B_192;
+        else if (!memcmp(pos, WLAN_RSN_AKM_OWE, WLAN_RSN_SUITE_LEN))
+            val |= WLAN_KEY_MGMT_OWE;
+
+        pos += WLAN_RSN_SUITE_LEN;
+    }
+
+    return val;
+}
+
+static void wifi_assoc_clear_rsn_sae_suite(t_u8 *rsn_ie)
+{
+    /* Skip index to 1 byte (RSN information) + 1 byte (Tag length) + 2 byte (RSN version) + 4 byte (Group Cipher
+     * Suite)*/
+    int index      = 8;
+    /* Get pairwise count value from wpa_ie (2 Bytes LE) */
+    uint16_t pairwise_count = rsn_ie[index + 1] << 8 | rsn_ie[index];
+    /* Skip 2 bytes pairwise_count + all pairwise cipher suite in list (Each 4 bytes) */
+    index = index + 2 + pairwise_count * 4;
+    /* Get AKM count value from wpa_ie (2 Bytes LE) */
+    uint16_t akm_count = rsn_ie[index + 1] << 8 | rsn_ie[index];
+    /* Skip 2 bytes akm_count */
+    index = index + 2;
+
+    /* Skip OUI */
+    index = index + 3;
+    for (int i = 0; i < akm_count; i++)
+    {
+        /* Check AKM type field is SAE (0x8) */
+        if (rsn_ie[index] == 0x8)
+        {
+            /* Replace AKM type to PSK (0x2) */
+            rsn_ie[index] = 0x02;
+        }
+        /* Skip OUI (1 byte) + AKM type (1 byte) */
+        index = index + 4;
+    }
+}
+
+static void wifi_assoc_rsno_2_rsn(t_u8 *rsno_ie, size_t rsno_len, t_u8 *rsn_ie, t_u8 *rsn_len)
+{
+    t_u8 tag_len = (t_u8)(rsno_len - MLAN_RSNO_SUITE_OFFSET - sizeof(IEEEtypes_Header_t));
+
+    /* 1 Byte tag, 1 Byte len */
+    rsn_ie[0] = RSN_IE;
+    rsn_ie[1] = tag_len;
+    (void)memcpy(rsn_ie + sizeof(IEEEtypes_Header_t),
+                 rsno_ie + MLAN_RSNO_SUITE_OFFSET + sizeof(IEEEtypes_Header_t), tag_len);
+    (*rsn_len) = tag_len + sizeof(IEEEtypes_Header_t);
+}
+
+/**
+ * Pick preferrence IE from RSNE, RSNO, RSNO2 and WPA IE to
+ * copy to dst IE buffer which we will use to associate.
+ * Convert RSNO or RSNO2 IE to RSN IE if we are using them to connect.
+ *
+ * The security profile is matched before in scan results.
+ * So the case that AP requires secure connection but we are in open mode will not happen.
+ */
+static int wifi_assoc_pick_security_ie(mlan_private *priv, BSSDescriptor_t *d,
+    int wlan_security, int wlan_key_mgmt, bool is_wpa_tkip)
+{
+    t_u32 key_mgmt_network = (t_u32)wlan_key_mgmt;
+    t_u32 key_mgmt_ie_rsno2 = 0;
+    t_u32 key_mgmt_ie_rsno = 0;
+    t_u32 key_mgmt_ie_rsn = 0;
+
+    if (d->prsn_ie)
+    {
+        if (d->prsno2_ie &&
+            d->rsno2_ie_buff_len > MLAN_RSNO_SUITE_OFFSET + sizeof(IEEEtypes_Header_t))
+        {
+            /* skip 3 bytes WFA OUI and 1 byte RSNO2 OUI type */
+            key_mgmt_ie_rsno2 = wifi_rsn_to_key_map((t_u8 *)d->prsno2_ie + MLAN_RSNO_SUITE_OFFSET);
+            if (key_mgmt_network & key_mgmt_ie_rsno2)
+            {
+                priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_RSNO2;
+                if (d->rsno2_ie_buff_len <= MLAN_RSN_MAX_IE_LEN + MLAN_RSNO_SUITE_OFFSET)
+                {
+                    wifi_assoc_rsno_2_rsn((t_u8 *)d->prsno2_ie,
+                        d->rsno2_ie_buff_len, priv->wpa_ie, &priv->wpa_ie_len);
+                    goto rsn_ie_picked;
+                }
+                else
+                {
+                    wifi_e("Failed to copy RSNO2 IE len %d, fall through", d->rsno2_ie_buff_len);
+                }
+            }
+        }
+
+        if (d->prsno_ie &&
+            d->rsno_ie_buff_len > MLAN_RSNO_SUITE_OFFSET + sizeof(IEEEtypes_Header_t))
+        {
+            /* skip 3 bytes WFA OUI and 1 byte RSNO OUI type */
+            key_mgmt_ie_rsno = wifi_rsn_to_key_map((t_u8 *)d->prsno_ie + MLAN_RSNO_SUITE_OFFSET);
+            if (key_mgmt_network & key_mgmt_ie_rsno)
+            {
+                priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_RSNO;
+                if (d->rsno_ie_buff_len <= MLAN_RSN_MAX_IE_LEN + MLAN_RSNO_SUITE_OFFSET)
+                {
+                    wifi_assoc_rsno_2_rsn((t_u8 *)d->prsno_ie,
+                        d->rsno_ie_buff_len, priv->wpa_ie, &priv->wpa_ie_len);
+                    goto rsn_ie_picked;
+                }
+                else
+                {
+                    wifi_e("Failed to copy RSNO IE len %d, fall through", d->rsno_ie_buff_len);
+                }
+            }
+        }
+
+        key_mgmt_ie_rsn = wifi_rsn_to_key_map((t_u8 *)d->prsn_ie);
+        if (key_mgmt_network & key_mgmt_ie_rsn)
+        {
+            if (d->prsno_ie || d->prsno2_ie)
+            {
+                priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_RSN;
+            }
+            else {
+                priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_INVALID;
+            }
+
+            if (d->rsn_ie_buff_len <= MLAN_RSN_MAX_IE_LEN)
+            {
+                (void)memcpy((void *)priv->wpa_ie, (const void *)d->rsn_ie_buff,
+                             d->rsn_ie_buff_len);
+                priv->wpa_ie_len = (t_u8)d->rsn_ie_buff_len;
+                goto rsn_ie_picked;
+            }
+            else
+            {
+                wifi_e("Failed to copy RSN IE len %d, fall through", d->rsn_ie_buff_len);
+            }
+        }
+    }
+
+    if (d->pwpa_ie &&
+        ((wlan_security == WLAN_SECURITY_WPA || wlan_security == WLAN_SECURITY_WPA_WPA2_MIXED)))
+    {
+        priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_INVALID;
+        goto wpa_ie_picked;
+    }
+
+    wifi_d("wifi assoc selecting security profile failed, "
+           "key mgmt network 0x%x rsno2 0x%x rsno 0x%x rsn 0x%x",
+           key_mgmt_network, key_mgmt_ie_rsno2, key_mgmt_ie_rsno, key_mgmt_ie_rsn);
+    priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_INVALID;
+    return WM_SUCCESS;
+
+wpa_ie_picked:
+    priv->sec_info.is_wpa_tkip = is_wpa_tkip;
+    priv->sec_info.wpa_enabled = true;
+    if (d->wpa_ie_buff_len <= sizeof(priv->wpa_ie))
+    {
+        (void)memcpy((void *)priv->wpa_ie, (const void *)d->wpa_ie_buff, d->wpa_ie_buff_len);
+        priv->wpa_ie_len = (t_u8)d->wpa_ie_buff_len;
+    }
+    else
+    {
+        wifi_e("Failed to copy WPA IE");
+        return -WM_FAIL;
+    }
+
+    return WM_SUCCESS;
+
+rsn_ie_picked:
+    priv->sec_info.is_wpa_tkip  = is_wpa_tkip;
+    priv->sec_info.wpa2_enabled = true;
+
+    wifi_d("assoc_pick_rsn: "
+           "key mgmt network 0x%x rsno2 0x%x rsno 0x%x rsn 0x%x",
+           key_mgmt_network, key_mgmt_ie_rsno2, key_mgmt_ie_rsno, key_mgmt_ie_rsn);
+
+#if CONFIG_11R
+    if (wlan_security == WLAN_SECURITY_WPA2 || wlan_security == WLAN_SECURITY_WPA3_SAE ||
+        wlan_security == WLAN_SECURITY_WPA2_WPA3_SAE_MIXED || wlan_security == WLAN_SECURITY_WPA2_FT)
+    {
+        if (d->md_ie_buff_len <= sizeof(priv->md_ie))
+        {
+            (void)memcpy((void *)priv->md_ie, (const void *)d->md_ie_buff, (size_t)d->md_ie_buff_len);
+            priv->md_ie_len = d->md_ie_buff_len;
+        }
+    }
+#endif
+
+    /* In case of WPA3 SAE-PSK mixed mode AP, RSN IE processing sets the SAE AKM,
+     * but if the configured security is WPA2 PSK then AKM must be of PSK
+     * hence update the AKM to WPA2 PSK and reset the PMF capabilities
+     */
+    if (wlan_security == WLAN_SECURITY_WPA2 || wlan_security == WLAN_SECURITY_WPA_WPA2_MIXED)
+    {
+        wifi_assoc_clear_rsn_sae_suite(priv->wpa_ie);
+    }
+
+    return WM_SUCCESS;
+}
+
 /*
  * fixme: This function is temporarily present till the mlan transition is complete.
  */
 int wrapper_wifi_assoc(
-    const unsigned char *bssid, int wlan_security, bool is_wpa_tkip, unsigned int owe_trans_mode, bool is_ft)
+    const unsigned char *bssid, int wlan_security, bool is_wpa_tkip,
+    unsigned int owe_trans_mode, bool is_ft, int key_mgmt)
 {
-#if !CONFIG_11R
-    (void)is_ft;
-#endif
     mlan_private *priv = (mlan_private *)mlan_adap->priv[0];
     t_u8 country_code[COUNTRY_CODE_LEN];
+    int ret;
+
     /* BSSDescriptor_t *bssDesc = OSA_MemoryAllocate(sizeof(BSSDescriptor_t)); */
     /* if (!bssDesc) */
     /* 	return -WM_FAIL; */
@@ -1849,6 +2112,7 @@ int wrapper_wifi_assoc(
     priv->sec_info.ewpa_enabled        = false;
     priv->sec_info.wpa_enabled         = false;
     priv->sec_info.authentication_mode = MLAN_AUTH_MODE_AUTO;
+    priv->sec_info.rsn_selector        = MLAN_RSN_SELECTOR_INVALID;
 
 #if CONFIG_11K
     if (priv->assoc_req_size != 0U)
@@ -1876,99 +2140,16 @@ int wrapper_wifi_assoc(
      * security part is yet not fully integrated into mlan. This will
      * not be necessary after the integration is complete.
      */
-#if CONFIG_WPA2_ENTP
-    if (d->prsn_ie && (wlan_security == WLAN_SECURITY_EAP_TLS || wlan_security == WLAN_SECURITY_EAP_PEAP_MSCHAPV2))
-    {
-        priv->sec_info.wpa2_enabled = true;
-        if (d->rsn_ie_buff_len <= sizeof(priv->wpa_ie))
-        {
-            (void)memcpy(priv->wpa_ie, d->rsn_ie_buff, d->rsn_ie_buff_len);
-            priv->wpa_ie_len = d->rsn_ie_buff_len;
-        }
-        else
-        {
-            wifi_e("Failed to copy RSN IE");
-            return -WM_FAIL;
-        }
-    }
-    else
-#endif
-        if ((d->pwpa_ie != MNULL) && (d->prsn_ie != MNULL) && (wlan_security == WLAN_SECURITY_WPA_WPA2_MIXED))
-    {
-        priv->sec_info.is_wpa_tkip  = is_wpa_tkip;
-        priv->sec_info.wpa2_enabled = true;
-        if (d->rsn_ie_buff_len <= sizeof(priv->wpa_ie))
-        {
-            (void)memcpy((void *)priv->wpa_ie, (const void *)d->rsn_ie_buff, d->rsn_ie_buff_len);
-            priv->wpa_ie_len = (t_u8)d->rsn_ie_buff_len;
-        }
-        else
-        {
-            wifi_e("Failed to copy RSN IE");
-            return -WM_FAIL;
-        }
-    }
-    else if ((d->pwpa_ie != MNULL) &&
-             (wlan_security == WLAN_SECURITY_WPA || wlan_security == WLAN_SECURITY_WPA_WPA2_MIXED))
-    {
-        priv->sec_info.is_wpa_tkip = is_wpa_tkip;
-        priv->sec_info.wpa_enabled = true;
-        if (d->wpa_ie_buff_len <= sizeof(priv->wpa_ie))
-        {
-            (void)memcpy((void *)priv->wpa_ie, (const void *)d->wpa_ie_buff, d->wpa_ie_buff_len);
-            priv->wpa_ie_len = (t_u8)d->wpa_ie_buff_len;
-        }
-        else
-        {
-            wifi_e("Failed to copy WPA IE");
-            return -WM_FAIL;
-        }
-    }
-    else if ((d->prsn_ie != MNULL) &&
 #if CONFIG_11R
-             (!is_ft) &&
+    if (!is_ft)
 #endif
-             (wlan_security == WLAN_SECURITY_WPA2 || wlan_security == WLAN_SECURITY_WPA_WPA2_MIXED ||
-#if CONFIG_DRIVER_OWE
-              owe_trans_mode == OWE_TRANS_MODE_OWE || wlan_security == WLAN_SECURITY_OWE_ONLY ||
-#endif
-              wlan_security == WLAN_SECURITY_WPA3_SAE || wlan_security == WLAN_SECURITY_WPA2_WPA3_SAE_MIXED))
     {
-        if (wlan_security == WLAN_SECURITY_WPA2 || wlan_security == WLAN_SECURITY_WPA_WPA2_MIXED)
-
+        ret = wifi_assoc_pick_security_ie(priv, d, wlan_security, key_mgmt, is_wpa_tkip);
+        if (ret != WM_SUCCESS)
         {
-            priv->sec_info.authentication_mode = MLAN_AUTH_MODE_OPEN;
-        }
-        priv->sec_info.is_wpa_tkip  = is_wpa_tkip;
-        priv->sec_info.wpa2_enabled = true;
-        if (d->rsn_ie_buff_len <= sizeof(priv->wpa_ie))
-        {
-            (void)memcpy((void *)priv->wpa_ie, (const void *)d->rsn_ie_buff, d->rsn_ie_buff_len);
-            priv->wpa_ie_len = (t_u8)d->rsn_ie_buff_len;
-        }
-        else
-        {
-            wifi_e("Failed to copy RSN IE.");
+            wifi_e("wifi_assoc_pick_security_ie failed ret %d", ret);
             return -WM_FAIL;
         }
-#if CONFIG_11R
-        if ((!is_ft) && (wlan_security == WLAN_SECURITY_WPA2 || wlan_security == WLAN_SECURITY_WPA3_SAE ||
-                         wlan_security == WLAN_SECURITY_WPA2_WPA3_SAE_MIXED))
-        {
-            if (d->md_ie_buff_len <= sizeof(priv->md_ie))
-            {
-                (void)memcpy((void *)priv->md_ie, (const void *)d->md_ie_buff, (size_t)d->md_ie_buff_len);
-                priv->md_ie_len = d->md_ie_buff_len;
-            }
-        }
-#endif
-        /* In case of WPA3 SAE-PSK mixed mode AP, RSN IE processing sets the SAE AKM,
-         * but if the configured security is WPA2 PSK then AKM must be of PSK
-         * hence update the AKM to WPA2 PSK and reset the PMF capabilities
-         */
-    }
-    else
-    { /* Do Nothing */
     }
 
     if ((MNULL != d) && (*d->country_info.country_code) && (d->country_info.len > COUNTRY_CODE_LEN) &&
@@ -2494,6 +2675,7 @@ int wifi_nxp_send_assoc(nxp_wifi_assoc_info_t *assoc_info)
     priv->sec_info.ewpa_enabled        = MFALSE;
     priv->sec_info.wpa_enabled         = MFALSE;
     priv->sec_info.authentication_mode = MLAN_AUTH_MODE_AUTO;
+    priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_INVALID;
 
     priv->sec_info.is_wpa_tkip = MFALSE;
 #if CONFIG_11R
@@ -6367,6 +6549,7 @@ static void process_rsn_ie(t_u8 *rsn_ie,
     t_u8 rsn_ft_sae_oui[4] = {0x00, 0x0f, 0xac, 0x09};
     t_u8 wpa3_oui0d[4]     = {0x00, 0x0f, 0xac, 0x0d};
 #endif
+    t_u8 wfa_oui[3] = {0x50, 0x6f, 0x9a};
 
     ENTER();
 
@@ -6379,13 +6562,20 @@ static void process_rsn_ie(t_u8 *rsn_ie,
         /* Do nothing */
     }
 
-    if (rsn_ie[0] != (t_u8)RSN_IE)
+    if (rsn_ie[0] == (t_u8)RSN_IE)
     {
-        goto done;
+        /* Do nothing */
+    }
+    else if (rsn_ie[0] == (t_u8)VENDOR_SPECIFIC_221 &&
+             !memcmp(&rsn_ie[2], wfa_oui, sizeof(wfa_oui)) &&
+             (rsn_ie[5] == MLAN_OUI_TYPE_RSNO || rsn_ie[5] == MLAN_OUI_TYPE_RSNO2))
+    {
+        /* This is RSN Override or RSN Override 2 IE, move ptr to adapt RSN case */
+        rsn_ie += MLAN_RSNO_SUITE_OFFSET;
     }
     else
     {
-        /* Do nothing */
+        goto done;
     }
     /*  2 bytes header + 2 bytes version + 4 bytes group_cipher_suite +
      *  2 bytes pairwise_cipher_count + pairwise_cipher_count *
@@ -6522,8 +6712,8 @@ static void process_rsn_ie(t_u8 *rsn_ie,
                                  (int)pairwise_cipher_count * 4 + (int)sizeof(t_u16) + (int)akm_suite_count * 4);
     rsn_cap = (t_u16)wlan_le16_to_cpu(rsn_cap);
 
-    *ap_mfpc = ((rsn_cap & (0x1 << MFPC_BIT)) == (0x1 << MFPC_BIT));
-    *ap_mfpr = ((rsn_cap & (0x1 << MFPR_BIT)) == (0x1 << MFPR_BIT));
+    (*ap_mfpc) |= ((rsn_cap & (0x1 << MFPC_BIT)) == (0x1 << MFPC_BIT));
+    (*ap_mfpr) &= ((rsn_cap & (0x1 << MFPR_BIT)) == (0x1 << MFPR_BIT));
 done:
     LEAVE();
 }
@@ -6680,6 +6870,10 @@ int wrapper_bssdesc_first_set(int bss_index,
                               t_u8 *ap_pwe)
 {
     uint8_t i = WLAN_SUPPORTED_RATES;
+    t_u8 pwe_rsnx = 0;
+    t_u8 pwe_rsnxo = 0;
+    t_u8 pwe_superset = 0;
+
     if (bss_index >= (int)mlan_adap->num_in_scan_table)
     {
         wifi_w("Unable to find given entry %d in BSS table", bss_index);
@@ -6725,7 +6919,18 @@ int wrapper_bssdesc_first_set(int bss_index,
 
         if (d->prsn_ie != MNULL)
         {
+            (*ap_mfpr)     = 1;
+            /* use superset of RSNE, RSNO and RSNO2 to match with network security profile */
             process_rsn_ie(d->rsn_ie_buff, rsn_mcstCipher, rsn_ucstCipher, ap_mfpc, ap_mfpr, WPA_WPA2_WEP);
+
+            if (d->prsno_ie != MNULL)
+            {
+                process_rsn_ie(d->rsno_ie_buff, rsn_mcstCipher, rsn_ucstCipher, ap_mfpc, ap_mfpr, WPA_WPA2_WEP);
+            }
+            if (d->prsno2_ie != MNULL)
+            {
+                process_rsn_ie(d->rsno2_ie_buff, rsn_mcstCipher, rsn_ucstCipher, ap_mfpc, ap_mfpr, WPA_WPA2_WEP);
+            }
         }
     }
     else
@@ -6737,17 +6942,53 @@ int wrapper_bssdesc_first_set(int bss_index,
         }
     }
 
+    /* use superset of RSNXE and RSNXO */
     if ((d->prsnx_ie != MNULL) && (d->prsnx_ie->data[0] & (0x1 << SAE_H2E_BIT)))
     {
-        *ap_pwe = 2;
+        pwe_rsnx = MBIT(2);
         for (i = WLAN_SUPPORTED_RATES; i > 0; i--)
         {
             if (d->data_rates[i-1] == 0xFB)
             {
-                *ap_pwe = 1;
+                pwe_rsnx = MBIT(1);
                 break;
             }
         }
+    }
+    else
+    {
+        pwe_rsnx = MBIT(0);
+    }
+
+    if (!d->prsnxo_ie)
+    {
+        pwe_rsnxo = 0;
+    }
+    else if (d->prsnxo_ie->data[0] & (0x1 << SAE_H2E_BIT))
+    {
+        pwe_rsnxo = MBIT(2);
+        for (i = WLAN_SUPPORTED_RATES; i > 0; i--)
+        {
+            if (d->data_rates[i - 1] == 0xFB)
+            {
+                pwe_rsnxo = MBIT(1);
+                break;
+            }
+        }
+    }
+    else
+    {
+        pwe_rsnxo = MBIT(0);
+    }
+
+    pwe_superset = (pwe_rsnx | pwe_rsnxo);
+    if (pwe_superset >= 3)
+    {
+        *ap_pwe = 2;
+    }
+    else if (pwe_superset == MBIT(1))
+    {
+        *ap_pwe = 1;
     }
     else
     {

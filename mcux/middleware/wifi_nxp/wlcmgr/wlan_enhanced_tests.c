@@ -1374,9 +1374,10 @@ static void dump_wlan_set_txomi_usage()
 static void test_wlan_set_rutxpwrlimit(int argc, char **argv)
 {
     int rv;
-    uint32_t region_code = (t_u16)strtol(argv[1], NULL, 0);
+
 #if CONFIG_COMPRESS_RU_TX_PWTBL
 #ifdef RW610
+    uint32_t region_code = (t_u16)strtol(argv[1], NULL, 0);
     switch (region_code)
     {
         case RW610_PACKAGE_TYPE_WW:
@@ -1660,16 +1661,16 @@ static void test_wlan_twt_report(int argc, char **argv)
         t_u16 mantissa= p[5] | p[6] << 8;
         t_u16 twt_info= p[7] | p[8] << 8;
         t_u8 btwt_id  = (twt_info & 0xF8) >> 3;
-    
+
         (void)PRINTF("Schedule-[%d]:\r\n", i);
         for (j = 0; j < WLAN_BTWT_REPORT_LEN; j++)
         {
             (void)PRINTF(" 0x%02x", info.data[i * WLAN_BTWT_REPORT_LEN + j]);
         }
         (void)PRINTF("\r\n");
-        
+
         (void)PRINTF(" ## Explain: Broadcast TWT ID = %2d; %s, %s; Interval Exponent = %2d, Mantissa = %2d; Wake Duration = %2d\r\n",
-                    btwt_id, 
+                    btwt_id,
                     (req_typ & BIT(4)) ? "Trigger":"No trigger",
                     (req_typ & BIT(6)) ? "Unannounced":"Announced",
                     (req_typ & 0x7C00) >> 10, //IntervalExponent

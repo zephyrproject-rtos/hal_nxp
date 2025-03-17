@@ -289,7 +289,7 @@ typedef enum _mlan_scan_type
     MLAN_SCAN_TYPE_UNCHANGED = 0,
     MLAN_SCAN_TYPE_ACTIVE,
     MLAN_SCAN_TYPE_PASSIVE,
-#if defined(RW610) || defined(SD9177)
+#if defined(RW610) || defined(SD9177) || defined(SD8978)
     MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE,
 #endif
 } mlan_scan_type;

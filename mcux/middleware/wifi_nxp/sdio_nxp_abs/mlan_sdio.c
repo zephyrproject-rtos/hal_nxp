@@ -7,12 +7,11 @@
  *  SPDX-License-Identifier: BSD-3-Clause
  *
  */
-#include <wmerrno.h>
-#include <board.h>
-#include <wifi_bt_config.h>
 
 #include <mlan_sdio_api.h>
 #include <osa.h>
+#include <fsl_common.h>
+#include <fsl_gpio.h>
 #include <zephyr/sd/sdio.h>
 
 #define SDIO_CMD_TIMEOUT 2000

@@ -97,6 +97,7 @@ static void dump_wlan_set_channel_usage(void)
     (void)PRINTF("\r\n");
 }
 
+#if !defined(SD8978)
 static void dump_wlan_set_radio_mode_usage()
 {
     (void)PRINTF("Usage:\r\n");
@@ -106,6 +107,7 @@ static void dump_wlan_set_radio_mode_usage()
     (void)PRINTF("11: sets the radio in 2.4GHz band, 1X1 mode(path A)\r\n");
     (void)PRINTF("\r\n");
 }
+#endif
 
 static void wlan_rf_channel_set(int argc, char *argv[])
 {
@@ -138,6 +140,7 @@ static void wlan_rf_channel_set(int argc, char *argv[])
     }
 }
 
+#if !defined(SD8978)
 static void dump_wlan_get_radio_mode_usage()
 {
     (void)PRINTF("Usage:\r\n");
@@ -172,6 +175,7 @@ static void wlan_rf_radio_mode_get(int argc, char *argv[])
         dump_wlan_get_radio_mode_usage();
     }
 }
+#endif
 
 static void dump_wlan_get_channel_usage(void)
 {
@@ -378,6 +382,7 @@ static void wlan_rf_bandwidth_get(int argc, char *argv[])
     }
 }
 
+#if !defined(SD8978)
 static void dump_wlan_get_and_reset_per_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -415,6 +420,7 @@ static void wlan_rf_per_get(int argc, char *argv[])
         dump_wlan_get_and_reset_per_usage();
     }
 }
+#endif
 
 static void dump_wlan_set_tx_cont_mode_usage(void)
 {
@@ -918,6 +924,7 @@ disable:
     }
 }
 
+#if !defined(SD8978)
 static void dump_wlan_set_rf_trigger_frame_cfg_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -1369,6 +1376,7 @@ static void wlan_rf_otp_cal_data_get(int argc, char *argv[])
 
     (void)OSA_MemoryFree(cal_data);
 }
+#endif
 
 static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-set-rf-test-mode", NULL, wlan_rf_test_mode_set},
@@ -1383,8 +1391,10 @@ static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-get-rf-bandwidth", NULL, wlan_rf_bandwidth_get},
     {"wlan-set-rf-channel", "<channel>", wlan_rf_channel_set},
     {"wlan-get-rf-channel", NULL, wlan_rf_channel_get},
+#if !defined(SD8978)
     {"wlan-set-rf-radio-mode", "<radio_mode>", wlan_rf_radio_mode_set},
     {"wlan-get-rf-radio-mode", NULL, wlan_rf_radio_mode_get},
+#endif
     {"wlan-set-rf-tx-power", "<tx_power> <modulation> <path_id>", wlan_rf_tx_power_set},
     {"wlan-set-rf-tx-cont-mode", "<enable_tx> <cw_mode> <payload_pattern> <cs_mode> <act_sub_ch> <tx_rate>",
      wlan_rf_tx_cont_mode_set},
@@ -1392,6 +1402,7 @@ static struct cli_command wlan_test_mode_commands[] = {
      "<start> <data_rate> <frame_pattern> <frame_len> <adjust_burst_sifs> <burst_sifs_in_us> <short_preamble> "
      "<act_sub_ch> <short_gi> <adv_coding> <tx_bf> <gf_mode> <stbc> <bssid>",
      wlan_rf_tx_frame_set},
+#if !defined(SD8978)
     {"wlan-set-rf-trigger-frame-cfg",
      "<Enable_tx> <Standalone_hetb> <FRAME_CTRL_TYPE> <FRAME_CTRL_SUBTYPE> <FRAME_DURATION>"
      "<TriggerType> <UlLen> <MoreTF> <CSRequired> <UlBw> <LTFType> <LTFMode>"
@@ -1405,6 +1416,7 @@ static struct cli_command wlan_test_mode_commands[] = {
     {"wlan-get-rf-otp-mac-addr", NULL, wlan_rf_otp_mac_addr_get},
     {"wlan-set-rf-otp-cal-data", NULL, wlan_rf_otp_cal_data_set},
     {"wlan-get-rf-otp-cal-data", NULL, wlan_rf_otp_cal_data_get},
+#endif
 };
 
 int wlan_test_mode_cli_init(void)

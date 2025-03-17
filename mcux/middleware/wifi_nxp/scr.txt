@@ -1,0 +1,9 @@
+Name: NXP Wi-Fi driver
+Outgoing License: BSD 3-Clause "New" or "Revised" License
+License File: LICENSE
+Version: v1.3.r51.z_up.p3
+Format: source code, header files
+Description: NXP Wi-Fi driver and networking utilities
+Location: https://github.com/NXP/wifi_nxp/
+Origin: NXP (BSD-3-Clause)
+        mbedtls (Apache License 2.0) - http://tracker.debian.org/pkg/mbedtls
