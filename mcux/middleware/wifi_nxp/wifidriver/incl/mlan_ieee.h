@@ -3,7 +3,7 @@
  *  @brief This file contains IEEE information element related
  *  definitions used in MLAN and MOAL module.
  *
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -660,6 +660,30 @@ typedef t_u8 WLAN_802_11_RATES[WLAN_SUPPORTED_RATES];
 #define PMF_MASK 0x00c0
 #endif
 
+/** RSN Override IE to RSN IE offset of suite position
+ *  RSN Override IE has 3 Bytes WFA OUI and 1 Byte OUI type
+ *  more than RSN IE
+ */
+#define MLAN_RSNO_SUITE_OFFSET 4
+
+/** Enumeration for RSN Override oui type */
+typedef enum _mlan_rsno_oui_type
+{
+    MLAN_OUI_TYPE_RSNO = 0x29,
+    MLAN_OUI_TYPE_RSNO2 = 0x2a,
+    MLAN_OUI_TYPE_RSNXO = 0x2b,
+    MLAN_OUI_TYPE_RSN_SEL = 0x2c
+} mlan_rsno_oui_type;
+
+/** Enumeration for RSN Override Selector */
+typedef enum _mlan_rsn_selector
+{
+    MLAN_RSN_SELECTOR_RSN = 0,
+    MLAN_RSN_SELECTOR_RSNO,
+    MLAN_RSN_SELECTOR_RSNO2,
+    MLAN_RSN_SELECTOR_INVALID = 0xFF,
+} mlan_rsn_selector;
+
 /** wpa_suite_t */
 typedef MLAN_PACK_START struct _wpa_suite_t
 {
@@ -703,6 +727,32 @@ typedef MLAN_PACK_START struct _IEEEtypes_Rsnx_t
     /** Rsnx : data */
     t_u8 data[1];
 } MLAN_PACK_END IEEEtypes_Rsnx_t, *pIEEEtypes_Rsnx_t;
+
+/** IEEEtypes_Rsnxo_t */
+typedef MLAN_PACK_START struct _IEEEtypes_Rsnxo_t
+{
+    /** Generic IE header */
+    IEEEtypes_Header_t ieee_hdr;
+    /** Rsnxo : wfa oui */
+    t_u8 wfa_oui[3];
+    /** Rsnxo : vendor type */
+    t_u8 vendor_type;
+    /** Rsnxo : data */
+    t_u8 data[1];
+} MLAN_PACK_END IEEEtypes_Rsnxo_t, *pIEEEtypes_Rsnxo_t;
+
+/** IEEEtypes_RsnSelector_t */
+typedef MLAN_PACK_START struct _IEEEtypes_RsnSelector_t
+{
+    /** Generic IE header */
+    IEEEtypes_Header_t ieee_hdr;
+    /** RsnSelector : wfa oui */
+    t_u8 wfa_oui[3];
+    /** RsnSelector : vendor type */
+    t_u8 vendor_type;
+    /** RsnSelector : Selector of RSN IEs, 0: RSNE, 1: RSNO, 2: RSNO2 */
+    t_u8 selector;
+} MLAN_PACK_END IEEEtypes_RsnSelector_t, *pIEEEtypes_RsnSelector_t;
 
 /** IEEEtypes_Wpa_t */
 typedef MLAN_PACK_START struct _IEEEtypes_Wpa_t
@@ -2461,8 +2511,10 @@ typedef struct _BSSDescriptor_t
     t_u16 wpa_offset;
     /** RSN IE */
     IEEEtypes_Generic_t *prsn_ie;
-    /** RSN IE offset in the beacon buffer */
-    t_u16 rsn_offset;
+    /** RSN Override IE */
+    IEEEtypes_Generic_t *prsno_ie;
+    /** RSN Override 2 IE */
+    IEEEtypes_Generic_t *prsno2_ie;
 #ifdef STA_SUPPORT
     /** WAPI IE */
     IEEEtypes_Generic_t *pwapi_ie;
@@ -2524,8 +2576,12 @@ typedef struct _BSSDescriptor_t
     */
     unsigned char wpa_ie_buff[MLAN_WMSDK_MAX_WPA_IE_LEN];
     size_t wpa_ie_buff_len;
-    unsigned char rsn_ie_buff[MLAN_WMSDK_MAX_WPA_IE_LEN];
+    unsigned char rsn_ie_buff[MLAN_RSN_MAX_IE_LEN];
     size_t rsn_ie_buff_len;
+    unsigned char rsno_ie_buff[MLAN_WMSDK_MAX_WPA_IE_LEN];
+    size_t rsno_ie_buff_len;
+    unsigned char rsno2_ie_buff[MLAN_WMSDK_MAX_WPA_IE_LEN];
+    size_t rsno2_ie_buff_len;
 
     bool wps_IE_exist;
     t_u16 wps_session;
@@ -2534,8 +2590,9 @@ typedef struct _BSSDescriptor_t
     /** RSNX IE */
     IEEEtypes_Rsnx_t *prsnx_ie;
     IEEEtypes_Rsnx_t rsnx_ie_saved;
-    /** RSNX IE offset in the beacon buffer */
-    t_u16 rsnx_offset;
+    /** RSNX Override IE */
+    IEEEtypes_Rsnxo_t *prsnxo_ie;
+    IEEEtypes_Rsnxo_t rsnxo_ie_saved;
 
     bool brcm_ie_exist;
     bool epigram_ie_exist;

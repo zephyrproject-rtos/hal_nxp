@@ -1,5 +1,5 @@
 /*
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -190,11 +190,13 @@ int wifi_init_fcc(const uint8_t *fw_start_addr, const size_t size);
  *
  */
 void wifi_deinit(void);
-#ifdef RW610
+
 /**
  * This API can be used to destroy all wifi driver tasks.
  */
 void wifi_destroy_wifidriver_tasks(void);
+
+#ifdef RW610
 /**
  * This API can be used to get IMU task lock.
  */
@@ -907,7 +909,8 @@ unsigned short wifi_get_listen_interval();
 unsigned int wifi_get_delay_to_ps();
 void wifi_configure_null_pkt_interval(unsigned int null_pkt_interval);
 int wrapper_wifi_assoc(
-    const unsigned char *bssid, int wlan_security, bool is_wpa_tkip, unsigned int owe_trans_mode, bool is_ft);
+    const unsigned char *bssid, int wlan_security, bool is_wpa_tkip,
+    unsigned int owe_trans_mode, bool is_ft, int key_mgmt);
 bool wifi_get_xfer_pending(void);
 void wifi_set_xfer_pending(bool xfer_val);
 int wrapper_wlan_cmd_11n_ba_stream_timeout(void *saved_event_buff);
