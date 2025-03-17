@@ -2761,11 +2761,8 @@ void handle_cdint(int error)
     if (!error && g_txrx_flag)
     {
         g_txrx_flag = false;
-#if CONFIG_ZEPHYR
-        (void)OSA_EventNotifyPost(wm_wifi.wifi_core_task_Handle);
-#else
-        (void)OSA_EventSet((osa_event_handle_t)wm_wifi.wifi_event_Handle, WIFI_EVENT_SDIO);
-#endif
+
+        (void)OSA_TaskNotifyPost(wm_wifi.wifi_core_task_Handle);
     }
 }
 
@@ -3057,6 +3054,7 @@ void sd_wifi_deinit(void)
     sdio_drv_deinit();
     (void)mlan_subsys_deinit();
     (void)wlan_deinit_struct();
+    g_txrx_flag = false;
 }
 
 #if CONFIG_FW_VDLL
