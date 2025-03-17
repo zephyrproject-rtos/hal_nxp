@@ -33,120 +33,150 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_RW610
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW_rw610.h"
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8987_AW_CM358_USD
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987_AW_CM358_USD
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x09
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8987_AW_CM358MA_M2
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987_AW_CM358MA_M2
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x09
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8987_MURATA_1ZM_USD
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987_MURATA_1ZM_USD
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1ZM_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x06
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x06
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8987_MURATA_1ZM_M2
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987_MURATA_1ZM_M2
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1ZM_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x06
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x06
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW416_AW_AM457_USD
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_AW_AM457_USD
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x09
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW416_AW_AM457MA_M2
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_AW_AM457MA_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x09
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW416_AW_AM510_USD
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_AW_AM510_USD
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x09
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW416_AW_AM510MA_M2
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_AW_AM510MA_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x09
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW416_MURATA_1XK_USD
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_MURATA_1XK_USD
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x00
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW416_MURATA_1XK_M2
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_MURATA_1XK_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x00
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0C
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW612_MURATA_2EL_USD
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_EU
+    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_EU.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_CA
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_CA.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_WW
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_WW.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_US
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_US.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_JP
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_JP.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW416_REGION_CA
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_1XK_CA.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW612_MURATA_2EL_USD
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW612_MURATA_2EL_M2
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW612_MURATA_2EL_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW611_MURATA_2DL_USD
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW611_MURATA_2DL_USD
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
     WIFI_BT_USE_USD_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_IW611_MURATA_2DL_M2
-    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW611_MURATA_2DL_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
     CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
     WIFI_BT_USE_M2_INTERFACE
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8801_AW_NM191_USD
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_US
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_US_RU_Tx_power.h"
+)
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_JP
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_JP_RU_Tx_power.h"
+)
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_CA
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"
+)
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_EU
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_EU_RU_Tx_power.h"
+)
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X_REGION_WW
+	 WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2EL_WW.h"
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_AW_NM191_USD
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x1B
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8801_AW_NM191MA_M2
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_AW_NM191MA_M2
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x1B
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8801_MURATA_2DS_USD
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_MURATA_2DS_USD
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2DS_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0E
 )
 
-zephyr_compile_definitions_ifdef(CONFIG_88W8801_MURATA_2DS_M2
+zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_MURATA_2DS_M2
     WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2DS_WW.h"
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0E
 )
@@ -263,6 +293,13 @@ zephyr_library_compile_definitions_ifdef(CONFIG_WIFI_NM_HOSTAPD_AP
 
 if(CONFIG_CODE_DATA_RELOCATION)
 if(CONFIG_SPEED_OPTIMIZATIONS OR CONFIG_SIZE_OPTIMIZATIONS)
+
+if(CONFIG_NXP_RW610)
+	set(QUICK_ACCESS_CODE_AREA RAM_TEXT)
+else()
+	set(QUICK_ACCESS_CODE_AREA ITCM_TEXT)
+endif()
+
 # critical path code relocated to SRAM
 zephyr_code_relocate(FILES
                      port/osa/osa.c
@@ -273,13 +310,13 @@ zephyr_code_relocate(FILES
                      wifidriver/mlan_11n_rxreorder.c
                      wifidriver/mlan_wmm.c
                      wifidriver/wifi.c
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 
 if(CONFIG_SDIO_STACK)
 zephyr_code_relocate(FILES
                      sdio_nxp_abs/mlan_sdio.c
                      wifidriver/wifi-sdio.c
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 endif()
 
 if(CONFIG_NXP_RW610)
@@ -292,41 +329,44 @@ endif()
 
 zephyr_code_relocate(FILES
                      ${MCUX_SDK_DIR}/components/osa/fsl_os_abstraction_zephyr.c
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 
 if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 else()
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memcpy.S
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 endif()
 
 file(GLOB ZPERF_SRC ${ZEPHYR_BASE}/subsys/net/lib/zperf/*.c)
 zephyr_code_relocate(FILES ${ZPERF_SRC} LOCATION RAM_TEXT)
 
 zephyr_code_relocate(FILES
-                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_packet.c
-                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets.c
                      ${ZEPHYR_BASE}/subsys/net/ip/connection.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4_fragment.c
                      ${ZEPHYR_BASE}/subsys/net/ip/ipv6.c
                      ${ZEPHYR_BASE}/subsys/net/ip/ipv6_fragment.c
+                     ${ZEPHYR_BASE}/subsys/net/ip/packet_socket.c
+                     ${ZEPHYR_BASE}/subsys/net/ip/utils.c
+                     LOCATION RAM_TEXT)
+
+zephyr_code_relocate(FILES
+                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_packet.c
+                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets.c
+                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4.c
+                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4_fragment.c
                      ${ZEPHYR_BASE}/subsys/net/ip/net_context.c
                      ${ZEPHYR_BASE}/subsys/net/ip/net_core.c
                      ${ZEPHYR_BASE}/subsys/net/ip/net_if.c
                      ${ZEPHYR_BASE}/subsys/net/ip/net_pkt.c
                      ${ZEPHYR_BASE}/subsys/net/ip/net_tc.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/packet_socket.c
                      ${ZEPHYR_BASE}/subsys/net/ip/tcp.c
                      ${ZEPHYR_BASE}/subsys/net/ip/udp.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/utils.c
                      ${ZEPHYR_BASE}/subsys/net/l2/ethernet/ethernet.c
                      ${ZEPHYR_BASE}/lib/net_buf/buf.c
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 
 zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/kernel/mem_slab.c
@@ -338,7 +378,7 @@ zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/kernel/sem.c
                      ${ZEPHYR_BASE}/kernel/thread.c
                      ${ZEPHYR_BASE}/kernel/work.c
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 endif()
 endif()
 

@@ -34,7 +34,12 @@
 
 #define WLAN_MAGIC_NUM (('W' << 0) | ('L' << 8) | ('F' << 16) | ('W' << 24))
 
+#if CONFIG_RF_TEST_MODE
+/* sizeof(HostCmd_DS_COMMAND) in worst case is 2828 where HostCmd_DS_MFG_CMD_OTP_CAL_DATA_T size is 2820 */
+#define WIFI_FW_CMDBUF_SIZE 2832U
+#else
 #define WIFI_FW_CMDBUF_SIZE 2100U
+#endif
 
 #define WIFI_RESP_WAIT_TIME 10
 

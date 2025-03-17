@@ -2,7 +2,7 @@
  *
  *  @brief  This file provides Core WLAN definition
  *
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -151,9 +151,12 @@ extern const unsigned int wlan_fw_bin_len;
 const unsigned char *wlan_fw_bin   = (const unsigned char *)(void *)0;
 const unsigned int wlan_fw_bin_len = 0;
 #endif /* CONFIG_NXP_MONOLITHIC_WIFI */
+#else
+extern const unsigned char *wlan_fw_bin;
+extern const unsigned int wlan_fw_bin_len;
+#endif
 extern int nxp_wifi_wlan_event_callback(enum wlan_event_reason reason, void *data);
 #define wlan_event_callback nxp_wifi_wlan_event_callback
-#endif
 
 static int wifi_wakeup_card_cb(osa_rw_lock_t *plock, unsigned int wait_time);
 
@@ -245,8 +248,8 @@ extern WPS_DATA wps_global;
         (void)wlan.cb(r, data);   \
     }
 
-#ifdef RW610
 OSA_MUTEX_HANDLE_DEFINE(reset_lock);
+#ifdef RW610
 /* Mon thread */
 static bool mon_thread_init = 0;
 #endif
@@ -1812,7 +1815,8 @@ static bool is_sta_connecting(void)
 
     return ((state >= WPA_SCANNING) && (state <= WPA_COMPLETED));
 #else
-    return ((wlan.sta_state > CM_STA_ASSOCIATING) && (wlan.sta_state <= CM_STA_CONNECTED));
+    return ((wlan.sta_state == CM_STA_SCANNING)
+            || ((wlan.sta_state >= CM_STA_ASSOCIATING) && (wlan.sta_state <= CM_STA_CONNECTED)));
 #endif
 }
 
@@ -2152,8 +2156,10 @@ static int do_start(struct wlan_network *network)
                 wpa_supp_set_ap_bw(netif, 1);
             }
 #else
-            wifi_get_active_channel_list(active_chan_list, &active_num_chans,
-                                                 wlan.networks[wlan.cur_uap_network_idx].acs_band);
+            if (network->channel > MAX_CHANNELS_BG)
+                wifi_get_active_channel_list(active_chan_list, &active_num_chans, BAND_5GHZ);
+            else
+                wifi_get_active_channel_list(active_chan_list, &active_num_chans, BAND_2GHZ);
 
             for (i = 0; i < active_num_chans; i++)
             {
@@ -2563,7 +2569,7 @@ static int start_association(struct wlan_network *network, struct wifi_scan_resu
 #endif
 
     ret = wrapper_wifi_assoc(res->bssid, (int)network->security.type, (bool)network->security.ucstCipher.tkip,
-                             owe_trans_mode, is_ft);
+                             owe_trans_mode, is_ft, network->security.key_mgmt);
     if (ret != WM_SUCCESS)
     {
         wlcm_d("association failed");
@@ -2792,7 +2798,6 @@ static void handle_scan_results(void)
         return;
     }
 
-#ifdef RW610
     /* If reset is in process, skip re-scan */
     if (OSA_MutexLock((osa_mutex_handle_t)reset_lock, 0) != WM_SUCCESS)
     {
@@ -2800,7 +2805,6 @@ static void handle_scan_results(void)
         return;
     }
     OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
-#endif
 
     /* We didn't find our network in the scan results set: rescan if we
      * have rescan attempts remaining, otherwise give up.
@@ -3056,7 +3060,7 @@ static void wlcm_process_scan_result_event(struct wifi_message *msg, enum cm_sta
         wifi_scan_done(msg);
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
         /*
-         * Subscribe EVENT_RSSI_LOW if roaming is enabled. 
+         * Subscribe EVENT_RSSI_LOW if roaming is enabled.
          * Do this here in case roaming is not happened or failed in wpa_supplicant.
          */
 #if CONFIG_ROAMING
@@ -4570,7 +4574,7 @@ static int wlan_set_uap_ecsa_cfg(
     }
     else
     {
-        wlcm_e("uap isn't up");
+        wlcm_e("uap isn't up OR station is connected");
         return -WM_FAIL;
     }
 }
@@ -6258,7 +6262,7 @@ static void wlcm_request_scan(struct wifi_message *msg, enum cm_sta_state *next)
     wlcm_d("initiating wlan-scan (return to %s)", dbg_sta_state_name(wlan.sta_state));
 
     wlan.scan_cb       = (int (*)(unsigned int count))(wlan_scan_param->cb);
-	
+
     int ret = wifi_send_scan_cmd((t_u8)g_wifi_scan_params.bss_type, wlan_scan_param->bssid,
                                  ssid, ssid_num,
                                  wlan_scan_param->num_channels, wlan_scan_param->chan_list, wlan_scan_param->num_probes,
@@ -7895,9 +7899,7 @@ static void wlan_wait_wlmgr_ready()
 
 int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
 {
-#ifdef RW610
     static bool reset_mutex_init = 0;
-#endif
     int ret;
     osa_status_t status;
 
@@ -8019,7 +8021,6 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     }
     OSA_SemaphorePost((osa_semaphore_handle_t)wlan.scan_lock);
 
-#ifdef RW610
     if (!reset_mutex_init)
     {
         status = OSA_MutexCreate((osa_mutex_handle_t)reset_lock);
@@ -8034,8 +8035,10 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         }
         reset_mutex_init = 1;
     }
+#ifdef RW610
     if (!mon_thread_init)
     {
+
         status = OSA_MsgQCreate((osa_msgq_handle_t)mon_thread_events, MAX_EVENTS, sizeof(struct wlan_message));
         if (status != KOSA_StatusSuccess)
         {
@@ -8259,18 +8262,6 @@ int wlan_stop(void)
         return WLAN_ERROR_STATE;
     }
 #endif
-
-    /* We need to wait for scan_lock as wifi scan might have been
-     * scheduled, so it must be completed before deleting cm_main_thread
-     * here. Otherwise deadlock situation might arrive as both of them
-     * share command_lock semaphore.
-     */
-    status = OSA_SemaphoreWait((osa_semaphore_handle_t)wlan.scan_lock, osaWaitForever_c);
-    if (status != KOSA_StatusSuccess)
-    {
-        wlcm_w("failed to get scan lock: %d.", ret);
-        return WLAN_ERROR_STATE;
-    }
 #else
 #if CONFIG_WIFI_RECOVERY && UAP_SUPPORT
     /* If CONFIG_WIFI_RECOVERY is defined, 0xb2 CMD will be skipped, but dhcp_server_stop()
@@ -8392,31 +8383,6 @@ int wlan_stop(void)
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wls_csi_sem);
 #endif
 
-#ifndef RW610
-    if (wlan.sta_state > CM_STA_ASSOCIATING)
-    {
-        (void)wifi_deauthenticate((uint8_t *)wlan.networks[wlan.cur_network_idx].bssid);
-        wlan.sta_return_to = CM_STA_IDLE;
-    }
-    if (wlan.uap_state > CM_UAP_CONFIGURED)
-    {
-        (void)wifi_uap_stop();
-//        (void)dhcp_server_stop();
-    }
-
-    status = OSA_TaskDestroy((osa_task_handle_t)wlan.wlcmgr_task_Handle);
-
-    if (status != KOSA_StatusSuccess)
-    {
-        wlcm_w("failed to terminate thread: %d", ret);
-        return WLAN_ERROR_STATE;
-    }
-
-    (void)net_wlan_deinit();
-
-    wlan.status = WLCMGR_INIT_DONE;
-    wlcm_d("WLCMGR thread deleted\n\r");
-#else
     wlan.running = 0;
     wlan.status  = WLCMGR_INACTIVE;
     memset(&wlan, 0x00, sizeof(wlan));
@@ -8424,7 +8390,6 @@ int wlan_stop(void)
     wifi_deinit();
 
     OSA_RWLockDestroy(&sleep_rwlock);
-#endif
 
 #if CONFIG_WMM_UAPSD
     OSA_SemaphoreDestroy((osa_semaphore_handle_t)uapsd_sem);
@@ -10441,7 +10406,6 @@ int wlan_stop_network(const char *name)
 #endif /* UAP_SUPPORT */
 }
 
-#if defined(RW610)
 int wlan_remove_all_networks(void)
 {
     void *intrfc_handle = NULL;
@@ -10454,33 +10418,32 @@ int wlan_remove_all_networks(void)
     wlan_remove_all_network_profiles();
 
     intrfc_handle = net_get_sta_handle();
-    net_interface_down(intrfc_handle);
+    net_if_down(((interface_t *)intrfc_handle)->netif);
 
 #if UAP_SUPPORT
     intrfc_handle = net_get_uap_handle();
-    net_interface_down(intrfc_handle);
+    net_if_down(((interface_t *)intrfc_handle)->netif);
+#endif
     /* wait for mgmt_event handled */
     OSA_TimeDelay(500);
-#endif
 
     return WM_SUCCESS;
 }
 
-#if CONFIG_WIFI_NM_WPA_SUPPLICANT
 int wlan_enable_all_networks(void)
 {
     void *intrfc_handle = NULL;
 
     intrfc_handle = net_get_sta_handle();
-    net_interface_up(intrfc_handle);
+    net_if_up(((interface_t *)intrfc_handle)->netif);
 
 #if UAP_SUPPORT
     intrfc_handle = net_get_uap_handle();
-    net_interface_up(intrfc_handle);
+    net_if_up(((interface_t *)intrfc_handle)->netif);
 #endif
     return WM_SUCCESS;
 }
-#endif
+
 void wlan_destroy_all_tasks(void)
 {
     OSA_LockSchedule();
@@ -10500,6 +10463,7 @@ void wlan_destroy_all_tasks(void)
     OSA_UnlockSchedule();
 }
 
+#if defined(RW610)
 int wlan_imu_get_task_lock(void)
 {
     return wifi_imu_get_task_lock();
@@ -10509,6 +10473,7 @@ int wlan_imu_put_task_lock(void)
 {
     return wifi_imu_put_task_lock();
 }
+#endif
 
 void wlan_reset(cli_reset_option ResetOption)
 {
@@ -10589,8 +10554,10 @@ void wlan_reset(cli_reset_option ResetOption)
 
             wifi_scan_stop();
             mlan_adap->skip_dfs = false;
+#if defined(RW610)
             if (!wifi_fw_is_hang())
                 wifi_send_shutdown_cmd();
+#endif
 
 #if CONFIG_WPA_SUPP
             wifi_supp_deinit();
@@ -10599,8 +10566,13 @@ void wlan_reset(cli_reset_option ResetOption)
 #endif
 #endif
 
+#if defined(RW610)
             /* wait for imu task done */
             wlan_imu_get_task_lock();
+#else
+            g_txrx_flag = false;
+            wifi_sdio_lock();
+#endif
             /* Destroy all tasks before touch the global vars */
             wlan_destroy_all_tasks();
 #if CONFIG_NCP_BRIDGE
@@ -10615,11 +10587,15 @@ void wlan_reset(cli_reset_option ResetOption)
             wlan_free_entp_cert_files();
 #endif
 
+#if defined(RW610)
             wlan_imu_put_task_lock();
+#endif
             /* Clear wlcmgr */
             wlan_stop();
         }
+#if defined(RW610)
         power_off_device(LOAD_WIFI_FIRMWARE);
+#endif
     }
 
     if (ResetOption == CLI_ENABLE_WIFI || ResetOption == CLI_RESET_WIFI)
@@ -10647,7 +10623,6 @@ void wlan_reset(cli_reset_option ResetOption)
             /* update the netif hwaddr after reset */
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
             wlan_set_mac_addr(&wlan.sta_mac[0]);
-            wlan_enable_all_networks();
 #else
 #if UAP_SUPPORT
             net_wlan_set_mac_address(&wlan.sta_mac[0], &wlan.uap_mac[0]);
@@ -10655,6 +10630,8 @@ void wlan_reset(cli_reset_option ResetOption)
             net_wlan_set_mac_address(&wlan.sta_mac[0], NULL);
 #endif
 #endif
+            wlan_enable_all_networks();
+
             /* Unblock TX data */
             wifi_set_tx_status(WIFI_DATA_RUNNING);
             /* Unblock RX data */
@@ -10673,11 +10650,12 @@ void wlan_reset(cli_reset_option ResetOption)
     }
 
     OSA_MutexUnlock((osa_mutex_handle_t)reset_lock);
-	
+
     wlan_in_reset = false;
     PRINTF("--- Done ---\r\n");
 }
 
+#if defined(RW610)
 static void wlcmgr_mon_task(void * data)
 {
 #if CONFIG_HOST_SLEEP

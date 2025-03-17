@@ -4,7 +4,7 @@
  *  structures and declares global function prototypes used
  *  in MLAN module.
  *
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -1034,6 +1034,8 @@ typedef struct _wlan_802_11_security_t
     mlan_auth_mode authentication_mode;
     /** Encryption mode */
     mlan_encryption_mode encryption_mode;
+    /** RSN Selector */
+    mlan_rsn_selector rsn_selector;
 } wlan_802_11_security_t;
 
 /** Current Basic Service Set State Structure */
@@ -1293,7 +1295,6 @@ typedef MLAN_PACK_START struct _mlan_chan_info
 #define HOST_MLME_ASSOC_DONE    MBIT(3)
 #endif
 
-#ifdef RW610
 /**Adapter_operations data structure*/
 typedef struct _bus_operations
 {
@@ -1302,7 +1303,6 @@ typedef struct _bus_operations
     /**Interface header length*/
     t_u32 intf_header_len;
 } bus_operations;
-#endif
 
 /** Private structure for MLAN */
 struct _mlan_private
@@ -1503,7 +1503,7 @@ struct _mlan_private
     /** EWPA query 0: disable, 1: enable */
     bool ewpa_query;
     /** Encryption Key*/
-    t_u8 wpa_ie[MLAN_WMSDK_MAX_WPA_IE_LEN];
+    t_u8 wpa_ie[MLAN_RSN_MAX_IE_LEN];
     /** WPA IE length */
     t_u8 wpa_ie_len;
 #if CONFIG_11R
@@ -2191,10 +2191,8 @@ struct _mlan_adapter
     mlan_callbacks callbacks;
     /** Init parameters */
     mlan_init_para init_para;
-#ifdef RW610
     /** bus operations*/
     bus_operations bus_ops;
-#endif
     /** Country ie ignore */
     t_u8 country_ie_ignore;
     /** In reset status now */
