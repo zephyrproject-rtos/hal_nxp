@@ -2,7 +2,7 @@
  *
  *  @brief MLAN Interface
  *
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -15,6 +15,7 @@
 #include <wlan.h>
 
 #define MLAN_WMSDK_MAX_WPA_IE_LEN 64U
+#define MLAN_RSN_MAX_IE_LEN       255U
 #define MLAN_MAX_MDIE_LEN         10U
 #define MLAN_MAX_VENDOR_IE_LEN    100U
 

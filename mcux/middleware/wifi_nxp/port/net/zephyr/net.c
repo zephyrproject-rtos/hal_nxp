@@ -674,7 +674,7 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
     }
     else if (ret == -WM_E_BUSY)
     {
-        net_e("Wifi Net Busy");
+        net_d("Wifi Net Busy");
         ret = -ETIMEDOUT;
     }
     else

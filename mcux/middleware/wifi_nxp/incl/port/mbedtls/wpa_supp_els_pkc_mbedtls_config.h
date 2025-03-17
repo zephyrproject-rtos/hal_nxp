@@ -1791,6 +1791,7 @@
  */
 #define MBEDTLS_SSL_SESSION_TICKETS
 
+#ifndef MBEDTLS_SSL_EXPORT_KEYS
 /**
  * \def MBEDTLS_SSL_EXPORT_KEYS
  *
@@ -1800,6 +1801,7 @@
  * Comment this macro to disable support for key export
  */
 #define MBEDTLS_SSL_EXPORT_KEYS
+#endif
 
 /**
  * \def MBEDTLS_SSL_SERVER_NAME_INDICATION
@@ -3749,6 +3751,8 @@
 #define MBEDTLS_ENTROPY_HARDWARE_ALT
 #undef MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
 #endif /* CONFIG_BUILD_WITH_TFM */
+
+#undef MBEDTLS_PSA_P256M_DRIVER_ENABLED
 
 /*
  * CBC-MAC is not yet supported via the PSA API in Mbed TLS.

@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r50.z_up.p6"
+#define WLAN_DRV_VERSION "v1.3.r51.z_up.p3"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -2043,14 +2043,13 @@ struct wlan_tx_pert_info
     t_u16 tx_pert_check_num;
 };
 #endif
-#if defined(RW610)
+
 typedef enum
 {
     CLI_DISABLE_WIFI,
     CLI_ENABLE_WIFI,
     CLI_RESET_WIFI,
 } cli_reset_option;
-#endif
 
 enum wlan_mon_task_event
 {
@@ -2349,12 +2348,13 @@ int wlan_get_prov_session(void);
  */
 int wlan_remove_all_network_profiles(void);
 
-#if defined(RW610)
 /** Reset the driver.
  *  \param[in] ResetOption: Option including enable, disable or reset Wi-Fi driver
  *  can be chosen.
  */
 void wlan_reset(cli_reset_option ResetOption);
+
+#if defined(RW610)
 /** Stop and remove all Wi-Fi network (access point).
  *
  *  \return WM_SUCCESS if successful.
@@ -2365,13 +2365,13 @@ int wlan_remove_all_networks(void);
  * This API destroys all tasks.
  */
 void wlan_destroy_all_tasks(void);
+
 /** Retrieve the status information of if Wi-Fi started.
  *
  *  \return TRUE if Wi-Fi network is started.
  *  \return FALSE if not started.
  */
 int wlan_is_started(void);
-
 #endif // RW610
 
 #if CONFIG_NCP_BRIDGE
@@ -3520,7 +3520,7 @@ int wlan_set_ieeeps_cfg(struct wlan_ieeeps_config *ps_cfg);
  * periodically wakes up to check if the AP has any pending packets for it. A
  * longer listen interval implies that the Wi-Fi SoC stays in power save for a
  * longer duration at the cost of additional delays while receiving data.
- * Note that choosing incorrect value for listen interval 
+ * Note that choosing incorrect value for listen interval
  * causes poor response from device during data transfer.
  * Actual listen interval selected by firmware is equal to closest DTIM.\n
  * For example:\n
@@ -5751,7 +5751,7 @@ int wlan_set_crypto_AES_WRAP_encrypt(
 int wlan_set_crypto_AES_WRAP_decrypt(
     const t_u8 *Key, const t_u16 KeyLength, const t_u8 *KeyIV, const t_u16 KeyIVLength, t_u8 *Data, t_u16 *DataLength);
 
-/** Set crypto AES_CCMP (counter mode with cipher block chaining message authentication code protocol) 
+/** Set crypto AES_CCMP (counter mode with cipher block chaining message authentication code protocol)
  * algorithm encrypt command parameters.
  *
  * \param[in] Key: key
