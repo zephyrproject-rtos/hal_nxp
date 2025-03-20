@@ -49,6 +49,9 @@ if(CONFIG_SOC_SERIES_MCXW)
         ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/configs
     )
 
-    set(CONFIG_USE_component_osa_zephyr true)
-    include(set_component_osa)
+    if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+        include(set_component_osa)
+        set(CONFIG_USE_component_osa_zephyr true)
+    endif()
+
 endif()
