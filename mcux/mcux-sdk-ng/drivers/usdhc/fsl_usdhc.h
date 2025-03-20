@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -587,7 +587,11 @@ typedef uint32_t usdhc_adma1_descriptor_t;
 typedef struct _usdhc_adma2_descriptor
 {
     uint32_t attribute;      /*!< The control and status field. */
+#if INTPTR_MAX == INT64_MAX
+    uint32_t address;        /*!< The address field. */
+#else
     const uint32_t *address; /*!< The address field. */
+#endif
 } usdhc_adma2_descriptor_t;
 
 /*!
