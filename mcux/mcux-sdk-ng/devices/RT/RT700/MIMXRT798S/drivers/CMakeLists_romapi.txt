@@ -1,0 +1,27 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+if (CONFIG_MCUX_COMPONENT_driver.romapi)
+    mcux_component_version(2.1.0)
+    mcux_add_source(
+        SOURCES ./romapi/bootloader/fsl_romapi.h
+                ./romapi/bootloader/fsl_romapi.c
+                ./romapi/otp/fsl_romapi_otp.h
+                ./romapi/otp/fsl_romapi_otp.c
+                ./romapi/nboot/fsl_romapi_nboot.h
+                ./romapi/nboot/fsl_romapi_nboot.c
+                ./romapi/iap/fsl_romapi_iap.h
+                ./romapi/iap/fsl_romapi_iap.c
+                ./romapi/iap/fsl_sbloader_v3.h
+    )
+
+    mcux_add_include(
+        INCLUDES ./romapi 
+                 ./romapi/bootloader 
+                 ./romapi/nboot 
+                 ./romapi/iap
+                 ./romapi/otp
+    )
+
+endif()

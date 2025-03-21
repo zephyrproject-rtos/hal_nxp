@@ -1,0 +1,13 @@
+if (CONFIG_MCUX_COMPONENT_driver.ele_base_api)
+    mcux_component_version(1.0.0)
+
+    mcux_add_source(
+        SOURCES fsl_ele_base_api.c
+                fsl_ele_base_api.h
+    )
+
+    mcux_add_include(
+        INCLUDES .
+    )
+
+endif()
