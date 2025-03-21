@@ -587,7 +587,7 @@ typedef uint32_t usdhc_adma1_descriptor_t;
 typedef struct _usdhc_adma2_descriptor
 {
     uint32_t attribute;      /*!< The control and status field. */
-    const uint32_t *address; /*!< The address field. */
+    uint32_t address;        /*!< The address field. */
 } usdhc_adma2_descriptor_t;
 
 /*!
