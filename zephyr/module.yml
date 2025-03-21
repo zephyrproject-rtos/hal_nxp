@@ -59,3 +59,12 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4/raw/MCUX_2.16.100/bin/mcxw71/mcxw71_nbu_ble_15_4_dyn_1_0_17_2.sb3
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
+#SD8987
+  - path: SD8987/sduart8987_wlan_bt.bin.inc
+    sha256: e8f0db42a54769d5d1c54f2b931121713211d3925acb3c8753f117f6376c8ffb
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://raw.githubusercontent.com/NXP/wifi_nxp/mcux_wifi_release/wifi_bt_firmware/8987/sduart8987_wlan_bt.bin.inc
+    description: "Firmware for NXP SD8987 Wi-Fi + Bluetooth single-chip solution"
+    doc-url: https://github.com/NXP/wifi_nxp/blob/mcux_wifi_release/wifi_bt_firmware/version.txt
