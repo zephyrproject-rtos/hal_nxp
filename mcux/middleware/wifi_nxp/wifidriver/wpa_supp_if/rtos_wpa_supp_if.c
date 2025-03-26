@@ -19,6 +19,9 @@
 #include "rtos_wpa_supp_if.h"
 #include "wifi-internal.h"
 #include "supp_main.h"
+#if CONFIG_NXP_WIFI_SOFTAP_SUPPORT
+#include "hapd_main.h"
+#endif
 
 #define MAX_MGMT_TX_FRAME_SIZE 1500
 
