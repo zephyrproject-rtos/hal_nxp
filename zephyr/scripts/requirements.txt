@@ -1,0 +1,2 @@
+# used by NXP platform to generate/flash firmware images
+spsdk == 2.6.0
