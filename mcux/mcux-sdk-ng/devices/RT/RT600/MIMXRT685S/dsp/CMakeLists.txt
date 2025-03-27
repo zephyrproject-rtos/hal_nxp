@@ -8,6 +8,3 @@ include(${SdkRootDirPath}/devices/xtensa/device_header_dsp.cmake)
 
 # middlewares and components
 include(${SdkRootDirPath}/devices/xtensa/shared.cmake)
-
-# common configuration
-include(${SdkRootDirPath}/arch/xtensa/configuration/common.cmake)
