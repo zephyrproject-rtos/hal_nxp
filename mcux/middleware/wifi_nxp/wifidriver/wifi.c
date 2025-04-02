@@ -28,7 +28,7 @@
 
 #endif
 #ifdef RW610
-#include "fsl_adapter_rfimu.h"
+#include "fsl_adapter_imu.h"
 #endif
 
 /* Always keep this include at the end of all include files */

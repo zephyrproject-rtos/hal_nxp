@@ -196,7 +196,6 @@ zephyr_include_directories(
     ${MCUX_SDK_DIR}/components/lists/
     ${MCUX_SDK_DIR}/components/wifi_bt_module/AzureWave/tx_pwr_limits/
     ${MCUX_SDK_DIR}/components/wifi_bt_module/Murata/tx_pwr_limits/
-    ${MCUX_SDK_DIR}/components/rpmsg/
 )
 
 # OS abstraction layer source
@@ -287,8 +286,7 @@ if(CONFIG_NXP_RW610)
 zephyr_code_relocate(FILES
                      wifidriver/wifi-imu.c
                      ${MCUX_SDK_DIR}/drivers/imu/fsl_imu.c
-                     # Only legacy SDK has this file.
-                     ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/rpmsg/fsl_adapter_rfimu.c
+                     ${MCUX_SDK_DIR}/components/imu_adapter/fsl_adapter_imu.c
                      LOCATION RAM_TEXT)
 endif()
 
