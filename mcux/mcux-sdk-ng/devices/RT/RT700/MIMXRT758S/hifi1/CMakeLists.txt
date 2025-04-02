@@ -10,4 +10,4 @@ include(${SdkRootDirPath}/devices/xtensa/device_header_hifi1.cmake)
 include(${SdkRootDirPath}/devices/xtensa/shared.cmake)
 
 # common configuration
-include(${SdkRootDirPath}/arch/xtensa/configuration/common.cmake)
+#include(${SdkRootDirPath}/arch/xtensa/configuration/common.cmake)

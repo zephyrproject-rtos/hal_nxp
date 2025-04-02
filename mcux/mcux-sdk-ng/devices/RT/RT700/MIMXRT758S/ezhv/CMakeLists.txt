@@ -9,4 +9,4 @@ include(${SdkRootDirPath}/devices/ezhv/device_header_ezhv.cmake)
 include(${SdkRootDirPath}/devices/ezhv/shared.cmake)
 
 # common configuration
-include(${SdkRootDirPath}/arch/riscv/configuration/common.cmake)
+#include(${SdkRootDirPath}/arch/riscv/configuration/common.cmake)
