@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024, 2025 NXP
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -9,5 +9,3 @@ include(${SdkRootDirPath}/devices/xtensa/device_header_dsp.cmake)
 # middlewares and components
 include(${SdkRootDirPath}/devices/xtensa/shared.cmake)
 
-# common configuration
-include(${SdkRootDirPath}/arch/xtensa/configuration/common.cmake)
