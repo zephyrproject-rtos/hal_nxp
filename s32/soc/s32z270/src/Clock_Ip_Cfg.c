@@ -940,9 +940,9 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 23U
     {
         P0_PSI5_189K_CLK,                    /* name */
-        3306U,                              /* value */
+        8U,                              /* value */
         {
-            2U,
+            0U,
         }
     },
     #endif
@@ -1210,9 +1210,9 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 50U
     {
         P4_PSI5_189K_CLK,                    /* name */
-        3306U,                              /* value */
+        8U,                              /* value */
         {
-            2U,
+            0U,
         }
     },
     #endif
