@@ -190,7 +190,8 @@ static mlan_status wlan_uap_cmd_ap_config(pmlan_private pmpriv,
     }
 
     if ((bss->param.bss_config.auth_mode <= MLAN_AUTH_MODE_SHARED) ||
-        (bss->param.bss_config.auth_mode == MLAN_AUTH_MODE_AUTO))
+        (bss->param.bss_config.auth_mode == MLAN_AUTH_MODE_AUTO) ||
+        (bss->param.bss_config.auth_mode == MLAN_AUTH_MODE_SAE))
     {
         tlv_auth_type                 = (MrvlIEtypes_auth_type_t *)tlv;
         tlv_auth_type->header.type    = wlan_cpu_to_le16(TLV_TYPE_AUTH_TYPE);
