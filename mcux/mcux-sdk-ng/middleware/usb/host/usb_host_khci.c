@@ -8,12 +8,19 @@
 
 #include "usb_host_config.h"
 #if ((defined USB_HOST_CONFIG_KHCI) && (USB_HOST_CONFIG_KHCI))
+/* CONFIG_UHC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if (defined CONFIG_UHC_DRIVER)
+#include "usb_host_mcux_drv_port.h"
+#include "fsl_device_registers.h"
+#include "usb_host_khci.h"
+#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "fsl_device_registers.h"
 #include "usb_host_khci.h"
 #include "usb_host_devices.h"
 #include "usb_host_framework.h"
+#endif
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -1723,11 +1730,11 @@ usb_status_t USB_HostKhciOpenPipe(usb_host_controller_handle controllerHandle,
         else
         {
             tempPipePointer = usbHostPointer->pipeDescriptorBasePointer;
-            while (NULL != tempPipePointer)
+            do
             {
                 prePipePointer  = tempPipePointer;
                 tempPipePointer = tempPipePointer->next;
-            }
+            } while (NULL != tempPipePointer);
             prePipePointer->next = pipePointer;
         }
         pipePointer->next = NULL;
@@ -2012,7 +2019,11 @@ static usb_status_t _USB_HostKhciBusControl(usb_host_controller_handle handle, u
         _USB_HostKhciDelay(usbHostPointer, 30U);
         usbHostPointer->usbRegBase->CTL &= (uint8_t)(~USB_CTL_RESET_MASK);
         usbHostPointer->usbRegBase->CTL |= USB_CTL_ODDRST_MASK;
+#if (defined CONFIG_UHC_DRIVER)
+        usbHostPointer->usbRegBase->CTL = USB_CTL_HOSTMODEEN_MASK | USB_CTL_USBENSOFEN_MASK;
+#else
         usbHostPointer->usbRegBase->CTL = USB_CTL_HOSTMODEEN_MASK;
+#endif
 
         usbHostPointer->txBd = 0U;
         usbHostPointer->rxBd = 0U;
