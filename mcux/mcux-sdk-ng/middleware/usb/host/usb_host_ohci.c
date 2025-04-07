@@ -8,11 +8,17 @@
 
 #include "usb_host_config.h"
 #if (defined(USB_HOST_CONFIG_OHCI) && (USB_HOST_CONFIG_OHCI > 0U))
+#if (defined CONFIG_UHC_DRIVER)
+#include "usb_host_mcux_drv_port.h"
+#include "fsl_device_registers.h"
+#include "usb_host_ohci.h"
+#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "fsl_device_registers.h"
 #include "usb_host_ohci.h"
 #include "usb_host_devices.h"
+#endif
 
 /*******************************************************************************
  * Definitions
@@ -836,6 +842,14 @@ static usb_status_t USB_HostOhciOpenControlBulkPipe(usb_host_ohci_state_struct_t
     return kStatus_USB_Success;
 }
 
+static uint8_t USB_HostOhciGetDeviceInfo(usb_device_handle deviceHandle, uint32_t infoCode)
+{
+    uint32_t info_val = 0U;
+
+    (void)USB_HostHelperGetPeripheralInformation(deviceHandle, (uint32_t)infoCode, &info_val);
+    return (uint8_t)info_val;
+}
+
 #if (defined(USB_HOST_CONFIG_OHCI_MAX_ITD) && (USB_HOST_CONFIG_OHCI_MAX_ITD > 0U))
 static usb_status_t USB_HostOhciOpenIsoPipe(usb_host_ohci_state_struct_t *usbHostState,
                                             usb_host_ohci_pipe_struct_t *pipe)
@@ -847,7 +861,7 @@ static usb_status_t USB_HostOhciOpenIsoPipe(usb_host_ohci_state_struct_t *usbHos
     OSA_SR_ALLOC();
 
     pipe->busTime = (uint16_t)USB_HostOhciBusTime(
-        ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed, pipe->pipeCommon.pipeType,
+        USB_HostOhciGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed), pipe->pipeCommon.pipeType,
         pipe->pipeCommon.direction,
         ((uint32_t)pipe->pipeCommon.maxPacketSize) * ((uint32_t)pipe->pipeCommon.numberPerUframe));
 
@@ -894,7 +908,7 @@ static usb_status_t USB_HostOhciOpenInterruptPipe(usb_host_ohci_state_struct_t *
     OSA_SR_ALLOC();
 
     pipe->busTime = (uint16_t)USB_HostOhciBusTime(
-        ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed, pipe->pipeCommon.pipeType,
+        USB_HostOhciGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed), pipe->pipeCommon.pipeType,
         pipe->pipeCommon.direction,
         ((uint32_t)pipe->pipeCommon.maxPacketSize) * ((uint32_t)pipe->pipeCommon.numberPerUframe));
 
@@ -2350,9 +2364,9 @@ usb_status_t USB_HostOhciOpenPipe(usb_host_controller_handle controllerHandle,
     pipe->pipeCommon.open                 = 1U;
     pipe->ed->stateUnion.stateBitField.EN = pipeInit->endpointAddress;
     pipe->ed->stateUnion.stateBitField.D  = (USB_OUT == pipeInit->direction) ? 1U : 2U;
-    pipe->ed->stateUnion.stateBitField.FA = ((usb_host_device_instance_t *)pipeInit->devInstance)->setAddress;
+    pipe->ed->stateUnion.stateBitField.FA = USB_HostOhciGetDeviceInfo(pipeInit->devInstance, kUSB_HostGetDeviceAddress);
     pipe->ed->stateUnion.stateBitField.S =
-        (USB_SPEED_FULL == ((usb_host_device_instance_t *)pipeInit->devInstance)->speed) ? 0U : 1U;
+        (USB_SPEED_FULL == USB_HostOhciGetDeviceInfo(pipeInit->devInstance, kUSB_HostGetDeviceSpeed)) ? 0U : 1U;
     pipe->ed->stateUnion.stateBitField.F   = 0U;
     pipe->ed->stateUnion.stateBitField.MPS = pipeInit->maxPacketSize;
     pipe->ed->stateUnion.stateBitField.K   = 0U;

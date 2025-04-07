@@ -7,6 +7,15 @@
  */
 #include "usb_host_config.h"
 #if ((defined USB_HOST_CONFIG_EHCI) && (USB_HOST_CONFIG_EHCI > 0U))
+/* CONFIG_UHC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if (defined CONFIG_UHC_DRIVER)
+#include "usb_host_mcux_drv_port.h"
+#include "fsl_device_registers.h"
+#include "usb_host_ehci.h"
+#if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT))
+#include "usb_phy.h"
+#endif
+#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "usb_host_devices.h"
@@ -20,6 +29,7 @@
 #endif
 #if ((defined USB_HOST_CONFIG_COMPLIANCE_TEST) && (USB_HOST_CONFIG_COMPLIANCE_TEST))
 #include "usb_host.h"
+#endif
 #endif
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
 #include "fsl_memory.h"
@@ -3851,6 +3861,7 @@ static usb_status_t USB_HostEhciControlBus(usb_host_ehci_instance_t *ehciInstanc
         case kUSB_HostBusL1Sleep:
             if (0U != (ehciInstance->ehciIpBase->PORTSC1 & USBHS_PORTSC1_CCS_MASK))
             {
+                uint32_t info_val;
                 volatile uint32_t lpm_count = 200000U;
                 OSA_SR_ALLOC();
                  /* set timer1 */
@@ -3876,11 +3887,9 @@ static usb_status_t USB_HostEhciControlBus(usb_host_ehci_instance_t *ehciInstanc
                     ((uint32_t)ehciInstance->hirdValue << USBNC_LPM_CSR2_LPM_HST_BESL_SHIFT) |
                     ((uint32_t)ehciInstance->L1remoteWakeupEnable << USBNC_LPM_CSR2_LPM_HST_RWKEN_SHIFT));
                 ehciInstance->registerNcBase->LPM_CSR2 = portScRegister;
-                
-                usb_host_device_instance_t *deviceInstance;
 
                 ehciInstance->busSuspendStatus = kBus_EhciL1StartSleep;
-                deviceInstance = (usb_host_device_instance_t *)hostPointer->suspendedDevice;
+                USB_HostHelperGetPeripheralInformation(hostPointer->suspendedDevice, kUSB_HostGetDeviceAddress, &info_val);
                  OSA_ENTER_CRITICAL();
                 /* Workaroud for ERR052428: begin */
                 ehciInstance->ehciIpBase->USBSTS |= USB_USBSTS_SRI_MASK;
@@ -3890,7 +3899,7 @@ static usb_status_t USB_HostEhciControlBus(usb_host_ehci_instance_t *ehciInstanc
                     lpm_count--;
                 }
                 ehciInstance->registerNcBase->LPM_CSR2 |= ((uint32_t)USBNC_LPM_CSR2_LPM_HST_SEND_MASK |
-                  (((uint32_t)deviceInstance->setAddress << USBNC_LPM_CSR2_LPM_HST_DEVADD_SHIFT) &
+                  (((uint32_t)info_val << USBNC_LPM_CSR2_LPM_HST_DEVADD_SHIFT) &
                   (uint32_t)USBNC_LPM_CSR2_LPM_HST_DEVADD_MASK));
                 /* Workaroud for ERR052428: end */
                 OSA_EXIT_CRITICAL();
