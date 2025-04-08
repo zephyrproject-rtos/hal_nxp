@@ -5,7 +5,7 @@
  *  and response routines for sending adhoc start, adhoc join, and
  *  association commands to the firmware.
  *
- *  Copyright 2008-2024 NXP
+ *  Copyright 2008-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  *
@@ -357,13 +357,20 @@ static int wlan_update_rsn_ie(mlan_private *pmpriv,
     */
     t_u8 akm_type_selected;
     t_u8 akm_type_id        = 0;
-#if CONFIG_11R
-    t_u8 akm_preference[25] = {0, 7, 1, 9, 3, 8, 2, 0, 5, 6, 0, 10, 11, 12, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 13};
-#else
+#if CONFIG_WPA_SUPP
     t_u8 akm_preference[25] = {0, 7, 1, 0, 0, 8, 2, 0, 5, 0, 0, 10, 11, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 13};
+#else
+    t_u8 akm_preference[25] = {0, 0, 1, 0, 0, 0, 2, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0};
 #endif
-
     int ap_mfpc = 0, ap_mfpr = 0, ret = MLAN_STATUS_SUCCESS;
+
+#if CONFIG_11R
+    /* add FT akm types to preference list */
+    akm_preference[3] = 9;
+    akm_preference[4] = 3;
+    akm_preference[9] = 6;
+    akm_preference[13] = 12;
+#endif
 
     pmf_mask = (((pmpriv->pmfcfg.mfpc << MFPC_BIT) | (pmpriv->pmfcfg.mfpr << MFPR_BIT)) | (~PMF_MASK));
     /* prsn_cap = prsn_ie->rsn_ie + 2 bytes version + 4 bytes
@@ -786,6 +793,107 @@ static int wlan_cmd_append_pass_through_ie(mlan_private *priv, IEEEtypes_Generic
 }
 #endif
 
+static void wlan_cmd_append_pwe_tlv(mlan_private *priv, BSSDescriptor_t *pbss_desc, t_u8 **ppbuffer)
+{
+    MrvlIEtypes_SAE_PWE_Mode_t *psae_pwe_mode_tlv = (MrvlIEtypes_SAE_PWE_Mode_t *)(void *)(*ppbuffer);
+    t_u8 pwe = 0;
+
+    /* use RSNX or RSNXO */
+    if (pbss_desc->prsnxo_ie &&
+        (priv->sec_info.rsn_selector == MLAN_RSN_SELECTOR_RSNO ||
+        priv->sec_info.rsn_selector == MLAN_RSN_SELECTOR_RSNO2))
+    {
+        if (pbss_desc->prsnxo_ie->ieee_hdr.element_id == VENDOR_SPECIFIC_221 &&
+            pbss_desc->prsnxo_ie->vendor_type == MLAN_OUI_TYPE_RSNXO)
+        {
+            pwe = pbss_desc->prsnxo_ie->data[0];
+        }
+    }
+    else if (pbss_desc->prsnx_ie)
+    {
+        pwe = pbss_desc->prsnx_ie->data[0];
+    }
+    else
+    {
+        return;
+    }
+
+    if (pwe & (0x1 << SAE_H2E_BIT))
+    {
+        psae_pwe_mode_tlv->header.type = wlan_cpu_to_le16(TLV_TYPE_WPA3_SAE_PWE_DERIVATION_MODE);
+        psae_pwe_mode_tlv->header.len  = sizeof(psae_pwe_mode_tlv->pwe);
+        psae_pwe_mode_tlv->pwe[0]      = pwe;
+        (*ppbuffer) += sizeof(psae_pwe_mode_tlv->header) + sizeof(psae_pwe_mode_tlv->pwe);
+    }
+}
+
+static void wlan_cmd_append_rsno_tlv(mlan_private *priv, BSSDescriptor_t *pbss_desc, t_u8 **ppbuffer)
+{
+    t_u8 *pos = (*ppbuffer);
+    MrvlIEtypesHeader_t *tlv_hdr = (MrvlIEtypesHeader_t *)(void *)pos;
+    IEEEtypes_RsnSelector_t *rsn_selector = MNULL;
+
+    tlv_hdr->type = wlan_cpu_to_le16(TLV_TYPE_RSNO_IE);
+
+    pos += sizeof(MrvlIEtypesHeader_t);
+
+    /* RSN Selector, 3 bytes WFA oui + 1 byte RSN Selector type + 1 byte selector */
+    rsn_selector = (IEEEtypes_RsnSelector_t *)(void *)pos;
+
+    rsn_selector->ieee_hdr.element_id = VENDOR_SPECIFIC_221;
+    rsn_selector->ieee_hdr.len = 5;
+    rsn_selector->wfa_oui[0] = 0x50;
+    rsn_selector->wfa_oui[1] = 0x6f;
+    rsn_selector->wfa_oui[2] = 0x9a;
+    rsn_selector->vendor_type = MLAN_OUI_TYPE_RSN_SEL;
+    rsn_selector->selector = (t_u8)priv->sec_info.rsn_selector;
+    pos += sizeof(IEEEtypes_RsnSelector_t);
+
+    /* pass RSNE, RSNO, RSNO2, RSNX, RSNXO IEs to FW to check AP M3 EAPOL frame */
+    if (pbss_desc->prsn_ie && pbss_desc->rsn_ie_buff_len &&
+        pbss_desc->rsn_ie_buff_len < MLAN_RSN_MAX_IE_LEN)
+    {
+        (void)__memcpy(priv->adapter, pos, pbss_desc->prsn_ie, pbss_desc->rsn_ie_buff_len);
+        pos += pbss_desc->rsn_ie_buff_len;
+    }
+
+    if (pbss_desc->prsno_ie && pbss_desc->rsno_ie_buff_len &&
+        pbss_desc->rsno_ie_buff_len < MLAN_WMSDK_MAX_WPA_IE_LEN)
+    {
+        (void)__memcpy(priv->adapter, pos, pbss_desc->prsno_ie, pbss_desc->rsno_ie_buff_len);
+        pos += pbss_desc->rsno_ie_buff_len;
+    }
+
+    if (pbss_desc->prsno2_ie && pbss_desc->rsno2_ie_buff_len &&
+        pbss_desc->rsno2_ie_buff_len < MLAN_WMSDK_MAX_WPA_IE_LEN)
+    {
+        (void)__memcpy(priv->adapter, pos, pbss_desc->prsno2_ie, pbss_desc->rsno2_ie_buff_len);
+        pos += pbss_desc->rsno2_ie_buff_len;
+    }
+
+    /* fixme: RSNX and RSNXO is not saved by IE tag len.
+     * static sizeof may be wrong len, so need to align rsnx buffer storage
+     * with rsne
+     */
+    /*
+    if (pbss_desc->prsnx_ie)
+    {
+        (void)__memcpy(priv->adapter, pos, pbss_desc->prsnx_ie, sizeof(IEEEtypes_Rsnx_t));
+        pos += sizeof(IEEEtypes_Rsnx_t);
+    }
+
+    if (pbss_desc->prsnxo_ie)
+    {
+        (void)__memcpy(priv->adapter, pos, pbss_desc->prsnxo_ie, sizeof(IEEEtypes_Rsnxo_t));
+        pos += sizeof(IEEEtypes_Rsnxo_t);
+    }
+    */
+
+    tlv_hdr->len = pos - (t_u8 *)(void *)tlv_hdr - sizeof(MrvlIEtypesHeader_t);
+    (*ppbuffer) += sizeof(MrvlIEtypesHeader_t) + tlv_hdr->len;
+    tlv_hdr->len = wlan_cpu_to_le16(tlv_hdr->len);
+}
+
 /********************************************************
                 Global Functions
 ********************************************************/
@@ -827,7 +935,6 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
 #if CONFIG_DRIVER_MBO
     t_u8 oper_class = 1;
 #endif
-
 #if CONFIG_HOST_MLME
     MrvlIEtypes_HostMlme_t *host_mlme_tlv = MNULL;
 #endif
@@ -1074,18 +1181,7 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
 
     if ((pauth_tlv != MNULL) && (pauth_tlv->auth_type == wlan_cpu_to_le16(AssocAgentAuth_Wpa3Sae)))
     {
-        if ((pbss_desc->prsnx_ie != MNULL) && pbss_desc->prsnx_ie->ieee_hdr.len &&
-            (pbss_desc->prsnx_ie->data[0] & (0x1 << SAE_H2E_BIT)))
-        {
-            MrvlIEtypes_SAE_PWE_Mode_t *psae_pwe_mode_tlv;
-
-            /* Setup the sae mode TLV in the association command */
-            psae_pwe_mode_tlv              = (MrvlIEtypes_SAE_PWE_Mode_t *)(void *)pos;
-            psae_pwe_mode_tlv->header.type = wlan_cpu_to_le16(TLV_TYPE_WPA3_SAE_PWE_DERIVATION_MODE);
-            psae_pwe_mode_tlv->header.len  = sizeof(psae_pwe_mode_tlv->pwe);
-            psae_pwe_mode_tlv->pwe[0]      = pbss_desc->prsnx_ie->data[0];
-            pos += sizeof(psae_pwe_mode_tlv->header) + sizeof(psae_pwe_mode_tlv->pwe);
-        }
+        wlan_cmd_append_pwe_tlv(pmpriv, pbss_desc, &pos);
     }
 
     if (ISSUPP_11NENABLED(pmadapter->fw_cap_info) && (!pbss_desc->disable_11n) &&
@@ -1160,6 +1256,11 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
 #endif
 
     wlan_cmd_append_generic_ie(pmpriv, &pos);
+
+    if (pmpriv->sec_info.rsn_selector != MLAN_RSN_SELECTOR_INVALID)
+    {
+        wlan_cmd_append_rsno_tlv(pmpriv, pbss_desc, &pos);
+    }
 
     cmd->size = wlan_cpu_to_le16((t_u16)(pos - (t_u8 *)passo) + S_DS_GEN);
 
