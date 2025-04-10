@@ -16,7 +16,7 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
     '''Runner front-end for SPSDK.'''
 
     def __init__(
-        self, cfg, bootdevice=None, family=None, bootloader=None, flashbin=None, commander=None
+        self, cfg, bootdevice=None, family=None, bootloader=None, flashbin=None, containers=None, commander=None
     ):
         super().__init__(cfg)
         self.file = cfg.file
@@ -29,6 +29,7 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
         self.family = family
         self.bootloader = bootloader
         self.flashbin = flashbin
+        self.containers = containers
         self.commander = commander
 
     @classmethod
@@ -45,6 +46,7 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
         parser.add_argument('--family', required=True, help='family')
         parser.add_argument('--bootloader', required=True, help='bootloader')
         parser.add_argument('--flashbin', required=True, help='nxp container image flash.bin')
+        parser.add_argument('--containers', required=True, help='container count in flash.bin: one or two')
         parser.add_argument(
             '--commander',
             default='nxpuuu',
@@ -59,6 +61,7 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
             family=args.family,
             bootloader=args.bootloader,
             flashbin=args.flashbin,
+            containers=args.containers,
             commander=args.commander,
         )
 
@@ -69,8 +72,32 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
             self.flash(**kwargs)
 
     def flash(self, **kwargs):
+        self.logger.info(f"Flashing file: {self.flashbin}")
+
+        kwargs = {}
+        if not self.logger.isEnabledFor(logging.DEBUG):
+            kwargs['stdout'] = subprocess.DEVNULL
+
         if self.bootdevice == 'spl':
-            cmd = [self.commander] + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
+            if self.containers == 'one':
+                cmd = [self.commander] + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
+                self.logger.info(f"Command: {cmd}")
+                self.check_call(cmd, **kwargs)
+            elif self.containers == 'two':
+                cmd = [self.commander] + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
+                self.logger.info(f"Command: {cmd}")
+                self.check_call(cmd, **kwargs)
+                cmd = [self.commander] + ['run'] + [f"SDPV: delay 1000"]
+                self.logger.info(f"Command: {cmd}")
+                self.check_call(cmd, **kwargs)
+                cmd = [self.commander] + ['run'] + [f"SDPV: write -f {self.flashbin} -skipspl"]
+                self.logger.info(f"Command: {cmd}")
+                self.check_call(cmd, **kwargs)
+                cmd = [self.commander] + ['run'] + [f"SDPV: jump"]
+                self.logger.info(f"Command: {cmd}")
+                self.check_call(cmd, **kwargs)
+            else:
+                raise ValueError(f"Invalid containers count: {self.containers}")
         else:
             cmd = (
                 [self.commander]
@@ -80,12 +107,5 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
                 + [f'{self.bootloader}']
                 + [f'{self.flashbin}']
             )
-
-        self.logger.info(f"Flashing file: {self.flashbin}")
-        self.logger.info(f"Command: {cmd}")
-
-        kwargs = {}
-        if not self.logger.isEnabledFor(logging.DEBUG):
-            kwargs['stdout'] = subprocess.DEVNULL
-
-        self.check_call(cmd, **kwargs)
+            self.logger.info(f"Command: {cmd}")
+            self.check_call(cmd, **kwargs)
