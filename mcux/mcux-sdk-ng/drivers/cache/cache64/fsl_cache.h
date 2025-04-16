@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief cache driver version. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 9))
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 /*! @} */
 
 /*! @brief cache line size. */
@@ -70,7 +70,7 @@ extern "C" {
 
 #if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
- * @brief Returns an instance number given peripheral base address.
+ * @brief Returns an instance number given periphearl base address.
  *
  * @param base The peripheral base address.
  * @return CACHE64_POLSEL instance number starting from 0.
