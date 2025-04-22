@@ -77,14 +77,16 @@ extern "C" {
 #define EDMA_TCD_CITER_ELINKNO_MASK 0x7fff
 #define EDMA_TCD_CITER_ELINKNO(x) ((x) & EDMA_TCD_CITER_ELINKNO_MASK)
 
-#define EDMA_TCD_BITER_ELINKNO_MASK 0x7fff
+#define EDMA_TCD_BITER_ELINKNO_MASK 0xf
 #define EDMA_TCD_BITER_ELINKNO(x) ((x) & EDMA_TCD_BITER_ELINKNO_MASK)
 
 #define EDMA_TCD_NBYTES_MLOFFNO_MASK 0x3fffffff
 #define EDMA_TCD_NBYTES_MLOFFNO(x) ((x) & EDMA_TCD_NBYTES_MLOFFNO_MASK)
 
+#define EDMA_TCD_CSR_MAJORELINK_MASk EDMA_BIT(5)
 #define EDMA_TCD_CSR_INTHALF_MASK EDMA_BIT(2)
 #define EDMA_TCD_CSR_INTMAJOR_MASK EDMA_BIT(1)
+#define EDMA_TCD_CSR_START_MASK EDMA_BIT(0)
 
 #define EDMA_TCD_CH_CSR_ACTIVE_MASK EDMA_BIT(31)
 #define EDMA_TCD_CH_CSR_DONE_MASK EDMA_BIT(30)
@@ -92,12 +94,23 @@ extern "C" {
 
 #define EDMA_TCD_CH_INT_MASK BIT(1)
 
+#define EDMA_CSR_MAJORELINK_MASK        EDMA_BIT(5)
+#define EDMA_CITER_ELINKYES_LINKCH_MASK (0x3E00U)
+#define EDMA_BITER_ELINKYES_LINKCH_MASK (0x3E00U)
+#define EDMA_BITER_ELINKYES_LINKCH(x)   (((uint16_t)(((uint16_t)(x)) << (9U))) & (0x3E00U))
+#define EDMA_CITER_ELINKYES_LINKCH(x)   (((uint16_t)(((uint16_t)(x)) << (9U))) & (0x3E00U))
+#define EDMA_BITER_ELINKYES_ELINK_MASK  EDMA_BIT(15)
+#define EDMA_CITER_ELINKYES_ELINK_MASK  EDMA_BIT(15)
+#define EDMA_CSR_MAJORLINKCH_MASK       (0x1F00U)
+#define EDMA_CSR_MAJORLINKCH(x)         (((uint16_t)(((uint16_t)(x)) << (8U))) & (0x1F00U))
+
 /* EDMA registers */
 /* common MP-related registers */
 #define EDMA_MP_CS EDMA_REGISTER_MAKE(EDMA_MP_CS_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_ES EDMA_REGISTER_MAKE(EDMA_MP_ES_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_INT EDMA_REGISTER_MAKE(EDMA_MP_INT_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_HRS EDMA_REGISTER_MAKE(EDMA_MP_HRS_INDEX, kEDMA_RegAccess32)
+#define EDMA_MP_CS_GCLC_MASK		EDMA_BIT(6)
 /* TODO: access requires validation */
 #define EDMA_MP_CH_GRPRI EDMA_REGISTER_MAKE(EDMA_MP_CH_GRPRI_INDEX, kEDMA_RegAccess32)
 /* common TCD-related registers */
@@ -158,6 +171,14 @@ enum _edma_transfer_type {
     kEDMA_TransferTypeM2P, /* Memory to peripheral transfer */
     kEDMA_TransferTypeP2M, /* Peripheral to memory transfer */
 };
+
+/*! @brief Channel link type */
+typedef enum _edma_channel_link_type
+{
+    kEDMA_LinkNone = 0x0U, /*!< No channel link  */
+    kEDMA_MinorLink,       /*!< Channel link after each minor loop */
+    kEDMA_MajorLink,       /*!< Channel link while major loop count exhausted */
+}edma_channel_link_type_t;
 
 typedef struct _edma_config {
     /* EDMA base address. Should be overwritten by user if working with virtual
@@ -328,3 +349,4 @@ status_t EDMA_ConfigureTransfer(edma_config_t *cfg, int channel,
 }
 #endif
 #endif /* _FSL_EDMA_REV2_H_ */
+

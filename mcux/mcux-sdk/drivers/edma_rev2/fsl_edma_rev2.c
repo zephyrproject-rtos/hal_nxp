@@ -172,6 +172,39 @@ static uint32_t EDMA_ConvertTransferWidth(uint32_t width)
     return 0;
 }
 
+status_t EDMA_SetChannelLink(edma_config_t *cfg, int channel, edma_channel_link_type_t type, uint32_t linkedChannel)
+{
+        uint32_t mp_csr;
+	/* setting global channel linking control  */
+        mp_csr = EDMA_MPRegRead(cfg, EDMA_MP_CS) | EDMA_MP_CS_GCLC_MASK;
+        EDMA_MPRegWrite(cfg, EDMA_MP_CS, mp_csr);
+        if (type == kEDMA_MinorLink)
+        {
+               uint16_t biter, citer;
+               biter = EDMA_ChannelRegRead(cfg, channel, EDMA_TCD_BITER);
+               citer = EDMA_ChannelRegRead(cfg, channel, EDMA_TCD_CITER);
+               biter |= EDMA_BITER_ELINKYES_ELINK_MASK | EDMA_BITER_ELINKYES_LINKCH(linkedChannel);
+               citer |= EDMA_CITER_ELINKYES_ELINK_MASK | EDMA_CITER_ELINKYES_LINKCH(linkedChannel);
+               EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_CITER, citer);
+               EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_BITER, biter);
+        }
+        else if(type == kEDMA_MajorLink)
+        {
+                uint16_t csr;
+                csr = EDMA_ChannelRegRead(cfg, channel, EDMA_TCD_CSR);
+                csr |= EDMA_CSR_MAJORELINK_MASK | EDMA_CSR_MAJORLINKCH(linkedChannel);
+                EDMA_ChannelRegUpdate(cfg, channel, EDMA_TCD_CSR, EDMA_TCD_CSR_MAJORELINK_MASk, 0);
+        }
+	else
+	{
+		/* disable global channel linking control if no linked channel */
+		mp_csr = EDMA_MPRegRead(cfg, EDMA_MP_CS) & (~EDMA_MP_CS_GCLC_MASK);
+		EDMA_MPRegWrite(cfg, EDMA_MP_CS, mp_csr);
+       }
+
+       return kStatus_Success;
+}
+
 status_t EDMA_ConfigureTransfer(edma_config_t *cfg, int channel,
 				uint32_t saddr, uint32_t daddr,
 				uint32_t ssize, uint32_t dsize,
