@@ -8,6 +8,9 @@
 #include <stdbool.h>
 
 #include "fsl_edma_rev2.h"
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 
 #define EDMA_READ(base, access)\
     ((access) == kEDMA_RegAccess16 ?\
@@ -236,6 +239,11 @@ status_t EDMA_ConfigureTransfer(edma_config_t *cfg, int channel,
         soff = 0;
         break;
     }
+
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+    saddr = MEMORY_ConvertMemoryMapAddress((uint32_t)(saddr), kMEMORY_Local2DMA);
+    daddr = MEMORY_ConvertMemoryMapAddress((uint32_t)(daddr), kMEMORY_Local2DMA);
+#endif
 
     /* notes:
      * 1) SOFF and DOFF are currently set to SSIZE and DSIZE.
