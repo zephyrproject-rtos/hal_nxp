@@ -14,7 +14,9 @@
 #include "fsl_ocotp.h"
 #endif
 
-#ifdef WIFI_BT_TX_PWR_LIMITS
+#if defined(WIFI_BT_TX_PWR_LIMITS_OVERRIDE)
+#include WIFI_BT_TX_PWR_LIMITS_OVERRIDE
+#elif defined(WIFI_BT_TX_PWR_LIMITS)
 #include WIFI_BT_TX_PWR_LIMITS
 #else
 #error "Region tx power config not defined"
