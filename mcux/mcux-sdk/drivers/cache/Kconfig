@@ -1,8 +1,0 @@
-# Copyright 2023-2024 NXP
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-rsource "./armv7-m7/Kconfig"
-rsource "./cache64/Kconfig"
-rsource "./lmem/Kconfig"
-rsource "./xcache/Kconfig"
