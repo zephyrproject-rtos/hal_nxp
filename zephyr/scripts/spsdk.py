@@ -16,9 +16,10 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
     '''Runner front-end for SPSDK.'''
 
     def __init__(
-        self, cfg, bootdevice=None, family=None, bootloader=None, flashbin=None, containers=None, commander=None
+        self, cfg, dev_id, bootdevice=None, family=None, bootloader=None, flashbin=None, containers=None, commander=None
     ):
         super().__init__(cfg)
+        self.dev_id = dev_id
         self.file = cfg.file
         self.file_type = cfg.file_type
         self.hex_name = cfg.hex_file
@@ -38,7 +39,11 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
 
     @classmethod
     def capabilities(cls):
-        return RunnerCaps(commands={'flash'})
+        return RunnerCaps(commands={'flash'}, dev_id=True)
+
+    @classmethod
+    def dev_id_help(cls) -> str:
+        return 'SPSDK serial number for the board.'
 
     @classmethod
     def do_add_parser(cls, parser):
@@ -63,6 +68,7 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
             flashbin=args.flashbin,
             containers=args.containers,
             commander=args.commander,
+            dev_id=args.dev_id,
         )
 
     def do_run(self, command, **kwargs):
@@ -78,22 +84,26 @@ class SPSDKBinaryRunner(ZephyrBinaryRunner):
         if not self.logger.isEnabledFor(logging.DEBUG):
             kwargs['stdout'] = subprocess.DEVNULL
 
+        if self.dev_id:
+            cmd_with_id = [self.commander] + [(f'-us={self.dev_id}' if self.dev_id else '')]
+        else:
+            cmd_with_id = [self.commander]
         if self.bootdevice == 'spl':
             if self.containers == 'one':
-                cmd = [self.commander] + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
+                cmd = cmd_with_id + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
                 self.logger.info(f"Command: {cmd}")
                 self.check_call(cmd, **kwargs)
             elif self.containers == 'two':
-                cmd = [self.commander] + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
+                cmd = cmd_with_id + ['run'] + [f"SDPS[-t 10000]: boot -f {self.flashbin}"]
                 self.logger.info(f"Command: {cmd}")
                 self.check_call(cmd, **kwargs)
-                cmd = [self.commander] + ['run'] + [f"SDPV: delay 1000"]
+                cmd = cmd_with_id + ['run'] + [f"SDPV: delay 1000"]
                 self.logger.info(f"Command: {cmd}")
                 self.check_call(cmd, **kwargs)
-                cmd = [self.commander] + ['run'] + [f"SDPV: write -f {self.flashbin} -skipspl"]
+                cmd = cmd_with_id + ['run'] + [f"SDPV: write -f {self.flashbin} -skipspl"]
                 self.logger.info(f"Command: {cmd}")
                 self.check_call(cmd, **kwargs)
-                cmd = [self.commander] + ['run'] + [f"SDPV: jump"]
+                cmd = cmd_with_id + ['run'] + [f"SDPV: jump"]
                 self.logger.info(f"Command: {cmd}")
                 self.check_call(cmd, **kwargs)
             else:
