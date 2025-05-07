@@ -13,8 +13,8 @@ if(CONFIG_SOC_SERIES_RW6XX)
         ${CMAKE_CURRENT_LIST_DIR}/platform/rw61x/configs
         # Flash files are only included to build successfully the framework files.
         # Content is not used
-        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk/components/flash/mflash/rdrw612bga
-        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk/components/flash/mflash
+        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk-ng/components/flash/mflash/rdrw612bga
+        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk-ng/components/flash/mflash
     )
 
     zephyr_compile_definitions(gPlatformDisableVendorSpecificInit=1U)
