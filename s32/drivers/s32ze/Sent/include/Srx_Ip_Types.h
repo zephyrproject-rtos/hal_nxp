@@ -137,7 +137,7 @@ typedef enum
 typedef enum
 {
     SRX_IP_OPTION_2_LOW_LATENCY = 0U,
-    SRX_IP_OPTION_1_PREFERED
+    SRX_IP_OPTION_1_PREFERRED
 } Srx_Ip_SuccessiveCalibCheckType;
 
 typedef enum
