@@ -193,3 +193,4 @@ Patch List:
   - mcux-sdk-middleware-usb: Disable the control endpoint ZLT (Zero Length Transaction) of MCUX hal USB controller drivers
     (usb_device_ehci.c and usb_device_lpcip3511.c) in Zephyr environment.
   - drivers: dmamux: Fix build error when FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL is defined as 1.
+  - mcux-sdk-ng: drivers: dma3: Add peripheral to peripheral support.
