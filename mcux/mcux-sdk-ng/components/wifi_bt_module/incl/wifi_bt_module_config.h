@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021-2024 NXP
+ *  Copyright 2021-2025 NXP
  *
  *  SPDX-License-Identifier: BSD-3-Clause
  */
@@ -356,9 +356,9 @@
 
 /* USD IW610 module */
 #elif defined(WIFI_IW610_BOARD_RD_USD)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_NH_FCC.h"
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2LL.h"
 #define IW610
-#define SDMMCHOST_OPERATION_VOLTAGE_3V3
+#define SDMMCHOST_OPERATION_VOLTAGE_1V8
 #define SD_TIMING_MAX kSD_TimingDDR50Mode
 #define WIFI_BT_USE_USD_INTERFACE
 #define WLAN_ED_MAC_CTRL                                                               \
@@ -366,9 +366,9 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
     }
 
-/* RD IW610 module with M2 interface */
-#elif defined(WIFI_IW610_BOARD_RD_M2)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_NH_FCC.h"
+/* 2LL NightHawk module with M2 interface */
+#elif defined(WIFI_IW610_BOARD_MURATA_2LL_M2)
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2LL.h"
 #define IW610
 #define SDMMCHOST_OPERATION_VOLTAGE_1V8
 #define SD_TIMING_MAX kSD_TimingDDR50Mode
