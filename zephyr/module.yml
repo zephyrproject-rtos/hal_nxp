@@ -111,3 +111,29 @@ blobs:
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/IW416/sduartIW416_wlan_bt.bin
     description: "Combo firmware for IW416 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+
+#For IW610
+  - path: IW610/sd_iw610.bin.se
+    sha256: 96775de49896df7fcc161b6e4211324d20a9160ef55a1ff9b9b33f41d7da4fa6
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.2/IW610/sd_iw610.bin.se
+    description: "Wi-Fi firmware for IW610 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.2/readme.txt
+  - path: IW610/uart_iw610_bt.bin.se
+    sha256: 3b5063ad0e96c7d827690ae4e274a213426df621b9f5f84ba392d54e3ff30b9e
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.2/IW610/uart_iw610_bt.bin.se
+    description: "BT firmware for IW610 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.2/readme.txt
+  - path: IW610/sduart_iw610.bin.se
+    sha256: 897f4467187456ffdc549db651fc6dea7c1644e2e1989822a4d66b623959cd14
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.2/IW610/sduart_iw610.bin.se
+    description: "Combo firmware for IW610 boards"
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.2/readme.txt
