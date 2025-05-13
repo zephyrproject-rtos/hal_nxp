@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -36,7 +36,7 @@ extern "C"{
 #define NETC_ETH_IP_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETH_IP_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -217,6 +217,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetIngrStreamIdentificationTable( const uint8
                                                                      Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableList
                                                                    );
 
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
 /**
  * @brief            Add or Update Stream Gate Instance Table Entry function
  * @details          External function for adding or updating one Stream Gate Instance entry with "Entry ID Match" access method.
@@ -275,7 +276,9 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateInstanceTableEntry( const uin
                                                                        uint32 *MatchedEntries,
                                                                        uint32 SGIEntryId
                                                                      );
+#endif /* (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U) */
 
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
 /**
  * @brief            Add Stream Gate Control List Table Entry function
  * @details          External function for adding one Stream Gate Control List entry with "Entry ID Match" access method.
@@ -336,6 +339,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateControlListTableEntry( const 
                                                                           uint32 *MatchedEntries,
                                                                           uint32 SGCLEntryId
                                                                         );
+#endif /* (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U) */
 
 /**
  * @brief            Add or Update Ingress Stream Table Entry function
@@ -502,7 +506,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxBuff(uint8 ctrlIndex,
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
                                              uint8 ring,
-                                            Netc_Eth_Ip_BufferType * buff,
+                                             #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
+                                             Netc_Eth_Ip_BufferType *buff,
+                                             #else
+                                             const Netc_Eth_Ip_BufferType *buff,
+                                             #endif
                                              const Netc_Eth_Ip_TxOptionsType * options
                                             );
 
@@ -533,7 +541,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
                                                         uint8 ring,
-                                                        Netc_Eth_Ip_BufferType Buffers[],
+                                                        const Netc_Eth_Ip_BufferType Buffers[],
                                                         const Netc_Eth_Ip_TxOptionsType *options,
                                                         uint16 NumBuffers);
 
@@ -648,7 +656,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
  */
 void Netc_Eth_Ip_ProvideMultipleRxBuff(const uint8 CtrlIndex,
                                                          const uint8 Ring,
-                                                         uint8* BuffList[],
+                                                         uint8* const BuffList[],
                                                          uint16* BuffListSize);
 
 /*!
@@ -703,6 +711,44 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTransmitStatus(uint8 ctrlIndex,
  * @retval NETC_ETH_IP_STATUS_TIMEOUT Changing the physical address was not changed because a timeout has occured.
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMacAddr(uint8 CtrlIndex, const uint8 *MacAddr);
+
+/**
+ * @brief Compute has value for MAC addr.
+ *
+ * @param MacAddr MAC address.
+ * @return uint8  Hash value for MacAddr.
+ */
+uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr);
+
+/**
+ * @brief Remove MAC addr in the software table.
+ *
+ * @param CtrlIndex        Index of the SI.
+ * @param HashValue        Computed hash value.
+ * @param MacAddr          MAC address.
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS               - successfully operation
+ *                                NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL   - unsuccessfully operation
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMACHashFilterEntry(uint8 CtrlIndex, \
+                                                         uint8 HashValue, \
+                                                         const uint8 *MacAddr);
+
+/**
+ * @brief Remove MAC addr in the software table.
+ *
+ * @param CtrlIndex        Index of the SI.
+ * @param HashValue        Computed hash value.
+ * @param MacAddr          MAC address.
+ * @param deleteAllEntries Allows the function to delete all Hash filter table entries or a specific entry.
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                NETC_ETH_IP_STATUS_ERROR   - unsuccessfully operation
+ *                                NETC_ETH_IP_STATUS_MAC_ADDR_NOT_FOUND - the current destination MAC was not
+ *                                                                found in the hash filter table
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACHashFilterEntry(const uint8 CtrlIndex, \
+                                                            const uint8 HashValue, \
+                                                            const uint8 *MacAddr, \
+                                                            const boolean deleteAllEntries);
 
 /**
  * @brief Gets the physical address of the MAC for a controller.
@@ -841,6 +887,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigPortTimeGateScheduling( const uint8 CtrlIndex, const boolean Enable );
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
 /**
  * @brief Add/Update rate policer table entry.
  *
@@ -889,6 +936,29 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 Ctrl
                                                                 uint32 *MatchedEntries,
                                                                 uint32 RatePolicerEntryId
                                                               );
+#endif /* (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0) */
+
+/**
+ * @brief Add MAC Filter Table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in]  MacFilterTableEntry  pointer to structure Netc_Eth_Ip_MacFilterTableEntryDataType that contains the data of the MAC Filter Table entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMacFilterTableEntry(const uint8 ctrlIndex, const Netc_Eth_Ip_MacFilterTableEntryDataType *MacFilterTableEntry);
+
+/**
+ * @brief Add MAC Filter Table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in,out]  MacFilterTableEntry  pointer to structure Netc_Eth_Ip_MacFilterTableEntryDataType that contains the data of the MAC Filter Table entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryMacFilterTableEntry(const uint8 ctrlIndex, Netc_Eth_Ip_MacFilterTableEntryDataType *MacFilterTableEntry);
 
 /**
  * @brief Add VLAN Filter Table entry.
@@ -1135,7 +1205,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStatisticsRfsTableEntry(const uint8 ctrl
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex,
                                                                 uint8 RfsEntryIdx,
-                                                                 uint32 * RfsTableEntryAddr);
+                                                                const uint32 * RfsTableEntryAddr);
 
 /**
  * @brief Add Receive Flow Steering table entry.
@@ -1166,14 +1236,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr( const uint8 CtrlIndex,
 #if defined(ERR_IPV_NETC_051247)
     #if (STD_ON == ERR_IPV_NETC_051247)
 /**
- * @brief This function calculates CRC8 for the VSItoPSI message
+ * @brief This function calculates CRC16 CCITT-FALSE for the VSItoPSI message
 * @param[in]  MsgCommandConfig           Pointer to the message
 * @param[in]  MsgLength                  Message length
 *
-* @return          uint8
+* @return          uint16
 * @retval          resulted crc
 */
-uint8 Netc_Eth_Ip_VsiMsgCalculateCRC8(const Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig,
+uint16 Netc_Eth_Ip_VsiMsgCalculateCRC16(volatile Netc_Eth_Ip_VsiToPsiMsgType const *MsgCommandConfig, \
                                                     uint8 MsgLength);
     #endif
 #endif

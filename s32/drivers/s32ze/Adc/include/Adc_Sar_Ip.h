@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -36,7 +36,7 @@ extern "C"{
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION    0
 #define ADC_SAR_IP_SW_MAJOR_VERSION               2
 #define ADC_SAR_IP_SW_MINOR_VERSION               0
-#define ADC_SAR_IP_SW_PATCH_VERSION               0
+#define ADC_SAR_IP_SW_PATCH_VERSION               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -242,21 +242,6 @@ void Adc_Sar_Ip_EnableChannel(const uint32 u32Instance,
 void Adc_Sar_Ip_DisableChannel(const uint32 u32Instance,
                                const Adc_Sar_Ip_ConvChainType pChainType,
                                const uint32 u32ChnIdx);
-
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-/*!
- * @brief Set conversion resolution
- *
- * This function sets the conversion resolution (number of bits per conversion data)
- *
- * @param[in] u32Instance - ADC instance number
- * @param[in] eResolution - conversion resolution
- * @return void
- */
-void Adc_Sar_Ip_SetResolution(const uint32 u32Instance,
-                              const Adc_Sar_Ip_Resolution eResolution);
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
 /*!
  * @brief Start conversion
  *
@@ -368,13 +353,15 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
                               const Adc_Sar_Ip_ConvChainType pChainType,
                               Adc_Sar_Ip_ChanResultType * const pResult);
 
+
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
 /*!
  * @brief Perform Calibration of the ADC
  *
  * This function performs a calibration of the ADC. The maximum input clock
  * frequency for the ADC is 80 MHz, checked with assertions if DEV_ASSERT is
  * enabled. After calibration, the ADC is left in Powerup state (PWDN bit is clear).
- * Note: If asynchronous calibration mode is enabled and a calibration is started, 
+ * Note: If asynchronous calibration mode is enabled and a calibration is started,
  * other APIs should not be called until the calibration is complete.
  *
  * @param[in] u32Instance - ADC instance number
@@ -386,6 +373,7 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
  */
 Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance);
 
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
 /*!
  * @brief Power up the ADC
  *
@@ -490,7 +478,7 @@ void Adc_Sar_Ip_DisableChannelNotifications(const uint32 u32Instance,
 Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
                                               const Adc_Sar_Ip_ClockConfigType * const pConfig);
 
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
 /*!
  * @brief Set the sample times
  *
@@ -504,9 +492,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
  */
 void Adc_Sar_Ip_SetSampleTimes(const uint32 u32Instance,
                                const uint8 * const aSampleTimes);
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
 
-#if FEATURE_ADC_HAS_AVERAGING
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
 /*!
  * @brief Configure averaging
  *
@@ -522,7 +510,7 @@ void Adc_Sar_Ip_SetSampleTimes(const uint32 u32Instance,
 void Adc_Sar_Ip_SetAveraging(const uint32 u32Instance,
                              const boolean bAvgEn,
                              const Adc_Sar_Ip_AvgSelectType eAvgSel);
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
 
 /*!
  * @brief Abort ongoing conversion
@@ -554,7 +542,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_AbortChain(const uint32 u32Instance,
                                             const boolean bBlocking,
                                             const boolean bAllowRestart);
 
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
 /*!
  * @brief Set the Presampling Source for the channel group
  *
@@ -614,7 +602,7 @@ void Adc_Sar_Ip_EnablePresampleConversion(const uint32 u32Instance);
  * @return void
  */
 void Adc_Sar_Ip_DisablePresampleConversion(const uint32 u32Instance);
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
 
 /*!
  * @brief Enable DMA Requests
@@ -732,7 +720,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetCtuMode(const uint32 u32Instance,
 #endif /* ADC_SAR_IP_HAS_CTU */
 
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER)
+#if (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE)
 /*!
  * @brief Configure external trigger
  *
@@ -746,9 +734,10 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetCtuMode(const uint32 u32Instance,
 void Adc_Sar_Ip_SetExternalTrigger(const uint32 u32Instance,
                                    const Adc_Sar_Ip_ExtTriggerEdgeType eTriggerEdge,
                                    const Adc_Sar_Ip_ExtTriggerSourceType eTrggerSrc);
-#endif /* (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER) */
+#endif /* (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE) */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
 
+#if ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE
 /*!
  * @brief Configure user gain and offset
  *
@@ -762,6 +751,7 @@ void Adc_Sar_Ip_SetExternalTrigger(const uint32 u32Instance,
 void Adc_Sar_Ip_SetUserGainAndOffset(const uint32 Instance,
                                      const uint16 Gain,
                                      const uint8 Offset);
+#endif /* ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE */
 
 
 #define ADC_STOP_SEC_CODE

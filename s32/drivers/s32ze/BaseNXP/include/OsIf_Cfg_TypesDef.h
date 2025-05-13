@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -8,7 +8,7 @@
 
 /**
 *   @file       OsIf_Cfg_TypesDef.h
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *
 *   @addtogroup osif_drv
@@ -48,7 +48,7 @@ extern "C"{
 #define OSIF_CFG_TYPESDEF_AR_RELEASE_REVISION_VERSION  0
 #define OSIF_CFG_TYPESDEF_SW_MAJOR_VERSION             2
 #define OSIF_CFG_TYPESDEF_SW_MINOR_VERSION             0
-#define OSIF_CFG_TYPESDEF_SW_PATCH_VERSION             0
+#define OSIF_CFG_TYPESDEF_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS

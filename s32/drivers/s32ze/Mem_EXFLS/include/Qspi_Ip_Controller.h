@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,7 +32,7 @@ extern "C"{
 #define QSPI_IP_CONTROLLER_AR_RELEASE_REVISION_VERSION_H     0
 #define QSPI_IP_CONTROLLER_SW_MAJOR_VERSION_H                2
 #define QSPI_IP_CONTROLLER_SW_MINOR_VERSION_H                0
-#define QSPI_IP_CONTROLLER_SW_PATCH_VERSION_H                0
+#define QSPI_IP_CONTROLLER_SW_PATCH_VERSION_H                1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -104,14 +104,12 @@ extern "C"{
 
      #define Qspi_Ip_SetAhbSeqId(instance, seqID) \
              OsIf_Trusted_Call2params(Qspi_Ip_SetAhbSeqId_Privileged, instance, seqID)
-
 #else
      #define Qspi_Ip_WriteLuts(Instance, StartLutRegister, Data, Size) \
              Qspi_Ip_WriteLuts_Privileged(Instance, StartLutRegister, Data, Size)
 
      #define Qspi_Ip_SetAhbSeqId(instance, seqID) \
              Qspi_Ip_SetAhbSeqId_Privileged(instance, seqID)
-
 #endif
 
 /*******************************************************************************
@@ -121,16 +119,6 @@ extern "C"{
 /*******************************************************************************
 * Definitions
 ******************************************************************************/
-
-#define MEM_43_EXFLS_START_SEC_CONST_UNSPECIFIED
-#include "Mem_43_EXFLS_MemMap.h"
-
-extern QuadSPI_Type * const Qspi_Ip_BaseAddress[];
-
-#define MEM_43_EXFLS_STOP_SEC_CONST_UNSPECIFIED
-#include "Mem_43_EXFLS_MemMap.h"
-
-
 #define MEM_43_EXFLS_START_SEC_VAR_CLEARED_8
 #include "Mem_43_EXFLS_MemMap.h"
 
@@ -152,26 +140,6 @@ extern uint8 Qspi_Ip_MemoryPadding[QuadSPI_INSTANCE_COUNT];
 
 #define MEM_43_EXFLS_START_SEC_CODE
 #include "Mem_43_EXFLS_MemMap.h"
-
-
-
-/*!
- * @brief Configures LUT commands
- *
- * This function configures a pair of LUT commands in the specified LUT register.
- * LUT sequences start at index multiple of 4 and can have up to 8 commands
- *
- * @param instance     QuadSPI peripheral instance number
- * @param LutRegister  Index in physical LUT array
- * @param operation0   First operation
- * @param operation1   Second operation
- * Implements      Qspi_Ip_SetLut_Activity
- */
-void Qspi_Ip_SetLut(uint32 instance,
-                    uint8 LutRegister,
-                    Qspi_Ip_InstrOpType operation0,
-                    Qspi_Ip_InstrOpType operation1
-                   );
 
 /*!
  * @brief Configures LUT commands
@@ -199,7 +167,6 @@ void Qspi_Ip_WriteLuts_Privileged(uint32 Instance,
 void Qspi_Ip_SetAhbSeqId_Privileged(uint32 instance,
                                     uint8 seqID
                                    );
-
 /*!
  * @brief Returns the physical base address of a flash device
  *
@@ -247,8 +214,8 @@ Qspi_Ip_StatusType Qspi_Ip_IpCommand(uint32 instance,
 Qspi_Ip_StatusType Qspi_Ip_IpRead(uint32 instance,
                                   uint8 SeqId,
                                   uint32 addr,
-                                  uint8 * dataRead,
-                                  const uint8 * dataCmp,
+                                  uint8 *dataRead,
+                                  const uint8 *dataCmp,
                                   uint32 size
                                  );
 
@@ -266,9 +233,20 @@ Qspi_Ip_StatusType Qspi_Ip_IpRead(uint32 instance,
 Qspi_Ip_StatusType Qspi_Ip_IpWrite(uint32 instance,
                                    uint8 SeqId,
                                    uint32 addr,
-                                   const uint8 * data,
+                                   const uint8 *data,
                                    uint32 size
                                   );
+
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+/*!
+ * @brief Calculate and check the CRC of memory device configurations set
+ *
+ * @return             Error or success status returned by API
+ */
+Qspi_Ip_StatusType Qspi_Ip_ValidateMemConfigCRC(const Qspi_Ip_MemoryConfigType * pConfig,
+                                                const Qspi_Ip_MemoryConnectionType * pConnect
+                                               );
+#endif
 
 
 #define MEM_43_EXFLS_STOP_SEC_CODE

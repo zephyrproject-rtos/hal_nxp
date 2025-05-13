@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -52,7 +52,7 @@ extern "C"{
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define ADC_SAR_IP_SW_MAJOR_VERSION_C               2
 #define ADC_SAR_IP_SW_MINOR_VERSION_C               0
-#define ADC_SAR_IP_SW_PATCH_VERSION_C               0
+#define ADC_SAR_IP_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -232,11 +232,12 @@ extern "C"{
 #define ADC_START_SEC_CONST_UNSPECIFIED
 #include "Adc_MemMap.h"
 
+
 /* Table of pBase addresses for ADC instances. */
-ADC_Type * const Adc_Sar_Ip_apxAdcBase[ADC_INSTANCE_COUNT] = IP_ADC_BASE_PTRS;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
-SAR_ADC_AE_Type * const Adc_Sar_AE_Ip_apxAdcBase[SAR_ADC_AE_INSTANCE_COUNT] = IP_SAR_ADC_AE_BASE_PTRS;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+static ADC_Type * const Adc_Sar_Ip_apxAdcBase[ADC_INSTANCE_COUNT] = IP_ADC_BASE_PTRS;
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+static SAR_ADC_AE_Type * const Adc_Sar_AE_Ip_apxAdcBase[SAR_ADC_AE_INSTANCE_COUNT] = IP_SAR_ADC_AE_BASE_PTRS;
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #if ADC_SAR_IP_HAS_TEMPSENSE_CHN
 #if (ADC_SAR_IP_TEMPSENSE_ENABLED == STD_ON)
 static TEMPSENSE_Type * const Adc_Sar_Ip_apxTempsenseBase[TEMPSENSE_INSTANCE_COUNT] = IP_TEMPSENSE_BASE_PTRS;
@@ -249,7 +250,7 @@ static TEMPSENSE_Type * const Adc_Sar_Ip_apxTempsenseBase[TEMPSENSE_INSTANCE_COU
 #define ADC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Adc_MemMap.h"
 /* Global state structure */
-VAR_SEC_NOCACHE(Adc_Sar_Ip_axAdcSarState) static Adc_Sar_Ip_StateStructType Adc_Sar_Ip_axAdcSarState[ADC_SAR_IP_INSTANCE_COUNT];
+static Adc_Sar_Ip_StateStructType Adc_Sar_Ip_axAdcSarState[ADC_SAR_IP_INSTANCE_COUNT];
 
 #define ADC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Adc_MemMap.h"
@@ -257,18 +258,27 @@ VAR_SEC_NOCACHE(Adc_Sar_Ip_axAdcSarState) static Adc_Sar_Ip_StateStructType Adc_
 #define ADC_START_SEC_CONST_32
 #include "Adc_MemMap.h"
 
-static const uint8 Adc_Sar_Ip_au8AdcGroupCount[ADC_SAR_IP_INSTANCE_COUNT] = FEATURE_ADC_MAX_GROUP_COUNT;
+static const uint8 Adc_Sar_Ip_au8AdcGroupCount[ADC_SAR_IP_INSTANCE_COUNT] = ADC_SAR_IP_MAX_GROUP_COUNT;
 
 #if ((1U ==  ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL) || (ADC_SAR_IP_HAS_CTU && (STD_ON == ADC_SAR_IP_EOCTU_ENABLED) && (STD_ON == ADC_SAR_IP_EOC_ENABLED)))
-static const uint32 Adc_Sar_Ip_au32AdcChanBitmap[ADC_SAR_IP_INSTANCE_COUNT][ADC_SAR_IP_NUM_GROUP_CHAN] = FEATURE_ADC_CHN_AVAIL_BITMAP;
+static const uint32 Adc_Sar_Ip_au32AdcChanBitmap[ADC_SAR_IP_INSTANCE_COUNT][ADC_SAR_IP_NUM_GROUP_CHAN] = ADC_SAR_IP_CHN_AVAIL_BITMAP;
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL */
 
 #if ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE
-static const uint32 Adc_Sar_Ip_au32AdcFeatureBitmap[ADC_SAR_IP_INSTANCE_COUNT] = FEATURE_ADC_FEAT_AVAIL_BITMAP;
+static const uint32 Adc_Sar_Ip_au32AdcFeatureBitmap[ADC_SAR_IP_INSTANCE_COUNT] = ADC_SAR_IP_FEAT_AVAIL_BITMAP;
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
 
 #define ADC_STOP_SEC_CONST_32
 #include "Adc_MemMap.h"
+
+#ifdef ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND
+#define ADC_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#include "Adc_MemMap.h"
+uint32 Adc_Sar_Ip_u32workaround;
+
+#define ADC_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#include "Adc_MemMap.h"
+#endif /* ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND */
 
 /*==================================================================================================
 *                                      GLOBAL CONSTANTS
@@ -288,10 +298,30 @@ static const uint32 Adc_Sar_Ip_au32AdcFeatureBitmap[ADC_SAR_IP_INSTANCE_COUNT] =
 #define ADC_START_SEC_CODE
 #include "Adc_MemMap.h"
 
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-static inline uint8 Adc_Sar_GetResolution(const uint32 Instance);
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
+static inline void Adc_Sar_Powerup(const uint32 Instance);
 
+static inline void Adc_Sar_Powerdown(const uint32 Instance);
+
+static inline void Adc_Sar_WriteThresholds(const uint32 Instance,
+                                           const uint8 RegisterNumber,
+                                           const uint16 HighThreshold,
+                                           const uint16 LowThreshold);
+
+#if (ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u)
+static inline volatile uint32 * Adc_Sar_GetChannelWatchdogAddress(const uint32 Instance,
+                                                                  const uint32 RegisterNumber);
+#endif /* ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u */
+
+#if ADC_SAR_IP_CWSELR_AVAILABLE
+#if (STD_ON == ADC_SAR_IP_WDG_ENABLED )
+static inline void Adc_Sar_WriteChannelMapping(const uint32 Instance,
+                                               const uint32 RegisterNumber,
+                                               const uint32 FieldPosition,
+                                               const uint32 Value);
+#endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
+
+static inline void Adc_Sar_ResetWdogCWSELR(const uint32 Instance, const uint8 RegisterNumber);
+#endif /* ADC_SAR_IP_CWSELR_AVAILABLE */
 static inline uint16 Adc_Sar_GetMaskedResult(const uint32 Instance,
                                              const uint32 Cdr);
 static inline uint32 Adc_Sar_GetMsrFlags(const uint32 Instance);
@@ -319,12 +349,6 @@ static uint32 Adc_Sar_GetConvResults(const uint32 Instance,
                                      const uint32 Length);
 
 static void Adc_Sar_ResetWdog(const uint32 Instance);
-
-#if FEATURE_ADC_HAS_CLOCK_DIVIDER
-static inline void Adc_Sar_EnableClkDiv(const uint32 Instance,
-                                        const boolean ClkDivEnable);
-#endif /* FEATURE_ADC_HAS_CLOCK_DIVIDER */
-
 #if ( \
      (STD_ON == ADC_SAR_IP_ECH_ENABLED) || (STD_ON == ADC_SAR_IP_JECH_ENABLED) || \
      ((ADC_SAR_IP_HAS_CTU == 1U) && (STD_ON == ADC_SAR_IP_EOCTU_ENABLED) && (STD_ON == ADC_SAR_IP_EOC_ENABLED)) \
@@ -355,22 +379,14 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
 #endif /* ((STD_ON == ADC_SAR_IP_WDG_ENABLED) || (STD_ON == ADC_SAR_IP_EOC_ENABLED)) */
 
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER)
+#if (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE)
 static inline void Adc_Sar_ConfigExternalTrigger(const uint32 Instance,
                                                  const Adc_Sar_Ip_ExtTriggerEdgeType TriggerEdge,
                                                  const uint32 TrgEdgeSetMask,
                                                  const uint32 TrgEdgeClrMask,
                                                  const uint32 TrigSrcMask);
-#endif /* (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER) */
+#endif /* (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE) */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
-
-#if ADC_SAR_IP_HAS_TEMPSENSE_CHN
-#if (ADC_SAR_IP_TEMPSENSE_ENABLED == STD_ON)
-static inline uint32 Adc_Sar_TempsenseConvFp2Int(const uint32 FloatingPoint);
-static inline uint16 Adc_Sar_TempsenseConvInt2Fp(const sint32 SignedInteger);
-#endif /* (ADC_SAR_IP_TEMPSENSE_ENABLED == STD_ON) */
-#endif /* ADC_SAR_IP_HAS_TEMPSENSE_CHN */
-
 static inline void Adc_Sar_SetNormalChain(const uint32 Instance,
                                           const uint32 * const Mask);
 static inline void Adc_Sar_SetInjectedChain(const uint32 Instance,
@@ -380,21 +396,413 @@ static inline void Adc_Sar_SetInjectedChain(const uint32 Instance,
 static inline uint32 Adc_Sar_GetValueFromBool(const boolean bVal,
                                               const uint32 TrueVal,
                                               const uint32 FalseVal);
-
-static inline Adc_Sar_Ip_StatusType Adc_Sar_CalibrationClkRestore(const uint32 u32Instance, 
-                                                                     volatile uint32 * MCRAddr,
-                                                                     uint32 McrSavedValue);
-static inline Adc_Sar_Ip_StatusType Adc_Sar_CalibrationClkSelect(const uint32 u32Instance, 
-                                                                    volatile uint32 * MCRAddr,
-                                                                    uint32* McrSavedValue);
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
+static inline Adc_Sar_Ip_StatusType Adc_Sar_CalibrationClkRestore(const uint32 u32Instance,
+                                                                  volatile uint32 * MCRAddr,
+                                                                  uint32 McrSavedValue);
+static inline Adc_Sar_Ip_StatusType Adc_Sar_CalibrationClkSelect(const uint32 u32Instance,
+                                                                 volatile uint32 * MCRAddr,
+                                                                 uint32* McrSavedValue);
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
 #if (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED)
 static inline Adc_Sar_Ip_StatusType Adc_Sar_CheckTimeoutStatus(const uint32 ActualTimeout,
                                                                const uint32 ExpectTimeout);
+
+static void Adc_Sar_TimeoutCheckMSRStatus(volatile const uint32 * MSRAddr,
+                                          uint32 * TimeoutTicks,
+                                          uint32 * ElapsedTicks,
+                                          uint32 * CurrentTicks);
 #endif /* (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED) */
 
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
+
+
+/*FUNCTION*********************************************************************
+ *
+ * Function Name : Adc_Sar_Powerup
+ * Description   : Turning on power to the analog portion of ADC
+ *
+ *END*************************************************************************/
+static inline void Adc_Sar_Powerup(const uint32 Instance)
+{
+    ADC_Type * AdcBasePtr = NULL_PTR;
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    if (Instance >= ADC_INSTANCE_COUNT)
+    {
+        AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
+        AdcAEBasePtr->MCR &= ~(ADC_MCR_PWDN(1u));
+    }
+    else
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+    {
+        AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+        AdcBasePtr->MCR &= ~(ADC_MCR_PWDN(1u));
+    }
+}
+
+
+/*FUNCTION*********************************************************************
+ *
+ * Function Name : Adc_Sar_Powerdown
+ * Description   : Turning off power to the analog portion of ADC
+ *
+ *END*************************************************************************/
+static inline void Adc_Sar_Powerdown(const uint32 Instance)
+{
+    ADC_Type * AdcBasePtr = NULL_PTR;
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    if (Instance >= ADC_INSTANCE_COUNT)
+    {
+        AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
+        AdcAEBasePtr->MCR |= ADC_MCR_PWDN(1u);
+    }
+    else
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+    {
+        AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+        AdcBasePtr->MCR |= ADC_MCR_PWDN(1u);
+    }
+}
+
+
+/*FUNCTION*********************************************************************
+ *
+ * Function Name : Adc_Sar_WriteThresholds
+ * Description   : Write Watchdog low, high thresholds for a wdog register
+ *
+ *END*************************************************************************/
+static inline void Adc_Sar_WriteThresholds(const uint32 Instance,
+                                           const uint8 RegisterNumber,
+                                           const uint16 HighThreshold,
+                                           const uint16 LowThreshold)
+{
+#if ADC_SAR_IP_HAS_THRHLR_ARRAY
+    ADC_Type * AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+    uint32 Value = ADC_THRHLR_THRH(HighThreshold) |
+                   ADC_THRHLR_THRL(LowThreshold);
+    THRHLR(AdcBasePtr, RegisterNumber) = Value;
+#else /* ADC_SAR_IP_HAS_THRHLR_ARRAY == 0 */
+    ADC_Type * AdcBasePtr = NULL_PTR;
+    volatile uint32 * ThrhlrAddr = NULL_PTR;
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    SAR_ADC_AE_Type *AdcAEBasePtr = NULL_PTR;
+    if (Instance >= ADC_INSTANCE_COUNT)
+    {
+        AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
+        switch (RegisterNumber)
+        {
+            case 0u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR0);
+                break;
+            case 1u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR1);
+                break;
+            case 2u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR2);
+                break;
+            case 3u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR3);
+                break;
+            case 4u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR4);
+                break;
+            case 5u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR5);
+                break;
+            case 6u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR6);
+                break;
+            case 7u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR7);
+                break;
+            case 8u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR8);
+                break;
+            case 9u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR9);
+                break;
+            case 10u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR10);
+                break;
+            case 11u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR11);
+                break;
+            case 12u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR12);
+                break;
+            case 13u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR13);
+                break;
+            case 14u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR14);
+                break;
+            case 15u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcAEBasePtr->THRHLR15);
+                break;
+            default:
+                ; /* no-op */
+                break;
+        }
+    }
+    else
+#endif
+    {
+        AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+        switch (RegisterNumber)
+        {
+            case 0u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR0);
+                break;
+            case 1u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR1);
+                break;
+            case 2u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR2);
+                break;
+            case 3u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR3);
+                break;
+            case 4u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR4);
+                break;
+            case 5u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR5);
+                break;
+    #if (ADC_SAR_IP_THRHLR_COUNT > 6U)
+            case 6u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR6);
+                break;
+            case 7u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR7);
+                break;
+    #if (ADC_SAR_IP_THRHLR_COUNT > 8U)
+            case 8u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR8);
+                break;
+            case 9u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR9);
+                break;
+            case 10u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR10);
+                break;
+            case 11u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR11);
+                break;
+    #if (ADC_SAR_IP_THRHLR_COUNT > 12U)
+            case 12u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR12);
+                break;
+            case 13u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR13);
+                break;
+            case 14u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR14);
+                break;
+            case 15u:
+                ThrhlrAddr = (volatile uint32 *)&(AdcBasePtr->THRHLR15);
+                break;
+    #endif /* ((ADC_SAR_IP_THRHLR_COUNT > 12U) || ...) */
+    #endif /* ((ADC_SAR_IP_THRHLR_COUNT > 8U) || ...) */
+    #endif /* ((ADC_SAR_IP_THRHLR_COUNT > 6U) || ...) */
+            default:
+                ; /* no-op */
+                break;
+        }
+    }
+    uint32 Value = ADC_THRHLR0_THRH(HighThreshold) |
+                   ADC_THRHLR0_THRL(LowThreshold);
+    if (ThrhlrAddr != NULL_PTR)
+    {
+        *ThrhlrAddr = Value;
+    }
+#endif /* !ADC_SAR_IP_HAS_THRHLR_ARRAY */
+}
+
+#if (ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u)
+/*FUNCTION*********************************************************************
+ *
+ * Function Name : Adc_Sar_GetChannelWatchdogAddress
+ * Description   : Returns the address of the specified CWSELR register
+ *
+ *END*************************************************************************/
+static inline volatile uint32 * Adc_Sar_GetChannelWatchdogAddress(const uint32 Instance,
+                                                                  const uint32 RegisterNumber)
+{
+    ADC_Type * AdcBasePtr = NULL_PTR;
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+    volatile uint32 * CwselrAddr = NULL_PTR;
+#if (ADC_SAR_IP_HAS_CWSELR0 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+    volatile uint32 * CWSELR0Addr = NULL_PTR;
+#endif /* (ADC_SAR_IP_HAS_CWSELR0 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
+#if (ADC_SAR_IP_HAS_CWSELR1 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+    volatile uint32 * CWSELR1Addr = NULL_PTR;
+#endif /* (ADC_SAR_IP_HAS_CWSELR1 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
+#if (ADC_SAR_IP_HAS_CWSELR2 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+    volatile uint32 * CWSELR2Addr = NULL_PTR;
+#endif /* (ADC_SAR_IP_HAS_CWSELR2 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
+
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    if (Instance >= ADC_INSTANCE_COUNT)
+    {
+        AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
+        CWSELR0Addr = (volatile uint32 *)&(AdcAEBasePtr->CWSELR0);
+        CWSELR1Addr = (volatile uint32 *)&(AdcAEBasePtr->CWSELR1);
+        CWSELR2Addr = (volatile uint32 *)&(AdcAEBasePtr->CWSELR2);
+    }
+    else
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+    {
+        AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+#if ADC_SAR_IP_HAS_CWSELR0
+        CWSELR0Addr = (volatile uint32 *)&(AdcBasePtr->CWSELR0);
+#endif /* ADC_SAR_IP_HAS_CWSELR0 */
+#if ADC_SAR_IP_HAS_CWSELR1
+        CWSELR1Addr = (volatile uint32 *)&(AdcBasePtr->CWSELR1);
+#endif /* ADC_SAR_IP_HAS_CWSELR1 */
+#if ADC_SAR_IP_HAS_CWSELR2
+        CWSELR2Addr = (volatile uint32 *)&(AdcBasePtr->CWSELR2);
+#endif /* ADC_SAR_IP_HAS_CWSELR2 */
+    }
+
+    switch (RegisterNumber)
+    {
+#if (ADC_SAR_IP_HAS_CWSELR0 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+        case 0u:
+            CwselrAddr = CWSELR0Addr;
+            break;
+#endif /* (ADC_SAR_IP_HAS_CWSELR0 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
+#if (ADC_SAR_IP_HAS_CWSELR1 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+        case 1u:
+            CwselrAddr = CWSELR1Addr;
+            break;
+#endif /* (ADC_SAR_IP_HAS_CWSELR1 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
+#if (ADC_SAR_IP_HAS_CWSELR2 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+        case 2u:
+            CwselrAddr = CWSELR2Addr;
+            break;
+#endif /* (ADC_SAR_IP_HAS_CWSELR2 || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
+#if ADC_SAR_IP_HAS_CWSELR3
+        case 3u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR3);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR3 */
+#if ADC_SAR_IP_HAS_CWSELR4
+        case 4u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR4);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR4 */
+#if ADC_SAR_IP_HAS_CWSELR5
+        case 5u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR5);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR5 */
+#if ADC_SAR_IP_HAS_CWSELR6
+        case 6u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR6);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR6 */
+#if ADC_SAR_IP_HAS_CWSELR7
+        case 7u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR7);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR7 */
+#if ADC_SAR_IP_HAS_CWSELR8
+        case 8u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR8);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR8 */
+#if ADC_SAR_IP_HAS_CWSELR9
+        case 9u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR9);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR9 */
+#if ADC_SAR_IP_HAS_CWSELR10
+        case 10u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR10);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR10 */
+#if ADC_SAR_IP_HAS_CWSELR11
+        case 11u:
+            CwselrAddr = (volatile uint32 *)&(AdcBasePtr->CWSELR11);
+            break;
+#endif /* ADC_SAR_IP_HAS_CWSELR11 */
+        default:
+            ; /* the RegisterNumber does not exist */
+#if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
+            DevAssert(FALSE);
+#endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
+            break;
+    }
+
+    return CwselrAddr;
+}
+#endif /* ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1 */
+
+#if ADC_SAR_IP_CWSELR_AVAILABLE
+#if (STD_ON == ADC_SAR_IP_WDG_ENABLED )
+/*FUNCTION*********************************************************************
+ *
+ * Function Name : Adc_Sar_WriteChannelMapping
+ * Description   :
+ *
+ *END*************************************************************************/
+static inline void Adc_Sar_WriteChannelMapping(const uint32 Instance,
+                                               const uint32 RegisterNumber,
+                                               const uint32 FieldPosition,
+                                               const uint32 Value)
+{
+    uint32 CwselrVal;
+    uint32 CwselrMask;
+    uint32 CwselrShift;
+
+#if (ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u)
+    volatile uint32 * Cwselr = Adc_Sar_GetChannelWatchdogAddress(Instance, RegisterNumber);
+
+    /* Each CWSELR register contains 8 watchdog selections according to 8 channels
+       Each watchdog selection possibly needs maximum 4 bits for setting */
+    CwselrShift = FieldPosition * ADC_CWSELR0_WSEL_CH1_SHIFT;
+    CwselrMask = (uint32)ADC_CWSELR0_WSEL_CH0_MASK << CwselrShift;
+    CwselrVal  = (*Cwselr) & (~CwselrMask);
+    CwselrVal |= ADC_CWSELR0_WSEL_CH0(Value) << CwselrShift;
+    *Cwselr      = CwselrVal;
+#else /* ADC_SAR_IP_HAS_CWSELR_UNROLLED == 0 */
+    ADC_Type * const AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+
+    CwselrShift = FieldPosition * ADC_CWSELR_WSEL_CH1_SHIFT;
+    CwselrMask = (uint32)ADC_CWSELR_WSEL_CH0_MASK << CwselrShift;
+    CwselrVal  = CWSELR(AdcBasePtr, RegisterNumber) & (~CwselrMask);
+    CwselrVal |= ADC_CWSELR_WSEL_CH0(Value) << CwselrShift;
+    CWSELR(AdcBasePtr, RegisterNumber) = CwselrVal;
+#endif /* (ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u) */
+}
+#endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
+
+static inline void Adc_Sar_ResetWdogCWSELR(const uint32 Instance, const uint8 RegisterNumber)
+{
+#if (ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u)
+    volatile uint32 * Cwselr = Adc_Sar_GetChannelWatchdogAddress(Instance, (uint32)RegisterNumber);
+
+    *Cwselr = 0U;
+#else /* ADC_SAR_IP_HAS_CWSELR_UNROLLED == 0 */
+    ADC_Type * const AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+
+    CWSELR(AdcBasePtr, RegisterNumber) = 0u;
+#endif /* (ADC_SAR_IP_HAS_CWSELR_UNROLLED == 1u) */
+}
+#endif /* ADC_SAR_IP_CWSELR_AVAILABLE */
+
 #if (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED)
 static inline Adc_Sar_Ip_StatusType Adc_Sar_CheckTimeoutStatus(const uint32 ActualTimeout,
                                                                const uint32 ExpectTimeout)
@@ -409,30 +817,26 @@ static inline Adc_Sar_Ip_StatusType Adc_Sar_CheckTimeoutStatus(const uint32 Actu
     /* Return the value of ADC SAR status */
     return RelValue;
 }
-#endif /* (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED) */
 
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-/*FUNCTION*********************************************************************
- *
- * Function Name : Adc_Sar_GetResolution
- * Description   : Returns Adc Sar resolution for conversion data
- *
- *END*************************************************************************/
-static inline uint8 Adc_Sar_GetResolution(const uint32 Instance)
+static void Adc_Sar_TimeoutCheckMSRStatus(volatile const uint32 * MSRAddr,
+                                          uint32 * TimeoutTicks,
+                                          uint32 * ElapsedTicks,
+                                          uint32 * CurrentTicks)
 {
-    uint8 Resolution;
-    static const uint8 ResolutionArray[] = {14U, 12U, 10U, 8U}; /* maps each register bit value to resolution bit number */
-    const ADC_Type * const AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
-    uint32 Calbistreg = AdcBasePtr->CALBISTREG;
-    /* ResolutionArray can be used only for 2 bits resolutions. On S32K3 platforms only 2 bits are used so "& 3U" operation is needed */
-    uint8 ResolutionBits = (uint8)(((Calbistreg & ADC_CALBISTREG_RESN_MASK) >> ADC_CALBISTREG_RESN_SHIFT) & 3U);
-
-    Resolution = ResolutionArray[ResolutionBits];
-
-    return Resolution;
+    uint32 MsrStatus;
+    *TimeoutTicks = OsIf_MicrosToTicks(ADC_SAR_IP_TIMEOUT_VAL, ADC_SAR_IP_TIMEOUT_TYPE);
+    *CurrentTicks = OsIf_GetCounter(ADC_SAR_IP_TIMEOUT_TYPE);
+    *ElapsedTicks = 0U;
+    /* Read ADC status */
+    MsrStatus = ((*MSRAddr) & ADC_MSR_ADCSTATUS_MASK) >> ADC_MSR_ADCSTATUS_SHIFT;
+    /* Wait for ADC changes to the expected Idle mode, The bitfield MSR[ADCSTATUS] should be checked to Idle state when MCR[NSTART] is written to 0 */
+    while ((MsrStatus != ADC_MSR_ADCSTATUS(ADC_SAR_IP_MSR_ADCSTATUS_IDLE)) && (*ElapsedTicks < *TimeoutTicks))
+    {
+        MsrStatus = ((*MSRAddr) & ADC_MSR_ADCSTATUS_MASK) >> ADC_MSR_ADCSTATUS_SHIFT;
+        *ElapsedTicks += OsIf_GetElapsed(CurrentTicks, ADC_SAR_IP_TIMEOUT_TYPE);
+    }
 }
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
+#endif /* (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED) */
 #if (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED)
 /*FUNCTION*********************************************************************
  *
@@ -444,9 +848,9 @@ static inline void Adc_Sar_ConfigSelftestThreshold(const uint32 Instance,
                                                    const Adc_Sar_Ip_SelfTestThresholdType * SelfTestThresholdConfig)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #ifdef ADC_STAW0R_AWDE
     volatile uint32 * STAW0RAddr = NULL_PTR;
 #endif /* ADC_STAW0R_AWDE */
@@ -465,7 +869,7 @@ static inline void Adc_Sar_ConfigSelftestThreshold(const uint32 Instance,
     volatile uint32 * STAW5RAddr = NULL_PTR;
 #endif /* ADC_STAW4R_AWDE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -488,7 +892,7 @@ static inline void Adc_Sar_ConfigSelftestThreshold(const uint32 Instance,
 #endif /* ADC_STAW4R_AWDE */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
 #ifdef ADC_STAW0R_AWDE
@@ -553,9 +957,9 @@ static inline void Adc_Sar_ConfigSelftestThreshold(const uint32 Instance,
 static inline void Adc_Sar_EnableSelftestThreshold(const uint32 Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #ifdef ADC_STAW0R_AWDE
     volatile uint32 * STAW0RAddr = NULL_PTR;
 #endif /* ADC_STAW0R_AWDE */
@@ -572,7 +976,7 @@ static inline void Adc_Sar_EnableSelftestThreshold(const uint32 Instance)
     volatile uint32 * STAW4RAddr = NULL_PTR;
 #endif /* ADC_STAW4R_AWDE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -593,7 +997,7 @@ static inline void Adc_Sar_EnableSelftestThreshold(const uint32 Instance)
 #endif /* ADC_STAW4R_AWDE */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
 #ifdef ADC_STAW0R_AWDE
@@ -647,9 +1051,9 @@ static inline void Adc_Sar_EnableSelftestThreshold(const uint32 Instance)
 static inline void Adc_Sar_DisableSelftestThreshold(const uint32 Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #ifdef ADC_STAW0R_AWDE
     volatile uint32 * STAW0RAddr = NULL_PTR;
 #endif /* ADC_STAW0R_AWDE */
@@ -666,7 +1070,7 @@ static inline void Adc_Sar_DisableSelftestThreshold(const uint32 Instance)
     volatile uint32 * STAW4RAddr = NULL_PTR;
 #endif /* ADC_STAW4R_AWDE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -687,7 +1091,7 @@ static inline void Adc_Sar_DisableSelftestThreshold(const uint32 Instance)
 #endif /* ADC_STAW4R_AWDE */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
 #ifdef ADC_STAW0R_AWDE
@@ -741,25 +1145,7 @@ static inline uint16 Adc_Sar_GetMaskedResult(const uint32 Instance,
 {
     uint32 CdrMask;
     uint16 Result;
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-    uint8 Resolution;
-    uint32 ResolutionMask;
-    uint8 ResolutionShift;
-#else
     uint8 Resolution = ADC_SAR_IP_MAX_RESOLUTION;
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-    if (FALSE == Adc_Sar_Ip_axAdcSarState[Instance].BypassResolution)
-    {
-        Resolution = Adc_Sar_GetResolution(Instance);
-    }
-    else
-    {
-        Resolution = ADC_SAR_IP_RESULT_RESOLUTION;
-    }
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
     /* If the result is left aligned, adjust register mask accordingly */
     if (Adc_Sar_Ip_axAdcSarState[Instance].DataAlign == ADC_SAR_IP_DATA_ALIGNED_LEFT)
     {
@@ -767,21 +1153,11 @@ static inline uint16 Adc_Sar_GetMaskedResult(const uint32 Instance,
         CdrMask = (uint32)ADC_CDR_CDATA_MASK << (16u - Resolution);
         Result = ((uint16)(Cdr & CdrMask)) >> (16u - Resolution + ADC_CDR_CDATA_SHIFT);
     }
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-    else
-    {
-        ResolutionMask = (uint32)ADC_CDR_CDATA_MASK << (ADC_SAR_IP_RESULT_RESOLUTION - Resolution);
-        ResolutionShift = ADC_SAR_IP_RESULT_RESOLUTION - Resolution + ADC_CDR_CDATA_SHIFT;
-        CdrMask = ((uint32)ADC_CDR_CDATA_MASK >> 1u) & ResolutionMask;
-        Result = ((uint16)(Cdr & CdrMask)) >> ResolutionShift;
-    }
-#else
     else
     {
         CdrMask = (uint32)ADC_CDR_CDATA_MASK;
         Result = ((uint16)(Cdr & CdrMask)) >> ADC_CDR_CDATA_SHIFT;
     }
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
     return Result;
 }
 
@@ -797,26 +1173,26 @@ static inline uint32 Adc_Sar_GetMsrFlags(const uint32 Instance)
     uint32 Msr = 0U;
     uint32 Flags = 0U;
     const ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     const SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
         Msr = AdcAEBasePtr->MSR;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         Msr = AdcBasePtr->MSR;
     }
 
-#if FEATURE_ADC_HAS_CALIBRATION
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
     Flags |= ((Msr & ADC_MSR_CALIBRTD_MASK) != 0U) ? ADC_SAR_IP_STATUS_FLAG_CALIBRATED : 0U;
-#endif /* FEATURE_ADC_HAS_CALIBRATION */
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
     Flags |= ((Msr & ADC_MSR_NSTART_MASK) != 0U) ? ADC_SAR_IP_STATUS_FLAG_NORMAL_STARTED : 0U;
     Flags |= ((Msr & ADC_MSR_JABORT_MASK) != 0U) ? ADC_SAR_IP_STATUS_FLAG_INJECTED_ABORTED : 0U;
     Flags |= ((Msr & ADC_MSR_JSTART_MASK) != 0U) ? ADC_SAR_IP_STATUS_FLAG_INJECTED_STARTED : 0U;
@@ -846,18 +1222,18 @@ static inline uint32 Adc_Sar_GetIsrFlags(const uint32 Instance)
     uint32 Flags = 0U;
     uint32 Isr = 0U;
     const ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     const SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
         Isr = AdcAEBasePtr->ISR;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         Isr = AdcBasePtr->ISR;
@@ -968,7 +1344,7 @@ static inline uint32 Adc_Sar_CollectMcrMasks(const uint32 Instance,
 #endif /*ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE*/
 #endif /* ADC_SAR_IP_HAS_CTU */
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if FEATURE_ADC_HAS_INJ_EXT_TRIGGER
+#if ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE
     switch (Config->InjectedEdge)
     {
         case ADC_SAR_IP_EXT_TRIG_EDGE_FALLING:
@@ -987,11 +1363,11 @@ static inline uint32 Adc_Sar_CollectMcrMasks(const uint32 Instance,
             ; /* no-op */
             break;
     }
-#endif /* FEATURE_ADC_HAS_INJ_EXT_TRIGGER */
+#endif /* ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
 
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if FEATURE_ADC_HAS_EXT_TRIGGER
+#if ADC_SAR_IP_EXT_TRIGGER_AVAILABLE
     /* Get normal trigger masks */
     Mcr &= ~(ADC_MCR_EDGE_MASK);
     Mcr |= (Config->ExtTrigger == ADC_SAR_IP_EXT_TRIG_EDGE_RISING) ? (ADC_MCR_EDGE(1U)) : 0U;
@@ -999,33 +1375,33 @@ static inline uint32 Adc_Sar_CollectMcrMasks(const uint32 Instance,
     {
         Mcr &= ~(ADC_MCR_TRGEN_MASK);
         Mcr |= Adc_Sar_GetValueFromBool(Config->NormalExtTrgEn, ADC_MCR_TRGEN_MASK, 0U);
-#if FEATURE_ADC_HAS_AUX_EXT_TRIGGER
+#if ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE
         Mcr &= ~(ADC_MCR_XSTRTEN_MASK);
         Mcr |= Adc_Sar_GetValueFromBool(Config->NormalAuxExtTrgEn, ADC_MCR_XSTRTEN_MASK, 0U);
-#endif /* FEATURE_ADC_HAS_AUX_EXT_TRIGGER */
+#endif /* ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE */
     }
-#endif /* FEATURE_ADC_HAS_EXT_TRIGGER */
+#endif /* ADC_SAR_IP_EXT_TRIGGER_AVAILABLE */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
 
-#if FEATURE_ADC_HAS_AVERAGING
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
     Mcr &= ~(ADC_MCR_AVGEN_MASK);
     Mcr |= Adc_Sar_GetValueFromBool(Config->AvgEn, ADC_MCR_AVGEN_MASK, 0U);
     Mcr &= ~(ADC_MCR_AVGS_MASK);
     Mcr |= ADC_MCR_AVGS(Config->AvgSel);
 #else
-#if FEATURE_ADC_HAS_CALIBRATION
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
     /* On platforms that use AVGEN only for calibration, reset to default value */
     Mcr |= ADC_MCR_AVGEN_MASK;
-#endif /* FEATURE_ADC_HAS_CALIBRATION */
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
 
-#if FEATURE_ADC_HAS_CALIBRATION
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
 #if ADC_SAR_IP_CALIBRATION_USES_MCR
     /* Reset NRSMPL to default value */
     Mcr &= ~(ADC_MCR_NRSMPL_MASK);
     Mcr |= ADC_MCR_NRSMPL_MASK;
 #endif /* ADC_SAR_IP_CALIBRATION_USES_MCR */
-#endif /* FEATURE_ADC_HAS_CALIBRATION */
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
 
     return Mcr;
 }
@@ -1055,15 +1431,15 @@ static inline void Adc_Sar_ConfigChannels(const uint32 Instance,
     const uint32 CwenrMask[ADC_SAR_IP_NUM_GROUP_CHAN] = ADC_SAR_IP_NUM_GROUP_CHAN_INIT_VAL;
 #endif
     uint32 DmarMask[ADC_SAR_IP_NUM_GROUP_CHAN] = ADC_SAR_IP_NUM_GROUP_CHAN_INIT_VAL;
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
     uint32 PsrMask[ADC_SAR_IP_NUM_GROUP_CHAN] = ADC_SAR_IP_NUM_GROUP_CHAN_INIT_VAL;
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     const Adc_Sar_Ip_ChanConfigType * ChnConfig;
 
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
     for (Index = 0U; Index < NumChannels; Index++)
     {
@@ -1078,9 +1454,11 @@ static inline void Adc_Sar_ConfigChannels(const uint32 Instance,
         if (ADC_SAR_IP_INST_HAS_CWSELRn(Instance, VectAdr))
         {
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL */
+#if (STD_ON == ADC_SAR_IP_CWSELR_AVAILABLE)
             Adc_Sar_WriteChannelMapping(Instance, VectAdr, VectBit, ChnConfig->WdgThreshRegIndex);
             /* Store threshold register index for configured channel */
             Adc_Sar_Ip_axAdcSarState[Instance].ChanWdgThresholdIndex[ChnConfig->ChanIndex] = ChnConfig->WdgThreshRegIndex;
+#endif
 #if ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL
         }
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL */
@@ -1096,35 +1474,35 @@ static inline void Adc_Sar_ConfigChannels(const uint32 Instance,
         CwenrMask[VectAdr] |= Adc_Sar_GetValueFromBool(ChnConfig->WdgNotificationEn, (1UL << VectBit), 0UL);
 #endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
         DmarMask[VectAdr]  |= Adc_Sar_GetValueFromBool(ChnConfig->EndOfConvDmaEnable, (1UL << VectBit), 0UL);
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
         PsrMask[VectAdr]   |= Adc_Sar_GetValueFromBool(ChnConfig->PresamplingEnable, (1UL << VectBit), 0UL);
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     }
 
     /* Enable WDG, EOC, DMA and Presample */
     for (Index = 0U; Index < Adc_Sar_Ip_au8AdcGroupCount[Instance]; Index++)
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
             CIMR(AdcAEBasePtr, Index) = CimrMask[Index];
             CWENR(AdcAEBasePtr, Index) = CwenrMask[Index];
             DMAR(AdcAEBasePtr, Index) = DmarMask[Index];
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
             PSR(AdcAEBasePtr, Index) = PsrMask[Index];
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
             CIMR(AdcBasePtr, Index) = CimrMask[Index];
             CWENR(AdcBasePtr, Index) = CwenrMask[Index];
             DMAR(AdcBasePtr, Index) = DmarMask[Index];
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
             PSR(AdcBasePtr, Index) = PsrMask[Index];
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
         }
     }
 }
@@ -1148,23 +1526,23 @@ static inline Adc_Sar_Ip_StatusType Adc_Sar_CheckSelfTestProgress(const uint32 I
     uint8 Index;
 
     const ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     const SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
         MSRAddr = (volatile const uint32 *)&(AdcAEBasePtr->MSR);
-        STSR1Addr = &(AdcAEBasePtr->STSR1);
+        STSR1Addr = (volatile const uint32 *)&(AdcAEBasePtr->STSR1);
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         MSRAddr = (volatile const uint32 *)&(AdcBasePtr->MSR);
-        STSR1Addr = &(AdcBasePtr->STSR1);
+        STSR1Addr = (volatile const uint32 *)&(AdcBasePtr->STSR1);
     }
 
     /*  Each for loop checks the conversion of all steps in self-test S algorithm
@@ -1242,27 +1620,32 @@ static uint32 Adc_Sar_GetConvResults(const uint32 Instance,
 {
     uint32 Index = 0u;
     boolean LengthExceeded = FALSE;
-    ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
-    SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
     uint32 VectAdr;
     uint32 VectBit;
     uint8 ChnIdx;
     uint32 Cdr;
     volatile uint32 * CEOCFRAddr = NULL_PTR;
-    const uint16 AdcChanCount[ADC_SAR_IP_INSTANCE_COUNT][ADC_SAR_IP_NUM_GROUP_CHAN] = FEATURE_ADC_MAX_CHN_COUNT;
+    volatile uint32 * CEOCFBaseRAddr;
+    volatile const uint32 * CdrBaseRAddr;
+    const uint16 AdcChanCount[ADC_SAR_IP_INSTANCE_COUNT][ADC_SAR_IP_NUM_GROUP_CHAN] = ADC_SAR_IP_MAX_CHN_COUNT;
+    ADC_Type * AdcBasePtr = NULL_PTR;
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
+    SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
     if (Instance >= ADC_INSTANCE_COUNT)
     {
-        AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
+        AdcAEBasePtr   = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
+        CEOCFBaseRAddr = &(CEOCFR(AdcAEBasePtr, 0U));
+        CdrBaseRAddr   = &(CDR_AE(AdcAEBasePtr, 0U));
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
-        AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
+        AdcBasePtr     = Adc_Sar_Ip_apxAdcBase[Instance];
+        CEOCFBaseRAddr = &(CEOCFR(AdcBasePtr, 0U));
+        CdrBaseRAddr   = &(CDR(AdcBasePtr, 0U));
     }
+
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     /* ResultsRaw and ResultsStruct cannot be both NULL */
     DevAssert((ResultsRaw != NULL_PTR) || (ResultsStruct != NULL_PTR));
@@ -1271,16 +1654,7 @@ static uint32 Adc_Sar_GetConvResults(const uint32 Instance,
     /* Go through each channel group */
     for (VectAdr = 0u; VectAdr < Adc_Sar_Ip_au8AdcGroupCount[Instance]; VectAdr++)
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
-        if (Instance >= ADC_INSTANCE_COUNT)
-        {
-            CEOCFRAddr = &(CEOCFR(AdcAEBasePtr, VectAdr));
-        }
-        else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
-        {
-            CEOCFRAddr = &(CEOCFR(AdcBasePtr, VectAdr));
-        }
+        CEOCFRAddr = &CEOCFBaseRAddr[VectAdr];
         /* go through each bit in the group, check if there is a completed conversion */
         for (VectBit = 0u; VectBit < AdcChanCount[Instance][VectAdr]; VectBit++)
         {
@@ -1297,17 +1671,7 @@ static uint32 Adc_Sar_GetConvResults(const uint32 Instance,
                 continue; /* skip if the CDR register is not available */
             }
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL */
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
-            if (Instance >= ADC_INSTANCE_COUNT)
-            {
-                Cdr = CDR_AE(AdcAEBasePtr, ChnIdx);
-            }
-            else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
-            {
-                Cdr = CDR(AdcBasePtr, ChnIdx);
-            }
-
+            Cdr = CdrBaseRAddr[ChnIdx];
             if ((ADC_CDR_RESULT((uint32)ChainType) | ADC_CDR_VALID_MASK) == (Cdr & (ADC_CDR_RESULT_MASK | ADC_CDR_VALID_MASK)))
             {
                 /* if the result type matches the one request by ChainType
@@ -1357,18 +1721,18 @@ static void Adc_Sar_ResetWdog(const uint32 Instance)
     uint8 MaxThresholdRegs = 0U;
 
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
         MaxThresholdRegs = ADC_SAR_AE_IP_THRHLR_COUNT;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         MaxThresholdRegs = ADC_SAR_IP_THRHLR_COUNT;
@@ -1376,14 +1740,14 @@ static void Adc_Sar_ResetWdog(const uint32 Instance)
 
     for (Index = 0u; Index < Adc_Sar_Ip_au8AdcGroupCount[Instance]; Index++)
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (Instance >= ADC_INSTANCE_COUNT)
         {
             CWENR(AdcAEBasePtr, Index) = 0u;
             AWORR(AdcAEBasePtr, Index) = 0xFFFFFFFFu; /* w1c bits */
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             CWENR(AdcBasePtr, Index) = 0u;
             AWORR(AdcBasePtr, Index) = 0xFFFFFFFFu; /* w1c bits */
@@ -1404,34 +1768,11 @@ static void Adc_Sar_ResetWdog(const uint32 Instance)
             continue; /* skip register if it's not available */
         }
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL */
+#if ADC_SAR_IP_CWSELR_AVAILABLE
         Adc_Sar_ResetWdogCWSELR(Instance, Index);
+#endif /* ADC_SAR_IP_CWSELR_AVAILABLE */
     }
 }
-
-#if FEATURE_ADC_HAS_CLOCK_DIVIDER
-/*FUNCTION*********************************************************************
- *
- * Function Name : Adc_Sar_EnableClkDiv
- * Description   : Configure clock divider
- *
- *END*************************************************************************/
-static inline void Adc_Sar_EnableClkDiv(const uint32 Instance,
-                                        const boolean ClkDivEnable)
-{
-    ADC_Type * const AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
-
-    /* Enable clock divider */
-    if (ClkDivEnable)
-    {
-        AdcBasePtr->CLKDIV_CTRL |= ADC_CLKDIV_CTRL_CLKDIV_ENABLE(1U);
-    }
-    else
-    {
-        AdcBasePtr->CLKDIV_CTRL &= ~(ADC_CLKDIV_CTRL_CLKDIV_ENABLE_MASK);
-    }
-}
-#endif /* FEATURE_ADC_HAS_CLOCK_DIVIDER */
-
 #if ( \
      (STD_ON == ADC_SAR_IP_ECH_ENABLED) || (STD_ON == ADC_SAR_IP_JECH_ENABLED) || \
      ((ADC_SAR_IP_HAS_CTU == 1U) && (STD_ON == ADC_SAR_IP_EOCTU_ENABLED) && (STD_ON == ADC_SAR_IP_EOC_ENABLED)) \
@@ -1464,7 +1805,7 @@ static inline void Adc_Sar_CheckAndCallEoctuNotification(const uint32 Instance)
     boolean ValidInterrupt = FALSE;
     uint32 GroupIdx;
     ADC_Type * AdcBasePtr;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr;
 
     if (Instance >= ADC_INSTANCE_COUNT)
@@ -1476,7 +1817,7 @@ static inline void Adc_Sar_CheckAndCallEoctuNotification(const uint32 Instance)
         Imr            = AdcAEBasePtr->IMR;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr     = Adc_Sar_Ip_apxAdcBase[Instance];
         CEOCFBaseRAddr = &(CEOCFR(AdcBasePtr, 0U));
@@ -1535,15 +1876,15 @@ static inline void Adc_Sar_CheckAndCallEocNotification(uint32 Instance,
                                                        boolean * CeocfrFlag)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     const uint32 Mask = (uint32)1UL << ADC_SAR_IP_CHAN_2_BIT(ChanIdx);
     uint32 Ceocfr = 0U;
     uint32 Cimr   = 0U;
     volatile uint32 * CEOCFRAddr = NULL_PTR;
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -1551,7 +1892,7 @@ static inline void Adc_Sar_CheckAndCallEocNotification(uint32 Instance,
         Cimr   = (CIMR(AdcAEBasePtr, VectAdr) & Mask);
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         CEOCFRAddr = &(CEOCFR(AdcBasePtr, VectAdr));
@@ -1590,9 +1931,9 @@ static inline uint32 Adc_Sar_CheckAndCallWorrNotification(uint32 Instance,
                                                           uint16 VectAdr)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     const uint32 Mask = (uint32)1UL << ADC_SAR_IP_CHAN_2_BIT(ChanIdx);
     uint32 Aworr = 0U;
     uint32 Cwenr = 0U;
@@ -1603,7 +1944,7 @@ static inline uint32 Adc_Sar_CheckAndCallWorrNotification(uint32 Instance,
     uint16 ThresholdIndex;
     volatile uint32 * AWORRAddr;
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -1613,7 +1954,7 @@ static inline uint32 Adc_Sar_CheckAndCallWorrNotification(uint32 Instance,
         Wtimr = AdcAEBasePtr->WTIMR;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         AWORRAddr = &(AWORR(AdcBasePtr, VectAdr));
@@ -1668,13 +2009,13 @@ static inline uint32 Adc_Sar_CheckAndCallWorrNotification(uint32 Instance,
 static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint16 VectAdr;
     uint16 PhyChan;
     uint16 ChanCnt;
-    const uint16 AdcChanCount[ADC_SAR_IP_INSTANCE_COUNT][ADC_SAR_IP_NUM_GROUP_CHAN] = FEATURE_ADC_MAX_CHN_COUNT;
+    const uint16 AdcChanCount[ADC_SAR_IP_INSTANCE_COUNT][ADC_SAR_IP_NUM_GROUP_CHAN] = ADC_SAR_IP_MAX_CHN_COUNT;
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
     uint32 WtisrMask = 0U;
     volatile uint32 * WTISRAddr = NULL_PTR;
@@ -1686,7 +2027,7 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
     boolean CeocfrFlag = FALSE;
 #endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -1699,7 +2040,7 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
 #endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
 #if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
@@ -1716,12 +2057,6 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
     EocFlag  = (*IMRAddr);
     EocFlag &= (*ISRAddr);
     EocFlag &= (ADC_ISR_EOC_MASK | ADC_ISR_JEOC_MASK);
-
-    /* Clear EOC Flag */
-    if (EocFlag != 0)
-    {
-        *ISRAddr = EocFlag;
-    }
 #endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 
     for (VectAdr = 0U; VectAdr < Adc_Sar_Ip_au8AdcGroupCount[Instance]; VectAdr++)
@@ -1742,6 +2077,13 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
         }
     }
 
+    /* CPR_RTD_00664 */
+#if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
+    if (TRUE == CeocfrFlag)
+    {
+        *ISRAddr = EocFlag;
+    }
+#endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
     if (WtisrMask != 0U)
     {
@@ -1752,7 +2094,7 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
 #endif /* ((STD_ON == ADC_SAR_IP_WDG_ENABLED) || (STD_ON == ADC_SAR_IP_EOC_ENABLED)) */
 
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER)
+#if (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE)
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_ConfigExternalTrigger
@@ -1766,24 +2108,24 @@ static inline void Adc_Sar_ConfigExternalTrigger(const uint32 Instance,
                                                  const uint32 TrigSrcMask)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * MCRAddr = NULL_PTR;
 
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[Instance].CalibrationOnGoing)
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
             MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
             MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
@@ -1811,63 +2153,8 @@ static inline void Adc_Sar_ConfigExternalTrigger(const uint32 Instance,
     }
     SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_21();
 }
-#endif /* (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER) */
+#endif /* (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE) */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
-
-#if ADC_SAR_IP_HAS_TEMPSENSE_CHN
-#if (ADC_SAR_IP_TEMPSENSE_ENABLED == STD_ON)
-/*FUNCTION**********************************************************************
- *
- * Function Name : Adc_Sar_TempsenseConvFp2Int
- * Description   : The function converts the number in signed fixed point format
- * (1,11,4) to the integer number multipled with ADC_SAR_IP_TEMPSENSE_MULTIPLIER to avoid
- * rounding the decimal part.
- *
- *END**************************************************************************/
-static inline uint32 Adc_Sar_TempsenseConvFp2Int(const uint32 FloatingPoint)
-{
-    uint32 RetVal;
-
-    /* The integer and decimal part multiple with ADC_SAR_IP_TEMPSENSE_MULTIPLIER to avoid rounding the decimal part */
-    RetVal  = ((FloatingPoint & ADC_SAR_IP_TEMPSENSE_INTEGER_MASK) >> ADC_SAR_IP_TEMPSENSE_INTEGER_SHIFT) * ADC_SAR_IP_TEMPSENSE_MULTIPLIER;
-    RetVal += ((FloatingPoint & ADC_SAR_IP_TEMPSENSE_DECIMAL_MASK) * ADC_SAR_IP_TEMPSENSE_MULTIPLIER) / (ADC_SAR_IP_TEMPSENSE_DECIMAL_MASK + 1U);
-
-    return RetVal;
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : Adc_Sar_TempsenseConvInt2Fp
- * Description   : The function converts the number in integer number to signed fixed
- * point format (1,11,4). The integer number parameter is multipled with ADC_SAR_IP_TEMPSENSE_MULTIPLIER
- *
- *END**************************************************************************/
-static inline uint16 Adc_Sar_TempsenseConvInt2Fp(const sint32 SignedInteger)
-{
-    uint16 RetVal;
-    uint32 Temp;
-
-    if (SignedInteger < 0)
-    {
-        RetVal = ADC_SAR_IP_TEMPSENSE_SIGN_MASK;
-        Temp = (uint32)(- SignedInteger);
-    }
-    else
-    {
-        RetVal = 0U;
-        Temp = (uint32)SignedInteger;
-    }
-
-    /* Calculates the integer part */
-    RetVal |= (uint16)(((Temp / ADC_SAR_IP_TEMPSENSE_MULTIPLIER) << ADC_SAR_IP_TEMPSENSE_INTEGER_SHIFT) & ADC_SAR_IP_TEMPSENSE_INTEGER_MASK);
-    /* Calculates the decimal part */
-    RetVal |= (uint16)(((Temp % ADC_SAR_IP_TEMPSENSE_MULTIPLIER) * (ADC_SAR_IP_TEMPSENSE_DECIMAL_MASK + 1U)) / ADC_SAR_IP_TEMPSENSE_MULTIPLIER);
-
-    return RetVal;
-}
-#endif /* (ADC_SAR_IP_TEMPSENSE_ENABLED == STD_ON) */
-#endif /* ADC_SAR_IP_HAS_TEMPSENSE_CHN */
-
 /*FUNCTION*********************************************************************
  *
  * Function Name : Adc_Sar_Ip_IRQHandler
@@ -1878,9 +2165,9 @@ static inline uint16 Adc_Sar_TempsenseConvInt2Fp(const sint32 SignedInteger)
 void Adc_Sar_Ip_IRQHandler(const uint32 Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * ISRAddr = NULL_PTR;
     volatile uint32 * WTISRAddr = NULL_PTR;
     uint32 Isr = 0u;
@@ -1895,7 +2182,7 @@ void Adc_Sar_Ip_IRQHandler(const uint32 Instance)
     DevAssert(Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -1908,7 +2195,7 @@ void Adc_Sar_Ip_IRQHandler(const uint32 Instance)
 #endif /* (ADC_SAR_IP_HAS_CTU && (STD_ON == ADC_SAR_IP_EOCTU_ENABLED)) || ... */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         ISRAddr = (volatile uint32 *)&(AdcBasePtr->ISR);
@@ -1971,11 +2258,11 @@ static inline void Adc_Sar_SetNormalChain(const uint32 Instance,
     uint8 Index;
 
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -1985,7 +2272,7 @@ static inline void Adc_Sar_SetNormalChain(const uint32 Instance,
         }
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         for (Index = 0U; Index < Adc_Sar_Ip_au8AdcGroupCount[Instance]; Index++)
@@ -2007,11 +2294,11 @@ static inline void Adc_Sar_SetInjectedChain(const uint32 Instance,
     uint8 Index;
 
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -2021,7 +2308,7 @@ static inline void Adc_Sar_SetInjectedChain(const uint32 Instance,
         }
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
         for (Index = 0U; Index < Adc_Sar_Ip_au8AdcGroupCount[Instance]; Index++)
@@ -2046,7 +2333,7 @@ static inline uint32 Adc_Sar_GetValueFromBool(const boolean bVal,
 {
     return ((TRUE == bVal) ? TrueVal : FalseVal);
 }
-#if FEATURE_ADC_HAS_CALIBRATION
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
 /*FUNCTION**********************************************************************
  *
  * Function Name : Adc_Sar_CalibrationClkSelect
@@ -2103,7 +2390,7 @@ static inline Adc_Sar_Ip_StatusType Adc_Sar_CalibrationClkRestore(const uint32 u
 
     /* Restore the state of ADCLKSEL */
     Status = Adc_Sar_Ip_Powerdown(u32Instance);
-    
+
     SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_12();
     Mcr = *MCRAddr;
 #if ADC_SAR_IP_HAS_ADCLKSEL
@@ -2124,7 +2411,7 @@ static inline Adc_Sar_Ip_StatusType Adc_Sar_CalibrationClkRestore(const uint32 u
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
     return Status;
 }
-#endif /* FEATURE_ADC_HAS_CALIBRATION */
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
@@ -2146,17 +2433,17 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
     volatile uint32 * MCRAddr = NULL_PTR;
     volatile uint32 * PDEDRAddr = NULL_PTR;
     volatile uint32 * DMAEAddr = NULL_PTR;
-#if FEATURE_ADC_SAR_DECODE_DELAY
+#if ADC_SAR_IP_DECODE_DELAY_AVAILABLE
     volatile uint32 * DSDRAddr = NULL_PTR;
-#endif /* FEATURE_ADC_SAR_DECODE_DELAY */
-#if FEATURE_ADC_HAS_PRESAMPLING
+#endif /* ADC_SAR_IP_DECODE_DELAY_AVAILABLE */
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
     volatile uint32 * PSCRAddr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
 
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -2169,33 +2456,33 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
 #endif /* (ADC_SAR_IP_HAS_CTU_TRIGGER_MODE == 0u) */
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
         MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
         PDEDRAddr = (volatile uint32 *)&(AdcAEBasePtr->PDEDR);
         DMAEAddr = (volatile uint32 *)&(AdcAEBasePtr->DMAE);
-#if FEATURE_ADC_SAR_DECODE_DELAY
+#if ADC_SAR_IP_DECODE_DELAY_AVAILABLE
         DSDRAddr = (volatile uint32 *)&(AdcAEBasePtr->DSDR);
-#endif /* FEATURE_ADC_SAR_DECODE_DELAY */
-#if FEATURE_ADC_HAS_PRESAMPLING
+#endif /* ADC_SAR_IP_DECODE_DELAY_AVAILABLE */
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
         PSCRAddr = (volatile uint32 *)&(AdcAEBasePtr->PSCR);
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
         PDEDRAddr = (volatile uint32 *)&(AdcBasePtr->PDEDR);
         DMAEAddr = (volatile uint32 *)&(AdcBasePtr->DMAE);
-#if FEATURE_ADC_SAR_DECODE_DELAY
+#if ADC_SAR_IP_DECODE_DELAY_AVAILABLE
         DSDRAddr = (volatile uint32 *)&(AdcBasePtr->DSDR);
-#endif /* FEATURE_ADC_SAR_DECODE_DELAY */
-#if FEATURE_ADC_HAS_PRESAMPLING
+#endif /* ADC_SAR_IP_DECODE_DELAY_AVAILABLE */
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
         PSCRAddr = (volatile uint32 *)&(AdcBasePtr->PSCR);
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     }
 
 #if (STD_ON == ADC_SAR_IP_ENABLE_USER_MODE_SUPPORT)
@@ -2230,31 +2517,25 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
                 /* Workaround to enable CTU_MODE because it cannot be written in power-down mode in SAF85 */
                 *MCRAddr |= ADC_MCR_CTU_MODE(1U);
             }
-#if FEATURE_ADC_HAS_HIGH_SPEED_ENABLE
+#if ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE
             /* Enables high speed conversion or calibration */
             Adc_Sar_EnableHighSpeed(AdcBasePtr, pConfig->HighSpeedConvEn);
-#endif /* FEATURE_ADC_HAS_HIGH_SPEED_ENABLE */
+#endif /* ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE */
 
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
             /* Set the sample times for each channnel group */
             Adc_Sar_Ip_SetSampleTimes(u32Instance, pConfig->SampleTimeArr);
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
 
             *PDEDRAddr = ADC_PDEDR_PDED(pConfig->PowerDownDelay);
-
-#if FEATURE_ADC_HAS_CLOCK_DIVIDER
-            /* Configure clock divider */
-            Adc_Sar_EnableClkDiv(u32Instance, pConfig->ClkDivEnable);
-#endif /* FEATURE_ADC_HAS_CLOCK_DIVIDER */
-
 #ifdef ADC_DSDR_DSD
 #if ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE
             if (ADC_SAR_IP_INST_HAS_DSDR(u32Instance))
             {
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
-#if FEATURE_ADC_SAR_DECODE_DELAY
+#if ADC_SAR_IP_DECODE_DELAY_AVAILABLE
                 *DSDRAddr = ADC_DSDR_DSD(pConfig->DecodeDelay);
-#endif /* FEATURE_ADC_SAR_DECODE_DELAY */
+#endif /* ADC_SAR_IP_DECODE_DELAY_AVAILABLE */
 #if ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE
             }
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
@@ -2263,12 +2544,6 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
             /* Configure chain conversions */
             Adc_Sar_SetNormalChain(u32Instance, pConfig->ChanMaskNormal);
             Adc_Sar_SetInjectedChain(u32Instance, pConfig->ChanMaskInjected);
-
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-            /* Configure resolution */
-            Adc_Sar_Ip_SetResolution(u32Instance, pConfig->AdcResolution);
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
             /* Configure WDG */
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
             if ((pConfig->WdgThresholds != NULL_PTR) && (pConfig->NumWdgThresholds > 0u))
@@ -2301,7 +2576,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
                 Adc_Sar_ConfigChannels(u32Instance, pConfig->ChannelConfigsPtr, pConfig->NumChannels);
             }
 
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
             /* Configure presampling sources */
             *PSCRAddr &= ~(ADC_PSCR_PRECONV_MASK);
             *PSCRAddr |= ADC_PSCR_PRECONV(pConfig->BypassSampling ? 1u : 0u);
@@ -2311,7 +2586,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
 #if ADC_SAR_IP_NUM_GROUP_CHAN > 2u
             Adc_Sar_Ip_SetPresamplingSource(u32Instance, ADC_SAR_IP_CHAN_GROUP_2, pConfig->PresamplingSourceArr[2u]);
 #endif /* ADC_SAR_IP_NUM_GROUP_CHAN > 2u */
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
 
 
             /* Add notification callbacks to the state structure */
@@ -2332,24 +2607,22 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
             Adc_Sar_Ip_axAdcSarState[u32Instance].WdgOutOfRangeNotification = pConfig->WdgOutOfRangeNotification;
 #endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-            Adc_Sar_Ip_axAdcSarState[u32Instance].BypassResolution = pConfig->BypassResolution;
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
             Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationClkSelect = pConfig->CalibrationClkSelect;
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
             if (u32Instance >= ADC_INSTANCE_COUNT)
             {
                 /* Configure user gain and offset */
                 AdcAEBasePtr->ADC_AE_USER_OFFSET_GAIN_REG = ADC_AE_USER_OFFSET(pConfig->UsrOffset) | ADC_AE_USER_GAIN(pConfig->UsrGain);
             }
             else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
             {
                 /* Configure user gain and offset */
                 AdcBasePtr->ADC_USER_OFFSET_GAIN_REG = ADC_USER_OFFSET(pConfig->UsrOffset) | ADC_USER_GAIN(pConfig->UsrGain);
             }
-
+#endif /* ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE */
             /* Mark that the driver was initialized */
             Adc_Sar_Ip_axAdcSarState[u32Instance].InitStatus = TRUE;
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
@@ -2372,9 +2645,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Init(const uint32 u32Instance,
 Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint32 Index;
     Adc_Sar_Ip_ConfigType DefaultConfig;
     Adc_Sar_Ip_StatusType Status;
@@ -2386,68 +2659,68 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
     DefaultConfig.ConvMode = ADC_SAR_IP_CONV_MODE_ONESHOT;
     DefaultConfig.ClkSelect = ADC_SAR_IP_CLK_FULL_BUS;
     DefaultConfig.CalibrationClkSelect = ADC_SAR_IP_CLK_HALF_BUS;
-#if FEATURE_ADC_HAS_HIGH_SPEED_ENABLE
+#if ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE
     DefaultConfig.HighSpeedConvEn = FALSE;
-#endif /* FEATURE_ADC_HAS_HIGH_SPEED_ENABLE */
+#endif /* ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE */
 #if ADC_SAR_IP_HAS_CTU
     DefaultConfig.CtuMode = ADC_SAR_IP_CTU_MODE_DISABLED;
 #endif /* ADC_SAR_IP_HAS_CTU */
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if FEATURE_ADC_HAS_INJ_EXT_TRIGGER
+#if ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE
     DefaultConfig.InjectedEdge = ADC_SAR_IP_EXT_TRIG_EDGE_DISABLED;
-#endif /* FEATURE_ADC_HAS_INJ_EXT_TRIGGER */
-#if FEATURE_ADC_HAS_EXT_TRIGGER
+#endif /* ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE */
+#if ADC_SAR_IP_EXT_TRIGGER_AVAILABLE
     DefaultConfig.ExtTrigger = ADC_SAR_IP_EXT_TRIG_EDGE_DISABLED;
     DefaultConfig.NormalExtTrgEn = FALSE;
-#if FEATURE_ADC_HAS_AUX_EXT_TRIGGER
+#if ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE
     DefaultConfig.NormalAuxExtTrgEn = FALSE;
-#endif /* FEATURE_ADC_HAS_AUX_EXT_TRIGGER */
-#endif /* FEATURE_ADC_HAS_EXT_TRIGGER */
+#endif /* ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE */
+#endif /* ADC_SAR_IP_EXT_TRIGGER_AVAILABLE */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
-#if (FEATURE_ADC_HAS_CONVERSION_TIMING || FEATURE_ADC_HAS_PRESAMPLING)
+#if (ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE || ADC_SAR_IP_PRESAMPLING_AVAILABLE)
     for (Index = 0u; Index < Adc_Sar_Ip_au8AdcGroupCount[u32Instance]; Index++)
     {
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         DefaultConfig.SampleTimeArr[Index] = ADC_SAR_AE_IP_DEF_SAMPLE_TIME;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         DefaultConfig.SampleTimeArr[Index] = ADC_SAR_IP_DEF_SAMPLE_TIME;
     }
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
-#if FEATURE_ADC_HAS_PRESAMPLING
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
 #if (ADC_PSCR_PREVAL0_WIDTH > 1u)
         DefaultConfig.PresamplingSourceArr[Index] = ADC_SAR_IP_PRESAMPLE_DVDD;
 #else
         DefaultConfig.PresamplingSourceArr[Index] = ADC_SAR_IP_PRESAMPLE_VREFL;
 #endif /* (ADC_PSCR_PREVAL0_WIDTH > 1u) */
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     }
-#endif /* (FEATURE_ADC_HAS_CONVERSION_TIMING || FEATURE_ADC_HAS_PRESAMPLING) */
-#if FEATURE_ADC_HAS_PRESAMPLING
+#endif /* (ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE || ADC_SAR_IP_PRESAMPLING_AVAILABLE) */
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
     DefaultConfig.BypassSampling = FALSE;
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     DefaultConfig.AutoClockOff = FALSE;
     DefaultConfig.OverwriteEnable = FALSE;
     DefaultConfig.DataAlign = ADC_SAR_IP_DATA_ALIGNED_RIGHT;
-#if FEATURE_ADC_SAR_DECODE_DELAY
+#if ADC_SAR_IP_DECODE_DELAY_AVAILABLE
     DefaultConfig.DecodeDelay = 0u;
-#endif /* FEATURE_ADC_SAR_DECODE_DELAY */
+#endif /* ADC_SAR_IP_DECODE_DELAY_AVAILABLE */
     DefaultConfig.PowerDownDelay = 0u;
 #if (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED)
     DefaultConfig.SelfTestThresholdConfig = NULL_PTR;
 #endif /* (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED) */
-#if FEATURE_ADC_HAS_CLOCK_DIVIDER
+#if ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE
     DefaultConfig.ClkDivEnable = FALSE;
-#endif /* FEATURE_ADC_HAS_CLOCK_DIVIDER */
-#if FEATURE_ADC_HAS_AVERAGING
+#endif /* ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE */
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
     DefaultConfig.AvgEn = FALSE;
     DefaultConfig.AvgSel = ADC_SAR_IP_AVG_4_CONV;
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
     DefaultConfig.UsrOffset = 0u;
     DefaultConfig.UsrGain = 0u;
     DefaultConfig.DmaEnable = FALSE;
@@ -2477,7 +2750,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
     Status = Adc_Sar_Ip_Init(u32Instance, &DefaultConfig);
     if (ADC_SAR_IP_STATUS_SUCCESS == Status)
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if ((u32Instance >= ADC_INSTANCE_COUNT))
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -2486,9 +2759,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
                 CIMR(AdcAEBasePtr, Index) = 0u;
                 CEOCFR(AdcAEBasePtr, Index) = 0xFFFFFFFFu; /* w1c bits */
                 DMAR(AdcAEBasePtr, Index) = 0u;
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
                 PSR(AdcAEBasePtr, Index) = 0u;
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
             }
 
             /* Deinit watchdog interrupts */
@@ -2496,7 +2769,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
             AdcAEBasePtr->WTIMR = 0u;
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             for (Index = 0u; Index < Adc_Sar_Ip_au8AdcGroupCount[u32Instance]; Index++)
@@ -2504,9 +2777,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
                 CIMR(AdcBasePtr, Index) = 0u;
                 CEOCFR(AdcBasePtr, Index) = 0xFFFFFFFFu; /* w1c bits */
                 DMAR(AdcBasePtr, Index) = 0u;
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
                 PSR(AdcBasePtr, Index) = 0u;
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
             }
 
             /* Deinit watchdog interrupts */
@@ -2516,11 +2789,6 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Deinit(const uint32 u32Instance)
         /* Deinit channel configuration */
 
         Adc_Sar_Ip_ClearStatusFlags(u32Instance, ADC_SAR_IP_NOTIF_FLAG_ALL);
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-        /* Set default resolution */
-        Adc_Sar_Ip_SetResolution(u32Instance, ADC_SAR_IP_RESOLUTION_12);
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
         /* Mark that the driver was deinitialized */
         Adc_Sar_Ip_axAdcSarState[u32Instance].InitStatus = FALSE;
 
@@ -2552,7 +2820,7 @@ void Adc_Sar_Ip_ChainConfig(const uint32 u32Instance,
     DevAssert(pChansIdxMask != NULL_PTR);
 #if ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL
     uint8 i;
-    
+
     /* Enabling unavailable channels is forbidden */
     for (i = 0U; i < ADC_SAR_IP_NUM_GROUP_CHAN; i++)
     {
@@ -2593,9 +2861,9 @@ void Adc_Sar_Ip_EnableChannel(const uint32 u32Instance,
     uint32 VectAdr;
     uint32 VectBit;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * NCMRAddr = NULL_PTR;
     volatile uint32 * JCMRAddr = NULL_PTR;
 
@@ -2613,7 +2881,7 @@ void Adc_Sar_Ip_EnableChannel(const uint32 u32Instance,
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -2621,7 +2889,7 @@ void Adc_Sar_Ip_EnableChannel(const uint32 u32Instance,
         JCMRAddr = &(JCMR(AdcAEBasePtr, VectAdr));
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         NCMRAddr = &(NCMR(AdcBasePtr, VectAdr));
@@ -2664,9 +2932,9 @@ void Adc_Sar_Ip_DisableChannel(const uint32 u32Instance,
     uint32 VectAdr;
     uint32 VectBit;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * NCMRAddr = NULL_PTR;
     volatile uint32 * JCMRAddr = NULL_PTR;
 
@@ -2684,7 +2952,7 @@ void Adc_Sar_Ip_DisableChannel(const uint32 u32Instance,
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -2692,7 +2960,7 @@ void Adc_Sar_Ip_DisableChannel(const uint32 u32Instance,
         JCMRAddr = &(JCMR(AdcAEBasePtr, VectAdr));
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         NCMRAddr = &(NCMR(AdcBasePtr, VectAdr));
@@ -2720,66 +2988,6 @@ void Adc_Sar_Ip_DisableChannel(const uint32 u32Instance,
     }
 }
 
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-/*FUNCTION**********************************************************************
-*
-* Function Name : Adc_Sar_Ip_SetResolution
-* Description   : This function sets the conversion resolution (number of bits per conversion data)
-*
-* @implements      Adc_Sar_Ip_SetResolution_Activity
-* END**************************************************************************/
-void Adc_Sar_Ip_SetResolution(const uint32 u32Instance,
-                              const Adc_Sar_Ip_Resolution eResolution)
-{
-    uint32 Calbistreg;
-    ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
-    SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
-#if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
-    uint32 Msr;
-    DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
-#endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
-    volatile uint32 * CALBISTREGAddr = NULL_PTR;
-#if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
-    /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
-#endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
-    {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
-        if (u32Instance >= ADC_INSTANCE_COUNT)
-        {
-            AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
-#if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
-        Msr = AdcAEBasePtr->MSR;
-    #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
-            CALBISTREGAddr = (volatile uint32 *)&(AdcAEBasePtr->CALBISTREG);
-        }
-        else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
-        {
-            AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
-#if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
-            Msr = AdcBasePtr->MSR;
-#endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
-            CALBISTREGAddr = (volatile uint32 *)&(AdcBasePtr->CALBISTREG);
-        }
-
-#if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
-        /* The selected ADC should be in IDLE state */
-        DevAssert((Msr & ADC_MSR_ADCSTATUS_MASK) == ADC_MSR_ADCSTATUS(ADC_SAR_IP_MSR_ADCSTATUS_IDLE));
-#endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
-        SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_37();
-        Calbistreg = *CALBISTREGAddr;
-        /* Clear the bits and set resolution value */
-        Calbistreg &= ~(ADC_CALBISTREG_RESN_MASK);
-        Calbistreg |= ADC_CALBISTREG_RESN(eResolution);
-        *CALBISTREGAddr = Calbistreg;
-        SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_37();
-    }
-}
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
-
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_Ip_StartConversion
@@ -2792,9 +3000,9 @@ void Adc_Sar_Ip_StartConversion(const uint32 u32Instance,
                                 const Adc_Sar_Ip_ConvChainType pChainType)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * MCRAddr = NULL_PTR;
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
@@ -2802,17 +3010,17 @@ void Adc_Sar_Ip_StartConversion(const uint32 u32Instance,
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
-#endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */    
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+#endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
             MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
@@ -2876,23 +3084,23 @@ void Adc_Sar_Ip_ClearStatusFlags(const uint32 u32Instance,
     volatile uint32 * ISRAddr = NULL_PTR;
 
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
     DevAssert((u32Mask & (~ADC_SAR_IP_NOTIF_FLAG_ALL)) == 0UL);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
         ISRAddr = (volatile uint32 *)&(AdcAEBasePtr->ISR);
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         ISRAddr = (volatile uint32 *)&(AdcBasePtr->ISR);
@@ -2931,16 +3139,15 @@ void Adc_Sar_Ip_ClearStatusFlags(const uint32 u32Instance,
 Adc_Sar_Ip_StatusType Adc_Sar_Ip_SelfTest(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     Adc_Sar_Ip_StatusType Status = ADC_SAR_IP_STATUS_SUCCESS;
 #if ADC_SAR_IP_HAS_SELFTEST_STCR1
     uint32 Reg;
 #endif /* ADC_SAR_IP_HAS_SELFTEST_STCR1 */
-    uint32 MsrStatus;
-    uint32 TimeoutTicks = OsIf_MicrosToTicks(ADC_SAR_IP_TIMEOUT_VAL, ADC_SAR_IP_TIMEOUT_TYPE);
-    uint32 CurrentTicks = OsIf_GetCounter(ADC_SAR_IP_TIMEOUT_TYPE);
+    uint32 TimeoutTicks = 0U;
+    uint32 CurrentTicks = 0U;
     uint32 ElapsedTicks = 0U;
 #if (ADC_SAR_IP_SELFTEST_FULL_CLK && ADC_SAR_IP_HAS_ADCLKSEL)
     uint32 AdcClkSel = 0u;
@@ -2971,15 +3178,15 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SelfTest(const uint32 u32Instance)
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
     {
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
             MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
-            MSRAddr = (volatile uint32 *)&(AdcAEBasePtr->MSR);
+            MSRAddr = (volatile const uint32 *)&(AdcAEBasePtr->MSR);
 #if !ADC_SAR_IP_HAS_SELFTEST_USE_CH32
             NCMR0Addr = &(NCMR(AdcAEBasePtr, 0u));
 #else
@@ -2994,11 +3201,11 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SelfTest(const uint32 u32Instance)
 #endif /* ADC_SAR_IP_HAS_SELFTEST_STCR3 */
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
-            MSRAddr = (volatile uint32 *)&(AdcBasePtr->MSR);
+            MSRAddr = (volatile const uint32 *)&(AdcBasePtr->MSR);
 #if !ADC_SAR_IP_HAS_SELFTEST_USE_CH32
             NCMR0Addr = &(NCMR(AdcBasePtr, 0u));
 #else
@@ -3133,16 +3340,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SelfTest(const uint32 u32Instance)
 
                 if (ADC_SAR_IP_STATUS_SUCCESS == Status)
                 {
-                    /* Read ADC status */
-                    MsrStatus = ((*MSRAddr) & ADC_MSR_ADCSTATUS_MASK) >> ADC_MSR_ADCSTATUS_SHIFT;
-                    /* Wait for ADC changes to the expected Idle mode, The bitfield MSR[ADCSTATUS] should be checked to Idle state when MCR[NSTART] is written to 0 */
-                    TimeoutTicks = OsIf_MicrosToTicks(ADC_SAR_IP_TIMEOUT_VAL, ADC_SAR_IP_TIMEOUT_TYPE);
-                    ElapsedTicks = 0U;
-                    while ((MsrStatus != ADC_MSR_ADCSTATUS(ADC_SAR_IP_MSR_ADCSTATUS_IDLE)) && (ElapsedTicks < TimeoutTicks))
-                    {
-                        MsrStatus = ((*MSRAddr) & ADC_MSR_ADCSTATUS_MASK) >> ADC_MSR_ADCSTATUS_SHIFT;
-                        ElapsedTicks += OsIf_GetElapsed(&CurrentTicks, ADC_SAR_IP_TIMEOUT_TYPE);
-                    }
+                    Adc_Sar_TimeoutCheckMSRStatus(MSRAddr, &TimeoutTicks, &ElapsedTicks, &CurrentTicks);
                 }
 
                 Adc_Sar_DisableSelftestThreshold(u32Instance);
@@ -3255,9 +3453,9 @@ uint16 Adc_Sar_Ip_GetConvData(const uint32 u32Instance,
     uint32 VectBit;
     uint32 Cdr;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -3269,7 +3467,7 @@ uint16 Adc_Sar_Ip_GetConvData(const uint32 u32Instance,
 
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3283,7 +3481,7 @@ uint16 Adc_Sar_Ip_GetConvData(const uint32 u32Instance,
         }
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         Cdr = CDR(AdcBasePtr, u32ChnIdx);
@@ -3326,9 +3524,9 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
     uint32 Cdr;
     volatile uint32 * CEOCFRAddr = NULL_PTR;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -3347,7 +3545,7 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
     pResult->ValidFlag = FALSE;
     pResult->OverWrittenFlag = FALSE;
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3355,7 +3553,7 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
         CEOCFRAddr = &(CEOCFR(AdcAEBasePtr, VectAdr));
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         Cdr = CDR(AdcBasePtr, u32ChnIdx);
@@ -3378,7 +3576,7 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
     *CEOCFRAddr = ((uint32)1UL << VectBit); /* w1c bit */
 }
 
-#if FEATURE_ADC_HAS_CALIBRATION
+#if ADC_SAR_IP_CALIBRATION_AVAILABLE
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_Ip_DoCalibration
@@ -3392,9 +3590,9 @@ void Adc_Sar_Ip_GetConvResult(const uint32 u32Instance,
 Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     Adc_Sar_Ip_StatusType Status = ADC_SAR_IP_STATUS_SUCCESS;
     Adc_Sar_Ip_StatusType CalStatus = ADC_SAR_IP_STATUS_SUCCESS;
     uint32 TimeoutTicks = OsIf_MicrosToTicks(ADC_SAR_IP_TIMEOUT_VAL, ADC_SAR_IP_TIMEOUT_TYPE);
@@ -3406,19 +3604,19 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
     uint32 Mcr;
 #endif /* ADC_SAR_IP_CALIBRATION_USES_MCR */
     volatile uint32 * MCRAddr = NULL_PTR;
-#if (!ADC_SAR_IP_CALIBRATION_USES_MCR || FEATURE_ADC_HAS_APPLICATION_EXTENSION)
+#if (!ADC_SAR_IP_CALIBRATION_USES_MCR || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
     uint32 Calbistreg;
     volatile uint32 * CALBISTREGAddr = NULL_PTR;
 #if defined(ADC_CAL2_ENX_MASK)
     volatile uint32 * CAL2Addr = NULL_PTR;
 #endif /* defined(ADC_CAL2_ENX_MASK) */
-#endif /* (!ADC_SAR_IP_CALIBRATION_USES_MCR || FEATURE_ADC_HAS_APPLICATION_EXTENSION) */
+#endif /* (!ADC_SAR_IP_CALIBRATION_USES_MCR || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3429,7 +3627,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
 #endif /* defined(ADC_CAL2_ENX_MASK) */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
@@ -3441,11 +3639,11 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
 #endif /* !ADC_SAR_IP_CALIBRATION_USES_MCR */
     }
 
-#if (!ADC_SAR_IP_CALIBRATION_USES_MCR || FEATURE_ADC_HAS_APPLICATION_EXTENSION)
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if (!ADC_SAR_IP_CALIBRATION_USES_MCR || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE)
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
             if (u32Instance >= ADC_INSTANCE_COUNT)
             {
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
                 if (Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing == FALSE)
                 {
@@ -3478,7 +3676,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
                 else
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
                 {
-                    
+
                     /* Wait for calibration to finish */
                     while (((*CALBISTREGAddr & ADC_SAR_IP_CALBISTREG_C_T_BUSY_MASK) != 0U) && (ElapsedTicks < TimeoutTicks))
                     {
@@ -3498,17 +3696,17 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
                         ; /* Empty else branch to avoid MISRA */
                     }
                     Status = Adc_Sar_CalibrationClkRestore(u32Instance, MCRAddr, McrSavedValue);
-                    
+
                 }
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
             }
             else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
-#endif /* (!ADC_SAR_IP_CALIBRATION_USES_MCR || FEATURE_ADC_HAS_APPLICATION_EXTENSION) */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
+#endif /* (!ADC_SAR_IP_CALIBRATION_USES_MCR || ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE) */
             {
 #if ADC_SAR_IP_CALIBRATION_USES_MCR
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
-                if(Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing == FALSE)
+                if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
                 {
                     Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing = TRUE;
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
@@ -3562,7 +3760,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_DoCalibration(const uint32 u32Instance)
             }
     return Status;
 }
-#endif /* FEATURE_ADC_HAS_CALIBRATION */
+#endif /* ADC_SAR_IP_CALIBRATION_AVAILABLE */
 
 /*FUNCTION**********************************************************************
 *
@@ -3577,9 +3775,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerup(const uint32 u32Instance)
     Adc_Sar_Ip_StatusType ReturnStatus = ADC_SAR_IP_STATUS_SUCCESS;
 
     const ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     const SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #if ADC_SAR_IP_HAS_BANDGAP_STATUS
     uint32 BandGapStatus = 0u;
 #else
@@ -3595,7 +3793,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerup(const uint32 u32Instance)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3604,7 +3802,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerup(const uint32 u32Instance)
 #endif /* !ADC_SAR_IP_HAS_BANDGAP_STATUS */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
 #if !ADC_SAR_IP_HAS_BANDGAP_STATUS
@@ -3654,15 +3852,6 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerup(const uint32 u32Instance)
         }
     }
 #endif /* ADC_SAR_IP_HAS_BANDGAP_STATUS */
-
-#if (1U == FEATURE_ADC_HAS_CLOCK_DIVIDER)
-    if (ADC_SAR_IP_STATUS_SUCCESS == ReturnStatus)
-    {
-        /* Ensure the clock div is enabled because it was automatically disabled when entering power-down mode */
-        Adc_Sar_EnableClkDiv(u32Instance, TRUE);
-    }
-#endif /* 1U == FEATURE_ADC_HAS_CLOCK_DIVIDER */
-
     return ReturnStatus;
 }
 
@@ -3677,9 +3866,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerup(const uint32 u32Instance)
 Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerdown(const uint32 u32Instance)
 {
     const ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     const SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     Adc_Sar_Ip_StatusType ReturnStatus = ADC_SAR_IP_STATUS_SUCCESS;
 
 #if ADC_SAR_IP_HAS_BANDGAP_STATUS
@@ -3697,7 +3886,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerdown(const uint32 u32Instance)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3706,7 +3895,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_Powerdown(const uint32 u32Instance)
 #endif /* !ADC_SAR_IP_HAS_BANDGAP_STATUS */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
 #if !ADC_SAR_IP_HAS_BANDGAP_STATUS
@@ -3764,9 +3953,9 @@ void Adc_Sar_Ip_EnableNotifications(const uint32 u32Instance,
                                     const uint32 u32NotificationMask)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint32 ImrFlags = 0U;
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
@@ -3800,7 +3989,7 @@ void Adc_Sar_Ip_EnableNotifications(const uint32 u32Instance,
     /* Clear pending interrupt flags - CPR_RTD_01182 */
     Adc_Sar_Ip_ClearStatusFlags(u32Instance, ADC_SAR_IP_NOTIF_FLAG_ALL);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3809,7 +3998,7 @@ void Adc_Sar_Ip_EnableNotifications(const uint32 u32Instance,
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_33();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_33();
@@ -3830,9 +4019,9 @@ void Adc_Sar_Ip_DisableNotifications(const uint32 u32Instance,
                                      const uint32 u32NotificationMask)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint32 ImrFlags = 0U;
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
@@ -3862,7 +4051,7 @@ void Adc_Sar_Ip_DisableNotifications(const uint32 u32Instance,
 #endif /*ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE*/
 #endif /* (STD_ON == ADC_SAR_IP_EOCTU_ENABLED) */
 #endif /* ADC_SAR_IP_HAS_CTU */
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3871,7 +4060,7 @@ void Adc_Sar_Ip_DisableNotifications(const uint32 u32Instance,
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_34();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_34();
@@ -3895,9 +4084,9 @@ void Adc_Sar_Ip_EnableChannelNotifications(const uint32 u32Instance,
                                            const uint32 u32Mask)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
     volatile uint32 * CIMRAddr = NULL_PTR;
 #endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
@@ -3919,7 +4108,7 @@ void Adc_Sar_Ip_EnableChannelNotifications(const uint32 u32Instance,
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -3931,7 +4120,7 @@ void Adc_Sar_Ip_EnableChannelNotifications(const uint32 u32Instance,
 #endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
 #if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
@@ -3974,9 +4163,9 @@ void Adc_Sar_Ip_DisableChannelNotifications(const uint32 u32Instance,
                                             const uint32 u32Mask)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
     volatile uint32 * CIMRAddr = NULL_PTR;
 #endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
@@ -3998,7 +4187,7 @@ void Adc_Sar_Ip_DisableChannelNotifications(const uint32 u32Instance,
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4010,7 +4199,7 @@ void Adc_Sar_Ip_DisableChannelNotifications(const uint32 u32Instance,
 #endif /* (STD_ON == ADC_SAR_IP_WDG_ENABLED) */
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
 #if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
@@ -4058,9 +4247,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
 #endif /* ADC_SAR_IP_HAS_ADCLKSEL */
     volatile uint32 * PDEDRAddr = NULL_PTR;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -4068,10 +4257,10 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
     {
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4081,7 +4270,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
             PDEDRAddr = (volatile uint32 *)&(AdcAEBasePtr->PDEDR);
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
 #if ADC_SAR_IP_HAS_ADCLKSEL
@@ -4106,24 +4295,24 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
             Status = Adc_Sar_Ip_Powerup(u32Instance);
             if (ADC_SAR_IP_STATUS_SUCCESS == Status)
             {
-#if FEATURE_ADC_HAS_HIGH_SPEED_ENABLE
+#if ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE
                 SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_51();
                 /* Enables high speed conversion or calibration */
                 Adc_Sar_EnableHighSpeed(AdcBasePtr, pConfig->HighSpeedConvEn);
                 SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_51();
-#endif /* FEATURE_ADC_HAS_HIGH_SPEED_ENABLE */
+#endif /* ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE */
 
-#if FEATURE_ADC_HAS_AVERAGING
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
                 Adc_Sar_Ip_SetAveraging(u32Instance, pConfig->AvgEn, pConfig->AvgSel);
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
 
                 /* Set powerdown delay */
                 *PDEDRAddr = ADC_PDEDR_PDED(pConfig->PowerDownDelay);
 
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
                 /* Set sample times */
                 Adc_Sar_Ip_SetSampleTimes(u32Instance, pConfig->SampleTimeArr);
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
             }
         }
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
@@ -4136,7 +4325,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetClockMode(const uint32 u32Instance,
     return Status;
 }
 
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_Ip_SetSampleTimes
@@ -4148,16 +4337,16 @@ void Adc_Sar_Ip_SetSampleTimes(const uint32 u32Instance,
                                const uint8 * const aSampleTimes)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint8 Index;
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4168,7 +4357,7 @@ void Adc_Sar_Ip_SetSampleTimes(const uint32 u32Instance,
         }
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         for (Index = 0u; Index < Adc_Sar_Ip_au8AdcGroupCount[u32Instance]; Index++)
@@ -4178,7 +4367,7 @@ void Adc_Sar_Ip_SetSampleTimes(const uint32 u32Instance,
         }
     }
 }
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
 
 
 /*FUNCTION**********************************************************************
@@ -4191,19 +4380,19 @@ void Adc_Sar_Ip_SetSampleTimes(const uint32 u32Instance,
 void Adc_Sar_Ip_AbortConversion(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4212,14 +4401,14 @@ void Adc_Sar_Ip_AbortConversion(const uint32 u32Instance)
             SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_17();
         }
         else
-    #endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+    #endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_17();
             AdcBasePtr->MCR |= ADC_MCR_ABORT(1U);
             SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_17();
         }
-        
+
     }
 }
 
@@ -4235,9 +4424,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_AbortChain(const uint32 u32Instance,
                                             const boolean bAllowRestart)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * MCRAddr = NULL_PTR;
     volatile const uint32 * MSRAddr = NULL_PTR;
     uint32 MsrStatus;
@@ -4251,22 +4440,22 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_AbortChain(const uint32 u32Instance,
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
     {
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
             MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
-            MSRAddr = (volatile uint32 *)&(AdcAEBasePtr->MSR);
+            MSRAddr = (volatile const uint32 *)&(AdcAEBasePtr->MSR);
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
-            MSRAddr = (volatile uint32 *)&(AdcBasePtr->MSR);
+            MSRAddr = (volatile const uint32 *)&(AdcBasePtr->MSR);
         }
 
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_18();
@@ -4328,7 +4517,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_AbortChain(const uint32 u32Instance,
     return ReturnStatus;
 }
 
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_Ip_SetPresamplingSource
@@ -4342,19 +4531,19 @@ void Adc_Sar_Ip_SetPresamplingSource(const uint32 u32Instance,
 {
     uint32 Pscr;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * PSCRAddr = NULL_PTR;
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
         PSCRAddr = (volatile uint32 *)&(AdcAEBasePtr->PSCR);
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         PSCRAddr = (volatile uint32 *)&(AdcBasePtr->PSCR);
@@ -4423,9 +4612,9 @@ void Adc_Sar_Ip_EnableChannelPresampling(const uint32 u32Instance,
     uint32 VectAdr;
     uint32 VectBit;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -4441,7 +4630,7 @@ void Adc_Sar_Ip_EnableChannelPresampling(const uint32 u32Instance,
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
         VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
         VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4450,7 +4639,7 @@ void Adc_Sar_Ip_EnableChannelPresampling(const uint32 u32Instance,
             SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_41();
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_41();
@@ -4475,9 +4664,9 @@ void Adc_Sar_Ip_DisableChannelPresampling(const uint32 u32Instance,
     uint32 VectAdr;
     uint32 VectBit;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -4493,7 +4682,7 @@ void Adc_Sar_Ip_DisableChannelPresampling(const uint32 u32Instance,
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
         VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
         VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4502,7 +4691,7 @@ void Adc_Sar_Ip_DisableChannelPresampling(const uint32 u32Instance,
             SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_42();
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_42();
@@ -4526,9 +4715,9 @@ void Adc_Sar_Ip_DisableChannelPresampling(const uint32 u32Instance,
 void Adc_Sar_Ip_EnablePresampleConversion(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -4539,7 +4728,7 @@ void Adc_Sar_Ip_EnablePresampleConversion(const uint32 u32Instance)
     {
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4548,7 +4737,7 @@ void Adc_Sar_Ip_EnablePresampleConversion(const uint32 u32Instance)
             SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_39();
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_39();
@@ -4570,9 +4759,9 @@ void Adc_Sar_Ip_EnablePresampleConversion(const uint32 u32Instance)
 void Adc_Sar_Ip_DisablePresampleConversion(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
@@ -4582,7 +4771,7 @@ void Adc_Sar_Ip_DisablePresampleConversion(const uint32 u32Instance)
     {
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4591,7 +4780,7 @@ void Adc_Sar_Ip_DisablePresampleConversion(const uint32 u32Instance)
             SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_40();
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_40();
@@ -4603,7 +4792,7 @@ void Adc_Sar_Ip_DisablePresampleConversion(const uint32 u32Instance)
     }
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_FEATURE */
 }
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
 
 /*FUNCTION**********************************************************************
 *
@@ -4615,15 +4804,15 @@ void Adc_Sar_Ip_DisablePresampleConversion(const uint32 u32Instance)
 void Adc_Sar_Ip_EnableDma(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4632,7 +4821,7 @@ void Adc_Sar_Ip_EnableDma(const uint32 u32Instance)
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_43();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_43();
@@ -4651,15 +4840,15 @@ void Adc_Sar_Ip_EnableDma(const uint32 u32Instance)
 void Adc_Sar_Ip_DisableDma(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4668,7 +4857,7 @@ void Adc_Sar_Ip_DisableDma(const uint32 u32Instance)
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_44();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_44();
@@ -4689,9 +4878,9 @@ void Adc_Sar_Ip_EnableChannelDma(const uint32 u32Instance,
                                  const uint32 u32ChnIdx)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint32 VectAdr;
     uint32 VectBit;
 
@@ -4706,7 +4895,7 @@ void Adc_Sar_Ip_EnableChannelDma(const uint32 u32Instance,
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4715,7 +4904,7 @@ void Adc_Sar_Ip_EnableChannelDma(const uint32 u32Instance,
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_46();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_46();
@@ -4736,9 +4925,9 @@ void Adc_Sar_Ip_DisableChannelDma(const uint32 u32Instance,
                                   const uint32 u32ChnIdx)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint32 VectAdr;
     uint32 VectBit;
 
@@ -4753,7 +4942,7 @@ void Adc_Sar_Ip_DisableChannelDma(const uint32 u32Instance,
     VectAdr = ADC_SAR_IP_CHAN_2_VECT(u32ChnIdx);
     VectBit = ADC_SAR_IP_CHAN_2_BIT(u32ChnIdx);
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4762,7 +4951,7 @@ void Adc_Sar_Ip_DisableChannelDma(const uint32 u32Instance,
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_47();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_47();
@@ -4782,16 +4971,16 @@ void Adc_Sar_Ip_DisableChannelDma(const uint32 u32Instance,
 void Adc_Sar_Ip_DisableChannelDmaAll(const uint32 u32Instance)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     uint8 Index;
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4803,7 +4992,7 @@ void Adc_Sar_Ip_DisableChannelDmaAll(const uint32 u32Instance)
         }
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         for (Index = 0U; Index < Adc_Sar_Ip_au8AdcGroupCount[u32Instance]; Index++)
@@ -4826,15 +5015,15 @@ void Adc_Sar_Ip_SetDmaClearSource(const uint32 u32Instance,
                                   const Adc_Sar_Ip_ClearSourceType pDmaClear)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(u32Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
@@ -4844,7 +5033,7 @@ void Adc_Sar_Ip_SetDmaClearSource(const uint32 u32Instance,
         SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_45();
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_45();
@@ -4867,15 +5056,10 @@ void Adc_Sar_Ip_SetWdgThreshold(const uint32 u32Instance,
                                 const Adc_Sar_Ip_WdgThresholdType * const pThresholdValues)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     volatile uint32 * WTIMRAddr = NULL_PTR;
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-    uint8 Shift;
-    uint16 HighThreshold;
-    uint16 LowThreshold;
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
     uint32 Wtimr;
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
@@ -4884,40 +5068,18 @@ void Adc_Sar_Ip_SetWdgThreshold(const uint32 u32Instance,
     DevAssert(u8RegisterIdx < ADC_SAR_IP_THRHLR_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
         WTIMRAddr = (volatile uint32 *)&(AdcAEBasePtr->WTIMR);
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
         WTIMRAddr = (volatile uint32 *)&(AdcBasePtr->WTIMR);
     }
-
-#if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
-    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].BypassResolution)
-    {
-        /* Calculate the shift of the threshold value to get the number of bits
-         * needed by the hardware unit. */
-        Shift = ADC_SAR_IP_RESULT_RESOLUTION - Adc_Sar_GetResolution(u32Instance);
-        /* Shift the threshold to obtain the value to be written in the threshold register. */
-        HighThreshold = (pThresholdValues->HighThreshold) << Shift;
-        LowThreshold = (pThresholdValues->LowThreshold) << Shift;
-
-        /* If the bits of the high threshold value that are ignored due to
-         * resolution remain 0, this will trigger interrupts when the conversion
-         * value is equal to the high threshold value because the ignored bits
-         * of the conversion result will be more than 0, so the high threshold
-         * value will need to have the ignored bits set to 1. */
-        HighThreshold |= (((uint16)1U << Shift) - 1U);
-
-        Adc_Sar_WriteThresholds(u32Instance, u8RegisterIdx, HighThreshold, LowThreshold);
-    }
-    else
-#endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
     {
         Adc_Sar_WriteThresholds(u32Instance, u8RegisterIdx, pThresholdValues->HighThreshold, pThresholdValues->LowThreshold);
     }
@@ -4961,9 +5123,9 @@ void Adc_Sar_Ip_SetConversionMode(const uint32 u32Instance,
                                   const Adc_Sar_Ip_ConvModeType eConvMode)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     volatile const uint32 * MSRAddr = NULL_PTR;
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
@@ -4974,24 +5136,24 @@ void Adc_Sar_Ip_SetConversionMode(const uint32 u32Instance,
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
     {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
-            MSRAddr = (volatile uint32 *)&(AdcAEBasePtr->MSR);
+            MSRAddr = (volatile const uint32 *)&(AdcAEBasePtr->MSR);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
             MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
-            MSRAddr = (volatile uint32 *)&(AdcBasePtr->MSR);
+            MSRAddr = (volatile const uint32 *)&(AdcBasePtr->MSR);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
             MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
         }
@@ -5031,9 +5193,9 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetCtuMode(const uint32 u32Instance,
                                             const Adc_Sar_Ip_CtuModeType eCtuMode)
 {
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     Adc_Sar_Ip_StatusType Status = ADC_SAR_IP_STATUS_SUCCESS;
     volatile uint32 * MCRAddr = NULL_PTR;
 
@@ -5045,18 +5207,24 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetCtuMode(const uint32 u32Instance,
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 #if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     /* calibration must not be interrupted */
-    if(FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
+    if (FALSE == Adc_Sar_Ip_axAdcSarState[u32Instance].CalibrationOnGoing)
     {
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
         if (u32Instance >= ADC_INSTANCE_COUNT)
         {
+#ifdef ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND
+            Adc_Sar_Ip_u32workaround = ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND_VALUE_1;
+#endif /* ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND */
             AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT];
             MCRAddr = (volatile uint32 *)&(AdcAEBasePtr->MCR);
         }
         else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
         {
+#ifdef ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND
+            Adc_Sar_Ip_u32workaround = ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND_VALUE_2;
+#endif /* ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND */
             AdcBasePtr = Adc_Sar_Ip_apxAdcBase[u32Instance];
             MCRAddr = (volatile uint32 *)&(AdcBasePtr->MCR);
         }
@@ -5116,7 +5284,7 @@ Adc_Sar_Ip_StatusType Adc_Sar_Ip_SetCtuMode(const uint32 u32Instance,
 #endif /* ADC_SAR_IP_HAS_CTU */
 
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER)
+#if (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE)
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_Ip_SetExternalTrigger
@@ -5135,32 +5303,33 @@ void Adc_Sar_Ip_SetExternalTrigger(const uint32 u32Instance,
     /* Switch between injected and normal external trigger */
     switch (eTrggerSrc)
     {
-#if FEATURE_ADC_HAS_EXT_TRIGGER
+#if ADC_SAR_IP_EXT_TRIGGER_AVAILABLE
         case ADC_SAR_IP_NORMAL_EXT_TRIG:
             Adc_Sar_ConfigExternalTrigger(u32Instance, eTriggerEdge, ADC_MCR_EDGE_MASK, 0U, ADC_MCR_TRGEN_MASK);
             break;
-#if FEATURE_ADC_HAS_AUX_EXT_TRIGGER
+#if ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE
         case ADC_SAR_IP_AUX_NORMAL_EXT_TRIG:
             Adc_Sar_ConfigExternalTrigger(u32Instance, eTriggerEdge, ADC_MCR_EDGE_MASK, 0U, ADC_MCR_XSTRTEN_MASK);
             break;
         case ADC_SAR_IP_ALL_NORMAL_EXT_TRIG:
             Adc_Sar_ConfigExternalTrigger(u32Instance, eTriggerEdge, ADC_MCR_EDGE_MASK, ADC_MCR_EDGE_MASK, (ADC_MCR_TRGEN_MASK | ADC_MCR_XSTRTEN_MASK));
             break;
-#endif /* FEATURE_ADC_HAS_AUX_EXT_TRIGGER */
-#endif /* FEATURE_ADC_HAS_EXT_TRIGGER */
-#if FEATURE_ADC_HAS_INJ_EXT_TRIGGER
+#endif /* ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE */
+#endif /* ADC_SAR_IP_EXT_TRIGGER_AVAILABLE */
+#if ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE
         case ADC_SAR_IP_INJECTED_EXT_TRIG:
             Adc_Sar_ConfigExternalTrigger(u32Instance, eTriggerEdge, ADC_MCR_JEDGE_MASK, ADC_MCR_JEDGE_MASK, ADC_MCR_JTRGEN_MASK);
             break;
-#endif /* FEATURE_ADC_HAS_INJ_EXT_TRIGGER */
+#endif /* ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE */
         default:
             ; /* no-op */
             break;
     }
 }
-#endif /* (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER) */
+#endif /* (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE) */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
 
+#if ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE
 /*FUNCTION**********************************************************************
 *
 * Function Name : Adc_Sar_Ip_SetUserGainAndOffset
@@ -5174,16 +5343,16 @@ void Adc_Sar_Ip_SetUserGainAndOffset(const uint32 Instance,
 {
     uint32 RegVal;
     ADC_Type * AdcBasePtr = NULL_PTR;
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     /* Write in RegVal the value needed for the register. */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
 
     if (Instance >= ADC_INSTANCE_COUNT)
     {
@@ -5194,7 +5363,7 @@ void Adc_Sar_Ip_SetUserGainAndOffset(const uint32 Instance,
         AdcAEBasePtr->ADC_AE_USER_OFFSET_GAIN_REG = RegVal;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         AdcBasePtr = Adc_Sar_Ip_apxAdcBase[Instance];
 
@@ -5203,6 +5372,7 @@ void Adc_Sar_Ip_SetUserGainAndOffset(const uint32 Instance,
         AdcBasePtr->ADC_USER_OFFSET_GAIN_REG = RegVal;
     }
 }
+#endif /* ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE */
 
 
 /*FUNCTION*********************************************************************
@@ -5224,13 +5394,13 @@ uint32 Adc_Sar_Ip_GetDataAddress(uint32 u32Instance,
 #endif /* ADC_SAR_IP_BAD_ACCESS_PROT_CHANNEL */
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (u32Instance >= ADC_INSTANCE_COUNT)
     {
         returnAddr = (uint32)&(CDR_AE(Adc_Sar_AE_Ip_apxAdcBase[u32Instance - ADC_INSTANCE_COUNT], u32ChannelIndex)) - ADC_SAR_IP_APPLICATION_EXTENSION_BASE_ADDRESS;
     }
     else
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
     {
         returnAddr = (Adc_Sar_Ip_uintPtrType)&(CDR(Adc_Sar_Ip_apxAdcBase[u32Instance], u32ChannelIndex));
     }
@@ -5246,19 +5416,19 @@ uint32 Adc_Sar_Ip_GetDataAddress(uint32 u32Instance,
  *END**************************************************************************/
 void Adc_Sar_Ip_SetUserAccessAllowed(const uint32 Instance)
 {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
 #else
 #ifdef SAR_ADC_PROT_MEM_U32
     ADC_Type * AdcBasePtr = NULL_PTR;
 #endif /* SAR_ADC_PROT_MEM_U32 */
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -5271,7 +5441,7 @@ void Adc_Sar_Ip_SetUserAccessAllowed(const uint32 Instance)
 #else
     (void)Instance;
 #endif /* SAR_ADC_PROT_MEM_U32 */
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 }
 
 /*FUNCTION**********************************************************************
@@ -5282,19 +5452,19 @@ void Adc_Sar_Ip_SetUserAccessAllowed(const uint32 Instance)
  *END**************************************************************************/
 void Adc_Sar_Ip_ClrUserAccessAllowed(const uint32 Instance)
 {
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     SAR_ADC_AE_Type * AdcAEBasePtr = NULL_PTR;
 #else
 #ifdef SAR_ADC_PROT_MEM_U32
     ADC_Type * AdcBasePtr = NULL_PTR;
 #endif /* SAR_ADC_PROT_MEM_U32 */
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 
 #if (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(Instance < ADC_SAR_IP_INSTANCE_COUNT);
 #endif /* (ADC_SAR_IP_DEV_ERROR_DETECT == STD_ON) */
 
-#if FEATURE_ADC_HAS_APPLICATION_EXTENSION
+#if ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE
     if (Instance >= ADC_INSTANCE_COUNT)
     {
         AdcAEBasePtr = Adc_Sar_AE_Ip_apxAdcBase[Instance - ADC_INSTANCE_COUNT];
@@ -5307,7 +5477,7 @@ void Adc_Sar_Ip_ClrUserAccessAllowed(const uint32 Instance)
 #else
     (void)Instance;
 #endif /* SAR_ADC_PROT_MEM_U32 */
-#endif /* FEATURE_ADC_HAS_APPLICATION_EXTENSION */
+#endif /* ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE */
 }
 #endif /* (STD_ON == ADC_SAR_IP_ENABLE_USER_MODE_SUPPORT) */
 
@@ -5319,3 +5489,4 @@ void Adc_Sar_Ip_ClrUserAccessAllowed(const uint32 Instance)
 #endif
 
 /** @} */
+

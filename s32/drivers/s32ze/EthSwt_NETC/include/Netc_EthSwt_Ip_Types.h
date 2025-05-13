@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -39,7 +39,7 @@ extern "C"{
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETHSWT_IP_TYPES_SW_MAJOR_VERSION             2
 #define NETC_ETHSWT_IP_TYPES_SW_MINOR_VERSION             0
-#define NETC_ETHSWT_IP_TYPES_SW_PATCH_VERSION             0
+#define NETC_ETHSWT_IP_TYPES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -93,7 +93,7 @@ extern "C"{
 ==================================================================================================*/
 
 #define NETC_ETHSWT_IP_NUMBER_OF_PSEUDO_PORT (1U)  /*!< number of pseudoport */
-#define NETC_ETHSWT_IP_NUMBER_OF_PORTS       3  /*!< number of ports */
+#define NETC_ETHSWT_IP_NUMBER_OF_PORTS       (3U)  /*!< number of ports */
 #define NETC_ETHSWT_IP_NUMBER_OF_MAC_PORTS   (2U)  /*!< number of mac ports*/
 #define NETC_ETHSWT_IP_NUMBER_OF_VID_PER_PORT (255U)   /*!< 3 number of vid per port */
 
@@ -778,6 +778,11 @@ typedef uint32 Netc_EthSwt_Ip_ISQGTABLE_SQTagType;
 #define NETC_ETHSWT_IP_ISQGTABLE_RTAG                           (0x02U)      /*!< 802.1CB R-TAG.. */
 #define NETC_ETHSWT_IP_ISQGTABLE_HSRTAG                         (0x03U)      /*!< HSR Tag. */
 
+#define NETC_ETHSWT_IP_ESQRTABLE_ANYTAG                         (0x00U)     /*!< Accept ANY tag. */
+#define NETC_ETHSWT_IP_ESQRTABLE_DRAFT20_RTAG                   (0x01U)     /*!< Accept 802.1CB draft 2.0 R-TAG. */
+#define NETC_ETHSWT_IP_ESQRTABLE_RTAG                           (0x02U)     /*!< Accept 802.1CB R-TAG. */
+#define NETC_ETHSWT_IP_ESQRTABLE_HSRTAG                         (0x03U)     /*!< Accept HSR Tag. */
+
 /*!
 * @brief Ingress Sequence Generation Table CFGE_DATA config bits Format
 */
@@ -1126,7 +1131,7 @@ typedef uint32 Netc_EthSwt_Ip_EnetcForwardingActionDataType;
 #define NETC_ETHSWT_IP_SWT_ALLOWWITHSIBITMAP              (0x2U)           /*!< Allow with setting the pre L2 filtering SI bitmap to the value configured in the SI_MAP field of this entry. */
 
 /*!
- * @brief Override ET_EID data format enum type.
+ * @brief Override ET_EID data type.
  */
 typedef uint32 Netc_EthSwt_Ip_OETEIDIdxType;
 #define NETC_ETHSWT_IP_NO_EGRESS_PKT_PROCESSING_ACTIONS_SPECIFIED  (0x0U)      /*!< No egress packet processing actions specified */
@@ -1135,7 +1140,7 @@ typedef uint32 Netc_EthSwt_Ip_OETEIDIdxType;
 #define NETC_ETHSWT_IP_MULTIPORT_ABS_EGRESS_TREATMENT_TABLE_ACCESS  (0x3U)      /*!< Multi-port absolute Egress Treatment table access */
 
 /*!
- * @brief Cut-Through Disable data format enum type.
+ * @brief Cut-Through Disable data type.
  */
 typedef uint32 Netc_EthSwt_Ip_CutThroughtDisableIdxType;
 #define NETC_ETHSWT_IP_DONOT_OVERRIDE_CUTTHROUGH_STATE          (0x0U)      /*!< Do not override cut-through state */
@@ -1144,14 +1149,14 @@ typedef uint32 Netc_EthSwt_Ip_CutThroughtDisableIdxType;
 #define NETC_ETHSWT_IP_DISABLE_CUTTHROUGH_RESERVED              (0x3U)      /*!< Reserved */
 
 /*!
- * @brief Ingress Sequence Action data format enum type.
+ * @brief Ingress Sequence Action data type.
  */
 typedef uint32 Netc_EthSwt_Ip_IngressSeqActionIdxType;
 #define NETC_ETHSWT_IP_FRER_SEQ_GENERATION_FUNC_NOT_PERFORMED   (0x0U)      /*!< FRER sequence generation function is not performed. */
 #define NETC_ETHSWT_IP_FRER_SEQ_GENERATION_FUNC_PERFORMED       (0x1U)      /*!< FRER sequence generation function is performed. */
 
 /*!
- * @brief Egress Sequence Recovery Table CFGE_DATA enum type.
+ * @brief Egress Sequence Recovery Table CFGE_DATA type.
  */
 typedef uint32 Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTnsqIdxType;
 #define NETC_ETHSWT_IP_ESQRTABLE_DISCARD_FRAME_AND_COUNT        (0x0U)      /*!< Discard frame and count in both the TAGLESS_PACKETS counter and in the port's PTXDCR register. */
@@ -1413,6 +1418,20 @@ typedef struct
     Netc_EthSwt_Ip_SrcPortMasqIdxType Keye_Spm;                     /* Source port masquerading */
     uint32 Keye_FrmKey[4U];                                         /* Frame portion of the Key */
 }Netc_EthSwt_Ip_IngrStremIdentificationTableDataType;
+
+/*!
+ * @brief defines Ingress Stream Look Up table data type.
+ */
+typedef struct
+{
+    boolean PortIngressStreamEnableLookUp;                   /* This field shows the enablement of Ingress Stream look up. */
+    uint16  PortIngressStreamDefaultEntryID;                 /* This field is used for choosing the default Ingress Stream ID. When there is no match in the
+                                                                First or Second ISI look up, the default IS entry ID will be used to determine the action that has to
+                                                                be done to the specific Stream. */
+    boolean PortIngressStreamUseFirstLookUp;                 /* This field shows the usage of the first rule from the selected pair of key contruction rule set. */
+    boolean PortIngressStreamUseSecondLookUp;                /* This field shows the usage of the second rule from the selected pair of key contruction rule set. */
+    boolean PortIngressStreamUseSecondKeyConstructionPair;   /* This field shows the usage of the latter 2 entries of the EthSwtKeyConstruction list of rules. */
+}Netc_EthSwt_Ip_PortIngresStreamLookUpDataType;
 
 /*!
  * @brief FDB Table CFGE_DATA format enum type.
@@ -2008,6 +2027,84 @@ typedef enum {
     NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA4,                           /*!< fifth item of CFGEDATA but sixth item of Frame Modification Table Response Data Buffer Format */
     NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA5                            /*!< sixth item of CFGEDATA but seventh item of Frame Modification Table Response Data Buffer Format */
 } Netc_EthSwt_Ip_FrmModificationTable_RspDataIndexType;
+
+/*!
+ * @brief Frame Modification Table PCP action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PCPACT_USE_EXISTING       (0x0U)  /* Use existing PCP in the frame. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PCPACT_USE_SPECIFIED      (0x1U)  /* Use the specified PCP. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PCPACT_PCPTOPCP_PROFILE   (0x2U)  /* Use PCP to PCP mapping profile. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PCPACT_QOSTOPCP_PROFILE   (0x3U)  /* Use QOS to PCP mapping profile. */
+
+/*!
+ * @brief Frame Modification Table DEI action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_DEIACT_USE_EXISTING      (0x0U) /* Use existing DEI in the frame. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_DEIACT_USE_SPECIFIED     (0x1U) /* Use the specified DEI. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_DEIACT_DRTODEI_PROFILE   (0x2U)  /* Use DR to DEI mapping profile. */
+
+/*!
+ * @brief Frame Modification Table Sequence Tag action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_SQ_TAG_NO_ACTION      (0x0U)   /* Redundancy tag is kept at egress. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_SQ_TAG_REMOVE_RTAG    (0x1U)   /* Redundancy tag is removed at egress. */
+
+/*!
+ * @brief Frame Modification Table Outer VID action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_VIDACT_USE_EXISTING   (0x0U)   /* No frame modification is performed on VID of the received frame. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_VIDACT_USE_SPECIFIED  (0x1U)   /* VID value of the received frame will be changed according to Frame Modification entry. */
+
+/*!
+ * @brief Frame Modification Table VLAN header action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_VLAN_HEADER_ACT_NO_ACTION                  (0x0U)    /* No frame modification is performed on the VLAN header of the frame. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_VLAN_HEADER_ACT_DELETE_OUTER_VLAN_HEADER   (0x1U)    /* Frame Modification Table entry will delete the Outer VLAN header of the frame. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_VLAN_HEADER_ACT_ADD_OUTER_VLAN_HEADER      (0x2U)    /* Frame Modification Table will add a VLAN header to the frame.
+                                                                                                  If the frame already has already a VLAN header, the resulted frame will be double tagged. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_VLAN_HEADER_ACT_REPLACE_OUTER_VLAN_HEADER  (0x3U)    /* VLAN header of the frame will be replaced with new specified values of the selected Frame Modification Table entry. */
+
+/*!
+ * @brief Frame Modification Table MAC header action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_MAC_HEADER_ACTION_NO_ACTION                                         (0x0U) /* No action is performed on the MAC header. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_MAC_HEADER_ACTION_REPLACE_SMAC_FROM_REGISTER                        (0x2U) /* Replace SMAC with the contents of the PMAR0/1 register where port=SMAC_PORT. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_MAC_HEADER_ACTION_REPLACE_SMAC_FROM_REGISTER_DMAC_FROM_FIELD        (0x3U) /* Replace SMAC with the contents of the PMAR0/1 register where port=SMAC_PORT, and DMAC by specified DEST_MAC_ADDR field value. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_MAC_HEADER_ACTION_REPLACE_SMAC_FROM_REGISTER_DMAC_FROM_FRAME_SMAC   (0x4U) /* Replace SMAC with the contents of the PMAR0/1 register where port=SMAC_PORT, and DMAC by frame's SMAC. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_MAC_HEADER_ACTION_REPLACE_DMAC_FROM_FIELD                           (0x5U) /* Replace DMAC with specified DEST_MAC_ADDR field value. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_MAC_HEADER_ACTION_SWAP_DMAC_SMAC                                    (0x6U)  /* Swap DMAC and SMAC. */
+
+/*!
+ * @brief Frame Modification Table Layer 2 action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_L2ACTION_USE_L2_HEADER_ACTIONS  (0x0U)   /* L2 actions are specified in L2 header action fields of this entry; i.e. MAC_HDR_ACT, VLAN_HDR_ACT and SQT_HDR_ACT. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_L2ACTION_USE_REPLACE_L2_PDU     (0x1U)   /* The entire L2 PDU (or frame) is replaced with new L2 PDU of length FMD_BYTES
+                                                                                       specified by FMD_EID (FCS not present in the new L2 PDU). No L2 header actions
+                                                                                       or payload action in this */
+
+/*!
+ * @brief Frame Modification Table Payload action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PAYLOADACTION_NO_ACTION                    (0x0U)   /* No action on payload. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PAYLOADACTION_REPLACE_WITH_FRM_MODIF_DATA  (0x1U)   /* Remove entire Ethernet payload including the payload Ethertype and insert with FMD_BYTES of data
+                                                                                                  specified in FMD_EID. The the Ethernet payload (including the payload Ethertype) begins in the
+                                                                                                  received frame immediately after source MAC address or VLAN tag(s) (up to 2) or R-TAG/HSR tag (if any). */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_PAYLOADACTION_REPLACE_DATA_FROM_OFFSET     (0x2U)   /* Replace FMD_BYTES of raw data in the Ethernet payload starting at PLD_OFFSET. Data is specified in FMD_EID.
+                                                                                                  The maximum number of bytes that can be replaced is 128 bytes. If the frame is too short to replace all of
+                                                                                                  the bytes specified by this replacement action, the Ethernet payload of the frame is replaced up to its last byte,
+                                                                                                  and then the new calculated FCS is appended to the frame. The transmission of the frame completes without error. */
+
+/*!
+ * @brief Frame Modification Table Outer TPID action defines.
+ */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_TPIDACTION_USE_EXISTING          (0x0U)  /* Use TPID from outer VLAN header, if no outer VLANheader is present then a misconfiguration event will be
+                                                                                      generated and handled according to the port's PFMCR register. The outer VLAN header in a received frame
+                                                                                      is considered present if VLAN classification has deemed the outer VLAN header valid. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_TPIDACTION_SET_TO_0X8100         (0x1U) /* Set TPID to 0x8100. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_TPIDACTION_SET_TO_0X88A8         (0x2U) /* Set TPID to 0x88A8. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_TPIDACTION_SET_TO_CVLAN          (0x3U) /* Set TPID to C-VLAN. */
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_TPIDACTION_SET_TO_CUSTOM_SVLAN   (0x4U) /* Set TPID to Custom S-VLAN. */
+
 
 /*!
  * @brief defines Frame Modification Table entries.
@@ -2721,6 +2818,7 @@ typedef struct {
     uint8 vlanMappingProfile; /*!< Select the VLANIPV profile 0/1 using the PCP and DEI */
     boolean vlanEnableIngressPcpToPcpMapping; /*!< If there is frame modification enable the PCP change */
     uint8 vlanIngressPcpToPcpProfile; /*!< If there is frame modification and enable use this profile */
+    Netc_EthSwt_Ip_PortIngresStreamLookUpDataType EthSwtPortIngressStreamLookUpConfig; /*!< Ingress Stream look up configuration. */
 } Netc_EthSwt_Ip_PortIngressType;
 
 
@@ -2840,6 +2938,7 @@ typedef struct {
     boolean EthSwtPortEnableMagicPacketDetection; /*!< Enable/Disable packet magic detection*/
     boolean EthSwtPortTimeStampSupport; /*!< Activates egress time stamping. */
     boolean EthSwtPortPruningEnable; /*!< A received frame is not allowed to be transmitted on same port it was recceived. */
+    boolean EthSwtEnableFreeRunningTimer; /*!< Enable/Disable free running timer. */
     boolean EthSwtPortLoopbackEnable; /*!< Enable loopback mode for current port */
     boolean EthSwtPortDisallowMacStationMove; /*!< MAC station move disallowed.*/
 } Netc_EthSwt_Ip_PortType;
@@ -2864,8 +2963,8 @@ typedef struct {
     uint16 EthSwtMaxDynamicEntries; /*!< This field specifies the maximum number of dynamic entries allowed in the FDB table for the entire switch. A value of 0 implies no global switch limit imposed for dynamic entries.*/
     uint16 EthSwtArlTableEntryTimeout; /*!< specifies the timeout in seconds for removing unused entries. */
     boolean EthSwtEnableSharedLearning; /*!< Used to determine the FID when doing a lookup in the FDB table. 0: Independent VLAN learning: FID is set to to the VID assigned to the frame 1: Shared VLAN learning: Use the FID specified in this register */
-    uint16 EthSwtCustomVlanEtherType1;  /*!< Custom VLAN */
-    uint16 EthSwtCustomVlanEtherType2;  /*!< Custom VLAN */
+    uint32 EthSwtCustomVlanEtherType1;  /*!< Custom VLAN Ethertype 1 (C-VLAN) */
+    uint32 EthSwtCustomVlanEtherType2;  /*!< Custom VLAN Ethertype 2 (S-VLAN) */
     Netc_EthSwt_Ip_PortType (*port)[NETC_ETHSWT_IP_NUMBER_OF_PORTS]; /*!< Port description. */
     Netc_EthSwt_Ip_KeyConstructionRuleType (*EthSwtKeyConstruction)[4U]; /*!< Represents a Key Construction Rule. */
 #if (NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)

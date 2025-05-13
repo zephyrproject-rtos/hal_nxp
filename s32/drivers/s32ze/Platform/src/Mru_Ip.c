@@ -1,5 +1,6 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 1997-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -42,7 +43,7 @@ extern "C"
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_C               2
 #define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_C               0
-#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_C               0
+#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_C               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -174,9 +175,9 @@ extern "C"
 #define PLATFORM_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Platform_MemMap.h"
 
-VAR_SEC_NOCACHE(Mru_Ip_axStateStructure) Mru_Ip_StateStructureType Mru_Ip_axStateStructure[MRU_IP_NUMBER_OF_INSTANCES];
+Mru_Ip_StateStructureType Mru_Ip_axStateStructure[MRU_IP_NUMBER_OF_INSTANCES];
 
-VAR_SEC_NOCACHE(Mru_Ip_apxStateStructureArray) Mru_Ip_StateStructureType* Mru_Ip_apxStateStructureArray[MRU_IP_NUMBER_OF_INSTANCES];
+Mru_Ip_StateStructureType* Mru_Ip_apxStateStructureArray[MRU_IP_NUMBER_OF_INSTANCES];
 
 #define PLATFORM_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Platform_MemMap.h"

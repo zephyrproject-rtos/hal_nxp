@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,7 +35,7 @@ extern "C"{
 #define CANEXCEL_IP_AR_RELEASE_REVISION_VERSION_H    0
 #define CANEXCEL_IP_SW_MAJOR_VERSION_H               2
 #define CANEXCEL_IP_SW_MINOR_VERSION_H               0
-#define CANEXCEL_IP_SW_PATCH_VERSION_H               0
+#define CANEXCEL_IP_SW_PATCH_VERSION_H               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,7 +7,7 @@
 /**
  *   @file       Emios_Mcl_Ip.h
  *
- *   @version    2.0.0
+ *   @version    2.0.1
  *
  *   @brief      AUTOSAR Mcl - Emios Common driver header file.
  *
@@ -46,7 +46,7 @@ extern "C"{
 #define EMIOS_MCL_IP_AR_RELEASE_REVISION_VERSION  0
 #define EMIOS_MCL_IP_SW_MAJOR_VERSION             2
 #define EMIOS_MCL_IP_SW_MINOR_VERSION             0
-#define EMIOS_MCL_IP_SW_PATCH_VERSION             0
+#define EMIOS_MCL_IP_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -95,7 +95,7 @@ extern "C"{
 /*==================================================================================================
 *                                          CONSTANTS
 ==================================================================================================*/
-extern eMIOS_Type *const Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT];
+extern eMIOS_Type* Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT];
 
 /*==================================================================================================
 *                                      DEFINES AND MACROS

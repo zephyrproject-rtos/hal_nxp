@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -30,7 +30,7 @@ extern "C"{
 #define QSPI_IP_AR_RELEASE_REVISION_VERSION_C  0
 #define QSPI_IP_SW_MAJOR_VERSION_C             2
 #define QSPI_IP_SW_MINOR_VERSION_C             0
-#define QSPI_IP_SW_PATCH_VERSION_C             0
+#define QSPI_IP_SW_PATCH_VERSION_C             1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -553,51 +553,59 @@ static boolean bootModeLegacyXPI = (boolean)TRUE;    /* Memory device boots up i
 #define MEM_43_EXFLS_START_SEC_VAR_INIT_8
 #include "Mem_43_EXFLS_MemMap.h"
 
-static uint8 eraseInstDword[4U] = {
+static uint8 eraseInstDword[4U] =
+{
     QSPI_IP_SFDP_BASIC_ERASE1_INST_DWORD,
     QSPI_IP_SFDP_BASIC_ERASE2_INST_DWORD,
     QSPI_IP_SFDP_BASIC_ERASE3_INST_DWORD,
     QSPI_IP_SFDP_BASIC_ERASE4_INST_DWORD
 };
-static uint8 eraseInstShift[4U] = {
+static uint8 eraseInstShift[4U] =
+{
     QSPI_IP_SFDP_BASIC_ERASE1_INST_SHIFT,
     QSPI_IP_SFDP_BASIC_ERASE2_INST_SHIFT,
     QSPI_IP_SFDP_BASIC_ERASE3_INST_SHIFT,
     QSPI_IP_SFDP_BASIC_ERASE4_INST_SHIFT
 };
-static uint8 eraseInstWidth[4U] = {
+static uint8 eraseInstWidth[4U] =
+{
     QSPI_IP_SFDP_BASIC_ERASE1_INST_WIDTH,
     QSPI_IP_SFDP_BASIC_ERASE2_INST_WIDTH,
     QSPI_IP_SFDP_BASIC_ERASE3_INST_WIDTH,
     QSPI_IP_SFDP_BASIC_ERASE4_INST_WIDTH
 };
-static uint8 eraseSizeDword[4U] = {
+static uint8 eraseSizeDword[4U] =
+{
     QSPI_IP_SFDP_BASIC_ERASE1_SIZE_DWORD,
     QSPI_IP_SFDP_BASIC_ERASE2_SIZE_DWORD,
     QSPI_IP_SFDP_BASIC_ERASE3_SIZE_DWORD,
     QSPI_IP_SFDP_BASIC_ERASE4_SIZE_DWORD
 };
-static uint8 eraseSizeShift[4U] = {
+static uint8 eraseSizeShift[4U] =
+{
     QSPI_IP_SFDP_BASIC_ERASE1_SIZE_SHIFT,
     QSPI_IP_SFDP_BASIC_ERASE2_SIZE_SHIFT,
     QSPI_IP_SFDP_BASIC_ERASE3_SIZE_SHIFT,
     QSPI_IP_SFDP_BASIC_ERASE4_SIZE_SHIFT
 };
-static uint8 eraseSizeWidth[4U] = {
+static uint8 eraseSizeWidth[4U] =
+{
     QSPI_IP_SFDP_BASIC_ERASE1_SIZE_WIDTH,
     QSPI_IP_SFDP_BASIC_ERASE2_SIZE_WIDTH,
     QSPI_IP_SFDP_BASIC_ERASE3_SIZE_WIDTH,
     QSPI_IP_SFDP_BASIC_ERASE4_SIZE_WIDTH
 };
 
-static uint8 erase4ByteSupShift[4U] = {
+static uint8 erase4ByteSupShift[4U] =
+{
     QSPI_IP_SFDP_4BADD_ERASE1_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_ERASE2_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_ERASE3_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_ERASE4_SUP_SHIFT
 };
 
-static uint8 erase4ByteInstShift[4U] = {
+static uint8 erase4ByteInstShift[4U] =
+{
     QSPI_IP_SFDP_4BADD_ERASE1_INST_SHIFT,
     QSPI_IP_SFDP_4BADD_ERASE2_INST_SHIFT,
     QSPI_IP_SFDP_4BADD_ERASE3_INST_SHIFT,
@@ -605,14 +613,16 @@ static uint8 erase4ByteInstShift[4U] = {
 };
 
 /* Erase instruction with 4-Byte Address, specified by JESD216D */
-static uint8 erase4ByteInst[4U] = {
+static uint8 erase4ByteInst[4U] =
+{
     0x21U,                                  /*   4-KB erase */
     0x5CU,                                  /*  32-KB erase */
     0xDCU,                                  /*  64-KB erase */
     0xDCU                                   /* 256-KB erase */
 };
 
-static uint8 dopiSwitchShift[7U] = {
+static uint8 dopiSwitchShift[7U] =
+{
     QSPI_IP_SFDP_2DOPI_CMD_BYTE1_SHIFT,
     QSPI_IP_SFDP_2DOPI_CMD_BYTE2_SHIFT,
     QSPI_IP_SFDP_2DOPI_CMD_BYTE3_SHIFT,
@@ -621,7 +631,8 @@ static uint8 dopiSwitchShift[7U] = {
     QSPI_IP_SFDP_2DOPI_CMD_BYTE6_SHIFT,
     QSPI_IP_SFDP_2DOPI_CMD_BYTE7_SHIFT,
 };
-static uint8 dopiSwitchWord[7U] = {
+static uint8 dopiSwitchWord[7U] =
+{
     0U,
     0U,
     0U,
@@ -631,7 +642,8 @@ static uint8 dopiSwitchWord[7U] = {
     1U,
 };
 
-static uint8 readSupDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readSupDword[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_SUP_DWORD,
     QSPI_IP_SFDP_BASIC_READ122_SUP_DWORD,
     QSPI_IP_SFDP_BASIC_READ114_SUP_DWORD,
@@ -641,7 +653,8 @@ static uint8 readSupDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_SUP_DWORD
 };
 
-static uint8 readSupShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readSupShift[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_SUP_SHIFT,
     QSPI_IP_SFDP_BASIC_READ122_SUP_SHIFT,
     QSPI_IP_SFDP_BASIC_READ114_SUP_SHIFT,
@@ -651,7 +664,8 @@ static uint8 readSupShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_SUP_SHIFT
 };
 
-static uint8 readSupWitdh[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readSupWitdh[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_SUP_WIDTH,
     QSPI_IP_SFDP_BASIC_READ122_SUP_WIDTH,
     QSPI_IP_SFDP_BASIC_READ114_SUP_WIDTH,
@@ -661,7 +675,8 @@ static uint8 readSupWitdh[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_SUP_WIDTH
 };
 
-static uint8 read4ByteSupDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 read4ByteSupDword[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_4BADD_READ112_SUP_DWORD,
     QSPI_IP_SFDP_4BADD_READ122_SUP_DWORD,
     QSPI_IP_SFDP_4BADD_READ114_SUP_DWORD,
@@ -671,7 +686,8 @@ static uint8 read4ByteSupDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_4BADD_READ188_SUP_DWORD
 };
 
-static uint8 read4ByteSupShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 read4ByteSupShift[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_4BADD_READ112_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_READ122_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_READ114_SUP_SHIFT,
@@ -681,7 +697,8 @@ static uint8 read4ByteSupShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_4BADD_READ188_SUP_SHIFT
 };
 
-static uint8 write4ByteSupDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 write4ByteSupDword[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_4BADD_WRITE112_SUP_DWORD,
     QSPI_IP_SFDP_4BADD_WRITE122_SUP_DWORD,
     QSPI_IP_SFDP_4BADD_WRITE114_SUP_DWORD,
@@ -691,7 +708,8 @@ static uint8 write4ByteSupDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_4BADD_WRITE188_SUP_DWORD
 };
 
-static uint8 write4ByteSupShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 write4ByteSupShift[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_4BADD_WRITE112_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_WRITE122_SUP_SHIFT,
     QSPI_IP_SFDP_4BADD_WRITE114_SUP_SHIFT,
@@ -701,7 +719,8 @@ static uint8 write4ByteSupShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_4BADD_WRITE188_SUP_SHIFT
 };
 
-static uint8 read4ByteInst[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 read4ByteInst[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     0x3CU,
     0xBCU,
     0x6CU,
@@ -711,7 +730,8 @@ static uint8 read4ByteInst[QSPI_IP_SFDP_READ_MODE_MAX] = {
     0xCCU
 };
 
-static uint8 write4ByteInst[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 write4ByteInst[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     0x00U,
     0x00U,
     0x34U,
@@ -721,7 +741,8 @@ static uint8 write4ByteInst[QSPI_IP_SFDP_READ_MODE_MAX] = {
     0x8EU
 };
 
-static uint8 readInstDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readInstDword[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_INST_DWORD,
     QSPI_IP_SFDP_BASIC_READ122_INST_DWORD,
     QSPI_IP_SFDP_BASIC_READ114_INST_DWORD,
@@ -731,7 +752,8 @@ static uint8 readInstDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_INST_DWORD
 };
 
-static uint8 readInstShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readInstShift[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_INST_SHIFT,
     QSPI_IP_SFDP_BASIC_READ122_INST_SHIFT,
     QSPI_IP_SFDP_BASIC_READ114_INST_SHIFT,
@@ -741,7 +763,8 @@ static uint8 readInstShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_INST_SHIFT
 };
 
-static uint8 readInstWidth[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readInstWidth[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_INST_WIDTH,
     QSPI_IP_SFDP_BASIC_READ122_INST_WIDTH,
     QSPI_IP_SFDP_BASIC_READ114_INST_WIDTH,
@@ -751,7 +774,8 @@ static uint8 readInstWidth[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_INST_WIDTH
 };
 
-static uint8 readModeDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readModeDword[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_MODE_DWORD,
     QSPI_IP_SFDP_BASIC_READ122_MODE_DWORD,
     QSPI_IP_SFDP_BASIC_READ114_MODE_DWORD,
@@ -761,7 +785,8 @@ static uint8 readModeDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_MODE_DWORD
 };
 
-static uint8 readModeShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readModeShift[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_MODE_SHIFT,
     QSPI_IP_SFDP_BASIC_READ122_MODE_SHIFT,
     QSPI_IP_SFDP_BASIC_READ114_MODE_SHIFT,
@@ -771,7 +796,8 @@ static uint8 readModeShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_MODE_SHIFT
 };
 
-static uint8 readModeWidth[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readModeWidth[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_MODE_WIDTH,
     QSPI_IP_SFDP_BASIC_READ122_MODE_WIDTH,
     QSPI_IP_SFDP_BASIC_READ114_MODE_WIDTH,
@@ -781,7 +807,8 @@ static uint8 readModeWidth[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_MODE_WIDTH
 };
 
-static uint8 readDummyDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readDummyDword[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_DUMMY_DWORD,
     QSPI_IP_SFDP_BASIC_READ122_DUMMY_DWORD,
     QSPI_IP_SFDP_BASIC_READ114_DUMMY_DWORD,
@@ -791,7 +818,8 @@ static uint8 readDummyDword[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_DUMMY_DWORD
 };
 
-static uint8 readDummyShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readDummyShift[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_DUMMY_SHIFT,
     QSPI_IP_SFDP_BASIC_READ122_DUMMY_SHIFT,
     QSPI_IP_SFDP_BASIC_READ114_DUMMY_SHIFT,
@@ -801,7 +829,8 @@ static uint8 readDummyShift[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_SFDP_BASIC_READ188_DUMMY_SHIFT
 };
 
-static uint8 readDummyWidth[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static uint8 readDummyWidth[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_SFDP_BASIC_READ112_DUMMY_WIDTH,
     QSPI_IP_SFDP_BASIC_READ122_DUMMY_WIDTH,
     QSPI_IP_SFDP_BASIC_READ114_DUMMY_WIDTH,
@@ -818,7 +847,8 @@ static uint8 readDummyWidth[QSPI_IP_SFDP_READ_MODE_MAX] = {
 #define MEM_43_EXFLS_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Mem_43_EXFLS_MemMap.h"
 
-static Qspi_Ip_LutPadsType readModeInstPads[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static Qspi_Ip_LutPadsType readModeInstPads[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_LUT_PADS_1,
     QSPI_IP_LUT_PADS_1,
     QSPI_IP_LUT_PADS_1,
@@ -828,7 +858,8 @@ static Qspi_Ip_LutPadsType readModeInstPads[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_LUT_PADS_1
 };
 
-static Qspi_Ip_LutPadsType readModeAddrPads[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static Qspi_Ip_LutPadsType readModeAddrPads[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_LUT_PADS_1,
     QSPI_IP_LUT_PADS_2,
     QSPI_IP_LUT_PADS_1,
@@ -838,7 +869,8 @@ static Qspi_Ip_LutPadsType readModeAddrPads[QSPI_IP_SFDP_READ_MODE_MAX] = {
     QSPI_IP_LUT_PADS_8
 };
 
-static Qspi_Ip_LutPadsType readModeDataPads[QSPI_IP_SFDP_READ_MODE_MAX] = {
+static Qspi_Ip_LutPadsType readModeDataPads[QSPI_IP_SFDP_READ_MODE_MAX] =
+{
     QSPI_IP_LUT_PADS_2,
     QSPI_IP_LUT_PADS_2,
     QSPI_IP_LUT_PADS_4,
@@ -1876,8 +1908,20 @@ static Qspi_Ip_StatusType Qspi_Ip_SfdpFindWorkingMode(uint32 instance,
                                                      )
 {
     /* List of sfdp modes attempt to read and the corresponding pad return values */
-    const Qspi_Ip_SfdpModes  modes[4U] = {QSPI_IP_SFDP_4S_4D_4D, QSPI_IP_SFDP_4S_4S_4S, QSPI_IP_SFDP_2S_2S_2S, QSPI_IP_SFDP_1S_1S_1S};
-    const Qspi_Ip_LutPadsType pads[4U] = {QSPI_IP_LUT_PADS_4,    QSPI_IP_LUT_PADS_4,    QSPI_IP_LUT_PADS_2,    QSPI_IP_LUT_PADS_1   };
+    const Qspi_Ip_SfdpModes  modes[4U] =
+    {
+        QSPI_IP_SFDP_4S_4D_4D,
+        QSPI_IP_SFDP_4S_4S_4S,
+        QSPI_IP_SFDP_2S_2S_2S,
+        QSPI_IP_SFDP_1S_1S_1S
+    };
+    const Qspi_Ip_LutPadsType pads[4U] =
+    {
+        QSPI_IP_LUT_PADS_4,
+        QSPI_IP_LUT_PADS_4,
+        QSPI_IP_LUT_PADS_2,
+        QSPI_IP_LUT_PADS_1
+    };
     const uint32 maxAttempts = 4U;
     Qspi_Ip_StatusType status;
     uint8 data[4U];

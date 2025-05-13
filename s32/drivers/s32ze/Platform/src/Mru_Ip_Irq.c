@@ -1,5 +1,6 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 1997-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,7 +8,7 @@
 /**
 *   @file    Mru_Ip_Irq.c
 *
-*   @version 2.0.0
+*   @version 1.0.0
 *
 *   @brief   ISR handler file.
 *   @details Declaration APIs for Mru ISR.
@@ -38,7 +39,7 @@ extern "C"
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_IRQ_C    0
 #define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_IRQ_C               2
 #define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_IRQ_C               0
-#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_IRQ_C               0
+#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_IRQ_C               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/

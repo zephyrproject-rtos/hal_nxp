@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,12 +24,15 @@ extern "C"{
 ==================================================================================================*/
 #include "Netc_Eth_Ip.h"
 #include "OsIf.h"        /* Used for timeouts. */
+#if(STD_ON == NETC_ETH_IP_USE_CRC_DRIVER)
+#include "Crc.h"         /* Used to calculate CRC16-CCITT-FALSE */
+#endif
 #include "SchM_Eth_43_NETC.h"
 
-#if(NETC_ETH_IP_DEV_ERROR_DETECT == STD_ON)
+#if(STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     #include "Devassert.h"
 #endif
-#if(NETC_ETH_IP_HAS_CACHE_MANAGEMENT == STD_ON)
+#if(STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT)
     #include "Cache_Ip.h"
 #endif
 
@@ -42,7 +45,7 @@ extern "C"{
 #define NETC_ETH_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define NETC_ETH_IP_SW_MAJOR_VERSION_C               2
 #define NETC_ETH_IP_SW_MINOR_VERSION_C               0
-#define NETC_ETH_IP_SW_PATCH_VERSION_C               0
+#define NETC_ETH_IP_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -102,6 +105,59 @@ extern "C"{
 #define NETC_ETH_IP_UCORR_SEV_MASK ((uint32)NETC_F1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_SEV_UCORR_INT_SEV_MASK)
 #define NETC_ETH_IP_AER_ROOT_CLEAR_STATUS_MASK ((uint32)(0x7F))
 
+#define ETH_43_NETC_START_SEC_CONST_16
+#include "Eth_43_NETC_MemMap.h"
+
+/* CRC16-CCITT-FALSE table generated based on the (0x1021) polynom. */
+
+/* When STD_OFF == NETC_ETH_IP_USE_CRC_DRIVER, then CRC16-CCITT-FALSE calculus will be
+   provided by the Ethernet driver using the following lookup table. */
+
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+        #if (STD_OFF == NETC_ETH_IP_USE_CRC_DRIVER)
+static const uint16 Netc_Eth_Ip_Crc16Table[256] =
+{
+    0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
+    0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
+    0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
+    0x9339, 0x8318, 0xb37b, 0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de,
+    0x2462, 0x3443, 0x0420, 0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485,
+    0xa56a, 0xb54b, 0x8528, 0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d,
+    0x3653, 0x2672, 0x1611, 0x0630, 0x76d7, 0x66f6, 0x5695, 0x46b4,
+    0xb75b, 0xa77a, 0x9719, 0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc,
+    0x48c4, 0x58e5, 0x6886, 0x78a7, 0x0840, 0x1861, 0x2802, 0x3823,
+    0xc9cc, 0xd9ed, 0xe98e, 0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b,
+    0x5af5, 0x4ad4, 0x7ab7, 0x6a96, 0x1a71, 0x0a50, 0x3a33, 0x2a12,
+    0xdbfd, 0xcbdc, 0xfbbf, 0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a,
+    0x6ca6, 0x7c87, 0x4ce4, 0x5cc5, 0x2c22, 0x3c03, 0x0c60, 0x1c41,
+    0xedae, 0xfd8f, 0xcdec, 0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49,
+    0x7e97, 0x6eb6, 0x5ed5, 0x4ef4, 0x3e13, 0x2e32, 0x1e51, 0x0e70,
+    0xff9f, 0xefbe, 0xdfdd, 0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78,
+    0x9188, 0x81a9, 0xb1ca, 0xa1eb, 0xd10c, 0xc12d, 0xf14e, 0xe16f,
+    0x1080, 0x00a1, 0x30c2, 0x20e3, 0x5004, 0x4025, 0x7046, 0x6067,
+    0x83b9, 0x9398, 0xa3fb, 0xb3da, 0xc33d, 0xd31c, 0xe37f, 0xf35e,
+    0x02b1, 0x1290, 0x22f3, 0x32d2, 0x4235, 0x5214, 0x6277, 0x7256,
+    0xb5ea, 0xa5cb, 0x95a8, 0x8589, 0xf56e, 0xe54f, 0xd52c, 0xc50d,
+    0x34e2, 0x24c3, 0x14a0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
+    0xa7db, 0xb7fa, 0x8799, 0x97b8, 0xe75f, 0xf77e, 0xc71d, 0xd73c,
+    0x26d3, 0x36f2, 0x0691, 0x16b0, 0x6657, 0x7676, 0x4615, 0x5634,
+    0xd94c, 0xc96d, 0xf90e, 0xe92f, 0x99c8, 0x89e9, 0xb98a, 0xa9ab,
+    0x5844, 0x4865, 0x7806, 0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3,
+    0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e, 0x8bf9, 0x9bd8, 0xabbb, 0xbb9a,
+    0x4a75, 0x5a54, 0x6a37, 0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92,
+    0xfd2e, 0xed0f, 0xdd6c, 0xcd4d, 0xbdaa, 0xad8b, 0x9de8, 0x8dc9,
+    0x7c26, 0x6c07, 0x5c64, 0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1,
+    0xef1f, 0xff3e, 0xcf5d, 0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8,
+    0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
+};
+        #endif
+    #endif
+#endif
+
+#define ETH_43_NETC_STOP_SEC_CONST_16
+#include "Eth_43_NETC_MemMap.h"
+
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
@@ -115,31 +171,25 @@ static boolean Netc_Eth_Ip_TGSAdminListRegistered;
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
-#define ETH_43_NETC_START_SEC_VAR_INIT_UNSPECIFIED
-#include "Eth_43_NETC_MemMap.h"
-extern Netc_Eth_Ip_SiBaseType *netcSIsBase[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
-extern Netc_Eth_Ip_VfBaseType *netcVFBase[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
-extern Netc_Eth_Ip_PCIeBaseType *netcPCIePFBase[FEATURE_NETC_NUMBER_OF_FUNC];
-#define ETH_43_NETC_STOP_SEC_VAR_INIT_UNSPECIFIED
-#include "Eth_43_NETC_MemMap.h"
-
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
-VAR_SEC_NOCACHE(MACFilterHashTableAddrs) extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
+#endif /* (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0) */
 
-#if ((NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS == STD_ON) || (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON))
+#if ((STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS) || (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS))
 #define ETH_43_NETC_START_SEC_CONST_BOOLEAN
 #include "Eth_43_NETC_MemMap.h"
 
-#if (NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
 /** @brief Table storing information related to the method of Tx Data Buffers Management.*/
 static const boolean Netc_Eth_Ip_ControllerHasExternalTxBufferManagement[FEATURE_NETC_ETH_NUMBER_OF_CTRLS] = NETC_ETH_IP_INST_HAS_EXTERNAL_TX_BUFFERS;
 #endif
 
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
 /** @brief Table storing information related to the method of Rx Data Buffers Management.*/
 static const boolean Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[FEATURE_NETC_ETH_NUMBER_OF_CTRLS] = NETC_ETH_IP_INST_HAS_EXTERNAL_RX_BUFFERS;
 #endif
@@ -147,7 +197,7 @@ static const boolean Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[FEATURE
 #define ETH_43_NETC_STOP_SEC_CONST_BOOLEAN
 #include "Eth_43_NETC_MemMap.h"
 
-#endif /* ((NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS == STD_ON) || (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)) */
+#endif /* ((STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS) || (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)) */
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -182,38 +232,37 @@ extern volatile Netc_Eth_Ip_RxTimestampInfoType Netc_Eth_Ip_RxTimestampInfoBuff[
 #include "Eth_43_NETC_MemMap.h"
 
 #if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
-#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
 /** @brief Structures used to measure the usage of the FIFOs*/
-VAR_SEC_NOCACHE(Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff) volatile uint16 Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_RXRINGS];
-VAR_SEC_NOCACHE(Netc_Eth_Ip_Tx_FillLevelInfo) volatile Netc_Eth_Ip_FillLevelInfo Netc_Eth_Ip_Tx_FillLevelInfo[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_TXRINGS];
+volatile uint16 Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_RXRINGS];
+volatile Netc_Eth_Ip_FillLevelInfo Netc_Eth_Ip_Tx_FillLevelInfo[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_TXRINGS];
 #endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
 #endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
+
 /** @brief Pointers to NETC internal driver state for each controller(SI). */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_apxState) Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 /** @brief List of Error Reporting structures that aggregate information for each Pcie function in case of an error reported to the Event Collector. EMDIO, TIMER, SWITCH, ENETC, PSI0, VSI1-7*/
-VAR_SEC_NOCACHE(Netc_Eth_Ip_ErrorStatus) static volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS];
+static volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS];
 
 /* Enabled status for Time Aware Shaper for PSI */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_PortTimeAwareShaperEnabled) static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
+static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
 
 /* Table entries for Time Aware Shaping configuration */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_EthTimeGateSchedulingEntryData) static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
+static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
 
 /* The frequency of the NETC module for computing CBS parameters */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_NetcClockFrequency) static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
+static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
 
 /* a 16 bytes aligned table request data buffer */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_EnetcTableDataBuffer) VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
-VAR_SEC_NOCACHE(Netc_Eth_Ip_OperationData) static VAR_ALIGN(Netc_Eth_Ip_ReqHeaderTableOperationDataType Netc_Eth_Ip_OperationData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+static VAR_ALIGN(Netc_Eth_Ip_ReqHeaderTableOperationDataType Netc_Eth_Ip_OperationData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
-VAR_SEC_NOCACHE(Netc_Eth_Ip_TableData) static VAR_ALIGN(Netc_Eth_Ip_SetMessageHeaderTableOperationDataType Netc_Eth_Ip_TableData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+static VAR_ALIGN(Netc_Eth_Ip_SetMessageHeaderTableOperationDataType Netc_Eth_Ip_TableData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
 /* Local copy of the pointer to the configuration data. */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_ConfigPtr)  static const Netc_Eth_Ip_ConfigType * Netc_Eth_Ip_ConfigPtr[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
-
-
+static const Netc_Eth_Ip_ConfigType * Netc_Eth_Ip_ConfigPtr[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
@@ -221,14 +270,14 @@ VAR_SEC_NOCACHE(Netc_Eth_Ip_ConfigPtr)  static const Netc_Eth_Ip_ConfigType * Ne
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
 
-VAR_SEC_NOCACHE(Netc_Eth_Ip_RfsSetDataBuffer) static VAR_ALIGN(uint32 Netc_Eth_Ip_RfsSetDataBuffer[NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+static VAR_ALIGN(uint32 Netc_Eth_Ip_RfsSetDataBuffer[NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 /* Key element data for ingress port filter table */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_IPFKeyeData) static volatile VAR_ALIGN(uint32 Netc_Eth_Ip_IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+static volatile VAR_ALIGN(uint32 Netc_Eth_Ip_IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
 
-#if (NETC_ETH_IP_HAS_CACHE_MANAGEMENT == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT)
 /*  FEATURE_NETC_CACHABLE_BUFFERS_LMEM and FEATURE_NETC_CACHABLE_BUFFERS_CORE are generated based on the
 platform and the core type in case both cache IPs are supported.
     These macros must be both defined for the driver when the cache management feature is enabled.
@@ -254,7 +303,7 @@ static const Cache_Ip_Type CacheType = CACHE_IP_CORE;
 #include "Eth_43_NETC_MemMap.h"
         #endif /* defined (FEATURE_NETC_CACHABLE_BUFFERS_CORE) */
     #endif /* defined (FEATURE_NETC_CACHABLE_BUFFERS_LMEM) */
-#endif /*NETC_HAS_CACHE_MANAGEMENT == STD_ON */
+#endif /*STD_ON == NETC_HAS_CACHE_MANAGEMENT*/
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
@@ -366,24 +415,6 @@ static inline void Netc_Eth_Ip_StartTimeOut(uint32 *StartTimeOut,
 static inline boolean Netc_Eth_Ip_TimeoutExpired(uint32 *StartTimeInOut,
                                                  uint32 *ElapsedTimeInOut,
                                                  uint32 TimeoutTicks);
-/**
- * @brief Add MAC addr in the software table.
- *
- * @param CtrlIndex Index of the SI.
- * @param HashValue Computed hash value.
- * @param MacAddr   MAC address.
- * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
- *                                NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL - MAC table used for hash filter is full
- */
-static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMACFilterEntry(uint8 CtrlIndex, uint8 HashValue, const uint8 *MacAddr);
-
-/**
- * @brief Compute has value for MAC addr.
- *
- * @param MacAddr MAC address.
- * @return uint8  Hash value for MacAddr.
- */
-static inline uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr);
 
 /**
  * @brief Send message from the VSI to PSI.
@@ -402,20 +433,6 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
                                                              Netc_Eth_Ip_VsiToPsiMsgActionType MsgAction, \
                                                              const uint8 *MacAddr, \
                                                              uint16 * PsiRspMessage );
-/**
- * @brief Remove MAC addr in the software table.
- *
- * @param CtrlIndex Index of the SI.
- * @param HashValue Computed hash value.
- * @param MacAddr   MAC address.
- * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
- *                                NETC_ETH_IP_STATUS_ERROR   - unsuccessfully operation
- *                                NETC_ETH_IP_STATUS_MAC_ADDR_NOT_FOUND - the current destination MAC was not
- *                                found in the hash filter table
- */
-static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint8 CtrlIndex, \
-                                                                      const uint8 HashValue, \
-                                                                      const uint8 *MacAddr);
 
 /**
  * @brief Wait until the command is send from the VSI to the PSI.
@@ -425,7 +442,7 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint
  * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
  *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in the allotted time
  */
-static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uint8 VsiId, const Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig, uint16 * PsiRspMessage);
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uint8 VsiId, volatile Netc_Eth_Ip_VsiToPsiMsgType const *MsgCommandConfig, uint16 * PsiRspMessage);
 
 /**
  * @brief Performs a transformation to a hardware specific value which sets the
@@ -448,6 +465,19 @@ static uint8 Netc_Eth_Ip_CoalescingTxPacketsConversion (uint16 PacketsThreshold)
  * @return Netc_Eth_Ip_StatusType Error in case the memory access wasn't enabled beforehand.
  */
 static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetupErrorReporting(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config);
+
+#if (NETC_ETH_IP_NUMBER_OF_MAC_FILTER_TABLE_ENTRIES > 0U)
+/**
+ * @brief            Mac Filter table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigMACFilterTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
+#endif
 
 #if (NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES > 0U)
 /**
@@ -514,6 +544,19 @@ static Std_ReturnType Netc_Eth_Ip_ConfigIngressStreamTable(uint8 ctrlIndex, cons
 static Std_ReturnType Netc_Eth_Ip_ConfigSGCL(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
 #endif
 
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+/**
+ * @brief            Multicast MAC Hash filter configuration function.
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigMulticastMACHashFilter(uint8 ctrlIndex);
+#endif
+
 #if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
 /**
  * @brief            Stream Gate Instance configuration function
@@ -552,8 +595,10 @@ static inline void Netc_Eth_Ip_Init_FirstPart(const uint8 ctrlIndex, const Netc_
  *
  * @param[in] ctrlIndex controller index
  * @param[in] config controller configuration
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfull operation
  */
-static inline void Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
 
 
 /*!
@@ -563,7 +608,7 @@ static inline void Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc
  * @param[in] ctrlIndex controller index
  * @param[in] config controller configuration
  */
-static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+static inline void Netc_Eth_Ip_InitSI_ConfigureSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
 
 /*!
  * @brief   : Function for initializing NTMP table.
@@ -572,8 +617,10 @@ static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const 
  * @param[in] ctrlIndex controller index
  * @param[in] config controller configuration
  *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfull operation
+ *
  */
-static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
 
 /*!
  * @brief   : Internal function for reading the  error status registers for EMDIO
@@ -792,13 +839,13 @@ static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForSI(const uint8 ctrlIdx, con
  * @param[in] ctrlIndex
  * @param[in] ring
  * @param[in] status
- * @param[in] CurrLowTime
+ * @param[in] CurrTime
  * @return    VOID
  */
 static inline void Netc_Eth_Ip_HostReasonTimeStamp(uint8 ctrlIndex,
                                                    uint8 ring,
                                                    Netc_Eth_Ip_StatusType* status,
-                                                   uint32 CurrLowTime
+                                                   Netc_Eth_Ip_TimeType CurrTime
                                                    );
 #endif
 
@@ -889,8 +936,9 @@ static inline void Netc_Eth_Ip_SetupErrorReporting_EnableUncorrectableErrors(con
  */
 static inline void Netc_Eth_Ip_SetupErrorReporting_EnableCorrectableErrors(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config);
 
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
 /*!
- * @brief  : Local fuction used by Netc_Eth_Ip_DeleteMACFilterEntry
+ * @brief  : Local fuction used by Netc_Eth_Ip_DeleteMACHashFilterEntry
  * @details
  * @param[in] CtrlIndex
  * @param[in] MatchedEntry
@@ -898,10 +946,11 @@ static inline void Netc_Eth_Ip_SetupErrorReporting_EnableCorrectableErrors(const
  * @param[in] MacAddr
  * @return    VOID
  */
-static inline void Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(const uint8 CtrlIndex,
+static inline void Netc_Eth_Ip_DeleteMACHashFilterEntry_MarkEntryEmpty(const uint8 CtrlIndex,
                                                                    boolean* const MatchedEntry,
                                                                    const uint8 CurrentEntry,
                                                                    const uint8 *MacAddr);
+#endif /* (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0) */
 
 /*!
  * @brief   : Internal function for processing the interrupt status for VSIx
@@ -924,11 +973,23 @@ static inline void Netc_Eth_Ip_ProcessErrorStatusForInterruptForFunctions(const 
 ==================================================================================================*/
 static void Netc_Eth_Ip_GetCurrentTick(uint8 ctrlIndex, Netc_Eth_Ip_TimeType *TimePtr)
 {
-    /* Read the low register, then immediately read the high register to get a synchronised 64-bit time value */
-    (*TimePtr).nanosecondsL = (uint32)(netcSIsBase[ctrlIndex]->SICTR0);
-    (*TimePtr).nanosecondsH = (uint32)(netcSIsBase[ctrlIndex]->SICTR1);
+#if(STD_ON == NETC_ETH_FREE_RUNNING_TIMER_SUPPORT)
+        (*TimePtr).nanosecondsL = (uint32)(IP_NETC__TMR0_BASE->TMR_FRT_L);
+        (*TimePtr).nanosecondsH = (uint32)(IP_NETC__TMR0_BASE->TMR_FRT_H);
+        (void)ctrlIndex;
+#else
+        /* Read the low register, then immediately read the high register to get a synchronised 64-bit time value */
+        (*TimePtr).nanosecondsL = (uint32)(netcSIsBase[ctrlIndex]->SICTR0);
+        (*TimePtr).nanosecondsH = (uint32)(netcSIsBase[ctrlIndex]->SICTR1);
+#endif
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_StartTimeOut
+ * Description   : Prepare to use a timeout.
+ *
+ *END**************************************************************************/
 static inline void Netc_Eth_Ip_StartTimeOut(uint32 *StartTimeOut,
                                             uint32 *ElapsedTimeOut,
                                             uint32 *TimeoutTicksOut,
@@ -939,6 +1000,12 @@ static inline void Netc_Eth_Ip_StartTimeOut(uint32 *StartTimeOut,
     *TimeoutTicksOut = OsIf_MicrosToTicks(TimeoutUs, NETC_ETH_IP_TIMEOUT_TYPE);
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_TimeoutExpired
+ * Description   : Checks for timeout expiration condition.
+ *
+ *END**************************************************************************/
 static inline boolean Netc_Eth_Ip_TimeoutExpired(uint32 *StartTimeInOut,
                                                  uint32 *ElapsedTimeInOut,
                                                  uint32 TimeoutTicks)
@@ -989,7 +1056,7 @@ static void Netc_Eth_Ip_InitStateStructure(uint8 ctrlIndex, const Netc_Eth_Ip_Co
             config->stateStructure->LockTxBuffDescr[u8TxBDIdx][currBDIdx] = FALSE;
         }
 #if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
-#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
         Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][u8TxBDIdx].TotalNumberOfBuff = config->stateStructure->TxRingSize[u8TxBDIdx] - (uint16)1U;
 #endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
 #endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
@@ -1002,8 +1069,11 @@ static void Netc_Eth_Ip_InitStateStructure(uint8 ctrlIndex, const Netc_Eth_Ip_Co
     config->stateStructure->NumberOfTxBDR                   = (*config->siConfig).NumberOfTxBDR;
     config->stateStructure->NumberOfRxBDR                   = (*config->siConfig).NumberOfRxBDR;
     config->stateStructure->SiType                          =   config->SiType;
-    config->stateStructure->MACFilterTableMaxNumOfEntries   = (*config->siConfig).MACFilterTableMaxNumOfEntries;
     config->stateStructure->CtrlLogicalIndex                = (*config->siConfig).CtrlLogicalIndex;
+#if (0U != NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES)
+    config->stateStructure->NumberOfConfiguredMulticastMacHashFilterEntries = (*config->siConfig).NumberOfConfiguredMulticastMacHashFilterEntries;
+    config->stateStructure->MulticastMACFilterEntries                       = config->siConfig->MulticastMACFilterEntries;
+#endif
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     config->stateStructure->RxDataBuffAddr  = (*config).rxExternalBuffersAddr;
 #endif
@@ -1011,6 +1081,9 @@ static void Netc_Eth_Ip_InitStateStructure(uint8 ctrlIndex, const Netc_Eth_Ip_Co
     /*SI runtime permissions */
     if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
     {
+#if (STD_ON == NETC_ETH_IP_MANAGEMENT_SUPPORT_API)
+        config->stateStructure->ManagementIPV                   = (*config->generalConfig).ManagementIPV;
+#endif
         config->stateStructure->SIGeneralConfig = config->generalConfig->stationInterfaceGeneralConfig;
         config->stateStructure->generalConfig = config->generalConfig;
 
@@ -1030,7 +1103,6 @@ static void Netc_Eth_Ip_InitStateStructure(uint8 ctrlIndex, const Netc_Eth_Ip_Co
 
     config->stateStructure->EnetcCommandBDConfig.commandBDAddr = (*config->siConfig).commandBDConfig.commandBDAddr;
     config->stateStructure->EnetcCommandBDConfig.lengthCBDR = (*config->siConfig).commandBDConfig.lengthCBDR;
-
 
 
     Netc_Eth_Ip_apxState[ctrlIndex] = config->stateStructure;
@@ -1064,15 +1136,13 @@ static void Netc_Eth_Ip_InitTxBD(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
             if (!Netc_Eth_Ip_ControllerHasExternalTxBufferManagement[ctrlIndex])
             {
+#endif
                 /* Write in the buffer descriptor the address of the allocated buffer */
                 TempTxDescr->dataBuffAddr = (uint32)((*config->paCtrlTxRingConfig)[currentTxBDR].Buffer) + \
                                                     (uint32)(currBDIdx * (*config->paCtrlTxRingConfig)[currentTxBDR].maxBuffLen);
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
             }
 #endif
-
-            /* Write in the buffer descriptor the address of the allocated buffer */
-            TempTxDescr->dataBuffAddr = (uint32)((*config->paCtrlTxRingConfig)[currentTxBDR].Buffer) + \
-                                                (uint32)(currBDIdx * (*config->paCtrlTxRingConfig)[currentTxBDR].maxBuffLen);
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
             /* Write in the buffer descriptor the extended bit */
@@ -1107,7 +1177,7 @@ static void Netc_Eth_Ip_InitRxBD(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *
         netcSIsBase[ctrlIndex]->BDR_NUM[u8RxBDIdx].RBLENR = (*config->paCtrlRxRingConfig)[u8RxBDIdx].ringSize;
         /* Write in the transmission BDR register the address to the receive buffer descriptor. */
         netcSIsBase[ctrlIndex]->BDR_NUM[u8RxBDIdx].RBBAR0 = (uint32)(*config->paCtrlRxRingConfig)[u8RxBDIdx].RingDesc;
-        /* Maximum size of the receive packet. Drop all packets with a bigger size. */
+        /* Maximum size of the receive packet.*/
         netcSIsBase[ctrlIndex]->BDR_NUM[u8RxBDIdx].RBBSR = (*config->paCtrlRxRingConfig)[u8RxBDIdx].bufferLen;
 
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
@@ -1131,10 +1201,19 @@ static void Netc_Eth_Ip_InitRxBD(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
         }
 #endif
-
     }
+
+    /* Configure the receive BD rings assignment to group by setting SIRBGCR register according to the rules defined in the register definition.*/
+    netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_NUM_GROUPS(1U); /* 1 Group, if 0 --> all incomming frames are received by RX BD Ring 0 regardles. */
+    netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_RINGS_PER_GROUP(7U); /* 8 rings per group for each SI */
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_Init_IpvToBdrMapping
+ * Description   : Configure IPV to BDR - Station interface IPV to ring mapping register (SIIPVBDRMR0)
+ *
+ *END**************************************************************************/
 static void Netc_Eth_Ip_Init_IpvToBdrMapping(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
 {
     netcSIsBase[ctrlIndex]->SIIPVBDRMR0 =
@@ -1158,21 +1237,6 @@ static void Netc_Eth_Ip_Init_VlanToIpvMapping(uint8 ctrlIndex, const Netc_Eth_Ip
                                         ENETC_PORT_PQOSMR_VS(1U)); /* PQOSMR[VS] = 1 --> outer tag is considered. */
                                                                    /* PQOSMR[VE] = 1 --> enable the use of VLAN tag data to determine IPV and DR, over the default settings. */
     }
-
-    /* Configure the receive BD rings assignment to group by setting SIRBGCR register according to the rules defined in the register definition.*/
-    netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_NUM_GROUPS(1U); /* 1 Group, if 0 --> all incomming frames are received by RX BD Ring 0 regardles. */
-
-    if(ctrlIndex == 0U)
-    {
-        netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_RINGS_PER_GROUP(8U); /* 9 rings group PSI0 */
-    }
-    else
-    {
-        netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_RINGS_PER_GROUP(7U); /* 8 rings group for other SIs */
-    }
-
-    /* Default receive group = 0. The default receive group is used when there is no match for RFS and RSS is disabled. */
-    netcSIsBase[ctrlIndex]->SIMR &= (netcSIsBase[ctrlIndex]->SIMR ^ NETC_F3_SI0_SIMR_DEFAULT_RX_GROUP(1U));
 
 #if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
     if(config->siConfig->enableVlanToIpvMapping == TRUE)
@@ -1199,18 +1263,22 @@ static void Netc_Eth_Ip_Init_VlanToIpvMapping(uint8 ctrlIndex, const Netc_Eth_Ip
         NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_15(config->siConfig->vlanToIpv[15]);
     }
     else
-    { /* enableVlanToIpvMapping == false -> The port default IPV is used (PQOSMR[DIPV] and PQOSMR[DDR]) */
 #endif
+    { /* enableVlanToIpvMapping == false -> The port default IPV is used (PQOSMR[DIPV] and PQOSMR[DDR]) */
+
         /* V2IPVE is toggled off. 011 &= (011 ^ 010) ,  001 &= (001 ^ 010) */
         netcSIsBase[ctrlIndex]->SIMR &= (netcSIsBase[ctrlIndex]->SIMR ^ NETC_F3_SI0_SIMR_V2IPVE(1U));
-#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
     }
-#endif
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_InitCBDR
+ * Description   : Init Command BD ring
+ *
+ *END**************************************************************************/
 static void Netc_Eth_Ip_InitCBDR(uint8 ctrlIndex)
 {
-
     netcSIsBase[ctrlIndex]->SICBDRBAR0 = (uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr);
     netcSIsBase[ctrlIndex]->SICBDRLENR = NETC_F3_SI0_SICBDRLENR_LENGTH(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.lengthCBDR);
     netcSIsBase[ctrlIndex]->SICBDRPIR  = NETC_F3_SI0_SICBDRPIR_BDR_INDEX(0U);
@@ -1218,7 +1286,12 @@ static void Netc_Eth_Ip_InitCBDR(uint8 ctrlIndex)
     netcSIsBase[ctrlIndex]->SICBDRMR   = NETC_F3_SI0_SICBDRMR_EN(1U);
 }
 
-
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_EnableIrq_ConfigMsiTableTx
+ * Description   : Local function used by Netc_Eth_Ip_EnableIrq to enable and set the configuration for interrupt.
+ *
+ *END**************************************************************************/
 static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableTx(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config, Netc_Eth_Ip_MSITable* const msiTableConfig)
 {
     uint8 txBDRIndex;
@@ -1232,6 +1305,12 @@ static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableTx(uint8 ctrlIndex, const
     }
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_EnableIrq_ConfigMsiTableRx
+ * Description   : Local function used by Netc_Eth_Ip_EnableIrq to enable and set the configuration for interrupt.
+ *
+ *END**************************************************************************/
 static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableRx(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config, Netc_Eth_Ip_MSITable* const msiTableConfig)
 {
     uint8 rxBDRIndex;
@@ -1254,7 +1333,21 @@ static inline void Netc_Eth_Ip_EnableIrq(uint8 ctrlIndex, const Netc_Eth_Ip_Conf
     NETC_F3_PCI_HDR_TYPE0_Type *PSIConfig;
     uint32* msiBaseAddr[] = NETC_ETH_IP_MSI_BASE_PTRS;
 
-    msiTableConfig = (Netc_Eth_Ip_MSITable *)msiBaseAddr[ctrlIndex];
+    msiTableConfig = (Netc_Eth_Ip_MSITable *)((uint32)msiBaseAddr[ctrlIndex]);
+
+    /* Clear all RX Flags before enabling interupts */
+    netcSIsBase[ctrlIndex]->SIRXIDR0 = NETC_ETH_IP_SIRXIDR0_RX_ALL_MASK;
+    netcSIsBase[ctrlIndex]->SIRXIDR1 = NETC_ETH_IP_SIRXIDR1_RX_ALL_MASK;
+
+    /* Clear all TX Flags before enabling interupts */
+    netcSIsBase[ctrlIndex]->SITXIDR0 = NETC_ETH_IP_SITXIDR0_TXT_TXF_ALL_MASK;
+    netcSIsBase[ctrlIndex]->SITXIDR1 = NETC_ETH_IP_SITXIDR1_TXT_TXF_ALL_MASK;
+
+    if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
+    {
+        /* Clear all MR and FLR Flags before enabling interupts */
+        netcSIsBase[ctrlIndex]->INTERRUPT.PSI.PSIIDR = (NETC_ETH_IP_PSI_MR_EV_MASK | NETC_ETH_IP_FLR_EV_MASK);
+    }
 
     if ((0U != (*config->siConfig).TxInterrupts) && \
         (NULL_PTR != (*config->siConfig).txMruMailboxAddr))
@@ -1393,7 +1486,7 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitSI(const uint8 ctrlIndex, c
         /*Enable VS - VLAN Select*/
         IP_NETC__ENETC0_BASE->PSIVLANFMR = NETC_F3_PSIVLANFMR_VS(1U);
 #endif
-        Netc_Eth_Ip_InitSI_ConfigureVSI(ctrlIndex, config);
+        Netc_Eth_Ip_InitSI_ConfigureSI(ctrlIndex, config);
 
         /** TODO: Advanced feature configuration. TBA later. */
         /* Configure the number of MAC and VLAN filter entries for all SIs - Port station interface 0 VSI MAC address filtering configuration register (PSI0VMAFCFGR) and
@@ -1402,14 +1495,14 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitSI(const uint8 ctrlIndex, c
                                                                              Port station interface a VLAN filtering configuration register (PSI1VLANFCFGR - PSI7VLANFCFGR)*/
         /* Configure the internal priority to ICM priority mapping - Receive IPV to ICM priority mapping register 0 (IPV2ICMPMR0) */
         /* Configure the IPV to traffic class assignment - Transmit priority to traffic class mapping register 0 (PRIO2TCMR0) */
-        IP_NETC__ENETC0_BASE->PRIO2TCMR0 = NETC_F3_PRIO2TCMR0_PRIO0TC((uint32)((*config->generalConfig).priorityToTrafficClassic[0])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO1TC((uint32)((*config->generalConfig).priorityToTrafficClassic[1])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO2TC((uint32)((*config->generalConfig).priorityToTrafficClassic[2])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO3TC((uint32)((*config->generalConfig).priorityToTrafficClassic[3])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO4TC((uint32)((*config->generalConfig).priorityToTrafficClassic[4])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO5TC((uint32)((*config->generalConfig).priorityToTrafficClassic[5])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO6TC((uint32)((*config->generalConfig).priorityToTrafficClassic[6])) |
-                                           NETC_F3_PRIO2TCMR0_PRIO7TC((uint32)((*config->generalConfig).priorityToTrafficClassic[7]));
+        IP_NETC__ENETC0_BASE->PRIO2TCMR0 = NETC_F3_PRIO2TCMR0_PRIO0TC((uint32)((*config->generalConfig).priorityToTrafficClass[0])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO1TC((uint32)((*config->generalConfig).priorityToTrafficClass[1])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO2TC((uint32)((*config->generalConfig).priorityToTrafficClass[2])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO3TC((uint32)((*config->generalConfig).priorityToTrafficClass[3])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO4TC((uint32)((*config->generalConfig).priorityToTrafficClass[4])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO5TC((uint32)((*config->generalConfig).priorityToTrafficClass[5])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO6TC((uint32)((*config->generalConfig).priorityToTrafficClass[6])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO7TC((uint32)((*config->generalConfig).priorityToTrafficClass[7]));
 
         /* Configure speed and other settings in Port configuration register (PCR) */
 
@@ -1472,7 +1565,13 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitIngressPortFilterTable(cons
 }
 #endif
 
-static inline uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ComputeMACHashValue
+ * Description   : Compute has value for MAC addr.
+ *
+ *END**************************************************************************/
+uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr)
 {
     uint8 HashValue = 0U;
     uint8 h0;
@@ -1541,17 +1640,20 @@ static inline uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr)
     return HashValue;
 }
 
-static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uint8 VsiId, const Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig, uint16 * PsiRspMessage )
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uint8 VsiId, volatile Netc_Eth_Ip_VsiToPsiMsgType const *MsgCommandConfig, uint16 * PsiRspMessage )
 {
     uint32 StartTime;
     uint32 ElapsedTime;
     uint32 TimeoutTicks;
     Netc_Eth_Ip_StatusType Status;
-    Netc_Eth_Ip_StatusType PSIResponseStatus;
+    volatile Netc_Eth_Ip_StatusType PSIResponseStatus = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+    volatile uint16 PSIResponse_ReturnCode;
+    Netc_Eth_Ip_GetTimerSyncClassProtocolStatusType SITimerSyncStatus = NETC_ETH_IP_PSITOVSI_PROTOCOL_TIMER_SYNC_STATUS_NOT_SYNCHRONIZED;
 
     /*Assure the data to be sent is synchronised*/
     MCAL_DATA_SYNC_BARRIER();
     /* Set message command address(aligned at 64) and the size of it(6 bits code). */
+    /* VSIMSGSNDAR0 - This is the message send address register 0. Writing this register will trigger a send of the message, located at this address, to the Physical Station Interface (PSI). */
     ((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGSNDAR0 = ((uint32)MsgCommandConfig | NETC_ETH_IP_VSITOPSI_MSG_SIZE);
 
     /* Wait until the message sent is processed by PSI. */
@@ -1559,16 +1661,51 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uin
     do
     {
         /* Return the status of the message command. */
+        /* VSIMSGSR - This is the message send register for the VSI to copy a message in memory to the PSI. */
+        /* VSIMSGSR[MB] - This bit will clear automatically and status field MS set accordingly. */
         if (NETC_ETH_IP_VSI_MSG_PROGRESS_STATUS != \
-            (((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGSR & NETC_ETH_IP_VSI_MSG_PROGRESS_STATUS))
+           (((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGSR & NETC_ETH_IP_VSI_MSG_PROGRESS_STATUS))
         {
+            /* VSIMSGSR[MS]s - The status bit indicates if the command was executed successfully. */
+            Status = (Netc_Eth_Ip_StatusType)((uint8)((((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGSR) & NETC_ETH_IP_VSI_MSG_STATUS));
 
-            Status = (Netc_Eth_Ip_StatusType)((uint16)(((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGSR) & NETC_ETH_IP_VSI_MSG_STATUS);
-
-            /* If the message was successfully transmited, copy the index value, or the user defined Message Code, received from PSI */
-            if(NETC_ETH_IP_STATUS_SUCCESS == Status )
+            if(NETC_ETH_IP_STATUS_SUCCESS == Status)
             {
-                PSIResponseStatus = (Netc_Eth_Ip_StatusType) (((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGRR >> NETC_ETH_IP_PSI_MSG_POS );
+                /* VSIMSGRR - message receive register for the Virtual Station Interface (VSI) which indicates if there is a pending messages from the PSI in the form of a 16-bit message code. */
+                /* Reading this register acknowledges to the PSI that the message was received and another message can be sent. */
+
+                /* [MC] - This field provides a user defined 16-bit message value from the PSI */
+                PSIResponse_ReturnCode = NETC_ETH_IP_PSITOVSI_REPLY_GET_RETURN_CODE((((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGRR >> NETC_ETH_IP_PSI_MSG_POS ));
+
+                /* Map the respons according to the statuses supported by RTD. */
+                switch (PSIResponse_ReturnCode)
+                {
+                    case ((uint16)NETC_ETH_IP_PSITOVSI_PROTOCOL_CMD_SUCCESFUL):
+                    {
+                        PSIResponseStatus = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+                        break;
+                    }
+                    case (NETC_ETH_IP_VSITOPSI_GET_TIMER_SYNC_STATUS_CLASS_CODE):
+                    {
+                        SITimerSyncStatus = (Netc_Eth_Ip_GetTimerSyncClassProtocolStatusType)((uint8)((((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGRR >> NETC_ETH_IP_PSI_MSG_POS ) & 0x0001U));
+                        PSIResponseStatus = ((Netc_Eth_Ip_GetTimerSyncClassProtocolStatusType)SITimerSyncStatus == NETC_ETH_IP_PSITOVSI_PROTOCOL_TIMER_SYNC_STATUS_NOT_SYNCHRONIZED) ? NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE : NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE;
+                        break;
+                    }
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+                    case ((uint16)NETC_ETH_IP_PSITOVSI_MSG_INTEGRITY_ERROR):
+                    {
+                        PSIResponseStatus = NETC_ETH_IP_PSITOVSI_MSG_INTEGRITY_ERROR;
+                        break;
+                    }
+    #endif
+#endif
+                    default:
+                    {
+                        PSIResponseStatus = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+                        break;
+                    }
+                }
 
                 switch(PSIResponseStatus)
                 {
@@ -1617,62 +1754,112 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uin
     return Status;
 }
 
-static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMACFilterEntry(uint8 CtrlIndex, uint8 HashValue, const uint8 *MacAddr)
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMACHashFilterEntry(uint8 CtrlIndex, uint8 HashValue, const uint8 *MacAddr)
 {
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
     uint8 CurrentEntry;
     uint8 CurrentMACByte;
-    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL;
+    boolean entryAlreadyExist = FALSE;
+#endif
+    Netc_Eth_Ip_StatusType Status;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
-    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[NETC_ETH_IP_PHYSICAL_SI]);
 #endif
-
-    for(CurrentEntry = 0U; CurrentEntry < Netc_Eth_Ip_apxState[CtrlIndex]->MACFilterTableMaxNumOfEntries; CurrentEntry++)
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+    /* Check if there's already an entry with the same MAC addr. */
+    for(CurrentEntry = 0U; CurrentEntry < NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES; CurrentEntry++)
     {
         SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
-        if(FALSE == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus)
+        if(NETC_MAC_ADDR_MATCH(MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].MACAddr, MacAddr) && \
+           ((boolean)TRUE == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus))
         {
-            MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus = TRUE;
+            entryAlreadyExist = TRUE;
+            Status = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
             SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
-
-            MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].HashValue   = HashValue;
-            for(CurrentMACByte = 0U; CurrentMACByte < NETC_ETH_IP_MAC_BYTES_SIZE;CurrentMACByte++)
-            {
-                MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].MACAddr[CurrentMACByte] = MacAddr[CurrentMACByte];
-            }
-            Status = NETC_ETH_IP_STATUS_SUCCESS;
             break;
         }
         else
         {
-            SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
+            /* Check the next entries */
+        }
+        SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
+    }
+
+    /* If there is no such MAC address, proceed to step where should be checked for free space in the software table. */
+    if(entryAlreadyExist == FALSE)
+    {
+        for(CurrentEntry = 0U; CurrentEntry < NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES; CurrentEntry++)
+        {
+            SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
+
+            if(FALSE == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus)
+            {
+                MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus = TRUE;
+                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
+
+                MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].HashValue   = HashValue;
+                for(CurrentMACByte = 0U; CurrentMACByte < NETC_ETH_IP_MAC_BYTES_SIZE; CurrentMACByte++)
+                {
+                    MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].MACAddr[CurrentMACByte] = MacAddr[CurrentMACByte];
+                }
+                Status = NETC_ETH_IP_STATUS_SUCCESS;
+                break;
+            }
+            else
+            {
+                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_00();
+                Status = NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL;
+            }
         }
     }
+    else
+    {
+        /* Do nothing. */
+    }
+#else
+    (void)HashValue;
+    (void)MacAddr;
+    (void)CtrlIndex;
+    Status = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+#endif
+
     return Status;
 }
 
-static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint8 CtrlIndex, const uint8 HashValue, const uint8 *MacAddr)
+/* Remove MAC addr in the software table. */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACHashFilterEntry(const uint8 CtrlIndex, const uint8 HashValue, const uint8 *MacAddr, const boolean deleteAllEntries)
 {
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
     uint8 CurrentEntry;
-    Netc_Eth_Ip_StatusType Status;
     boolean MatchedEntry = FALSE;
     uint8 HashNumOfMatches = 0U;
+#endif
+    Netc_Eth_Ip_StatusType Status;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
-    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[NETC_ETH_IP_PHYSICAL_SI]);
 #endif
-
-    for(CurrentEntry = 0U; CurrentEntry < Netc_Eth_Ip_apxState[CtrlIndex]->MACFilterTableMaxNumOfEntries; CurrentEntry++)
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+    for(CurrentEntry = 0U; CurrentEntry < NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES; CurrentEntry++)
     {
         SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
         if  ((TRUE == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus) && \
-             (HashValue == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].HashValue)
+             (HashValue == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].HashValue) && \
+             ((boolean)FALSE == deleteAllEntries)
             )
         {
             HashNumOfMatches++;
-            Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(CtrlIndex, &MatchedEntry, CurrentEntry, MacAddr);
+            Netc_Eth_Ip_DeleteMACHashFilterEntry_MarkEntryEmpty(CtrlIndex, &MatchedEntry, CurrentEntry, MacAddr);
+        }
+        else if((TRUE == deleteAllEntries) && (TRUE == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus))
+        {
+            HashNumOfMatches++;
+            MatchedEntry = TRUE;
+            MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus = FALSE;
+            SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
         }
         else
         {
@@ -1695,65 +1882,110 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint
     {
         Status = NETC_ETH_IP_STATUS_MAC_ADDR_NOT_FOUND;
     }
+#else
+    (void)HashValue;
+    (void)MacAddr;
+    (void)deleteAllEntries;
+    (void)CtrlIndex;
+    Status = NETC_ETH_IP_STATUS_MAC_ADDR_NOT_FOUND;
+#endif
 
     return Status;
 }
 #if defined(ERR_IPV_NETC_051247)
     #if (STD_ON == ERR_IPV_NETC_051247)
-uint8 Netc_Eth_Ip_VsiMsgCalculateCRC8(const Netc_Eth_Ip_VsiToPsiMsgType * MsgCommandConfig, uint8 MsgLength)
+
+/* CRC16 CCITT-FALSE with polynomial (0x1021) and initial value (0xFFFF) */
+uint16 Netc_Eth_Ip_VsiMsgCalculateCRC16(volatile Netc_Eth_Ip_VsiToPsiMsgType const * MsgCommandConfig, uint8 MsgLength)
 {
-    uint8 Data;
-    uint8 Crc = (uint8) 0U;
-    uint8 ByteNb;
-    uint8 BitNb;
+    uint8 DataArray[32];
+    uint16 StartCrc = 0xFFFFU;
+    uint16 Crc = 0xFFFFU;
+    uint16 CrcFinal;
+    uint8 ByteNb;        /* Counts from the first byte to the last byte of the MsgCommandConfig. */
+    uint8 idxByte = 0U;  /* Consecutive index for DataArray. */
+    uint8 dataByte = 0U; /* Relevant byte index from the message field. Used for case selection. */
+#if (STD_OFF == NETC_ETH_IP_USE_CRC_DRIVER)
+    uint8 idxDataArray = 0U;
+#endif
 
-    /* Calculate modulo 2 division for each message byte. */
-    for(ByteNb = 0U; ByteNb < MsgLength; ByteNb++)
+    /* Calculate CRC16 for each message byte. */
+    for(ByteNb = 2U; ByteNb < MsgLength; ByteNb++) /* CRC16 field - byte 0 and byte 1, start from byte 2*/
     {
-        if(ByteNb == 0U) /* Class field*/
+        dataByte = (ByteNb >= (uint8)NETC_ETH_IP_VSITOPSI_FIELD_DATA) ?  (uint8)NETC_ETH_IP_VSITOPSI_FIELD_DATA : (ByteNb);
+        switch(dataByte)
         {
-            Data = MsgCommandConfig->Class;
-        }
-        else if(ByteNb == 1U) /* Command field*/
-        {
-            Data = MsgCommandConfig->Command;
-        }
-        else /* Data field array. ByteNb - 2 to start indexing Data field array from 0  */
-        {
-            Data = MsgCommandConfig->Data[ByteNb - 2U];
-        }
-
-        /* Take the next byte into the Crc */
-        Crc ^= Data;
-
-        /* Calculate modulo 2 division bit by bit */
-        for(BitNb = 8U; BitNb > 0U; BitNb--)
-        {
-            if((Crc & ((uint8) 1U << (uint8) 7U)) != (uint8) 0U)
+            case (uint8)NETC_ETH_IP_VSITOPSI_FIELD_CLASS:            /* Class field */
             {
-                Crc = (Crc << (uint8) 1U) ^ (uint8) NETC_ETH_IP_VSI_MSG_POLYNOMIAL;
+                DataArray[idxByte] = MsgCommandConfig->Class;
+                break;
             }
-            else
+            case (uint8)NETC_ETH_IP_VSITOPSI_FIELD_COMMAND:          /* Command field */
             {
-                Crc = Crc << (uint8) 1U;
+                DataArray[idxByte] = MsgCommandConfig->Command;
+                break;
+            }
+            case (uint8)NETC_ETH_IP_VSITOPSI_FIELD_PROTOCOL_VERSION: /* ProtocolVersion field */
+            {
+                DataArray[idxByte] = MsgCommandConfig->ProtocolVersion;
+                break;
+            }
+            case (uint8)NETC_ETH_IP_VSITOPSI_FIELD_LENGTH:           /* Length field */
+            {
+                DataArray[idxByte] = MsgCommandConfig->Length;
+                break;
+            }
+            case (uint8)NETC_ETH_IP_VSITOPSI_FIELD_COOKIE:           /* Cookie field */
+            {
+                DataArray[idxByte] = MsgCommandConfig->Cookie;
+                break;
+            }
+            case (uint8)NETC_ETH_IP_VSITOPSI_FIELD_DATA:             /* Data field array. ByteNb - 16 to start indexing Data field array from 0  */
+            {
+                DataArray[idxByte] = MsgCommandConfig->Data[ByteNb - 16U];
+                break;
+            }
+            default:
+            {
+                idxByte--;
+                break;
             }
         }
+        idxByte++;
     }
+#if (STD_OFF == NETC_ETH_IP_USE_CRC_DRIVER)
+    for(idxDataArray = 0U; idxDataArray < idxByte; idxDataArray++) /* idxByte holds the total number of relevant bytes from the command message. */
+    {
+        Crc = (Crc << 8U) ^ Netc_Eth_Ip_Crc16Table[(((uint8)(Crc >> (uint16)8U)) ^ DataArray[idxDataArray]) & (uint8)0xFFU];
+    }
+    (void)StartCrc;
+#endif
+#if(STD_ON == NETC_ETH_IP_USE_CRC_DRIVER)
+    Crc = Crc_CalculateCRC16(DataArray, idxByte, StartCrc, TRUE);
+#endif
+    /* CrcFinal - network byte order (BE) format, i.e. with the higher 8 bits on the first
+       position (byte 0) and the lower 8 bits on the second position (byte 1) of
+       the message header. */
+    CrcFinal = ((Crc << (uint16)8U) & (uint16)0xFF00U) | ((Crc >> (uint16)8U) & (uint16)0x00FFU);
 
-    return Crc;
+    return CrcFinal;
 }
     #endif
 #endif
 
 /* Local function to clear the VSI to PSI message buffer */
-static inline void Netc_Eth_Ip_ClearVsiToPsiMsgBuff(Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig, uint8 Size)
+static inline void Netc_Eth_Ip_ClearVsiToPsiMsgBuff(volatile Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig)
 {
     uint8 DataIdx;
 
+    MsgCommandConfig->CRC16   = (uint16)0U;
     MsgCommandConfig->Class   = (uint8)0U;
     MsgCommandConfig->Command = (uint8)0U;
+    MsgCommandConfig->Cookie  = (uint8)0U;
+    MsgCommandConfig->Length  = (uint8)0U;
+    MsgCommandConfig->ProtocolVersion = (uint8)0U;
 
-    for(DataIdx = 0; DataIdx < (Size - (uint8) 2U); DataIdx++)
+    for(DataIdx = 0; DataIdx < 16U; DataIdx++)
     {
         MsgCommandConfig->Data[DataIdx] = (uint8)0U;
     }
@@ -1764,140 +1996,99 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
                                                              const uint8 *MacAddr, \
                                                              uint16 * PsiRspMessage)
 {
-    Netc_Eth_Ip_StatusType Status;
-    Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig = Netc_Eth_Ip_apxState[VsiId]->VSItoPSIMsgCommand;
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+    volatile Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig = Netc_Eth_Ip_apxState[VsiId]->VSItoPSIMsgCommand;
 
     /*Clear the buffer before sending a new command */
-    Netc_Eth_Ip_ClearVsiToPsiMsgBuff(MsgCommandConfig,  ((uint8) sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8) NETC_ETH_IP_VSITOPSI_MSG_SIZE));
+    Netc_Eth_Ip_ClearVsiToPsiMsgBuff(MsgCommandConfig);
+
+    MsgCommandConfig->ProtocolVersion = 0x0U; /* Supported VSI-PSI command protocol version, should be 0 for the initial protocol release. */
+    MsgCommandConfig->Length = 0x0U; /* Length of 0 means that the total message size is 32B. */
+    MsgCommandConfig->Cookie = 0x1U; /* If not 0, indicates that the command should be executed asynchronously on PSI side. */
 
     switch (MsgAction)
     {
         case NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET:
         {
             /* Set class for command message. */
-            MsgCommandConfig->Class   = (uint8)0U;
-            MsgCommandConfig->Command = (uint8)0U;
-            /* Set MAC address. */
-            MsgCommandConfig->Data[0U] = (uint8)0U;
-            MsgCommandConfig->Data[1U] = (uint8)0U;
-            MsgCommandConfig->Data[2U] = MacAddr[0U];
-            MsgCommandConfig->Data[3U] = MacAddr[1U];
-            MsgCommandConfig->Data[4U] = MacAddr[2U];
-            MsgCommandConfig->Data[5U] = MacAddr[3U];
-            MsgCommandConfig->Data[6U] = MacAddr[4U];
-            MsgCommandConfig->Data[7U] = MacAddr[5U];
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (10 bytes for this command), and assign it to Data fields last byte */
-            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-            Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
-            break;
-        }
-        case NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_FILTER:
-        {
-            /* Set class for command message. */
-            MsgCommandConfig->Class   = (uint8)1U;
-            MsgCommandConfig->Command = (uint8)0U;
-            /* Compute the hash value for the MAC address. */
-            MsgCommandConfig->Data[0U] = Netc_Eth_Ip_ComputeMACHashValue(MacAddr);
-            MsgCommandConfig->Data[1U] = (uint8)0U;
-            /* Exact match(EM) will be deactivated when hash table is used. */
-            MsgCommandConfig->Data[2U] = (uint8)0U;
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (5 bytes for this command), and assign it to Data fields last byte */
-            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-            Status = Netc_Eth_Ip_AddMACFilterEntry(VsiId, MsgCommandConfig->Data[0U], MacAddr);
-
-            if(NETC_ETH_IP_STATUS_SUCCESS == Status)
-            {
-                Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
-            }
-            break;
-        }
-        case NETC_ETH_IP_VSITOPSI_DELETE_RX_MAC_ADDR_FILTER:
-        {
-            /* Compute the hash value for the MAC address. */
-            MsgCommandConfig->Data[0U] = Netc_Eth_Ip_ComputeMACHashValue(MacAddr);
-            Status = Netc_Eth_Ip_DeleteMACFilterEntry(VsiId, MsgCommandConfig->Data[0U], MacAddr);
-
-            if(NETC_ETH_IP_STATUS_DELETE_MAC_ADDR == Status)
-            {
-                /* Set class for command message. */
-                MsgCommandConfig->Class   = (uint8)1U;
-                MsgCommandConfig->Command = (uint8)1U;
-                MsgCommandConfig->Data[1U] = (uint8)0U;
-                /* Exact match(EM) will be deactivated when hash table is used. */
-                MsgCommandConfig->Data[2U] = (uint8)0U;
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (5 bytes for this command), and assign it to Data fields last byte */
-                MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-                Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
-            }
-
-            break;
-        }
-        case NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST:
-        {
-            /* Set class for command message. */
-            MsgCommandConfig->Class   = (uint8)0x10U;
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE;
             MsgCommandConfig->Command = (uint8)0x00U;
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
-            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-            Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
+
+            /* COUNT field: Set primary mac address command should have COUNT set to 0, which means only one MAC address is going to be processed PSI.
+               Add entry and Del entry can have multiple address entries. If COUNT is greater than 2, then the extended message
+               body has to be used, and LEN must be set accordingly in the header. */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_COUNT] = 0U;
+
+            /* Set MAC address - MACADDR0 */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0]      = MacAddr[0U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0 + 1U] = MacAddr[1U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0 + 2U] = MacAddr[2U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0 + 3U] = MacAddr[3U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0 + 4U] = MacAddr[4U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0 + 5U] = MacAddr[5U];
             break;
         }
-        case NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST:
+        case NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_HASH_FILTER:
+        {
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE;
+            MsgCommandConfig->Command = (uint8)0x3U;
+            /* Set class for command message. */
+            /* Lowest 32-bit (word) of the first MAC filtering hash table (T0) */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W0]      = MacAddr[5U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W0 + 1U] = MacAddr[4U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W0 + 2U] = MacAddr[3U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W0 + 3U] = MacAddr[2U];
+            /* Next 32-bit (word) of the first MAC filtering hash table (T0) */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W1]      = MacAddr[1U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W1 + 1U] = MacAddr[0U];
+            break;
+        }
+        case NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_RX_MAC_ADDR_HASH_FILTER:
         {
             /* Set class for command message. */
-            MsgCommandConfig->Class   = (uint8)0x10U;
-            MsgCommandConfig->Command = (uint8)0x10U;
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
-            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-            Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE;
+            MsgCommandConfig->Command = (uint8)0x09U;
+
+            /* Compute the hash value for the MAC address. */
+            /* MAC address - MACADDR */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR]      = MacAddr[0U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR + 1U] = MacAddr[1U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR + 2U] = MacAddr[2U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR + 3U] = MacAddr[3U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR + 4U] = MacAddr[4U];
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR + 5U] = MacAddr[5U];
+
+            break;
+        }
+        case NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST_PROMISCUOS:
+        {
+            /* Set class for command message. */
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE;
+            MsgCommandConfig->Command = (uint8)0x05U;
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_AND_OP] = (uint8)NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST_PROMISCUOS;
+            break;
+        }
+        case NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST_PROMISCUOUS:
+        {
+            /* Set class for command message. */
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE;
+            MsgCommandConfig->Command = (uint8)0x05U;
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_AND_OP] = (uint8)NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST_PROMISCUOUS;
             break;
         }
         case NETC_ETH_IP_VSITOPSI_CLOSE_FILTER:
         {
             /* Set class for command message. */
-            MsgCommandConfig->Class   = (uint8)0x10U;
-            MsgCommandConfig->Command = (uint8)0x20U;
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
-            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-            Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE;
+            MsgCommandConfig->Command = (uint8)0x05U;
+            MsgCommandConfig->Data[NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_AND_OP] = (uint8)NETC_ETH_IP_VSITOPSI_CLOSE_FILTER;
             break;
         }
-        case NETC_ETH_IP_VSITOPSI_GET_SYNC_STATE:
+        case NETC_ETH_IP_VSITOPSI_GET_TIMER_SYNC_STATE:
         {
             /* Set class for command message. */
-            MsgCommandConfig->Class   = (uint8)0x20U;
+            MsgCommandConfig->Class   = NETC_ETH_IP_VSITOPSI_GET_TIMER_SYNC_STATUS_CLASS_CODE;
             MsgCommandConfig->Command = (uint8)0x00U;
-#if defined(ERR_IPV_NETC_051247)
-    #if (STD_ON == ERR_IPV_NETC_051247)
-            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
-            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
-    #endif
-#endif
-            Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             break;
         }
         default:
@@ -1905,6 +2096,17 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             Status = NETC_ETH_IP_STATUS_UNSUPPORTED;
             break;
         }
+    }
+
+    if(NETC_ETH_IP_STATUS_UNSUPPORTED != Status)
+    {
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+        /* Calculate CRC16 */
+        MsgCommandConfig->CRC16 = Netc_Eth_Ip_VsiMsgCalculateCRC16(MsgCommandConfig, (((uint16)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint16)NETC_ETH_IP_VSITOPSI_MSG_SIZE)));
+    #endif
+#endif
+        Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
     }
 
     return Status;
@@ -1957,6 +2159,10 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendCommand(const uint8 CtrlIndex, con
     uint32 ElapsedTime;
     uint32 TimeoutTicks;
     boolean TimeExpired;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
+#endif
 
     /* read the producer and consumer index register */
     producerIdx = netcSIsBase[CtrlIndex]->SICBDRPIR;
@@ -2047,6 +2253,10 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_ShortFormat(uint8 Ctr
     uint32 TimeoutTicks;
     boolean TimeExpired;
 
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
+#endif
+
     /* read the producer and consumer index register */
     producerIdx = netcSIsBase[CtrlIndex]->SICBDRPIR;
     consumerIdx = netcSIsBase[CtrlIndex]->SICBDRCIR;
@@ -2125,6 +2335,103 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_ShortFormat(uint8 Ctr
     return status;
 }
 
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_AddMacFilterTableEntry
+ * Description   : Internal function for adding an entry to the MAC Filter Table.
+
+ * implements     Netc_Eth_Ip_AddMacFilterTableEntry_Activity
+ *END**************************************************************************/
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMacFilterTableEntry(const uint8 ctrlIndex, const Netc_Eth_Ip_MacFilterTableEntryDataType *MacFilterTableEntry)
+{
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[ctrlIndex]);
+#endif
+
+    /* Class 2 for Mac Filter Table */
+    Netc_Eth_Ip_TableData.Class = 1U;
+    /* Command 0 for adding an entry to the Mac Filter Table */
+    Netc_Eth_Ip_TableData.Command = 0U;
+
+    /* Fill in the configured data */
+    /* MAC left to right --> MSB MAC byte in the lowest byte offset of Data variable.*/
+    Netc_Eth_Ip_TableData.Data0 = ((uint32)((uint32)MacFilterTableEntry->MacAdress[0] << 0U) & 0x000000FFUL) |
+                                  ((uint32)((uint32)MacFilterTableEntry->MacAdress[1] << 8U) & 0x0000FF00UL) |
+                                  ((uint32)((uint32)MacFilterTableEntry->MacAdress[2] << 16U) & 0x00FF0000UL)|
+                                  ((uint32)((uint32)MacFilterTableEntry->MacAdress[3] << 24U) & 0xFF000000UL); /* First 4 bytes : left (MSB) to right (LSB) */
+    Netc_Eth_Ip_TableData.Data1 = ((uint32)((uint32)MacFilterTableEntry->MacAdress[4] << 0U) & 0x000000FFUL) |
+                                  ((uint32)((uint32)MacFilterTableEntry->MacAdress[5] << 8U) & 0x0000FF00UL) ; /* Last 2 bytes : left (MSB) to right (LSB) */
+    Netc_Eth_Ip_TableData.SI_Bitmap = MacFilterTableEntry->SIBitmap;
+    Netc_Eth_Ip_TableData.Index = MacFilterTableEntry->MacFilterTable_EID;
+
+    status = Netc_Eth_Ip_SendNTMP1Command_ShortFormat(ctrlIndex, &Netc_Eth_Ip_TableData); /* NETC_ETH_IP_CBDRSTATUS_RINGFULL, NETC_ETH_IP_STATUS_ERROR, NETC_ETH_IP_STATUS_SUCCESS */
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_QueryMacFilterTableEntry
+ * Description   : Internal function for Quering an entry from the Mac Filter Table.
+
+ * implements     Netc_Eth_Ip_QueryMacFilterTableEntry_Activity
+ *END**************************************************************************/
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryMacFilterTableEntry(const uint8 ctrlIndex, Netc_Eth_Ip_MacFilterTableEntryDataType *MacFilterTableEntry)
+{
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+    uint32 producerIdx;
+    uint32 lengthOfCmDB;
+    uint32 macHighBytes, macLowBytes;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[ctrlIndex]);
+#endif
+
+    /* Class 2 for VLAN Filter Table */
+    Netc_Eth_Ip_TableData.Class = 1U;
+    /* Command 1 for adding an entry to the VLAN Filter Table */
+    Netc_Eth_Ip_TableData.Command = 1U;
+
+    /* Fill in the table entry ID */
+    Netc_Eth_Ip_TableData.Index = MacFilterTableEntry->MacFilterTable_EID;
+
+    status = Netc_Eth_Ip_SendNTMP1Command_ShortFormat(ctrlIndex, &Netc_Eth_Ip_TableData);
+
+    producerIdx = netcSIsBase[ctrlIndex]->SICBDRPIR; /* reflects the number of cbd rings added */
+
+    /* the value stored in producer index register indicates the index of next entry */
+    if (producerIdx > 0UL)
+    {
+        producerIdx -= 1UL;
+    }
+    else /* producerIdx increased from 15 to 0, will set it to 15, or length minus 1 */
+    {
+        lengthOfCmDB = ((uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.lengthCBDR) * NETC_ETH_IP_SET_OF_BD);
+        producerIdx = lengthOfCmDB - 0x1UL;
+    }
+
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+        /* Query entry */
+        macHighBytes = Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_ADDR_L];
+        macLowBytes  = Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_ADDR_H];
+        for(uint8 MacByteIdx = 0U; MacByteIdx < 6U; MacByteIdx++)
+        {
+            MacFilterTableEntry->MacAdress[MacByteIdx] = (uint8)((MacByteIdx < 4U) ? ((macHighBytes >> (8U * MacByteIdx)) & 0x000000FFUL):((macLowBytes >> (8U * (MacByteIdx - 4U))) & 0x000000FFUL));
+        }
+        MacFilterTableEntry->SIBitmap = (uint16)(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_DATA_4] & 0x0000FFFFU);
+        MacFilterTableEntry->MacFilterTable_EID = (uint8)(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_LENGTH_INDEX] & 0x000000FFUL);
+    }
+
+    return status;
+}
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_Eth_Ip_AddVLANFilterTableEntry
@@ -2194,12 +2501,39 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryVLANFilterTableEntry(const uint8 ctrlInd
 
     if (status == NETC_ETH_IP_STATUS_SUCCESS)
     {
-        VLANTableEntry->TPID = (Netc_Eth_Ip_VlanProtocolIdentifierType)NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_GET_TPID(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_ADDR_L]);
+        VLANTableEntry->TPID = (Netc_Eth_Ip_VlanProtocolIdentifierType)((uint8)NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_GET_TPID(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_ADDR_L]));
         VLANTableEntry->VLANId = (uint16)(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_ADDR_L] & 0x00000FFFU);
         VLANTableEntry->SIBitmap = (uint16)(Netc_Eth_Ip_apxState[ctrlIndex]->EnetcCommandBDConfig.commandBDAddr[producerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_DATA_4]);
     }
     return status;
 }
+
+#if (NETC_ETH_IP_NUMBER_OF_MAC_FILTER_TABLE_ENTRIES > 0)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ConfigMACFilterTable
+ * Description   : Add the configured entries to the MAC Filter Table.
+ *
+ *END**************************************************************************/
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigMACFilterTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config)
+{
+    uint8 MACFilterTableIdx;
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_MacFilterTableEntryDataType MACTableEntry = {0};
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+#endif
+
+    for (MACFilterTableIdx = 0U; MACFilterTableIdx < Config->generalConfig->NumberOfMACFilterEntries; MACFilterTableIdx++)
+    {
+        MACTableEntry = (*(Config->generalConfig->MacTableEntries))[MACFilterTableIdx];
+        status = Netc_Eth_Ip_AddMacFilterTableEntry(ctrlIndex, &MACTableEntry); /* NETC_ETH_IP_CBDRSTATUS_RINGFULL, NETC_ETH_IP_STATUS_ERROR, NETC_ETH_IP_STATUS_SUCCESS */
+    }
+
+    return status;
+}
+#endif
 
 #if (NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES > 0)
 /*FUNCTION**********************************************************************
@@ -2429,6 +2763,10 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_LongFormat(uint8 Ctrl
     uint32 TimeoutTicks;
     boolean TimeExpired;
 
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
+#endif
+
     /* read the producer and consumer index register */
     producerIdx = netcSIsBase[CtrlIndex]->SICBDRPIR;
     consumerIdx = netcSIsBase[CtrlIndex]->SICBDRCIR;
@@ -2518,6 +2856,10 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_RfsShortFormat(const 
     uint32 ElapsedTime;
     uint32 TimeoutTicks;
     boolean TimeExpired;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
+#endif
 
     /* read the producer and consumer index register */
     producerIdx = netcSIsBase[CtrlIndex]->SICBDRPIR;
@@ -2669,7 +3011,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex, const
        There is an alignment restrictions for the data address to be 16-byte aligned;
        hardware ignores the least significant 4 bits of the ADDR field. */
     Netc_Eth_Ip_TableData.Data0 = (uint32)  &Netc_Eth_Ip_RfsSetDataBuffer;
-    Netc_Eth_Ip_TableData.Length = (uint16)( NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
+    Netc_Eth_Ip_TableData.Length = ((uint16)NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
     Netc_Eth_Ip_TableData.Index = RfsTableEntry->RfsTableEntryId;
 
     /*Set the format to Long format */
@@ -2689,7 +3031,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex, const
  *
  * implements     Netc_Eth_Ip_QueryRfsTableEntry_Activity
  *END**************************************************************************/
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex, uint8 RfsEntryIdx, uint32 * RfsTableEntryAddr)
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex, uint8 RfsEntryIdx, const uint32 * RfsTableEntryAddr)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
 
@@ -2703,7 +3045,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex, uin
     /* Fill in the table entry address */
     Netc_Eth_Ip_TableData.Data0 = (uint32)RfsTableEntryAddr;
     /* Fill in the table entry length */
-    Netc_Eth_Ip_TableData.Length = (uint16)( NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
+    Netc_Eth_Ip_TableData.Length = ((uint16)NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
     /* Class 4 for RFS Table */
     Netc_Eth_Ip_TableData.Class = 4U;
     /* Command 1 for adding an querrying to the RFS Table (Long format) */
@@ -2795,6 +3137,44 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigRfsTable(const uint8 ctrlIndex, 
 
     return status;
 }
+
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigMulticastMACHashFilter(uint8 ctrlIndex)
+{
+    uint8 MulticastMACFilterIdx;
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_SiMulticastMACHashFilterDataType MulticastMACFilterEntry = {0};
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[ctrlIndex]);
+#endif
+
+#ifdef NETC_ETH_0_USED
+    for (MulticastMACFilterIdx = 0U; MulticastMACFilterIdx < Netc_Eth_Ip_apxState[NETC_ETH_IP_PHYSICAL_SI]->NumberOfConfiguredMulticastMacHashFilterEntries; MulticastMACFilterIdx++)
+    {
+        MulticastMACFilterEntry = (*(Netc_Eth_Ip_apxState[NETC_ETH_IP_PHYSICAL_SI]->MulticastMACFilterEntries))[MulticastMACFilterIdx];
+        if(TRUE == NETC_ETH_IP_CHECK_SI_BITMAP_VALUE(MulticastMACFilterEntry.SiBitmap, ctrlIndex))
+        {
+            status |= Netc_Eth_Ip_SetMulticastForwardAll(ctrlIndex, FALSE);
+            status |= Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(ctrlIndex, MulticastMACFilterEntry.MacAddress);
+        }
+        else
+        {
+            /* Do nothing. */
+        }
+    }
+#else
+    for (MulticastMACFilterIdx = 0U; MulticastMACFilterIdx < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfConfiguredMulticastMacHashFilterEntries; MulticastMACFilterIdx++)
+    {
+        MulticastMACFilterEntry = (*(Netc_Eth_Ip_apxState[ctrlIndex]->MulticastMACFilterEntries))[MulticastMACFilterIdx];
+        status |= Netc_Eth_Ip_SetMulticastForwardAll(ctrlIndex, FALSE);
+        status |= Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(ctrlIndex, MulticastMACFilterEntry.MacAddress);
+    }
+#endif
+    return status;
+}
+#endif
 
 /*FUNCTION**********************************************************************
  *
@@ -3008,7 +3388,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
             FillInGateControlListData(&OperationTimeIdx, TimeGateSchedulingTableEntry);
 
             /* send "update" command to remove gate control list */
-            (void)Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+            status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 
         }
             #endif
@@ -3116,6 +3496,10 @@ static void Netc_Eth_Ip_GetMatchedEntries(uint8 CtrlIndex, uint32 *NumOfEntry)
     uint32 statusField;
     uint32 lengthOfCmDB;
 
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
+#endif
+
     producerIdx = netcSIsBase[CtrlIndex]->SICBDRPIR;
 
     /* the value stored in producer index register indicates the index of next entry */
@@ -3137,6 +3521,7 @@ static void Netc_Eth_Ip_GetMatchedEntries(uint8 CtrlIndex, uint32 *NumOfEntry)
 
 }
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry( const uint8 CtrlIndex,
                                                                      Netc_Eth_Ip_CommandsType Cmd,
                                                                      uint32 *MatchedEntries,
@@ -3385,6 +3770,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 Ctrl
     return status;
 }
 
+#endif /* (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0) */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
                                                                                             Netc_Eth_Ip_CommandsType Cmd,
                                                                                             uint32 *MatchedEntries,
@@ -3676,7 +4062,7 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_SearchAndFillIngrStreamIdentifi
             ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[2U];
             ISITableEntry[*NumOfExistingEntry].Keye_Keytype = (ConfigBits & NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_MASK);
 
-            for (FrmKeyIdx = 0U; FrmKeyIdx < 2U; FrmKeyIdx++)
+            for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
             {
                 ISITableEntry[*NumOfExistingEntry].Keye_FrmKey[FrmKeyIdx] = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[3U + FrmKeyIdx];
             }
@@ -3736,6 +4122,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetIngrStreamIdentificationTable( const uint8
     return status;
 }
 
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateStreamGateInstanceTableEntry( const uint8 CtrlIndex,
                                                                                       Netc_Eth_Ip_CommandsType Cmd,
                                                                                       uint32 *MatchedEntries,
@@ -3983,7 +4370,9 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateInstanceTableEntry( const uin
 
     return status;
 }
+#endif /* (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U) */
 
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_Eth_Ip_AddStreamGateControlListTableEntry
@@ -4004,10 +4393,8 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddStreamGateControlListTableEntry( const uin
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(SGCLTableEntry != NULL_PTR);
     DevAssert(MatchedEntries != NULL_PTR);
-    if (SGCLTableEntry->Cfge_ListLength > 0U)
-    {
-        DevAssert(SGCLTableEntry->ListEntries != NULL_PTR);
-    }
+    DevAssert(SGCLTableEntry->Cfge_ListLength > 0U);
+    DevAssert(SGCLTableEntry->ListEntries != NULL_PTR);
 #endif
 
     /* clear the variable MatchedEntries first */
@@ -4236,7 +4623,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateControlListTableEntry( const 
 
     return status;
 }
-
+#endif /* (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U) */
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_Eth_Ip_AddOrUpdateIngressStreamTableEntry
@@ -4498,7 +4885,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
 
 {
 
-    Netc_Eth_Ip_TxBDRType *txBDR;
+    const Netc_Eth_Ip_TxBDRType *txBDR;
     uint32 LastDescrCheckIndex;
     volatile uint32 CurrDescrCheckIndex;
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
@@ -4510,6 +4897,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
 #endif /* NETC_ETH_0_USED */
 #endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_apxState[ctrlIndex] != NULL_PTR);
+#endif
 
     LastDescrCheckIndex= Netc_Eth_Ip_apxState[ctrlIndex]->lastTxDataBuffAddrIdx[ring];
     /* Get the addres of the current BDR to get status for it. */
@@ -4534,10 +4926,10 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
             if (NETC_ETH_IP_TXBD_WRITEBACK_MASK == (txBDR->buffConfig & NETC_ETH_IP_TXBD_WRITEBACK_MASK))
             {
                 /* Check the STATUS bitfield and read the possible errors and store them in info */
-                if ((0U != (uint16)(((Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK)) && \
+                if ((0U != (uint16)(((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK)) && \
                    (NULL_PTR != info))
                 {
-                    info->txStatus = (Netc_Eth_Ip_TxStatusType)(((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK);
+                    info->txStatus = (Netc_Eth_Ip_TxStatusType)((uint16)(((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK));
                 }
                 else
                 {
@@ -4545,9 +4937,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
                     /* Get the frame Timestamp */
                     if (NULL_PTR != info)
                     {
+#if (STD_ON == NETC_ETH_FREE_RUNNING_TIMER_SUPPORT)
+                        currentTimeLow = (uint32)(IP_NETC__TMR0_BASE->TMR_FRT_L);
+                        currentTimeHigh = (uint32)(IP_NETC__TMR0_BASE->TMR_FRT_H);
+#else
                         /*Read the HIGH Part from SICTR registers in a succesive manner, first the LOW part, then imediately, the HIGH part*/
                         currentTimeLow = (uint32)(netcSIsBase[ctrlIndex]->SICTR0);
                         currentTimeHigh = (uint32)(netcSIsBase[ctrlIndex]->SICTR1);
+#endif
 
                         /*Check for overflow on Low part of the timer*/
                         if( (uint32) (((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->Timestamp) > currentTimeLow)
@@ -4620,7 +5017,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
     }
 
 #if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
-#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE )
     Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff = ((ConsumerIndex <= Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring]) ?
         (Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring] - ConsumerIndex) : (Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].TotalNumberOfBuff + 1U - ConsumerIndex + Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring]));
 
@@ -4678,21 +5075,21 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetupErrorReporting(const Netc_Eth_Ip_
     Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
 
     if  (
-        ((IP_NETC__NETC_F0_PCI_HDR_TYPE0->PCI_CFH_CMD & ((uint16) (NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
+        ((IP_NETC__NETC_F0_PCI_HDR_TYPE0->PCI_CFH_CMD & (((uint16)NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
                                                                   NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_SHIFT) |
-                                                                 (NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
+                                                                 ((uint16)NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
                                                                   NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_SHIFT))) == (uint16)0U) ||
-        ((IP_NETC__NETC_F1_PCI_HDR_TYPE0->PCI_CFH_CMD & ((uint16) (NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
+        ((IP_NETC__NETC_F1_PCI_HDR_TYPE0->PCI_CFH_CMD & (((uint16)NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
                                                                   NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_SHIFT) |
-                                                                 (NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
+                                                                 ((uint16)NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
                                                                   NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_SHIFT))) == (uint16)0U) ||
-        ((IP_NETC__NETC_F2_PCI_HDR_TYPE0->PCI_CFH_CMD & ((uint16) (NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
+        ((IP_NETC__NETC_F2_PCI_HDR_TYPE0->PCI_CFH_CMD & (((uint16)NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
                                                                   NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_SHIFT) |
-                                                                 (NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
+                                                                 ((uint16)NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
                                                                   NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_SHIFT))) == (uint16)0U) ||
-        ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD & ((uint16) (NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
+        ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD & (((uint16)NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK <<
                                                                   NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_SHIFT) |
-                                                                 (NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
+                                                                 ((uint16)NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK <<
                                                                   NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS_SHIFT))) == (uint16)0U)
         )
     {
@@ -5737,14 +6134,20 @@ static inline void Netc_Eth_Ip_Init_FirstPart(const uint8 ctrlIndex, const Netc_
     Netc_Eth_Ip_InitCBDR(ctrlIndex);
 }
 
-static inline void Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
 {
-    Netc_Eth_Ip_InitNTMPTables(ctrlIndex, config);
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+
+    /* Init NTMP tables. */
+    Status = Netc_Eth_Ip_InitNTMPTables(ctrlIndex, config);
+
     /* Initialize TX BDRs */
     Netc_Eth_Ip_InitTxBD(ctrlIndex, config);
+
     /* Initialize RX BDRs */
     Netc_Eth_Ip_InitRxBD(ctrlIndex, config);
 
+    return Status;
 }
 
 /*==================================================================================================
@@ -5764,7 +6167,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init(uint8 ctrlIndex, const Netc_Eth_Ip_Confi
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(config != NULL_PTR);
 #endif
-
     /* Configure SI */
     Status = Netc_Eth_Ip_InitSI(ctrlIndex, config);
 
@@ -5788,18 +6190,34 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init(uint8 ctrlIndex, const Netc_Eth_Ip_Confi
             Status = Netc_Eth_Ip_InitIngressPortFilterTable(ctrlIndex, config);
 #endif
         }
-        Netc_Eth_Ip_Init_SecondPart(ctrlIndex, config);
-        /* Check if any interrupt is enabled and configure the hardware */
-        if ((TRUE == (*config->siConfig).EnableSIMsgInterrupt) ||
-            ((*config->siConfig).TxInterrupts != 0U) ||
-            ((*config->siConfig).RxInterrupts != 0U))
+
+#if (NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST > 0U)
+        if (NETC_ETH_IP_STATUS_SUCCESS == Status)
+#endif
         {
-            /* Enable interrupts for the current controller. */
-            Netc_Eth_Ip_EnableIrq(ctrlIndex, config);
+            Status = Netc_Eth_Ip_Init_SecondPart(ctrlIndex, config);
         }
+        
+        if (NETC_ETH_IP_STATUS_SUCCESS == Status)
+        {
+            /* Check if any interrupt is enabled and configure the hardware */
+            if ((TRUE == (*config->siConfig).EnableSIMsgInterrupt) ||
+                ((*config->siConfig).TxInterrupts != 0U) ||
+                ((*config->siConfig).RxInterrupts != 0U))
+            {
+                /* Enable interrupts for the current controller. */
+                Netc_Eth_Ip_EnableIrq(ctrlIndex, config);
+            }
 
-        Netc_Eth_Ip_ConfigPtr[ctrlIndex] = config;
-
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+            /* Configure Multicast Mac filter */
+            Status = Netc_Eth_Ip_ConfigMulticastMACHashFilter(ctrlIndex);
+            if (NETC_ETH_IP_STATUS_SUCCESS == Status)
+#endif
+            {
+                Netc_Eth_Ip_ConfigPtr[ctrlIndex] = config;
+            }
+        }
     }
     return Status;
 }
@@ -5992,6 +6410,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DisableController(uint8 ctrlIndex)
         /* Clear the EN bit in Station interface mode register (SIMR) */
         netcSIsBase[ctrlIndex]->SIMR &= ~NETC_F3_SI0_SIMR_EN_MASK;
 
+        /* Clear all RX Flags before enabling interupts */
+        netcSIsBase[ctrlIndex]->SIRXIDR0 = NETC_ETH_IP_SIRXIDR0_RX_ALL_MASK;
+        netcSIsBase[ctrlIndex]->SIRXIDR1 = NETC_ETH_IP_SIRXIDR1_RX_ALL_MASK;
+
+        /* clear all TX flags when disabling interrupts */
+        netcSIsBase[ctrlIndex]->SITXIDR0 = NETC_ETH_IP_SITXIDR0_TXT_TXF_ALL_MASK;
+        netcSIsBase[ctrlIndex]->SITXIDR1 = NETC_ETH_IP_SITXIDR1_TXT_TXF_ALL_MASK;
+
         /* Restore all information related with the TX operations. */
         /* Loop through all the configured transmission rings */
         for (ringCounter = 0U; ringCounter < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfTxBDR; ringCounter++)
@@ -6071,6 +6497,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DisableController(uint8 ctrlIndex)
 
         Status = NETC_ETH_IP_STATUS_SUCCESS;
     }
+
+    /* Clear SI command BDR producer and consumer indexes. */
+    netcSIsBase[ctrlIndex]->SICBDRPIR  = NETC_F3_SI0_SICBDRPIR_BDR_INDEX(0U);
+    netcSIsBase[ctrlIndex]->SICBDRCIR  = NETC_F3_SI0_SICBDRCIR_BDR_INDEX(0U);
+
     SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_02();
 
     return Status;
@@ -6097,6 +6528,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxBuff(uint8 ctrlIndex,
     DevAssert(buff != NULL_PTR);
 #endif
 
+    SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_30();
     currProducerIdx = Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring];
 
     /* Get the next producer index and the overflow status for producer counter. */
@@ -6125,13 +6557,13 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxBuff(uint8 ctrlIndex,
         }
         else
         {
-#if (NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
             if (!Netc_Eth_Ip_ControllerHasExternalTxBufferManagement[ctrlIndex])
             {
 #endif
                 buff->data = (uint8*) ((uint32)Netc_Eth_Ip_apxState[ctrlIndex]->FirstTxDataBufferAddr[ring] + \
                                       (currProducerIdx * Netc_Eth_Ip_apxState[ctrlIndex]->TxDataBuffMaxLenAddr[ring]));
-#if (NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
             }
 #endif
             /* If used, return the buffer index */
@@ -6148,6 +6580,8 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxBuff(uint8 ctrlIndex,
             Netc_Eth_Ip_apxState[ctrlIndex]->LockTxBuffDescr[ring][currProducerIdx] = TRUE;
         }
     }
+
+    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_30();
 
     return status;
 }
@@ -6221,7 +6655,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxMultiBuff(uint8 ctrlIndex,
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
                                                         uint8 ring,
-                                                        Netc_Eth_Ip_BufferType Buffers[],
+                                                        const Netc_Eth_Ip_BufferType Buffers[],
                                                         const Netc_Eth_Ip_TxOptionsType *options,
                                                         uint16 NumBuffers)
 {
@@ -6230,9 +6664,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
     uint16 FreeBuffers = 0U;
     uint16 BufferIndex = 0U;
     uint16 FrameLength = 0U;
-    /* Read the producer index */
-    uint32 ProducerIndex = (uint32)Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring]; /* Increment the producer index; making sure it wraps around according to the length of the ring */
-    uint32 NextProducerIndex = ProducerIndex;
 #if (STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT)
     Std_ReturnType CacheStatus = E_NOT_OK;
 #endif
@@ -6242,6 +6673,10 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
     DevAssert(Netc_Eth_Ip_apxState[ctrlIndex] != NULL_PTR);
     DevAssert(ring < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfTxBDR);
 #endif
+
+    /* Read the producer index */
+    uint32 ProducerIndex = (uint32)Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring]; /* Increment the producer index; making sure it wraps around according to the length of the ring */
+    uint32 NextProducerIndex = ProducerIndex;
 
     /*Check if the first buffer does not exceed 16 bytes. The hardware limits the first buffer to 16bytes.*/
     if (Buffers[NETC_ETH_IP_FIRST_BUFFER_IDX].length < NETC_ETH_IP_MIN_FRAME_LENGTH)
@@ -6279,6 +6714,9 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
     {
         while (BufferIndex < NumBuffers)
         {
+            /* This is to fix CWE: AUDIT.SPECULATIVE_EXECUTION_DATA_LEAK */
+            MCAL_INSTRUCTION_SYNC_BARRIER();
+            MCAL_DATA_SYNC_BARRIER();
             Netc_Eth_Ip_apxState[ctrlIndex]->LockTxBuffDescr[ring][ProducerIndex] = TRUE;
             /* Save the address of the external buffer to be used in GetTransmitStatus for correctly identifying the descriptor. */
             Netc_Eth_Ip_apxState[ctrlIndex]->TxDataBuffAddr[ring][ProducerIndex] = Buffers[BufferIndex].data;
@@ -6350,7 +6788,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
                                              uint8 ring,
+                                            #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
                                             Netc_Eth_Ip_BufferType *buff,
+                                            #else
+                                            const Netc_Eth_Ip_BufferType *buff,
+                                            #endif
                                              const Netc_Eth_Ip_TxOptionsType *options)
 {
     Netc_Eth_Ip_TxBDRType *txBD;
@@ -6496,7 +6938,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
             netcSIsBase[ctrlIndex]->BDR_NUM[ring].TBPIR = NextProducerIndex;
 
 #if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
-#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
             Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff++;
             if (Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].MaxNumberOfUsedBuff < Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff)
             {
@@ -6591,26 +7033,43 @@ void Netc_Eth_Ip_ReleaseTxBuffers(const uint8 CtrlIdx, const uint8 Ring)
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMacAddr(uint8 CtrlIndex, const uint8 *MacAddr)
 {
-    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_StatusType Status;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(MacAddr != NULL_PTR);
     DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
 #endif
-
+#ifdef NETC_ETH_0_USED /* If PSI is not used in the calling core in a multicore scenario, the calling SI will use VSI-PSI messaging.*/
     /* If the controller is the PSI it should write directly the MAC address. */
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
     {
         IP_NETC__ENETC0_PORT->PMAR0 = ((uint32)MacAddr[0U]) | ((uint32)MacAddr[1U] << 8U) | ((uint32)MacAddr[2U] << 16U) | ((uint32)MacAddr[3U] << 24U);
         IP_NETC__ENETC0_PORT->PMAR1 = ((uint32)MacAddr[4U]) | ((uint32)MacAddr[5U] << 8U);
+
+        Status = NETC_ETH_IP_STATUS_SUCCESS;
     }
     /* If the controller is a VSI a mailbox request is sent to the PSI to change the MAC address. */
     else
     {
-        uint16 PsiRspMessage;
-        Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET, MacAddr, &PsiRspMessage);
+#endif
+#ifndef NETC_ETH_0_USED
+        if(NETC_ETH_IP_PHYSICAL_SI != CtrlIndex)
+        {
+#endif
+            uint16 PsiRspMessage;
+            Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET, MacAddr, &PsiRspMessage);
+#ifndef NETC_ETH_0_USED
+        }
+        else
+        {
+            /* Do nothing. */
+            Status = NETC_ETH_IP_STATUS_ERROR;
+        }
+#endif
+#ifdef NETC_ETH_0_USED
     }
+#endif
 
     return Status;
 }
@@ -6710,13 +7169,10 @@ static inline uint64 Netc_Eth_Ip_GetCounterLocal(const volatile uint32 *Reg)
  * @param[in] config controller configuration
  *
  */
-static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
 {
-#if defined(ERR_IPV_NETC_E051130)
-    #if (STD_ON == ERR_IPV_NETC_E051130)
-    Netc_Eth_Ip_StatusType Status;
-    #endif
-#endif
+
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
 
     /* Tables initialization should be done after enabling the controller. Set the EN bit in Station interface mode register (SIMR) to enable psi0*/
     netcSIsBase[ctrlIndex]->SIMR |= NETC_F3_SI0_SIMR_EN_MASK;
@@ -6733,13 +7189,13 @@ static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip
 #if defined(ERR_IPV_NETC_E051130)
     #if (STD_ON == ERR_IPV_NETC_E051130)
             /* Default time gate scheduling conditions on the pseudo port */
-            Status = Netc_Eth_Ip_InitTimeGateSchedulingFeature(ctrlIndex);
+            Status = Netc_Eth_Ip_InitTimeGateSchedulingFeature(ctrlIndex); /* Netc_Eth_Ip_StatusType */
             if (Status == NETC_ETH_IP_STATUS_SUCCESS)
             {
     #endif
 #endif
-                /* Add time gate scheduling table entries data */
-                Netc_Eth_Ip_InitTimeGateSchedulingTableEntryData(config);
+               /* Add time gate scheduling table entries data */
+               Netc_Eth_Ip_InitTimeGateSchedulingTableEntryData(config);
 #if defined(ERR_IPV_NETC_E051130)
     #if (STD_ON == ERR_IPV_NETC_E051130)
             }
@@ -6747,17 +7203,35 @@ static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip
 #endif
         }
 
-        /* Init Vlan Filter Table*/
+        /* Init Vlan Filter Table */
         #if (NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES > 0U)
-        Netc_Eth_Ip_ConfigVLANFilterTable(ctrlIndex, config);
+        if (Status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            Status = Netc_Eth_Ip_ConfigVLANFilterTable(ctrlIndex, config); /* Netc_Eth_Ip_StatusType */
+        }
+        #endif
+
+        /* Init MAC Filter Table */
+        #if (NETC_ETH_IP_NUMBER_OF_MAC_FILTER_TABLE_ENTRIES > 0U)
+        if (Status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            Status = Netc_Eth_Ip_ConfigMACFilterTable(ctrlIndex, config); /* Netc_Eth_Ip_StatusType */
+        }
         #endif
     }
 
-    /* Init Receive Flow Steering Table */
-    (void)Netc_Eth_Ip_ConfigRfsTable(ctrlIndex, config);
+    if (Status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+        /* Init Receive Flow Steering Table */
+        Status = Netc_Eth_Ip_ConfigRfsTable(ctrlIndex, config); /* Netc_Eth_Ip_StatusType */
+        if (Status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            /* After table initializatios the controller should be disabled. Clear the EN bit in Station interface mode register (SIMR) to disalbe psi0 */
+            netcSIsBase[ctrlIndex]->SIMR &= ~NETC_F3_SI0_SIMR_EN_MASK;
+        }
+    }
 
-    /* After table initializatios the controller should be disabled. Clear the EN bit in Station interface mode register (SIMR) to disalbe psi0 */
-    netcSIsBase[ctrlIndex]->SIMR &= ~NETC_F3_SI0_SIMR_EN_MASK;
+    return Status;
 }
 
 #if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
@@ -6796,15 +7270,12 @@ static inline void Netc_Eth_Ip_ReadFrame_AddCustomRxTagHeader(uint8 ctrlIndex,
 static inline void Netc_Eth_Ip_HostReasonTimeStamp(uint8 ctrlIndex,
                                                    uint8 ring,
                                                    Netc_Eth_Ip_StatusType* status,
-                                                   uint32 CurrLowTime
+                                                   Netc_Eth_Ip_TimeType CurrTime
                                                    )
 {
     const Netc_Eth_Ip_TxTimestampResponseType *TempTxResponse;
     uint16 TxTimestampID;
     Netc_Eth_Ip_TimeType LatestTxTimestamp = { 0U, 0U};
-    uint32 CurrHighTime = 0U;
-
-    CurrHighTime = netcSIsBase[0U]->SICTR1;
 
     if ((0U == ctrlIndex) && (0U == ring))
     {
@@ -6812,8 +7283,8 @@ static inline void Netc_Eth_Ip_HostReasonTimeStamp(uint8 ctrlIndex,
         TxTimestampID = TempTxResponse->TxTimestampID;
 
         LatestTxTimestamp.nanosecondsL = TempTxResponse->Timestamp;
-        LatestTxTimestamp.nanosecondsH = CurrHighTime;
-        if(CurrLowTime < LatestTxTimestamp.nanosecondsL)
+        LatestTxTimestamp.nanosecondsH = CurrTime.nanosecondsH;
+        if(CurrTime.nanosecondsL < LatestTxTimestamp.nanosecondsL)
         {
             LatestTxTimestamp.nanosecondsH--;
         }
@@ -6838,13 +7309,13 @@ static inline void Netc_Eth_Ip_ReadFrame_ReturnBufferDetails(uint8 ctrlIndex,
 {
     const Netc_Eth_Ip_RxBDRType  *rxBDR;
     uint32 rxIndex = 0;
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     uint32 bufferIndex = 0;
 #endif
 
     rxBDR = Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
     rxIndex = Netc_Eth_Ip_apxState[ctrlIndex]->rxCurrentIndex[ring];
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     bufferIndex = ring * NETC_ETH_MAX_NUMBER_OF_RXBD + rxIndex;
 
     if (!Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[ctrlIndex])
@@ -6853,7 +7324,7 @@ static inline void Netc_Eth_Ip_ReadFrame_ReturnBufferDetails(uint8 ctrlIndex,
         /* All conditions meet, return buffer data details. */
         buff->data = (uint8 *)((uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->FirstRxDataBufferAddr[ring]) + \
                     (rxIndex * Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring]));
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     }
     else
     {
@@ -7056,8 +7527,8 @@ static inline void Netc_Eth_Ip_SetupErrorReporting_EnableCorrectableErrors(const
     IP_NETC__SW0_COMMON->CMECR =  NETC_F2_COMMON_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
 }
 
-
-static inline void Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(const uint8 CtrlIndex,
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+static inline void Netc_Eth_Ip_DeleteMACHashFilterEntry_MarkEntryEmpty(const uint8 CtrlIndex,
                                                                    boolean* const MatchedEntry,
                                                                    const uint8 CurrentEntry,
                                                                    const uint8 *MacAddr)
@@ -7089,7 +7560,7 @@ static inline void Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(const uint8 C
         SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
     }
 }
-
+#endif /* (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0) */
 
 static inline void Netc_Eth_Ip_ConfigureBufferDescriptors(const uint16 BufferIndex, const Netc_Eth_Ip_TxOptionsType *options, Netc_Eth_Ip_TxBDRType *txBD)
 {
@@ -7129,7 +7600,7 @@ static inline void Netc_Eth_Ip_ConfigureBufferDescriptors(const uint16 BufferInd
     }
 }
 
-static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+static inline void Netc_Eth_Ip_InitSI_ConfigureSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
 {
     uint8  u8Iterator;
     uint8  siHwId;
@@ -7146,6 +7617,7 @@ static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const 
         if (TRUE == (*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableSi)
         {
             /** Assure that SI is not enabled. */
+            IP_NETC__ENETC0_BASE->NUM_SI[0U].PSIVMAFCFGR = NETC_F3_PSIVMAFCFGR_NUM_MAC_AFTE(0U);
             netcSIsBase[siHwId]->SIMR &= ~(NETC_F3_SI0_SIMR_EN_MASK);
 
             if (ctrlIndex == siHwId)
@@ -7183,6 +7655,15 @@ static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const 
                     IP_NETC__ENETC0_SI0->MSGSR.PSI_A.VSI_NUM[siHwId - 1U].PSIVMSGRCVAR0 = (uint32)config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U] | \
                                                                                           NETC_ETH_IP_VSITOPSI_MSG_SIZE;
                 }
+                /* Configure the station interface PRIO to TC mapping register for the current SI */
+                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR1 = NETC_F3_PSICFGR1_TC0_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[0]) | \
+                                                                NETC_F3_PSICFGR1_TC1_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[1]) | \
+                                                                NETC_F3_PSICFGR1_TC2_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[2]) | \
+                                                                NETC_F3_PSICFGR1_TC3_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[3]) | \
+                                                                NETC_F3_PSICFGR1_TC4_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[4]) | \
+                                                                NETC_F3_PSICFGR1_TC5_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[5]) | \
+                                                                NETC_F3_PSICFGR1_TC6_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[6]) | \
+                                                                NETC_F3_PSICFGR1_TC7_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].VSITCtoTransmitTrafficClass[7]);
             }
 
             /* Number of entries in a MSI table for the current SI. */
@@ -7199,16 +7680,6 @@ static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const 
 
             /* Configure pruning to be enabled by default for each SI. */
             IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SPE_MASK;
-
-            /* Configure the station interface PRIO to TC mapping register for the current SI */
-            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR1 = NETC_F3_PSICFGR1_TC0_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[0]) | \
-                                                            NETC_F3_PSICFGR1_TC1_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[1]) | \
-                                                            NETC_F3_PSICFGR1_TC2_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[2]) | \
-                                                            NETC_F3_PSICFGR1_TC3_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[3]) | \
-                                                            NETC_F3_PSICFGR1_TC4_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[4]) | \
-                                                            NETC_F3_PSICFGR1_TC5_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[5]) | \
-                                                            NETC_F3_PSICFGR1_TC6_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[6]) | \
-                                                            NETC_F3_PSICFGR1_TC7_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[7]);
 
 #if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
             SiConfig = &((*config->generalConfig->stationInterfaceGeneralConfig)[siHwId]);
@@ -7234,7 +7705,8 @@ static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const 
                                                              NETC_F3_PSICFGR0_VTE((SiConfig->EnableVLANTagExtract) ? 1U : 0U);
 #endif
 
-            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_ASE(((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableAntiSpoofing) ? 1U : 0U);
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 = (~(NETC_F3_PSICFGR0_ASE_MASK) & IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0) | NETC_F3_PSICFGR0_ASE(((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableAntiSpoofing) ? 1U : 0U);
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 = (~(NETC_F3_PSICFGR0_SPE_MASK) & IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0) | NETC_F3_PSICFGR0_SPE(((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableSIPruning) ? 1U : 0U);
 
             if (ctrlIndex != siHwId)
             {
@@ -7331,8 +7803,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
     const Netc_Eth_Ip_RxBDRType  *rxBDR;
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-    uint32 CurrLowTime = 0U;
-    uint32 CurrHighTime = 0U;
+    Netc_Eth_Ip_TimeType CurrTime = {0U, 0U};
     uint32 rxIndex = 0;
     uint64 nanoseconds = 0U;
 #ifdef NETC_ETH_0_USED
@@ -7384,8 +7855,8 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
             {
                 info->pktLen = (uint16)(rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_LENGTH_MASK);
             }
-            info->rxStatus = (Netc_Eth_Ip_RxStatusType)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_ERROR_MASK) >> NETC_ETH_IP_RXBD_ERROR_SHIFT);
-            info->hostReason = (Netc_Eth_Ip_HostReasonType)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_HOST_REASON_MASK) >> NETC_ETH_IP_RXBD_HOST_REASON_SHIFT);
+            info->rxStatus = (Netc_Eth_Ip_RxStatusType)((uint8)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_ERROR_MASK) >> NETC_ETH_IP_RXBD_ERROR_SHIFT));
+            info->hostReason = (Netc_Eth_Ip_HostReasonType)((uint8)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_HOST_REASON_MASK) >> NETC_ETH_IP_RXBD_HOST_REASON_SHIFT));
 #if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
             info->VlanInfo.ProtocolIdentifier = (Netc_Eth_Ip_VlanProtocolIdentifierType)(rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_TPID_MASK);
             info->VlanInfo.PriorityCodePoint = (uint8)((rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_PCP_MASK) >> NETC_ETH_IP_RXBD_PCP_SHIFT);
@@ -7394,13 +7865,18 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
             info->VlanInfo.VlanIdentifier = (uint16)((rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_VID_MASK) >> NETC_ETH_IP_RXBD_VID_SHIFT);
 #endif
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
+#if (STD_ON == NETC_ETH_FREE_RUNNING_TIMER_SUPPORT)
+            CurrTime.nanosecondsL = (uint32)(IP_NETC__TMR0_BASE->TMR_FRT_L);
+            CurrTime.nanosecondsH = (uint32)(IP_NETC__TMR0_BASE->TMR_FRT_H);
+#else
             /* Read the low register then immediately the high register to get a synchronised 64-bit time value in nanoseconds */
-            CurrLowTime = netcSIsBase[0U]->SICTR0;
-            CurrHighTime = netcSIsBase[0U]->SICTR1;
+            CurrTime.nanosecondsL = netcSIsBase[0U]->SICTR0;
+            CurrTime.nanosecondsH = netcSIsBase[0U]->SICTR1;
+#endif
 #endif
         }
 
-        if (NETC_ETH_RX_NO_RECEIVE_ERR == (Netc_Eth_Ip_RxStatusType)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_ERROR_MASK) >> 16U))
+        if (NETC_ETH_RX_NO_RECEIVE_ERR == (Netc_Eth_Ip_RxStatusType)((uint8)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_ERROR_MASK) >> 16U)))
         {
             HostReason = ((rxBDR->configRxBD[3U] >> NETC_ETH_IP_HOSTREASON_WB_SHIFT) & NETC_ETH_IP_HOSTREASON_WB_MASK);
 
@@ -7424,14 +7900,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
                     Netc_Eth_Ip_ReadFrame_ReturnBufferDetails(ctrlIndex, ring, buff);
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-                    if(CurrLowTime < rxBDR->extendConfigRxBD[0U])
+                    if(CurrTime.nanosecondsL < rxBDR->extendConfigRxBD[0U])
                     {
-                        CurrHighTime--;
+                        CurrTime.nanosecondsH--;
                     }
 
                     if (NULL_PTR != info)
                     {
-                        nanoseconds = (uint64)(rxBDR->extendConfigRxBD[0U]) | (uint64)(((uint64)(CurrHighTime)) << 32U);
+                        nanoseconds = (uint64)(rxBDR->extendConfigRxBD[0U]) | (uint64)(((uint64)(CurrTime.nanosecondsH)) << 32U);
                         info->PacketTimestamp.nanoseconds = NETC_ETH_IP_GET_NANOSECONDS(nanoseconds);
                         info->PacketTimestamp.seconds     = (uint32) (NETC_ETH_IP_NANO_TO_SECONDS(nanoseconds) & NETC_ETH_IP_SECONDS_LOW_MASK_U64);
                         info->PacketTimestamp.secondsHi   = (uint16) ((NETC_ETH_IP_NANO_TO_SECONDS(nanoseconds) >> 32U) & 0xFFFFU);
@@ -7449,7 +7925,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
                         Netc_Eth_Ip_RxTimestampInfoBuff[ctrlIndex][ring][rxIndex].SourcePort = (uint8)(rxBDR->configRxBD[1U] & NETC_ETH_IP_RXBD_SRC_PORT_MASK);
 
                         Netc_Eth_Ip_RxTimestampInfoBuff[ctrlIndex][ring][rxIndex].TimestampValue.nanosecondsL = rxBDR->extendConfigRxBD[0U];
-                        Netc_Eth_Ip_RxTimestampInfoBuff[ctrlIndex][ring][rxIndex].TimestampValue.nanosecondsH = CurrHighTime;
+                        Netc_Eth_Ip_RxTimestampInfoBuff[ctrlIndex][ring][rxIndex].TimestampValue.nanosecondsH = CurrTime.nanosecondsH;
 
                         SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_20();
                         Netc_Eth_Ip_RxTimestampID = (Netc_Eth_Ip_RxTimestampID % (uint32)0xFFFFU) + (uint32)1U;
@@ -7467,7 +7943,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
             #if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF))
             else if(NETC_ETH_IP_HOSTREASON_TIMESTAMP == HostReason)
             {
-                Netc_Eth_Ip_HostReasonTimeStamp(ctrlIndex, ring, &status, CurrLowTime);
+                Netc_Eth_Ip_HostReasonTimeStamp(ctrlIndex, ring, &status, CurrTime);
             }
             #endif /* defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) */
             else
@@ -7520,6 +7996,9 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(Netc_Eth_Ip_apxState[ctrlIndex] != NULL_PTR);
     DevAssert(ring < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfRxBDR);
+#if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffAddr);
+#endif
 
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     if (Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[ctrlIndex])
@@ -7542,7 +8021,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
     {
 #endif
         RxBDR->configRxBD[0U] = ((uint32)Netc_Eth_Ip_apxState[ctrlIndex]->FirstRxDataBufferAddr[ring] + \
-                             (uint32)(CurrentConsumerIndex * Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring]));
+                             ((uint32)CurrentConsumerIndex * (uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring])));
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     }
     else
@@ -7550,6 +8029,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
         Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffAddr[bufferIndex] = (uint32)buff->data;
         RxBDR->configRxBD[0U] = (uint32)buff->data;
     }
+
 #else
     /* Avoid compiler warning */
     (void)buff;
@@ -7571,7 +8051,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
     netcSIsBase[ctrlIndex]->BDR_NUM[ring].RBCIR = (uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->LogicRxConsumerIndex[ring]);
     SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_28();
 
-
     return NETC_ETH_IP_STATUS_SUCCESS;
 }
 
@@ -7582,7 +8061,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
  *END**************************************************************************/
 void Netc_Eth_Ip_ProvideMultipleRxBuff(const uint8 CtrlIndex,
                                                          const uint8 Ring,
-                                                         uint8* BuffList[],
+                                                         uint8* const BuffList[],
                                                          uint16* BuffListSize)
 {
     uint16 ConsumerIndex = 0U;
@@ -7687,20 +8166,23 @@ Netc_Eth_Ip_PowerStateType Netc_Eth_Ip_GetPowerState(uint8 CtrlIndex)
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(const uint8 CtrlIndex, \
                                                                    const uint8 *MacAddr)
 {
-    uint8 HashValue;
-    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+#ifdef NETC_ETH_0_USED
+    uint8 HashValue = 0U;
+#endif
+    Netc_Eth_Ip_StatusType Status;
+    uint16 PsiRspMessage;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
 #endif
-
+#ifdef NETC_ETH_0_USED /* If PSI is not used in the calling core in a multicore scenario, the calling SI will use VSI-PSI messaging.*/
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
     {
         HashValue = Netc_Eth_Ip_ComputeMACHashValue(MacAddr);
 
         /* Add MAC entry in the software table. */
-        Status = Netc_Eth_Ip_AddMACFilterEntry(CtrlIndex, HashValue, MacAddr);
+        Status = Netc_Eth_Ip_AddMACHashFilterEntry(CtrlIndex, HashValue, MacAddr);
 
         if(NETC_ETH_IP_STATUS_SUCCESS == Status)
         {
@@ -7708,14 +8190,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(const uint8 C
             if(0U != ((uint32)HashValue & NETC_ETH_IP_SELECT_HASH_REGISTER))
             {
                 SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_09();
-                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR1 |= (uint32)(1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
+                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR1 |= ((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
                 SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_09();
 
             }
             else
             {
                 SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_09();
-                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR0 |= (uint32)(1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
+                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR0 |= ((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
                 SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_09();
 
             }
@@ -7723,9 +8205,24 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(const uint8 C
     }
     else
     {
-        uint16 PsiRspMessage;
-        Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_FILTER, MacAddr, &PsiRspMessage);
+#endif
+#ifndef NETC_ETH_0_USED
+        if(NETC_ETH_IP_PHYSICAL_SI != CtrlIndex)
+        {
+#endif
+            Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_HASH_FILTER, MacAddr, &PsiRspMessage);
+#ifndef NETC_ETH_0_USED
+        }
+        else
+        {
+            (void)PsiRspMessage;
+            Status = NETC_ETH_IP_STATUS_ERROR;
+            /* Do nothing. */
+        }
+#endif
+#ifdef NETC_ETH_0_USED
     }
+#endif
 
     return Status;
 }
@@ -7738,19 +8235,21 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(const uint8 C
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_RemoveMulticastDstAddrFromHashFilter(const uint8 CtrlIndex, \
                                                                         const uint8 *MacAddr)
 {
+#ifdef NETC_ETH_0_USED
     uint8 HashValue;
-    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+#endif
+    Netc_Eth_Ip_StatusType Status;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
 #endif
-
+#ifdef NETC_ETH_0_USED /* If PSI is not used in the calling core in a multicore scenario, the calling SI will use VSI-PSI messaging.*/
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
     {
         HashValue = Netc_Eth_Ip_ComputeMACHashValue(MacAddr);
 
-        Status = Netc_Eth_Ip_DeleteMACFilterEntry(CtrlIndex, HashValue, MacAddr);
+        Status = Netc_Eth_Ip_DeleteMACHashFilterEntry(CtrlIndex, HashValue, MacAddr, FALSE);
 
         if(NETC_ETH_IP_STATUS_DELETE_MAC_ADDR == Status)
         {
@@ -7758,14 +8257,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_RemoveMulticastDstAddrFromHashFilter(const ui
             if((HashValue & NETC_ETH_IP_SELECT_HASH_REGISTER) != (uint8)0U)
             {
                 SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_10();
-                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR1 &= ~(uint32)(1U << ((uint32)HashValue & NETC_ETH_IP_HASH_VALUE));
+                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR1 &= ~((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
                 SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_10();
 
             }
             else
             {
                 SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_10();
-                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR0 &= ~(uint32)(1U << ((uint32)HashValue & NETC_ETH_IP_HASH_VALUE));
+                IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR0 &= ~((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
                 SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_10();
             }
 
@@ -7775,9 +8274,24 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_RemoveMulticastDstAddrFromHashFilter(const ui
     }
     else
     {
-        uint16 PsiRspMessage;
-        Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_DELETE_RX_MAC_ADDR_FILTER, MacAddr, &PsiRspMessage);
+#endif
+#ifndef NETC_ETH_0_USED
+        if(NETC_ETH_IP_PHYSICAL_SI != CtrlIndex)
+        {
+#endif
+            uint16 PsiRspMessage;
+            Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_RX_MAC_ADDR_HASH_FILTER, MacAddr, &PsiRspMessage);
+#ifndef NETC_ETH_0_USED
+        }
+        else
+        {
+            /* Do nothing. */
+            Status = NETC_ETH_IP_STATUS_ERROR;
+        }
+#endif
+#ifdef NETC_ETH_0_USED
     }
+#endif
 
     return Status;
 }
@@ -7789,13 +8303,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_RemoveMulticastDstAddrFromHashFilter(const ui
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMulticastForwardAll(const uint8 CtrlIndex, const boolean EnableMulticast)
 {
-    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_StatusType Status;
+    uint16 PsiRspMessage;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
 #endif
-
+#ifdef NETC_ETH_0_USED /* If PSI is not used in the calling core in a multicore scenario, the calling SI will use VSI-PSI messaging.*/
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
     {
         if(EnableMulticast)
@@ -7812,21 +8327,36 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMulticastForwardAll(const uint8 CtrlIndex,
             IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32)1U << (CtrlIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT));
             SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_11();
         }
+        Status = NETC_ETH_IP_STATUS_SUCCESS;
     }
     else
     {
-        uint16 PsiRspMessage;
-        if(EnableMulticast)
+#endif
+#ifndef NETC_ETH_0_USED
+        if(NETC_ETH_IP_PHYSICAL_SI != CtrlIndex)
         {
-            /* Enable MAC multicast promiscuous mode. */
-            Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST, NULL_PTR, &PsiRspMessage);
+#endif
+            if(EnableMulticast)
+            {
+                /* Enable MAC multicast promiscuous mode. */
+                Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST_PROMISCUOS, NULL_PTR, &PsiRspMessage);
+            }
+            else
+            {
+                /* Disable MAC multicast promiscuous mode. */
+                Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST_PROMISCUOUS, NULL_PTR, &PsiRspMessage);
+            }
+#ifndef NETC_ETH_0_USED
         }
         else
         {
-            /* Disable MAC multicast promiscuous mode. */
-            Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST, NULL_PTR, &PsiRspMessage);
+            /* Do nothing. */
+            Status = NETC_ETH_IP_STATUS_ERROR;
         }
+#endif
+#ifdef NETC_ETH_0_USED
     }
+#endif
 
     return Status;
 }
@@ -7838,32 +8368,61 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMulticastForwardAll(const uint8 CtrlIndex,
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_CloseMulticastReceiving(const uint8 CtrlIndex)
 {
-    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
-
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_ERROR;
+    uint16 PsiRspMessage;
+#ifdef NETC_ETH_0_USED
+    const Netc_Eth_Ip_GeneralSIConfigType* SIConfig;
+#endif
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
 #endif
-
+#ifdef NETC_ETH_0_USED /* If PSI is not used in the calling core in a multicore scenario, the calling SI will use VSI-PSI messaging.*/
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
     {
         SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_12();
-        /* Disable MAC multicast promiscuous mode. */
-        IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32)1U << (CtrlIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT));
 
-        IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR1 = 0x0U;
-        IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR0 = 0x0U;
+        /*Get the SI general configuration */
+        SIConfig = &(*Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX]->SIGeneralConfig)[CtrlIndex];
 
+        if (SIConfig->multicastPromiscuousChangeAllowed == TRUE)
+        {
+            /* Disable MAC multicast promiscuous mode. */
+            IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32)1U << (CtrlIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT));
+            Status = NETC_ETH_IP_STATUS_SUCCESS;
+        }
+
+        if (SIConfig->hashFilterUpdateAllowed == TRUE)
+        {
+            /* Clear all entries in filter. */
+            (void)Netc_Eth_Ip_DeleteMACHashFilterEntry(CtrlIndex, 0U, NULL_PTR, TRUE);
+            IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR1 = 0x0U;
+            IP_NETC__ENETC0_BASE->NUM_SI[CtrlIndex].PSIMMHFR0 = 0x0U;
+            Status = NETC_ETH_IP_STATUS_SUCCESS;
+        }
 
         SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_12();
 
     }
     else
     {
-        uint16 PsiRspMessage;
-        /* Disable MAC multicast promiscuous mode. */
-        Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_CLOSE_FILTER, NULL_PTR, &PsiRspMessage);
+#endif
+#ifndef NETC_ETH_0_USED
+        if(NETC_ETH_IP_PHYSICAL_SI != CtrlIndex)
+        {
+#endif
+            /* Disable MAC multicast promiscuous mode. */
+            Status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_CLOSE_FILTER, NULL_PTR, &PsiRspMessage);
+#ifndef NETC_ETH_0_USED
+        }
+        else
+        {
+            /* Do nothing. */
+        }
+#endif
+#ifdef NETC_ETH_0_USED
     }
+#endif
 
     return Status;
 }
@@ -8152,6 +8711,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetRxTimestampInfo(const uint8 CtrlIdx, const
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIdx < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(DataPtr != NULL_PTR);
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIdx] != NULL_PTR);
 #endif
 
     *RxTimestampInfo = NULL_PTR;
@@ -8218,9 +8778,10 @@ void Netc_Eth_Ip_GetSysTime(uint8 ctrlIndex, Netc_Eth_Ip_TimeType *TimePtr)
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_Deinit(uint8 ctrlIndex)
 {
-    #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
-        DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
-    #endif
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_apxState[ctrlIndex] != NULL_PTR);
+#endif
 
     uint32 StartTime;
     uint32 ElapsedTime;
@@ -8264,6 +8825,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Deinit(uint8 ctrlIndex)
 void Netc_Eth_Ip_PCIe_AER_Handler(uint8 ctrlIndex)
 {
     uint8 i = 0U;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_apxState[ctrlIndex] != NULL_PTR);
+#endif
 
     if (IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_STAT != 0U)
     {
@@ -8512,7 +9078,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddIngressPortFilterTableEntry( uint8 CtrlInd
     Netc_Eth_Ip_IPFKeyeData[11U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformationMask) << NETC_ETH_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformation;
     Netc_Eth_Ip_IPFKeyeData[12U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask) << NETC_ETH_IP_16BIT_SHIFT) \
-                 | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask;
+                 | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherType;
     Netc_Eth_Ip_IPFKeyeData[13U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocolMask) << NETC_ETH_IP_8BIT_SHIFT) | (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocol);
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
@@ -8849,26 +9415,41 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetSyncState( const uint8 CtrlIndex,
                                                             )
 {
     static volatile uint16 PSIRspMessage;
-    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_StatusType status;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
     DevAssert(SyncState != NULL_PTR);
 #endif
-
+#ifdef NETC_ETH_0_USED /* If PSI is not used in the calling core in a multicore scenario, the calling SI will use VSI-PSI messaging.*/
     /* If the controller is of physical type it can directly read the sync state from the register,
         otherwise it must use VSI to PSI messaging to request a read from the PSI */
     if(Netc_Eth_Ip_apxState[CtrlIndex]->SiType == NETC_ETH_IP_PHYSICAL_SI)
     {
         *SyncState = ((IP_NETC__ENETC0_SI0->SITSR & NETC_F3_SI0_SITSR_SYNC_MASK) == 1UL) ? (boolean)TRUE: (boolean)FALSE;
+        status = NETC_ETH_IP_STATUS_SUCCESS;
     }
     else
     {
-        status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_GET_SYNC_STATE, NULL_PTR, (uint16 *) &PSIRspMessage);
-        *SyncState = (boolean) PSIRspMessage;
+#endif
+#ifndef NETC_ETH_0_USED
+    if(NETC_ETH_IP_PHYSICAL_SI != CtrlIndex)
+    {
+#endif
+        status = Netc_Eth_Ip_VsiToPsiMsg(CtrlIndex, NETC_ETH_IP_VSITOPSI_GET_TIMER_SYNC_STATE, NULL_PTR, (uint16 *) &PSIRspMessage);
+        *SyncState = (PSIRspMessage != 0U) ? (boolean)TRUE : (boolean)FALSE;
+#ifndef NETC_ETH_0_USED
     }
-
+    else
+    {
+        /* Do nothing. */
+        status = NETC_ETH_IP_STATUS_ERROR;
+    }
+#endif
+#ifdef NETC_ETH_0_USED
+    }
+#endif
     return status;
 }
 
@@ -8928,7 +9509,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr(const uint8 CtrlIndex,
 }
 
 #if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
-#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxRingFillLevel(const uint8 CtrlIndex, const uint8 RingIdx, Netc_Eth_Ip_FillLevelInfo * FillInfo)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;

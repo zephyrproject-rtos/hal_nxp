@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -28,7 +28,7 @@ extern "C"{
 #define QSPI_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION_H     0
 #define QSPI_IP_HW_ACCESS_SW_MAJOR_VERSION_H                2
 #define QSPI_IP_HW_ACCESS_SW_MINOR_VERSION_H                0
-#define QSPI_IP_HW_ACCESS_SW_PATCH_VERSION_H                0
+#define QSPI_IP_HW_ACCESS_SW_PATCH_VERSION_H                1
 
 
 /*==================================================================================================
@@ -232,6 +232,21 @@ static inline void QSPI_DQS_Disable(const QuadSPI_Type *BaseAddr)
 }
 #endif
 
+#ifdef QuadSPI_MCR_DQS_OUT_EN_MASK
+static inline void Qspi_Ip_DqsOutEnable(QuadSPI_Type *BaseAddr, boolean Dqs_Out_Enable)
+{
+    /* Disable DQS */
+    BaseAddr->MCR &= ~QuadSPI_MCR_DQS_OUT_EN_MASK;
+    BaseAddr->MCR |= QuadSPI_MCR_DQS_OUT_EN(Dqs_Out_Enable? 1U : 0U);
+}
+#else
+static inline void Qspi_Ip_DqsOutEnable(const QuadSPI_Type *BaseAddr, boolean Dqs_Out_Enable)
+{
+    /* Unused variable */
+    (void)BaseAddr;
+    (void)Dqs_Out_Enable;
+}
+#endif
 
 /*
  * Assert QuadSPI sw reset bits
@@ -257,9 +272,9 @@ static inline void Qspi_Ip_SwResetOff(QuadSPI_Type *BaseAddr)
  * Configure idle values for data lines 2:3
  */
 static inline void Qspi_Ip_SetIdleLineValuesB(QuadSPI_Type *BaseAddr,
-                                             uint8 Iofb2IdleValue,
-                                             uint8 Iofb3IdleValue
-                                            )
+                                              uint8 Iofb2IdleValue,
+                                              uint8 Iofb3IdleValue
+                                             )
 {
     /* get value MCR register */
     uint32 RegValue = (uint32)BaseAddr->MCR;
@@ -274,9 +289,9 @@ static inline void Qspi_Ip_SetIdleLineValuesB(QuadSPI_Type *BaseAddr,
 
 #ifdef QuadSPI_MCR_ISD2FA_MASK
 static inline void Qspi_Ip_SetIdleLineValuesA(QuadSPI_Type *BaseAddr,
-                                             uint8 Iofa2IdleValue,
-                                             uint8 Iofa3IdleValue
-                                            )
+                                              uint8 Iofa2IdleValue,
+                                              uint8 Iofa3IdleValue
+                                             )
 {
     /* get value MCR register */
     uint32 RegValue = (uint32)BaseAddr->MCR;
@@ -508,7 +523,8 @@ static inline boolean Qspi_Ip_DLLGetSlaveLockStatusA(const QuadSPI_Type *BaseAdd
     return (RegValue != 0U)? TRUE : FALSE;
 #else
     (void)BaseAddr;
-    return FALSE;
+    /* For derivatives not support DLLSR register, the return value is always TRUE to avoid a timeout error */
+    return TRUE;
 #endif
 }
 
@@ -526,7 +542,8 @@ static inline boolean Qspi_Ip_DLLGetLockStatusA(const QuadSPI_Type *BaseAddr)
     return (RegValue != 0U)? TRUE : FALSE;
 #else
     (void)BaseAddr;
-    return FALSE;
+    /* For derivatives not support DLLSR register, the return value is always TRUE to avoid a timeout error */
+    return TRUE;
 #endif
 }
 
@@ -694,8 +711,8 @@ static inline void Qspi_Ip_DLLSetResolutionB(QuadSPI_Type *BaseAddr,
  * Sets slave delay chain coarse offset
  */
 static inline void Qspi_Ip_DLLSetDelayOffsetB(QuadSPI_Type *BaseAddr,
-                                               uint8 CoarseDelay
-                                              )
+                                              uint8 CoarseDelay
+                                             )
 {
     /* get value DLLCRB register */
     uint32 RegValue = (uint32)BaseAddr->DLLCRB;
@@ -761,14 +778,14 @@ static inline boolean Qspi_Ip_DLLGetErrorStatusB(const QuadSPI_Type *BaseAddr)
 /*
  * Configure external flash memory map size A
  */
-static inline void Qspi_Ip_SetMemMapSizeA(uint32 instance,
+static inline void Qspi_Ip_SetMemMapSizeA(uint32 AhbAddress,
                                           QuadSPI_Type *BaseAddr,
                                           uint32 SizeA1,
                                           uint32 SizeA2
                                          )
 {
-    BaseAddr->SFA1AD = Qspi_Ip_AhbAddress[instance] + SizeA1;
-    BaseAddr->SFA2AD = Qspi_Ip_AhbAddress[instance] + SizeA1 + SizeA2;
+    BaseAddr->SFA1AD = AhbAddress + SizeA1;
+    BaseAddr->SFA2AD = AhbAddress + SizeA1 + SizeA2;
 }
 
 /*
@@ -888,9 +905,9 @@ static inline void Qspi_Ip_SetAhbBuf2(QuadSPI_Type *BaseAddr,
  * Sets AHB buffer 3 configuration
  */
 static inline void Qspi_Ip_SetAhbBuf3(QuadSPI_Type *BaseAddr,
-                                       uint16 Size,
-                                       uint8 Master,
-                                       boolean AllMasters
+                                      uint16 Size,
+                                      uint8 Master,
+                                      boolean AllMasters
                                      )
 {
     BaseAddr->BUF3CR =  QuadSPI_BUF3CR_ADATSZ((uint32)Size >> 3U)
@@ -956,9 +973,14 @@ static inline void Qspi_Ip_SetAddrOptions(QuadSPI_Type *BaseAddr,
                                           boolean WordAdressable
                                          )
 {
-    /* Set a value for SAFCR */
-    BaseAddr->SFACR = QuadSPI_SFACR_CAS(ColumnAddr)
-                    | QuadSPI_SFACR_WA(WordAdressable? 1U : 0U);
+    /* Get value of SFACR register */
+    uint32 RegValue = BaseAddr->SFACR;
+
+    /* Set a value for SFACR */
+    RegValue &= ~(QuadSPI_SFACR_CAS_MASK | QuadSPI_SFACR_WA_MASK);
+    RegValue |= QuadSPI_SFACR_CAS(ColumnAddr)
+              | QuadSPI_SFACR_WA(WordAdressable? 1U : 0U);
+    BaseAddr->SFACR = RegValue;
 }
 #else
 static inline void Qspi_Ip_SetAddrOptions(const QuadSPI_Type *BaseAddr,
@@ -1238,7 +1260,8 @@ static inline void Qspi_Ip_ClearIntFlag(QuadSPI_Type *BaseAddr,
  * Configure DQS clock for sampling read data
  */
 static inline void Qspi_Ip_SetDQSSourceA(QuadSPI_Type *BaseAddr,
-                                         Qspi_Ip_ReadModeType ReadModeA)
+                                         Qspi_Ip_ReadModeType ReadModeA
+                                        )
 {
     /* get the value of MCR register */
     uint32 RegValue = (uint32)BaseAddr->MCR;
@@ -1278,7 +1301,8 @@ static inline void Qspi_Ip_SetDQSSourceA(QuadSPI_Type *BaseAddr,
 
 
 static inline void Qspi_Ip_SetDQSSourceB(QuadSPI_Type *BaseAddr,
-                                         Qspi_Ip_ReadModeType ReadModeB)
+                                         Qspi_Ip_ReadModeType ReadModeB
+                                        )
 {
     /* get the value of MCR register */
     uint32 RegValue = (uint32)BaseAddr->MCR;
@@ -1496,11 +1520,10 @@ static inline void Qspi_Ip_Sfp_SetAccessControls
  * @param[in] MdadInstance index of the target group to be configured
  * @param[in] Valid value to be written into the VLD bit
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetTgValid
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 MdadInstance,
-    boolean Valid)
+static inline void Qspi_Ip_Sfp_SetTgValid(QuadSPI_Type * BaseAddr,
+                                          uint8 MdadInstance,
+                                          boolean Valid
+                                         )
 {
     if (MdadInstance < QuadSPI_MDAD_COUNT)
     {
@@ -1521,11 +1544,10 @@ static inline void Qspi_Ip_Sfp_SetTgValid
  * @param[in] MdadInstance index of the target group to be configured
  * @param[in] SecureAttribute value of the SA field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetTgSecureAttribute
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 MdadInstance,
-    Qspi_Ip_SfpSaType SecureAttribute)
+static inline void Qspi_Ip_Sfp_SetTgSecureAttribute(QuadSPI_Type * BaseAddr,
+                                                    uint8 MdadInstance,
+                                                    Qspi_Ip_SfpSaType SecureAttribute
+                                                   )
 {
     if (MdadInstance < QuadSPI_MDAD_COUNT)
     {
@@ -1546,11 +1568,10 @@ static inline void Qspi_Ip_Sfp_SetTgSecureAttribute
  * @param[in] MdadInstance index of the target group to be configured
  * @param[in] MaskType value to be written in the mask type field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetTgMaskType
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 MdadInstance,
-    Qspi_Ip_SfpMasktypeType MaskType)
+static inline void Qspi_Ip_Sfp_SetTgMaskType(QuadSPI_Type * BaseAddr,
+                                             uint8 MdadInstance,
+                                             Qspi_Ip_SfpMasktypeType MaskType
+                                            )
 {
     if (MdadInstance < QuadSPI_MDAD_COUNT)
     {
@@ -1571,11 +1592,10 @@ static inline void Qspi_Ip_Sfp_SetTgMaskType
  * @param[in] MdadInstance index of the target group to be configured
  * @param[in] Mask value that is written into the 6-bit mask
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetTgMask
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 MdadInstance,
-    uint8 Mask)
+static inline void Qspi_Ip_Sfp_SetTgMask(QuadSPI_Type * BaseAddr,
+                                         uint8 MdadInstance,
+                                         uint8 Mask
+                                        )
 {
     if (MdadInstance < QuadSPI_MDAD_COUNT)
     {
@@ -1596,11 +1616,10 @@ static inline void Qspi_Ip_Sfp_SetTgMask
  * @param[in] MdadInstance index of the target group to be configured
  * @param[in] DomainIdMatch value of MIDMATCH field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetTgDomainIdMatch
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 MdadInstance,
-    uint8 DomainIdMatch)
+static inline void Qspi_Ip_Sfp_SetTgDomainIdMatch(QuadSPI_Type * BaseAddr,
+                                                  uint8 MdadInstance,
+                                                  uint8 DomainIdMatch
+                                                 )
 {
     if (MdadInstance < QuadSPI_MDAD_COUNT)
     {
@@ -1625,10 +1644,9 @@ static inline void Qspi_Ip_Sfp_SetTgDomainIdMatch
  * @retval FALSE: invalid
  * @retval FALSE: the MdadInstance is invalid
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline boolean Qspi_Ip_Sfp_TgIpcrsValid
-(
-    QuadSPI_Type const * BaseAddr,
-    uint8 MdadInstance)
+static inline boolean Qspi_Ip_Sfp_TgIpcrsValid(QuadSPI_Type const * BaseAddr,
+                                               uint8 MdadInstance
+                                              )
 {
     uint32 RegValue = 0U;
     if (MdadInstance < QuadSPI_MDAD_COUNT)
@@ -1651,11 +1669,10 @@ static inline boolean Qspi_Ip_Sfp_TgIpcrsValid
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] StartAddress 64 KB aligned start address of the flash region
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradStartAddress
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    uint32 StartAddress)
+static inline void Qspi_Ip_Sfp_SetFradStartAddress(QuadSPI_Type * BaseAddr,
+                                                   uint8 FradInstance,
+                                                   uint32 StartAddress
+                                                  )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1672,11 +1689,10 @@ static inline void Qspi_Ip_Sfp_SetFradStartAddress
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] EndAddress 64 KB aligned end address of the flash region
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradEndAddress
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    uint32 EndAddress)
+static inline void Qspi_Ip_Sfp_SetFradEndAddress(QuadSPI_Type * BaseAddr,
+                                                 uint8 FradInstance,
+                                                 uint32 EndAddress
+                                                )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1694,11 +1710,10 @@ static inline void Qspi_Ip_Sfp_SetFradEndAddress
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] MdAcp value to be written in MD0ACP
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradMd0Acp
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    uint8 MdAcp)
+static inline void Qspi_Ip_Sfp_SetFradMd0Acp(QuadSPI_Type * BaseAddr,
+                                             uint8 FradInstance,
+                                             uint8 MdAcp
+                                            )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1719,11 +1734,10 @@ static inline void Qspi_Ip_Sfp_SetFradMd0Acp
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] MdAcp value to be written in MD0ACP
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradMd1Acp
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    uint8 MdAcp)
+static inline void Qspi_Ip_Sfp_SetFradMd1Acp(QuadSPI_Type * BaseAddr,
+                                             uint8 FradInstance,
+                                             uint8 MdAcp
+                                            )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1744,11 +1758,10 @@ static inline void Qspi_Ip_Sfp_SetFradMd1Acp
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] Valid value to be written into VLD bit
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradValid
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    boolean Valid)
+static inline void Qspi_Ip_Sfp_SetFradValid(QuadSPI_Type * BaseAddr,
+                                            uint8 FradInstance,
+                                            boolean Valid
+                                           )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1769,11 +1782,10 @@ static inline void Qspi_Ip_Sfp_SetFradValid
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] Lock value to be written into LOCK field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradLock
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    uint8 Lock)
+static inline void Qspi_Ip_Sfp_SetFradLock(QuadSPI_Type * BaseAddr,
+                                           uint8 FradInstance,
+                                           uint8 Lock
+                                          )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1794,11 +1806,10 @@ static inline void Qspi_Ip_Sfp_SetFradLock
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] EaOwner value to be written into EALO field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradEaOwner
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    uint8 EaOwner)
+static inline void Qspi_Ip_Sfp_SetFradEaOwner(QuadSPI_Type * BaseAddr,
+                                              uint8 FradInstance,
+                                              uint8 EaOwner
+                                             )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1819,11 +1830,10 @@ static inline void Qspi_Ip_Sfp_SetFradEaOwner
  * @param[in] FradInstance index of the FRAD descriptor to be configured
  * @param[in] EaLock value to be written into EAL field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetFradEaLock
-(
-    QuadSPI_Type * BaseAddr,
-    uint8 FradInstance,
-    Qspi_Ip_SfpEalType EaLock)
+static inline void Qspi_Ip_Sfp_SetFradEaLock(QuadSPI_Type * BaseAddr,
+                                             uint8 FradInstance,
+                                             Qspi_Ip_SfpEalType EaLock
+                                            )
 {
     if (FradInstance < QuadSPI_FRAD_COUNT)
     {
@@ -1845,10 +1855,9 @@ static inline void Qspi_Ip_Sfp_SetFradEaLock
  *
  * @return the value read from the EAL field
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline uint8 Qspi_Ip_Sfp_FradEaLock
-(
-    QuadSPI_Type const * BaseAddr,
-    uint8 FradInstance)
+static inline uint8 Qspi_Ip_Sfp_FradEaLock(QuadSPI_Type const * BaseAddr,
+                                           uint8 FradInstance
+                                          )
 {
     uint32 RegValue = 0U;
     if (FradInstance < QuadSPI_FRAD_COUNT)
@@ -1869,10 +1878,9 @@ static inline uint8 Qspi_Ip_Sfp_FradEaLock
  * @param[in] BaseAddr base address of the given QuadSPI instance
  * @param[in] Timeout timeout value to be programmed into the register
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static inline void Qspi_Ip_Sfp_SetMasterTimeout
-(
-    QuadSPI_Type * BaseAddr,
-    uint32 Timeout)
+static inline void Qspi_Ip_Sfp_SetMasterTimeout(QuadSPI_Type * BaseAddr,
+                                                uint32 Timeout
+                                               )
 {
     BaseAddr->MTO = Timeout;
 }

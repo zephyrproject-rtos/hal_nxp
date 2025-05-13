@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -30,7 +30,7 @@ extern "C"{
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION_HEADERWRAPPER_S32XX    0
 #define ADC_SAR_IP_SW_MAJOR_VERSION_HEADERWRAPPER_S32XX               2
 #define ADC_SAR_IP_SW_MINOR_VERSION_HEADERWRAPPER_S32XX               0
-#define ADC_SAR_IP_SW_PATCH_VERSION_HEADERWRAPPER_S32XX               0
+#define ADC_SAR_IP_SW_PATCH_VERSION_HEADERWRAPPER_S32XX               1
 
 /*==================================================================================================
 *                                     DEFINITIONS
@@ -86,50 +86,50 @@ extern "C"{
 #define ADC_SAR_IP_ABORTCHAIN_WORKAROUND                 (1U)
 
 #if (ADC_SAR_IP_INSTANCE_COUNT == 2U)
-                                      /* 31-28   3-0  63-60  35-32 95-92  67-64
-                                          \_/    \_/   \_/    \_/   \_/    \_/
-                                           |......|     |......|     |......| */
-#define FEATURE_ADC_CHN_AVAIL_BITMAP   {{0x000000FFU, 0x00000079U}, /* 0 */ \
-                                        {0x000000FFU, 0x00000079U}, /* 1 */ \
-                                       }
-                                      /* Adc Channels are divided into 2 Groups. */
-                                      /* This array shows max number of channels of each group. */
-                                      /* There are some registers that relate to this one: CEOCFR, CIMR, DMAR, PSR, NCMR, JCMR,... */
-                                      /* Should be same with ADC_CDRx_COUNT in header file (from Base) */
-#define FEATURE_ADC_MAX_CHN_COUNT      {{8U, 8U}, /* 0 */ \
-                                        {8U, 8U}, /* 1 */ \
-                                       }
-                                       /* Number of group channels of each unit*/
-                                       /* Unit 0 / 1 */
-#define FEATURE_ADC_MAX_GROUP_COUNT    { 2U, 2U }
-                                      /* Bit0: DSDR is available
-                                         Bit1: PSCR is available
-                                         Bit2: CTU is available
-                                         Bit3: CTU trigger mode is available */
-#define FEATURE_ADC_FEAT_AVAIL_BITMAP   {0x0000000EU, /* 0 */ \
-                                         0x0000000EU, /* 1 */ \
-                                        }
-#else
-                                      /* 31-28   3-0  63-60  35-32 95-92  67-64
-                                          \_/    \_/   \_/    \_/   \_/    \_/
-                                           |......|     |......|     |......| */
-#define FEATURE_ADC_CHN_AVAIL_BITMAP   {{0x000000FFU, 0x00000079U}, /* 0 */ \
-                                       }
-                                      /* Adc Channels are divided into 2 Groups. */
-                                      /* This array shows max number of channels of each group. */
-                                      /* There are some registers that relate to this one: CEOCFR, CIMR, DMAR, PSR, NCMR, JCMR,... */
-                                      /* Should be same with ADC_CDRx_COUNT in header file (from Base) */
-#define FEATURE_ADC_MAX_CHN_COUNT      {{8U, 8U}, /* 0 */ \
-                                       }
-                                       /* Number of group channels of each unit*/
-                                       /* Unit 0 */
-#define FEATURE_ADC_MAX_GROUP_COUNT    { 2U }
-                                      /* Bit0: DSDR is available
+                                     /* 31-28   3-0  63-60  35-32 95-92  67-64
+                                         \_/    \_/   \_/    \_/   \_/    \_/
+                                          |......|     |......|     |......| */
+#define ADC_SAR_IP_CHN_AVAIL_BITMAP   {{0x000000FFU, 0x00000079U}, /* 0 */ \
+                                       {0x000000FFU, 0x00000079U}, /* 1 */ \
+                                      }
+                                     /* Adc Channels are divided into 2 Groups. */
+                                     /* This array shows max number of channels of each group. */
+                                     /* There are some registers that relate to this one: CEOCFR, CIMR, DMAR, PSR, NCMR, JCMR,... */
+                                     /* Should be same with ADC_CDRx_COUNT in header file (from Base) */
+#define ADC_SAR_IP_MAX_CHN_COUNT      {{8U, 8U}, /* 0 */ \
+                                       {8U, 8U}, /* 1 */ \
+                                      }
+                                     /* Number of group channels of each unit*/
+                                     /* Unit 0 / 1 */
+#define ADC_SAR_IP_MAX_GROUP_COUNT    { 2U, 2U }
+                                     /* Bit0: DSDR is available
                                         Bit1: PSCR is available
                                         Bit2: CTU is available
                                         Bit3: CTU trigger mode is available */
-#define FEATURE_ADC_FEAT_AVAIL_BITMAP   {0x0000000EU, /* 0 */ \
-                                        }
+#define ADC_SAR_IP_FEAT_AVAIL_BITMAP   {0x0000000EU, /* 0 */ \
+                                        0x0000000EU, /* 1 */ \
+                                       }
+#else
+                                     /* 31-28   3-0  63-60  35-32 95-92  67-64
+                                         \_/    \_/   \_/    \_/   \_/    \_/
+                                          |......|     |......|     |......| */
+#define ADC_SAR_IP_CHN_AVAIL_BITMAP   {{0x000000FFU, 0x00000079U}, /* 0 */ \
+                                      }
+                                     /* Adc Channels are divided into 2 Groups. */
+                                     /* This array shows max number of channels of each group. */
+                                     /* There are some registers that relate to this one: CEOCFR, CIMR, DMAR, PSR, NCMR, JCMR,... */
+                                     /* Should be same with ADC_CDRx_COUNT in header file (from Base) */
+#define ADC_SAR_IP_MAX_CHN_COUNT      {{8U, 8U}, /* 0 */ \
+                                      }
+                                     /* Number of group channels of each unit*/
+                                     /* Unit 0 */
+#define ADC_SAR_IP_MAX_GROUP_COUNT    { 2U }
+                                     /* Bit0: DSDR is available
+                                       Bit1: PSCR is available
+                                       Bit2: CTU is available
+                                       Bit3: CTU trigger mode is available */
+#define ADC_SAR_IP_FEAT_AVAIL_BITMAP   {0x0000000EU, /* 0 */ \
+                                       }
 #endif /* (ADC_SAR_IP_INSTANCE_COUNT == 2U) */
 
 /* Register access defines */

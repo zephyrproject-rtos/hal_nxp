@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,7 +7,7 @@
 /**
 *   @file    Emios_Mcl_Ip.c
 *
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Mcl - Emios Common driver source file.
 *   @details
@@ -37,7 +37,7 @@ extern "C"{
 #define EMIOS_MCL_IP_AR_RELEASE_REVISION_VERSION_C     0
 #define EMIOS_MCL_IP_SW_MAJOR_VERSION_C                2
 #define EMIOS_MCL_IP_SW_MINOR_VERSION_C                0
-#define EMIOS_MCL_IP_SW_PATCH_VERSION_C                0
+#define EMIOS_MCL_IP_SW_PATCH_VERSION_C                1
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
 ==================================================================================================*/
@@ -76,7 +76,7 @@ extern "C"{
 #define MCL_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
 
-eMIOS_Type *const Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
+eMIOS_Type* Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
 
 #define MCL_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
@@ -99,7 +99,7 @@ eMIOS_Type *const Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
     #define MCL_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
     #include "Mcl_MemMap.h"
 
-    VAR_SEC_NOCACHE(Emios_Ip_axIpIsInitialized) static Emios_Ip_InstStateType Emios_Ip_axIpIsInitialized[eMIOS_INSTANCE_COUNT];
+    static Emios_Ip_InstStateType Emios_Ip_axIpIsInitialized[eMIOS_INSTANCE_COUNT];
 
     #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
     #include "Mcl_MemMap.h"
@@ -110,7 +110,7 @@ eMIOS_Type *const Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
 #define MCL_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
 
-VAR_SEC_NOCACHE(Emios_Ip_axChState) static Emios_Ip_ChStateType Emios_Ip_axChState[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC_COUNT];
+static Emios_Ip_ChStateType Emios_Ip_axChState[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC_COUNT];
 
 #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"

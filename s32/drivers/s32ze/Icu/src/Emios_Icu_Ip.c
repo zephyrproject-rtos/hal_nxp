@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -27,18 +27,11 @@ extern "C"{
     #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
         #include "Devassert.h"
     #endif
-    
-    #if (defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT))
-        #if (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT)
-            #define USER_MODE_REG_PROT_ENABLED  (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT)
-            #include "RegLockMacros.h"
-        #endif
-    #endif /* defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT) */
 
     #if ((STD_ON == EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA_IPL) || (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL))
         #include "Dma_Ip.h"
     #endif
-    
+
 #endif  /* EMIOS_ICU_IP_USED */
 /*==================================================================================================
 *                                        SOURCE FILE VERSION INFORMATION
@@ -49,23 +42,13 @@ extern "C"{
 #define EMIOS_ICU_IP_AR_RELEASE_REVISION_VERSION_C     0
 #define EMIOS_ICU_IP_SW_MAJOR_VERSION_C                2
 #define EMIOS_ICU_IP_SW_MINOR_VERSION_C                0
-#define EMIOS_ICU_IP_SW_PATCH_VERSION_C                0
+#define EMIOS_ICU_IP_SW_PATCH_VERSION_C                1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if (STD_ON == EMIOS_ICU_IP_USED)
-        #if (defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT))
-            #if (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT)
-                /* Check if the files Emios_Icu_Ip.c and RegLockMacros.h are of the same version */
-                #if ((EMIOS_ICU_IP_AR_RELEASE_MAJOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION) || \
-                    (EMIOS_ICU_IP_AR_RELEASE_MINOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MINOR_VERSION))
-                    #error "AutoSar Version Numbers of Emios_Icu_Ip.c and RegLockMacros.h are different"
-                #endif
-            #endif
-        #endif /* defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT) */
-
         #if ((STD_ON == EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA_IPL) || (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL))
             /* Check if header file and Dma_Ip.h file are of the same Autosar version */
             #if ((EMIOS_ICU_IP_AR_RELEASE_MAJOR_VERSION_C != DMA_IP_AR_RELEASE_MAJOR_VERSION) || \
@@ -74,10 +57,10 @@ extern "C"{
             #endif
         #endif
     #endif  /* EMIOS_ICU_IP_USED */
-    
-    /* Check if this header file and SchM_Icu.h file are of the same Autosar version */
-    #if ((EMIOS_ICU_IP_AR_RELEASE_MAJOR_VERSION != SCHM_ICU_AR_RELEASE_MAJOR_VERSION) || \
-        (EMIOS_ICU_IP_AR_RELEASE_MINOR_VERSION != SCHM_ICU_AR_RELEASE_MINOR_VERSION))
+
+    /* Check if this source file and SchM_Icu.h file are of the same Autosar version */
+    #if ((EMIOS_ICU_IP_AR_RELEASE_MAJOR_VERSION_C != SCHM_ICU_AR_RELEASE_MAJOR_VERSION) || \
+        (EMIOS_ICU_IP_AR_RELEASE_MINOR_VERSION_C != SCHM_ICU_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of Emios_Icu_Ip.c and SchM_Icu.h are different"
     #endif
 #endif
@@ -113,17 +96,8 @@ extern "C"{
 /*==================================================================================================
 *                                           LOCAL MACROS
 ==================================================================================================*/
-#if (STD_ON == EMIOS_ICU_IP_USED)
-    #if ((defined (MCAL_EMIOS_REG_PROT_AVAILABLE)) && (defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT)))
-        #if ((STD_ON == MCAL_EMIOS_REG_PROT_AVAILABLE) && (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT))
-            #define Call_Emios_Icu_Ip_SetUserAccessAllowed(BaseAddr) OsIf_Trusted_Call1param(Emios_Icu_Ip_SetUserAccessAllowed,(BaseAddr))
-        #else
-            #define Call_Emios_Icu_Ip_SetUserAccessAllowed(BaseAddr)
-        #endif
-    #else
-        #define Call_Emios_Icu_Ip_SetUserAccessAllowed(BaseAddr)
-    #endif
-#endif  /* EMIOS_ICU_IP_USED */
+
+
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
 ==================================================================================================*/
@@ -215,19 +189,19 @@ eMIOS_Type * const s_emiosBase[] = IP_eMIOS_BASE_PTRS;
 
 #if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
 eMios_Icu_Ip_MeasStatusType eMios_Icu_Ip_aeInt_Counter[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
-eMios_Icu_ValueType eMios_Icu_Ip_CapturedActivePulseWidth[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
-eMios_Icu_ValueType eMios_Icu_Ip_TimeStart[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+eMios_Icu_ValueType eMios_Icu_Ip_auCapturedActivePulseWidth[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+eMios_Icu_ValueType eMios_Icu_Ip_auTimeStart[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
 #endif /* EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON */
 
 #if (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)
-eMios_Icu_ValueType eMios_Icu_Ip_BufferPtr[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+eMios_Icu_ValueType eMios_Icu_Ip_auBufferPtr[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
 #endif /* EMIOS_ICU_IP_TIMESTAMP_API == STD_ON */
 
-eMios_Icu_Ip_ChStateType eMios_Icu_Ip_ChState[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+eMios_Icu_Ip_ChStateType eMios_Icu_Ip_axChState[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
 
 #if (defined EMIOS_ICU_IP_WSC_SUPPORT)
     #if (EMIOS_ICU_IP_WSC_SUPPORT == STD_ON)
-eMios_Icu_Ip_WsChStateType eMios_Icu_Ip_WsChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_WSC_NUM_OF_CHANNELS];
+eMios_Icu_Ip_WsChStateType eMios_Icu_Ip_axWsChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_WSC_NUM_OF_CHANNELS];
     #endif
 #endif
 #if (EMIOS_ICU_IP_NO_CACHE_USED == STD_ON)
@@ -243,8 +217,8 @@ eMios_Icu_Ip_WsChStateType eMios_Icu_Ip_WsChState[EMIOS_ICU_IP_INSTANCE_COUNT][E
     #define ICU_START_SEC_VAR_INIT_8
 #endif
 #include "Icu_MemMap.h"
-/* This array stores the positions in the eMios_Icu_Ip_ChState array of the configured eMios channels. */
-uint8 eMios_Icu_Ip_IndexInChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_NUM_OF_CHANNELS] = EMIOS_ICU_IP_INITIAL_INDEX_OF_CHANNELS;
+/* This array stores the positions in the eMios_Icu_Ip_axChState array of the configured eMios channels. */
+uint8 eMios_Icu_Ip_u8IndexInChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_NUM_OF_CHANNELS] = EMIOS_ICU_IP_INITIAL_INDEX_OF_CHANNELS;
 #if (EMIOS_ICU_IP_NO_CACHE_USED == STD_ON)
     #define ICU_STOP_SEC_VAR_INIT_8_NO_CACHEABLE
 #else
@@ -257,10 +231,6 @@ uint8 eMios_Icu_Ip_IndexInChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_NUM_
 ==================================================================================================*/
 #define ICU_START_SEC_CODE
 #include "Icu_MemMap.h"
-
-#if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
-extern void Emios_Icu_Ip_SignalMeasurementHandler(const uint8 instance, const uint8 hwChannel, boolean bOverflow);
-#endif
 
 #if (EMIOS_ICU_IP_DUAL_CLOCK_MODE_API == STD_ON)
 /**
@@ -348,39 +318,12 @@ static inline uint8 Emios_Icu_Ip_GetMasterBus
     eMios_Icu_Ip_BusType u32Bus
 );
 
-#if (defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT))
-#if (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT)
-
-#if (defined(MCAL_EMIOS_REG_PROT_AVAILABLE))
-#if (STD_ON == MCAL_EMIOS_REG_PROT_AVAILABLE)
-/**
-* @brief        Enables EMIOS registers writing in User Mode by configuring REG_PROT
-* @details      Sets the UAA (User Access Allowed) bit of the EMIOS IP allowing EMIOS registers writing in User Mode
-*
-* @param[in]    EmiosBaseAddr
-*
-* @return       none
-*
-* @pre          Should be executed in supervisor mode
-* @post         none
-*
-*/
-void Emios_Icu_Ip_SetUserAccessAllowed(uint32 EmiosBaseAddr);
-#endif /* (STD_ON == MCAL_EMIOS_REG_PROT_AVAILABLE) */
-#endif /* (defined(MCAL_EMIOS_REG_PROT_AVAILABLE)) */
-
-#endif /* (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT) */
-#endif /* defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT) */
-
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
-static inline void Emios_Icu_Ip_UCSetMode
-(
-    const uint8 instance,
-    const uint8 hwChannel,
-    const uint32 u32Mode
-)
+static inline void Emios_Icu_Ip_UCSetMode(const uint8 instance,
+                                          const uint8 hwChannel,
+                                          const uint32 u32Mode)
 {
     SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_48();
     /* Clear MODE bitfield - GPIO mode */
@@ -390,11 +333,8 @@ static inline void Emios_Icu_Ip_UCSetMode
     SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_48();
 }
 
-static inline uint8 Emios_Icu_Ip_GetMasterBus
-(
-    uint8 hwChannel,
-    eMios_Icu_Ip_BusType u32Bus
-)
+static inline uint8 Emios_Icu_Ip_GetMasterBus(uint8 hwChannel,
+                                              eMios_Icu_Ip_BusType u32Bus)
 {
     uint8 u8MasterBusChannelIdx = (uint8)0U;
 
@@ -412,8 +352,9 @@ static inline uint8 Emios_Icu_Ip_GetMasterBus
         {
             u8MasterBusChannelIdx = EMIOS_ICU_IP_CHANNEL_16;
         }
-        else /* Bus E remaining */
+        else
         {
+            /* Bus E remaining */
             u8MasterBusChannelIdx = EMIOS_ICU_IP_CHANNEL_24;
         }
     }
@@ -421,24 +362,18 @@ static inline uint8 Emios_Icu_Ip_GetMasterBus
     {
         u8MasterBusChannelIdx = EMIOS_ICU_IP_CHANNEL_23;
     }
-    else if (EMIOS_ICU_BUS_F == u32Bus) /* bus F remaining */
-    {
-        u8MasterBusChannelIdx = EMIOS_ICU_IP_CHANNEL_22;
-    }
     else
     {
         /*Empty else to fix misra*/
     }
+
     return u8MasterBusChannelIdx;
 }
 
 #if (EMIOS_ICU_IP_DUAL_CLOCK_MODE_API == STD_ON)
-static inline void Emios_Icu_Ip_SetPrescaler
-(
-    const uint8 instance,
-    const uint8 hwChannel,
-    const uint32 u32ChannelPrescaler
-)
+static inline void Emios_Icu_Ip_SetPrescaler(const uint8 instance,
+                                             const uint8 hwChannel,
+                                             const uint32 u32ChannelPrescaler)
 {
     SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_53();
 
@@ -457,17 +392,14 @@ static inline void Emios_Icu_Ip_SetPrescaler
 
 #if ((EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)||(EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)||(EMIOS_ICU_IP_EDGE_DETECT_API == STD_ON))
 #if (EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API == STD_ON)
-static inline void Emios_Icu_Ip_EnableMasterBusInterrupt
-(
-    const uint8 instance,
-    const uint8 hwChannel
-)
+static inline void Emios_Icu_Ip_EnableMasterBusInterrupt(const uint8 instance,
+                                                         const uint8 hwChannel)
 {
     uint8      nMasterBusHwChannel;
 
-    if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+    if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
     {
-        nMasterBusHwChannel = Emios_Icu_Ip_GetMasterBus(hwChannel, eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected);
+        nMasterBusHwChannel = Emios_Icu_Ip_GetMasterBus(hwChannel, eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected);
         if (nMasterBusHwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS)
         {
             if((uint8)0U == eMios_Icu_Ip_u8NumOvflByCounterBus[instance][nMasterBusHwChannel])
@@ -482,17 +414,14 @@ static inline void Emios_Icu_Ip_EnableMasterBusInterrupt
     }
 }
 
-static inline void Emios_Icu_Ip_DisableMasterBusInterrupt
-(
-    const uint8 instance,
-    const uint8 hwChannel
-)
+static inline void Emios_Icu_Ip_DisableMasterBusInterrupt(const uint8 instance,
+                                                          const uint8 hwChannel)
 {
     uint8      nMasterBusHwChannel;
 
-    if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+    if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
     {
-        nMasterBusHwChannel = Emios_Icu_Ip_GetMasterBus(hwChannel, eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected);
+        nMasterBusHwChannel = Emios_Icu_Ip_GetMasterBus(hwChannel, eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected);
         if (nMasterBusHwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS)
         {
             eMios_Icu_Ip_u8NumOvflByCounterBus[instance][nMasterBusHwChannel]--;
@@ -510,20 +439,6 @@ static inline void Emios_Icu_Ip_DisableMasterBusInterrupt
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-#if (defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT))
-#if (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT)
-    
-#if (defined(MCAL_EMIOS_REG_PROT_AVAILABLE))
-#if (STD_ON == MCAL_EMIOS_REG_PROT_AVAILABLE)
-void Emios_Icu_Ip_SetUserAccessAllowed(uint32 EmiosBaseAddr)
-{
-    SET_USER_ACCESS_ALLOWED(EmiosBaseAddr, EMIOS_PROT_MEM_U32);
-}
-#endif /* (STD_ON == MCAL_EMIOS_REG_PROT_AVAILABLE) */
-#endif /* (defined(MCAL_EMIOS_REG_PROT_AVAILABLE)) */
-
-#endif /* (STD_ON == EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT) */
-#endif /* defined (EMIOS_ICU_IP_ENABLE_USER_MODE_SUPPORT) */
 
 /** @implements Emios_Icu_Ip_EnableInterrupt_Activity */
 void Emios_Icu_Ip_EnableInterrupt(uint8 instance, uint8 hwChannel)
@@ -565,68 +480,66 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Init(uint8 instance, const eMios_Icu_Ip_Con
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(userConfig != NULL_PTR);
-#endif 
+#endif
     if (FALSE == eMios_Icu_Ip_bInstanceState[instance])
     {
         eMios_Icu_Ip_bInstanceState[instance] = TRUE;
-        
+
         if (userConfig->nNumChannels > 0U)
         {
             for (index=0U; index < EMIOS_ICU_IP_NUM_OF_CHANNELS; index++)
             {
-                if (eMios_Icu_Ip_IndexInChState[instance][index] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED)
-                {                
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][index]].channelsInitState = FALSE;
+                if (eMios_Icu_Ip_u8IndexInChState[instance][index] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED)
+                {
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][index]].channelsInitState = FALSE;
                 }
                 u8MasterBusMode[index] = EMIOS_ICU_IP_CB_NONE;
             }
-            /* Register Protection - Set UAA bit in GCR - allow USER MODE access */
-            Call_Emios_Icu_Ip_SetUserAccessAllowed((uint32)s_emiosBase[instance]);
-            
+
             for (index=0U; index < userConfig->nNumChannels; index++)
             {
                 hwChannel   = (*userConfig->pChannelsConfig)[index].hwChannel;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelsInitState = TRUE;
-                
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelsInitState = TRUE;
+
                 /* Initialize the state for calling user notification - can be HLD or IPL direct user notification */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMiosChannelNotification = (*userConfig->pChannelsConfig)[index].eMiosChannelNotification;
-                
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMiosChannelNotification = (*userConfig->pChannelsConfig)[index].eMiosChannelNotification;
+
                 /* Take HLD callback pointer and logic channel and store them in state configuration. */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMiosOverflowNotification = (*userConfig->pChannelsConfig)[index].eMiosOverflowNotification;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].callback      = (*userConfig->pChannelsConfig)[index].callback;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].logicChStateCallback = (*userConfig->pChannelsConfig)[index].logicChStateCallback;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].callbackParam = (*userConfig->pChannelsConfig)[index].callbackParams;
-                
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMiosOverflowNotification = (*userConfig->pChannelsConfig)[index].eMiosOverflowNotification;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].callback      = (*userConfig->pChannelsConfig)[index].callback;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].logicChStateCallback = (*userConfig->pChannelsConfig)[index].logicChStateCallback;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].callbackParam = (*userConfig->pChannelsConfig)[index].callbackParams;
+
                 /* Set the event which will generate the interrupt */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].edgeTrigger   = (*userConfig->pChannelsConfig)[index].edgeAlignement;
-            
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].edgeTrigger   = (*userConfig->pChannelsConfig)[index].edgeAlignement;
+
                 /* Clear channel config for hwChannel */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
 #if (defined(EMIOS_ICU_IP_EDGE_COUNT_API) && (STD_ON == EMIOS_ICU_IP_EDGE_COUNT_API))
 #if (STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER)
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].maxCounterValue = EMIOS_ICU_IP_INIT_CADR_U32;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].maxCounterValue = EMIOS_ICU_IP_INIT_CADR_U32;
 #endif  /* STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER */
 #endif /* (defined(EMIOS_ICU_IP_EDGE_COUNT_API) && (STD_ON == EMIOS_ICU_IP_EDGE_COUNT_API)) */
 
 #if (STD_ON == EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API)
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement = EMIOS_ICU_NO_MEASUREMENT;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod = (uint16)0U;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (uint16)0U;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement = EMIOS_ICU_NO_MEASUREMENT;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod = (uint16)0U;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (uint16)0U;
 #endif
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_API)
     #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
                 /* Reset aBufferPtr */
-                eMios_Icu_Ip_BufferPtr[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = 0U;
+                eMios_Icu_Ip_auBufferPtr[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = 0U;
     #endif /* (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL) */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer = NULL_PTR;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferSize = (uint16)0U;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferNotify = (uint16)0U;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aNotifyCount = (uint16)0U;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex = (uint16)0U;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].timestampBufferType = (*userConfig->pChannelsConfig)[index].timestampBufferType;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer = NULL_PTR;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferSize = (uint16)0U;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferNotify = (uint16)0U;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aNotifyCount = (uint16)0U;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex = (uint16)0U;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].timestampBufferType = (*userConfig->pChannelsConfig)[index].timestampBufferType;
 #endif /* (STD_ON == EMIOS_ICU_IP_TIMESTAMP_API) */
 #if ((STD_ON == EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA_IPL) || (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL))
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel =  (*userConfig->pChannelsConfig)[index].dmaChannel;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel =  (*userConfig->pChannelsConfig)[index].dmaChannel;
 #endif
 
 #if (STD_ON == EMIOS_ICU_USES_MCL_DRIVER)
@@ -637,48 +550,49 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Init(uint8 instance, const eMios_Icu_Ip_Con
                 /* Enter GPIO Mode to Configure Channel */
                 /* Reset mode for selected channel */
                 s_emiosBase[instance]->CH.UC[hwChannel].C = EMIOS_ICU_IP_CCR_CLEAR_U32;
-                
-                /* Initialize channel filter, freeze enable, and bus select and disable the
+
+                /* Initialize channel filter, filter clock selection, freeze enable and bus select and disable the
                 * Set Default Edge (included)
                 */
-                u32RegCCR = eMIOS_C_UCPREN_MASK | eMIOS_C_FCK_MASK;
+                u32RegCCR = eMIOS_C_UCPREN_MASK;
                 u32RegCCR |= eMIOS_C_FREN(((*userConfig->pChannelsConfig)[index].FreezeEn)?1U:0U);
                 u32RegCCR |= eMIOS_C_IF((*userConfig->pChannelsConfig)[index].Filter);
+                u32RegCCR |= eMIOS_C_FCK(((*userConfig->pChannelsConfig)[index].filterClock)?1U:0U);
                 u32RegCCR |= eMIOS_C_BSL((*userConfig->pChannelsConfig)[index].CntBus);
-                
+
                 s_emiosBase[instance]->CH.UC[hwChannel].C |= u32RegCCR;
-                
+
                 /* Initialize prescaler value */
                 s_emiosBase[instance]->CH.UC[hwChannel].C2 &= ~eMIOS_C2_UCEXTPRE_MASK;
                 s_emiosBase[instance]->CH.UC[hwChannel].C2 |= eMIOS_C2_UCEXTPRE((*userConfig->pChannelsConfig)[index].Prescaler);
-                
+
                 /* Disable interrupt */
                 Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
-                
+
                 /* Clear pending interrupt flag (and other flags) for the channel */
                 s_emiosBase[instance]->CH.UC[hwChannel].S |= (eMIOS_S_OVR_MASK | eMIOS_S_OVFL_MASK | eMIOS_S_FLAG_MASK);
-                
-                Emios_Icu_Ip_SetActivation( instance, hwChannel, eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].edgeTrigger);
-                
+
+                Emios_Icu_Ip_SetActivation( instance, hwChannel, eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].edgeTrigger);
+
                 /* Set Configuration for hwChannel */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaMode = (*userConfig->pChannelsConfig)[index].chSubMode;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].operationMode = (*userConfig->pChannelsConfig)[index].ucMode;
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].msWithoutInterrupt = (*userConfig->pChannelsConfig)[index].bWithoutInterrupt;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaMode = (*userConfig->pChannelsConfig)[index].chSubMode;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].operationMode = (*userConfig->pChannelsConfig)[index].ucMode;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].msWithoutInterrupt = (*userConfig->pChannelsConfig)[index].bWithoutInterrupt;
         #if (STD_ON == EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API)
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement = (*userConfig->pChannelsConfig)[index].measurementMode;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement = (*userConfig->pChannelsConfig)[index].measurementMode;
         #endif
                 /* Store bus select of hwChannel */
-                eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected = (*userConfig->pChannelsConfig)[index].CntBus;
+                eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected = (*userConfig->pChannelsConfig)[index].CntBus;
 
-                if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+                if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
                 {
-                    u8MasterBusChannelIdx = (uint8)Emios_Icu_Ip_GetMasterBus(hwChannel, eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected);
+                    u8MasterBusChannelIdx = (uint8)Emios_Icu_Ip_GetMasterBus(hwChannel, eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected);
                     if(EMIOS_ICU_IP_CB_NONE == u8MasterBusMode[u8MasterBusChannelIdx]) /* This master bus have not been configured*/
                     {
                         /* store master bus mode and master bus pre-scaler*/
                         u8MasterBusMode[u8MasterBusChannelIdx] = (uint8)EMIOS_ICU_IP_MCB_INT_CLOCK_U32;
-                        eMios_Icu_Ip_IndexInChState[instance][u8MasterBusChannelIdx] = EMIOS_ICU_IP_MASTERBUS_CHANNEL_USED;
-#if (STD_ON == EMIOS_ICU_USES_MCL_DRIVER) 
+                        eMios_Icu_Ip_u8IndexInChState[instance][u8MasterBusChannelIdx] = EMIOS_ICU_IP_MASTERBUS_CHANNEL_USED;
+#if (STD_ON == EMIOS_ICU_USES_MCL_DRIVER)
                         /* Enable EMIOS Channel to make registers write-able. */
                         Emios_Mcl_Ip_EnableChannel(instance, hwChannel);
 #endif
@@ -710,7 +624,7 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Init(uint8 instance, const eMios_Icu_Ip_Con
 
                 /* Disable mode */
                 s_emiosBase[instance]->CH.WSC[hwChannel + EMIOS_ICU_IP_WSC_CHANNEL_OFFSET].WSC1 &= ~eMIOS_WSC1_MODE_MASK;
-                
+
                 wsRegisterValue = 0U;
                 wsInputFilter   = (uint32)(*userConfig->pWSChannelsConfig)[index].WscInputFilter;
                 wsRegisterValue |= eMIOS_WSC1_FREN((*userConfig->pWSChannelsConfig)[index].FreezeEn  ? 1U : 0U);
@@ -736,13 +650,13 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Init(uint8 instance, const eMios_Icu_Ip_Con
 
                 /* Set mode */
                 s_emiosBase[instance]->CH.WSC[hwChannel + EMIOS_ICU_IP_WSC_CHANNEL_OFFSET].WSC1 |= eMIOS_WSC1_MODE((*userConfig->pWSChannelsConfig)[index].WsChannelMode);
-                
-                eMios_Icu_Ip_WsChState[instance][hwChannel].WsCAPNotification = (*userConfig->pWSChannelsConfig)[index].WsCAPNotification;
-                eMios_Icu_Ip_WsChState[instance][hwChannel].WsCENotification = (*userConfig->pWSChannelsConfig)[index].WsCENotification;
-                eMios_Icu_Ip_WsChState[instance][hwChannel].WsCEONotification = (*userConfig->pWSChannelsConfig)[index].WsCEONotification;
-                eMios_Icu_Ip_WsChState[instance][hwChannel].WsPWONotification = (*userConfig->pWSChannelsConfig)[index].WsPWONotification;
-                eMios_Icu_Ip_WsChState[instance][hwChannel].WsPWNotification = (*userConfig->pWSChannelsConfig)[index].WsPWNotification;
-                eMios_Icu_Ip_WsChState[instance][hwChannel].EnableInterruptStatus = 0U;
+
+                eMios_Icu_Ip_axWsChState[instance][hwChannel].WsCAPNotification = (*userConfig->pWSChannelsConfig)[index].WsCAPNotification;
+                eMios_Icu_Ip_axWsChState[instance][hwChannel].WsCENotification = (*userConfig->pWSChannelsConfig)[index].WsCENotification;
+                eMios_Icu_Ip_axWsChState[instance][hwChannel].WsCEONotification = (*userConfig->pWSChannelsConfig)[index].WsCEONotification;
+                eMios_Icu_Ip_axWsChState[instance][hwChannel].WsPWONotification = (*userConfig->pWSChannelsConfig)[index].WsPWONotification;
+                eMios_Icu_Ip_axWsChState[instance][hwChannel].WsPWNotification = (*userConfig->pWSChannelsConfig)[index].WsPWNotification;
+                eMios_Icu_Ip_axWsChState[instance][hwChannel].EnableInterruptStatus = 0U;
             }
         }
     #endif /* EMIOS_ICU_IP_WSC_SUPPORT */
@@ -762,31 +676,31 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance)
 {
     eMios_Icu_Ip_ModeType       nMeasMode;
     uint8                       hwChannel;
-    
+
     eMios_Icu_Ip_StatusType     retStatus   = EMIOS_IP_STATUS_SUCCESS;
 
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
-#endif 
+#endif
 
     if (TRUE == eMios_Icu_Ip_bInstanceState[instance])
     {
         eMios_Icu_Ip_bInstanceState[instance] = FALSE;
-        
+
         for (hwChannel = 0U; hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS; hwChannel++)
         {
-            if (eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED)
+            if (eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED)
             {
-                if (TRUE == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelsInitState)
+                if (TRUE == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelsInitState)
                 {
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelsInitState = FALSE;
-                    
-                    nMeasMode = eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode;
-        
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelsInitState = FALSE;
+
+                    nMeasMode = eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode;
+
                     /* Set all channel registers as after reset */
                     s_emiosBase[instance]->CH.UC[hwChannel].C = EMIOS_ICU_IP_CCR_CLEAR_U32;
                     s_emiosBase[instance]->CH.UC[hwChannel].A = EMIOS_ICU_IP_CCR_CLEAR_U32;
-    
+
                     switch (nMeasMode)
                     {
                         case EMIOS_ICU_MODE_SIGNAL_MEASUREMENT:
@@ -794,13 +708,13 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance)
                             s_emiosBase[instance]->CH.UC[hwChannel].B = EMIOS_ICU_IP_CCR_CLEAR_U32;
                         }
                         break;
-        
+
                         case EMIOS_ICU_MODE_EDGE_COUNTER:
                         {
                             s_emiosBase[instance]->CH.UC[hwChannel].CNT = EMIOS_ICU_IP_CCR_CLEAR_U32;
                         }
                         break;
-        
+
                         default:
                         {
                             /*For Misra Compliance*/
@@ -812,11 +726,11 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance)
 
 #if (EMIOS_ICU_IP_EDGE_COUNT_API == STD_ON)
                     /* Clear all aEdgeCurrent_Value */
-                    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = (uint32)(0x0U);
+                    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = (uint32)(0x0U);
 #endif /* EMIOS_ICU_IP_EDGE_COUNT_API == STD_ON */
 
                     /* if channel using master bus, so de-init for master bus */
-                    if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+                    if (EMIOS_ICU_BUS_INTERNAL_COUNTER != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
                     {
 #if (STD_ON == EMIOS_ICU_USES_MCL_DRIVER)
                         /* Disable eMIOS Channel */
@@ -824,20 +738,20 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance)
 #endif
                     }
                     /* Clear config for hardware channel */
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].operationMode = EMIOS_ICU_UNINIT;
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected   = EMIOS_ICU_BUS_INTERNAL_COUNTER;
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode   = EMIOS_ICU_MODE_NO_MEASUREMENT;
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].operationMode = EMIOS_ICU_UNINIT;
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected   = EMIOS_ICU_BUS_INTERNAL_COUNTER;
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode   = EMIOS_ICU_MODE_NO_MEASUREMENT;
 #if (STD_ON == EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API)
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement   = EMIOS_ICU_NO_MEASUREMENT;
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement   = EMIOS_ICU_NO_MEASUREMENT;
 #endif
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_API)
-                    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].timestampBufferType = EMIOS_ICU_NO_TIMESTAMP;
+                    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].timestampBufferType = EMIOS_ICU_NO_TIMESTAMP;
 #endif
                 }
             }
-            if (EMIOS_ICU_IP_MASTERBUS_CHANNEL_USED == eMios_Icu_Ip_IndexInChState[instance][hwChannel])
+            if (EMIOS_ICU_IP_MASTERBUS_CHANNEL_USED == eMios_Icu_Ip_u8IndexInChState[instance][hwChannel])
             {
-                eMios_Icu_Ip_IndexInChState[instance][hwChannel] = EMIOS_ICU_IP_CHANNEL_NOT_USED;
+                eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] = EMIOS_ICU_IP_CHANNEL_NOT_USED;
             }
         }
 #if (defined EMIOS_ICU_IP_WSC_SUPPORT)
@@ -863,8 +777,8 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance)
             s_emiosBase[instance]->CH.WSC[hwChannel + EMIOS_ICU_IP_WSC_CHANNEL_OFFSET].WSS |= (eMIOS_WSS_FLAGCEC(1U) | eMIOS_WSS_FLAGECOC(1U) | eMIOS_WSS_FLAGPWC(1U) | eMIOS_WSS_FLAGCAPC(1U) | eMIOS_WSS_FLAGPWOC(1U) | eMIOS_WSS_FLAGFFC(1U));
             /* Clear all Overrun flags.*/
             s_emiosBase[instance]->CH.WSC[hwChannel + EMIOS_ICU_IP_WSC_CHANNEL_OFFSET].WSS |= (eMIOS_WSS_OVRCEC(1U) | eMIOS_WSS_OVRECOC(1U) | eMIOS_WSS_OVRPWC(1U) | eMIOS_WSS_OVRCAPC(1U) | eMIOS_WSS_OVRPWOC(1U));
-            
-            eMios_Icu_Ip_WsChState[instance][hwChannel].EnableInterruptStatus = 0U;
+
+            eMios_Icu_Ip_axWsChState[instance][hwChannel].EnableInterruptStatus = 0U;
         }
     #endif /* EMIOS_ICU_IP_WSC_SUPPORT */
 #endif /* defined EMIOS_ICU_IP_WSC_SUPPORT */
@@ -878,30 +792,6 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance)
 }
 #endif
 
-#if (EMIOS_ICU_IP_SET_MODE_API == STD_ON)
-void Emios_Icu_Ip_SetSleepMode(uint8 instance, uint8 hwChannel)
-{
-#if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
-    DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
-    DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
-    /* Stop eMIOS channel */
-    Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
-}
-
-void Emios_Icu_Ip_SetNormalMode(uint8 instance, uint8 hwChannel)
-{
-#if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
-    DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
-    DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif
-
-    /* Enable interrupt */
-    Emios_Icu_Ip_EnableInterrupt(instance, hwChannel);
-}
-#endif  /* EMIOS_ICU_IP_SET_MODE_API */
-
 /* @implements Emios_Icu_Ip_SetActivation_Activity */
 void Emios_Icu_Ip_SetActivation(uint8 instance, uint8 hwChannel, eMios_Icu_Ip_EdgeType edge)
 {
@@ -912,7 +802,7 @@ void Emios_Icu_Ip_SetActivation(uint8 instance, uint8 hwChannel, eMios_Icu_Ip_Ed
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_50();
     switch (edge)
     {
@@ -956,19 +846,24 @@ void Emios_Icu_Ip_EnableEdgeDetection(uint8 instance, uint8 hwChannel)
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
     /* Enter GPIO Mode */
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_GPI_U32);
 
+#if (EMIOS_ICU_IP_SAIC_EDGE_CAPTURING_SUPPORT == STD_ON)
+    /* Enable SAIC with edge capturing mode */
+    Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_SAIC_EDGE_CAPTURING_U32);
+#else
     /* Enable SAIC mode */
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_SAIC_U32);
+#endif
 
     /* Enable Interrupt */
     Emios_Icu_Ip_EnableInterrupt(instance, hwChannel);
 
     /* Set Channel Config */
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_SIGNAL_EDGE_DETECT;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_SIGNAL_EDGE_DETECT;
 
 #if (EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API == STD_ON)
     /* Enable Interrupt for masterbus*/
@@ -983,8 +878,8 @@ void Emios_Icu_Ip_DisableEdgeDetection(uint8 instance, uint8 hwChannel)
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
     /* Disable interrupt */
     Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
 
@@ -992,7 +887,7 @@ void Emios_Icu_Ip_DisableEdgeDetection(uint8 instance, uint8 hwChannel)
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_GPI_U32);
 
     /* Clear Channel Config */
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
 
 #if (EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API == STD_ON)
     /* Disable Interrupt for masterbus*/
@@ -1007,10 +902,10 @@ void Emios_Icu_Ip_EnableNotification(uint8 instance, uint8 hwChannel)
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
 
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].notificationEnable =  TRUE;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].notificationEnable =  TRUE;
 }
 
 /* @implements Emios_Icu_Ip_DisableNotification_Activity */
@@ -1019,22 +914,20 @@ void Emios_Icu_Ip_DisableNotification(uint8 instance, uint8 hwChannel)
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
 
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].notificationEnable =  FALSE;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].notificationEnable =  FALSE;
 }
 
 #if (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)
 /* @implements Emios_Icu_Ip_StartTimestamp_Activity */
-void Emios_Icu_Ip_StartTimestamp
-(
-    uint8 instance,
-    uint8 hwChannel,
-    eMios_Icu_ValueType * bufferPtr,
-    uint16 bufferSize,
-    uint16 notifyInterval
-)
+void Emios_Icu_Ip_StartTimestamp(uint8 instance,
+                                 uint8 hwChannel,
+                                 eMios_Icu_ValueType * bufferPtr,
+                                 uint16 bufferSize,
+                                 uint16 notifyInterval
+                                )
 {
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
         Dma_Ip_LogicChannelTransferListType global_DmaChannelTransferList[11U];
@@ -1043,22 +936,22 @@ void Emios_Icu_Ip_StartTimestamp
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
     SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_51();
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer = bufferPtr;
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferSize = bufferSize;
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferNotify = notifyInterval;
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aNotifyCount = (uint16)0U;
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex = (uint16)0U;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer = bufferPtr;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferSize = bufferSize;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferNotify = notifyInterval;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aNotifyCount = (uint16)0U;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex = (uint16)0U;
     SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_51();
-    
+
     /* Reset aBufferPtr */
-    eMios_Icu_Ip_BufferPtr[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = 0U;
-    
+    eMios_Icu_Ip_auBufferPtr[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = 0U;
+
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
     /* Setup DMA in Dma_Ip*/
-    if (0xFFU != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel)
+    if (0xFFU != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel)
     {
         /* Create the desired configuration list. */
         global_DmaChannelTransferList[0U].Param = DMA_IP_CH_SET_SOURCE_ADDRESS;
@@ -1067,7 +960,7 @@ void Emios_Icu_Ip_StartTimestamp
          * The application should ensure that only addresses that fit in uint32 are used for configuring DMA. */
         global_DmaChannelTransferList[1U].Param = DMA_IP_CH_SET_DESTINATION_ADDRESS;
         global_DmaChannelTransferList[1U].Value = (uint32)bufferPtr;
-        global_DmaChannelTransferList[2U].Param = DMA_IP_CH_SET_DESTINATION_TRANSFER_SIZE; 
+        global_DmaChannelTransferList[2U].Param = DMA_IP_CH_SET_DESTINATION_TRANSFER_SIZE;
         global_DmaChannelTransferList[2U].Value = (uint32)DMA_IP_TRANSFER_SIZE_4_BYTE;
         global_DmaChannelTransferList[3U].Param = DMA_IP_CH_SET_SOURCE_TRANSFER_SIZE;
         global_DmaChannelTransferList[3U].Value = (uint32)DMA_IP_TRANSFER_SIZE_4_BYTE;
@@ -1079,14 +972,14 @@ void Emios_Icu_Ip_StartTimestamp
         global_DmaChannelTransferList[6U].Value = (uint32)0U;
         global_DmaChannelTransferList[7U].Param = DMA_IP_CH_SET_DESTINATION_MODULO;
         global_DmaChannelTransferList[7U].Value = (uint32)0U;
-        
+
         if ((notifyInterval >= bufferSize) || (notifyInterval == (uint16)0))
         {
             global_DmaChannelTransferList[8U].Param = DMA_IP_CH_SET_MINORLOOP_SIZE;
             global_DmaChannelTransferList[8U].Value = 4U;
             global_DmaChannelTransferList[9U].Param = DMA_IP_CH_SET_MAJORLOOP_COUNT;
             global_DmaChannelTransferList[9U].Value = bufferSize;
-            if ((uint8) EMIOS_ICU_CIRCULAR_BUFFER == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].timestampBufferType)
+            if ((uint8) EMIOS_ICU_CIRCULAR_BUFFER == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].timestampBufferType)
             {
                 global_DmaChannelTransferList[10U].Param = DMA_IP_CH_SET_DESTINATION_SIGNED_LAST_ADDR_ADJ;
                 global_DmaChannelTransferList[10U].Value = (uint32) (~(bufferSize * 4U)) + 1U;
@@ -1103,9 +996,9 @@ void Emios_Icu_Ip_StartTimestamp
             global_DmaChannelTransferList[8U].Value = 4U;
             global_DmaChannelTransferList[9U].Param = DMA_IP_CH_SET_MAJORLOOP_COUNT;
             global_DmaChannelTransferList[9U].Value = notifyInterval;
-            if ((uint8) EMIOS_ICU_CIRCULAR_BUFFER == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].timestampBufferType)
+            if ((uint8) EMIOS_ICU_CIRCULAR_BUFFER == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].timestampBufferType)
             {
-        
+
                 global_DmaChannelTransferList[10U].Param = DMA_IP_CH_SET_DESTINATION_SIGNED_LAST_ADDR_ADJ;
                 global_DmaChannelTransferList[10U].Value = (uint32)0U;
             }
@@ -1119,9 +1012,9 @@ void Emios_Icu_Ip_StartTimestamp
         {
             /* Nothing to be done */
         }
-        
-        Dma_Ip_SetLogicChannelTransferList(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, global_DmaChannelTransferList, (uint32)11U);
-        Dma_Ip_SetLogicChannelCommand(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_SET_HARDWARE_REQUEST);
+
+        Dma_Ip_SetLogicChannelTransferList(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, global_DmaChannelTransferList, (uint32)11U);
+        Dma_Ip_SetLogicChannelCommand(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_SET_HARDWARE_REQUEST);
     }
 #endif  /* (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL) */
 
@@ -1131,24 +1024,29 @@ void Emios_Icu_Ip_StartTimestamp
     /* Clear pending interrupts */
     s_emiosBase[instance]->CH.UC[hwChannel].S |= (eMIOS_S_OVR_MASK | eMIOS_S_OVFL_MASK | eMIOS_S_FLAG_MASK);
 
+#if (EMIOS_ICU_IP_SAIC_EDGE_CAPTURING_SUPPORT == STD_ON)
+    /* Enable SAIC with edge capturing mode */
+    Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_SAIC_EDGE_CAPTURING_U32);
+#else
     /* Enable SAIC mode */
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_SAIC_U32);
+#endif
 
-    if(EMIOS_ICU_MODE_WITH_DMA == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaMode)
+    if(EMIOS_ICU_MODE_WITH_DMA == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaMode)
     {
         SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_51();
         s_emiosBase[instance]->CH.UC[hwChannel].C |= (eMIOS_C_DMA_MASK);
         SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_51();
     }
 
-    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
     {
         /* Set Max. A value */
         s_emiosBase[instance]->CH.UC[hwChannel].A = EMIOS_ICU_IP_INIT_CADR_U32;
     }
 
     /* Set channel Config*/
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_TIMESTAMP;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_TIMESTAMP;
     /* Enable Interrupt */
     Emios_Icu_Ip_EnableInterrupt(instance, hwChannel);
 
@@ -1159,11 +1057,9 @@ void Emios_Icu_Ip_StartTimestamp
 }
 
 /* @implements Emios_Icu_Ip_GetTimestampIndex_Activity */
-uint16 Emios_Icu_Ip_GetTimestampIndex
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+uint16 Emios_Icu_Ip_GetTimestampIndex(uint8 instance,
+                                      uint8 hwChannel
+                                     )
 {
     uint16 timestampIndex = 0U;
 
@@ -1173,37 +1069,37 @@ uint16 Emios_Icu_Ip_GetTimestampIndex
     uint32* const   pStartIter = &startIter;
     uint32* const   pCrtIter = &crtIter;
 #endif
-    
+
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
 #endif
 
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
-    if (0xFFU != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel)
+    if (0xFFU != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel)
     {
-        if (NULL_PTR == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer)
+        if (NULL_PTR == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer)
         {
             timestampIndex = 0U;
         }
         else
         {
-            Dma_Ip_GetLogicChannelParam(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_GET_BEGIN_ITER_COUNT, pStartIter);
-            Dma_Ip_GetLogicChannelParam(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_GET_CURRENT_ITER_COUNT, pCrtIter);
+            Dma_Ip_GetLogicChannelParam(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_GET_BEGIN_ITER_COUNT, pStartIter);
+            Dma_Ip_GetLogicChannelParam(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_GET_CURRENT_ITER_COUNT, pCrtIter);
             crtIter = startIter - crtIter;
-            timestampIndex =  eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex + (uint16)crtIter;
+            timestampIndex =  eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex + (uint16)crtIter;
         }
     }
     else
     {
 #endif /* (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL) */
-        if (NULL_PTR == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer)
+        if (NULL_PTR == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBuffer)
         {
             timestampIndex = 0U;
         }
         else
         {
-            timestampIndex = eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex;
+            timestampIndex = eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aBufferIndex;
         }
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
     }
@@ -1218,15 +1114,15 @@ void Emios_Icu_Ip_StopTimestamp(uint8 instance, uint8 hwChannel)
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
 
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
     /* Disable Dma for Timestamp */
-    if (0xFFU != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel)
+    if (0xFFU != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel)
     {
-        Dma_Ip_SetLogicChannelCommand(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_CLEAR_HARDWARE_REQUEST);
-    }  
+        Dma_Ip_SetLogicChannelCommand(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_CLEAR_HARDWARE_REQUEST);
+    }
 #endif /* (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL) */
 
     /* Disable interrupt */
@@ -1236,9 +1132,9 @@ void Emios_Icu_Ip_StopTimestamp(uint8 instance, uint8 hwChannel)
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_GPI_U32);
 
     /* Clear channel Config */
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
-    
-    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
+
+    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
     {
         /* Set Max. A value */
         s_emiosBase[instance]->CH.UC[hwChannel].A = EMIOS_ICU_IP_CCR_CLEAR_U32;;
@@ -1252,17 +1148,15 @@ void Emios_Icu_Ip_StopTimestamp(uint8 instance, uint8 hwChannel)
 #endif  /* EMIOS_ICU_IP_TIMESTAMP_API */
 
 #if ((EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA == STD_ON) || (EMIOS_ICU_IP_TIMESTAMP_USES_DMA == STD_ON))
-uint32 Emios_Icu_Ip_GetStartAddress
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+uint32 Emios_Icu_Ip_GetStartAddress(uint8 instance,
+                                    uint8 hwChannel
+                                   )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
 #endif
-    /*return the value of A register*/
+    /*return the Address of A register*/
     return (uint32)(&s_emiosBase[instance]->CH.UC[hwChannel].A);
 }
 #endif
@@ -1271,18 +1165,16 @@ uint32 Emios_Icu_Ip_GetStartAddress
 #if (EMIOS_ICU_IP_EDGE_COUNT_API == STD_ON)
 
 /* @implements Emios_Icu_Ip_ResetEdgeCount_Activity */
-void Emios_Icu_Ip_ResetEdgeCount
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+void Emios_Icu_Ip_ResetEdgeCount(uint8 instance,
+                                 uint8 hwChannel
+                                )
 {
     uint32  u32PrevMode;
 
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     u32PrevMode = (s_emiosBase[instance]->CH.UC[hwChannel].C & eMIOS_C_MODE_MASK);
 
     /* Disable timer interrupts */
@@ -1304,7 +1196,7 @@ void Emios_Icu_Ip_ResetEdgeCount
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, u32PrevMode);
 
     /* Cleare Current Value*/
-    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = (uint32)0U;
+    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = (uint32)0U;
     /* Enable timer interrupts */
     Emios_Icu_Ip_EnableInterrupt(instance, hwChannel);
 }
@@ -1315,7 +1207,7 @@ void Emios_Icu_Ip_EnableEdgeCount(uint8 instance, uint8 hwChannel)
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
 #endif
     /* Disable interrupt */
     Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
@@ -1324,18 +1216,17 @@ void Emios_Icu_Ip_EnableEdgeCount(uint8 instance, uint8 hwChannel)
 
     /* Set Max. A value */
 #if (STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER)
-    s_emiosBase[instance]->CH.UC[hwChannel].A = eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].maxCounterValue;
+    s_emiosBase[instance]->CH.UC[hwChannel].A = eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].maxCounterValue;
 #else
     s_emiosBase[instance]->CH.UC[hwChannel].A = EMIOS_ICU_IP_INIT_CADR_U32;
 #endif  /* STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER */
-
 
     /* Sync. eMIOS counter value. (Needed in case of stopping and re-enabling counting)
      * Note: Setting GPIO mode, the internal counter was cleared and must be restored
      */
 
     /* When call again affter call Emios_Icu_Ip_DisableEdgeCount*/
-    s_emiosBase[instance]->CH.UC[hwChannel].CNT = eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_IndexInChState[instance][hwChannel]];
+    s_emiosBase[instance]->CH.UC[hwChannel].CNT = eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]];
 
     /* Modulus counter mode */
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_MCB_EXT_CLOCK_U32);
@@ -1347,23 +1238,19 @@ void Emios_Icu_Ip_EnableEdgeCount(uint8 instance, uint8 hwChannel)
     Emios_Icu_Ip_EnableInterrupt(instance, hwChannel);
 
     /* Set Channel config */
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_EDGE_COUNTER;
-
-
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_EDGE_COUNTER;
 }
 
 /* @implements Emios_Icu_Ip_DisableEdgeCount_Activity */
-void Emios_Icu_Ip_DisableEdgeCount
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+void Emios_Icu_Ip_DisableEdgeCount(uint8 instance,
+                                   uint8 hwChannel
+                                  )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
     /* Disable interrupt */
     Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
 
@@ -1371,25 +1258,23 @@ void Emios_Icu_Ip_DisableEdgeCount
     s_emiosBase[instance]->CH.UC[hwChannel].S |= (eMIOS_S_OVR_MASK | eMIOS_S_OVFL_MASK | eMIOS_S_FLAG_MASK);
 
     /* Save count, before going to GPIO mode (because counter is reset to 0x0000) */
-    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = s_emiosBase[instance]->CH.UC[hwChannel].CNT;
+    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = s_emiosBase[instance]->CH.UC[hwChannel].CNT;
 
     /* Disable MCB mode */
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_GPI_U32);
 
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
-    
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
+
 #if (STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER)
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].maxCounterValue = EMIOS_ICU_IP_INIT_CADR_U32;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].maxCounterValue = EMIOS_ICU_IP_INIT_CADR_U32;
 #endif  /* STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER */
 }
 
 
 /* @implements Emios_Icu_Ip_GetEdgeNumbers_Activity */
-eMios_Icu_ValueType Emios_Icu_Ip_GetEdgeNumbers
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+eMios_Icu_ValueType Emios_Icu_Ip_GetEdgeNumbers(uint8 instance,
+                                                uint8 hwChannel
+                                               )
 {
     uint32 u32Mode;
     eMios_Icu_ValueType u16Result = (eMios_Icu_ValueType)0U;
@@ -1398,11 +1283,11 @@ eMios_Icu_ValueType Emios_Icu_Ip_GetEdgeNumbers
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     /* Check mode after call Emios_Icu_Ip_DisableEdgeCount */
     if(EMIOS_ICU_IP_CCR_MODE_GPI_U32 == u32Mode)
     {
-        u16Result = (eMios_Icu_ValueType)eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_IndexInChState[instance][hwChannel]];
+        u16Result = (eMios_Icu_ValueType)eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]];
     }
     else
     {
@@ -1414,12 +1299,10 @@ eMios_Icu_ValueType Emios_Icu_Ip_GetEdgeNumbers
 
 #if (STD_ON == EMIOS_ICU_IP_SET_INITIAL_COUNTER)
 /* @implements Emios_Icu_Ip_SetInitialCounterValue_Activity */
-void Emios_Icu_Ip_SetInitialCounterValue
-(
-    uint8 instance,
-    uint8 hwChannel,
-    uint32 initialCounter
-)
+void Emios_Icu_Ip_SetInitialCounterValue(uint8 instance,
+                                         uint8 hwChannel,
+                                         uint32 initialCounter
+                                        )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance   < EMIOS_ICU_IP_INSTANCE_COUNT);
@@ -1427,18 +1310,16 @@ void Emios_Icu_Ip_SetInitialCounterValue
 #endif
 
     /* Save initial counter for channel */
-    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_IndexInChState[instance][hwChannel]]= initialCounter;
+    eMios_Icu_Ip_u32aEdgeCurrent_Value[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]]= initialCounter;
 }
 #endif  /* STD_ON == EMIOS_ICU_IP_SET_INITIAL_COUNTER */
 
 #if (STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER)
 /* @implements Emios_Icu_Ip_SetMaxCounterValue_Activity */
-void Emios_Icu_Ip_SetMaxCounterValue
-(
-    uint8 instance,
-    uint8 hwChannel,
-    uint32 maxCounter
-)
+void Emios_Icu_Ip_SetMaxCounterValue(uint8 instance,
+                                     uint8 hwChannel,
+                                     uint32 maxCounter
+                                    )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance   < EMIOS_ICU_IP_INSTANCE_COUNT);
@@ -1447,18 +1328,16 @@ void Emios_Icu_Ip_SetMaxCounterValue
 #endif
 
     /* Save max counter for channel */
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].maxCounterValue = maxCounter;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].maxCounterValue = maxCounter;
 }
 #endif  /* STD_ON == EMIOS_ICU_IP_SET_MAX_COUNTER */
 #endif  /* EMIOS_ICU_IP_EDGE_COUNT_API */
 
 #if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
 /* @implements Emios_Icu_Ip_StartSignalMeasurement_Activity */
-void Emios_Icu_Ip_StartSignalMeasurement
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+void Emios_Icu_Ip_StartSignalMeasurement(uint8 instance,
+                                         uint8 hwChannel
+                                        )
 {
     eMios_Icu_Ip_UCModeType eMiosOperationMode;
 #if (STD_ON == EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA_IPL)
@@ -1470,19 +1349,19 @@ void Emios_Icu_Ip_StartSignalMeasurement
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
 
 #if (STD_ON == EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA_IPL)
     /* Setup DMA for this channel */
-    if (0xFFU != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel)
+    if (0xFFU != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel)
     {
-        Emios_Icu_Ip_aIsSecondInterrupt[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = 0U;
+        Emios_Icu_Ip_aIsSecondInterrupt[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = 0U;
         /* initialize the members of the structure */
         global_DmaChannelTransferList[0U].Param = DMA_IP_CH_SET_SOURCE_ADDRESS;
         global_DmaChannelTransferList[0U].Value = Emios_Icu_Ip_GetStartAddress(instance, hwChannel);
         global_DmaChannelTransferList[1U].Param = DMA_IP_CH_SET_DESTINATION_ADDRESS;
-        global_DmaChannelTransferList[1U].Value = (uint32)&Emios_Icu_Ip_aDmaBuffer[eMios_Icu_Ip_IndexInChState[instance][hwChannel]][0];
+        global_DmaChannelTransferList[1U].Value = (uint32)&Emios_Icu_Ip_aDmaBuffer[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]][0];
         global_DmaChannelTransferList[2U].Param = DMA_IP_CH_SET_DESTINATION_TRANSFER_SIZE;
         global_DmaChannelTransferList[2U].Value = (uint32)DMA_IP_TRANSFER_SIZE_4_BYTE;
         global_DmaChannelTransferList[3U].Param = DMA_IP_CH_SET_SOURCE_TRANSFER_SIZE;
@@ -1499,24 +1378,24 @@ void Emios_Icu_Ip_StartSignalMeasurement
         global_DmaChannelTransferList[8U].Value = (uint32)4U;
         global_DmaChannelTransferList[9U].Param = DMA_IP_CH_SET_MAJORLOOP_COUNT;
         global_DmaChannelTransferList[9U].Value = (uint32)1U;
-                              
-        Dma_Ip_SetLogicChannelTransferList(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, global_DmaChannelTransferList, (uint32)10U);
-        Dma_Ip_SetLogicChannelCommand(eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_SET_HARDWARE_REQUEST);
+
+        Dma_Ip_SetLogicChannelTransferList(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, global_DmaChannelTransferList, (uint32)10U);
+        Dma_Ip_SetLogicChannelCommand(eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaChannel, DMA_IP_CH_SET_HARDWARE_REQUEST);
 
         /*Clear the DMA result buffer for configured DMA channel*/
         for(u8index = 0U; u8index < EMIOS_ICU_IP_DMA_MAJORLOOP_COUNT; u8index++)
         {
-             Emios_Icu_Ip_aDmaBuffer[eMios_Icu_Ip_IndexInChState[instance][hwChannel]][u8index] = (uint16)0;
-        }     
+             Emios_Icu_Ip_aDmaBuffer[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]][u8index] = (uint16)0;
+        }
     }
 #endif
 
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod = (eMios_Icu_ValueType)0U;
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (eMios_Icu_ValueType)0U;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod = (eMios_Icu_ValueType)0U;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (eMios_Icu_ValueType)0U;
 
     /* Reset capture and timestart of hwChannel */
-    eMios_Icu_Ip_CapturedActivePulseWidth[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = 0U;
-    eMios_Icu_Ip_TimeStart[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = 0U;
+    eMios_Icu_Ip_auCapturedActivePulseWidth[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = 0U;
+    eMios_Icu_Ip_auTimeStart[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = 0U;
 
     /* Disable interrupt */
     Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
@@ -1525,18 +1404,18 @@ void Emios_Icu_Ip_StartSignalMeasurement
     Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_GPI_U32);
 
     /* Set activation condition */
-    Emios_Icu_Ip_SetActivation(instance, hwChannel, eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].edgeTrigger);
+    Emios_Icu_Ip_SetActivation(instance, hwChannel, eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].edgeTrigger);
 
     /* Get operation mode of hardware channel */
-    if(EMIOS_ICU_MODE_WITH_DMA == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].dmaMode)\
+    if(EMIOS_ICU_MODE_WITH_DMA == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].dmaMode)\
     {
         SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_52();
         s_emiosBase[instance]->CH.UC[hwChannel].C |= (eMIOS_C_DMA_MASK);
         SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_52();
     }
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_SIGNAL_MEASUREMENT;
-    
-    eMiosOperationMode = (eMios_Icu_Ip_UCModeType)eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].operationMode;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_SIGNAL_MEASUREMENT;
+
+    eMiosOperationMode = (eMios_Icu_Ip_UCModeType)eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].operationMode;
 
     switch (eMiosOperationMode)
     {
@@ -1556,13 +1435,18 @@ void Emios_Icu_Ip_StartSignalMeasurement
 
         default:
             {
+#if (EMIOS_ICU_IP_SAIC_EDGE_CAPTURING_SUPPORT == STD_ON)
+                /* Enable SAIC with edge capturing mode */
+                Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_SAIC_EDGE_CAPTURING_U32);
+#else
                 /* Enable SAIC mode */
                 Emios_Icu_Ip_UCSetMode(instance, hwChannel, EMIOS_ICU_IP_CCR_MODE_SAIC_U32);
+#endif
             }
         break;
     }
-    
-    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+
+    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
     {
         /* Set Max. A value */
         s_emiosBase[instance]->CH.UC[hwChannel].A = EMIOS_ICU_IP_INIT_CADR_U32;
@@ -1570,8 +1454,8 @@ void Emios_Icu_Ip_StartSignalMeasurement
     /* Clear pending interrupt flag (and other flags) for the channel */
     s_emiosBase[instance]->CH.UC[hwChannel].S |= (eMIOS_S_OVR_MASK | eMIOS_S_OVFL_MASK | eMIOS_S_FLAG_MASK);
     /* Clear the counter for signal measurement */
-    eMios_Icu_Ip_aeInt_Counter[eMios_Icu_Ip_IndexInChState[instance][hwChannel]] = EMIOS_ICU_MEASUREMENT_PENDING;
-    if (TRUE != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].msWithoutInterrupt)
+    eMios_Icu_Ip_aeInt_Counter[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]] = EMIOS_ICU_MEASUREMENT_PENDING;
+    if (TRUE != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].msWithoutInterrupt)
     {
         /* Enable Interrupt */
         Emios_Icu_Ip_EnableInterrupt(instance, hwChannel);
@@ -1584,17 +1468,15 @@ void Emios_Icu_Ip_StartSignalMeasurement
 }
 
 /* @implements Emios_Icu_Ip_StopSignalMeasurement_Activity */
-void Emios_Icu_Ip_StopSignalMeasurement
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+void Emios_Icu_Ip_StopSignalMeasurement(uint8 instance,
+                                        uint8 hwChannel
+                                       )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
     /* Disable interrupt */
     Emios_Icu_Ip_DisableInterrupt(instance, hwChannel);
 
@@ -1607,8 +1489,8 @@ void Emios_Icu_Ip_StopSignalMeasurement
     /* Disables the flag generation as defined by EDPOL Bit */
     s_emiosBase[instance]->CH.UC[hwChannel].C |= eMIOS_C_EDSEL_MASK;
     SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_49();
-    
-    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected)
+
+    if (EMIOS_ICU_BUS_INTERNAL_COUNTER == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected)
     {
         /* Set Max. A value */
         s_emiosBase[instance]->CH.UC[hwChannel].A = EMIOS_ICU_IP_CCR_CLEAR_U32;
@@ -1616,7 +1498,7 @@ void Emios_Icu_Ip_StopSignalMeasurement
     /* Clear pending interrupt flag (and other flags) for the channel */
     s_emiosBase[instance]->CH.UC[hwChannel].S |= (eMIOS_S_OVR_MASK | eMIOS_S_OVFL_MASK | eMIOS_S_FLAG_MASK);
     /* Clear channel config */
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode = EMIOS_ICU_MODE_NO_MEASUREMENT;
 #if (EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API == STD_ON)
     /* Disable Interrupt for masterbus*/
     Emios_Icu_Ip_DisableMasterBusInterrupt(instance, hwChannel);
@@ -1624,31 +1506,29 @@ void Emios_Icu_Ip_StopSignalMeasurement
 }
 
 /* @implements Emios_Icu_Ip_GetTimeElapsed_Activity */
-eMios_Icu_ValueType Emios_Icu_Ip_GetTimeElapsed
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+eMios_Icu_ValueType Emios_Icu_Ip_GetTimeElapsed(uint8 instance,
+                                                uint8 hwChannel
+                                               )
 {
     eMios_Icu_ValueType timeElapsed = (eMios_Icu_ValueType)0U;
 
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
-    if((EMIOS_ICU_DUTY_CYCLE != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement) && \
-        (EMIOS_ICU_NO_MEASUREMENT != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement))
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
+    if((EMIOS_ICU_DUTY_CYCLE != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement) && \
+        (EMIOS_ICU_NO_MEASUREMENT != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement))
     {
-        if ((eMios_Icu_Ip_MeasType)EMIOS_ICU_PERIOD_TIME == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement)
+        if ((eMios_Icu_Ip_MeasType)EMIOS_ICU_PERIOD_TIME == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement)
         {
-            timeElapsed = eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod;
-            eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod = (eMios_Icu_ValueType)0U;
+            timeElapsed = eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod;
+            eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod = (eMios_Icu_ValueType)0U;
         }
         else
         {
-            timeElapsed = eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth;
-            eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (eMios_Icu_ValueType)0U;
+            timeElapsed = eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth;
+            eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (eMios_Icu_ValueType)0U;
         }
     }
     #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
@@ -1661,27 +1541,25 @@ eMios_Icu_ValueType Emios_Icu_Ip_GetTimeElapsed
 }
 
 /* @implements Emios_Icu_Ip_GetDutyCycleValues_Activity */
-void Emios_Icu_Ip_GetDutyCycleValues
-(
-    uint8 instance,
-    uint8 hwChannel,
-    eMios_Icu_Ip_DutyCycleType*  dutyCycleValues 
-)
+void Emios_Icu_Ip_GetDutyCycleValues(uint8 instance,
+                                     uint8 hwChannel,
+                                     eMios_Icu_Ip_DutyCycleType*  dutyCycleValues
+                                    )
 {
 
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-    DevAssert(eMios_Icu_Ip_IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
-#endif 
-    if(EMIOS_ICU_DUTY_CYCLE == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].measurement)
+    DevAssert(eMios_Icu_Ip_u8IndexInChState[instance][hwChannel] < EMIOS_ICU_IP_NUM_OF_CHANNELS_USED);
+#endif
+    if(EMIOS_ICU_DUTY_CYCLE == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].measurement)
     {
-        if ((eMios_Icu_ValueType)0U != eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod)
+        if ((eMios_Icu_ValueType)0U != eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod)
         {
-            dutyCycleValues->ActiveTime = (eMios_Icu_ValueType)eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth;
-            dutyCycleValues->PeriodTime = (eMios_Icu_ValueType)eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod;
-            eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (eMios_Icu_ValueType)0U;
-            eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod           = (eMios_Icu_ValueType)0U;
+            dutyCycleValues->ActiveTime = (eMios_Icu_ValueType)eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth;
+            dutyCycleValues->PeriodTime = (eMios_Icu_ValueType)eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod;
+            eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = (eMios_Icu_ValueType)0U;
+            eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod           = (eMios_Icu_ValueType)0U;
         }
         else
         {
@@ -1694,28 +1572,28 @@ void Emios_Icu_Ip_GetDutyCycleValues
     {
         DevAssert(TRUE);
     }
-    #endif 
+    #endif
 }
 
 /**
  * @brief Emios_Icu_Ip_SetPWandPeriod
  */
 void Emios_Icu_Ip_SetPWandPeriod(uint8 instance, \
-                               uint8 hwChannel, \
-                               eMios_Icu_ValueType activePulseWidth, \
-                               eMios_Icu_ValueType period)
+                                 uint8 hwChannel, \
+                                 eMios_Icu_ValueType activePulseWidth, \
+                                 eMios_Icu_ValueType period
+                                )
 {
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = activePulseWidth;
-    eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod           = period;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aActivePulseWidth = activePulseWidth;
+    eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].eMios_Icu_Ip_aPeriod           = period;
 }
 #endif  /* EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API */
 
 #if (EMIOS_ICU_IP_GET_INPUT_STATE_API == STD_ON)
-boolean Emios_Icu_Ip_GetInputState
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+/* @implements Emios_Icu_Ip_GetInputState_Activity */
+boolean Emios_Icu_Ip_GetInputState(uint8 instance,
+                                   uint8 hwChannel
+                                  )
 {
     boolean bResult = FALSE;
     uint32 u32ValueCCRFEN;
@@ -1724,21 +1602,21 @@ boolean Emios_Icu_Ip_GetInputState
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     u32ValueCCRFEN  = (s_emiosBase[instance]->CH.UC[hwChannel].C & eMIOS_C_FEN_MASK);
     u32ValueCSRFLAG = (s_emiosBase[instance]->CH.UC[hwChannel].S & eMIOS_S_FLAG_MASK);
 
     /* Interrupt not enabled, flag bit was set */
     if ((eMIOS_C_FEN_MASK != u32ValueCCRFEN) && (eMIOS_S_FLAG_MASK == u32ValueCSRFLAG))
     {
-    
+
         /* Clear pending interrupt */
         s_emiosBase[instance]->CH.UC[hwChannel].S |= eMIOS_S_FLAG_MASK;
         bResult = TRUE;
     }
-    
-    if ((FALSE == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].msWithoutInterrupt) && \
-        (EMIOS_ICU_MODE_SIGNAL_MEASUREMENT == eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].channelMode))
+
+    if ((FALSE == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].msWithoutInterrupt) && \
+        (EMIOS_ICU_MODE_SIGNAL_MEASUREMENT == eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].channelMode))
     {
         bResult = FALSE;
     }
@@ -1749,33 +1627,30 @@ boolean Emios_Icu_Ip_GetInputState
 
 #if (EMIOS_ICU_IP_GET_INPUT_LEVEL_API == STD_ON)
 /* @implements  Emios_Icu_Ip_GetInputLevel_Activity */
-eMios_Icu_Ip_LevelType Emios_Icu_Ip_GetInputLevel
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+eMios_Icu_Ip_LevelType Emios_Icu_Ip_GetInputLevel(uint8 instance,
+                                                  uint8 hwChannel
+                                                 )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     return ((0U != ((s_emiosBase[instance]->CH.UC[hwChannel].S & eMIOS_S_UCIN_MASK)>> eMIOS_S_UCIN_SHIFT))? \
             EMIOS_ICU_LEVEL_HIGH : EMIOS_ICU_LEVEL_LOW);
 }
 #endif /* EMIOS_ICU_IP_GET_INPUT_LEVEL_API == STD_ON */
 
-boolean Emios_Icu_Ip_GetOverflow
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+/* @implements  Emios_Icu_Ip_GetOverflow_Activity */
+boolean Emios_Icu_Ip_GetOverflow(uint8 instance,
+                                 uint8 hwChannel
+                                )
 {
     uint32 u32RegCSR = (uint32) 0U;
 
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     u32RegCSR = s_emiosBase[instance]->CH.UC[hwChannel].S;
 
     /* Clear pending interrupt serviced */
@@ -1785,12 +1660,11 @@ boolean Emios_Icu_Ip_GetOverflow
 }
 
 #if (EMIOS_ICU_IP_DUAL_CLOCK_MODE_API == STD_ON)
-void Emios_Icu_Ip_SetClockMode
-(
-    uint8 instance,
-    const eMios_Icu_Ip_ConfigType                   *peMiosIpConfig,
-    const eMios_Icu_Ip_ClockModeType                Prescaler
-)
+/* @implements Emios_Icu_Ip_SetClockMode_Activity */  
+void Emios_Icu_Ip_SetClockMode(uint8 instance,
+                               const eMios_Icu_Ip_ConfigType *peMiosIpConfig,
+                               const eMios_Icu_Ip_ClockModeType Prescaler
+                              )
 {
     /* logical channel */
     uint8   index;
@@ -1801,7 +1675,7 @@ void Emios_Icu_Ip_SetClockMode
 
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
-#endif 
+#endif
     for (index=0U; index < (uint8)EMIOS_ICU_IP_NUM_OF_CHANNELS; index++)
     {
         u8MasterBusUse[index] = (uint8)EMIOS_ICU_IP_CB_NONE;
@@ -1810,7 +1684,7 @@ void Emios_Icu_Ip_SetClockMode
     for (index=0U; index < peMiosIpConfig->nNumChannels; index++)
     {
         hwChannel   = (*peMiosIpConfig->pChannelsConfig)[index].hwChannel;
-        nCtrlBus = eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].BusSelected;
+        nCtrlBus = eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].BusSelected;
 
         if (EMIOS_ICU_BUS_INTERNAL_COUNTER == nCtrlBus)
         {
@@ -1861,45 +1735,39 @@ void Emios_Icu_Ip_SetClockMode
 
 #if ((EMIOS_ICU_IP_CAPTURERGISTER_API == STD_ON) && ((EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON) || (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)))
 /** @implements Emios_Icu_Ip_GetCaptureRegValue_Activity */
-uint32 Emios_Icu_Ip_GetCaptureRegValue
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+uint32 Emios_Icu_Ip_GetCaptureRegValue(uint8 instance,
+                                       uint8 hwChannel
+                                      )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
-    return s_emiosBase[instance]->CH.UC[hwChannel].A;
+#endif
+    return (s_emiosBase[instance]->CH.UC[hwChannel].A);
 }
 #endif  /* (EMIOS_ICU_IP_CAPTURERGISTER_API == STD_ON) && ((EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON) || (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)) */
 
 #if ((EMIOS_ICU_IP_GET_PULSE_WIDTH_API == STD_ON) && (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON))
 /* @implements Emios_Icu_Ip_GetPulseWidth_Activity */
-void Emios_Icu_Ip_GetPulseWidth
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+void Emios_Icu_Ip_GetPulseWidth(uint8 instance,
+                                uint8 hwChannel
+                               )
 {
 #if (STD_ON == EMIOS_ICU_IP_DEV_ERROR_DETECT)
     DevAssert(instance < EMIOS_ICU_IP_INSTANCE_COUNT);
     DevAssert(hwChannel < EMIOS_ICU_IP_NUM_OF_CHANNELS);
-#endif 
+#endif
     Emios_Icu_Ip_SignalMeasurementHandler(instance, hwChannel, FALSE);
 }
 #endif /* ((EMIOS_ICU_IP_GET_PULSE_WIDTH_API == STD_ON) && (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON))*/
 
 #if ((EMIOS_ICU_IP_VALIDATE_GLOBAL_CALL == STD_ON) && ((EMIOS_ICU_IP_GET_PULSE_WIDTH_API == STD_ON) && (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)))
-Std_ReturnType Emios_Icu_Ip_ValidateSignalMeasureWithoutInterrupt
-(
-    uint8 instance,
-    uint8 hwChannel
-)
+Std_ReturnType Emios_Icu_Ip_ValidateSignalMeasureWithoutInterrupt(uint8 instance,
+                                                                  uint8 hwChannel
+                                                                 )
 {
     /*return ICU signal property without using interrupt*/
-    return (eMios_Icu_Ip_ChState[eMios_Icu_Ip_IndexInChState[instance][hwChannel]].msWithoutInterrupt)?(Std_ReturnType)E_OK:(Std_ReturnType)E_NOT_OK;
+    return (eMios_Icu_Ip_axChState[eMios_Icu_Ip_u8IndexInChState[instance][hwChannel]].msWithoutInterrupt)?(Std_ReturnType)E_OK:(Std_ReturnType)E_NOT_OK;
 }
 #endif /* ((EMIOS_ICU_IP_GET_PULSE_WIDTH_API == STD_ON) && (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON))*/
 
@@ -1930,7 +1798,7 @@ uint32 Emios_Icu_Ip_GetWheelSpeedTimeMeasurement(uint8 instance, uint8 hwWSChann
     {
         timeValue = 0U;
     }
-    
+
     return timeValue;
 }
 
@@ -1998,12 +1866,12 @@ void Emios_Icu_Ip_WheelSpeedEnableInterrupt(uint8 instance, uint8 hwWSChannel, e
     DevAssert(hwWSChannel < EMIOS_ICU_IP_WSC_CHANNEL_OFFSET);
 #endif
     s_emiosBase[instance]->CH.WSC[hwWSChannelId].WSC2 |= eMIOS_WSC2_FLAGSEL(isrSource);
-    
-    if ((uint8)0U == eMios_Icu_Ip_WsChState[instance][hwWSChannel].EnableInterruptStatus)
+
+    if ((uint8)0U == eMios_Icu_Ip_axWsChState[instance][hwWSChannel].EnableInterruptStatus)
     {
         s_emiosBase[instance]->CH.WSC[hwWSChannelId].WSC1 |= (uint32)eMIOS_WSC1_FEN_MASK;
     }
-    eMios_Icu_Ip_WsChState[instance][hwWSChannel].EnableInterruptStatus |= (uint8)isrSource;
+    eMios_Icu_Ip_axWsChState[instance][hwWSChannel].EnableInterruptStatus |= (uint8)isrSource;
 }
 
 /* @implements Emios_Icu_Ip_WheelSpeedDisableInterrupt_Activity */
@@ -2015,17 +1883,17 @@ void Emios_Icu_Ip_WheelSpeedDisableInterrupt(uint8 instance, uint8 hwWSChannel, 
     DevAssert(hwWSChannel < EMIOS_ICU_IP_WSC_CHANNEL_OFFSET);
 #endif
     s_emiosBase[instance]->CH.WSC[hwWSChannelId].WSC2 &= ~eMIOS_WSC2_FLAGSEL(isrSource);
-    
+
     if (EMIOS_FLAG_NONE == isrSource)
     {
-        eMios_Icu_Ip_WsChState[instance][hwWSChannel].EnableInterruptStatus = 0U;
+        eMios_Icu_Ip_axWsChState[instance][hwWSChannel].EnableInterruptStatus = 0U;
     }
     else
     {
-        eMios_Icu_Ip_WsChState[instance][hwWSChannel].EnableInterruptStatus &= ~((uint8)isrSource);
+        eMios_Icu_Ip_axWsChState[instance][hwWSChannel].EnableInterruptStatus &= ~((uint8)isrSource);
     }
-    
-    if (0U == eMios_Icu_Ip_WsChState[instance][hwWSChannel].EnableInterruptStatus)
+
+    if (0U == eMios_Icu_Ip_axWsChState[instance][hwWSChannel].EnableInterruptStatus)
     {
         s_emiosBase[instance]->CH.WSC[hwWSChannelId].WSC1 &= ~(uint32)eMIOS_WSC1_FEN_MASK;
     }
