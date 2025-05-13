@@ -728,8 +728,8 @@ status_t ECSPI_MasterTransferNonBlocking(ECSPI_Type *base, ecspi_master_handle_t
         return kStatus_ECSPI_Busy;
     }
 
-    /* Check if the input arguments valid */
-    if (((xfer->txData == NULL) && (xfer->rxData == NULL)) || (xfer->dataSize == 0U))
+    /* Check if data size argument is valid */
+    if (xfer->dataSize == 0U)
     {
         return kStatus_InvalidArgument;
     }
