@@ -179,6 +179,8 @@ Patch List:
   - Add missing CMAKE files device_system.cmake device_CMSIS.cmake and drivers/driver_reset.cmake to MCXW716C.
   - Add missing CMAKE file to ccm32k driver driver_ccm32k.cmake.
   - Add missing CMAKE file to flash_k4 driver driver_flash_k4.cmake.
+  - drivers: k4_flash: update to support MCXN series
+  - mcux-sdk-ng/devices/MCX/MCXN/MCXNx4x/MCXNx4x_cm33_core0_features.h and core1 added PFLASH feature macros
   - Add missing CMAKE file to spc driver driver_spc.cmake
   - mcux-sdk/drivers/dspi/fsl_dspi.c, mcux-sdk/drivers/dspi/fsl_dspi.h, mcux-sdk/drivers/dspi/fsl_dspi_edma.c,
   mcux-sdk/drivers/dspi/fsl_dspi_edma.h: add the guards for unsupport features on S32Z27x devices
