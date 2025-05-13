@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -36,7 +36,7 @@ extern "C"{
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION_TYPES    0
 #define ADC_SAR_IP_SW_MAJOR_VERSION_TYPES               2
 #define ADC_SAR_IP_SW_MINOR_VERSION_TYPES               0
-#define ADC_SAR_IP_SW_PATCH_VERSION_TYPES               0
+#define ADC_SAR_IP_SW_PATCH_VERSION_TYPES               1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -94,7 +94,7 @@ typedef enum
     ADC_SAR_IP_STATUS_SUCCESS = 0x00U,  /*!< Function completed successfully */
     ADC_SAR_IP_STATUS_ERROR = 0x01U,    /*!< Function didn't complete successfully */
     ADC_SAR_IP_STATUS_TIMEOUT = 0x02U,   /*!< Function timed out */
-#if(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
+#if (ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON)
     ADC_SAR_IP_STATUS_CAL_ONGOING = 0x03U    /*!< Calibration functionality is ongoing */
 #endif /*(ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED == STD_ON) */
 } Adc_Sar_Ip_StatusType;
@@ -145,7 +145,7 @@ typedef enum
 #endif /* ADC_SAR_IP_HAS_CTU */
 
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER)
+#if (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE)
 /*!
  * @brief External Trigger selection
  *
@@ -168,18 +168,18 @@ typedef enum
  * Implements : Adc_Sar_Ip_ExtTriggerSourceType_Class
  */
 typedef enum {
-#if (FEATURE_ADC_HAS_EXT_TRIGGER)
+#if (ADC_SAR_IP_EXT_TRIGGER_AVAILABLE)
     ADC_SAR_IP_NORMAL_EXT_TRIG     = 0x00U,       /*!< Enables normal trigger input */
-#if (FEATURE_ADC_HAS_AUX_EXT_TRIGGER)
+#if (ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE)
     ADC_SAR_IP_AUX_NORMAL_EXT_TRIG = 0x01U,       /*!< Enables auxiliary normal trigger input */
     ADC_SAR_IP_ALL_NORMAL_EXT_TRIG = 0x02U,       /*!< Enables normal and auxiliary trigger inputs */
-#endif /* (FEATURE_ADC_HAS_AUX_EXT_TRIGGER) */
-#endif /* (FEATURE_ADC_HAS_EXT_TRIGGER) */
-#if (FEATURE_ADC_HAS_INJ_EXT_TRIGGER)
+#endif /* (ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE) */
+#endif /* (ADC_SAR_IP_EXT_TRIGGER_AVAILABLE) */
+#if (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE)
     ADC_SAR_IP_INJECTED_EXT_TRIG   = 0x03U,       /*!< Enables injection trigger input */
-#endif /* (FEATURE_ADC_HAS_INJ_EXT_TRIGGER) */
+#endif /* (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE) */
 } Adc_Sar_Ip_ExtTriggerSourceType;
-#endif /* (FEATURE_ADC_HAS_INJ_EXT_TRIGGER || FEATURE_ADC_HAS_EXT_TRIGGER) */
+#endif /* (ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE || ADC_SAR_IP_EXT_TRIGGER_AVAILABLE) */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
 
 /*!
@@ -221,7 +221,7 @@ typedef enum {
     ADC_SAR_IP_DMA_REQ_CLEAR_ON_READ = 0x01U,   /*!< Clear DMA Request on read of Data Registers */
 } Adc_Sar_Ip_ClearSourceType;
 
-#if FEATURE_ADC_HAS_PRESAMPLING
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
 /*!
  * @brief Presampling Voltage selection
  *
@@ -237,7 +237,7 @@ typedef enum {
     ADC_SAR_IP_PRESAMPLE_VREFL = ADC_SAR_IP_PRESAMPLE_VREFL_EVAL, /*!< Presampling from VREFL */
     ADC_SAR_IP_PRESAMPLE_VREFH = ADC_SAR_IP_PRESAMPLE_VREFH_EVAL  /*!< Presampling from VREFH */
 } Adc_Sar_Ip_PresamplingSourceType;
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
 
 /*!
  * @brief Channel group selection
@@ -254,7 +254,7 @@ typedef enum {
 #endif /* (ADC_SAR_IP_NUM_GROUP_CHAN > 2u) */
 } Adc_Sar_Ip_ChanGroupType;
 
-#if FEATURE_ADC_HAS_AVERAGING
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
 /*!
  * @brief Averaging selection
  *
@@ -269,7 +269,7 @@ typedef enum {
     ADC_SAR_IP_AVG_16_CONV = 0x02U,       /*!< 16 conversions per conversion data */
     ADC_SAR_IP_AVG_32_CONV = 0x03U,       /*!< 32 conversions per conversion data */
 } Adc_Sar_Ip_AvgSelectType;
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
 
 #if (ADC_SAR_IP_SET_RESOLUTION == STD_ON)
 /**
@@ -341,20 +341,20 @@ typedef struct
 typedef struct
 {
     Adc_Sar_Ip_ClockSelType ClkSelect;         /*!< Selected clock */
-#if FEATURE_ADC_HAS_HIGH_SPEED_ENABLE
+#if ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE
     boolean HighSpeedConvEn; /* Enables high speed conversion or calibration */
-#endif /* FEATURE_ADC_HAS_HIGH_SPEED_ENABLE */
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
+#endif /* ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE */
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
     uint8 SampleTimeArr[ADC_SAR_IP_NUM_GROUP_CHAN];  /*!< Sample time for each channel group */
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
     uint8 PowerDownDelay;                     /*!< Delay before entering Power Down */
-#if FEATURE_ADC_HAS_CLOCK_DIVIDER
+#if ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE
     boolean ClkDivEnable;               /*!< Clock divider enable */
-#endif /* FEATURE_ADC_HAS_CLOCK_DIVIDER */
-#if FEATURE_ADC_HAS_AVERAGING
+#endif /* ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE */
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
     boolean AvgEn;
     Adc_Sar_Ip_AvgSelectType AvgSel;
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
 } Adc_Sar_Ip_ClockConfigType;
 
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
@@ -452,48 +452,48 @@ typedef struct
 #endif /* (ADC_SAR_IP_SET_RESOLUTION == STD_ON) */
     Adc_Sar_Ip_ClockSelType ClkSelect; /*!< Clock input */
     Adc_Sar_Ip_ClockSelType CalibrationClkSelect; /*!< Clock input for calibration */
-#if FEATURE_ADC_HAS_HIGH_SPEED_ENABLE
+#if ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE
     boolean HighSpeedConvEn; /* Enables high speed conversion or calibration */
-#endif /* FEATURE_ADC_HAS_HIGH_SPEED_ENABLE */
+#endif /* ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE */
 #if ADC_SAR_IP_HAS_CTU
     Adc_Sar_Ip_CtuModeType CtuMode;     /*!< CTU mode */
 #endif /* ADC_SAR_IP_HAS_CTU */
 #if (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE)
-#if FEATURE_ADC_HAS_INJ_EXT_TRIGGER
+#if ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE
     Adc_Sar_Ip_ExtTriggerEdgeType InjectedEdge;   /*!< Injected Trigger selection */
-#endif /* FEATURE_ADC_HAS_INJ_EXT_TRIGGER */
-#if FEATURE_ADC_HAS_EXT_TRIGGER
+#endif /* ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE */
+#if ADC_SAR_IP_EXT_TRIGGER_AVAILABLE
     Adc_Sar_Ip_ExtTriggerEdgeType ExtTrigger;     /*!< External Trigger selection */
     boolean NormalExtTrgEn;                       /*!< Enables normal trigger source */
-#if FEATURE_ADC_HAS_AUX_EXT_TRIGGER
+#if ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE
     boolean NormalAuxExtTrgEn;                    /*!< Enables auxiliary normal trigger source */
-#endif /* FEATURE_ADC_HAS_AUX_EXT_TRIGGER */
-#endif /* FEATURE_ADC_HAS_EXT_TRIGGER */
+#endif /* ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE */
+#endif /* ADC_SAR_IP_EXT_TRIGGER_AVAILABLE */
 #endif /* (ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE) */
-#if FEATURE_ADC_HAS_CONVERSION_TIMING
+#if ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE
     uint8 SampleTimeArr[ADC_SAR_IP_NUM_GROUP_CHAN]; /*!< Sample time for each channel group */
-#endif /* FEATURE_ADC_HAS_CONVERSION_TIMING */
-#if FEATURE_ADC_HAS_PRESAMPLING
+#endif /* ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE */
+#if ADC_SAR_IP_PRESAMPLING_AVAILABLE
     boolean BypassSampling;  /* PSCR[PRECONV] */
     Adc_Sar_Ip_PresamplingSourceType PresamplingSourceArr[ADC_SAR_IP_NUM_GROUP_CHAN]; /*!< Presampling sources for each channel group */
-#endif /* FEATURE_ADC_HAS_PRESAMPLING */
+#endif /* ADC_SAR_IP_PRESAMPLING_AVAILABLE */
     boolean AutoClockOff; /*!< Enable Auto Clock Off */
     boolean OverwriteEnable; /*!< Overwrite new conversion data over old data */
     Adc_Sar_Ip_DataAlignedType DataAlign; /*!< Data alignment in conversion result register */
-#if FEATURE_ADC_SAR_DECODE_DELAY
+#if ADC_SAR_IP_DECODE_DELAY_AVAILABLE
     uint16 DecodeDelay; /*!< Delay for decoding Input MUX channels */
-#endif /* FEATURE_ADC_SAR_DECODE_DELAY */
+#endif /* ADC_SAR_IP_DECODE_DELAY_AVAILABLE */
     uint8 PowerDownDelay; /*!< Delay before entering Power Down */
-#if FEATURE_ADC_HAS_CLOCK_DIVIDER
+#if ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE
     boolean ClkDivEnable;               /*!< Clock divider enable */
-#endif /* FEATURE_ADC_HAS_CLOCK_DIVIDER */
+#endif /* ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE */
 #if (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED)
     const Adc_Sar_Ip_SelfTestThresholdType * SelfTestThresholdConfig; /*!< Self test threshold configuration */
 #endif /* (STD_ON == ADC_SAR_IP_SELFTEST_ENABLED) */
-#if FEATURE_ADC_HAS_AVERAGING
+#if ADC_SAR_IP_AVERAGING_AVAILABLE
     boolean AvgEn;
     Adc_Sar_Ip_AvgSelectType AvgSel;
-#endif /* FEATURE_ADC_HAS_AVERAGING */
+#endif /* ADC_SAR_IP_AVERAGING_AVAILABLE */
     uint8 UsrOffset;
     uint16 UsrGain;
     boolean DmaEnable;                         /* Enables DMA */

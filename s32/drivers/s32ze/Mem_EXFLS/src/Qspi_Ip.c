@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,6 +18,7 @@ extern "C"{
 
 #include "Mcal.h"
 #include "OsIf.h"
+#include "SchM_Mem_43_EXFLS.h"
 #include "Qspi_Ip_Controller.h"
 #include "Qspi_Ip_Common.h"
 #include "Qspi_Ip.h"
@@ -33,7 +34,7 @@ extern "C"{
 #define QSPI_IP_AR_RELEASE_REVISION_VERSION_C  0
 #define QSPI_IP_SW_MAJOR_VERSION_C             2
 #define QSPI_IP_SW_MINOR_VERSION_C             0
-#define QSPI_IP_SW_PATCH_VERSION_C             0
+#define QSPI_IP_SW_PATCH_VERSION_C             1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -136,7 +137,7 @@ extern "C"{
 #if (QSPI_IP_MEM_INSTANCE_COUNT > 0)
 
 /*When multicore type3 is enabled on MemAcc, global variables must be allocated to share memory section */
-#if( QSPI_IP_MULTICORE_ENABLED == STD_ON)
+#if (QSPI_IP_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_EXFLS_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_EXFLS_START_SEC_VAR_CLEARED_UNSPECIFIED
@@ -144,9 +145,9 @@ extern "C"{
 #include "Mem_43_EXFLS_MemMap.h"
 
 /* Pointer to runtime state structures */
-VAR_SEC_NOCACHE(Qspi_Ip_MemoryStateStructure) Qspi_Ip_StateType Qspi_Ip_MemoryStateStructure[QSPI_IP_MEM_INSTANCE_COUNT];
+Qspi_Ip_StateType Qspi_Ip_MemoryStateStructure[QSPI_IP_MEM_INSTANCE_COUNT];
 
-#if( QSPI_IP_MULTICORE_ENABLED == STD_ON)
+#if (QSPI_IP_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_EXFLS_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_EXFLS_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -205,8 +206,8 @@ static uint16 Qspi_Ip_InitLutSeq(uint32 instance,
                                 );
 
 static void Qspi_Ip_DeinitLutSeq(uint32 instance,
-                                   uint8 LutRegister
-                                  );
+                                 uint8 LutRegister
+                                );
 
 /*FUNCTION**********************************************************************
  *
@@ -371,7 +372,7 @@ static uint32 Qspi_Ip_GetBitfield(const uint8 *data,
  *
  * Function Name : Qspi_Ip_UpdateStatusReg
  * Description   : Updates a bitfield in the status register
-* @implements      Qspi_Ip_UpdateStatusReg_Activity */
+ *                 Qspi_Ip_UpdateStatusReg_Activity */
 static Qspi_Ip_StatusType Qspi_Ip_UpdateStatusReg(uint32 instance,
                                                   uint8 offset,
                                                   uint8 width,
@@ -412,7 +413,7 @@ static Qspi_Ip_StatusType Qspi_Ip_UpdateStatusReg(uint32 instance,
  *
  * Function Name : Qspi_Ip_CheckStatusReg
  * Description   : Checks a bitfield in the status register
-* @implements      Qspi_Ip_CheckStatusReg_Activity */
+ *                 Qspi_Ip_CheckStatusReg_Activity */
 static Qspi_Ip_StatusType Qspi_Ip_CheckStatusReg(uint32 instance,
                                                  uint8 offset,
                                                  uint8 width,
@@ -461,8 +462,11 @@ static Qspi_Ip_StatusType Qspi_Ip_WriteEnable(uint32 instance)
         {
             status = cmdStatus;
         }
-        /* check WEL bit */
-        cmdStatus = Qspi_Ip_CheckStatusReg(instance, statusConfig->writeEnableOffset, 1U, &welValue);
+        else
+        {
+            /* check WEL bit */
+            cmdStatus = Qspi_Ip_CheckStatusReg(instance, statusConfig->writeEnableOffset, 1U, &welValue);
+        }
         if (STATUS_QSPI_IP_SUCCESS == cmdStatus)
         {
             /* 1 == check WEL */
@@ -588,8 +592,8 @@ static Qspi_Ip_StatusType Qspi_Ip_CheckMemoryStatus(uint32 instance,
  * Description   : Wait until external memory is not busy
  */
 static Qspi_Ip_StatusType Qspi_Ip_WaitCommandComplete(uint32 instance,
-                                                       uint16 VirtualLut
-                                                      )
+                                                      uint16 VirtualLut
+                                                     )
 {
     Qspi_Ip_StatusType status = STATUS_QSPI_IP_SUCCESS;
     uint32  ElapsedTicks = 0UL;
@@ -622,7 +626,7 @@ static Qspi_Ip_StatusType Qspi_Ip_WaitCommandComplete(uint32 instance,
  *
  * Function Name : Qspi_Ip_WaitResetComplete
  * Description   : Wait until external memory is available for operation after a reset
-* @implements      Qspi_Ip_CheckResetComplete_Activity */
+ * Qspi_Ip_WaitResetComplete_Activity */
 static void Qspi_Ip_WaitResetComplete(void)
 {
     uint32 ElapsedTicks = 0UL;
@@ -645,12 +649,12 @@ static void Qspi_Ip_WaitResetComplete(void)
  *
  * Function Name : Qspi_Ip_InitWriteReg
  * Description   : Write the configured value into a register of external flash device
-* @implements      Qspi_Ip_InitWriteReg_Activity */
+ *                 Qspi_Ip_InitWriteReg_Activity */
 static Qspi_Ip_StatusType Qspi_Ip_InitWriteReg(uint32 instance,
                                                const Qspi_Ip_InitOperationType * operation
                                               )
 {
-    Qspi_Ip_StatusType status = STATUS_QSPI_IP_SUCCESS;
+    Qspi_Ip_StatusType status = STATUS_QSPI_IP_ERROR;
     uint8 value[4U];
 
     /* write a value in a register */
@@ -673,7 +677,7 @@ static Qspi_Ip_StatusType Qspi_Ip_InitWriteReg(uint32 instance,
  *
  * Function Name : Qspi_Ip_InitRMWReg
  * Description   : Change a bitfield in a register of external flash device
-* @implements      Qspi_Ip_InitRMWReg_Activity */
+ *                 Qspi_Ip_InitRMWReg_Activity */
 static Qspi_Ip_StatusType Qspi_Ip_InitRMWReg(uint32 instance,
                                              const Qspi_Ip_InitOperationType *operation
                                             )
@@ -713,7 +717,7 @@ static Qspi_Ip_StatusType Qspi_Ip_InitRMWReg(uint32 instance,
  *
  * Function Name : Qspi_Ip_InitReadReg
  * Description   : Read the register's value of external flash device and loop until matching the configured one
-* @implements      Qspi_Ip_InitReadReg_Activity */
+ *                 Qspi_Ip_InitReadReg_Activity */
 static Qspi_Ip_StatusType Qspi_Ip_InitReadReg(uint32 instance,
                                               const Qspi_Ip_InitOperationType *operation
                                              )
@@ -827,11 +831,10 @@ static Qspi_Ip_StatusType Qspi_Ip_InitDevice(uint32 instance,
     /* Perform device initialization (specific) */
     if (STATUS_QSPI_IP_SUCCESS == status)
     {
-
-    if (QSPI_IP_HYPER_FLASH == state->configuration->memType)
-    {
-        status = Qspi_Ip_HyperflashInit(instance);
-    }
+        if (QSPI_IP_HYPER_FLASH == state->configuration->memType)
+        {
+            status = Qspi_Ip_HyperflashInit(instance);
+        }
     }
     else
     {
@@ -1017,6 +1020,9 @@ Qspi_Ip_StatusType Qspi_Ip_RunCommand(uint32 instance,
                                       uint32 addr
                                      )
 {
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_04();
+
     Qspi_Ip_StatusType status = STATUS_QSPI_IP_ERROR;
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
 
@@ -1026,7 +1032,7 @@ Qspi_Ip_StatusType Qspi_Ip_RunCommand(uint32 instance,
     DEV_ASSERT_QSPI(addr < state->configuration->memSize);
 #endif
 
-    if (lut != QSPI_IP_LUT_INVALID)
+    if ((lut != QSPI_IP_LUT_INVALID) && (TRUE != state->isInXIPMode))
     {
         /* Copy sequence in LUT registers */
         (void)Qspi_Ip_InitLutSeq(instance, lut, QSPI_IP_COMMAND_LUT);
@@ -1037,6 +1043,9 @@ Qspi_Ip_StatusType Qspi_Ip_RunCommand(uint32 instance,
         /* Clear sequence in LUT registers */
         Qspi_Ip_DeinitLutSeq(instance, QSPI_IP_COMMAND_LUT);
     }
+
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_04();
 
     return status;
 }
@@ -1055,6 +1064,9 @@ Qspi_Ip_StatusType Qspi_Ip_RunReadCommand(uint32 instance,
                                           uint32 size
                                          )
 {
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_05();
+
     Qspi_Ip_StatusType status = STATUS_QSPI_IP_ERROR;
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
 
@@ -1065,7 +1077,7 @@ Qspi_Ip_StatusType Qspi_Ip_RunReadCommand(uint32 instance,
     DEV_ASSERT_QSPI((size > 0UL) && ((addr + size) <= state->configuration->memSize));
 #endif
 
-    if (lut != QSPI_IP_LUT_INVALID)
+    if (((lut != QSPI_IP_LUT_INVALID) && (TRUE != state->isInXIPMode)) || (lut == state->activeReadLut))
     {
         /* Copy sequence in LUT registers */
         (void)Qspi_Ip_InitLutSeq(instance, lut, QSPI_IP_COMMAND_LUT);
@@ -1076,6 +1088,9 @@ Qspi_Ip_StatusType Qspi_Ip_RunReadCommand(uint32 instance,
         /* Clear sequence in LUT registers */
         Qspi_Ip_DeinitLutSeq(instance, QSPI_IP_COMMAND_LUT);
     }
+
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_05();
 
     return status;
 }
@@ -1093,6 +1108,9 @@ Qspi_Ip_StatusType Qspi_Ip_RunWriteCommand(uint32 instance,
                                            uint32 size
                                           )
 {
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_06();
+
     Qspi_Ip_StatusType status = STATUS_QSPI_IP_ERROR;
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
 
@@ -1104,7 +1122,7 @@ Qspi_Ip_StatusType Qspi_Ip_RunWriteCommand(uint32 instance,
     DEV_ASSERT_QSPI(data != NULL_PTR);
 #endif
 
-    if (lut != QSPI_IP_LUT_INVALID)
+    if ((lut != QSPI_IP_LUT_INVALID) && (TRUE != state->isInXIPMode))
     {
         /* Copy sequence in LUT registers */
         (void)Qspi_Ip_InitLutSeq(instance, lut, QSPI_IP_COMMAND_LUT);
@@ -1115,6 +1133,9 @@ Qspi_Ip_StatusType Qspi_Ip_RunWriteCommand(uint32 instance,
         /* Clear sequence in LUT registers */
         Qspi_Ip_DeinitLutSeq(instance, QSPI_IP_COMMAND_LUT);
     }
+
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_06();
 
     return status;
 }
@@ -1143,7 +1164,7 @@ Qspi_Ip_StatusType Qspi_Ip_EraseBlock(uint32 instance,
 #endif
 
     /* Check address range */
-    if (address < state->configuration->memSize)
+    if ((address < state->configuration->memSize) && (TRUE != state->isInXIPMode))
     {
         /* find the suited erase type */
         for (eraseType = 0U; eraseType < QSPI_IP_ERASE_TYPES; eraseType++)
@@ -1183,26 +1204,34 @@ Qspi_Ip_StatusType Qspi_Ip_EraseChip(uint32 instance)
     Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
     Qspi_Ip_StatusType status;
 
-    /* Check device type */
-    switch (state->configuration->memType)
+    if (TRUE != state->isInXIPMode)
     {
-        case QSPI_IP_HYPER_FLASH:
-            status = Qspi_Ip_HyperflashChipErase(instance);
-            break;
+        /* Check device type */
+        switch (state->configuration->memType)
+        {
+            case QSPI_IP_HYPER_FLASH:
+                status = Qspi_Ip_HyperflashChipErase(instance);
+                break;
 
-        case QSPI_IP_SERIAL_FLASH:
-            status = Qspi_Ip_SerialflashEraseChip(instance);
-            break;
+            case QSPI_IP_SERIAL_FLASH:
+                status = Qspi_Ip_SerialflashEraseChip(instance);
+                break;
 
-        default:
-            status = STATUS_QSPI_IP_ERROR; /* unknown operation */
-            break;
+            default:
+                status = STATUS_QSPI_IP_ERROR; /* unknown operation */
+                break;
+        }
+
+        if (STATUS_QSPI_IP_SUCCESS == status)
+        {
+            state->lastCommand = QSPI_IP_LAST_COMMAND_ERASE;
+        }
+    }
+    else
+    {
+        status = STATUS_QSPI_IP_ERROR;
     }
 
-    if (STATUS_QSPI_IP_SUCCESS == status)
-    {
-        state->lastCommand = QSPI_IP_LAST_COMMAND_ERASE;
-    }
 
     return status;
 }
@@ -1313,11 +1342,15 @@ Qspi_Ip_StatusType Qspi_Ip_Reset(uint32 instance)
     uint8 resetCmdCount;       /*!< Number of commands in reset sequence       */
 
     resetCmdLut = state->configuration->resetSettings.resetCmdLut;
-    if (QSPI_IP_LUT_INVALID != resetCmdLut)
+    if ((QSPI_IP_LUT_INVALID != resetCmdLut) && (TRUE != state->isInXIPMode))
     {
         resetCmdCount = state->configuration->resetSettings.resetCmdCount;
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_08();
         /* Perform reset */
         status = Qspi_Ip_InitReset(instance, resetCmdLut, resetCmdCount, state);
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_08();
         /* Bring corresponding controller to initial configuration if required */
         if ((STATUS_QSPI_IP_SUCCESS == status) && (state->configuration->ctrlAutoCfgPtr != NULL_PTR))
         {
@@ -1331,7 +1364,7 @@ Qspi_Ip_StatusType Qspi_Ip_Reset(uint32 instance)
     }
 
     /* If enabled, call the reset callout. */
-    if (NULL_PTR != state->configuration->resetCallout)
+    if ((NULL_PTR != state->configuration->resetCallout) && (TRUE != state->isInXIPMode))
     {
         status = state->configuration->resetCallout(instance);
     }
@@ -1354,37 +1387,44 @@ Qspi_Ip_StatusType Qspi_Ip_GetMemoryStatus(uint32 instance)
     Qspi_Ip_StatusType status;
     Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
 
-    /* Check if the QuadSPI command is complete */
-    status = Qspi_Ip_ControllerGetStatus(state->connection->qspiInstance);
-
-    if (STATUS_QSPI_IP_SUCCESS == status)
+    if (TRUE != state->isInXIPMode)
     {
-        /* Check device type */
-        switch (state->configuration->memType)
-        {
-            case QSPI_IP_HYPER_FLASH:
-                /* Check if the operation has finished in the hyper flash */
-                status = Qspi_Ip_HyperflashGetMemoryStatus(instance);
-                break;
+        /* Check if the QuadSPI command is complete */
+        status = Qspi_Ip_ControllerGetStatus(state->connection->qspiInstance);
 
-            case QSPI_IP_SERIAL_FLASH:
-                /* Check if the operation has finished in the serial flash */
-                status = Qspi_Ip_SerialflashGetMemoryStatus(instance);
-                break;
-            default:
-                status = STATUS_QSPI_IP_ERROR; /* unknown operation */
-                break;
+        if (STATUS_QSPI_IP_SUCCESS == status)
+        {
+            /* Check device type */
+            switch (state->configuration->memType)
+            {
+                case QSPI_IP_HYPER_FLASH:
+                    /* Check if the operation has finished in the hyper flash */
+                    status = Qspi_Ip_HyperflashGetMemoryStatus(instance);
+                    break;
+
+                case QSPI_IP_SERIAL_FLASH:
+                    /* Check if the operation has finished in the serial flash */
+                    status = Qspi_Ip_SerialflashGetMemoryStatus(instance);
+                    break;
+                default:
+                    status = STATUS_QSPI_IP_ERROR; /* unknown operation */
+                    break;
+            }
+        }
+
+        if (STATUS_QSPI_IP_SUCCESS == status)
+        {
+            /* Call user callout, if available, to check operation result */
+            if ((state->lastCommand != QSPI_IP_LAST_COMMAND_NONE) && (NULL_PTR != state->configuration->errorCheckCallout))
+            {
+                status = state->configuration->errorCheckCallout(instance);
+            }
+            state->lastCommand = QSPI_IP_LAST_COMMAND_NONE;
         }
     }
-
-    if (STATUS_QSPI_IP_SUCCESS == status)
+    else
     {
-        /* Call user callout, if available, to check operation result */
-        if ((state->lastCommand != QSPI_IP_LAST_COMMAND_NONE) && (NULL_PTR != state->configuration->errorCheckCallout))
-        {
-            status = state->configuration->errorCheckCallout(instance);
-        }
-        state->lastCommand = QSPI_IP_LAST_COMMAND_NONE;
+        status = STATUS_QSPI_IP_ERROR;
     }
 
     return status;
@@ -1506,27 +1546,34 @@ Qspi_Ip_StatusType Qspi_Ip_ReadId(uint32 instance,
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
     Qspi_Ip_StatusType status;
 
-    /* Check device type */
-    switch (state->configuration->memType)
+    if (TRUE != state->isInXIPMode)
     {
-        case QSPI_IP_HYPER_FLASH:
-            status = Qspi_Ip_HyperflashReadId(instance,
-                                              state->configuration->hfConfig->deviceIdWordAddress,
-                                              data,
-                                              state->configuration->readIdSettings.readIdSize);
-            break;
+        /* Check device type */
+        switch (state->configuration->memType)
+        {
+            case QSPI_IP_HYPER_FLASH:
+                status = Qspi_Ip_HyperflashReadId(instance,
+                                                state->configuration->hfConfig->deviceIdWordAddress,
+                                                data,
+                                                state->configuration->readIdSettings.readIdSize);
+                break;
 
-        case QSPI_IP_SERIAL_FLASH:
-            status = Qspi_Ip_RunReadCommand(instance,
-                                            state->configuration->readIdSettings.readIdLut,
-                                            0U,
-                                            data,
-                                            NULL_PTR,
-                                            state->configuration->readIdSettings.readIdSize);
-            break;
-        default:
-            status = STATUS_QSPI_IP_ERROR; /* unknown operation */
-            break;
+            case QSPI_IP_SERIAL_FLASH:
+                status = Qspi_Ip_RunReadCommand(instance,
+                                                state->configuration->readIdSettings.readIdLut,
+                                                0U,
+                                                data,
+                                                NULL_PTR,
+                                                state->configuration->readIdSettings.readIdSize);
+                break;
+            default:
+                status = STATUS_QSPI_IP_ERROR; /* unknown operation */
+                break;
+        }
+    }
+    else
+    {
+        status = STATUS_QSPI_IP_ERROR;
     }
 
     return status;
@@ -1705,7 +1752,7 @@ Qspi_Ip_StatusType Qspi_Ip_Program(uint32 instance,
 #endif
 
     /* Check address range and page size */
-    if ((address < state->configuration->memSize) && ((size <= state->configuration->pageSize)))
+    if ((address < state->configuration->memSize) && ((size <= state->configuration->pageSize)) && (TRUE != state->isInXIPMode))
     {
         /* Write data to the flash device */
         switch (state->configuration->memType)
@@ -1771,6 +1818,12 @@ Qspi_Ip_StatusType Qspi_Ip_Enter0XX(uint32 instance)
         (void)Qspi_Ip_InitLutSeq(instance, state->configuration->read0xxLutAHB, QSPI_IP_AHB_LUT);
     }
 
+    if (STATUS_QSPI_IP_SUCCESS == status)
+    {
+        /* XIP mode is enabled */
+        state->isInXIPMode = TRUE;
+    }
+
     return status;
 }
 
@@ -1803,6 +1856,12 @@ Qspi_Ip_StatusType Qspi_Ip_Exit0XX(uint32 instance)
         (void)Qspi_Ip_InitLutSeq(instance, state->configuration->readLut, QSPI_IP_AHB_LUT);
     }
 
+    if (STATUS_QSPI_IP_SUCCESS == status)
+    {
+        /* XIP mode is disabled */
+        state->isInXIPMode = FALSE;
+    }
+
     return status;
 }
 
@@ -1820,10 +1879,20 @@ Qspi_Ip_StatusType Qspi_Ip_SetProtection(uint32 instance,
     DEV_ASSERT_QSPI(instance < QSPI_IP_MEM_INSTANCE_COUNT);
 #endif
 
+    Qspi_Ip_StatusType status;
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
     const Qspi_Ip_StatusConfigType *statusConfig = &(state->configuration->statusConfig);
 
-    return Qspi_Ip_UpdateStatusReg(instance, statusConfig->blockProtectionOffset, statusConfig->blockProtectionWidth, value);
+    if (TRUE != state->isInXIPMode)
+    {
+        status = Qspi_Ip_UpdateStatusReg(instance, statusConfig->blockProtectionOffset, statusConfig->blockProtectionWidth, value);
+    }
+    else
+    {
+        status = STATUS_QSPI_IP_ERROR;
+    }
+
+    return status;
 }
 
 
@@ -1841,10 +1910,20 @@ Qspi_Ip_StatusType Qspi_Ip_GetProtection(uint32 instance,
     DEV_ASSERT_QSPI(value != NULL_PTR);
 #endif
 
+    Qspi_Ip_StatusType status;
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
     const Qspi_Ip_StatusConfigType *statusConfig = &(state->configuration->statusConfig);
 
-    return Qspi_Ip_CheckStatusReg(instance, statusConfig->blockProtectionOffset, statusConfig->blockProtectionWidth, value);
+    if (TRUE != state->isInXIPMode)
+    {
+        status = Qspi_Ip_CheckStatusReg(instance, statusConfig->blockProtectionOffset, statusConfig->blockProtectionWidth, value);
+    }
+    else
+    {
+        status = STATUS_QSPI_IP_ERROR;
+    }
+
+    return status;
 }
 
 
@@ -1862,7 +1941,7 @@ Qspi_Ip_StatusType Qspi_Ip_AhbReadEnable(uint32 instance)
     Qspi_Ip_StatusType status = STATUS_QSPI_IP_ERROR;
     const Qspi_Ip_StateType * state = &(Qspi_Ip_MemoryStateStructure[instance]);
 
-    if (state->activeReadLut != QSPI_IP_LUT_INVALID)
+    if ((state->activeReadLut != QSPI_IP_LUT_INVALID) && (TRUE != state->isInXIPMode))
     {
         /* Patch the command sequence before using */
         Qspi_Ip_PatchReadCommand(instance, state->activeReadLut);
@@ -1875,7 +1954,6 @@ Qspi_Ip_StatusType Qspi_Ip_AhbReadEnable(uint32 instance)
 
     return status;
 }
-
 
 /*FUNCTION**********************************************************************
  *
@@ -1898,42 +1976,51 @@ Qspi_Ip_StatusType Qspi_Ip_Init(uint32 instance,
     DEV_ASSERT_QSPI(NULL_PTR == state->configuration);
 #endif
 
-    /* Copy configuration information to state structure */
-    state->configuration = pConfig;
-    state->connection = pConnect;
-    state->activeReadLut = pConfig->readLut;    /* 0-X-X mode disabled by default */
-    state->lastCommand = QSPI_IP_LAST_COMMAND_NONE;
-    state->baseAddress = Qspi_Ip_GetBaseAdress(pConnect->qspiInstance, pConnect->connectionType);
-
-#if (QSPI_PERFORM_DEVICE_CONFIG == STD_ON)
-    /* Initialize corresponding controller if required */
-    if (pConfig->ctrlAutoCfgPtr != NULL_PTR)
-    {
-        status = Qspi_Ip_ControllerInit(pConnect->qspiInstance, pConfig->ctrlAutoCfgPtr);
-    }
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+#if (QSPI_IP_USE_SFDP_CFG == STD_OFF)
+    status = Qspi_Ip_ValidateMemConfigCRC(pConfig, pConnect);
     if (STATUS_QSPI_IP_SUCCESS == status)
-    {
-        /* Perform initial reset */
-        status = Qspi_Ip_InitReset(instance, pConfig->initResetSettings.resetCmdLut, pConfig->initResetSettings.resetCmdCount, state);
-    }
-    if (STATUS_QSPI_IP_SUCCESS == status)
-    {
-        /* Execute initial setup of external device */
-        status = Qspi_Ip_InitDevice(instance, state);
-    }
-
-    /* If enabled, call the init callout, for additional QSPI IP or external memory settings. */
-    if ((STATUS_QSPI_IP_SUCCESS == status) && (NULL_PTR != pConfig->initCallout))
-    {
-        status = pConfig->initCallout(instance);
-    }
-
-    /* Perform protection configuration */
-    if (STATUS_QSPI_IP_SUCCESS == status)
-    {
-        status = Qspi_Ip_InitProtection(instance, state);
-    }
 #endif
+#endif
+    {
+        /* Copy configuration information to state structure */
+        state->configuration = pConfig;
+        state->connection = pConnect;
+        state->activeReadLut = pConfig->readLut;    /* 0-X-X mode disabled by default */
+        state->lastCommand = QSPI_IP_LAST_COMMAND_NONE;
+        state->isInXIPMode = FALSE;
+        state->baseAddress = Qspi_Ip_GetBaseAdress(pConnect->qspiInstance, pConnect->connectionType);
+
+#if (QSPI_IP_PERFORM_DEVICE_CONFIG == STD_ON)
+        /* Initialize corresponding controller if required */
+        if (pConfig->ctrlAutoCfgPtr != NULL_PTR)
+        {
+            status = Qspi_Ip_ControllerInit(pConnect->qspiInstance, pConfig->ctrlAutoCfgPtr);
+        }
+        if (STATUS_QSPI_IP_SUCCESS == status)
+        {
+            /* Perform initial reset */
+            status = Qspi_Ip_InitReset(instance, pConfig->initResetSettings.resetCmdLut, pConfig->initResetSettings.resetCmdCount, state);
+        }
+        if (STATUS_QSPI_IP_SUCCESS == status)
+        {
+            /* Execute initial setup of external device */
+            status = Qspi_Ip_InitDevice(instance, state);
+        }
+
+        /* If enabled, call the init callout, for additional QSPI IP or external memory settings. */
+        if ((STATUS_QSPI_IP_SUCCESS == status) && (NULL_PTR != pConfig->initCallout))
+        {
+            status = pConfig->initCallout(instance);
+        }
+
+        /* Perform protection configuration */
+        if (STATUS_QSPI_IP_SUCCESS == status)
+        {
+            status = Qspi_Ip_InitProtection(instance, state);
+        }
+#endif
+    }
 
     return status;
 }
@@ -1953,6 +2040,8 @@ Qspi_Ip_StatusType Qspi_Ip_Deinit(uint32 instance)
 #endif
 
     state->configuration = NULL_PTR;
+    state->connection = NULL_PTR;
+    state->activeReadLut = QSPI_IP_LUT_INVALID;
     return STATUS_QSPI_IP_SUCCESS;
 }
 

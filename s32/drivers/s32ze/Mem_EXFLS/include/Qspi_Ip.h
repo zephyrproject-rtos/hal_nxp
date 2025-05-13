@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,7 +31,7 @@ extern "C"{
 #define QSPI_IP_AR_RELEASE_REVISION_VERSION_H     0
 #define QSPI_IP_SW_MAJOR_VERSION_H                2
 #define QSPI_IP_SW_MINOR_VERSION_H                0
-#define QSPI_IP_SW_PATCH_VERSION_H                0
+#define QSPI_IP_SW_PATCH_VERSION_H                1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -380,7 +380,6 @@ Qspi_Ip_StatusType Qspi_Ip_RunWriteCommand(uint32 instance,
  */
 Qspi_Ip_StatusType Qspi_Ip_AhbReadEnable(uint32 instance);
 
-
 /*!
  * @brief Check the status of the QSPI controller
  *
@@ -437,6 +436,7 @@ Qspi_Ip_StatusType Qspi_Ip_Abort(uint32 instance);
 Qspi_Ip_StatusType Qspi_Ip_ReadSfdp(Qspi_Ip_MemoryConfigType * pConfig,
                                     const Qspi_Ip_MemoryConnectionType * pConnect
                                    );
+
 
 #define MEM_43_EXFLS_STOP_SEC_CODE
 #include "Mem_43_EXFLS_MemMap.h"

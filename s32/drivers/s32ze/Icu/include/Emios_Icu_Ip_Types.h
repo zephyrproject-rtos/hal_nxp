@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
  *   @file       Emios_Icu_Ip_[!IF "var:defined('postBuildVariant')"!][!"$postBuildVariant"!]_[!ENDIF!]PBcfg.c
- *   @version    2.0.0
+ *   @version    2.0.1
  *
  *   @brief      AUTOSAR Icu - contains the data exported by the Icu module
  *   @details    Contains the information that will be exported by the module, as requested by AUTOSAR.
@@ -39,7 +39,7 @@ extern "C"{
 #define EMIOS_ICU_IP_TYPES_AR_RELEASE_REVISION_VERSION   0
 #define EMIOS_ICU_IP_TYPES_SW_MAJOR_VERSION              2
 #define EMIOS_ICU_IP_TYPES_SW_MINOR_VERSION              0
-#define EMIOS_ICU_IP_TYPES_SW_PATCH_VERSION              0
+#define EMIOS_ICU_IP_TYPES_SW_PATCH_VERSION              1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
@@ -80,13 +80,8 @@ extern "C"{
 #define EMIOS_ICU_IP_CHANNEL_8     ((uint8)0x08)
 #define EMIOS_ICU_IP_CHANNEL_15    ((uint8)0x0F)
 #define EMIOS_ICU_IP_CHANNEL_16    ((uint8)0x10)
-#define EMIOS_ICU_IP_CHANNEL_22    ((uint8)0x16)
 #define EMIOS_ICU_IP_CHANNEL_23    ((uint8)0x17)
 #define EMIOS_ICU_IP_CHANNEL_24    ((uint8)0x18)
-
-#if (STD_ON == EMIOS_ICU_IP_CHANNEL_24_USED)
-#define EMIOS_ICU_IP_CHANNEL_31    ((uint8)0x1F)
-#endif
 
 #define EMIOS_ICU_IP_MCB_INT_CLOCK_U32         ((uint32)(0x50U))
 #if (EMIOS_ICU_IP_EDGE_COUNT_API == STD_ON)
@@ -102,7 +97,12 @@ extern "C"{
 #endif
 
 #define EMIOS_ICU_IP_CCR_MODE_GPI_U32          ((uint32)(0x00))
-#define EMIOS_ICU_IP_CCR_MODE_SAIC_U32         ((uint32)(0x02))
+
+#if (EMIOS_ICU_IP_SAIC_EDGE_CAPTURING_SUPPORT == STD_ON)
+    #define EMIOS_ICU_IP_CCR_MODE_SAIC_EDGE_CAPTURING_U32         ((uint32)(0x42))
+#else
+    #define EMIOS_ICU_IP_CCR_MODE_SAIC_U32         ((uint32)(0x02))
+#endif
 
 #if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
 #define EMIOS_ICU_IP_CCR_MODE_IPWM_U32         ((uint32)(0x04))
@@ -146,7 +146,7 @@ typedef enum
     EMIOS_ICU_MODE_TIMESTAMP                        = 0x4U,
     /** @brief Edge counter measurement mode.*/
     EMIOS_ICU_MODE_EDGE_COUNTER                     = 0x8U
-} eMios_Icu_Ip_ModeType; 
+} eMios_Icu_Ip_ModeType;
 
 /** @brief Enable/disable DMA support for timestamp. */
 typedef enum
@@ -173,15 +173,15 @@ typedef enum
 {
     /** @brief No measurement. */
     EMIOS_ICU_NO_MEASUREMENT = 0U,
-    /** @brief The time measurement for OFF period. */ 
+    /** @brief The time measurement for OFF period. */
     EMIOS_ICU_LOW_TIME       = 1U,
-    /** @brief The time measurement for ON period. */ 
+    /** @brief The time measurement for ON period. */
     EMIOS_ICU_HIGH_TIME      = 2U,
     /** @brief Period measurement between two consecutive falling/raising edges. */
     EMIOS_ICU_PERIOD_TIME    = 4U,
     /** @brief The fraction of active period. */
     EMIOS_ICU_DUTY_CYCLE     = 8U
-} eMios_Icu_Ip_MeasType; 
+} eMios_Icu_Ip_MeasType;
 
 #if (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)
 /** @brief Type of operation for timestamp. */
@@ -189,11 +189,11 @@ typedef enum
 {
     /** @brief No timestamp. */
     EMIOS_ICU_NO_TIMESTAMP      = 0U,
-    /** @brief The timestamp with circular buffer . */ 
+    /** @brief The timestamp with circular buffer . */
     EMIOS_ICU_CIRCULAR_BUFFER   = 1U,
-    /** @brief The timestamp with linear buffer . */ 
+    /** @brief The timestamp with linear buffer . */
     EMIOS_ICU_LINEAR_BUFFER     = 2U
-} eMios_Icu_Ip_TimestampBufferType; 
+} eMios_Icu_Ip_TimestampBufferType;
 #endif
 
 #if (STD_ON == EMIOS_ICU_IP_GET_INPUT_LEVEL_API)
@@ -220,7 +220,6 @@ typedef enum
 {
     EMIOS_ICU_BUS_A                 = 0x0U, /**< @brief Bus A            */
     EMIOS_ICU_BUS_DIVERSE           = 0x1U, /**< @brief Bus diverse      */
-    EMIOS_ICU_BUS_F                 = 0x2U, /**< @brief Bus F            */
     EMIOS_ICU_BUS_INTERNAL_COUNTER  = 0x3U  /**< @brief Internal counter */
 } eMios_Icu_Ip_BusType;
 
@@ -353,6 +352,7 @@ typedef struct
     eMios_Icu_Ip_MeasType               measurementMode;            /*!< subMode selection for Signal Measurement*/
     eMios_Icu_Ip_EdgeType               edgeAlignement;             /*!< Edge alignment for measurement */
     eMios_Icu_Ip_FilterType             Filter;                     /*!< Channel Digital Input Filter */
+    boolean                             filterClock;                /*!< Selects the clock source for the programmable input filter */
     eMios_Icu_Ip_CallbackType           callback;                   /*!< The HLD callback function for channels events */
     eMios_Icu_Ip_LogicChStateCbType     logicChStateCallback;       /*!< The HLD callback function for changing logic channels status */
     uint8                               callbackParams;             /*!< The HLD logical channel serviced */
@@ -414,7 +414,7 @@ typedef enum
     EMIOS_ICU_IP_FALLING_EDGE     = 0x00U,    /*!< Falling edge */
     EMIOS_ICU_IP_RISING_EDGE      = 0x01U,    /*!< Rising edge */
     EMIOS_ICU_IP_BOTH_EDGES       = 0x02U,    /*!< Rising and falling edge */
-    EMIOS_ICU_IP_NONE_TRIGGER     = 0x03U     /*!< No edge */
+    EMIOS_ICU_IP_NO_TRIGGER       = 0x03U     /*!< No edge */
 } eMios_Icu_Ip_WscTriggerModeType;
 
 /*

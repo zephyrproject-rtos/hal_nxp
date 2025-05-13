@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Mem_43_EXFLS.c
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -42,7 +42,7 @@ extern "C"{
 #define SCHM_MEM_43_EXFLS_AR_RELEASE_REVISION_VERSION_C  0
 #define SCHM_MEM_43_EXFLS_SW_MAJOR_VERSION_C             2
 #define SCHM_MEM_43_EXFLS_SW_MINOR_VERSION_C             0
-#define SCHM_MEM_43_EXFLS_SW_PATCH_VERSION_C             0
+#define SCHM_MEM_43_EXFLS_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
@@ -58,7 +58,7 @@ extern "C"{
         #else
             #define ISR_STATE_MASK     ((uint32)0x00000001UL)   /**< @brief PRIMASK bit 0 */
         #endif
-    #endif 
+    #endif
 #else
     #ifdef MCAL_PLATFORM_S12
         #define ISR_STATE_MASK     ((uint32)0x00000010UL)   /**< @brief I bit of CCR */
@@ -76,7 +76,7 @@ extern "C"{
         #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) != (uint32)(ISR_STATE_MASK))
     #else
         #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) == (uint32)0)
-    #endif    
+    #endif
 #else
     #ifdef MCAL_PLATFORM_S12
         #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) == (uint32)0)
@@ -99,16 +99,26 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_MEM_EXCLUSIVE_AREA_10) static volatile uint32 msr_MEM_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MEM_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MEM_EXCLUSIVE_AREA_11) static volatile uint32 msr_MEM_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MEM_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MEM_EXCLUSIVE_AREA_12) static volatile uint32 msr_MEM_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MEM_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MEM_EXCLUSIVE_AREA_13) static volatile uint32 msr_MEM_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MEM_EXCLUSIVE_AREA_13) static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MEM_EXCLUSIVE_AREA_14) static volatile uint32 msr_MEM_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MEM_EXCLUSIVE_AREA_14) static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_MEM_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MEM_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -127,18 +137,18 @@ VAR_SEC_NOCACHE(reentry_guard_MEM_EXCLUSIVE_AREA_14) static volatile uint32 reen
 
 #ifndef _COSMIC_C_S32ZE_
 /*================================================================================================*/
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
-uint32 Mem_43_EXFLS_schm_read_msr(void); 
+uint32 Mem_43_EXFLS_schm_read_msr(void);
 #endif /*ifndef _COSMIC_C_S32ZE_*/
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
@@ -148,13 +158,13 @@ uint32 Mem_43_EXFLS_schm_read_msr(void);
 
 #if (defined(_GREENHILLS_C_S32ZE_) || defined(_CODEWARRIOR_C_S32ZE_))
 /*================================================================================================*/
-/** 
-* @brief   This macro returns the MSR register value (32 bits). 
-* @details This macro function implementation returns the MSR register value in r3 (32 bits). 
-*     
+/**
+* @brief   This macro returns the MSR register value (32 bits).
+* @details This macro function implementation returns the MSR register value in r3 (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 #ifdef MCAL_PLATFORM_ARM
 #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
@@ -193,16 +203,16 @@ ASM_KEYWORD uint32 Mem_43_EXFLS_schm_read_msr(void)
 #endif /*#ifdef GHS||CW*/
 
 #ifdef _DIABDATA_C_S32ZE_
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 #ifdef MCAL_PLATFORM_ARM
 uint32 Mem_43_EXFLS_schm_read_msr(void)
@@ -225,23 +235,23 @@ uint32 Mem_43_EXFLS_schm_read_msr(void)
 ASM_KEYWORD uint32 Mem_43_EXFLS_schm_read_msr(void)
 {
     mfmsr r3
-}    
+}
 #endif  /* MCAL_PLATFORM_ARM */
 
 #endif   /* _DIABDATA_C_S32ZE_*/
 
 #ifdef _COSMIC_C_S32ZE_
 /*================================================================================================*/
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 
 #ifdef MCAL_PLATFORM_S12
@@ -255,16 +265,16 @@ ASM_KEYWORD uint32 Mem_43_EXFLS_schm_read_msr(void)
 
 #ifdef _HITECH_C_S32ZE_
 /*================================================================================================*/
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 uint32 Mem_43_EXFLS_schm_read_msr(void)
 {
@@ -276,16 +286,16 @@ uint32 Mem_43_EXFLS_schm_read_msr(void)
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
 #ifdef _GCC_C_S32ZE_
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 uint32 Mem_43_EXFLS_schm_read_msr(void)
 {
@@ -307,16 +317,16 @@ uint32 Mem_43_EXFLS_schm_read_msr(void)
 /*================================================================================================*/
 
 #ifdef _ARM_DS5_C_S32ZE_
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 uint32 Mem_43_EXFLS_schm_read_msr(void)
 {
@@ -337,25 +347,31 @@ uint32 Mem_43_EXFLS_schm_read_msr(void)
 #endif   /* _ARM_DS5_C_S32ZE_ */
 
 #ifdef _IAR_C_S32ZE_
-/** 
-* @brief   This function returns the MSR register value (32 bits). 
-* @details This function returns the MSR register value (32 bits). 
-*     
+/**
+* @brief   This function returns the MSR register value (32 bits).
+* @details This function returns the MSR register value (32 bits).
+*
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits). 
-* 
+* @return        uint32 msr  This function returns the MSR register value (32 bits).
+*
 * @pre  None
 * @post None
-* 
+*
 */
 uint32 Mem_43_EXFLS_schm_read_msr(void)
 {
     register uint32 reg_tmp;
 
-#if ((defined MCAL_ENABLE_USER_MODE_SUPPORT)&&(!defined MCAL_PLATFORM_ARM_M0PLUS))
-   __asm volatile( " mrs %0, basepri " : "=r" (reg_tmp) );
+#if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
+    __asm volatile( " mrs %x0, DAIF " : "=r" (reg_tmp) );
+#elif  (MCAL_PLATFORM_ARM == MCAL_ARM_RARCH)
+    __asm volatile( " mrs %0, CPSR " : "=r" (reg_tmp) );
 #else
-   __asm volatile( " mrs %0, primask " : "=r" (reg_tmp) );
+    #if ((defined MCAL_ENABLE_USER_MODE_SUPPORT)&&(!defined MCAL_PLATFORM_ARM_M0PLUS))
+    __asm volatile( " mrs %0, basepri " : "=r" (reg_tmp) );
+    #else
+    __asm volatile( " mrs %0, primask " : "=r" (reg_tmp) );
+    #endif
 #endif
 
     return (uint32)reg_tmp;
@@ -370,6 +386,348 @@ uint32 Mem_43_EXFLS_schm_read_msr(void)
 ==================================================================================================*/
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_01(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_01[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_01[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_01[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_01(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_01[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_02(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_02[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_02[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_02[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_02(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_02[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_03(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_03[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_03[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_03[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_03(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_03[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_04(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_04[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_04[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_04[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_04(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_04[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_05(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_05[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_05[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_05[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_05(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_05[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_06(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_06[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_06[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_06[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_06(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_06[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_07(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_07[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_07[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_07[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_07(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_07[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_08(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_08[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_08[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_08[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_08(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_08[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_08[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_08[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_09(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_09[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
+#else
+        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MEM_EXCLUSIVE_AREA_09[u32CoreId] = msr;
+    }
+    reentry_guard_MEM_EXCLUSIVE_AREA_09[u32CoreId]++;
+}
+
+void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_09(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MEM_EXCLUSIVE_AREA_09[u32CoreId]--;
+    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_09[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_09[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
 
 void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_10(void)
 {
@@ -409,193 +767,57 @@ void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_10(void)
     }
 }
 
-void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_11(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_11[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
-#else
-        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_MEM_EXCLUSIVE_AREA_11[u32CoreId] = msr;
-    }
-    reentry_guard_MEM_EXCLUSIVE_AREA_11[u32CoreId]++;
-}
-
-void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_11(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_MEM_EXCLUSIVE_AREA_11[u32CoreId]--;
-    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
-void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_12(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_12[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
-#else
-        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_MEM_EXCLUSIVE_AREA_12[u32CoreId] = msr;
-    }
-    reentry_guard_MEM_EXCLUSIVE_AREA_12[u32CoreId]++;
-}
-
-void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_12(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_MEM_EXCLUSIVE_AREA_12[u32CoreId]--;
-    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
-void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_13(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_13[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
-#else
-        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_MEM_EXCLUSIVE_AREA_13[u32CoreId] = msr;
-    }
-    reentry_guard_MEM_EXCLUSIVE_AREA_13[u32CoreId]++;
-}
-
-void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_13(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_MEM_EXCLUSIVE_AREA_13[u32CoreId]--;
-    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_13[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_13[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
-void SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_14(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_14[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Mem_43_EXFLS_schm_read_msr);
-#else
-        msr = Mem_43_EXFLS_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_MEM_EXCLUSIVE_AREA_14[u32CoreId] = msr;
-    }
-    reentry_guard_MEM_EXCLUSIVE_AREA_14[u32CoreId]++;
-}
-
-void SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_14(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_MEM_EXCLUSIVE_AREA_14[u32CoreId]--;
-    if ((ISR_ON(msr_MEM_EXCLUSIVE_AREA_14[u32CoreId]))&&(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_14[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
 
 #ifdef MCAL_TESTING_ENVIRONMENT
-/** 
-@brief   This function checks that all entered exclusive areas were also exited. 
+/**
+@brief   This function checks that all entered exclusive areas were also exited.
 @details This function checks that all entered exclusive areas were also exited. The check
          is done by verifying that all reentry_guard_* static variables are back to the
          zero value.
-    
+
 @param[in]     void       No input parameters
-@return        void       This function does not return a value. Test asserts are used instead. 
+@return        void       This function does not return a value. Test asserts are used instead.
 
 @pre  None
 @post None
 
-@remarks Covers 
-@remarks Implements 
+@remarks Covers
+@remarks Implements
 */
 void SchM_Check_mem_43_exfls(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_01[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_01[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_01 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_02[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_02[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_02 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_03[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_03[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_03 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_04[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_04[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_04 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_05[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_05[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_01 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_06[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_06[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_02 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_07[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_07[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_03 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_08[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_08[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_04 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_09[u32CoreId]);
+    reentry_guard_MEM_EXCLUSIVE_AREA_09[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_04 for the next test in the suite*/
+
     EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_10[u32CoreId]);
     reentry_guard_MEM_EXCLUSIVE_AREA_10[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_10 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_11[u32CoreId]);
-    reentry_guard_MEM_EXCLUSIVE_AREA_11[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_11 for the next test in the suite*/
-
-    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_12[u32CoreId]);
-    reentry_guard_MEM_EXCLUSIVE_AREA_12[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_12 for the next test in the suite*/
-
-    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_13[u32CoreId]);
-    reentry_guard_MEM_EXCLUSIVE_AREA_13[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_13 for the next test in the suite*/
-
-    EU_ASSERT(0UL == reentry_guard_MEM_EXCLUSIVE_AREA_14[u32CoreId]);
-    reentry_guard_MEM_EXCLUSIVE_AREA_14[u32CoreId] = 0UL; /*reset reentry_guard_MEM_EXCLUSIVE_AREA_14 for the next test in the suite*/
 }
 #endif /*MCAL_TESTING_ENVIRONMENT*/
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -29,70 +29,6 @@ extern "C"{
 #include "OsIf.h"
 #include "Emios_Mcl_Ip_Cfg_Defines.h"
 
-/*==================================================================================================
-*                               HEADER FILE VERSION INFORMATION
-==================================================================================================*/
-#define EMIOS_MCL_IP_IRQ_VENDOR_ID                       43
-#define EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION        4
-#define EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION        7
-#define EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION     0
-#define EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION                2
-#define EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION                0
-#define EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION                0
-/*==================================================================================================
-*                                      FILE VERSION CHECKS
-==================================================================================================*/
-#if (EMIOS_MCL_IP_IRQ_VENDOR_ID != EMIOS_MCL_IP_CFG_DEFINES_VENDOR_ID)
-    #error "Emios_Mcl_Ip_Irq.h and Emios_Mcl_Ip_Cfg_Defines.h have different vendor ids"
-#endif
-
-/* Check if  header file and Emios_Mcl_Ip_Cfg_Defines.h file are of the same Autosar version */
-#if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
-     (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION) || \
-     (EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION != EMIOS_MCL_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION))
-    #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Mcl_Ip_Cfg_Defines.h are different"
-#endif
-
-/* Check if header file and Emios_Mcl_Ip_Cfg_Defines.h file are of the same Software version */
-#if ((EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_SW_MAJOR_VERSION) || \
-     (EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_SW_MINOR_VERSION) || \
-     (EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION != EMIOS_MCL_IP_CFG_DEFINES_SW_PATCH_VERSION))
-    #error "Software Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Mcl_Ip_Cfg_Defines.h are different"
-#endif
-
-#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-
-    /* Check if this header file and OsIf.h file are of the same Autosar version */
-    #if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != OSIF_AR_RELEASE_MAJOR_VERSION) || \
-        (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != OSIF_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and OsIf.h are different"
-    #endif
-
-#endif
-
-/*==================================================================================================
-*                                            CONSTANTS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                       DEFINES AND MACROS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                              ENUMS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                  STRUCTURES AND OTHER TYPEDEFS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                  GLOBAL VARIABLE DECLARATIONS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                       FUNCTION PROTOTYPES
-==================================================================================================*/
 #if (\
         (defined GPT_EMIOS_0_CH_0_ISR_USED) ||\
         (defined GPT_EMIOS_0_CH_1_ISR_USED) ||\
@@ -191,9 +127,10 @@ extern "C"{
         (defined GPT_EMIOS_2_CH_30_ISR_USED) ||\
         (defined GPT_EMIOS_2_CH_31_ISR_USED)\
     )
+#define MCL_EMIOS_GPT_IP_H
+#include "Emios_Gpt_Ip.h"
+#endif
 
-        extern void Emios_Gpt_Ip_IrqHandler(uint8 instance, uint8 channel);
-    #endif
 #if (\
         (defined ICU_EMIOS_0_CH_0_ISR_USED) ||\
         (defined ICU_EMIOS_0_CH_1_ISR_USED) ||\
@@ -292,9 +229,10 @@ extern "C"{
         (defined ICU_EMIOS_2_CH_30_ISR_USED) ||\
         (defined ICU_EMIOS_2_CH_31_ISR_USED)\
     )
+#define MCL_EMIOS_ICU_IP_IRQ_H
+#include "Emios_Icu_Ip_Irq.h"
+#endif
 
-        extern void Emios_Icu_Ip_IrqHandler(uint8 instance, uint8 channel);
-    #endif
 #if (\
         (defined OCU_EMIOS_0_CH_0_ISR_USED) ||\
         (defined OCU_EMIOS_0_CH_1_ISR_USED) ||\
@@ -393,9 +331,10 @@ extern "C"{
         (defined OCU_EMIOS_2_CH_30_ISR_USED) ||\
         (defined OCU_EMIOS_2_CH_31_ISR_USED)\
     )
+#define MCL_EMIOS_OCU_IP_IRQ_H
+#include "Emios_Ocu_Ip_Irq.h"
+#endif
 
-        extern void Emios_Ocu_Ip_IrqHandler(uint8 instance, uint8 channel);
-    #endif
 #if (\
         (defined PWM_EMIOS_0_CH_0_ISR_USED) ||\
         (defined PWM_EMIOS_0_CH_1_ISR_USED) ||\
@@ -494,10 +433,161 @@ extern "C"{
         (defined PWM_EMIOS_2_CH_30_ISR_USED) ||\
         (defined PWM_EMIOS_2_CH_31_ISR_USED)\
     )
+#define MCL_EMIOS_PWM_IP_IRQ_H
+#include "Emios_Pwm_Ip_Irq.h"
+#endif
+/*==================================================================================================
+*                               HEADER FILE VERSION INFORMATION
+==================================================================================================*/
+#define EMIOS_MCL_IP_IRQ_VENDOR_ID                       43
+#define EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION        4
+#define EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION        7
+#define EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION     0
+#define EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION                2
+#define EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION                0
+#define EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION                1
+/*==================================================================================================
+*                                      FILE VERSION CHECKS
+==================================================================================================*/
+#if (EMIOS_MCL_IP_IRQ_VENDOR_ID != EMIOS_MCL_IP_CFG_DEFINES_VENDOR_ID)
+    #error "Emios_Mcl_Ip_Irq.h and Emios_Mcl_Ip_Cfg_Defines.h have different vendor ids"
+#endif
 
-        extern void Emios_Pwm_Ip_IrqHandler(uint8 instance, uint8 channel);
+/* Check if  header file and Emios_Mcl_Ip_Cfg_Defines.h file are of the same Autosar version */
+#if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION != EMIOS_MCL_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Mcl_Ip_Cfg_Defines.h are different"
+#endif
+
+/* Check if header file and Emios_Mcl_Ip_Cfg_Defines.h file are of the same Software version */
+#if ((EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_SW_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION != EMIOS_MCL_IP_CFG_DEFINES_SW_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION != EMIOS_MCL_IP_CFG_DEFINES_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Mcl_Ip_Cfg_Defines.h are different"
+#endif
+
+#ifdef MCL_EMIOS_GPT_IP_H
+
+#if (EMIOS_MCL_IP_IRQ_VENDOR_ID != EMIOS_GPT_IP_VENDOR_ID)
+    #error "Emios_Mcl_Ip_Irq.h and Emios_Gpt_Ip.h have different vendor ids"
+#endif
+
+/* Check if  header file and Emios_Gpt_Ip.h file are of the same Autosar version */
+#if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != EMIOS_GPT_IP_AR_RELEASE_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != EMIOS_GPT_IP_AR_RELEASE_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION != EMIOS_GPT_IP_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Gpt_Ip.h are different"
+#endif
+
+/* Check if header file and Emios_Gpt_Ip.h file are of the same Software version */
+#if ((EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION != EMIOS_GPT_IP_SW_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION != EMIOS_GPT_IP_SW_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION != EMIOS_GPT_IP_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Gpt_Ip.h are different"
+#endif
+
+#endif /* MCL_EMIOS_GPT_IP_H */
+
+#ifdef MCL_EMIOS_ICU_IP_IRQ_H
+
+#if (EMIOS_MCL_IP_IRQ_VENDOR_ID != EMIOS_ICU_IP_IRQ_VENDOR_ID)
+    #error "Emios_Mcl_Ip_Irq.h and Emios_Icu_Ip_Irq.h have different vendor ids"
+#endif
+
+/* Check if  header file and Emios_Icu_Ip_Irq.h file are of the same Autosar version */
+#if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != EMIOS_ICU_IP_IRQ_AR_RELEASE_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != EMIOS_ICU_IP_IRQ_AR_RELEASE_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION != EMIOS_ICU_IP_IRQ_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Icu_Ip_Irq.h are different"
+#endif
+
+/* Check if header file and Emios_Icu_Ip_Irq.h file are of the same Software version */
+#if ((EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION != EMIOS_ICU_IP_IRQ_SW_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION != EMIOS_ICU_IP_IRQ_SW_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION != EMIOS_ICU_IP_IRQ_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Icu_Ip_Irq.h are different"
+#endif
+
+#endif /* MCL_EMIOS_ICU_IP_IRQ_H */
+
+#ifdef MCL_EMIOS_OCU_IP_IRQ_H
+
+#if (EMIOS_MCL_IP_IRQ_VENDOR_ID != EMIOS_OCU_IP_IRQ_VENDOR_ID)
+    #error "Emios_Mcl_Ip_Irq.h and Emios_Ocu_Ip_Irq.h have different vendor ids"
+#endif
+
+/* Check if  header file and Emios_Ocu_Ip_Irq.h file are of the same Autosar version */
+#if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != EMIOS_OCU_IP_IRQ_AR_RELEASE_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != EMIOS_OCU_IP_IRQ_AR_RELEASE_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION != EMIOS_OCU_IP_IRQ_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Ocu_Ip_Irq.h are different"
+#endif
+
+/* Check if header file and Emios_Ocu_Ip_Irq.h file are of the same Software version */
+#if ((EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION != EMIOS_OCU_IP_IRQ_SW_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION != EMIOS_OCU_IP_IRQ_SW_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION != EMIOS_OCU_IP_IRQ_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Ocu_Ip_Irq.h are different"
+#endif
+
+#endif /* MCL_EMIOS_OCU_IP_IRQ_H */
+
+#ifdef MCL_EMIOS_PWM_IP_IRQ_H
+
+#if (EMIOS_MCL_IP_IRQ_VENDOR_ID != EMIOS_PWM_IP_IRQ_VENDOR_ID)
+    #error "Emios_Mcl_Ip_Irq.h and Emios_Pwm_Ip_Irq.h have different vendor ids"
+#endif
+
+/* Check if  header file and Emios_Pwm_Ip_Irq.h file are of the same Autosar version */
+#if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != EMIOS_PWM_IP_IRQ_AR_RELEASE_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != EMIOS_PWM_IP_IRQ_AR_RELEASE_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_AR_RELEASE_REVISION_VERSION != EMIOS_PWM_IP_IRQ_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Pwm_Ip_Irq.h are different"
+#endif
+
+/* Check if header file and Emios_Pwm_Ip_Irq.h file are of the same Software version */
+#if ((EMIOS_MCL_IP_IRQ_SW_MAJOR_VERSION != EMIOS_PWM_IP_IRQ_SW_MAJOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_MINOR_VERSION != EMIOS_PWM_IP_IRQ_SW_MINOR_VERSION) || \
+     (EMIOS_MCL_IP_IRQ_SW_PATCH_VERSION != EMIOS_PWM_IP_IRQ_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Emios_Mcl_Ip_Irq.h and Emios_Pwm_Ip_Irq.h are different"
+#endif
+
+#endif /* MCL_EMIOS_PWM_IP_IRQ_H */
+
+#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
+
+    /* Check if this header file and OsIf.h file are of the same Autosar version */
+    #if ((EMIOS_MCL_IP_IRQ_AR_RELEASE_MAJOR_VERSION != OSIF_AR_RELEASE_MAJOR_VERSION) || \
+        (EMIOS_MCL_IP_IRQ_AR_RELEASE_MINOR_VERSION != OSIF_AR_RELEASE_MINOR_VERSION))
+        #error "AutoSar Version Numbers of Emios_Mcl_Ip_Irq.h and OsIf.h are different"
     #endif
 
+#endif
+
+/*==================================================================================================
+*                                            CONSTANTS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                       DEFINES AND MACROS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                              ENUMS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                  STRUCTURES AND OTHER TYPEDEFS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                  GLOBAL VARIABLE DECLARATIONS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                       FUNCTION PROTOTYPES
+==================================================================================================*/
 
 #define MCL_START_SEC_CODE
 #include "Mcl_MemMap.h"

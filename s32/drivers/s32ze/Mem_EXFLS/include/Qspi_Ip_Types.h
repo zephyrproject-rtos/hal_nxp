@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,7 +33,7 @@ extern "C"{
 #define QSPI_IP_TYPES_AR_RELEASE_REVISION_VERSION_CFG  0
 #define QSPI_IP_TYPES_SW_MAJOR_VERSION_CFG             2
 #define QSPI_IP_TYPES_SW_MINOR_VERSION_CFG             0
-#define QSPI_IP_TYPES_SW_PATCH_VERSION_CFG             0
+#define QSPI_IP_TYPES_SW_PATCH_VERSION_CFG             1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -121,7 +121,7 @@ extern "C"{
 #define QSPI_IP_ERASE_TYPES                 (4U)
 
 /*! @brief Number of AHB buffers in the device */
-#define QSPI_IP_AHB_BUFFERS                 4
+#define QSPI_IP_AHB_BUFFERS                 (4U)
 
 /*! Invalid index in virtual LUT, used for unsupported features */
 #define QSPI_IP_LUT_INVALID                 (uint16)0xFFFFU
@@ -130,7 +130,7 @@ extern "C"{
 #define QSPI_IP_LUT_SEQ_END                 (uint16)0x0U
 
 /*! Pack the two operations into a LUT register (each operation is a pair of instruction-operand) */
-#define QSPI_IP_PACK_LUT_REG(ops0, ops1)    ( (uint32)(ops0) + ((uint32)(ops1) << 16U) )
+#define QSPI_IP_PACK_LUT_REG(ops0, ops1)    ((uint32)(ops0) + ((uint32)(ops1) << 16U))
 
 
 /*******************************************************************************
@@ -209,6 +209,15 @@ typedef enum
     QSPI_IP_LUT_PADS_8              = (3U << 8U),    /*!<  8 Pads     */
 } Qspi_Ip_LutPadsType;
 
+/**
+* brief Size of data to be processeed by CRC.
+*/
+typedef enum
+{
+    QSPI_IP_CRC_8_BITS = 0,
+    QSPI_IP_CRC_16_BITS
+} Qspi_Ip_CrcDataSizeType;
+
 /*!
  * @brief Operation in a LUT sequence.
  *
@@ -219,6 +228,12 @@ typedef enum
  * Qspi_Ip_LutCommandsType and Qspi_Ip_LutPadsType types should be used to form operations
  */
 typedef uint16 Qspi_Ip_InstrOpType;
+
+/**
+* @brief          Mem CRC Type
+* @details        CRC computed over config set
+*/
+typedef uint16 Qspi_Ip_CrcType;
 
 /*! @brief Read mode
  */
@@ -329,23 +344,6 @@ typedef struct
     boolean allMasters;                    /*!< Indicates that any master may access the last buffer */
 } Qspi_Ip_ControllerAhbConfigType;
 
-#if defined(FEATURE_QSPI_CHIP_OPTIONS_S32K148)
-/*! @brief Source of QuadSPI AHB read interface, module and bus interface clock
- */
-typedef enum
-{
-    QSPI_IP_CLK_SRC_SYS_CLK = 0U,  /*!< FIRC_DIV1 is clock source of QuadSPI internal reference clock */
-    QSPI_IP_CLK_SRC_BUS_CLK = 1U,  /*!< PLL_DIV1 is clock source of QuadSPI internal reference clock  */
-} Qspi_Ip_ClockSourceType;
-
-/*! @brief Source of QuadSPI internal reference clock
- */
-typedef enum
-{
-    QSPI_IP_CLK_REF_PLL_DIV1  = 0U,  /*!< PLL_DIV1 is clock source of QuadSPI internal reference clock  */
-    QSPI_IP_CLK_REF_FIRC_DIV1 = 1U,  /*!< FIRC_DIV1 is clock source of QuadSPI internal reference clock */
-} Qspi_Ip_ClockReferenceType;
-#endif
 
 
 #if (FEATURE_QSPI_HAS_SFP == 1)
@@ -444,15 +442,6 @@ typedef struct
  */
 typedef struct
 {
-#if defined(FEATURE_QSPI_CHIP_OPTIONS_S32K148)
-    Qspi_Ip_ClockSourceType    clockSrc;    /*!< AHB read interface, module and bus interface clock      */
-    Qspi_Ip_ClockReferenceType clockRef;    /*!< Internal reference clock (async clock domain)           */
-    uint8   clockRefDiv;                    /*!< Divider value for internal reference clock              */
-    boolean dqsInvertA;                     /*!< Inverted reference clock selection for DQS Flash A      */
-    boolean dqsInvertB;                     /*!< Inverted reference clock selection for DQS Flash B      */
-    uint8   dqsDelayA;                      /*!< Fine delay chain configuration for Flash A              */
-    uint8   dqsDelayB;                      /*!< Fine delay chain configuration for Flash B              */
-#endif
 
     Qspi_Ip_DataRateType dataRate;          /*!< Single/double data rate                                 */
     uint32 memSizeA1;                       /*!< Size of serial flash A1                                 */
@@ -480,6 +469,7 @@ typedef struct
     uint8 io3IdleValueA;                    /*!< (0 / 1) Logic level of IO[3] signal when not used on side A      */
     uint8 io2IdleValueB;                    /*!< (0 / 1) Logic level of IO[2] signal when not used on side B      */
     uint8 io3IdleValueB;                    /*!< (0 / 1) Logic level of IO[3] signal when not used on side B      */
+    boolean dqsAsAnOutput;                  /*!< Enable DQS as an output                                 */
     boolean byteSwap;                       /*!< Enable byte swap in octal DDR mode                      */
 #if (FEATURE_QSPI_HAS_SFP == 1)
 #if (QSPI_IP_SFP_ENABLE_GLOBAL == STD_ON)
@@ -487,6 +477,9 @@ typedef struct
 #endif
 #endif
     Qspi_Ip_ControllerAhbConfigType ahbConfig;  /*!< AHB buffers configuration                     */
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+    Qspi_Ip_CrcType memCtrlCfgCRC;              /* Controller configuration CRC */
+#endif
 } Qspi_Ip_ControllerConfigType;
 
  /*!
@@ -640,7 +633,7 @@ typedef struct
 */
 typedef enum
 {
-    QSPI_IP_HYPER_FLASH     = 1U,           /*!< Hyperbus devices            */
+    QSPI_IP_HYPER_FLASH     = 1U,           /*!< HyperFlash devices          */
     QSPI_IP_SERIAL_FLASH    = 0U            /*!< Traditional xSPI devices    */
 } Qspi_Ip_FlashMemoryType;
 
@@ -674,6 +667,9 @@ typedef struct
     Qspi_Ip_ErrorCheckCalloutPtrType errorCheckCallout;   /*!< Pointer to error check callout                   */
     Qspi_Ip_EccCheckCalloutPtrType eccCheckCallout;       /*!< Pointer to ecc check callout                     */
     const Qspi_Ip_ControllerConfigType * ctrlAutoCfgPtr;  /*!< Initial controller configuration, if needed      */
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+    Qspi_Ip_CrcType memCfgCRC;                            /*!< Memory device configuration CRC                  */
+#endif
 } Qspi_Ip_MemoryConfigType;
 
 
@@ -688,6 +684,9 @@ typedef struct
     uint32 qspiInstance;                /*!< QSPI Instance where this device is connected     */
     Qspi_Ip_ConnectionType connectionType;            /*!< Device connection to QSPI module                 */
     uint8  memAlignment;                              /*!< Memory alignment required by the external flash  */
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+    Qspi_Ip_CrcType memCntCfgCRC;                    /*!< Flash-controller conections configuration CRC    */
+#endif
 } Qspi_Ip_MemoryConnectionType;
 
 

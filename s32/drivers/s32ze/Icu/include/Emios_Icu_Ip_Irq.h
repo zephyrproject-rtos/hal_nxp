@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -41,7 +41,7 @@ extern "C"{
 #define EMIOS_ICU_IP_IRQ_AR_RELEASE_REVISION_VERSION     0
 #define EMIOS_ICU_IP_IRQ_SW_MAJOR_VERSION                2
 #define EMIOS_ICU_IP_IRQ_SW_MINOR_VERSION                0
-#define EMIOS_ICU_IP_IRQ_SW_PATCH_VERSION                0
+#define EMIOS_ICU_IP_IRQ_SW_PATCH_VERSION                1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -93,10 +93,6 @@ extern "C"{
 ==================================================================================================*/
 
 /*==================================================================================================
-*                                        GLOBAL VARIABLES
-==================================================================================================*/
-
-/*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
 
@@ -115,35 +111,6 @@ extern "C"{
     
 #define ICU_START_SEC_CODE
 #include "Icu_MemMap.h"
-
-/**
-* @brief      Icu driver function that handles the interrupt of eMIOS channel.
-* @details    This function:
-*              - Reads the status register
-*              - Clears the pending interrupt
-*              - Processes interrupt for corresponding eMIOS channel
-*
-* @param[in]  channel - eMIOS hardware channel
-*
-*
-*/
-void Emios_Icu_Ip_IrqHandler(uint8 instance, uint8 channel);
-
-#if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
-/**
-* @brief      Icu driver function that handles the signal measurement type interrupt.
-* @details    This service is  called when an  interrupt is recognized  as a Signal  Measurement
-*             type. There are two branch depending on  the sub-function selected: Duty Cycle or
-*             OTHER. Duty Cycle requires  an extra  variable, because  three values  are required:
-*             two flanks for active signal time and another flank for the end of the pulse. For
-*             calculating high, low and period is enough with the HW registers.
-*
-* @param[in]  instance  - eMIOS module index
-* @param[in]  hwChannel - eMIOS Channel index
-* @param[in]  bOverflow        Parameter that indicates the source of report is an overflow
-*/
-void Emios_Icu_Ip_SignalMeasurementHandler(const uint8 instance, const uint8 hwChannel, boolean bOverflow);
-#endif /* EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON */
 
 #if (STD_ON == EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL)
 /**
@@ -172,6 +139,19 @@ void Emios_Icu_Ip_TimestampDmaProcessing(uint8 instance, uint8 hwChannel);
 **/
 void Emios_Icu_Ip_SignalMeasurementDmaProcessing(uint8 instance, uint8 hwChannel);
 #endif
+
+/**
+* @brief      Icu driver function that handles the interrupt of eMIOS channel.
+* @details    This function:
+*              - Reads the status register
+*              - Clears the pending interrupt
+*              - Processes interrupt for corresponding eMIOS channel
+*
+* @param[in]  channel - eMIOS hardware channel
+*
+*
+*/
+void Emios_Icu_Ip_IrqHandler(uint8 instance, uint8 channel);
 
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"

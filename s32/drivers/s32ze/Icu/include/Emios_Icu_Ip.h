@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -43,7 +43,7 @@ extern "C"
 #define EMIOS_ICU_IP_AR_RELEASE_REVISION_VERSION         0
 #define EMIOS_ICU_IP_SW_MAJOR_VERSION                    2
 #define EMIOS_ICU_IP_SW_MINOR_VERSION                    0
-#define EMIOS_ICU_IP_SW_PATCH_VERSION                    0
+#define EMIOS_ICU_IP_SW_PATCH_VERSION                    1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
@@ -66,28 +66,17 @@ extern "C"
     #error "Software Version Numbers of Emios_Icu_Ip.h and Emios_Icu_Ip_Cfg.h are different"
 #endif
 
-#if (STD_ON == EMIOS_ICU_IP_USED)
-    #if (STD_ON == EMIOS_ICU_USES_MCL_DRIVER)
-        /* Check if  header file and Emios_Mcl_Ip.h file are of the same Autosar version */
-        #if (EMIOS_ICU_IP_VENDOR_ID != EMIOS_MCL_IP_VENDOR_ID)
-            #error "Emios_Icu_Ip.h and Emios_Mcl_Ip.h have different vendor ids"
+#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
+    #if (STD_ON == EMIOS_ICU_IP_USED)
+        #if (STD_ON == EMIOS_ICU_USES_MCL_DRIVER)
+            /* Check if  header file and Emios_Mcl_Ip.h file are of the same Autosar version */
+            #if ((EMIOS_ICU_IP_AR_RELEASE_MAJOR_VERSION    != EMIOS_MCL_IP_AR_RELEASE_MAJOR_VERSION) || \
+                (EMIOS_ICU_IP_AR_RELEASE_MINOR_VERSION    != EMIOS_MCL_IP_AR_RELEASE_MINOR_VERSION))
+                #error "AutoSar Version Numbers of Emios_Icu_Ip.h and Emios_Mcl_Ip.h are different"
+            #endif
         #endif
-        
-        /* Check if  header file and Emios_Mcl_Ip.h file are of the same Autosar version */
-        #if ((EMIOS_ICU_IP_AR_RELEASE_MAJOR_VERSION    != EMIOS_MCL_IP_AR_RELEASE_MAJOR_VERSION) || \
-             (EMIOS_ICU_IP_AR_RELEASE_MINOR_VERSION    != EMIOS_MCL_IP_AR_RELEASE_MINOR_VERSION) || \
-             (EMIOS_ICU_IP_AR_RELEASE_REVISION_VERSION != EMIOS_MCL_IP_AR_RELEASE_REVISION_VERSION))
-            #error "AutoSar Version Numbers of Emios_Icu_Ip.h and Emios_Mcl_Ip.h are different"
-        #endif
-        
-        /* Check if header file and Emios_Mcl_Ip.h file are of the same Software version */
-        #if ((EMIOS_ICU_IP_SW_MAJOR_VERSION != EMIOS_MCL_IP_SW_MAJOR_VERSION) || \
-             (EMIOS_ICU_IP_SW_MINOR_VERSION != EMIOS_MCL_IP_SW_MINOR_VERSION) || \
-             (EMIOS_ICU_IP_SW_PATCH_VERSION != EMIOS_MCL_IP_SW_PATCH_VERSION))
-            #error "Software Version Numbers of Emios_Icu_Ip.h and Emios_Mcl_Ip.h are different"
-        #endif
-    #endif
-#endif  /* EMIOS_ICU_IP_USED */
+    #endif  /* EMIOS_ICU_IP_USED */
+#endif
 /*==================================================================================================
                                            CONSTANTS
 ==================================================================================================*/
@@ -108,7 +97,7 @@ EMIOS_ICU_CONFIG_EXT
 #include "Icu_MemMap.h"
 #endif
 /*==================================================================================================
-*                                        GLOBAL VARIABLES
+*                                        GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 
 #if (EMIOS_ICU_IP_NO_CACHE_USED == STD_ON)
@@ -119,18 +108,18 @@ EMIOS_ICU_CONFIG_EXT
 #include "Icu_MemMap.h"
 #if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
 extern eMios_Icu_Ip_MeasStatusType eMios_Icu_Ip_aeInt_Counter[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
-extern eMios_Icu_ValueType eMios_Icu_Ip_CapturedActivePulseWidth[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
-extern eMios_Icu_ValueType eMios_Icu_Ip_TimeStart[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+extern eMios_Icu_ValueType eMios_Icu_Ip_auCapturedActivePulseWidth[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+extern eMios_Icu_ValueType eMios_Icu_Ip_auTimeStart[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
 #endif /* EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON */
 #if (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)
-extern eMios_Icu_ValueType eMios_Icu_Ip_BufferPtr[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+extern eMios_Icu_ValueType eMios_Icu_Ip_auBufferPtr[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
 #endif /* EMIOS_ICU_IP_TIMESTAMP_API == STD_ON */
 
-extern eMios_Icu_Ip_ChStateType eMios_Icu_Ip_ChState[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
+extern eMios_Icu_Ip_ChStateType eMios_Icu_Ip_axChState[EMIOS_ICU_IP_NUM_OF_CHANNELS_USED];
 
 #if (defined EMIOS_ICU_IP_WSC_SUPPORT)
     #if (EMIOS_ICU_IP_WSC_SUPPORT == STD_ON)
-extern eMios_Icu_Ip_WsChStateType eMios_Icu_Ip_WsChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_WSC_NUM_OF_CHANNELS];
+extern eMios_Icu_Ip_WsChStateType eMios_Icu_Ip_axWsChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_WSC_NUM_OF_CHANNELS];
     #endif
 #endif
 #if (EMIOS_ICU_IP_NO_CACHE_USED == STD_ON)
@@ -146,8 +135,8 @@ extern eMios_Icu_Ip_WsChStateType eMios_Icu_Ip_WsChState[EMIOS_ICU_IP_INSTANCE_C
     #define ICU_START_SEC_VAR_INIT_8
 #endif
 #include "Icu_MemMap.h"
-/* This array stores the positions in the eMios_Icu_Ip_ChState array of the configured eMios channels. */
-extern uint8 eMios_Icu_Ip_IndexInChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_NUM_OF_CHANNELS];
+/* This array stores the positions in the eMios_Icu_Ip_axChState array of the configured eMios channels. */
+extern uint8 eMios_Icu_Ip_u8IndexInChState[EMIOS_ICU_IP_INSTANCE_COUNT][EMIOS_ICU_IP_NUM_OF_CHANNELS];
 #if (EMIOS_ICU_IP_NO_CACHE_USED == STD_ON)
     #define ICU_STOP_SEC_VAR_INIT_8_NO_CACHEABLE
 #else
@@ -207,8 +196,13 @@ extern volatile uint32 Emios_Icu_Ip_aFirstEdgeTimeStamp[EMIOS_ICU_IP_NUM_OF_CHAN
  *             - Clears the (pending) interrupt flag corresponding to eMIOS channel
  *             - Resets the UC A register.
  *             - Enables the SAIC mode for eMIOS channels.
+ *
  * @param[in]  instance - EMIOS instance used.
  * @param[in]  userConfig - pointer to eMios configuration structure
+ *
+ * @return eMios_Icu_Ip_StatusType
+ *         - EMIOS_IP_STATUS_SUCCESS : Completed successfully.
+ *         - EMIOS_IP_STATUS_ERROR : Error occurred.
  */
 eMios_Icu_Ip_StatusType Emios_Icu_Ip_Init(uint8 instance, const eMios_Icu_Ip_ConfigType *userConfig);
 
@@ -220,44 +214,26 @@ eMios_Icu_Ip_StatusType Emios_Icu_Ip_Init(uint8 instance, const eMios_Icu_Ip_Con
 *             - Resets the eMIOS channel control register
 *             - Resets the UC A register.
 *             - Clears the (pending) interrupt flag corresponding to eMIOS channel
-* @param[in]  peMiosIpConfig   - pointer to eMios configuration structure
+*
+* @param[in]  instance   - instance - EMIOS instance used.
+*
+* @return     eMios_Icu_Ip_StatusType
+*             - EMIOS_IP_STATUS_SUCCESS : Completed successfully.
+*             - EMIOS_IP_STATUS_ERROR : Error occurred.
 */
 eMios_Icu_Ip_StatusType Emios_Icu_Ip_Deinit(uint8 instance);
 #endif
-
-#if (EMIOS_ICU_IP_SET_MODE_API == STD_ON)
-/**
-* @brief      Emios_Icu_Ip_SetSleepMode
-* @details    This function is called separately for each EMIOS hw channel corresponding to the
-*             configured Icu channels, and:
-*             - Enables the interrupt for the eMIOS channel,
-*                 if the wake up functionality is enabled
-*             - Disables the interrupt for the eMIOS channel,
-*                 if the wake up functionality is disabled
-* @param[in]  instance    - eMIOS module index
-* @param[in]  hwChannel   - eMIOS encoded hardware channel
-* @api
-*/
-void Emios_Icu_Ip_SetSleepMode(uint8 instance, uint8 hwChannel);
-
-/**
-* @brief      Emios_Icu_Ip_SetNormalMode
-* @details    This function: Set normal mode
-*
-* @param[in]  instance    - eMIOS module index
-* @param[in]  hwChannel   - eMIOS encoded hardware channel
-* @api
-*/
-void Emios_Icu_Ip_SetNormalMode(uint8 instance, uint8 hwChannel);
-#endif  /* ICU_SET_MODE_API */
 
 /**
 * @brief      Icu driver function that sets activation condition of eMIOS channel
 * @details    This function enables the requested activation condition(rising, falling or both
 *             edges) for corresponding eMIOS channels.
+*
 * @param[in]  instance    - eMIOS module index
 * @param[in]  hwChannel   - eMIOS channel index
 * @param[in]  edge        - type of edge to be used
+*
+* @return     void
 * @api
 */
 void Emios_Icu_Ip_SetActivation(uint8 instance, uint8 hwChannel, eMios_Icu_Ip_EdgeType edge);
@@ -289,8 +265,9 @@ void Emios_Icu_Ip_DisableEdgeDetection(uint8 instance, uint8 hwChannel);
 /**
  * @brief      Driver function Enable Notification.
  *
- * @param[in]  instance  Hardware instance used. 
+ * @param[in]  instance  Hardware instance used.
  * @param[in]  hwChannel Hardware channel used.
+ *
  * @return     void
  */
 void Emios_Icu_Ip_EnableNotification(uint8 instance, uint8 hwChannel);
@@ -298,8 +275,9 @@ void Emios_Icu_Ip_EnableNotification(uint8 instance, uint8 hwChannel);
 /**
  * @brief      Driver function Disable Notification.
  *
- * @param[in]  instance  Hardware instance used. 
+ * @param[in]  instance  Hardware instance used.
  * @param[in]  hwChannel Hardware channel used.
+ *
  * @return     void
  */
 void Emios_Icu_Ip_DisableNotification(uint8 instance, uint8 hwChannel);
@@ -318,7 +296,9 @@ void Emios_Icu_Ip_DisableNotification(uint8 instance, uint8 hwChannel);
 * @param[in]  bufferPtr        - buffer pointer for results
 * @param[in]  bufferSize       - size of buffer results
 * @param[in]  notifyInterval   - interval for calling notification
-* @api
+*
+* @return     void
+* @pre        Emios_Icu_Ip_Init must be called before.
 */
 void Emios_Icu_Ip_StartTimestamp
 (
@@ -335,7 +315,7 @@ void Emios_Icu_Ip_StartTimestamp
 *          which is next to be written.
 *
 * @param[in]  instance      - eMIOS module index
-* @param[in]  hwChannel     - Logical number of the ICU channel
+* @param[in]  hwChannel     - eMIOS encoded hardware channel
 *
 * @return     uint16 - Timestamp index of the given channel
 * @pre        Emios_Icu_Ip_Init must be called before. Icu_StartTimestamp must be called before.
@@ -354,6 +334,8 @@ uint16 Emios_Icu_Ip_GetTimestampIndex
 *
 * @param[in]  instance    - eMIOS module index
 * @param[in]  hwChannel   - eMIOS encoded hardware channel
+*
+* @return void
 * @api
 */
 void Emios_Icu_Ip_StopTimestamp(uint8 instance, uint8 hwChannel);
@@ -367,7 +349,7 @@ void Emios_Icu_Ip_StopTimestamp(uint8 instance, uint8 hwChannel);
 * @param[in]  instance    - eMIOS module index
 * @param[in]  hwChannel   - eMIOS encoded hardware channel
 *
-* @return void
+* @return uint32
 *
 **/
 uint32 Emios_Icu_Ip_GetStartAddress
@@ -375,7 +357,7 @@ uint32 Emios_Icu_Ip_GetStartAddress
     uint8 instance,
     uint8 hwChannel
 );
-#endif
+#endif /* ((EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA == STD_ON) || (EMIOS_ICU_IP_TIMESTAMP_USES_DMA == STD_ON)) */
 
 #if (EMIOS_ICU_IP_EDGE_COUNT_API == STD_ON)
 /**
@@ -390,6 +372,7 @@ uint32 Emios_Icu_Ip_GetStartAddress
 * @param[in]  instance    - eMIOS module index
 * @param[in]  hwChannel   - eMIOS encoded hardware channel
 *
+* @return void
 * @api
 */
 void Emios_Icu_Ip_ResetEdgeCount
@@ -410,6 +393,8 @@ void Emios_Icu_Ip_ResetEdgeCount
 *
 * @param[in]  instance    - eMIOS module index
 * @param[in]  hwChannel   - eMIOS encoded hardware channel
+*
+* @return void
 */
 void Emios_Icu_Ip_EnableEdgeCount(uint8 instance, uint8 hwChannel);
 
@@ -425,6 +410,7 @@ void Emios_Icu_Ip_EnableEdgeCount(uint8 instance, uint8 hwChannel);
 * @param[in]  instance     - eMIOS module index
 * @param[in]  hwChannel    - eMIOS encoded hardware channel
 *
+* @return void
 * @api
 */
 void Emios_Icu_Ip_DisableEdgeCount
@@ -440,7 +426,7 @@ void Emios_Icu_Ip_DisableEdgeCount
 * @param[in]  instance    - eMIOS module index
 * @param[in]  hwChannel   - eMIOS encoded hardware channel
 *
-* @return     uint32 - Counted edges number
+* @return     eMios_Icu_ValueType
 *
 * @api
 */
@@ -457,13 +443,14 @@ eMios_Icu_ValueType Emios_Icu_Ip_GetEdgeNumbers
 *
 * @param[in]  instance        - eMIOS module index
 * @param[in]  hwChannel       - eMIOS encoded hardware channel
-* @param[in]  offsetCounter   - eMios Initial counter
+* @param[in]  initialCounter  - eMios Initial counter
 *
-* @pre        This function is not required because the counter value is 
-*             set automatically. But to arbitrarily change the Initial value 
-*             of the counter value, it is necessary to call this function 
+* @return     void
+* @pre        This function is not required because the counter value is
+*             set automatically. But to arbitrarily change the Initial value
+*             of the counter value, it is necessary to call this function
 *             before the Emios_Icu_Ip_EnableEdgeCount.
-*             After call Emios_Icu_Ip_ResetEdgeCount function to reset counter value 
+*             After call Emios_Icu_Ip_ResetEdgeCount function to reset counter value
 *             to 0, the previously set Initial value will no longer be valid.
 */
 void Emios_Icu_Ip_SetInitialCounterValue
@@ -481,11 +468,12 @@ void Emios_Icu_Ip_SetInitialCounterValue
 *
 * @param[in]  instance        - eMIOS module index
 * @param[in]  hwChannel       - eMIOS encoded hardware channel
-* @param[in]  defaultCounter  - eMios Max counter
+* @param[in]  maxCounter      - eMios Max counter
 *
-* @pre        This function is not required because the counter value is 
-*             set automatically. But to arbitrarily change the Max value 
-*             of the counter value, it is necessary to call this function  
+* @return     void
+* @pre        This function is not required because the counter value is
+*             set automatically. But to arbitrarily change the Max value
+*             of the counter value, it is necessary to call this function
 *             before the Emios_Icu_Ip_EnableEdgeCount function.
 */
 void Emios_Icu_Ip_SetMaxCounterValue
@@ -511,6 +499,7 @@ void Emios_Icu_Ip_SetMaxCounterValue
 * @param[in]  instance   - eMIOS module index
 * @param[in]  hwChannel  - eMIOS encoded hardware channel
 *
+* @return     void
 * @api
 */
 void Emios_Icu_Ip_StartSignalMeasurement
@@ -529,6 +518,7 @@ void Emios_Icu_Ip_StartSignalMeasurement
 * @param[in]  instance   - eMIOS module index
 * @param[in]  hwChannel  - eMIOS encoded hardware channel
 *
+* @return     void
 * @api
 */
 void Emios_Icu_Ip_StopSignalMeasurement
@@ -554,9 +544,9 @@ void Emios_Icu_Ip_StopSignalMeasurement
 *          configurable.
 *
 * @param[in]  instance     - eMIOS module index
-* @param[in]  hwChannel    - Logical number of the ICU channel
+* @param[in]  hwChannel    - eMIOS encoded hardware channel
 *
-* @return     uint16 -  the elapsed Signal Low Time for the given channel that is configured in
+* @return     eMios_Icu_ValueType -  the elapsed Signal Low Time for the given channel that is configured in
 *             Measurement Mode Signal Measurement, Signal Low Time
 * @pre        Emios_Icu_Ip_Init must be called before. The channel must be configured in Measurement Mode Signal
 *             Measurement.
@@ -574,7 +564,7 @@ eMios_Icu_ValueType Emios_Icu_Ip_GetTimeElapsed
 *          Cycle Values.
 *
 * @param[in]     instance         - eMIOS module index
-* @param[in]     hwChannel        - Logical number of the ICU channel
+* @param[in]     hwChannel        - eMIOS encoded hardware channel
 * @param[out]    dutyCycleValues  - Pointer to a buffer where the results (active time and period time)
 *                                   shall be placed.
 *
@@ -591,11 +581,14 @@ void Emios_Icu_Ip_GetDutyCycleValues
 
 /**
  * @brief Emios_Icu_Ip_SetPWandPeriod
- * 
- * @param instance 
- * @param hwChannel 
- * @param activePulseWidth 
- * @param period 
+ * @details The function shall store pulse width and period to global variable for corresponding Emios channel.
+ *
+ * @param[in] instance         - eMIOS module index
+ * @param[in] hwChannel        - eMIOS encoded hardware channel
+ * @param[in] activePulseWidth - pulse width value
+ * @param[in] period           - period value
+ *
+ * @return    void
  */
 void Emios_Icu_Ip_SetPWandPeriod(uint8 instance,
                                  uint8 hwChannel,
@@ -630,13 +623,12 @@ boolean Emios_Icu_Ip_GetInputState
 #if (EMIOS_ICU_IP_GET_INPUT_LEVEL_API == STD_ON)
 /**
 * @brief      This function returns the actual status of PIN.
-* @details    This function returns the actual status o PIN
+* @details    The API should return the value of input pin for the corresponding channel.
 *
-* @param[in]     instance   - eMIOS module index
-* @param[in]     hwChannel  - eMIOS encoded hardware channel
+* @param[in]  instance   - eMIOS module index
+* @param[in]  hwChannel  - eMIOS encoded hardware channel
 *
-* @return  void
-*
+* @return  eMios_Icu_Ip_LevelType - low or high level enumeration value
 * @api
 */
 eMios_Icu_Ip_LevelType Emios_Icu_Ip_GetInputLevel
@@ -657,7 +649,6 @@ eMios_Icu_Ip_LevelType Emios_Icu_Ip_GetInputLevel
 * @retval      true         the overflow flag is set
 * @retval      false        the overflow flag is not set
 *
-* @return void
 */
 boolean Emios_Icu_Ip_GetOverflow
 (
@@ -666,6 +657,16 @@ boolean Emios_Icu_Ip_GetOverflow
 );
 
 #if (EMIOS_ICU_IP_DUAL_CLOCK_MODE_API == STD_ON)
+/**
+* @brief      Emios_Icu_Ip_SetClockMode
+* @details    The function Emios_Icu_Ip_SetClockMode shall switches between the normal clock and the alternate clock for the whole instance.
+*
+* @param[in]   instance       - eMios module index
+* @param[in]   peMiosIpConfig - Pointer to eMios configuration structure
+* @param[in]   Prescaler      - Prescaler type selection (Normal or Alternate)
+*
+* @return      void
+*/
 void Emios_Icu_Ip_SetClockMode
 (
     uint8 instance,
@@ -675,6 +676,15 @@ void Emios_Icu_Ip_SetClockMode
 #endif  /* EMIOS_ICU_IP_DUAL_CLOCK_MODE_API == STD_ON */
 
 #if ((EMIOS_ICU_IP_CAPTURERGISTER_API == STD_ON) && ((EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON) || (EMIOS_ICU_IP_TIMESTAMP_API == STD_ON)))
+/**
+* @brief      Emios_Icu_Ip_GetCaptureRegValue
+* @details    The API should return the value of counter for the corresponding channel.
+*
+* @param[in]   instance    - eMIOS module index
+* @param[in]   hwChannel   - eMIOS  encoded hardware channel
+*
+* @return      uint32
+*/
 uint32 Emios_Icu_Ip_GetCaptureRegValue
 (
     uint8 instance,
@@ -686,11 +696,12 @@ uint32 Emios_Icu_Ip_GetCaptureRegValue
 /**
 * @brief      This function returns the signals High time, Low time and Period without using the
 *             channel interrupt
-* @details    This function returns the signals High time, Low time and Period without using the
-*             channel interrupt
+* @details    The function Emios_Icu_Ip_GetPulseWidth shall measure High time, Low time and Period time without interrupt
 *
 * @param[in]  instance   - eMIOS module index
 * @param[in]  hwChannel  - eMIOS hardware channel
+*
+* @return     void
 */
 void Emios_Icu_Ip_GetPulseWidth
 (
@@ -700,6 +711,15 @@ void Emios_Icu_Ip_GetPulseWidth
 #endif /* ((EMIOS_ICU_IP_GET_PULSE_WIDTH_API == STD_ON) &&  (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON))*/
 
 #if ((EMIOS_ICU_IP_VALIDATE_GLOBAL_CALL == STD_ON) && ((EMIOS_ICU_IP_GET_PULSE_WIDTH_API == STD_ON) && (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)))
+/**
+* @brief      Emios_Icu_Ip_ValidateSignalMeasureWithoutInterrupt
+* @details    Validate the emios channel without Interrupt
+*
+* @param[in]  instance   - eMIOS module index
+* @param[in]  hwChannel  - eMIOS hardware channel
+*
+* @return     void
+*/
 Std_ReturnType Emios_Icu_Ip_ValidateSignalMeasureWithoutInterrupt
 (
     uint8 instance,
@@ -713,7 +733,9 @@ Std_ReturnType Emios_Icu_Ip_ValidateSignalMeasureWithoutInterrupt
 *             enables eMIOS Channel interrupt
 *
 * @param[in]  instance  - eMIOS module index
-* @param[in]  hwChannel - eMIOS Channel index
+* @param[in]  hwChannel - eMIOS hardware channel
+*
+* @return     void
 * @api
 */
 void Emios_Icu_Ip_EnableInterrupt(uint8 instance, uint8 hwChannel);
@@ -724,9 +746,29 @@ void Emios_Icu_Ip_EnableInterrupt(uint8 instance, uint8 hwChannel);
 *
 * @param[in]  instance  - eMIOS module index
 * @param[in]  hwChannel - eMIOS Channel index
+*
+* @return     void
 * @api
 */
 void Emios_Icu_Ip_DisableInterrupt(uint8 instance, uint8 hwChannel);
+
+#if (EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON)
+/**
+* @brief      Icu driver function that handles the signal measurement type interrupt.
+* @details    This service is  called when an  interrupt is recognized  as a Signal  Measurement
+*             type. There are two branch depending on  the sub-function selected: Duty Cycle or
+*             OTHER. Duty Cycle requires  an extra  variable, because  three values  are required:
+*             two flanks for active signal time and another flank for the end of the pulse. For
+*             calculating high, low and period is enough with the HW registers.
+*
+* @param[in]  instance  - eMIOS module index
+* @param[in]  hwChannel - eMIOS Channel index
+* @param[in]  bOverflow - Parameter that indicates the source of report is an overflow
+*
+* @return     void
+*/
+void Emios_Icu_Ip_SignalMeasurementHandler(const uint8 instance, const uint8 hwChannel, boolean bOverflow);
+#endif /* EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API == STD_ON */
 
 #if (defined EMIOS_ICU_IP_WSC_SUPPORT)
 #if (EMIOS_ICU_IP_WSC_SUPPORT == STD_ON)
@@ -739,7 +781,7 @@ void Emios_Icu_Ip_DisableInterrupt(uint8 instance, uint8 hwChannel);
 *
 * @return      uint32        The actual width measured on input signal
 *
-*/  
+*/
 uint32 Emios_Icu_Ip_GetWheelSpeedTimeMeasurement(uint8 instance, uint8 hwWSChannel);
 
 /**
@@ -763,7 +805,7 @@ uint32 Emios_Icu_Ip_GetWheelSpeedCaptureA(uint8 instance, uint8 hwWSChannel);
 *
 * @return      uint32        Value of the EMIOS Wheel Speed capture B register
 *
-*/   
+*/
 uint32 Emios_Icu_Ip_GetWheelSpeedCaptureB(uint8 instance, uint8 hwWSChannel);
 
 /**
@@ -788,7 +830,7 @@ void Emios_Icu_Ip_SetWheelSpeedEvent(uint8 instance, uint8 hwWSChannel, uint8 ev
 *
 * @return      uint32        Value of Capture Event
 *
-*/    
+*/
 uint32 Emios_Icu_Ip_GetWheelSpeedCaptureEvent(uint8 instance, uint8 hwWSChannel);
 
 /**
@@ -800,7 +842,7 @@ uint32 Emios_Icu_Ip_GetWheelSpeedCaptureEvent(uint8 instance, uint8 hwWSChannel)
 *
 * @return      uint8         Number of event counter
 *
-*/    
+*/
 uint8 Emios_Icu_Ip_GetWheelSpeedEventCnt(uint8 instance, uint8 hwWSChannel);
 
 /**
@@ -813,7 +855,7 @@ uint8 Emios_Icu_Ip_GetWheelSpeedEventCnt(uint8 instance, uint8 hwWSChannel);
 *
 * @return      void
 *
-*/   
+*/
 void Emios_Icu_Ip_WheelSpeedEnableInterrupt(uint8 instance, uint8 hwWSChannel, eMios_Icu_Ip_WscIsrSourceType isrSource);
 
 /**
@@ -827,7 +869,7 @@ void Emios_Icu_Ip_WheelSpeedEnableInterrupt(uint8 instance, uint8 hwWSChannel, e
 * @return      void
 * @pre         When the value of isrSource is 0, all interrupt sources will be disabled.
 *
-*/    
+*/
 void Emios_Icu_Ip_WheelSpeedDisableInterrupt(uint8 instance, uint8 hwWSChannel, eMios_Icu_Ip_WscIsrSourceType isrSource);
 
 /**

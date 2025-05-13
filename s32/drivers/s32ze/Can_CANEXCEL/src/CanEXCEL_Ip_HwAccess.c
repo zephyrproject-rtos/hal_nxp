@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_REVISION_VERSION_C    0
 #define CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_C               2
 #define CANEXCEL_IP_HWACCESS_SW_MINOR_VERSION_C               0
-#define CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_C               0
+#define CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_C               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -237,7 +237,6 @@ Canexcel_Ip_StatusType CanXL_SoftReset(CANXL_SIC_Type * base)
     Canexcel_Ip_StatusType returnResult = CANEXCEL_STATUS_SUCCESS;
     uint32 uS2Ticks = OsIf_MicrosToTicks(CANEXCEL_IP_TIMEOUT_DURATION, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     base->SYSMC = CANXL_SIC_SYSMC_SOFRST_MASK;
-    timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     while ((base->SYSMC & CANXL_SIC_SYSMC_SOFRST_MASK) == CANXL_SIC_SYSMC_SOFRST_MASK)
     {
         timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
@@ -276,7 +275,7 @@ void CanXL_ClearRAM(const CANEXCEL_StructType * CANXL, uint8 instance)
        }
    }
    /* Clear the filter bank check the size in device reg as CANXL_IP_FILTER_BANK_SIZE */
-   volatile uint32 * ptr = (volatile uint32 *)&CANXL->EXL_FILTER[instance]->AFCFG0;
+   volatile uint32 * ptr = &CANXL->EXL_FILTER[instance]->AFCFG0;
    for (idx = 0u; idx <= (uint16)(CANXL_IP_FILTER_BANK_SIZE/4U); idx++)
    {
        ptr[idx] = 0U;
@@ -359,7 +358,6 @@ Canexcel_Ip_StatusType CanXL_EnterFreezeMode(CANXL_SIC_Type * base)
     }
     if (CANEXCEL_STATUS_SUCCESS == returnResult)
     {
-        timeElapsed = 0U;
         timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (0U == (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK))
         {
@@ -378,7 +376,6 @@ Canexcel_Ip_StatusType CanXL_EnterFreezeMode(CANXL_SIC_Type * base)
         SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_01();
         base->SYSMC |= CANXL_SIC_SYSMC_LPMREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_01();
-        timeElapsed = 0U;
         timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
         {
@@ -435,7 +432,6 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
         SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
         base->SYSMC &= ~CANXL_SIC_SYSMC_FRZREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
-        timeElapsed = 0U;
         timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (0U == (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK))
         {
@@ -453,8 +449,6 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
         SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
         base->SYSMC |= CANXL_SIC_SYSMC_LPMREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
-        timeElapsed = 0U;
-        timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
         {
             timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);

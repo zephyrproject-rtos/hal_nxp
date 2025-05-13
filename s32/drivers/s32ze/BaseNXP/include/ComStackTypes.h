@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           ComStack_Types.h
 *   @implements     ComStack_Types.h_Artifact
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR BaseNXP - Communication stack types header file.
 *   @details AUTOSAR communication stack type header file.

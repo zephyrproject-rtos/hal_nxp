@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -27,7 +27,7 @@
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION    0
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION               2
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION               0
-#define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION               0
+#define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS

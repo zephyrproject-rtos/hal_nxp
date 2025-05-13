@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,7 +37,7 @@ extern "C"{
 #define NETC_ETH_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETH_IP_TYPES_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_TYPES_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_TYPES_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_TYPES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -96,6 +96,15 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
+
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
+#ifdef NETC_ETH_0_USED
+/*!
+ *  @brief SI enablement check for SI bitmap.
+ */
+#define NETC_ETH_IP_CHECK_SI_BITMAP_VALUE(SiBitmap, CtrlIndex)      ((boolean)((SiBitmap >> CtrlIndex) & 0x01U))
+#endif
+#endif
 
 /*!
  * @brief CMBDR requeste length field.
@@ -299,9 +308,9 @@ extern "C"{
 /** @brief TPID field */
 #define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_SHIFT                  (16U)
 /** @brief TPID field set mask */
-#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_SET_MASK               (0x000F0000UL)
+#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_SET_MASK               (0x00030000UL)
 /** @brief TPID field get mask */
-#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_GET_MASK               (0x0000000FUL)
+#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_GET_MASK               (0x00000003UL)
 /** @brief TPID field set */
 #define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_SET_TPID(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_SHIFT)) & NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_SET_MASK)
 /** @brief TPID field get */
@@ -309,7 +318,7 @@ extern "C"{
 /* ---definitions for NTMP V1.0 CBD fields--- */
 
 
-#define NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE             (116U/4U)  /*there are a total of 116bytes for RFS table which will be loaded into a uint32 array*/
+#define NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE             (29U)  /*there are a total of 116bytes for RFS table which will be loaded into a uint32 array*/
 /*!
  * @brief Time Gate Scheduling Table CFGE_DATA field.
  */
@@ -344,6 +353,7 @@ extern "C"{
 #define NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSION_MASK  (0xF0000000UL)
 #define NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(x)   (((uint32)(((uint32)(x)) << NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSION_SHIFT)) & NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSION_MASK)
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
 /*!
  * @brief Eth Rate Policer Table Request Data Buffer FEEU field.
  */
@@ -357,6 +367,7 @@ extern "C"{
 #define NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_PSEU_SHIFT          (2U)
 #define NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_PSEU_MASK           (0x00000004UL)
 #define NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_PSEU(x)             (((uint32)(((uint32)(x)) << NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_PSEU_SHIFT)) & NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_PSEU_MASK)
+
 
 /*!
  * @brief Eth Rate Policer Table Request Data Buffer STSEU field.
@@ -398,6 +409,7 @@ extern "C"{
 #define NETC_ETH_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_SHIFT        (5U)
 #define NETC_ETH_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_MASK         (0x00000060UL)
 #define NETC_ETH_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE(x)           (((uint32)(((uint32)(x)) << NETC_ETH_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_SHIFT)) & NETC_ETH_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_MASK)
+#endif /* (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0) */
 
 /*!
  * @brief Ingress Port Filter table CFGE_DATA config field.
@@ -513,6 +525,7 @@ typedef uint32 Netc_Eth_Ip_KeyTypeIdxType;
 #define NETC_ETH_IP_ENETC_KEYTYPE_0                      (0x00U)         /* Enetc function, key construction is specified in ISIDKC0CR0 */
 #define NETC_ETH_IP_ENETC_KEYTYPE_1                      (0x01U)         /* Enetc function, key construction is specified in ISIDKC1CR0 */
 
+#if ((NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U) || (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U))
 /*!
  * @brief Stream Gate Instance Table Request Data Buffer ACFGEU (Admin Configuration Element Update.) field.
  */
@@ -595,7 +608,9 @@ typedef uint32 Netc_Eth_Ip_SGITABLE_GateStateType;
 #define NETC_ETH_IP_SGITABLE_SGISE_STATE_SHIFT               (2U)
 #define NETC_ETH_IP_SGITABLE_SGISE_STATE_MASK                (0x0000001CUL)
 #define NETC_ETH_IP_SGITABLE_SGISE_STATE(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_SGISE_STATE_SHIFT)) & NETC_ETH_IP_SGITABLE_SGISE_STATE_MASK)
+#endif /* ((NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U) || (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)) */
 
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
 /*!
 * @brief Stream Gate Control List Table CFGE_DATA config bits Format
 */
@@ -657,6 +672,7 @@ typedef uint32 Netc_Eth_Ip_SGCLTABLE_RefCountType;
 #define NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_SHIFT          (0U)
 #define NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK           (0x000000FFUL)
 #define NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT(x)             (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_SHIFT)) & NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK)
+#endif /* (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U) */
 
 /*!
 * @brief Ingress Stream Table CFGE_DATA config bits Format
@@ -815,13 +831,14 @@ typedef uint32 Netc_Eth_Ip_SGCLTABLE_RefCountType;
  */
 #if defined(ERR_IPV_NETC_051247)
     #if (STD_ON == ERR_IPV_NETC_051247)
+
 /* Data field position used to store the CRC byte obtained by removing 1 for Class field, 1 for Command field and 1 because of indexing starting with 0 */
 #define NETC_ETH_IP_VSI_MSG_CRC_POS     (((uint8)(sizeof(Netc_Eth_Ip_VsiToPsiMsgType)) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8) (3U))
- /* Standard 8-bit polynomial used in embedded networks */
-#define NETC_ETH_IP_VSI_MSG_POLYNOMIAL  (0x97)
 
 #endif
 #endif
+
+
 
 
 /*==================================================================================================
@@ -856,9 +873,9 @@ typedef enum
 typedef enum
 {
     /* Generic error codes */
-    NETC_ETH_IP_STATUS_SUCCESS                    = 0x000U,   /*!< Generic operation success status */
-    NETC_ETH_IP_STATUS_ERROR                      = 0x001U,   /*!< Generic operation failure status */
-    NETC_ETH_IP_STATUS_TIMEOUT                    = 0x003U,   /*!< Generic operation timeout status */
+    NETC_ETH_IP_STATUS_SUCCESS                 = 0x000U,   /*!< Generic operation success status */
+    NETC_ETH_IP_STATUS_ERROR                   = 0x001U,   /*!< Generic operation failure status */
+    NETC_ETH_IP_STATUS_TIMEOUT                 = 0x003U,   /*!< Generic operation timeout status */
     NETC_ETH_IP_STATUS_UNSUPPORTED             = 0x004U,   /*!< Generic operation unsupported status. */
     NETC_ETH_IP_STATUS_MAC_ADDR_NOT_FOUND      = 0x005U,   /*!< The current searched MAC address is not used. */
     NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL     = 0x006U,   /*!< Table of MAC address is full. */
@@ -869,36 +886,75 @@ typedef enum
     NETC_ETH_IP_STATUS_HOSTREASON_TIMESTAMP    = 0x101U,
 
     /*PSI user defined message codes */
-    NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL                  = 0x8000U, /*!< PSI sent positive response, VSI command executed succesful  */
-    NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED              = 0x8001U, /*!< PSI sent negative response - permission denied */
-    NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE               = 0x8002U, /*!< PSI sent affirmative response to sync status request */
-    NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE              = 0x8003U, /*!< PSI sent negative response to sync status request */
-    NETC_ETH_IP_PSITOVSI_MSG_INTEGRITY_ERROR            = 0x8004U, /*!< PSI received erronous data */
+    NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL         = 0x8000U, /*!< PSI sent positive response, VSI command executed succesful  */
+    NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED     = 0x8001U, /*!< PSI sent negative response - permission denied */
+    NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE      = 0x8002U, /*!< PSI sent affirmative response to sync status request */
+    NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE     = 0x8003U, /*!< PSI sent negative response to sync status request */
+    NETC_ETH_IP_PSITOVSI_MSG_INTEGRITY_ERROR   = 0x8004U, /*!< PSI received erronous data */
 
     NETC_ETH_IP_STATUS_TX_MANAGEMENT_BUFF_BUSY = 0x904U,   /*!< All internal TX buffers are currently in use */
     /* Specific error codes */
-    NETC_ETH_IP_STATUS_RX_QUEUE_EMPTY             = 0xA01U,   /*!< There is no available frame in the receive queue */
-    NETC_ETH_IP_STATUS_TX_QUEUE_FULL              = 0xA02U,   /*!< There is no available space for the frame in the transmit queue */
-    NETC_ETH_IP_STATUS_BUFF_NOT_FOUND             = 0xA03U,   /*!< The specified buffer was not found in the queue */
-    NETC_ETH_IP_STATUS_TX_BUFF_BUSY               = 0xA04U,   /*!< All internal TX buffers are currently in use */
-    NETC_ETH_IP_STATUS_TX_BUFF_OVERFLOW           = 0xA05U,   /*!< The requested TX buffer length is not supported. */
-    NETC_ETH_IP_STATUS_INVALID_FRAME_LENGTH       = 0xA06U,   /*!< The length of the frame should be minimum 16 bytes. */
+    NETC_ETH_IP_STATUS_RX_QUEUE_EMPTY          = 0xA01U,   /*!< There is no available frame in the receive queue */
+    NETC_ETH_IP_STATUS_TX_QUEUE_FULL           = 0xA02U,   /*!< There is no available space for the frame in the transmit queue */
+    NETC_ETH_IP_STATUS_BUFF_NOT_FOUND          = 0xA03U,   /*!< The specified buffer was not found in the queue */
+    NETC_ETH_IP_STATUS_TX_BUFF_BUSY            = 0xA04U,   /*!< All internal TX buffers are currently in use */
+    NETC_ETH_IP_STATUS_TX_BUFF_OVERFLOW        = 0xA05U,   /*!< The requested TX buffer length is not supported. */
+    NETC_ETH_IP_STATUS_INVALID_FRAME_LENGTH    = 0xA06U,   /*!< The length of the frame should be minimum 16 bytes. */
 #if(NETC_ETH_IP_HAS_CACHE_MANAGEMENT == STD_ON)
-    NETC_ETH_IP_STATUS_CACHE_ERROR                = 0xA07U,   /*!< Cache operation failed. */
+    NETC_ETH_IP_STATUS_CACHE_ERROR             = 0xA07U,   /*!< Cache operation failed. */
 #endif
-    NETC_ETH_IP_STATUS_NOT_REAL_ERROR             = 0x8AU,     /*!< Error code 0x8A is not a real error. This need to be cover errata */
+    NETC_ETH_IP_STATUS_NOT_REAL_ERROR          = 0x8AU,     /*!< Error code 0x8A is not a real error. This need to be cover errata */
 
     /* Time scheduling table error code*/
-    NETC_ETH_CBDRSTATUS_UPTATE_EXISTING_ADMIN_GATE_CONTROL              = 0x0D1U,   /* Update action attempted on an existing admin gate control. An existing admin gate control list cannot be modified, Delete admin gate control list first before creating a new admin list. (Use update action with ADMIN_CONTROL_LIST_LENGTH =0 to perform delete). */
-    NETC_ETH_CBDRSTATUS_UPDATE_ACTION_EXCEED_MAX_GCL_LEN                = 0x0D2U,   /* Update action attempted exceeds TGSTCAPR[MAX_GCL_LEN]. */
-    NETC_ETH_CBDRSTATUS_UPDATE_ACTION_EXCEED_NUM_WORDS                  = 0x0D3U,   /* Update action attempted exceeds TGSTCAPR[NUM_WORDS]. */
-    NETC_ETH_CBDRSTATUS_INSUFFICIENT_RESOURCES                          = 0x0D4U,   /* Insufficient resources to perform the requested operation (not enough free time gate list entries) */
-    NETC_ETH_CBDRSTATUS_TRANSMITTING_TIME_NOT_SUFFICIENT                = 0x0D5U,   /* Update action attempted with ADMIN_CYCLE_TIME, ADMIN_TIME_INTERVAL_GE_i or truncated ADMIN_TIME_INTERVAL_GE_n due ADMIN_CYCLE_TIME specified is not sufficient to transmit 64 byte of frame data + header overhead. Where header overhead = PTXSDUOR[PTXSDUOR] + PTXSDUOR[PPDU_BCO]. */
-    NETC_ETH_CBDRSTATUS_ADMIN_BASE_TIME_IS_MORE_THAN_1S                 = 0x0D6U,   /* Update action attempted with ADMIN_BASE_TIME specified is more than one second in the past from tcs advance time. */
-    NETC_ETH_CBDRSTATUS_ADMIN_CYCLE_TIME_OVERFLOW                       = 0x0D7U,   /* Update action attempted with ADMIN_CYCLE_TIME + ADMIN_CYCLE_TIME_EXT is greater than 2^32-1. */
-    NETC_ETH_CBDRSTATUS_RETRY_QUERY                                     = 0x0D8U,   /* Query action issued when config change occurred. Retry query. */
-    NETC_ETH_CBDRSTATUS_INVALID_ADMIN_HR_CB_GE                          = 0x0D9U   /* Update action attempted with ADMIN_HR_CB_GE_i set to an invalid value. */
+    NETC_ETH_CBDRSTATUS_UPTATE_EXISTING_ADMIN_GATE_CONTROL     = 0x0D1U,   /* Update action attempted on an existing admin gate control. An existing admin gate control list cannot be modified, Delete admin gate control list first before creating a new admin list. (Use update action with ADMIN_CONTROL_LIST_LENGTH =0 to perform delete). */
+    NETC_ETH_CBDRSTATUS_UPDATE_ACTION_EXCEED_MAX_GCL_LEN       = 0x0D2U,   /* Update action attempted exceeds TGSTCAPR[MAX_GCL_LEN]. */
+    NETC_ETH_CBDRSTATUS_UPDATE_ACTION_EXCEED_NUM_WORDS         = 0x0D3U,   /* Update action attempted exceeds TGSTCAPR[NUM_WORDS]. */
+    NETC_ETH_CBDRSTATUS_INSUFFICIENT_RESOURCES                 = 0x0D4U,   /* Insufficient resources to perform the requested operation (not enough free time gate list entries) */
+    NETC_ETH_CBDRSTATUS_TRANSMITTING_TIME_NOT_SUFFICIENT       = 0x0D5U,   /* Update action attempted with ADMIN_CYCLE_TIME, ADMIN_TIME_INTERVAL_GE_i or truncated ADMIN_TIME_INTERVAL_GE_n due ADMIN_CYCLE_TIME specified is not sufficient to transmit 64 byte of frame data + header overhead. Where header overhead = PTXSDUOR[PTXSDUOR] + PTXSDUOR[PPDU_BCO]. */
+    NETC_ETH_CBDRSTATUS_ADMIN_BASE_TIME_IS_MORE_THAN_1S        = 0x0D6U,   /* Update action attempted with ADMIN_BASE_TIME specified is more than one second in the past from tcs advance time. */
+    NETC_ETH_CBDRSTATUS_ADMIN_CYCLE_TIME_OVERFLOW              = 0x0D7U,   /* Update action attempted with ADMIN_CYCLE_TIME + ADMIN_CYCLE_TIME_EXT is greater than 2^32-1. */
+    NETC_ETH_CBDRSTATUS_RETRY_QUERY                            = 0x0D8U,   /* Query action issued when config change occurred. Retry query. */
+    NETC_ETH_CBDRSTATUS_INVALID_ADMIN_HR_CB_GE                 = 0x0D9U   /* Update action attempted with ADMIN_HR_CB_GE_i set to an invalid value. */
 } Netc_Eth_Ip_StatusType;
+
+/** @brief
+*/
+typedef enum
+{
+    /* MAC Address Filtering class statuses */
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_INVALID_MAC        = 0x0U, /* Invalid MAC address */
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_DUPLICATE_MAC      = 0x1U, /* Duplicate MAC addr (set primary, add entry) */
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_MAC_ADDR_NOT_FOUND = 0x2U, /* MAC addr not found (del entry) */
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_NO_RESOURCE        = 0x3U, /* No resource (not enough exact-match entries available) */
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_HT_MISMATCH        = 0x4U, /* Not supported: HT size mismatch */
+
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_CMD_SUCCESFUL      = 0xFFU, /* Mac Address filtering command succesfully executed. - used with Netc_Eth_Ip_PsiToVsiGenericProtocolStatusType */
+    NETC_ETH_IP_PSITOVSI_ADDR_FILTERING_PROTOCOL_PERMISION_DENIED   = 0xFEU  /* Mac Address filtering command execution denied - used with Netc_Eth_Ip_PsiToVsiGenericProtocolStatusType */
+}Netc_Eth_Ip_MacAddressFilteringClassProtocolStatusType;
+
+/** @briefs
+*/
+typedef enum
+{
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_TIMER_SYNC_STATUS_NOT_SYNCHRONIZED = 0x0U,
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_TIMER_SYNC_STATUS_SYNCHRONIZED     = 0x1U
+}Netc_Eth_Ip_GetTimerSyncClassProtocolStatusType;
+
+/** @brief Netc_Eth_Ip_PsiToVsiGenericProtocolStatusType
+*/
+enum
+{
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_CMD_SUCCESFUL               = 0x01U, /* CMD successful (successfully executed by PSI) */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_PERMISSION_DENIED           = 0x02U, /* Permission denied - command privilege level not met by VF */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_COMMAND_NOT_SUPPORTED       = 0x03U, /* CMD not supported */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_PSI_BUSY                    = 0x04U, /* PSI busy (message queue full or blocked) */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_MSG_INTEGRITY_ERROR         = 0x05U, /* MSG integrity error (CRC error) */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_PROTO_VERSION_NOT_SUPPORTED = 0x06U, /* PROTO version not supported */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_INVALID_MSG_LEN             = 0x07U, /* Invalid MSG LEN */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_CMD_TIMED_OUT               = 0x08U, /* CMD timed out */
+    NETC_ETH_IP_PSITOVSI_PROTOCOL_CMD_DEFFERED                = 0x0FU  /* CMD deferred (needs cookie) - async mode only */
+};
+
 
 /** @brief Counters supported by ENETC.
  * implements Netc_Eth_Ip_CounterType_enum */
@@ -915,6 +971,7 @@ typedef enum
                                     of frames with error (BD status code point) 0x020 (frame dropped due to port reset) or 0x0A0 (multi-bit ECC error), which will be counted in this counter.*/
     NETC_ETH_IP_SITUCA = 0x330U,    /*!< Station interface transmit unicast frame counter (ifOutUcastPkts). Number of unicast frames transmitted by the SI without errors. */
     NETC_ETH_IP_SITMCA = 0x338U,    /*!< Station interface transmit multicast frame counter (ifOutMulticastPkts). Number of multicast frames transmitted by the SI without errors. */
+    NETC_ETH_IP_RBDCR = 0x8180U,    /*!< Rx BDR drop count register. Number of frames dropped due to lack of receive buffer descriptors available. */
 } Netc_Eth_Ip_CounterType;
 
 /** @brief VLAN Protocol Identifier, which can be inserted in transmission and are acceptable for VLAN removal in reception.
@@ -1019,13 +1076,27 @@ typedef enum
  */
 typedef enum
 {
-    NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET              = 0x0000U, /*!< VSI sent a set MAC command. */
-    NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_FILTER    = 0x0100U, /*!< VSI sent an add filter for a MAC command. */
-    NETC_ETH_IP_VSITOPSI_DELETE_RX_MAC_ADDR_FILTER = 0x0101U, /*!< VSI sent a delete filter MAC command. */
-    NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST          = 0x1000U, /*!< VSI sent a request to enable multicast promiscuous mode. */
-    NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST         = 0x1010U, /*!< VSI sent a request to disable multicast promiscuous mode. */
-    NETC_ETH_IP_VSITOPSI_CLOSE_FILTER              = 0x1020U,  /*!< VSI sent a request to stop all multicast traffic. */
-    NETC_ETH_IP_VSITOPSI_GET_SYNC_STATE            = 0x2000U  /*!< VSI sent a request for the synchronization state */
+    NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET                            = 0x2000U, /*!< VSI sent a set MAC command. */
+    NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_HASH_FILTER             = 0x2003U, /*!< VSI sent an add Hash filter for a MAC command. */
+    NETC_ETH_IP_VSITOPSI_DELETE_ALL_RX_MAC_ADDR_HASH_FILTER      = 0x2004U, /*!< VSI delete(flush) command to remove all MAC addresses from the hash filter . */
+    NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_RX_MAC_ADDR_HASH_FILTER   = 0x2009U, /*!< VSI delete(flush) command to remove a specific MAC address from the hash filter . */
+
+    /*!< VSI command to apply a specific action for Multicast MAC address from the hash filter . */
+    NETC_ETH_IP_VSITOPSI_MULTICAST_ACTIONS                       = 0x2005U,
+    /*!< VSI sent a request to enable multicast promiscuous mode. */
+    NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST_PROMISCUOS             = NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_TYPE_MC_ONLY_ACTION)  |
+                                                                   NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP0_NO_FLUSH_ADDRESSES)|
+                                                                   NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP1_ENABLE_PROMISC)    ,
+    /*!< VSI sent a request to disable multicast promiscuous mode. */
+    NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST_PROMISCUOUS           = NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_TYPE_MC_ONLY_ACTION)  |
+                                                                   NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP0_NO_FLUSH_ADDRESSES)|
+                                                                   NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP1_DISABLE_PROMISC)   ,
+    /*!< VSI sent a request to stop all multicast traffic. */
+    NETC_ETH_IP_VSITOPSI_CLOSE_FILTER                            = NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_TYPE_MC_ONLY_ACTION)|
+                                                                   NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP0_FLUSH_ADDRESSES) |
+                                                                   NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_ACTION(NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP1_DISABLE_PROMISC) ,
+
+    NETC_ETH_IP_VSITOPSI_GET_TIMER_SYNC_STATE                     = 0xE000U  /*!< VSI sent a request for the synchronization state */
 } Netc_Eth_Ip_VsiToPsiMsgActionType;
 
 typedef enum {
@@ -1152,8 +1223,23 @@ typedef enum {
  */
 typedef enum {
     NETC_ETH_IPF_NOACTION,                     /*!< 0x0: no actions. */
-    NETC_ETH_IPF_SENDTOSPECIFICSIS             /*!< 0x1: sending to a specific SIs. */
+    NETC_ETH_IPF_SENDTOSPECIFICSIS = 3U        /*!< 0x3: sending to a specific SIs. */
 } Netc_Eth_Ip_IPFFilterActionDataType;
+
+
+/*!
+ * @brief enum type for byte index of a specific field in command message for VSI-to-PSI messaging.
+ * Netc_Eth_Ip_VsiToPsiMsgCommandFields
+ */
+enum
+{
+    NETC_ETH_IP_VSITOPSI_FIELD_CLASS            = 2U, /* The specific class to which a specific command belongs to. */
+    NETC_ETH_IP_VSITOPSI_FIELD_COMMAND          = 3U, /* The specific command associated with the selected class. */
+    NETC_ETH_IP_VSITOPSI_FIELD_PROTOCOL_VERSION = 4U, /* Should be 0 for the initial protocol release. To be incremented for future protocol extensions. */
+    NETC_ETH_IP_VSITOPSI_FIELD_LENGTH           = 5U, /* Extended message body length in increments of 32B. */
+    NETC_ETH_IP_VSITOPSI_FIELD_COOKIE           = 7U, /* Optional parameter, which, if not 0, indicates that the command should be executed asynchronously on PSI side. */
+    NETC_ETH_IP_VSITOPSI_FIELD_DATA             = 16U,/* Holds the specific data for each command. */
+};
 
 /*==================================================================================================
 *                                  STRUCTURES AND OTHER TYPEDEFS
@@ -1206,14 +1292,43 @@ typedef struct
     uint8 lengthCBDR;     /*!< Number of command buffer descriptors ring. */
 } Netc_Eth_Ip_CommandBDType;
 
-
 /** @brief Message configuration structure.Should be a multiple of 32 bytes. */
 typedef struct
 {
-    uint8 Class;        /*!< Class of the command. */
-    uint8 Command;      /*!< Type of command. */
-    uint8 Data[30U];    /*!< Data. */
+    uint16 CRC16;            /*!< Big Endian (BE) format: Standard CRC16 CCITT-FALSE */
+    uint8  Class;            /*!< Class of the command. */
+    uint8  Command;          /*!< Type of the command. */
+    uint8  ProtocolVersion;  /*!< Supported VSI-PSI command protocol version, should be 0 for the initial protocol release.
+                                  To be incremented for future protocol extensions. */
+    uint8  Length;           /*!< Extended message body length in increments of 32B. The upper limit is given by the physical
+                                  implementation of the NETC VSI-PSI Messaging mechanism that supports message sizes of
+                                  up to 1024B (including headers), that are multiple of 32B. Length of 0 means that the total message size is 32B.
+
+                                  Observation: If COUNT is greater than 2, then the extended message body has to be used, and LEN must
+                                  be set accordingly in the header. */
+    uint8  RESERVED_0;
+    uint8  Cookie;           /*!< Optional parameter, which, if not 0, indicates that the command should be executed asynchronously on PSI side.
+                                  If COOKIE is not 0 and the command cannot be executed instantly on the PSI side (it would take longer time to complete),
+                                  the PSI may enqueue the request in a command queue of up to 15 entries per VSI and, later after command execution,
+                                  the PSI returns the COOKIE to VSI as part of an asynchronous notification message that indicates the command completion status.
+                                  If COOKIE is 0 then the command is considered as blocking, and the PSI will wait for the execution of the command to
+                                  complete before updating the PSIMSGRR[MC] field with the corresponding return code.
+                                  Rationale: may be required to optimize VSI probe time, or other time critical VSI driver paths, or to avoid possible stalls
+                                  or even deadlocks for VSI commands that are executed inside critical sections (i.e. atomic context in Linux). */
+    uint8  RESERVED_1[8];
+    uint8  Data[16U];        /*!< Message body. */
+    /* message extension */
 } Netc_Eth_Ip_VsiToPsiMsgType;
+
+#if (0U != NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES)
+/** @brief SI multicast MAC filter configuration structure. */
+typedef struct
+{
+    uint8 MulticastMacHashFilter_EID;
+    uint8 SiBitmap;
+    uint8 MacAddress[6U];
+}Netc_Eth_Ip_SiMulticastMACHashFilterDataType;
+#endif
 
 /** @brief Transmit buffer descriptor. */
 typedef struct
@@ -1311,6 +1426,17 @@ typedef struct
 } Netc_Eth_Ip_TimeGateSchedulingEntryDataType;
 
 /*!
+* @brief defines MAC Address Filter Table entries for ENETC.
+* @details Structure used to define the attributes of a MAC Filter Table entry.
+*/
+typedef struct
+{
+    uint16 MacFilterTable_EID;                     /*!< Mac Filter Table Entry ID */
+    uint16 SIBitmap;                                /*!< Bitmap of the SIs for which the filter is used */
+    uint8 MacAdress[6];
+} Netc_Eth_Ip_MacFilterTableEntryDataType;
+
+/*!
  * @brief defines VLAN Address Filter Table entries for ENETC.
   * implements     Netc_Eth_Ip_VLANFilterTableEntryDataType_structure
  */
@@ -1359,6 +1485,7 @@ typedef struct
     uint64 SrcIpAddrHigh;       /*!< IPv4/IPv6 source address. Defined in network byte order (big-endian). MSB of port nb is stored at LSB offset of this field.*/
 } Netc_Eth_Ip_RfsEntryType;
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
 /*!
  * @brief Eth Rate Policer Table CFGE_DATA Format.
  */
@@ -1422,6 +1549,7 @@ typedef struct
     boolean MarkRedFlag;                        /* 0b = Indicates that the rate policer blocking "mark all frames red" function has not been triggered */
                                                 /* 1b = Indicates that all frames arriving at this rate policer are marked red by the rate policer blocking "mark all frames red" function. */
 } Netc_Eth_Ip_RatePolicerEntryRspDataType;
+#endif /* (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0) */
 
 /*!
  * @brief Key Construction Rule
@@ -1477,6 +1605,7 @@ typedef struct
     uint32 Keye_FrmKey[4U];                                         /* Frame portion of the Key */
 } Netc_Eth_Ip_IngrStremIdentificationTableDataType;
 
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
 /*!
  * @brief defines Stream Gate Instance entries.
  *
@@ -1519,7 +1648,9 @@ typedef struct
     boolean Cfge_Oexen;                                     /* Octets Exceeded Enable */
     boolean Cfge_Irxen;                                     /* Invalid Receive Enable */
 } Netc_Eth_Ip_StreamGateInstanceEntryRspDataType;
+#endif /* (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U) */
 
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
 /*!
  * @brief defines Stream Gate Control List entries data type.
  */
@@ -1548,6 +1679,7 @@ typedef struct
     Netc_Eth_Ip_SGCLEntriesDataType *ListEntries;        /* Stream Gate Control List entries pointer */
     Netc_Eth_Ip_SGCLTABLE_RefCountType Sgclse_RefCount;  /* Ref count, an element in response data buffer */
 } Netc_Eth_Ip_SGCLTableDataType;
+#endif /* (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U) */
 
 /*!
  * @brief Request and Response Data Buffer Format of Tables supported by ENETC.
@@ -1570,7 +1702,7 @@ typedef struct
     uint8 NumberOfTxBDR; /*< The number of allowed TX BDR */
     uint8 SIBandwidthWeight; /*< SI Bandwidth Weight */
     uint8 numberOfMSIs;  /*< The number of assigned MSIs */
-    uint8 priorityToTrafficClassMapping[NETC_ETH_IP_NUMBER_OF_PRIORITIES]; /*< Port station interface a configuration register 1 (PSI1CFGR1 - PSI7CFGR1).
+    uint8 VSITCtoTransmitTrafficClass[NETC_ETH_IP_NUMBER_OF_PRIORITIES]; /*< Port station interface a configuration register 1 (PSI1CFGR1 - PSI7CFGR1).
                                                                         The field will not be used for PSI0 */
     /** TODO: other fields from Port station interface 0 configuration register 0 (PSI0CFGR0) */
     /* MAC configurations */
@@ -1595,6 +1727,8 @@ typedef struct
 
     /* boolean enableMulticastVLANPromiscuosMode;  Enable or disable the Multicast VLAN Promiscuos Mode */
     /* boolean enableUnicastVLANPromiscuosMode;  Enable or disable the Unicast VLAN Promiscuos Mode */
+
+    boolean enableSIPruning;
 
 } Netc_Eth_Ip_GeneralSIConfigType;
 /** @endcond DRIVER_INTERNAL_USE_ONLY */
@@ -1734,7 +1868,7 @@ typedef struct
     /* TBD: Port pause configuration */
     /* TBD: Port station interface VLAN filtering mode register (PSIVLANFMR) */
     Netc_Eth_Ip_ICMType priorityToICM[NETC_ETH_IP_NUMBER_OF_PRIORITIES];  /*!< Mapping of internal priority to ICM. Receive IPV to ICM priority mapping register 0 (IPV2ICMPMR0) */
-    uint8 priorityToTrafficClassic[NETC_ETH_IP_NUMBER_OF_PRIORITIES];     /*!< Mapping of transmit BD rings priority to traffic class. Transmit priority to traffic class mapping register 0 (PRIO2TCMR0) */
+    uint8 priorityToTrafficClass[NETC_ETH_IP_NUMBER_OF_PRIORITIES];     /*!< Mapping of transmit BD rings priority to traffic class. Transmit priority to traffic class mapping register 0 (PRIO2TCMR0) */
     uint8 pcpToIpv[NETC_ETH_IP_NUMBER_OF_PRIORITIES];                     /*!< Mapping of Pcp from VLAN Tag to internal priority. VLAN to IPV mapping profile a register 0 (VLANIPVMP0R0 - VLANIPVMP1R0) */
     /* TBD: VLAN to DR mapping profile a register (VLANDRMP0R - VLANDRMP1R) */
     /* TBD: All the tables */
@@ -1761,12 +1895,17 @@ typedef struct
     /* TBD: A lot of other stream gate and frame preemption settings - low priority for basic driver */
     Netc_Eth_Ip_CreditBasedShaperConfigType (*cbsConfig)[NETC_ETH_IP_NUMBER_OF_PRIORITIES]; /*!< Configuration of each CBS used. */
     const Netc_Eth_Ip_KeyConstructionRuleType (*EthKeyConstruction)[2U];
+
+#if (NETC_ETH_IP_NUMBER_OF_MAC_FILTER_TABLE_ENTRIES > 0)
+    uint8 NumberOfMACFilterEntries; /*!< Number of MAC Filter Table entries. */
+    const Netc_Eth_Ip_MacFilterTableEntryDataType (*MacTableEntries)[NETC_ETH_IP_NUMBER_OF_MAC_FILTER_TABLE_ENTRIES]; /*!< Pointer to an array containing the configured MAC Filter table entries. */
+#endif
 #if (NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES > 0)
-    uint8 NumberOfVLANFilterEntries; /*!< NUmber of VLAN Filter Table entries. */
+    uint8 NumberOfVLANFilterEntries; /*!< Number of VLAN Filter Table entries. */
     const Netc_Eth_Ip_VLANFilterTableEntryDataType (*VLANTableEntries)[NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES]; /*!< Pointer to an array containing the configured VLAN Filter table entries. */
 #endif
 #if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
-    uint8 NumberOfRPTableEntries; /*!< NUmber of Rate Policer Table entries. */
+    uint8 NumberOfRPTableEntries; /*!< Number of Rate Policer Table entries. */
     const Netc_Eth_Ip_RatePolicerEntryDataType (*RPTableEntries)[NETC_ETH_IP_NUMBER_OF_RP_ENTRIES]; /*!< Pointer to an array containing the configured Rate Policer table entries. */
 #endif
 #if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
@@ -1811,12 +1950,15 @@ typedef struct
     uint8 CustomIPV;
     uint8 CustomDR;
 #endif
-    uint8 defaultIPV;                          /*!< PQOSMR[DDR] - set the default value of Drop Resilience which is used in following cases: 
+    uint8 defaultIPV;                          /*!< PQOSMR[DDR] - set the default value of Drop Resilience which is used in following cases:
                                                     1. enableVlanToIpvMapping is disabled.
-                                                    2. enableVlanToIpvMapping is enabled, but the incoming frame is not VLAN tagged. */ 
-    uint8 defaultDR;                           /*!< PQOSMR[DIPV] - set the default value of Drop Resilience which is used in following cases: 
+                                                    2. enableVlanToIpvMapping is enabled, but the incoming frame is not VLAN tagged. */
+    uint8 defaultDR;                           /*!< PQOSMR[DIPV] - set the default value of Drop Resilience which is used in following cases:
                                                     1. enableVlanToIpvMapping is disabled.
-                                                    2. enableVlanToIpvMapping is enabled, but the incoming frame is not VLAN tagged. */ 
+                                                    2. enableVlanToIpvMapping is enabled, but the incoming frame is not VLAN tagged. */
+#if(STD_ON == NETC_ETH_IP_MANAGEMENT_SUPPORT_API)
+    uint8 ManagementIPV;
+#endif
 } Netc_Eth_Ip_EnetcGeneralConfigType;
 
 /** @brief The station interface configuration. This applies to all SIs either PSI or VSI. */
@@ -1831,7 +1973,7 @@ typedef struct
     uint8 NumberOfRxBDR;                       /*!< The number of configured RX BDR */
     uint8 NumberOfTxBDR;                       /*!< The number of configured TX BDR */
     Netc_Eth_Ip_CommandBDType commandBDConfig; /*!< This will store the configuration of the command BDR. */
-    Netc_Eth_Ip_VsiToPsiMsgType *VSItoPSIMsgCommand; /*!< Address of the command message sent from VSI to PSI. */
+    volatile Netc_Eth_Ip_VsiToPsiMsgType *VSItoPSIMsgCommand; /*!< Address of the command message sent from VSI to PSI. */
     uint8 CtrlLogicalIndex;                    /*!< This member keep the value of controller index for the callback function. */
 
     uint32 *txMruMailboxAddr;              /*!< Mailbox address for TX. */
@@ -1839,7 +1981,11 @@ typedef struct
     uint32 *siMsgMruMailboxAddr;           /*!< Mailbox address for VSI to PSI messaging. */
     boolean EnableSIMsgInterrupt;          /*!< Interrupt SI support messaging enable. */
 
-    uint8 MACFilterTableMaxNumOfEntries;   /*!< Maximum number of entries in the MAC filter table. */
+#if (0U != NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES)
+    uint8 NumberOfConfiguredMulticastMacHashFilterEntries; /*< Number of Multicast Mac Hash filter entries */
+    const Netc_Eth_Ip_SiMulticastMACHashFilterDataType (*MulticastMACFilterEntries)[NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES]; /*< Pointer to an array containing the configured Multicast MAC Hash Filter entries. */
+#endif
+
     uint32 RxInterrupts;                   /*!< Channel interrupt sources. A logical OR of "Netc_Eth_Ip_ChInterruptType". */
     uint32 TxInterrupts;                   /*!< Channel interrupt sources. A logical OR of "Netc_Eth_Ip_ChInterruptType". */
 } Netc_Eth_Ip_StationInterfaceConfigType;
@@ -1918,11 +2064,10 @@ typedef struct
     uint8 *FirstTxDataBufferAddr[FEATURE_NETC_TX_BDR_COUNT];                /*!< Array with starting address of each data buffer used to store TX data by ring. */
     uint16 TxDataBuffMaxLenAddr[FEATURE_NETC_TX_BDR_COUNT];                 /*!<  */
 
-    Netc_Eth_Ip_VsiToPsiMsgType *VSItoPSIMsgCommand;                   /*!< The VSI command sends to PSI. */
+    volatile Netc_Eth_Ip_VsiToPsiMsgType *VSItoPSIMsgCommand;                   /*!< The VSI command sends to PSI. */
     uint8 NumberOfRxBDR;                       /*!< The number of configured RX BDR */
     uint8 NumberOfTxBDR;                       /*!< The number of configured TX BDR */
     Netc_Eth_Ip_StationInterfaceType SiType;          /*!< The type of the SI (PSI or VSI). */
-    uint8 MACFilterTableMaxNumOfEntries; /*!< Maximum number of entries in the MAC filter table. */
 
     const Netc_Eth_Ip_GeneralSIConfigType (*SIGeneralConfig)[FEATURE_NETC_ETH_NUMBER_OF_CTRLS]; /*!< SI Runtime permissions. Valid only for PSI, NULL_PTR for VSI  */
 
@@ -1946,6 +2091,13 @@ typedef struct
     boolean PcieAerUncorrectableErrEnabled; /*!< Uncorrectable error reporting enabled/disabled. */
     boolean PcieAerCorrectableErrEnabled;   /*!< Correctable error reporting enabled/disabled. */
     Netc_Eth_Ip_PcieAerErrorReportingCallbackType PcieAerErrorReportingCallback;
+#if (0U != NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES)
+    uint8 NumberOfConfiguredMulticastMacHashFilterEntries; /*< Number of Multicast Mac Hash filter entries */
+    const Netc_Eth_Ip_SiMulticastMACHashFilterDataType (*MulticastMACFilterEntries)[NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES]; /*< Pointer to an array containing the configured Multicast MAC Hash Filter entries. */
+#endif
+#if(STD_ON == NETC_ETH_IP_MANAGEMENT_SUPPORT_API)
+    uint8 ManagementIPV;
+#endif
 } Netc_Eth_Ip_StateType;
 /** @endcond DRIVER_INTERNAL_USE_ONLY */
 
@@ -2065,6 +2217,7 @@ typedef struct
     Netc_Eth_Ip_MSITableEntry msiTable[3U]; /*!< Array with all entries in table. */
 } Netc_Eth_Ip_MSITable;
 
+#if (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0)
 /** @brief Entry type for MAC filter hash table. */
 typedef struct
 {
@@ -2072,6 +2225,7 @@ typedef struct
     uint8   HashValue;   /*!< Hash value for the MAC address. */
     uint8   MACAddr[6U]; /*!< MAC address. */
 } Netc_Eth_Ip_MACFilterHashTableEntryType;
+#endif /* (NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES > 0) */
 
 /** @brief Store the counter values for time. */
 typedef struct
@@ -2104,6 +2258,8 @@ typedef struct
     uint16  TxTimeStampID;
     Netc_Eth_Ip_TimeType   TimestampValue;
 } Netc_Eth_Ip_TxTimestampInfoType;
+
+
 #endif /* NETC_ETH_0_USED */
 
 /** @brief Timestamp received frame information.
@@ -2138,7 +2294,7 @@ typedef struct Netc_Eth_Ip_axTxBufferIdxMapType
 /* implements     Netc_Eth_Ip_ErrorCaptureRegLabel_enum */
 typedef enum
 {
-    NONE,               /* Default unassigned value */
+    NETC_NONE,          /* Default unassigned value */
     SIUPESR,            /* This is the uncorrectable programming error status register.*/
     SIUPECTR,           /* This is the uncorrectable programming error count register which tracks how many received frames have been dropped by the station interface.*/
     CMESR,              /* This is the correctable memory error status register.*/
@@ -2148,14 +2304,14 @@ typedef enum
     SIUNSBESR,          /* This is the uncorrectable non-fatal system bus error status register.*/
     SIUNSBECTR,         /* This is the uncorrectable non-fatal system bus error count register which tracks how many events have been detected.*/
     TBCIR,              /* Frame BD prefetching for the station interface ring is stalled. The frame BD consumer index will indicate the last successfully updated BD.*/
-    PM0_RERR,            /* MAC Receive Frame Error Counter Register(ifInErrorsn)*/
-    PM1_RERR,            /* MAC Receive Frame Error Counter Register(ifInErrorsn)*/
+    PM0_RERR,           /* MAC Receive Frame Error Counter Register(ifInErrorsn)*/
+    PM1_RERR,           /* MAC Receive Frame Error Counter Register(ifInErrorsn)*/
     PM0_EVENT,
     PM1_EVENT,
-    MAC_MERGE_MMFSECR0,  /* A count of received MAC frames / MAC frame fragments rejected due to unknown SMD value or arriving with an SMD-C when no frame is in progress*/
-    MAC_MERGE_MMFSECR1,  /* A count of received MAC frames / MAC frame fragments rejected due to unknown SMD value or arriving with an SMD-C when no frame is in progress*/
-    MAC_MERGE_MMFAECR0,  /* A count of MAC frames with reassembly errors.*/
-    MAC_MERGE_MMFAECR1,  /* A count of MAC frames with reassembly errors.*/
+    MAC_MERGE_MMFSECR0, /* A count of received MAC frames / MAC frame fragments rejected due to unknown SMD value or arriving with an SMD-C when no frame is in progress*/
+    MAC_MERGE_MMFSECR1, /* A count of received MAC frames / MAC frame fragments rejected due to unknown SMD value or arriving with an SMD-C when no frame is in progress*/
+    MAC_MERGE_MMFAECR0, /* A count of MAC frames with reassembly errors.*/
+    MAC_MERGE_MMFAECR1, /* A count of MAC frames with reassembly errors.*/
     UNMESR0,            /* This is the uncorrectable non-fatal memory error status register 0.*/
     UNMESR1,            /* This is the uncorrectable non-fatal memory error status register 1.*/
     UNMECTR,            /* This is the uncorrectable non-fatal memory error count register which tracks how many events have been detected.*/
@@ -2166,7 +2322,7 @@ typedef enum
     UNIESR,             /* This is the uncorrectable non-fatal integrity error status register. */
     UNIECTR,            /* This is the uncorrectable non-fatal integrity error count register which tracks how many events have been detected. */
     TUFSBESR,           /* This is the timer uncorrectable fatal system bus error status register. */
-    EMDIOUFSBESR,       /*This is the EMDIO uncorrectable fatal system bus error status register.*/
+    EMDIOUFSBESR,       /* This is the EMDIO uncorrectable fatal system bus error status register.*/
     UFSBESR,            /* This is the uncorrectable fatal system bus error status register. */
     SIUFSBESR,          /* This is the uncorrectable fatal system bus error status register. */
     RBPIR,              /* Frame BD prefetching for the station interface ring is stalled. The frame BD producer index will indicate the last successfully updated BD.*/
@@ -2175,8 +2331,8 @@ typedef enum
     SIUFMESR0,          /* This is the uncorrectable fatal memory error status register 0. */
     SIUFMESR1,          /* This is the uncorrectable fatal memory error status register 1. */
     UFIESR,             /* This is the uncorrectable fatal integrity error status register. */
-    SIUFIESR,            /* This is the uncorrectable fatal integrity error status register. */
-    UNMACESR /* This is the uncorrectable non-fatal MAC error status register.*/
+    SIUFIESR,           /* This is the uncorrectable fatal integrity error status register. */
+    UNMACESR            /* This is the uncorrectable non-fatal MAC error status register.*/
 } Netc_Eth_Ip_ErrorCaptureRegLabel;
 
 /* implements     Netc_Eth_Ip_ErrorCaptureRegisterInformation_structure */

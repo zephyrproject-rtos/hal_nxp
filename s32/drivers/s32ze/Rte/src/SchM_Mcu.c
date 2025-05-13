@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Mcu.c
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -42,7 +42,7 @@ extern "C"{
 #define SCHM_MCU_AR_RELEASE_REVISION_VERSION_C  0
 #define SCHM_MCU_SW_MAJOR_VERSION_C             2
 #define SCHM_MCU_SW_MINOR_VERSION_C             0
-#define SCHM_MCU_SW_PATCH_VERSION_C             0
+#define SCHM_MCU_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
@@ -99,12 +99,12 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_00) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_01) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_02) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"

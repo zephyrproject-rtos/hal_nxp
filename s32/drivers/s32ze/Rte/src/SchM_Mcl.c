@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Mcl.c
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -42,7 +42,7 @@ extern "C"{
 #define SCHM_MCL_AR_RELEASE_REVISION_VERSION_C  0
 #define SCHM_MCL_SW_MAJOR_VERSION_C             2
 #define SCHM_MCL_SW_MINOR_VERSION_C             0
-#define SCHM_MCL_SW_PATCH_VERSION_C             0
+#define SCHM_MCL_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
@@ -99,100 +99,102 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_00) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_01) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_02) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_03) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_04) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_05) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_06) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_06) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_07) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_07) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_08) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_08) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_09) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_09) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_10) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_11) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_12) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_13) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_13) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_14) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_14) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_15) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_15) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_16) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_16) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_17) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_17) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_18) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_18) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_19) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_19) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_20) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_20) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_21) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_21) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_22) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_22) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_23) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_23) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_24) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_24) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_25) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_25) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_26) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_26) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_27) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_27) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_28) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_28) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_29) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_29) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_30) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_30) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_31) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_31) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_32) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_32) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_33) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_33) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_34) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_34[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_34) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_34[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_35) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_35) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_36) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_36) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_37) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_37[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_37) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_37[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_38) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_38) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_39) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_39) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_40) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_40) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_41) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_41) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_42) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_42) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_43) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_43) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_44) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_44) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_45) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_45) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCL_EXCLUSIVE_AREA_46) static volatile uint32 msr_MCL_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCL_EXCLUSIVE_AREA_46) static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_34[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_34[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_37[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_37[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_MCL_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCL_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -2241,6 +2243,44 @@ void SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_46(void)
     }
 }
 
+void SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_47(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_MCL_EXCLUSIVE_AREA_47[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Mcl_schm_read_msr);
+#else
+        msr = Mcl_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32K3XX_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_MCL_EXCLUSIVE_AREA_47[u32CoreId] = msr;
+    }
+    reentry_guard_MCL_EXCLUSIVE_AREA_47[u32CoreId]++;
+}
+
+void SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_47(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_MCL_EXCLUSIVE_AREA_47[u32CoreId]--;
+    if ((ISR_ON(msr_MCL_EXCLUSIVE_AREA_47[u32CoreId]))&&(0UL == reentry_guard_MCL_EXCLUSIVE_AREA_47[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32K3XX_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
 
 #ifdef MCAL_TESTING_ENVIRONMENT
 /** 
@@ -2402,6 +2442,9 @@ void SchM_Check_mcl(void)
 
     EU_ASSERT(0UL == reentry_guard_MCL_EXCLUSIVE_AREA_46[u32CoreId]);
     reentry_guard_MCL_EXCLUSIVE_AREA_46[u32CoreId] = 0UL; /*reset reentry_guard_MCL_EXCLUSIVE_AREA_46 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_MCL_EXCLUSIVE_AREA_47[u32CoreId]);
+    reentry_guard_MCL_EXCLUSIVE_AREA_47[u32CoreId] = 0UL; /*reset reentry_guard_MCL_EXCLUSIVE_AREA_47 for the next test in the suite*/
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,6 +18,7 @@ extern "C"{
 
 #include "Mcal.h"
 #include "OsIf.h"
+#include "SchM_Mem_43_EXFLS.h"
 #include "Qspi_Ip.h"
 #include "Qspi_Ip_Controller.h"
 #include "Qspi_Ip_HwAccess.h"
@@ -31,7 +32,7 @@ extern "C"{
 #define QSPI_IP_CONTROLLER_AR_RELEASE_REVISION_VERSION_C     0
 #define QSPI_IP_CONTROLLER_SW_MAJOR_VERSION_C                2
 #define QSPI_IP_CONTROLLER_SW_MINOR_VERSION_C                0
-#define QSPI_IP_CONTROLLER_SW_PATCH_VERSION_C                0
+#define QSPI_IP_CONTROLLER_SW_PATCH_VERSION_C                1
 
 
 /*==================================================================================================
@@ -115,28 +116,6 @@ extern "C"{
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#if defined(FEATURE_QSPI_CHIP_OPTIONS_S32K148)
-    /* Bit-fields of chip-specific MCR[SCLKCFG] field */
-    #define QSPI_MCR_SCLKCFG_INPUT_EN             0x80U    /* Enable input buffer of QSPI pads */
-    #define QSPI_MCR_SCLKCFG_CLK_MOD              0x40U    /* Quadspi Clocking mode selection  */
-    #define QSPI_MCR_SCLKCFG_EXT_DQS              0x20U    /* Use external DQS (HyperRAM mode) */
-    #define QSPI_MCR_SCLKCFG_CLK_SRC              0x10U    /* QuadSPI source clock selection   */
-    #define QSPI_MCR_SCLKCFG_DQS_INV_B            0x08U    /* B-side DQS invert                */
-    #define QSPI_MCR_SCLKCFG_DQS_SEL_B            0x04U    /* B-side DQS select                */
-    #define QSPI_MCR_SCLKCFG_DQS_INV_A            0x02U    /* A-side DQS invert                */
-    #define QSPI_MCR_SCLKCFG_DQS_SEL_A            0x01U    /* A-side DQS select                */
-
-    /* Bit-fields of chip-specific SOCCR[SOCCFG] field */
-    /* Programmable Divider Selection */
-    #define QuadSPI_SOCCR_PD_MASK                 0xE0000000u
-    #define QuadSPI_SOCCR_PD_SHIFT                29u
-    #define QuadSPI_SOCCR_PD(x)                   (((uint32)(((uint32)(x))<<QuadSPI_SOCCR_PD_SHIFT))&QuadSPI_SOCCR_PD_MASK)
-    /* Programmable Divider Disable */
-    #define QuadSPI_SOCCR_PDD_MASK                0x10000000u
-
-    #define QuadSPI_SOCCR_DSQ_DEL_B               8u
-    #define QuadSPI_SOCCR_DSQ_DEL_A               0u
-#endif /* (FEATURE_QSPI_CHIP_OPTIONS_S32K148) */
 
 #if (FEATURE_QSPI_HAS_SFP == 1)
 
@@ -178,9 +157,9 @@ extern "C"{
 #include "Mem_43_EXFLS_MemMap.h"
 
 /* Table of base addresses for QuadSPI instances. */
-QuadSPI_Type * const Qspi_Ip_BaseAddress[QuadSPI_INSTANCE_COUNT] = IP_QuadSPI_BASE_PTRS;
+static QuadSPI_Type * const Qspi_Ip_BaseAddress[QuadSPI_INSTANCE_COUNT] = IP_QuadSPI_BASE_PTRS;
 /* Table of AHB addresses for QuadSPI instances. */
-const uint32 Qspi_Ip_AhbAddress[QuadSPI_INSTANCE_COUNT] = QuadSPI_AHB_PTRS;
+static const uint32 Qspi_Ip_AhbAddress[QuadSPI_INSTANCE_COUNT] = QuadSPI_AHB_PTRS;
 
 #define MEM_43_EXFLS_STOP_SEC_CONST_UNSPECIFIED
 #include "Mem_43_EXFLS_MemMap.h"
@@ -201,7 +180,6 @@ uint8 Qspi_Ip_MemoryPadding[QuadSPI_INSTANCE_COUNT];
 #define MEM_43_EXFLS_STOP_SEC_VAR_CLEARED_8
 #include "Mem_43_EXFLS_MemMap.h"
 
-
 #define MEM_43_EXFLS_START_SEC_VAR_CLEARED_32
 #include "Mem_43_EXFLS_MemMap.h"
 
@@ -211,6 +189,18 @@ static const Qspi_Ip_ControllerConfigType * Qspi_Ip_ControllerConfig[QuadSPI_INS
 #define MEM_43_EXFLS_STOP_SEC_VAR_CLEARED_32
 #include "Mem_43_EXFLS_MemMap.h"
 
+#define MEM_43_EXFLS_START_SEC_VAR_CLEARED_32
+#include "Mem_43_EXFLS_MemMap.h"
+
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+/**
+ * Pointer to current module configuration set
+ */
+static uint32 u32AccCRCremainder;
+#endif /* QSPI_IP_CHECK_CFG_CRC */
+
+#define MEM_43_EXFLS_STOP_SEC_VAR_CLEARED_32
+#include "Mem_43_EXFLS_MemMap.h"
 
 /*******************************************************************************
  * Private Functions
@@ -223,7 +213,9 @@ static inline uint32 Qspi_Ip_GetWordSize(uint32 sizeRemaining);
 
 #if (FEATURE_QSPI_HAS_SFP == 1)
 
-void Qspi_Ip_Sfp_Configure_Privileged(QuadSPI_Type * baseAddr, Qspi_Ip_ControllerConfigType const * userConfigPtr);
+void Qspi_Ip_Sfp_Configure_Privileged(QuadSPI_Type * baseAddr,
+                                      Qspi_Ip_ControllerConfigType const * userConfigPtr
+                                     );
 void Qspi_Ip_ResetPrivilegedRegisters_Privileged(QuadSPI_Type *BaseAddr);
 void Qspi_Ip_Sfp_ClearLatchedErrors_Privileged(QuadSPI_Type * BaseAddr);
 
@@ -232,6 +224,313 @@ void Qspi_Ip_Sfp_ClearLatchedErrors_Privileged(QuadSPI_Type * BaseAddr);
 static inline void Qspi_Ip_ResetAllRegisters(QuadSPI_Type *BaseAddr);
 
 static Qspi_Ip_StatusType Qspi_Ip_CmdWaitComplete(uint32 instance);
+
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+static void Qspi_Ip_AccumulateCRC(uint32 InputData);
+static void Qspi_Ip_ResetCRC(void);
+static uint32 Qspi_Ip_FinalizeCRC(void);
+static void Qspi_Ip_UpdateCRCreminder(Qspi_Ip_CrcDataSizeType DataSize);
+
+static Qspi_Ip_CrcType Qspi_Ip_CalcMemCfgCRC(const Qspi_Ip_MemoryConfigType * pConfig);
+static Qspi_Ip_CrcType Qspi_Ip_CalcCntCfgCRC(const Qspi_Ip_MemoryConnectionType * pConnect);
+static Qspi_Ip_StatusType Qspi_Ip_ValidateCtrlCfgCRC(const Qspi_Ip_ControllerConfigType *userConfigPtr);
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Qspi_Ip_WaitResetComplete
+ */
+static void Qspi_Ip_AccumulateCRC(uint32 InputData)
+{
+    if (0xFFFFU < InputData)
+    {
+        /* preparation for accumulation of higher 16 bits of the InputData */
+        u32AccCRCremainder = (u32AccCRCremainder << 16U) | (InputData >> 16U);
+        /* make 16-bit accumulated result (in lower 16-bits of u32AccCRCremainder) */
+        Qspi_Ip_UpdateCRCreminder(QSPI_IP_CRC_16_BITS);
+    }
+
+    if (0xFFU < InputData)
+    {
+        /* preparation for accumulation of lower 16 bits of the InputData */
+        u32AccCRCremainder = (u32AccCRCremainder << 16U) | (InputData & 0x0000FFFFU);
+        /* make 16-bit accumulated result (in lower 16-bits of u32AccCRCremainder) */
+        Qspi_Ip_UpdateCRCreminder(QSPI_IP_CRC_16_BITS);
+    }
+    else
+    {
+        /* optimization: only 8 LSB bits are processed */
+        /* preparation for accumulation of lower 8 bits of the InputData */
+        u32AccCRCremainder = (u32AccCRCremainder << 8U) | InputData;
+        /* make 16-bit accumulated result (in lower 16-bits of u32AccCRCremainder) */
+        Qspi_Ip_UpdateCRCreminder(QSPI_IP_CRC_8_BITS);
+    }
+}
+
+/**
+ * @brief        Function to reset CRC calculation.
+ *
+ */
+static void Qspi_Ip_ResetCRC(void)
+{
+    u32AccCRCremainder = 0U;
+}
+
+
+static uint32 Qspi_Ip_FinalizeCRC(void)
+{
+    /* add the final 0x0000 to the remainder */
+    u32AccCRCremainder = (u32AccCRCremainder << 16U);
+    /* make the final 16-bit CRC */
+    Qspi_Ip_UpdateCRCreminder(QSPI_IP_CRC_16_BITS);
+
+    return u32AccCRCremainder;
+}
+
+
+static void Qspi_Ip_UpdateCRCreminder(Qspi_Ip_CrcDataSizeType DataSize)
+{
+    uint32 CrcPolynomSft;
+    uint32 LeadingOne;
+    uint32 AccDataLoc;
+    uint32 LeadingOneInitial;
+
+    switch (DataSize)
+    {
+        case QSPI_IP_CRC_8_BITS:
+            CrcPolynomSft = 0x11021U << 7U; /* shifted CRC-16-CCITT (x.25 protocol)*/
+            LeadingOneInitial = 0x10000U << 7U;
+            break;
+
+        case QSPI_IP_CRC_16_BITS:
+        default:
+            CrcPolynomSft = 0x11021U << 15U; /* shifted CRC-16-CCITT (x.25 protocol)*/
+            LeadingOneInitial = 0x10000U << 15U;
+            break;
+    }
+
+    /* copy static variable to auto (computation over static may be slow) */
+    AccDataLoc = u32AccCRCremainder;
+
+    /* CRC computation */
+    for (LeadingOne = LeadingOneInitial; LeadingOne >= 0x00010000U; LeadingOne >>= 1U)
+    {
+        if (0U != (AccDataLoc & LeadingOne))
+        {
+            AccDataLoc ^= CrcPolynomSft;
+        }
+        CrcPolynomSft >>= 1U;
+    }
+
+    /* copy back to static variable */
+    u32AccCRCremainder = AccDataLoc;
+}
+
+static Qspi_Ip_CrcType Qspi_Ip_CalcMemCfgCRC(const Qspi_Ip_MemoryConfigType * pConfig)
+{
+    uint32 Index;
+    uint32 readIdXor = 0U;
+
+    /* Reset the accumulated CRC value */
+    Qspi_Ip_ResetCRC();
+
+    switch (pConfig->memType)
+    {
+        case QSPI_IP_HYPER_FLASH:
+            if (NULL_PTR != pConfig->hfConfig)
+            {
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->memSize);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->pageSize);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->hfConfig->outputDriverStrength);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->hfConfig->RWDSLowOnDualError);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->hfConfig->secureRegionUnlocked);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->hfConfig->readLatency);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->hfConfig->paramSectorMap);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->hfConfig->deviceIdWordAddress);
+            }
+            break;
+        case QSPI_IP_SERIAL_FLASH:
+            /* CRC - Accumulate LUT settings */
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->memSize);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->pageSize);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->readLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->writeLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->read0xxLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->read0xxLutAHB);
+
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->readIdSettings.readIdLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->readIdSettings.readIdSize);
+            for (Index = 0; Index < pConfig->readIdSettings.readIdSize; Index++)
+            {
+                readIdXor ^= pConfig->readIdSettings.readIdExpected[Index];
+            }
+            Qspi_Ip_AccumulateCRC(readIdXor);
+
+            for (Index = 0; Index < QSPI_IP_ERASE_TYPES; Index++)
+            {
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->eraseSettings.eraseTypes[Index].eraseLut);
+                Qspi_Ip_AccumulateCRC((uint32) pConfig->eraseSettings.eraseTypes[Index].size);
+            }
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->eraseSettings.chipEraseLut);
+
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.statusRegInitReadLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.statusRegReadLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.statusRegWriteLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.writeEnableSRLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.writeEnableLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.regSize);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.busyOffset);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.busyValue);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.writeEnableOffset);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.blockProtectionOffset);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.blockProtectionWidth);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->statusConfig.blockProtectionValue);
+
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->suspendSettings.eraseSuspendLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->suspendSettings.eraseResumeLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->suspendSettings.programSuspendLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->suspendSettings.programResumeLut);
+
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->resetSettings.resetCmdLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->resetSettings.resetCmdCount);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->initResetSettings.resetCmdLut);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->initResetSettings.resetCmdCount);
+
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->initConfiguration.opCount);
+            Qspi_Ip_AccumulateCRC((uint32) pConfig->lutSequences.opCount);
+            break;
+
+        default:
+            ; /* Not possible */
+            break;
+    }
+
+    return ((Qspi_Ip_CrcType)Qspi_Ip_FinalizeCRC());
+}
+
+static Qspi_Ip_CrcType Qspi_Ip_CalcCntCfgCRC(const Qspi_Ip_MemoryConnectionType * pConnect)
+{
+    /* Reset the accumulated CRC value */
+    Qspi_Ip_ResetCRC();
+
+    /* CRC - Accumulate MemConnectionCfg */
+    Qspi_Ip_AccumulateCRC((uint32) pConnect->qspiInstance);
+    Qspi_Ip_AccumulateCRC((uint32) pConnect->connectionType);
+    Qspi_Ip_AccumulateCRC((uint32) pConnect->memAlignment);
+
+    return ((Qspi_Ip_CrcType)Qspi_Ip_FinalizeCRC());
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Qspi_Ip_ValidateConfigCRC
+ * Description   : Caculate and check the CRC over configuration set
+*/
+Qspi_Ip_StatusType Qspi_Ip_ValidateMemConfigCRC(const Qspi_Ip_MemoryConfigType * pConfig,
+                                                const Qspi_Ip_MemoryConnectionType * pConnect
+                                               )
+{
+    Qspi_Ip_StatusType status = STATUS_QSPI_IP_SUCCESS;
+
+    if ((pConfig->memCfgCRC != Qspi_Ip_CalcMemCfgCRC(pConfig)) || (pConnect->memCntCfgCRC != Qspi_Ip_CalcCntCfgCRC(pConnect)))
+    {
+        status = STATUS_QSPI_IP_ERROR;
+    }
+
+    return status;
+}
+
+static Qspi_Ip_StatusType Qspi_Ip_ValidateCtrlCfgCRC(const Qspi_Ip_ControllerConfigType *userConfigPtr)
+{
+    Qspi_Ip_StatusType status = STATUS_QSPI_IP_SUCCESS;
+
+    /* Reset the accumulated CRC value */
+    Qspi_Ip_ResetCRC();
+
+    /* CRC - Accumulate dataRate */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dataRate);
+    /* CRC - Accumulate memSizeA1 */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->memSizeA1);
+    /* CRC - Accumulate memSizeA2 */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->memSizeA2);
+    /* CRC - Accumulate memSizeB1 */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->memSizeB1);
+    /* CRC - Accumulate memSizeB2 */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->memSizeB2);
+    /* CRC - Accumulate csHoldTime */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->csHoldTime);
+    /* CRC - Accumulate csSetupTime */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->csSetupTime);
+    /* CRC - Accumulate columnAddr */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->columnAddr);
+    /* CRC - Accumulate wordAddresable */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->wordAddresable);
+    /* CRC - Accumulate readModeA */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->readModeA);
+    /* CRC - Accumulate readModeB */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->readModeB);
+    /* CRC - Accumulate sampleDelay */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->sampleDelay);
+    /* CRC - Accumulate samplePhase */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->samplePhase);
+    /* CRC - Accumulate dllMode */
+    /* CRC - dllMode side A */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.dllMode);
+    /* CRC - Accumulate freqEnable */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.freqEnable);
+    /* CRC - Accumulate referenceCounter */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.referenceCounter);
+    /* CRC - Accumulate resolution */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.resolution);
+    /* CRC - Accumulate coarseDelay */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.coarseDelay);
+    /* CRC - Accumulate fineDelay */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.fineDelay);
+    /* CRC - Accumulate tapSelect */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsA.tapSelect);
+    /* CRC - dllMode side B */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.dllMode);
+    /* CRC - Accumulate freqEnable */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.freqEnable);
+    /* CRC - Accumulate referenceCounter */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.referenceCounter);
+    /* CRC - Accumulate resolution */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.resolution);
+    /* CRC - Accumulate coarseDelay */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.coarseDelay);
+    /* CRC - Accumulate fineDelay */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.fineDelay);
+    /* CRC - Accumulate tapSelect */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dllSettingsB.tapSelect);
+    /* CRC - Accumulate centerAlignedStrobe */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->centerAlignedStrobeA);
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->centerAlignedStrobeB);
+    /* CRC - Accumulate differentialClock */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->differentialClockA);
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->differentialClockB);
+    /* CRC - Accumulate dataAlign */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dataAlign);
+    /* CRC - Accumulate io2IdleValueA */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->io2IdleValueA);
+    /* CRC - Accumulate io3IdleValueA */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->io3IdleValueA);
+    /* CRC - Accumulate io2IdleValueA */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->io2IdleValueB);
+    /* CRC - Accumulate io3IdleValueA */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->io3IdleValueB);
+    /* CRC - Accumulate dqsAsAnOutput */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->dqsAsAnOutput);
+    /* CRC - Accumulate byteSwap */
+    Qspi_Ip_AccumulateCRC((uint32) userConfigPtr->byteSwap);
+
+    if (userConfigPtr->memCtrlCfgCRC != (Qspi_Ip_CrcType)Qspi_Ip_FinalizeCRC())
+    {
+        status = STATUS_QSPI_IP_ERROR;
+    }
+
+    return status;
+}
+
+#endif /* QSPI_IP_CHECK_CFG_CRC */
 
 /*FUNCTION**********************************************************************
  *
@@ -522,7 +821,7 @@ static inline Qspi_Ip_StatusType Qspi_Ip_ProcessDataBlankCheck(uint32 size,
  *
  * Function Name : Qspi_Ip_FillTxBuf
  * Description   : Fill Tx buffer with the specified number of 4-byte entries
-* @implements      Qspi_Ip_FillTxBuf_Activity */
+ *                 Qspi_Ip_FillTxBuf_Activity */
 static void Qspi_Ip_FillTxBuf(QuadSPI_Type *baseAddr,
                               const uint8 *roData,
                               uint32 size,
@@ -693,8 +992,10 @@ static void Qspi_Ip_SwReset(QuadSPI_Type *baseAddr)
  * Function Name : Qspi_Ip_AhbFlush
  * Description   : Reset AHB buffers
  */
-static void Qspi_Ip_AhbFlush(QuadSPI_Type *baseAddr)
+static Qspi_Ip_StatusType Qspi_Ip_AhbFlush(QuadSPI_Type *baseAddr)
 {
+    Qspi_Ip_StatusType status = STATUS_QSPI_IP_SUCCESS;
+
 #ifdef QuadSPI_SPTRCLR_ABRT_CLR_MASK
     uint32  u32ElapsedTicks = 0UL;
     uint32  u32TimeoutTicks;
@@ -714,6 +1015,7 @@ static void Qspi_Ip_AhbFlush(QuadSPI_Type *baseAddr)
         u32ElapsedTicks += OsIf_GetElapsed(&u32CurrentTicks, QSPI_IP_TIMEOUT_TYPE);
         if (u32ElapsedTicks >= u32TimeoutTicks)
         {
+            status = STATUS_QSPI_IP_TIMEOUT;
             break;
         }
     }
@@ -722,6 +1024,8 @@ static void Qspi_Ip_AhbFlush(QuadSPI_Type *baseAddr)
     /* Otherwise use the software reset */
     Qspi_Ip_SwReset(baseAddr);
 #endif
+
+    return status;
 }
 
 
@@ -1121,78 +1425,16 @@ static inline boolean Qspi_Ip_IsSideAvailableB(const Qspi_Ip_ControllerConfigTyp
  * Function Name : Qspi_Ip_ConfigureChipOptions
  * Description   : Configures chip-specific settings, e.g. SOCCR
  ***********************************************************************/
-#if defined(FEATURE_QSPI_CHIP_OPTIONS_S32K148)
-static void Qspi_Ip_ConfigureChipOptions(QuadSPI_Type *baseAddr,
-                                         const Qspi_Ip_ControllerConfigType *userConfigPtr
+
+
+static void Qspi_Ip_ConfigureChipOptions(const QuadSPI_Type *baseAddr,
+                                         const Qspi_Ip_ControllerConfigType * userConfigPtr
                                         )
-{
-    /* always enable pads input buffers */
-    uint8 clkOption = QSPI_MCR_SCLKCFG_INPUT_EN;
-    uint32 chipOption = 0U;
-
-    /* Configure MCR_SCLKCFG options */
-    /* Configure module clock selection */
-    if (QSPI_IP_CLK_SRC_BUS_CLK == userConfigPtr->clockSrc)
-    {
-        clkOption |= QSPI_MCR_SCLKCFG_CLK_MOD;
-    }
-    /* Configure internal reference clock selection */
-    if (QSPI_IP_CLK_REF_FIRC_DIV1 == userConfigPtr->clockRef)
-    {
-        clkOption |= QSPI_MCR_SCLKCFG_CLK_SRC;
-    }
-    /* Configure external DQS mode for Flash B (HyperRAM Enabled) */
-    if (QSPI_IP_READ_MODE_EXTERNAL_DQS == userConfigPtr->readModeB)
-    {
-        clkOption |= QSPI_MCR_SCLKCFG_EXT_DQS;
-    }
-    /* Select reference clock for DQS for each side */
-    if (QSPI_IP_READ_MODE_LOOPBACK == userConfigPtr->readModeA)
-    {
-        clkOption |= (uint8)(QSPI_MCR_SCLKCFG_DQS_SEL_A);
-    }
-    if (QSPI_IP_READ_MODE_LOOPBACK == userConfigPtr->readModeB)
-    {
-        clkOption |= (uint8)(QSPI_MCR_SCLKCFG_DQS_SEL_B);
-    }
-    /* Configure inverted DQS: 0-Inverted / 1-Not Inverted */
-    if ((boolean)FALSE == userConfigPtr->dqsInvertA)
-    {
-        clkOption |= (uint8)(QSPI_MCR_SCLKCFG_DQS_INV_A);
-    }
-    if ((boolean)FALSE == userConfigPtr->dqsInvertB)
-    {
-        clkOption |= (uint8)(QSPI_MCR_SCLKCFG_DQS_INV_B);
-    }
-    Qspi_Ip_SetClockOptions(baseAddr, clkOption);
-
-    /* Configure SOCCR options */
-    /* Disable divider before configuring it */
-    Qspi_Ip_SetChipOptions(baseAddr, QuadSPI_SOCCR_PDD_MASK);
-    chipOption |= QuadSPI_SOCCR_PD((uint32)userConfigPtr->clockRefDiv - 1U);
-    chipOption |= ((uint32)userConfigPtr->dqsDelayA << QuadSPI_SOCCR_DSQ_DEL_A) +
-                  ((uint32)userConfigPtr->dqsDelayB << QuadSPI_SOCCR_DSQ_DEL_B);
-    /* Write configuration, keep divider disabled */
-    Qspi_Ip_SetChipOptions(baseAddr, chipOption | QuadSPI_SOCCR_PDD_MASK);
-    /* Enable divider */
-    Qspi_Ip_SetChipOptions(baseAddr, chipOption);
-}
-
-#elif defined(FEATURE_QSPI_CHIP_OPTIONS_S32K3)
-static void Qspi_Ip_ConfigureChipOptions(QuadSPI_Type *baseAddr, const Qspi_Ip_ControllerConfigType * userConfigPtr)
-{
-    (void)userConfigPtr;
-    Qspi_Ip_SetChipOptions(baseAddr, 0x0000000E);  /* set ibe=1, obe=1, dse=1 and sre=0 */
-}
-
-#else
-static void Qspi_Ip_ConfigureChipOptions(const QuadSPI_Type *baseAddr, const Qspi_Ip_ControllerConfigType * userConfigPtr)
 {
     /* Do nothing */
     (void)userConfigPtr;
     (void)baseAddr;
 }
-#endif
 
 /*FUNCTION**********************************************************************
  *
@@ -1220,13 +1462,15 @@ static void Qspi_Ip_DdrConfig(QuadSPI_Type *baseAddr,
  *
  * Function Name : Qspi_Ip_ConfigureReadOptions
  * Description   : Configures data read settings
-* @implements      Qspi_Ip_ConfigureReadOptions_Activity */
+ *                 Qspi_Ip_ConfigureReadOptions_Activity */
 static void Qspi_Ip_ConfigureReadOptions(QuadSPI_Type *baseAddr,
                                          const Qspi_Ip_ControllerConfigType *userConfigPtr
                                         )
 {
     /* Always enable DQS */
     QSPI_DQS_Enable(baseAddr);
+
+    Qspi_Ip_DqsOutEnable(baseAddr, userConfigPtr->dqsAsAnOutput);
 
     Qspi_Ip_DdrConfig(baseAddr, userConfigPtr);
 
@@ -1254,8 +1498,8 @@ static void Qspi_Ip_ConfigureReadOptions(QuadSPI_Type *baseAddr,
  * Description   : Sets up AHB buffer 0 buffer 1 and buffer 2
  */
 static void Qspi_Ip_SetAhbBuf(uint32 instance,
-                                           const Qspi_Ip_ControllerAhbConfigType *config
-                                          )
+                              const Qspi_Ip_ControllerAhbConfigType *config
+                             )
 {
     QuadSPI_Type *baseAddr;
     /* Get base address of instance */
@@ -1272,7 +1516,7 @@ static void Qspi_Ip_SetAhbBuf(uint32 instance,
  *
  * Function Name : Qspi_Ip_AhbSetup
  * Description   : Sets up AHB accesses to the serial flash
-* @implements      Qspi_Ip_AhbSetup_Activity */
+ *                 Qspi_Ip_AhbSetup_Activity */
 static Qspi_Ip_StatusType Qspi_Ip_AhbSetup(uint32 instance,
                                            const Qspi_Ip_ControllerAhbConfigType *config
                                           )
@@ -1317,12 +1561,11 @@ static Qspi_Ip_StatusType Qspi_Ip_AhbSetup(uint32 instance,
  * @retval STATUS_QSPI_IP_SUCCESS SFAR and IPCR writes passed the MDAD checks
  * @retval STATUS_QSPI_IP_ERROR a common or a queue error has occurred
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static void Qspi_Ip_NewIpsTransaction
-(
-    QuadSPI_Type * BaseAddress,
-    uint32 Address,
-    uint16 DataSize,
-    uint8 SeqId)
+static void Qspi_Ip_NewIpsTransaction(QuadSPI_Type *BaseAddress,
+                                      uint32 Address,
+                                      uint16 DataSize,
+                                      uint8 SeqId
+                                     )
 {
     #if (FEATURE_QSPI_HAS_SFP == 1)
     Qspi_Ip_Sfp_ClearLatchedErrors(BaseAddress);
@@ -1351,9 +1594,7 @@ static void Qspi_Ip_NewIpsTransaction
  *
  * @param[in] BaseAddr base address of the given QuadSPI instance
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void Qspi_Ip_Sfp_ClearLatchedErrors_Privileged
-(
-    QuadSPI_Type * BaseAddr)
+void Qspi_Ip_Sfp_ClearLatchedErrors_Privileged(QuadSPI_Type *BaseAddr)
 {
     BaseAddr->ERRSTAT  |= 0x1FFUL;
     BaseAddr->FLSEQREQ |= QuadSPI_FLSEQREQ_CLR_MASK;
@@ -1376,10 +1617,9 @@ void Qspi_Ip_Sfp_ClearLatchedErrors_Privileged
  * @retval STATUS_QSPI_IP_TIMEOUT
  * @retval STATUS_QSPI_IP_ERROR
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-static Qspi_Ip_StatusType Qspi_Ip_Sfp_WaitFsmState
-(
-    QuadSPI_Type const * BaseAddress,
-    uint32 State)
+static Qspi_Ip_StatusType Qspi_Ip_Sfp_WaitFsmState(QuadSPI_Type const * BaseAddress,
+                                                   uint32 State
+                                                  )
 {
     Qspi_Ip_StatusType Status = STATUS_QSPI_IP_ERROR;
     uint32 FsmStat;
@@ -1419,30 +1659,6 @@ static Qspi_Ip_StatusType Qspi_Ip_Sfp_WaitFsmState
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : Qspi_Ip_SetLut
- * Description   : Configures a pair of LUT commands in the specified LUT register
- *
- *END**************************************************************************/
-void Qspi_Ip_SetLut(uint32 instance,
-                    uint8 LutRegister,
-                    Qspi_Ip_InstrOpType operation0,
-                    Qspi_Ip_InstrOpType operation1
-                   )
-{
-    QuadSPI_Type *baseAddr;
-
-#if (QSPI_IP_DEV_ERROR_DETECT == STD_ON)
-    DEV_ASSERT_QSPI(instance < QuadSPI_INSTANCE_COUNT);
-    DEV_ASSERT_QSPI(LutRegister < QuadSPI_LUT_COUNT);
-#endif
-
-    baseAddr = Qspi_Ip_BaseAddress[instance];
-    baseAddr->LUT[LutRegister] = QSPI_IP_PACK_LUT_REG(operation0, operation1);
-}
-
 
 /*FUNCTION**********************************************************************
  *
@@ -1492,7 +1708,6 @@ void Qspi_Ip_SetAhbSeqId_Privileged(uint32 instance,
     baseAddr = Qspi_Ip_BaseAddress[instance];
     baseAddr->BFGENCR =  QuadSPI_BFGENCR_SEQID(seqID);
 }
-
 
 /*FUNCTION**********************************************************************
  *
@@ -1557,12 +1772,14 @@ static inline void Qspi_Ip_ConfigureBuffers(uint32 instance,
  *
  *END**************************************************************************/
 static inline void Qspi_Ip_ConfigureControllerA(uint32 instance,
-                                                const Qspi_Ip_ControllerConfigType *userConfigPtr)
+                                                const Qspi_Ip_ControllerConfigType *userConfigPtr
+                                               )
 {
     QuadSPI_Type *baseAddr = Qspi_Ip_BaseAddress[instance];
+    uint32 AhbAddress = Qspi_Ip_AhbAddress[instance];
 
     /* Configure external flash memory map Size A */
-    Qspi_Ip_SetMemMapSizeA(instance, baseAddr, userConfigPtr->memSizeA1, userConfigPtr->memSizeA2);
+    Qspi_Ip_SetMemMapSizeA(AhbAddress, baseAddr, userConfigPtr->memSizeA1, userConfigPtr->memSizeA2);
 
     /* Configure idle line value side A */
     Qspi_Ip_SetIdleLineValuesA(baseAddr, userConfigPtr->io2IdleValueA, userConfigPtr->io3IdleValueA);
@@ -1582,7 +1799,8 @@ static inline void Qspi_Ip_ConfigureControllerA(uint32 instance,
  *
  *END**************************************************************************/
 static inline void Qspi_Ip_ConfigureControllerB(uint32 instance,
-                                                const Qspi_Ip_ControllerConfigType *userConfigPtr)
+                                                const Qspi_Ip_ControllerConfigType *userConfigPtr
+                                               )
 {
     /* Check Size B is available */
     if (TRUE == Qspi_Ip_IsSideAvailableB(userConfigPtr))
@@ -1612,8 +1830,8 @@ static inline void Qspi_Ip_ConfigureControllerB(uint32 instance,
  *
  *END**************************************************************************/
 static inline void Qspi_Ip_ConfigureControllerRegisters(uint32 instance,
-                                                 const Qspi_Ip_ControllerConfigType * userConfigPtr
-                                                )
+                                                        const Qspi_Ip_ControllerConfigType *userConfigPtr
+                                                       )
 {
     Qspi_Ip_ConfigureControllerA(instance, userConfigPtr);
 
@@ -1627,7 +1845,7 @@ static inline void Qspi_Ip_ConfigureControllerRegisters(uint32 instance,
  *
  *END**************************************************************************/
 static inline void Qspi_Ip_ConfigureController(uint32 instance,
-                                               const Qspi_Ip_ControllerConfigType * userConfigPtr
+                                               const Qspi_Ip_ControllerConfigType *userConfigPtr
                                               )
 {
     QuadSPI_Type *baseAddr = Qspi_Ip_BaseAddress[instance];
@@ -1671,31 +1889,42 @@ Qspi_Ip_StatusType Qspi_Ip_ControllerInit(uint32 instance,
     DEV_ASSERT_QSPI(userConfigPtr != NULL_PTR);
 #endif
 
-    /* Initialize driver status structure */
-    baseAddr = Qspi_Ip_BaseAddress[instance];
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_09();
 
-    /* Ensure module is disabled */
-    Qspi_Ip_Disable(baseAddr);
+#if (QSPI_IP_CHECK_CFG_CRC == STD_ON)
+    status = Qspi_Ip_ValidateCtrlCfgCRC(userConfigPtr);
+    if (STATUS_QSPI_IP_SUCCESS == status)
+#endif
+    {
+        /* Initialize driver status structure */
+        baseAddr = Qspi_Ip_BaseAddress[instance];
 
-    /* Ensure all registers contain their reset value */
-    Qspi_Ip_ResetAllRegisters(baseAddr);
+        /* Ensure module is disabled */
+        Qspi_Ip_Disable(baseAddr);
 
-    /* Configure the controller following the user configurations */
-    Qspi_Ip_ConfigureController(instance, userConfigPtr);
+        /* Ensure all registers contain their reset value */
+        Qspi_Ip_ResetAllRegisters(baseAddr);
 
-    /* Enable QuadSPI module */
-    Qspi_Ip_Enable(baseAddr);
+        /* Configure the controller following the user configurations */
+        Qspi_Ip_ConfigureController(instance, userConfigPtr);
 
-    /* Reset serial flash and AHB domains */
-    Qspi_Ip_SwReset(baseAddr);
+        /* Enable QuadSPI module */
+        Qspi_Ip_Enable(baseAddr);
 
-    /* Store user configuration for runtime usage */
-    Qspi_Ip_ControllerConfig[instance] = userConfigPtr;
-    /* Configure the DLL */
-    status = Qspi_Ip_ConfigureDLL(instance, userConfigPtr);
+        /* Reset serial flash and AHB domains */
+        Qspi_Ip_SwReset(baseAddr);
 
-    /* Workaround to clear CRC and ECC errors flags */
-    baseAddr->FR = (uint32)0xFFFFFFFFUL;
+        /* Store user configuration for runtime usage */
+        Qspi_Ip_ControllerConfig[instance] = userConfigPtr;
+        /* Configure the DLL */
+        status = Qspi_Ip_ConfigureDLL(instance, userConfigPtr);
+
+        /* Workaround to clear CRC and ECC errors flags */
+        baseAddr->FR = (uint32)0xFFFFFFFFUL;
+    }
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_09();
 
     return status;
 }
@@ -1714,6 +1943,9 @@ Qspi_Ip_StatusType Qspi_Ip_ControllerDeinit(uint32 instance)
     DEV_ASSERT_QSPI(instance < QuadSPI_INSTANCE_COUNT);
 #endif
 
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_10();
+
     baseAddr = Qspi_Ip_BaseAddress[instance];
 
     /* Disable QuadSPI module */
@@ -1721,6 +1953,9 @@ Qspi_Ip_StatusType Qspi_Ip_ControllerDeinit(uint32 instance)
 
     /* Detach the configuration pointer */
     Qspi_Ip_ControllerConfig[instance] = NULL_PTR;
+
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_10();
 
     return STATUS_QSPI_IP_SUCCESS;
 }
@@ -1741,6 +1976,9 @@ Qspi_Ip_StatusType Qspi_Ip_Abort(uint32 instance)
     QuadSPI_Type *baseAddr = Qspi_Ip_BaseAddress[instance];
     Qspi_Ip_StatusType status = STATUS_QSPI_IP_SUCCESS;
 
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_07();
+
     /* Reset serial flash and AHB domains */
     Qspi_Ip_SwReset(baseAddr);
 
@@ -1752,6 +1990,9 @@ Qspi_Ip_StatusType Qspi_Ip_Abort(uint32 instance)
          */
         status = Qspi_Ip_ConfigureDLL(instance, Qspi_Ip_ControllerConfig[instance]);
     }
+
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_EXFLS_MEM_EXCLUSIVE_AREA_07();
 
     return status;
 }
@@ -1824,20 +2065,23 @@ Qspi_Ip_StatusType Qspi_Ip_IpCommand(uint32 instance,
     baseAddr = Qspi_Ip_BaseAddress[instance];
 
     /* Reset AHB buffers to force re-read from memory after erase operation */
-    Qspi_Ip_AhbFlush(baseAddr);
+    status = Qspi_Ip_AhbFlush(baseAddr);
 
-    /* Launch the IP command */
-    Qspi_Ip_NewIpsTransaction(baseAddr, addr, 0U, SeqId);
+    if (STATUS_QSPI_IP_SUCCESS == status)
+    {
+        /* Launch the IP command */
+        Qspi_Ip_NewIpsTransaction(baseAddr, addr, 0U, SeqId);
 
-    /* Add Fault Injection point for FR_ILLINE flag */
-    MCAL_FAULT_INJECTION_POINT(FLS_FIP_FR_ERROR_IPCOMMAND);
+        /* Add Fault Injection point for FR_ILLINE flag */
+        MCAL_FAULT_INJECTION_POINT(FLS_FIP_FR_ERROR_IPCOMMAND);
 
-    status = Qspi_Ip_CmdWaitComplete(instance);
+        status = Qspi_Ip_CmdWaitComplete(instance);
 
-    /* Make sure there is no garbage in Rx fifo in case of triggering a dummy READ instruction.
-       This clears RBSR[RDBFL] to ensure QuadSPI is idle from SFP point of view and avoid the Master timeout error.
-     */
-    Qspi_Ip_ClearRxBuf(baseAddr);
+        /* Make sure there is no garbage in Rx fifo in case of triggering a dummy READ instruction.
+           This clears RBSR[RDBFL] to ensure QuadSPI is idle from SFP point of view and avoid the Master timeout error.
+         */
+        Qspi_Ip_ClearRxBuf(baseAddr);
+    }
 
     return status;
 }
@@ -1950,7 +2194,7 @@ Qspi_Ip_StatusType Qspi_Ip_IpRead(uint32 instance,
  *
  * Function Name : Qspi_Ip_InvalidateTxBuf
  * Description   : Invalidates the TX buffer content and wait until it is completed or timed out
- * @implements     Qspi_Ip_InvalidateTxBuf_Activity */
+ *                 Qspi_Ip_InvalidateTxBuf_Activity */
 static inline void Qspi_Ip_InvalidateTxBuf(uint32 instance)
 {
     QuadSPI_Type *baseAddr = Qspi_Ip_BaseAddress[instance];
@@ -1976,39 +2220,32 @@ static inline void Qspi_Ip_InvalidateTxBuf(uint32 instance)
  *                 by the device for transmission to start
  *
  *END**************************************************************************/
-#if (FEATURE_QSPI_TX_MIN_BUF_FILL > 1)
-static void Qspi_Ip_PadTxBuf(QuadSPI_Type *baseAddr)
-{
-    uint32 bufFill = Qspi_Ip_GetTxBufFill(baseAddr);
-    /* Pad buffer will blank data */
-    while ((bufFill < FEATURE_QSPI_TX_MIN_BUF_FILL) || ((bufFill & 3U) != 0U))
-    {
-        Qspi_Ip_WriteTxData(baseAddr, 0xFFFFFFFFU);
-        bufFill++;
-    }
-}
-#else
 static void Qspi_Ip_PadTxBuf(const QuadSPI_Type *baseAddr)
 {
     /* Remove unused variable */
     (void)baseAddr;
 }
-#endif
 
 /*FUNCTION**********************************************************************
  *
  * Function Name : Qspi_Ip_IpWritePrepare
  * Description   : Reset AHB buffers and check no garbage in Tx
  */
-static void Qspi_Ip_IpWritePrepare(uint32 instance)
+static Qspi_Ip_StatusType Qspi_Ip_IpWritePrepare(uint32 instance)
 {
     QuadSPI_Type *baseAddr;
     baseAddr = Qspi_Ip_BaseAddress[instance];
+    Qspi_Ip_StatusType status;
     /* Reset AHB buffers to force re-read from memory after write operation */
-    Qspi_Ip_AhbFlush(baseAddr);
+    status = Qspi_Ip_AhbFlush(baseAddr);
 
-    /* Ensure there is no garbage in Tx FIFO */
-    Qspi_Ip_InvalidateTxBuf(instance);
+    if (STATUS_QSPI_IP_SUCCESS == status)
+    {
+        /* Ensure there is no garbage in Tx FIFO */
+        Qspi_Ip_InvalidateTxBuf(instance);
+    }
+
+    return status;
 }
 
 
@@ -2036,53 +2273,57 @@ static void Qspi_Ip_TxBufPrepare(QuadSPI_Type *baseAddr,
  * Description   : Launches an IP write command with sfp
  */
 static Qspi_Ip_StatusType Qspi_Ip_IpWriteSfp(uint32 instance,
-                                      uint8 SeqId,
-                                      uint32 addr,
-                                      const uint8 * data,
-                                      uint32 size
-                                     )
+                                             uint8 SeqId,
+                                             uint32 addr,
+                                             const uint8 * data,
+                                             uint32 size
+                                            )
 {
     QuadSPI_Type *baseAddr;
-    Qspi_Ip_StatusType status = STATUS_QSPI_IP_ERROR;
+    Qspi_Ip_StatusType status;
     uint32 padding;
     uint16 TotalSize = 0U;
 
     baseAddr = Qspi_Ip_BaseAddress[instance];
     /* Reset AHB buffers and check no garbage in Tx */
-    Qspi_Ip_IpWritePrepare(instance);
+    status = Qspi_Ip_IpWritePrepare(instance);
 
-    padding = Qspi_Ip_MemoryPadding[instance];
-    TotalSize = (uint16)(size + (padding >> 4U) + (padding & 0x0FU));
-    /* Check total data size need to be written is aligned with 4-bytes to avoid invalid value when setup watermark */
-    if (((TotalSize % 4U) != 0U) && (TotalSize > 4U))
+    if (STATUS_QSPI_IP_SUCCESS == status)
     {
-        TotalSize += (4U - (TotalSize % 4U));
-    }
-    Qspi_Ip_MemoryPadding[instance] = 0U;  /* Clear padding */
-
-    /* Setup water mark according to the transfer size to avoid underrun issue. */
-    Qspi_Ip_SetTxWatermark(baseAddr, (uint8)((FEATURE_QSPI_TX_BUF_SIZE / 4U) - ((TotalSize / 4U) - 1U)));
-
-    Qspi_Ip_NewIpsTransaction(baseAddr, addr, TotalSize, SeqId);
-
-    /* 01 - TBDR lock is open. QuadSPI considers IPS transfer. Master counter is started. */
-    if (STATUS_QSPI_IP_SUCCESS == Qspi_Ip_Sfp_WaitFsmState(baseAddr, 1U))
-    {
-        /* Fill Tx buffer and Pad Tx buffer up to the minimum number of entries required by the device. */
-        Qspi_Ip_TxBufPrepare(baseAddr, data, size, padding);
-
-        MCAL_DATA_SYNC_BARRIER();
-        MCAL_INSTRUCTION_SYNC_BARRIER();
-        /* 10 - TX buffer filled above threshold. Write transfer is triggered. SEQID is written. */
-        if (((baseAddr->FSMSTAT & QuadSPI_FSMSTAT_STATE_MASK) >> QuadSPI_FSMSTAT_STATE_SHIFT) == 2U)
+        padding = Qspi_Ip_MemoryPadding[instance];
+        TotalSize = (uint16)(size + (padding >> 4U) + (padding & 0x0FU));
+        /* Check total data size need to be written is aligned with 4-bytes to avoid invalid value when setup watermark */
+        if (((TotalSize % 4U) != 0U) && (TotalSize > 4U))
         {
-            /* Add Fault Injection point for FR_TBUF flag */
-            MCAL_FAULT_INJECTION_POINT(FLS_FIP_FR_ERROR_IPWRITE);
+            TotalSize += (4U - (TotalSize % 4U));
+        }
+        Qspi_Ip_MemoryPadding[instance] = 0U;  /* Clear padding */
 
-            /* Wait until the command is sent */
-            status = Qspi_Ip_CmdWaitComplete(instance);
+        /* Setup water mark according to the transfer size to avoid underrun issue. */
+        Qspi_Ip_SetTxWatermark(baseAddr, (uint8)((FEATURE_QSPI_TX_BUF_SIZE / 4U) - ((TotalSize / 4U) - 1U)));
+
+        Qspi_Ip_NewIpsTransaction(baseAddr, addr, TotalSize, SeqId);
+
+        /* 01 - TBDR lock is open. QuadSPI considers IPS transfer. Master counter is started. */
+        if (STATUS_QSPI_IP_SUCCESS == Qspi_Ip_Sfp_WaitFsmState(baseAddr, 1U))
+        {
+            /* Fill Tx buffer and Pad Tx buffer up to the minimum number of entries required by the device. */
+            Qspi_Ip_TxBufPrepare(baseAddr, data, size, padding);
+
+            MCAL_DATA_SYNC_BARRIER();
+            MCAL_INSTRUCTION_SYNC_BARRIER();
+            /* 10 - TX buffer filled above threshold. Write transfer is triggered. SEQID is written. */
+            if (((baseAddr->FSMSTAT & QuadSPI_FSMSTAT_STATE_MASK) >> QuadSPI_FSMSTAT_STATE_SHIFT) == 2U)
+            {
+                /* Add Fault Injection point for FR_TBUF flag */
+                MCAL_FAULT_INJECTION_POINT(FLS_FIP_FR_ERROR_IPWRITE);
+
+                /* Wait until the command is sent */
+                status = Qspi_Ip_CmdWaitComplete(instance);
+            }
         }
     }
+
     return status;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,7 +37,7 @@ extern "C"{
 #define NETC_ETHSWT_IP_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETHSWT_IP_SW_MAJOR_VERSION             2
 #define NETC_ETHSWT_IP_SW_MINOR_VERSION             0
-#define NETC_ETHSWT_IP_SW_PATCH_VERSION             0
+#define NETC_ETHSWT_IP_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -97,15 +97,8 @@ NETC_ETHSWT_CONFIG_EXT
 #define ETHSWT_43_NETC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "EthSwt_43_NETC_MemMap.h"
 
-/* Base address of the registers for the MAC Ports */
-extern Netc_EthSwt_Ip_PortBaseType* Netc_EthSwt_Ip_PortBaseTable[];
-
-/* Base address of the registers for the pseudo Port */
-extern Netc_EthSwt_Ip_PseudoPortBaseType* Netc_EthSwt_Ip_PseudoPortBaseTable[];
 extern SW_PORT0_Type *Netc_EthSwt_Ip_SW0_PortxBaseAddr[NETC_ETHSWT_IP_NUMBER_OF_PORTS];
 
-/* Ingress Port Filter Entry ID for mirroing */
-extern uint32 MirroringIngressPortFilterEntryId;
 
 #define NETC_ETHSWT_IP_MACADDRLEN  (6U)                             /*!< mac addr length */
 #define NETC_ETHSWT_IP_BITMAPLEN   (24U)                            /*!< bit map length */

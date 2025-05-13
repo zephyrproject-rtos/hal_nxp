@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,13 +19,13 @@ extern "C"{
 /*==================================================================================================
  *                                        INCLUDE FILES
 ==================================================================================================*/
+#include "Mcal.h"
 #include "OsIf.h"
 #include "Qspi_Ip.h"
 #include "Qspi_Ip_Common.h"
 #include "Qspi_Ip_Controller.h"
 #include "Qspi_Ip_HyperflashRegs.h"
 #include "Qspi_Ip_Hyperflash.h"
-
 
 /*==================================================================================================
  *                              SOURCE FILE VERSION INFORMATION
@@ -36,7 +36,7 @@ extern "C"{
 #define QSPI_IP_HYPERFLASH_AR_RELEASE_REVISION_VERSION_C  0
 #define QSPI_IP_HYPERFLASH_SW_MAJOR_VERSION_C             2
 #define QSPI_IP_HYPERFLASH_SW_MINOR_VERSION_C             0
-#define QSPI_IP_HYPERFLASH_SW_PATCH_VERSION_C             0
+#define QSPI_IP_HYPERFLASH_SW_PATCH_VERSION_C             1
 
 #if (QSPI_IP_MEM_INSTANCE_COUNT > 0)
 
@@ -49,6 +49,12 @@ extern "C"{
          (QSPI_IP_HYPERFLASH_AR_RELEASE_MINOR_VERSION_C != OSIF_AR_RELEASE_MINOR_VERSION) \
         )
         #error "AutoSar Version Numbers of Qspi_Ip_Hyperflash.c and OsIf.h are different"
+    #endif
+    /* Check if current file and Mcal.h header file are of the same Autosar version */
+    #if ((QSPI_IP_HYPERFLASH_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
+         (QSPI_IP_HYPERFLASH_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION)    \
+        )
+        #error "AutoSar Version Numbers of Qspi_Ip_Hyperflash.c and Mcal.h are different"
     #endif
 #endif
 
@@ -426,6 +432,7 @@ static Qspi_Ip_StatusType Qspi_Ip_HyperflashSendUnlockCycles12(uint32 instance)
         /* Send unlock cycle 2 */
         status = Qspi_Ip_RunCommand(instance, QSPI_IP_HF_LUT_COMMON_2AA_55, 0x554);
     }
+    MCAL_FAULT_INJECTION_POINT(QSPI_IP_UNLOCK_CYCLE12_SENT_COMPLETE);
 
     return status;
 }

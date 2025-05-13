@@ -1,5 +1,6 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 1997-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -39,7 +40,7 @@ extern "C"{
 #define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
 #define CDD_PLATFORM_MRU_IP_TYPES_SW_MAJOR_VERSION             2
 #define CDD_PLATFORM_MRU_IP_TYPES_SW_MINOR_VERSION             0
-#define CDD_PLATFORM_MRU_IP_TYPES_SW_PATCH_VERSION             0
+#define CDD_PLATFORM_MRU_IP_TYPES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS

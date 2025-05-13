@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,7 +35,7 @@ extern "C"{
 #define QSPI_IP_HYPERFLASH_AR_RELEASE_REVISION_VERSION_H  0
 #define QSPI_IP_HYPERFLASH_SW_MAJOR_VERSION_H             2
 #define QSPI_IP_HYPERFLASH_SW_MINOR_VERSION_H             0
-#define QSPI_IP_HYPERFLASH_SW_PATCH_VERSION_H             0
+#define QSPI_IP_HYPERFLASH_SW_PATCH_VERSION_H             1
 
 #if (QSPI_IP_MEM_INSTANCE_COUNT > 0)
 

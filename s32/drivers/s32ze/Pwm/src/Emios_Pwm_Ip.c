@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +40,7 @@ extern "C"{
 #define EMIOS_PWM_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define EMIOS_PWM_IP_SW_MAJOR_VERSION_C               2
 #define EMIOS_PWM_IP_SW_MINOR_VERSION_C               0
-#define EMIOS_PWM_IP_SW_PATCH_VERSION_C               0
+#define EMIOS_PWM_IP_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -133,25 +133,6 @@ Emios_Pwm_Ip_HwAddrType *const Emios_Pwm_Ip_aBasePtr[EMIOS_PWM_IP_INSTANCE_COUNT
 
 #define PWM_STOP_SEC_CONST_UNSPECIFIED
 #include "Pwm_MemMap.h"
-
-#if (EMIOS_PWM_IP_DEV_ERROR_DETECT == STD_ON)
-#if (EMIOS_PWM_IP_NO_CACHE_NEEDED == STD_ON)
-    #define PWM_START_SEC_VAR_INIT_32_NO_CACHEABLE
-#else
-    #define PWM_START_SEC_VAR_INIT_32
-#endif
-#include "Pwm_MemMap.h"
-
-/* Array with available pwm modes for each Emios Channel */
-static uint32 Emios_Pwm_Ip_aChannelModes[EMIOS_PWM_IP_INSTANCE_COUNT][EMIOS_PWM_IP_MODES] = EMIOS_PWM_IP_CHANNEL_MODES;
-
-#if (EMIOS_PWM_IP_NO_CACHE_NEEDED == STD_ON)
-    #define PWM_STOP_SEC_VAR_INIT_32_NO_CACHEABLE
-#else
-    #define PWM_STOP_SEC_VAR_INIT_32
-#endif
-#include "Pwm_MemMap.h"
-#endif
 
 #if (EMIOS_PWM_IP_NO_CACHE_NEEDED == STD_ON)
     #define PWM_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
@@ -313,7 +294,7 @@ static inline void Emios_Pwm_Ip_SetOutputToNormalOpwfm(uint8 Instance,
     if(0x8000U == DutyPercent)
     {
        Emios_Pwm_Ip_SetPwmModePol(Base, Channel, Mode, (Polarity == EMIOS_PWM_IP_ACTIVE_HIGH) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW);
-    } 
+    }
     else
     {
         /* Do nothing */
@@ -378,7 +359,10 @@ static inline boolean Emios_Pwm_Ip_ValidateMode(uint8  Instance,
                                                 Emios_Pwm_Ip_PwmType Mode
                                                )
 {
+    /* Array with available pwm modes for each Emios Channel */
+    const uint32 Emios_Pwm_Ip_aChannelModes[EMIOS_PWM_IP_INSTANCE_COUNT][EMIOS_PWM_IP_MODES] = EMIOS_PWM_IP_CHANNEL_MODES;
     boolean Ret = FALSE;
+
     if((uint8)Mode < (uint8)EMIOS_PWM_IP_MODES)
     {
         Ret = (((Emios_Pwm_Ip_aChannelModes[Instance][(uint8)Mode] >> Channel) & 0x01UL) == 1UL) ? TRUE : FALSE;
@@ -422,7 +406,7 @@ static inline Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetCounterBusPeriod(uint8 Ins
 
     if(MasterBusCh < EMIOS_PWM_IP_CHANNEL_COUNT)
     {
-        ChPeriod = Emios_Mcl_Ip_GetCounterBusPeriod(Instance, MasterBusCh);   
+        ChPeriod = Emios_Mcl_Ip_GetCounterBusPeriod(Instance, MasterBusCh);
     }
     else
     {
@@ -593,10 +577,10 @@ static void Emios_Pwm_Ip_InitPeriodDutyCycleOpwfmMode(uint8 Instance,
         /* Configure output pin polarity */
         Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId,(UserChCfg->OutputPolarity == EMIOS_PWM_IP_ACTIVE_HIGH) ? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH );
     }
-    
+
     /* Transition from GPIO Mode to OPWFM Mode */
     Emios_Pwm_Ip_SetPwmMode(Base, UserChCfg->ChannelId, UserChCfg->Mode);
-    
+
     if (UserChCfg->PeriodCount == UserChCfg->DutyCycle)
     {
         /* Configure output pin polarity */
@@ -679,6 +663,56 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleOpwfmb(uint8  Ins
 #ifdef EMIOS_PWM_IP_MODE_OPWFM_USED
 /*FUNCTION**********************************************************************
  *
+ * Function Name : Emios_Pwm_Ip_EdgePolarityOpwfmConfig
+ * Description   : Set Polarity Edge for the Channel in OPWFM Mode
+ * This function will set polarity when channels is in active state
+ *
+ *END**************************************************************************/
+static inline void Emios_Pwm_Ip_EdgePolarityOpwfmConfig(Emios_Pwm_Ip_HwAddrType *const Base,
+                                                        uint8  Instance,
+                                                        uint8  Channel,
+                                                        Emios_Pwm_Ip_DutyType NewDutyCycle
+                                                       )
+{
+    if ((Emios_Pwm_Ip_PeriodType)0U == Emios_Pwm_Ip_aPeriod[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+    {
+        if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+        {
+            /* Reverse output pin polarity */
+            Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW );
+        }
+    }
+    else
+    {
+        if(NewDutyCycle == 0U)
+        {
+            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+            {
+                /* Reverse output pin polarity */
+                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW );
+            }
+        }
+        else if (NewDutyCycle == Emios_Pwm_Ip_aPeriod[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+        {
+            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+            {
+                /* Reverse output pin polarity */
+                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW );
+            }
+        }
+        else
+        {
+            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+            {
+                /* Configure output pin polarity */
+                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH );
+            }
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
  * Function Name : Emios_Pwm_Ip_SetDutyCycleOpwfm
  * Description   : Set new duty cycle for the Channel in OPWFM Mode
  * This function will check the specific duty cycle and set new duty cycle for
@@ -711,11 +745,7 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleOpwfm(uint8  Inst
         Emios_Pwm_Ip_SetUCRegA(Base, Channel, (Emios_Pwm_Ip_PeriodType)0U);
         Emios_Pwm_Ip_aNotif[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] = (uint8)1U;
         /* Set polarity when channels is in active state */
-        if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
-        {
-            /* Reverse output pin polarity */
-            Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW );
-        }
+        Emios_Pwm_Ip_EdgePolarityOpwfmConfig(Base, Instance, Channel, NewDutyCycle);
     }
     else
     {
@@ -726,11 +756,7 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleOpwfm(uint8  Inst
             Emios_Pwm_Ip_ClearFlagEvent(Base, Channel);
             Emios_Pwm_Ip_aNotif[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] = (uint8)1U;
             /* Set polarity when channels is in active state */
-            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
-            {
-                /* Reverse output pin polarity */
-                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW );
-            }
+            Emios_Pwm_Ip_EdgePolarityOpwfmConfig(Base, Instance, Channel, NewDutyCycle);
         }
         else if (NewDutyCycle == Emios_Pwm_Ip_aPeriod[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
         {
@@ -739,22 +765,14 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleOpwfm(uint8  Inst
             Emios_Pwm_Ip_ClearFlagEvent(Base, Channel);
             Emios_Pwm_Ip_aNotif[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] = (uint8)1U;
             /* Set polarity when channels is in active state */
-            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
-            {
-                /* Reverse output pin polarity */
-                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW );
-            }
+            Emios_Pwm_Ip_EdgePolarityOpwfmConfig(Base, Instance, Channel, NewDutyCycle);
         }
         else
         {
             Emios_Pwm_Ip_aNotif[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] = (uint8)0U;
             Emios_Pwm_Ip_SetInterruptRequest(Base, Channel, (Emios_Pwm_Ip_aCheckEnableNotif[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == 0U)? FALSE : TRUE);
             /* Set polarity when channels is in active state */
-            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
-            {
-                /* Configure output pin polarity */
-                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] == (uint16)1U) ? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH );
-            }
+            Emios_Pwm_Ip_EdgePolarityOpwfmConfig(Base, Instance, Channel, NewDutyCycle);
         }
 
         Emios_Pwm_Ip_SetUCRegA(Base, Channel, NewDutyCycle);
@@ -818,13 +836,13 @@ static void Emios_Pwm_Ip_InitDeadTimeMode(uint8 Instance,
         {
             DutyCycle = 1U;
         }
-        else 
+        else
         {
             /* Do nothing */
         }
         /* To avoid spike pulse
         If duty cycle = 100%, when enter Mode, EDPOL bit get complement of polarity
-        after that, EDPOL bit is restored valid value */ 
+        after that, EDPOL bit is restored valid value */
         Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId,(UserChCfg->OutputPolarity == EMIOS_PWM_IP_ACTIVE_HIGH) ? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH );
         Emios_Pwm_Ip_aNotif[eMios_Pwm_Ip_IndexInChState[Instance][UserChCfg->ChannelId]] = (uint8)1U;
     }
@@ -840,7 +858,7 @@ static void Emios_Pwm_Ip_InitDeadTimeMode(uint8 Instance,
         DutyCycle = (UserChCfg->DutyCycle) >> (uint8)1U;
         DutyCycle = Emios_Pwm_Ip_GetCounterBusPeriod(Instance, UserChCfg->ChannelId, UserChCfg->Timebase) - DutyCycle;
         Emios_Pwm_Ip_aNotif[eMios_Pwm_Ip_IndexInChState[Instance][UserChCfg->ChannelId]] = (uint8)0U;
-        Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId, UserChCfg->OutputPolarity);        
+        Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId, UserChCfg->OutputPolarity);
     }
 
     /* Configure OPWMCB or OPWMC special parameters */
@@ -860,6 +878,26 @@ static void Emios_Pwm_Ip_InitDeadTimeMode(uint8 Instance,
 #endif
 
 #ifdef EMIOS_PWM_IP_MODE_OPWMCB_USED
+static inline void Emios_Pwm_Ip_DutyCycleOpwmcbLimitCheck(Emios_Pwm_Ip_HwAddrType *const Base,
+                                                          uint8 Channel,
+                                                          uint8 ChannelIdx
+                                                         )
+{
+    /* This statement is required to avoid limitation of 0% duty cycle (if call 100% to 0%) */
+    if(1U == Emios_Pwm_Ip_GetUCRegA(Base, Channel))
+    {
+        if((Emios_Pwm_Ip_aInitialModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG) ||
+           (Emios_Pwm_Ip_aInitialModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG_BOTH))
+        {
+            Emios_Pwm_Ip_SetForceMatchB(Base, Channel, TRUE);
+        }
+        else
+        {
+            Emios_Pwm_Ip_SetForceMatchA(Base, Channel, TRUE);
+        }
+    }
+}
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : Emios_Pwm_Ip_SetDutyCycleOpwmcb
@@ -898,19 +936,8 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleOpwmcb(uint8  Ins
 
             Emios_Pwm_Ip_SetUCRegA(Base, Channel, ChPeriod + 1U);
             Emios_Pwm_Ip_aNotif[ChannelIdx] = (uint8)1U;
-            /* This statement is required to avoid limitation of 0% duty cycle (if call 100% to 0%) */
-            if(1U == Emios_Pwm_Ip_GetUCRegA(Base, Channel))
-            {
-                if((Emios_Pwm_Ip_aInitialModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG) ||
-                   (Emios_Pwm_Ip_aInitialModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG_BOTH))
-                {
-                    Emios_Pwm_Ip_SetForceMatchB(Base, Channel, TRUE);
-                }
-                else
-                {
-                    Emios_Pwm_Ip_SetForceMatchA(Base, Channel, TRUE);
-                }
-            }
+
+            Emios_Pwm_Ip_DutyCycleOpwmcbLimitCheck(Base, Channel, ChannelIdx);
         }
         else if(NewDutyCycle == ((ChPeriod * 2U) - 2U))
         {
@@ -1012,13 +1039,13 @@ static void Emios_Pwm_Ip_InitEdgePlacementOpwmMode(uint8 Instance,
         /* Configure output pin polarity */
         Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId, UserChCfg->OutputPolarity);
     }
-    
+
     /* Transition from GPIO Mode to OPWM Mode */
     Emios_Pwm_Ip_SetPwmMode(Base, UserChCfg->ChannelId, UserChCfg->Mode);
-    
+
     /* Configure output pin polarity */
     Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId, UserChCfg->OutputPolarity);
-    
+
     /* Stores the inital duty cycle in ticks */
     Emios_Pwm_Ip_aDutyCycle[eMios_Pwm_Ip_IndexInChState[Instance][UserChCfg->ChannelId]] = UserChCfg->DutyCycle;
 }
@@ -1307,11 +1334,13 @@ static void Emios_Pwm_Ip_InitTriggerMode(uint8 Instance,
     after that, EDPOL bit is restored valid value */
     if (CounterBusPeriod == UserChCfg->DutyCycle)
     {
-         Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId,(UserChCfg->OutputPolarity == EMIOS_PWM_IP_ACTIVE_HIGH) ? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH );
+        /* Configure polarity and desired mode at the same time to prevent a spike in case multi-variants used or the initialization occurs more than once */
+        Emios_Pwm_Ip_SetPwmModePol(Base, UserChCfg->ChannelId, UserChCfg->Mode, (UserChCfg->OutputPolarity == EMIOS_PWM_IP_ACTIVE_HIGH) ? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH);
     }
     else
     {
-        Emios_Pwm_Ip_SetEdgePolarity(Base, UserChCfg->ChannelId, UserChCfg->OutputPolarity);
+        /* Configure polarity and desired mode at the same time to prevent a spike in case multi-variants used or the initialization occurs more than once */
+        Emios_Pwm_Ip_SetPwmModePol(Base, UserChCfg->ChannelId, UserChCfg->Mode, UserChCfg->OutputPolarity);
     }
     /* Transition from GPIO Mode to OPWMT Mode */
     Emios_Pwm_Ip_SetPwmMode(Base, UserChCfg->ChannelId, UserChCfg->Mode);
@@ -1509,6 +1538,42 @@ static void Emios_Pwm_Ip_InitDoubleCompareMode(uint8 Instance,
 
 /*FUNCTION**********************************************************************
  *
+ * Function Name : Emios_Pwm_Ip_EdgePolarityDaocConfig
+ * Description   : Set Polarity Edge for the Channel in DAOC Mode
+ * This function will set polarity when channels is in active state
+ *
+ *END**************************************************************************/
+static inline void Emios_Pwm_Ip_EdgePolarityDaocConfig(Emios_Pwm_Ip_HwAddrType *const Base,
+                                                       uint8  Channel,
+                                                       uint8  ChannelIdx,
+                                                       Emios_Pwm_Ip_DutyType NewDutyCycle
+                                                      )
+{
+    if (((Emios_Pwm_Ip_PeriodType)0U == Emios_Pwm_Ip_aPeriod[ChannelIdx]) || ((Emios_Pwm_Ip_DutyType)0U == NewDutyCycle))
+    {
+        if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[ChannelIdx])
+        {
+            Emios_Pwm_Ip_SetEdgePolarity(Base, Channel, (Emios_Pwm_Ip_aPolarity[ChannelIdx] == 1U)? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW);
+        }
+    }
+    else if(NewDutyCycle == Emios_Pwm_Ip_aPeriod[ChannelIdx])
+    {
+        if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[ChannelIdx])
+        {
+            Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[ChannelIdx] == 1U)? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH);
+        }
+    }
+    else
+    {
+        if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[ChannelIdx])
+        {
+            Emios_Pwm_Ip_SetEdgePolarity(Base, Channel, (Emios_Pwm_Ip_aPolarity[ChannelIdx] == 1U)? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW);
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
  * Function Name : Emios_Pwm_Ip_SetDutyCycleDaoc
  * Description   : Set new duty cycle for the Channel in DAOC Mode
  * This function will check the specific duty cycle and set new duty cycle for
@@ -1553,10 +1618,7 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleDaoc(uint8  Insta
             /* Configure Trailing Edge in reg B */
             Emios_Pwm_Ip_SetUCRegB(Base, Channel, (NewDutyCycle + 1U));
             /* Set polarity when channels is in active state */
-            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[ChannelIdx])
-            {
-                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel, (Emios_Pwm_Ip_aPolarity[ChannelIdx] == 1U)? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW);
-            }
+            Emios_Pwm_Ip_EdgePolarityDaocConfig(Base, Channel, ChannelIdx, NewDutyCycle);
 
             Emios_Pwm_Ip_aNotif[ChannelIdx] = (uint8)1U;
         }
@@ -1576,10 +1638,7 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleDaoc(uint8  Insta
             Emios_Pwm_Ip_SetUCRegB(Base, Channel, (DaocRegA == 0U)? CounterMax : DaocRegA);
             /* Set polarity when channels is in active state */
             /* Invert the EDGE POLARITY in control register */
-            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[ChannelIdx])
-            {
-                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel,(Emios_Pwm_Ip_aPolarity[ChannelIdx] == 1U)? EMIOS_PWM_IP_ACTIVE_LOW : EMIOS_PWM_IP_ACTIVE_HIGH);
-            }
+            Emios_Pwm_Ip_EdgePolarityDaocConfig(Base, Channel, ChannelIdx, NewDutyCycle);
 
             Emios_Pwm_Ip_aNotif[ChannelIdx] = (uint8)1U;
         }
@@ -1594,10 +1653,7 @@ static inline Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycleDaoc(uint8  Insta
             /* Configure Trailing Edge in reg B */
             Emios_Pwm_Ip_SetUCRegB(Base, Channel, NewDutyCycle + 1U);
             /* Set polarity when channels is in active state */
-            if (EMIOS_PWM_IP_MODE_GPO != Emios_Pwm_Ip_aCurrentModes[ChannelIdx])
-            {
-                Emios_Pwm_Ip_SetEdgePolarity(Base, Channel, (Emios_Pwm_Ip_aPolarity[ChannelIdx] == 1U)? EMIOS_PWM_IP_ACTIVE_HIGH : EMIOS_PWM_IP_ACTIVE_LOW);
-            }
+            Emios_Pwm_Ip_EdgePolarityDaocConfig(Base, Channel, ChannelIdx, NewDutyCycle);
 
             Emios_Pwm_Ip_aNotif[ChannelIdx] = (uint8)0U;
 
@@ -1698,6 +1754,45 @@ static inline void Emios_Pwm_Ip_InitOutputIrqAndMode(uint8                      
             break;
     }
 }
+
+#ifdef EMIOS_PWM_IP_MODE_OPWMCB_USED
+static inline void Emios_Pwm_Ip_OutputUpdateEnable(Emios_Pwm_Ip_HwAddrType *const Base,
+                                                   uint8 Instance,
+                                                   uint8 Channel
+                                                  )
+{
+    /* Get the value of channel Index */
+    uint8 ChannelIdx = Emios_Pwm_Ip_GetChannelIndex(Instance, Channel);
+
+    /* This statement is required to avoid limitation of 0% duty cycle (if call 100% to 0%) */
+    if(1U == Emios_Pwm_Ip_GetUCRegA(Base, Channel))
+    {
+        if (ChannelIdx < EMIOS_PWM_IP_NUM_OF_CHANNELS_USED_U8)
+        {
+            if((Emios_Pwm_Ip_aCurrentModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG) ||
+               (Emios_Pwm_Ip_aCurrentModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG_BOTH))
+            {
+                /* Enable the output update for the corresponding Channel.*/
+                Emios_Mcl_Ip_ComparatorTransferEnable(Instance, (uint32)((uint32)1U << Channel));
+
+                Emios_Pwm_Ip_SetForceMatchB(Base, Channel, TRUE);
+            }
+            else if ((Emios_Pwm_Ip_aCurrentModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_LEAD_EDGE_FLAG) ||
+                        (Emios_Pwm_Ip_aCurrentModes[ChannelIdx] == EMIOS_PWM_IP_MODE_OPWMCB_LEAD_EDGE_FLAG_BOTH))
+            {
+                /* Enable the output update for the corresponding Channel.*/
+                Emios_Mcl_Ip_ComparatorTransferEnable(Instance, (uint32)((uint32)1U << Channel));
+
+                Emios_Pwm_Ip_SetForceMatchA(Base, Channel, TRUE);
+            }
+            else
+            {
+                /* Do Nothing */
+            }
+        }
+    }
+}
+#endif
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
@@ -1733,7 +1828,7 @@ static inline void Emios_Pwm_Ip_InitOutputIrqAndMode(uint8                      
  *       Channel with a fixed PWM leading edge position with respect to the other channels and the
  *       ability to generate a trigger signal at any point in the period that can be output from
  *       the module to initiate activity in other parts of the SoC such as starting ADC conversions.
- * 
+ *
  * @implements Emios_Pwm_Ip_InitChannel_Activity
  **/
 void Emios_Pwm_Ip_InitChannel(uint8 Instance,
@@ -1758,7 +1853,15 @@ void Emios_Pwm_Ip_InitChannel(uint8 Instance,
     uint8 TimbaseCh = Emios_Pwm_Ip_GetTimebaseChannel(UserChCfg->ChannelId, UserChCfg->Timebase);
 
     /* Disable Channel pre-scaler (reset default) */
-    Emios_Pwm_Ip_aBasePtr[Instance]->CH.UC[UserChCfg->ChannelId].C = 0UL;
+    if (EMIOS_PWM_IP_MODE_OPWMT == UserChCfg->Mode)
+    {
+        /* Do not touch Polarity and Mode bits in control register to prevent spike if the desired mode is OPWMT */
+        Emios_Pwm_Ip_aBasePtr[Instance]->CH.UC[UserChCfg->ChannelId].C &= (eMIOS_C_MODE_MASK | eMIOS_C_EDPOL_MASK);
+    }
+    else
+    {
+        Emios_Pwm_Ip_aBasePtr[Instance]->CH.UC[UserChCfg->ChannelId].C = 0UL;
+    }
 
     /* Enable the Output Update for Channel */
     Emios_Pwm_Ip_SetOutputUpdate(Base, UserChCfg->ChannelId, TRUE);
@@ -1814,7 +1917,7 @@ void Emios_Pwm_Ip_InitChannel(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_DeInitChannel
  * Description   : Reset eMIOS Channel to GPIO Mode (reset default)
- * 
+ *
  * @implements Emios_Pwm_Ip_DeInitChannel_Activity
  **/
 void Emios_Pwm_Ip_DeInitChannel(uint8 Instance,
@@ -1858,7 +1961,7 @@ void Emios_Pwm_Ip_DeInitChannel(uint8 Instance,
         Emios_Pwm_Ip_aCheckEnableNotif[ChannelIdx] = (uint8)0U;
 
         /* Confirm the Channel is inactive*/
-        Emios_Pwm_Ip_aCheckState[ChannelIdx] = (uint8)0U;        
+        Emios_Pwm_Ip_aCheckState[ChannelIdx] = (uint8)0U;
     }
 
     /* If the counter buses to be used by the Unified Channel. */
@@ -1888,7 +1991,7 @@ void Emios_Pwm_Ip_DeInitChannel(uint8 Instance,
  *      in the output flipflop to the opposite of EDPOL. In trail dead time insertion the
  *      output flip-flop is forced to the value of EDPOL bit.
  *      FORCMA bit set does not set the internal time-Base to 0x1 as a regular A1 match.
- * 
+ *
  * @implements Emios_Pwm_Ip_ForceMatchLeadingEdge_Activity
  **/
 void Emios_Pwm_Ip_ForceMatchLeadingEdge(uint8 Instance,
@@ -1917,7 +2020,7 @@ void Emios_Pwm_Ip_ForceMatchLeadingEdge(uint8 Instance,
  *       If FORCMB bit is set, the output flip-flop value depends upon the selected dead time
  *       insertion Mode. In lead dead time insertion FORCMB forces the output flip-flop to transition to EDPOL
  *       bit value. In trail dead time insertion the output flip-flop is forced to the opposite of EDPOL bit value.
- * 
+ *
  * @implements Emios_Pwm_Ip_ForceMatchTrailingEdge_Activity
  **/
 void Emios_Pwm_Ip_ForceMatchTrailingEdge(uint8 Instance,
@@ -1941,7 +2044,7 @@ void Emios_Pwm_Ip_ForceMatchTrailingEdge(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_GetPeriod
  * Description   : Get period of waveforms in PWM Mode.
- * 
+ *
  * @implements Emios_Pwm_Ip_GetPeriod_Activity
  **/
 Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetPeriod(uint8 Instance,
@@ -2039,7 +2142,7 @@ Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetPeriod(uint8 Instance,
  * With PWM Mode, the OPWFMB(Output Pulse Width and Frequency Modulation Buffered) and the OPWFM(Output Pulse Width and Frequency Modulation) can set
  * period. All other PWM modes can not, because OPWFMB Mode using internal counter. All other
  * modes use external timebase and their period is timebase period.
- * 
+ *
  * @implements Emios_Pwm_Ip_SetPeriod_Activity
  **/
 void Emios_Pwm_Ip_SetPeriod(uint8 Instance,
@@ -2090,7 +2193,7 @@ void Emios_Pwm_Ip_SetPeriod(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_GetDutyCycle
  * Description   : Get duty cycle of waveforms in PWM Mode. Duty cycle is signal active time in a period.
- * 
+ *
  * @implements Emios_Pwm_Ip_GetDutyCycle_Activity
  **/
 Emios_Pwm_Ip_DutyType Emios_Pwm_Ip_GetDutyCycle(uint8 Instance,
@@ -2114,7 +2217,7 @@ Emios_Pwm_Ip_DutyType Emios_Pwm_Ip_GetDutyCycle(uint8 Instance,
  * Description   : Setup duty cycle of waveforms in OPWFMB, OPWFM Mode.
  * Duty cycle should be not greater period value. When set duty cycle value greater period value
  * (and do not over 24 bits counter register) 100% duty cycle signal generated.
- * 
+ *
  * @implements Emios_Pwm_Ip_SetDutyCycle_Activity
  **/
 Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycle(uint8 Instance,
@@ -2207,7 +2310,7 @@ Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetDutyCycle(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_GetPhaseShift
  * Description   : Get Leading edge position of waveforms in OPWMB & OPWMT Mode.
- * 
+ *
  * @implements Emios_Pwm_Ip_GetPhaseShift_Activity
  **/
 Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetPhaseShift(uint8 Instance,
@@ -2241,7 +2344,7 @@ Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetPhaseShift(uint8 Instance,
  * Function Name : Emios_Pwm_Ip_SetPhaseShift
  * Description   : Set Leading edge position of waveforms in OPWMB, OPWM & OPWMT Mode.
  * DutyCycle will be kept the same value.
- * 
+ *
  * @implements Emios_Pwm_Ip_SetPhaseShift_Activity
  **/
 Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetPhaseShift(uint8 Instance,
@@ -2310,7 +2413,7 @@ Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetPhaseShift(uint8 Instance,
 #ifdef EMIOS_PWM_IP_MODE_OPWMT_USED
         case EMIOS_PWM_IP_MODE_OPWMT:
             CounterStart = (EMIOS_PWM_IP_MCB_UP_COUNTER == Emios_Pwm_Ip_GetCounterBusMode(Instance, Channel, CounterBus)) ? 0x01U : 0x00U;
-        
+
             Emios_Pwm_Ip_aRegA[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] = PhaseShift + CounterStart;
             if (PhaseShift > ChPeriod)
             {
@@ -2343,7 +2446,7 @@ Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_SetPhaseShift(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_GetDeadTime
  * Description   : Get Dead time value of waveforms in OPWMCB Mode.
- * 
+ *
  * @implements Emios_Pwm_Ip_GetDeadTime_Activity
  **/
 Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetDeadTime(uint8 Instance,
@@ -2374,7 +2477,7 @@ Emios_Pwm_Ip_PeriodType Emios_Pwm_Ip_GetDeadTime(uint8 Instance,
  * Function Name : Emios_Pwm_Ip_SetDeadTime
  * Description   : Set Dead time value of waveforms in OPWMCB Mode. New dead time should
  * be no greater than 0xFFFFFF (24 bits).
- * 
+ *
  * @implements Emios_Pwm_Ip_SetDeadTime_Activity
  **/
 void Emios_Pwm_Ip_SetDeadTime(uint8 Instance,
@@ -2405,7 +2508,7 @@ void Emios_Pwm_Ip_SetDeadTime(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_GetTriggerPlacement
  * Description   : Get Trigger placement value in OPWMT Mode
- * 
+ *
  * @implements Emios_Pwm_Ip_GetTriggerPlacement_Activity
  **/
 uint32 Emios_Pwm_Ip_GetTriggerPlacement(uint8 Instance,
@@ -2444,7 +2547,7 @@ uint32 Emios_Pwm_Ip_GetTriggerPlacement(uint8 Instance,
  * Function Name : Emios_Pwm_Ip_SetTriggerPlacement
  * Description   : Set Trigger placement value in OPWMT Mode. New trigger placement
  * should be no larger than 0xFFFFFF(24 bits).
- * 
+ *
  * @implements Emios_Pwm_Ip_SetTriggerPlacement_Activity
  **/
 void Emios_Pwm_Ip_SetTriggerPlacement(uint8 Instance,
@@ -2492,7 +2595,7 @@ void Emios_Pwm_Ip_SetTriggerPlacement(uint8 Instance,
  * Function Name : Emios_Pwm_Ip_ChannelEnterDebugMode
  * Description   : To set a Channel enters freeze state, should be setting
  * Emios_Pwm_Ip_AllowEnterDebugMode first.
- * 
+ *
  * @implements Emios_Pwm_Ip_ChannelEnterDebugMode_Activity
  **/
 Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_ChannelEnterDebugMode(uint8 Instance,
@@ -2523,7 +2626,7 @@ Emios_Pwm_Ip_StatusType Emios_Pwm_Ip_ChannelEnterDebugMode(uint8 Instance,
  *
  * Function Name : Emios_Pwm_Ip_ChannelStopDebugMode
  * Description   : Release a Channel from freeze state
- * 
+ *
  * @implements Emios_Pwm_Ip_ChannelStopDebugMode_Activity
  **/
 void Emios_Pwm_Ip_ChannelStopDebugMode(uint8 Instance,
@@ -2676,6 +2779,16 @@ void Emios_Pwm_Ip_SetOutputState(uint8 Instance,
     }
     /* Enter GPIO output Mode */
     Emios_Pwm_Ip_SetPwmMode(Base, Channel, (Emios_Pwm_Ip_PwmModeType)EMIOS_PWM_IP_MODE_GPO);
+
+#if (defined(EMIOS_PWM_IP_AUTOSAR_MODE_IS_USED) && (STD_ON == EMIOS_PWM_IP_AUTOSAR_MODE_IS_USED))
+    if (0U == Emios_Pwm_Ip_aCheckState[eMios_Pwm_Ip_IndexInChState[Instance][Channel]])
+    {
+        /* Clear An and Bn registers */
+        Emios_Pwm_Ip_SetUCRegA(Base, Channel, 0U);
+        Emios_Pwm_Ip_SetUCRegB(Base, Channel, 0U);
+    }
+#endif
+
     /* Stored the current Mode */
     Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][Channel]] = (Emios_Pwm_Ip_PwmModeType)EMIOS_PWM_IP_MODE_GPO;
     /* Disable Channel interrupts */
@@ -2816,7 +2929,7 @@ Emios_Pwm_Ip_PwmModeType Emios_Pwm_Ip_GetChannelMode(uint8 Instance,
 }
 
 /**
-* 
+*
 * Function Name : Emios_Pwm_Ip_GetMasterBusChannel
 * Description   : Get master bus Channel
 *
@@ -2856,7 +2969,7 @@ uint8 Emios_Pwm_Ip_GetMasterBusChannel(uint8 Instance,
 }
 
 /**
-* 
+*
 * Function Name : Emios_Pwm_Ip_SetPreEnableClock
 * Description   : Set Prescaler Enable bit.
 *
@@ -2880,7 +2993,7 @@ void Emios_Pwm_Ip_SetPreEnableClock(uint8 Instance,
 }
 
 /**
-* 
+*
 * Function Name : Emios_Pwm_Ip_SetBusSelected
 * Description   : Set Bus Select bits.
 *
@@ -2903,7 +3016,7 @@ void Emios_Pwm_Ip_SetBusSelected(uint8 Instance,
 }
 
 /**
-* 
+*
 * Function Name : Emios_Pwm_Ip_SetClockPs
 * Description   : This function set the value of the prescaler on eMios channels
 *
@@ -2930,7 +3043,7 @@ void Emios_Pwm_Ip_SetClockPs(uint8 Instance,
 }
 
 /**
-* 
+*
 * Function Name : Emios_Pwm_Ip_ComparatorTransferEnable
 * Description   : The function shall enable the output update for the corresponding Channel.
 *
@@ -3004,30 +3117,7 @@ void Emios_Pwm_Ip_SyncUpdate(uint8 Instance)
         if (((uint8)0U != Emios_Pwm_Ip_aCheckState[eMios_Pwm_Ip_IndexInChState[Instance][ChannelId]]) && ((uint8)1U == OudisDisable))
         {
 #ifdef EMIOS_PWM_IP_MODE_OPWMCB_USED
-            /* This statement is required to avoid limitation of 0% duty cycle (if call 100% to 0%) */
-            if(1U == Emios_Pwm_Ip_GetUCRegA(Base, ChannelId))
-            {
-                if((Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][ChannelId]] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG) ||
-                   (Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][ChannelId]] == EMIOS_PWM_IP_MODE_OPWMCB_TRAIL_EDGE_FLAG_BOTH))
-                {
-                    /* Enable the output update for the corresponding Channel.*/
-                    Emios_Mcl_Ip_ComparatorTransferEnable(Instance, (uint32)((uint32)1U << ChannelId));
-
-                    Emios_Pwm_Ip_SetForceMatchB(Base, ChannelId, TRUE);
-                }
-                else if ((Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][ChannelId]] == EMIOS_PWM_IP_MODE_OPWMCB_LEAD_EDGE_FLAG) ||
-                         (Emios_Pwm_Ip_aCurrentModes[eMios_Pwm_Ip_IndexInChState[Instance][ChannelId]] == EMIOS_PWM_IP_MODE_OPWMCB_LEAD_EDGE_FLAG_BOTH))
-                {
-                    /* Enable the output update for the corresponding Channel.*/
-                    Emios_Mcl_Ip_ComparatorTransferEnable(Instance, (uint32)((uint32)1U << ChannelId));
-
-                    Emios_Pwm_Ip_SetForceMatchA(Base, ChannelId, TRUE);
-                }
-                else
-                {
-                    /* Do Nothing */
-                }
-            }
+            Emios_Pwm_Ip_OutputUpdateEnable(Base, Instance, ChannelId);
 #endif
             /* Update OUDIS register value for synchronization */
             ChannelMask |= (uint32)((uint32)1U << ChannelId);
@@ -3042,7 +3132,7 @@ void Emios_Pwm_Ip_SyncUpdate(uint8 Instance)
 /**
 *
 * Function Name : Emios_Pwm_Ip_UpdateUCRegA
-* Description   : This function updates the value of UCRegA. It may be used to 
+* Description   : This function updates the value of UCRegA. It may be used to
 *                 change duty cycle or phase shift with minimum overhead.
 *
 * @implements Emios_Pwm_Ip_UpdateUCRegA_Activity
@@ -3061,8 +3151,8 @@ void Emios_Pwm_Ip_UpdateUCRegA(uint8 Instance, uint8 Channel, Emios_Pwm_Ip_Perio
 /**
 *
 * Function Name : Emios_Pwm_Ip_UpdateUCRegB
-* Description   : This function updates the value of UCRegB. It may be used to 
-*                 change duty cycle, phase shift or inserted dead time buffer 
+* Description   : This function updates the value of UCRegB. It may be used to
+*                 change duty cycle, phase shift or inserted dead time buffer
 *                 with minimum overhead.
 *
 * @implements Emios_Pwm_Ip_UpdateUCRegB_Activity

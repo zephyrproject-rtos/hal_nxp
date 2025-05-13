@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Pwm.h
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module interface
 *   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
@@ -37,7 +37,7 @@ extern "C" {
 #define SCHM_PWM_AR_RELEASE_REVISION_VERSION  0
 #define SCHM_PWM_SW_MAJOR_VERSION             2
 #define SCHM_PWM_SW_MINOR_VERSION             0
-#define SCHM_PWM_SW_PATCH_VERSION             0
+#define SCHM_PWM_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -183,6 +183,21 @@ extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_33(void);
 extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_34(void);
 extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_34(void);
 
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_35(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_35(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_36(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_36(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_37(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_37(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_38(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_38(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_39(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_39(void);
+
 extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_40(void);
 extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_40(void);
 
@@ -197,6 +212,9 @@ extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_43(void);
 
 extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_44(void);
 extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_44(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_45(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_45(void);
 
 extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_50(void);
 extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_50(void);
@@ -245,6 +263,27 @@ extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_64(void);
 
 extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_65(void);
 extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_65(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_66(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_66(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_70(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_70(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_71(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_71(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_72(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_72(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_73(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_73(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_74(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_74(void);
+
+extern void SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_75(void);
+extern void SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_75(void);
 
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,7 +35,7 @@ extern "C"{
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION_TRUSTEDFUNCTIONS    0
 #define ADC_SAR_IP_SW_MAJOR_VERSION_TRUSTEDFUNCTIONS               2
 #define ADC_SAR_IP_SW_MINOR_VERSION_TRUSTEDFUNCTIONS               0
-#define ADC_SAR_IP_SW_PATCH_VERSION_TRUSTEDFUNCTIONS               0
+#define ADC_SAR_IP_SW_PATCH_VERSION_TRUSTEDFUNCTIONS               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/

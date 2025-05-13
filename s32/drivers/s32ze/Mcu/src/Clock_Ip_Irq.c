@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Irq.c
-*   @version    2.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,7 +36,7 @@ extern "C"{
 #define CLOCK_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_IRQ_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_IRQ_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_IRQ_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS

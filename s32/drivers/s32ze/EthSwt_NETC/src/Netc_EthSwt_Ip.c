@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +40,7 @@ extern "C"{
 #define NETC_ETHSWT_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define NETC_ETHSWT_IP_SW_MAJOR_VERSION_C               2
 #define NETC_ETHSWT_IP_SW_MINOR_VERSION_C               0
-#define NETC_ETHSWT_IP_SW_PATCH_VERSION_C               0
+#define NETC_ETHSWT_IP_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -138,7 +138,6 @@ typedef struct
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT (0U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT (1U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT (2U)
-#define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT (3U)
 
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
@@ -155,7 +154,6 @@ typedef struct
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS (0U)
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS (9U)
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS (99U)
-#define NETC_ETHSWT_IP_SHAPING_PSPEED_2000MBITS (199U)
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS (249U)
 
 #define NETC_ETHSWT_IP_NUM_SHAPING_CLASS (8U)
@@ -210,10 +208,10 @@ static boolean PortTimeAwareShaperEnabled[NETC_ETHSWT_IP_NUMBER_OF_PORTS];
 #include "EthSwt_43_NETC_MemMap.h"
 
 /* Base address of the registers for the MAC Ports */
-Netc_EthSwt_Ip_PortBaseType* Netc_EthSwt_Ip_PortBaseTable[] = { (Netc_EthSwt_Ip_PortBaseType*)IP_NETC__SW0_ETH_MAC_PORT0_BASE, (Netc_EthSwt_Ip_PortBaseType*)IP_NETC__SW0_ETH_MAC_PORT1_BASE };
+static Netc_EthSwt_Ip_PortBaseType* Netc_EthSwt_Ip_PortBaseTable[] = { (Netc_EthSwt_Ip_PortBaseType*)IP_NETC__SW0_ETH_MAC_PORT0_BASE, (Netc_EthSwt_Ip_PortBaseType*)IP_NETC__SW0_ETH_MAC_PORT1_BASE };
 
 /* Base address of the registers for the pseudo Port */
-Netc_EthSwt_Ip_PseudoPortBaseType* Netc_EthSwt_Ip_PseudoPortBaseTable[] = { IP_NETC__SW0_PSEUDO_MAC_PORT2 };
+static Netc_EthSwt_Ip_PseudoPortBaseType* Netc_EthSwt_Ip_PseudoPortBaseTable[] = { IP_NETC__SW0_PSEUDO_MAC_PORT2 };
 SW_PORT0_Type *Netc_EthSwt_Ip_SW0_PortxBaseAddr[NETC_ETHSWT_IP_NUMBER_OF_PORTS] = {(SW_PORT0_Type*)IP_NETC__SW0_PORT0_BASE, (SW_PORT0_Type*)IP_NETC__SW0_PORT1_BASE, (SW_PORT0_Type*)IP_NETC__SW0_PORT2_BASE};
 #define ETHSWT_43_NETC_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "EthSwt_43_NETC_MemMap.h"
@@ -236,7 +234,7 @@ static uint32 TimerOriginalRefClk = 0x0UL;
 static uint32 TimerRefClk = 0x0UL;
 
 /* Ingress Port Filter Entry ID for mirroing */
-uint32 MirroringIngressPortFilterEntryId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+static uint32 MirroringIngressPortFilterEntryId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
 
 /* Steps used to skip cycles that will not incress the FDB aging counters. */
 static uint32 Netc_EthSwt_Ip_MainFunctionCycle[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS] =  {0UL};
@@ -266,25 +264,25 @@ static uint16 Netc_EthSwt_Ip_FdbTableEntryTimeout[FEATURE_NETC_ETHSWT_IP_NUMBER_
 #include "EthSwt_43_NETC_MemMap.h"
 
 /* A shadow buffer for the mirroring configuration to be used when the application is reading the active configuration */
-VAR_SEC_NOCACHE(MirrorCfgBackup) static Netc_EthSwt_Ip_SwitchMirrorCfgType MirrorCfgBackup;
+static Netc_EthSwt_Ip_SwitchMirrorCfgType MirrorCfgBackup;
 
 /* Structure used for filling in the actual command buffer descriptor used in table operations */
-VAR_SEC_NOCACHE(CmdBDRConfig) static volatile Netc_EthSwt_Ip_CmdBDType CmdBDRConfig[NETC_ETHSWT_IP_CBDR_NUM];
+static volatile Netc_EthSwt_Ip_CmdBDType CmdBDRConfig[NETC_ETHSWT_IP_CBDR_NUM];
 
  /* Key element data for ingress port filter table */
-VAR_SEC_NOCACHE(Netc_EthSwt_Ip_IPFKeyeData) static volatile uint32 Netc_EthSwt_Ip_IPFKeyeData[NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
+static volatile uint32 Netc_EthSwt_Ip_IPFKeyeData[NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
 
 /* a 128 bytes aligned command ring descriptor buffer */
-VAR_SEC_NOCACHE(SwtcommandRingDescriptor0) VAR_ALIGN(static Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor0[NETC_ETHSWT_IP_ACTUAL_CBDR0_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
+VAR_ALIGN(static Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor0[NETC_ETHSWT_IP_ACTUAL_CBDR0_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
 
 /* a 16 bytes aligned FDB table request data buffer */
-VAR_SEC_NOCACHE(TableDataBuffer) VAR_ALIGN(static volatile Netc_EthSwt_Ip_SwitchTableDataType TableDataBuffer, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
+VAR_ALIGN(static volatile Netc_EthSwt_Ip_SwitchTableDataType TableDataBuffer, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
 
 /* a 16 bytes aligned request header table data buffer */
-VAR_SEC_NOCACHE(Netc_EthSwt_Ip_OperationData) VAR_ALIGN(static Netc_EthSwt_Ip_ReqHeaderTableOperationDataType Netc_EthSwt_Ip_OperationData, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
+VAR_ALIGN(static Netc_EthSwt_Ip_ReqHeaderTableOperationDataType Netc_EthSwt_Ip_OperationData, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
 
 /* Local copy of the pointer to the configuration data. */
-VAR_SEC_NOCACHE(Netc_EthSwt_Ip_ConfigPtr) static const Netc_EthSwt_Ip_ConfigType * Netc_EthSwt_Ip_ConfigPtr[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS];
+static const Netc_EthSwt_Ip_ConfigType * Netc_EthSwt_Ip_ConfigPtr[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS];
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "EthSwt_43_NETC_MemMap.h"
@@ -434,6 +432,13 @@ static inline Std_ReturnType Netc_EthSwt_Ip_ConfigIngressPortFilterForPortMirror
 
 static inline Std_ReturnType Netc_EthSwt_Ip_ConfigEgressFrameModificationForPortMirroring(uint8 MirroredSwitchIdx, const Netc_EthSwt_Ip_SwitchMirrorCfgType* MirrorConfigurationPtr);
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_PortConfigIngresStreamLookUp
+ * Description   : Internal function for configuring the Ingress Stream look up for a specific port.
+ *
+ *END**************************************************************************/
+static inline void Netc_EthSwt_Ip_PortConfigIngresStreamLookUp(uint8 SwitchPortIdx, const Netc_EthSwt_Ip_PortType *port);
 
 static inline void Netc_EthSwt_Ip_CheckMacAddressFilterEnableFlag(Netc_EthSwt_Ip_IngressPortFilterSrcDestAddrFilter* const IngressPortFilterSrcDestAddrFilter, const Netc_EthSwt_Ip_SwitchMirrorCfgType* MirrorConfigurationPtr);
 /**
@@ -639,7 +644,7 @@ static Std_ReturnType Netc_EthSwt_Ip_ConfigSwt(uint8 SwitchIdx, const Netc_EthSw
  * @retval E_OK: success
  * @retval E_NOT_OK: timeout has occured
  */
-static inline Std_ReturnType Netc_EthSwt_Ip_EnablePCIE(void);
+static inline void Netc_EthSwt_Ip_EnablePCIE(void);
 
 static inline Std_ReturnType Netc_EthSwt_Ip_PortRateEnumToRate(EthTrcv_BaudRateType baudRate, uint64 *portTxRate);
 
@@ -1201,7 +1206,7 @@ static inline Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed_SGMII_Mode(EthTrcv_Baud
         case ETHTRCV_BAUD_RATE_2500MBIT: /* 2500Mbps */
         {
             *interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
-            *interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT));
+            *interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT));
             *shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS;
             break;
         }
@@ -1789,81 +1794,38 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortSpeed( uint8 SwitchIdx,
                                           )
 {
     Std_ReturnType status = E_OK;
-    uint32 interfaceModeConfig;
+    uint32 shapingPSpeedConfig = 0UL; /* used for shaping of the port */
 
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
     DevAssert(SwitchPortIdx < NETC_ETHSWT_IP_NUMBER_OF_PORTS);
 #endif
 
-    (void) SwitchIdx;
-    if(SwitchPortIdx < NETC_ETHSWT_IP_NUMBER_OF_MAC_PORTS)
-    {
-        interfaceModeConfig = (Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE);
+    shapingPSpeedConfig = Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR;
 
-        switch((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE_MASK) >> SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE_SHIFT)
-        {
-            case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_MII_MODE: /* MII mode */
-            case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RMII_MODE: /* RMII mode */
-                if((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_M10_MASK) == SW_ETH_MAC_PORT1_PM0_IF_MODE_M10_MASK)
-                {
-                    *BaudRate = ETHTRCV_BAUD_RATE_10MBIT;
-                }
-                else
-                {
-                    *BaudRate = ETHTRCV_BAUD_RATE_100MBIT;
-                }
-                break;
-            case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RGMII_MODE: /* RGMII mode */
-                switch((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK) >> SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_SHIFT)
-                {
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT: /* 1000Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_1000MBIT;
-                        break;
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT: /* 100Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_100MBIT;
-                        break;
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT: /* 10Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_10MBIT;
-                        break;
-                    default:
-                        status = E_NOT_OK;
-                        break;
-                }
-                break;
-            case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_SGMII_MODE: /* RGMII mode */
-                switch((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK) >> SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_SHIFT)
-                {
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT: /* 2500Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_2500MBIT;
-                        break;
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT: /* 1000Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_1000MBIT;
-                        break;
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT: /* 100Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_100MBIT;
-                        break;
-                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT: /* 10Mbps */
-                        *BaudRate = ETHTRCV_BAUD_RATE_10MBIT;
-                        break;
-                    default:
-                        status = E_NOT_OK;
-                        break;
-                }
-                break;
-            default:
-                status = E_NOT_OK;
-                break;
-        }
-    }
-    else
+    switch((shapingPSpeedConfig & SW_PORT0_PCR_PSPEED_MASK) >> SW_PORT0_PCR_PSPEED_SHIFT)
     {
-        *BaudRate = ETHTRCV_BAUD_RATE_1000MBIT;
+        case NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS:
+            *BaudRate = ETHTRCV_BAUD_RATE_10MBIT;
+            break;
+        case NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS:
+            *BaudRate = ETHTRCV_BAUD_RATE_100MBIT;
+            break;
+        case NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS:
+            *BaudRate = ETHTRCV_BAUD_RATE_1000MBIT;
+            break;
+        case NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS:
+            *BaudRate = ETHTRCV_BAUD_RATE_2500MBIT;
+            break;
+        default:
+            status = E_NOT_OK;
+            break;
     }
+
+    (void)SwitchIdx;
 
     return status;
 }
-
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_EthSwt_Ip_SetPortSpeed
@@ -1928,7 +1890,24 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx,
     /* pseudo port */
         SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01();
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR &= ~SW_PORT0_PCR_PSPEED_MASK;
-        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_2000MBITS);
+        switch(BaudRate)
+        {
+            case ETHTRCV_BAUD_RATE_10MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS);
+                break;
+            case ETHTRCV_BAUD_RATE_100MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS);
+                break;
+            case ETHTRCV_BAUD_RATE_1000MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS);
+                break;
+            case ETHTRCV_BAUD_RATE_2500MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS);
+                break;
+            default:
+                status = E_NOT_OK;
+                break;
+        }
         SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01();
     }
 
@@ -3448,7 +3427,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntr
                                                                                  )
 {
     Netc_EthSwt_Ip_CBDRStatusType status;
-    uint16 MacAddrH;
+    uint32 MacAddrH = 0x0UL;
     uint32 MacAddrL = 0x0UL;
     uint8 MacByteIdx;
 
@@ -3473,14 +3452,18 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntr
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U);        /* Configuration Element Update */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = FrmModificationTableEntry->FrmModificationEntryID;                /* Entry ID */
 
-        /* be careful to the order of dest mac address, it is in big endian */
-        for (MacByteIdx = 5U; MacByteIdx > 2U; MacByteIdx-- )       /* Get the Dest Mac Address */
+        /* big endian */
+        for(MacByteIdx = 0U; MacByteIdx < 6U; MacByteIdx++)
         {
-            MacAddrL |= FrmModificationTableEntry->DestMacAddr[MacByteIdx];
-            MacAddrL <<= 8U;
+            if(MacByteIdx < 2U)
+            {
+                MacAddrH |= ((uint32)(FrmModificationTableEntry->DestMacAddr[MacByteIdx]) << (MacByteIdx * 8U));
+            }
+            else
+            {
+                MacAddrL |= ((uint32)(FrmModificationTableEntry->DestMacAddr[MacByteIdx]) << ((MacByteIdx - 2U) * 8U));
+            }
         }
-        MacAddrL |= FrmModificationTableEntry->DestMacAddr[2U];
-        MacAddrH = ((uint16)(FrmModificationTableEntry->DestMacAddr[1U]) << 8U) | FrmModificationTableEntry->DestMacAddr[0U];
 
         /* fill in CFGE Data */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = (NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H(MacAddrH) \
@@ -3603,23 +3586,23 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryFrmModificationTableEntry( uin
             FrmModificationTableEntry->DestMacAddr[5U] = (uint8)(MacAddrH >> 8U);
 
             FrmModificationTableEntry->SrcMacAddrRegisterPort = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_SRC_MAC_ADDR_PORT_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_SRC_MAC_ADDR_PORT_SHIFT);
-            FrmModificationTableEntry->SequenceTagAction = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_SEQUENCE_TAG_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_SEQUENCE_TAG_ACTION_SHIFT);
-            FrmModificationTableEntry->OuterVidActions = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VID_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VID_ACTION_SHIFT);
-            FrmModificationTableEntry->L2HeaderVlanActions = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_VLAN_HEADER_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_VLAN_HEADER_ACTION_SHIFT);
-            FrmModificationTableEntry->L2HeaderMacActions = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_MAC_HEADER_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_MAC_HEADER_ACTION_SHIFT);
-            FrmModificationTableEntry->L2Actions = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_LAYER2_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_LAYER2_ACTION_SHIFT);
+            FrmModificationTableEntry->SequenceTagAction      = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_SEQUENCE_TAG_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_SEQUENCE_TAG_ACTION_SHIFT);
+            FrmModificationTableEntry->OuterVidActions        = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VID_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VID_ACTION_SHIFT);
+            FrmModificationTableEntry->L2HeaderVlanActions    = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_VLAN_HEADER_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_VLAN_HEADER_ACTION_SHIFT);
+            FrmModificationTableEntry->L2HeaderMacActions     = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_MAC_HEADER_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_MAC_HEADER_ACTION_SHIFT);
+            FrmModificationTableEntry->L2Actions              = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_LAYER2_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_LAYER2_ACTION_SHIFT);
 
             CfgeData = TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA2];
-            FrmModificationTableEntry->PayloadActions = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_ACTION_SHIFT);
-            FrmModificationTableEntry->OuterDeiAction = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_DEI_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_DEI_ACTION_SHIFT);
-            FrmModificationTableEntry->OuterPcpAction = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_PCP_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_PCP_ACTION_SHIFT);
+            FrmModificationTableEntry->PayloadActions  = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_ACTION_SHIFT);
+            FrmModificationTableEntry->OuterDeiAction  = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_DEI_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_DEI_ACTION_SHIFT);
+            FrmModificationTableEntry->OuterPcpAction  = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_PCP_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_PCP_ACTION_SHIFT);
             FrmModificationTableEntry->OuterTpidAction = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_TPID_ACTION_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_TPID_ACTION_SHIFT);
-            FrmModificationTableEntry->OuterVlanDei = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_DEI_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_DEI_SHIFT);
-            FrmModificationTableEntry->OuterVlanPcp = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_PCP_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_PCP_SHIFT);
-            FrmModificationTableEntry->OuterVlanVID = (uint16)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_VID_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_VID_SHIFT);
+            FrmModificationTableEntry->OuterVlanDei    = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_DEI_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_DEI_SHIFT);
+            FrmModificationTableEntry->OuterVlanPcp    = (uint8)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_PCP_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_PCP_SHIFT);
+            FrmModificationTableEntry->OuterVlanVID    = (uint16)((CfgeData & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_VID_MASK) >> NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_OUTER_VLAN_VID_SHIFT);
 
-            FrmModificationTableEntry->PayloadOffset = (uint8)(TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA3] & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_OFFSET_MASK);
-            FrmModificationTableEntry->FrmModificationDataBytes = (uint16)(TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA4] & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_FRM_MODI_BYTES_MASK);
+            FrmModificationTableEntry->PayloadOffset              = (uint8)(TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA3] & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_OFFSET_MASK);
+            FrmModificationTableEntry->FrmModificationDataBytes   = (uint16)(TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA4] & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_FRM_MODI_BYTES_MASK);
             FrmModificationTableEntry->FrmModificationDataEntryID = TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_RSPFMT_CFGEDATA5];
         }
     }
@@ -5656,7 +5639,10 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_InitCommandBDR(uint8 SwitchI
         status = NETC_ETHSWT_IP_CBDRSTATUS_INDEX_ERROR;
     }
     else
-    {
+    {   /* initialize memory and length for command ring 0 */
+        CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].CmdBDAddr = &SwtcommandRingDescriptor0[0U];
+        CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].lengthCBDR = (NETC_ETHSWT_IP_CBDR0_LENGTH);
+
         /* configure the CBDR base address register where the address of a switch table is stored*/
         IP_NETC__SW0_BASE->NUM_CBDR[cbdrIndex].CBDRBAR0 = (uint32)(CmdBDRConfig[cbdrIndex].CmdBDAddr);
 
@@ -5769,6 +5755,31 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInVlanFilterTableReqData
     SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_12();
 
     return status;
+}
+
+static inline void Netc_EthSwt_Ip_PortConfigIngresStreamLookUp(uint8 SwitchPortIdx, const Netc_EthSwt_Ip_PortType *port)
+{
+    const Netc_EthSwt_Ip_PortIngresStreamLookUpDataType *PortConfig = &port->iPort->EthSwtPortIngressStreamLookUpConfig;
+    if(TRUE == PortConfig->PortIngressStreamEnableLookUp)
+    {
+        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PISIDCR = SW_PORT2_PISIDCR_ISEID(PortConfig->PortIngressStreamDefaultEntryID)        |
+                                                                   SW_PORT2_PISIDCR_KC0EN((uint8)PortConfig->PortIngressStreamUseFirstLookUp) |
+                                                                   SW_PORT2_PISIDCR_KC1EN((uint8)PortConfig->PortIngressStreamUseSecondLookUp);
+
+        if(TRUE == PortConfig->PortIngressStreamUseSecondKeyConstructionPair)
+        {
+            Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PISIDCR |= SW_PORT2_PISIDCR_KCPAIR(1U);
+        }
+        else
+        {
+            /* Use the first pair of Key Construction rules.  */
+        }
+    }
+    else
+    {
+        /* Stream filtering is bypassed. */
+        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PISIDCR = 0xFFFFFFFFUL;
+    }
 }
 
 /*FUNCTION**********************************************************************
@@ -6180,7 +6191,17 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMacLayerDuplexMode( uint8 SwitchIdx, uint8 
         }
         else /* ETHTRCV_DUPLEX_MODE_HALF */
         {
-            interfaceModeConfig |= SW_ETH_MAC_PORT0_PM0_IF_MODE_HD_MASK;
+            switch ((interfaceModeConfig & SW_ETH_MAC_PORT0_PM0_IF_MODE_IFMODE_MASK) >> SW_ETH_MAC_PORT0_PM0_IF_MODE_IFMODE_SHIFT)
+            {
+                case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_MII_MODE:
+                case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RMII_MODE:
+                case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RGMII_MODE:
+                    interfaceModeConfig |= SW_ETH_MAC_PORT0_PM0_IF_MODE_HD_MASK;
+                    break;
+                default:
+                    status = E_NOT_OK;
+                    break;
+            }
         }
 
         Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE = interfaceModeConfig;
@@ -6192,85 +6213,6 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMacLayerDuplexMode( uint8 SwitchIdx, uint8 
     return status;
 }
 
-static inline Std_ReturnType Netc_EthSwt_Ip_RGMIIModeConfig(uint32 *interfaceModeConfig, uint32 *shapingPSpeedConfig, EthTrcv_BaudRateType EthSwtPortMacLayerSpeed, Netc_EthSwt_Ip_PortDuplexType EthSwtPortMacLayerDuplexMode)
-{
-    Std_ReturnType status = E_OK;
-
-    /* Full duplex is 0 in HD field for RGMII mode*/
-    if (EthSwtPortMacLayerDuplexMode == NETC_ETHSWT_PORT_FULL_DUPLEX)
-    {
-        (*interfaceModeConfig) &= ~SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK;
-    }
-
-    switch(EthSwtPortMacLayerSpeed)
-    {
-        case ETHTRCV_BAUD_RATE_10MBIT: /* 10Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
-            break;
-        }
-        case ETHTRCV_BAUD_RATE_100MBIT: /* 100Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
-            break;
-        }
-        case ETHTRCV_BAUD_RATE_1000MBIT: /* 1000Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS;
-            break;
-        }
-        default:
-        {
-            status = E_NOT_OK;
-            break;
-        }
-    }
-
-    return status;
-}
-static inline Std_ReturnType Netc_EthSwt_Ip_SGMIIModeConfig(uint32 *interfaceModeConfig, uint32 *shapingPSpeedConfig, EthTrcv_BaudRateType EthSwtPortMacLayerSpeed)
-
-{
-    Std_ReturnType status = E_OK;
-
-    switch(EthSwtPortMacLayerSpeed)
-    {
-        case ETHTRCV_BAUD_RATE_10MBIT: /* 10Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
-            break;
-        }
-        case ETHTRCV_BAUD_RATE_100MBIT: /* 100Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
-            break;
-        }
-        case ETHTRCV_BAUD_RATE_1000MBIT: /* 1000Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS;
-            break;
-        }
-        case ETHTRCV_BAUD_RATE_2500MBIT: /* 2500Mbps */
-        {
-            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT));
-            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS;
-            break;
-        }
-        default:
-        {
-            status = E_NOT_OK;
-            break;
-        }
-    }
-
-    return status;
-}
 
 static inline Std_ReturnType Netc_EthSwt_Ip_MacPortConfigSetInterface( Netc_EthSwt_Ip_SwitchIdxSwitchPort SwitchIdxSwitchPort,
                                                                 Netc_EthSwt_Ip_XmiiModeType EthSwtPortPhysicalLayerType,
@@ -6283,47 +6225,37 @@ static inline Std_ReturnType Netc_EthSwt_Ip_MacPortConfigSetInterface( Netc_EthS
     uint32 shapingPSpeedConfig = 0UL; /* used for shaping of the port */
 
     /* Set the interface type */
-    if (NETC_ETHSWT_RGMII_MODE == EthSwtPortPhysicalLayerType)
+    switch (EthSwtPortPhysicalLayerType)
     {
-        interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(4U));
-        status = Netc_EthSwt_Ip_RGMIIModeConfig(&interfaceModeConfig, &shapingPSpeedConfig, EthSwtPortMacLayerSpeed, EthSwtPortMacLayerDuplexMode);
-    }
-    else if (NETC_ETHSWT_RMII_MODE == EthSwtPortPhysicalLayerType)
-    {
-        interfaceModeConfig = (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(3U));
-        /* Full duplex is 0 in HD field */
-        if (EthSwtPortMacLayerDuplexMode == NETC_ETHSWT_PORT_FULL_DUPLEX)
-        {
-            interfaceModeConfig |= SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK;
-        }
-        if(ETHTRCV_BAUD_RATE_10MBIT == EthSwtPortMacLayerSpeed)
-        {
-            interfaceModeConfig |= SW_ETH_MAC_PORT1_PM0_IF_MODE_M10_MASK;
-            shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
-        }
-    }
-    else if (NETC_ETHSWT_MII_MODE == EthSwtPortPhysicalLayerType)
-    {
-        interfaceModeConfig = (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(1U));
-        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
-    }
-    else if (NETC_ETHSWT_SGMII_MODE == EthSwtPortPhysicalLayerType)
-    {
-         /* The MAC register IF_MODE[IFMODE] must be set to 0b101 for SGMII mode. */
-        interfaceModeConfig = (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(5U));
-        status = Netc_EthSwt_Ip_SGMIIModeConfig(&interfaceModeConfig, &shapingPSpeedConfig, EthSwtPortMacLayerSpeed);
-    }
-    else
-    {
-        /* type error */
-        status = E_NOT_OK;
+        case NETC_ETHSWT_MII_MODE:
+        case NETC_ETHSWT_RMII_MODE:
+            interfaceModeConfig |= SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE((NETC_ETHSWT_RMII_MODE == EthSwtPortPhysicalLayerType) ? SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RMII_MODE : SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_MII_MODE);
+            status = Netc_EthSwt_Ip_SetPortSpeed_MII_RMII_Mode(EthSwtPortMacLayerSpeed, &interfaceModeConfig, &shapingPSpeedConfig);
+            break;
+        case NETC_ETHSWT_RGMII_MODE:
+            interfaceModeConfig |= SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RGMII_MODE);
+            status = Netc_EthSwt_Ip_SetPortSpeed_RGMII_Mode(EthSwtPortMacLayerSpeed, &interfaceModeConfig, &shapingPSpeedConfig);
+            break;
+        case NETC_ETHSWT_SGMII_MODE:
+            interfaceModeConfig |= SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_SGMII_MODE);
+            status = Netc_EthSwt_Ip_SetPortSpeed_SGMII_Mode(EthSwtPortMacLayerSpeed, &interfaceModeConfig, &shapingPSpeedConfig);
+            break;
+        default:
+            status = E_NOT_OK;
+            break;
     }
 
-    /* Write the interface mode configuration in the register */
-    Netc_EthSwt_Ip_PortBaseTable[SwitchIdxSwitchPort.SwitchPortIdx]->PM0_IF_MODE = interfaceModeConfig;
-    Netc_EthSwt_Ip_PortBaseTable[SwitchIdxSwitchPort.SwitchPortIdx]->PM1_IF_MODE = interfaceModeConfig;
-    Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR &= ~SW_PORT0_PCR_PSPEED_MASK;
-    Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(shapingPSpeedConfig);
+    if (status == E_OK)
+    {
+        /* Write the interface mode configuration in the register */
+        Netc_EthSwt_Ip_PortBaseTable[SwitchIdxSwitchPort.SwitchPortIdx]->PM0_IF_MODE = interfaceModeConfig;
+        Netc_EthSwt_Ip_PortBaseTable[SwitchIdxSwitchPort.SwitchPortIdx]->PM1_IF_MODE = interfaceModeConfig;
+        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR &= ~SW_PORT0_PCR_PSPEED_MASK;
+        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(shapingPSpeedConfig);
+
+        status = Netc_EthSwt_Ip_SetPortMacLayerDuplexMode(SwitchIdxSwitchPort.SwitchIdx, SwitchIdxSwitchPort.SwitchPortIdx, EthSwtPortMacLayerDuplexMode);
+    }
+
     return status;
 }
 
@@ -6348,7 +6280,24 @@ static Std_ReturnType Netc_EthSwt_Ip_MacPortConfig( Netc_EthSwt_Ip_SwitchIdxSwit
     {
     /* pseudo port */
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR &= ~SW_PORT0_PCR_PSPEED_MASK;
-        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_2000MBITS);
+        switch(EthSwtPortMacLayerSpeed)
+        {
+            case ETHTRCV_BAUD_RATE_10MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS);
+                break;
+            case ETHTRCV_BAUD_RATE_100MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS);
+                break;
+            case ETHTRCV_BAUD_RATE_1000MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS);
+                break;
+            case ETHTRCV_BAUD_RATE_2500MBIT:
+                Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS);
+                break;
+            default:
+                status = E_NOT_OK;
+                break;
+        }
     }
 
     return status;
@@ -6485,6 +6434,12 @@ static inline Std_ReturnType Netc_EthSwt_Ip_ConfigPMCommandReg(Netc_EthSwt_Ip_Sw
             portCommandConfig |= SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_LOOP_ENA_MASK;
         }
 
+        /* set TS_MODE bit if is needed, by default TS_MODE is 0*/
+        if(TRUE == port->EthSwtEnableFreeRunningTimer)
+        {
+            portCommandConfig |= SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_TS_MODE(1);
+        }
+
         /* Write the PMa_COMMAND_CONFIG with the computed value */
         Netc_EthSwt_Ip_PortBaseTable[SwitchIdxSwitchPort.SwitchPortIdx]->PM0_COMMAND_CONFIG = portCommandConfig;
         Netc_EthSwt_Ip_PortBaseTable[SwitchIdxSwitchPort.SwitchPortIdx]->PM1_COMMAND_CONFIG = portCommandConfig;
@@ -6493,12 +6448,11 @@ static inline Std_ReturnType Netc_EthSwt_Ip_ConfigPMCommandReg(Netc_EthSwt_Ip_Sw
         /* Config link protocol for mac ports */
         Netc_EthSwt_Ip_ConfigLinkProtocol(SwitchIdxSwitchPort.SwitchIdx, SwitchIdxSwitchPort.SwitchPortIdx, port->EthSwtPortPhysicalLayerType);
 #endif
-
-        /* Configure the interface mode, the speed and the duplex mode */
-        status |= Netc_EthSwt_Ip_MacPortConfig(SwitchIdxSwitchPort, port->EthSwtPortPhysicalLayerType,
-                                                port->EthSwtPortMacLayerSpeed, port->EthSwtPortMacLayerDuplexMode
-                                                );
     }
+
+    /* Configure the interface mode, the speed and the duplex mode */
+    status |= Netc_EthSwt_Ip_MacPortConfig(SwitchIdxSwitchPort, port->EthSwtPortPhysicalLayerType,
+                                           port->EthSwtPortMacLayerSpeed, port->EthSwtPortMacLayerDuplexMode);
 
     return status;
 }
@@ -6507,6 +6461,7 @@ static inline void Netc_EthSwt_Ip_SetIngressCutThroughPortx(uint8 SwitchPortIdx)
 {
     if( (0U == SwitchPortIdx) || (1U == SwitchPortIdx) )
     {
+        /* Set Ingress Cut-through frame State*/
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCTFCR |= SW_PORT0_PCTFCR_ICTS(1U);
     }
 }
@@ -6515,6 +6470,7 @@ static inline void Netc_EthSwt_Ip_SetEgressCutThroughPortx(uint8 SwitchPortIdx)
 {
     if( (0U == SwitchPortIdx) || (1U == SwitchPortIdx) )
     {
+        /* Set Egress Cut-through frame State*/
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCTFCR |= SW_PORT0_PCTFCR_ECTS(1U);
     }
 }
@@ -6533,6 +6489,51 @@ static inline void Netc_EthSwt_Ip_InitPort_ConfigIngressEgressCutThroughSettings
     }
 }
 
+static inline Std_ReturnType Netc_EthSwt_Ip_ConfigPortScheduler (uint8 SwitchPortIdx, const Netc_EthSwt_Ip_PortType *port)
+{
+    /* Configure the number of WBFS Queues and Strict Priority queues, by assigning the Traffic Classes to a specific scheduler input. */
+    const Netc_EthSwt_Ip_PortSchedulerType *SchedulerType = port->ePort->portScheduler;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS;
+    Std_ReturnType status = E_OK;
+    uint32 MatchedEntries;
+
+    if(SchedulerType != NULL_PTR)
+    {
+        /* Entry ID value represents the ETM Class Scheduler instance and each entry corresponds
+        to a class queue scheduler on given switch port (there is one scheduler per port) */
+        CBDRStatus = Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry(0U, SwitchPortIdx, &MatchedEntries, SchedulerType);
+        status = ((CBDRStatus == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS) ? E_OK : E_NOT_OK);
+    }
+    else
+    {
+        /* In case there is no configuration for Port Scheduler mapping profile, the variables declared at
+           the begining of the function will not be used, thus it will be generated an warning at compilation. */
+        (void)CBDRStatus;
+        (void)MatchedEntries;
+    }
+
+    return status;
+}
+
+static Std_ReturnType Netc_EthSwt_Ip_ConfigPortAdvancedFeatures(Netc_EthSwt_Ip_SwitchIdxSwitchPort SwitchIdxSwitchPort, const Netc_EthSwt_Ip_PortType *port)
+{
+    Std_ReturnType status = E_OK;
+
+    /* Configure egress frame preemption. */
+    Netc_EthSwt_Ip_ConfigEgressPreemptionReg(SwitchIdxSwitchPort.SwitchPortIdx, port);
+
+    /* Configure the credit base shaper. */
+    Netc_EthSwt_Ip_ConfigCreditBaseShaperReg(SwitchIdxSwitchPort.SwitchPortIdx, port);
+
+    /* Configure the scheduler for a specific port. */
+    status |= Netc_EthSwt_Ip_ConfigPortScheduler(SwitchIdxSwitchPort.SwitchPortIdx, port);
+
+    /* Configure the Ingress Stream look up for a specific port. */
+    Netc_EthSwt_Ip_PortConfigIngresStreamLookUp(SwitchIdxSwitchPort.SwitchPortIdx, port);
+
+    return status;
+}
+
 static Std_ReturnType Netc_EthSwt_Ip_InitPort(Netc_EthSwt_Ip_SwitchIdxSwitchPort SwitchIdxSwitchPort, const Netc_EthSwt_Ip_PortType *port)
 {
     Std_ReturnType status = E_OK;
@@ -6548,7 +6549,11 @@ static Std_ReturnType Netc_EthSwt_Ip_InitPort(Netc_EthSwt_Ip_SwitchIdxSwitchPort
         | SW_PORT0_PQOSMR_VE(port->iPort->vlanEnable?1U:0U)
         | SW_PORT0_PQOSMR_DIPV(port->iPort->vlanDefaultIpv)
         | SW_PORT0_PQOSMR_DDR(port->iPort->vlanDefaultDr)
+#if defined(ERR_IPV_NETC_051649)
+    #if (STD_ON != ERR_IPV_NETC_051649)
         | SW_PORT0_PQOSMR_VQMP(port->iPort->vlanMappingProfile)
+    #endif /* If ERR051649 is applicable, then only the VLAN to IPV mapping profile 0 shall be used. */
+#endif
         | SW_PORT0_PQOSMR_QVMP(port->ePort->vlanMappingProfile);
 
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->PPCPDEIMR = SW_PORT0_PPCPDEIMR_IPCPMPV(port->iPort->vlanEnableIngressPcpToPcpMapping?1U:0U)
@@ -6556,10 +6561,10 @@ static Std_ReturnType Netc_EthSwt_Ip_InitPort(Netc_EthSwt_Ip_SwitchIdxSwitchPort
         | SW_PORT0_PPCPDEIMR_EPCPMPV(port->ePort->vlanEnableEgressPcpToPcpMapping?1U:0U)
         | SW_PORT0_PPCPDEIMR_EPCPMP(port->ePort->vlanEgressPcpToPcpProfile)
         | SW_PORT0_PPCPDEIMR_DRME(port->ePort->updateEgressDr?1U:0U)
-        | SW_PORT0_PPCPDEIMR_DR0DEI(*(port->ePort->vlanDrToDei)[0U])
-        | SW_PORT0_PPCPDEIMR_DR1DEI(*(port->ePort->vlanDrToDei)[1U])
-        | SW_PORT0_PPCPDEIMR_DR2DEI(*(port->ePort->vlanDrToDei)[2U])
-        | SW_PORT0_PPCPDEIMR_DR3DEI(*(port->ePort->vlanDrToDei)[3U]);
+        | SW_PORT0_PPCPDEIMR_DR0DEI((*port->ePort->vlanDrToDei)[0U])
+        | SW_PORT0_PPCPDEIMR_DR1DEI((*port->ePort->vlanDrToDei)[1U])
+        | SW_PORT0_PPCPDEIMR_DR2DEI((*port->ePort->vlanDrToDei)[2U])
+        | SW_PORT0_PPCPDEIMR_DR3DEI((*port->ePort->vlanDrToDei)[3U]);
 
     /* Bridge Port Default Vlan register configuration */
     Netc_EthSwt_Ip_ConfigBridgePortDefaultVlanReg(SwitchIdxSwitchPort.SwitchPortIdx, port);
@@ -6585,11 +6590,7 @@ static Std_ReturnType Netc_EthSwt_Ip_InitPort(Netc_EthSwt_Ip_SwitchIdxSwitchPort
 
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchIdxSwitchPort.SwitchPortIdx]->BPCR = bridgePortConfig;
 
-    /* configure egress frame preemption */
-    Netc_EthSwt_Ip_ConfigEgressPreemptionReg(SwitchIdxSwitchPort.SwitchPortIdx, port);
-
-    /* configure the credit base shaper */
-    Netc_EthSwt_Ip_ConfigCreditBaseShaperReg(SwitchIdxSwitchPort.SwitchPortIdx, port);
+    status |= Netc_EthSwt_Ip_ConfigPortAdvancedFeatures(SwitchIdxSwitchPort, port);
 
     return status;
 }
@@ -6604,29 +6605,24 @@ Std_ReturnType Netc_EthSwt_Ip_ConfigureEgressFramePreemption(uint8 SwitchIdx, co
 {
     uint8 tcIndex;
     uint32 localPFPCR = 0U;
-    Std_ReturnType status = E_OK;
 
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(SwitchPortIdx < NETC_ETHSWT_IP_NUMBER_OF_MAC_PORTS);
 #endif
     (void) SwitchIdx;
-    if(SwitchPortIdx < NETC_ETHSWT_IP_NUMBER_OF_MAC_PORTS)
+
+    for(tcIndex = 0U; tcIndex < NETC_ETHSWT_IP_NUM_SHAPING_CLASS; tcIndex++)
     {
-        for(tcIndex = 0U; tcIndex < NETC_ETHSWT_IP_NUM_SHAPING_CLASS; tcIndex++)
-        {
-            localPFPCR |= ((uint32)(TrafficClass[tcIndex] ? 1U : 0U)) << tcIndex;
-        }
+        localPFPCR |= ((uint32)(TrafficClass[tcIndex] ? 1U : 0U)) << tcIndex;
     }
-    else
-    {
-        status = E_NOT_OK; /* Unavailable feature for pseudo-port */
-    };
+
 
     SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_62();
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PFPCR = localPFPCR;
     SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_62();
 
-    return status;
+    return E_OK;
 }
 
 /*FUNCTION**********************************************************************
@@ -6772,55 +6768,123 @@ Std_ReturnType Netc_EthSwt_Ip_EnableCreditBasedShaper(uint8 SwitchIdx, const uin
 /* inline function for configuring VlanIpvDr2PcpProfile */
 static inline void Netc_EthSwt_Ip_ConfigVlanIpvDr2PcpProfile(const uint8 *IndexProfile, const Netc_EthSwt_Ip_ConfigType * Config)
 {
-    uint16 IndexIpv;
-    uint16 IndexDr;
-
+    /* QOS to PCP mapping is done trough 4 for registers. */
     if(NULL_PTR != Config->vlanIpvDr2PcpProfile)
     {
-        for (IndexDr=0U; IndexDr < NETC_ETHSWT_IP_NUMBER_OF_DR; IndexDr++)
-        { /* Shifted by NETC_ETHSWT_IP_FIELD_REP_IN_4BITS for each DR index */
-            for (IndexIpv=0; IndexIpv < NETC_ETHSWT_IP_NUMBER_OF_IPV; IndexIpv++)
-            {
-                /* Settings are divied in 4 registers by groups of 2 */
-                /* even IPV in lower bits */
-                IP_NETC__SW0_BASE->MAP_PCP[(*IndexProfile)].QOSVLANMPR[IndexIpv/2U] |= (uint32)((uint32)((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][IndexIpv][IndexDr])
-                    & NETC_F2_QOSVLANMPR_IPV0_DR0_MASK) << ((IndexDr*NETC_ETHSWT_IP_FIELD_REP_IN_4BITS) + (NETC_ETHSWT_IP_FIELD_REP_IN_TOP_OF_32BITS * (IndexIpv % 2U)));
-            }
-        }
+
+        /* Register 0 --> IPV 0 - 1 and DR 0-3 */
+        IP_NETC__SW0_BASE->MAP_PCP[(*IndexProfile)].QOSVLANMPR[0] |= NETC_F2_QOSVLANMPR_IPV0_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][0][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV0_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][0][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV0_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][0][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV0_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][0][3]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV1_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][1][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV1_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][1][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV1_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][1][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV1_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][1][3]) ;
+
+        /* Register 1 --> IPV 2 - 3 and DR 0-3 */
+        IP_NETC__SW0_BASE->MAP_PCP[(*IndexProfile)].QOSVLANMPR[1] |= NETC_F2_QOSVLANMPR_IPV2_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][2][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV2_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][2][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV2_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][2][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV2_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][2][3]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV3_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][3][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV3_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][3][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV3_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][3][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV3_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][3][3]) ;
+        /* Register 2 --> IPV 4 - 5 and DR 0-3 */
+        IP_NETC__SW0_BASE->MAP_PCP[(*IndexProfile)].QOSVLANMPR[2] |= NETC_F2_QOSVLANMPR_IPV4_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][4][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV4_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][4][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV4_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][4][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV4_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][4][3]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV5_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][5][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV5_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][5][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV5_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][5][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV5_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][5][3]) ;
+        /* Register 3 --> IPV 6 - 7 and DR 0-3 */
+        IP_NETC__SW0_BASE->MAP_PCP[(*IndexProfile)].QOSVLANMPR[3] |= NETC_F2_QOSVLANMPR_IPV6_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][6][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV6_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][6][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV6_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][6][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV6_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][6][3]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV7_DR0((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][7][0]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV7_DR1((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][7][1]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV7_DR2((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][7][2]) | \
+                                                                     NETC_F2_QOSVLANMPR_IPV7_DR3((*(Config->vlanIpvDr2PcpProfile))[(*IndexProfile)][7][3]) ;
     }
 }
 
 static inline void Netc_EthSwt_Ip_InitMappingProfilePartTwo(uint8 IndexProfile, const Netc_EthSwt_Ip_ConfigType * Config)
 {
-    uint8 IndexPcpDei;
-    uint8 IndexPcp;
-    if(NULL_PTR != Config->vlanPcpDei2IpvProfile )
+    /* As per ERR051649, VLANIPVMPR and VLANDRMPR accept only the instance 0 of all profile mappings, due to the decoding of instance 1 is not corect. */
+
+    /* Configure PCP-DEI to IPV mapping profiles. */
+#if defined(ERR_IPV_NETC_051649)
+    #if (STD_ON == ERR_IPV_NETC_051649)
+    if((NULL_PTR != Config->vlanPcpDei2IpvProfile) && (0U == IndexProfile))
     {
-        for (IndexPcpDei=0U; IndexPcpDei < NETC_ETHSWT_IP_NUMBER_OF_PCP_DEI; IndexPcpDei++)
-        {
-            if(IndexPcpDei < (NETC_ETHSWT_IP_NUMBER_OF_PCP_DEI/2U)) /* Setting are divided in 2 registers */
-            {
-                IP_NETC__SW0_COMMON->NUM_PROFILE[IndexProfile].VLANIPVMPR0 |= (((uint32)((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][IndexPcpDei]) & NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_0_MASK)<<(IndexPcpDei*NETC_ETHSWT_IP_FIELD_REP_IN_4BITS));
-            }
-            else
-            {
-                IP_NETC__SW0_COMMON->NUM_PROFILE[IndexProfile].VLANIPVMPR1 |= (((uint32)((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][IndexPcpDei]) & NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_0_MASK)<<(IndexPcpDei/2U*NETC_ETHSWT_IP_FIELD_REP_IN_4BITS));
-            }
-        }
+    #endif
+#else
+    if(NULL_PTR != Config->vlanPcpDei2IpvProfile)
+    {
+#endif
+
+        IP_NETC__SW0_COMMON->NUM_PROFILE[IndexProfile].VLANIPVMPR0 |= NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_0((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][0U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_1((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][1U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_2((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][2U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_3((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][3U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_4((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][4U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_5((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][5U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_6((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][6U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR0_PCP_DEI_7((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][7U]) ;
+
+        IP_NETC__SW0_COMMON->NUM_PROFILE[IndexProfile].VLANIPVMPR1 |= NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_8((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][8U])   | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_9((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][9U])   | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_10((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][10U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_11((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][11U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_12((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][12U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_13((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][13U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_14((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][14U]) | \
+                                                                      NETC_F2_COMMON_VLANIPVMPR1_PCP_DEI_15((*(Config->vlanPcpDei2IpvProfile))[IndexProfile][15U]) ;
     }
+
+    /* Configure PCP-DEI to DR mapping profiles. */
+#if defined(ERR_IPV_NETC_051649)
+    #if (STD_ON == ERR_IPV_NETC_051649)
+    if((Config->vlanPcpDei2DrProfile != NULL_PTR) && (0U == IndexProfile))
+    {
+    #endif
+#else
     if(Config->vlanPcpDei2DrProfile != NULL_PTR)
     {
-        for (IndexPcpDei=0U; IndexPcpDei < NETC_ETHSWT_IP_NUMBER_OF_PCP_DEI; IndexPcpDei++)
-        {
-            IP_NETC__SW0_COMMON->NUM_PROFILE[IndexProfile].VLANDRMPR |= (((uint32)((*(Config->vlanPcpDei2DrProfile))[IndexProfile][IndexPcpDei]) & NETC_F2_COMMON_VLANDRMPR_PCP_DEI_0_MASK)<<(IndexPcpDei*NETC_F2_COMMON_VLANDRMPR_PCP_DEI_0_WIDTH));
-        }
+#endif
+        IP_NETC__SW0_COMMON->NUM_PROFILE[IndexProfile].VLANDRMPR |= NETC_F2_COMMON_VLANDRMPR_PCP_DEI_0((*(Config->vlanPcpDei2DrProfile))[IndexProfile][0U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_1((*(Config->vlanPcpDei2DrProfile))[IndexProfile][1U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_2((*(Config->vlanPcpDei2DrProfile))[IndexProfile][2U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_3((*(Config->vlanPcpDei2DrProfile))[IndexProfile][3U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_4((*(Config->vlanPcpDei2DrProfile))[IndexProfile][4U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_5((*(Config->vlanPcpDei2DrProfile))[IndexProfile][5U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_6((*(Config->vlanPcpDei2DrProfile))[IndexProfile][6U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_7((*(Config->vlanPcpDei2DrProfile))[IndexProfile][7U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_8((*(Config->vlanPcpDei2DrProfile))[IndexProfile][8U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_9((*(Config->vlanPcpDei2DrProfile))[IndexProfile][9U])   | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_10((*(Config->vlanPcpDei2DrProfile))[IndexProfile][10U]) | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_11((*(Config->vlanPcpDei2DrProfile))[IndexProfile][11U]) | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_12((*(Config->vlanPcpDei2DrProfile))[IndexProfile][12U]) | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_13((*(Config->vlanPcpDei2DrProfile))[IndexProfile][13U]) | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_14((*(Config->vlanPcpDei2DrProfile))[IndexProfile][14U]) | \
+                                                                    NETC_F2_COMMON_VLANDRMPR_PCP_DEI_15((*(Config->vlanPcpDei2DrProfile))[IndexProfile][15U]) ;
     }
+
+    /* Configure PCP to PCP mapping profiles. */
     if(NULL_PTR != Config->vlanPcp2PcpProfile)
     {
-        for (IndexPcp=0U; IndexPcp < NETC_ETHSWT_IP_NUMBER_OF_PCP; IndexPcp++)
-        {
-                IP_NETC__SW0_BASE->PCP2PCPMPR[IndexProfile] |= (((uint32)((*(Config->vlanPcp2PcpProfile))[IndexProfile][IndexPcp]) & NETC_F2_PCP2PCPMPR_PCP0_MASK)<<(IndexPcp*NETC_ETHSWT_IP_FIELD_REP_IN_4BITS));
-        }
+        IP_NETC__SW0_BASE->PCP2PCPMPR[IndexProfile] |= NETC_F2_PCP2PCPMPR_PCP0((*(Config->vlanPcp2PcpProfile))[IndexProfile][0U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP1((*(Config->vlanPcp2PcpProfile))[IndexProfile][1U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP2((*(Config->vlanPcp2PcpProfile))[IndexProfile][2U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP3((*(Config->vlanPcp2PcpProfile))[IndexProfile][3U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP4((*(Config->vlanPcp2PcpProfile))[IndexProfile][4U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP5((*(Config->vlanPcp2PcpProfile))[IndexProfile][5U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP6((*(Config->vlanPcp2PcpProfile))[IndexProfile][6U]) | \
+                                                       NETC_F2_PCP2PCPMPR_PCP7((*(Config->vlanPcp2PcpProfile))[IndexProfile][7U]) ;
     }
 }
 
@@ -6916,8 +6980,8 @@ static inline void Netc_EthSwt_Ip_InitTimeGateSchedulingTableEntryData(const Net
             TimeGateSchedulingEntryData[PortIndex].AdminBaseTime = (*((*(Config)).port))[PortIndex].ePort->portEgressAdminBaseTime;
             TimeGateSchedulingEntryData[PortIndex].AdminCycleTime = (*((*(Config)).port))[PortIndex].ePort->portEgressAdminCycleTime;
             TimeGateSchedulingEntryData[PortIndex].AdminCycleTimeExt = (*((*(Config)).port))[PortIndex].ePort->portEgressAdminCycleTimeExt;
-            TimeGateSchedulingEntryData[PortIndex].AdminControlListLength = (*((*(Config)).port))[PortIndex].ePort->numberOfGateControlListEntries;
 #if (NETC_ETHSWT_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES > 0U)
+            TimeGateSchedulingEntryData[PortIndex].AdminControlListLength = (*((*(Config)).port))[PortIndex].ePort->numberOfGateControlListEntries;
             for (GateControlListIdx = 0U; GateControlListIdx < TimeGateSchedulingEntryData[PortIndex].AdminControlListLength; GateControlListIdx++)
             {
                 TimeGateSchedulingEntryData[PortIndex].GateEntryAdminControlListData[GateControlListIdx].AdminTimeInterval = (*((*((*(Config)).port))[PortIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminTimeInterval;
@@ -6974,39 +7038,8 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_InitTimeGateSchedulingFeatur
     #endif
 #endif
 
-static inline Std_ReturnType Netc_EthSwt_Ip_EnablePCIE(void)
+static inline void Netc_EthSwt_Ip_EnablePCIE(void)
 {
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    Std_ReturnType Status = E_NOT_OK;
-
-    /* Perform warm reset to allow IERB writes. */
-    IP_NETC__NETC_PRIV->NETCRR &= ~NETC_PRIV_NETCRR_LOCK_MASK;
-
-    /* Wait until NETCRR[LOCK] is cleared. */
-    Netc_EthSwt_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETHSWT_IP_TIMEOUT_VALUE_US);
-    do
-    {
-        if ((IP_NETC__NETC_PRIV->NETCRR & NETC_PRIV_NETCRR_LOCK_MASK) == 0x0U)
-        {
-            Status = E_OK;
-            break;
-        }
-    }while(!Netc_EthSwt_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
-    /* This is a short procedure of warm reset because the functions were not intialized until now. */
-
-    if(E_OK == Status)
-    {
-        /* Allocate memory for stream gate instance index table memory. */
-        IP_NETC__NETC_IERB->CFG_ENETC_INST[0U].ESGIITMAR  = (uint32)0x00U;
-        /* Allocate memory for stream gate control list index table memory */
-        IP_NETC__NETC_IERB->CFG_ENETC_INST[0U].ESGCLITMAR = (uint32)0x02U;
-    }
-
-    /* Explicit lock of memory. */
-    IP_NETC__NETC_PRIV->NETCRR |= NETC_PRIV_NETCRR_LOCK_MASK;
-
     /* Enable PCIE for the TIMER */
     IP_NETC__NETC_F0_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
     /* Enable PCIE for the MDIO */
@@ -7019,8 +7052,6 @@ static inline Std_ReturnType Netc_EthSwt_Ip_EnablePCIE(void)
     IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
     #endif
 #endif
-
-    return Status;
 }
 
 /*FUNCTION**********************************************************************
@@ -7041,16 +7072,21 @@ static Std_ReturnType Netc_EthSwt_Ip_ConfigSwt(uint8 SwitchIdx, const Netc_EthSw
 
     if(Config->EthSwtEnableSharedLearning)
     {
+        /* VL = 1 - Shared VLAN learning: Use the FID specified in this register */
         IP_NETC__SW0_BASE->VFHTDECR1 = NETC_F2_VFHTDECR1_VL_MODE(1U) | NETC_F2_VFHTDECR1_FID(0U);
     }
     else
     {
+        /* VL = 0 - Shared VLAN learning: FID is set to the VID assigned o the frame */
         IP_NETC__SW0_BASE->VFHTDECR1 = NETC_F2_VFHTDECR1_VL_MODE(0U);
     }
 
     IP_NETC__SW0_BASE->FDBHTMCR = NETC_F2_FDBHTMCR_DYN_LIMIT(Config->EthSwtMaxDynamicEntries);
-    IP_NETC__SW0_COMMON->CVLANR1 = NETC_F2_COMMON_CVLANR1_V(Config->EthSwtCustomVlanEtherType1);
-    IP_NETC__SW0_COMMON->CVLANR2 = NETC_F2_COMMON_CVLANR2_ETYPE(Config->EthSwtCustomVlanEtherType2);
+
+    /* Initialize Custom VLAN Ethertype 1 (C-VLAN) */
+    IP_NETC__SW0_COMMON->CVLANR1 = Config->EthSwtCustomVlanEtherType1;
+    /* Initialize Custom VLAN Ethertype 2 (S-VLAN) */
+    IP_NETC__SW0_COMMON->CVLANR2 = Config->EthSwtCustomVlanEtherType2;
 
     /* Mapping profile initialization */
     Netc_EthSwt_Ip_InitMappingProfile(Config);
@@ -7082,10 +7118,6 @@ static Std_ReturnType Netc_EthSwt_Ip_ConfigSwt(uint8 SwitchIdx, const Netc_EthSw
     /* +++ initialize 1588 timer for time gate scheduling +++ */
     Netc_EthSwt_Ip_InitTimer1588(Config);
     /* --- initialize 1588 timer for time gate scheduling --- */
-
-    /* initialize memory and length for command ring 0 and 1 */
-    CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].CmdBDAddr = &SwtcommandRingDescriptor0[0U];
-    CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].lengthCBDR = (NETC_ETHSWT_IP_CBDR0_LENGTH);
 
     return status;
 }
@@ -7227,12 +7259,6 @@ static Std_ReturnType Netc_EthSwt_Ip_ConfigISITable(const Netc_EthSwt_Ip_ConfigT
     Std_ReturnType status = E_OK;
     Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
 
-    /* Add key construction rules */
-    IP_NETC__SW0_COMMON->ISIDKC0CR0 = (*(Config->EthSwtKeyConstruction))[0U].EthSwtKeyConstructionRegValue;
-    IP_NETC__SW0_COMMON->ISIDKC1CR0 = (*(Config->EthSwtKeyConstruction))[1U].EthSwtKeyConstructionRegValue;
-    IP_NETC__SW0_COMMON->ISIDKC2CR0 = (*(Config->EthSwtKeyConstruction))[2U].EthSwtKeyConstructionRegValue;
-    IP_NETC__SW0_COMMON->ISIDKC3CR0 = (*(Config->EthSwtKeyConstruction))[3U].EthSwtKeyConstructionRegValue;
-
     /* Add payload field values */
     IP_NETC__SW0_COMMON->ISIDKC0PF0CR = (*(Config->EthSwtKeyConstruction))[0U].EthSwtPayloadField0RegValue;
     IP_NETC__SW0_COMMON->ISIDKC0PF1CR = (*(Config->EthSwtKeyConstruction))[0U].EthSwtPayloadField1RegValue;
@@ -7242,6 +7268,12 @@ static Std_ReturnType Netc_EthSwt_Ip_ConfigISITable(const Netc_EthSwt_Ip_ConfigT
     IP_NETC__SW0_COMMON->ISIDKC2PF1CR = (*(Config->EthSwtKeyConstruction))[2U].EthSwtPayloadField1RegValue;
     IP_NETC__SW0_COMMON->ISIDKC3PF0CR = (*(Config->EthSwtKeyConstruction))[3U].EthSwtPayloadField0RegValue;
     IP_NETC__SW0_COMMON->ISIDKC3PF1CR = (*(Config->EthSwtKeyConstruction))[3U].EthSwtPayloadField1RegValue;
+
+    /* Add key construction rules */
+    IP_NETC__SW0_COMMON->ISIDKC0CR0 = (*(Config->EthSwtKeyConstruction))[0U].EthSwtKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1CR0 = (*(Config->EthSwtKeyConstruction))[1U].EthSwtKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC2CR0 = (*(Config->EthSwtKeyConstruction))[2U].EthSwtKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC3CR0 = (*(Config->EthSwtKeyConstruction))[3U].EthSwtKeyConstructionRegValue;
 
     /* Add static IngressStreamIdentification entries */
     for (IsiEntryIdx = 0U; IsiEntryIdx < Config->NumberOfIsiEntries; IsiEntryIdx++)
@@ -7591,7 +7623,7 @@ Std_ReturnType Netc_EthSwt_Ip_Init(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigT
 {
     Std_ReturnType status;
     uint8 portIdx = 0U;
-    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS;
 
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
@@ -7599,18 +7631,17 @@ Std_ReturnType Netc_EthSwt_Ip_Init(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigT
 #endif
 
     /* enable PCIE for the timer, MDIO, switch, and ENETC */
-    status = Netc_EthSwt_Ip_EnablePCIE();
-    status |= Netc_EthSwt_Ip_IerbReady();
+    Netc_EthSwt_Ip_EnablePCIE();
+    status = Netc_EthSwt_Ip_IerbReady();
 
     if(status == (uint8)(E_OK))
     {
-        /* configure switch registers and ports */
-        status = Netc_EthSwt_Ip_ConfigSwt(SwitchIdx,Config);
-
         /* intialize command ring 0 */
         CBDRStatus = Netc_EthSwt_Ip_InitCommandBDR(0U, NETC_ETHSWT_IP_CBDR_0);
         if (NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS == CBDRStatus)
         {
+             /* configure switch registers and ports */
+            status = Netc_EthSwt_Ip_ConfigSwt(SwitchIdx,Config);
 #if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
             /* Configure FDB table */
             status |= Netc_EthSwt_Ip_ConfigFDBTable(Config);
@@ -9636,6 +9667,7 @@ static inline Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SearchAndFillIngressS
     uint32 CfgeConfigBits;
     uint8 SduType;
     uint32 MatchedEntries = 0x0UL;
+    uint8 TableMemIdx;
 
 #if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
@@ -9649,10 +9681,17 @@ static inline Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SearchAndFillIngressS
 
     SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_25();
 
+    /* clear the memory for searching, otherwise will get 0x89 error code */
+    for (TableMemIdx = (uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD; TableMemIdx <= (uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA9; TableMemIdx++)
+    {
+        TableDataBuffer.TableDataField[TableMemIdx] = 0U;
+    }
+
     /* ------initialize the table request data buffer------ */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
     /* fill in KEYE_DATA field */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = *ResumeEntryId;
+
     SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_25();
 
     /* fill in operation data for config field of Request Header*/
@@ -9745,7 +9784,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngressStreamFilterTable( uint8 
                                                                           Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableList
                                                                         )
 {
-    Netc_EthSwt_Ip_CBDRStatusType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS;
     uint16 NumOfExistingEntry = 0U;
     uint32 ResumeId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
 
@@ -9769,7 +9808,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngressStreamFilterTable( uint8 
     do
     {
         /* check if the IngressStreamFilterTableList is full or we get all existing entries */
-        if ((NumOfExistingEntry >= *NumberOfElements) || (status == (uint8)(E_NOT_OK)))
+        if ((NumOfExistingEntry >= *NumberOfElements) || (NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS != status))
         {
             break;
         }
@@ -11005,7 +11044,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngrStreamIdentificationTable( u
                                                                                Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableList
                                                                              )
 {
-    Netc_EthSwt_Ip_CBDRStatusType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS;
     uint16 NumOfExistingEntry = 0U;
     uint32 ResumeId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
 
@@ -11029,7 +11068,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngrStreamIdentificationTable( u
     do
     {
         /* check if the ISITableList is full or we get all existing entries */
-        if ((NumOfExistingEntry >= *NumberOfElements) || (status == (uint8)(E_NOT_OK)))
+        if ((NumOfExistingEntry >= *NumberOfElements) || (NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS != status))
         {
             break;
         }
@@ -11063,7 +11102,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry( ui
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
     DevAssert(SchedulerTableEntry != NULL_PTR);
     DevAssert(MatchedEntries != NULL_PTR);
-    DevAssert((EntryId > 0U) && (EntryId < NETC_ETHSWT_IP_NUMBER_OF_PORTS));
+    DevAssert(EntryId < NETC_ETHSWT_IP_NUMBER_OF_PORTS);
 #endif
 
     /* clear the variable MatchedEntries first */
@@ -11108,20 +11147,20 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry( ui
 
     /* send command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &Netc_EthSwt_Ip_OperationData);
-    #if defined(ERR_IPV_NETC_051243)
-            #if (STD_ON == ERR_IPV_NETC_051243)
-        /* Error code 0x8A is not a real error. check it on Errata. */
-        if ((status == 0x8AU) || (status == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS))
-            #else
-        if (status == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS)
-            #endif
-        #else
-        if (status == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS)
-        #endif
-        {
-            status = NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS;
-            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
-        }
+#if defined(ERR_IPV_NETC_051243)
+#if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS))
+#else
+    if (status == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS)
+#endif
+#else
+    if (status == NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS)
+#endif
+    {
+        status = NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
 
     return status;
 }

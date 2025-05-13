@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -28,7 +28,7 @@ extern "C"{
 #define QSPI_IP_COMMON_AR_RELEASE_REVISION_VERSION_H     0
 #define QSPI_IP_COMMON_SW_MAJOR_VERSION_H                2
 #define QSPI_IP_COMMON_SW_MINOR_VERSION_H                0
-#define QSPI_IP_COMMON_SW_PATCH_VERSION_H                0
+#define QSPI_IP_COMMON_SW_PATCH_VERSION_H                1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -58,6 +58,7 @@ typedef struct
     uint32 baseAddress;                                 /*!< Base address of serial flash device              */
     Qspi_Ip_LastCommandType lastCommand;                /*!< Last command sent to the flash device            */
     uint16 activeReadLut;                               /*!< LUT number for currently active read mode        */
+    boolean isInXIPMode;                                    /*!< Status of XIP mode (TRUE = Enabled/ FALSE = Disabled)       */
 } Qspi_Ip_StateType;
 
 
@@ -67,21 +68,13 @@ typedef struct
 
  /* Physical LUT seq to use for all flash commands */
 #define QSPI_IP_COMMAND_LUT 0U
+
  /* Physical LUT seq to use for AHB reads */
 #define QSPI_IP_AHB_LUT 1U
 
-#define MEM_43_EXFLS_START_SEC_CONST_UNSPECIFIED
-#include "Mem_43_EXFLS_MemMap.h"
-
-/* Table of AHB addresses for QuadSPI instances. */
-extern const uint32 Qspi_Ip_AhbAddress[QuadSPI_INSTANCE_COUNT];
-
-#define MEM_43_EXFLS_STOP_SEC_CONST_UNSPECIFIED
-#include "Mem_43_EXFLS_MemMap.h"
-
 
 /*When multicore type3 is enabled on MemAcc, global variables must be allocated to share memory section */
-#if( QSPI_IP_MULTICORE_ENABLED == STD_ON)
+#if (QSPI_IP_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_EXFLS_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_EXFLS_START_SEC_VAR_CLEARED_UNSPECIFIED
@@ -91,7 +84,7 @@ extern const uint32 Qspi_Ip_AhbAddress[QuadSPI_INSTANCE_COUNT];
 /* Pointer to runtime state structures */
 extern Qspi_Ip_StateType Qspi_Ip_MemoryStateStructure[];
 
-#if( QSPI_IP_MULTICORE_ENABLED == STD_ON)
+#if (QSPI_IP_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_EXFLS_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_EXFLS_STOP_SEC_VAR_CLEARED_UNSPECIFIED

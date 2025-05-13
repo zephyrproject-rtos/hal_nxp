@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +40,7 @@ extern "C"{
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION  0
 #define LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION             2
 #define LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION             0
-#define LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION             0
+#define LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -106,6 +106,7 @@ extern "C"{
 #ifdef PARTITION_LITTLE_ENDIAN
     #define SWAP_BYTES_UINT16(x) ((((x) >> 8U) & 0xFFU) | (((x) << 8U) & 0xFF00U))
 #endif
+
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
@@ -120,7 +121,12 @@ typedef enum
     LINFLEXD_UART_IP_7_BITS     = 0U,
     LINFLEXD_UART_IP_8_BITS     = 1U,
     LINFLEXD_UART_IP_15_BITS    = 2U,
-    LINFLEXD_UART_IP_16_BITS    = 3U
+    LINFLEXD_UART_IP_16_BITS    = 3U,
+#ifdef LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT
+#if (STD_ON == LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT)
+    LINFLEXD_UART_IP_12_BITS    = 4U
+#endif /*(STD_ON == LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT)*/
+#endif /* LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT */
 } Linflexd_Uart_Ip_WordLengthType;
 
 /**

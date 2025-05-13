@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -67,7 +67,7 @@ extern "C"{
 #define OSIF_TIMER_SYSTEM_AR_RELEASE_REVISION_VERSION_C  0
 #define OSIF_TIMER_SYSTEM_SW_MAJOR_VERSION_C             2
 #define OSIF_TIMER_SYSTEM_SW_MINOR_VERSION_C             0
-#define OSIF_TIMER_SYSTEM_SW_PATCH_VERSION_C             0
+#define OSIF_TIMER_SYSTEM_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS

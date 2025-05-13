@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -52,7 +52,7 @@ extern "C"
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define SPI_IP_SW_MAJOR_VERSION_C               2
 #define SPI_IP_SW_MINOR_VERSION_C               0
-#define SPI_IP_SW_PATCH_VERSION_C               0
+#define SPI_IP_SW_PATCH_VERSION_C               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -150,6 +150,8 @@ extern "C"
 #define SPI_IP_CTARE_DTCP_MAX_U16 (SPI_CTARE_DTCP_MASK >> SPI_CTARE_DTCP_SHIFT)
 /* Pushr CONT mask to be used for CMD field which is uint16  */
 #define SPI_IP_PUSHR_CONT_MASK_U16  ((uint16)(SPI_PUSHR_CONT_MASK >> 16))
+/* Pushr FCPCS mask to be used for CMD field which is uint16  */
+#define SPI_PUSHR_PP_MCSC_MASK_U16         ((uint16)(SPI_PUSHR_PP_MCSC_MASK >> 16))
 /*  Maximum number of bytes that can be written in a FIFO entry */
 #define SPI_TX_WORD_SIZE    (SPI_TXFR_TXDATA_WIDTH / 8U)
 /*  Maximum number of bytes that can be read from a FIFO entry */
@@ -171,7 +173,7 @@ static SPI_Type* const Spi_Ip_apxBases[SPI_INSTANCE_COUNT] = IP_SPI_BASE_PTRS;
 #if (SPI_IP_DMA_USED == STD_ON)
     #define SPI_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
     #include "Spi_MemMap.h"
-VAR_SEC_NOCACHE(Spi_Ip_u32DiscardData) static uint32 Spi_Ip_u32DiscardData;
+static uint32 Spi_Ip_u32DiscardData;
     #define SPI_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
     #include "Spi_MemMap.h"
 #endif
@@ -179,8 +181,8 @@ VAR_SEC_NOCACHE(Spi_Ip_u32DiscardData) static uint32 Spi_Ip_u32DiscardData;
 #define SPI_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Spi_MemMap.h"
 
-VAR_SEC_NOCACHE(Spi_Ip_axStateStructure) static Spi_Ip_StateStructureType Spi_Ip_axStateStructure[SPI_IP_NUMBER_OF_INSTANCES];
-VAR_SEC_NOCACHE(Spi_Ip_apxStateStructureArray) static Spi_Ip_StateStructureType* Spi_Ip_apxStateStructureArray[SPI_INSTANCE_COUNT];
+static Spi_Ip_StateStructureType Spi_Ip_axStateStructure[SPI_IP_NUMBER_OF_INSTANCES];
+static Spi_Ip_StateStructureType* Spi_Ip_apxStateStructureArray[SPI_INSTANCE_COUNT];
 
 #define SPI_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Spi_MemMap.h"
@@ -201,12 +203,11 @@ static void Spi_Ip_TransferProcess(uint8 Instance);
 #if (SPI_IP_DMA_USED == STD_ON)
 static void Spi_Ip_CmdDmaTcdSGInit(uint8 Instance);
 #if (SPI_IP_ENABLE_DMAFASTTRANSFER_SUPPORT == STD_ON)
-static void Spi_Ip_CmdDmaTcdSGConfig(   uint8 Instance,
-                                        uint8 TCDSGId,
-                                        uint32 CmdAdd,
-                                        uint16 Iter,
-                                        uint8 DisHwReq
-                                    );
+static void Spi_Ip_CmdDmaTcdSGConfig(uint8 Instance,
+                                     uint8 TCDSGId,
+                                     uint32 CmdAdd,
+                                     uint16 Iter,
+                                     uint8 DisHwReq);
 static void Spi_Ip_DmaFastConfig(uint8 Instance, const Spi_Ip_FastTransferType *FastTransferCfg, uint8 NumberOfTransfer);
 static void Spi_Ip_RxDmaTcdSGConfig(uint8 Instance, uint8 TCDSGIndex, uint8 DisHwReq);
 static void Spi_Ip_RxDmaTcdSGInit(uint8 Instance);
@@ -262,7 +263,15 @@ static uint16 Spi_Ip_WriteCmdFifo(Spi_Ip_StateStructureType* State, SPI_Type *Ba
     uint16 i;
 
     NumberOfCmdWrites = (uint16)((Base->SREX) & SPI_SREX_CMDCTR_MASK) >> SPI_SREX_CMDCTR_SHIFT;
-    NumberOfCmdWrites = SPI_IP_FIFO_SIZE_U16 - NumberOfCmdWrites;
+    if (NumberOfCmdWrites <= SPI_IP_FIFO_SIZE_U16)
+    {
+        NumberOfCmdWrites = SPI_IP_FIFO_SIZE_U16 - NumberOfCmdWrites;
+    }
+    else
+    {
+        /* Handle hw error on bits. Ceil CMDCTR and calculate result: SPI_IP_FIFO_SIZE_U16 - SPI_IP_FIFO_SIZE_U16 */
+        NumberOfCmdWrites = 0;
+    }
     if (NumberOfCmdWrites > State->ExpectedCmdFifoWrites)
     {
         NumberOfCmdWrites = State->ExpectedCmdFifoWrites;
@@ -317,6 +326,10 @@ static void Spi_Ip_TransferProcess(uint8 Instance)
         {
             /* Read all data available in receive HW fifo. */
             NumberOfReads = (uint16)(((Base->SR) & SPI_SR_RXCTR_MASK) >> SPI_SR_RXCTR_SHIFT);
+            if (NumberOfReads > SPI_IP_FIFO_SIZE_U16)
+            {
+                NumberOfReads = SPI_IP_FIFO_SIZE_U16;
+            }
             if(NumberOfReads != 0u)
             {
                 /* Read data from RX FIFO */
@@ -460,8 +473,10 @@ static void Spi_Ip_UpdateCtarAndPushr(Spi_Ip_StateStructureType* State, SPI_Type
             State->PushrCmds[i] = (uint16)(((PushrCmd32 & (~SPI_PUSHR_CTAS_MASK)) |
                                     SPI_PUSHR_CTAS(i)) >> 16u);
         }
+        /* Clear PUSHR_PP_MCSC bit for last frame */
+        State->PushrCmds[i - 1u] &= ~SPI_PUSHR_PP_MCSC_MASK_U16;
         /* Update last pushr to clear CS if needed */
-        if ((State->PushrCmds[i - 1u] & SPI_IP_PUSHR_CONT_MASK_U16) != 0u)
+        if (((State->PushrCmds[i - 1u] & SPI_IP_PUSHR_CONT_MASK_U16) != 0u) && (State->KeepCs == FALSE))
         {
             State->PushrCmds[i - 1u] &= ~SPI_IP_PUSHR_CONT_MASK_U16;
         }
@@ -817,12 +832,11 @@ static void Spi_Ip_RxDmaTcdSGConfig(uint8 Instance, uint8 TCDSGIndex, uint8 DisH
 /**
 * @brief   This function will configure TCD Scatter Gather for the CMD DMA channel
 */
-static void Spi_Ip_CmdDmaTcdSGConfig(   uint8 Instance,
-                                        uint8 TCDSGId,
-                                        uint32 CmdAdd,
-                                        uint16 Iter,
-                                        uint8 DisHwReq
-                                    )
+static void Spi_Ip_CmdDmaTcdSGConfig(uint8 Instance,
+                                     uint8 TCDSGId,
+                                     uint32 CmdAdd,
+                                     uint16 Iter,
+                                     uint8 DisHwReq)
 {
     const Spi_Ip_StateStructureType* State = Spi_Ip_apxStateStructureArray[Instance];
     Dma_Ip_LogicChannelTransferListType DmaTcdList[3u];
@@ -1628,6 +1642,10 @@ static boolean Spi_Ip_SyncReadWriteStep(Spi_Ip_StateStructureType *State, SPI_Ty
     /* RECEIVE */
     /* Read all data available in receive HW fifo. */
     NumberOfReads = (uint16)(((Base->SR) & SPI_SR_RXCTR_MASK) >> SPI_SR_RXCTR_SHIFT);
+    if (NumberOfReads > SPI_IP_FIFO_SIZE_U16)
+    {
+        NumberOfReads = SPI_IP_FIFO_SIZE_U16;
+    }
     if(NumberOfReads != 0u)
     {
         /* Read data from RX FIFO */
@@ -1639,13 +1657,11 @@ static boolean Spi_Ip_SyncReadWriteStep(Spi_Ip_StateStructureType *State, SPI_Ty
 }
 
 /*================================================================================================*/
-Spi_Ip_StatusType Spi_Ip_SyncTransmit(
-                                      const Spi_Ip_ExternalDeviceType *ExternalDevice,
+Spi_Ip_StatusType Spi_Ip_SyncTransmit(const Spi_Ip_ExternalDeviceType *ExternalDevice,
                                       const uint8 *TxBuffer,
                                       uint8 *RxBuffer,
                                       uint16 Length,
-                                      uint32 TimeOut
-                                     )
+                                      uint32 TimeOut)
 {
     SPI_Type *Base;
     Spi_Ip_StateStructureType *State;
@@ -1714,13 +1730,11 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
     return Status;
 }
 
-Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
-                                       const Spi_Ip_ExternalDeviceType *ExternalDevice,
+Spi_Ip_StatusType Spi_Ip_AsyncTransmit(const Spi_Ip_ExternalDeviceType *ExternalDevice,
                                        const uint8 *TxBuffer,
                                        uint8 *RxBuffer,
                                        uint16 Length,
-                                       Spi_Ip_CallbackType EndCallback
-                                      )
+                                       Spi_Ip_CallbackType EndCallback)
 {
     SPI_Type* Base;
     Spi_Ip_StateStructureType* State;
@@ -1777,11 +1791,9 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
 }
 
 #if ((SPI_IP_DMA_USED == STD_ON) && (SPI_IP_ENABLE_DMAFASTTRANSFER_SUPPORT == STD_ON))
-Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(
-                                       const Spi_Ip_FastTransferType *FastTransferCfg,
-                                       uint8 NumberOfTransfer,
-                                       Spi_Ip_CallbackType EndCallback
-                                      )
+Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(const Spi_Ip_FastTransferType *FastTransferCfg,
+                                           uint8 NumberOfTransfer,
+                                           Spi_Ip_CallbackType EndCallback)
 {
     SPI_Type* Base;
     Spi_Ip_StateStructureType* State;
@@ -2033,8 +2045,8 @@ void Spi_Ip_ManageBuffers(uint8 Instance)
 
 Spi_Ip_StatusType Spi_Ip_UpdateTransferParam
 (
-     const Spi_Ip_ExternalDeviceType *ExternalDevice,
-     const Spi_Ip_TransferAdjustmentType *Param
+    const Spi_Ip_ExternalDeviceType *ExternalDevice,
+    const Spi_Ip_TransferAdjustmentType *Param
 )
 {
     Spi_Ip_StateStructureType* State;

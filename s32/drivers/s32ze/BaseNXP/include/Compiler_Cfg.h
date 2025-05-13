@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file    Compiler_Cfg.h
 *   @implements     Compiler_Cfg.h_Artifact
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR BaseNXP - Module specific memory and pointer classes
 *   @details The file Compiler_Cfg.h contains the module specific parameters (ptrclass and 

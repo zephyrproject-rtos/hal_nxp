@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -43,7 +43,7 @@ extern "C"{
 #define SPI_IP_AR_RELEASE_REVISION_VERSION     0
 #define SPI_IP_SW_MAJOR_VERSION                2
 #define SPI_IP_SW_MINOR_VERSION                0
-#define SPI_IP_SW_PATCH_VERSION                0
+#define SPI_IP_SW_PATCH_VERSION                1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -143,13 +143,11 @@ Spi_Ip_StatusType Spi_Ip_DeInit(uint8 Instance);
 *
 * @implements Spi_Ip_SyncTransmit_Activity
 */
-Spi_Ip_StatusType Spi_Ip_SyncTransmit(
-                                      const Spi_Ip_ExternalDeviceType *ExternalDevice,
+Spi_Ip_StatusType Spi_Ip_SyncTransmit(const Spi_Ip_ExternalDeviceType *ExternalDevice,
                                       const uint8 *TxBuffer,
                                       uint8 *RxBuffer,
                                       uint16 Length,
-                                      uint32 TimeOut
-                                     );
+                                      uint32 TimeOut);
 
 /**
 * @brief            SPI/DSPI asynchronous transmission.
@@ -167,13 +165,11 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
 *                   SPI_IP_STATUS_FAIL: Transmission command has not been accepted.
 * @implements Spi_Ip_AsyncTransmit_Activity
 */
-Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
-                                       const Spi_Ip_ExternalDeviceType *ExternalDevice,
+Spi_Ip_StatusType Spi_Ip_AsyncTransmit(const Spi_Ip_ExternalDeviceType *ExternalDevice,
                                        const uint8 *TxBuffer,
                                        uint8 *RxBuffer,
                                        uint16 Length,
-                                       Spi_Ip_CallbackType EndCallback
-                                      );
+                                       Spi_Ip_CallbackType EndCallback);
 
 #if (SPI_IP_DMA_USED == STD_ON)
 #if (SPI_IP_ENABLE_DMAFASTTRANSFER_SUPPORT == STD_ON)
@@ -247,11 +243,9 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
 *                   SPI_IP_STATUS_FAIL: Transmission command has not been accepted.
 * @implements Spi_Ip_AsyncTransmitFast_Activity
 */
-Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(
-                                       const Spi_Ip_FastTransferType *FastTransferCfg,
-                                       uint8 NumberOfTransfer,
-                                       Spi_Ip_CallbackType EndCallback
-                                      );
+Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(const Spi_Ip_FastTransferType *FastTransferCfg,
+                                           uint8 NumberOfTransfer,
+                                           Spi_Ip_CallbackType EndCallback);
 #endif
 #endif
 
@@ -290,8 +284,8 @@ void Spi_Ip_ManageBuffers(uint8 Instance);
 */
 Spi_Ip_StatusType Spi_Ip_UpdateTransferParam
 (
-     const Spi_Ip_ExternalDeviceType *ExternalDevice,
-     const Spi_Ip_TransferAdjustmentType *Param
+    const Spi_Ip_ExternalDeviceType *ExternalDevice,
+    const Spi_Ip_TransferAdjustmentType *Param
 );
 
 /**

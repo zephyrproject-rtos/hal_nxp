@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Adc.h
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module interface
 *   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
@@ -37,7 +37,7 @@ extern "C" {
 #define SCHM_ADC_AR_RELEASE_REVISION_VERSION  0
 #define SCHM_ADC_SW_MAJOR_VERSION             2
 #define SCHM_ADC_SW_MINOR_VERSION             0
-#define SCHM_ADC_SW_PATCH_VERSION             0
+#define SCHM_ADC_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
