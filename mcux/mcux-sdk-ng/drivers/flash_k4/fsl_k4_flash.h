@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,14 +24,14 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
 
 /*! @brief Flash driver version for ROM*/
 enum _flash_driver_version_constants
 {
     kFLASH_DriverVersionName   = 'F', /*!< Flash driver version name.*/
     kFLASH_DriverVersionMajor  = 2,   /*!< Major flash driver version.*/
-    kFLASH_DriverVersionMinor  = 1,   /*!< Minor flash driver version.*/
+    kFLASH_DriverVersionMinor  = 3,   /*!< Minor flash driver version.*/
     kFLASH_DriverVersionBugfix = 0    /*!< Bugfix for flash driver version.*/
 };
 
@@ -261,9 +261,11 @@ status_t Read_IFR_Into_MISR(
 
 /*! @} */
 
+#if defined(SMSCM)
 void flash_cache_disable(void);
 
 void flash_cache_speculation_control(bool isPreProcess, FMU_Type *base);
+#endif
 
 #if defined(__cplusplus)
 }
