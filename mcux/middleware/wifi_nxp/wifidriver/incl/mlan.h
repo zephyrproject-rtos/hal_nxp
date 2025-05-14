@@ -32,6 +32,8 @@ Change log:
 
 #if defined(SD9177)
 #define CONFIG_TCP_ACK_ENH 1
+#endif
+#if defined(SD9177) || defined(IW610)
 #define CONFIG_FW_VDLL     1
 #if !CONFIG_WIFI_CAPA
 #define CONFIG_WIFI_CAPA 1

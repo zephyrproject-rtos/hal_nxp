@@ -218,12 +218,13 @@ void wifi_nxp_wpa_supp_event_proc_chan_list_changed(void *if_priv, const char *a
     event.channel_list_changed.alpha2[2] = alpha2[2];
 
 #if CONFIG_WPA_SUPP_AP
-    if (wifi_if_ctx_rtos->hostapd)
+    if (wifi_if_ctx_rtos->hostapd && wifi_if_ctx_rtos->hostapd_callbk_fns.chan_list_changed)
     {
         wifi_if_ctx_rtos->hostapd_callbk_fns.chan_list_changed(wifi_if_ctx_rtos->hapd_drv_if_ctx, &event);
     }
     else
 #endif
+    if (wifi_if_ctx_rtos->supp_callbk_fns.chan_list_changed)
     {
         wifi_if_ctx_rtos->supp_callbk_fns.chan_list_changed(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
     }
@@ -823,6 +824,9 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
     wifi_scan_channel_list_t *chan_list    = NULL;
     t_u8 channels[WIFI_SCAN_MAX_NUM_CHAN]  = {0};
     mlan_scan_type scan_type               = MLAN_SCAN_TYPE_ACTIVE;
+#if CONFIG_SCAN_CHANNEL_GAP
+    t_u16 scan_chan_gap = 0;
+#endif
 
     if (!if_priv || !params)
     {
@@ -946,13 +950,23 @@ int wifi_nxp_wpa_supp_scan2(void *if_priv, struct wpa_driver_scan_params *params
         wm_wifi.hostapd_op = true;
     }
 #endif
+#if CONFIG_SCAN_CHANNEL_GAP
+    if (is_uap_started() || is_sta_connected())
+    {
+        scan_chan_gap = SCAN_CHANNEL_GAP_VALUE;
+    }
+    else
+    {
+        scan_chan_gap = 0;
+    }
+#endif
 
     status = wifi_send_scan_cmd(bss_mode, bssid, ssid, params->num_ssids, num_chans, chan_list, 0,
 #if CONFIG_SCAN_WITH_RSSIFILTER
                                 params->filter_rssi,
 #endif
 #if CONFIG_SCAN_CHANNEL_GAP
-                                50U,
+                                scan_chan_gap,
 #endif
                                 false, false);
     if (status != WM_SUCCESS)
@@ -1920,12 +1934,14 @@ int wifi_nxp_wpa_supp_set_country(void *if_priv, const char *alpha2)
     }
 #endif
 
-#if defined(RW610) && ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+#if ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+#if defined(RW610) || defined(IW610)
     ret = wlan_set_ru_power_cfg(region_code);
     if (ret != WM_SUCCESS)
     {
         return -WM_FAIL;
     }
+#endif
 #endif
 
     return ret;
@@ -3560,7 +3576,13 @@ out:
 
 bool wifi_nxp_wpa_get_modes(void *if_priv)
 {
-    return (!ISSUPP_NO5G(mlan_adap->fw_cap_ext));
+    return (!ISSUPP_NO5G(mlan_adap->fw_cap_ext)
+            && ((mlan_adap->fw_bands & BAND_A)
+            || (mlan_adap->fw_bands & BAND_AN)
+#if CONFIG_11AC
+            || (mlan_adap->fw_bands & BAND_AAC)
+#endif
+           ));
 }
 
 void wifi_nxp_wpa_supp_cancel_action_wait(void *if_priv)
