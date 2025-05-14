@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -74,12 +74,36 @@ status_t FLASH_Init(flash_config_t *config)
         /* M33 flash size 512KB */
         config->msf1Config[0].flashDesc.totalSize =
             FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE_512KB;
-#elif (defined(CPU_KW47B42ZB7AFTA_cm33_core0) || defined(CPU_MCXW727CMFTA_cm33_core0))
+#elif (defined(CPU_KW47B42ZB7AFTA_cm33_core0) || defined(CPU_KW47B42ZB6AFTA_cm33_core0) || \
+     defined(CPU_KW47B42Z97AFTA_cm33_core0) || defined(CPU_KW47B42Z96AFTA_cm33_core0) || \
+     defined(CPU_KW47B42Z83AFTA_cm33_core0) || defined(CPU_KW47B42ZB3AFTA_cm33_core0) || \
+     defined(CPU_KW47B42ZB2AFTA_cm33_core0) || defined(CPU_KW47Z420B2AFTA) || \
+     defined(CPU_KW47Z420B3AFTA) || defined(CPU_KW47Z42092AFTA) || \
+     defined(CPU_KW47Z42082AFTA) || defined(CPU_MCXW727DMFTA_cm33_core0) || \
+     defined(CPU_MCXW727AMFTA_cm33_core0) || defined(CPU_MCXW727CMFTA_cm33_core0))
         config->msf1Config[0].flashDesc.totalSize =
             FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
 #elif (defined(CPU_MCXW716CMFTA) || (CPU_MCXW716CMFPA) || (CPU_MCXW716AMFTA) || (CPU_MCXW716AMFPA))
         config->msf1Config[0].flashDesc.totalSize =
             FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
+#elif (defined(CPU_KW47B42ZB7AFTA_cm33_core1) || defined(CPU_KW47B42ZB6AFTA_cm33_core1) || \
+     defined(CPU_KW47B42Z97AFTA_cm33_core1) || defined(CPU_KW47B42Z96AFTA_cm33_core1) || \
+     defined(CPU_KW47B42Z83AFTA_cm33_core1) || defined(CPU_KW47B42ZB3AFTA_cm33_core1) || \
+     defined(CPU_KW47B42ZB2AFTA_cm33_core1) || defined(CPU_MCXW727DMFTA_cm33_core1) || \
+     defined(CPU_MCXW727AMFTA_cm33_core1) || defined(CPU_MCXW727CMFTA_cm33_core1))
+        config->msf1Config[0].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
+#elif (defined(CPU_KW43B43ZC7MFTA) || defined(CPU_MCXW70ADMFTA))
+        config->msf1Config[0].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
+
+/* Instead of matching a device type default to generic size definition based on block count and size */
+
+#elif (defined(FLASH_FEATURE_PFLASH0_BLOCK_COUNT) && FLASH_FEATURE_PFLASH0_BLOCK_COUNT > 0)
+
+        config->msf1Config[0].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
+
 #else
 #error "No valid CPU defined!"
 #endif
@@ -108,7 +132,13 @@ status_t FLASH_Init(flash_config_t *config)
 
         config->msf1Config[1].ifrDesc.pflashIfr0Start   = FLASH_FEATURE_PFLASH1_IFR0_START_ADDRESS;
         config->msf1Config[1].ifrDesc.pflashIfr0MemSize = 0U;
-#elif (defined(CPU_KW47B42ZB7AFTA_cm33_core0) || defined(CPU_MCXW727CMFTA_cm33_core0))
+#elif (defined(CPU_KW47B42ZB7AFTA_cm33_core0) || defined(CPU_KW47B42ZB6AFTA_cm33_core0) || \
+     defined(CPU_KW47B42Z97AFTA_cm33_core0) || defined(CPU_KW47B42Z96AFTA_cm33_core0) || \
+     defined(CPU_KW47B42Z83AFTA_cm33_core0) || defined(CPU_KW47B42ZB3AFTA_cm33_core0) || \
+     defined(CPU_KW47B42ZB2AFTA_cm33_core0) || defined(CPU_KW47Z420B2AFTA) || \
+     defined(CPU_KW47Z420B3AFTA) || defined(CPU_KW47Z42092AFTA) || \
+     defined(CPU_KW47Z42082AFTA) || defined(CPU_MCXW727DMFTA_cm33_core0) || \
+     defined(CPU_MCXW727AMFTA_cm33_core0) || defined(CPU_MCXW727CMFTA_cm33_core0))
         config->msf1Config[1].flashDesc.blockBase  = FLASH_FEATURE_PFLASH1_START_ADDRESS;
         config->msf1Config[1].flashDesc.blockCount = FLASH_FEATURE_PFLASH1_BLOCK_COUNT;
         config->msf1Config[1].flashDesc.totalSize =
@@ -124,8 +154,26 @@ status_t FLASH_Init(flash_config_t *config)
 
         config->msf1Config[1].ifrDesc.pflashIfr0Start   = FLASH_FEATURE_PFLASH1_IFR0_START_ADDRESS;
         config->msf1Config[1].ifrDesc.pflashIfr0MemSize = FLASH_FEATURE_PFLASH1_IFR0_SIZE;
+#elif (defined(CPU_KW47B42ZB7AFTA_cm33_core1) || defined(CPU_KW47B42ZB6AFTA_cm33_core1) || \
+     defined(CPU_KW47B42Z97AFTA_cm33_core1) || defined(CPU_KW47B42Z96AFTA_cm33_core1) || \
+     defined(CPU_KW47B42Z83AFTA_cm33_core1) || defined(CPU_KW47B42ZB3AFTA_cm33_core1) || \
+     defined(CPU_KW47B42ZB2AFTA_cm33_core1) || defined(CPU_MCXW727DMFTA_cm33_core1) || \
+     defined(CPU_MCXW727AMFTA_cm33_core1) || defined(CPU_MCXW727CMFTA_cm33_core1))
+        config->msf1Config[1].flashDesc.blockBase  = FLASH_FEATURE_PFLASH1_START_ADDRESS;
+        config->msf1Config[1].flashDesc.blockCount = FLASH_FEATURE_PFLASH1_BLOCK_COUNT;
+        config->msf1Config[1].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH1_BLOCK_COUNT * FLASH_FEATURE_PFLASH1_BLOCK_SIZE;
+
+        config->msf1Config[1].ifrDesc.pflashIfr0Start   = FLASH_FEATURE_PFLASH1_IFR0_START_ADDRESS;
+        config->msf1Config[1].ifrDesc.pflashIfr0MemSize = FLASH_FEATURE_PFLASH1_IFR0_SIZE;
+#elif (defined(CPU_KW43B43ZC7MFTA) || defined(CPU_MCXW70ADMFTA))
+        config->msf1Config[1].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH1_BLOCK_COUNT * FLASH_FEATURE_PFLASH1_BLOCK_SIZE;
 #else
-#error "No valid CPU defined!"
+        /* PFLASH1 not present */
+        config->msf1Config[1].flashDesc.blockBase  = 0U;
+        config->msf1Config[1].flashDesc.blockCount = 0U;
+        config->msf1Config[1].flashDesc.totalSize  = 0U;
 #endif
 
         status = kStatus_FLASH_Success;
@@ -204,12 +252,26 @@ status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, u
     {
         // Align length to whole phrase.
         uint32_t alignedLength = ALIGN_DOWN(lengthInBytes, sizeof(uint8_t) * FLASH_FEATURE_PHRASE_SIZE);
-        uint32_t extraBytes    = lengthInBytes - alignedLength;
+        uint32_t extraBytes    = 0;
         uint32_t *srcWord      = (uint32_t *)(uintptr_t)src;
+
+        if (lengthInBytes >= alignedLength)
+        {
+            extraBytes = lengthInBytes - alignedLength;
+        }
+        else
+        {
+            return kStatus_FLASH_AddressError; // Handle underflow error
+        }
 
         if (alignedLength > 0U)
         {
-            uint32_t endAddress = start + alignedLength - 1U;
+            uint32_t endAddress;
+            if (start > UINT32_MAX - alignedLength)
+            {
+                return kStatus_FLASH_AddressError; // Handle overflow error
+            }
+            endAddress = start + alignedLength - 1U;
             while (start <= endAddress)
             {
                 status = FLASH_CMD_ProgramPhrase(base, start, srcWord);
@@ -271,12 +333,26 @@ status_t FLASH_ProgramPage(flash_config_t *config, FMU_Type *base, uint32_t star
     {
         // Align length to whole phrase.
         uint32_t alignedLength = ALIGN_DOWN(lengthInBytes, sizeof(uint8_t) * FLASH_FEATURE_PAGE_SIZE);
-        uint32_t extraBytes    = lengthInBytes - alignedLength;
+        uint32_t extraBytes    = 0;
         uint32_t *srcWord      = (uint32_t *)(uintptr_t)src;
+
+        if (lengthInBytes >= alignedLength)
+        {
+            extraBytes = lengthInBytes - alignedLength;
+        }
+        else
+        {
+            return kStatus_FLASH_AddressError; // Handle underflow error
+        }
 
         if (alignedLength > 0U)
         {
-            uint32_t endAddress = start + alignedLength - 1U;
+            uint32_t endAddress;
+            if (start > UINT32_MAX - alignedLength)
+            {
+                return kStatus_FLASH_AddressError; // Handle overflow error
+            }
+            endAddress = start + alignedLength - 1U;
             while (start <= endAddress)
             {
                 status = FLASH_CMD_ProgramPage(base, start, srcWord);
@@ -341,7 +417,12 @@ status_t FLASH_VerifyErasePhrase(flash_config_t *config, FMU_Type *base, uint32_
     status = pflash_check_param(config, base, &startaddr, lengthInBytes, FLASH_FEATURE_PHRASE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
-        uint32_t endAddress = startaddr + lengthInBytes - 1U;
+        uint32_t endAddress;
+        if (lengthInBytes > UINT32_MAX - startaddr)
+        {
+            return kStatus_FLASH_AddressError; // Handle overflow error
+        }
+        endAddress = startaddr + lengthInBytes - 1U;
         while (startaddr <= endAddress)
         {
             status = FLASH_CMD_VerifyErasePhrase(base, startaddr);
@@ -372,7 +453,12 @@ status_t FLASH_VerifyErasePage(flash_config_t *config, FMU_Type *base, uint32_t 
     status = pflash_check_param(config, base, &startaddr, lengthInBytes, FLASH_FEATURE_PAGE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
-        uint32_t endAddress = startaddr + lengthInBytes - 1U;
+        uint32_t endAddress;
+        if (startaddr > UINT32_MAX - lengthInBytes)
+        {
+            return kStatus_FLASH_AddressError; // Handle overflow error
+        }
+        endAddress = startaddr + lengthInBytes - 1U;
         while (startaddr <= endAddress)
         {
             status = FLASH_CMD_VerifyErasePage(base, startaddr);
@@ -403,7 +489,12 @@ status_t FLASH_VerifyEraseSector(flash_config_t *config, FMU_Type *base, uint32_
     status = pflash_check_param(config, base, &startaddr, lengthInBytes, FLASH_FEATURE_SECTOR_SIZE);
     if (status == kStatus_FLASH_Success)
     {
-        uint32_t endAddress = startaddr + lengthInBytes - 1U;
+        uint32_t endAddress;
+        if (startaddr > UINT32_MAX - lengthInBytes)
+        {
+            return kStatus_FLASH_AddressError; // Handle overflow error
+        }
+        endAddress = startaddr + lengthInBytes - 1U;
         while (startaddr <= endAddress)
         {
             status = FLASH_CMD_VerifyEraseSector(base, startaddr);
@@ -434,7 +525,12 @@ status_t FLASH_VerifyEraseIFRPhrase(flash_config_t *config, FMU_Type *base, uint
     status = ifr_check_param(config, base, &startaddr, lengthInBytes, FLASH_FEATURE_PHRASE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
-        uint32_t endAddress = startaddr + lengthInBytes - 1U;
+        uint32_t endAddress;
+        if (startaddr > UINT32_MAX - lengthInBytes)
+        {
+            return kStatus_FLASH_AddressError; // Handle overflow error
+        }
+        endAddress = startaddr + lengthInBytes - 1U;
         while (startaddr <= endAddress)
         {
             status = FLASH_CMD_VerifyEraseIFRPhrase(base, startaddr);
@@ -465,7 +561,12 @@ status_t FLASH_VerifyEraseIFRPage(flash_config_t *config, FMU_Type *base, uint32
     status = ifr_check_param(config, base, &startaddr, lengthInBytes, FLASH_FEATURE_PAGE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
-        uint32_t endAddress = startaddr + lengthInBytes - 1U;
+        uint32_t endAddress;
+        if (startaddr > UINT32_MAX - lengthInBytes)
+        {
+            return kStatus_FLASH_AddressError; // Handle overflow error
+        }
+        endAddress = startaddr + lengthInBytes - 1U;
         while (startaddr <= endAddress)
         {
             status = FLASH_CMD_VerifyEraseIFRPage(base, startaddr);
@@ -496,7 +597,12 @@ status_t FLASH_VerifyEraseIFRSector(flash_config_t *config, FMU_Type *base, uint
     status = ifr_check_param(config, base, &startaddr, lengthInBytes, FLASH_FEATURE_SECTOR_SIZE);
     if (status == kStatus_FLASH_Success)
     {
-        uint32_t endAddress = startaddr + lengthInBytes - 1U;
+        uint32_t endAddress;
+        if (startaddr > UINT32_MAX - lengthInBytes)
+        {
+            return kStatus_FLASH_AddressError; // Handle overflow error
+        }
+        endAddress = startaddr + lengthInBytes - 1U;
         while (startaddr <= endAddress)
         {
             status = FLASH_CMD_VerifyEraseIFRSector(base, startaddr);
@@ -587,7 +693,12 @@ status_t Read_Into_MISR(
         status = pflash_check_param(config, base, &startAddr, (ending - start), FLASH_FEATURE_PAGE_SIZE);
         if (status == kStatus_FLASH_Success)
         {
-            uint32_t endAddr = startAddr + ending - start;
+            uint32_t endAddr;
+            if (startAddr > UINT32_MAX - (ending - start))
+            {
+                return kStatus_FLASH_AddressError; // Handle overflow error
+            }
+            endAddr = startAddr + ending - start;
             status           = FLASH_CMD_ReadIntoMISR(base, startAddr, endAddr, seed, signature);
         }
         else
@@ -619,7 +730,12 @@ status_t Read_IFR_Into_MISR(
         status = ifr_check_param(config, base, &startAddr, (ending - start), FLASH_FEATURE_PAGE_SIZE);
         if (status == kStatus_FLASH_Success)
         {
-            uint32_t endAddr = startAddr + ending - start;
+            uint32_t endAddr;
+            if (startAddr > UINT32_MAX - (ending - start))
+            {
+                return kStatus_FLASH_AddressError; // Handle overflow error
+            }
+            endAddr = startAddr + ending - start;
             status           = FLASH_CMD_ReadIFRIntoMISR(base, startAddr, endAddr, seed, signature);
         }
         else
@@ -672,6 +788,7 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
     return status;
 }
 
+#if defined(SMSCM)
 #if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && (FLASH_DRIVER_IS_FLASH_RESIDENT == 1)
 #if defined(__IAR_SYSTEMS_ICC__)
 __ramfunc
@@ -687,6 +804,7 @@ __attribute__ ((section (".ramfunc")))
     SMSCM->OCMDR0 = (SMSCM->OCMDR0 & (~SMSCM_FLASH_SPECULATION_CTRL_MASK)) | SMSCM_FLASH_SPECULATION_CTRL(0x3);
     __ISB();
     __DSB();
+
 }
 
 #if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && (FLASH_DRIVER_IS_FLASH_RESIDENT == 1)
@@ -737,6 +855,8 @@ __attribute__ ((section (".ramfunc")))
     __DSB();
 }
 
+#endif
+
 static status_t flash_check_param(
     flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t lengthInBytes, uint32_t alignmentBaseline)
 {
@@ -755,7 +875,7 @@ static status_t flash_check_param(
     {
         status = kStatus_FLASH_InvalidArgument;
     }
-    else if ((start & (alignmentBaseline - 1U)) != 0u)
+    else if ((alignmentBaseline > 0U) && ((start & (alignmentBaseline - 1U)) != 0u))
     {
         /* Verify the start is alignmentBaseline aligned. */
         status = kStatus_FLASH_AlignmentError;
@@ -831,7 +951,7 @@ static status_t pflash_check_param(
     {
         status = kStatus_FLASH_InvalidArgument;
     }
-    else if ((*start & (alignmentBaseline - 1U)) != 0u)
+    else if ((alignmentBaseline > 0U) && ((*start & (alignmentBaseline - 1U)) != 0u))
     {
         /* Verify the start is alignmentBaseline aligned. */
         status = kStatus_FLASH_AlignmentError;
@@ -893,11 +1013,9 @@ static status_t ifr_check_param(
     {
         status = kStatus_FLASH_InvalidArgument;
     }
-    else
-
-        /* Verify the start is alignmentBaseline aligned. */
-        if ((*start & (alignmentBaseline - 1U)) != 0u)
+    else if ((alignmentBaseline > 0U) && ((*start & (alignmentBaseline - 1U)) != 0u))
     {
+        /* Verify the start is alignmentBaseline aligned. */
         status = kStatus_FLASH_AlignmentError;
     }
     else
