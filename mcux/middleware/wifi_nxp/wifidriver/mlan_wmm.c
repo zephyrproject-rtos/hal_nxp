@@ -194,7 +194,7 @@ t_void wlan_init_wmm_param(pmlan_adapter pmadapter)
      * aifsn,ecw_max,ecw_min, tx_op_limit only when ucm is set to 1.
      * othewise the default setting/behavoir in firmware will be used.
      */
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
     pmadapter->ac_params[AC_BE].aci_aifsn.acm   = 0;
     pmadapter->ac_params[AC_BE].aci_aifsn.aci   = AC_BE;
     pmadapter->ac_params[AC_BE].aci_aifsn.aifsn = 5;

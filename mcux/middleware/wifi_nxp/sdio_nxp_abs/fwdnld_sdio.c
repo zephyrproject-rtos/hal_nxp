@@ -132,7 +132,7 @@ int32_t wlan_reset_fw()
     t_u32 tries = 0;
     int32_t ret = FWDNLD_INTF_SUCCESS;
     bool rv;
-    uint32_t resp;
+    uint32_t resp = 1;
 
     //	wlan_pm_sdio_wakeup_card(pmadapter, MFALSE);
 
@@ -166,10 +166,8 @@ int32_t wlan_reset_fw()
         ret = FWDNLD_INTF_FAIL;
         goto done;
     }
-#if defined(SD8978) || defined(SD8987) || defined(SD9177)
-    (void)sdio_drv_creg_read(HOST_TO_CARD_EVENT_REG, 1, &resp);
-
-    rv = sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, resp | HOST_POWER_UP, &resp);
+#if defined(SD8978) || defined(SD8987) || defined(SD9177) || defined(IW610)
+    rv = sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, 0x10, &resp);
     if (rv == false)
     {
         sdio_io_e("Failed to write register.");

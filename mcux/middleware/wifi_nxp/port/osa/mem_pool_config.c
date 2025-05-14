@@ -40,7 +40,7 @@
 #define POOL_ID1_BUF0_CNT 2
 
 /* Buffer descriptor size already part of TX size so don't add again */
-#define POOL_ID1_BUF0_SZ 4600
+#define POOL_ID1_BUF0_SZ 6000
 
 // Pool 1 total buffer size calculation
 #define POOL_ID1_SZ (POOL_ID1_BUF0_SZ * POOL_ID1_BUF0_CNT)

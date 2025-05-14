@@ -34,15 +34,13 @@ Change Log:
 #define WLAN_TX_PWR_JP_A_DEFAULT 23
 /** 100mW */
 #define WLAN_TX_PWR_FR_100MW 20
-/** 10mW */
-#define WLAN_TX_PWR_FR_10MW 10
 /** 100mW */
 #define WLAN_TX_PWR_EMEA_DEFAULT 20
 /** 200mW */
 #define WLAN_TX_PWR_200MW 23
 /** 2000mW */
 #define WLAN_TX_PWR_CN_2000MW 33
-#if defined(RW610)
+#if defined(RW610) || defined(IW610)
 /** 22dBm */
 #define WLAN_TX_PWR_WW_DEFAULT 22
 #else
@@ -235,9 +233,9 @@ static const chan_freq_power_t channel_freq_power_FR_BG[] = {
     {3, 2422, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}, {4, 2427, WLAN_TX_PWR_FR_100MW, (bool)MFALSE},
     {5, 2432, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}, {6, 2437, WLAN_TX_PWR_FR_100MW, (bool)MFALSE},
     {7, 2442, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}, {8, 2447, WLAN_TX_PWR_FR_100MW, (bool)MFALSE},
-    {9, 2452, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}, {10, 2457, WLAN_TX_PWR_FR_10MW, (bool)MFALSE},
-    {11, 2462, WLAN_TX_PWR_FR_10MW, (bool)MFALSE}, {12, 2467, WLAN_TX_PWR_FR_10MW, (bool)MFALSE},
-    {13, 2472, WLAN_TX_PWR_FR_10MW, (bool)MFALSE}};
+    {9, 2452, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}, {10, 2457, WLAN_TX_PWR_FR_100MW, (bool)MFALSE},
+    {11, 2462, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}, {12, 2467, WLAN_TX_PWR_FR_100MW, (bool)MFALSE},
+    {13, 2472, WLAN_TX_PWR_FR_100MW, (bool)MFALSE}};
 
 /** Band: 'B/G', Region: Japan */
 static const chan_freq_power_t channel_freq_power_JPN40_BG[] = {{14, 2484, WLAN_TX_PWR_JP_BG_DEFAULT, (bool)MFALSE}};

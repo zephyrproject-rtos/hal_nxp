@@ -40,6 +40,7 @@ static void test_wlan_auto_arp(int argc, char **argv)
     else
         (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d\r\n", ret);
 }
+#if (CONFIG_HOST_SLEEP && CONFIG_MEF_CFG)
 static void dump_wlan_add_packet_filter()
 {
     (void)PRINTF("Usage:\r\n");
@@ -98,13 +99,16 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
     else
         (void)PRINTF("Failed to enabled magic pkt filter offload, error: %d", ret);
 }
+#endif /* CONFIG_HOST_SLEEP && CONFIG_MEF_CFG */
 #endif
 
 static struct cli_command features[] = {
     {"enable-ns-offload", NULL, test_wlan_ns_offload},
     {"wlan-auto-arp", NULL, test_wlan_auto_arp},
+#if (CONFIG_HOST_SLEEP && CONFIG_MEF_CFG)
     {"wlan-add-packet-filter", "0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........",
      test_wlan_add_packet_filter},
+#endif
 };
 
 /* Register our commands with the MTF. */
