@@ -19,7 +19,7 @@
 /** device support 2.4G 242 tone RUs */
 #define AX_2G_20MHZ_SUPPORT MBIT(5)
 
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
 /**
  *  firmware 11ax tlv sequence number, for judging 2.4G or 5G tlv
  *  firmware add 11ax tlv as 0-5G 1-2.4G to stack
@@ -35,7 +35,7 @@ t_u16 wlan_fill_he_cap_tlv(mlan_private *pmpriv, t_u16 band, MrvlIEtypes_Extensi
 int wlan_cmd_append_11ax_tlv(mlan_private *pmpriv, BSSDescriptor_t *pbss_desc, t_u8 **ppbuffer);
 void wlan_update_11ax_cap(mlan_adapter *pmadapter,
                           MrvlIEtypes_Extension_t *hw_he_cap
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
                           ,
                           int tlv_idx
 #endif

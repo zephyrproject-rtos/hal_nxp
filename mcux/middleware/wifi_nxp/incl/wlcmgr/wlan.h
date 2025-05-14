@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r51.z_up.p3"
+#define WLAN_DRV_VERSION "v1.3.r51.z_up.p9"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -191,6 +191,9 @@ typedef enum
 #endif
 #elif defined(WIFI_88W8987_BOARD_MURATA_1ZM_M2) || defined(WIFI_IW416_BOARD_MURATA_1XK_M2)
 #define HOST_WAKEUP_GPIO_PIN 2
+#define CARD_WAKEUP_GPIO_PIN 16
+#elif defined(WIFI_IW610_BOARD_MURATA_2LL_M2)
+#define HOST_WAKEUP_GPIO_PIN 4
 #define CARD_WAKEUP_GPIO_PIN 16
 #else
 #define HOST_WAKEUP_GPIO_PIN 1
@@ -1538,15 +1541,15 @@ typedef wifi_twt_setup_config_t wlan_twt_setup_config_t;
  * \ref wifi_twt_teardown_config_t
  */
 typedef wifi_twt_teardown_config_t wlan_twt_teardown_config_t;
-/** Configuration for Broadcast TWT setup
+/** Configuration for Broadcast TWT Setup
  * \ref wifi_btwt_config_t
  */
 typedef wifi_btwt_config_t wlan_btwt_config_t;
-/** Configuration for TWT report
+/** Configuration for TWT Report
  * \ref wifi_twt_report_t
  */
 typedef wifi_twt_report_t wlan_twt_report_t;
-/** Configuration for TWT information
+/** Configuration for TWT Information
  * \ref wifi_twt_information_t
  */
 typedef wifi_twt_information_t wlan_twt_information_t;
@@ -1602,6 +1605,17 @@ typedef wifi_csi_config_params_t wlan_csi_config_params_t;
 typedef wifi_net_monitor_t wlan_net_monitor_t;
 #endif
 
+#if HOST_TXRX_MGMT_FRAME
+#define TXRX_MGMT_FRAME_HEADER_SIZE 8
+// frmctl + durationid + addr1 + addr2 + addr3 + seqctl + addr4
+#define TXRX_MGMT_FRAME_HEADER_LEN (2 + 2 + 6 + 6 + 6 + 2 + 6)
+
+/** Configuration for host tx frame from
+ * \ref wifi_host_tx_frame_params_t
+ */
+typedef wifi_host_tx_frame_params_t wlan_host_tx_frame_params_t;
+#endif
+
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
 /** Configuration for GPIO independent reset
  * \ref wifi_indrst_cfg_t
@@ -1621,6 +1635,10 @@ typedef txrate_setting wlan_txrate_setting;
  * \ref wifi_rssi_info_t
  */
 typedef wifi_rssi_info_t wlan_rssi_info_t;
+#endif
+
+#if CONFIG_WIFI_CHANNEL_LOAD
+typedef wifi_802_11_chan_load_t wlan_802_11_chan_load_t;
 #endif
 
 #if CONFIG_EXTERNAL_COEX_PTA
@@ -2055,6 +2073,7 @@ enum wlan_mon_task_event
 {
     HOST_SLEEP_HANDSHAKE = 1,
     HOST_SLEEP_EXIT,
+    HOST_SLEEP_HANDSHAKE_SKIP,
     WIFI_RECOVERY_REQ,
 };
 
@@ -4056,6 +4075,7 @@ int wlan_set_auto_arp(void);
 int wlan_set_auto_ping(void);
 #endif /*  CONFIG_AUTO_PING */
 
+#if (CONFIG_HOST_SLEEP && CONFIG_MEF_CFG)
 /**
  * Use this API to enable WOWLAN (wake-on-wireless-LAN) on magic packet RX in Wi-Fi firmware
  *
@@ -4065,6 +4085,8 @@ int wlan_set_auto_ping(void);
  *\return -WM_FAIL if command fails
  */
 int wlan_wowlan_cfg_ptn_match(wlan_wowlan_ptn_cfg_t *ptn_cfg);
+#endif
+
 /**
  * Use this API to enable NS offload in Wi-Fi firmware.
  *
@@ -4115,6 +4137,11 @@ int wlan_send_host_sleep(uint32_t wakeup_condition);
  * \return -WM_FAIL if command fails.
  */
 int wlan_get_wakeup_reason(uint16_t *hs_wakeup_reason);
+
+#ifdef IW610
+/** Use this API to register call back for host sleep confirm done*/
+void wlan_register_hs_callback(void (*hs_notify_cb)(void));
+#endif
 #endif
 
 /**
@@ -4551,8 +4578,8 @@ int wlan_set_sta_tx_power(t_u32 power_level);
 /**
  * Set worldwide safe mode TX power limits.
  * Set TX power limit and ru TX power limit according to the region code.
- * TX power limit: \ref rg_power_cfg_rw610
- * ru TX power limit: \ref ru_power_cfg_rw610
+ * TX power limit: \ref rg_power_cfg_info
+ * ru TX power limit: \ref ru_power_cfg_info
  *
  * \return WM_SUCCESS if successful.
  * \return -WM_FAIL if unsuccessful.
@@ -6045,17 +6072,18 @@ wlan_11ax_config_t *wlan_get_11ax_cfg(void);
 #if CONFIG_11AX_TWT
 /** Set broadcast TWT (target wake time) configuration parameters
  *
- * \param[in] btwt_config: Broadcast TWT setup parameters to be sent to firmware.
+ * \param[in] btwt_cfg Broadcast TWT Setup parameters to be sent to Firmware
  *
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
-int wlan_set_btwt_cfg(const wlan_btwt_config_t *btwt_config);
-
-/** Get broadcast TWT configuration parameters
+int wlan_set_btwt_cfg(wlan_btwt_config_t *btwt_cfg);
+/** Get broadcast TWT (target wake time) configuration parameters
  *
- * \return Broadcast TWT setup parameters default configuration array.
+ * \param[in] btwt_cfg Broadcast TWT Setup parameters to be sent to Firmware
+ *
+ * \return WM_SUCCESS if successful otherwise failure.
  */
-wlan_btwt_config_t *wlan_get_btwt_cfg(void);
+int wlan_get_btwt_cfg(wlan_btwt_config_t *btwt_cfg);
 
 /** Set TWT setup configuration parameters
  *
@@ -6127,6 +6155,19 @@ int wlan_get_mmsf(t_u8 *enable, t_u8 *Density, t_u8 *MMSF);
 
 #if CONFIG_WIFI_RECOVERY
 int wlan_recovery_test(void);
+#endif
+
+#if CONFIG_WIFI_CHANNEL_LOAD
+/**
+ * Set Wi-Fi channel load info.
+ *
+ */
+int wlan_channel_load(wlan_802_11_chan_load_t *chan_load);
+/**
+ * Get Wi-Fi channel load info.
+ *
+ */
+int wlan_get_channel_load(wlan_802_11_chan_load_t *chan_load);
 #endif
 
 #if CONFIG_WIFI_CLOCKSYNC
@@ -6931,6 +6972,16 @@ void wlan_register_monitor_user_callback(int (*monitor_data_recv_callback)(void 
 void wlan_deregister_net_monitor_user_callback(void);
 #endif
 
+#if HOST_TXRX_MGMT_FRAME
+/**
+ * Send the mgmt/data frame config parameter and payload to FW.
+ *
+ *\param[in] mgmtframe: Frame header and payload
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ */
+int wlan_mgmtframe_tx_cfg(wlan_host_tx_frame_params_t *mgmtframe);
+#endif
+
 #if CONFIG_WIFI_CAPA
 /** Check if Wi-Fi hardware support 802.11n for on 2.4G or 5G bands.
  *
@@ -7004,7 +7055,7 @@ int wlan_get_bandcfg(wlan_bandcfg_t *bandcfg);
 int wlan_set_rg_power_cfg(t_u16 region_code);
 #endif
 
-#if defined(RW610) && ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+#if ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
 /**
  * set ru tx power table
  * \param[in] region_code: region code
@@ -7191,6 +7242,13 @@ int wlan_set_region_code(unsigned int region_code);
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
 int wlan_get_region_code(unsigned int *region_code);
+
+/** Generates 11D info from user specified regioncode
+ *  and download to FW
+ *
+ * \return WM_SUCCESS if successful otherwise fail.
+ */
+int wlan_create_dnld_countryinfo(void);
 
 const chan_freq_power_t  *wlan_get_regulatory_domain(uint8_t chan_freq, int *cfp_no);
 

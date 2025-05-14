@@ -23,7 +23,7 @@ Change log:
 /********************************************************
                 Local Constants
 ********************************************************/
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
 /** minimum scan time for passive to active scan */
 #define MIN_PASSIVE_TO_ACTIVE_SCAN_TIME 150
 #endif
@@ -205,9 +205,10 @@ static t_u8 is_rsn_oui_present(mlan_adapter *pmadapter, BSSDescriptor_t *pbss_de
     t_u8 *oui       = MNULL;
     IEBody *ie_body = MNULL;
     t_u8 ret        = MLAN_OUI_NOT_PRESENT;
+#if !CONFIG_WPA_SUPP
     IEEEtypes_VendorHeader_t *hdr = MNULL;
     const t_u8 wfa_oui[3] = {0x50, 0x6f, 0x9a};
-
+#endif
     ENTER();
     if (((pbss_desc->prsn_ie != MNULL) && ((*(pbss_desc->prsn_ie)).ieee_hdr.element_id == RSN_IE)))
     {
@@ -220,6 +221,7 @@ static t_u8 is_rsn_oui_present(mlan_adapter *pmadapter, BSSDescriptor_t *pbss_de
         }
     }
 
+#if !CONFIG_WPA_SUPP
     if (pbss_desc->prsno_ie != MNULL)
     {
         hdr = (IEEEtypes_VendorHeader_t *)(void *)pbss_desc->prsno_ie;
@@ -253,6 +255,7 @@ static t_u8 is_rsn_oui_present(mlan_adapter *pmadapter, BSSDescriptor_t *pbss_de
             }
         }
     }
+#endif
 
     LEAVE();
     return ret;
@@ -482,7 +485,7 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
                         /* Skip DFS channels if required */
                         if (pmadapter->skip_dfs)
                             continue;
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
                         scan_type = MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE;
 #else
                         scan_type = MLAN_SCAN_TYPE_PASSIVE;
@@ -508,7 +511,7 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
                 pscan_chan_list[chan_idx].max_scan_time =
                     wlan_cpu_to_le16((t_u16)puser_scan_in->chan_list[0].scan_time);
             }
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
             else if (scan_type == MLAN_SCAN_TYPE_PASSIVE || scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
 #else
             else if (scan_type == MLAN_SCAN_TYPE_PASSIVE)
@@ -525,7 +528,7 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
                 pscan_chan_list[chan_idx].max_scan_time = wlan_cpu_to_le16(pmadapter->active_scan_time);
             }
 
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
             {
                 pscan_chan_list[chan_idx].max_scan_time =
@@ -533,7 +536,7 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
                 pscan_chan_list[chan_idx].chan_scan_mode.passive_to_active_scan = MTRUE;
             }
 #endif
-#if defined(RW610) || defined(SD9177)
+#if defined(RW610) || defined(SD9177) || defined(IW610)
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE || scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
 #else
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE)
@@ -549,7 +552,7 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
 
             pscan_chan_list[chan_idx].chan_number = (t_u8)cfp->channel;
 
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
             wscan_d("Channel: %d Type: %s %d", cfp->channel,
                     scan_type == MLAN_SCAN_TYPE_PASSIVE           ? "Passive" :
                     scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE ? "PassiveToActive" :
@@ -1351,7 +1354,7 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
                         /* Skip DFS channels if required */
                         if (pmadapter->skip_dfs)
                             continue;
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
                         scan_type = MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE;
 #else
                         scan_type = MLAN_SCAN_TYPE_PASSIVE;
@@ -1367,7 +1370,7 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
                     }
                 }
             }
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE || scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
 #else
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE)
@@ -1387,7 +1390,7 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
             }
             else
             {
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
                 if (scan_type == MLAN_SCAN_TYPE_PASSIVE || scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
 #else
                 if (scan_type == MLAN_SCAN_TYPE_PASSIVE)
@@ -1405,7 +1408,7 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
                 }
             }
 
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
             {
                 (pscan_chan_list + chan_idx)->chan_scan_mode.passive_to_active_scan = MTRUE;
@@ -1415,7 +1418,7 @@ static mlan_status wlan_scan_setup_scan_config(IN mlan_private *pmpriv,
             (pscan_chan_list + chan_idx)->min_scan_time = wlan_cpu_to_le16(scan_dur);
             (pscan_chan_list + chan_idx)->max_scan_time = wlan_cpu_to_le16(scan_dur);
 
-#if defined(RW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(SD9177) || defined(SD8978) || defined(IW610)
             wscan_d("Channel: %d Type: %s ", channel,
                     scan_type == MLAN_SCAN_TYPE_PASSIVE           ? "Passive" :
                     scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE ? "PassiveToActive" :
@@ -1502,9 +1505,12 @@ static mlan_status wlan_interpret_bss_desc_with_ie(IN pmlan_adapter pmadapter,
     const t_u8 epigram_oui[3]   = {0x00, 0x90, 0x4c};
     const t_u8 epigram_type1[1] = {0x33};
     const t_u8 epigram_type2[1] = {0x34};
+#if CONFIG_DRIVER_OWE || CONFIG_DRIVER_MBO || !CONFIG_WPA_SUPP
     const t_u8 wfa_oui[3]       = {0x50, 0x6f, 0x9a};
+#endif
+#if !CONFIG_WPA_SUPP
     const t_u8 rsno_type[3]     = {0x29, 0x2a, 0x2b};
-
+#endif
 #if CONFIG_DRIVER_OWE
     const t_u8 owe_type[1] = {0x01c};
 #endif
@@ -1924,6 +1930,7 @@ static mlan_status wlan_interpret_bss_desc_with_ie(IN pmlan_adapter pmadapter,
                     }
                 }
 #endif
+#if !CONFIG_WPA_SUPP
                 else if (__memcmp(pmadapter, pvendor_ie->vend_hdr.oui, wfa_oui, sizeof(wfa_oui)) == 0 &&
                          (pvendor_ie->vend_hdr.oui_type == rsno_type[0] ||
                          pvendor_ie->vend_hdr.oui_type == rsno_type[1] ||
@@ -1956,6 +1963,7 @@ static mlan_status wlan_interpret_bss_desc_with_ie(IN pmlan_adapter pmadapter,
                             pbss_entry->prsnxo_ie = &pbss_entry->rsnxo_ie_saved;
                     }
                 }
+#endif
 #if CONFIG_11K
                 /* Voice Enterprise Test Plan V1.2, test case 5.4, store other vendor specific ie */
                 else
@@ -2829,6 +2837,7 @@ static void adjust_pointers_to_internal_buffers(BSSDescriptor_t *pbss_entry, BSS
     {
         pbss_entry->prsn_ie = (IEEEtypes_Generic_t *)(void *)pbss_entry->rsn_ie_buff;
     }
+#if !CONFIG_WPA_SUPP
     if (pbss_entry->prsno_ie != NULL)
     {
         pbss_entry->prsno_ie = (IEEEtypes_Generic_t *)(void *)pbss_entry->rsno_ie_buff;
@@ -2837,14 +2846,17 @@ static void adjust_pointers_to_internal_buffers(BSSDescriptor_t *pbss_entry, BSS
     {
         pbss_entry->prsno2_ie = (IEEEtypes_Generic_t *)(void *)pbss_entry->rsno2_ie_buff;
     }
+#endif
     if (pbss_entry->prsnx_ie != NULL)
     {
         pbss_entry->prsnx_ie = &pbss_entry->rsnx_ie_saved;
     }
+#if !CONFIG_WPA_SUPP
     if (pbss_entry->prsnxo_ie != NULL)
     {
         pbss_entry->prsnxo_ie = &pbss_entry->rsnxo_ie_saved;
     }
+#endif
 #if CONFIG_WPA_SUPP
     if (pbss_new_entry->ies != NULL)
     {
@@ -3456,10 +3468,14 @@ static mlan_status wlan_update_ssid_in_beacon_buf(mlan_adapter *pmadapter,
                                                   IEEEtypes_Ssid_t *pssid,
                                                   IEEEtypes_ExtCap_t *pnew_extcap,
                                                   IEEEtypes_Generic_t *pnew_rsnx,
-                                                  IEEEtypes_Generic_t *pnew_rsn,
+                                                  IEEEtypes_Generic_t *pnew_rsn
+#if !CONFIG_WPA_SUPP
+                                                  ,
                                                   IEEEtypes_Generic_t *pnew_rsno,
                                                   IEEEtypes_Generic_t *pnew_rsno2,
-                                                  IEEEtypes_Generic_t *pnew_rsnxo)
+                                                  IEEEtypes_Generic_t *pnew_rsnxo
+#endif
+                                                  )
 {
 #if CONFIG_WPA_SUPP
     mlan_callbacks *pcb = (pmlan_callbacks)&pmadapter->callbacks;
@@ -3476,8 +3492,10 @@ static mlan_status wlan_update_ssid_in_beacon_buf(mlan_adapter *pmadapter,
 
     if (pnew_rsnx)
         beacon_buf_size += pnew_rsnx->ieee_hdr.len + sizeof(IEEEtypes_Header_t);
+#if !CONFIG_WPA_SUPP
     if (pnew_rsnxo)
         beacon_buf_size += pnew_rsnxo->ieee_hdr.len + sizeof(IEEEtypes_Header_t);
+#endif
 #if CONFIG_WPA_SUPP
     ret = pcb->moal_malloc(pmadapter->pmoal_handle, beacon_buf_size, MLAN_MEM_DEF, (t_u8 **)&pbeacon_buf);
     if (ret != MLAN_STATUS_SUCCESS || !pbeacon_buf)
@@ -3513,12 +3531,14 @@ static mlan_status wlan_update_ssid_in_beacon_buf(mlan_adapter *pmadapter,
                        sizeof(pnew_entry->rsnx_ie_saved));
         pnew_entry->prsnx_ie = &pnew_entry->rsnx_ie_saved;
     }
+#if !CONFIG_WPA_SUPP
     if (pnew_rsnxo)
     {
         (void)__memcpy(pmadapter, &pnew_entry->rsnxo_ie_saved, pnew_rsnxo,
                        sizeof(pnew_entry->rsnxo_ie_saved));
         pnew_entry->prsnxo_ie = &pnew_entry->rsnxo_ie_saved;
     }
+#endif
 
     if (pnew_rsn)
     {
@@ -3527,6 +3547,7 @@ static mlan_status wlan_update_ssid_in_beacon_buf(mlan_adapter *pmadapter,
         pnew_entry->rsn_ie_buff_len = pnew_rsn->ieee_hdr.len + sizeof(IEEEtypes_Header_t);
         pnew_entry->prsn_ie         = (IEEEtypes_Generic_t *)pnew_entry->rsn_ie_buff;
     }
+#if !CONFIG_WPA_SUPP
     if (pnew_rsno)
     {
         (void)__memcpy(pmadapter, pnew_entry->rsno_ie_buff, pnew_rsno,
@@ -3541,7 +3562,7 @@ static mlan_status wlan_update_ssid_in_beacon_buf(mlan_adapter *pmadapter,
         pnew_entry->rsno2_ie_buff_len = pnew_rsno2->ieee_hdr.len + sizeof(IEEEtypes_Header_t);
         pnew_entry->prsno2_ie         = (IEEEtypes_Generic_t *)pnew_entry->rsno2_ie_buff;
     }
-
+#endif
 #if CONFIG_WPA_SUPP
     /** copy fixed IE */
     (void)__memcpy(pmadapter, pbeacon_buf, pbss_entry->pbeacon_buf, BEACON_FIX_SIZE);
@@ -3693,11 +3714,13 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
 #endif
     IEEEtypes_ExtCap_t *pextcap = MNULL;
     IEEEtypes_Generic_t *prsnx  = MNULL;
+#if !CONFIG_WPA_SUPP
     IEEEtypes_VendorHeader_t *pvdr = MNULL;
     IEEEtypes_Generic_t *prsno = MNULL;
     IEEEtypes_Generic_t *prsno2 = MNULL;
     IEEEtypes_Generic_t *prsnxo = MNULL;
     const t_u8 wfa_oui[3] = {0x50, 0x6f, 0x9a};
+#endif
 
     ENTER();
 
@@ -3750,6 +3773,7 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
                 prsn = (IEEEtypes_Generic_t *)pos;
                 DBG_HEXDUMP(MCMD_D, "MBSSID RSN", pos, prsn->ieee_hdr.len + sizeof(IEEEtypes_Header_t));
                 break;
+#if !CONFIG_WPA_SUPP
             case VENDOR_SPECIFIC_221:
                 pvdr = (IEEEtypes_VendorHeader_t *)pos;
                 if (!__memcmp(pmadapter, pvdr->oui, wfa_oui, sizeof(wfa_oui)))
@@ -3768,6 +3792,7 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
                     }
                 }
                 break;
+#endif
             default:
                 break;
         }
@@ -3797,8 +3822,11 @@ static t_void wlan_parse_non_trans_bssid_profile(mlan_private *pmpriv,
             bss_new_entry->ssid.ssid_len = pssid->len;
             (void)__memcpy(pmadapter, bss_new_entry->ssid.ssid, pssid->ssid, MIN(pssid->len, MLAN_MAX_SSID_LENGTH));
             if (MLAN_STATUS_SUCCESS !=
-                wlan_update_ssid_in_beacon_buf(pmadapter, pbss_entry, bss_new_entry, pssid, pextcap, prsnx, prsn,
-                                               prsno, prsno2, prsnxo))
+                wlan_update_ssid_in_beacon_buf(pmadapter, pbss_entry, bss_new_entry, pssid, pextcap, prsnx, prsn
+#if !CONFIG_WPA_SUPP
+                                               , prsno, prsno2, prsnxo
+#endif
+                                               ))
             {
                 PRINTM(MERROR, "Fail to update MBSSID beacon buf\n");
                 pcb->moal_mfree(pmadapter->pmoal_handle, (t_u8 *)bss_new_entry);
@@ -4685,7 +4713,7 @@ mlan_status wlan_cmd_bgscan_config(IN mlan_private *pmpriv,
     max_bgscan_chan = WLAN_BG_SCAN_CHAN_MAX;
 
 #if CONFIG_UNII4_BAND_SUPPORT
-#if defined(SD9177)
+#if defined(SD9177) || defined(IW610)
     max_bgscan_chan = WLAN_BG_SCAN_CHAN_MAX_UNII_4;
 #endif
 #endif

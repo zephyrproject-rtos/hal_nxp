@@ -939,6 +939,18 @@ typedef struct
     int16_t bcn_nf_avg;
 } wifi_rssi_info_t;
 
+#if CONFIG_WIFI_CHANNEL_LOAD
+typedef PACK_START struct
+{
+    t_u16 action;
+    t_u16 ch_load;
+    t_s16 noise;
+    t_u16 rx_quality;
+    t_u16 duration;
+    t_u16 cca_th; /* not using cca_th in v18 */
+} PACK_END wifi_802_11_chan_load_t;
+#endif
+
 /**
  * Data structure for subband set
  *
@@ -1081,7 +1093,7 @@ typedef PACK_START struct
     /** Number of Channels */
     t_u8 num_chans;
     /** TRPC config */
-#if defined(SD9177)
+#if defined(SD9177) || defined(IW610)
     wifi_txpwrlimit_config_t txpwrlimit_config[43];
 #else
     wifi_txpwrlimit_config_t txpwrlimit_config[40];
@@ -1177,31 +1189,38 @@ typedef PACK_START struct
     /** TWT Flow Identifier. Range: [0-7] */
     t_u8 flow_identifier;
     /** Negotiation Type. 0: Future Individual TWT SP start time, 1: Next
-     * Wake TBTT time */
+     * Wake TBTT time, 3：Broadcast TWT */
     t_u8 negotiation_type;
     /** Tear down all TWT. 1: To teardown all TWT, 0 otherwise */
     t_u8 teardown_all_twt;
 } PACK_END wifi_twt_teardown_config_t;
 
-/** Wi-Fi BTWT Configuration */
+/** Wi-Fi Broadcast TWT AP config */
+#define BTWT_AGREEMENT_MAX 5
 typedef PACK_START struct
 {
-    /** Only support 1: Set*/
-    t_u16 action;
-    /** Broadcast TWT AP config */
-    t_u16 sub_id;
+    /** BTWT ID */
+    t_u8 btwt_id;
+    /** BTWT Mantissa */
+    t_u16 bcast_mantissa;
+    /** BTWT Exponent */
+    t_u8 bcast_exponent;
     /** Range 64-255 */
     t_u8 nominal_wake;
-    /** Max STA Support */
-    t_u8 max_sta_support;
-    /** TWT Mantissa */
-    t_u16 twt_mantissa;
-    /** TWT Offset */
-    t_u16 twt_offset;
-    /** TWT Exponent */
-    t_u8 twt_exponent;
-    /** SP Gap */
-    t_u8 sp_gap;
+} PACK_END btwt_set_t;
+/** BTWT AP Config parameters */
+typedef PACK_START struct
+{
+    /** Reserved */
+    t_u8 bcast_bet_sta_wait;
+    /** Reserved */
+    t_u16 bcast_offset;
+    /** Reserved */
+    t_u8 bcast_twtli;
+    /** Count of BTWT agreement sets */
+    t_u8 count;
+    /** BTWT agreement sets */
+    btwt_set_t btwt_sets[BTWT_AGREEMENT_MAX];
 } PACK_END wifi_btwt_config_t;
 
 #define WLAN_BTWT_REPORT_LEN     9
@@ -1379,6 +1398,32 @@ typedef PACK_START struct
     uint16_t qos_ctrl;
 } PACK_END wifi_data_info_t;
 #endif
+
+#if HOST_TXRX_MGMT_FRAME
+/** host tx frame params structure */
+typedef PACK_START struct
+{
+    /** Packet Length */
+    t_u16 frm_len;
+    /** Frame Control */
+    t_u16 frm_ctl;
+    /** Duration ID */
+    t_u16 duration_id;
+    /** Address1 */
+    t_u8 addr1[MLAN_MAC_ADDR_LENGTH];
+    /** Address2 */
+    t_u8 addr2[MLAN_MAC_ADDR_LENGTH];
+    /** Address3 */
+    t_u8 addr3[MLAN_MAC_ADDR_LENGTH];
+    /** Sequence Control */
+    t_u16 seq_ctl;
+    /** Address4 */
+    t_u8 addr4[MLAN_MAC_ADDR_LENGTH];
+    /** Frame payload */
+    t_u8 payload[];
+} PACK_END wifi_host_tx_frame_params_t;
+#endif
+
 /** Wifi frame types */
 typedef enum
 {

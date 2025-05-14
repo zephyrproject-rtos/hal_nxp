@@ -210,7 +210,7 @@ Change log:
 
 /** MU beamformer */
 #define DEFALUT_11AC_CAP_BEAMFORMING_RESET_MASK (MBIT(19))
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
 /** Short GI for 80MHz/TVHT_MODE_4C */
 #define DEFALUT_11AC_CAP_SHORTGI_80MHZ_RESET_MASK (MBIT(5))
 /** HE Phy Cap Info(40MHz in 2.4GHz band) */

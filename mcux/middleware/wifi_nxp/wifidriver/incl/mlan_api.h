@@ -333,6 +333,10 @@ int wifi_mmsf_cfg(const t_u16 action, t_u8 *enable, t_u8 *Density, t_u8 *MMSF);
 int wifi_recovery_test(void);
 #endif
 
+#if CONFIG_WIFI_CHANNEL_LOAD
+int wifi_channel_load(wlan_802_11_chan_load_t *cfg);
+int wifi_get_channel_load(wlan_802_11_chan_load_t *cfg);
+#endif
 /**
  * Get the string representation of the wlan firmware extended version.
  *

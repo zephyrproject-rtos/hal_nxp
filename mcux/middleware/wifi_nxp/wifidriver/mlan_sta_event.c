@@ -94,12 +94,7 @@ t_void wlan_reset_connect_state(pmlan_private priv, t_u8 drv_disconnect)
 
 #if CONFIG_WMM_UAPSD
     /* Need to put uapsd_sem before getting ra_list.plock in wlan_ralist_del_all_enh */
-    if (priv->adapter->pps_uapsd_mode)
-    {
-        OSA_SemaphorePost((osa_semaphore_handle_t)uapsd_sem);
-    }
-    priv->adapter->tx_lock_flag   = MFALSE;
-    priv->adapter->pps_uapsd_mode = MFALSE;
+    wifi_exit_uapsd_mode(priv);
 #endif
 
 #if CONFIG_GTK_REKEY_OFFLOAD
