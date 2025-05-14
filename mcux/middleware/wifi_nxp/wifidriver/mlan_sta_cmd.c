@@ -2036,6 +2036,37 @@ static mlan_status wlan_cmd_csi(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd, t
 }
 #endif
 
+#if CONFIG_WIFI_CHANNEL_LOAD
+/**
+ *  @brief This function sends channel load command to firmware.
+ *
+ *  @param pmpriv       A pointer to mlan_private structure
+ *  @param cmd          Hostcmd ID
+ *  @param cmd_action   Command action
+ *  @param pdata_buf    A void pointer to information buffer
+ *  @return             N/A
+ */
+mlan_status wlan_cmd_get_channel_load(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd, t_u16 cmd_action, t_void *pdata_buf)
+{
+    HostCmd_DS_802_11_GET_CH_LOAD *cfg_cmd = (HostCmd_DS_802_11_GET_CH_LOAD *)&cmd->params.channel_load;
+    wifi_802_11_chan_load_t *cfg              = (wifi_802_11_chan_load_t *)pdata_buf;
+
+    ENTER();
+
+    cmd->command    = wlan_cpu_to_le16(HostCmd_CMD_802_11_GET_CH_LOAD);
+    cmd->size       = wlan_cpu_to_le16(sizeof(HostCmd_DS_802_11_GET_CH_LOAD) + S_DS_GEN);
+    cfg_cmd->action = wlan_cpu_to_le16(cmd_action);
+
+    if (cmd_action == HostCmd_ACT_GEN_GET)
+    {
+        cfg_cmd->duration = (t_u16)cfg->duration;
+    }
+
+    LEAVE();
+    return MLAN_STATUS_SUCCESS;
+}
+#endif
+
 /********************************************************
                 Global Functions
 ********************************************************/
@@ -2298,6 +2329,11 @@ mlan_status wlan_ops_sta_prepare_cmd(IN t_void *priv,
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
         case HostCmd_CMD_INDEPENDENT_RESET_CFG:
             ret = wlan_cmd_ind_rst_cfg(cmd_ptr, cmd_action, pdata_buf);
+            break;
+#endif
+#if CONFIG_WIFI_CHANNEL_LOAD
+        case HostCmd_CMD_802_11_GET_CH_LOAD:
+            ret = wlan_cmd_get_channel_load(pmpriv, cmd_ptr, cmd_action, pdata_buf);
             break;
 #endif
         case HostCmd_CMD_802_11_TX_FRAME:

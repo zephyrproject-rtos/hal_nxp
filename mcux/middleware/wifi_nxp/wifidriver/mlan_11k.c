@@ -608,6 +608,7 @@ void wlan_add_rm_beacon_report(wlan_rrm_beacon_report_data *rep_data,
             pos += sizeof(bss_entry->wmm_ie);
         }
 
+#if !CONFIG_WPA_SUPP
         /* RSN Override */
         if (bss_entry->rsno_ie_buff_len > 0U)
         {
@@ -631,6 +632,7 @@ void wlan_add_rm_beacon_report(wlan_rrm_beacon_report_data *rep_data,
             (void)memcpy(pos, bss_entry->rsno2_ie_buff, bss_entry->rsno2_ie_buff_len);
             pos += bss_entry->rsno2_ie_buff_len;
         }
+#endif
 
         /* Others */
         if (bss_entry->vendor_ie_len > (t_u8)0U)

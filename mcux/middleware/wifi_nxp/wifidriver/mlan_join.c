@@ -798,6 +798,7 @@ static void wlan_cmd_append_pwe_tlv(mlan_private *priv, BSSDescriptor_t *pbss_de
     MrvlIEtypes_SAE_PWE_Mode_t *psae_pwe_mode_tlv = (MrvlIEtypes_SAE_PWE_Mode_t *)(void *)(*ppbuffer);
     t_u8 pwe = 0;
 
+#if !CONFIG_WPA_SUPP
     /* use RSNX or RSNXO */
     if (pbss_desc->prsnxo_ie &&
         (priv->sec_info.rsn_selector == MLAN_RSN_SELECTOR_RSNO ||
@@ -809,7 +810,9 @@ static void wlan_cmd_append_pwe_tlv(mlan_private *priv, BSSDescriptor_t *pbss_de
             pwe = pbss_desc->prsnxo_ie->data[0];
         }
     }
-    else if (pbss_desc->prsnx_ie)
+    else
+#endif
+    if (pbss_desc->prsnx_ie)
     {
         pwe = pbss_desc->prsnx_ie->data[0];
     }
@@ -827,6 +830,7 @@ static void wlan_cmd_append_pwe_tlv(mlan_private *priv, BSSDescriptor_t *pbss_de
     }
 }
 
+#if !CONFIG_WPA_SUPP
 static void wlan_cmd_append_rsno_tlv(mlan_private *priv, BSSDescriptor_t *pbss_desc, t_u8 **ppbuffer)
 {
     t_u8 *pos = (*ppbuffer);
@@ -893,6 +897,7 @@ static void wlan_cmd_append_rsno_tlv(mlan_private *priv, BSSDescriptor_t *pbss_d
     (*ppbuffer) += sizeof(MrvlIEtypesHeader_t) + tlv_hdr->len;
     tlv_hdr->len = wlan_cpu_to_le16(tlv_hdr->len);
 }
+#endif
 
 /********************************************************
                 Global Functions
@@ -1257,10 +1262,12 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
 
     wlan_cmd_append_generic_ie(pmpriv, &pos);
 
+#if !CONFIG_WPA_SUPP
     if (pmpriv->sec_info.rsn_selector != MLAN_RSN_SELECTOR_INVALID)
     {
         wlan_cmd_append_rsno_tlv(pmpriv, pbss_desc, &pos);
     }
+#endif
 
     cmd->size = wlan_cpu_to_le16((t_u16)(pos - (t_u8 *)passo) + S_DS_GEN);
 
