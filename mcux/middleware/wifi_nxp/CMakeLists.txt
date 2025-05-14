@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022-2024 NXP
 
+# define part number for this driver
+
 # Legacy MCUX SDK code is in mcux/mcux-sdk.
 # MCUX SDK NG code is in mcux/mcux-sdk-ng.
 # Use the right code by checking whether the platform is not supported by MCUX SDK NG.
@@ -9,8 +11,6 @@ if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
 else()
     set(MCUX_SDK_DIR ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng)
 endif()
-
-# define part number for this driver
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987
     SD8987
@@ -26,6 +26,10 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_IW61X
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801
     SD8801
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW610
+    IW610
 )
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_RW610
@@ -181,6 +185,20 @@ zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8801_MURATA_2DS_M2
     CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0E
 )
 
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW610_MURATA_2LL_M2
+    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2LL.h"
+    CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
+    CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
+    WIFI_BT_USE_M2_INTERFACE
+)
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IW610_RD_USD
+    WIFI_BT_TX_PWR_LIMITS="wlan_txpwrlimit_cfg_murata_2LL.h"
+    CONFIG_NXP_WIFI_ED_OFFSET_2G=0x0A
+    CONFIG_NXP_WIFI_ED_OFFSET_5G=0x0A
+    WIFI_BT_USE_USD_INTERFACE
+)
+
 zephyr_compile_definitions_ifdef(CONFIG_NXP_WIFI_BT_USE_USD_INTERFACE
     WIFI_BT_USE_USD_INTERFACE
 )
@@ -195,7 +213,7 @@ zephyr_library_compile_definitions(
     CONFIG_OSA_DEBUG_ASSERT_ENABLED=1
 )
 
-# mcux-sdk and mcux-sdk-ng shar the wifi_nxp, the lists and osa is
+# mcux-sdk and mcux-sdk-ng share the wifi_nxp, the lists and osa is
 # included in another way. Need add condition here.
 if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
   zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S)
@@ -225,6 +243,7 @@ zephyr_include_directories(
     wifi_bt_firmware/IW416
     wifi_bt_firmware/nw61x
     wifi_bt_firmware/8801
+    wifi_bt_firmware/iw610
     cli
     ${MCUX_SDK_DIR}/components/osa/
     ${MCUX_SDK_DIR}/components/lists/
@@ -328,7 +347,7 @@ zephyr_code_relocate(FILES
                      wifidriver/wifi-imu.c
                      ${MCUX_SDK_DIR}/drivers/imu/fsl_imu.c
                      ${MCUX_SDK_DIR}/components/imu_adapter/fsl_adapter_imu.c
-                     LOCATION RAM_TEXT)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA})
 endif()
 
 zephyr_code_relocate(FILES

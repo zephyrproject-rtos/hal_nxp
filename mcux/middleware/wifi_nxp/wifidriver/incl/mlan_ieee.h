@@ -1391,6 +1391,15 @@ typedef MLAN_PACK_START struct _OverlapBSSScanParam_t
 } MLAN_PACK_END OBSSScanParam_t, *pOBSSScanParam_t;
 
 /** HT Capabilities IE */
+typedef MLAN_PACK_START struct _IEEEtypes_SupportRates_t
+{
+    /** Generic IE header */
+    IEEEtypes_Header_t ieee_hdr;
+    /** Support rates */
+    t_u8 rates[WLAN_SUPPORTED_RATES];
+} MLAN_PACK_END IEEEtypes_SupportRates_t, *pIEEEtypes_SupportRates_t;
+
+/** HT Capabilities IE */
 typedef MLAN_PACK_START struct _IEEEtypes_HTCap_t
 {
     /** Generic IE header */
@@ -2511,10 +2520,12 @@ typedef struct _BSSDescriptor_t
     t_u16 wpa_offset;
     /** RSN IE */
     IEEEtypes_Generic_t *prsn_ie;
+#if !CONFIG_WPA_SUPP
     /** RSN Override IE */
     IEEEtypes_Generic_t *prsno_ie;
     /** RSN Override 2 IE */
     IEEEtypes_Generic_t *prsno2_ie;
+#endif
 #ifdef STA_SUPPORT
     /** WAPI IE */
     IEEEtypes_Generic_t *pwapi_ie;
@@ -2578,10 +2589,12 @@ typedef struct _BSSDescriptor_t
     size_t wpa_ie_buff_len;
     unsigned char rsn_ie_buff[MLAN_RSN_MAX_IE_LEN];
     size_t rsn_ie_buff_len;
+#if !CONFIG_WPA_SUPP
     unsigned char rsno_ie_buff[MLAN_WMSDK_MAX_WPA_IE_LEN];
     size_t rsno_ie_buff_len;
     unsigned char rsno2_ie_buff[MLAN_WMSDK_MAX_WPA_IE_LEN];
     size_t rsno2_ie_buff_len;
+#endif
 
     bool wps_IE_exist;
     t_u16 wps_session;
@@ -2590,9 +2603,11 @@ typedef struct _BSSDescriptor_t
     /** RSNX IE */
     IEEEtypes_Rsnx_t *prsnx_ie;
     IEEEtypes_Rsnx_t rsnx_ie_saved;
+#if !CONFIG_WPA_SUPP
     /** RSNX Override IE */
     IEEEtypes_Rsnxo_t *prsnxo_ie;
     IEEEtypes_Rsnxo_t rsnxo_ie_saved;
+#endif
 
     bool brcm_ie_exist;
     bool epigram_ie_exist;

@@ -221,13 +221,13 @@ int wlan_cmd_append_11ax_tlv(mlan_private *pmpriv, BSSDescriptor_t *pbss_desc, t
  */
 void wlan_update_11ax_cap(mlan_adapter *pmadapter,
                           MrvlIEtypes_Extension_t *hw_he_cap
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
                           ,
                           int tlv_idx
 #endif
 )
 {
-#ifndef RW610
+#if !defined(RW610) && !defined(IW610)
     MrvlIEtypes_He_cap_t *phe_cap = MNULL;
 #endif
     t_u8 i         = 0;
@@ -243,7 +243,7 @@ void wlan_update_11ax_cap(mlan_adapter *pmadapter,
         LEAVE();
         return;
     }
-#ifndef RW610
+#if !defined(RW610) && !defined(IW610)
     phe_cap = (MrvlIEtypes_He_cap_t *)hw_he_cap;
     if (phe_cap->he_phy_cap[0] & (AX_2G_20MHZ_SUPPORT | AX_2G_40MHZ_SUPPORT))
 #else
@@ -539,6 +539,7 @@ mlan_status wlan_cmd_twt_cfg(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd, t_u1
     hostcmd_twt_teardown *twt_teardown_params       = MNULL;
     hostcmd_twt_report *twt_report_params           = MNULL;
     hostcmd_twt_information *twt_information_params = MNULL;
+    hostcmd_btwt_cfg *btwt_cfg                      = MNULL;
     mlan_status ret                                 = MLAN_STATUS_SUCCESS;
 
     ENTER();
@@ -586,9 +587,15 @@ mlan_status wlan_cmd_twt_cfg(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd, t_u1
         case MLAN_11AX_TWT_INFORMATION_SUBID:
             twt_information_params = &hostcmd_twtcfg->param.twt_information;
             __memset(pmpriv->adapter, twt_information_params, 0x00, sizeof(hostcmd_twtcfg->param.twt_information));
-            twt_information_params->flow_identifier  = ds_twtcfg->param.twt_information.flow_identifier;
+            twt_information_params->flow_identifier = ds_twtcfg->param.twt_information.flow_identifier;
             twt_information_params->suspend_duration = ds_twtcfg->param.twt_information.suspend_duration;
             cmd->size += sizeof(hostcmd_twtcfg->param.twt_information);
+            break;
+        case MLAN_11AX_TWT_BTWT_SUBID:
+            btwt_cfg = &hostcmd_twtcfg->param.btwt_cfg;
+            __memset(pmpriv->adapter, btwt_cfg, 0x00, sizeof(hostcmd_twtcfg->param.btwt_cfg));
+            memcpy(btwt_cfg, &ds_twtcfg->param.btwt_cfg, sizeof(*btwt_cfg));
+            cmd->size += sizeof(hostcmd_twtcfg->param.btwt_cfg);
             break;
         default:
             PRINTM(MERROR, "Unknown subcmd %x\n", ds_twtcfg->sub_id);

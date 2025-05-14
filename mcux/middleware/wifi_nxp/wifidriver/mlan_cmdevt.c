@@ -1048,7 +1048,7 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
     MrvlIEtypesHeader_t *tlv = MNULL;
 #if CONFIG_11AX
     MrvlIEtypes_Extension_t *ext_tlv = MNULL;
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
     int he_tlv_idx = 0;
 #endif
 #endif
@@ -1056,6 +1056,9 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
     ENTER();
 
     pmadapter->fw_cap_info = wlan_le32_to_cpu(hw_spec->fw_cap_info);
+#if defined(IW610)
+    pmadapter->board_type = hw_spec->board_type;
+#endif
     /* Get no 5G status to check whether need to disable 5G */
     wlan_get_no_5G_status(pmpriv, resp);
 #ifdef STA_SUPPORT
@@ -1263,7 +1266,7 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
                 {
                     ext_tlv->type = tlv_type;
                     ext_tlv->len  = tlv_len;
-#ifndef RW610
+#if !defined(RW610) && !defined(IW610)
                     wlan_update_11ax_cap(pmadapter, (MrvlIEtypes_Extension_t *)ext_tlv);
 #else
                     if ((he_tlv_idx == AX_2G_TLV_INDEX) || !ISSUPP_NO5G(pmadapter->fw_cap_ext))
@@ -1289,7 +1292,7 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
         tlv = (MrvlIEtypesHeader_t *)(void *)((t_u8 *)tlv + tlv_len + sizeof(MrvlIEtypesHeader_t));
     }
 
-#if defined(SD8987) || defined(SD9177)
+#if defined(SD8987) || defined(SD9177) || defined(IW610)
     pmadapter->cmd_tx_data = IS_FW_SUPPORT_CMD_TX_DATA(pmadapter) ? 0x01 : 0x00;
 #endif
 
@@ -2230,7 +2233,7 @@ mlan_status wlan_process_vdll_event(pmlan_private pmpriv, t_u8 *pevent)
         case VDLL_IND_TYPE_ERR_ID:
             wevt_d("VDLL_IND (ID ERR).");
             break;
-#if defined(SD9177)
+#if defined(SD9177) || defined(IW610)
         case VDLL_IND_TYPE_ERR_SECURE:
             wevt_d("VDLL_IND (SECURE ERR).");
             break;

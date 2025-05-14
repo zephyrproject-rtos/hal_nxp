@@ -45,6 +45,10 @@ wlan_csi_config_params_t g_csi_params;
 wlan_net_monitor_t g_net_monitor_param;
 #endif
 
+#if HOST_TXRX_MGMT_FRAME
+wlan_host_tx_frame_params_t *pmgmtframe_tx_param = NULL;
+#endif
+
 #if CONFIG_HOST_SLEEP
 extern uint64_t rtc_timeout;
 #endif
@@ -2146,7 +2150,7 @@ static void test_wlan_host_sleep(int argc, char **argv)
 #if CONFIG_MEF_CFG
         else if (string_equal(argv[2], "mef"))
         {
-            ret = wlan_send_host_sleep(HOST_SLEEP_NO_COND);
+            ret = wlan_send_host_sleep(HOST_SLEEP_COND_MEF);
             if (ret == WM_SUCCESS)
             {
                 (void)PRINTF("Host sleep configuration successs with MEF");
@@ -2176,12 +2180,12 @@ static void test_wlan_host_sleep(int argc, char **argv)
         (void)PRINTF("	       bit 4: WAKE_ON_ARP_BROADCAST\r\n");
         (void)PRINTF("	       bit 6: WAKE_ON_MGMT_FRAME\r\n");
         (void)PRINTF("	       All bit 0 discard and not wakeup host\r\n");
-        (void)PRINTF("	       All bit 1 cancel host sleep configuration\r\n");
 #if CONFIG_MEF_CFG
         (void)PRINTF("    mef     -- MEF host wakeup\r\n");
+#endif
         (void)PRINTF("Example:\r\n");
+#if CONFIG_MEF_CFG
         (void)PRINTF("    wlan-host-sleep <1/0> mef\r\n");
-        (void)PRINTF("    wlan-host-sleep <1/0> wowlan 0x1e\r\n");
 #endif
         (void)PRINTF("    wlan-host-sleep <1/0> wowlan 0x1e\r\n");
         return;
@@ -2233,6 +2237,7 @@ static void test_wlan_auto_host_sleep(int argc, char **argv)
     is_periodic = (t_u8)atoi(argv[2]);
     wlan_config_host_sleep(is_manual, is_periodic);
 }
+#endif /* CONFIG_WIFI_BLE_COEX_APP */
 #else
 static void test_wlan_ns_offload(int argc, char **argv)
 {
@@ -2281,122 +2286,69 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
 {
     int ret = -WM_FAIL;
     t_u8 i = 0, j = 0, k = 0;
+    t_u32 *pmask = NULL;
     wlan_wowlan_ptn_cfg_t wowlan_ptn_cfg;
-    if (argc < 2)
+    enum wlan_bss_type bss_type = WLAN_BSS_TYPE_STA;
+
+    if (argc < 3)
     {
-        (void)PRINTF("Usage: %s <0/1>\r\n", argv[0]);
+        (void)PRINTF("Usage: %s <sta/uap> <0/1> \r\n", argv[0]);
         (void)PRINTF("Error: Specify 1 to magic filter\r\n");
         dump_wlan_add_packet_filter();
         return;
     }
-    if (argc > 3 && atoi(argv[2]) != argc - 3)
+
+    if (string_equal("sta", argv[1]))
     {
-        (void)PRINTF("Usage: %s 0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........\r\n", argv[0]);
-        dump_wlan_add_packet_filter();
-        return;
+        bss_type = MLAN_BSS_TYPE_STA;
     }
-    (void)memset(&wowlan_ptn_cfg, 0, sizeof(wlan_wowlan_ptn_cfg_t));
-    wowlan_ptn_cfg.enable = atoi(argv[1]);
-    if (argc > 2)
+    else if (string_equal("uap", argv[1]))
     {
-        wowlan_ptn_cfg.n_patterns = atoi(argv[2]);
-        for (i = 0, k = 0; (i + 3 < argc) && k < MAX_NUM_FILTERS; k++)
+        bss_type = MLAN_BSS_TYPE_UAP;
+    }
+    else
+    {
+       (void)PRINTF("Error: provide BSS type\r\n");
+       (void)PRINTF("Usage: %s <sta/uap> <0/1> \r\n", argv[0]);
+       dump_wlan_add_packet_filter();
+       return;
+    }
+
+    if (argc > 4)
+    {
+        /* argv[3]: number of patterns
+         * argv[4]: ptn_len
+         */
+        int n_param = 4;
+        for (int k = 0; k < atoi(argv[3]); k++)
         {
-            wowlan_ptn_cfg.patterns[k].pattern_len = atoi(argv[i + 3]);
-            i++;
-            wowlan_ptn_cfg.patterns[k].pkt_offset = atoi(argv[i + 3]);
-            i++;
-            for (j = 0; j < wowlan_ptn_cfg.patterns[k].pattern_len; j++)
-                wowlan_ptn_cfg.patterns[k].pattern[j] = atoi(argv[j + i + 3]);
-            i = +j;
-            (void)memset(wowlan_ptn_cfg.patterns[k].mask, 0x3f, 6);
+            n_param += atoi(argv[n_param]) + 2;
+        }
+
+        if (n_param != argc)
+        {
+            (void)PRINTF("Usage: %s sta/uap 0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........\r\n", argv[0]);
+            dump_wlan_add_packet_filter();
+            return;
         }
     }
-    ret = wlan_wowlan_cfg_ptn_match(&wowlan_ptn_cfg);
-    if (ret == WM_SUCCESS)
-        (void)PRINTF("Enabled pkt filter offload feature");
-    else
-        (void)PRINTF("Failed to enabled magic pkt filter offload, error: %d", ret);
-}
-#endif /* CONFIG_MEF_CFG */
-#endif /*RW610*/
-#else
-static void test_wlan_ns_offload(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    ret     = wlan_set_ipv6_ns_offload();
-    if (ret == WM_SUCCESS)
-    {
-        (void)PRINTF("Enabled  wlan IPv6 NS offload feature");
-    }
-    else
-    {
-        (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d", ret);
-    }
-}
 
-static void test_wlan_auto_arp(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    ret     = wlan_set_auto_arp();
-    if (ret == WM_SUCCESS)
-        (void)PRINTF("Enabled  wlan auto arp offload feature\r\n");
-    else
-        (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d\r\n", ret);
-}
-
-#if CONFIG_MEF_CFG
-static void dump_wlan_add_packet_filter()
-{
-    (void)PRINTF("Usage:\r\n");
-    (void)PRINTF("For wowlan Add packet filter\r\n");
-    (void)PRINTF("wowlan magic filter:\r\n");
-    (void)PRINTF("wlan_add_packet_filter 1:\r\n");
-    (void)PRINTF("wowlan User defined pattren packet filter:\r\n");
-    (void)PRINTF("wlan_add_packet_filter 0 <number of patterns> <ptn_len> <pkt_offset> <ptn> ........:\r\n");
-    (void)PRINTF(
-        "For 2 number of patterns Usage \r\nwlan_add_packet_filter 0 2 6 0 0xff 0xff 0xff 0xff 0xff 0xff 4 20 192 168 "
-        "10 1\r\n");
-    (void)PRINTF("wowlan User defined pattren and magic packet filter:\r\n");
-    (void)PRINTF("wlan_add_packet_filter 1 <number of patterns> <ptn_len> <pkt_offset> <ptn> ........:\r\n");
-    (void)PRINTF(
-        "For 2 number of patterns Usage \r\nwlan_add_packet_filter 1 2 6 0 0xff 0xff 0xff 0xff 0xff 0xff 4 20 192 168 "
-        "10 1\r\n");
-}
-
-static void test_wlan_add_packet_filter(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    t_u8 i = 0, j = 0, k = 0;
-    wlan_wowlan_ptn_cfg_t wowlan_ptn_cfg;
-    if (argc < 2)
-    {
-        (void)PRINTF("Usage: %s <0/1>\r\n", argv[0]);
-        (void)PRINTF("Error: Specify 1 to magic filter\r\n");
-        dump_wlan_add_packet_filter();
-        return;
-    }
-    if (argc > 3 && atoi(argv[2]) != argc - 3)
-    {
-        (void)PRINTF("Usage: %s 0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........\r\n", argv[0]);
-        dump_wlan_add_packet_filter();
-        return;
-    }
     (void)memset(&wowlan_ptn_cfg, 0, sizeof(wlan_wowlan_ptn_cfg_t));
-    wowlan_ptn_cfg.enable = atoi(argv[1]);
-    if (argc > 2)
+    wowlan_ptn_cfg.enable = atoi(argv[2]);
+    if (argc > 3)
     {
-        wowlan_ptn_cfg.n_patterns = atoi(argv[2]);
-        for (i = 0, k = 0; (i + 3 < argc) && k < MAX_NUM_FILTERS; k++)
+        wowlan_ptn_cfg.n_patterns = atoi(argv[3]);
+        for (i = 4, k = 0; (i < argc) && k < MAX_NUM_FILTERS; k++)
         {
-            wowlan_ptn_cfg.patterns[k].pattern_len = atoi(argv[i + 3]);
+            wowlan_ptn_cfg.patterns[k].pattern_len = atoi(argv[i]);
             i++;
-            wowlan_ptn_cfg.patterns[k].pkt_offset = atoi(argv[i + 3]);
+            wowlan_ptn_cfg.patterns[k].pkt_offset = atoi(argv[i]);
             i++;
             for (j = 0; j < wowlan_ptn_cfg.patterns[k].pattern_len; j++)
-                wowlan_ptn_cfg.patterns[k].pattern[j] = atoi(argv[j + i + 3]);
-            i = +j;
-            (void)memset(wowlan_ptn_cfg.patterns[k].mask, 0x3f, 6);
+                wowlan_ptn_cfg.patterns[k].pattern[j] = a2hex_or_atoi(argv[j + i]);
+            i += j;
+            pmask = (t_u32 *)wowlan_ptn_cfg.patterns[k].mask;
+            *pmask = (1 << wowlan_ptn_cfg.patterns[k].pattern_len) - 1;
         }
     }
     ret = wlan_wowlan_cfg_ptn_match(&wowlan_ptn_cfg);
@@ -2437,7 +2389,7 @@ static void test_wlan_send_hostcmd(int argc, char **argv)
     }
 }
 
-#if defined(RW610) || defined(SD9177)
+#if defined(RW610) || defined(SD9177) || defined(IW610)
 static void test_wlan_ext_coex_uwb_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -4323,6 +4275,68 @@ static void test_wlan_recovery_test(int argc, char **argv)
 }
 #endif
 
+#if CONFIG_WIFI_CHANNEL_LOAD
+/**
+ *  @brief This function dump the usage of wlan-subscribe-event cmd for user test.
+ */
+static void dump_wlan_get_channel_load_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-get-channel-load <duration>\r\n");
+    (void)PRINTF("duration:\r\n");
+    (void)PRINTF("      please set duration, the value set is taken as ms value.\r\n");
+}
+
+static void test_wlan_get_channel_load(int argc, char **argv)
+{
+    int ret;
+    wlan_802_11_chan_load_t chan_load;
+
+    if (argc < 2)
+    {
+        (void)PRINTF("Error: invalid number of arguments\r\n");
+        dump_wlan_get_channel_load_usage();
+        return;
+    }
+
+    (void)memset(&chan_load, 0, sizeof(wlan_802_11_chan_load_t));
+
+    /* Set duration to get channel load*/
+    if (!strncmp(argv[1], "set", strlen(argv[1])))
+    {
+        chan_load.duration = atoi(argv[2]);
+
+        ret = wlan_channel_load(&chan_load);
+
+        if (ret != WM_SUCCESS)
+        {
+            (void)PRINTF("Fail to set par channel load.\r\n");
+        }
+        else
+        {
+            (void)PRINTF("Set channel load duration %d.\r\n", chan_load.duration);
+        }
+    }
+    /* Get channel load after setting*/
+    else if (!strncmp(argv[1], "get", strlen(argv[1])))
+    {
+        ret = wlan_get_channel_load(&chan_load);
+
+        if (ret != WM_SUCCESS)
+        {
+            (void)PRINTF("Fail to get channel load.\r\n");
+        }
+
+        PRINTF("Wi-Fi channel load:\r\n");
+        PRINTF("Channel load noise: %d\r\n", chan_load.noise);
+        PRINTF("Channel load ch_load: %d\r\n", chan_load.ch_load);
+        PRINTF("Channel load rx_quality: %d\r\n", chan_load.rx_quality);
+    }
+
+    return;
+}
+#endif
+
 #if CONFIG_SUBSCRIBE_EVENT_SUPPORT
 /**
  *  @brief This function print the get subscribe event from firmware for user test.
@@ -4947,6 +4961,15 @@ void set_csi_filter(t_u8 pkt_type, t_u8 subtype, t_u8 flags, int op_index, t_u8 
     switch (op_index)
     {
         case CSI_FILTER_OPT_ADD:
+            for (int i = 0; i < g_csi_params.csi_filter_cnt; i++)
+            {
+                if (!memcmp(g_csi_params.csi_filter[i].mac_addr, mac, MLAN_MAC_ADDR_LENGTH))
+                {
+                    temp_filter_cnt = i;
+                    g_csi_params.csi_filter_cnt--;
+                    break;
+                }
+            }
             if (temp_filter_cnt < CSI_FILTER_MAX)
             {
                 (void)memcpy(&g_csi_params.csi_filter[temp_filter_cnt].mac_addr[0], mac, MLAN_MAC_ADDR_LENGTH);
@@ -5297,6 +5320,13 @@ void set_monitor_filter(int op_index, t_u8 *mac)
     switch (op_index)
     {
         case MONITOR_FILTER_OPT_ADD_MAC:
+            for (int i = 0; i < g_net_monitor_param.filter_num; i++)
+            {
+                if (!memcmp(g_net_monitor_param.mac_addr[i], mac, MLAN_MAC_ADDR_LENGTH))
+                {
+                    return;
+                }
+            }
             if (temp_filter_num < MAX_MONIT_MAC_FILTER_NUM)
             {
                 (void)memcpy(&g_net_monitor_param.mac_addr[temp_filter_num], mac, MLAN_MAC_ADDR_LENGTH);
@@ -5403,6 +5433,161 @@ static void test_wlan_net_monitor_cfg(int argc, char **argv)
     {
         (void)PRINTF("Failed to send monitor cfg\r\n");
     }
+}
+#endif
+
+#if HOST_TXRX_MGMT_FRAME
+static void test_wlan_set_mgmtframetx_header(int argc, char **argv)
+{
+    t_u16 type = 0, subtype = 0, from_ds = 0, to_ds = 0;
+    t_u16 seq_num = 0, frag_num = 0;
+    t_u8 raw_mac[MLAN_MAC_ADDR_LENGTH];
+    int i = 0;
+
+    if(argc !=11)
+     {
+         (void)PRINTF("Error             : invalid number of arguments\r\n");
+         (void)PRINTF("Usage             : %s <PktType> <PktSubType> <FromDS> <ToDS> <SeqNum> <FragNum> <Addr1> <Addr2> <Addr3> <Addr4>\r\n", argv[0]);
+
+         (void)PRINTF("\r\nPktType           : Should be zero for MGMT frames \r\n");
+         (void)PRINTF("PktSubType        : Mgmt frame subtypes. For example: Assoc Request 0x0\r\n");
+         (void)PRINTF("FromDS            : From DS \r\n");
+         (void)PRINTF("ToDS              : To DS \r\n");
+         (void)PRINTF("SeqNum            : Sequence number \r\n");
+         (void)PRINTF("FragNum           : Fragment number \r\n");
+         (void)PRINTF("Addr1             : Destination address \r\n");
+         (void)PRINTF("Addr2             : Source address \r\n");
+         (void)PRINTF("Addr3             : BSSID \r\n");
+         (void)PRINTF("Addr4             : Addr4 \r\n");
+
+         (void)PRINTF("\r\nUsage example ：\r\n");
+         (void)PRINTF("wlan-set-mgmtframetx-header 0 5 0 0 0 0 00:50:43:27:B0:41 00:50:43:21:0F:84 00:50:43:21:0F:84 FF:FF:FF:FF:FF:FF\r\n");
+
+         return;
+     }
+
+    if(NULL == pmgmtframe_tx_param)
+    {
+
+#if !CONFIG_MEM_POOLS
+        pmgmtframe_tx_param = (wlan_host_tx_frame_params_t *)OSA_MemoryAllocate(1024);
+#else
+        pmgmtframe_tx_param = (wlan_host_tx_frame_params_t *)OSA_MemoryPoolAllocate(buf_1024_MemoryPool);
+#endif
+    }
+
+    if(NULL == pmgmtframe_tx_param)
+    {
+        (void)PRINTF("Alloc memory for tx frame failed \r\n");
+        return;
+    }
+
+    //frm_ctl
+    type = (t_u16)atoi(argv[1]);
+    pmgmtframe_tx_param->frm_ctl = (type & 0x3) << 2;
+    subtype = (t_u16)atoi(argv[2]);
+    pmgmtframe_tx_param->frm_ctl |= (subtype & 0xf) << 4;
+    from_ds = (t_u16)atoi(argv[3]);
+    pmgmtframe_tx_param->frm_ctl |= (from_ds & 0x1) << 9;
+    to_ds = (t_u16)atoi(argv[4]);
+    pmgmtframe_tx_param->frm_ctl |= (to_ds & 0x1) << 8;
+
+    //seq_ctl
+    seq_num = (t_u16)atoi(argv[5]);
+    pmgmtframe_tx_param->seq_ctl = seq_num << 4;
+    frag_num = (t_u16)atoi(argv[6]);
+    pmgmtframe_tx_param->seq_ctl |= (frag_num & 0xf);
+
+    for(i = 1; i <= 4; i++)
+    {
+        if(0 != get_mac(argv[i+6], (char *)raw_mac, ':'))
+        {
+            (void)PRINTF("Error: Addr%d invalid MAC argument\r\n",i);
+            return;
+        }
+
+        switch(i)
+        {
+            case 1:
+                memcpy(pmgmtframe_tx_param->addr1, raw_mac, MLAN_MAC_ADDR_LENGTH);
+                break;
+            case 2:
+                memcpy(pmgmtframe_tx_param->addr2, raw_mac, MLAN_MAC_ADDR_LENGTH);
+                break;
+            case 3:
+                memcpy(pmgmtframe_tx_param->addr3, raw_mac, MLAN_MAC_ADDR_LENGTH);
+                break;
+            case 4:
+                memcpy(pmgmtframe_tx_param->addr4, raw_mac, MLAN_MAC_ADDR_LENGTH);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+static void test_wlan_set_mgmtframetx_payload(int argc, char **argv)
+{
+    int i = 0;
+    t_u16 data_len = argc - 1;
+
+    if(argc < 2)
+    {
+        (void)PRINTF("Error             : invalid number of arguments\r\n");
+        (void)PRINTF("Usage             : %s <Data0 Data1 ... Datan>\r\n", argv[0]);
+        (void)PRINTF("\r\nUsage example : \r\n");
+        (void)PRINTF("wlan-set-mgmtframetx-payload 0x01 0x01 0x00 0x0c 0x00 0x58 0x02 0x40\r\n");
+
+        return;
+    }
+
+    if(NULL == pmgmtframe_tx_param)
+    {
+
+#if !CONFIG_MEM_POOLS
+        pmgmtframe_tx_param = (wlan_host_tx_frame_params_t *)OSA_MemoryAllocate(1024);
+#else
+        pmgmtframe_tx_param = (wlan_host_tx_frame_params_t *)OSA_MemoryPoolAllocate(buf_1024_MemoryPool);
+#endif
+    }
+
+    if(NULL == pmgmtframe_tx_param)
+    {
+        (void)PRINTF("Alloc memory for tx frame failed \r\n");
+        return;
+    }
+
+    for(i = 0; i < data_len; i++)
+    {
+        pmgmtframe_tx_param->payload[i] = (t_u8)a2hex_or_atoi(argv[i + 1]);
+    }
+
+    pmgmtframe_tx_param->frm_len = data_len + TXRX_MGMT_FRAME_HEADER_LEN;
+}
+
+static void test_wlan_set_mgmtframetx_cfg(int argc, char ** argv)
+{
+    int ret;
+
+    if(NULL == pmgmtframe_tx_param)
+    {
+        (void)PRINTF("Error: No tx frame buff\r\n");
+        return;
+    }
+
+    ret = wlan_mgmtframe_tx_cfg(pmgmtframe_tx_param);
+
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Failed to sent mgmt frame\r\n");
+    }
+
+#if !CONFIG_MEM_POOLS
+    OSA_MemoryFree(pmgmtframe_tx_param);
+#else
+    OSA_MemoryPoolFree(buf_1024_MemoryPool, pmgmtframe_tx_param);
+#endif
+    pmgmtframe_tx_param = NULL;
 }
 #endif
 
@@ -8835,7 +9020,7 @@ static struct cli_command tests[] = {
 #endif /*RW610*/
 #endif /*CONFIG_HOST_SLEEP*/
     {"wlan-send-hostcmd", NULL, test_wlan_send_hostcmd},
-#if defined(RW610) || defined(SD9177)
+#if defined(RW610) || defined(SD9177) || defined(IW610)
     {"wlan-ext-coex-uwb", NULL, test_wlan_ext_coex_uwb},
 #endif
 #ifdef SD8801
@@ -8940,6 +9125,12 @@ static struct cli_command tests[] = {
     {"wlan-set-monitor-param", "<action> <monitor_activity> <filter_flags> <radio_type> <chan_number>",
      test_wlan_set_monitor_param},
 #endif
+#if HOST_TXRX_MGMT_FRAME
+    {"wlan-set-mgmtframetx-cfg", NULL, test_wlan_set_mgmtframetx_cfg},
+    {"wlan-set-mgmtframetx-header", "<PktType> <PktSubType> <FromDS> <ToDS> <SeqNum> <FragNum> <Addr1> <Addr2> <Addr3> <Addr4>",
+    test_wlan_set_mgmtframetx_header},
+    {"wlan-set-mgmtframetx-payload", "<Data0 Data1 ... Datan>", test_wlan_set_mgmtframetx_payload},
+#endif
 #if CONFIG_TSP
     {"wlan-set-tsp-cfg",
      "<enable> <backoff> <highThreshold> <lowThreshold> <dutycycstep> <dutycycmin> <highthrtemp> <lowthrtemp>",
@@ -9031,7 +9222,10 @@ static struct cli_command tests[] = {
     {"wlan-recovery-test", NULL, test_wlan_recovery_test},
 #endif
     {"wlan-get-max-clients-count", NULL, test_wlan_get_max_clients_count},
-    {"wlan-get-ps-cfg", NULL, test_wlan_get_ps_cfg}
+    {"wlan-get-ps-cfg", NULL, test_wlan_get_ps_cfg},
+#if CONFIG_WIFI_CHANNEL_LOAD
+    {"wlan-get-channel-load", "<set/get> <duration>", test_wlan_get_channel_load},
+#endif
 };
 
 /* Register our commands with the MTF. */

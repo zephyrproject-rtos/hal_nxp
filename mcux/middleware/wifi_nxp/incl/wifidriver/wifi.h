@@ -23,6 +23,8 @@
 
 #if defined(SD9177)
 #define CONFIG_TCP_ACK_ENH 1
+#endif
+#if defined(SD9177) || defined(IW610)
 #define CONFIG_FW_VDLL     1
 #if !CONFIG_WIFI_CAPA
 #undef CONFIG_WIFI_CAPA
@@ -164,6 +166,25 @@ typedef struct wifi_uap_client_disassoc
  */
 int wifi_init(const uint8_t *fw_start_addr, const size_t size);
 
+#if (CONFIG_WIFI_IND_DNLD)
+/**
+ * Re-initialize Wi-Fi driver module.
+ *
+ * Performs downloads Wi-Fi Firmware, creates Wi-Fi Driver
+ * and command response processor thread.
+ *
+ * Also creates mutex, and semaphores used in command and data synchronizations.
+ *
+ * \param[in] fw_start_addr address of stored Wi-Fi Firmware.
+ * \param[in] size Size of Wi-Fi Firmware.
+ * \param[in] fw_reload Type of Firmware reset.
+ *
+ * \return WM_SUCCESS on success or -WM_FAIL on error.
+ *
+ */
+int wifi_reinit(const uint8_t *fw_start_addr, const size_t size, uint8_t fw_reload);
+#endif
+
 /**
  * Initialize Wi-Fi driver module for FCC Certification.
  *
@@ -205,15 +226,18 @@ int wifi_imu_get_task_lock(void);
  * This API can be used to put IMU task lock.
  */
 int wifi_imu_put_task_lock(void);
+#endif
+
 /**
  * This API can be used to judge if wifi firmware is hang.
  */
 bool wifi_fw_is_hang(void);
+
 /**
  * This API can be used to send shutdown command to FW.
  */
 int wifi_send_shutdown_cmd(void);
-#endif
+
 /**
  * This API can be used to set wifi driver tx status.
  *
@@ -852,6 +876,7 @@ int wifi_set_region_code(t_u32 region_code);
  */
 int wifi_set_country_code(const char *alpha2);
 int wifi_get_country_code(char *alpha2);
+int wifi_create_dnld_countryinfo(void);
 int wifi_set_country_ie_ignore(uint8_t *ignore);
 
 bool wifi_11d_is_channel_allowed(int channel);
@@ -920,7 +945,7 @@ int wifi_get_txratecfg(wifi_ds_rate *ds_rate, mlan_bss_type bss_type);
 void wifi_wake_up_card(uint32_t *resp);
 void wifi_tx_card_awake_lock(void);
 void wifi_tx_card_awake_unlock(void);
-#ifdef RW610
+#if defined(RW610) || defined(IW610)
 uint32_t wifi_get_board_type();
 #endif
 #if CONFIG_WPA2_ENTP
@@ -1302,11 +1327,19 @@ int wifi_set_11ax_cfg(wifi_11ax_config_t *ax_config);
 #if CONFIG_11AX_TWT
 /** Set btwt config params
  *
- * \param[in] btwt_config Broadcast TWT setup parameters to be sent to Firmware
+ * \param[in] btwt_cfg Broadcast TWT setup parameters to be sent to Firmware
  *
  * \return WM_SUCCESS if successful otherwise failure.
  */
-int wifi_set_btwt_cfg(const wifi_btwt_config_t *btwt_config);
+int wifi_set_btwt_cfg(const wifi_btwt_config_t *btwt_cfg);
+
+/** Get btwt config params
+ *
+ * \param[in] btwt_cfg Broadcast TWT setup parameters to be sent to Firmware
+ *
+ * \return WM_SUCCESS if successful otherwise failure.
+ */
+int wifi_get_btwt_cfg(wifi_btwt_config_t *btwt_cfg);
 
 /** Set twt setup config params
  *
@@ -1686,8 +1719,6 @@ void set_ecsa_block_tx_flag(bool block_tx);
  */
 bool get_ecsa_block_tx_flag();
 
-void wifi_put_ecsa_sem(void);
-
 /** wifi_ecsa_status_control */
 typedef struct _wifi_ecsa_status_control
 {
@@ -1695,8 +1726,6 @@ typedef struct _wifi_ecsa_status_control
     bool required;
     /** block time of one detect period*/
     t_u8 block_time;
-    /** Semaphore to wait ECSA complete */
-    OSA_SEMAPHORE_HANDLE_DEFINE(ecsa_sem);
 } wifi_ecsa_status_control;
 #endif
 
@@ -1806,6 +1835,15 @@ bool get_monitor_flag();
 
 #endif
 
+#if HOST_TXRX_MGMT_FRAME
+/**
+ * Send the frame header parameter and payload to FW.
+ *
+ * \return WM_SUCCESS if successful otherwise failure.
+ */
+int wifi_mgmtframe_tx_cfg(wifi_host_tx_frame_params_t *mgmtframe);
+#endif
+
 int wifi_send_mgmt_auth_request(const t_u8 channel,
                                 const t_u8 auth_alg,
                                 const t_u8 *auth_seq_num,
@@ -1862,7 +1900,7 @@ void wifi_pmip_v33_enable();
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
 int wifi_set_indrst_cfg(const wifi_indrst_cfg_t *indrst_cfg, mlan_bss_type bss_type);
 int wifi_get_indrst_cfg(wifi_indrst_cfg_t *indrst_cfg, mlan_bss_type bss_type);
-int wifi_test_independent_reset();
+int wifi_trigger_inband_indrst();
 int wifi_trigger_oob_indrst();
 #endif
 

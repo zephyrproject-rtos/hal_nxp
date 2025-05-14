@@ -138,6 +138,11 @@ uint32_t dev_value1 = -1;
 uint8_t dev_mac_addr[MLAN_MAC_ADDR_LENGTH];
 uint8_t dev_mac_addr_uap[MLAN_MAC_ADDR_LENGTH];
 static uint8_t dev_fw_ver_ext[MLAN_MAX_VER_STR_LEN];
+#if CONFIG_HOST_SLEEP
+extern int is_hs_handshake_done;
+extern bool skip_hs_handshake;
+extern void wlan_hs_hanshake_cfg(bool skip);
+#endif
 
 static void wifi_init_imulink(void)
 {
@@ -172,6 +177,12 @@ static hal_imumc_status_t wifi_send_fw_cmd(t_u16 cmd_type, t_u8 *cmd_payload, t_
     {
         OSA_TimeDelay(1);
     }
+#if CONFIG_HOST_SLEEP
+    if (is_hs_handshake_done == WLAN_HOSTSLEEP_SUCCESS)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
+#endif
     return kStatus_HAL_ImumcSuccess;
 }
 
@@ -180,6 +191,12 @@ static hal_imumc_status_t wifi_send_fw_data(t_u8 *data, t_u32 length)
     if (data == NULL || length == 0)
         return kStatus_HAL_ImumcError;
     w_pkt_d("Data TX SIG: Driver=>FW, len %d", length);
+#if CONFIG_HOST_SLEEP
+    if (is_hs_handshake_done == WLAN_HOSTSLEEP_SUCCESS)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
+#endif
     return HAL_ImuSendTxData(kIMU_LinkCpu1Cpu3, data, length);
 }
 
@@ -1278,8 +1295,14 @@ mlan_status wlan_flush_wmm_pkt(int pkt_cnt)
 
     w_pkt_d("Data TX: Driver=>FW, pkt_cnt %d", pkt_cnt);
 
+#if CONFIG_HOST_SLEEP
+    if (is_hs_handshake_done == WLAN_HOSTSLEEP_SUCCESS)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
+#endif
+
     ret = HAL_ImuSendMultiTxData(kIMU_LinkCpu1Cpu3);
-    ;
     if (ret != kStatus_HAL_ImumcSuccess)
     {
         wifi_io_e("wlan_flush_wmm_pkt failed (%d)", ret);
@@ -1409,6 +1432,11 @@ hal_imumc_status_t imumc_cmdrsp_handler(IMU_Msg_t *pImuMsg, uint32_t length)
         mlan_adap->wlan_wakeup.id      = *(uint16_t *)((uint8_t *)pImuMsg->PayloadPtr[0] + 4);
         POWER_ClearWakeupStatus(WL_MCI_WAKEUP0_IRQn);
     }
+    /* Clear host sleep flags to enable host sleep for next low power round */
+    else if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
 #endif
 
     wlan_decode_rx_packet((t_u8 *)pImuMsg->PayloadPtr[0], MLAN_TYPE_CMD);
@@ -1430,6 +1458,10 @@ hal_imumc_status_t imumc_event_handler(IMU_Msg_t *pImuMsg, uint32_t length)
         mlan_adap->wlan_wakeup.subtype = 0;
         mlan_adap->wlan_wakeup.id      = *(uint16_t *)((uint8_t *)pImuMsg->PayloadPtr[0] + 4);
         POWER_ClearWakeupStatus(WL_MCI_WAKEUP0_IRQn);
+    }
+    else if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
     }
 #endif
 
@@ -1465,6 +1497,10 @@ hal_imumc_status_t imumc_rxpkt_handler(IMU_Msg_t *pImuMsg, uint32_t length)
         mlan_adap->wlan_wakeup.subtype = 0;
         mlan_adap->wlan_wakeup.id      = 0;
         POWER_ClearWakeupStatus(WL_MCI_WAKEUP0_IRQn);
+    }
+    else if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
     }
 #endif
 
