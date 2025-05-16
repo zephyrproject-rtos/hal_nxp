@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -410,6 +410,8 @@ void NETC_TimerAdjustFreq(netc_timer_handle_t *handle, int32_t ppb)
     /* addend' = 10^9 / freq * (1 + ppp / 10^9) * 2^32 = (2^32 * (10^9 + ppb)) / freq */
     addend = (((uint64_t)1ULL << 32) * (uint64_t)offset) / handle->timerFreq;
 
+    handle->hw.base->TMR_CTRL = handle->hw.base->TMR_CTRL & (~ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD_MASK) |
+				ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD((uint32_t)(addend >> 32)) ;
     handle->hw.base->TMR_ADD = (uint32_t)addend;
 }
 
