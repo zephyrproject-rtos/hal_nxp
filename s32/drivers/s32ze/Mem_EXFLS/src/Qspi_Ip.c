@@ -145,7 +145,7 @@ extern "C"{
 #include "Mem_43_EXFLS_MemMap.h"
 
 /* Pointer to runtime state structures */
-Qspi_Ip_StateType Qspi_Ip_MemoryStateStructure[QSPI_IP_MEM_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Qspi_Ip_MemoryStateStructure) Qspi_Ip_StateType Qspi_Ip_MemoryStateStructure[QSPI_IP_MEM_INSTANCE_COUNT];
 
 #if (QSPI_IP_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_EXFLS_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE

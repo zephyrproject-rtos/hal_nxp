@@ -175,9 +175,9 @@ extern "C"
 #define PLATFORM_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Platform_MemMap.h"
 
-Mru_Ip_StateStructureType Mru_Ip_axStateStructure[MRU_IP_NUMBER_OF_INSTANCES];
+VAR_SEC_NOCACHE(Mru_Ip_axStateStructure) Mru_Ip_StateStructureType Mru_Ip_axStateStructure[MRU_IP_NUMBER_OF_INSTANCES];
 
-Mru_Ip_StateStructureType* Mru_Ip_apxStateStructureArray[MRU_IP_NUMBER_OF_INSTANCES];
+VAR_SEC_NOCACHE(Mru_Ip_apxStateStructureArray) Mru_Ip_StateStructureType* Mru_Ip_apxStateStructureArray[MRU_IP_NUMBER_OF_INSTANCES];
 
 #define PLATFORM_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Platform_MemMap.h"

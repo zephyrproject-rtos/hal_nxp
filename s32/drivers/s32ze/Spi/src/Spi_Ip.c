@@ -173,7 +173,7 @@ static SPI_Type* const Spi_Ip_apxBases[SPI_INSTANCE_COUNT] = IP_SPI_BASE_PTRS;
 #if (SPI_IP_DMA_USED == STD_ON)
     #define SPI_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
     #include "Spi_MemMap.h"
-static uint32 Spi_Ip_u32DiscardData;
+VAR_SEC_NOCACHE(Spi_Ip_u32DiscardData) static uint32 Spi_Ip_u32DiscardData;
     #define SPI_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
     #include "Spi_MemMap.h"
 #endif
@@ -181,8 +181,8 @@ static uint32 Spi_Ip_u32DiscardData;
 #define SPI_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Spi_MemMap.h"
 
-static Spi_Ip_StateStructureType Spi_Ip_axStateStructure[SPI_IP_NUMBER_OF_INSTANCES];
-static Spi_Ip_StateStructureType* Spi_Ip_apxStateStructureArray[SPI_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Spi_Ip_axStateStructure) static Spi_Ip_StateStructureType Spi_Ip_axStateStructure[SPI_IP_NUMBER_OF_INSTANCES];
+VAR_SEC_NOCACHE(Spi_Ip_apxStateStructureArray) static Spi_Ip_StateStructureType* Spi_Ip_apxStateStructureArray[SPI_INSTANCE_COUNT];
 
 #define SPI_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Spi_MemMap.h"
