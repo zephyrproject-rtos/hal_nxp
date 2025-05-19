@@ -1,6 +1,6 @@
 /*
- * Copyright 2022-2024 NXP
-*
+ * Copyright 2022-2025 NXP
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -21,7 +21,7 @@ extern "C"{
 #define CDD_PLATFORM_MRU_IP_CFG_DEFINES_VENDOR_ID                          43
 #define CDD_PLATFORM_MRU_IP_CFG_DEFINES_SW_MAJOR_VERSION                   2
 #define CDD_PLATFORM_MRU_IP_CFG_DEFINES_SW_MINOR_VERSION                   0
-#define CDD_PLATFORM_MRU_IP_CFG_DEFINES_SW_PATCH_VERSION                   0
+#define CDD_PLATFORM_MRU_IP_CFG_DEFINES_SW_PATCH_VERSION                   1
 #define CDD_PLATFORM_MRU_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION           4
 #define CDD_PLATFORM_MRU_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION           7
 #define CDD_PLATFORM_MRU_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION        0
@@ -38,12 +38,17 @@ extern "C"{
 
 /**
 * @brief          Enable User Mode Support.
-* @details        When MruEnableUserModeSupport = TRUE,
+* @details        When GeneralConfiguration/PlatformEnableUserModeSupport = TRUE,
 *                 the MRU driver can be executed from both supervisor and user mode.
 *
 * @api
 */
 #define MRU_IP_ENABLE_USER_MODE_SUPPORT  (STD_OFF)
+/**
+* @brief Switches ON or OFF for the detection and reporting of development errors(API parameter checking) at IP level.
+*/
+/** @implements MRU_IP_DEV_ERROR_DETECT_define  */
+#define MRU_IP_DEV_ERROR_DETECT     (STD_OFF)
 
 /** @brief Adds or removes the service Mru_Ip_ResetChannel(). */
 #define MRU_IP_CHANNEL_RESET_API     (STD_OFF)
@@ -57,15 +62,7 @@ extern "C"{
 /** @brief Adds or removes the service Mru_Ip_DisableChannel(). */
 #define MRU_IP_CHANNEL_DISABLE_API     (STD_OFF)
 
-/**
-* @brief Switches ON or OFF for the detection and reporting of development errors(API parameter checking) at IP level.
-*/
-/** @implements MRU_IP_DEV_ERROR_DETECT_define  */
-#define MRU_IP_DEV_ERROR_DETECT     (STD_OFF)
-
-
 #define NOTIFY_STATUS_COUNT (2U)
-
 #define INTERRUPT_GROUP_0                 (0U)
 #define INTERRUPT_GROUP_1                 (1U)
 
@@ -82,6 +79,9 @@ extern "C"{
 
 #define MRU_IP_NOTIFY_CH1_IS_MASK               (0x1U) /*The notify status mask of first channel*/
 
+/**
+* @brief    MRU timeout type
+*/
 #define PLATFORM_TIMEOUT_TYPE                   (OSIF_COUNTER_DUMMY)
 
 #ifdef __cplusplus

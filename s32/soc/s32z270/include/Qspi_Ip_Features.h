@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,7 +37,7 @@ extern "C"{
 #define QSPI_IP_FEATURES_AR_RELEASE_REVISION_VERSION_CFG    0
 #define QSPI_IP_FEATURES_SW_MAJOR_VERSION_CFG               2
 #define QSPI_IP_FEATURES_SW_MINOR_VERSION_CFG               0
-#define QSPI_IP_FEATURES_SW_PATCH_VERSION_CFG               0
+#define QSPI_IP_FEATURES_SW_PATCH_VERSION_CFG               1
 
 
 /*==================================================================================================
@@ -97,7 +97,6 @@ extern "C"{
 /*! @brief Supports secure flash protection feature */
 #define FEATURE_QSPI_HAS_SFP                          1
 
-
 /*! @brief The maximum size of manufacturer & device ID that flash memories can have */
 #define FEATURE_EXFLS_FLASH_MDID_SIZE                  10U
 
@@ -112,3 +111,5 @@ extern "C"{
 /** @} */
 
 #endif /* QSPI_IP_FEATURES_H */
+
+

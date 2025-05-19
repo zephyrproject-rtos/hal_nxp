@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -39,7 +39,7 @@ extern "C"{
 #define EMIOS_PWM_IP_INIT_PB_CFG_AR_RELEASE_REVISION_VERSION     0
 #define EMIOS_PWM_IP_INIT_PB_CFG_SW_MAJOR_VERSION                2
 #define EMIOS_PWM_IP_INIT_PB_CFG_SW_MINOR_VERSION                0
-#define EMIOS_PWM_IP_INIT_PB_CFG_SW_PATCH_VERSION                0
+#define EMIOS_PWM_IP_INIT_PB_CFG_SW_PATCH_VERSION                1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -93,7 +93,6 @@ extern "C"{
 
 #define IS_EMIOS_OPWMCB_MODE_USED(n)                                                       \
             DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWMCB_MODE_USED)
-
 /* Macro to enable the mode operations. */
 #if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWFMB_MODE_USED) 0
 #define EMIOS_PWM_IP_MODE_OPWFMB_USED

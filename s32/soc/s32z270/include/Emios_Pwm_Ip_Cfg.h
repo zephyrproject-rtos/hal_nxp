@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,7 +17,6 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-
 
 /*==================================================================================================
 *                                          INCLUDE FILES
@@ -49,7 +48,7 @@ extern "C"{
 #define EMIOS_PWM_IP_CFG_AR_RELEASE_REVISION_VERSION  0
 #define EMIOS_PWM_IP_CFG_SW_MAJOR_VERSION             2
 #define EMIOS_PWM_IP_CFG_SW_MINOR_VERSION             0
-#define EMIOS_PWM_IP_CFG_SW_PATCH_VERSION             0
+#define EMIOS_PWM_IP_CFG_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -104,10 +103,10 @@ extern "C"{
 #define EMIOS_PWM_IP_SET_INITIAL_MODE(n)    DT_INST_FOREACH_CHILD_STATUS_OKAY(n, SET_INITIAL_MODE)
 
 /** @brief      Enable the Emios Ip */
-#define EMIOS_PWM_IP_USED                       (STD_ON)
+#define EMIOS_PWM_IP_USED                          (STD_ON)
 
 /** @brief      Switch to enable the development error detection. */
-#define EMIOS_PWM_IP_DEV_ERROR_DETECT           (STD_OFF)
+#define EMIOS_PWM_IP_DEV_ERROR_DETECT              (STD_OFF)
 
 /** @brief      The number of Emios instances available on platform */
 #define EMIOS_PWM_IP_INSTANCE_COUNT                (eMIOS_INSTANCE_COUNT)
@@ -137,17 +136,27 @@ extern "C"{
 /** @brief Arrays to store the channel logic Index State */
 #define EMIOS_PWM_IP_USED_CHANNELS \
 { \
-    {0U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U},  \
-    {255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U}  \
+    {0U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U}, \
+    {255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U} \
 }
 
 /** @brief    Calculate the supported eMios channels */
-#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED_U8   0 DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED)
+#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED_U8       0 DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED)
 
 #define EMIOS_PWM_IP_INITIAL_MODES                                                \
 {                                                                                 \
     DT_INST_FOREACH_STATUS_OKAY(EMIOS_PWM_IP_SET_INITIAL_MODE)                    \
 }
+
+/** @brief    Support for User mode */
+#define EMIOS_PWM_IP_ENABLE_USER_MODE_SUPPORT      (STD_OFF)
+
+#ifndef MCAL_ENABLE_USER_MODE_SUPPORT
+    #if (STD_ON == EMIOS_PWM_IP_ENABLE_USER_MODE_SUPPORT)
+        #error MCAL_ENABLE_USER_MODE_SUPPORT is not enabled. For running EMIOS in user mode the MCAL_ENABLE_USER_MODE_SUPPORT needs to be defined
+    #endif /* (STD_ON == EMIOS_PWM_IP_ENABLE_USER_MODE_SUPPORT) */
+#endif /* ifndef MCAL_ENABLE_USER_MODE_SUPPORT */
+
 
 /*==================================================================================================
 *                                              ENUMS
@@ -158,6 +167,7 @@ extern "C"{
 ==================================================================================================*/
 /* Redefine eMIOS_Type from header file to comply with coding guidelines */
 typedef eMIOS_Type Emios_Pwm_Ip_HwAddrType;
+
 /**
 * @brief        PWM Period type (the value of the period is platform dependent and thus configurable)
 */

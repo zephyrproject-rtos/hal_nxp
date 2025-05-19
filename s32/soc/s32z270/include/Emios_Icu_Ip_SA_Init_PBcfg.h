@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
  *   @file    Emios_Icu_Ip_SA_Init_PBCfg.h
- *   @version 2.0.0
+ *   @version 2.0.1
  *
  *   @brief   AUTOSAR Icu - contains the data exported by the ICU module.
  *   @details Contains the information that will be exported by the module, as requested by Autosar.
@@ -38,7 +38,7 @@ extern "C"{
 #define EMIOS_ICU_IP_SA_INIT_PBCFG_AR_RELEASE_REVISION_VERSION  0
 #define EMIOS_ICU_IP_SA_INIT_PBCFG_SW_MAJOR_VERSION             2
 #define EMIOS_ICU_IP_SA_INIT_PBCFG_SW_MINOR_VERSION             0
-#define EMIOS_ICU_IP_SA_INIT_PBCFG_SW_PATCH_VERSION             0
+#define EMIOS_ICU_IP_SA_INIT_PBCFG_SW_PATCH_VERSION             1
 
 /*==================================================================================================
  *                                      FILE VERSION CHECKS
@@ -66,9 +66,13 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
+
+/*==================================================================================================
+*                                  GLOBAL VARIABLE DECLARATIONS
+==================================================================================================*/
 #if (STD_ON == EMIOS_ICU_IP_USED)
 
-#define EMIOS_ICU_CONFIG_SA_INIT_PB 
+#define EMIOS_ICU_CONFIG_SA_INIT_PB
 
 #endif  /* EMIOS_ICU_IP_USED */
 

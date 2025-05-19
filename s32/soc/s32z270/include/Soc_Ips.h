@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,7 +38,7 @@ extern "C"{
 #define SOC_IPS_AR_RELEASE_REVISION_VERSION  0
 #define SOC_IPS_SW_MAJOR_VERSION             2
 #define SOC_IPS_SW_MINOR_VERSION             0
-#define SOC_IPS_SW_PATCH_VERSION             0
+#define SOC_IPS_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -253,6 +253,13 @@ must be enabled for NETC to accept table management commands for any function
 #define ERR_IPV_NETC_051260        (STD_ON)
 
 /**
+* @brief Hardware errata for NETC: (ERR051649)
+* @details ERR051649 NETC: Switch ports support only one 802.1p and DEI to internal QoS
+mapping profile.
+*/
+#define ERR_IPV_NETC_051649        (STD_ON)
+
+/**
 * @brief Hardware errata for NETC: (ERR051261)
 * @details ERR051261 NETC: Egress ports can violate 802.3 half-duplex jam protocol after collision
 event
@@ -335,6 +342,11 @@ MCB mode transition
 circumstances
 */
 #define ERR_IPV_NETC_051300        (STD_ON)
+
+/** @brief Hardware errata for ICU GTM: (ERR051781)
+* @details ERR051781 GTM: (TIM) Potentially wrong capture values
+*/
+#define ERR_IPV_GTM_051781        (STD_ON)
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
@@ -383,3 +395,4 @@ circumstances
 /** @} */
 
 #endif /* SOC_IPS_H */
+

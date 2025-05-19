@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -42,7 +42,7 @@ extern "C"{
 #define DEVICEDEFINITION_AR_RELEASE_REVISION_VERSION_H   0
 #define DEVICEDEFINITION_SW_MAJOR_VERSION_H              2
 #define DEVICEDEFINITION_SW_MINOR_VERSION_H              0
-#define DEVICEDEFINITION_SW_PATCH_VERSION_H              0
+#define DEVICEDEFINITION_SW_PATCH_VERSION_H              1
 /**@}*/
 /*==================================================================================================
 *                                      FILE VERSION CHECKS

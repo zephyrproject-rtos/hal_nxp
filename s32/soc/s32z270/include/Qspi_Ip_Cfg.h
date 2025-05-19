@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -30,6 +30,7 @@ extern "C"{
 #include "Qspi_Ip_Types.h"
 #include <zephyr/devicetree.h>
 
+
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -39,7 +40,7 @@ extern "C"{
 #define QSPI_IP_AR_RELEASE_REVISION_VERSION_CFG  0
 #define QSPI_IP_SW_MAJOR_VERSION_CFG             2
 #define QSPI_IP_SW_MINOR_VERSION_CFG             0
-#define QSPI_IP_SW_PATCH_VERSION_CFG             0
+#define QSPI_IP_SW_PATCH_VERSION_CFG             1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -96,7 +97,7 @@ extern "C"{
     #endif
 #endif
 
-#define QSPI_PERFORM_DEVICE_CONFIG                      (STD_ON)
+#define QSPI_IP_PERFORM_DEVICE_CONFIG                      (STD_ON)
 
 
 /*==================================================================================================
@@ -113,3 +114,5 @@ extern "C"{
 /** @} */
 
 #endif /* QSPI_IP_CFG_H */
+
+

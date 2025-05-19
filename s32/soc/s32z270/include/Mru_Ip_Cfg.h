@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
 *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Mru_Ip_Cfg.h
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Platform - Mru configuration header file.
 *   @details This file is the header containing all the necessary information for MRU
@@ -46,7 +46,7 @@ extern "C"{
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_CFG     0
 #define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG                2
 #define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_CFG                0
-#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG                0
+#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG                1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
@@ -57,7 +57,6 @@ extern "C"{
          (CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG != MCAL_AR_RELEASE_MINOR_VERSION))
     #error "AutoSar Version Numbers of Mru_Ip_Cfg.h and Mcal.h are different"
     #endif
-
     /* Check if the current file and OsIf.h header file are of the same version */
     #if ((CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG != OSIF_AR_RELEASE_MAJOR_VERSION) || \
          (CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG != OSIF_AR_RELEASE_MINOR_VERSION) \

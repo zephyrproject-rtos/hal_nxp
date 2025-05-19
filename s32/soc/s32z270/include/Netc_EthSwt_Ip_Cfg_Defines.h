@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,7 +32,6 @@ extern "C"{
 #include "S32Z2_NETC_F1_PCI_HDR_TYPE0.h"
 #include "S32Z2_NETC_F2_PCI_HDR_TYPE0.h"
 #include "S32Z2_NETC_F3_PCI_HDR_TYPE0.h"
-#include "S32Z2_ENETC_PORT.h"
 #include "S32Z2_SW_PORT0.h"
 #include "S32Z2_SW_PORT1.h"
 #include "S32Z2_SW_PORT2.h"
@@ -58,7 +57,7 @@ extern "C"{
 #define NETC_ETHSWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETHSWT_IP_CFG_DEFINES_SW_MAJOR_VERSION             2
 #define NETC_ETHSWT_IP_CFG_DEFINES_SW_MINOR_VERSION             0
-#define NETC_ETHSWT_IP_CFG_DEFINES_SW_PATCH_VERSION             0
+#define NETC_ETHSWT_IP_CFG_DEFINES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS

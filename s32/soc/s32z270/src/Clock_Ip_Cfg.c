@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
 *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg.c
-*   @version    2.0.0
+*   @version    2.0.1
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -39,7 +39,7 @@ extern "C"{
 #define CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_CFG_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_CFG_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_CFG_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_CFG_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -940,9 +940,9 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 23U
     {
         P0_PSI5_189K_CLK,                    /* name */
-        3306U,                              /* value */
+        8U,                              /* value */
         {
-            2U,
+            0U,
         }
     },
     #endif
@@ -1210,9 +1210,9 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 50U
     {
         P4_PSI5_189K_CLK,                    /* name */
-        3306U,                              /* value */
+        8U,                              /* value */
         {
-            2U,
+            0U,
         }
     },
     #endif

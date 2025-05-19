@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg_Defines.h
-*   @version    2.0.0
+*   @version    2.0.1
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -60,7 +60,7 @@ extern "C"{
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION     0
 #define CLOCK_IP_CFG_DEFINES_SW_MAJOR_VERSION                2
 #define CLOCK_IP_CFG_DEFINES_SW_MINOR_VERSION                0
-#define CLOCK_IP_CFG_DEFINES_SW_PATCH_VERSION                0
+#define CLOCK_IP_CFG_DEFINES_SW_PATCH_VERSION                1
 
 /*==================================================================================================
                                            DEFINES AND MACROS

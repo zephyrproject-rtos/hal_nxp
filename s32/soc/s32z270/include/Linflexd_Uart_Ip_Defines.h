@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,7 +37,7 @@ extern "C"{
 #define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION   0
 #define LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION              2
 #define LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION              0
-#define LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION              0
+#define LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION              1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -62,6 +62,8 @@ extern "C"{
 
 /** Array initializer of LINFLEXD peripheral base pointers */
 #define LINFLEXD_IP_BASE_PTRS                    IP_LINFLEXD_BASE_PTRS
+/* @brief Support for Micro Second Channel Upstream frame feature with 12 bits and Parity. If this parameter has been configured to TRUE, the Uart driver can be executed from both supervisor and user mode. */
+#define LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT  (STD_OFF)
 /* @brief Development error detection */
 #define LINFLEXD_UART_IP_DEV_ERROR_DETECT       (STD_OFF)
 
@@ -69,10 +71,10 @@ extern "C"{
 #define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (DT_NUM_INST_STATUS_OKAY(nxp_s32_linflexd))
 
 /* @brief Uart Osif source counter. This parameter is used to select between different OsIf counter implementation */
-#define LINFLEXD_UART_IP_TIMEOUT_TYPE           (OSIF_COUNTER_DUMMY)
+#define LINFLEXD_UART_IP_TIMEOUT_TYPE           (OSIF_COUNTER_SYSTEM)
 
 /* @brief Number of loops before returning LINFLEXD_STATUS_TIMEOUT.*/
-#define LINFLEXD_UART_IP_TIMEOUT_VALUE_US       (0U)
+#define LINFLEXD_UART_IP_TIMEOUT_VALUE_US       (1000U)
 
 /* @brief LINFLEXD rx/tx/error interrupt lines ORED together. */
 #define LINFLEXD_UART_IP_ORED_INT_LINES         (1U)

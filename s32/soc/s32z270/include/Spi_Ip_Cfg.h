@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Spi_Ip_Cfg.h
-*   @version 2.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Spi - Spi configuration header file.
 *   @details This file is the header containing all the necessary information for SPI
@@ -45,7 +45,7 @@ extern "C"
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_CFG     0
 #define SPI_IP_SW_MAJOR_VERSION_CFG                2
 #define SPI_IP_SW_MINOR_VERSION_CFG                0
-#define SPI_IP_SW_PATCH_VERSION_CFG                0
+#define SPI_IP_SW_PATCH_VERSION_CFG                1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
