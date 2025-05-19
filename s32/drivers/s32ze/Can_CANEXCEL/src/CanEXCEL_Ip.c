@@ -452,6 +452,7 @@ static Canexcel_Ip_StatusType Canexcel_ResetController(uint8 instance)
     uint32 timeElapsed = 0U;
     uint32 uS2Ticks = OsIf_MicrosToTicks(CANEXCEL_IP_TIMEOUT_DURATION, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     Canexcel_Ip_StatusType returnResult = CANEXCEL_STATUS_SUCCESS;
+    timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
 
     /* Wait Hardware to became available after clock start */
     while ((CANEXCEL.EXL_SIC[instance]->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK) == 0U)
@@ -817,7 +818,7 @@ Canexcel_Ip_StatusType Canexcel_Ip_TxDescriptor(uint8 instance, uint8 descNo, ui
     uint32 timeElapsed = 0U;
     Canexcel_Ip_StateType * state = Canexcel_Ip_apxState[instance];
     Canexcel_Ip_StatusType returnResult = CANEXCEL_STATUS_SUCCESS;
-    
+    uint32 uS2Ticks = OsIf_MicrosToTicks(CANEXCEL_IP_TIMEOUT_DURATION, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     /* Ensure that the buffer given was already configured by Canexcel_Ip_ConfigXlTx/Canexcel_Ip_ConfigFdTx before start the transmission */
     if (0U == ((((Canexcel_TxMsgHeaderType *)txPtrList)->word2) & CANXL_TX_HEADER_MODE_MASK))
     {
@@ -825,14 +826,13 @@ Canexcel_Ip_StatusType Canexcel_Ip_TxDescriptor(uint8 instance, uint8 descNo, ui
     }
     else
     {
-        uint32 uS2Ticks = OsIf_MicrosToTicks(CANEXCEL_IP_TIMEOUT_DURATION, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
-        timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         /* Set system lock Status */
         #if (CANEXCEL_IP_HAS_SYSLOCK01 == STD_ON)
         CANEXCEL.EXL_DESC_CTR[instance]->DSCMBCTRLAR[descNo].DCSYSLOCK = 1U;
         #else
         (void)CANEXCEL.EXL_DESC_CTR[instance]->DSCMBCTRLAR[descNo].DCSYSLOCK;
         #endif
+        timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (CANEXCEL_DESCNTSTATUS_LOCKED_HW == CanXL_GetDescControlStatus(CANEXCEL.EXL_DESC_CTR[instance], descNo))
         {
             timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
