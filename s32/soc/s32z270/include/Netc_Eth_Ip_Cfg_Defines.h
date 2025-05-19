@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -51,10 +51,10 @@ extern "C"{
 
 #include "S32Z2_TMR0_BASE.h"
 
-#include "S32Z2_IERC_PCI.h"
-
 #include "S32Z2_SW_ETH_MAC_PORT0.h"
 #include "S32Z2_SW_ETH_MAC_PORT1.h"
+
+#include "S32Z2_IERC_PCI.h"
 
 #include "S32Z2_NETC_F1_GLOBAL.h"
 #include "S32Z2_NETC_F0_GLOBAL.h"
@@ -76,7 +76,7 @@ extern "C"{
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETH_IP_CFG_DEFINES_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_CFG_DEFINES_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_CFG_DEFINES_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_CFG_DEFINES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -90,11 +90,11 @@ extern "C"{
 #endif
 
 /*==================================================================================================
-                                           CONSTANTS
+*                                           CONSTANTS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       DEFINES AND MACROS
+*                                       DEFINES AND MACROS
 ==================================================================================================*/
 
 /** TODO: This must be generated in function of what user is using in configuration.
@@ -138,6 +138,12 @@ extern "C"{
 /** @brief TX threshold(coalescing) interrupt enable bit mask. */
 #define NETC_ETH_IP_TBIER_TXTIE_MASK            (0x00000001UL)
 
+/** @brief Mask all TX threshold and  TX frame interrupt status bits */
+#define NETC_ETH_IP_SITXIDR0_TXT_TXF_ALL_MASK   (0xFFFFFFFFUL)
+
+/** @brief Mask all TX threshold and  TX frame interrupt status bits */
+#define NETC_ETH_IP_SITXIDR1_TXT_TXF_ALL_MASK   (0x00030003UL)
+
 /* RX buffer descriptor information. */
 /** @brief RX buffer descriptor priority code point mask. */
 #define NETC_ETH_IP_RXBD_PCP_MASK               (0xE0000000UL)
@@ -179,6 +185,10 @@ extern "C"{
 #define NETC_ETH_IP_RXBD_HOST_REASON_SHIFT            (2UL)
 /** @brief Receive threshold interrupt enable mask. */
 #define NETC_ETH_IP_RBIER_RXTIE_MASK            (0x00000001UL)
+/** @brief Mask all RX frame interrupt status bits */
+#define NETC_ETH_IP_SIRXIDR0_RX_ALL_MASK        (0x0000FFFFUL)
+/** @brief Mask all RX frame interrupt status bits */
+#define NETC_ETH_IP_SIRXIDR1_RX_ALL_MASK        (0x00000003UL)
 
 /** @brief Station interface(SI) type. */
 #define Netc_Eth_Ip_SiBaseType               NETC_F3_SI0_Type
@@ -259,7 +269,9 @@ extern "C"{
     #define NETC_ETH_IP_E_FLAGS_MASK             (0x00FF0000UL)
 #endif
 
-/* VSI-to-PSI message used defines. */
+/*!
+ * @brief  VSI-to-PSI message used defines.
+*/
 /** @brief Define the bit used by VSI-to-PSI messaging to show if the process is still in progress. */
 #define NETC_ETH_IP_VSI_MSG_PROGRESS_STATUS      (0x00000001UL)
 /** @brief Define the bit used to show the message status. */
@@ -281,9 +293,98 @@ extern "C"{
 /** @brief Define FLRn shift value for PSIIDR register, x = 1..7 */
 #define NETC_ETH_IP_PSI_IDR_FLR(x)           (16U + (x))
 
+/*!
+ * @brief  Field offsets of Data field for VSI-PSI messaging.
+ */
+/* MAC address filtering class - set primary MAC address */
+#define NETC_ETH_IP_VSITOPSI_MAC_ADDR_FILTERING_CLASS_CODE            (uint8)(0x20U)
+
+#define NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_COUNT              (0U)  /* Index of the Count field in Data array from set primary MAC address command. */
+#define NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR0           (4U)
+#define NETC_ETH_IP_VSITOPSI_SET_PRIMARY_MAC_FIELD_MACADDR1           (10U)
+
+/* MAC address filtering class - set hash table */
+#define NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_TYPE                (0U)  /* Index of the TYPE_SIZE field in Data array from Set Hash Table command. */
+#define NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W0  (4U)  /* mandatory - Index of the Multicast Low MAC address in Data array. */
+#define NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T0_W1  (8U)  /* mandatory - Index of the Multicast High MAC address in Data array. */
+#define NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T1_W0  (12U) /* optional  - Index of the Unicast Low MAC address in Data array. */
+#define NETC_ETH_IP_VSITOPSI_SET_HASH_TABLE_FIELD_MAC_HASH_FLT_T1_W1  (16U) /* optional  - Index of the Unicast High MAC address in Data array.*/
+
+/* MAC address filtering class - flush hash table */
+#define NETC_ETH_IP_VSITOPSI_FLUSH_FIELD_TYPE                         (0U)  /* Index of the TYPE field in Data array from Flush Table command. */
+#define NETC_ETH_IP_VSITOPSI_FLUSH_FIELD_TYPE_BIT_SHIFT               (6U)
+#define NETC_ETH_IP_VSITOPSI_FLUSH_FIELD_TYPE_MASK                    (0xC0U)
+#define NETC_ETH_IP_VSITOPSI_FLUSH_UC_ACTION                          (1U)
+#define NETC_ETH_IP_VSITOPSI_FLUSH_MC_ACTION                          (2U)
+#define NETC_ETH_IP_VSITOPSI_FLUSH_FIELD_TYPE_ACTION(x)               (((uint8)(((uint8)(x)) << NETC_ETH_IP_VSITOPSI_FLUSH_FIELD_TYPE_BIT_SHIFT)) & NETC_ETH_IP_VSITOPSI_FLUSH_FIELD_TYPE_MASK)
+
+/* MAC address filtering class - delete single MAC addr from hash table */
+#define NETC_ETH_IP_VSITOPSI_DELETE_SINGLE_FIELD_MACADDR              (4U)  /* Index of the MAC address value in Data array from Delete Single Hash value command. */
+
+/* MAC address filtering class - set promiscuos (and/or enable/disable flush filters) */
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_AND_OP            (0U)  /* Index of the TYPE field in Data array from Promiscuous command. */
+
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_BIT_SHIFT         (6U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_MASK              (0xC0U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_TYPE_UC_ONLY_ACTION          (1U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_TYPE_MC_ONLY_ACTION          (2U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_TYPE_MC_AND_UC_ACTION        (3U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_ACTION(x)         (((uint8)(((uint8)(x)) << NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_BIT_SHIFT)) & NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_TYPE_MASK)
+
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_BIT_SHIFT          (0U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_MASK               (0x01U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP0_NO_FLUSH_ADDRESSES       (0U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP0_FLUSH_ADDRESSES          (1U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_ACTION(x)          (((uint8)(((uint8)(x)) << NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_BIT_SHIFT)) & NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP0_MASK)
+
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_BIT_SHIFT          (1U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_MASK               (0x02U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP1_DISABLE_PROMISC          (0U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_OP1_ENABLE_PROMISC           (1U)
+#define NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_ACTION(x)          (((uint8)(((uint8)(x)) << NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_BIT_SHIFT)) & NETC_ETH_IP_VSITOPSI_PROMISCUOUS_FIELD_OP1_MASK)
+
+/* Get SI timer sync status class - According to ERR051188, VF cannot read the SYNC bit from the SITSR register,
+so it has to ask the PF to return it via a PSI-to-VSI return code message (blocking). */
+#define NETC_ETH_IP_VSITOPSI_GET_TIMER_SYNC_STATUS_CLASS_CODE         (uint8)(0xE0U)
+
+/* PSI to VSI specific reply fields */
+
+#define NETC_ETH_IP_VSITOPSI_REPLY_RETURN_CODE_SHIFT    (8U)
+#define NETC_ETH_IP_VSITOPSI_REPLY_RETURN_CODE_MASK     ((uint16)0xFF00U)
+/* Return code - specifies the class to which the command belonged. */
+#define NETC_ETH_IP_PSITOVSI_REPLY_SET_RETURN_CODE(x)   (((uint16)(((uint16)(x)) << NETC_ETH_IP_VSITOPSI_REPLY_RETURN_CODE_SHIFT)) & NETC_ETH_IP_VSITOPSI_REPLY_RETURN_CODE_MASK)
+
+#define NETC_ETH_IP_VSITOPSI_REPLY_CLASS_CODE_SHIFT     (4U)
+#define NETC_ETH_IP_VSITOPSI_REPLY_CLASS_CODE_MASK      ((uint16)0x00F0U)
+/* Class code - specifies the status of the command processed by the PSI. */
+#define NETC_ETH_IP_PSITOVSI_REPLY_SET_CLASS_CODE(x)    (((uint16)(((uint16)(x)) << NETC_ETH_IP_VSITOPSI_REPLY_CLASS_CODE_SHIFT)) & NETC_ETH_IP_VSITOPSI_REPLY_CLASS_CODE_MASK)
+
+#define NETC_ETH_IP_VSITOPSI_REPLY_COOKIE_SHIFT         (0U)
+#define NETC_ETH_IP_VSITOPSI_REPLY_COOKIE_MASK          ((uint16)0x000FU)
+/* Cookie - when set to 1, the processing of the command is done asynchronously. */
+#define NETC_ETH_IP_PSITOVSI_REPLY_SET_COOKIE(x)        (((uint16)(((uint16)(x)) << NETC_ETH_IP_VSITOPSI_REPLY_COOKIE_SHIFT)) & NETC_ETH_IP_VSITOPSI_REPLY_COOKIE_MASK)
+
+#define NETC_ETH_IP_VSITOPSI_REPLY_GET_CLASS_CODE_MASK  ((uint16)0x000FU)
+#define NETC_ETH_IP_PSITOVSI_REPLY_GET_CLASS_CODE(x)    (((uint16)(((uint16)(x)) >> NETC_ETH_IP_VSITOPSI_REPLY_CLASS_CODE_SHIFT)) & NETC_ETH_IP_VSITOPSI_REPLY_GET_CLASS_CODE_MASK)
+
+#define NETC_ETH_IP_VSITOPSI_REPLY_GET_RETURN_CODE_MASK ((uint16)0x00FFU)
+#define NETC_ETH_IP_PSITOVSI_REPLY_GET_RETURN_CODE(x)   (((uint16)(((uint16)(x)) >> NETC_ETH_IP_VSITOPSI_REPLY_RETURN_CODE_SHIFT)) & NETC_ETH_IP_VSITOPSI_REPLY_GET_RETURN_CODE_MASK)
+
+#define NETC_MAC_ADDR_MATCH(mac_1, mac_2)  ((boolean)(((mac_1)[0U]==(mac_2)[0U]) && \
+                                                      ((mac_1)[1U]==(mac_2)[1U]) && \
+                                                      ((mac_1)[2U]==(mac_2)[2U]) && \
+                                                      ((mac_1)[3U]==(mac_2)[3U]) && \
+                                                      ((mac_1)[4U]==(mac_2)[4U]) && \
+                                                      ((mac_1)[5U]==(mac_2)[5U])))
+
+
 #define NETC_ETH_IP_VLAN_SUPPORT          (STD_ON)
 /*! @brief Enables/Disables internal cache management */
 #define  NETC_ETH_IP_HAS_CACHE_MANAGEMENT       (STD_OFF)
+/*! @brief Enable/Disable free timer support, by default sync timer support is activate */
+#define NETC_ETH_FREE_RUNNING_TIMER_SUPPORT     (STD_OFF)
+/*! @brief EN: Enables / Disables the usage of CRC driver for CRC calculations. When disabled, Eth driver will handle the CRC calculations. */
+#define NETC_ETH_IP_USE_CRC_DRIVER     (STD_OFF)
 
 /*!< the length of response data buffer in bytes for Ingress Port Filter table */
 #define NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN    (224U)
@@ -319,22 +420,29 @@ extern "C"{
 #define NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN    (53U) 
 /*!< 16-byte aligned memory for command tables */
 #define NETC_ETH_IP_TABLE_ALIGNED_SIZE                      (16U)
-/* The maximum number of VLAN Filter Table entries */
-#define NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES              (0U)
+/* The maximum number of MAC Filter Table entries */
+ #define NETC_ETH_IP_NUMBER_OF_MAC_FILTER_TABLE_ENTRIES               (CONFIG_ETH_NXP_S32_MAC_FILTER_TABLE_SIZE)
+ /* The maximum number of Multicast MAC Hash Filter entries */
+ #define NETC_ETH_IP_MAX_NUMBER_OF_MULTICAST_MAC_HASH_FILTER_ENTRIES  (CONFIG_ETH_NXP_S32_MULTICAST_MAC_FILTER_TABLE_SIZE)
+ /* The maximum number of VLAN Filter Table entries */
+#define NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES                 (0U)
 /* The maximum number of Rate Policer Table entries */
-#define NETC_ETH_IP_NUMBER_OF_RP_ENTRIES                       (0U)
+#define NETC_ETH_IP_NUMBER_OF_RP_ENTRIES                          (0U)
 /* The maximum number of Stream Identification Table entries */
-#define NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES        (0U)
+#define NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES           (0U)
 /* The maximum number of Ingress Stream Table entries */
-#define NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES               (0U)
+#define NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES                  (0U)
 /* The maximum number of Stream Gate Control List entries */
-#define NETC_ETH_NUMBER_OF_SGCL_ENTRIES                        (0U)
+#define NETC_ETH_NUMBER_OF_SGCL_ENTRIES                           (0U)
 /* The maximum number of Stream Gate Instance entries */
-#define NETC_ETH_NUMBER_OF_SGI_ENTRIES                         (0U)
+#define NETC_ETH_NUMBER_OF_SGI_ENTRIES                            (0U)
 /* The maximum number of gate control list */
-#define NETC_ETH_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES      (2U)
+#define NETC_ETH_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES         (2U)
 /* The maximum number of static ingress port filter table list */
-#define NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST              (0U)
+#define NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST                   (3U)
+/* Netc version used on a specific platform. */
+ #define NETC_ETH_IP_NETC_V3 (3U) 
+
 /*!< The length of response data buffer in bytes for time gate scheduling table. */
 #define NETC_ETH_IP_TGSTABLE_ADD_REQBUFFER_LEN     (44U)
 #define NETC_ETH_IP_TABLEDATA_BUFFER_LENGTH  (59U)
@@ -352,19 +460,25 @@ extern "C"{
 
 
 /*==================================================================================================
-                                             ENUMS
+*                                             ENUMS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                 STRUCTURES AND OTHER TYPEDEFS
+*                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                 GLOBAL VARIABLE DECLARATIONS
+*                                 GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
-
+#define ETH_43_NETC_START_SEC_VAR_INIT_UNSPECIFIED
+#include "Eth_43_NETC_MemMap.h"
+extern Netc_Eth_Ip_SiBaseType *netcSIsBase[];
+extern Netc_Eth_Ip_VfBaseType *netcVFBase[];
+extern Netc_Eth_Ip_PCIeBaseType *netcPCIePFBase[];
+#define ETH_43_NETC_STOP_SEC_VAR_INIT_UNSPECIFIED
+#include "Eth_43_NETC_MemMap.h"
 /*==================================================================================================
-                                     FUNCTION PROTOTYPES
+*                                     FUNCTION PROTOTYPES
 ==================================================================================================*/
 
 #ifdef __cplusplus
@@ -374,3 +488,4 @@ extern "C"{
 /** @} */
 
 #endif /* NETC_ETH_IP_CFG_DEFINES_H */
+

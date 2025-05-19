@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +40,7 @@ extern "C"{
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION_CFGDEFINES    0
 #define ADC_SAR_IP_SW_MAJOR_VERSION_CFGDEFINES               2
 #define ADC_SAR_IP_SW_MINOR_VERSION_CFGDEFINES               0
-#define ADC_SAR_IP_SW_PATCH_VERSION_CFGDEFINES               0
+#define ADC_SAR_IP_SW_PATCH_VERSION_CFGDEFINES               1
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
 ==================================================================================================*/
@@ -87,31 +87,36 @@ extern "C"{
 #define ADC_SAR_IP_JECH_ENABLED               (STD_ON)
 #define ADC_SAR_IP_EOCTU_ENABLED              (STD_ON)
 #define ADC_SAR_IP_EOC_ENABLED                (STD_ON)
-#define ADC_SAR_IP_WDG_ENABLED                (STD_ON)
-#define ADC_SAR_IP_SELFTEST_ENABLED           (STD_OFF)
-#define ADC_SAR_IP_DEV_ERROR_DETECT           (STD_OFF)
+#define ADC_SAR_IP_WDG_ENABLED                ((STD_OFF))
+#define ADC_SAR_IP_SELFTEST_ENABLED           ((STD_OFF))
+#define ADC_SAR_IP_DEV_ERROR_DETECT           ((STD_OFF))
 #define ADC_SAR_IP_TIMEOUT_TYPE               (OSIF_COUNTER_DUMMY)
 #define ADC_SAR_IP_TIMEOUT_VAL                (100000UL)
-#define ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED  (STD_OFF)
-#define ADC_SAR_IP_DMA_ERROR_ENABLED          (STD_OFF)
-#define ADC_SAR_IP_ENABLE_USER_MODE_SUPPORT   (STD_OFF)
-#define ADC_SAR_IP_SET_RESOLUTION             (STD_OFF)
-#define ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE    (STD_ON)
-#define FEATURE_ADC_HAS_HIGH_SPEED_ENABLE     (0U)
-#define FEATURE_ADC_HAS_EXT_TRIGGER           (1U)
-#define FEATURE_ADC_HAS_INJ_EXT_TRIGGER       (1U)
-#define FEATURE_ADC_HAS_AUX_EXT_TRIGGER       (0U)
-#define FEATURE_ADC_HAS_CLOCK_DIVIDER         (0U)
-#define FEATURE_ADC_HAS_CALIBRATION           (1U)
-#define FEATURE_ADC_HAS_PRESAMPLING           (1U)
-#define FEATURE_ADC_HAS_CONVERSION_TIMING     (1U)
-#define FEATURE_ADC_HAS_APPLICATION_EXTENSION (0U)
-#define FEATURE_ADC_SAR_DECODE_DELAY          (0U)
-#define FEATURE_ADC_HAS_AVERAGING             (0U)
-#define FEATURE_ADC_SAF8544_CHANNEL_WORKAROUND             (0U)
+#define ADC_SAR_IP_ASYNC_CALIBARTION_ENABLED  ((STD_OFF))
+#define ADC_SAR_IP_ENABLE_USER_MODE_SUPPORT   ((STD_OFF))
+#define ADC_SAR_IP_SET_RESOLUTION             ((STD_OFF))
+#define ADC_SAR_IP_EXTERNAL_TRIGGER_ENABLE    ((STD_ON))
+#define ADC_SAR_IP_HIGH_SPEED_ENABLE_AVAILABLE     ((0U))
+#define ADC_SAR_IP_EXT_TRIGGER_AVAILABLE           ((1U))
+#define ADC_SAR_IP_INJ_EXT_TRIGGER_AVAILABLE       ((1U))
+#define ADC_SAR_IP_AUX_EXT_TRIGGER_AVAILABLE       ((0U))
+#define ADC_SAR_IP_CLOCK_DIVIDER_AVAILABLE         ((0U))
+#define ADC_SAR_IP_CALIBRATION_AVAILABLE           ((1U))
+#define ADC_SAR_IP_USER_OFFSET_GAIN_REG_AVAILABLE  ((1U))
+#define ADC_SAR_IP_PRESAMPLING_AVAILABLE           ((1U))
+#define ADC_SAR_IP_CONVERSION_TIMING_AVAILABLE     ((1U))
+#define ADC_SAR_IP_CWSELR_AVAILABLE                ((1U))
+#define ADC_SAR_IP_APPLICATION_EXTENSION_AVAILABLE ((0U))
+#define ADC_SAR_IP_DECODE_DELAY_AVAILABLE          ((0U))
+#define ADC_SAR_IP_AVERAGING_AVAILABLE             ((0U))
+#define FEATURE_ADC_SAF8544_CHANNEL_WORKAROUND     (0U)
 #define ADC_SAR_IP_MAX_CALIBRATION_STEPS             (14U)
 #define ADC_SAR_IP_DEF_SAMPLE_TIME             (20U)
 #define ADC_SAR_IP_NUM_GROUP_CHAN_INIT_VAL   {0U, 0U}
+#ifdef ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND
+#define ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND_VALUE_1      (1U)
+#define ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND_VALUE_2      (2U)
+#endif /* ADC_SAR_IP_SET_CTU_MODE_GCC_WORKAROUND */
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
 ==================================================================================================*/

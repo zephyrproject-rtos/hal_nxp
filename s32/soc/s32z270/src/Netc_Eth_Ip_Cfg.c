@@ -1,6 +1,6 @@
 /*
- * Copyright 2022-2024 NXP
-*
+ * Copyright 2022-2025 NXP
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -33,7 +33,7 @@ extern "C"{
 #define NETC_IP_CFG_AR_RELEASE_REVISION_VERSION_C   0
 #define NETC_IP_CFG_SW_MAJOR_VERSION_C              2
 #define NETC_IP_CFG_SW_MINOR_VERSION_C              0
-#define NETC_IP_CFG_SW_PATCH_VERSION_C              0
+#define NETC_IP_CFG_SW_PATCH_VERSION_C              1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -108,7 +108,7 @@ Netc_Eth_Ip_VfBaseType *netcVFBase[] = { (Netc_Eth_Ip_VfBaseType *)NULL_PTR, \
                                          (Netc_Eth_Ip_VfBaseType *)IP_NETC__NETC_VF3_PCI_HDR_TYPE0, (Netc_Eth_Ip_VfBaseType *)IP_NETC__NETC_VF4_PCI_HDR_TYPE0, \
                                          (Netc_Eth_Ip_VfBaseType *)IP_NETC__NETC_VF5_PCI_HDR_TYPE0, (Netc_Eth_Ip_VfBaseType *)IP_NETC__NETC_VF6_PCI_HDR_TYPE0, \
                                          (Netc_Eth_Ip_VfBaseType *)IP_NETC__NETC_VF7_PCI_HDR_TYPE0};
-
+                                         
 /** @brief Base address for all VFs. NULL_PTR is added as the hardware has only 7 VF starting from 1. */
 Netc_Eth_Ip_PCIeBaseType *netcPCIePFBase[] = { (Netc_Eth_Ip_PCIeBaseType *)IP_NETC__NETC_F0_PCI_HDR_TYPE0, (Netc_Eth_Ip_PCIeBaseType *)IP_NETC__NETC_F1_PCI_HDR_TYPE0, \
                                                (Netc_Eth_Ip_PCIeBaseType *)IP_NETC__NETC_F2_PCI_HDR_TYPE0, (Netc_Eth_Ip_PCIeBaseType *)IP_NETC__NETC_F3_PCI_HDR_TYPE0};

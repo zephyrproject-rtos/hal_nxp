@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,7 +38,7 @@ extern "C"{
 #define EMIOS_PWM_IP_CFGDEFINES_AR_RELEASE_REVISION_VERSION  0
 #define EMIOS_PWM_IP_CFGDEFINES_SW_MAJOR_VERSION             2
 #define EMIOS_PWM_IP_CFGDEFINES_SW_MINOR_VERSION             0
-#define EMIOS_PWM_IP_CFGDEFINES_SW_PATCH_VERSION             0
+#define EMIOS_PWM_IP_CFGDEFINES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -62,10 +62,10 @@ extern "C"{
 #define EMIOS_PWM_IP_NOTIFICATION_SUPPORT             (STD_OFF)
 
 /** @brief        Macros to indicate prescaler used*/
-#define  EMIOS_PWM_IP_PRESCALER_14BIT
+#define EMIOS_PWM_IP_PRESCALER_14BIT
 
-/** @brief        Timer width*/
-#define  EMIOS_PWM_IP_TIMER_WIDTH_24BITS
+/** @brief        Macros to indicate timer width */
+#define EMIOS_PWM_IP_TIMER_WIDTH_24BITS
 
 /**
 * @brief        Macro to indicate that PWM driver can support call IP layer directly or must be using HLD (Autosar mode).
@@ -74,8 +74,7 @@ extern "C"{
 *               If CT tool is used, this mean PWM driver can support call IP layer directly or
 *               using HLD layer, so this macro can be equal to STD_ON/STD_OFF
 */
-#define EMIOS_PWM_IP_AUTOSAR_MODE_IS_USED                (STD_OFF)
-
+#define EMIOS_PWM_IP_AUTOSAR_MODE_IS_USED           (STD_OFF)
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/

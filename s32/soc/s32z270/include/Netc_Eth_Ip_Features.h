@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,7 +35,7 @@ extern "C"
 #define NETC_ETH_IP_FEATURES_AR_RELEASE_REVISION_VERSION  0
 #define NETC_ETH_IP_FEATURES_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_FEATURES_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_FEATURES_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_FEATURES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS

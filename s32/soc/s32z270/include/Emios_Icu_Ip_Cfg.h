@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
  *   @file    Emios_Icu_Ip_Cfg.h
- *   @version 2.0.0
+ *   @version 2.0.1
  *
  *   @brief   AUTOSAR Icu - contains the data exported by the ICU module.
  *   @details Contains the information that will be exported by the module, as requested by AUTOSAR.
@@ -41,14 +41,14 @@ extern "C"{
 #define EMIOS_ICU_IP_CFG_AR_RELEASE_REVISION_VERSION  0
 #define EMIOS_ICU_IP_CFG_SW_MAJOR_VERSION             2
 #define EMIOS_ICU_IP_CFG_SW_MINOR_VERSION             0
-#define EMIOS_ICU_IP_CFG_SW_PATCH_VERSION             0
+#define EMIOS_ICU_IP_CFG_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 /* Check if source file and ICU configuration header file are of the same vendor */
 #if (EMIOS_ICU_IP_CFG_VENDOR_ID != EMIOS_ICU_IP_SA_INIT_PBCFG_VENDOR_ID)
-    #error "Emios_Icu_Ip_Cfg.h and Emios_Icu_Ip_SA_INIT_PBcfg.h have different vendor IDs"
+    #error "Emios_Icu_Ip_Cfg.h and Emios_Icu_Ip_SA_Init_PBcfg.h have different vendor IDs"
 #endif
 /* Check if header file and Icu configuration header file are of the same Autosar version */
 #if ((EMIOS_ICU_IP_CFG_AR_RELEASE_MAJOR_VERSION != EMIOS_ICU_IP_SA_INIT_PBCFG_AR_RELEASE_MAJOR_VERSION) || \
@@ -727,4 +727,3 @@ extern "C"{
 /** @} */
 
 #endif /* EMIOS_ICU_IP_CFG_H */
-

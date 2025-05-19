@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,7 +19,7 @@
 #define ADC_SAR_IP_AR_RELEASE_REVISION_VERSION_INIT_PBCFG   0
 #define ADC_SAR_IP_SW_MAJOR_VERSION_INIT_PBCFG              2
 #define ADC_SAR_IP_SW_MINOR_VERSION_INIT_PBCFG              0
-#define ADC_SAR_IP_SW_PATCH_VERSION_INIT_PBCFG              0
+#define ADC_SAR_IP_SW_PATCH_VERSION_INIT_PBCFG              1
 
 #endif /* ADC_SAR_IP_INIT_PBCFG_H */
 
