@@ -264,25 +264,25 @@ static uint16 Netc_EthSwt_Ip_FdbTableEntryTimeout[FEATURE_NETC_ETHSWT_IP_NUMBER_
 #include "EthSwt_43_NETC_MemMap.h"
 
 /* A shadow buffer for the mirroring configuration to be used when the application is reading the active configuration */
-static Netc_EthSwt_Ip_SwitchMirrorCfgType MirrorCfgBackup;
+VAR_SEC_NOCACHE(MirrorCfgBackup) static Netc_EthSwt_Ip_SwitchMirrorCfgType MirrorCfgBackup;
 
 /* Structure used for filling in the actual command buffer descriptor used in table operations */
-static volatile Netc_EthSwt_Ip_CmdBDType CmdBDRConfig[NETC_ETHSWT_IP_CBDR_NUM];
+VAR_SEC_NOCACHE(CmdBDRConfig) static volatile Netc_EthSwt_Ip_CmdBDType CmdBDRConfig[NETC_ETHSWT_IP_CBDR_NUM];
 
  /* Key element data for ingress port filter table */
-static volatile uint32 Netc_EthSwt_Ip_IPFKeyeData[NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
+VAR_SEC_NOCACHE(Netc_EthSwt_Ip_IPFKeyeData) static volatile uint32 Netc_EthSwt_Ip_IPFKeyeData[NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
 
 /* a 128 bytes aligned command ring descriptor buffer */
-VAR_ALIGN(static Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor0[NETC_ETHSWT_IP_ACTUAL_CBDR0_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(SwtcommandRingDescriptor0) VAR_ALIGN(static Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor0[NETC_ETHSWT_IP_ACTUAL_CBDR0_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
 
 /* a 16 bytes aligned FDB table request data buffer */
-VAR_ALIGN(static volatile Netc_EthSwt_Ip_SwitchTableDataType TableDataBuffer, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(TableDataBuffer) VAR_ALIGN(static volatile Netc_EthSwt_Ip_SwitchTableDataType TableDataBuffer, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
 
 /* a 16 bytes aligned request header table data buffer */
-VAR_ALIGN(static Netc_EthSwt_Ip_ReqHeaderTableOperationDataType Netc_EthSwt_Ip_OperationData, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_EthSwt_Ip_OperationData) VAR_ALIGN(static Netc_EthSwt_Ip_ReqHeaderTableOperationDataType Netc_EthSwt_Ip_OperationData, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
 
 /* Local copy of the pointer to the configuration data. */
-static const Netc_EthSwt_Ip_ConfigType * Netc_EthSwt_Ip_ConfigPtr[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS];
+VAR_SEC_NOCACHE(Netc_EthSwt_Ip_ConfigPtr) static const Netc_EthSwt_Ip_ConfigType * Netc_EthSwt_Ip_ConfigPtr[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS];
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "EthSwt_43_NETC_MemMap.h"

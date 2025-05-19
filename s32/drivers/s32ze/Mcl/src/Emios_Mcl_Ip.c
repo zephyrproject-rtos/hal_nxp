@@ -76,7 +76,7 @@ extern "C"{
 #define MCL_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
 
-eMIOS_Type* Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
+eMIOS_Type *const Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
 
 #define MCL_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
@@ -99,7 +99,7 @@ eMIOS_Type* Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
     #define MCL_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
     #include "Mcl_MemMap.h"
 
-    static Emios_Ip_InstStateType Emios_Ip_axIpIsInitialized[eMIOS_INSTANCE_COUNT];
+    VAR_SEC_NOCACHE(Emios_Ip_axIpIsInitialized) static Emios_Ip_InstStateType Emios_Ip_axIpIsInitialized[eMIOS_INSTANCE_COUNT];
 
     #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
     #include "Mcl_MemMap.h"
@@ -110,7 +110,7 @@ eMIOS_Type* Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
 #define MCL_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
 
-static Emios_Ip_ChStateType Emios_Ip_axChState[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC_COUNT];
+VAR_SEC_NOCACHE(Emios_Ip_axChState) static Emios_Ip_ChStateType Emios_Ip_axChState[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC_COUNT];
 
 #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
