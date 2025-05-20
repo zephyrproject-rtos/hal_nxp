@@ -1,4 +1,4 @@
-if(CONFIG_BT OR CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
+if(CONFIG_BT OR CONFIG_NET_L2_OPENTHREAD OR CONFIG_IEEE802154)
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk-middleware-connectivity-framework)
     include(connectivity_framework)
     if(CONFIG_SOC_SERIES_MCXW)
@@ -26,7 +26,7 @@ if(CONFIG_BT OR CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
             ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/rpmsg_lite/rpmsg_lite.c
         )
 
-        if(CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
+        if(CONFIG_IEEE802154)
             zephyr_include_directories(
                 ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/phy/interface
             )
