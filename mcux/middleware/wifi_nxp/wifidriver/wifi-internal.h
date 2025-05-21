@@ -422,8 +422,6 @@ void wifi_sdio_unlock(void);
 bool wifi_ind_reset_in_progress(void);
 void wifi_ind_reset_start(void);
 void wifi_ind_reset_stop(void);
-int wifi_ind_reset_lock(void);
-void wifi_ind_reset_unlock(void);
 #endif
 
 mlan_status wrapper_wlan_cmd_mgmt_ie(int bss_type, void *buffer, unsigned int len, t_u16 action);
@@ -487,4 +485,13 @@ int send_wifi_driver_tx_data_event(t_u8 interface);
 int send_wifi_driver_tx_null_data_event(t_u8 interface);
 #endif
 
+/**
+ * Use this function to check whether wifi reset is in progress.
+ */
+bool wifi_reset_in_progress(void);
+
+/**
+ * Use this function to mark wifi reset start and stop.
+ */
+void wifi_reset_set_state(bool enable);
 #endif /* __WIFI_INTERNAL_H__ */
