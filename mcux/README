@@ -194,3 +194,9 @@ Patch List:
     (usb_device_ehci.c and usb_device_lpcip3511.c) in Zephyr environment.
   - drivers: dmamux: Fix build error when FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL is defined as 1.
   - mcux-sdk-ng: drivers: dma3: Add peripheral to peripheral support.
+  - Add usb_host_mcux_drv_port.h file for using MCUX SDK USB host controller driver easily in Zephyr.
+      - usb_host_mcux_drv_port.h contains the simplified structs, enums and APIs that MCUX SDK USB host controller drivers need.
+      - Update usb_host_ehci.c, usb_host_khci.c, usb_host_ohci.c and usb_host_ip3516hs.c if in Zephyr environment.
+        - Add include of usb_host_mcux_drv_port.h.
+        - Remove include of usb_host.h, usb_host_hci.h, usb_host_devices.h and usb_host_framework.h.
+      - Update usb_host_ehci.c and usb_host_ip3516hs.c to not depend on usb_host_device_instance_t struct.
