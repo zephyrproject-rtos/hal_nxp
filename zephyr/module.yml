@@ -15,29 +15,29 @@ blobs:
     description: "Firmware for NXP IW612 Wi-Fi + Bluetooth single-chip solution"
     doc-url: https://www.nxp.com/products/wireless-connectivity/wi-fi-plus-bluetooth-plus-802-15-4/2-4-5-ghz-dual-band-1x1-wi-fi-6-802-11ax-plus-bluetooth-5-4-plus-802-15-4-tri-radio-solution:IW612
   - path: rw61x/rw61x_sb_ble_15d4_combo_a2.bin
-    sha256: 9c21650a1033f41fc38f4121d1900097e27b5ad6807fd71b0b415dd3d104bedf
+    sha256: abe79b5f7d6bf2bbae94345b1850afd50c54952a3fc9f27973d717b08fbb4333
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.0.0/rw61x_sb_combo_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.1/rw61x/rw61x_sb_ble_15d4_combo_a2.bin
     description: "BLE and 15.4 combo firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.0.0/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.1/readme.txt
   - path: rw61x/rw61x_sb_ble_a2.bin
-    sha256: 3441bb18ccaddbcd0ea88e8c7a92800d1b91ed2f25ea020ddbcfde3ff8a72ad9
+    sha256: dd380b5fee980fc6e0d7c21a5fc6a9d99be3ab3003212c563b610f015be4ddea
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.0.0/rw61x_sb_ble_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.1/rw61x/rw61x_sb_ble_a2.bin
     description: "BLE firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.0.0/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.1/readme.txt
   - path: rw61x/rw61x_sb_wifi_a2.bin
-    sha256: f6ac472b11067b3d73f8fab149e9d79988cfcdba580f28d859693b7cfd9a19c5
+    sha256: 4bfde14a0639384e1a2f2986a3c3b555bde7ae90207485b5c81fa972c5e3636f
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.0.0/rw61x_sb_wifi_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.1/rw61x/rw61x_sb_wifi_a2.bin
     description: "WiFi firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.0.0/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.1/readme.txt
   - path: mcxw71/mcxw71_nbu_ble.sb3
     sha256: f952d3df86b781982586d0737f29d46c4b7480b6b6e7905c002625f807ac60f4
     type: img
