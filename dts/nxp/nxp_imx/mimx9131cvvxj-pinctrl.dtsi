@@ -303,13 +303,13 @@
 	/omit-if-no-ref/ iomuxc1_enet1_td3_flexio_flexio_flexio2_flexio2: IOMUXC1_ENET1_TD3_FLEXIO_FLEXIO_FLEXIO2_FLEXIO2 {
 		pinmux = <0x443c00a0 4 0x0 0 0x443c0250>;
 	};
-	/omit-if-no-ref/ iomuxc1_enet1_td3_gpio_io_gpio4_io3: IOMUXC1_ENET1_TD3_GPIO_IO_GPIO4_IO3 {
+	/omit-if-no-ref/ iomuxc1_enet1_td3_gpio_io_gpio4_io2: IOMUXC1_ENET1_TD3_GPIO_IO_GPIO4_IO2 {
 		pinmux = <0x443c00a0 5 0x0 0 0x443c0250>;
 	};
 	/omit-if-no-ref/ iomuxc1_enet1_td3_hsiomix_otg_id_hsiomix_otg_id2: IOMUXC1_ENET1_TD3_HSIOMIX_OTG_ID_HSIOMIX_OTG_ID2 {
 		pinmux = <0x443c00a0 3 0x0 0 0x443c0250>;
 	};
-	/omit-if-no-ref/ iomuxc1_enet1_td3_lpi2c_scl_lpi2c1_scl: IOMUXC1_ENET1_TD3_LPI2C_SCL_LPI2C1_SCL {
+	/omit-if-no-ref/ iomuxc1_enet1_td3_lpi2c_scl_lpi2c2_scl: IOMUXC1_ENET1_TD3_LPI2C_SCL_LPI2C2_SCL {
 		pinmux = <0x443c00a0 6 0x443c03e8 0 0x443c0250>;
 	};
 	/omit-if-no-ref/ iomuxc1_enet1_txc_ccm_enet_qos_clock_generate_tx_clk_ccm_enet_qos_clock_generate_tx_clk: IOMUXC1_ENET1_TXC_CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK_CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK {
@@ -1296,7 +1296,7 @@
 	/omit-if-no-ref/ iomuxc1_i2c1_sda_tpm_ch_tpm2_ch1: IOMUXC1_I2C1_SDA_TPM_CH_TPM2_CH1 {
 		pinmux = <0x443c0174 3 0x0 0 0x443c0324>;
 	};
-	/omit-if-no-ref/ iomuxc1_i2c2_scl_gpio_io_gpio1_io3: IOMUXC1_I2C2_SCL_GPIO_IO_GPIO1_IO3 {
+	/omit-if-no-ref/ iomuxc1_i2c2_scl_gpio_io_gpio1_io2: IOMUXC1_I2C2_SCL_GPIO_IO_GPIO1_IO2 {
 		pinmux = <0x443c0178 5 0x0 0 0x443c0328>;
 	};
 	/omit-if-no-ref/ iomuxc1_i2c2_scl_i3c_pur_b_i3c1_pur_b: IOMUXC1_I2C2_SCL_I3C_PUR_B_I3C1_PUR_B {
