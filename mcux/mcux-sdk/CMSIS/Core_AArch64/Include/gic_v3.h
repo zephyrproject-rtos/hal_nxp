@@ -266,9 +266,9 @@ __STATIC_INLINE GICRedistributor_Type *GIC_GetRdist(void)
 
 /** \brief Get the Redistributor SGI_base.
 */
-__STATIC_INLINE void *GIC_GetRdistSGIBase(void *rd_base)
+__STATIC_INLINE GICDistributor_Type *GIC_GetRdistSGIBase(void *rd_base)
 {
-  return (void *)((uintptr_t)rd_base + GICR_SGI_BASE_OFF);
+  return (GICDistributor_Type *)((uintptr_t)rd_base + GICR_SGI_BASE_OFF);
 }
 
 /** \brief Wait for register write pending.
@@ -690,7 +690,7 @@ __STATIC_INLINE void GIC_DistInit(void)
   for (i = 32U; i < num_irq; i++)
   {
       /* Use non secure group1 for all SPI */
-      GIC_SetGroup(i, 1);
+      GIC_SetGroup((IRQn_Type)i, 1);
       //Disable the SPI interrupt
       GIC_DisableIRQ((IRQn_Type)i);
       //Set level-sensitive (and N-N model)
