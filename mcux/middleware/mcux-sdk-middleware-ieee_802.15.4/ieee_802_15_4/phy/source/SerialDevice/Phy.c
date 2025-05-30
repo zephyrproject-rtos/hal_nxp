@@ -36,6 +36,12 @@
 #undef CTX_NO
 #define CTX_NO 2
 
+#define PHY_GET_CTX_CNT 10
+
+#define PHY_INTF_CB_QUEUE_SIZE 10
+#define PHY_INTF_CB_TASK_PRIORITY 4
+#define PHY_INTF_CB_TASK_STACK_SIZE 1024
+
 static struct phy_local
 {
     uint32_t id;
@@ -58,8 +64,16 @@ static plmeGetReq_t phy_get_rsp;
 
 static OSA_EVENT_HANDLE_DEFINE(get_event);
 
+static OSA_MUTEX_HANDLE_DEFINE(phy_intf_mutex);
+static OSA_MSGQ_HANDLE_DEFINE(phy_intf_cb_queue, PHY_INTF_CB_QUEUE_SIZE, sizeof(phyMessageHeader_t *));
+
+static void phy_intf_cb_task_func();
+static OSA_TASK_HANDLE_DEFINE(phy_intf_cb_task);
+static OSA_TASK_DEFINE(phy_intf_cb_task_func, PHY_INTF_CB_TASK_PRIORITY, 1, PHY_INTF_CB_TASK_STACK_SIZE, FALSE);
+
 static bool_t phy_intf_init_done = FALSE;
 static bool_t phy_intf_init_ongoing = FALSE;
+extern const uint8_t gUseRtos_c;
 
 
 static void wait_response()
@@ -83,6 +97,64 @@ static void wait_response()
     OSA_EventClear(get_event, 1);
 }
 
+static void phy_intf_cb_task_func()
+{
+    phyMessageHeader_t *msg;
+    bool_t msg_free;
+
+    while (1)
+    {
+        if (OSA_MsgQGet(phy_intf_cb_queue, &msg, osaWaitForever_c) == KOSA_StatusSuccess)
+        {
+            msg_free = TRUE;
+
+            switch (msg->msgType)
+            {
+                case gPdDataInd_c:
+                    if (phyLocal[msg->ctx_id].PD_MAC_SapHandler)
+                    {
+                        msg_free = FALSE;
+                        ((pdDataToMacMessage_t *)msg)->msgData.dataInd.pPsdu = (uint8_t *)msg + sizeof(pdDataToMacMessage_t);
+
+                        phyLocal[msg->ctx_id].PD_MAC_SapHandler((pdDataToMacMessage_t *)msg, msg->ctx_id);
+                    }
+                    break;
+
+                case gPdDataCnf_c:
+                    if (phyLocal[msg->ctx_id].PD_MAC_SapHandler)
+                    {
+                        msg_free = FALSE;
+                        ((pdDataToMacMessage_t *)msg)->msgData.dataCnf.ackData = (uint8_t *)msg + sizeof(pdDataToMacMessage_t);
+
+                        phyLocal[msg->ctx_id].PD_MAC_SapHandler((pdDataToMacMessage_t *)msg, msg->ctx_id);
+                    }
+                    break;
+
+                case gPlmeCcaCnf_c:
+                case gPlmeEdCnf_c:
+                case gPlmeSetCnf_c:
+                case gPlmeTimeoutInd_c:
+                case gPlmeAbortInd_c:
+                    if (phyLocal[msg->ctx_id].PLME_MAC_SapHandler)
+                    {
+                        msg_free = FALSE;
+                        phyLocal[msg->ctx_id].PLME_MAC_SapHandler((plmeToMacMessage_t *)msg, msg->ctx_id);
+                    }
+                    break;
+            }
+
+            if (msg_free)
+            {
+                PHY_MSG_Free(msg);
+            }
+        }
+
+        if (!gUseRtos_c)
+        {
+            break;
+        }
+    }
+}
 
 static hal_rpmsg_return_status_t PhyRpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
 {
@@ -112,31 +184,9 @@ static hal_rpmsg_return_status_t PhyRpmsgRxCallback(void *param, uint8_t *data, 
         pMsg->ctx_id = 0;
     }
 
-    switch(pMsg->msgType)
+    if (OSA_MsgQPut(phy_intf_cb_queue, &pMsg) != KOSA_StatusSuccess)
     {
-        case gPdDataInd_c:
-            ((pdDataToMacMessage_t *)pMsg)->msgData.dataInd.pPsdu = (uint8_t *)pMsg + sizeof(pdDataToMacMessage_t);
-
-            phyLocal[pMsg->ctx_id].PD_MAC_SapHandler((pdDataToMacMessage_t *)pMsg, pMsg->ctx_id);
-            break;
-
-        case gPdDataCnf_c:
-            ((pdDataToMacMessage_t *)pMsg)->msgData.dataCnf.ackData = (uint8_t *)pMsg + sizeof(pdDataToMacMessage_t);
-
-            phyLocal[pMsg->ctx_id].PD_MAC_SapHandler((pdDataToMacMessage_t *)pMsg, pMsg->ctx_id);
-            break;
-
-        case gPlmeCcaCnf_c:
-        case gPlmeEdCnf_c:
-        case gPlmeSetTRxStateCnf_c:
-        case gPlmeSetCnf_c:
-        case gPlmeTimeoutInd_c:
-        case gPlmeAbortInd_c:
-            phyLocal[pMsg->ctx_id].PLME_MAC_SapHandler((plmeToMacMessage_t *)pMsg, pMsg->ctx_id);
-            break;
-
-        default:
-            PHY_MSG_Free(pMsg);
+        PHY_MSG_Free(pMsg);
     }
 
     return kStatus_HAL_RL_RELEASE;
@@ -156,6 +206,15 @@ void Phy_Init(void)
 
     OSA_InterruptEnable();
 
+#ifndef MEM_USE_ZEPHYR
+    /* prepare to send RNG seed to NBU */
+    int PLATFORM_FwkSrvInit();
+    PLATFORM_FwkSrvInit();
+
+    int RNG_Init();
+    RNG_Init();
+#endif /* MEM_USE_ZEPHYR */
+
     if (HAL_RpmsgInit((hal_rpmsg_handle_t)phyRpmsgHandle, &phyRpmsgConfig) != kStatus_HAL_RpmsgSuccess)
     {
         assert(0);
@@ -170,6 +229,11 @@ void Phy_Init(void)
 
     /* plmeEventHandle with 0 auto clear to allow the task to run after flags have been set */
     OSA_EventCreate((osa_event_handle_t)get_event, 0);
+
+    OSA_MutexCreate((osa_mutex_handle_t)phy_intf_mutex);
+
+    OSA_MsgQCreate((osa_msgq_handle_t)phy_intf_cb_queue, PHY_INTF_CB_QUEUE_SIZE, sizeof(phyMessageHeader_t *));
+    OSA_TaskCreate((osa_task_handle_t)phy_intf_cb_task, OSA_TASK(phy_intf_cb_task_func), NULL);
 
     /* Configure DTEST signals for debug */
 #if (defined(HWINIT_DEBUG_DTEST) && (HWINIT_DEBUG_DTEST == 1L))
@@ -227,6 +291,7 @@ phyStatus_t MAC_PLME_SapHandler(macToPlmeMessage_t *pMsg, instanceId_t phyInstan
         return gPhyInvalidParameter_c;
     }
 
+    OSA_MutexLock(phy_intf_mutex, osaWaitForever_c);
     PLATFORM_RemoteActiveReq();
 
     do
@@ -276,6 +341,7 @@ phyStatus_t MAC_PLME_SapHandler(macToPlmeMessage_t *pMsg, instanceId_t phyInstan
 
     wait_phy_rsp = FALSE;
     PLATFORM_RemoteActiveRel();
+    OSA_MutexUnlock(phy_intf_mutex);
 
     return ret;
 }
@@ -299,6 +365,7 @@ phyStatus_t MAC_PD_SapHandler(macToPdDataMessage_t *pMsg, instanceId_t phyInstan
         return gPhyInvalidParameter_c;
     }
 
+    OSA_MutexLock(phy_intf_mutex, osaWaitForever_c);
     PLATFORM_RemoteActiveReq();
 
     do
@@ -323,19 +390,34 @@ phyStatus_t MAC_PD_SapHandler(macToPdDataMessage_t *pMsg, instanceId_t phyInstan
     } while (0);
 
     PLATFORM_RemoteActiveRel();
+    OSA_MutexUnlock(phy_intf_mutex);
 
     return ret;
 }
 
 uint8_t PHY_get_ctx()
 {
+    uint8_t cnt = PHY_GET_CTX_CNT;
+    phyStatus_t ret;
     macToPlmeMessage_t msg;
 
     msg.msgType = gPlmeGetReq_c;
     msg.msgData.getReq.PibAttribute = gPhyGetCtxId;
     msg.msgData.getReq.PibAttributeValue = (uint64_t)(-1);
 
-    MAC_PLME_SapHandler(&msg, 0);
+    /* wait for NBU to be ready */
+    do
+    {
+        ret = MAC_PLME_SapHandler(&msg, 0);
+    } while ((ret != gPhySuccess_c) && (cnt--));
+
+    assert(ret == gPhySuccess_c);
+
+#ifndef MEM_USE_ZEPHYR
+    /* send RNG seed to NBU */
+    int RNG_SetSeed(void);
+    RNG_SetSeed();
+#endif /* MEM_USE_ZEPHYR */
 
     return (uint8_t)msg.msgData.getReq.PibAttributeValue;
 }
