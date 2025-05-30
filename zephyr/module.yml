@@ -59,6 +59,13 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4/raw/MCUX_2.16.100/bin/mcxw71/mcxw71_nbu_ble_15_4_dyn_1_0_17_2.sb3
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
+  - path: mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
+    sha256: fe2de0a690f33128073103b208dbb8bbbb5a30bfb33521ebf16e52a751439073
+    type: img
+    version: '1.0.21b'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.06.00-pvw2/bin/mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
+    description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW72 boards"
 
 #For NW61x
   - path: nw61x/sd_nw61x.bin.se
