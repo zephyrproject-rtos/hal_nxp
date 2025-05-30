@@ -1082,7 +1082,10 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
     uint8_t qhIdle              = 0U;
     uint8_t waitingSafelyAccess = 1U;
     uint32_t primeTimesCount    = 0U;
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if !((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
     void *temp;
+#endif
     OSA_SR_ALLOC();
 
     if (NULL == ehciState)
@@ -1202,6 +1205,8 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
             qhIdle                    = 1U;
         }
     } while (0U != length);
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if !((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
     if ((USB_CONTROL_ENDPOINT == (endpointAddress & USB_ENDPOINT_NUMBER_MASK)) &&
         (USB_IN == ((endpointAddress & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK) >>
                     USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_SHIFT)))
@@ -1222,6 +1227,7 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
             }
         }
     }
+#endif
     /* If the QH is not empty */
     if (0U == qhIdle)
     {
