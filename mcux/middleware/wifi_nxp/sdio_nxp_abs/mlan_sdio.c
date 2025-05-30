@@ -24,11 +24,14 @@ static struct sdio_func g_sdio_funcs[8];
 int sdio_drv_creg_read(int addr, int fn, uint32_t *resp)
 {
     struct sdio_func *func = &g_sdio_funcs[fn];
+    uint8_t read_val = 0;
 
-    if (sdio_read_byte(func, addr, (uint8_t *)resp) != 0)
+    if (sdio_read_byte(func, addr, &read_val) != 0)
     {
         return 0;
     }
+
+    *resp = read_val;
 
     return 1;
 }
@@ -36,11 +39,14 @@ int sdio_drv_creg_read(int addr, int fn, uint32_t *resp)
 int sdio_drv_creg_write(int addr, int fn, uint8_t data, uint32_t *resp)
 {
     struct sdio_func *func = &g_sdio_funcs[fn];
+    uint8_t read_val = 0;
 
-    if (sdio_rw_byte(func, addr, data, (uint8_t *)resp) != 0)
+    if (sdio_rw_byte(func, addr, data, &read_val) != 0)
     {
         return 0;
     }
+
+    *resp = read_val;
 
     return 1;
 }
@@ -86,6 +92,12 @@ void sdio_enable_interrupt(void)
     return;
 }
 
+void sdio_disable_interrupt(void)
+{
+    sdhc_disable_interrupt(sdhc_dev, SDHC_INT_SDIO);
+    return;
+}
+
 static void sdio_controller_init(void)
 {
     (void)memset(&wm_g_sd, 0, sizeof(struct sd_card));
@@ -127,7 +139,11 @@ static int sdio_card_init(void)
     /* Enable IO in card */
     (void)sdio_drv_creg_write(0x2, 0, 0x2, &resp);
 
+#if defined(IW610)
+    (void)sdio_set_block_size(&g_sdio_funcs[0], 1);
+#else
     (void)sdio_set_block_size(&g_sdio_funcs[0], 256);
+#endif
     (void)sdio_set_block_size(&g_sdio_funcs[1], 256);
     (void)sdio_set_block_size(&g_sdio_funcs[2], 256);
 

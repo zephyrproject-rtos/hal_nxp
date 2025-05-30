@@ -9,7 +9,7 @@ if (CONFIG_MCUX_COMPONENT_component.wifi_bt_module.tx_pwr_limits)
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_1ZM_WW.h
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_2DS_WW.h
                 Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_2EL_WW.h
-                Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_NH_FCC.h
+                Murata/tx_pwr_limits/wlan_txpwrlimit_cfg_murata_2LL.h
                 u-blox/tx_pwr_limits/wlan_txpwrlimit_cfg_jody_w5_WW.h
     )
     mcux_add_include(

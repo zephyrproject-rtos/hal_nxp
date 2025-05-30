@@ -123,6 +123,7 @@ int retry_attempts;
 wm_wifi_t wm_wifi;
 static bool xfer_pending;
 static bool scan_thread_in_process = false;
+static bool wifi_reset_in_process  = false;
 
 #if CONFIG_HOST_SLEEP
 OSA_SEMAPHORE_HANDLE_DEFINE(wakelock);
@@ -333,6 +334,16 @@ static int wifi_put_mcastf_lock(void)
     }
 
     return WM_SUCCESS;
+}
+
+bool wifi_reset_in_progress(void)
+{
+    return (wifi_reset_in_process == true);
+}
+
+void wifi_reset_set_state(bool enable)
+{
+    wifi_reset_in_process = enable;
 }
 
 #if CONFIG_WIFI_FW_DEBUG
@@ -648,7 +659,7 @@ void wifi_sdio_reg_dbg()
 }
 #endif
 #elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || \
-    defined(SD9177) || defined(RW610_SERIES)
+    defined(SD9177) || defined(RW610_SERIES) || defined(IW610)
 
 #define DEBUG_HOST_READY     0xCC
 #define DEBUG_FW_DONE        0xFF
@@ -1023,7 +1034,6 @@ int wifi_wait_for_vdllcmdresp(void *cmd_resp_priv)
 #endif
 
 #if (CONFIG_WIFI_IND_DNLD)
-static int wifi_reinit(uint8_t fw_reload);
 t_u8 wifi_rx_block_cnt;
 t_u8 wifi_tx_block_cnt;
 
@@ -1040,10 +1050,7 @@ void wlan_process_hang(uint8_t fw_reload)
     wifi_d("Start to process hanging");
 
 #if CONFIG_WIFI_IND_RESET
-    if (fw_reload == FW_RELOAD_NO_EMULATION)
-    {
-        (void)wifi_ind_reset_lock();
-    }
+    wifi_ind_reset_start();
 #endif
 
     /* Block TX data */
@@ -1067,10 +1074,12 @@ void wlan_process_hang(uint8_t fw_reload)
             if (mlan_adap->priv[i]->bss_type == MLAN_BSS_TYPE_STA)
             {
             }
+#if UAP_SUPPORT
             else if (mlan_adap->priv[i]->bss_type == MLAN_BSS_TYPE_UAP)
             {
                 mlan_adap->priv[i]->uap_bss_started = MFALSE;
             }
+#endif
         }
 
         if (mlan_adap->priv[i])
@@ -1081,7 +1090,7 @@ void wlan_process_hang(uint8_t fw_reload)
 
     (void)wifi_event_completion(WIFI_EVENT_FW_HANG, WIFI_EVENT_REASON_SUCCESS, NULL);
 
-    ret = wifi_reinit(fw_reload);
+    ret = wifi_reinit(wm_wifi.fw_start_addr, wm_wifi.size, fw_reload);
 
     if (ret != WM_SUCCESS)
     {
@@ -1096,15 +1105,15 @@ void wlan_process_hang(uint8_t fw_reload)
     wifi_tx_block_cnt   = 0;
     wifi_rx_block_cnt   = 0;
 
-#if CONFIG_WIFI_IND_RESET
-    wifi_ind_reset_stop();
-#endif
+    /* Put sleep_rwlock before resetting FW to avoid wakeing up FW
+       before enabling ieee-ps/deep-ps */
+    if (mlan_adap->ps_state == PS_STATE_SLEEP)
+    {
+        OSA_RWLockWriteUnlock(&sleep_rwlock);
+        mlan_adap->ps_state = PS_STATE_AWAKE;
+    }
 
     (void)wifi_event_completion(WIFI_EVENT_FW_RESET, WIFI_EVENT_REASON_SUCCESS, NULL);
-
-#if CONFIG_WIFI_IND_RESET
-    wifi_ind_reset_unlock();
-#endif
 }
 #endif
 
@@ -1162,9 +1171,6 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
          * this error will help to localize the problem.
          */
         wifi_e("cmd size greater than WIFI_FW_CMDBUF_SIZE\r\n");
-#if CONFIG_WIFI_IND_RESET
-        wifi_ind_reset_unlock();
-#endif
         (void)wifi_put_command_lock();
         return -WM_FAIL;
     }
@@ -1173,9 +1179,6 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
     if (wifi_recovery_enable)
     {
         wifi_w("Recovery in progress. command 0x%x skipped", cmd->command);
-#if CONFIG_WIFI_IND_RESET
-        wifi_ind_reset_unlock();
-#endif
         wifi_put_command_lock();
         return -WM_FAIL;
     }
@@ -1183,9 +1186,6 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
     if (wifi_shutdown_enable)
     {
         wifi_w("FW shutdown in progress. command 0x%x skipped", cmd->command);
-#if CONFIG_WIFI_IND_RESET
-        wifi_ind_reset_unlock();
-#endif
         wifi_put_command_lock();
         return -WM_FAIL;
     }
@@ -1200,9 +1200,6 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
     {
 #if CONFIG_WIFI_PS_DEBUG
         wifi_e("Failed to wakeup card");
-#endif
-#if CONFIG_WIFI_IND_RESET
-        wifi_ind_reset_unlock();
 #endif
         // wakelock_put(WL_ID_LL_OUTPUT);
         (void)wifi_put_command_lock();
@@ -1276,14 +1273,15 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
 #endif
 #if CONFIG_WIFI_RECOVERY
         wifi_recovery_enable = true;
-#else
+#ifndef RW610
         /* assert as command flow cannot work anymore */
-#if (CONFIG_WIFI_IND_DNLD)
+#if CONFIG_WIFI_IND_DNLD
         wlan_process_hang(FW_RELOAD_SDIO_INBAND_RESET);
+#endif /* CONFIG_WIFI_IND_DNLD */
+#endif /* !RW610 */
 #else
         ASSERT(0);
-#endif
-#endif
+#endif /* CONFIG_WIFI_RECOVERY */
     }
 
     if (cmd->command == HostCmd_CMD_FUNC_SHUTDOWN)
@@ -1296,9 +1294,6 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
     OSA_SemaphorePost((osa_semaphore_handle_t)uapsd_sem);
 #endif
     wifi_set_xfer_pending(false);
-#if CONFIG_WIFI_IND_RESET
-    wifi_ind_reset_unlock();
-#endif
     (void)wifi_put_command_lock();
     return ret;
 }
@@ -2065,16 +2060,6 @@ static int wifi_core_init(void)
     OSA_SemaphorePost((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
 #endif
 
-#if CONFIG_ECSA
-    /* Semaphore to wait ECSA complete */
-    status = OSA_SemaphoreCreateBinary((osa_semaphore_handle_t)ecsa_status_control.ecsa_sem);
-    if (status != KOSA_StatusSuccess)
-    {
-        PRINTF("Create ecsa sem failed");
-        goto fail;
-    }
-#endif
-
 #if CONFIG_FW_VDLL
     (void)mlan_adap->callbacks.moal_init_timer(mlan_adap->pmoal_handle, &mlan_adap->vdll_timer, wlan_vdll_complete,
                                                NULL);
@@ -2083,8 +2068,9 @@ static int wifi_core_init(void)
     wm_wifi.wifi_core_init_done = 1;
 
 #if UAP_SUPPORT
-#if defined(SD8801) || defined(RW610)
+#if defined(SD8801) || defined(RW610) || defined(IW610)
     wifi_uap_set_bandwidth(BANDWIDTH_20MHZ);
+    wifi_uap_set_beacon_period(UAP_DEFAULT_BEACON_PERIOD);
 #else
     wifi_uap_set_bandwidth(BANDWIDTH_40MHZ);
 #endif
@@ -2161,9 +2147,7 @@ static void wifi_core_deinit(void)
 #if CONFIG_CSI
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
 #endif
-#if CONFIG_ECSA
-    (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)ecsa_status_control.ecsa_sem);
-#endif
+
 #if CONFIG_FW_VDLL
     (void)mlan_adap->callbacks.moal_stop_timer(mlan_adap->pmoal_handle, mlan_adap->vdll_timer);
     (void)mlan_adap->callbacks.moal_free_timer(mlan_adap->pmoal_handle, &mlan_adap->vdll_timer);
@@ -2246,11 +2230,27 @@ int wifi_init(const uint8_t *fw_start_addr, const size_t size)
 }
 
 #if (CONFIG_WIFI_IND_DNLD)
-static int wifi_reinit(uint8_t fw_reload)
+int wifi_reinit(const uint8_t *fw_start_addr, const size_t size, uint8_t fw_reload)
 {
     int ret = WM_SUCCESS;
 
-    ret = (int)sd_wifi_reinit(WLAN_TYPE_NORMAL, wm_wifi.fw_start_addr, wm_wifi.size, fw_reload);
+#if CONFIG_WIFI_IND_RESET
+    if (wifi_reset_in_progress() == true)
+    {
+        (void)memset(&wm_wifi, 0, sizeof(wm_wifi_t));
+
+        wm_wifi.fw_start_addr = fw_start_addr;
+        wm_wifi.size          = size;
+    }
+    else
+    { /* Do Nothing */
+    }
+#endif
+
+    ret = (int)sd_wifi_reinit(WLAN_TYPE_NORMAL, fw_start_addr, size, fw_reload);
+#if CONFIG_WIFI_IND_RESET
+    wifi_ind_reset_stop();
+#endif
     if (ret != WM_SUCCESS)
     {
         if (ret != MLAN_STATUS_FW_DNLD_SKIP)
@@ -2285,16 +2285,31 @@ static int wifi_reinit(uint8_t fw_reload)
                 ret = -WM_FAIL;
                 break;
         }
+        return ret;
     }
 #ifndef RW610
-    else
+#if CONFIG_WIFI_IND_RESET
+    if (wifi_reset_in_progress() == true)
     {
-        ret = (int)sd_wifi_post_init(WLAN_TYPE_NORMAL);
+        ret = wifi_core_init();
         if (ret != WM_SUCCESS)
         {
-            wifi_e("sd_wifi_post_init failed. status code %d", ret);
+            wifi_e("wifi core re-init failed. status code %d", ret);
             return ret;
         }
+    }
+#endif
+
+    ret = (int)sd_wifi_post_init(WLAN_TYPE_NORMAL);
+    if (ret != WM_SUCCESS)
+    {
+        wifi_e("sd_wifi_post_init failed. status code %d", ret);
+        return ret;
+    }
+
+    if (ret == WM_SUCCESS)
+    {
+        wm_wifi.wifi_init_done = 1;
     }
 #endif
 
@@ -3211,6 +3226,9 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
 
             wlan_abort_split_scan();
             wifi_user_scan_config_cleanup();
+#if CONFIG_WMM_UAPSD
+            wifi_exit_uapsd_mode(priv);
+#endif
 
             if (payload_len <= (int)sizeof(deauth_resp->frame.frame))
             {
@@ -3235,6 +3253,9 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
 
             wlan_abort_split_scan();
             wifi_user_scan_config_cleanup();
+#if CONFIG_WMM_UAPSD
+            wifi_exit_uapsd_mode(priv);
+#endif
 
             if (payload_len <= (int)sizeof(disassoc_resp->frame.frame))
             {
@@ -4744,7 +4765,6 @@ int wifi_set_country_code(const char *alpha2)
 #endif
     }
 #endif
-
     return WM_SUCCESS;
 }
 
@@ -4752,6 +4772,29 @@ int wifi_get_country_code(char *alpha2)
 {
     (void)memcpy(alpha2, mlan_adap->country_code, COUNTRY_CODE_LEN - 1);
 
+    return WM_SUCCESS;
+}
+
+int wifi_create_dnld_countryinfo(void)
+{
+    mlan_private *priv = (mlan_private *)mlan_adap->priv[0];
+
+    if (priv->support_11d != NULL)
+    {
+        if (priv->support_11d->wlan_11d_create_dnld_countryinfo_p(priv, BAND_B) != MLAN_STATUS_SUCCESS)
+        {
+            PRINTM(MERROR, "Dnld_countryinfo_11d failed\n");
+            return -WM_FAIL;
+        }
+#if CONFIG_5GHz_SUPPORT
+        if ((!ISSUPP_NO5G(mlan_adap->fw_cap_ext))
+            && (priv->support_11d->wlan_11d_create_dnld_countryinfo_p(priv, BAND_A) != MLAN_STATUS_SUCCESS))
+        {
+            PRINTM(MERROR, "Dnld_countryinfo_11d failed\n");
+            return -WM_FAIL;
+        }
+#endif
+    }
     return WM_SUCCESS;
 }
 
@@ -5035,6 +5078,7 @@ int wifi_supp_inject_frame(const unsigned int bss_type, const uint8_t *buff, con
 int wifi_nxp_set_country(const unsigned int bss_type, const char *alpha2)
 {
     (void)wifi_set_country_code(alpha2);
+    (void)wifi_create_dnld_countryinfo();
     return WM_SUCCESS;
 }
 
