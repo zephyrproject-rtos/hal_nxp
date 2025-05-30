@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -67,7 +67,6 @@ void NETC_TimerInitHandle(netc_timer_handle_t *handle)
 status_t NETC_TimerInit(netc_timer_handle_t *handle, const netc_timer_config_t *config)
 {
     status_t result = kStatus_Success;
-    uint32_t period = NETC_NANOSECOND_ONE_SECOND / config->refClkHz;
 
     /* Initialize the handle. */
     NETC_TimerInitHandle(handle);
@@ -90,10 +89,9 @@ status_t NETC_TimerInit(netc_timer_handle_t *handle, const netc_timer_config_t *
         return result;
     }
 
-    handle->hw.base->TMR_CTRL =
-        ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD(period) | ENETC_PF_TMR_TMR_CTRL_COPH(config->clkOutputPhase) |
+    handle->hw.base->TMR_CTRL = ENETC_PF_TMR_TMR_CTRL_COPH(config->clkOutputPhase) |
         ENETC_PF_TMR_TMR_CTRL_CIPH(config->clkInputPhase) | ENETC_PF_TMR_TMR_CTRL_TE(config->enableTimer) |
-        ENETC_PF_TMR_TMR_CTRL_COMP_MODE(config->atomicMode) | ENETC_PF_TMR_TMR_CTRL_CK_SEL(config->clockSelect);
+        ENETC_PF_TMR_TMR_CTRL_COMP_MODE(1U) | ENETC_PF_TMR_TMR_CTRL_CK_SEL(config->clockSelect);
 
     NETC_TimerAdjustFreq(handle, config->defaultPpb);
 
@@ -402,6 +400,7 @@ void NETC_TimerAdjustFreq(netc_timer_handle_t *handle, int32_t ppb)
 {
     int64_t offset = 1000000000LL + ppb;
     uint64_t addend;
+    uint32_t control;
 
     /* period (in ns) is given by: 10^9 / freq */
     /* ppb is applied to period: period' = period * (1 + ppb / 10^9) */
@@ -409,6 +408,9 @@ void NETC_TimerAdjustFreq(netc_timer_handle_t *handle, int32_t ppb)
     /* which is equivalent to scaling period by 2^32, and then taking the lower 32bits */
     /* addend' = 10^9 / freq * (1 + ppp / 10^9) * 2^32 = (2^32 * (10^9 + ppb)) / freq */
     addend = (((uint64_t)1ULL << 32) * (uint64_t)offset) / handle->timerFreq;
+
+    control = handle->hw.base->TMR_CTRL & ~ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD_MASK;
+    handle->hw.base->TMR_CTRL = control | ENETC_PF_TMR_TMR_CTRL_TCLK_PERIOD((uint32_t)(addend >> 32));
 
     handle->hw.base->TMR_ADD = (uint32_t)addend;
 }
