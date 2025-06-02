@@ -11,6 +11,7 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 #include <stdint.h>
+#include <stdbool.h>
 
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
@@ -113,5 +114,13 @@ int PLATFORM_ReleaseBleWakeUp(void);
  * \return int return status: >=0 for success, <0 for errors
  */
 int PLATFORM_HandleControllerPowerState(void);
+
+/*!
+ * \brief Return Controller status
+ *
+ * \return true Controller is at active, and finish HCI initialization
+ * \return false Controller is at sleep or not do HCI initialization
+ */
+bool PLATFORM_IsControllerActive(void);
 
 #endif /* _FWK_PLATFORM_BLE_H_ */

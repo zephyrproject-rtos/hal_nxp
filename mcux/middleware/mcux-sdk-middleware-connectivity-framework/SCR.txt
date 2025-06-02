@@ -1,0 +1,12 @@
+NXP Software Content Register
+
+Package: FWK except above packages
+Version: 7.0.1
+Outgoing License: BSD-3-Clause
+License File: LICENSE_BSD-3-Clause.txt
+Type of Content: source code & header files
+Description and comments: Connectivity Framework middleware for Connectivity stacks
+Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
+URL: None
+Origin:
+      NXP
