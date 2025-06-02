@@ -7,9 +7,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
-
-/* Get some BOARD_***_DEFAULT macro values if defined in board.h for 32kHz settings */
-#include "board_platform.h"
+#include "fsl_os_abstraction.h"
 
 #include "fwk_platform.h"
 #include "fwk_config.h"
@@ -19,22 +17,15 @@
 #endif
 
 #include "FunctionLib.h"
-#include "fsl_adapter_flash.h"
-#include "HWParameter.h"
-#include "fsl_component_timer_manager.h"
-#include "fsl_os_abstraction.h"
 #include "fsl_adapter_rpmsg.h"
 #include "fsl_ccm32k.h"
 #include "fsl_spc.h"
-#include "fsl_trdc.h"
 
 #include "rpmsg_platform.h"
 
 #if defined(gMWS_Enabled_d) && (gMWS_Enabled_d > 0)
 #include "fwk_platform_mws.h"
 #endif
-
-#include "fwk_debug.h"
 
 #include "mcmgr_imu_internal.h"
 
@@ -142,20 +133,6 @@ int PLATFORM_IsNbuStarted(void)
     return nbu_started;
 }
 
-void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
-{
-    uint32_t           val = 0UL;
-    extern uint32_t    m_lowpower_flag_start[]; /* defined by linker */
-    volatile uint32_t *p_lp_flag = (volatile uint32_t *)(uint32_t)m_lowpower_flag_start;
-
-    /* if called with */
-    if (PwrDownOngoing)
-    {
-        val = PLATFORM_HOST_USE_POWER_DOWN;
-    }
-    *p_lp_flag = val;
-}
-
 int PLATFORM_InitNbu(void)
 {
     int status = 0;
@@ -173,9 +150,6 @@ int PLATFORM_InitNbu(void)
         domainAssignment.privilegeAttr = (uint8_t)kTRDC_ForcePrivilege;
         TRDC_SetNonProcessorDomainAssignment(TRDC, (uint8_t)kTRDC_MasterRadioNBU, &domainAssignment);
 #endif
-
-        /* Initialize a memory zone of the shared memory that will be used to transmit a message later */
-        PLATFORM_SetLowPowerFlag(false);
 
         rfmc_ctrl = RFMC->RF2P4GHZ_CTRL;
 
@@ -200,14 +174,10 @@ int PLATFORM_InitNbu(void)
          * Here, we make sure the XTAL is ready before releasing the CM3 from reset
          * it will prevent any access issue when the CM3 is starting up.
          * CM3 is released in HAL_RpmsgMcmgrInit */
-        BOARD_DBGLPIOSET(2, 1);
         while ((cnt++ < FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT) && ((RFMC->XO_STAT & RFMC_XO_STAT_XTAL_RDY_MASK) == 0U))
         {
-            BOARD_DBGLPIOSET(2, 0);
             __ASM("NOP");
-            BOARD_DBGLPIOSET(2, 1);
         }
-        BOARD_DBGLPIOSET(2, 0);
 
         if (cnt > FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT)
         {
@@ -215,8 +185,6 @@ int PLATFORM_InitNbu(void)
         }
         else
         {
-            DBG_NBU_GPIOD_ACCESS();
-
             /* nbu initialization completed */
             nbu_init = 1;
         }
@@ -262,19 +230,6 @@ int PLATFORM_InitMulticore(void)
 
 void PLATFORM_LoadHwParams(void)
 {
-    uint8_t               xtal_32m_trim;
-    hardwareParameters_t *pHWParams = NULL;
-    uint32_t              status;
-
-    /* Load the HW parameters from Flash to RAM */
-    status = NV_ReadHWParameters(&pHWParams);
-    if ((status == 0U) && (pHWParams->xtalTrim != 0xFFU))
-    {
-        /* There is an existing trim value */
-        xtal_32m_trim = pHWParams->xtalTrim;
-        /* Set value to RFMC */
-        PLATFORM_SetXtal32MhzTrim(xtal_32m_trim, FALSE);
-    }
 }
 
 /* get 4 words of information that uniquely identifies the MCU */
@@ -350,63 +305,12 @@ int PLATFORM_InitOsc32K(void)
 
 int PLATFORM_GetOscCap32KValue(uint8_t *xtalCap32K)
 {
-    hardwareParameters_t *pHWParams = NULL;
-    int                   status;
-
-    status = (int)NV_ReadHWParameters(&pHWParams);
-
-    if ((status == 0) && (pHWParams->xtalCap32K != 0xFFU))
-    {
-        uint32_t regPrimask;
-        regPrimask  = DisableGlobalIRQ();
-        *xtalCap32K = pHWParams->xtalCap32K;
-        EnableGlobalIRQ(regPrimask);
-    }
-    else
-    {
-        *xtalCap32K = BOARD_32KHZ_XTAL_CLOAD_DEFAULT;
-    }
-    /* If the HWParameter are not set it will keep the value chosen by default so do nothing here */
-    return status;
+    return -1;
 }
 
 int PLATFORM_SetOscCap32KValue(uint8_t xtalCap32K)
 {
-    hardwareParameters_t *pHWParams = NULL;
-    int                   status;
-    ccm32k_osc_config_t   osc32k_config;
-
-    do
-    {
-        uint32_t regPrimask;
-        if (xtalCap32K > BOARD_32KHZ_XTAL_CAPACITANCE_MAX_VALUE)
-        {
-            status = -1;
-            break;
-        }
-
-        status = (int)NV_ReadHWParameters(&pHWParams);
-        if (status != 0)
-        {
-            break;
-        }
-
-        regPrimask            = DisableGlobalIRQ();
-        pHWParams->xtalCap32K = xtalCap32K;
-        (void)NV_WriteHWParameters();
-        EnableGlobalIRQ(regPrimask);
-
-        osc32k_config.enableInternalCapBank = true;
-        osc32k_config.coarseAdjustment      = (ccm32k_osc_coarse_adjustment_value_t)BOARD_32KHZ_XTAL_COARSE_ADJ_DEFAULT;
-
-        osc32k_config.extalCap = (ccm32k_osc_extal_cap_t)xtalCap32K;
-        osc32k_config.xtalCap  = (ccm32k_osc_xtal_cap_t)xtalCap32K;
-
-        CCM32K_Set32kOscConfig(CCM32K, kCCM32K_Enable32kHzCrystalOsc, &osc32k_config);
-
-    } while (false);
-
-    return status;
+    return -1;
 }
 
 int PLATFORM_SwitchToOsc32k(void)
@@ -467,72 +371,15 @@ uint8_t PLATFORM_GetXtal32MhzTrim(bool_t regRead)
 /* Calling this function assumes HWParameters in flash have been read */
 void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
 {
-    uint32_t              status;
-    uint32_t              rfmc_xo;
-    hardwareParameters_t *pHWParams = NULL;
-    status                          = NV_ReadHWParameters(&pHWParams);
-    if ((TRUE == saveToHwParams) && (status == 0U))
-    {
-        /* update value only if it changed */
-        pHWParams->xtalTrim = trimValue;
-        (void)NV_WriteHWParameters();
-    }
-
-    /* Apply a trim value to the crystal oscillator */
-    rfmc_xo = RFMC->XO_TEST;
-
-    rfmc_xo &= ~(RFMC_XO_TEST_CDAC_MASK);
-    rfmc_xo |= RFMC_XO_TEST_CDAC(pHWParams->xtalTrim);
-
-    RFMC->XO_TEST = rfmc_xo;
 }
 
 int PLATFORM_InitTimerManager(void)
 {
-    int status = 0;
-
-    if (timer_manager_initialized == 0)
-    {
-        timer_status_t tm_st;
-        timer_config_t timerConfig;
-
-        timerConfig.instance       = PLATFORM_TM_INSTANCE;
-        timerConfig.srcClock_Hz    = PLATFORM_TM_CLK_FREQ;
-        timerConfig.clockSrcSelect = PLATFORM_TM_CLK_SELECT;
-
-#if (defined(TM_ENABLE_TIME_STAMP) && (TM_ENABLE_TIME_STAMP > 0U))
-        timerConfig.timeStampSrcClock_Hz    = PLATFORM_TM_STAMP_CLK_FREQ;
-        timerConfig.timeStampInstance       = PLATFORM_TM_STAMP_INSTANCE;
-        timerConfig.timeStampClockSrcSelect = PLATFORM_TM_STAMP_CLK_SELECT;
-#endif
-
-        tm_st = TM_Init(&timerConfig);
-        if (tm_st != kStatus_TimerSuccess)
-        {
-            status = RAISE_ERROR(tm_st, 1);
-            assert(0);
-        }
-        else
-        {
-            /* Timer Manager initialization completed */
-            timer_manager_initialized = 1;
-        }
-    }
-    else
-    {
-        /* Timer Manager already initialized */
-        status = 1;
-    }
-    return status;
+    return -1;
 }
 
 void PLATFORM_DeinitTimerManager(void)
 {
-    if (timer_manager_initialized == 1)
-    {
-        TM_Deinit();
-        timer_manager_initialized = 0;
-    }
 }
 
 uint64_t PLATFORM_GetTimeStamp(void)
@@ -601,9 +448,6 @@ void PLATFORM_DisableControllerLowPower(void)
 
 void PLATFORM_RemoteActiveReq(void)
 {
-    BOARD_DBGLPIOSET(1, 1);
-    BOARD_DBGLPIOSET(0, 1);
-
     OSA_InterruptDisable();
 
     if (active_request_nb == 0)
@@ -667,9 +511,7 @@ void PLATFORM_RemoteActiveReq(void)
         /* Wait for the NBU to become active */
         while ((RFMC->RF2P4GHZ_STAT & RFMC_RF2P4GHZ_STAT_BLE_STATE_MASK) != RFMC_RF2P4GHZ_STAT_BLE_STATE(0x1U))
         {
-            BOARD_DBGLPIOSET(0, 1);
             __ASM("NOP");
-            BOARD_DBGLPIOSET(0, 0);
             /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
             if (PLATFORM_IsTimeoutExpired(timestamp, FWK_PLATFORM_ACTIVE_REQ_TIMEOUT_US) &&
                 (pfPlatformErrorCallback != NULL))
@@ -689,14 +531,10 @@ void PLATFORM_RemoteActiveReq(void)
     active_request_nb++;
 
     OSA_InterruptEnable();
-
-    BOARD_DBGLPIOSET(0, 0);
 }
 
 void PLATFORM_RemoteActiveRel(void)
 {
-    BOARD_DBGLPIOSET(0, 1);
-
     OSA_InterruptDisable();
 
     assert(active_request_nb > 0);
@@ -708,12 +546,9 @@ void PLATFORM_RemoteActiveRel(void)
         rfmc_ctrl = RFMC->RF2P4GHZ_CTRL;
         rfmc_ctrl &= ~RFMC_RF2P4GHZ_CTRL_BLE_WKUP_MASK;
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
-        BOARD_DBGLPIOSET(1, 0);
     }
 
     OSA_InterruptEnable();
-
-    BOARD_DBGLPIOSET(0, 0);
 }
 
 void PLATFORM_GetResetCause(PLATFORM_ResetStatus_t *reset_status)

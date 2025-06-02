@@ -166,7 +166,7 @@
  *      in non secure mode.
  * */
 #if !defined(gPlatformNbuDebugGpioDAccessEnabled_d)
-#define gPlatformNbuDebugGpioDAccessEnabled_d 1
+#define gPlatformNbuDebugGpioDAccessEnabled_d 0
 #endif
 
 /*********************************************************************
@@ -179,7 +179,7 @@
  * thread stack (this can be configured).
  */
 #ifndef gPlatformIcsUseWorkqueueRxProcessing_d
-#define gPlatformIcsUseWorkqueueRxProcessing_d 1
+#define gPlatformIcsUseWorkqueueRxProcessing_d 0
 #endif
 
 #endif /* _FWK_CONFIG_H_ */

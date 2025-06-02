@@ -33,35 +33,6 @@
 /*                                 Definitions                                */
 /* -------------------------------------------------------------------------- */
 
-/*! @brief The configuration of timer. */
-#ifndef PLATFORM_TM_INSTANCE
-#define PLATFORM_TM_INSTANCE 0U
-#endif
-#ifndef PLATFORM_TM_CLK_FREQ
-#define PLATFORM_TM_CLK_FREQ 32768U
-#endif
-
-#ifndef PLATFORM_TM_CLK_SELECT
-#define PLATFORM_TM_CLK_SELECT 2U /*Lptmr timer use (kLPTMR_PrescalerClock_2) 32k clock*/
-#endif
-
-/*! @brief The configuration of timer stamp. */
-#ifndef PLATFORM_TM_STAMP_INSTANCE
-#define PLATFORM_TM_STAMP_INSTANCE 1U
-#endif
-#ifndef PLATFORM_TM_STAMP_CLK_FREQ
-#define PLATFORM_TM_STAMP_CLK_FREQ 32768U
-#endif
-
-#ifndef PLATFORM_TM_STAMP_CLK_SELECT
-#define PLATFORM_TM_STAMP_CLK_SELECT 2U /*Lptmr timer use (kLPTMR_PrescalerClock_2) 32k clock*/
-#endif
-
-#define PLATFORM_TM_STAMP_MAX_US COUNT_TO_USEC(LPTMR_CNR_COUNTER_MASK, PLATFORM_TM_STAMP_CLK_FREQ)
-
-/* Value of LowPower flag word to notify NBU core that Host core has initiated PowerDown */
-#define PLATFORM_HOST_USE_POWER_DOWN (0xA5A5A5A5U)
-
 /*!
  * \brief  type definition for the list of reset status
  *

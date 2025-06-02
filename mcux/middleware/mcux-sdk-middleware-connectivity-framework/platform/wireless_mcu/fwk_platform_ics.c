@@ -14,7 +14,6 @@
 #include "fwk_platform.h"
 #include "FunctionLib.h"
 #include "fsl_adapter_rpmsg.h"
-#include "fwk_debug.h"
 
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 #include "fwk_workq.h"
@@ -296,8 +295,6 @@ int PLATFORM_SendChipRevision(void)
     {
         ret = PLATFORM_FwkSrvSendPacket(gFwkSrvHostChipRevision_c, (void *)&chip_rev, 1);
     }
-
-    PWR_DBG_LOG("chip rev sent:%d", chip_rev);
 
     return ret;
 }

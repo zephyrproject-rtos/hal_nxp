@@ -7,55 +7,23 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
-/* Get BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT if defined in board.h for 32MHz settings
- * BOARD_FRO32K_PPM_TARGET and BOARD_FRO32K_FILTER_SIZE for fro32k calibration settings */
-#include "board_platform.h"
-
 #include "fsl_common.h"
 #include "fsl_adapter_rpmsg.h"
 #include "fwk_platform_ble.h"
 #include "fwk_platform.h"
 #include "fwk_platform_ics.h"
-#include "FunctionLib.h"
-#include "HWParameter.h"
-#include "RNG_Interface.h"
-#include "fwk_debug.h"
-#include "controller_api.h"
-
-#if defined(gMWS_Enabled_d) && (gMWS_Enabled_d == 1)
-#include "MWS.h"
-#endif
 
 #ifdef SERIAL_BTSNOOP
 #include "sbtsnoop.h"
 #endif
 
-#if defined(BOARD_FRO32K_PPM_TARGET) || defined(BOARD_FRO32K_FILTER_SIZE) || \
-    defined(BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS) || defined(BOARD_FRO32K_TRIG_SAMPLE_NUMBER)
-#include "fwk_sfc.h"
-#endif
-
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
-#define PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE (BLE_MAC_ADDR_SZ - MAC_ADDR_OUI_PART_SIZE)
-#define PLATFORM_BLE_BD_ADDR_OUI_PART_SIZE  MAC_ADDR_OUI_PART_SIZE
-#define PLATFORM_BLE_BD_ADDR_FULL_SIZE      BLE_MAC_ADDR_SZ
 
 #ifndef PLATFORM_BLE_HCI_TIMEOUT_MS
 #define PLATFORM_BLE_HCI_TIMEOUT_MS 200U
 #endif
-
-#define mBoardUidSize_c 16
-
-#ifndef BD_ADDR_OUI
-#define BD_ADDR_OUI 0x37U, 0x60U, 0x00U
-#endif
-
-#define HciCommand(opCodeGroup, opCodeCommand) \
-    (((uint16_t)(opCodeGroup) & (uint16_t)0x3FU) << (uint16_t)SHIFT10) | (uint16_t)((opCodeCommand)&0x3FFU)
-
-#define BT_USER_BD 254
 
 /* Check if __st is negative,  if true, apply 4 bits shift and add new __error_code,
     assert in debug and break
@@ -74,19 +42,9 @@
  * the returned status will be negative */
 #define RAISE_ERROR(__st, __error_code) -(int)((uint32_t)(((uint32_t)(__st) << 4) | (uint32_t)(__error_code)));
 
-/*!
- * \brief Default calibration settings for the FRO32K, can be overriden in board.h with BOARD_FRO32K_PPM_TARGET
- *        and BOARD_FRO32K_FILTER_SIZE
- */
-#define PLATFORM_DEFAULT_FRO32K_PPM_TARGET                  200U
-#define PLATFORM_DEFAULT_FRO32K_FILTER_SIZE                 128U
-#define PLATFORM_DEFAULT_FRO32K_MAX_CALIBRATION_INTERVAL_MS 1000U
-#define PLATFORM_DEFAULT_FRO32K_TRIG_SAMPLE_NUMBER          3U
-
 /* -------------------------------------------------------------------------- */
 /*                         Private memory declarations                        */
 /* -------------------------------------------------------------------------- */
-static const uint8_t gBD_ADDR_OUI_c[PLATFORM_BLE_BD_ADDR_OUI_PART_SIZE] = {BD_ADDR_OUI};
 
 /* RPMSG related variables */
 
@@ -101,32 +59,7 @@ static const hal_rpmsg_config_t hciRpmsgConfig = {
 
 static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
 
-#if defined(BOARD_FRO32K_PPM_TARGET) || defined(BOARD_FRO32K_FILTER_SIZE) || \
-    defined(BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS) || defined(BOARD_FRO32K_TRIG_SAMPLE_NUMBER)
-static const sfc_config_t sfcConfig = {
-#ifdef BOARD_FRO32K_PPM_TARGET
-    .ppmTarget = BOARD_FRO32K_PPM_TARGET,
-#else
-    .ppmTarget                = PLATFORM_DEFAULT_FRO32K_PPM_TARGET,
-#endif /* BOARD_FRO32K_PPM_TARGET */
-#ifdef BOARD_FRO32K_FILTER_SIZE
-    .filterSize = BOARD_FRO32K_FILTER_SIZE,
-#else
-    .filterSize               = PLATFORM_DEFAULT_FRO32K_FILTER_SIZE,
-#endif /* BOARD_FRO32K_FILTER_SIZE */
-#ifdef BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS
-    .maxCalibrationIntervalMs = BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS,
-#else
-    .maxCalibrationIntervalMs = PLATFORM_DEFAULT_FRO32K_MAX_CALIBRATION_INTERVAL_MS,
-#endif /* BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS */
-#ifdef BOARD_FRO32K_TRIG_SAMPLE_NUMBER
-    .trigSampleNumber = BOARD_FRO32K_TRIG_SAMPLE_NUMBER
-#else
-    .trigSampleNumber         = PLATFORM_DEFAULT_FRO32K_TRIG_SAMPLE_NUMBER,
-#endif /* BOARD_FRO32K_TRIG_SAMPLE_NUMBER */
-};
-#endif /* BOARD_FRO32K_PPM_TARGET || BOARD_FRO32K_FILTER_SIZE ||  BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS || \
-          BOARD_FRO32K_TRIG_SAMPLE_NUMBER */
+static bool is_initialized = false;
 
 /* -------------------------------------------------------------------------- */
 /*                         Public memory declarations                        */
@@ -153,29 +86,6 @@ static int PLATFORM_InitHciLink(void);
  */
 static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_t *data, uint32_t len);
 
-/*!
- * \brief Configure max TX power in dBm for BLE
- *
- * \param[in] max_tx_power Desired max TX power in dBm
- */
-static void PLATFORM_SetBleMaxTxPower(int8_t max_tx_power);
-
-#ifdef BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT
-/*!
- * \brief Send to the NBU the value of BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT to be setted on its side
- *
- */
-static void PLATFORM_SendWakeupDelay(uint8_t wakeupDelayToBeSendToNbu);
-#endif
-
-/*!
- * \brief Generate new BD address
- *
- * \param[in] Provide pointer to buffer location when the BD address should be stored
- *
- */
-static void PLATFORM_GenerateNewBDAddr(uint8_t *bleDeviceAddress);
-
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
 /* -------------------------------------------------------------------------- */
@@ -186,6 +96,12 @@ int PLATFORM_InitBle(void)
 
     do
     {
+        if (is_initialized)
+        {
+            status = 1;
+            break;
+        }
+
         /* When waking up from deep power down mode (following Deep power down reset), it is necessary to release IO
          * isolations. this is usually done in Low power initialization but it is necessay also
          * to be done if the Application does not support low power */
@@ -210,34 +126,13 @@ int PLATFORM_InitBle(void)
         status = PLATFORM_FwkSrvInit();
         CHECK_AND_RAISE_ERROR(status, -5);
 
-#if defined(BOARD_FRO32K_PPM_TARGET) || defined(BOARD_FRO32K_FILTER_SIZE) || \
-    defined(BOARD_FRO32K_MAX_CALIBRATION_INTERVAL_MS) || defined(BOARD_FRO32K_TRIG_SAMPLE_NUMBER)
-        PLATFORM_FwkSrvSetRfSfcConfig((void *)&sfcConfig, (uint16_t)sizeof(sfc_config_t));
-#endif
-
-#if defined(gMWS_Enabled_d) && (gMWS_Enabled_d == 1)
-        MWS_Init();
-#endif
-
 #if !defined(FPGA_SUPPORT) || (FPGA_SUPPORT == 0)
         /* Send chip revision (A0 or A1) to NBU */
         status = PLATFORM_SendChipRevision();
         CHECK_AND_RAISE_ERROR(status, -6);
 #endif
 
-#ifdef BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT
-        PLATFORM_SendWakeupDelay(BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT);
-#endif
-
-        /* Update 32MHz trim value with the one stored in HW parameters */
-        PLATFORM_LoadHwParams();
-
-        PLATFORM_SetBleMaxTxPower(gAppMaxTxPowerDbm_c);
-
-        /* Initialize log handle for second core */
-        BOARD_DBGCONFIGINITNBU(TRUE);
-        // DBG_LOG_DUMP();
-
+        is_initialized = true;
     } while (false);
 
     /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
@@ -249,9 +144,11 @@ int PLATFORM_InitBle(void)
     return status;
 }
 
-void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
+int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
 {
     hci_rx_callback = callback;
+
+    return 0;
 }
 
 int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
@@ -292,54 +189,14 @@ int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
     return status;
 }
 
-void PLATFORM_GetBDAddr(uint8_t *bleDeviceAddress)
+int PLATFORM_TerminateBle(void)
 {
-    hardwareParameters_t *pHWParams = NULL;
-    uint32_t              status;
-
-    status = NV_ReadHWParameters(&pHWParams);
-
-    /* FLib_MemCmpToVal mandatory to make sure BLE mac address is valid
-     * because return status of NV_ReadHWParameters is 1 only at 1st read attempt */
-    if ((status == gHWParameterSuccess_c) &&
-        (FLib_MemCmpToVal((const void *)pHWParams->bluetooth_address, 0xFFU, PLATFORM_BLE_BD_ADDR_FULL_SIZE) == FALSE))
-    {
-        uint32_t regPrimask;
-
-        regPrimask = DisableGlobalIRQ();
-        FLib_MemCpy((void *)bleDeviceAddress, (const void *)pHWParams->bluetooth_address,
-                    PLATFORM_BLE_BD_ADDR_FULL_SIZE);
-        EnableGlobalIRQ(regPrimask);
-    }
-    else
-    {
-        uint32_t regPrimask;
-
-        /* User can decide to use the device unique address or a random generated address with
-         * gPlatformUseUniqueDeviceIdForBdAddr_d */
-        PLATFORM_GenerateNewBDAddr(bleDeviceAddress);
-
-        regPrimask = DisableGlobalIRQ();
-        FLib_MemCpy((void *)pHWParams->bluetooth_address, (void *)bleDeviceAddress, PLATFORM_BLE_BD_ADDR_FULL_SIZE);
-
-        (void)NV_WriteHWParameters();
-        EnableGlobalIRQ(regPrimask);
-    }
+    return 0;
 }
 
-int32_t PLATFORM_EnableBleSecureKeyManagement(void)
+int PLATFORM_StartHci(void)
 {
-    int32_t ret = 0;
-
-    ret = PLATFORM_FwkSrvSendPacket(gFwkSrvNbuSecureModeRequest_c, NULL, 0U);
-
-    return ret;
-}
-
-bool PLATFORM_CheckNextBleConnectivityActivity(void)
-{
-    DBG_LOG_DUMP();
-    return true;
+    return 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -394,108 +251,4 @@ static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_
     (void)param;
 
     return kStatus_HAL_RL_RELEASE;
-}
-
-static void PLATFORM_SetBleMaxTxPower(int8_t max_tx_power)
-{
-    uint8_t ldo_ana_trim;
-
-    if (max_tx_power == 0)
-    {
-        ldo_ana_trim = 3U;
-    }
-    else if (max_tx_power == 7)
-    {
-        ldo_ana_trim = 9U;
-    }
-    else
-    {
-        if (max_tx_power != 10)
-        {
-            // set to 10dBm if setting is invalid
-            assert(false);
-            max_tx_power = 10;
-        }
-        ldo_ana_trim = 15U;
-    }
-
-    /* configure max tx power in controller */
-    (void)Controller_SetMaxTxPower(max_tx_power, ldo_ana_trim);
-}
-
-#ifdef BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT
-static void PLATFORM_SendWakeupDelay(uint8_t wakeupDelayToBeSendToNbu)
-{
-    (void)PLATFORM_FwkSrvSendPacket(gFwkSrvNbuWakeupDelayLpoCycle_c, &wakeupDelayToBeSendToNbu,
-                                    (uint16_t)sizeof(wakeupDelayToBeSendToNbu));
-}
-#endif
-
-static void PLATFORM_GenerateNewBDAddr(uint8_t *bleDeviceAddress)
-{
-    uint8_t macAddr[PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE] = {0U};
-
-#if (gPlatformUseUniqueDeviceIdForBdAddr_d != 0)
-    /* First need to activate the radio clock */
-    PLATFORM_RemoteActiveReq();
-    uint32_t uid_lsb = RADIO_CTRL->UID_LSB;
-    PLATFORM_RemoteActiveRel();
-
-    /* The UID is read out as 0 if clock is uninitalized.
-     * Even when initialized UID may have been left as 0xffffffff */
-    if ((uid_lsb != 0U) && (uid_lsb != UINT32_MAX))
-    {
-        for (int i = 0; i < PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE; i++)
-        {
-            macAddr[i] = (uint8_t)uid_lsb & 0xffU;
-            uid_lsb >>= 8;
-        }
-    }
-    else
-#endif
-    {
-        int ret;
-
-        ret = RNG_Init();
-        assert(ret == 0);
-        (void)ret;
-
-#ifndef FWK_RNG_DEPRECATED_API
-        int num;
-        num = RNG_GetPseudoRandomData(macAddr, PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE, NULL);
-#else
-        int16_t num;
-        RNG_SetPseudoRandomNoSeed(NULL);
-        num = RNG_GetPseudoRandomNo(macAddr, PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE, NULL);
-#endif
-        assert(num == PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE);
-        (void)num;
-    }
-    /* Set 3 LSB from mac address */
-    FLib_MemCpy((void *)bleDeviceAddress, (const void *)macAddr, PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE);
-
-    /* Set 3 MSB from OUI */
-    FLib_MemCpy((void *)&bleDeviceAddress[PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE], (const void *)gBD_ADDR_OUI_c,
-                PLATFORM_BLE_BD_ADDR_OUI_PART_SIZE);
-}
-
-uint64_t PLATFORM_GetDeltaTimeStamp(uint32_t controllerTimestamp)
-{
-    uint64_t delta = 0U, currentTimestamp = 0U, tstmr0 = 0U, ble_native_timestamp = 0U;
-    uint32_t ll_timing_slot = 0U;
-    uint16_t ll_timing_us   = 0U;
-
-    if (Controller_GetTimestampEx(&ll_timing_slot, &ll_timing_us, &tstmr0) == KOSA_StatusSuccess)
-    {
-        ble_native_timestamp = (uint64_t)(ll_timing_slot)*625ULL + (uint64_t)(ll_timing_us);
-        currentTimestamp     = PLATFORM_GetTimeStamp();
-
-        delta = (ble_native_timestamp - controllerTimestamp) + (currentTimestamp - tstmr0);
-    }
-    else
-    {
-        delta = 0U;
-    }
-
-    return delta;
 }
