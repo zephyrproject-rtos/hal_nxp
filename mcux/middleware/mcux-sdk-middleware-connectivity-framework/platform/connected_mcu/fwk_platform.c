@@ -109,6 +109,12 @@ int PLATFORM_InitNbu(void)
         RFMC->RF2P4GHZ_CTRL = rfmc_ctrl;
         RFMC->RF2P4GHZ_TIMER |= RFMC_RF2P4GHZ_TIMER_TIM_EN(0x1U);
 
+#if defined(FWK_KW47_MCXW72_FAMILIES) && (FWK_KW47_MCXW72_FAMILIES == 1)
+        /* Allow the debugger to wakeup the target */
+        RFMC->RF2P4GHZ_CFG |= RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_MASK;
+        CMC0->DBGCTL &= ~CMC_DBGCTL_SOD_MASK;
+#endif
+
         /* Enabling BLE Power Controller (BLE_LP_EN) will automatically start the XTAL
          * According to RM, we need to wait for the XTAL to be ready before accessing
          * Radio domain ressources.
