@@ -1,8 +1,11 @@
-/* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2023 NXP                          */
-/*                            All rights reserved.                            */
-/*                    SPDX-License-Identifier: BSD-3-Clause                   */
-/* -------------------------------------------------------------------------- */
+/*!
+ * Copyright 2021-2024 NXP
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * \file fwk_platform.h
+ * \brief PLATFORM abstraction for general purpose use
+ *
+ */
 
 #ifndef _FWK_PLATFORM_H_
 #define _FWK_PLATFORM_H_
@@ -14,8 +17,25 @@
 #include <stdint.h>
 
 /* -------------------------------------------------------------------------- */
+/*                                Public macros                               */
+/* -------------------------------------------------------------------------- */
+
+#ifndef PLATFORM_TM_INSTANCE
+#define PLATFORM_TM_INSTANCE 0U
+#endif
+
+/* -------------------------------------------------------------------------- */
 /*                              Public prototypes                             */
 /* -------------------------------------------------------------------------- */
+
+/*!
+ * \brief  Initialize Timer Manager
+ *
+ *    This API will initialize the Timer Manager and the required clocks
+ *
+ * \return int 0 if success, 1 if already initialized, negative value if error.
+ */
+int PLATFORM_InitTimerManager(void);
 
 /*!
  * \brief Initializes timestamp module

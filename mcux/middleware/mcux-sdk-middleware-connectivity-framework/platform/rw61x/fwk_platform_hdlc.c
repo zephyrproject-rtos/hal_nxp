@@ -15,6 +15,8 @@
 #include "fwk_platform_ble.h"
 #include "fwk_platform_hdlc.h"
 #include "fwk_platform_ot.h"
+
+#include "fsl_power.h"
 #include "fsl_adapter_imu.h"
 #include "fsl_os_abstraction.h"
 
@@ -87,13 +89,13 @@ static bool PLATFORM_IsHdlcLinkReady(void);
 /* -------------------------------------------------------------------------- */
 
 static platform_hdlc_rx_callback_t hdlcRxCallback;
-static void *                      callbackParam = NULL;
+static void                       *callbackParam = NULL;
 
 static IMUMC_HANDLE_DEFINE(hdlcImumcHandle);
 static const hal_imumc_config_t hdlcImumcConfig = {
     .local_addr  = PLATFORM_HDLC_IMUMC_LOCAL_ADDR,
     .remote_addr = PLATFORM_HDLC_IMUMC_REMOTE_ADDR,
-    .imuLink     = kIMU_LinkCpu2Cpu3,
+    .imuLink     = (uint8_t)kIMU_LinkCpu2Cpu3,
     .callback    = &PLATFORM_HdlcImumcRxCallback,
     .param       = NULL,
 };
@@ -141,15 +143,13 @@ int PLATFORM_TerminateHdlcInterface(void)
 
     do
     {
-        /* Make sure the controller is awake */
-        ret = PLATFORM_RequestBleWakeUp();
-        if (ret != 0)
+        if (PLATFORM_TerminateControllers(conn802_15_4_c) != 0)
         {
             ret = -1;
             break;
         }
 
-        if (HAL_ImuDeinit(kIMU_LinkCpu2Cpu3, 0) != kStatus_HAL_ImumcSuccess)
+        if (HAL_ImuDeinit(kIMU_LinkCpu2Cpu3, 1) != kStatus_HAL_ImumcSuccess)
         {
             ret = -2;
             break;
@@ -158,20 +158,6 @@ int PLATFORM_TerminateHdlcInterface(void)
         if (PLATFORM_TerminateHdlcImumc() != 0)
         {
             ret = -3;
-            break;
-        }
-
-        if (PLATFORM_TerminateControllers((uint32_t)conn802_15_4_c) != 0)
-        {
-            ret = -4;
-            break;
-        }
-
-        /* Release the wake up request now */
-        ret = PLATFORM_ReleaseBleWakeUp();
-        if (ret != 0)
-        {
-            ret = -5;
             break;
         }
     } while (false);
@@ -198,8 +184,8 @@ int PLATFORM_SendHdlcMessage(uint8_t *msg, uint32_t len)
     int                ret                = 0;
     int                hdlcLinkReadyRetry = 0;
     uint32_t           remainingBytes     = len;
-    uint8_t *          pMsg               = msg;
-    uint8_t *          pImumcBuffer       = NULL;
+    uint8_t           *pMsg               = msg;
+    uint8_t           *pImumcBuffer       = NULL;
 
     do
     {
@@ -224,7 +210,7 @@ int PLATFORM_SendHdlcMessage(uint8_t *msg, uint32_t len)
 
         /* Send HDLC Packet through IMUMC channel
          * If the size if larger than the maximum IMUMC buffer size, we have to send chunks of the packet */
-        while (remainingBytes > 0)
+        while (remainingBytes > 0u)
         {
             uint32_t sizeToSend;
 
