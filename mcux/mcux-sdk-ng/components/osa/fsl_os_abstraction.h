@@ -1104,22 +1104,36 @@ int OSA_MsgQAvailableMsgs(osa_msgq_handle_t msgqHandle);
 osa_status_t OSA_MsgQDestroy(osa_msgq_handle_t msgqHandle);
 
 /*!
- * @brief Enable all interrupts.
+ * @brief Enable all interrupts managed by OS.
+ *
+ * Different operating system may have different implementaions.
+ * The enabled interrupt range may be configured through operating system.
+ * This function supports nested calls.
  */
 void OSA_InterruptEnable(void);
 
 /*!
- * @brief Disable all interrupts.
+ * @brief Disable all interrupts managed by OS.
+ *
+ * Different operating system may have different implementaions.
+ * The disabled interrupt range may be configured through operating system.
+ * This function supports nested calls.
  */
 void OSA_InterruptDisable(void);
 
 /*!
  * @brief Enable all interrupts using PRIMASK.
+ *
+ * This function enable all interrupts apart from non-maskable interrupts.
+ * This function supports nested calls.
  */
 void OSA_EnableIRQGlobal(void);
 
 /*!
  * @brief Disable all interrupts using PRIMASK.
+ *
+ * This function disable all interrupts apart from non-maskable interrupts.
+ * This function supports nested calls.
  */
 void OSA_DisableIRQGlobal(void);
 
