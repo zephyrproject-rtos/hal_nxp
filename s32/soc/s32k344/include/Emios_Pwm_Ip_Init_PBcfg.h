@@ -97,7 +97,7 @@ extern "C"{
 
 #define EMIOS_OPWFMB_MODE_USED(node_id)                                                    \
             COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
-                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, OPWFMB)),                     \
+                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwfmb)),                     \
                        (0)) ||
 
 #define IS_EMIOS_OPWFMB_MODE_USED(n)                                                       \
@@ -105,7 +105,7 @@ extern "C"{
 
 #define EMIOS_OPWMB_MODE_USED(node_id)                                                     \
             COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
-                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, OPWMB)),                      \
+                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwmb)),                      \
                        (0)) ||
 
 #define IS_EMIOS_OPWMB_MODE_USED(n)                                                        \
@@ -113,8 +113,8 @@ extern "C"{
 
 #define EMIOS_OPWMCB_MODE_USED(node_id)                                                    \
             COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
-                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, OPWMCB_TRAIL_EDGE) ||         \
-                        DT_ENUM_HAS_VALUE(node_id, pwm_mode, OPWMCB_LEAD_EDGE)             \
+                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwmcb_trail_edge) ||         \
+                        DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwmcb_lead_edge)             \
                         ),(0)) ||
 
 #define IS_EMIOS_OPWMCB_MODE_USED(n)                                                       \

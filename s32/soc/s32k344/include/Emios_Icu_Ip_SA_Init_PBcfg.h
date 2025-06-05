@@ -97,7 +97,7 @@ extern "C"{
 #define HAS_QDEC (DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32) && CONFIG_QDEC_NXP_S32)
 
 #define EMIOS_ICU_CHANNEL(node_id, ch)                                   \
-        IF_ENABLED(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC),           \
+        IF_ENABLED(DT_ENUM_HAS_VALUE(node_id, pwm_mode, saic),           \
                   ((DT_PROP(node_id, channel) == ch) ||))
 
 #if DT_FOREACH_CHILD_STATUS_OKAY_VARGS(EMIOS_PWM_NODE(EMIOS_0_DRV_INST), \
