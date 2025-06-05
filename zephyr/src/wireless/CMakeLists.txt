@@ -45,6 +45,10 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/iw610_wifi_fw.bin.se.inc)
       set(wifi_binary_blob_name sd_iw610.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu1.c)
+      set_source_files_properties(
+		${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu1.c
+		PROPERTIES OBJECT_DEPENDS ${ZEPHYR_BINARY_DIR}/include/generated/iw610_wifi_fw.bin.se.inc
+		)
       list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/IW610/${wifi_binary_blob_name})
     else()
       message(FATAL_ERROR "Couldn't determine soc revision")
@@ -74,6 +78,10 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/iw610_bt_fw.bin.inc)
       set(bt_binary_blob_name uart_iw610_bt.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu2.c)
+      set_source_files_properties(
+		${CMAKE_CURRENT_LIST_DIR}/IW610/IW610_cpu2.c
+		PROPERTIES OBJECT_DEPENDS ${ZEPHYR_BINARY_DIR}/include/generated/iw610_bt_fw.bin.inc
+		)
       list(APPEND wifi_bt_binary_blobs_list ${hal_blobs_dir}/IW610/${bt_binary_blob_name})
     else()
       message(FATAL_ERROR "Unsupported controller. Please select a BT conntroller, refer to ./driver/bluetooth/hci/Kconfig.nxp")
