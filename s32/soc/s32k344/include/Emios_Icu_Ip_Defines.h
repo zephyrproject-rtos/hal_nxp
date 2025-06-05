@@ -30,7 +30,7 @@ extern "C"{
 #include <zephyr/devicetree.h>
 
 #define _PWM_NXP_S32_CAPTURE_USED(node_id)  \
-        COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC), (+ 1), (+ 0))
+        COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, saic), (+ 1), (+ 0))
 
 #define PWM_NXP_S32_CAPTURE_USED(node_id)     \
         DT_FOREACH_CHILD_STATUS_OKAY(node_id, _PWM_NXP_S32_CAPTURE_USED)

@@ -87,7 +87,7 @@ extern "C"{
 #define EMIOS_PWM_NODE(n)   DT_CHILD(DT_INST(n, nxp_s32_emios), pwm)
 
 #define EMIOS_ICU_CHANNEL(node_id, ch)                                   \
-        IF_ENABLED(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC),           \
+        IF_ENABLED(DT_ENUM_HAS_VALUE(node_id, pwm_mode, saic),           \
                   ((DT_PROP(node_id, channel) == ch) ||))
 
 #if DT_FOREACH_CHILD_STATUS_OKAY_VARGS(EMIOS_PWM_NODE(EMIOS_0_DRV_INST), \

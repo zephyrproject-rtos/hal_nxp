@@ -95,10 +95,10 @@ extern "C"{
 ==================================================================================================*/
 #define DT_DRV_COMPAT   nxp_s32_emios_pwm
 
-#define NUM_CHANNEL_USED(node_id)           COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC), (+ 0), (+ 1))
+#define NUM_CHANNEL_USED(node_id)           COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, saic), (+ 0), (+ 1))
 #define EMIOS_NUM_CHANNELS_USED(n)          DT_INST_FOREACH_CHILD_STATUS_OKAY(n, NUM_CHANNEL_USED)
 
-#define SET_INITIAL_MODE(node_id)           IF_ENABLED(UTIL_NOT(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC)),    \
+#define SET_INITIAL_MODE(node_id)           IF_ENABLED(UTIL_NOT(DT_ENUM_HAS_VALUE(node_id, pwm_mode, saic)),    \
                                                        (EMIOS_PWM_IP_MODE_NODEFINE,))
 #define EMIOS_PWM_IP_SET_INITIAL_MODE(n)    DT_INST_FOREACH_CHILD_STATUS_OKAY(n, SET_INITIAL_MODE)
 
