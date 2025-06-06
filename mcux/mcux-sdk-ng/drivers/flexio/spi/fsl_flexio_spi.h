@@ -189,6 +189,8 @@ struct _flexio_spi_master_handle
     flexio_spi_shift_direction_t direction;         /*!< Shift direction. */
     flexio_spi_master_transfer_callback_t callback; /*!< FlexIO SPI callback. */
     void *userData;                                 /*!< Callback parameter. */
+    bool isCsContinuous;                            /*!< Is current transfer using CS continuous mode. */
+    uint32_t timer1Cfg;                             /*!< TIMER1 TIMCFG regiser value backup. */
 };
 
 /*******************************************************************************

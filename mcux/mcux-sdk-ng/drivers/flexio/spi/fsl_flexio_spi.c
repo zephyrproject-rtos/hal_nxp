@@ -52,6 +52,41 @@ static void FLEXIO_SPI_TransferSendTransaction(FLEXIO_SPI_Type *base, flexio_spi
  */
 static void FLEXIO_SPI_TransferReceiveTransaction(FLEXIO_SPI_Type *base, flexio_spi_master_handle_t *handle);
 
+/*!
+ * @brief Set the Timer 1 register TIMCFG
+ *
+ * This function is used for master mode. It sets the Timer 1 (used to control CS pin)
+ * TIMCFG register based on CS continous mode configuration, and return the old
+ * register value, for later recovery.
+ *
+ * @param base Pointer to FLEXIO_SPI_Type structure
+ * @param csContinuous Use CS continuous mode or not.
+ * @return The old TIMCFG register value.
+ */
+static uint32_t FLEXIO_SPI_MasterSetTimer1Cfg(FLEXIO_SPI_Type *base, bool csContinuous);
+
+/*!
+ * @brief Recover the Timer 1 register TIMCFG
+ *
+ * This function is used for master mode. It recovers the TIMCFG register using
+ * the value got by @ref FLEXIO_SPI_MasterSetTimer1Cfg.
+ *
+ * @param base Pointer to FLEXIO_SPI_Type structure
+ * @param The old TIMCFG register value.
+ */
+static void FLEXIO_SPI_MasterRecoverTimer1Cfg(FLEXIO_SPI_Type *base, uint32_t timer1Cfg);
+
+/*!
+ * @brief Force disable the Timer 1 register TIMCFG
+ *
+ * This function is used for master mode CS continuous mode. In this mode,
+ * the timer1 is set to kFLEXIO_TimerDisableNever, so after all data transfer
+ * done, this function should be called to disable the timer1.
+ *
+ * @param base Pointer to FLEXIO_SPI_Type structure
+ */
+static void FLEXIO_SPI_MasterForceDisableTimer1(FLEXIO_SPI_Type *base);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -59,6 +94,64 @@ static void FLEXIO_SPI_TransferReceiveTransaction(FLEXIO_SPI_Type *base, flexio_
 /*******************************************************************************
  * Codes
  ******************************************************************************/
+
+static uint32_t FLEXIO_SPI_MasterSetTimer1Cfg(FLEXIO_SPI_Type *base, bool csContinuous)
+{
+    uint32_t timer1Cfg = base->flexioBase->TIMCFG[base->timerIndex[1]];
+
+    /*
+     * Timer1 configuration for CS continuous and non-continuous modes.
+     *
+     * CS pin is configured to be logical one when timer1 enabled, so the
+     * keypoint is:
+     * - In CS non-continuous mode, set timers only enabled when the data frame
+     *   transfer is in progress.
+     * - In CS continuous mode, set timer1 always enabled during data transfer.
+     *
+     * Non-continuous mode:
+     * In this mode, enable timer1 when timer0 is enabled, and disable timer1
+     * when timer0 is disabled. Timer0 controls SCK, it is enabled/disabled
+     * when a data frame starts/stops, so timer1 is only enabled when
+     * one data frame transfer is in progress.
+     *
+     * Continuous mode:
+     * In this mode, enable timer1 when timer0 is enabled, in other word, timer1
+     * will be enabled at the beginning of the whole data transfer. Timer1
+     * will never be disabled, until FLEXIO_SPI_MasterForceDisableTimer1 is called
+     * after all data transfer done. Also, the TIMDEC is set to
+     * kFLEXIO_TimerDecSrcOnPinInputShiftPinInput, so that the timer won't
+     * decrease in the whole process.
+     */
+
+    if (csContinuous)
+    {
+        base->flexioBase->TIMCFG[base->timerIndex[1]] =
+            (base->flexioBase->TIMCFG[base->timerIndex[1]] & ~(FLEXIO_TIMCFG_TIMDIS_MASK | FLEXIO_TIMCFG_TIMDEC_MASK)) |
+            FLEXIO_TIMCFG_TIMDIS(kFLEXIO_TimerDisableNever) |
+            FLEXIO_TIMCFG_TIMDEC(kFLEXIO_TimerDecSrcOnPinInputShiftPinInput);
+    }
+    else
+    {
+        base->flexioBase->TIMCFG[base->timerIndex[1]] =
+            (base->flexioBase->TIMCFG[base->timerIndex[1]] & ~(FLEXIO_TIMCFG_TIMDIS_MASK | FLEXIO_TIMCFG_TIMDEC_MASK)) |
+            FLEXIO_TIMCFG_TIMDIS(kFLEXIO_TimerDisableOnPreTimerDisable) |
+            FLEXIO_TIMCFG_TIMDEC(kFLEXIO_TimerDecSrcOnFlexIOClockShiftTimerOutput);
+    }
+
+    return timer1Cfg;
+}
+
+static void FLEXIO_SPI_MasterRecoverTimer1Cfg(FLEXIO_SPI_Type *base, uint32_t timer1Cfg)
+{
+    base->flexioBase->TIMCFG[base->timerIndex[1]] = timer1Cfg;
+}
+
+static void FLEXIO_SPI_MasterForceDisableTimer1(FLEXIO_SPI_Type *base)
+{
+    uint32_t timctl = base->flexioBase->TIMCTL[base->timerIndex[1]];
+    base->flexioBase->TIMCTL[base->timerIndex[1]] = timctl & (~FLEXIO_TIMCTL_TIMOD_MASK);
+    base->flexioBase->TIMCTL[base->timerIndex[1]] = timctl;
+}
 
 static uint32_t FLEXIO_SPI_GetInstance(FLEXIO_SPI_Type *base)
 {
@@ -813,21 +906,11 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
 #if SPI_RETRY_TIMES
     uint32_t waitTimes;
 #endif
+    status_t status = kStatus_Success;
+    bool isCsContinuous = ((xfer->flags & (uint8_t)kFLEXIO_SPI_csContinuous) != 0U);
 
     timerCmp &= 0x00FFU;
-
-    if ((xfer->flags & (uint8_t)kFLEXIO_SPI_csContinuous) != 0U)
-    {
-        base->flexioBase->TIMCFG[base->timerIndex[0]] =
-            (base->flexioBase->TIMCFG[base->timerIndex[0]] & ~FLEXIO_TIMCFG_TSTOP_MASK) |
-            FLEXIO_TIMCFG_TSTOP(kFLEXIO_TimerStopBitDisabled);
-    }
-    else
-    {
-        base->flexioBase->TIMCFG[base->timerIndex[0]] =
-            (base->flexioBase->TIMCFG[base->timerIndex[0]] & ~FLEXIO_TIMCFG_TSTOP_MASK) |
-            FLEXIO_TIMCFG_TSTOP(kFLEXIO_TimerStopBitEnableOnTimerDisable);
-    }
+    uint32_t timer1Cfg;
 
     /* Configure the values in handle. */
     switch (dataFormat)
@@ -884,6 +967,8 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
         return kStatus_InvalidArgument;
     }
 
+    timer1Cfg = FLEXIO_SPI_MasterSetTimer1Cfg(base, isCsContinuous);
+
     /* Configure transfer size. */
     base->flexioBase->TIMCMP[base->timerIndex[0]] = dataMode;
 
@@ -902,7 +987,8 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
 #if SPI_RETRY_TIMES
         if (waitTimes == 0U)
         {
-            return kStatus_FLEXIO_SPI_Timeout;
+            status = kStatus_FLEXIO_SPI_Timeout;
+            break;
         }
 #endif
         if (xfer->txData != NULL)
@@ -967,7 +1053,8 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
 #if SPI_RETRY_TIMES
         if (waitTimes == 0U)
         {
-            return kStatus_FLEXIO_SPI_Timeout;
+            status = kStatus_FLEXIO_SPI_Timeout;
+            break;
         }
 #endif
         tmpData = FLEXIO_SPI_ReadData(base, direction);
@@ -1020,7 +1107,14 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
         }
     }
 
-    return kStatus_Success;
+    if (isCsContinuous)
+    {
+        FLEXIO_SPI_MasterForceDisableTimer1(base);
+    }
+
+    FLEXIO_SPI_MasterRecoverTimer1Cfg(base, timer1Cfg);
+
+    return status;
 }
 
 /*!
@@ -1097,24 +1191,9 @@ status_t FLEXIO_SPI_MasterTransferNonBlocking(FLEXIO_SPI_Type *base,
         return kStatus_InvalidArgument;
     }
 
-    /* Timer1 controls the CS signal which enables/disables(asserts/deasserts) when timer0 enable/disable. Timer0
-       enables when tx shifter is written and disables when timer compare. The timer compare event causes the
-       transmit shift registers to load which generates a tx register empty event. Since when timer stop bit is
-       disabled, a timer enable condition can be detected in the same cycle as a timer disable condition, so if
-       software writes the tx register upon the detection of tx register empty event, the timer enable condition
-       is triggered again, then the CS signal can remain low until software no longer writes the tx register. */
-    if ((xfer->flags & (uint8_t)kFLEXIO_SPI_csContinuous) != 0U)
-    {
-        base->flexioBase->TIMCFG[base->timerIndex[0]] =
-            (base->flexioBase->TIMCFG[base->timerIndex[0]] & ~FLEXIO_TIMCFG_TSTOP_MASK) |
-            FLEXIO_TIMCFG_TSTOP(kFLEXIO_TimerStopBitDisabled);
-    }
-    else
-    {
-        base->flexioBase->TIMCFG[base->timerIndex[0]] =
-            (base->flexioBase->TIMCFG[base->timerIndex[0]] & ~FLEXIO_TIMCFG_TSTOP_MASK) |
-            FLEXIO_TIMCFG_TSTOP(kFLEXIO_TimerStopBitEnableOnTimerDisable);
-    }
+    handle->isCsContinuous = ((xfer->flags & (uint8_t)kFLEXIO_SPI_csContinuous) != 0U);
+
+    handle->timer1Cfg = FLEXIO_SPI_MasterSetTimer1Cfg(base, handle->isCsContinuous);
 
     /* Configure the values in handle */
     switch (dataFormat)
@@ -1229,12 +1308,7 @@ status_t FLEXIO_SPI_MasterTransferNonBlocking(FLEXIO_SPI_Type *base,
 
     /* Enable transmit and receive interrupt to handle rx. */
     FLEXIO_SPI_EnableInterrupts(base, (uint32_t)kFLEXIO_SPI_RxFullInterruptEnable);
-    
-    if ((xfer->flags & (uint8_t)kFLEXIO_SPI_csContinuous) != 0U)
-    {
-        FLEXIO_SPI_EnableInterrupts(base, (uint32_t)kFLEXIO_SPI_TxEmptyInterruptEnable);
-    }
-    
+
     return kStatus_Success;
 }
 
@@ -1282,6 +1356,13 @@ void FLEXIO_SPI_MasterTransferAbort(FLEXIO_SPI_Type *base, flexio_spi_master_han
     FLEXIO_SPI_DisableInterrupts(base, (uint32_t)kFLEXIO_SPI_RxFullInterruptEnable);
     FLEXIO_SPI_DisableInterrupts(base, (uint32_t)kFLEXIO_SPI_TxEmptyInterruptEnable);
 
+    if (handle->isCsContinuous)
+    {
+        FLEXIO_SPI_MasterForceDisableTimer1(base);
+    }
+
+    FLEXIO_SPI_MasterRecoverTimer1Cfg(base, handle->timer1Cfg);
+
     /* Transfer finished, set the state to idle. */
     handle->state = (uint32_t)kFLEXIO_SPI_Idle;
 
@@ -1315,7 +1396,6 @@ void FLEXIO_SPI_MasterTransferHandleIRQ(void *spiType, void *spiHandle)
     /* Receive interrupt. */
     if ((status & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag) == 0U)
     {
-        FLEXIO_SPI_TransferSendTransaction(base, handle);
         return;
     }
 
