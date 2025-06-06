@@ -262,6 +262,10 @@ typedef struct Phy_PhyLocalStruct_tag
     PD_MAC_SapHandler_t         PD_MAC_SapHandler;
     PLME_MAC_SapHandler_t       PLME_MAC_SapHandler;
 
+#ifndef MEM_USE_ZEPHYR
+    messaging_t                 macPhyInputQueue;
+#endif /* MEM_USE_ZEPHYR */
+
     phyTxParams_t               txParams;
     phyRxParams_t               rxParams;
     phyCcaParams_t              ccaParams;
@@ -345,6 +349,14 @@ typedef struct Phy_nbRssiCtrl_tag
  *
  ********************************************************************************** */
 void PhyHwInit(void);
+
+#if defined(MFG_OT_RCP)
+/*! *********************************************************************************
+ * \brief  Update the XCVR HW
+ *
+ ********************************************************************************** */
+void PhyHwUpdate(void);
+#endif
 
 /*! *********************************************************************************
  * \brief  Enable/Disable the XCVR promiscuous mode.
@@ -603,22 +615,22 @@ phyStatus_t PhyPlmeSetCurrentChannelRequest(uint8_t channel, uint8_t pan);
 uint8_t PhyPlmeGetCurrentChannelRequest(uint8_t pan);
 
 /*! *********************************************************************************
- * \brief Set the TX power level
+ * \brief Set the TX ouput power level in dBm signed value
  *
- * \param[in] pwrStep  the Tx power level
+ * \param[in] pwr_dbm Tx output power in dBm signed value
  *
  * \return status
  *
  ********************************************************************************** */
-phyStatus_t PhyPlmeSetPwrLevelRequest(int8_t pwrStep);
+phyStatus_t PhyPlmeSetPwrLevelRequest(int8_t pwr_dbm);
 
 /*! *********************************************************************************
- * \brief Get the TX power level
+ * \brief Get the TX output power level in dBm signed value
  *
- * \return current power level
+ * \return current TX output power in dBm signed value
  *
  ********************************************************************************** */
-uint8_t PhyPlmeGetPwrLevelRequest(void);
+int8_t PhyPlmeGetPwrLevelRequest(void);
 
 /*! *********************************************************************************
  * \brief Set a PHY PIB
@@ -957,12 +969,6 @@ uint8_t PhySetTxPowerLimit(uint8_t txPowerLimit);
  */
 uint8_t PhyGetTxPowerLimit(void);
 
-/*! *********************************************************************************
- * \brief This function will update tx power limit
- *
- * \return update txPowerLimit stored in gPhyChannelTxPowerLimits
- */
-uint8_t PhyUpdateTxPowerLimit(void);
 #endif
 
 /*! *********************************************************************************

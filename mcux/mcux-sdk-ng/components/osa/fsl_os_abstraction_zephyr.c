@@ -74,7 +74,8 @@ static sys_dlist_t s_OSA_TaskList = {0};   /*!< List of alive tasks. Used for bi
 static bool s_OSA_IsInitialized   = false; /*!< Indicates whether OSA_Init() was called. */
 #endif
 
-static uint32_t s_OSA_InterruptDisableCount = 0; /*!< Used for correct enabling/disabling IRQs based on call count. */
+static uint32_t s_OSA_DisableIRQGlobalNesting = 0; /*!< Used for correct enabling/disabling IRQs based on call count. */
+static uint32_t s_OSA_InterruptRegPrimask = 0;
 
 const uint8_t gUseRtos_c = USE_RTOS;             /*!< USE_RTOS = 0 for BareMetal and 1 for OS. */
 
@@ -222,7 +223,7 @@ void OSA_Init(void)
         sys_dlist_init(&s_OSA_TaskList);
 #if 0
         // Initialization to 0 should be done automatically since it is static varriable
-        s_OSA_InterruptDisableCount = 0;
+        s_OSA_DisableIRQGlobalNesting = 0;
 #endif
         s_OSA_IsInitialized = true;
     }
@@ -242,23 +243,23 @@ void OSA_Start(void)
 
 void OSA_InterruptEnable(void)
 {
-    __enable_irq();
+    OSA_EnableIRQGlobal();
 }
 
 void OSA_InterruptDisable(void)
 {
-    __disable_irq();
+    OSA_DisableIRQGlobal();
 }
 
 void OSA_EnableIRQGlobal(void)
 {
-    if (s_OSA_InterruptDisableCount > 0U)
+    if (s_OSA_DisableIRQGlobalNesting > 0U)
     {
-        s_OSA_InterruptDisableCount--;
+        s_OSA_DisableIRQGlobalNesting--;
 
-        if (0U == s_OSA_InterruptDisableCount)
+        if (0U == s_OSA_DisableIRQGlobalNesting)
         {
-            __enable_irq();
+            irq_unlock(s_OSA_InterruptRegPrimask);
         }
         /* call core API to enable the global interrupt*/
     }
@@ -267,10 +268,13 @@ void OSA_EnableIRQGlobal(void)
 void OSA_DisableIRQGlobal(void)
 {
     /* call core API to disable the global interrupt*/
-    __disable_irq();
+    if (0U == s_OSA_DisableIRQGlobalNesting)
+    {
+        s_OSA_InterruptRegPrimask = irq_lock();
+    }
 
     /* update counter*/
-    s_OSA_InterruptDisableCount++;
+    s_OSA_DisableIRQGlobalNesting++;
 }
 
 /*!

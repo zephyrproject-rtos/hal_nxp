@@ -4,7 +4,7 @@
 ********************************************************************************** */
 /*! *********************************************************************************
 * Copyright (c) 2015, Freescale Semiconductor, Inc.
-* Copyright 2016-2017, 2024 NXP
+* Copyright 2016-2017, 2024-2025 NXP
 * All rights reserved.
 *
 * \file
@@ -39,7 +39,6 @@ typedef enum
     gPlmeEdCnf_c,           /*!< Channel Energy Detect Confirm */
 
     gPlmeSetTRxStateReq_c,  /*!< Set Transceiver State request */
-    gPlmeSetTRxStateCnf_c,  /*!< Set Transceiver State confirm */
 
     gPlmeSetReq_c,          /*!< Set PHY PIB request */
     gPlmeSetCnf_c,          /*!< Unused */
