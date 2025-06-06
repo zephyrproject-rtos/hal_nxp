@@ -201,7 +201,7 @@ typedef struct {
 /** Array initializer of ENET peripheral base addresses */
 #define IP_ENET_BASE_ADDRS                       { IP_ENET_BASE }
 /** Array initializer of ENET peripheral base pointers */
-#define IP_ENET_BASE_PTRS                        { IP_ENET }
+#define ENET_BASE_PTRS                        { IP_ENET }
 
 /* ----------------------------------------------------------------------------
    -- ENET Register Masks
@@ -1497,6 +1497,16 @@ typedef struct {
 /*!
  * @}
  */ /* end of group ENET_Register_Masks */
+
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
+/* Interrupt vectors for the ENET peripheral type */
+#define ENET_Transmit_IRQS                       { ENET_TX_Buffer_IRQn }
+#define ENET_Receive_IRQS                        { ENET_RX_Buffer_IRQn }
+#define ENET_Error_IRQS                          { ENET_PRE_IRQn }
+#define ENET_1588_Timer_IRQS                     { ENET_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET_Timer_IRQn }
 
 /*!
  * @}
