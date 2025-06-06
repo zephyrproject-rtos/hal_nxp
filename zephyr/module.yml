@@ -111,3 +111,13 @@ blobs:
     url: https://github.com/NXP/wifi_nb_fw/raw/refs/tags/nxp-v4.1.0/IW416/sduartIW416_wlan_bt.bin
     description: "Combo firmware for IW416 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.0/readme.txt
+
+# For imx-boot-firmware
+  - path: imx-boot-firmware/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
+    sha256: ce9618f16d0898fb377ddedccdf5fec0fd1bdc6363b7b0cadc7e77e1d0f2d9c6
+    type: img
+    version: '0.1'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    click-through: True
+    url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
+    description: "Boot firmware for imx95-19x19-lpddr5-evk board"
