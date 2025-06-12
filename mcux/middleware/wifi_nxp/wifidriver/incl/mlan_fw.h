@@ -1396,6 +1396,8 @@ typedef enum _ENH_PS_MODES
 #define HostCmd_ACT_GEN_GET 0x0000U
 /** General purpose action : Set */
 #define HostCmd_ACT_GEN_SET 0x0001U
+/** General purpose action : Set Default */
+#define HostCmd_ACT_GEN_SET_DEFAULT 0x0002U
 /** Special purpose action : Set */
 #define HostCmd_ACT_SPC_SET 0x8001
 
