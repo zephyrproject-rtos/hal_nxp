@@ -3511,8 +3511,13 @@ void wifi_wmm_init()
     mlan_adapter *pmadapter = pmpriv->adapter;
     mlan_status status      = MLAN_STATUS_SUCCESS;
 
-    status =
-        wlan_prepare_cmd(pmpriv, HostCmd_CMD_WMM_PARAM_CONFIG, HostCmd_ACT_GEN_SET, 0, MNULL, &pmadapter->ac_params);
+    status = wlan_prepare_cmd(pmpriv, HostCmd_CMD_WMM_PARAM_CONFIG,
+#if defined(SD8978) || defined(SD8987)
+                              HostCmd_ACT_GEN_SET_DEFAULT,
+#else
+                              HostCmd_ACT_GEN_SET,
+#endif
+                              0, MNULL, &pmadapter->ac_params);
     if (status != MLAN_STATUS_SUCCESS)
     {
         wifi_e("ERR: WMM wlan_prepare_cmd returned status=0x%x", status);
