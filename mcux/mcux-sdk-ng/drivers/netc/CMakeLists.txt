@@ -20,6 +20,15 @@ if(CONFIG_MCUX_COMPONENT_driver.netc_imx95)
 
 endif()
 
+if(CONFIG_MCUX_COMPONENT_driver.netc_imx943)
+    mcux_component_version(2.0.0)
+
+    mcux_add_source(SOURCES socs/imx943/fsl_netc_soc.c socs/imx943/fsl_netc_soc.h)
+
+    mcux_add_include(INCLUDES ./socs/imx943)
+
+endif()
+
 if(CONFIG_MCUX_COMPONENT_driver.netc)
     mcux_component_version(2.8.1)
 
