@@ -1059,7 +1059,7 @@ static void ipv6_mcast_delete(struct net_mgmt_event_callback *cb, struct net_if 
 }
 #endif
 
-static void wifi_net_event_handler(struct net_mgmt_event_callback *cb, uint32_t mgmt_event, struct net_if *iface)
+static void wifi_net_event_handler(struct net_mgmt_event_callback *cb, uint64_t mgmt_event, struct net_if *iface)
 {
     // const struct wifi_status *status = (const struct wifi_status *)cb->info;
     enum wifi_event_reason wifi_event_reason;
