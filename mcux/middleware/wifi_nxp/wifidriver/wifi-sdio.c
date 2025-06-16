@@ -526,9 +526,13 @@ static mlan_status wlan_handle_cmd_resp_packet(t_u8 *pmbuf)
         case HostCmd_CMD_GET_HW_SPEC:
             (void)wlan_ret_get_hw_spec((mlan_private *)mlan_adap->priv[0], (HostCmd_DS_COMMAND *)(void *)cmdresp, NULL);
 #ifdef IW610
+#if !defined(OVERRIDE_CALIBRATION_DATA)
             t_u32 fw_cap_ext;
             fw_cap_ext = mlan_adap->priv[0]->adapter->fw_cap_ext;
             cal_data_valid_fw = (((fw_cap_ext & 0x0800) == 0) ? 0 : 1);
+#else
+            cal_data_valid_fw = 0;
+#endif
 #endif
             break;
         case HostCmd_CMD_VERSION_EXT:
@@ -2065,32 +2069,8 @@ t_void wlan_interrupt(mlan_adapter *pmadapter)
         pmadapter->sdio_ireg |= sdio_ireg;
     }
 
-#if CONFIG_WMM
-    t_u32 wr_bitmap;
-
-#if defined(SD8801)
-    wr_bitmap = ((t_u16)mp_regs[WR_BITMAP_U]) << 8;
-    wr_bitmap |= (t_u16)mp_regs[WR_BITMAP_L];
-#elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
-    wr_bitmap = (t_u32)mp_regs[WR_BITMAP_L];
-    wr_bitmap |= ((t_u32)mp_regs[WR_BITMAP_U]) << 8;
-    wr_bitmap |= ((t_u32)mp_regs[WR_BITMAP_1L]) << 16;
-    wr_bitmap |= ((t_u32)mp_regs[WR_BITMAP_1U]) << 24;
-#endif
-
-    if (!!wr_bitmap)
-    {
-        if (mlan_adap->wait_txbuf == true)
-        {
-            OSA_SemaphorePost((osa_semaphore_handle_t)txbuf_sem);
-            send_wifi_driver_tx_data_event(0);
-        }
-    }
-#endif
-
 #if CONFIG_WIFI_IO_DEBUG
     t_u32 rd_bitmap;
-#if !CONFIG_WMM
     t_u32 wr_bitmap;
 
 #if defined(SD8801)
@@ -2103,7 +2083,6 @@ t_void wlan_interrupt(mlan_adapter *pmadapter)
     wr_bitmap |= ((t_u32)mp_regs[WR_BITMAP_1U]) << 24;
 #endif
 
-#endif
 #if defined(SD8801)
     rd_bitmap = ((t_u16)mp_regs[RD_BITMAP_U]) << 8;
     rd_bitmap |= (t_u16)mp_regs[RD_BITMAP_L];
@@ -2656,6 +2635,9 @@ mlan_status wlan_process_int_status(mlan_adapter *pmadapter)
     t_u32 rx_len;
     t_u32 rx_blocks;
 #endif
+#if CONFIG_WMM
+    t_u32 pre_wr_bitmap = pmadapter->mp_wr_bitmap;
+#endif
 
     /* Get the interrupt status */
     wlan_interrupt(pmadapter);
@@ -2752,6 +2734,21 @@ mlan_status wlan_process_int_status(mlan_adapter *pmadapter)
 
         if (pmadapter->mp_wr_bitmap & CTRL_PORT_MASK)
             pmadapter->cmd_sent = false;
+    }
+#endif
+
+#if CONFIG_WMM
+    if (pmadapter->mp_wr_bitmap != 0)
+    {
+        if (mlan_adap->wait_txbuf == true)
+        {
+            OSA_SemaphorePost((osa_semaphore_handle_t)txbuf_sem);
+            send_wifi_driver_tx_data_event(0);
+        }
+        else if (pre_wr_bitmap == 0)
+        {
+            send_wifi_driver_tx_data_event(0);
+        }
     }
 #endif
 

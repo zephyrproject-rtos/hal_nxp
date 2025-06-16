@@ -3701,6 +3701,11 @@ static void clear_ie_index(unsigned int index)
     mgmt_ie_index_bitmap &= ~(MBIT(index));
 }
 
+unsigned int get_ie_index()
+{
+    return mgmt_ie_index_bitmap;
+}
+
 #ifdef SD8801
 static int wifi_config_ext_coex(int action,
                                 const wifi_ext_coex_config_t *ext_coex_config,
@@ -4091,6 +4096,54 @@ int wifi_clear_mgmt_ie2(mlan_bss_type bss_type, int mgmt_bitmap_index)
     unsigned int data_len = 0;
 
     return wifi_config_mgmt_ie2(bss_type, HostCmd_ACT_GEN_SET, 0, NULL, &data_len, mgmt_bitmap_index);
+}
+
+int wifi_get_mgmt_ie_by_index(mlan_bss_type bss_type, void *buf, unsigned int *buf_len, int index)
+{
+    t_u16 action = HostCmd_ACT_GEN_GET;
+    tlvbuf_custom_ie *tlv      = NULL;
+    unsigned int len = 0;
+    custom_ie *ie_ptr          = NULL;
+
+    tlv       = (tlvbuf_custom_ie *)(void *)buf;
+    tlv->type = MRVL_MGMT_IE_LIST_TLV_ID;
+    tlv->length = sizeof(custom_ie) - MAX_IE_SIZE;
+
+    /* Locate headers */
+    ie_ptr = (custom_ie *)(tlv->ie_data);
+    ie_ptr->ie_index = index;
+    /* Set TLV fields */
+    len = sizeof(tlvbuf_custom_ie) + tlv->length;
+
+    mlan_status rv = wrapper_wlan_cmd_mgmt_ie(bss_type, buf, len, action);
+
+    if (rv != MLAN_STATUS_SUCCESS && rv != MLAN_STATUS_PENDING)
+    {
+        wifi_e("%s: wrapper_wlan_cmd_mgmt_ie fail ret=0x%x", __FUNCTION__, rv);
+        return -WM_FAIL;
+    }
+
+    if (action == HostCmd_ACT_GEN_GET)
+    {
+        if (wm_wifi.cmd_resp_status != 0)
+        {
+            wifi_w("Unable to get mgmt ie buffer");
+            return wm_wifi.cmd_resp_status;
+        }
+        if (tlv->length < (sizeof(custom_ie) - MAX_IE_SIZE))
+        {
+            wifi_e("%s: invalid tlv len=%u", __FUNCTION__, tlv->length);
+            return -WM_FAIL;
+        }
+        *buf_len = sizeof(tlvbuf_custom_ie) + tlv->length;
+
+        wifi_d("%s: dump buf %u", __FUNCTION__, *buf_len);
+#if CONFIG_WIFI_IO_DUMP
+        dump_hex(buf, *buf_len);
+#endif
+    }
+
+    return WM_SUCCESS;
 }
 
 #ifdef SD8801

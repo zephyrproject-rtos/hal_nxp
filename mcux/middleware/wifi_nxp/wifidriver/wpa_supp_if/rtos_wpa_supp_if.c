@@ -3555,6 +3555,25 @@ out:
         OSA_MemoryFree((void *)acl_params);
     return ret;
 }
+
+int wifi_nxp_wpa_supp_sta_get_inact_sec(void *if_priv, const u8 *addr)
+{
+    int ret = -1;
+
+    if ((!if_priv) || (!addr))
+    {
+        supp_e("%s: Invalid params", __func__);
+        goto out;
+    }
+
+    /* Not support to get station inactivity duration,
+     * return 0 directly.
+     */
+    ret = 0;
+
+out:
+    return ret;
+}
 #endif
 
 int wifi_nxp_wpa_dpp_listen(void *if_priv, bool enable)

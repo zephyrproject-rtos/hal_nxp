@@ -1562,6 +1562,27 @@ void wifi_uap_handle_cmd_resp(HostCmd_DS_COMMAND *resp)
                 wm_wifi.cmd_resp_status = WM_SUCCESS;
             }
             break;
+            case MRVL_MGMT_IE_LIST_TLV_ID:
+            {
+                tlvbuf_custom_ie *tlv_mgmt_ie = (tlvbuf_custom_ie *)(void *)tlv;
+                uint32_t tlv_mgmt_ie_len = tlv_mgmt_ie->length + sizeof(tlvbuf_custom_ie);
+                wifi_d("%s: dump tlv_mgmt_ie %u", __FUNCTION__, tlv_mgmt_ie_len);
+#if CONFIG_WIFI_IO_DUMP
+                dump_hex(tlv_mgmt_ie, tlv_mgmt_ie_len);
+#endif
+                if (wm_wifi.cmd_resp_priv != NULL)
+                {
+                    uint8_t *saved_tlv_mgmt_ie = (uint8_t *)wm_wifi.cmd_resp_priv;
+                    wm_wifi.cmd_resp_priv = NULL;
+                    __memcpy(NULL, (void *)saved_tlv_mgmt_ie, (const void *)tlv_mgmt_ie, tlv_mgmt_ie_len);
+                    wifi_d("%s: dump saved_tlv_mgmt_ie %u", __FUNCTION__, tlv_mgmt_ie_len);
+#if CONFIG_WIFI_IO_DUMP
+                    dump_hex(saved_tlv_mgmt_ie, tlv_mgmt_ie_len);
+#endif
+                }
+                wm_wifi.cmd_resp_status = WM_SUCCESS;
+            }
+            break;
             default:
                 wm_wifi.cmd_resp_status = WM_SUCCESS;
                 break;

@@ -322,6 +322,10 @@ struct wifi_scan_result2
 #if CONFIG_11AX
     /** 11AX HE capab support */
     bool phecap_ie_present;
+#if CONFIG_11AX_TWT
+    /** 11AX TWT capab support */
+    bool twt_capab;
+#endif
 #endif
 
     bool wmm_ie_present;                       /*!< WMM IE present info */

@@ -2080,7 +2080,6 @@ int wifi_uap_do_acs(const int *freq_list);
  *
  */
 void wifi_uap_config_wifi_capa(uint8_t wlan_capa);
-void wifi_get_fw_info(mlan_bss_type type, t_u16 *fw_bands);
 #endif
 
 int wifi_uap_set_bandwidth(const t_u8 bandwidth);
@@ -2097,4 +2096,7 @@ void wifi_uap_client_assoc(t_u8 *sta_addr, unsigned char is_11n_enabled);
 void wifi_uap_client_deauth(t_u8 *sta_addr);
 #endif
 #endif /* UAP_SUPPORT */
+#if CONFIG_WIFI_CAPA
+void wifi_get_fw_info(mlan_bss_type type, t_u16 *fw_bands);
+#endif
 #endif /* __WIFI_H__ */

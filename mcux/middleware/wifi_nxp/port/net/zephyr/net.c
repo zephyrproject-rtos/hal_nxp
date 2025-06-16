@@ -455,6 +455,20 @@ static void process_data_packet(const t_u8 *rcvdata, const t_u16 datalen)
             deliver_packet_above(p, recv_interface);
             break;
         default:
+#if CONFIG_NET_MONITOR
+            /* If rx_pkt_type is 802.11, and in monitor mode, deliver data to user */
+            if ((rxpd->rx_pkt_type == PKT_TYPE_802DOT11) && (true == get_monitor_flag()))
+            {
+                wifi_frame_t *frame = (wifi_frame_t *)payload;
+
+                if (frame->frame_type == BEACON_FRAME || frame->frame_type == DATA_FRAME ||
+                    frame->frame_type == AUTH_FRAME || frame->frame_type == PROBE_REQ_FRAME ||
+                    frame->frame_type == QOS_DATA_FRAME)
+                {
+                    user_recv_monitor_data(rcvdata);
+                }
+            }
+#endif
             /* fixme: avoid pbuf allocation in this case */
 
             (void)net_pkt_unref(p);
