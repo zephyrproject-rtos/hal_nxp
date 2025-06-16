@@ -5,7 +5,7 @@
  *
  */
 
-/** @file wifi_cal_data_rw61x_override.h
+/** @file wifi_cal_data_override.h
  *
  *  @brief  Customer can override the data of ext_cal_data[] to set specific antenna calibration data.
  */

@@ -118,16 +118,14 @@ rg_power_cfg rg_power_cfg_info[] = {
 
 #if defined(IW610)
 rg_power_cfg rg_power_cfg_info[] = {
-    {0x00, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_WW_csp, sizeof(rg_table_WW_csp)},
-    .power_info[IW610_PACKAGE_TYPE_QFN] = {(t_u8 *)rg_table_WW_qfn, sizeof(rg_table_WW_qfn)}},
     {0x10, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_US_csp, sizeof(rg_table_US_csp)},
-    .power_info[IW610_PACKAGE_TYPE_QFN] = {(t_u8 *)rg_table_US_qfn, sizeof(rg_table_US_qfn)}},
+    },
+    {0x20, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_CA_csp, sizeof(rg_table_CA_csp)},
+    },
     {0x30, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_EU_csp, sizeof(rg_table_EU_csp)},
-    .power_info[IW610_PACKAGE_TYPE_QFN] = {(t_u8 *)rg_table_EU_qfn, sizeof(rg_table_EU_qfn)}},
-    {0x50, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_CN_csp, sizeof(rg_table_CN_csp)},
-    .power_info[IW610_PACKAGE_TYPE_QFN] = {(t_u8 *)rg_table_CN_qfn, sizeof(rg_table_CN_qfn)}},
+    },
     {0xFF, .power_info[IW610_PACKAGE_TYPE_CSP] = {(t_u8 *)rg_table_JP_csp, sizeof(rg_table_JP_csp)},
-    .power_info[IW610_PACKAGE_TYPE_QFN] = {(t_u8 *)rg_table_JP_qfn, sizeof(rg_table_JP_qfn)}},
+    },
 };
 #endif /* IW610 */
 
@@ -138,7 +136,7 @@ int wlan_set_rg_power_cfg(t_u16 region_code)
     int rv              = WM_SUCCESS;
 
     board_type = wifi_get_board_type();
-    (void)PRINTF("baord_type: %d, baord_type mapping: \r\n", board_type);
+    (void)PRINTF("board_type: %d, board_type mapping: \r\n", board_type);
 
 #if defined(RW610)
     (void)PRINTF("0----QFN\r\n");

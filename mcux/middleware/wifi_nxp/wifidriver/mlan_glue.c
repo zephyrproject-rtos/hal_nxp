@@ -37,6 +37,8 @@
 #endif
 #define RUTXCMD_RESP_BUFF_SIZE 1024
 
+#define MAX_CUSTOM_IE_LEN 1024
+
 static const uint8_t wpa2_akmp_oui[4] = {0x00, 0x0f, 0xac, 0x01};
 #ifdef WLAN_LOW_POWER_ENABLE
 bool low_power_mode;
@@ -1817,6 +1819,255 @@ int wifi_get_txratecfg(wifi_ds_rate *ds_rate, mlan_bss_type bss_type)
     return ret;
 }
 
+/**
+ *  @brief This function will search the ie_buf for the elem pointer with input elem id
+ *
+ *
+ *  @param priv    A pointer to mlan_private
+ *  @param ie_buf  A pointer to ie_buf
+ *  @param ie_len  total ie length
+ *  @param id      elem id
+ *
+ *  @return        elem pointer or MNULL
+ */
+t_u8 *wifi_get_ie(pmlan_private priv, t_u8 *ie_buf, int ie_len, IEEEtypes_ElementId_e id)
+{
+    int bytes_left    = ie_len;
+    t_u8 *pcurrent_ptr = ie_buf;
+    int cur_total_ie_len = 0;
+    t_u8 *ie_ptr = MNULL;
+    IEEEtypes_ElementId_e element_id;
+    t_u8 element_len;
+
+    ENTER();
+
+    if ((ie_buf == NULL) || (ie_len <= 2U))
+    {
+        wifi_d("%s: return for ie_buf=%p ie_len=%d\n", __FUNCTION__, ie_buf, ie_len);
+        return NULL;
+    }
+
+    DBG_HEXDUMP(MCMD_D, "ie_buf", ie_buf, ie_len);
+    while (bytes_left >= 2U)
+    {
+        element_id  = (IEEEtypes_ElementId_e)(*((t_u8 *)pcurrent_ptr));
+        element_len = *((t_u8 *)pcurrent_ptr + 1);
+        cur_total_ie_len = (int)(element_len + (t_u8)sizeof(IEEEtypes_Header_t));
+        if (bytes_left < cur_total_ie_len)
+        {
+            wifi_d("%s: Error in processing IE bytes_left 0x%x < cur_ie_len 0x%x",
+                __FUNCTION__, bytes_left, cur_total_ie_len);
+            break;
+        }
+        if (element_id == id)
+        {
+            wifi_d("%s: Find IE: id=%u\n", __FUNCTION__, id);
+            DBG_HEXDUMP(MCMND, "IE", pcurrent_ptr, cur_total_ie_len);
+            ie_ptr = pcurrent_ptr;
+            break;
+        }
+        pcurrent_ptr += (element_len + 2U);
+        bytes_left -= (element_len + 2U);
+    }
+
+    LEAVE();
+
+    return ie_ptr;
+}
+
+void wifi_io_dump_hex(const void *data, unsigned len)
+{
+#if CONFIG_WIFI_IO_DUMP
+    dump_hex(data, len);
+#endif
+}
+
+#if UAP_SUPPORT
+int wlan_set_uap_coutry_regd_by_conn_bss(pmlan_private priv, BSSDescriptor_t *d)
+{
+    t_u32 country_ie_len = 0;
+    int ret = WM_SUCCESS;
+
+	wifi_d("%s: Enter", __FUNCTION__);
+
+    if (mlan_adap->priv[1]->uap_bss_started != MTRUE)
+    {
+        wifi_d("%s: uap not started.", __FUNCTION__);
+        return WM_SUCCESS;
+    }
+
+    if (d == NULL)
+    {
+        wifi_e("%s: invalid input bss.", __FUNCTION__);
+        return -WM_FAIL;
+    }
+
+    if ((*d->country_info.country_code) && (d->country_info.len > COUNTRY_CODE_LEN) &&
+        (!priv->adapter->country_ie_ignore))
+    {
+        country_ie_len = d->country_info.len;
+        wifi_d("%s: dump bss country ie %u", __FUNCTION__, country_ie_len + 2U);
+        wifi_io_dump_hex(&(d->country_info), country_ie_len + 2U);
+    }
+
+    if (country_ie_len > 0)
+    {
+        uint8_t *buf = NULL;
+        uint8_t *buf_ptr = NULL;
+        unsigned int buf_len = MAX_CUSTOM_IE_LEN;
+        int buf_len_left = 0;
+        uint8_t *buf_new = NULL;
+        uint8_t *buf_new_ptr = NULL;
+        unsigned int buf_new_len = MAX_CUSTOM_IE_LEN;
+        unsigned short mask = MGMT_MASK_BEACON | MGMT_MASK_PROBE_RESP | MGMT_MASK_ASSOC_RESP;
+        unsigned int ie_index_bitmap = 0;
+        t_u32 bit = 0;
+        t_u8 updated_cur_rnd = 0;
+        t_u8 updated_all = 0;
+
+#if !CONFIG_MEM_POOLS
+        buf = (uint8_t *)OSA_MemoryAllocate(buf_len);
+#else
+        buf = OSA_MemoryPoolAllocate(buf_512_MemoryPool);
+#endif
+        if (buf == NULL)
+        {
+            wifi_e("%s: alloc %u size buf fail.", __FUNCTION__, buf_len);
+            return -WM_FAIL;
+        }
+#if !CONFIG_MEM_POOLS
+        buf_new = (uint8_t *)OSA_MemoryAllocate(buf_new_len);
+#else
+        buf_new = OSA_MemoryPoolAllocate(buf_512_MemoryPool);
+#endif
+        if (buf_new == NULL)
+        {
+#if !CONFIG_MEM_POOLS
+            OSA_MemoryFree(buf);
+#else
+            OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
+#endif
+            wifi_e("%s: alloc %u size buf_new fail.", __FUNCTION__, buf_new_len);
+            return -WM_FAIL;
+        }
+
+        ie_index_bitmap = get_ie_index();
+        while (ie_index_bitmap != 0)
+        {
+            wifi_d("%s: ie_index_bitmap=0x%x bit=%u", __FUNCTION__, ie_index_bitmap, bit);
+            if ((ie_index_bitmap & MBIT(bit)) != 0)
+            {
+                __memset(priv->adapter, buf, 0x00, MAX_CUSTOM_IE_LEN);
+                buf_len = MAX_CUSTOM_IE_LEN;
+                ret = wifi_get_mgmt_ie_by_index(MLAN_BSS_TYPE_UAP, buf, &buf_len, bit);
+                if (ret == WM_SUCCESS)
+                {
+                    wifi_d("%s: get_mgmt_ie index=%u len=%u", __FUNCTION__, bit, buf_len);
+                    if (buf_len < (sizeof(tlvbuf_custom_ie) + sizeof(custom_ie) - MAX_IE_SIZE))
+                    {
+                        wifi_d("%s: get_mgmt_ie index=%u invalid len=%u", __FUNCTION__, bit, buf_len);
+                    }
+                    else if (buf_len > MAX_CUSTOM_IE_LEN)
+                    {
+                        wifi_e("%s: get_mgmt_ie index=%u invalid len=%u>%u", __FUNCTION__, bit, buf_len, MAX_CUSTOM_IE_LEN);
+                    }
+                    else
+                    {
+                        custom_ie *cu_ie = (custom_ie *)(buf + sizeof(tlvbuf_custom_ie));
+                        IEEEtypes_ElementId_e element_id = 0;
+                        t_u8 element_len = 0;
+
+						wifi_d("%s: get_mgmt_ie index=%u SUCCESS: len=%u", __FUNCTION__, bit, buf_len);
+                        wifi_io_dump_hex(buf, buf_len);
+                        buf_ptr = (t_u8 *)cu_ie + (sizeof(custom_ie) - MAX_IE_SIZE);
+                        buf_len_left = cu_ie->ie_length;
+
+                        __memset(priv->adapter, buf_new, 0x00, MAX_CUSTOM_IE_LEN);
+                        buf_new_ptr = buf_new;
+                        buf_new_len = 0;
+
+                        updated_cur_rnd = 0;
+                        while (buf_len_left >= 2U)
+                        {
+                            element_id	= (IEEEtypes_ElementId_e)(*((t_u8 *)buf_ptr));
+                            element_len = *((t_u8 *)buf_ptr + 1);
+                            if (buf_len_left < (element_len + 2U))
+                            {
+                                wifi_e("%s: Error in processing IE bytes_left 0x%x < cur_ie_len 0x%x",
+                                    __FUNCTION__, buf_len_left, (element_len + 2U));
+                                break;
+                            }
+                            if ((element_id == COUNTRY_INFO) && (country_ie_len > 0))
+                            {
+                                wifi_d("%s: Find COUNTRY IE: id=%u\n", __FUNCTION__, element_id);
+                                __memcpy(priv->adapter, buf_new_ptr, &(d->country_info), country_ie_len + 2U);
+                                buf_new_ptr += (country_ie_len + 2U);
+                                buf_new_len += (country_ie_len + 2U);
+                                updated_cur_rnd = 1;
+                            }
+                            else
+                            {
+                                __memcpy(priv->adapter, buf_new_ptr, buf_ptr, (element_len + 2U));
+                                buf_new_ptr += (element_len + 2U);
+                                buf_new_len += (element_len + 2U);
+                            }
+                            buf_ptr += (element_len + 2U);
+                            buf_len_left -= (element_len + 2U);
+                        }
+
+                        if (updated_cur_rnd != 0)
+                        {
+                            wifi_d("%s: updated_cur_rnd=%u: dump buf_new %u", __FUNCTION__, updated_cur_rnd, buf_new_len);
+                            wifi_io_dump_hex(buf_new, buf_new_len);
+                            wifi_clear_mgmt_ie2(MLAN_BSS_TYPE_UAP, bit);
+                            ret = wifi_set_mgmt_ie2(MLAN_BSS_TYPE_UAP, cu_ie->mgmt_subtype_mask, buf_new, buf_new_len);
+                            if (ret < 0)
+                            {
+                                wifi_e("%s: updated_cur_rnd=%u: wifi_set_mgmt_ie2 fail ret=%d.", __FUNCTION__, updated_cur_rnd, ret);
+                            }
+                            updated_all = 1;
+                        }
+                    }
+                }
+            }
+            ie_index_bitmap &= ~(MBIT(bit));
+            bit++;
+        }
+        if (updated_all == 0)
+        {
+            __memset(priv->adapter, buf_new, 0x00, MAX_CUSTOM_IE_LEN);
+            buf_new_ptr = buf_new;
+            buf_new_len = 0;
+            if (country_ie_len > 0)
+            {
+                __memcpy(priv->adapter, (void *)buf_new_ptr, (const void *)&(d->country_info), (country_ie_len + 2U));
+                buf_new_ptr += (country_ie_len + 2U);
+                buf_new_len += (country_ie_len + 2U);
+            }
+            wifi_d("%s: updated_all=%u: dump buf_new %u", __FUNCTION__, updated_all, buf_new_len);
+            ret = wifi_set_mgmt_ie2(MLAN_BSS_TYPE_UAP, mask, buf_new, buf_new_len);
+            if (ret < 0)
+            {
+                wifi_e("%s: updated_all=%u: wifi_set_mgmt_ie2 fail ret=%d.", __FUNCTION__, updated_all, ret);
+            }
+        }
+#if !CONFIG_MEM_POOLS
+        OSA_MemoryFree(buf);
+#else
+        OSA_MemoryPoolFree(buf_512_MemoryPool, buf);
+#endif
+#if !CONFIG_MEM_POOLS
+        OSA_MemoryFree(buf_new);
+#else
+        OSA_MemoryPoolFree(buf_512_MemoryPool, buf_new);
+#endif
+    }
+
+    return ret;
+}
+#endif
+
+
 bool wrapper_wlan_11d_support_is_enabled(void)
 {
     mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[0];
@@ -2042,9 +2293,15 @@ static int wifi_assoc_pick_security_ie(mlan_private *priv, BSSDescriptor_t *d,
         goto wpa_ie_picked;
     }
 
+#if CONFIG_WPA_SUPP
+    wifi_d("wifi assoc select none security profile, "
+           "key mgmt network 0x%x rsn 0x%x",
+           key_mgmt_network, key_mgmt_ie_rsn);
+#else
     wifi_d("wifi assoc select none security profile, "
            "key mgmt network 0x%x rsno2 0x%x rsno 0x%x rsn 0x%x",
            key_mgmt_network, key_mgmt_ie_rsno2, key_mgmt_ie_rsno, key_mgmt_ie_rsn);
+#endif
     priv->sec_info.rsn_selector = MLAN_RSN_SELECTOR_INVALID;
     return WM_SUCCESS;
 
@@ -2068,9 +2325,15 @@ rsn_ie_picked:
     priv->sec_info.is_wpa_tkip  = is_wpa_tkip;
     priv->sec_info.wpa2_enabled = true;
 
+#if CONFIG_WPA_SUPP
+    wifi_d("assoc_pick_rsn: "
+           "key mgmt network 0x%x rsn 0x%x",
+           key_mgmt_network, key_mgmt_ie_rsn);
+#else
     wifi_d("assoc_pick_rsn: "
            "key mgmt network 0x%x rsno2 0x%x rsno 0x%x rsn 0x%x",
            key_mgmt_network, key_mgmt_ie_rsno2, key_mgmt_ie_rsno, key_mgmt_ie_rsn);
+#endif
 
 #if CONFIG_11R
     if (wlan_security == WLAN_SECURITY_WPA2 || wlan_security == WLAN_SECURITY_WPA3_SAE ||
@@ -2202,7 +2465,13 @@ int wrapper_wifi_assoc(
     (void)memset(&bss, 0x00, sizeof(mlan_ds_bss));
     bss.sub_command          = MLAN_OID_BSS_START;
     bss.param.ssid_bssid.idx = (t_u32)idx + 1UL; /* + 1 req. by mlan */
-    return wifi_send_bss_ioctl(&bss);
+    ret = wifi_send_bss_ioctl(&bss);
+
+#if UAP_SUPPORT
+    wlan_set_uap_coutry_regd_by_conn_bss(priv,d);
+#endif
+
+    return ret;
 }
 
 #if CONFIG_WPA_SUPP
@@ -2746,6 +3015,7 @@ int wifi_nxp_send_assoc(nxp_wifi_assoc_info_t *assoc_info)
         wlan_set_country_code((const char *)country_code);
     }
 
+
     /* The original assoc cmd handling function of mlan sends
        additional two commands to the firmware; both
        HostCmd_CMD_802_11D_DOMAIN_INFO. In the current wmsdk wifi
@@ -2773,7 +3043,13 @@ int wifi_nxp_send_assoc(nxp_wifi_assoc_info_t *assoc_info)
     (void)memset(&bss, 0x00, sizeof(mlan_ds_bss));
     bss.sub_command          = MLAN_OID_BSS_START;
     bss.param.ssid_bssid.idx = (t_u32)idx + 1UL; /* + 1 req. by mlan */
-    return wifi_send_bss_ioctl(&bss);
+    ret = wifi_send_bss_ioctl(&bss);
+
+#if UAP_SUPPORT
+    wlan_set_uap_coutry_regd_by_conn_bss(priv, d);
+#endif
+
+    return ret;
 }
 
 #define MAX_NUM_CHANNEL_2G  (14)
@@ -7071,6 +7347,9 @@ int wrapper_bssdesc_second_set(int bss_index,
 #endif
 #if CONFIG_11AX
                                bool *phecap_ie_present,
+#if CONFIG_11AX_TWT
+                                bool *twt_capab,
+#endif
 #endif
                                bool *wmm_ie_present,
                                uint16_t *band,
@@ -7101,7 +7380,7 @@ int wrapper_bssdesc_second_set(int bss_index,
         wifi_w("Unable to find given entry %d in BSS table", bss_index);
         return -WM_FAIL;
     }
-    const BSSDescriptor_t *d = &mlan_adap->pscan_table[bss_index];
+    BSSDescriptor_t *d = &mlan_adap->pscan_table[bss_index];
 #if CONFIG_11R
     IEEEtypes_MobilityDomain_t *pmd_ie;
 #endif
@@ -7142,6 +7421,16 @@ int wrapper_bssdesc_second_set(int bss_index,
     {
         *phecap_ie_present = false;
     }
+#if CONFIG_11AX_TWT
+    if(*phecap_ie_present == true)
+    {
+        *twt_capab = wlan_check_ap_11ax_twt_supported(d);
+    }
+    else
+    {
+        *twt_capab = false;
+    }
+#endif
 #endif
     if (d->wmm_ie.vend_hdr.element_id == WMM_IE)
     {

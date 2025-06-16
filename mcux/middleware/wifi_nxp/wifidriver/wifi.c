@@ -1628,6 +1628,9 @@ int wifi_get_scan_result(unsigned int index, struct wifi_scan_result2 **desc)
 #endif
 #if CONFIG_11AX
                                     &common_desc.phecap_ie_present,
+#if CONFIG_11AX_TWT
+                                    &common_desc.twt_capab,
+#endif
 #endif
                                     &common_desc.wmm_ie_present, &common_desc.band, &common_desc.wps_IE_exist,
                                     &common_desc.wps_session, &common_desc.wpa2_entp_IE_exist,

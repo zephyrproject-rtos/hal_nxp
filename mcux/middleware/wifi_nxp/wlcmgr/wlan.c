@@ -2502,6 +2502,9 @@ static void update_network_params(struct wlan_network *network, const struct wif
 #endif
 #if CONFIG_11AX
     network->dot11ax = res->phecap_ie_present;
+#ifdef CONFIG_11AX_TWT
+    network->twt_capab = res->twt_capab;
+#endif
 #endif
 
 #if CONFIG_11R
@@ -5804,7 +5807,6 @@ static void wlcm_process_init(enum cm_sta_state *next)
 
     (void)wrapper_wlan_cmd_get_hw_spec();
 
-#ifndef RW610
     wlan_ed_mac_ctrl_t wlan_ed_mac_ctrl = {
         0x01,
         CONFIG_NXP_WIFI_ED_OFFSET_2G
@@ -5815,6 +5817,7 @@ static void wlcm_process_init(enum cm_sta_state *next)
 #endif
     };
     (void)wlan_set_ed_mac_mode(wlan_ed_mac_ctrl);
+#if UAP_SUPPORT
     (void)wlan_set_uap_ed_mac_mode(wlan_ed_mac_ctrl);
 #endif
 

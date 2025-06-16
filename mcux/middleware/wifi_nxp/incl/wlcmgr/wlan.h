@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r51.z_up.p9"
+#define WLAN_DRV_VERSION "v1.3.r51.z_up.p12"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -2016,6 +2016,11 @@ struct wlan_network
 #if CONFIG_11K
     /** Neighbor report support */
     bool neighbor_report_supported;
+#endif
+#if CONFIG_11AX
+#if CONFIG_11AX_TWT
+    bool twt_capab;
+#endif
 #endif
 };
 

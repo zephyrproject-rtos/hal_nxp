@@ -4918,7 +4918,7 @@ typedef PACK_START struct
 } PACK_END hostcmd_btwt_set_t;
 /** BTWT AP Config parameters */
 
-typedef MLAN_PACK_START struct 
+typedef MLAN_PACK_START struct
 {
     t_u8 bcast_bet_sta_wait;
     t_u16 bcast_offset;

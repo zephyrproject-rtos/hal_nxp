@@ -310,6 +310,9 @@ int wifi_exit_deepsleep_power_save(void)
 int wifi_set_power_save_mode(void)
 {
     t_u32 mode = BLOCK_CMD_IN_PRE_ASLEEP;
+#if defined(SD9177) || defined(IW610) || defined (RW610)
+    mode = (mode & ~BLOCK_CMD_IN_PRE_ASLEEP);
+#endif
 
     return wifi_send_power_save_command(EXT_PS_PARAM, 0U, MLAN_BSS_TYPE_STA, &mode);
 }
