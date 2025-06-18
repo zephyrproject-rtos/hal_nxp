@@ -5,7 +5,7 @@ build:
   settings:
     dts_root: .
 blobs:
-#IW612
+#For IW612
   - path: iw612/uart_nw61x_se.h
     sha256: 7655e871c377a21b1bf03defb13edb04e844e84508f04ffa90052f3163d430d0
     type: img
@@ -14,30 +14,34 @@ blobs:
     url: https://raw.githubusercontent.com/NXP/wifi_nxp/MCUX_2.15.100/wifi_bt_firmware/nw61x/uart_nw61x_se.h
     description: "Firmware for NXP IW612 Wi-Fi + Bluetooth single-chip solution"
     doc-url: https://www.nxp.com/products/wireless-connectivity/wi-fi-plus-bluetooth-plus-802-15-4/2-4-5-ghz-dual-band-1x1-wi-fi-6-802-11ax-plus-bluetooth-5-4-plus-802-15-4-tri-radio-solution:IW612
+
+#For RW61x
   - path: rw61x/rw61x_sb_ble_15d4_combo_a2.bin
-    sha256: abe79b5f7d6bf2bbae94345b1850afd50c54952a3fc9f27973d717b08fbb4333
+    sha256: cb101939fbbc1b77cc13eab848f01bb5e682071a940a468d89ebd1b0f31674cc
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.1/rw61x/rw61x_sb_ble_15d4_combo_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.3/rw61x/rw61x_sb_ble_15d4_combo_a2.bin
     description: "BLE and 15.4 combo firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.3/readme.txt
   - path: rw61x/rw61x_sb_ble_a2.bin
-    sha256: dd380b5fee980fc6e0d7c21a5fc6a9d99be3ab3003212c563b610f015be4ddea
+    sha256: 97fe6270806455b23dc14e78c6f710b8eb72b05307b7646b928a7c9f8fed9223
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.1/rw61x/rw61x_sb_ble_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.3/rw61x/rw61x_sb_ble_a2.bin
     description: "BLE firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.3/readme.txt
   - path: rw61x/rw61x_sb_wifi_a2.bin
-    sha256: 4bfde14a0639384e1a2f2986a3c3b555bde7ae90207485b5c81fa972c5e3636f
+    sha256: 4c0144e63a9cb679bd124fb98f49f2a686c438fa5de514329564e2b13356aa18
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.1/rw61x/rw61x_sb_wifi_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.3/rw61x/rw61x_sb_wifi_a2.bin
     description: "WiFi firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.1/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.3/readme.txt
+
+#For MCXW71
   - path: mcxw71/mcxw71_nbu_ble.sb3
     sha256: f952d3df86b781982586d0737f29d46c4b7480b6b6e7905c002625f807ac60f4
     type: img
@@ -121,31 +125,31 @@ blobs:
 
 #For IW610
   - path: IW610/sd_iw610.bin.se
-    sha256: 96775de49896df7fcc161b6e4211324d20a9160ef55a1ff9b9b33f41d7da4fa6
+    sha256: 4701b5f7b401b82f134c0b9c086164d2ba6d5b8be0b8ba4bf717f0bdd85c9b62
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.2/IW610/sd_iw610.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.3/IW610/sd_iw610.bin.se
     description: "Wi-Fi firmware for IW610 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.2/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.3/readme.txt
   - path: IW610/uart_iw610_bt.bin.se
-    sha256: 3b5063ad0e96c7d827690ae4e274a213426df621b9f5f84ba392d54e3ff30b9e
+    sha256: 95513b49c3a3ca1fdfaf443081daafd8defe416bc7a498e52ceaf7b8dad7405c
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.2/IW610/uart_iw610_bt.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.3/IW610/uart_iw610_bt.bin.se
     description: "BT firmware for IW610 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.2/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.3/readme.txt
   - path: IW610/sduart_iw610.bin.se
-    sha256: 897f4467187456ffdc549db651fc6dea7c1644e2e1989822a4d66b623959cd14
+    sha256: c87a7946cffd6b82a6bebb6507cdfe0fface6b7bf9b48a03b4080f275c5c532b
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.2/IW610/sduart_iw610.bin.se
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v4.1.3/IW610/sduart_iw610.bin.se
     description: "Combo firmware for IW610 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.2/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.1.3/readme.txt
 
-# For imx-boot-firmware
+#For imx-boot-firmware
   - path: imx-boot-firmware/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
     sha256: ce9618f16d0898fb377ddedccdf5fec0fd1bdc6363b7b0cadc7e77e1d0f2d9c6
     type: img
