@@ -324,7 +324,7 @@ if(CONFIG_NXP_RW610)
 	set(QUICK_ACCESS_CODE_AREA_2 RAM_TEXT)
 else()
 	set(QUICK_ACCESS_CODE_AREA ITCM_TEXT)
-	set(QUICK_ACCESS_CODE_AREA_2 DTCM)
+	set(QUICK_ACCESS_CODE_AREA_2 DTCM_TEXT)
 endif()
 
 # critical path code relocated to SRAM
@@ -337,13 +337,19 @@ zephyr_code_relocate(FILES
                      wifidriver/mlan_11n_rxreorder.c
                      wifidriver/mlan_wmm.c
                      wifidriver/wifi.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 if(CONFIG_SDIO_STACK)
 zephyr_code_relocate(FILES
                      sdio_nxp_abs/mlan_sdio.c
                      wifidriver/wifi-sdio.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     wifidriver/sdio.c
+                     ${ZEPHYR_BASE}/subsys/sd/sdio.c
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+zephyr_code_relocate(FILES ${ZEPHYR_BASE}/drivers/wifi/nxp/nxp_wifi_drv.c
+                     FILTER ".*\\.nxp_wifi_send|.*\\.nxp_wifi_recv"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 endif()
 
 if(CONFIG_NXP_RW610)
@@ -351,38 +357,35 @@ zephyr_code_relocate(FILES
                      wifidriver/wifi-imu.c
                      ${MCUX_SDK_DIR}/drivers/imu/fsl_imu.c
                      ${MCUX_SDK_DIR}/components/imu_adapter/fsl_adapter_imu.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 endif()
 
 zephyr_code_relocate(FILES
                      ${MCUX_SDK_DIR}/components/osa/fsl_os_abstraction_zephyr.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 else()
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memcpy.S
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 endif()
 
 file(GLOB ZPERF_SRC ${ZEPHYR_BASE}/subsys/net/lib/zperf/*.c)
-zephyr_code_relocate(FILES ${ZPERF_SRC} LOCATION ${QUICK_ACCESS_CODE_AREA_2})
+zephyr_code_relocate(FILES ${ZPERF_SRC} LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
+
+zephyr_code_relocate(FILES
+                     ${ZEPHYR_BASE}/subsys/net/ip/ipv6_fragment.c
+                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4_fragment.c
+                     LOCATION RAM_TEXT NOKEEP)
 
 zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/subsys/net/ip/connection.c
                      ${ZEPHYR_BASE}/subsys/net/ip/packet_socket.c
                      ${ZEPHYR_BASE}/subsys/net/ip/utils.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA_2})
-
-zephyr_code_relocate(FILES
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv6_fragment.c
-                     ${ZEPHYR_BASE}/subsys/net/ip/ipv4_fragment.c
-                     LOCATION RAM_TEXT)
-
-zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_packet.c
                      ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets.c
                      ${ZEPHYR_BASE}/subsys/net/ip/ipv4.c
@@ -396,7 +399,7 @@ zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/subsys/net/ip/udp.c
                      ${ZEPHYR_BASE}/subsys/net/l2/ethernet/ethernet.c
                      ${ZEPHYR_BASE}/lib/net_buf/buf.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/kernel/mem_slab.c
@@ -408,7 +411,7 @@ zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/kernel/sem.c
                      ${ZEPHYR_BASE}/kernel/thread.c
                      ${ZEPHYR_BASE}/kernel/work.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA})
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 endif()
 endif()
 
