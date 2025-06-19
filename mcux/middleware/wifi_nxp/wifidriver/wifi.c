@@ -1775,9 +1775,7 @@ static void wifi_core_task(void *argv)
         g_txrx_flag = true;
         //		SDIOC_IntMask(SDIOC_INT_CDINT, UNMASK);
         //		SDIOC_IntSigMask(SDIOC_INT_CDINT, UNMASK);
-#ifndef RW610
         sdio_enable_interrupt();
-#endif
 
         OSA_EXIT_CRITICAL();
 
@@ -1785,20 +1783,12 @@ static void wifi_core_task(void *argv)
 
         // wakelock_get(WL_ID_WIFI_CORE_INPUT);
 
-#if defined(RW610)
-        (void)wifi_imu_lock();
-#else
         /* Protect the SDIO from other parallel activities */
         (void)wifi_sdio_lock();
 
         (void)wlan_process_int_status(mlan_adap);
-#endif
 
-#if defined(RW610)
-        wifi_imu_unlock();
-#else
         wifi_sdio_unlock();
-#endif
         // wakelock_put(WL_ID_WIFI_CORE_INPUT);
     } /* for ;; */
 }
