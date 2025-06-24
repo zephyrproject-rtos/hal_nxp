@@ -99,6 +99,12 @@ uint8_t dev_mac_addr[MLAN_MAC_ADDR_LENGTH];
 uint8_t dev_mac_addr_uap[MLAN_MAC_ADDR_LENGTH];
 static uint8_t dev_fw_ver_ext[MLAN_MAX_VER_STR_LEN];
 
+#if CONFIG_HOST_SLEEP
+extern int is_hs_handshake_done;
+extern bool skip_hs_handshake;
+extern void wlan_hs_hanshake_cfg(bool skip);
+#endif
+
 static mlan_status wifi_send_fw_data(t_u8 *data, t_u32 txlen)
 {
     t_u32 tx_blocks = 0, buflen = 0;
@@ -118,6 +124,13 @@ static mlan_status wifi_send_fw_data(t_u8 *data, t_u32 txlen)
 
     if (data == NULL || txlen == 0)
         return MLAN_STATUS_FAILURE;
+
+#if CONFIG_HOST_SLEEP
+    if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
+#endif
 
     w_pkt_d("Data TX SIG: Driver=>FW, len %d", txlen);
 
@@ -1598,6 +1611,13 @@ int wlan_send_sdio_cmd(t_u8 *buf, t_u32 tx_blocks, t_u32 buflen)
 
     (void)wifi_sdio_lock();
 
+#if CONFIG_HOST_SLEEP
+    if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
+#endif
+
     (void)memcpy((void *)outbuf, (const void *)buf, tx_blocks * buflen);
     sdio->pkttype = MLAN_TYPE_CMD;
     sdio->size    = sdio->hostcmd.size + INTF_HEADER_LEN;
@@ -1710,6 +1730,13 @@ static mlan_status wifi_tx_data(t_u8 start_port, t_u8 ports, t_u8 pkt_cnt, t_u32
     if (wifi_ind_reset_in_progress() == true)
     {
         return WM_SUCCESS;
+    }
+#endif
+
+#if CONFIG_HOST_SLEEP
+    if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
     }
 #endif
 
@@ -2639,6 +2666,13 @@ mlan_status wlan_process_int_status(mlan_adapter *pmadapter)
     t_u32 pre_wr_bitmap = pmadapter->mp_wr_bitmap;
 #endif
 
+#if CONFIG_HOST_SLEEP
+    if (skip_hs_handshake == true)
+    {
+        wlan_hs_hanshake_cfg(false);
+    }
+#endif
+
     /* Get the interrupt status */
     wlan_interrupt(pmadapter);
 
@@ -3137,7 +3171,7 @@ void wifi_print_wakeup_reason(t_u16 hs_wakeup_reason)
 {
     if (hs_wakeup_reason == 0)
     {
-        PRINTF("Woken up by unknown reason\r\n");
+        PRINTF("Woken up by pin\r\n");
     }
     else if (hs_wakeup_reason == 1)
     {
