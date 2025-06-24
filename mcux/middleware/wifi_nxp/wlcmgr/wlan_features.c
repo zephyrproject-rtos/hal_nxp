@@ -17,29 +17,7 @@
 #if CONFIG_WIFI_FEATURES
 
 #ifdef ENABLE_OFFLOAD
-static void test_wlan_ns_offload(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    ret     = wlan_set_ipv6_ns_offload();
-    if (ret == WM_SUCCESS)
-    {
-        (void)PRINTF("Enabled  wlan IPv6 NS offload feature");
-    }
-    else
-    {
-        (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d", ret);
-    }
-}
 
-static void test_wlan_auto_arp(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    ret     = wlan_set_auto_arp();
-    if (ret == WM_SUCCESS)
-        (void)PRINTF("Enabled  wlan auto arp offload feature\r\n");
-    else
-        (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d\r\n", ret);
-}
 #if (CONFIG_HOST_SLEEP && CONFIG_MEF_CFG)
 static void dump_wlan_add_packet_filter()
 {
@@ -103,8 +81,6 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
 #endif
 
 static struct cli_command features[] = {
-    {"enable-ns-offload", NULL, test_wlan_ns_offload},
-    {"wlan-auto-arp", NULL, test_wlan_auto_arp},
 #if (CONFIG_HOST_SLEEP && CONFIG_MEF_CFG)
     {"wlan-add-packet-filter", "0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........",
      test_wlan_add_packet_filter},
