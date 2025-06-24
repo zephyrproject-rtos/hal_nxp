@@ -2378,7 +2378,7 @@ int wlan_remove_all_network_profiles(void);
  */
 void wlan_reset(cli_reset_option ResetOption);
 
-#if defined(RW610)
+#if defined(RW610) || defined(IW610)
 /** Stop and remove all Wi-Fi network (access point).
  *
  *  \return WM_SUCCESS if successful.
@@ -3422,7 +3422,6 @@ void wlan_subscribe_rssi_low_event(void);
 #endif
 
 #if CONFIG_HOST_SLEEP
-#ifdef RW610
 #if CONFIG_MEF_CFG
 /** Wowlan (wake on wireless LAN) configuration.
  * This function may be called to configure host sleep in firmware.
@@ -3460,7 +3459,6 @@ void wlan_config_host_sleep(bool is_manual, t_u8 is_periodic);
  * \return kStatus_Success if successful else return -WM_FAIL.
  */
 status_t wlan_hs_send_event(int id, void *data);
-#endif /*RW610*/
 
 /** Cancel host sleep.
  * This function is called to cancel the host sleep in the firmware.
@@ -4062,14 +4060,6 @@ int wlan_get_tbtt_offset_stats(wlan_tbtt_offset_t *tbtt_offset);
  */
 int wlan_set_packet_filters(wlan_flt_cfg_t *flt_cfg);
 
-/**
- * Use this API to enable ARP (address resolution protocol) offload in Wi-Fi firmware
- *
- * \return WM_SUCCESS if operation is successful.
- * \return -WM_FAIL if command fails.
- */
-int wlan_set_auto_arp(void);
-
 #if CONFIG_AUTO_PING
 /**
  * Use this API to enable ping offload in Wi-Fi firmware.
@@ -4092,38 +4082,7 @@ int wlan_set_auto_ping(void);
 int wlan_wowlan_cfg_ptn_match(wlan_wowlan_ptn_cfg_t *ptn_cfg);
 #endif
 
-/**
- * Use this API to enable NS offload in Wi-Fi firmware.
- *
- * \return WM_SUCCESS if operation is successful.
- * \return -WM_FAIL if command fails.
- */
-int wlan_set_ipv6_ns_offload(void);
-
 #if CONFIG_HOST_SLEEP
-
-/** Use this API to set configuration before going to host sleep */
-void wlan_hs_pre_cfg(void);
-
-/** Use this API to get and print the reason of waking up from host sleep */
-void wlan_hs_post_cfg(void);
-
-/**
- * Use this API to configure host sleep parameters in Wi-Fi firmware.
- *
- * \param[in] wakeup_condition: bit 0: WAKE_ON_ALL_BROADCAST
- *                              bit 1: WAKE_ON_UNICAST
- *                              bit 2: WAKE_ON_MAC_EVENT
- *                              bit 3: WAKE_ON_MULTICAST
- *                              bit 4: WAKE_ON_ARP_BROADCAST
- *                              bit 6: WAKE_ON_MGMT_FRAME
- *                              All bit 0 discard and not wakeup host
- *
- * \return WM_SUCCESS if operation is successful.
- * \return -WM_FAIL if command fails.
- */
-int wlan_send_host_sleep(uint32_t wakeup_condition);
-
 /**
  * Use this API to get host sleep wakeup reason from Wi-Fi firmware after waking up from host sleep by Wi-Fi.
  *
@@ -4142,11 +4101,6 @@ int wlan_send_host_sleep(uint32_t wakeup_condition);
  * \return -WM_FAIL if command fails.
  */
 int wlan_get_wakeup_reason(uint16_t *hs_wakeup_reason);
-
-#ifdef IW610
-/** Use this API to register call back for host sleep confirm done*/
-void wlan_register_hs_callback(void (*hs_notify_cb)(void));
-#endif
 #endif
 
 /**
@@ -6734,6 +6688,19 @@ enum wlan_mef_type
  *
  */
 int wlan_mef_set_auto_arp(t_u8 mef_action);
+
+/** This function set multicast packet as low power wake up condition.
+ *
+ * \param[in] mef_action: To be\n
+ *                        0--discard multicast packet and not wake host\n
+ *                        1--discard multicast packet and wake host\n
+ *                        3--allow multicast packet and wake host.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ *
+ */
+int wlan_mef_set_multicast(t_u8 mef_action);
+
 /** This function set auto ping configuration.
  *
  * \param[in] mef_action: To be\n
