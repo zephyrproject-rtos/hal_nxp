@@ -3408,7 +3408,9 @@ static void wifi_set_uap_dfs_cac(mlan_private *priv, Band_Config_t *bandcfg, t_u
         if ((priv_sta->media_connected == MTRUE) && wlan_11h_radar_detect_required(priv, priv->uap_channel))
         {
             nxp_wifi_dfs_cac_info cacinfo;
+#if (CONFIG_11AC)
             t_u8 center_chan = 0;
+#endif
 
             memset(&cacinfo, 0, sizeof(nxp_wifi_dfs_cac_info));
             cacinfo.center_freq  = channel_to_frequency(priv->uap_channel, bandcfg->chanBand);
