@@ -510,6 +510,10 @@ typedef enum _clock_mux
                                CCM_CSCMR1_SAI3_CLK_SEL_SHIFT,
                                CCM_CSCMR1_SAI3_CLK_SEL_MASK,
                                CCM_NO_BUSY_WAIT), /*!< sai3 mux name */
+    kCLOCK_Sai2Mux       = CCM_TUPLE(CSCMR1_OFFSET,
+                               CCM_CSCMR1_SAI1_CLK_SEL_SHIFT,
+                               CCM_CSCMR1_SAI1_CLK_SEL_MASK,
+                               CCM_NO_BUSY_WAIT), /*!< readded because kCLOCK_Sai2Mux is expected to be defined */
     kCLOCK_Sai1Mux       = CCM_TUPLE(CSCMR1_OFFSET,
                                CCM_CSCMR1_SAI1_CLK_SEL_SHIFT,
                                CCM_CSCMR1_SAI1_CLK_SEL_MASK,
@@ -598,10 +602,18 @@ typedef enum _clock_div
                                      CCM_CS1CDR_FLEXIO1_CLK_PRED_SHIFT,
                                      CCM_CS1CDR_FLEXIO1_CLK_PRED_MASK,
                                      CCM_NO_BUSY_WAIT), /*!< flexio1 pre div name */
+    kCLOCK_Sai2PreDiv    = CCM_TUPLE(CS1CDR_OFFSET,
+                                  CCM_CS1CDR_SAI1_CLK_PRED_SHIFT,
+                                  CCM_CS1CDR_SAI1_CLK_PRED_MASK,
+                                  CCM_NO_BUSY_WAIT), /*!< Readded here because kCLOCK_Sai2PreDiv is expected to be defined */
     kCLOCK_Sai1PreDiv    = CCM_TUPLE(CS1CDR_OFFSET,
                                   CCM_CS1CDR_SAI1_CLK_PRED_SHIFT,
                                   CCM_CS1CDR_SAI1_CLK_PRED_MASK,
                                   CCM_NO_BUSY_WAIT), /*!< sai1 pre div name */
+    kCLOCK_Sai2Div       = CCM_TUPLE(CS1CDR_OFFSET,
+                               CCM_CS1CDR_SAI1_CLK_PODF_SHIFT,
+                               CCM_CS1CDR_SAI1_CLK_PODF_MASK,
+                               CCM_NO_BUSY_WAIT), /*!< Readded here because kCLOCK_Sai2Div is expected to be defined */
     kCLOCK_Sai1Div       = CCM_TUPLE(CS1CDR_OFFSET,
                                CCM_CS1CDR_SAI1_CLK_PODF_SHIFT,
                                CCM_CS1CDR_SAI1_CLK_PODF_MASK,
