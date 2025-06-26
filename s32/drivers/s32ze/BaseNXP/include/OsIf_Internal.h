@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Soc_Ips.h"
 #include "OsIf_Cfg.h"
 
@@ -40,6 +40,7 @@ extern "C"{
 #endif /* defined(USING_OS_ZEPHYR) */
 
 #if defined(USING_OS_FREERTOS)
+#include "OsIf_Interrupts.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #endif /* defined(USING_OS_FREERTOS) */
@@ -61,9 +62,21 @@ void Sys_ResumeInterrupts(void);
 uint8 Sys_GetCoreID(void);
 #endif /* !defined(USING_OS_AUTOSAROS) */
 
+#if defined(USING_COHORT_DOMAIN_ID)
+#if (USING_COHORT_DOMAIN_ID == STD_ON)
+uint8 Sys_GetCohortID(void);
+uint8 Sys_GetDomainID(void);
+uint8 Sys_GetAID(void);
+#endif
+#endif /* defined(USING_COHORT_DOMAIN_ID) */
+
 #if (MCAL_PLATFORM_ARM  == MCAL_ARM_AARCH32) || (MCAL_PLATFORM_ARM  == MCAL_ARM_RARCH) 
 void Sys_EL1SuspendInterrupts(void);
 void Sys_EL1ResumeInterrupts(void);
+#endif
+
+#ifdef USING_GET_CUSTOM_ID
+uint8 OsIf_GetCustomID(void);
 #endif
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -72,9 +85,9 @@ void Sys_EL1ResumeInterrupts(void);
 #define OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_INTERNAL_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_INTERNAL_SW_MAJOR_VERSION             1
+#define OSIF_INTERNAL_SW_MAJOR_VERSION             2
 #define OSIF_INTERNAL_SW_MINOR_VERSION             0
-#define OSIF_INTERNAL_SW_PATCH_VERSION             0
+#define OSIF_INTERNAL_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -97,11 +110,11 @@ void Sys_EL1ResumeInterrupts(void);
     #error "Software Version Numbers of OsIf_Internal.h and OsIf_Cfg.h are different"
 #endif
 
-/* Check if OsIf_Internal.h file and StandardTypes.h file are of the same Autosar version */
+/* Check if OsIf_Internal.h file and Std_Types.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of OsIf_Internal.h and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of OsIf_Internal.h and Std_Types.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
@@ -211,6 +224,24 @@ void Sys_EL1ResumeInterrupts(void);
     #endif
 #endif
 
+#ifdef USING_GET_PARTITION_ID
+/*
+ * OsIf_GetOsAppId
+ */
+/* USING_OS_AUTOSAROS */
+    #ifdef USING_OS_AUTOSAROS
+        #define OsIf_GetUserId()       (OsIf_apxMultiPartitionPredefinedConfig[GetApplicationID()])
+    #else
+        #define OsIf_GetUserId()       OsIf_GetCoreID()
+    #endif
+#else
+    #ifdef USING_GET_CORE_ID
+        #define OsIf_GetUserId()   OsIf_GetCoreID()
+    #else
+        #define OsIf_GetUserId()   OsIf_GetCustomID()
+    #endif
+#endif
+
 /*
  * OsIf_SuspendAllInterrupts
  * OsIf_ResumeAllInterrupts
@@ -226,8 +257,8 @@ void Sys_EL1ResumeInterrupts(void);
             #define SuspendAllInterrupts()  Sys_EL1SuspendInterrupts()
         #elif (MCAL_PLATFORM_ARM  == MCAL_ARM_MARCH)
             #if defined(USING_OS_FREERTOS)
-                #define ResumeAllInterrupts()   taskEXIT_CRITICAL()
-                #define SuspendAllInterrupts()  taskENTER_CRITICAL()
+                #define ResumeAllInterrupts()   OsIf_Interrupts_ResumeAllInterrupts()
+                #define SuspendAllInterrupts()  OsIf_Interrupts_SuspendAllInterrupts()
             #else
                 #define ResumeAllInterrupts()   ASM_KEYWORD(" cpsie i")
                 #define SuspendAllInterrupts()  ASM_KEYWORD(" cpsid i")
@@ -272,6 +303,69 @@ void Sys_EL1ResumeInterrupts(void);
 #endif /* defined (USE_SW_VECTOR_MODE) */
 #endif /* USING_OS_AUTOSAROS */
 
+#if defined(USING_COHORT_DOMAIN_ID)
+#if (USING_COHORT_DOMAIN_ID == STD_ON)
+    #define OsIf_GetCohortID()  Sys_GetCohortID()
+    #define OsIf_GetDomainID()  Sys_GetDomainID()
+    #define OsIf_GetAID()       Sys_GetAID()
+#endif
+#endif /* defined(USING_COHORT_DOMAIN_ID) */
+
+/*
+ * OsIf_EnableInterruptSource
+ */
+#ifdef USING_OS_AUTOSAROS
+    #define OsIf_EnableInterruptSource(ISRID, ClearPending)    EnableInterruptSource(ISRID, ClearPending)
+#elif defined(USING_OS_ZEPHYR)
+    /* specific Zephyr API for enabling interrupts */
+#elif defined(USING_OS_FREERTOS)
+    /* specific FreeRTOS API for enabling interrupts */
+#endif
+
+/*
+ * OsIf_SetEvent
+ */
+#ifdef USING_OS_AUTOSAROS
+    #define OsIf_SetEvent(taskId, mask)    SetEvent(taskId, mask)
+#elif defined(USING_OS_ZEPHYR)
+    /* specific Zephyr API for setting events */
+#elif defined(USING_OS_FREERTOS)
+    /* specific FreeRTOS API for setting events */
+#endif
+
+/*
+ * OsIf_ClearEvent
+ */
+#ifdef USING_OS_AUTOSAROS
+    #define OsIf_ClearEvent(mask)    ClearEvent(mask)
+#elif defined(USING_OS_ZEPHYR)
+    /* specific Zephyr API for clearing events */
+#elif defined(USING_OS_FREERTOS)
+    /* specific FreeRTOS API for clearing events */
+#endif
+
+
+/*
+ * OsIf_WaitEvent
+ */
+#ifdef USING_OS_AUTOSAROS
+    #define OsIf_WaitEvent(mask)    WaitEvent(mask)
+#elif defined(USING_OS_ZEPHYR)
+    /* specific Zephyr API for waiting for events */
+#elif defined(USING_OS_FREERTOS)
+    /* specific FreeRTOS API for waiting for events */
+#endif
+
+/*
+ * OsIf_Schedule
+ */
+#ifdef USING_OS_AUTOSAROS
+    #define OsIf_Schedule()    Schedule()
+#elif defined(USING_OS_ZEPHYR)
+    /* specific Zephyr API for scheduling */
+#elif defined(USING_OS_FREERTOS)
+    /* specific FreeRTOS API for scheduling */
+#endif
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/

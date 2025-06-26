@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_LSTCU_14_15_17_18.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_LSTCU_14_15_17_18
  *
  * This file contains register definitions and macros for easy access to their
@@ -135,6 +135,11 @@ typedef struct {
 /*! @name ERR_STAT - Error Status */
 /*! @{ */
 
+#define LSTCU_14_15_17_18_ERR_STAT_INVP_MB_MASK  (0x2U)
+#define LSTCU_14_15_17_18_ERR_STAT_INVP_MB_SHIFT (1U)
+#define LSTCU_14_15_17_18_ERR_STAT_INVP_MB_WIDTH (1U)
+#define LSTCU_14_15_17_18_ERR_STAT_INVP_MB(x)    (((uint32_t)(((uint32_t)(x)) << LSTCU_14_15_17_18_ERR_STAT_INVP_MB_SHIFT)) & LSTCU_14_15_17_18_ERR_STAT_INVP_MB_MASK)
+
 #define LSTCU_14_15_17_18_ERR_STAT_INVP_LB_MASK  (0x4U)
 #define LSTCU_14_15_17_18_ERR_STAT_INVP_LB_SHIFT (2U)
 #define LSTCU_14_15_17_18_ERR_STAT_INVP_LB_WIDTH (1U)
@@ -153,6 +158,11 @@ typedef struct {
 
 /*! @name ERR_FM - Error Fault Mapping */
 /*! @{ */
+
+#define LSTCU_14_15_17_18_ERR_FM_INVPFMMB_MASK   (0x2U)
+#define LSTCU_14_15_17_18_ERR_FM_INVPFMMB_SHIFT  (1U)
+#define LSTCU_14_15_17_18_ERR_FM_INVPFMMB_WIDTH  (1U)
+#define LSTCU_14_15_17_18_ERR_FM_INVPFMMB(x)     (((uint32_t)(((uint32_t)(x)) << LSTCU_14_15_17_18_ERR_FM_INVPFMMB_SHIFT)) & LSTCU_14_15_17_18_ERR_FM_INVPFMMB_MASK)
 
 #define LSTCU_14_15_17_18_ERR_FM_INVPFMLB_MASK   (0x4U)
 #define LSTCU_14_15_17_18_ERR_FM_INVPFMLB_SHIFT  (2U)

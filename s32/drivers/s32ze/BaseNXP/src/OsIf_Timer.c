@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -42,9 +42,9 @@ extern "C"{
 #define OSIF_TIMER_AR_RELEASE_MAJOR_VERSION_C     4
 #define OSIF_TIMER_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_TIMER_AR_RELEASE_REVISION_VERSION_C  0
-#define OSIF_TIMER_SW_MAJOR_VERSION_C             1
+#define OSIF_TIMER_SW_MAJOR_VERSION_C             2
 #define OSIF_TIMER_SW_MINOR_VERSION_C             0
-#define OSIF_TIMER_SW_PATCH_VERSION_C             0
+#define OSIF_TIMER_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -150,6 +150,17 @@ extern "C"{
 /*==================================================================================================
 *                                          LOCAL MACROS
 ==================================================================================================*/
+#ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE
+#if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON)
+#if ((STD_ON == OSIF_ENABLE_USER_MODE_SUPPORT) && (defined (MCAL_ENABLE_USER_MODE_SUPPORT)))
+    #define Call_OsIf_GetPhysicalCoreIdPrivileged()  \
+                OsIf_Trusted_Call_Return(OsIf_GetPhysicalCoreIdPrivileged)
+#else
+    #define Call_OsIf_GetPhysicalCoreIdPrivileged()  \
+                OsIf_GetPhysicalCoreIdPrivileged()
+#endif
+#endif
+#endif
 
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
@@ -177,6 +188,11 @@ static inline uint32 OsIf_Timer_Dummy_GetCounter(void);
 static inline uint32 OsIf_Timer_Dummy_GetElapsed(const uint32 * const CurrentRef);
 static inline void OsIf_Timer_Dummy_SetTimerFrequency(uint32 Freq);
 static inline uint32 OsIf_Timer_Dummy_MicrosToTicks(uint32 Micros);
+#ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE
+#if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON)
+static uint8 OsIf_GetPhysicalCoreIdPrivileged(void);
+#endif /* #ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE */
+#endif /* #if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON) */
 
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"
@@ -230,6 +246,23 @@ static inline uint32 OsIf_Timer_Dummy_MicrosToTicks(uint32 Micros)
 {
     return Micros;
 }
+
+#ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE
+#if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON)
+static uint8 OsIf_GetPhysicalCoreIdPrivileged(void)
+{
+    uint8 coreId = 0U;
+#if (OSIF_GET_PHYSICAL_CORE_ID_RUNTIME == STD_ON)
+    coreId = ((uint8)(IP_MSCM->CPXNUM & MSCM_CPXNUM_CPN_MASK));
+#else
+    /* OSIF_PHYSICAL_CORE_ID is generated base on OsIfPhysicalCoreId configuration */
+    coreId = OSIF_PHYSICAL_CORE_ID;
+#endif
+
+    return coreId;
+}
+#endif /* #ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE */
+#endif /* #if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON) */
 
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"
@@ -398,6 +431,26 @@ uint32 OsIf_MicrosToTicks(uint32 Micros, OsIf_CounterType SelectedCounter)
 
     return Value;
 }
+
+#ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE
+#if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OsIf_GetPhysicalCoreId.
+ * Description   : Get physical Core ID
+ * @implements OsIf_GetPhysicalCoreId_Activity
+ *
+ *END**************************************************************************/
+uint8 OsIf_GetPhysicalCoreId(void)
+{
+    uint8 coreId = 0U;
+
+    coreId = Call_OsIf_GetPhysicalCoreIdPrivileged();
+
+    return coreId;
+}
+#endif /* #ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE */
+#endif /* #if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON) */
 
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"

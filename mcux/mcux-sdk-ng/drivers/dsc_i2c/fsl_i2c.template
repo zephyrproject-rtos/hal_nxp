@@ -1,0 +1,33 @@
+  /* Software peripheral reset to a known state. */
+  ${SW_RESET_CONTROL_PERIPHERAL}$->${SW_RESET_CONTROL_REGISTER}$ |= ${SW_RESET_CONTROL_PERIPHERAL}$_${SW_RESET_CONTROL_REGISTER}$_${SW_RESET_CONTROL_BITFIELD}$_MASK;
+  ${SW_RESET_CONTROL_PERIPHERAL}$->${SW_RESET_CONTROL_REGISTER}$ &= ~ ${SW_RESET_CONTROL_PERIPHERAL}$_${SW_RESET_CONTROL_REGISTER}$_${SW_RESET_CONTROL_BITFIELD}$_MASK;
+#if defined(${VPREFIX}$_A1_INIT)
+  ${PERIPHERAL}$->A1 = ${VPREFIX}$_A1_INIT;
+#endif /* ${VPREFIX}$_A1_INIT */
+#if defined(${VPREFIX}$_F_INIT)
+  ${PERIPHERAL}$->F = ${VPREFIX}$_F_INIT;
+#endif /* ${VPREFIX}$_F_INIT */
+#if defined(${VPREFIX}$_C2_INIT)
+  ${PERIPHERAL}$->C2 = ${VPREFIX}$_C2_INIT;
+#endif /* ${VPREFIX}$_C2_INIT */
+#if defined(${VPREFIX}$_FLT_INIT)
+  ${PERIPHERAL}$->FLT = ${VPREFIX}$_FLT_INIT;
+#endif /* ${VPREFIX}$_FLT_INIT */
+#if defined(${VPREFIX}$_RA_INIT)
+  ${PERIPHERAL}$->RA = ${VPREFIX}$_RA_INIT;
+#endif /* ${VPREFIX}$_RA_INIT */
+#if defined(${VPREFIX}$_SMB_INIT)
+  ${PERIPHERAL}$->SMB = ${VPREFIX}$_SMB_INIT;
+#endif /* ${VPREFIX}$_SMB_INIT */
+#if defined(${VPREFIX}$_A2_INIT)
+  ${PERIPHERAL}$->A2 = ${VPREFIX}$_A2_INIT;
+#endif /* ${VPREFIX}$_A2_INIT */
+#if defined(${VPREFIX}$_SLTH_INIT)
+  ${PERIPHERAL}$->SLTH = ${VPREFIX}$_SLTH_INIT;
+#endif /* ${VPREFIX}$_SLTH_INIT */
+#if defined(${VPREFIX}$_SLTL_INIT)
+  ${PERIPHERAL}$->SLTL = ${VPREFIX}$_SLTL_INIT;
+#endif /* ${VPREFIX}$_SLTL_INIT */
+#if defined(${VPREFIX}$_C1_INIT)
+  ${PERIPHERAL}$->C1 = ${VPREFIX}$_C1_INIT;
+#endif /* ${VPREFIX}$_C1_INIT */

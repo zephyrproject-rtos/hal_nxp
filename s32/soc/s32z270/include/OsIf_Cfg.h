@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       OsIf_Cfg.h
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *
 *   @addtogroup OSIF_DRIVER
@@ -27,9 +27,10 @@ extern "C"{
  3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "OsIf_ArchCfg.h"
-#include "StandardTypes.h"
+#include "Std_Types.h"
 
 #include "S32Z2_SYSTICK.h"
+#include "S32Z2_MSCM.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -37,9 +38,9 @@ extern "C"{
 #define OSIF_CFG_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_CFG_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_CFG_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_CFG_SW_MAJOR_VERSION             1
+#define OSIF_CFG_SW_MAJOR_VERSION             2
 #define OSIF_CFG_SW_MINOR_VERSION             0
-#define OSIF_CFG_SW_PATCH_VERSION             0
+#define OSIF_CFG_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -61,11 +62,11 @@ extern "C"{
     #error "Software Version Numbers of OsIf_Cfg.h and OsIf_ArchCfg.h are different"
 #endif
 
-/* Check if OsIf_Cfg.h file and StandardTypes.h file are of the same Autosar version */
+/* Check if OsIf_Cfg.h file and Std_Types.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_CFG_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_CFG_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of OsIf_Cfg.h and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of OsIf_Cfg.h and Std_Types.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 /*==================================================================================================
@@ -92,13 +93,20 @@ extern "C"{
 
 #define OSIF_MAX_COREIDX_SUPPORTED       (1U)
 
-#define OSIF_DEV_ERROR_DETECT            (STD_OFF)
+#define OSIF_MAX_APPIDX_SUPPORTED        (1U) 
 
+#define OSIF_DEV_ERROR_DETECT            (STD_OFF)
+#define USING_COHORT_DOMAIN_ID     (STD_OFF)
 #define USING_OS_ZEPHYR
+
+#define USING_GET_CORE_ID
 
 #define OSIF_USE_SYSTEM_TIMER            (STD_ON)
 
 #define OSIF_USE_CUSTOM_TIMER            (STD_OFF)
+
+
+#define OSIF_GET_PHYSICAL_CORE_ID_ENABLE  (STD_OFF)
 
 /* Autosar OS Specific */
 

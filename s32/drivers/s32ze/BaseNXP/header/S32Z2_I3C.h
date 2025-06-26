@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_I3C.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_I3C
  *
  * This file contains register definitions and macros for easy access to their
@@ -79,31 +79,30 @@ typedef struct {
   __I  uint32_t SINTMASKED;                        /**< Target Interrupt Mask, offset: 0x18 */
   __IO uint32_t SERRWARN;                          /**< Target Errors and Warnings, offset: 0x1C */
   __IO uint32_t SDMACTRL;                          /**< Target DMA Control, offset: 0x20 */
-  __IO uint32_t SHDRBTCFG;                         /**< Target HDR-BT Configuration, offset: 0x24 */
-  __I  uint32_t SHDRBTLAST;                        /**< Target HDR-Last, offset: 0x28 */
+  uint8_t RESERVED_1[8];
   __IO uint32_t SDATACTRL;                         /**< Target Data Control, offset: 0x2C */
   __O  uint32_t SWDATAB;                           /**< Target Write Data Byte, offset: 0x30 */
   __O  uint32_t SWDATABE;                          /**< Target Write Data Byte End, offset: 0x34 */
-  __O  uint32_t SWDATAH;                           /**< Target Write Data Half-word, offset: 0x38 */
-  __O  uint32_t SWDATAHE;                          /**< Target Write Data Half-word End, offset: 0x3C */
+  __O  uint32_t SWDATAH;                           /**< Target Write Data Halfword, offset: 0x38 */
+  __O  uint32_t SWDATAHE;                          /**< Target Write Data Halfword End, offset: 0x3C */
   __I  uint32_t SRDATAB;                           /**< Target Read Data Byte, offset: 0x40 */
-  uint8_t RESERVED_1[4];
+  uint8_t RESERVED_2[4];
   union {                                          /* offset: 0x48 */
     __I  uint32_t MRDATAH;                           /**< Controller Read Data Halfword, offset: 0x48 */
     __I  uint32_t SRDATAH;                           /**< Target Read Data Halfword, offset: 0x48 */
   } SRDATAH_MRDATAH;
-  uint8_t RESERVED_2[8];
+  uint8_t RESERVED_3[8];
   union {                                          /* offset: 0x54 */
-    __IO uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
+    __O  uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
   } SWDATA_B_H;
-  uint8_t RESERVED_3[4];
+  uint8_t RESERVED_4[4];
   __I  uint32_t SCAPABILITIES2;                    /**< Target Capabilities 2, offset: 0x5C */
   __I  uint32_t SCAPABILITIES;                     /**< Target Capabilities, offset: 0x60 */
-  uint8_t RESERVED_4[12];
+  uint8_t RESERVED_5[12];
        uint32_t SIDEXT;                            /**< Target ID Extension, offset: 0x70 */
-  uint8_t RESERVED_5[8];
+  uint8_t RESERVED_6[8];
   __I  uint32_t SMSGLAST;                          /**< Target Message Last Matched, offset: 0x7C */
-  uint8_t RESERVED_6[4];
+       uint32_t MCONFIG_EXT;                       /**< Controller Extended Configuration, offset: 0x80 */
   __IO uint32_t MCTRL;                             /**< Controller Control, offset: 0x84 */
   __IO uint32_t MSTATUS;                           /**< Controller Status, offset: 0x88 */
   uint8_t RESERVED_7[4];
@@ -121,7 +120,7 @@ typedef struct {
   __I  uint32_t MRDATAB;                           /**< Controller Read Data Byte, offset: 0xC0 */
   uint8_t RESERVED_9[8];
   union {                                          /* offset: 0xCC */
-    __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1(to bus), offset: 0xCC */
+    __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1 (to Bus), offset: 0xCC */
   } MWDATA_B1_H1;
   union {                                          /* offset: 0xD0 */
     __O  uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
@@ -135,25 +134,17 @@ typedef struct {
 } I3C_Type, *I3C_MemMapPtr;
 
 /** Number of instances of the I3C module. */
-#define I3C_INSTANCE_COUNT                       (3u)
+#define I3C_INSTANCE_COUNT                       (1u)
 
 /* I3C - Peripheral instance base addresses */
 /** Peripheral I3C_0 base address */
 #define IP_I3C_0_BASE                            (0x401D0000u)
 /** Peripheral I3C_0 base pointer */
 #define IP_I3C_0                                 ((I3C_Type *)IP_I3C_0_BASE)
-/** Peripheral I3C_1 base address */
-#define IP_I3C_1_BASE                            (0x409D0000u)
-/** Peripheral I3C_1 base pointer */
-#define IP_I3C_1                                 ((I3C_Type *)IP_I3C_1_BASE)
-/** Peripheral I3C_2 base address */
-#define IP_I3C_2_BASE                            (0x421D0000u)
-/** Peripheral I3C_2 base pointer */
-#define IP_I3C_2                                 ((I3C_Type *)IP_I3C_2_BASE)
 /** Array initializer of I3C peripheral base addresses */
-#define IP_I3C_BASE_ADDRS                        { IP_I3C_0_BASE, IP_I3C_1_BASE, IP_I3C_2_BASE }
+#define IP_I3C_BASE_ADDRS                        { IP_I3C_0_BASE }
 /** Array initializer of I3C peripheral base pointers */
-#define IP_I3C_BASE_PTRS                         { IP_I3C_0, IP_I3C_1, IP_I3C_2 }
+#define IP_I3C_BASE_PTRS                         { IP_I3C_0 }
 
 /* ----------------------------------------------------------------------------
    -- I3C Register Masks
@@ -182,11 +173,6 @@ typedef struct {
 #define I3C_MCONFIG_HKEEP_WIDTH                  (2U)
 #define I3C_MCONFIG_HKEEP(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_HKEEP_SHIFT)) & I3C_MCONFIG_HKEEP_MASK)
 
-#define I3C_MCONFIG_ODSTOP_MASK                  (0x40U)
-#define I3C_MCONFIG_ODSTOP_SHIFT                 (6U)
-#define I3C_MCONFIG_ODSTOP_WIDTH                 (1U)
-#define I3C_MCONFIG_ODSTOP(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_ODSTOP_SHIFT)) & I3C_MCONFIG_ODSTOP_MASK)
-
 #define I3C_MCONFIG_PPBAUD_MASK                  (0xF00U)
 #define I3C_MCONFIG_PPBAUD_SHIFT                 (8U)
 #define I3C_MCONFIG_PPBAUD_WIDTH                 (4U)
@@ -201,11 +187,6 @@ typedef struct {
 #define I3C_MCONFIG_ODBAUD_SHIFT                 (16U)
 #define I3C_MCONFIG_ODBAUD_WIDTH                 (8U)
 #define I3C_MCONFIG_ODBAUD(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_ODBAUD_SHIFT)) & I3C_MCONFIG_ODBAUD_MASK)
-
-#define I3C_MCONFIG_ODHPP_MASK                   (0x1000000U)
-#define I3C_MCONFIG_ODHPP_SHIFT                  (24U)
-#define I3C_MCONFIG_ODHPP_WIDTH                  (1U)
-#define I3C_MCONFIG_ODHPP(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_ODHPP_SHIFT)) & I3C_MCONFIG_ODHPP_MASK)
 
 #define I3C_MCONFIG_SKEW_MASK                    (0xE000000U)
 #define I3C_MCONFIG_SKEW_SHIFT                   (25U)
@@ -269,11 +250,6 @@ typedef struct {
 #define I3C_SSTATUS_STREQWR_SHIFT                (4U)
 #define I3C_SSTATUS_STREQWR_WIDTH                (1U)
 #define I3C_SSTATUS_STREQWR(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STREQWR_SHIFT)) & I3C_SSTATUS_STREQWR_MASK)
-
-#define I3C_SSTATUS_STDAA_MASK                   (0x20U)
-#define I3C_SSTATUS_STDAA_SHIFT                  (5U)
-#define I3C_SSTATUS_STDAA_WIDTH                  (1U)
-#define I3C_SSTATUS_STDAA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STDAA_SHIFT)) & I3C_SSTATUS_STDAA_MASK)
 
 #define I3C_SSTATUS_START_MASK                   (0x100U)
 #define I3C_SSTATUS_START_SHIFT                  (8U)
@@ -471,34 +447,6 @@ typedef struct {
 #define I3C_SDMACTRL_DMAWIDTH(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDMACTRL_DMAWIDTH_SHIFT)) & I3C_SDMACTRL_DMAWIDTH_MASK)
 /*! @} */
 
-/*! @name SHDRBTCFG - Target HDR-BT Configuration */
-/*! @{ */
-
-#define I3C_SHDRBTCFG_CRC32_MASK                 (0x4U)
-#define I3C_SHDRBTCFG_CRC32_SHIFT                (2U)
-#define I3C_SHDRBTCFG_CRC32_WIDTH                (1U)
-#define I3C_SHDRBTCFG_CRC32(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SHDRBTCFG_CRC32_SHIFT)) & I3C_SHDRBTCFG_CRC32_MASK)
-
-#define I3C_SHDRBTCFG_WDATAMAX_MASK              (0xFFF0U)
-#define I3C_SHDRBTCFG_WDATAMAX_SHIFT             (4U)
-#define I3C_SHDRBTCFG_WDATAMAX_WIDTH             (12U)
-#define I3C_SHDRBTCFG_WDATAMAX(x)                (((uint32_t)(((uint32_t)(x)) << I3C_SHDRBTCFG_WDATAMAX_SHIFT)) & I3C_SHDRBTCFG_WDATAMAX_MASK)
-
-#define I3C_SHDRBTCFG_DATALEN_MASK               (0xFFFF0000U)
-#define I3C_SHDRBTCFG_DATALEN_SHIFT              (16U)
-#define I3C_SHDRBTCFG_DATALEN_WIDTH              (16U)
-#define I3C_SHDRBTCFG_DATALEN(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SHDRBTCFG_DATALEN_SHIFT)) & I3C_SHDRBTCFG_DATALEN_MASK)
-/*! @} */
-
-/*! @name SHDRBTLAST - Target HDR-Last */
-/*! @{ */
-
-#define I3C_SHDRBTLAST_DATALEN_MASK              (0xFFFF0000U)
-#define I3C_SHDRBTLAST_DATALEN_SHIFT             (16U)
-#define I3C_SHDRBTLAST_DATALEN_WIDTH             (16U)
-#define I3C_SHDRBTLAST_DATALEN(x)                (((uint32_t)(((uint32_t)(x)) << I3C_SHDRBTLAST_DATALEN_SHIFT)) & I3C_SHDRBTLAST_DATALEN_MASK)
-/*! @} */
-
 /*! @name SDATACTRL - Target Data Control */
 /*! @{ */
 
@@ -576,7 +524,7 @@ typedef struct {
 #define I3C_SWDATABE_DATA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SWDATABE_DATA_SHIFT)) & I3C_SWDATABE_DATA_MASK)
 /*! @} */
 
-/*! @name SWDATAH - Target Write Data Half-word */
+/*! @name SWDATAH - Target Write Data Halfword */
 /*! @{ */
 
 #define I3C_SWDATAH_DATA0_MASK                   (0xFFU)
@@ -595,7 +543,7 @@ typedef struct {
 #define I3C_SWDATAH_END(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SWDATAH_END_SHIFT)) & I3C_SWDATAH_END_MASK)
 /*! @} */
 
-/*! @name SWDATAHE - Target Write Data Half-word End */
+/*! @name SWDATAHE - Target Write Data Halfword End */
 /*! @{ */
 
 #define I3C_SWDATAHE_DATA0_MASK                  (0xFFU)
@@ -653,11 +601,6 @@ typedef struct {
 #define I3C_SWDATAB1_DATA_SHIFT                  (0U)
 #define I3C_SWDATAB1_DATA_WIDTH                  (8U)
 #define I3C_SWDATAB1_DATA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SWDATAB1_DATA_SHIFT)) & I3C_SWDATAB1_DATA_MASK)
-
-#define I3C_SWDATAB1_IGNORED_MASK                (0xFFFFFF00U)
-#define I3C_SWDATAB1_IGNORED_SHIFT               (8U)
-#define I3C_SWDATAB1_IGNORED_WIDTH               (24U)
-#define I3C_SWDATAB1_IGNORED(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SWDATAB1_IGNORED_SHIFT)) & I3C_SWDATAB1_IGNORED_MASK)
 /*! @} */
 
 /*! @name SCAPABILITIES2 - Target Capabilities 2 */
@@ -677,11 +620,6 @@ typedef struct {
 #define I3C_SCAPABILITIES2_I2CDEVID_SHIFT        (6U)
 #define I3C_SCAPABILITIES2_I2CDEVID_WIDTH        (1U)
 #define I3C_SCAPABILITIES2_I2CDEVID(x)           (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_I2CDEVID_SHIFT)) & I3C_SCAPABILITIES2_I2CDEVID_MASK)
-
-#define I3C_SCAPABILITIES2_SSTWR_MASK            (0x800000U)
-#define I3C_SCAPABILITIES2_SSTWR_SHIFT           (23U)
-#define I3C_SCAPABILITIES2_SSTWR_WIDTH           (1U)
-#define I3C_SCAPABILITIES2_SSTWR(x)              (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_SSTWR_SHIFT)) & I3C_SCAPABILITIES2_SSTWR_MASK)
 /*! @} */
 
 /*! @name SCAPABILITIES - Target Capabilities */
@@ -920,11 +858,6 @@ typedef struct {
 #define I3C_MERRWARN_MSGERR_WIDTH                (1U)
 #define I3C_MERRWARN_MSGERR(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_MSGERR_SHIFT)) & I3C_MERRWARN_MSGERR_MASK)
 
-#define I3C_MERRWARN_INVREQ_MASK                 (0x80000U)
-#define I3C_MERRWARN_INVREQ_SHIFT                (19U)
-#define I3C_MERRWARN_INVREQ_WIDTH                (1U)
-#define I3C_MERRWARN_INVREQ(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_INVREQ_SHIFT)) & I3C_MERRWARN_INVREQ_MASK)
-
 #define I3C_MERRWARN_TIMEOUT_MASK                (0x100000U)
 #define I3C_MERRWARN_TIMEOUT_SHIFT               (20U)
 #define I3C_MERRWARN_TIMEOUT_WIDTH               (1U)
@@ -1069,7 +1002,7 @@ typedef struct {
 #define I3C_MRDATAB_VALUE(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MRDATAB_VALUE_SHIFT)) & I3C_MRDATAB_VALUE_MASK)
 /*! @} */
 
-/*! @name MWDATAB1 - Controller Write Byte Data 1(to bus) */
+/*! @name MWDATAB1 - Controller Write Byte Data 1 (to Bus) */
 /*! @{ */
 
 #define I3C_MWDATAB1_VALUE_MASK                  (0xFFU)

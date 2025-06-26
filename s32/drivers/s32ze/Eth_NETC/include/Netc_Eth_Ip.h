@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,9 +34,9 @@ extern "C"{
 #define NETC_ETH_IP_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -97,6 +97,15 @@ NETC_ETH_IP_CONFIG_EXT
 *                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 
+#define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
+#include "Eth_43_NETC_MemMap.h"
+
+/** @brief Pointers to NETC internal driver state for each controller(SI). */
+extern Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+#define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
+
+#include "Eth_43_NETC_MemMap.h"
+
 /*==================================================================================================
 *                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -116,6 +125,280 @@ NETC_ETH_IP_CONFIG_EXT
  * @retval NETC_ETH_IP_STATUS_TIMEOUT The initialization returned a timeout.
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
+/**
+* @brief            Ethernet controller function for starting TSN.
+* @details          This function enables the statically configured TSN settings. If stream gating or time aware shaping is used, the API must be called after the clock is synchronized.
+*                   Eth_Ip_StartTSN shall:
+*                   - Populate all tables related to 802.1qci.
+*
+* @param[in]        ctrlIndex   Instance number
+*
+* @return           Result of the operation
+* @retval           E_OK        success
+* @retval           E_NOT_OK    TSN could not be started
+*/
+Std_ReturnType Netc_Eth_Ip_StartTSN(uint8 ctrlIndex);
+
+/**
+ * @brief            Add or Update Ingress Stream Identification Table Entry function
+ * @details          External function for adding or updating one Ingress Stream Identification entry with "KEY_ELEMENT" access method.
+ *                   That means only "KEY_ELEMENT" access method is supported.
+ *
+ * @param[in]        ctrlIndex        Instance number
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        ISQGTableEntry   Pointer points to a Ingress Stream Identification entry structure Netc_Eth_Ip_IngrStremIdentificationTableDataType
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
+                                                                                  Netc_Eth_Ip_CommandsType Cmd,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  const Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                );
+
+/**
+ * @brief            Query Ingress Stream Identification Table Entry function
+ * @details          External function for querying one Ingress Stream Identification entry with "KEY_ELEMENT" access method.
+ *                   That means only "KEY_ELEMENT" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ISITableEntry          A pointer that provides the data with the "query" operation
+ * @param[out]       ISITableEntry          A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
+                                                                            uint32 *MatchedEntries,
+                                                                            Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                          );
+
+/**
+ * @brief            Delete Ingress Stream Identification Table Entry function
+ * @details          External function for deleting one Ingress Stream Identification entry with "KEY_ELEMENT" access method.
+ *                   That means only "KEY_ELEMENT" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ISITableEntry          A pointer that provides the data with the "delete" operation
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       const Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                     );
+
+/**
+ * @brief            Dump all Ingress Stream Identification Table Entries function
+ * @details          External function for dumping all Ingress Stream Identification entries with "SEARCH_CRITERIA" access method.
+ *                   That means only "SEARCH_CRITERIA" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[in]        NumberOfElements       Number of entries that want to be dumped
+ * @param[out]       NumberOfElements       Number of entries that actually are dumped (number of existing entries)
+ * @param[out]       ISITableList           A pointer that returns the list of NumberOfElements entries
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetIngrStreamIdentificationTable( const uint8 CtrlIndex,
+                                                                     uint16 * NumberOfElements,
+                                                                     Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableList
+                                                                   );
+
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
+/**
+ * @brief            Add or Update Stream Gate Instance Table Entry function
+ * @details          External function for adding or updating one Stream Gate Instance entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex        Instance number
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        StreamGateInstanceTableEntry    Pointer points to a Stream Gate Instance entry structure Netc_Eth_Ip_StreamGateInstanceEntryDataType
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateStreamGateInstanceTableEntry( const uint8 CtrlIndex,
+                                                                            Netc_Eth_Ip_CommandsType Cmd,
+                                                                            uint32 *MatchedEntries,
+                                                                            const Netc_Eth_Ip_StreamGateInstanceEntryDataType * StreamGateInstanceTableEntry
+                                                                           );
+
+/**
+ * @brief            Query Stream Gate Instance Table Entry function
+ * @details          External function for querying one Stream Gate Instance entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGIEntryId             Stream Gate Instance entry ID
+ * @param[out]       SGITableEntryRspData   A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStreamGateInstanceTableEntry( const uint8 CtrlIndex,
+                                                                      uint32 *MatchedEntries,
+                                                                      uint32 SGIEntryId,
+                                                                      Netc_Eth_Ip_StreamGateInstanceEntryRspDataType * SGITableEntryRspData
+                                                                    );
+
+/**
+ * @brief            Delete Stream Gate Instance Table Entry function
+ * @details          External function for deleting one Stream Gate Instance entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGIEntryId             Stream Gate Instance entry ID
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateInstanceTableEntry( const uint8 CtrlIndex,
+                                                                       uint32 *MatchedEntries,
+                                                                       uint32 SGIEntryId
+                                                                     );
+#endif /* (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U) */
+
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
+/**
+ * @brief            Add Stream Gate Control List Table Entry function
+ * @details          External function for adding one Stream Gate Control List entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex        Instance number
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        SGCLTableEntry   Pointer points to a Stream Gate Control List entry structure Netc_Eth_Ip_SGCLTableDataType
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddStreamGateControlListTableEntry( const uint8 CtrlIndex,
+                                                                       Netc_Eth_Ip_CommandsType Cmd,
+                                                                       uint32 *MatchedEntries,
+                                                                       const Netc_Eth_Ip_SGCLTableDataType * SGCLTableEntry
+                                                                     );
+
+/**
+ * @brief            Query Stream Gate Control List Table Entry function
+ * @details          External function for querying one Stream Gate Control List entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGCLEntryId            Stream Gate Control List entry ID
+ * @param[in]        ListLen                Stream Gate Control List entry length, it has to be set to the same value as LIST_LENGTH when adding the entry
+ * @param[out]       SGCLTableEntryRspData  A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStreamGateControlListTableEntry( const uint8 CtrlIndex,
+                                                                         uint32 *MatchedEntries,
+                                                                         uint32 SGCLEntryId,
+                                                                         uint8 ListLen,
+                                                                         Netc_Eth_Ip_SGCLTableDataType * SGCLTableEntryRspData
+                                                                       );
+
+/**
+ * @brief            Delete Stream Gate Control List Table Entry function
+ * @details          External function for deleting one Stream Gate Control List entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGCLEntryId            Stream Gate Control List entry ID
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateControlListTableEntry( const uint8 CtrlIndex,
+                                                                          uint32 *MatchedEntries,
+                                                                          uint32 SGCLEntryId
+                                                                        );
+#endif /* (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U) */
+
+/**
+ * @brief            Add or Update Ingress Stream Table Entry function
+ * @details          External function for adding or updating one Ingress Stream entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex        Instance number
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        IngressStreamTableEntry    Pointer points to a Ingress Stream entry structure Netc_Eth_Ip_IngressStreamEntryDataType
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateIngressStreamTableEntry( const uint8 CtrlIndex,
+                                                                       Netc_Eth_Ip_CommandsType Cmd,
+                                                                       uint32 *MatchedEntries,
+                                                                       const Netc_Eth_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                     );
+
+/**
+ * @brief            Query Ingress Stream Table Entry function
+ * @details          External function for querying one Ingress Stream entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamEntryId     Ingress Stream table entry ID
+ * @param[out]       IngressStreamTableEntry  A pointer that returns the data of a matched entry by "query" operation
+ *                                            The data is valid only when MatchedEntries equals 1.
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngressStreamTableEntry( const uint8 CtrlIndex,
+                                                                 uint32 *MatchedEntries,
+                                                                 uint32 IngressStreamEntryId,
+                                                                 Netc_Eth_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                               );
+
+/**
+ * @brief            Delete Ingress Stream Table Entry function
+ * @details          External function for deleting one Ingress Stream entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ *
+ * @param[in]        ctrlIndex              Instance number
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamEntryId     Ingress Stream entry ID
+ *
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETH_IP_STATUS_SUCCESS, success
+ * @retval           others : fail
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngressStreamTableEntry( const uint8 CtrlIndex,
+                                                                  uint32 *MatchedEntries,
+                                                                  uint32 IngressStreamEntryId
+                                                                );
 
 /**
  * @brief            Set the credit based shaper slope
@@ -223,7 +506,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxBuff(uint8 ctrlIndex,
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
                                              uint8 ring,
-                                            Netc_Eth_Ip_BufferType * buff,
+                                             #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
+                                             Netc_Eth_Ip_BufferType *buff,
+                                             #else
+                                             const Netc_Eth_Ip_BufferType *buff,
+                                             #endif
                                              const Netc_Eth_Ip_TxOptionsType * options
                                             );
 
@@ -254,7 +541,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
                                                         uint8 ring,
-                                                        Netc_Eth_Ip_BufferType Buffers[],
+                                                        const Netc_Eth_Ip_BufferType Buffers[],
                                                         const Netc_Eth_Ip_TxOptionsType *options,
                                                         uint16 NumBuffers);
 
@@ -369,7 +656,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
  */
 void Netc_Eth_Ip_ProvideMultipleRxBuff(const uint8 CtrlIndex,
                                                          const uint8 Ring,
-                                                         uint8* BuffList[],
+                                                         uint8* const BuffList[],
                                                          uint16* BuffListSize);
 
 /*!
@@ -424,6 +711,44 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTransmitStatus(uint8 ctrlIndex,
  * @retval NETC_ETH_IP_STATUS_TIMEOUT Changing the physical address was not changed because a timeout has occured.
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMacAddr(uint8 CtrlIndex, const uint8 *MacAddr);
+
+/**
+ * @brief Compute has value for MAC addr.
+ *
+ * @param MacAddr MAC address.
+ * @return uint8  Hash value for MacAddr.
+ */
+uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr);
+
+/**
+ * @brief Remove MAC addr in the software table.
+ *
+ * @param CtrlIndex        Index of the SI.
+ * @param HashValue        Computed hash value.
+ * @param MacAddr          MAC address.
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS               - successfully operation
+ *                                NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL   - unsuccessfully operation
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMACHashFilterEntry(uint8 CtrlIndex, \
+                                                         uint8 HashValue, \
+                                                         const uint8 *MacAddr);
+
+/**
+ * @brief Remove MAC addr in the software table.
+ *
+ * @param CtrlIndex        Index of the SI.
+ * @param HashValue        Computed hash value.
+ * @param MacAddr          MAC address.
+ * @param deleteAllEntries Allows the function to delete all Hash filter table entries or a specific entry.
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                NETC_ETH_IP_STATUS_ERROR   - unsuccessfully operation
+ *                                NETC_ETH_IP_STATUS_MAC_ADDR_NOT_FOUND - the current destination MAC was not
+ *                                                                found in the hash filter table
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACHashFilterEntry(const uint8 CtrlIndex, \
+                                                            const uint8 HashValue, \
+                                                            const uint8 *MacAddr, \
+                                                            const boolean deleteAllEntries);
 
 /**
  * @brief Gets the physical address of the MAC for a controller.
@@ -562,6 +887,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigPortTimeGateScheduling( const uint8 CtrlIndex, const boolean Enable );
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
 /**
  * @brief Add/Update rate policer table entry.
  *
@@ -610,6 +936,29 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 Ctrl
                                                                 uint32 *MatchedEntries,
                                                                 uint32 RatePolicerEntryId
                                                               );
+#endif /* (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0) */
+
+/**
+ * @brief Add MAC Filter Table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in]  MacFilterTableEntry  pointer to structure Netc_Eth_Ip_MacFilterTableEntryDataType that contains the data of the MAC Filter Table entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMacFilterTableEntry(const uint8 ctrlIndex, const Netc_Eth_Ip_MacFilterTableEntryDataType *MacFilterTableEntry);
+
+/**
+ * @brief Add MAC Filter Table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in,out]  MacFilterTableEntry  pointer to structure Netc_Eth_Ip_MacFilterTableEntryDataType that contains the data of the MAC Filter Table entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryMacFilterTableEntry(const uint8 ctrlIndex, Netc_Eth_Ip_MacFilterTableEntryDataType *MacFilterTableEntry);
 
 /**
  * @brief Add VLAN Filter Table entry.
@@ -720,8 +1069,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Deinit(uint8 ctrlIndex);
  * @param ring                  Ring Number.
  * @param ConsumerIndex         Consumer read from HW.
  * @param buff                  Buffer address.
- * @param timeStampInfo         Parameter where the timestamp can be provided for the transmitted frame
- * @param txStatus              Parameter where the transmission status can be provided.
+ * @param info                  Parameter where the timestamp and the the transmission status can be provided for the transmitted frame.
  * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
  *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in time
  * @internal This function is not an API.
@@ -730,8 +1078,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
                                                     uint8 ring,
                                                     uint32 ConsumerIndex,
                                                     const uint8 *buff,
-                                                    Netc_Eth_Ip_TimestampType *timeStampInfo,
-                                                    Netc_Eth_Ip_TxStatusType *txStatus);
+                                                    Netc_Eth_Ip_TxInfoType *info);
 
 /**
  * @brief The Pcie Event Collector Interrupt handler
@@ -819,7 +1166,7 @@ void Netc_Eth_Ip_DumpErrorCapture (     const uint8 ctrlIdx,
                                         const Netc_Eth_Ip_PcieFunction function,
                                         uint8 *numberOfRegisters,
                                         uint8 siIndex,
-                                        Netc_Eth_Ip_ErrorCaptureRegisterInformation* Buffers[]);
+                                        Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
 
 /**
  * @brief This function gets Timer Syncronization State function.
@@ -858,7 +1205,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStatisticsRfsTableEntry(const uint8 ctrl
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex,
                                                                 uint8 RfsEntryIdx,
-                                                                 uint32 * RfsTableEntryAddr);
+                                                                const uint32 * RfsTableEntryAddr);
 
 /**
  * @brief Add Receive Flow Steering table entry.
@@ -885,6 +1232,47 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex,
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr( const uint8 CtrlIndex,
                                                     const uint8 SiId,
                                                     const uint8 *MacAddr);
+
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+/**
+ * @brief This function calculates CRC16 CCITT-FALSE for the VSItoPSI message
+* @param[in]  MsgCommandConfig           Pointer to the message
+* @param[in]  MsgLength                  Message length
+*
+* @return          uint16
+* @retval          resulted crc
+*/
+uint16 Netc_Eth_Ip_VsiMsgCalculateCRC16(volatile Netc_Eth_Ip_VsiToPsiMsgType const *MsgCommandConfig, \
+                                                    uint8 MsgLength);
+    #endif
+#endif
+
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+/**
+ * @brief Get data on how much of a Tx Ring is occupied
+ * @param[in]   CtrlIndex           Index of the current controller
+ * @param[in]   RingIdx             Index of the queried Tx ring on the controller
+ * @param[in]   FillInfo            Pointer to data structure to be populated with information about the Tx ring
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successful operation
+ *                                others - function called with invalid parameters or null pointers
+*/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxRingFillLevel(const uint8 CtrlIndex, const uint8 RingIdx, Netc_Eth_Ip_FillLevelInfo * FillInfo);
+
+/**
+ * @brief Get data on how much of a Rx Ring is occupied
+ * @param[in]   CtrlIndex           Index of the current controller
+ * @param[in]   RingIdx             Index of the queried Rx ring on the controller
+ * @param[in]   FillInfo            Pointer to data structure to be populated with information about the Rx ring
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successful operation
+ *                                others - function called with invalid parameters or null pointers
+*/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetRxRingFillLevel(const uint8 CtrlIndex, const uint8 RingIdx, Netc_Eth_Ip_FillLevelInfo * FillInfo);
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
 #define ETH_43_NETC_STOP_SEC_CODE
 #include "Eth_43_NETC_MemMap.h"

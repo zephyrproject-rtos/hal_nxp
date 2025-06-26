@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,11 +19,12 @@ extern "C"{
 #endif
 
 /*==================================================================================================
-                                         INCLUDE FILES
- 1) system and project includes
- 2) needed interfaces from external units
- 3) internal and external interfaces from this unit
+ *                                         INCLUDE FILES
+ * 1) system and project includes
+ * 2) needed interfaces from external units
+ * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+/* Include all variants header files. */
 #include "Netc_Eth_Ip_Sa_Init_PBcfg.h"
 
 /*==================================================================================================
@@ -33,9 +34,9 @@ extern "C"{
 #define NETC_ETH_IP_CFG_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_CFG_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_CFG_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_CFG_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_CFG_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_CFG_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_CFG_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_CFG_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -54,14 +55,19 @@ extern "C"{
      (NETC_ETH_IP_CFG_SW_PATCH_VERSION != NETC_ETH_IP_SA_INIT_PBCFG_SW_PATCH_VERSION))
     #error "Software Version Numbers of Netc_Eth_Ip_Cfg.h and Netc_Eth_Ip_Sa_Init_PBcfg.h are different"
 #endif
+/*==================================================================================================
+*                                            CONSTANTS
+==================================================================================================*/
 
 /*==================================================================================================
 *                                      DEFINES AND MACROS
 ==================================================================================================*/
+/** @brief Export all PB configurations used. */
 #define NETC_ETH_IP_CONFIG_EXT \
     NETC_ETH_IP_CONFIG_SA_INIT_PB \
 
-/* Value used to increment producer index */
+#define FEATURE_NETC_ETH_VSI_MSG_ALIGNMENT          (64U)
+
 #if (STD_OFF == NETC_ETH_IP_EXTENDED_BUFF)
     /** @brief Value used to increment producer index. */
     #define  NETC_ETH_IP_PRODUCER_INCR            (1U)
@@ -76,20 +82,23 @@ extern "C"{
 /** @brief Timeout value in microseconds. */
 #define NETC_ETH_IP_TIMEOUT_VALUE_US          (1000U)
 
-/** @brief Enables / Disables the allocation of the TX data buffers. */
+/*! @brief Enables / Disables the Switch Management APIs */
+#define NETC_ETH_IP_MANAGEMENT_SUPPORT_API   (STD_OFF)
+
+/*! @brief Enables / Disables the allocation of the TX data buffers. */
 #define NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS  (STD_OFF)
 
-/** @brief Enables / Disables the allocation of the RX data buffers. */
+/*! @brief Enables / Disables the allocation of the RX data buffers. */
 #define NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS  (STD_OFF)
 
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
-    /** @brief Array of the feature of external buffers support indexed at controller level. */
-    #define NETC_ETH_IP_INST_HAS_EXTERNAL_TX_BUFFERS  {(boolean)FALSE}
+/*! @brief Array of the feature of external buffers support indexed at controller level. */
+    #define NETC_ETH_IP_INST_HAS_EXTERNAL_TX_BUFFERS  {(boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE}
 #endif
 
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
-    /** @brief Array of the feature of external buffers support indexed at controller level. */
-    #define NETC_ETH_IP_INST_HAS_EXTERNAL_RX_BUFFERS  {(boolean)FALSE}
+/*! @brief Array of the feature of external buffers support indexed at controller level. */
+    #define NETC_ETH_IP_INST_HAS_EXTERNAL_RX_BUFFERS  {(boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE}
 #endif
 
 /*==================================================================================================
@@ -115,3 +124,4 @@ extern "C"{
 /** @} */
 
 #endif /* NETC_ETH_IP_CFG_H */
+

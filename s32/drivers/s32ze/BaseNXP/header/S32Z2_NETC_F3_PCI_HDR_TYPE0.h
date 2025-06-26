@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F3_PCI_HDR_TYPE0.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F3_PCI_HDR_TYPE0
  *
  * This file contains register definitions and macros for easy access to their
@@ -116,7 +116,7 @@ typedef struct {
   uint8_t RESERVED_9[4];
   __I  uint16_t PCI_CFC_EA_CAP_LIST;               /**< PCI EA capabilities list register, offset: 0x9C */
   __I  uint16_t PCI_CFC_EA_CAP;                    /**< PCI EA capabilities register, offset: 0x9E */
-  struct {                                         /* offset: 0xA0, array step: 0x10 */
+  struct NETC_F3_PCI_HDR_TYPE0_NUM_EA {            /* offset: 0xA0, array step: 0x10 */
     __I  uint32_t PCI_CFC_EA_PE_FMT;                 /**< PCI EA per-entry 0 format register..PCI EA per-entry 3 format register, array offset: 0xA0, array step: 0x10 */
     __I  uint32_t PCI_CFC_EA_PE_BASE;                /**< PCI EA per-entry 0 base register..PCI EA per-entry 3 base register, array offset: 0xA4, array step: 0x10 */
     __I  uint32_t PCI_CFC_EA_PE_MAXOFF;              /**< PCI EA per-entry 0 max offset register..PCI EA per-entry 3 max offset register, array offset: 0xA8, array step: 0x10 */

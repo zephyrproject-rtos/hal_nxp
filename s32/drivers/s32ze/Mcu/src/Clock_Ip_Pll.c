@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Pll.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -35,9 +35,9 @@ extern "C"{
 #define CLOCK_IP_PLL_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_PLL_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PLL_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_PLL_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_PLL_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_PLL_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_PLL_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_PLL_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -99,7 +99,6 @@ extern "C"{
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-
 static void Clock_Ip_CallbackPllEmpty(Clock_Ip_PllConfigType const* Config);
 static Clock_Ip_PllStatusReturnType Clock_Ip_CallbackPllEmptyComplete(Clock_Ip_NameType PllName);
 static void Clock_Ip_CallbackPllEmptyDisable(Clock_Ip_NameType PllName);
@@ -110,19 +109,20 @@ static void Clock_Ip_SetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clo
 static Clock_Ip_PllStatusReturnType Clock_Ip_CompletePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clock_Ip_NameType PllName);
 static void Clock_Ip_EnablePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clock_Ip_PllConfigType const* Config);
 #endif
+
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN
 static void Clock_Ip_ResetPlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Config);
 static void Clock_Ip_SetPlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Config);
 static Clock_Ip_PllStatusReturnType Clock_Ip_CompletePlldigRdivMfiMfnSdmen(Clock_Ip_NameType PllName);
 static void Clock_Ip_EnablePlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Config);
 #endif
+
 #ifdef CLOCK_IP_LFASTPLL_ENABLE
 static void Clock_Ip_ResetLfastPLL(Clock_Ip_PllConfigType const* Config);
 static void Clock_Ip_SetLfastPLL(Clock_Ip_PllConfigType const* Config);
 static Clock_Ip_PllStatusReturnType Clock_Ip_CompleteLfastPLL(Clock_Ip_NameType PllName);
 static void Clock_Ip_EnableLfastPLL(Clock_Ip_PllConfigType const* Config);
 #endif
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -156,8 +156,6 @@ static void Clock_Ip_CallbackPllEmptyDisable(Clock_Ip_NameType PllName)
     /* No implementation */
 }
 
-
-/* Pll with frequency modulation */
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE
 #ifndef CLOCK_IP_FIRC_PLL_REFERENCE
     #define CLOCK_IP_FIRC_PLL_REFERENCE 0U
@@ -276,7 +274,7 @@ static Clock_Ip_PllStatusReturnType Clock_Ip_CompletePlldigRdivMfiMfnSdmenSsscgb
     {
         PllStatus = STATUS_PLL_NOT_ENABLED;
     }
-    
+
     return PllStatus;
 }
 static void Clock_Ip_EnablePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clock_Ip_PllConfigType const* Config)
@@ -301,7 +299,6 @@ static void Clock_Ip_EnablePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(
 }
 #endif
 
-/* Pll without frequency modulation */
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN
 #ifndef CLOCK_IP_FIRC_PLL_REFERENCE
     #define CLOCK_IP_FIRC_PLL_REFERENCE 0U
@@ -435,13 +432,6 @@ static void Clock_Ip_EnablePlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* C
     }
 }
 #endif
-
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
-
-
-
 
 #ifdef CLOCK_IP_LFASTPLL_ENABLE
 #ifdef ERR_IPV_LFAST_PLL_051380
@@ -665,6 +655,11 @@ static void Clock_Ip_EnableLfastPLL(Clock_Ip_PllConfigType const* Config)
 #endif
 
 
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
+
+
 
 
 /* Clock stop section code */
@@ -682,43 +677,43 @@ static void Clock_Ip_EnableLfastPLL(Clock_Ip_PllConfigType const* Config)
 const Clock_Ip_PllCallbackType Clock_Ip_axPllCallbacks[CLOCK_IP_PLL_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_CallbackPllEmpty,            /* Reset */
-        Clock_Ip_CallbackPllEmpty,            /* Set */
-        Clock_Ip_CallbackPllEmptyComplete,    /* Complete */
-        Clock_Ip_CallbackPllEmpty,            /* Enable */
-        Clock_Ip_CallbackPllEmptyDisable,     /* Disable */
+        &Clock_Ip_CallbackPllEmpty,            /* Reset */
+        &Clock_Ip_CallbackPllEmpty,            /* Set */
+        &Clock_Ip_CallbackPllEmptyComplete,    /* Complete */
+        &Clock_Ip_CallbackPllEmpty,            /* Enable */
+        &Clock_Ip_CallbackPllEmptyDisable,     /* Disable */
     },
-    /* Pll with frequency modulation */
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE
     {
-        Clock_Ip_ResetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,              /* Reset */
-        Clock_Ip_SetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,                /* Set */
-        Clock_Ip_CompletePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,           /* Complete */
-        Clock_Ip_EnablePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,             /* Enable */
-        Clock_Ip_CallbackPllEmptyDisable,                                               /* Disable */
+        &Clock_Ip_ResetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,              /* Reset */
+        &Clock_Ip_SetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,                /* Set */
+        &Clock_Ip_CompletePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,           /* Complete */
+        &Clock_Ip_EnablePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize,             /* Enable */
+        &Clock_Ip_CallbackPllEmptyDisable,                                               /* Disable */
     },
 #endif
-    /* Pll without frequency modulation */
+
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN
     {
-        Clock_Ip_ResetPlldigRdivMfiMfnSdmen,          /* Reset */
-        Clock_Ip_SetPlldigRdivMfiMfnSdmen,            /* Set */
-        Clock_Ip_CompletePlldigRdivMfiMfnSdmen,       /* Complete */
-        Clock_Ip_EnablePlldigRdivMfiMfnSdmen,         /* Enable */
-        Clock_Ip_CallbackPllEmptyDisable,            /* Disable */
+        &Clock_Ip_ResetPlldigRdivMfiMfnSdmen,          /* Reset */
+        &Clock_Ip_SetPlldigRdivMfiMfnSdmen,            /* Set */
+        &Clock_Ip_CompletePlldigRdivMfiMfnSdmen,       /* Complete */
+        &Clock_Ip_EnablePlldigRdivMfiMfnSdmen,         /* Enable */
+        &Clock_Ip_CallbackPllEmptyDisable,            /* Disable */
     },
 #endif
+
 #ifdef CLOCK_IP_LFASTPLL_ENABLE
     {
-        Clock_Ip_ResetLfastPLL,                                      /* Reset */
-        Clock_Ip_SetLfastPLL,                                        /* Set */
-        Clock_Ip_CompleteLfastPLL,                                   /* Complete */
-        Clock_Ip_EnableLfastPLL,                                     /* Enable */
-        Clock_Ip_CallbackPllEmptyDisable,                            /* Disable */
+        &Clock_Ip_ResetLfastPLL,                                      /* Reset */
+        &Clock_Ip_SetLfastPLL,                                        /* Set */
+        &Clock_Ip_CompleteLfastPLL,                                   /* Complete */
+        &Clock_Ip_EnableLfastPLL,                                     /* Enable */
+        &Clock_Ip_CallbackPllEmptyDisable,                            /* Disable */
     },
 #endif
-};
 
+};
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_UNSPECIFIED
@@ -730,4 +725,3 @@ const Clock_Ip_PllCallbackType Clock_Ip_axPllCallbacks[CLOCK_IP_PLL_CALLBACKS_CO
 #endif
 
 /** @} */
-

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,9 +21,9 @@
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_C       4
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_C       7
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_REVISION_VERSION_C    0
-#define CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_C               1
+#define CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_C               2
 #define CANEXCEL_IP_HWACCESS_SW_MINOR_VERSION_C               0
-#define CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_C               0
+#define CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_C               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -35,14 +35,14 @@
 #if ((CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_C    != CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_C    != CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_AR_RELEASE_REVISION_VERSION_C != CANEXCEL_IP_HWACCESS_AR_RELEASE_REVISION_VERSION_H) \
-    )
+)
     #error "AutoSar Version Numbers of CanEXCEL_Ip_HwAccess.c and CanEXCEL_Ip_HwAccess.h are different"
 #endif
 /* Check if current file and CanEXCEL_Ip_HwAccess.h are of the same Software version */
 #if ((CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_C != CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_SW_MINOR_VERSION_C != CANEXCEL_IP_HWACCESS_SW_MINOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_C != CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_H) \
-    )
+)
     #error "Software Version Numbers of CanEXCEL_Ip_HwAccess.c and CanEXCEL_Ip_HwAccess.h are different"
 #endif
 
@@ -50,7 +50,7 @@
     /* Check if current file and SchM_Can_43_CANEXCEL.h header file are of the same version */
     #if ((CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_C    !=  SCHM_CAN_43_CANEXCEL_AR_RELEASE_MAJOR_VERSION) || \
         (CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_C     !=  SCHM_CAN_43_CANEXCEL_AR_RELEASE_MINOR_VERSION) \
-        )
+)
         #error "AUTOSAR Version Numbers of CanEXCEL_Ip_HwAccess.c and SchM_Can_43_CANEXCEL.h are different"
     #endif
 #endif
@@ -75,6 +75,9 @@
 *                                      GLOBAL VARIABLES
 ==================================================================================================*/
 
+#define CAN_43_CANEXCEL_START_SEC_CODE
+#include "Can_43_CANEXCEL_MemMap.h"
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : CanXL_SetMDQueueConfigs
@@ -84,7 +87,7 @@
 void CanXL_SetMDQueueConfigs(CANXL_GRP_CONTROL_Type * base, const Canexcel_Ip_QueueConf * pConfigs)
 {
     uint8 i,j=0U;
-    for(i=0U;i < CANXL_GRP_CONTROL_FIFOCTRLREQ_COUNT; i++)
+    for (i=0U;i < CANXL_GRP_CONTROL_FIFOCTRLREQ_COUNT; i++)
     {
         base->FIFOCTRL[i] = CANXL_GRP_CONTROL_FIFOCTRL_FIFODPH1(pConfigs[j].mdQueueDepth) | CANXL_GRP_CONTROL_FIFOCTRL_FIFODPH2(pConfigs[j+1u].mdQueueDepth) |
                             CANXL_GRP_CONTROL_FIFOCTRL_FIFOWTM1(pConfigs[j].mdQueueWatermark) | CANXL_GRP_CONTROL_FIFOCTRL_FIFOWTM2(pConfigs[j+1u].mdQueueWatermark);
@@ -101,7 +104,7 @@ uint8 CanXL_GetMDQueueDepth(const CANXL_GRP_CONTROL_Type * base,const uint8 MDin
 {
     uint8 retValue = 0;
     /* Devide MDIndex to 32U in order to determine the group of the register */
-    if(((MDindex>>4U)%2U) == 0U)
+    if (0U == ((MDindex >> 4U) % 2U))
     {
         retValue = (uint8)(base->FIFOCTRL[MDindex>>5U]&CANXL_GRP_CONTROL_FIFOCTRL_FIFODPH1_MASK);
     }
@@ -165,7 +168,6 @@ uint8 CAN_ComputeDLCValue(uint8 payloadSize)
                                            CANXL_IP_DLC_VALUE_64_BYTES, CANXL_IP_DLC_VALUE_64_BYTES, CANXL_IP_DLC_VALUE_64_BYTES, CANXL_IP_DLC_VALUE_64_BYTES,
                                            CANXL_IP_DLC_VALUE_64_BYTES, CANXL_IP_DLC_VALUE_64_BYTES, CANXL_IP_DLC_VALUE_64_BYTES, CANXL_IP_DLC_VALUE_64_BYTES
                                           };
-
     if (payloadSize <= 64U)
     {
         ret = payload_code[payloadSize];
@@ -235,6 +237,7 @@ Canexcel_Ip_StatusType CanXL_SoftReset(CANXL_SIC_Type * base)
     Canexcel_Ip_StatusType returnResult = CANEXCEL_STATUS_SUCCESS;
     uint32 uS2Ticks = OsIf_MicrosToTicks(CANEXCEL_IP_TIMEOUT_DURATION, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     base->SYSMC = CANXL_SIC_SYSMC_SOFRST_MASK;
+    timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     while ((base->SYSMC & CANXL_SIC_SYSMC_SOFRST_MASK) == CANXL_SIC_SYSMC_SOFRST_MASK)
     {
         timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
@@ -257,28 +260,31 @@ void CanXL_ClearRAM(const CANEXCEL_StructType * CANXL, uint8 instance)
 {
    uint16 idx;
    CANXL_MSG_DESCRIPTORS_Type * base_Msg_Desc = CANXL->EXL_MSGD[instance];
-   for(idx=0u; idx < CANXL_MSG_DESCRIPTORS_MSGDSC_COUNT; idx++)
+   for (idx=0u; idx < CANXL_MSG_DESCRIPTORS_MSGDSC_COUNT; idx++)
    {
-       base_Msg_Desc->MSGDSC[idx].CTRL.RXCTRL = 0U;
+#if   (CANEXCEL_IP_FEATURE_HAS_MSGDESC_RXCTRL_MODE == (STD_ON))
+       /* Set as Invalid Config Rx Msg Descriptor */
+       base_Msg_Desc->MSGDSC[idx].CTRL.RXCTRL = CANXL_MSG_DESCRIPTORS_RXCTRL_MODE_MASK;
+#endif
        base_Msg_Desc->MSGDSC[idx].CFG1.MDFLT1FD = 0U;
        base_Msg_Desc->MSGDSC[idx].CFG2.MDFLT2FD = 0U;
        base_Msg_Desc->MSGDSC[idx].LSTPNT.RXLSTPTR = 0U;
-       for(uint8 i=0;i<16u;i++)
+       for (uint8 i=0;i<16u;i++)
        {
            /* Initialize the msg descriptor reserved space */
            base_Msg_Desc->MSGDSC[idx].RESERVED_0[i] = 0U;
        }
    }
    /* Clear the filter bank check the size in device reg as CANXL_IP_FILTER_BANK_SIZE */
-   volatile uint32 * ptr = &CANXL->EXL_FILTER[instance]->AFCFG0;
-   for(idx = 0u; idx <= (uint16)(CANXL_IP_FILTER_BANK_SIZE/4U); idx++ )
+   volatile uint32 * ptr = (volatile uint32 *)&CANXL->EXL_FILTER[instance]->AFCFG0;
+   for (idx = 0u; idx <= (uint16)(CANXL_IP_FILTER_BANK_SIZE/4U); idx++)
    {
        ptr[idx] = 0U;
    }
    /* Clear and initilize RXFIFO memory */
    CANXL_RXFIFO_Type * base_RxFifo = CANXL->EXL_RXFIFO[instance];
    base_RxFifo->RXFFCTR = 0U;
-   for(idx = 0u; idx < CANXL_RXFIFO_RXFFPOINTERAR_COUNT; idx++)
+   for (idx = 0u; idx < CANXL_RXFIFO_RXFFPOINTERAR_COUNT; idx++)
    {
        base_RxFifo->RXFMBP[idx] = 0U;
    }
@@ -289,20 +295,20 @@ void CanXL_ClearRAM(const CANEXCEL_StructType * CANXL, uint8 instance)
    base_RxFifo->SAMRCFG = 0U;
    base_RxFifo->AAMRCFG = 0U;
    base_RxFifo->ACPTIDMR = 0U;
-   for(idx = 0u; idx < CANXL_RXFIFO_VCANACPTFLTAR_COUNT; idx++)
+   for (idx = 0u; idx < CANXL_RXFIFO_VCANACPTFLTAR_COUNT; idx++)
    {
        base_RxFifo->VAFLT[idx] = 0U;
    }
-   for(idx = 0u; idx < CANXL_RXFIFO_SDUACPTFLTAR_COUNT; idx++)
+   for (idx = 0u; idx < CANXL_RXFIFO_SDUACPTFLTAR_COUNT; idx++)
    {
        base_RxFifo->SAFLT[idx] = 0U;
    }
-   for(idx = 0u; idx < CANXL_RXFIFO_ADDRACPTFLTAR_COUNT; idx++)
+   for (idx = 0u; idx < CANXL_RXFIFO_ADDRACPTFLTAR_COUNT; idx++)
    {
        base_RxFifo->ADDRACPTFLTAR[idx].AAFLTL = 0U;
        base_RxFifo->ADDRACPTFLTAR[idx].AAFLTH = 0U;
    }
-   for(idx = 0u; idx < CANXL_RXFIFO_IDACPTFLTAR_COUNT; idx++)
+   for (idx = 0u; idx < CANXL_RXFIFO_IDACPTFLTAR_COUNT; idx++)
    {
        base_RxFifo->IDACPTFLTAR[idx].IDAFLTL = 0U;
        base_RxFifo->IDACPTFLTAR[idx].IDAFLTH = 0U;
@@ -324,9 +330,9 @@ Canexcel_Ip_StatusType CanXL_EnterFreezeMode(CANXL_SIC_Type * base)
     boolean lowPower =  FALSE;
 
     /* Start critical section: implementation depends on integrator */
-    if(((base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK) == CANXL_SIC_SYSS_FRZACKF_MASK) && ((base->SYSMC & CANXL_SIC_SYSMC_FRZREQ_MASK) == 0U))
+    if ((CANXL_SIC_SYSS_FRZACKF_MASK == (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK)) && (0U == (base->SYSMC & CANXL_SIC_SYSMC_FRZREQ_MASK)))
     {
-        if(((base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK) != 0U) && ((base->SYSMC & CANXL_SIC_SYSMC_LPMREQ_MASK) == CANXL_SIC_SYSMC_LPMREQ_MASK))
+        if (((base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK) != 0U) && (CANXL_SIC_SYSMC_LPMREQ_MASK == (base->SYSMC & CANXL_SIC_SYSMC_LPMREQ_MASK)))
         {
             lowPower = TRUE;
             /* Exit low Power Mode to allow Freeze Enter Mode */
@@ -335,7 +341,7 @@ Canexcel_Ip_StatusType CanXL_EnterFreezeMode(CANXL_SIC_Type * base)
             base->SYSMC &= ~CANXL_SIC_SYSMC_LPMREQ_MASK;
             SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_01();
             timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
-            while(0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
+            while (0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
             {
                 timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
                 if (timeElapsed >= uS2Ticks)
@@ -351,8 +357,9 @@ Canexcel_Ip_StatusType CanXL_EnterFreezeMode(CANXL_SIC_Type * base)
         base->SYSMC |= CANXL_SIC_SYSMC_FRZREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_01();
     }
-    if(CANEXCEL_STATUS_SUCCESS == returnResult)
+    if (CANEXCEL_STATUS_SUCCESS == returnResult)
     {
+        timeElapsed = 0U;
         timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (0U == (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK))
         {
@@ -365,14 +372,15 @@ Canexcel_Ip_StatusType CanXL_EnterFreezeMode(CANXL_SIC_Type * base)
         }
     }
 
-    if((CANEXCEL_STATUS_SUCCESS == returnResult) && (TRUE == lowPower))
+    if ((CANEXCEL_STATUS_SUCCESS == returnResult) && (TRUE == lowPower))
     {
         base->SYSS = CANXL_SIC_SYSS_LPMACKF_MASK;
         SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_01();
         base->SYSMC |= CANXL_SIC_SYSMC_LPMREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_01();
+        timeElapsed = 0U;
         timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
-        while(0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
+        while (0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
         {
             timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
             if (timeElapsed >= uS2Ticks)
@@ -398,7 +406,7 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
     uint32 uS2Ticks = OsIf_MicrosToTicks(CANEXCEL_IP_TIMEOUT_DURATION, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
     Canexcel_Ip_StatusType returnResult = CANEXCEL_STATUS_SUCCESS;
     boolean lowPower =  FALSE;
-    if((base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK) != 0U)
+    if ((base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK) != 0U)
     {
         if ((base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK) == CANXL_SIC_SYSS_LPMACKF_MASK)
         {
@@ -409,7 +417,7 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
             base->SYSMC &= ~CANXL_SIC_SYSMC_LPMREQ_MASK;
             SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
             timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
-            while(0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
+            while (0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
             {
                 timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
                 if (timeElapsed >= uS2Ticks)
@@ -420,13 +428,14 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
             }
         }
     }
-    if(CANEXCEL_STATUS_SUCCESS == returnResult)
+    if (CANEXCEL_STATUS_SUCCESS == returnResult)
     {
         base->SYSS = CANXL_SIC_SYSS_FRZACKF_MASK;
         /* Request exit Freeze Mode */
         SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
         base->SYSMC &= ~CANXL_SIC_SYSMC_FRZREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
+        timeElapsed = 0U;
         timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
         while (0U == (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK))
         {
@@ -438,13 +447,15 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
             }
         }
     }
-    if((CANEXCEL_STATUS_SUCCESS == returnResult) && (TRUE == lowPower))
+    if ((CANEXCEL_STATUS_SUCCESS == returnResult) && (TRUE == lowPower))
     {
         base->SYSS = CANXL_SIC_SYSS_LPMACKF_MASK;
         SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
         base->SYSMC |= CANXL_SIC_SYSMC_LPMREQ_MASK;
         SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_02();
-        while(0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
+        timeElapsed = 0U;
+        timeStart = OsIf_GetCounter(CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
+        while (0U == (base->SYSS & CANXL_SIC_SYSS_LPMACKF_MASK))
         {
             timeElapsed += OsIf_GetElapsed(&timeStart, CANEXCEL_IP_SERVICE_TIMEOUT_TYPE);
             if (timeElapsed >= uS2Ticks)
@@ -464,7 +475,7 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base)
 Canexcel_Ip_DesCntStatus CanXL_GetDescControlStatus(const CANXL_DSC_CONTROL_Type * base, uint8 descNo)
 {
     Canexcel_Ip_DesCntStatus status = CANEXCEL_DESCNTSTATUS_INVALID;
-    switch((base->DSCMBCTRLAR[descNo].STA.DCSTA & (CANXL_DSC_CONTROL_DCSTA_HWLOCK_MASK | CANXL_DSC_CONTROL_DCSTA_SYSLOCK_MASK))>>CANXL_DSC_CONTROL_DCSTA_HWLOCK_SHIFT)
+    switch ((base->DSCMBCTRLAR[descNo].DCSTA & (CANXL_DSC_CONTROL_DCSTA_HWLOCK_MASK | CANXL_DSC_CONTROL_DCSTA_SYSLOCK_MASK))>>CANXL_DSC_CONTROL_DCSTA_HWLOCK_SHIFT)
     {
         case 0U:
             status = CANEXCEL_DESCNTSTATUS_UNLOCKED;
@@ -512,6 +523,24 @@ void CanXL_SetOperationMode(CANXL_SIC_Type * base, Canexcel_Ip_ModesType mode)
             break;
     }
 }
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : CanXL_DeserializeRevUint32
+ * Description   : Combine the user's data into a word
+ *END**************************************************************************/
+static inline uint32 CanXL_DeserializeRevUint32(const uint8 * Buffer)
+{
+    uint32 value = 0;
+    /* the endianness type for the payload is litle-endian */
+    value |= (uint32)Buffer[3] << 24U;
+    value |= (uint32)Buffer[2] << 16U;
+    value |= (uint32)Buffer[1] << 8U;
+    value |= (uint32)Buffer[0];
+
+    return value;
+}
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : CanXL_SetTxMsgBuffData
@@ -522,22 +551,35 @@ void CanXL_SetTxMsgBuffData(const Canexcel_Ip_DataInfoType * info, const uint8 *
     volatile uint32 * Mb_Data_32 = (volatile uint32 *)MB;
     const uint32 * MsgData_32 = (const uint32*)data;
     uint16 idx;
-    for(idx = 0u; idx< (info->dataLength & ~3U); idx +=4u )
+    
+    /* Check if the buffer address is word aligned */
+    if (((uint32)MsgData_32 & 0x3U) != 0U)
     {
-        * Mb_Data_32 = * MsgData_32;
-       Mb_Data_32++;
-       MsgData_32++;
+        for (idx = 0u; idx< (info->dataLength & ~3U); idx +=4u)
+        {
+            Mb_Data_32[idx >> 2U] = CanXL_DeserializeRevUint32(&data[idx]);
+        }
     }
-    for ( ; idx < info->dataLength; idx++)
+    else
+    {
+        for (idx = 0u; idx< (info->dataLength & ~3U); idx +=4u)
+        {
+            * Mb_Data_32 = * MsgData_32;
+            Mb_Data_32++;
+            MsgData_32++;
+        }
+    }
+    
+    for (; idx < info->dataLength; idx++)
     {
         MB[idx] =  data[idx];
     }
 
-    if(info->frame == CANEXCEL_FD_FRAME)
+    if (CANEXCEL_FD_FRAME == info->frame)
     {
         uint8 dlcValue = CAN_ComputeDLCValue((uint8)(info->dataLength));
         uint8 calcValue = CAN_ComputePayloadSizeHw(dlcValue);
-        for(idx = info->dataLength; idx<calcValue; idx++)
+        for (idx = info->dataLength; idx<calcValue; idx++)
         {
             MB[idx] = info->fd_padding;
         }
@@ -621,7 +663,7 @@ Canexcel_Ip_StatusType CanXL_ConfigCtrlOptions(CANXL_SIC_Type * base, uint32 u32
     {
         base->BCFG2 &= (~CANXL_SIC_BCFG2_TFER_MASK);
     }
-    
+
     if ((u32Options & CANXL_IP_BUSOFF_RECOVERY_U32) != 0U)
     {
         /* 0b - Automatic bus-off recovery is enabled */
@@ -632,7 +674,7 @@ Canexcel_Ip_StatusType CanXL_ConfigCtrlOptions(CANXL_SIC_Type * base, uint32 u32
         /* 1b - Automatic bus-off recovery is disabled */
         base->BCFG1 |= CANXL_SIC_BCFG1_ABRDIS_MASK;
     }
-    
+
     if ((u32Options & CANXL_IP_EDGE_FILTER_U32) != 0U)
     {
         /* 0b - Edge Filter is enabled */
@@ -643,7 +685,7 @@ Canexcel_Ip_StatusType CanXL_ConfigCtrlOptions(CANXL_SIC_Type * base, uint32 u32
         /* 1b - Edge Filter is disabled */
         base->BCFG2 |= CANXL_SIC_BCFG2_EDFLTDIS_MASK;
     }
-    
+
     if ((u32Options & CANXL_IP_XLER_U32) != 0U)
     {
         base->BCFG2 |= CANXL_SIC_BCFG2_XLER_MASK;
@@ -662,7 +704,7 @@ Canexcel_Ip_StatusType CanXL_ConfigCtrlOptions(CANXL_SIC_Type * base, uint32 u32
 void CanXL_ConfigAccAddr(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilterID_ADDR * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+    if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
     {
         /* Enable Range Filter operation */
         base->AAMRCFG |= mask;
@@ -682,7 +724,7 @@ void CanXL_ConfigAccAddr(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilter
 void CanXL_ConfigIDFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilterID_ADDR * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+    if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
     {
         /* Enable Range Filter operation */
         base->ACPTIDMR |= mask;
@@ -702,7 +744,7 @@ void CanXL_ConfigIDFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilte
 void CanXL_ConfigSDUFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+    if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
     {
         /* Enable Range Filter operation */
         base->SAMRCFG |= mask;
@@ -713,13 +755,13 @@ void CanXL_ConfigSDUFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilt
     }
     /* Div the register selection to 2, this register is composed form a pair of SDU filter */
     base->SAFLT[filtIdx>>2U] = 0U;
-    if((filtIdx % 2U)  == 0U)
+    if (0U == (filtIdx % 2U))
     {
-        base->SAFLT[filtIdx>>2U] |= CANXL_RXFIFO_SAFLT_SDUa_H(filter->sduVcanFilterH) | CANXL_RXFIFO_SAFLT_SDUa_L(filter->sduVcanFilterL);
+        base->SAFLT[filtIdx>>1U] |= CANXL_RXFIFO_SAFLT_SDUa_H(filter->sduVcanFilterH) | CANXL_RXFIFO_SAFLT_SDUa_L(filter->sduVcanFilterL);
     }
     else
     {
-        base->SAFLT[filtIdx>>2U] |= CANXL_RXFIFO_SAFLT_SDUb_H(filter->sduVcanFilterH) | CANXL_RXFIFO_SAFLT_SDUb_L(filter->sduVcanFilterL);
+        base->SAFLT[filtIdx>>1U] |= CANXL_RXFIFO_SAFLT_SDUb_H(filter->sduVcanFilterH) | CANXL_RXFIFO_SAFLT_SDUb_L(filter->sduVcanFilterL);
     }
 }
 /*FUNCTION**********************************************************************
@@ -730,7 +772,7 @@ void CanXL_ConfigSDUFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilt
 void CanXL_ConfigVCANFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+    if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
     {
         /* Enable Range Filter operation */
         base->VAMRCFG |= mask;
@@ -741,13 +783,13 @@ void CanXL_ConfigVCANFilter(CANXL_RXFIFO_Type * base,const Canexcel_Ip_RxFifoFil
     }
     /* Div the register selection to 2, this register is composed form a pair of SDU filter */
     base->VAFLT[filtIdx>>2U] = 0U;
-    if((filtIdx % 2U)  == 0U)
+    if (0U == (filtIdx % 2U))
     {
-        base->VAFLT[filtIdx>>2U] |= CANXL_RXFIFO_VAFLT_VCANa_H(filter->sduVcanFilterH) | CANXL_RXFIFO_VAFLT_VCANa_L(filter->sduVcanFilterL);
+        base->VAFLT[filtIdx>>1U] |= CANXL_RXFIFO_VAFLT_VCANa_H(filter->sduVcanFilterH) | CANXL_RXFIFO_VAFLT_VCANa_L(filter->sduVcanFilterL);
     }
     else
     {
-        base->VAFLT[filtIdx>>2U] |= CANXL_RXFIFO_VAFLT_VCANb_H(filter->sduVcanFilterH) | CANXL_RXFIFO_VAFLT_VCANb_L(filter->sduVcanFilterL);
+        base->VAFLT[filtIdx>>1U] |= CANXL_RXFIFO_VAFLT_VCANb_H(filter->sduVcanFilterH) | CANXL_RXFIFO_VAFLT_VCANb_L(filter->sduVcanFilterL);
     }
 }
 /*FUNCTION**********************************************************************
@@ -762,11 +804,11 @@ void CanXL_ConfigAccAddrFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,con
         uint32 AAFLTx_L;
         uint32 AAFLTx_H;
     } AddrFilterAAType;
-    if(bank == 0U)
+    if (0U == bank)
     {
         /* MISRA Rule 11.3: When detected for casting integer pointers to integer pointers of different size: This operation is allowed, as it does not lead to incompatible alignment. */
         volatile AddrFilterAAType * FilterStr = (volatile AddrFilterAAType *)&base->AAFLT0_0L;
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->AAMRCFG0 |= mask;
@@ -781,7 +823,7 @@ void CanXL_ConfigAccAddrFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,con
     else
     {
         volatile AddrFilterAAType * FilterStr = (volatile AddrFilterAAType *)&base->AAFLT1_0L;
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->AAMRCFG1 |= mask;
@@ -806,10 +848,10 @@ void CanXL_ConfigAccAddrRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,con
         uint32 ARFLTx_L;
         uint32 ARFLTx_H;
     } AddrFilterType;
-    if(bank == 0U)
+    if (0U == bank)
     {
         volatile AddrFilterType * FilterStr = (volatile AddrFilterType *)&base->ARFLT0_0L;
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->ARMRCFG0 |= mask;
@@ -824,7 +866,7 @@ void CanXL_ConfigAccAddrRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,con
     else
     {
         volatile AddrFilterType * FilterStr = (volatile AddrFilterType *)&base->ARFLT1_0L;
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->ARMRCFG1 |= mask;
@@ -845,9 +887,9 @@ void CanXL_ConfigAccAddrRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,con
 void CanXL_ConfigSDUFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(bank == 0U)
+    if (0U == bank)
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->SAMRCFG0 |= mask;
@@ -858,18 +900,18 @@ void CanXL_ConfigSDUFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * SAFLT = (volatile uint32 *)&base->SAFLT0_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            SAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SAFLT0_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT0_0_SDUa_L(filter->sduVcanFilterL);
+            SAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SAFLT0_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT0_0_SDUa_L(filter->sduVcanFilterL);
         }
         else
         {
-            SAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SAFLT0_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT0_0_SDUb_L(filter->sduVcanFilterL);
+            SAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SAFLT0_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT0_0_SDUb_L(filter->sduVcanFilterL);
         }
     }
     else
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->SAMRCFG1 |= mask;
@@ -880,13 +922,13 @@ void CanXL_ConfigSDUFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * SAFLT = (volatile uint32 *)&base->SAFLT1_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            SAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SAFLT1_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT1_0_SDUa_L(filter->sduVcanFilterL);
+            SAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SAFLT1_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT1_0_SDUa_L(filter->sduVcanFilterL);
         }
         else
         {
-            SAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SAFLT1_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT1_0_SDUb_L(filter->sduVcanFilterL);
+            SAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SAFLT1_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SAFLT1_0_SDUb_L(filter->sduVcanFilterL);
         }
     }
 }
@@ -898,9 +940,9 @@ void CanXL_ConfigSDUFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
 void CanXL_ConfigSDURejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(bank == 0U)
+    if (0U == bank)
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->SRMRCFG0 |= mask;
@@ -911,18 +953,18 @@ void CanXL_ConfigSDURejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * SRFLT = (volatile uint32 *)&base->SRFLT0_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            SRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SRFLT0_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT0_0_SDUa_L(filter->sduVcanFilterL);
+            SRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SRFLT0_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT0_0_SDUa_L(filter->sduVcanFilterL);
         }
         else
         {
-            SRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SRFLT0_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT0_0_SDUb_L(filter->sduVcanFilterL);
+            SRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SRFLT0_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT0_0_SDUb_L(filter->sduVcanFilterL);
         }
     }
     else
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->SRMRCFG1 |= mask;
@@ -933,13 +975,13 @@ void CanXL_ConfigSDURejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * SRFLT = (volatile uint32 *)&base->SRFLT1_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            SRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SRFLT1_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT1_0_SDUa_L(filter->sduVcanFilterL);
+            SRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SRFLT1_0_SDUa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT1_0_SDUa_L(filter->sduVcanFilterL);
         }
         else
         {
-            SRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_SRFLT1_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT1_0_SDUb_L(filter->sduVcanFilterL);
+            SRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_SRFLT1_0_SDUb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_SRFLT1_0_SDUb_L(filter->sduVcanFilterL);
         }
     }
 }
@@ -951,9 +993,9 @@ void CanXL_ConfigSDURejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
 void CanXL_ConfigVCANFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(bank == 0U)
+    if (0U == bank)
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->VAMRCFG0 |= mask;
@@ -964,18 +1006,18 @@ void CanXL_ConfigVCANFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const 
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * VAFLT = (volatile uint32 *)&base->VAFLT0_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            VAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VAFLT0_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT0_0_VCANa_L(filter->sduVcanFilterL);
+            VAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VAFLT0_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT0_0_VCANa_L(filter->sduVcanFilterL);
         }
         else
         {
-            VAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VAFLT0_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT0_0_VCANb_L(filter->sduVcanFilterL);
+            VAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VAFLT0_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT0_0_VCANb_L(filter->sduVcanFilterL);
         }
     }
     else
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->VAMRCFG1 |= mask;
@@ -986,13 +1028,13 @@ void CanXL_ConfigVCANFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const 
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * VAFLT = (volatile uint32 *)&base->VAFLT1_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            VAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VAFLT1_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT1_0_VCANa_L(filter->sduVcanFilterL);
+            VAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VAFLT1_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT1_0_VCANa_L(filter->sduVcanFilterL);
         }
         else
         {
-            VAFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VAFLT1_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT1_0_VCANb_L(filter->sduVcanFilterL);
+            VAFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VAFLT1_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VAFLT1_0_VCANb_L(filter->sduVcanFilterL);
         }
     }
 }
@@ -1004,9 +1046,9 @@ void CanXL_ConfigVCANFilterBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const 
 void CanXL_ConfigVCANRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx)
 {
     uint32 mask = 1UL << (filtIdx%32U);
-    if(bank == 0U)
+    if (0U == bank)
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->VRMRCFG0 |= mask;
@@ -1017,18 +1059,18 @@ void CanXL_ConfigVCANRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const 
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * VRFLT = (volatile uint32 *)&base->VRFLT0_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            VRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VRFLT0_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT0_0_VCANa_L(filter->sduVcanFilterL);
+            VRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VRFLT0_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT0_0_VCANa_L(filter->sduVcanFilterL);
         }
         else
         {
-            VRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VRFLT0_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT0_0_VCANb_L(filter->sduVcanFilterL);
+            VRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VRFLT0_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT0_0_VCANb_L(filter->sduVcanFilterL);
         }
     }
     else
     {
-        if(filter->filterType == CANEXCEL_IP_RX_FIFO_RANGE_FILTER)
+        if (CANEXCEL_IP_RX_FIFO_RANGE_FILTER == filter->filterType)
         {
             /* Enable Range Filter operation */
             base->VRMRCFG1 |= mask;
@@ -1039,15 +1081,19 @@ void CanXL_ConfigVCANRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const 
         }
         /* Div the register selection to 2, this register is composed form a pair of SDU filter */
         volatile uint32 * VRFLT = (volatile uint32 *)&base->VRFLT1_0;
-        if((filtIdx % 2U)  == 0U)
+        if (0U == (filtIdx % 2U))
         {
-            VRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VRFLT1_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT1_0_VCANa_L(filter->sduVcanFilterL);
+            VRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VRFLT1_0_VCANa_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT1_0_VCANa_L(filter->sduVcanFilterL);
         }
         else
         {
-            VRFLT[filtIdx>>2U] |= CANXL_FILTER_BANK_VRFLT1_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT1_0_VCANb_L(filter->sduVcanFilterL);
+            VRFLT[filtIdx>>1U] |= CANXL_FILTER_BANK_VRFLT1_0_VCANb_H(filter->sduVcanFilterH) | CANXL_FILTER_BANK_VRFLT1_0_VCANb_L(filter->sduVcanFilterL);
         }
     }
 }
+
+#define CAN_43_CANEXCEL_STOP_SEC_CODE
+#include "Can_43_CANEXCEL_MemMap.h"
+
 /** @} */
 

@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           ComStack_Types.h
 *   @implements     ComStack_Types.h_Artifact
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR BaseNXP - Communication stack types header file.
 *   @details AUTOSAR communication stack type header file.
@@ -25,8 +25,7 @@ extern "C"{
 /*==================================================================================================
 *                                         INCLUDE FILES
 ==================================================================================================*/
-
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "ComStack_Cfg.h"
 
 /*==================================================================================================
@@ -40,18 +39,18 @@ extern "C"{
 #define COMTYPE_AR_RELEASE_MAJOR_VERSION     4
 #define COMTYPE_AR_RELEASE_MINOR_VERSION     7
 #define COMTYPE_AR_RELEASE_REVISION_VERSION  0
-#define COMTYPE_SW_MAJOR_VERSION             1
+#define COMTYPE_SW_MAJOR_VERSION             2
 #define COMTYPE_SW_MINOR_VERSION             0
-#define COMTYPE_SW_PATCH_VERSION             0
+#define COMTYPE_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if source file and StandardTypes.h header file are of the same Autosar version */
+    /* Check if source file and Std_Types.h header file are of the same Autosar version */
     #if ((COMTYPE_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (COMTYPE_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of ComStack_Types.h and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of ComStack_Types.h and Std_Types.h are different"
     #endif
 #endif
 

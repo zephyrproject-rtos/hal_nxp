@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR3.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR3
  *
  * This file contains register definitions and macros for easy access to their
@@ -77,7 +77,9 @@ typedef struct {
   __I  uint32_t DDRCS;                             /**< DDRC Status, offset: 0x10 */
   __IO uint32_t DDRCC;                             /**< DDRC Control, offset: 0x14 */
   __IO uint32_t GENC0;                             /**< Generic control register 0, offset: 0x18 */
-  uint8_t RESERVED_0[52];
+  uint8_t RESERVED_0[36];
+  __IO uint32_t FUNCC6;                            /**< Enable for TX Ack Suppress Logic, offset: 0x40 */
+  uint8_t RESERVED_1[12];
   __I  uint32_t INITM3;                            /**< NoC Initiator NIU Timeout Status, offset: 0x50 */
   __I  uint32_t TARGTMS3;                          /**< NoC Target NIU Timeout Status, offset: 0x54 */
   __IO uint32_t TARGTMC3;                          /**< NoC Target NIU Timeout Control, offset: 0x58 */
@@ -85,18 +87,16 @@ typedef struct {
   __I  uint32_t RTU0FDS;                           /**< RTU0 Fence and Drain Status, offset: 0x60 */
   __IO uint32_t RTU1FDC;                           /**< RTU1 Fence and Drain Control, offset: 0x64 */
   __I  uint32_t RTU1FDS;                           /**< RTU1 Fence and Drain Status, offset: 0x68 */
-  uint8_t RESERVED_1[4];
+  uint8_t RESERVED_2[4];
   __IO uint32_t CE0RSTCNT;                         /**< FlexLLCE Cortex-M33 Core 0 Reset Counter, offset: 0x70 */
   __IO uint32_t CE1RSTCNT;                         /**< FlexLLCE Cortex-M33 Core 1 Reset Counter, offset: 0x74 */
   __IO uint32_t CLKOUT4SEL;                        /**< CLKOUT_4 MUX select, offset: 0x78 */
-  uint8_t RESERVED_2[4];
+  __IO uint32_t RGMC;                              /**< MC_RGM Control, offset: 0x7C */
   __I  uint32_t XRDC_INT_S;                        /**< XRDC Interrupt Source, offset: 0x80 */
   uint8_t RESERVED_3[32];
   __I  uint32_t FLEXLLCECM33S;                     /**< FlexLLCE Cortex-M33 Core 0 Status, offset: 0xA4 */
   __I  uint32_t FLEXLLCECM33CES;                   /**< FlexLLCE Cortex-M33 Core 1 Status, offset: 0xA8 */
-  uint8_t RESERVED_4[4];
-  __IO uint32_t LVFCCU3S;                          /**< VFCCU Fault Status 3, offset: 0xB0 */
-  __IO uint32_t LVFCCU3S_2;                        /**< VFCCU Fault Status 3 for RTU and FlexLLCE, offset: 0xB4 */
+  uint8_t RESERVED_4[12];
   __IO uint32_t XPAR3;                             /**< Interface parity control and status register, offset: 0xB8 */
   __IO uint32_t XPAR4;                             /**< Interface parity control and status register, offset: 0xBC */
   __IO uint32_t RTU0XPAR;                          /**< RTU0 global parity control register, offset: 0xC0 */
@@ -191,6 +191,15 @@ typedef struct {
 #define GPR3_GENC0_CTRL0_SHIFT                   (0U)
 #define GPR3_GENC0_CTRL0_WIDTH                   (32U)
 #define GPR3_GENC0_CTRL0(x)                      (((uint32_t)(((uint32_t)(x)) << GPR3_GENC0_CTRL0_SHIFT)) & GPR3_GENC0_CTRL0_MASK)
+/*! @} */
+
+/*! @name FUNCC6 - Enable for TX Ack Suppress Logic */
+/*! @{ */
+
+#define GPR3_FUNCC6_CTRL_MASK                    (0xFFFFFFFFU)
+#define GPR3_FUNCC6_CTRL_SHIFT                   (0U)
+#define GPR3_FUNCC6_CTRL_WIDTH                   (32U)
+#define GPR3_FUNCC6_CTRL(x)                      (((uint32_t)(((uint32_t)(x)) << GPR3_FUNCC6_CTRL_SHIFT)) & GPR3_FUNCC6_CTRL_MASK)
 /*! @} */
 
 /*! @name INITM3 - NoC Initiator NIU Timeout Status */
@@ -313,6 +322,25 @@ typedef struct {
 #define GPR3_CLKOUT4SEL_MUXSEL(x)                (((uint32_t)(((uint32_t)(x)) << GPR3_CLKOUT4SEL_MUXSEL_SHIFT)) & GPR3_CLKOUT4SEL_MUXSEL_MASK)
 /*! @} */
 
+/*! @name RGMC - MC_RGM Control */
+/*! @{ */
+
+#define GPR3_RGMC_FUNC_RST_ENTRY_PROC_DONE_MASK  (0xFFU)
+#define GPR3_RGMC_FUNC_RST_ENTRY_PROC_DONE_SHIFT (0U)
+#define GPR3_RGMC_FUNC_RST_ENTRY_PROC_DONE_WIDTH (8U)
+#define GPR3_RGMC_FUNC_RST_ENTRY_PROC_DONE(x)    (((uint32_t)(((uint32_t)(x)) << GPR3_RGMC_FUNC_RST_ENTRY_PROC_DONE_SHIFT)) & GPR3_RGMC_FUNC_RST_ENTRY_PROC_DONE_MASK)
+
+#define GPR3_RGMC_FUNC_RST_EXIT_PROC_DONE_MASK   (0x300U)
+#define GPR3_RGMC_FUNC_RST_EXIT_PROC_DONE_SHIFT  (8U)
+#define GPR3_RGMC_FUNC_RST_EXIT_PROC_DONE_WIDTH  (2U)
+#define GPR3_RGMC_FUNC_RST_EXIT_PROC_DONE(x)     (((uint32_t)(((uint32_t)(x)) << GPR3_RGMC_FUNC_RST_EXIT_PROC_DONE_SHIFT)) & GPR3_RGMC_FUNC_RST_EXIT_PROC_DONE_MASK)
+
+#define GPR3_RGMC_DEST_RST_DISABLE_MASK          (0x1FFFC00U)
+#define GPR3_RGMC_DEST_RST_DISABLE_SHIFT         (10U)
+#define GPR3_RGMC_DEST_RST_DISABLE_WIDTH         (15U)
+#define GPR3_RGMC_DEST_RST_DISABLE(x)            (((uint32_t)(((uint32_t)(x)) << GPR3_RGMC_DEST_RST_DISABLE_SHIFT)) & GPR3_RGMC_DEST_RST_DISABLE_MASK)
+/*! @} */
+
 /*! @name XRDC_INT_S - XRDC Interrupt Source */
 /*! @{ */
 
@@ -408,24 +436,6 @@ typedef struct {
 #define GPR3_FLEXLLCECM33CES_SYSRSTREQ_SHIFT     (7U)
 #define GPR3_FLEXLLCECM33CES_SYSRSTREQ_WIDTH     (1U)
 #define GPR3_FLEXLLCECM33CES_SYSRSTREQ(x)        (((uint32_t)(((uint32_t)(x)) << GPR3_FLEXLLCECM33CES_SYSRSTREQ_SHIFT)) & GPR3_FLEXLLCECM33CES_SYSRSTREQ_MASK)
-/*! @} */
-
-/*! @name LVFCCU3S - VFCCU Fault Status 3 */
-/*! @{ */
-
-#define GPR3_LVFCCU3S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR3_LVFCCU3S_STAT_SHIFT                 (0U)
-#define GPR3_LVFCCU3S_STAT_WIDTH                 (32U)
-#define GPR3_LVFCCU3S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR3_LVFCCU3S_STAT_SHIFT)) & GPR3_LVFCCU3S_STAT_MASK)
-/*! @} */
-
-/*! @name LVFCCU3S_2 - VFCCU Fault Status 3 for RTU and FlexLLCE */
-/*! @{ */
-
-#define GPR3_LVFCCU3S_2_STAT_MASK                (0xFFFFFFFFU)
-#define GPR3_LVFCCU3S_2_STAT_SHIFT               (0U)
-#define GPR3_LVFCCU3S_2_STAT_WIDTH               (32U)
-#define GPR3_LVFCCU3S_2_STAT(x)                  (((uint32_t)(((uint32_t)(x)) << GPR3_LVFCCU3S_2_STAT_SHIFT)) & GPR3_LVFCCU3S_2_STAT_MASK)
 /*! @} */
 
 /*! @name XPAR3 - Interface parity control and status register */

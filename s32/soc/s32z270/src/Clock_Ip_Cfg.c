@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2023 NXP
- *
+ * Copyright 2022-2025 NXP
+*
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -27,7 +27,7 @@ extern "C"{
  2) needed interfaces from external units
  3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Clock_Ip_Private.h"
 
 /*==================================================================================================
@@ -37,19 +37,19 @@ extern "C"{
 #define CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_CFG_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_CFG_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_CFG_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_CFG_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_CFG_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if source file and StandardTypes.h file are of the same Autosar version */
+/* Check if source file and Std_Types.h file are of the same Autosar version */
 #if ((CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION_C != STD_AR_RELEASE_MAJOR_VERSION) || \
      (CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION_C != STD_AR_RELEASE_MINOR_VERSION) \
     )
-    #error "AutoSar Version Numbers of Clock_Ip_Cfg.c and StandardTypes.h are different"
+    #error "AutoSar Version Numbers of Clock_Ip_Cfg.c and Std_Types.h are different"
 #endif
 #endif    /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 /* Check if source file and Clock_Ip_Private.h file are of the same vendor */
@@ -74,29 +74,24 @@ extern "C"{
 #endif
 
 /*==================================================================================================
-                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
+*                                            CONSTANTS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                        LOCAL MACROS
+*                                       DEFINES AND MACROS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       LOCAL CONSTANTS
+*                                              ENUMS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       LOCAL VARIABLES
+*                                  STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       GLOBAL CONSTANTS
+*                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
-
-/*==================================================================================================
-                                       GLOBAL VARIABLES
-==================================================================================================*/
-
 
 #define MCU_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Mcu_MemMap.h"
@@ -148,6 +143,7 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
             0U,
             0U,
         },
+        0U,                     /* SoftwareDisable */
     },
     #endif
 
@@ -175,6 +171,7 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
             0U,
             0U,
         },
+        0U,                     /* SoftwareDisable */
     },
     #endif
 
@@ -202,6 +199,7 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
             0U,
             0U,
         },
+        0U,                     /* SoftwareDisable */
     },
     #endif
 
@@ -229,6 +227,7 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
             0U,
             0U,
         },
+        0U,                     /* SoftwareDisable */
     },
     #endif
 
@@ -256,6 +255,7 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
             0U,
             0U,
         },
+        0U,                     /* SoftwareDisable */
     },
     #endif
 };
@@ -489,7 +489,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 32U
     {
         P3_CAN_PE_CLK,                    /* Clock name associated to selector */
-        FIRC_CLK,                    /* Name of the selected input source */
+        PERIPHPLL_PHI5_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -552,7 +552,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 41U
     {
         P4_QSPI0_2X_CLK,                    /* Clock name associated to selector */
-        FIRC_CLK,                    /* Name of the selected input source */
+        PERIPHPLL_DFS0_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -566,7 +566,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 43U
     {
         P4_SDHC_CLK,                    /* Clock name associated to selector */
-        FIRC_CLK,                    /* Name of the selected input source */
+        PERIPHPLL_DFS2_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -770,7 +770,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 6U
     {
         ETH0_REF_RMII_CLK,                    /* name */
-        0U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -780,7 +780,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 7U
     {
         ETH0_RX_MII_CLK,                    /* name */
-        0U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -800,7 +800,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 9U
     {
         ETH0_TX_MII_CLK,                    /* name */
-        0U,                              /* value */
+        20U,                              /* value */
         {
             0U,
         }
@@ -820,7 +820,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 11U
     {
         ETH1_REF_RMII_CLK,                    /* name */
-        0U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -830,7 +830,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 12U
     {
         ETH1_RX_MII_CLK,                    /* name */
-        0U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -850,7 +850,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 14U
     {
         ETH1_TX_MII_CLK,                    /* name */
-        0U,                              /* value */
+        20U,                              /* value */
         {
             0U,
         }
@@ -940,9 +940,9 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 23U
     {
         P0_PSI5_189K_CLK,                    /* name */
-        3306U,                              /* value */
+        8U,                              /* value */
         {
-            2U,
+            0U,
         }
     },
     #endif
@@ -1140,7 +1140,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 43U
     {
         P3_CAN_PE_CLK,                    /* name */
-        1U,                              /* value */
+        2U,                              /* value */
         {
             0U,
         }
@@ -1210,9 +1210,9 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 50U
     {
         P4_PSI5_189K_CLK,                    /* name */
-        3306U,                              /* value */
+        8U,                              /* value */
         {
-            2U,
+            0U,
         }
     },
     #endif
@@ -1340,7 +1340,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 63U
     {
         P4_QSPI0_2X_CLK,                    /* name */
-        1U,                              /* value */
+        2U,                              /* value */
         {
             0U,
         }
@@ -1380,7 +1380,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 67U
     {
         P5_CANXL_CHI_CLK,                    /* name */
-        10U,                              /* value */
+        5U,                              /* value */
         {
             0U,
         }
@@ -1550,7 +1550,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 84U
     {
         P4_SDHC_CLK,                    /* name */
-        1U,                              /* value */
+        2U,                              /* value */
         {
             0U,
         }
@@ -1579,7 +1579,7 @@ static const Clock_Ip_FracDivConfigType Clock_Ip_FracDivsConfigurations_0[CLOCK_
         1U,          /* Enabled */
         {
             1U,          /* integer part */
-            9U,          /* fractional part */
+            0U,          /* fractional part */
         },
     },
     #endif
@@ -1667,7 +1667,7 @@ static const Clock_Ip_FracDivConfigType Clock_Ip_FracDivsConfigurations_0[CLOCK_
         1U,          /* Enabled */
         {
             2U,          /* integer part */
-            18U,          /* fractional part */
+            0U,          /* fractional part */
         },
     },
     #endif
@@ -2847,7 +2847,7 @@ static const Clock_Ip_ConfiguredFrequencyType Clock_Ip_ConfiguredFrequencyConfig
     #if CLOCK_IP_CONFIGURED_FREQUENCIES_COUNT > 13U
     {
         RTU0_CORE_CLK,
-        800000000U,
+        1000000000U,
     },
     #endif
 
@@ -2861,7 +2861,7 @@ static const Clock_Ip_ConfiguredFrequencyType Clock_Ip_ConfiguredFrequencyConfig
     #if CLOCK_IP_CONFIGURED_FREQUENCIES_COUNT > 15U
     {
         RTU1_CORE_CLK,
-        800000000U,
+        1000000000U,
     },
     #endif
 
@@ -2918,15 +2918,7 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
 
 
 /*==================================================================================================
-                                   LOCAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-/*==================================================================================================
-                                       LOCAL FUNCTIONS
-==================================================================================================*/
-
-/*==================================================================================================
-                                       GLOBAL FUNCTIONS
+*                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
 
 #ifdef __cplusplus
@@ -2934,3 +2926,4 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
 #endif
 
 /** @} */
+

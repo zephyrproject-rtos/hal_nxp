@@ -13,22 +13,47 @@ if(CONFIG_SOC_SERIES_RW6XX)
         ${CMAKE_CURRENT_LIST_DIR}/platform/rw61x/configs
         # Flash files are only included to build successfully the framework files.
         # Content is not used
-        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk/components/flash/mflash/rdrw612bga
-        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk/components/flash/mflash
+        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk-ng/components/flash/mflash/rdrw612bga
+        ${CMAKE_CURRENT_LIST_DIR}/../../mcux-sdk-ng/components/flash/mflash
     )
 
     zephyr_compile_definitions(gPlatformDisableVendorSpecificInit=1U)
 
-    if (CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITHIC_IEEE802154)
-        zephyr_compile_definitions(gPlatformMonolithicApp_d=1U)
+    if (CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_NBU)
+        zephyr_compile_definitions(
+            gPlatformMonolithicApp_d=1U
+            fw_cpu2_ble=fw_cpu2
+            fw_cpu2_combo=fw_cpu2
+        )
 
-        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_BT
-                                          BLE_FW_ADDRESS=0U)
+        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_NBU
+                                          BLE_FW_ADDRESS=0U
+                                          COMBO_FW_ADDRESS=0U)
 
         zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_WIFI
                                           WIFI_FW_ADDRESS=0U)
-
-        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_IEEE802154
-                                          COMBO_FW_ADDRESS=0U)
     endif()
+endif()
+
+if(CONFIG_SOC_SERIES_MCXW)
+    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ics.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ot.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ble.c
+    )
+
+    zephyr_include_directories(
+        ${CMAKE_CURRENT_LIST_DIR}/Common
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/configs
+    )
+
+    zephyr_compile_definitions_ifdef(CONFIG_SOC_MCXW727C FWK_KW47_MCXW72_FAMILIES=1)
+
+    if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+        include(set_component_osa)
+        set(CONFIG_USE_component_osa_zephyr true)
+    endif()
+
 endif()

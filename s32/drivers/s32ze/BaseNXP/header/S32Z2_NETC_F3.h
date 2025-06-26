@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F3.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F3
  *
  * This file contains register definitions and macros for easy access to their
@@ -98,7 +98,7 @@ typedef struct {
   __I  uint32_t PRXBCR;                            /**< Port receive buffer count register, offset: 0x128 */
   __I  uint32_t PRXBCHWMR;                         /**< Port receive buffer count high watermark register, offset: 0x12C */
   uint8_t RESERVED_5[16];
-  struct {                                         /* offset: 0x140, array step: 0x10 */
+  struct NETC_F3_PICDRADCR {                       /* offset: 0x140, array step: 0x10 */
     __I  uint32_t PICDRDCR;                          /**< Port ingress congestion DR0 discard count register..Port ingress congestion DR3 discard count register, array offset: 0x140, array step: 0x10 */
     uint8_t RESERVED_0[4];
     __I  uint32_t PICDRDCRRR;                        /**< Port ingress congestion DR0 discard count read-reset register..Port ingress congestion DR3 discard count read-reset register, array offset: 0x148, array step: 0x10 */
@@ -136,7 +136,7 @@ typedef struct {
   uint8_t RESERVED_16[124];
   __IO uint32_t SMHRBDRMR[NETC_F3_NUM_SMHRBDRMR_COUNT]; /**< Switch management host reason 1 receive BD ring mapping register..Switch management host reason 15 receive BD ring mapping register, array offset: 0x880, array step: 0x4 */
   uint8_t RESERVED_17[5956];
-  struct {                                         /* offset: 0x2000, array step: 0x80 */
+  struct NETC_F3_NUM_SI {                          /* offset: 0x2000, array step: 0x80 */
     __IO uint32_t PSIPMAR0;                          /**< Port station interface 0 primary MAC address register 0..Port station interface 7 primary MAC address register 0, array offset: 0x2000, array step: 0x80 */
     __IO uint32_t PSIPMAR1;                          /**< Port station interface 0 primary MAC address register 1..Port station interface 7 primary MAC address register 1, array offset: 0x2004, array step: 0x80 */
     __IO uint32_t PSIVLANR;                          /**< Port station interface 0 VLAN register..Port station interface 7 VLAN register, array offset: 0x2008, array step: 0x80 */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Spi_Ip.h
-*   
+*
 *
 *   @brief   SPI/DSPI IP driver header file.
 *   @details SPI/DSPI IP driver header file.
@@ -41,9 +41,9 @@ extern "C"{
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION        4
 #define SPI_IP_AR_RELEASE_MINOR_VERSION        7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION     0
-#define SPI_IP_SW_MAJOR_VERSION                1
+#define SPI_IP_SW_MAJOR_VERSION                2
 #define SPI_IP_SW_MINOR_VERSION                0
-#define SPI_IP_SW_PATCH_VERSION                0
+#define SPI_IP_SW_PATCH_VERSION                1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -143,19 +143,17 @@ Spi_Ip_StatusType Spi_Ip_DeInit(uint8 Instance);
 *
 * @implements Spi_Ip_SyncTransmit_Activity
 */
-Spi_Ip_StatusType Spi_Ip_SyncTransmit(
-                                      const Spi_Ip_ExternalDeviceType *ExternalDevice,
+Spi_Ip_StatusType Spi_Ip_SyncTransmit(const Spi_Ip_ExternalDeviceType *ExternalDevice,
                                       const uint8 *TxBuffer,
                                       uint8 *RxBuffer,
                                       uint16 Length,
-                                      uint32 TimeOut
-                                     );
+                                      uint32 TimeOut);
 
 /**
 * @brief            SPI/DSPI asynchronous transmission.
 * @details          This function initializes an asynchronous transfer using the bus parameters provided
 *                   by external device. After Spi_Ip_Init function is called, SPI_IP_POLLING
-*					mode is set as default to change the default mode Spi_Ip_UpdateTransferMode should be called.
+*                    mode is set as default to change the default mode Spi_Ip_UpdateTransferMode should be called.
 *
 * @param[in]        ExternalDevice - pointer to the external device where data is transmitted
 * @param[in]        TxBuffer - pointer to transmit buffer.
@@ -167,13 +165,11 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
 *                   SPI_IP_STATUS_FAIL: Transmission command has not been accepted.
 * @implements Spi_Ip_AsyncTransmit_Activity
 */
-Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
-                                       const Spi_Ip_ExternalDeviceType *ExternalDevice,
+Spi_Ip_StatusType Spi_Ip_AsyncTransmit(const Spi_Ip_ExternalDeviceType *ExternalDevice,
                                        const uint8 *TxBuffer,
                                        uint8 *RxBuffer,
                                        uint16 Length,
-                                       Spi_Ip_CallbackType EndCallback
-                                      );
+                                       Spi_Ip_CallbackType EndCallback);
 
 #if (SPI_IP_DMA_USED == STD_ON)
 #if (SPI_IP_ENABLE_DMAFASTTRANSFER_SUPPORT == STD_ON)
@@ -182,7 +178,7 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
 * @details          This function initializes an asynchronous transmission for multiple transfers session
 *                   and CPU used only for processing at the end of sequence transfer.
 *                   The list of transfers session is composed of an array of fast transfers settings.
-*                   The settings array is defined by the user needs: it contains entries parameters to be configured 
+*                   The settings array is defined by the user needs: it contains entries parameters to be configured
 *                   for each transfer session as defined in Spi_Ip_FastTransferType.
 *
 *    How to use this interface:
@@ -193,20 +189,20 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
 *        b. In each transfer section, the number of data buffer(Length) is NOT higher than 32767 if SpiDataWidth < 9.
 *        c. Only Master mode is supported(SpiPhyUnit/SpiPhyUnitMode = SPI_MASTER).
 *        d. Make sure that SpiPhyUnit/SpiMaxDmaFastTransfer value must NOT lower than total of transfer sessions.
-*        e. Make sure that number of ScatterGathers configuration in SpiPhyUnit/SpiPhyTxCmdDmaChannel must NOT lower than 
+*        e. Make sure that number of ScatterGathers configuration in SpiPhyUnit/SpiPhyTxCmdDmaChannel must NOT lower than
 *        total of transfer sessions plus number of time request CS de-assert(KeepCs = FALSE) at the end of transfer session in the list configured.
 *        f. Make sure that number of ScatterGathers configuration in each SpiPhyUnit/SpiPhyTxDmaChannel, SpiPhyRxDmaChannel must NOT lower than total of transfer sessions.
 *    2. Call the "Spi_Ip_AsyncTransmitFast()" interface.
-*    
+*
 *    Example:
 *        The user shall create the desired configuration list for his specific application.
 *        For example use case:
 *        - Requiring 2 transfers session, keep CS assert at the end of first transfer session.
-*        - Transfer session 1: 
+*        - Transfer session 1:
 *            + Use SpiExternalDevice_0 with SpiCsIdentifier = PCS0, SpiCsContinous = TRUE.
 *            + Send 5 bytes. Tx buffer is "uint8 u8TxBuffer1[5u]={0,1,2,3,4};". Rx buffer is "uint8 u8RxBuffer1[5u];".
 *            + Keep CS assert at the end of this transfer session.
-*        - Transfer session 2: 
+*        - Transfer session 2:
 *            + Use SpiExternalDevice_0 with SpiCsIdentifier = PCS0, SpiCsContinous = TRUE.
 *            + Send 10 bytes with default transmit data value is 5. Tx buffer is NULL_PTR. Rx buffer is "uint8 u8RxBuffer2[10u];".
 *            + This is last transfer session, so CS will not kipped by default at the end of last transfer session.
@@ -238,7 +234,7 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
 *                }
 *            };
 *            Spi_Ip_AsyncTransmitFast(aUserFastTransferCfgList, 2u, &UserCallbackFunc);
-*            
+*
 * @param[in-out]    FastTransferCfg - pointer to the list of transfers section configuration.
 * @param[in]        NumberOfTransfer - number of transfers session in the list is pointed by pFastTransferCfg.
 * @param[in]        EndCallback - callback function is called at the end of sequence transfer.
@@ -247,11 +243,9 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
 *                   SPI_IP_STATUS_FAIL: Transmission command has not been accepted.
 * @implements Spi_Ip_AsyncTransmitFast_Activity
 */
-Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(
-                                       const Spi_Ip_FastTransferType *FastTransferCfg,
-                                       uint8 NumberOfTransfer,
-                                       Spi_Ip_CallbackType EndCallback
-                                      );
+Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(const Spi_Ip_FastTransferType *FastTransferCfg,
+                                           uint8 NumberOfTransfer,
+                                           Spi_Ip_CallbackType EndCallback);
 #endif
 #endif
 
@@ -268,7 +262,7 @@ Spi_Ip_HwStatusType Spi_Ip_GetStatus(uint8 Instance);
 
 /**
 * @brief            Process transfer in POLLING mode.
-* @details          This function shall polls the SPI interrupts linked to SPI peripheral instance allocated to 
+* @details          This function shall polls the SPI interrupts linked to SPI peripheral instance allocated to
 *                   the transmission of data to enable the evolution of transmission state machine.
 *
 * @param[in]        Instance - SPI peripheral instance number.
@@ -277,6 +271,22 @@ Spi_Ip_HwStatusType Spi_Ip_GetStatus(uint8 Instance);
 * @implements Spi_Ip_ManageBuffers_Activity
 */
 void Spi_Ip_ManageBuffers(uint8 Instance);
+
+/**
+* @brief            Adjust transfer based on external conditions
+* @details          Use parameters to improve transfer
+*
+* @param[in]        ExternalDevice - External device where data is transmitted
+* @param[in]        Param - Parameter with adjustments
+*
+* @return           SPI_IP_STATUS_SUCCESS: Setting command has been accepted.
+*                   SPI_IP_STATUS_FAIL: Setting command has not been accepted.
+*/
+Spi_Ip_StatusType Spi_Ip_UpdateTransferParam
+(
+    const Spi_Ip_ExternalDeviceType *ExternalDevice,
+    const Spi_Ip_TransferAdjustmentType *Param
+);
 
 /**
 * @brief            SPI/DSPI change frame size.

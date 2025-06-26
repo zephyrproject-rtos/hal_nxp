@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Irq.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -34,9 +34,9 @@ extern "C"{
 #define CLOCK_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_IRQ_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_IRQ_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_IRQ_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -78,6 +78,10 @@ extern "C"{
 ==================================================================================================*/
 
 /*==================================================================================================
+*                                    LOCAL FUNCTION PROTOTYPES
+==================================================================================================*/
+
+/*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
 
@@ -86,8 +90,21 @@ extern "C"{
 ==================================================================================================*/
 
 /*==================================================================================================
-*                                    LOCAL FUNCTION PROTOTYPES
+*                                    GLOBAL FUNCTION PROTOTYPES
 ==================================================================================================*/
+#define MCU_START_SEC_CODE
+
+#include "Mcu_MemMap.h"
+
+#if CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U
+
+ISR(Mcu_Cmu_ClockFail_IRQHandler);
+
+#endif
+
+#define MCU_STOP_SEC_CODE
+
+#include "Mcu_MemMap.h"
 
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
@@ -114,8 +131,6 @@ ISR(Mcu_Cmu_ClockFail_IRQHandler)
     EXIT_INTERRUPT();
 }
 #endif
-
-
 
 #define MCU_STOP_SEC_CODE
 

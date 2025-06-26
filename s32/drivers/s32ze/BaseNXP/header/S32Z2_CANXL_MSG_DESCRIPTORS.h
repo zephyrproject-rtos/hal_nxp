@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_MSG_DESCRIPTORS.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_MSG_DESCRIPTORS
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,20 +73,20 @@
 
 /** CANXL_MSG_DESCRIPTORS - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x20 */
+  struct CANXL_MSG_DESCRIPTORS_MSGDSC {            /* offset: 0x0, array step: 0x20 */
     union {                                          /* offset: 0x0, array step: 0x20 */
-      __IO uint32_t RXCTRL;                            /**< Message Descriptor Control (In Rx Mode), array offset: 0x0, array step: 0x20 */
+      __IO uint32_t RXCTRL;                            /**< Message Descriptor Control (In Rx Mode), array offset: 0x0, array step: 0x20, valid indices: [1-127] */
     } CTRL;
     union {                                          /* offset: 0x4, array step: 0x20 */
-      __IO uint32_t MDFLT1FD;                          /**< Message Descriptor Filter Configuration 1 (In Rx Mode/In FD Mode), array offset: 0x4, array step: 0x20 */
-      __IO uint32_t MDFLT1XL;                          /**< Message Descriptor Filter Configuration 1 (In Rx Mode/In XL Mode), array offset: 0x4, array step: 0x20 */
+      __IO uint32_t MDFLT1FD;                          /**< Message Descriptor Filter Configuration 1 (In Rx Mode/In FD Mode), array offset: 0x4, array step: 0x20, valid indices: [1-127] */
+      __IO uint32_t MDFLT1XL;                          /**< Message Descriptor Filter Configuration 1 (In Rx Mode/In XL Mode), array offset: 0x4, array step: 0x20, valid indices: [1-127] */
     } CFG1;
     union {                                          /* offset: 0x8, array step: 0x20 */
-      __IO uint32_t MDFLT2FD;                          /**< Message Descriptor Filter Configuration 2 (In Rx Mode/In FD Mode), array offset: 0x8, array step: 0x20 */
-      __IO uint32_t MDFLT2XL;                          /**< Message Descriptor Filter Configuration 2 (In Rx Mode/In XL Mode), array offset: 0x8, array step: 0x20 */
+      __IO uint32_t MDFLT2FD;                          /**< Message Descriptor Filter Configuration 2 (In Rx Mode/In FD Mode), array offset: 0x8, array step: 0x20, valid indices: [1-127] */
+      __IO uint32_t MDFLT2XL;                          /**< Message Descriptor Filter Configuration 2 (In Rx Mode/In XL Mode), array offset: 0x8, array step: 0x20, valid indices: [1-127] */
     } CFG2;
     union {                                          /* offset: 0xC, array step: 0x20 */
-      __IO uint32_t RXLSTPTR;                          /**< Message List Pointer (In Rx Mode), array offset: 0xC, array step: 0x20 */
+      __IO uint32_t RXLSTPTR;                          /**< Message List Pointer (In Rx Mode), array offset: 0xC, array step: 0x20, valid indices: [1-127] */
       __IO uint32_t TXLSTPTR;                          /**< Message List Pointer (In Tx Mode), array offset: 0xC, array step: 0x20 */
     } LSTPNT;
     uint8_t RESERVED_0[16];

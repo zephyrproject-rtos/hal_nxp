@@ -1,0 +1,4 @@
+menu "Board Boot Header"
+    config MCUX_COMPONENT_board.boot_header
+        bool "Use board boot header"
+endmenu

@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file    RegLockMacros.h
 *   
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR BaseNXP - IP module versions.
 *   @details Implements macros for soft and hard lock on CORTEXM hardware platform
@@ -40,9 +40,9 @@ extern "C"{
 #define REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION     4
 #define REGLOCKMACROS_AR_RELEASE_MINOR_VERSION     7
 #define REGLOCKMACROS_AR_RELEASE_REVISION_VERSION  0
-#define REGLOCKMACROS_SW_MAJOR_VERSION             1
+#define REGLOCKMACROS_SW_MAJOR_VERSION             2
 #define REGLOCKMACROS_SW_MINOR_VERSION             0
-#define REGLOCKMACROS_SW_PATCH_VERSION             0
+#define REGLOCKMACROS_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS

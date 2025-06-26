@@ -1,9 +1,8 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 #ifndef CANEXCEL_IP_HWACCESS_H_
 #define CANEXCEL_IP_HWACCESS_H_
 
@@ -37,9 +36,9 @@ extern "C"{
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_H       4
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_H       7
 #define CANEXCEL_IP_HWACCESS_AR_RELEASE_REVISION_VERSION_H    0
-#define CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_H               1
+#define CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_H               2
 #define CANEXCEL_IP_HWACCESS_SW_MINOR_VERSION_H               0
-#define CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_H               0
+#define CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_H               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -51,14 +50,14 @@ extern "C"{
 #if ((CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_H    != CANEXCEL_IP_AR_RELEASE_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_H    != CANEXCEL_IP_AR_RELEASE_MINOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_AR_RELEASE_REVISION_VERSION_H != CANEXCEL_IP_AR_RELEASE_REVISION_VERSION_H) \
-    )
+)
     #error "AutoSar Version Numbers of CanEXCEL_Ip_HwAccess.h and CanEXCEL_Ip.h are different"
 #endif
 /* Check if current file and CanEXCEL_Ip.h are of the same Software version */
 #if ((CANEXCEL_IP_HWACCESS_SW_MAJOR_VERSION_H != CANEXCEL_IP_SW_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_SW_MINOR_VERSION_H != CANEXCEL_IP_SW_MINOR_VERSION_H) || \
      (CANEXCEL_IP_HWACCESS_SW_PATCH_VERSION_H != CANEXCEL_IP_SW_PATCH_VERSION_H) \
-    )
+)
     #error "Software Version Numbers of CanEXCEL_Ip_HwAccess.h and CanEXCEL_Ip.h are different"
 #endif
 
@@ -66,15 +65,15 @@ extern "C"{
     /* Check if current file and Mcal.h header file are of the same version */
     #if ((CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_H != MCAL_AR_RELEASE_MAJOR_VERSION) || \
         (CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_H != MCAL_AR_RELEASE_MINOR_VERSION) \
-        )
+)
         #error "Software Version Numbers of CanEXCEL_Ip_HwAccess.h and Mcal.h are different"
     #endif
-    
+
     #if (CANEXCEL_IP_DEV_ERROR_DETECT == STD_ON)
         /* Check if current file and Devassert.h header file are of the same version */
         #if ((CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_H != DEVASSERT_AR_RELEASE_MAJOR_VERSION) || \
             (CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_H != DEVASSERT_AR_RELEASE_MINOR_VERSION) \
-            )
+   )
             #error "Software Version Numbers of CanEXCEL_Ip_HwAccess.h and Devassert.h are different"
         #endif
     #endif
@@ -82,7 +81,7 @@ extern "C"{
     /* Check if current file and SchM_Can_43_CANEXCEL.h header file are of the same version */
     #if ((CANEXCEL_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION_H    !=  SCHM_CAN_43_CANEXCEL_AR_RELEASE_MAJOR_VERSION) || \
         (CANEXCEL_IP_HWACCESS_AR_RELEASE_MINOR_VERSION_H     !=  SCHM_CAN_43_CANEXCEL_AR_RELEASE_MINOR_VERSION) \
-        )
+)
         #error "AUTOSAR Version Numbers of CanEXCEL_Ip_HwAccess.c and SchM_Can_43_CANEXCEL.h are different"
     #endif
 #endif
@@ -139,6 +138,7 @@ extern "C"{
 #define CANXL_MRU_CMD_READ_ST                                     0x5u
 #define CANXL_MRU_CMD_READ_TDCS                                   0x6u
 #define CANXL_MRU_CMD_WRITE_TDCS                                  0x7u
+#define CANXL_MRU_CMD_LAST_ST                                     0x8u
 
 #define BCANXL_EC_TEC_MASK                                        (0xFF00u)
 #define BCANXL_EC_TEC_SHIFT                                       (8u)
@@ -174,12 +174,15 @@ typedef enum
     CANXL_INT_MD_OVER     = CANXL_SIC_SYSIE_CMDOERRIE_MASK,    /*!< MD Overrun Error Interrupt */
     CANXL_INT_LOM         = CANXL_SIC_SYSIE_CLSERRIE_MASK,     /*!< LOM State Error Interrupt */
     CANXL_INT_RXFIFO_OVER = CANXL_SIC_SYSIE_CRFOERRIR_MASK,    /*!< RX FIFO Overflow Interrupt */
-    CANXL_INT_TXFIFO_UNDER= CANXL_SIC_SYSIE_CTFOERRIR_MASK     /*!< TX FIFO Underflow Interrupt */
+    CANXL_INT_TXFIFO_UNDER= CANXL_SIC_SYSIE_CTFUERRIR_MASK     /*!< TX FIFO Underflow Interrupt */
 } canxl_int_type_t;
 
 /*==================================================================================================
 *                                    FUNCTION PROTOTYPES
 ==================================================================================================*/
+#define CAN_43_CANEXCEL_START_SEC_CODE
+#include "Can_43_CANEXCEL_MemMap.h"
+
  /*!
  * @brief Set the Message Descriptors Queue Depths and WaterMark Levels
  *
@@ -285,7 +288,7 @@ Canexcel_Ip_StatusType CanXL_ExitFreezeMode(CANXL_SIC_Type * base);
  */
 Canexcel_Ip_StatusType CanXL_ConfigCtrlOptions(CANXL_SIC_Type * base, uint32 u32Options);
  /*!
- * @brief Disable config Interrupts on HW 
+ * @brief Disable config Interrupts on HW
  *
  * @param   base        The CanXL SIC base address
  */
@@ -319,36 +322,7 @@ static inline void CanXL_SetTimeStampCaputre(CANXL_SIC_Type * base, Canexcel_Ip_
     base->BCFG2 |= CANXL_SIC_BCFG2_TSCAP(type);
 }
 #endif /* (CANEXCEL_IP_HAS_TS_ENABLE == STD_ON) */
- /*!
- * @brief Set the corresponding Message Descriptor interrupt
- *
- * @param   base        The CanXL MSG Grup Control base address
- * @param   mb_idx      Index of the message descriptor
- */
-static inline void CanXL_SetMsgBuffIntCmd(CANXL_GRP_CONTROL_Type * base, uint32 msgBuffIdx)
-{
-    uint8 ImaskCnt = (uint8)(msgBuffIdx/32U) ;
-    /* Enable the corresponding message buffer Interrupt */
-    uint32 temp = 1UL << (msgBuffIdx % 32U);
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_04();
-    base->MSGIMASK[ImaskCnt] |= temp;
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_04();
-}
- /*!
- * @brief Disable the corresponding Message Descriptor interrupt
- *
- * @param   base        The CanXL MSG Grup Control base address
- * @param   mb_idx      Index of the message descriptor
- */
-static inline void CanXL_ClearMsgBuffIntCmd(CANXL_GRP_CONTROL_Type * base, uint32 mb_idx )
-{
-    uint8 ImaskCnt = (uint8)(mb_idx/32U) ;
-    /* Enable the corresponding message buffer Interrupt */
-    uint32 temp = 1UL << (mb_idx % 32U);
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_13();
-    base->MSGIMASK[ImaskCnt] &= (~temp);
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_13();
-}
+
 
 /*!
  * @brief Clears the interrupt flag of the message descriptor.
@@ -391,11 +365,9 @@ static inline uint8 CanXL_GetMsgBuffIntStatusFlag(const CANXL_GRP_CONTROL_Type *
     uint32 mask;
     uint8 ImaskCnt = (uint8)(msgBuffIdx/32U);
 
-    if (msgBuffIdx < 32U)
-    {
-        mask = base->MSGIMASK[ImaskCnt];
-        flag = (uint8)(((base->MSGIFLAG[ImaskCnt] & mask) >> (msgBuffIdx % 32U)) & 1U);
-    }
+    mask = base->MSGIMASK[ImaskCnt];
+    flag = (uint8)(((base->MSGIFLAG[ImaskCnt] & mask) >> (msgBuffIdx % 32U)) & 1U);
+
     return flag;
 }
 
@@ -408,7 +380,7 @@ static inline uint8 CanXL_GetMsgBuffIntStatusFlag(const CANXL_GRP_CONTROL_Type *
  */
 static inline boolean CanXL_IsFreezeMode(const CANXL_SIC_Type * base)
 {
-    return ( ( ( (base->SYSMC &  CANXL_SIC_SYSMC_FRZREQ_MASK) & (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK) ) != 0U )? TRUE : FALSE);
+    return ((((base->SYSMC &  CANXL_SIC_SYSMC_FRZREQ_MASK) & (base->SYSS & CANXL_SIC_SYSS_FRZACKF_MASK)) != 0U)? TRUE : FALSE);
 }
 
 /*!
@@ -439,13 +411,13 @@ static inline boolean CanXL_IsXLModeEnabled(const CANXL_SIC_Type * base)
  *
  * @param   base  The CanEXCEL base address
  * @param   descNo  Index of the message descriptor
- * @return  The drescriptor state based on states 
+ * @return  The drescriptor state based on states
  * enumerated by Canexcel_Ip_DescState type
  */
 static inline Canexcel_Ip_DescState CanXL_GetDesciptorState(const CANXL_DSC_CONTROL_Type * base, uint8 descNo)
 {
     Canexcel_Ip_DescState retval;
-    switch (base->DSCMBCTRLAR[descNo].STA.DCSTA & CANXL_DSC_CONTROL_DCSTA_STATE_MASK)
+    switch (base->DSCMBCTRLAR[descNo].DCSTA & CANXL_DSC_CONTROL_DCSTA_STATE_MASK)
     {
         case 0u:
             retval = CANEXCEL_DESC_STATE_INACTIVE;
@@ -474,7 +446,7 @@ static inline Canexcel_Ip_DescState CanXL_GetDesciptorState(const CANXL_DSC_CONT
  */
 static inline uint8 CanXL_GetDesciptorHWIndex(const CANXL_DSC_CONTROL_Type * base, uint8 descNo)
 {
-    return (uint8)((base->DSCMBCTRLAR[descNo].STA.DCSTA & CANXL_DSC_CONTROL_DCSTA_HWPOINTER_MASK) >> CANXL_DSC_CONTROL_DCSTA_HWPOINTER_SHIFT);
+    return (uint8)((base->DSCMBCTRLAR[descNo].DCSTA & CANXL_DSC_CONTROL_DCSTA_HWPOINTER_MASK) >> CANXL_DSC_CONTROL_DCSTA_HWPOINTER_SHIFT);
 }
 /*!
  * @brief Return Descriptor Status of System Index
@@ -485,7 +457,7 @@ static inline uint8 CanXL_GetDesciptorHWIndex(const CANXL_DSC_CONTROL_Type * bas
  */
  static inline uint8 CanXL_GetDesciptorSysIndex(const CANXL_DSC_CONTROL_Type * base, uint8 descNo)
 {
-    return (uint8)((base->DSCMBCTRLAR[descNo].STA.DCSTA & CANXL_DSC_CONTROL_DCSTA_SYSPOINTER_MASK) >> CANXL_DSC_CONTROL_DCSTA_SYSPOINTER_SHIFT);
+    return (uint8)((base->DSCMBCTRLAR[descNo].DCSTA & CANXL_DSC_CONTROL_DCSTA_SYSPOINTER_MASK) >> CANXL_DSC_CONTROL_DCSTA_SYSPOINTER_SHIFT);
 }
 /*!
  * @brief Enables/Disables the Self Reception feature.
@@ -512,55 +484,6 @@ static inline boolean CanXL_IsListenOnlyModeEnabled(const CANXL_SIC_Type * base)
     return (((base->BCFG2 & (CANXL_SIC_BCFG2_LOM_MASK)) != 0U) ? TRUE : FALSE);
 }
 
-/*!
- * @brief Enables/Disables Listen Only Mode
- *
- * @param   base    The CanXL SIC base address
- * @param   enable  TRUE to enable; FALSE to disable
- */
-static inline void CanXL_SetListenOnlyMode(CANXL_SIC_Type * base, boolean enable)
-{
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_05();
-    base->BCFG2 = (base->BCFG2 & ~CANXL_SIC_BCFG2_LOM_MASK) | CANXL_SIC_BCFG2_LOM(enable ? 1UL : 0UL);
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_05();
-}
-
-/*!
- * @brief Enables/Disables Flexible Data rate (if supported).
- *
- * @param   base    The CanXL SIC base address
- * @param   enable  TRUE to enable; FALSE to disable
- */
-static inline void CanXL_SetFDEnabled(CANXL_SIC_Type * base,
-                                        boolean enableFD,
-                                        boolean enableBRS
-                                       )
-{
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_00();
-    base->BCFG2 = (base->BCFG2 & ~CANXL_SIC_BCFG2_FDEN_MASK) | CANXL_SIC_BCFG2_FDEN(enableFD ? 1UL : 0UL);
-    /* Enable BitRate Switch support */
-    base->BCFG1 = (base->BCFG1 & ~CANXL_SIC_BCFG1_FDRSDIS_MASK) | CANXL_SIC_BCFG1_FDRSDIS(enableBRS ? 0UL : 1UL);
-    /* Disable Transmission Delay Compensation by default */
-    base->BTDCC &= ~(CANXL_SIC_BTDCC_FTDCEN_MASK | CANXL_SIC_BTDCC_FTDCOFF_MASK);
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_00();
-}
-
-/*!
- * @brief Enables/Disables XL Frame Support
- *
- * @param   base    The CanXL SIC base address
- * @param   enable  TRUE to enable; FALSE to disable
- */
-static inline void CanXL_SetXLEnable(CANXL_SIC_Type * base,
-                                     boolean enableXL
-                                    )
-{
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_14();
-    base->BCFG2 = (base->BCFG2 & ~CANXL_SIC_BCFG2_XLEN_MASK) | CANXL_SIC_BCFG2_XLEN(enableXL ? 1UL : 0UL);
-    /* Disable Transmission Delay Compensation by default */
-    base->BTDCC &= ~(CANXL_SIC_BTDCC_XTDCEN_MASK | CANXL_SIC_BTDCC_XTDCOFF_MASK);
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_14();
-}
 
 /*!
  * @brief Sets the CanEXCEL FD time segments for setting up data bit rate.
@@ -578,7 +501,7 @@ DevAssert(timeSeg != NULL_PTR);
 (base->BFDCBT) = (CANXL_SIC_BFDCBT_FTSEG1(timeSeg->phaseSeg1 + timeSeg->propSeg) |
                   CANXL_SIC_BFDCBT_FTSEG2(timeSeg->phaseSeg2) |
                   CANXL_SIC_BFDCBT_FRJW(timeSeg->rJumpwidth)
-                );
+       );
 }
 
 /*!
@@ -597,7 +520,7 @@ DevAssert(timeSeg != NULL_PTR);
 (base->BXDCBT) = (CANXL_SIC_BXDCBT_XTSEG1(timeSeg->phaseSeg1 + timeSeg->propSeg) |
                   CANXL_SIC_BXDCBT_XTSEG2(timeSeg->phaseSeg2) |
                   CANXL_SIC_BXDCBT_XRJW(timeSeg->rJumpwidth)
-                );
+       );
 }
 
 /*!
@@ -615,35 +538,13 @@ DevAssert(timeSeg != NULL_PTR);
 (base->BBPRS) = 0U;
 
 (base->BBPRS) = CANXL_SIC_BBPRS_PRESDIV(timeSeg->preDivider);
-(base->BNCBT) = ( CANXL_SIC_BNCBT_NTSEG1(timeSeg->phaseSeg1 + timeSeg->propSeg) |
+(base->BNCBT) = (CANXL_SIC_BNCBT_NTSEG1(timeSeg->phaseSeg1 + timeSeg->propSeg) |
                   CANXL_SIC_BNCBT_NTSEG2(timeSeg->phaseSeg2) |
                   CANXL_SIC_BNCBT_NRJW(timeSeg->rJumpwidth)
-                );
+       );
 }
 
-/*!
- * @brief Enable/disable TDC and TDCM and TDC offset for FD phase
- *
- */
-static inline void CanXL_SetTDCOffsetFD(CANXL_SIC_Type * base, boolean TDCEnable, boolean TDCMEnable, uint8 Offset)
-{
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_10();
-    base->BTDCC &= ~(CANXL_SIC_BTDCC_FTDCEN_MASK | CANXL_SIC_BTDCC_FTDMDIS_MASK | CANXL_SIC_BTDCC_FTDCOFF_MASK);
-    base->BTDCC |= (CANXL_SIC_BTDCC_FTDCEN(TDCEnable ? 1UL : 0UL) | CANXL_SIC_BTDCC_FTDMDIS(TDCMEnable ? 1UL : 0UL) | CANXL_SIC_BTDCC_FTDCOFF(Offset));
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_10();
-}
 
-/*!
- * @brief Enable/disable TDC and TDCM and TDC offset for XL phase
- *
- */
-static inline void CanXL_SetTDCOffsetXL(CANXL_SIC_Type * base, boolean TDCEnable, boolean TDCMEnable, uint8 Offset)
-{
-    SchM_Enter_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_11();
-    base->BTDCC &= ~(CANXL_SIC_BTDCC_XTDCEN_MASK | CANXL_SIC_BTDCC_XTDMDIS_MASK | CANXL_SIC_BTDCC_XTDCOFF_MASK);
-    base->BTDCC |= (CANXL_SIC_BTDCC_XTDCEN(TDCEnable ? 1UL : 0UL) | CANXL_SIC_BTDCC_XTDMDIS(TDCMEnable ? 1UL : 0UL) | CANXL_SIC_BTDCC_XTDCOFF(Offset));
-    SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_11();
-}
 /*!
  * @brief Enables/Disables Error Response
  *
@@ -683,7 +584,7 @@ static inline boolean CanXL_IsPwmModeEnable(const CANXL_SIC_Type * Base)
 static inline void CanXL_SetPWMPhases(CANXL_SIC_Type * Base, uint8 PWMS, uint8 PWML, uint8 PWMO)
 {
     Base->BMICI &= ~(CANXL_SIC_BMICI_PWMS_MASK | CANXL_SIC_BMICI_PWML_MASK | CANXL_SIC_BMICI_PWMO_MASK);
-    Base->BMICI |= (CANXL_SIC_BMICI_PWMS(PWMS) | CANXL_SIC_BMICI_PWML(PWML) | CANXL_SIC_BMICI_PWMO(PWMO)); 
+    Base->BMICI |= (CANXL_SIC_BMICI_PWMS(PWMS) | CANXL_SIC_BMICI_PWML(PWML) | CANXL_SIC_BMICI_PWMO(PWMO));
 }
 
 
@@ -848,6 +749,30 @@ void CanXL_ConfigSDURejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const C
  * @param   filtIdx  Filter Position in the Bank
  */
 void CanXL_ConfigVCANRejectBank(CANXL_FILTER_BANK_Type * base, uint8 bank,const Canexcel_Ip_RxFifoFilterSDU_CAN * filter, uint8 filtIdx);
+
+ /*!
+ * @brief IrqHandler for Rx\Tx and RxFIFO
+ *
+ * @param   instance The CanXL Instance Number
+ */
+void Canexcel_Ip_RxTxIRQHandler(uint8 instance);
+
+ /*!
+ * @brief IrqHandler for MRU service unit
+ *
+ * @param   instance The CanXL Instance Number
+ */
+void Canexcel_Ip_MruIRQHandler(uint8 instance);
+
+ /*!
+ * @brief IrqHandler for Errors
+ *
+ * @param   instance The CanXL Instance Number
+ */
+void Canexcel_Ip_ErrIRQHandler(uint8 instance);
+
+#define CAN_43_CANEXCEL_STOP_SEC_CODE
+#include "Can_43_CANEXCEL_MemMap.h"
 
 #ifdef __cplusplus
 }

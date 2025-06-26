@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CTU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CTU
  *
  * This file contains register definitions and macros for easy access to their
@@ -86,7 +86,7 @@ typedef struct {
   __IO uint32_t CLCR2;                             /**< Commands List Control Register 2, offset: 0x20 */
   __IO uint32_t THCR1;                             /**< Trigger Handler Control Register 1, offset: 0x24 */
   __IO uint32_t THCR2;                             /**< Trigger Handler Control Register 2, offset: 0x28 */
-  union {                                          /* offset: 0x2C, array step: 0x2 */
+  union {                                          /* offset: 0x2C */
     __IO uint16_t A[CTU_CLR_COUNT];                  /**< Commands List Register A for ADC single-conversion mode commands, array offset: 0x2C, array step: 0x2 */
     __IO uint16_t B[CTU_CLR_COUNT];                  /**< Command List Register B for ADC dual-conversion mode commands, array offset: 0x2C, array step: 0x2 */
   } CLR;

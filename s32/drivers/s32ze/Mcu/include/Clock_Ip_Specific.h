@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_Specific.h
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK IP specific header file.
 *   @details CLOCK IP specific header file.
@@ -48,9 +48,9 @@ extern "C"{
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION                1
+#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION                2
 #define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION                0
-#define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION                0
+#define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION                1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
@@ -131,7 +131,7 @@ extern "C"{
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 
-#define CLOCK_IP_ALL_CALLBACKS_COUNT                                                   11U
+#define CLOCK_IP_ALL_CALLBACKS_COUNT                                                   12U
 #define CLOCK_IP_TRIGGER_VALUE               0xFFFFFFFFU              /* Trigger value. */
 
 #define CLOCK_IP_NUMBER_OF_HARDWARE_DFS                                                12U
@@ -140,7 +140,7 @@ extern "C"{
 #define DFS_PORTSR_PORTSTAT_MASK                  (DFS_PORTSR_PORTSTAT5_MASK | DFS_PORTSR_PORTSTAT4_MASK | DFS_PORTSR_PORTSTAT3_MASK | DFS_PORTSR_PORTSTAT2_MASK | DFS_PORTSR_PORTSTAT1_MASK | DFS_PORTSR_PORTSTAT0_MASK)
 #define DFS_PORTSR_PORTSTAT_SHIFT                 (DFS_PORTSR_PORTSTAT0_SHIFT)
 
-#define MC_ME_AE_TRANSITION_IS_ON_GOING            MC_ME_AE_GS_S_MTRANS_MASK
+#define CLOCK_IP_MC_ME_AE_TRANSITION_IS_ON_GOING            MC_ME_AE_GS_S_MTRANS_MASK
 
 #define CLOCK_IP_MC_CGM_MUX_MUX_DIV_COUNT                  11u
 #define CLOCK_IP_MC_CGM_PCFS_COUNT                         64u
@@ -366,6 +366,20 @@ extern const uint16 Clock_Ip_au16SelectorEntryAeHardwareValue[CLOCK_IP_FEATURE_N
 
 void Clock_Ip_McMeEnterKey(void);
 
+#if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK))
+void Clock_Ip_SpecificSetUserAccessAllowed(void);
+    #endif /* (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)) */
+  #endif
+#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
+
+#ifdef CLOCK_IP_HAS_RAM_WAIT_STATES
+void Clock_Ip_SRAMControllerSetRamIWS(uint32 SmuM33CoreClk_IwsSetting,
+                                      uint32 Rtu0CoreClk_IwsSetting,
+                                      uint32 Rtu1CoreClk_IwsSetting,
+                                      uint32 CeM33CoreClk_IwsSetting);
+#endif
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 

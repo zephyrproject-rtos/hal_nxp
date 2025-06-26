@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Spi_Ip_TrustedFunctions.h
-*   
+*
 *
 *   @brief   SPI IP driver header file.
 *   @details SPI IP driver header file.
@@ -37,9 +37,9 @@ extern "C"{
 #define SPI_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION        4
 #define SPI_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        7
 #define SPI_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION     0
-#define SPI_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                1
+#define SPI_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                2
 #define SPI_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                0
-#define SPI_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                0
+#define SPI_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/

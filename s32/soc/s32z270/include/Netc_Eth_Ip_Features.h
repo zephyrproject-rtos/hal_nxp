@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,9 +33,9 @@ extern "C"
 #define NETC_ETH_IP_FEATURES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_FEATURES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_FEATURES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_FEATURES_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_FEATURES_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_FEATURES_SW_MINOR_VERSION             0
-#define NETC_ETH_IP_FEATURES_SW_PATCH_VERSION             0
+#define NETC_ETH_IP_FEATURES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -58,8 +58,9 @@ extern "C"
 #define FEATURE_NETC_ETH_NUMBER_OF_CTRLS            (8)
 
 #define FEATURE_NETC_NUMBER_OF_FUNC            (4U)
+
 /** @brief Index of the physical SI. */
-#define NETC_ETH_IP_PSI_INDEX                       (0U)
+#define NETC_ETH_IP_PSI_INDEX                       (uint8)(0U)
 
 /** @brief Alignment for buffer descriptor. */
 #define FEATURE_NETC_BUFFDESCR_ALIGNMENT_BYTES      (128U)
@@ -67,8 +68,8 @@ extern "C"
 /** @brief Alignment for buffer. */
 #define FEATURE_NETC_BUFF_ALIGNMENT_BYTES           (64U)
 
-/** @brief Alignment value for virtual station interface message send. */
-#define FEATURE_NETC_ETH_VSI_MSG_ALIGNMENT          (64U)
+/** @brief Custom tag size. */
+#define FEATURE_NETC_ETH_CUSTOM_TAG_SIZE            (64U)
 
 /* TODO: Generate this from configuration. From all VSs take the bigger value. */
 /** @brief Number of RX BDR used.*/
@@ -108,7 +109,13 @@ extern "C"
 
 #define NETC_ETH_IP_TIME_GATE_SCHEDULING_TABLE_ID   (5U)     /*!< Time Gate Scheduling table id */
 #define NETC_ETH_IP_RATE_POLICER_TABLE_ID           (10U)    /*!< Rate Policer table id */
+#define NETC_ETH_IP_INGRESS_STREAM_IDEN_TABLE_ID    (30U)    /*!< Ingress Stream Identification table id */
 #define NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID    (13U)    /*!< Ingress Port Filter table id */
+#define NETC_ETH_IP_STREAM_GATE_INSTANCE_TABLE_ID   (36U)    /*!< Stream Gate Instance table id */
+#define NETC_ETH_IP_STREAM_GATE_CTRL_LIST_TABLE_ID  (37U)    /*!< Stream Gate Control List table id */
+#define NETC_ETH_IP_INGRESS_STREAM_TABLE_ID         (31U)    /*!< Ingress Stream table id */
+#define NETC_ETH_IP_BD_NULL_ENTRY_ID                (0xFFFFFFFFUL)       /*!< BD null entry */
+#define NETC_ETH_IP_BD_ZERO_ENTRY_ID                (0x00000000UL)       /*!< BD null entry */
 
 /*! @brief Generate the type of cache IP on the platform used for the cacheable buffers feature */
 #define FEATURE_NETC_CACHABLE_BUFFERS_LMEM      (0U)

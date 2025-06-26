@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_LINFLEXD.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_LINFLEXD
  *
  * This file contains register definitions and macros for easy access to their
@@ -71,27 +71,27 @@
 /** LINFLEXD - Register Layout Typedef */
 typedef struct {
   __IO uint32_t LINCR1;                            /**< LIN Control Register 1, offset: 0x0 */
-  __IO uint32_t LINIER;                            /**< LIN Interrupt Enable Register, offset: 0x4 */
-  __IO uint32_t LINSR;                             /**< LIN Status Register, offset: 0x8 */
-  __IO uint32_t LINESR;                            /**< LIN Error Status Register, offset: 0xC */
-  __IO uint32_t UARTCR;                            /**< UART Mode Control Register, offset: 0x10 */
-  __IO uint32_t UARTSR;                            /**< UART Mode Status Register, offset: 0x14 */
-  __IO uint32_t LINTCSR;                           /**< LIN Time-Out Control Status Register, offset: 0x18 */
-  __IO uint32_t LINOCR;                            /**< LIN Output Compare Register, offset: 0x1C */
-  __IO uint32_t LINTOCR;                           /**< LIN Time-Out Control Register, offset: 0x20 */
-  __IO uint32_t LINFBRR;                           /**< LIN Fractional Baud Rate Register, offset: 0x24 */
-  __IO uint32_t LINIBRR;                           /**< LIN Integer Baud Rate Register, offset: 0x28 */
-  __IO uint32_t LINCFR;                            /**< LIN Checksum Field Register, offset: 0x2C */
+  __IO uint32_t LINIER;                            /**< LIN Interrupt Enable, offset: 0x4 */
+  __IO uint32_t LINSR;                             /**< LIN Status, offset: 0x8 */
+  __IO uint32_t LINESR;                            /**< LIN Error Status, offset: 0xC */
+  __IO uint32_t UARTCR;                            /**< UART Mode Control, offset: 0x10 */
+  __IO uint32_t UARTSR;                            /**< UART Mode Status, offset: 0x14 */
+  __IO uint32_t LINTCSR;                           /**< LIN Time-Out Control Status, offset: 0x18 */
+  __IO uint32_t LINOCR;                            /**< LIN Output Compare, offset: 0x1C */
+  __IO uint32_t LINTOCR;                           /**< LIN Time-Out Control, offset: 0x20 */
+  __IO uint32_t LINFBRR;                           /**< LIN Fractional Baud Rate, offset: 0x24 */
+  __IO uint32_t LINIBRR;                           /**< LIN Integer Baud Rate, offset: 0x28 */
+  __IO uint32_t LINCFR;                            /**< LIN Checksum Field, offset: 0x2C */
   __IO uint32_t LINCR2;                            /**< LIN Control Register 2, offset: 0x30 */
-  __IO uint32_t BIDR;                              /**< Buffer Identifier Register, offset: 0x34 */
+  __IO uint32_t BIDR;                              /**< Buffer Identifier, offset: 0x34 */
   __IO uint32_t BDRL;                              /**< Buffer Data Register Least Significant, offset: 0x38 */
   __IO uint32_t BDRM;                              /**< Buffer Data Register Most Significant, offset: 0x3C */
   uint8_t RESERVED_0[12];
-  __IO uint32_t GCR;                               /**< Global Control Register, offset: 0x4C */
-  __IO uint32_t UARTPTO;                           /**< UART Preset Timeout Register, offset: 0x50 */
-  __I  uint32_t UARTCTO;                           /**< UART Current Timeout Register, offset: 0x54 */
-  __IO uint32_t DMATXE;                            /**< DMA Tx Enable Register, offset: 0x58 */
-  __IO uint32_t DMARXE;                            /**< DMA Rx Enable Register, offset: 0x5C */
+  __IO uint32_t GCR;                               /**< Global Control, offset: 0x4C */
+  __IO uint32_t UARTPTO;                           /**< UART Preset Timeout, offset: 0x50 */
+  __I  uint32_t UARTCTO;                           /**< UART Current Timeout, offset: 0x54 */
+  __IO uint32_t DMATXE;                            /**< DMA Tx Enable, offset: 0x58 */
+  __IO uint32_t DMARXE;                            /**< DMA Rx Enable, offset: 0x5C */
 } LINFLEXD_Type, *LINFLEXD_MemMapPtr;
 
 /** Number of instances of the LINFLEXD module. */
@@ -223,7 +223,7 @@ typedef struct {
 #define LINFLEXD_LINCR1_NLSE(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINCR1_NLSE_SHIFT)) & LINFLEXD_LINCR1_NLSE_MASK)
 /*! @} */
 
-/*! @name LINIER - LIN Interrupt Enable Register */
+/*! @name LINIER - LIN Interrupt Enable */
 /*! @{ */
 
 #define LINFLEXD_LINIER_HRIE_MASK                (0x1U)
@@ -292,7 +292,7 @@ typedef struct {
 #define LINFLEXD_LINIER_SZIE(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINIER_SZIE_SHIFT)) & LINFLEXD_LINIER_SZIE_MASK)
 /*! @} */
 
-/*! @name LINSR - LIN Status Register */
+/*! @name LINSR - LIN Status */
 /*! @{ */
 
 #define LINFLEXD_LINSR_HRF_MASK                  (0x1U)
@@ -346,7 +346,7 @@ typedef struct {
 #define LINFLEXD_LINSR_RDC(x)                    (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINSR_RDC_SHIFT)) & LINFLEXD_LINSR_RDC_MASK)
 /*! @} */
 
-/*! @name LINESR - LIN Error Status Register */
+/*! @name LINESR - LIN Error Status */
 /*! @{ */
 
 #define LINFLEXD_LINESR_NF_MASK                  (0x1U)
@@ -400,7 +400,7 @@ typedef struct {
 #define LINFLEXD_LINESR_SZF(x)                   (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINESR_SZF_SHIFT)) & LINFLEXD_LINESR_SZF_MASK)
 /*! @} */
 
-/*! @name UARTCR - UART Mode Control Register */
+/*! @name UARTCR - UART Mode Control */
 /*! @{ */
 
 #define LINFLEXD_UARTCR_UART_MASK                (0x1U)
@@ -504,7 +504,7 @@ typedef struct {
 #define LINFLEXD_UARTCR_MIS(x)                   (((uint32_t)(((uint32_t)(x)) << LINFLEXD_UARTCR_MIS_SHIFT)) & LINFLEXD_UARTCR_MIS_MASK)
 /*! @} */
 
-/*! @name UARTSR - UART Mode Status Register */
+/*! @name UARTSR - UART Mode Status */
 /*! @{ */
 
 #define LINFLEXD_UARTSR_NF_MASK                  (0x1U)
@@ -573,7 +573,7 @@ typedef struct {
 #define LINFLEXD_UARTSR_SZF(x)                   (((uint32_t)(((uint32_t)(x)) << LINFLEXD_UARTSR_SZF_SHIFT)) & LINFLEXD_UARTSR_SZF_MASK)
 /*! @} */
 
-/*! @name LINTCSR - LIN Time-Out Control Status Register */
+/*! @name LINTCSR - LIN Time-Out Control Status */
 /*! @{ */
 
 #define LINFLEXD_LINTCSR_CNT_MASK                (0xFFU)
@@ -597,7 +597,7 @@ typedef struct {
 #define LINFLEXD_LINTCSR_MODE(x)                 (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINTCSR_MODE_SHIFT)) & LINFLEXD_LINTCSR_MODE_MASK)
 /*! @} */
 
-/*! @name LINOCR - LIN Output Compare Register */
+/*! @name LINOCR - LIN Output Compare */
 /*! @{ */
 
 #define LINFLEXD_LINOCR_OC1_MASK                 (0xFFU)
@@ -611,7 +611,7 @@ typedef struct {
 #define LINFLEXD_LINOCR_OC2(x)                   (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINOCR_OC2_SHIFT)) & LINFLEXD_LINOCR_OC2_MASK)
 /*! @} */
 
-/*! @name LINTOCR - LIN Time-Out Control Register */
+/*! @name LINTOCR - LIN Time-Out Control */
 /*! @{ */
 
 #define LINFLEXD_LINTOCR_HTO_MASK                (0x7FU)
@@ -625,7 +625,7 @@ typedef struct {
 #define LINFLEXD_LINTOCR_RTO(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINTOCR_RTO_SHIFT)) & LINFLEXD_LINTOCR_RTO_MASK)
 /*! @} */
 
-/*! @name LINFBRR - LIN Fractional Baud Rate Register */
+/*! @name LINFBRR - LIN Fractional Baud Rate */
 /*! @{ */
 
 #define LINFLEXD_LINFBRR_FBR_MASK                (0xFU)
@@ -634,7 +634,7 @@ typedef struct {
 #define LINFLEXD_LINFBRR_FBR(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINFBRR_FBR_SHIFT)) & LINFLEXD_LINFBRR_FBR_MASK)
 /*! @} */
 
-/*! @name LINIBRR - LIN Integer Baud Rate Register */
+/*! @name LINIBRR - LIN Integer Baud Rate */
 /*! @{ */
 
 #define LINFLEXD_LINIBRR_IBR_MASK                (0xFFFFFU)
@@ -643,7 +643,7 @@ typedef struct {
 #define LINFLEXD_LINIBRR_IBR(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINIBRR_IBR_SHIFT)) & LINFLEXD_LINIBRR_IBR_MASK)
 /*! @} */
 
-/*! @name LINCFR - LIN Checksum Field Register */
+/*! @name LINCFR - LIN Checksum Field */
 /*! @{ */
 
 #define LINFLEXD_LINCFR_CF_MASK                  (0xFFU)
@@ -696,7 +696,7 @@ typedef struct {
 #define LINFLEXD_LINCR2_TBDE(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_LINCR2_TBDE_SHIFT)) & LINFLEXD_LINCR2_TBDE_MASK)
 /*! @} */
 
-/*! @name BIDR - Buffer Identifier Register */
+/*! @name BIDR - Buffer Identifier */
 /*! @{ */
 
 #define LINFLEXD_BIDR_ID_MASK                    (0x3FU)
@@ -768,7 +768,7 @@ typedef struct {
 #define LINFLEXD_BDRM_DATA7(x)                   (((uint32_t)(((uint32_t)(x)) << LINFLEXD_BDRM_DATA7_SHIFT)) & LINFLEXD_BDRM_DATA7_MASK)
 /*! @} */
 
-/*! @name GCR - Global Control Register */
+/*! @name GCR - Global Control */
 /*! @{ */
 
 #define LINFLEXD_GCR_SR_MASK                     (0x1U)
@@ -802,7 +802,7 @@ typedef struct {
 #define LINFLEXD_GCR_TDFBM(x)                    (((uint32_t)(((uint32_t)(x)) << LINFLEXD_GCR_TDFBM_SHIFT)) & LINFLEXD_GCR_TDFBM_MASK)
 /*! @} */
 
-/*! @name UARTPTO - UART Preset Timeout Register */
+/*! @name UARTPTO - UART Preset Timeout */
 /*! @{ */
 
 #define LINFLEXD_UARTPTO_PTO_MASK                (0xFFFU)
@@ -811,7 +811,7 @@ typedef struct {
 #define LINFLEXD_UARTPTO_PTO(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_UARTPTO_PTO_SHIFT)) & LINFLEXD_UARTPTO_PTO_MASK)
 /*! @} */
 
-/*! @name UARTCTO - UART Current Timeout Register */
+/*! @name UARTCTO - UART Current Timeout */
 /*! @{ */
 
 #define LINFLEXD_UARTCTO_CTO_MASK                (0xFFFU)
@@ -820,7 +820,7 @@ typedef struct {
 #define LINFLEXD_UARTCTO_CTO(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_UARTCTO_CTO_SHIFT)) & LINFLEXD_UARTCTO_CTO_MASK)
 /*! @} */
 
-/*! @name DMATXE - DMA Tx Enable Register */
+/*! @name DMATXE - DMA Tx Enable */
 /*! @{ */
 
 #define LINFLEXD_DMATXE_DTE0_MASK                (0x1U)
@@ -829,7 +829,7 @@ typedef struct {
 #define LINFLEXD_DMATXE_DTE0(x)                  (((uint32_t)(((uint32_t)(x)) << LINFLEXD_DMATXE_DTE0_SHIFT)) & LINFLEXD_DMATXE_DTE0_MASK)
 /*! @} */
 
-/*! @name DMARXE - DMA Rx Enable Register */
+/*! @name DMARXE - DMA Rx Enable */
 /*! @{ */
 
 #define LINFLEXD_DMARXE_DRE0_MASK                (0x1U)

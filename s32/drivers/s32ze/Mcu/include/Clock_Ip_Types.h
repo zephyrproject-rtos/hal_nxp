@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_Types.h
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK IP type header file.
 *   @details CLOCK IP type header file.
@@ -27,7 +27,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Clock_Ip_Cfg_Defines.h"
 #include "Mcal.h"
 /*==================================================================================================
@@ -37,20 +37,21 @@ extern "C"{
 #define CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_TYPES_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_TYPES_SW_MAJOR_VERSION                1
+#define CLOCK_IP_TYPES_SW_MAJOR_VERSION                2
 #define CLOCK_IP_TYPES_SW_MINOR_VERSION                0
-#define CLOCK_IP_TYPES_SW_PATCH_VERSION                0
+#define CLOCK_IP_TYPES_SW_PATCH_VERSION                1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if Clock_Ip_Types.h file and StandardTypes.h file are of the same Autosar version */
-#if ((CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != STD_AR_RELEASE_MAJOR_VERSION) || \
-     (CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION    != STD_AR_RELEASE_MINOR_VERSION))
-    #error "AutoSar Version Numbers of Clock_Ip_Types.h and StandardTypes.h are different"
+/* Check if source file and Std_Types.h file are of the same Autosar version */
+#if ((CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
+     (CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
+    )
+    #error "AutoSar Version Numbers of Clock_Ip_Types.h  and Std_Types.h are different"
 #endif
-#endif
+#endif    /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
 /* Check if Clock_Ip_Types.h file and Clock_Ip_Cfg_Defines.h file have same versions */
 #if (CLOCK_IP_TYPES_VENDOR_ID  != CLOCK_IP_CFG_DEFINES_VENDOR_ID)
@@ -548,6 +549,12 @@ typedef enum {
 #if defined(CLOCK_IP_HAS_FTM_1_EXT_REF_CLK)
     FTM_1_EXT_REF_CLK         = CLOCK_IP_HAS_FTM_1_EXT_REF_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_GMAC_MII_RGMII_RX_CLK)
+    GMAC_MII_RGMII_RX_CLK           = CLOCK_IP_HAS_GMAC_MII_RGMII_RX_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC_MII_RMII_RGMII_TX_CLK)
+    GMAC_MII_RMII_RGMII_TX_CLK      = CLOCK_IP_HAS_GMAC_MII_RMII_RGMII_TX_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_GMAC_0_EXT_REF_CLK)
     GMAC_0_EXT_REF_CLK        = CLOCK_IP_HAS_GMAC_0_EXT_REF_CLK,
 #endif
@@ -1024,7 +1031,10 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
     ADC6_CLK                  = CLOCK_IP_HAS_ADC6_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_ADCBIST_CLK)
-    ADCBIST_CLK                  = CLOCK_IP_HAS_ADCBIST_CLK,
+    ADCBIST_CLK               = CLOCK_IP_HAS_ADCBIST_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AURORAPLL_DIFF_CLK)
+    AURORAPLL_DIFF_CLK        = CLOCK_IP_HAS_AURORAPLL_DIFF_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_BCTU0_CLK)
     BCTU0_CLK                 = CLOCK_IP_HAS_BCTU0_CLK,
@@ -1659,6 +1669,12 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_GMAC_TS_CLK)
     GMAC_TS_CLK               = CLOCK_IP_HAS_GMAC_TS_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_GMAC_RX_CLK)
+    GMAC_RX_CLK               = CLOCK_IP_HAS_GMAC_RX_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC_TX_CLK)
+    GMAC_TX_CLK               = CLOCK_IP_HAS_GMAC_TX_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_GMAC0_RX_CLK)
     GMAC0_RX_CLK              = CLOCK_IP_HAS_GMAC0_RX_CLK,
 #endif
@@ -1671,14 +1687,14 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_GMAC0_TX_RMII_CLK)
     GMAC0_TX_RMII_CLK         = CLOCK_IP_HAS_GMAC0_TX_RMII_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_GMAC0_MII_RX_CLK)
-    GMAC0_MII_RX_CLK          = CLOCK_IP_HAS_GMAC0_MII_RX_CLK,
+#if defined(CLOCK_IP_HAS_GMAC0_MII_RGMII_RX_CLK)
+    GMAC0_MII_RGMII_RX_CLK          = CLOCK_IP_HAS_GMAC0_MII_RGMII_RX_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_GMAC0_MII_RMII_TX_CLK)
-    GMAC0_MII_RMII_TX_CLK     = CLOCK_IP_HAS_GMAC0_MII_RMII_TX_CLK,
+#if defined(CLOCK_IP_HAS_GMAC0_MII_RMII_RGMII_TX_CLK)
+    GMAC0_MII_RMII_RGMII_TX_CLK     = CLOCK_IP_HAS_GMAC0_MII_RMII_RGMII_TX_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_GMAC1_MII_RX_CLK)
-    GMAC1_MII_RX_CLK          = CLOCK_IP_HAS_GMAC1_MII_RX_CLK,
+#if defined(CLOCK_IP_HAS_GMAC1_MII_RGMII_RX_CLK)
+    GMAC1_MII_RGMII_RX_CLK          = CLOCK_IP_HAS_GMAC1_MII_RGMII_RX_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_GMAC1_RX_CLK)
     GMAC1_RX_CLK              = CLOCK_IP_HAS_GMAC1_RX_CLK,
@@ -1692,8 +1708,8 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_GMAC1_RMII_CLK)
     GMAC1_RMII_CLK            = CLOCK_IP_HAS_GMAC1_RMII_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_GMAC1_RMII_EXT_CLK)
-    GMAC1_RMII_EXT_CLK        = CLOCK_IP_HAS_GMAC1_RMII_EXT_CLK,
+#if defined(CLOCK_IP_HAS_GMAC1_MII_RMII_RGMII_TX_CLK)
+    GMAC1_MII_RMII_RGMII_TX_CLK        = CLOCK_IP_HAS_GMAC1_MII_RMII_RGMII_TX_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_GPIO0_CLK)
     GPIO0_CLK                 = CLOCK_IP_HAS_GPIO0_CLK,
@@ -2628,6 +2644,9 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_USDHC_CLK)
     USDHC_CLK                 = CLOCK_IP_HAS_USDHC_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_USDHC_PER_CLK)
+    USDHC_PER_CLK             = CLOCK_IP_HAS_USDHC_PER_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_USDHC0_CLK)
     USDHC0_CLK                = CLOCK_IP_HAS_USDHC0_CLK,
 #endif
@@ -2884,6 +2903,7 @@ typedef enum
     CLOCK_IP_ACTIVE                             = 8U,   /**< @brief Report Clock Active. */
     CLOCK_IP_INACTIVE                           = 9U,   /**< @brief Report Clock Inactive. */
     CLOCK_IP_REPORT_WRITE_PROTECTION_ERROR      = 10U,  /**< @brief Report Write Protection Error. */
+    CLOCK_IP_SET_RAM_WAIT_STATES_ERROR          = 11U,  /**< @brief Set Ram Wait States Error. */
 } Clock_Ip_NotificationType;
 
 /** @brief Clock ip trigger divider type. */
@@ -3001,6 +3021,7 @@ typedef struct
 
     uint16                   Dividers[3U];                   /**< Dividers values */
 
+    uint8                    SoftwareDisable;                /**< Software Disable */
 } Clock_Ip_PllConfigType;
 
 /*!
@@ -3058,7 +3079,7 @@ typedef struct
 typedef struct
 {
     Clock_Ip_NameType         Name;                           /**< Clock name of the external clock. */
-    uint32                    Value;                          /**< Enable value - if value is zero then clock is gated, otherwise is enabled in different modes. */
+    uint64                    Value;                          /**< Enable value - if value is zero then clock is gated, otherwise is enabled in different modes. */
 
 } Clock_Ip_ExtClkConfigType;
 
@@ -3145,7 +3166,7 @@ typedef struct
     const Clock_Ip_PcfsConfigType            (*Pcfs)[];                                 /**< Progressive clock switching */
     const Clock_Ip_CmuConfigType             (*Cmus)[];                                 /**< Clock cmus */
     const Clock_Ip_ConfiguredFrequencyType   (*ConfiguredFrequencies)[];                /**< Configured frequency values */
-    
+
 } Clock_Ip_ClockConfigType;
 
 /*==================================================================================================

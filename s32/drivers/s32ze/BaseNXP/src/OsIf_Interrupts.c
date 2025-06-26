@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP.
+ * Copyright 2021-2025 NXP.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -26,7 +26,15 @@ extern "C"{
 
 #if defined(USING_OS_ZEPHYR)
 #include <zephyr/kernel.h>
+#endif
 
+#if defined(USING_OS_FREERTOS)
+#include "OsIf_Cfg_TypesDef.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#endif
+
+#if (defined(USING_OS_ZEPHYR) || defined(USING_OS_FREERTOS))
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -34,9 +42,9 @@ extern "C"{
 #define OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION_C     4
 #define OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION_C  0
-#define OSIF_INTERRUPTS_SW_MAJOR_VERSION_C             1
+#define OSIF_INTERRUPTS_SW_MAJOR_VERSION_C             2
 #define OSIF_INTERRUPTS_SW_MINOR_VERSION_C             0
-#define OSIF_INTERRUPTS_SW_PATCH_VERSION_C             0
+#define OSIF_INTERRUPTS_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -84,11 +92,13 @@ extern "C"{
 /*==================================================================================================
 *                                          LOCAL MACROS
 ==================================================================================================*/
+#if defined(USING_OS_ZEPHYR)
 #if (STD_ON == OSIF_ENABLE_MULTICORE_SUPPORT)
     #define OsIfCoreID()        (OsIf_GetCoreID())
 #else
     #define OsIfCoreID()        (0U)
-#endif
+#endif /* STD_ON == OSIF_ENABLE_MULTICORE_SUPPORT */
+#endif /* defined(USING_OS_ZEPHYR)*/
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
@@ -96,6 +106,7 @@ extern "C"{
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
+#if defined(USING_OS_ZEPHYR)
 #define BASENXP_START_SEC_VAR_CLEARED_32
 #include "BaseNXP_MemMap.h"
 
@@ -105,6 +116,17 @@ static uint32 OsIf_au32SuspendLevel[OSIF_MAX_COREIDX_SUPPORTED];
 #define BASENXP_STOP_SEC_VAR_CLEARED_32
 #include "BaseNXP_MemMap.h"
 
+#elif defined(USING_OS_FREERTOS)
+#define BASENXP_START_SEC_VAR_CLEARED_UNSPECIFIED
+#include "BaseNXP_MemMap.h"
+
+volatile UBaseType_t OsIf_InterruptNestingLevel;
+volatile UBaseType_t OsIf_SavedInterruptStatus;
+
+#define BASENXP_STOP_SEC_VAR_CLEARED_UNSPECIFIED
+#include "BaseNXP_MemMap.h"
+
+#endif /* defined(USING_OS_FREERTOS) */
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -133,6 +155,7 @@ static uint32 OsIf_au32SuspendLevel[OSIF_MAX_COREIDX_SUPPORTED];
  * Description   : Suspend all interrupts.
  * 
  *END**************************************************************************/
+#if defined(USING_OS_ZEPHYR)
 void OsIf_Interrupts_SuspendAllInterrupts(void)
 {
     uint32 CoreId = OsIfCoreID();
@@ -142,6 +165,25 @@ void OsIf_Interrupts_SuspendAllInterrupts(void)
         OsIf_au32OldIrqMask[CoreId] = arch_irq_lock();
     }
 }
+#elif defined(USING_OS_FREERTOS)
+void OsIf_Interrupts_SuspendAllInterrupts(void)
+{
+    if (xPortIsInsideInterrupt())
+    {
+        UBaseType_t CurrentInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+
+        if (0 == OsIf_InterruptNestingLevel)
+        {
+            OsIf_SavedInterruptStatus = CurrentInterruptStatus; /* only value from nesting level 0 is needed for restoration */
+        }
+        OsIf_InterruptNestingLevel++;
+    }
+    else
+    {
+        taskENTER_CRITICAL(); /* supports nesting already */
+    }
+}
+#endif /* defined(USING_OS_FREERTOS) */
 
 /*FUNCTION**********************************************************************
  *
@@ -149,6 +191,7 @@ void OsIf_Interrupts_SuspendAllInterrupts(void)
  * Description   : Resume all interrupts.
  * 
  *END**************************************************************************/
+#if defined(USING_OS_ZEPHYR)
 void OsIf_Interrupts_ResumeAllInterrupts(void)
 {
     uint32 CoreId = OsIfCoreID();
@@ -158,11 +201,37 @@ void OsIf_Interrupts_ResumeAllInterrupts(void)
        arch_irq_unlock(OsIf_au32OldIrqMask[CoreId]);
     }
 }
+#elif defined(USING_OS_FREERTOS)
+void OsIf_Interrupts_ResumeAllInterrupts(void)
+{
+    if (xPortIsInsideInterrupt())
+    {
+        if(0 < OsIf_InterruptNestingLevel)
+        { 
+            OsIf_InterruptNestingLevel--;
+            if( 0 == OsIf_InterruptNestingLevel)
+            {
+                taskEXIT_CRITICAL_FROM_ISR(OsIf_SavedInterruptStatus);
+            }
+        }
+        else
+        {
+            #if (STD_ON == OSIF_DEV_ERROR_DETECT)
+            (void)Det_ReportError(OSIF_MODULE_ID, OSIF_DRIVER_INSTANCE, OSIF_SID_RESUMEALLINT, OSIF_E_INV_CALL);
+            #endif
+        }
+    }
+    else
+    {
+        taskEXIT_CRITICAL();  /* supports nesting already */
+    }
+}
+#endif /* defined(USING_OS_FREERTOS) */
 
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"
 
-#endif /* defined(USING_OS_ZEPHYR) */
+#endif /* defined(USING_OS_ZEPHYR) || defined(USING_OS_FREERTOS) */
 
 #ifdef __cplusplus
 }

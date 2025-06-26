@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -36,9 +36,9 @@ extern "C"{
 #define SOC_IPS_AR_RELEASE_MAJOR_VERSION     4
 #define SOC_IPS_AR_RELEASE_MINOR_VERSION     7
 #define SOC_IPS_AR_RELEASE_REVISION_VERSION  0
-#define SOC_IPS_SW_MAJOR_VERSION             1
+#define SOC_IPS_SW_MAJOR_VERSION             2
 #define SOC_IPS_SW_MINOR_VERSION             0
-#define SOC_IPS_SW_PATCH_VERSION             0
+#define SOC_IPS_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -128,13 +128,13 @@ extern "C"{
 * @brief GMAC IP Version: D_IP_3P_ENET_MAC_SYN_017 [v02.00.00.08]
 * @details  IP Versions
 */
-#define IPV_GMAC                (0x1F350101UL)  
+#define IPV_GMAC                (0x1F350101UL)
 
 /**
 * @brief C40ASF IP Version: M_IP_c40asf_spec [v00.00.00.04]
 * @details  IP Versions
 */
-#define IPV_C40ASF              (0x1F350101UL) 
+#define IPV_C40ASF              (0x1F350101UL)
 
 /**
 * @brief PFLASH IP Version: pflash_c40asf_s32k_spec [v00.00.00.11]
@@ -146,25 +146,25 @@ extern "C"{
 * @brief C40ASF IP Version: M_IP_c40asf_spec [v00.00.00.04]
 * @details  IP Versions
 */
-#define IPV_FLASH_ARRAY         (0x1F350101UL) 
+#define IPV_FLASH_ARRAY         (0x1F350101UL)
 
 /**
 * @brief PFLASH IP Version: pflash_c40asf_s32k_spec [v00.00.00.11]
 * @details  IP Versions
 */
-#define IPV_FLASH_CONTROLLER    (0x1F350101UL)  
+#define IPV_FLASH_CONTROLLER    (0x1F350101UL)
 
 /**
 * @brief QSPI IP Version: QSPI d_ip_quadspi_v2_sync_spec.025
 * @details  IP Versions
 */
-#define IPV_QSPI                (0x1F350101UL)          
+#define IPV_QSPI                (0x1F350101UL)
 
 /**
 * @brief Clock Monitoring Unit Frequency Check (CMU_FC) IP Version
 * @details  IP Versions
 */
-#define IPV_CMU_FC              (0x1F350101UL) 
+#define IPV_CMU_FC              (0x1F350101UL)
 
 /*==================================================================================================
 *                              REGISTER PROTECTION (REG_PROT)
@@ -174,21 +174,15 @@ extern "C"{
 * @details  IP Versions
 */
 #define IPV_REG_PROT                  (0x1F350101UL)
- 
+
 /*==================================================================================================
 *                              Software Erratas for Hardware Erratas
 ==================================================================================================*/
 /**
-* @brief Hardware errata for FMC: (e10716)
-* @details e10716 RTC: Timer Alarm Flag can assert erroneously
-*/
-#define ERR_IPV_RTC_0001         (STD_ON)
-
-/**
 * @brief Hardware errata for LPSPI: (ERR050456)
 * @details ERR050456 LPSPI: Reset to fifo does not work as expected
 */
-#define ERR_IPV_LPSPIV2_0001         (STD_ON)
+#define ERR_IPV_LPSPIV2_E050456         (STD_ON)
 
 /**
 * @brief Hardware errata for LINFlexD: (e007274)
@@ -259,6 +253,13 @@ must be enabled for NETC to accept table management commands for any function
 #define ERR_IPV_NETC_051260        (STD_ON)
 
 /**
+* @brief Hardware errata for NETC: (ERR051649)
+* @details ERR051649 NETC: Switch ports support only one 802.1p and DEI to internal QoS
+mapping profile.
+*/
+#define ERR_IPV_NETC_051649        (STD_ON)
+
+/**
 * @brief Hardware errata for NETC: (ERR051261)
 * @details ERR051261 NETC: Egress ports can violate 802.3 half-duplex jam protocol after collision
 event
@@ -323,6 +324,29 @@ code.
 */
 #define ERR_IPV_NETC_051247        (STD_ON)
 
+/**
+* @brief Hardware errata for NETC: (ERR051124)
+* @details ERR051124 NETC: Simultaneous scheduler events result in missed hold assertion
+MCB mode transition
+*/
+#define ERR_IPV_NETC_051124        (STD_ON)
+
+/**
+* @brief Hardware errata for NETC: (ERR051587)
+* @details ERR051587 NETC: Time gate scheduling update command may respond with error when AdminBaseTime specified is near the current time.
+*/
+#define ERR_IPV_NETC_051587        (STD_ON)
+
+/** @brief Hardware errata for NETC: (ERR051300)
+* @details ERR051300 NETC: NETC engine watchdogs do not operate effectively under all
+circumstances
+*/
+#define ERR_IPV_NETC_051300        (STD_ON)
+
+/** @brief Hardware errata for ICU GTM: (ERR051781)
+* @details ERR051781 GTM: (TIM) Potentially wrong capture values
+*/
+#define ERR_IPV_GTM_051781        (STD_ON)
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
@@ -371,3 +395,4 @@ code.
 /** @} */
 
 #endif /* SOC_IPS_H */
+

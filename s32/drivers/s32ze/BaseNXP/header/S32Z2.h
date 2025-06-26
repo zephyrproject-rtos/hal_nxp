@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2
  *
  * This file contains register definitions and macros for easy access to their
@@ -117,6 +117,7 @@
 #include "S32Z2_LLC_CSR.h"
 #include "S32Z2_LLC_FSC.h"
 #include "S32Z2_LMEM64.h"
+#include "S32Z2_LPI2C.h"
 #include "S32Z2_LSTCU.h"
 #include "S32Z2_LSTCU_14_15_17_18.h"
 #include "S32Z2_L_VFCCU.h"
@@ -204,18 +205,14 @@
 #include "S32Z2_SEMA42.h"
 #include "S32Z2_SINC.h"
 #include "S32Z2_SIPI.h"
-#include "S32Z2_SIUL2.h"
 #include "S32Z2_SMU_L_VFCCU.h"
 #include "S32Z2_SMU_MRU.h"
 #include "S32Z2_SMU_SEMA42.h"
 #include "S32Z2_SMU_SRG_S.h"
 #include "S32Z2_SMU_XRDC.h"
 #include "S32Z2_SPFU.h"
-#include "S32Z2_SPI.h"
 #include "S32Z2_SRAMCTL.h"
 #include "S32Z2_SRX.h"
-#include "S32Z2_STM.h"
-#include "S32Z2_SWT.h"
 #include "S32Z2_SW_ETH_MAC_PORT0.h"
 #include "S32Z2_SW_ETH_MAC_PORT1.h"
 #include "S32Z2_SW_PORT0.h"

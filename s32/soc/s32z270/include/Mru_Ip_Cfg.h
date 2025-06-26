@@ -1,6 +1,6 @@
 /*
- * Copyright 2022-2023 NXP
- *
+ * Copyright 2022-2025 NXP
+*
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Mru_Ip_Cfg.h
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Platform - Mru configuration header file.
 *   @details This file is the header containing all the necessary information for MRU
@@ -19,8 +19,7 @@
 */
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C"{
 #endif
 
 
@@ -32,7 +31,6 @@ extern "C"
 * 4) user callback header files
 ==================================================================================================*/
 #include <zephyr/devicetree.h>
-
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Mru_Ip_CfgDefines.h"
@@ -46,9 +44,9 @@ extern "C"
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG        4
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG        7
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_CFG     0
-#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG                1
+#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG                2
 #define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_CFG                0
-#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG                0
+#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG                1
 
 /*==================================================================================================
                                       FILE VERSION CHECKS
@@ -59,7 +57,6 @@ extern "C"
          (CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG != MCAL_AR_RELEASE_MINOR_VERSION))
     #error "AutoSar Version Numbers of Mru_Ip_Cfg.h and Mcal.h are different"
     #endif
-
     /* Check if the current file and OsIf.h header file are of the same version */
     #if ((CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG != OSIF_AR_RELEASE_MAJOR_VERSION) || \
          (CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG != OSIF_AR_RELEASE_MINOR_VERSION) \
@@ -86,20 +83,7 @@ extern "C"
 /*==================================================================================================
                                             CONSTANTS
 ==================================================================================================*/
-/**
-* @brief          Enable User Mode Support.
-* @details        When MruEnableUserModeSupport = TRUE,
-*                 the MRU driver can be executed from both supervisor and user mode.
-*
-* @api
-*/
-#define MRU_IP_ENABLE_USER_MODE_SUPPORT  (STD_OFF)
 
-/**
-* @brief Switches ON or OFF for the detection and reporting of development errors(API parameter checking) at IP level.
-*/
-/** @implements MRU_IP_DEV_ERROR_DETECT_define  */
-#define MRU_IP_DEV_ERROR_DETECT     (STD_OFF)
 /*==================================================================================================
  *                                     DEFINES AND MACROS
 ==================================================================================================*/
@@ -233,6 +217,7 @@ extern "C"
 * @brief ID for interrupt group 1.
 */
 #define MRU_IP_INT_GROUP_1  1
+
 /*==================================================================================================
 *                                            ENUMS
 ==================================================================================================*/

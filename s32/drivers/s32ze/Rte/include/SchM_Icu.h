@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Icu.h
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module interface
 *   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
@@ -35,9 +35,9 @@ extern "C" {
 #define SCHM_ICU_AR_RELEASE_MAJOR_VERSION     4
 #define SCHM_ICU_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_ICU_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_ICU_SW_MAJOR_VERSION             1
+#define SCHM_ICU_SW_MAJOR_VERSION             2
 #define SCHM_ICU_SW_MINOR_VERSION             0
-#define SCHM_ICU_SW_PATCH_VERSION             0
+#define SCHM_ICU_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -102,26 +102,14 @@ extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_02(void);
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_03(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_03(void);
 
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_04(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_04(void);
-
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_05(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_05(void);
-
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_06(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_06(void);
-
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_07(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_07(void);
-
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_08(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_08(void);
 
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_09(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_09(void);
 
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_11(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_11(void);
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_10(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_10(void);
 
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_15(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_15(void);
@@ -171,20 +159,20 @@ extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_29(void);
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_30(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_30(void);
 
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_31(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_31(void);
-
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_32(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_32(void);
-
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_33(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_33(void);
 
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_44(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_44(void);
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_34(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_34(void);
 
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_45(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_45(void);
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_35(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_35(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_36(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_36(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_37(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_37(void);
 
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_46(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_46(void);
@@ -216,8 +204,56 @@ extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_57(void);
 extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_58(void);
 extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_58(void);
 
-extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_59(void);
-extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_59(void);
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_60(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_60(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_61(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_61(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_62(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_62(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_63(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_63(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_64(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_64(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_65(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_65(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_66(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_66(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_67(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_67(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_68(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_68(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_69(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_69(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_70(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_70(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_71(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_71(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_72(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_72(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_73(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_73(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_74(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_74(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_75(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_75(void);
+
+extern void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_76(void);
+extern void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_76(void);
 
 
 

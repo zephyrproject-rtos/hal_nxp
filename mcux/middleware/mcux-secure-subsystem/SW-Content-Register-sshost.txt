@@ -1,0 +1,8 @@
+Release Name:              secure subsystem
+Version:                   1.0
+Outgoing License:          BSD_CLEAR
+License File:              COPYING-BSD-CLEAR
+Type of content:           source code
+Description and comments:  SSHOST SDK API for ELE200
+Location:                  https://github.com/nxp-mcuxpresso/secure-subsystem
+Origin:                    NXP (proprietary)

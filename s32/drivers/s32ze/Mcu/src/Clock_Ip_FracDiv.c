@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_FracDiv.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -38,9 +38,9 @@ extern "C"{
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_FRACDIV_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_FRACDIV_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_FRACDIV_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -90,6 +90,11 @@ extern "C"{
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
+
+/*==================================================================================================
+*                                    GLOBAL FUNCTION PROTOTYPES
+==================================================================================================*/
+
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -105,6 +110,7 @@ static void Clock_Ip_ResetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config);
 static void Clock_Ip_SetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config);
 static Clock_Ip_DfsStatusType Clock_Ip_CompleteDfsMfiMfn(Clock_Ip_NameType DfsName);
 #endif
+
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -214,14 +220,16 @@ static Clock_Ip_DfsStatusType Clock_Ip_CompleteDfsMfiMfn(Clock_Ip_NameType DfsNa
 
 #endif
 
+
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
+
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
 #include "Mcu_MemMap.h"
 
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -233,17 +241,18 @@ static Clock_Ip_DfsStatusType Clock_Ip_CompleteDfsMfiMfn(Clock_Ip_NameType DfsNa
 const Clock_Ip_FracDivCallbackType Clock_Ip_axFracDivCallbacks[CLOCK_IP_FRACTIONAL_DIVIDER_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_CallbackFracDivEmpty,            /* Reset */
-        Clock_Ip_CallbackFracDivEmpty,            /* Set */
-        Clock_Ip_CallbackFracDivEmptyComplete,    /* Complete */
+        &Clock_Ip_CallbackFracDivEmpty,            /* Reset */
+        &Clock_Ip_CallbackFracDivEmpty,            /* Set */
+        &Clock_Ip_CallbackFracDivEmptyComplete,    /* Complete */
     },
 #ifdef CLOCK_IP_DFS_MFI_MFN
     {
-        Clock_Ip_ResetDfsMfiMfn,                   /* Reset */
-        Clock_Ip_SetDfsMfiMfn,                     /* Set */
-        Clock_Ip_CompleteDfsMfiMfn,                /* Complete */
+        &Clock_Ip_ResetDfsMfiMfn,                   /* Reset */
+        &Clock_Ip_SetDfsMfiMfn,                     /* Set */
+        &Clock_Ip_CompleteDfsMfiMfn,                /* Complete */
     },
 #endif
+
 };
 
 /* Clock stop constant section data */

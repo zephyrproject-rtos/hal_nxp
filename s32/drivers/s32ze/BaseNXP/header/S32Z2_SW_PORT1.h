@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SW_PORT1.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SW_PORT1
  *
  * This file contains register definitions and macros for easy access to their
@@ -117,7 +117,7 @@ typedef struct {
   __IO uint32_t PTXDCRR0;                          /**< Port Tx discard count reason register 0, offset: 0x1E8 */
   __IO uint32_t PTXDCRR1;                          /**< Port Tx discard count reason register 1, offset: 0x1EC */
   uint8_t RESERVED_13[16];
-  struct {                                         /* offset: 0x200, array step: 0x20 */
+  struct SW_PORT1_TCT_NUM {                        /* offset: 0x200, array step: 0x20 */
     __I  uint32_t PTGSTCSR;                          /**< Port time gate scheduling traffic class 0 status register..Port time gate scheduling traffic class 7 status register, array offset: 0x200, array step: 0x20 */
     uint8_t RESERVED_0[4];
     __IO uint32_t PTCTMSDUR;                         /**< Port traffic class 0 transmit maximum SDU register..Port traffic class 7 transmit maximum SDU register, array offset: 0x208, array step: 0x20 */

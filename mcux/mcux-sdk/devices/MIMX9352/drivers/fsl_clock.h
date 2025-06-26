@@ -1,6 +1,5 @@
 /*
  * Copyright 2023 NXP
- * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,6 +8,9 @@
 #define _FSL_CLOCK_H_
 
 #include "fsl_common.h"
+
+/*! @brief CLOCK driver version. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 0, 1))
 
 /*!
  * @brief CCM reg macros to map corresponding registers.
@@ -21,6 +23,19 @@
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY \
     (250000000UL) /* When using Overdrive Voltage, the maximum frequency of cm33 is 250 MHz */
 #endif
+
+/*! LPM_SETTING
+ *  0b000..LPCG will be OFF in any CPU mode.
+ *  0b001..LPCG will be ON in RUN mode, OFF in WAIT/STOP/SUSPEND mode.
+ *  0b010..LPCG will be ON in RUN/WAIT mode, OFF in STOP/SUSPEND mode.
+ *  0b011..LPCG will be ON in RUN/WAIT/STOP mode, OFF in SUSPEND mode.
+ *  0b100..LPCG will be ON in RUN/WAIT/STOP/SUSPEND mode.
+ */
+#define CCM_LPCG_LPM_SETTING_0 (0U)
+#define CCM_LPCG_LPM_SETTING_1 (1U)
+#define CCM_LPCG_LPM_SETTING_2 (2U)
+#define CCM_LPCG_LPM_SETTING_3 (3U)
+#define CCM_LPCG_LPM_SETTING_4 (4U)
 
 /*******************************************************************************
  * PLL Definitions
@@ -66,7 +81,7 @@ static inline void CLOCK_PllInit(PLL_Type *pll, const fracn_pll_init_t *pll_cfg)
 
     /* Power up for locking */
     pll->CTRL.SET = PLL_CTRL_POWERUP_MASK;
-    while (!(pll->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK))
+    while ((pll->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK) == 0UL)
     {
     }
 
@@ -87,23 +102,25 @@ static inline void CLOCK_PllInit(PLL_Type *pll, const fracn_pll_init_t *pll_cfg)
 static inline void CLOCK_PllPfdInit(PLL_Type *pll, uint32_t pfd_n, const fracn_pll_pfd_init_t *pfd_cfg)
 {
     /* Bypass DFS*/
-    pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_BYPASS_EN_MASK;
+    pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_BYPASS_EN_MASK;
     /* Disable output and DFS */
-    pll->NO_OF_DFS[pfd_n].DFS_CTRL.CLR = PLL_NO_OF_DFS_CLKOUT_EN_MASK | PLL_NO_OF_DFS_ENABLE_MASK;
+    pll->DFS[pfd_n].DFS_CTRL.CLR = PLL_DFS_CLKOUT_EN_MASK | PLL_DFS_ENABLE_MASK;
     /* Set mfi and mfn */
-    pll->NO_OF_DFS[pfd_n].DFS_DIV.RW = PLL_NO_OF_DFS_MFI(pfd_cfg->mfi) | PLL_NO_OF_DFS_MFN(pfd_cfg->mfn);
+    pll->DFS[pfd_n].DFS_DIV.RW = PLL_DFS_MFI(pfd_cfg->mfi) | PLL_DFS_MFN(pfd_cfg->mfn);
     /* Enable output and DFS*/
-    pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_CLKOUT_EN_MASK;
+    pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_CLKOUT_EN_MASK;
     /* Enable div2 */
     if (pfd_cfg->div2_en)
-        pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_CLKOUT_DIVBY2_EN_MASK;
+    {
+        pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_CLKOUT_DIVBY2_EN_MASK;
+    }
     /* Enable DFS for locking*/
-    pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_ENABLE_MASK;
-    while (!((pll->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) & (1 << pfd_n)))
+    pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_ENABLE_MASK;
+    while (((pll->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) & (1UL << pfd_n)) == 0UL)
     {
     }
     /* Clean bypass */
-    pll->NO_OF_DFS[pfd_n].DFS_CTRL.CLR = PLL_NO_OF_DFS_BYPASS_EN_MASK;
+    pll->DFS[pfd_n].DFS_CTRL.CLR = PLL_DFS_BYPASS_EN_MASK;
     __DSB();
     __ISB();
 }
@@ -136,105 +153,7 @@ typedef enum _clock_name
     kCLOCK_Ext             = 16, /* Ext */
 } clock_name_t;
 
-static const clock_name_t s_clockSourceName[][4] = {
-    /*SRC0,         SRC1,                   SRC2,                   SRC3,            */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Arm A55 Periph */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Arm A55 MTR BUS */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Arm A55 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* M33 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Sentinel */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Bus Wakeup */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Bus Aon */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Wakeup Axi */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Swo Trace */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* M33 Systick */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Flexio1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Flexio2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpit1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpit2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lptmr1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lptmr2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_AudioPll1Out, kCLOCK_Ext},                    /* Tpm1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_AudioPll1Out, kCLOCK_Ext},                    /* Tpm2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_AudioPll1Out, kCLOCK_Ext},                    /* Tpm3 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_AudioPll1Out, kCLOCK_Ext},                    /* Tpm4 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_AudioPll1Out, kCLOCK_Ext},                    /* Tpm5 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_AudioPll1Out, kCLOCK_Ext},                    /* Tpm6 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Flexspi1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Can1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Can2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart3 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart4 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart5 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart6 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart7 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpuart8 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c3 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c4 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c5 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c6 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c7 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpi2c8 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi3 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi4 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi5 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi6 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi7 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Lpspi8 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* I3c1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* I3c2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Usdhc1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Usdhc2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Usdhc3 */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Sai1 */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Sai2 */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Sai3 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_AudioPll1Out},            /* Ccm Cko1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_VideoPll1Out},            /* Ccm Cko2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_AudioPll1Out},            /* Ccm Cko3 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_VideoPll1Out},            /* Ccm Cko4 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Hsio */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Hsio Usb Test 60M */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Hsio Acscan 80M */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd2},           /* Hsio Acscan 480M */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Nic */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Nic Apb */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Ml Apb */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Ml */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Media Axi */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Media Apb */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd0},           /* Media Ldb */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd0},           /* Media Disp Pix */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd0},           /* Cam Pix */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd0},           /* Mipi Test Byte */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd0},           /* Mipi Phy Cfg */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0, kCLOCK_SysPll1Pfd1, kCLOCK_SysPll1Pfd2},             /* Dram Alt */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_SysPll1Pfd2Div2}, /* Dram Apb */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Adc */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Pdm */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Tstmr1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Tstmr2 */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Mqs1 */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Mqs2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_SysPll1Pfd2Div2}, /* Audio XCVR */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_Ext},                   /* Spdif */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_SysPll1Pfd2Div2}, /* Enet */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Enet Timer1 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Enet Timer2 */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_SysPll1Pfd2Div2}, /* Enet Ref */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Enet Ref Phy */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* I3c1 Slow */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* I3c2 Slow */
-    {kCLOCK_Osc24M, kCLOCK_SysPll1Pfd0Div2, kCLOCK_SysPll1Pfd1Div2, kCLOCK_VideoPll1Out},    /* Usb Phy Burunin */
-    {kCLOCK_Osc24M, kCLOCK_AudioPll1Out, kCLOCK_VideoPll1Out, kCLOCK_SysPll1Pfd2}            /* Pal Came Scan */
-};
-
+extern const clock_name_t s_clockSourceName[][4];
 /*******************************************************************************
  * Clock Root Definitions
  ******************************************************************************/
@@ -932,8 +851,8 @@ typedef enum _clock_root_mux_source
 /*! @brief Clock gate value */
 typedef enum _clock_gate_value
 {
-    kCLOCK_Off = (int)~CCM_LPCG_DIRECT_ON_MASK, /*!< Clock is off. */
-    kCLOCK_On  = CCM_LPCG_DIRECT_ON_MASK,       /*!< Clock is on*/
+    kCLOCK_Off = CCM_LPCG_LPM_SETTING_0,
+    kCLOCK_On  = CCM_LPCG_LPM_SETTING_4,
 } clock_gate_value_t;
 
 /*!
@@ -1088,6 +1007,12 @@ typedef enum _clock_lpcg
         kCLOCK_Mu_A, kCLOCK_Mu_A \
     }
 
+/*! @brief Clock ip name array for LCDIFV3. */
+#define LCDIFV3_CLOCKS                 \
+    {                                  \
+        kCLOCK_IpInvalid, kCLOCK_Lcdif \
+    }
+
 /*! @brief Clock ip name array for LPI2C. */
 #define LPI2C_CLOCKS                                                                                                \
     {                                                                                                               \
@@ -1112,6 +1037,24 @@ typedef enum _clock_lpcg
 #define TPM_CLOCKS                                                                    \
     {                                                                                 \
         kCLOCK_Tpm1, kCLOCK_Tpm2, kCLOCK_Tpm3, kCLOCK_Tpm4, kCLOCK_Tpm5, kCLOCK_Tpm6, \
+    }
+
+/*! @brief Clock ip name array for FLEXIO. */
+#define FLEXIO_CLOCKS                                    \
+    {                                                    \
+        kCLOCK_IpInvalid, kCLOCK_Flexio1, kCLOCK_Flexio2 \
+    }
+
+/*! @brief Clock ip name array for FLEXSPI. */
+#define FLEXSPI_CLOCKS                    \
+    {                                     \
+        kCLOCK_IpInvalid, kCLOCK_Flexspi1 \
+    }
+
+/*! @brief Clock ip name array for TMU. */
+#define TMU_CLOCKS  \
+    {               \
+        kCLOCK_Tmc, \
     }
 
 /*! @brief Clock ip name array for FLEXCAN. */
@@ -1139,6 +1082,12 @@ typedef enum _clock_lpcg
         kCLOCK_Pdm \
     }
 
+/*! @brief Clock ip name array for USDHC. */
+#define USDHC_CLOCKS                                                  \
+    {                                                                 \
+        kCLOCK_IpInvalid, kCLOCK_Usdhc1, kCLOCK_Usdhc2, kCLOCK_Usdhc3 \
+    }
+
 /*! @brief Clock ip name array for ENET QOS. */
 #define ENETQOS_CLOCKS  \
     {                   \
@@ -1157,7 +1106,11 @@ typedef enum _clock_lpcg
         kCLOCK_IpInvalid, kCLOCK_I3c1, kCLOCK_I3c2 \
     }
 
-void CLOCK_Init(CCM_Type *regBase);
+/*! @brief Clock ip name array for SEMA42. */
+#define SEMA42_CLOCKS                                \
+    {                                                \
+        kCLOCK_IpInvalid, kCLOCK_Sema1, kCLOCK_Sema2 \
+    }
 
 /*******************************************************************************
  * Clock Root APIs
@@ -1169,7 +1122,14 @@ void CLOCK_Init(CCM_Type *regBase);
  * @param root Which root clock node to set, see \ref clock_root_t.
  * @param src Clock mux value to set, different mux has different value range. See \ref clock_root_mux_source_t.
  */
-void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src);
+static inline void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src)
+{
+    assert(src < 8U);
+    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW =
+        (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & ~(CCM_CLOCK_ROOT_MUX_MASK)) | CCM_CLOCK_ROOT_MUX(src);
+    __DSB();
+    __ISB();
+}
 
 /*!
  * @brief Get CCM Root Clock MUX value.
@@ -1177,7 +1137,10 @@ void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src);
  * @param root Which root clock node to get, see \ref clock_root_t.
  * @return Clock mux value.
  */
-uint32_t CLOCK_GetRootClockMux(clock_root_t root);
+static inline uint32_t CLOCK_GetRootClockMux(clock_root_t root)
+{
+    return (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & CCM_CLOCK_ROOT_MUX_MASK) >> CCM_CLOCK_ROOT_MUX_SHIFT;
+}
 
 /*!
  * @brief Get CCM Root Clock Source.
@@ -1197,7 +1160,15 @@ static inline clock_name_t CLOCK_GetRootClockSource(clock_root_t root, uint32_t 
  * @param root Which root clock to set, see \ref clock_root_t.
  * @param div Clock div value to set, different divider has different value range.
  */
-void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div);
+static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div)
+{
+    assert(div);
+    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW =
+        (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & ~CCM_CLOCK_ROOT_DIV_MASK) |
+        CCM_CLOCK_ROOT_DIV((uint32_t)div - 1UL);
+    __DSB();
+    __ISB();
+}
 
 /*!
  * @brief Get CCM DIV node value.
@@ -1205,21 +1176,38 @@ void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div);
  * @param root Which root clock node to get, see \ref clock_root_t.
  * @return divider set for this root
  */
-uint32_t CLOCK_GetRootClockDiv(clock_root_t root);
+static inline uint32_t CLOCK_GetRootClockDiv(clock_root_t root)
+{
+    return ((CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & CCM_CLOCK_ROOT_DIV_MASK) >> CCM_CLOCK_ROOT_DIV_SHIFT) +
+           1UL;
+}
 
 /*!
  * @brief Power Off Root Clock
  *
  * @param root Which root clock node to set, see \ref clock_root_t.
  */
-void CLOCK_PowerOffRootClock(clock_root_t root);
+static inline void CLOCK_PowerOffRootClock(clock_root_t root)
+{
+    if (0UL == (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & CCM_CLOCK_ROOT_OFF_MASK))
+    {
+        CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.SET = CCM_CLOCK_ROOT_OFF_MASK;
+        __DSB();
+        __ISB();
+    }
+}
 
 /*!
  * @brief Power On Root Clock
  *
  * @param root Which root clock node to set, see \ref clock_root_t.
  */
-void CLOCK_PowerOnRootClock(clock_root_t root);
+static inline void CLOCK_PowerOnRootClock(clock_root_t root)
+{
+    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.CLR = CCM_CLOCK_ROOT_OFF_MASK;
+    __DSB();
+    __ISB();
+}
 
 /*!
  * @brief Configure Root Clock
@@ -1227,7 +1215,15 @@ void CLOCK_PowerOnRootClock(clock_root_t root);
  * @param root Which root clock node to set, see \ref clock_root_t.
  * @param config root clock config, see \ref clock_root_config_t
  */
-void CLOCK_SetRootClock(clock_root_t root, const clock_root_config_t *config);
+static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config_t *config)
+{
+    assert(config);
+    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW = CCM_CLOCK_ROOT_MUX(config->mux) |
+                                                       CCM_CLOCK_ROOT_DIV((uint32_t)config->div - 1UL) |
+                                                       (config->clockOff ? CCM_CLOCK_ROOT_OFF(config->clockOff) : 0UL);
+    __DSB();
+    __ISB();
+}
 
 /*******************************************************************************
  * Clock Gate APIs
@@ -1236,12 +1232,16 @@ void CLOCK_SetRootClock(clock_root_t root, const clock_root_config_t *config);
 /*!
  * @brief Control the clock gate for specific IP.
  *
- * @note This API will not have any effect when this clock is in CPULPM or SetPoint Mode
- *
  * @param name  Which clock to enable, see \ref clock_lpcg_t.
  * @param value Clock gate value to set, see \ref clock_gate_value_t.
  */
-void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value);
+static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
+{
+    CCM_CTRL->LPCG[name].AUTHEN |= CCM_LPCG_AUTHEN_CPULPM_MODE(1U);
+    CCM_CTRL->LPCG[name].LPM_CUR = CCM_LPCG_LPM_CUR_LPM_SETTING_CUR(value);
+    __DSB();
+    __ISB();
+}
 
 /*!
  * @brief Enable the clock for specific IP.

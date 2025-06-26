@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -32,18 +32,18 @@ extern "C"{
 #define OSIF_TIMER_CUSTOM_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_TIMER_CUSTOM_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_TIMER_CUSTOM_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_TIMER_CUSTOM_SW_MAJOR_VERSION             1
+#define OSIF_TIMER_CUSTOM_SW_MAJOR_VERSION             2
 #define OSIF_TIMER_CUSTOM_SW_MINOR_VERSION             0
-#define OSIF_TIMER_CUSTOM_SW_PATCH_VERSION             0
+#define OSIF_TIMER_CUSTOM_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-/* Checks against StandardTypes.h */
+/* Checks against Std_Types.h */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_TIMER_CUSTOM_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_TIMER_CUSTOM_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of OsIf_Timer_Custom.h and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of OsIf_Timer_Custom.h and Std_Types.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 

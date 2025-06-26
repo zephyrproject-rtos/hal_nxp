@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           Eth_GeneralTypes.h
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR BaseNXP driver type definitions header file
 *   @details Definitions of types for the Ethernet driver
@@ -216,8 +216,6 @@ typedef enum
     ETHTRCV_WUR_NONE = (uint8)0x0U,
     /**< @brief General wake up detected, no distinct reason supported by hardware. */
     ETHTRCV_WUR_GENERAL  = (uint8)0x1U,
-    /**< @brief Bus wake up detected. Available if supported by hardware. */
-    ETHTRCV_WUR_BUS  = (uint8)0x2U,
     /**< @brief Internal wake up detected. Available if supported by hardware. */
     ETHTRCV_WUR_INTERNAL  = (uint8)0x3U,
     /**< @brief Reset wake up detected. Available if supported by hardware. */
@@ -227,8 +225,17 @@ typedef enum
     /**< @brief Pin wake up detected. Available if supported by hardware. */
     ETHTRCV_WUR_PIN  = (uint8)0x6U,
     /**< @brief System error wake up detected. Available if supported by hardware. */
-    ETHTRCV_WUR_SYSERR  = (uint8)0x7U
-    
+    ETHTRCV_WUR_SYSERR  = (uint8)0x7U,
+    /**< @brief Wake-up on data line (WUP = wake up pulse) detected while link is down of the corresponding Ethernet hardware (e.g. PHY).
+Only available if EthTrcvWakeupSleepOn DatalineEnabled is set to TRUE */
+    ETHTRCV_WUR_WODL_WUP  = (uint8)0x8U,
+    /**< @brief Wake-up on data line (WUR = wake up request) detected while link is active of the used Ethernet hardware (e.g. PHY). 
+Only available if EthTrcvWakeupSleepOnDataline Enabled is set to TRUE */
+    ETHTRCV_WUR_WODL_WUR  = (uint8)0x9U,
+    /**< @brief Device internal transfer of wake-up on data line from a neighboring PHY. Only possible if Ethernet hardware is compliant to OA TC10. 
+Only available if EthTrcvWakeupSleepOn DatalineEnabled is set to TRUE. */
+    ETHTRCV_WUR_TRANSFER  = (uint8)0xAU
+
 } EthTrcv_WakeupReasonType;
 
 /**
@@ -513,7 +520,6 @@ typedef struct
     uint8 MacAddr[6];
     uint16 VlanId;
     uint8 SwitchPort;
-    uint16 HashValue;
 }Eth_MacVlanType;
 
 /**

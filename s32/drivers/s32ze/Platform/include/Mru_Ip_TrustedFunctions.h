@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 /**
 *   @file Mru_Ip_TrustedFunctions.h
 *
-*   @addtogroup Mru_Ip Mru IPV Driver
+*   @addtogroup MRU_IP_DRIVER Mru Ip Driver
 *   @{
 */
 
@@ -25,9 +25,9 @@
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION       4
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION       7
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION    0
-#define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION               1
+#define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION               2
 #define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION               0
-#define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION               0
+#define CDD_PLATFORM_MPU_R52_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -59,6 +59,9 @@
 extern "C" {
 #endif
 
+#ifdef PLATFORM_IP_ENABLE_MRU
+#if (PLATFORM_IP_ENABLE_MRU == STD_ON)
+
 #define PLATFORM_START_SEC_CODE
 #include "Platform_MemMap.h"
 
@@ -84,6 +87,41 @@ extern void Mru_Ip_Init_Privileged(const Mru_Ip_ConfigType *HWUnitConfigPtr);
 extern Mru_Ip_StatusType Mru_Ip_Transmit_Privileged( const Mru_Ip_TransmitChannelType *TransmitChCfgPtr,
                                                      const uint32 *TxBufferPtr
                                                    );
+#if (STD_ON == MRU_IP_CHANNEL_RESET_API)
+/**
+* @brief            MRU Reset transmit channel.
+* @details          This function reset mailboxs status which are used by transmit channel in configuration.
+*
+* @param[in]        TransmitChCfgPtr - Pointer for the transmit channel configuration.
+*
+* @return           void
+*
+*/
+extern void Mru_Ip_ResetTransmitChannel_Privileged( const Mru_Ip_TransmitChannelType *TransmitChCfgPtr);
+/**
+* @brief            MRU Reset receive channel.
+* @details          This function reset mailboxs status which are used by receive channel in configuration.
+*
+* @param[in]        ReceiveChCfgPtr - Pointer for the receive channel configuration.
+*
+* @return           void
+*
+*/
+extern void Mru_Ip_ResetReceiveChannel_Privileged( const Mru_Ip_ReceiveChannelType *ReceiveChCfgPtr );
+#endif
+
+#if (STD_ON == MRU_IP_INSTANCE_RESET_API)
+/**
+* @brief            Reset Mru Instance.
+* @details          This function reset all mailbox status in a Mru instance.
+*
+* @param[in]        ResetInsCfgPtr – Reset Mru instance configuration pointer.
+*
+* @return           void
+*
+*/
+extern void Mru_Ip_ResetInstance_Privileged( const Mru_Ip_ResetInstanceType *ResetInsCfgPtr );
+#endif
 
 /**
 * @brief            MRU Read Mailbox.
@@ -94,7 +132,6 @@ extern Mru_Ip_StatusType Mru_Ip_Transmit_Privileged( const Mru_Ip_TransmitChanne
 * @param[in]        Timeout - time-out
 *
 * @return           MRU_IP_STATUS_SUCCESS: Receive command has been accepted.
-*                   MRU_IP_STATUS_FAIL: Receive command has not been accepted.
 *                   MRU_IP_STATUS_TIMEOUT: Receive command has been timeout.
 */
 extern Mru_Ip_StatusType Mru_Ip_ReadMailbox_Privileged( const Mru_Ip_ReceiveChannelType *ReceiveChCfgPtr,
@@ -114,9 +151,46 @@ extern Mru_Ip_StatusType Mru_Ip_ReadMailbox_Privileged( const Mru_Ip_ReceiveChan
 */
 extern Mru_Ip_MBStatusType Mru_Ip_GetMailboxStatus_Privileged( const Mru_Ip_ReceiveChannelType *ReceiveChCfgPtr );
 
+#if (STD_ON == MRU_IP_CHANNEL_ENABLE_API)
+/**
+* @brief            MRU Enable channel.
+* @details          This function enable interrupt capability of a logical receive channel.
+*
+* @param[in]        ReceiveChCfgPtr - Pointer for the receive channel configuration.
+*
+* @return           Mru_Ip_StatusType
+* @retval           MRU_IP_STATUS_SUCCESS: Receive command has been accepted.
+*                   MRU_IP_STATUS_FAIL: Receive command has not been accepted.
+*
+*/
+extern Mru_Ip_StatusType Mru_Ip_EnableChannel_Privileged( const Mru_Ip_ReceiveChannelType *ReceiveChCfgPtr);
+#endif
+
+#if (STD_ON == MRU_IP_CHANNEL_DISABLE_API)
+/**
+* @brief            MRU Disable channel.
+* @details          This function disable interrupt capability and Mru mailbox read functional of a logical receive channel. 
+*                   Before actual disabling logical Mru channel , Mru_Ip_DisableChannel
+*                   will try to see if there is any on-going request is pending and execute it immediately. 
+*                   After disabling operation is done, any new request will be ignored. 
+*                   The pending interrupt inside interrupt controller cannot be cleared and will be treated like spurious interrupt.
+*
+* @param[in]        ReceiveChCfgPtr - Pointer for the receive channel configuration.
+*
+* @return           Mru_Ip_StatusType
+* @retval           MRU_IP_STATUS_SUCCESS: Receive command has been accepted.
+*                   MRU_IP_STATUS_FAIL: Receive command has not been accepted.
+*
+*/
+extern Mru_Ip_StatusType Mru_Ip_DisableChannel_Privileged( const Mru_Ip_ReceiveChannelType *ReceiveChCfgPtr);
+#endif
+
 #endif /* MRU_IP_ENABLE_USER_MODE_SUPPORT == STD_ON */
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"
+
+#endif /* PLATFORM_IP_ENABLE_MRU == STD_ON)*/
+#endif /* PLATFORM_IP_ENABLE_MRU */
 
 #if defined(__cplusplus)
 }

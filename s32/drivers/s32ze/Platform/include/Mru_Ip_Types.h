@@ -1,5 +1,6 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 1997-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -27,7 +28,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Mru_Ip_Cfg.h"
 
 /*==================================================================================================
@@ -37,19 +38,20 @@ extern "C"{
 #define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define CDD_PLATFORM_MRU_IP_TYPES_SW_MAJOR_VERSION             1
+#define CDD_PLATFORM_MRU_IP_TYPES_SW_MAJOR_VERSION             2
 #define CDD_PLATFORM_MRU_IP_TYPES_SW_MINOR_VERSION             0
-#define CDD_PLATFORM_MRU_IP_TYPES_SW_PATCH_VERSION             0
+#define CDD_PLATFORM_MRU_IP_TYPES_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if current file and StandardTypes header file are of the same Autosar version */
-    #if ((CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-         (CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-    #error "AutoSar Version Numbers of Mru_Ip_Types.h and StandardTypes.h are different"
-    #endif
+/* Check if source file and Std_Types header file are of the same Autosar version */
+#if ((CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
+     (CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION  != STD_AR_RELEASE_MINOR_VERSION) \
+    )
+    #error "AutoSar Version Numbers of Mru_Ip_Types.h and Std_Types.h are different"
+#endif
 #endif
 
 /* Check if Mru_Ip_Types.h header file and Mru_Ip_Cfg.h configuration header file are of the same vendor */
@@ -110,10 +112,25 @@ typedef struct
 {
    uint8 NumTxMB;                         /**< The number of MailBox used. */ 
    volatile uint32 * const * MBAddList;   /**< List of MailBox address used. */
+   const uint8 * TxMBList;                /**< List of MailBox used. */ 
    volatile uint32 * ChMBSTATAdd;         /**< The data configuartion for MBSTAT register. */
    uint8 LastTxMBIndex;                   /**< Last MailBox which is enabled by receiver. */
    boolean bOverwriteMBEnb;               /**< Allow overwriting to mailbox. */
 } Mru_Ip_TransmitChannelType;
+
+/** @brief   Structure defining channels information in a Mru instance for the reset instance. */
+typedef struct  
+{
+   uint32 MBStatusMask;       /**< MB Status Mask. */
+   volatile uint32 * ChMBSTATAdd;   /**< Address of channel MBSTAT register. */
+}Mru_Ip_ResetChOfInsType;
+
+/** @brief   Structure defining the data configuration for the reset instance. */
+typedef struct  
+{
+   uint8 NumChannel;                               /**< The number of channel. */ 
+   const Mru_Ip_ResetChOfInsType *MruResetChOfInsCfg;  /**< Struct define channels information in a Mru instance . */
+} Mru_Ip_ResetInstanceType;
 
 /** @brief   ISR notification function type for receiving channel. */
 typedef void (*Mru_Ip_ReceiveNotificationType)(uint8 RxChannelId, const uint32 * RxBuffer, uint8 BufferSize);
@@ -125,8 +142,8 @@ typedef struct
    uint8 InstanceId;                                     /**< Instance Id of the hardware unit. */
    uint8 ChannelIndex;                                   /**< Channel Index. */
    uint8 NumRxMB;                                        /**< The number of MailBox used. */ 
-   uint8 * ListRxMB;                                     /**< The list of MailBox used. */ 
-   volatile const uint32 * const * MBAddList;                    /**< List of MailBox address used. */
+   const uint8 * ListRxMB;                                     /**< The list of MailBox used. */ 
+   volatile const uint32 * const * MBAddList;                  /**< List of MailBox address used. */
    uint32 * RxBuffer;                                    /**< Receiving buffer. */
    Mru_Ip_ReceiveNotificationType ReceiveNotification;   /**< Store pointer for ISR notification function */
 } Mru_Ip_ReceiveChannelType;
@@ -146,7 +163,8 @@ typedef struct
    uint32 ChCFG1;                                  /**< The data configuartion for CH_CFG1 register. */
    volatile uint32 * ChMBSTATAdd;                  /**< The data configuartion for MBSTAT register. */
    uint32 NumMailbox;                              /**< Number of Mailbox. */
-   const Mru_Ip_MBLinkReceiveChannelType (* MBLinkReceiveChCfg)[NUMBER_OF_INTERRUPT_GROUP]; /**< Link Mailbox to the receiving channel configuration corresponding to groups interrupt. */
+   boolean bSkipInitChannel;                       /**< Skip the initialization of channel. */
+   const Mru_Ip_MBLinkReceiveChannelType (* MBLinkReceiveChCfg)[NOTIFY_STATUS_COUNT]; /**< Link Mailbox to the receiving channel configuration corresponding to groups interrupt. */
 } Mru_Ip_ChannelCfgType;
 
 /** @brief   Structure defining information needed for MRU driver initialization. */

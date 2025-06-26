@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2023, NXP
+# Copyright 2023-2025 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -63,16 +63,28 @@ def processor_to_controller(processor_name):
     if "IMXRT1" in processor_name:
         # Use IMX config tools
         return 'IOMUX'
+    if "IMXRT7" in processor_name:
+        # LPC config tools
+        return 'IOCON'
     if "IMXRT6" in processor_name:
         # LPC config tools
         return 'IOCON'
     if "IMXRT5" in processor_name:
         # LPC config tools
         return 'IOCON'
-    if "LPC55" in processor_name:
+    if "IMX8M" in processor_name:
+        # IMX config tools
+        return 'IOMUX'
+    if "IMX9" in processor_name:
+        # IMX config tools
+        return 'IOMUX'
+    if "LPC5" in processor_name:
         # LPC config tools
         return 'IOCON'
     if "MK" in processor_name:
+        # Kinetis config tools
+        return 'PORT'
+    if "K32" in processor_name:
         # Kinetis config tools
         return 'PORT'
     if "MCX" in processor_name:
@@ -117,8 +129,8 @@ def main():
 
     data_version = get_pack_version(temp_dir.name)
     print(f"Found data pack version {data_version}")
-    if round(data_version) != 14:
-        print("Warning: This tool is only verified for data pack version 14, "
+    if round(data_version) != 16:
+        print("Warning: This tool is only verified for data pack version 16, "
             "other versions may not work")
 
     # Attempt to locate the signal XML files we will generate from
@@ -127,8 +139,11 @@ def main():
     # Pathlib glob returns an iteration, so use sum to count the length
     package_count = sum(1 for _ in proc_root.glob(search_pattern))
     if package_count == 0:
-        print("No signal configuration files were found in this data pack")
-        sys.exit(255)
+        search_pattern = "*/i_mx_2_0/*/signal_configuration.xml"
+        package_count = sum(1 for _ in proc_root.glob(search_pattern))
+        if package_count == 0:
+            print("No signal configuration files were found in this data pack")
+            sys.exit(255)
     if args.copyright:
         # Add default copyright
         nxp_copyright = (f"Copyright {datetime.datetime.today().year}, NXP\n"

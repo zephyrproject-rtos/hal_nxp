@@ -42,6 +42,8 @@ Patch List for S32K1:
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
    - Rename fields and macros of FTM device headers to allow compatibility with MCUX FTM driver.
    - Rename fields and macros of FlexCAN device headers to allow compatibility with MCUX FlexCAN driver.
+   - Rename fields and macros of ADC device headers to allow compatibility with MCUX ADC driver.
+   - Add/rename macros of S32K148 ENET device header to allow compatibility with MCUX ENET driver.
 
 Patch List for S32K3:
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
@@ -64,3 +66,11 @@ Patch List for S32Z/E:
      for S32Z/E.
    - Remove 'static inline' keywords from 'Netc_Eth_Ip_MSIX_Rx' function so that it can be
      used as an extern function outside of the file declaration.
+   - Clear the EOC flag before Adc_Sar_CheckAndCallEocNotification() is called to avoid the
+     race condition that prevents the next end of conversion callback to be executed, when
+     a conversion is started inside the previous end of conversion completed callback.
+   - Rename the DMAMUX_Type member CHCONF to CHCFG so that the MCUX DMA driver can be reused
+     for S32Z.
+   - Remove #include "S32Z2_SPI.h" from s32/drivers/s32ze/BaseNXP/header/S32Z2.h to support
+     DSPI using the MCUX driver. This removal won't affect SPI shim driver because this header
+     file is already included inside the RTD SPI driver

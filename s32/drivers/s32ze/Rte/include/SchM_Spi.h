@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Spi.h
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module interface
 *   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
@@ -35,9 +35,9 @@ extern "C" {
 #define SCHM_SPI_AR_RELEASE_MAJOR_VERSION     4
 #define SCHM_SPI_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_SPI_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_SPI_SW_MAJOR_VERSION             1
+#define SCHM_SPI_SW_MAJOR_VERSION             2
 #define SCHM_SPI_SW_MINOR_VERSION             0
-#define SCHM_SPI_SW_PATCH_VERSION             0
+#define SCHM_SPI_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS

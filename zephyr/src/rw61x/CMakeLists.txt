@@ -1,4 +1,4 @@
-if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITHIC_IEEE802154)
+if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_NBU)
 	set(hal_blobs_dir ${ZEPHYR_HAL_NXP_MODULE_DIR}/zephyr/blobs/rw61x)
 
 	set(signed_binary_blobs_list)
@@ -14,21 +14,15 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITH
 
 		zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/rw61x_cpu1.c)
 	endif()
-	if(CONFIG_NXP_MONOLITHIC_IEEE802154)
-		list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/rw61x_combo_fw.bin.inc)
-
-		set(signed_binary_blob_name rw61x_sb_combo_a2.bin)
-
-		list(APPEND signed_binary_blobs_list ${hal_blobs_dir}/${signed_binary_blob_name})
-
-		zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/rw61x_cpu2.c)
-	elseif(CONFIG_NXP_MONOLITHIC_BT)
-		list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/rw61x_ble_fw.bin.inc)
-
-		set(signed_binary_blob_name rw61x_sb_ble_a2.bin)
+	if(CONFIG_NXP_MONOLITHIC_NBU)
+		if(CONFIG_SOC_RW612)
+			set(signed_binary_blob_name rw61x_sb_ble_15d4_combo_a2.bin)
+		else()
+			set(signed_binary_blob_name rw61x_sb_ble_a2.bin)
+		endif()
+		list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/rw61x_cpu2_fw.bin.inc)
 
 		list(APPEND signed_binary_blobs_list ${hal_blobs_dir}/${signed_binary_blob_name})
-
 		zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/rw61x_cpu2.c)
 	endif()
 
@@ -37,12 +31,14 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITH
 	foreach(i RANGE ${count})
 		list(GET signed_binary_blobs_list ${i} signed_binary_blob)
 		if(EXISTS ${signed_binary_blob})
-			set(binary_blob ${signed_binary_blob})
+			list(APPEND binary_blobs_list ${signed_binary_blob})
+		elseif(CONFIG_BUILD_ONLY_NO_BLOBS)
+			message(WARNING "Couldn't find signed firmware ! ${signed_binary_blob}")
+			list(APPEND binary_blobs_list "NOTFOUND")
 		else()
 			message(FATAL_ERROR "Couldn't find signed firmware ! ${signed_binary_blob}")
 		endif()
 
-		list(APPEND binary_blobs_list ${binary_blob})
 	endforeach()
 
 	list(LENGTH binary_blobs_list count)
@@ -51,6 +47,10 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITH
 		list(GET binary_blobs_list ${i} binary_blob)
 		list(GET output_includes_list ${i} output_include)
 		message(STATUS " generate include of binary blob: ${binary_blob}")
-		generate_inc_file_for_target(${ZEPHYR_CURRENT_LIBRARY} ${binary_blob} ${output_include})
+		if(${binary_blob} STREQUAL "NOTFOUND")
+			file(TOUCH ${output_include})
+		else()
+			generate_inc_file_for_target(${ZEPHYR_CURRENT_LIBRARY} ${binary_blob} ${output_include})
+		endif()
 	endforeach()
 endif()

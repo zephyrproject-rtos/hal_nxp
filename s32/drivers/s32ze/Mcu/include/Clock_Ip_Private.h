@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_Private.h
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK IP driver private header file.
 *   @details CLOCK IP driver private header file.
@@ -52,9 +52,9 @@ extern "C"{
 #define CLOCK_IP_PRIVATE_AR_RELEASE_MAJOR_VERSION     4
 #define CLOCK_IP_PRIVATE_AR_RELEASE_MINOR_VERSION     7
 #define CLOCK_IP_PRIVATE_AR_RELEASE_REVISION_VERSION  0
-#define CLOCK_IP_PRIVATE_SW_MAJOR_VERSION             1
+#define CLOCK_IP_PRIVATE_SW_MAJOR_VERSION             2
 #define CLOCK_IP_PRIVATE_SW_MINOR_VERSION             0
-#define CLOCK_IP_PRIVATE_SW_PATCH_VERSION             0
+#define CLOCK_IP_PRIVATE_SW_PATCH_VERSION             1
 
 
 /*==================================================================================================
@@ -305,7 +305,6 @@ typedef struct
     extOscResetCallback Reset;
     extOscSetCallback Set;
     extOscSetCallback Complete;
-    extOscDisableCallback Disable;
     extOscEnableCallback Enable;
 
 }Clock_Ip_ExtOscCallbackType;
@@ -507,17 +506,20 @@ extern uint8 Clock_Ip_FreqIds[CLOCK_IP_FEATURE_NAMES_NO];
 
 #ifdef CLOCK_IP_POWER_NOTIFICATIONS
 #if (CLOCK_IP_POWER_NOTIFICATIONS == STD_ON)
-void Clock_Ip_ClockPowerNotifications(Clock_Ip_PowerModesType PowerMode, Clock_Ip_PowerNotificationType Notification);
+void Clock_Ip_ClockPowerNotifications(Clock_Ip_PowerModesType PowerMode,
+                                    Clock_Ip_PowerNotificationType Notification);
 #endif
 #endif
-void Clock_Ip_ReportClockErrors(Clock_Ip_NotificationType Error, Clock_Ip_NameType ClockName);
-void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint32 Frequency);
+void Clock_Ip_ReportClockErrors(Clock_Ip_NotificationType Error,
+                                Clock_Ip_NameType ClockName);
+void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName,
+                                         uint64 Frequency);
 #if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
-uint32 Clock_Ip_GetFreq(Clock_Ip_NameType ClockName);
-void Clock_Ip_SetExternalOscillatorFrequency(Clock_Ip_NameType ExtOscName, uint32 Frequency);
+uint64 Clock_Ip_GetFreq(Clock_Ip_NameType ClockName);
+void Clock_Ip_SetExternalOscillatorFrequency(Clock_Ip_NameType ExtOscName,
+                                             uint64 Frequency);
 #endif
 #if CLOCK_IP_CMU_INFO_SIZE > 0U
-uint32 Clock_Ip_CMU_GetInterruptStatus(uint8 IndexCmu);
 void Clock_Ip_CMU_ClockFailInt(void);
 #endif
 #if defined(CLOCK_IP_CGU_INTERRUPT)
@@ -532,7 +534,8 @@ void Clock_Ip_CGU_ClockDetectInt(void);
 #if (defined(CLOCK_IP_REGISTER_VALUES_OPTIMIZATION) && (CLOCK_IP_REGISTER_VALUES_OPTIMIZATION == STD_ON))
 void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes);
 #endif
-void Clock_Ip_Command(Clock_Ip_ClockConfigType const * Config, Clock_Ip_CommandType Command);
+void Clock_Ip_Command(Clock_Ip_ClockConfigType const * Config,
+                    Clock_Ip_CommandType Command);
 /*!
  * @brief Initializes a starting reference point for timeout
  *

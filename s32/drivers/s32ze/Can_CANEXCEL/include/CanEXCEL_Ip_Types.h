@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,9 +33,9 @@ extern "C"{
 #define CANEXCEL_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H       4
 #define CANEXCEL_IP_TYPES_AR_RELEASE_MINOR_VERSION_H       7
 #define CANEXCEL_IP_TYPES_AR_RELEASE_REVISION_VERSION_H    0
-#define CANEXCEL_IP_TYPES_SW_MAJOR_VERSION_H               1
+#define CANEXCEL_IP_TYPES_SW_MAJOR_VERSION_H               2
 #define CANEXCEL_IP_TYPES_SW_MINOR_VERSION_H               0
-#define CANEXCEL_IP_TYPES_SW_PATCH_VERSION_H               0
+#define CANEXCEL_IP_TYPES_SW_PATCH_VERSION_H               1
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
@@ -47,14 +47,14 @@ extern "C"{
 #if ((CANEXCEL_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H    != CANEXCEL_IP_CFG_AR_RELEASE_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_TYPES_AR_RELEASE_MINOR_VERSION_H    != CANEXCEL_IP_CFG_AR_RELEASE_MINOR_VERSION_H) || \
      (CANEXCEL_IP_TYPES_AR_RELEASE_REVISION_VERSION_H != CANEXCEL_IP_CFG_AR_RELEASE_REVISION_VERSION_H) \
-    )
+)
     #error "AutoSar Version Numbers of CanEXCEL_Ip_Types.h and CanEXCEL_Ip_Cfg.h are different"
 #endif
 /* Check if current file and CanEXCEL_Ip_Cfg.h are of the same Software version */
 #if ((CANEXCEL_IP_TYPES_SW_MAJOR_VERSION_H != CANEXCEL_IP_CFG_SW_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_TYPES_SW_MINOR_VERSION_H != CANEXCEL_IP_CFG_SW_MINOR_VERSION_H) || \
      (CANEXCEL_IP_TYPES_SW_PATCH_VERSION_H != CANEXCEL_IP_CFG_SW_PATCH_VERSION_H) \
-    )
+)
     #error "Software Version Numbers of CanEXCEL_Ip_Types.h and CanEXCEL_Ip_Cfg.h are different"
 #endif
 /*==================================================================================================
@@ -79,7 +79,6 @@ extern "C"{
 /* implements CANEXCEL_StructType_structure */
 typedef struct {
     CANXL_SIC_Type ** EXL_SIC;
-    MC_RGM_Type ** EXL_RGM;
     CANXL_MRU_Type ** EXL_MRU;
     CANXL_GRP_CONTROL_Type ** EXL_GRP;
     CANXL_DSC_CONTROL_Type ** EXL_DESC_CTR;
@@ -155,6 +154,7 @@ typedef enum
     CANEXCEL_IP_INT_FREEZE,         /*!< ACk Freeze event interrupt*/
 } Canexcel_Ip_ErrorIntType;
 
+#if (CANEXCEL_IP_HAS_TS_ENABLE == STD_ON)
 /** @brief Canexcel Timestamp Clock Sources
  * This are define based on the resource file of each Chip support source selection */
 /* implements  Canexcel_Ip_TimeBaseSelType_enum */
@@ -177,6 +177,7 @@ typedef enum
     CANEXCEL_TIMESTAMPCAPTURE_START         /**< The high resolution time stamp is captured in the start of frame for classical CAN frames and
                                              in res bit for CAN FD frames and in the res XL bit for CAN XL frames */
 }Canexcel_Ip_TimeStampCaptureType;
+#endif /* (CANEXCEL_IP_HAS_TS_ENABLE == STD_ON) */
 
 /** @brief The status used and reported by Canexcel Ip driver.
  *  @details The CanEXCEL specific error codes
@@ -194,7 +195,7 @@ typedef enum
 
 /*! @brief CANXL operation modes
  */
-/*  implements Canexcel_Ip_ModesType_typedef */
+/*  implements  Canexcel_Ip_ModesType_typedef */
 typedef enum
 {
     CANEXCEL_NORMAL_MODE,        /**< Normal mode or user mode @internal gui name="Normal" */
@@ -228,7 +229,7 @@ typedef struct{
 } Canexcel_Ip_QueueConf;
 
 /*! @brief CanExcel Rx FIFO filter type */
-/* implements  Canexcel_Ip_RxFifoFilterType_enum */
+/* implements Canexcel_Ip_RxFifoFilterType_enum */
 typedef enum
 {
     CANEXCEL_IP_RX_FIFO_RANGE_FILTER = 0U,      /*!< Filter element with range scheme*/
@@ -293,6 +294,7 @@ typedef struct{
     uint8 SDT;
     boolean SEC;
     uint8 VCID;
+    uint32 AF;
     boolean is_polling;
 } Canexcel_Ip_DataInfoType;
 
@@ -356,6 +358,8 @@ typedef struct
 typedef struct
 {
     uint32  list[16];                  /**< The Can Message Buffer Pointer List array */
+    boolean isPending[16];             /**< TRUE when the user pushes a pointer to the mb, FALSE when the mb processed in mainfunction/ISR */
+    uint8   lastHwIdex;                /**< The No of Message Pointers List sent\received */
     uint8   noPointers;                /**< The No of Message Pointers List sent\received */
     boolean isPolling;                 /**< True if the transfer is Polling Mode  */
     boolean isRemote;                  /**< True if the frame is a remote frame */
@@ -379,7 +383,7 @@ typedef struct CanexcelState
                     Canexcel_Ip_EventType eventType,
                     uint32 buffIdx,
                     const struct CanexcelState *driverState
-                   );                                         /**< IRQ handler callback function. */
+          );                                         /**< IRQ handler callback function. */
    void * callbackParam;                                      /**< Parameter used to pass user data
                                                                    when invoking the callback
                                                                    function. */
@@ -387,7 +391,7 @@ typedef struct CanexcelState
                           Canexcel_Ip_EventType eventType,
                           uint32 u32SysStatus,
                           const struct CanexcelState *driverState
-                         );                                   /**< Error IRQ handler callback
+                );                                   /**< Error IRQ handler callback
                                                                    function. */
    void *errorCallbackParam;                                  /**< Parameter used to pass user data
                                                                    when invoking the error callback
@@ -414,7 +418,7 @@ typedef void (* Canexcel_Ip_CallbackType)(uint8 instance,
                                          Canexcel_Ip_EventType eventType,
                                          uint32 buffIdx,
                                          const Canexcel_Ip_StateType * canexcelState
-                                        );
+                               );
 
 /*! @brief CanExcel Driver error callback function type
  */
@@ -423,7 +427,7 @@ typedef void (* Canexcel_Ip_ErrorCallbackType)(uint8 instance,
                                               Canexcel_Ip_EventType eventType,
                                               uint32 u32SysStatus,
                                               const Canexcel_Ip_StateType * canexcelState
-                                             );
+                                    );
 
 #if (CANEXCEL_IP_HAS_TS_ENABLE == STD_ON)
 /*! @brief CanEXCEL configuration for TimeStamp
@@ -457,7 +461,7 @@ typedef struct{
     Canexcel_Ip_TimeSegmentType Fd_bitrate;        /**< The bitrate used for the data phase of FD frames. */
     Canexcel_Ip_TimeSegmentType Xl_bitrate;        /**< The bitrate used for the data phase of XL frames. */
 #if (CANEXCEL_IP_HAS_TS_ENABLE == STD_ON)
-    Canexcel_Ip_TimeStampConf_Type TimestampConfig;/**< The Timestamp configuration */ 
+    Canexcel_Ip_TimeStampConf_Type TimestampConfig;/**< The Timestamp configuration */
 #endif
     Canexcel_Ip_CallbackType Callback;             /**< The Callback for Rx or Tx, FIFO Events */
     Canexcel_Ip_ErrorCallbackType ErrorCallback;   /**< The ErrorCallback for Error Events */

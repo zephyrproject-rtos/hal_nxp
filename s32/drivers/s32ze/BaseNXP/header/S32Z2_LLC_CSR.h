@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_LLC_CSR.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_LLC_CSR
  *
  * This file contains register definitions and macros for easy access to their
@@ -84,7 +84,7 @@ typedef struct {
   __IO uint32_t CCUSPCR1;                          /**< Scratchpad Configuration 1, offset: 0x24 */
   __IO uint32_t CCUSPBR0;                          /**< Scratchpad Base Address 0, offset: 0x28 */
   uint8_t RESERVED_2[20];
-  struct {                                         /* offset: 0x40, array step: 0x8 */
+  struct LLC_CSR_CCUWPCR {                         /* offset: 0x40, array step: 0x8 */
     __IO uint32_t CCUWPCRA;                          /**< Way Partitioning Control A 0..Way Partitioning Control A 7, array offset: 0x40, array step: 0x8 */
     __IO uint32_t CCUWPCRB;                          /**< Way Partitioning Control B 0..Way Partitioning Control B 7, array offset: 0x44, array step: 0x8 */
   } CCUWPCR[LLC_CSR_CCUWPCR_COUNT];

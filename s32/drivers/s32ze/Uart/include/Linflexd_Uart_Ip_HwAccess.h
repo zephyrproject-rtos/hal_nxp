@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 
-#ifndef LINFLEXD_HWACCESS_H
-#define LINFLEXD_HWACCESS_H
+#ifndef LINFLEXD_UART_IP_HWACCESS_H
+#define LINFLEXD_UART_IP_HWACCESS_H
 
 /**
 *   @file
@@ -26,7 +26,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "OsIf.h"
 #include "Linflexd_Uart_Ip_Defines.h"
 #include "SchM_Uart.h"
@@ -38,9 +38,9 @@ extern "C"{
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION     4
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION  0
-#define LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION             1
+#define LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION             2
 #define LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION             0
-#define LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION             0
+#define LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION             1
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -63,11 +63,11 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if current file and StandardTypes.h header file are of the same Autosar version */
+    /* Check if current file and Std_Types.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
     )
-        #error "Linflexd_Uart_Ip_HwAccess.h and StandardTypes.h are different"
+        #error "Linflexd_Uart_Ip_HwAccess.h and Std_Types.h are different"
     #endif
 
     /* Check if current file and OsIf.h header file are of the same Autosar version */
@@ -99,13 +99,14 @@ extern "C"{
 
 #ifdef CPU_BYTE_ORDER
     #if (LOW_BYTE_FIRST == CPU_BYTE_ORDER)
-        #define CORE_LITTLE_ENDIAN
+        #define PARTITION_LITTLE_ENDIAN
     #endif
 #endif
 
-#ifdef CORE_LITTLE_ENDIAN
+#ifdef PARTITION_LITTLE_ENDIAN
     #define SWAP_BYTES_UINT16(x) ((((x) >> 8U) & 0xFFU) | (((x) << 8U) & 0xFF00U))
 #endif
+
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
@@ -120,7 +121,12 @@ typedef enum
     LINFLEXD_UART_IP_7_BITS     = 0U,
     LINFLEXD_UART_IP_8_BITS     = 1U,
     LINFLEXD_UART_IP_15_BITS    = 2U,
-    LINFLEXD_UART_IP_16_BITS    = 3U
+    LINFLEXD_UART_IP_16_BITS    = 3U,
+#ifdef LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT
+#if (STD_ON == LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT)
+    LINFLEXD_UART_IP_12_BITS    = 4U
+#endif /*(STD_ON == LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT)*/
+#endif /* LINFLEXD_UART_IP_ENABLE_UPSTREAM_FRAME_SUPPORT */
 } Linflexd_Uart_Ip_WordLengthType;
 
 /**
@@ -656,7 +662,7 @@ static inline void Linflexd_Uart_Ip_SetTxDataBuffer2Bytes(LINFLEXD_Type * Base, 
 {
     uint32 Mask;
     uint16 DataTemp;
-#ifdef CORE_LITTLE_ENDIAN
+#ifdef PARTITION_LITTLE_ENDIAN
     DataTemp = SWAP_BYTES_UINT16(Data);
 #else
     DataTemp = Data;
@@ -692,7 +698,7 @@ static inline uint16 Linflexd_Uart_Ip_GetRxDataBuffer2Bytes(const LINFLEXD_Type 
     uint16 Data;
     uint32 Mask = LINFLEXD_BDRM_DATA4_MASK | LINFLEXD_BDRM_DATA5_MASK;
     Data = (uint16)(Base->BDRM & Mask);
-#ifdef CORE_LITTLE_ENDIAN
+#ifdef PARTITION_LITTLE_ENDIAN
     Data = SWAP_BYTES_UINT16(Data);
 #endif
     return Data;
@@ -781,4 +787,4 @@ static inline boolean Linflexd_Uart_Ip_CheckTimeout(uint32 * StartTime, uint32 *
 
 /** @} */
 
-#endif /* LINFLEXD_HWACCESS_H */
+#endif /* LINFLEXD_UART_IP_HWACCESS_H */

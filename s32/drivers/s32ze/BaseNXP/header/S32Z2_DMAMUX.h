@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_DMAMUX.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_DMAMUX
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,7 +73,7 @@
 
 /** DMAMUX - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t CHCONF[DMAMUX_CHCFG_COUNT];         /**< Channel Configuration, array offset: 0x0, array step: 0x1, irregular array, not all indices are valid */
+  __IO uint8_t CHCFG[DMAMUX_CHCFG_COUNT];         /**< Channel Configuration, array offset: 0x0, array step: 0x1, irregular array, not all indices are valid */
 } DMAMUX_Type, *DMAMUX_MemMapPtr;
 
 /** Number of instances of the DMAMUX module. */

@@ -9,6 +9,8 @@
 
 /* SOC module features */
 
+/* @brief ADC12 availability on the SoC. */
+#define FSL_FEATURE_SOC_ADC12_COUNT (2)
 /* @brief SYSMPU availability on the SoC. */
 #define FSL_FEATURE_SOC_SYSMPU_COUNT (1)
 /* @brief PORT availability on the SoC. */
@@ -300,5 +302,12 @@
 #define FSL_FEATURE_RTC_HAS_PCR (0)
 /* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (1)
+
+/* ADC12 module features */
+
+/* @brief Has DMA support (bit SC2[DMAEN]. */
+#define FSL_FEATURE_ADC12_HAS_DMA_SUPPORT (1)
+/* @brief Conversion control count (related to number of registers SC1n and Rn). */
+#define FSL_FEATURE_ADC12_CONVERSION_CONTROL_COUNT (24)
 
 #endif /* _S32K146_FEATURES_H_ */

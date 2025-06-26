@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F3_COMMON.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F3_COMMON
  *
  * This file contains register definitions and macros for easy access to their
@@ -102,12 +102,12 @@ typedef struct {
   __IO uint32_t UFIECR;                            /**< Uncorrectable fatal integrity error configuration register, offset: 0x10C0 */
   __IO uint32_t UFIESR;                            /**< Uncorrectable fatal integrity error status register, offset: 0x10C4 */
   uint8_t RESERVED_8[312];
-  __IO uint32_t CVLANR1;                           /**< Custom VLAN Ethertype register 1, offset: 0x1200 */
-  __IO uint32_t CVLANR2;                           /**< Custom VLAN Ethertype register 2, offset: 0x1204 */
+  __IO uint32_t CVLANR1;                           /**< Custom VLAN EtherType register 1, offset: 0x1200 */
+  __IO uint32_t CVLANR2;                           /**< Custom VLAN EtherType register 2, offset: 0x1204 */
   uint8_t RESERVED_9[24];
   __IO uint32_t DOSL2CR;                           /**< DoS L2 configuration register, offset: 0x1220 */
   uint8_t RESERVED_10[220];
-  struct {                                         /* offset: 0x1300, array step: 0xC */
+  struct NETC_F3_COMMON_NUM_PROFILE {              /* offset: 0x1300, array step: 0xC */
     __IO uint32_t VLANIPVMPR0;                       /**< VLAN to IPV mapping profile 0 register 0, array offset: 0x1300, array step: 0xC */
     __IO uint32_t VLANIPVMPR1;                       /**< VLAN to IPV mapping profile 0 register 1, array offset: 0x1304, array step: 0xC */
     __IO uint32_t VLANDRMPR;                         /**< VLAN to DR mapping profile 0 register, array offset: 0x1308, array step: 0xC */
@@ -487,7 +487,7 @@ typedef struct {
 #define NETC_F3_COMMON_UFIESR_INTERR(x)          (((uint32_t)(((uint32_t)(x)) << NETC_F3_COMMON_UFIESR_INTERR_SHIFT)) & NETC_F3_COMMON_UFIESR_INTERR_MASK)
 /*! @} */
 
-/*! @name CVLANR1 - Custom VLAN Ethertype register 1 */
+/*! @name CVLANR1 - Custom VLAN EtherType register 1 */
 /*! @{ */
 
 #define NETC_F3_COMMON_CVLANR1_ETYPE_MASK        (0xFFFFU)
@@ -501,7 +501,7 @@ typedef struct {
 #define NETC_F3_COMMON_CVLANR1_V(x)              (((uint32_t)(((uint32_t)(x)) << NETC_F3_COMMON_CVLANR1_V_SHIFT)) & NETC_F3_COMMON_CVLANR1_V_MASK)
 /*! @} */
 
-/*! @name CVLANR2 - Custom VLAN Ethertype register 2 */
+/*! @name CVLANR2 - Custom VLAN EtherType register 2 */
 /*! @{ */
 
 #define NETC_F3_COMMON_CVLANR2_ETYPE_MASK        (0xFFFFU)

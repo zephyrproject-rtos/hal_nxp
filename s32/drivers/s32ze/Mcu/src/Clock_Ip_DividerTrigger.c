@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_DividerTrigger.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -37,9 +37,9 @@ extern "C"{
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DIVIDERTRIGGER_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_DIVIDERTRIGGER_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_DIVIDERTRIGGER_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_DIVIDERTRIGGER_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_DIVIDERTRIGGER_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -89,6 +89,11 @@ extern "C"{
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
+
+/*==================================================================================================
+*                                    GLOBAL FUNCTION PROTOTYPES
+==================================================================================================*/
+
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -98,6 +103,7 @@ extern "C"{
 #include "Mcu_MemMap.h"
 
 static void Clock_Ip_Callback_DividerTriggerEmpty(Clock_Ip_DividerTriggerConfigType const* Config);
+
 #ifdef CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT
 static void Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_DividerTriggerConfigType const* Config);
 static void Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_DividerTriggerConfigType const* Config);
@@ -201,34 +207,36 @@ static void Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_Divide
 }
 #endif
 
+
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
 #include "Mcu_MemMap.h"
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
 
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
+
 /* Clock start constant section data */
 #define MCU_START_SEC_CONST_UNSPECIFIED
-
 #include "Mcu_MemMap.h"
 
 const Clock_Ip_DividerTriggerCallbackType Clock_Ip_axDividerTriggerCallbacks[CLOCK_IP_DIVIDERTRIGGER_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_Callback_DividerTriggerEmpty,                  /* Configure */
-        Clock_Ip_Callback_DividerTriggerEmpty,                  /* Trigger Update */
+        &Clock_Ip_Callback_DividerTriggerEmpty,                  /* Configure */
+        &Clock_Ip_Callback_DividerTriggerEmpty,                  /* Trigger Update */
     },
 #ifdef CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT
     {
-        Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat,           /* Configure */
-        Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat,       /* Trigger Update */
+        &Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat,           /* Configure */
+        &Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat,       /* Trigger Update */
     },
 #endif
+
 };
 
 /* Clock stop constant section data */

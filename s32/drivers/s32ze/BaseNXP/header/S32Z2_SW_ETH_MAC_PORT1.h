@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SW_ETH_MAC_PORT1.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SW_ETH_MAC_PORT1
  *
  * This file contains register definitions and macros for easy access to their
@@ -85,9 +85,7 @@ typedef struct {
   __IO uint32_t PM0_PAUSE_THRESH;                  /**< Port MAC 0 Pause Quanta Threshold Register, offset: 0x64 */
   uint8_t RESERVED_5[12];
   __I  uint32_t PM0_RX_PAUSE_STATUS;               /**< Port MAC 0 Receive Pause Status Register, offset: 0x74 */
-  uint8_t RESERVED_6[64];
-  __IO uint32_t PM0_LPWAKE_TIMER;                  /**< Port MAC 0 EEE Low Power Wakeup Timer Register, offset: 0xB8 */
-  __IO uint32_t PM0_SLEEP_TIMER;                   /**< Port MAC 0 Transmit EEE Low Power Timer Register, offset: 0xBC */
+  uint8_t RESERVED_6[72];
   __IO uint32_t PM0_SINGLE_STEP;                   /**< Port MAC 0 IEEE1588 Single-Step Control Register, offset: 0xC0 */
   uint8_t RESERVED_7[12];
   __IO uint32_t PM0_HD_BACKOFF_ENTROPY;            /**< Port MAC 0 half-duplex backoff entropy register, offset: 0xD0 */
@@ -167,9 +165,7 @@ typedef struct {
   __IO uint32_t PM1_PAUSE_THRESH;                  /**< Port MAC 1 Pause Quanta Threshold Register, offset: 0x464 */
   uint8_t RESERVED_22[12];
   __I  uint32_t PM1_RX_PAUSE_STATUS;               /**< Port MAC 1 Receive Pause Status Register, offset: 0x474 */
-  uint8_t RESERVED_23[64];
-  __IO uint32_t PM1_LPWAKE_TIMER;                  /**< Port MAC 1 EEE Low Power Wakeup Timer Register, offset: 0x4B8 */
-  __IO uint32_t PM1_SLEEP_TIMER;                   /**< Port MAC 1 Transmit EEE Low Power Timer Register, offset: 0x4BC */
+  uint8_t RESERVED_23[72];
   __IO uint32_t PM1_SINGLE_STEP;                   /**< Port MAC 1 IEEE1588 Single-Step Control Register, offset: 0x4C0 */
   uint8_t RESERVED_24[12];
   __IO uint32_t PM1_HD_BACKOFF_ENTROPY;            /**< Port MAC 1 half-duplex backoff entropy register, offset: 0x4D0 */
@@ -328,11 +324,6 @@ typedef struct {
 #define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_FLUSH_WIDTH (1U)
 #define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_FLUSH(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_FLUSH_SHIFT)) & SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_FLUSH_MASK)
 
-#define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_LOWP_ENA_MASK (0x800000U)
-#define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT (23U)
-#define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_LOWP_ENA_WIDTH (1U)
-#define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_LOWP_ENA(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT)) & SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_TX_LOWP_ENA_MASK)
-
 #define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_SWR_MASK (0x4000000U)
 #define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_SWR_SHIFT (26U)
 #define SW_ETH_MAC_PORT1_PM0_COMMAND_CONFIG_SWR_WIDTH (1U)
@@ -451,30 +442,12 @@ typedef struct {
 #define SW_ETH_MAC_PORT1_PM0_RX_PAUSE_STATUS_PSTAT(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM0_RX_PAUSE_STATUS_PSTAT_SHIFT)) & SW_ETH_MAC_PORT1_PM0_RX_PAUSE_STATUS_PSTAT_MASK)
 /*! @} */
 
-/*! @name PM0_LPWAKE_TIMER - Port MAC 0 EEE Low Power Wakeup Timer Register */
-/*! @{ */
-
-#define SW_ETH_MAC_PORT1_PM0_LPWAKE_TIMER_TW_SYS_TX_MASK (0xFFFFFFU)
-#define SW_ETH_MAC_PORT1_PM0_LPWAKE_TIMER_TW_SYS_TX_SHIFT (0U)
-#define SW_ETH_MAC_PORT1_PM0_LPWAKE_TIMER_TW_SYS_TX_WIDTH (24U)
-#define SW_ETH_MAC_PORT1_PM0_LPWAKE_TIMER_TW_SYS_TX(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM0_LPWAKE_TIMER_TW_SYS_TX_SHIFT)) & SW_ETH_MAC_PORT1_PM0_LPWAKE_TIMER_TW_SYS_TX_MASK)
-/*! @} */
-
-/*! @name PM0_SLEEP_TIMER - Port MAC 0 Transmit EEE Low Power Timer Register */
-/*! @{ */
-
-#define SW_ETH_MAC_PORT1_PM0_SLEEP_TIMER_SLEEPT_MASK (0xFFFFFFU)
-#define SW_ETH_MAC_PORT1_PM0_SLEEP_TIMER_SLEEPT_SHIFT (0U)
-#define SW_ETH_MAC_PORT1_PM0_SLEEP_TIMER_SLEEPT_WIDTH (24U)
-#define SW_ETH_MAC_PORT1_PM0_SLEEP_TIMER_SLEEPT(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM0_SLEEP_TIMER_SLEEPT_SHIFT)) & SW_ETH_MAC_PORT1_PM0_SLEEP_TIMER_SLEEPT_MASK)
-/*! @} */
-
 /*! @name PM0_SINGLE_STEP - Port MAC 0 IEEE1588 Single-Step Control Register */
 /*! @{ */
 
-#define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_MASK (0xFF80U)
+#define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_MASK (0x7F80U)
 #define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_SHIFT (7U)
-#define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_WIDTH (9U)
+#define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_WIDTH (8U)
 #define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_SHIFT)) & SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_OFFSET_MASK)
 
 #define SW_ETH_MAC_PORT1_PM0_SINGLE_STEP_EN_MASK (0x80000000U)
@@ -1043,11 +1016,6 @@ typedef struct {
 #define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_FLUSH_WIDTH (1U)
 #define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_FLUSH(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_FLUSH_SHIFT)) & SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_FLUSH_MASK)
 
-#define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_LOWP_ENA_MASK (0x800000U)
-#define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT (23U)
-#define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_LOWP_ENA_WIDTH (1U)
-#define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_LOWP_ENA(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_LOWP_ENA_SHIFT)) & SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_TX_LOWP_ENA_MASK)
-
 #define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_SWR_MASK (0x4000000U)
 #define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_SWR_SHIFT (26U)
 #define SW_ETH_MAC_PORT1_PM1_COMMAND_CONFIG_SWR_WIDTH (1U)
@@ -1166,30 +1134,12 @@ typedef struct {
 #define SW_ETH_MAC_PORT1_PM1_RX_PAUSE_STATUS_PSTAT(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM1_RX_PAUSE_STATUS_PSTAT_SHIFT)) & SW_ETH_MAC_PORT1_PM1_RX_PAUSE_STATUS_PSTAT_MASK)
 /*! @} */
 
-/*! @name PM1_LPWAKE_TIMER - Port MAC 1 EEE Low Power Wakeup Timer Register */
-/*! @{ */
-
-#define SW_ETH_MAC_PORT1_PM1_LPWAKE_TIMER_TW_SYS_TX_MASK (0xFFFFFFU)
-#define SW_ETH_MAC_PORT1_PM1_LPWAKE_TIMER_TW_SYS_TX_SHIFT (0U)
-#define SW_ETH_MAC_PORT1_PM1_LPWAKE_TIMER_TW_SYS_TX_WIDTH (24U)
-#define SW_ETH_MAC_PORT1_PM1_LPWAKE_TIMER_TW_SYS_TX(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM1_LPWAKE_TIMER_TW_SYS_TX_SHIFT)) & SW_ETH_MAC_PORT1_PM1_LPWAKE_TIMER_TW_SYS_TX_MASK)
-/*! @} */
-
-/*! @name PM1_SLEEP_TIMER - Port MAC 1 Transmit EEE Low Power Timer Register */
-/*! @{ */
-
-#define SW_ETH_MAC_PORT1_PM1_SLEEP_TIMER_SLEEPT_MASK (0xFFFFFFU)
-#define SW_ETH_MAC_PORT1_PM1_SLEEP_TIMER_SLEEPT_SHIFT (0U)
-#define SW_ETH_MAC_PORT1_PM1_SLEEP_TIMER_SLEEPT_WIDTH (24U)
-#define SW_ETH_MAC_PORT1_PM1_SLEEP_TIMER_SLEEPT(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM1_SLEEP_TIMER_SLEEPT_SHIFT)) & SW_ETH_MAC_PORT1_PM1_SLEEP_TIMER_SLEEPT_MASK)
-/*! @} */
-
 /*! @name PM1_SINGLE_STEP - Port MAC 1 IEEE1588 Single-Step Control Register */
 /*! @{ */
 
-#define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_MASK (0xFF80U)
+#define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_MASK (0x7F80U)
 #define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_SHIFT (7U)
-#define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_WIDTH (9U)
+#define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_WIDTH (8U)
 #define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_SHIFT)) & SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_OFFSET_MASK)
 
 #define SW_ETH_MAC_PORT1_PM1_SINGLE_STEP_EN_MASK (0x80000000U)

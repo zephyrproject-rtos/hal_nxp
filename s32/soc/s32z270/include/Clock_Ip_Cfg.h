@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg.h
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   AUTOSAR Mcu - Clock configuration header file.
 *   @details This file is the header containing all the necessary information for CLOCK
@@ -40,9 +40,9 @@ extern "C"{
 #define CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION       4
 #define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION       7
 #define CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION    0
-#define CLOCK_IP_CFG_SW_MAJOR_VERSION               1
+#define CLOCK_IP_CFG_SW_MAJOR_VERSION               2
 #define CLOCK_IP_CFG_SW_MINOR_VERSION               0
-#define CLOCK_IP_CFG_SW_PATCH_VERSION               0
+#define CLOCK_IP_CFG_SW_PATCH_VERSION               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -109,7 +109,7 @@ typedef enum
     CLOCK_IP_RAM_MEMORY_CONFIG_EXIT_POINT       = 0x88U,
     CLOCK_IP_FLASH_MEMORY_CONFIG_ENTRY_POINT    = 0x89U,
     CLOCK_IP_FLASH_MEMORY_CONFIG_EXIT_POINT     = 0x90U
-
+ 
 } Clock_Ip_MemoryConfigStageType;
 #endif
 

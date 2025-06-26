@@ -1,15 +1,19 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2025 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 zephyr_include_directories(include)
-zephyr_library_sources_ifdef(CONFIG_GPIO_NXP_S32 src/SchM_Dio.c)
-zephyr_library_sources_ifdef(CONFIG_NXP_S32_EIRQ src/SchM_Icu.c)
+zephyr_library_sources_ifdef(CONFIG_ADC_NXP_S32_ADC_SAR src/SchM_Adc.c)
 zephyr_library_sources_ifdef(CONFIG_CLOCK_CONTROL_NXP_S32 src/SchM_Mcu.c)
-zephyr_library_sources_ifdef(CONFIG_PINCTRL_NXP_S32 src/SchM_Port.c)
+zephyr_library_sources_ifdef(CONFIG_MBOX_NXP_S32_MRU src/SchM_Platform.c)
 zephyr_library_sources_ifdef(CONFIG_NXP_S32_SPI src/SchM_Spi.c)
 zephyr_library_sources_ifdef(CONFIG_UART_NXP_S32_LINFLEXD src/SchM_Uart.c)
-zephyr_library_sources_ifdef(CONFIG_COUNTER_NXP_S32_SYS_TIMER src/SchM_Gpt.c)
-zephyr_library_sources_ifdef(CONFIG_WDT_NXP_S32 src/SchM_Wdg.c)
 zephyr_library_sources_ifdef(CONFIG_CAN_NXP_S32_CANXL src/SchM_Can_43_CANEXCEL.c)
 zephyr_library_sources_ifdef(CONFIG_ETH_NXP_S32_NETC src/SchM_Eth_43_NETC.c)
 zephyr_library_sources_ifdef(CONFIG_ETH_NXP_S32_NETC src/SchM_EthSwt_43_NETC.c)
+zephyr_library_sources_ifdef(CONFIG_NXP_S32_EMIOS src/SchM_Mcl.c)
+zephyr_library_sources_ifdef(CONFIG_PWM_NXP_S32_EMIOS src/SchM_Pwm.c)
+if(CONFIG_PWM_NXP_S32_EMIOS AND CONFIG_PWM_CAPTURE)
+    zephyr_library_sources(src/SchM_Icu.c)
+endif()
+zephyr_library_sources_ifdef(CONFIG_MEMC_NXP_S32_QSPI src/SchM_Mem_43_EXFLS.c)
+zephyr_library_sources_ifdef(CONFIG_SENT_NXP_S32 src/SchM_Sent.c)

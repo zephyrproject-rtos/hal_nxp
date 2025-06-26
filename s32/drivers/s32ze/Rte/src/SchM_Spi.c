@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Spi.c
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -40,9 +40,9 @@ extern "C"{
 #define SCHM_SPI_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_SPI_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_SPI_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_SPI_SW_MAJOR_VERSION_C             1
+#define SCHM_SPI_SW_MAJOR_VERSION_C             2
 #define SCHM_SPI_SW_MINOR_VERSION_C             0
-#define SCHM_SPI_SW_PATCH_VERSION_C             0
+#define SCHM_SPI_SW_PATCH_VERSION_C             1
 
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
@@ -106,7 +106,7 @@ VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_01) static volatile uint32 reen
 VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_02) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_03) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_03)static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_04) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_05) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
@@ -303,7 +303,7 @@ uint32 Spi_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZE_
+#ifdef _GCC_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -331,7 +331,7 @@ uint32 Spi_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZE_*/
+#endif   /* _GCC_C_S32ZE_*/
 /*================================================================================================*/
 
 #ifdef _ARM_DS5_C_S32ZE_

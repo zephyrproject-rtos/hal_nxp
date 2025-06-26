@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           CompilerDefinition.h
-*   @version 1.0.0
+*   @version 2.0.1
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction
 *   @details The file Compiler.h provides macros for the encapsulation of definitions and
@@ -41,9 +41,9 @@ extern "C"{
 #define COMPILERDEFINITION_AR_RELEASE_MAJOR_VERSION       4
 #define COMPILERDEFINITION_AR_RELEASE_MINOR_VERSION       7
 #define COMPILERDEFINITION_AR_RELEASE_REVISION_VERSION    0
-#define COMPILERDEFINITION_SW_MAJOR_VERSION               1
+#define COMPILERDEFINITION_SW_MAJOR_VERSION               2
 #define COMPILERDEFINITION_SW_MINOR_VERSION               0
-#define COMPILERDEFINITION_SW_PATCH_VERSION               0
+#define COMPILERDEFINITION_SW_PATCH_VERSION               1
 /**@}*/
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -77,9 +77,9 @@ extern "C"{
 #endif
 #if (defined(__GNUC__) && !defined(__DCC__))
          /**
-        * @brief Symbol required to be defined when Linaro ARM compiler is used.
+        * @brief Symbol required to be defined when GCC ARM compiler is used.
         */
-        #define _LINARO_C_S32ZE_
+        #define _GCC_C_S32ZE_
  #endif      
 #ifdef __CC_ARM 
         /**

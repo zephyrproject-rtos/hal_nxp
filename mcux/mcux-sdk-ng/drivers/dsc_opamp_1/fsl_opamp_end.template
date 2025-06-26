@@ -1,0 +1,14 @@
+  
+  ${PERIPHERAL}$->CTRL |= OPAMP_CTRL_LDOK_MASK;
+
+  /* Wait until LDOK bit is automatically cleared (the loading is complete) */
+  while((${PERIPHERAL}$->CTRL & OPAMP_CTRL_LDOK_MASK) == OPAMP_CTRL_LDOK_MASK) 
+  {
+  }
+
+  /* Clear the flag.*/
+  ${PERIPHERAL}$->STAT |= OPAMP_STAT_LDCMF_MASK;
+
+#if defined(${VPREFIX}$_CTRL_INIT)
+  ${PERIPHERAL}$->CTRL = ${VPREFIX}$_CTRL_INIT;
+#endif /* ${VPREFIX}$_CTRL_INIT */

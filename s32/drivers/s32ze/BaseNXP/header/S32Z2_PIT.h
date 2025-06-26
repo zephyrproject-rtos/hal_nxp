@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_PIT.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_PIT
  *
  * This file contains register definitions and macros for easy access to their
@@ -78,7 +78,7 @@ typedef struct {
   __I  uint32_t LTMR64H;                           /**< PIT Upper Lifetimer, offset: 0xE0 */
   __I  uint32_t LTMR64L;                           /**< PIT Lower Lifetimer, offset: 0xE4 */
   uint8_t RESERVED_1[24];
-  struct {                                         /* offset: 0x100, array step: 0x10 */
+  struct PIT_TIMER {                               /* offset: 0x100, array step: 0x10 */
     __IO uint32_t LDVAL;                             /**< Timer Load Value, array offset: 0x100, array step: 0x10, irregular array, not all indices are valid */
     __I  uint32_t CVAL;                              /**< Current Timer Value, array offset: 0x104, array step: 0x10, irregular array, not all indices are valid */
     __IO uint32_t TCTRL;                             /**< Timer Control, array offset: 0x108, array step: 0x10, irregular array, not all indices are valid */

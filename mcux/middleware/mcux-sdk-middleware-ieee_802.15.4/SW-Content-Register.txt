@@ -1,0 +1,9 @@
+NXP Software Content Register
+
+Package: mcux-sdk-middleware-ieee_802.15.4.git
+Version: 5.3.11
+Outgoing License: LA_OPT_NXP_SOFTWARE_License v44 - Additional distribution license granted, license in Section 2.3 applies
+License File: LICENSE.htm
+Description and comments: Wireless 802.15.4 middleware 
+Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4.git
+Origin: NXP (proprietary)

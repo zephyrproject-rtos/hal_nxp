@@ -1,0 +1,21 @@
+1. This template is for QTMR pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert several fsl_qtmr_channel.template (optional, for channel0~channel3)
+      insert fsl_qtmr.template
+   }
+
+3. Macro definition.
+      fsl_qtmr_channel.template
+          ${SUBMODULE}$ must be 0, 1, 2 or 3, don't add any suffix for the number, say 0U or 1U is not allowed.
+
+      fsl_qtmr.template:
+          ${VPREFIX}$_ENBL_INIT_MASK rule:
+              mask = 0x0;
+              if(CHANNEL0_Init) mask |= 0x1U;
+              if(CHANNEL1_Init) mask |= 0x2U;
+              if(CHANNEL2_Init) mask |= 0x4U;
+              if(CHANNEL3_Init) mask |= 0x8U;
+              ${VPREFIX}$_ENBL_INIT_MASK = mask;

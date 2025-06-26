@@ -2,7 +2,30 @@
 @page middleware_log Middleware Change Log
 
 @section USB USB stack for MCUXpresso SDK
-  The current version of USB stack is 2.9.0.
+  The current version of USB stack is 2.10.0.
+  - 2.10.0
+    - New features and demos:
+      - Implement the USB Host ECM.
+        - Add new USB host example: usb_host_cdc_ecm
+      - Add one new USB host audio example: usb_host_audio_unified.
+      - eUSB support on EHCI.
+      - Add L1 LPM low power feature on EHCI for device and host.
+    - Improvement:
+      - Enable cache maintenance in the usb_host_msd_fatfs, usb_device_msc_disk and usb_device_msc_ramdisk examples on the RT1040-EVK, RT1050-EVKB, RT1060-EVKC and RT1170-EVKB platforms.
+      - Improve Host VNIC to be more compatible with other USB devices.
+      - Add USB_DEVICE_CONFIG_SOF_NOTIFICATION for device stack.
+      - Clear the pending FR_Swap during initialization to prevent the FR_Swap from affecting the later PD negotiation.
+    - Bug fixes:
+      - Fix on IP3511 driver that SETUP bit is cleared by mistake.
+      - Fix on IP3516 driver that cannot do multiple ISO endpoints transfers at the same time.
+      - Fix on IP3516 driver that the Token Done interrupt is cleared but the last completed transfer is not processed.
+      - Fix on IP3516 driver that the transfer will continue when receiving a short packet.
+      - Fix on host audio class driver that entities cannot be distinguished between recorder and speaker.
+  - 2.9.1
+    - Improvement:
+      - Update EHCI controller driver for basic support of eUSB. 
+      - Replace the hard code in audio cases with macro.
+      - Uniform the Chapter9 for device lite cases.
   - 2.9.0
     - Improvement:
       - Change ROOT2 as enabled by default in device stack.
@@ -31,7 +54,7 @@
       - Update dev_composite_hid_audio_unified_bm demo to suppport independent mute/unmute and volume control.
   - 2.8.1
     - Improvement:
-      - update USB audio demos to use audio component (components\audio).
+      - update USB audio demos to use audio component (components/audio).
       - Add the checking of function call return value.
       - Add audio multiple channels demo (usb_device_composite_audio_multi_ch_unified) on RT600 audio board.
       - Fix audio noise on sync mode and improve overflow/underflow checking method.

@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Monitor.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -37,9 +37,9 @@ extern "C"{
 #define CLOCK_IP_MONITOR_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_MONITOR_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_MONITOR_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_MONITOR_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_MONITOR_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_MONITOR_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_MONITOR_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_MONITOR_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -79,38 +79,6 @@ extern "C"{
 /*==================================================================================================
 *                                          LOCAL MACROS
 ==================================================================================================*/
-#ifdef CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF
-#define CLOCK_IP_CMU_REFERENCE_COUNTER_MINIMUM_VALUE_MULTIPLIER 80U
-#define CLOCK_IP_CMU_FC_VAR                                     3U
-#define CLOCK_IP_CMU_REFERENCE_CLOCK_VARIATION                  33U
-#define CLOCK_IP_CMU_MONITORED_CLOCK_VARIATION                  11U
-#define CLOCK_IP_DIVIDE_BY_1000                                 1000U
-
-#if defined(CLOCK_IP_FEATURE_OFFSET_REFERENCE_COUNT_FORMULA1)
-    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA1 CLOCK_IP_FEATURE_OFFSET_REFERENCE_COUNT_FORMULA1
-#else
-    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA1 1U
-#endif
-
-#if defined(CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA1)
-    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA1 CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA1
-#else
-    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA1 3U
-#endif
-
-#if defined(CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA2)
-    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA2 CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA2
-#else
-    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA2 9U
-#endif
-
-#if defined(CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA2)
-    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA2 CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA2
-#else
-    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA2 5U
-#endif
-
-#endif
 
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
@@ -146,7 +114,6 @@ static uint32 HashCmu[CLOCK_IP_CMUS_COUNT];
 
 #include "Mcu_MemMap.h"
 
-/*  TODO ARTD-738  Implement CMU in Clock_Ip driver    */
 
 static void Clock_Ip_ClockMonitorEmpty(Clock_Ip_CmuConfigType const* Config);
 static void Clock_Ip_ClockMonitorEmpty_Set( Clock_Ip_CmuConfigType const* Config,
@@ -162,12 +129,10 @@ static void Clock_Ip_SetCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const* C
 static void Clock_Ip_DisableCmuFcFceRefCntLfrefHfref(Clock_Ip_NameType Name);
 static void Clock_Ip_EnableCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const* Config);
 #endif
-
 #if (defined(CLOCK_IP_REGISTER_VALUES_OPTIMIZATION) && (CLOCK_IP_REGISTER_VALUES_OPTIMIZATION == STD_ON))
 /* Set clock monitor via register value configuration */
 static void Clock_Ip_SetClockMonitorRegisterValues(Clock_Ip_CmuConfigType const* Config, uint32 Index);
 #endif
-
 
 
 
@@ -214,7 +179,7 @@ static void Clock_Ip_SetClockMonitorRegisterValues( Clock_Ip_CmuConfigType const
 {
     (void)Index;
 
-    if (NULL_PTR != Config)
+    if ((NULL_PTR != Config) && (Config->Enable != 0U))
     {
         Clock_Ip_WriteRegisterValues(&Config->Indexes);
     }
@@ -223,6 +188,36 @@ static void Clock_Ip_SetClockMonitorRegisterValues( Clock_Ip_CmuConfigType const
 #endif
 
 #ifdef CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF
+#define CLOCK_IP_CMU_REFERENCE_COUNTER_MINIMUM_VALUE_MULTIPLIER 80U
+#define CLOCK_IP_CMU_FC_VAR                                     3U
+#define CLOCK_IP_CMU_REFERENCE_CLOCK_VARIATION                  33U
+#define CLOCK_IP_CMU_MONITORED_CLOCK_VARIATION                  11U
+#define CLOCK_IP_DIVIDE_BY_1000                                 1000U
+
+#if defined(CLOCK_IP_FEATURE_OFFSET_REFERENCE_COUNT_FORMULA1)
+    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA1 CLOCK_IP_FEATURE_OFFSET_REFERENCE_COUNT_FORMULA1
+#else
+    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA1 1U
+#endif
+
+#if defined(CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA1)
+    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA1 CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA1
+#else
+    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA1 3U
+#endif
+
+#if defined(CLOCK_IP_FEATURE_OFFSET_REFERENCE_COUNT_FORMULA2)
+    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA2 CLOCK_IP_FEATURE_OFFSET_REFERENCE_COUNT_FORMULA2
+#else
+    #define CLOCK_IP_OFFSET_REFERENCE_COUNT_FORMULA2 9U
+#endif
+
+#if defined(CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA2)
+    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA2 CLOCK_IP_FEATURE_MULTIPLIER_REFERENCE_COUNT_FORMULA2
+#else
+    #define CLOCK_IP_MULTIPLIER_REFERENCE_COUNT_FORMULA2 5U
+#endif
+
 static void Clock_Ip_DisableCmuFcFceRefCntLfrefHfref(Clock_Ip_NameType Name)
 {
     const Clock_Ip_CmuInfoType * CmuInformation = &Clock_Ip_axCmuInfo[Clock_Ip_au8ClockFeatures[Name][CLOCK_IP_CMU_INDEX]];
@@ -297,15 +292,15 @@ static void Clock_Ip_SetCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const* C
     uint32 DividerResult;
     uint32 ModuloValue;
 
-    if (NULL_PTR != Config)
+    if ((NULL_PTR != Config) && (Config->Enable != 0U))
     {
         CmuInformation = &Clock_Ip_axCmuInfo[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_CMU_INDEX]];
         CmuFc    = CmuInformation->CmuInstance;
 
         /* Do not calculate cmu values if these values are already calculated and written in hw registers */
-        if (HashCmu[Index] != ((((uint32)Config->Enable) ^ ((uint32)Config->Interrupt) ^ ((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name))))
+        if (HashCmu[Index] != ((((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name))))
         {
-            HashCmu[Index] = ((((uint32)Config->Enable) ^ ((uint32)Config->Interrupt) ^ ((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name)));
+            HashCmu[Index] = ((((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name)));
 
             ReferenceClk = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[CmuInformation->Reference]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000;
             BusClk       = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[CmuInformation->Bus]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000;
@@ -433,16 +428,6 @@ static void Clock_Ip_EnableCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const
 
 #if CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U
 
-uint32 Clock_Ip_CMU_GetInterruptStatus(uint8 IndexCmu)
-{
-    uint32 CmuIsrValue;
-
-    /* Read flags */
-    CmuIsrValue = Clock_Ip_apxCmu[IndexCmu]->SR & CLOCK_IP_CMU_ISR_MASK;
-
-    return CmuIsrValue;
-}
-
 /**
 * @brief        This function clear the CMU interrupt flag from CMU module.
 * @details      Called by RGM ISR routine when a user notification for CMU FCCU events is configured
@@ -492,7 +477,6 @@ void Clock_Ip_CMU_ClockFailInt(void)
 }
 #endif
 
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -510,24 +494,23 @@ void Clock_Ip_CMU_ClockFailInt(void)
 const Clock_Ip_ClockMonitorCallbackType Clock_Ip_axCmuCallbacks[CLOCK_IP_CMU_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_ClockMonitorEmpty,                /* Reset */
-        Clock_Ip_ClockMonitorEmpty_Set,            /* Set */
-        Clock_Ip_ClockMonitorEmpty_Disable,        /* Disable */
-        Clock_Ip_ClockMonitorEmpty,                /* Enable */
+        &Clock_Ip_ClockMonitorEmpty,                /* Reset */
+        &Clock_Ip_ClockMonitorEmpty_Set,            /* Set */
+        &Clock_Ip_ClockMonitorEmpty_Disable,        /* Disable */
+        &Clock_Ip_ClockMonitorEmpty,                /* Enable */
     },
 #ifdef CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF
     {
-        Clock_Ip_ResetCmuFcFceRefCntLfrefHfref,          /* Reset */
+        &Clock_Ip_ResetCmuFcFceRefCntLfrefHfref,          /* Reset */
 #if (defined(CLOCK_IP_REGISTER_VALUES_OPTIMIZATION) && (CLOCK_IP_REGISTER_VALUES_OPTIMIZATION == STD_ON))
-        Clock_Ip_SetClockMonitorRegisterValues,          /* Set */
+        &Clock_Ip_SetClockMonitorRegisterValues,          /* Set */
 #else
-        Clock_Ip_SetCmuFcFceRefCntLfrefHfref,            /* Set */
+        &Clock_Ip_SetCmuFcFceRefCntLfrefHfref,            /* Set */
 #endif
-        Clock_Ip_DisableCmuFcFceRefCntLfrefHfref,        /* Disable */
-        Clock_Ip_EnableCmuFcFceRefCntLfrefHfref,         /* Enable */
+        &Clock_Ip_DisableCmuFcFceRefCntLfrefHfref,        /* Disable */
+        &Clock_Ip_EnableCmuFcFceRefCntLfrefHfref,         /* Enable */
     },
 #endif
-
 
 };
 
@@ -542,4 +525,3 @@ const Clock_Ip_ClockMonitorCallbackType Clock_Ip_axCmuCallbacks[CLOCK_IP_CMU_CAL
 #endif
 
 /** @} */
-

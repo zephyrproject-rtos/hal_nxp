@@ -4,21 +4,90 @@ MCUXpresso SDK
 Origin:
    NXP MCUXpresso SDK
    https://github.com/nxp-mcuxpresso/mcux-sdk
-   SHA: a6bf851f65020c437704e53d2d9587ae21789d65
+   SHA: cc77cb1006ad2226fe45f0431e85add0fcd891d8
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
    https://www.nxp.com/webapp/Download?colCode=MKW2XD-MRC20A-CONNECTIVITY-SW&appType=license&Parent_nodeId=1425322332576706617013&Parent_pageType=productI
 
    NXP MCUXpresso SDK USB
-
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-usb
-   SHA: c8317a37546b18bef2072d6075e061d668b3f1c7
+   SHA: e0f1fc8488508db2f92ae454f4378513d96e83e2
+   SDK 2.16.000 merge
 
    NXP MCUXpresso SDK Connectivity Framework
-
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
-   TAG: MCUX_2.15.000_RW610_RC1
+   TAG: MCUX_2.15.000_RW610_RC1 - MCUX_2.16.000(For connected_mcu platform files used by MCXW71)
+
+   NXP MCUXpresso SDK Multicore middleware
+   https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-multicore
+   TAG: MCUX_2.16.000
+
+   RPMsg Component
+   https://github.com/nxp-mcuxpresso/rpmsg-lite
+   TAG: v5.1.2
+
+   NXP MCUXpresso SDK secure subsystem
+   https://github.com/nxp-mcuxpresso/mcux-secure-subsystem
+   TAG: MCUX_2.16.000
+
+   NXP MCUXpresso SDK ieee_802.15.4 middleware
+   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4
+   TAG: MCUX_2.16.000
+
+   NXP MCUXpresso SDK Core
+   https://github.com/nxp-mcuxpresso/mcuxsdk-core
+   SHA: 84547d55114471cd361e32559db1c4ecb3a32815
+   Source folder: cmake/extension
+   Destination folder: mcux-sdk-ng/cmake/extension
+
+   NXP MCUXpresso SDK Component
+   https://github.com/nxp-mcuxpresso/mcux-component
+   SHA: 0a95c0536c168a97e1caac0bc41898c3cf9f75a8
+   Source folder: Root folder of the NXP MCUXpresso SDK Component Repository
+   Destination folder: mcux-sdk-ng/components
+
+   NXP MCUXpresso SDK USB
+   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-usb
+   SHA: ff4c277499155029637526e0bf7ad7fa4c875e48
+   Source folder: Root folder of the NXP MCUXpresso SDK USB Repository
+   Destination folder: mcux-sdk-ng/middleware/usb
+
+   NXP MCUXpresso SDK Device i.MX
+   https://github.com/nxp-mcuxpresso/mcux-devices-imx
+   SHA: bd9dec893950a163c5f9f4c53e5bc7a202b83819
+   Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
+   Destination folder: mcux-sdk-ng/devices/i.MX
+
+   NXP MCUXpresso SDK Device RT
+   https://github.com/nxp-mcuxpresso/mcux-devices-rt
+   SHA: 69599d3038bf20fdffb5b89dc3fcb34a2322f43a
+   Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
+   Destination folder: mcux-sdk-ng/devices/RT
+
+   NXP MCUXpresso SDK Device Kinetis
+   https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
+   SHA: d3b2cbe46095f59a27d7f0d8b251bcfa7a8f5d6f
+   Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
+   Destination folder: mcux-sdk-ng/devices/Kinetis
+
+   NXP MCUXpresso SDK Device LPC
+   https://github.com/nxp-mcuxpresso/mcux-devices-lpc
+   SHA: 4671b7f19480417fefb23eb8c6e71a2bc9f2d9f1
+   Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
+   Destination folder: mcux-sdk-ng/devices/LPC
+
+   NXP MCUXpresso SDK Device MCX
+   https://github.com/nxp-mcuxpresso/mcux-devices-mcx
+   SHA: 3ff51c8cf729c59918e96f4ce33b37c3e93ffc74
+   Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
+   Destination folder: mcux-sdk-ng/devices/MCX
+
+   NXP MCUXpresso SDK Device Wireless
+   https://github.com/nxp-mcuxpresso/mcux-devices-wireless
+   SHA: 0dbc39ab4a247d7edc1b2b9aecdf3f0ea33369af
+   Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
+   Destination folder: mcux-sdk-ng/devices/Wireless
 
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
@@ -66,24 +135,70 @@ License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
 Patch List:
-  1. mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
+  - mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
-  2. Patched middleware_usb_common_header.cmake file to address build issue. PR submitted to upstream
-  3. exclude the following directories and files from mcux-sdk update to reduce HAL size:
+
+  - Patched middleware\mcux-sdk-middleware-usb\middleware_usb_common_header.cmake to remove "#include(component_osa)". PR submitted to upstream
+
+  - exclude the following directories and files from mcux-sdk update to reduce HAL size:
      - All *.a binary archive files. Files are still present in the SDK github repo but are not allowed in Zephyr Project
      - mcux-sdk\manifests
      - mcux-sdk\docs
-  4. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
-  5. drivers: flexio lcd: Pass a parameter to the GPIO callback functions.
-  6. Add usb_device_mcux_drv_port.h file for using MCUX SDK USB device controller driver easily in Zephyr.
+     - devices\KW45*
+     - devices\K32W*
+     - devices\MIMX9301 through MIMX9351
+     - devices\MIMX9596
+
+  - Add usb_device_mcux_drv_port.h file for using MCUX SDK USB device controller driver easily in Zephyr.
       - usb_device_mcux_drv_port.h contains the simplified structs, enums and APIs that MCUX SDK USB device controller drivers need.
       - Update usb_device_ehci.c and usb_device_lpcip3511.c if in Zephyr environment.
         - Add include of usb_device_mcux_drv_port.h.
         - Remove include of usb_device.h and usb_device_dci.h.
-  7. drivers: csi: Rework to fix the low framerate issue
-  8. drivers: flexio: Enable flexio hal driver to support flexio IP on S32 SoCs
-  9. drivers: elcdif: Fix register writting issue in SetPixelFormat
-  10. mcux-sdk-middleware-connectivity-framework: Add new CMake file connectivity_framework.cmake
-  11. mcux-sdk-middleware-connectivity-framework: rw61x: Fix assertion OSA Mutex Alloc fail
-  12. mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
-  13. devices: MCXN947: added missing inputmux_connections.cmake file
+
+  - mcux-sdk-middleware-connectivity-framework: Add new CMake file connectivity_framework.cmake
+  - mcux-sdk-middleware-connectivity-framework: rw61x: Fix assertion OSA Mutex Alloc fail
+  - mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
+  - mcux-sdk-middleware-connectivity-framework: connected_mcu: Modified to remove a large amount of dependencies and adapt code to be supported with Zephyr
+  - Patched mcux-sdk\components\conn_fwloader\mcux-sdk\components\conn_fwloader\driver_conn_fwloader.cmake for TFM support
+  - mcux-sdk/drivers/s3mu/fsl_s3mu.c: rename _BIT macro to avoid collision from util_macro.h in Zephyr
+  - Modifed mcux\mcux-sdk\drivers\mipi_dsi_split\fsl_mipi_dsi.c line 541 to force 8.0 to float (8.0f) to avoid [-Double-promotion] warning
+  - Wrap conditional code setting SCB->VTOR with !defined(__ZEPHYR__) in system c files of the following parts:
+      - MCXN94x family
+      - MCXA14x family
+      - MCXA15x family
+      - MCXN23x family
+  - add kUSB_DeviceNotifySOF to usb_device_mcux_drv_port.h SDK USB stack already supports it in SDK 2.16.0
+  - mcux-sdk/drivers/adc12/fsl_adc12.c: add guards to avoid compilation warnings when building
+      with SDK clock control driver disabled.
+  - Update the driver in mcux-sdk/drivers/cache/cache64/fsl_cache.c to use the non-secure flash address during cache invalidation.
+  - mcux-sdk/drivers/flexcan/fsl_flexcan.c and mcux-sdk/drivers/flexcan/fsl_flexcan.h: add the guards for unsupport features on S32Z27x devices
+  - drivers: edma_rev2: drop grouping of EDMA register indexes
+  - drivers: edma_rev2: support MUX register in MP space
+  - drivers: edma_rev2: support 64-bit TCD registers
+  - devices: MIMX9596: add EDMA rev2 soc layer definition
+  - Add missing CMAKE files device_system.cmake device_CMSIS.cmake and drivers/driver_reset.cmake to MCXW716C.
+  - Add missing CMAKE file to ccm32k driver driver_ccm32k.cmake.
+  - Add missing CMAKE file to flash_k4 driver driver_flash_k4.cmake.
+  - drivers: k4_flash: update to support MCXN series
+  - mcux-sdk-ng/devices/MCX/MCXN/MCXNx4x/MCXNx4x_cm33_core0_features.h and core1 added PFLASH feature macros
+  - Add missing CMAKE file to spc driver driver_spc.cmake
+  - mcux-sdk/drivers/dspi/fsl_dspi.c, mcux-sdk/drivers/dspi/fsl_dspi.h, mcux-sdk/drivers/dspi/fsl_dspi_edma.c,
+  mcux-sdk/drivers/dspi/fsl_dspi_edma.h: add the guards for unsupport features on S32Z27x devices
+  - drivers: irqsteer: adjust CHn_MASK index computation
+  - mcux-sdk/drivers/cache/cache64/fsl_cache.c: remove invalid assertion when
+    CACHE64_GetInstanceByAddr() is passed an address not managed by the CACHE64
+    controller
+  - drivers: edma_rev2: add macro for CHn_CSR's ACTIVE bit
+  - drivers: rtwdog: Fix the issue that driver doesn't wait the over status after CS register operation
+  - drivers: elemu: undefine BIT macro to avoid collision from util_macro.h in Zephyr
+  - mcux-sdk-middleware-ieee_802.15.4: adapt code to be supported with Zephyr
+  - mcux-sdk-middleware-usb: Disable the control endpoint ZLT (Zero Length Transaction) of MCUX hal USB controller drivers
+    (usb_device_ehci.c and usb_device_lpcip3511.c) in Zephyr environment.
+  - drivers: dmamux: Fix build error when FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL is defined as 1.
+  - mcux-sdk-ng: drivers: dma3: Add peripheral to peripheral support.
+  - Add usb_host_mcux_drv_port.h file for using MCUX SDK USB host controller driver easily in Zephyr.
+      - usb_host_mcux_drv_port.h contains the simplified structs, enums and APIs that MCUX SDK USB host controller drivers need.
+      - Update usb_host_ehci.c, usb_host_khci.c, usb_host_ohci.c and usb_host_ip3516hs.c if in Zephyr environment.
+        - Add include of usb_host_mcux_drv_port.h.
+        - Remove include of usb_host.h, usb_host_hci.h, usb_host_devices.h and usb_host_framework.h.
+      - Update usb_host_ehci.c and usb_host_ip3516hs.c to not depend on usb_host_device_instance_t struct.

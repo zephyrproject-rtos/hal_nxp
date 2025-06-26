@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Data.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -44,9 +44,9 @@ extern "C"{
 #define CLOCK_IP_DATA_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DATA_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DATA_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_DATA_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_DATA_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_DATA_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -116,6 +116,7 @@ extern "C"{
 #define CLOCK_IP_CLKOUT                        9U
 #define CLOCK_IP_CLKOUT_CMU                    9U
 #define CLOCK_IP_HWMUX_MUL_DIV                 10U
+#define CLOCK_IP_HWMUX_DIV_PCFS                11U
 
 #define CLOCK_IP_DDR_EXTENSION                          0U
 #define CLOCK_IP_P0_SYS_EXTENSION                       1U
@@ -541,6 +542,11 @@ const uint8 Clock_Ip_au8DividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /*CLOCK_IP_SWMUX_DIV */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CGM_X_DE_DIV_FMT_STAT_WITHOUT_PHASE,               /* CLOCK_IP_HWMUX_MUL_DIV */
+#if defined(CLOCK_IP_MC_ME_AE_GS_S_SYSCLK)
+    CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_HWMUX_DIV_PCFS */
+#else
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+#endif
 };
 const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -551,6 +557,7 @@ const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT,            /* CLOCK_IP_HWMUX_DIV_TRIGGER */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -567,8 +574,10 @@ const uint8 Clock_Ip_au8XoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8IrcoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -593,11 +602,13 @@ const uint8 Clock_Ip_au8GateCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8FractionalDividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_DFS_MFI_MFN,                                       /* CLOCK_IP_PCFS_DFS */
     CLOCK_IP_DFS_MFI_MFN,                                       /* CLOCK_IP_DFS */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -612,6 +623,7 @@ const uint8 Clock_Ip_au8PllCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE,/* CLOCK_IP_PLL_MOD */
     CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN,                         /* CLOCK_IP_PLL */
     CLOCK_IP_LFASTPLL_ENABLE,                                   /* CLOCK_IP_LFASTPLL */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -636,6 +648,11 @@ const uint8 Clock_Ip_au8SelectorCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP,                             /* CLOCK_IP_SWMUX_DIV */
     CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL,                           /* CLOCK_IP_CLKOUT */
     CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_MUL_DIV */
+#if defined(CLOCK_IP_MC_ME_AE_GS_S_SYSCLK)
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_DIV_PCFS */
+#else
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+#endif
 };
 const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -649,6 +666,11 @@ const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+#if defined(CLOCK_IP_MC_ME_AE_GS_S_SYSCLK)
+    CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS,                    /* CLOCK_IP_HWMUX_DIV_PCFS */
+#else
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+#endif
 };
 const uint8 Clock_Ip_au8CmuCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -661,6 +683,7 @@ const uint8 Clock_Ip_au8CmuCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_CLKOUT_CMU */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 
@@ -937,7 +960,11 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   P4_SDHC_IP_CLK clock       */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX,                        CLOCK_IP_P4_SDHC_IP_EXTENSION,           0U,                 CLOCK_IP_SEL_10_INDEX,       0U,                          0U,                               0U,                          0U},                                /*   P4_SDHC_IP_CLK clock       */
 /*   P4_SDHC_IP_DIV2_CLK clock  */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX,                        CLOCK_IP_P4_SDHC_IP_DIV2_EXTENSION,      0U,                 CLOCK_IP_SEL_10_INDEX,       0U,                          0U,                               0U,                          0U},                                /*   P4_SDHC_IP_DIV2_CLK clock  */
 /*   P5_DIPORT_CLK clock        */ {CLOCK_IP_CGM5_INSTANCE,           CLOCK_IP_HWMUX,                        CLOCK_IP_P5_AE_EXTENSION,                0U,                 CLOCK_IP_SEL_5_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P5_DIPORT_CLK clock        */
-/*   P5_AE_CLK clock            */ {CLOCK_IP_CGM5_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P5_AE_EXTENSION,                0U,                 CLOCK_IP_SEL_5_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               CLOCK_IP_PCFS_2_INDEX,       0U},                                /*   P5_AE_CLK clock            */
+#if defined(CLOCK_IP_HAS_SYSTEM_DRUN_CLK)
+/*   P5_AE_CLK clock            */ {CLOCK_IP_CGM5_INSTANCE,           CLOCK_IP_HWMUX_DIV_PCFS,               CLOCK_IP_P5_AE_EXTENSION,                0U,                 CLOCK_IP_SEL_5_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               CLOCK_IP_PCFS_2_INDEX,       0U},                                /*   P5_AE_CLK clock            */
+#else
+/*   P5_AE_CLK clock            */ {CLOCK_IP_CGM5_INSTANCE,           CLOCK_IP_HWMUX_DIV,               CLOCK_IP_P5_AE_EXTENSION,                0U,                 CLOCK_IP_SEL_5_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               CLOCK_IP_PCFS_2_INDEX,       0U},                                /*   P5_AE_CLK clock            */
+#endif
 /*   P5_CANXL_PE_CLK clock      */ {CLOCK_IP_CGM5_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P5_CANXL_PE_EXTENSION,          0U,                 CLOCK_IP_SEL_5_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   P5_CANXL_PE_CLK clock      */
 /*   P5_CANXL_CHI_CLK clock     */ {CLOCK_IP_CGM5_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P5_CANXL_CHI_EXTENSION,         0U,                 CLOCK_IP_SEL_5_INDEX,        CLOCK_IP_DIV_2_INDEX,        0U,                               0U,                          0U},                                /*   P5_CANXL_CHI_CLK clock     */
 /*   P5_CLKOUT_SRC_CLK clock    */ {CLOCK_IP_GPR5_INSTANCE,           CLOCK_IP_CLKOUT,                       CLOCK_IP_P5_CLKOUT_SRC_EXTENSION,        0U,                 CLOCK_IP_SEL_3_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P5_CLKOUT_SRC_CLK clock    */
@@ -2829,7 +2856,7 @@ volatile Clock_Ip_CgmPcfsType* const Clock_Ip_apxCgmPcfs[CLOCK_IP_MC_CGM_INSTANC
     (volatile Clock_Ip_CgmPcfsType*)(&(CLOCK_IP_RTU0__MC_CGM->PCFS_SDUR)),
     (volatile Clock_Ip_CgmPcfsType*)(&(CLOCK_IP_RTU1__MC_CGM->PCFS_SDUR)),
 #if defined(CLOCK_IP_HAS_SYSTEM_CLK)
-    (volatile Clock_Ip_CgmPcfsType*)(&(IP_MC_CGM_AE->PCFS_SDUR)),
+    (volatile Clock_Ip_CgmPcfsType*)(&(IP_MC_CGM_AE->PCS_SDUR)),
 #else
     NULL_PTR,
 #endif
@@ -2948,11 +2975,11 @@ Clock_Ip_ClockMonitorType* const Clock_Ip_apxCmu[CLOCK_IP_CMU_INSTANCES_ARRAY_SI
     (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_2_BASE,
     (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_3_BASE,
     (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_4_BASE,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_0_BASE,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_1_BASE,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_2_BASE,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_3_BASE,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_4_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU1__CMU_FC_0_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU1__CMU_FC_1_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU1__CMU_FC_2_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU1__CMU_FC_3_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU1__CMU_FC_4_BASE,
     (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_1_BASE,
     (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_2_BASE,
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)

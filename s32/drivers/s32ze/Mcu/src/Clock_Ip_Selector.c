@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Selector.c
-*   @version    1.0.0
+*   @version    2.0.1
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,9 +36,9 @@ extern "C"{
 #define CLOCK_IP_SELECTOR_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_SELECTOR_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_SELECTOR_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_SELECTOR_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_SELECTOR_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_SELECTOR_SW_MINOR_VERSION_C               0
-#define CLOCK_IP_SELECTOR_SW_PATCH_VERSION_C               0
+#define CLOCK_IP_SELECTOR_SW_PATCH_VERSION_C               1
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -94,11 +94,11 @@ extern "C"{
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
-
 #ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
 void Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
 void Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
 #endif
+
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
@@ -300,7 +300,8 @@ static void Clock_Ip_ResetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Co
         SelectorMask       = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueMask;
         SelectorShift      = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueShift;
 
-        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC |= (MC_CGM_MUX_CSC_CG_MASK);
+        /* FCG is set to 1 to cover the case has default inactive source */
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC |= (MC_CGM_MUX_CSC_CG_MASK | MC_CGM_MUX_CSC_FCG_MASK);
 
         Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
         do
@@ -420,7 +421,6 @@ static void Clock_Ip_SetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Conf
 }
 #endif
 
-
 #ifdef CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL
 /* No implementation */
 static void Clock_Ip_ResetGprXClkoutSelMuxsel(Clock_Ip_SelectorConfigType const *Config)
@@ -465,7 +465,33 @@ static void Clock_Ip_SetGprXClkoutSelMuxsel(Clock_Ip_SelectorConfigType const *C
 }
 #endif
 
+#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
+static void Clock_Ip_ResetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
+{
+#ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    OsIf_Trusted_Call1param(Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall,(Config));
+  #else
+    Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Config);
+  #endif
+#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
+}
+static void Clock_Ip_SetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
+{
+#ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    OsIf_Trusted_Call1param(Clock_Ip_SetMcMeAeGssSysclk_TrustedCall,(Config));
+  #else
+    Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Config);
+  #endif
+#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
+}
+#endif
 
+
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
 #ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
 /* Reset IP_MC_ME_AE[SAFE_MC] register */
 void Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config)
@@ -517,7 +543,7 @@ void Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *
         {
             TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
         }
-        while ((MC_ME_AE_TRANSITION_IS_ON_GOING == (IP_MC_ME_AE->GS & MC_ME_AE_GS_S_MTRANS_MASK)) && (FALSE == TimeoutOccurred));
+        while ((CLOCK_IP_MC_ME_AE_TRANSITION_IS_ON_GOING == (IP_MC_ME_AE->GS & MC_ME_AE_GS_S_MTRANS_MASK)) && (FALSE == TimeoutOccurred));
 
         if (TRUE == TimeoutOccurred)
         {
@@ -538,32 +564,6 @@ void Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *
 }
 #endif
 
-#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
-static void Clock_Ip_ResetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
-{
-#ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
-  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
-    OsIf_Trusted_Call1param(Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall,(Config));
-  #else
-    Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Config);
-  #endif
-#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
-}
-static void Clock_Ip_SetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
-{
-#ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
-  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
-    OsIf_Trusted_Call1param(Clock_Ip_SetMcMeAeGssSysclk_TrustedCall,(Config));
-  #else
-    Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Config);
-  #endif
-#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
-}
-#endif
-
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -581,34 +581,34 @@ static void Clock_Ip_SetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Confi
 const Clock_Ip_SelectorCallbackType Clock_Ip_axSelectorCallbacks[CLOCK_IP_SELECTOR_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_CallbackSelectorEmpty,            /* Reset */
-        Clock_Ip_CallbackSelectorEmpty,            /* Set */
+        &Clock_Ip_CallbackSelectorEmpty,            /* Reset */
+        &Clock_Ip_CallbackSelectorEmpty,            /* Set */
     },
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP
     {
-        Clock_Ip_ResetCgmXCscCssClkswSwip,          /* Reset */
-        Clock_Ip_SetCgmXCscCssClkswSwip,            /* Set */
+        &Clock_Ip_ResetCgmXCscCssClkswSwip,          /* Reset */
+        &Clock_Ip_SetCgmXCscCssClkswSwip,            /* Set */
     },
 #endif
 
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
     {
-        Clock_Ip_ResetCgmXCscCssCsGrip,           /* Reset */
-        Clock_Ip_SetCgmXCscCssCsGrip,             /* Set */
+        &Clock_Ip_ResetCgmXCscCssCsGrip,           /* Reset */
+        &Clock_Ip_SetCgmXCscCssCsGrip,             /* Set */
     },
 #endif
 
 #ifdef CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL
     {
-        Clock_Ip_ResetGprXClkoutSelMuxsel,       /* Reset */
-        Clock_Ip_SetGprXClkoutSelMuxsel,         /* Set */
+        &Clock_Ip_ResetGprXClkoutSelMuxsel,       /* Reset */
+        &Clock_Ip_SetGprXClkoutSelMuxsel,         /* Set */
     },
 #endif
 
 #ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
     {
-        Clock_Ip_ResetMcMeAeGssSysclk,           /* Reset */
-        Clock_Ip_SetMcMeAeGssSysclk,             /* Set */
+        &Clock_Ip_ResetMcMeAeGssSysclk,           /* Reset */
+        &Clock_Ip_SetMcMeAeGssSysclk,             /* Set */
     },
 #endif
 
@@ -618,8 +618,6 @@ const Clock_Ip_SelectorCallbackType Clock_Ip_axSelectorCallbacks[CLOCK_IP_SELECT
 #define MCU_STOP_SEC_CONST_UNSPECIFIED
 
 #include "Mcu_MemMap.h"
-
-
 
 #ifdef __cplusplus
 }
