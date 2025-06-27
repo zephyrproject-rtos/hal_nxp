@@ -12,7 +12,7 @@
 #define KINETIS_MUX(port, pin, mux)		\
 	(((((port) - 'A') & 0xF) << 28) |	\
 	(((pin) & 0x3F) << 22) |		\
-	(((mux) & 0x7) << 8))
+	(((mux) & 0xF) << 8))
 
 #define PTA0 KINETIS_MUX('A',0,1) /* PTA_0 */
 #define WUU0_P0_PTA0 KINETIS_MUX('A',0,1) /* PTA_0 */
