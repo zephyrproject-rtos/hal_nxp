@@ -365,8 +365,6 @@ uint32_t SENTINEL_RngClose(uint32_t *pRngHandle);
 
 uint32_t SENTINEL_RngGetRandom(uint32_t *pRngHandle, uint32_t outAddr, uint32_t outSize);
 
-uint32_t SENTINEL_DumpDebugBuffer(void);
-
 status_t SENTINEL_RNG_GetRandomData(uint32_t output, uint32_t len);
 
 uint32_t SENTINEL_ReleaseRDC(enum rdc_type type);
