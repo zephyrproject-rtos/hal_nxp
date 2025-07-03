@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DDRC.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_DDRC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DDRC
  *
  * CMSIS Peripheral Access Layer for DDRC
  */
 
-#if !defined(DDRC_H_)
-#define DDRC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DDRC_H_)
+#define PERI_DDRC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -723,7 +726,6 @@ typedef struct {
  *  0b010..10
  *  0b011..11
  *  0b111..7
- *  *..
  */
 #define DDRC_CS_CONFIG_COL_BITS_CS(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_CS_CONFIG_COL_BITS_CS_SHIFT)) & DDRC_CS_CONFIG_COL_BITS_CS_MASK)
 
@@ -746,7 +748,6 @@ typedef struct {
  *  0b011..15
  *  0b100..16
  *  0b101..17
- *  *..
  */
 #define DDRC_CS_CONFIG_ROW_BITS_CS(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_CS_CONFIG_ROW_BITS_CS_SHIFT)) & DDRC_CS_CONFIG_ROW_BITS_CS_MASK)
 
@@ -1004,7 +1005,6 @@ typedef struct {
 /*! BA_INTLV_CTL - Rank Interleaving Control
  *  0b0000000..No external ranks are interleaved.
  *  0b1000000..External ranks 0 and 1 are interleaved.
- *  *..
  */
 #define DDRC_DDR_SDRAM_CFG_BA_INTLV_CTL(x)       (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_BA_INTLV_CTL_SHIFT)) & DDRC_DDR_SDRAM_CFG_BA_INTLV_CTL_MASK)
 
@@ -1012,7 +1012,6 @@ typedef struct {
 #define DDRC_DDR_SDRAM_CFG_DBW_SHIFT             (19U)
 /*! DBW - DDR SDRAM Data Bus Width
  *  0b10..16 bits
- *  *..
  */
 #define DDRC_DDR_SDRAM_CFG_DBW(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_DBW_SHIFT)) & DDRC_DDR_SDRAM_CFG_DBW_MASK)
 
@@ -1028,7 +1027,6 @@ typedef struct {
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_SHIFT      (24U)
 /*! SDRAM_TYPE - DDR SDRAM Type
  *  0b100..LPDDR4X SDRAM
- *  *..
  */
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_SHIFT)) & DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_MASK)
 
@@ -1071,7 +1069,6 @@ typedef struct {
  *  0b0110..6
  *  0b0111..7
  *  0b1000..8
- *  *..
  */
 #define DDRC_DDR_SDRAM_CFG_2_NUM_PR(x)           (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_2_NUM_PR_SHIFT)) & DDRC_DDR_SDRAM_CFG_2_NUM_PR_MASK)
 
@@ -1139,7 +1136,6 @@ typedef struct {
  *  0b000..0
  *  0b001..1
  *  0b100..0 and 1
- *  *..
  */
 #define DDRC_DDR_SDRAM_MD_CNTL_CS_SEL(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_MD_CNTL_CS_SEL_SHIFT)) & DDRC_DDR_SDRAM_MD_CNTL_CS_SEL_MASK)
 
@@ -1183,7 +1179,6 @@ typedef struct {
 /*! DLL_LOCK - DDR SDRAM DLL Lock Time
  *  0b10..1024 clocks
  *  0b11..2048 clocks
- *  *..
  */
 #define DDRC_TIMING_CFG_4_DLL_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_4_DLL_LOCK_SHIFT)) & DDRC_TIMING_CFG_4_DLL_LOCK_MASK)
 
@@ -1310,7 +1305,6 @@ typedef struct {
  *  0b1001..16384
  *  0b1010..32768
  *  0b1111..ZQCS calibration disabled
- *  *..
  */
 #define DDRC_DDR_ZQ_CNTL_ZQCS_INT(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_ZQ_CNTL_ZQCS_INT_SHIFT)) & DDRC_DDR_ZQ_CNTL_ZQCS_INT_MASK)
 
@@ -1486,7 +1480,6 @@ typedef struct {
  *  0b010..DBI
  *  0b011..Neither data masks nor DBI
  *  0b100..DBI with data masks
- *  *..
  */
 #define DDRC_DDR_SDRAM_CFG_3_DM_CFG(x)           (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_3_DM_CFG_SHIFT)) & DDRC_DDR_SDRAM_CFG_3_DM_CFG_MASK)
 
@@ -1702,7 +1695,6 @@ typedef struct {
  *  0b0001..Total write and read streams are one transaction each.
  *  0b0010..Total write and read streams are two transactions each.
  *  0b0011..Total write and read streams are four transactions each.
- *  *..
  */
 #define DDRC_DDR_MTCR_MT_TRNARND(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_MTCR_MT_TRNARND_SHIFT)) & DDRC_DDR_MTCR_MT_TRNARND_MASK)
 
@@ -3547,5 +3539,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DDRC_H_ */
+#endif  /* PERI_DDRC_H_ */
 

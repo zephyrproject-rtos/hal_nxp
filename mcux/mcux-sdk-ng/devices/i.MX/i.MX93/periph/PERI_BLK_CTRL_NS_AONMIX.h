@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file BLK_CTRL_NS_AONMIX.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_BLK_CTRL_NS_AONMIX.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
  *
  * CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
  */
 
-#if !defined(BLK_CTRL_NS_AONMIX_H_)
-#define BLK_CTRL_NS_AONMIX_H_                    /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_BLK_CTRL_NS_AONMIX_H_)
+#define PERI_BLK_CTRL_NS_AONMIX_H_               /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -229,120 +232,120 @@ typedef struct {
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_MASK (0x1U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_SHIFT (0U)
 /*! CAN1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_CAN1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA1_MASK (0x2U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA1_SHIFT (1U)
 /*! EDMA1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_EDMA1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C1_MASK (0x4U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C1_SHIFT (2U)
 /*! LPI2C1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C2_MASK (0x8U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C2_SHIFT (3U)
 /*! LPI2C2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPI2C2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1_MASK (0x10U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1_SHIFT (4U)
 /*! LPIT1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPIT1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_MASK (0x20U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_SHIFT (5U)
 /*! LPSPI1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2_MASK (0x40U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2_SHIFT (6U)
 /*! LPSPI2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPSPI2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1_MASK (0x80U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1_SHIFT (7U)
 /*! LPTMR1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_LPTMR1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_MASK (0x100U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_SHIFT (8U)
 /*! SAI1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_SAI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1_MASK (0x200U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1_SHIFT (9U)
 /*! TPM1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM2_MASK (0x400U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM2_SHIFT (10U)
 /*! TPM2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_TPM2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG1_MASK (0x800U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG1_SHIFT (11U)
 /*! WDOG1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG2_MASK (0x1000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG2_SHIFT (12U)
 /*! WDOG2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_WDOG2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_I3C1_MASK (0x2000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_I3C1_SHIFT (13U)
 /*! I3C1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_I3C1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_I3C1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_I3C1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_PDM_MASK (0x4000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_PDM_SHIFT (14U)
 /*! PDM - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_PDM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_PDM_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_PDM_MASK)
 /*! @} */
@@ -594,8 +597,8 @@ typedef struct {
 #define BLK_CTRL_NS_AONMIX_OCOTP_STATUS_BUSY_MASK (0x1U)
 #define BLK_CTRL_NS_AONMIX_OCOTP_STATUS_BUSY_SHIFT (0U)
 /*! BUSY - OCOTP controller busy bit
- *  0b1..OCOTP is Busy
  *  0b0..Idle
+ *  0b1..OCOTP is Busy
  */
 #define BLK_CTRL_NS_AONMIX_OCOTP_STATUS_BUSY(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_OCOTP_STATUS_BUSY_SHIFT)) & BLK_CTRL_NS_AONMIX_OCOTP_STATUS_BUSY_MASK)
 /*! @} */
@@ -681,5 +684,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* BLK_CTRL_NS_AONMIX_H_ */
+#endif  /* PERI_BLK_CTRL_NS_AONMIX_H_ */
 

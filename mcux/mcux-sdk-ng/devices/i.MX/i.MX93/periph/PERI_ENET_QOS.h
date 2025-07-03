@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET_QOS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ENET_QOS.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_ENET_QOS.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ENET_QOS
  *
  * CMSIS Peripheral Access Layer for ENET_QOS
  */
 
-#if !defined(ENET_QOS_H_)
-#define ENET_QOS_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ENET_QOS_H_)
+#define PERI_ENET_QOS_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -599,9 +602,9 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_PRELEN_MASK   (0xCU)
 #define ENET_QOS_MAC_CONFIGURATION_PRELEN_SHIFT  (2U)
 /*! PRELEN - Preamble Length for Transmit packets
- *  0b10..3 bytes of preamble
- *  0b01..5 bytes of preamble
  *  0b00..7 bytes of preamble
+ *  0b01..5 bytes of preamble
+ *  0b10..3 bytes of preamble
  *  0b11..Reserved
  */
 #define ENET_QOS_MAC_CONFIGURATION_PRELEN(x)     (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_PRELEN_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_PRELEN_MASK)
@@ -617,34 +620,34 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_BL_MASK       (0x60U)
 #define ENET_QOS_MAC_CONFIGURATION_BL_SHIFT      (5U)
 /*! BL - Back-Off Limit
- *  0b11..k = min(n,1)
  *  0b00..k = min(n,10)
- *  0b10..k = min(n,4)
  *  0b01..k = min(n,8)
+ *  0b10..k = min(n,4)
+ *  0b11..k = min(n,1)
  */
 #define ENET_QOS_MAC_CONFIGURATION_BL(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_BL_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_BL_MASK)
 
 #define ENET_QOS_MAC_CONFIGURATION_DR_MASK       (0x100U)
 #define ENET_QOS_MAC_CONFIGURATION_DR_SHIFT      (8U)
 /*! DR - Disable Retry
- *  0b1..Disable Retry
  *  0b0..Enable Retry
+ *  0b1..Disable Retry
  */
 #define ENET_QOS_MAC_CONFIGURATION_DR(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_DR_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_DR_MASK)
 
 #define ENET_QOS_MAC_CONFIGURATION_DCRS_MASK     (0x200U)
 #define ENET_QOS_MAC_CONFIGURATION_DCRS_SHIFT    (9U)
 /*! DCRS - Disable Carrier Sense During Transmission
- *  0b1..Disable Carrier Sense During Transmission
  *  0b0..Enable Carrier Sense During Transmission
+ *  0b1..Disable Carrier Sense During Transmission
  */
 #define ENET_QOS_MAC_CONFIGURATION_DCRS(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_DCRS_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_DCRS_MASK)
 
 #define ENET_QOS_MAC_CONFIGURATION_DO_MASK       (0x400U)
 #define ENET_QOS_MAC_CONFIGURATION_DO_SHIFT      (10U)
 /*! DO - Disable Receive Own
- *  0b1..Disable Receive Own
  *  0b0..Enable Receive Own
+ *  0b1..Disable Receive Own
  */
 #define ENET_QOS_MAC_CONFIGURATION_DO(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_DO_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_DO_MASK)
 
@@ -667,16 +670,16 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_DM_MASK       (0x2000U)
 #define ENET_QOS_MAC_CONFIGURATION_DM_SHIFT      (13U)
 /*! DM - Duplex Mode
- *  0b1..Full-duplex mode
  *  0b0..Half-duplex mode
+ *  0b1..Full-duplex mode
  */
 #define ENET_QOS_MAC_CONFIGURATION_DM(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_DM_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_DM_MASK)
 
 #define ENET_QOS_MAC_CONFIGURATION_FES_MASK      (0x4000U)
 #define ENET_QOS_MAC_CONFIGURATION_FES_SHIFT     (14U)
 /*! FES - Speed
- *  0b1..100 Mbps when PS bit is 1 and 2.5 Gbps when PS bit is 0
  *  0b0..10 Mbps when PS bit is 1 and 1 Gbps when PS bit is 0
+ *  0b1..100 Mbps when PS bit is 1 and 2.5 Gbps when PS bit is 0
  */
 #define ENET_QOS_MAC_CONFIGURATION_FES(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_FES_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_FES_MASK)
 
@@ -701,8 +704,8 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_JD_MASK       (0x20000U)
 #define ENET_QOS_MAC_CONFIGURATION_JD_SHIFT      (17U)
 /*! JD - Jabber Disable
- *  0b1..Jabber is disabled
  *  0b0..Jabber is enabled
+ *  0b1..Jabber is disabled
  */
 #define ENET_QOS_MAC_CONFIGURATION_JD(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_JD_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_JD_MASK)
 
@@ -718,8 +721,8 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_WD_MASK       (0x80000U)
 #define ENET_QOS_MAC_CONFIGURATION_WD_SHIFT      (19U)
 /*! WD - Watchdog Disable
- *  0b1..Watchdog is disabled
  *  0b0..Watchdog is enabled
+ *  0b1..Watchdog is disabled
  */
 #define ENET_QOS_MAC_CONFIGURATION_WD(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_WD_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_WD_MASK)
 
@@ -761,14 +764,14 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_IPG_MASK      (0x7000000U)
 #define ENET_QOS_MAC_CONFIGURATION_IPG_SHIFT     (24U)
 /*! IPG - Inter-Packet Gap These bits control the minimum IPG between packets during transmission.
- *  0b111..40 bit times IPG
- *  0b110..48 bit times IPG
- *  0b101..56 bit times IPG
- *  0b100..64 bit times IPG
- *  0b011..72 bit times IPG
- *  0b010..80 bit times IPG
- *  0b001..88 bit times IPG
  *  0b000..96 bit times IPG
+ *  0b001..88 bit times IPG
+ *  0b010..80 bit times IPG
+ *  0b011..72 bit times IPG
+ *  0b100..64 bit times IPG
+ *  0b101..56 bit times IPG
+ *  0b110..48 bit times IPG
+ *  0b111..40 bit times IPG
  */
 #define ENET_QOS_MAC_CONFIGURATION_IPG(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_IPG_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_IPG_MASK)
 
@@ -783,11 +786,11 @@ typedef struct {
 #define ENET_QOS_MAC_CONFIGURATION_SARC_MASK     (0x70000000U)
 #define ENET_QOS_MAC_CONFIGURATION_SARC_SHIFT    (28U)
 /*! SARC - Source Address Insertion or Replacement Control
+ *  0b000..mti_sa_ctrl_i and ati_sa_ctrl_i input signals control the SA field generation
  *  0b010..Contents of MAC Addr-0 inserted in SA field
  *  0b011..Contents of MAC Addr-0 replaces SA field
  *  0b110..Contents of MAC Addr-1 inserted in SA field
  *  0b111..Contents of MAC Addr-1 replaces SA field
- *  0b000..mti_sa_ctrl_i and ati_sa_ctrl_i input signals control the SA field generation
  */
 #define ENET_QOS_MAC_CONFIGURATION_SARC(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_CONFIGURATION_SARC_SHIFT)) & ENET_QOS_MAC_CONFIGURATION_SARC_MASK)
 /*! @} */
@@ -803,8 +806,8 @@ typedef struct {
 #define ENET_QOS_MAC_EXT_CONFIGURATION_DCRCC_MASK (0x10000U)
 #define ENET_QOS_MAC_EXT_CONFIGURATION_DCRCC_SHIFT (16U)
 /*! DCRCC - Disable CRC Checking for Received Packets
- *  0b1..CRC Checking is disabled
  *  0b0..CRC Checking is enabled
+ *  0b1..CRC Checking is disabled
  */
 #define ENET_QOS_MAC_EXT_CONFIGURATION_DCRCC(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_EXT_CONFIGURATION_DCRCC_SHIFT)) & ENET_QOS_MAC_EXT_CONFIGURATION_DCRCC_MASK)
 
@@ -892,8 +895,8 @@ typedef struct {
 #define ENET_QOS_MAC_PACKET_FILTER_DBF_MASK      (0x20U)
 #define ENET_QOS_MAC_PACKET_FILTER_DBF_SHIFT     (5U)
 /*! DBF - Disable Broadcast Packets
- *  0b1..Disable Broadcast Packets
  *  0b0..Enable Broadcast Packets
+ *  0b1..Disable Broadcast Packets
  */
 #define ENET_QOS_MAC_PACKET_FILTER_DBF(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PACKET_FILTER_DBF_SHIFT)) & ENET_QOS_MAC_PACKET_FILTER_DBF_MASK)
 
@@ -902,9 +905,9 @@ typedef struct {
 /*! PCF - Pass Control Packets These bits control the forwarding of all control packets (including
  *    unicast and multicast Pause packets).
  *  0b00..MAC filters all control packets from reaching the application
+ *  0b01..MAC forwards all control packets except Pause packets to the application even if they fail the Address filter
  *  0b10..MAC forwards all control packets to the application even if they fail the Address filter
  *  0b11..MAC forwards the control packets that pass the Address filter
- *  0b01..MAC forwards all control packets except Pause packets to the application even if they fail the Address filter
  */
 #define ENET_QOS_MAC_PACKET_FILTER_PCF(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PACKET_FILTER_PCF_SHIFT)) & ENET_QOS_MAC_PACKET_FILTER_PCF_MASK)
 
@@ -951,8 +954,8 @@ typedef struct {
 #define ENET_QOS_MAC_PACKET_FILTER_DNTU_MASK     (0x200000U)
 #define ENET_QOS_MAC_PACKET_FILTER_DNTU_SHIFT    (21U)
 /*! DNTU - Drop Non-TCP/UDP over IP Packets
- *  0b1..Drop Non-TCP/UDP over IP Packets
  *  0b0..Forward Non-TCP/UDP over IP Packets
+ *  0b1..Drop Non-TCP/UDP over IP Packets
  */
 #define ENET_QOS_MAC_PACKET_FILTER_DNTU(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PACKET_FILTER_DNTU_SHIFT)) & ENET_QOS_MAC_PACKET_FILTER_DNTU_MASK)
 
@@ -971,13 +974,6 @@ typedef struct {
 #define ENET_QOS_MAC_WATCHDOG_TIMEOUT_WTO_MASK   (0xFU)
 #define ENET_QOS_MAC_WATCHDOG_TIMEOUT_WTO_SHIFT  (0U)
 /*! WTO - Watchdog Timeout
- *  0b1000..10 KB
- *  0b1001..11 KB
- *  0b1010..12 KB
- *  0b1011..13 KB
- *  0b1100..14 KB
- *  0b1101..15 KB
- *  0b1110..16383 Bytes
  *  0b0000..2 KB
  *  0b0001..3 KB
  *  0b0010..4 KB
@@ -986,6 +982,13 @@ typedef struct {
  *  0b0101..7 KB
  *  0b0110..8 KB
  *  0b0111..9 KB
+ *  0b1000..10 KB
+ *  0b1001..11 KB
+ *  0b1010..12 KB
+ *  0b1011..13 KB
+ *  0b1100..14 KB
+ *  0b1101..15 KB
+ *  0b1110..16383 Bytes
  *  0b1111..Reserved
  */
 #define ENET_QOS_MAC_WATCHDOG_TIMEOUT_WTO(x)     (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_WATCHDOG_TIMEOUT_WTO_SHIFT)) & ENET_QOS_MAC_WATCHDOG_TIMEOUT_WTO_MASK)
@@ -1031,8 +1034,8 @@ typedef struct {
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_CT_MASK       (0x2U)
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_CT_SHIFT      (1U)
 /*! CT - Command Type
- *  0b1..Read operation
  *  0b0..Write operation
+ *  0b1..Read operation
  */
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_CT(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_TAG_CTRL_CT_SHIFT)) & ENET_QOS_MAC_VLAN_TAG_CTRL_CT_MASK)
 
@@ -1062,10 +1065,10 @@ typedef struct {
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_EVLS_SHIFT    (21U)
 /*! EVLS - Enable VLAN Tag Stripping on Receive This field indicates the stripping operation on the
  *    outer VLAN Tag in received packet.
- *  0b11..Always strip
  *  0b00..Do not strip
- *  0b10..Strip if VLAN filter fails
  *  0b01..Strip if VLAN filter passes
+ *  0b10..Strip if VLAN filter fails
+ *  0b11..Always strip
  */
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_EVLS(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_TAG_CTRL_EVLS_SHIFT)) & ENET_QOS_MAC_VLAN_TAG_CTRL_EVLS_MASK)
 
@@ -1105,10 +1108,10 @@ typedef struct {
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_EIVLS_SHIFT   (28U)
 /*! EIVLS - Enable Inner VLAN Tag Stripping on Receive This field indicates the stripping operation
  *    on inner VLAN Tag in received packet.
- *  0b11..Always strip
  *  0b00..Do not strip
- *  0b10..Strip if VLAN filter fails
  *  0b01..Strip if VLAN filter passes
+ *  0b10..Strip if VLAN filter fails
+ *  0b11..Always strip
  */
 #define ENET_QOS_MAC_VLAN_TAG_CTRL_EIVLS(x)      (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_TAG_CTRL_EIVLS_SHIFT)) & ENET_QOS_MAC_VLAN_TAG_CTRL_EIVLS_MASK)
 
@@ -1140,16 +1143,16 @@ typedef struct {
 #define ENET_QOS_MAC_VLAN_TAG_DATA_ETV_MASK      (0x20000U)
 #define ENET_QOS_MAC_VLAN_TAG_DATA_ETV_SHIFT     (17U)
 /*! ETV - 12bits or 16bits VLAN comparison
- *  0b1..12 bit VLAN comparison
  *  0b0..16 bit VLAN comparison
+ *  0b1..12 bit VLAN comparison
  */
 #define ENET_QOS_MAC_VLAN_TAG_DATA_ETV(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_TAG_DATA_ETV_SHIFT)) & ENET_QOS_MAC_VLAN_TAG_DATA_ETV_MASK)
 
 #define ENET_QOS_MAC_VLAN_TAG_DATA_DOVLTC_MASK   (0x40000U)
 #define ENET_QOS_MAC_VLAN_TAG_DATA_DOVLTC_SHIFT  (18U)
 /*! DOVLTC - Disable VLAN Type Comparison
- *  0b1..VLAN type comparison is disabled
  *  0b0..VLAN type comparison is enabled
+ *  0b1..VLAN type comparison is disabled
  */
 #define ENET_QOS_MAC_VLAN_TAG_DATA_DOVLTC(x)     (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_TAG_DATA_DOVLTC_SHIFT)) & ENET_QOS_MAC_VLAN_TAG_DATA_DOVLTC_MASK)
 
@@ -1205,9 +1208,9 @@ typedef struct {
 /*! VLC - VLAN Tag Control in Transmit Packets - 2'b00: No VLAN tag deletion, insertion, or
  *    replacement - 2'b01: VLAN tag deletion The MAC removes the VLAN type (bytes 13 and 14) and VLAN tag
  *    (bytes 15 and 16) of all transmitted packets with VLAN tags.
+ *  0b00..No VLAN tag deletion, insertion, or replacement
  *  0b01..VLAN tag deletion
  *  0b10..VLAN tag insertion
- *  0b00..No VLAN tag deletion, insertion, or replacement
  *  0b11..VLAN tag replacement
  */
 #define ENET_QOS_MAC_VLAN_INCL_VLC(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_INCL_VLC_SHIFT)) & ENET_QOS_MAC_VLAN_INCL_VLC_MASK)
@@ -1261,8 +1264,8 @@ typedef struct {
 #define ENET_QOS_MAC_VLAN_INCL_BUSY_MASK         (0x80000000U)
 #define ENET_QOS_MAC_VLAN_INCL_BUSY_SHIFT        (31U)
 /*! BUSY - Busy
- *  0b1..Busy status detected
  *  0b0..Busy status not detected
+ *  0b1..Busy status detected
  */
 #define ENET_QOS_MAC_VLAN_INCL_BUSY(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_VLAN_INCL_BUSY_SHIFT)) & ENET_QOS_MAC_VLAN_INCL_BUSY_MASK)
 /*! @} */
@@ -1278,9 +1281,9 @@ typedef struct {
 #define ENET_QOS_MAC_INNER_VLAN_INCL_VLC_MASK    (0x30000U)
 #define ENET_QOS_MAC_INNER_VLAN_INCL_VLC_SHIFT   (16U)
 /*! VLC - VLAN Tag Control in Transmit Packets
+ *  0b00..No VLAN tag deletion, insertion, or replacement
  *  0b01..VLAN tag deletion
  *  0b10..VLAN tag insertion
- *  0b00..No VLAN tag deletion, insertion, or replacement
  *  0b11..VLAN tag replacement
  */
 #define ENET_QOS_MAC_INNER_VLAN_INCL_VLC(x)      (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INNER_VLAN_INCL_VLC_SHIFT)) & ENET_QOS_MAC_INNER_VLAN_INCL_VLC_MASK)
@@ -1333,11 +1336,11 @@ typedef struct {
 #define ENET_QOS_MAC_TX_FLOW_CTRL_Q_PLT_MASK     (0x70U)
 #define ENET_QOS_MAC_TX_FLOW_CTRL_Q_PLT_SHIFT    (4U)
 /*! PLT - Pause Low Threshold
- *  0b011..Pause Time minus 144 Slot Times (PT -144 slot times)
- *  0b100..Pause Time minus 256 Slot Times (PT -256 slot times)
+ *  0b000..Pause Time minus 4 Slot Times (PT -4 slot times)
  *  0b001..Pause Time minus 28 Slot Times (PT -28 slot times)
  *  0b010..Pause Time minus 36 Slot Times (PT -36 slot times)
- *  0b000..Pause Time minus 4 Slot Times (PT -4 slot times)
+ *  0b011..Pause Time minus 144 Slot Times (PT -144 slot times)
+ *  0b100..Pause Time minus 256 Slot Times (PT -256 slot times)
  *  0b101..Pause Time minus 512 Slot Times (PT -512 slot times)
  *  0b110..Reserved
  */
@@ -1346,8 +1349,8 @@ typedef struct {
 #define ENET_QOS_MAC_TX_FLOW_CTRL_Q_DZPQ_MASK    (0x80U)
 #define ENET_QOS_MAC_TX_FLOW_CTRL_Q_DZPQ_SHIFT   (7U)
 /*! DZPQ - Disable Zero-Quanta Pause
- *  0b1..Zero-Quanta Pause packet generation is disabled
  *  0b0..Zero-Quanta Pause packet generation is enabled
+ *  0b1..Zero-Quanta Pause packet generation is disabled
  */
 #define ENET_QOS_MAC_TX_FLOW_CTRL_Q_DZPQ(x)      (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TX_FLOW_CTRL_Q_DZPQ_SHIFT)) & ENET_QOS_MAC_TX_FLOW_CTRL_Q_DZPQ_MASK)
 
@@ -1644,120 +1647,120 @@ typedef struct {
 #define ENET_QOS_MAC_INTERRUPT_STATUS_RGSMIIIS_MASK (0x1U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_RGSMIIIS_SHIFT (0U)
 /*! RGSMIIIS - RGMII or SMII Interrupt Status
- *  0b1..RGMII or SMII Interrupt Status is active
  *  0b0..RGMII or SMII Interrupt Status is not active
+ *  0b1..RGMII or SMII Interrupt Status is active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_RGSMIIIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_RGSMIIIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_RGSMIIIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_PHYIS_MASK (0x8U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_PHYIS_SHIFT (3U)
 /*! PHYIS - PHY Interrupt
- *  0b1..PHY Interrupt detected
  *  0b0..PHY Interrupt not detected
+ *  0b1..PHY Interrupt detected
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_PHYIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_PHYIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_PHYIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_PMTIS_MASK (0x10U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_PMTIS_SHIFT (4U)
 /*! PMTIS - PMT Interrupt Status
- *  0b1..PMT Interrupt status active
  *  0b0..PMT Interrupt status not active
+ *  0b1..PMT Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_PMTIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_PMTIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_PMTIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_LPIIS_MASK (0x20U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_LPIIS_SHIFT (5U)
 /*! LPIIS - LPI Interrupt Status
- *  0b1..LPI Interrupt status active
  *  0b0..LPI Interrupt status not active
+ *  0b1..LPI Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_LPIIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_LPIIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_LPIIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCIS_MASK (0x100U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCIS_SHIFT (8U)
 /*! MMCIS - MMC Interrupt Status
- *  0b1..MMC Interrupt status active
  *  0b0..MMC Interrupt status not active
+ *  0b1..MMC Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MMCIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MMCIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIS_MASK (0x200U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIS_SHIFT (9U)
 /*! MMCRXIS - MMC Receive Interrupt Status
- *  0b1..MMC Receive Interrupt status active
  *  0b0..MMC Receive Interrupt status not active
+ *  0b1..MMC Receive Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCTXIS_MASK (0x400U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCTXIS_SHIFT (10U)
 /*! MMCTXIS - MMC Transmit Interrupt Status
- *  0b1..MMC Transmit Interrupt status active
  *  0b0..MMC Transmit Interrupt status not active
+ *  0b1..MMC Transmit Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCTXIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MMCTXIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MMCTXIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIPIS_MASK (0x800U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIPIS_SHIFT (11U)
 /*! MMCRXIPIS - MMC Receive Checksum Offload Interrupt Status
- *  0b1..MMC Receive Checksum Offload Interrupt status active
  *  0b0..MMC Receive Checksum Offload Interrupt status not active
+ *  0b1..MMC Receive Checksum Offload Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIPIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MMCRXIPIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_TSIS_MASK  (0x1000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_TSIS_SHIFT (12U)
 /*! TSIS - Timestamp Interrupt Status
- *  0b1..Timestamp Interrupt status active
  *  0b0..Timestamp Interrupt status not active
+ *  0b1..Timestamp Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_TSIS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_TSIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_TSIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_TXSTSIS_MASK (0x2000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_TXSTSIS_SHIFT (13U)
 /*! TXSTSIS - Transmit Status Interrupt
- *  0b1..Transmit Interrupt status active
  *  0b0..Transmit Interrupt status not active
+ *  0b1..Transmit Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_TXSTSIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_TXSTSIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_TXSTSIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_RXSTSIS_MASK (0x4000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_RXSTSIS_SHIFT (14U)
 /*! RXSTSIS - Receive Status Interrupt
- *  0b1..Receive Interrupt status active
  *  0b0..Receive Interrupt status not active
+ *  0b1..Receive Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_RXSTSIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_RXSTSIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_RXSTSIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_FPEIS_MASK (0x20000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_FPEIS_SHIFT (17U)
 /*! FPEIS - Frame Preemption Interrupt Status
- *  0b1..Frame Preemption Interrupt status active
  *  0b0..Frame Preemption Interrupt status not active
+ *  0b1..Frame Preemption Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_FPEIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_FPEIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_FPEIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MDIOIS_MASK (0x40000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MDIOIS_SHIFT (18U)
 /*! MDIOIS - MDIO Interrupt Status
- *  0b1..MDIO Interrupt status active
  *  0b0..MDIO Interrupt status not active
+ *  0b1..MDIO Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MDIOIS(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MDIOIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MDIOIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MFTIS_MASK (0x80000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MFTIS_SHIFT (19U)
 /*! MFTIS - MMC FPE Transmit Interrupt Status
- *  0b1..MMC FPE Transmit Interrupt status active
  *  0b0..MMC FPE Transmit Interrupt status not active
+ *  0b1..MMC FPE Transmit Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MFTIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MFTIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MFTIS_MASK)
 
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MFRIS_MASK (0x100000U)
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MFRIS_SHIFT (20U)
 /*! MFRIS - MMC FPE Receive Interrupt Status
- *  0b1..MMC FPE Receive Interrupt status active
  *  0b0..MMC FPE Receive Interrupt status not active
+ *  0b1..MMC FPE Receive Interrupt status active
  */
 #define ENET_QOS_MAC_INTERRUPT_STATUS_MFRIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INTERRUPT_STATUS_MFRIS_SHIFT)) & ENET_QOS_MAC_INTERRUPT_STATUS_MFRIS_MASK)
 /*! @} */
@@ -1855,8 +1858,8 @@ typedef struct {
 /*! TJT - Transmit Jabber Timeout This bit indicates that the Transmit Jabber Timer expired which
  *    happens when the packet size exceeds 2,048 bytes (10,240 bytes when the Jumbo packet is enabled)
  *    and JD bit is reset in the MAC_CONFIGURATION register.
- *  0b1..Transmit Jabber Timeout occurred
  *  0b0..No Transmit Jabber Timeout
+ *  0b1..Transmit Jabber Timeout occurred
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_TJT(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_TJT_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_TJT_MASK)
 
@@ -1864,8 +1867,8 @@ typedef struct {
 #define ENET_QOS_MAC_RX_TX_STATUS_NCARR_SHIFT    (1U)
 /*! NCARR - No Carrier When the DTXSTS bit is set in the MAC_OPERATION_MODE register, this bit
  *    indicates that the carrier signal from the PHY is not present at the end of preamble transmission.
- *  0b1..No carrier
  *  0b0..Carrier is present
+ *  0b1..No carrier
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_NCARR(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_NCARR_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_NCARR_MASK)
 
@@ -1874,8 +1877,8 @@ typedef struct {
 /*! LCARR - Loss of Carrier When the DTXSTS bit is set in the MAC_OPERATION_MODE register, this bit
  *    indicates that the loss of carrier occurred during packet transmission, that is, the phy_crs_i
  *    signal was inactive for one or more transmission clock periods during packet transmission.
- *  0b1..Loss of carrier
  *  0b0..Carrier is present
+ *  0b1..Loss of carrier
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_LCARR(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_LCARR_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_LCARR_MASK)
 
@@ -1885,8 +1888,8 @@ typedef struct {
  *    DC bit is set in the MAC_CONFIGURATION register, this bit indicates that the transmission
  *    ended because of excessive deferral of over 24,288 bit times (155,680 in 1000/2500 Mbps mode or
  *    when Jumbo packet is enabled).
- *  0b1..Excessive deferral
  *  0b0..No Excessive deferral
+ *  0b1..Excessive deferral
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_EXDEF(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_EXDEF_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_EXDEF_MASK)
 
@@ -1895,8 +1898,8 @@ typedef struct {
 /*! LCOL - Late Collision When the DTXSTS bit is set in the MAC_OPERATION_MODE register, this bit
  *    indicates that the packet transmission aborted because a collision occurred after the collision
  *    window (512 bytes including Preamble and Carrier Extension in GMII mode).
- *  0b1..Late collision is sensed
  *  0b0..No collision
+ *  0b1..Late collision is sensed
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_LCOL(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_LCOL_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_LCOL_MASK)
 
@@ -1905,8 +1908,8 @@ typedef struct {
 /*! EXCOL - Excessive Collisions When the DTXSTS bit is set in the MAC_OPERATION_MODE register, this
  *    bit indicates that the transmission aborted after 16 successive collisions while attempting
  *    to transmit the current packet.
- *  0b1..Excessive collision is sensed
  *  0b0..No collision
+ *  0b1..Excessive collision is sensed
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_EXCOL(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_EXCOL_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_EXCOL_MASK)
 
@@ -1915,8 +1918,8 @@ typedef struct {
 /*! RWT - Receive Watchdog Timeout This bit is set when a packet with length greater than 2,048
  *    bytes is received (10, 240 bytes when Jumbo Packet mode is enabled) and the WD bit is reset in the
  *    MAC_CONFIGURATION register.
- *  0b1..Receive watchdog timed out
  *  0b0..No receive watchdog timeout
+ *  0b1..Receive watchdog timed out
  */
 #define ENET_QOS_MAC_RX_TX_STATUS_RWT(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_RX_TX_STATUS_RWT_SHIFT)) & ENET_QOS_MAC_RX_TX_STATUS_RWT_MASK)
 /*! @} */
@@ -1954,8 +1957,8 @@ typedef struct {
 #define ENET_QOS_MAC_PMT_CONTROL_STATUS_MGKPRCVD_SHIFT (5U)
 /*! MGKPRCVD - Magic Packet Received When this bit is set, it indicates that the power management
  *    event is generated because of the reception of a magic packet.
- *  0b1..Magic packet is received
  *  0b0..No Magic packet is received
+ *  0b1..Magic packet is received
  */
 #define ENET_QOS_MAC_PMT_CONTROL_STATUS_MGKPRCVD(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PMT_CONTROL_STATUS_MGKPRCVD_SHIFT)) & ENET_QOS_MAC_PMT_CONTROL_STATUS_MGKPRCVD_MASK)
 
@@ -1963,8 +1966,8 @@ typedef struct {
 #define ENET_QOS_MAC_PMT_CONTROL_STATUS_RWKPRCVD_SHIFT (6U)
 /*! RWKPRCVD - Remote Wake-Up Packet Received When this bit is set, it indicates that the power
  *    management event is generated because of the reception of a remote wake-up packet.
- *  0b1..Remote wake-up packet is received
  *  0b0..Remote wake-up packet is received
+ *  0b1..Remote wake-up packet is received
  */
 #define ENET_QOS_MAC_PMT_CONTROL_STATUS_RWKPRCVD(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PMT_CONTROL_STATUS_RWKPRCVD_SHIFT)) & ENET_QOS_MAC_PMT_CONTROL_STATUS_RWKPRCVD_MASK)
 
@@ -2020,8 +2023,8 @@ typedef struct {
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEN_SHIFT (0U)
 /*! TLPIEN - Transmit LPI Entry When this bit is set, it indicates that the MAC Transmitter has
  *    entered the LPI state because of the setting of the LPIEN bit.
- *  0b1..Transmit LPI entry detected
  *  0b0..Transmit LPI entry not detected
+ *  0b1..Transmit LPI entry detected
  */
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEN(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEN_SHIFT)) & ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEN_MASK)
 
@@ -2029,8 +2032,8 @@ typedef struct {
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEX_SHIFT (1U)
 /*! TLPIEX - Transmit LPI Exit When this bit is set, it indicates that the MAC transmitter exited
  *    the LPI state after the application cleared the LPIEN bit and the LPI TW Timer has expired.
- *  0b1..Transmit LPI exit detected
  *  0b0..Transmit LPI exit not detected
+ *  0b1..Transmit LPI exit detected
  */
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEX(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEX_SHIFT)) & ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIEX_MASK)
 
@@ -2038,8 +2041,8 @@ typedef struct {
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEN_SHIFT (2U)
 /*! RLPIEN - Receive LPI Entry When this bit is set, it indicates that the MAC Receiver has received
  *    an LPI pattern and entered the LPI state.
- *  0b1..Receive LPI entry detected
  *  0b0..Receive LPI entry not detected
+ *  0b1..Receive LPI entry detected
  */
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEN(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEN_SHIFT)) & ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEN_MASK)
 
@@ -2048,8 +2051,8 @@ typedef struct {
 /*! RLPIEX - Receive LPI Exit When this bit is set, it indicates that the MAC Receiver has stopped
  *    receiving the LPI pattern on the GMII interface, exited the LPI state, and resumed the normal
  *    reception.
- *  0b1..Receive LPI exit detected
  *  0b0..Receive LPI exit not detected
+ *  0b1..Receive LPI exit detected
  */
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEX(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEX_SHIFT)) & ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIEX_MASK)
 
@@ -2057,16 +2060,16 @@ typedef struct {
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIST_SHIFT (8U)
 /*! TLPIST - Transmit LPI State When this bit is set, it indicates that the MAC is transmitting the
  *    LPI pattern on the GMII interface.
- *  0b1..Transmit LPI state detected
  *  0b0..Transmit LPI state not detected
+ *  0b1..Transmit LPI state detected
  */
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIST(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIST_SHIFT)) & ENET_QOS_MAC_LPI_CONTROL_STATUS_TLPIST_MASK)
 
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIST_MASK (0x200U)
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIST_SHIFT (9U)
 /*! RLPIST - Receive LPI State When this bit is set, it indicates that the MAC is receiving the LPI pattern on the GMII interface.
- *  0b1..Receive LPI state detected
  *  0b0..Receive LPI state not detected
+ *  0b1..Receive LPI state detected
  */
 #define ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIST(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIST_SHIFT)) & ENET_QOS_MAC_LPI_CONTROL_STATUS_RLPIST_MASK)
 
@@ -2186,17 +2189,17 @@ typedef struct {
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKMOD_MASK (0x10000U)
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKMOD_SHIFT (16U)
 /*! LNKMOD - Link Mode This bit indicates the current mode of operation of the link.
- *  0b1..Full-duplex mode
  *  0b0..Half-duplex mode
+ *  0b1..Full-duplex mode
  */
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKMOD(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKMOD_SHIFT)) & ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKMOD_MASK)
 
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSPEED_MASK (0x60000U)
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSPEED_SHIFT (17U)
 /*! LNKSPEED - Link Speed This bit indicates the current speed of the link.
- *  0b10..125 MHz
  *  0b00..2.5 MHz
  *  0b01..25 MHz
+ *  0b10..125 MHz
  *  0b11..Reserved
  */
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSPEED(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSPEED_SHIFT)) & ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSPEED_MASK)
@@ -2204,8 +2207,8 @@ typedef struct {
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSTS_MASK (0x80000U)
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSTS_SHIFT (19U)
 /*! LNKSTS - Link Status This bit indicates whether the link is up (1'b1) or down (1'b0).
- *  0b1..Link up
  *  0b0..Link down
+ *  0b1..Link up
  */
 #define ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSTS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSTS_SHIFT)) & ENET_QOS_MAC_PHYIF_CONTROL_STATUS_LNKSTS_MASK)
 /*! @} */
@@ -2231,8 +2234,8 @@ typedef struct {
 #define ENET_QOS_MAC_DEBUG_RPESTS_SHIFT          (0U)
 /*! RPESTS - MAC GMII Receive Protocol Engine Status When this bit is set, it indicates that the MAC
  *    GMII receive protocol engine is actively receiving data, and it is not in the Idle state.
- *  0b1..MAC GMII Receive Protocol Engine Status detected
  *  0b0..MAC GMII Receive Protocol Engine Status not detected
+ *  0b1..MAC GMII Receive Protocol Engine Status detected
  */
 #define ENET_QOS_MAC_DEBUG_RPESTS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_DEBUG_RPESTS_SHIFT)) & ENET_QOS_MAC_DEBUG_RPESTS_MASK)
 
@@ -2249,18 +2252,18 @@ typedef struct {
 /*! TPESTS - MAC GMII or MII Transmit Protocol Engine Status When this bit is set, it indicates that
  *    the MAC GMII or MII transmit protocol engine is actively transmitting data, and it is not in
  *    the Idle state.
- *  0b1..MAC GMII Transmit Protocol Engine Status detected
  *  0b0..MAC GMII Transmit Protocol Engine Status not detected
+ *  0b1..MAC GMII Transmit Protocol Engine Status detected
  */
 #define ENET_QOS_MAC_DEBUG_TPESTS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_DEBUG_TPESTS_SHIFT)) & ENET_QOS_MAC_DEBUG_TPESTS_MASK)
 
 #define ENET_QOS_MAC_DEBUG_TFCSTS_MASK           (0x60000U)
 #define ENET_QOS_MAC_DEBUG_TFCSTS_SHIFT          (17U)
 /*! TFCSTS - MAC Transmit Packet Controller Status This field indicates the state of the MAC Transmit Packet Controller module.
- *  0b10..Generating and transmitting a Pause control packet (in full-duplex mode)
  *  0b00..Idle state
- *  0b11..Transferring input packet for transmission
  *  0b01..Waiting for one of the following: Status of the previous packet OR IPG or back off period to be over
+ *  0b10..Generating and transmitting a Pause control packet (in full-duplex mode)
+ *  0b11..Transferring input packet for transmission
  */
 #define ENET_QOS_MAC_DEBUG_TFCSTS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_DEBUG_TFCSTS_SHIFT)) & ENET_QOS_MAC_DEBUG_TFCSTS_MASK)
 /*! @} */
@@ -2271,20 +2274,20 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_MIISEL_MASK         (0x1U)
 #define ENET_QOS_MAC_HW_FEAT_MIISEL_SHIFT        (0U)
 /*! MIISEL - 10 or 100 Mbps Support This bit is set to 1 when 10/100 Mbps is selected as the Mode of Operation
- *  0b1..10 or 100 Mbps support
  *  0b0..No 10 or 100 Mbps support
+ *  0b1..10 or 100 Mbps support
  */
 #define ENET_QOS_MAC_HW_FEAT_MIISEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_MIISEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_MIISEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_NRVF_MASK           (0x7U)
 #define ENET_QOS_MAC_HW_FEAT_NRVF_SHIFT          (0U)
 /*! NRVF - Number of Extended VLAN Tag Filters Enabled This field indicates the Number of Extended VLAN Tag Filters selected:
+ *  0b000..No Extended Rx VLAN Filters
+ *  0b001..4 Extended Rx VLAN Filters
+ *  0b010..8 Extended Rx VLAN Filters
  *  0b011..16 Extended Rx VLAN Filters
  *  0b100..24 Extended Rx VLAN Filters
  *  0b101..32 Extended Rx VLAN Filters
- *  0b001..4 Extended Rx VLAN Filters
- *  0b010..8 Extended Rx VLAN Filters
- *  0b000..No Extended Rx VLAN Filters
  *  0b110..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_NRVF(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_NRVF_SHIFT)) & ENET_QOS_MAC_HW_FEAT_NRVF_MASK)
@@ -2293,18 +2296,18 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_RXFIFOSIZE_SHIFT    (0U)
 /*! RXFIFOSIZE - MTL Receive FIFO Size This field contains the configured value of MTL Rx FIFO in
  *    bytes expressed as Log to base 2 minus 7, that is, Log2(RXFIFO_SIZE) -7:
- *  0b00011..1024 bytes
  *  0b00000..128 bytes
- *  0b01010..128 KB
- *  0b00111..16384 bytes
- *  0b00100..2048 bytes
  *  0b00001..256 bytes
- *  0b01011..256 KB
- *  0b01000..32 KB
- *  0b00101..4096 bytes
  *  0b00010..512 bytes
- *  0b01001..64 KB
+ *  0b00011..1024 bytes
+ *  0b00100..2048 bytes
+ *  0b00101..4096 bytes
  *  0b00110..8192 bytes
+ *  0b00111..16384 bytes
+ *  0b01000..32 KB
+ *  0b01001..64 KB
+ *  0b01010..128 KB
+ *  0b01011..256 KB
  *  0b01100..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_RXFIFOSIZE(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_RXFIFOSIZE_SHIFT)) & ENET_QOS_MAC_HW_FEAT_RXFIFOSIZE_MASK)
@@ -2326,16 +2329,16 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_GMIISEL_MASK        (0x2U)
 #define ENET_QOS_MAC_HW_FEAT_GMIISEL_SHIFT       (1U)
 /*! GMIISEL - 1000 Mbps Support This bit is set to 1 when 1000 Mbps is selected as the Mode of Operation
- *  0b1..1000 Mbps support
  *  0b0..No 1000 Mbps support
+ *  0b1..1000 Mbps support
  */
 #define ENET_QOS_MAC_HW_FEAT_GMIISEL(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_GMIISEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_GMIISEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_HDSEL_MASK          (0x4U)
 #define ENET_QOS_MAC_HW_FEAT_HDSEL_SHIFT         (2U)
 /*! HDSEL - Half-duplex Support This bit is set to 1 when the half-duplex mode is selected
- *  0b1..Half-duplex support
  *  0b0..No Half-duplex support
+ *  0b1..Half-duplex support
  */
 #define ENET_QOS_MAC_HW_FEAT_HDSEL(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_HDSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_HDSEL_MASK)
 
@@ -2343,8 +2346,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_PCSSEL_SHIFT        (3U)
 /*! PCSSEL - PCS Registers (TBI, SGMII, or RTBI PHY interface) This bit is set to 1 when the TBI,
  *    SGMII, or RTBI PHY interface option is selected
- *  0b1..PCS Registers (TBI, SGMII, or RTBI PHY interface)
  *  0b0..No PCS Registers (TBI, SGMII, or RTBI PHY interface)
+ *  0b1..PCS Registers (TBI, SGMII, or RTBI PHY interface)
  */
 #define ENET_QOS_MAC_HW_FEAT_PCSSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_PCSSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_PCSSEL_MASK)
 
@@ -2352,48 +2355,48 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_CBTISEL_SHIFT       (4U)
 /*! CBTISEL - Queue/Channel based VLAN tag insertion on Tx Enable This bit is set to 1 when the
  *    Enable Queue/Channel based VLAN tag insertion on Tx Feature is selected.
- *  0b1..Enable Queue/Channel based VLAN tag insertion on Tx feature is selected
  *  0b0..Enable Queue/Channel based VLAN tag insertion on Tx feature is not selected
+ *  0b1..Enable Queue/Channel based VLAN tag insertion on Tx feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_CBTISEL(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_CBTISEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_CBTISEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_VLHASH_MASK         (0x10U)
 #define ENET_QOS_MAC_HW_FEAT_VLHASH_SHIFT        (4U)
 /*! VLHASH - VLAN Hash Filter Selected This bit is set to 1 when the Enable VLAN Hash Table Based Filtering option is selected
- *  0b1..VLAN Hash Filter selected
  *  0b0..VLAN Hash Filter not selected
+ *  0b1..VLAN Hash Filter selected
  */
 #define ENET_QOS_MAC_HW_FEAT_VLHASH(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_VLHASH_SHIFT)) & ENET_QOS_MAC_HW_FEAT_VLHASH_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_DVLAN_MASK          (0x20U)
 #define ENET_QOS_MAC_HW_FEAT_DVLAN_SHIFT         (5U)
 /*! DVLAN - Double VLAN Tag Processing Selected This bit is set to 1 when the Enable Double VLAN Processing Feature is selected.
- *  0b1..Double VLAN option is selected
  *  0b0..Double VLAN option is not selected
+ *  0b1..Double VLAN option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_DVLAN(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_DVLAN_SHIFT)) & ENET_QOS_MAC_HW_FEAT_DVLAN_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_SMASEL_MASK         (0x20U)
 #define ENET_QOS_MAC_HW_FEAT_SMASEL_SHIFT        (5U)
 /*! SMASEL - SMA (MDIO) Interface This bit is set to 1 when the Enable Station Management (MDIO Interface) option is selected
- *  0b1..SMA (MDIO) Interface selected
  *  0b0..SMA (MDIO) Interface not selected
+ *  0b1..SMA (MDIO) Interface selected
  */
 #define ENET_QOS_MAC_HW_FEAT_SMASEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_SMASEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_SMASEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_SPRAM_MASK          (0x20U)
 #define ENET_QOS_MAC_HW_FEAT_SPRAM_SHIFT         (5U)
 /*! SPRAM - Single Port RAM Enable This bit is set to 1 when the Use single port RAM Feature is selected.
- *  0b1..Single Port RAM feature is selected
  *  0b0..Single Port RAM feature is not selected
+ *  0b1..Single Port RAM feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_SPRAM(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_SPRAM_SHIFT)) & ENET_QOS_MAC_HW_FEAT_SPRAM_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_RWKSEL_MASK         (0x40U)
 #define ENET_QOS_MAC_HW_FEAT_RWKSEL_SHIFT        (6U)
 /*! RWKSEL - PMT Remote Wake-up Packet Enable This bit is set to 1 when the Enable Remote Wake-Up Packet Detection option is selected
- *  0b1..PMT Remote Wake-up Packet Enable option is selected
  *  0b0..PMT Remote Wake-up Packet Enable option is not selected
+ *  0b1..PMT Remote Wake-up Packet Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_RWKSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_RWKSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_RWKSEL_MASK)
 
@@ -2401,17 +2404,17 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_TXFIFOSIZE_SHIFT    (6U)
 /*! TXFIFOSIZE - MTL Transmit FIFO Size This field contains the configured value of MTL Tx FIFO in
  *    bytes expressed as Log to base 2 minus 7, that is, Log2(TXFIFO_SIZE) -7:
- *  0b00011..1024 bytes
  *  0b00000..128 bytes
- *  0b01010..128 KB
- *  0b00111..16384 bytes
- *  0b00100..2048 bytes
  *  0b00001..256 bytes
- *  0b01000..32 KB
- *  0b00101..4096 bytes
  *  0b00010..512 bytes
- *  0b01001..64 KB
+ *  0b00011..1024 bytes
+ *  0b00100..2048 bytes
+ *  0b00101..4096 bytes
  *  0b00110..8192 bytes
+ *  0b00111..16384 bytes
+ *  0b01000..32 KB
+ *  0b01001..64 KB
+ *  0b01010..128 KB
  *  0b01011..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_TXFIFOSIZE(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_TXFIFOSIZE_SHIFT)) & ENET_QOS_MAC_HW_FEAT_TXFIFOSIZE_MASK)
@@ -2433,24 +2436,24 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_MGKSEL_MASK         (0x80U)
 #define ENET_QOS_MAC_HW_FEAT_MGKSEL_SHIFT        (7U)
 /*! MGKSEL - PMT Magic Packet Enable This bit is set to 1 when the Enable Magic Packet Detection option is selected
- *  0b1..PMT Magic Packet Enable option is selected
  *  0b0..PMT Magic Packet Enable option is not selected
+ *  0b1..PMT Magic Packet Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_MGKSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_MGKSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_MGKSEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_MMCSEL_MASK         (0x100U)
 #define ENET_QOS_MAC_HW_FEAT_MMCSEL_SHIFT        (8U)
 /*! MMCSEL - RMON Module Enable This bit is set to 1 when the Enable MAC Management Counters (MMC) option is selected
- *  0b1..RMON Module Enable option is selected
  *  0b0..RMON Module Enable option is not selected
+ *  0b1..RMON Module Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_MMCSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_MMCSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_MMCSEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_ARPOFFSEL_MASK      (0x200U)
 #define ENET_QOS_MAC_HW_FEAT_ARPOFFSEL_SHIFT     (9U)
 /*! ARPOFFSEL - ARP Offload Enabled This bit is set to 1 when the Enable IPv4 ARP Offload option is selected
- *  0b1..ARP Offload Enable option is selected
  *  0b0..ARP Offload Enable option is not selected
+ *  0b1..ARP Offload Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_ARPOFFSEL(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_ARPOFFSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_ARPOFFSEL_MASK)
 
@@ -2458,8 +2461,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_PDUPSEL_SHIFT       (9U)
 /*! PDUPSEL - Broadcast/Multicast Packet Duplication This bit is set to 1 when the
  *    Broadcast/Multicast Packet Duplication feature is selected.
- *  0b1..Broadcast/Multicast Packet Duplication feature is selected
  *  0b0..Broadcast/Multicast Packet Duplication feature is not selected
+ *  0b1..Broadcast/Multicast Packet Duplication feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_PDUPSEL(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_PDUPSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_PDUPSEL_MASK)
 
@@ -2467,8 +2470,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_FRPSEL_SHIFT        (10U)
 /*! FRPSEL - Flexible Receive Parser Selected This bit is set to 1 when the Enable Flexible
  *    Programmable Receive Parser option is selected.
- *  0b1..Flexible Receive Parser feature is selected
  *  0b0..Flexible Receive Parser feature is not selected
+ *  0b1..Flexible Receive Parser feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_FRPSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_FRPSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_FRPSEL_MASK)
 
@@ -2476,9 +2479,9 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_FRPBS_SHIFT         (11U)
 /*! FRPBS - Flexible Receive Parser Buffer size This field indicates the supported Max Number of
  *    bytes of the packet data to be Parsed by Flexible Receive Parser.
+ *  0b00..64 Bytes
  *  0b01..128 Bytes
  *  0b10..256 Bytes
- *  0b00..64 Bytes
  *  0b11..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_FRPBS(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_FRPBS_SHIFT)) & ENET_QOS_MAC_HW_FEAT_FRPBS_MASK)
@@ -2486,16 +2489,16 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_OSTEN_MASK          (0x800U)
 #define ENET_QOS_MAC_HW_FEAT_OSTEN_SHIFT         (11U)
 /*! OSTEN - One-Step Timestamping Enable This bit is set to 1 when the Enable One-Step Timestamp Feature is selected.
- *  0b1..One-Step Timestamping feature is selected
  *  0b0..One-Step Timestamping feature is not selected
+ *  0b1..One-Step Timestamping feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_OSTEN(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_OSTEN_SHIFT)) & ENET_QOS_MAC_HW_FEAT_OSTEN_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_PTOEN_MASK          (0x1000U)
 #define ENET_QOS_MAC_HW_FEAT_PTOEN_SHIFT         (12U)
 /*! PTOEN - PTP Offload Enable This bit is set to 1 when the Enable PTP Timestamp Offload Feature is selected.
- *  0b1..PTP Offload feature is selected
  *  0b0..PTP Offload feature is not selected
+ *  0b1..PTP Offload feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_PTOEN(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_PTOEN_SHIFT)) & ENET_QOS_MAC_HW_FEAT_PTOEN_MASK)
 
@@ -2516,16 +2519,16 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_TSSEL_MASK          (0x1000U)
 #define ENET_QOS_MAC_HW_FEAT_TSSEL_SHIFT         (12U)
 /*! TSSEL - IEEE 1588-2008 Timestamp Enabled This bit is set to 1 when the Enable IEEE 1588 Timestamp Support option is selected
- *  0b1..IEEE 1588-2008 Timestamp Enable option is selected
  *  0b0..IEEE 1588-2008 Timestamp Enable option is not selected
+ *  0b1..IEEE 1588-2008 Timestamp Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_TSSEL(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_TSSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_TSSEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_ADVTHWORD_MASK      (0x2000U)
 #define ENET_QOS_MAC_HW_FEAT_ADVTHWORD_SHIFT     (13U)
 /*! ADVTHWORD - IEEE 1588 High Word Register Enable This bit is set to 1 when the Add IEEE 1588 Higher Word Register option is selected
- *  0b1..IEEE 1588 High Word Register option is selected
  *  0b0..IEEE 1588 High Word Register option is not selected
+ *  0b1..IEEE 1588 High Word Register option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_ADVTHWORD(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_ADVTHWORD_SHIFT)) & ENET_QOS_MAC_HW_FEAT_ADVTHWORD_MASK)
 
@@ -2533,8 +2536,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_EEESEL_SHIFT        (13U)
 /*! EEESEL - Energy Efficient Ethernet Enabled This bit is set to 1 when the Enable Energy Efficient
  *    Ethernet (EEE) option is selected
- *  0b1..Energy Efficient Ethernet Enable option is selected
  *  0b0..Energy Efficient Ethernet Enable option is not selected
+ *  0b1..Energy Efficient Ethernet Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_EEESEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_EEESEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_EEESEL_MASK)
 
@@ -2542,9 +2545,9 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_FRPES_SHIFT         (13U)
 /*! FRPES - Flexible Receive Parser Table Entries size This field indicates the Max Number of Parser
  *    Entries supported by Flexible Receive Parser.
+ *  0b00..64 Entries
  *  0b01..128 Entries
  *  0b10..256 Entries
- *  0b00..64 Entries
  *  0b11..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_FRPES(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_FRPES_SHIFT)) & ENET_QOS_MAC_HW_FEAT_FRPES_MASK)
@@ -2563,16 +2566,16 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_TXCOESEL_SHIFT      (14U)
 /*! TXCOESEL - Transmit Checksum Offload Enabled This bit is set to 1 when the Enable Transmit
  *    TCP/IP Checksum Insertion option is selected
- *  0b1..Transmit Checksum Offload Enable option is selected
  *  0b0..Transmit Checksum Offload Enable option is not selected
+ *  0b1..Transmit Checksum Offload Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_TXCOESEL(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_TXCOESEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_TXCOESEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_DCBEN_MASK          (0x10000U)
 #define ENET_QOS_MAC_HW_FEAT_DCBEN_SHIFT         (16U)
 /*! DCBEN - DCB Feature Enable This bit is set to 1 when the Enable Data Center Bridging option is selected
- *  0b1..DCB Feature is selected
  *  0b0..DCB Feature is not selected
+ *  0b1..DCB Feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_DCBEN(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_DCBEN_SHIFT)) & ENET_QOS_MAC_HW_FEAT_DCBEN_MASK)
 
@@ -2580,28 +2583,28 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_ESTSEL_SHIFT        (16U)
 /*! ESTSEL - Enhancements to Scheduling Traffic Enable This bit is set to 1 when the Enable
  *    Enhancements to Scheduling Traffic feature is selected.
- *  0b1..Enable Enhancements to Scheduling Traffic feature is selected
  *  0b0..Enable Enhancements to Scheduling Traffic feature is not selected
+ *  0b1..Enable Enhancements to Scheduling Traffic feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_ESTSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_ESTSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_ESTSEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_RXCOESEL_MASK       (0x10000U)
 #define ENET_QOS_MAC_HW_FEAT_RXCOESEL_SHIFT      (16U)
 /*! RXCOESEL - Receive Checksum Offload Enabled This bit is set to 1 when the Enable Receive TCP/IP Checksum Check option is selected
- *  0b1..Receive Checksum Offload Enable option is selected
  *  0b0..Receive Checksum Offload Enable option is not selected
+ *  0b1..Receive Checksum Offload Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_RXCOESEL(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_RXCOESEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_RXCOESEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_ESTDEP_MASK         (0xE0000U)
 #define ENET_QOS_MAC_HW_FEAT_ESTDEP_SHIFT        (17U)
 /*! ESTDEP - Depth of the Gate Control List This field indicates the depth of Gate Control list expressed as Log2(DWC_EQOS_EST_DEP)-5
- *  0b101..1024
+ *  0b000..No Depth configured
+ *  0b001..64
  *  0b010..128
  *  0b011..256
  *  0b100..512
- *  0b001..64
- *  0b000..No Depth configured
+ *  0b101..1024
  *  0b110..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_ESTDEP(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_ESTDEP_SHIFT)) & ENET_QOS_MAC_HW_FEAT_ESTDEP_MASK)
@@ -2609,8 +2612,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_SPHEN_MASK          (0x20000U)
 #define ENET_QOS_MAC_HW_FEAT_SPHEN_SHIFT         (17U)
 /*! SPHEN - Split Header Feature Enable This bit is set to 1 when the Enable Split Header Structure option is selected
- *  0b1..Split Header Feature is selected
  *  0b0..Split Header Feature is not selected
+ *  0b1..Split Header Feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_SPHEN(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_SPHEN_SHIFT)) & ENET_QOS_MAC_HW_FEAT_SPHEN_MASK)
 
@@ -2625,8 +2628,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_TSOEN_SHIFT         (18U)
 /*! TSOEN - TCP Segmentation Offload Enable This bit is set to 1 when the Enable TCP Segmentation
  *    Offloading for TCP/IP Packets option is selected
- *  0b1..TCP Segmentation Offload Feature is selected
  *  0b0..TCP Segmentation Offload Feature is not selected
+ *  0b1..TCP Segmentation Offload Feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_TSOEN(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_TSOEN_SHIFT)) & ENET_QOS_MAC_HW_FEAT_TSOEN_MASK)
 
@@ -2647,16 +2650,16 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_DBGMEMA_MASK        (0x80000U)
 #define ENET_QOS_MAC_HW_FEAT_DBGMEMA_SHIFT       (19U)
 /*! DBGMEMA - DMA Debug Registers Enable This bit is set to 1 when the Debug Mode Enable option is selected
- *  0b1..DMA Debug Registers option is selected
  *  0b0..DMA Debug Registers option is not selected
+ *  0b1..DMA Debug Registers option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_DBGMEMA(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_DBGMEMA_SHIFT)) & ENET_QOS_MAC_HW_FEAT_DBGMEMA_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_AVSEL_MASK          (0x100000U)
 #define ENET_QOS_MAC_HW_FEAT_AVSEL_SHIFT         (20U)
 /*! AVSEL - AV Feature Enable This bit is set to 1 when the Enable Audio Video Bridging option is selected.
- *  0b1..AV Feature is selected
  *  0b0..AV Feature is not selected
+ *  0b1..AV Feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_AVSEL(x)            (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_AVSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_AVSEL_MASK)
 
@@ -2675,8 +2678,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_RAVSEL_SHIFT        (21U)
 /*! RAVSEL - Rx Side Only AV Feature Enable This bit is set to 1 when the Enable Audio Video
  *    Bridging option on Rx Side Only is selected.
- *  0b1..Rx Side Only AV Feature is selected
  *  0b0..Rx Side Only AV Feature is not selected
+ *  0b1..Rx Side Only AV Feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_RAVSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_RAVSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_RAVSEL_MASK)
 
@@ -2684,8 +2687,8 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_MACADR32SEL_SHIFT   (23U)
 /*! MACADR32SEL - MAC Addresses 32-63 Selected This bit is set to 1 when the Enable Additional 32
  *    MAC Address Registers (32-63) option is selected
- *  0b1..MAC Addresses 32-63 Select option is selected
  *  0b0..MAC Addresses 32-63 Select option is not selected
+ *  0b1..MAC Addresses 32-63 Select option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_MACADR32SEL(x)      (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_MACADR32SEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_MACADR32SEL_MASK)
 
@@ -2693,18 +2696,18 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_POUOST_SHIFT        (23U)
 /*! POUOST - One Step for PTP over UDP/IP Feature Enable This bit is set to 1 when the Enable One
  *    step timestamp for PTP over UDP/IP feature is selected.
- *  0b1..One Step for PTP over UDP/IP Feature is selected
  *  0b0..One Step for PTP over UDP/IP Feature is not selected
+ *  0b1..One Step for PTP over UDP/IP Feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_POUOST(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_POUOST_SHIFT)) & ENET_QOS_MAC_HW_FEAT_POUOST_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_HASHTBLSZ_MASK      (0x3000000U)
 #define ENET_QOS_MAC_HW_FEAT_HASHTBLSZ_SHIFT     (24U)
 /*! HASHTBLSZ - Hash Table Size This field indicates the size of the hash table:
+ *  0b00..No hash table
+ *  0b01..64
  *  0b10..128
  *  0b11..256
- *  0b01..64
- *  0b00..No hash table
  */
 #define ENET_QOS_MAC_HW_FEAT_HASHTBLSZ(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_HASHTBLSZ_SHIFT)) & ENET_QOS_MAC_HW_FEAT_HASHTBLSZ_MASK)
 
@@ -2712,19 +2715,19 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_MACADR64SEL_SHIFT   (24U)
 /*! MACADR64SEL - MAC Addresses 64-127 Selected This bit is set to 1 when the Enable Additional 64
  *    MAC Address Registers (64-127) option is selected
- *  0b1..MAC Addresses 64-127 Select option is selected
  *  0b0..MAC Addresses 64-127 Select option is not selected
+ *  0b1..MAC Addresses 64-127 Select option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_MACADR64SEL(x)      (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_MACADR64SEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_MACADR64SEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_PPSOUTNUM_MASK      (0x7000000U)
 #define ENET_QOS_MAC_HW_FEAT_PPSOUTNUM_SHIFT     (24U)
 /*! PPSOUTNUM - Number of PPS Outputs This field indicates the number of PPS outputs:
+ *  0b000..No PPS output
  *  0b001..1 PPS output
  *  0b010..2 PPS output
  *  0b011..3 PPS output
  *  0b100..4 PPS output
- *  0b000..No PPS output
  *  0b101..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_PPSOUTNUM(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_PPSOUTNUM_SHIFT)) & ENET_QOS_MAC_HW_FEAT_PPSOUTNUM_MASK)
@@ -2733,9 +2736,9 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_TSSTSSEL_SHIFT      (25U)
 /*! TSSTSSEL - Timestamp System Time Source This bit indicates the source of the Timestamp system
  *    time: This bit is set to 1 when the Enable IEEE 1588 Timestamp Support option is selected
- *  0b10..External
- *  0b01..Internal
  *  0b00..Reserved
+ *  0b01..Internal
+ *  0b10..External
  *  0b11..Both
  */
 #define ENET_QOS_MAC_HW_FEAT_TSSTSSEL(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_TSSTSSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_TSSTSSEL_MASK)
@@ -2743,14 +2746,15 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_FPESEL_MASK         (0x4000000U)
 #define ENET_QOS_MAC_HW_FEAT_FPESEL_SHIFT        (26U)
 /*! FPESEL - Frame Preemption Enable This bit is set to 1 when the Enable Frame preemption feature is selected.
- *  0b1..Frame Preemption Enable feature is selected
  *  0b0..Frame Preemption Enable feature is not selected
+ *  0b1..Frame Preemption Enable feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_FPESEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_FPESEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_FPESEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_L3L4FNUM_MASK       (0x78000000U)
 #define ENET_QOS_MAC_HW_FEAT_L3L4FNUM_SHIFT      (27U)
 /*! L3L4FNUM - Total number of L3 or L4 Filters This field indicates the total number of L3 or L4 filters:
+ *  0b0000..No L3 or L4 Filter
  *  0b0001..1 L3 or L4 Filter
  *  0b0010..2 L3 or L4 Filters
  *  0b0011..3 L3 or L4 Filters
@@ -2759,7 +2763,6 @@ typedef struct {
  *  0b0110..6 L3 or L4 Filters
  *  0b0111..7 L3 or L4 Filters
  *  0b1000..8 L3 or L4 Filters
- *  0b0000..No L3 or L4 Filter
  */
 #define ENET_QOS_MAC_HW_FEAT_L3L4FNUM(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_L3L4FNUM_SHIFT)) & ENET_QOS_MAC_HW_FEAT_L3L4FNUM_MASK)
 
@@ -2767,16 +2770,16 @@ typedef struct {
 #define ENET_QOS_MAC_HW_FEAT_SAVLANINS_SHIFT     (27U)
 /*! SAVLANINS - Source Address or VLAN Insertion Enable This bit is set to 1 when the Enable SA and
  *    VLAN Insertion on Tx option is selected
- *  0b1..Source Address or VLAN Insertion Enable option is selected
  *  0b0..Source Address or VLAN Insertion Enable option is not selected
+ *  0b1..Source Address or VLAN Insertion Enable option is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_SAVLANINS(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_SAVLANINS_SHIFT)) & ENET_QOS_MAC_HW_FEAT_SAVLANINS_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_TBSSEL_MASK         (0x8000000U)
 #define ENET_QOS_MAC_HW_FEAT_TBSSEL_SHIFT        (27U)
 /*! TBSSEL - Time Based Scheduling Enable This bit is set to 1 when the Time Based Scheduling feature is selected.
- *  0b1..Time Based Scheduling Enable feature is selected
  *  0b0..Time Based Scheduling Enable feature is not selected
+ *  0b1..Time Based Scheduling Enable feature is selected
  */
 #define ENET_QOS_MAC_HW_FEAT_TBSSEL(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_TBSSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_TBSSEL_MASK)
 
@@ -2785,34 +2788,34 @@ typedef struct {
 /*! ACTPHYSEL - Active PHY Selected When you have multiple PHY interfaces in your configuration,
  *    this field indicates the sampled value of phy_intf_sel_i during reset de-assertion.
  *  0b000..GMII
- *  0b111..RevMII
  *  0b001..RGMII
+ *  0b010..SGMII
+ *  0b011..TBI
  *  0b100..RMII
  *  0b101..RTBI
- *  0b010..SGMII
  *  0b110..SMII
- *  0b011..TBI
+ *  0b111..RevMII
  */
 #define ENET_QOS_MAC_HW_FEAT_ACTPHYSEL(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_ACTPHYSEL_SHIFT)) & ENET_QOS_MAC_HW_FEAT_ACTPHYSEL_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_ASP_MASK            (0x30000000U)
 #define ENET_QOS_MAC_HW_FEAT_ASP_SHIFT           (28U)
 /*! ASP - Automotive Safety Package Following are the encoding for the different Safety features
+ *  0b00..No Safety features selected
+ *  0b01..Only "ECC protection for external memory" feature is selected
  *  0b10..All the Automotive Safety features are selected without the "Parity Port Enable for external interface" feature
  *  0b11..All the Automotive Safety features are selected with the "Parity Port Enable for external interface" feature
- *  0b01..Only "ECC protection for external memory" feature is selected
- *  0b00..No Safety features selected
  */
 #define ENET_QOS_MAC_HW_FEAT_ASP(x)              (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_ASP_SHIFT)) & ENET_QOS_MAC_HW_FEAT_ASP_MASK)
 
 #define ENET_QOS_MAC_HW_FEAT_AUXSNAPNUM_MASK     (0x70000000U)
 #define ENET_QOS_MAC_HW_FEAT_AUXSNAPNUM_SHIFT    (28U)
 /*! AUXSNAPNUM - Number of Auxiliary Snapshot Inputs This field indicates the number of auxiliary snapshot inputs:
+ *  0b000..No auxiliary input
  *  0b001..1 auxiliary input
  *  0b010..2 auxiliary input
  *  0b011..3 auxiliary input
  *  0b100..4 auxiliary input
- *  0b000..No auxiliary input
  *  0b101..Reserved
  */
 #define ENET_QOS_MAC_HW_FEAT_AUXSNAPNUM(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_HW_FEAT_AUXSNAPNUM_SHIFT)) & ENET_QOS_MAC_HW_FEAT_AUXSNAPNUM_MASK)
@@ -2981,32 +2984,32 @@ typedef struct {
 #define ENET_QOS_MAC_FPE_CTRL_STS_RVER_MASK      (0x10000U)
 #define ENET_QOS_MAC_FPE_CTRL_STS_RVER_SHIFT     (16U)
 /*! RVER - Received Verify Frame Set when a Verify mPacket is received.
- *  0b1..Received Verify Frame
  *  0b0..Not received Verify Frame
+ *  0b1..Received Verify Frame
  */
 #define ENET_QOS_MAC_FPE_CTRL_STS_RVER(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_FPE_CTRL_STS_RVER_SHIFT)) & ENET_QOS_MAC_FPE_CTRL_STS_RVER_MASK)
 
 #define ENET_QOS_MAC_FPE_CTRL_STS_RRSP_MASK      (0x20000U)
 #define ENET_QOS_MAC_FPE_CTRL_STS_RRSP_SHIFT     (17U)
 /*! RRSP - Received Respond Frame Set when a Respond mPacket is received.
- *  0b1..Received Respond Frame
  *  0b0..Not received Respond Frame
+ *  0b1..Received Respond Frame
  */
 #define ENET_QOS_MAC_FPE_CTRL_STS_RRSP(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_FPE_CTRL_STS_RRSP_SHIFT)) & ENET_QOS_MAC_FPE_CTRL_STS_RRSP_MASK)
 
 #define ENET_QOS_MAC_FPE_CTRL_STS_TVER_MASK      (0x40000U)
 #define ENET_QOS_MAC_FPE_CTRL_STS_TVER_SHIFT     (18U)
 /*! TVER - Transmitted Verify Frame Set when a Verify mPacket is transmitted (triggered by setting SVER field).
- *  0b1..transmitted Verify Frame
  *  0b0..Not transmitted Verify Frame
+ *  0b1..transmitted Verify Frame
  */
 #define ENET_QOS_MAC_FPE_CTRL_STS_TVER(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_FPE_CTRL_STS_TVER_SHIFT)) & ENET_QOS_MAC_FPE_CTRL_STS_TVER_MASK)
 
 #define ENET_QOS_MAC_FPE_CTRL_STS_TRSP_MASK      (0x80000U)
 #define ENET_QOS_MAC_FPE_CTRL_STS_TRSP_SHIFT     (19U)
 /*! TRSP - Transmitted Respond Frame Set when a Respond mPacket is transmitted (triggered by setting SRSP field).
- *  0b1..transmitted Respond Frame
  *  0b0..Not transmitted Respond Frame
+ *  0b1..transmitted Respond Frame
  */
 #define ENET_QOS_MAC_FPE_CTRL_STS_TRSP(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_FPE_CTRL_STS_TRSP_SHIFT)) & ENET_QOS_MAC_FPE_CTRL_STS_TRSP_MASK)
 /*! @} */
@@ -3153,8 +3156,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBPKTIS_SHIFT (0U)
 /*! RXGBPKTIS - MMC Receive Good Bad Packet Counter Interrupt Status This bit is set when the
  *    rxpacketcount_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBPKTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBPKTIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBPKTIS_MASK)
 
@@ -3162,8 +3165,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBOCTIS_SHIFT (1U)
 /*! RXGBOCTIS - MMC Receive Good Bad Octet Counter Interrupt Status This bit is set when the
  *    rxoctetcount_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Good Bad Octet Counter Interrupt Status detected
  *  0b0..MMC Receive Good Bad Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Good Bad Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBOCTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBOCTIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGBOCTIS_MASK)
 
@@ -3171,8 +3174,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGOCTIS_SHIFT (2U)
 /*! RXGOCTIS - MMC Receive Good Octet Counter Interrupt Status This bit is set when the
  *    rxoctetcount_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Good Octet Counter Interrupt Status detected
  *  0b0..MMC Receive Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGOCTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGOCTIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXGOCTIS_MASK)
 
@@ -3180,8 +3183,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXBCGPIS_SHIFT (3U)
 /*! RXBCGPIS - MMC Receive Broadcast Good Packet Counter Interrupt Status This bit is set when the
  *    rxbroadcastpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Broadcast Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Broadcast Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Broadcast Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXBCGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXBCGPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXBCGPIS_MASK)
 
@@ -3189,8 +3192,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXMCGPIS_SHIFT (4U)
 /*! RXMCGPIS - MMC Receive Multicast Good Packet Counter Interrupt Status This bit is set when the
  *    rxmulticastpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Multicast Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Multicast Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Multicast Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXMCGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXMCGPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXMCGPIS_MASK)
 
@@ -3198,8 +3201,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCRCERPIS_SHIFT (5U)
 /*! RXCRCERPIS - MMC Receive CRC Error Packet Counter Interrupt Status This bit is set when the
  *    rxcrcerror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive CRC Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive CRC Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive CRC Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCRCERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCRCERPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCRCERPIS_MASK)
 
@@ -3207,8 +3210,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXALGNERPIS_SHIFT (6U)
 /*! RXALGNERPIS - MMC Receive Alignment Error Packet Counter Interrupt Status This bit is set when
  *    the rxalignmenterror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Alignment Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Alignment Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Alignment Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXALGNERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXALGNERPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXALGNERPIS_MASK)
 
@@ -3216,8 +3219,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRUNTPIS_SHIFT (7U)
 /*! RXRUNTPIS - MMC Receive Runt Packet Counter Interrupt Status This bit is set when the
  *    rxrunterror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Runt Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Runt Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Runt Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRUNTPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRUNTPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRUNTPIS_MASK)
 
@@ -3225,8 +3228,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXJABERPIS_SHIFT (8U)
 /*! RXJABERPIS - MMC Receive Jabber Error Packet Counter Interrupt Status This bit is set when the
  *    rxjabbererror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Jabber Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Jabber Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Jabber Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXJABERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXJABERPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXJABERPIS_MASK)
 
@@ -3234,8 +3237,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUSIZEGPIS_SHIFT (9U)
 /*! RXUSIZEGPIS - MMC Receive Undersize Good Packet Counter Interrupt Status This bit is set when
  *    the rxundersize_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Undersize Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Undersize Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Undersize Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUSIZEGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUSIZEGPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUSIZEGPIS_MASK)
 
@@ -3243,8 +3246,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXOSIZEGPIS_SHIFT (10U)
 /*! RXOSIZEGPIS - MMC Receive Oversize Good Packet Counter Interrupt Status This bit is set when the
  *    rxoversize_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Oversize Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Oversize Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Oversize Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXOSIZEGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXOSIZEGPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXOSIZEGPIS_MASK)
 
@@ -3252,8 +3255,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX64OCTGBPIS_SHIFT (11U)
 /*! RX64OCTGBPIS - MMC Receive 64 Octet Good Bad Packet Counter Interrupt Status This bit is set
  *    when the rx64octets_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive 64 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive 64 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive 64 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX64OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RX64OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RX64OCTGBPIS_MASK)
 
@@ -3262,8 +3265,8 @@ typedef struct {
 /*! RX65T127OCTGBPIS - MMC Receive 65 to 127 Octet Good Bad Packet Counter Interrupt Status This bit
  *    is set when the rx65to127octets_gb counter reaches half of the maximum value or the maximum
  *    value.
- *  0b1..MMC Receive 65 to 127 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive 65 to 127 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive 65 to 127 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX65T127OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RX65T127OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RX65T127OCTGBPIS_MASK)
 
@@ -3272,8 +3275,8 @@ typedef struct {
 /*! RX128T255OCTGBPIS - MMC Receive 128 to 255 Octet Good Bad Packet Counter Interrupt Status This
  *    bit is set when the rx128to255octets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Receive 128 to 255 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive 128 to 255 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive 128 to 255 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX128T255OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RX128T255OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RX128T255OCTGBPIS_MASK)
 
@@ -3282,8 +3285,8 @@ typedef struct {
 /*! RX256T511OCTGBPIS - MMC Receive 256 to 511 Octet Good Bad Packet Counter Interrupt Status This
  *    bit is set when the rx256to511octets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Receive 256 to 511 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive 256 to 511 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive 256 to 511 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX256T511OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RX256T511OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RX256T511OCTGBPIS_MASK)
 
@@ -3292,8 +3295,8 @@ typedef struct {
 /*! RX512T1023OCTGBPIS - MMC Receive 512 to 1023 Octet Good Bad Packet Counter Interrupt Status This
  *    bit is set when the rx512to1023octets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Receive 512 to 1023 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive 512 to 1023 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive 512 to 1023 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX512T1023OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RX512T1023OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RX512T1023OCTGBPIS_MASK)
 
@@ -3302,8 +3305,8 @@ typedef struct {
 /*! RX1024TMAXOCTGBPIS - MMC Receive 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status
  *    This bit is set when the rx1024tomaxoctets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Receive 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RX1024TMAXOCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RX1024TMAXOCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RX1024TMAXOCTGBPIS_MASK)
 
@@ -3311,8 +3314,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUCGPIS_SHIFT (17U)
 /*! RXUCGPIS - MMC Receive Unicast Good Packet Counter Interrupt Status This bit is set when the
  *    rxunicastpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Unicast Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Unicast Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Unicast Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUCGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUCGPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXUCGPIS_MASK)
 
@@ -3320,16 +3323,16 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLENERPIS_SHIFT (18U)
 /*! RXLENERPIS - MMC Receive Length Error Packet Counter Interrupt Status This bit is set when the
  *    rxlengtherror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Length Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Length Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Length Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLENERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLENERPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLENERPIS_MASK)
 
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXORANGEPIS_MASK (0x80000U)
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXORANGEPIS_SHIFT (19U)
 /*! RXORANGEPIS - MMC Receive Out Of Range Error Packet Counter Interrupt Status.
- *  0b1..MMC Receive Out Of Range Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Out Of Range Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Out Of Range Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXORANGEPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXORANGEPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXORANGEPIS_MASK)
 
@@ -3337,8 +3340,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXPAUSPIS_SHIFT (20U)
 /*! RXPAUSPIS - MMC Receive Pause Packet Counter Interrupt Status This bit is set when the
  *    rxpausepackets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Pause Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Pause Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Pause Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXPAUSPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXPAUSPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXPAUSPIS_MASK)
 
@@ -3346,8 +3349,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXFOVPIS_SHIFT (21U)
 /*! RXFOVPIS - MMC Receive FIFO Overflow Packet Counter Interrupt Status This bit is set when the
  *    rxfifooverflow counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive FIFO Overflow Packet Counter Interrupt Status detected
  *  0b0..MMC Receive FIFO Overflow Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive FIFO Overflow Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXFOVPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXFOVPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXFOVPIS_MASK)
 
@@ -3355,8 +3358,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXVLANGBPIS_SHIFT (22U)
 /*! RXVLANGBPIS - MMC Receive VLAN Good Bad Packet Counter Interrupt Status This bit is set when the
  *    rxvlanpackets_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive VLAN Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Receive VLAN Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive VLAN Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXVLANGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXVLANGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXVLANGBPIS_MASK)
 
@@ -3364,8 +3367,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXWDOGPIS_SHIFT (23U)
 /*! RXWDOGPIS - MMC Receive Watchdog Error Packet Counter Interrupt Status This bit is set when the
  *    rxwatchdog error counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Watchdog Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Watchdog Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Watchdog Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXWDOGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXWDOGPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXWDOGPIS_MASK)
 
@@ -3373,8 +3376,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRCVERRPIS_SHIFT (24U)
 /*! RXRCVERRPIS - MMC Receive Error Packet Counter Interrupt Status This bit is set when the
  *    rxrcverror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRCVERRPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRCVERRPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXRCVERRPIS_MASK)
 
@@ -3382,8 +3385,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCTRLPIS_SHIFT (25U)
 /*! RXCTRLPIS - MMC Receive Control Packet Counter Interrupt Status This bit is set when the
  *    rxctrlpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive Control Packet Counter Interrupt Status detected
  *  0b0..MMC Receive Control Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive Control Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCTRLPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCTRLPIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXCTRLPIS_MASK)
 
@@ -3391,8 +3394,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPIUSCIS_SHIFT (26U)
 /*! RXLPIUSCIS - MMC Receive LPI microsecond counter interrupt status This bit is set when the
  *    Rx_LPI_USEC_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive LPI microsecond Counter Interrupt Status detected
  *  0b0..MMC Receive LPI microsecond Counter Interrupt Status not detected
+ *  0b1..MMC Receive LPI microsecond Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPIUSCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPIUSCIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPIUSCIS_MASK)
 
@@ -3400,8 +3403,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPITRCIS_SHIFT (27U)
 /*! RXLPITRCIS - MMC Receive LPI transition counter interrupt status This bit is set when the
  *    Rx_LPI_Tran_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive LPI transition Counter Interrupt Status detected
  *  0b0..MMC Receive LPI transition Counter Interrupt Status not detected
+ *  0b1..MMC Receive LPI transition Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPITRCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPITRCIS_SHIFT)) & ENET_QOS_MAC_MMC_RX_INTERRUPT_RXLPITRCIS_MASK)
 /*! @} */
@@ -3413,8 +3416,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBOCTIS_SHIFT (0U)
 /*! TXGBOCTIS - MMC Transmit Good Bad Octet Counter Interrupt Status This bit is set when the
  *    txoctetcount_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Good Bad Octet Counter Interrupt Status detected
  *  0b0..MMC Transmit Good Bad Octet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Good Bad Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBOCTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBOCTIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBOCTIS_MASK)
 
@@ -3422,8 +3425,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBPKTIS_SHIFT (1U)
 /*! TXGBPKTIS - MMC Transmit Good Bad Packet Counter Interrupt Status This bit is set when the
  *    txpacketcount_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBPKTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBPKTIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGBPKTIS_MASK)
 
@@ -3431,8 +3434,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGPIS_SHIFT (2U)
 /*! TXBCGPIS - MMC Transmit Broadcast Good Packet Counter Interrupt Status This bit is set when the
  *    txbroadcastpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Broadcast Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Broadcast Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Broadcast Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGPIS_MASK)
 
@@ -3440,8 +3443,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGPIS_SHIFT (3U)
 /*! TXMCGPIS - MMC Transmit Multicast Good Packet Counter Interrupt Status This bit is set when the
  *    txmulticastpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Multicast Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Multicast Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Multicast Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGPIS_MASK)
 
@@ -3449,8 +3452,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX64OCTGBPIS_SHIFT (4U)
 /*! TX64OCTGBPIS - MMC Transmit 64 Octet Good Bad Packet Counter Interrupt Status This bit is set
  *    when the tx64octets_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit 64 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit 64 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit 64 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX64OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TX64OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TX64OCTGBPIS_MASK)
 
@@ -3459,8 +3462,8 @@ typedef struct {
 /*! TX65T127OCTGBPIS - MMC Transmit 65 to 127 Octet Good Bad Packet Counter Interrupt Status This
  *    bit is set when the tx65to127octets_gb counter reaches half the maximum value, and also when it
  *    reaches the maximum value.
- *  0b1..MMC Transmit 65 to 127 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit 65 to 127 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit 65 to 127 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX65T127OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TX65T127OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TX65T127OCTGBPIS_MASK)
 
@@ -3469,8 +3472,8 @@ typedef struct {
 /*! TX128T255OCTGBPIS - MMC Transmit 128 to 255 Octet Good Bad Packet Counter Interrupt Status This
  *    bit is set when the tx128to255octets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Transmit 128 to 255 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit 128 to 255 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit 128 to 255 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX128T255OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TX128T255OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TX128T255OCTGBPIS_MASK)
 
@@ -3479,8 +3482,8 @@ typedef struct {
 /*! TX256T511OCTGBPIS - MMC Transmit 256 to 511 Octet Good Bad Packet Counter Interrupt Status This
  *    bit is set when the tx256to511octets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Transmit 256 to 511 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit 256 to 511 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit 256 to 511 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX256T511OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TX256T511OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TX256T511OCTGBPIS_MASK)
 
@@ -3489,8 +3492,8 @@ typedef struct {
 /*! TX512T1023OCTGBPIS - MMC Transmit 512 to 1023 Octet Good Bad Packet Counter Interrupt Status
  *    This bit is set when the tx512to1023octets_gb counter reaches half of the maximum value or the
  *    maximum value.
- *  0b1..MMC Transmit 512 to 1023 Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit 512 to 1023 Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit 512 to 1023 Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX512T1023OCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TX512T1023OCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TX512T1023OCTGBPIS_MASK)
 
@@ -3499,8 +3502,8 @@ typedef struct {
 /*! TX1024TMAXOCTGBPIS - MMC Transmit 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status
  *    This bit is set when the tx1024tomaxoctets_gb counter reaches half of the maximum value or
  *    the maximum value.
- *  0b1..MMC Transmit 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit 1024 to Maximum Octet Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TX1024TMAXOCTGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TX1024TMAXOCTGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TX1024TMAXOCTGBPIS_MASK)
 
@@ -3508,8 +3511,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUCGBPIS_SHIFT (10U)
 /*! TXUCGBPIS - MMC Transmit Unicast Good Bad Packet Counter Interrupt Status This bit is set when
  *    the txunicastpackets_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Unicast Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Unicast Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Unicast Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUCGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUCGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUCGBPIS_MASK)
 
@@ -3517,8 +3520,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGBPIS_SHIFT (11U)
 /*! TXMCGBPIS - MMC Transmit Multicast Good Bad Packet Counter Interrupt Status The bit is set when
  *    the txmulticastpackets_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Multicast Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Multicast Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Multicast Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCGBPIS_MASK)
 
@@ -3526,8 +3529,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGBPIS_SHIFT (12U)
 /*! TXBCGBPIS - MMC Transmit Broadcast Good Bad Packet Counter Interrupt Status This bit is set when
  *    the txbroadcastpackets_gb counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Broadcast Good Bad Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Broadcast Good Bad Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Broadcast Good Bad Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGBPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGBPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXBCGBPIS_MASK)
 
@@ -3535,8 +3538,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUFLOWERPIS_SHIFT (13U)
 /*! TXUFLOWERPIS - MMC Transmit Underflow Error Packet Counter Interrupt Status This bit is set when
  *    the txunderflowerror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Underflow Error Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Underflow Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Underflow Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUFLOWERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUFLOWERPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXUFLOWERPIS_MASK)
 
@@ -3544,8 +3547,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXSCOLGPIS_SHIFT (14U)
 /*! TXSCOLGPIS - MMC Transmit Single Collision Good Packet Counter Interrupt Status This bit is set
  *    when the txsinglecol_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Single Collision Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Single Collision Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Single Collision Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXSCOLGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXSCOLGPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXSCOLGPIS_MASK)
 
@@ -3553,8 +3556,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCOLGPIS_SHIFT (15U)
 /*! TXMCOLGPIS - MMC Transmit Multiple Collision Good Packet Counter Interrupt Status This bit is
  *    set when the txmulticol_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Multiple Collision Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Multiple Collision Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Multiple Collision Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCOLGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCOLGPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXMCOLGPIS_MASK)
 
@@ -3562,8 +3565,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXDEFPIS_SHIFT (16U)
 /*! TXDEFPIS - MMC Transmit Deferred Packet Counter Interrupt Status This bit is set when the
  *    txdeferred counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Deferred Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Deferred Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Deferred Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXDEFPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXDEFPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXDEFPIS_MASK)
 
@@ -3571,8 +3574,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLATCOLPIS_SHIFT (17U)
 /*! TXLATCOLPIS - MMC Transmit Late Collision Packet Counter Interrupt Status This bit is set when
  *    the txlatecol counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Late Collision Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Late Collision Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Late Collision Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLATCOLPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLATCOLPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLATCOLPIS_MASK)
 
@@ -3580,8 +3583,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXCOLPIS_SHIFT (18U)
 /*! TXEXCOLPIS - MMC Transmit Excessive Collision Packet Counter Interrupt Status This bit is set
  *    when the txexesscol counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Excessive Collision Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Excessive Collision Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Excessive Collision Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXCOLPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXCOLPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXCOLPIS_MASK)
 
@@ -3589,8 +3592,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXCARERPIS_SHIFT (19U)
 /*! TXCARERPIS - MMC Transmit Carrier Error Packet Counter Interrupt Status This bit is set when the
  *    txcarriererror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Carrier Error Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Carrier Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Carrier Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXCARERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXCARERPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXCARERPIS_MASK)
 
@@ -3598,8 +3601,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGOCTIS_SHIFT (20U)
 /*! TXGOCTIS - MMC Transmit Good Octet Counter Interrupt Status This bit is set when the
  *    txoctetcount_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Good Octet Counter Interrupt Status detected
  *  0b0..MMC Transmit Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGOCTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGOCTIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGOCTIS_MASK)
 
@@ -3607,8 +3610,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGPKTIS_SHIFT (21U)
 /*! TXGPKTIS - MMC Transmit Good Packet Counter Interrupt Status This bit is set when the
  *    txpacketcount_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGPKTIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGPKTIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXGPKTIS_MASK)
 
@@ -3616,8 +3619,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXDEFPIS_SHIFT (22U)
 /*! TXEXDEFPIS - MMC Transmit Excessive Deferral Packet Counter Interrupt Status This bit is set
  *    when the txexcessdef counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Excessive Deferral Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Excessive Deferral Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Excessive Deferral Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXDEFPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXDEFPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXEXDEFPIS_MASK)
 
@@ -3625,8 +3628,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXPAUSPIS_SHIFT (23U)
 /*! TXPAUSPIS - MMC Transmit Pause Packet Counter Interrupt Status This bit is set when the
  *    txpausepacketserror counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Pause Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Pause Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Pause Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXPAUSPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXPAUSPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXPAUSPIS_MASK)
 
@@ -3634,8 +3637,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXVLANGPIS_SHIFT (24U)
 /*! TXVLANGPIS - MMC Transmit VLAN Good Packet Counter Interrupt Status This bit is set when the
  *    txvlanpackets_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit VLAN Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit VLAN Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit VLAN Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXVLANGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXVLANGPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXVLANGPIS_MASK)
 
@@ -3643,8 +3646,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXOSIZEGPIS_SHIFT (25U)
 /*! TXOSIZEGPIS - MMC Transmit Oversize Good Packet Counter Interrupt Status This bit is set when
  *    the txoversize_g counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit Oversize Good Packet Counter Interrupt Status detected
  *  0b0..MMC Transmit Oversize Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Transmit Oversize Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXOSIZEGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXOSIZEGPIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXOSIZEGPIS_MASK)
 
@@ -3652,8 +3655,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPIUSCIS_SHIFT (26U)
 /*! TXLPIUSCIS - MMC Transmit LPI microsecond counter interrupt status This bit is set when the
  *    Tx_LPI_USEC_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit LPI microsecond Counter Interrupt Status detected
  *  0b0..MMC Transmit LPI microsecond Counter Interrupt Status not detected
+ *  0b1..MMC Transmit LPI microsecond Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPIUSCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPIUSCIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPIUSCIS_MASK)
 
@@ -3661,8 +3664,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPITRCIS_SHIFT (27U)
 /*! TXLPITRCIS - MMC Transmit LPI transition counter interrupt status This bit is set when the
  *    Tx_LPI_Tran_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Transmit LPI transition Counter Interrupt Status detected
  *  0b0..MMC Transmit LPI transition Counter Interrupt Status not detected
+ *  0b1..MMC Transmit LPI transition Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPITRCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPITRCIS_SHIFT)) & ENET_QOS_MAC_MMC_TX_INTERRUPT_TXLPITRCIS_MASK)
 /*! @} */
@@ -5066,8 +5069,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GPIS_SHIFT (0U)
 /*! RXIPV4GPIS - MMC Receive IPV4 Good Packet Counter Interrupt Status This bit is set when the
  *    rxipv4_gd_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GPIS_MASK)
 
@@ -5075,8 +5078,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HERPIS_SHIFT (1U)
 /*! RXIPV4HERPIS - MMC Receive IPV4 Header Error Packet Counter Interrupt Status This bit is set
  *    when the rxipv4_hdrerr_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 Header Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 Header Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 Header Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HERPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HERPIS_MASK)
 
@@ -5084,8 +5087,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYPIS_SHIFT (2U)
 /*! RXIPV4NOPAYPIS - MMC Receive IPV4 No Payload Packet Counter Interrupt Status This bit is set
  *    when the rxipv4_nopay_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 No Payload Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 No Payload Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 No Payload Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYPIS_MASK)
 
@@ -5093,8 +5096,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGPIS_SHIFT (3U)
 /*! RXIPV4FRAGPIS - MMC Receive IPV4 Fragmented Packet Counter Interrupt Status This bit is set when
  *    the rxipv4_frag_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 Fragmented Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 Fragmented Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 Fragmented Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGPIS_MASK)
 
@@ -5103,8 +5106,8 @@ typedef struct {
 /*! RXIPV4UDSBLPIS - MMC Receive IPV4 UDP Checksum Disabled Packet Counter Interrupt Status This bit
  *    is set when the rxipv4_udsbl_pkts counter reaches half of the maximum value or the maximum
  *    value.
- *  0b1..MMC Receive IPV4 UDP Checksum Disabled Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 UDP Checksum Disabled Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 UDP Checksum Disabled Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4UDSBLPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4UDSBLPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4UDSBLPIS_MASK)
 
@@ -5112,8 +5115,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GPIS_SHIFT (5U)
 /*! RXIPV6GPIS - MMC Receive IPV6 Good Packet Counter Interrupt Status This bit is set when the
  *    rxipv6_gd_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV6 Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV6 Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV6 Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GPIS_MASK)
 
@@ -5121,8 +5124,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HERPIS_SHIFT (6U)
 /*! RXIPV6HERPIS - MMC Receive IPV6 Header Error Packet Counter Interrupt Status This bit is set
  *    when the rxipv6_hdrerr_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV6 Header Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV6 Header Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV6 Header Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HERPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HERPIS_MASK)
 
@@ -5130,8 +5133,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYPIS_SHIFT (7U)
 /*! RXIPV6NOPAYPIS - MMC Receive IPV6 No Payload Packet Counter Interrupt Status This bit is set
  *    when the rxipv6_nopay_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV6 No Payload Packet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV6 No Payload Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV6 No Payload Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYPIS_MASK)
 
@@ -5139,8 +5142,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGPIS_SHIFT (8U)
 /*! RXUDPGPIS - MC Receive UDP Good Packet Counter Interrupt Status This bit is set when the
  *    rxudp_gd_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive UDP Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive UDP Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive UDP Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGPIS_MASK)
 
@@ -5148,8 +5151,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPERPIS_SHIFT (9U)
 /*! RXUDPERPIS - MMC Receive UDP Error Packet Counter Interrupt Status This bit is set when the
  *    rxudp_err_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive UDP Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive UDP Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive UDP Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPERPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPERPIS_MASK)
 
@@ -5157,8 +5160,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGPIS_SHIFT (10U)
 /*! RXTCPGPIS - MMC Receive TCP Good Packet Counter Interrupt Status This bit is set when the
  *    rxtcp_gd_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive TCP Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive TCP Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive TCP Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGPIS_MASK)
 
@@ -5166,8 +5169,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPERPIS_SHIFT (11U)
 /*! RXTCPERPIS - MMC Receive TCP Error Packet Counter Interrupt Status This bit is set when the
  *    rxtcp_err_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive TCP Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive TCP Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive TCP Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPERPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPERPIS_MASK)
 
@@ -5175,8 +5178,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGPIS_SHIFT (12U)
 /*! RXICMPGPIS - MMC Receive ICMP Good Packet Counter Interrupt Status This bit is set when the
  *    rxicmp_gd_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive ICMP Good Packet Counter Interrupt Status detected
  *  0b0..MMC Receive ICMP Good Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive ICMP Good Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGPIS_MASK)
 
@@ -5184,8 +5187,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPERPIS_SHIFT (13U)
 /*! RXICMPERPIS - MMC Receive ICMP Error Packet Counter Interrupt Status This bit is set when the
  *    rxicmp_err_pkts counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive ICMP Error Packet Counter Interrupt Status detected
  *  0b0..MMC Receive ICMP Error Packet Counter Interrupt Status not detected
+ *  0b1..MMC Receive ICMP Error Packet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPERPIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPERPIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPERPIS_MASK)
 
@@ -5193,8 +5196,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GOIS_SHIFT (16U)
 /*! RXIPV4GOIS - MMC Receive IPV4 Good Octet Counter Interrupt Status This bit is set when the
  *    rxipv4_gd_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 Good Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4GOIS_MASK)
 
@@ -5202,8 +5205,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HEROIS_SHIFT (17U)
 /*! RXIPV4HEROIS - MMC Receive IPV4 Header Error Octet Counter Interrupt Status This bit is set when
  *    the rxipv4_hdrerr_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 Header Error Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 Header Error Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 Header Error Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HEROIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HEROIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4HEROIS_MASK)
 
@@ -5211,8 +5214,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYOIS_SHIFT (18U)
 /*! RXIPV4NOPAYOIS - MMC Receive IPV4 No Payload Octet Counter Interrupt Status This bit is set when
  *    the rxipv4_nopay_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 No Payload Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 No Payload Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 No Payload Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4NOPAYOIS_MASK)
 
@@ -5220,8 +5223,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGOIS_SHIFT (19U)
 /*! RXIPV4FRAGOIS - MMC Receive IPV4 Fragmented Octet Counter Interrupt Status This bit is set when
  *    the rxipv4_frag_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV4 Fragmented Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 Fragmented Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 Fragmented Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4FRAGOIS_MASK)
 
@@ -5230,8 +5233,8 @@ typedef struct {
 /*! RXIPV4UDSBLOIS - MMC Receive IPV4 UDP Checksum Disabled Octet Counter Interrupt Status This bit
  *    is set when the rxipv4_udsbl_octets counter reaches half of the maximum value or the maximum
  *    value.
- *  0b1..MMC Receive IPV4 UDP Checksum Disabled Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV4 UDP Checksum Disabled Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV4 UDP Checksum Disabled Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4UDSBLOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4UDSBLOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV4UDSBLOIS_MASK)
 
@@ -5239,8 +5242,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GOIS_SHIFT (21U)
 /*! RXIPV6GOIS - MMC Receive IPV6 Good Octet Counter Interrupt Status This bit is set when the
  *    rxipv6_gd_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV6 Good Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV6 Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV6 Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6GOIS_MASK)
 
@@ -5248,8 +5251,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HEROIS_SHIFT (22U)
 /*! RXIPV6HEROIS - MMC Receive IPV6 Header Error Octet Counter Interrupt Status This bit is set when
  *    the rxipv6_hdrerr_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV6 Header Error Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV6 Header Error Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV6 Header Error Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HEROIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HEROIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6HEROIS_MASK)
 
@@ -5257,8 +5260,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYOIS_SHIFT (23U)
 /*! RXIPV6NOPAYOIS - MMC Receive IPV6 No Payload Octet Counter Interrupt Status This bit is set when
  *    the rxipv6_nopay_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive IPV6 No Payload Octet Counter Interrupt Status detected
  *  0b0..MMC Receive IPV6 No Payload Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive IPV6 No Payload Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXIPV6NOPAYOIS_MASK)
 
@@ -5266,8 +5269,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGOIS_SHIFT (24U)
 /*! RXUDPGOIS - MMC Receive UDP Good Octet Counter Interrupt Status This bit is set when the
  *    rxudp_gd_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive UDP Good Octet Counter Interrupt Status detected
  *  0b0..MMC Receive UDP Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive UDP Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPGOIS_MASK)
 
@@ -5275,8 +5278,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPEROIS_SHIFT (25U)
 /*! RXUDPEROIS - MMC Receive UDP Error Octet Counter Interrupt Status This bit is set when the
  *    rxudp_err_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive UDP Error Octet Counter Interrupt Status detected
  *  0b0..MMC Receive UDP Error Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive UDP Error Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPEROIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPEROIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXUDPEROIS_MASK)
 
@@ -5284,8 +5287,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGOIS_SHIFT (26U)
 /*! RXTCPGOIS - MMC Receive TCP Good Octet Counter Interrupt Status This bit is set when the
  *    rxtcp_gd_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive TCP Good Octet Counter Interrupt Status detected
  *  0b0..MMC Receive TCP Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive TCP Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPGOIS_MASK)
 
@@ -5293,8 +5296,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPEROIS_SHIFT (27U)
 /*! RXTCPEROIS - MMC Receive TCP Error Octet Counter Interrupt Status This bit is set when the
  *    rxtcp_err_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive TCP Error Octet Counter Interrupt Status detected
  *  0b0..MMC Receive TCP Error Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive TCP Error Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPEROIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPEROIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXTCPEROIS_MASK)
 
@@ -5302,8 +5305,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGOIS_SHIFT (28U)
 /*! RXICMPGOIS - MMC Receive ICMP Good Octet Counter Interrupt Status This bit is set when the
  *    rxicmp_gd_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive ICMP Good Octet Counter Interrupt Status detected
  *  0b0..MMC Receive ICMP Good Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive ICMP Good Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGOIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGOIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPGOIS_MASK)
 
@@ -5311,8 +5314,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPEROIS_SHIFT (29U)
 /*! RXICMPEROIS - MMC Receive ICMP Error Octet Counter Interrupt Status This bit is set when the
  *    rxicmp_err_octets counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Receive ICMP Error Octet Counter Interrupt Status detected
  *  0b0..MMC Receive ICMP Error Octet Counter Interrupt Status not detected
+ *  0b1..MMC Receive ICMP Error Octet Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPEROIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPEROIS_SHIFT)) & ENET_QOS_MAC_MMC_IPC_RX_INTERRUPT_RXICMPEROIS_MASK)
 /*! @} */
@@ -5606,8 +5609,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_FCIS_SHIFT (0U)
 /*! FCIS - MMC Tx FPE Fragment Counter Interrupt status This bit is set when the
  *    Tx_FPE_Fragment_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Tx FPE Fragment Counter Interrupt status detected
  *  0b0..MMC Tx FPE Fragment Counter Interrupt status not detected
+ *  0b1..MMC Tx FPE Fragment Counter Interrupt status detected
  */
 #define ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_FCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_FCIS_SHIFT)) & ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_FCIS_MASK)
 
@@ -5615,8 +5618,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_HRCIS_SHIFT (1U)
 /*! HRCIS - MMC Tx Hold Request Counter Interrupt Status This bit is set when the Tx_Hold_Req_Cntr
  *    counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Tx Hold Request Counter Interrupt Status detected
  *  0b0..MMC Tx Hold Request Counter Interrupt Status not detected
+ *  0b1..MMC Tx Hold Request Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_HRCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_HRCIS_SHIFT)) & ENET_QOS_MAC_MMC_FPE_TX_INTERRUPT_HRCIS_MASK)
 /*! @} */
@@ -5671,8 +5674,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAECIS_SHIFT (0U)
 /*! PAECIS - MMC Rx Packet Assembly Error Counter Interrupt Status This bit is set when the
  *    Rx_Packet_Assemble_Err_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Rx Packet Assembly Error Counter Interrupt Status detected
  *  0b0..MMC Rx Packet Assembly Error Counter Interrupt Status not detected
+ *  0b1..MMC Rx Packet Assembly Error Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAECIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAECIS_SHIFT)) & ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAECIS_MASK)
 
@@ -5680,8 +5683,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PSECIS_SHIFT (1U)
 /*! PSECIS - MMC Rx Packet SMD Error Counter Interrupt Status This bit is set when the
  *    Rx_Packet_SMD_Err_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Rx Packet SMD Error Counter Interrupt Status detected
  *  0b0..MMC Rx Packet SMD Error Counter Interrupt Status not detected
+ *  0b1..MMC Rx Packet SMD Error Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PSECIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PSECIS_SHIFT)) & ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PSECIS_MASK)
 
@@ -5689,8 +5692,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAOCIS_SHIFT (2U)
 /*! PAOCIS - MMC Rx Packet Assembly OK Counter Interrupt Status This bit is set when the
  *    Rx_Packet_Assemble_Ok_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Rx Packet Assembly OK Counter Interrupt Status detected
  *  0b0..MMC Rx Packet Assembly OK Counter Interrupt Status not detected
+ *  0b1..MMC Rx Packet Assembly OK Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAOCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAOCIS_SHIFT)) & ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_PAOCIS_MASK)
 
@@ -5698,8 +5701,8 @@ typedef struct {
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_FCIS_SHIFT (3U)
 /*! FCIS - MMC Rx FPE Fragment Counter Interrupt Status This bit is set when the
  *    Rx_FPE_Fragment_Cntr counter reaches half of the maximum value or the maximum value.
- *  0b1..MMC Rx FPE Fragment Counter Interrupt Status detected
  *  0b0..MMC Rx FPE Fragment Counter Interrupt Status not detected
+ *  0b1..MMC Rx FPE Fragment Counter Interrupt Status detected
  */
 #define ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_FCIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_FCIS_SHIFT)) & ENET_QOS_MAC_MMC_FPE_RX_INTERRUPT_FCIS_MASK)
 /*! @} */
@@ -7315,17 +7318,17 @@ typedef struct {
 #define ENET_QOS_MAC_INDIR_ACCESS_CTRL_COM_MASK  (0x2U)
 #define ENET_QOS_MAC_INDIR_ACCESS_CTRL_COM_SHIFT (1U)
 /*! COM - Command type. Indicates the register access type.
- *  0b1..Indicates a read operation
  *  0b0..Indicates a write operation
+ *  0b1..Indicates a read operation
  */
 #define ENET_QOS_MAC_INDIR_ACCESS_CTRL_COM(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INDIR_ACCESS_CTRL_COM_SHIFT)) & ENET_QOS_MAC_INDIR_ACCESS_CTRL_COM_MASK)
 
 #define ENET_QOS_MAC_INDIR_ACCESS_CTRL_AUTO_MASK (0x20U)
 #define ENET_QOS_MAC_INDIR_ACCESS_CTRL_AUTO_SHIFT (5U)
 /*! AUTO - Auto increment enable
+ *  0b0..AOFF is not incremented automatically. Software should program the correct Address Offset for each access.
  *  0b1..AOFF is incremented by 1. Software should ensure not to cause a wrap condition. Byte wise read/write is
  *       not supported when auto increment is enabled.
- *  0b0..AOFF is not incremented automatically. Software should program the correct Address Offset for each access.
  */
 #define ENET_QOS_MAC_INDIR_ACCESS_CTRL_AUTO(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_INDIR_ACCESS_CTRL_AUTO_SHIFT)) & ENET_QOS_MAC_INDIR_ACCESS_CTRL_AUTO_MASK)
 
@@ -7626,8 +7629,8 @@ typedef struct {
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSSOVF_SHIFT (0U)
 /*! TSSOVF - Timestamp Seconds Overflow When this bit is set, it indicates that the seconds value of
  *    the timestamp (when supporting version 2 format) has overflowed beyond 32'hFFFF_FFFF.
- *  0b1..Timestamp Seconds Overflow status detected
  *  0b0..Timestamp Seconds Overflow status not detected
+ *  0b1..Timestamp Seconds Overflow status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSSOVF(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSSOVF_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSSOVF_MASK)
 
@@ -7636,16 +7639,16 @@ typedef struct {
 /*! TSTARGT0 - Timestamp Target Time Reached When set, this bit indicates that the value of system
  *    time is greater than or equal to the value specified in the MAC_PPS0_Target_Time_Seconds and
  *    MAC_PPS0_Target_Time_Nanoseconds registers.
- *  0b1..Timestamp Target Time Reached status detected
  *  0b0..Timestamp Target Time Reached status not detected
+ *  0b1..Timestamp Target Time Reached status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT0(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT0_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT0_MASK)
 
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_AUXTSTRIG_MASK (0x4U)
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_AUXTSTRIG_SHIFT (2U)
 /*! AUXTSTRIG - Auxiliary Timestamp Trigger Snapshot This bit is set high when the auxiliary snapshot is written to the FIFO.
- *  0b1..Auxiliary Timestamp Trigger Snapshot status detected
  *  0b0..Auxiliary Timestamp Trigger Snapshot status not detected
+ *  0b1..Auxiliary Timestamp Trigger Snapshot status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_AUXTSTRIG(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_AUXTSTRIG_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_AUXTSTRIG_MASK)
 
@@ -7653,8 +7656,8 @@ typedef struct {
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR0_SHIFT (3U)
 /*! TSTRGTERR0 - Timestamp Target Time Error This bit is set when the latest target time programmed
  *    in the MAC_PPS0_Target_Time_Seconds and MAC_PPS0_Target_Time_Nanoseconds registers elapses.
- *  0b1..Timestamp Target Time Error status detected
  *  0b0..Timestamp Target Time Error status not detected
+ *  0b1..Timestamp Target Time Error status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR0(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR0_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR0_MASK)
 
@@ -7663,8 +7666,8 @@ typedef struct {
 /*! TSTARGT1 - Timestamp Target Time Reached for Target Time PPS1 When set, this bit indicates that
  *    the value of system time is greater than or equal to the value specified in the
  *    MAC_PPS1_TARGET_TIME_SECONDS and MAC_PPS1_TARGET_TIME_NANOSECONDS registers.
- *  0b1..Timestamp Target Time Reached for Target Time PPS1 status detected
  *  0b0..Timestamp Target Time Reached for Target Time PPS1 status not detected
+ *  0b1..Timestamp Target Time Reached for Target Time PPS1 status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT1(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT1_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT1_MASK)
 
@@ -7672,8 +7675,8 @@ typedef struct {
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR1_SHIFT (5U)
 /*! TSTRGTERR1 - Timestamp Target Time Error This bit is set when the latest target time programmed
  *    in the MAC_PPS1_TARGET_TIME_SECONDS and MAC_PPS1_TARGET_TIME_NANOSECONDS registers elapses.
- *  0b1..Timestamp Target Time Error status detected
  *  0b0..Timestamp Target Time Error status not detected
+ *  0b1..Timestamp Target Time Error status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR1(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR1_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR1_MASK)
 
@@ -7682,8 +7685,8 @@ typedef struct {
 /*! TSTARGT2 - Timestamp Target Time Reached for Target Time PPS2 When set, this bit indicates that
  *    the value of system time is greater than or equal to the value specified in the
  *    MAC_PPS2_TARGET_TIME_SECONDS and MAC_PPS2_TARGET_TIME_NANOSECONDS registers.
- *  0b1..Timestamp Target Time Reached for Target Time PPS2 status detected
  *  0b0..Timestamp Target Time Reached for Target Time PPS2 status not detected
+ *  0b1..Timestamp Target Time Reached for Target Time PPS2 status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT2(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT2_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT2_MASK)
 
@@ -7691,8 +7694,8 @@ typedef struct {
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR2_SHIFT (7U)
 /*! TSTRGTERR2 - Timestamp Target Time Error This bit is set when the latest target time programmed
  *    in the MAC_PPS2_TARGET_TIME_SECONDS and MAC_PPS2_TARGET_TIME_NANOSECONDS registers elapses.
- *  0b1..Timestamp Target Time Error status detected
  *  0b0..Timestamp Target Time Error status not detected
+ *  0b1..Timestamp Target Time Error status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR2(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR2_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR2_MASK)
 
@@ -7701,8 +7704,8 @@ typedef struct {
 /*! TSTARGT3 - Timestamp Target Time Reached for Target Time PPS3 When this bit is set, it indicates
  *    that the value of system time is greater than or equal to the value specified in the
  *    MAC_PPS3_TARGET_TIME_SECONDS and MAC_PPS3_TARGET_TIME_NANOSECONDS registers.
- *  0b1..Timestamp Target Time Reached for Target Time PPS3 status detected
  *  0b0..Timestamp Target Time Reached for Target Time PPS3 status not detected
+ *  0b1..Timestamp Target Time Reached for Target Time PPS3 status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT3(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT3_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTARGT3_MASK)
 
@@ -7710,8 +7713,8 @@ typedef struct {
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR3_SHIFT (9U)
 /*! TSTRGTERR3 - Timestamp Target Time Error This bit is set when the latest target time programmed
  *    in the MAC_PPS3_TARGET_TIME_SECONDS and MAC_PPS3_TARGET_TIME_NANOSECONDS registers elapses.
- *  0b1..Timestamp Target Time Error status detected
  *  0b0..Timestamp Target Time Error status not detected
+ *  0b1..Timestamp Target Time Error status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR3(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR3_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TSTRGTERR3_MASK)
 
@@ -7720,8 +7723,8 @@ typedef struct {
 /*! TXTSSIS - Tx Timestamp Status Interrupt Status In non-EQOS_CORE configurations when drop
  *    transmit status is enabled in MTL, this bit is set when the captured transmit timestamp is updated in
  *    the MAC_TX_TIMESTAMP_STATUS_NANOSECONDS and MAC_TX_TIMESTAMP_STATUS_SECONDS registers.
- *  0b1..Tx Timestamp Status Interrupt status detected
  *  0b0..Tx Timestamp Status Interrupt status not detected
+ *  0b1..Tx Timestamp Status Interrupt status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_TXTSSIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_TXTSSIS_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_TXTSSIS_MASK)
 
@@ -7736,8 +7739,8 @@ typedef struct {
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_ATSSTM_SHIFT (24U)
 /*! ATSSTM - Auxiliary Timestamp Snapshot Trigger Missed This bit is set when the Auxiliary
  *    timestamp snapshot FIFO is full and external trigger was set.
- *  0b1..Auxiliary Timestamp Snapshot Trigger Missed status detected
  *  0b0..Auxiliary Timestamp Snapshot Trigger Missed status not detected
+ *  0b1..Auxiliary Timestamp Snapshot Trigger Missed status detected
  */
 #define ENET_QOS_MAC_TIMESTAMP_STATUS_ATSSTM(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TIMESTAMP_STATUS_ATSSTM_SHIFT)) & ENET_QOS_MAC_TIMESTAMP_STATUS_ATSSTM_MASK)
 
@@ -7760,8 +7763,8 @@ typedef struct {
 #define ENET_QOS_MAC_TX_TIMESTAMP_STATUS_NANOSECONDS_TXTSSMIS_MASK (0x80000000U)
 #define ENET_QOS_MAC_TX_TIMESTAMP_STATUS_NANOSECONDS_TXTSSMIS_SHIFT (31U)
 /*! TXTSSMIS - Transmit Timestamp Status Missed
- *  0b1..Transmit Timestamp Status Missed status detected
  *  0b0..Transmit Timestamp Status Missed status not detected
+ *  0b1..Transmit Timestamp Status Missed status detected
  */
 #define ENET_QOS_MAC_TX_TIMESTAMP_STATUS_NANOSECONDS_TXTSSMIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_TX_TIMESTAMP_STATUS_NANOSECONDS_TXTSSMIS_SHIFT)) & ENET_QOS_MAC_TX_TIMESTAMP_STATUS_NANOSECONDS_TXTSSMIS_MASK)
 /*! @} */
@@ -7950,20 +7953,20 @@ typedef struct {
 /*! TRGTMODSEL0 - Target Time Register Mode for PPS0 Output This field indicates the Target Time
  *    registers (MAC_PPS0_TARGET_TIME_SECONDS and MAC_PPS0_TARGET_TIME_NANOSECONDS) mode for PPS0
  *    output signal:
- *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
  *  0b00..Target Time registers are programmed only for generating the interrupt event. The Flexible PPS function
  *        must not be enabled in this mode, otherwise spurious transitions may be observed on the corresponding
  *        ptp_pps_o output port
- *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  *  0b01..Reserved
+ *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
+ *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  */
 #define ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL0(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL0_SHIFT)) & ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL0_MASK)
 
 #define ENET_QOS_MAC_PPS_CONTROL_MCGREN0_MASK    (0x80U)
 #define ENET_QOS_MAC_PPS_CONTROL_MCGREN0_SHIFT   (7U)
 /*! MCGREN0 - MCGR Mode Enable for PPS0 Output This field enables the 0th PPS instance to operate in PPS or MCGR mode.
- *  0b1..0th PPS instance is enabled to operate in MCGR mode
  *  0b0..0th PPS instance is enabled to operate in PPS mode
+ *  0b1..0th PPS instance is enabled to operate in MCGR mode
  */
 #define ENET_QOS_MAC_PPS_CONTROL_MCGREN0(x)      (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS_CONTROL_MCGREN0_SHIFT)) & ENET_QOS_MAC_PPS_CONTROL_MCGREN0_MASK)
 
@@ -7977,12 +7980,12 @@ typedef struct {
 /*! TRGTMODSEL1 - Target Time Register Mode for PPS1 Output This field indicates the Target Time
  *    registers (MAC_PPS1_TARGET_TIME_SECONDS and MAC_PPS1_TARGET_TIME_NANOSECONDS) mode for PPS1
  *    output signal.
- *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
  *  0b00..Target Time registers are programmed only for generating the interrupt event. The Flexible PPS function
  *        must not be enabled in this mode, otherwise spurious transitions may be observed on the corresponding
  *        ptp_pps_o output port
- *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  *  0b01..Reserved
+ *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
+ *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  */
 #define ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL1(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL1_SHIFT)) & ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL1_MASK)
 
@@ -8004,12 +8007,12 @@ typedef struct {
 /*! TRGTMODSEL2 - Target Time Register Mode for PPS2 Output This field indicates the Target Time
  *    registers (MAC_PPS2_TARGET_TIME_SECONDS and MAC_PPS2_TARGET_TIME_NANOSECONDS) mode for PPS2
  *    output signal.
- *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
  *  0b00..Target Time registers are programmed only for generating the interrupt event. The Flexible PPS function
  *        must not be enabled in this mode, otherwise spurious transitions may be observed on the corresponding
  *        ptp_pps_o output port
- *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  *  0b01..Reserved
+ *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
+ *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  */
 #define ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL2(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL2_SHIFT)) & ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL2_MASK)
 
@@ -8031,12 +8034,12 @@ typedef struct {
 /*! TRGTMODSEL3 - Target Time Register Mode for PPS3 Output This field indicates the Target Time
  *    registers (MAC_PPS3_TARGET_TIME_SECONDS and MAC_PPS3_TARGET_TIME_NANOSECONDS) mode for PPS3
  *    output signal.
- *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
  *  0b00..Target Time registers are programmed only for generating the interrupt event. The Flexible PPS function
  *        must not be enabled in this mode, otherwise spurious transitions may be observed on the corresponding
  *        ptp_pps_o output port
- *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  *  0b01..Reserved
+ *  0b10..Target Time registers are programmed for generating the interrupt event and starting or stopping the PPS0 output signal generation
+ *  0b11..Target Time registers are programmed only for starting or stopping the PPS0 output signal generation. No interrupt is asserted
  */
 #define ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL3(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL3_SHIFT)) & ENET_QOS_MAC_PPS_CONTROL_TRGTMODSEL3_MASK)
 
@@ -8067,8 +8070,8 @@ typedef struct {
 #define ENET_QOS_MAC_PPS0_TARGET_TIME_NANOSECONDS_TRGTBUSY0_SHIFT (31U)
 /*! TRGTBUSY0 - PPS Target Time Register Busy The MAC sets this bit when the PPSCMD0 field in the
  *    PPS_CONTROL register is programmed to 010 or 011.
- *  0b1..PPS Target Time Register Busy is detected
  *  0b0..PPS Target Time Register Busy status is not detected
+ *  0b1..PPS Target Time Register Busy is detected
  */
 #define ENET_QOS_MAC_PPS0_TARGET_TIME_NANOSECONDS_TRGTBUSY0(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS0_TARGET_TIME_NANOSECONDS_TRGTBUSY0_SHIFT)) & ENET_QOS_MAC_PPS0_TARGET_TIME_NANOSECONDS_TRGTBUSY0_MASK)
 /*! @} */
@@ -8114,8 +8117,8 @@ typedef struct {
 #define ENET_QOS_MAC_PPS1_TARGET_TIME_NANOSECONDS_TRGTBUSY1_SHIFT (31U)
 /*! TRGTBUSY1 - PPS Target Time Register Busy The MAC sets this bit when the PPSCMD0 field in the
  *    PPS_CONTROL register is programmed to 010 or 011.
- *  0b1..PPS Target Time Register Busy is detected
  *  0b0..PPS Target Time Register Busy status is not detected
+ *  0b1..PPS Target Time Register Busy is detected
  */
 #define ENET_QOS_MAC_PPS1_TARGET_TIME_NANOSECONDS_TRGTBUSY1(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS1_TARGET_TIME_NANOSECONDS_TRGTBUSY1_SHIFT)) & ENET_QOS_MAC_PPS1_TARGET_TIME_NANOSECONDS_TRGTBUSY1_MASK)
 /*! @} */
@@ -8161,8 +8164,8 @@ typedef struct {
 #define ENET_QOS_MAC_PPS2_TARGET_TIME_NANOSECONDS_TRGTBUSY2_SHIFT (31U)
 /*! TRGTBUSY2 - PPS Target Time Register Busy The MAC sets this bit when the PPSCMD0 field in the
  *    PPS_CONTROL register is programmed to 010 or 011.
- *  0b1..PPS Target Time Register Busy is detected
  *  0b0..PPS Target Time Register Busy status is not detected
+ *  0b1..PPS Target Time Register Busy is detected
  */
 #define ENET_QOS_MAC_PPS2_TARGET_TIME_NANOSECONDS_TRGTBUSY2(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS2_TARGET_TIME_NANOSECONDS_TRGTBUSY2_SHIFT)) & ENET_QOS_MAC_PPS2_TARGET_TIME_NANOSECONDS_TRGTBUSY2_MASK)
 /*! @} */
@@ -8208,8 +8211,8 @@ typedef struct {
 #define ENET_QOS_MAC_PPS3_TARGET_TIME_NANOSECONDS_TRGTBUSY3_SHIFT (31U)
 /*! TRGTBUSY3 - PPS Target Time Register Busy The MAC sets this bit when the PPSCMD0 field in the
  *    PPS_CONTROL register is programmed to 010 or 011.
- *  0b1..PPS Target Time Register Busy is detected
  *  0b0..PPS Target Time Register Busy status is not detected
+ *  0b1..PPS Target Time Register Busy is detected
  */
 #define ENET_QOS_MAC_PPS3_TARGET_TIME_NANOSECONDS_TRGTBUSY3(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PPS3_TARGET_TIME_NANOSECONDS_TRGTBUSY3_SHIFT)) & ENET_QOS_MAC_PPS3_TARGET_TIME_NANOSECONDS_TRGTBUSY3_MASK)
 /*! @} */
@@ -8286,8 +8289,8 @@ typedef struct {
 /*! DRRDIS - Disable PTO Delay Request/Response response generation When this bit is set, the Delay
  *    Request and Delay response is not generated for received SYNC and Delay request packet
  *    respectively, as required by the programmed mode.
- *  0b1..PTO Delay Request/Response response generation is disabled
  *  0b0..PTO Delay Request/Response response generation is enabled
+ *  0b1..PTO Delay Request/Response response generation is disabled
  */
 #define ENET_QOS_MAC_PTO_CONTROL_DRRDIS(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PTO_CONTROL_DRRDIS_SHIFT)) & ENET_QOS_MAC_PTO_CONTROL_DRRDIS_MASK)
 
@@ -8296,8 +8299,8 @@ typedef struct {
 /*! PDRDIS - Disable Peer Delay Response response generation When this bit is set, the Peer Delay
  *    Response (Pdelay_Resp) response is not be generated for received Peer Delay Request (Pdelay_Req)
  *    request packet, as required by the programmed mode.
- *  0b1..Peer Delay Response response generation is disabled
  *  0b0..Peer Delay Response response generation is enabled
+ *  0b1..Peer Delay Response response generation is disabled
  */
 #define ENET_QOS_MAC_PTO_CONTROL_PDRDIS(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_PTO_CONTROL_PDRDIS_SHIFT)) & ENET_QOS_MAC_PTO_CONTROL_PDRDIS_MASK)
 
@@ -8347,13 +8350,13 @@ typedef struct {
 #define ENET_QOS_MAC_LOG_MESSAGE_INTERVAL_DRSYNCR_MASK (0x700U)
 #define ENET_QOS_MAC_LOG_MESSAGE_INTERVAL_DRSYNCR_SHIFT (8U)
 /*! DRSYNCR - Delay_Req to SYNC Ratio In Slave mode, it is used for controlling frequency of Delay_Req messages transmitted.
- *  0b110..Reserved
  *  0b000..DelayReq generated for every received SYNC
- *  0b100..for every 16 SYNC messages
  *  0b001..DelayReq generated every alternate reception of SYNC
- *  0b101..for every 32 SYNC messages
  *  0b010..for every 4 SYNC messages
  *  0b011..for every 8 SYNC messages
+ *  0b100..for every 16 SYNC messages
+ *  0b101..for every 32 SYNC messages
+ *  0b110..Reserved
  */
 #define ENET_QOS_MAC_LOG_MESSAGE_INTERVAL_DRSYNCR(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MAC_LOG_MESSAGE_INTERVAL_DRSYNCR_SHIFT)) & ENET_QOS_MAC_LOG_MESSAGE_INTERVAL_DRSYNCR_MASK)
 
@@ -8385,10 +8388,10 @@ typedef struct {
 #define ENET_QOS_MTL_OPERATION_MODE_SCHALG_MASK  (0x60U)
 #define ENET_QOS_MTL_OPERATION_MODE_SCHALG_SHIFT (5U)
 /*! SCHALG - Tx Scheduling Algorithm This field indicates the algorithm for Tx scheduling:
+ *  0b00..WRR algorithm
+ *  0b01..WFQ algorithm when DCB feature is selected.Otherwise, Reserved
  *  0b10..DWRR algorithm when DCB feature is selected.Otherwise, Reserved
  *  0b11..Strict priority algorithm
- *  0b01..WFQ algorithm when DCB feature is selected.Otherwise, Reserved
- *  0b00..WRR algorithm
  */
 #define ENET_QOS_MTL_OPERATION_MODE_SCHALG(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_OPERATION_MODE_SCHALG_SHIFT)) & ENET_QOS_MTL_OPERATION_MODE_SCHALG_MASK)
 
@@ -8440,20 +8443,20 @@ typedef struct {
 #define ENET_QOS_MTL_DBG_CTL_BYTEEN_MASK         (0xCU)
 #define ENET_QOS_MTL_DBG_CTL_BYTEEN_SHIFT        (2U)
 /*! BYTEEN - Byte Enables This field indicates the number of data bytes valid in the data register during Write operation.
- *  0b11..All four bytes are valid
- *  0b10..Byte 0, Byte 1, and Byte 2 are valid
- *  0b01..Byte 0 and Byte 1 are valid
  *  0b00..Byte 0 valid
+ *  0b01..Byte 0 and Byte 1 are valid
+ *  0b10..Byte 0, Byte 1, and Byte 2 are valid
+ *  0b11..All four bytes are valid
  */
 #define ENET_QOS_MTL_DBG_CTL_BYTEEN(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_CTL_BYTEEN_SHIFT)) & ENET_QOS_MTL_DBG_CTL_BYTEEN_MASK)
 
 #define ENET_QOS_MTL_DBG_CTL_PKTSTATE_MASK       (0x60U)
 #define ENET_QOS_MTL_DBG_CTL_PKTSTATE_SHIFT      (5U)
 /*! PKTSTATE - Encoded Packet State This field is used to write the control information to the Tx FIFO or Rx FIFO.
- *  0b01..Control Word/Normal Status
- *  0b11..EOP Data/EOP
  *  0b00..Packet Data
+ *  0b01..Control Word/Normal Status
  *  0b10..SOP Data/Last Status
+ *  0b11..EOP Data/EOP
  */
 #define ENET_QOS_MTL_DBG_CTL_PKTSTATE(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_CTL_PKTSTATE_SHIFT)) & ENET_QOS_MTL_DBG_CTL_PKTSTATE_MASK)
 
@@ -8494,10 +8497,10 @@ typedef struct {
 #define ENET_QOS_MTL_DBG_CTL_FIFOSEL_MASK        (0x3000U)
 #define ENET_QOS_MTL_DBG_CTL_FIFOSEL_SHIFT       (12U)
 /*! FIFOSEL - FIFO Selected for Access This field indicates the FIFO selected for debug access:
- *  0b11..Rx FIFO
- *  0b10..TSO FIFO (cannot be accessed when SLVMOD is set)
  *  0b00..Tx FIFO
  *  0b01..Tx Status FIFO (only read access when SLVMOD is set)
+ *  0b10..TSO FIFO (cannot be accessed when SLVMOD is set)
+ *  0b11..Rx FIFO
  */
 #define ENET_QOS_MTL_DBG_CTL_FIFOSEL(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_CTL_FIFOSEL_SHIFT)) & ENET_QOS_MTL_DBG_CTL_FIFOSEL_MASK)
 
@@ -8528,28 +8531,28 @@ typedef struct {
 /*! FIFOBUSY - FIFO Busy When set, this bit indicates that a FIFO operation is in progress in the
  *    MAC and content of the following fields is not valid: - All other fields of this register - All
  *    fields of the MTL_FIFO_DEBUG_DATA register
- *  0b1..FIFO Busy detected
  *  0b0..FIFO Busy not detected
+ *  0b1..FIFO Busy detected
  */
 #define ENET_QOS_MTL_DBG_STS_FIFOBUSY(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_STS_FIFOBUSY_SHIFT)) & ENET_QOS_MTL_DBG_STS_FIFOBUSY_MASK)
 
 #define ENET_QOS_MTL_DBG_STS_PKTSTATE_MASK       (0x6U)
 #define ENET_QOS_MTL_DBG_STS_PKTSTATE_SHIFT      (1U)
 /*! PKTSTATE - Encoded Packet State This field is used to get the control or status information of the selected FIFO.
- *  0b01..Control Word/Normal Status
- *  0b11..EOP Data/EOP
  *  0b00..Packet Data
+ *  0b01..Control Word/Normal Status
  *  0b10..SOP Data/Last Status
+ *  0b11..EOP Data/EOP
  */
 #define ENET_QOS_MTL_DBG_STS_PKTSTATE(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_STS_PKTSTATE_SHIFT)) & ENET_QOS_MTL_DBG_STS_PKTSTATE_MASK)
 
 #define ENET_QOS_MTL_DBG_STS_BYTEEN_MASK         (0x18U)
 #define ENET_QOS_MTL_DBG_STS_BYTEEN_SHIFT        (3U)
 /*! BYTEEN - Byte Enables This field indicates the number of data bytes valid in the data register during Read operation.
- *  0b11..All four bytes are valid
- *  0b10..Byte 0, Byte 1, and Byte 2 are valid
- *  0b01..Byte 0 and Byte 1 are valid
  *  0b00..Byte 0 valid
+ *  0b01..Byte 0 and Byte 1 are valid
+ *  0b10..Byte 0, Byte 1, and Byte 2 are valid
+ *  0b11..All four bytes are valid
  */
 #define ENET_QOS_MTL_DBG_STS_BYTEEN(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_STS_BYTEEN_SHIFT)) & ENET_QOS_MTL_DBG_STS_BYTEEN_MASK)
 
@@ -8557,8 +8560,8 @@ typedef struct {
 #define ENET_QOS_MTL_DBG_STS_PKTI_SHIFT          (8U)
 /*! PKTI - Receive Packet Available Interrupt Status When set, this bit indicates that MAC layer has
  *    written the EOP of received packet to the Rx FIFO.
- *  0b1..Receive Packet Available Interrupt Status detected
  *  0b0..Receive Packet Available Interrupt Status not detected
+ *  0b1..Receive Packet Available Interrupt Status detected
  */
 #define ENET_QOS_MTL_DBG_STS_PKTI(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_STS_PKTI_SHIFT)) & ENET_QOS_MTL_DBG_STS_PKTI_MASK)
 
@@ -8566,8 +8569,8 @@ typedef struct {
 #define ENET_QOS_MTL_DBG_STS_STSI_SHIFT          (9U)
 /*! STSI - Transmit Status Available Interrupt Status When set, this bit indicates that the Slave
  *    mode Tx packet is transmitted, and the status is available in Tx Status FIFO.
- *  0b1..Transmit Status Available Interrupt Status detected
  *  0b0..Transmit Status Available Interrupt Status not detected
+ *  0b1..Transmit Status Available Interrupt Status detected
  */
 #define ENET_QOS_MTL_DBG_STS_STSI(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_DBG_STS_STSI_SHIFT)) & ENET_QOS_MTL_DBG_STS_STSI_MASK)
 
@@ -8594,64 +8597,64 @@ typedef struct {
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q0IS_MASK  (0x1U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q0IS_SHIFT (0U)
 /*! Q0IS - Queue 0 Interrupt status This bit indicates that there is an interrupt from Queue 0.
- *  0b1..Queue 0 Interrupt status detected
  *  0b0..Queue 0 Interrupt status not detected
+ *  0b1..Queue 0 Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q0IS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_Q0IS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_Q0IS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q1IS_MASK  (0x2U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q1IS_SHIFT (1U)
 /*! Q1IS - Queue 1 Interrupt status This bit indicates that there is an interrupt from Queue 1.
- *  0b1..Queue 1 Interrupt status detected
  *  0b0..Queue 1 Interrupt status not detected
+ *  0b1..Queue 1 Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q1IS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_Q1IS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_Q1IS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q2IS_MASK  (0x4U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q2IS_SHIFT (2U)
 /*! Q2IS - Queue 2 Interrupt status This bit indicates that there is an interrupt from Queue 2.
- *  0b1..Queue 2 Interrupt status detected
  *  0b0..Queue 2 Interrupt status not detected
+ *  0b1..Queue 2 Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q2IS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_Q2IS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_Q2IS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q3IS_MASK  (0x8U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q3IS_SHIFT (3U)
 /*! Q3IS - Queue 3 Interrupt status This bit indicates that there is an interrupt from Queue 3.
- *  0b1..Queue 3 Interrupt status detected
  *  0b0..Queue 3 Interrupt status not detected
+ *  0b1..Queue 3 Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q3IS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_Q3IS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_Q3IS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q4IS_MASK  (0x10U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q4IS_SHIFT (4U)
 /*! Q4IS - Queue 4 Interrupt status This bit indicates that there is an interrupt from Queue 4.
- *  0b1..Queue 4 Interrupt status detected
  *  0b0..Queue 4 Interrupt status not detected
+ *  0b1..Queue 4 Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_Q4IS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_Q4IS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_Q4IS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_DBGIS_MASK (0x20000U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_DBGIS_SHIFT (17U)
 /*! DBGIS - Debug Interrupt status This bit indicates an interrupt event during the slave access.
- *  0b1..Debug Interrupt status detected
  *  0b0..Debug Interrupt status not detected
+ *  0b1..Debug Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_DBGIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_DBGIS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_DBGIS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_ESTIS_MASK (0x40000U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_ESTIS_SHIFT (18U)
 /*! ESTIS - EST (TAS- 802.
- *  0b1..EST (TAS- 802.1Qbv) Interrupt status detected
  *  0b0..EST (TAS- 802.1Qbv) Interrupt status not detected
+ *  0b1..EST (TAS- 802.1Qbv) Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_ESTIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_ESTIS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_ESTIS_MASK)
 
 #define ENET_QOS_MTL_INTERRUPT_STATUS_MTLPIS_MASK (0x800000U)
 #define ENET_QOS_MTL_INTERRUPT_STATUS_MTLPIS_SHIFT (23U)
 /*! MTLPIS - MTL Rx Parser Interrupt Status This bit indicates that there is an interrupt from Rx Parser Block.
- *  0b1..MTL Rx Parser Interrupt status detected
  *  0b0..MTL Rx Parser Interrupt status not detected
+ *  0b1..MTL Rx Parser Interrupt status detected
  */
 #define ENET_QOS_MTL_INTERRUPT_STATUS_MTLPIS(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_INTERRUPT_STATUS_MTLPIS_SHIFT)) & ENET_QOS_MTL_INTERRUPT_STATUS_MTLPIS_MASK)
 /*! @} */
@@ -8823,8 +8826,8 @@ typedef struct {
 #define ENET_QOS_MTL_EST_CONTROL_DDBF_SHIFT      (4U)
 /*! DDBF - Do not Drop frames during Frame Size Error When set, frames are not be dropped during
  *    Head-of-Line blocking due to Frame Size Error (HLBF field of MTL_EST_STATUS register).
- *  0b1..Do not Drop frames during Frame Size Error
  *  0b0..Drop frames during Frame Size Error
+ *  0b1..Do not Drop frames during Frame Size Error
  */
 #define ENET_QOS_MTL_EST_CONTROL_DDBF(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_CONTROL_DDBF_SHIFT)) & ENET_QOS_MTL_EST_CONTROL_DDBF_MASK)
 
@@ -8842,10 +8845,10 @@ typedef struct {
 #define ENET_QOS_MTL_EST_CONTROL_LCSE_SHIFT      (6U)
 /*! LCSE - Loop Count to report Scheduling Error Programmable number of GCL list iterations before
  *    reporting an HLBS error defined in EST_STATUS register.
- *  0b10..16 iterations
- *  0b11..32 iterations
  *  0b00..4 iterations
  *  0b01..8 iterations
+ *  0b10..16 iterations
+ *  0b11..32 iterations
  */
 #define ENET_QOS_MTL_EST_CONTROL_LCSE(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_CONTROL_LCSE_SHIFT)) & ENET_QOS_MTL_EST_CONTROL_LCSE_MASK)
 
@@ -8886,8 +8889,8 @@ typedef struct {
 #define ENET_QOS_MTL_EST_STATUS_SWLC_SHIFT       (0U)
 /*! SWLC - Switch to S/W owned list Complete When "1" indicates the hardware has successfully
  *    switched to the SWOL, and the SWOL bit has been updated to that effect.
- *  0b1..Switch to S/W owned list Complete detected
  *  0b0..Switch to S/W owned list Complete not detected
+ *  0b1..Switch to S/W owned list Complete detected
  */
 #define ENET_QOS_MTL_EST_STATUS_SWLC(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_STATUS_SWLC_SHIFT)) & ENET_QOS_MTL_EST_STATUS_SWLC_MASK)
 
@@ -8895,8 +8898,8 @@ typedef struct {
 #define ENET_QOS_MTL_EST_STATUS_BTRE_SHIFT       (1U)
 /*! BTRE - BTR Error When "1" indicates a programming error in the BTR of SWOL where the programmed
  *    value is less than current time.
- *  0b1..BTR Error detected
  *  0b0..BTR Error not detected
+ *  0b1..BTR Error detected
  */
 #define ENET_QOS_MTL_EST_STATUS_BTRE(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_STATUS_BTRE_SHIFT)) & ENET_QOS_MTL_EST_STATUS_BTRE_MASK)
 
@@ -8906,8 +8909,8 @@ typedef struct {
  *    Queues as a result of none of the Time Intervals of gate open in the GCL being greater than or
  *    equal to the duration needed for frame size (or frame fragment size when preemption is
  *    enabled) transmission.
- *  0b1..Head-Of-Line Blocking due to Frame Size detected
  *  0b0..Head-Of-Line Blocking due to Frame Size not detected
+ *  0b1..Head-Of-Line Blocking due to Frame Size detected
  */
 #define ENET_QOS_MTL_EST_STATUS_HLBF(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_STATUS_HLBF_SHIFT)) & ENET_QOS_MTL_EST_STATUS_HLBF_MASK)
 
@@ -8915,8 +8918,8 @@ typedef struct {
 #define ENET_QOS_MTL_EST_STATUS_HLBS_SHIFT       (3U)
 /*! HLBS - Head-Of-Line Blocking due to Scheduling Set when the frame is not able to win arbitration
  *    and get scheduled even after 4 iterations of the GCL.
- *  0b1..Head-Of-Line Blocking due to Scheduling detected
  *  0b0..Head-Of-Line Blocking due to Scheduling not detected
+ *  0b1..Head-Of-Line Blocking due to Scheduling detected
  */
 #define ENET_QOS_MTL_EST_STATUS_HLBS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_STATUS_HLBS_SHIFT)) & ENET_QOS_MTL_EST_STATUS_HLBS_MASK)
 
@@ -8925,8 +8928,8 @@ typedef struct {
 /*! CGCE - Constant Gate Control Error This error occurs when the list length (LLR) is 1 and the
  *    programmed Time Interval (TI) value after the optional Left Shifting is less than or equal to the
  *    Cycle Time (CTR).
- *  0b1..Constant Gate Control Error detected
  *  0b0..Constant Gate Control Error not detected
+ *  0b1..Constant Gate Control Error detected
  */
 #define ENET_QOS_MTL_EST_STATUS_CGCE(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_STATUS_CGCE_SHIFT)) & ENET_QOS_MTL_EST_STATUS_CGCE_MASK)
 
@@ -8934,8 +8937,8 @@ typedef struct {
 #define ENET_QOS_MTL_EST_STATUS_SWOL_SHIFT       (7U)
 /*! SWOL - S/W owned list When '0' indicates Gate control list number "0" is owned by software and
  *    when "1" indicates the Gate Control list "1" is owned by the software.
- *  0b1..Gate control list number "1" is owned by software
  *  0b0..Gate control list number "0" is owned by software
+ *  0b1..Gate control list number "1" is owned by software
  */
 #define ENET_QOS_MTL_EST_STATUS_SWOL(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_STATUS_SWOL_SHIFT)) & ENET_QOS_MTL_EST_STATUS_SWOL_MASK)
 
@@ -9054,8 +9057,8 @@ typedef struct {
 #define ENET_QOS_MTL_EST_GCL_CONTROL_R1W0_MASK   (0x2U)
 #define ENET_QOS_MTL_EST_GCL_CONTROL_R1W0_SHIFT  (1U)
 /*! R1W0 - Read '1', Write '0': When set to '1': Read Operation When set to '0': Write Operation.
- *  0b1..Read Operation
  *  0b0..Write Operation
+ *  0b1..Read Operation
  */
 #define ENET_QOS_MTL_EST_GCL_CONTROL_R1W0(x)     (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_GCL_CONTROL_R1W0_SHIFT)) & ENET_QOS_MTL_EST_GCL_CONTROL_R1W0_MASK)
 
@@ -9115,9 +9118,9 @@ typedef struct {
 /*! ESTEIEC - ECC Inject Error Control for EST Memory When EIEE bit of this register is set,
  *    following are the errors inserted based on the value encoded in this field.
  *  0b00..Insert 1 bit error
- *  0b11..Insert 1 bit error in address field
  *  0b01..Insert 2 bit errors
  *  0b10..Insert 3 bit errors
+ *  0b11..Insert 1 bit error in address field
  */
 #define ENET_QOS_MTL_EST_GCL_CONTROL_ESTEIEC(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_EST_GCL_CONTROL_ESTEIEC_SHIFT)) & ENET_QOS_MTL_EST_GCL_CONTROL_ESTEIEC_MASK)
 /*! @} */
@@ -9151,8 +9154,8 @@ typedef struct {
 #define ENET_QOS_MTL_FPE_CTRL_STS_HRS_MASK       (0x10000000U)
 #define ENET_QOS_MTL_FPE_CTRL_STS_HRS_SHIFT      (28U)
 /*! HRS - Hold/Release Status - 1: Indicates a Set-and-Hold-MAC operation was last executed and the pMAC is in Hold State.
- *  0b1..Indicates a Set-and-Hold-MAC operation was last executed and the pMAC is in Hold State
  *  0b0..Indicates a Set-and-Release-MAC operation was last executed and the pMAC is in Release State
+ *  0b1..Indicates a Set-and-Hold-MAC operation was last executed and the pMAC is in Hold State
  */
 #define ENET_QOS_MTL_FPE_CTRL_STS_HRS(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_FPE_CTRL_STS_HRS_SHIFT)) & ENET_QOS_MTL_FPE_CTRL_STS_HRS_MASK)
 /*! @} */
@@ -9198,8 +9201,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_CONTROL_STATUS_RXPI_SHIFT (31U)
 /*! RXPI - RX Parser in Idle state This status bit is set to 1 when the Rx parser is in Idle State
  *    and waiting for a new packet for processing.
- *  0b1..RX Parser in Idle state
  *  0b0..RX Parser not in Idle state
+ *  0b1..RX Parser in Idle state
  */
 #define ENET_QOS_MTL_RXP_CONTROL_STATUS_RXPI(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_CONTROL_STATUS_RXPI_SHIFT)) & ENET_QOS_MTL_RXP_CONTROL_STATUS_RXPI_MASK)
 /*! @} */
@@ -9212,8 +9215,8 @@ typedef struct {
 /*! NVEOVIS - Number of Valid Entries Overflow Interrupt Status While parsing if the Instruction
  *    address found to be more than NVE (Number of Valid Entries in MTL_RXP_CONTROL register), then
  *    this bit is set to 1.
- *  0b1..Number of Valid Entries Overflow Interrupt Status detected
  *  0b0..Number of Valid Entries Overflow Interrupt Status not detected
+ *  0b1..Number of Valid Entries Overflow Interrupt Status detected
  */
 #define ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_NVEOVIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_NVEOVIS_SHIFT)) & ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_NVEOVIS_MASK)
 
@@ -9222,8 +9225,8 @@ typedef struct {
 /*! NPEOVIS - Number of Parsable Entries Overflow Interrupt Status While parsing a packet if the
  *    number of parsed entries found to be more than NPE[] (Number of Parseable Entries in
  *    MTL_RXP_CONTROL register),then this bit is set to 1.
- *  0b1..Number of Parsable Entries Overflow Interrupt Status detected
  *  0b0..Number of Parsable Entries Overflow Interrupt Status not detected
+ *  0b1..Number of Parsable Entries Overflow Interrupt Status detected
  */
 #define ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_NPEOVIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_NPEOVIS_SHIFT)) & ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_NPEOVIS_MASK)
 
@@ -9231,8 +9234,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_FOOVIS_SHIFT (2U)
 /*! FOOVIS - Frame Offset Overflow Interrupt Status While parsing if the Instruction table entry's
  *    'Frame Offset' found to be more than EOF offset, then then this bit is set.
- *  0b1..Frame Offset Overflow Interrupt Status detected
  *  0b0..Frame Offset Overflow Interrupt Status not detected
+ *  0b1..Frame Offset Overflow Interrupt Status detected
  */
 #define ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_FOOVIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_FOOVIS_SHIFT)) & ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_FOOVIS_MASK)
 
@@ -9240,8 +9243,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_PDRFIS_SHIFT (3U)
 /*! PDRFIS - Packet Dropped due to RF Interrupt Status If the Rx Parser result says to drop the
  *    packet by setting RF=1 in the instruction memory, then this bit is set to 1.
- *  0b1..Packet Dropped due to RF Interrupt Status detected
  *  0b0..Packet Dropped due to RF Interrupt Status not detected
+ *  0b1..Packet Dropped due to RF Interrupt Status detected
  */
 #define ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_PDRFIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_PDRFIS_SHIFT)) & ENET_QOS_MTL_RXP_INTERRUPT_CONTROL_STATUS_PDRFIS_MASK)
 
@@ -9290,8 +9293,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_DROP_CNT_RXPDCOVF_SHIFT (31U)
 /*! RXPDCOVF - Rx Parser Drop Counter Overflow Bit When set, this bit indicates that the
  *    MTL_RXP_DROP_CNT (RXPDC) Counter field crossed the maximum limit.
- *  0b1..Rx Parser Drop count overflow occurred
  *  0b0..Rx Parser Drop count overflow not occurred
+ *  0b1..Rx Parser Drop count overflow occurred
  */
 #define ENET_QOS_MTL_RXP_DROP_CNT_RXPDCOVF(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_DROP_CNT_RXPDCOVF_SHIFT)) & ENET_QOS_MTL_RXP_DROP_CNT_RXPDCOVF_MASK)
 /*! @} */
@@ -9311,8 +9314,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_ERROR_CNT_RXPECOVF_SHIFT (31U)
 /*! RXPECOVF - Rx Parser Error Counter Overflow Bit When set, this bit indicates that the
  *    MTL_RXP_ERROR_CNT (RXPEC) Counter field crossed the maximum limit.
- *  0b1..Rx Parser Error count overflow occurred
  *  0b0..Rx Parser Error count overflow not occurred
+ *  0b1..Rx Parser Error count overflow occurred
  */
 #define ENET_QOS_MTL_RXP_ERROR_CNT_RXPECOVF(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_ERROR_CNT_RXPECOVF_SHIFT)) & ENET_QOS_MTL_RXP_ERROR_CNT_RXPECOVF_MASK)
 /*! @} */
@@ -9337,8 +9340,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_STARTBUSY_SHIFT (31U)
 /*! STARTBUSY - FRP Instruction Table Access Busy When this bit is set to 1 by the software then it
  *    indicates to start the Read/Write operation from/to the Rx Parser Memory.
- *  0b1..hardware is busy (Read/Write operation from/to the Rx Parser Memory)
  *  0b0..hardware not busy
+ *  0b1..hardware is busy (Read/Write operation from/to the Rx Parser Memory)
  */
 #define ENET_QOS_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_STARTBUSY(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_STARTBUSY_SHIFT)) & ENET_QOS_MTL_RXP_INDIRECT_ACC_CONTROL_STATUS_STARTBUSY_MASK)
 /*! @} */
@@ -9363,8 +9366,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXP_BYPASS_CNT_RXPBCOF_MASK (0x80000000U)
 #define ENET_QOS_MTL_RXP_BYPASS_CNT_RXPBCOF_SHIFT (31U)
 /*! RXPBCOF - Rx Parser bypass Counter Overflow Bit. Access restriction applies. Clears on read. Self-set to 1 on internal event.
- *  0b1..Indicates that MTL_RXP_BYPASS_CNT[RXPBC] counter field has crossed the maximum limit
  *  0b0..Indicates that MTL_RXP_BYPASS_CNT[RXPBC] counter field has not crossed the maximum limit
+ *  0b1..Indicates that MTL_RXP_BYPASS_CNT[RXPBC] counter field has crossed the maximum limit
  */
 #define ENET_QOS_MTL_RXP_BYPASS_CNT_RXPBCOF(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXP_BYPASS_CNT_RXPBCOF_SHIFT)) & ENET_QOS_MTL_RXP_BYPASS_CNT_RXPBCOF_MASK)
 /*! @} */
@@ -9392,8 +9395,8 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_OP_MODE_TXQEN_SHIFT    (2U)
 /*! TXQEN - Transmit Queue Enable This field is used to enable/disable the transmit queue 0.
  *  0b00..Not enabled
- *  0b10..Enabled
  *  0b01..Enable in AV mode (Reserved in non-AV)
+ *  0b10..Enabled
  *  0b11..Reserved
  */
 #define ENET_QOS_MTL_TXQX_OP_MODE_TXQEN(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_OP_MODE_TXQEN_SHIFT)) & ENET_QOS_MTL_TXQX_OP_MODE_TXQEN_MASK)
@@ -9401,14 +9404,14 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_OP_MODE_TTC_MASK       (0x70U)
 #define ENET_QOS_MTL_TXQX_OP_MODE_TTC_SHIFT      (4U)
 /*! TTC - Transmit Threshold Control These bits control the threshold level of the MTL Tx Queue.
+ *  0b000..32
+ *  0b001..64
+ *  0b010..96
  *  0b011..128
  *  0b100..192
  *  0b101..256
- *  0b000..32
  *  0b110..384
  *  0b111..512
- *  0b001..64
- *  0b010..96
  */
 #define ENET_QOS_MTL_TXQX_OP_MODE_TTC(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_OP_MODE_TTC_SHIFT)) & ENET_QOS_MTL_TXQX_OP_MODE_TTC_MASK)
 
@@ -9435,8 +9438,8 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_UNDRFLW_UFCNTOVF_SHIFT (11U)
 /*! UFCNTOVF - Overflow Bit for Underflow Packet Counter This bit is set every time the Tx queue
  *    Underflow Packet Counter field overflows, that is, it has crossed the maximum count.
- *  0b1..Overflow detected for Underflow Packet Counter
  *  0b0..Overflow not detected for Underflow Packet Counter
+ *  0b1..Overflow detected for Underflow Packet Counter
  */
 #define ENET_QOS_MTL_TXQX_UNDRFLW_UFCNTOVF(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_UNDRFLW_UFCNTOVF_SHIFT)) & ENET_QOS_MTL_TXQX_UNDRFLW_UFCNTOVF_MASK)
 /*! @} */
@@ -9453,18 +9456,18 @@ typedef struct {
  *    indicates that the Tx Queue is in the Pause condition (in the full-duplex only mode) because
  *    of the following: - Reception of the PFC packet for the priorities assigned to the Tx Queue
  *    when PFC is enabled - Reception of 802.
- *  0b1..Transmit Queue in Pause status is detected
  *  0b0..Transmit Queue in Pause status is not detected
+ *  0b1..Transmit Queue in Pause status is detected
  */
 #define ENET_QOS_MTL_TXQX_DBG_TXQPAUSED(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_DBG_TXQPAUSED_SHIFT)) & ENET_QOS_MTL_TXQX_DBG_TXQPAUSED_MASK)
 
 #define ENET_QOS_MTL_TXQX_DBG_TRCSTS_MASK        (0x6U)
 #define ENET_QOS_MTL_TXQX_DBG_TRCSTS_SHIFT       (1U)
 /*! TRCSTS - MTL Tx Queue Read Controller Status This field indicates the state of the Tx Queue Read Controller:
- *  0b11..Flushing the Tx queue because of the Packet Abort request from the MAC
  *  0b00..Idle state
  *  0b01..Read state (transferring data to the MAC transmitter)
  *  0b10..Waiting for pending Tx Status from the MAC transmitter
+ *  0b11..Flushing the Tx queue because of the Packet Abort request from the MAC
  */
 #define ENET_QOS_MTL_TXQX_DBG_TRCSTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_DBG_TRCSTS_SHIFT)) & ENET_QOS_MTL_TXQX_DBG_TRCSTS_MASK)
 
@@ -9472,8 +9475,8 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_DBG_TWCSTS_SHIFT       (3U)
 /*! TWCSTS - MTL Tx Queue Write Controller Status When high, this bit indicates that the MTL Tx
  *    Queue Write Controller is active, and it is transferring the data to the Tx Queue.
- *  0b1..MTL Tx Queue Write Controller status is detected
  *  0b0..MTL Tx Queue Write Controller status is not detected
+ *  0b1..MTL Tx Queue Write Controller status is detected
  */
 #define ENET_QOS_MTL_TXQX_DBG_TWCSTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_DBG_TWCSTS_SHIFT)) & ENET_QOS_MTL_TXQX_DBG_TWCSTS_MASK)
 
@@ -9481,16 +9484,16 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_DBG_TXQSTS_SHIFT       (4U)
 /*! TXQSTS - MTL Tx Queue Not Empty Status When this bit is high, it indicates that the MTL Tx Queue
  *    is not empty and some data is left for transmission.
- *  0b1..MTL Tx Queue Not Empty status is detected
  *  0b0..MTL Tx Queue Not Empty status is not detected
+ *  0b1..MTL Tx Queue Not Empty status is detected
  */
 #define ENET_QOS_MTL_TXQX_DBG_TXQSTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_DBG_TXQSTS_SHIFT)) & ENET_QOS_MTL_TXQX_DBG_TXQSTS_MASK)
 
 #define ENET_QOS_MTL_TXQX_DBG_TXSTSFSTS_MASK     (0x20U)
 #define ENET_QOS_MTL_TXQX_DBG_TXSTSFSTS_SHIFT    (5U)
 /*! TXSTSFSTS - MTL Tx Status FIFO Full Status When high, this bit indicates that the MTL Tx Status FIFO is full.
- *  0b1..MTL Tx Status FIFO Full status is detected
  *  0b0..MTL Tx Status FIFO Full status is not detected
+ *  0b1..MTL Tx Status FIFO Full status is detected
  */
 #define ENET_QOS_MTL_TXQX_DBG_TXSTSFSTS(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_DBG_TXSTSFSTS_SHIFT)) & ENET_QOS_MTL_TXQX_DBG_TXSTSFSTS_MASK)
 
@@ -9536,11 +9539,11 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_ETS_CTRL_SLC_MASK      (0x70U)
 #define ENET_QOS_MTL_TXQX_ETS_CTRL_SLC_SHIFT     (4U)
 /*! SLC - Slot Count
- *  0b100..16 slots
  *  0b000..1 slot
  *  0b001..2 slots
  *  0b010..4 slots
  *  0b011..8 slots
+ *  0b100..16 slots
  *  0b101..Reserved
  */
 #define ENET_QOS_MTL_TXQX_ETS_CTRL_SLC(x)        (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_ETS_CTRL_SLC_SHIFT)) & ENET_QOS_MTL_TXQX_ETS_CTRL_SLC_MASK)
@@ -9625,16 +9628,16 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_TXUNFIS_SHIFT (0U)
 /*! TXUNFIS - Transmit Queue Underflow Interrupt Status This bit indicates that the Transmit Queue
  *    had an underflow while transmitting the packet.
- *  0b1..Transmit Queue Underflow Interrupt Status detected
  *  0b0..Transmit Queue Underflow Interrupt Status not detected
+ *  0b1..Transmit Queue Underflow Interrupt Status detected
  */
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_TXUNFIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_INTCTRL_STAT_TXUNFIS_SHIFT)) & ENET_QOS_MTL_TXQX_INTCTRL_STAT_TXUNFIS_MASK)
 
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_ABPSIS_MASK (0x2U)
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_ABPSIS_SHIFT (1U)
 /*! ABPSIS - Average Bits Per Slot Interrupt Status When set, this bit indicates that the MAC has updated the ABS value.
- *  0b1..Average Bits Per Slot Interrupt Status detected
  *  0b0..Average Bits Per Slot Interrupt Status not detected
+ *  0b1..Average Bits Per Slot Interrupt Status detected
  */
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_ABPSIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_INTCTRL_STAT_ABPSIS_SHIFT)) & ENET_QOS_MTL_TXQX_INTCTRL_STAT_ABPSIS_MASK)
 
@@ -9659,8 +9662,8 @@ typedef struct {
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_RXOVFIS_SHIFT (16U)
 /*! RXOVFIS - Receive Queue Overflow Interrupt Status This bit indicates that the Receive Queue had
  *    an overflow while receiving the packet.
- *  0b1..Receive Queue Overflow Interrupt Status detected
  *  0b0..Receive Queue Overflow Interrupt Status not detected
+ *  0b1..Receive Queue Overflow Interrupt Status detected
  */
 #define ENET_QOS_MTL_TXQX_INTCTRL_STAT_RXOVFIS(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_TXQX_INTCTRL_STAT_RXOVFIS_SHIFT)) & ENET_QOS_MTL_TXQX_INTCTRL_STAT_RXOVFIS_MASK)
 
@@ -9684,10 +9687,10 @@ typedef struct {
 /*! RTC - Receive Queue Threshold Control These bits control the threshold level of the MTL Rx queue
  *    (in bytes): The received packet is transferred to the application or DMA when the packet size
  *    within the MTL Rx queue is larger than the threshold.
- *  0b11..128
- *  0b01..32
  *  0b00..64
+ *  0b01..32
  *  0b10..96
+ *  0b11..128
  */
 #define ENET_QOS_MTL_RXQX_OP_MODE_RTC(x)         (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_OP_MODE_RTC_SHIFT)) & ENET_QOS_MTL_RXQX_OP_MODE_RTC_MASK)
 
@@ -9725,8 +9728,8 @@ typedef struct {
 /*! DIS_TCP_EF - Disable Dropping of TCP/IP Checksum Error Packets When this bit is set, the MAC
  *    does not drop the packets which only have the errors detected by the Receive Checksum Offload
  *    engine.
- *  0b1..Dropping of TCP/IP Checksum Error Packets is disabled
  *  0b0..Dropping of TCP/IP Checksum Error Packets is enabled
+ *  0b1..Dropping of TCP/IP Checksum Error Packets is disabled
  */
 #define ENET_QOS_MTL_RXQX_OP_MODE_DIS_TCP_EF(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_OP_MODE_DIS_TCP_EF_SHIFT)) & ENET_QOS_MTL_RXQX_OP_MODE_DIS_TCP_EF_MASK)
 
@@ -9778,8 +9781,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_OVFCNTOVF_SHIFT (11U)
 /*! OVFCNTOVF - Overflow Counter Overflow Bit When set, this bit indicates that the Rx Queue
  *    Overflow Packet Counter field crossed the maximum limit.
- *  0b1..Overflow Counter overflow detected
  *  0b0..Overflow Counter overflow not detected
+ *  0b1..Overflow Counter overflow detected
  */
 #define ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_OVFCNTOVF(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_OVFCNTOVF_SHIFT)) & ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_OVFCNTOVF_MASK)
 
@@ -9794,8 +9797,8 @@ typedef struct {
 #define ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_MISCNTOVF_SHIFT (27U)
 /*! MISCNTOVF - Missed Packet Counter Overflow Bit When set, this bit indicates that the Rx Queue
  *    Missed Packet Counter crossed the maximum limit.
- *  0b1..Missed Packet Counter overflow detected
  *  0b0..Missed Packet Counter overflow not detected
+ *  0b1..Missed Packet Counter overflow detected
  */
 #define ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_MISCNTOVF(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_MISCNTOVF_SHIFT)) & ENET_QOS_MTL_RXQX_MISSPKT_OVRFLW_CNT_MISCNTOVF_MASK)
 /*! @} */
@@ -9810,27 +9813,27 @@ typedef struct {
 #define ENET_QOS_MTL_RXQX_DBG_RWCSTS_SHIFT       (0U)
 /*! RWCSTS - MTL Rx Queue Write Controller Active Status When high, this bit indicates that the MTL
  *    Rx queue Write controller is active, and it is transferring a received packet to the Rx Queue.
- *  0b1..MTL Rx Queue Write Controller Active Status detected
  *  0b0..MTL Rx Queue Write Controller Active Status not detected
+ *  0b1..MTL Rx Queue Write Controller Active Status detected
  */
 #define ENET_QOS_MTL_RXQX_DBG_RWCSTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_DBG_RWCSTS_SHIFT)) & ENET_QOS_MTL_RXQX_DBG_RWCSTS_MASK)
 
 #define ENET_QOS_MTL_RXQX_DBG_RRCSTS_MASK        (0x6U)
 #define ENET_QOS_MTL_RXQX_DBG_RRCSTS_SHIFT       (1U)
 /*! RRCSTS - MTL Rx Queue Read Controller State This field gives the state of the Rx queue Read controller:
- *  0b11..Flushing the packet data and status
  *  0b00..Idle state
  *  0b01..Reading packet data
  *  0b10..Reading packet status (or timestamp)
+ *  0b11..Flushing the packet data and status
  */
 #define ENET_QOS_MTL_RXQX_DBG_RRCSTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_DBG_RRCSTS_SHIFT)) & ENET_QOS_MTL_RXQX_DBG_RRCSTS_MASK)
 
 #define ENET_QOS_MTL_RXQX_DBG_RXQSTS_MASK        (0x30U)
 #define ENET_QOS_MTL_RXQX_DBG_RXQSTS_SHIFT       (4U)
 /*! RXQSTS - MTL Rx Queue Fill-Level Status This field gives the status of the fill-level of the Rx Queue:
- *  0b10..Rx Queue fill-level above flow-control activate threshold
- *  0b01..Rx Queue fill-level below flow-control deactivate threshold
  *  0b00..Rx Queue empty
+ *  0b01..Rx Queue fill-level below flow-control deactivate threshold
+ *  0b10..Rx Queue fill-level above flow-control activate threshold
  *  0b11..Rx Queue full
  */
 #define ENET_QOS_MTL_RXQX_DBG_RXQSTS(x)          (((uint32_t)(((uint32_t)(x)) << ENET_QOS_MTL_RXQX_DBG_RXQSTS_SHIFT)) & ENET_QOS_MTL_RXQX_DBG_RXQSTS_MASK)
@@ -10003,56 +10006,56 @@ typedef struct {
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK (0x1U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_SHIFT (0U)
 /*! DC0IS - DMA Channel 0 Interrupt Status This bit indicates an interrupt event in DMA Channel 0.
- *  0b1..DMA Channel 0 Interrupt Status detected
  *  0b0..DMA Channel 0 Interrupt Status not detected
+ *  0b1..DMA Channel 0 Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK)
 
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK (0x2U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_SHIFT (1U)
 /*! DC1IS - DMA Channel 1 Interrupt Status This bit indicates an interrupt event in DMA Channel 1.
- *  0b1..DMA Channel 1 Interrupt Status detected
  *  0b0..DMA Channel 1 Interrupt Status not detected
+ *  0b1..DMA Channel 1 Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK)
 
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_MASK (0x4U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_SHIFT (2U)
 /*! DC2IS - DMA Channel 2 Interrupt Status This bit indicates an interrupt event in DMA Channel 2.
- *  0b1..DMA Channel 2 Interrupt Status detected
  *  0b0..DMA Channel 2 Interrupt Status not detected
+ *  0b1..DMA Channel 2 Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_MASK)
 
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_MASK (0x8U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_SHIFT (3U)
 /*! DC3IS - DMA Channel 3 Interrupt Status This bit indicates an interrupt event in DMA Channel 3.
- *  0b1..DMA Channel 3 Interrupt Status detected
  *  0b0..DMA Channel 3 Interrupt Status not detected
+ *  0b1..DMA Channel 3 Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_MASK)
 
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC4IS_MASK (0x10U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC4IS_SHIFT (4U)
 /*! DC4IS - DMA Channel 4 Interrupt Status This bit indicates an interrupt event in DMA Channel 4.
- *  0b1..DMA Channel 4 Interrupt Status detected
  *  0b0..DMA Channel 4 Interrupt Status not detected
+ *  0b1..DMA Channel 4 Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_DC4IS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_DC4IS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_DC4IS_MASK)
 
 #define ENET_QOS_DMA_INTERRUPT_STATUS_MTLIS_MASK (0x10000U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_MTLIS_SHIFT (16U)
 /*! MTLIS - MTL Interrupt Status This bit indicates an interrupt event in the MTL.
- *  0b1..MTL Interrupt Status detected
  *  0b0..MTL Interrupt Status not detected
+ *  0b1..MTL Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_MTLIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_MTLIS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_MTLIS_MASK)
 
 #define ENET_QOS_DMA_INTERRUPT_STATUS_MACIS_MASK (0x20000U)
 #define ENET_QOS_DMA_INTERRUPT_STATUS_MACIS_SHIFT (17U)
 /*! MACIS - MAC Interrupt Status This bit indicates an interrupt event in the MAC.
- *  0b1..MAC Interrupt Status detected
  *  0b0..MAC Interrupt Status not detected
+ *  0b1..MAC Interrupt Status detected
  */
 #define ENET_QOS_DMA_INTERRUPT_STATUS_MACIS(x)   (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_INTERRUPT_STATUS_MACIS_SHIFT)) & ENET_QOS_DMA_INTERRUPT_STATUS_MACIS_MASK)
 /*! @} */
@@ -10064,8 +10067,8 @@ typedef struct {
 #define ENET_QOS_DMA_DEBUG_STATUS0_AXWHSTS_SHIFT (0U)
 /*! AXWHSTS - AXI Master Write Channel When high, this bit indicates that the write channel of the
  *    AXI master is active, and it is transferring data.
- *  0b1..AXI Master Write Channel or AHB Master Status detected
  *  0b0..AXI Master Write Channel or AHB Master Status not detected
+ *  0b1..AXI Master Write Channel or AHB Master Status detected
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_AXWHSTS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_AXWHSTS_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_AXWHSTS_MASK)
 
@@ -10073,92 +10076,92 @@ typedef struct {
 #define ENET_QOS_DMA_DEBUG_STATUS0_AXRHSTS_SHIFT (1U)
 /*! AXRHSTS - AXI Master Read Channel Status When high, this bit indicates that the read channel of
  *    the AXI master is active, and it is transferring the data.
- *  0b1..AXI Master Read Channel Status detected
  *  0b0..AXI Master Read Channel Status not detected
+ *  0b1..AXI Master Read Channel Status detected
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_AXRHSTS(x)    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_AXRHSTS_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_AXRHSTS_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS0_MASK     (0xF00U)
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS0_SHIFT    (8U)
 /*! RPS0 - DMA Channel 0 Receive Process State This field indicates the Rx DMA FSM state for Channel 0.
- *  0b0010..Reserved for future use
- *  0b0101..Running (Closing the Rx Descriptor)
- *  0b0001..Running (Fetching Rx Transfer Descriptor)
- *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
- *  0b0011..Running (Waiting for Rx packet)
  *  0b0000..Stopped (Reset or Stop Receive Command issued)
+ *  0b0001..Running (Fetching Rx Transfer Descriptor)
+ *  0b0010..Reserved for future use
+ *  0b0011..Running (Waiting for Rx packet)
  *  0b0100..Suspended (Rx Descriptor Unavailable)
+ *  0b0101..Running (Closing the Rx Descriptor)
  *  0b0110..Timestamp write state
+ *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS0(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_RPS0_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_RPS0_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS0_MASK     (0xF000U)
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS0_SHIFT    (12U)
 /*! TPS0 - DMA Channel 0 Transmit Process State This field indicates the Tx DMA FSM state for Channel 0.
- *  0b0101..Reserved for future use
- *  0b0111..Running (Closing Tx Descriptor)
- *  0b0001..Running (Fetching Tx Transfer Descriptor)
- *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
- *  0b0010..Running (Waiting for status)
  *  0b0000..Stopped (Reset or Stop Transmit Command issued)
- *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0001..Running (Fetching Tx Transfer Descriptor)
+ *  0b0010..Running (Waiting for status)
+ *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
  *  0b0100..Timestamp write state
+ *  0b0101..Reserved for future use
+ *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0111..Running (Closing Tx Descriptor)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS0(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_TPS0_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_TPS0_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS1_MASK     (0xF0000U)
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS1_SHIFT    (16U)
 /*! RPS1 - DMA Channel 1 Receive Process State This field indicates the Rx DMA FSM state for Channel 1.
- *  0b0010..Reserved for future use
- *  0b0101..Running (Closing the Rx Descriptor)
- *  0b0001..Running (Fetching Rx Transfer Descriptor)
- *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
- *  0b0011..Running (Waiting for Rx packet)
  *  0b0000..Stopped (Reset or Stop Receive Command issued)
+ *  0b0001..Running (Fetching Rx Transfer Descriptor)
+ *  0b0010..Reserved for future use
+ *  0b0011..Running (Waiting for Rx packet)
  *  0b0100..Suspended (Rx Descriptor Unavailable)
+ *  0b0101..Running (Closing the Rx Descriptor)
  *  0b0110..Timestamp write state
+ *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS1(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_RPS1_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_RPS1_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS1_MASK     (0xF00000U)
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS1_SHIFT    (20U)
 /*! TPS1 - DMA Channel 1 Transmit Process State This field indicates the Tx DMA FSM state for Channel 1.
- *  0b0101..Reserved for future use
- *  0b0111..Running (Closing Tx Descriptor)
- *  0b0001..Running (Fetching Tx Transfer Descriptor)
- *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
- *  0b0010..Running (Waiting for status)
  *  0b0000..Stopped (Reset or Stop Transmit Command issued)
- *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0001..Running (Fetching Tx Transfer Descriptor)
+ *  0b0010..Running (Waiting for status)
+ *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
  *  0b0100..Timestamp write state
+ *  0b0101..Reserved for future use
+ *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0111..Running (Closing Tx Descriptor)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS1(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_TPS1_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_TPS1_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS2_MASK     (0xF000000U)
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS2_SHIFT    (24U)
 /*! RPS2 - DMA Channel 2 Receive Process State This field indicates the Rx DMA FSM state for Channel 2.
- *  0b0010..Reserved for future use
- *  0b0101..Running (Closing the Rx Descriptor)
- *  0b0001..Running (Fetching Rx Transfer Descriptor)
- *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
- *  0b0011..Running (Waiting for Rx packet)
  *  0b0000..Stopped (Reset or Stop Receive Command issued)
+ *  0b0001..Running (Fetching Rx Transfer Descriptor)
+ *  0b0010..Reserved for future use
+ *  0b0011..Running (Waiting for Rx packet)
  *  0b0100..Suspended (Rx Descriptor Unavailable)
+ *  0b0101..Running (Closing the Rx Descriptor)
  *  0b0110..Timestamp write state
+ *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_RPS2(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_RPS2_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_RPS2_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS2_MASK     (0xF0000000U)
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS2_SHIFT    (28U)
 /*! TPS2 - DMA Channel 2 Transmit Process State This field indicates the Tx DMA FSM state for Channel 2.
- *  0b0101..Reserved for future use
- *  0b0111..Running (Closing Tx Descriptor)
- *  0b0001..Running (Fetching Tx Transfer Descriptor)
- *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
- *  0b0010..Running (Waiting for status)
  *  0b0000..Stopped (Reset or Stop Transmit Command issued)
- *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0001..Running (Fetching Tx Transfer Descriptor)
+ *  0b0010..Running (Waiting for status)
+ *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
  *  0b0100..Timestamp write state
+ *  0b0101..Reserved for future use
+ *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0111..Running (Closing Tx Descriptor)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS0_TPS2(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS0_TPS2_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS0_TPS2_MASK)
 /*! @} */
@@ -10169,56 +10172,56 @@ typedef struct {
 #define ENET_QOS_DMA_DEBUG_STATUS1_RPS3_MASK     (0xFU)
 #define ENET_QOS_DMA_DEBUG_STATUS1_RPS3_SHIFT    (0U)
 /*! RPS3 - DMA Channel 3 Receive Process State This field indicates the Rx DMA FSM state for Channel 3.
- *  0b0010..Reserved for future use
- *  0b0101..Running (Closing the Rx Descriptor)
- *  0b0001..Running (Fetching Rx Transfer Descriptor)
- *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
- *  0b0011..Running (Waiting for Rx packet)
  *  0b0000..Stopped (Reset or Stop Receive Command issued)
+ *  0b0001..Running (Fetching Rx Transfer Descriptor)
+ *  0b0010..Reserved for future use
+ *  0b0011..Running (Waiting for Rx packet)
  *  0b0100..Suspended (Rx Descriptor Unavailable)
+ *  0b0101..Running (Closing the Rx Descriptor)
  *  0b0110..Timestamp write state
+ *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS1_RPS3(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS1_RPS3_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS1_RPS3_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS1_TPS3_MASK     (0xF0U)
 #define ENET_QOS_DMA_DEBUG_STATUS1_TPS3_SHIFT    (4U)
 /*! TPS3 - DMA Channel 3 Transmit Process State This field indicates the Tx DMA FSM state for Channel 3.
- *  0b0101..Reserved for future use
- *  0b0111..Running (Closing Tx Descriptor)
- *  0b0001..Running (Fetching Tx Transfer Descriptor)
- *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
- *  0b0010..Running (Waiting for status)
  *  0b0000..Stopped (Reset or Stop Transmit Command issued)
- *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0001..Running (Fetching Tx Transfer Descriptor)
+ *  0b0010..Running (Waiting for status)
+ *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
  *  0b0100..Timestamp write state
+ *  0b0101..Reserved for future use
+ *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0111..Running (Closing Tx Descriptor)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS1_TPS3(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS1_TPS3_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS1_TPS3_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS1_RPS4_MASK     (0xF00U)
 #define ENET_QOS_DMA_DEBUG_STATUS1_RPS4_SHIFT    (8U)
 /*! RPS4 - DMA Channel 4 Receive Process State This field indicates the Rx DMA FSM state for Channel 4.
- *  0b0010..Reserved for future use
- *  0b0101..Running (Closing the Rx Descriptor)
- *  0b0001..Running (Fetching Rx Transfer Descriptor)
- *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
- *  0b0011..Running (Waiting for Rx packet)
  *  0b0000..Stopped (Reset or Stop Receive Command issued)
+ *  0b0001..Running (Fetching Rx Transfer Descriptor)
+ *  0b0010..Reserved for future use
+ *  0b0011..Running (Waiting for Rx packet)
  *  0b0100..Suspended (Rx Descriptor Unavailable)
+ *  0b0101..Running (Closing the Rx Descriptor)
  *  0b0110..Timestamp write state
+ *  0b0111..Running (Transferring the received packet data from the Rx buffer to the system memory)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS1_RPS4(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS1_RPS4_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS1_RPS4_MASK)
 
 #define ENET_QOS_DMA_DEBUG_STATUS1_TPS4_MASK     (0xF000U)
 #define ENET_QOS_DMA_DEBUG_STATUS1_TPS4_SHIFT    (12U)
 /*! TPS4 - DMA Channel 4 Transmit Process State This field indicates the Tx DMA FSM state for Channel 4.
- *  0b0101..Reserved for future use
- *  0b0111..Running (Closing Tx Descriptor)
- *  0b0001..Running (Fetching Tx Transfer Descriptor)
- *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
- *  0b0010..Running (Waiting for status)
  *  0b0000..Stopped (Reset or Stop Transmit Command issued)
- *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0001..Running (Fetching Tx Transfer Descriptor)
+ *  0b0010..Running (Waiting for status)
+ *  0b0011..Running (Reading Data from system memory buffer and queuing it to the Tx buffer (Tx FIFO))
  *  0b0100..Timestamp write state
+ *  0b0101..Reserved for future use
+ *  0b0110..Suspended (Tx Descriptor Unavailable or Tx Buffer Underflow)
+ *  0b0111..Running (Closing Tx Descriptor)
  */
 #define ENET_QOS_DMA_DEBUG_STATUS1_TPS4(x)       (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_DEBUG_STATUS1_TPS4_SHIFT)) & ENET_QOS_DMA_DEBUG_STATUS1_TPS4_MASK)
 /*! @} */
@@ -10360,8 +10363,8 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_TX_CTRL_ST_MASK         (0x1U)
 #define ENET_QOS_DMA_CHX_TX_CTRL_ST_SHIFT        (0U)
 /*! ST - Start or Stop Transmission Command When this bit is set, transmission is placed in the Running state.
- *  0b1..Start Transmission Command
  *  0b0..Stop Transmission Command
+ *  0b1..Start Transmission Command
  */
 #define ENET_QOS_DMA_CHX_TX_CTRL_ST(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_TX_CTRL_ST_SHIFT)) & ENET_QOS_DMA_CHX_TX_CTRL_ST_MASK)
 
@@ -10410,8 +10413,8 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_RX_CTRL_SR_SHIFT        (0U)
 /*! SR - Start or Stop Receive When this bit is set, the DMA tries to acquire the descriptor from
  *    the Receive list and processes the incoming packets.
- *  0b1..Start Receive
  *  0b0..Stop Receive
+ *  0b1..Start Receive
  */
 #define ENET_QOS_DMA_CHX_RX_CTRL_SR(x)           (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_RX_CTRL_SR_SHIFT)) & ENET_QOS_DMA_CHX_RX_CTRL_SR_MASK)
 
@@ -10749,16 +10752,16 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_STAT_TI_MASK            (0x1U)
 #define ENET_QOS_DMA_CHX_STAT_TI_SHIFT           (0U)
 /*! TI - Transmit Interrupt This bit indicates that the packet transmission is complete.
- *  0b1..Transmit Interrupt status detected
  *  0b0..Transmit Interrupt status not detected
+ *  0b1..Transmit Interrupt status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_TI(x)              (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_TI_SHIFT)) & ENET_QOS_DMA_CHX_STAT_TI_MASK)
 
 #define ENET_QOS_DMA_CHX_STAT_TPS_MASK           (0x2U)
 #define ENET_QOS_DMA_CHX_STAT_TPS_SHIFT          (1U)
 /*! TPS - Transmit Process Stopped This bit is set when the transmission is stopped.
- *  0b1..Transmit Process Stopped status detected
  *  0b0..Transmit Process Stopped status not detected
+ *  0b1..Transmit Process Stopped status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_TPS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_TPS_SHIFT)) & ENET_QOS_DMA_CHX_STAT_TPS_MASK)
 
@@ -10766,16 +10769,16 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_STAT_TBU_SHIFT          (2U)
 /*! TBU - Transmit Buffer Unavailable This bit indicates that the application owns the next
  *    descriptor in the Transmit list, and the DMA cannot acquire it.
- *  0b1..Transmit Buffer Unavailable status detected
  *  0b0..Transmit Buffer Unavailable status not detected
+ *  0b1..Transmit Buffer Unavailable status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_TBU(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_TBU_SHIFT)) & ENET_QOS_DMA_CHX_STAT_TBU_MASK)
 
 #define ENET_QOS_DMA_CHX_STAT_RI_MASK            (0x40U)
 #define ENET_QOS_DMA_CHX_STAT_RI_SHIFT           (6U)
 /*! RI - Receive Interrupt This bit indicates that the packet reception is complete.
- *  0b1..Receive Interrupt status detected
  *  0b0..Receive Interrupt status not detected
+ *  0b1..Receive Interrupt status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_RI(x)              (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_RI_SHIFT)) & ENET_QOS_DMA_CHX_STAT_RI_MASK)
 
@@ -10783,16 +10786,16 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_STAT_RBU_SHIFT          (7U)
 /*! RBU - Receive Buffer Unavailable This bit indicates that the application owns the next
  *    descriptor in the Receive list, and the DMA cannot acquire it.
- *  0b1..Receive Buffer Unavailable status detected
  *  0b0..Receive Buffer Unavailable status not detected
+ *  0b1..Receive Buffer Unavailable status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_RBU(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_RBU_SHIFT)) & ENET_QOS_DMA_CHX_STAT_RBU_MASK)
 
 #define ENET_QOS_DMA_CHX_STAT_RPS_MASK           (0x100U)
 #define ENET_QOS_DMA_CHX_STAT_RPS_SHIFT          (8U)
 /*! RPS - Receive Process Stopped This bit is asserted when the Rx process enters the Stopped state.
- *  0b1..Receive Process Stopped status detected
  *  0b0..Receive Process Stopped status not detected
+ *  0b1..Receive Process Stopped status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_RPS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_RPS_SHIFT)) & ENET_QOS_DMA_CHX_STAT_RPS_MASK)
 
@@ -10800,8 +10803,8 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_STAT_RWT_SHIFT          (9U)
 /*! RWT - Receive Watchdog Timeout This bit is asserted when a packet with length greater than 2,048
  *    bytes (10,240 bytes when Jumbo Packet mode is enabled) is received.
- *  0b1..Receive Watchdog Timeout status detected
  *  0b0..Receive Watchdog Timeout status not detected
+ *  0b1..Receive Watchdog Timeout status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_RWT(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_RWT_SHIFT)) & ENET_QOS_DMA_CHX_STAT_RWT_MASK)
 
@@ -10809,8 +10812,8 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_STAT_ETI_SHIFT          (10U)
 /*! ETI - Early Transmit Interrupt This bit when set indicates that the TxDMA has completed the
  *    transfer of packet data to the MTL TXFIFO memory.
- *  0b1..Early Transmit Interrupt status detected
  *  0b0..Early Transmit Interrupt status not detected
+ *  0b1..Early Transmit Interrupt status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_ETI(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_ETI_SHIFT)) & ENET_QOS_DMA_CHX_STAT_ETI_MASK)
 
@@ -10818,16 +10821,16 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_STAT_ERI_SHIFT          (11U)
 /*! ERI - Early Receive Interrupt This bit when set indicates that the RxDMA has completed the
  *    transfer of packet data to the memory.
- *  0b1..Early Receive Interrupt status detected
  *  0b0..Early Receive Interrupt status not detected
+ *  0b1..Early Receive Interrupt status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_ERI(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_ERI_SHIFT)) & ENET_QOS_DMA_CHX_STAT_ERI_MASK)
 
 #define ENET_QOS_DMA_CHX_STAT_FBE_MASK           (0x1000U)
 #define ENET_QOS_DMA_CHX_STAT_FBE_SHIFT          (12U)
 /*! FBE - Fatal Bus Error This bit indicates that a bus error occurred (as described in the EB field).
- *  0b1..Fatal Bus Error status detected
  *  0b0..Fatal Bus Error status not detected
+ *  0b1..Fatal Bus Error status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_FBE(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_FBE_SHIFT)) & ENET_QOS_DMA_CHX_STAT_FBE_MASK)
 
@@ -10837,8 +10840,8 @@ typedef struct {
  *    descriptor error, which indicates invalid context in the middle of packet flow ( intermediate
  *    descriptor) or all one's descriptor in Tx case and on Rx side it indicates DMA has read a descriptor
  *    with either of the buffer address as ones which is considered to be invalid.
- *  0b1..Context Descriptor Error status detected
  *  0b0..Context Descriptor Error status not detected
+ *  0b1..Context Descriptor Error status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_CDE(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_CDE_SHIFT)) & ENET_QOS_DMA_CHX_STAT_CDE_MASK)
 
@@ -10849,8 +10852,8 @@ typedef struct {
  *    register: - Bit 1: Transmit Process Stopped - Bit 7: Receive Buffer Unavailable - Bit 8: Receive
  *    Process Stopped - Bit 10: Early Transmit Interrupt - Bit 12: Fatal Bus Error - Bit 13: Context
  *    Descriptor Error Only unmasked bits affect the Abnormal Interrupt Summary bit.
- *  0b1..Abnormal Interrupt Summary status detected
  *  0b0..Abnormal Interrupt Summary status not detected
+ *  0b1..Abnormal Interrupt Summary status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_AIS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_AIS_SHIFT)) & ENET_QOS_DMA_CHX_STAT_AIS_MASK)
 
@@ -10861,8 +10864,8 @@ typedef struct {
  *    register: - Bit 0: Transmit Interrupt - Bit 2: Transmit Buffer Unavailable - Bit 6: Receive
  *    Interrupt - Bit 11: Early Receive Interrupt Only unmasked bits (interrupts for which interrupt
  *    enable is set in DMA_CH3_INTERRUPT_ENABLE register) affect the Normal Interrupt Summary bit.
- *  0b1..Normal Interrupt Summary status detected
  *  0b0..Normal Interrupt Summary status not detected
+ *  0b1..Normal Interrupt Summary status detected
  */
 #define ENET_QOS_DMA_CHX_STAT_NIS(x)             (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_STAT_NIS_SHIFT)) & ENET_QOS_DMA_CHX_STAT_NIS_MASK)
 
@@ -10894,8 +10897,8 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_MISS_FRAME_CNT_MFCO_MASK (0x8000U)
 #define ENET_QOS_DMA_CHX_MISS_FRAME_CNT_MFCO_SHIFT (15U)
 /*! MFCO - Overflow status of the MFC Counter When this bit is set then the MFC counter does not get incremented further.
- *  0b1..Miss Frame Counter overflow occurred
  *  0b0..Miss Frame Counter overflow not occurred
+ *  0b1..Miss Frame Counter overflow occurred
  */
 #define ENET_QOS_DMA_CHX_MISS_FRAME_CNT_MFCO(x)  (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_MISS_FRAME_CNT_MFCO_SHIFT)) & ENET_QOS_DMA_CHX_MISS_FRAME_CNT_MFCO_MASK)
 /*! @} */
@@ -10915,8 +10918,8 @@ typedef struct {
 #define ENET_QOS_DMA_CHX_RXP_ACCEPT_CNT_RXPACOF_SHIFT (31U)
 /*! RXPACOF - Rx Parser Accept Counter Overflow Bit When set, this bit indicates that the RXPAC
  *    Counter field crossed the maximum limit.
- *  0b1..Rx Parser Accept Counter overflow occurred
  *  0b0..Rx Parser Accept Counter overflow not occurred
+ *  0b1..Rx Parser Accept Counter overflow occurred
  */
 #define ENET_QOS_DMA_CHX_RXP_ACCEPT_CNT_RXPACOF(x) (((uint32_t)(((uint32_t)(x)) << ENET_QOS_DMA_CHX_RXP_ACCEPT_CNT_RXPACOF_SHIFT)) & ENET_QOS_DMA_CHX_RXP_ACCEPT_CNT_RXPACOF_MASK)
 /*! @} */
@@ -10958,5 +10961,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ENET_QOS_H_ */
+#endif  /* PERI_ENET_QOS_H_ */
 
