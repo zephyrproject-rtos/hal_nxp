@@ -1100,6 +1100,12 @@ typedef enum _clock_lpcg
         kCLOCK_IpInvalid, kCLOCK_I3c1, kCLOCK_I3c2 \
     }
 
+/*! @brief Clock ip name array for USDHC. */
+#define	USDHC_CLOCKS                                                  \
+	{                                                                 \
+		kCLOCK_IpInvalid, kCLOCK_Usdhc1, kCLOCK_Usdhc2, kCLOCK_Usdhc3 \
+	}
+
 /*! @brief Clock ip name array for SEMA42. */
 #define SEMA42_CLOCKS                                \
     {                                                \
