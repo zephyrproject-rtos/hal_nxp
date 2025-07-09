@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CACHE_ECC_MCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CACHE_ECC_MCM.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_CACHE_ECC_MCM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CACHE_ECC_MCM
  *
  * CMSIS Peripheral Access Layer for CACHE_ECC_MCM
  */
 
-#if !defined(CACHE_ECC_MCM_H_)
-#define CACHE_ECC_MCM_H_                         /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CACHE_ECC_MCM_H_)
+#define PERI_CACHE_ECC_MCM_H_                    /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -223,16 +226,16 @@ typedef struct {
 #define CACHE_ECC_MCM_CACHE_ECCR_WECC_DIS_MASK   (0x1U)
 #define CACHE_ECC_MCM_CACHE_ECCR_WECC_DIS_SHIFT  (0U)
 /*! WECC_DIS - Disable CACHE ECC Write Generation
- *  0b1..Disable ECC generation on CACHE write data
  *  0b0..Enable ECC generation on CACHE write data
+ *  0b1..Disable ECC generation on CACHE write data
  */
 #define CACHE_ECC_MCM_CACHE_ECCR_WECC_DIS(x)     (((uint32_t)(((uint32_t)(x)) << CACHE_ECC_MCM_CACHE_ECCR_WECC_DIS_SHIFT)) & CACHE_ECC_MCM_CACHE_ECCR_WECC_DIS_MASK)
 
 #define CACHE_ECC_MCM_CACHE_ECCR_RECC_DIS_MASK   (0x2U)
 #define CACHE_ECC_MCM_CACHE_ECCR_RECC_DIS_SHIFT  (1U)
 /*! RECC_DIS - Disable Cache ECC Read Check
- *  0b1..Disable ECC check on CACHE read data
  *  0b0..Enable ECC check on CACHE read data
+ *  0b1..Disable ECC check on CACHE read data
  */
 #define CACHE_ECC_MCM_CACHE_ECCR_RECC_DIS(x)     (((uint32_t)(((uint32_t)(x)) << CACHE_ECC_MCM_CACHE_ECCR_RECC_DIS_SHIFT)) & CACHE_ECC_MCM_CACHE_ECCR_RECC_DIS_MASK)
 /*! @} */
@@ -914,5 +917,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CACHE_ECC_MCM_H_ */
+#endif  /* PERI_CACHE_ECC_MCM_H_ */
 
