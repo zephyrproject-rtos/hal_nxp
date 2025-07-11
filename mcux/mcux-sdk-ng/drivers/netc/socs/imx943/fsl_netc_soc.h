@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,23 @@
 #define NETC_SOC_SWT_PORT_NUM (4U)
 
 /*! @brief The Switch function register base address offset.(SW0_PCI_HDR_TYPE0) */
-#define NETC_SOC_SWT_PCIE_FUNC_OFFSET       (5U)
+#define NETC_SOC_SWT_PCIE_FUNC_OFFSET (5U)
+#define NETC_SOC_SWT_MSI_FUNC_OFFSET  (0U)
+
+/*! @name NETC register map. */
+/*@{*/
+#define NETC_SWT_COMMON_BASE_OFFSET (0x1000U)  /*!< The ENETC common register base address offset. */
+#define NETC_SWT_GLOBAL_BASE_OFFSET (0x70000U) /*!< The Switch global register base address offset. */
+/*@}*/
+
+/*
+ *                port3  port2  port1  port0
+ * 0x08 = 0b 0000   1      0      0      0
+ * It means that input frame will forward to switch port3
+ */
+#ifndef NETC_SOC_INPUT_FRM_SWT_PORT_BITMAP
+#define NETC_SOC_INPUT_FRM_SWT_PORT_BITMAP (0x08)
+#endif
 
 /*! @brief Station interface index enumerator */
 typedef enum _netc_hw_si_idx
@@ -66,12 +82,4 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
  */
 uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port);
 
-/*!
- * @brief Preinit VSIs
- *
- * @param hw      The enetc hw handle.
- * @param si      The SI object.
- * @return status_t
- */
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
 #endif /* _FSL_NETC_SOC_H_ */
