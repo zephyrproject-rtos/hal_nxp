@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -50,10 +50,10 @@
  */
 
 /*! @brief Driver Version */
-#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
+#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
 
 /*! @brief Macro to divides an address into a low 32 bits and a possible high 32 bits */
-#define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)(x)&0xFFFFFFFFU)
+#define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)(x) & 0xFFFFFFFFU)
 #define NETC_ADDR_HIGH_32BIT(x) ((4U != sizeof(uintptr_t)) ? (((uintptr_t)(x) >> 32U) & 0xFFFFFFFFU) : 0U)
 
 /*! @brief Status code for the NETC module */
@@ -67,9 +67,9 @@ enum
         MAKE_STATUS(kStatusGroup_NETC, 4), /*!< Lack of resources to configure certain features. */
     kStatus_NETC_Unsupported      = MAKE_STATUS(kStatusGroup_NETC, 5), /*!< Unsupported operation/feature. */
     kStatus_NETC_RxHRZeroFrame    = MAKE_STATUS(kStatusGroup_NETC, 6), /*!< Rx frame host reason is zero */
-    kStatus_NETC_RxHRNotZeroFrame = MAKE_STATUS(kStatusGroup_NETC, 7),  /*!< Rx frame host reason is not zero */
-    kStatus_NETC_NotFound         = MAKE_STATUS(kStatusGroup_NETC, 8),  /*!< No entry found in hardware tables */
-    kStatus_NETC_EntryExists      = MAKE_STATUS(kStatusGroup_NETC, 9)  /*!< An entry already exists in hardware tables */
+    kStatus_NETC_RxHRNotZeroFrame = MAKE_STATUS(kStatusGroup_NETC, 7), /*!< Rx frame host reason is not zero */
+    kStatus_NETC_NotFound         = MAKE_STATUS(kStatusGroup_NETC, 8), /*!< No entry found in hardware tables */
+    kStatus_NETC_EntryExists      = MAKE_STATUS(kStatusGroup_NETC, 9) /*!< An entry already exists in hardware tables */
 };
 
 /*! @brief Defines the common interrupt event for callback use. */
@@ -179,9 +179,11 @@ typedef struct _netc_tx_frame_info_struct
 {
     bool isTsAvail;     /*!< Tx frame timestamp is available or not. */
     uint32_t timestamp; /*!< The timestamp of this Tx frame, valid when isTsAvail is true. */
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     bool isTxTsIdAvail; /*!< Switch port Tx frame timestamp Identifier is available or not. */
     uint16_t txtsid; /*!< The Transmit Timestamp Identifier, valid when isTsIdAvail is true, use for Switch management
                         ENETC direct frame which has specified a timestamp request. */
+#endif
     void *context;   /*!< Private context provided by the user. */
     netc_ep_tx_status_t status; /*!< Transmit status. */
 } netc_tx_frame_info_t;
@@ -205,7 +207,7 @@ typedef struct _netc_msix_entry
 /*! @brief METC Extension Transmit Buffer Descriptor Extension flags field */
 typedef enum _netc_tx_ext_flags
 {
-    kNETC_TxExtVlanInsert = 0x1, /*!< Enable VLAN insert. */
+    kNETC_TxExtVlanInsert = 0x1,      /*!< Enable VLAN insert. */
 #if !(defined(FSL_FEATURE_NETC_HAS_ERRATA_051255) && FSL_FEATURE_NETC_HAS_ERRATA_051255)
     kNETC_TxExtOneStepTs = 0x1 << 1U, /*!< Enable one-step timestamp offload. */
 #endif
@@ -226,7 +228,7 @@ typedef enum _netc_tx_ext_flags
 /*! @brief Get SI information from netc_hw_si_idx_t. */
 #define getSiInstance(si) ((uint8_t)((uint16_t)(si) >> 8U))          /*!< The ENETC instance of this SI. */
 #define getSiNum(si)      ((uint8_t)(((uint16_t)(si) >> 4U) & 0xFU)) /*!< The SI number in the ENETC. */
-#define getSiIdx(si)      ((uint8_t)((uint16_t)(si)&0xFU))           /*!< The actaul index in the netc_hw_si_idx_t. */
+#define getSiIdx(si)      ((uint8_t)((uint16_t)(si) & 0xFU))         /*!< The actaul index in the netc_hw_si_idx_t. */
 
 /*! @brief ENETC index enumerator */
 typedef enum _netc_hw_enetc_idx
@@ -336,6 +338,7 @@ typedef enum _netc_hw_mii_mode
     kNETC_GmiiMode  = 2U, /*!< GMII mode for data interface. */
     kNETC_RmiiMode  = 3U, /*!< RMII mode for data interface. */
     kNETC_RgmiiMode = 4U, /*!< RGMII mode for data interface. */
+    kNETC_SgmiiMode = 5U, /*!< SGMII mode for data interface. */
 } netc_hw_mii_mode_t;
 
 /*! @brief Defines the speed for the *MII data interface. */
@@ -444,7 +447,7 @@ typedef struct _netc_enetc_native_vlan_config_t
     bool enUnderZeroVid; /*!< Enable use the port default VLAN VID when the VID in the packet's is zero */
     bool enUnderNoVlan;  /*!< Enable use the port default VLAN VID when the VLAN tag is not present */
     netc_enetc_vlan_tag_t
-        vlanTag; /*!< Port native outer/inner VLAN tag, valid when enUnderZeroVid or enUnderNoVlan is true */
+        vlanTag;         /*!< Port native outer/inner VLAN tag, valid when enUnderZeroVid or enUnderNoVlan is true */
 } netc_enetc_native_vlan_config_t;
 
 /*! @brief ENETC parser configuration */
@@ -478,7 +481,7 @@ typedef enum _netc_port_tgsl_status
 {
     kNETC_OperListActive = 0x1U, /*!< Port operational gate control list is active. */
     kNETC_AdminListPending =
-        0x2U /*!< Administrative gate control list is pending (configured but not installed yet). */
+        0x2U                     /*!< Administrative gate control list is pending (configured but not installed yet). */
 } netc_port_tgsl_status_t;
 
 /*! @brief Port Tx/Rx discard counter in the datapath processing pipeline or bridge forwarding processing function*/
@@ -537,6 +540,15 @@ typedef struct _netc_port_tg_config
     uint32_t holdSkew;  /*!< Hold-Skew in ns, not effective on ports connected to a pseudo-MAC */
 } netc_port_tg_config_t;
 
+/*! @brief Port time gate config when used with Frame Preemption */
+typedef struct _netc_port_tg_preemption_config
+{
+    uint16_t holdAdvance;    /*!< the amount of time in ns prior to the Set-And-Hold-MAC time slot for asserting a Hold
+                                request. Used with frame Preemption. */
+    uint16_t releaseAdvance; /*!< the amount of time in ns prior to the Set-And-Release-MAC time slot for asserting a
+                                Release request. Used with Frame Preemption. */
+} netc_port_tg_preemption_config;
+
 /*! @brief Port MAC preemption mode */
 typedef enum _netc_hw_preemption_mode
 {
@@ -544,6 +556,30 @@ typedef enum _netc_hw_preemption_mode
     kNETC_PreemptOn64B,        /*!< Frame preemption is enabled, but transmit only preempts frames on 64B boundaries */
     kNETC_PreemptOn4B          /*!< Frame preemption is enabled, but transmit only preempts frames on 4B boundaries */
 } netc_hw_preemption_mode_t;
+
+/*! @brief Port MAC Remote Additional Fragment Size */
+typedef enum _netc_hw_raf_size
+{
+    kNETC_RafSize64 = 0U, /*!< Additional Fragment Size of 64 octets */
+    kNETC_RafSize128,     /*!< Additional Fragment Size of 128 octets */
+    kNETC_RafSize256,     /*!< Additional Fragment Size of 256 octets */
+    kNETC_RafSize512,     /*!< Additional Fragment Size of 512 octets */
+} netc_hw_raf_size_t;
+
+/*! @brief Frame Preemption Portconfig */
+typedef struct _netc_port_preemption_config
+{
+    bool enMergeVerify : 1; /*!< Enable verify the merged preemption frame, need to enable when preemptMode is not zero
+                             */
+    uint8_t mergeVerifyTime : 7; /*!< The nominal wait time between verification attempts in milliseconds, range in 1 ~
+                                    128 */
+    netc_hw_preemption_mode_t preemptMode : 2; /*!< When set to not zero, PMAC frames may be preempted by EMAC frames */
+    netc_hw_raf_size_t raf_size : 2; /*!< Additional Fragment Size. Indicates the smallest sized fragments that can
+                                        be sent on Tx */
+    bool PreemptionActive : 1; /*!< Local preemption active. Indicates whether preemption is active for this port. This
+                                    bit will be set if preemption is both enabled and has completed the verification
+                                  process*/
+} netc_port_preemption_config;
 
 /*! @brief Configuration for the Credit Based Shaped for port TC.
  *
@@ -592,10 +628,10 @@ typedef struct _netc_port_tx_tc_config
 {
     bool enPreemption : 1; /*!< Frames from traffic class are transmitted on the preemptable MAC, not supported on
                           internal port (ENETC 1 port and Switch port 4)*/
-    bool enTcGate : 1; /*!< Enable the traffic class gate when no gate control list is operational, or when time gate
-                            scheduling is disabled. */
-    bool enableTsd : 1;    /*!< Enable Time Specific Departure traffic class, only applicable to ENETC */
-    bool enableCbs : 1;    /*!< Enable Credit based shaper for traffic class  */
+    bool enTcGate : 1;  /*!< Enable the traffic class gate when no gate control list is operational, or when time gate
+                             scheduling is disabled. */
+    bool enableTsd : 1; /*!< Enable Time Specific Departure traffic class, only applicable to ENETC */
+    bool enableCbs : 1; /*!< Enable Credit based shaper for traffic class  */
     netc_port_tc_sdu_config_t sduCfg;
     netc_port_tc_cbs_config_t cbsCfg; /*!< Configure transmit traffic class credit based shaper (PTC0CBSR0/PTC0CBSR1) if
                                   enableCbs set to ture */
@@ -660,23 +696,21 @@ typedef struct _netc_port_ethmac
 {
     bool enableRevMii : 1;                /*!< Enable RevMII mode. */
     netc_port_ts_select_t txTsSelect : 1; /*!< Tx timestamp clock source. */
-    bool isTsPointPhy : 1; /*!< True: Timestamp is captured based on PHY SFD detect pulse on Rx and Tx for 2-step timestamping.
-                                False: Based on SFD detect at boundary of MAC merge layer and pins/protocol gaskets. */
-    netc_hw_mii_mode_t miiMode : 3;       /*!< MII mode. */
-    netc_hw_mii_speed_t miiSpeed : 3;     /*!< MII Speed. */
-    netc_hw_mii_duplex_t miiDuplex : 1;   /*!< MII duplex. */
+    bool isTsPointPhy : 1; /*!< True: Timestamp is captured based on PHY SFD detect pulse on Rx and Tx for 2-step
+                              timestamping. False: Based on SFD detect at boundary of MAC merge layer and pins/protocol
+                              gaskets. */
+    netc_hw_mii_mode_t miiMode : 3;     /*!< MII mode. */
+    netc_hw_mii_speed_t miiSpeed : 3;   /*!< MII Speed. */
+    netc_hw_mii_duplex_t miiDuplex : 1; /*!< MII duplex. */
     bool enTxPad : 1; /*!< Enable ETH MAC Tx Padding, which will pad the frame to a minimum of 60 bytes and append 4
                          octets of FCS. */
     uint8_t rxMinFrameSize : 7; /*!< Receive Minimum Frame Length size in bytes, range in 18 ~ 64, received frames
                                    shorter than 18B are discarded silently. Both for express MAC and preemptable MAC. */
     uint16_t rxMaxFrameSize;    /*!< Receive Maximum Frame Length size in bytes, up to 2000, received frames that exceed
                                    this stated maximum are truncated. Both for express MAC and preemptable MAC. */
-    bool enMergeVerify : 1; /*!< Enable verify the merged preemption frame, need to enable when preemptMode is not zero
-                             */
-    uint8_t mergeVerifyTime : 7; /*!< The nominal wait time between verification attempts in milliseconds, range in 1 ~
-                                    128 */
-    netc_hw_preemption_mode_t preemptMode : 2; /*!< When set to not zero, PMAC frames may be preempted by EMAC frames */
-    bool rgmiiClkStop : 1; /*!< True: RGMII transmit clock is stoppable during low power idle. False: It's not stoppable. */
+    netc_port_preemption_config PreemptionConfig; /*!< Frame Preemption configuration */
+    bool rgmiiClkStop : 1;       /*!< True: RGMII transmit clock is stoppable during low power idle. False: It's not
+                                    stoppable. */
 #if !(defined(FSL_FEATURE_NETC_HAS_ERRATA_051255) && FSL_FEATURE_NETC_HAS_ERRATA_051255)
     bool enOneStepTS : 1;        /*!< Enable IEEE-1588 Single-Step timestamp */
     bool enChUpdate : 1;         /*!< Enable correction UDP checksum when enable Single-Step timestamp */
@@ -684,15 +718,17 @@ typedef struct _netc_port_ethmac
                                     (index to MS byte) */
 #endif
     bool enableHalfDuplexFlowCtrl : 1; /*!< Enable/Disable half-duplex flow control. */
-    uint16_t maxBackPressOn; /*!< Maximum amount of time backpressure can stay asserted before stopping to prevent excess
-                                     defer on link partner, in byte times. */
+    uint16_t maxBackPressOn;  /*!< Maximum amount of time backpressure can stay asserted before stopping to prevent
+                                 excess  defer on link partner, in byte times. */
     uint16_t minBackPressOff; /*!< Minimum amount of time backpressure will stay off after reaching the ON max, before
-                                      backpressure can reassert after checking if icm_pause_notification is still or again
-                                      asserted, in byte times. */
-    uint32_t txWakeupTimeCycleEEE; /*!< Energy Efficient Ethernet feature. Defines the number of NETC cycles (which represents time) required by the PHY to wait before
-                                  transmitting a new frame after the application has indicated it wants to end the low power state. */
-    uint32_t txSleepTimeCycleEEE; /*!< Energy Efficient Ethernet feature. Defines the number of NETC cycles (which represents time) where Tx is idle before mac transmits
-                                  low power EEE. A value of 0 does not activate low power EEE transmission. */
+                                      backpressure can reassert after checking if icm_pause_notification is still or
+                                 again asserted, in byte times. */
+    uint32_t txWakeupTimeCycleEEE; /*!< Energy Efficient Ethernet feature. Defines the number of NETC cycles (which
+                                  represents time) required by the PHY to wait before transmitting a new frame after the
+                                  application has indicated it wants to end the low power state. */
+    uint32_t txSleepTimeCycleEEE;  /*!< Energy Efficient Ethernet feature. Defines the number of NETC cycles (which
+                                   represents time) where Tx is idle before mac transmits  low power EEE. A value of 0
+                                   does not activate low power EEE transmission. */
 } netc_port_ethmac_t;
 
 /*! @brief Defines the Port's Stream Gate Open Gate Check mode. */
@@ -714,8 +750,8 @@ typedef struct _netc_port_common
     uint8_t txMacsecBco; /*!< Port transmit MACSec byte count overhead which due to MACSec encapsulation */
     uint8_t txPpduBco;   /*!< Port transmit PPDU Byte count overhead which includes IPG, SFD and Preamble */
 #if (defined(FSL_FEATURE_NETC_HAS_PORT_FCSEA) && FSL_FEATURE_NETC_HAS_PORT_FCSEA)
-    bool stompFcs : 1; /*!< Enable stomp the FCS error frame, not effective on ports connected to a pseudo-MAC, only
-                          applies to device with ASIL-B safety requirements */
+    bool stompFcs : 1;   /*!< Enable stomp the FCS error frame, not effective on ports connected to a pseudo-MAC, only
+                            applies to device with ASIL-B safety requirements */
 #endif
     netc_port_sg_ogc_mode_t ogcMode : 1; /*!< Stream Gate Open Gate Check mode, 0b is check whether SFD is within the
                          open gate interval, 1b is check whether the entire frame is within the open gate interval */
@@ -881,8 +917,8 @@ typedef enum _netc_tb_cmd
     kNETC_AddOrUpdateEntry = 0xAU, /*!< If the entry exists, is update operation, if not exist, is the Add operation*/
     kNETC_AddAndQueryEntry = 0xCU, /*!< Add operation followed by a query operation */
     kNETC_AddQueryAndUpdateEntry =
-        0xEU /*!< Add operation followed by a query operation, Then, if the entry existed
-                  prior to the Add operation of this command, the Update operation will be performed. */
+        0xEU                       /*!< Add operation followed by a query operation, Then, if the entry existed
+                                        prior to the Add operation of this command, the Update operation will be performed. */
 } netc_tb_cmd_t;
 
 /*! @brief Table Access Method */
@@ -1047,14 +1083,14 @@ typedef union _netc_cmd_bd
         };
         struct
         {
-            netc_tb_cmd_t cmd : 4; /*!< Access table entry command, see @ref netc_tb_cmd_t . */
+            netc_tb_cmd_t cmd : 4;                /*!< Access table entry command, see @ref netc_tb_cmd_t . */
             uint32_t : 8;
             netc_tb_access_mode_t accessType : 2; /*!< Access table entry method, see @ref netc_tb_access_mode_t. */
             uint32_t : 2;                         /*!< RSS Hash high field value. */
             netc_tb_index_t tableId : 8;
-            uint32_t version : 6;   /*!< Protocol Version. */
-            uint32_t enCompInt : 1; /*!< Command Completion Interrupt. */
-            uint32_t resReady : 1;  /*!< Response Ready. */
+            uint32_t version : 6;                 /*!< Protocol Version. */
+            uint32_t enCompInt : 1;               /*!< Command Completion Interrupt. */
+            uint32_t resReady : 1;                /*!< Response Ready. */
         };
         uint32_t reserved[3];
         struct
@@ -1072,26 +1108,26 @@ typedef union _netc_cmd_bd
             uint32_t numMatched : 16; /*!< Number of Entries Matched. */
             uint32_t error : 12;      /*!< Error status. */
             uint32_t : 3;
-            uint32_t resReady : 1; /*!< Response Ready. */
+            uint32_t resReady : 1;    /*!< Response Ready. */
         };
         uint32_t reserved2[4];
     } resp;
     struct
     {
-        uint64_t addr; /*!< Data. */
+        uint64_t addr;          /*!< Data. */
         uint32_t : 31;
-        uint32_t en : 1; /*!< Enable entry. */
+        uint32_t en : 1;        /*!< Enable entry. */
         uint32_t reserved[2];
         uint32_t siBitMap : 16; /*!< Station interfaces 15-0 for which this filter applies. */
         uint32_t : 16;
-        uint32_t index : 16;  /*!< The index refers to an entry location within a table. */
-        uint32_t length : 16; /*!< NA */
-        uint32_t cmd : 8;     /*!< Command. */
-        uint32_t class : 8;   /*!< Class of command. */
+        uint32_t index : 16;    /*!< The index refers to an entry location within a table. */
+        uint32_t length : 16;   /*!< NA */
+        uint32_t cmd : 8;       /*!< Command. */
+        uint32_t class : 8;     /*!< Class of command. */
         uint32_t : 8;
-        uint32_t status : 6; /*!< Status. */
-        uint32_t ci : 1;     /*!< Completion interrupt. */
-        uint32_t sf : 1;     /*!< Short format. */
+        uint32_t status : 6;    /*!< Status. */
+        uint32_t ci : 1;        /*!< Completion interrupt. */
+        uint32_t sf : 1;        /*!< Short format. */
     } generic;
 } netc_cmd_bd_t;
 
@@ -1118,7 +1154,7 @@ typedef struct _netc_tb_common_header
 {
     uint32_t updateActions : 16; /*!< Update Actions */
     uint32_t : 8;
-    uint32_t queryActions : 4; /*!< Query Actions */
+    uint32_t queryActions : 4;   /*!< Query Actions */
     uint32_t : 4;
 } netc_tb_common_header_t;
 
@@ -1168,9 +1204,11 @@ typedef enum _netc_fm_vlan_ar_act
  * @note sqta should be netc_fm_sqt_act_t type, vuda should be netc_fm_vlan_ud_act_t type and vara should be
  *       netc_fm_vlan_ar_act_t type.
  */
-#define NETC_FD_EID_ENCODE_OPTION_0(entryId)    ((uint32_t)(entryId)&0xFFFU)
-#define NETC_FD_EID_ENCODE_OPTION_1(sqta, vuda) ((((uint32_t)(sqta)&0x7U) << 2U) | ((uint32_t)(vuda)&0x3U) | 0x2000U)
-#define NETC_FD_EID_ENCODE_OPTION_2(vara, vid)  ((((uint32_t)(vara)&0x3U) << 12U) | ((uint32_t)(vid)&0xFFFU) | 0x4000U)
+#define NETC_FD_EID_ENCODE_OPTION_0(entryId) ((uint32_t)(entryId) & 0xFFFU)
+#define NETC_FD_EID_ENCODE_OPTION_1(sqta, vuda) \
+    ((((uint32_t)(sqta) & 0x7U) << 2U) | ((uint32_t)(vuda) & 0x3U) | 0x2000U)
+#define NETC_FD_EID_ENCODE_OPTION_2(vara, vid) \
+    ((((uint32_t)(vara) & 0x3U) << 12U) | ((uint32_t)(vid) & 0xFFFU) | 0x4000U)
 
 /*!
  * @brief Define FDB/L2MCF/IS table entry access the primary Egress Treatment table entry group mode
@@ -1215,8 +1253,8 @@ typedef enum _netc_tb_ipf_attr_mask
     kNETC_IPFIpHeaderMask   = 0x80U,  /*!< IP Header Mask */
     kNETC_IPFIpVersionMask  = 0x100U, /*!< IP Version Mask */
     kNETC_IPFIpExtMask      = 0x200U, /*!< IPv4 option / IPv6 extension Mask */
-    kNETC_IPFL4HeaderMask   = 0x400U, /*!< L4 Code Mask */
-    kNETC_IPFWakeOnLanMask  = 0x800U  /*!< Wake-on-LAN Magic Packet Mask */
+    kNETC_IPFL4HeaderMask   = 0xC00U, /*!< L4 Code Mask */
+    kNETC_IPFWakeOnLanMask  = 0x1000U /*!< Wake-on-LAN Magic Packet Mask */
 } netc_tb_ipf_attr_mask_t;
 
 /*! @brief Ingress Port Filter frame attribute Sequence Tag Code */
@@ -1257,35 +1295,35 @@ typedef struct _netc_tb_ipf_keye
         netc_tb_ipf_l4_header_t l4Header : 2; /*!< L4 Header code */
         uint16_t wakeOnLan : 1;               /*!< Wake-on-LAN Magic Packet Present */
         uint16_t : 3;
-    } frameAttr;            /*!< Frame Attribute flags */
-    uint16_t frameAttrMask; /*!< Frame attribute mask, set with OR of @ref netc_tb_ipf_attr_mask_t */
-    uint16_t dscp : 6;      /*!< Differentiated Services Code Point */
-    uint16_t dscpMask : 6;  /*!< Differentiated Services Code Point Mask */
+    } frameAttr;                              /*!< Frame Attribute flags */
+    uint16_t frameAttrMask;                   /*!< Frame attribute mask, set with OR of @ref netc_tb_ipf_attr_mask_t */
+    uint16_t dscp : 6;                        /*!< Differentiated Services Code Point */
+    uint16_t dscpMask : 6;                    /*!< Differentiated Services Code Point Mask */
     uint16_t res1 : 4;
-    uint16_t srcPort : 5;     /*!< Source Port ID */
-    uint16_t srcPortMask : 5; /*!< Source Port ID Mask */
+    uint16_t srcPort : 5;                     /*!< Source Port ID */
+    uint16_t srcPortMask : 5;                 /*!< Source Port ID Mask */
     uint16_t res2 : 6;
-    uint16_t outerVlanTCI;     /*!< Outer VLAN Tag Control Information */
-    uint16_t outerVlanTCIMask; /*!< Outer VLAN Tag Control Information Mask */
-    uint8_t dmac[6];           /*!< Destination MAC Address */
-    uint8_t dmacMask[6];       /*!< Destination MAC Address Mask */
-    uint8_t smac[6];           /*!< Source MAC Address */
-    uint8_t smacMask[6];       /*!< Source MAC Address Mask */
-    uint16_t innerVlanTCI;     /*!< Inner VLAN Tag Control Information */
-    uint16_t innerVlanTCIMask; /*!< Inner VLAN Tag Control Information Mask */
-    uint16_t etherType;        /*!< 2-byte EtherType */
-    uint16_t etherTypeMask;    /*!< EtherType Mask */
-    uint8_t IPProtocol;        /*!< IP Protocol */
-    uint8_t IPProtocolMask;    /*!< IP Protocol Mask */
+    uint16_t outerVlanTCI;                    /*!< Outer VLAN Tag Control Information */
+    uint16_t outerVlanTCIMask;                /*!< Outer VLAN Tag Control Information Mask */
+    uint8_t dmac[6];                          /*!< Destination MAC Address */
+    uint8_t dmacMask[6];                      /*!< Destination MAC Address Mask */
+    uint8_t smac[6];                          /*!< Source MAC Address */
+    uint8_t smacMask[6];                      /*!< Source MAC Address Mask */
+    uint16_t innerVlanTCI;                    /*!< Inner VLAN Tag Control Information */
+    uint16_t innerVlanTCIMask;                /*!< Inner VLAN Tag Control Information Mask */
+    uint16_t etherType;                       /*!< 2-byte EtherType */
+    uint16_t etherTypeMask;                   /*!< EtherType Mask */
+    uint8_t IPProtocol;                       /*!< IP Protocol */
+    uint8_t IPProtocolMask;                   /*!< IP Protocol Mask */
     uint8_t res3[14];
     uint8_t srcIPAddr[16]; /*!< IP Source Address, Bits 127-0: IPv6 source address, Bits 127-96: IPv4 source address */
     uint8_t res4[8];
-    uint8_t srcIPAddrMask[16]; /*!< IP Source Address Mask */
-    uint16_t l4SrcPort;        /*!< L4 Source Port */
-    uint16_t l4SrcPortMask;    /*!< L4 Source Port Mask */
+    uint8_t srcIPAddrMask[16];  /*!< IP Source Address Mask */
+    uint16_t l4SrcPort;         /*!< L4 Source Port */
+    uint16_t l4SrcPortMask;     /*!< L4 Source Port Mask */
     uint8_t res5[4];
-    uint8_t destIPAddr[16]; /*!< IP Destination Address, Bits 127-0: IPv6 source address, Bits 127-96: IPv4 source
-                               address */
+    uint8_t destIPAddr[16];     /*!< IP Destination Address, Bits 127-0: IPv6 source address, Bits 127-96: IPv4 source
+                                   address */
     uint8_t res6[8];
     uint8_t destIPAddrMask[16]; /*!< IP Destination Address Mask*/
     uint16_t l4DestPort;        /*!< L4 Destination Port */
@@ -1330,16 +1368,16 @@ typedef struct _netc_tb_ipf_cfge
     uint32_t odr : 1;                       /*!< Overwrite DR */
     netc_tb_ipf_forward_action_t fltfa : 2; /*!< Filter Forwarding action. */
     uint32_t : 1;
-    uint32_t imire : 1;                   /*!< Ingress Mirroring Enable */
-    uint32_t wolte : 1;                   /*!< Wake-onLAN trigger enable */
-    netc_tb_ipf_filter_action_t flta : 2; /*!< FIlter Action. */
-    uint32_t rpr : 2;                     /*!< Relative Precedent Resolution */
-    uint32_t ctd : 1;                     /*!< Cut through disable. */
-    netc_host_reason_t hr : 4;            /*!< Host Reason metadata when frame is redirected/copied to
-                                            the switch management port */
-    uint32_t timecape : 1;                /*!< Timestam capture enable */
+    uint32_t imire : 1;                     /*!< Ingress Mirroring Enable */
+    uint32_t wolte : 1;                     /*!< Wake-onLAN trigger enable */
+    netc_tb_ipf_filter_action_t flta : 2;   /*!< FIlter Action. */
+    uint32_t rpr : 2;                       /*!< Relative Precedent Resolution */
+    uint32_t ctd : 1;                       /*!< Cut through disable. */
+    netc_host_reason_t hr : 4;              /*!< Host Reason metadata when frame is redirected/copied to
+                                              the switch management port */
+    uint32_t timecape : 1;                  /*!< Timestam capture enable */
     uint32_t : 9;
-    uint32_t fltaTgt; /*!< Target for selected switch forwarding action or filter action*/
+    uint32_t fltaTgt;                       /*!< Target for selected switch forwarding action or filter action*/
 } netc_tb_ipf_cfge_t;
 
 /*! @brief Ingress port filter statistic element */
@@ -1398,7 +1436,7 @@ typedef struct _netc_tb_ipf_config
 
 /*! @brief 2 Bytes VLAN field which may added to the frame Key */
 #define NETC_ISI_VLAN_FRAME_KEY(valid, pcp, vid) \
-    (((uint16_t)((valid)&0x1) << 15U) | ((uint16_t)((pcp)&0x3) << 12U) | ((uint16_t)(vid)&0xFFFU))
+    (((uint16_t)((valid) & 0x1) << 15U) | ((uint16_t)((pcp) & 0x3) << 12U) | ((uint16_t)(vid) & 0xFFFU))
 
 /*! @brief Stream identification table key type */
 typedef enum _netc_tb_isi_key_type
@@ -1416,7 +1454,7 @@ typedef struct _netc_tb_isi_keye
     uint8_t srcPortID : 5;            /*!< Source Port ID, used when kc portp filed is 1. Only for SWITCH */
     uint8_t spm : 1;                  /*!< Source Port Masquerading, used when kc spm filed is 1. Only for SWITCH */
     uint8_t res0[3];
-    uint8_t framekey[16]; /*!< Frame portion of the key. */
+    uint8_t framekey[16];             /*!< Frame portion of the key. */
 } netc_tb_isi_keye_t;
 
 /*! @brief Stream identification table config element */
@@ -1510,14 +1548,14 @@ typedef netc_tb_eteid_access_mode_t netc_tb_is_oeteid_mode_t;
 /*! @brief Ingress Stream table config element */
 typedef struct _netc_tb_is_cfge
 {
-    uint32_t sfe : 1; /*!< Stream Filtering Enable */
+    uint32_t sfe : 1;                 /*!< Stream Filtering Enable */
     uint32_t : 3;
-    uint32_t ipv : 4;      /*!< Internal Priority Value, active when opiv is set to 1 */
-    uint32_t oipv : 1;     /*!< Override internal priority value */
-    uint32_t dr : 2;       /*!< Drop Resilience, active when odr is set to 1 */
-    uint32_t odr : 1;      /*!< Overwrite DR */
-    uint32_t imire : 1;    /*!< Ingress Mirroring Enable, not applicable to ENETC */
-    uint32_t timecape : 1; /*!< Timestamp Capture Enable, not applicable to ENETC */
+    uint32_t ipv : 4;                 /*!< Internal Priority Value, active when opiv is set to 1 */
+    uint32_t oipv : 1;                /*!< Override internal priority value */
+    uint32_t dr : 2;                  /*!< Drop Resilience, active when odr is set to 1 */
+    uint32_t odr : 1;                 /*!< Overwrite DR */
+    uint32_t imire : 1;               /*!< Ingress Mirroring Enable, not applicable to ENETC */
+    uint32_t timecape : 1;            /*!< Timestamp Capture Enable, not applicable to ENETC */
     uint32_t : 1;
     uint32_t sppd : 1;                /*!< Source Port Pruning Disable, not applicable to ENETC */
     netc_tb_is_isq_action_t isqa : 2; /*!< Ingress Sequence Action, not applicable to ENETC */
@@ -1529,7 +1567,7 @@ typedef struct _netc_tb_is_cfge
     netc_tb_is_forward_action_t fa : 3; /*!< Forwad Option */
     netc_tc_sdu_type_t sduType : 2;     /*!< Service Data Unit Type to user for MSDU */
     uint32_t : 3;
-    uint32_t msdu : 16;         /*!< Maximum Service Data Unit */
+    uint32_t msdu : 16;                 /*!< Maximum Service Data Unit */
     uint32_t ifmeLenChange : 7; /*!< Ingress Frame Modification Entry Frame Length Change, specified in unit of bytes
                                    using a 2's complement notation */
     uint32_t eport : 5; /*!< Egress Port which need do egress packet processing, active when oeteid is set to 1, not
@@ -1548,7 +1586,7 @@ typedef struct _netc_tb_is_cfge
     uint32_t ePortBitmap; /*!< Egress Port bitmap, identifies the ports to which the frame is to be forwarding or
                                   ET applicability port bitmap when oETEID = 10b. Not applicable to ENETC */
     uint32_t : 8;
-    uint32_t siMap : 16; /*!< Station Interface Map, only valid for ENETC function when fa field is set to 10b */
+    uint32_t siMap : 16;  /*!< Station Interface Map, only valid for ENETC function when fa field is set to 10b */
     uint32_t : 16;
 } netc_tb_is_cfge_t;
 
@@ -1615,10 +1653,10 @@ typedef struct _netc_tb_isf_cfge
     uint32_t orp : 1;      /*!< Override Rate Policer (instance) ID */
     netc_tc_sdu_type_t sduType : 2; /*!< Service Data Unit Type to user for MSDU */
     uint32_t : 1;
-    uint32_t msdu : 16; /*!< Maximum Service Data Unit */
-    uint32_t rpEID;     /*!< Rate Policer Entry ID, Valid when orp =1. 0xFFFF_FFFF is NULL */
-    uint32_t sgiEID;    /*!< Stream Gate Instance Entry ID, Valid when osgi =1. 0xFFFF_FFFF is NULL */
-    uint32_t iscEID;    /*!< Ingress Stream counter Index. 0xFFFF_FFFF is NULL. */
+    uint32_t msdu : 16;             /*!< Maximum Service Data Unit */
+    uint32_t rpEID;                 /*!< Rate Policer Entry ID, Valid when orp =1. 0xFFFF_FFFF is NULL */
+    uint32_t sgiEID;                /*!< Stream Gate Instance Entry ID, Valid when osgi =1. 0xFFFF_FFFF is NULL */
+    uint32_t iscEID;                /*!< Ingress Stream counter Index. 0xFFFF_FFFF is NULL. */
 } netc_tb_isf_cfge_t;
 
 /*! @brief Ingress Stream Filter table request data buffer */
@@ -1798,13 +1836,13 @@ typedef struct _netc_tb_rp_config
 /*! @brief Ingress Stream Count table statistic element */
 typedef struct _netc_tb_isc_stse
 {
-    uint32_t rxCount; /*!< Receive Count */
+    uint32_t rxCount;          /*!< Receive Count */
     uint32_t res0;
-    uint32_t msduDropCount; /*!< MSDU Drop Count */
+    uint32_t msduDropCount;    /*!< MSDU Drop Count */
     uint32_t res1;
     uint32_t policerDropCount; /*!< Policer Drop Count */
     uint32_t res2;
-    uint32_t sgDropCount; /*!< Stream Gating Drop Count */
+    uint32_t sgDropCount;      /*!< Stream Gating Drop Count */
     uint32_t res3;
 } netc_tb_isc_stse_t;
 
@@ -1926,7 +1964,7 @@ typedef struct _netc_tb_sgi_rsp_data
         netc_tb_sgi_sgise_t sgise;
         struct
         {
-            uint8_t res0[24];
+            uint8_t res0[25];
             netc_tb_sgi_cfge_t cfge;
             netc_tb_sgi_icfge_t icfge;
             uint8_t res1;
@@ -1980,8 +2018,8 @@ typedef struct _netc_sgcl_gate_entry
 /*! @brief Stream Gate Control List table config element */
 typedef struct _netc_tb_sgcl_cfge
 {
-    uint32_t cycleTime; /*!< Cycle Time */
-    uint8_t listLength; /*!< List Length */
+    uint32_t cycleTime;   /*!< Cycle Time */
+    uint8_t listLength;   /*!< List Length */
     uint8_t res0;
     uint16_t extOipv : 1; /*!< Extension (means the stream gate control list ends and before cycleTime restarts)
                              Override Internal Priority Value */
@@ -2190,12 +2228,12 @@ typedef struct _netc_tb_fm_cfge
     netc_tb_fm_outer_dei_act_t outerDeiAct : 2;   /*!< Outer DEI action */
     netc_tb_fm_payload_act_t pldAct : 3; /*!< Payload Actions, Not applicable for ingress frame modifications */
     uint32_t : 5;
-    uint8_t pldOffset; /*!< Payload Offset, valid if outerPldAct = 010b */
+    uint8_t pldOffset;                   /*!< Payload Offset, valid if outerPldAct = 010b */
     uint8_t res1[3];
     uint16_t fmdBytes; /*!< Frame Modification Bytes, valid if outerPldAct = 001b,010b or l2Act = 1b */
     uint16_t res2;
-    uint32_t fmdEID; /*!< Frame Modification Data Entry ID, valid if outerPldAct = 001b,010b or l2Act = 1b. 0xFFFF is
-                        null pointer */
+    uint32_t fmdEID;   /*!< Frame Modification Data Entry ID, valid if outerPldAct = 001b,010b or l2Act = 1b. 0xFFFF is
+                          null pointer */
 } netc_tb_fm_cfge_t;
 
 /*! @brief Frame Modification table request data buffer */
@@ -2268,7 +2306,7 @@ typedef struct _netc_tb_fmd_data
 /*! @brief Frame Modification data table entry update config */
 typedef struct _netc_tb_fmd_update_config
 {
-    uint32_t res; /*!< Hold for request->commonHeader */
+    uint32_t res;   /*!< Hold for request->commonHeader */
     uint32_t entryID;
     uint8_t cfge[]; /*!< Configuration Element Data size is variable */
 } netc_tb_fmd_update_config_t;
@@ -2301,18 +2339,18 @@ typedef struct _netc_tb_vf_cfge
     uint32_t portMembership : 24; /*!< Port Membership Bitmap */
     uint32_t stgID : 4;           /*!< Spanning Tree Group Member ID */
     uint32_t : 4;
-    uint32_t fid : 12; /*!< Filtering ID */
+    uint32_t fid : 12;            /*!< Filtering ID */
     uint32_t : 4;
-    uint32_t mlo : 3; /*!< MAC Learning Options */
-    uint32_t mfo : 2; /*!< MAC Forwarding Options */
+    uint32_t mlo : 3;             /*!< MAC Learning Options */
+    uint32_t mfo : 2;             /*!< MAC Forwarding Options */
     uint32_t : 1;
-    uint32_t ipmfe : 1;  /*!< IP Multicast Filtering Enable */
-    uint32_t ipmfle : 1; /*!< IP Multicast Flooding Enable */
+    uint32_t ipmfe : 1;           /*!< IP Multicast Filtering Enable */
+    uint32_t ipmfle : 1;          /*!< IP Multicast Flooding Enable */
     uint32_t : 8;
-    uint32_t etaPortBitmap : 24; /*!< Egress Treatment Applicability Port Bitmap for the secondary
-                                    Egress Treatment group */
+    uint32_t etaPortBitmap : 24;  /*!< Egress Treatment Applicability Port Bitmap for the secondary
+                                     Egress Treatment group */
     uint32_t : 8;
-    uint32_t baseETEID; /*!< Base Egress Treatment Entry ID for the secondary Egress Treatment group */
+    uint32_t baseETEID;           /*!< Base Egress Treatment Entry ID for the secondary Egress Treatment group */
 } netc_tb_vf_cfge_t;
 
 /*! @brief Vlan Filter table search criteria format */
@@ -2392,7 +2430,7 @@ typedef struct _netc_tb_fdb_keye
     uint8_t macAddr[6]; /*!< Destination MAC address of the frame for MAC forwarding lookups and the source MAC address
                            of the frame for MAC learning lookups */
     uint8_t res0[2];
-    uint32_t fid : 12; /*!< Filtering ID, is obtained from an ingress lookup into the VLAN Filter table */
+    uint32_t fid : 12;  /*!< Filtering ID, is obtained from an ingress lookup into the VLAN Filter table */
     uint32_t : 20;
 } netc_tb_fdb_keye_t;
 
@@ -2406,9 +2444,9 @@ typedef struct _netc_tb_fdb_cfge
     uint32_t ePort : 5;                   /*!< Egress Ports, active when oETEid = 01b or ctd = 01b */
     uint32_t iMirE : 1;                   /*!< Ingress Mirroring Enable */
     uint32_t : 1;
-    netc_tb_fdb_ctd_mode_t ctd : 2; /*!< Cut-Through Disable */
-    uint32_t dynamic : 1;           /*!< Static or Dynamic Entry, 0b = Static entry, 1b = Dynamic entry */
-    uint32_t timeCapE : 1;          /*!< Timestamp Capture Enable when set */
+    netc_tb_fdb_ctd_mode_t ctd : 2;       /*!< Cut-Through Disable */
+    uint32_t dynamic : 1;                 /*!< Static or Dynamic Entry, 0b = Static entry, 1b = Dynamic entry */
+    uint32_t timeCapE : 1;                /*!< Timestamp Capture Enable when set */
     uint32_t : 19;
     uint32_t etEID; /*!< Base egress treatment table entry id for primary Egress Treatment group, is valid if the oETEID
                        field is set to value other than kNETC_FDBNoEPP. 0xFFFFFFFF is NULL. */
@@ -2455,7 +2493,7 @@ typedef struct _netc_tb_fdb_search_criteria
     netc_tb_fdb_cfge_t cfge; /*!< Configuration Element data which used to match against the table entries */
     struct
     {
-        netc_tb_fdb_acte_t acte;            /*!< Activity Element data which used to match against the table entries */
+        netc_tb_fdb_acte_t acte;             /*!< Activity Element data which used to match against the table entries */
         netc_tb_fdb_sc_keye_mc_t keyeMc : 2; /*!< Key Element data match criteria */
         uint8_t : 6;
         netc_tb_fdb_sc_cfge_mc_t cfgeMc : 3; /*!< Configuration Element data match criteria */
@@ -2476,7 +2514,7 @@ typedef struct _netc_tb_fdb_req_data
         netc_tb_fdb_keye_t keye;                 /*!< Active when access method is kNETC_ExactKeyMatch */
         netc_tb_fdb_search_criteria_t sCriteria; /*!< Active when access method is kNETC_Search */
     };
-    netc_tb_fdb_cfge_t cfge; /*!< Present only for commands which perform an update or add */
+    netc_tb_fdb_cfge_t cfge;                     /*!< Present only for commands which perform an update or add */
 } netc_tb_fdb_req_data_t;
 
 /*! @brief FDB table request response data buffer */
@@ -2527,10 +2565,10 @@ typedef struct _netc_tb_l2mcf_keye
 {
     netc_tb_l2mcf_key_type_t keyType : 4; /*!< Key Type */
     uint32_t : 12;
-    uint32_t fid : 12; /*!< Filtering ID */
+    uint32_t fid : 12;                    /*!< Filtering ID */
     uint32_t : 4;
-    uint32_t ipv4DestAddr; /*!< IPv4 Destination Address */
-    uint32_t ipv4SrcAddr;  /*!< IPv4 Source Address */
+    uint32_t ipv4DestAddr;                /*!< IPv4 Destination Address */
+    uint32_t ipv4SrcAddr;                 /*!< IPv4 Source Address */
 } netc_tb_l2mcf_keye_t;
 
 /*! @brief L2 IPV4 Multicast Filter table search criteria Key Element Match Criteria */
@@ -2687,7 +2725,7 @@ typedef struct _netc_tb_iseqg_config
 typedef enum _netc_tb_iseqg_update_action
 {
     kNETC_ISEQGCfgEUpdate = 0x1U, /*!< Configuration Element Update */
-    kNETC_ISEQGSgsEUpdate  = 0x2U, /*!< Sequence Generation Element Update */
+    kNETC_ISEQGSgsEUpdate = 0x2U, /*!< Sequence Generation Element Update */
 } netc_tb_iseqg_update_action_t;
 
 #if !(defined(__GNUC__) || defined(__ICCARM__))
@@ -2715,11 +2753,11 @@ typedef struct _netc_tb_eseqr_cfge
     uint32_t sqrType : 1; /*!< Sequence Recovery Function type, 0b = Sequence recovery function, 1b = Individual
                              recovery function */
     uint32_t : 2;
-    uint32_t sqrHl : 7; /*!< Sequence Recovery History Length, valid if sqrAlg = 0b */
+    uint32_t sqrHl : 7;   /*!< Sequence Recovery History Length, valid if sqrAlg = 0b */
     uint32_t : 1;
     uint32_t sqrFwl : 12; /*!< Sequence Recovery Future Window Length, valid if sqrAlg = 0b */
     uint32_t : 4;
-    uint32_t sqrTp : 12; /*!< Sequence Timeout Period, the unit is 1.048576 milliseconds */
+    uint32_t sqrTp : 12;  /*!< Sequence Timeout Period, the unit is 1.048576 milliseconds */
     uint32_t : 20;
 } netc_tb_eseqr_cfge_t;
 
@@ -2738,10 +2776,10 @@ typedef struct _netc_tb_eseqr_stse
 /*! @brief Egress Sequence Recovery table sequence recovery state element */
 typedef struct _netc_tb_eseqr_srse
 {
-    uint32_t sqrNum : 16; /*!< Sequence Recovery Number */
-    uint32_t takeAny : 1; /*!< Take Any */
-    uint32_t lce : 1;     /*!< Lost Count Enable */
-    uint32_t sqrTs : 12;  /*!< Sequence Recovery Timestamp */
+    uint32_t sqrNum : 16;   /*!< Sequence Recovery Number */
+    uint32_t takeAny : 1;   /*!< Take Any */
+    uint32_t lce : 1;       /*!< Lost Count Enable */
+    uint32_t sqrTs : 12;    /*!< Sequence Recovery Timestamp */
     uint32_t : 2;
     uint32_t sqrHistory[4]; /*!< Recovery History bit vector, each bit corresponding to sequence numbers, bit 1 means a
                                packet with that sequence number has been previously received */
@@ -2820,8 +2858,8 @@ typedef struct _netc_tgs_gate_entry
     {
         struct
         {
-            uint32_t tcGateState : 8; /*!< Traffic Class Gate States for Gate Entry, 8 bits for 8 Traffic
-                                           Class , 0b means Gate closed, 1b means Gate open */
+            uint32_t tcGateState : 8;             /*!< Traffic Class Gate States for Gate Entry, 8 bits for 8 Traffic
+                                                       Class , 0b means Gate closed, 1b means Gate open */
             uint32_t : 8;
             netc_tb_tgs_gate_type_t operType : 4; /*!< Gate operation type ( IEEE 802.1Q-2018) field for gate
                                                     control list entry i */
@@ -2939,16 +2977,16 @@ typedef struct _netc_tb_et_cfge
 {
     netc_tb_et_efm_mode_t efmMode : 2; /*!< Egress Frame Modification mode */
     uint8_t : 2;
-    netc_tb_et_esq_act_t esqa : 2; /*!< Egress Sequence Actions */
-    netc_tb_et_ec_act_t eca : 2;   /*!< Egress Counter Action */
-    uint8_t : 1;                   /*!< Reserve for data align */
-    uint8_t efmLenChange : 7;      /*!< Egress Frame Modification Length Change, specified in units of bytes using a 2's
-                                       complement notation */
-    uint16_t efmDataLen : 11;      /*!< Egress Frame Modification Data Length */
+    netc_tb_et_esq_act_t esqa : 2;     /*!< Egress Sequence Actions */
+    netc_tb_et_ec_act_t eca : 2;       /*!< Egress Counter Action */
+    uint8_t : 1;                       /*!< Reserve for data align */
+    uint8_t efmLenChange : 7; /*!< Egress Frame Modification Length Change, specified in units of bytes using a 2's
+                                  complement notation */
+    uint16_t efmDataLen : 11; /*!< Egress Frame Modification Data Length */
     uint16_t : 5;
-    uint32_t efmEID;     /*!< Egress Frame Modification Entry Id */
-    uint32_t ecEID;      /*!< Egress Count Table Entry ID */
-    uint32_t esqaTgtEID; /*!< Egress Sequence Actions Target Entry ID, active when esqa = 10b */
+    uint32_t efmEID;          /*!< Egress Frame Modification Entry Id */
+    uint32_t ecEID;           /*!< Egress Count Table Entry ID */
+    uint32_t esqaTgtEID;      /*!< Egress Sequence Actions Target Entry ID, active when esqa = 10b */
 } netc_tb_et_cfge_t;
 
 /*! @brief Egress Treatment table request data buffer */
@@ -2992,7 +3030,7 @@ typedef struct _netc_tb_et_config
 #endif
 /*! @brief ETM Class Queue table entry ID macro, cqID is represents the Class Queue ID ,rang in 0 ~ 7, portID is Switch
  * ID, rang in 0 ~ 4 */
-#define NETC_TB_ETM_CQ_ENTRY_ID(portID, cqID) (((uint32_t)(portID) << 4U) | ((cqID)&0x7U))
+#define NETC_TB_ETM_CQ_ENTRY_ID(portID, cqID) (((uint32_t)(portID) << 4U) | ((cqID) & 0x7U))
 
 /*! @brief ETM Class Queue table Update Actions */
 typedef enum _netc_tb_etmcq_update_action
@@ -3092,7 +3130,7 @@ typedef struct _netc_tb_etmcs_cfge
     netc_tb_etmcs_ca_assg_t cqAssg : 4; /*!< Class Queue Assignment, input 0 to 7 are weighted fair whereby input 8 to
                                            15 are strict priority */
     uint32_t : 12;
-    uint32_t oal : 11; /*!< Overead accounting length */
+    uint32_t oal : 11;                  /*!< Overead accounting length */
     uint32_t : 5;
     struct
     {
@@ -3142,7 +3180,7 @@ typedef struct _netc_tb_etmcs_config
 #endif
 /*! @brief ETM Congestion Group table entry ID macro, cgID is represents the Congestion Group ID ,rang in 0 ~ 7, portID
  * is Switch ID, rang in 0 ~ 4 */
-#define NETC_TB_ETM_CG_ENTRY_ID(portID, cgID) (((uint32_t)(portID) << 4U) | ((cgID)&0x7U))
+#define NETC_TB_ETM_CG_ENTRY_ID(portID, cgID) (((uint32_t)(portID) << 4U) | ((cgID) & 0x7U))
 
 /*! @brief ETM Congestion Group table config element */
 typedef struct _netc_tb_etmcg_cfge
@@ -3157,7 +3195,7 @@ typedef struct _netc_tb_etmcg_cfge
         uint16_t tn : 5; /*!< TA */
         uint16_t ta : 8; /*!< Tn */
         uint16_t : 3;
-    } tdDRThresh[4]; /*!< Tail Drop Threshold (TA * 2^Tn) for DR0 ~ DR3 Frames, valid if tdDrnEn = 1b */
+    } tdDRThresh[4];     /*!< Tail Drop Threshold (TA * 2^Tn) for DR0 ~ DR3 Frames, valid if tdDrnEn = 1b */
 } netc_tb_etmcg_cfge_t;
 
 /*! @brief ETM Congestion Group table statistic element */
@@ -3248,7 +3286,7 @@ typedef struct _netc_tb_ec_data
 
 /*! @brief Buffer pool and shared buffer pool threshold macro, the threshold = MANT*2^EXP, uint is internal memory words
  * (avergae of 20 bytes each) */
-#define NETC_TB_BP_THRESH(mant, exp) (((uint32_t)((mant)&0xFF) << 4U) | ((exp)&0xF))
+#define NETC_TB_BP_THRESH(mant, exp) (((uint32_t)((mant) & 0xFF) << 4U) | ((exp) & 0xF))
 
 /*! @brief Buffer Pool Flow Control (FC) Configuration */
 typedef enum _netc_tb_bp_fc_cfg
@@ -3267,23 +3305,23 @@ typedef struct _netc_tb_bp_cfge
                        pool */
     netc_tb_bp_fc_cfg_t gcCfg : 2; /*!< Flow Control (FC) Configuration */
     uint8_t : 5;
-    uint8_t pfcVector;       /*!< Priority Flow Control (PFC) Vector, not support in NETC 3.0 and 3.1 version */
-    uint16_t maxThresh : 12; /*!< Maximum Threshold, value 0 means disable maximum threshold checking, use
-                                NETC_TB_BP_THRESH macro to set this value */
+    uint8_t pfcVector;             /*!< Priority Flow Control (PFC) Vector, not support in NETC 3.0 and 3.1 version */
+    uint16_t maxThresh : 12;       /*!< Maximum Threshold, value 0 means disable maximum threshold checking, use
+                                      NETC_TB_BP_THRESH macro to set this value */
     uint16_t : 4;
-    uint16_t fcOnThresh : 12; /*!< Flow Control On Threshold, If the buffer pool usage crosses this threshold, and if
-                                fcOnThresh is greater than fcOffThresh, the flow control state of the buffer pool
-                                is set to 1, use NETC_TB_BP_THRESH macro to set this value. */
+    uint16_t fcOnThresh : 12;  /*!< Flow Control On Threshold, If the buffer pool usage crosses this threshold, and if
+                                 fcOnThresh is greater than fcOffThresh, the flow control state of the buffer pool
+                                 is set to 1, use NETC_TB_BP_THRESH macro to set this value. */
     uint16_t : 4;
     uint16_t fcOffThresh : 12; /*!< Flow Control Off Threshold, If buffer pool usage drops to this threshold or below,
                                       the flow control state of the buffer pool is set to 0, , use NETC_TB_BP_THRESH
                                   macro to set this value */
     uint16_t : 4;
-    uint32_t sbpThresh : 12; /*!< Shared Buffer Pool Threshold, use NETC_TB_BP_THRESH macro to set this value */
+    uint32_t sbpThresh : 12;   /*!< Shared Buffer Pool Threshold, use NETC_TB_BP_THRESH macro to set this value */
     uint32_t : 20;
-    uint32_t sbpEid;  /*!< Shared Buffer Pool Entry ID, valid if sbpEn is true */
-    uint32_t fcPorts; /*!< Flow Control Port bitmap, indicates which ports are to be flow controlled for this
-                            buffer pool */
+    uint32_t sbpEid;           /*!< Shared Buffer Pool Entry ID, valid if sbpEn is true */
+    uint32_t fcPorts;          /*!< Flow Control Port bitmap, indicates which ports are to be flow controlled for this
+                                     buffer pool */
 } netc_tb_bp_cfge_t;
 
 /*! @brief Buffer Pool table State Element Data*/
@@ -3343,12 +3381,12 @@ typedef struct _netc_tb_bp_config
 typedef struct _netc_tb_sbp_cfge
 {
     uint32_t : 16;
-    uint32_t maxThresh : 12; /*!< Maximum Threshold, If shared buffer pool usage is greater than or equal to this
-                                threshold, use NETC_TB_BP_THRESH macro to set this value */
+    uint32_t maxThresh : 12;   /*!< Maximum Threshold, If shared buffer pool usage is greater than or equal to this
+                                  threshold, use NETC_TB_BP_THRESH macro to set this value */
     uint32_t : 4;
-    uint16_t fcOnThresh : 12; /*!< Flow Control On Threshold, If the shared buffer pool usage crosses this threshold,
-                                and if fcOnThresh is greater than fcOffThresh, the flow control state of the buffer pool
-                                is set to 1, use NETC_TB_BP_THRESH macro to set this value.  */
+    uint16_t fcOnThresh : 12;  /*!< Flow Control On Threshold, If the shared buffer pool usage crosses this threshold,
+                                 and if fcOnThresh is greater than fcOffThresh, the flow control state of the buffer pool
+                                 is set to 1, use NETC_TB_BP_THRESH macro to set this value.  */
     uint16_t : 4;
     uint16_t fcOffThresh : 12; /*!< Flow Control Off Threshold, If shared buffer pool usage drops to this threshold or
                                   below, the flow control state of the buffer pool is set to 0, use NETC_TB_BP_THRESH
@@ -3444,7 +3482,7 @@ typedef union _netc_tb_data_buffer
  * @{
  */
 /*! @brief Macro to cover VLAN PCP, DEI value to internal used pcpDei value. */
-#define NETC_VLAN_PCP_DEI_VALUE(pcp, dei) (((uint8_t)((pcp)&0x7U) << 1U) | ((dei)&0x1U))
+#define NETC_VLAN_PCP_DEI_VALUE(pcp, dei) (((uint8_t)((pcp) & 0x7U) << 1U) | ((dei) & 0x1U))
 
 /*! @brief VLAN Ethertypes. */
 typedef enum _netc_hw_enetc_si_vlan_type
@@ -3485,11 +3523,11 @@ typedef struct _netc_hw_enetc_si_config
     uint32_t ringPerBdrGroup : 3; /*!< The ring number in every Rx BD ring group, range in 1 ~ 8, active when
                                     rxBdrGroupNum not equal zero. */
     netc_hw_enetc_si_rxr_group
-        defaultRxBdrGroup; /*!< The selected Rx BD ring group, active when rxBdrGroupNum not equal zero. */
+        defaultRxBdrGroup;        /*!< The selected Rx BD ring group, active when rxBdrGroupNum not equal zero. */
 
-    uint8_t vlanToIpvMap[16]; /*!< Frame VLAN pcp|dei to IPV mapping, active when valnToIpvEnable is true. */
-    uint8_t ipvToRingMap[8];  /*!< BD ring used within the default Rx BD ring group for IPV n, active when rxBdrGroupNum
-                                 not equal zero. */
+    uint8_t vlanToIpvMap[16];     /*!< Frame VLAN pcp|dei to IPV mapping, active when valnToIpvEnable is true. */
+    uint8_t ipvToRingMap[8]; /*!< BD ring used within the default Rx BD ring group for IPV n, active when rxBdrGroupNum
+                                not equal zero. */
     uint8_t vsiTcToTC[8]; /*!< Maps the VSI traffic class to transmit traffic class, done after the ENETC txPrio to TC
                              mapping, only available for VSI. */
     bool enSIBaseVlan;    /*!< Enable use SI-based VLAN information. */
@@ -3565,24 +3603,40 @@ typedef union _netc_tx_bd
         uint32_t timestamp : 30; /*!< IEEE1588 PTP one-step timestamp. */
         uint32_t : 2;            /*!< Ignore 2-bit MSB. */
         uint16_t : 14;
-        uint16_t tpid : 2; /*!< VLAN TPID type, see @ref netc_vlan_tpid_select_t. */
-        uint16_t vid : 12; /*!< VLAN ID. */
-        uint16_t dei : 1;  /*!< VLAN DEI. */
-        uint16_t pcp : 3;  /*!< VLAN PCP. */
+        uint16_t tpid : 2;       /*!< VLAN TPID type, see @ref netc_vlan_tpid_select_t. */
+        uint16_t vid : 12;       /*!< VLAN ID. */
+        uint16_t dei : 1;        /*!< VLAN DEI. */
+        uint16_t pcp : 3;        /*!< VLAN PCP. */
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+        uint32_t lsoMaxSegSize : 14;
+        uint32_t : 2;
+        uint32_t frameLenExt : 4;
+        uint32_t : 12;
+#else
         uint32_t : 32;
+#endif
         uint16_t : 16;
-        uint8_t eFlags; /*!< Tx extension flags. */
+        uint8_t eFlags;      /*!< Tx extension flags. */
         uint8_t : 7;
         uint8_t isFinal : 1; /*!< Final BD flag. */
     } ext;
     struct
     {
-        uint32_t timestamp;   /*!< Timestamp write back. */
+        uint32_t timestamp; /*!< Timestamp write back. */
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+        uint32_t : 32;
+#else
         uint32_t txtsid : 16; /*!/ Transmit timestamp identifier, only active on Switch management ENETC. */
         uint32_t : 16;
+#endif
         uint32_t : 32;
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+        uint32_t lsoErrCnt : 4;
+        uint32_t : 12;
+#else
         uint32_t : 16;
-        uint32_t status : 9; /*!< Status. */
+#endif
+        uint32_t status : 9;  /*!< Status. */
         uint32_t : 1;
         uint32_t written : 1; /*!< Write-back flag. */
         uint32_t : 5;
@@ -3608,24 +3662,24 @@ typedef union _netc_rx_bd
         {
             struct
             {
-                uint32_t srcPort : 5; /*!< Source port received from switch management port. */
+                uint32_t srcPort : 5;  /*!< Source port received from switch management port. */
                 uint32_t : 3;
                 uint32_t rssHash : 24; /*!< RSS Hash high field value. */
             };
-            uint32_t rssHashSwt; /*!< RSS hash while not used as switch management port. */
+            uint32_t rssHashSwt;       /*!< RSS hash while not used as switch management port. */
         };
-        uint16_t bufLen;   /*!< Length of received buffer. */
-        uint16_t vid : 12; /*!< VLAN ID. */
-        uint16_t dei : 1;  /*!< VLAN DEI. */
-        uint16_t pcp : 3;  /*!< VLAN PCP. */
-        uint8_t tpid : 2;  /*!< VLAN TPID. */
-        uint8_t hr : 4;    /*!< Host Reason. */
+        uint16_t bufLen;               /*!< Length of received buffer. */
+        uint16_t vid : 12;             /*!< VLAN ID. */
+        uint16_t dei : 1;              /*!< VLAN DEI. */
+        uint16_t pcp : 3;              /*!< VLAN PCP. */
+        uint8_t tpid : 2;              /*!< VLAN TPID. */
+        uint8_t hr : 4;                /*!< Host Reason. */
         uint8_t : 2;
-        uint8_t flags; /*!< Rx information flags. */
-        uint8_t error; /*!< Rx error code. */
+        uint8_t flags;                 /*!< Rx information flags. */
+        uint8_t error;                 /*!< Rx error code. */
         uint8_t : 6;
-        uint8_t isReady : 1; /*!< Received data ready flag. */
-        uint8_t isFinal : 1; /*!< Final BD flag. */
+        uint8_t isReady : 1;           /*!< Received data ready flag. */
+        uint8_t isFinal : 1;           /*!< Final BD flag. */
     } writeback;
     struct
     {
@@ -3633,20 +3687,22 @@ typedef union _netc_rx_bd
         uint32_t : 32;
         uint64_t : 64;
     } ext;
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     struct
     {
         uint32_t timestamp; /*!< Switch response timestamp. */
         uint32_t : 32;
-        uint16_t txtsid; /*!< Transmit timestamp identifier. */
+        uint16_t txtsid;    /*!< Transmit timestamp identifier. */
         uint16_t : 16;
         uint32_t : 2;
-        uint32_t hr : 4; /*!< Host Reason. */
+        uint32_t hr : 4;      /*!< Host Reason. */
         uint32_t : 10;
-        uint32_t error : 8;
+        uint32_t error : 8;   /*!< Error status code. */
         uint32_t : 6;
         uint32_t isReady : 1; /*!< Received data ready flag. */
         uint32_t isFinal : 1; /*!< Final BD flag. */
     } resp;
+#endif
 } netc_rx_bd_t;
 
 /*! @brief Configuration for the SI Tx Buffer Descriptor Ring Configuration. */
@@ -3980,6 +4036,17 @@ typedef struct _netc_switch_inuse_fdb_statistic
     uint16_t dynamicEntries;    /*!< Number of dynamic FDB entries in-use (hash-based and CAM-based entries). */
     uint16_t dynamicEntriesHWM; /*!< High water mark of dynamic entries in-use in the FDB table. */
 } netc_switch_inuse_fdb_statistic_t;
+
+/*! @brief Port seamless redundancy configuration */
+typedef struct _netc_swt_port_sr_config
+{
+    uint16_t isqEID;
+    uint8_t pathId;
+    bool txSqta;
+    bool srcPortFlt;
+    bool sdfa;
+    bool srPort;
+} netc_swt_port_sr_config_t;
 
 /*! @} */ // end of netc_hw_switch
 #if !(defined(__GNUC__) || defined(__ICCARM__))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -233,9 +233,9 @@ static uint16_t EP_RxL2MFQueryDeleteEMTableEntry(ep_handle_t *handle, uint8_t si
         }
         else
         {
-            m = 6U * i;
+            m                  = 6U * i;
             cmdBd.generic.addr = ((uint64_t)macAddr[m + 4U] << 32U) + ((uint64_t)macAddr[m + 5U] << 40U) +
-                  *(uint32_t *)(uintptr_t)&macAddr[m];
+                                 *(uint32_t *)(uintptr_t)&macAddr[m];
         }
 
         cmdBd.generic.addr     = 0;
@@ -1058,7 +1058,7 @@ void EP_PsiHandleRxMsg(ep_handle_t *handle, uint8_t vsi, netc_psi_rx_msg_t *msgI
     ENETC_SI_Type *base       = handle->hw.si;
     bool notify               = false;
     uint32_t crc;
-    hal_crc_config_t config   = {
+    hal_crc_config_t config = {
         .crcSize            = 2U,
         .crcStartByte       = 2U,
         .crcRefIn           = KHAL_CrcInputNoRef,

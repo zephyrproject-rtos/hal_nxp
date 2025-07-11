@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,9 +31,9 @@ typedef enum _netc_hw_si_idx
 /*! @brief Ethernet MAC port resource for the NETC module */
 typedef enum _netc_hw_eth_port_idx
 {
-    kNETC_ENETC0EthPort   = 0U, /*!< Ethernet MAC port for ENETC0 */
-    kNETC_ENETC1EthPort   = 1U, /*!< Ethernet MAC port for ENETC1 */
-    kNETC_ENETC2EthPort   = 2U, /*!< Ethernet MAC port for ENETC2 */
+    kNETC_ENETC0EthPort = 0U, /*!< Ethernet MAC port for ENETC0 */
+    kNETC_ENETC1EthPort = 1U, /*!< Ethernet MAC port for ENETC1 */
+    kNETC_ENETC2EthPort = 2U, /*!< Ethernet MAC port for ENETC2 */
 } netc_hw_eth_port_idx_t;
 
 /*!
@@ -61,12 +61,4 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
  */
 uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port);
 
-/*!
- * @brief Preinit VSIs
- *
- * @param hw      The enetc hw handle.
- * @param si      The SI object.
- * @return status_t
- */
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
 #endif /* _FSL_NETC_SOC_H_ */
