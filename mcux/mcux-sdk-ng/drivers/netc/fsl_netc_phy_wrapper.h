@@ -36,4 +36,27 @@ typedef enum _phy_mode
  */
 status_t NETC_PHYInit(netc_mdio_handle_t *handle, phy_mode_t mode);
 
+/*!
+ * @brief NETC PHY WRAPPER register bits write
+ *
+ * @param handle  mdio handle.
+ * @param pcs  pcs.
+ * @param reg  register address.
+ * @param mask mask to write.
+ * @param val  value to write.
+ * @return status_t
+ */
+status_t NETC_PHYWriteRegBits(
+    netc_mdio_handle_t *handle, bool pcs, volatile uint16_t *reg, uint16_t mask, uint16_t val);
+
+/*!
+ * @brief NETC PHY WRAPPER register read
+ *
+ * @param handle  mdio handle.
+ * @param pcs  pcs.
+ * @param reg  register address.
+ * @param val  read value.
+ * @return status_t
+ */
+status_t NETC_PHYReadReg(netc_mdio_handle_t *handle, bool pcs, const volatile uint16_t *reg, uint16_t *val);
 #endif /* _FSL_NETC_PHY_WRAPPER_H_ */
