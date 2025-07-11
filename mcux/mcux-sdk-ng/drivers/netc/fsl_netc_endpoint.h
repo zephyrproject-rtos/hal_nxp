@@ -1477,12 +1477,14 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
 static inline void EP_WaitUnitilTxComplete(ep_handle_t *handle, uint8_t ring)
 {
     uint8_t hwRing = ring;
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
         hwRing++;
     }
+#endif
     while (handle->hw.si->BDR[hwRing].TBCIR != handle->txBdRing[ring].producerIndex)
     {
     }
