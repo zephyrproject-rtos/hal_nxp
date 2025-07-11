@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,7 +11,8 @@
 
 /*!
  * @brief Software reset NETC module
- * Software should follow these steps when initiating a soft reset to avoid hanging any outstanding transactions in the system.
+ * Software should follow these steps when initiating a soft reset to avoid hanging any outstanding transactions in the
+ * system.
  * - Software disables MAC receive function(s).
  * - Software sets the soft reset bit NETCRR[SR]=1.
  *   + NETC stops further prefetching of BDs
@@ -19,7 +20,8 @@
  * - Software waits for NETC to complete any in-flight transmit frames processing.
  *   + If there is use of time gating or credit based shaping, worst case wait time is SaTGSLR/EaTGSLR[MIN_LOOKAHEAD] +
  *     PTGSATOR[ADV_TIME_OFFSET] + Transmit(MAX_SDU) + Writeback BD.
- *   + If there is no use of time gating or credit based shaping, worst case wait time is Transmit(MAX_SDU) + Writeback BD.
+ *   + If there is no use of time gating or credit based shaping, worst case wait time is Transmit(MAX_SDU) + Writeback
+ * BD.
  * - Software waits for either:
  *   + 100 ms (as per PCIe specification).
  *   + Shortest possible reset time as defined by IERB register NETCFLRCR.

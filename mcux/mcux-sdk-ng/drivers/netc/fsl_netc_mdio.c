@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -258,8 +258,7 @@ static void NETC_PIMDIO_C45Write(
     NETC_ETH_LINK_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t data)
 {
     base->PM0_MDIO_CFG |= NETC_ETH_LINK_PM0_MDIO_CFG_ENC45_MASK;
-    base->PM0_MDIO_CTL = NETC_ETH_LINK_PM0_MDIO_CTL_PORT_ADDR(portAddr) |
-                         NETC_ETH_LINK_PM0_MDIO_CTL_DEV_ADDR(devAddr);
+    base->PM0_MDIO_CTL  = NETC_ETH_LINK_PM0_MDIO_CTL_PORT_ADDR(portAddr) | NETC_ETH_LINK_PM0_MDIO_CTL_DEV_ADDR(devAddr);
     base->PM0_MDIO_ADDR = NETC_ETH_LINK_PM0_MDIO_ADDR_REGADDR(regAddr);
 
     while (NETC_PIMDIO_IsSMIBusy(base))
@@ -276,8 +275,7 @@ static status_t NETC_PIMDIO_C45Read(
     NETC_ETH_LINK_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t *pData)
 {
     base->PM0_MDIO_CFG |= NETC_ETH_LINK_PM0_MDIO_CFG_ENC45_MASK;
-    base->PM0_MDIO_CTL = NETC_ETH_LINK_PM0_MDIO_CTL_PORT_ADDR(portAddr) |
-                         NETC_ETH_LINK_PM0_MDIO_CTL_DEV_ADDR(devAddr);
+    base->PM0_MDIO_CTL  = NETC_ETH_LINK_PM0_MDIO_CTL_PORT_ADDR(portAddr) | NETC_ETH_LINK_PM0_MDIO_CTL_DEV_ADDR(devAddr);
     base->PM0_MDIO_ADDR = NETC_ETH_LINK_PM0_MDIO_ADDR_REGADDR(regAddr);
 
     while (NETC_PIMDIO_IsSMIBusy(base))
