@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -179,20 +179,42 @@ typedef enum _ep_rx_flags
 
 typedef enum _ep_tx_opt_flags
 {
-    kEP_TX_OPT_REQ_TS      = 0x1U, /*!< Request timestamp (IEEE 1588 PTP two-step timestamp). */
-    kEP_TX_OPT_VLAN_INSERT = 0x2U, /*!< Enable VLAN insert. */
-    kEP_TX_OPT_START_TIME  = 0x4U, /*!< Specifiy frame departure time. */
+    kEP_TX_OPT_REQ_TS      = 0x1U,     /*!< Request timestamp (IEEE 1588 PTP two-step timestamp). */
+    kEP_TX_OPT_VLAN_INSERT = 0x2U,     /*!< Enable VLAN insert. */
+    kEP_TX_OPT_START_TIME  = 0x4U,     /*!< Specifiy frame departure time. */
 #if !(defined(FSL_FEATURE_NETC_HAS_ERRATA_051255) && FSL_FEATURE_NETC_HAS_ERRATA_051255)
     kEP_TX_OPT_REQ_ONE_STEP_TS = 0x8U, /*!< Request IEEE 1588 PTP one-step timestamp offload. */
 #endif
 } ep_tx_opt_flags;
 
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
 typedef struct _ep_tx_opt
 {
     uint32_t flags;             /*!< A bitmask of ep_tx_opt_flags */
     uint32_t timestamp;         /*!< Departure timestamp, used if kEP_TX_OPT_START_TIME is set */
     netc_enetc_vlan_tag_t vlan; /*!< VLAN tag which will be inserted, used if kEP_TX_OPT_VLAN_INSERT is set */
 } ep_tx_opt;
+#else
+typedef struct _ep_tx_offload
+{
+    bool lso;                    /*!< Large send offload. */
+    bool l4Checksum;             /*!< L4 checksum offload. */
+    bool ipv4Checksum;           /*!< IPv4 checksum offload. */
+    uint32_t lsoMaxSegSize : 14; /*!< Large send offload maximum segment size. */
+    uint32_t l4Type : 3;         /*!< L4 type. 1-UDP, 2-TCP. */
+    uint32_t l3Type : 1;         /*!< L3 type. 0-IPv4, 1-IPv6. */
+    uint32_t l3HeaderSize : 7;   /*!< L3 IP header size in units of 32-bit words. */
+    uint32_t l3Start : 7;        /*!< Offset of the IPv4/IPv6 header in units of bytes. */
+} netc_tx_offload_t;
+
+typedef struct _ep_tx_opt
+{
+    uint32_t flags;             /*!< A bitmask of ep_tx_opt_flags */
+    uint32_t timestamp;         /*!< Departure timestamp, used if kEP_TX_OPT_START_TIME is set */
+    netc_enetc_vlan_tag_t vlan; /*!< VLAN tag which will be inserted, used if kEP_TX_OPT_VLAN_INSERT is set */
+    netc_tx_offload_t offload;
+} ep_tx_opt;
+#endif
 
 /*! @} */ // end of netc_ep_xfer
 #if !(defined(__GNUC__) || defined(__ICCARM__))
@@ -247,7 +269,12 @@ typedef void (*ep_rx_free_cb_t)(ep_handle_t *handle, uint8_t ring, void *address
 typedef status_t (*ep_get_link_status_cb_t)(ep_handle_t *handle, uint8_t *link);
 
 /*! @brief Callback for getting link speed */
-typedef status_t (*ep_get_link_speed_cb_t)(ep_handle_t *handle, netc_hw_mii_speed_t *speed, netc_hw_mii_duplex_t *duplex);
+typedef status_t (*ep_get_link_speed_cb_t)(ep_handle_t *handle,
+                                           netc_hw_mii_speed_t *speed,
+                                           netc_hw_mii_duplex_t *duplex);
+
+/*! @brief Callback for vsi pre-init */
+typedef status_t (*ep_preinit_vsi_cb_t)(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
 
 /*! @brief Configuration for the endpoint handle. */
 typedef struct _ep_config
@@ -284,6 +311,7 @@ typedef struct _ep_config
     bool rxZeroCopy;                    /*!< Enable/Disable zero-copy receive mode. */
     ep_rx_alloc_cb_t rxBuffAlloc;       /*!< Callback function to alloc memory, must be provided for zero-copy Rx. */
     ep_rx_free_cb_t rxBuffFree;         /*!< Callback function to free memory, must be provided for zero-copy Rx. */
+    ep_preinit_vsi_cb_t preinitVsi;     /*!< Callback function to pre-init VSI */
     netc_cmd_bdr_config_t cmdBdrConfig; /*!< Command BD ring configuration. */
 } ep_config_t;
 
@@ -1194,6 +1222,75 @@ status_t EP_TxtTGSGetOperGcl(ep_handle_t *handle, netc_tb_tgs_gcl_t *gcl, uint32
  */
 status_t EP_TxTrafficClassConfig(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, const netc_port_tx_tc_config_t *config);
 
+/*!
+ * @brief Config Preemption for each port TC (traffic class)
+ *
+ * @param handle
+ * @param tcIdx
+ * @param enable
+ */
+static inline void EP_TxTcConfigPreemption(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, const bool enable)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.portGroup.port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortConfigTcPreemption(base, tcIdx, enable);
+    }
+}
+
+/*!
+ * @brief Get Preemption configuration for each port TC (traffic class)
+ *
+ * @param handle
+ * @param tcIdx
+ * @param enabled
+ */
+static inline void EP_TxGetTcPreemption(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, bool *enabled)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.portGroup.port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortGetTcPreemption(base, tcIdx, enabled);
+    }
+}
+
+/*!
+ * @brief Configure Preemption control configuration for an ethernet MAC
+ *
+ * @param handle
+ * @param config
+ */
+static inline void EP_TxPortEthMacConfigPreemption(ep_handle_t *handle, const netc_port_preemption_config *config)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.portGroup.eth;
+    NETC_PortConfigEthMacPreemption(base, config);
+}
+
+/*!
+ * @brief Get Preemption configuration from ethernet MAC port
+ *
+ * @param handle
+ * @param config
+ * @param status
+ */
+static inline void EP_TxPortGetEthMacPreemption(ep_handle_t *handle,
+                                                netc_port_preemption_config *config,
+                                                netc_port_phy_mac_preemption_status_t *status)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.portGroup.eth;
+    NETC_PortGetPhyMacPreemptionControl(base, config);
+
+    NETC_PortGetPhyMacPreemptionStatus(base, status);
+}
+
 /*! @} */ // end of netc_ep_tx
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma endregion netc_ep_tx
@@ -1380,12 +1477,14 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
 static inline void EP_WaitUnitilTxComplete(ep_handle_t *handle, uint8_t ring)
 {
     uint8_t hwRing = ring;
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
         hwRing++;
     }
+#endif
     while (handle->hw.si->BDR[hwRing].TBCIR != handle->txBdRing[ring].producerIndex)
     {
     }

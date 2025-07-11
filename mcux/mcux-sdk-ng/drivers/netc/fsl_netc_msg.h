@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -10,7 +10,8 @@
 #include "fsl_netc.h"
 #include "fsl_netc_endpoint.h"
 
-#define NETC_MSG_RETURN_CODE(class, code, cookie) (((uint16_t)(class) << 8U) | ((uint16_t)(code) << 4U) | (uint16_t)(cookie))
+#define NETC_MSG_RETURN_CODE(class, code, cookie) \
+    (((uint16_t)(class) << 8U) | ((uint16_t)(code) << 4U) | (uint16_t)(cookie))
 
 /*!
  * @brief VSI-PSI message class id

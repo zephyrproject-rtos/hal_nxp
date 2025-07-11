@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,10 +11,14 @@
 #include <math.h>
 #endif
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.netc_switch"
+#endif
+
 /*! @name NETC register map. */
 /*@{*/
-#define NETC_SWT_PORT_GROUP_BASE_OFFSET (0x4000U)  /*!< The Switch port group register base address offset. */
-#define NETC_SWT_GLOBAL_BASE_OFFSET     (0x80000U) /*!< The Switch global register base address offset. */
+#define NETC_SWT_PORT_GROUP_BASE_OFFSET (0x4000U) /*!< The Switch port group register base address offset. */
 
 /*! @brief Pointers to netc bases for each instance. */
 static ENETC_PCI_TYPE0_Type *const s_netcPciBases[] = ENETC_PCI_TYPE0_BASE_PTRS;
@@ -34,7 +38,7 @@ static void SWT_GetBaseResource(swt_handle_t *handle, netc_hw_switch_idx_t sw)
 {
     handle->hw.func   = s_netcPciBases[NETC_SOC_SWT_PCIE_FUNC_OFFSET + (uint32_t)sw];
     handle->hw.base   = s_netcSWBases[sw];
-    handle->hw.common = (NETC_SW_ENETC_Type *)((uintptr_t)handle->hw.base);
+    handle->hw.common = (NETC_SW_ENETC_Type *)((uintptr_t)handle->hw.base + NETC_SWT_COMMON_BASE_OFFSET);
     handle->hw.global = (ENETC_GLOBAL_Type *)((uintptr_t)handle->hw.base + NETC_SWT_GLOBAL_BASE_OFFSET);
     for (uint32_t i = 0U; i < (uint32_t)FSL_FEATURE_NETC_SWITCH_MAX_PORT_NUMBER; i++)
     {
@@ -42,8 +46,9 @@ static void SWT_GetBaseResource(swt_handle_t *handle, netc_hw_switch_idx_t sw)
             (NETC_PORT_Type *)((uintptr_t)handle->hw.base + (i + 1U) * NETC_SWT_PORT_GROUP_BASE_OFFSET);
         handle->hw.ports[i].eth = (NETC_ETH_LINK_Type *)((uintptr_t)handle->hw.ports[i].port + 0x1000U);
     }
-    handle->hw.msixTable = (netc_msix_entry_t *)((uint32_t)FSL_FEATURE_NETC_MSIX_TABLE_BASE +
-                                                 NETC_MSIX_TABLE_OFFSET * (NETC_SOC_SWT_PCIE_FUNC_OFFSET + (uint32_t)sw));
+    handle->hw.msixTable =
+        (netc_msix_entry_t *)((uint32_t)FSL_FEATURE_NETC_MSIX_TABLE_BASE +
+                              NETC_MSIX_TABLE_OFFSET * (NETC_SOC_SWT_MSI_FUNC_OFFSET + (uint32_t)sw));
 }
 
 /*!
@@ -198,23 +203,24 @@ status_t SWT_GetDefaultConfig(swt_config_t *config)
 #if (defined(FSL_FEATURE_NETC_HAS_PORT_FCSEA) && FSL_FEATURE_NETC_HAS_PORT_FCSEA)
         config->ports[i].commonCfg.stompFcs = true;
 #endif
-        config->ports[i].commonCfg.rxPpduBco         = 20U;
-        config->ports[i].commonCfg.txPpduBco         = 20U;
-        config->ports[i].commonCfg.timeGate.holdSkew = 64;
-        config->ports[i].commonCfg.parser.l2PloadCount    = 24;
-        config->ports[i].commonCfg.parser.l3PayloadCount  = 24;
-        config->ports[i].commonCfg.parser.enableL3Parser  = true;
-        config->ports[i].commonCfg.parser.l4PayloadCount  = 24;
-        config->ports[i].commonCfg.parser.enableL4Parser  = true;
-        config->ports[i].ethMac.preemptMode          = kNETC_PreemptDisable;
-        config->ports[i].ethMac.enMergeVerify        = false;
-        config->ports[i].ethMac.mergeVerifyTime      = 10U;
-        config->ports[i].ethMac.enTxPad              = true;
-        config->ports[i].ethMac.rxMinFrameSize       = 64U;
-        config->ports[i].ethMac.rxMaxFrameSize       = 0x600U;
-        config->ports[i].ethMac.maxBackPressOn       = 3036U;
-        config->ports[i].ethMac.minBackPressOff      = 20U;
-        config->ports[i].enTxRx                      = true;
+        config->ports[i].commonCfg.rxPpduBco                     = 20U;
+        config->ports[i].commonCfg.txPpduBco                     = 20U;
+        config->ports[i].commonCfg.timeGate.holdSkew             = 64;
+        config->ports[i].commonCfg.parser.l2PloadCount           = 24;
+        config->ports[i].commonCfg.parser.l3PayloadCount         = 24;
+        config->ports[i].commonCfg.parser.enableL3Parser         = true;
+        config->ports[i].commonCfg.parser.l4PayloadCount         = 24;
+        config->ports[i].commonCfg.parser.enableL4Parser         = true;
+        config->ports[i].ethMac.PreemptionConfig.preemptMode     = kNETC_PreemptDisable;
+        config->ports[i].ethMac.PreemptionConfig.enMergeVerify   = false;
+        config->ports[i].ethMac.PreemptionConfig.mergeVerifyTime = 10U;
+        config->ports[i].ethMac.PreemptionConfig.raf_size        = kNETC_RafSize64;
+        config->ports[i].ethMac.enTxPad                          = true;
+        config->ports[i].ethMac.rxMinFrameSize                   = 64U;
+        config->ports[i].ethMac.rxMaxFrameSize                   = 0x600U;
+        config->ports[i].ethMac.maxBackPressOn                   = 3036U;
+        config->ports[i].ethMac.minBackPressOff                  = 20U;
+        config->ports[i].enTxRx                                  = true;
         for (uint32_t j = 0U; j < 8U; j++)
         {
             config->ports[i].txTcCfg[j].enTcGate           = true;
@@ -365,18 +371,11 @@ status_t SWT_Init(swt_handle_t *handle, const swt_config_t *config)
             (void)SWT_FMConfigPort(handle, (netc_hw_port_idx_t)i, &config->ports[i].fmCfg);
             (void)NETC_PortSetISI(port, &config->ports[i].isiCfg);
             (void)NETC_PortConfig(port, &config->ports[i].commonCfg);
-            port->PMCR      = NETC_PORT_PMCR_IMIRE(config->ports[i].enMirror);
+            port->PMCR = NETC_PORT_PMCR_IMIRE(config->ports[i].enMirror);
 #if defined(NETC_PORT_PLANIDCR_LANID)
-            port->PLANIDCR  = NETC_PORT_PLANIDCR_LANID(config->ports[i].lanID);
+            port->PLANIDCR = NETC_PORT_PLANIDCR_LANID(config->ports[i].lanID);
 #endif
-            port->PIPV2QMR0 = NETC_PORT_PIPV2QMR0_IPV7_Q(config->ports[i].ipvToTC[7]) |
-                              NETC_PORT_PIPV2QMR0_IPV6_Q(config->ports[i].ipvToTC[6]) |
-                              NETC_PORT_PIPV2QMR0_IPV5_Q(config->ports[i].ipvToTC[5]) |
-                              NETC_PORT_PIPV2QMR0_IPV4_Q(config->ports[i].ipvToTC[4]) |
-                              NETC_PORT_PIPV2QMR0_IPV3_Q(config->ports[i].ipvToTC[3]) |
-                              NETC_PORT_PIPV2QMR0_IPV2_Q(config->ports[i].ipvToTC[2]) |
-                              NETC_PORT_PIPV2QMR0_IPV1_Q(config->ports[i].ipvToTC[1]) |
-                              NETC_PORT_PIPV2QMR0_IPV0_Q(config->ports[i].ipvToTC[0]);
+            (void)SWT_SetPortIPV2QMR(handle, (netc_hw_port_idx_t)i, config->ports[i].ipvToTC);
             port->PBPMCR0 = NETC_PORT_PBPMCR0_IPV3_INDEX(config->ports[i].ipvToBP[3]) |
                             NETC_PORT_PBPMCR0_IPV2_INDEX(config->ports[i].ipvToBP[2]) |
                             NETC_PORT_PBPMCR0_IPV1_INDEX(config->ports[i].ipvToBP[1]) |
@@ -593,9 +592,11 @@ static void SWT_StoreTransConfig(swt_handle_t *handle, const swt_transfer_config
     handle->cfg.rxBuffAlloc       = config->rxBuffAlloc;
     handle->cfg.rxBuffFree        = config->rxBuffFree;
     handle->cfg.enUseMgmtRxBdRing = config->enUseMgmtRxBdRing;
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     handle->cfg.enUseMgmtTxBdRing = config->enUseMgmtTxBdRing;
-    handle->cfg.reclaimCallback   = config->reclaimCallback;
-    handle->cfg.userData          = config->userData;
+#endif
+    handle->cfg.reclaimCallback = config->reclaimCallback;
+    handle->cfg.userData        = config->userData;
 }
 
 status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, const swt_transfer_config_t *txRxConfig)
@@ -685,6 +686,7 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
         /* Enable the Rx BD ring. */
         NETC_SIRxRingEnable(epHandle->hw.si, mgmtRxBdRingIdx, true);
     }
+
     if (txRxConfig->enUseMgmtTxBdRing)
     {
         /* Management Tx ring only can be SI 0 ring 0 */
@@ -696,11 +698,67 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
         handle->mgmtTxBdRing.dirtyBase = txRxConfig->mgmtTxBdrConfig.dirtyArray;
         handle->mgmtTxBdRing.len       = txRxConfig->mgmtTxBdrConfig.len;
     }
+
     return kStatus_Success;
 }
 
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+status_t SWT_SendFrame(swt_handle_t *handle, netc_frame_struct_t *frame, void *context, swt_tx_opt *opt)
+{
+    netc_tx_bdr_t *txBdRing = &handle->mgmtTxBdRing;
+    netc_tx_bd_t txDesc[2]  = {0};
+
+    if (opt != NULL)
+    {
+        if ((opt->flags & (uint32_t)kSWT_TX_OPT_VLAN_INSERT) != 0U)
+        {
+            txDesc[0].standard.isExtended = 1U;
+            txDesc[1].ext.pcp             = opt->vlan.pcp;
+            txDesc[1].ext.dei             = opt->vlan.dei;
+            txDesc[1].ext.vid             = opt->vlan.vid;
+            txDesc[1].ext.tpid            = (uint16_t)opt->vlan.tpid;
+            txDesc[1].ext.eFlags          = (uint8_t)kNETC_TxExtVlanInsert;
+        }
+
+        if ((opt->flags & (uint32_t)kSWT_TX_OPT_OFFLOAD) != 0U)
+        {
+            txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FL(1) | NETC_SI_TXDESCRIP_RD_LSO(opt->offload.lso) |
+                                       NETC_SI_TXDESCRIP_RD_L4CS(opt->offload.l4Checksum) |
+                                       NETC_SI_TXDESCRIP_RD_L4T(opt->offload.l4Type) |
+                                       NETC_SI_TXDESCRIP_RD_L3T(opt->offload.l3Type) |
+                                       NETC_SI_TXDESCRIP_RD_L3HDRSIZE(opt->offload.l3HeaderSize) |
+                                       NETC_SI_TXDESCRIP_RD_IPCS(opt->offload.ipv4Checksum) |
+                                       NETC_SI_TXDESCRIP_RD_L3START(opt->offload.l3Start);
+
+            txDesc[0].standard.isExtended = (opt->offload.lso) ? 1U : 0U;
+            txDesc[1].ext.lsoMaxSegSize   = opt->offload.lsoMaxSegSize;
+        }
+    }
+
+    return EP_SendFrameCommon(handle->epHandle, txBdRing, opt == NULL ? 0U : opt->ring, frame, context, &txDesc[0],
+                              handle->cfg.txCacheMaintain);
+}
+
+void SWT_ReclaimTxDescriptor(swt_handle_t *handle, uint8_t ring)
+{
+    netc_tx_frame_info_t *frameInfo;
+
+    do
+    {
+        frameInfo =
+            EP_ReclaimTxDescCommon(handle->epHandle, &handle->mgmtTxBdRing, 0, (handle->cfg.reclaimCallback != NULL));
+        if (frameInfo != NULL)
+        {
+            /* If reclaim callback is enabled, it must be called for each full frame. */
+            (void)handle->cfg.reclaimCallback(handle, frameInfo, handle->cfg.userData);
+            (void)memset(frameInfo, 0, sizeof(netc_tx_frame_info_t));
+        }
+    } while (frameInfo != NULL);
+}
+
+#else
 status_t SWT_SendFrame(swt_handle_t *handle,
-                       swt_mgmt_tx_arg_t ringOrQueue,
+                       swt_mgmt_tx_arg_t txArg,
                        netc_hw_port_idx_t swtPort,
                        bool enMasquerade,
                        netc_frame_struct_t *frame,
@@ -716,14 +774,14 @@ status_t SWT_SendFrame(swt_handle_t *handle,
         {
             /* Switch management ENETC Tx BD hardware ring 0 can't be used to send port masqueradeque frame, so the
              * index need increase 1 */
-            hwRing = ringOrQueue.ring + 1U;
+            hwRing = txArg.ring + 1U;
         }
         else
         {
-            hwRing = ringOrQueue.ring;
+            hwRing = txArg.ring;
         }
         txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FLQ(2) | NETC_SI_TXDESCRIP_RD_PORT(swtPort);
-        txBdRing                 = &handle->epHandle->txBdRing[ringOrQueue.ring];
+        txBdRing                 = &handle->epHandle->txBdRing[txArg.ring];
     }
     else
     {
@@ -733,8 +791,8 @@ status_t SWT_SendFrame(swt_handle_t *handle,
             return kStatus_InvalidArgument;
         }
         txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FLQ(2) | NETC_SI_TXDESCRIP_RD_SMSO_MASK |
-                                   NETC_SI_TXDESCRIP_RD_PORT(swtPort) | NETC_SI_TXDESCRIP_RD_IPV(ringOrQueue.ipv) |
-                                   NETC_SI_TXDESCRIP_RD_DR(ringOrQueue.dr);
+                                   NETC_SI_TXDESCRIP_RD_PORT(swtPort) | NETC_SI_TXDESCRIP_RD_IPV(txArg.ipv) |
+                                   NETC_SI_TXDESCRIP_RD_DR(txArg.dr);
         hwRing   = 0U;
         txBdRing = &handle->mgmtTxBdRing;
     }
@@ -805,36 +863,6 @@ void SWT_ReclaimTxDescriptor(swt_handle_t *handle, bool enMasquerade, uint8_t ri
     } while (frameInfo != NULL);
 }
 
-status_t SWT_GetRxFrameSize(swt_handle_t *handle, uint32_t *length)
-{
-    assert((handle != NULL) && (length != NULL));
-    netc_rx_bdr_t *rxBdRing = NULL;
-    status_t result;
-
-    if (handle->cfg.enUseMgmtRxBdRing)
-    {
-        rxBdRing = &handle->mgmtRxBdRing;
-    }
-    else if (handle->epHandle->cfg.rxRingUse != 0U)
-    {
-        /* If no management Rx ring is specified, the host reason not zero frames will be received by Rx ring 0 */
-        rxBdRing = &handle->epHandle->rxBdRing[0];
-    }
-    else
-    {
-        /* If both the switch and its associated EP not config the Rx BD ring, no frame can be received */
-        return kStatus_InvalidArgument;
-    }
-
-    result = EP_GetRxFrameSizeCommon(handle->epHandle, rxBdRing, length);
-    if (kStatus_NETC_RxHRNotZeroFrame == result)
-    {
-        /* Only return success when currently frame is host reason not zero frame */
-        result = kStatus_Success;
-    }
-    return result;
-}
-
 status_t SWT_GetTimestampRefResp(swt_handle_t *handle, swt_tsr_resp_t *tsr)
 {
     status_t result         = kStatus_Fail;
@@ -890,6 +918,37 @@ status_t SWT_GetTimestampRefResp(swt_handle_t *handle, swt_tsr_resp_t *tsr)
         result = kStatus_Success;
     }
 
+    return result;
+}
+#endif
+
+status_t SWT_GetRxFrameSize(swt_handle_t *handle, uint32_t *length)
+{
+    assert((handle != NULL) && (length != NULL));
+    netc_rx_bdr_t *rxBdRing = NULL;
+    status_t result;
+
+    if (handle->cfg.enUseMgmtRxBdRing)
+    {
+        rxBdRing = &handle->mgmtRxBdRing;
+    }
+    else if (handle->epHandle->cfg.rxRingUse != 0U)
+    {
+        /* If no management Rx ring is specified, the host reason not zero frames will be received by Rx ring 0 */
+        rxBdRing = &handle->epHandle->rxBdRing[0];
+    }
+    else
+    {
+        /* If both the switch and its associated EP not config the Rx BD ring, no frame can be received */
+        return kStatus_InvalidArgument;
+    }
+
+    result = EP_GetRxFrameSizeCommon(handle->epHandle, rxBdRing, length);
+    if (kStatus_NETC_RxHRNotZeroFrame == result)
+    {
+        /* Only return success when currently frame is host reason not zero frame */
+        result = kStatus_Success;
+    }
     return result;
 }
 
@@ -1159,16 +1218,16 @@ status_t SWT_BridgeInit(swt_handle_t *handle, const netc_swt_bridge_config_t *co
     assert(config != NULL);
 
     /* Configure switch default VLAN filter entry */
-    handle->hw.base->VFHTDECR0 =
-        NETC_SW_VFHTDECR0_IPMFLE(config->dVFCfg.enIPMFlood) | NETC_SW_VFHTDECR0_IPMFE(config->dVFCfg.enIPMFilter) |
-        NETC_SW_VFHTDECR0_STG_ID(config->dVFCfg.stgID) |
-        ((config->dVFCfg.portMembership << NETC_SW_VFHTDECR0_PORT0_SHIFT) &
-         (
+    handle->hw.base->VFHTDECR0 = NETC_SW_VFHTDECR0_IPMFLE(config->dVFCfg.enIPMFlood) |
+                                 NETC_SW_VFHTDECR0_IPMFE(config->dVFCfg.enIPMFilter) |
+                                 NETC_SW_VFHTDECR0_STG_ID(config->dVFCfg.stgID) |
+                                 ((config->dVFCfg.portMembership << NETC_SW_VFHTDECR0_PORT0_SHIFT) &
+                                  (
 #if defined(NETC_SW_VFHTDECR0_PORT4_MASK)
-	  NETC_SW_VFHTDECR0_PORT4_MASK |
+                                      NETC_SW_VFHTDECR0_PORT4_MASK |
 #endif
-	  NETC_SW_VFHTDECR0_PORT3_MASK | NETC_SW_VFHTDECR0_PORT2_MASK |
-          NETC_SW_VFHTDECR0_PORT1_MASK | NETC_SW_VFHTDECR0_PORT0_MASK));
+                                      NETC_SW_VFHTDECR0_PORT3_MASK | NETC_SW_VFHTDECR0_PORT2_MASK |
+                                      NETC_SW_VFHTDECR0_PORT1_MASK | NETC_SW_VFHTDECR0_PORT0_MASK));
 #if defined(NETC_SW_VFHTDECR1_ET_EID)
     handle->hw.base->VFHTDECR1 = NETC_SW_VFHTDECR1_ET_EID(config->dVFCfg.baseETEID) |
 #else
@@ -1176,38 +1235,37 @@ status_t SWT_BridgeInit(swt_handle_t *handle, const netc_swt_bridge_config_t *co
 #endif
                                  NETC_SW_VFHTDECR1_VL_MODE(config->dVFCfg.enUseFilterID) |
                                  NETC_SW_VFHTDECR1_FID(config->dVFCfg.filterID);
-    handle->hw.base->VFHTDECR2 =
-        NETC_SW_VFHTDECR2_MFO(config->dVFCfg.mfo) | NETC_SW_VFHTDECR2_MLO(config->dVFCfg.mlo) |
+    handle->hw.base->VFHTDECR2 = NETC_SW_VFHTDECR2_MFO(config->dVFCfg.mfo) | NETC_SW_VFHTDECR2_MLO(config->dVFCfg.mlo) |
 #if defined(NETC_SW_VFHTDECR2_ETA_PORT0_SHIFT)
-        ((config->dVFCfg.etaPortBitmap << NETC_SW_VFHTDECR2_ETA_PORT0_SHIFT) &
+                                 ((config->dVFCfg.etaPortBitmap << NETC_SW_VFHTDECR2_ETA_PORT0_SHIFT) &
 #else
-        ((config->dVFCfg.etaPortBitmap << NETC_SW_VFHTDECR2_ET_PORT0_SHIFT) &
+                                 ((config->dVFCfg.etaPortBitmap << NETC_SW_VFHTDECR2_ET_PORT0_SHIFT) &
 #endif
-         (
+                                  (
 #if defined(NETC_SW_VFHTDECR2_ET_PORT4_MASK)
-          NETC_SW_VFHTDECR2_ET_PORT4_MASK |
+                                      NETC_SW_VFHTDECR2_ET_PORT4_MASK |
 #endif
 #if defined(NETC_SW_VFHTDECR2_ETA_PORT3_MASK)
-          NETC_SW_VFHTDECR2_ETA_PORT3_MASK |
+                                      NETC_SW_VFHTDECR2_ETA_PORT3_MASK |
 #else
-          NETC_SW_VFHTDECR2_ET_PORT3_MASK |
+                                      NETC_SW_VFHTDECR2_ET_PORT3_MASK |
 #endif
 #if defined(NETC_SW_VFHTDECR2_ETA_PORT2_MASK)
-          NETC_SW_VFHTDECR2_ETA_PORT2_MASK |
+                                      NETC_SW_VFHTDECR2_ETA_PORT2_MASK |
 #else
-          NETC_SW_VFHTDECR2_ET_PORT2_MASK |
+                                      NETC_SW_VFHTDECR2_ET_PORT2_MASK |
 #endif
 #if defined(NETC_SW_VFHTDECR2_ETA_PORT1_MASK)
-          NETC_SW_VFHTDECR2_ETA_PORT1_MASK |
+                                      NETC_SW_VFHTDECR2_ETA_PORT1_MASK |
 #else
-          NETC_SW_VFHTDECR2_ET_PORT1_MASK |
+                                      NETC_SW_VFHTDECR2_ET_PORT1_MASK |
 #endif
 #if defined(NETC_SW_VFHTDECR2_ETA_PORT0_MASK)
-          NETC_SW_VFHTDECR2_ETA_PORT0_MASK
+                                      NETC_SW_VFHTDECR2_ETA_PORT0_MASK
 #else
-          NETC_SW_VFHTDECR2_ET_PORT0_MASK
+                                      NETC_SW_VFHTDECR2_ET_PORT0_MASK
 #endif
-         ));
+                                      ));
     return kStatus_Success;
 }
 
@@ -1242,11 +1300,10 @@ status_t SWT_BridgeConfigPort(swt_handle_t *handle,
     return kStatus_Success;
 }
 
-status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle,
-                              netc_hw_port_idx_t portIdx, uint16_t vid)
+status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle, netc_hw_port_idx_t portIdx, uint16_t vid)
 {
     assert(handle != NULL);
-    NETC_PORT_Type *base  = handle->hw.ports[portIdx].port;
+    NETC_PORT_Type *base = handle->hw.ports[portIdx].port;
 
     base->BPDVR = (base->BPDVR & ~NETC_PORT_BPDVR_VID_MASK) | NETC_PORT_BPDVR_VID(vid);
 
@@ -1314,8 +1371,8 @@ status_t SWT_BridgeUpdateVFTableEntry(swt_handle_t *handle, uint32_t entryID, ne
 }
 
 status_t SWT_BridgeSearchVFTableEntry(swt_handle_t *handle,
-                                       netc_tb_vf_search_criteria_t *sCriteria,
-                                       netc_tb_vf_rsp_data_t *rsp)
+                                      netc_tb_vf_search_criteria_t *sCriteria,
+                                      netc_tb_vf_rsp_data_t *rsp)
 {
     assert((handle != NULL) && (sCriteria != NULL) && (rsp != NULL));
     netc_cmd_bd_t cmdBd = {0};
@@ -1328,12 +1385,12 @@ status_t SWT_BridgeSearchVFTableEntry(swt_handle_t *handle,
         /* Query entry in VF Table based on the search criteria */
         cdbrHandle.buffer->vf.request.sCriteria                 = *sCriteria;
         cdbrHandle.buffer->vf.request.commonHeader.queryActions = 0U;
-        cmdBd.req.addr                                           = (uintptr_t)cdbrHandle.buffer;
-        cmdBd.req.reqLength                                      = sizeof(netc_tb_vf_req_data_t);
-        cmdBd.req.resLength                                      = sizeof(netc_tb_vf_rsp_data_t);
-        cmdBd.req.tableId                                        = kNETC_VFTable;
-        cmdBd.req.cmd                                            = kNETC_QueryEntry;
-        cmdBd.req.accessType                                     = kNETC_Search;
+        cmdBd.req.addr                                          = (uintptr_t)cdbrHandle.buffer;
+        cmdBd.req.reqLength                                     = sizeof(netc_tb_vf_req_data_t);
+        cmdBd.req.resLength                                     = sizeof(netc_tb_vf_rsp_data_t);
+        cmdBd.req.tableId                                       = kNETC_VFTable;
+        cmdBd.req.cmd                                           = kNETC_QueryEntry;
+        cmdBd.req.accessType                                    = kNETC_Search;
         status = NETC_CmdBDSendCommand(cdbrHandle.base, cdbrHandle.cmdr, &cmdBd, kNETC_NtmpV2_0);
         if (kStatus_Success == status)
         {
@@ -1351,9 +1408,7 @@ status_t SWT_BridgeSearchVFTableEntry(swt_handle_t *handle,
     return status;
 }
 
-status_t SWT_BridgeQueryVFTableEntry(swt_handle_t *handle,
-                                       netc_tb_vf_keye_t *keye,
-                                       netc_tb_vf_rsp_data_t *rsp)
+status_t SWT_BridgeQueryVFTableEntry(swt_handle_t *handle, netc_tb_vf_keye_t *keye, netc_tb_vf_rsp_data_t *rsp)
 {
     assert((handle != NULL) && (keye != NULL) && (rsp != NULL));
     netc_cmd_bd_t cmdBd = {0};
@@ -1364,14 +1419,14 @@ status_t SWT_BridgeQueryVFTableEntry(swt_handle_t *handle,
     {
         (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_fdb_req_data_t));
         /* Query entry in VF Table based on the exact match criteria */
-        cdbrHandle.buffer->vf.request.keye                       = *keye;
+        cdbrHandle.buffer->vf.request.keye                      = *keye;
         cdbrHandle.buffer->vf.request.commonHeader.queryActions = 0U;
-        cmdBd.req.addr                                           = (uintptr_t)cdbrHandle.buffer;
-        cmdBd.req.reqLength                                      = sizeof(netc_tb_vf_req_data_t);
-        cmdBd.req.resLength                                      = sizeof(netc_tb_vf_rsp_data_t);
-        cmdBd.req.tableId                                        = kNETC_VFTable;
-        cmdBd.req.cmd                                            = kNETC_QueryEntry;
-        cmdBd.req.accessType                                     = kNETC_ExactKeyMatch;
+        cmdBd.req.addr                                          = (uintptr_t)cdbrHandle.buffer;
+        cmdBd.req.reqLength                                     = sizeof(netc_tb_vf_req_data_t);
+        cmdBd.req.resLength                                     = sizeof(netc_tb_vf_rsp_data_t);
+        cmdBd.req.tableId                                       = kNETC_VFTable;
+        cmdBd.req.cmd                                           = kNETC_QueryEntry;
+        cmdBd.req.accessType                                    = kNETC_ExactKeyMatch;
         status = NETC_CmdBDSendCommand(cdbrHandle.base, cdbrHandle.cmdr, &cmdBd, kNETC_NtmpV2_0);
         if (kStatus_Success == status)
         {
@@ -1388,7 +1443,6 @@ status_t SWT_BridgeQueryVFTableEntry(swt_handle_t *handle,
 
     return status;
 }
-
 
 status_t SWT_BridgeDelVFTableEntry(swt_handle_t *handle, uint32_t entryID)
 {
@@ -1514,9 +1568,7 @@ status_t SWT_BridgeSearchFDBTableEntry(swt_handle_t *handle,
     return status;
 }
 
-status_t SWT_BridgeQueryFDBTableEntry(swt_handle_t *handle,
-                                       netc_tb_fdb_keye_t *keye,
-                                       netc_tb_fdb_rsp_data_t *rsp)
+status_t SWT_BridgeQueryFDBTableEntry(swt_handle_t *handle, netc_tb_fdb_keye_t *keye, netc_tb_fdb_rsp_data_t *rsp)
 {
     assert((handle != NULL) && (keye != NULL) && (rsp != NULL));
     netc_cmd_bd_t cmdBd = {0};
@@ -1527,7 +1579,7 @@ status_t SWT_BridgeQueryFDBTableEntry(swt_handle_t *handle,
     {
         (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_fdb_req_data_t));
         /* Query entry in FDB Table based on the exact match criteria */
-        cdbrHandle.buffer->fdb.request.keye                       = *keye;
+        cdbrHandle.buffer->fdb.request.keye                      = *keye;
         cdbrHandle.buffer->fdb.request.commonHeader.queryActions = 0U;
         cmdBd.req.addr                                           = (uintptr_t)cdbrHandle.buffer;
         cmdBd.req.reqLength                                      = sizeof(netc_tb_fdb_req_data_t);
@@ -1788,7 +1840,9 @@ status_t SWT_RxPSFPQueryISITableEntry(swt_handle_t *handle, uint32_t entryID, ne
     }
 }
 
-status_t SWT_RxPSFPQueryISITableEntryWithKey(swt_handle_t *handle, netc_tb_isi_keye_t *keye, netc_tb_isi_rsp_data_t *rsp)
+status_t SWT_RxPSFPQueryISITableEntryWithKey(swt_handle_t *handle,
+                                             netc_tb_isi_keye_t *keye,
+                                             netc_tb_isi_rsp_data_t *rsp)
 {
     assert((handle != NULL) && (keye != NULL) && (rsp != NULL));
     netc_cbdr_handle_t cdbrHandle;
@@ -2012,6 +2066,20 @@ status_t SWT_RxPSFPUpdateSGITableEntry(swt_handle_t *handle, netc_tb_sgi_config_
         return kStatus_NETC_LackOfResource;
     }
 }
+status_t SWT_RxPSFPResetIRXOEXSGITableEntry(swt_handle_t *handle, uint32_t entryID)
+{
+    assert(handle != NULL);
+    netc_cbdr_handle_t cdbrHandle;
+
+    if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
+    {
+        return NETC_ResetIRXOEXSGITableEntry(&cdbrHandle, entryID);
+    }
+    else
+    {
+        return kStatus_NETC_LackOfResource;
+    }
+}
 
 status_t SWT_RxPSFPDelSGITableEntry(swt_handle_t *handle, uint32_t entryID)
 {
@@ -2030,7 +2098,7 @@ status_t SWT_RxPSFPDelSGITableEntry(swt_handle_t *handle, uint32_t entryID)
 
 status_t SWT_RxPSFPGetSGIState(swt_handle_t *handle, uint32_t entryID, netc_tb_sgi_sgise_t *state)
 {
-    assert(handle != NULL);
+    assert((handle != NULL) && (state != NULL));
     netc_cbdr_handle_t cdbrHandle;
 
     if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
@@ -2043,14 +2111,14 @@ status_t SWT_RxPSFPGetSGIState(swt_handle_t *handle, uint32_t entryID, netc_tb_s
     }
 }
 
-status_t SWT_RxPSFPQuerySGITableEntry(swt_handle_t *handle, uint32_t entryID, netc_tb_sgi_rsp_data_t *rsp)
+status_t SWT_RxPSFPQuerySGITableEntry(swt_handle_t *handle, uint32_t entryID, netc_tb_sgi_config_t *config)
 {
-    assert((handle != NULL) && (rsp != NULL));
+    assert((handle != NULL) && (config != NULL));
     netc_cbdr_handle_t cdbrHandle;
 
     if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
     {
-        return NETC_QuerySGITableEntry(&cdbrHandle, entryID, rsp);
+        return NETC_QuerySGITableEntry(&cdbrHandle, entryID, config);
     }
     else
     {
@@ -2170,7 +2238,7 @@ status_t SWT_RxPSFPResetMRRPTableEntry(swt_handle_t *handle, uint32_t entryID)
 
     if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
     {
-         return NETC_ResetMRRPTableEntry(&cdbrHandle, entryID);
+        return NETC_ResetMRRPTableEntry(&cdbrHandle, entryID);
     }
     else
     {
@@ -2235,8 +2303,7 @@ status_t SWT_TxTrafficClassConfig(swt_handle_t *handle,
 
     if (!NETC_PortIsPseudo(base))
     {
-        temp = base->PFPCR & (~((uint32_t)1U << (uint8_t)tcIdx));
-        base->PFPCR   = temp | ((uint32_t)config->enPreemption << (uint8_t)tcIdx);
+        NETC_PortConfigTcPreemption(base, tcIdx, config->enPreemption);
     }
     temp        = base->PDGSR & (~((uint32_t)1U << (uint32_t)tcIdx));
     base->PDGSR = temp | ((uint32_t)config->enTcGate << (uint32_t)tcIdx);
@@ -2265,7 +2332,7 @@ status_t SWT_TxPortTGSEnable(swt_handle_t *handle, netc_hw_port_idx_t portIdx, b
         netc_tgs_gate_entry_t gate[2] = {{.interval = 50000U, .tcGateState = gateState},
                                          {.interval = 50000U, .tcGateState = gateState}};
         netc_tb_tgs_gcl_t wTgsList    = {
-            .entryID = (netc_tb_tgs_entry_id_t)portIdx, .cycleTime = 1000000U, .numEntries = 2U, .gcList = &gate[0]};
+               .entryID = (netc_tb_tgs_entry_id_t)portIdx, .cycleTime = 1000000U, .numEntries = 2U, .gcList = &gate[0]};
         uint64_t time;
         /* Enable master bus and memory access for default ns timer*/
         TMR_PCI_HDR_TYPE0->PCI_CFH_CMD |=
@@ -2310,7 +2377,7 @@ status_t SWT_TxTGSConfigAdminGcl(swt_handle_t *handle, netc_tb_tgs_gcl_t *config
             uint64_t time, minBaseTime;
 
             /* Read the previous active Operationa gate control list cycle time*/
-            (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_tgs_data_t));
+            (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_tgs_req_data_t));
             cdbrHandle.buffer->tgs.request.entryID                    = config->entryID;
             cdbrHandle.buffer->tgs.request.commonHeader.updateActions = 0U;
             cdbrHandle.buffer->tgs.request.commonHeader.queryActions  = 0U;
@@ -2446,6 +2513,35 @@ status_t SWT_FMDelTableEntry(swt_handle_t *handle, uint32_t entryID)
     {
         return kStatus_NETC_LackOfResource;
     }
+}
+
+status_t SWT_FMQueryTableEntry(swt_handle_t *handle, uint32_t entryID, netc_tb_fm_config_t *config)
+{
+    netc_cmd_bd_t cmdBd = {0};
+    netc_cbdr_handle_t cdbrHandle;
+    status_t status = kStatus_NETC_LackOfResource;
+
+    if (SWT_GetIdleCmdBDRing(handle, &cdbrHandle) == kStatus_Success)
+    {
+        (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_fm_config_t));
+        cdbrHandle.buffer->fm.request.entryID                    = entryID;
+        cdbrHandle.buffer->fm.request.commonHeader.updateActions = 0U;
+        cdbrHandle.buffer->fm.request.commonHeader.queryActions  = 0U;
+        cmdBd.req.addr                                           = (uintptr_t)cdbrHandle.buffer;
+        cmdBd.req.reqLength                                      = 8U;
+        cmdBd.req.resLength                                      = sizeof(netc_tb_fm_config_t);
+        cmdBd.req.tableId                                        = kNETC_FMTable;
+        cmdBd.req.cmd                                            = kNETC_QueryEntry;
+        /* Only support Entry ID Match */
+        cmdBd.req.accessType = kNETC_EntryIDMatch;
+        status               = NETC_CmdBDSendCommand(cdbrHandle.base, cdbrHandle.cmdr, &cmdBd, kNETC_NtmpV2_0);
+        if (kStatus_Success == status)
+        {
+            (void)memcpy(&config->cfge, &cdbrHandle.buffer->fm.response.cfge, sizeof(netc_tb_fm_cfge_t));
+        }
+    }
+
+    return status;
 }
 
 status_t SWT_FMDUpdateTableEntry(swt_handle_t *handle, netc_tb_fmd_update_config_t *config, uint32_t length)
@@ -2584,7 +2680,7 @@ status_t SWT_TxEPPQueryETTableEntry(swt_handle_t *handle, uint32_t entryID, netc
             if (0U != cmdBd.resp.numMatched)
             {
                 config->entryID = cdbrHandle.buffer->et.response.entryID;
-                config->cfge = cdbrHandle.buffer->et.response.cfge;
+                config->cfge    = cdbrHandle.buffer->et.response.cfge;
             }
             else
             {
@@ -3025,10 +3121,10 @@ status_t SWT_FRERConfigESEQRTableEntry(swt_handle_t *handle, netc_tb_eseqr_confi
 }
 
 status_t SWT_FRERQueryESEQRTableEntry(swt_handle_t *handle,
-                                   uint32_t entryID,
-                                   netc_tb_eseqr_stse_t *statistic,
-                                   netc_tb_eseqr_cfge_t *config,
-                                   netc_tb_eseqr_srse_t *state)
+                                      uint32_t entryID,
+                                      netc_tb_eseqr_stse_t *statistic,
+                                      netc_tb_eseqr_cfge_t *config,
+                                      netc_tb_eseqr_srse_t *state)
 {
     assert(handle != NULL);
 
@@ -3060,10 +3156,10 @@ status_t SWT_FRERQueryESEQRTableEntry(swt_handle_t *handle,
 
             if (config != NULL)
             {
-                *config    = cdbrHandle.buffer->eseqr.response.cfge;
+                *config = cdbrHandle.buffer->eseqr.response.cfge;
             }
 
-            *state     = cdbrHandle.buffer->eseqr.response.srse;
+            *state = cdbrHandle.buffer->eseqr.response.srse;
         }
     }
 

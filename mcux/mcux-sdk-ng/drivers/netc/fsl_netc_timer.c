@@ -70,8 +70,8 @@ status_t NETC_TimerInit(netc_timer_handle_t *handle, const netc_timer_config_t *
 
     /* Initialize the handle. */
     NETC_TimerInitHandle(handle);
-    handle->entryNum     = config->entryNum;
-    handle->timerFreq    = config->refClkHz;
+    handle->entryNum  = config->entryNum;
+    handle->timerFreq = config->refClkHz;
 
     /* Reset this function */
     handle->hw.func->PCI_CFC_PCIE_DEV_CTL |= ENETC_PCI_TYPE0_PCI_CFC_PCIE_DEV_CTL_INIT_FLR_MASK;
@@ -276,10 +276,10 @@ void NETC_TimerConfigureExtPulseTrig(netc_timer_handle_t *handle,
     handle->hw.base->TMR_CTRL &= ~clear;
     handle->hw.base->TMR_CTRL |= control;
 
-    clear = (extTrigId == kNETC_TimerExtTrig1) ?
-                (ENETC_PF_TMR_TMR_TEMASK_ETS1EN_MASK | ENETC_PF_TMR_TMR_TEMASK_ETS1_THREN_MASK |
+    clear   = (extTrigId == kNETC_TimerExtTrig1) ?
+                  (ENETC_PF_TMR_TMR_TEMASK_ETS1EN_MASK | ENETC_PF_TMR_TMR_TEMASK_ETS1_THREN_MASK |
                  ENETC_PF_TMR_TMR_TEMASK_ETS1_OVEN_MASK) :
-                (ENETC_PF_TMR_TMR_TEMASK_ETS2EN_MASK | ENETC_PF_TMR_TMR_TEMASK_ETS2_THREN_MASK |
+                  (ENETC_PF_TMR_TMR_TEMASK_ETS2EN_MASK | ENETC_PF_TMR_TMR_TEMASK_ETS2_THREN_MASK |
                  ENETC_PF_TMR_TMR_TEMASK_ETS2_OVEN_MASK);
     control = (extTrigId == kNETC_TimerExtTrig1) ?
                   (ENETC_PF_TMR_TMR_TEMASK_ETS1EN(extTrig->enableTsAvailInterrupt) |
@@ -321,7 +321,7 @@ status_t NETC_TimerReadExtPulseCaptureTime(netc_timer_handle_t *handle,
         else
         {
             timeLow  = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_L;
-            timeHigh  = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_H;
+            timeHigh = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_H;
         }
         *nanosecond = ((uint64_t)timeHigh << 32U) + timeLow;
         result      = kStatus_Success;
@@ -334,7 +334,8 @@ static void __NETC_TimerGetCurrentTime(ENETC_PF_TMR_Type *base, uint64_t *nanose
     uint32_t timeLow, timeHigh[2];
 
     timeHigh[0] = base->TMR_CUR_TIME_H;
-    do {
+    do
+    {
         timeHigh[1] = timeHigh[0];
         timeLow     = base->TMR_CUR_TIME_L;
         timeHigh[0] = base->TMR_CUR_TIME_H;
@@ -345,13 +346,17 @@ static void __NETC_TimerGetCurrentTime(ENETC_PF_TMR_Type *base, uint64_t *nanose
 
 void NETC_TimerGetTime(ENETC_PF_TMR_Type *base, uint64_t *nanosecond)
 {
-    if ((base->TMR_CTRL & ENETC_PF_TMR_TMR_CTRL_TE_MASK) != 0U) {
+    if ((base->TMR_CTRL & ENETC_PF_TMR_TMR_CTRL_TE_MASK) != 0U)
+    {
         __NETC_TimerGetCurrentTime(base, nanosecond);
-    } else {
+    }
+    else
+    {
         uint32_t timeLow, timeHigh[2];
 
         timeHigh[0] = base->TMR_DEF_CNT_H;
-        do {
+        do
+        {
             timeHigh[1] = timeHigh[0];
             timeLow     = base->TMR_DEF_CNT_L;
             timeHigh[0] = base->TMR_DEF_CNT_H;
