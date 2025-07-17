@@ -15,15 +15,13 @@
 **
 **     Reference manual:    KV5XP144M240RM Rev. 3, 02/2016
 **     Version:             rev. 0.3, 2016-02-29
-**     Build:               b210308
+**     Build:               b250717
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MKV56F24
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -37,6 +35,7 @@
 **         FMC - corrected base address.
 **     - rev. 0.3 (2016-02-29)
 **         PORT - removed registers GICLR, GICHR.
+**         CAN  - removed instance CAN2.
 **
 ** ###################################################################
 */
@@ -44,7 +43,7 @@
 /*!
  * @file MKV56F24.h
  * @version 0.3
- * @date 2016-02-29
+ * @date 2025-07-17
  * @brief CMSIS Peripheral Access Layer for MKV56F24
  *
  * CMSIS Peripheral Access Layer for MKV56F24
@@ -32272,7 +32271,6 @@ typedef struct {
 #define DSPI2                     SPI2
 #define FLEXCAN0                  CAN0
 #define FLEXCAN1                  CAN1
-#define FLEXCAN2                  CAN2
 #define DMAMUX0                   DMAMUX
 
 /*!
