@@ -202,3 +202,5 @@ Patch List:
         - Add include of usb_host_mcux_drv_port.h.
         - Remove include of usb_host.h, usb_host_hci.h, usb_host_devices.h and usb_host_framework.h.
       - Update usb_host_ehci.c and usb_host_ip3516hs.c to not depend on usb_host_device_instance_t struct.
+  - mcux-sdk: devices: fix MKV56F24.h wrong macro
+      - The MKV56F24 device doesn't contain CAN2 peripheral. Remove it from the device header.
