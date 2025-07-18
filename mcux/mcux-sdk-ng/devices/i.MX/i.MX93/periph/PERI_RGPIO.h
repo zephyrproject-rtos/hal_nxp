@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RGPIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RGPIO.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_RGPIO.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RGPIO
  *
  * CMSIS Peripheral Access Layer for RGPIO
  */
 
-#if !defined(RGPIO_H_)
-#define RGPIO_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RGPIO_H_)
+#define PERI_RGPIO_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -196,17 +199,17 @@ typedef struct {
   __IO uint32_t ICNP;                              /**< Interrupt Control Non-Privilege, offset: 0x1C */
        uint8_t RESERVED_1[32];
   __IO uint32_t PDOR;                              /**< Port Data Output Register, offset: 0x40 */
-  __O  uint32_t PSOR;                              /**< Port Set Output Register, offset: 0x44 */
-  __O  uint32_t PCOR;                              /**< Port Clear Output Register, offset: 0x48 */
-  __O  uint32_t PTOR;                              /**< Port Toggle Output Register, offset: 0x4C */
+  __IO uint32_t PSOR;                              /**< Port Set Output Register, offset: 0x44 */
+  __IO uint32_t PCOR;                              /**< Port Clear Output Register, offset: 0x48 */
+  __IO uint32_t PTOR;                              /**< Port Toggle Output Register, offset: 0x4C */
   __I  uint32_t PDIR;                              /**< Port Data Input Register, offset: 0x50 */
   __IO uint32_t PDDR;                              /**< Port Data Direction Register, offset: 0x54 */
   __IO uint32_t PIDR;                              /**< Port Input Disable Register, offset: 0x58 */
        uint8_t RESERVED_2[4];
   __IO uint8_t PDR[RGPIO_PDR_COUNT];               /**< Pin Data Register a, array offset: 0x60, array step: 0x1 */
   __IO uint32_t ICR[RGPIO_ICR_COUNT];              /**< Interrupt Control Register 0..Interrupt Control Register 31, array offset: 0x80, array step: 0x4 */
-  __O  uint32_t GICLR;                             /**< Global Interrupt Control Low Register, offset: 0x100 */
-  __O  uint32_t GICHR;                             /**< Global Interrupt Control High Register, offset: 0x104 */
+  __IO uint32_t GICLR;                             /**< Global Interrupt Control Low Register, offset: 0x100 */
+  __IO uint32_t GICHR;                             /**< Global Interrupt Control High Register, offset: 0x104 */
        uint8_t RESERVED_3[24];
   __IO uint32_t ISFR[RGPIO_ISFR_COUNT];            /**< Interrupt Status Flag Register, array offset: 0x120, array step: 0x4 */
 } RGPIO_Type;
@@ -3764,5 +3767,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RGPIO_H_ */
+#endif  /* PERI_RGPIO_H_ */
 

@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_BLK_CTRL_NS_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AON_BLK_CTRL_NS_AONMIX.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_AON_BLK_CTRL_NS_AONMIX.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AON_BLK_CTRL_NS_AONMIX
  *
  * CMSIS Peripheral Access Layer for AON_BLK_CTRL_NS_AONMIX
  */
 
-#if !defined(AON_BLK_CTRL_NS_AONMIX_H_)
-#define AON_BLK_CTRL_NS_AONMIX_H_                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AON_BLK_CTRL_NS_AONMIX_H_)
+#define PERI_AON_BLK_CTRL_NS_AONMIX_H_           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -201,8 +474,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_GPC_CFG_M7_SLEEP_SEL_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_GPC_CFG_M7_SLEEP_SEL_SHIFT (1U)
 /*! M7_SLEEP_SEL - M7 SLEEP Request Select
- *  0b1..Select SLEEPDEEP as request source
  *  0b0..Select SLEEPING as request source
+ *  0b1..Select SLEEPDEEP as request source
  */
 #define AON_BLK_CTRL_NS_AONMIX_GPC_CFG_M7_SLEEP_SEL(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_GPC_CFG_M7_SLEEP_SEL_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_GPC_CFG_M7_SLEEP_SEL_MASK)
 /*! @} */
@@ -347,8 +620,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_sys_ctr1_MASK)
 /*! @} */
@@ -367,8 +640,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_SHIFT (1U)
 /*! edma1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_MASK)
 
@@ -471,8 +744,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_pdm_MASK (0x4000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_pdm_SHIFT (14U)
 /*! pdm - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_pdm(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_pdm_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_pdm_MASK)
 
@@ -491,64 +764,64 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1_SHIFT (0U)
 /*! can1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_SHIFT (1U)
 /*! edma1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1_SHIFT (2U)
 /*! lpi2c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c2_MASK (0x8U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c2_SHIFT (3U)
 /*! lpi2c2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpit1_MASK (0x10U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpit1_SHIFT (4U)
 /*! lpit1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpit1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpit1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpit1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi1_MASK (0x20U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi1_SHIFT (5U)
 /*! lpspi1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi2_MASK (0x40U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi2_SHIFT (6U)
 /*! lpspi2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpspi2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lptmr1_MASK (0x80U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lptmr1_SHIFT (7U)
 /*! lptmr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lptmr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lptmr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lptmr1_MASK)
 
@@ -563,56 +836,56 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm1_MASK (0x200U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm1_SHIFT (9U)
 /*! tpm1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm2_MASK (0x400U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm2_SHIFT (10U)
 /*! tpm2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_tpm2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog1_MASK (0x800U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog1_SHIFT (11U)
 /*! wdog1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog2_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog2_SHIFT (12U)
 /*! wdog2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_wdog2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_i3c1_MASK (0x2000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_i3c1_SHIFT (13U)
 /*! i3c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_i3c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_i3c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_i3c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_pdm_MASK (0x4000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_pdm_SHIFT (14U)
 /*! pdm - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_pdm(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_pdm_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_pdm_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_sys_ctr1_MASK)
 /*! @} */
@@ -623,56 +896,56 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1_SHIFT (0U)
 /*! can1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_SHIFT (1U)
 /*! edma1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1_SHIFT (2U)
 /*! lpi2c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c2_MASK (0x8U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c2_SHIFT (3U)
 /*! lpi2c2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpit1_MASK (0x10U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpit1_SHIFT (4U)
 /*! lpit1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpit1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpit1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpit1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi1_MASK (0x20U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi1_SHIFT (5U)
 /*! lpspi1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi2_MASK (0x40U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi2_SHIFT (6U)
 /*! lpspi2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpspi2_MASK)
 
@@ -687,8 +960,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sai1_MASK (0x100U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sai1_SHIFT (8U)
 /*! sai1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sai1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sai1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sai1_MASK)
 
@@ -703,48 +976,48 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_tpm2_MASK (0x400U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_tpm2_SHIFT (10U)
 /*! tpm2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_tpm2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_tpm2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_tpm2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog1_MASK (0x800U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog1_SHIFT (11U)
 /*! wdog1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog2_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog2_SHIFT (12U)
 /*! wdog2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_wdog2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_i3c1_MASK (0x2000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_i3c1_SHIFT (13U)
 /*! i3c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_i3c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_i3c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_i3c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_pdm_MASK (0x4000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_pdm_SHIFT (14U)
 /*! pdm - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_pdm(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_pdm_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_pdm_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_sys_ctr1_MASK)
 /*! @} */
@@ -851,16 +1124,16 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_wdog2_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_wdog2_SHIFT (12U)
 /*! wdog2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_wdog2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_wdog2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_wdog2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_i3c1_MASK (0x2000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_i3c1_SHIFT (13U)
 /*! i3c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_i3c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_i3c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_i3c1_MASK)
 
@@ -875,8 +1148,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_sys_ctr1_MASK)
 /*! @} */
@@ -887,56 +1160,56 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1_SHIFT (0U)
 /*! can1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_SHIFT (1U)
 /*! edma1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1_SHIFT (2U)
 /*! lpi2c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c2_MASK (0x8U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c2_SHIFT (3U)
 /*! lpi2c2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpit1_MASK (0x10U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpit1_SHIFT (4U)
 /*! lpit1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpit1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpit1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpit1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi1_MASK (0x20U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi1_SHIFT (5U)
 /*! lpspi1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi2_MASK (0x40U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi2_SHIFT (6U)
 /*! lpspi2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpspi2_MASK)
 
@@ -951,64 +1224,64 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sai1_MASK (0x100U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sai1_SHIFT (8U)
 /*! sai1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sai1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sai1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sai1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm1_MASK (0x200U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm1_SHIFT (9U)
 /*! tpm1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm2_MASK (0x400U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm2_SHIFT (10U)
 /*! tpm2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_tpm2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog1_MASK (0x800U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog1_SHIFT (11U)
 /*! wdog1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog2_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog2_SHIFT (12U)
 /*! wdog2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_wdog2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_i3c1_MASK (0x2000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_i3c1_SHIFT (13U)
 /*! i3c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_i3c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_i3c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_i3c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_pdm_MASK (0x4000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_pdm_SHIFT (14U)
 /*! pdm - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_pdm(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_pdm_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_pdm_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_sys_ctr1_MASK)
 /*! @} */
@@ -1115,16 +1388,16 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_wdog2_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_wdog2_SHIFT (12U)
 /*! wdog2 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_wdog2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_wdog2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_wdog2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_i3c1_MASK (0x2000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_i3c1_SHIFT (13U)
 /*! i3c1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_i3c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_i3c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_i3c1_MASK)
 
@@ -1139,8 +1412,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_sys_ctr1_MASK)
 /*! @} */
@@ -1271,8 +1544,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_sys_ctr1_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_sys_ctr1_SHIFT (15U)
 /*! sys_ctr1 - Mask bit for debug halted mode
- *  0b1..Block enters debug halted mode when CA55 is debug halted
  *  0b0..Block does not enter debug halted mode with CA55
+ *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_sys_ctr1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_sys_ctr1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_sys_ctr1_MASK)
 /*! @} */
@@ -1283,8 +1556,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_SHIFT (0U)
 /*! OSCCA_FUSE_READ_DIS - Fuse read disable bit
- *  0b1..SoC is not allowed to access the OCOTP
  *  0b0..SoC is allowed to access the OCOTP registers
+ *  0b1..SoC is not allowed to access the OCOTP
  */
 #define AON_BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_MASK)
 /*! @} */
@@ -1448,8 +1721,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_OCOTP_STATUS_busy_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_OCOTP_STATUS_busy_SHIFT (0U)
 /*! busy - OCOTP controller busy bit
- *  0b1..Busy
  *  0b0..Idle
+ *  0b1..Busy
  */
 #define AON_BLK_CTRL_NS_AONMIX_OCOTP_STATUS_busy(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_OCOTP_STATUS_busy_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_OCOTP_STATUS_busy_MASK)
 /*! @} */
@@ -1460,8 +1733,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_sel_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_sel_SHIFT (0U)
 /*! sel - select source for pdm clock
- *  0b1..SAI1_MCLK
  *  0b0..PDM root clock
+ *  0b1..SAI1_MCLK
  */
 #define AON_BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_sel(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_sel_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_PDM_CLK_SEL_sel_MASK)
 /*! @} */
@@ -1492,8 +1765,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_SSI_BLKHOLE_MODE_B_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_SSI_BLKHOLE_MODE_B_SHIFT (1U)
 /*! BLKHOLE_MODE_B - AONMIX SSI master blackhole mode
- *  0b1..AONMIX SSI master will exit from blackhole mode
  *  0b0..AONMIX SSI master will enter into blackhole mode
+ *  0b1..AONMIX SSI master will exit from blackhole mode
  */
 #define AON_BLK_CTRL_NS_AONMIX_SSI_BLKHOLE_MODE_B(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_SSI_BLKHOLE_MODE_B_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_SSI_BLKHOLE_MODE_B_MASK)
 /*! @} */
@@ -1518,8 +1791,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_SHIFT (1U)
 /*! MQS_EN - MQS Enable
- *  0b1..Enable MQS
  *  0b0..Disable MQS
+ *  0b1..Enable MQS
  */
 #define AON_BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_MQS_SETTINGS_MQS_EN_MASK)
 
@@ -1569,16 +1842,16 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop_SHIFT (0U)
 /*! can1_stop - CAN1 ipg_stop control
- *  0b1..Enable stop
  *  0b0..Disable stop
+ *  0b1..Enable stop
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_SHIFT (1U)
 /*! edma1_stop - EDMA1 ipg_stop control
- *  0b1..Enable stop
  *  0b0..Disable stop
+ *  0b1..Enable stop
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_MASK)
 
@@ -1621,8 +1894,8 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_ACK_STATUS_pdm_stop_ack_MASK (0x200U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_ACK_STATUS_pdm_stop_ack_SHIFT (9U)
 /*! pdm_stop_ack - PDM ipg_stop_ack status
- *  0b1..Stop acknowledge
  *  0b0..No stop acknowledge
+ *  0b1..Stop acknowledge
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_ACK_STATUS_pdm_stop_ack(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_STOP_ACK_STATUS_pdm_stop_ack_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_STOP_ACK_STATUS_pdm_stop_ack_MASK)
 /*! @} */
@@ -1633,88 +1906,88 @@ typedef struct {
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_can1_doze_MASK (0x1U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_can1_doze_SHIFT (0U)
 /*! can1_doze - CAN1 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_can1_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_can1_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_can1_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c1_doze_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c1_doze_SHIFT (2U)
 /*! lpi2c1_doze - LPI2C1 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c1_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c1_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c1_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c2_doze_MASK (0x8U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c2_doze_SHIFT (3U)
 /*! lpi2c2_doze - LPI2C2 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c2_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c2_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpi2c2_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpit1_doze_MASK (0x10U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpit1_doze_SHIFT (4U)
 /*! lpit1_doze - LPIT1 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpit1_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpit1_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpit1_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi1_doze_MASK (0x20U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi1_doze_SHIFT (5U)
 /*! lpspi1_doze - LPSPI1 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi1_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi1_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi1_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi2_doze_MASK (0x40U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi2_doze_SHIFT (6U)
 /*! lpspi2_doze - LPSPI2 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi2_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi2_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpspi2_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart1_doze_MASK (0x80U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart1_doze_SHIFT (7U)
 /*! lpuart1_doze - LPUART1 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart1_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart1_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart1_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart2_doze_MASK (0x100U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart2_doze_SHIFT (8U)
 /*! lpuart2_doze - LPUART2 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart2_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart2_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_lpuart2_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_pdm_doze_MASK (0x200U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_pdm_doze_SHIFT (9U)
 /*! pdm_doze - PDM doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_pdm_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_pdm_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_pdm_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm1_doze_MASK (0x800U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm1_doze_SHIFT (11U)
 /*! tpm1_doze - TPM1 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm1_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm1_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm1_doze_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm2_doze_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm2_doze_SHIFT (12U)
 /*! tpm2_doze - TPM2 doze control
- *  0b1..Enable doze
  *  0b0..Disable doze
+ *  0b1..Enable doze
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm2_doze(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm2_doze_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DOZE_CTL_tpm2_doze_MASK)
 /*! @} */
@@ -2028,5 +2301,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AON_BLK_CTRL_NS_AONMIX_H_ */
+#endif  /* PERI_AON_BLK_CTRL_NS_AONMIX_H_ */
 

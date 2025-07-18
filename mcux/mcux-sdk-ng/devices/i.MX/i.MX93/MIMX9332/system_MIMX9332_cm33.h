@@ -10,8 +10,8 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b231019
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,12 +28,15 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 #ifndef _SYSTEM_MIMX9332_cm33_H_
-#define _SYSTEM_MIMX9332_cm33_H_ /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MIMX9332_cm33_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,4 +92,4 @@ void SystemCoreClockUpdate(void);
 }
 #endif
 
-#endif /* _SYSTEM_MIMX9332_cm33_H_ */
+#endif  /* _SYSTEM_MIMX9332_cm33_H_ */

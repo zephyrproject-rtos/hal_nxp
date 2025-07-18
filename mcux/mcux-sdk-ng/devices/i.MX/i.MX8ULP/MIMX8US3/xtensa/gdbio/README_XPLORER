@@ -1,0 +1,34 @@
+About memmap.xmm
+----------------
+
+WARNING: The memmap.xmm file in this lsp will NOT be updated with latest changes. 
+
+The memory map editor saves changes only to sim/memmap.xmm.
+This is intentional because the clone config is treated as a "set of standard lsps" with a single memory map. 
+Other lsps such as sim-rom, min-rt, represent different target platforms, 
+differing from sim in the parameters they use (such as ROMING=true, ENTRY=symbol, etc).
+
+Since the memmap.xmm files of other lsps are siblings of sim/memmap.xmm, 
+we generate only linker scripts for the other lsps by asking xt-genldscripts 
+to read the memory partition info from sim/memmap.xmm and parameters from other lsps.
+
+So if user creates a "clone config for editing memory map", the memmap.xmm files for lsps apart from sim 
+will not be updated, only their linker scripts will be generated. 
+
+Also, these linker scripts will be generated lazily by the makefile, 
+when this lsp is used as a part of a managed xtensa c/c++ project. 
+If you plan to use this lsp in an unmanaged project, i.e. a project where makefiles are written by you, 
+please generate all lsps using the menuitem "Generate linker scripts" on the context menu of the clone config,
+before building the project.
+
+However, if you want to create a new lsp for your target platform, Xplorer has a new feature called "Custom LSP". 
+You can create a custom lsp by copying one of the standard lsps (sim, gdbio, min-rt, etc.) as a starting point, 
+and then modify this custom lsp as per the requirements of your target platform.
+
+The custom lsp is now de-linked from the standard lsps, and you can independently make changes to it 
+through the memory map editor. Any changes will be saved to <new_custom_lsp>/memmap.xmm, 
+and its linker scripts will be generated. 
+
+To create a custom lsp, select an installed build, right click and click the menuitem "Create Custom LSP".
+ 
+Please read the help at Concepts -> "Memory Map and Custom LSP" for more details.

@@ -21,14 +21,14 @@
 **                          MIMX8MQ7DVAJZ_ca53
 **                          MIMX8MQ7DVAJZ_cm4
 **
-**     Version:             rev. 4.0, 2018-01-26
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,21 +43,24 @@
 **         Rev.C Header EAR2
 **     - rev. 4.0 (2018-01-26)
 **         Rev.D Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CCM.h
- * @version 4.0
- * @date 2018-01-26
+ * @file PERI_CCM.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CCM
  *
  * CMSIS Peripheral Access Layer for CCM
  */
 
-#if !defined(CCM_H_)
-#define CCM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CCM_H_)
+#define PERI_CCM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MD6CVAHZ_ca53) || defined(CPU_MIMX8MD6DVAJZ_ca53))
 #include "MIMX8MD6_ca53_COMMON.h"
@@ -1677,5 +1680,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CCM_H_ */
+#endif  /* PERI_CCM_H_ */
 

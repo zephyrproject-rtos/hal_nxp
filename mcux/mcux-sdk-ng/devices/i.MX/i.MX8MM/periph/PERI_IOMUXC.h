@@ -25,14 +25,14 @@
 **                          MIMX8MM6DVTLZ_ca53
 **                          MIMX8MM6DVTLZ_cm4
 **
-**     Version:             rev. 4.0, 2019-02-18
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Rev.B Header PRC
 **     - rev. 4.0 (2019-02-18)
 **         Rev.0 Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC.h
- * @version 4.0
- * @date 2019-02-18
+ * @file PERI_IOMUXC.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC
  *
  * CMSIS Peripheral Access Layer for IOMUXC
  */
 
-#if !defined(IOMUXC_H_)
-#define IOMUXC_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_H_)
+#define PERI_IOMUXC_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MM1CVTKZ_ca53) || defined(CPU_MIMX8MM1DVTLZ_ca53))
 #include "MIMX8MM1_ca53_COMMON.h"
@@ -613,8 +616,8 @@ typedef struct {
 #define IOMUXC_SW_MUX_CTL_PAD_SION_MASK          (0x10U)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT         (4U)
 /*! SION
- *  0b1..Force input path of pad SPDIF_EXT_CLK
  *  0b0..Input Path is determined by functionality of the selected mux mode (regular).
+ *  0b1..Force input path of pad SPDIF_EXT_CLK
  */
 #define IOMUXC_SW_MUX_CTL_PAD_SION(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_SION_MASK)
 /*! @} */
@@ -626,8 +629,8 @@ typedef struct {
 #define IOMUXC_SW_PAD_CTL_PAD_DSE_SHIFT          (0U)
 /*! DSE - Drive Strength Field
  *  0b00x..Drive strength X1
- *  0b10x..Drive strength X2
  *  0b01x..Drive strength X4
+ *  0b10x..Drive strength X2
  *  0b11x..Drive strength X6
  */
 #define IOMUXC_SW_PAD_CTL_PAD_DSE(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_DSE_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_DSE_MASK)
@@ -722,5 +725,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_H_ */
+#endif  /* PERI_IOMUXC_H_ */
 

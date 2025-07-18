@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ADC.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_ADC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC
  */
 
-#if !defined(ADC_H_)
-#define ADC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ADC_H_)
+#define PERI_ADC_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -317,10 +590,42 @@ typedef struct {
 /*! JSTART - Start Injection Conversion */
 #define ADC_MCR_JSTART(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MCR_JSTART_SHIFT)) & ADC_MCR_JSTART_MASK)
 
+#define ADC_MCR_JEDGE_MASK                       (0x200000U)
+#define ADC_MCR_JEDGE_SHIFT                      (21U)
+/*! JEDGE - Injection Trigger Edge Selection
+ *  0b0..Falling edge is trigger
+ *  0b1..Rising edge is trigger
+ */
+#define ADC_MCR_JEDGE(x)                         (((uint32_t)(((uint32_t)(x)) << ADC_MCR_JEDGE_SHIFT)) & ADC_MCR_JEDGE_MASK)
+
+#define ADC_MCR_JTRGEN_MASK                      (0x400000U)
+#define ADC_MCR_JTRGEN_SHIFT                     (22U)
+/*! JTRGEN - Injection External Trigger Enable
+ *  0b0..Injected conversion not started by external trigger
+ *  0b1..Injected conversion started by external trigger
+ */
+#define ADC_MCR_JTRGEN(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MCR_JTRGEN_SHIFT)) & ADC_MCR_JTRGEN_MASK)
+
 #define ADC_MCR_NSTART_MASK                      (0x1000000U)
 #define ADC_MCR_NSTART_SHIFT                     (24U)
 /*! NSTART - Normal Conversion Start */
 #define ADC_MCR_NSTART(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MCR_NSTART_SHIFT)) & ADC_MCR_NSTART_MASK)
+
+#define ADC_MCR_EDGE_MASK                        (0x4000000U)
+#define ADC_MCR_EDGE_SHIFT                       (26U)
+/*! EDGE - Trigger Edge Select
+ *  0b0..Falling edge is trigger
+ *  0b1..Rising edge is trigger
+ */
+#define ADC_MCR_EDGE(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_MCR_EDGE_SHIFT)) & ADC_MCR_EDGE_MASK)
+
+#define ADC_MCR_TRGEN_MASK                       (0x8000000U)
+#define ADC_MCR_TRGEN_SHIFT                      (27U)
+/*! TRGEN - External Trigger Enable
+ *  0b0..External trigger is disabled
+ *  0b1..Enables the external trigger to start a conversion
+ */
+#define ADC_MCR_TRGEN(x)                         (((uint32_t)(((uint32_t)(x)) << ADC_MCR_TRGEN_SHIFT)) & ADC_MCR_TRGEN_MASK)
 
 #define ADC_MCR_MODE_MASK                        (0x20000000U)
 #define ADC_MCR_MODE_SHIFT                       (29U)
@@ -355,10 +660,10 @@ typedef struct {
 /*! ADCSTATUS - ADC Status
  *  0b000..Idle
  *  0b001..Power-down
+ *  0b010..Wait state (waiting to start conversion after [external trigger]).
+ *  0b011..Busy in calibration
  *  0b100..Sample
  *  0b110..Conversion
- *  0b010..Wait state
- *  0b011..Busy in calibration
  */
 #define ADC_MSR_ADCSTATUS(x)                     (((uint32_t)(((uint32_t)(x)) << ADC_MSR_ADCSTATUS_SHIFT)) & ADC_MSR_ADCSTATUS_MASK)
 
@@ -381,14 +686,11 @@ typedef struct {
  *  0b0000101..Channel 5 selected
  *  0b0000110..Channel 6 selected
  *  0b0000111..Channel 7 selected
- *  0b0001000..Reserved
- *  0b0001001..Reserved
- *  0b0001010..Reserved
- *  0b0001011..Bandgap input selected
- *  0b0001100..Pre-sample voltage - 1 : DVDD1P0/2
- *  0b0001101..Pre-sample voltage - 2 : AVDD1p8/4
- *  0b0001110..Pre-sample voltage - 3 : VREFL_1p8
- *  0b0001111..Pre-sample voltage - 4 : VREFH_1p8
+ *  0b0100000..Bandgap input selected
+ *  0b0100001..Pre-sample voltage - 1 : DVDD1P0/2
+ *  0b0100010..Pre-sample voltage - 2 : AVDD1p8
+ *  0b0100011..Pre-sample voltage - 3 : VREFL_1p8
+ *  0b0100100..Pre-sample voltage - 4 : VREFH_1p8
  */
 #define ADC_MSR_CHADDR(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MSR_CHADDR_SHIFT)) & ADC_MSR_CHADDR_MASK)
 
@@ -436,8 +738,8 @@ typedef struct {
 #define ADC_MSR_CALFAIL_SHIFT                    (30U)
 /*! CALFAIL - Calibration Failed
  *  0b0..Calibration passed (must be checked with CALBUSY = 0b)
- *  0b1..Calibration failed
  *  0b0..No effect
+ *  0b1..Calibration failed
  *  0b1..Clear the flag
  */
 #define ADC_MSR_CALFAIL(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_MSR_CALFAIL_SHIFT)) & ADC_MSR_CALFAIL_MASK)
@@ -458,9 +760,9 @@ typedef struct {
 #define ADC_ISR_ECH_SHIFT                        (0U)
 /*! ECH - End of Conversion Chain
  *  0b0..End of conversion chain has not occurred
- *  0b1..End of conversion chain has occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..End of conversion chain has occurred
  */
 #define ADC_ISR_ECH(x)                           (((uint32_t)(((uint32_t)(x)) << ADC_ISR_ECH_SHIFT)) & ADC_ISR_ECH_MASK)
 
@@ -468,8 +770,8 @@ typedef struct {
 #define ADC_ISR_EOC_SHIFT                        (1U)
 /*! EOC - End of Channel Conversion
  *  0b0..Channel end of conversion has not occurred
- *  0b1..Channel end of conversion has occurred
  *  0b0..No effect
+ *  0b1..Channel end of conversion has occurred
  *  0b1..Clear the flag
  */
 #define ADC_ISR_EOC(x)                           (((uint32_t)(((uint32_t)(x)) << ADC_ISR_EOC_SHIFT)) & ADC_ISR_EOC_MASK)
@@ -478,9 +780,9 @@ typedef struct {
 #define ADC_ISR_JECH_SHIFT                       (2U)
 /*! JECH - Injected End of Conversion Chain
  *  0b0..Injected channel end of conversion chain has not occurred
- *  0b1..Injected channel end of conversion chain has occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Injected channel end of conversion chain has occurred
  */
 #define ADC_ISR_JECH(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_ISR_JECH_SHIFT)) & ADC_ISR_JECH_MASK)
 
@@ -488,9 +790,9 @@ typedef struct {
 #define ADC_ISR_JEOC_SHIFT                       (3U)
 /*! JEOC - Injected Channel End of Conversion
  *  0b0..Injected channel end of conversion has not occurred
- *  0b1..Injected channel end of conversion has occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Injected channel end of conversion has occurred
  */
 #define ADC_ISR_JEOC(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_ISR_JEOC_SHIFT)) & ADC_ISR_JEOC_MASK)
 /*! @} */
@@ -502,9 +804,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH0_SHIFT                (0U)
 /*! EOC_CH0 - Channel 0 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH0(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH0_SHIFT)) & ADC_CEOCFR0_EOC_CH0_MASK)
 
@@ -512,9 +814,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH1_SHIFT                (1U)
 /*! EOC_CH1 - Channel 1 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH1(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH1_SHIFT)) & ADC_CEOCFR0_EOC_CH1_MASK)
 
@@ -522,9 +824,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH2_SHIFT                (2U)
 /*! EOC_CH2 - Channel 2 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH2(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH2_SHIFT)) & ADC_CEOCFR0_EOC_CH2_MASK)
 
@@ -532,9 +834,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH3_SHIFT                (3U)
 /*! EOC_CH3 - Channel 3 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH3(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH3_SHIFT)) & ADC_CEOCFR0_EOC_CH3_MASK)
 
@@ -542,9 +844,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH4_SHIFT                (4U)
 /*! EOC_CH4 - Channel 4 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH4(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH4_SHIFT)) & ADC_CEOCFR0_EOC_CH4_MASK)
 
@@ -552,9 +854,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH5_SHIFT                (5U)
 /*! EOC_CH5 - Channel 5 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH5(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH5_SHIFT)) & ADC_CEOCFR0_EOC_CH5_MASK)
 
@@ -562,9 +864,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH6_SHIFT                (6U)
 /*! EOC_CH6 - Channel 6 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH6(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH6_SHIFT)) & ADC_CEOCFR0_EOC_CH6_MASK)
 
@@ -572,9 +874,9 @@ typedef struct {
 #define ADC_CEOCFR0_EOC_CH7_SHIFT                (7U)
 /*! EOC_CH7 - Channel 7 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR0_EOC_CH7(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR0_EOC_CH7_SHIFT)) & ADC_CEOCFR0_EOC_CH7_MASK)
 /*! @} */
@@ -586,9 +888,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH32_SHIFT               (0U)
 /*! EOC_CH32 - Channel 32 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH32(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH32_SHIFT)) & ADC_CEOCFR1_EOC_CH32_MASK)
 
@@ -596,9 +898,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH33_SHIFT               (1U)
 /*! EOC_CH33 - Channel 33 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH33(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH33_SHIFT)) & ADC_CEOCFR1_EOC_CH33_MASK)
 
@@ -606,9 +908,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH34_SHIFT               (2U)
 /*! EOC_CH34 - Channel 34 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH34(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH34_SHIFT)) & ADC_CEOCFR1_EOC_CH34_MASK)
 
@@ -616,9 +918,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH35_SHIFT               (3U)
 /*! EOC_CH35 - Channel 35 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH35(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH35_SHIFT)) & ADC_CEOCFR1_EOC_CH35_MASK)
 
@@ -626,9 +928,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH36_SHIFT               (4U)
 /*! EOC_CH36 - Channel 36 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH36(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH36_SHIFT)) & ADC_CEOCFR1_EOC_CH36_MASK)
 
@@ -636,9 +938,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH37_SHIFT               (5U)
 /*! EOC_CH37 - Channel 37 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH37(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH37_SHIFT)) & ADC_CEOCFR1_EOC_CH37_MASK)
 
@@ -646,9 +948,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH38_SHIFT               (6U)
 /*! EOC_CH38 - Channel 38 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH38(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH38_SHIFT)) & ADC_CEOCFR1_EOC_CH38_MASK)
 
@@ -656,9 +958,9 @@ typedef struct {
 #define ADC_CEOCFR1_EOC_CH39_SHIFT               (7U)
 /*! EOC_CH39 - Channel 39 EOC Status
  *  0b0..Conversion not complete
- *  0b1..Conversion complete
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Conversion complete
  */
 #define ADC_CEOCFR1_EOC_CH39(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CEOCFR1_EOC_CH39_SHIFT)) & ADC_CEOCFR1_EOC_CH39_MASK)
 /*! @} */
@@ -842,9 +1144,9 @@ typedef struct {
 #define ADC_WTISR_WDG0L_SHIFT                    (0U)
 /*! WDG0L - Channel 0 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG0L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG0L_SHIFT)) & ADC_WTISR_WDG0L_MASK)
 
@@ -852,9 +1154,9 @@ typedef struct {
 #define ADC_WTISR_WDG0H_SHIFT                    (1U)
 /*! WDG0H - Channel 0 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG0H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG0H_SHIFT)) & ADC_WTISR_WDG0H_MASK)
 
@@ -862,9 +1164,9 @@ typedef struct {
 #define ADC_WTISR_WDG1L_SHIFT                    (2U)
 /*! WDG1L - Channel 1 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG1L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG1L_SHIFT)) & ADC_WTISR_WDG1L_MASK)
 
@@ -872,9 +1174,9 @@ typedef struct {
 #define ADC_WTISR_WDG1H_SHIFT                    (3U)
 /*! WDG1H - Channel 1 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG1H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG1H_SHIFT)) & ADC_WTISR_WDG1H_MASK)
 
@@ -882,9 +1184,9 @@ typedef struct {
 #define ADC_WTISR_WDG2L_SHIFT                    (4U)
 /*! WDG2L - Channel 2 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG2L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG2L_SHIFT)) & ADC_WTISR_WDG2L_MASK)
 
@@ -892,9 +1194,9 @@ typedef struct {
 #define ADC_WTISR_WDG2H_SHIFT                    (5U)
 /*! WDG2H - Channel 2 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG2H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG2H_SHIFT)) & ADC_WTISR_WDG2H_MASK)
 
@@ -902,9 +1204,9 @@ typedef struct {
 #define ADC_WTISR_WDG3L_SHIFT                    (6U)
 /*! WDG3L - Channel 3 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG3L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG3L_SHIFT)) & ADC_WTISR_WDG3L_MASK)
 
@@ -912,9 +1214,9 @@ typedef struct {
 #define ADC_WTISR_WDG3H_SHIFT                    (7U)
 /*! WDG3H - Channel 3 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG3H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG3H_SHIFT)) & ADC_WTISR_WDG3H_MASK)
 
@@ -922,9 +1224,9 @@ typedef struct {
 #define ADC_WTISR_WDG4L_SHIFT                    (8U)
 /*! WDG4L - Channel 4 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG4L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG4L_SHIFT)) & ADC_WTISR_WDG4L_MASK)
 
@@ -932,9 +1234,9 @@ typedef struct {
 #define ADC_WTISR_WDG4H_SHIFT                    (9U)
 /*! WDG4H - Channel 4 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG4H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG4H_SHIFT)) & ADC_WTISR_WDG4H_MASK)
 
@@ -942,9 +1244,9 @@ typedef struct {
 #define ADC_WTISR_WDG5L_SHIFT                    (10U)
 /*! WDG5L - Channel 5 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG5L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG5L_SHIFT)) & ADC_WTISR_WDG5L_MASK)
 
@@ -952,9 +1254,9 @@ typedef struct {
 #define ADC_WTISR_WDG5H_SHIFT                    (11U)
 /*! WDG5H - Channel 5 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG5H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG5H_SHIFT)) & ADC_WTISR_WDG5H_MASK)
 
@@ -962,9 +1264,9 @@ typedef struct {
 #define ADC_WTISR_WDG6L_SHIFT                    (12U)
 /*! WDG6L - Channel 6 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG6L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG6L_SHIFT)) & ADC_WTISR_WDG6L_MASK)
 
@@ -972,9 +1274,9 @@ typedef struct {
 #define ADC_WTISR_WDG6H_SHIFT                    (13U)
 /*! WDG6H - Channel 6 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG6H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG6H_SHIFT)) & ADC_WTISR_WDG6H_MASK)
 
@@ -982,9 +1284,9 @@ typedef struct {
 #define ADC_WTISR_WDG7L_SHIFT                    (14U)
 /*! WDG7L - Channel 7 Watchdog Low Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG7L(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG7L_SHIFT)) & ADC_WTISR_WDG7L_MASK)
 
@@ -992,9 +1294,9 @@ typedef struct {
 #define ADC_WTISR_WDG7H_SHIFT                    (15U)
 /*! WDG7H - Channel 7 Watchdog High Threshold Interrupt
  *  0b0..Interrupt not asserted
- *  0b1..Interrupt asserted
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt asserted
  */
 #define ADC_WTISR_WDG7H(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_WTISR_WDG7H_SHIFT)) & ADC_WTISR_WDG7H_MASK)
 /*! @} */
@@ -2177,9 +2479,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH0_SHIFT                (0U)
 /*! AWOR_CH0 - Analog Watchdog Out of Range for Channel 0
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH0(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH0_SHIFT)) & ADC_AWORR0_AWOR_CH0_MASK)
 
@@ -2187,9 +2489,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH1_SHIFT                (1U)
 /*! AWOR_CH1 - Analog Watchdog Out of Range for Channel 1
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH1(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH1_SHIFT)) & ADC_AWORR0_AWOR_CH1_MASK)
 
@@ -2197,9 +2499,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH2_SHIFT                (2U)
 /*! AWOR_CH2 - Analog Watchdog Out of Range for Channel 2
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH2(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH2_SHIFT)) & ADC_AWORR0_AWOR_CH2_MASK)
 
@@ -2207,9 +2509,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH3_SHIFT                (3U)
 /*! AWOR_CH3 - Analog Watchdog Out of Range for Channel 3
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH3(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH3_SHIFT)) & ADC_AWORR0_AWOR_CH3_MASK)
 
@@ -2217,9 +2519,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH4_SHIFT                (4U)
 /*! AWOR_CH4 - Analog Watchdog Out of Range for Channel 4
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH4(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH4_SHIFT)) & ADC_AWORR0_AWOR_CH4_MASK)
 
@@ -2227,9 +2529,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH5_SHIFT                (5U)
 /*! AWOR_CH5 - Analog Watchdog Out of Range for Channel 5
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH5(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH5_SHIFT)) & ADC_AWORR0_AWOR_CH5_MASK)
 
@@ -2237,9 +2539,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH6_SHIFT                (6U)
 /*! AWOR_CH6 - Analog Watchdog Out of Range for Channel 6
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH6(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH6_SHIFT)) & ADC_AWORR0_AWOR_CH6_MASK)
 
@@ -2247,9 +2549,9 @@ typedef struct {
 #define ADC_AWORR0_AWOR_CH7_SHIFT                (7U)
 /*! AWOR_CH7 - Analog Watchdog Out of Range for Channel 7
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR0_AWOR_CH7(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_AWORR0_AWOR_CH7_SHIFT)) & ADC_AWORR0_AWOR_CH7_MASK)
 /*! @} */
@@ -2261,9 +2563,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH32_SHIFT               (0U)
 /*! AWOR_CH32 - Analog Watchdog Out of Range for Channel 32
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH32(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH32_SHIFT)) & ADC_AWORR1_AWOR_CH32_MASK)
 
@@ -2271,9 +2573,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH33_SHIFT               (1U)
 /*! AWOR_CH33 - Analog Watchdog Out of Range for Channel 33
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH33(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH33_SHIFT)) & ADC_AWORR1_AWOR_CH33_MASK)
 
@@ -2281,9 +2583,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH34_SHIFT               (2U)
 /*! AWOR_CH34 - Analog Watchdog Out of Range for Channel 34
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH34(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH34_SHIFT)) & ADC_AWORR1_AWOR_CH34_MASK)
 
@@ -2291,9 +2593,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH35_SHIFT               (3U)
 /*! AWOR_CH35 - Analog Watchdog Out of Range for Channel 35
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH35(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH35_SHIFT)) & ADC_AWORR1_AWOR_CH35_MASK)
 
@@ -2301,9 +2603,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH36_SHIFT               (4U)
 /*! AWOR_CH36 - Analog Watchdog Out of Range for Channel 36
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH36(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH36_SHIFT)) & ADC_AWORR1_AWOR_CH36_MASK)
 
@@ -2311,9 +2613,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH37_SHIFT               (5U)
 /*! AWOR_CH37 - Analog Watchdog Out of Range for Channel 37
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH37(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH37_SHIFT)) & ADC_AWORR1_AWOR_CH37_MASK)
 
@@ -2321,9 +2623,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH38_SHIFT               (6U)
 /*! AWOR_CH38 - Analog Watchdog Out of Range for Channel 38
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH38(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH38_SHIFT)) & ADC_AWORR1_AWOR_CH38_MASK)
 
@@ -2331,9 +2633,9 @@ typedef struct {
 #define ADC_AWORR1_AWOR_CH39_SHIFT               (7U)
 /*! AWOR_CH39 - Analog Watchdog Out of Range for Channel 39
  *  0b0..Converted data is in range
- *  0b1..Converted data is out of range
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Converted data is out of range
  */
 #define ADC_AWORR1_AWOR_CH39(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_AWORR1_AWOR_CH39_SHIFT)) & ADC_AWORR1_AWOR_CH39_MASK)
 /*! @} */
@@ -2527,9 +2829,9 @@ typedef struct {
 #define ADC_STSR1_ERR_S0_SHIFT                   (11U)
 /*! ERR_S0 - Algorithm S0 Error
  *  0b0..No VREF error
- *  0b1..VREF error occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..VREF error occurred
  */
 #define ADC_STSR1_ERR_S0(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_S0_SHIFT)) & ADC_STSR1_ERR_S0_MASK)
 
@@ -2537,19 +2839,19 @@ typedef struct {
 #define ADC_STSR1_ERR_S1_SHIFT                   (12U)
 /*! ERR_S1 - Algorithm S1 Error
  *  0b0..No VDD ERROR
- *  0b1..VDD ERROR occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..VDD ERROR occurred
  */
 #define ADC_STSR1_ERR_S1(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_S1_SHIFT)) & ADC_STSR1_ERR_S1_MASK)
 
 #define ADC_STSR1_ERR_S2_MASK                    (0x2000U)
 #define ADC_STSR1_ERR_S2_SHIFT                   (13U)
 /*! ERR_S2 - Algorithm S2 Error
- *  0b0..No error occurred on the sampled signal
- *  0b1..Error occurred on the sampled signal
  *  0b0..No effect
+ *  0b0..No error occurred on the sampled signal
  *  0b1..Clear the flag
+ *  0b1..Error occurred on the sampled signal
  */
 #define ADC_STSR1_ERR_S2(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_S2_SHIFT)) & ADC_STSR1_ERR_S2_MASK)
 
@@ -2557,8 +2859,8 @@ typedef struct {
 #define ADC_STSR1_ERR_C_SHIFT                    (15U)
 /*! ERR_C - Algorithm C Error
  *  0b0..No Algorithm C error
- *  0b1..Algorithm C error occurred
  *  0b0..No effect
+ *  0b1..Algorithm C error occurred
  *  0b1..Clear the flag
  */
 #define ADC_STSR1_ERR_C(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ERR_C_SHIFT)) & ADC_STSR1_ERR_C_MASK)
@@ -2566,60 +2868,60 @@ typedef struct {
 #define ADC_STSR1_WDG_EOA_S_MASK                 (0x10000U)
 #define ADC_STSR1_WDG_EOA_S_SHIFT                (16U)
 /*! WDG_EOA_S - Watchdog End of Algorithm S
- *  0b0..Self-test end of Algorithm S conversion is not complete.
- *  0b1..Self-test end of Algorithm S conversion is complete.
  *  0b0..No effect
+ *  0b0..Self-test end of Algorithm S conversion is not complete.
  *  0b1..Clear the flag
+ *  0b1..Self-test end of Algorithm S conversion is complete.
  */
 #define ADC_STSR1_WDG_EOA_S(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDG_EOA_S_SHIFT)) & ADC_STSR1_WDG_EOA_S_MASK)
 
 #define ADC_STSR1_WDG_EOA_C_MASK                 (0x40000U)
 #define ADC_STSR1_WDG_EOA_C_SHIFT                (18U)
 /*! WDG_EOA_C - Watchdog End of Algorithm C
- *  0b0..Self-test end of Algorithm C conversion is not complete
- *  0b1..Self-test end of Algorithm C conversion is complete
  *  0b0..No effect
+ *  0b0..Self-test end of Algorithm C conversion is not complete
  *  0b1..Clear the flag
+ *  0b1..Self-test end of Algorithm C conversion is complete
  */
 #define ADC_STSR1_WDG_EOA_C(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDG_EOA_C_SHIFT)) & ADC_STSR1_WDG_EOA_C_MASK)
 
 #define ADC_STSR1_ST_EOC_MASK                    (0x800000U)
 #define ADC_STSR1_ST_EOC_SHIFT                   (23U)
 /*! ST_EOC - Self-Test EOC
- *  0b0..Self-test end of conversion is not complete
- *  0b1..Self-test end of conversion is complete
  *  0b0..No effect
+ *  0b0..Self-test end of conversion is not complete
  *  0b1..Clear the flag
+ *  0b1..Self-test end of conversion is complete
  */
 #define ADC_STSR1_ST_EOC(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_ST_EOC_SHIFT)) & ADC_STSR1_ST_EOC_MASK)
 
 #define ADC_STSR1_OVERWR_MASK                    (0x1000000U)
 #define ADC_STSR1_OVERWR_SHIFT                   (24U)
 /*! OVERWR - Overwrite Error
- *  0b0..No overwrite error
- *  0b1..Overwrite error occurred
  *  0b0..No effect
+ *  0b0..No overwrite error
  *  0b1..Clear the flag
+ *  0b1..Overwrite error occurred
  */
 #define ADC_STSR1_OVERWR(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_OVERWR_SHIFT)) & ADC_STSR1_OVERWR_MASK)
 
 #define ADC_STSR1_WDTERR_MASK                    (0x2000000U)
 #define ADC_STSR1_WDTERR_SHIFT                   (25U)
 /*! WDTERR - Watchdog Timer Error
- *  0b0..No failure
- *  0b1..Failure occurred
  *  0b0..No effect
+ *  0b0..No failure
  *  0b1..Clear the flag
+ *  0b1..Failure occurred
  */
 #define ADC_STSR1_WDTERR(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDTERR_SHIFT)) & ADC_STSR1_WDTERR_MASK)
 
 #define ADC_STSR1_WDSERR_MASK                    (0x8000000U)
 #define ADC_STSR1_WDSERR_SHIFT                   (27U)
 /*! WDSERR - Watchdog Sequence Errors
- *  0b0..No failure
- *  0b1..Failure occurred
  *  0b0..No effect
+ *  0b0..No failure
  *  0b1..Clear the flag
+ *  0b1..Failure occurred
  */
 #define ADC_STSR1_WDSERR(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_STSR1_WDSERR_SHIFT)) & ADC_STSR1_WDSERR_MASK)
 /*! @} */
@@ -2842,7 +3144,7 @@ typedef struct {
 
 #define ADC_STAW5R_THRL_MASK                     (0xFFFU)
 #define ADC_STAW5R_THRL_SHIFT                    (0U)
-/*! THRL - Low Threshold Value for Step0 of Algorithm C */
+/*! THRL - Low Threshold Value for Step N of Algorithm C */
 #define ADC_STAW5R_THRL(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_STAW5R_THRL_SHIFT)) & ADC_STAW5R_THRL_MASK)
 
 #define ADC_STAW5R_THRH_MASK                     (0xFFF0000U)
@@ -2990,5 +3292,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ADC_H_ */
+#endif  /* PERI_ADC_H_ */
 

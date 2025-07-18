@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2019-09-23
-**     Build:               b230707
+**     Build:               b250506
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,6 +43,8 @@
 #define FSL_FEATURE_SOC_ECSPI_COUNT (3)
 /* @brief ENET availability on the SoC. */
 #define FSL_FEATURE_SOC_ENET_COUNT (1)
+/* @brief FLEXSPI availability on the SoC. */
+#define FSL_FEATURE_SOC_FLEXSPI_COUNT (1)
 /* @brief GPC availability on the SoC. */
 #define FSL_FEATURE_SOC_GPC_COUNT (1)
 /* @brief GPC_PGC availability on the SoC. */
@@ -163,6 +165,11 @@
 /* @brief Has data register toggle DR_TOGGLE. */
 #define FSL_FEATURE_IGPIO_HAS_DR_TOGGLE (0)
 
+/* GPT module features */
+
+/* @brief Is affected by errata with ID 3777. */
+#define FSL_FEATURE_GPT_HAS_ERRATA_3777 (0)
+
 /* SAI module features */
 
 /* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
@@ -199,6 +206,10 @@
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (1)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief Support synchronous with another SAI. */
+#define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
+/* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
+#define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
 /* @brief SAI5 AND SAI6 SHARE ONE IRQNUMBER. */
 #define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (1)
 
@@ -271,6 +282,12 @@
 #define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (19)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (0)
+/* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
+#define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (0)
+/* @brief PDM Has no DOZEN Bitfield In PDM CTRL_1 Register */
+#define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
+/* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
+#define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (0)
 
 /* SDMA module features */
 
@@ -353,6 +370,10 @@
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
 /* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
 #define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (0)
+/* @brief Has no VSELECT bit in VEND_SPEC register */
+#define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (0)
+/* @brief Has no VS18 bit in HOST_CTRL_CAP register */
+#define FSL_FEATURE_USDHC_HAS_NO_VS18 (0)
 
 #endif /* _MIMX8MN6_cm7_FEATURES_H_ */
 
