@@ -4,16 +4,6 @@
 
 include_guard(GLOBAL)
 
-include(${SdkRootDirPath}/cmake/extension/misc_function.cmake)
-set(READ_TOOL_VERSION_PY "${SdkRootDirPath}/scripts/misc/read_tool_versions.py")
-
-_read_tool_versions(${READ_TOOL_VERSION_PY})
-
-log_status("CMake version: ${CMAKE_VERSION}")
-if (CMAKE_VERSION VERSION_LESS ${CMAKE_MINIMUM_VERSION})
-  message("warning: The system CMake version ${CMAKE_VERSION} is lower than the recommended version ${CMAKE_MINIMUM_VERSION} which may cause unexpected build failure especially for complicated project. Please upgrade CMake to version ${CMAKE_MINIMUM_VERSION} or above.")
-endif()
-
 # Source-less library that encapsulates all the global compiler options needed
 # by all source files.
 add_library(mcux_build_properties INTERFACE)
