@@ -18,6 +18,29 @@ static uint32_t pflashTotalSize;
 static uint32_t pflashSectorSize;
 static uint32_t pflashPageSize;
 
+static void speculation_buffer_clear(void)
+{
+    /* Clear Flash/Flash data speculation. */
+    if(((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK) == 0U)
+        && ((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK) == 0U))
+    {
+        if((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK) == 0U)
+        {
+            /* Disable flash speculation first. */
+            SYSCON->NVM_CTRL |= SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK;
+            /* Re-enable flash speculation. */
+            SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK;
+        }
+        if((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_DATA_SPEC_MASK) == 0U)
+        {
+            /* Disable flash data speculation first. */
+            SYSCON->NVM_CTRL |= SYSCON_NVM_CTRL_DIS_DATA_SPEC_MASK;
+            /* Re-enable flash data speculation. */
+            SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_DATA_SPEC_MASK;
+        }
+    }
+}
+
 /* API - initialize 'mflash' */
 int32_t mflash_drv_init(void)
 {
@@ -64,40 +87,58 @@ int32_t mflash_drv_init(void)
 /* API - Erase single sector */
 int32_t mflash_drv_sector_erase(uint32_t sector_addr)
 {
+    status_t ret;
+
     if (false == mflash_drv_is_sector_aligned(sector_addr))
     {
         return kStatus_InvalidArgument;
     }
     else
     {
-        return FLASH_API->flash_erase_sector(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, kFLASH_ApiEraseKey);
+        ret = FLASH_API->flash_erase_sector(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, kFLASH_ApiEraseKey);
     }
+
+    speculation_buffer_clear();
+
+    return ret;
 }
 
 /* API - Page program */
 int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 {
+    status_t ret;
+
     if (false == mflash_drv_is_page_aligned(page_addr))
     {
         return kStatus_InvalidArgument;
     }
     else
     {
-        return FLASH_API->flash_program_page(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PAGE_SIZE);
+        ret = FLASH_API->flash_program_page(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PAGE_SIZE);
     }
+
+    speculation_buffer_clear();
+
+    return ret;
 }
 
 /* API - Phrase program */
 int32_t mflash_drv_phrase_program(uint32_t page_addr, uint32_t *data)
 {
+    status_t ret;
+
     if (false == mflash_drv_is_phrase_aligned(page_addr))
     {
         return kStatus_InvalidArgument;
     }
     else
     {
-        return FLASH_API->flash_program_phrase(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PHRASE_SIZE);
+        ret = FLASH_API->flash_program_phrase(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PHRASE_SIZE);
     }
+
+    speculation_buffer_clear();
+
+    return ret;
 }
 
 /* API - Read data */

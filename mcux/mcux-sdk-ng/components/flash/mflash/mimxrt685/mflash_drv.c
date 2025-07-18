@@ -354,7 +354,6 @@ static int32_t mflash_drv_init_internal(void)
     __asm("cpsid i");
 
     /* Init output reset pin. */
-    GPIO_PortInit(GPIO, BOARD_FLASH_RESET_GPIO_PORT);
     GPIO_PinInit(GPIO, BOARD_FLASH_RESET_GPIO_PORT, BOARD_FLASH_RESET_GPIO_PIN, &reset_config);
 
 #ifndef XIP_EXTERNAL_FLASH

@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (CONFIG_MCUX_COMPONENT_component.eth_phy_common)
@@ -52,16 +52,29 @@ if (CONFIG_MCUX_COMPONENT_component.phyksz8081)
     )
 endif()
 
-if (CONFIG_MCUX_COMPONENT_component.phydp83848)
+if (CONFIG_MCUX_COMPONENT_component.phydp8384x)
     mcux_add_include(
         INCLUDES
-            ./device/phydp83848
+            ./device/phydp8384x
     )
 
     mcux_add_source(
         SOURCES
-            ./device/phydp83848/fsl_phydp83848.c
-            ./device/phydp83848/fsl_phydp83848.h
+            ./device/phydp8384x/fsl_phydp8384x.c
+            ./device/phydp8384x/fsl_phydp8384x.h
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_component.phygpy215)
+    mcux_add_include(
+        INCLUDES
+            ./device/phygpy215
+    )
+
+    mcux_add_source(
+        SOURCES
+            ./device/phygpy215/fsl_phygpy215.c
+            ./device/phygpy215/fsl_phygpy215.h
     )
 endif()
 
@@ -140,5 +153,44 @@ if (CONFIG_MCUX_COMPONENT_component.phylan8741)
         SOURCES
             ./device/phylan8741/fsl_phylan8741.c
             ./device/phylan8741/fsl_phylan8741.h
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_component.phytja1100)
+    mcux_add_include(
+        INCLUDES
+            ./device/phytja1100
+    )
+
+    mcux_add_source(
+        SOURCES
+            ./device/phytja1100/fsl_phytja1100.c
+            ./device/phytja1100/fsl_phytja1100.h
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_component.phytja1120)
+    mcux_add_include(
+        INCLUDES
+            ./device/phytja1120
+    )
+
+    mcux_add_source(
+        SOURCES
+            ./device/phytja1120/fsl_phytja1120.c
+            ./device/phytja1120/fsl_phytja1120.h
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_component.phyyt8521)
+    mcux_add_include(
+        INCLUDES
+            ./device/phyyt8521
+    )
+
+    mcux_add_source(
+        SOURCES
+            ./device/phyyt8521/fsl_phyyt8521.c
+            ./device/phyyt8521/fsl_phyyt8521.h
     )
 endif()
