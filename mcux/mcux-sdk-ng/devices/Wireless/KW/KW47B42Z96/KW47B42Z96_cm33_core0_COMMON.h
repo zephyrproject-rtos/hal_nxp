@@ -7,14 +7,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    Rev. 1, 2024-10-13
-**     Version:             rev. 1.0, 2024-10-13
-**     Build:               b241128
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW47B42Z96_cm33_core0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,14 +23,17 @@
 **     Revisions:
 **     - rev. 1.0 (2024-10-13)
 **         Rev. 1, 2024-10-13
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file KW47B42Z96_cm33_core0_COMMON.h
- * @version 1.0
- * @date 2024-10-13
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for KW47B42Z96_cm33_core0
  *
  * CMSIS Peripheral Access Layer for KW47B42Z96_cm33_core0
@@ -41,7 +44,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -184,7 +187,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef KW47B42Z96_cm33_core0_SERIES
 #define KW47B42Z96_cm33_core0_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "KW47B42Z96_cm33_core0_features.h"
 
@@ -2263,14 +2268,14 @@ typedef enum IRQn {
  * @param value Value of the bit field.
  * @return Masked and shifted value.
  */
-#define NXP_VAL2FLD(field, value)    (((value) << (field ## _SHIFT)) & (field ## _MASK))
+#define NXP_VAL2FLD(field, value)    (((value) << (field##_SHIFT)) & (field##_MASK))
 /**
  * @brief Mask and right-shift a register value to extract a bit field value.
  * @param field Name of the register bit field.
  * @param value Value of the register.
  * @return Masked and shifted bit field value.
  */
-#define NXP_FLD2VAL(field, value)    (((value) & (field ## _MASK)) >> (field ## _SHIFT))
+#define NXP_FLD2VAL(field, value)    (((value) & (field##_MASK)) >> (field##_SHIFT))
 
 /*!
  * @}
@@ -2291,7 +2296,9 @@ typedef enum IRQn {
 #define NXP_RADIO_GEN (470)
 #define IS_APP_CORE (1)
 #define IS_RADIO_CORE (0)
+#ifndef KW47_core0_SERIES
 #define KW47_core0_SERIES
+#endif
 
 /*! @brief define LTC0 from LTC. */
 #define LTC0 LTC
@@ -2331,7 +2338,9 @@ static inline uint8_t Chip_GetVersion(void)
 #define NXP_RADIO_GEN (470)
 #define IS_APP_CORE (0)
 #define IS_RADIO_CORE (1)
-#define MCXW72_core1_SERIES
+#ifndef KW47_core1_SERIES
+#define KW47_core1_SERIES
+#endif
 
 /*! @brief define LTC0 from LTC. */
 #define LTC0 LTC

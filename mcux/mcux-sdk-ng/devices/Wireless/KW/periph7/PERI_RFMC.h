@@ -19,14 +19,14 @@
 **                          KW45Z41083AFPA
 **                          KW45Z41083AFTA
 **
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RFMC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **     Revisions:
 **     - rev. 1.0 (2020-05-12)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RFMC.h
- * @version 1.0
- * @date 2020-05-12
+ * @file PERI_RFMC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RFMC
  *
  * CMSIS Peripheral Access Layer for RFMC
  */
 
-#if !defined(RFMC_H_)
-#define RFMC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RFMC_H_)
+#define PERI_RFMC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_KW45B41Z52AFPA) || defined(CPU_KW45B41Z52AFTA))
 #include "KW45B41Z52_COMMON.h"
@@ -516,12 +519,12 @@ typedef struct {
 #define RFMC_RF2P4GHZ_CTRL_SFA_TRIG_EN_MASK      (0x1C0000U)
 #define RFMC_RF2P4GHZ_CTRL_SFA_TRIG_EN_SHIFT     (18U)
 /*! SFA_TRIG_EN - SFA Trigger Enable
- *  0bxx0..MAN Low Power Controller is not allowed to cause an SFA trigger.
- *  0bxx1..MAN Low Power Controller is allowed to cause an SFA trigger.
- *  0bx0x..WOR Low Power Controller is not allowed to cause an SFA trigger.
- *  0bx1x..WOR Low Power Controller is allowed to cause an SFA trigger.
  *  0b0xx..Bluetooth LE Low Power Controller is not allowed to cause an SFA trigger.
  *  0b1xx..Bluetooth LE Low Power Controller is allowed to cause an SFA trigger.
+ *  0bx0x..WOR Low Power Controller is not allowed to cause an SFA trigger.
+ *  0bx1x..WOR Low Power Controller is allowed to cause an SFA trigger.
+ *  0bxx0..MAN Low Power Controller is not allowed to cause an SFA trigger.
+ *  0bxx1..MAN Low Power Controller is allowed to cause an SFA trigger.
  */
 #define RFMC_RF2P4GHZ_CTRL_SFA_TRIG_EN(x)        (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_CTRL_SFA_TRIG_EN_SHIFT)) & RFMC_RF2P4GHZ_CTRL_SFA_TRIG_EN_MASK)
 
@@ -546,14 +549,14 @@ typedef struct {
 #define RFMC_RF2P4GHZ_CTRL_CLK_OVR_MASK          (0xF000000U)
 #define RFMC_RF2P4GHZ_CTRL_CLK_OVR_SHIFT         (24U)
 /*! CLK_OVR - Clock Gating Override
- *  0bxxx0..TIMER clock only enabled when TIM_EN=1
- *  0bxxx1..TIMER clock always enabled
- *  0bxx0x..MAN power controller clock only enabled when MAN_EN=1 (default)
- *  0bxx1x..MAN power controller clock always enabled
- *  0bx0xx..WOR power controller clock only enabled when WOR_EN=1 (default)
- *  0bx1xx..WOR power controller clock always enabled
  *  0b0xxx..Bluetooth LE power controller clock (and 32kHz clock used by Bluetooth LE link layer) only enabled when BLE_LP_EN=1 (default)
  *  0b1xxx..Bluetooth LE power controller clock (and 32kHz clock used by Bluetooth LE link layer) always enabled
+ *  0bx0xx..WOR power controller clock only enabled when WOR_EN=1 (default)
+ *  0bx1xx..WOR power controller clock always enabled
+ *  0bxx0x..MAN power controller clock only enabled when MAN_EN=1 (default)
+ *  0bxx1x..MAN power controller clock always enabled
+ *  0bxxx0..TIMER clock only enabled when TIM_EN=1
+ *  0bxxx1..TIMER clock always enabled
  */
 #define RFMC_RF2P4GHZ_CTRL_CLK_OVR(x)            (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_CTRL_CLK_OVR_SHIFT)) & RFMC_RF2P4GHZ_CTRL_CLK_OVR_MASK)
 
@@ -939,5 +942,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RFMC_H_ */
+#endif  /* PERI_RFMC_H_ */
 

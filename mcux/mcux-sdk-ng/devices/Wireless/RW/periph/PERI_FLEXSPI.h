@@ -7,14 +7,14 @@
 **                          RW612HNA2I
 **                          RW612UKA2I
 **
-**     Version:             rev. 1.0, 2021-03-16
-**     Build:               b241017
+**     Version:             rev. 3.0, 2025-04-07
+**     Build:               b250519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,21 +23,26 @@
 **     Revisions:
 **     - rev. 1.0 (2021-03-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-04-07)
+**         Based on CRR Rev9.1.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXSPI.h
- * @version 1.0
- * @date 2021-03-16
+ * @file PERI_FLEXSPI.h
+ * @version 3.0
+ * @date 2025-04-07
  * @brief CMSIS Peripheral Access Layer for FLEXSPI
  *
  * CMSIS Peripheral Access Layer for FLEXSPI
  */
 
-#if !defined(FLEXSPI_H_)
-#define FLEXSPI_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXSPI_H_)
+#define PERI_FLEXSPI_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_RW610ETA2I) || defined(CPU_RW610HNA2I) || defined(CPU_RW610UKA2I))
 #include "RW610_COMMON.h"
@@ -496,6 +501,14 @@ typedef struct {
  *       burst required to meet the alignment requirement.
  */
 #define FLEXSPI_AHBCR_READADDROPT(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_READADDROPT_SHIFT)) & FLEXSPI_AHBCR_READADDROPT_MASK)
+
+#define FLEXSPI_AHBCR_RESUMEDISABLE_MASK         (0x80U)
+#define FLEXSPI_AHBCR_RESUMEDISABLE_SHIFT        (7U)
+/*! RESUMEDISABLE - AHB Read Resume Disable
+ *  0b0..Suspended AHB read prefetch will start to resume when AHB is IDLE
+ *  0b1..Suspended AHB read prefetch will not resume once it is aborted
+ */
+#define FLEXSPI_AHBCR_RESUMEDISABLE(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_RESUMEDISABLE_SHIFT)) & FLEXSPI_AHBCR_RESUMEDISABLE_MASK)
 
 #define FLEXSPI_AHBCR_READSZALIGN_MASK           (0x400U)
 #define FLEXSPI_AHBCR_READSZALIGN_SHIFT          (10U)
@@ -2642,5 +2655,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXSPI_H_ */
+#endif  /* PERI_FLEXSPI_H_ */
 
