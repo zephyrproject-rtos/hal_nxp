@@ -1,0 +1,38 @@
+// Memory Configuration File
+//
+// Description:
+//  A memory configuration file contains commands that define the legally accessible
+//  areas of memory for your specific board. Useful for example when the debugger
+//  tries to display the content of a "char *" variable, that has not yet been initialized.
+//  In this case the debugger may try to read from a bogus address, which could cause a
+//  bus error.
+//
+// Board:
+//  56800 MC56F80723
+//
+// Reference:
+//  -
+
+
+// All reserved ranges read back 0xBABA...
+reservedchar 0xBA
+
+usederivative "MC56F80723"
+
+//         Memory Map:
+//         ----------------------------------------------------------------------
+//         <memory address rage>     <access size>     <permission>
+range      p:0x00000000 p:0x000001FF       2           ReadWrite      // FLASH
+range      p:0x00000200 p:0x00000207       2           ReadWrite      // FLASH_CONFIG
+range      p:0x00000208 p:0x00003FFF       2           ReadWrite      // FLASH
+reserved   p:0x00008000 p:0x0000EFFF
+range      p:0x0000F000 p:0x0000FBFF       2           ReadWrite      // RAM
+reserved   p:0x00010000 p:0x001FFFFF
+
+range      x:0x00000000 x:0x00000BFF       2           ReadWrite      // RAM
+reserved   x:0x00001000 x:0x00003FFF
+range      x:0x00004000 x:0x000041FF       2           ReadWrite      // FLASH
+range      x:0x00004200 x:0x00004207       2           Read           // FLASH_CONFIG
+range      x:0x00004208 x:0x00007FFF       2           ReadWrite      // FLASH
+//         x:0x0000C000 x:0x0000FFFF       2           ReadWrite      // Memory Mapped Registers
+reserved   x:0x00010000 x:0x00FFFFFF
