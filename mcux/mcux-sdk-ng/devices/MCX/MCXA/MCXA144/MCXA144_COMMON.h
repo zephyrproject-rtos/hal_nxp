@@ -12,14 +12,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXA18 User manual
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA144
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXA144_COMMON.h
- * @version 1.0
- * @date 2022-03-29
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCXA144
  *
  * CMSIS Peripheral Access Layer for MCXA144
@@ -46,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -200,7 +203,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MCXA144_SERIES
 #define MCXA144_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MCXA144_features.h"
 

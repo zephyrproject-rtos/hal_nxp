@@ -5,14 +5,14 @@
 **                          MCXW716CMFPA
 **                          MCXW716CMFTA
 **
-**     Version:             rev. 1.0, 2024-03-21
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NPX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -21,21 +21,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-21)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file NPX.h
- * @version 1.0
- * @date 2024-03-21
+ * @file PERI_NPX.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for NPX
  *
  * CMSIS Peripheral Access Layer for NPX
  */
 
-#if !defined(NPX_H_)
-#define NPX_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_NPX_H_)
+#define PERI_NPX_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXW716AMFPA) || defined(CPU_MCXW716AMFTA))
 #include "MCXW716A_COMMON.h"
@@ -134,65 +137,65 @@ typedef struct {
 #define NPX_NPXCR_GEE_MASK                       (0x1U)
 #define NPX_NPXCR_GEE_SHIFT                      (0U)
 /*! GEE - Global Encryption Enable
+ *  0b0..Global encryption disabled. NPX on-the-fly encryption is disabled. Subsequent reads return 0.
  *  0b1..Global encryption enabled. NPX on-the-fly encryption is enabled if the flash access hits in a valid
  *       memory context. Subsequent reads return 1.
- *  0b0..Global encryption disabled. NPX on-the-fly encryption is disabled. Subsequent reads return 0.
  */
 #define NPX_NPXCR_GEE(x)                         (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_GEE_SHIFT)) & NPX_NPXCR_GEE_MASK)
 
 #define NPX_NPXCR_GDE_MASK                       (0x4U)
 #define NPX_NPXCR_GDE_SHIFT                      (2U)
 /*! GDE - Global Decryption Enable
- *  0b1..Global decryption enabled. NPX on-the-fly decryption is globally enabled. Subsequent reads return 1.
  *  0b0..Global decryption disabled. NPX on-the-fly decryption is globally disabled. Subsequent reads return 0.
+ *  0b1..Global decryption enabled. NPX on-the-fly decryption is globally enabled. Subsequent reads return 1.
  */
 #define NPX_NPXCR_GDE(x)                         (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_GDE_SHIFT)) & NPX_NPXCR_GDE_MASK)
 
 #define NPX_NPXCR_GLK_MASK                       (0x10U)
 #define NPX_NPXCR_GLK_SHIFT                      (4U)
 /*! GLK - Global Lock Enable
- *  0b1..Lock enabled: cannot write to VMAPCTXn, NPXCR, or CACMSK. Subsequent reads return 1.
  *  0b0..Lock disabled. Subsequent reads return 0.
+ *  0b1..Lock enabled: cannot write to VMAPCTXn, NPXCR, or CACMSK. Subsequent reads return 1.
  */
 #define NPX_NPXCR_GLK(x)                         (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_GLK_SHIFT)) & NPX_NPXCR_GLK_MASK)
 
 #define NPX_NPXCR_MLK_MASK                       (0x40U)
 #define NPX_NPXCR_MLK_SHIFT                      (6U)
 /*! MLK - Mask Lock Enable
- *  0b1..Lock enabled: cannot write to mask. Subsequent reads return 1.
  *  0b0..Lock disabled. Subsequent reads return 0.
+ *  0b1..Lock enabled: cannot write to mask. Subsequent reads return 1.
  */
 #define NPX_NPXCR_MLK(x)                         (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_MLK_SHIFT)) & NPX_NPXCR_MLK_MASK)
 
 #define NPX_NPXCR_CTX0LK_MASK                    (0x100U)
 #define NPX_NPXCR_CTX0LK_SHIFT                   (8U)
 /*! CTX0LK - Lock Enable for Context 0
- *  0b1..Lock enabled: cannot write to VMAPCTX0 (becomes read-only)
  *  0b0..Lock disabled: VMAPCTX0 remains read-write
+ *  0b1..Lock enabled: cannot write to VMAPCTX0 (becomes read-only)
  */
 #define NPX_NPXCR_CTX0LK(x)                      (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_CTX0LK_SHIFT)) & NPX_NPXCR_CTX0LK_MASK)
 
 #define NPX_NPXCR_CTX1LK_MASK                    (0x400U)
 #define NPX_NPXCR_CTX1LK_SHIFT                   (10U)
 /*! CTX1LK - Lock Enable for Context 1
- *  0b1..Lock enabled: cannot write to VMAPCTX1 (becomes read-only)
  *  0b0..Lock disabled: VMAPCTX1 remains read-write
+ *  0b1..Lock enabled: cannot write to VMAPCTX1 (becomes read-only)
  */
 #define NPX_NPXCR_CTX1LK(x)                      (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_CTX1LK_SHIFT)) & NPX_NPXCR_CTX1LK_MASK)
 
 #define NPX_NPXCR_CTX2LK_MASK                    (0x1000U)
 #define NPX_NPXCR_CTX2LK_SHIFT                   (12U)
 /*! CTX2LK - Lock Enable for Context 2
- *  0b1..Lock enabled: cannot write to VMAPCTX2 (becomes read-only)
  *  0b0..Lock disabled: VMAPCTX2 remains read-write
+ *  0b1..Lock enabled: cannot write to VMAPCTX2 (becomes read-only)
  */
 #define NPX_NPXCR_CTX2LK(x)                      (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_CTX2LK_SHIFT)) & NPX_NPXCR_CTX2LK_MASK)
 
 #define NPX_NPXCR_CTX3LK_MASK                    (0x4000U)
 #define NPX_NPXCR_CTX3LK_SHIFT                   (14U)
 /*! CTX3LK - Lock Enable for Context 3
- *  0b1..Lock enabled: cannot write to VMAPCTX3 (becomes read-only)
  *  0b0..Lock disabled: VMAPCTX3 remains read-write
+ *  0b1..Lock enabled: cannot write to VMAPCTX3 (becomes read-only)
  */
 #define NPX_NPXCR_CTX3LK(x)                      (((uint32_t)(((uint32_t)(x)) << NPX_NPXCR_CTX3LK_SHIFT)) & NPX_NPXCR_CTX3LK_MASK)
 /*! @} */
@@ -259,8 +262,8 @@ typedef struct {
 #define NPX_REMAP_REMAPLK_MASK                   (0x1U)
 #define NPX_REMAP_REMAPLK_SHIFT                  (0U)
 /*! REMAPLK - Remap Lock Enable
- *  0b1..Lock enabled: cannot write to REMAP
  *  0b0..Lock disabled: can write to REMAP
+ *  0b1..Lock enabled: cannot write to REMAP
  */
 #define NPX_REMAP_REMAPLK(x)                     (((uint32_t)(((uint32_t)(x)) << NPX_REMAP_REMAPLK_SHIFT)) & NPX_REMAP_REMAPLK_MASK)
 
@@ -1129,5 +1132,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* NPX_H_ */
+#endif  /* PERI_NPX_H_ */
 

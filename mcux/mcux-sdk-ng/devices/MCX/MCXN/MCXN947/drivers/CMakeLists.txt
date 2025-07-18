@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-mcux_add_cmakelists(${SdkRootDirPath}/devices/MCX/MCXN/MCXN947/drivers/romapi)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/MCX/MCXN/MCXN947/drivers/romapi)
 
 if (CONFIG_MCUX_COMPONENT_driver.clock)
     mcux_component_version(2.0.0)
