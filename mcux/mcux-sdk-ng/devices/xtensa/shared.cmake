@@ -1,5 +1,5 @@
-# Copyright 2024 NXP
-#
-# SPDX-License-Identifier: BSD-3-Clause
+# core related
+include(${SdkRootDirPath}/arch/xtensa/core/core_${CONFIG_MCUX_HW_CORE}.cmake)
 
-# Empty file to make avoid cmake process failure.
+# build target related
+include(${SdkRootDirPath}/arch/xtensa/target/targets.cmake)
