@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,7 +17,7 @@
  */
 
 /*! @brief MSIX table address offset. */
-#define NETC_MSIX_TABLE_OFFSET     (0x10000U)
+#define NETC_MSIX_TABLE_OFFSET (0x10000U)
 /*! @brief MSIX PBA address offset. */
 #define NETC_MSIX_TABLE_PBA_OFFSET (0x800U)
 
@@ -99,11 +99,11 @@ typedef struct _netc_timer_hw
 /*! @brief Register group for both EMDIO and port external MDIO. */
 typedef struct _netc_mdio_hw
 {
-    __IO uint32_t EMDIO_CFG;  /*!< External MDIO configuration register, offset: 0x1C00 */
-    __IO uint32_t EMDIO_CTL;  /*!< External MDIO interface control register, offset: 0x1C04 */
-    __IO uint32_t EMDIO_DATA; /*!< External MDIO interface data register, offset: 0x1C08 */
-    __IO uint32_t EMDIO_ADDR; /*!< External MDIO register address register, offset: 0x1C0C */
-    __I uint32_t EMDIO_STAT;  /*!< External MDIO status register, offset: 0x1C10 */
+    __IO uint32_t EMDIO_CFG;        /*!< External MDIO configuration register, offset: 0x1C00 */
+    __IO uint32_t EMDIO_CTL;        /*!< External MDIO interface control register, offset: 0x1C04 */
+    __IO uint32_t EMDIO_DATA;       /*!< External MDIO interface data register, offset: 0x1C08 */
+    __IO uint32_t EMDIO_ADDR;       /*!< External MDIO register address register, offset: 0x1C0C */
+    __I uint32_t EMDIO_STAT;        /*!< External MDIO status register, offset: 0x1C10 */
     uint8_t RESERVED_1[12];
     __IO uint32_t PHY_STATUS_CFG;   /*!< PHY status configuration register, offset: 0x1C20 */
     __IO uint32_t PHY_STATUS_CTL;   /*!< PHY status control register, offset: 0x1C24 */
@@ -128,8 +128,8 @@ typedef struct _netc_mdio_hw
 /*! @brief Register group for SI/Switch command bd ring */
 typedef struct _netc_cbdr_hw
 {
-    __IO uint32_t CBDRMR; /*!< Command BDR mode register. */
-    __I uint32_t CBDRSR;  /*!< Command BDR status register. */
+    __IO uint32_t CBDRMR;   /*!< Command BDR mode register. */
+    __I uint32_t CBDRSR;    /*!< Command BDR status register. */
     uint8_t RESERVED_0[8];
     __IO uint32_t CBDRBAR0; /*!< Command BDR base address register 0 */
     __IO uint32_t CBDRBAR1; /*!< Command BDR base address register 1 */
@@ -379,7 +379,9 @@ status_t NETC_QueryISITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, n
  * @return status_t
  * @return See @ref netc_cmd_error_t
  */
-status_t NETC_QueryISITableEntryWithKey(netc_cbdr_handle_t *handle, netc_tb_isi_keye_t *keye, netc_tb_isi_rsp_data_t *rsp);
+status_t NETC_QueryISITableEntryWithKey(netc_cbdr_handle_t *handle,
+                                        netc_tb_isi_keye_t *keye,
+                                        netc_tb_isi_rsp_data_t *rsp);
 
 /*!
  * @brief Add or update entry in Ingress Stream table
@@ -498,6 +500,16 @@ status_t NETC_ResetISCStatistic(netc_cbdr_handle_t *handle, uint32_t entryID);
 status_t NETC_AddOrUpdateSGITableEntry(netc_cbdr_handle_t *handle, netc_tb_sgi_config_t *config, bool isAdd);
 
 /*!
+ * @brief Reset IRX and OEX flags in stream gate instance entry
+ *
+ * @param handle
+ * @param entryID
+ * @return status_t
+ * @return See @ref netc_cmd_error_t
+ */
+status_t NETC_ResetIRXOEXSGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID);
+
+/*!
  * @brief Delete entry in the stream gate instance table
  *
  * @param handle
@@ -523,11 +535,11 @@ status_t NETC_GetSGIState(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_
  *
  * @param handle
  * @param entryID
- * @param rsp
+ * @param config
  * @return status_t
  * @return See @ref netc_cmd_error_t
  */
-status_t NETC_QuerySGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_sgi_rsp_data_t *rsp);
+status_t NETC_QuerySGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_sgi_config_t *config);
 
 /*!
  * @brief Add entry into Stream Gate Control List Table

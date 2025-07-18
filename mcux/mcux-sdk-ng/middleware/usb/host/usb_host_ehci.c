@@ -7,15 +7,6 @@
  */
 #include "usb_host_config.h"
 #if ((defined USB_HOST_CONFIG_EHCI) && (USB_HOST_CONFIG_EHCI > 0U))
-/* CONFIG_UHC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
-#if (defined CONFIG_UHC_DRIVER)
-#include "usb_host_mcux_drv_port.h"
-#include "fsl_device_registers.h"
-#include "usb_host_ehci.h"
-#if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT))
-#include "usb_phy.h"
-#endif
-#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "usb_host_devices.h"
@@ -29,7 +20,6 @@
 #endif
 #if ((defined USB_HOST_CONFIG_COMPLIANCE_TEST) && (USB_HOST_CONFIG_COMPLIANCE_TEST))
 #include "usb_host.h"
-#endif
 #endif
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
 #include "fsl_memory.h"
@@ -2501,7 +2491,7 @@ static usb_status_t USB_HostEhciQhInit(usb_host_ehci_instance_t *ehciInstance, u
     USB_HostEhciUnlock();
     if (qhPointer == NULL)
     {
-#ifdef HOST_EHCO
+#ifdef HOST_ECHO
         usb_echo("get qh error\r\n");
 #endif
         return kStatus_USB_Error;

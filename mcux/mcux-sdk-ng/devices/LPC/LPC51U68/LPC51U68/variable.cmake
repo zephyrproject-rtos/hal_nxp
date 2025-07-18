@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/LPC/variable.cmake)
 mcux_set_variable(device LPC51U68)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series LPC51U68)
 mcux_set_variable(soc_periph periph)
 mcux_set_variable(core_id_suffix_name "")

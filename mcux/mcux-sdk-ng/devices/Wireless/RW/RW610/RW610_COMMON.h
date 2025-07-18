@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    RW61X User manual Rev. 0.95, June 2022
-**     Version:             rev. 1.0, 2021-03-16
-**     Build:               b240823
+**     Version:             rev. 3.0, 2025-04-07
+**     Build:               b250519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +26,19 @@
 **     Revisions:
 **     - rev. 1.0 (2021-03-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-04-07)
+**         Based on CRR Rev9.1.
 **
 ** ###################################################################
 */
 
 /*!
  * @file RW610_COMMON.h
- * @version 1.0
- * @date 2021-03-16
+ * @version 3.0
+ * @date 2025-04-07
  * @brief CMSIS Peripheral Access Layer for RW610
  *
  * CMSIS Peripheral Access Layer for RW610
@@ -44,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -238,7 +243,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef RW610_SERIES
 #define RW610_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "RW610_features.h"
 

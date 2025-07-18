@@ -526,7 +526,6 @@ void POWER_EnterDeepPowerDown(uint32_t exclude_from_pd,
 
 /**
  * @brief   Configures and enters in SLEEP low power mode
- * @param   :
  * @return  Nothing
  */
 void POWER_EnterSleep(void);

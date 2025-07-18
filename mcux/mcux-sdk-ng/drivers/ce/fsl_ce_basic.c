@@ -35,7 +35,7 @@ int CE_NullCmd()
     return status;
 }
 
-int CE_Copy(int *pDst, int *pSrc, const unsigned int N)
+int CE_Copy(int *pDst, int *pSrc, const int N)
 {
     int status;
 

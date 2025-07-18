@@ -1,0 +1,7 @@
+# Copyright 2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_component.power_manager.mcxw23
+    bool "power_manager_mcxw23"
+    help
+        Enable component.power_manager.mcxw23 component

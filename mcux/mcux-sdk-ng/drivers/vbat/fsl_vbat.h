@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 ~ 2022 NXP
- * All rights reserved.
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,9 +20,26 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief VBAT driver version 2.1.0. */
-#define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief VBAT driver version 2.1.1. */
+#define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
+
+/*! @name Configuration */
+
+/*!
+ * @brief Max loops to wait for LDO ready.
+ *
+ * When configuring the LDO, driver will wait for LDO ready. This parameter 
+ * defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef VBAT_LDO_READY_TIMEOUT
+    #ifdef CONFIG_VBAT_LDO_READY_TIMEOUT
+        #define VBAT_LDO_READY_TIMEOUT CONFIG_VBAT_LDO_READY_TIMEOUT
+    #else
+        #define VBAT_LDO_READY_TIMEOUT 0U
+    #endif
+#endif
 
 /*!
  * @brief The enumeration of VBAT module status.
@@ -292,6 +308,7 @@ static inline void VBAT_EnableBandgapRefreshMode(VBAT_Type *base, bool enableRef
  * @retval kStatus_VBAT_Fro16kNotEnabled Fail to enable backup SRAM regulator due to FRO16k is not enabled previously.
  * @retval kStatus_VBAT_BandgapNotEnabled Fail to enable backup SRAM regulator due to the bandgap is not enabled
  * previously.
+ * @retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t VBAT_EnableBackupSRAMRegulator(VBAT_Type *base, bool enable);
 

@@ -8,17 +8,11 @@
 
 #include "usb_host_config.h"
 #if (defined(USB_HOST_CONFIG_IP3516HS) && (USB_HOST_CONFIG_IP3516HS > 0U))
-#if (defined CONFIG_UHC_DRIVER)
-#include "usb_host_mcux_drv_port.h"
-#include "fsl_device_registers.h"
-#include "usb_host_ip3516hs.h"
-#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "fsl_device_registers.h"
 #include "usb_host_ip3516hs.h"
 #include "usb_host_devices.h"
-#endif
 #if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
 #include "usb_phy.h"
 #endif

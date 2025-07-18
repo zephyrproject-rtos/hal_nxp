@@ -1,0 +1,7 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+    config MCUX_COMPONENT_driver.ezhv
+         bool "ezhv"
+         depends on MCUX_HW_DEVICE_MIMXRT758S && MCUX_HW_CORE_ID_CM33_CORE0

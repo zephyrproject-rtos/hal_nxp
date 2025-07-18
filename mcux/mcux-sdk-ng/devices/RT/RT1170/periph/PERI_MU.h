@@ -1,40 +1,66 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1171AVM8A
+**                          MIMXRT1171AVM8B
 **                          MIMXRT1171CVM8A
+**                          MIMXRT1171CVM8B
 **                          MIMXRT1171DVMAA
+**                          MIMXRT1171DVMAB
 **                          MIMXRT1172AVM8A
+**                          MIMXRT1172AVM8B
 **                          MIMXRT1172CVM8A
+**                          MIMXRT1172CVM8B
 **                          MIMXRT1172DVMAA
+**                          MIMXRT1172DVMAB
 **                          MIMXRT1173CVM8A_cm4
 **                          MIMXRT1173CVM8A_cm7
+**                          MIMXRT1173CVM8B_cm4
+**                          MIMXRT1173CVM8B_cm7
 **                          MIMXRT1175AVM8A_cm4
 **                          MIMXRT1175AVM8A_cm7
+**                          MIMXRT1175AVM8B_cm4
+**                          MIMXRT1175AVM8B_cm7
 **                          MIMXRT1175CVM8A_cm4
 **                          MIMXRT1175CVM8A_cm7
+**                          MIMXRT1175CVM8B_cm4
+**                          MIMXRT1175CVM8B_cm7
 **                          MIMXRT1175DVMAA_cm4
 **                          MIMXRT1175DVMAA_cm7
+**                          MIMXRT1175DVMAB_cm4
+**                          MIMXRT1175DVMAB_cm7
 **                          MIMXRT1176AVM8A_cm4
 **                          MIMXRT1176AVM8A_cm7
+**                          MIMXRT1176AVM8B_cm4
+**                          MIMXRT1176AVM8B_cm7
 **                          MIMXRT1176CVM8A_cm4
 **                          MIMXRT1176CVM8A_cm7
+**                          MIMXRT1176CVM8B_cm4
+**                          MIMXRT1176CVM8B_cm7
 **                          MIMXRT1176DVMAA_cm4
 **                          MIMXRT1176DVMAA_cm7
+**                          MIMXRT1176DVMAB_cm4
+**                          MIMXRT1176DVMAB_cm7
 **                          MIMXRT117HAVM8A_cm4
 **                          MIMXRT117HAVM8A_cm7
+**                          MIMXRT117HAVM8B_cm4
+**                          MIMXRT117HAVM8B_cm7
 **                          MIMXRT117HCVM8A_cm4
 **                          MIMXRT117HCVM8A_cm7
+**                          MIMXRT117HCVM8B_cm4
+**                          MIMXRT117HCVM8B_cm7
 **                          MIMXRT117HDVMAA_cm4
 **                          MIMXRT117HDVMAA_cm7
+**                          MIMXRT117HDVMAB_cm4
+**                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 1.0, 2020-12-29
-**     Build:               b241022
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,41 +71,44 @@
 **         Initial version.
 **     - rev. 1.0 (2020-12-29)
 **         Update header files to align with IMXRT1170RM Rev.0.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MU.h
- * @version 1.0
- * @date 2020-12-29
+ * @file PERI_MU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MU
  *
  * CMSIS Peripheral Access Layer for MU
  */
 
-#if !defined(MU_H_)
-#define MU_H_                                    /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MU_H_)
+#define PERI_MU_H_                               /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1171AVM8A) || defined(CPU_MIMXRT1171CVM8A) || defined(CPU_MIMXRT1171DVMAA))
+#if (defined(CPU_MIMXRT1171AVM8A) || defined(CPU_MIMXRT1171AVM8B) || defined(CPU_MIMXRT1171CVM8A) || defined(CPU_MIMXRT1171CVM8B) || defined(CPU_MIMXRT1171DVMAA) || defined(CPU_MIMXRT1171DVMAB))
 #include "MIMXRT1171_COMMON.h"
-#elif (defined(CPU_MIMXRT1172AVM8A) || defined(CPU_MIMXRT1172CVM8A) || defined(CPU_MIMXRT1172DVMAA))
+#elif (defined(CPU_MIMXRT1172AVM8A) || defined(CPU_MIMXRT1172AVM8B) || defined(CPU_MIMXRT1172CVM8A) || defined(CPU_MIMXRT1172CVM8B) || defined(CPU_MIMXRT1172DVMAA) || defined(CPU_MIMXRT1172DVMAB))
 #include "MIMXRT1172_COMMON.h"
-#elif (defined(CPU_MIMXRT1173CVM8A_cm4))
+#elif (defined(CPU_MIMXRT1173CVM8A_cm4) || defined(CPU_MIMXRT1173CVM8B_cm4))
 #include "MIMXRT1173_cm4_COMMON.h"
-#elif (defined(CPU_MIMXRT1173CVM8A_cm7))
+#elif (defined(CPU_MIMXRT1173CVM8A_cm7) || defined(CPU_MIMXRT1173CVM8B_cm7))
 #include "MIMXRT1173_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1175AVM8A_cm4) || defined(CPU_MIMXRT1175CVM8A_cm4) || defined(CPU_MIMXRT1175DVMAA_cm4))
+#elif (defined(CPU_MIMXRT1175AVM8A_cm4) || defined(CPU_MIMXRT1175AVM8B_cm4) || defined(CPU_MIMXRT1175CVM8A_cm4) || defined(CPU_MIMXRT1175CVM8B_cm4) || defined(CPU_MIMXRT1175DVMAA_cm4) || defined(CPU_MIMXRT1175DVMAB_cm4))
 #include "MIMXRT1175_cm4_COMMON.h"
-#elif (defined(CPU_MIMXRT1175AVM8A_cm7) || defined(CPU_MIMXRT1175CVM8A_cm7) || defined(CPU_MIMXRT1175DVMAA_cm7))
+#elif (defined(CPU_MIMXRT1175AVM8A_cm7) || defined(CPU_MIMXRT1175AVM8B_cm7) || defined(CPU_MIMXRT1175CVM8A_cm7) || defined(CPU_MIMXRT1175CVM8B_cm7) || defined(CPU_MIMXRT1175DVMAA_cm7) || defined(CPU_MIMXRT1175DVMAB_cm7))
 #include "MIMXRT1175_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1176AVM8A_cm4) || defined(CPU_MIMXRT1176CVM8A_cm4) || defined(CPU_MIMXRT1176DVMAA_cm4))
+#elif (defined(CPU_MIMXRT1176AVM8A_cm4) || defined(CPU_MIMXRT1176AVM8B_cm4) || defined(CPU_MIMXRT1176CVM8A_cm4) || defined(CPU_MIMXRT1176CVM8B_cm4) || defined(CPU_MIMXRT1176DVMAA_cm4) || defined(CPU_MIMXRT1176DVMAB_cm4))
 #include "MIMXRT1176_cm4_COMMON.h"
-#elif (defined(CPU_MIMXRT1176AVM8A_cm7) || defined(CPU_MIMXRT1176CVM8A_cm7) || defined(CPU_MIMXRT1176DVMAA_cm7))
+#elif (defined(CPU_MIMXRT1176AVM8A_cm7) || defined(CPU_MIMXRT1176AVM8B_cm7) || defined(CPU_MIMXRT1176CVM8A_cm7) || defined(CPU_MIMXRT1176CVM8B_cm7) || defined(CPU_MIMXRT1176DVMAA_cm7) || defined(CPU_MIMXRT1176DVMAB_cm7))
 #include "MIMXRT1176_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT117HAVM8A_cm4) || defined(CPU_MIMXRT117HCVM8A_cm4) || defined(CPU_MIMXRT117HDVMAA_cm4))
+#elif (defined(CPU_MIMXRT117HAVM8A_cm4) || defined(CPU_MIMXRT117HAVM8B_cm4) || defined(CPU_MIMXRT117HCVM8A_cm4) || defined(CPU_MIMXRT117HCVM8B_cm4) || defined(CPU_MIMXRT117HDVMAA_cm4) || defined(CPU_MIMXRT117HDVMAB_cm4))
 #include "MIMXRT117H_cm4_COMMON.h"
-#elif (defined(CPU_MIMXRT117HAVM8A_cm7) || defined(CPU_MIMXRT117HCVM8A_cm7) || defined(CPU_MIMXRT117HDVMAA_cm7))
+#elif (defined(CPU_MIMXRT117HAVM8A_cm7) || defined(CPU_MIMXRT117HAVM8B_cm7) || defined(CPU_MIMXRT117HCVM8A_cm7) || defined(CPU_MIMXRT117HCVM8B_cm7) || defined(CPU_MIMXRT117HDVMAA_cm7) || defined(CPU_MIMXRT117HDVMAB_cm7))
 #include "MIMXRT117H_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -313,5 +342,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MU_H_ */
+#endif  /* PERI_MU_H_ */
 

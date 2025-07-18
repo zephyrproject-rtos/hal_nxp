@@ -1,74 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA165VLH
-**                          MCXA165VLL
-**                          MCXA165VLQ
-**                          MCXA165VPN
-**                          MCXA166VLH
-**                          MCXA166VLL
-**                          MCXA166VLQ
-**                          MCXA166VPN
-**                          MCXA175VLH
-**                          MCXA175VLL
-**                          MCXA175VLQ
-**                          MCXA175VPN
-**                          MCXA176VLH
-**                          MCXA176VLL
-**                          MCXA176VLQ
-**                          MCXA176VPN
-**                          MCXA275VLH
-**                          MCXA275VLL
-**                          MCXA275VLQ
-**                          MCXA275VPN
-**                          MCXA276VLH
-**                          MCXA276VLL
-**                          MCXA276VLQ
-**                          MCXA276VPN
+**     Processors:          MCXA345VLH
+**                          MCXA345VLL
+**                          MCXA345VLQ
+**                          MCXA345VPN
+**                          MCXA346VLH
+**                          MCXA346VLL
+**                          MCXA346VLQ
+**                          MCXA346VPN
 **
-**     Version:             rev. 1.0, 2024-03-26
-**     Build:               b241120
+**     Version:             rev. 1.0, 2024-11-21
+**     Build:               b250417
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMARTDMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2024-03-26)
-**         Initial version based on Rev1 DraftC RM
+**     - rev. 1.0 (2024-11-21)
+**         Initial version based on Rev1 RM
 **
 ** ###################################################################
 */
 
 /*!
- * @file SMARTDMA.h
+ * @file PERI_SMARTDMA.h
  * @version 1.0
- * @date 2024-03-26
+ * @date 2024-11-21
  * @brief CMSIS Peripheral Access Layer for SMARTDMA
  *
  * CMSIS Peripheral Access Layer for SMARTDMA
  */
 
-#if !defined(SMARTDMA_H_)
-#define SMARTDMA_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SMARTDMA_H_)
+#define PERI_SMARTDMA_H_                         /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA165VLH) || defined(CPU_MCXA165VLL) || defined(CPU_MCXA165VLQ) || defined(CPU_MCXA165VPN))
-#include "MCXA165_COMMON.h"
-#elif (defined(CPU_MCXA166VLH) || defined(CPU_MCXA166VLL) || defined(CPU_MCXA166VLQ) || defined(CPU_MCXA166VPN))
-#include "MCXA166_COMMON.h"
-#elif (defined(CPU_MCXA175VLH) || defined(CPU_MCXA175VLL) || defined(CPU_MCXA175VLQ) || defined(CPU_MCXA175VPN))
-#include "MCXA175_COMMON.h"
-#elif (defined(CPU_MCXA176VLH) || defined(CPU_MCXA176VLL) || defined(CPU_MCXA176VLQ) || defined(CPU_MCXA176VPN))
-#include "MCXA176_COMMON.h"
-#elif (defined(CPU_MCXA275VLH) || defined(CPU_MCXA275VLL) || defined(CPU_MCXA275VLQ) || defined(CPU_MCXA275VPN))
-#include "MCXA275_COMMON.h"
-#elif (defined(CPU_MCXA276VLH) || defined(CPU_MCXA276VLL) || defined(CPU_MCXA276VLQ) || defined(CPU_MCXA276VPN))
-#include "MCXA276_COMMON.h"
+#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#include "MCXA345_COMMON.h"
+#elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
+#include "MCXA346_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -118,10 +94,7 @@ typedef struct {
   __IO uint32_t CTRL;                              /**< Control, offset: 0x24 */
   __I  uint32_t PC;                                /**< Program Counter, offset: 0x28 */
   __I  uint32_t SP;                                /**< Stack Pointer, offset: 0x2C */
-  __IO uint32_t BREAK_ADDR;                        /**< Breakpoint Address, offset: 0x30 */
-  __IO uint32_t BREAK_VECT;                        /**< Breakpoint Vector, offset: 0x34 */
-  __IO uint32_t EMER_VECT;                         /**< Emergency Vector, offset: 0x38 */
-  __IO uint32_t EMER_SEL;                          /**< Emergency Select, offset: 0x3C */
+       uint8_t RESERVED_1[16];
   __IO uint32_t ARM2EZH;                           /**< ARM to EZH Interrupt Control, offset: 0x40 */
   __IO uint32_t EZH2ARM;                           /**< EZH to ARM Trigger, offset: 0x44 */
   __IO uint32_t PENDTRAP;                          /**< Pending Trap Control, offset: 0x48 */
@@ -195,47 +168,6 @@ typedef struct {
 #define SMARTDMA_SP_SP_SHIFT                     (0U)
 /*! SP - Stack Pointer */
 #define SMARTDMA_SP_SP(x)                        (((uint32_t)(((uint32_t)(x)) << SMARTDMA_SP_SP_SHIFT)) & SMARTDMA_SP_SP_MASK)
-/*! @} */
-
-/*! @name BREAK_ADDR - Breakpoint Address */
-/*! @{ */
-
-#define SMARTDMA_BREAK_ADDR_ADDR_MASK            (0xFFFFFFFCU)
-#define SMARTDMA_BREAK_ADDR_ADDR_SHIFT           (2U)
-/*! ADDR - 32-bit address to swap to EZHB_BREAK_VECT location */
-#define SMARTDMA_BREAK_ADDR_ADDR(x)              (((uint32_t)(((uint32_t)(x)) << SMARTDMA_BREAK_ADDR_ADDR_SHIFT)) & SMARTDMA_BREAK_ADDR_ADDR_MASK)
-/*! @} */
-
-/*! @name BREAK_VECT - Breakpoint Vector */
-/*! @{ */
-
-#define SMARTDMA_BREAK_VECT_VEC_MASK             (0xFFFFFFFCU)
-#define SMARTDMA_BREAK_VECT_VEC_SHIFT            (2U)
-/*! VEC - Vector address of user debug routine. */
-#define SMARTDMA_BREAK_VECT_VEC(x)               (((uint32_t)(((uint32_t)(x)) << SMARTDMA_BREAK_VECT_VEC_SHIFT)) & SMARTDMA_BREAK_VECT_VEC_MASK)
-/*! @} */
-
-/*! @name EMER_VECT - Emergency Vector */
-/*! @{ */
-
-#define SMARTDMA_EMER_VECT_VEC_MASK              (0xFFFFFFFCU)
-#define SMARTDMA_EMER_VECT_VEC_SHIFT             (2U)
-/*! VEC - Vector address of emergency code routine */
-#define SMARTDMA_EMER_VECT_VEC(x)                (((uint32_t)(((uint32_t)(x)) << SMARTDMA_EMER_VECT_VEC_SHIFT)) & SMARTDMA_EMER_VECT_VEC_MASK)
-/*! @} */
-
-/*! @name EMER_SEL - Emergency Select */
-/*! @{ */
-
-#define SMARTDMA_EMER_SEL_EN_MASK                (0x100U)
-#define SMARTDMA_EMER_SEL_EN_SHIFT               (8U)
-/*! EN - Emergency code routine */
-#define SMARTDMA_EMER_SEL_EN(x)                  (((uint32_t)(((uint32_t)(x)) << SMARTDMA_EMER_SEL_EN_SHIFT)) & SMARTDMA_EMER_SEL_EN_MASK)
-
-#define SMARTDMA_EMER_SEL_RQ_MASK                (0x200U)
-#define SMARTDMA_EMER_SEL_RQ_SHIFT               (9U)
-/*! RQ - Software emergency request */
-#define SMARTDMA_EMER_SEL_RQ(x)                  (((uint32_t)(((uint32_t)(x)) << SMARTDMA_EMER_SEL_RQ_SHIFT)) & SMARTDMA_EMER_SEL_RQ_MASK)
 /*! @} */
 
 /*! @name ARM2EZH - ARM to EZH Interrupt Control */
@@ -314,5 +246,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SMARTDMA_H_ */
+#endif  /* PERI_SMARTDMA_H_ */
 

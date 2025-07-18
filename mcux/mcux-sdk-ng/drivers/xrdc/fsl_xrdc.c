@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2023 NXP
- * All rights reserved.
+ * Copyright 2016-2017, 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -48,11 +47,27 @@ typedef union
 } xrdc_mda_reg_t;
 
 /*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+/*!
+ * @brief Get first specific domain error submodule.
+ *
+ * Get first specific domain error submodule.
+ *
+ * @param base XRDC peripheral base address.
+ * @param domainId Domain ID.
+ * @param errorSubmoduleIndex First error submodule index.
+ * @retval kStatus_Success Get first specific domain error submodule successfully.
+ * @retval kStatus_XRDC_NoError No error.
+ */
+static status_t XRDC_GetFirstSpecificDomainErrorSubmodule(XRDC_Type *base, uint8_t domainId, uint8_t *errorSubmoduleIndex);
+
+/*******************************************************************************
  * Variables
  ******************************************************************************/
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Clock name of XRDC. */
-#if (FSL_CLOCK_XRDC_GATE_COUNT > 1)
+#if defined(XRDC_CLOCKS)
 static const clock_ip_name_t s_xrdcClock[] = XRDC_CLOCKS;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -98,17 +113,13 @@ void XRDC_Init(XRDC_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
-#if (FSL_CLOCK_XRDC_GATE_COUNT > 0)
-#if (FSL_CLOCK_XRDC_GATE_COUNT == 1)
-    CLOCK_EnableClock(kCLOCK_Xrdc0);
-#else
+#if defined(XRDC_CLOCKS)
     uint8_t i;
 
     for (i = 0; i < ARRAY_SIZE(s_xrdcClock); i++)
     {
         CLOCK_EnableClock(s_xrdcClock[i]);
     }
-#endif
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -125,17 +136,13 @@ void XRDC_Deinit(XRDC_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
-#if (FSL_CLOCK_XRDC_GATE_COUNT > 0)
-#if (FSL_CLOCK_XRDC_GATE_COUNT == 1)
-    CLOCK_EnableClock(kCLOCK_Xrdc0);
-#else
+#if defined(XRDC_CLOCKS)
     uint8_t i;
 
     for (i = 0; i < ARRAY_SIZE(s_xrdcClock); i++)
     {
         CLOCK_DisableClock(s_xrdcClock[i]);
     }
-#endif
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -178,6 +185,78 @@ status_t XRDC_GetAndClearFirstDomainError(XRDC_Type *base, xrdc_error_t *error)
     return XRDC_GetAndClearFirstSpecificDomainError(base, error, XRDC_GetCurrentMasterDomainId(base));
 }
 
+static status_t XRDC_GetFirstSpecificDomainErrorSubmodule(XRDC_Type *base, uint8_t domainId, uint8_t *errorSubmoduleIndex)
+{
+#if defined(FSL_FEATURE_XRDC_HAS_ERRATA_050593) && FSL_FEATURE_XRDC_HAS_ERRATA_050593
+    /*
+     * ERR050593
+     *
+     * If there are multiple violation after the first violation successively then the DERRLOCn register
+     * is not able to provide the correct instance number of reporting MRC and/or PAC submodule.
+     *
+     * Workaround: Read all DERR_W1_n registers to determine which all submodules failed (check EST bit)
+     */
+    uint8_t index;
+    uint32_t hwcfg0 = base->HWCFG0;
+
+    uint8_t pacNumber    = (uint8_t)((hwcfg0 & XRDC_HWCFG0_NPAC_MASK) >> XRDC_HWCFG0_NPAC_SHIFT) + 1U;
+    uint8_t mrcNumber    = (uint8_t)((hwcfg0 & XRDC_HWCFG0_NMRC_MASK) >> XRDC_HWCFG0_NMRC_SHIFT) + 1U;
+
+#if (defined(FSL_FEATURE_XRDC_HAS_FDID) && FSL_FEATURE_XRDC_HAS_FDID)
+    /* Must write FDID[FDID] with the domain ID before reading the Domain Error registers. */
+    base->FDID = XRDC_FDID_FDID(domainId);
+#else
+    (void)domainId;
+#endif /* FSL_FEATURE_XRDC_HAS_FDID */
+
+    /*
+     * The `index` here is the same with the shift of each MRC or PAC submodule in register DERRLOCn.
+     * The index is not continuous, because MRC's shift in DERRLOCn starts from XRDC_DERRLOC_MRCINST_SHIFT,
+     * PAC shift starts from XRDC_DERRLOC_PACINST_SHIFT.
+     */
+    for (index = XRDC_DERRLOC_MRCINST_SHIFT; index < XRDC_DERRLOC_MRCINST_SHIFT + mrcNumber; index++)
+    {
+        if ((base->DERR_W[index][1] & XRDC_DERR_W_EST(2)) != 0U)
+        {
+            *errorSubmoduleIndex = index;
+            return kStatus_Success;
+        }
+    }
+
+    for (index = XRDC_DERRLOC_PACINST_SHIFT; index < XRDC_DERRLOC_PACINST_SHIFT + pacNumber; index++)
+    {
+        if ((base->DERR_W[index][1] & XRDC_DERR_W_EST(2)) != 0U)
+        {
+            *errorSubmoduleIndex = index;
+            return kStatus_Success;
+        }
+    }
+
+    return kStatus_XRDC_NoError;
+
+#else
+    uint32_t errorBitMap;
+
+    /* Get the error bitmap. */
+    errorBitMap = base->DERRLOC[domainId];
+
+    if (0U == errorBitMap) /* No error captured. */
+    {
+        return kStatus_XRDC_NoError;
+    }
+    else
+    {
+        /* Get the first error controller index. */
+#if ((__CORTEX_M == 0U) && (defined(__ICCARM__)))
+        *errorSubmoduleIndex = 31U - XRDC_CountLeadingZeros(errorBitMap);
+#else
+        *errorSubmoduleIndex = 31U - __CLZ(errorBitMap);
+#endif
+        return kStatus_Success;
+    }
+#endif /* FSL_FEATURE_XRDC_HAS_ERRATA_050593 */
+}
+
 /*!
  * brief Gets and clears the first domain error of the specific domain.
  *
@@ -198,7 +277,6 @@ status_t XRDC_GetAndClearFirstSpecificDomainError(XRDC_Type *base, xrdc_error_t 
 
     status_t status;
     uint8_t errorIndex;   /* The index of first domain error. */
-    uint32_t errorBitMap; /* Domain error location bit map.   */
     uint32_t regW1;       /* To save XRDC_DERR_W1.            */
 
     if (domainId >= ARRAY_SIZE(base->DERRLOC))
@@ -206,43 +284,32 @@ status_t XRDC_GetAndClearFirstSpecificDomainError(XRDC_Type *base, xrdc_error_t 
         return kStatus_InvalidArgument;
     }
 
-    /* Get the error bitmap. */
-    errorBitMap = base->DERRLOC[domainId];
+    status = XRDC_GetFirstSpecificDomainErrorSubmodule(base, domainId, &errorIndex);
 
-    if (0U == errorBitMap) /* No error captured. */
+    if (kStatus_Success != status)
     {
-        status = kStatus_XRDC_NoError;
+        return status;
     }
-    else
-    {
-        /* Get the first error controller index. */
-#if ((__CORTEX_M == 0U) && (defined(__ICCARM__)))
-        errorIndex = 31U - XRDC_CountLeadingZeros(errorBitMap);
-#else
-        errorIndex        = 31U - __CLZ(errorBitMap);
-#endif
 
 #if (defined(FSL_FEATURE_XRDC_HAS_FDID) && FSL_FEATURE_XRDC_HAS_FDID)
-        /* Must write FDID[FDID] with the domain ID before reading the Domain Error registers. */
-        base->FDID = XRDC_FDID_FDID(domainId);
+    /* Must write FDID[FDID] with the domain ID before reading the Domain Error registers. */
+    base->FDID = XRDC_FDID_FDID(domainId);
 #endif /* FSL_FEATURE_XRDC_HAS_FDID */
-        /* Get the error information. */
-        regW1             = base->DERR_W[errorIndex][1];
-        error->controller = (xrdc_controller_t)errorIndex;
-        error->address    = base->DERR_W[errorIndex][0];
-        error->errorState = (xrdc_error_state_t)XRDC_DERR_W1_EST_VAL(regW1);
-        error->errorAttr  = (xrdc_error_attr_t)XRDC_DERR_W1_EATR_VAL(regW1);
-        error->errorType  = (xrdc_error_type_t)XRDC_DERR_W1_ERW_VAL(regW1);
-        error->errorPort  = XRDC_DERR_W1_EPORT_VAL(regW1);
-        error->domainId   = XRDC_DERR_W1_EDID_VAL(regW1);
 
-        /* Clear error pending. */
-        base->DERR_W[errorIndex][3] = XRDC_DERR_W_RECR(0x01U);
+    /* Get the error information. */
+    regW1             = base->DERR_W[errorIndex][1];
+    error->controller = (xrdc_controller_t)errorIndex;
+    error->address    = base->DERR_W[errorIndex][0];
+    error->errorState = (xrdc_error_state_t)XRDC_DERR_W1_EST_VAL(regW1);
+    error->errorAttr  = (xrdc_error_attr_t)XRDC_DERR_W1_EATR_VAL(regW1);
+    error->errorType  = (xrdc_error_type_t)XRDC_DERR_W1_ERW_VAL(regW1);
+    error->errorPort  = XRDC_DERR_W1_EPORT_VAL(regW1);
+    error->domainId   = XRDC_DERR_W1_EDID_VAL(regW1);
 
-        status = kStatus_Success;
-    }
+    /* Clear error pending. */
+    base->DERR_W[errorIndex][3] = XRDC_DERR_W_RECR(0x01U);
 
-    return status;
+    return kStatus_Success;
 }
 
 /*!

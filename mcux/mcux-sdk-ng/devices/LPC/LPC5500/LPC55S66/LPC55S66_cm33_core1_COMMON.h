@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
-**     Version:             rev. 1.1, 2019-05-16
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S66_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **         Initial version based on v0.2UM
 **     - rev. 1.1 (2019-05-16)
 **         Initial A1 version based on v1.3UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC55S66_cm33_core1_COMMON.h
- * @version 1.1
- * @date 2019-05-16
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC55S66_cm33_core1
  *
  * CMSIS Peripheral Access Layer for LPC55S66_cm33_core1
@@ -46,9 +49,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -166,14 +169,16 @@ typedef enum IRQn {
 #include "core_cm33.h"                 /* Core Peripheral Access Layer */
 #include "system_LPC55S66_cm33_core1.h" /* Device specific configuration file */
 
-#define LPC55S66_cm33_core1_SERIES
-/* CPU specific feature definitions */
-#include "LPC55S66_cm33_core1_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef LPC55S66_cm33_core1_SERIES
+#define LPC55S66_cm33_core1_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "LPC55S66_cm33_core1_features.h"
 
 /* ADC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

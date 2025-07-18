@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DSI_HOST_NXP_FDSOI28_DPHY_INTFC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DSI_HOST_NXP_FDSOI28_DPHY_INTFC.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_DSI_HOST_NXP_FDSOI28_DPHY_INTFC.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DSI_HOST_NXP_FDSOI28_DPHY_INTFC
  *
  * CMSIS Peripheral Access Layer for DSI_HOST_NXP_FDSOI28_DPHY_INTFC
  */
 
-#if !defined(DSI_HOST_NXP_FDSOI28_DPHY_INTFC_H_)
-#define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_H_       /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DSI_HOST_NXP_FDSOI28_DPHY_INTFC_H_)
+#define PERI_DSI_HOST_NXP_FDSOI28_DPHY_INTFC_H_  /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -135,8 +138,8 @@ typedef struct {
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_TX_PD_TX_MASK (0x1U)
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_TX_PD_TX_SHIFT (0U)
 /*! PD_TX - Power Down input for D-PHY
- *  0b1..Power Down
  *  0b0..Power Up
+ *  0b1..Power Down
  */
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_TX_PD_TX(x) (((uint32_t)(((uint32_t)(x)) << DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_TX_PD_TX_SHIFT)) & DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_TX_PD_TX_MASK)
 /*! @} */
@@ -201,8 +204,8 @@ typedef struct {
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_PLL_PD_PLL_MASK (0x1U)
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_PLL_PD_PLL_SHIFT (0U)
 /*! PD_PLL - Power-down signal
- *  0b1..Power down PLL
  *  0b0..Power up PLL
+ *  0b1..Power down PLL
  */
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_PLL_PD_PLL(x) (((uint32_t)(((uint32_t)(x)) << DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_PLL_PD_PLL_SHIFT)) & DSI_HOST_NXP_FDSOI28_DPHY_INTFC_PD_PLL_PD_PLL_MASK)
 /*! @} */
@@ -254,8 +257,8 @@ typedef struct {
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_LOCK_LOCK_MASK (0x1U)
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_LOCK_LOCK_SHIFT (0U)
 /*! LOCK - Lock Detect output
- *  0b1..PLL has achieved frequency lock
  *  0b0..PLL not locked
+ *  0b1..PLL has achieved frequency lock
  */
 #define DSI_HOST_NXP_FDSOI28_DPHY_INTFC_LOCK_LOCK(x) (((uint32_t)(((uint32_t)(x)) << DSI_HOST_NXP_FDSOI28_DPHY_INTFC_LOCK_LOCK_SHIFT)) & DSI_HOST_NXP_FDSOI28_DPHY_INTFC_LOCK_LOCK_MASK)
 /*! @} */
@@ -357,5 +360,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DSI_HOST_NXP_FDSOI28_DPHY_INTFC_H_ */
+#endif  /* PERI_DSI_HOST_NXP_FDSOI28_DPHY_INTFC_H_ */
 

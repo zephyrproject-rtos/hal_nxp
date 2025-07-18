@@ -1,0 +1,33 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# Remove original timer manager files
+mcux_project_remove_source(
+    BASE_PATH ${SdkRootDirPath}
+    SOURCES components/timer_manager/fsl_component_timer_manager.c
+    SOURCES components/timer_manager/fsl_component_timer_manager.h
+)
+
+mcux_project_remove_include(
+    BASE_PATH ${SdkRootDirPath}
+    SOURCES components/timer_manager/
+)
+
+if (CONFIG_MCUX_COMPONENT_component.timer_manager)
+    mcux_component_version(1.0.0)
+    mcux_add_source(
+        SOURCES timer_manager_mcxw23/fsl_component_timer_manager.c
+                timer_manager_mcxw23/fsl_component_timer_manager.h
+    )
+    mcux_add_include( INCLUDES timer_manager_mcxw23/. )
+    mcux_add_configuration(CC "-DHAL_CTIMER_COUNTER_RESET=false -DUSE_MCXW23_TIMER_MANAGER")
+endif()
+
+if (CONFIG_MCUX_PRJSEG_configure.timer_manager_enable_time_stamp)
+    mcux_add_configuration(
+        AS "-DTM_ENABLE_TIME_STAMP=1"
+        CC "-DTM_ENABLE_TIME_STAMP=1"
+        CX "-DTM_ENABLE_TIME_STAMP=1"
+    )
+endif()

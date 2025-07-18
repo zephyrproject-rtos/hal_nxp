@@ -1,0 +1,12 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.dcm_gpr
+    bool
+    default y if MCUX_HW_IP_DriverType_DCM_GPR
+
+config MCUX_COMPONENT_driver.dcm_gpr
+    bool "mc_rgm"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.dcm_gpr

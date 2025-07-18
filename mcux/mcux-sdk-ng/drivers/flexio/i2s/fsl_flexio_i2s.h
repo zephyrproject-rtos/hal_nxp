@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FlexIO I2S driver version 2.2.0. */
-#define FSL_FLEXIO_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief FlexIO I2S driver version 2.2.2. */
+#define FSL_FLEXIO_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -367,7 +367,7 @@ status_t FLEXIO_I2S_WriteBlocking(FLEXIO_I2S_Type *base, uint8_t bitWidth, uint8
  */
 static inline void FLEXIO_I2S_WriteData(FLEXIO_I2S_Type *base, uint8_t bitWidth, uint32_t data)
 {
-    base->flexioBase->SHIFTBUFBIS[base->txShifterIndex] = (data << (32U - bitWidth));
+    base->flexioBase->SHIFTBUFBIS[base->txShifterIndex] = (bitWidth <= 32U) ? (data << (32U - bitWidth)) : data;
 }
 
 /*!

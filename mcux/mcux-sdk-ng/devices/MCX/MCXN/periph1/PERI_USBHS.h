@@ -9,14 +9,14 @@
 **                          MCXN236VNL
 **                          MCXN236VPB
 **
-**     Version:             rev. 1.0, 2023-10-01
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBHS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **     Revisions:
 **     - rev. 1.0 (2023-10-01)
 **         Initial version based on RM 1.2
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USBHS.h
- * @version 1.0
- * @date 2023-10-01
+ * @file PERI_USBHS.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USBHS
  *
  * CMSIS Peripheral Access Layer for USBHS
  */
 
-#if !defined(USBHS_H_)
-#define USBHS_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USBHS_H_)
+#define PERI_USBHS_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXN235VDF) || defined(CPU_MCXN235VKL) || defined(CPU_MCXN235VNL) || defined(CPU_MCXN235VPB))
 #include "MCXN235_COMMON.h"
@@ -1623,5 +1626,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USBHS_H_ */
+#endif  /* PERI_USBHS_H_ */
 

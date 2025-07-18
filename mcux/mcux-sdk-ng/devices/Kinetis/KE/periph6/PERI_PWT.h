@@ -9,14 +9,14 @@
 **                          MKE15Z256VLH7
 **                          MKE15Z256VLL7
 **
-**     Version:             rev. 6.0, 2016-09-20
-**     Build:               b240715
+**     Version:             rev. 7.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PWT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **         Based on rev1.x RDP.
 **     - rev. 6.0 (2016-09-20)
 **         Based on rev2 RDP.
+**     - rev. 7.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PWT.h
- * @version 6.0
- * @date 2016-09-20
+ * @file PERI_PWT.h
+ * @version 7.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PWT
  *
  * CMSIS Peripheral Access Layer for PWT
  */
 
-#if !defined(PWT_H_)
-#define PWT_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PWT_H_)
+#define PERI_PWT_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE14Z128VLH7) || defined(CPU_MKE14Z128VLL7) || defined(CPU_MKE14Z256VLH7) || defined(CPU_MKE14Z256VLL7))
 #include "MKE14Z7_COMMON.h"
@@ -328,5 +331,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PWT_H_ */
+#endif  /* PERI_PWT_H_ */
 

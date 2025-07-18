@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for HDMI_TRNG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file HDMI_TRNG.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_HDMI_TRNG.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for HDMI_TRNG
  *
  * CMSIS Peripheral Access Layer for HDMI_TRNG
  */
 
-#if !defined(HDMI_TRNG_H_)
-#define HDMI_TRNG_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_HDMI_TRNG_H_)
+#define PERI_HDMI_TRNG_H_                        /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -171,10 +198,10 @@ typedef struct {
 #define HDMI_TRNG_CTRL_CMD_MASK                  (0x7U)
 #define HDMI_TRNG_CTRL_CMD_SHIFT                 (0U)
 /*! CMD - Execute a command.
- *  0b001..Generate a random number
- *  0b011..Execute a nonce reseed
  *  0b000..Execute a NOP
+ *  0b001..Generate a random number
  *  0b010..Execute a random reseed
+ *  0b011..Execute a nonce reseed
  */
 #define HDMI_TRNG_CTRL_CMD(x)                    (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_CTRL_CMD_SHIFT)) & HDMI_TRNG_CTRL_CMD_MASK)
 /*! @} */
@@ -257,8 +284,8 @@ typedef struct {
 #define HDMI_TRNG_SMODE_MISSION_MODE_MASK        (0x100U)
 #define HDMI_TRNG_SMODE_MISSION_MODE_SHIFT       (8U)
 /*! MISSION_MODE - Sets the operating mode to TEST or MISSION.
- *  0b1..Mission mode (no access to internal state)
  *  0b0..Test mode (access to internal state and test fields)
+ *  0b1..Mission mode (no access to internal state)
  */
 #define HDMI_TRNG_SMODE_MISSION_MODE(x)          (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_SMODE_MISSION_MODE_SHIFT)) & HDMI_TRNG_SMODE_MISSION_MODE_MASK)
 
@@ -326,50 +353,50 @@ typedef struct {
 #define HDMI_TRNG_ISTAT_RAND_RDY_MASK            (0x1U)
 #define HDMI_TRNG_ISTAT_RAND_RDY_SHIFT           (0U)
 /*! RAND_RDY - Status and acknowledgment (clearing) of RAND_RDY indicator.
- *  0b0..No unacknowledged RAND_RDY indicator
- *  0b1..Unacknowledged RAND_RDY indicator
  *  0b0..NOP
+ *  0b0..No unacknowledged RAND_RDY indicator
  *  0b1..Acknowledge RAND_RDY indicator
+ *  0b1..Unacknowledged RAND_RDY indicator
  */
 #define HDMI_TRNG_ISTAT_RAND_RDY(x)              (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_ISTAT_RAND_RDY_SHIFT)) & HDMI_TRNG_ISTAT_RAND_RDY_MASK)
 
 #define HDMI_TRNG_ISTAT_SEED_DONE_MASK           (0x2U)
 #define HDMI_TRNG_ISTAT_SEED_DONE_SHIFT          (1U)
 /*! SEED_DONE - Status and acknowledgment (clearing) of SEED_DONE indicator.
- *  0b0..No unacknowledged SEED_DONE indicator
- *  0b1..Unacknowledged SEED_DONE indicator
  *  0b0..NOP
+ *  0b0..No unacknowledged SEED_DONE indicator
  *  0b1..Acknowledge SEED_DONE indicator
+ *  0b1..Unacknowledged SEED_DONE indicator
  */
 #define HDMI_TRNG_ISTAT_SEED_DONE(x)             (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_ISTAT_SEED_DONE_SHIFT)) & HDMI_TRNG_ISTAT_SEED_DONE_MASK)
 
 #define HDMI_TRNG_ISTAT_AGE_ALARM_MASK           (0x4U)
 #define HDMI_TRNG_ISTAT_AGE_ALARM_SHIFT          (2U)
 /*! AGE_ALARM - Status and acknowledgment (clearing) of AGE_ALARM indicator.
- *  0b0..No unacknowledged AGE_ALARM indicator
- *  0b1..Unacknowledged AGE_ALARM indicator
  *  0b0..NOP
+ *  0b0..No unacknowledged AGE_ALARM indicator
  *  0b1..Acknowledge AGE_ALARM indicator
+ *  0b1..Unacknowledged AGE_ALARM indicator
  */
 #define HDMI_TRNG_ISTAT_AGE_ALARM(x)             (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_ISTAT_AGE_ALARM_SHIFT)) & HDMI_TRNG_ISTAT_AGE_ALARM_MASK)
 
 #define HDMI_TRNG_ISTAT_RQST_ALARM_MASK          (0x8U)
 #define HDMI_TRNG_ISTAT_RQST_ALARM_SHIFT         (3U)
 /*! RQST_ALARM - Status and acknowledgment (clearing) of RQST_ALARM indicator.
- *  0b0..No unacknowledged RQST_ALARM indicator
- *  0b1..Unacknowledged RQST_ALARM indicator
  *  0b0..NOP
+ *  0b0..No unacknowledged RQST_ALARM indicator
  *  0b1..Acknowledge RQST_ALARM indicator
+ *  0b1..Unacknowledged RQST_ALARM indicator
  */
 #define HDMI_TRNG_ISTAT_RQST_ALARM(x)            (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_ISTAT_RQST_ALARM_SHIFT)) & HDMI_TRNG_ISTAT_RQST_ALARM_MASK)
 
 #define HDMI_TRNG_ISTAT_LFSR_LOCKUP_MASK         (0x10U)
 #define HDMI_TRNG_ISTAT_LFSR_LOCKUP_SHIFT        (4U)
 /*! LFSR_LOCKUP - Status and acknowledgment (clearing) of LFSR_LOCKUP indicator.
- *  0b0..No unacknowledged LFSR_LOCKUP indicator
- *  0b1..Unacknowledged LFSR_LOCKUP indicator
  *  0b0..NOP
+ *  0b0..No unacknowledged LFSR_LOCKUP indicator
  *  0b1..Acknowledge LFSR_LOCKUP indicator
+ *  0b1..Unacknowledged LFSR_LOCKUP indicator
  */
 #define HDMI_TRNG_ISTAT_LFSR_LOCKUP(x)           (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_ISTAT_LFSR_LOCKUP_SHIFT)) & HDMI_TRNG_ISTAT_LFSR_LOCKUP_MASK)
 /*! @} */
@@ -390,9 +417,9 @@ typedef struct {
 #define HDMI_TRNG_COREKIT_REL_EXT_ENUM_MASK      (0xF0000000U)
 #define HDMI_TRNG_COREKIT_REL_EXT_ENUM_SHIFT     (28U)
 /*! EXT_ENUM - Indicates the coreKit release extension type.
- *  0b0010..EA release
  *  0b0000..GA release
  *  0b0001..LCA release
+ *  0b0010..EA release
  *  0b0011..LP release
  *  0b0100..LPC release
  *  0b0101..SOW release
@@ -422,8 +449,8 @@ typedef struct {
 #define HDMI_TRNG_FEATURES_MISSION_MODE_RESET_STATE_MASK (0x8U)
 #define HDMI_TRNG_FEATURES_MISSION_MODE_RESET_STATE_SHIFT (3U)
 /*! MISSION_MODE_RESET_STATE - Indicates state of SMODE.
- *  0b1..Resets to MISSION_MODE
  *  0b0..Resets to TEST_MODE
+ *  0b1..Resets to MISSION_MODE
  */
 #define HDMI_TRNG_FEATURES_MISSION_MODE_RESET_STATE(x) (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_FEATURES_MISSION_MODE_RESET_STATE_SHIFT)) & HDMI_TRNG_FEATURES_MISSION_MODE_RESET_STATE_MASK)
 
@@ -601,9 +628,9 @@ typedef struct {
 #define HDMI_TRNG_BUILD_CONFIG_CORE_TYPE_MASK    (0x3U)
 #define HDMI_TRNG_BUILD_CONFIG_CORE_TYPE_SHIFT   (0U)
 /*! CORE_TYPE - Configured I/O style (license controlled).
+ *  0b00..5-Wire control/status I/O
  *  0b01..ESM nonce I/O
  *  0b10..ESM nonce I/O with multi-ESM support
- *  0b00..5-Wire control/status I/O
  */
 #define HDMI_TRNG_BUILD_CONFIG_CORE_TYPE(x)      (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_BUILD_CONFIG_CORE_TYPE_SHIFT)) & HDMI_TRNG_BUILD_CONFIG_CORE_TYPE_MASK)
 
@@ -626,16 +653,16 @@ typedef struct {
 #define HDMI_TRNG_BUILD_CONFIG_MODE_AFTER_RST_MASK (0x10U)
 #define HDMI_TRNG_BUILD_CONFIG_MODE_AFTER_RST_SHIFT (4U)
 /*! MODE_AFTER_RST - Indicates state of SMODE.
- *  0b1..Resets to MISSION_MODE
  *  0b0..Resets to TEST_MODE
+ *  0b1..Resets to MISSION_MODE
  */
 #define HDMI_TRNG_BUILD_CONFIG_MODE_AFTER_RST(x) (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_BUILD_CONFIG_MODE_AFTER_RST_SHIFT)) & HDMI_TRNG_BUILD_CONFIG_MODE_AFTER_RST_MASK)
 
 #define HDMI_TRNG_BUILD_CONFIG_AUTO_RESEED_LOOPBACK_MASK (0x20U)
 #define HDMI_TRNG_BUILD_CONFIG_AUTO_RESEED_LOOPBACK_SHIFT (5U)
 /*! AUTO_RESEED_LOOPBACK - Indicates auto-reseed configuration setting.
- *  0b1..Auto-reseed loopback present
  *  0b0..No auto-reseed loopback
+ *  0b1..Auto-reseed loopback present
  */
 #define HDMI_TRNG_BUILD_CONFIG_AUTO_RESEED_LOOPBACK(x) (((uint32_t)(((uint32_t)(x)) << HDMI_TRNG_BUILD_CONFIG_AUTO_RESEED_LOOPBACK_SHIFT)) & HDMI_TRNG_BUILD_CONFIG_AUTO_RESEED_LOOPBACK_MASK)
 
@@ -686,5 +713,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* HDMI_TRNG_H_ */
+#endif  /* PERI_HDMI_TRNG_H_ */
 

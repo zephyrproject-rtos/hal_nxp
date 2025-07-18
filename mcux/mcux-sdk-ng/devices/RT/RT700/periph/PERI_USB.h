@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USB.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_USB.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USB
  *
  * CMSIS Peripheral Access Layer for USB
  */
 
-#if !defined(USB_H_)
-#define USB_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USB_H_)
+#define PERI_USB_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -657,8 +660,8 @@ typedef struct {
 /*! UI - USB Interrupt (USBINT) Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_UI(x)                         (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UI_SHIFT)) & USB_USBSTS_UI_MASK)
 
@@ -667,18 +670,18 @@ typedef struct {
 /*! UEI - USB Error Interrupt (USBERRINT) Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_UEI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UEI_SHIFT)) & USB_USBSTS_UEI_MASK)
 
 #define USB_USBSTS_PCI_MASK                      (0x4U)
 #define USB_USBSTS_PCI_SHIFT                     (2U)
 /*! PCI - Port Change Detect Flag
- *  0b0..Port change not detected
  *  0b0..No effect
- *  0b1..Port change detected
+ *  0b0..Port change not detected
  *  0b1..Clear the flag
+ *  0b1..Port change detected
  */
 #define USB_USBSTS_PCI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_PCI_SHIFT)) & USB_USBSTS_PCI_MASK)
 
@@ -687,8 +690,8 @@ typedef struct {
 /*! FRI - Frame List Rollover Flag
  *  0b0..Frame list index did not roll over
  *  0b0..No effect
- *  0b1..Frame list index rolled over
  *  0b1..Clear the flag
+ *  0b1..Frame list index rolled over
  */
 #define USB_USBSTS_FRI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_FRI_SHIFT)) & USB_USBSTS_FRI_MASK)
 
@@ -697,8 +700,8 @@ typedef struct {
 /*! SEI - System Error Flag
  *  0b0..Error response did not occur
  *  0b0..No effect
- *  0b1..Error response occurred
  *  0b1..Clear the flag
+ *  0b1..Error response occurred
  */
 #define USB_USBSTS_SEI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_SEI_SHIFT)) & USB_USBSTS_SEI_MASK)
 
@@ -707,28 +710,28 @@ typedef struct {
 /*! AAI - Interrupt on Asynchronous Advance Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_AAI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_AAI_SHIFT)) & USB_USBSTS_AAI_MASK)
 
 #define USB_USBSTS_URI_MASK                      (0x40U)
 #define USB_USBSTS_URI_SHIFT                     (6U)
 /*! URI - USB Reset Received
- *  0b0..USB reset not received
  *  0b0..No effect
- *  0b1..USB reset received
+ *  0b0..USB reset not received
  *  0b1..Clear the flag
+ *  0b1..USB reset received
  */
 #define USB_USBSTS_URI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_URI_SHIFT)) & USB_USBSTS_URI_MASK)
 
 #define USB_USBSTS_SRI_MASK                      (0x80U)
 #define USB_USBSTS_SRI_SHIFT                     (7U)
 /*! SRI - SOF Received Flag
- *  0b0..SOF not received
  *  0b0..No effect
- *  0b1..SOF received
+ *  0b0..SOF not received
  *  0b1..Clear the flag
+ *  0b1..SOF received
  */
 #define USB_USBSTS_SRI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_SRI_SHIFT)) & USB_USBSTS_SRI_MASK)
 
@@ -737,8 +740,8 @@ typedef struct {
 /*! SLI - Device Controller Suspend Flag
  *  0b0..Did not enter Suspended state
  *  0b0..No effect
- *  0b1..Entered Suspended state
  *  0b1..Clear the flag
+ *  0b1..Entered Suspended state
  */
 #define USB_USBSTS_SLI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_SLI_SHIFT)) & USB_USBSTS_SLI_MASK)
 
@@ -747,8 +750,8 @@ typedef struct {
 /*! ULPII - ULPI Interrupt Flag
  *  0b0..Event completion did not occur
  *  0b0..No effect
- *  0b1..Event completion occurred
  *  0b1..Clear the flag
+ *  0b1..Event completion occurred
  */
 #define USB_USBSTS_ULPII(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_ULPII_SHIFT)) & USB_USBSTS_ULPII_MASK)
 
@@ -791,8 +794,8 @@ typedef struct {
 /*! UAI - USB Host Asynchronous Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_UAI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UAI_SHIFT)) & USB_USBSTS_UAI_MASK)
 
@@ -801,8 +804,8 @@ typedef struct {
 /*! UPI - USB Host Periodic Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_UPI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UPI_SHIFT)) & USB_USBSTS_UPI_MASK)
 
@@ -811,8 +814,8 @@ typedef struct {
 /*! TI0 - General Purpose Timer Interrupt 0 (GPTINT0) Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_TI0(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_TI0_SHIFT)) & USB_USBSTS_TI0_MASK)
 
@@ -821,8 +824,8 @@ typedef struct {
 /*! TI1 - General Purpose Timer Interrupt 1 (GPTINT1) Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_TI1(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_TI1_SHIFT)) & USB_USBSTS_TI1_MASK)
 
@@ -831,8 +834,8 @@ typedef struct {
 /*! LPM_L1_EXITI - L1 Exit Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_LPM_L1_EXITI(x)               (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_LPM_L1_EXITI_SHIFT)) & USB_USBSTS_LPM_L1_EXITI_MASK)
 
@@ -841,8 +844,8 @@ typedef struct {
 /*! LPM_L1_ENTRYI - L1 Entry Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_LPM_L1_ENTRYI(x)              (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_LPM_L1_ENTRYI_SHIFT)) & USB_USBSTS_LPM_L1_ENTRYI_MASK)
 
@@ -851,8 +854,8 @@ typedef struct {
 /*! LPM_DEV_RCVDI - Device Received Extension Token Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_LPM_DEV_RCVDI(x)              (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_LPM_DEV_RCVDI_SHIFT)) & USB_USBSTS_LPM_DEV_RCVDI_MASK)
 
@@ -861,8 +864,8 @@ typedef struct {
 /*! LPM_HST_COMPI - Host Completes the LPM Transaction Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_LPM_HST_COMPI(x)              (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_LPM_HST_COMPI_SHIFT)) & USB_USBSTS_LPM_HST_COMPI_MASK)
 /*! @} */
@@ -1115,8 +1118,8 @@ typedef struct {
 /*! EPRN - RX Endpoint NAK Flag
  *  0b00000000..No NACK
  *  0b00000000..No effect
- *  0b00000001..NACK
  *  0b00000001..Clear the flag
+ *  0b00000001..NACK
  */
 #define USB_ENDPTNAK_EPRN(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTNAK_EPRN_SHIFT)) & USB_ENDPTNAK_EPRN_MASK)
 
@@ -1125,8 +1128,8 @@ typedef struct {
 /*! EPTN - TX Endpoint NAK Flag
  *  0b00000000..No NACK
  *  0b00000000..No effect
- *  0b00000001..NACK
  *  0b00000001..Clear the flag
+ *  0b00000001..NACK
  */
 #define USB_ENDPTNAK_EPTN(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTNAK_EPTN_SHIFT)) & USB_ENDPTNAK_EPTN_MASK)
 /*! @} */
@@ -1573,10 +1576,10 @@ typedef struct {
 #define USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_MASK   (0xFFFFU)
 #define USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_SHIFT  (0U)
 /*! ENDPTSETUPSTAT - Endpoint Setup Status Flag
- *  0b0000000000000000..Not received
  *  0b0000000000000000..No effect
- *  0b0000000000000001..Received
+ *  0b0000000000000000..Not received
  *  0b0000000000000001..Clear the flag
+ *  0b0000000000000001..Received
  */
 #define USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT(x)     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_SHIFT)) & USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_MASK)
 /*! @} */
@@ -1823,5 +1826,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USB_H_ */
+#endif  /* PERI_USB_H_ */
 

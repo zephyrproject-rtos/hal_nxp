@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for HSIO_BLK_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file HSIO_BLK_CTRL.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_HSIO_BLK_CTRL.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for HSIO_BLK_CTRL
  *
  * CMSIS Peripheral Access Layer for HSIO_BLK_CTRL
  */
 
-#if !defined(HSIO_BLK_CTRL_H_)
-#define HSIO_BLK_CTRL_H_                         /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_HSIO_BLK_CTRL_H_)
+#define PERI_HSIO_BLK_CTRL_H_                    /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -569,32 +596,32 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_MASK (0x1U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_SHIFT (0U)
 /*! OTG_WKDPDMCHG_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_WKDPDMCHG_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_MASK)
 
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_MASK (0x2U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_SHIFT (1U)
 /*! OTG_VBUS_WAKE_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_VBUS_WAKE_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_MASK)
 
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_MASK (0x4U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_SHIFT (2U)
 /*! OTG_ID_WAKEUP_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_ID_WAKEUP_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_MASK)
 
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_U3_WAKE_EN_MASK (0x8U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_U3_WAKE_EN_SHIFT (3U)
 /*! OTG_U3_WAKE_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_U3_WAKE_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_U3_WAKE_EN_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_OTG_U3_WAKE_EN_MASK)
 
@@ -613,8 +640,8 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_AUTORESUME_EN_MASK (0x100U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_AUTORESUME_EN_SHIFT (8U)
 /*! AUTORESUME_EN
- *  0b1..enable.
  *  0b0..disable.
+ *  0b1..enable.
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_AUTORESUME_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_AUTORESUME_EN_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_AUTORESUME_EN_MASK)
 
@@ -629,8 +656,8 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_LOWSPEED_EN_MASK (0x800U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_LOWSPEED_EN_SHIFT (11U)
 /*! LOWSPEED_EN
- *  0b1..lowspeed
  *  0b0..full/high speed
+ *  0b1..lowspeed
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_LOWSPEED_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_LOWSPEED_EN_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_CTRL_LOWSPEED_EN_MASK)
 
@@ -705,8 +732,8 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB1_WAKEUP_STATUS_OTG_HOST_MODE_MASK (0x400U)
 #define HSIO_BLK_CTRL_USB1_WAKEUP_STATUS_OTG_HOST_MODE_SHIFT (10U)
 /*! OTG_HOST_MODE
- *  0b1..host mode
  *  0b0..device mode
+ *  0b1..host mode
  */
 #define HSIO_BLK_CTRL_USB1_WAKEUP_STATUS_OTG_HOST_MODE(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB1_WAKEUP_STATUS_OTG_HOST_MODE_SHIFT)) & HSIO_BLK_CTRL_USB1_WAKEUP_STATUS_OTG_HOST_MODE_MASK)
 
@@ -729,32 +756,32 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_MASK (0x1U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_SHIFT (0U)
 /*! OTG_WKDPDMCHG_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_WKDPDMCHG_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_WKDPDMCHG_EN_MASK)
 
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_MASK (0x2U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_SHIFT (1U)
 /*! OTG_VBUS_WAKE_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_VBUS_WAKE_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_VBUS_WAKE_EN_MASK)
 
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_MASK (0x4U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_SHIFT (2U)
 /*! OTG_ID_WAKEUP_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_ID_WAKEUP_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_ID_WAKEUP_EN_MASK)
 
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_U3_WAKE_EN_MASK (0x8U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_U3_WAKE_EN_SHIFT (3U)
 /*! OTG_U3_WAKE_EN
- *  0b1..enable
  *  0b0..disable
+ *  0b1..enable
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_U3_WAKE_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_U3_WAKE_EN_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_OTG_U3_WAKE_EN_MASK)
 
@@ -773,8 +800,8 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_AUTORESUME_EN_MASK (0x100U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_AUTORESUME_EN_SHIFT (8U)
 /*! AUTORESUME_EN
- *  0b1..enable.
  *  0b0..disable.
+ *  0b1..enable.
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_AUTORESUME_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_AUTORESUME_EN_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_AUTORESUME_EN_MASK)
 
@@ -789,8 +816,8 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_LOWSPEED_EN_MASK (0x800U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_LOWSPEED_EN_SHIFT (11U)
 /*! LOWSPEED_EN
- *  0b1..lowspeed
  *  0b0..full/high speed
+ *  0b1..lowspeed
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_LOWSPEED_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_LOWSPEED_EN_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_CTRL_LOWSPEED_EN_MASK)
 
@@ -865,8 +892,8 @@ typedef struct {
 #define HSIO_BLK_CTRL_USB2_WAKEUP_STATUS_OTG_HOST_MODE_MASK (0x400U)
 #define HSIO_BLK_CTRL_USB2_WAKEUP_STATUS_OTG_HOST_MODE_SHIFT (10U)
 /*! OTG_HOST_MODE
- *  0b1..host mode
  *  0b0..device mode
+ *  0b1..host mode
  */
 #define HSIO_BLK_CTRL_USB2_WAKEUP_STATUS_OTG_HOST_MODE(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_USB2_WAKEUP_STATUS_OTG_HOST_MODE_SHIFT)) & HSIO_BLK_CTRL_USB2_WAKEUP_STATUS_OTG_HOST_MODE_MASK)
 
@@ -919,5 +946,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* HSIO_BLK_CTRL_H_ */
+#endif  /* PERI_HSIO_BLK_CTRL_H_ */
 

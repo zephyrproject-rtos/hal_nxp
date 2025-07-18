@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021, 2023 NXP
+ * Copyright 2016-2019, 2021, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,81 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SLCD driver version. */
-#define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
+
+/*! @brief SLCD clock prescaler to generate frame frequency. */
+typedef enum _slcd_clock_prescaler
+{
+    kSLCD_ClkPrescaler00 = 0U, /*!< Prescaler 0. */
+    kSLCD_ClkPrescaler01,      /*!< Prescaler 1. */
+    kSLCD_ClkPrescaler02,      /*!< Prescaler 2. */
+    kSLCD_ClkPrescaler03,      /*!< Prescaler 3. */
+    kSLCD_ClkPrescaler04,      /*!< Prescaler 4. */
+    kSLCD_ClkPrescaler05,      /*!< Prescaler 5. */
+    kSLCD_ClkPrescaler06,      /*!< Prescaler 6. */
+    kSLCD_ClkPrescaler07       /*!< Prescaler 7. */
+} slcd_clock_prescaler_t;
+
+#if defined(FSL_FEATURE_SLCD_LP_CONTROL) && FSL_FEATURE_SLCD_LP_CONTROL
+/*! @brief SLCD regulated voltage trim parameter, be used to meet the desired contrast. */
+typedef enum _slcd_regulated_voltage_trim
+{
+    kSLCD_VolatgeTrimNo = 0U,            /*!< No voltage trim. */
+    kSLCD_VolatgeTrimIncrease50mV,       /*!< Increase the voltage by 50 mV. */
+    kSLCD_VolatgeTrimIncrease100mV,      /*!< Increase the voltage by 100 mV. */
+    kSLCD_VolatgeTrimIncrease150mV,      /*!< Increase the voltage by 150 mV. */
+    kSLCD_VolatgeTrimIncrease200mV,      /*!< Increase the voltage by 200 mV. */
+    kSLCD_VolatgeTrimIncrease250mV,      /*!< Increase the voltage by 250 mV. */
+    kSLCD_VolatgeTrimIncrease300mV,      /*!< Increase the voltage by 300 mV. */
+    kSLCD_VolatgeTrimIncrease350mV,      /*!< Increase the voltage by 350 mV. */
+    kSLCD_VolatgeTrimDecrease400mV,      /*!< Decrease the voltage by 400 mV. */
+    kSLCD_VolatgeTrimDecrease350mV,      /*!< Decrease the voltage by 350 mV. */
+    kSLCD_VolatgeTrimDecrease300mV,      /*!< Decrease the voltage by 300 mV. */
+    kSLCD_VolatgeTrimDecrease250mV,      /*!< Decrease the voltage by 250 mV. */
+    kSLCD_VolatgeTrimDecrease200mV,      /*!< Decrease the voltage by 200 mV. */
+    kSLCD_VolatgeTrimDecrease150mV,      /*!< Decrease the voltage by 150 mV. */
+    kSLCD_VolatgeTrimDecrease100mV,      /*!< Decrease the voltage by 100 mV. */
+    kSLCD_VolatgeTrimDecrease50mV        /*!< Decrease the voltage by 50 mV. */
+} slcd_regulated_voltage_trim_t;
+
+/*! @brief SLCD sample&hold configuration. To save power, configure the voltage to be
+ * sampled and held periodically, during this period the phase switches are turned off.
+ */
+typedef enum _slcd_sample_hold
+{
+    kSLCD_SampleHoldNone = 0U,       /*!< No sample&hold. */
+    kSLCD_SampleHold64Cycle = 0b10U, /*!< Sample&hold each 64 function clock cycle. */
+    kSLCD_SampleHold128Cycle = 0b11U /*!< Sample&hold each 128 function clock cycle. */
+} slcd_sample_hold_t;
+
+/*! @brief SLCD blink rate. */
+typedef enum _slcd_blink_rate
+{
+    kSLCD_BlinkRate00 = 0U, /*!< SLCD blink rate is LCD clock/((2^11)). */
+    kSLCD_BlinkRate01,      /*!< SLCD blink rate is LCD clock/((2^12)). */
+    kSLCD_BlinkRate02,      /*!< SLCD blink rate is LCD clock/((2^13)). */
+    kSLCD_BlinkRate03,      /*!< SLCD blink rate is LCD clock/((2^14)). */
+    kSLCD_BlinkRate04,      /*!< SLCD blink rate is LCD clock/((2^15)). */
+    kSLCD_BlinkRate05,      /*!< SLCD blink rate is LCD clock/((2^16)). */
+    kSLCD_BlinkRate06,      /*!< SLCD blink rate is LCD clock/((2^17)). */
+    kSLCD_BlinkRate07       /*!< SLCD blink rate is LCD clock/((2^18)). */
+} slcd_blink_rate_t;
+
+#else
+
+/*! @brief SLCD blink rate. */
+typedef enum _slcd_blink_rate
+{
+    kSLCD_BlinkRate00 = 0U, /*!< SLCD blink rate is LCD clock/((2^12)). */
+    kSLCD_BlinkRate01,      /*!< SLCD blink rate is LCD clock/((2^13)). */
+    kSLCD_BlinkRate02,      /*!< SLCD blink rate is LCD clock/((2^14)). */
+    kSLCD_BlinkRate03,      /*!< SLCD blink rate is LCD clock/((2^15)). */
+    kSLCD_BlinkRate04,      /*!< SLCD blink rate is LCD clock/((2^16)). */
+    kSLCD_BlinkRate05,      /*!< SLCD blink rate is LCD clock/((2^17)). */
+    kSLCD_BlinkRate06,      /*!< SLCD blink rate is LCD clock/((2^18)). */
+    kSLCD_BlinkRate07       /*!< SLCD blink rate is LCD clock/((2^19)). */
+} slcd_blink_rate_t;
 
 /*! @brief SLCD power supply option. */
 typedef enum _slcd_power_supply_option
@@ -108,18 +181,19 @@ typedef enum _slcd_alt_clock_div
     kSLCD_AltClkDivFactor512     /*!< Divide alternate clock with factor 512. */
 } slcd_alt_clock_div_t;
 
-/*! @brief SLCD clock prescaler to generate frame frequency. */
-typedef enum _slcd_clock_prescaler
+/*! @brief SLCD clock configuration structure. */
+typedef struct _slcd_clock_config
 {
-    kSLCD_ClkPrescaler00 = 0U, /*!< Prescaler 0. */
-    kSLCD_ClkPrescaler01,      /*!< Prescaler 1. */
-    kSLCD_ClkPrescaler02,      /*!< Prescaler 2. */
-    kSLCD_ClkPrescaler03,      /*!< Prescaler 3. */
-    kSLCD_ClkPrescaler04,      /*!< Prescaler 4. */
-    kSLCD_ClkPrescaler05,      /*!< Prescaler 5. */
-    kSLCD_ClkPrescaler06,      /*!< Prescaler 6. */
-    kSLCD_ClkPrescaler07       /*!< Prescaler 7. */
-} slcd_clock_prescaler_t;
+    slcd_clock_src_t clkSource; /*!< Clock source. "slcd_clock_src_t" is recommended to be used.
+                                  The SLCD is optimized to operate using a 32.768kHz clock input. */
+    slcd_alt_clock_div_t
+        altClkDivider; /*!< The divider to divide the alternate clock used for alternate clock source. */
+    slcd_clock_prescaler_t clkPrescaler; /*!< Clock prescaler. */
+#if FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE
+    bool fastFrameRateEnable; /*!< Fast frame rate enable flag. */
+#endif                        /* FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE */
+} slcd_clock_config_t;
+#endif
 
 /*! @brief SLCD duty cycle. */
 typedef enum _slcd_duty_cycle
@@ -176,19 +250,6 @@ typedef enum _slcd_blink_mode
     kSLCD_AltDisplayBlink /*!< Display alternate display during the blink period if duty cycle is lower than 5. */
 } slcd_blink_mode_t;
 
-/*! @brief SLCD blink rate. */
-typedef enum _slcd_blink_rate
-{
-    kSLCD_BlinkRate00 = 0U, /*!< SLCD blink rate is LCD clock/((2^12)). */
-    kSLCD_BlinkRate01,      /*!< SLCD blink rate is LCD clock/((2^13)). */
-    kSLCD_BlinkRate02,      /*!< SLCD blink rate is LCD clock/((2^14)). */
-    kSLCD_BlinkRate03,      /*!< SLCD blink rate is LCD clock/((2^15)). */
-    kSLCD_BlinkRate04,      /*!< SLCD blink rate is LCD clock/((2^16)). */
-    kSLCD_BlinkRate05,      /*!< SLCD blink rate is LCD clock/((2^17)). */
-    kSLCD_BlinkRate06,      /*!< SLCD blink rate is LCD clock/((2^18)). */
-    kSLCD_BlinkRate07       /*!< SLCD blink rate is LCD clock/((2^19)). */
-} slcd_blink_rate_t;
-
 /*! @brief SLCD fault detect clock prescaler. */
 typedef enum _slcd_fault_detect_clock_prescaler
 {
@@ -243,28 +304,23 @@ typedef struct _slcd_fault_detect_config
     slcd_fault_detect_sample_window_width_t width;      /*!< Fault detect sample window width. */
 } slcd_fault_detect_config_t;
 
-/*! @brief SLCD clock configuration structure. */
-typedef struct _slcd_clock_config
-{
-    slcd_clock_src_t clkSource; /*!< Clock source. "slcd_clock_src_t" is recommended to be used.
-                                  The SLCD is optimized to operate using a 32.768kHz clock input. */
-    slcd_alt_clock_div_t
-        altClkDivider; /*!< The divider to divide the alternate clock used for alternate clock source. */
-    slcd_clock_prescaler_t clkPrescaler; /*!< Clock prescaler. */
-#if FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE
-    bool fastFrameRateEnable; /*!< Fast frame rate enable flag. */
-#endif                        /* FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE */
-} slcd_clock_config_t;
-
 /*! @brief SLCD configuration structure. */
 typedef struct _slcd_config
 {
+#if defined(FSL_FEATURE_SLCD_LP_CONTROL) && FSL_FEATURE_SLCD_LP_CONTROL
+    bool lowPowerWaveform; /*!< Generate low power waveform. */
+    slcd_regulated_voltage_trim_t voltageTrimVLL1; /*!< Voltage trim for VLL1 output level. */
+    slcd_regulated_voltage_trim_t voltageTrimVLL2; /*!< Voltage trim for VLL2 output level. */
+    slcd_sample_hold_t sampleHold;                 /*!< Sample&hold setting. */
+    slcd_clock_prescaler_t clkPrescaler;
+#else
     slcd_power_supply_option_t powerSupply;    /*!< Power supply option. */
     slcd_regulated_voltage_trim_t voltageTrim; /*!< Regulated voltage trim used for the internal regulator VIREG to
                                                   adjust to facilitate contrast control. */
     slcd_clock_config_t *clkConfig;            /*!< Clock configure. */
-    slcd_display_mode_t displayMode;           /*!< SLCD display mode. */
     slcd_load_adjust_t loadAdjust;             /*!< Load adjust to handle glass capacitance. */
+#endif
+    slcd_display_mode_t displayMode;           /*!< SLCD display mode. */
     slcd_duty_cycle_t dutyCycle;               /*!< Duty cycle. */
     slcd_lowpower_behavior lowPowerBehavior;   /*!< SLCD behavior in low power mode. */
 #if FSL_FEATURE_SLCD_HAS_FRAME_FREQUENCY_INTERRUPT

@@ -1,0 +1,58 @@
+// Memory Configuration File
+//
+// Description:
+//  A memory configuration file contains commands that define the legally accessible
+//  areas of memory for your specific board. Useful for example when the debugger
+//  tries to display the content of a "char *" variable, that has not yet been initialized.
+//  In this case the debugger may try to read from a bogus address, which could cause a
+//  bus error.
+//
+// Board:
+//  56800 MC56F83763
+//
+// Reference:
+//  -
+
+
+// All reserved ranges read back 0xBABA...
+reservedchar 0xBA
+
+usederivative "MC56F83763"
+
+//         Memory Map:
+//         ----------------------------------------------------------------------
+//         <memory address rage>     <access size>     <permission>
+range      p:0x00000000 p:0x0000FFFF       2           ReadWrite      // FLASH
+reserved   p:0x00010000 p:0x0001FFFF
+reserved   p:0x00020000 p:0x0005FFFF
+range      p:0x00060000 p:0x00065FFF       2           ReadWrite      // RAM
+reserved   p:0x00066000 p:0x00077FFF
+range      p:0x00078000 p:0x0007BFFF       2           ReadWrite      // BOOT ROM
+reserved   p:0x0007C000 p:0x001FFFFF
+
+range      x:0x00000000 x:0x00005FFF       2           ReadWrite      // RAM
+reserved   x:0x00006000 x:0x00007FFF
+range      x:0x00008000 x:0x0000BFFF       2           ReadWrite      // FLASH
+//         x:0x0000C000 x:0x0000FFFF       2           ReadWrite      // Memory Mapped Registers
+reserved   x:0x0000C200 x:0x0000C7FF
+reserved   x:0x0000D800 x:0x0000DFFF
+reserved   x:0x0000E040 x:0x0000E07F
+reserved   x:0x0000E0D0 x:0x0000E0DF
+reserved   x:0x0000E120 x:0x0000E13F
+reserved   x:0x0000E1C0 x:0x0000E1FF
+reserved   x:0x0000E270 x:0x0000E29F
+reserved   x:0x0000E2C0 x:0x0000E2FF
+reserved   x:0x0000E3B4 x:0x0000E3BF
+reserved   x:0x0000E3F0 x:0x0000E3FF
+reserved   x:0x0000E44F x:0x0000E4FF
+reserved   x:0x0000E580 x:0x0000E5FF
+reserved   x:0x0000E6D1 x:0x0000E6FF
+reserved   x:0x0000E7D1 x:0x0000EAFF
+reserved   x:0x0000F800 x:0x0000FFFF
+reserved   x:0x00010000 x:0x0001FFFF
+range      x:0x00020000 x:0x0002FFFF       2           ReadWrite      // FLASH
+reserved   x:0x00030000 x:0x00077FFF
+range      x:0x00078000 x:0x00079FFF       2           ReadWrite      // BOOT ROM/DATA ROM
+range      x:0x0007C000 x:0x0007C3FF       2           ReadWrite      // FLASH Program Buffer
+reserved   x:0x0007C400 x:0x00FFFEFF
+range      x:0x00FFFF00 x:0x00FFFFFF       2           ReadWrite      // EOnCE registers

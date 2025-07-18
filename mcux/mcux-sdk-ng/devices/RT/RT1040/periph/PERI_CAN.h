@@ -13,14 +13,14 @@
 **                          MIMXRT1046DFQ6B
 **                          MIMXRT1046XFQ5B
 **
-**     Version:             rev. 0.1, 2021-07-20
-**     Build:               b241021
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2021-07-20)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CAN.h
- * @version 0.1
- * @date 2021-07-20
+ * @file PERI_CAN.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CAN
  *
  * CMSIS Peripheral Access Layer for CAN
  */
 
-#if !defined(CAN_H_)
-#define CAN_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CAN_H_)
+#define PERI_CAN_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1041DFP6B) || defined(CPU_MIMXRT1041DJM6B) || defined(CPU_MIMXRT1041XFP5B) || defined(CPU_MIMXRT1041XJM5B))
 #include "MIMXRT1041_COMMON.h"
@@ -364,8 +367,8 @@ typedef struct {
 #define CAN_MCR_HALT_MASK                        (0x10000000U)
 #define CAN_MCR_HALT_SHIFT                       (28U)
 /*! HALT - Halt FlexCAN
- *  0b0..No Freeze mode request.
- *  0b1..Enters Freeze mode if the FRZ bit is asserted.
+ *  0b0..No Freeze Mode request.
+ *  0b1..Enters Freeze Mode if the FRZ bit is asserted.
  */
 #define CAN_MCR_HALT(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_MCR_HALT_SHIFT)) & CAN_MCR_HALT_MASK)
 
@@ -421,8 +424,8 @@ typedef struct {
 #define CAN_CTRL1_TSYN_MASK                      (0x20U)
 #define CAN_CTRL1_TSYN_SHIFT                     (5U)
 /*! TSYN - Timer Sync
- *  0b0..Timer sync feature disabled
- *  0b1..Timer sync feature enabled
+ *  0b0..Timer Sync feature disabled
+ *  0b1..Timer Sync feature enabled
  */
 #define CAN_CTRL1_TSYN(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_TSYN_SHIFT)) & CAN_CTRL1_TSYN_MASK)
 
@@ -552,22 +555,14 @@ typedef struct {
 /*! @name ECR - Error Counter */
 /*! @{ */
 
-#define CAN_ECR_TXERRCNT_MASK                    (0xFFU)
-#define CAN_ECR_TXERRCNT_SHIFT                   (0U)
-/*! TXERRCNT - Transmit Error Counter */
-#define CAN_ECR_TXERRCNT(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ECR_TXERRCNT_SHIFT)) & CAN_ECR_TXERRCNT_MASK)
-
 #define CAN_ECR_TX_ERR_COUNTER_MASK              (0xFFU)
 #define CAN_ECR_TX_ERR_COUNTER_SHIFT             (0U)
+/*! TX_ERR_COUNTER - Transmit Error Counter */
 #define CAN_ECR_TX_ERR_COUNTER(x)                (((uint32_t)(((uint32_t)(x)) << CAN_ECR_TX_ERR_COUNTER_SHIFT)) & CAN_ECR_TX_ERR_COUNTER_MASK)
-
-#define CAN_ECR_RXERRCNT_MASK                    (0xFF00U)
-#define CAN_ECR_RXERRCNT_SHIFT                   (8U)
-/*! RXERRCNT - Receive Error Counter */
-#define CAN_ECR_RXERRCNT(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ECR_RXERRCNT_SHIFT)) & CAN_ECR_RXERRCNT_MASK)
 
 #define CAN_ECR_RX_ERR_COUNTER_MASK              (0xFF00U)
 #define CAN_ECR_RX_ERR_COUNTER_SHIFT             (8U)
+/*! RX_ERR_COUNTER - Receive Error Counter */
 #define CAN_ECR_RX_ERR_COUNTER(x)                (((uint32_t)(((uint32_t)(x)) << CAN_ECR_RX_ERR_COUNTER_SHIFT)) & CAN_ECR_RX_ERR_COUNTER_MASK)
 
 #define CAN_ECR_TXERRCNT_FAST_MASK               (0xFF0000U)
@@ -661,7 +656,7 @@ typedef struct {
 #define CAN_ESR1_STFERR_SHIFT                    (10U)
 /*! STFERR - Stuffing Error
  *  0b0..No such occurrence.
- *  0b1..A stuffing error occurred since last read of this register.
+ *  0b1..A Stuffing Error occurred since last read of this register.
  */
 #define CAN_ESR1_STFERR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_STFERR_SHIFT)) & CAN_ESR1_STFERR_MASK)
 
@@ -943,8 +938,8 @@ typedef struct {
 #define CAN_CTRL2_EACEN_MASK                     (0x10000U)
 #define CAN_CTRL2_EACEN_SHIFT                    (16U)
 /*! EACEN - Entire Frame Arbitration Field Comparison Enable For Rx Mailboxes
- *  0b0..Rx mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
- *  0b1..Enables the comparison of both Rx mailbox filter's IDE and RTR bit with their corresponding bits within
+ *  0b0..Rx Mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
+ *  0b1..Enables the comparison of both Rx Mailbox filter's IDE and RTR bit with their corresponding bits within
  *       the incoming frame. Mask bits do apply.
  */
 #define CAN_CTRL2_EACEN(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_EACEN_SHIFT)) & CAN_CTRL2_EACEN_MASK)
@@ -1006,8 +1001,8 @@ typedef struct {
 #define CAN_ESR2_IMB_MASK                        (0x2000U)
 #define CAN_ESR2_IMB_SHIFT                       (13U)
 /*! IMB - Inactive Mailbox
- *  0b0..If ESR2[VPS] is asserted, the ESR2[LPTM] is not an inactive mailbox.
- *  0b1..If ESR2[VPS] is asserted, there is at least one inactive mailbox. LPTM content is the number of the first one.
+ *  0b0..If ESR2[VPS] is asserted, the ESR2[LPTM] is not an inactive Mailbox.
+ *  0b1..If ESR2[VPS] is asserted, there is at least one inactive Mailbox. LPTM content is the number of the first one.
  */
 #define CAN_ESR2_IMB(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_ESR2_IMB_SHIFT)) & CAN_ESR2_IMB_MASK)
 
@@ -2246,5 +2241,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CAN_H_ */
+#endif  /* PERI_CAN_H_ */
 

@@ -1,6 +1,5 @@
 /*
- * Copyright 2022 NXP
- * All rights reserved.
+ * Copyright 2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +39,7 @@ void INTM_GetDefaultConfig(intm_config_t *config)
 {
     assert(config);
 
-    for (uint32_t i = 0; i < (uint32_t)FSL_FEATURE_INTM_MONITOR_COUNT; i++)
+    for (uint32_t i = 0; i < (uint32_t)INTM_MON_COUNT; i++)
     {
         config->intm[i].irqnumber = NotAvail_IRQn;
         config->intm[i].maxtimer  = 1000U;
@@ -63,7 +62,7 @@ void INTM_Init(INTM_Type *base, const intm_config_t *config)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(kCLOCK_Intm);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-    for (uint32_t i = 0U; i < (uint32_t)FSL_FEATURE_INTM_MONITOR_COUNT; i++)
+    for (uint32_t i = 0U; i < (uint32_t)INTM_MON_COUNT; i++)
     {
         base->MON[i].INTM_IRQSEL  = INTM_MON_INTM_IRQSEL_IRQ(config->intm[i].irqnumber);
         base->MON[i].INTM_LATENCY = INTM_MON_INTM_LATENCY_LAT(config->intm[i].maxtimer);

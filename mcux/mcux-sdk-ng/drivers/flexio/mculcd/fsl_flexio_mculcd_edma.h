@@ -23,7 +23,7 @@
 
 /*! @{ */
 /*! @brief FlexIO MCULCD EDMA driver version. */
-#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*! @} */
 
 /*! @brief  typedef for flexio_mculcd_edma_handle_t in advance. */

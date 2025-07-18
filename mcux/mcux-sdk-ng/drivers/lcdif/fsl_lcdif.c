@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021,2023 NXP
+ * Copyright (c) 2019-2021,2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -47,10 +47,11 @@ static uint32_t LCDIF_GetInstance(LCDIF_Type *base);
  * brief Gets the layer config register value
  *
  * param config Pointer to the configuration structure.
+ * param isOverlay Whether this layer is overlay layer.
  *
  * return The value for layer configuration register.
  */
-static uint32_t LCDIF_GetLayerConfig(const lcdif_fb_config_t *config);
+static uint32_t LCDIF_GetLayerConfig(const lcdif_fb_config_t *config, bool isOverlay);
 #endif
 /*******************************************************************************
  * Variables
@@ -274,6 +275,7 @@ void LCDIF_FrameBufferGetDefaultConfig(lcdif_fb_config_t *config)
     config->inOrder        = kLCDIF_PixelInputOrderARGB;
     config->format         = kLCDIF_PixelFormatRGB565;
     config->standard       = kLCDIF_ConvertBT601;
+    config->decompress     = kLCDIF_DecompressNone;
 
     /* kLCDIF_PorterDuffSrc */
     config->alpha.srcAlphaMode       = kLCDIF_AlphaStraight;
@@ -286,13 +288,26 @@ void LCDIF_FrameBufferGetDefaultConfig(lcdif_fb_config_t *config)
     config->alpha.useDstAlpha        = (uint32_t) true;
 }
 
-static uint32_t LCDIF_GetLayerConfig(const lcdif_fb_config_t *config)
+static uint32_t LCDIF_GetLayerConfig(const lcdif_fb_config_t *config, bool isOverlay)
 {
-    return LCDIF_FRAMEBUFFERCONFIG0_ROT_ANGLE(config->rotateFlipMode) |
-           LCDIF_FRAMEBUFFERCONFIG0_UV_SWIZZLE(config->enableUVSwizzle) |
-           LCDIF_FRAMEBUFFERCONFIG0_SWIZZLE(config->inOrder) |
-           LCDIF_FRAMEBUFFERCONFIG0_COLOR_KEY_EN(config->colorkey.enable) |
-           LCDIF_FRAMEBUFFERCONFIG0_ENABLE((uint32_t)config->enable) | ((uint32_t)config->format & 0x7UL);
+    if (isOverlay)
+    {
+        return LCDIF_OVERLAYCONFIG_ROT_ANGLE(config->rotateFlipMode) |
+               LCDIF_OVERLAYCONFIG_UV_SWIZZLE((config->enableUVSwizzle ? 1U : 0U)) |
+               LCDIF_OVERLAYCONFIG_DEC_MODE(config->decompress) |
+               LCDIF_OVERLAYCONFIG_SWIZZLE(config->inOrder) |
+               LCDIF_OVERLAYCONFIG_COLOR_KEY_EN((config->colorkey.enable ? 1U : 0U)) |
+               LCDIF_OVERLAYCONFIG_ENABLE((config->enable ? 1U : 0U)) | ((uint32_t)config->format & 0x7UL);
+    }
+    else
+    {
+        return LCDIF_FRAMEBUFFERCONFIG0_ROT_ANGLE(config->rotateFlipMode) |
+               LCDIF_FRAMEBUFFERCONFIG0_UV_SWIZZLE((config->enableUVSwizzle ? 1U : 0U)) |
+               LCDIF_FRAMEBUFFERCONFIG0_DEC_MODE(config->decompress) |
+               LCDIF_FRAMEBUFFERCONFIG0_SWIZZLE(config->inOrder) |
+               LCDIF_FRAMEBUFFERCONFIG0_COLOR_KEY_EN((config->colorkey.enable ? 1U : 0U)) |
+               LCDIF_FRAMEBUFFERCONFIG0_ENABLE((config->enable ? 1U : 0U)) | ((uint32_t)config->format & 0x7UL);
+    }
 }
 
 /*!
@@ -315,7 +330,7 @@ void LCDIF_SetFrameBufferConfig(LCDIF_Type *base, uint8_t displayIndex, const lc
 
     base->LAYERCLOCKGATE = (base->LAYERCLOCKGATE & (~LCDIF_LAYERCLOCKGATE_DISABLE_VIDEO_CLK_MASK)) |
                            LCDIF_LAYERCLOCKGATE_DISABLE_VIDEO_CLK(!config->enable);
-    base->FRAMEBUFFERCONFIG0    = LCDIF_GetLayerConfig(config);
+    base->FRAMEBUFFERCONFIG0    = LCDIF_GetLayerConfig(config, false);
     base->FRAMEBUFFERCLEARVALUE = config->clearValue;
     base->VIDEOTL               = LCDIF_VIDEOTL_X(config->topLeftX) | LCDIF_VIDEOTL_Y(config->topLeftY);
     base->FRAMEBUFFERSIZE = LCDIF_FRAMEBUFFERSIZE_WIDTH(config->width) | LCDIF_FRAMEBUFFERSIZE_HEIGHT(config->height);
@@ -372,7 +387,7 @@ void LCDIF_SetOverlayLayerConfig(LCDIF_Type *base,
     switch (layerIndex)
     {
         case 0U:
-            base->OVERLAYCONFIG     = LCDIF_GetLayerConfig(config);
+            base->OVERLAYCONFIG     = LCDIF_GetLayerConfig(config, true);
             base->OVERLAYCLEARVALUE = config->clearValue;
             base->LAYERCLOCKGATE    = (base->LAYERCLOCKGATE & (~LCDIF_LAYERCLOCKGATE_DISABLE_OVERLAY0_CLK_MASK)) |
                                    LCDIF_LAYERCLOCKGATE_DISABLE_OVERLAY0_CLK(!config->enable);
@@ -387,7 +402,7 @@ void LCDIF_SetOverlayLayerConfig(LCDIF_Type *base,
             break;
 
         case 1U:
-            base->OVERLAYCONFIG1    = LCDIF_GetLayerConfig(config);
+            base->OVERLAYCONFIG1    = LCDIF_GetLayerConfig(config, true);
             base->OVERLAYCLEARVALUE = config->clearValue;
             base->LAYERCLOCKGATE    = (base->LAYERCLOCKGATE & (~LCDIF_LAYERCLOCKGATE_DISABLE_OVERLAY1_CLK_MASK)) |
                                    LCDIF_LAYERCLOCKGATE_DISABLE_OVERLAY1_CLK(!config->enable);
@@ -650,8 +665,8 @@ void LCDIF_SetPanelConfig(LCDIF_Type *base, uint8_t displayIndex, const lcdif_pa
     base->BLENDSTACKORDER = (uint32_t)config->order;
     base->SRCCONFIGENDIAN = (uint32_t)config->endian;
     base->PANELFUNCTION = (base->PANELFUNCTION & ~(LCDIF_PANELFUNCTION_OUTPUT_MASK | LCDIF_PANELFUNCTION_GAMMA_MASK)) |
-                          LCDIF_PANELFUNCTION_OUTPUT((uint32_t)config->enable) |
-                          LCDIF_PANELFUNCTION_GAMMA((uint32_t)config->enableGamma);
+                          LCDIF_PANELFUNCTION_OUTPUT(config->enable ? 1U : 0U) |
+                          LCDIF_PANELFUNCTION_GAMMA(config->enableGamma ? 1U : 0U);
 }
 
 #else
@@ -888,6 +903,9 @@ void LCDIF_DbiSelectArea(LCDIF_Type *base,
                          uint16_t endY,
                          bool isTiled)
 {
+    assert(endX >= startX);
+    assert(endY >= startY);
+
     uint16_t width  = endX - startX + 1U;
     uint16_t height = endY - startY + 1U;
 

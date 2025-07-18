@@ -1,0 +1,1 @@
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/../../../MC56F83xxx/MC56F83789/drivers)

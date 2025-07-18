@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-05-19
-**     Build:               b240417
+**     Build:               b250324
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -117,6 +117,28 @@
     (((x) == FTM2) ? (0) : (-1))))
 /* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
 #define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (0)
+/* @brief Has filter prescaler. */
+#define FSL_FEATURE_FTM_HAS_FILTER_PRESCALER (0)
+/* @brief Has fault output state configurable. */
+#define FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE (0)
+/* @brief Has paired deadtime. */
+#define FSL_FEATURE_FTM_HAS_PAIRED_DEADTIME (0)
+/* @brief Has PWM dithering. */
+#define FSL_FEATURE_FTM_HAS_DITHERING (0)
+/* @brief FTM instance has PWM dithering. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(x) (0)
+/* @brief Has trigger mode control. */
+#define FSL_FEATURE_FTM_HAS_TRIGGER_MODE (0)
+/* @brief Has modified combine mode. */
+#define FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM (0)
+/* @brief Has configurable channel input state. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHIS_BIT (0)
+/* @brief Has configurable channel output value. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHOV_BIT (0)
+/* @brief FTM instance has Quadrature Decoder with input filter. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (0)
+/* @brief FTM instance fault input number. */
+#define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) (4)
 /* @brief TPM Has no CONF. */
 #define FSL_FEATURE_TPM_HAS_NO_CONF (1)
 /* @brief There is CLKS bit in SC register. */
@@ -269,6 +291,8 @@
 #define FSL_FEATURE_PIT_HAS_SHARED_IRQ_HANDLER (0)
 /* @brief Has timer enable control. */
 #define FSL_FEATURE_PIT_HAS_MDIS (1)
+/* @brief Has ERRATA 7914. */
+#define FSL_FEATURE_PIT_HAS_ERRATA_7914 (0)
 
 /* SPI module features */
 

@@ -8,6 +8,8 @@
  * Includes
  ******************************************************************************/
 #include "usb_device_config.h"
+
+#if defined(USB_DEVICE_CONFIG_CDC_ECM) && USB_DEVICE_CONFIG_CDC_ECM
 #include "usb.h"
 #include "usb_device.h"
 #include "usb_device_class.h"
@@ -680,3 +682,4 @@ usb_status_t USB_DeviceCdcEcmEvent(void *handle, uint32_t event, void *param)
 
     return status;
 }
+#endif

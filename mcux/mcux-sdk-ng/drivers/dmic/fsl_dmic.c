@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -171,6 +171,7 @@ void DMIC_ConfigChannel(DMIC_Type *base,
                         stereo_side_t side,
                         dmic_channel_config_t *channel_config)
 {
+
     base->CHANNEL[channel].DIVHFCLK     = (uint32_t)channel_config->divhfclk;
     base->CHANNEL[channel].OSR          = channel_config->osr;
     base->CHANNEL[channel].GAINSHIFT    = (uint32_t)channel_config->gainshft;
@@ -180,10 +181,10 @@ void DMIC_ConfigChannel(DMIC_Type *base,
         DMIC_CHANNEL_PHY_CTRL_PHY_FALL(side) | DMIC_CHANNEL_PHY_CTRL_PHY_HALF(channel_config->sample_rate);
     base->CHANNEL[channel].DC_CTRL = DMIC_CHANNEL_DC_CTRL_DCPOLE(channel_config->dc_cut_level) |
                                      DMIC_CHANNEL_DC_CTRL_DCGAIN(channel_config->post_dc_gain_reduce) |
-                                     DMIC_CHANNEL_DC_CTRL_SATURATEAT16BIT(channel_config->saturate16bit);
+                                     DMIC_CHANNEL_DC_CTRL_SATURATEAT16BIT(channel_config->saturate16bit ? 1U : 0U);
 
 #if defined(FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND) && (FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND)
-    base->CHANNEL[channel].DC_CTRL |= DMIC_CHANNEL_DC_CTRL_SIGNEXTEND(channel_config->enableSignExtend);
+    base->CHANNEL[channel].DC_CTRL |= DMIC_CHANNEL_DC_CTRL_SIGNEXTEND(channel_config->enableSignExtend ? 1U : 0U);
 #endif
 }
 
@@ -203,7 +204,7 @@ void DMIC_CfgChannelDc(DMIC_Type *base,
 {
     base->CHANNEL[channel].DC_CTRL = DMIC_CHANNEL_DC_CTRL_DCPOLE(dc_cut_level) |
                                      DMIC_CHANNEL_DC_CTRL_DCGAIN(post_dc_gain_reduce) |
-                                     DMIC_CHANNEL_DC_CTRL_SATURATEAT16BIT(saturate16bit);
+                                     DMIC_CHANNEL_DC_CTRL_SATURATEAT16BIT(saturate16bit ? 1U : 0U);
 }
 
 /*!

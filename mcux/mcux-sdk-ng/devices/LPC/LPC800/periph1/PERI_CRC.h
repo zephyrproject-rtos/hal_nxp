@@ -7,14 +7,14 @@
 **                          LPC832M101FDH20
 **                          LPC834M101FHI33
 **
-**     Version:             rev. 1.1, 2018-02-25
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Initial version.
 **     - rev. 1.1 (2018-02-25)
 **         Update some registers according to UM rev 1.2
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CRC.h
- * @version 1.1
- * @date 2018-02-25
+ * @file PERI_CRC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CRC
  *
  * CMSIS Peripheral Access Layer for CRC
  */
 
-#if !defined(CRC_H_)
-#define CRC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CRC_H_)
+#define PERI_CRC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC822M101JDH20) || defined(CPU_LPC822M101JHI33))
 #include "LPC822_COMMON.h"
@@ -206,5 +209,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CRC_H_ */
+#endif  /* PERI_CRC_H_ */
 

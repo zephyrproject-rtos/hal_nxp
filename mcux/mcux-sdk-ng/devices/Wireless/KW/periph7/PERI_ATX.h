@@ -19,14 +19,14 @@
 **                          KW45Z41083AFPA
 **                          KW45Z41083AFTA
 **
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ATX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **     Revisions:
 **     - rev. 1.0 (2020-05-12)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ATX.h
- * @version 1.0
- * @date 2020-05-12
+ * @file PERI_ATX.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ATX
  *
  * CMSIS Peripheral Access Layer for ATX
  */
 
-#if !defined(ATX_H_)
-#define ATX_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ATX_H_)
+#define PERI_ATX_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_KW45B41Z52AFPA) || defined(CPU_KW45B41Z52AFTA))
 #include "KW45B41Z52_COMMON.h"
@@ -194,8 +197,8 @@ typedef struct {
 #define ATX_CTRL_IDAC_EN_MASK                    (0x40000U)
 #define ATX_CTRL_IDAC_EN_SHIFT                   (18U)
 /*! IDAC_EN - This bit is used to enable IDAC
- *  0b1..IDAC is enabled
  *  0b0..IDAC is disabled
+ *  0b1..IDAC is enabled
  */
 #define ATX_CTRL_IDAC_EN(x)                      (((uint32_t)(((uint32_t)(x)) << ATX_CTRL_IDAC_EN_SHIFT)) & ATX_CTRL_IDAC_EN_MASK)
 
@@ -212,8 +215,8 @@ typedef struct {
 #define ATX_CTRL_I2V_EN_MASK                     (0x4000000U)
 #define ATX_CTRL_I2V_EN_SHIFT                    (26U)
 /*! I2V_EN - current to voltage converter enable
- *  0b1..current to voltage converter enabled
  *  0b0..current to voltage converter disabled
+ *  0b1..current to voltage converter enabled
  */
 #define ATX_CTRL_I2V_EN(x)                       (((uint32_t)(((uint32_t)(x)) << ATX_CTRL_I2V_EN_SHIFT)) & ATX_CTRL_I2V_EN_MASK)
 
@@ -255,27 +258,27 @@ typedef struct {
 #define ATX_NVM_CTRL_FLASH_TO_ATX_EN_LV_MASK     (0xFFU)
 #define ATX_NVM_CTRL_FLASH_TO_ATX_EN_LV_SHIFT    (0U)
 /*! FLASH_TO_ATX_EN_LV
- *  0b10000100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[1]
- *  0b10000010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[1]
- *  0b10000001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[1]
- *  0b01001000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[1]
- *  0b01000010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[1]
- *  0b01000001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[1]
- *  0b00101000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[1]
- *  0b00100100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[1]
- *  0b00100001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[1]
- *  0b00011000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[1]
- *  0b00010100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[1]
- *  0b00010010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[1]
- *  0b10000000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] on ipt_test_ana_atx3v[1]
- *  0b01000000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] on ipt_test_ana_atx3v[1]
- *  0b00100000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] on ipt_test_ana_atx3v[1]
- *  0b00010000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] on ipt_test_ana_atx3v[1]
- *  0b00001000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
- *  0b00000100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
- *  0b00000010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
- *  0b00000001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
  *  0b00000000..no connection
+ *  0b00000001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
+ *  0b00000010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
+ *  0b00000100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
+ *  0b00001000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; no connection on ipt_test_ana_atx3v[1]
+ *  0b00010000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] on ipt_test_ana_atx3v[1]
+ *  0b00010010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[1]
+ *  0b00010100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[1]
+ *  0b00011000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[1]
+ *  0b00100000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] on ipt_test_ana_atx3v[1]
+ *  0b00100001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[1]
+ *  0b00100100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[1]
+ *  0b00101000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[1]
+ *  0b01000000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] on ipt_test_ana_atx3v[1]
+ *  0b01000001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[1]
+ *  0b01000010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[1]
+ *  0b01001000..flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[1]
+ *  0b10000000..no connection to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] on ipt_test_ana_atx3v[1]
+ *  0b10000001..flash_to_atx_tm_nvm_3v[0] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[1]
+ *  0b10000010..flash_to_atx_tm_nvm_3v[1] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[1]
+ *  0b10000100..flash_to_atx_tm_nvm_3v[2] connect to ipt_test_ana_atx3v[0]; flash_to_atx_tm_nvm_3v[3] connect to ipt_test_ana_atx3v[1]
  */
 #define ATX_NVM_CTRL_FLASH_TO_ATX_EN_LV(x)       (((uint32_t)(((uint32_t)(x)) << ATX_NVM_CTRL_FLASH_TO_ATX_EN_LV_SHIFT)) & ATX_NVM_CTRL_FLASH_TO_ATX_EN_LV_MASK)
 /*! @} */
@@ -332,5 +335,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ATX_H_ */
+#endif  /* PERI_ATX_H_ */
 

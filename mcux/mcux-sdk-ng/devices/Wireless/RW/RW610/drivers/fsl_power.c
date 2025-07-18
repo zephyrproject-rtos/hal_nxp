@@ -149,6 +149,8 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_DelayUs(uint32_t us))
 {
     uint32_t instNum;
 
+    assert(SystemCoreClock < (UINT32_MAX - 999999UL));
+    assert(((UINT32_MAX - 2U) / us) > ((SystemCoreClock + 999999UL) / 1000000UL));
     instNum = ((SystemCoreClock + 999999UL) / 1000000UL) * us;
     POWER_Delay((instNum + 2U) / 3U);
 }
@@ -249,6 +251,9 @@ static void POWER_RestoreNvicState(void)
     irqRegs = (SCnSCB->ICTR & SCnSCB_ICTR_INTLINESNUM_Msk) + 1U;
     irqNum  = irqRegs * 32U;
 
+    assert(irqRegs <= ARRAY_SIZE(s_nvicContext.ISER));
+    assert(irqNum <= ARRAY_SIZE(s_nvicContext.IPR));
+
     NVIC_SetPriorityGrouping(s_nvicContext.PriorityGroup);
 
     for (i = 0U; i < irqRegs; i++)
@@ -331,15 +336,16 @@ void CAPT_PULSE_DriverIRQHandler(void)
 bool POWER_GetWakeupStatus(IRQn_Type irq)
 {
     uint32_t status;
-    uint32_t irqNum = (uint32_t)irq;
+    uint32_t irqNum;
 
     assert((int32_t)irq >= 0);
+    irqNum = (uint32_t)(int32_t)irq;
 
     if (irq <= HWVAD0_IRQn)
     {
         status = PMU->WAKEUP_PM2_STATUS0 & (1UL << irqNum);
     }
-    else if (irq <= POWERQUAD_IRQn)
+    else if ((irq <= POWERQUAD_IRQn) && (irq >= RTC_IRQn))
     {
         status = PMU->WAKEUP_PM2_STATUS1 & (1UL << (irqNum - 32U));
     }
@@ -393,15 +399,16 @@ bool POWER_GetWakeupStatus(IRQn_Type irq)
  */
 void POWER_ClearWakeupStatus(IRQn_Type irq)
 {
-    uint32_t irqNum = (uint32_t)irq;
+    uint32_t irqNum;
 
     assert((int32_t)irq >= 0);
+    irqNum = (uint32_t)(int32_t)irq;
 
     if (irq <= HWVAD0_IRQn)
     {
         PMU->WAKEUP_PM2_SRC_CLR0 = (1UL << irqNum);
     }
-    else if (irq <= POWERQUAD_IRQn)
+    else if ((irq <= POWERQUAD_IRQn) && (irq >= RTC_IRQn))
     {
         PMU->WAKEUP_PM2_SRC_CLR1 = (1UL << (irqNum - 32U));
     }
@@ -452,15 +459,16 @@ void POWER_ClearWakeupStatus(IRQn_Type irq)
  */
 void POWER_EnableWakeup(IRQn_Type irq)
 {
-    uint32_t irqNum = (uint32_t)irq;
+    uint32_t irqNum;
 
     assert((int32_t)irq >= 0);
+    irqNum = (uint32_t)(int32_t)irq;
 
     if (irq <= HWVAD0_IRQn)
     {
         PMU->WAKEUP_PM2_MASK0 |= (1UL << irqNum);
     }
-    else if (irq <= POWERQUAD_IRQn)
+    else if ((irq <= POWERQUAD_IRQn) && (irq >= RTC_IRQn))
     {
         PMU->WAKEUP_PM2_MASK1 |= (1UL << (irqNum - 32U));
     }
@@ -511,15 +519,16 @@ void POWER_EnableWakeup(IRQn_Type irq)
  */
 void POWER_DisableWakeup(IRQn_Type irq)
 {
-    uint32_t irqNum = (uint32_t)irq;
+    uint32_t irqNum;
 
     assert((int32_t)irq >= 0);
+    irqNum = (uint32_t)(int32_t)irq;
 
     if (irq <= HWVAD0_IRQn)
     {
         PMU->WAKEUP_PM2_MASK0 &= ~(1UL << irqNum);
     }
-    else if (irq <= POWERQUAD_IRQn)
+    else if ((irq <= POWERQUAD_IRQn) && (irq >= RTC_IRQn))
     {
         PMU->WAKEUP_PM2_MASK1 &= ~(1UL << (irqNum - 32U));
     }
@@ -697,12 +706,12 @@ void POWER_ConfigCauInSleep(bool pdCau)
 {
     if (pdCau) /* xtal / cau full pd */
     {
-        CAU->PD_CTRL_ONE_REG |= 0x4U;
+        CAU->PD_CTRL_ONE_REG |= CAU_PD_CTRL_ONE_REG_SLPBIAS_PD_MASK;
         CAU->SLP_CTRL_ONE_REG = 0xCU;
     }
     else
     {
-        CAU->PD_CTRL_ONE_REG &= 0xFBU;
+        CAU->PD_CTRL_ONE_REG &= ~CAU_PD_CTRL_ONE_REG_SLPBIAS_PD_MASK;
         CAU->SLP_CTRL_ONE_REG = 0x9EU;
         CAU->SLP_CTRL_TWO_REG = 0x6AU;
     }
@@ -749,9 +758,6 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_PrePowerMode(uint32_t mode, const 
     }
     else if (mode >= 3U)
     {
-        /* Turn off the short switch between C18/C11 and V18/V11.
-           In sleep mode, V11 drops to 0.8V */
-        BUCK18->BUCK_CTRL_TWENTY_REG = 0x75U;
         if (mode == 3U)
         {
             POWER_SaveNvicState();
@@ -955,6 +961,10 @@ static void POWER_InitVSensorThreshold(uint8_t volt11, uint32_t pack)
     svcMv = (uint32_t)(volt11)*5U + 630U;
     val   = val & ~(SENSOR_CTRL_VSEN_CTRL_1_REG_1_VSEN_MAX_VOLTAGE_THR_MASK |
                   SENSOR_CTRL_VSEN_CTRL_1_REG_1_VSEN_MIN_VOLTAGE_THR_MASK);
+    assert((svcMv * 10U) >= v11.margin);
+    assert((svcMv * 10U) < (UINT32_MAX - v11.margin));
+    assert((UINT32_MAX - v11.param2) > 999999U);
+    assert(((UINT32_MAX - v11.param2 - 999999U) / v11.param1) > (svcMv * 10U + v11.margin));
     val |= SENSOR_CTRL_VSEN_CTRL_1_REG_1_VSEN_MAX_VOLTAGE_THR(
         (v11.param1 * (svcMv * 10U + v11.margin) + v11.param2 + 999999U) / 1000000U);
     val |= SENSOR_CTRL_VSEN_CTRL_1_REG_1_VSEN_MIN_VOLTAGE_THR((v11.param1 * (svcMv * 10U - v11.margin) + v11.param2) /
@@ -969,6 +979,10 @@ static void POWER_InitVSensorThreshold(uint8_t volt11, uint32_t pack)
     /* Configure threshold */
     val = val & ~(SENSOR_CTRL_VSEN_CTRL_2_REG_1_VSEN_MAX_VOLTAGE_THR_MASK |
                   SENSOR_CTRL_VSEN_CTRL_2_REG_1_VSEN_MIN_VOLTAGE_THR_MASK);
+    assert((1710U * 10U) >= v18.margin);
+    assert((1890U * 10U) < (UINT32_MAX - v18.margin));
+    assert((UINT32_MAX - v18.param2) > 999999U);
+    assert(((UINT32_MAX - v18.param2 - 999999U) / v18.param1) > (1890U * 10U + v18.margin));
     val |= SENSOR_CTRL_VSEN_CTRL_2_REG_1_VSEN_MAX_VOLTAGE_THR(
         (v18.param1 * (1890U * 10U + v18.margin) + v18.param2 + 999999U) / 1000000U);
     val |= SENSOR_CTRL_VSEN_CTRL_2_REG_1_VSEN_MIN_VOLTAGE_THR((v18.param1 * (1710U * 10U - v18.margin) + v18.param2) /
@@ -983,6 +997,10 @@ static void POWER_InitVSensorThreshold(uint8_t volt11, uint32_t pack)
     /* Configure threshold */
     val = val & ~(SENSOR_CTRL_VSEN_CTRL_3_REG_1_VSEN_MAX_VOLTAGE_THR_MASK |
                   SENSOR_CTRL_VSEN_CTRL_3_REG_1_VSEN_MIN_VOLTAGE_THR_MASK);
+    assert((1850U * 10U) >= v33.margin);
+    assert((3630U * 10U) < (UINT32_MAX - v33.margin));
+    assert((UINT32_MAX - v33.param2) > 999999U);
+    assert(((UINT32_MAX - v33.param2 - 999999U) / v33.param1) > (3630U * 10U + v33.margin));
     val |= SENSOR_CTRL_VSEN_CTRL_3_REG_1_VSEN_MAX_VOLTAGE_THR(
         (v33.param1 * (3630U * 10U + v33.margin) + v33.param2 + 999999U) / 1000000U);
     val |= SENSOR_CTRL_VSEN_CTRL_3_REG_1_VSEN_MIN_VOLTAGE_THR((v33.param1 * (1850U * 10U - v33.margin) + v33.param2) /
@@ -1013,9 +1031,8 @@ void POWER_InitPowerConfig(const power_init_config_t *config)
     iBuck         = config->iBuck;
     gateCauRefClk = config->gateCauRefClk;
 
-    BUCK11->BUCK_CTRL_THREE_REG  = 0x10U;
-    BUCK18->BUCK_CTRL_THREE_REG  = 0x10U;
-    BUCK18->BUCK_CTRL_TWENTY_REG = 0x55U;
+    BUCK11->BUCK_CTRL_THREE_REG  = BUCK11_BUCK_CTRL_THREE_REG_SOC_BUCK_RINGOSC_CTRL_MASK;
+    BUCK18->BUCK_CTRL_THREE_REG  = BUCK18_BUCK_CTRL_THREE_REG_SOC_BUCK_RINGOSC_CTRL_MASK;
 
     SYSCTL0->AUTOCLKGATEOVERRIDE0 = 0U;
     /* Enable RAM dynamic clk gate */
@@ -1247,7 +1264,7 @@ void POWER_InitVoltage(uint32_t dro, uint32_t pack)
     SystemCoreClockUpdate();
 
     /* LPBG trim */
-    BUCK11->BUCK_CTRL_EIGHTEEN_REG = 0x6U;
+    BUCK11->BUCK_CTRL_EIGHTEEN_REG &= ~BUCK11_BUCK_CTRL_EIGHTEEN_REG_LPBG_TRIM_MASK;
 
     if (dro == 0U)
     { /* Boot voltage 1.11V */
@@ -1341,6 +1358,7 @@ void POWER_DisableGDetVSensors(void)
         RSTCTL0->PRSTCTL1 = rstctl1;
     }
 
+    assert(s_gdetSensorContext.disableCount < INT32_MAX);
     s_gdetSensorContext.disableCount++;
 }
 
@@ -1350,6 +1368,7 @@ bool POWER_EnableGDetVSensors(void)
     uint32_t rstctl0, rstctl1;
     bool retval = true;
 
+    assert(s_gdetSensorContext.disableCount > INT32_MIN);
     s_gdetSensorContext.disableCount--;
 
     if (s_gdetSensorContext.disableCount == 0)
@@ -1465,7 +1484,7 @@ uint32_t POWER_TrimSvc(uint32_t gdetTrim, uint32_t pack)
             assert(false);
         }
 
-        trimSvc = ((uint32_t)y3) << 24;
+        trimSvc = (((uint32_t)y3) & 0xFFU) << 24;
 
         clk = CLKCTL0->PSCCTL0;
         rst = RSTCTL0->PRSTCTL0;

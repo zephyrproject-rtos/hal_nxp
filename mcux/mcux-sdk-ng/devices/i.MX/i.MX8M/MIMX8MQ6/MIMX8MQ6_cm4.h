@@ -8,14 +8,14 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    IMX8MDQLQRM, Rev. 0, Jan. 2018
-**     Version:             rev. 4.0, 2018-01-26
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MQ6_cm4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -30,14 +30,17 @@
 **         Rev.C Header EAR2
 **     - rev. 4.0 (2018-01-26)
 **         Rev.D Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX8MQ6_cm4.h
- * @version 4.0
- * @date 2018-01-26
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMX8MQ6_cm4
  *
  * CMSIS Peripheral Access Layer for MIMX8MQ6_cm4

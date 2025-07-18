@@ -37,14 +37,14 @@
 **                          MIMX8MN6DVTJZ_ca53
 **                          MIMX8MN6DVTJZ_cm7
 **
-**     Version:             rev. 2.0, 2019-09-23
-**     Build:               b240708
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPC_PGC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -55,21 +55,24 @@
 **         Initial version.
 **     - rev. 2.0 (2019-09-23)
 **         Rev.B Header RFP
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file GPC_PGC.h
- * @version 2.0
- * @date 2019-09-23
+ * @file PERI_GPC_PGC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for GPC_PGC
  *
  * CMSIS Peripheral Access Layer for GPC_PGC
  */
 
-#if !defined(GPC_PGC_H_)
-#define GPC_PGC_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_GPC_PGC_H_)
+#define PERI_GPC_PGC_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MN1CVPIZ_ca53) || defined(CPU_MIMX8MN1CVTIZ_ca53) || defined(CPU_MIMX8MN1DVPIZ_ca53) || defined(CPU_MIMX8MN1DVTJZ_ca53))
 #include "MIMX8MN1_ca53_COMMON.h"
@@ -678,5 +681,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* GPC_PGC_H_ */
+#endif  /* PERI_GPC_PGC_H_ */
 

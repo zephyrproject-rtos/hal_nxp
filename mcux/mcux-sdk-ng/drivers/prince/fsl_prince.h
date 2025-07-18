@@ -10,8 +10,6 @@
 
 #include "fsl_common.h"
 
-#include FFR_INCLUDE
-
 /*!
  * @addtogroup prince
  * @{
@@ -59,27 +57,32 @@
 /* LPC55S0x series*/
 #define FSL_PRINCE_DRIVER_LPC55S0x
 #include "fsl_puf.h"
+#include "fsl_iap_ffr.h"
 
 #elif (defined(LPC55S14_SERIES) || defined(LPC55S16_SERIES))
 /* LPC55S1x series*/
 #define FSL_PRINCE_DRIVER_LPC55S1x
 #include "fsl_puf.h"
+#include "fsl_iap_ffr.h"
 
 #elif (defined(LPC55S26_SERIES) || defined(LPC55S28_SERIES))
 /* LPC55S2x series*/
 #define FSL_PRINCE_DRIVER_LPC55S2x
 #include "fsl_puf.h"
+#include "fsl_iap_ffr.h"
 
 #elif (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) || \
        defined(LPC55S66_cm33_core0_SERIES) || defined(LPC55S66_cm33_core1_SERIES))
 /* LPC55S6x series*/
 #define FSL_PRINCE_DRIVER_LPC55S6x
 #include "fsl_puf.h"
+#include "fsl_iap_ffr.h"
 
 #elif (defined(LPC55S36_SERIES))
 /* LPC55S3x series*/
 #define FSL_PRINCE_DRIVER_LPC55S3x
 #define PRINCE PRINCE0
+#include "fsl_flash_ffr.h"
 #include "fsl_mem_interface.h"
 #include "mcux_els.h"                // Power Down Wake-up Init
 #include <mcuxClEls.h>              // Interface to the entire nxpClEls component

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -346,6 +346,10 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
         }
         else
         {
+            if (destOffset > INT16_MAX)
+            {
+                return kStatus_InvalidArgument;
+            }
             EDMA_PrepareTransferConfig(&config, (void *)(uint32_t *)startAddr, FSL_FEATURE_PDM_FIFO_WIDTH,
                                        FSL_FEATURE_PDM_FIFO_OFFSET, (uint8_t *)(uint32_t)currentTransfer->data,
                                        FSL_FEATURE_PDM_FIFO_WIDTH, (int16_t)destOffset,
@@ -393,6 +397,19 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
         if (currentTransfer == xfer)
         {
             handle->isLoopTransfer = true;
+
+            /* Normal usage for existing examples is as follows: */
+            /* handle->tcdNum == handle->tcdUsedNum */
+
+            /* If the number of allocated TCDs is greater than the number of used TCDs, link the last TCD to the first one */
+            if (handle->tcdNum > handle->tcdUsedNum)
+            {
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+                EDMA_TCD_DLAST_SGA(&handle->tcd[handle->tcdUser-1], EDMA_TCD_TYPE(handle->dmaHandle->base)) = (uint32_t)&handle->tcd[0];
+#else
+                handle->tcd[handle->tcdUser-1].DLAST_SGA = (uint32_t)&handle->tcd[0];
+#endif
+            }
             break;
         }
     }

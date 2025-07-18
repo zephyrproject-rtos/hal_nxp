@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2020-05-18
-**     Build:               b241127
+**     Build:               b250512
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -142,8 +142,6 @@
 #define FSL_FEATURE_ACMP_HAS_C0_LINKEN_BIT (1)
 /* @brief Has C0 OFFSET Bit */
 #define FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT (0)
-/* @brief Has C0 HYSTCTR Bit */
-#define FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT (1)
 /* @brief Has C1 INPSEL Bit */
 #define FSL_FEATURE_ACMP_HAS_C1_INPSEL_BIT (0)
 /* @brief Has C1 INNSEL Bit */
@@ -154,8 +152,20 @@
 #define FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT (1)
 /* @brief Has C2 RRE Bit */
 #define FSL_FEATURE_ACMP_HAS_C2_RRE_BIT (0)
+/* @brief Has C3 RDIVE Bit */
+#define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (1)
+/* @brief Has C0 HYSTCTR Bit */
+#define FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT (1)
+/* @brief If support round-robin mode */
+#define FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE (0)
 /* @brief If support 3v domain */
 #define FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN (0)
+/* @brief If support window mode */
+#define FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE (0)
+/* @brief If support filter mode */
+#define FSL_FEATURE_ACMP_HAS_NO_FILTER_MODE (0)
+/* @brief Has No C0 SE Bit */
+#define FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT (0)
 /* @brief If has acmp sample signal */
 #define FSL_FEATURE_ACMP_HAS_NO_SAMPLE_SIGNAL (1)
 
@@ -175,8 +185,6 @@
 #define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (0)
 /* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_MODE (0)
-/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
-#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
 #define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
 /* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
@@ -193,8 +201,6 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (0)
-/* @brief Has Trigger status register. */
-#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has power select (bitfield CFG[PWRSEL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
 /* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
@@ -207,6 +213,12 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
 /* @brief Conversion averaged bitfiled width. */
 #define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
+/* @brief Enable hardware trigger command selection */
+#define FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL (0)
+/* @brief OFSTRIM availability on the SoC. */
+#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (0)
+/* @brief Has Trigger status register. */
+#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has B side channels. */
 #define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (1)
 /* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
@@ -229,6 +241,10 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
 /* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
 #define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
+/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
+/* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 
 /* CACHE64_CTRL module features */
 
@@ -436,14 +452,14 @@
 
 /* FLEXIO module features */
 
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (1)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
 #define FSL_FEATURE_FLEXIO_HAS_SHIFTER_STATUS (1)
 /* @brief Has Pin Data Input Register (FLEXIO_PIN) */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_STATUS (1)
-/* @brief Has pin input output related registers */
-#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
 /* @brief Has Shifter Buffer N Nibble Byte Swapped Register (FLEXIO_SHIFTBUFNBSn) */
 #define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_BYTE_SWAP (1)
 /* @brief Has Shifter Buffer N Half Word Swapped Register (FLEXIO_SHIFTBUFHWSn) */
@@ -460,8 +476,12 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x2010003)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x10100808)
+/* @brief Flexio DMA request base channel */
+#define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 /* @brief Represent the bit width of the TIMDCE field (FLEXIO_TIMCFGLn[TIMDEC]) */
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
+/* @brief Has pin input output related registers */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
 
 /* FLEXSPI module features */
 
@@ -537,6 +557,12 @@
 #define FSL_FEATURE_I3C_HAS_ERRATA_051617 (1)
 /* @brief Has ERRATA_052123. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_052123 (1)
+/* @brief Has ERRATA_052086. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052086 (0)
+/* @brief Has IBI bytes. */
+#define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (0)
+/* @brief Has SCL delay after START. */
+#define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (0)
 /* @brief Has no the master write data register for DMA. */
 #define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 

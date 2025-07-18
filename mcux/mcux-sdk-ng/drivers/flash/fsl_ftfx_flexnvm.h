@@ -232,6 +232,34 @@ status_t FLEXNVM_ProgramPartition(flexnvm_config_t *config,
                                   uint32_t eepromDataSizeCode,
                                   uint32_t flexnvmPartitionCode);
 
+/*!
+ * @brief Prepares the FlexNVM block for use as data flash, EEPROM backup, or a combination of both and initializes the
+ * FlexRAM. This is the CSE enabled version for IP's like FTFC.
+ *
+ * @param config Pointer to storage for the driver runtime state.
+ * @param option The option used to set FlexRAM load behavior during reset.
+ * @param eepromDataSizeCode Determines the amount of FlexRAM used in each of the available EEPROM subsystems.
+ * @param flexnvmPartitionCode Specifies how to split the FlexNVM block between data flash memory and EEPROM backup
+ *        memory supporting EEPROM functions.
+ * @param CSEcKeySize CSEc/SHE key size, see RM for details and possible values
+ * @param SFE Security Flag Extension (SFE), see RM for details and possible values
+ *
+ * @retval #kStatus_FTFx_Success API was executed successfully; the FlexNVM block for use as data flash, EEPROM backup,
+ *         or a combination of both have been Prepared.
+ *
+ * @retval #kStatus_FTFx_InvalidArgument Invalid argument is provided.
+ * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
+ * @retval #kStatus_FTFx_AccessError Invalid instruction codes and out-of bounds addresses.
+ * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
+ * @retval #kStatus_FTFx_CommandFailure Run-time error during command execution.
+ */
+status_t FLEXNVM_ProgramPartition_CSE(flexnvm_config_t *config,
+                                  ftfx_partition_flexram_load_opt_t option,
+                                  uint32_t eepromDataSizeCode,
+                                  uint32_t flexnvmPartitionCode,
+                                  uint8_t CSEcKeySize,
+                                  uint8_t SFE);
+
 /*! @} */
 
 /*!

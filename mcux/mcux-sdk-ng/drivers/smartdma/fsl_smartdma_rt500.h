@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,6 @@
 #define SMARTDMA_DISPLAY_MIPI_AND_FLEXIO 0
 #define SMARTDMA_DISPLAY_MIPI_ONLY       1
 #define SMARTDMA_DISPLAY_FLEXIO_ONLY     2
-#define SMARTDMA_FLEXIO_QSPI             3
 
 /* Select firmware for MIPI and FLEXIO by default. */
 #ifndef SMARTDMA_DISPLAY_FIRMWARE_SELECT
@@ -40,6 +39,18 @@ extern const uint8_t s_smartdmaDisplayFirmware[];
 
 /*! @brief Size of s_smartdmaDisplayFirmware */
 extern const uint32_t s_smartdmaDisplayFirmwareSize;
+
+/*! @brief The firmware used for QSPI. */
+extern const uint8_t s_smartdmaQspiFirmware[];
+
+/*! @brief The s_smartdmaQspiFirmware firmware memory address. */
+#define SMARTDMA_QSPI_MEM_ADDR 0x24100000U
+
+/*! @brief Size of s_smartdmaQspiFirmware */
+#define SMARTDMA_QSPI_FIRMWARE_SIZE (s_smartdmaQspiFirmwareSize)
+
+/*! @brief Size of s_smartdmaQspiFirmware */
+extern const uint32_t s_smartdmaQspiFirmwareSize;
 
 #if (SMARTDMA_DISPLAY_FIRMWARE_SELECT == SMARTDMA_DISPLAY_MIPI_AND_FLEXIO)
 /*!
@@ -142,7 +153,7 @@ enum _smartdma_display_api
     kSMARTDMA_FlexIO_DMA_ONELANE, /*!< FlexIO DMA for one SHIFTBUF, Write Data to SHIFTBUF[OFFSET] */
     kSMARTDMA_FlexIO_FIFO2RAM, /*!< Read data from FlexIO FIFO to ram space. */
 };
-#elif (SMARTDMA_DISPLAY_FIRMWARE_SELECT == SMARTDMA_FLEXIO_QSPI)
+#endif /* SMARTDMA_DISPLAY_FIRMWARE_SELECT */
 
 /*!
  * @brief The API index when using s_smartdmaDisplayFirmware.
@@ -164,7 +175,6 @@ typedef struct _smartdma_flexio_qspi_param
     uint32_t buf_num;
     flexio_qspi_buf_t *bufs;
 } smartdma_flexio_qspi_param_t;
-#endif
 
 /*!
  * @brief Parameter for FlexIO MCULCD except kSMARTDMA_FlexIO_DMA_ONELANE

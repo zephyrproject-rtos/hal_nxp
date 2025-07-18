@@ -10,5 +10,5 @@ if(NOT XTENSA_CORE)
     mcux_set_variable(XTENSA_CORE rt700_hifi1_RI23_11_nlib)
 endif()
 
-mcux_set_variable(XTENSA_LSP_DEBUG ${SdkRootDirPath}/devices/RT/RT700/MIMXRT735S/xtensa/hifi1/gdbio)
-mcux_set_variable(XTENSA_LSP_RELEASE ${SdkRootDirPath}/devices/RT/RT700/MIMXRT735S/xtensa/hifi1/min-rt)
+mcux_set_variable(XTENSA_LSP_DEBUG ${SdkRootDirPath}/${device_root}/RT/RT700/MIMXRT735S/xtensa/hifi1/gdbio)
+mcux_set_variable(XTENSA_LSP_RELEASE ${SdkRootDirPath}/${device_root}/RT/RT700/MIMXRT735S/xtensa/hifi1/min-rt)

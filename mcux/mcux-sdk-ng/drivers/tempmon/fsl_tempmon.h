@@ -1,5 +1,5 @@
 /*
- * Copyright  2018-2021, 2024 NXP
+ * Copyright  2018-2021, 2024-2025 NXP
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,11 +19,18 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+/*! @brief TEMPMON calibration data mask. */
+#define TEMPMON_HOTTEMPMASK    0xFFU
+#define TEMPMON_HOTTEMPSHIFT   0x00U
+#define TEMPMON_HOTCOUNTMASK   0xFFF00U
+#define TEMPMON_HOTCOUNTSHIFT  0X08U
+#define TEMPMON_ROOMCOUNTMASK  0xFFF00000U
+#define TEMPMON_ROOMCOUNTSHIFT 0x14U
 
 /*! @name Driver version */
 /*! @{ */
 /*! @brief TEMPMON driver version. */
-#define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*! @brief TEMPMON temperature structure. */

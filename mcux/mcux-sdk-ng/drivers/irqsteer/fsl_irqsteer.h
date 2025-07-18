@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020-2024 NXP
- * All rights reserved.
+ * Copyright 2016-2017, 2020-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! Driver version. */
-#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
 /*!

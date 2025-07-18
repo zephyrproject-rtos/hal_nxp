@@ -10,8 +10,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1010RM Rev.1, 10/2021 | IMXRT1010SRM Rev.0
-**     Version:             rev. 1.2, 2021-08-10
-**     Build:               b240823
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,17 @@
 **         Update header files to align with IMXRT1010RM Rev.B.
 **     - rev. 1.2 (2021-08-10)
 **         Update header files to align with IMXRT1010RM Rev.1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1011
- * @version 1.2
- * @date 2021-08-10
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for MIMXRT1011 (header file)
  *
  * Provides a system configuration function and a global variable that contains

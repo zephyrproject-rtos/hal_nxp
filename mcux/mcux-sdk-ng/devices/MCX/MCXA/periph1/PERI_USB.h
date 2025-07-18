@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USB.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_USB.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USB
  *
  * CMSIS Peripheral Access Layer for USB
  */
 
-#if !defined(USB_H_)
-#define USB_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USB_H_)
+#define PERI_USB_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -243,10 +246,10 @@ typedef struct {
 #define USB_ISTAT_USBRST_MASK                    (0x1U)
 #define USB_ISTAT_USBRST_SHIFT                   (0U)
 /*! USBRST - USB Reset Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define USB_ISTAT_USBRST(x)                      (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_USBRST_SHIFT)) & USB_ISTAT_USBRST_MASK)
 
@@ -255,8 +258,8 @@ typedef struct {
 /*! ERROR - Error Flag
  *  0b0..Error did not occur
  *  0b0..No effect
- *  0b1..Error occurred
  *  0b1..Clear the flag
+ *  0b1..Error occurred
  */
 #define USB_ISTAT_ERROR(x)                       (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_ERROR_SHIFT)) & USB_ISTAT_ERROR_MASK)
 
@@ -265,18 +268,18 @@ typedef struct {
 /*! SOFTOK - Start Of Frame (SOF) Token Flag
  *  0b0..Did not receive
  *  0b0..No effect
- *  0b1..Received
  *  0b1..Clear the flag
+ *  0b1..Received
  */
 #define USB_ISTAT_SOFTOK(x)                      (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_SOFTOK_SHIFT)) & USB_ISTAT_SOFTOK_MASK)
 
 #define USB_ISTAT_TOKDNE_MASK                    (0x8U)
 #define USB_ISTAT_TOKDNE_SHIFT                   (3U)
 /*! TOKDNE - Current Token Processing Flag
- *  0b0..Not processed
  *  0b0..No effect
- *  0b1..Processed
+ *  0b0..Not processed
  *  0b1..Clear the flag
+ *  0b1..Processed
  */
 #define USB_ISTAT_TOKDNE(x)                      (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_TOKDNE_SHIFT)) & USB_ISTAT_TOKDNE_MASK)
 
@@ -285,8 +288,8 @@ typedef struct {
 /*! SLEEP - Sleep Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_ISTAT_SLEEP(x)                       (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_SLEEP_SHIFT)) & USB_ISTAT_SLEEP_MASK)
 
@@ -295,8 +298,8 @@ typedef struct {
 /*! RESUME - Resume Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_ISTAT_RESUME(x)                      (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_RESUME_SHIFT)) & USB_ISTAT_RESUME_MASK)
 
@@ -305,8 +308,8 @@ typedef struct {
 /*! STALL - Stall Interrupt Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_ISTAT_STALL(x)                       (((uint8_t)(((uint8_t)(x)) << USB_ISTAT_STALL_SHIFT)) & USB_ISTAT_STALL_MASK)
 /*! @} */
@@ -379,8 +382,8 @@ typedef struct {
 /*! PIDERR - PID Error Flag
  *  0b0..Did not fail
  *  0b0..No effect
- *  0b1..Failed
  *  0b1..Clear the flag
+ *  0b1..Failed
  */
 #define USB_ERRSTAT_PIDERR(x)                    (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_PIDERR_SHIFT)) & USB_ERRSTAT_PIDERR_MASK)
 
@@ -389,18 +392,18 @@ typedef struct {
 /*! CRC5EOF - CRC5 Error or End of Frame Error Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_ERRSTAT_CRC5EOF(x)                   (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_CRC5EOF_SHIFT)) & USB_ERRSTAT_CRC5EOF_MASK)
 
 #define USB_ERRSTAT_CRC16_MASK                   (0x4U)
 #define USB_ERRSTAT_CRC16_SHIFT                  (2U)
 /*! CRC16 - CRC16 Error Flag
- *  0b0..Not rejected
  *  0b0..No effect
- *  0b1..Rejected
+ *  0b0..Not rejected
  *  0b1..Clear the flag
+ *  0b1..Rejected
  */
 #define USB_ERRSTAT_CRC16(x)                     (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_CRC16_SHIFT)) & USB_ERRSTAT_CRC16_MASK)
 
@@ -409,18 +412,18 @@ typedef struct {
 /*! DFN8 - Data Field Not 8 Bits Flag
  *  0b0..Integer number of bytes
  *  0b0..No effect
- *  0b1..Not an integer number of bytes
  *  0b1..Clear the flag
+ *  0b1..Not an integer number of bytes
  */
 #define USB_ERRSTAT_DFN8(x)                      (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_DFN8_SHIFT)) & USB_ERRSTAT_DFN8_MASK)
 
 #define USB_ERRSTAT_BTOERR_MASK                  (0x10U)
 #define USB_ERRSTAT_BTOERR_SHIFT                 (4U)
 /*! BTOERR - Bus Turnaround Timeout Error Flag
- *  0b0..Not timed out
  *  0b0..No effect
- *  0b1..Timed out
+ *  0b0..Not timed out
  *  0b1..Clear the flag
+ *  0b1..Timed out
  */
 #define USB_ERRSTAT_BTOERR(x)                    (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_BTOERR_SHIFT)) & USB_ERRSTAT_BTOERR_MASK)
 
@@ -429,8 +432,8 @@ typedef struct {
 /*! DMAERR - DMA Access Error Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_ERRSTAT_DMAERR(x)                    (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_DMAERR_SHIFT)) & USB_ERRSTAT_DMAERR_MASK)
 
@@ -439,18 +442,18 @@ typedef struct {
 /*! OWNERR - BD Unavailable Error Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_ERRSTAT_OWNERR(x)                    (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_OWNERR_SHIFT)) & USB_ERRSTAT_OWNERR_MASK)
 
 #define USB_ERRSTAT_BTSERR_MASK                  (0x80U)
 #define USB_ERRSTAT_BTSERR_SHIFT                 (7U)
 /*! BTSERR - Bit Stuff Error Flag
- *  0b0..Packet not rejected due to the error
  *  0b0..No effect
- *  0b1..Packet rejected due to the error
+ *  0b0..Packet not rejected due to the error
  *  0b1..Clear the flag
+ *  0b1..Packet rejected due to the error
  */
 #define USB_ERRSTAT_BTSERR(x)                    (((uint8_t)(((uint8_t)(x)) << USB_ERRSTAT_BTSERR_SHIFT)) & USB_ERRSTAT_BTSERR_MASK)
 /*! @} */
@@ -1207,8 +1210,8 @@ typedef struct {
 /*! OVF_ERROR - Overflow Error Interrupt Status Flag
  *  0b0..Interrupt did not occur
  *  0b0..No effect
- *  0b1..Unmasked interrupt occurred
  *  0b1..Clear the flag
+ *  0b1..Unmasked interrupt occurred
  */
 #define USB_CLK_RECOVER_INT_STATUS_OVF_ERROR(x)  (((uint8_t)(((uint8_t)(x)) << USB_CLK_RECOVER_INT_STATUS_OVF_ERROR_SHIFT)) & USB_CLK_RECOVER_INT_STATUS_OVF_ERROR_MASK)
 /*! @} */
@@ -1251,5 +1254,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USB_H_ */
+#endif  /* PERI_USB_H_ */
 

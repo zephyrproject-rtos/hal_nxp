@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -362,41 +362,53 @@ status_t PHY_AQR113C_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed
 {
     assert(!((speed == NULL) && (duplex == NULL)));
 
-    status_t result;
+    status_t result = kStatus_Success;
     uint16_t regValue;
 
-    result = PHY_AQR113C_READ(handle, PHY_MMD_PMAPMD, PHY_MMD_PMAPMD_CTRL1_REG, &regValue);
-    if (result != kStatus_Success)
+    if ((speed == NULL) && (duplex == NULL))
     {
-        return result;
+        return kStatus_Fail;
     }
 
-    switch (regValue & CTRL1_SPEED_SEL_MASK)
+    if (speed != NULL)
     {
-        case CTRL1_SPEED_SEL_10M:
-            *speed = kPHY_Speed10M;
-            break;
-        case CTRL1_SPEED_SEL_100M:
-            *speed = kPHY_Speed100M;
-            break;
-        case CTRL1_SPEED_SEL_1000M:
-            *speed = kPHY_Speed1000M;
-            break;
-        case CTRL1_SPEED_SEL_2500M:
-            *speed = kPHY_Speed2500M;
-            break;
-        case CTRL1_SPEED_SEL_5G:
-            *speed = kPHY_Speed5G;
-            break;
-        case CTRL1_SPEED_SEL_10G:
-            *speed = kPHY_Speed10G;
-            break;
-        default:
-            *speed = kPHY_Speed10M;
-            break;
+        result = PHY_AQR113C_READ(handle, PHY_MMD_PMAPMD, PHY_MMD_PMAPMD_CTRL1_REG, &regValue);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        switch (regValue & CTRL1_SPEED_SEL_MASK)
+        {
+            case CTRL1_SPEED_SEL_10M:
+                *speed = kPHY_Speed10M;
+                break;
+            case CTRL1_SPEED_SEL_100M:
+                *speed = kPHY_Speed100M;
+                break;
+            case CTRL1_SPEED_SEL_1000M:
+                *speed = kPHY_Speed1000M;
+                break;
+            case CTRL1_SPEED_SEL_2500M:
+                *speed = kPHY_Speed2500M;
+                break;
+            case CTRL1_SPEED_SEL_5G:
+                *speed = kPHY_Speed5G;
+                break;
+            case CTRL1_SPEED_SEL_10G:
+                *speed = kPHY_Speed10G;
+                break;
+            default:
+                *speed = kPHY_Speed10M;
+                break;
+        }
     }
 
-    *duplex = kPHY_FullDuplex;
+    if (duplex != NULL)
+    {
+        *duplex = kPHY_FullDuplex;
+    }
+
     return result;
 }
 

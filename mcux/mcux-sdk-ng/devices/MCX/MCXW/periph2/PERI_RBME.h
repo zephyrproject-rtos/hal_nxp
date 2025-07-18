@@ -5,14 +5,14 @@
 **                          MCXW716CMFPA
 **                          MCXW716CMFTA
 **
-**     Version:             rev. 1.0, 2024-03-21
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RBME
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -21,21 +21,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-21)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RBME.h
- * @version 1.0
- * @date 2024-03-21
+ * @file PERI_RBME.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RBME
  *
  * CMSIS Peripheral Access Layer for RBME
  */
 
-#if !defined(RBME_H_)
-#define RBME_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RBME_H_)
+#define PERI_RBME_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXW716AMFPA) || defined(CPU_MCXW716AMFTA))
 #include "MCXW716A_COMMON.h"
@@ -365,8 +368,8 @@ typedef struct {
 #define RBME_FEC_CFG1_FECOV_EN_MASK              (0x4U)
 #define RBME_FEC_CFG1_FECOV_EN_SHIFT             (2U)
 /*! FECOV_EN - Enable dynamic overide of FEC
- *  0b1..The override of FEC is only used in Bluetooth LE LR cases, dynamically depending on the LR AA detected
  *  0b0..Disable FEC override
+ *  0b1..The override of FEC is only used in Bluetooth LE LR cases, dynamically depending on the LR AA detected
  */
 #define RBME_FEC_CFG1_FECOV_EN(x)                (((uint32_t)(((uint32_t)(x)) << RBME_FEC_CFG1_FECOV_EN_SHIFT)) & RBME_FEC_CFG1_FECOV_EN_MASK)
 
@@ -759,5 +762,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RBME_H_ */
+#endif  /* PERI_RBME_H_ */
 

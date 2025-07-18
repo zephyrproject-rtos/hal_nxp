@@ -1,0 +1,12 @@
+NXP Software Content Register
+
+Package: mcux-devices-rt
+Version: 24.12.00-pvw2
+Outgoing License: BSD-3-Clause
+License File: LICENSE
+Type of content: source code, linker files
+Description and comments: Device system files, template files, IDE related startup and linker files.
+Release Location: https://github.com/nxp-mcuxpresso/mcux-devices-rt
+Origin: 
+      NXP (BSD-3-Clause)
+
