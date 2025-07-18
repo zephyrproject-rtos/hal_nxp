@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ADC.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_ADC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC
  */
 
-#if !defined(ADC_H_)
-#define ADC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ADC_H_)
+#define PERI_ADC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -411,8 +414,8 @@ typedef struct {
 #define ADC_STAT_FOF0_MASK                       (0x2U)
 #define ADC_STAT_FOF0_SHIFT                      (1U)
 /*! FOF0 - Result FIFO 0 Overflow Flag
- *  0b0..No result FIFO 0 overflow occurred
  *  0b0..No effect
+ *  0b0..No result FIFO 0 overflow occurred
  *  0b1..At least one result FIFO 0 overflow occurred
  *  0b1..Clear the flag
  */
@@ -429,8 +432,8 @@ typedef struct {
 #define ADC_STAT_FOF1_MASK                       (0x8U)
 #define ADC_STAT_FOF1_SHIFT                      (3U)
 /*! FOF1 - Result FIFO1 Overflow Flag
- *  0b0..No result FIFO1 overflow occurred
  *  0b0..No effect
+ *  0b0..No result FIFO1 overflow occurred
  *  0b1..At least one result FIFO1 overflow occurred
  *  0b1..Clear the flag
  */
@@ -439,10 +442,10 @@ typedef struct {
 #define ADC_STAT_TEXC_INT_MASK                   (0x100U)
 #define ADC_STAT_TEXC_INT_SHIFT                  (8U)
 /*! TEXC_INT - Interrupt Flag for High Priority Trigger Exception
- *  0b0..No trigger exceptions occurred
  *  0b0..No effect
- *  0b1..Trigger exceptions occurred; acknowledgment is pending
+ *  0b0..No trigger exceptions occurred
  *  0b1..Clear the flag
+ *  0b1..Trigger exceptions occurred; acknowledgment is pending
  */
 #define ADC_STAT_TEXC_INT(x)                     (((uint32_t)(((uint32_t)(x)) << ADC_STAT_TEXC_INT_SHIFT)) & ADC_STAT_TEXC_INT_MASK)
 
@@ -451,8 +454,8 @@ typedef struct {
 /*! TCOMP_INT - Interrupt Flag for Trigger Completion
  *  0b0..Either IE[TCOMP_IE] is 0 or no trigger sequences are complete
  *  0b0..No effect
- *  0b1..Trigger sequence completed; all data stored in the associated FIFO
  *  0b1..Clear the flag
+ *  0b1..Trigger sequence completed; all data stored in the associated FIFO
  */
 #define ADC_STAT_TCOMP_INT(x)                    (((uint32_t)(((uint32_t)(x)) << ADC_STAT_TCOMP_INT_SHIFT)) & ADC_STAT_TCOMP_INT_MASK)
 
@@ -1088,5 +1091,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ADC_H_ */
+#endif  /* PERI_ADC_H_ */
 

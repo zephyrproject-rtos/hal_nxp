@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -95,8 +95,8 @@ void EZHV_Deinit(void)
 
 void EZHV_WakeUpEzhv(arm2ezhv_intctl_t arm2ezhvInt)
 {
-    volatile uint32_t tmp = 0;
-    while(0 == tmp)
+    volatile bool tmp = false;
+    while(!tmp)
     {
         tmp = EZHV_GetEzhvWaitStatusFlag();
     }

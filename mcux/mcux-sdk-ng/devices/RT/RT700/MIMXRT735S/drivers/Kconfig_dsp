@@ -1,0 +1,7 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+    config MCUX_COMPONENT_driver.dsp
+         bool "dsp"
+         depends on MCUX_HW_DEVICE_MIMXRT735S && MCUX_HW_CORE_ID_CM33_CORE1

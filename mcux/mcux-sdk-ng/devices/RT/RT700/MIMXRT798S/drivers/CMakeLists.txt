@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -10,6 +10,7 @@ include(./CMakeLists_inputmux_connections.txt)
 include(./CMakeLists_iopctl_soc.txt)
 include(./CMakeLists_mipi_dsi_soc.txt)
 include(./CMakeLists_power.txt)
+include(./CMakeLists_pvts.txt)
 include(./CMakeLists_reset.txt)
 include(./CMakeLists_romapi.txt)
 
