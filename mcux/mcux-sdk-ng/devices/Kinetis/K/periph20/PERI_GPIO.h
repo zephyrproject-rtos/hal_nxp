@@ -7,14 +7,14 @@
 **                          MK22FN512VLL12
 **                          MK22FN512VMP12
 **
-**     Version:             rev. 2.9, 2016-03-21
-**     Build:               b240709
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -52,21 +52,24 @@
 **     - rev. 2.9 (2016-03-21)
 **         Added MK22FN512VFX12 part.
 **         GPIO - renamed port instances: PTx -> GPIOx.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file GPIO.h
- * @version 2.9
- * @date 2016-03-21
+ * @file PERI_GPIO.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for GPIO
  *
  * CMSIS Peripheral Access Layer for GPIO
  */
 
-#if !defined(GPIO_H_)
-#define GPIO_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_GPIO_H_)
+#define PERI_GPIO_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK22FN512CAP12) || defined(CPU_MK22FN512VDC12) || defined(CPU_MK22FN512VFX12) || defined(CPU_MK22FN512VLH12) || defined(CPU_MK22FN512VLL12) || defined(CPU_MK22FN512VMP12))
 #include "MK22F51212_COMMON.h"
@@ -118,9 +121,9 @@
 /** GPIO - Register Layout Typedef */
 typedef struct {
   __IO uint32_t PDOR;                              /**< Port Data Output Register, offset: 0x0 */
-  __O  uint32_t PSOR;                              /**< Port Set Output Register, offset: 0x4 */
-  __O  uint32_t PCOR;                              /**< Port Clear Output Register, offset: 0x8 */
-  __O  uint32_t PTOR;                              /**< Port Toggle Output Register, offset: 0xC */
+  __IO uint32_t PSOR;                              /**< Port Set Output Register, offset: 0x4 */
+  __IO uint32_t PCOR;                              /**< Port Clear Output Register, offset: 0x8 */
+  __IO uint32_t PTOR;                              /**< Port Toggle Output Register, offset: 0xC */
   __I  uint32_t PDIR;                              /**< Port Data Input Register, offset: 0x10 */
   __IO uint32_t PDDR;                              /**< Port Data Direction Register, offset: 0x14 */
 } GPIO_Type;
@@ -242,5 +245,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* GPIO_H_ */
+#endif  /* PERI_GPIO_H_ */
 

@@ -5,14 +5,14 @@
 **                          MK22FN128VLL10
 **                          MK22FN128VMP10
 **
-**     Version:             rev. 1.6, 2015-02-19
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -36,21 +36,24 @@
 **         Interrupt INT_LPTimer renamed to INT_LPTMR0, interrupt INT_Watchdog renamed to INT_WDOG_EWM.
 **     - rev. 1.6 (2015-02-19)
 **         Renamed interrupt vector LLW to LLWU.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RTC.h
- * @version 1.6
- * @date 2015-02-19
+ * @file PERI_RTC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RTC
  *
  * CMSIS Peripheral Access Layer for RTC
  */
 
-#if !defined(RTC_H_)
-#define RTC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RTC_H_)
+#define PERI_RTC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK22FN128VDC10) || defined(CPU_MK22FN128VLH10) || defined(CPU_MK22FN128VLL10) || defined(CPU_MK22FN128VMP10))
 #include "MK22F12810_COMMON.h"
@@ -156,11 +159,11 @@ typedef struct {
 #define RTC_TCR_TCR_MASK                         (0xFFU)
 #define RTC_TCR_TCR_SHIFT                        (0U)
 /*! TCR - Time Compensation Register
- *  0b10000000..Time Prescaler Register overflows every 32896 clock cycles.
- *  0b11111111..Time Prescaler Register overflows every 32769 clock cycles.
  *  0b00000000..Time Prescaler Register overflows every 32768 clock cycles.
  *  0b00000001..Time Prescaler Register overflows every 32767 clock cycles.
  *  0b01111111..Time Prescaler Register overflows every 32641 clock cycles.
+ *  0b10000000..Time Prescaler Register overflows every 32896 clock cycles.
+ *  0b11111111..Time Prescaler Register overflows every 32769 clock cycles.
  */
 #define RTC_TCR_TCR(x)                           (((uint32_t)(((uint32_t)(x)) << RTC_TCR_TCR_SHIFT)) & RTC_TCR_TCR_MASK)
 
@@ -562,5 +565,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RTC_H_ */
+#endif  /* PERI_RTC_H_ */
 

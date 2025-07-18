@@ -7,14 +7,14 @@
 **                          MK22FN512VLL12
 **                          MK22FN512VMP12
 **
-**     Version:             rev. 2.9, 2016-03-21
-**     Build:               b240709
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FTM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -52,21 +52,24 @@
 **     - rev. 2.9 (2016-03-21)
 **         Added MK22FN512VFX12 part.
 **         GPIO - renamed port instances: PTx -> GPIOx.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FTM.h
- * @version 2.9
- * @date 2016-03-21
+ * @file PERI_FTM.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FTM
  *
  * CMSIS Peripheral Access Layer for FTM
  */
 
-#if !defined(FTM_H_)
-#define FTM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FTM_H_)
+#define PERI_FTM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK22FN512CAP12) || defined(CPU_MK22FN512VDC12) || defined(CPU_MK22FN512VFX12) || defined(CPU_MK22FN512VLH12) || defined(CPU_MK22FN512VLL12) || defined(CPU_MK22FN512VMP12))
 #include "MK22F51212_COMMON.h"
@@ -1717,5 +1720,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FTM_H_ */
+#endif  /* PERI_FTM_H_ */
 
