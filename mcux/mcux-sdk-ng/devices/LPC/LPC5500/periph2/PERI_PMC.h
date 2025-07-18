@@ -17,14 +17,14 @@
 **                          LPC55S16JEV59
 **                          LPC55S16JEV98
 **
-**     Version:             rev. 1.1, 2019-12-03
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PMC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **         Initial version based on v0.2UM
 **     - rev. 1.1 (2019-12-03)
 **         Initial version based on v0.6UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PMC.h
- * @version 1.1
- * @date 2019-12-03
+ * @file PERI_PMC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PMC
  *
  * CMSIS Peripheral Access Layer for PMC
  */
 
-#if !defined(PMC_H_)
-#define PMC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PMC_H_)
+#define PERI_PMC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5512JBD100) || defined(CPU_LPC5512JBD64))
 #include "LPC5512_COMMON.h"
@@ -224,32 +227,32 @@ typedef struct {
 #define PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK (0x30U)
 #define PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT (4U)
 /*! BODVBATRESETENA_SECURE - BOD VBAT reset enable.
- *  0b10..BOD VBAT reset is disable.
  *  0b01..Any other value than b10, BOD VBAT reset is enable.
+ *  0b10..BOD VBAT reset is disable.
  */
 #define PMC_RESETCTRL_BODVBATRESETENA_SECURE(x)  (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT)) & PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK)
 
 #define PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK (0xC0U)
 #define PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT (6U)
 /*! BODCORERESETENA_SECURE - BOD Core reset enable.
- *  0b10..BOD Core reset is disable.
  *  0b01..Any other value than b10, BOD Core reset is enable.
+ *  0b10..BOD Core reset is disable.
  */
 #define PMC_RESETCTRL_BODCORERESETENA_SECURE(x)  (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT)) & PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK)
 
 #define PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK (0x30000000U)
 #define PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_SHIFT (28U)
 /*! BODVBATRESETENA_SECURE_DP - BOD VBAT reset enable.
- *  0b10..BOD VBAT reset is disable.
  *  0b01..Any other value than b10, BOD VBAT reset is enable.
+ *  0b10..BOD VBAT reset is disable.
  */
 #define PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP(x) (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_SHIFT)) & PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK)
 
 #define PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK (0xC0000000U)
 #define PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_SHIFT (30U)
 /*! BODCORERESETENA_SECURE_DP - BOD Core reset enable.
- *  0b10..BOD Core reset is disable.
  *  0b01..Any other value than b10, BOD Core reset is enable.
+ *  0b10..BOD Core reset is disable.
  */
 #define PMC_RESETCTRL_BODCORERESETENA_SECURE_DP(x) (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_SHIFT)) & PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK)
 /*! @} */
@@ -1231,5 +1234,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PMC_H_ */
+#endif  /* PERI_PMC_H_ */
 

@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b231026
+**     Build:               b241212
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -243,6 +243,10 @@
     (((x) == FLEXCOMM7) ? (1) : \
     (((x) == FLEXCOMM8) ? (0) : \
     (((x) == FLEXCOMM9) ? (0) : (-1)))))))))))
+
+/* GINT module features */
+
+/* No feature definitions */
 
 /* I2S module features */
 
