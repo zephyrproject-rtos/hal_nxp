@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -80,7 +80,9 @@ static const clock_ip_name_t s_edmaClockName[] = EDMA_CLOCKS;
 #endif /* FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(DMA_IRQS)
 static const IRQn_Type s_edmaIRQNumber[][FSL_FEATURE_EDMA_MODULE_CHANNEL] = DMA_IRQS;
+#endif
 
 /*! @brief Pointers to transfer handle for each EDMA channel. */
 static edma_handle_t *s_EDMAHandle[FSL_FEATURE_EDMA_MODULE_CHANNEL * FSL_FEATURE_SOC_EDMA_COUNT];
@@ -867,8 +869,10 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
     s_EDMAHandle[channelIndex] = handle;
     /* record enabled channel */
     s_EDMAEnabledChannel[edmaInstance][channel] = true;
+#if defined(DMA_IRQS)
     /* Enable NVIC interrupt */
     (void)EnableIRQ(s_edmaIRQNumber[edmaInstance][channel]);
+#endif
 
     /*
        Reset TCD registers to zero. Unlike the EDMA_TcdReset(DREQ will be set),
@@ -955,7 +959,7 @@ void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
     assert(srcAddr != NULL);
     assert(destAddr != NULL);
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 4U) || (srcWidth == 8U) || (srcWidth == 16U) ||
-           (srcWidth == 32U) || srcWidth == 64U);
+           (srcWidth == 32U) || (srcWidth == 64U));
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 4U) || (destWidth == 8U) || (destWidth == 16U) ||
            (destWidth == 32U) || (destWidth == 64U));
     assert(transferBytes % bytesEachRequest == 0U);
@@ -974,60 +978,9 @@ void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
 
     config->minorLoopBytes  = bytesEachRequest;
     config->majorLoopCounts = transferBytes / bytesEachRequest;
-    switch (srcWidth)
-    {
-        case 1U:
-            config->srcTransferSize = kEDMA_TransferSize1Bytes;
-            break;
-        case 2U:
-            config->srcTransferSize = kEDMA_TransferSize2Bytes;
-            break;
-        case 4U:
-            config->srcTransferSize = kEDMA_TransferSize4Bytes;
-            break;
-        case 8U:
-            config->srcTransferSize = kEDMA_TransferSize8Bytes;
-            break;
-        case 16U:
-            config->srcTransferSize = kEDMA_TransferSize16Bytes;
-            break;
-        case 32U:
-            config->srcTransferSize = kEDMA_TransferSize32Bytes;
-            break;
-        case 64U:
-            config->srcTransferSize = kEDMA_TransferSize64Bytes;
-            break;
-        default:
-            assert(false);
-            break;
-    }
-    switch (destWidth)
-    {
-        case 1U:
-            config->destTransferSize = kEDMA_TransferSize1Bytes;
-            break;
-        case 2U:
-            config->destTransferSize = kEDMA_TransferSize2Bytes;
-            break;
-        case 8U:
-            config->destTransferSize = kEDMA_TransferSize8Bytes;
-            break;
-        case 4U:
-            config->destTransferSize = kEDMA_TransferSize4Bytes;
-            break;
-        case 16U:
-            config->destTransferSize = kEDMA_TransferSize16Bytes;
-            break;
-        case 32U:
-            config->destTransferSize = kEDMA_TransferSize32Bytes;
-            break;
-        case 64U:
-            config->destTransferSize = kEDMA_TransferSize64Bytes;
-            break;
-        default:
-            assert(false);
-            break;
-    }
+
+    config->srcTransferSize = EDMA_GetTransferSize(srcWidth);
+    config->destTransferSize = EDMA_GetTransferSize(destWidth);
 
     config->destOffset = destOffset;
     config->srcOffset  = srcOffset;
@@ -1321,7 +1274,7 @@ void EDMA_StartTransfer(edma_handle_t *handle)
         {
             primask = DisableGlobalIRQ();
             /* Check if channel request is actually disable. */
-            if ((handle->base->CH[handle->channel].CH_CSR & DMA_CH_CSR_ERQ_MASK & (1U << handle->channel)) == 0U)
+            if ((handle->base->CH[handle->channel].CH_CSR & DMA_CH_CSR_ERQ_MASK) == 0U)
             {
                 /* Check if transfer is paused. */
                 /*

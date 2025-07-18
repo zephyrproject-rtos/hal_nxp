@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO MCULCD driver version. */
-#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
 #ifndef FLEXIO_MCULCD_WAIT_COMPLETE_TIME
@@ -50,6 +50,19 @@
 
 #if (16UL != FLEXIO_MCULCD_DATA_BUS_WIDTH) && (8UL != FLEXIO_MCULCD_DATA_BUS_WIDTH)
 #error Only support data bus 8-bit or 16-bit
+#endif
+
+/*!
+ * @brief Whether to use legacy GPIO functions to control the CS/RS/RDWR pin signal.
+ *
+ * If using the legacy pin functions, there is no user defined argument passed to the function.
+ */
+#ifndef FLEXIO_MCULCD_LEGACY_GPIO_FUNC
+    #ifdef CONFIG_FLEXIO_MCULCD_LEGACY_GPIO_FUNC
+        #define FLEXIO_MCULCD_LEGACY_GPIO_FUNC CONFIG_FLEXIO_MCULCD_LEGACY_GPIO_FUNC
+    #else
+        #define FLEXIO_MCULCD_LEGACY_GPIO_FUNC 1
+    #endif
 #endif
 
 /*! @brief FlexIO LCD transfer status */
@@ -97,15 +110,10 @@ enum _flexio_mculcd_dma_enable
     kFLEXIO_MCULCD_RxDmaEnable = 0x2U, /*!< Rx DMA request source */
 };
 
-#ifndef FLEXIO_MCULCD_LEGACY_GPIO_FUNC
-#define FLEXIO_MCULCD_LEGACY_GPIO_FUNC 1
-#endif
-
-#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
 /*! @brief Function to set or clear the CS and RS pin. */
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
 typedef void (*flexio_mculcd_pin_func_t)(bool set);
 #else
-/*! @brief Function to set or clear the CS and RS pin. */
 typedef void (*flexio_mculcd_pin_func_t)(bool set, void *userData);
 #endif
 
@@ -136,7 +144,9 @@ typedef struct _flexio_mculcd_type
 typedef struct _flexio_mculcd_config
 {
     bool enable;           /*!< Enable/disable FlexIO MCULCD after configuration. */
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     bool enableInDoze;     /*!< Enable/disable FlexIO operation in doze mode. */
+#endif
     bool enableInDebug;    /*!< Enable/disable FlexIO operation in debug mode. */
     bool enableFastAccess; /*!< Enable/disable fast access to FlexIO registers,
                            fast access requires the FlexIO clock to be at least

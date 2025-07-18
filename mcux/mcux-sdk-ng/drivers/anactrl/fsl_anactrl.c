@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021, NXP
+ * Copyright 2018-2021, 2024 NXP
  * All rights reserved.
  *
  *
@@ -102,16 +102,22 @@ void ANACTRL_SetFro192M(ANACTRL_Type *base, const anactrl_fro192M_config_t *conf
 
     uint32_t tmp32 = base->FRO192M_CTRL;
 
+#if !(defined(FSL_FEATURE_ANACTRL_HAS_96MHZCLK_CONTROL) && (FSL_FEATURE_ANACTRL_HAS_96MHZCLK_CONTROL == 0))
     tmp32 &= ~(ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK | ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK);
+#else
+    tmp32 &= ~(ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK);
+#endif
 
     if (config->enable12MHzClk)
     {
         tmp32 |= ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK;
     }
+#if !(defined(FSL_FEATURE_ANACTRL_HAS_96MHZCLK_CONTROL) && (FSL_FEATURE_ANACTRL_HAS_96MHZCLK_CONTROL == 0))
     if (config->enable96MHzClk)
     {
         tmp32 |= ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK;
     }
+#endif
 
     base->FRO192M_CTRL |= tmp32;
 }
@@ -136,6 +142,7 @@ void ANACTRL_GetDefaultFro192MConfig(anactrl_fro192M_config_t *config)
     config->enable96MHzClk = false;
 }
 
+#if !(defined(FSL_FEATURE_ANACTRL_HAS_XO32M_CTRL) && (FSL_FEATURE_ANACTRL_HAS_XO32M_CTRL == 0))
 /*!
  * brief Configs the 32 MHz Crystal oscillator(High-speed crystal oscillator), such as enable/disable output to CPU
  * system, and so on.
@@ -212,6 +219,7 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config)
     config->enableADCOutput = true;
 #endif /* FSL_FEATURE_ANACTRL_HAS_XO32M_ADC_CLK_MODE_BIF_FIELD */
 }
+#endif /* FSL_FEATURE_ANACTRL_HAS_XO32M_CTRL */
 
 #if !(defined(FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL) && FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL)
 /*!

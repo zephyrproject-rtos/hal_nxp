@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -48,7 +48,9 @@ void FLEXIO_CAMERA_GetDefaultConfig(flexio_camera_config_t *config)
     (void)memset(config, 0, sizeof(*config));
 
     config->enablecamera     = false;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     config->enableInDoze     = false;
+#endif
     config->enableInDebug    = false;
     config->enableFastAccess = false;
 }
@@ -81,14 +83,21 @@ void FLEXIO_CAMERA_Init(FLEXIO_CAMERA_Type *base, const flexio_camera_config_t *
 
     /* Configure flexio camera */
     controlVal = base->flexioBase->CTRL;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     controlVal &=
         ~(FLEXIO_CTRL_DOZEN_MASK | FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#else
+    controlVal &=
+        ~(FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#endif
     controlVal |= (FLEXIO_CTRL_DBGE(config->enableInDebug) | FLEXIO_CTRL_FASTACC(config->enableFastAccess) |
                    FLEXIO_CTRL_FLEXEN(config->enablecamera));
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     if (!config->enableInDoze)
     {
         controlVal |= FLEXIO_CTRL_DOZEN_MASK;
     }
+#endif
     base->flexioBase->CTRL = controlVal;
 
     /* FLEXIO_CAMERA shifter config */

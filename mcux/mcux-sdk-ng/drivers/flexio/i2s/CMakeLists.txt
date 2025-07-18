@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexio_i2s_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_i2s)
-    mcux_component_version(2.2.0)
+    mcux_component_version(2.2.1)
 
     mcux_add_source(SOURCES fsl_flexio_i2s.c fsl_flexio_i2s.h)
 

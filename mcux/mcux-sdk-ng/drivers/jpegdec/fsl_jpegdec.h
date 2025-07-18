@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023,2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief JPEG decoder driver version 2.0.0. */
-#define FSL_JPEGDEC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief JPEG decoder driver version. */
+#define FSL_JPEGDEC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief JPEG decoder structure definition. */

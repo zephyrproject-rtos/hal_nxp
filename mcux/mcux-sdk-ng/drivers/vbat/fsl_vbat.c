@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 ~ 2022 NXP
- * All rights reserved.
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -102,10 +101,15 @@ status_t VBAT_EnableBandgap(VBAT_Type *base, bool enable)
  * retval kStatus_VBAT_Fro16kNotEnabled Fail to enable backup SRAM regulator due to FRO16k is not enabled previously.
  * retval kStatus_VBAT_BandgapNotEnabled Fail to enable backup SRAM regulator due to the bandgap is not enabled
  * previously.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t VBAT_EnableBackupSRAMRegulator(VBAT_Type *base, bool enable)
 {
     status_t status = kStatus_Success;
+
+#if VBAT_LDO_READY_TIMEOUT
+    uint32_t timeout = VBAT_LDO_READY_TIMEOUT;
+#endif
 
     if (enable)
     {
@@ -116,6 +120,12 @@ status_t VBAT_EnableBackupSRAMRegulator(VBAT_Type *base, bool enable)
                 base->LDOCTLA |= VBAT_LDOCTLA_LDO_EN_MASK;
                 while ((base->STATUSA & VBAT_STATUSA_LDO_RDY_MASK) == 0UL)
                 {
+#if VBAT_LDO_READY_TIMEOUT
+                    if ((--timeout) == 0U)
+                    {
+                        status = kStatus_Timeout;
+                    }
+#endif
                 }
             }
             else

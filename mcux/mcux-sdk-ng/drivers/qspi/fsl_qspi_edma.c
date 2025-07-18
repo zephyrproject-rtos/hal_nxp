@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -43,9 +42,11 @@ typedef union pvoid_to_u32
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+/* Base pointer array */
+static QuadSPI_Type *const s_qspiBases[] = QuadSPI_BASE_PTRS;
 
 /*<! Private handle only used for internally. */
-static qspi_edma_private_handle_t s_edmaPrivateHandle[FSL_FEATURE_SOC_QuadSPI_COUNT][2];
+static qspi_edma_private_handle_t s_edmaPrivateHandle[ARRAY_SIZE(s_qspiBases)][2];
 
 /*******************************************************************************
  * Prototypes
@@ -283,7 +284,8 @@ status_t QSPI_TransferReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle
             status = EDMA_SubmitTransfer(handle->dmaHandle, &xferConfig);
         } while (status != kStatus_Success);
 
-        handle->dmaHandle->base->TCD[handle->dmaHandle->channel].ATTR |= DMA_ATTR_SMOD(0x5U);
+        EDMA_SetModulo(handle->dmaHandle->base, handle->dmaHandle->channel, kEDMA_Modulo32bytes, kEDMA_ModuloDisable);
+        
         EDMA_StartTransfer(handle->dmaHandle);
 
         /* Enable QSPI TX EDMA. */

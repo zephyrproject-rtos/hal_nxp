@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.mipi_dsi_smartdma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.mipi_dsi)
-    mcux_component_version(2.2.1)
+    mcux_component_version(2.2.2)
 
     mcux_add_source(SOURCES fsl_mipi_dsi.c fsl_mipi_dsi.h)
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2024 NXP
+ * Copyright 2016-2023, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 9))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
 /*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
@@ -381,6 +381,7 @@ struct _lpspi_master_handle
     volatile bool isByteSwap;        /*!< A flag that whether should byte swap. */
     volatile bool isTxMask;          /*!< A flag that whether TCR[TXMSK] is set. */
     volatile uint16_t bytesPerFrame; /*!< Number of bytes in each frame */
+    volatile uint16_t frameSize;     /*!< Backup of TCR[FRAMESZ] */
 
     volatile uint8_t fifoSize; /*!< FIFO dataSize. */
 
@@ -1250,6 +1251,22 @@ bool LPSPI_WaitTxFifoEmpty(LPSPI_Type *base);
 /*!
  *@}
  */
+
+/*!
+ * @name Common IRQ Handler
+ * @{
+ */
+
+/*!
+ * @brief LPSPI driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for LPSPI.
+ *
+ * @param instance LPSPI instance.
+ */
+void LPSPI_DriverIRQHandler(uint32_t instance);
+
+/*! @} */
 
 #if defined(__cplusplus)
 }

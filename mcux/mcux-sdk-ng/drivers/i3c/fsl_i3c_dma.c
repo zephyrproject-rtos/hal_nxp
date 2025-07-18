@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,7 +31,7 @@ enum _i3c_dma_transfer_states
 #endif
     kStopState,
     kWaitForCompletionState,
-    kAddressMatchState,
+    kCtrlDoneState,
 };
 
 /*! @brief Common sets of flags used by the driver. */
@@ -76,7 +76,7 @@ enum _i3c_dma_flag_constants
 static I3C_Type *const kI3cBases[] = I3C_BASE_PTRS;
 
 /*! @brief DMA linked transfer descriptor. */
-SDK_ALIGN(dma_descriptor_t static s_dma_table[ARRAY_SIZE(kI3cBases)][2], FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE);
+SDK_ALIGN(static dma_descriptor_t s_dma_table[ARRAY_SIZE(kI3cBases)][2], FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE);
 
 /*******************************************************************************
  * Prototypes
@@ -141,11 +141,17 @@ static void I3C_MasterTransferDMACallbackRx(dma_handle_t *dmaHandle, void *param
         else
         {
 #endif
-            /* Terminate the receiving process. */
-            i3cHandle->base->MCTRL |= I3C_MCTRL_RDTERM(1U);
 
-            i3cHandle->state = (uint8_t)kStopState;
-            I3C_MasterTransferDMAHandleIRQ(i3cHandle->base, i3cHandle);
+            /* If target send back the data logner as expect and controller can't get COMPLETE, stop the transfer here.
+               If bus transfer is done normally, this function will do nothing. */
+            if ((i3cHandle->state != (uint8_t)kCtrlDoneState) &&
+                (0UL == (i3cHandle->base->MINTMASKED & (uint32_t)kI3C_MasterCompleteFlag)))
+            {
+                /* Terminate following data if present. */
+                i3cHandle->base->MCTRL |= I3C_MCTRL_RDTERM(1U);
+                i3cHandle->state = (uint8_t)kWaitForCompletionState;
+                I3C_MasterTransferDMAHandleIRQ(i3cHandle->base, i3cHandle);
+            }
 #if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
         }
 #endif
@@ -449,6 +455,10 @@ static status_t I3C_MasterInitTransferStateMachineDMA(I3C_Type *base, i3c_master
         {
             handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
         }
+        else
+        {
+            handle->state = (uint8_t)kWaitForCompletionState;
+        }
     }
     else
     {
@@ -676,8 +686,20 @@ static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_
                     {
                         I3C_MasterEmitRequest(base, kI3C_RequestEmitStop);
                     }
+                    handle->state = (uint8_t)kCtrlDoneState;
                 }
-                *isDone        = true;
+                else
+                {
+                    *isDone        = true;
+                    state_complete = true;
+                }
+                break;
+
+            case (uint8_t)kCtrlDoneState:
+                if (0UL != (status & (uint32_t)kI3C_MasterControlDoneFlag))
+                {
+                    *isDone = true;
+                }
                 state_complete = true;
                 break;
 

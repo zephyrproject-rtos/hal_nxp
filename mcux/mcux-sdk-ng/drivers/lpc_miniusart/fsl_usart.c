@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2022, 2025 NXP
  * All rights reserved.
  *
  *
@@ -231,9 +231,9 @@ status_t USART_Init(USART_Type *base, const usart_config_t *config, uint32_t src
     /* Setup configuration and enable USART to configure other register. */
     base->CFG = USART_CFG_PARITYSEL(config->parityMode) | USART_CFG_STOPLEN(config->stopBitCount) |
                 USART_CFG_SYNCEN((uint32_t)config->syncMode >> 1) |
-                USART_CFG_DATALEN((uint8_t)config->bitCountPerChar) | USART_CFG_LOOP(config->loopback) |
+                USART_CFG_DATALEN((uint8_t)config->bitCountPerChar) | USART_CFG_LOOP(config->loopback ? 1U : 0U) |
                 USART_CFG_SYNCMST(config->syncMode) | USART_CFG_CLKPOL(config->clockPolarity) |
-                USART_CFG_CTSEN(config->enableHardwareFlowControl) | USART_CFG_ENABLE_MASK;
+                USART_CFG_CTSEN(config->enableHardwareFlowControl ? 1U : 0U) | USART_CFG_ENABLE_MASK;
 #if defined(FSL_FEATURE_USART_HAS_RXIDLETO_CHECK) && FSL_FEATURE_USART_HAS_RXIDLETO_CHECK
     base->CTL |= USART_CTL_RXIDLETOCFG(config->rxIdleTimeout);
 #endif
