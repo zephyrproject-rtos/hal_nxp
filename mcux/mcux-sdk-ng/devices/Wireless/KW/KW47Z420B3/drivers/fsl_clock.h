@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022,2025 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief CLOCK driver version 2.1.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -1075,6 +1075,20 @@ static inline void CLOCK_UnlockFircControlStatusReg(void)
 static inline void CLOCK_LockFircControlStatusReg(void)
 {
     CLOCK_REG(&SCG0->FIRCCSR) |= SCG_FIRCCSR_LK_MASK;
+}
+
+/*!
+ * @brief Check whether FIRC auto trim locked to target frequency range.
+ *
+ * When FIRCTREN and FIRCTRUP are enabled, TRIM_LOCK will indicate when auto
+ * trimming is complete and output FIRC frequency has locked to target FIRC range.
+ * TRIM_LOCK will automatically get cleared if FIRCTREN and FIRCTRUP are not set.
+ *
+ * @return True if FIRC trim locked to target frequency range, false if not.
+ */
+static inline bool CLOCK_IsFIRCAutoTrimLocked(void)
+{
+    return ((bool)(CLOCK_REG(&SCG0->FIRCCSR) & SCG_FIRCCSR_TRIM_LOCK_MASK));
 }
 
 /*!

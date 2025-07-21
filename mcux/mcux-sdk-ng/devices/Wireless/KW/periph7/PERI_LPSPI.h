@@ -19,14 +19,14 @@
 **                          KW45Z41083AFPA
 **                          KW45Z41083AFTA
 **
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **     Revisions:
 **     - rev. 1.0 (2020-05-12)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPSPI.h
- * @version 1.0
- * @date 2020-05-12
+ * @file PERI_LPSPI.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPSPI
  *
  * CMSIS Peripheral Access Layer for LPSPI
  */
 
-#if !defined(LPSPI_H_)
-#define LPSPI_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPSPI_H_)
+#define PERI_LPSPI_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_KW45B41Z52AFPA) || defined(CPU_KW45B41Z52AFTA))
 #include "KW45B41Z52_COMMON.h"
@@ -163,7 +166,6 @@ typedef struct {
 #define LPSPI_VERID_FEATURE_SHIFT                (0U)
 /*! FEATURE - Module Identification Number
  *  0b0000000000000100..Standard feature set supporting a 32-bit shift register.
- *  *..
  */
 #define LPSPI_VERID_FEATURE(x)                   (((uint32_t)(((uint32_t)(x)) << LPSPI_VERID_FEATURE_SHIFT)) & LPSPI_VERID_FEATURE_MASK)
 
@@ -871,5 +873,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPSPI_H_ */
+#endif  /* PERI_LPSPI_H_ */
 

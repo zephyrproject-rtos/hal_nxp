@@ -19,14 +19,14 @@
 **                          KW45Z41083AFPA
 **                          KW45Z41083AFTA
 **
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM32K
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **     Revisions:
 **     - rev. 1.0 (2020-05-12)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CCM32K.h
- * @version 1.0
- * @date 2020-05-12
+ * @file PERI_CCM32K.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CCM32K
  *
  * CMSIS Peripheral Access Layer for CCM32K
  */
 
-#if !defined(CCM32K_H_)
-#define CCM32K_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CCM32K_H_)
+#define PERI_CCM32K_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_KW45B41Z52AFPA) || defined(CPU_KW45B41Z52AFTA))
 #include "KW45B41Z52_COMMON.h"
@@ -263,8 +266,8 @@ typedef struct {
 #define CCM32K_OSC32K_CTRL_SOX_EN_MASK           (0x1000000U)
 #define CCM32K_OSC32K_CTRL_SOX_EN_SHIFT          (24U)
 /*! SOX_EN - SOX Mode Enable
- *  0b1..SOX mode is enabled.
  *  0b0..SOX mode is disabled.
+ *  0b1..SOX mode is enabled.
  */
 #define CCM32K_OSC32K_CTRL_SOX_EN(x)             (((uint32_t)(((uint32_t)(x)) << CCM32K_OSC32K_CTRL_SOX_EN_SHIFT)) & CCM32K_OSC32K_CTRL_SOX_EN_MASK)
 
@@ -291,24 +294,24 @@ typedef struct {
 #define CCM32K_STATUS_OSC32K_ACTIVE_MASK         (0x4U)
 #define CCM32K_STATUS_OSC32K_ACTIVE_SHIFT        (2U)
 /*! OSC32K_ACTIVE - 32 kHz Oscillator active bit
- *  0b1..OSC32K is the active clock source
  *  0b0..OSC32K is not the active clock source
+ *  0b1..OSC32K is the active clock source
  */
 #define CCM32K_STATUS_OSC32K_ACTIVE(x)           (((uint32_t)(((uint32_t)(x)) << CCM32K_STATUS_OSC32K_ACTIVE_SHIFT)) & CCM32K_STATUS_OSC32K_ACTIVE_MASK)
 
 #define CCM32K_STATUS_FRO32K_ACTIVE_MASK         (0x10U)
 #define CCM32K_STATUS_FRO32K_ACTIVE_SHIFT        (4U)
 /*! FRO32K_ACTIVE - 32 kHz FRO active bit
- *  0b1..FRO32K is the active clock source
  *  0b0..FRO32K is not the active clock source
+ *  0b1..FRO32K is the active clock source
  */
 #define CCM32K_STATUS_FRO32K_ACTIVE(x)           (((uint32_t)(((uint32_t)(x)) << CCM32K_STATUS_FRO32K_ACTIVE_SHIFT)) & CCM32K_STATUS_FRO32K_ACTIVE_MASK)
 
 #define CCM32K_STATUS_CLOCK_DET_MASK             (0x40U)
 #define CCM32K_STATUS_CLOCK_DET_SHIFT            (6U)
 /*! CLOCK_DET - Clock Detect
- *  0b1..Clock error is detected
  *  0b0..Clock error is not detected
+ *  0b1..Clock error is detected
  */
 #define CCM32K_STATUS_CLOCK_DET(x)               (((uint32_t)(((uint32_t)(x)) << CCM32K_STATUS_CLOCK_DET_SHIFT)) & CCM32K_STATUS_CLOCK_DET_MASK)
 /*! @} */
@@ -415,5 +418,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CCM32K_H_ */
+#endif  /* PERI_CCM32K_H_ */
 

@@ -19,14 +19,14 @@
 **                          KW47Z420B2AFTA
 **                          KW47Z420B3AFTA
 **
-**     Version:             rev. 1.0, 2024-10-13
-**     Build:               b241128
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for REGFILE
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-10-13)
 **         Rev. 1, 2024-10-13
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file REGFILE.h
- * @version 1.0
- * @date 2024-10-13
+ * @file PERI_REGFILE.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for REGFILE
  *
  * CMSIS Peripheral Access Layer for REGFILE
  */
 
-#if !defined(REGFILE_H_)
-#define REGFILE_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_REGFILE_H_)
+#define PERI_REGFILE_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_KW47B42Z83AFTA_cm33_core0))
 #include "KW47B42Z83_cm33_core0_COMMON.h"
@@ -328,5 +331,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* REGFILE_H_ */
+#endif  /* PERI_REGFILE_H_ */
 

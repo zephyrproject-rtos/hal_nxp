@@ -1,14 +1,14 @@
 /*
 ** ###################################################################
 **     Processor:           K32W1480VFTA
-**     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VBAT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -17,21 +17,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-01-18)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file VBAT.h
- * @version 1.0
- * @date 2021-01-18
+ * @file PERI_VBAT.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for VBAT
  *
  * CMSIS Peripheral Access Layer for VBAT
  */
 
-#if !defined(VBAT_H_)
-#define VBAT_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_VBAT_H_)
+#define PERI_VBAT_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32W1480VFTA))
 #include "K32W1480_COMMON.h"
@@ -385,14 +388,14 @@ typedef struct {
 #define VBAT_LDOTIMER0_TIMCFG_MASK               (0x7U)
 #define VBAT_LDOTIMER0_TIMCFG_SHIFT              (0U)
 /*! TIMCFG - Timeout Configuration
- *  0b111..Timeout every 7.8125 ms
- *  0b110..Timeout every 15.625 ms
- *  0b101..Timeout every 31.25 ms
- *  0b100..Timeout every 62.5 ms
- *  0b011..Timeout every 125 ms
- *  0b010..Timeout every 250 ms
- *  0b001..Timeout every 500 ms
  *  0b000..Timeout every 1 sec
+ *  0b001..Timeout every 500 ms
+ *  0b010..Timeout every 250 ms
+ *  0b011..Timeout every 125 ms
+ *  0b100..Timeout every 62.5 ms
+ *  0b101..Timeout every 31.25 ms
+ *  0b110..Timeout every 15.625 ms
+ *  0b111..Timeout every 7.8125 ms
  */
 #define VBAT_LDOTIMER0_TIMCFG(x)                 (((uint32_t)(((uint32_t)(x)) << VBAT_LDOTIMER0_TIMCFG_SHIFT)) & VBAT_LDOTIMER0_TIMCFG_MASK)
 
@@ -456,5 +459,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* VBAT_H_ */
+#endif  /* PERI_VBAT_H_ */
 

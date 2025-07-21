@@ -1,17 +1,11 @@
 /*
- *     Copyright 2023 NXP
+ * Copyright 2023,2025 NXP
  *      
- *
- *     SPDX-License-Identifier: BSD-3-Clause
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_IPED_H_
 #define _FSL_IPED_H_
-
-/* Component ID definition, used by tools. */
-#ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.iped"
-#endif
 
 #include <stdint.h>
 #include <stddef.h>
@@ -30,10 +24,10 @@
 /*@{*/
 /*! @brief IPED driver version for RW61x. Version 1.0.0.
  *
- * - Version 1.0.0
+ * - Version 1.0.1
  *   - Initial version
  */
-#define FSL_IPED_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+#define FSL_IPED_DRIVER_VERSION (MAKE_VERSION(1, 0, 1))
 /*@}*/
 
 #define kIPED_Region0  (0U)  /*!< IPED region  0 */
