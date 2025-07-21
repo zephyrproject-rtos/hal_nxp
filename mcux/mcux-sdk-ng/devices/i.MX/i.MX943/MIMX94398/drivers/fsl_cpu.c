@@ -6,12 +6,13 @@
 
 /* Includes */
 
-#include "fsl_ccm.h"
-#include "fsl_cpu.h"
 #include "fsl_power.h"
 #include "fsl_reset.h"
-#include "fsl_src.h"
 #include "fsl_device_registers.h"
+#if CONFIG_DIRECT
+#include "fsl_ccm.h"
+#include "fsl_cpu.h"
+#include "fsl_src.h"
 
 /* Local Defines */
 
@@ -1091,11 +1092,11 @@ bool CPU_RunModeSet(uint32_t cpuIdx, uint32_t runMode)
                             /* Process MIX handshakes until CPU MIX is ready */
                             while (!SRC_MixIsPwrReady(s_cpuMgmtInfo[cpuIdx].srcMixIdx))
                             {
-                                if (NVIC_GetPendingIRQ(GPC_SM_REQ_IRQn) == 1U)
-                                {
-                                    GPC_SM_REQ_IRQHandler();
-                                    NVIC_ClearPendingIRQ(GPC_SM_REQ_IRQn);
-                                }
+                                //if (NVIC_GetPendingIRQ(GPC_SM_REQ_IRQn) == 1U)
+                                //{
+                                //    GPC_SM_REQ_IRQHandler();
+                                //    NVIC_ClearPendingIRQ(GPC_SM_REQ_IRQn);
+                                //}
                             }
 
                             /* Inhibit GPC LP handshake during CPU reset */
@@ -2150,3 +2151,6 @@ bool CPU_ResetVectorGet(uint32_t cpuIdx, uint64_t *vector)
     return rc;
 }
 
+#else
+
+#endif

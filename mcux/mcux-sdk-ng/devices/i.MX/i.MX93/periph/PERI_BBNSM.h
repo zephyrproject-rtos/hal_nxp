@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BBNSM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file BBNSM.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_BBNSM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for BBNSM
  *
  * CMSIS Peripheral Access Layer for BBNSM
  */
 
-#if !defined(BBNSM_H_)
-#define BBNSM_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_BBNSM_H_)
+#define PERI_BBNSM_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -272,14 +275,14 @@ typedef struct {
 #define BBNSM_BBNSM_CTRL_CAL_VAL_MASK            (0x1F00U)
 #define BBNSM_BBNSM_CTRL_CAL_VAL_SHIFT           (8U)
 /*! CAL_VAL - Calibration Value
- *  0b01111..+15 counts per each 32768 ticks of the counter clock.
- *  0b00010..+2 counts per each 32768 ticks of the counter clock.
- *  0b00001..+1 counts per each 32768 ticks of the counter clock.
  *  0b00000..+0 counts per each 32768 ticks of the counter clock.
- *  0b11111..-1 counts per each 32768 ticks of the counter clock.
- *  0b11110..-2 counts per each 32768 ticks of the counter clock.
- *  0b10001..-15 counts per each 32768 ticks of the counter clock.
+ *  0b00001..+1 counts per each 32768 ticks of the counter clock.
+ *  0b00010..+2 counts per each 32768 ticks of the counter clock.
+ *  0b01111..+15 counts per each 32768 ticks of the counter clock.
  *  0b10000..-16 counts per each 32768 ticks of the counter clock.
+ *  0b10001..-15 counts per each 32768 ticks of the counter clock.
+ *  0b11110..-2 counts per each 32768 ticks of the counter clock.
+ *  0b11111..-1 counts per each 32768 ticks of the counter clock.
  */
 #define BBNSM_BBNSM_CTRL_CAL_VAL(x)              (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_CTRL_CAL_VAL_SHIFT)) & BBNSM_BBNSM_CTRL_CAL_VAL_MASK)
 
@@ -623,5 +626,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* BBNSM_H_ */
+#endif  /* PERI_BBNSM_H_ */
 

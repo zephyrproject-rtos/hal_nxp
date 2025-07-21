@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MEDIA_BLK_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MEDIA_BLK_CTRL.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_MEDIA_BLK_CTRL.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MEDIA_BLK_CTRL
  *
  * CMSIS Peripheral Access Layer for MEDIA_BLK_CTRL
  */
 
-#if !defined(MEDIA_BLK_CTRL_H_)
-#define MEDIA_BLK_CTRL_H_                        /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MEDIA_BLK_CTRL_H_)
+#define PERI_MEDIA_BLK_CTRL_H_                   /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -191,176 +218,176 @@ typedef struct {
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_PCLK_RESETN_MASK (0x1U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_PCLK_RESETN_SHIFT (0U)
 /*! SFT_EN_MIPI_DSI_PCLK_RESETN - sft_en_mipi_dsi_pclk_resetn
- *  0b1..software reset disable for mipi_dsi_pclk
  *  0b0..software reset enable for mipi_dsi_pclk
+ *  0b1..software reset disable for mipi_dsi_pclk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_PCLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_PCLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_PCLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_CLKREF_RESETN_MASK (0x2U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_CLKREF_RESETN_SHIFT (1U)
 /*! SFT_EN_MIPI_DSI_CLKREF_RESETN - sft_en_mipi_dsi_CLKREF_resetn
- *  0b1..software reset disable for mipi_dsi_CLKREF
  *  0b0..software reset enable for mipi_dsi_CLKREF
+ *  0b1..software reset disable for mipi_dsi_CLKREF
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_CLKREF_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_CLKREF_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI_CLKREF_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_PCLK_RESETN_MASK (0x4U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_PCLK_RESETN_SHIFT (2U)
 /*! SFT_EN_MIPI_CSI_PCLK_RESETN - sft_en_mipi_csi_pclk_resetn
- *  0b1..software reset disable for mipi_csi_pclk
  *  0b0..software reset enable for mipi_csi_pclk
+ *  0b1..software reset disable for mipi_csi_pclk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_PCLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_PCLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_PCLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_ACLK_RESETN_MASK (0x8U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_ACLK_RESETN_SHIFT (3U)
 /*! SFT_EN_MIPI_CSI_ACLK_RESETN - sft_en_mipi_csi_aclk_resetn
- *  0b1..software reset disable for mipi_csi_aclk
  *  0b0..software reset enable for mipi_csi_aclk
+ *  0b1..software reset disable for mipi_csi_aclk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_ACLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_ACLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI_ACLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_PIXEL_CLK_RESETN_MASK (0x10U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_PIXEL_CLK_RESETN_SHIFT (4U)
 /*! SFT_EN_LCDIF_PIXEL_CLK_RESETN - sft_en_lcdif_pixel_clk_resetn
- *  0b1..software reset disable for lcdif_pixel_clk
  *  0b0..software reset enable for lcdif_pixel_clk
+ *  0b1..software reset disable for lcdif_pixel_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_PIXEL_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_PIXEL_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_PIXEL_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_APB_CLK_RESETN_MASK (0x20U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_APB_CLK_RESETN_SHIFT (5U)
 /*! SFT_EN_LCDIF_APB_CLK_RESETN - sft_en_lcdif_apb_clk_resetn
- *  0b1..software reset disable for lcdif_apb_clk
  *  0b0..software reset enable for lcdif_apb_clk
+ *  0b1..software reset disable for lcdif_apb_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_APB_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_APB_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_APB_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_PROC_CLK_RESETN_MASK (0x40U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_PROC_CLK_RESETN_SHIFT (6U)
 /*! SFT_EN_ISI_PROC_CLK_RESETN - sft_en_isi_proc_clk_resetn
- *  0b1..software reset disable for isi_proc_clk
  *  0b0..software reset enable for isi_proc_clk
+ *  0b1..software reset disable for isi_proc_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_PROC_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_PROC_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_PROC_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_APB_CLK_RESETN_MASK (0x80U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_APB_CLK_RESETN_SHIFT (7U)
 /*! SFT_EN_ISI_APB_CLK_RESETN - sft_en_isi_apb_clk_resetn
- *  0b1..software reset disable for isi_apb_clk
  *  0b0..software reset enable for isi_apb_clk
+ *  0b1..software reset disable for isi_apb_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_APB_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_APB_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISI_APB_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_BUS_BLK_CLK_RESETN_MASK (0x100U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_BUS_BLK_CLK_RESETN_SHIFT (8U)
 /*! SFT_EN_BUS_BLK_CLK_RESETN - sft_en_bus_blk_clk_resetn
- *  0b1..software reset disable for bus_blk_clk
  *  0b0..software reset enable for bus_blk_clk
+ *  0b1..software reset disable for bus_blk_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_BUS_BLK_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_BUS_BLK_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_BUS_BLK_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_PCLK_RESETN_MASK (0x200U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_PCLK_RESETN_SHIFT (9U)
 /*! SFT_EN_MIPI_CSI2_PCLK_RESETN - sft_en_mipi_csi2_pclk_resetn
- *  0b1..software reset disable for mipi_csi2_pclk
  *  0b0..software reset enable for mipi_csi2_pclk
+ *  0b1..software reset disable for mipi_csi2_pclk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_PCLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_PCLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_PCLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_ACLK_RESETN_MASK (0x400U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_ACLK_RESETN_SHIFT (10U)
 /*! SFT_EN_MIPI_CSI2_ACLK_RESETN - sft_en_mipi_csi2_aclk_resetn
- *  0b1..software reset disable for mipi_csi2_aclk
  *  0b0..software reset enable for mipi_csi2_aclk
+ *  0b1..software reset disable for mipi_csi2_aclk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_ACLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_ACLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_CSI2_ACLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_PIXEL_CLK_RESETN_MASK (0x800U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_PIXEL_CLK_RESETN_SHIFT (11U)
 /*! SFT_EN_LCDIF2_PIXEL_CLK_RESETN - sft_en_lcdif2_pixel_clk_resetn
- *  0b1..software reset disable for lcdif2_pixel_clk
  *  0b0..software reset enable for lcdif2_pixel_clk
+ *  0b1..software reset disable for lcdif2_pixel_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_PIXEL_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_PIXEL_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_PIXEL_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_APB_CLK_RESETN_MASK (0x1000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_APB_CLK_RESETN_SHIFT (12U)
 /*! SFT_EN_LCDIF2_APB_CLK_RESETN - sft_en_lcdif2_apb_clk_resetn
- *  0b1..software reset disable for lcdif2_apb_clk
  *  0b0..software reset enable for lcdif2_apb_clk
+ *  0b1..software reset disable for lcdif2_apb_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_APB_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_APB_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_APB_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_COR_CLK_RESETN_MASK (0x10000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_COR_CLK_RESETN_SHIFT (16U)
 /*! SFT_EN_ISP_COR_CLK_RESETN - sft_en_isp_cor_clk_resetn;
- *  0b1..software reset disable for isp_cor_clk
  *  0b0..software reset enable for isp_cor_clk
+ *  0b1..software reset disable for isp_cor_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_COR_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_COR_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_COR_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AXI_CLK_RESETN_MASK (0x20000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AXI_CLK_RESETN_SHIFT (17U)
 /*! SFT_EN_ISP_AXI_CLK_RESETN - sft_en_isp_axi_clk_resetn;
- *  0b1..software reset disable for isp_axi_clk
  *  0b0..software reset enable for isp_axi_clk
+ *  0b1..software reset disable for isp_axi_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AXI_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AXI_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AXI_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AHB_CLK_RESETN_MASK (0x40000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AHB_CLK_RESETN_SHIFT (18U)
 /*! SFT_EN_ISP_AHB_CLK_RESETN - sft_en_isp_ahb_clk_resetn;
- *  0b1..software reset disable for isp_ahb_clk
  *  0b0..software reset enable for isp_ahb_clk
+ *  0b1..software reset disable for isp_ahb_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AHB_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AHB_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_ISP_AHB_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_COR_CLK_RESETN_MASK (0x80000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_COR_CLK_RESETN_SHIFT (19U)
 /*! SFT_EN_DWE_COR_CLK_RESETN - sft_en_dwe_cor_clk_resetn;
- *  0b1..software reset disable for dwe_cor_clk
  *  0b0..software reset enable for dwe_cor_clk
+ *  0b1..software reset disable for dwe_cor_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_COR_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_COR_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_COR_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AXI_CLK_RESETN_MASK (0x100000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AXI_CLK_RESETN_SHIFT (20U)
 /*! SFT_EN_DWE_AXI_CLK_RESETN - sft_en_dwe_axi_clk_resetn;
- *  0b1..software reset disable for dwe_axi_clk
  *  0b0..software reset enable for dwe_axi_clk
+ *  0b1..software reset disable for dwe_axi_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AXI_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AXI_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AXI_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AHB_CLK_RESETN_MASK (0x200000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AHB_CLK_RESETN_SHIFT (21U)
 /*! SFT_EN_DWE_AHB_CLK_RESETN - sft_en_dwe_ahb_clk_resetn;
- *  0b1..software reset disable for dwe_ahb_clk
  *  0b0..software reset enable for dwe_ahb_clk
+ *  0b1..software reset disable for dwe_ahb_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AHB_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AHB_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_DWE_AHB_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI2_CLKREF_RESETN_MASK (0x400000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI2_CLKREF_RESETN_SHIFT (22U)
 /*! SFT_EN_MIPI_DSI2_CLKREF_RESETN - sft_en_mipi_dsi2_CLKREF_resetn
- *  0b1..software reset disable for mipi_dsi2_CLKREF
  *  0b0..software reset enable for mipi_dsi2_CLKREF
+ *  0b1..software reset disable for mipi_dsi2_CLKREF
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI2_CLKREF_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI2_CLKREF_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_MIPI_DSI2_CLKREF_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_AXI_CLK_RESETN_MASK (0x800000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_AXI_CLK_RESETN_SHIFT (23U)
 /*! SFT_EN_LCDIF_AXI_CLK_RESETN - sft_en_lcdif_axi_clk_resetn
- *  0b1..software reset disable for lcdif_axi_clk
  *  0b0..software reset enable for lcdif_axi_clk
+ *  0b1..software reset disable for lcdif_axi_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_AXI_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_AXI_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF_AXI_CLK_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_AXI_CLK_RESETN_MASK (0x1000000U)
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_AXI_CLK_RESETN_SHIFT (24U)
 /*! SFT_EN_LCDIF2_AXI_CLK_RESETN - sft_en_lcdif2_axi_clk_resetn
- *  0b1..software reset disable for lcdif2_axi_clk
  *  0b0..software reset enable for lcdif2_axi_clk
+ *  0b1..software reset disable for lcdif2_axi_clk
  */
 #define MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_AXI_CLK_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_AXI_CLK_RESETN_SHIFT)) & MEDIA_BLK_CTRL_SFT_RSTN_SFT_EN_LCDIF2_AXI_CLK_RESETN_MASK)
 /*! @} */
@@ -371,176 +398,176 @@ typedef struct {
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_PCLK_MASK (0x1U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_PCLK_SHIFT (0U)
 /*! SFT_EN_MIPI_DSI_PCLK - sft_en_mipi_dsi_pclk
- *  0b1..clock enable for mipi_dsi_pclk
  *  0b0..clock disable (gated) for mipi_dsi_pclk
+ *  0b1..clock enable for mipi_dsi_pclk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_PCLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_PCLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_PCLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_CLKREF_MASK (0x2U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_CLKREF_SHIFT (1U)
 /*! SFT_EN_MIPI_DSI_CLKREF - sft_en_mipi_dsi_CLKREF
- *  0b1..clock enable for mipi_dsi_CLKREF
  *  0b0..clock disable (gated) for mipi_dsi_CLKREF
+ *  0b1..clock enable for mipi_dsi_CLKREF
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_CLKREF(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_CLKREF_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI_CLKREF_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_PCLK_MASK (0x4U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_PCLK_SHIFT (2U)
 /*! SFT_EN_MIPI_CSI_PCLK - sft_en_mipi_csi_pclk
- *  0b1..clock enable for mipi_csi_pclk
  *  0b0..clock disable (gated) for mipi_csi_pclk
+ *  0b1..clock enable for mipi_csi_pclk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_PCLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_PCLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_PCLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_ACLK_MASK (0x8U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_ACLK_SHIFT (3U)
 /*! SFT_EN_MIPI_CSI_ACLK - sft_en_mipi_csi_aclk
- *  0b1..clock enable for mipi_csi_aclk
  *  0b0..clock disable (gated) for mipi_csi_aclk
+ *  0b1..clock enable for mipi_csi_aclk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_ACLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_ACLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI_ACLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_PIXEL_CLK_MASK (0x10U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_PIXEL_CLK_SHIFT (4U)
 /*! SFT_EN_LCDIF_PIXEL_CLK - sft_en_lcdif_pixel_clk
- *  0b1..clock enable for lcdif_pixel_clk
  *  0b0..clock disable (gated) for lcdif_pixel_clk
+ *  0b1..clock enable for lcdif_pixel_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_PIXEL_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_PIXEL_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_PIXEL_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_APB_CLK_MASK (0x20U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_APB_CLK_SHIFT (5U)
 /*! SFT_EN_LCDIF_APB_CLK - sft_en_lcdif_apb_clk
- *  0b1..clock enable for lcdif_apb_clk
  *  0b0..clock disable (gated) for lcdif_apb_clk
+ *  0b1..clock enable for lcdif_apb_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_APB_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_APB_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_APB_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_PROC_CLK_MASK (0x40U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_PROC_CLK_SHIFT (6U)
 /*! SFT_EN_ISI_PROC_CLK - sft_en_isi_proc_clk
- *  0b1..clock enable for isi_proc_clk
  *  0b0..clock disable (gated) for isi_proc_clk
+ *  0b1..clock enable for isi_proc_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_PROC_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_PROC_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_PROC_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_APB_CLK_MASK (0x80U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_APB_CLK_SHIFT (7U)
 /*! SFT_EN_ISI_APB_CLK - sft_en_isi_apb_clk
- *  0b1..clock enable for isi_apb_clk
  *  0b0..clock disable (gated) for isi_apb_clk
+ *  0b1..clock enable for isi_apb_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_APB_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_APB_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISI_APB_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_BUS_BLK_CLK_MASK (0x100U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_BUS_BLK_CLK_SHIFT (8U)
 /*! SFT_EN_BUS_BLK_CLK - sft_en_bus_blk_clk
- *  0b1..clock enable for bus_blk_clk
  *  0b0..clock disable (gated) for bus_blk_clk
+ *  0b1..clock enable for bus_blk_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_BUS_BLK_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_BUS_BLK_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_BUS_BLK_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_PCLK_MASK (0x200U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_PCLK_SHIFT (9U)
 /*! SFT_EN_MIPI_CSI2_PCLK - sft_en_mipi_csi2_pclk
- *  0b1..clock enable for mipi_csi2_pclk
  *  0b0..clock disable (gated) for mipi_csi2_pclk
+ *  0b1..clock enable for mipi_csi2_pclk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_PCLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_PCLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_PCLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_ACLK_MASK (0x400U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_ACLK_SHIFT (10U)
 /*! SFT_EN_MIPI_CSI2_ACLK - sft_en_mipi_csi2_aclk
- *  0b1..clock enable for mipi_csi2_aclk
  *  0b0..clock disable (gated) for mipi_csi2_aclk
+ *  0b1..clock enable for mipi_csi2_aclk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_ACLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_ACLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_CSI2_ACLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_PIXEL_CLK_MASK (0x800U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_PIXEL_CLK_SHIFT (11U)
 /*! SFT_EN_LCDIF2_PIXEL_CLK - sft_en_lcdif2_pixel_clk
- *  0b1..clock enable for lcdif2_pixel_clk
  *  0b0..clock disable (gated) for lcdif2_pixel_clk
+ *  0b1..clock enable for lcdif2_pixel_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_PIXEL_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_PIXEL_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_PIXEL_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_APB_CLK_MASK (0x1000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_APB_CLK_SHIFT (12U)
 /*! SFT_EN_LCDIF2_APB_CLK - sft_en_lcdif2_apb_clk
- *  0b1..clock enable for lcdif2_apb_clk
  *  0b0..clock disable (gated) for lcdif2_apb_clk
+ *  0b1..clock enable for lcdif2_apb_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_APB_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_APB_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_APB_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_COR_CLK_MASK (0x10000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_COR_CLK_SHIFT (16U)
 /*! SFT_EN_ISP_COR_CLK - sft_en_isp_cor_clk
- *  0b1..clock enable for isp_cor_clk
  *  0b0..clock disable (gated) for isp_cor_clk
+ *  0b1..clock enable for isp_cor_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_COR_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_COR_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_COR_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AXI_CLK_MASK (0x20000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AXI_CLK_SHIFT (17U)
 /*! SFT_EN_ISP_AXI_CLK - sft_en_isp_axi_clk
- *  0b1..clock enable for isp_axi_clk
  *  0b0..clock disable (gated) for isp_axi_clk
+ *  0b1..clock enable for isp_axi_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AXI_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AXI_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AXI_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AHB_CLK_MASK (0x40000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AHB_CLK_SHIFT (18U)
 /*! SFT_EN_ISP_AHB_CLK - sft_en_isp_ahb_clk
- *  0b1..clock enable for isp_ahb_clk
  *  0b0..clock disable (gated) for isp_ahb_clk
+ *  0b1..clock enable for isp_ahb_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AHB_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AHB_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_ISP_AHB_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_COR_CLK_MASK (0x80000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_COR_CLK_SHIFT (19U)
 /*! SFT_EN_DWE_COR_CLK - sft_en_dwe_cor_clk
- *  0b1..clock enable for dwe_cor_clk
  *  0b0..clock disable (gated) for dwe_cor_clk
+ *  0b1..clock enable for dwe_cor_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_COR_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_COR_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_COR_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AXI_CLK_MASK (0x100000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AXI_CLK_SHIFT (20U)
 /*! SFT_EN_DWE_AXI_CLK - sft_en_dwe_axi_clk
- *  0b1..clock enable for dwe_axi_clk
  *  0b0..clock disable (gated) for dwe_axi_clk
+ *  0b1..clock enable for dwe_axi_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AXI_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AXI_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AXI_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AHB_CLK_MASK (0x200000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AHB_CLK_SHIFT (21U)
 /*! SFT_EN_DWE_AHB_CLK - sft_en_dwe_ahb_clk
- *  0b1..clock enable for dwe_ahb_clk
  *  0b0..clock disable (gated) for dwe_ahb_clk
+ *  0b1..clock enable for dwe_ahb_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AHB_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AHB_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_DWE_AHB_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI2_CLKREF_MASK (0x400000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI2_CLKREF_SHIFT (22U)
 /*! SFT_EN_MIPI_DSI2_CLKREF - sft_en_mipi_dsi2_CLKREF
- *  0b1..clock enable for mipi_dsi2_CLKREF
  *  0b0..clock disable (gated) for mipi_dsi2_CLKREF
+ *  0b1..clock enable for mipi_dsi2_CLKREF
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI2_CLKREF(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI2_CLKREF_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_MIPI_DSI2_CLKREF_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_AXI_CLK_MASK (0x800000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_AXI_CLK_SHIFT (23U)
 /*! SFT_EN_LCDIF_AXI_CLK - sft_en_lcdif_axi_clk
- *  0b1..clock enable for lcdif_axi_clk
  *  0b0..clock disable (gated) for lcdif_axi_clk
+ *  0b1..clock enable for lcdif_axi_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_AXI_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_AXI_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF_AXI_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_AXI_CLK_MASK (0x1000000U)
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_AXI_CLK_SHIFT (24U)
 /*! SFT_EN_LCDIF2_AXI_CLK - sft_en_lcdif2_axi_clk
- *  0b1..clock enable for lcdif2_axi_clk
  *  0b0..clock disable (gated) for lcdif2_axi_clk
+ *  0b1..clock enable for lcdif2_axi_clk
  */
 #define MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_AXI_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_AXI_CLK_SHIFT)) & MEDIA_BLK_CTRL_CLK_EN_SFT_EN_LCDIF2_AXI_CLK_MASK)
 /*! @} */
@@ -551,104 +578,104 @@ typedef struct {
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_RESETN_MASK (0x10000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_RESETN_SHIFT (16U)
 /*! GPR_MIPI_S_RESETN - GPR_MIPI_S_RESETN
- *  0b1..MIPI DPHY S_RESETN reset disable
  *  0b0..MIPI DPHY S_RESETN reset enable
+ *  0b1..MIPI DPHY S_RESETN reset disable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_RESETN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_RESETN_MASK (0x20000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_RESETN_SHIFT (17U)
 /*! GPR_MIPI_M_RESETN - GPR_MIPI_M_RESETN
- *  0b1..MIPI DPHY M_RESETN reset disable
  *  0b0..MIPI DPHY M_RESETN reset enable
+ *  0b1..MIPI DPHY M_RESETN reset disable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_RESETN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S3_BIASEN_MASK (0x40000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S3_BIASEN_SHIFT (18U)
 /*! GPR_CTRL_S3_BIASEN - GPR_CTRL_S3_BIASEN. Used in MIPI PHY
- *  0b1..S3_BIASEN active
  *  0b0..S3_BIASEN disable
+ *  0b1..S3_BIASEN active
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S3_BIASEN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S3_BIASEN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S3_BIASEN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S2_BIASEN_MASK (0x80000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S2_BIASEN_SHIFT (19U)
 /*! GPR_CTRL_S2_BIASEN - GPR_CTRL_S2_BIASEN. Used in MIPI PHY
- *  0b1..S2_BIASEN active
  *  0b0..S2_BIASEN disable
+ *  0b1..S2_BIASEN active
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S2_BIASEN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S2_BIASEN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S2_BIASEN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S1_BIASEN_MASK (0x100000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S1_BIASEN_SHIFT (20U)
 /*! GPR_CTRL_S1_BIASEN - GPR_CTRL_S1_BIASEN. Used in MIPI PHY
- *  0b1..S1_BIASEN active
  *  0b0..S1_BIASEN disable
+ *  0b1..S1_BIASEN active
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S1_BIASEN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S1_BIASEN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_S1_BIASEN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M2_BIASEN_MASK (0x200000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M2_BIASEN_SHIFT (21U)
 /*! GPR_CTRL_M2_BIASEN - GPR_CTRL_M2_BIASEN. Used in MIPI PHY
- *  0b1..M2_BIASEN active
  *  0b0..M2_BIASEN disable
+ *  0b1..M2_BIASEN active
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M2_BIASEN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M2_BIASEN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M2_BIASEN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M1_BIASEN_MASK (0x400000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M1_BIASEN_SHIFT (22U)
 /*! GPR_CTRL_M1_BIASEN - GPR_CTRL_M1_BIASEN. Used in MIPI PHY
- *  0b1..M1_BIASEN active
  *  0b0..M1_BIASEN disable
+ *  0b1..M1_BIASEN active
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M1_BIASEN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M1_BIASEN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_CTRL_M1_BIASEN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_DAT_MASK (0x800000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_DAT_SHIFT (23U)
 /*! GPR_MIPI_S_DPDN_SWAP_DAT - GPR_MIPI_S_DPDN_SWAP_DAT
- *  0b1..Master DPHY data lane DP and DN swap enable
  *  0b0..Master DPHY data lane DP and DN swap disable
+ *  0b1..Master DPHY data lane DP and DN swap enable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_DAT(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_DAT_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_DAT_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_CLK_MASK (0x1000000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_CLK_SHIFT (24U)
 /*! GPR_MIPI_S_DPDN_SWAP_CLK - GPR_MIPI_S_DPDN_SWAP_CLK
- *  0b1..Slave DPHY clock lane DP and DN swap enable
  *  0b0..Slave DPHY clock lane DP and DN swap disable
+ *  0b1..Slave DPHY clock lane DP and DN swap enable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_CLK_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S_DPDN_SWAP_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_DAT_MASK (0x2000000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_DAT_SHIFT (25U)
 /*! GPR_MIPI_M_DPDN_SWAP_DAT - GPR_MIPI_M_DPDN_SWAP_DAT
- *  0b1..Master DPHY data lane DP and DN swap enable
  *  0b0..Master DPHY data lane DP and DN swap disable
+ *  0b1..Master DPHY data lane DP and DN swap enable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_DAT(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_DAT_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_DAT_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_CLK_MASK (0x4000000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_CLK_SHIFT (26U)
 /*! GPR_MIPI_M_DPDN_SWAP_CLK - GPR_MIPI_M_DPDN_SWAP_CLK
- *  0b1..Master DPHY clock lane DP and DN swap enable
  *  0b0..Master DPHY clock lane DP and DN swap disable
+ *  0b1..Master DPHY clock lane DP and DN swap enable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_CLK(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_CLK_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M_DPDN_SWAP_CLK_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M2_RESETN_MASK (0x20000000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M2_RESETN_SHIFT (29U)
 /*! GPR_MIPI_M2_RESETN - GPR_MIPI_M2_RESETN
- *  0b1..MIPI DPHY M2_RESETN reset disable
  *  0b0..MIPI DPHY M2_RESETN reset enable
+ *  0b1..MIPI DPHY M2_RESETN reset disable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M2_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M2_RESETN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_M2_RESETN_MASK)
 
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S2_RESETN_MASK (0x40000000U)
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S2_RESETN_SHIFT (30U)
 /*! GPR_MIPI_S2_RESETN - GPR_MIPI_S2_RESETN
- *  0b1..MIPI DPHY S2_RESETN reset disable
  *  0b0..MIPI DPHY S2_RESETN reset enable
+ *  0b1..MIPI DPHY S2_RESETN reset disable
  */
 #define MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S2_RESETN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S2_RESETN_SHIFT)) & MEDIA_BLK_CTRL_MIPI_RESET_DIV_GPR_MIPI_S2_RESETN_MASK)
 /*! @} */
@@ -1627,16 +1654,16 @@ typedef struct {
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH0_DATA_WIDTH_MASK (0x20U)
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH0_DATA_WIDTH_SHIFT (5U)
 /*! CH0_DATA_WIDTH - ch0_data_width
- *  0b1..24bits
  *  0b0..18bits
+ *  0b1..24bits
  */
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH0_DATA_WIDTH(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_LDB_CTRL_CH0_DATA_WIDTH_SHIFT)) & MEDIA_BLK_CTRL_LDB_CTRL_CH0_DATA_WIDTH_MASK)
 
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH0_BIT_MAPPING_MASK (0x40U)
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH0_BIT_MAPPING_SHIFT (6U)
 /*! CH0_BIT_MAPPING - ch0_bit_mapping
- *  0b1..JEIDA mapping
  *  0b0..SPWG mapping
+ *  0b1..JEIDA mapping
  */
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH0_BIT_MAPPING(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_LDB_CTRL_CH0_BIT_MAPPING_SHIFT)) & MEDIA_BLK_CTRL_LDB_CTRL_CH0_BIT_MAPPING_MASK)
 
@@ -1648,24 +1675,24 @@ typedef struct {
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH1_BIT_MAPPING_MASK (0x100U)
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH1_BIT_MAPPING_SHIFT (8U)
 /*! CH1_BIT_MAPPING - ch1_bit_mapping
- *  0b1..JEIDA mapping
  *  0b0..SPWG mapping
+ *  0b1..JEIDA mapping
  */
 #define MEDIA_BLK_CTRL_LDB_CTRL_CH1_BIT_MAPPING(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_LDB_CTRL_CH1_BIT_MAPPING_SHIFT)) & MEDIA_BLK_CTRL_LDB_CTRL_CH1_BIT_MAPPING_MASK)
 
 #define MEDIA_BLK_CTRL_LDB_CTRL_DI0_VSYNC_POLARITY_MASK (0x200U)
 #define MEDIA_BLK_CTRL_LDB_CTRL_DI0_VSYNC_POLARITY_SHIFT (9U)
 /*! DI0_VSYNC_POLARITY - di0 VSYNC polarity select
- *  0b1..positive polarity
  *  0b0..negative polarity
+ *  0b1..positive polarity
  */
 #define MEDIA_BLK_CTRL_LDB_CTRL_DI0_VSYNC_POLARITY(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_LDB_CTRL_DI0_VSYNC_POLARITY_SHIFT)) & MEDIA_BLK_CTRL_LDB_CTRL_DI0_VSYNC_POLARITY_MASK)
 
 #define MEDIA_BLK_CTRL_LDB_CTRL_DI1_VSYNC_POLARITY_MASK (0x400U)
 #define MEDIA_BLK_CTRL_LDB_CTRL_DI1_VSYNC_POLARITY_SHIFT (10U)
 /*! DI1_VSYNC_POLARITY - di1 VSYNC polarity select
- *  0b1..positive polarity
  *  0b0..negative polarity
+ *  0b1..positive polarity
  */
 #define MEDIA_BLK_CTRL_LDB_CTRL_DI1_VSYNC_POLARITY(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_LDB_CTRL_DI1_VSYNC_POLARITY_SHIFT)) & MEDIA_BLK_CTRL_LDB_CTRL_DI1_VSYNC_POLARITY_MASK)
 
@@ -1686,32 +1713,32 @@ typedef struct {
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_ENABLE_MASK (0x1U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_ENABLE_SHIFT (0U)
 /*! GASKET_0_ENABLE - Gasket 0 enable
- *  0b1..Gasket 0 output enable
  *  0b0..Gasket output disable
+ *  0b1..Gasket 0 output enable
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_ENABLE_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_ENABLE_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_DOUBLE_COMP_MASK (0x2U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_DOUBLE_COMP_SHIFT (1U)
 /*! GASKET_0_DOUBLE_COMP - Gasket 0 double component enable
- *  0b1..Gasket 0 input double component per pixel clock for YUV422
  *  0b0..Gasket 0 input single component per pixel clock for YUV422
+ *  0b1..Gasket 0 input double component per pixel clock for YUV422
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_DOUBLE_COMP(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_DOUBLE_COMP_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_DOUBLE_COMP_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LEFT_JUST_MODE_MASK (0x4U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LEFT_JUST_MODE_SHIFT (2U)
 /*! GASKET_0_LEFT_JUST_MODE - Gasket 0 Left justified mode
- *  0b1..unused LSB equal most significant bit of valid data
  *  0b0..unused LSB equal lease significant bit of valid data
+ *  0b1..unused LSB equal most significant bit of valid data
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LEFT_JUST_MODE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LEFT_JUST_MODE_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LEFT_JUST_MODE_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_YUV420_LINE_SEL_MASK (0x8U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_YUV420_LINE_SEL_SHIFT (3U)
 /*! GASKET_0_YUV420_LINE_SEL - Gasket 0 YUV420 ODD/EVEN line first select
- *  0b1..Gasket 0 EVEN line first for YUV420 data type
  *  0b0..Gasket 0 ODD line first for YUV420 data type
+ *  0b1..Gasket 0 EVEN line first for YUV420 data type
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_YUV420_LINE_SEL(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_YUV420_LINE_SEL_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_YUV420_LINE_SEL_MASK)
 
@@ -1723,10 +1750,10 @@ typedef struct {
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_INTER_MODE_MASK (0xC0U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_INTER_MODE_SHIFT (6U)
 /*! GASKET_0_INTER_MODE - Gasket 0 interlace mode
- *  0b11..reserved
- *  0b10..interlaced right
- *  0b01..interlaced left
  *  0b00..not interlaced
+ *  0b01..interlaced left
+ *  0b10..interlaced right
+ *  0b11..reserved
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_INTER_MODE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_INTER_MODE_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_INTER_MODE_MASK)
 
@@ -1755,18 +1782,18 @@ typedef struct {
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_SRC_SEL_MASK (0xC000U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_SRC_SEL_SHIFT (14U)
 /*! GASKET_0_SRC_SEL - Gasket 0 source when support ISI de-interlace line_doubling mode
- *  0b11..source from mipi_csi channel 3
- *  0b10..source from mipi_csi channel 2
- *  0b01..source from mipi_csi channel 1
  *  0b00..source from mipi_csi channel 0
+ *  0b01..source from mipi_csi channel 1
+ *  0b10..source from mipi_csi channel 2
+ *  0b11..source from mipi_csi channel 3
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_SRC_SEL(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_SRC_SEL_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_SRC_SEL_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LINE_DOUBLING_EN_MASK (0x10000U)
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LINE_DOUBLING_EN_SHIFT (16U)
 /*! GASKET_0_LINE_DOUBLING_EN - Gasket 0 output for ISI de-interlace line_doubling mode enable
- *  0b1..Gasket 0 output for ISI de-interlace line_doubling mode
  *  0b0..Gasket 0 not output for ISI de-interlace line_doubling mode
+ *  0b1..Gasket 0 output for ISI de-interlace line_doubling mode
  */
 #define MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LINE_DOUBLING_EN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LINE_DOUBLING_EN_SHIFT)) & MEDIA_BLK_CTRL_GASKET_0_CTRL_GASKET_0_LINE_DOUBLING_EN_MASK)
 
@@ -1873,32 +1900,32 @@ typedef struct {
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_ENABLE_MASK (0x1U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_ENABLE_SHIFT (0U)
 /*! GASKET_1_ENABLE - Gasket 1 enable
- *  0b1..Gasket 1 output enable;
  *  0b0..Gasket output disable
+ *  0b1..Gasket 1 output enable;
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_ENABLE_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_ENABLE_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_DOUBLE_COMP_MASK (0x2U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_DOUBLE_COMP_SHIFT (1U)
 /*! GASKET_1_DOUBLE_COMP - Gasket 1 double component enable
- *  0b1..Gasket 1 input double component per pixel clock for YUV422
  *  0b0..Gasket 1 input single component per pixel clock for YUV422
+ *  0b1..Gasket 1 input double component per pixel clock for YUV422
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_DOUBLE_COMP(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_DOUBLE_COMP_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_DOUBLE_COMP_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LEFT_JUST_MODE_MASK (0x4U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LEFT_JUST_MODE_SHIFT (2U)
 /*! GASKET_1_LEFT_JUST_MODE - Gasket 1 Left justified mode
- *  0b1..unused LSB equal most significant bit of valid data
  *  0b0..unused LSB equal lease significant bit of valid data
+ *  0b1..unused LSB equal most significant bit of valid data
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LEFT_JUST_MODE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LEFT_JUST_MODE_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LEFT_JUST_MODE_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_YUV420_LINE_SEL_MASK (0x8U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_YUV420_LINE_SEL_SHIFT (3U)
 /*! GASKET_1_YUV420_LINE_SEL - Gasket 1 YUV420 ODD/EVEN line first select
- *  0b1..Gasket 1 EVEN line first for YUV420 data type
  *  0b0..Gasket 1 ODD line first for YUV420 data type
+ *  0b1..Gasket 1 EVEN line first for YUV420 data type
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_YUV420_LINE_SEL(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_YUV420_LINE_SEL_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_YUV420_LINE_SEL_MASK)
 
@@ -1910,10 +1937,10 @@ typedef struct {
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_INTER_MODE_MASK (0xC0U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_INTER_MODE_SHIFT (6U)
 /*! GASKET_1_INTER_MODE - Gasket 1 interlace mode
- *  0b11..reserved
- *  0b10..interlaced right
- *  0b01..interlaced left
  *  0b00..not interlaced
+ *  0b01..interlaced left
+ *  0b10..interlaced right
+ *  0b11..reserved
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_INTER_MODE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_INTER_MODE_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_INTER_MODE_MASK)
 
@@ -1942,18 +1969,18 @@ typedef struct {
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_SRC_SEL_MASK (0xC000U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_SRC_SEL_SHIFT (14U)
 /*! GASKET_1_SRC_SEL - Gasket 1 source when support ISI de-interlace line_doubling mode
- *  0b11..source from mipi_csi channel 3
- *  0b10..source from mipi_csi channel 2
- *  0b01..source from mipi_csi channel 1
  *  0b00..source from mipi_csi channel 0
+ *  0b01..source from mipi_csi channel 1
+ *  0b10..source from mipi_csi channel 2
+ *  0b11..source from mipi_csi channel 3
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_SRC_SEL(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_SRC_SEL_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_SRC_SEL_MASK)
 
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LINE_DOUBLING_EN_MASK (0x10000U)
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LINE_DOUBLING_EN_SHIFT (16U)
 /*! GASKET_1_LINE_DOUBLING_EN - Gasket 1 output for ISI de-interlace line_doubling mode enable
- *  0b1..Gasket 1 output for ISI de-interlace line_doubling mode
  *  0b0..Gasket 0 not output for ISI de-interlace line_doubling mode
+ *  0b1..Gasket 1 output for ISI de-interlace line_doubling mode
  */
 #define MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LINE_DOUBLING_EN(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LINE_DOUBLING_EN_SHIFT)) & MEDIA_BLK_CTRL_GASKET_1_CTRL_GASKET_1_LINE_DOUBLING_EN_MASK)
 
@@ -2504,10 +2531,10 @@ typedef struct {
 #define MEDIA_BLK_CTRL_ISP_DEWARP_CONTROL_ISP_ID_MODE_MASK (0x1800000U)
 #define MEDIA_BLK_CTRL_ISP_DEWARP_CONTROL_ISP_ID_MODE_SHIFT (23U)
 /*! ISP_ID_MODE - isp_id_mode
- *  0b11..vc_id_02 toggle 0,1,2 during no data transmit;
- *  0b10..vc_id_01 toggle 0,1 during no data transmit;
- *  0b01..vc_id_012 toggle 0,2 during no data transmit;
  *  0b00..vc_id_disable; ID will not toggle during no data transmit;
+ *  0b01..vc_id_012 toggle 0,2 during no data transmit;
+ *  0b10..vc_id_01 toggle 0,1 during no data transmit;
+ *  0b11..vc_id_02 toggle 0,1,2 during no data transmit;
  */
 #define MEDIA_BLK_CTRL_ISP_DEWARP_CONTROL_ISP_ID_MODE(x) (((uint32_t)(((uint32_t)(x)) << MEDIA_BLK_CTRL_ISP_DEWARP_CONTROL_ISP_ID_MODE_SHIFT)) & MEDIA_BLK_CTRL_ISP_DEWARP_CONTROL_ISP_ID_MODE_MASK)
 /*! @} */
@@ -2548,5 +2575,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MEDIA_BLK_CTRL_H_ */
+#endif  /* PERI_MEDIA_BLK_CTRL_H_ */
 

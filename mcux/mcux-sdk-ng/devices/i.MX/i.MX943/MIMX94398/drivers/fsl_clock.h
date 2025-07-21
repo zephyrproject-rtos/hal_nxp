@@ -8,6 +8,9 @@
 #define _FSL_CLOCK_H_
 
 #include "fsl_common.h"
+#include "scmi.h"
+#include "scmi_clock.h"
+#include "scmi_internal.h"
 
 /*!
  * @brief CCM reg macros to map corresponding registers.
@@ -238,25 +241,6 @@
 /*******************************************************************************
  * PLL Definitions
  ******************************************************************************/
-#if 0
-/*! @brief PLL initialzation data. */
-typedef struct _fracn_pll_init
-{
-    uint32_t rdiv;
-    uint32_t mfi;
-    uint32_t mfn;
-    uint32_t mfd;
-    uint32_t odiv;
-} fracn_pll_init_t;
-
-/*! @brief PLL PFD initialzation data. */
-typedef struct _fracn_pll_pfd_init
-{
-    uint32_t mfi;
-    uint32_t mfn;
-    bool div2_en;
-} fracn_pll_pfd_init_t;
-#endif
 
 /* Types */
 typedef struct
@@ -272,6 +256,202 @@ typedef struct
     uint32_t selShift;
     uint32_t selMux[CLOCK_NUM_GPR_MUX_SEL];
 } ccm_gpr_sel_attr_t;
+
+/*!
+ * @brief Clock ID
+ */
+typedef enum _clock_ip_name
+{
+    /* unify clock id for clock sources and ips */
+    /* clock id for clock sources */
+    kCLOCK_Ext = 0, /* clock id for EXT_CLK */
+    kCLOCK_Osc32k = 1, /* clock id for OSC_32K_CLK */
+    kCLOCK_Osc24m = 2, /* clock id for OSC_24M_CLK */
+    kCLOCK_Fro = 3, /* clock id for FRO_CLK */
+    kCLOCK_Syspll1ctl = 4, /* clock id for SYS_PLL1_CTL */
+    kCLOCK_Syspll1dfs0ctl = 5, /* clock id for SYS_PLL1_DFS0_CTL */
+    kCLOCK_Syspll1dfs0 = 6, /* clock id for SYS_PLL1_DFS0_CLK */
+    kCLOCK_Syspll1dfs0div2 = 7, /* clock id for SYS_PLL1_DFS0_DIV2_CLK */
+    kCLOCK_Syspll1dfs1ctl = 8, /* clock id for SYS_PLL1_DFS1_CTL */
+    kCLOCK_Syspll1dfs1 = 9, /* clock id for SYS_PLL1_DFS1_CLK */
+    kCLOCK_Syspll1dfs1div2 = 10, /* clock id for SYS_PLL1_DFS1_DIV2_CLK */
+    kCLOCK_Syspll1dfs2ctl = 11, /* clock id for SYS_PLL1_DFS2_CTL */
+    kCLOCK_Syspll1dfs2 = 12, /* clock id for SYS_PLL1_DFS2_CLK */
+    kCLOCK_Syspll1dfs2div2 = 13, /* clock id for SYS_PLL1_DFS2_DIV2_CLK */
+    kCLOCK_Audiopll1ctl = 14, /* clock id for AUDIO_PLL1_CTL */
+    kCLOCK_Audiopll1 = 15, /* clock id for AUDIO_PLL1_CLK */
+    kCLOCK_Audiopll2ctl = 16, /* clock id for AUDIO_PLL2_CTL */
+    kCLOCK_Audiopll2 = 17, /* clock id for AUDIO_PLL2_CLK */
+    kCLOCK_Videopll1ctl = 18, /* clock id for VIDEO_PLL1_CTL(The clock source dose not exist) */
+    kCLOCK_Videopll1 = 19, /* clock id for VIDEO_PLL1_CLK(The clock source dose not exist) */
+    kCLOCK_Videopll2ctl = 20, /* clock id for VIDEO_PLL2_CTL(The clock source dose not exist) */
+    kCLOCK_Videopll2 = 21, /* clock id for VIDEO_PLL2_CLK(The clock source dose not exist) */
+    kCLOCK_Videopll3ctl = 22, /* clock id for VIDEO_PLL3_CTL(The clock source dose not exist) */
+    kCLOCK_Videopll3 = 23, /* clock id for VIDEO_PLL3_CLK(The clock source dose not exist) */
+    kCLOCK_Encoderpllctl = 24, /* clock id for ENCODER_PLL_CTL */
+    kCLOCK_Encoderplldfs0ctl = 25, /* clock id for ENCODER_PLL_DFS0_CTL */
+    kCLOCK_Encoderplldfs0 = 26, /* clock id for ENCODER_PLL_DFS0_CLK */
+    kCLOCK_Encoderplldfs1ctl = 27, /* clock id for ENCODER_PLL_DFS1_CTL */
+    kCLOCK_Encoderplldfs1 = 28, /* clock id for ENCODER_PLL_DFS1_CLK */
+    kCLOCK_Armpllctl = 29, /* clock id for ARM_PLL_CTL */
+    kCLOCK_Armplldfs0ctl = 30, /* clock id for ARM_PLL_DFS0_CTL */
+    kCLOCK_Armplldfs0 = 31, /* clock id for ARM_PLL_DFS0_CLK */
+    kCLOCK_Armplldfs1ctl = 32, /* clock id for ARM_PLL_DFS1_CTL */
+    kCLOCK_Armplldfs1 = 33, /* clock id for ARM_PLL_DFS1_CLK */
+    kCLOCK_Armplldfs2ctl = 34, /* clock id for ARM_PLL_DFS2_CTL */
+    kCLOCK_Armplldfs2 = 35, /* clock id for ARM_PLL_DFS2_CLK */
+    kCLOCK_Armplldfs3ctl = 36, /* clock id for ARM_PLL_DFS3_CTL */
+    kCLOCK_Armplldfs3 = 37, /* clock id for ARM_PLL_DFS3_CLK */
+    kCLOCK_Drampllctl = 38, /* clock id for DRAM_PLL_CTL */
+    kCLOCK_Drampll = 39, /* clock id for DRAM_PLL_CLK */
+    kCLOCK_Hsiopllctl = 40, /* clock id for HSIO_PLL_CTL */
+    kCLOCK_Hsiopll = 41, /* clock id for HSIO_PLL_CLK */
+    kCLOCK_Ldbpllctl = 42, /* clock id for LDB_PLL_CTL */
+    kCLOCK_Ldbpll = 43, /* clock id for LDB_PLL_CLK */
+    kCLOCK_Extl   = 44, /* clock id for ext1(from components/imx_sm/devices/MIMX943/drivers/fsl_clock.h) */
+    kCLOCK_Ext2   = 45, /* clock id for ext2(from components/imx_sm/devices/MIMX943/drivers/fsl_clock.h) */
+
+    /* clock id for ips */
+    kCLOCK_Adc = CLOCK_NUM_SRC + 0, /* clock id for ADC */
+    kCLOCK_Busaon = CLOCK_NUM_SRC + 1, /* clock id for BUS AON */
+    kCLOCK_Can1 = CLOCK_NUM_SRC + 2, /* clock id for CAN1 */
+    kCLOCK_Glitchfilter = CLOCK_NUM_SRC + 3, /* clock id for GLITCHFILTER */
+    kCLOCK_Gpt1 = CLOCK_NUM_SRC + 4, /* clock id for GPT1 */
+    kCLOCK_I3c1slow = CLOCK_NUM_SRC + 5, /* clock id for I3C1 SLOW */
+    kCLOCK_Lpi2c1 = CLOCK_NUM_SRC + 6, /* clock id for LPI2C1 */
+    kCLOCK_Lpi2c2 = CLOCK_NUM_SRC + 7, /* clock id for LPI2C2 */
+    kCLOCK_Lpspi1 = CLOCK_NUM_SRC + 8, /* clock id for LPSPI1 */
+    kCLOCK_Lpspi2 = CLOCK_NUM_SRC + 9, /* clock id for LPSPI2 */
+    kCLOCK_Lptmr1 = CLOCK_NUM_SRC + 10, /* clock id for LPTMR1 */
+    kCLOCK_Lpuart1 = CLOCK_NUM_SRC + 11, /* clock id for LPUART1 */
+    kCLOCK_Lpuart2 = CLOCK_NUM_SRC + 12, /* clock id for LPUART2 */
+    kCLOCK_M33 = CLOCK_NUM_SRC + 13, /* clock id for M33 */
+    kCLOCK_M33systick = CLOCK_NUM_SRC + 14, /* clock id for M33 SYSTICK */
+    kCLOCK_Pdm = CLOCK_NUM_SRC + 15, /* clock id for PDM */
+    kCLOCK_Sai1 = CLOCK_NUM_SRC + 16, /* clock id for SAI1 */
+    kCLOCK_Tpm2 = CLOCK_NUM_SRC + 17, /* clock id for TPM2 */
+    kCLOCK_Arma55 = CLOCK_NUM_SRC + 18, /* clock id for ARM A55 */
+    kCLOCK_Arma55mtrbus  = CLOCK_NUM_SRC + 19, /* clock id for ARM A55 MTR BUS  */
+    kCLOCK_Arma55periph = CLOCK_NUM_SRC + 20, /* clock id for ARM A55 PERIPH */
+    kCLOCK_Dramalt = CLOCK_NUM_SRC + 21, /* clock id for DRAM ALT */
+    kCLOCK_Dramapb = CLOCK_NUM_SRC + 22, /* clock id for DRAM APB */
+    kCLOCK_Dispapb = CLOCK_NUM_SRC + 23, /* clock id for DISP APB */
+    kCLOCK_Dispaxi = CLOCK_NUM_SRC + 24, /* clock id for DISP AXI */
+    kCLOCK_Disppix = CLOCK_NUM_SRC + 25, /* clock id for DISP PIX */
+    kCLOCK_Hsioacscan480m = CLOCK_NUM_SRC + 26, /* clock id for HSIO ACSCAN 480M */
+    kCLOCK_Hsioacscan80m = CLOCK_NUM_SRC + 27, /* clock id for HSIO ACSCAN 80M */
+    kCLOCK_Hsio = CLOCK_NUM_SRC + 28, /* clock id for HSIO */
+    kCLOCK_Hsiopcieaux = CLOCK_NUM_SRC + 29, /* clock id for HSIO PCIE AUX */
+    kCLOCK_Hsiopcietest160m = CLOCK_NUM_SRC + 30, /* clock id for HSIO PCIE TEST 160M */
+    kCLOCK_Hsiopcietest400m = CLOCK_NUM_SRC + 31, /* clock id for HSIO PCIE TEST 400M */
+    kCLOCK_Hsiopcietest500m = CLOCK_NUM_SRC + 32, /* clock id for HSIO PCIE TEST 500M */
+    kCLOCK_Hsiousbtest50m = CLOCK_NUM_SRC + 33, /* clock id for HSIO USB TEST 50M */
+    kCLOCK_Hsiousbtest60m = CLOCK_NUM_SRC + 34, /* clock id for HSIO USB TEST 60M */
+    kCLOCK_Busm70 = CLOCK_NUM_SRC + 35, /* clock id for BUS M7 0 */
+    kCLOCK_M70 = CLOCK_NUM_SRC + 36, /* clock id for M7 0 */
+    kCLOCK_M70systick = CLOCK_NUM_SRC + 37, /* clock id for M7 0 SYSTICK */
+    kCLOCK_Busm71 = CLOCK_NUM_SRC + 38, /* clock id for BUS M7 1 */
+    kCLOCK_M71 = CLOCK_NUM_SRC + 39, /* clock id for M7 1 */
+    kCLOCK_M71systick = CLOCK_NUM_SRC + 40, /* clock id for M7 1 SYSTICK */
+    kCLOCK_Busnetcmix = CLOCK_NUM_SRC + 41, /* clock id for BUS NETCMIX */
+    kCLOCK_Ecat = CLOCK_NUM_SRC + 42, /* clock id for ECAT */
+    kCLOCK_Enet = CLOCK_NUM_SRC + 43, /* clock id for ENET */
+    kCLOCK_Enetphytest200m = CLOCK_NUM_SRC + 44, /* clock id for ENET PHY TEST 200M */
+    kCLOCK_Enetphytest500m = CLOCK_NUM_SRC + 45, /* clock id for ENET PHY TEST 500M */
+    kCLOCK_Enetphytest667m = CLOCK_NUM_SRC + 46, /* clock id for ENET PHY TEST 667M */
+    kCLOCK_Enetref = CLOCK_NUM_SRC + 47, /* clock id for ENET REF */
+    kCLOCK_Enettimer1 = CLOCK_NUM_SRC + 48, /* clock id for ENET TIMER1 */
+    kCLOCK_Enettimer2 = CLOCK_NUM_SRC + 49, /* clock id for ENET TIMER2 */
+    kCLOCK_Enettimer3 = CLOCK_NUM_SRC + 50, /* clock id for ENET TIMER3 */
+    kCLOCK_Flexio3 = CLOCK_NUM_SRC + 51, /* clock id for FLEXIO3 */
+    kCLOCK_Flexio4 = CLOCK_NUM_SRC + 52, /* clock id for FLEXIO4 */
+    kCLOCK_M33sync = CLOCK_NUM_SRC + 53, /* clock id for M33 SYNC */
+    kCLOCK_M33syncsystick = CLOCK_NUM_SRC + 54, /* clock id for M33 SYNC SYSTICK */
+    kCLOCK_Mac0 = CLOCK_NUM_SRC + 55, /* clock id for MAC0 */
+    kCLOCK_Mac1 = CLOCK_NUM_SRC + 56, /* clock id for MAC1 */
+    kCLOCK_Mac2 = CLOCK_NUM_SRC + 57, /* clock id for MAC2 */
+    kCLOCK_Mac3 = CLOCK_NUM_SRC + 58, /* clock id for MAC3 */
+    kCLOCK_Mac4 = CLOCK_NUM_SRC + 59, /* clock id for MAC4 */
+    kCLOCK_Mac5 = CLOCK_NUM_SRC + 60, /* clock id for MAC5 */
+    kCLOCK_Nocapb = CLOCK_NUM_SRC + 61, /* clock id for NOC APB */
+    kCLOCK_Noc = CLOCK_NUM_SRC + 62, /* clock id for NOC */
+    kCLOCK_Npuapb = CLOCK_NUM_SRC + 63, /* clock id for NPU APB */
+    kCLOCK_Npu = CLOCK_NUM_SRC + 64, /* clock id for NPU */
+    kCLOCK_Ccmcko1 = CLOCK_NUM_SRC + 65, /* clock id for CCM CKO1 */
+    kCLOCK_Ccmcko2 = CLOCK_NUM_SRC + 66, /* clock id for CCM CKO2 */
+    kCLOCK_Ccmcko3 = CLOCK_NUM_SRC + 67, /* clock id for CCM CKO3 */
+    kCLOCK_Ccmcko4 = CLOCK_NUM_SRC + 68, /* clock id for CCM CKO4 */
+    kCLOCK_Biss = CLOCK_NUM_SRC + 69, /* clock id for BISS */
+    kCLOCK_Buswakeup = CLOCK_NUM_SRC + 70, /* clock id for BUS WAKEUP */
+    kCLOCK_Ewm = CLOCK_NUM_SRC + 70, /* clock id for EWM */
+    kCLOCK_Ewm0 = CLOCK_NUM_SRC + 70, /* clock id for EWM */
+    kCLOCK_Can2 = CLOCK_NUM_SRC + 71, /* clock id for CAN2 */
+    kCLOCK_Can3 = CLOCK_NUM_SRC + 72, /* clock id for CAN3 */
+    kCLOCK_Can4 = CLOCK_NUM_SRC + 73, /* clock id for CAN4 */
+    kCLOCK_Can5 = CLOCK_NUM_SRC + 74, /* clock id for CAN5 */
+    kCLOCK_Endat21 = CLOCK_NUM_SRC + 75, /* clock id for ENDAT2 1 */
+    kCLOCK_Endat22 = CLOCK_NUM_SRC + 76, /* clock id for ENDAT2 2 */
+    kCLOCK_Endat31fast = CLOCK_NUM_SRC + 77, /* clock id for ENDAT3 1 FAST */
+    kCLOCK_Endat31slow = CLOCK_NUM_SRC + 78, /* clock id for ENDAT3 1 SLOW */
+    kCLOCK_Flexio1 = CLOCK_NUM_SRC + 79, /* clock id for FLEXIO1 */
+    kCLOCK_Flexio2 = CLOCK_NUM_SRC + 80, /* clock id for FLEXIO2 */
+    kCLOCK_Gpt2 = CLOCK_NUM_SRC + 81, /* clock id for GPT2 */
+    kCLOCK_Gpt3 = CLOCK_NUM_SRC + 82, /* clock id for GPT3 */
+    kCLOCK_Gpt4 = CLOCK_NUM_SRC + 83, /* clock id for GPT4 */
+    kCLOCK_Hiperface1 = CLOCK_NUM_SRC + 84, /* clock id for HIPERFACE1 */
+    kCLOCK_Hiperface1sync = CLOCK_NUM_SRC + 85, /* clock id for HIPERFACE1 SYNC */
+    kCLOCK_Hiperface2 = CLOCK_NUM_SRC + 86, /* clock id for HIPERFACE2 */
+    kCLOCK_Hiperface2sync = CLOCK_NUM_SRC + 87, /* clock id for HIPERFACE2 SYNC */
+    kCLOCK_I3c2slow = CLOCK_NUM_SRC + 88, /* clock id for I3C2 SLOW */
+    kCLOCK_Lpi2c3 = CLOCK_NUM_SRC + 89, /* clock id for LPI2C3 */
+    kCLOCK_Lpi2c4 = CLOCK_NUM_SRC + 90, /* clock id for LPI2C4 */
+    kCLOCK_Lpi2c5 = CLOCK_NUM_SRC + 91, /* clock id for LPI2C5 */
+    kCLOCK_Lpi2c6 = CLOCK_NUM_SRC + 92, /* clock id for LPI2C6 */
+    kCLOCK_Lpi2c7 = CLOCK_NUM_SRC + 93, /* clock id for LPI2C7 */
+    kCLOCK_Lpi2c8 = CLOCK_NUM_SRC + 94, /* clock id for LPI2C8 */
+    kCLOCK_Lpspi3 = CLOCK_NUM_SRC + 95, /* clock id for LPSPI3 */
+    kCLOCK_Lpspi4 = CLOCK_NUM_SRC + 96, /* clock id for LPSPI4 */
+    kCLOCK_Lpspi5 = CLOCK_NUM_SRC + 97, /* clock id for LPSPI5 */
+    kCLOCK_Lpspi6 = CLOCK_NUM_SRC + 98, /* clock id for LPSPI6 */
+    kCLOCK_Lpspi7 = CLOCK_NUM_SRC + 99, /* clock id for LPSPI7 */
+    kCLOCK_Lpspi8 = CLOCK_NUM_SRC + 100, /* clock id for LPSPI8 */
+    kCLOCK_Lptmr2 = CLOCK_NUM_SRC + 101, /* clock id for LPTMR2 */
+    kCLOCK_Lpuart10 = CLOCK_NUM_SRC + 102, /* clock id for LPUART10 */
+    kCLOCK_Lpuart11 = CLOCK_NUM_SRC + 103, /* clock id for LPUART11 */
+    kCLOCK_Lpuart12 = CLOCK_NUM_SRC + 104, /* clock id for LPUART12 */
+    kCLOCK_Lpuart3 = CLOCK_NUM_SRC + 105, /* clock id for LPUART3 */
+    kCLOCK_Lpuart4 = CLOCK_NUM_SRC + 106, /* clock id for LPUART4 */
+    kCLOCK_Lpuart5 = CLOCK_NUM_SRC + 107, /* clock id for LPUART5 */
+    kCLOCK_Lpuart6 = CLOCK_NUM_SRC + 108, /* clock id for LPUART6 */
+    kCLOCK_Lpuart7 = CLOCK_NUM_SRC + 109, /* clock id for LPUART7 */
+    kCLOCK_Lpuart8 = CLOCK_NUM_SRC + 110, /* clock id for LPUART8 */
+    kCLOCK_Lpuart9 = CLOCK_NUM_SRC + 111, /* clock id for LPUART9 */
+    kCLOCK_Sai2 = CLOCK_NUM_SRC + 112, /* clock id for SAI2 */
+    kCLOCK_Sai3 = CLOCK_NUM_SRC + 113, /* clock id for SAI3 */
+    kCLOCK_Sai4 = CLOCK_NUM_SRC + 114, /* clock id for SAI4 */
+    kCLOCK_Swotrace = CLOCK_NUM_SRC + 115, /* clock id for SWO TRACE */
+    kCLOCK_Tpm4 = CLOCK_NUM_SRC + 116, /* clock id for TPM4 */
+    kCLOCK_Tpm5 = CLOCK_NUM_SRC + 117, /* clock id for TPM5 */
+    kCLOCK_Tpm6 = CLOCK_NUM_SRC + 118, /* clock id for TPM6 */
+    kCLOCK_Usbphyburunin = CLOCK_NUM_SRC + 119, /* clock id for USB PHY BURUNIN */
+    kCLOCK_Usdhc1 = CLOCK_NUM_SRC + 120, /* clock id for USDHC1 */
+    kCLOCK_Usdhc2 = CLOCK_NUM_SRC + 121, /* clock id for USDHC2 */
+    kCLOCK_Usdhc3 = CLOCK_NUM_SRC + 122, /* clock id for USDHC3 */
+    kCLOCK_V2xpk = CLOCK_NUM_SRC + 123, /* clock id for V2X PK */
+    kCLOCK_Wakeupaxi = CLOCK_NUM_SRC + 124, /* clock id for WAKEUP AXI */
+    kCLOCK_Xspislvroot = CLOCK_NUM_SRC + 125, /* clock id for XSPI SLV ROOT */
+    kCLOCK_Xspi1 = CLOCK_NUM_SRC + 126, /* clock id for XSPI1 */
+    kCLOCK_Xspi2 = CLOCK_NUM_SRC + 127, /* clock id for XSPI2 */
+    kCLOCK_IpInvalid          = CLOCK_NUM_SRC + 128
+} clock_ip_name_t;
+
+typedef struct _clk
+{
+    clock_ip_name_t clkId; /* clock device id */
+    clock_ip_name_t pclkId; /* parent clock device id */
+    uint32_t clkRoundOpt; /* clock round options */
+    uint64_t rate; /* clock rate */
+} clk_t;
 
 /*!
  * CCM CGC attribute structure
@@ -300,258 +480,9 @@ extern const ccm_gpr_sel_attr_t g_clockGprSel[CLOCK_NUM_GPR_SEL];
 /*! CCM CGC attributes */
 extern const ccm_cgc_attr_t g_clockCgcAttr[CLOCK_NUM_CGC];
 
-#if 0
-/*!
- * @brief PLL init.
- *
- * @param pll PLL base addr.
- * @param pll_cfg PLL initailization data.
- */
-static inline void CLOCK_PllInit(PLL_Type *pll, const fracn_pll_init_t *pll_cfg)
-{
-    /* Bypass PLL */
-    pll->CTRL.SET = PLL_CTRL_CLKMUX_BYPASS_MASK;
-    /* Disable output and PLL */
-    pll->CTRL.CLR = PLL_CTRL_CLKMUX_EN_MASK | PLL_CTRL_POWERUP_MASK;
-    /* Set rdiv, mfi, and odiv */
-    pll->DIV.RW = PLL_DIV_RDIV(pll_cfg->rdiv) | PLL_DIV_MFI(pll_cfg->mfi) | PLL_DIV_ODIV(pll_cfg->odiv);
-    /* Disable spread spectrum modulation */
-    pll->SPREAD_SPECTRUM.CLR = PLL_SPREAD_SPECTRUM_ENABLE_MASK;
-    /* Set mfn and mfd */
-    pll->NUMERATOR.RW   = PLL_NUMERATOR_MFN(pll_cfg->mfn);
-    pll->DENOMINATOR.RW = PLL_DENOMINATOR_MFD(pll_cfg->mfd);
-
-    /* Power up for locking */
-    pll->CTRL.SET = PLL_CTRL_POWERUP_MASK;
-    while (!(pll->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK))
-    {
-    }
-
-    /* Enable PLL and clean bypass*/
-    pll->CTRL.SET = PLL_CTRL_CLKMUX_EN_MASK;
-    pll->CTRL.CLR = PLL_CTRL_CLKMUX_BYPASS_MASK;
-    __DSB();
-    __ISB();
-}
-
-/*!
- * @brief PLL PFD init.
- *
- * @param pll PLL base addr.
- * @param pfd_n The PFD index number.
- * @param pfd_cfg PLL PFD initailization data.
- */
-static inline void CLOCK_PllPfdInit(PLL_Type *pll, uint32_t pfd_n, const fracn_pll_pfd_init_t *pfd_cfg)
-{
-    /* Bypass DFS*/
-    pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_BYPASS_EN_MASK;
-    /* Disable output and DFS */
-    pll->DFS[pfd_n].DFS_CTRL.CLR = PLL_DFS_CLKOUT_EN_MASK | PLL_DFS_ENABLE_MASK;
-    /* Set mfi and mfn */
-    pll->DFS[pfd_n].DFS_DIV.RW = PLL_DFS_MFI(pfd_cfg->mfi) | PLL_DFS_MFN(pfd_cfg->mfn);
-    /* Enable output and DFS*/
-    pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_CLKOUT_EN_MASK;
-    /* Enable div2 */
-    if (pfd_cfg->div2_en)
-        pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_CLKOUT_DIVBY2_EN_MASK;
-    /* Enable DFS for locking*/
-    pll->DFS[pfd_n].DFS_CTRL.SET = PLL_DFS_ENABLE_MASK;
-    while (!((pll->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) & (1 << pfd_n)))
-    {
-    }
-    /* Clean bypass */
-    pll->DFS[pfd_n].DFS_CTRL.CLR = PLL_DFS_BYPASS_EN_MASK;
-    __DSB();
-    __ISB();
-}
-#endif
-
 /*******************************************************************************
  * Clock Source Definitions
  ******************************************************************************/
-
-/*!
- * @brief Clock name.
- */
-typedef enum _clock_name
-{
-    kCLOCK_Ext = 0,
-    kCLOCK_Osc32K = 1,
-    kCLOCK_Osc24M = 2,
-    kCLOCK_Fro = 3,
-    kCLOCK_SysPll1Ctl = 4,
-    kCLOCK_SysPll1Dfs0Ctl = 5,
-    kCLOCK_SysPll1Dfs0 = 6,
-    kCLOCK_SysPll1Dfs0Div2 = 7,
-    kCLOCK_SysPll1Dfs1Ctl = 8,
-    kCLOCK_SysPll1Dfs1 = 9,
-    kCLOCK_SysPll1Dfs1Div2 = 10,
-    kCLOCK_SysPll1Dfs2Ctl = 11,
-    kCLOCK_SysPll1Dfs2 = 12,
-    kCLOCK_SysPll1Dfs2Div2 = 13,
-    kCLOCK_AudioPll1Ctl = 14,
-    kCLOCK_AudioPll1 = 15,
-    kCLOCK_AudioPll2Ctl = 16,
-    kCLOCK_AudioPll2 = 17,
-    kCLOCK_VideoPll1Ctl_NotExist = 18, /* The clock source does not exist */
-    kCLOCK_VideoPll1_NotExist = 19,
-    kCLOCK_VideoPll2Ctl_NotExist = 20,
-    kCLOCK_VideoPll2_NotExist = 21,
-    kCLOCK_VideoPll3Ctl_NotExist = 22,
-    kCLOCK_VideoPll3_NotExist = 23,
-    kCLOCK_EncoderPllCtl = 24,
-    kCLOCK_EncoderPllDfs0Ctl = 25,
-    kCLOCK_EncoderPllDfs0 = 26,
-    kCLOCK_EncoderPllDfs1Ctl = 27,
-    kCLOCK_EncoderPllDfs1 = 28,
-    kCLOCK_ArmPllCtl = 29,
-    kCLOCK_ArmPllDfs0Ctl = 30,
-    kCLOCK_ArmPllDfs0 = 31,
-    kCLOCK_ArmPllDfs1Ctl = 32,
-    kCLOCK_ArmPllDfs1 = 33,
-    kCLOCK_ArmPllDfs2Ctl = 34,
-    kCLOCK_ArmPllDfs2 = 35,
-    kCLOCK_ArmPllDfs3Ctl = 36,
-    kCLOCK_ArmPllDfs3 = 37,
-    kCLOCK_DramPllCtl = 38,
-    kCLOCK_DramPll = 39,
-    kCLOCK_HsioPllCtl = 40,
-    kCLOCK_HsioPll = 41,
-    kCLOCK_LdbPllCtl = 42,
-    kCLOCK_LdbPll = 43,
-} clock_name_t;
-
-static const clock_name_t s_clockSourceName[][4] = {
-    /*   SRC0,         SRC1,                      SRC2,                                 SRC3,            */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* adc_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* bus_aon_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* can1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* glitchfilter_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* gpt1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* i3c1_slow_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lptmr1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2, kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2, kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart2_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* m33_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* m33_systick_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1,        kCLOCK_AudioPll2,               kCLOCK_Ext},	/* pdm_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1,        kCLOCK_AudioPll2,               kCLOCK_Ext},	/* sai1_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,        kCLOCK_AudioPll1,               kCLOCK_Ext},	/* tpm2_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* arm_a55_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* arm_a55_mtr_bus_clk_root  */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* arm_a55_periph_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* dram_alt_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* dram_apb_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* disp_apb_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* disp_axi_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1,        kCLOCK_AudioPll2,         kCLOCK_SysPll1Dfs0},	/* disp_pix_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1, kCLOCK_EncoderPllDfs1,    kCLOCK_SysPll1Dfs0Div2},	/* hsio_acscan_480m_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* hsio_acscan_80m_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* hsio_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* hsio_pcie_aux_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* hsio_pcie_test_160m_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* hsio_pcie_test_400m_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* hsio_pcie_test_500m_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* hsio_usb_test_50m_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* hsio_usb_test_60m_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* bus_m7_0_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* m7_0_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* m7_0_systick_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* bus_m7_1_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* m7_1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* m7_1_systick_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* bus_netcmix_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* ecat_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* enet_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* enet_phy_test_200m_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* enet_phy_test_500m_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* enet_phy_test_667m_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* enet_ref_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* enet_timer1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* enet_timer2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* enet_timer3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* flexio3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* flexio4_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* m33_sync_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* m33_sync_systick_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* mac0_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* mac1_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* mac2_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* mac3_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* mac4_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* mac5_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* noc_apb_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* noc_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* npu_apb_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* npu_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,           kCLOCK_Osc32K,        kCLOCK_AudioPll1},	/* ccm_cko1_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,        kCLOCK_AudioPll2},	/* ccm_cko2_clk_root */
-    {kCLOCK_Osc24M,           kCLOCK_Osc32K,         kCLOCK_SysPll1Dfs1, kCLOCK_EncoderPllDfs0},	/* ccm_cko3_clk_root */
-    {kCLOCK_Osc24M, kCLOCK_EncoderPllDfs1,         kCLOCK_SysPll1Dfs1,        kCLOCK_AudioPll2},	/* ccm_cko4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* biss_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* bus_wakeup_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* can2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* can3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* can4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* can5_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2, kCLOCK_EncoderPllDfs1},	/* endat2_1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2, kCLOCK_EncoderPllDfs1},	/* endat2_2_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* endat3_1_fast_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* endat3_1_slow_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* flexio1_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* flexio2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* gpt2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* gpt3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* gpt4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2, kCLOCK_EncoderPllDfs0},	/* hiperface1_clk_root */
-    {kCLOCK_Osc24M,           kCLOCK_Osc32K,    kCLOCK_SysPll1Dfs1Div2, kCLOCK_EncoderPllDfs0},	/* hiperface1_sync_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2, kCLOCK_EncoderPllDfs0},	/* hiperface2_clk_root */
-    {kCLOCK_Osc24M,           kCLOCK_Osc32K,    kCLOCK_SysPll1Dfs1Div2, kCLOCK_EncoderPllDfs0},	/* hiperface2_sync_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* i3c2_slow_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c5_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c6_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c7_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpi2c8_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi5_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi6_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi7_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lpspi8_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* lptmr2_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart10_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart11_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart12_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart3_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart5_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart6_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart7_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart8_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_EncoderPllDfs0,               kCLOCK_Fro},	/* lpuart9_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1,        kCLOCK_AudioPll2,               kCLOCK_Ext},	/* sai2_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1,        kCLOCK_AudioPll2,               kCLOCK_Ext},	/* sai3_clk_root */
-    {kCLOCK_Osc24M,        kCLOCK_AudioPll1,        kCLOCK_AudioPll2,               kCLOCK_Ext},	/* sai4_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* swo_trace_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,        kCLOCK_AudioPll1,               kCLOCK_Ext},	/* tpm4_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,        kCLOCK_AudioPll1,               kCLOCK_Ext},	/* tpm5_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,        kCLOCK_AudioPll1,               kCLOCK_Ext},	/* tpm6_clk_root */
-    {kCLOCK_Osc24M,    kCLOCK_SysPll1Dfs0Div2,    kCLOCK_SysPll1Dfs1Div2,               kCLOCK_Fro},	/* usb_phy_burunin_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* usdhc1_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* usdhc2_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* usdhc3_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* v2x_pk_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* wakeup_axi_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* xspi_slv_root_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* xspi1_clk_root */
-    {kCLOCK_Osc24M,         kCLOCK_SysPll1Dfs0,         kCLOCK_SysPll1Dfs1,         kCLOCK_SysPll1Dfs2},	/* xspi2_clk_root */
-};
 
 /*******************************************************************************
  * Clock Root Definitions
@@ -1486,153 +1417,16 @@ typedef enum _clock_gate_value
     kCLOCK_On  = CCM_LPCG_DIRECT_ON_MASK,       /*!< Clock is on*/
 } clock_gate_value_t;
 
-/*!
- * @brief Clock LPCG index (Clock Gating Channel)
- */
-typedef enum _clock_lpcg
-{
-    kCLOCK_A55            = 0,
-    kCLOCK_Cm33           = 1,
-    kCLOCK_Arm_Trout      = 2,
-    kCLOCK_Sentinel       = 3,
-    kCLOCK_Sim_Wakeup     = 4,
-    kCLOCK_Sim_Aon        = 5,
-    kCLOCK_Sim_Mega       = 6,
-    kCLOCK_Anadig         = 7,
-    kCLOCK_Src            = 8,
-    kCLOCK_Ccm            = 9,
-    kCLOCK_Gpc            = 10,
-    kCLOCK_Adc1           = 11,
-    kCLOCK_Wdog1          = 12,
-    kCLOCK_Wdog2          = 13,
-    kCLOCK_Wdog3          = 14,
-    kCLOCK_Wdog4          = 15,
-    kCLOCK_Wdog5          = 16,
-    kCLOCK_Sema1          = 17,
-    kCLOCK_Sema2          = 18,
-    kCLOCK_Mu_A           = 19,
-    kCLOCK_Mu_B           = 20,
-    kCLOCK_Edma1          = 21,
-    kCLOCK_Edma2          = 22,
-    kCLOCK_Romcp_A55      = 23,
-    kCLOCK_Romcp_M33      = 24,
-    kCLOCK_Flexspi1       = 25,
-    kCLOCK_Aon_Trdc       = 26,
-    kCLOCK_Wkup_Trdc      = 27,
-    kCLOCK_Ocotp          = 28,
-    kCLOCK_Bbsm_Hp        = 29,
-    kCLOCK_Bbsm           = 30,
-    kCLOCK_Cstrace        = 31,
-    kCLOCK_Csswo          = 32,
-    kCLOCK_Iomuxc         = 33,
-    kCLOCK_Gpio1          = 34,
-    kCLOCK_Gpio2          = 35,
-    kCLOCK_Gpio3          = 36,
-    kCLOCK_Gpio4          = 37,
-    kCLOCK_Flexio1        = 38,
-    kCLOCK_Flexio2        = 39,
-    kCLOCK_Lpit1          = 40,
-    kCLOCK_Lpit2          = 41,
-    kCLOCK_Lptmr1         = 42,
-    kCLOCK_Lptmr2         = 43,
-    kCLOCK_Tpm1           = 44,
-    kCLOCK_Tpm2           = 45,
-    kCLOCK_Tpm3           = 46,
-    kCLOCK_Tpm4           = 47,
-    kCLOCK_Tpm5           = 48,
-    kCLOCK_Tpm6           = 49,
-    kCLOCK_Can1           = 50,
-    kCLOCK_Can2           = 51,
-    kCLOCK_Lpuart1        = 52,
-    kCLOCK_Lpuart2        = 53,
-    kCLOCK_Lpuart3        = 54,
-    kCLOCK_Lpuart4        = 55,
-    kCLOCK_Lpuart5        = 56,
-    kCLOCK_Lpuart6        = 57,
-    kCLOCK_Lpuart7        = 58,
-    kCLOCK_Lpuart8        = 59,
-    kCLOCK_Lpi2c1         = 60,
-    kCLOCK_Lpi2c2         = 61,
-    kCLOCK_Lpi2c3         = 62,
-    kCLOCK_Lpi2c4         = 63,
-    kCLOCK_Lpi2c5         = 64,
-    kCLOCK_Lpi2c6         = 65,
-    kCLOCK_Lpi2c7         = 66,
-    kCLOCK_Lpi2c8         = 67,
-    kCLOCK_Lpspi1         = 68,
-    kCLOCK_Lpspi2         = 69,
-    kCLOCK_Lpspi3         = 70,
-    kCLOCK_Lpspi4         = 71,
-    kCLOCK_Lpspi5         = 72,
-    kCLOCK_Lpspi6         = 73,
-    kCLOCK_Lpspi7         = 74,
-    kCLOCK_Lpspi8         = 75,
-    kCLOCK_I3c1           = 76,
-    kCLOCK_I3c2           = 77,
-    kCLOCK_Usdhc1         = 78,
-    kCLOCK_Usdhc2         = 79,
-    kCLOCK_Usdhc3         = 80,
-    kCLOCK_Sai1           = 81,
-    kCLOCK_Sai2           = 82,
-    kCLOCK_Sai3           = 83,
-    kCLOCK_Ssi_W2ao       = 84,
-    kCLOCK_Ssi_Ao2w       = 85,
-    kCLOCK_Mipi_Csi       = 86,
-    kCLOCK_Mipi_Dsi       = 87,
-    kCLOCK_Lvds           = 88,
-    kCLOCK_Lcdif          = 89,
-    kCLOCK_Pxp            = 90,
-    kCLOCK_Isi            = 91,
-    kCLOCK_Nic_Media      = 92,
-    kCLOCK_Ddr_Dfi        = 93,
-    kCLOCK_Ddr_Ctl        = 94,
-    kCLOCK_Ddr_Dfi_Ctl    = 95,
-    kCLOCK_Ddr_Ssi        = 96,
-    kCLOCK_Ddr_Bypass     = 97,
-    kCLOCK_Ddr_Apb        = 98,
-    kCLOCK_Ddr_Drampll    = 99,
-    kCLOCK_Ddr_Clk_Ctl    = 100,
-    kCLOCK_Nic_Central    = 101,
-    kCLOCK_Gic600         = 102,
-    kCLOCK_Nic_Apb        = 103,
-    kCLOCK_Usb_Controller = 104,
-    kCLOCK_Usb_Test_60m   = 105,
-    kCLOCK_Hsio_Trout_24m = 106,
-    kCLOCK_Pdm            = 107,
-    kCLOCK_Mqs1           = 108,
-    kCLOCK_Mqs2           = 109,
-    kCLOCK_Aud_Xcvr       = 110,
-    kCLOCK_Nicmix_Mecc    = 111,
-    kCLOCK_Spdif          = 112,
-    kCLOCK_Ssi_Ml2nic     = 113,
-    kCLOCK_Ssi_Med2nic    = 114,
-    kCLOCK_Ssi_Hsio2nic   = 115,
-    kCLOCK_Ssi_W2nic      = 116,
-    kCLOCK_Ssi_Nic2w      = 117,
-    kCLOCK_Ssi_Nic2ddr    = 118,
-    kCLOCK_Hsio_32k       = 119,
-    kCLOCK_Enet1          = 120,
-    kCLOCK_Enet_Qos       = 121,
-    kCLOCK_Sys_Cnt        = 122,
-    kCLOCK_Tstmr1         = 123,
-    kCLOCK_Tstmr2         = 124,
-    kCLOCK_Tmc            = 125,
-    kCLOCK_Pmro           = 126,
-    kCLOCK_IpInvalid,
-} clock_lpcg_t;
-
-#define clock_ip_name_t clock_lpcg_t
-
 /*! @brief Clock ip name array for EDMA. */
 #define EDMA_CLOCKS                \
     {                              \
-        kCLOCK_Edma1, kCLOCK_Edma2 \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, \
     }
 
 /*! @brief Clock ip name array for ADC. */
 #define ADC_CLOCKS                \
     {                              \
-        kCLOCK_Adc1 \
+        kCLOCK_Adc \
     }
 
 /*
@@ -1641,7 +1435,12 @@ typedef enum _clock_lpcg
  */
 #define MU_CLOCKS                \
     {                            \
-        kCLOCK_Mu_A, kCLOCK_Mu_A \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid,  \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid,  \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid,  \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid,  \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid,  \
     }
 
 /*! @brief Clock ip name array for LPI2C. */
@@ -1654,7 +1453,7 @@ typedef enum _clock_lpcg
 /*! @brief Clock ip name array for LPIT. */
 #define LPIT_CLOCKS                                  \
     {                                                \
-        kCLOCK_IpInvalid, kCLOCK_Lpit1, kCLOCK_Lpit2 \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, \
     }
 
 /*! @brief Clock ip name array for LPSPI. */
@@ -1667,62 +1466,45 @@ typedef enum _clock_lpcg
 /*! @brief Clock ip name array for TPM. */
 #define TPM_CLOCKS                                                                    \
     {                                                                                 \
-        kCLOCK_Tpm1, kCLOCK_Tpm2, kCLOCK_Tpm3, kCLOCK_Tpm4, kCLOCK_Tpm5, kCLOCK_Tpm6, \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_Tpm2, kCLOCK_IpInvalid, kCLOCK_Tpm4, kCLOCK_Tpm5, kCLOCK_Tpm6, \
     }
 
 /*! @brief Clock ip name array for FLEXIO. */
 #define FLEXIO_CLOCKS                                    \
     {                                                    \
-        kCLOCK_Flexio1, kCLOCK_Flexio2 \
+        kCLOCK_IpInvalid, kCLOCK_Flexio1, kCLOCK_Flexio2, kCLOCK_Flexio3, kCLOCK_Flexio4, \
     }
 
-/*! @brief Clock ip name array for FLEXSPI. */
-#define FLEXSPI_CLOCKS                    \
+/*! @brief Clock ip name array for XSPI. */
+#define XSPI_CLOCKS                    \
     {                                     \
-        kCLOCK_IpInvalid, kCLOCK_Flexspi1 \
-    }
-
-/*! @brief Clock ip name array for TMU. */
-#define TMU_CLOCKS  \
-    {               \
-        kCLOCK_Tmc, \
+        kCLOCK_IpInvalid, kCLOCK_Xspi1, kCLOCK_Xspi2,  \
     }
 
 /*! @brief Clock ip name array for FLEXCAN. */
 #define FLEXCAN_CLOCKS                              \
     {                                               \
-        kCLOCK_IpInvalid, kCLOCK_Can1, kCLOCK_Can2, \
+        kCLOCK_IpInvalid, kCLOCK_Can1, kCLOCK_Can2, kCLOCK_Can3, kCLOCK_Can4, kCLOCK_Can5, \
     }
 
 /*! @brief Clock ip name array for LPUART. */
 #define LPUART_CLOCKS                                                                                     \
     {                                                                                                     \
         kCLOCK_IpInvalid, kCLOCK_Lpuart1, kCLOCK_Lpuart2, kCLOCK_Lpuart3, kCLOCK_Lpuart4, kCLOCK_Lpuart5, \
-            kCLOCK_Lpuart6, kCLOCK_Lpuart7, kCLOCK_Lpuart8                                                \
+        kCLOCK_Lpuart6, kCLOCK_Lpuart7, kCLOCK_Lpuart8, kCLOCK_Lpuart9, kCLOCK_Lpuart10, kCLOCK_Lpuart11, \
+	kCLOCK_Lpuart12                                                                                   \
     }
 
 /*! @brief Clock ip name array for SAI. */
 #define SAI_CLOCKS                                               \
     {                                                            \
-        kCLOCK_IpInvalid, kCLOCK_Sai1, kCLOCK_Sai2, kCLOCK_Sai3, \
+        kCLOCK_IpInvalid, kCLOCK_Sai1, kCLOCK_Sai2, kCLOCK_Sai3, kCLOCK_Sai4, \
     }
 
 /*! @brief Clock ip name array for PDM. */
 #define PDM_CLOCKS \
     {              \
         kCLOCK_Pdm \
-    }
-
-/*! @brief Clock ip name array for ENET QOS. */
-#define ENETQOS_CLOCKS  \
-    {                   \
-        kCLOCK_Enet_Qos \
-    }
-
-/*! @brief Clock ip name array for ENET. */
-#define ENET_CLOCKS  \
-    {                \
-        kCLOCK_Enet1 \
     }
 
 /*! @brief Clock ip name array for I3C. */
@@ -1762,7 +1544,71 @@ typedef enum _clock_lpcg
         kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid \
     }
 
+/*
+ *! @brief Clock ip name array for SINC.
+ */
+#define SINC_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid \
+    }
+/*
+ *! @brief Clock ip name array for EWM.
+ */
+#define EWM_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_Ewm \
+    }
 
+/*
+ *! @brief Clock ip name array for DCIF.
+ */
+#define DCIF_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid \
+    }
+
+/*
+ *! @brief Clock ip name array for SEMA42.
+ */
+#define SEMA42_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid \
+    }
+
+/*
+ *! @brief Clock ip name array for EQDC.
+ */
+#define QDC_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid \
+    }
+
+/*
+ *! @brief Clock ip name array for AOI.
+ */
+#define AOI_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid \
+    }
+
+/*
+ *! @brief Clock ip name array for PXP.
+ */
+#define PXP_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid \
+    }
+
+/*
+ *! @brief Clock ip name array for QTMR.
+ */
+#define TMR_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid \
+    }
+
+
+#ifdef CONFIG_DIRECT
 /*******************************************************************************
  * Clock Root APIs
  ******************************************************************************/
@@ -1999,5 +1845,42 @@ bool CLOCK_SourceGetEnable(uint32_t sourceIdx);
  * source, otherwise false.
  */
 bool CLOCK_SourceSetEnable(uint32_t sourceIdx, bool enable);
+#else
+/**
+ * @brief Enable the clock for specific IP.
+ * @param clk : Clock to be enabled.
+ * @return  Nothing
+ */
+status_t CLOCK_EnableClock(clock_ip_name_t clkId);
+
+/**
+ * @brief Disable the clock for specific IP.
+ * @param clk : Clock to be disabled.
+ * @return  Nothing
+ */
+status_t CLOCK_DisableClock(clock_ip_name_t clkId);
+
+/**
+ * @brief Set rate of the clock for specific IP.
+ * @param clk : Clock's rate to be set.
+ * @return  status
+ */
+status_t CLOCK_SetRate(clk_t *clk);
+
+/**
+ * @brief Get rate of the clock for specific IP.
+ * @param clk : Clock's rate to be Get.
+ * @return  clock rate
+ */
+uint64_t CLOCK_GetRate(clock_ip_name_t clkId);
+
+/**
+ * @brief Set parent clock for specific IP.
+ * @param clk : Clock's parent to be set.
+ * @return  status
+ */
+
+status_t CLOCK_SetParent(clk_t *clk);
+#endif
 
 #endif

@@ -74,12 +74,21 @@
 
 
 #include "fsl_common.h"
+#include "fsl_debug_console.h"
 #include "system_MIMX94398_cm7_core1.h"
+#include "fsl_mu.h"
+#include "scmi.h"
+#include "scmi_internal.h"
+#include "smt.h"
 
 /* ----------------------------------------------------------------------------
    -- Core clock
    ---------------------------------------------------------------------------- */
 uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
+
+static MU_Type *const s_muBases[] = MU_BASE_PTRS;
+static IRQn_Type const s_muIrqs[] = MU_IRQS;
+static uint32_t g_systemState = 0xFFFFFFFF;
 
 /* ----------------------------------------------------------------------------
    -- SystemInitMemoryRegions()
@@ -147,6 +156,7 @@ __attribute__((weak)) void SystemInitHook(void)
 
 void SystemCoreClockUpdate(void)
 {
+    SystemCoreClock = CLOCK_GetRate(kCLOCK_M71);
 }
 
 /* ----------------------------------------------------------------------------
@@ -155,4 +165,223 @@ void SystemCoreClockUpdate(void)
 void SystemTimeDelay(uint32_t usec)
 {
     SDK_DelayAtLeastUs(usec, SystemCoreClock);
+}
+
+/*!
+ * @brief Initialize channel and MU interface for communication with SM.
+ */
+void SystemPlatformInit(void)
+{
+    MU_Type *base = s_muBases[SYSTEM_PLATFORM_MU_INST];
+    IRQn_Type irq = s_muIrqs[SYSTEM_PLATFORM_MU_INST];
+
+    /* Configure SMT */
+    SMT_ChannelConfig(SCMI_A2P, SYSTEM_PLATFORM_MU_INST, SCMI_DBIR_A2P, SYSTEM_PLATFORM_SMA_ADDR);
+    SMT_ChannelConfig(SCMI_NOTIFY, SYSTEM_PLATFORM_MU_INST, SCMI_DBIR_NOTIFY, SYSTEM_PLATFORM_SMA_ADDR);
+    SMT_ChannelConfig(SCMI_PRIORITY, SYSTEM_PLATFORM_MU_INST, SCMI_DBIR_PRIORITY, SYSTEM_PLATFORM_SMA_ADDR);
+
+    /* Configure MU */
+    MU_Init(base);
+    EnableIRQ(irq);
+    MU_EnableInterrupts(base, kMU_GenInt1InterruptEnable);
+    MU_EnableInterrupts(base, kMU_GenInt2InterruptEnable);
+
+    /* Enable system notifications */
+    SCMI_SystemPowerStateNotify(SCMI_A2P, SCMI_SYS_NOTIFY_ENABLE(1U));
+
+    /* Enable LMM notifications from AP(cortex-A55) */
+    SCMI_LmmNotify(SCMI_A2P, SYSTEM_PLATFORM_LMID_A55,
+                   SCMI_LMM_NOTIFY_BOOT(1U) | SCMI_LMM_NOTIFY_SHUTDOWN(1U) | SCMI_LMM_NOTIFY_SUSPEND(1U) |
+                       SCMI_LMM_NOTIFY_WAKE(1U));
+
+#if defined(SYSTEM_PLATFORM_RTC_NOTIFY) && SYSTEM_PLATFORM_RTC_NOTIFY
+    /* Enable BBM notifications */
+    SCMI_BbmRtcNotify(
+        SCMI_A2P, SYSTEM_PLATFORM_RTC_ID,
+        SCMI_BBM_NOTIFY_RTC_UPDATED(1U) | SCMI_BBM_NOTIFY_RTC_ROLLOVER(1U) | SCMI_BBM_NOTIFY_RTC_ALARM(1U));
+#endif
+    SCMI_BbmButtonNotify(SCMI_A2P, SCMI_BBM_NOTIFY_BUTTON_DETECT(1U));
+
+    /* Enable FuSa notifications */
+    SCMI_FusaFaultGroupNotify(SCMI_A2P, SYSTEM_PLATFORM_FAULT_ID_FIRST, SYSTEM_PLATFORM_FAULT_MASK,
+                              SYSTEM_PLATFORM_NOTIFY_ENABLE, NULL, NULL);
+}
+
+/*!
+ * @brief Deinitialize MU interface.
+ */
+void SystemPlatformDeinit(void)
+{
+}
+
+/*!
+ * @brief SM Platform Set System State
+ */
+void SystemPlatformSetSystemState(uint32_t systemState)
+{
+    g_systemState = systemState;
+}
+
+/*!
+ * @brief SM Platform Get System State
+ */
+uint32_t SystemPlatformGetSystemState(void)
+{
+    return g_systemState;
+}
+
+/*!
+ * @brief SM Platform Handler.
+ */
+void SystemPlatformHandler(void)
+{
+    MU_Type *base = s_muBases[SYSTEM_PLATFORM_MU_INST];
+    uint32_t flags;
+
+    /* Get interrupt status flags */
+    flags = MU_GetStatusFlags(base);
+
+    /* Clear interrupts */
+    MU_ClearStatusFlags(base, flags);
+
+    /* Notification pending? */
+    if (flags & kMU_GenInt1Flag)
+    {
+        uint32_t protocolId, messageId;
+
+        /* Get pending info */
+        if (SCMI_P2aPending(SCMI_NOTIFY, &protocolId, &messageId) == SCMI_ERR_SUCCESS)
+        {
+            /* System event? */
+            if (protocolId == SCMI_PROTOCOL_SYS)
+            {
+                uint32_t notifyFlags, systemState;
+
+                if (SCMI_SystemPowerStateNotifier(SCMI_NOTIFY, NULL, &notifyFlags, &systemState, NULL) ==
+                    SCMI_ERR_SUCCESS)
+                {
+                    bool graceful = (SCMI_SYS_NOTIFIER_GRACEFUL(notifyFlags) != 0U);
+
+                    PRINTF("\nSCMI system notification: graceful=%u, state=0x%08X\r\n", graceful, systemState);
+
+                    if (graceful)
+                    {
+                        SystemPlatformSetSystemState(systemState);
+                        switch (systemState)
+                        {
+                            case SCMI_SYS_STATE_FULL_SHUTDOWN:
+                            case SCMI_SYS_STATE_SHUTDOWN:
+                                PRINTF("shutdown\r\n");
+                                break;
+                            case SCMI_SYS_STATE_FULL_RESET:
+                            case SCMI_SYS_STATE_COLD_RESET:
+                            case SCMI_SYS_STATE_WARM_RESET:
+                                PRINTF("reset\r\n");
+                                break;
+                            case SCMI_SYS_STATE_FULL_SUSPEND:
+                            case SCMI_SYS_STATE_SUSPEND:
+                                PRINTF("suspend\r\n");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            else if (protocolId == SCMI_PROTOCOL_LMM)
+            {
+                uint32_t notifyFlags, eventLm;
+
+                if (SCMI_LmmEvent(SCMI_NOTIFY, NULL, &eventLm, &notifyFlags) == SCMI_ERR_SUCCESS)
+                {
+                    PRINTF("\nSCMI LMM notification: LM %u, flags=0x%08X\r\n", eventLm, notifyFlags);
+                }
+            }
+            else if (protocolId == SCMI_PROTOCOL_BBM)
+            {
+                if (messageId == SCMI_MSG_BBM_RTC_EVENT)
+                {
+                    uint32_t notifyFlags;
+
+                    if (SCMI_BbmRtcEvent(SCMI_NOTIFY, &notifyFlags) == SCMI_ERR_SUCCESS)
+                    {
+                        PRINTF("\nSCMI BBM RTC notification: flags=0x%08X\r\n", flags);
+                    }
+                }
+                else
+                {
+                    uint32_t notifyFlags;
+
+                    if (SCMI_BbmButtonEvent(SCMI_NOTIFY, &notifyFlags) == SCMI_ERR_SUCCESS)
+                    {
+                        PRINTF("\nSCMI BBM button notification: flags=0x%08X\r\n", flags);
+                    }
+                }
+            }
+            else if (protocolId == SCMI_PROTOCOL_SENSOR)
+            {
+                uint32_t sensorId, desc;
+
+                if (SCMI_SensorTripPointEvent(SCMI_NOTIFY, NULL, &sensorId, &desc) == SCMI_ERR_SUCCESS)
+                {
+                    PRINTF("\nSCMI sensor notification: sensor=%u, desc=0x%08X\r\n", sensorId, desc);
+                }
+            }
+            else
+            {
+                PRINTF("\nSCMI unknown notification: 0x%X, 0x%X\r\n", protocolId, messageId);
+            }
+        }
+    }
+
+    /* Priority notification pending? */
+    if (flags & kMU_GenInt2Flag)
+    {
+        uint32_t protocolId, messageId;
+
+        /* Get pending info */
+        if (SCMI_P2aPending(SCMI_PRIORITY, &protocolId, &messageId) == SCMI_ERR_SUCCESS)
+        {
+            if (messageId == SCMI_MSG_FUSA_FEENV_STATE_EVENT)
+            {
+                uint32_t state, mSel;
+
+                if (SCMI_FusaFeenvStateEvent(SCMI_PRIORITY, &state, &mSel) == SCMI_ERR_SUCCESS)
+                {
+                    PRINTF("\nSCMI FuSa F-EENV notification: state=%u, mSel=%u\r\n", state, mSel);
+                }
+            }
+            else if (messageId == SCMI_MSG_FUSA_SEENV_STATE_REQ_EVENT)
+            {
+                uint32_t cookie;
+
+                if (SCMI_FusaSeenvStateReqEvent(SCMI_PRIORITY, &cookie) == SCMI_ERR_SUCCESS)
+                {
+                    PRINTF("\nSCMI FuSa S-EENV notification: cookie=%u\r\n", cookie);
+                }
+            }
+            else
+            {
+                uint32_t faultId, flag;
+
+                if (SCMI_FusaFaultEvent(SCMI_PRIORITY, &faultId, &flag) == SCMI_ERR_SUCCESS)
+                {
+                    PRINTF("\nSCMI FuSa fault notification: faultId=%u, flags=%u\r\n", faultId, flag);
+
+                    if (SCMI_FUSA_FAULT_FLAG_STATE(flag) != 0U)
+                    {
+                        SCMI_FusaFaultSet(SCMI_A2P, faultId, SCMI_FUSA_FAULT_SET_STATE(0U));
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*!
+ * @brief MU7_A IRQ Handler
+ */
+void MU7_A_IRQHandler(void)
+{
+    SystemPlatformHandler();
 }

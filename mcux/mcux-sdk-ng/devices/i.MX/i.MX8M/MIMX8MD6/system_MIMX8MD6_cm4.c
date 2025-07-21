@@ -8,8 +8,8 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    IMX8MDQLQRM, Rev. 0, Jan. 2018
-**     Version:             rev. 4.0, 2018-01-26
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -17,7 +17,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -32,6 +32,9 @@
 **         Rev.C Header EAR2
 **     - rev. 4.0 (2018-01-26)
 **         Rev.D Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
@@ -39,7 +42,7 @@
 /*!
  * @file MIMX8MD6_cm4
  * @version 1.0
- * @date 080724
+ * @date 210525
  * @brief Device specific configuration file for MIMX8MD6_cm4 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -50,10 +53,11 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
+
 /*!
  * @brief CCM reg macros to extract corresponding registers bit field.
  */
-#define CCM_BIT_FIELD_VAL(val, mask, shift) (((val)&mask) >> shift)
+#define CCM_BIT_FIELD_VAL(val, mask, shift)  (((val) & mask) >> shift)
 
 /*!
  * @brief CCM reg macros to get corresponding registers values.
@@ -165,6 +169,7 @@ uint32_t GetSSCGPllFreq(const volatile uint32_t *base)
     return (uint32_t)(pll2InputClock * divf2 / outDiv);
 }
 
+
 /* ----------------------------------------------------------------------------
    -- Core clock
    ---------------------------------------------------------------------------- */
@@ -175,47 +180,47 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-void SystemInit(void)
-{
+void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access */
-#endif                                                 /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
+  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
+#endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
-    /* Initialize Cache */
-    /* Enable Code Bus Cache */
-    /* set command to invalidate all ways, and write GO bit to initiate command */
-    LMEM->PCCCR |= LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_INVW0_MASK;
-    LMEM->PCCCR |= LMEM_PCCCR_GO_MASK;
-    /* Wait until the command completes */
-    while ((LMEM->PCCCR & LMEM_PCCCR_GO_MASK) != 0U)
-    {
-    }
-    /* Enable cache, enable write buffer */
-    LMEM->PCCCR |= (LMEM_PCCCR_ENWRBUF_MASK | LMEM_PCCCR_ENCACHE_MASK);
+  /* Initialize Cache */
+  /* Enable Code Bus Cache */
+  /* set command to invalidate all ways, and write GO bit to initiate command */
+  LMEM->PCCCR |= LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_INVW0_MASK;
+  LMEM->PCCCR |= LMEM_PCCCR_GO_MASK;
+  /* Wait until the command completes */
+  while ((LMEM->PCCCR & LMEM_PCCCR_GO_MASK) != 0U)
+  {
+  }
+  /* Enable cache, enable write buffer */
+  LMEM->PCCCR |= (LMEM_PCCCR_ENWRBUF_MASK | LMEM_PCCCR_ENCACHE_MASK);
 
-    /* Enable System Bus Cache */
-    /* set command to invalidate all ways, and write GO bit to initiate command */
-    LMEM->PSCCR |= LMEM_PSCCR_INVW1_MASK | LMEM_PSCCR_INVW0_MASK;
-    LMEM->PSCCR |= LMEM_PSCCR_GO_MASK;
-    /* Wait until the command completes */
-    while ((LMEM->PSCCR & LMEM_PSCCR_GO_MASK) != 0U)
-    {
-    }
-    /* Enable cache, enable write buffer */
-    LMEM->PSCCR |= (LMEM_PSCCR_ENWRBUF_MASK | LMEM_PSCCR_ENCACHE_MASK);
+  /* Enable System Bus Cache */
+  /* set command to invalidate all ways, and write GO bit to initiate command */
+  LMEM->PSCCR |= LMEM_PSCCR_INVW1_MASK | LMEM_PSCCR_INVW0_MASK;
+  LMEM->PSCCR |= LMEM_PSCCR_GO_MASK;
+  /* Wait until the command completes */
+  while ((LMEM->PSCCR & LMEM_PSCCR_GO_MASK) != 0U)
+  {
+  }
+  /* Enable cache, enable write buffer */
+  LMEM->PSCCR |= (LMEM_PSCCR_ENWRBUF_MASK | LMEM_PSCCR_ENCACHE_MASK);
 
-    __ISB();
-    __DSB();
+  __ISB();
+  __DSB();
 
-    SystemInitHook();
+  SystemInitHook();
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
-void SystemCoreClockUpdate(void)
-{
+void SystemCoreClockUpdate (void) {
+
+
     volatile uint32_t *M4_ClockRoot = (volatile uint32_t *)(&(CCM)->ROOT[1].TARGET_ROOT);
     uint32_t pre  = ((*M4_ClockRoot & CCM_TARGET_ROOT_PRE_PODF_MASK) >> CCM_TARGET_ROOT_PRE_PODF_SHIFT) + 1U;
     uint32_t post = ((*M4_ClockRoot & CCM_TARGET_ROOT_POST_PODF_MASK) >> CCM_TARGET_ROOT_POST_PODF_SHIFT) + 1U;
@@ -254,13 +259,13 @@ void SystemCoreClockUpdate(void)
     }
 
     SystemCoreClock = freq / pre / post;
+
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
-__attribute__((weak)) void SystemInitHook(void)
-{
-    /* Void implementation of the weak function. */
+__attribute__ ((weak)) void SystemInitHook (void) {
+  /* Void implementation of the weak function. */
 }

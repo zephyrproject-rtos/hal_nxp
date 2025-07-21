@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,6 +7,10 @@
 #define _FSL_IOMUXC_H_
 
 #include "fsl_common.h"
+#ifndef CONFIG_DIRECT
+#include "board.h"
+#include "scmi.h"
+#endif
 
 /*!
  * @addtogroup iomuxc_driver
@@ -1618,6 +1622,7 @@ extern "C" {
 /*! @name Configuration */
 /*@{*/
 
+#ifdef CONFIG_DIRECT
 /*!
  * @brief Sets the IOMUXC pin mux mode.
  * @note The first five parameters can be filled with the pin function ID macros.
@@ -1685,6 +1690,103 @@ static inline void IOMUXC_SetGpr(uint32_t gprInstance,
     }
 }
 /*@}*/
+#else
+/*!
+ * @brief Sets the IOMUXC pin mux mode.
+ * @note The first five parameters can be filled with the pin function ID macros.
+ *
+ * @param muxRegister    The pin mux register
+ * @param muxMode        The pin mux mode
+ * @param inputRegister  The select input register
+ * @param inputDaisy     The input daisy
+ * @param configRegister The config register
+ * @param inputOn        The software input on
+ */
+static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
+                                    uint32_t muxMode,
+                                    uint32_t inputRegister,
+                                    uint32_t inputDaisy,
+                                    uint32_t configRegister,
+                                    uint32_t inputOnfield)
+{
+    scmi_pin_config_t configs[4];
+    uint32_t numConfigs = 0;
+
+    if (muxRegister)
+    {
+        uint32_t extMode = (muxMode & 0xF0U) >> 4U;
+
+        configs[numConfigs].type = SCMI_PINCTRL_TYPE_MUX;
+        configs[numConfigs].value = IOMUXC_PAD_MUX_MODE(muxMode)
+            | IOMUXC_PAD_SION(inputOnfield);
+        numConfigs++;
+
+        if (extMode != 0U)
+        {
+            configs[numConfigs].type = SCMI_PINCTRL_TYPE_EXT;
+            configs[numConfigs].value = extMode;
+            numConfigs++;
+        }
+    }
+
+    if (inputRegister & 0xFFFF)
+    {
+        configs[numConfigs].type = SCMI_PINCTRL_TYPE_DAISY_ID;
+        configs[numConfigs].value = (inputRegister - IOMUXC_DAISY_BASE) / 4U;
+        numConfigs++;
+        configs[numConfigs].type = SCMI_PINCTRL_TYPE_DAISY_CFG;
+        configs[numConfigs].value = inputDaisy;
+        numConfigs++;
+    }
+
+    if (muxRegister || inputRegister)
+    {
+        int32_t result = SCMI_ERR_SUCCESS;
+        uint32_t attributes = SCMI_PINCTRL_SET_ATTR_SELECTOR(SCMI_PINCTRL_SEL_PIN)
+            | SCMI_PINCTRL_SET_ATTR_FUNCTION(0U)
+            | SCMI_PINCTRL_SET_ATTR_NUM_CONFIGS(numConfigs);
+
+        result = SCMI_PinctrlSettingsConfigure(SCMI_A2P, (muxRegister - PINCTRL_BASE) / 4U,
+            0U, attributes, configs);
+        while (result != SCMI_ERR_SUCCESS);
+    }
+}
+
+/*!
+ * @brief Sets the IOMUXC pin configuration.
+ * @note The previous five parameters can be filled with the pin function ID macros.
+ *
+ * @param muxRegister    The pin mux register
+ * @param muxMode        The pin mux mode
+ * @param inputRegister  The select input register
+ * @param inputDaisy     The input daisy
+ * @param configRegister The config register
+ * @param configValue    The pin config value
+ */
+static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
+                                       uint32_t muxMode,
+                                       uint32_t inputRegister,
+                                       uint32_t inputDaisy,
+                                       uint32_t configRegister,
+                                       uint32_t configValue)
+{
+    if (configRegister)
+    {
+        int32_t result = SCMI_ERR_SUCCESS;
+        uint32_t attributes = SCMI_PINCTRL_SET_ATTR_SELECTOR(SCMI_PINCTRL_SEL_PIN)
+            | SCMI_PINCTRL_SET_ATTR_FUNCTION(0U)
+            | SCMI_PINCTRL_SET_ATTR_NUM_CONFIGS(1U);
+        scmi_pin_config_t configs[1] = {0};
+
+        configs[0].type  = SCMI_PINCTRL_TYPE_CONFIG;
+        configs[0].value = configValue;
+        result = SCMI_PinctrlSettingsConfigure(SCMI_A2P, (configRegister - IOMUXC_PADCTL_BASE) / 4U,
+            0U, attributes, configs);
+        while (result != SCMI_ERR_SUCCESS);
+    }
+}
+/*@}*/
+#endif
 
 #if defined(__cplusplus)
 }

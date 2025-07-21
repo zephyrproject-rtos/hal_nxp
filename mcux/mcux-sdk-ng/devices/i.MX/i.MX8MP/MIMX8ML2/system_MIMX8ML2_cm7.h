@@ -1,15 +1,15 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML2CVNKZ
-**                          MIMX8ML2DVNLZ
+**     Processors:          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2DVNLZ_cm7
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b210301
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -17,9 +17,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -36,23 +34,25 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX8ML2_cm7
- * @version 5.0
- * @date 2021-03-01
+ * @version 1.0
+ * @date 210525
  * @brief Device specific configuration file for MIMX8ML2_cm7 (header file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
  * (PLL) that is part of the microcontroller device.
  */
-
 #ifndef _SYSTEM_MIMX8ML2_cm7_H_
-#define _SYSTEM_MIMX8ML2_cm7_H_ /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MIMX8ML2_cm7_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,14 +60,16 @@ extern "C" {
 
 #include <stdint.h>
 
+
 /* i.MX8ML Definitions */
 #ifndef DISABLE_WDOG
-#define DISABLE_WDOG 1
+  #define DISABLE_WDOG      1
 #endif
 /* Define clock source values */
-#define CPU_XTAL_SOSC_CLK_24MHZ 24000000U  /* Value of the external System Oscillator Clock(SOSC) frequency in Hz */
-#define CLK_PAD_CLK             0U         /* The value could be changed according to the  actual usage */
-#define DEFAULT_SYSTEM_CLOCK    800000000U /* Default System clock value */
+#define CPU_XTAL_SOSC_CLK_24MHZ           24000000U           /* Value of the external System Oscillator Clock(SOSC) frequency in Hz */
+#define CLK_PAD_CLK                       0U                  /* The value could be changed according to the  actual usage */
+#define DEFAULT_SYSTEM_CLOCK              800000000U          /* Default System clock value */
+
 
 /**
  * @brief System clock frequency (core clock)
@@ -87,7 +89,7 @@ extern uint32_t SystemCoreClock;
  * microcontroller device. For systems with variable clock speed it also updates
  * the variable SystemCoreClock. SystemInit is called from startup_device file.
  */
-void SystemInit(void);
+void SystemInit (void);
 
 /**
  * @brief Updates the SystemCoreClock variable.
@@ -96,7 +98,7 @@ void SystemInit(void);
  * execution. SystemCoreClockUpdate() evaluates the clock register settings and calculates
  * the current core clock.
  */
-void SystemCoreClockUpdate(void);
+void SystemCoreClockUpdate (void);
 
 /**
  * @brief SystemInit function hook.
@@ -108,10 +110,10 @@ void SystemCoreClockUpdate(void);
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
-void SystemInitHook(void);
+void SystemInitHook (void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _SYSTEM_MIMX8ML2_cm7_H_ */
+#endif  /* _SYSTEM_MIMX8ML2_cm7_H_ */

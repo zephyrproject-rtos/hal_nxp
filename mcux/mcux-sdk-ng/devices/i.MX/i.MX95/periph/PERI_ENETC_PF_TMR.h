@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_PF_TMR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ENETC_PF_TMR.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_ENETC_PF_TMR.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ENETC_PF_TMR
  *
  * CMSIS Peripheral Access Layer for ENETC_PF_TMR
  */
 
-#if !defined(ENETC_PF_TMR_H_)
-#define ENETC_PF_TMR_H_                          /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ENETC_PF_TMR_H_)
+#define PERI_ENETC_PF_TMR_H_                     /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -133,49 +406,50 @@
 #define ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_ALARMM_COUNT 2u
 #define ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_FIPERF_COUNT 3u
 #define ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_ETTSN_COUNT 2u
+#define ENETC_PF_TMR_ALL_REG_ARRAYS_COUNT         1u
 
 /** ENETC_PF_TMR - Register Layout Typedef */
 typedef struct {
-  __I  uint32_t TMR_ID;                            /**< Module ID, array offset: 0x0, array step: 0xFC */
-       uint8_t RESERVED_0[4];
-  __I  uint32_t TMR_CAPR;                          /**< Timer Capability, array offset: 0x8, array step: 0xFC */
-       uint8_t RESERVED_1[20];
-  __I  uint32_t TMR_FRT_L;                         /**< Timer Free Running Time Low, array offset: 0x20, array step: 0xFC */
-  __I  uint32_t TMR_FRT_H;                         /**< Timer Free Running Time High, array offset: 0x24, array step: 0xFC */
-  __I  uint32_t TMR_SRT_L;                         /**< Timer Synchronous Time Low, array offset: 0x28, array step: 0xFC */
-  __I  uint32_t TMR_SRT_H;                         /**< Timer Synchronous Time High, array offset: 0x2C, array step: 0xFC */
-  __I  uint32_t TMR_DEF_CNT_L;                     /**< Default ns Timer Counter Low, array offset: 0x30, array step: 0xFC */
-  __I  uint32_t TMR_DEF_CNT_H;                     /**< Default ns Timer Counter High, array offset: 0x34, array step: 0xFC */
-       uint8_t RESERVED_2[72];
-  __IO uint32_t TMR_CTRL;                          /**< Timer Control, array offset: 0x80, array step: 0xFC */
-  __IO uint32_t TMR_TEVENT;                        /**< Timer Event, array offset: 0x84, array step: 0xFC */
-  __IO uint32_t TMR_TEMASK;                        /**< Timer Event Mask, array offset: 0x88, array step: 0xFC */
-  __IO uint32_t TMR_MSIVEC;                        /**< Timer MSI-X Vector, array offset: 0x8C, array step: 0xFC */
-       uint8_t RESERVED_3[4];
-  __I  uint32_t TMR_STAT;                          /**< Timer Status, array offset: 0x94, array step: 0xFC */
-  __IO uint32_t TMR_CNT_L;                         /**< Timer Counter Low, array offset: 0x98, array step: 0xFC */
-  __IO uint32_t TMR_CNT_H;                         /**< Timer Counter High, array offset: 0x9C, array step: 0xFC */
-  __IO uint32_t TMR_ADD;                           /**< Timer Addend, array offset: 0xA0, array step: 0xFC */
-  __I  uint32_t TMR_ACC;                           /**< Timer Accumulator, array offset: 0xA4, array step: 0xFC */
-  __IO uint32_t TMR_PRSC;                          /**< Timer Prescale, array offset: 0xA8, array step: 0xFC */
-  __IO uint32_t TMR_ECTRL;                         /**< Extended Timer Control, array offset: 0xAC, array step: 0xFC */
-  __IO uint32_t TMROFF_L;                          /**< Timer Offset Low, array offset: 0xB0, array step: 0xFC */
-  __IO uint32_t TMROFF_H;                          /**< Timer Offset High, array offset: 0xB4, array step: 0xFC */
-  struct {                                         /* offset: 0xB8, array step: index*0xFC, index2*0x8 */
-    __IO uint32_t TMR_ALARM_L;                       /**< Alarm Time Comparator Low, array offset: 0xB8, array step: index*0xFC, index2*0x8 */
-    __IO uint32_t TMR_ALARM_H;                       /**< Alarm Time Comparator High, array offset: 0xBC, array step: index*0xFC, index2*0x8 */
-  } TMR_ALARMM[ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_ALARMM_COUNT];
-       uint8_t RESERVED_4[4];
-  __IO uint32_t TMR_ALARM_CTRL;                    /**< Timer Alarm Control, array offset: 0xCC, array step: 0xFC */
-  __IO uint32_t TMR_FIPER[ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_FIPERF_COUNT];   /**< Timer Fixed Interval Period, array offset: 0xD0, array step: index*0xFC, index2*0x4 */
-  __IO uint32_t TMR_FIPER_CTRL;                    /**< Timer FIPER Control, array offset: 0xDC, array step: 0xFC */
-  struct {                                         /* offset: 0xE0, array step: index*0xFC, index2*0x8 */
-    __I  uint32_t TMR_ETTS_L;                        /**< External Trigger Stamp, array offset: 0xE0, array step: index*0xFC, index2*0x8 */
-    __I  uint32_t TMR_ETTS_H;                        /**< External Trigger Stamp, array offset: 0xE4, array step: index*0xFC, index2*0x8 */
-  } TMR_ETTSN[ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_ETTSN_COUNT];
-  __I  uint32_t TMR_CUR_TIME_L;                    /**< Timer Current Time Low, array offset: 0xF0, array step: 0xFC */
-  __I  uint32_t TMR_CUR_TIME_H;                    /**< Timer Current Time High, array offset: 0xF4, array step: 0xFC */
-  __IO uint32_t TMR_PARAM;                         /**< Timer Parameter, array offset: 0xF8, array step: 0xFC */
+    __I  uint32_t TMR_ID;                            /**< Module ID, array offset: 0x0, array step: 0xFC */
+         uint8_t RESERVED_0[4];
+    __I  uint32_t TMR_CAPR;                          /**< Timer Capability, array offset: 0x8, array step: 0xFC */
+         uint8_t RESERVED_1[20];
+    __I  uint32_t TMR_FRT_L;                         /**< Timer Free Running Time Low, array offset: 0x20, array step: 0xFC */
+    __I  uint32_t TMR_FRT_H;                         /**< Timer Free Running Time High, array offset: 0x24, array step: 0xFC */
+    __I  uint32_t TMR_SRT_L;                         /**< Timer Synchronous Time Low, array offset: 0x28, array step: 0xFC */
+    __I  uint32_t TMR_SRT_H;                         /**< Timer Synchronous Time High, array offset: 0x2C, array step: 0xFC */
+    __I  uint32_t TMR_DEF_CNT_L;                     /**< Default ns Timer Counter Low, array offset: 0x30, array step: 0xFC */
+    __I  uint32_t TMR_DEF_CNT_H;                     /**< Default ns Timer Counter High, array offset: 0x34, array step: 0xFC */
+         uint8_t RESERVED_2[72];
+    __IO uint32_t TMR_CTRL;                          /**< Timer Control, array offset: 0x80, array step: 0xFC */
+    __IO uint32_t TMR_TEVENT;                        /**< Timer Event, array offset: 0x84, array step: 0xFC */
+    __IO uint32_t TMR_TEMASK;                        /**< Timer Event Mask, array offset: 0x88, array step: 0xFC */
+    __IO uint32_t TMR_MSIVEC;                        /**< Timer MSI-X Vector, array offset: 0x8C, array step: 0xFC */
+         uint8_t RESERVED_3[4];
+    __I  uint32_t TMR_STAT;                          /**< Timer Status, array offset: 0x94, array step: 0xFC */
+    __IO uint32_t TMR_CNT_L;                         /**< Timer Counter Low, array offset: 0x98, array step: 0xFC */
+    __IO uint32_t TMR_CNT_H;                         /**< Timer Counter High, array offset: 0x9C, array step: 0xFC */
+    __IO uint32_t TMR_ADD;                           /**< Timer Addend, array offset: 0xA0, array step: 0xFC */
+    __I  uint32_t TMR_ACC;                           /**< Timer Accumulator, array offset: 0xA4, array step: 0xFC */
+    __IO uint32_t TMR_PRSC;                          /**< Timer Prescale, array offset: 0xA8, array step: 0xFC */
+    __IO uint32_t TMR_ECTRL;                         /**< Extended Timer Control, array offset: 0xAC, array step: 0xFC */
+    __IO uint32_t TMROFF_L;                          /**< Timer Offset Low, array offset: 0xB0, array step: 0xFC */
+    __IO uint32_t TMROFF_H;                          /**< Timer Offset High, array offset: 0xB4, array step: 0xFC */
+    struct {                                         /* offset: 0xB8, array step: index*0xFC, index2*0x8 */
+      __IO uint32_t TMR_ALARM_L;                       /**< Alarm Time Comparator Low, array offset: 0xB8, array step: index*0xFC, index2*0x8 */
+      __IO uint32_t TMR_ALARM_H;                       /**< Alarm Time Comparator High, array offset: 0xBC, array step: index*0xFC, index2*0x8 */
+    } TMR_ALARMM[ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_ALARMM_COUNT];
+         uint8_t RESERVED_4[4];
+    __IO uint32_t TMR_ALARM_CTRL;                    /**< Timer Alarm Control, array offset: 0xCC, array step: 0xFC */
+    __IO uint32_t TMR_FIPER[ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_FIPERF_COUNT];   /**< Timer Fixed Interval Period, array offset: 0xD0, array step: index*0xFC, index2*0x4 */
+    __IO uint32_t TMR_FIPER_CTRL;                    /**< Timer FIPER Control, array offset: 0xDC, array step: 0xFC */
+    struct {                                         /* offset: 0xE0, array step: index*0xFC, index2*0x8 */
+      __I  uint32_t TMR_ETTS_L;                        /**< External Trigger Stamp, array offset: 0xE0, array step: index*0xFC, index2*0x8 */
+      __I  uint32_t TMR_ETTS_H;                        /**< External Trigger Stamp, array offset: 0xE4, array step: index*0xFC, index2*0x8 */
+    } TMR_ETTSN[ENETC_PF_TMR_ALL_REG_ARRAYS_TMR_ETTSN_COUNT];
+    __I  uint32_t TMR_CUR_TIME_L;                    /**< Timer Current Time Low, array offset: 0xF0, array step: 0xFC */
+    __I  uint32_t TMR_CUR_TIME_H;                    /**< Timer Current Time High, array offset: 0xF4, array step: 0xFC */
+    __IO uint32_t TMR_PARAM;                         /**< Timer Parameter, array offset: 0xF8, array step: 0xFC */
 } ENETC_PF_TMR_Type;
 
 /* ----------------------------------------------------------------------------
@@ -212,21 +486,37 @@ typedef struct {
 /*! @name TMR_CAPR - Timer Capability */
 /*! @{ */
 
-#define ENETC_PF_TMR_TMR_CAPR_IEEE_1722_MASK     (0x1U)
-#define ENETC_PF_TMR_TMR_CAPR_IEEE_1722_SHIFT    (0U)
+#define ENETC_PF_TMR_TMR_CAPR_ECADJ_MASK         (0x2U)
+#define ENETC_PF_TMR_TMR_CAPR_ECADJ_SHIFT        (1U)
+/*! ECADJ
+ *  0b0..Not supported
+ *  0b1..Supported
+ */
+#define ENETC_PF_TMR_TMR_CAPR_ECADJ(x)           (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CAPR_ECADJ_SHIFT)) & ENETC_PF_TMR_TMR_CAPR_ECADJ_MASK)
+
+#define ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_MASK (0x4U)
+#define ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_SHIFT (2U)
+/*! IEEE_8021AS_REV
+ *  0b0..Not supported
+ *  0b1..Supported
+ */
+#define ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_SHIFT)) & ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_MASK)
+
+#define ENETC_PF_TMR_TMR_CAPR_AUTO_OFFSET_ADJ_MASK (0x8U)
+#define ENETC_PF_TMR_TMR_CAPR_AUTO_OFFSET_ADJ_SHIFT (3U)
+/*! AUTO_OFFSET_ADJ
+ *  0b0..Not supported
+ *  0b1..Supported
+ */
+#define ENETC_PF_TMR_TMR_CAPR_AUTO_OFFSET_ADJ(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CAPR_AUTO_OFFSET_ADJ_SHIFT)) & ENETC_PF_TMR_TMR_CAPR_AUTO_OFFSET_ADJ_MASK)
+
+#define ENETC_PF_TMR_TMR_CAPR_IEEE_1722_MASK     (0x200U)
+#define ENETC_PF_TMR_TMR_CAPR_IEEE_1722_SHIFT    (9U)
 /*! IEEE_1722
  *  0b0..Not supported
  *  0b1..Supported
  */
 #define ENETC_PF_TMR_TMR_CAPR_IEEE_1722(x)       (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CAPR_IEEE_1722_SHIFT)) & ENETC_PF_TMR_TMR_CAPR_IEEE_1722_MASK)
-
-#define ENETC_PF_TMR_TMR_CAPR_ECADJ_MASK         (0x2U)
-#define ENETC_PF_TMR_TMR_CAPR_ECADJ_SHIFT        (1U)
-#define ENETC_PF_TMR_TMR_CAPR_ECADJ(x)           (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CAPR_ECADJ_SHIFT)) & ENETC_PF_TMR_TMR_CAPR_ECADJ_MASK)
-
-#define ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_MASK (0x4U)
-#define ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_SHIFT (2U)
-#define ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_SHIFT)) & ENETC_PF_TMR_TMR_CAPR_IEEE_8021AS_REV_MASK)
 
 #define ENETC_PF_TMR_TMR_CAPR_NUM_MSIX_MASK      (0x10000U)
 #define ENETC_PF_TMR_TMR_CAPR_NUM_MSIX_SHIFT     (16U)
@@ -334,6 +624,11 @@ typedef struct {
 #define ENETC_PF_TMR_TMR_CTRL_ETEP2_SHIFT        (9U)
 /*! ETEP2 - External trigger 2 edge polarity */
 #define ENETC_PF_TMR_TMR_CTRL_ETEP2(x)           (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CTRL_ETEP2_SHIFT)) & ENETC_PF_TMR_TMR_CTRL_ETEP2_MASK)
+
+#define ENETC_PF_TMR_TMR_CTRL_LDR_MASK           (0x800U)
+#define ENETC_PF_TMR_TMR_CTRL_LDR_SHIFT          (11U)
+/*! LDR - Timer Leader mode */
+#define ENETC_PF_TMR_TMR_CTRL_LDR(x)             (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_CTRL_LDR_SHIFT)) & ENETC_PF_TMR_TMR_CTRL_LDR_MASK)
 
 #define ENETC_PF_TMR_TMR_CTRL_COMP_MODE_MASK     (0x8000U)
 #define ENETC_PF_TMR_TMR_CTRL_COMP_MODE_SHIFT    (15U)
@@ -697,6 +992,11 @@ typedef struct {
 /*! FIPER1_PW - FIPER 1 pulse width selection */
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_PW(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_PW_SHIFT)) & ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_PW_MASK)
 
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_FS_ALM_MASK (0x20U)
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_FS_ALM_SHIFT (5U)
+/*! FIPER1_FS_ALM - FIPER1 Alarm select */
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_FS_ALM(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_FS_ALM_SHIFT)) & ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER1_FS_ALM_MASK)
+
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_PG1_MASK     (0x40U)
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_PG1_SHIFT    (6U)
 /*! PG1 - FIPER1 pulse generation select */
@@ -712,6 +1012,11 @@ typedef struct {
 /*! FIPER2_PW - FIPER 2 pulse width selection */
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_PW(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_PW_SHIFT)) & ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_PW_MASK)
 
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_FS_ALM_MASK (0x2000U)
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_FS_ALM_SHIFT (13U)
+/*! FIPER2_FS_ALM - FIPER2 Alarm select */
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_FS_ALM(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_FS_ALM_SHIFT)) & ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER2_FS_ALM_MASK)
+
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_PG2_MASK     (0x4000U)
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_PG2_SHIFT    (14U)
 /*! PG2 - FIPER2 pulse generation time */
@@ -726,6 +1031,11 @@ typedef struct {
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_PW_SHIFT (16U)
 /*! FIPER3_PW - FIPER 3 Pulse Width Selection */
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_PW(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_PW_SHIFT)) & ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_PW_MASK)
+
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_FS_ALM_MASK (0x200000U)
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_FS_ALM_SHIFT (21U)
+/*! FIPER3_FS_ALM - FIPER3 Alarm select */
+#define ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_FS_ALM(x) (((uint32_t)(((uint32_t)(x)) << ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_FS_ALM_SHIFT)) & ENETC_PF_TMR_TMR_FIPER_CTRL_FIPER3_FS_ALM_MASK)
 
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_PG3_MASK     (0x400000U)
 #define ENETC_PF_TMR_TMR_FIPER_CTRL_PG3_SHIFT    (22U)
@@ -845,5 +1155,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ENETC_PF_TMR_H_ */
+#endif  /* PERI_ENETC_PF_TMR_H_ */
 

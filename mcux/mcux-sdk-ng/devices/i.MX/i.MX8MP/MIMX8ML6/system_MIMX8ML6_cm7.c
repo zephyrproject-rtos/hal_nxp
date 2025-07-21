@@ -8,8 +8,8 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240723
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -17,7 +17,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,6 +34,9 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
@@ -41,7 +44,7 @@
 /*!
  * @file MIMX8ML6_cm7
  * @version 1.0
- * @date 230724
+ * @date 210525
  * @brief Device specific configuration file for MIMX8ML6_cm7 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -52,10 +55,11 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
+
 /*!
  * @brief CCM reg macros to extract corresponding registers bit field.
  */
-#define CCM_BIT_FIELD_VAL(val, mask, shift) (((val)&mask) >> shift)
+#define CCM_BIT_FIELD_VAL(val, mask, shift)  (((val) & mask) >> shift)
 
 /*!
  * @brief CCM reg macros to get corresponding registers values.
@@ -93,8 +97,7 @@ uint32_t GetFracPllFreq(const volatile uint32_t *base)
     }
     else
     {
-        refClkFreq = CLK_PAD_CLK; /* CLK_PAD_CLK Clock, please note that the value is 0hz by default, it could be set at
-                                     system_MIMX8MLx_cm7.h :65 */
+       refClkFreq = CLK_PAD_CLK;  /* CLK_PAD_CLK Clock, please note that the value is 0hz by default, it could be set at system_MIMX8MLx_cm7.h :65 */
     }
     fracClk = (uint64_t)refClkFreq * ((uint64_t)mainDiv * 65536UL + (uint64_t)dsm) /
               ((uint64_t)65536UL * preDiv * (1UL << postDiv));
@@ -126,8 +129,7 @@ uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
     }
     else
     {
-        refClkFreq = CLK_PAD_CLK; /* CLK_PAD_CLK Clock, please note that the value is 0hz by default, it could be set at
-                                     system_MIMX8MLx_cm7.h :65 */
+       refClkFreq = CLK_PAD_CLK;  /* CLK_PAD_CLK Clock, please note that the value is 0hz by default, it could be set at system_MIMX8MLx_cm7.h :65 */
     }
 
     if (pllBypass != 0U)
@@ -143,6 +145,7 @@ uint32_t GetIntegerPllFreq(const volatile uint32_t *base)
     return (uint32_t)pllOutClock;
 }
 
+
 /* ----------------------------------------------------------------------------
    -- Core clock
    ---------------------------------------------------------------------------- */
@@ -153,21 +156,23 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-void SystemInit(void)
-{
+void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access */
-#endif                                                 /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
+  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
+#endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
-    SystemInitHook();
+
+
+  SystemInitHook();
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
-void SystemCoreClockUpdate(void)
-{
+void SystemCoreClockUpdate (void) {
+
+
     volatile uint32_t *M7_ClockRoot = (volatile uint32_t *)(&(CCM)->ROOT[1].TARGET_ROOT);
     uint32_t pre  = ((*M7_ClockRoot & CCM_TARGET_ROOT_PRE_PODF_MASK) >> CCM_TARGET_ROOT_PRE_PODF_SHIFT) + 1U;
     uint32_t post = ((*M7_ClockRoot & CCM_TARGET_ROOT_POST_PODF_MASK) >> CCM_TARGET_ROOT_POST_PODF_SHIFT) + 1U;
@@ -205,14 +210,14 @@ void SystemCoreClockUpdate(void)
             break;
     }
 
-    SystemCoreClock = freq / pre / post;
+  SystemCoreClock = freq / pre / post;
+
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
-__attribute__((weak)) void SystemInitHook(void)
-{
-    /* Void implementation of the weak function. */
+__attribute__ ((weak)) void SystemInitHook (void) {
+  /* Void implementation of the weak function. */
 }

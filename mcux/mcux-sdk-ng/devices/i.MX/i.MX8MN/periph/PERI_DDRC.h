@@ -37,14 +37,14 @@
 **                          MIMX8MN6DVTJZ_ca53
 **                          MIMX8MN6DVTJZ_cm7
 **
-**     Version:             rev. 2.0, 2019-09-23
-**     Build:               b240708
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -55,21 +55,24 @@
 **         Initial version.
 **     - rev. 2.0 (2019-09-23)
 **         Rev.B Header RFP
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DDRC.h
- * @version 2.0
- * @date 2019-09-23
+ * @file PERI_DDRC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DDRC
  *
  * CMSIS Peripheral Access Layer for DDRC
  */
 
-#if !defined(DDRC_H_)
-#define DDRC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DDRC_H_)
+#define PERI_DDRC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MN1CVPIZ_ca53) || defined(CPU_MIMX8MN1CVTIZ_ca53) || defined(CPU_MIMX8MN1DVPIZ_ca53) || defined(CPU_MIMX8MN1DVTJZ_ca53))
 #include "MIMX8MN1_ca53_COMMON.h"
@@ -454,11 +457,11 @@ typedef struct {
  *  0b00..SDRAM is not in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4). If retry is enabled by
  *        CRCPARCTRL1.crc_parity_retry_enable, this also indicates SRE command is still in parity error window or retry is
  *        in-progress.
- *  0b11..SDRAM is in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4), which was caused by Automatic Self
- *        Refresh only. If retry is enabled, this guarantees SRE command is executed correctly without parity error.
  *  0b10..SDRAM is in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4), which was not caused solely under
  *        Automatic Self Refresh control. It could have been caused by Hardware Low Power Interface and/or Software
  *        (reg_ddrc_selfref_sw). If retry is enabled, this guarantees SRE command is executed correctly without parity
+ *  0b11..SDRAM is in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4), which was caused by Automatic Self
+ *        Refresh only. If retry is enabled, this guarantees SRE command is executed correctly without parity error.
  */
 #define DDRC_STAT_selfref_type(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_STAT_selfref_type_SHIFT)) & DDRC_STAT_selfref_type_MASK)
 
@@ -839,8 +842,8 @@ typedef struct {
 /*! per_bank_refresh - Per bank refresh allows traffic to flow to other banks. Per bank refresh is
  *    not supported by all LPDDR2 devices but should be supported by all LPDDR3/LPDDR4 devices.
  *    Present only in designs configured to support LPDDR2/LPDDR3/LPDDR4
- *  0b1..Per bank refresh
  *  0b0..All bank refresh
+ *  0b1..Per bank refresh
  */
 #define DDRC_RFSHCTL0_per_bank_refresh(x)        (((uint32_t)(((uint32_t)(x)) << DDRC_RFSHCTL0_per_bank_refresh_SHIFT)) & DDRC_RFSHCTL0_per_bank_refresh_MASK)
 
@@ -2311,8 +2314,8 @@ typedef struct {
 #define DDRC_DFIUPD0_dis_auto_ctrlupd_srx_MASK   (0x40000000U)
 #define DDRC_DFIUPD0_dis_auto_ctrlupd_srx_SHIFT  (30U)
 /*! dis_auto_ctrlupd_srx - Auto ctrlupd request generation
- *  0b1..disable the automatic dfi_ctrlupd_req generation by the DDRC at self-refresh exit.
  *  0b0..DDRC issues a dfi_ctrlupd_req before or after exiting self-refresh, depending on DFIUPD0.ctrlupd_pre_srx.
+ *  0b1..disable the automatic dfi_ctrlupd_req generation by the DDRC at self-refresh exit.
  */
 #define DDRC_DFIUPD0_dis_auto_ctrlupd_srx(x)     (((uint32_t)(((uint32_t)(x)) << DDRC_DFIUPD0_dis_auto_ctrlupd_srx_SHIFT)) & DDRC_DFIUPD0_dis_auto_ctrlupd_srx_MASK)
 
@@ -4789,5 +4792,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DDRC_H_ */
+#endif  /* PERI_DDRC_H_ */
 

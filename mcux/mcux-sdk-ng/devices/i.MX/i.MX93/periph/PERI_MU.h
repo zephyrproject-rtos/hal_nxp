@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MU.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_MU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MU
  *
  * CMSIS Peripheral Access Layer for MU
  */
 
-#if !defined(MU_H_)
-#define MU_H_                                    /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MU_H_)
+#define PERI_MU_H_                               /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -215,7 +218,7 @@ typedef struct {
   __IO uint32_t RCR;                               /**< Receive Control Register, offset: 0x128 */
   __I  uint32_t RSR;                               /**< Receive Status Register, offset: 0x12C */
        uint8_t RESERVED_3[208];
-  __O  uint32_t TR[MU_TR_COUNT];                   /**< Transmit Register, array offset: 0x200, array step: 0x4 */
+  __IO uint32_t TR[MU_TR_COUNT];                   /**< Transmit Register, array offset: 0x200, array step: 0x4 */
        uint8_t RESERVED_4[112];
   __I  uint32_t RR[MU_RR_COUNT];                   /**< Receive Register, array offset: 0x280, array step: 0x4 */
 } MU_Type;
@@ -798,5 +801,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MU_H_ */
+#endif  /* PERI_MU_H_ */
 

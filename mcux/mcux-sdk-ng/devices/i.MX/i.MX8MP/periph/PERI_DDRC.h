@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DDRC.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_DDRC.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DDRC
  *
  * CMSIS Peripheral Access Layer for DDRC
  */
 
-#if !defined(DDRC_H_)
-#define DDRC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DDRC_H_)
+#define PERI_DDRC_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -410,11 +437,11 @@ typedef struct {
  *  0b00..SDRAM is not in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4). If retry is enabled by
  *        CRCPARCTRL1.crc_parity_retry_enable, this also indicates SRE command is still in parity error window or retry is
  *        in-progress.
- *  0b11..SDRAM is in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4), which was caused by Automatic Self
- *        Refresh only. If retry is enabled, this guarantees SRE command is executed correctly without parity error.
  *  0b10..SDRAM is in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4), which was not caused solely under
  *        Automatic Self Refresh control. It could have been caused by Hardware Low Power Interface and/or Software
  *        (reg_ddrc_selfref_sw). If retry is enabled, this guarantees SRE command is executed correctly without parity
+ *  0b11..SDRAM is in Self Refresh (except LPDDR4) or SR-Powerdown (LPDDR4), which was caused by Automatic Self
+ *        Refresh only. If retry is enabled, this guarantees SRE command is executed correctly without parity error.
  */
 #define DDRC_STAT_SELFREF_TYPE(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_STAT_SELFREF_TYPE_SHIFT)) & DDRC_STAT_SELFREF_TYPE_MASK)
 
@@ -795,8 +822,8 @@ typedef struct {
 /*! per_bank_refresh - Per bank refresh allows traffic to flow to other banks. Per bank refresh is
  *    not supported by all LPDDR2 devices but should be supported by all LPDDR3/LPDDR4 devices.
  *    Present only in designs configured to support LPDDR2/LPDDR3/LPDDR4
- *  0b1..Per bank refresh
  *  0b0..All bank refresh
+ *  0b1..Per bank refresh
  */
 #define DDRC_RFSHCTL0_PER_BANK_REFRESH(x)        (((uint32_t)(((uint32_t)(x)) << DDRC_RFSHCTL0_PER_BANK_REFRESH_SHIFT)) & DDRC_RFSHCTL0_PER_BANK_REFRESH_MASK)
 
@@ -2368,8 +2395,8 @@ typedef struct {
 #define DDRC_DFIUPD0_DIS_AUTO_CTRLUPD_SRX_MASK   (0x40000000U)
 #define DDRC_DFIUPD0_DIS_AUTO_CTRLUPD_SRX_SHIFT  (30U)
 /*! dis_auto_ctrlupd_srx - Auto ctrlupd request generation
- *  0b1..disable the automatic dfi_ctrlupd_req generation by the DDRC at self-refresh exit.
  *  0b0..DDRC issues a dfi_ctrlupd_req before or after exiting self-refresh, depending on DFIUPD0.ctrlupd_pre_srx.
+ *  0b1..disable the automatic dfi_ctrlupd_req generation by the DDRC at self-refresh exit.
  */
 #define DDRC_DFIUPD0_DIS_AUTO_CTRLUPD_SRX(x)     (((uint32_t)(((uint32_t)(x)) << DDRC_DFIUPD0_DIS_AUTO_CTRLUPD_SRX_SHIFT)) & DDRC_DFIUPD0_DIS_AUTO_CTRLUPD_SRX_MASK)
 
@@ -4848,5 +4875,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DDRC_H_ */
+#endif  /* PERI_DDRC_H_ */
 

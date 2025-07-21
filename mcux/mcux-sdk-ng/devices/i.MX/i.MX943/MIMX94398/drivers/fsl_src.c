@@ -5,12 +5,13 @@
  */
 
 /* Includes */
-#include "fsl_ccm.h"
-#include "fsl_cpu.h"
 #include "fsl_power.h"
 #include "fsl_reset.h"
-#include "fsl_src.h"
 #include "fsl_device_registers.h"
+#if CONFIG_DIRECT
+#include "fsl_ccm.h"
+#include "fsl_cpu.h"
+#include "fsl_src.h"
 
 /* Local Defines */
 
@@ -764,4 +765,7 @@ void SRC_MixIsolationSetup(uint32_t isoMask, bool enable)
         src->SP_ISO_CTRL &= ~isoMask;
     }
 }
+#endif
+#else
+
 #endif
