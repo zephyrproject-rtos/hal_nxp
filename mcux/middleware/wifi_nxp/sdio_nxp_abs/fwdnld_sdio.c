@@ -167,7 +167,8 @@ int32_t wlan_reset_fw()
         goto done;
     }
 #if defined(SD8978) || defined(SD8987) || defined(SD9177) || defined(IW610)
-    rv = sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, 0x10, &resp);
+    (void)sdio_drv_creg_read(HOST_TO_CARD_EVENT_REG, 1, &resp);
+    rv = sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, resp | 0x10, &resp);
     if (rv == false)
     {
         sdio_io_e("Failed to write register.");

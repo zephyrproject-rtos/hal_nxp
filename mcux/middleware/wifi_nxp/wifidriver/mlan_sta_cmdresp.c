@@ -105,6 +105,7 @@ static mlan_status wlan_ret_mfg_tx_frame(pmlan_private pmpriv, HostCmd_DS_COMMAN
     cfg->short_preamble    = wlan_le32_to_cpu(mcmd->short_preamble);
     cfg->act_sub_ch        = wlan_le32_to_cpu(mcmd->act_sub_ch);
     cfg->short_gi          = wlan_le32_to_cpu(mcmd->short_gi);
+    cfg->adv_coding        = wlan_le32_to_cpu(mcmd->adv_coding);
     cfg->tx_bf             = wlan_le32_to_cpu(mcmd->tx_bf);
     cfg->gf_mode           = wlan_le32_to_cpu(mcmd->gf_mode);
     cfg->stbc              = wlan_le32_to_cpu(mcmd->stbc);

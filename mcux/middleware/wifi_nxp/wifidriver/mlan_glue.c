@@ -5768,6 +5768,10 @@ static void wifi_handle_event_tx_status_report(Event_Ext_t *evt)
         {
             (void)wifi_event_completion(WIFI_EVENT_MGMT_TX_STATUS, WIFI_EVENT_REASON_SUCCESS, (void *)bss_type);
         }
+        else
+        {
+            (void)wifi_event_completion(WIFI_EVENT_MGMT_TX_STATUS, WIFI_EVENT_REASON_FAILURE, (void *)bss_type);
+        }
         return;
     }
 #endif
@@ -9451,85 +9455,6 @@ uint32_t wifi_get_board_type()
 uint32_t wifi_get_board_type()
 {
     return mlan_adap->board_type;
-}
-#endif
-
-#ifdef RW610
-void wifi_cau_temperature_enable()
-{
-    t_u32 val;
-
-    val = WIFI_REG32(WLAN_CAU_ENABLE_ADDR);
-    val &= ~(0xC);
-    val |= (2 << 2);
-    WIFI_WRITE_REG32(WLAN_CAU_ENABLE_ADDR, val);
-    OSA_TimeDelay(1);
-}
-
-int32_t wifi_get_temperature(void)
-{
-    int32_t val                   = 0;
-    uint32_t reg_val              = 0;
-    uint32_t temp_Cau_Raw_Reading = 0;
-    uint32_t board_type           = 0;
-
-    reg_val              = WIFI_REG32(WLAN_CAU_TEMPERATURE_ADDR);
-    temp_Cau_Raw_Reading = ((reg_val & 0XFFC00) >> 10);
-    board_type           = wifi_get_board_type();
-
-    switch (board_type)
-    {
-        case RW610_PACKAGE_TYPE_QFN:
-            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 484260) - 220040600) / 1000000);
-            break;
-
-        case RW610_PACKAGE_TYPE_CSP:
-            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 480560) - 220707000) / 1000000);
-            break;
-
-        case RW610_PACKAGE_TYPE_BGA:
-            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 480561) - 220707400) / 1000000);
-            break;
-
-        default:
-            PRINTF("Unknown board type, use BGA temperature \r\n");
-            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 480561) - 220707400) / 1000000);
-            break;
-    }
-
-    return val;
-}
-
-int wifi_cau_temperature_write_to_firmware()
-{
-    int32_t val = 0;
-
-    val = wifi_get_temperature();
-    WIFI_WRITE_REG32(WLAN_CAU_TEMPERATURE_FW_ADDR, val);
-    return val;
-}
-
-void wifi_pmip_v33_enable()
-{
-    uint32_t val;
-
-    val = WIFI_REG32(WLAN_PMIP_TSEN_ADDR);
-    val &= ~(0xE);
-    val |= (5 << 1);
-    WIFI_WRITE_REG32(WLAN_PMIP_TSEN_ADDR, val);
-
-    val = WIFI_REG32(WLAN_V33_VSEN_ADDR);
-    val &= ~(0xE);
-    val |= (5 << 1);
-    WIFI_WRITE_REG32(WLAN_V33_VSEN_ADDR, val);
-
-    val = WIFI_REG32(WLAN_ADC_CTRL_ADDR);
-    val |= 1 << 0;
-    WIFI_WRITE_REG32(WLAN_ADC_CTRL_ADDR, val);
-
-    val = WIFI_REG32(WLAN_ADC_CTRL_ADDR);
-    val &= ~(1 << 0);
-    WIFI_WRITE_REG32(WLAN_ADC_CTRL_ADDR, val);
 }
 #endif
 

@@ -536,7 +536,7 @@ static t_void wlan_scan_create_channel_list(IN mlan_private *pmpriv,
                 pscan_chan_list[chan_idx].chan_scan_mode.passive_to_active_scan = MTRUE;
             }
 #endif
-#if defined(RW610) || defined(SD9177) || defined(IW610)
+#if defined(RW610) || defined(SD9177) || defined(IW610) || defined(SD8978)
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE || scan_type == MLAN_SCAN_TYPE_PASSIVE_TO_ACTIVE)
 #else
             if (scan_type == MLAN_SCAN_TYPE_PASSIVE)

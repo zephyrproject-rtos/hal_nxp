@@ -650,7 +650,7 @@ void rx_mgmt_register_callback(int (*rx_mgmt_cb_fn)(const enum wlan_bss_type bss
 void rx_mgmt_deregister_callback(void);
 #endif
 
-int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt);
+int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt, bool pkt_fwd);
 void nxp_wifi_internal_register_rx_cb(int (*rx_cb_fn)(struct net_if *iface, struct net_pkt *pkt));
 const struct netif *net_if_get_binding(const char *ifname);
 #endif /* _WM_NET_H_ */

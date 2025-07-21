@@ -156,6 +156,12 @@ void wifi_process_mgmt_tx_status(struct wifi_message *msg)
             }
         }
     }
+    else
+    {
+#if CONFIG_ROAMING
+        wlan_subscribe_rssi_low_event();
+#endif
+    }
 }
 
 int wifi_setup_ht_cap(t_u16 *ht_capab, t_u8 *pmcs_set, t_u8 *a_mpdu_params, t_u8 band)
