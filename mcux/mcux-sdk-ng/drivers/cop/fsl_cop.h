@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2018, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief COP driver version 2.0.1. */
-#define FSL_COP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief COP driver version 2.0.2. */
+#define FSL_COP_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @name COP refresh sequence. */

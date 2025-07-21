@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,7 +26,7 @@
  * @{
  */
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 5, 5))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -437,7 +437,12 @@ struct _lpi2c_slave_handle
  ******************************************************************************/
 /*! Array to map LPI2C instance number to IRQ number, used internally for LPI2C master interrupt and EDMA transactional
 APIs. */
+#if defined(FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ) && FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ
+extern IRQn_Type const kLpi2cMasterIrqs[];
+extern IRQn_Type const kLpi2cSlaveIrqs[];
+#else
 extern IRQn_Type const kLpi2cIrqs[];
+#endif
 
 /*! Pointer to master IRQ handler for each instance, used internally for LPI2C master interrupt and EDMA transactional
 APIs. */
@@ -1379,6 +1384,22 @@ void LPI2C_SlaveTransferAbort(LPI2C_Type *base, lpi2c_slave_handle_t *handle);
 void LPI2C_SlaveTransferHandleIRQ(LPI2C_Type *base, lpi2c_slave_handle_t *handle);
 
 /*! @}*/
+
+/*! @} */
+
+/*!
+ * @name Common IRQ Handler
+ * @{
+ */
+
+/*!
+ * @brief LPI2C driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for LPI2C.
+ *
+ * @param instance LPI2C instance.
+ */
+void LPI2C_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

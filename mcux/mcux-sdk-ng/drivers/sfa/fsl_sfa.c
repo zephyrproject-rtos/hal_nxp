@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -64,8 +64,11 @@ static uint8_t SFA_GetInstance(SFA_Type *base);
  * note If the CUT frequency > REF frequency, it is recommended CUT target be set to 0xFFFF_FFFF.
  *
  *  param base SFA peripheral base address.
+ *
+ * retval kStatus_Success run success.
+ * retval kStatus_Timeout timeout occurs.
  */
-static void SFA_StartMeasureFrequency(SFA_Type *base);
+static status_t SFA_StartMeasureFrequency(SFA_Type *base);
 
 /*!
  * brief Start to measure the period of the clock under test or the time between triggers.
@@ -74,8 +77,11 @@ static void SFA_StartMeasureFrequency(SFA_Type *base);
  * This function does not return until the measurement starts.
  *
  * param base SFA peripheral base address.
+ *
+ * retval kStatus_Success run success.
+ * retval kStatus_Timeout timeout occurs.
  */
-static void SFA_StartMeasurePeriod(SFA_Type *base);
+static status_t SFA_StartMeasurePeriod(SFA_Type *base);
 
 /*!
  * brief Calculate the frequency of the selected CUT source when the selected mode is mode0.
@@ -119,9 +125,11 @@ static uint32_t SFA_Mode2Mode3Calculate(SFA_Type *base);
  * param base SFA peripheral base address.
  * param mode SFA measurement mode.
  *
+ * retval kStatus_Success run success.
  * retval kStatus_SFA_ReferenceCounterTimeout error happens.
  * retval kStatus_SFA_MeasurementCompleted measure completes.
  * retval kStatus_SFA_CUTCounterTimeout error happens.
+ * retval kStatus_Timeout timeout occurs.
  */
 static status_t SFA_MeasureFrequencyBlocking(SFA_Type *base, sfa_measurement_mode_t mode);
 
@@ -130,8 +138,10 @@ static status_t SFA_MeasureFrequencyBlocking(SFA_Type *base, sfa_measurement_mod
  *
  * param base SFA peripheral base address.
  *
+ * retval kStatus_Success run success.
  * retval kStatus_SFA_ReferenceCounterTimeout error happens.
  * retval kStatus_SFA_MeasurementCompleted measure completes.
+ * retval kStatus_Timeout timeout occurs.
  */
 static status_t SFA_MeasurePeriodBlocking(SFA_Type *base);
 
@@ -180,9 +190,13 @@ static uint8_t SFA_GetInstance(SFA_Type *base)
     return instance;
 }
 
-static void SFA_StartMeasureFrequency(SFA_Type *base)
+static status_t SFA_StartMeasureFrequency(SFA_Type *base)
 {
     bool triggerable = false;
+
+#if SFA_MEASUREMENT_START_TIMEOUT || SFA_CUT_COUNTER_STOP_TIMEOUT
+    uint32_t timeout;
+#endif
 
 #if defined(RF_SFA)
     /*
@@ -202,6 +216,9 @@ static void SFA_StartMeasureFrequency(SFA_Type *base)
 
     (*(volatile uint32_t *)&(base->REF_CNT)) = 0U; /* Dummy write to REF counter. */
 
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+    timeout = SFA_CUT_COUNTER_STOP_TIMEOUT;
+#endif
     /* Poll the CUT_STOPPED bit to make sure it cleared. */
     /*
      * $Branch Coverage Justification$
@@ -209,38 +226,76 @@ static void SFA_StartMeasureFrequency(SFA_Type *base)
      */
     while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U)
     {
-        ;
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+
     /*
      * $Branch Coverage Justification$
      * (true == triggerable) not covered. The trigger measurement function does not have enable.
      */
     if (!triggerable)
     {
+#if SFA_MEASUREMENT_START_TIMEOUT
+        timeout = SFA_MEASUREMENT_START_TIMEOUT;
+#endif
         (*(volatile uint32_t *)&(base->CUT_CNT)) = 0U; /* Dummy write to CUT counter. */
         while (0U == (base->CNT_STAT & SFA_CNT_STAT_MEAS_STARTED_MASK))
         {
-            ; /* Loop until measurement start. */
+#if SFA_MEASUREMENT_START_TIMEOUT
+            if ((--timeout) == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
+    return kStatus_Success;
 }
 
-static void SFA_StartMeasurePeriod(SFA_Type *base)
+static status_t SFA_StartMeasurePeriod(SFA_Type *base)
 {
+#if SFA_MEASUREMENT_START_TIMEOUT || SFA_CUT_COUNTER_STOP_TIMEOUT
+    uint32_t timeout;
+#endif
+
     (*(volatile uint32_t *)&(base->REF_CNT)) = 0U; /* Dummy write to REF counter. */
+
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+    timeout = SFA_CUT_COUNTER_STOP_TIMEOUT;
+#endif
     /*
      * $Branch Coverage Justification$
      * $ref sfa_c_ref_4$.
      */
     while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U)
     {
-        ;
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
+#if SFA_MEASUREMENT_START_TIMEOUT
+    timeout = SFA_MEASUREMENT_START_TIMEOUT;
+#endif
     while (0U == (base->CNT_STAT & SFA_CNT_STAT_MEAS_STARTED_MASK))
     {
-        ; /* Loop until measurement start. */
+#if SFA_MEASUREMENT_START_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+
+    return kStatus_Success;
 }
 
 static uint32_t SFA_Mode0Calculate(SFA_Type *base, uint32_t refFrequency)
@@ -295,12 +350,24 @@ static status_t SFA_MeasureFrequencyBlocking(SFA_Type *base, sfa_measurement_mod
 {
     status_t status = kStatus_Success;
 
+#if SFA_MEASUREMENT_START_TIMEOUT || SFA_CUT_COUNTER_STOP_TIMEOUT || SFA_REF_COUNTER_STOP_TIMEOUT
+        uint32_t timeout;
+#endif
+
     if (mode == kSFA_FrequencyMeasurement0)
     {
+#if SFA_REF_COUNTER_STOP_TIMEOUT || SFA_CUT_COUNTER_STOP_TIMEOUT
+        timeout = SFA_REF_COUNTER_STOP_TIMEOUT;
+#endif
         while (((base->CNT_STAT & SFA_CNT_STAT_REF_STOPPED_MASK) == 0U) ||
                ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) == 0U))
         {
-            ;
+#if SFA_REF_COUNTER_STOP_TIMEOUT || SFA_CUT_COUNTER_STOP_TIMEOUT
+            if ((--timeout) == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
         if ((base->CNT_STAT & SFA_CNT_STAT_REF_CNT_TIMEOUT_MASK) != 0U)
         {
@@ -315,9 +382,17 @@ static status_t SFA_MeasureFrequencyBlocking(SFA_Type *base, sfa_measurement_mod
     }
     else
     {
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+        timeout = SFA_CUT_COUNTER_STOP_TIMEOUT;
+#endif
         while (0U == (base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK))
         {
-            ;
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+            if ((--timeout) == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
         if ((base->CUT_CNT) < (base->CUT_TARGET))
         {
@@ -335,10 +410,22 @@ static status_t SFA_MeasureFrequencyBlocking(SFA_Type *base, sfa_measurement_mod
 static status_t SFA_MeasurePeriodBlocking(SFA_Type *base)
 {
     status_t status = kStatus_Success;
+#if SFA_REF_COUNTER_STOP_TIMEOUT
+        uint32_t timeout;
+#endif
+
+#if SFA_REF_COUNTER_STOP_TIMEOUT
+        timeout = SFA_REF_COUNTER_STOP_TIMEOUT;
+#endif
 
     while (0U == (base->CNT_STAT & SFA_CNT_STAT_REF_STOPPED_MASK))
     {
-        ;
+#if SFA_REF_COUNTER_STOP_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
     if ((base->CNT_STAT & SFA_CNT_STAT_REF_CNT_TIMEOUT_MASK) != 0U)
     {
@@ -437,19 +524,35 @@ void SFA_Init(SFA_Type *base)
  * brief Clear counter, disable SFA and gate the SFA clock.
  *
  * param base SFA peripheral base address.
+ * 
+ * return kStatus_Success if measurement started, kStatus_Timeout if timeout occurs.
  */
-void SFA_Deinit(SFA_Type *base)
+status_t SFA_Deinit(SFA_Type *base)
 {
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+    uint32_t timeout;
+#endif
+
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+    timeout = SFA_CUT_COUNTER_STOP_TIMEOUT;
+#endif
     (*(volatile uint32_t *)&(base->REF_CNT)) = 0U; /* Dummy write REF counter to clear flags and counters. */
     while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U)
     {
-        ;
+#if SFA_CUT_COUNTER_STOP_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
     base->CTRL &= ~SFA_CTRL_SFA_EN_MASK;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_DisableClock(s_sfaClocks[SFA_GetInstance(base)]);
 #endif /*FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL*/
+
+    return kStatus_Success;
 }
 
 /*!

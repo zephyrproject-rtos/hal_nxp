@@ -483,6 +483,9 @@ status_t ASRC_SetChannelPairConfig(ASRC_Type *base,
     uint32_t asrcsr =
         base->ASRCSR &
         (~(ASRC_ASRCSR_INPUT_CLOCK_SOURCE_MASK(channelPair) | ASRC_ASRCSR_OUTPUT_CLOCK_SOURCE_MASK(channelPair)));
+    if (config->outClockSource < 0 || config->outClockSource > kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT) {
+        return kStatus_InvalidArgument;
+    }
     asrcsr |= ASRC_ASRCSR_OUTPUT_CLOCK_SOURCE(config->outClockSource, channelPair);
     if (config->inClockSource != kASRC_ClockSourceNotAvalible)
     {
@@ -522,7 +525,7 @@ status_t ASRC_SetChannelPairConfig(ASRC_Type *base,
                        (~(ASRC_ASRMCRA_BUFSTALLA_MASK | ASRC_ASRMCRA_EXTTHRSHA_MASK |
                           ASRC_ASRMCRA_INFIFO_THRESHOLDA_MASK | ASRC_ASRMCRA_OUTFIFO_THRESHOLDA_MASK));
     /* buffer stall */
-    asrmcra |= ASRC_ASRMCRA_BUFSTALLA(config->bufStallWhenFifoEmptyFull);
+    asrmcra |= ASRC_ASRMCRA_BUFSTALLA(config->bufStallWhenFifoEmptyFull ? 1U : 0U);
     /* in fifo and out fifo threshold */
     asrmcra |= ASRC_ASRMCRA_EXTTHRSHA_MASK | ASRC_ASRMCRA_INFIFO_THRESHOLDA(config->inFifoThreshold - 1UL) |
                ASRC_ASRMCRA_OUTFIFO_THRESHOLDA(config->outFifoThreshold - 1UL);
@@ -603,7 +606,14 @@ uint32_t ASRC_GetOutSamplesSize(ASRC_Type *base,
         inSamples = inSamplesize / (inAlign == kASRC_DataAlignMSB ? 2U : 1U);
     }
 
-    outSamples = (uint32_t)((uint64_t)inSamples * outSampleRate / inSampleRate);
+    /* Cert-compliant overflow check */
+    if (inSamples > UINT32_MAX / outSampleRate) {
+        return kStatus_OutOfRange;
+    }
+    else
+    {
+        outSamples = inSamples * outSampleRate / inSampleRate;
+    }
     /* make sure output samples is in group */
     outSamples = outSamples - outSamples % audioChannels;
 
@@ -611,17 +621,32 @@ uint32_t ASRC_GetOutSamplesSize(ASRC_Type *base,
     {
         if ((outAlign == kASRC_DataAlignMSB) || signExtend)
         {
-            outSamplesBufSize = outSamples * 4U;
+            /* Cert-compliant overflow check */
+            if (outSamples > UINT32_MAX / 4U) {
+                return kStatus_OutOfRange;
+            } else {
+                outSamplesBufSize = outSamples * 4U;
+            }
         }
         else
         {
-            outSamplesBufSize = outSamples * 2U;
+            /* Cert-compliant overflow check */
+            if (outSamples > UINT32_MAX / 2U) {
+                return kStatus_OutOfRange;
+            } else {
+                outSamplesBufSize = outSamples * 2U;
+            }
         }
     }
 
     if (outWdith == kASRC_DataWidth24Bit)
     {
-        outSamplesBufSize = outSamples * 4U;
+        /* Cert-compliant overflow check */
+        if (outSamples > UINT32_MAX / 4U) {
+            return kStatus_OutOfRange;
+        } else {
+            outSamplesBufSize = outSamples * 4U;
+        }
     }
 
     return outSamplesBufSize;
@@ -665,6 +690,11 @@ status_t ASRC_TransferBlocking(ASRC_Type *base, asrc_channel_pair_t channelPair,
                 MIN(inSamples, (size_t)((FSL_ASRC_CHANNEL_PAIR_FIFO_DEPTH * audioChannels - inWaterMark)));
             ASRC_WriteNonBlocking(base, channelPair, (uint32_t *)(uint32_t)inAddr, onceWriteSamples, inSampleMask,
                                   inWidth);
+            /* Cert-compliant overflow check */
+            if (onceWriteSamples > (UINT32_MAX - (uint32_t)inAddr) / inWidth)
+            {
+                return kStatus_OutOfRange;
+            }
             inAddr = (uint8_t *)((uint32_t)inAddr + onceWriteSamples * inWidth);
             inSamples -= onceWriteSamples;
         }
@@ -674,14 +704,24 @@ status_t ASRC_TransferBlocking(ASRC_Type *base, asrc_channel_pair_t channelPair,
             if ((status & (1UL << ((uint32_t)channelPair + ASRC_ASRSTR_AODFA_SHIFT))) != 0U)
             {
                 ASRC_ReadNonBlocking(base, channelPair, (uint32_t *)(uint32_t)outAddr, outWaterMark, outWidth);
+                /* Cert-compliant overflow check */
+                if (outWaterMark > (UINT32_MAX - (uint32_t)outAddr) / outWidth)
+                {
+                  return kStatus_OutOfRange;
+                }
                 outAddr = (uint8_t *)((uint32_t)outAddr + outWaterMark * outWidth);
                 outSamples -= outWaterMark;
             }
         }
         else
         {
-            outSamples -=
-                ASRC_GetRemainFifoSamples(base, channelPair, (uint32_t *)(uint32_t)outAddr, outWidth, outSamples);
+            uint32_t samplesProcessed = ASRC_GetRemainFifoSamples(base, channelPair,
+                                (uint32_t *)(uint32_t)outAddr, outWidth, outSamples);
+            /* Cert-compliant overflow check */
+            if (samplesProcessed > outSamples) {
+                return kStatus_OutOfRange;
+            }
+            outSamples -= samplesProcessed;
             continue;
         }
     }
@@ -964,8 +1004,12 @@ void ASRC_TransferHandleIRQ(ASRC_Type *base, asrc_handle_t *handle)
                               (uint32_t *)(uint32_t)handle->in.asrcQueue[handle->in.queueDriver], size,
                               handle->in.sampleMask, handle->in.sampleWidth);
         handle->in.transferSamples[handle->in.queueDriver] -= size;
-        handle->in.asrcQueue[handle->in.queueDriver] =
-            (uint8_t *)((uint32_t)handle->in.asrcQueue[handle->in.queueDriver] + size * handle->in.sampleWidth);
+        /* Cert-compliant overflow check */
+        if (size < (UINT32_MAX - (uint32_t)handle->in.asrcQueue[handle->in.queueDriver]) / handle->in.sampleWidth)
+        {
+            handle->in.asrcQueue[handle->in.queueDriver] =
+                (uint8_t *)((uint32_t)handle->in.asrcQueue[handle->in.queueDriver] + size * handle->in.sampleWidth);
+        }
     }
 
     /* If finished a block, call the callback function */
@@ -981,9 +1025,17 @@ void ASRC_TransferHandleIRQ(ASRC_Type *base, asrc_handle_t *handle)
 
     if (handle->out.transferSamples[handle->out.queueDriver] < (handle->out.fifoThreshold + 1U))
     {
-        handle->out.transferSamples[handle->out.queueDriver] -= ASRC_GetRemainFifoSamples(
+        uint32_t samplesProcessed = ASRC_GetRemainFifoSamples(
             base, handle->channelPair, (uint32_t *)(uint32_t)handle->out.asrcQueue[handle->out.queueDriver],
             handle->out.sampleWidth, handle->out.transferSamples[handle->out.queueDriver]);
+
+        /* Cert-compliant overflow check */
+        if (samplesProcessed <= handle->out.transferSamples[handle->out.queueDriver]) {
+            handle->out.transferSamples[handle->out.queueDriver] -= samplesProcessed;
+        } else {
+            /* Handle error condition (should never occur given function implementation) */
+            handle->out.transferSamples[handle->out.queueDriver] = 0;
+        }
     }
 
     if (handle->out.transferSamples[handle->out.queueDriver] == 0U)

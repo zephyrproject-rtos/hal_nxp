@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -205,6 +205,9 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
     uint32_t err, best_err;
 
     best_err = 0U;
+
+    assert(srcClock_Hz <= (UINT32_MAX / 10U));
+    assert((baudRate_Bps > 0U) && (baudRate_Bps <= 1000000U));
 
     for (scl = 9U; scl >= 2U; scl--)
     {

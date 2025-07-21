@@ -23,7 +23,10 @@
  * Variables
  ******************************************************************************/
 /*! @brief Pointers to aoi bases for each instance. */
+#if defined(AOI_RESETS_ARRAY) || \
+   !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static AOI_Type *const s_aoiBases[] = AOI_BASE_PTRS;
+#endif
 
 #if defined(AOI_RESETS_ARRAY)
 /* Reset array */
@@ -34,6 +37,9 @@ static const reset_ip_name_t s_aoiResets[] = AOI_RESETS_ARRAY;
 /*! @brief Pointers to aoi clocks for each instance. */
 static const clock_ip_name_t s_aoiClocks[] = AOI_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(AOI_RESETS_ARRAY) || \
+   !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -66,6 +72,7 @@ static uint32_t AOI_GetInstance(AOI_Type *base)
 
     return instance;
 }
+#endif
 
 /*!
  * brief Initializes an AOI instance for operation.

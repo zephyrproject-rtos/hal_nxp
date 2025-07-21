@@ -1,5 +1,5 @@
 /*
- * Copyright  2018-2021, 2024 NXP
+ * Copyright  2018-2021, 2024-2025 NXP
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -15,14 +15,6 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.tempmon"
 #endif
-
-/*! @brief TEMPMON calibration data mask. */
-#define TEMPMON_HOTTEMPMASK    0xFFU
-#define TEMPMON_HOTTEMPSHIFT   0x00U
-#define TEMPMON_HOTCOUNTMASK   0xFFF00U
-#define TEMPMON_HOTCOUNTSHIFT  0X08U
-#define TEMPMON_ROOMCOUNTMASK  0xFFF00000U
-#define TEMPMON_ROOMCOUNTSHIFT 0x14U
 
 /*! @brief the room temperature. */
 #define TEMPMON_ROOMTEMP 25.0f

@@ -1,6 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
- * All rights reserved.
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -82,25 +81,25 @@ void OPAMP_Init(OPAMP_Type *base, const opamp_config_t *config)
     RESET_ReleasePeripheralReset(s_opampResets[OPAMP_GetInstance(base)]);
 #endif
 
-    tmp32 = OPAMP_OPAMP_CTR_EN(config->enable) | OPAMP_OPAMP_CTR_MODE(config->mode) |
+    tmp32 = OPAMP_OPAMP_CTR_EN(config->enable ? 1U : 0U) | OPAMP_OPAMP_CTR_MODE(config->mode) |
             OPAMP_OPAMP_CTR_BIASC(config->trimOption) | OPAMP_OPAMP_CTR_INTREF(config->intRefVoltage) |
             OPAMP_OPAMP_CTR_PREF(config->posRefVoltage) |
 #if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW
-            OPAMP_OPAMP_CTR_OUTSW(config->enableOutputSwitch) |
+            OPAMP_OPAMP_CTR_OUTSW(config->enableOutputSwitch ? 1U : 0U) |
 #endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW */
 #if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1
-            OPAMP_OPAMP_CTR_ADCSW1(config->enablePosADCSw1) |
+            OPAMP_OPAMP_CTR_ADCSW1(config->enablePosADCSw1 ? 1U : 0U) |
 #else
-            OPAMP_OPAMP_CTR_ADCSW(config->enablePosADCSw) |
+            OPAMP_OPAMP_CTR_ADCSW(config->enablePosADCSw ? 1U : 0U) |
 #endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1 */
 #if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2
-            OPAMP_OPAMP_CTR_ADCSW2(config->enablePosADCSw2) |
+            OPAMP_OPAMP_CTR_ADCSW2(config->enablePosADCSw2 ? 1U : 0U) |
 #endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2 */
 #if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL
             OPAMP_OPAMP_CTR_INPSEL(config->PosInputChannelSelection) |
 #endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL */
 #if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD
-            OPAMP_OPAMP_CTR_TRIGMD(config->enableTriggerMode) |
+            OPAMP_OPAMP_CTR_TRIGMD(config->enableTriggerMode ? 1U : 0U) |
 #endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD */
             OPAMP_OPAMP_CTR_NGAIN(config->negGain);
     base->OPAMP_CTR = tmp32;

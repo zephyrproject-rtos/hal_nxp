@@ -105,8 +105,8 @@ typedef enum
 /* structure defining the ce command buffer configuration */
 typedef struct
 {
-    int *buffer_base_ptr;
-    int *next_buffer_ptr;
+    unsigned int *buffer_base_ptr;
+    unsigned int *next_buffer_ptr;
     int *status_buffer_ptr;
     unsigned int n_cmd;
     ce_cmd_mode_t cmdmode;
@@ -115,8 +115,8 @@ typedef struct
 /* structure for a single zv/ce command */
 typedef struct
 {
-    short n_ptr_args;                     /* number of pointer arguments */
-    short n_param_args;                   /* number of integer arguments */
+    unsigned short n_ptr_args;            /* number of pointer arguments */
+    unsigned short n_param_args;          /* number of integer arguments */
     void *arg_ptr_array[CE_CMD_MAX_ARGS]; /* array of pointer arguments */
     int arg_param_array[CE_CMD_MAX_ARGS]; /* array of integer arguments */
 } ce_cmdstruct_t;

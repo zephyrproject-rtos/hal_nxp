@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2021, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,12 +24,12 @@
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*!
  * @brief Get instance number for ADC12 module.
  *
  * @param base ADC12 peripheral base address
  */
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t ADC12_GetInstance(ADC_Type *base);
 #endif
 
@@ -63,8 +62,8 @@ static status_t ADC12_GetCalibrationStatus(ADC_Type *base);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/*! @brief Pointers to ADC12 bases for each instance. */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+/*! @brief Pointers to ADC12 bases for each instance. */
 static ADC_Type *const s_adc12Bases[] = ADC_BASE_PTRS;
 /*! @brief Pointers to ADC12 clocks for each instance. */
 static const clock_ip_name_t s_adc12Clocks[] = ADC12_CLOCKS;
@@ -322,10 +321,13 @@ status_t ADC12_DoAutoCalibration(ADC_Type *base)
     tmp32 |= (ADC_SC3_AVGE_MASK | ADC_SC3_AVGS(((uint32_t)ADC_SC3_AVGS_MASK >> (uint32_t)ADC_SC3_AVGS_SHIFT)));
 
     /* Trigger calibration and wait until it complete. */
+    base->SC1[0] &= ~ADC_SC1_COCO_MASK; /* Clear SC1A[COCO] before calibration. */
+    
     tmp32 |= ADC_SC3_CAL_MASK;
     base->SC3 = tmp32;
-    while ((uint32_t)kADC12_ChannelConversionCompletedFlag !=
-           (ADC12_GetChannelStatusFlags(base, 0U) & (uint32_t)kADC12_ChannelConversionCompletedFlag))
+    __ISB();
+
+    while ((base->SC3 & ADC_SC3_CAL_MASK) == ADC_SC3_CAL_MASK)
     {
     }
 

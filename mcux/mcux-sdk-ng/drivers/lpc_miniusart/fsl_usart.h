@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*! @} */
 
 /*! @brief Macro gate for enable transaction API.  1 for enable, 0 for disable. */
@@ -601,7 +601,7 @@ static inline void USART_WriteByte(USART_Type *base, uint8_t data)
  */
 static inline uint8_t USART_ReadByte(USART_Type *base)
 {
-    return (uint8_t)base->RXDAT & 0xFFU;
+    return (uint8_t)(base->RXDAT & 0xFFU);
 }
 
 /*!

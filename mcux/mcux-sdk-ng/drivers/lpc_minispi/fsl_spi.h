@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020,2022 NXP
+ * Copyright 2017-2020,2022,2025 NXP
  * All rights reserved.
  *
  *
@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 /*! @} */
 
 #ifndef SPI_DUMMYDATA

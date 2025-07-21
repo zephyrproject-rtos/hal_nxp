@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, 2022 NXP
+ * Copyright 2017-2020, 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SEMA4 driver version */
-#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*! @brief The number to reset all SEMA4 gates. */
@@ -46,6 +46,30 @@
  */
 #define SEMA4_GATEn(base, n) (((volatile uint8_t *)(&((base)->Gate00)))[(n)])
 
+#endif
+
+/*!
+ * @brief Maximum polling iterations for SEMA4 waiting loops
+ *
+ * This parameter defines the maximum number of iterations for any polling loop
+ * in the SEMA4 driver code before timing out and returning an error.
+ *
+ * It applies to all waiting loops in SEMA4 driver, such as waiting for a gate
+ * to be unlocked, waiting for a reset to complete, or waiting for a resource
+ * to become available.
+ *
+ * This is a count of loop iterations, not a time-based value.
+ *
+ * If defined as 0, polling loops will continue indefinitely until their exit condition
+ * is met, which could potentially cause the system to hang if hardware doesn't respond
+ * or if a resource is never released.
+ */
+#ifndef SEMA4_BUSY_POLL_COUNT
+    #ifdef CONFIG_SEMA4_BUSY_POLL_COUNT
+        #define SEMA4_BUSY_POLL_COUNT CONFIG_SEMA4_BUSY_POLL_COUNT
+    #else
+        #define SEMA4_BUSY_POLL_COUNT 0U
+    #endif
 #endif
 
 /*******************************************************************************
@@ -99,11 +123,18 @@ status_t SEMA4_TryLock(SEMA4_Type *base, uint8_t gateNum, uint8_t procNum);
  * locked by other processors, this function waits until it is unlocked and then
  * lock it.
  *
+ * If SEMA4_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return kStatus_Timeout.
+ *
  * @param base SEMA4 peripheral base address.
  * @param gateNum  Gate number to lock.
  * @param procNum  Current processor number.
+ *
+ * @return status_t
+ * @retval kStatus_Success The gate was successfully locked.
+ * @retval kStatus_Timeout Timeout occurred while waiting for the gate to be unlocked.
  */
-void SEMA4_Lock(SEMA4_Type *base, uint8_t gateNum, uint8_t procNum);
+status_t SEMA4_Lock(SEMA4_Type *base, uint8_t gateNum, uint8_t procNum);
 
 /*!
  * @brief Unlocks the SEMA4 gate.
@@ -180,10 +211,10 @@ static inline status_t SEMA4_ResetAllGates(SEMA4_Type *base)
  * @param mask OR'ed value of the gate index, for example: (1<<0) | (1<<1) means
  * gate 0 and gate 1.
  */
-static inline void SEMA4_EnableGateNotifyInterrupt(SEMA4_Type *base, uint8_t procNum, uint32_t mask)
+static inline void SEMA4_EnableGateNotifyInterrupt(SEMA4_Type *base, uint8_t procNum, uint16_t mask)
 {
     mask = __REV(__RBIT(mask));
-    base->CPINE[procNum].CPINE |= (uint16_t)mask;
+    base->CPINE[procNum].CPINE |= mask;
 }
 
 /*!
@@ -197,10 +228,10 @@ static inline void SEMA4_EnableGateNotifyInterrupt(SEMA4_Type *base, uint8_t pro
  * @param mask OR'ed value of the gate index, for example: (1<<0) | (1<<1) means
  * gate 0 and gate 1.
  */
-static inline void SEMA4_DisableGateNotifyInterrupt(SEMA4_Type *base, uint8_t procNum, uint32_t mask)
+static inline void SEMA4_DisableGateNotifyInterrupt(SEMA4_Type *base, uint8_t procNum, uint16_t mask)
 {
     mask = __REV(__RBIT(mask));
-    base->CPINE[procNum].CPINE &= (uint16_t)(~mask);
+    base->CPINE[procNum].CPINE &= (~mask);
 }
 
 /*!

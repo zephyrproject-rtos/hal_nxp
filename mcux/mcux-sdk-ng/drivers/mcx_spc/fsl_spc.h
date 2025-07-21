@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.7.0. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+/*! @brief SPC driver version 2.8.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 8, 0))
 /*! @} */
 
 #define SPC_EVD_CFG_REG_EVDISO_SHIFT   0UL
@@ -622,6 +622,7 @@ static inline bool SPC_CheckSwitchState(SPC_Type *base)
  */
 spc_power_domain_low_power_mode_t SPC_GetPowerDomainLowPowerMode(SPC_Type *base, spc_power_domain_id_t powerDomainId);
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_PWR_REQ_STATUS_BIT) && (FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_PWR_REQ_STATUS_BIT == 0U))
 /*!
  * @brief Checks power domain's low power request.
  *
@@ -637,6 +638,7 @@ static inline bool SPC_CheckPowerDomainLowPowerRequest(SPC_Type *base, spc_power
     return ((base->PD_STATUS[(uint8_t)powerDomainId] & SPC_PD_STATUS_PWR_REQ_STATUS_MASK) ==
             SPC_PD_STATUS_PWR_REQ_STATUS_MASK);
 }
+#endif /* FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_PWR_REQ_STATUS_BIT */
 
 /*!
  * @brief Clears selected power domain's low power request flag.

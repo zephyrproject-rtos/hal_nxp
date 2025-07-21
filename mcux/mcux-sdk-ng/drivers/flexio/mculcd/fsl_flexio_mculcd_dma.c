@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020,2023 NXP
+ * Copyright 2019-2020,2023,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -493,7 +493,11 @@ status_t FLEXIO_MCULCD_TransferDMA(FLEXIO_MCULCD_Type *base,
             /* For 6800, assert the RDWR pin. */
             if (kFLEXIO_MCULCD_6800 == base->busType)
             {
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
                 base->setRDWRPin(true);
+#else
+                base->setRDWRPin(true, base->userData);
+#endif
             }
             FLEXIO_MCULCD_SetMultiBeatsReadConfig(base);
             FLEXIO_MCULCD_EnableRxDMA(base, true);
@@ -504,7 +508,11 @@ status_t FLEXIO_MCULCD_TransferDMA(FLEXIO_MCULCD_Type *base,
             /* For 6800, de-assert the RDWR pin. */
             if (kFLEXIO_MCULCD_6800 == base->busType)
             {
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
                 base->setRDWRPin(false);
+#else
+                base->setRDWRPin(false, base->userData);
+#endif
             }
             FLEXIO_MCULCD_SetMultiBeatsWriteConfig(base);
             FLEXIO_MCULCD_EnableTxDMA(base, true);

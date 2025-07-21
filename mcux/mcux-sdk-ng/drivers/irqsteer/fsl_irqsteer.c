@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020, 2024 NXP
- * All rights reserved.
+ * Copyright 2016-2017, 2020, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -201,7 +200,7 @@ IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_mast
 
     bitOffset = __CLZ(__RBIT(base->CHn_STATUS[regIndex]));
     /* When no result found, continue the loop to parse the next CHn_STATUS register. */
-    if (IRQSTEER_INT_SRC_REG_WIDTH == bitOffset)
+    if ((IRQSTEER_INT_SRC_REG_WIDTH == bitOffset) && (regIndex > 0U))
     {
         regIndex--;
         bitOffset = __CLZ(__RBIT(base->CHn_STATUS[regIndex]));

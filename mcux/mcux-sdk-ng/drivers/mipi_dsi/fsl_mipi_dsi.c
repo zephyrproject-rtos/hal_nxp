@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019-2024 NXP
+ * Copyright 2017, 2019-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -394,6 +394,11 @@ static void DSI_ApbClearRxFifo(MIPI_DSI_HOST_Type *base)
     volatile uint32_t dummy = 0U;
     uint32_t level          = base->PKT_FIFO_RD_LEVEL;
 
+    if (level == 0U)
+    {
+        return;
+    }
+
     while (0U != (level--))
     {
         dummy = base->PKT_RX_PAYLOAD;
@@ -610,6 +615,11 @@ void DSI_SetDpiConfig(MIPI_DSI_HOST_Type *base,
 uint32_t DSI_InitDphy(MIPI_DSI_HOST_Type *base, const dsi_dphy_config_t *config, uint32_t refClkFreq_Hz)
 {
     assert(config);
+    assert((uint32_t)config->tHsPrepare_HalfEscClk >= DSI_THS_PREPARE_HALF_ESC_CLK_BASE);
+    assert((uint32_t)config->tClkPrepare_HalfEscClk >= DSI_TCLK_PREPARE_HALF_ESC_CLK_BASE);
+    assert((uint32_t)config->tHsZero_ByteClk >= DSI_THS_ZERO_BYTE_CLK_BASE);
+    assert((uint32_t)config->tClkZero_ByteClk >= DSI_TCLK_ZERO_BYTE_CLK_BASE);
+
 
 #if !((defined(FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
     uint32_t cn = 0x0U;
@@ -864,10 +874,13 @@ void DSI_WriteApbTxPayloadExt(
 
     if (sendDcsCmd)
     {
+        assert(payloadSizeLocal <= (FSL_DSI_TX_MAX_PAYLOAD_BYTE - 1U));
         payloadSizeLocal += 1U;
     }
-
-    assert(payloadSizeLocal <= FSL_DSI_TX_MAX_PAYLOAD_BYTE);
+    else
+    {
+        assert(payloadSizeLocal <= FSL_DSI_TX_MAX_PAYLOAD_BYTE);
+    }
 
     /* The first 4-byte. */
     if (sendDcsCmd)

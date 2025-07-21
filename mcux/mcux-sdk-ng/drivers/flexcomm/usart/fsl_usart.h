@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 8, 4))
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 8, 5))
 /*! @} */
 
 #define USART_FIFOTRIG_TXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_TXLVL_MASK) >> USART_FIFOTRIG_TXLVL_SHIFT)
@@ -580,6 +580,8 @@ static inline uint32_t USART_GetEnabledInterrupts(USART_Type *base)
  */
 static inline void USART_EnableTxDMA(USART_Type *base, bool enable)
 {
+    uint32_t globalMask = DisableGlobalIRQ();
+
     if (enable)
     {
         base->FIFOCFG |= USART_FIFOCFG_DMATX_MASK;
@@ -588,6 +590,8 @@ static inline void USART_EnableTxDMA(USART_Type *base, bool enable)
     {
         base->FIFOCFG &= ~(USART_FIFOCFG_DMATX_MASK);
     }
+
+    EnableGlobalIRQ(globalMask);
 }
 
 /*!
@@ -595,6 +599,8 @@ static inline void USART_EnableTxDMA(USART_Type *base, bool enable)
  */
 static inline void USART_EnableRxDMA(USART_Type *base, bool enable)
 {
+    uint32_t globalMask = DisableGlobalIRQ();
+
     if (enable)
     {
         base->FIFOCFG |= USART_FIFOCFG_DMARX_MASK;
@@ -603,6 +609,8 @@ static inline void USART_EnableRxDMA(USART_Type *base, bool enable)
     {
         base->FIFOCFG &= ~(USART_FIFOCFG_DMARX_MASK);
     }
+
+    EnableGlobalIRQ(globalMask);
 }
 
 /*!

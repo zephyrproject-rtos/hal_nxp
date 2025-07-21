@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020,2022 NXP
+ * Copyright 2017-2020,2022,2025 NXP
  * All rights reserved.
  *
  *
@@ -271,7 +271,7 @@ status_t SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint3
     }
     /* Set CFG register to configure phase/polarity/direction/master mode/loopback/ssel pin select. */
     tmp |= (SPI_CFG_CPHA(config->clockPhase) | SPI_CFG_CPOL(config->clockPolarity) | SPI_CFG_LSBF(config->direction) |
-            SPI_CFG_MASTER(1) | SPI_CFG_LOOP(config->enableLoopback) |
+            SPI_CFG_MASTER(1) | SPI_CFG_LOOP(config->enableLoopback ? 1U : 0U) |
             ((uint32_t)config->sselPolarity & (uint32_t)kSPI_SpolActiveAllHigh));
     base->CFG = tmp;
 

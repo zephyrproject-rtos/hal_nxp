@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -81,7 +81,7 @@ void PWT_Init(PWT_Type *base, const pwt_config_t *config)
      * Clear all interrupt, disable the counter, config the first counter load enable bit,
      * enable module interrupt bit.
      */
-    base->CS = PWT_CS_FCTLE(config->enableFirstCounterLoad) | PWT_CS_PWTIE_MASK;
+    base->CS = PWT_CS_FCTLE(config->enableFirstCounterLoad ? 1U : 0U) | PWT_CS_PWTIE_MASK;
 
     /* Set clock source, prescale and input source */
     base->CR = PWT_CR_PCLKS(config->clockSource) | PWT_CR_PRE(config->prescale) | PWT_CR_PINSEL(config->inputSelect);
@@ -95,7 +95,7 @@ void PWT_Init(PWT_Type *base, const pwt_config_t *config)
 void PWT_Deinit(PWT_Type *base)
 {
     /* Disable the counter */
-    base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK);
+    base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK & 0xFFU);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the PWT clock */

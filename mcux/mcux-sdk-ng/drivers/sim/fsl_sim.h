@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
- * All rights reserved.
+ * Copyright 2016-2021, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +19,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SIM_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Driver version. */
+#define FSL_SIM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Driver version. */
 /*! @} */
 
 #if (defined(FSL_FEATURE_SIM_OPT_HAS_USB_VOLTAGE_REGULATOR) && FSL_FEATURE_SIM_OPT_HAS_USB_VOLTAGE_REGULATOR)
@@ -61,12 +60,14 @@ typedef struct _sim_rf_addr
 } sim_rf_addr_t;
 #endif /* FSL_FEATURE_SIM_HAS_RF_MAC_ADDR */
 
+#if (defined(FSL_FEATURE_SIM_FCFG_HAS_FLASHDOZE) && FSL_FEATURE_SIM_FCFG_HAS_FLASHDOZE)
 /*!@brief Flash enable mode. */
 enum _sim_flash_mode
 {
     kSIM_FlashDisableInWait = SIM_FCFG1_FLASHDOZE_MASK, /*!< Disable flash in wait mode.   */
     kSIM_FlashDisable       = SIM_FCFG1_FLASHDIS_MASK   /*!< Disable flash in normal mode. */
 };
+#endif /* FSL_FEATURE_SIM_FCFG_HAS_FLASHDOZE */
 
 /*******************************************************************************
  * API
@@ -100,6 +101,7 @@ void SIM_SetUsbVoltRegulatorEnableMode(uint32_t mask);
  */
 void SIM_GetUniqueId(sim_uid_t *uid);
 
+#if (defined(FSL_FEATURE_SIM_FCFG_HAS_FLASHDOZE) && FSL_FEATURE_SIM_FCFG_HAS_FLASHDOZE)
 /*!
  * @brief Sets the flash enable mode.
  *
@@ -109,6 +111,7 @@ static inline void SIM_SetFlashMode(uint8_t mode)
 {
     SIM->FCFG1 = mode;
 }
+#endif /* FSL_FEATURE_SIM_FCFG_HAS_FLASHDOZE */
 
 #if (defined(FSL_FEATURE_SIM_HAS_RF_MAC_ADDR) && FSL_FEATURE_SIM_HAS_RF_MAC_ADDR)
 /*!
@@ -141,6 +144,18 @@ static inline void SIM_EnableSystickClock(bool enable)
 }
 
 #endif /* FSL_FEATURE_SIM_MISC2_HAS_SYSTICK_CLK_EN */
+
+#if (defined(FSL_FEATURE_SIM_HAS_SW_TRG) && FSL_FEATURE_SIM_HAS_SW_TRG)
+/*!
+ * @brief Software trigger to TRGMUX
+ *
+ * Generates software trigger to peripherals through TRGMUX.
+ */
+static inline void SIM_SetSoftwareTrigger(void)
+{
+    SIM->MISCTRL1 |= SIM_MISCTRL1_SW_TRG_MASK;
+}
+#endif /* FSL_FEATURE_SIM_HAS_SW_TRG */
 
 #if defined(__cplusplus)
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -109,6 +109,13 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
     base->TOVALH  = (uint16_t)((config->timeoutValue >> 16U) & 0xFFFFU);
     base->TOVALL  = (uint16_t)((config->timeoutValue) & 0xFFFFU);
     base->STCTRLH = value;
+
+    /* The watchdog reconfigure sequence requires writes watchdog control registers within the WCT window. The WCT
+    window is a fixed 256 bus clocks. */
+    for (uint32_t i = 0; i < WDOG_WCT_INSTRUCITON_COUNT; i++)
+    {
+        (void)base->RSTCNT;
+    }
     EnableGlobalIRQ(primaskValue);
 }
 

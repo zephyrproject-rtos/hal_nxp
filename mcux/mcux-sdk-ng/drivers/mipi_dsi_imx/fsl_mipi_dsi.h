@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @brief Error codes for the MIPI DSI driver. */
@@ -422,7 +422,7 @@ void DSI_GetDefaultConfig(dsi_config_t *config);
  * the formula is as follows, m & n is configured by mediamix control block.
  *
  * desiredOutFreq_Hz = refClkFreq_Hz * (M + 2) / (N + 1).
- * M: 40 ~ 625
+ * M: 62 ~ 625
  * N: 0 ~ 15
  *
  * @param m Control of the feedback multiplication ratio.
@@ -684,6 +684,39 @@ void DSI_ReadRxData(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
  * @retval kStatus_DSI_Fail Transfer failed for other reasons.
  */
 status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer);
+
+/*!
+ * brief Lookup table method to obtain HS frequency range of operation selection override.
+ *
+ * param bnd_width band width frequncy in Hz
+ * return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
+ */
+uint16_t Pll_Set_Hs_Freqrange(uint32_t bnd_width);
+
+/*!
+ * brief Lookup table method to obtain PLL Proportional Charge Pump control.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
+ */
+uint16_t Pll_Set_Pll_Prop_Param(uint32_t pll_freq_sel);
+
+/*!
+ * brief Lookup table method to obtain DDL target oscillation frequency.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
+ */
+uint16_t Pll_Set_Sr_Osc_Freq_Target(uint32_t pll_freq_sel);
+
+/*!
+ * brief Lookup table method to obtain VCO parameter.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
+ * find suitable value, return default value 63.
+ */
+uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel);
 /*! @} */
 
 #if defined(__cplusplus)

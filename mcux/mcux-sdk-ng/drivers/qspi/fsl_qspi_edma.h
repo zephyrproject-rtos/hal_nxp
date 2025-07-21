@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief QSPI EDMA driver version 2.2.2. */
-#define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief QSPI EDMA driver version. */
+#define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*! @} */
 
 typedef struct _qspi_edma_handle qspi_edma_handle_t;

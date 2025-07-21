@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -80,6 +79,30 @@ typedef enum _sema42_gate_status
  */
 #define SEMA42_GATEn(base, n) (((volatile uint8_t *)(&((base)->GATE3)))[(n) ^ 3U])
 
+/*!
+ * @brief Maximum polling iterations for SEMA42 waiting loops
+ *
+ * This parameter defines the maximum number of iterations for any polling loop
+ * in the SEMA42 driver code before timing out and returning an error.
+ *
+ * It applies to all waiting loops in SEMA42 driver, such as waiting for a gate
+ * to be unlocked, waiting for a reset to complete, or waiting for a resource
+ * to become available.
+ *
+ * This is a count of loop iterations, not a time-based value.
+ *
+ * If defined as 0, polling loops will continue indefinitely until their exit condition
+ * is met, which could potentially cause the system to hang if hardware doesn't respond
+ * or if a resource is never released.
+ */
+#ifndef SEMA42_BUSY_POLL_COUNT
+    #ifdef CONFIG_SEMA42_BUSY_POLL_COUNT
+        #define SEMA42_BUSY_POLL_COUNT CONFIG_SEMA42_BUSY_POLL_COUNT
+    #else
+        #define SEMA42_BUSY_POLL_COUNT 0U
+    #endif
+#endif
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -131,11 +154,18 @@ status_t SEMA42_TryLock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum);
  * locked by other processors, this function waits until it is unlocked and then
  * lock it.
  *
+ * If SEMA42_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return kStatus_Timeout.
+ *
  * @param base SEMA42 peripheral base address.
  * @param gateNum  Gate number to lock.
  * @param procNum  Current processor number.
+ *
+ * @return status_t
+ * @retval kStatus_Success The gate was successfully locked.
+ * @retval kStatus_Timeout Timeout occurred while waiting for the gate to be unlocked.
  */
-void SEMA42_Lock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum);
+status_t SEMA42_Lock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum);
 
 /*!
  * @brief Unlocks the SEMA42 gate.

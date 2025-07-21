@@ -17,6 +17,18 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#define DMA_CORE_MP_CSR_EDBG_MASK      (0x2U)
+#define DMA_CORE_MP_CSR_ERCA_MASK      (0x4U)
+#define DMA_CORE_MP_CSR_HAE_MASK       (0x10U)
+#define DMA_CORE_MP_CSR_HALT_MASK      (0x20U)
+#define DMA_CORE_MP_CSR_GCLC_MASK      (0x40U)
+#define DMA_CORE_MP_CSR_GMRC_MASK      (0x80U)
+#define DMA_CORE_MP_CSR_EDBG(x)        (((uint32_t)(((uint32_t)(x)) << (1U))) & (0x2U))
+#define DMA_CORE_MP_CSR_ERCA(x)        (((uint32_t)(((uint32_t)(x)) << (2U))) & (0x4U))
+#define DMA_CORE_MP_CSR_HAE(x)         (((uint32_t)(((uint32_t)(x)) << (4U))) & (0x10U))
+#define DMA_CORE_MP_CSR_HALT(x)        (((uint32_t)(((uint32_t)(x)) << (5U))) & (0x20U))
+#define DMA_CORE_MP_CSR_GCLC(x)        (((uint32_t)(((uint32_t)(x)) << (6U))) & (0x40U))
+#define DMA_CORE_MP_CSR_GMRC(x)        (((uint32_t)(((uint32_t)(x)) << (7U))) & (0x80U))
 #define DMA_CSR_INTMAJOR_MASK          (0x2U)
 #define DMA_CSR_INTHALF_MASK           (0x4U)
 #define DMA_CSR_DREQ_MASK              (0x8U)
@@ -99,17 +111,17 @@
 
 #else
 
-#define DMA_ERR_DBE_FLAG                     DMA_MP_ES_DBE_MASK
-#define DMA_ERR_SBE_FLAG                     DMA_MP_ES_SBE_MASK
-#define DMA_ERR_SGE_FLAG                     DMA_MP_ES_SGE_MASK
-#define DMA_ERR_NCE_FLAG                     DMA_MP_ES_NCE_MASK
-#define DMA_ERR_DOE_FLAG                     DMA_MP_ES_DOE_MASK
-#define DMA_ERR_DAE_FLAG                     DMA_MP_ES_DAE_MASK
-#define DMA_ERR_SOE_FLAG                     DMA_MP_ES_SOE_MASK
-#define DMA_ERR_SAE_FLAG                     DMA_MP_ES_SAE_MASK
-#define DMA_ERR_ERRCHAN_FLAG                 DMA_MP_ES_ERRCHN_MASK
-#define DMA_ERR_ECX_FLAG                     DMA_MP_ES_ECX_MASK
-#define DMA_ERR_FLAG                         DMA_MP_ES_VLD_MASK
+#define DMA_ERR_DBE_FLAG                     (0x1U)
+#define DMA_ERR_SBE_FLAG                     (0x2U)
+#define DMA_ERR_SGE_FLAG                     (0x4U)
+#define DMA_ERR_NCE_FLAG                     (0x8U)
+#define DMA_ERR_DOE_FLAG                     (0x10U)
+#define DMA_ERR_DAE_FLAG                     (0x20U)
+#define DMA_ERR_SOE_FLAG                     (0x40U)
+#define DMA_ERR_SAE_FLAG                     (0x80U)
+#define DMA_ERR_ERRCHAN_FLAG                 (0x1F000000U)
+#define DMA_ERR_ECX_FLAG                     (0x100U)
+#define DMA_ERR_FLAG                         (0x80000000U)
 
 /*! @brief get/clear DONE bit*/
 #define DMA_CLEAR_DONE_STATUS(base, channel) (EDMA_CHANNEL_BASE(base, channel)->CH_CSR |= DMA_CH_CSR_DONE_MASK)
@@ -252,14 +264,23 @@ typedef edma_core_tcd_t EDMA_TCDType;
 typedef void EDMA_Type;
 
 /*!@brief EDMA base address convert macro */
-#define EDMA_BASE(base)
+#define EDMA_CORE_BASE(base)
+#define EDMA_MP_BASE(base) ((edma_core_mp_t *)((uint32_t)(uint32_t *)(base)))
+#if defined EDMA_CHANNEL_ARRAY_STEPn 
+#define EDMA_CHANNEL_BASE(base, channel)                                          \
+    ((edma_core_channel_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
+                             EDMA_CHANNEL_ARRAY_STEPn(base, channel)))
+#define EDMA_TCD_BASE(base, channel)                                          \
+    ((edma_core_tcd_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
+                         EDMA_CHANNEL_ARRAY_STEPn(base, channel) + 0x20U))
+#else
 #define EDMA_CHANNEL_BASE(base, channel)                                          \
     ((edma_core_channel_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
                              (channel)*EDMA_CHANNEL_ARRAY_STEP(base)))
 #define EDMA_TCD_BASE(base, channel)                                          \
     ((edma_core_tcd_t *)((uint32_t)(uint32_t *)(base) + EDMA_CHANNEL_OFFSET + \
                          (channel)*EDMA_CHANNEL_ARRAY_STEP(base) + 0x20U))
-#define EDMA_MP_BASE(base) ((edma_core_mp_t *)((uint32_t)(uint32_t *)(base)))
+#endif
 
 /*!@brief EDMA TCD type macro */
 #if defined FSL_FEATURE_EDMA_TCD_TYPEn

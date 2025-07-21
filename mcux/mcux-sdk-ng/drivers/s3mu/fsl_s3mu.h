@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,16 +20,19 @@
  *******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines S3MU driver version 2.0.1.
+/*! @brief Defines S3MU driver version 2.0.2.
  *
  * Change log:
+ * - Version 2.0.2
+ *   - Fix macro BIT redefined warning when compiling with Zephyr.
+ *
  * - Version 2.0.1
  *   - Update kStatusGroup_SNT to kStatusGroup_ELEMU
  *
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_S3MU_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_S3MU_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 #define MU_MSG_HEADER_SIZE (1U)

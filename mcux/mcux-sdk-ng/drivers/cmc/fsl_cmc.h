@@ -1,6 +1,5 @@
 /*
- * Copyright 2019 ~ 2024 NXP
- * All rights reserved.
+ * Copyright 2019-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,8 +16,27 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CMC driver version 2.4.0. */
-#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief CMC driver version 2.4.3. */
+#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+/*! @} */
+
+/*! @name Configuration */
+
+/*!
+ * @brief Max loops to wait for CMC SRAM operation complete
+ *
+ * When configuring the SRAM, driver will wait for the completion of new settings.
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef CMC_SRAM_BUSY_TIMEOUT
+    #ifdef CONFIG_CMC_SRAM_BUSY_TIMEOUT
+        #define CMC_SRAM_BUSY_TIMEOUT CONFIG_CMC_SRAM_BUSY_TIMEOUT
+    #else
+        #define CMC_SRAM_BUSY_TIMEOUT 0U
+    #endif
+#endif
+
 /*! @} */
 
 #if defined(CMC_BLR_LOCK_MASK)
@@ -151,7 +169,9 @@ enum _cmc_system_reset_sources
 #if (defined(FSL_FEATURE_CMC_SRS_HAS_JTAG) && FSL_FEATURE_CMC_SRS_HAS_JTAG)
     kCMC_JTAGSystemReset = CMC_SRS_JTAG_MASK, /*!< The reset caused by a JTAG system reset request. */
 #endif /* (defined(FSL_FEATURE_CMC_SRS_HAS_JTAG) && FSL_FEATURE_CMC_SRS_HAS_JTAG) */
+#if defined CMC_SRS_SECVIO_MASK
     kCMC_SecurityViolationReset = CMC_SRS_SECVIO_MASK, /*!< The reset caused by a Security Violation logic. */
+#endif
 };
 
 /*!
@@ -687,6 +707,7 @@ static inline void CMC_ForceBootConfiguration(CMC_Type *base, bool assert)
  * @{
  */
 
+#if !(defined FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER && (FSL_FEATURE_CMC_HAS_NO_BOOTROM_LOCK_REGISTER > 0))
 /*!
  * @brief Lock write operation to BootROM status register and BootROM Lock register.
  *
@@ -700,6 +721,7 @@ static inline void CMC_LockWriteOperationToBootRomStatusReg(CMC_Type *base, uint
 {
     assert((uint32_t)index < CMC_BSR_COUNT);
     base->BLR = ((base->BLR & ~CMC_BLR_LOCK_IDX_MASK(index)) | CMC_BLR_LOCK_IDX(index, 0x5UL));
+
 }
 
 /*!
@@ -716,6 +738,7 @@ static inline bool CMC_CheckBootRomStatusRegWriteLocked(CMC_Type *base, uint8_t 
     assert((uint32_t)index < CMC_BSR_COUNT);
     return ((base->BLR & CMC_BLR_LOCK_IDX_MASK(index)) == CMC_BLR_LOCK_IDX(index, 0x5UL));
 }
+#endif
 
 /*!
  * @brief Gets the information written by the BootROM.
@@ -820,8 +843,10 @@ static inline void CMC_PowerOnSRAMLowPowerOnly(CMC_Type *base, uint32_t mask)
  *
  * @param base CMC peripheral base address.
  * @param config Pointer to cmc_sram_voltage_config structure.
+ * @retval kStatus_Success Successfully configured.
+ * @retval kStatus_Timeout Timeout occurs while waiting completion.
  */
-void CMC_ConfigSRAMVoltage(CMC_Type *base, const cmc_sram_voltage_config *config);
+status_t CMC_ConfigSRAMVoltage(CMC_Type *base, const cmc_sram_voltage_config *config);
 #endif /* FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER */
 
 /*! @} */

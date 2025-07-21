@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022, 2024 NXP
+ * Copyright 2016-2020, 2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO driver version. */
-#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
 /*! @brief Calculate FlexIO timer trigger.*/

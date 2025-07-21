@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022 NXP
+ * Copyright 2016-2020, 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
 #ifndef FLEXIO_SPI_DUMMYDATA
@@ -126,7 +126,9 @@ typedef struct _flexio_spi_type
 typedef struct _flexio_spi_master_config
 {
     bool enableMaster;                        /*!< Enable/disable FlexIO SPI master after configuration. */
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     bool enableInDoze;                        /*!< Enable/disable FlexIO operation in doze mode. */
+#endif
     bool enableInDebug;                       /*!< Enable/disable FlexIO operation in debug mode. */
     bool enableFastAccess;                    /*!< Enable/disable fast access to FlexIO registers,
                                               fast access requires the FlexIO clock to be at least
@@ -140,7 +142,9 @@ typedef struct _flexio_spi_master_config
 typedef struct _flexio_spi_slave_config
 {
     bool enableSlave;                         /*!< Enable/disable FlexIO SPI slave after configuration. */
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     bool enableInDoze;                        /*!< Enable/disable FlexIO operation in doze mode. */
+#endif
     bool enableInDebug;                       /*!< Enable/disable FlexIO operation in debug mode. */
     bool enableFastAccess;                    /*!< Enable/disable fast access to FlexIO registers,
                                               fast access requires the FlexIO clock to be at least

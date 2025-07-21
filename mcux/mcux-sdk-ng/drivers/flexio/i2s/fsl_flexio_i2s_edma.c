@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -239,7 +239,18 @@ status_t FLEXIO_I2S_TransferSendEDMA(FLEXIO_I2S_Type *base,
     assert((handle != NULL) && (xfer != NULL));
 
     edma_transfer_config_t config = {0};
-    uint32_t destAddr             = FLEXIO_I2S_TxGetDataRegisterAddress(base) + (4UL - handle->bytesPerFrame);
+    uint32_t destAddr;
+
+    if (handle->bytesPerFrame <= 4UL)
+    {
+        uint32_t baseAddr = FLEXIO_I2S_TxGetDataRegisterAddress(base);
+        uint32_t offset = 4UL - handle->bytesPerFrame;
+        destAddr = (UINT32_MAX - baseAddr < offset) ? baseAddr : baseAddr + offset;
+    }
+    else
+    {
+        destAddr = FLEXIO_I2S_TxGetDataRegisterAddress(base);
+    }
 
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U))

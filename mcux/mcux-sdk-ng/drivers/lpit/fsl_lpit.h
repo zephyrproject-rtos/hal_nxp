@@ -23,6 +23,17 @@
 /*! @{ */
 #define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
                                                         /*! @{ */
+/*! @brief Delay used in LPIT_Reset
+ *
+ * The macro value should be larger than 4 * core clock / LPIT peripheral clock.
+ */
+#ifndef LPIT_RESET_STATE_DELAY
+#ifdef CONFIG_LPIT_RESET_STATE_DELAY
+#define LPIT_RESET_STATE_DELAY CONFIG_LPIT_RESET_STATE_DELAY
+#else
+#define LPIT_RESET_STATE_DELAY 120u
+#endif
+#endif
 
 /*!
  * @brief List of LPIT channels
@@ -376,6 +387,33 @@ static inline void LPIT_StopTimer(LPIT_Type *base, lpit_chnl_t channel)
 /*! @}*/
 
 /*!
+ * @brief Short wait for LPIT state reset.
+ *
+ * After clear or set LPIT_EN, there should be delay longer than 4 LPIT
+ * functional clock.
+ * @param count Delay count.
+ */
+static void LPIT_ResetStateDelay(void)
+{
+    /* clang-format off */
+    __asm volatile(
+        "    MOV R0, %0                 \n"
+        "loop%=:                        \n"
+#if defined(__GNUC__) && !defined(__ARMCC_VERSION)
+        "    SUB    R0, R0, #1          \n"
+#else
+        "    SUBS   R0, R0, #1          \n"
+#endif
+        "    CMP    R0, #0              \n"
+        "    BNE    loop%=              \n"
+        :
+        : "r" (LPIT_RESET_STATE_DELAY / 4U)
+        : "r0"
+    );
+    /* clang-format on */
+}
+
+/*!
  * @brief Performs a software reset on the LPIT module.
  *
  * This resets all channels and registers except the Module Control Register.
@@ -385,6 +423,7 @@ static inline void LPIT_StopTimer(LPIT_Type *base, lpit_chnl_t channel)
 static inline void LPIT_Reset(LPIT_Type *base)
 {
     base->MCR |= LPIT_MCR_SW_RST_MASK;
+    LPIT_ResetStateDelay();
     base->MCR &= ~LPIT_MCR_SW_RST_MASK;
 }
 

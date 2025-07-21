@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -240,18 +240,30 @@ void SDK_DelayCoreCycles(uint32_t u32Num)
  * brief Delay at least for some time.
  *  Please note that, this API uses while loop for delay, different run-time environments make the time not precise,
  *  if precise delay count was needed, please implement a new delay function with hardware timer.
- *  The maximum delay time is limited with MCU core clock, for example CPU core clock = 100MHz, then the maximum delay
- *  time should be less than 0xFFFFFFFF/100 = 42,949,672us
  *
  * param delayTime_us Delay time in unit of microsecond.
  * param coreClock_Hz  Core clock frequency with Hz.
  */
 void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz)
 {
-    assert(0U != delayTime_us);
-    uint32_t count = USEC_TO_COUNT(delayTime_us, coreClock_Hz);
+    while(delayTime_us > 0)
+    {
+        uint32_t us, count;
 
-    SDK_DelayCoreCycles(count);
+        /* USEC_TO_COUNT(fixed-point) supports maximum 4294us, use 4000UL here */
+        if(delayTime_us > 4000UL)
+        {
+            us = 4000UL;
+        }
+        else
+        {
+            us = delayTime_us;
+        }
+        delayTime_us -= us;
+
+        count = USEC_TO_COUNT(us, coreClock_Hz);
+        SDK_DelayCoreCycles(count);
+    }
 }
 
 /*!
@@ -297,7 +309,7 @@ uint32_t SDK_CovertCountToUs(uint32_t u32Count, uint32_t u32Hz)
      *  count * 1000000UL / hz
      *
      *  i1 = count / hz
-     *  r1 = count - i1 * hz	 *
+     *  r1 = count - i1 * hz
      *  sum = i1 * 1000000UL
      *
      *  count = r1 * 10UL
@@ -443,8 +455,22 @@ uint32_t SDK_CovertCountToMs(uint32_t u32Count, uint32_t u32Hz)
  */
 void SDK_DelayAtLeastMs(uint32_t delayTime_ms, uint32_t coreClock_Hz)
 {
-    assert(0U != delayTime_ms);
-    uint32_t count = MSEC_TO_COUNT(delayTime_ms, coreClock_Hz);
+    while(delayTime_ms > 0)
+    {
+        uint32_t ms, count;
 
-    SDK_DelayCoreCycles(count);
+        /* MSEC_TO_COUNT(fixed-point) supports maximum 42949ms @ 100MHz, use 1000UL here */
+        if(delayTime_ms > 1000UL)
+        {
+            ms = 1000UL;
+        }
+        else
+        {
+            ms = delayTime_ms;
+        }
+        delayTime_ms -= ms;
+
+        count = MSEC_TO_COUNT(ms, coreClock_Hz);
+        SDK_DelayCoreCycles(count);
+    }
 }

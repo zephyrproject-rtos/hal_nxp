@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020,2021 NXP
+ * Copyright 2016-2020,2021,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 7))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 8))
 /*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
@@ -838,7 +838,7 @@ static inline bool LPSPI_IsMaster(LPSPI_Type *base)
  */
 static inline void LPSPI_FlushFifo(LPSPI_Type *base, bool flushTxFifo, bool flushRxFifo)
 {
-    base->CR |= ((uint32_t)flushTxFifo << LPSPI_CR_RTF_SHIFT) | ((uint32_t)flushRxFifo << LPSPI_CR_RRF_SHIFT);
+    base->CR |= ((flushTxFifo ? 1U : 0U) << LPSPI_CR_RTF_SHIFT) | ((flushRxFifo ? 1U : 0U) << LPSPI_CR_RRF_SHIFT);
 }
 
 /*!
@@ -897,6 +897,7 @@ static inline void LPSPI_SetAllPcsPolarity(LPSPI_Type *base, uint32_t mask)
  */
 static inline void LPSPI_SetFrameSize(LPSPI_Type *base, uint32_t frameSize)
 {
+    assert(frameSize >= 1);
     base->TCR = (LPSPI_GetTcr(base) & ~LPSPI_TCR_FRAMESZ_MASK) | LPSPI_TCR_FRAMESZ(frameSize - 1U);
 }
 

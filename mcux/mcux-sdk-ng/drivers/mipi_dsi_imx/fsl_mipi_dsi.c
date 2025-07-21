@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -168,10 +168,11 @@ static uint16_t DSI_CheckAndUpdatePixCycle(uint16_t cycle, uint8_t bpp, uint8_t 
            that is no paddings for these parameters. */
         if ((((cycle + (uint16_t)i) * (uint16_t)bpp) % div) == 0U)
         {
-            updatedCycle = cycle + (uint16_t)i;
+            updatedCycle = (cycle + (uint16_t)i) * bpp / div;
             break;
         }
     }
+
     return updatedCycle;
 }
 
@@ -499,7 +500,7 @@ void DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config)
  * the formula is as follows, m & n is configured by mediamix control block.
  *
  * desiredOutFreq_Hz = refClkFreq_Hz * (M + 2) / (N + 1).
- * M: 40 ~ 625
+ * M: 62 ~ 625
  * N: 0 ~ 15
  *
  * param m Control of the feedback multiplication ratio.
@@ -511,53 +512,37 @@ void DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config)
  */
 uint32_t DSI_DphyGetPllDivider(uint32_t *m, uint32_t *n, uint32_t refClkFreq_Hz, uint32_t desiredOutFreq_Hz)
 {
-    uint32_t mCur;
-    uint8_t nCur;
+    uint32_t mCur, nCur;
     uint32_t curOutFreq;
     uint32_t diffCur;
     uint32_t diff     = 0xFFFFFFFFU;
     uint32_t bestFreq = 0U;
 
-    for (nCur = 0U; nCur <= 0xFU; nCur++)
+    for (nCur = 0U; nCur < 16U; nCur++)
     {
         /* Calculate the m value */
-        mCur = desiredOutFreq_Hz * ((uint32_t)nCur + 1U) / refClkFreq_Hz - 2U;
-
-        if (mCur > 625U)
+        for (mCur = 62U; mCur <= 623U; mCur++)
         {
-            continue;
-        }
+            curOutFreq = refClkFreq_Hz * (mCur + 2U) / (nCur + 1U);
+            diffCur = (curOutFreq > desiredOutFreq_Hz) ? (curOutFreq - desiredOutFreq_Hz) : (desiredOutFreq_Hz - curOutFreq);
 
-        curOutFreq = refClkFreq_Hz * (mCur + 2U) / (nCur + 1U);
-
-        if (curOutFreq > desiredOutFreq_Hz)
-        {
-            diffCur = (curOutFreq - desiredOutFreq_Hz);
-        }
-        else
-        {
-            diffCur = (desiredOutFreq_Hz - curOutFreq);
-        }
-
-        /* Save the better configuration. */
-        if (diffCur < diff)
-        {
-            diff     = diffCur;
-            *m       = mCur;
-            *n       = nCur;
-            bestFreq = curOutFreq;
-
-            /* If the output PLL frequency is exactly the disired value, return directly. */
-            if (0U == diff)
+            if (diffCur < diff)
             {
-                break;
+                diff     = diffCur;
+                *m       = mCur;
+                *n       = nCur;
+                bestFreq = curOutFreq;
+
+                if (diff == 0)
+                {
+                    return bestFreq;
+                }
             }
         }
     }
 
     return bestFreq;
 }
-
 /*!
  * brief Power up the DSI
  *
@@ -1042,4 +1027,119 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     }
 
     return kStatus_Success;
+}
+
+/*!
+ * brief Lookup table method to obtain HS frequency range of operation selection override.
+ *
+ * param bnd_width band width frequncy in Hz
+ * return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
+ */
+uint16_t Pll_Set_Hs_Freqrange(uint32_t bnd_width) {
+    uint16_t set_hs_freqrange = 0U;
+    float bnd_wdth = (float)bnd_width / 1000000.0f;
+    static const struct {
+        float upper_bound;
+        uint16_t value;
+    } freq_table[] = {
+        { 82.5, 0 }, { 92.5, 16 }, { 102.5, 32 }, { 112.5, 48 },
+        { 122.5, 1 }, { 132.5, 17 }, { 142.5, 33 }, { 152.5, 49 },
+        { 162.5, 2 }, { 172.5, 18 }, { 182.5, 34 }, { 192.5, 50 },
+        { 207.5, 3 }, { 222.5, 19 }, { 237.5, 35 }, { 262.5, 51 },
+        { 287.5, 4 }, { 312.5, 20 }, { 337.5, 37 }, { 375.0, 53 },
+        { 425.0, 5 }, { 475.0, 22 }, { 525.0, 38 }, { 575.0, 55 },
+        { 625.0, 7 }, { 675.0, 24 }, { 725.0, 40 }, { 775.0, 57 },
+        { 825.0, 9 }, { 875.0, 25 }, { 925.0, 41 }, { 975.0, 58 },
+        { 1025.0, 10 }, { 1075.0, 26 }, { 1125.0, 42 }, { 1175.0, 59 },
+        { 1225.0, 11 }, { 1275.0, 27 }, { 1325.0, 43 }, { 1375.0, 60 },
+        { 1425.0, 12 }, { 1475.0, 28 }, { 1525.0, 44 }, { 1575.0, 61 },
+        { 1625.0, 13 }, { 1675.0, 29 }, { 1725.0, 46 }, { 1775.0, 62 },
+        { 1825.0, 14 }, { 1875.0, 30 }, { 1925.0, 47 }, { 1975.0, 63 },
+        { 2025.0, 15 }, { 2075.0, 64 }, { 2125.0, 65 }, { 2175.0, 66 },
+        { 2225.0, 67 }, { 2275.0, 68 }, { 2325.0, 69 }, { 2375.0, 70 },
+        { 2425.0, 71 }, { 2475.0, 72 }, { 2525.0, 73 }
+    };
+
+    for (size_t i = 0; i < sizeof(freq_table) / sizeof(freq_table[0]); i++) {
+        if (bnd_wdth <= freq_table[i].upper_bound) {
+            set_hs_freqrange = freq_table[i].value;
+            break;
+        }
+    }
+
+    return set_hs_freqrange;
+}
+
+/*!
+ * brief Lookup table method to obtain PLL Proportional Charge Pump control.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
+ */
+uint16_t Pll_Set_Pll_Prop_Param(uint32_t pll_freq_sel)
+{
+    uint16_t set_pll_prop_param = 13;
+
+    if (pll_freq_sel >= 1150 && pll_freq_sel <= 1250)
+    {
+        set_pll_prop_param = 14;
+    }
+
+    return set_pll_prop_param;
+}
+
+/*!
+ * brief Lookup table method to obtain DDL target oscillation frequency.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
+ */
+uint16_t Pll_Set_Sr_Osc_Freq_Target(uint32_t pll_freq_sel)
+{
+    uint32_t set_sr_osc_freq_target;
+    if (pll_freq_sel > 1000)
+        set_sr_osc_freq_target = 0x7D0U;
+    else if (pll_freq_sel > 500)
+        set_sr_osc_freq_target = 0x4E2U;
+    else if (pll_freq_sel <= 500)
+        set_sr_osc_freq_target = 0x384U;
+    else
+        set_sr_osc_freq_target = 0;
+
+    return set_sr_osc_freq_target;
+}
+
+/*!
+ * brief Lookup table method to obtain VCO parameter.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
+ * find suitable value, return default value 63.
+ */
+uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel) {
+    uint16_t vco_freq;
+
+    if (pll_freq_sel >= 320)
+        vco_freq = pll_freq_sel;
+    else if (pll_freq_sel >= 160)
+        vco_freq = pll_freq_sel * 2;
+    else if (pll_freq_sel >= 80)
+        vco_freq = pll_freq_sel * 4;
+    else
+        vco_freq = pll_freq_sel * 8;
+
+    static const struct {
+        uint16_t vco_freq;
+        uint16_t param;
+    } vco_table[] = {
+        {1150, 1}, {1100, 1}, {630, 3}, {420, 9}, {320, 15},
+        {210, 25}, {160, 31}, {105, 41}, {80, 47}, {53, 57}, {40, 63}
+    };
+
+    for (size_t i = 0; i < sizeof(vco_table) / sizeof(vco_table[0]); i++) {
+        if (vco_freq >= vco_table[i].vco_freq) {
+            return vco_table[i].param;
+        }
+    }
+    return 63;
 }

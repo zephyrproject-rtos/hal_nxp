@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -127,6 +127,16 @@ static inline void EnableGlobalIRQ(uint32_t intCtrl)
 static inline void EnableMachineModeInt(ezhv_mie_mask_t mask)
 {
     csr_set(CSR_MIE, mask);
+}
+
+/*!
+ * @brief Disable M-mode interrupt.
+ *
+ * @param mask M-mode interrupt mask.
+ */
+static inline void DisableMachineModeInt(ezhv_mie_mask_t mask)
+{
+    csr_clear(CSR_MIE, mask);
 }
 
 #if defined(__cplusplus)

@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022~2023 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,8 +23,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief ADC driver version 2.5.3. */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 5,3))
+/*! @brief ADC driver version 2.6.0. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*! @} */
 
 /*!
@@ -95,6 +94,19 @@ enum _adc_interrupt_enable
                                                                interrupt/DMA trigger. */
 };
 
+#if (defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP)
+/*!
+ * @brief Extend ADC sampling time according to source impedance.
+ */
+typedef enum _adc_extend_sample_time
+{
+    kADC_ExtendSampleTimeNotUsed = 0x0U,    /* Not Used */
+    kADC_ExtendSampleTime1 = 0x1U,          /* 0.621kΩ */
+    kADC_ExtendSampleTime2 = 0x14U,         /* 55kΩ */
+    kADC_ExtendSampleTime3 = 0x1fU,         /* 87kΩ */
+}adc_extend_sample_time_t;
+#endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP */
+
 #if (defined(FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE) && FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE)
 /*!
  * @brief Define selection of clock mode.
@@ -114,7 +126,7 @@ typedef enum _adc_clock_mode
 typedef enum _adc_resolution
 {
     kADC_Resolution6bit = 3U,
-    /*!< 6-bit resolution. */  /* This is a HW issue that the ADC resolution enum configure not align with HW implement,
+    /*!< 6-bit resolution. NOTE: This is a HW issue that the ADC resolution enum configure not align with HW implement,
                                   ES2 chip already fixed the issue, Currently, update ADC enum define as a workaround */
     kADC_Resolution8bit  = 2U, /*!< 8-bit resolution. */
     kADC_Resolution10bit = 1U, /*!< 10-bit resolution. */
@@ -275,6 +287,9 @@ typedef struct _adc_config
     uint32_t sampleTimeNumber; /*!< By default, with value as "0U", the sample period would be 2.5 ADC clocks. Then,
                                     to plus the "sampleTimeNumber" value here. The available value range is in 3 bits.*/
 #endif                         /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP. */
+#if (defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP)
+    adc_extend_sample_time_t extendSampleTimeNumber; /*!< Extend ADC sampling time according to source impedance.*/
+#endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP */
 #if (defined(FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE) && FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE)
     bool enableLowPowerMode; /*!< If disable low-power mode, ADC remains activated even when no conversions are
                               requested.
@@ -362,6 +377,7 @@ void ADC_Deinit(ADC_Type *base);
  *   config->resolution = kADC_Resolution12bit;
  *   config->enableBypassCalibration = false;
  *   config->sampleTimeNumber = 0U;
+ *   config->extendSampleTimeNumber = kADC_ExtendSampleTimeNotUsed;
  * @endcode
  * @param config Pointer to configuration structure.
  */

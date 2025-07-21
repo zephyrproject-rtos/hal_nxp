@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,8 +23,13 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 13))
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
+
+/* Legacy code sets callback for each PINT event resource. */
+#ifndef PINT_USE_LEGACY_CALLBACK
+#define PINT_USE_LEGACY_CALLBACK (0)
+#endif
 
 /* PININT Bit slice source register bits */
 #define PININT_BITSLICE_SRC_START 8U
@@ -150,15 +155,26 @@ typedef enum _pint_pmatch_bslice_cfg
     kPINT_PatternMatchBothEdges       = 7U, /*!< Either rising or falling edge */
 } pint_pmatch_bslice_cfg_t;
 
+/*! @brief PINT event status */
+typedef struct _pint_status
+{
+    uint32_t pmstatus;
+    bool riseFlag;
+    bool fallFlag;
+    bool activeLevelFlag;
+} pint_status_t;
+
 /*! @brief PINT Callback function. */
-typedef void (*pint_cb_t)(pint_pin_int_t pintr, uint32_t pmatch_status);
+typedef void (*pint_cb_t)(pint_pin_int_t pintr, pint_status_t *status);
 
 typedef struct _pint_pmatch_cfg
 {
     pint_pmatch_input_src_t bs_src;
     pint_pmatch_bslice_cfg_t bs_cfg;
     bool end_point;
+#if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
     pint_cb_t callback;
+#endif
 } pint_pmatch_cfg_t;
 
 /*******************************************************************************
@@ -180,8 +196,9 @@ extern "C" {
  */
 void PINT_Init(PINT_Type *base);
 
+#if (defined(PINT_USE_LEGACY_CALLBACK) && PINT_USE_LEGACY_CALLBACK)
 /*!
- * @brief	Configure PINT peripheral pin interrupt.
+ * @brief Deprecated Configure PINT peripheral pin interrupt.
 
  * This function configures a given pin interrupt.
  *
@@ -195,7 +212,7 @@ void PINT_Init(PINT_Type *base);
 void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enable_t enable, pint_cb_t callback);
 
 /*!
- * @brief	Get PINT peripheral pin interrupt configuration.
+ * @brief Deprecated Get PINT peripheral pin interrupt configuration.
 
  * This function returns the configuration of a given pin interrupt.
  *
@@ -207,6 +224,45 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
  * @retval None.
  */
 void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_enable_t *enable, pint_cb_t *callback);
+#else
+/*!
+ * @brief Set PINT callback.
+
+ * This function set the callback for PINT interupt handler.
+ *
+ * @param base Base address of the PINT peripheral.
+ * @param callback Callback.
+ *
+ * @retval None.
+ */
+void PINT_SetCallback(PINT_Type *base, pint_cb_t callback);
+
+/*!
+ * @brief Configure PINT peripheral pin interrupt.
+
+ * This function configures a given pin interrupt.
+ *
+ * @param base Base address of the PINT peripheral.
+ * @param intr Pin interrupt.
+ * @param enable Selects detection logic.
+ *
+ * @retval None.
+ */
+void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enable_t enable);
+
+/*!
+ * @brief Get PINT peripheral pin interrupt configuration.
+
+ * This function returns the configuration of a given pin interrupt.
+ *
+ * @param base Base address of the PINT peripheral.
+ * @param pintr Pin interrupt.
+ * @param enable Pointer to store the detection logic.
+ *
+ * @retval None.
+ */
+void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_enable_t *enable);
+#endif
 
 /*!
  * @brief	Clear Selected pin interrupt status only when the pin was triggered by edge-sensitive.

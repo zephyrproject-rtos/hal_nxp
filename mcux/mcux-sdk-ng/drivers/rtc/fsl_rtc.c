@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -118,11 +118,12 @@ static uint32_t RTC_ConvertDatetimeToSeconds(const rtc_datetime_t *datetime)
      * represented in the hours, minutes and seconds field*/
     seconds += ((uint32_t)datetime->day - 1U);
     /* For leap year if month less than or equal to Febraury, decrement day counter*/
-    if ((0U == (datetime->year & 3U)) && (datetime->month <= 2U))
+    if ((0U == (datetime->year & 3U)) && (datetime->month <= 2U) && 0U != seconds)
     {
         seconds--;
     }
 
+    assert(seconds < UINT32_MAX / SECONDS_IN_A_DAY);
     seconds = (seconds * SECONDS_IN_A_DAY) + ((uint32_t)datetime->hour * SECONDS_IN_A_HOUR) +
               ((uint32_t)datetime->minute * SECONDS_IN_A_MINUTE) + datetime->second;
 
@@ -236,16 +237,16 @@ void RTC_Init(RTC_Type *base, const rtc_config_t *config)
 /* Setup the update mode and supervisor access mode */
 #if !(defined(FSL_FEATURE_RTC_HAS_NO_CR_OSCE) && FSL_FEATURE_RTC_HAS_NO_CR_OSCE)
     reg &= ~(RTC_CR_UM_MASK | RTC_CR_SUP_MASK);
-    reg |= RTC_CR_UM(config->updateMode) | RTC_CR_SUP(config->supervisorAccess);
+    reg |= RTC_CR_UM(config->updateMode ? 1U : 0U) | RTC_CR_SUP(config->supervisorAccess ? 1U : 0U);
 #else
     reg &= ~RTC_CR_UM_MASK;
-    reg |= RTC_CR_UM(config->updateMode);
+    reg |= RTC_CR_UM(config->updateMode ? 1U : 0U);
 #endif
 
 #if defined(FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION) && FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION
     /* Setup the wakeup pin select */
     reg &= ~(RTC_CR_WPS_MASK);
-    reg |= RTC_CR_WPS(config->wakeupSelect);
+    reg |= RTC_CR_WPS(config->wakeupSelect ? 1U : 0U);
 #endif /* FSL_FEATURE_RTC_HAS_WAKEUP_PIN */
     base->CR = reg;
 
@@ -304,8 +305,6 @@ void RTC_GetDefaultConfig(rtc_config_t *config)
  */
 status_t RTC_SetDatetime(RTC_Type *base, const rtc_datetime_t *datetime)
 {
-    assert(NULL != datetime);
-
     /* Return error if the time provided is not valid */
     if (!(RTC_CheckDatetimeFormat(datetime)))
     {
@@ -326,9 +325,11 @@ status_t RTC_SetDatetime(RTC_Type *base, const rtc_datetime_t *datetime)
  */
 void RTC_GetDatetime(RTC_Type *base, rtc_datetime_t *datetime)
 {
-    assert(NULL != datetime);
+    assert(datetime != NULL);
 
     uint32_t seconds = 0;
+
+    (void)memset(datetime, 0, sizeof(rtc_datetime_t));
 
     seconds = base->TSR;
     RTC_ConvertSecondsToDatetime(seconds, datetime);
@@ -349,10 +350,12 @@ void RTC_GetDatetime(RTC_Type *base, rtc_datetime_t *datetime)
  */
 status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
 {
-    assert(NULL != alarmTime);
-
     uint32_t alarmSeconds = 0;
     uint32_t currSeconds  = 0;
+
+#if defined(FSL_FEATURE_RTC_HAS_ERRATA_010716) && (FSL_FEATURE_RTC_HAS_ERRATA_010716)
+    bool restartCounter = false;
+#endif /* FSL_FEATURE_RTC_HAS_ERRATA_010716 */
 
     /* Return error if the alarm time provided is not valid */
     if (!(RTC_CheckDatetimeFormat(alarmTime)))
@@ -371,8 +374,23 @@ status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
         return kStatus_Fail;
     }
 
+#if defined(FSL_FEATURE_RTC_HAS_ERRATA_010716) && (FSL_FEATURE_RTC_HAS_ERRATA_010716)
+    /* Save current TCE state */
+    restartCounter = ((base->SR & RTC_SR_TCE_MASK) != 0U);
+    /* Disable time counter */
+    base->SR &= ~RTC_SR_TCE_MASK;
+#endif /* FSL_FEATURE_RTC_HAS_ERRATA_010716 */
+
     /* Set alarm in seconds*/
     base->TAR = alarmSeconds;
+
+#if defined(FSL_FEATURE_RTC_HAS_ERRATA_010716) && (FSL_FEATURE_RTC_HAS_ERRATA_010716)
+    /* Restore TCE if it was enabled */
+    if (restartCounter)
+    {
+        base->SR |= RTC_SR_TCE_MASK;
+    }
+#endif /* FSL_FEATURE_RTC_HAS_ERRATA_010716 */
 
     return kStatus_Success;
 }
@@ -385,7 +403,7 @@ status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
  */
 void RTC_GetAlarm(RTC_Type *base, rtc_datetime_t *datetime)
 {
-    assert(NULL != datetime);
+    assert(RTC_CheckDatetimeFormat(datetime));
 
     uint32_t alarmSeconds = 0;
 
@@ -853,7 +871,7 @@ void RTC_SetMonotonicCounter(RTC_Type *base, uint64_t counter)
     base->MER &= ~RTC_MER_MCE_MASK;
 
     base->MCHR = (uint32_t)((counter) >> 32);
-    base->MCLR = (uint32_t)(counter);
+    base->MCLR = (uint32_t)(counter & 0xFFFFFFFFU);
 }
 
 /*!

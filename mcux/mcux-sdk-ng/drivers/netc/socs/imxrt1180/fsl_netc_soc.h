@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,13 +20,25 @@
 #define NETC_ENETC_PCIE_FUNC_OFFSET       (3U)       /*!< The ENETC PCIE function index. */
 #define NETC_ENETC_PORT_GROUP_BASE_OFFSET (0x4000U)  /*!< The ENETC port group register base address offset. */
 #define NETC_ENETC_GLOBAL_BASE_OFFSET     (0x10000U) /*!< The ENETC global register base address offset. */
+#define NETC_SWT_COMMON_BASE_OFFSET       (0x0U)     /*!< The ENETC common register base address offset. */
+#define NETC_SWT_GLOBAL_BASE_OFFSET       (0x80000U) /*!< The Switch global register base address offset. */
 /*@}*/
 
 /*! @brief Switch port numbers(Port0 ~ 4 in Switch Core). */
 #define NETC_SOC_SWT_PORT_NUM (5U)
 
 /*! @brief The Switch function register base address offset.(NETC_F1_PCI_HDR_TYPE0) */
-#define NETC_SOC_SWT_PCIE_FUNC_OFFSET       (2U)
+#define NETC_SOC_SWT_PCIE_FUNC_OFFSET (2U)
+#define NETC_SOC_SWT_MSI_FUNC_OFFSET  (2U)
+
+/*
+ *                port4 port3  port2  port1  port0
+ * 0x10 = 0b 000  1     0      0      0      0
+ * It means that input frame will forward to switch port4
+ */
+#ifndef NETC_SOC_INPUT_FRM_SWT_PORT_BITMAP
+#define NETC_SOC_INPUT_FRM_SWT_PORT_BITMAP (0x10)
+#endif
 
 /*! @brief Defines the NETC link index. */
 typedef enum _netc_soc_link
@@ -42,21 +54,21 @@ typedef enum _netc_soc_link
 typedef enum _netc_soc_revmii_mii_speed
 {
     kNETC_SocRevMiiSpeed100M = 0U, /*!< RevMII MII mode speed 100 Mbps. */
-    kNETC_SocRevMiiSpeed10M, /*!< RevMII MII mode speed 10 Mbps. */
+    kNETC_SocRevMiiSpeed10M,       /*!< RevMII MII mode speed 10 Mbps. */
 } netc_soc_revmii_mii_speed_t;
 
 /*! @brief Defines clock source for NETC timer. */
 typedef enum _netc_soc_timer_clk_sel
 {
     kNETC_SocTimerCcmClk = 0U, /*!< PTP timer clock source is from CCM tmr_1588_clk_root. */
-    kNETC_SocTimerExtPinClk, /*!< PTP timer clock source is from chip pin. */
+    kNETC_SocTimerExtPinClk,   /*!< PTP timer clock source is from chip pin. */
 } netc_soc_timer_clk_sel_t;
 
 /*! @brief Defines the timer trigger input source. */
 typedef enum _netc_soc_timer_trig_input
 {
     kNETC_SocTimerTrigIomuxInput = 0U, /*!< Input from IOMUX. */
-    kNETC_SocTimerTrigXbarInput, /*!< Input from XBAR. */
+    kNETC_SocTimerTrigXbarInput,       /*!< Input from XBAR. */
 } netc_soc_timer_trig_input_t;
 
 /*! @brief Station interface index enumerator */
@@ -180,12 +192,4 @@ status_t NETC_SocSetLinkAddr(netc_soc_link_t link, uint8_t phyAddr);
  */
 uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port);
 
-/*!
- * @brief Preinit VSIs
- *
- * @param hw      The enetc hw handle.
- * @param si      The SI object.
- * @return status_t
- */
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
 #endif /* FSL_NETC_SOC_H_ */

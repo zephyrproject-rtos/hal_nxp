@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief ISI driver version */
-#define FSL_ISI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_ISI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
 
 /*! @brief ISI interrupts. */
@@ -222,9 +222,9 @@ typedef struct _isi_csc_config
     float C1;            /*!< Must be in the range of [-3.99609375, 3.99609375]. */
     float C2;            /*!< Must be in the range of [-3.99609375, 3.99609375]. */
     float C3;            /*!< Must be in the range of [-3.99609375, 3.99609375]. */
-    int16_t D1;          /*!< Must be in the range of [-256, 255]. */
-    int16_t D2;          /*!< Must be in the range of [-256, 255]. */
-    int16_t D3;          /*!< Must be in the range of [-256, 255]. */
+    int32_t D1;          /*!< Must be in the range of [-256, 255]. */
+    int32_t D2;          /*!< Must be in the range of [-256, 255]. */
+    int32_t D3;          /*!< Must be in the range of [-256, 255]. */
 } isi_csc_config_t;
 
 /*! @brief ISI flipping mode. */

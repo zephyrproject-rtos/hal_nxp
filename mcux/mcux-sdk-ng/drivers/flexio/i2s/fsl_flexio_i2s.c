@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -75,7 +75,7 @@ static void FLEXIO_I2S_WriteNonBlocking(FLEXIO_I2S_Type *base, uint8_t bitWidth,
             data |= (temp << (8U * j));
             txData++;
         }
-        base->flexioBase->SHIFTBUFBIS[base->txShifterIndex] = data << (32U - bitWidth);
+        base->flexioBase->SHIFTBUFBIS[base->txShifterIndex] = (bitWidth <= 32U) ? (data << (32U - bitWidth)) : data;
         data                                                = 0;
     }
 }
@@ -359,7 +359,17 @@ void FLEXIO_I2S_DisableInterrupts(FLEXIO_I2S_Type *base, uint32_t mask)
  */
 void FLEXIO_I2S_MasterSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *format, uint32_t srcClock_Hz)
 {
-    uint32_t timDiv  = srcClock_Hz / (format->sampleRate_Hz * format->bitWidth * 2U);
+    uint32_t timDiv = 0;
+
+    if (format->sampleRate_Hz > 0)
+    {
+        timDiv = srcClock_Hz / format->sampleRate_Hz;
+        if (format->bitWidth > 0)
+        {
+            timDiv = timDiv / format->bitWidth / 2U;
+        }
+    }
+
     uint32_t bclkDiv = 0;
 
     /* Shall keep bclk and fs div an integer */
@@ -375,6 +385,7 @@ void FLEXIO_I2S_MasterSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *form
     base->flexioBase->TIMCMP[base->bclkTimerIndex] = FLEXIO_TIMCMP_CMP(bclkDiv);
 }
 
+
 /*!
  * brief Configures the FlexIO I2S audio format in slave mode.
  *
@@ -386,12 +397,17 @@ void FLEXIO_I2S_MasterSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *form
  */
 void FLEXIO_I2S_SlaveSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *format)
 {
+    assert(format != NULL);
+    assert(format->bitWidth == 8U || format->bitWidth == 16U || format->bitWidth == 24U || format->bitWidth == 32U);
+
     /* Set Frame sync timer cmp */
-    base->flexioBase->TIMCMP[base->fsTimerIndex] = FLEXIO_TIMCMP_CMP(format->bitWidth * 4UL - 3UL);
+    uint32_t fsTimerCmp = format->bitWidth * 4UL - 3UL;
+    base->flexioBase->TIMCMP[base->fsTimerIndex] = FLEXIO_TIMCMP_CMP(fsTimerCmp);
 
     /* Set bit clock timer cmp */
     base->flexioBase->TIMCMP[base->bclkTimerIndex] = FLEXIO_TIMCMP_CMP(format->bitWidth * 2UL - 1UL);
 }
+
 
 /*!
  * brief Sends data using a blocking method.
@@ -519,7 +535,9 @@ void FLEXIO_I2S_TransferTxCreateHandle(FLEXIO_I2S_Type *base,
 {
     assert(handle != NULL);
 
+#if defined(FLEXIO_IRQS)
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
+#endif
 
     /* Zero the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -534,8 +552,10 @@ void FLEXIO_I2S_TransferTxCreateHandle(FLEXIO_I2S_Type *base,
     /* Set the TX/RX state. */
     handle->state = (uint32_t)kFLEXIO_I2S_Idle;
 
+#if defined(FLEXIO_IRQS)
     /* Enable interrupt in NVIC. */
     (void)EnableIRQ(flexio_irqs[FLEXIO_I2S_GetInstance(base)]);
+#endif
 }
 
 /*!
@@ -557,7 +577,9 @@ void FLEXIO_I2S_TransferRxCreateHandle(FLEXIO_I2S_Type *base,
 {
     assert(handle != NULL);
 
+#if defined(FLEXIO_IRQS)
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
+#endif
 
     /* Zero the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -572,8 +594,10 @@ void FLEXIO_I2S_TransferRxCreateHandle(FLEXIO_I2S_Type *base,
     /* Set the TX/RX state. */
     handle->state = (uint32_t)kFLEXIO_I2S_Idle;
 
+#if defined(FLEXIO_IRQS)
     /* Enable interrupt in NVIC. */
     (void)EnableIRQ(flexio_irqs[FLEXIO_I2S_GetInstance(base)]);
+#endif
 }
 
 /*!
@@ -834,10 +858,20 @@ void FLEXIO_I2S_TransferTxHandleIRQ(void *i2sBase, void *i2sHandle)
         FLEXIO_I2S_WriteNonBlocking(base, handle->bitWidth, buffer, dataSize);
 
         /* Update internal counter */
-        handle->queue[handle->queueDriver].dataSize -= dataSize;
+        if (handle->queue[handle->queueDriver].dataSize >= dataSize)
+        {
+            handle->queue[handle->queueDriver].dataSize -= dataSize;
+        }
+        else
+        {
+            /* Handle error case where dataSize is larger than remaining data */
+            handle->queue[handle->queueDriver].dataSize = 0;
+        }
+
         handle->queue[handle->queueDriver].data =
-            (uint8_t *)((uint32_t)handle->queue[handle->queueDriver].data + dataSize);
+        (uint8_t *)((uint32_t)handle->queue[handle->queueDriver].data + dataSize);
     }
+
 
     /* If finished a block, call the callback function */
     if ((handle->queue[handle->queueDriver].dataSize == 0U) && (handle->queue[handle->queueDriver].data != NULL))
@@ -879,9 +913,18 @@ void FLEXIO_I2S_TransferRxHandleIRQ(void *i2sBase, void *i2sHandle)
         FLEXIO_I2S_ReadNonBlocking(base, handle->bitWidth, buffer, dataSize);
 
         /* Update internal state */
-        handle->queue[handle->queueDriver].dataSize -= dataSize;
+        if (handle->queue[handle->queueDriver].dataSize >= dataSize)
+        {
+            handle->queue[handle->queueDriver].dataSize -= dataSize;
+        }
+        else
+        {
+            /* Handle error case where dataSize is larger than remaining data */
+            handle->queue[handle->queueDriver].dataSize = 0;
+        }
+
         handle->queue[handle->queueDriver].data =
-            (uint8_t *)((uint32_t)handle->queue[handle->queueDriver].data + dataSize);
+        (uint8_t *)((uint32_t)handle->queue[handle->queueDriver].data + dataSize);
     }
 
     /* If finished a block, call the callback function */

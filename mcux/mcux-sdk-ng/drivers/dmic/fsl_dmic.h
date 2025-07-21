@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.3.2. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief DMIC driver version 2.3.3. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 /*! @brief _dmic_status DMIC transfer status.*/
@@ -127,6 +127,7 @@ typedef enum _dmic_channel
     kDMIC_Channel6 = 6U, /*!< DMIC channel 6 */
     kDMIC_Channel7 = 7U, /*!< DMIC channel 7 */
 #endif
+    kDMIC_ChannelMAX     /*!< Maximum number of DMIC channels */
 } dmic_channel_t;
 
 /*! @brief _dmic_channel_mask DMIC Channel mask. */
@@ -158,7 +159,7 @@ typedef struct _dmic_channel_config
 {
     pdm_div_t divhfclk;                 /*!< DMIC Clock pre-divider values */
     uint32_t osr;                       /*!< oversampling rate(CIC decimation rate) for PCM */
-    int32_t gainshft;                   /*!< 4FS PCM data gain control */
+    uint32_t gainshft;                  /*!< 4FS PCM data gain control */
     compensation_t preac2coef;          /*!< Pre-emphasis Filter coefficient value for 2FS */
     compensation_t preac4coef;          /*!< Pre-emphasis Filter coefficient value for 4FS */
     dc_removal_t dc_cut_level;          /*!< DMIC DC filter control values. */

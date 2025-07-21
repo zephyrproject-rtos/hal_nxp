@@ -21,6 +21,11 @@ uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler)
 #undef __VECTOR_TABLE
 #endif
 
+    if (((int32_t)irq + 16) < 0)
+    {
+        return MSDK_INVALID_IRQ_HANDLER;
+    }
+
 /* Addresses for VECTOR_TABLE and VECTOR_RAM come from the linker file */
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
     extern uint32_t Image$$VECTOR_ROM$$Base[];

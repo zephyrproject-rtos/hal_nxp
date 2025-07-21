@@ -1,7 +1,5 @@
 /*
- * Copyright 2021-2022, 2024 NXP
- * All rights reserved.
- *
+ * Copyright 2021-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -181,20 +179,27 @@ void SYSPM_DisableCounter(SYSPM_Type *base, syspm_monitor_t monitor)
 #endif /* FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH */
 
 /*!
- * @brief This is the the 40-bits of eventx counter.
+ * brief This is the the 40-bits of eventx counter.
          The value in this register increments each time the event
          selected in PMCRx[SELEVTx] occurs.
  *
- * @param base              SYSPM peripheral base address.
- * @param monitor           syspm control monitor, see to #syspm_monitor_t.
- * @param event             syspm select event, see to #syspm_event_t.
- * @return                  get the the 40 bits of eventx counter.
+ * param base              SYSPM peripheral base address.
+ * param monitor           syspm control monitor, see to #syspm_monitor_t.
+ * param event             syspm select event, see to #syspm_event_t.
+ * return
+ *    - When the return value is not equal to SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents a 40 bits eventx counter.
+ *    - When the return value is equal to SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents timeout occured.
  */
 uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_event_t event)
 {
     uint32_t highOld;
     uint32_t high;
     uint32_t low;
+#if EVENT_COUNT_STABLE_TIMEOUT
+    uint32_t timeout = EVENT_COUNT_STABLE_TIMEOUT;
+#endif
 
     highOld = base->PMCR[(uint8_t)monitor].PMECTR[(uint8_t)event].HI;
     while (true)
@@ -209,6 +214,12 @@ uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_
         {
             highOld = high;
         }
+#if EVENT_COUNT_STABLE_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE;
+        }
+#endif
     }
 
     return ((uint64_t)high << 32U) + low;
@@ -222,13 +233,20 @@ uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_
  *
  * param base              SYSPM peripheral base address.
  * param monitor           syspm control monitor, see to #syspm_monitor_t.
- * return                  get the the 40 bits of instruction counter.
+ * return
+ *    - When the return value is not equal to SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents a 40 bits instruction counter.
+ *    - When the return value is equal to SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents timeout occured.
  */
 uint64_t SYSPM_GetInstructionCounter(SYSPM_Type *base, syspm_monitor_t monitor)
 {
     uint32_t highOld;
     uint32_t high;
     uint32_t low;
+#if INSTRUCTION_COUNT_STABLE_TIMEOUT
+    uint32_t timeout = INSTRUCTION_COUNT_STABLE_TIMEOUT;
+#endif
 
     highOld = base->PMCR[(uint8_t)monitor].PMICTR_HI;
     while (true)
@@ -243,6 +261,12 @@ uint64_t SYSPM_GetInstructionCounter(SYSPM_Type *base, syspm_monitor_t monitor)
         {
             highOld = high;
         }
+#if INSTRUCTION_COUNT_STABLE_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE;
+        }
+#endif
     }
 
     return ((uint64_t)high << 32U) + low;

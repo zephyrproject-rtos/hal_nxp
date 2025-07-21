@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, 2023-2024 NXP
+ * Copyright 2016-2021, 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -57,7 +57,7 @@ volatile uint8_t g_cache64MemPhyAliasId = 0U;
  ******************************************************************************/
 #if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
- * brief Returns an instance number given periphearl base address.
+ * brief Returns an instance number given peripheral base address.
  *
  * param base The peripheral base address.
  * return CACHE64_POLSEL instance number starting from 0.
@@ -239,10 +239,15 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_NONSECURE_ADDR(address + size_byte - 0x01U);
+        /* Check for potential overflow before adding */
+        if ((UINT32_MAX - address) < size_byte)
+        {
+            return;
+        }
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = MSDK_REG_NONSECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
+        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
@@ -256,8 +261,20 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
+
+        /* In some platforms, multiple regions in the memory map are remapped to create
+         * continuous address space. So both startAddr and endAddr need to be remapped.
+        */
+#if defined(CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR)
+        uint32_t startOff = 0U;
+        uint32_t regionOff = endAddr - startAddr;
+        uint32_t cache64RemappBase[CACHE64_PHYMEM_COLUM_COUNT] = CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR;
+        startOff = startAddr - phyMemBase[instance][g_cache64MemPhyAliasId];
+        startAddr = cache64RemappBase[g_cache64MemPhyAliasId] + startOff;
+        endAddr = startAddr + regionOff;
+#endif /* defined(CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR) */
 
         /* Set the invalidate by line command and use the physical address. */
         pccReg = (base->CLCR & ~CACHE64_CTRL_CLCR_LCMD_MASK) | CACHE64_CTRL_CLCR_LCMD(1) | CACHE64_CTRL_CLCR_LADSEL_MASK;
@@ -309,10 +326,15 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_NONSECURE_ADDR(address + size_byte - 0x01U);
+        /* Check for potential overflow before adding */
+        if ((UINT32_MAX - address) < size_byte)
+        {
+            return;
+        }
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = MSDK_REG_NONSECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
+        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
@@ -326,8 +348,20 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
+
+        /* In some platforms, multiple regions in the memory map are remapped to create
+         * continuous address space. So both startAddr and endAddr need to be remapped.
+        */
+#if defined(CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR)
+        uint32_t startOff = 0U;
+        uint32_t regionOff = endAddr - startAddr;
+        uint32_t cache64RemappBase[CACHE64_PHYMEM_COLUM_COUNT] = CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR;
+        startOff = startAddr - phyMemBase[instance][g_cache64MemPhyAliasId];
+        startAddr = cache64RemappBase[g_cache64MemPhyAliasId] + startOff;
+        endAddr = startAddr + regionOff;
+#endif /* defined(CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR) */
 
         /* Set the push by line command. */
         pccReg = (base->CLCR & ~CACHE64_CTRL_CLCR_LCMD_MASK) | CACHE64_CTRL_CLCR_LCMD(2) | CACHE64_CTRL_CLCR_LADSEL_MASK;
@@ -381,10 +415,15 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_NONSECURE_ADDR(address + size_byte - 0x01U);
+        /* Check for potential overflow before adding */
+        if ((UINT32_MAX - address) < size_byte)
+        {
+            return;
+        }
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = MSDK_REG_NONSECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
+        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
@@ -398,8 +437,20 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
+
+        /* In some platforms, multiple regions in the memory map are remapped to create
+         * continuous address space. So both startAddr and endAddr need to be remapped.
+        */
+#if defined(CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR)
+        uint32_t startOff = 0U;
+        uint32_t regionOff = endAddr - startAddr;
+        uint32_t cache64RemappBase[CACHE64_PHYMEM_COLUM_COUNT] = CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR;
+        startOff = startAddr - phyMemBase[instance][g_cache64MemPhyAliasId];
+        startAddr = cache64RemappBase[g_cache64MemPhyAliasId] + startOff;
+        endAddr = startAddr + regionOff;
+#endif /* defined(CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR) */
 
         /* Set the push by line command. */
         pccReg = (base->CLCR & ~CACHE64_CTRL_CLCR_LCMD_MASK) | CACHE64_CTRL_CLCR_LCMD(3) | CACHE64_CTRL_CLCR_LADSEL_MASK;

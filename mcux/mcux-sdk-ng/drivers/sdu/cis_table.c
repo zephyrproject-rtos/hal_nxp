@@ -29,11 +29,11 @@ static uint8_t tohex(uint8_t c)
 {
     if (c < 10U)
     {
-        return (uint8_t)(c + '0');
+        return (uint8_t)(c + (uint8_t)'0');
     }
     else
     {
-        return (uint8_t)((c - 10U) + 'A');
+        return (uint8_t)((c - 10U) + (uint8_t)'A');
     }
 }
 
@@ -95,7 +95,7 @@ void emitvers(uint32_t *p_cis_addr, uint8_t *s, uint32_t subs)
         return;
     }
 
-    emit1(p_cis_addr, (uint8_t)(slen + 2));
+    emit1(p_cis_addr, (uint8_t)((uint8_t)slen + 2U));
     emit1(p_cis_addr, TPLLV1_MAJOR);
     emit1(p_cis_addr, TPLLV1_MINOR);
 
@@ -110,12 +110,12 @@ void emitvers(uint32_t *p_cis_addr, uint8_t *s, uint32_t subs)
     {
         uint32_t id = (uint32_t)((SOCCTRL->CHIP_INFO & SOCCIU_CHIP_INFO_ID_MASK) >> SOCCIU_CHIP_INFO_ID_SHIFT);
 
-        for (i = 0; i < slen; i++)
+        for (i = 0; i < (uint32_t)slen; i++)
         {
             if ((i < ((uint32_t)slen - 2U)) && (s[i] == (uint8_t)'X' && s[i + 1U] == (uint8_t)'X'))
             {
-                REG8(addr + i)      = (uint8_t)tohex((id >> 4U) & 0xfU);
-                REG8(addr + i + 1U) = (uint8_t)tohex(id & 0xfU);
+                REG8(addr + i)      = (uint8_t)tohex((uint8_t)((id >> 4U) & 0xfU));
+                REG8(addr + i + 1U) = (uint8_t)tohex((uint8_t)(id & 0xfU));
             }
         }
     }
@@ -192,7 +192,7 @@ static uint32_t modify(uint32_t tmp, uint32_t hi, uint32_t lo, uint32_t val)
     uint32_t mask;
     uint32_t masklen;
     masklen = (hi - lo) + 1U;       // Width of the field
-    mask    = (uint32_t)((1U << masklen) - 1U); // Now as a mask
+    mask    = (uint32_t)(((uint32_t)1U << masklen) - 1U); // Now as a mask
     val &= mask;                    // mask unshifted val
     val <<= lo;                     // Now move val to field off
     mask <<= lo;                    // mask moves too to field off
@@ -256,7 +256,7 @@ static void set_iomux_helper(uint32_t hi, uint32_t lo)
         addr = &SOCCTRL->MCI_IOMUX_EN1;
     }
     masklen = (hi - lo) + 1U; // Field len
-    mask    = (uint32_t)((1U << masklen) - 1U);
+    mask    = (uint32_t)(((uint32_t)1U << masklen) - 1U);
     val     = mask;
     mask <<= lo;
     do

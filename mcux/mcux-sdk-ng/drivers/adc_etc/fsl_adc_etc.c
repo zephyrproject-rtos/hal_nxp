@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -84,9 +84,9 @@ void ADC_ETC_Init(ADC_ETC_Type *base, const adc_etc_config_t *config)
 #if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
         ADC_ETC_CTRL_EXT0_TRIG_PRIORITY(config->TSC0triggerPriority) |
 #endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
-#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)
         ADC_ETC_CTRL_EXT1_TRIG_PRIORITY(config->TSC1triggerPriority) |
-#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
+#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG */
         ADC_ETC_CTRL_PRE_DIVIDER(config->clockPreDivider) | ADC_ETC_CTRL_TRIG_ENABLE(config->XBARtriggerMask)
 #if defined(FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL) && FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL
         | ADC_ETC_CTRL_DMA_MODE_SEL(config->dmaMode)
@@ -94,24 +94,32 @@ void ADC_ETC_Init(ADC_ETC_Type *base, const adc_etc_config_t *config)
         ;
 
 #if (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)) || \
-    (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG))
+    (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG))
     if (config->enableTSCBypass)
     {
         tmp32 |= ADC_ETC_CTRL_TSC_BYPASS_MASK;
     }
+#else
+    /* For ADC_ETC without TSC trigger source, CTRL [bit 30] shall be cleared explicitly.
+     * Otherwise the ADC instance 2 can not work correctly.
+     */
+#if ((FSL_FEATURE_SOC_ADC_COUNT > 1U) || (FSL_FEATURE_SOC_LPADC_COUNT > 1U))
+    tmp32 &= ~(1UL << 30UL);
 #endif
+#endif
+
 #if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
     if (config->enableTSC0Trigger)
     {
         tmp32 |= ADC_ETC_CTRL_EXT0_TRIG_ENABLE_MASK;
     }
 #endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
-#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)
     if (config->enableTSC1Trigger)
     {
         tmp32 |= ADC_ETC_CTRL_EXT1_TRIG_ENABLE_MASK;
     }
-#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
+#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG */
     base->CTRL = tmp32;
 }
 
@@ -154,7 +162,7 @@ void ADC_ETC_GetDefaultConfig(adc_etc_config_t *config)
     (void)memset(config, 0, sizeof(*config));
 
 #if (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)) || \
-    (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG))
+    (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG))
     config->enableTSCBypass = true;
 #endif
 
@@ -162,21 +170,21 @@ void ADC_ETC_GetDefaultConfig(adc_etc_config_t *config)
     config->enableTSC0Trigger = false;
 #endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
 
-#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)
     config->enableTSC1Trigger = false;
-#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
+#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG */
 
 #if defined(FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL) && FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL
-    config->dmaMode = kADC_ETC_TrigDMAWithLatchedSignal;
+    config->dmaMode = kADC_ETC_TrigDMAWithPulsedSignal;
 #endif /*FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL*/
 
 #if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
     config->TSC0triggerPriority = 0U;
 #endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
 
-#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)
     config->TSC1triggerPriority = 0U;
-#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
+#endif /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG */
     config->clockPreDivider = 0U;
     config->XBARtriggerMask = 0U;
 }

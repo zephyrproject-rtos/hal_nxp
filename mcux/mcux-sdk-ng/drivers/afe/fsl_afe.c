@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -72,7 +71,7 @@ void AFE_Init(AFE_Type *base, const afe_config_t *config)
     regData = base->CR & ~(AFE_CR_STRTUP_CNT_MASK | AFE_CR_RESULT_FORMAT_MASK | AFE_CR_RST_B_MASK | AFE_CR_LPM_EN_MASK);
     /* Set new startup time, result format, low power mode value */
     regData |= AFE_CR_STRTUP_CNT((uint8_t)config->startupCount) | AFE_CR_RESULT_FORMAT(config->resultFormat) |
-               AFE_CR_LPM_EN(config->enableLowPower);
+               AFE_CR_LPM_EN(config->enableLowPower ? 1U : 0U);
     /* Write value to CR register */
     base->CR = regData;
 
@@ -171,7 +170,7 @@ void AFE_SetChannelConfig(AFE_Type *base, uint32_t channel, const afe_channel_co
     regData &= ~(AFE_CFR_DEC_OSR_MASK | AFE_CFR_HW_TRG_MASK | AFE_CFR_CC_MASK);
     /* Set new Decimator OverSampling Ratio, Conversion Mode, Trigger Select value */
     regData |= AFE_CFR_DEC_OSR((uint32_t)config->decimatorOversampleRatio) |
-               AFE_CFR_CC(config->enableContinuousConversion) | AFE_CFR_HW_TRG(config->enableHardwareTrigger);
+               AFE_CFR_CC(config->enableContinuousConversion ? 1U : 0U) | AFE_CFR_HW_TRG(config->enableHardwareTrigger ? 1U : 0U);
 
     base->CFR[channel] = regData;
 }
