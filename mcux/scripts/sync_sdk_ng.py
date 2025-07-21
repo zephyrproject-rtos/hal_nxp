@@ -5,161 +5,415 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
-import sys
-import re
 import shutil
 import argparse
-from textwrap import dedent
-from pathlib import Path
+import fnmatch
+from functools import partial
 
-HELPSTR = f"""
-This script synchronizes the MCUX SDK code to folder mcux/mcux-sdk-ng,
-use the argument `--mcuxsdk_dir` to specify the MCUX SDK code folder,
-like:
-    {Path(__file__).name} --mcuxsdk_dir=~/mcuxsdk
-"""
+def should_ignore(name):
+    name_lower = name.lower()
+    ignored_names = {'.git', '.gitignore', 'doc', 'docs', 'doxygen', 'Doxygen'}
+    
+    if name_lower in ignored_names:
+        return True
+    if name_lower.startswith('kconfig') or name_lower == 'kconfig':
+        return True
+    return False
 
-# Content to copy, use wildcard
-COPY_CONTENT = [
-    'devices/**/*',
-    'drivers/**/*',
-    'components/conn_fwloader/**/*',
-    'components/flash/fsl_flash.h',
-    'components/flash/mflash/**/*',
-    'components/flash/nand/**/*',
-    'components/flash/nor/**/*',
-    'components/imu_adapter/**/*',
-    'components/lists/**/*',
-    'components/misc_utilities/**/*',
-    'components/osa/**/*',
-    'components/phy/**/*',
-    'components/rpmsg/**/*',
-    'components/wifi_bt_module/**/*',
-    'middleware/usb/**/*',
-]
+def is_non_empty_file(file_path):
+    return os.path.isfile(file_path) and os.path.getsize(file_path) > 0
 
-# Content to remove, use wildcard
-REMOVE_CONTENT = [
-    '**/Kconfig*',
-    'devices/**/RTE_Device.h',
-    'devices/**/*.yml',
-    'devices/**/*.icf',
-    'devices/**/*.ld',
-    'devices/**/*.scf',
-    'devices/**/*.FLM',
-    'devices/**/*.sdf',
-    'devices/**/*.dbgconf',
-    'devices/**/startup*.[sS]',
-    'devices/**/mcuxpresso/startup_*.cpp',
-    'devices/**/[Dd]oxygen',
-    'devices/**/prj.conf',
-    'drivers/**/[Dd]oxygen',
-    'components/**/[Dd]oxygen',
-    'middleware/usb/example',
-    'middleware/usb/docs',
-]
+def copy_filtered_files(src_dir, dest_dir, file_pattern="*", dir_ignore_func=None, file_ignore_func=None, skip_empty=True):
+    os.makedirs(dest_dir, exist_ok=True)
+    
+    for root, dirs, files in os.walk(src_dir):
+        dirs[:] = [d for d in dirs if not should_ignore(d)]
+        
+        if dir_ignore_func:
+            dirs[:] = [d for d in dirs if not dir_ignore_func(d, root)]
+        
+        rel_path = os.path.relpath(root, src_dir)
+        cur_dest_dir = os.path.join(dest_dir, rel_path)
+        os.makedirs(cur_dest_dir, exist_ok=True)
 
-def banner(*args):
-    print('===', *args)
-
-def small_banner(*args):
-    print('---', *args)
-
-
-def copy_content():
-    '''
-    Copy the content specified by COPY_CONTENT
-    '''
-    for pattern in COPY_CONTENT:
-        for f_src in MCUXSDK_BASE.glob(pattern):
-            if '.git' in str(f_src):
+        for file in files:
+            src_file = os.path.join(root, file)
+            dest_file = os.path.join(cur_dest_dir, file)
+            
+            if should_ignore(file):
                 continue
+            if file_ignore_func and file_ignore_func(file, root):
+                continue
+            if not fnmatch.fnmatch(file, file_pattern):
+                continue
+            if skip_empty and not is_non_empty_file(src_file):
+                continue
+                
+            shutil.copy2(src_file, dest_file)
 
-            f_dst = HAL_NXP_SDK_BASE / f_src.relative_to(MCUXSDK_BASE)
+# 特定模块的拷贝函数
+def copy_arch(src_sdk, dest_root):
+    print("Copying arch...")
+    arch_dirs = {
+        'arm': os.path.join(src_sdk, 'arch', 'arm'),
+        'xtensa': os.path.join(src_sdk, 'arch', 'xtensa')
+    }
+    
+    for cpu_type, src_dir in arch_dirs.items():
+        if not os.path.exists(src_dir):
+            print(f"  Warning: Source not found - {src_dir}")
+            continue
+            
+        dest_dir = os.path.join(dest_root, 'arch', cpu_type)
+        
+        def ignore_dir(dirname, parent_path):
+            return dirname.lower() == "cmsis" and parent_path == src_dir
+            
+        copy_filtered_files(
+            src_dir=src_dir,
+            dest_dir=dest_dir,
+            file_pattern="*.cmake",
+            dir_ignore_func=ignore_dir,
+            skip_empty=True
+        )
 
-            small_banner(f'Copy {f_src} to {f_dst}')
-
-            f_dst.parent.mkdir(parents=True, exist_ok=True)
-            if f_src.is_file():
-                shutil.copy(f_src, f_dst)
-
-def remove_content():
-    '''
-    Remove the content specified by REMOVE_CONTENT, this is called after
-    `copy_content`.
-    '''
-    for pattern in REMOVE_CONTENT:
-        for f in HAL_NXP_SDK_BASE.glob(pattern):
-            small_banner(f'Remove {f}')
-            if f.is_file():
-                f.unlink()
-            elif f.is_dir():
-                shutil.rmtree(f)
-
-
-def patch_clean_device_shared_cmake():
-    '''
-    Clean the shared.cmake file in devices folder, it adds the build flags,
-    such as CC_FLAGS, LD_FLAGS, which are not used for zephyr.
-    '''
-
-    devices_dir = HAL_NXP_SDK_BASE / 'devices'
-
-    for shared_cmake in devices_dir.rglob('shared.cmake'):
-        small_banner(f'Clean the content of {shared_cmake}')
-        with open(shared_cmake, 'w') as fd:
-            fd.write('')
-
-def patch_content():
-    '''
-    Patch the copied files from MCUX SDK, this is only for the changes which
-    are not suitable to apply in MCUX SDK.
-    '''
-    patch_clean_device_shared_cmake()
-
-def remove_empty_folders():
-    '''
-    Remove the empty folders.
-    '''
-    for folder in HAL_NXP_SDK_BASE.rglob('*'):
-        if folder.is_dir() and not any(folder.iterdir()):
-            small_banner(f'Remove empty folder {folder}')
-            folder.rmdir()
-
-def parse_args():
-
-    parser = argparse.ArgumentParser(
-        allow_abbrev=False,
-        formatter_class=argparse.RawTextHelpFormatter,
-        description = HELPSTR,
+def copy_drivers(src_sdk, dest_root):
+    print("Copying drivers...")
+    src_dir = os.path.join(src_sdk, 'drivers')
+    dest_dir = os.path.join(dest_root, 'drivers')
+    
+    if not os.path.exists(src_dir):
+        print(f"  Warning: Drivers source not found - {src_dir}")
+        return
+    
+    # 文件忽略规则
+    def ignore_file(filename, _):
+        return filename.endswith('template') or filename == 'template.readme'
+        
+    copy_filtered_files(
+        src_dir=src_dir,
+        dest_dir=dest_dir,
+        file_ignore_func=ignore_file,
+        skip_empty=True
     )
 
-    parser.add_argument("--mcuxsdk_dir", default='~/github/mcuxsdk',
-                        help="mcuxsdk repo path, like ~/mcuxsdk, will copy files from here")
+def copy_components(src_sdk, dest_root):
+    print("Copying components...")
+    components_map = [
+        'conn_fwloader',
+        'imu_adapter',
+        'lists',
+        'misc_utilities',
+        'osa',
+        'phy',
+        'rpmsg',
+        'wifi_bt_module',
+        'flash/mflash',
+        'flash/nand',
+        'flash/nor'
+    ]
+    
+    flash_header = {
+        'src': os.path.join(src_sdk, 'components', 'flash', 'fsl_flash.h'),
+        'dest': os.path.join(dest_root, 'components', 'flash', 'fsl_flash.h')
+    }
+    
+    for comp_path in components_map:
+        src = os.path.join(src_sdk, 'components', comp_path)
+        dest = os.path.join(dest_root, 'components', comp_path)
+        
+        if not os.path.exists(src):
+            print(f"  Warning: Component source not found - {src}")
+            continue
+            
+        if os.path.isdir(src):
+            copy_filtered_files(src, dest, skip_empty=True)
+        else:
+            print(f"  Warning: Component is not a directory - {src}")
+    
+    if os.path.isfile(flash_header['src']) and is_non_empty_file(flash_header['src']):
+        os.makedirs(os.path.dirname(flash_header['dest']), exist_ok=True)
+        shutil.copy2(flash_header['src'], flash_header['dest'])
 
-    args = parser.parse_args()
+def copy_middleware_usb(src_sdk, dest_root):
+    print("Copying USB middleware...")
+    src = os.path.join(src_sdk, 'middleware', 'usb')
+    dest = os.path.join(dest_root, 'middleware', 'usb')
+    
+    if os.path.exists(src):
+        copy_filtered_files(src, dest)
+    else:
+        print(f"  Warning: USB middleware source not found - {src}")
 
-    return args
+def copy_cmake_extension(src_sdk, dest_root):
+    print("Copying cmake extensions...")
+    src_dir = os.path.join(src_sdk, 'cmake', 'extension')
+    dest_dir = os.path.join(dest_root, 'cmake', 'extension')
+    files_to_copy = ['logging.cmake', 'function.cmake', 'basic_settings_lite.cmake']
+    
+    for file in files_to_copy:
+        src_file = os.path.join(src_dir, file)
+        if os.path.isfile(src_file) and is_non_empty_file(src_file):
+            os.makedirs(dest_dir, exist_ok=True)
+            shutil.copy2(src_file, os.path.join(dest_dir, file))
+        else:
+            print(f"  Warning: CMake file not found - {src_file}")
 
+def copy_boards(src_sdk, dest_root):
+    print("Copying boards...")
+    board_map = [
+        {
+            "src_path": "evkbimxrt1050", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkbimxrt1050"
+        },
+        {
+            "src_path": "evkbmimxrt1060", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkbmimxrt1060"
+        },
+        {
+            "src_path": "evkbmimxrt1170", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h", "xmcd.c", "xmcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkbmimxrt1170"
+        },
+        {
+            "src_path": "evkcmimxrt1060", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["xip"],
+            "dest": "evkcmimxrt1060"
+        },
+        {
+            "src_path": "evkmimxrt595", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["flash_config"],
+            "dest": "evkmimxrt595"
+        },
+        {
+            "src_path": "evkmimxrt685", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["flash_config"],
+            "dest": "evkmimxrt685"
+        },
+        {
+            "src_path": "evkmimxrt1010", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1010"
+        },
+        {
+            "src_path": "evkmimxrt1015", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1015"
+        },
+        {
+            "src_path": "evkmimxrt1020", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1020"
+        },
+        {
+            "src_path": "evkmimxrt1024", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1024"
+        },
+        {
+            "src_path": "evkmimxrt1040", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1040"
+        },
+        {
+            "src_path": "evkmimxrt1060", 
+            "src_dir": os.path.join(src_sdk, "examples_int", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1060"
+        },
+        {
+            "src_path": "evkmimxrt1064", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1064"
+        },
+        {
+            "src_path": "evkmimxrt1160", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "files": ["dcd.c", "dcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1160"
+        },
+        {
+            "src_path": "evkmimxrt1170", 
+            "src_dir": os.path.join(src_sdk, "examples_int", "_boards"),
+            "files": ["dcd.c", "dcd.h", "xmcd.c", "xmcd.h"],
+            "dirs": ["xip"],
+            "dest": "evkmimxrt1170"
+        },
+        {
+            "src_path": "evkmimxrt1180", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["xip", "jlinkscript"],
+            "dest": "evkmimxrt1180"
+        },
+        {
+            "src_path": "frdmmcxn947", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["xip"],
+            "dest": "frdmmcxn947"
+        },
+        {
+            "src_path": "mcxn9xxevk", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["xip"],
+            "dest": "mcxn9xxevk"
+        },
+        {
+            "src_path": "mimxrt700evk", 
+            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
+            "dirs": ["flash_config"],
+            "dest": "mimxrt700evk"
+        },
+    ]
+    
+    boards_dir = os.path.join(dest_root, 'boards')
+    os.makedirs(boards_dir, exist_ok=True)
+    
+    for board_info in board_map:
+        base_src = board_info['src_dir']
+        src_path = os.path.join(base_src, board_info['src_path'])
+        dest_path = os.path.join(boards_dir, board_info['dest'])
+        
+        if not os.path.exists(src_path):
+            print(f"  Warning: Board source not found - {src_path}")
+            continue
+        
+        os.makedirs(dest_path, exist_ok=True)
+        
+        for file in board_info.get('files', []):
+            src_file = os.path.join(src_path, file)
+            if os.path.isfile(src_file) and is_non_empty_file(src_file):
+                dest_file = os.path.join(dest_path, file)
+                shutil.copy2(src_file, dest_file)
+            else:
+                print(f"  Warning: Board file not found - {src_file}")
+        
+        for dir in board_info.get('dirs', []):
+            src_dir = os.path.join(src_path, dir)
+            dest_dir = os.path.join(dest_path, dir)
+            if os.path.isdir(src_dir):
+                copy_filtered_files(src_dir, dest_dir, skip_empty=True)
+            else:
+                print(f"  Warning: Board directory not found - {src_dir}")
+
+def copy_device_family(family, src_sdk, dest_root):
+    print(f"Copying devices: {family}...")
+    src_dir = os.path.join(src_sdk, 'devices', family)
+    dest_dir = os.path.join(dest_root, 'devices', family)
+    
+    if not os.path.exists(src_dir):
+        print(f"  Warning: Device family source not found - {src_dir}")
+        return
+    
+    def family_ignore_dir(dirname, parent_path):
+        return dirname.lower() in ['mcuxpresso', 'iar', 'arm', 'gcc', 'llvm', 'xtensa', 'doxygen']
+        
+    def family_ignore_file(filename, parent_path):
+        ignore_exts = ['.yml', '.icf', '.ld', '.scf', '.flm', '.sdf', '.dbgconf']
+        ignore_names = ['RTE_Device.h', 'startup.s', 'startup.S', 'prj.conf']
+        
+        if any(filename.lower().endswith(ext) for ext in ignore_exts):
+            return True
+        
+        if filename in ignore_names:
+            return True
+            
+        return False
+        
+    copy_filtered_files(
+        src_dir=src_dir,
+        dest_dir=dest_dir,
+        dir_ignore_func=family_ignore_dir,
+        file_ignore_func=family_ignore_file,
+        skip_empty=True
+    )
+
+def copy_device_arch(src_sdk, dest_root):
+    print("Copying device architecture...")
+    for arch_type in ['arm', 'xtensa']:
+        src = os.path.join(src_sdk, 'devices', arch_type)
+        dest = os.path.join(dest_root, 'devices', arch_type)
+        if os.path.exists(src):
+            copy_filtered_files(src, dest, skip_empty=True)
+        else:
+            print(f"  Warning: Device arch source not found - {src}")
 
 def main():
-    global HAL_NXP_BASE, MCUXSDK_BASE, HAL_NXP_SDK_BASE
+    parser = argparse.ArgumentParser(description='MCUx SDK SYNC TOOL')
+    parser.add_argument('--mcuxsdk_dir', required=True, help='mcux sdk source dir')
+    parser.add_argument('--copy_module', nargs='*', choices=[
+        'arch', 'drivers', 'boards', 'components',
+        'middleware/usb', 'devices/arch', 'devices/i.MX',
+        'devices/Kinetis', 'devices/LPC', 'devices/MCX',
+        'devices/RT', 'devices/Wireless', 'cmake_extension'
+    ], help='Please select the module to copy (default sync all modules)')
+    
+    args = parser.parse_args()
+    
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    dest_root = os.path.join(script_dir, '..', 'mcux-sdk-ng')
+    os.makedirs(dest_root, exist_ok=True)
+    
+    all_modules = [
+        'arch', 'drivers', 'boards', 'components',
+        'middleware/usb', 'devices/arch', 'devices/i.MX',
+        'devices/Kinetis', 'devices/LPC', 'devices/MCX',
+        'devices/RT', 'devices/Wireless', 'cmake_extension'
+    ]
+    
+    selected_modules = args.copy_module if args.copy_module else all_modules
+    print(f"Selected modules: {', '.join(selected_modules)}")
+    
+    module_actions = {
+        'arch': copy_arch,
+        'drivers': copy_drivers,
+        'boards': copy_boards,
+        'components': copy_components,
+        'middleware/usb': copy_middleware_usb,
+        'cmake_extension': copy_cmake_extension,
+        'devices/arch': copy_device_arch,
+        'devices/i.MX': partial(copy_device_family, 'i.MX'),
+        'devices/Kinetis': partial(copy_device_family, 'Kinetis'),
+        'devices/LPC': partial(copy_device_family, 'LPC'),
+        'devices/MCX': partial(copy_device_family, 'MCX'),
+        'devices/RT': partial(copy_device_family, 'RT'),
+        'devices/Wireless': partial(copy_device_family, 'Wireless')
+    }
+    
+    for module in selected_modules:
+        if module not in module_actions:
+            print(f"  Warning: Unknown module '{module}', skipping...")
+            continue
+            
+        try:
+            action = module_actions[module]
+            action(args.mcuxsdk_dir, dest_root)
+        except Exception as e:
+            print(f"  Error during copying {module}: {str(e)}")
+        
+    print("Copy complete!")
 
-    args = parse_args()
-    MCUXSDK_BASE = Path(args.mcuxsdk_dir).expanduser().resolve()
-
-    HAL_NXP_BASE     = Path(__file__).parent.parent.parent.resolve()
-    HAL_NXP_SDK_BASE = HAL_NXP_BASE / 'mcux' / 'mcux-sdk-ng'
-
-    copy_content()
-    remove_content()
-    patch_content()
-
-    remove_empty_folders()
-
-    banner('=' * 80)
-    banner('Copy completed.')
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
