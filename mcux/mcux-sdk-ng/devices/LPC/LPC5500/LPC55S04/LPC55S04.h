@@ -9,14 +9,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC55S0x/LPC550x User manual Rev.0.3  14 August 2020
-**     Version:             rev. 1.0, 2020-04-09
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S04
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,14 +25,17 @@
 **     Revisions:
 **     - rev. 1.0 (2020-04-09)
 **         Initial version based on Niobe4mini
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC55S04.h
- * @version 1.0
- * @date 2020-04-09
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC55S04
  *
  * CMSIS Peripheral Access Layer for LPC55S04

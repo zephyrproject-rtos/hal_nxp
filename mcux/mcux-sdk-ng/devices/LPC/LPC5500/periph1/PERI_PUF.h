@@ -9,14 +9,14 @@
 **                          LPC55S36JBD100
 **                          LPC55S36JHI48
 **
-**     Version:             rev. 1.1, 2021-08-04
-**     Build:               b241024
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PUF
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -27,21 +27,24 @@
 **         Initial version based on RM DraftF
 **     - rev. 1.1 (2021-08-04)
 **         Initial version based on RM DraftG
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PUF.h
- * @version 1.1
- * @date 2021-08-04
+ * @file PERI_PUF.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PUF
  *
  * CMSIS Peripheral Access Layer for PUF
  */
 
-#if !defined(PUF_H_)
-#define PUF_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PUF_H_)
+#define PERI_PUF_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5534JBD100) || defined(CPU_LPC5534JBD64) || defined(CPU_LPC5534JHI48))
 #include "LPC5534_COMMON.h"
@@ -652,10 +655,10 @@ typedef struct {
 #define PUF_SEC_LOCK_SEC_LEVEL_MASK              (0x3U)
 #define PUF_SEC_LOCK_SEC_LEVEL_SHIFT             (0U)
 /*! SEC_LEVEL - Disable PUF enroll command
- *  0b00..Nonsecure user
  *  0b00..Nonsecure privilege
- *  0b00..Secure user
+ *  0b00..Nonsecure user
  *  0b00..Secure privilege
+ *  0b00..Secure user
  */
 #define PUF_SEC_LOCK_SEC_LEVEL(x)                (((uint32_t)(((uint32_t)(x)) << PUF_SEC_LOCK_SEC_LEVEL_SHIFT)) & PUF_SEC_LOCK_SEC_LEVEL_MASK)
 
@@ -838,5 +841,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PUF_H_ */
+#endif  /* PERI_PUF_H_ */
 

@@ -29,14 +29,14 @@
 **                          LPC55S69JEV98_cm33_core0
 **                          LPC55S69JEV98_cm33_core1
 **
-**     Version:             rev. 1.1, 2019-05-16
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AHB_SECURE_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Initial version based on v0.2UM
 **     - rev. 1.1 (2019-05-16)
 **         Initial A1 version based on v1.3UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AHB_SECURE_CTRL.h
- * @version 1.1
- * @date 2019-05-16
+ * @file PERI_AHB_SECURE_CTRL.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AHB_SECURE_CTRL
  *
  * CMSIS Peripheral Access Layer for AHB_SECURE_CTRL
  */
 
-#if !defined(AHB_SECURE_CTRL_H_)
-#define AHB_SECURE_CTRL_H_                       /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AHB_SECURE_CTRL_H_)
+#define PERI_AHB_SECURE_CTRL_H_                  /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5526JBD100) || defined(CPU_LPC5526JBD64) || defined(CPU_LPC5526JEV98))
 #include "LPC5526_COMMON.h"
@@ -1973,256 +1976,256 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_SHIFT (0U)
 /*! PIO0_PIN0_SEC_MASK - Secure mask for pin P0_0
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_SHIFT (1U)
 /*! PIO0_PIN1_SEC_MASK - Secure mask for pin P0_1
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_SHIFT (2U)
 /*! PIO0_PIN2_SEC_MASK - Secure mask for pin P0_2
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_SHIFT (3U)
 /*! PIO0_PIN3_SEC_MASK - Secure mask for pin P0_3
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_SHIFT (4U)
 /*! PIO0_PIN4_SEC_MASK - Secure mask for pin P0_4
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_SHIFT (5U)
 /*! PIO0_PIN5_SEC_MASK - Secure mask for pin P0_5
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_SHIFT (6U)
 /*! PIO0_PIN6_SEC_MASK - Secure mask for pin P0_6
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_SHIFT (7U)
 /*! PIO0_PIN7_SEC_MASK - Secure mask for pin P0_7
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_SHIFT (8U)
 /*! PIO0_PIN8_SEC_MASK - Secure mask for pin P0_8
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_SHIFT (9U)
 /*! PIO0_PIN9_SEC_MASK - Secure mask for pin P0_9
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_SHIFT (10U)
 /*! PIO0_PIN10_SEC_MASK - Secure mask for pin P0_10
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_SHIFT (11U)
 /*! PIO0_PIN11_SEC_MASK - Secure mask for pin P0_11
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_MASK (0x1000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_SHIFT (12U)
 /*! PIO0_PIN12_SEC_MASK - Secure mask for pin P0_12
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_MASK (0x2000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_SHIFT (13U)
 /*! PIO0_PIN13_SEC_MASK - Secure mask for pin P0_13
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_MASK (0x4000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_SHIFT (14U)
 /*! PIO0_PIN14_SEC_MASK - Secure mask for pin P0_14
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_SHIFT (15U)
 /*! PIO0_PIN15_SEC_MASK - Secure mask for pin P0_15
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_MASK (0x10000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_SHIFT (16U)
 /*! PIO0_PIN16_SEC_MASK - Secure mask for pin P0_16
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_MASK (0x20000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_SHIFT (17U)
 /*! PIO0_PIN17_SEC_MASK - Secure mask for pin P0_17
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_MASK (0x40000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_SHIFT (18U)
 /*! PIO0_PIN18_SEC_MASK - Secure mask for pin P0_18
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_MASK (0x80000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_SHIFT (19U)
 /*! PIO0_PIN19_SEC_MASK - Secure mask for pin P0_19
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_MASK (0x100000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_SHIFT (20U)
 /*! PIO0_PIN20_SEC_MASK - Secure mask for pin P0_20
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_MASK (0x200000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_SHIFT (21U)
 /*! PIO0_PIN21_SEC_MASK - Secure mask for pin P0_21
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_MASK (0x400000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_SHIFT (22U)
 /*! PIO0_PIN22_SEC_MASK - Secure mask for pin P0_22
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_MASK (0x800000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_SHIFT (23U)
 /*! PIO0_PIN23_SEC_MASK - Secure mask for pin P0_23
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_MASK (0x1000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_SHIFT (24U)
 /*! PIO0_PIN24_SEC_MASK - Secure mask for pin P0_24
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_SHIFT (25U)
 /*! PIO0_PIN25_SEC_MASK - Secure mask for pin P0_25
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_MASK (0x4000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_SHIFT (26U)
 /*! PIO0_PIN26_SEC_MASK - Secure mask for pin P0_26
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_MASK (0x8000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_SHIFT (27U)
 /*! PIO0_PIN27_SEC_MASK - Secure mask for pin P0_27
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_MASK (0x10000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_SHIFT (28U)
 /*! PIO0_PIN28_SEC_MASK - Secure mask for pin P0_28
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_MASK (0x20000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_SHIFT (29U)
 /*! PIO0_PIN29_SEC_MASK - Secure mask for pin P0_29
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_MASK (0x40000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_SHIFT (30U)
 /*! PIO0_PIN30_SEC_MASK - Secure mask for pin P0_30
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_MASK (0x80000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_SHIFT (31U)
 /*! PIO0_PIN31_SEC_MASK - Secure mask for pin P0_31
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_MASK)
 /*! @} */
@@ -2233,256 +2236,256 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_SHIFT (0U)
 /*! PIO1_PIN0_SEC_MASK - Secure mask for pin P1_0
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_SHIFT (1U)
 /*! PIO1_PIN1_SEC_MASK - Secure mask for pin P1_1
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_SHIFT (2U)
 /*! PIO1_PIN2_SEC_MASK - Secure mask for pin P1_2
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_SHIFT (3U)
 /*! PIO1_PIN3_SEC_MASK - Secure mask for pin P1_3
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_SHIFT (4U)
 /*! PIO1_PIN4_SEC_MASK - Secure mask for pin P1_4
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_SHIFT (5U)
 /*! PIO1_PIN5_SEC_MASK - Secure mask for pin P1_5
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_SHIFT (6U)
 /*! PIO1_PIN6_SEC_MASK - Secure mask for pin P1_6
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_SHIFT (7U)
 /*! PIO1_PIN7_SEC_MASK - Secure mask for pin P1_7
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_SHIFT (8U)
 /*! PIO1_PIN8_SEC_MASK - Secure mask for pin P1_8
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_SHIFT (9U)
 /*! PIO1_PIN9_SEC_MASK - Secure mask for pin P1_9
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_SHIFT (10U)
 /*! PIO1_PIN10_SEC_MASK - Secure mask for pin P1_10
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_SHIFT (11U)
 /*! PIO1_PIN11_SEC_MASK - Secure mask for pin P1_11
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_MASK (0x1000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_SHIFT (12U)
 /*! PIO1_PIN12_SEC_MASK - Secure mask for pin P1_12
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_MASK (0x2000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_SHIFT (13U)
 /*! PIO1_PIN13_SEC_MASK - Secure mask for pin P1_13
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_MASK (0x4000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_SHIFT (14U)
 /*! PIO1_PIN14_SEC_MASK - Secure mask for pin P1_14
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_SHIFT (15U)
 /*! PIO1_PIN15_SEC_MASK - Secure mask for pin P1_15
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_MASK (0x10000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_SHIFT (16U)
 /*! PIO1_PIN16_SEC_MASK - Secure mask for pin P1_16
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_MASK (0x20000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_SHIFT (17U)
 /*! PIO1_PIN17_SEC_MASK - Secure mask for pin P1_17
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_MASK (0x40000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_SHIFT (18U)
 /*! PIO1_PIN18_SEC_MASK - Secure mask for pin P1_18
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_MASK (0x80000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_SHIFT (19U)
 /*! PIO1_PIN19_SEC_MASK - Secure mask for pin P1_19
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_MASK (0x100000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_SHIFT (20U)
 /*! PIO1_PIN20_SEC_MASK - Secure mask for pin P1_20
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_MASK (0x200000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_SHIFT (21U)
 /*! PIO1_PIN21_SEC_MASK - Secure mask for pin P1_21
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_MASK (0x400000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_SHIFT (22U)
 /*! PIO1_PIN22_SEC_MASK - Secure mask for pin P1_22
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_MASK (0x800000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_SHIFT (23U)
 /*! PIO1_PIN23_SEC_MASK - Secure mask for pin P1_23
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_MASK (0x1000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_SHIFT (24U)
 /*! PIO1_PIN24_SEC_MASK - Secure mask for pin P1_24
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_SHIFT (25U)
 /*! PIO1_PIN25_SEC_MASK - Secure mask for pin P1_25
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_MASK (0x4000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_SHIFT (26U)
 /*! PIO1_PIN26_SEC_MASK - Secure mask for pin P1_26
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_MASK (0x8000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_SHIFT (27U)
 /*! PIO1_PIN27_SEC_MASK - Secure mask for pin P1_27
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_MASK (0x10000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_SHIFT (28U)
 /*! PIO1_PIN28_SEC_MASK - Secure mask for pin P1_28
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_MASK (0x20000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_SHIFT (29U)
 /*! PIO1_PIN29_SEC_MASK - Secure mask for pin P1_29
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_MASK (0x40000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_SHIFT (30U)
 /*! PIO1_PIN30_SEC_MASK - Secure mask for pin P1_30
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_MASK (0x80000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_SHIFT (31U)
 /*! PIO1_PIN31_SEC_MASK - Secure mask for pin P1_31
- *  0b1..Pin state is readable by non-secure world.
  *  0b0..Pin state is blocked to non-secure world.
+ *  0b1..Pin state is readable by non-secure world.
  */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_MASK)
 /*! @} */
@@ -2981,32 +2984,32 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_SHIFT (0U)
 /*! SEC_GPIO_MASK0_LOCK - SEC_GPIO_MASK0 register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_MASK (0xCU)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_SHIFT (2U)
 /*! SEC_GPIO_MASK1_LOCK - SEC_GPIO_MASK1 register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_MASK (0x300U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_SHIFT (8U)
 /*! SEC_CPU1_INT_MASK0_LOCK - SEC_CPU_INT_MASK0 register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_MASK (0xC00U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_SHIFT (10U)
 /*! SEC_CPU1_INT_MASK1_LOCK - SEC_CPU_INT_MASK1 register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_MASK)
 /*! @} */
@@ -3107,8 +3110,8 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_SHIFT (30U)
 /*! MASTER_SEC_LEVEL_LOCK - MASTER_SEC_LEVEL write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_MASK)
 /*! @} */
@@ -3119,98 +3122,98 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_MASK (0x30U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_SHIFT (4U)
 /*! CPU1C - Micro-Cortex M33 (CPU1) Code bus. Must be equal to NOT(MASTER_SEC_LEVEL.CPU1C)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_SHIFT (6U)
 /*! CPU1S - Micro-Cortex M33 (CPU1) System bus. Must be equal to NOT(MASTER_SEC_LEVEL.CPU1S)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_MASK (0x300U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_SHIFT (8U)
 /*! USBFSD - USB Full Speed Device. Must be equal to NOT(MASTER_SEC_LEVEL.USBFSD)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_SHIFT (10U)
 /*! SDMA0 - System DMA 0. Must be equal to NOT(MASTER_SEC_LEVEL.SDMA0)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_MASK (0x30000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_SHIFT (16U)
 /*! SDIO - SDIO. Must be equal to NOT(MASTER_SEC_LEVEL.SDIO)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_MASK (0xC0000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_SHIFT (18U)
 /*! PQ - Power Quad. Must be equal to NOT(MASTER_SEC_LEVEL.PQ)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_MASK (0x300000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_SHIFT (20U)
 /*! HASH - Hash. Must be equal to NOT(MASTER_SEC_LEVEL.HASH)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_MASK (0xC00000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_SHIFT (22U)
 /*! USBFSH - USB Full speed Host. Must be equal to NOT(MASTER_SEC_LEVEL.USBFSH)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_MASK (0x3000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_SHIFT (24U)
 /*! SDMA1 - System DMA 1 security level. Must be equal to NOT(MASTER_SEC_LEVEL.SDMA1)
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_SHIFT (30U)
 /*! MASTER_SEC_LEVEL_ANTIPOL_LOCK - MASTER_SEC_ANTI_POL_REG register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_MASK)
 /*! @} */
@@ -3221,48 +3224,48 @@ typedef struct {
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
 /*! LOCK_NS_VTOR - Cortex M33 (CPU0) VTOR_NS register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_MASK)
 
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
 /*! LOCK_NS_MPU - Cortex M33 (CPU0) non-secure MPU register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_MASK)
 
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_MASK (0x30U)
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_SHIFT (4U)
 /*! LOCK_S_VTAIRCR - Cortex M33 (CPU0) VTOR_S, AIRCR.PRIS, IRCR.BFHFNMINS registers write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_MASK)
 
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_MASK (0xC0U)
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_SHIFT (6U)
 /*! LOCK_S_MPU - Cortex M33 (CPU0) Secure MPU registers write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_MASK)
 
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_MASK (0x300U)
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_SHIFT (8U)
 /*! LOCK_SAU - Cortex M33 (CPU0) SAU registers write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_MASK)
 
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_SHIFT (30U)
 /*! CPU0_LOCK_REG_LOCK - CPU0_LOCK_REG write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_MASK)
 /*! @} */
@@ -3273,24 +3276,24 @@ typedef struct {
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
 /*! LOCK_NS_VTOR - micro-Cortex M33 (CPU1) VTOR_NS register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_MASK)
 
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
 /*! LOCK_NS_MPU - micro-Cortex M33 (CPU1) non-secure MPU register write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_MASK)
 
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_SHIFT (30U)
 /*! CPU1_LOCK_REG_LOCK - CPU1_LOCK_REG write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_MASK)
 /*! @} */
@@ -3301,64 +3304,64 @@ typedef struct {
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT (0U)
 /*! WRITE_LOCK - Write lock.
- *  0b10..Secure control registers can be written.
  *  0b01..Restricted mode.
+ *  0b10..Secure control registers can be written.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
 /*! ENABLE_SECURE_CHECKING - Enable secure check for AHB matrix.
- *  0b10..Disable check.
  *  0b01..Restricted mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
 /*! ENABLE_S_PRIV_CHECK - Enable secure privilege check for AHB matrix.
- *  0b10..Disable check.
  *  0b01..Restricted mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
 /*! ENABLE_NS_PRIV_CHECK - Enable non-secure privilege check for AHB matrix.
- *  0b10..Disable check.
  *  0b01..Restricted mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_MASK (0x300U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_SHIFT (8U)
 /*! DISABLE_VIOLATION_ABORT - Disable secure violation abort.
- *  0b10..Enable abort fort secure checker.
  *  0b01..Disable abort fort secure checker.
+ *  0b10..Enable abort fort secure checker.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT (10U)
 /*! DISABLE_SIMPLE_MASTER_STRICT_MODE - Disable simple master strict mode.
- *  0b10..Simple master in strict mode.
  *  0b01..Simple master in tier mode.
+ *  0b10..Simple master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT (12U)
 /*! DISABLE_SMART_MASTER_STRICT_MODE - Disable smart master strict mode.
- *  0b10..Smart master in strict mode.
  *  0b01..Smart master in tier mode.
+ *  0b10..Smart master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_MASK (0xC000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_SHIFT (14U)
 /*! IDAU_ALL_NS - Disable IDAU.
- *  0b10..IDAU is enabled.
  *  0b01..IDAU is disable.
+ *  0b10..IDAU is enabled.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_MASK)
 /*! @} */
@@ -3369,64 +3372,64 @@ typedef struct {
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT (0U)
 /*! WRITE_LOCK - Write lock.
- *  0b10..Secure control registers can be written.
  *  0b01..Restricted mode.
+ *  0b10..Secure control registers can be written.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
 /*! ENABLE_SECURE_CHECKING - Enable secure check for AHB matrix.
- *  0b10..Disable check.
  *  0b01..Enabled (restricted mode)
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
 /*! ENABLE_S_PRIV_CHECK - Enable secure privilege check for AHB matrix.
- *  0b10..Disable check.
  *  0b01..Enabled (restricted mode)
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
 /*! ENABLE_NS_PRIV_CHECK - Enable non-secure privilege check for AHB matrix.
- *  0b10..Disable check.
  *  0b01..Enabled (restricted mode)
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_MASK (0x300U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_SHIFT (8U)
 /*! DISABLE_VIOLATION_ABORT - Disable secure violation abort.
- *  0b10..Enable abort fort secure checker.
  *  0b01..Disable abort fort secure checker.
+ *  0b10..Enable abort fort secure checker.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT (10U)
 /*! DISABLE_SIMPLE_MASTER_STRICT_MODE - Disable simple master strict mode.
- *  0b10..Simple master in strict mode.
  *  0b01..Simple master in tier mode.
+ *  0b10..Simple master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT (12U)
 /*! DISABLE_SMART_MASTER_STRICT_MODE - Disable smart master strict mode.
- *  0b10..Smart master in strict mode.
  *  0b01..Smart master in tier mode.
+ *  0b10..Smart master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_MASK (0xC000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_SHIFT (14U)
 /*! IDAU_ALL_NS - Disable IDAU.
- *  0b10..IDAU is enabled.
  *  0b01..IDAU is disable.
+ *  0b10..IDAU is enabled.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_MASK)
 /*! @} */
@@ -3465,5 +3468,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AHB_SECURE_CTRL_H_ */
+#endif  /* PERI_AHB_SECURE_CTRL_H_ */
 

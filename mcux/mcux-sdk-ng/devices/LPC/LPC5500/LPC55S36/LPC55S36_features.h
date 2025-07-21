@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2021-08-04
-**     Build:               b241031
+**     Build:               b250512
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -215,6 +215,8 @@
 
 /* @brief FIFO availability on the SoC. */
 #define FSL_FEATURE_LPADC_FIFO_COUNT (2)
+/* @brief Does not support two simultanious single ended conversions (bitfield TCTRL[FIFO_SEL_B]). */
+#define FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B (0)
 /* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
@@ -225,8 +227,6 @@
 #define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (1)
 /* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_MODE (1)
-/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
-#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
 #define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
 /* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
@@ -243,10 +243,6 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
-/* @brief OFSTRIM availability on the SoC. */
-#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (2)
-/* @brief Has Trigger status register. */
-#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has power select (bitfield CFG[PWRSEL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
 /* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
@@ -259,6 +255,12 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
 /* @brief Conversion averaged bitfiled width. */
 #define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
+/* @brief Enable hardware trigger command selection */
+#define FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL (0)
+/* @brief OFSTRIM availability on the SoC. */
+#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (2)
+/* @brief Has Trigger status register. */
+#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has B side channels. */
 #define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (1)
 /* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
@@ -281,6 +283,10 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
 /* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
 #define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
+/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
+/* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -332,7 +338,10 @@
 
 /* CDOG module features */
 
-/* No feature definitions */
+/* @brief SOC has no reset driver. */
+#define FSL_FEATURE_CDOG_HAS_NO_RESET (0)
+/* @brief CDOG Load default configurations during init function */
+#define FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF (0)
 
 /* CRC module features */
 
@@ -553,8 +562,12 @@
 #define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
 /* @brief FlexSPI AHB RX buffer size (byte) */
 #define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
+/* @brief FlexSPI IPED REGION COUNT */
+#define FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT (4)
 /* @brief FlexSPI Array Length */
 #define FSL_FEATURE_FLEXSPI_ARRAY_LEN (1)
+/* @brief FlexSPI Has ERRATA052733 */
+#define FSL_FEATURE_FLEXSPI_HAS_ERRATA_052733 (1)
 
 /* GINT module features */
 
@@ -582,6 +595,18 @@
 #define FSL_FEATURE_I3C_HAS_HDROK (0)
 /* @brief SOC doesn't support slave IBI/MR/HJ. */
 #define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
+/* @brief Has ERRATA_051617. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_051617 (0)
+/* @brief Has ERRATA_052123. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
+/* @brief Has ERRATA_052086. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052086 (0)
+/* @brief Has IBI bytes. */
+#define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (0)
+/* @brief Has SCL delay after START. */
+#define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (0)
+/* @brief Has no the master write data register for DMA. */
+#define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 
 /* INPUTMUX module features */
 
@@ -645,7 +670,7 @@
 /* @brief Number of fault channel in each (e)FlexPWM module. */
 #define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
 /* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
-#define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
+#define FSL_FEATURE_PWM_HAS_NO_WAITEN (0)
 /* @brief If (e)FlexPWM has phase delay feature. */
 #define FSL_FEATURE_PWM_HAS_PHASE_DELAY (1)
 /* @brief If (e)FlexPWM has input filter capture feature. */
@@ -710,6 +735,10 @@
 #define FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES (32768)
 /* @brief Flash size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_SIZE_BYTES (251904)
+/* @brief Has parity miss (bitfield LPCAC_CTRL[PARITY_MISS_EN]). */
+#define FSL_FEATURE_SYSCON_HAS_LPCAC_CTRL_PARITY_MISS_EN_BIT (1)
+/* @brief Has parity error report (bitfield LPCAC_CTRL[PARITY_FAULT_EN]). */
+#define FSL_FEATURE_SYSCON_HAS_LPCAC_CTRL_PARITY_FAULT_EN_BIT (0)
 
 /* SYSCTL module features */
 

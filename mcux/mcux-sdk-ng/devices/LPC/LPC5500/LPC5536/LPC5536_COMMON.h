@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC55S3x Reference Manual Rev. DraftG, 07/2021
-**     Version:             rev. 1.1, 2021-08-04
-**     Build:               b241024
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5536
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **         Initial version based on RM DraftF
 **     - rev. 1.1 (2021-08-04)
 **         Initial version based on RM DraftG
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC5536_COMMON.h
- * @version 1.1
- * @date 2021-08-04
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC5536
  *
  * CMSIS Peripheral Access Layer for LPC5536
@@ -46,9 +49,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -231,7 +234,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef LPC5536_SERIES
 #define LPC5536_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "LPC5536_features.h"
 
@@ -376,20 +381,22 @@ typedef enum IRQn {
   /** Array initializer of CACHE64_CTRL peripheral base pointers */
   #define CACHE64_CTRL_BASE_PTRS                   { CACHE64_CTRL0 }
 #endif
+/** CACHE64_CTRL physical memory base alias count */
+ #define CACHE64_CTRL_PHYMEM_BASE_ALIAS_COUNT     (2)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
 /** CACHE64_CTRL physical memory base address */
- #define CACHE64_CTRL_PHYMEM_BASES                { 0x18000000u, 0x38000000u }
+ #define CACHE64_CTRL_PHYMEM_BASES                { {0x18000000u, 0x38000000u} }
 /** CACHE64_CTRL physical memory size */
- #define CACHE64_CTRL_PHYMEM_SIZES                { 0x08000000u, 0x08000000u }
+ #define CACHE64_CTRL_PHYMEM_SIZES                { {0x08000000u, 0x08000000u} }
 /** CACHE64_CTRL physical memory base address */
- #define CACHE64_CTRL_PHYMEM_BASES_NS             { 0x08000000u, 0x28000000u }
+ #define CACHE64_CTRL_PHYMEM_BASES_NS             { {0x08000000u, 0x28000000u} }
 /** CACHE64_CTRL physical memory size */
- #define CACHE64_CTRL_PHYMEM_SIZES_NS             { 0x08000000u, 0x08000000u }
+ #define CACHE64_CTRL_PHYMEM_SIZES_NS             { {0x08000000u, 0x08000000u} }
 #else
 /** CACHE64_CTRL physical memory base address */
- #define CACHE64_CTRL_PHYMEM_BASES                { 0x08000000u, 0x28000000u }
+ #define CACHE64_CTRL_PHYMEM_BASES                { {0x08000000u, 0x28000000u} }
 /** CACHE64_CTRL physical memory size */
- #define CACHE64_CTRL_PHYMEM_SIZES                { 0x08000000u, 0x08000000u }
+ #define CACHE64_CTRL_PHYMEM_SIZES                { {0x08000000u, 0x08000000u} }
 #endif
 /* Backward compatibility */
 

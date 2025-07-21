@@ -588,7 +588,7 @@ void POWER_EnterPowerDown(uint32_t exclude_from_pd,
     /* Enter low power mode */
     POWER_EnterLowPower(&lv_low_power_mode_cfg);
 
-#ifdef SYSCON_AHBCLKCTRL2_PUF_MASK
+#ifdef PUF_SRAM_CTRL_CFG_ENABLE_MASK
     /* Following code is to reset PUF to remove over consumption */
     /* Enable PUF register clock to access register */
     SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_PUF_MASK;

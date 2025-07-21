@@ -84,18 +84,6 @@ if (CONFIG_MCUX_COMPONENT_driver.romapi_runbootloader)
     mcux_add_include( INCLUDES ./romapi/runbootloader )
 endif()
 
-if (CONFIG_MCUX_COMPONENT_driver.romapi_flash)
-    mcux_component_version(2.0.0)
-    mcux_add_source(
-        SOURCES 
-            ./romapi/flash/src/fsl_flash.c
-            ./romapi/flash/fsl_efuse.h
-            ./romapi/flash/fsl_flash_ffr.h
-            ./romapi/flash/fsl_flash.h
-            ./romapi/flash/fsl_flexspi_nor_flash.h)
-    mcux_add_include( INCLUDES ./romapi/flash )
-endif()
-
 if (CONFIG_MCUX_COMPONENT_driver.romapi)
     mcux_component_version(2.0.0)
     mcux_add_source(

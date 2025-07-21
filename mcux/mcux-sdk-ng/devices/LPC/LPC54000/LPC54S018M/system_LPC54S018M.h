@@ -9,8 +9,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC54018JxM/LPC54S018JxM User manual Rev.1.0 20 September 2018
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,17 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC54S018M
- * @version 1.2
- * @date 2017-06-08
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for LPC54S018M (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -50,7 +53,7 @@
  */
 
 #ifndef _SYSTEM_LPC54S018M_H_
-#define _SYSTEM_LPC54S018M_H_ /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_LPC54S018M_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,12 +61,16 @@ extern "C" {
 
 #include <stdint.h>
 
-#define DEFAULT_SYSTEM_CLOCK 12000000u /* Default System clock value */
-#define CLK_RTC_32K_CLK      32768u    /* RTC oscillator 32 kHz output (32k_clk */
-#define CLK_FRO_12MHZ        12000000u /* FRO 12 MHz (fro_12m) */
-#define CLK_FRO_48MHZ        48000000u /* FRO 48 MHz (fro_48m) */
-#define CLK_FRO_96MHZ        96000000u /* FRO 96 MHz (fro_96m) */
-#define CLK_CLK_IN           0u        /* Default CLK_IN pin clock */
+#define DEFAULT_SYSTEM_CLOCK           12000000u           /* Default System clock value */
+#define CLK_RTC_32K_CLK                   32768u           /* RTC oscillator 32 kHz output (32k_clk */
+#define CLK_FRO_12MHZ                  12000000u           /* FRO 12 MHz (fro_12m) */
+#define CLK_FRO_48MHZ                  48000000u           /* FRO 48 MHz (fro_48m) */
+#define CLK_FRO_96MHZ                  96000000u           /* FRO 96 MHz (fro_96m) */
+
+#ifndef CLK_CLK_IN
+#define CLK_CLK_IN                            0u           /* Default CLK_IN pin clock */
+#endif /* CLK_CLK_IN */
+
 
 /**
  * @brief System clock frequency (core clock)
@@ -83,7 +90,7 @@ extern uint32_t SystemCoreClock;
  * microcontroller device. For systems with variable clock speed it also updates
  * the variable SystemCoreClock. SystemInit is called from startup_device file.
  */
-void SystemInit(void);
+void SystemInit (void);
 
 /**
  * @brief Updates the SystemCoreClock variable.
@@ -92,7 +99,7 @@ void SystemInit(void);
  * execution. SystemCoreClockUpdate() evaluates the clock register settings and calculates
  * the current core clock.
  */
-void SystemCoreClockUpdate(void);
+void SystemCoreClockUpdate (void);
 
 /**
  * @brief SystemInit function hook.
@@ -104,10 +111,10 @@ void SystemCoreClockUpdate(void);
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
-void SystemInitHook(void);
+void SystemInitHook (void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _SYSTEM_LPC54S018M_H_ */
+#endif  /* _SYSTEM_LPC54S018M_H_ */

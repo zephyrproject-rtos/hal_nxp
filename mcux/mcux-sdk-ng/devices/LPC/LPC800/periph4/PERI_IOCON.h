@@ -6,14 +6,14 @@
 **                          LPC802M011JDH20
 **                          LPC802UK
 **
-**     Version:             rev. 1.0, 2018-01-09
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -22,21 +22,24 @@
 **     Revisions:
 **     - rev. 1.0 (2018-01-09)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOCON.h
- * @version 1.0
- * @date 2018-01-09
+ * @file PERI_IOCON.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOCON
  *
  * CMSIS Peripheral Access Layer for IOCON
  */
 
-#if !defined(IOCON_H_)
-#define IOCON_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOCON_H_)
+#define PERI_IOCON_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC802M001JDH16) || defined(CPU_LPC802M001JDH20) || defined(CPU_LPC802M001JHI33) || defined(CPU_LPC802M011JDH20) || defined(CPU_LPC802UK))
 #include "LPC802_COMMON.h"
@@ -190,5 +193,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOCON_H_ */
+#endif  /* PERI_IOCON_H_ */
 

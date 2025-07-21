@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC86x User manual Rev.1  March 2022
-**     Version:             rev. 1.0, 2022-03-15
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC864
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **         Initial version.
 **     - rev. 1.0 (2022-03-15)
 **         Revesion of Rev. 1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC864_COMMON.h
- * @version 1.0
- * @date 2022-03-15
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC864
  *
  * CMSIS Peripheral Access Layer for LPC864
@@ -46,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -132,14 +135,16 @@ typedef enum IRQn {
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
 #include "system_LPC864.h"             /* Device specific configuration file */
 
-#define LPC864_SERIES
-/* CPU specific feature definitions */
-#include "LPC864_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef LPC864_SERIES
+#define LPC864_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "LPC864_features.h"
 
 /* ACOMP - Peripheral instance base addresses */
 /** Peripheral ACOMP base address */

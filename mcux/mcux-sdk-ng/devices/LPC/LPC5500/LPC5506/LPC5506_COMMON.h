@@ -9,14 +9,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC55S0x/LPC550x User manual Rev.0.3  14 August 2020
-**     Version:             rev. 1.0, 2020-04-09
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5506
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,14 +25,17 @@
 **     Revisions:
 **     - rev. 1.0 (2020-04-09)
 **         Initial version based on Niobe4mini
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC5506_COMMON.h
- * @version 1.0
- * @date 2020-04-09
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC5506
  *
  * CMSIS Peripheral Access Layer for LPC5506
@@ -43,7 +46,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -164,14 +167,16 @@ typedef enum IRQn {
 #include "core_cm33.h"                 /* Core Peripheral Access Layer */
 #include "system_LPC5506.h"            /* Device specific configuration file */
 
-#define LPC5506_SERIES
-/* CPU specific feature definitions */
-#include "LPC5506_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef LPC5506_SERIES
+#define LPC5506_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "LPC5506_features.h"
 
 /* ADC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

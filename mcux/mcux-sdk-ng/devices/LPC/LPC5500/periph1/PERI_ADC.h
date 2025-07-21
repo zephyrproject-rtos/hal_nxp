@@ -9,14 +9,14 @@
 **                          LPC55S36JBD100
 **                          LPC55S36JHI48
 **
-**     Version:             rev. 1.1, 2021-08-04
-**     Build:               b241024
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -27,21 +27,24 @@
 **         Initial version based on RM DraftF
 **     - rev. 1.1 (2021-08-04)
 **         Initial version based on RM DraftG
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ADC.h
- * @version 1.1
- * @date 2021-08-04
+ * @file PERI_ADC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC
  */
 
-#if !defined(ADC_H_)
-#define ADC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ADC_H_)
+#define PERI_ADC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5534JBD100) || defined(CPU_LPC5534JBD64) || defined(CPU_LPC5534JHI48))
 #include "LPC5534_COMMON.h"
@@ -99,6 +102,8 @@
 #define ADC_CMD_COUNT                             15u
 #define ADC_CV_COUNT                              15u
 #define ADC_RESFIFO_COUNT                         2u
+#define ADC_CAL_GAR_COUNT                         33u
+#define ADC_CAL_GBR_COUNT                         33u
 
 /** ADC - Register Layout Typedef */
 typedef struct {
@@ -132,73 +137,9 @@ typedef struct {
        uint8_t RESERVED_7[196];
   __I  uint32_t RESFIFO[ADC_RESFIFO_COUNT];        /**< Data Result FIFO Register, array offset: 0x300, array step: 0x4 */
        uint8_t RESERVED_8[248];
-  __IO uint32_t CAL_GAR0;                          /**< Calibration General A-Side Registers, offset: 0x400 */
-  __IO uint32_t CAL_GAR1;                          /**< Calibration General A-Side Registers, offset: 0x404 */
-  __IO uint32_t CAL_GAR2;                          /**< Calibration General A-Side Registers, offset: 0x408 */
-  __IO uint32_t CAL_GAR3;                          /**< Calibration General A-Side Registers, offset: 0x40C */
-  __IO uint32_t CAL_GAR4;                          /**< Calibration General A-Side Registers, offset: 0x410 */
-  __IO uint32_t CAL_GAR5;                          /**< Calibration General A-Side Registers, offset: 0x414 */
-  __IO uint32_t CAL_GAR6;                          /**< Calibration General A-Side Registers, offset: 0x418 */
-  __IO uint32_t CAL_GAR7;                          /**< Calibration General A-Side Registers, offset: 0x41C */
-  __IO uint32_t CAL_GAR8;                          /**< Calibration General A-Side Registers, offset: 0x420 */
-  __IO uint32_t CAL_GAR9;                          /**< Calibration General A-Side Registers, offset: 0x424 */
-  __IO uint32_t CAL_GAR10;                         /**< Calibration General A-Side Registers, offset: 0x428 */
-  __IO uint32_t CAL_GAR11;                         /**< Calibration General A-Side Registers, offset: 0x42C */
-  __IO uint32_t CAL_GAR12;                         /**< Calibration General A-Side Registers, offset: 0x430 */
-  __IO uint32_t CAL_GAR13;                         /**< Calibration General A-Side Registers, offset: 0x434 */
-  __IO uint32_t CAL_GAR14;                         /**< Calibration General A-Side Registers, offset: 0x438 */
-  __IO uint32_t CAL_GAR15;                         /**< Calibration General A-Side Registers, offset: 0x43C */
-  __IO uint32_t CAL_GAR16;                         /**< Calibration General A-Side Registers, offset: 0x440 */
-  __IO uint32_t CAL_GAR17;                         /**< Calibration General A-Side Registers, offset: 0x444 */
-  __IO uint32_t CAL_GAR18;                         /**< Calibration General A-Side Registers, offset: 0x448 */
-  __IO uint32_t CAL_GAR19;                         /**< Calibration General A-Side Registers, offset: 0x44C */
-  __IO uint32_t CAL_GAR20;                         /**< Calibration General A-Side Registers, offset: 0x450 */
-  __IO uint32_t CAL_GAR21;                         /**< Calibration General A-Side Registers, offset: 0x454 */
-  __IO uint32_t CAL_GAR22;                         /**< Calibration General A-Side Registers, offset: 0x458 */
-  __IO uint32_t CAL_GAR23;                         /**< Calibration General A-Side Registers, offset: 0x45C */
-  __IO uint32_t CAL_GAR24;                         /**< Calibration General A-Side Registers, offset: 0x460 */
-  __IO uint32_t CAL_GAR25;                         /**< Calibration General A-Side Registers, offset: 0x464 */
-  __IO uint32_t CAL_GAR26;                         /**< Calibration General A-Side Registers, offset: 0x468 */
-  __IO uint32_t CAL_GAR27;                         /**< Calibration General A-Side Registers, offset: 0x46C */
-  __IO uint32_t CAL_GAR28;                         /**< Calibration General A-Side Registers, offset: 0x470 */
-  __IO uint32_t CAL_GAR29;                         /**< Calibration General A-Side Registers, offset: 0x474 */
-  __IO uint32_t CAL_GAR30;                         /**< Calibration General A-Side Registers, offset: 0x478 */
-  __IO uint32_t CAL_GAR31;                         /**< Calibration General A-Side Registers, offset: 0x47C */
-  __IO uint32_t CAL_GAR32;                         /**< Calibration General A-Side Registers, offset: 0x480 */
+  __IO uint32_t CAL_GAR[ADC_CAL_GAR_COUNT];        /**< Calibration General A-Side Registers, array offset: 0x400, array step: 0x4 */
        uint8_t RESERVED_9[124];
-  __IO uint32_t CAL_GBR0;                          /**< Calibration General B-Side Registers, offset: 0x500 */
-  __IO uint32_t CAL_GBR1;                          /**< Calibration General B-Side Registers, offset: 0x504 */
-  __IO uint32_t CAL_GBR2;                          /**< Calibration General B-Side Registers, offset: 0x508 */
-  __IO uint32_t CAL_GBR3;                          /**< Calibration General B-Side Registers, offset: 0x50C */
-  __IO uint32_t CAL_GBR4;                          /**< Calibration General B-Side Registers, offset: 0x510 */
-  __IO uint32_t CAL_GBR5;                          /**< Calibration General B-Side Registers, offset: 0x514 */
-  __IO uint32_t CAL_GBR6;                          /**< Calibration General B-Side Registers, offset: 0x518 */
-  __IO uint32_t CAL_GBR7;                          /**< Calibration General B-Side Registers, offset: 0x51C */
-  __IO uint32_t CAL_GBR8;                          /**< Calibration General B-Side Registers, offset: 0x520 */
-  __IO uint32_t CAL_GBR9;                          /**< Calibration General B-Side Registers, offset: 0x524 */
-  __IO uint32_t CAL_GBR10;                         /**< Calibration General B-Side Registers, offset: 0x528 */
-  __IO uint32_t CAL_GBR11;                         /**< Calibration General B-Side Registers, offset: 0x52C */
-  __IO uint32_t CAL_GBR12;                         /**< Calibration General B-Side Registers, offset: 0x530 */
-  __IO uint32_t CAL_GBR13;                         /**< Calibration General B-Side Registers, offset: 0x534 */
-  __IO uint32_t CAL_GBR14;                         /**< Calibration General B-Side Registers, offset: 0x538 */
-  __IO uint32_t CAL_GBR15;                         /**< Calibration General B-Side Registers, offset: 0x53C */
-  __IO uint32_t CAL_GBR16;                         /**< Calibration General B-Side Registers, offset: 0x540 */
-  __IO uint32_t CAL_GBR17;                         /**< Calibration General B-Side Registers, offset: 0x544 */
-  __IO uint32_t CAL_GBR18;                         /**< Calibration General B-Side Registers, offset: 0x548 */
-  __IO uint32_t CAL_GBR19;                         /**< Calibration General B-Side Registers, offset: 0x54C */
-  __IO uint32_t CAL_GBR20;                         /**< Calibration General B-Side Registers, offset: 0x550 */
-  __IO uint32_t CAL_GBR21;                         /**< Calibration General B-Side Registers, offset: 0x554 */
-  __IO uint32_t CAL_GBR22;                         /**< Calibration General B-Side Registers, offset: 0x558 */
-  __IO uint32_t CAL_GBR23;                         /**< Calibration General B-Side Registers, offset: 0x55C */
-  __IO uint32_t CAL_GBR24;                         /**< Calibration General B-Side Registers, offset: 0x560 */
-  __IO uint32_t CAL_GBR25;                         /**< Calibration General B-Side Registers, offset: 0x564 */
-  __IO uint32_t CAL_GBR26;                         /**< Calibration General B-Side Registers, offset: 0x568 */
-  __IO uint32_t CAL_GBR27;                         /**< Calibration General B-Side Registers, offset: 0x56C */
-  __IO uint32_t CAL_GBR28;                         /**< Calibration General B-Side Registers, offset: 0x570 */
-  __IO uint32_t CAL_GBR29;                         /**< Calibration General B-Side Registers, offset: 0x574 */
-  __IO uint32_t CAL_GBR30;                         /**< Calibration General B-Side Registers, offset: 0x578 */
-  __IO uint32_t CAL_GBR31;                         /**< Calibration General B-Side Registers, offset: 0x57C */
-  __IO uint32_t CAL_GBR32;                         /**< Calibration General B-Side Registers, offset: 0x580 */
+  __IO uint32_t CAL_GBR[ADC_CAL_GBR_COUNT];        /**< Calibration General B-Side Registers, array offset: 0x500, array step: 0x4 */
 } ADC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -1047,598 +988,22 @@ typedef struct {
 #define ADC_RESFIFO_VALID(x)                     (((uint32_t)(((uint32_t)(x)) << ADC_RESFIFO_VALID_SHIFT)) & ADC_RESFIFO_VALID_MASK)
 /*! @} */
 
-/*! @name CAL_GAR0 - Calibration General A-Side Registers */
+/*! @name CAL_GAR - Calibration General A-Side Registers */
 /*! @{ */
 
-#define ADC_CAL_GAR0_CAL_GAR_VAL_MASK            (0x7FFU)
-#define ADC_CAL_GAR0_CAL_GAR_VAL_SHIFT           (0U)
+#define ADC_CAL_GAR_CAL_GAR_VAL_MASK             (0xFFFFU)  /* Merged from fields with different position or width, of widths (11, 12, 13, 14, 15, 16), largest definition used */
+#define ADC_CAL_GAR_CAL_GAR_VAL_SHIFT            (0U)
 /*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR0_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR0_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR0_CAL_GAR_VAL_MASK)
+#define ADC_CAL_GAR_CAL_GAR_VAL(x)               (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR_CAL_GAR_VAL_MASK)  /* Merged from fields with different position or width, of widths (11, 12, 13, 14, 15, 16), largest definition used */
 /*! @} */
 
-/*! @name CAL_GAR1 - Calibration General A-Side Registers */
+/*! @name CAL_GBR - Calibration General B-Side Registers */
 /*! @{ */
 
-#define ADC_CAL_GAR1_CAL_GAR_VAL_MASK            (0xFFFU)
-#define ADC_CAL_GAR1_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR1_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR1_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR1_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR2 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR2_CAL_GAR_VAL_MASK            (0x1FFFU)
-#define ADC_CAL_GAR2_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR2_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR2_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR2_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR3 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR3_CAL_GAR_VAL_MASK            (0x1FFFU)
-#define ADC_CAL_GAR3_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR3_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR3_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR3_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR4 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR4_CAL_GAR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GAR4_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR4_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR4_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR4_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR5 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR5_CAL_GAR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GAR5_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR5_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR5_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR5_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR6 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR6_CAL_GAR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GAR6_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR6_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR6_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR6_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR7 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR7_CAL_GAR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GAR7_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR7_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR7_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR7_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR8 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR8_CAL_GAR_VAL_MASK            (0x7FFFU)
-#define ADC_CAL_GAR8_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR8_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR8_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR8_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR9 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR9_CAL_GAR_VAL_MASK            (0x7FFFU)
-#define ADC_CAL_GAR9_CAL_GAR_VAL_SHIFT           (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR9_CAL_GAR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR9_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR9_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR10 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR10_CAL_GAR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GAR10_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR10_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR10_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR10_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR11 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR11_CAL_GAR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GAR11_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR11_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR11_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR11_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR12 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR12_CAL_GAR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GAR12_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR12_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR12_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR12_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR13 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR13_CAL_GAR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GAR13_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR13_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR13_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR13_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR14 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR14_CAL_GAR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GAR14_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR14_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR14_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR14_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR15 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR15_CAL_GAR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GAR15_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR15_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR15_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR15_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR16 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR16_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR16_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR16_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR16_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR16_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR17 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR17_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR17_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR17_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR17_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR17_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR18 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR18_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR18_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR18_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR18_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR18_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR19 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR19_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR19_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR19_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR19_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR19_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR20 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR20_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR20_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR20_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR20_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR20_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR21 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR21_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR21_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR21_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR21_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR21_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR22 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR22_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR22_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR22_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR22_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR22_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR23 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR23_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR23_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR23_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR23_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR23_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR24 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR24_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR24_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR24_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR24_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR24_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR25 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR25_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR25_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR25_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR25_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR25_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR26 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR26_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR26_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR26_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR26_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR26_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR27 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR27_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR27_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR27_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR27_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR27_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR28 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR28_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR28_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR28_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR28_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR28_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR29 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR29_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR29_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR29_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR29_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR29_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR30 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR30_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR30_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR30_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR30_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR30_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR31 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR31_CAL_GAR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GAR31_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR31_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR31_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR31_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GAR32 - Calibration General A-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GAR32_CAL_GAR_VAL_MASK           (0x7FFU)
-#define ADC_CAL_GAR32_CAL_GAR_VAL_SHIFT          (0U)
-/*! CAL_GAR_VAL - Calibration General A Side Register Element */
-#define ADC_CAL_GAR32_CAL_GAR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GAR32_CAL_GAR_VAL_SHIFT)) & ADC_CAL_GAR32_CAL_GAR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR0 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR0_CAL_GBR_VAL_MASK            (0x7FFU)
-#define ADC_CAL_GBR0_CAL_GBR_VAL_SHIFT           (0U)
+#define ADC_CAL_GBR_CAL_GBR_VAL_MASK             (0xFFFFU)  /* Merged from fields with different position or width, of widths (11, 12, 13, 14, 15, 16), largest definition used */
+#define ADC_CAL_GBR_CAL_GBR_VAL_SHIFT            (0U)
 /*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR0_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR0_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR0_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR1 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR1_CAL_GBR_VAL_MASK            (0xFFFU)
-#define ADC_CAL_GBR1_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR1_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR1_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR1_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR2 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR2_CAL_GBR_VAL_MASK            (0x1FFFU)
-#define ADC_CAL_GBR2_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR2_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR2_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR2_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR3 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR3_CAL_GBR_VAL_MASK            (0x1FFFU)
-#define ADC_CAL_GBR3_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR3_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR3_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR3_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR4 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR4_CAL_GBR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GBR4_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR4_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR4_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR4_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR5 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR5_CAL_GBR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GBR5_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR5_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR5_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR5_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR6 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR6_CAL_GBR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GBR6_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR6_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR6_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR6_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR7 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR7_CAL_GBR_VAL_MASK            (0x3FFFU)
-#define ADC_CAL_GBR7_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR7_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR7_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR7_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR8 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR8_CAL_GBR_VAL_MASK            (0x7FFFU)
-#define ADC_CAL_GBR8_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR8_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR8_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR8_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR9 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR9_CAL_GBR_VAL_MASK            (0x7FFFU)
-#define ADC_CAL_GBR9_CAL_GBR_VAL_SHIFT           (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR9_CAL_GBR_VAL(x)              (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR9_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR9_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR10 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR10_CAL_GBR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GBR10_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR10_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR10_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR10_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR11 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR11_CAL_GBR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GBR11_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR11_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR11_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR11_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR12 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR12_CAL_GBR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GBR12_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR12_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR12_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR12_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR13 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR13_CAL_GBR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GBR13_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR13_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR13_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR13_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR14 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR14_CAL_GBR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GBR14_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR14_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR14_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR14_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR15 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR15_CAL_GBR_VAL_MASK           (0x7FFFU)
-#define ADC_CAL_GBR15_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR15_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR15_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR15_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR16 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR16_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR16_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR16_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR16_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR16_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR17 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR17_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR17_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR17_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR17_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR17_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR18 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR18_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR18_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR18_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR18_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR18_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR19 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR19_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR19_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR19_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR19_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR19_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR20 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR20_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR20_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR20_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR20_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR20_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR21 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR21_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR21_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR21_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR21_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR21_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR22 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR22_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR22_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR22_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR22_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR22_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR23 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR23_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR23_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR23_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR23_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR23_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR24 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR24_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR24_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR24_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR24_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR24_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR25 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR25_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR25_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR25_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR25_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR25_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR26 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR26_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR26_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR26_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR26_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR26_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR27 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR27_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR27_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR27_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR27_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR27_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR28 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR28_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR28_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR28_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR28_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR28_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR29 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR29_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR29_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR29_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR29_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR29_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR30 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR30_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR30_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR30_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR30_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR30_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR31 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR31_CAL_GBR_VAL_MASK           (0xFFFFU)
-#define ADC_CAL_GBR31_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR31_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR31_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR31_CAL_GBR_VAL_MASK)
-/*! @} */
-
-/*! @name CAL_GBR32 - Calibration General B-Side Registers */
-/*! @{ */
-
-#define ADC_CAL_GBR32_CAL_GBR_VAL_MASK           (0x7FFU)
-#define ADC_CAL_GBR32_CAL_GBR_VAL_SHIFT          (0U)
-/*! CAL_GBR_VAL - Calibration General B Side Register Element */
-#define ADC_CAL_GBR32_CAL_GBR_VAL(x)             (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR32_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR32_CAL_GBR_VAL_MASK)
+#define ADC_CAL_GBR_CAL_GBR_VAL(x)               (((uint32_t)(((uint32_t)(x)) << ADC_CAL_GBR_CAL_GBR_VAL_SHIFT)) & ADC_CAL_GBR_CAL_GBR_VAL_MASK)  /* Merged from fields with different position or width, of widths (11, 12, 13, 14, 15, 16), largest definition used */
 /*! @} */
 
 
@@ -1675,5 +1040,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ADC_H_ */
+#endif  /* PERI_ADC_H_ */
 
