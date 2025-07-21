@@ -625,7 +625,14 @@ static pd_status_t PD_AltModeStandardVDMCallbackProcess(pd_alt_mode_t *altModeIn
                     {
                         /* if SVIDs is not end, get next SVIDs */
                         /* last SVID */
-                        svid = (uint16_t)svdmResult->vdoData[svdmResult->vdoCount - 1U];
+                        if (svdmResult->vdoCount >= 1U)
+                        {
+                            svid = (uint16_t)svdmResult->vdoData[svdmResult->vdoCount - 1U];
+                        }
+                        else
+                        {
+                            break;
+                        }
                         if (svid != 0x0000U)
                         {
                             /* get next SVIDs LIST */

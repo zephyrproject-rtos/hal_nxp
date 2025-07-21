@@ -230,32 +230,43 @@ static void USB_HostEnumerationTransferCallback(void *param, usb_host_transfer_t
     if (nextStep == 1U)
     {
         deviceInstance->stallRetries = USB_HOST_CONFIG_ENUMERATION_MAX_STALL_RETRIES;
-        if (s_EnumEntries[deviceInstance->state - 1U].process == NULL)
+        if (deviceInstance->state > 0U)
         {
-            deviceInstance->state = (uint8_t)s_EnumEntries[deviceInstance->state - 1U].successState; /* next state */
+            if (s_EnumEntries[deviceInstance->state - 1U].process == NULL)
+            {
+                deviceInstance->state = (uint8_t)s_EnumEntries[deviceInstance->state - 1U].successState; /* next state */
+            }
+            else
+            {
+                status = s_EnumEntries[deviceInstance->state - 1U].process(
+                    deviceInstance, dataLength);   /* process the previous state result */
+                if (status == kStatus_USB_Success) /* process success */
+                {
+                    deviceInstance->state = (uint8_t)s_EnumEntries[deviceInstance->state - 1U].successState;
+                }
+                else if (status == kStatus_USB_Retry) /* need retry */
+                {
+                    deviceInstance->state = (uint8_t)s_EnumEntries[deviceInstance->state - 1U].retryState;
+                }
+                else if (status == kStatus_USB_NotSupported) /* device don't suport by the application */
+                {
+                    return; /* unrecoverable fail */
+                }
+                else /* process error, next retry */
+                {
+                    /* kStatus_USB_Error or kStatus_USB_AllocFail */
+                    failReason = status;
+                    nextStep   = 2U;
+                }
+            }
         }
         else
         {
-            status = s_EnumEntries[deviceInstance->state - 1U].process(
-                deviceInstance, dataLength);   /* process the previous state result */
-            if (status == kStatus_USB_Success) /* process success */
-            {
-                deviceInstance->state = (uint8_t)s_EnumEntries[deviceInstance->state - 1U].successState;
-            }
-            else if (status == kStatus_USB_Retry) /* need retry */
-            {
-                deviceInstance->state = (uint8_t)s_EnumEntries[deviceInstance->state - 1U].retryState;
-            }
-            else if (status == kStatus_USB_NotSupported) /* device don't suport by the application */
-            {
-                return; /* unrecoverable fail */
-            }
-            else /* process error, next retry */
-            {
-                /* kStatus_USB_Error or kStatus_USB_AllocFail */
-                failReason = status;
-                nextStep   = 2U;
-            }
+#ifdef HOST_ECHO
+            usb_echo("device state error\r\n");
+#endif
+            failReason = kStatus_USB_Error;
+            nextStep   = 2U;
         }
     }
 
@@ -584,8 +595,15 @@ static usb_status_t USB_HostNotifyDevice(usb_host_handle hostHandle,
     hostInstance = (usb_host_instance_t *)hostHandle;
     if (deviceInstance == NULL)
     {
-        (void)hostInstance->deviceCallback(NULL, NULL, eventCode);
-        return kStatus_USB_InvalidHandle;
+        if (hostInstance->deviceCallback != NULL)
+        {
+            (void)hostInstance->deviceCallback(NULL, NULL, eventCode);
+            return kStatus_USB_InvalidHandle;
+        }
+        else
+        {
+            return status1;
+        }    
     }
 
 #if ((defined USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB))
