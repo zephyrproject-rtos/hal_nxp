@@ -61,14 +61,14 @@
 **                          MIMX8US5DVP08_dsp0
 **                          MIMX8US5DVP08_dsp1
 **
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA_AD
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -85,21 +85,24 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DMA_AD.h
- * @version 5.0
- * @date 2023-04-27
+ * @file PERI_DMA_AD.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DMA_AD
  *
  * CMSIS Peripheral Access Layer for DMA_AD
  */
 
-#if !defined(DMA_AD_H_)
-#define DMA_AD_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DMA_AD_H_)
+#define PERI_DMA_AD_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8UD3CVP08_ca35) || defined(CPU_MIMX8UD3DVK08_ca35) || defined(CPU_MIMX8UD3DVP08_ca35))
 #include "MIMX8UD3_ca35_COMMON.h"
@@ -1047,5 +1050,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DMA_AD_H_ */
+#endif  /* PERI_DMA_AD_H_ */
 

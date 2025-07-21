@@ -25,14 +25,14 @@
 **                          MIMX8MM6DVTLZ_ca53
 **                          MIMX8MM6DVTLZ_cm4
 **
-**     Version:             rev. 4.0, 2019-02-18
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VPU_G2
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Rev.B Header PRC
 **     - rev. 4.0 (2019-02-18)
 **         Rev.0 Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file VPU_G2.h
- * @version 4.0
- * @date 2019-02-18
+ * @file PERI_VPU_G2.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for VPU_G2
  *
  * CMSIS Peripheral Access Layer for VPU_G2
  */
 
-#if !defined(VPU_G2_H_)
-#define VPU_G2_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_VPU_G2_H_)
+#define PERI_VPU_G2_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MM1CVTKZ_ca53) || defined(CPU_MIMX8MM1DVTLZ_ca53))
 #include "MIMX8MM1_ca53_COMMON.h"
@@ -568,8 +571,8 @@ typedef struct {
 #define VPU_G2_SWREG3_SW_FILTERING_DIS_MASK      (0x4000U)
 #define VPU_G2_SWREG3_SW_FILTERING_DIS_SHIFT     (14U)
 /*! SW_FILTERING_DIS - De-block filtering disable
- *  0b1..Filtering is disabled for current picture
  *  0b0..Filtering is enabled for current picture
+ *  0b1..Filtering is disabled for current picture
  */
 #define VPU_G2_SWREG3_SW_FILTERING_DIS(x)        (((uint32_t)(((uint32_t)(x)) << VPU_G2_SWREG3_SW_FILTERING_DIS_SHIFT)) & VPU_G2_SWREG3_SW_FILTERING_DIS_MASK)
 
@@ -2669,8 +2672,8 @@ typedef struct {
 #define VPU_G2_SWREG184_SW_DEC_DS_E_MASK         (0x80U)
 #define VPU_G2_SWREG184_SW_DEC_DS_E_SHIFT        (7U)
 /*! SW_DEC_DS_E - Raster scan down scale enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_G2_SWREG184_SW_DEC_DS_E(x)           (((uint32_t)(((uint32_t)(x)) << VPU_G2_SWREG184_SW_DEC_DS_E_SHIFT)) & VPU_G2_SWREG184_SW_DEC_DS_E_MASK)
 /*! @} */
@@ -3375,5 +3378,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* VPU_G2_H_ */
+#endif  /* PERI_VPU_G2_H_ */
 

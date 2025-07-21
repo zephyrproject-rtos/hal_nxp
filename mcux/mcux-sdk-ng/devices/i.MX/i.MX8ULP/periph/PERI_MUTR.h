@@ -61,14 +61,14 @@
 **                          MIMX8US5DVP08_dsp0
 **                          MIMX8US5DVP08_dsp1
 **
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MUTR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -85,21 +85,24 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MUTR.h
- * @version 5.0
- * @date 2023-04-27
+ * @file PERI_MUTR.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MUTR
  *
  * CMSIS Peripheral Access Layer for MUTR
  */
 
-#if !defined(MUTR_H_)
-#define MUTR_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MUTR_H_)
+#define PERI_MUTR_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8UD3CVP08_ca35) || defined(CPU_MIMX8UD3DVK08_ca35) || defined(CPU_MIMX8UD3DVP08_ca35))
 #include "MIMX8UD3_ca35_COMMON.h"
@@ -202,7 +205,7 @@ typedef struct {
   __I  uint32_t RSR;                               /**< Receive Status Register, offset: 0x12C */
        uint8_t RESERVED_1[204];
   __IO uint32_t UNUSED1;                           /**< Unused Register 1, offset: 0x1FC */
-  __O  uint32_t TR[MUTR_TR_COUNT];                 /**< Transmit Register, array offset: 0x200, array step: 0x4, irregular array, not all indices are valid */
+  __IO uint32_t TR[MUTR_TR_COUNT];                 /**< Transmit Register, array offset: 0x200, array step: 0x4, irregular array, not all indices are valid */
        uint8_t RESERVED_2[64];
   __I  uint32_t RR[MUTR_RR_COUNT];                 /**< Receive Register, array offset: 0x280, array step: 0x4, irregular array, not all indices are valid */
   __I  uint32_t MUTRA_ATTR;                        /**< MUTRA Host Attributes Register, offset: 0x2C0, available only on: s4_mu.MUTRB/S4_MU__MUTRB (missing on s4_mu.MUTRA/S4_MU__MUTRA) */
@@ -398,5 +401,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MUTR_H_ */
+#endif  /* PERI_MUTR_H_ */
 

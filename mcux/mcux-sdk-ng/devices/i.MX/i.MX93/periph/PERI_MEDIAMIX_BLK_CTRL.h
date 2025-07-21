@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MEDIAMIX_BLK_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MEDIAMIX_BLK_CTRL.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_MEDIAMIX_BLK_CTRL.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MEDIAMIX_BLK_CTRL
  *
  * CMSIS Peripheral Access Layer for MEDIAMIX_BLK_CTRL
  */
 
-#if !defined(MEDIAMIX_BLK_CTRL_H_)
-#define MEDIAMIX_BLK_CTRL_H_                     /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MEDIAMIX_BLK_CTRL_H_)
+#define PERI_MEDIAMIX_BLK_CTRL_H_                /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -449,8 +452,8 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_LDB_CTRL_CH0_FIFO_RESET_MASK (0x800U)
 #define MEDIAMIX_BLK_CTRL_LDB_CTRL_CH0_FIFO_RESET_SHIFT (11U)
 /*! CH0_FIFO_RESET - LVDS channel 0 async FIFO software reset
- *  0b1..Software reset
  *  0b0..No action
+ *  0b1..Software reset
  */
 #define MEDIAMIX_BLK_CTRL_LDB_CTRL_CH0_FIFO_RESET(x) (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_LDB_CTRL_CH0_FIFO_RESET_SHIFT)) & MEDIAMIX_BLK_CTRL_LDB_CTRL_CH0_FIFO_RESET_MASK)
 
@@ -798,6 +801,7 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_CAMERA_MUX_DATA_TYPE_MASK (0x1F8U)
 #define MEDIAMIX_BLK_CTRL_CAMERA_MUX_DATA_TYPE_SHIFT (3U)
 /*! DATA_TYPE - Data type
+ *  0b011000..YUV420 8-bit
  *  0b011001..YUV420 10-bit
  *  0b011010..Legacy YUV420 (8-bit)
  *  0b011100..YUV420 8-bit (Chroma Shifted Pixel Sampling)
@@ -814,7 +818,6 @@ typedef struct {
  *  0b101100..RAW12
  *  0b101101..RAW14
  *  0b110000..User define32. Align with MIPI CSI ipi_mode[8] configure to 1'b0.
- *  0b011000..YUV420 8-bit
  *  0b110001..User define16. Align with MIPI CSI ipi_mode[8] configure to 1'b1.
  */
 #define MEDIAMIX_BLK_CTRL_CAMERA_MUX_DATA_TYPE(x) (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_CAMERA_MUX_DATA_TYPE_SHIFT)) & MEDIAMIX_BLK_CTRL_CAMERA_MUX_DATA_TYPE_MASK)
@@ -900,18 +903,18 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_DISPLAY_MUX_LCDIF_CROSS_LINE_PATTERN_MASK (0xFU)
 #define MEDIAMIX_BLK_CTRL_DISPLAY_MUX_LCDIF_CROSS_LINE_PATTERN_SHIFT (0U)
 /*! LCDIF_CROSS_LINE_PATTERN - LCDIF pixel component bit map configuration, aligned with the cross line pattern configuration on LCDIF.
- *  0b1101..UYVY to YUYV from LCDIF[23:8]
- *  0b1100..YUYV to YUYV from LCDIF[23:8]
- *  0b1001..UYVY to YUYV from LCDIF[16:0]
- *  0b1000..YUYV to YUYV from LCDIF[16:0]
- *  0b0111..RGB565 to RGB565
- *  0b0110..RGB888 to RGB666
- *  0b0101..BGR888 to RGB888
- *  0b0100..BRG888 to RGB888
  *  0b0000..RGB888 to RGB888
  *  0b0001..RBG888 to RGB888
  *  0b0010..GBR888 to RGB888
  *  0b0011..GRB888 to RGB888
+ *  0b0100..BRG888 to RGB888
+ *  0b0101..BGR888 to RGB888
+ *  0b0110..RGB888 to RGB666
+ *  0b0111..RGB565 to RGB565
+ *  0b1000..YUYV to YUYV from LCDIF[16:0]
+ *  0b1001..UYVY to YUYV from LCDIF[16:0]
+ *  0b1100..YUYV to YUYV from LCDIF[23:8]
+ *  0b1101..UYVY to YUYV from LCDIF[23:8]
  */
 #define MEDIAMIX_BLK_CTRL_DISPLAY_MUX_LCDIF_CROSS_LINE_PATTERN(x) (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_DISPLAY_MUX_LCDIF_CROSS_LINE_PATTERN_SHIFT)) & MEDIAMIX_BLK_CTRL_DISPLAY_MUX_LCDIF_CROSS_LINE_PATTERN_MASK)
 
@@ -1149,11 +1152,6 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_DATA_TYPE_IN_MASK (0x7800000U)
 #define MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_DATA_TYPE_IN_SHIFT (23U)
 /*! DATA_TYPE_IN - CSI input data type
- *  0b1100..Reserved
- *  0b1000..Reserved
- *  0b1001..Bayer 8-bit
- *  0b1010..Bayer 10-bit
- *  0b1011..Reserved
  *  0b0000..UYVY bt656 8-bit
  *  0b0001..UYVY bt656 10-bit
  *  0b0010..RGB 8-bit
@@ -1162,16 +1160,21 @@ typedef struct {
  *  0b0101..YUV422 YVYU 8-bit
  *  0b0110..YUV444 YUV 8-bit
  *  0b0111..Reserved
+ *  0b1000..Reserved
+ *  0b1001..Bayer 8-bit
+ *  0b1010..Bayer 10-bit
+ *  0b1011..Reserved
+ *  0b1100..Reserved
  */
 #define MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_DATA_TYPE_IN(x) (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_DATA_TYPE_IN_SHIFT)) & MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_DATA_TYPE_IN_MASK)
 
 #define MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_MASK_VSYNC_CNTR_MASK (0x18000000U)
 #define MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_MASK_VSYNC_CNTR_SHIFT (27U)
 /*! MASK_VSYNC_CNTR - CSI mask VSYNC counter
- *  0b11..Mask 3 frames
  *  0b00..No mask
  *  0b01..Mask 1 frame
  *  0b10..Mask 2 frames
+ *  0b11..Mask 3 frames
  */
 #define MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_MASK_VSYNC_CNTR(x) (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_MASK_VSYNC_CNTR_SHIFT)) & MEDIAMIX_BLK_CTRL_INTERFACE_CTRL_REG_MASK_VSYNC_CNTR_MASK)
 
@@ -1256,10 +1259,10 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_CSI_ERRCONTROL_1_MASK  (0x200000U)
 #define MEDIAMIX_BLK_CTRL_CSI_ERRCONTROL_1_SHIFT (21U)
 /*! ERRCONTROL_1 - Control error lane 1
+ *  0b0..No error detected.
  *  0b1..An incorrect line state sequence is detected. For example, if a turnaround request or Escape mode request
  *       is immediately followed by a Stop state instead of the required Bridge state, this signal is asserted and
  *       remains high until the line returns to Stop state.
- *  0b0..No error detected.
  */
 #define MEDIAMIX_BLK_CTRL_CSI_ERRCONTROL_1(x)    (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_CSI_ERRCONTROL_1_SHIFT)) & MEDIAMIX_BLK_CTRL_CSI_ERRCONTROL_1_MASK)
 
@@ -1298,10 +1301,10 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_DSI_CLKSEL_MASK        (0xC0U)
 #define MEDIAMIX_BLK_CTRL_DSI_CLKSEL_SHIFT       (6U)
 /*! CLKSEL - Control of PLL clock output selection
- *  0b10..buffered clkext
- *  0b11..Forbidden
  *  0b00..Clocks stopped
  *  0b01..Clock generation
+ *  0b10..buffered clkext
+ *  0b11..Forbidden
  */
 #define MEDIAMIX_BLK_CTRL_DSI_CLKSEL(x)          (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_DSI_CLKSEL_SHIFT)) & MEDIAMIX_BLK_CTRL_DSI_CLKSEL_MASK)
 
@@ -1400,8 +1403,8 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_DSI_W1_FORCE_LOCK_MASK (0x400U)
 #define MEDIAMIX_BLK_CTRL_DSI_W1_FORCE_LOCK_SHIFT (10U)
 /*! FORCE_LOCK - PLL force lock control
- *  0b1..Force PLL internal lock indication
  *  0b0..According to lock detector
+ *  0b1..Force PLL internal lock indication
  */
 #define MEDIAMIX_BLK_CTRL_DSI_W1_FORCE_LOCK(x)   (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_DSI_W1_FORCE_LOCK_SHIFT)) & MEDIAMIX_BLK_CTRL_DSI_W1_FORCE_LOCK_MASK)
 
@@ -1464,8 +1467,8 @@ typedef struct {
 #define MEDIAMIX_BLK_CTRL_DSI_R1_LOCK_PLL_MASK   (0x400U)
 #define MEDIAMIX_BLK_CTRL_DSI_R1_LOCK_PLL_SHIFT  (10U)
 /*! LOCK_PLL - PLL lock state
- *  0b1..PLL is locked
  *  0b0..PLL is not locked
+ *  0b1..PLL is locked
  */
 #define MEDIAMIX_BLK_CTRL_DSI_R1_LOCK_PLL(x)     (((uint32_t)(((uint32_t)(x)) << MEDIAMIX_BLK_CTRL_DSI_R1_LOCK_PLL_SHIFT)) & MEDIAMIX_BLK_CTRL_DSI_R1_LOCK_PLL_MASK)
 /*! @} */
@@ -1504,5 +1507,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MEDIAMIX_BLK_CTRL_H_ */
+#endif  /* PERI_MEDIAMIX_BLK_CTRL_H_ */
 
