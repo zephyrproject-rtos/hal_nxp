@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 function(mcux_add_source)
   set(single_value BASE_PATH CONFIG PREINCLUDE EXCLUDE SCOPE)
-  set(multi_value SOURCES ${MCUX_SOURCE_CONDITION})
+  set(multi_value SOURCES PREINCLUDE_TYPE ${MCUX_SOURCE_CONDITION})
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
@@ -66,8 +66,13 @@ function(mcux_add_source)
     if (match)
       file(GLOB files "${directory}/${file}")
     else ()
-      # add source_abs_path to list file
-      list(APPEND files "${source_abs_path}")
+      string(REGEX MATCH "\\*\\*" match "${file}")
+      if (match)
+        file(GLOB_RECURSE files "${directory}/*")
+      else ()
+        # add source_abs_path to list file
+        list(APPEND files "${source_abs_path}")
+      endif ()
     endif ()
     foreach(source_abs_path ${files})
         # process config files, project customized config files have higher priority
@@ -171,8 +176,17 @@ function(mcux_add_source)
             set(pre_flag "-include ${source_abs_path}")
           endif()
           if (pre_flag)
-            mcux_append_single_compiler_flags_variable("CC" "${pre_flag}")
-            mcux_append_single_compiler_flags_variable("CX" "${pre_flag}")
+            if(__PREINCLUDE_TYPE)
+              if("c_include" IN_LIST __PREINCLUDE_TYPE)
+                mcux_append_single_compiler_flags_variable("CC" "${pre_flag}")
+              endif()
+              if("cpp_include" IN_LIST __PREINCLUDE_TYPE)
+                mcux_append_single_compiler_flags_variable("CX" "${pre_flag}")
+              endif()
+            else()
+              mcux_append_single_compiler_flags_variable("CC" "${pre_flag}")
+              mcux_append_single_compiler_flags_variable("CX" "${pre_flag}")
+            endif()
           endif()
           if(${CONFIG_TOOLCHAIN} STREQUAL "codewarrior")
           # don't set preinclude file for codewarrior assembler, otherwise build failed
@@ -184,9 +198,21 @@ function(mcux_add_source)
           #   Error: ^
           #   Unrecognized mnemonic: CONFIG_DBI_USE_MIPI_PANE
           elseif (as_pre_flag)
-            mcux_append_single_compiler_flags_variable("AS" "${as_pre_flag}")
+            if(__PREINCLUDE_TYPE)
+               if("asm_include" IN_LIST __PREINCLUDE_TYPE)
+                 mcux_append_single_compiler_flags_variable("AS" "${as_pre_flag}")
+               endif()
+            else()
+              mcux_append_single_compiler_flags_variable("AS" "${as_pre_flag}")
+            endif()
           else ()
-            mcux_append_single_compiler_flags_variable("AS" "${pre_flag}")
+            if(__PREINCLUDE_TYPE)
+              if("asm_include" IN_LIST __PREINCLUDE_TYPE)
+                mcux_append_single_compiler_flags_variable("AS" "${pre_flag}")
+              endif()
+            else()
+              mcux_append_single_compiler_flags_variable("AS" "${pre_flag}")
+            endif()
           endif ()
         endif()
 
@@ -194,6 +220,8 @@ function(mcux_add_source)
           target_sources(${MCUX_SDK_PROJECT_NAME} ${source_scope} ${source_abs_path})
           log_debug("Add source ${source_abs_path} into project"
                     ${CMAKE_CURRENT_LIST_FILE})
+        else()
+          mcux_set_property(MCUX_EXCLUDE_FILE_LIST ${source_abs_path} APPEND)
         endif ()
 
         # need to go through remove source list and remove the source from
@@ -480,6 +508,13 @@ function(mcux_set_variable name value)
         CACHE STRING "Selected ${name}: ${value}")
   endif()
 
+  if(${name} STREQUAL device)
+    # for west cmd to find cached variable
+    set(CACHED_DEVICE
+        ${value}
+        CACHE STRING "Selected ${name}: ${value}")
+  endif()
+
   set(${name} ${value} CACHE STRING "The variable ${name}: ${value}" FORCE)
 
   log_debug("Variable ${name} is set to ${value}" ${CMAKE_CURRENT_LIST_FILE})
@@ -505,7 +540,7 @@ function(post_build_process)
 endfunction()
 
 function(mcux_convert_binary)
-  set(single_value BINARY)
+  set(single_value BINARY TARGET)
   set(multi_value TOOLCHAINS EXTRA_ARGS)
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
@@ -522,6 +557,19 @@ function(mcux_convert_binary)
   endif()
 
   if(NOT binary_name)
+    return()
+  endif()
+  
+  if(__TARGET)
+    set(target_name ${__TARGET})
+  else()
+    set(target_name ${MCUX_SDK_PROJECT_NAME})
+  endif()
+
+  # Library can not be converted to binary file, only convert executable
+  get_target_property(TARGET_TYPE ${target_name} TYPE)
+  if(NOT TARGET_TYPE STREQUAL "EXECUTABLE")
+    log_warn("${target_name} is library type, can't be converted to binary file by mcux_convert_binary" ${CMAKE_CURRENT_LIST_FILE})
     return()
   endif()
 
@@ -548,27 +596,33 @@ function(mcux_convert_binary)
     if(NOT __EXTRA_ARGS)
       set(__EXTRA_ARGS -gap-fill 0xff -flash-start-x 0x20000)
     endif()
-    target_link_options(${MCUX_SDK_PROJECT_NAME} PRIVATE ${OBJDUMP_BIN_CMD} ${__EXTRA_ARGS})
+    target_link_options(${target_name} PRIVATE ${OBJDUMP_BIN_CMD} ${__EXTRA_ARGS})
     return()
+  else()
+    if(__EXTRA_ARGS)
+      string(REPLACE " " ";" extra_args "${__EXTRA_ARGS}")
+    else()
+      set(extra_args)
+    endif()
   endif()
 
-  get_target_property(IMAGE_FILE_NAME ${MCUX_SDK_PROJECT_NAME} OUTPUT_NAME)
+  get_target_property(IMAGE_FILE_NAME ${target_name} OUTPUT_NAME)
   if (${IMAGE_FILE_NAME} STREQUAL "IMAGE_FILE_NAME-NOTFOUND")
-     set(IMAGE_FILE_NAME ${MCUX_SDK_PROJECT_NAME})
+     set(IMAGE_FILE_NAME ${target_name})
   endif()
   add_custom_command(
-    TARGET ${MCUX_SDK_PROJECT_NAME}
+    TARGET ${target_name}
     POST_BUILD
     COMMAND
-      ${CMAKE_OBJCOPY} ${OBJDUMP_BIN_CMD}
+      ${CMAKE_OBJCOPY} ${OBJDUMP_BIN_CMD} ${extra_args}
       ${CMAKE_CURRENT_BINARY_DIR}/${IMAGE_FILE_NAME}${CMAKE_EXECUTABLE_SUFFIX}
       ${OBJDUMP_OUT_CMD} ${binary_name})
 
-  get_target_property(clean_files ${MCUX_SDK_PROJECT_NAME}
+  get_target_property(clean_files ${target_name}
                       ADDITIONAL_CLEAN_FILES)
   list(APPEND clean_files ${binary_name})
 
-  set_target_properties(${MCUX_SDK_PROJECT_NAME}
+  set_target_properties(${target_name}
                         PROPERTIES ADDITIONAL_CLEAN_FILES "${clean_files}")
 endfunction()
 
@@ -1098,12 +1152,33 @@ endfunction()
 
 function(mcux_add_cmakelists path)
   set(add_cmakelist 0)
-  file(RELATIVE_PATH relative_path ${SdkRootDirPath} ${path})
   set(cmakelist_path ${path}/CMakeLists.txt)
+  file(RELATIVE_PATH relative_path ${SdkRootDirPath} ${path})
+
+  string(FIND ${relative_path} "../" sdk_path_index)
+  if(${sdk_path_index} GREATER -1)
+    string(REGEX REPLACE "^([.][.]/)+" "custom/" relative_path ${relative_path})
+  endif()
 
   if(ARGC EQUAL 1)
     set(add_cmakelist 1)
+    get_filename_component(binary_path "${APPLICATION_BINARY_DIR}/${relative_path}" ABSOLUTE)
   elseif(ARGC EQUAL 2)
+    string(TOUPPER ${ARGV1} ARGV1)
+    if(${ARGV1} STREQUAL OPTIONAL)
+      if(EXISTS ${cmakelist_path})
+        set(add_cmakelist 1)
+        get_filename_component(binary_path "${APPLICATION_BINARY_DIR}/${relative_path}" ABSOLUTE)
+      else()
+        log_debug("No CMakeLists.txt in ${path}" ${CMAKE_CURRENT_LIST_FILE})
+      endif()
+    else()
+      # If the second argument is not OPTIONAL, treat it as binary_path
+      set(add_cmakelist 1)
+      set(binary_path ${ARGV1})
+    endif()
+  elseif(ARGC EQUAL 3)
+    set(binary_path ${ARGV2})
     string(TOUPPER ${ARGV1} ARGV1)
     if(${ARGV1} STREQUAL OPTIONAL)
       if(EXISTS ${cmakelist_path})
@@ -1116,6 +1191,10 @@ function(mcux_add_cmakelists path)
         "Wrong argument in mcux_add_cmakelists, second argument only supports OPTIONAL"
         ${CMAKE_CURRENT_LIST_FILE})
     endif()
+  else()
+    log_fatal(
+      "Wrong number of arguments in mcux_add_cmakelists, expected 1, 2, or 3 arguments"
+      ${CMAKE_CURRENT_LIST_FILE})
   endif()
 
   if(${add_cmakelist} EQUAL 1)
@@ -1124,7 +1203,13 @@ function(mcux_add_cmakelists path)
     else()
       log_debug("Include CMakeLists.txt from ${path}"
                 ${CMAKE_CURRENT_LIST_FILE})
-      add_subdirectory(${path} ${CMAKE_CURRENT_BINARY_DIR}/${relative_path})
+      get_property(ADDED_SUBDIRS GLOBAL PROPERTY ADDED_SUBDIRS)
+      get_filename_component(path "${path}" REALPATH)
+      list(FIND ADDED_SUBDIRS ${path} SUBDIR_FOUND)
+      if(SUBDIR_FOUND EQUAL -1)
+        add_subdirectory(${path} ${binary_path})
+        set_property(GLOBAL APPEND PROPERTY ADDED_SUBDIRS ${path})
+      endif()
     endif()
   endif()
 endfunction()
@@ -1135,41 +1220,53 @@ function(mcux_load_project_ide_data)
     foreach(f
             ${SdkRootDirPath}/devices/IDE.yml
             ${SdkRootDirPath}/devices/${soc_portfolio}/IDE.yml
-            ${SdkRootDirPath}/devices/${soc_portfolio}/${soc_series}/IDE.yml
-            ${SdkRootDirPath}/devices/${soc_portfolio}/${soc_series}/${device}/IDE.yml
-            ${SdkRootDirPath}/examples/IDE.yml
-            ${SdkRootDirPath}/examples/_boards/IDE.yml
-            ${SdkRootDirPath}/examples/_boards/${board}/IDE.yml)
+            ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/IDE.yml
+            ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}/IDE.yml)
       if(EXISTS ${f})
         list(APPEND IDE_yml_list ${f})
       endif()
     endforeach()
+
+    if (DEFINED board)
+      foreach(f
+            ${SdkRootDirPath}/examples/IDE.yml
+            ${SdkRootDirPath}/examples/_boards/IDE.yml
+            ${SdkRootDirPath}/${board_root}/${board}/IDE.yml)
+        if(EXISTS ${f})
+          list(APPEND IDE_yml_list ${f})
+        endif()
+      endforeach()
+    endif()
   else()
     foreach(f
             ${SdkRootDirPath}/devices/IDE.yml
             ${SdkRootDirPath}/devices/${soc_portfolio}/IDE.yml
-            ${SdkRootDirPath}/devices/${soc_portfolio}/${soc_series}/IDE.yml
-            ${SdkRootDirPath}/devices/${soc_portfolio}/${soc_series}/${device}/IDE.yml
-            ${SdkRootDirPath}/devices/${soc_portfolio}/${soc_series}/${device}/${core_id}/IDE.yml
-            ${SdkRootDirPath}/examples/IDE.yml
-            ${SdkRootDirPath}/examples/_boards/IDE.yml
-            ${SdkRootDirPath}/examples/_boards/${board}/IDE.yml
-            ${SdkRootDirPath}/examples/_boards/${board}/${core_id}/IDE.yml)
+            ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/IDE.yml
+            ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}/IDE.yml
+            ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}/${core_id}/IDE.yml)
       if(EXISTS ${f})
         list(APPEND IDE_yml_list ${f})
       endif()
     endforeach()
+
+    if (DEFINED board)
+      foreach(f
+            ${SdkRootDirPath}/examples/IDE.yml
+            ${SdkRootDirPath}/examples/_boards/IDE.yml
+            ${SdkRootDirPath}/${board_root}/${board}/IDE.yml
+            ${SdkRootDirPath}/${board_root}/${board}/${core_id}/IDE.yml)
+        if(EXISTS ${f})
+          list(APPEND IDE_yml_list ${f})
+        endif()
+      endforeach()
+    endif()
   endif()
 
-  if (DEFINED project_board_port_path)
-    if (DEFINED INTERNAL_EXAMPLE)
-      get_target_source_in_sub_folders(${APPLICATION_SOURCE_DIR} ${INTERNAL_EXAMPLE_FOLDER} "IDE.yml")
-    else ()
-      get_target_source_in_sub_folders(${APPLICATION_SOURCE_DIR} "examples" "IDE.yml")
-    endif ()
+  if (DEFINED project_board_port_path OR DEFINED project_device_port_path)
+    get_target_source_in_sub_folders(${APPLICATION_SOURCE_DIR} ${EXAMPLE_FOLDER} "IDE.yml")
     list(APPEND IDE_yml_list ${GET_TARGET_SOURCE_IN_SUB_FOLDERS_OUTPUT})
 
-    get_target_source_in_sub_folders(${full_project_board_port_path} "${board}" "IDE.yml")
+    get_target_source_in_sub_folders(${full_project_port_path} "${board_device_folder}" "IDE.yml")
     list(APPEND IDE_yml_list ${GET_TARGET_SOURCE_IN_SUB_FOLDERS_OUTPUT})
   else()
     if (EXISTS ${APPLICATION_SOURCE_DIR}/IDE.yml)
@@ -2389,7 +2486,58 @@ function(reset_app_link_order)
     target_link_libraries(app PRIVATE -Wl,--end-group)
   endif()
 
-  # Workaround: there will a an extra "-Wl,--start-group" without the statement below
-  target_link_libraries(app PRIVATE McuxSDK)
+  # Workaround:
+  # Without the statement below, there are two errors:
+  # missing --end-group
+  # undefined reference to `_exit'
+  if(${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
+    target_link_libraries(app PRIVATE -Wl,--start-group)
+    target_link_libraries(app PRIVATE "-lm")
+    target_link_libraries(app PRIVATE "-lc")
+    target_link_libraries(app PRIVATE "-lgcc")
+    target_link_libraries(app PRIVATE "-lnosys")
+    target_link_libraries(app PRIVATE -Wl,--end-group)
+  endif()
 endfunction()
 
+# Usage
+#   _get_subfolder_file(<output-var> <directory> <pattern> <level>)
+#
+# get designated file path from subfolder with designed deepth level
+function(_get_subfolder_file OUTPUT_VAR CURRENT_DIR PATTERN LEVEL)
+  set(current_level 1) 
+  set(dir_queue "${CURRENT_DIR}")
+
+  while( dir_queue AND (${current_level} LESS_EQUAL ${LEVEL}))
+    list(LENGTH dir_queue queue_length)
+
+    math(EXPR end_index "${queue_length} - 1")
+    foreach(index RANGE ${end_index})
+      list(GET dir_queue ${index} dir)
+      file(GLOB children RELATIVE "${dir}" "${dir}/*/")
+
+      foreach(child ${children})
+        if(IS_DIRECTORY "${dir}/${child}")
+          list(APPEND dir_queue "${dir}/${child}")
+        endif ()
+      endforeach()
+
+    endforeach()
+
+    math(EXPR end_index "${queue_length} - 1")
+    foreach(index RANGE ${end_index})
+      list(REMOVE_AT dir_queue 0)
+    endforeach ()
+
+
+    math(EXPR current_level "${current_level} + 1")
+  endwhile()
+
+  foreach (dir ${dir_queue})
+    if(EXISTS ${dir}/${PATTERN})
+      set(${OUTPUT_VAR} ${dir}/${PATTERN} PARENT_SCOPE)
+      break()
+    endif ()
+  endforeach ()
+
+endfunction()
