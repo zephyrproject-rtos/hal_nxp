@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FlexIO Camera driver version 2.1.3. */
-#define FSL_FLEXIO_CAMERA_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief FlexIO Camera driver version. */
+#define FSL_FLEXIO_CAMERA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*! @brief Define the Camera CPI interface is constantly 8-bit width. */
@@ -64,7 +64,9 @@ typedef struct _flexio_camera_type
 typedef struct _flexio_camera_config
 {
     bool enablecamera;     /*!< Enable/disable FlexIO Camera TX & RX. */
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     bool enableInDoze;     /*!< Enable/disable FlexIO operation in doze mode*/
+#endif
     bool enableInDebug;    /*!< Enable/disable FlexIO operation in debug mode*/
     bool enableFastAccess; /*!< Enable/disable fast access to FlexIO registers,
                             fast access requires the FlexIO clock to be at least

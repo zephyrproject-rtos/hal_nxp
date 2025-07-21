@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -82,7 +82,7 @@ extern "C" {
 
 /*!
  * @brief Enable the Debug function.
- * DebugToEnable could be bitwise OR of _smscm_debug_enable.
+ * DebugToEnable could be bitwise OR of _smscm_debug.
  *
  * @param base SMSCM peripheral address.
  * @param debugToEnable debug enable type.
@@ -95,7 +95,7 @@ static inline void SMSCM_EnableDebug(SMSCM_Type *base, uint32_t debugToEnable)
 
 /*!
  * @brief Disables the Debug function.
- * DebugToDisable could be bitwise OR of _smscm_debug_disable.
+ * DebugToDisable could be bitwise OR of _smscm_debug.
  *
  * @param base SMSCM peripheral address.
  * @param debugToDisable debug disable type.

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief PORT driver version. */
-#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*! @} */
 
 #if defined(FSL_FEATURE_PORT_HAS_PULL_ENABLE) && FSL_FEATURE_PORT_HAS_PULL_ENABLE
@@ -314,9 +314,9 @@ extern "C" {
 static inline void PORT_GetVersionInfo(PORT_Type *base, port_version_info_t *info)
 {
     uint32_t verid = base->VERID;
-    info->feature  = (uint16_t)verid;
-    info->minor    = (uint8_t)(verid >> PORT_VERID_MINOR_SHIFT);
-    info->major    = (uint8_t)(verid >> PORT_VERID_MAJOR_SHIFT);
+    info->feature = (uint16_t)((verid & PORT_VERID_FEATURE_MASK) >> PORT_VERID_FEATURE_SHIFT);
+    info->minor   = (uint8_t)((verid & PORT_VERID_MINOR_MASK) >> PORT_VERID_MINOR_SHIFT);
+    info->major   = (uint8_t)((verid & PORT_VERID_MAJOR_MASK) >> PORT_VERID_MAJOR_SHIFT);
 }
 #endif /* FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER */
 
@@ -561,7 +561,14 @@ static inline void PORT_SetPinDriveStrength(PORT_Type *base, uint32_t pin, uint8
  */
 static inline void PORT_EnablePinDoubleDriveStrength(PORT_Type *base, uint32_t pin, bool enable)
 {
-    base->PCR[pin] = (base->PCR[pin] & ~PORT_PCR_DSE1_MASK) | PORT_PCR_DSE1(enable);
+    if (enable)
+    {
+        base->PCR[pin] |= PORT_PCR_DSE1_MASK;
+    }
+    else
+    {
+        base->PCR[pin] &= ~PORT_PCR_DSE1_MASK;
+    }
 }
 #endif
 

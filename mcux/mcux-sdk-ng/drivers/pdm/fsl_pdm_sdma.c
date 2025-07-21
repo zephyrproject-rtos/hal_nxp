@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -132,9 +132,14 @@ void PDM_SetChannelConfigSDMA(PDM_Type *base,
     /* record end channel number */
     handle->endChannel = (uint8_t)channel;
     /* increase totoal enabled channel number */
-    handle->channelNums++;
+    if (handle->channelNums < UINT8_MAX) {
+        /* increase total enabled channel number */
+        handle->channelNums++;
+    }
+
     /* increase count pre channel numbers */
-    handle->count = (uint8_t)(handle->channelNums * (base->FIFO_CTRL & PDM_FIFO_CTRL_FIFOWMK_MASK));
+    uint32_t count = handle->channelNums * (base->FIFO_CTRL & PDM_FIFO_CTRL_FIFOWMK_MASK);
+    handle->count = (count > UINT8_MAX) ? UINT8_MAX : (uint8_t)count;
 }
 
 /*!

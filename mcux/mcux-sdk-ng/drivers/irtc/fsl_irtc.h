@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022-2023 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2022-2023, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +20,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_IRTC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_IRTC_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*! @} */
 
 #if !(defined(FSL_FEATURE_RTC_IS_SLAVE) && (FSL_FEATURE_RTC_IS_SLAVE != 0U))

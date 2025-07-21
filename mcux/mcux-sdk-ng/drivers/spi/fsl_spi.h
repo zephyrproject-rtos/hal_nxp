@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*! @} */
 
 #ifndef SPI_DUMMYDATA
@@ -509,10 +509,10 @@ void SPI_MasterSetBaudRate(SPI_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
 static inline void SPI_SetMatchData(SPI_Type *base, uint32_t matchData)
 {
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
-    base->ML = (uint8_t)matchData & 0xFFU;
-    base->MH = (uint8_t)(matchData >> 8U) & 0xFFU;
+    base->ML = (uint8_t)(matchData & 0xFFU);
+    base->MH = (uint8_t)((matchData >> 8U) & 0xFFU);
 #else
-    base->M = (uint8_t)matchData;
+    base->M = (uint8_t)(matchData & 0xFFU);
 #endif /* FSL_FEATURE_SPI_16BIT_TRANSFERS */
 }
 

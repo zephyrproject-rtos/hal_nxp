@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2025 NXP
  * All rights reserved.
  *
  *
@@ -24,9 +24,9 @@
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief PUF driver version. Version 2.1.6.
+/*! @brief PUF driver version. Version 2.2.0.
  *
- * Current version: 2.1.6
+ * Current version: 2.2.0
  *
  * Change log:
  * - 2.0.0
@@ -56,8 +56,11 @@
  * - 2.1.6
  *   - Changed wait time in PUF_Init(), when initialization fails it will try PUF_Powercycle() with shorter time. If
  * this shorter time will also fail, initialization will be tried with worst case time as before.
+ * - 2.2.0
+ * - Add support for kPUF_KeySlot4.
+ * - Add new PUF_ClearKey() function, that clears a desired PUF internal HW key register.
  */
-#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
+#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
 /*! @} */
 
 typedef enum _puf_key_index_register
@@ -95,6 +98,7 @@ typedef enum _puf_key_slot
 #if defined(PUF_KEYMASK_COUNT) && (PUF_KEYMASK_COUNT > 2)
     kPUF_KeySlot2 = 2U, /*!< PUF key slot 2 */
     kPUF_KeySlot3 = 3U, /*!< PUF key slot 3 */
+    kPUF_KeySlot4 = 4U, /*!< PUF key slot 4 */
 #endif
 } puf_key_slot_t;
 
@@ -278,6 +282,18 @@ status_t PUF_GetHwKey(
  * @return Status of the zeroize operation.
  */
 status_t PUF_Zeroize(PUF_Type *base);
+
+#if defined(FSL_FEATURE_PUF_HAS_KEYRESET) && (FSL_FEATURE_PUF_HAS_KEYRESET > 0)
+/*!
+ * @brief PUF HW Key Register Clearing
+ *
+ * This function clears a desired PUF internal HW key register.
+ *
+ * @param base PUF peripheral base address
+ * @param keySlot Slot of the HW key to be cleared.
+ */
+void PUF_ClearKey(PUF_Type *base, puf_key_slot_t keySlot);
+#endif /* FSL_FEATURE_PUF_HAS_KEYRESET */
 
 /*!
  * @brief Checks if Get Key operation is allowed.

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021, 2023 NXP
+ * Copyright 2016-2019, 2021, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,8 +16,6 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.slcd"
 #endif
-
-#define SLCD_WAVEFORM_CONFIG_NUM 16U
 
 /*******************************************************************************
  * Prototypes
@@ -81,7 +79,9 @@ static uint32_t SLCD_GetInstance(LCD_Type *base)
 void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
 {
     assert(configure);
+#if !(defined(FSL_FEATURE_SLCD_LP_CONTROL) && FSL_FEATURE_SLCD_LP_CONTROL)
     assert(configure->clkConfig);
+#endif
 
     uint32_t gcrReg   = 0;
     bool intEnabled   = false;
@@ -96,19 +96,38 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
     CLOCK_EnableClock(s_slcdClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+    /* Configure the duty and set the work for low power wait and stop mode. */
+    gcrReg = LCD_GCR_DUTY(configure->dutyCycle) | LCD_GCR_LCDSTP((uint32_t)configure->lowPowerBehavior & 0x1U);
+
+    gcrMsk = LCD_GCR_DUTY_MASK | LCD_GCR_LCDSTP_MASK;
+
+#if defined(FSL_FEATURE_SLCD_LP_CONTROL) && FSL_FEATURE_SLCD_LP_CONTROL
+    /* Clock divider. */
+    gcrReg |= LCD_GCR_LCLK(configure->clkPrescaler);
+    /* Sample and hold setting. */
+    gcrReg |= LCD_GCR_SHCYCLE(configure->sampleHold & 0x1U) | LCD_GCR_SHEN((configure->sampleHold & 0x2U) >> 1U);
+    /* Voltage trim. */
+    gcrReg |= LCD_GCR_VLL2TRIM(configure->voltageTrimVLL2) | LCD_GCR_VLL1TRIM(configure->voltageTrimVLL1);
+    /* Low power waveform. */
+    gcrReg |= LCD_GCR_LCDLP(configure->lowPowerWaveform);
+
+    gcrMsk |= LCD_GCR_LCLK_MASK | LCD_GCR_SHCYCLE_MASK | LCD_GCR_SHEN_MASK | LCD_GCR_VLL2TRIM_MASK |
+             LCD_GCR_VLL1TRIM_MASK | LCD_GCR_LCDLP_MASK;
+#else
     /* Configure general setting: power supply. */
-    gcrReg = LCD_GCR_RVEN((uint32_t)configure->powerSupply & 0x1U) |
+    gcrReg |= LCD_GCR_RVEN((uint32_t)configure->powerSupply & 0x1U) |
              LCD_GCR_CPSEL(((uint32_t)configure->powerSupply >> 1U) & 0x1U) |
              LCD_GCR_VSUPPLY(((uint32_t)configure->powerSupply >> 2U) & 0x1U) |
              LCD_GCR_LADJ((uint32_t)configure->loadAdjust);
     /* Configure general setting: clock source. */
     gcrReg |= LCD_GCR_SOURCE(((uint32_t)configure->clkConfig->clkSource) & 0x1U) |
               LCD_GCR_LCLK(configure->clkConfig->clkPrescaler) | LCD_GCR_ALTDIV(configure->clkConfig->altClkDivider);
-    /* Configure the duty and set the work for low power wait and stop mode. */
-    gcrReg |= LCD_GCR_DUTY(configure->dutyCycle) | LCD_GCR_LCDSTP((uint32_t)configure->lowPowerBehavior & 0x1U);
+    /* Voltage trim */
+    gcrReg |= LCD_GCR_RVTRIM(configure->voltageTrim);
 
-    gcrMsk = LCD_GCR_RVEN_MASK | LCD_GCR_CPSEL_MASK | LCD_GCR_VSUPPLY_MASK | LCD_GCR_LADJ_MASK | LCD_GCR_SOURCE_MASK |
-             LCD_GCR_LCLK_MASK | LCD_GCR_ALTDIV_MASK | LCD_GCR_DUTY_MASK | LCD_GCR_LCDSTP_MASK;
+    gcrMsk |= LCD_GCR_RVEN_MASK | LCD_GCR_CPSEL_MASK | LCD_GCR_VSUPPLY_MASK | LCD_GCR_LADJ_MASK | LCD_GCR_SOURCE_MASK |
+             LCD_GCR_LCLK_MASK | LCD_GCR_ALTDIV_MASK | LCD_GCR_RVTRIM_MASK;
+#endif
 
 #if FSL_FEATURE_SLCD_HAS_LCD_WAIT
     gcrReg |= LCD_GCR_LCDWAIT(((uint32_t)configure->lowPowerBehavior >> 1U) & 0x1U);
@@ -133,10 +152,6 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
     gcrReg |= LCD_GCR_FFR(configure->clkConfig->fastFrameRateEnable ? 1U : 0U);
     gcrMsk |= LCD_GCR_FFR_MASK;
 #endif /* FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE */
-
-    gcrReg |= LCD_GCR_RVTRIM(configure->voltageTrim);
-    gcrMsk |= LCD_GCR_RVTRIM_MASK;
-
     base->GCR = (base->GCR & ~gcrMsk) | gcrReg;
 
     /* Set display mode. */
@@ -166,7 +181,7 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
     }
 
     /* Initialize the Waveform. */
-    for (regNum = 0; regNum < SLCD_WAVEFORM_CONFIG_NUM; regNum++)
+    for (regNum = 0; regNum < LCD_WFOVERLAY_WFACCESS32BIT_WF_COUNT; regNum++)
     {
         base->WF[regNum] = 0;
     }
@@ -233,9 +248,17 @@ void SLCD_GetDefaultConfig(slcd_config_t *configure)
     /* Get Default parameters for the configuration structure. */
     /* SLCD in normal mode. */
     configure->displayMode = kSLCD_NormalMode;
+
+#if defined(FSL_FEATURE_SLCD_LP_CONTROL) && FSL_FEATURE_SLCD_LP_CONTROL
+    configure->voltageTrimVLL1 = kSLCD_VolatgeTrimNo;//TODO
+    configure->voltageTrimVLL2 = kSLCD_VolatgeTrimNo;
+    configure->lowPowerWaveform = false;
+    configure->sampleHold = kSLCD_SampleHoldNone;
+#else
     /* Power supply default: use charge pump to generate VLL1 and VLL2, VLL3 connected to VDD internally. */
     configure->powerSupply = kSLCD_InternalVll3UseChargePump;
     configure->voltageTrim = kSLCD_RegulatedVolatgeTrim08;
+#endif
     /* Work in low power mode. */
     configure->lowPowerBehavior = kSLCD_EnabledInWaitStop;
 #if FSL_FEATURE_SLCD_HAS_FRAME_FREQUENCY_INTERRUPT

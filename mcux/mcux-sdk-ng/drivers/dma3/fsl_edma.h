@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1)) /*!< Version 2.3.1. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0. */
 /*! @} */
 
 /*! @brief eDMA transfer configuration */
@@ -140,9 +140,9 @@ typedef enum _edma_interrupt_enable
 /*! @brief eDMA transfer type */
 typedef enum _edma_transfer_type
 {
-    kEDMA_MemoryToMemory = 0x0U, /*!< Transfer from memory to memory */
-    kEDMA_PeripheralToMemory,    /*!< Transfer from peripheral to memory */
-    kEDMA_MemoryToPeripheral,    /*!< Transfer from memory to peripheral */
+    kEDMA_MemoryToMemory = 0x0U,  /*!< Transfer from memory to memory */
+    kEDMA_PeripheralToMemory,     /*!< Transfer from peripheral to memory */
+    kEDMA_MemoryToPeripheral,     /*!< Transfer from memory to peripheral */
     kEDMA_PeripheralToPeripheral, /*!< Transfer from Peripheral to peripheral */
 } edma_transfer_type_t;
 
@@ -997,6 +997,52 @@ static inline uint32_t EDMA_GetUnusedTCDNumber(edma_handle_t *handle)
 static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
 {
     return (handle->base->CH[handle->channel].TCD_DLAST_SGA);
+}
+
+/*!
+ * @brief Get the transfer size.
+ *
+ * This function gets the transfer size.
+ *
+ * @param width transfer width(bytes).
+ * @return The transfer size.
+ */
+static inline edma_transfer_size_t EDMA_GetTransferSize(uint32_t width)
+{
+    assert((width == 1U) || (width == 2U) || (width == 4U) || (width == 8U) || (width == 16U) ||
+           (width == 32U) || (width == 64U));
+    
+    edma_transfer_size_t transferSize;
+
+    transferSize = kEDMA_TransferSize1Bytes;
+
+    switch (width)
+    {
+        case 1U:
+            transferSize =  kEDMA_TransferSize1Bytes;
+            break;
+        case 2U:
+            transferSize = kEDMA_TransferSize2Bytes;
+            break;
+        case 4U:
+            transferSize = kEDMA_TransferSize4Bytes;
+            break;
+        case 8U:
+            transferSize = kEDMA_TransferSize8Bytes;
+            break;
+        case 16U:
+            transferSize = kEDMA_TransferSize16Bytes;
+            break;
+        case 32U:
+            transferSize = kEDMA_TransferSize32Bytes;
+            break;
+        case 64U:
+            transferSize = kEDMA_TransferSize64Bytes;
+            break;
+    }
+    
+    return transferSize;
+
 }
 
 /*!

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
 
 /*! @brief PWT clock source selection */
 typedef enum _pwt_clock_source
@@ -145,7 +145,7 @@ void PWT_GetDefaultConfig(pwt_config_t *config);
  */
 static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
 {
-    base->CS |= (uint8_t)mask;
+    base->CS |= (uint8_t)(mask & 0xFFU);
 }
 
 /*!
@@ -157,7 +157,7 @@ static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
  */
 static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
 {
-    base->CS &= (uint8_t)(~mask);
+    base->CS &= (uint8_t)(~mask & 0xFFU);
 }
 
 /*!
@@ -202,7 +202,7 @@ static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
  */
 static inline void PWT_ClearStatusFlags(PWT_Type *base, uint32_t mask)
 {
-    base->CS &= (uint8_t)(~mask);
+    base->CS &= (uint8_t)(~mask & 0xFFU);
 }
 
 /*! @}*/
@@ -229,7 +229,7 @@ static inline void PWT_StartTimer(PWT_Type *base)
  */
 static inline void PWT_StopTimer(PWT_Type *base)
 {
-    base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK);
+    base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK & 0xFFU);
 }
 
 /*! @}*/

@@ -579,7 +579,9 @@ status_t FTFx_CMD_ProgramSection(ftfx_config_t *config, uint32_t start, const ui
 status_t FTFx_CMD_ProgramPartition(ftfx_config_t *config,
                                    ftfx_partition_flexram_load_opt_t option,
                                    uint32_t eepromDataSizeCode,
-                                   uint32_t flexnvmPartitionCode);
+                                   uint32_t flexnvmPartitionCode,
+                                   uint8_t CSEcKeySize,
+                                   uint8_t CFE);
 #endif /* FSL_FEATURE_FLASH_HAS_PROGRAM_PARTITION_CMD */
 
 /*! @} */

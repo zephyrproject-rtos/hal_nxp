@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020, 2024 NXP
+ * Copyright 2016-2017, 2020, 2024, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MRT_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_MRT_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*! @} */
 
 /*! @brief List of MRT channels */
