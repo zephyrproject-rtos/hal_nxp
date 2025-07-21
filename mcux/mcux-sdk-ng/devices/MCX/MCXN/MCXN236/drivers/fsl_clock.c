@@ -498,8 +498,8 @@ status_t CLOCK_FRO12MTrimConfig(sirc_trim_config_t config)
 
     if (kSCG_SircTrimNonUpdate == config.trimMode)
     {
-        SCG0->SIRCSTAT = SCG_SIRCSTAT_CCOTRIM(config.cltrim);
-        SCG0->SIRCSTAT = SCG_SIRCSTAT_CCOTRIM(config.ccotrim);
+        SCG0->SIRCSTAT = (SCG0->SIRCSTAT & ~SCG_SIRCSTAT_CLTRIM_MASK) | SCG_SIRCSTAT_CLTRIM(config.cltrim);
+        SCG0->SIRCSTAT = (SCG0->SIRCSTAT & ~SCG_SIRCSTAT_CCOTRIM_MASK) | SCG_SIRCSTAT_CCOTRIM(config.ccotrim);
     }
 
     /* Set trim mode. */
@@ -1143,9 +1143,9 @@ uint32_t CLOCK_GetLPFlexCommClkFreq(uint32_t id)
  */
 uint32_t CLOCK_GetPll0OutFreq(void)
 {
-    uint32_t clkRate = 0;
-    uint32_t prediv, postdiv;
-    float workRate = 0.0F;
+    volatile uint32_t clkRate = 0;
+    volatile uint32_t prediv, postdiv;
+    volatile float workRate = 0.0F;
 
     /* Get the input clock frequency of PLL. */
     clkRate = CLOCK_GetPLL0InClockRate();
@@ -1690,7 +1690,7 @@ uint32_t CLOCK_GetSaiRxBclkFreq(uint32_t id)
  */
 uint32_t CLOCK_GetPLL0InClockRate(void)
 {
-    uint32_t clkRate = 0U;
+    volatile uint32_t clkRate = 0U;
 
     switch ((SCG0->APLLCTRL & SCG_APLLCTRL_SOURCE_MASK) >> SCG_APLLCTRL_SOURCE_SHIFT)
     {
@@ -2029,7 +2029,7 @@ static uint32_t CLOCK_GetOsc32KFreq(uint32_t id)
  */
 uint32_t CLOCK_GetCoreSysClkFreq(void)
 {
-    uint32_t freq = 0U;
+    volatile uint32_t freq = 0U;
 
     switch ((SCG0->CSR & SCG_CSR_SCS_MASK) >> SCG_CSR_SCS_SHIFT)
     {

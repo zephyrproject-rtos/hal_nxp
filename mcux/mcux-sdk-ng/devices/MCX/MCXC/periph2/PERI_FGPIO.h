@@ -12,14 +12,14 @@
 **                          MCXC444VLH
 **                          MCXC444VMP
 **
-**     Version:             rev. 1.0, 2024-03-11
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FGPIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,21 +28,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-11)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FGPIO.h
- * @version 1.0
- * @date 2024-03-11
+ * @file PERI_FGPIO.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FGPIO
  *
  * CMSIS Peripheral Access Layer for FGPIO
  */
 
-#if !defined(FGPIO_H_)
-#define FGPIO_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FGPIO_H_)
+#define PERI_FGPIO_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXC143VFM) || defined(CPU_MCXC143VFT))
 #include "MCXC143_COMMON.h"
@@ -104,9 +107,9 @@
 /** FGPIO - Register Layout Typedef */
 typedef struct {
   __IO uint32_t PDOR;                              /**< Port Data Output Register, offset: 0x0 */
-  __O  uint32_t PSOR;                              /**< Port Set Output Register, offset: 0x4 */
-  __O  uint32_t PCOR;                              /**< Port Clear Output Register, offset: 0x8 */
-  __O  uint32_t PTOR;                              /**< Port Toggle Output Register, offset: 0xC */
+  __IO uint32_t PSOR;                              /**< Port Set Output Register, offset: 0x4 */
+  __IO uint32_t PCOR;                              /**< Port Clear Output Register, offset: 0x8 */
+  __IO uint32_t PTOR;                              /**< Port Toggle Output Register, offset: 0xC */
   __I  uint32_t PDIR;                              /**< Port Data Input Register, offset: 0x10 */
   __IO uint32_t PDDR;                              /**< Port Data Direction Register, offset: 0x14 */
 } FGPIO_Type;
@@ -228,5 +231,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FGPIO_H_ */
+#endif  /* PERI_FGPIO_H_ */
 

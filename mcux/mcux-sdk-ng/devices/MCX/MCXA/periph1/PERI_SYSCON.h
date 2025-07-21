@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SYSCON.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_SYSCON.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SYSCON
  *
  * CMSIS Peripheral Access Layer for SYSCON
  */
 
-#if !defined(SYSCON_H_)
-#define SYSCON_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SYSCON_H_)
+#define PERI_SYSCON_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -151,11 +154,7 @@ typedef struct {
   __I  uint32_t BINARY_CODE_MSB;                   /**< Gray to Binary Converter Binary Code [41:32], offset: 0xB6C */
        uint8_t RESERVED_11[716];
   __I  uint32_t ROP_STATE;                         /**< ROP State Register, offset: 0xE3C */
-  __I  uint32_t OVP_PAD_STATE;                     /**< OVP_PAD_STATE, offset: 0xE40 */
-  __I  uint32_t PROBE_STATE;                       /**< PROBE_STATE, offset: 0xE44 */
-  __I  uint32_t FT_STATE_A;                        /**< FT_STATE_A, offset: 0xE48 */
-  __I  uint32_t FT_STATE_B;                        /**< FT_STATE_B, offset: 0xE4C */
-       uint8_t RESERVED_12[8];
+       uint8_t RESERVED_12[24];
   __IO uint32_t SRAM_XEN;                          /**< RAM XEN Control, offset: 0xE58 */
   __IO uint32_t SRAM_XEN_DP;                       /**< RAM XEN Control (Duplicate), offset: 0xE5C */
        uint8_t RESERVED_13[32];
@@ -191,15 +190,16 @@ typedef struct {
 #define SYSCON_REMAP_CPU0_SBUS_MASK              (0x3U)
 #define SYSCON_REMAP_CPU0_SBUS_SHIFT             (0U)
 /*! CPU0_SBUS - RAMX0 address remap for CPU System bus
- *  0b00..RAMX0: 0x04000000 - 0x04001fff
- *  0b01..RAMX0: 0x2001e000 - 0x2001ffff(for 128KB RAM chip) / 0x20016000 - 0x20017fff(for 96KB RAM chip) / 0x2000e000 - 0x2000ffff(for 64KB RAM chip)
+ *  0b00..RAMX0: alias space is disabled.
+ *  0b01..RAMX0: alias space is enabled. It's linear address space from bottom of system ram. The start address is
+ *        0x20000000 + (system ram size - RAMX size)*1024.
  */
 #define SYSCON_REMAP_CPU0_SBUS(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_REMAP_CPU0_SBUS_SHIFT)) & SYSCON_REMAP_CPU0_SBUS_MASK)
 
 #define SYSCON_REMAP_DMA0_MASK                   (0xCU)
 #define SYSCON_REMAP_DMA0_SHIFT                  (2U)
 /*! DMA0 - RAMX0 address remap for DMA0
- *  0b00..RAMX0: 0x04000000 - 0x04001fff
+ *  0b00..RAMX0: alias space is disabled.
  *  0b01..RAMX0: same alias space as CPU0_SBUS
  */
 #define SYSCON_REMAP_DMA0(x)                     (((uint32_t)(((uint32_t)(x)) << SYSCON_REMAP_DMA0_SHIFT)) & SYSCON_REMAP_DMA0_MASK)
@@ -207,14 +207,14 @@ typedef struct {
 #define SYSCON_REMAP_USB0_MASK                   (0x30U)
 #define SYSCON_REMAP_USB0_SHIFT                  (4U)
 /*! USB0 - RAMX0 address remap for USB0
- *  0b00..RAMX0: 0x04000000 - 0x04001fff
+ *  0b00..RAMX0: alias space is disabled.
  *  0b01..RAMX0: same alias space as CPU0_SBUS
  */
 #define SYSCON_REMAP_USB0(x)                     (((uint32_t)(((uint32_t)(x)) << SYSCON_REMAP_USB0_SHIFT)) & SYSCON_REMAP_USB0_MASK)
 
 #define SYSCON_REMAP_LOCK_MASK                   (0x80000000U)
 #define SYSCON_REMAP_LOCK_SHIFT                  (31U)
-/*! LOCK - This 1-bit field provides a mechanism to limit writes to the this register to protect its
+/*! LOCK - This 1-bit field provides a mechanism to limit writes to this register to protect its
  *    contents. Once set, this bit remains asserted until a system reset.
  *  0b0..This register is not locked and can be altered.
  *  0b1..This register is locked and cannot be altered until a system reset.
@@ -688,42 +688,6 @@ typedef struct {
 #define SYSCON_ROP_STATE_ROP_STATE(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_ROP_STATE_ROP_STATE_SHIFT)) & SYSCON_ROP_STATE_ROP_STATE_MASK)
 /*! @} */
 
-/*! @name OVP_PAD_STATE - OVP_PAD_STATE */
-/*! @{ */
-
-#define SYSCON_OVP_PAD_STATE_OVP_PAD_STATE_MASK  (0xFFFFFFFFU)
-#define SYSCON_OVP_PAD_STATE_OVP_PAD_STATE_SHIFT (0U)
-/*! OVP_PAD_STATE - OVP_PAD_STATE */
-#define SYSCON_OVP_PAD_STATE_OVP_PAD_STATE(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_OVP_PAD_STATE_OVP_PAD_STATE_SHIFT)) & SYSCON_OVP_PAD_STATE_OVP_PAD_STATE_MASK)
-/*! @} */
-
-/*! @name PROBE_STATE - PROBE_STATE */
-/*! @{ */
-
-#define SYSCON_PROBE_STATE_PROBE_STATE_MASK      (0xFFFFFFFFU)
-#define SYSCON_PROBE_STATE_PROBE_STATE_SHIFT     (0U)
-/*! PROBE_STATE - PROBE_STATE */
-#define SYSCON_PROBE_STATE_PROBE_STATE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_PROBE_STATE_PROBE_STATE_SHIFT)) & SYSCON_PROBE_STATE_PROBE_STATE_MASK)
-/*! @} */
-
-/*! @name FT_STATE_A - FT_STATE_A */
-/*! @{ */
-
-#define SYSCON_FT_STATE_A_FT_STATE_A_MASK        (0xFFFFFFFFU)
-#define SYSCON_FT_STATE_A_FT_STATE_A_SHIFT       (0U)
-/*! FT_STATE_A - FT_STATE_A */
-#define SYSCON_FT_STATE_A_FT_STATE_A(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FT_STATE_A_FT_STATE_A_SHIFT)) & SYSCON_FT_STATE_A_FT_STATE_A_MASK)
-/*! @} */
-
-/*! @name FT_STATE_B - FT_STATE_B */
-/*! @{ */
-
-#define SYSCON_FT_STATE_B_FT_STATE_B_MASK        (0xFFFFFFFFU)
-#define SYSCON_FT_STATE_B_FT_STATE_B_SHIFT       (0U)
-/*! FT_STATE_B - FT_STATE_B */
-#define SYSCON_FT_STATE_B_FT_STATE_B(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FT_STATE_B_FT_STATE_B_SHIFT)) & SYSCON_FT_STATE_B_FT_STATE_B_MASK)
-/*! @} */
-
 /*! @name SRAM_XEN - RAM XEN Control */
 /*! @{ */
 
@@ -769,8 +733,8 @@ typedef struct {
 
 #define SYSCON_SRAM_XEN_LOCK_MASK                (0x80000000U)
 #define SYSCON_SRAM_XEN_LOCK_SHIFT               (31U)
-/*! LOCK - This 1-bit field provides a mechanism to limit writes to the this register (and
- *    SRAM_XEN_DP) to protect its contents. Once set, this bit remains asserted until a system reset.
+/*! LOCK - This 1-bit field provides a mechanism to limit writes to this register (and SRAM_XEN_DP)
+ *    to protect its contents. Once set, this bit remains asserted until a system reset.
  *  0b0..This register is not locked and can be altered.
  *  0b1..This register is locked and cannot be altered.
  */
@@ -911,10 +875,36 @@ typedef struct {
 /*! @name DEVICE_TYPE - Device Type */
 /*! @{ */
 
-#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_MASK      (0xFFFFFFFFU)
-#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SHIFT     (0U)
-/*! DEVICE_TYPE - Indicates DEVICE TYPE. */
-#define SYSCON_DEVICE_TYPE_DEVICE_TYPE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_MASK)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_MASK  (0xFFFFU)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_SHIFT (0U)
+/*! DEVICE_TYPE_NUM - Indicates the device part number */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_NUM_MASK)
+
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_MASK  (0x10000U)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_SHIFT (16U)
+/*! DEVICE_TYPE_SEC - Indicates the device type
+ *  0b0..Non Secure
+ *  0b1..Secure
+ */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_SEC_MASK)
+
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_MASK  (0xF00000U)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_SHIFT (20U)
+/*! DEVICE_TYPE_PKG - Indicates the device's package type
+ *  0b0000..HLQFP
+ *  0b0001..HTQFP
+ *  0b0010..BGA
+ *  0b0011..HDQFP
+ *  0b0100..QFN
+ *  0b0101..CSP
+ *  0b0110..LQFP
+ */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_PKG_MASK)
+
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_MASK  (0xFF000000U)
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_SHIFT (24U)
+/*! DEVICE_TYPE_PIN - Indicates the device's pin number */
+#define SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_SHIFT)) & SYSCON_DEVICE_TYPE_DEVICE_TYPE_PIN_MASK)
 /*! @} */
 
 /*! @name DEVICE_ID0 - Device ID */
@@ -922,7 +912,7 @@ typedef struct {
 
 #define SYSCON_DEVICE_ID0_RAM_SIZE_MASK          (0xFU)
 #define SYSCON_DEVICE_ID0_RAM_SIZE_SHIFT         (0U)
-/*! RAM_SIZE - Chip RAM Size
+/*! RAM_SIZE - Indicates the device's ram size
  *  0b0000..8KB.
  *  0b0001..16KB.
  *  0b0010..32KB.
@@ -940,7 +930,7 @@ typedef struct {
 
 #define SYSCON_DEVICE_ID0_FLASH_SIZE_MASK        (0xF0U)
 #define SYSCON_DEVICE_ID0_FLASH_SIZE_SHIFT       (4U)
-/*! FLASH_SIZE - Chip FLASH Size
+/*! FLASH_SIZE - Indicates the device's flash size
  *  0b0000..32KB.
  *  0b0001..64KB.
  *  0b0010..128KB.
@@ -952,6 +942,11 @@ typedef struct {
  *  0b1000..2MB.
  */
 #define SYSCON_DEVICE_ID0_FLASH_SIZE(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_FLASH_SIZE_SHIFT)) & SYSCON_DEVICE_ID0_FLASH_SIZE_MASK)
+
+#define SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK     (0xF00000U)
+#define SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT    (20U)
+/*! ROM_REV_MINOR - Indicates the device's ROM revision */
+#define SYSCON_DEVICE_ID0_ROM_REV_MINOR(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT)) & SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK)
 
 #define SYSCON_DEVICE_ID0_SECURITY_MASK          (0xF000000U)
 #define SYSCON_DEVICE_ID0_SECURITY_SHIFT         (24U)
@@ -1015,5 +1010,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SYSCON_H_ */
+#endif  /* PERI_SYSCON_H_ */
 

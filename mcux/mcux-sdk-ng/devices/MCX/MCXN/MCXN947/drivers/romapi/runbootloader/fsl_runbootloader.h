@@ -24,26 +24,25 @@
 /*@}*/
 
 /*   API prototype fields definition.
-| 31 : 24   |    23 : 20        |     19 : 16        |  15 : 04  |  03 : 00        |
-|    Tag    |   Boot mode       |   ISP interface    |  Reserved |  Image Index    |
-|           |                   |                    |           |                 |
-|           | 0: Master mode    | 0 - Auto detection |           | For boot mode 0 |
-|           | 1: ISP mode       | 1 - UART           |           |                 |
-|           |                   | 2 - SPI            |           |                 |
-|           |                   | 3 - I2C            |           |                 |
-|           |                   | 4 - USB FS HID     |           |                 |
-|           |                   | 5 - USB HS HID     |           |                 |
-|           |                   | 6 - CAN            |           |                 |
+| 31 : 24 |    23 : 20           |     19 : 16        |  15 : 12             |  11 : 8     |  7 ： 0   |
+|   Tag   |   Boot mode          | ISP Interface      |  Instance            | Image Index | Reserved  |
+|  0xEB   | 0: Master boot mode  | 0 - Auto detection | Used For Boot mode 0 |             |           |
+|         | 1: ISP mode          | 1 - UART           |                      |             |           |
+|         |                      | 2 - SPI            |                      |             |           |
+|         |                      | 3 - I2C            |                      |             |           |
+|         |                      | 4 - USB FS HID     |                      |             |           |
+|         |                      | 5 - USB HS HID     |                      |             |           |
+|         |                      | 6 - CAN            |                      |             |           |
 */
-
 typedef struct
 {
     union
     {
         struct
         {
+            uint32_t reserved : 8;
             uint32_t boot_image_index : 4;
-            uint32_t reserved : 12;
+            uint32_t instance : 4;
             uint32_t boot_interface : 4;
             uint32_t mode : 4;
             uint32_t tag : 8;

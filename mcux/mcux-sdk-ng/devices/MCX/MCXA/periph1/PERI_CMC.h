@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CMC.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_CMC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CMC
  *
  * CMSIS Peripheral Access Layer for CMC
  */
 
-#if !defined(CMC_H_)
-#define CMC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CMC_H_)
+#define PERI_CMC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -184,8 +187,9 @@ typedef struct {
 #define CMC_CKCTRL_CKMODE_MASK                   (0xFU)
 #define CMC_CKCTRL_CKMODE_SHIFT                  (0U)
 /*! CKMODE - Clocking Mode
- *  0b0000..No clock gating
- *  0b1111..Core, platform, and peripheral clocks are gated, and core enters Low-Power mode.
+ *  0b0000..Core clock is on
+ *  0b0001..Core clock is off
+ *  0b1111..Core, platform, and peripheral clocks are off, and core enters Low-Power mode
  */
 #define CMC_CKCTRL_CKMODE(x)                     (((uint32_t)(((uint32_t)(x)) << CMC_CKCTRL_CKMODE_SHIFT)) & CMC_CKCTRL_CKMODE_MASK)
 
@@ -204,8 +208,9 @@ typedef struct {
 #define CMC_CKSTAT_CKMODE_MASK                   (0xFU)
 #define CMC_CKSTAT_CKMODE_SHIFT                  (0U)
 /*! CKMODE - Low Power Status
- *  0b0000..Core clock not gated
- *  0b1111..Core, platform, and peripheral clocks were gated, and power domain entered Low-Power mode
+ *  0b0000..Core clock is on
+ *  0b0001..Core clock is off
+ *  0b1111..Core, platform, and peripheral clocks are off, and core enters Low-Power mode
  */
 #define CMC_CKSTAT_CKMODE(x)                     (((uint32_t)(((uint32_t)(x)) << CMC_CKSTAT_CKMODE_SHIFT)) & CMC_CKSTAT_CKMODE_MASK)
 
@@ -798,5 +803,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CMC_H_ */
+#endif  /* PERI_CMC_H_ */
 

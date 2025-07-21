@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXC242RM, Rev.1, Mar 2024
-**     Version:             rev. 1.6, 2016-06-24
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC141
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -55,14 +55,17 @@
 **     - rev. 1.6 (2016-06-24)
 **         USB - OTGCTL register was removed.
 **         USB - Bit RESUME was added in CTL register.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXC141.h
- * @version 1.6
- * @date 2016-06-24
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCXC141
  *
  * CMSIS Peripheral Access Layer for MCXC141

@@ -33,14 +33,14 @@
 **                          MCXN947VPB_cm33_core0
 **                          MCXN947VPB_cm33_core1
 **
-**     Version:             rev. 2.0, 2023-02-01
-**     Build:               b241120
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SINC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -51,21 +51,24 @@
 **         Initial version
 **     - rev. 2.0 (2023-02-01)
 **         Initial version based on Rev. 2 Draft B
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SINC.h
- * @version 2.0
- * @date 2023-02-01
+ * @file PERI_SINC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SINC
  *
  * CMSIS Peripheral Access Layer for SINC
  */
 
-#if !defined(SINC_H_)
-#define SINC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SINC_H_)
+#define PERI_SINC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXN546VDF_cm33_core0) || defined(CPU_MCXN546VKL_cm33_core0) || defined(CPU_MCXN546VNL_cm33_core0) || defined(CPU_MCXN546VPB_cm33_core0))
 #include "MCXN546_cm33_core0_COMMON.h"
@@ -780,150 +783,150 @@ typedef struct {
 #define SINC_NIS_COC0_MASK                       (0x1U)
 #define SINC_NIS_COC0_SHIFT                      (0U)
 /*! COC0 - Conversion Complete Flag
- *  0b0..Not finished; data not available
  *  0b0..No effect
- *  0b1..Finished; data available
+ *  0b0..Not finished; data not available
  *  0b1..Clear the flag
+ *  0b1..Finished; data available
  */
 #define SINC_NIS_COC0(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_COC0_SHIFT)) & SINC_NIS_COC0_MASK)
 
 #define SINC_NIS_COC1_MASK                       (0x2U)
 #define SINC_NIS_COC1_SHIFT                      (1U)
 /*! COC1 - Conversion Complete Flag
- *  0b0..Not finished; data not available
  *  0b0..No effect
- *  0b1..Finished; data available
+ *  0b0..Not finished; data not available
  *  0b1..Clear the flag
+ *  0b1..Finished; data available
  */
 #define SINC_NIS_COC1(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_COC1_SHIFT)) & SINC_NIS_COC1_MASK)
 
 #define SINC_NIS_COC2_MASK                       (0x4U)
 #define SINC_NIS_COC2_SHIFT                      (2U)
 /*! COC2 - Conversion Complete Flag
- *  0b0..Not finished; data not available
  *  0b0..No effect
- *  0b1..Finished; data available
+ *  0b0..Not finished; data not available
  *  0b1..Clear the flag
+ *  0b1..Finished; data available
  */
 #define SINC_NIS_COC2(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_COC2_SHIFT)) & SINC_NIS_COC2_MASK)
 
 #define SINC_NIS_COC3_MASK                       (0x8U)
 #define SINC_NIS_COC3_SHIFT                      (3U)
 /*! COC3 - Conversion Complete Flag
- *  0b0..Not finished; data not available
  *  0b0..No effect
- *  0b1..Finished; data available
+ *  0b0..Not finished; data not available
  *  0b1..Clear the flag
+ *  0b1..Finished; data available
  */
 #define SINC_NIS_COC3(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_COC3_SHIFT)) & SINC_NIS_COC3_MASK)
 
 #define SINC_NIS_COC4_MASK                       (0x10U)
 #define SINC_NIS_COC4_SHIFT                      (4U)
 /*! COC4 - Conversion Complete Flag
- *  0b0..Not finished; data not available
  *  0b0..No effect
- *  0b1..Finished; data available
+ *  0b0..Not finished; data not available
  *  0b1..Clear the flag
+ *  0b1..Finished; data available
  */
 #define SINC_NIS_COC4(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_COC4_SHIFT)) & SINC_NIS_COC4_MASK)
 
 #define SINC_NIS_CHF0_MASK                       (0x100U)
 #define SINC_NIS_CHF0_SHIFT                      (8U)
 /*! CHF0 - Data Output Ready Flag
- *  0b0..No overflow; data not available
  *  0b0..No effect
- *  0b1..Overflow; data available
+ *  0b0..No overflow; data not available
  *  0b1..Clear the flag
+ *  0b1..Overflow; data available
  */
 #define SINC_NIS_CHF0(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_CHF0_SHIFT)) & SINC_NIS_CHF0_MASK)
 
 #define SINC_NIS_CHF1_MASK                       (0x200U)
 #define SINC_NIS_CHF1_SHIFT                      (9U)
 /*! CHF1 - Data Output Ready Flag
- *  0b0..No overflow; data not available
  *  0b0..No effect
- *  0b1..Overflow; data available
+ *  0b0..No overflow; data not available
  *  0b1..Clear the flag
+ *  0b1..Overflow; data available
  */
 #define SINC_NIS_CHF1(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_CHF1_SHIFT)) & SINC_NIS_CHF1_MASK)
 
 #define SINC_NIS_CHF2_MASK                       (0x400U)
 #define SINC_NIS_CHF2_SHIFT                      (10U)
 /*! CHF2 - Data Output Ready Flag
- *  0b0..No overflow; data not available
  *  0b0..No effect
- *  0b1..Overflow; data available
+ *  0b0..No overflow; data not available
  *  0b1..Clear the flag
+ *  0b1..Overflow; data available
  */
 #define SINC_NIS_CHF2(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_CHF2_SHIFT)) & SINC_NIS_CHF2_MASK)
 
 #define SINC_NIS_CHF3_MASK                       (0x800U)
 #define SINC_NIS_CHF3_SHIFT                      (11U)
 /*! CHF3 - Data Output Ready Flag
- *  0b0..No overflow; data not available
  *  0b0..No effect
- *  0b1..Overflow; data available
+ *  0b0..No overflow; data not available
  *  0b1..Clear the flag
+ *  0b1..Overflow; data available
  */
 #define SINC_NIS_CHF3(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_CHF3_SHIFT)) & SINC_NIS_CHF3_MASK)
 
 #define SINC_NIS_CHF4_MASK                       (0x1000U)
 #define SINC_NIS_CHF4_SHIFT                      (12U)
 /*! CHF4 - Data Output Ready Flag
- *  0b0..No overflow; data not available
  *  0b0..No effect
- *  0b1..Overflow; data available
+ *  0b0..No overflow; data not available
  *  0b1..Clear the flag
+ *  0b1..Overflow; data available
  */
 #define SINC_NIS_CHF4(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_CHF4_SHIFT)) & SINC_NIS_CHF4_MASK)
 
 #define SINC_NIS_ZCD0_MASK                       (0x10000U)
 #define SINC_NIS_ZCD0_SHIFT                      (16U)
 /*! ZCD0 - Zero Cross Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_NIS_ZCD0(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_ZCD0_SHIFT)) & SINC_NIS_ZCD0_MASK)
 
 #define SINC_NIS_ZCD1_MASK                       (0x20000U)
 #define SINC_NIS_ZCD1_SHIFT                      (17U)
 /*! ZCD1 - Zero Cross Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_NIS_ZCD1(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_ZCD1_SHIFT)) & SINC_NIS_ZCD1_MASK)
 
 #define SINC_NIS_ZCD2_MASK                       (0x40000U)
 #define SINC_NIS_ZCD2_SHIFT                      (18U)
 /*! ZCD2 - Zero Cross Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_NIS_ZCD2(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_ZCD2_SHIFT)) & SINC_NIS_ZCD2_MASK)
 
 #define SINC_NIS_ZCD3_MASK                       (0x80000U)
 #define SINC_NIS_ZCD3_SHIFT                      (19U)
 /*! ZCD3 - Zero Cross Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_NIS_ZCD3(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_ZCD3_SHIFT)) & SINC_NIS_ZCD3_MASK)
 
 #define SINC_NIS_ZCD4_MASK                       (0x100000U)
 #define SINC_NIS_ZCD4_SHIFT                      (20U)
 /*! ZCD4 - Zero Cross Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_NIS_ZCD4(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_NIS_ZCD4_SHIFT)) & SINC_NIS_ZCD4_MASK)
 /*! @} */
@@ -934,200 +937,200 @@ typedef struct {
 #define SINC_EIS_SCD0_MASK                       (0x1U)
 #define SINC_EIS_SCD0_SHIFT                      (0U)
 /*! SCD0 - Short Circuit Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_EIS_SCD0(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_EIS_SCD0_SHIFT)) & SINC_EIS_SCD0_MASK)
 
 #define SINC_EIS_SCD1_MASK                       (0x2U)
 #define SINC_EIS_SCD1_SHIFT                      (1U)
 /*! SCD1 - Short Circuit Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_EIS_SCD1(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_EIS_SCD1_SHIFT)) & SINC_EIS_SCD1_MASK)
 
 #define SINC_EIS_SCD2_MASK                       (0x4U)
 #define SINC_EIS_SCD2_SHIFT                      (2U)
 /*! SCD2 - Short Circuit Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_EIS_SCD2(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_EIS_SCD2_SHIFT)) & SINC_EIS_SCD2_MASK)
 
 #define SINC_EIS_SCD3_MASK                       (0x8U)
 #define SINC_EIS_SCD3_SHIFT                      (3U)
 /*! SCD3 - Short Circuit Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_EIS_SCD3(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_EIS_SCD3_SHIFT)) & SINC_EIS_SCD3_MASK)
 
 #define SINC_EIS_SCD4_MASK                       (0x10U)
 #define SINC_EIS_SCD4_SHIFT                      (4U)
 /*! SCD4 - Short Circuit Detected Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define SINC_EIS_SCD4(x)                         (((uint32_t)(((uint32_t)(x)) << SINC_EIS_SCD4_SHIFT)) & SINC_EIS_SCD4_MASK)
 
 #define SINC_EIS_WLMT0_MASK                      (0x100U)
 #define SINC_EIS_WLMT0_SHIFT                     (8U)
 /*! WLMT0 - Window Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_WLMT0(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_WLMT0_SHIFT)) & SINC_EIS_WLMT0_MASK)
 
 #define SINC_EIS_WLMT1_MASK                      (0x200U)
 #define SINC_EIS_WLMT1_SHIFT                     (9U)
 /*! WLMT1 - Window Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_WLMT1(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_WLMT1_SHIFT)) & SINC_EIS_WLMT1_MASK)
 
 #define SINC_EIS_WLMT2_MASK                      (0x400U)
 #define SINC_EIS_WLMT2_SHIFT                     (10U)
 /*! WLMT2 - Window Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_WLMT2(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_WLMT2_SHIFT)) & SINC_EIS_WLMT2_MASK)
 
 #define SINC_EIS_WLMT3_MASK                      (0x800U)
 #define SINC_EIS_WLMT3_SHIFT                     (11U)
 /*! WLMT3 - Window Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_WLMT3(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_WLMT3_SHIFT)) & SINC_EIS_WLMT3_MASK)
 
 #define SINC_EIS_WLMT4_MASK                      (0x1000U)
 #define SINC_EIS_WLMT4_SHIFT                     (12U)
 /*! WLMT4 - Window Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_WLMT4(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_WLMT4_SHIFT)) & SINC_EIS_WLMT4_MASK)
 
 #define SINC_EIS_LLMT0_MASK                      (0x10000U)
 #define SINC_EIS_LLMT0_SHIFT                     (16U)
 /*! LLMT0 - Low Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_LLMT0(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_LLMT0_SHIFT)) & SINC_EIS_LLMT0_MASK)
 
 #define SINC_EIS_LLMT1_MASK                      (0x20000U)
 #define SINC_EIS_LLMT1_SHIFT                     (17U)
 /*! LLMT1 - Low Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_LLMT1(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_LLMT1_SHIFT)) & SINC_EIS_LLMT1_MASK)
 
 #define SINC_EIS_LLMT2_MASK                      (0x40000U)
 #define SINC_EIS_LLMT2_SHIFT                     (18U)
 /*! LLMT2 - Low Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_LLMT2(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_LLMT2_SHIFT)) & SINC_EIS_LLMT2_MASK)
 
 #define SINC_EIS_LLMT3_MASK                      (0x80000U)
 #define SINC_EIS_LLMT3_SHIFT                     (19U)
 /*! LLMT3 - Low Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_LLMT3(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_LLMT3_SHIFT)) & SINC_EIS_LLMT3_MASK)
 
 #define SINC_EIS_LLMT4_MASK                      (0x100000U)
 #define SINC_EIS_LLMT4_SHIFT                     (20U)
 /*! LLMT4 - Low Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_LLMT4(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_LLMT4_SHIFT)) & SINC_EIS_LLMT4_MASK)
 
 #define SINC_EIS_HLMT0_MASK                      (0x1000000U)
 #define SINC_EIS_HLMT0_SHIFT                     (24U)
 /*! HLMT0 - High Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_HLMT0(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_HLMT0_SHIFT)) & SINC_EIS_HLMT0_MASK)
 
 #define SINC_EIS_HLMT1_MASK                      (0x2000000U)
 #define SINC_EIS_HLMT1_SHIFT                     (25U)
 /*! HLMT1 - High Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_HLMT1(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_HLMT1_SHIFT)) & SINC_EIS_HLMT1_MASK)
 
 #define SINC_EIS_HLMT2_MASK                      (0x4000000U)
 #define SINC_EIS_HLMT2_SHIFT                     (26U)
 /*! HLMT2 - High Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_HLMT2(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_HLMT2_SHIFT)) & SINC_EIS_HLMT2_MASK)
 
 #define SINC_EIS_HLMT3_MASK                      (0x8000000U)
 #define SINC_EIS_HLMT3_SHIFT                     (27U)
 /*! HLMT3 - High Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_HLMT3(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_HLMT3_SHIFT)) & SINC_EIS_HLMT3_MASK)
 
 #define SINC_EIS_HLMT4_MASK                      (0x10000000U)
 #define SINC_EIS_HLMT4_SHIFT                     (28U)
 /*! HLMT4 - High Limit Flag
- *  0b0..Not exceeded
  *  0b0..No effect
- *  0b1..Exceeded
+ *  0b0..Not exceeded
  *  0b1..Clear the flag
+ *  0b1..Exceeded
  */
 #define SINC_EIS_HLMT4(x)                        (((uint32_t)(((uint32_t)(x)) << SINC_EIS_HLMT4_SHIFT)) & SINC_EIS_HLMT4_MASK)
 /*! @} */
@@ -1140,8 +1143,8 @@ typedef struct {
 /*! FUNF0 - FIFO Underflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FUNF0(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FUNF0_SHIFT)) & SINC_FIFOIS_FUNF0_MASK)
 
@@ -1150,8 +1153,8 @@ typedef struct {
 /*! FUNF1 - FIFO Underflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FUNF1(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FUNF1_SHIFT)) & SINC_FIFOIS_FUNF1_MASK)
 
@@ -1160,8 +1163,8 @@ typedef struct {
 /*! FUNF2 - FIFO Underflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FUNF2(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FUNF2_SHIFT)) & SINC_FIFOIS_FUNF2_MASK)
 
@@ -1170,8 +1173,8 @@ typedef struct {
 /*! FUNF3 - FIFO Underflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FUNF3(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FUNF3_SHIFT)) & SINC_FIFOIS_FUNF3_MASK)
 
@@ -1180,8 +1183,8 @@ typedef struct {
 /*! FUNF4 - FIFO Underflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FUNF4(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FUNF4_SHIFT)) & SINC_FIFOIS_FUNF4_MASK)
 
@@ -1190,8 +1193,8 @@ typedef struct {
 /*! FOVF0 - FIFO Overflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FOVF0(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FOVF0_SHIFT)) & SINC_FIFOIS_FOVF0_MASK)
 
@@ -1200,8 +1203,8 @@ typedef struct {
 /*! FOVF1 - FIFO Overflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FOVF1(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FOVF1_SHIFT)) & SINC_FIFOIS_FOVF1_MASK)
 
@@ -1210,8 +1213,8 @@ typedef struct {
 /*! FOVF2 - FIFO Overflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FOVF2(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FOVF2_SHIFT)) & SINC_FIFOIS_FOVF2_MASK)
 
@@ -1220,8 +1223,8 @@ typedef struct {
 /*! FOVF3 - FIFO Overflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FOVF3(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FOVF3_SHIFT)) & SINC_FIFOIS_FOVF3_MASK)
 
@@ -1230,8 +1233,8 @@ typedef struct {
 /*! FOVF4 - FIFO Overflow Flag
  *  0b0..Did not occur
  *  0b0..No effect
- *  0b1..Occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define SINC_FIFOIS_FOVF4(x)                     (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_FOVF4_SHIFT)) & SINC_FIFOIS_FOVF4_MASK)
 
@@ -1240,8 +1243,8 @@ typedef struct {
 /*! CAD0 - Clock Absence Flag
  *  0b0..Clock present
  *  0b0..No effect
- *  0b1..Clock absent
  *  0b1..Clear the flag
+ *  0b1..Clock absent
  */
 #define SINC_FIFOIS_CAD0(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_CAD0_SHIFT)) & SINC_FIFOIS_CAD0_MASK)
 
@@ -1250,8 +1253,8 @@ typedef struct {
 /*! CAD1 - Clock Absence Flag
  *  0b0..Clock present
  *  0b0..No effect
- *  0b1..Clock absent
  *  0b1..Clear the flag
+ *  0b1..Clock absent
  */
 #define SINC_FIFOIS_CAD1(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_CAD1_SHIFT)) & SINC_FIFOIS_CAD1_MASK)
 
@@ -1260,8 +1263,8 @@ typedef struct {
 /*! CAD2 - Clock Absence Flag
  *  0b0..Clock present
  *  0b0..No effect
- *  0b1..Clock absent
  *  0b1..Clear the flag
+ *  0b1..Clock absent
  */
 #define SINC_FIFOIS_CAD2(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_CAD2_SHIFT)) & SINC_FIFOIS_CAD2_MASK)
 
@@ -1270,8 +1273,8 @@ typedef struct {
 /*! CAD3 - Clock Absence Flag
  *  0b0..Clock present
  *  0b0..No effect
- *  0b1..Clock absent
  *  0b1..Clear the flag
+ *  0b1..Clock absent
  */
 #define SINC_FIFOIS_CAD3(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_CAD3_SHIFT)) & SINC_FIFOIS_CAD3_MASK)
 
@@ -1280,58 +1283,58 @@ typedef struct {
 /*! CAD4 - Clock Absence Flag
  *  0b0..Clock present
  *  0b0..No effect
- *  0b1..Clock absent
  *  0b1..Clear the flag
+ *  0b1..Clock absent
  */
 #define SINC_FIFOIS_CAD4(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_CAD4_SHIFT)) & SINC_FIFOIS_CAD4_MASK)
 
 #define SINC_FIFOIS_SAT0_MASK                    (0x1000000U)
 #define SINC_FIFOIS_SAT0_SHIFT                   (24U)
 /*! SAT0 - Saturation Flag
- *  0b0..Not saturated
  *  0b0..No effect
- *  0b1..Saturated
+ *  0b0..Not saturated
  *  0b1..Clear the flag
+ *  0b1..Saturated
  */
 #define SINC_FIFOIS_SAT0(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_SAT0_SHIFT)) & SINC_FIFOIS_SAT0_MASK)
 
 #define SINC_FIFOIS_SAT1_MASK                    (0x2000000U)
 #define SINC_FIFOIS_SAT1_SHIFT                   (25U)
 /*! SAT1 - Saturation Flag
- *  0b0..Not saturated
  *  0b0..No effect
- *  0b1..Saturated
+ *  0b0..Not saturated
  *  0b1..Clear the flag
+ *  0b1..Saturated
  */
 #define SINC_FIFOIS_SAT1(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_SAT1_SHIFT)) & SINC_FIFOIS_SAT1_MASK)
 
 #define SINC_FIFOIS_SAT2_MASK                    (0x4000000U)
 #define SINC_FIFOIS_SAT2_SHIFT                   (26U)
 /*! SAT2 - Saturation Flag
- *  0b0..Not saturated
  *  0b0..No effect
- *  0b1..Saturated
+ *  0b0..Not saturated
  *  0b1..Clear the flag
+ *  0b1..Saturated
  */
 #define SINC_FIFOIS_SAT2(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_SAT2_SHIFT)) & SINC_FIFOIS_SAT2_MASK)
 
 #define SINC_FIFOIS_SAT3_MASK                    (0x8000000U)
 #define SINC_FIFOIS_SAT3_SHIFT                   (27U)
 /*! SAT3 - Saturation Flag
- *  0b0..Not saturated
  *  0b0..No effect
- *  0b1..Saturated
+ *  0b0..Not saturated
  *  0b1..Clear the flag
+ *  0b1..Saturated
  */
 #define SINC_FIFOIS_SAT3(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_SAT3_SHIFT)) & SINC_FIFOIS_SAT3_MASK)
 
 #define SINC_FIFOIS_SAT4_MASK                    (0x10000000U)
 #define SINC_FIFOIS_SAT4_SHIFT                   (28U)
 /*! SAT4 - Saturation Flag
- *  0b0..Not saturated
  *  0b0..No effect
- *  0b1..Saturated
+ *  0b0..Not saturated
  *  0b1..Clear the flag
+ *  0b1..Saturated
  */
 #define SINC_FIFOIS_SAT4(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_FIFOIS_SAT4_SHIFT)) & SINC_FIFOIS_SAT4_MASK)
 /*! @} */
@@ -2023,5 +2026,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SINC_H_ */
+#endif  /* PERI_SINC_H_ */
 

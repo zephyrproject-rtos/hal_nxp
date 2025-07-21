@@ -5,6 +5,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/MCX/variable.cmake)
 mcux_set_variable(device MCXW727D)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series MCXW)
 mcux_set_variable(soc_periph periph3)
 
@@ -12,6 +13,6 @@ if (NOT DEFINED core_id)
     message(FATAL_ERROR "Please specify core_id for multicore device.")
 endif()
 
-include(${SdkRootDirPath}/devices/MCX/MCXW/MCXW727D/${core_id}/variable.cmake)
+include(${SdkRootDirPath}/${device_root}/MCX/MCXW/MCXW727D/${core_id}/variable.cmake)
 
 #### Source record

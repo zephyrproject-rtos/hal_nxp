@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SPC.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_SPC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SPC
  *
  * CMSIS Peripheral Access Layer for SPC
  */
 
-#if !defined(SPC_H_)
-#define SPC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SPC_H_)
+#define PERI_SPC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -149,7 +152,7 @@ typedef struct {
        uint8_t RESERVED_8[4];
   __IO uint32_t EVD_CFG;                           /**< External Voltage Domain Configuration, offset: 0x140 */
        uint8_t RESERVED_9[444];
-       uint32_t CORELDO_CFG;                       /**< LDO_CORE Configuration, offset: 0x300 */
+  __IO uint32_t CORELDO_CFG;                       /**< LDO_CORE Configuration, offset: 0x300 */
 } SPC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -196,8 +199,8 @@ typedef struct {
 #define SPC_SC_SPC_LP_REQ_MASK                   (0x2U)
 #define SPC_SC_SPC_LP_REQ_SHIFT                  (1U)
 /*! SPC_LP_REQ - SPC Power Mode Configuration Status Flag
- *  0b0..SPC is in Active mode; the ACTIVE_CFG register has control
  *  0b0..No effect
+ *  0b0..SPC is in Active mode; the ACTIVE_CFG register has control
  *  0b1..All power domains requested low-power mode; SPC entered a low-power state; power-mode configuration based on the LP_CFG register
  *  0b1..Clear the flag
  */
@@ -354,7 +357,7 @@ typedef struct {
  *  0b00..
  *  0b01..Regulate to mid voltage (1.0 V)
  *  0b10..Regulate to normal voltage (1.1 V)
- *  0b11..Reserved
+ *  0b11..Regulate to overdrive voltage (1.15 V)
  */
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL(x)        (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -424,10 +427,10 @@ typedef struct {
 #define SPC_LP_CFG_CORELDO_VDD_LVL_MASK          (0xCU)
 #define SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT         (2U)
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
- *  0b00..Retention voltage
+ *  0b00..Reserved
  *  0b01..Mid voltage (1.0 V)
  *  0b10..Normal voltage (1.1 V)
- *  0b11..Reserved
+ *  0b11..Overdrive voltage (1.15 V)
  */
 #define SPC_LP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_LP_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -517,8 +520,8 @@ typedef struct {
 /*! COREVDD_LVDF - Core Low-Voltage Detect Flag
  *  0b0..Event not detected
  *  0b0..No effect
- *  0b1..Event detected
  *  0b1..Clear the flag
+ *  0b1..Event detected
  */
 #define SPC_VD_STAT_COREVDD_LVDF(x)              (((uint32_t)(((uint32_t)(x)) << SPC_VD_STAT_COREVDD_LVDF_SHIFT)) & SPC_VD_STAT_COREVDD_LVDF_MASK)
 
@@ -527,8 +530,8 @@ typedef struct {
 /*! SYSVDD_LVDF - System Low-Voltage Detect Flag
  *  0b0..Event not detected
  *  0b0..No effect
- *  0b1..Event detected
  *  0b1..Clear the flag
+ *  0b1..Event detected
  */
 #define SPC_VD_STAT_SYSVDD_LVDF(x)               (((uint32_t)(((uint32_t)(x)) << SPC_VD_STAT_SYSVDD_LVDF_SHIFT)) & SPC_VD_STAT_SYSVDD_LVDF_MASK)
 
@@ -537,8 +540,8 @@ typedef struct {
 /*! SYSVDD_HVDF - System HVD Flag
  *  0b0..Event not detected
  *  0b0..No effect
- *  0b1..Event detected
  *  0b1..Clear the flag
+ *  0b1..Event detected
  */
 #define SPC_VD_STAT_SYSVDD_HVDF(x)               (((uint32_t)(((uint32_t)(x)) << SPC_VD_STAT_SYSVDD_HVDF_SHIFT)) & SPC_VD_STAT_SYSVDD_HVDF_MASK)
 /*! @} */
@@ -606,14 +609,6 @@ typedef struct {
  */
 #define SPC_VD_SYS_CFG_HVDIE(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_VD_SYS_CFG_HVDIE_SHIFT)) & SPC_VD_SYS_CFG_HVDIE_MASK)
 
-#define SPC_VD_SYS_CFG_LVSEL_MASK                (0x100U)
-#define SPC_VD_SYS_CFG_LVSEL_SHIFT               (8U)
-/*! LVSEL - System Low-Voltage Level Select
- *  0b0..Normal
- *  0b1..Safe
- */
-#define SPC_VD_SYS_CFG_LVSEL(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_VD_SYS_CFG_LVSEL_SHIFT)) & SPC_VD_SYS_CFG_LVSEL_MASK)
-
 #define SPC_VD_SYS_CFG_LOCK_MASK                 (0x10000U)
 #define SPC_VD_SYS_CFG_LOCK_SHIFT                (16U)
 /*! LOCK - System Voltage Detect Reset Enable Lock
@@ -640,6 +635,15 @@ typedef struct {
 #define SPC_EVD_CFG_EVDSTAT_SHIFT                (16U)
 /*! EVDSTAT - External Voltage Domain Status */
 #define SPC_EVD_CFG_EVDSTAT(x)                   (((uint32_t)(((uint32_t)(x)) << SPC_EVD_CFG_EVDSTAT_SHIFT)) & SPC_EVD_CFG_EVDSTAT_MASK)
+/*! @} */
+
+/*! @name CORELDO_CFG - LDO_CORE Configuration */
+/*! @{ */
+
+#define SPC_CORELDO_CFG_CORELDO_SPARE0_MASK      (0x10000U)
+#define SPC_CORELDO_CFG_CORELDO_SPARE0_SHIFT     (16U)
+/*! CORELDO_SPARE0 - CORELDO SPARE0 */
+#define SPC_CORELDO_CFG_CORELDO_SPARE0(x)        (((uint32_t)(((uint32_t)(x)) << SPC_CORELDO_CFG_CORELDO_SPARE0_SHIFT)) & SPC_CORELDO_CFG_CORELDO_SPARE0_MASK)
 /*! @} */
 
 
@@ -676,5 +680,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SPC_H_ */
+#endif  /* PERI_SPC_H_ */
 

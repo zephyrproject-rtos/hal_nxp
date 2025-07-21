@@ -1,74 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA165VLH
-**                          MCXA165VLL
-**                          MCXA165VLQ
-**                          MCXA165VPN
-**                          MCXA166VLH
-**                          MCXA166VLL
-**                          MCXA166VLQ
-**                          MCXA166VPN
-**                          MCXA175VLH
-**                          MCXA175VLL
-**                          MCXA175VLQ
-**                          MCXA175VPN
-**                          MCXA176VLH
-**                          MCXA176VLL
-**                          MCXA176VLQ
-**                          MCXA176VPN
-**                          MCXA275VLH
-**                          MCXA275VLL
-**                          MCXA275VLQ
-**                          MCXA275VPN
-**                          MCXA276VLH
-**                          MCXA276VLL
-**                          MCXA276VLQ
-**                          MCXA276VPN
+**     Processors:          MCXA345VLH
+**                          MCXA345VLL
+**                          MCXA345VLQ
+**                          MCXA345VPN
+**                          MCXA346VLH
+**                          MCXA346VLL
+**                          MCXA346VLQ
+**                          MCXA346VPN
 **
-**     Version:             rev. 1.0, 2024-03-26
-**     Build:               b241120
+**     Version:             rev. 1.0, 2024-11-21
+**     Build:               b250519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2024-03-26)
-**         Initial version based on Rev1 DraftC RM
+**     - rev. 1.0 (2024-11-21)
+**         Initial version based on Rev1 RM
 **
 ** ###################################################################
 */
 
 /*!
- * @file SPC.h
+ * @file PERI_SPC.h
  * @version 1.0
- * @date 2024-03-26
+ * @date 2024-11-21
  * @brief CMSIS Peripheral Access Layer for SPC
  *
  * CMSIS Peripheral Access Layer for SPC
  */
 
-#if !defined(SPC_H_)
-#define SPC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SPC_H_)
+#define PERI_SPC_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA165VLH) || defined(CPU_MCXA165VLL) || defined(CPU_MCXA165VLQ) || defined(CPU_MCXA165VPN))
-#include "MCXA165_COMMON.h"
-#elif (defined(CPU_MCXA166VLH) || defined(CPU_MCXA166VLL) || defined(CPU_MCXA166VLQ) || defined(CPU_MCXA166VPN))
-#include "MCXA166_COMMON.h"
-#elif (defined(CPU_MCXA175VLH) || defined(CPU_MCXA175VLL) || defined(CPU_MCXA175VLQ) || defined(CPU_MCXA175VPN))
-#include "MCXA175_COMMON.h"
-#elif (defined(CPU_MCXA176VLH) || defined(CPU_MCXA176VLL) || defined(CPU_MCXA176VLQ) || defined(CPU_MCXA176VPN))
-#include "MCXA176_COMMON.h"
-#elif (defined(CPU_MCXA275VLH) || defined(CPU_MCXA275VLL) || defined(CPU_MCXA275VLQ) || defined(CPU_MCXA275VPN))
-#include "MCXA275_COMMON.h"
-#elif (defined(CPU_MCXA276VLH) || defined(CPU_MCXA276VLL) || defined(CPU_MCXA276VLQ) || defined(CPU_MCXA276VPN))
-#include "MCXA276_COMMON.h"
+#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#include "MCXA345_COMMON.h"
+#elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
+#include "MCXA346_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -119,7 +95,8 @@ typedef struct {
   __I  uint32_t VERID;                             /**< Version ID, offset: 0x0 */
        uint8_t RESERVED_0[12];
   __IO uint32_t SC;                                /**< Status Control, offset: 0x10 */
-       uint8_t RESERVED_1[8];
+  __IO uint32_t CNTRL;                             /**< SPC Regulator Control, offset: 0x14 */
+       uint8_t RESERVED_1[4];
   __IO uint32_t LPREQ_CFG;                         /**< Low-Power Request Configuration, offset: 0x1C */
        uint8_t RESERVED_2[16];
   __IO uint32_t PD_STATUS[SPC_PD_STATUS_COUNT];    /**< SPC Power Domain Mode Status, array offset: 0x30, array step: 0x4 */
@@ -200,7 +177,7 @@ typedef struct {
 #define SPC_SC_SPC_LP_MODE_MASK                  (0xF0U)
 #define SPC_SC_SPC_LP_MODE_SHIFT                 (4U)
 /*! SPC_LP_MODE - Power Domain Low-Power Mode Request
- *  0b0000..Sleep mode with system clock running
+ *  0b0000..
  *  0b0001..DSLEEP with system clock off
  *  0b0010..PDOWN with system clock off
  *  0b0100..
@@ -212,6 +189,18 @@ typedef struct {
 #define SPC_SC_ISO_CLR_SHIFT                     (16U)
 /*! ISO_CLR - Isolation Clear Flags */
 #define SPC_SC_ISO_CLR(x)                        (((uint32_t)(((uint32_t)(x)) << SPC_SC_ISO_CLR_SHIFT)) & SPC_SC_ISO_CLR_MASK)
+/*! @} */
+
+/*! @name CNTRL - SPC Regulator Control */
+/*! @{ */
+
+#define SPC_CNTRL_CORELDO_EN_MASK                (0x1U)
+#define SPC_CNTRL_CORELDO_EN_SHIFT               (0U)
+/*! CORELDO_EN - LDO_CORE Regulator Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define SPC_CNTRL_CORELDO_EN(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_CNTRL_CORELDO_EN_SHIFT)) & SPC_CNTRL_CORELDO_EN_MASK)
 /*! @} */
 
 /*! @name LPREQ_CFG - Low-Power Request Configuration */
@@ -247,14 +236,6 @@ typedef struct {
 /*! @name PD_STATUS - SPC Power Domain Mode Status */
 /*! @{ */
 
-#define SPC_PD_STATUS_PWR_REQ_STATUS_MASK        (0x1U)
-#define SPC_PD_STATUS_PWR_REQ_STATUS_SHIFT       (0U)
-/*! PWR_REQ_STATUS - Power Request Status Flag
- *  0b0..Did not request
- *  0b1..Requested
- */
-#define SPC_PD_STATUS_PWR_REQ_STATUS(x)          (((uint32_t)(((uint32_t)(x)) << SPC_PD_STATUS_PWR_REQ_STATUS_SHIFT)) & SPC_PD_STATUS_PWR_REQ_STATUS_MASK)
-
 #define SPC_PD_STATUS_PD_LP_REQ_MASK             (0x10U)
 #define SPC_PD_STATUS_PD_LP_REQ_SHIFT            (4U)
 /*! PD_LP_REQ - Power Domain Low Power Request Flag
@@ -266,7 +247,7 @@ typedef struct {
 #define SPC_PD_STATUS_LP_MODE_MASK               (0xF00U)
 #define SPC_PD_STATUS_LP_MODE_SHIFT              (8U)
 /*! LP_MODE - Power Domain Low Power Mode Request
- *  0b0000..SLEEP with system clock running
+ *  0b0000..
  *  0b0001..DSLEEP with system clock off
  *  0b0010..PDOWN with system clock off
  *  0b0100..
@@ -361,14 +342,6 @@ typedef struct {
  *  0b11..
  */
 #define SPC_ACTIVE_CFG_BGMODE(x)                 (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_BGMODE_SHIFT)) & SPC_ACTIVE_CFG_BGMODE_MASK)
-
-#define SPC_ACTIVE_CFG_VDD_VD_DISABLE_MASK       (0x800000U)
-#define SPC_ACTIVE_CFG_VDD_VD_DISABLE_SHIFT      (23U)
-/*! VDD_VD_DISABLE - VDD Voltage Detect Disable
- *  0b0..Enable
- *  0b1..Disable
- */
-#define SPC_ACTIVE_CFG_VDD_VD_DISABLE(x)         (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_VDD_VD_DISABLE_SHIFT)) & SPC_ACTIVE_CFG_VDD_VD_DISABLE_MASK)
 
 #define SPC_ACTIVE_CFG_CORE_LVDE_MASK            (0x1000000U)
 #define SPC_ACTIVE_CFG_CORE_LVDE_SHIFT           (24U)
@@ -600,6 +573,14 @@ typedef struct {
  */
 #define SPC_VD_SYS_CFG_HVDIE(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_VD_SYS_CFG_HVDIE_SHIFT)) & SPC_VD_SYS_CFG_HVDIE_MASK)
 
+#define SPC_VD_SYS_CFG_LVSEL_MASK                (0x100U)
+#define SPC_VD_SYS_CFG_LVSEL_SHIFT               (8U)
+/*! LVSEL - System Low-Voltage Level Select
+ *  0b0..Normal
+ *  0b1..Safe
+ */
+#define SPC_VD_SYS_CFG_LVSEL(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_VD_SYS_CFG_LVSEL_SHIFT)) & SPC_VD_SYS_CFG_LVSEL_MASK)
+
 #define SPC_VD_SYS_CFG_LOCK_MASK                 (0x10000U)
 #define SPC_VD_SYS_CFG_LOCK_SHIFT                (16U)
 /*! LOCK - System Voltage Detect Reset Enable Lock
@@ -662,5 +643,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SPC_H_ */
+#endif  /* PERI_SPC_H_ */
 

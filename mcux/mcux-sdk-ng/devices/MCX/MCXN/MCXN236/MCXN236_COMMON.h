@@ -11,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXN23XRM
-**     Version:             rev. 1.0, 2023-10-01
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN236
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -27,14 +27,17 @@
 **     Revisions:
 **     - rev. 1.0 (2023-10-01)
 **         Initial version based on RM 1.2
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXN236_COMMON.h
- * @version 1.0
- * @date 2023-10-01
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCXN236
  *
  * CMSIS Peripheral Access Layer for MCXN236
@@ -45,7 +48,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -266,7 +269,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MCXN236_SERIES
 #define MCXN236_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MCXN236_features.h"
 
@@ -823,6 +828,8 @@ typedef enum IRQn {
   /** Array initializer of EWM peripheral base pointers */
   #define EWM_BASE_PTRS                            { EWM0 }
 #endif
+/** Interrupt vectors for the EWM peripheral type */
+#define EWM_IRQS                                 { EWM0_IRQn }
 
 /* FLEXIO - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

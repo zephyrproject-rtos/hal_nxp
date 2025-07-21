@@ -5,14 +5,14 @@
 **                          MCXW716CMFPA
 **                          MCXW716CMFTA
 **
-**     Version:             rev. 1.0, 2024-03-21
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMSCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -21,21 +21,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-21)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SMSCM.h
- * @version 1.0
- * @date 2024-03-21
+ * @file PERI_SMSCM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SMSCM
  *
  * CMSIS Peripheral Access Layer for SMSCM
  */
 
-#if !defined(SMSCM_H_)
-#define SMSCM_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SMSCM_H_)
+#define PERI_SMSCM_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXW716AMFPA) || defined(CPU_MCXW716AMFTA))
 #include "MCXW716A_COMMON.h"
@@ -139,60 +142,60 @@ typedef struct {
 #define SMSCM_DBGEN_DBGEN_MASK                   (0x7U)
 #define SMSCM_DBGEN_DBGEN_SHIFT                  (0U)
 /*! DBGEN - Invasive Debug Enable (DFF3 bitfield)
- *  0b101..W5C - Disable Invasive Debug.
- *  0b010..W2S - Enable Invasive Debug.
  *  0b000..Invasive Debug Disabled.
  *  0b010..Invasive Debug Enabled.
+ *  0b010..W2S - Enable Invasive Debug.
+ *  0b101..W5C - Disable Invasive Debug.
  */
 #define SMSCM_DBGEN_DBGEN(x)                     (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_DBGEN_SHIFT)) & SMSCM_DBGEN_DBGEN_MASK)
 
 #define SMSCM_DBGEN_SPIDEN_MASK                  (0x70U)
 #define SMSCM_DBGEN_SPIDEN_SHIFT                 (4U)
 /*! SPIDEN - Secure Invasive Debug Enable (DFF3 bitfield)
- *  0b101..W5C - Disable Secure Invasive Debug.
- *  0b010..W2S - Enable Secure Invasive Debug.
  *  0b000..Secure Invasive Debug Disabled.
  *  0b010..Secure Invasive Debug Enabled.
+ *  0b010..W2S - Enable Secure Invasive Debug.
+ *  0b101..W5C - Disable Secure Invasive Debug.
  */
 #define SMSCM_DBGEN_SPIDEN(x)                    (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_SPIDEN_SHIFT)) & SMSCM_DBGEN_SPIDEN_MASK)
 
 #define SMSCM_DBGEN_NIDEN_MASK                   (0x700U)
 #define SMSCM_DBGEN_NIDEN_SHIFT                  (8U)
 /*! NIDEN - Non-Invasive Debug Enable (DFF3 bitfield)
- *  0b101..W5C - Disable Non-Invasive Debug.
- *  0b010..W2S - Enable Non-Invasive Debug.
  *  0b000..Non-Invasive Debug Disabled.
  *  0b010..Non-Invasive Debug Enabled.
+ *  0b010..W2S - Enable Non-Invasive Debug.
+ *  0b101..W5C - Disable Non-Invasive Debug.
  */
 #define SMSCM_DBGEN_NIDEN(x)                     (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_NIDEN_SHIFT)) & SMSCM_DBGEN_NIDEN_MASK)
 
 #define SMSCM_DBGEN_SPNIDEN_MASK                 (0x7000U)
 #define SMSCM_DBGEN_SPNIDEN_SHIFT                (12U)
 /*! SPNIDEN - Secure Non-Invasive Debug Enable (DFF3 bitfield)
- *  0b101..W5C - Disable Secure Non-Invasive Debug.
- *  0b010..W2S - Enable Secure Non-Invasive Debug.
  *  0b000..Secure Non-Invasive Debug Disabled.
  *  0b010..Secure Non-Invasive Debug Enabled.
+ *  0b010..W2S - Enable Secure Non-Invasive Debug.
+ *  0b101..W5C - Disable Secure Non-Invasive Debug.
  */
 #define SMSCM_DBGEN_SPNIDEN(x)                   (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_SPNIDEN_SHIFT)) & SMSCM_DBGEN_SPNIDEN_MASK)
 
 #define SMSCM_DBGEN_ALTDBGEN_MASK                (0x70000U)
 #define SMSCM_DBGEN_ALTDBGEN_SHIFT               (16U)
 /*! ALTDBGEN - Alternate Invasive Debug Enable (DFF3 bitfield)
- *  0b101..W5C - Disable Alternate Invasive Debug.
- *  0b010..W2S - Enable Alternate Invasive Debug.
  *  0b000..Alternate Invasive Debug Disabled.
  *  0b010..Alternate Invasive Debug Enabled.
+ *  0b010..W2S - Enable Alternate Invasive Debug.
+ *  0b101..W5C - Disable Alternate Invasive Debug.
  */
 #define SMSCM_DBGEN_ALTDBGEN(x)                  (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_ALTDBGEN_SHIFT)) & SMSCM_DBGEN_ALTDBGEN_MASK)
 
 #define SMSCM_DBGEN_ALTEN_MASK                   (0x700000U)
 #define SMSCM_DBGEN_ALTEN_SHIFT                  (20U)
 /*! ALTEN - Alternate Enable (DFF3 bitfield)
- *  0b101..W5C - Disable Alternate.
- *  0b010..W2S - Enable Alternate.
  *  0b000..Alternate Disabled.
  *  0b010..Alternate Enabled.
+ *  0b010..W2S - Enable Alternate.
+ *  0b101..W5C - Disable Alternate.
  */
 #define SMSCM_DBGEN_ALTEN(x)                     (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_ALTEN_SHIFT)) & SMSCM_DBGEN_ALTEN_MASK)
 /*! @} */
@@ -203,60 +206,60 @@ typedef struct {
 #define SMSCM_DBGEN_B_DBGEN_B_MASK               (0x7U)
 #define SMSCM_DBGEN_B_DBGEN_B_SHIFT              (0U)
 /*! DBGEN_B - Invasive Debug Enable Complement (DFF3 bitfield)
- *  0b101..W5C - Enable Invasive Debug.
- *  0b010..W2S - Disable Invasive Debug.
  *  0b000..Invasive Debug Enabled.
  *  0b010..Invasive Debug Disabled.
+ *  0b010..W2S - Disable Invasive Debug.
+ *  0b101..W5C - Enable Invasive Debug.
  */
 #define SMSCM_DBGEN_B_DBGEN_B(x)                 (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_B_DBGEN_B_SHIFT)) & SMSCM_DBGEN_B_DBGEN_B_MASK)
 
 #define SMSCM_DBGEN_B_SPIDEN_B_MASK              (0x70U)
 #define SMSCM_DBGEN_B_SPIDEN_B_SHIFT             (4U)
 /*! SPIDEN_B - Secure Invasive Debug Enable - Complement (DFF3 bitfield)
- *  0b101..W5C - Enable Secure Invasive Debug.
- *  0b010..W2S - Disable Secure Invasive Debug.
  *  0b000..Secure Invasive Debug Enabled.
  *  0b010..Secure Invasive Debug Disabled.
+ *  0b010..W2S - Disable Secure Invasive Debug.
+ *  0b101..W5C - Enable Secure Invasive Debug.
  */
 #define SMSCM_DBGEN_B_SPIDEN_B(x)                (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_B_SPIDEN_B_SHIFT)) & SMSCM_DBGEN_B_SPIDEN_B_MASK)
 
 #define SMSCM_DBGEN_B_NIDEN_B_MASK               (0x700U)
 #define SMSCM_DBGEN_B_NIDEN_B_SHIFT              (8U)
 /*! NIDEN_B - Non-Invasive Debug Enable Complement (DFF3 bitfield)
- *  0b101..W5C - Enable Non-Invasive Debug.
- *  0b010..W2S - Disable Non-Invasive Debug.
  *  0b000..Non-Invasive Debug Enabled.
  *  0b010..Non-Invasive Debug Disabled.
+ *  0b010..W2S - Disable Non-Invasive Debug.
+ *  0b101..W5C - Enable Non-Invasive Debug.
  */
 #define SMSCM_DBGEN_B_NIDEN_B(x)                 (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_B_NIDEN_B_SHIFT)) & SMSCM_DBGEN_B_NIDEN_B_MASK)
 
 #define SMSCM_DBGEN_B_SPNIDEN_B_MASK             (0x7000U)
 #define SMSCM_DBGEN_B_SPNIDEN_B_SHIFT            (12U)
 /*! SPNIDEN_B - Secure Non-Invasive Debug Enable Complement (DFF3 bitfield)
- *  0b101..W5C - Enable Secure Non-Invasive Debug.
- *  0b010..W2S - Disable Secure Non-Invasive Debug.
  *  0b000..Secure Non-Invasive Debug Enabled.
  *  0b010..Secure Non-Invasive Debug Disabled.
+ *  0b010..W2S - Disable Secure Non-Invasive Debug.
+ *  0b101..W5C - Enable Secure Non-Invasive Debug.
  */
 #define SMSCM_DBGEN_B_SPNIDEN_B(x)               (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_B_SPNIDEN_B_SHIFT)) & SMSCM_DBGEN_B_SPNIDEN_B_MASK)
 
 #define SMSCM_DBGEN_B_ALTDBGEN_B_MASK            (0x70000U)
 #define SMSCM_DBGEN_B_ALTDBGEN_B_SHIFT           (16U)
 /*! ALTDBGEN_B - Alternate Invasive Debug Enable Complement (DFF3 bitfield)
- *  0b101..W5C - Alternate Enable Invasive Debug.
- *  0b010..W2S - Alternate Disable Invasive Debug.
  *  0b000..Alternate Invasive Debug Enabled.
  *  0b010..Alternate Invasive Debug Disabled.
+ *  0b010..W2S - Alternate Disable Invasive Debug.
+ *  0b101..W5C - Alternate Enable Invasive Debug.
  */
 #define SMSCM_DBGEN_B_ALTDBGEN_B(x)              (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_B_ALTDBGEN_B_SHIFT)) & SMSCM_DBGEN_B_ALTDBGEN_B_MASK)
 
 #define SMSCM_DBGEN_B_ALTEN_B_MASK               (0x700000U)
 #define SMSCM_DBGEN_B_ALTEN_B_SHIFT              (20U)
 /*! ALTEN_B - Alternate Enable Complement (DFF3 bitfield)
- *  0b101..W5C - Enable Alternate.
- *  0b010..W2S - Disable Alternate.
  *  0b000..Alternrate Enabled.
  *  0b010..Alternate Disabled.
+ *  0b010..W2S - Disable Alternate.
+ *  0b101..W5C - Enable Alternate.
  */
 #define SMSCM_DBGEN_B_ALTEN_B(x)                 (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_B_ALTEN_B_SHIFT)) & SMSCM_DBGEN_B_ALTEN_B_MASK)
 /*! @} */
@@ -267,37 +270,37 @@ typedef struct {
 #define SMSCM_DBGEN_LOCK_LOCK_MASK               (0x7U)
 #define SMSCM_DBGEN_LOCK_LOCK_SHIFT              (0U)
 /*! LOCK - Lock (DFF3 bitfield)
+ *  0b000..DBGEN[SPNIDEN,NIDEN,SPIDEN,DBGEN], DBGEN_B[SPNIDEN_B,NIDEN_B,SPIDEN_B,DBGEN_B], and DBGEN_LOCK[LOCK] unlocked.
+ *  0b010..DBGEN[SPNIDEN,NIDEN,SPIDEN,DBGEN], DBGEN_B[SPNIDEN_B,NIDEN_B,SPIDEN_B,DBGEN_B], and DBGEN_LOCK[LOCK] locked.
+ *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock DBGEN[SPNIDEN,NIDEN,SPIDEN,DBGEN], DBGEN_B[SPNIDEN_B,NIDEN_B,SPIDEN_B,DBGEN_B], and DBGEN_LOCK[LOCK].
  *  0b101..When DBGEN_LOCK[LOCK] is locked, DBGEN_LOCK[LOCK] cannot be unlocked with a write of 101b to this
  *         field. When DBGEN_LOCK[LOCK] is unlocked, a write of 101b to this field, DBGEN_LOCK[LOCK] remains unlocked
  *         and the DBGEN[DBGEN, SPIDEN, NIDEN, SPNIDEN],DBGEN_B[DBGEN_B, SPIDEN_B, NIDEN_B, SPNIDEN_B] fields remain
  *         writeable.
- *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock DBGEN[SPNIDEN,NIDEN,SPIDEN,DBGEN], DBGEN_B[SPNIDEN_B,NIDEN_B,SPIDEN_B,DBGEN_B], and DBGEN_LOCK[LOCK].
- *  0b000..DBGEN[SPNIDEN,NIDEN,SPIDEN,DBGEN], DBGEN_B[SPNIDEN_B,NIDEN_B,SPIDEN_B,DBGEN_B], and DBGEN_LOCK[LOCK] unlocked.
- *  0b010..DBGEN[SPNIDEN,NIDEN,SPIDEN,DBGEN], DBGEN_B[SPNIDEN_B,NIDEN_B,SPIDEN_B,DBGEN_B], and DBGEN_LOCK[LOCK] locked.
  */
 #define SMSCM_DBGEN_LOCK_LOCK(x)                 (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_LOCK_LOCK_SHIFT)) & SMSCM_DBGEN_LOCK_LOCK_MASK)
 
 #define SMSCM_DBGEN_LOCK_ALT_DBGEN_LOCK_MASK     (0x70000U)
 #define SMSCM_DBGEN_LOCK_ALT_DBGEN_LOCK_SHIFT    (16U)
 /*! ALT_DBGEN_LOCK - Alternate Lock (DFF3 bitfield)
+ *  0b000..ALT_DBGEN, ALT_DBGEN_B, ALT_DBGEN_LOCK unlocked.
+ *  0b010..ALT_DBGEN, ALT_DBGEN_B, ALT_DBGEN_LOCK locked.
+ *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock DBGEN[ALTDBGEN], DBGEN_B[ALTDBGEN_B, and DBGEN_LOCK[ALT_DBGEN_LOCK].
  *  0b101..When ALT_DBGEN_LOCK is locked, ALT_DBGEN_LOCK cannot be unlocked with a write of 101b to this field.
  *         When ALT_DBGEN_LOCK is unlocked, a write of 101b to this field, ALT_DBGEN_LOCK remains unlocked and
  *         DBGEN/DBGEN_B remains writeable.
- *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock DBGEN[ALTDBGEN], DBGEN_B[ALTDBGEN_B, and DBGEN_LOCK[ALT_DBGEN_LOCK].
- *  0b000..ALT_DBGEN, ALT_DBGEN_B, ALT_DBGEN_LOCK unlocked.
- *  0b010..ALT_DBGEN, ALT_DBGEN_B, ALT_DBGEN_LOCK locked.
  */
 #define SMSCM_DBGEN_LOCK_ALT_DBGEN_LOCK(x)       (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_LOCK_ALT_DBGEN_LOCK_SHIFT)) & SMSCM_DBGEN_LOCK_ALT_DBGEN_LOCK_MASK)
 
 #define SMSCM_DBGEN_LOCK_ALT_EN_LOCK_MASK        (0x700000U)
 #define SMSCM_DBGEN_LOCK_ALT_EN_LOCK_SHIFT       (20U)
 /*! ALT_EN_LOCK - Alternate Lock (DFF3 bitfield)
+ *  0b000..ALTEN, ALTEN_B, ALT_EN_LOCK unlocked.
+ *  0b010..ALTEN, ALTEN_B, ALT_EN_LOCK locked.
+ *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock DBGEN[ALTEN], DBGEN_B[ALTEN_B, and DBGEN_LOCK[ALT_EN_LOCK].
  *  0b101..f When ALT_EN_LOCK is locked, ALT_EN_LOCK cannot be unlocked with a write of 101b to this field. When
  *         ALT_EN_LOCK is unlocked, a write of 101b to this field, ALT_EN_LOCK remains unlocked and ALTEN/ALTEN_B
  *         remains writeable.
- *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock DBGEN[ALTEN], DBGEN_B[ALTEN_B, and DBGEN_LOCK[ALT_EN_LOCK].
- *  0b000..ALTEN, ALTEN_B, ALT_EN_LOCK unlocked.
- *  0b010..ALTEN, ALTEN_B, ALT_EN_LOCK locked.
  */
 #define SMSCM_DBGEN_LOCK_ALT_EN_LOCK(x)          (((uint32_t)(((uint32_t)(x)) << SMSCM_DBGEN_LOCK_ALT_EN_LOCK_SHIFT)) & SMSCM_DBGEN_LOCK_ALT_EN_LOCK_MASK)
 /*! @} */
@@ -328,9 +331,9 @@ typedef struct {
  *  0b00000111..OEM Open
  *  0b00001111..OEM Secure World Closed
  *  0b00011111..OEM Closed
- *  0b10011111..OEM Locked
  *  0b00111111..OEM Return
  *  0b01111111..NXP Return
+ *  0b10011111..OEM Locked
  *  0b11xxxxxx..BRICK
  */
 #define SMSCM_LIFECYCLE_CLC(x)                   (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_CLC_SHIFT)) & SMSCM_LIFECYCLE_CLC_MASK)
@@ -400,16 +403,16 @@ typedef struct {
 #define SMSCM_LIFECYCLE_B_CLC_B_MASK             (0xFFU)
 #define SMSCM_LIFECYCLE_B_CLC_B_SHIFT            (0U)
 /*! CLC_B - Converged Lifecycle Complement
- *  0b11111111..BLANK
- *  0b11111110..NXP Fab
- *  0b11111100..NXP Provisioned
- *  0b11111000..OEM Open
- *  0b11110000..OEM Secure World Closed
- *  0b11100000..OEM Closed
- *  0b01100000..OEM Locked
- *  0b11000000..OEM Return
- *  0b10000000..NXP Return
  *  0b00xxxxxx..BRICK
+ *  0b01100000..OEM Locked
+ *  0b10000000..NXP Return
+ *  0b11000000..OEM Return
+ *  0b11100000..OEM Closed
+ *  0b11110000..OEM Secure World Closed
+ *  0b11111000..OEM Open
+ *  0b11111100..NXP Provisioned
+ *  0b11111110..NXP Fab
+ *  0b11111111..BLANK
  */
 #define SMSCM_LIFECYCLE_B_CLC_B(x)               (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_CLC_B_SHIFT)) & SMSCM_LIFECYCLE_B_CLC_B_MASK)
 
@@ -424,8 +427,8 @@ typedef struct {
 #define SMSCM_LIFECYCLE_B_DBG_AUTH_DIS_B_MASK    (0x200U)
 #define SMSCM_LIFECYCLE_B_DBG_AUTH_DIS_B_SHIFT   (9U)
 /*! DBG_AUTH_DIS_B - Debug Authentication Disabled Complement
- *  0b1..Debug Authentication enabled.
  *  0b0..Debug Authentication disabled.
+ *  0b1..Debug Authentication enabled.
  */
 #define SMSCM_LIFECYCLE_B_DBG_AUTH_DIS_B(x)      (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_DBG_AUTH_DIS_B_SHIFT)) & SMSCM_LIFECYCLE_B_DBG_AUTH_DIS_B_MASK)
 
@@ -448,16 +451,16 @@ typedef struct {
 #define SMSCM_LIFECYCLE_B_SERIAL_DIS_B_MASK      (0x4000U)
 #define SMSCM_LIFECYCLE_B_SERIAL_DIS_B_SHIFT     (14U)
 /*! SERIAL_DIS_B - Serial Download Disabled Complement
- *  0b1..Serial download path is enabled.
  *  0b0..Serial download path is disabled.
+ *  0b1..Serial download path is enabled.
  */
 #define SMSCM_LIFECYCLE_B_SERIAL_DIS_B(x)        (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_SERIAL_DIS_B_SHIFT)) & SMSCM_LIFECYCLE_B_SERIAL_DIS_B_MASK)
 
 #define SMSCM_LIFECYCLE_B_WAKEUP_DIS_B_MASK      (0x8000U)
 #define SMSCM_LIFECYCLE_B_WAKEUP_DIS_B_SHIFT     (15U)
 /*! WAKEUP_DIS_B - Wakeup Disabled Complement
- *  0b1..Boot-ROM LP wakup is enabled.
  *  0b0..Boot-ROM LP wakup is disabled.
+ *  0b1..Boot-ROM LP wakup is enabled.
  */
 #define SMSCM_LIFECYCLE_B_WAKEUP_DIS_B(x)        (((uint32_t)(((uint32_t)(x)) << SMSCM_LIFECYCLE_B_WAKEUP_DIS_B_SHIFT)) & SMSCM_LIFECYCLE_B_WAKEUP_DIS_B_MASK)
 
@@ -483,10 +486,10 @@ typedef struct {
 #define SMSCM_ROM_LOCKOUT_REGLOCK_MASK           (0xE0000000U)
 #define SMSCM_ROM_LOCKOUT_REGLOCK_SHIFT          (29U)
 /*! REGLOCK - ROM_LOCKOUT Register Lock (DFF3 bitfield)
- *  0b101..Writing this value has no effect.
- *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock ROM_LOCKOUT register.
  *  0b000..ROM_LOCKOUT unlocked.
  *  0b010..ROM_LOCKOUT locked.
+ *  0b010, 0b000, 0b001, 0b011, 0b100, 0b111..Lock ROM_LOCKOUT register.
+ *  0b101..Writing this value has no effect.
  */
 #define SMSCM_ROM_LOCKOUT_REGLOCK(x)             (((uint32_t)(((uint32_t)(x)) << SMSCM_ROM_LOCKOUT_REGLOCK_SHIFT)) & SMSCM_ROM_LOCKOUT_REGLOCK_MASK)
 /*! @} */
@@ -792,5 +795,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SMSCM_H_ */
+#endif  /* PERI_SMSCM_H_ */
 

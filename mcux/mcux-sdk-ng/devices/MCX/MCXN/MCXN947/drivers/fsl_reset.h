@@ -1,6 +1,5 @@
 /*
- * Copyright 2022, NXP
- * All rights reserved.
+ * Copyright 2022, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -250,6 +249,23 @@ void RESET_PeripheralReset(reset_ip_name_t peripheral);
 static inline void RESET_ReleasePeripheralReset(reset_ip_name_t peripheral)
 {
     RESET_ClearPeripheralReset(peripheral);
+}
+
+/*!
+ * @brief Set/clear the CPU1 reset signal.
+ * 
+ * @param enable True to set the reset signal, false to clear the reset signal.
+ */
+static inline void CLOCK_SetCpu1Reset(SYSCON_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CPUCTRL |= SYSCON_CPUCTRL_CPU1RSTEN_MASK;
+    }
+    else
+    {
+        base->CPUCTRL &= ~SYSCON_CPUCTRL_CPU1RSTEN_MASK;
+    }
 }
 
 #if defined(__cplusplus)
