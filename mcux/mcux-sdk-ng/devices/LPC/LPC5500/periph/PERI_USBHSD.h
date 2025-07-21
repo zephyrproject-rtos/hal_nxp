@@ -29,14 +29,14 @@
 **                          LPC55S69JEV98_cm33_core0
 **                          LPC55S69JEV98_cm33_core1
 **
-**     Version:             rev. 1.1, 2019-05-16
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBHSD
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Initial version based on v0.2UM
 **     - rev. 1.1 (2019-05-16)
 **         Initial A1 version based on v1.3UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USBHSD.h
- * @version 1.1
- * @date 2019-05-16
+ * @file PERI_USBHSD.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USBHSD
  *
  * CMSIS Peripheral Access Layer for USBHSD
  */
 
-#if !defined(USBHSD_H_)
-#define USBHSD_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USBHSD_H_)
+#define PERI_USBHSD_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5526JBD100) || defined(CPU_LPC5526JBD64) || defined(CPU_LPC5526JEV98))
 #include "LPC5526_COMMON.h"
@@ -513,5 +516,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USBHSD_H_ */
+#endif  /* PERI_USBHSD_H_ */
 

@@ -13,12 +13,6 @@
 #define FSL_COMPONENT_ID "platform.drivers.power"
 #endif
 
-/*! @name Driver version */
-/*@{*/
-/*! @brief LPC51U68 power contorl version 2.0.0. */
-#define FSL_LPC51U68_POWER_CONTROL_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
-
 #define POWER_BASE (0x40020000u)
 #define POWER ((POWER_Type *)POWER_BASE)
 #define BODYBIAS_BASE (0x40030000u)
@@ -265,7 +259,7 @@ static void DeepSleepReloc(uint32_t peripheral_ctrl)
 
     /* Set PDRUNCFG[1] bits 29, 28 */
     pdSet = &(SYSCON->PDRUNCFGSET[0]);
-    ((volatile uint32_t *)pdSet)[1] = (3U << 28U);
+    *((volatile uint32_t *)pdSet + 1U) = (3U << 28U);
 
     /* Fix KPSDK-17275 */
     SYSCON->PRESETCTRLSET[0] = SYSCON_PRESETCTRL_FLASH_RST_MASK;
@@ -282,7 +276,7 @@ static void DeepSleepReloc(uint32_t peripheral_ctrl)
 
     /* When exiting only clear bit 29 of PDRUNCFG[1] */
     pdClr = &(SYSCON->PDRUNCFGCLR[0]);
-    ((volatile uint32_t *)pdClr)[1] = (1U << 29U);
+    *((volatile uint32_t *)pdClr + 1U) = (1U << 29U);
 
     /* Restore original pdruncfg */
     SYSCON->PDRUNCFG[0] = pdruncfg_val & ~(1U << 3U);
@@ -496,5 +490,5 @@ void POWER_SetLowPowerVoltageForFreq(uint32_t freq)
 
 uint32_t POWER_GetLibVersion(void)
 {
-    return FSL_LPC51U68_POWER_CONTROL_VERSION;
+    return FSL_POWER_DRIVER_VERSION;
 }

@@ -5,7 +5,7 @@
 
 #### device spepcific drivers
 include(${SdkRootDirPath}/devices/arm/device_header.cmake)
-mcux_add_cmakelists(${SdkRootDirPath}/devices/LPC/LPC5500/LPC55S16/drivers)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/LPC/LPC5500/LPC55S16/drivers)
 
 #### LPC shared drivers/components/middlewares, project segments
 include(${SdkRootDirPath}/devices/LPC/shared.cmake)

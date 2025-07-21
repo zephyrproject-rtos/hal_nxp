@@ -13,12 +13,6 @@
 #define FSL_COMPONENT_ID "platform.drivers.power"
 #endif
 
-/*! @name Driver version */
-/*@{*/
-/*! @brief LPC5400X power contorl version 1.0.0. */
-#define FSL_LPC5400X_POWER_CONTROL_VERSION (MAKE_VERSION(1, 0, 0))
-/*@}*/
-
 #define POWER_BASE (0x40020000u)
 #define POWER ((POWER_Type *)POWER_BASE)
 #define BODYBIAS_BASE (0x40030000u)
@@ -657,5 +651,5 @@ void POWER_SetUsbPhy(void)
 /* Get power lib version */
 uint32_t POWER_GetLibVersion(void)
 {
-    return FSL_LPC5400X_POWER_CONTROL_VERSION;
+    return FSL_POWER_DRIVER_VERSION;
 }

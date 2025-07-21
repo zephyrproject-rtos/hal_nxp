@@ -14,14 +14,14 @@
 **                          LPC55S06JBD64
 **                          LPC55S06JHI48
 **
-**     Version:             rev. 1.0, 2020-04-09
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for HASHCRYPT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -30,21 +30,24 @@
 **     Revisions:
 **     - rev. 1.0 (2020-04-09)
 **         Initial version based on Niobe4mini
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file HASHCRYPT.h
- * @version 1.0
- * @date 2020-04-09
+ * @file PERI_HASHCRYPT.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for HASHCRYPT
  *
  * CMSIS Peripheral Access Layer for HASHCRYPT
  */
 
-#if !defined(HASHCRYPT_H_)
-#define HASHCRYPT_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_HASHCRYPT_H_)
+#define PERI_HASHCRYPT_H_                        /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5502JBD64) || defined(CPU_LPC5502JHI48))
 #include "LPC5502_COMMON.h"
@@ -207,8 +210,8 @@ typedef struct {
 #define HASHCRYPT_CTRL_AESFLUSH_MASK             (0x2000U)
 #define HASHCRYPT_CTRL_AESFLUSH_SHIFT            (13U)
 /*! AESFLUSH - Flushes the AES engine registers. This bit self clears.
- *  0b1..Flush the AES engine registers.
  *  0b0..Do not flush the AES engine registers.
+ *  0b1..Flush the AES engine registers.
  */
 #define HASHCRYPT_CTRL_AESFLUSH(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_AESFLUSH_SHIFT)) & HASHCRYPT_CTRL_AESFLUSH_MASK)
 /*! @} */
@@ -622,5 +625,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* HASHCRYPT_H_ */
+#endif  /* PERI_HASHCRYPT_H_ */
 

@@ -9,14 +9,14 @@
 **                          LPC55S36JBD100
 **                          LPC55S36JHI48
 **
-**     Version:             rev. 1.1, 2021-08-04
-**     Build:               b241024
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -27,21 +27,24 @@
 **         Initial version based on RM DraftF
 **     - rev. 1.1 (2021-08-04)
 **         Initial version based on RM DraftG
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXSPI.h
- * @version 1.1
- * @date 2021-08-04
+ * @file PERI_FLEXSPI.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXSPI
  *
  * CMSIS Peripheral Access Layer for FLEXSPI
  */
 
-#if !defined(FLEXSPI_H_)
-#define FLEXSPI_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXSPI_H_)
+#define PERI_FLEXSPI_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC5534JBD100) || defined(CPU_LPC5534JBD64) || defined(CPU_LPC5534JHI48))
 #include "LPC5534_COMMON.h"
@@ -524,8 +527,8 @@ typedef struct {
 /*! IPCMDDONE - IP-Triggered Command Sequences Execution Finished
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_IPCMDDONE(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_IPCMDDONE_SHIFT)) & FLEXSPI_INTR_IPCMDDONE_MASK)
 
@@ -534,8 +537,8 @@ typedef struct {
 /*! IPCMDGE - IP-Triggered Command Sequences Grant Timeout
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_IPCMDGE(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_IPCMDGE_SHIFT)) & FLEXSPI_INTR_IPCMDGE_MASK)
 
@@ -544,8 +547,8 @@ typedef struct {
 /*! AHBCMDGE - AHB-Triggered Command Sequences Grant Timeout
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_AHBCMDGE(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_AHBCMDGE_SHIFT)) & FLEXSPI_INTR_AHBCMDGE_MASK)
 
@@ -554,8 +557,8 @@ typedef struct {
 /*! IPCMDERR - IP-Triggered Command Sequences Error
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_IPCMDERR(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_IPCMDERR_SHIFT)) & FLEXSPI_INTR_IPCMDERR_MASK)
 
@@ -564,8 +567,8 @@ typedef struct {
 /*! AHBCMDERR - AHB-Triggered Command Sequences Error
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_AHBCMDERR(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_AHBCMDERR_SHIFT)) & FLEXSPI_INTR_AHBCMDERR_MASK)
 
@@ -574,8 +577,8 @@ typedef struct {
 /*! IPRXWA - IP Receive FIFO Watermark Available
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_IPRXWA(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_IPRXWA_SHIFT)) & FLEXSPI_INTR_IPRXWA_MASK)
 
@@ -584,8 +587,8 @@ typedef struct {
 /*! IPTXWE - IP Transmit FIFO Watermark Empty
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_IPTXWE(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_IPTXWE_SHIFT)) & FLEXSPI_INTR_IPTXWE_MASK)
 
@@ -594,8 +597,8 @@ typedef struct {
 /*! DATALEARNFAIL - Data Learning Failed
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_DATALEARNFAIL(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_DATALEARNFAIL_SHIFT)) & FLEXSPI_INTR_DATALEARNFAIL_MASK)
 
@@ -604,8 +607,8 @@ typedef struct {
 /*! SCKSTOPBYRD - SCLK Stopped Due To Full Receive FIFO
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_SCKSTOPBYRD(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_SCKSTOPBYRD_SHIFT)) & FLEXSPI_INTR_SCKSTOPBYRD_MASK)
 
@@ -614,8 +617,8 @@ typedef struct {
 /*! SCKSTOPBYWR - SCLK Stopped Due To Empty Transmit FIFO
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_SCKSTOPBYWR(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_SCKSTOPBYWR_SHIFT)) & FLEXSPI_INTR_SCKSTOPBYWR_MASK)
 
@@ -624,8 +627,8 @@ typedef struct {
 /*! AHBBUSTIMEOUT - AHB Bus Timeout
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_AHBBUSTIMEOUT(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_AHBBUSTIMEOUT_SHIFT)) & FLEXSPI_INTR_AHBBUSTIMEOUT_MASK)
 
@@ -634,8 +637,8 @@ typedef struct {
 /*! SEQTIMEOUT - Sequence Execution Timeout
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_SEQTIMEOUT(x)               (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_SEQTIMEOUT_SHIFT)) & FLEXSPI_INTR_SEQTIMEOUT_MASK)
 
@@ -644,8 +647,8 @@ typedef struct {
 /*! IPCMDSECUREVIO - IP Command Security Violation
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_IPCMDSECUREVIO(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_IPCMDSECUREVIO_SHIFT)) & FLEXSPI_INTR_IPCMDSECUREVIO_MASK)
 
@@ -654,8 +657,8 @@ typedef struct {
 /*! AHBGCMERR - AHB Read GCM Error
  *  0b0..Interrupt condition has not occurred
  *  0b0..No effect
- *  0b1..Interrupt condition has occurred
  *  0b1..Clear the flag
+ *  0b1..Interrupt condition has occurred
  */
 #define FLEXSPI_INTR_AHBGCMERR(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_INTR_AHBGCMERR_SHIFT)) & FLEXSPI_INTR_AHBGCMERR_MASK)
 /*! @} */
@@ -1683,5 +1686,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXSPI_H_ */
+#endif  /* PERI_FLEXSPI_H_ */
 

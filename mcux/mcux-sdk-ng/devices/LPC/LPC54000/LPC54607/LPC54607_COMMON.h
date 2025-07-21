@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC546xx User manual Rev.1.9  5 June 2017
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC54607
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,14 +33,17 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC54607_COMMON.h
- * @version 1.2
- * @date 2017-06-08
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC54607
  *
  * CMSIS Peripheral Access Layer for LPC54607
@@ -51,9 +54,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0002U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -165,14 +168,16 @@ typedef enum IRQn {
 #include "core_cm4.h"                  /* Core Peripheral Access Layer */
 #include "system_LPC54607.h"           /* Device specific configuration file */
 
-#define LPC54607_SERIES
-/* CPU specific feature definitions */
-#include "LPC54607_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef LPC54607_SERIES
+#define LPC54607_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "LPC54607_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */
@@ -799,6 +804,8 @@ typedef enum IRQn {
  * @addtogroup SDK_Compatibility_Symbols SDK Compatibility
  * @{
  */
+
+#define SPIFI_IRQn SPIFI0_IRQn
 
 /** EMC CS base address */
 #define EMC_CS0_BASE                                (0x80000000u)

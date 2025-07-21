@@ -7,14 +7,14 @@
 **                          LPC865M201JHI33
 **                          LPC865M201JHI48
 **
-**     Version:             rev. 1.0, 2022-03-15
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Initial version.
 **     - rev. 1.0 (2022-03-15)
 **         Revesion of Rev. 1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SYSCON.h
- * @version 1.0
- * @date 2022-03-15
+ * @file PERI_SYSCON.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SYSCON
  *
  * CMSIS Peripheral Access Layer for SYSCON
  */
 
-#if !defined(SYSCON_H_)
-#define SYSCON_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SYSCON_H_)
+#define PERI_SYSCON_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC864M201JBD64) || defined(CPU_LPC864M201JHI33) || defined(CPU_LPC864M201JHI48))
 #include "LPC864_COMMON.h"
@@ -1629,5 +1632,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SYSCON_H_ */
+#endif  /* PERI_SYSCON_H_ */
 

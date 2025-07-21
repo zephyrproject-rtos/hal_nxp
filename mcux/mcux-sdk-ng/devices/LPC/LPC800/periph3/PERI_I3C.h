@@ -7,14 +7,14 @@
 **                          LPC865M201JHI33
 **                          LPC865M201JHI48
 **
-**     Version:             rev. 1.0, 2022-03-15
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I3C
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Initial version.
 **     - rev. 1.0 (2022-03-15)
 **         Revesion of Rev. 1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file I3C.h
- * @version 1.0
- * @date 2022-03-15
+ * @file PERI_I3C.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for I3C
  *
  * CMSIS Peripheral Access Layer for I3C
  */
 
-#if !defined(I3C_H_)
-#define I3C_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_I3C_H_)
+#define PERI_I3C_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC864M201JBD64) || defined(CPU_LPC864M201JHI33) || defined(CPU_LPC864M201JHI48))
 #include "LPC864_COMMON.h"
@@ -187,8 +190,8 @@ typedef struct {
 #define I3C_MCONFIG_DISTO_MASK                   (0x8U)
 #define I3C_MCONFIG_DISTO_SHIFT                  (3U)
 /*! DISTO - Disable Timeout
- *  0b1..Timeout disabled, if timeout is configured
  *  0b0..Timeout enabled
+ *  0b1..Timeout disabled, if timeout is configured
  */
 #define I3C_MCONFIG_DISTO(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_DISTO_SHIFT)) & I3C_MCONFIG_DISTO_MASK)
 
@@ -820,16 +823,16 @@ typedef struct {
 #define I3C_SDATACTRL_TXFULL_MASK                (0x40000000U)
 #define I3C_SDATACTRL_TXFULL_SHIFT               (30U)
 /*! TXFULL - TX is full
- *  0b1..TX is full
  *  0b0..TX is not full
+ *  0b1..TX is full
  */
 #define I3C_SDATACTRL_TXFULL(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_TXFULL_SHIFT)) & I3C_SDATACTRL_TXFULL_MASK)
 
 #define I3C_SDATACTRL_RXEMPTY_MASK               (0x80000000U)
 #define I3C_SDATACTRL_RXEMPTY_SHIFT              (31U)
 /*! RXEMPTY - RX is empty
- *  0b1..RX is empty
  *  0b0..RX is not empty
+ *  0b1..RX is empty
  */
 #define I3C_SDATACTRL_RXEMPTY(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_RXEMPTY_SHIFT)) & I3C_SDATACTRL_RXEMPTY_MASK)
 /*! @} */
@@ -1019,16 +1022,16 @@ typedef struct {
 #define I3C_SCAPABILITIES_INT_MASK               (0x40000000U)
 #define I3C_SCAPABILITIES_INT_SHIFT              (30U)
 /*! INT - INT
- *  0b1..Interrupts are supported
  *  0b0..Interrupts are not supported
+ *  0b1..Interrupts are supported
  */
 #define I3C_SCAPABILITIES_INT(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_INT_SHIFT)) & I3C_SCAPABILITIES_INT_MASK)
 
 #define I3C_SCAPABILITIES_DMA_MASK               (0x80000000U)
 #define I3C_SCAPABILITIES_DMA_SHIFT              (31U)
 /*! DMA - DMA
- *  0b1..DMA is supported
  *  0b0..DMA is not supported
+ *  0b1..DMA is supported
  */
 #define I3C_SCAPABILITIES_DMA(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_DMA_SHIFT)) & I3C_SCAPABILITIES_DMA_MASK)
 /*! @} */
@@ -1561,32 +1564,32 @@ typedef struct {
 #define I3C_MERRWARN_HPAR_MASK                   (0x200U)
 #define I3C_MERRWARN_HPAR_SHIFT                  (9U)
 /*! HPAR - High data rate parity
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define I3C_MERRWARN_HPAR(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_HPAR_SHIFT)) & I3C_MERRWARN_HPAR_MASK)
 
 #define I3C_MERRWARN_HCRC_MASK                   (0x400U)
 #define I3C_MERRWARN_HCRC_SHIFT                  (10U)
 /*! HCRC - High data rate CRC error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define I3C_MERRWARN_HCRC(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_HCRC_SHIFT)) & I3C_MERRWARN_HCRC_MASK)
 
 #define I3C_MERRWARN_OREAD_MASK                  (0x10000U)
 #define I3C_MERRWARN_OREAD_SHIFT                 (16U)
 /*! OREAD - Over-read error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define I3C_MERRWARN_OREAD(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_OREAD_SHIFT)) & I3C_MERRWARN_OREAD_MASK)
 
 #define I3C_MERRWARN_OWRITE_MASK                 (0x20000U)
 #define I3C_MERRWARN_OWRITE_SHIFT                (17U)
 /*! OWRITE - Over-write error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define I3C_MERRWARN_OWRITE(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_OWRITE_SHIFT)) & I3C_MERRWARN_OWRITE_MASK)
 
@@ -1869,8 +1872,8 @@ typedef struct {
 #define I3C_MDYNADDR_DAVALID_MASK                (0x1U)
 #define I3C_MDYNADDR_DAVALID_SHIFT               (0U)
 /*! DAVALID - Dynamic address valid
- *  0b1..Valid DA assigned
  *  0b0..No valid DA assigned
+ *  0b1..Valid DA assigned
  */
 #define I3C_MDYNADDR_DAVALID(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MDYNADDR_DAVALID_SHIFT)) & I3C_MDYNADDR_DAVALID_MASK)
 
@@ -1952,5 +1955,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* I3C_H_ */
+#endif  /* PERI_I3C_H_ */
 

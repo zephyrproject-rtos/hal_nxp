@@ -9,14 +9,14 @@
 **                          LPC845M301JHI33
 **                          LPC845M301JHI48
 **
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PMU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -32,21 +32,24 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PMU.h
- * @version 1.2
- * @date 2017-06-08
+ * @file PERI_PMU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PMU
  *
  * CMSIS Peripheral Access Layer for PMU
  */
 
-#if !defined(PMU_H_)
-#define PMU_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PMU_H_)
+#define PERI_PMU_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC844M201JBD48) || defined(CPU_LPC844M201JBD64) || defined(CPU_LPC844M201JHI33) || defined(CPU_LPC844M201JHI48))
 #include "LPC844_COMMON.h"
@@ -284,5 +287,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PMU_H_ */
+#endif  /* PERI_PMU_H_ */
 
