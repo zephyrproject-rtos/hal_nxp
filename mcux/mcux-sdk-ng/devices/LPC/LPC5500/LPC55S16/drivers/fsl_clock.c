@@ -2080,15 +2080,14 @@ bool CLOCK_EnableUsbfs0HostClock(clock_usbfs_src_t src, uint32_t freq)
         /*!< Set up PLL0 */
         POWER_DisablePD(kPDRUNCFG_PD_PLL0);
         CLOCK_AttachClk(kEXT_CLK_to_PLL0); /*!< Switch PLL0CLKSEL to EXT_CLK */
-        POWER_DisablePD(kPDRUNCFG_PD_PLL0_SSCG);
-        const pll_setup_t pll1Setup = {
-            .pllctrl = SYSCON_PLL0CTRL_CLKEN_MASK | SYSCON_PLL0CTRL_SELI(19U) | SYSCON_PLL0CTRL_SELP(9U),
+        const pll_setup_t pll0Setup = {
+            .pllctrl = SYSCON_PLL0CTRL_CLKEN_MASK | SYSCON_PLL0CTRL_SELI(17U) | SYSCON_PLL0CTRL_SELP(8U),
             .pllndec = SYSCON_PLL0NDEC_NDIV(1U),
             .pllpdec = SYSCON_PLL0PDEC_PDIV(5U),
             .pllsscg = {0x0U,(SYSCON_PLL0SSCG1_MDIV_EXT(30U) | SYSCON_PLL0SSCG1_SEL_EXT_MASK)},
             .pllRate = 48000000U,
-            .flags   = PLL_SETUPFLAG_WAITLOCK};
-        (void)CLOCK_SetPLL0Freq(&pll1Setup);
+            .flags =  PLL_SETUPFLAG_WAITLOCK};
+        (void)CLOCK_SetPLL0Freq(&pll0Setup);
 
         CLOCK_SetClkDiv(kCLOCK_DivUsb0Clk, 1U, false);
         CLOCK_AttachClk(kPLL0_to_USB0_CLK);
