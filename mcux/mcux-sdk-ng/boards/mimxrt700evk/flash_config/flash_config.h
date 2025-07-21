@@ -1,6 +1,5 @@
 /*
- * Copyright 2023 NXP
- * All rights reserved.
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
@@ -12,13 +11,16 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLASH_CONFIG driver version 2.0.0. */
-#define FSL_FLASH_CONFIG_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief FLASH_CONFIG driver version 2.0.1. */
+#define FSL_FLASH_CONFIG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*******************************************************************************
  * Definition
  ******************************************************************************/
+#ifndef FSL_FEATURE_SILICON_VERSION_A
+#define FSL_FEATURE_SILICON_VERSION_A (1U)
+#endif
 
 /* XSPI memory config block related defintions */
 #define FC_XSPI_CFG_BLK_TAG     (0x42464346UL) /* ascii "FCFB" Big Endian */
@@ -122,9 +124,7 @@ typedef struct _XSPIConfig
                                     2: Spi2Xpi (switch from SPI to DPI, QPI, or OPI mode)
                                     3: Xpi2Spi (switch from DPI, QPI, or OPI to SPI mode) */
     uint16_t waitTimeCfgCommands;    /* !< [0x012-0x013] Wait time for Device mode configuration command, unit: 100us */
-    fc_xspi_lut_seq_t deviceModeSeq; /* !< [0x014-0x017] Device mode sequence info
-					[ 7:0] - Number of required sequences
-					[15:8] - Sequence index */
+    fc_xspi_lut_seq_t deviceModeSeq; /* !< [0x014-0x017] Device mode sequence info [ 7:0] - Number of required sequences [15:8] - Sequence index */
     uint32_t deviceModeArg;          /* !< [0x018-0x01b] Argument/Parameter for device configuration */
     uint8_t configCmdEnable;         /* !< [0x01c-0x01c] Configure command Enable Flag, 1 - Enable, 0 - Disable */
     uint8_t configModeType[3];       /* !< [0x01d-0x01f] Configure Mode Type, similar as deviceModeTpe */
@@ -167,12 +167,21 @@ typedef struct _XSPIConfig
     uint16_t busyOffset;                 /* !< [0x07c-0x07d] Busy offset, valid value: 0-31 */
     uint16_t busyBitPolarity;            /* !< [0x07e-0x07f] Busy flag polarity, 0 - busy flag is 1 when flash device is busy, 1 -
                                             busy flag is 0 when flash device is busy */
+#if defined(FSL_FEATURE_SILICON_VERSION_A)
     uint32_t lookupTable[80];            /* !< [0x080-0x1bf] Lookup table holds Flash command sequences */
     fc_xspi_lut_seq_t lutCustomSeq[12];  /* !< [0x1c0-0x1ef] Customizable LUT Sequences */
     uint32_t dllCraSdrVal;               /* !< [0x1f0-0x1f3] Customizable DLLCRA for SDR setting */
     uint32_t smprSdrVal;                 /* !< [0x1f4-0x1f7] Customizable SMPR SDR setting */
     uint32_t dllCraDdrVal;               /* !< [0x1f8-0x1fb] Customizable DLLCRA for DDR setting */
     uint32_t smprDdrVal;                 /* !< [0x1fc-0x1ff] Customizable SMPR DDR setting */
+#else
+    uint32_t lookupTable[90];            /* !< [0x080-0x1e7] B0 Lookup table holds Flash command sequences */
+    fc_xspi_lut_seq_t lutCustomSeq[12];  /* !< [0x1e8-0x217] Customizable LUT Sequences */
+    uint32_t dllCraSdrVal;               /* !< [0x218-0x21b] Customizable DLLCRA for SDR setting */
+    uint32_t smprSdrVal;                 /* !< [0x21c-0x21f] Customizable SMPR SDR setting */
+    uint32_t dllCraDdrVal;               /* !< [0x220-0x223] Customizable DLLCRA for DDR setting */
+    uint32_t smprDdrVal;                 /* !< [0x224-0x227] Customizable SMPR DDR setting */
+#endif
 } fc_xspi_mem_config_t;
 /*
  *  Serial NOR configuration block
@@ -192,7 +201,11 @@ typedef struct _fc_xspi_nor_config
     uint8_t needRestoreNoCmdMode;   /* !< Need to Restore NoCmd mode after IP commmand execution */
     uint32_t blockSize;             /* !< Block size */
     uint32_t flashStateCtx;         /* !< Flash State Context */
+#if defined(FSL_FEATURE_SILICON_VERSION_A)
     uint32_t reserved2[58];          /* !< Reserved for future use */
+#else
+    uint32_t reserved2[48];          /* !< Reserved for future use */
+#endif
 } fc_xspi_nor_config_t;
 
 /*
@@ -210,7 +223,7 @@ typedef struct {
     fc_xspi_nor_config_t xspi_fcb_block; /* !< Configure structure for boot device connected to XSPI0/XSPI1 interface. */
     fc_xspi_psram_config_t psram_config_block; /* !< Configure structure for PSRAM device connected to XSPI0/XSPI1 interface. */
     uint8_t xspi2_fcb_block[768];        /* !< Configure structure for PSRAM device connected to XSPI2 interface. Only for
-					   users' usage, Boot ROM doesn't use this part */
+                                               users' usage, Boot ROM doesn't use this part */
     uint8_t reserved[1792];              /* !< Reserved for future usage */
 } fc_static_platform_config_t;
 #endif
