@@ -3,14 +3,14 @@
 **     Processors:          K32L3A60VPJ1A_cm0plus
 **                          K32L3A60VPJ1A_cm4
 **
-**     Version:             rev. 1.0, 2019-04-22
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -19,21 +19,24 @@
 **     Revisions:
 **     - rev. 1.0 (2019-04-22)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXIO.h
- * @version 1.0
- * @date 2019-04-22
+ * @file PERI_FLEXIO.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXIO
  *
  * CMSIS Peripheral Access Layer for FLEXIO
  */
 
-#if !defined(FLEXIO_H_)
-#define FLEXIO_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXIO_H_)
+#define PERI_FLEXIO_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32L3A60VPJ1A_cm0plus))
 #include "K32L3A60_cm0plus_COMMON.h"
@@ -657,5 +660,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXIO_H_ */
+#endif  /* PERI_FLEXIO_H_ */
 

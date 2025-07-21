@@ -3,14 +3,14 @@
 **     Processors:          MKM34Z256VLL7
 **                          MKM34Z256VLQ7
 **
-**     Version:             rev. 1.2, 2015-03-06
-**     Build:               b240710
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,21 +23,24 @@
 **         Update according to reference manual rev. 1, RC.
 **     - rev. 1.2 (2015-03-06)
 **         Update according to reference manual rev. 1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file WDOG.h
- * @version 1.2
- * @date 2015-03-06
+ * @file PERI_WDOG.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for WDOG
  *
  * CMSIS Peripheral Access Layer for WDOG
  */
 
-#if !defined(WDOG_H_)
-#define WDOG_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_WDOG_H_)
+#define PERI_WDOG_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKM34Z256VLL7) || defined(CPU_MKM34Z256VLQ7))
 #include "MKM34Z7_COMMON.h"
@@ -327,5 +330,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* WDOG_H_ */
+#endif  /* PERI_WDOG_H_ */
 

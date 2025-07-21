@@ -17,14 +17,14 @@
 **                          MKE16Z64VLD4
 **                          MKE16Z64VLF4
 **
-**     Version:             rev. 3.0, 2020-01-22
-**     Build:               b240712
+**     Version:             rev. 4.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPIT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -37,21 +37,24 @@
 **         Based on rev1 RM.
 **     - rev. 3.0 (2020-01-22)
 **         Add 40 pins part numbers.
+**     - rev. 4.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPIT.h
- * @version 3.0
- * @date 2020-01-22
+ * @file PERI_LPIT.h
+ * @version 4.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPIT
  *
  * CMSIS Peripheral Access Layer for LPIT
  */
 
-#if !defined(LPIT_H_)
-#define LPIT_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPIT_H_)
+#define PERI_LPIT_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE14Z32VFP4) || defined(CPU_MKE14Z32VLD4) || defined(CPU_MKE14Z32VLF4) || defined(CPU_MKE14Z64VFP4) || defined(CPU_MKE14Z64VLD4) || defined(CPU_MKE14Z64VLF4))
 #include "MKE14Z4_COMMON.h"
@@ -115,7 +118,7 @@ typedef struct {
   __IO uint32_t MSR;                               /**< Module Status Register, offset: 0xC */
   __IO uint32_t MIER;                              /**< Module Interrupt Enable Register, offset: 0x10 */
   __IO uint32_t SETTEN;                            /**< Set Timer Enable Register, offset: 0x14 */
-  __O  uint32_t CLRTEN;                            /**< Clear Timer Enable Register, offset: 0x18 */
+  __IO uint32_t CLRTEN;                            /**< Clear Timer Enable Register, offset: 0x18 */
        uint8_t RESERVED_0[4];
   struct {                                         /* offset: 0x20, array step: 0x10 */
     __IO uint32_t TVAL;                              /**< Timer Value Register, array offset: 0x20, array step: 0x10 */
@@ -484,5 +487,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPIT_H_ */
+#endif  /* PERI_LPIT_H_ */
 

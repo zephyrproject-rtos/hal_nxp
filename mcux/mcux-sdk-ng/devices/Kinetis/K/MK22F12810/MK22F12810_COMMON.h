@@ -12,14 +12,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K22P121M100SF9RM, Rev. 1, April 25, 2014
-**     Version:             rev. 1.6, 2015-02-19
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MK22F12810
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,14 +43,17 @@
 **         Interrupt INT_LPTimer renamed to INT_LPTMR0, interrupt INT_Watchdog renamed to INT_WDOG_EWM.
 **     - rev. 1.6 (2015-02-19)
 **         Renamed interrupt vector LLW to LLWU.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MK22F12810_COMMON.h
- * @version 1.6
- * @date 2015-02-19
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MK22F12810
  *
  * CMSIS Peripheral Access Layer for MK22F12810
@@ -61,9 +64,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0006U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 /**
  * @brief Macro to calculate address of an aliased word in the peripheral
@@ -241,14 +244,16 @@ typedef enum IRQn {
 #include "core_cm4.h"                  /* Core Peripheral Access Layer */
 #include "system_MK22F12810.h"         /* Device specific configuration file */
 
-#define MK22F12810_SERIES
-/* CPU specific feature definitions */
-#include "MK22F12810_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef MK22F12810_SERIES
+#define MK22F12810_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "MK22F12810_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */
