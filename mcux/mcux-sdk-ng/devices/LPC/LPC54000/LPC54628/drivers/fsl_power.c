@@ -13,12 +13,6 @@
 #define FSL_COMPONENT_ID "platform.drivers.power"
 #endif
 
-/*! @name Driver version */
-/*@{*/
-/*! @brief LPC546XX power contorl version 1.0.3. */
-#define FSL_LPC546XX_POWER_CONTROL_VERSION (MAKE_VERSION(1, 0, 3))
-/*@}*/
-
 #define POWER_BASE (0x40020000u)
 #define POWER ((POWER_Type *)POWER_BASE)
 #define OTP_BASE (0x40015000u)
@@ -501,5 +495,5 @@ void POWER_SetUsbPhy(void)
 /* Get power lib version */
 uint32_t POWER_GetLibVersion(void)
 {
-    return FSL_LPC546XX_POWER_CONTROL_VERSION;
+    return FSL_POWER_DRIVER_VERSION;
 }

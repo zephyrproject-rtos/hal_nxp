@@ -5,14 +5,14 @@
 **                          LPC54S018J2MET180
 **                          LPC54S018J4MET180
 **
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for UTICK
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,21 +28,24 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file UTICK.h
- * @version 1.2
- * @date 2017-06-08
+ * @file PERI_UTICK.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for UTICK
  *
  * CMSIS Peripheral Access Layer for UTICK
  */
 
-#if !defined(UTICK_H_)
-#define UTICK_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_UTICK_H_)
+#define PERI_UTICK_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_LPC54018J2MET180) || defined(CPU_LPC54018J4MET180))
 #include "LPC54018M_COMMON.h"
@@ -263,5 +266,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* UTICK_H_ */
+#endif  /* PERI_UTICK_H_ */
 

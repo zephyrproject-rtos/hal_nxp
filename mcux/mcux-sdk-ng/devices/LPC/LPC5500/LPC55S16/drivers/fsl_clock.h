@@ -76,9 +76,9 @@
         kCLOCK_Fmc \
     }
 /*! @brief Clock ip name array for INPUTMUX. */
-#define INPUTMUX_CLOCKS  \
-    {                    \
-        kCLOCK_InputMux0 \
+#define INPUTMUX_CLOCKS \
+    {                   \
+        kCLOCK_InputMux \
     }
 /*! @brief Clock ip name array for IOCON. */
 #define IOCON_CLOCKS \
