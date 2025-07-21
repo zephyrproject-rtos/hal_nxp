@@ -382,8 +382,13 @@ static void USB_HostHubProcess(usb_host_hub_instance_t *hubInstance)
 
 static void USB_HostHubProcessPort(usb_host_hub_instance_t *hubInstance)
 {
-    usb_host_hub_port_instance_t *portInstance = &hubInstance->portList[hubInstance->portProcess - 1U];
+    usb_host_hub_port_instance_t *portInstance = NULL;
 
+    if (hubInstance->portProcess < 1U)
+    {
+        return;
+    }
+    portInstance = &hubInstance->portList[hubInstance->portProcess - 1U];
     /* for device attach */
     if (portInstance->deviceHandle == NULL)
     {
@@ -397,17 +402,18 @@ static void USB_HostHubProcessPort(usb_host_hub_instance_t *hubInstance)
 
 static void USB_HostHubProcessPortAttach(usb_host_hub_instance_t *hubInstance)
 {
-    usb_host_hub_port_instance_t *portInstance = &hubInstance->portList[hubInstance->portProcess - 1U];
+    usb_host_hub_port_instance_t *portInstance = NULL;
     uint8_t processSuccess                     = 0U;
     uint32_t specStatus;
     uint8_t feature;
     uint32_t infoValue               = 0U;
     usb_host_hub_global_t *hubGlobal = USB_HostHubGetHubList(hubInstance->hostHandle);
     usb_host_port_app_status_t appStatus;
-    if (hubGlobal == NULL)
+    if ((hubGlobal == NULL) || (hubInstance->portProcess < 1U))
     {
         return;
     }
+    portInstance = &hubInstance->portList[hubInstance->portProcess - 1U];
     appStatus = (usb_host_port_app_status_t)portInstance->portStatus;
     switch (appStatus)
     {
@@ -622,7 +628,7 @@ static void USB_HostHubProcessPortAttach(usb_host_hub_instance_t *hubInstance)
 
 static void USB_HostHubProcessPortDetach(usb_host_hub_instance_t *hubInstance)
 {
-    usb_host_hub_port_instance_t *portInstance = &hubInstance->portList[hubInstance->portProcess - 1U];
+    usb_host_hub_port_instance_t *portInstance = NULL;
 #if ((defined(USB_HOST_CONFIG_LOW_POWER_MODE)) && (USB_HOST_CONFIG_LOW_POWER_MODE > 0U))
     usb_host_instance_t *hostPointer = (usb_host_instance_t *)hubInstance->hostHandle;
 #endif
@@ -630,10 +636,11 @@ static void USB_HostHubProcessPortDetach(usb_host_hub_instance_t *hubInstance)
     uint32_t specStatus;
     usb_host_port_app_status_t appStatus;
     usb_host_hub_global_t *hubGlobal = USB_HostHubGetHubList(hubInstance->hostHandle);
-    if (hubGlobal == NULL)
+    if ((hubGlobal == NULL) || (hubInstance->portProcess < 1U))
     {
         return;
     }
+    portInstance = &hubInstance->portList[hubInstance->portProcess - 1U];
     appStatus = (usb_host_port_app_status_t)portInstance->portStatus;
     switch (appStatus)
     {

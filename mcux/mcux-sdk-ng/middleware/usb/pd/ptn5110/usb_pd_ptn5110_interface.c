@@ -486,6 +486,10 @@ void PDPTN5110_ConnectDetectAttach(pd_instance_t *pdInstance)
         case TYPEC_UNATTACHED_ACCESSORY:
         case TYPEC_TRY_SRC:
         case TYPEC_TRY_WAIT_SRC:
+            if (typecSrcCurrent < 1U)
+            {
+                break;
+            }
             PDPTN5110_ConnectAssertRpUnattached(pdInstance, typecSrcCurrent - 1U);
             break;
         case TYPEC_UNATTACHED_SNK:
@@ -494,9 +498,17 @@ void PDPTN5110_ConnectDetectAttach(pd_instance_t *pdInstance)
             PDPTN5110_ConnectAssertRdUnattached(pdInstance);
             break;
         case TYPEC_TOGGLE_SRC_FIRST:
+            if (typecSrcCurrent < 1U)
+            {
+                break;
+            }
             PDPTN5110_ConnectAssertDrpUnattached(pdInstance, 1, typecSrcCurrent - 1U);
             break;
         case TYPEC_TOGGLE_SNK_FIRST:
+            if (typecSrcCurrent < 1U)
+            {
+                break;
+            }
             PDPTN5110_ConnectAssertDrpUnattached(pdInstance, 0, typecSrcCurrent - 1U);
             break;
         default:
@@ -513,6 +525,10 @@ void PDPTN5110_ConnectDetectDetach(pd_instance_t *pdInstance)
     switch (pdInstance->connectState)
     {
         case kTYPEC_ConnectSource:
+            if (pdInstance->pdPowerPortConfig->typecSrcCurrent < 1U)
+            {
+                break;
+            }
             PDPTN5110_ConnectAssertRpAttached(pdInstance, pdInstance->ccUsed,
                                               pdInstance->pdPowerPortConfig->typecSrcCurrent - 1U);
             break;
