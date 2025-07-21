@@ -12,14 +12,14 @@
 **                          MCXC444VLH
 **                          MCXC444VMP
 **
-**     Version:             rev. 1.0, 2024-03-11
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,21 +28,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-11)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MCG.h
- * @version 1.0
- * @date 2024-03-11
+ * @file PERI_MCG.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCG
  *
  * CMSIS Peripheral Access Layer for MCG
  */
 
-#if !defined(MCG_H_)
-#define MCG_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MCG_H_)
+#define PERI_MCG_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXC143VFM) || defined(CPU_MCXC143VFT))
 #include "MCXC143_COMMON.h"
@@ -368,5 +371,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MCG_H_ */
+#endif  /* PERI_MCG_H_ */
 

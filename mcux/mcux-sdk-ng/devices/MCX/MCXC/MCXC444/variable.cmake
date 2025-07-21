@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/MCX/variable.cmake)
 mcux_set_variable(device MCXC444)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series MCXC)
 mcux_set_variable(soc_periph periph2)
 mcux_set_variable(core_id_suffix_name "")

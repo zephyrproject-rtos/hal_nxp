@@ -10,8 +10,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXA1 User manual
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241118
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXA132
- * @version 1.0
- * @date 2022-03-29
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for MCXA132 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -46,8 +49,9 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
-
-
+#if __has_include("fsl_clock.h")
+#include "fsl_clock.h"
+#endif
 
 
 /* ----------------------------------------------------------------------------
@@ -78,6 +82,7 @@ __attribute__ ((weak)) void SystemInit (void) {
     SCB->VTOR = (uint32_t) &__Vectors;
 #endif
 #endif
+
     /* Enable the LPCAC */
     SYSCON->LPCAC_CTRL |= SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK;
     SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
@@ -112,6 +117,10 @@ __attribute__ ((weak)) void SystemInit (void) {
 
     /* Route the PMC bandgap buffer signal to the ADC */
     SPC0->CORELDO_CFG |= (1U << 24U);
+
+    /* Enables flash speculation */
+    SYSCON->NVM_CTRL &= ~(SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK | SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK);
+    SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK;
   SystemInitHook();
 }
 
@@ -120,7 +129,10 @@ __attribute__ ((weak)) void SystemInit (void) {
    ---------------------------------------------------------------------------- */
 
 void SystemCoreClockUpdate (void) {
-
+#if __has_include("fsl_clock.h")
+    /* Get frequency of Core System */
+    SystemCoreClock = CLOCK_GetCoreSysClkFreq();
+#endif
 }
 
 /* ----------------------------------------------------------------------------

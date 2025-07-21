@@ -11,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXNx4x Reference Manual
-**     Version:             rev. 2.0, 2023-02-01
-**     Build:               b241120
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN946_cm33_core0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,17 @@
 **         Initial version
 **     - rev. 2.0 (2023-02-01)
 **         Initial version based on Rev. 2 Draft B
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXN946_cm33_core0_COMMON.h
- * @version 2.0
- * @date 2023-02-01
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCXN946_cm33_core0
  *
  * CMSIS Peripheral Access Layer for MCXN946_cm33_core0
@@ -47,7 +50,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -129,7 +132,7 @@ typedef enum IRQn {
   ADC0_IRQn                    = 45,               /**< Analog-to-Digital Converter 0 - General Purpose interrupt */
   ADC1_IRQn                    = 46,               /**< Analog-to-Digital Converter 1 - General Purpose interrupt */
   PINT0_IRQn                   = 47,               /**< Pin Interrupt Pattern Match Interrupt */
-  PDM_EVENT_IRQn               = 48,               /**< Microphone Interface interrupt */
+  Reserved64_IRQn              = 48,               /**< Reserved interrupt */
   Reserved65_IRQn              = 49,               /**< Reserved interrupt */
   USB0_FS_IRQn                 = 50,               /**< Universal Serial Bus - Full Speed interrupt */
   USB0_DCD_IRQn                = 51,               /**< Universal Serial Bus - Device Charge Detect interrupt */
@@ -142,13 +145,13 @@ typedef enum IRQn {
   FLEXSPI0_IRQn                = 58,               /**< Flexible Serial Peripheral Interface interrupt */
   SAI0_IRQn                    = 59,               /**< Serial Audio Interface 0 interrupt */
   SAI1_IRQn                    = 60,               /**< Serial Audio Interface 1 interrupt */
-  USDHC0_IRQn                  = 61,               /**< Ultra Secured Digital Host Controller interrupt */
+  Reserved77_IRQn              = 61,               /**< Reserved interrupt */
   CAN0_IRQn                    = 62,               /**< Controller Area Network 0 interrupt */
   CAN1_IRQn                    = 63,               /**< Controller Area Network 1 interrupt */
   Reserved80_IRQn              = 64,               /**< Reserved interrupt */
   Reserved81_IRQn              = 65,               /**< Reserved interrupt */
   USB1_HS_PHY_IRQn             = 66,               /**< USBHS DCD or USBHS Phy interrupt */
-  USB1_HS_IRQn                 = 67,               /**< USB High Speed OTG Controller interrupt  */
+  USB1_HS_IRQn                 = 67,               /**< USB High Speed OTG Controller interrupt */
   SEC_HYPERVISOR_CALL_IRQn     = 68,               /**< AHB Secure Controller hypervisor call interrupt */
   Reserved85_IRQn              = 69,               /**< Reserved interrupt */
   PLU_IRQn                     = 70,               /**< Programmable Logic Unit interrupt */
@@ -182,10 +185,10 @@ typedef enum IRQn {
   GDET_IRQn                    = 98,               /**< Digital Glitch Detect 0 interrupt  or Digital Glitch Detect 1 interrupt */
   VBAT0_IRQn                   = 99,               /**< VBAT interrupt( VBAT interrupt or digital tamper interrupt) */
   EWM0_IRQn                    = 100,              /**< External Watchdog Monitor interrupt */
-  TSI_END_OF_SCAN_IRQn         = 101,              /**< TSI End of Scan interrupt */
-  TSI_OUT_OF_SCAN_IRQn         = 102,              /**< TSI Out of Scan interrupt */
-  EMVSIM0_IRQn                 = 103,              /**< EMVSIM0 interrupt */
-  EMVSIM1_IRQn                 = 104,              /**< EMVSIM1 interrupt */
+  Reserved117_IRQn             = 101,              /**< Reserved interrupt */
+  Reserved118_IRQn             = 102,              /**< Reserved interrupt */
+  Reserved119_IRQn             = 103,              /**< Reserved interrupt */
+  Reserved120_IRQn             = 104,              /**< Reserved interrupt */
   FLEXIO_IRQn                  = 105,              /**< Flexible Input/Output interrupt */
   DAC0_IRQn                    = 106,              /**< Digital-to-Analog Converter 0 - General Purpose interrupt */
   DAC1_IRQn                    = 107,              /**< Digital-to-Analog Converter 1 - General Purpose interrupt */
@@ -268,7 +271,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MCXN946_cm33_core0_SERIES
 #define MCXN946_cm33_core0_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MCXN946_cm33_core0_features.h"
 
@@ -448,11 +453,15 @@ typedef enum IRQn {
  #define CACHE64_CTRL_PHYMEM_BASES_NS             { {0x08000000u, 0x80000000u, 0xA0000000u} }
 /** CACHE64_CTRL physical memory size */
  #define CACHE64_CTRL_PHYMEM_SIZES_NS             { {0x08000000u, 0x10000000u, 0x10000000u} }
+/** CACHE64_CTRL remap base address */
+ #define CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR    {0x80000000u, 0x80000000u, 0x90000000u}
 #else
 /** CACHE64_CTRL physical memory base address */
  #define CACHE64_CTRL_PHYMEM_BASES                { {0x08000000u, 0x80000000u, 0xA0000000u} }
 /** CACHE64_CTRL physical memory size */
  #define CACHE64_CTRL_PHYMEM_SIZES                { {0x08000000u, 0x10000000u, 0x10000000u} }
+/** CACHE64_CTRL remap base address */
+ #define CACHE64_CTRL_ALIAS_REMAPPED_BASE_ADDR    {0x80000000u, 0x80000000u, 0x90000000u}
 #endif
 /* Backward compatibility */
 
@@ -967,6 +976,8 @@ typedef enum IRQn {
   /** Array initializer of EWM peripheral base pointers */
   #define EWM_BASE_PTRS                            { EWM0 }
 #endif
+/** Interrupt vectors for the EWM peripheral type */
+#define EWM_IRQS                                 { EWM0_IRQn }
 
 /* FLEXIO - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -1121,8 +1121,8 @@ status_t CLOCK_FRO12MTrimConfig(sirc_trim_config_t config)
 
     if (kSCG_SircTrimNonUpdate == config.trimMode)
     {
-        SCG0->SIRCSTAT = SCG_SIRCSTAT_CCOTRIM(config.cltrim);
-        SCG0->SIRCSTAT = SCG_SIRCSTAT_CCOTRIM(config.ccotrim);
+        SCG0->SIRCSTAT = (SCG0->SIRCSTAT & ~SCG_SIRCSTAT_CLTRIM_MASK) | SCG_SIRCSTAT_CLTRIM(config.cltrim);
+        SCG0->SIRCSTAT = (SCG0->SIRCSTAT & ~SCG_SIRCSTAT_CCOTRIM_MASK) | SCG_SIRCSTAT_CCOTRIM(config.ccotrim);
     }
 
     /* Set trim mode. */

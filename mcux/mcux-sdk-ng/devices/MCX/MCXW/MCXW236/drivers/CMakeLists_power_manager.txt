@@ -1,0 +1,29 @@
+# Copyright 2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+if (CONFIG_MCUX_COMPONENT_component.power_manager.mcxw23)
+    mcux_add_source(
+        SOURCES power_manager_mcxw23/device/fsl_pm_device.c
+                power_manager_mcxw23/device/fsl_pm_device.h
+                power_manager_mcxw23/device/fsl_pm_device_config.h
+                power_manager_mcxw23/device/fsl_pm_board.c
+                power_manager_mcxw23/device/fsl_pm_board.h
+    )
+    mcux_add_include(
+        INCLUDES power_manager_mcxw23/core
+    )
+    mcux_add_source(
+        SOURCES power_manager_mcxw23/core/fsl_pm_core.h
+                power_manager_mcxw23/core/fsl_pm_core.c
+                power_manager_mcxw23/core/fsl_pm_config.h
+                power_manager_mcxw23/core/fsl_pm_app.c
+                power_manager_mcxw23/core/fsl_pm_app.h
+    )
+    mcux_add_include(
+        INCLUDES power_manager_mcxw23/device
+    )
+
+    mcux_add_configuration(
+        CC "-DENABLE_LOW_POWER=1"
+    )
+endif()

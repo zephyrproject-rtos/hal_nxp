@@ -1,6 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
- * All rights reserved.
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -2162,6 +2161,23 @@ bool CLOCK_EnableUsbhsClock(void);
  * @return  returns success or fail status.
  */
 status_t CLOCK_FIRCAutoTrimWithSOF(void);
+
+/*!
+ * @brief Enable/disable the CPU1 clock
+ * 
+ * @param enable True to enable the clock, false to disable the clock.
+ */
+static inline void CLOCK_EnableCpu1Clock(SYSCON_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CPUCTRL |= SYSCON_CPUCTRL_CPU1CLKEN_MASK;
+    }
+    else
+    {
+        base->CPUCTRL &= ~SYSCON_CPUCTRL_CPU1CLKEN_MASK;
+    }
+}
 
 #if defined(__cplusplus)
 }
