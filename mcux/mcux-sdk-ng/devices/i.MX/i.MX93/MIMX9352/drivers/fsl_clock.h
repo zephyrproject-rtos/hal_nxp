@@ -999,6 +999,12 @@ typedef enum _clock_lpcg
 
 #define clock_ip_name_t clock_lpcg_t
 
+/*! @brief Clock ip name array for ADC. */
+#define ADC_CLOCKS  \
+    {               \
+        kCLOCK_Adc1 \
+    }
+
 /*! @brief Clock ip name array for EDMA. */
 #define EDMA_CLOCKS                \
     {                              \
@@ -1041,9 +1047,9 @@ typedef enum _clock_lpcg
     }
 
 /*! @brief Clock ip name array for TPM. */
-#define TPM_CLOCKS                                                                    \
-    {                                                                                 \
-        kCLOCK_Tpm1, kCLOCK_Tpm2, kCLOCK_Tpm3, kCLOCK_Tpm4, kCLOCK_Tpm5, kCLOCK_Tpm6, \
+#define TPM_CLOCKS                                                                                      \
+    {                                                                                                   \
+        kCLOCK_IpInvalid, kCLOCK_Tpm1, kCLOCK_Tpm2, kCLOCK_Tpm3, kCLOCK_Tpm4, kCLOCK_Tpm5, kCLOCK_Tpm6, \
     }
 
 /*! @brief Clock ip name array for FLEXIO. */
@@ -1087,6 +1093,12 @@ typedef enum _clock_lpcg
 #define PDM_CLOCKS \
     {              \
         kCLOCK_Pdm \
+    }
+
+/*! @brief Clock ip name array for USDHC. */
+#define USDHC_CLOCKS                                                  \
+    {                                                                 \
+        kCLOCK_IpInvalid, kCLOCK_Usdhc1, kCLOCK_Usdhc2, kCLOCK_Usdhc3 \
     }
 
 /*! @brief Clock ip name array for ENET QOS. */

@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file BLK_CTRL_S_AONMIX.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_BLK_CTRL_S_AONMIX.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
  *
  * CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
  */
 
-#if !defined(BLK_CTRL_S_AONMIX_H_)
-#define BLK_CTRL_S_AONMIX_H_                     /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_BLK_CTRL_S_AONMIX_H_)
+#define PERI_BLK_CTRL_S_AONMIX_H_                /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -425,10 +428,10 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_MASK  (0x18U)
 #define BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_SHIFT (3U)
 /*! TCM_SIZE - M33 TCM SIZE
- *  0b11..Reserved
- *  0b10..Double Sys TCM, 256KB Sys TCM
- *  0b01..Double Code TCM, 256KB Code TCM
  *  0b00..Regular TCM, 128KB Code TCM and 128KB Sys TCM
+ *  0b01..Double Code TCM, 256KB Code TCM
+ *  0b10..Double Sys TCM, 256KB Sys TCM
+ *  0b11..Reserved
  */
 #define BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_SHIFT)) & BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_MASK)
 /*! @} */
@@ -439,16 +442,16 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_M33_MASK (0x1U)
 #define BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_M33_SHIFT (0U)
 /*! M33 - M33 DAP_ACCESS_STKY
- *  0b1..M33 core cannot be accessed by DAPCore0 works normally
  *  0b0..M33 core can be accessed by DAP
+ *  0b1..M33 core cannot be accessed by DAPCore0 works normally
  */
 #define BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_M33(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_M33_SHIFT)) & BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_M33_MASK)
 
 #define BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_A55_MASK (0x2U)
 #define BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_A55_SHIFT (1U)
 /*! A55 - A55 DAP_ACCESS_STKY
- *  0b1..A55 core cannot be accessed by DAPCore0 works normally
  *  0b0..A55 core can be accessed by DAP
+ *  0b1..A55 core cannot be accessed by DAPCore0 works normally
  */
 #define BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_A55(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_A55_SHIFT)) & BLK_CTRL_S_AONMIX_DAP_ACCESS_STKYBIT_A55_MASK)
 /*! @} */
@@ -999,5 +1002,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* BLK_CTRL_S_AONMIX_H_ */
+#endif  /* PERI_BLK_CTRL_S_AONMIX_H_ */
 

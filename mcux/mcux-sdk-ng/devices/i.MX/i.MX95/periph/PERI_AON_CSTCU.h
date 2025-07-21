@@ -44,13 +44,13 @@
 **                          MIMX9596XVZXN_cm7
 **
 **     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Build:               b250106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_CSTCU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -139,8 +139,7 @@
 typedef struct {
   __IO uint32_t RUNSWREG;                          /**< Run Software, offset: 0x0 */
   __IO uint32_t LSCHLVLD;                          /**< LSTCU Scheduler List Valid, offset: 0x4 */
-       uint8_t RESERVED_0[4];
-  __IO uint32_t WDG;                               /**< Watchdog Timer, offset: 0xC */
+       uint8_t RESERVED_0[8];
   __IO uint32_t IE;                                /**< Interrupt Enable, offset: 0x10 */
   __IO uint32_t IF;                                /**< Interrupt Flag, offset: 0x14 */
        uint8_t RESERVED_1[8];
@@ -207,15 +206,6 @@ typedef struct {
 #define AON_CSTCU_LSCHLVLD_MBPLVLD(x)            (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_LSCHLVLD_MBPLVLD_SHIFT)) & AON_CSTCU_LSCHLVLD_MBPLVLD_MASK)
 /*! @} */
 
-/*! @name WDG - Watchdog Timer */
-/*! @{ */
-
-#define AON_CSTCU_WDG_WDGEOC_MASK                (0xFFFFFFFFU)
-#define AON_CSTCU_WDG_WDGEOC_SHIFT               (0U)
-/*! WDGEOC - Watchdog End of Counter */
-#define AON_CSTCU_WDG_WDGEOC(x)                  (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_WDG_WDGEOC_SHIFT)) & AON_CSTCU_WDG_WDGEOC_MASK)
-/*! @} */
-
 /*! @name IE - Interrupt Enable */
 /*! @{ */
 
@@ -235,8 +225,8 @@ typedef struct {
 #define AON_CSTCU_IF_STEND_IF_SHIFT              (0U)
 /*! STEND_IF - Self-Test End Interrupt Flag
  *  0b0..No pending interrupt
- *  0b1..Pending interrupt
  *  0b0..No effect
+ *  0b1..Pending interrupt
  *  0b1..Clear the flag
  */
 #define AON_CSTCU_IF_STEND_IF(x)                 (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_IF_STEND_IF_SHIFT)) & AON_CSTCU_IF_STEND_IF_MASK)
@@ -252,14 +242,6 @@ typedef struct {
  *  0b1..Invalid LSTCU pointer
  */
 #define AON_CSTCU_ERR_STAT_INVP_MB(x)            (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_ERR_STAT_INVP_MB_SHIFT)) & AON_CSTCU_ERR_STAT_INVP_MB_MASK)
-
-#define AON_CSTCU_ERR_STAT_ABORTHW_MASK          (0x100U)
-#define AON_CSTCU_ERR_STAT_ABORTHW_SHIFT         (8U)
-/*! ABORTHW - Hardware Abort Flag
- *  0b0..No abort detected
- *  0b1..Abort detected
- */
-#define AON_CSTCU_ERR_STAT_ABORTHW(x)            (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_ERR_STAT_ABORTHW_SHIFT)) & AON_CSTCU_ERR_STAT_ABORTHW_MASK)
 
 #define AON_CSTCU_ERR_STAT_ABORTSW_MASK          (0x200U)
 #define AON_CSTCU_ERR_STAT_ABORTSW_SHIFT         (9U)

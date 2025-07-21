@@ -61,14 +61,14 @@
 **                          MIMX8US5DVP08_dsp0
 **                          MIMX8US5DVP08_dsp1
 **
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I3C
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -85,21 +85,24 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file I3C.h
- * @version 5.0
- * @date 2023-04-27
+ * @file PERI_I3C.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for I3C
  *
  * CMSIS Peripheral Access Layer for I3C
  */
 
-#if !defined(I3C_H_)
-#define I3C_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_I3C_H_)
+#define PERI_I3C_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8UD3CVP08_ca35) || defined(CPU_MIMX8UD3DVK08_ca35) || defined(CPU_MIMX8UD3DVP08_ca35))
 #include "MIMX8UD3_ca35_COMMON.h"
@@ -217,10 +220,10 @@ typedef struct {
        uint8_t RESERVED_3[4];
   __IO uint32_t MCTRL;                             /**< Master Main Control Register, offset: 0x84 */
   __IO uint32_t MSTATUS;                           /**< Master Status Register, offset: 0x88 */
-  __IO uint32_t MIBIRULES;                         /**< Master In-band Interrupt Registry and Rules Register, offset: 0x8C, available only on: I3C0 (missing on I3C1, I3C2) */
-  __IO uint32_t MINTSET;                           /**< Master Interrupt Set Register, offset: 0x90, available only on: I3C0 (missing on I3C1, I3C2) */
-  __O  uint32_t MINTCLR;                           /**< Master Interrupt Clear Register, offset: 0x94, available only on: I3C0 (missing on I3C1, I3C2) */
-  __I  uint32_t MINTMASKED;                        /**< Master Interrupt Mask Register, offset: 0x98, available only on: I3C0 (missing on I3C1, I3C2) */
+  __IO uint32_t MIBIRULES;                         /**< Master In-band Interrupt Registry and Rules Register, offset: 0x8C */
+  __IO uint32_t MINTSET;                           /**< Master Interrupt Set Register, offset: 0x90 */
+  __O  uint32_t MINTCLR;                           /**< Master Interrupt Clear Register, offset: 0x94 */
+  __I  uint32_t MINTMASKED;                        /**< Master Interrupt Mask Register, offset: 0x98 */
   __IO uint32_t MERRWARN;                          /**< Master Errors and Warnings Register, offset: 0x9C */
   __IO uint32_t MDMACTRL;                          /**< Master DMA Control Register, offset: 0xA0 */
        uint8_t RESERVED_4[8];
@@ -1876,5 +1879,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* I3C_H_ */
+#endif  /* PERI_I3C_H_ */
 

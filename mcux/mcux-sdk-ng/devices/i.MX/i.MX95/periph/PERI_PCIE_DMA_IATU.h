@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PCIE_DMA_IATU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PCIE_DMA_IATU.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_PCIE_DMA_IATU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PCIE_DMA_IATU
  *
  * CMSIS Peripheral Access Layer for PCIE_DMA_IATU
  */
 
-#if !defined(PCIE_DMA_IATU_H_)
-#define PCIE_DMA_IATU_H_                         /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PCIE_DMA_IATU_H_)
+#define PERI_PCIE_DMA_IATU_H_                    /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -527,17 +800,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_0_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -760,10 +1033,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_RESPONSE_CODE_MASK)
 
@@ -794,8 +1067,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_0_MATCH_MODE_MASK)
 
@@ -838,17 +1111,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_0_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -992,17 +1265,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_1_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -1225,10 +1498,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_RESPONSE_CODE_MASK)
 
@@ -1259,8 +1532,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_1_MATCH_MODE_MASK)
 
@@ -1303,17 +1576,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_1_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -1457,17 +1730,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_2_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -1690,10 +1963,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_RESPONSE_CODE_MASK)
 
@@ -1724,8 +1997,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_2_MATCH_MODE_MASK)
 
@@ -1768,17 +2041,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_2_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -1922,17 +2195,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_3_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -2155,10 +2428,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_RESPONSE_CODE_MASK)
 
@@ -2189,8 +2462,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_3_MATCH_MODE_MASK)
 
@@ -2233,17 +2506,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_3_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -2387,17 +2660,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_4_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -2620,10 +2893,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_RESPONSE_CODE_MASK)
 
@@ -2654,8 +2927,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_4_MATCH_MODE_MASK)
 
@@ -2698,17 +2971,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_4_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -2852,17 +3125,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_5_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -3085,10 +3358,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_RESPONSE_CODE_MASK)
 
@@ -3119,8 +3392,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_5_MATCH_MODE_MASK)
 
@@ -3163,17 +3436,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_5_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -3317,17 +3590,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_6_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -3550,10 +3823,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_RESPONSE_CODE_MASK)
 
@@ -3584,8 +3857,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_6_MATCH_MODE_MASK)
 
@@ -3628,17 +3901,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_6_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -3782,17 +4055,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_INHIBIT_PAYLOAD_MASK (0x400000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_INHIBIT_PAYLOAD_SHIFT (22U)
 /*! INHIBIT_PAYLOAD - Inhibit TLP Payload Data for TLP's in Matched Region; assign iATU region to be TLP without data.
- *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  *  0b0..Fmt[1] =0/1 so that TLPs with or without data can be sent.
+ *  0b1..Fmt[1] =0 so that only TLP type without data is sent. For example, a Msg instead of MsgD will be sent.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_INHIBIT_PAYLOAD(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_INHIBIT_PAYLOAD_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_INHIBIT_PAYLOAD_MASK)
 
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_HEADER_SUBSTITUTE_EN_MASK (0x800000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_HEADER_SUBSTITUTE_EN_SHIFT (23U)
 /*! HEADER_SUBSTITUTE_EN - Header Substitute Enable.
+ *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  *  0b1..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register is used to fill bytes 8-to-11 (for 3
  *       DWORD header) or bytes 12-to-15 (for 4 DWORD header) of the translated TLP header.
- *  0b0..LWR_TARGET_RW in the iATU_LWR_TARGET_ADDR_OFF_OUTBOUND_i register forms the new address of the translated region.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_HEADER_SUBSTITUTE_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_HEADER_SUBSTITUTE_EN_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_OUTBOUND_7_HEADER_SUBSTITUTE_EN_MASK)
 
@@ -4015,10 +4288,10 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_RESPONSE_CODE_MASK (0x3000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_RESPONSE_CODE_SHIFT (24U)
 /*! RESPONSE_CODE - Response Code.
- *  0b10..Completer abort (CA)
  *  0b00..Normal RADM filter response is used.
- *  0b11..Not used / undefined / reserved
  *  0b01..Unsupported request (UR)
+ *  0b10..Completer abort (CA)
+ *  0b11..Not used / undefined / reserved
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_RESPONSE_CODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_RESPONSE_CODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_RESPONSE_CODE_MASK)
 
@@ -4049,8 +4322,8 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_MATCH_MODE_MASK (0x40000000U)
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_MATCH_MODE_SHIFT (30U)
 /*! MATCH_MODE - Match Mode.
- *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  *  0b0..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
+ *  0b1..The interpretation is dependent on TLP type, that is, MEM/IO, CFG0, or MSG/MSGD TLPs.
  */
 #define PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_MATCH_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_MATCH_MODE_SHIFT)) & PCIE_DMA_IATU_IATU_REGION_CTRL_2_OFF_INBOUND_7_MATCH_MODE_MASK)
 
@@ -4093,17 +4366,17 @@ typedef struct {
 #define PCIE_DMA_IATU_IATU_LIMIT_ADDR_OFF_INBOUND_7_CBUF_INCR_SHIFT (0U)
 /*! CBUF_INCR - Circular Buffer Increment.
  *  0b0000..0 (Default; legacy Single Address Location mode)
- *  0b1001..1024
- *  0b0110..128
- *  0b0011..16
- *  0b1010..2048
- *  0b0111..256
- *  0b0100..32
  *  0b0001..4
- *  0b1011..4096
- *  0b1000..512
- *  0b0101..64
  *  0b0010..8
+ *  0b0011..16
+ *  0b0100..32
+ *  0b0101..64
+ *  0b0110..128
+ *  0b0111..256
+ *  0b1000..512
+ *  0b1001..1024
+ *  0b1010..2048
+ *  0b1011..4096
  *  0b1100..8192
  *  0b1101..rsvd.
  *  0b1110..rsvd.
@@ -4819,9 +5092,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b00..Reserved
  *  0b01..This channel is active and transferring data
+ *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b11..The DMA has transferred all data for this channel, or you have prematurely stopped this channel by
  *        writing to the Stop field of the DMA Write Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read Doorbell
  *        Register (DMA_READ_DOORBELL_OFF)
@@ -4854,16 +5127,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..memory type
  *  0b0..peripheral type
+ *  0b1..memory type
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_0_DMA_MEM_TYPE_MASK)
 
@@ -4992,9 +5265,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b00..Reserved
  *  0b01..Running. This channel is active and transferring data.
+ *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b11..Stopped. The DMA has transferred all data for this channel, or you have prematurely stopped this channel
  *        by writing to the Stop field of the DMA Read Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read
  *        Doorbell Register (DMA_READ_DOORBELL_OFF).
@@ -5027,16 +5300,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..main memory
  *  0b0..peripheral
+ *  0b1..main memory
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_0_DMA_MEM_TYPE_MASK)
 
@@ -5165,9 +5438,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b00..Reserved
  *  0b01..This channel is active and transferring data
+ *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b11..The DMA has transferred all data for this channel, or you have prematurely stopped this channel by
  *        writing to the Stop field of the DMA Write Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read Doorbell
  *        Register (DMA_READ_DOORBELL_OFF)
@@ -5200,16 +5473,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..memory type
  *  0b0..peripheral type
+ *  0b1..memory type
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_1_DMA_MEM_TYPE_MASK)
 
@@ -5338,9 +5611,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b00..Reserved
  *  0b01..Running. This channel is active and transferring data.
+ *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b11..Stopped. The DMA has transferred all data for this channel, or you have prematurely stopped this channel
  *        by writing to the Stop field of the DMA Read Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read
  *        Doorbell Register (DMA_READ_DOORBELL_OFF).
@@ -5373,16 +5646,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..main memory
  *  0b0..peripheral
+ *  0b1..main memory
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_1_DMA_MEM_TYPE_MASK)
 
@@ -5511,9 +5784,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b00..Reserved
  *  0b01..This channel is active and transferring data
+ *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b11..The DMA has transferred all data for this channel, or you have prematurely stopped this channel by
  *        writing to the Stop field of the DMA Write Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read Doorbell
  *        Register (DMA_READ_DOORBELL_OFF)
@@ -5546,16 +5819,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..memory type
  *  0b0..peripheral type
+ *  0b1..memory type
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_2_DMA_MEM_TYPE_MASK)
 
@@ -5684,9 +5957,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b00..Reserved
  *  0b01..Running. This channel is active and transferring data.
+ *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b11..Stopped. The DMA has transferred all data for this channel, or you have prematurely stopped this channel
  *        by writing to the Stop field of the DMA Read Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read
  *        Doorbell Register (DMA_READ_DOORBELL_OFF).
@@ -5719,16 +5992,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..main memory
  *  0b0..peripheral
+ *  0b1..main memory
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_2_DMA_MEM_TYPE_MASK)
 
@@ -5857,9 +6130,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b00..Reserved
  *  0b01..This channel is active and transferring data
+ *  0b10..An error condition has been detected, and the DMA has stopped this channel
  *  0b11..The DMA has transferred all data for this channel, or you have prematurely stopped this channel by
  *        writing to the Stop field of the DMA Write Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read Doorbell
  *        Register (DMA_READ_DOORBELL_OFF)
@@ -5892,16 +6165,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..memory type
  *  0b0..peripheral type
+ *  0b1..memory type
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_WRCH_3_DMA_MEM_TYPE_MASK)
 
@@ -6030,9 +6303,9 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_CS_MASK (0x60U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_CS_SHIFT (5U)
 /*! CS - Channel Status (CS).
- *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b00..Reserved
  *  0b01..Running. This channel is active and transferring data.
+ *  0b10..Halted. An error condition has been detected, and the DMA has stopped this channel.
  *  0b11..Stopped. The DMA has transferred all data for this channel, or you have prematurely stopped this channel
  *        by writing to the Stop field of the DMA Read Doorbell Register (DMA_WRITE_DOORBELL_OFF) or DMA Read
  *        Doorbell Register (DMA_READ_DOORBELL_OFF).
@@ -6065,16 +6338,16 @@ typedef struct {
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_FUNC_NUM_MASK (0x1F000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_FUNC_NUM_SHIFT (12U)
 /*! DMA_FUNC_NUM - DMA Channel Physical Function Number.
- *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  *  0b00000..Physical Channel Function Number starts at 0.
+ *  0b11111..The maximum number of Physical Functions is given by CX_NFUNC, so the maximum value of this field is CX_NFUNC-1.
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_FUNC_NUM_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_FUNC_NUM_MASK)
 
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_MEM_TYPE_MASK (0x400000U)
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_MEM_TYPE_SHIFT (22U)
 /*! DMA_MEM_TYPE - Master AXI ACE-Lite Cache Coherency Control.
- *  0b1..main memory
  *  0b0..peripheral
+ *  0b1..main memory
  */
 #define PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_MEM_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_MEM_TYPE_SHIFT)) & PCIE_DMA_IATU_DMA_CH_CONTROL1_OFF_RDCH_3_DMA_MEM_TYPE_MASK)
 
@@ -6206,5 +6479,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PCIE_DMA_IATU_H_ */
+#endif  /* PERI_PCIE_DMA_IATU_H_ */
 

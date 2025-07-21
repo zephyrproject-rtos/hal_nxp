@@ -419,6 +419,22 @@ typedef struct {
 /*! NSTART - Normal Conversion Start */
 #define ADC_MCR_NSTART(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MCR_NSTART_SHIFT)) & ADC_MCR_NSTART_MASK)
 
+#define ADC_MCR_EDGE_MASK                        (0x4000000U)
+#define ADC_MCR_EDGE_SHIFT                       (26U)
+/*! EDGE - Trigger Edge Select
+ *  0b0..Falling edge is trigger
+ *  0b1..Rising edge is trigger
+ */
+#define ADC_MCR_EDGE(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_MCR_EDGE_SHIFT)) & ADC_MCR_EDGE_MASK)
+
+#define ADC_MCR_TRGEN_MASK                       (0x8000000U)
+#define ADC_MCR_TRGEN_SHIFT                      (27U)
+/*! TRGEN - External Trigger Enable
+ *  0b0..External trigger is disabled
+ *  0b1..Enables the external trigger to start a conversion
+ */
+#define ADC_MCR_TRGEN(x)                         (((uint32_t)(((uint32_t)(x)) << ADC_MCR_TRGEN_SHIFT)) & ADC_MCR_TRGEN_MASK)
+
 #define ADC_MCR_MODE_MASK                        (0x20000000U)
 #define ADC_MCR_MODE_SHIFT                       (29U)
 /*! MODE - Normal Scan Mode Select

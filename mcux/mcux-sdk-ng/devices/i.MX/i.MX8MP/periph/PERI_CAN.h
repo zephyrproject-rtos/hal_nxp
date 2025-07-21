@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CAN.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_CAN.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CAN
  *
  * CMSIS Peripheral Access Layer for CAN
  */
 
-#if !defined(CAN_H_)
-#define CAN_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CAN_H_)
+#define PERI_CAN_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -126,7 +153,7 @@
  */
 
 /** CAN - Size of Registers Arrays */
-#define CAN_MB_COUNT                              64u
+#define CAN_MB_SIZE_MB_GROUP_MB_COUNT             64u
 #define CAN_RXIMR_COUNT                           64u
 
 /** CAN - Register Layout Typedef */
@@ -157,7 +184,7 @@ typedef struct {
     __IO uint32_t ID;                                /**< Message Buffer 0 ID Register..Message Buffer 63 ID Register, array offset: 0x84, array step: 0x10 */
     __IO uint32_t WORD0;                             /**< Message Buffer 0 WORD0 Register..Message Buffer 63 WORD0 Register, array offset: 0x88, array step: 0x10 */
     __IO uint32_t WORD1;                             /**< Message Buffer 0 WORD1 Register..Message Buffer 63 WORD1 Register, array offset: 0x8C, array step: 0x10 */
-  } MB[CAN_MB_COUNT];
+  } MB[CAN_MB_SIZE_MB_GROUP_MB_COUNT];
        uint8_t RESERVED_3[1024];
   __IO uint32_t RXIMR[CAN_RXIMR_COUNT];            /**< Rx Individual Mask registers, array offset: 0x880, array step: 0x4 */
        uint8_t RESERVED_4[352];
@@ -205,8 +232,8 @@ typedef struct {
 #define CAN_MCR_FDEN_MASK                        (0x800U)
 #define CAN_MCR_FDEN_SHIFT                       (11U)
 /*! FDEN - CAN FD operation enable
- *  0b1..CAN FD is enabled. FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats.
  *  0b0..CAN FD is disabled. FlexCAN is able to receive and transmit messages in CAN 2.0 format.
+ *  0b1..CAN FD is enabled. FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats.
  */
 #define CAN_MCR_FDEN(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_MCR_FDEN_SHIFT)) & CAN_MCR_FDEN_MASK)
 
@@ -1584,5 +1611,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CAN_H_ */
+#endif  /* PERI_CAN_H_ */
 

@@ -21,14 +21,14 @@
 **                          MIMX8MQ7DVAJZ_ca53
 **                          MIMX8MQ7DVAJZ_cm4
 **
-**     Version:             rev. 4.0, 2018-01-26
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for APBH
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,21 +43,24 @@
 **         Rev.C Header EAR2
 **     - rev. 4.0 (2018-01-26)
 **         Rev.D Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file APBH.h
- * @version 4.0
- * @date 2018-01-26
+ * @file PERI_APBH.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for APBH
  *
  * CMSIS Peripheral Access Layer for APBH
  */
 
-#if !defined(APBH_H_)
-#define APBH_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_APBH_H_)
+#define PERI_APBH_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MD6CVAHZ_ca53) || defined(CPU_MIMX8MD6DVAJZ_ca53))
 #include "MIMX8MD6_ca53_COMMON.h"
@@ -139,7 +142,7 @@ typedef struct {
   __IO uint32_t CHANNEL_CTRL_SET;                  /**< AHB to APBH Bridge Channel Register, offset: 0x34 */
   __IO uint32_t CHANNEL_CTRL_CLR;                  /**< AHB to APBH Bridge Channel Register, offset: 0x38 */
   __IO uint32_t CHANNEL_CTRL_TOG;                  /**< AHB to APBH Bridge Channel Register, offset: 0x3C */
-  __I  uint32_t DEVSEL;                            /**< AHB to APBH DMA Device Assignment Register, offset: 0x40 */
+       uint32_t DEVSEL;                            /**< AHB to APBH DMA Device Assignment Register, offset: 0x40 */
        uint8_t RESERVED_0[12];
   __IO uint32_t DMA_BURST_SIZE;                    /**< AHB to APBH DMA burst size, offset: 0x50 */
        uint8_t RESERVED_1[12];
@@ -5144,5 +5147,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* APBH_H_ */
+#endif  /* PERI_APBH_H_ */
 

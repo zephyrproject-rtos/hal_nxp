@@ -5,7 +5,6 @@
  */
 
 #include "fsl_sentinel.h"
-#include "fsl_debug_console.h"
 #ifdef FSL_RTOS_FREE_RTOS
 #include "FreeRTOS.h"
 #include "task.h"
@@ -540,38 +539,6 @@ uint32_t SENTINEL_RngGetRandom(uint32_t *pRngHandle, uint32_t outAddr, uint32_t 
     }
 
     return respParam.rsp.rsp_code.bridge_rsp_code.status;
-}
-
-uint32_t SENTINEL_DumpDebugBuffer(void)
-{
-    struct dump_debug_buffer_msg_cmd cmdParam;
-    struct dump_debug_buffer_msg_cmd_rsp respParam;
-    uint32_t respParamCount = sizeof(respParam) / sizeof(uint32_t);
-
-    (void)memset((void *)&cmdParam, 0, sizeof(cmdParam));
-    cmdParam.hdr.cmd  = SENTINEL_BASELINE_API_CMD_DUMP_DEBUG_BUFFER;
-    cmdParam.hdr.tag  = SENTINEL_MSG_HDR_CMD_TAG;
-    cmdParam.hdr.size = sizeof(cmdParam) / sizeof(uint32_t);
-    cmdParam.hdr.ver  = SENTINEL_BASELINE_API_VER;
-
-    (void)SENTINEL_Command((uint32_t *)(void *)&cmdParam, sizeof(cmdParam) / sizeof(uint32_t),
-                           (uint32_t *)(void *)&respParam, &respParamCount);
-    assert(respParamCount > 0U);
-
-    if (respParam.rsp.rsp_code.baseline_rsp_code.status == BASELINE_SUCCESS_IND) /* Successful */
-    {
-        uint32_t i = 0U;
-        assert(respParamCount == sizeof(respParam) / sizeof(uint32_t));
-        for (i = 0U; i < sizeof(respParam.debug_words) / sizeof(uint32_t); i++)
-        {
-            (void)PRINTF("\r\n respParam.debug_words[%d] = 0x%x\r\n", i, respParam.debug_words[i]);
-        }
-    }
-    else
-    {
-    }
-
-    return respParam.rsp.rsp_code.baseline_rsp_code.status;
 }
 
 status_t SENTINEL_RNG_GetRandomData(uint32_t output, uint32_t len)

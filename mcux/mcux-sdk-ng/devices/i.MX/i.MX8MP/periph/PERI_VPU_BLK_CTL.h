@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VPU_BLK_CTL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file VPU_BLK_CTL.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_VPU_BLK_CTL.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for VPU_BLK_CTL
  *
  * CMSIS Peripheral Access Layer for VPU_BLK_CTL
  */
 
-#if !defined(VPU_BLK_CTL_H_)
-#define VPU_BLK_CTL_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_VPU_BLK_CTL_H_)
+#define PERI_VPU_BLK_CTL_H_                      /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -155,24 +182,24 @@ typedef struct {
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G2_SFT_RSTN_MASK (0x1U)
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G2_SFT_RSTN_SHIFT (0U)
 /*! G2_SFT_RSTN
- *  0b1..Normal
  *  0b0..Reset
+ *  0b1..Normal
  */
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G2_SFT_RSTN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G2_SFT_RSTN_SHIFT)) & VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G2_SFT_RSTN_MASK)
 
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G1_SFT_RSTN_MASK (0x2U)
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G1_SFT_RSTN_SHIFT (1U)
 /*! G1_SFT_RSTN
- *  0b1..Normal
  *  0b0..Reset
+ *  0b1..Normal
  */
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G1_SFT_RSTN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G1_SFT_RSTN_SHIFT)) & VPU_BLK_CTL_BLK_SFT_RSTN_CSR_G1_SFT_RSTN_MASK)
 
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_VC8000E_SFT_RSTN_MASK (0x4U)
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_VC8000E_SFT_RSTN_SHIFT (2U)
 /*! VC8000E_SFT_RSTN
- *  0b1..Normal
  *  0b0..Reset
+ *  0b1..Normal
  */
 #define VPU_BLK_CTL_BLK_SFT_RSTN_CSR_VC8000E_SFT_RSTN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_SFT_RSTN_CSR_VC8000E_SFT_RSTN_SHIFT)) & VPU_BLK_CTL_BLK_SFT_RSTN_CSR_VC8000E_SFT_RSTN_MASK)
 /*! @} */
@@ -183,32 +210,32 @@ typedef struct {
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_G2_CLK_EN_MASK (0x1U)
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_G2_CLK_EN_SHIFT (0U)
 /*! G2_CLK_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_G2_CLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_CLK_EN_CSR_G2_CLK_EN_SHIFT)) & VPU_BLK_CTL_BLK_CLK_EN_CSR_G2_CLK_EN_MASK)
 
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_G1_CLK_EN_MASK (0x2U)
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_G1_CLK_EN_SHIFT (1U)
 /*! G1_CLK_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_G1_CLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_CLK_EN_CSR_G1_CLK_EN_SHIFT)) & VPU_BLK_CTL_BLK_CLK_EN_CSR_G1_CLK_EN_MASK)
 
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_VC8000E_CLK_EN_MASK (0x4U)
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_VC8000E_CLK_EN_SHIFT (2U)
 /*! VC8000E_CLK_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_VC8000E_CLK_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_CLK_EN_CSR_VC8000E_CLK_EN_SHIFT)) & VPU_BLK_CTL_BLK_CLK_EN_CSR_VC8000E_CLK_EN_MASK)
 
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_MAIN_CLK_EN_MASK (0x8U)
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_MAIN_CLK_EN_SHIFT (3U)
 /*! MAIN_CLK_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_BLK_CLK_EN_CSR_MAIN_CLK_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_BLK_CLK_EN_CSR_MAIN_CLK_EN_SHIFT)) & VPU_BLK_CTL_BLK_CLK_EN_CSR_MAIN_CLK_EN_MASK)
 /*! @} */
@@ -219,8 +246,8 @@ typedef struct {
 #define VPU_BLK_CTL_G1_FUSE_DEC_CSR_G1_FUSE_DEC_MASK (0xFFFFFFFFU)
 #define VPU_BLK_CTL_G1_FUSE_DEC_CSR_G1_FUSE_DEC_SHIFT (0U)
 /*! G1_FUSE_DEC
- *  0b00000000000000000000000000000001..Enable
  *  0b00000000000000000000000000000000..Disable
+ *  0b00000000000000000000000000000001..Enable
  */
 #define VPU_BLK_CTL_G1_FUSE_DEC_CSR_G1_FUSE_DEC(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_G1_FUSE_DEC_CSR_G1_FUSE_DEC_SHIFT)) & VPU_BLK_CTL_G1_FUSE_DEC_CSR_G1_FUSE_DEC_MASK)
 /*! @} */
@@ -231,8 +258,8 @@ typedef struct {
 #define VPU_BLK_CTL_G1_FUSE_PP_CSR_G1_FUSE_PP_MASK (0xFFFFFFFFU)
 #define VPU_BLK_CTL_G1_FUSE_PP_CSR_G1_FUSE_PP_SHIFT (0U)
 /*! G1_FUSE_PP
- *  0b00000000000000000000000000000001..Enable
  *  0b00000000000000000000000000000000..Disable
+ *  0b00000000000000000000000000000001..Enable
  */
 #define VPU_BLK_CTL_G1_FUSE_PP_CSR_G1_FUSE_PP(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_G1_FUSE_PP_CSR_G1_FUSE_PP_SHIFT)) & VPU_BLK_CTL_G1_FUSE_PP_CSR_G1_FUSE_PP_MASK)
 /*! @} */
@@ -243,8 +270,8 @@ typedef struct {
 #define VPU_BLK_CTL_G2_FUSE_DEC_CSR_G2_FUSE_DEC_MASK (0xFFFFFFFFU)
 #define VPU_BLK_CTL_G2_FUSE_DEC_CSR_G2_FUSE_DEC_SHIFT (0U)
 /*! G2_FUSE_DEC
- *  0b00000000000000000000000000000001..Enable
  *  0b00000000000000000000000000000000..Disable
+ *  0b00000000000000000000000000000001..Enable
  */
 #define VPU_BLK_CTL_G2_FUSE_DEC_CSR_G2_FUSE_DEC(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_G2_FUSE_DEC_CSR_G2_FUSE_DEC_SHIFT)) & VPU_BLK_CTL_G2_FUSE_DEC_CSR_G2_FUSE_DEC_MASK)
 /*! @} */
@@ -255,8 +282,8 @@ typedef struct {
 #define VPU_BLK_CTL_VC8000E_FUSE_ENC_CSR_VC8000E_FUSE_ENC_MASK (0xFFFFFFFFU)
 #define VPU_BLK_CTL_VC8000E_FUSE_ENC_CSR_VC8000E_FUSE_ENC_SHIFT (0U)
 /*! VC8000E_FUSE_ENC
- *  0b00000000000000000000000000000001..Enable
  *  0b00000000000000000000000000000000..Disable
+ *  0b00000000000000000000000000000001..Enable
  */
 #define VPU_BLK_CTL_VC8000E_FUSE_ENC_CSR_VC8000E_FUSE_ENC(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VC8000E_FUSE_ENC_CSR_VC8000E_FUSE_ENC_SHIFT)) & VPU_BLK_CTL_VC8000E_FUSE_ENC_CSR_VC8000E_FUSE_ENC_MASK)
 /*! @} */
@@ -267,48 +294,48 @@ typedef struct {
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_ARCACHE_EN_MASK (0x1U)
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_ARCACHE_EN_SHIFT (0U)
 /*! G1_ARCACHE_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_ARCACHE_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_ARCACHE_EN_SHIFT)) & VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_ARCACHE_EN_MASK)
 
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_AWCACHE_EN_MASK (0x2U)
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_AWCACHE_EN_SHIFT (1U)
 /*! G1_AWCACHE_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_AWCACHE_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_AWCACHE_EN_SHIFT)) & VPU_BLK_CTL_VPU_CACHE_EN_CSR_G1_AWCACHE_EN_MASK)
 
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_ARCACHE_EN_MASK (0x4U)
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_ARCACHE_EN_SHIFT (2U)
 /*! G2_ARCACHE_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_ARCACHE_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_ARCACHE_EN_SHIFT)) & VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_ARCACHE_EN_MASK)
 
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_AWCACHE_EN_MASK (0x8U)
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_AWCACHE_EN_SHIFT (3U)
 /*! G2_AWCACHE_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_AWCACHE_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_AWCACHE_EN_SHIFT)) & VPU_BLK_CTL_VPU_CACHE_EN_CSR_G2_AWCACHE_EN_MASK)
 
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_ARCACHE_EN_MASK (0x10U)
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_ARCACHE_EN_SHIFT (4U)
 /*! VC8000E_ARCACHE_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_ARCACHE_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_ARCACHE_EN_SHIFT)) & VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_ARCACHE_EN_MASK)
 
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_AWCACHE_EN_MASK (0x20U)
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_AWCACHE_EN_SHIFT (5U)
 /*! VC8000E_AWCACHE_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_AWCACHE_EN(x) (((uint32_t)(((uint32_t)(x)) << VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_AWCACHE_EN_SHIFT)) & VPU_BLK_CTL_VPU_CACHE_EN_CSR_VC8000E_AWCACHE_EN_MASK)
 /*! @} */
@@ -401,5 +428,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* VPU_BLK_CTL_H_ */
+#endif  /* PERI_VPU_BLK_CTL_H_ */
 

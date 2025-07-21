@@ -25,14 +25,14 @@
 **                          MIMX8MM6DVTLZ_ca53
 **                          MIMX8MM6DVTLZ_cm4
 **
-**     Version:             rev. 4.0, 2019-02-18
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Rev.B Header PRC
 **     - rev. 4.0 (2019-02-18)
 **         Rev.0 Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_GPR.h
- * @version 4.0
- * @date 2019-02-18
+ * @file PERI_IOMUXC_GPR.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_GPR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_GPR
  */
 
-#if !defined(IOMUXC_GPR_H_)
-#define IOMUXC_GPR_H_                            /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_GPR_H_)
+#define PERI_IOMUXC_GPR_H_                       /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MM1CVTKZ_ca53) || defined(CPU_MIMX8MM1DVTLZ_ca53))
 #include "MIMX8MM1_ca53_COMMON.h"
@@ -179,8 +182,8 @@ typedef struct {
 #define IOMUXC_GPR_GPR1_GPR_ENET1_TX_CLK_SEL_MASK (0x2000U)
 #define IOMUXC_GPR_GPR1_GPR_ENET1_TX_CLK_SEL_SHIFT (13U)
 /*! GPR_ENET1_TX_CLK_SEL
- *  0b1..ENET1 RMII clock comes from CCM->pad->loopback. SOI bit for the pad (IOMUXC_SW_INPUT_ON_PAD_ENET_TD2) should be set also.
  *  0b0..ENET1 RMII clock comes from external PHY or OSC
+ *  0b1..ENET1 RMII clock comes from CCM->pad->loopback. SOI bit for the pad (IOMUXC_SW_INPUT_ON_PAD_ENET_TD2) should be set also.
  */
 #define IOMUXC_GPR_GPR1_GPR_ENET1_TX_CLK_SEL(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR1_GPR_ENET1_TX_CLK_SEL_SHIFT)) & IOMUXC_GPR_GPR1_GPR_ENET1_TX_CLK_SEL_MASK)
 
@@ -706,16 +709,16 @@ typedef struct {
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_SSC_EN_MASK (0x10000U)
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_SSC_EN_SHIFT (16U)
 /*! GPR_PCIE1_PHY_FUNC_I_SSC_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_SSC_EN(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_SSC_EN_SHIFT)) & IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_SSC_EN_MASK)
 
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_POWER_OFF_MASK (0x20000U)
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_POWER_OFF_SHIFT (17U)
 /*! GPR_PCIE1_PHY_FUNC_I_POWER_OFF
- *  0b1..Power Down
  *  0b0..Power Up
+ *  0b1..Power Down
  */
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_POWER_OFF(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_POWER_OFF_SHIFT)) & IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_POWER_OFF_MASK)
 
@@ -726,8 +729,8 @@ typedef struct {
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_AUX_EN_MASK (0x80000U)
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_AUX_EN_SHIFT (19U)
 /*! GPR_PCIE1_PHY_FUNC_I_AUX_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_AUX_EN(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_AUX_EN_SHIFT)) & IOMUXC_GPR_GPR14_GPR_PCIE1_PHY_FUNC_I_AUX_EN_MASK)
 
@@ -796,5 +799,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_GPR_H_ */
+#endif  /* PERI_IOMUXC_GPR_H_ */
 

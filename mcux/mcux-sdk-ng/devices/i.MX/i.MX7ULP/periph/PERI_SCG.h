@@ -6,14 +6,14 @@
 **                          MCIMX7U5DVK07
 **                          MCIMX7U5DVP07
 **
-**     Version:             rev. 7.0, 2018-11-05
-**     Build:               b240708
+**     Version:             rev. 8.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,21 +34,24 @@
 **         RevB(B0) Header GA
 **     - rev. 7.0 (2018-11-05)
 **         RevA(B1) Header
+**     - rev. 8.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SCG.h
- * @version 7.0
- * @date 2018-11-05
+ * @file PERI_SCG.h
+ * @version 8.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SCG
  *
  * CMSIS Peripheral Access Layer for SCG
  */
 
-#if !defined(SCG_H_)
-#define SCG_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SCG_H_)
+#define PERI_SCG_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCIMX7U3CVP06) || defined(CPU_MCIMX7U3DVK07))
 #include "MCIMX7U3_cm4_COMMON.h"
@@ -175,22 +178,22 @@ typedef struct {
 #define SCG_PARAM_CLKPRES_SHIFT                  (0U)
 /*! CLKPRES - Clock Present
  *  0b00000000-0b00000001..Reserved
- *  0bxxxxxx1x..System OSC (SOSC) is present.
- *  0bxxxxx1xx..Slow IRC (SIRC) is present.
- *  0bxxxx1xxx..Fast IRC (FIRC) is present.
- *  0bxxx1xxxx..RTC OSC (ROSC) is present.
- *  0bxx1xxxxx..Auxiliary PLL (APLL) is present.
  *  0bx1xxxxxx..System PLL (SPLL) is present.
+ *  0bxx1xxxxx..Auxiliary PLL (APLL) is present.
+ *  0bxxx1xxxx..RTC OSC (ROSC) is present.
+ *  0bxxxx1xxx..Fast IRC (FIRC) is present.
+ *  0bxxxxx1xx..Slow IRC (SIRC) is present.
+ *  0bxxxxxx1x..System OSC (SOSC) is present.
  */
 #define SCG_PARAM_CLKPRES(x)                     (((uint32_t)(((uint32_t)(x)) << SCG_PARAM_CLKPRES_SHIFT)) & SCG_PARAM_CLKPRES_MASK)
 
 #define SCG_PARAM_DIVPRES_MASK                   (0xF8000000U)
 #define SCG_PARAM_DIVPRES_SHIFT                  (27U)
 /*! DIVPRES - Divider Present
- *  0bxxxx1..System DIVSLOW is present.
- *  0bxxx1x..System DIVBUS is present.
- *  0bx1xxx..System DIVPLAT is present.
  *  0b1xxxx..System DIVCORE is present.
+ *  0bx1xxx..System DIVPLAT is present.
+ *  0bxxx1x..System DIVBUS is present.
+ *  0bxxxx1..System DIVSLOW is present.
  */
 #define SCG_PARAM_DIVPRES(x)                     (((uint32_t)(((uint32_t)(x)) << SCG_PARAM_DIVPRES_SHIFT)) & SCG_PARAM_DIVPRES_MASK)
 /*! @} */
@@ -1520,8 +1523,8 @@ typedef struct {
 #define SCG_APLLCFG_PLLS_MASK                    (0x2U)
 #define SCG_APLLCFG_PLLS_SHIFT                   (1U)
 /*! PLLS - PLL Select
- *  0b1..APLL PFD output clock selected
  *  0b0..APLL clock selected.
+ *  0b1..APLL PFD output clock selected
  */
 #define SCG_APLLCFG_PLLS(x)                      (((uint32_t)(((uint32_t)(x)) << SCG_APLLCFG_PLLS_SHIFT)) & SCG_APLLCFG_PLLS_MASK)
 
@@ -2034,5 +2037,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SCG_H_ */
+#endif  /* PERI_SCG_H_ */
 

@@ -6,14 +6,14 @@
 **                          MCIMX7U5DVK07
 **                          MCIMX7U5DVP07
 **
-**     Version:             rev. 7.0, 2018-11-05
-**     Build:               b240708
+**     Version:             rev. 8.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MMDC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,21 +34,24 @@
 **         RevB(B0) Header GA
 **     - rev. 7.0 (2018-11-05)
 **         RevA(B1) Header
+**     - rev. 8.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MMDC.h
- * @version 7.0
- * @date 2018-11-05
+ * @file PERI_MMDC.h
+ * @version 8.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MMDC
  *
  * CMSIS Peripheral Access Layer for MMDC
  */
 
-#if !defined(MMDC_H_)
-#define MMDC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MMDC_H_)
+#define PERI_MMDC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCIMX7U3CVP06) || defined(CPU_MCIMX7U3DVK07))
 #include "MCIMX7U3_cm4_COMMON.h"
@@ -1240,8 +1243,8 @@ typedef struct {
 #define MMDC_MADPCR0_SBS_MASK                    (0x200U)
 #define MMDC_MADPCR0_SBS_SHIFT                   (9U)
 /*! SBS
- *  0b1..Launch AXI pending access toward the DDR
  *  0b0..No access will be launched toward the DDR
+ *  0b1..Launch AXI pending access toward the DDR
  */
 #define MMDC_MADPCR0_SBS(x)                      (((uint32_t)(((uint32_t)(x)) << MMDC_MADPCR0_SBS_SHIFT)) & MMDC_MADPCR0_SBS_MASK)
 /*! @} */
@@ -1256,8 +1259,8 @@ typedef struct {
 #define MMDC_MADPCR1_PRF_AXI_IDMASK_MASK         (0xFFFF0000U)
 #define MMDC_MADPCR1_PRF_AXI_IDMASK_SHIFT        (16U)
 /*! PRF_AXI_IDMASK
- *  0b0000000000000001..AXI ID specific bit is chosen for profiling
  *  0b0000000000000000..AXI ID specific bit is ignored (don't care)
+ *  0b0000000000000001..AXI ID specific bit is chosen for profiling
  */
 #define MMDC_MADPCR1_PRF_AXI_IDMASK(x)           (((uint32_t)(((uint32_t)(x)) << MMDC_MADPCR1_PRF_AXI_IDMASK_SHIFT)) & MMDC_MADPCR1_PRF_AXI_IDMASK_MASK)
 /*! @} */
@@ -2668,5 +2671,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MMDC_H_ */
+#endif  /* PERI_MMDC_H_ */
 

@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TCM_ECC_MCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file TCM_ECC_MCM.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_TCM_ECC_MCM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for TCM_ECC_MCM
  *
  * CMSIS Peripheral Access Layer for TCM_ECC_MCM
  */
 
-#if !defined(TCM_ECC_MCM_H_)
-#define TCM_ECC_MCM_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_TCM_ECC_MCM_H_)
+#define PERI_TCM_ECC_MCM_H_                      /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -219,16 +222,16 @@ typedef struct {
 #define TCM_ECC_MCM_TCMECCR_WECC_DIS_MASK        (0x1U)
 #define TCM_ECC_MCM_TCMECCR_WECC_DIS_SHIFT       (0U)
 /*! WECC_DIS - Disable TCM ECC Write Generation
- *  0b1..Disable ECC generation on TCM write data
  *  0b0..Enable ECC generation on TCM write data
+ *  0b1..Disable ECC generation on TCM write data
  */
 #define TCM_ECC_MCM_TCMECCR_WECC_DIS(x)          (((uint32_t)(((uint32_t)(x)) << TCM_ECC_MCM_TCMECCR_WECC_DIS_SHIFT)) & TCM_ECC_MCM_TCMECCR_WECC_DIS_MASK)
 
 #define TCM_ECC_MCM_TCMECCR_RECC_DIS_MASK        (0x2U)
 #define TCM_ECC_MCM_TCMECCR_RECC_DIS_SHIFT       (1U)
 /*! RECC_DIS - Disable TCM ECC Read Check
- *  0b1..Disable ECC check on TCM read data
  *  0b0..Enable ECC check on TCM read data
+ *  0b1..Disable ECC check on TCM read data
  */
 #define TCM_ECC_MCM_TCMECCR_RECC_DIS(x)          (((uint32_t)(((uint32_t)(x)) << TCM_ECC_MCM_TCMECCR_RECC_DIS_SHIFT)) & TCM_ECC_MCM_TCMECCR_RECC_DIS_MASK)
 /*! @} */
@@ -575,5 +578,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* TCM_ECC_MCM_H_ */
+#endif  /* PERI_TCM_ECC_MCM_H_ */
 
