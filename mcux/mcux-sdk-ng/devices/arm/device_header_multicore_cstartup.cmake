@@ -31,32 +31,10 @@ if(CONFIG_MCUX_COMPONENT_device.startup)
         BASE_PATH
         ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}
         SOURCES
-        iar/startup_${CONFIG_MCUX_HW_DEVICE_CORE}.s
+        startup_${CONFIG_MCUX_HW_DEVICE_CORE}.c
         TOOLCHAINS
         iar
-        CORE_IDS
-        ${core_id}
-        CONFIG
-        true)
-
-    mcux_add_source(
-        BASE_PATH
-        ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}
-        SOURCES
-        gcc/startup_${CONFIG_MCUX_HW_DEVICE_CORE}.S
-        TOOLCHAINS
         armgcc
-        CORE_IDS
-        ${core_id}
-        CONFIG
-        true)
-
-    mcux_add_source(
-        BASE_PATH
-        ${SdkRootDirPath}/${device_root}/${soc_portfolio}/${soc_series}/${device}
-        SOURCES
-        arm/startup_${CONFIG_MCUX_HW_DEVICE_CORE}.S
-        TOOLCHAINS
         mdk
         CORE_IDS
         ${core_id}
