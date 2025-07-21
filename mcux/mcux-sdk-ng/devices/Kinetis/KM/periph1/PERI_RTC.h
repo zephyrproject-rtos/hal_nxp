@@ -3,14 +3,14 @@
 **     Processors:          MKM34Z256VLL7
 **                          MKM34Z256VLQ7
 **
-**     Version:             rev. 1.2, 2015-03-06
-**     Build:               b240710
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,21 +23,24 @@
 **         Update according to reference manual rev. 1, RC.
 **     - rev. 1.2 (2015-03-06)
 **         Update according to reference manual rev. 1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RTC.h
- * @version 1.2
- * @date 2015-03-06
+ * @file PERI_RTC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RTC
  *
  * CMSIS Peripheral Access Layer for RTC
  */
 
-#if !defined(RTC_H_)
-#define RTC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RTC_H_)
+#define PERI_RTC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKM34Z256VLL7) || defined(CPU_MKM34Z256VLQ7))
 #include "MKM34Z7_COMMON.h"
@@ -132,15 +135,15 @@ typedef struct {
  *  0b0000..Illegal Value
  *  0b0001..January
  *  0b0010..February
+ *  0b0010..October
  *  0b0011..March
+ *  0b0011..November
  *  0b0100..April
  *  0b0101..May
  *  0b0110..June
  *  0b0111..July
  *  0b1000..August
  *  0b1001..September
- *  0b0010..October
- *  0b0011..November
  *  0b1100..December
  *  0b1101..Illegal Value
  *  0b1110..Illegal Value
@@ -261,8 +264,8 @@ typedef struct {
 #define RTC_CTRL_FINEEN_MASK                     (0x1U)
 #define RTC_CTRL_FINEEN_SHIFT                    (0U)
 /*! FINEEN - Fine compensation enable bit
- *  0b1..Fine compensation is enabled.
  *  0b0..Fine compensation is disabled
+ *  0b1..Fine compensation is enabled.
  */
 #define RTC_CTRL_FINEEN(x)                       (((uint16_t)(((uint16_t)(x)) << RTC_CTRL_FINEEN_SHIFT)) & RTC_CTRL_FINEEN_MASK)
 
@@ -283,8 +286,8 @@ typedef struct {
 #define RTC_CTRL_TIMER_STB_MASK_MASK             (0x10U)
 #define RTC_CTRL_TIMER_STB_MASK_SHIFT            (4U)
 /*! TIMER_STB_MASK - Sampling timer clocks mask
- *  0b1..Sampling clocks are gated in standby mode
  *  0b0..Sampling clocks are not gated when in standby mode
+ *  0b1..Sampling clocks are gated in standby mode
  */
 #define RTC_CTRL_TIMER_STB_MASK(x)               (((uint16_t)(((uint16_t)(x)) << RTC_CTRL_TIMER_STB_MASK_SHIFT)) & RTC_CTRL_TIMER_STB_MASK_MASK)
 
@@ -906,5 +909,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RTC_H_ */
+#endif  /* PERI_RTC_H_ */
 

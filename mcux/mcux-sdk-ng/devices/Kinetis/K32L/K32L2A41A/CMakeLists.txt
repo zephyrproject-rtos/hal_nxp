@@ -5,7 +5,7 @@
 
 #### device spepcific drivers
 include(${SdkRootDirPath}/devices/arm/device_header.cmake)
-mcux_add_cmakelists(${SdkRootDirPath}/devices/Kinetis/K32L/K32L2A41A/drivers)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/Kinetis/K32L/K32L2A41A/drivers)
 
 #### Kinetis shared drivers/components/middlewares, project segments
 include(${SdkRootDirPath}/devices/Kinetis/shared.cmake)

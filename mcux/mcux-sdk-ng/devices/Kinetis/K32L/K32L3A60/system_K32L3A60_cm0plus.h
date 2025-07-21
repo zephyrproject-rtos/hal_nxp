@@ -7,8 +7,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
-**     Version:             rev. 1.0, 2019-04-22
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -16,7 +16,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,14 +25,17 @@
 **     Revisions:
 **     - rev. 1.0 (2019-04-22)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file K32L3A60_cm0plus
- * @version 1.0
- * @date 2019-04-22
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for K32L3A60_cm0plus (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -55,14 +58,14 @@ extern "C" {
 #endif
 
 /* Define clock source values */
-#define CPU_XTAL_CLK_HZ                 8000000u            /* Value of the external crystal or oscillator clock frequency in Hz */
+#define CPU_XTAL_CLK_HZ                8000000U            /* Value of the external crystal or oscillator clock frequency in Hz */
 
 /* Low power mode enable */
 /* SMC_PMPROT: AHSRUN=1, AVLP=1,ALLS=1,AVLLS=0x3 */
-#define SYSTEM_SMC_PMPROT_VALUE        0xABu               /* SMC_PMPROT */
-#define SYSTEM_SMC_PMCTRL_VALUE        0x0u                /* SMC_PMCTRL */
+#define SYSTEM_SMC_PMPROT_VALUE        0xABU               /* SMC_PMPROT */
+#define SYSTEM_SMC_PMCTRL_VALUE        0x0U                /* SMC_PMCTRL */
 
-#define DEFAULT_SYSTEM_CLOCK           48000000u           /* Default System clock value */
+#define DEFAULT_SYSTEM_CLOCK           48000000U           /* Default System clock value */
 
 
 

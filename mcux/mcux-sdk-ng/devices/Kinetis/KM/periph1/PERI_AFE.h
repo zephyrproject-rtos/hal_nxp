@@ -3,14 +3,14 @@
 **     Processors:          MKM34Z256VLL7
 **                          MKM34Z256VLQ7
 **
-**     Version:             rev. 1.2, 2015-03-06
-**     Build:               b240710
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AFE
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,21 +23,24 @@
 **         Update according to reference manual rev. 1, RC.
 **     - rev. 1.2 (2015-03-06)
 **         Update according to reference manual rev. 1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AFE.h
- * @version 1.2
- * @date 2015-03-06
+ * @file PERI_AFE.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AFE
  *
  * CMSIS Peripheral Access Layer for AFE
  */
 
-#if !defined(AFE_H_)
-#define AFE_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AFE_H_)
+#define PERI_AFE_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKM34Z256VLL7) || defined(CPU_MKM34Z256VLQ7))
 #include "MKM34Z7_COMMON.h"
@@ -485,5 +488,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AFE_H_ */
+#endif  /* PERI_AFE_H_ */
 

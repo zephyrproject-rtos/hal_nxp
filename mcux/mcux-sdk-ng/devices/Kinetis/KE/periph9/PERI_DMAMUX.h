@@ -7,14 +7,14 @@
 **                          MKE17Z512VLH9
 **                          MKE17Z512VLL9
 **
-**     Version:             rev. 2.0, 2023-10-08
-**     Build:               b240715
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMAMUX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Initial version.
 **     - rev. 2.0 (2023-10-08)
 **         Based on Rev.1 RM.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DMAMUX.h
- * @version 2.0
- * @date 2023-10-08
+ * @file PERI_DMAMUX.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DMAMUX
  *
  * CMSIS Peripheral Access Layer for DMAMUX
  */
 
-#if !defined(DMAMUX_H_)
-#define DMAMUX_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DMAMUX_H_)
+#define PERI_DMAMUX_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE12Z512VLH9) || defined(CPU_MKE12Z512VLL9))
 #include "MKE12Z9_COMMON.h"
@@ -170,5 +173,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DMAMUX_H_ */
+#endif  /* PERI_DMAMUX_H_ */
 

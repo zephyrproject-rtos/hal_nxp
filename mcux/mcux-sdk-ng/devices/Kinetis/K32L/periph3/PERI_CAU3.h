@@ -3,14 +3,14 @@
 **     Processors:          K32L3A60VPJ1A_cm0plus
 **                          K32L3A60VPJ1A_cm4
 **
-**     Version:             rev. 1.0, 2019-04-22
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAU3
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -19,21 +19,24 @@
 **     Revisions:
 **     - rev. 1.0 (2019-04-22)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CAU3.h
- * @version 1.0
- * @date 2019-04-22
+ * @file PERI_CAU3.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CAU3
  *
  * CMSIS Peripheral Access Layer for CAU3
  */
 
-#if !defined(CAU3_H_)
-#define CAU3_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CAU3_H_)
+#define PERI_CAU3_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32L3A60VPJ1A_cm0plus))
 #include "K32L3A60_cm0plus_COMMON.h"
@@ -349,10 +352,10 @@ typedef struct {
 #define CAU3_CR_DTCCFG_MASK                      (0x7000000U)
 #define CAU3_CR_DTCCFG_SHIFT                     (24U)
 /*! DTCCFG - Default Task Completion Configuration
- *  0b100..Issue a DMA request
- *  0b010..Assert Event Completion Signal
- *  0b001..Issue an Interrupt Request
  *  0b000..no explicit action
+ *  0b001..Issue an Interrupt Request
+ *  0b010..Assert Event Completion Signal
+ *  0b100..Issue a DMA request
  */
 #define CAU3_CR_DTCCFG(x)                        (((uint32_t)(((uint32_t)(x)) << CAU3_CR_DTCCFG_SHIFT)) & CAU3_CR_DTCCFG_MASK)
 
@@ -480,10 +483,10 @@ typedef struct {
 #define CAU3_SR_TCCFG_MASK                       (0x7000000U)
 #define CAU3_SR_TCCFG_SHIFT                      (24U)
 /*! TCCFG - Task completion configuration
- *  0b100..Issue a DMA request
- *  0b010..Assert the Event Completion Signal
- *  0b001..Assert an interrupt request
  *  0b000..No action
+ *  0b001..Assert an interrupt request
+ *  0b010..Assert the Event Completion Signal
+ *  0b100..Issue a DMA request
  */
 #define CAU3_SR_TCCFG(x)                         (((uint32_t)(((uint32_t)(x)) << CAU3_SR_TCCFG_SHIFT)) & CAU3_SR_TCCFG_MASK)
 
@@ -765,9 +768,9 @@ typedef struct {
 #define CAU3_CC_CMD_CMD_SHIFT                    (16U)
 /*! CMD - Command
  *  0b000..Use CR[DTCCFG] for task completion configuration
- *  0b100..Issue a DMA request
- *  0b010..Assert Event Completion Signal
  *  0b001..Issue an interrupt request
+ *  0b010..Assert Event Completion Signal
+ *  0b100..Issue a DMA request
  */
 #define CAU3_CC_CMD_CMD(x)                       (((uint32_t)(((uint32_t)(x)) << CAU3_CC_CMD_CMD_SHIFT)) & CAU3_CC_CMD_CMD_MASK)
 /*! @} */
@@ -1285,5 +1288,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CAU3_H_ */
+#endif  /* PERI_CAU3_H_ */
 

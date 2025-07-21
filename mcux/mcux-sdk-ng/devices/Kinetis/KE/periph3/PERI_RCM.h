@@ -17,14 +17,14 @@
 **                          MKE16Z64VLD4
 **                          MKE16Z64VLF4
 **
-**     Version:             rev. 3.0, 2020-01-22
-**     Build:               b240712
+**     Version:             rev. 4.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -37,21 +37,24 @@
 **         Based on rev1 RM.
 **     - rev. 3.0 (2020-01-22)
 **         Add 40 pins part numbers.
+**     - rev. 4.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RCM.h
- * @version 3.0
- * @date 2020-01-22
+ * @file PERI_RCM.h
+ * @version 4.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RCM
  *
  * CMSIS Peripheral Access Layer for RCM
  */
 
-#if !defined(RCM_H_)
-#define RCM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RCM_H_)
+#define PERI_RCM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE14Z32VFP4) || defined(CPU_MKE14Z32VLD4) || defined(CPU_MKE14Z32VLF4) || defined(CPU_MKE14Z64VFP4) || defined(CPU_MKE14Z64VLD4) || defined(CPU_MKE14Z64VLF4))
 #include "MKE14Z4_COMMON.h"
@@ -491,5 +494,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RCM_H_ */
+#endif  /* PERI_RCM_H_ */
 
