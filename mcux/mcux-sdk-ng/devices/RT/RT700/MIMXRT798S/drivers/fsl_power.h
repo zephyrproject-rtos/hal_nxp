@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.4.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief power driver version 2.4.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /* Define the default PMIC modes for power modes. */
@@ -84,7 +84,7 @@ typedef enum pd_bits
     kPDRUNCFG_DSR_VDDN_COM = MAKE_PD_BITS(PMC_PDRCFG0, 8U), /*!< Power Switch and DSR Enable for the VDDN_COM domain. */
     kPDRUNCFG_PD_VDD2_DSP  = MAKE_PD_BITS(PMC_PDRCFG0, 9U), /*!< Power switch for the HiFi4 DSP. */
     kPDRUNCFG_PD_VDD2_MIPI = MAKE_PD_BITS(PMC_PDRCFG0, 10U),        /*!< Power Switch for the MIPI PHY. */
-    kPDRUNCFG_LP_DCDC      = MAKE_PD_BITS(PMC_PDRCFG0, 12U),        /*!< DCDC Low-Power Mode. */
+    kPDRUNCFG_LP_DCDC      = MAKE_PD_BITS(PMC_PDRCFG0, 12U),        /*!< DCDC Low-Power Mode. Deprecated, use POWER_SetRunRegulatorMode. */
     kPDRUNCFG_PD_RBB_VDD1  = MAKE_PD_BITS(PMC_PDRCFG0, 22U),        /*!< Power Down RBB in VDD1. */
     kPDRUNCFG_PD_AFBB_VDD1 = MAKE_PD_BITS(PMC_PDRCFG0, 23U),        /*!< Power Down AFBB in VDD1 Domain. */
     kPDRUNCFG_PD_RBB_VDD2  = MAKE_PD_BITS(PMC_PDRCFG0, 24U),        /*!< Power Down RBB in VDD2 Domain.*/

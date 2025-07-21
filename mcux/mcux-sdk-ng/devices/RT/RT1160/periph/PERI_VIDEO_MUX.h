@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VIDEO_MUX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file VIDEO_MUX.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_VIDEO_MUX.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for VIDEO_MUX
  *
  * CMSIS Peripheral Access Layer for VIDEO_MUX
  */
 
-#if !defined(VIDEO_MUX_H_)
-#define VIDEO_MUX_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_VIDEO_MUX_H_)
+#define PERI_VIDEO_MUX_H_                        /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -194,16 +197,16 @@ typedef struct {
 #define VIDEO_MUX_PLM_CTRL_VSYNC_OVERRIDE_MASK   (0x2U)
 #define VIDEO_MUX_PLM_CTRL_VSYNC_OVERRIDE_SHIFT  (1U)
 /*! VSYNC_OVERRIDE - VSYNC override
- *  0b1..VSYNC is asserted
  *  0b0..VSYNC is not asserted
+ *  0b1..VSYNC is asserted
  */
 #define VIDEO_MUX_PLM_CTRL_VSYNC_OVERRIDE(x)     (((uint32_t)(((uint32_t)(x)) << VIDEO_MUX_PLM_CTRL_VSYNC_OVERRIDE_SHIFT)) & VIDEO_MUX_PLM_CTRL_VSYNC_OVERRIDE_MASK)
 
 #define VIDEO_MUX_PLM_CTRL_HSYNC_OVERRIDE_MASK   (0x4U)
 #define VIDEO_MUX_PLM_CTRL_HSYNC_OVERRIDE_SHIFT  (2U)
 /*! HSYNC_OVERRIDE - HSYNC override
- *  0b1..HSYNC is asserted
  *  0b0..HSYNC is not asserted
+ *  0b1..HSYNC is asserted
  */
 #define VIDEO_MUX_PLM_CTRL_HSYNC_OVERRIDE(x)     (((uint32_t)(((uint32_t)(x)) << VIDEO_MUX_PLM_CTRL_HSYNC_OVERRIDE_SHIFT)) & VIDEO_MUX_PLM_CTRL_HSYNC_OVERRIDE_MASK)
 
@@ -301,5 +304,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* VIDEO_MUX_H_ */
+#endif  /* PERI_VIDEO_MUX_H_ */
 

@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXSPI.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_FLEXSPI.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXSPI
  *
  * CMSIS Peripheral Access Layer for FLEXSPI
  */
 
-#if !defined(FLEXSPI_H_)
-#define FLEXSPI_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXSPI_H_)
+#define PERI_FLEXSPI_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -320,8 +323,8 @@ typedef struct {
 /*! SCKBDIFFOPT - B_SCLK pad can be used as A_SCLK differential clock output (inverted clock to
  *    A_SCLK). In this case, port B flash access is not available. After changing the value of this
  *    field, MCR0[SWRESET] should be set.
- *  0b1..B_SCLK pad is used as port A SCLK inverted clock output (Differential clock to A_SCLK). Port B flash access is not available.
  *  0b0..B_SCLK pad is used as port B SCLK clock output. Port B flash access is available.
+ *  0b1..B_SCLK pad is used as port A SCLK inverted clock output (Differential clock to A_SCLK). Port B flash access is not available.
  */
 #define FLEXSPI_MCR2_SCKBDIFFOPT(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR2_SCKBDIFFOPT_SHIFT)) & FLEXSPI_MCR2_SCKBDIFFOPT_MASK)
 
@@ -1469,5 +1472,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXSPI_H_ */
+#endif  /* PERI_FLEXSPI_H_ */
 

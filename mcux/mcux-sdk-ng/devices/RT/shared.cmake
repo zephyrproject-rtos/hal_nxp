@@ -2,4 +2,8 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-# Empty file to make avoid cmake process failure.
+# common configuration
+include(${SdkRootDirPath}/arch/arm/configuration/RT.cmake)
+
+# middlewares and components
+include(${SdkRootDirPath}/devices/arm/shared.cmake)

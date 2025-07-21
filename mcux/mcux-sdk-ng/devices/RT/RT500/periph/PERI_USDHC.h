@@ -9,14 +9,14 @@
 **                          MIMXRT595SFFOC_cm33
 **                          MIMXRT595SFFOC_dsp
 **
-**     Version:             rev. 5.0, 2020-08-27
-**     Build:               b240705
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USDHC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2020-08-27)
 **         Base on Rev.C RM.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USDHC.h
- * @version 5.0
- * @date 2020-08-27
+ * @file PERI_USDHC.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USDHC
  *
  * CMSIS Peripheral Access Layer for USDHC
  */
 
-#if !defined(USDHC_H_)
-#define USDHC_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USDHC_H_)
+#define PERI_USDHC_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT533SFAWC) || defined(CPU_MIMXRT533SFFOC))
 #include "MIMXRT533S_COMMON.h"
@@ -123,7 +126,7 @@ typedef struct {
   __IO uint32_t WTMK_LVL;                          /**< Watermark Level, offset: 0x44 */
   __IO uint32_t MIX_CTRL;                          /**< Mixer Control, offset: 0x48 */
        uint8_t RESERVED_0[4];
-  __O  uint32_t FORCE_EVENT;                       /**< Force Event, offset: 0x50 */
+  __IO uint32_t FORCE_EVENT;                       /**< Force Event, offset: 0x50 */
   __I  uint32_t ADMA_ERR_STATUS;                   /**< ADMA Error Status, offset: 0x54 */
   __IO uint32_t ADMA_SYS_ADDR;                     /**< ADMA System Address, offset: 0x58 */
        uint8_t RESERVED_1[4];
@@ -164,25 +167,25 @@ typedef struct {
 #define USDHC_BLK_ATT_BLKSIZE_MASK               (0x1FFFU)
 #define USDHC_BLK_ATT_BLKSIZE_SHIFT              (0U)
 /*! BLKSIZE - Transfer block size
- *  0b1000000000000..4096 bytes
- *  0b0100000000000..2048 bytes
- *  0b0001000000000..512 bytes
- *  0b0000111111111..511 bytes
- *  0b0000000000100..4 bytes
- *  0b0000000000011..3 bytes
- *  0b0000000000010..2 bytes
- *  0b0000000000001..1 byte
  *  0b0000000000000..No data transfer
+ *  0b0000000000001..1 byte
+ *  0b0000000000010..2 bytes
+ *  0b0000000000011..3 bytes
+ *  0b0000000000100..4 bytes
+ *  0b0000111111111..511 bytes
+ *  0b0001000000000..512 bytes
+ *  0b0100000000000..2048 bytes
+ *  0b1000000000000..4096 bytes
  */
 #define USDHC_BLK_ATT_BLKSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_BLK_ATT_BLKSIZE_SHIFT)) & USDHC_BLK_ATT_BLKSIZE_MASK)
 
 #define USDHC_BLK_ATT_BLKCNT_MASK                (0xFFFF0000U)
 #define USDHC_BLK_ATT_BLKCNT_SHIFT               (16U)
 /*! BLKCNT - Blocks count for current transfer
- *  0b1111111111111111..65535 blocks
- *  0b0000000000000010..2 blocks
- *  0b0000000000000001..1 block
  *  0b0000000000000000..Stop count
+ *  0b0000000000000001..1 block
+ *  0b0000000000000010..2 blocks
+ *  0b1111111111111111..65535 blocks
  */
 #define USDHC_BLK_ATT_BLKCNT(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_BLK_ATT_BLKCNT_SHIFT)) & USDHC_BLK_ATT_BLKCNT_MASK)
 /*! @} */
@@ -212,34 +215,34 @@ typedef struct {
 #define USDHC_CMD_XFR_TYP_CCCEN_MASK             (0x80000U)
 #define USDHC_CMD_XFR_TYP_CCCEN_SHIFT            (19U)
 /*! CCCEN - Command CRC check enable
- *  0b1..Enables command CRC check
  *  0b0..Disables command CRC check
+ *  0b1..Enables command CRC check
  */
 #define USDHC_CMD_XFR_TYP_CCCEN(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_CMD_XFR_TYP_CCCEN_SHIFT)) & USDHC_CMD_XFR_TYP_CCCEN_MASK)
 
 #define USDHC_CMD_XFR_TYP_CICEN_MASK             (0x100000U)
 #define USDHC_CMD_XFR_TYP_CICEN_SHIFT            (20U)
 /*! CICEN - Command index check enable
- *  0b1..Enables command index check
  *  0b0..Disable command index check
+ *  0b1..Enables command index check
  */
 #define USDHC_CMD_XFR_TYP_CICEN(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_CMD_XFR_TYP_CICEN_SHIFT)) & USDHC_CMD_XFR_TYP_CICEN_MASK)
 
 #define USDHC_CMD_XFR_TYP_DPSEL_MASK             (0x200000U)
 #define USDHC_CMD_XFR_TYP_DPSEL_SHIFT            (21U)
 /*! DPSEL - Data present select
- *  0b1..Data present
  *  0b0..No data present
+ *  0b1..Data present
  */
 #define USDHC_CMD_XFR_TYP_DPSEL(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_CMD_XFR_TYP_DPSEL_SHIFT)) & USDHC_CMD_XFR_TYP_DPSEL_MASK)
 
 #define USDHC_CMD_XFR_TYP_CMDTYP_MASK            (0xC00000U)
 #define USDHC_CMD_XFR_TYP_CMDTYP_SHIFT           (22U)
 /*! CMDTYP - Command type
- *  0b11..Abort CMD12, CMD52 for writing I/O Abort in CCCR
- *  0b10..Resume CMD52 for writing function select in CCCR
- *  0b01..Suspend CMD52 for writing bus suspend in CCCR
  *  0b00..Normal other commands
+ *  0b01..Suspend CMD52 for writing bus suspend in CCCR
+ *  0b10..Resume CMD52 for writing function select in CCCR
+ *  0b11..Abort CMD12, CMD52 for writing I/O Abort in CCCR
  */
 #define USDHC_CMD_XFR_TYP_CMDTYP(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_CMD_XFR_TYP_CMDTYP_SHIFT)) & USDHC_CMD_XFR_TYP_CMDTYP_MASK)
 
@@ -300,136 +303,136 @@ typedef struct {
 #define USDHC_PRES_STATE_CIHB_MASK               (0x1U)
 #define USDHC_PRES_STATE_CIHB_SHIFT              (0U)
 /*! CIHB - Command inhibit (CMD)
- *  0b1..Cannot issue command
  *  0b0..Can issue command using only CMD line
+ *  0b1..Cannot issue command
  */
 #define USDHC_PRES_STATE_CIHB(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_CIHB_SHIFT)) & USDHC_PRES_STATE_CIHB_MASK)
 
 #define USDHC_PRES_STATE_CDIHB_MASK              (0x2U)
 #define USDHC_PRES_STATE_CDIHB_SHIFT             (1U)
 /*! CDIHB - Command inhibit (DATA)
- *  0b1..Cannot issue command that uses the DATA line
  *  0b0..Can issue command that uses the DATA line
+ *  0b1..Cannot issue command that uses the DATA line
  */
 #define USDHC_PRES_STATE_CDIHB(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_CDIHB_SHIFT)) & USDHC_PRES_STATE_CDIHB_MASK)
 
 #define USDHC_PRES_STATE_DLA_MASK                (0x4U)
 #define USDHC_PRES_STATE_DLA_SHIFT               (2U)
 /*! DLA - Data line active
- *  0b1..DATA line active
  *  0b0..DATA line inactive
+ *  0b1..DATA line active
  */
 #define USDHC_PRES_STATE_DLA(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_DLA_SHIFT)) & USDHC_PRES_STATE_DLA_MASK)
 
 #define USDHC_PRES_STATE_SDSTB_MASK              (0x8U)
 #define USDHC_PRES_STATE_SDSTB_SHIFT             (3U)
 /*! SDSTB - SD clock stable
- *  0b1..Clock is stable.
  *  0b0..Clock is changing frequency and not stable.
+ *  0b1..Clock is stable.
  */
 #define USDHC_PRES_STATE_SDSTB(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_SDSTB_SHIFT)) & USDHC_PRES_STATE_SDSTB_MASK)
 
 #define USDHC_PRES_STATE_IPGOFF_MASK             (0x10U)
 #define USDHC_PRES_STATE_IPGOFF_SHIFT            (4U)
 /*! IPGOFF - Peripheral clock gated off internally
- *  0b1..Peripheral clock is gated off.
  *  0b0..Peripheral clock is active.
+ *  0b1..Peripheral clock is gated off.
  */
 #define USDHC_PRES_STATE_IPGOFF(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_IPGOFF_SHIFT)) & USDHC_PRES_STATE_IPGOFF_MASK)
 
 #define USDHC_PRES_STATE_HCKOFF_MASK             (0x20U)
 #define USDHC_PRES_STATE_HCKOFF_SHIFT            (5U)
 /*! HCKOFF - HCLK gated off internally
- *  0b1..HCLK is gated off.
  *  0b0..HCLK is active.
+ *  0b1..HCLK is gated off.
  */
 #define USDHC_PRES_STATE_HCKOFF(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_HCKOFF_SHIFT)) & USDHC_PRES_STATE_HCKOFF_MASK)
 
 #define USDHC_PRES_STATE_PEROFF_MASK             (0x40U)
 #define USDHC_PRES_STATE_PEROFF_SHIFT            (6U)
 /*! PEROFF - IPG_PERCLK gated off internally
- *  0b1..IPG_PERCLK is gated off.
  *  0b0..IPG_PERCLK is active.
+ *  0b1..IPG_PERCLK is gated off.
  */
 #define USDHC_PRES_STATE_PEROFF(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_PEROFF_SHIFT)) & USDHC_PRES_STATE_PEROFF_MASK)
 
 #define USDHC_PRES_STATE_SDOFF_MASK              (0x80U)
 #define USDHC_PRES_STATE_SDOFF_SHIFT             (7U)
 /*! SDOFF - SD clock gated off internally
- *  0b1..SD clock is gated off.
  *  0b0..SD clock is active.
+ *  0b1..SD clock is gated off.
  */
 #define USDHC_PRES_STATE_SDOFF(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_SDOFF_SHIFT)) & USDHC_PRES_STATE_SDOFF_MASK)
 
 #define USDHC_PRES_STATE_WTA_MASK                (0x100U)
 #define USDHC_PRES_STATE_WTA_SHIFT               (8U)
 /*! WTA - Write transfer active
- *  0b1..Transferring data
  *  0b0..No valid data
+ *  0b1..Transferring data
  */
 #define USDHC_PRES_STATE_WTA(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_WTA_SHIFT)) & USDHC_PRES_STATE_WTA_MASK)
 
 #define USDHC_PRES_STATE_RTA_MASK                (0x200U)
 #define USDHC_PRES_STATE_RTA_SHIFT               (9U)
 /*! RTA - Read transfer active
- *  0b1..Transferring data
  *  0b0..No valid data
+ *  0b1..Transferring data
  */
 #define USDHC_PRES_STATE_RTA(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_RTA_SHIFT)) & USDHC_PRES_STATE_RTA_MASK)
 
 #define USDHC_PRES_STATE_BWEN_MASK               (0x400U)
 #define USDHC_PRES_STATE_BWEN_SHIFT              (10U)
 /*! BWEN - Buffer write enable
- *  0b1..Write enable
  *  0b0..Write disable
+ *  0b1..Write enable
  */
 #define USDHC_PRES_STATE_BWEN(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_BWEN_SHIFT)) & USDHC_PRES_STATE_BWEN_MASK)
 
 #define USDHC_PRES_STATE_BREN_MASK               (0x800U)
 #define USDHC_PRES_STATE_BREN_SHIFT              (11U)
 /*! BREN - Buffer read enable
- *  0b1..Read enable
  *  0b0..Read disable
+ *  0b1..Read enable
  */
 #define USDHC_PRES_STATE_BREN(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_BREN_SHIFT)) & USDHC_PRES_STATE_BREN_MASK)
 
 #define USDHC_PRES_STATE_RTR_MASK                (0x1000U)
 #define USDHC_PRES_STATE_RTR_SHIFT               (12U)
 /*! RTR - Re-Tuning Request (only for SD3.0 SDR104 mode and EMMC HS200 mode)
- *  0b1..Sampling clock needs re-tuning
  *  0b0..Fixed or well tuned sampling clock
+ *  0b1..Sampling clock needs re-tuning
  */
 #define USDHC_PRES_STATE_RTR(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_RTR_SHIFT)) & USDHC_PRES_STATE_RTR_MASK)
 
 #define USDHC_PRES_STATE_TSCD_MASK               (0x8000U)
 #define USDHC_PRES_STATE_TSCD_SHIFT              (15U)
 /*! TSCD - Tape select change done
- *  0b1..Delay cell select change is finished.
  *  0b0..Delay cell select change is not finished.
+ *  0b1..Delay cell select change is finished.
  */
 #define USDHC_PRES_STATE_TSCD(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_TSCD_SHIFT)) & USDHC_PRES_STATE_TSCD_MASK)
 
 #define USDHC_PRES_STATE_CINST_MASK              (0x10000U)
 #define USDHC_PRES_STATE_CINST_SHIFT             (16U)
 /*! CINST - Card inserted
- *  0b1..Card inserted
  *  0b0..Power on reset or no card
+ *  0b1..Card inserted
  */
 #define USDHC_PRES_STATE_CINST(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_CINST_SHIFT)) & USDHC_PRES_STATE_CINST_MASK)
 
 #define USDHC_PRES_STATE_CDPL_MASK               (0x40000U)
 #define USDHC_PRES_STATE_CDPL_SHIFT              (18U)
 /*! CDPL - Card detect pin level
- *  0b1..Card present (CD_B = 0)
  *  0b0..No card present (CD_B = 1)
+ *  0b1..Card present (CD_B = 0)
  */
 #define USDHC_PRES_STATE_CDPL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_CDPL_SHIFT)) & USDHC_PRES_STATE_CDPL_MASK)
 
 #define USDHC_PRES_STATE_WPSPL_MASK              (0x80000U)
 #define USDHC_PRES_STATE_WPSPL_SHIFT             (19U)
 /*! WPSPL - Write protect switch pin level
- *  0b1..Write enabled (WP = 0)
  *  0b0..Write protected (WP = 1)
+ *  0b1..Write enabled (WP = 0)
  */
 #define USDHC_PRES_STATE_WPSPL(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_WPSPL_SHIFT)) & USDHC_PRES_STATE_WPSPL_MASK)
 
@@ -441,14 +444,14 @@ typedef struct {
 #define USDHC_PRES_STATE_DLSL_MASK               (0xFF000000U)
 #define USDHC_PRES_STATE_DLSL_SHIFT              (24U)
 /*! DLSL - DATA[7:0] line signal level
- *  0b00000111..Data 7 line signal level
- *  0b00000110..Data 6 line signal level
- *  0b00000101..Data 5 line signal level
- *  0b00000100..Data 4 line signal level
- *  0b00000011..Data 3 line signal level
- *  0b00000010..Data 2 line signal level
- *  0b00000001..Data 1 line signal level
  *  0b00000000..Data 0 line signal level
+ *  0b00000001..Data 1 line signal level
+ *  0b00000010..Data 2 line signal level
+ *  0b00000011..Data 3 line signal level
+ *  0b00000100..Data 4 line signal level
+ *  0b00000101..Data 5 line signal level
+ *  0b00000110..Data 6 line signal level
+ *  0b00000111..Data 7 line signal level
  */
 #define USDHC_PRES_STATE_DLSL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_DLSL_SHIFT)) & USDHC_PRES_STATE_DLSL_MASK)
 /*! @} */
@@ -459,9 +462,9 @@ typedef struct {
 #define USDHC_PROT_CTRL_DTW_MASK                 (0x6U)
 #define USDHC_PROT_CTRL_DTW_SHIFT                (1U)
 /*! DTW - Data transfer width
- *  0b10..8-bit mode
- *  0b01..4-bit mode
  *  0b00..1-bit mode
+ *  0b01..4-bit mode
+ *  0b10..8-bit mode
  *  0b11..Reserved
  */
 #define USDHC_PROT_CTRL_DTW(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_DTW_SHIFT)) & USDHC_PROT_CTRL_DTW_MASK)
@@ -469,8 +472,8 @@ typedef struct {
 #define USDHC_PROT_CTRL_D3CD_MASK                (0x8U)
 #define USDHC_PROT_CTRL_D3CD_SHIFT               (3U)
 /*! D3CD - DATA3 as card detection pin
- *  0b1..DATA3 as card detection pin
  *  0b0..DATA3 does not monitor card insertion
+ *  0b1..DATA3 as card detection pin
  */
 #define USDHC_PROT_CTRL_D3CD(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_D3CD_SHIFT)) & USDHC_PROT_CTRL_D3CD_MASK)
 
@@ -487,16 +490,16 @@ typedef struct {
 #define USDHC_PROT_CTRL_CDTL_MASK                (0x40U)
 #define USDHC_PROT_CTRL_CDTL_SHIFT               (6U)
 /*! CDTL - Card detect test level
- *  0b1..Card detect test level is 1, card inserted
  *  0b0..Card detect test level is 0, no card inserted
+ *  0b1..Card detect test level is 1, card inserted
  */
 #define USDHC_PROT_CTRL_CDTL(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CDTL_SHIFT)) & USDHC_PROT_CTRL_CDTL_MASK)
 
 #define USDHC_PROT_CTRL_CDSS_MASK                (0x80U)
 #define USDHC_PROT_CTRL_CDSS_SHIFT               (7U)
 /*! CDSS - Card detect signal selection
- *  0b1..Card detection test level is selected (for test purpose).
  *  0b0..Card detection level is selected (for normal purpose).
+ *  0b1..Card detection test level is selected (for test purpose).
  */
 #define USDHC_PROT_CTRL_CDSS(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CDSS_SHIFT)) & USDHC_PROT_CTRL_CDSS_MASK)
 
@@ -513,32 +516,32 @@ typedef struct {
 #define USDHC_PROT_CTRL_SABGREQ_MASK             (0x10000U)
 #define USDHC_PROT_CTRL_SABGREQ_SHIFT            (16U)
 /*! SABGREQ - Stop at block gap request
- *  0b1..Stop
  *  0b0..Transfer
+ *  0b1..Stop
  */
 #define USDHC_PROT_CTRL_SABGREQ(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_SABGREQ_SHIFT)) & USDHC_PROT_CTRL_SABGREQ_MASK)
 
 #define USDHC_PROT_CTRL_CREQ_MASK                (0x20000U)
 #define USDHC_PROT_CTRL_CREQ_SHIFT               (17U)
 /*! CREQ - Continue request
- *  0b1..Restart
  *  0b0..No effect
+ *  0b1..Restart
  */
 #define USDHC_PROT_CTRL_CREQ(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CREQ_SHIFT)) & USDHC_PROT_CTRL_CREQ_MASK)
 
 #define USDHC_PROT_CTRL_RWCTL_MASK               (0x40000U)
 #define USDHC_PROT_CTRL_RWCTL_SHIFT              (18U)
 /*! RWCTL - Read wait control
- *  0b1..Enables read wait control and assert read wait without stopping SD clock at block gap when SABGREQ field is set
  *  0b0..Disables read wait control and stop SD clock at block gap when SABGREQ field is set
+ *  0b1..Enables read wait control and assert read wait without stopping SD clock at block gap when SABGREQ field is set
  */
 #define USDHC_PROT_CTRL_RWCTL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_RWCTL_SHIFT)) & USDHC_PROT_CTRL_RWCTL_MASK)
 
 #define USDHC_PROT_CTRL_IABG_MASK                (0x80000U)
 #define USDHC_PROT_CTRL_IABG_SHIFT               (19U)
 /*! IABG - Interrupt at block gap
- *  0b1..Enables interrupt at block gap
  *  0b0..Disables interrupt at block gap
+ *  0b1..Enables interrupt at block gap
  */
 #define USDHC_PROT_CTRL_IABG(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_IABG_SHIFT)) & USDHC_PROT_CTRL_IABG_MASK)
 
@@ -550,41 +553,41 @@ typedef struct {
 #define USDHC_PROT_CTRL_WECINT_MASK              (0x1000000U)
 #define USDHC_PROT_CTRL_WECINT_SHIFT             (24U)
 /*! WECINT - Wakeup event enable on card interrupt
- *  0b1..Enables wakeup event enable on card interrupt
  *  0b0..Disables wakeup event enable on card interrupt
+ *  0b1..Enables wakeup event enable on card interrupt
  */
 #define USDHC_PROT_CTRL_WECINT(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_WECINT_SHIFT)) & USDHC_PROT_CTRL_WECINT_MASK)
 
 #define USDHC_PROT_CTRL_WECINS_MASK              (0x2000000U)
 #define USDHC_PROT_CTRL_WECINS_SHIFT             (25U)
 /*! WECINS - Wakeup event enable on SD card insertion
- *  0b1..Enable wakeup event enable on SD card insertion
  *  0b0..Disable wakeup event enable on SD card insertion
+ *  0b1..Enable wakeup event enable on SD card insertion
  */
 #define USDHC_PROT_CTRL_WECINS(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_WECINS_SHIFT)) & USDHC_PROT_CTRL_WECINS_MASK)
 
 #define USDHC_PROT_CTRL_WECRM_MASK               (0x4000000U)
 #define USDHC_PROT_CTRL_WECRM_SHIFT              (26U)
 /*! WECRM - Wakeup event enable on SD card removal
- *  0b1..Enables wakeup event enable on SD card removal
  *  0b0..Disables wakeup event enable on SD card removal
+ *  0b1..Enables wakeup event enable on SD card removal
  */
 #define USDHC_PROT_CTRL_WECRM(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_WECRM_SHIFT)) & USDHC_PROT_CTRL_WECRM_MASK)
 
 #define USDHC_PROT_CTRL_BURST_LEN_EN_MASK        (0x38000000U)
 #define USDHC_PROT_CTRL_BURST_LEN_EN_SHIFT       (27U)
 /*! BURST_LEN_EN - BURST length enable for INCR, INCR4 / INCR8 / INCR16, INCR4-WRAP / INCR8-WRAP / INCR16-WRAP
- *  0bxx1..Burst length is enabled for INCR.
- *  0bx1x..Burst length is enabled for INCR4 / INCR8 / INCR16.
  *  0b1xx..Burst length is enabled for INCR4-WRAP / INCR8-WRAP / INCR16-WRAP.
+ *  0bx1x..Burst length is enabled for INCR4 / INCR8 / INCR16.
+ *  0bxx1..Burst length is enabled for INCR.
  */
 #define USDHC_PROT_CTRL_BURST_LEN_EN(x)          (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_BURST_LEN_EN_SHIFT)) & USDHC_PROT_CTRL_BURST_LEN_EN_MASK)
 
 #define USDHC_PROT_CTRL_NON_EXACT_BLK_RD_MASK    (0x40000000U)
 #define USDHC_PROT_CTRL_NON_EXACT_BLK_RD_SHIFT   (30U)
 /*! NON_EXACT_BLK_RD - Non-exact block read
- *  0b1..The block read is non-exact block read. Host driver needs to issue abort command to terminate this multi-block read.
  *  0b0..The block read is exact block read. Host driver does not need to issue abort command to terminate this multi-block read.
+ *  0b1..The block read is non-exact block read. Host driver needs to issue abort command to terminate this multi-block read.
  */
 #define USDHC_PROT_CTRL_NON_EXACT_BLK_RD(x)      (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_NON_EXACT_BLK_RD_SHIFT)) & USDHC_PROT_CTRL_NON_EXACT_BLK_RD_MASK)
 /*! @} */
@@ -610,22 +613,22 @@ typedef struct {
 #define USDHC_SYS_CTRL_DTOCV_MASK                (0xF0000U)
 #define USDHC_SYS_CTRL_DTOCV_SHIFT               (16U)
 /*! DTOCV - Data timeout counter value
- *  0b1111..SDCLK x 2 29 + SDCLK x 2 28 + SDCLK x 2 27 + SDCLK x 2 26
- *  0b1110..SDCLK x 2 28
- *  0b1101..SDCLK x 2 27
- *  0b1100..SDCLK x 2 26
- *  0b1011..SDCLK x 2 25
- *  0b1010..SDCLK x 2 24
- *  0b1001..SDCLK x 2 23
- *  0b1000..SDCLK x 2 22
- *  0b0111..SDCLK x 2 21
- *  0b0110..SDCLK x 2 20
- *  0b0101..SDCLK x 2 19
- *  0b0100..SDCLK x 2 18
- *  0b0011..SDCLK x 2 17
- *  0b0010..SDCLK x 2 16
- *  0b0001..SDCLK x 2 15
  *  0b0000..SDCLK x 2 14
+ *  0b0001..SDCLK x 2 15
+ *  0b0010..SDCLK x 2 16
+ *  0b0011..SDCLK x 2 17
+ *  0b0100..SDCLK x 2 18
+ *  0b0101..SDCLK x 2 19
+ *  0b0110..SDCLK x 2 20
+ *  0b0111..SDCLK x 2 21
+ *  0b1000..SDCLK x 2 22
+ *  0b1001..SDCLK x 2 23
+ *  0b1010..SDCLK x 2 24
+ *  0b1011..SDCLK x 2 25
+ *  0b1100..SDCLK x 2 26
+ *  0b1101..SDCLK x 2 27
+ *  0b1110..SDCLK x 2 28
+ *  0b1111..SDCLK x 2 29 + SDCLK x 2 28 + SDCLK x 2 27 + SDCLK x 2 26
  */
 #define USDHC_SYS_CTRL_DTOCV(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_DTOCV_SHIFT)) & USDHC_SYS_CTRL_DTOCV_MASK)
 
@@ -637,24 +640,24 @@ typedef struct {
 #define USDHC_SYS_CTRL_RSTA_MASK                 (0x1000000U)
 #define USDHC_SYS_CTRL_RSTA_SHIFT                (24U)
 /*! RSTA - Software reset for all
- *  0b1..Reset
  *  0b0..No reset
+ *  0b1..Reset
  */
 #define USDHC_SYS_CTRL_RSTA(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_RSTA_SHIFT)) & USDHC_SYS_CTRL_RSTA_MASK)
 
 #define USDHC_SYS_CTRL_RSTC_MASK                 (0x2000000U)
 #define USDHC_SYS_CTRL_RSTC_SHIFT                (25U)
 /*! RSTC - Software reset for CMD line
- *  0b1..Reset
  *  0b0..No reset
+ *  0b1..Reset
  */
 #define USDHC_SYS_CTRL_RSTC(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_RSTC_SHIFT)) & USDHC_SYS_CTRL_RSTC_MASK)
 
 #define USDHC_SYS_CTRL_RSTD_MASK                 (0x4000000U)
 #define USDHC_SYS_CTRL_RSTD_SHIFT                (26U)
 /*! RSTD - Software reset for data line
- *  0b1..Reset
  *  0b0..No reset
+ *  0b1..Reset
  */
 #define USDHC_SYS_CTRL_RSTD(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_RSTD_SHIFT)) & USDHC_SYS_CTRL_RSTD_MASK)
 
@@ -675,80 +678,80 @@ typedef struct {
 #define USDHC_INT_STATUS_CC_MASK                 (0x1U)
 #define USDHC_INT_STATUS_CC_SHIFT                (0U)
 /*! CC - Command complete
- *  0b1..Command complete
  *  0b0..Command not complete
+ *  0b1..Command complete
  */
 #define USDHC_INT_STATUS_CC(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CC_SHIFT)) & USDHC_INT_STATUS_CC_MASK)
 
 #define USDHC_INT_STATUS_TC_MASK                 (0x2U)
 #define USDHC_INT_STATUS_TC_SHIFT                (1U)
 /*! TC - Transfer complete
- *  0b1..Transfer complete
  *  0b0..Transfer does not complete
+ *  0b1..Transfer complete
  */
 #define USDHC_INT_STATUS_TC(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_TC_SHIFT)) & USDHC_INT_STATUS_TC_MASK)
 
 #define USDHC_INT_STATUS_BGE_MASK                (0x4U)
 #define USDHC_INT_STATUS_BGE_SHIFT               (2U)
 /*! BGE - Block gap event
- *  0b1..Transaction stopped at block gap
  *  0b0..No block gap event
+ *  0b1..Transaction stopped at block gap
  */
 #define USDHC_INT_STATUS_BGE(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_BGE_SHIFT)) & USDHC_INT_STATUS_BGE_MASK)
 
 #define USDHC_INT_STATUS_DINT_MASK               (0x8U)
 #define USDHC_INT_STATUS_DINT_SHIFT              (3U)
 /*! DINT - DMA interrupt
- *  0b1..DMA interrupt is generated.
  *  0b0..No DMA interrupt
+ *  0b1..DMA interrupt is generated.
  */
 #define USDHC_INT_STATUS_DINT(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_DINT_SHIFT)) & USDHC_INT_STATUS_DINT_MASK)
 
 #define USDHC_INT_STATUS_BWR_MASK                (0x10U)
 #define USDHC_INT_STATUS_BWR_SHIFT               (4U)
 /*! BWR - Buffer write ready
- *  0b1..Ready to write buffer
  *  0b0..Not ready to write buffer
+ *  0b1..Ready to write buffer
  */
 #define USDHC_INT_STATUS_BWR(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_BWR_SHIFT)) & USDHC_INT_STATUS_BWR_MASK)
 
 #define USDHC_INT_STATUS_BRR_MASK                (0x20U)
 #define USDHC_INT_STATUS_BRR_SHIFT               (5U)
 /*! BRR - Buffer read ready
- *  0b1..Ready to read buffer
  *  0b0..Not ready to read buffer
+ *  0b1..Ready to read buffer
  */
 #define USDHC_INT_STATUS_BRR(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_BRR_SHIFT)) & USDHC_INT_STATUS_BRR_MASK)
 
 #define USDHC_INT_STATUS_CINS_MASK               (0x40U)
 #define USDHC_INT_STATUS_CINS_SHIFT              (6U)
 /*! CINS - Card insertion
- *  0b1..Card inserted
  *  0b0..Card state unstable or removed
+ *  0b1..Card inserted
  */
 #define USDHC_INT_STATUS_CINS(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CINS_SHIFT)) & USDHC_INT_STATUS_CINS_MASK)
 
 #define USDHC_INT_STATUS_CRM_MASK                (0x80U)
 #define USDHC_INT_STATUS_CRM_SHIFT               (7U)
 /*! CRM - Card removal
- *  0b1..Card removed
  *  0b0..Card state unstable or inserted
+ *  0b1..Card removed
  */
 #define USDHC_INT_STATUS_CRM(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CRM_SHIFT)) & USDHC_INT_STATUS_CRM_MASK)
 
 #define USDHC_INT_STATUS_CINT_MASK               (0x100U)
 #define USDHC_INT_STATUS_CINT_SHIFT              (8U)
 /*! CINT - Card interrupt
- *  0b1..Generate card interrupt
  *  0b0..No card interrupt
+ *  0b1..Generate card interrupt
  */
 #define USDHC_INT_STATUS_CINT(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CINT_SHIFT)) & USDHC_INT_STATUS_CINT_MASK)
 
 #define USDHC_INT_STATUS_RTE_MASK                (0x1000U)
 #define USDHC_INT_STATUS_RTE_SHIFT               (12U)
 /*! RTE - Re-tuning event: (only for SD3.0 SDR104 mode and EMMC HS200 mode)
- *  0b1..Re-tuning should be performed.
  *  0b0..Re-tuning is not required.
+ *  0b1..Re-tuning should be performed.
  */
 #define USDHC_INT_STATUS_RTE(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_RTE_SHIFT)) & USDHC_INT_STATUS_RTE_MASK)
 
@@ -760,64 +763,64 @@ typedef struct {
 #define USDHC_INT_STATUS_CTOE_MASK               (0x10000U)
 #define USDHC_INT_STATUS_CTOE_SHIFT              (16U)
 /*! CTOE - Command timeout error
- *  0b1..Time out
  *  0b0..No error
+ *  0b1..Time out
  */
 #define USDHC_INT_STATUS_CTOE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CTOE_SHIFT)) & USDHC_INT_STATUS_CTOE_MASK)
 
 #define USDHC_INT_STATUS_CCE_MASK                (0x20000U)
 #define USDHC_INT_STATUS_CCE_SHIFT               (17U)
 /*! CCE - Command CRC error
- *  0b1..CRC error generated
  *  0b0..No error
+ *  0b1..CRC error generated
  */
 #define USDHC_INT_STATUS_CCE(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CCE_SHIFT)) & USDHC_INT_STATUS_CCE_MASK)
 
 #define USDHC_INT_STATUS_CEBE_MASK               (0x40000U)
 #define USDHC_INT_STATUS_CEBE_SHIFT              (18U)
 /*! CEBE - Command end bit error
- *  0b1..End bit error generated
  *  0b0..No error
+ *  0b1..End bit error generated
  */
 #define USDHC_INT_STATUS_CEBE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CEBE_SHIFT)) & USDHC_INT_STATUS_CEBE_MASK)
 
 #define USDHC_INT_STATUS_CIE_MASK                (0x80000U)
 #define USDHC_INT_STATUS_CIE_SHIFT               (19U)
 /*! CIE - Command index error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_INT_STATUS_CIE(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_CIE_SHIFT)) & USDHC_INT_STATUS_CIE_MASK)
 
 #define USDHC_INT_STATUS_DTOE_MASK               (0x100000U)
 #define USDHC_INT_STATUS_DTOE_SHIFT              (20U)
 /*! DTOE - Data timeout error
- *  0b1..Time out
  *  0b0..No error
+ *  0b1..Time out
  */
 #define USDHC_INT_STATUS_DTOE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_DTOE_SHIFT)) & USDHC_INT_STATUS_DTOE_MASK)
 
 #define USDHC_INT_STATUS_DCE_MASK                (0x200000U)
 #define USDHC_INT_STATUS_DCE_SHIFT               (21U)
 /*! DCE - Data CRC error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_INT_STATUS_DCE(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_DCE_SHIFT)) & USDHC_INT_STATUS_DCE_MASK)
 
 #define USDHC_INT_STATUS_DEBE_MASK               (0x400000U)
 #define USDHC_INT_STATUS_DEBE_SHIFT              (22U)
 /*! DEBE - Data end bit error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_INT_STATUS_DEBE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_DEBE_SHIFT)) & USDHC_INT_STATUS_DEBE_MASK)
 
 #define USDHC_INT_STATUS_AC12E_MASK              (0x1000000U)
 #define USDHC_INT_STATUS_AC12E_SHIFT             (24U)
 /*! AC12E - Auto CMD12 error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_INT_STATUS_AC12E(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_AC12E_SHIFT)) & USDHC_INT_STATUS_AC12E_MASK)
 
@@ -829,8 +832,8 @@ typedef struct {
 #define USDHC_INT_STATUS_DMAE_MASK               (0x10000000U)
 #define USDHC_INT_STATUS_DMAE_SHIFT              (28U)
 /*! DMAE - DMA error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_INT_STATUS_DMAE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_DMAE_SHIFT)) & USDHC_INT_STATUS_DMAE_MASK)
 /*! @} */
@@ -841,168 +844,168 @@ typedef struct {
 #define USDHC_INT_STATUS_EN_CCSEN_MASK           (0x1U)
 #define USDHC_INT_STATUS_EN_CCSEN_SHIFT          (0U)
 /*! CCSEN - Command complete status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CCSEN(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CCSEN_SHIFT)) & USDHC_INT_STATUS_EN_CCSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_TCSEN_MASK           (0x2U)
 #define USDHC_INT_STATUS_EN_TCSEN_SHIFT          (1U)
 /*! TCSEN - Transfer complete status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_TCSEN(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_TCSEN_SHIFT)) & USDHC_INT_STATUS_EN_TCSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_BGESEN_MASK          (0x4U)
 #define USDHC_INT_STATUS_EN_BGESEN_SHIFT         (2U)
 /*! BGESEN - Block gap event status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_BGESEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_BGESEN_SHIFT)) & USDHC_INT_STATUS_EN_BGESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_DINTSEN_MASK         (0x8U)
 #define USDHC_INT_STATUS_EN_DINTSEN_SHIFT        (3U)
 /*! DINTSEN - DMA interrupt status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_DINTSEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_DINTSEN_SHIFT)) & USDHC_INT_STATUS_EN_DINTSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_BWRSEN_MASK          (0x10U)
 #define USDHC_INT_STATUS_EN_BWRSEN_SHIFT         (4U)
 /*! BWRSEN - Buffer write ready status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_BWRSEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_BWRSEN_SHIFT)) & USDHC_INT_STATUS_EN_BWRSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_BRRSEN_MASK          (0x20U)
 #define USDHC_INT_STATUS_EN_BRRSEN_SHIFT         (5U)
 /*! BRRSEN - Buffer read ready status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_BRRSEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_BRRSEN_SHIFT)) & USDHC_INT_STATUS_EN_BRRSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CINSSEN_MASK         (0x40U)
 #define USDHC_INT_STATUS_EN_CINSSEN_SHIFT        (6U)
 /*! CINSSEN - Card insertion status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CINSSEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CINSSEN_SHIFT)) & USDHC_INT_STATUS_EN_CINSSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CRMSEN_MASK          (0x80U)
 #define USDHC_INT_STATUS_EN_CRMSEN_SHIFT         (7U)
 /*! CRMSEN - Card removal status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CRMSEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CRMSEN_SHIFT)) & USDHC_INT_STATUS_EN_CRMSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CINTSEN_MASK         (0x100U)
 #define USDHC_INT_STATUS_EN_CINTSEN_SHIFT        (8U)
 /*! CINTSEN - Card interrupt status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CINTSEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CINTSEN_SHIFT)) & USDHC_INT_STATUS_EN_CINTSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_RTESEN_MASK          (0x1000U)
 #define USDHC_INT_STATUS_EN_RTESEN_SHIFT         (12U)
 /*! RTESEN - Re-tuning event status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_RTESEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_RTESEN_SHIFT)) & USDHC_INT_STATUS_EN_RTESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_TPSEN_MASK           (0x4000U)
 #define USDHC_INT_STATUS_EN_TPSEN_SHIFT          (14U)
 /*! TPSEN - Tuning pass status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_TPSEN(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_TPSEN_SHIFT)) & USDHC_INT_STATUS_EN_TPSEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CTOESEN_MASK         (0x10000U)
 #define USDHC_INT_STATUS_EN_CTOESEN_SHIFT        (16U)
 /*! CTOESEN - Command timeout error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CTOESEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CTOESEN_SHIFT)) & USDHC_INT_STATUS_EN_CTOESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CCESEN_MASK          (0x20000U)
 #define USDHC_INT_STATUS_EN_CCESEN_SHIFT         (17U)
 /*! CCESEN - Command CRC error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CCESEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CCESEN_SHIFT)) & USDHC_INT_STATUS_EN_CCESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CEBESEN_MASK         (0x40000U)
 #define USDHC_INT_STATUS_EN_CEBESEN_SHIFT        (18U)
 /*! CEBESEN - Command end bit error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CEBESEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CEBESEN_SHIFT)) & USDHC_INT_STATUS_EN_CEBESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_CIESEN_MASK          (0x80000U)
 #define USDHC_INT_STATUS_EN_CIESEN_SHIFT         (19U)
 /*! CIESEN - Command index error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_CIESEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_CIESEN_SHIFT)) & USDHC_INT_STATUS_EN_CIESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_DTOESEN_MASK         (0x100000U)
 #define USDHC_INT_STATUS_EN_DTOESEN_SHIFT        (20U)
 /*! DTOESEN - Data timeout error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_DTOESEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_DTOESEN_SHIFT)) & USDHC_INT_STATUS_EN_DTOESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_DCESEN_MASK          (0x200000U)
 #define USDHC_INT_STATUS_EN_DCESEN_SHIFT         (21U)
 /*! DCESEN - Data CRC error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_DCESEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_DCESEN_SHIFT)) & USDHC_INT_STATUS_EN_DCESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_DEBESEN_MASK         (0x400000U)
 #define USDHC_INT_STATUS_EN_DEBESEN_SHIFT        (22U)
 /*! DEBESEN - Data end bit error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_DEBESEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_DEBESEN_SHIFT)) & USDHC_INT_STATUS_EN_DEBESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_AC12ESEN_MASK        (0x1000000U)
 #define USDHC_INT_STATUS_EN_AC12ESEN_SHIFT       (24U)
 /*! AC12ESEN - Auto CMD12 error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_AC12ESEN(x)          (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_AC12ESEN_SHIFT)) & USDHC_INT_STATUS_EN_AC12ESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_TNESEN_MASK          (0x4000000U)
 #define USDHC_INT_STATUS_EN_TNESEN_SHIFT         (26U)
 /*! TNESEN - Tuning error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_TNESEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_TNESEN_SHIFT)) & USDHC_INT_STATUS_EN_TNESEN_MASK)
 
 #define USDHC_INT_STATUS_EN_DMAESEN_MASK         (0x10000000U)
 #define USDHC_INT_STATUS_EN_DMAESEN_SHIFT        (28U)
 /*! DMAESEN - DMA error status enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_STATUS_EN_DMAESEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_STATUS_EN_DMAESEN_SHIFT)) & USDHC_INT_STATUS_EN_DMAESEN_MASK)
 /*! @} */
@@ -1013,168 +1016,168 @@ typedef struct {
 #define USDHC_INT_SIGNAL_EN_CCIEN_MASK           (0x1U)
 #define USDHC_INT_SIGNAL_EN_CCIEN_SHIFT          (0U)
 /*! CCIEN - Command complete interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CCIEN(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CCIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CCIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_TCIEN_MASK           (0x2U)
 #define USDHC_INT_SIGNAL_EN_TCIEN_SHIFT          (1U)
 /*! TCIEN - Transfer complete interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_TCIEN(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_TCIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_TCIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_BGEIEN_MASK          (0x4U)
 #define USDHC_INT_SIGNAL_EN_BGEIEN_SHIFT         (2U)
 /*! BGEIEN - Block gap event interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_BGEIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_BGEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_BGEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_DINTIEN_MASK         (0x8U)
 #define USDHC_INT_SIGNAL_EN_DINTIEN_SHIFT        (3U)
 /*! DINTIEN - DMA interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_DINTIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_DINTIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_DINTIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_BWRIEN_MASK          (0x10U)
 #define USDHC_INT_SIGNAL_EN_BWRIEN_SHIFT         (4U)
 /*! BWRIEN - Buffer write ready interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_BWRIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_BWRIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_BWRIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_BRRIEN_MASK          (0x20U)
 #define USDHC_INT_SIGNAL_EN_BRRIEN_SHIFT         (5U)
 /*! BRRIEN - Buffer read ready interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_BRRIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_BRRIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_BRRIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CINSIEN_MASK         (0x40U)
 #define USDHC_INT_SIGNAL_EN_CINSIEN_SHIFT        (6U)
 /*! CINSIEN - Card insertion interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CINSIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CINSIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CINSIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CRMIEN_MASK          (0x80U)
 #define USDHC_INT_SIGNAL_EN_CRMIEN_SHIFT         (7U)
 /*! CRMIEN - Card removal interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CRMIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CRMIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CRMIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CINTIEN_MASK         (0x100U)
 #define USDHC_INT_SIGNAL_EN_CINTIEN_SHIFT        (8U)
 /*! CINTIEN - Card interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CINTIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CINTIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CINTIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_RTEIEN_MASK          (0x1000U)
 #define USDHC_INT_SIGNAL_EN_RTEIEN_SHIFT         (12U)
 /*! RTEIEN - Re-tuning event interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_RTEIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_RTEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_RTEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_TPIEN_MASK           (0x4000U)
 #define USDHC_INT_SIGNAL_EN_TPIEN_SHIFT          (14U)
 /*! TPIEN - Tuning Pass interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_TPIEN(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_TPIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_TPIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CTOEIEN_MASK         (0x10000U)
 #define USDHC_INT_SIGNAL_EN_CTOEIEN_SHIFT        (16U)
 /*! CTOEIEN - Command timeout error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CTOEIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CTOEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CTOEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CCEIEN_MASK          (0x20000U)
 #define USDHC_INT_SIGNAL_EN_CCEIEN_SHIFT         (17U)
 /*! CCEIEN - Command CRC error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CCEIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CCEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CCEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CEBEIEN_MASK         (0x40000U)
 #define USDHC_INT_SIGNAL_EN_CEBEIEN_SHIFT        (18U)
 /*! CEBEIEN - Command end bit error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CEBEIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CEBEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CEBEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_CIEIEN_MASK          (0x80000U)
 #define USDHC_INT_SIGNAL_EN_CIEIEN_SHIFT         (19U)
 /*! CIEIEN - Command index error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_CIEIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_CIEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_CIEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_DTOEIEN_MASK         (0x100000U)
 #define USDHC_INT_SIGNAL_EN_DTOEIEN_SHIFT        (20U)
 /*! DTOEIEN - Data timeout error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_DTOEIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_DTOEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_DTOEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_DCEIEN_MASK          (0x200000U)
 #define USDHC_INT_SIGNAL_EN_DCEIEN_SHIFT         (21U)
 /*! DCEIEN - Data CRC error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_DCEIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_DCEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_DCEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_DEBEIEN_MASK         (0x400000U)
 #define USDHC_INT_SIGNAL_EN_DEBEIEN_SHIFT        (22U)
 /*! DEBEIEN - Data end bit error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_DEBEIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_DEBEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_DEBEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_AC12EIEN_MASK        (0x1000000U)
 #define USDHC_INT_SIGNAL_EN_AC12EIEN_SHIFT       (24U)
 /*! AC12EIEN - Auto CMD12 error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_AC12EIEN(x)          (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_AC12EIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_AC12EIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_TNEIEN_MASK          (0x4000000U)
 #define USDHC_INT_SIGNAL_EN_TNEIEN_SHIFT         (26U)
 /*! TNEIEN - Tuning error interrupt enable
- *  0b1..Enabled
  *  0b0..Masked
+ *  0b1..Enabled
  */
 #define USDHC_INT_SIGNAL_EN_TNEIEN(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_TNEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_TNEIEN_MASK)
 
 #define USDHC_INT_SIGNAL_EN_DMAEIEN_MASK         (0x10000000U)
 #define USDHC_INT_SIGNAL_EN_DMAEIEN_SHIFT        (28U)
 /*! DMAEIEN - DMA error interrupt enable
- *  0b1..Enable
  *  0b0..Masked
+ *  0b1..Enable
  */
 #define USDHC_INT_SIGNAL_EN_DMAEIEN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_INT_SIGNAL_EN_DMAEIEN_SHIFT)) & USDHC_INT_SIGNAL_EN_DMAEIEN_MASK)
 /*! @} */
@@ -1185,48 +1188,48 @@ typedef struct {
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12NE_MASK   (0x1U)
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12NE_SHIFT  (0U)
 /*! AC12NE - Auto CMD12 not executed
- *  0b1..Not executed
  *  0b0..Executed
+ *  0b1..Not executed
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12NE(x)     (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_AC12NE_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_AC12NE_MASK)
 
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12TOE_MASK  (0x2U)
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12TOE_SHIFT (1U)
 /*! AC12TOE - Auto CMD12 / 23 timeout error
- *  0b1..Time out
  *  0b0..No error
+ *  0b1..Time out
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12TOE(x)    (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_AC12TOE_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_AC12TOE_MASK)
 
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12EBE_MASK  (0x4U)
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12EBE_SHIFT (2U)
 /*! AC12EBE - Auto CMD12 / 23 end bit error
- *  0b1..End bit error generated
  *  0b0..No error
+ *  0b1..End bit error generated
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12EBE(x)    (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_AC12EBE_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_AC12EBE_MASK)
 
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12CE_MASK   (0x8U)
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12CE_SHIFT  (3U)
 /*! AC12CE - Auto CMD12 / 23 CRC error
- *  0b1..CRC error met in Auto CMD12/23 response
  *  0b0..No CRC error
+ *  0b1..CRC error met in Auto CMD12/23 response
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12CE(x)     (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_AC12CE_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_AC12CE_MASK)
 
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12IE_MASK   (0x10U)
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12IE_SHIFT  (4U)
 /*! AC12IE - Auto CMD12 / 23 index error
- *  0b1..Error, the CMD index in response is not CMD12/23
  *  0b0..No error
+ *  0b1..Error, the CMD index in response is not CMD12/23
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_AC12IE(x)     (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_AC12IE_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_AC12IE_MASK)
 
 #define USDHC_AUTOCMD12_ERR_STATUS_CNIBAC12E_MASK (0x80U)
 #define USDHC_AUTOCMD12_ERR_STATUS_CNIBAC12E_SHIFT (7U)
 /*! CNIBAC12E - Command not issued by Auto CMD12 error
- *  0b1..Not issued
  *  0b0..No error
+ *  0b1..Not issued
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_CNIBAC12E(x)  (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_CNIBAC12E_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_CNIBAC12E_MASK)
 
@@ -1238,8 +1241,8 @@ typedef struct {
 #define USDHC_AUTOCMD12_ERR_STATUS_SMP_CLK_SEL_MASK (0x800000U)
 #define USDHC_AUTOCMD12_ERR_STATUS_SMP_CLK_SEL_SHIFT (23U)
 /*! SMP_CLK_SEL - Sample clock select
- *  0b1..Tuned clock is used to sample data
  *  0b0..Fixed clock is used to sample data
+ *  0b1..Tuned clock is used to sample data
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_SMP_CLK_SEL(x) (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_SMP_CLK_SEL_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_SMP_CLK_SEL_MASK)
 /*! @} */
@@ -1270,8 +1273,8 @@ typedef struct {
 #define USDHC_HOST_CTRL_CAP_USE_TUNING_SDR50_MASK (0x2000U)
 #define USDHC_HOST_CTRL_CAP_USE_TUNING_SDR50_SHIFT (13U)
 /*! USE_TUNING_SDR50 - Use Tuning for SDR50
- *  0b1..SDR50 requires tuning.
  *  0b0..SDR does not require tuning.
+ *  0b1..SDR50 requires tuning.
  */
 #define USDHC_HOST_CTRL_CAP_USE_TUNING_SDR50(x)  (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_USE_TUNING_SDR50_SHIFT)) & USDHC_HOST_CTRL_CAP_USE_TUNING_SDR50_MASK)
 
@@ -1298,56 +1301,56 @@ typedef struct {
 #define USDHC_HOST_CTRL_CAP_ADMAS_MASK           (0x100000U)
 #define USDHC_HOST_CTRL_CAP_ADMAS_SHIFT          (20U)
 /*! ADMAS - ADMA support
- *  0b1..Advanced DMA supported
  *  0b0..Advanced DMA not supported
+ *  0b1..Advanced DMA supported
  */
 #define USDHC_HOST_CTRL_CAP_ADMAS(x)             (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_ADMAS_SHIFT)) & USDHC_HOST_CTRL_CAP_ADMAS_MASK)
 
 #define USDHC_HOST_CTRL_CAP_HSS_MASK             (0x200000U)
 #define USDHC_HOST_CTRL_CAP_HSS_SHIFT            (21U)
 /*! HSS - High speed support
- *  0b1..High speed supported
  *  0b0..High speed not supported
+ *  0b1..High speed supported
  */
 #define USDHC_HOST_CTRL_CAP_HSS(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_HSS_SHIFT)) & USDHC_HOST_CTRL_CAP_HSS_MASK)
 
 #define USDHC_HOST_CTRL_CAP_DMAS_MASK            (0x400000U)
 #define USDHC_HOST_CTRL_CAP_DMAS_SHIFT           (22U)
 /*! DMAS - DMA support
- *  0b1..DMA supported
  *  0b0..DMA not supported
+ *  0b1..DMA supported
  */
 #define USDHC_HOST_CTRL_CAP_DMAS(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_DMAS_SHIFT)) & USDHC_HOST_CTRL_CAP_DMAS_MASK)
 
 #define USDHC_HOST_CTRL_CAP_SRS_MASK             (0x800000U)
 #define USDHC_HOST_CTRL_CAP_SRS_SHIFT            (23U)
 /*! SRS - Suspend / resume support
- *  0b1..Supported
  *  0b0..Not supported
+ *  0b1..Supported
  */
 #define USDHC_HOST_CTRL_CAP_SRS(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_SRS_SHIFT)) & USDHC_HOST_CTRL_CAP_SRS_MASK)
 
 #define USDHC_HOST_CTRL_CAP_VS33_MASK            (0x1000000U)
 #define USDHC_HOST_CTRL_CAP_VS33_SHIFT           (24U)
 /*! VS33 - Voltage support 3.3 V
- *  0b1..3.3 V supported
  *  0b0..3.3 V not supported
+ *  0b1..3.3 V supported
  */
 #define USDHC_HOST_CTRL_CAP_VS33(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_VS33_SHIFT)) & USDHC_HOST_CTRL_CAP_VS33_MASK)
 
 #define USDHC_HOST_CTRL_CAP_VS30_MASK            (0x2000000U)
 #define USDHC_HOST_CTRL_CAP_VS30_SHIFT           (25U)
 /*! VS30 - Voltage support 3.0 V
- *  0b1..3.0 V supported
  *  0b0..3.0 V not supported
+ *  0b1..3.0 V supported
  */
 #define USDHC_HOST_CTRL_CAP_VS30(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_VS30_SHIFT)) & USDHC_HOST_CTRL_CAP_VS30_MASK)
 
 #define USDHC_HOST_CTRL_CAP_VS18_MASK            (0x4000000U)
 #define USDHC_HOST_CTRL_CAP_VS18_SHIFT           (26U)
 /*! VS18 - Voltage support 1.8 V
- *  0b1..1.8 V supported
  *  0b0..1.8 V not supported
+ *  0b1..1.8 V supported
  */
 #define USDHC_HOST_CTRL_CAP_VS18(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_VS18_SHIFT)) & USDHC_HOST_CTRL_CAP_VS18_MASK)
 /*! @} */
@@ -1382,24 +1385,24 @@ typedef struct {
 #define USDHC_MIX_CTRL_DMAEN_MASK                (0x1U)
 #define USDHC_MIX_CTRL_DMAEN_SHIFT               (0U)
 /*! DMAEN - DMA enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define USDHC_MIX_CTRL_DMAEN(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_DMAEN_SHIFT)) & USDHC_MIX_CTRL_DMAEN_MASK)
 
 #define USDHC_MIX_CTRL_BCEN_MASK                 (0x2U)
 #define USDHC_MIX_CTRL_BCEN_SHIFT                (1U)
 /*! BCEN - Block count enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define USDHC_MIX_CTRL_BCEN(x)                   (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_BCEN_SHIFT)) & USDHC_MIX_CTRL_BCEN_MASK)
 
 #define USDHC_MIX_CTRL_AC12EN_MASK               (0x4U)
 #define USDHC_MIX_CTRL_AC12EN_SHIFT              (2U)
 /*! AC12EN - Auto CMD12 enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define USDHC_MIX_CTRL_AC12EN(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_AC12EN_SHIFT)) & USDHC_MIX_CTRL_AC12EN_MASK)
 
@@ -1411,16 +1414,16 @@ typedef struct {
 #define USDHC_MIX_CTRL_DTDSEL_MASK               (0x10U)
 #define USDHC_MIX_CTRL_DTDSEL_SHIFT              (4U)
 /*! DTDSEL - Data transfer direction select
- *  0b1..Read (Card to host)
  *  0b0..Write (Host to card)
+ *  0b1..Read (Card to host)
  */
 #define USDHC_MIX_CTRL_DTDSEL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_DTDSEL_SHIFT)) & USDHC_MIX_CTRL_DTDSEL_MASK)
 
 #define USDHC_MIX_CTRL_MSBSEL_MASK               (0x20U)
 #define USDHC_MIX_CTRL_MSBSEL_SHIFT              (5U)
 /*! MSBSEL - Multi / Single block select
- *  0b1..Multiple blocks
  *  0b0..Single block
+ *  0b1..Multiple blocks
  */
 #define USDHC_MIX_CTRL_MSBSEL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_MSBSEL_SHIFT)) & USDHC_MIX_CTRL_MSBSEL_MASK)
 
@@ -1437,32 +1440,32 @@ typedef struct {
 #define USDHC_MIX_CTRL_EXE_TUNE_MASK             (0x400000U)
 #define USDHC_MIX_CTRL_EXE_TUNE_SHIFT            (22U)
 /*! EXE_TUNE - Execute tuning: (Only used for SD3.0, SDR104 mode and EMMC HS200 mode)
- *  0b1..Execute tuning
  *  0b0..Not tuned or tuning completed
+ *  0b1..Execute tuning
  */
 #define USDHC_MIX_CTRL_EXE_TUNE(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_EXE_TUNE_SHIFT)) & USDHC_MIX_CTRL_EXE_TUNE_MASK)
 
 #define USDHC_MIX_CTRL_SMP_CLK_SEL_MASK          (0x800000U)
 #define USDHC_MIX_CTRL_SMP_CLK_SEL_SHIFT         (23U)
 /*! SMP_CLK_SEL - Clock selection
- *  0b1..Tuned clock is used to sample data / cmd
  *  0b0..Fixed clock is used to sample data / cmd
+ *  0b1..Tuned clock is used to sample data / cmd
  */
 #define USDHC_MIX_CTRL_SMP_CLK_SEL(x)            (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_SMP_CLK_SEL_SHIFT)) & USDHC_MIX_CTRL_SMP_CLK_SEL_MASK)
 
 #define USDHC_MIX_CTRL_AUTO_TUNE_EN_MASK         (0x1000000U)
 #define USDHC_MIX_CTRL_AUTO_TUNE_EN_SHIFT        (24U)
 /*! AUTO_TUNE_EN - Auto tuning enable (Only used for SD3.0, SDR104 mode and and EMMC HS200 mode)
- *  0b1..Enable auto tuning
  *  0b0..Disable auto tuning
+ *  0b1..Enable auto tuning
  */
 #define USDHC_MIX_CTRL_AUTO_TUNE_EN(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_AUTO_TUNE_EN_SHIFT)) & USDHC_MIX_CTRL_AUTO_TUNE_EN_MASK)
 
 #define USDHC_MIX_CTRL_FBCLK_SEL_MASK            (0x2000000U)
 #define USDHC_MIX_CTRL_FBCLK_SEL_SHIFT           (25U)
 /*! FBCLK_SEL - Feedback clock source selection (Only used for SD3.0, SDR104 mode and EMMC HS200 mode)
- *  0b1..Feedback clock comes from the ipp_card_clk_out
  *  0b0..Feedback clock comes from the loopback CLK
+ *  0b1..Feedback clock comes from the ipp_card_clk_out
  */
 #define USDHC_MIX_CTRL_FBCLK_SEL(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_MIX_CTRL_FBCLK_SEL_SHIFT)) & USDHC_MIX_CTRL_FBCLK_SEL_MASK)
 
@@ -1572,16 +1575,16 @@ typedef struct {
 #define USDHC_ADMA_ERR_STATUS_ADMALME_MASK       (0x4U)
 #define USDHC_ADMA_ERR_STATUS_ADMALME_SHIFT      (2U)
 /*! ADMALME - ADMA length mismatch error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_ADMA_ERR_STATUS_ADMALME(x)         (((uint32_t)(((uint32_t)(x)) << USDHC_ADMA_ERR_STATUS_ADMALME_SHIFT)) & USDHC_ADMA_ERR_STATUS_ADMALME_MASK)
 
 #define USDHC_ADMA_ERR_STATUS_ADMADCE_MASK       (0x8U)
 #define USDHC_ADMA_ERR_STATUS_ADMADCE_SHIFT      (3U)
 /*! ADMADCE - ADMA descriptor error
- *  0b1..Error
  *  0b0..No error
+ *  0b1..Error
  */
 #define USDHC_ADMA_ERR_STATUS_ADMADCE(x)         (((uint32_t)(((uint32_t)(x)) << USDHC_ADMA_ERR_STATUS_ADMADCE_SHIFT)) & USDHC_ADMA_ERR_STATUS_ADMADCE_MASK)
 /*! @} */
@@ -1801,8 +1804,8 @@ typedef struct {
 #define USDHC_VEND_SPEC_VSELECT_MASK             (0x2U)
 #define USDHC_VEND_SPEC_VSELECT_SHIFT            (1U)
 /*! VSELECT - Voltage selection
- *  0b1..Change the voltage to low voltage range, around 1.8 V
  *  0b0..Change the voltage to high voltage range, around 3.0 V
+ *  0b1..Change the voltage to low voltage range, around 1.8 V
  */
 #define USDHC_VEND_SPEC_VSELECT(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_VEND_SPEC_VSELECT_SHIFT)) & USDHC_VEND_SPEC_VSELECT_MASK)
 
@@ -1951,8 +1954,8 @@ typedef struct {
 #define USDHC_VEND_SPEC2_ACMD23_ARGU2_EN_MASK    (0x1000U)
 #define USDHC_VEND_SPEC2_ACMD23_ARGU2_EN_SHIFT   (12U)
 /*! ACMD23_ARGU2_EN - Argument2 register enable for ACMD23
- *  0b1..Argument2 register enable for ACMD23 sharing with SDMA system address register. Default is enabled.
  *  0b0..Disable
+ *  0b1..Argument2 register enable for ACMD23 sharing with SDMA system address register. Default is enabled.
  */
 #define USDHC_VEND_SPEC2_ACMD23_ARGU2_EN(x)      (((uint32_t)(((uint32_t)(x)) << USDHC_VEND_SPEC2_ACMD23_ARGU2_EN_SHIFT)) & USDHC_VEND_SPEC2_ACMD23_ARGU2_EN_MASK)
 /*! @} */
@@ -2022,5 +2025,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USDHC_H_ */
+#endif  /* PERI_USDHC_H_ */
 

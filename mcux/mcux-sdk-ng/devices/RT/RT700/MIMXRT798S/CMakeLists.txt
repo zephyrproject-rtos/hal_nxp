@@ -4,5 +4,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 #### device spepcific drivers
-mcux_add_cmakelists(${SdkRootDirPath}/devices/RT/RT700/MIMXRT798S/drivers)
-mcux_add_cmakelists(${SdkRootDirPath}/devices/RT/RT700/MIMXRT798S/${core_id})
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/RT/RT700/MIMXRT798S/drivers)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/RT/RT700/MIMXRT798S/${core_id})

@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_LPSR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_LPSR.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_IOMUXC_LPSR.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_LPSR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_LPSR
  */
 
-#if !defined(IOMUXC_LPSR_H_)
-#define IOMUXC_LPSR_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_LPSR_H_)
+#define PERI_IOMUXC_LPSR_H_                      /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -253,7 +256,6 @@ typedef struct {
 #define IOMUXC_LPSR_SW_MUX_CTL_PAD_MUX_MODE_MASK (0xFU)
 #define IOMUXC_LPSR_SW_MUX_CTL_PAD_MUX_MODE_SHIFT (0U)
 /*! MUX_MODE - MUX Mode Select Field.
- *  0b1010..Select mux mode: ALT10 mux port: GPIO12_IO10 of instance: GPIO12
  *  0b0000..Select mux mode: ALT0 mux port: JTAG_MUX_TRSTB of instance: JTAG_MUX
  *  0b0001..Select mux mode: ALT1 mux port: LPUART11_CTS_B of instance: LPUART11
  *  0b0010..Select mux mode: ALT2 mux port: LPI2C6_SDA of instance: LPI2C6
@@ -263,14 +265,15 @@ typedef struct {
  *  0b0110..Select mux mode: ALT6 mux port: LPI2C5_SCLS of instance: LPI2C5
  *  0b0111..Select mux mode: ALT7 mux port: SAI4_TX_SYNC of instance: SAI4
  *  0b1000..Select mux mode: ALT8 mux port: LPUART12_TXD of instance: LPUART12
+ *  0b1010..Select mux mode: ALT10 mux port: GPIO12_IO10 of instance: GPIO12
  */
 #define IOMUXC_LPSR_SW_MUX_CTL_PAD_MUX_MODE(x)   (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_LPSR_SW_MUX_CTL_PAD_MUX_MODE_MASK)
 
 #define IOMUXC_LPSR_SW_MUX_CTL_PAD_SION_MASK     (0x10U)
 #define IOMUXC_LPSR_SW_MUX_CTL_PAD_SION_SHIFT    (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad GPIO_LPSR_00
  *  0b0..Input Path is determined by functionality
+ *  0b1..Force input path of pad GPIO_LPSR_00
  */
 #define IOMUXC_LPSR_SW_MUX_CTL_PAD_SION(x)       (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_LPSR_SW_MUX_CTL_PAD_SION_MASK)
 /*! @} */
@@ -388,5 +391,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_LPSR_H_ */
+#endif  /* PERI_IOMUXC_LPSR_H_ */
 

@@ -13,14 +13,14 @@
 **                          MIMXRT1046DFQ6B
 **                          MIMXRT1046XFQ5B
 **
-**     Version:             rev. 0.1, 2021-07-20
-**     Build:               b241021
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2021-07-20)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_GPR.h
- * @version 0.1
- * @date 2021-07-20
+ * @file PERI_IOMUXC_GPR.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_GPR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_GPR
  */
 
-#if !defined(IOMUXC_GPR_H_)
-#define IOMUXC_GPR_H_                            /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_GPR_H_)
+#define PERI_IOMUXC_GPR_H_                       /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1041DFP6B) || defined(CPU_MIMXRT1041DJM6B) || defined(CPU_MIMXRT1041XFP5B) || defined(CPU_MIMXRT1041XJM5B))
 #include "MIMXRT1041_COMMON.h"
@@ -383,10 +386,262 @@ typedef struct {
 
 #define IOMUXC_GPR_GPR2_MQS_CLK_DIV_MASK         (0xFF0000U)
 #define IOMUXC_GPR_GPR2_MQS_CLK_DIV_SHIFT        (16U)
-/*! MQS_CLK_DIV
- *  0b00000000..mclk frequency = hmclk frequency
+/*! MQS_CLK_DIV - Divider ratio control for mclk from hmclk. mclk frequency = 1/(n+1) * hmclk frequency.
+ *  0b00000000..mclk frequency = 1/1 * hmclk frequency
  *  0b00000001..mclk frequency = 1/2 * hmclk frequency
  *  0b00000010..mclk frequency = 1/3 * hmclk frequency
+ *  0b00000011..mclk frequency = 1/4 * hmclk frequency
+ *  0b00000100..mclk frequency = 1/5 * hmclk frequency
+ *  0b00000101..mclk frequency = 1/6 * hmclk frequency
+ *  0b00000110..mclk frequency = 1/7 * hmclk frequency
+ *  0b00000111..mclk frequency = 1/8 * hmclk frequency
+ *  0b00001000..mclk frequency = 1/9 * hmclk frequency
+ *  0b00001001..mclk frequency = 1/10 * hmclk frequency
+ *  0b00001010..mclk frequency = 1/11 * hmclk frequency
+ *  0b00001011..mclk frequency = 1/12 * hmclk frequency
+ *  0b00001100..mclk frequency = 1/13 * hmclk frequency
+ *  0b00001101..mclk frequency = 1/14 * hmclk frequency
+ *  0b00001110..mclk frequency = 1/15 * hmclk frequency
+ *  0b00001111..mclk frequency = 1/16 * hmclk frequency
+ *  0b00010000..mclk frequency = 1/17 * hmclk frequency
+ *  0b00010001..mclk frequency = 1/18 * hmclk frequency
+ *  0b00010010..mclk frequency = 1/19 * hmclk frequency
+ *  0b00010011..mclk frequency = 1/20 * hmclk frequency
+ *  0b00010100..mclk frequency = 1/21 * hmclk frequency
+ *  0b00010101..mclk frequency = 1/22 * hmclk frequency
+ *  0b00010110..mclk frequency = 1/23 * hmclk frequency
+ *  0b00010111..mclk frequency = 1/24 * hmclk frequency
+ *  0b00011000..mclk frequency = 1/25 * hmclk frequency
+ *  0b00011001..mclk frequency = 1/26 * hmclk frequency
+ *  0b00011010..mclk frequency = 1/27 * hmclk frequency
+ *  0b00011011..mclk frequency = 1/28 * hmclk frequency
+ *  0b00011100..mclk frequency = 1/29 * hmclk frequency
+ *  0b00011101..mclk frequency = 1/30 * hmclk frequency
+ *  0b00011110..mclk frequency = 1/31 * hmclk frequency
+ *  0b00011111..mclk frequency = 1/32 * hmclk frequency
+ *  0b00100000..mclk frequency = 1/33 * hmclk frequency
+ *  0b00100001..mclk frequency = 1/34 * hmclk frequency
+ *  0b00100010..mclk frequency = 1/35 * hmclk frequency
+ *  0b00100011..mclk frequency = 1/36 * hmclk frequency
+ *  0b00100100..mclk frequency = 1/37 * hmclk frequency
+ *  0b00100101..mclk frequency = 1/38 * hmclk frequency
+ *  0b00100110..mclk frequency = 1/39 * hmclk frequency
+ *  0b00100111..mclk frequency = 1/40 * hmclk frequency
+ *  0b00101000..mclk frequency = 1/41 * hmclk frequency
+ *  0b00101001..mclk frequency = 1/42 * hmclk frequency
+ *  0b00101010..mclk frequency = 1/43 * hmclk frequency
+ *  0b00101011..mclk frequency = 1/44 * hmclk frequency
+ *  0b00101100..mclk frequency = 1/45 * hmclk frequency
+ *  0b00101101..mclk frequency = 1/46 * hmclk frequency
+ *  0b00101110..mclk frequency = 1/47 * hmclk frequency
+ *  0b00101111..mclk frequency = 1/48 * hmclk frequency
+ *  0b00110000..mclk frequency = 1/49 * hmclk frequency
+ *  0b00110001..mclk frequency = 1/50 * hmclk frequency
+ *  0b00110010..mclk frequency = 1/51 * hmclk frequency
+ *  0b00110011..mclk frequency = 1/52 * hmclk frequency
+ *  0b00110100..mclk frequency = 1/53 * hmclk frequency
+ *  0b00110101..mclk frequency = 1/54 * hmclk frequency
+ *  0b00110110..mclk frequency = 1/55 * hmclk frequency
+ *  0b00110111..mclk frequency = 1/56 * hmclk frequency
+ *  0b00111000..mclk frequency = 1/57 * hmclk frequency
+ *  0b00111001..mclk frequency = 1/58 * hmclk frequency
+ *  0b00111010..mclk frequency = 1/59 * hmclk frequency
+ *  0b00111011..mclk frequency = 1/60 * hmclk frequency
+ *  0b00111100..mclk frequency = 1/61 * hmclk frequency
+ *  0b00111101..mclk frequency = 1/62 * hmclk frequency
+ *  0b00111110..mclk frequency = 1/63 * hmclk frequency
+ *  0b00111111..mclk frequency = 1/64 * hmclk frequency
+ *  0b01000000..mclk frequency = 1/65 * hmclk frequency
+ *  0b01000001..mclk frequency = 1/66 * hmclk frequency
+ *  0b01000010..mclk frequency = 1/67 * hmclk frequency
+ *  0b01000011..mclk frequency = 1/68 * hmclk frequency
+ *  0b01000100..mclk frequency = 1/69 * hmclk frequency
+ *  0b01000101..mclk frequency = 1/70 * hmclk frequency
+ *  0b01000110..mclk frequency = 1/71 * hmclk frequency
+ *  0b01000111..mclk frequency = 1/72 * hmclk frequency
+ *  0b01001000..mclk frequency = 1/73 * hmclk frequency
+ *  0b01001001..mclk frequency = 1/74 * hmclk frequency
+ *  0b01001010..mclk frequency = 1/75 * hmclk frequency
+ *  0b01001011..mclk frequency = 1/76 * hmclk frequency
+ *  0b01001100..mclk frequency = 1/77 * hmclk frequency
+ *  0b01001101..mclk frequency = 1/78 * hmclk frequency
+ *  0b01001110..mclk frequency = 1/79 * hmclk frequency
+ *  0b01001111..mclk frequency = 1/80 * hmclk frequency
+ *  0b01010000..mclk frequency = 1/81 * hmclk frequency
+ *  0b01010001..mclk frequency = 1/82 * hmclk frequency
+ *  0b01010010..mclk frequency = 1/83 * hmclk frequency
+ *  0b01010011..mclk frequency = 1/84 * hmclk frequency
+ *  0b01010100..mclk frequency = 1/85 * hmclk frequency
+ *  0b01010101..mclk frequency = 1/86 * hmclk frequency
+ *  0b01010110..mclk frequency = 1/87 * hmclk frequency
+ *  0b01010111..mclk frequency = 1/88 * hmclk frequency
+ *  0b01011000..mclk frequency = 1/89 * hmclk frequency
+ *  0b01011001..mclk frequency = 1/90 * hmclk frequency
+ *  0b01011010..mclk frequency = 1/91 * hmclk frequency
+ *  0b01011011..mclk frequency = 1/92 * hmclk frequency
+ *  0b01011100..mclk frequency = 1/93 * hmclk frequency
+ *  0b01011101..mclk frequency = 1/94 * hmclk frequency
+ *  0b01011110..mclk frequency = 1/95 * hmclk frequency
+ *  0b01011111..mclk frequency = 1/96 * hmclk frequency
+ *  0b01100000..mclk frequency = 1/97 * hmclk frequency
+ *  0b01100001..mclk frequency = 1/98 * hmclk frequency
+ *  0b01100010..mclk frequency = 1/99 * hmclk frequency
+ *  0b01100011..mclk frequency = 1/100 * hmclk frequency
+ *  0b01100100..mclk frequency = 1/101 * hmclk frequency
+ *  0b01100101..mclk frequency = 1/102 * hmclk frequency
+ *  0b01100110..mclk frequency = 1/103 * hmclk frequency
+ *  0b01100111..mclk frequency = 1/104 * hmclk frequency
+ *  0b01101000..mclk frequency = 1/105 * hmclk frequency
+ *  0b01101001..mclk frequency = 1/106 * hmclk frequency
+ *  0b01101010..mclk frequency = 1/107 * hmclk frequency
+ *  0b01101011..mclk frequency = 1/108 * hmclk frequency
+ *  0b01101100..mclk frequency = 1/109 * hmclk frequency
+ *  0b01101101..mclk frequency = 1/110 * hmclk frequency
+ *  0b01101110..mclk frequency = 1/111 * hmclk frequency
+ *  0b01101111..mclk frequency = 1/112 * hmclk frequency
+ *  0b01110000..mclk frequency = 1/113 * hmclk frequency
+ *  0b01110001..mclk frequency = 1/114 * hmclk frequency
+ *  0b01110010..mclk frequency = 1/115 * hmclk frequency
+ *  0b01110011..mclk frequency = 1/116 * hmclk frequency
+ *  0b01110100..mclk frequency = 1/117 * hmclk frequency
+ *  0b01110101..mclk frequency = 1/118 * hmclk frequency
+ *  0b01110110..mclk frequency = 1/119 * hmclk frequency
+ *  0b01110111..mclk frequency = 1/120 * hmclk frequency
+ *  0b01111000..mclk frequency = 1/121 * hmclk frequency
+ *  0b01111001..mclk frequency = 1/122 * hmclk frequency
+ *  0b01111010..mclk frequency = 1/123 * hmclk frequency
+ *  0b01111011..mclk frequency = 1/124 * hmclk frequency
+ *  0b01111100..mclk frequency = 1/125 * hmclk frequency
+ *  0b01111101..mclk frequency = 1/126 * hmclk frequency
+ *  0b01111110..mclk frequency = 1/127 * hmclk frequency
+ *  0b01111111..mclk frequency = 1/128 * hmclk frequency
+ *  0b10000000..mclk frequency = 1/129 * hmclk frequency
+ *  0b10000001..mclk frequency = 1/130 * hmclk frequency
+ *  0b10000010..mclk frequency = 1/131 * hmclk frequency
+ *  0b10000011..mclk frequency = 1/132 * hmclk frequency
+ *  0b10000100..mclk frequency = 1/133 * hmclk frequency
+ *  0b10000101..mclk frequency = 1/134 * hmclk frequency
+ *  0b10000110..mclk frequency = 1/135 * hmclk frequency
+ *  0b10000111..mclk frequency = 1/136 * hmclk frequency
+ *  0b10001000..mclk frequency = 1/137 * hmclk frequency
+ *  0b10001001..mclk frequency = 1/138 * hmclk frequency
+ *  0b10001010..mclk frequency = 1/139 * hmclk frequency
+ *  0b10001011..mclk frequency = 1/140 * hmclk frequency
+ *  0b10001100..mclk frequency = 1/141 * hmclk frequency
+ *  0b10001101..mclk frequency = 1/142 * hmclk frequency
+ *  0b10001110..mclk frequency = 1/143 * hmclk frequency
+ *  0b10001111..mclk frequency = 1/144 * hmclk frequency
+ *  0b10010000..mclk frequency = 1/145 * hmclk frequency
+ *  0b10010001..mclk frequency = 1/146 * hmclk frequency
+ *  0b10010010..mclk frequency = 1/147 * hmclk frequency
+ *  0b10010011..mclk frequency = 1/148 * hmclk frequency
+ *  0b10010100..mclk frequency = 1/149 * hmclk frequency
+ *  0b10010101..mclk frequency = 1/150 * hmclk frequency
+ *  0b10010110..mclk frequency = 1/151 * hmclk frequency
+ *  0b10010111..mclk frequency = 1/152 * hmclk frequency
+ *  0b10011000..mclk frequency = 1/153 * hmclk frequency
+ *  0b10011001..mclk frequency = 1/154 * hmclk frequency
+ *  0b10011010..mclk frequency = 1/155 * hmclk frequency
+ *  0b10011011..mclk frequency = 1/156 * hmclk frequency
+ *  0b10011100..mclk frequency = 1/157 * hmclk frequency
+ *  0b10011101..mclk frequency = 1/158 * hmclk frequency
+ *  0b10011110..mclk frequency = 1/159 * hmclk frequency
+ *  0b10011111..mclk frequency = 1/160 * hmclk frequency
+ *  0b10100000..mclk frequency = 1/161 * hmclk frequency
+ *  0b10100001..mclk frequency = 1/162 * hmclk frequency
+ *  0b10100010..mclk frequency = 1/163 * hmclk frequency
+ *  0b10100011..mclk frequency = 1/164 * hmclk frequency
+ *  0b10100100..mclk frequency = 1/165 * hmclk frequency
+ *  0b10100101..mclk frequency = 1/166 * hmclk frequency
+ *  0b10100110..mclk frequency = 1/167 * hmclk frequency
+ *  0b10100111..mclk frequency = 1/168 * hmclk frequency
+ *  0b10101000..mclk frequency = 1/169 * hmclk frequency
+ *  0b10101001..mclk frequency = 1/170 * hmclk frequency
+ *  0b10101010..mclk frequency = 1/171 * hmclk frequency
+ *  0b10101011..mclk frequency = 1/172 * hmclk frequency
+ *  0b10101100..mclk frequency = 1/173 * hmclk frequency
+ *  0b10101101..mclk frequency = 1/174 * hmclk frequency
+ *  0b10101110..mclk frequency = 1/175 * hmclk frequency
+ *  0b10101111..mclk frequency = 1/176 * hmclk frequency
+ *  0b10110000..mclk frequency = 1/177 * hmclk frequency
+ *  0b10110001..mclk frequency = 1/178 * hmclk frequency
+ *  0b10110010..mclk frequency = 1/179 * hmclk frequency
+ *  0b10110011..mclk frequency = 1/180 * hmclk frequency
+ *  0b10110100..mclk frequency = 1/181 * hmclk frequency
+ *  0b10110101..mclk frequency = 1/182 * hmclk frequency
+ *  0b10110110..mclk frequency = 1/183 * hmclk frequency
+ *  0b10110111..mclk frequency = 1/184 * hmclk frequency
+ *  0b10111000..mclk frequency = 1/185 * hmclk frequency
+ *  0b10111001..mclk frequency = 1/186 * hmclk frequency
+ *  0b10111010..mclk frequency = 1/187 * hmclk frequency
+ *  0b10111011..mclk frequency = 1/188 * hmclk frequency
+ *  0b10111100..mclk frequency = 1/189 * hmclk frequency
+ *  0b10111101..mclk frequency = 1/190 * hmclk frequency
+ *  0b10111110..mclk frequency = 1/191 * hmclk frequency
+ *  0b10111111..mclk frequency = 1/192 * hmclk frequency
+ *  0b11000000..mclk frequency = 1/193 * hmclk frequency
+ *  0b11000001..mclk frequency = 1/194 * hmclk frequency
+ *  0b11000010..mclk frequency = 1/195 * hmclk frequency
+ *  0b11000011..mclk frequency = 1/196 * hmclk frequency
+ *  0b11000100..mclk frequency = 1/197 * hmclk frequency
+ *  0b11000101..mclk frequency = 1/198 * hmclk frequency
+ *  0b11000110..mclk frequency = 1/199 * hmclk frequency
+ *  0b11000111..mclk frequency = 1/200 * hmclk frequency
+ *  0b11001000..mclk frequency = 1/201 * hmclk frequency
+ *  0b11001001..mclk frequency = 1/202 * hmclk frequency
+ *  0b11001010..mclk frequency = 1/203 * hmclk frequency
+ *  0b11001011..mclk frequency = 1/204 * hmclk frequency
+ *  0b11001100..mclk frequency = 1/205 * hmclk frequency
+ *  0b11001101..mclk frequency = 1/206 * hmclk frequency
+ *  0b11001110..mclk frequency = 1/207 * hmclk frequency
+ *  0b11001111..mclk frequency = 1/208 * hmclk frequency
+ *  0b11010000..mclk frequency = 1/209 * hmclk frequency
+ *  0b11010001..mclk frequency = 1/210 * hmclk frequency
+ *  0b11010010..mclk frequency = 1/211 * hmclk frequency
+ *  0b11010011..mclk frequency = 1/212 * hmclk frequency
+ *  0b11010100..mclk frequency = 1/213 * hmclk frequency
+ *  0b11010101..mclk frequency = 1/214 * hmclk frequency
+ *  0b11010110..mclk frequency = 1/215 * hmclk frequency
+ *  0b11010111..mclk frequency = 1/216 * hmclk frequency
+ *  0b11011000..mclk frequency = 1/217 * hmclk frequency
+ *  0b11011001..mclk frequency = 1/218 * hmclk frequency
+ *  0b11011010..mclk frequency = 1/219 * hmclk frequency
+ *  0b11011011..mclk frequency = 1/220 * hmclk frequency
+ *  0b11011100..mclk frequency = 1/221 * hmclk frequency
+ *  0b11011101..mclk frequency = 1/222 * hmclk frequency
+ *  0b11011110..mclk frequency = 1/223 * hmclk frequency
+ *  0b11011111..mclk frequency = 1/224 * hmclk frequency
+ *  0b11100000..mclk frequency = 1/225 * hmclk frequency
+ *  0b11100001..mclk frequency = 1/226 * hmclk frequency
+ *  0b11100010..mclk frequency = 1/227 * hmclk frequency
+ *  0b11100011..mclk frequency = 1/228 * hmclk frequency
+ *  0b11100100..mclk frequency = 1/229 * hmclk frequency
+ *  0b11100101..mclk frequency = 1/230 * hmclk frequency
+ *  0b11100110..mclk frequency = 1/231 * hmclk frequency
+ *  0b11100111..mclk frequency = 1/232 * hmclk frequency
+ *  0b11101000..mclk frequency = 1/233 * hmclk frequency
+ *  0b11101001..mclk frequency = 1/234 * hmclk frequency
+ *  0b11101010..mclk frequency = 1/235 * hmclk frequency
+ *  0b11101011..mclk frequency = 1/236 * hmclk frequency
+ *  0b11101100..mclk frequency = 1/237 * hmclk frequency
+ *  0b11101101..mclk frequency = 1/238 * hmclk frequency
+ *  0b11101110..mclk frequency = 1/239 * hmclk frequency
+ *  0b11101111..mclk frequency = 1/240 * hmclk frequency
+ *  0b11110000..mclk frequency = 1/241 * hmclk frequency
+ *  0b11110001..mclk frequency = 1/242 * hmclk frequency
+ *  0b11110010..mclk frequency = 1/243 * hmclk frequency
+ *  0b11110011..mclk frequency = 1/244 * hmclk frequency
+ *  0b11110100..mclk frequency = 1/245 * hmclk frequency
+ *  0b11110101..mclk frequency = 1/246 * hmclk frequency
+ *  0b11110110..mclk frequency = 1/247 * hmclk frequency
+ *  0b11110111..mclk frequency = 1/248 * hmclk frequency
+ *  0b11111000..mclk frequency = 1/249 * hmclk frequency
+ *  0b11111001..mclk frequency = 1/250 * hmclk frequency
+ *  0b11111010..mclk frequency = 1/251 * hmclk frequency
+ *  0b11111011..mclk frequency = 1/252 * hmclk frequency
+ *  0b11111100..mclk frequency = 1/253 * hmclk frequency
+ *  0b11111101..mclk frequency = 1/254 * hmclk frequency
+ *  0b11111110..mclk frequency = 1/255 * hmclk frequency
  *  0b11111111..mclk frequency = 1/256 * hmclk frequency
  */
 #define IOMUXC_GPR_GPR2_MQS_CLK_DIV(x)           (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_MQS_CLK_DIV_SHIFT)) & IOMUXC_GPR_GPR2_MQS_CLK_DIV_MASK)
@@ -2252,5 +2507,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_GPR_H_ */
+#endif  /* PERI_IOMUXC_GPR_H_ */
 

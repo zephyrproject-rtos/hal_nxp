@@ -822,7 +822,7 @@ void POWER_ConfigRBBVolt(const power_rbb_voltage_t *config)
 
 void POWER_SetVddnSupplySrc(power_vdd_src_t src)
 {
-    assert(src == kVddSrc_PMIC); /* The VDDN can't be supplied by DCDC due to ERRATA. */
+    assert(src == kVddSrc_PMIC); /* The VDDN can't be supplied by DCDC due to ERRATA052405. */
 
     s_vddnSrc = src;
     if (s_vddnSrc == kVddSrc_PMIC) /* If powered by external PMIC, power down DCDC. */
@@ -856,12 +856,12 @@ void POWER_DisableRegulators(uint32_t mask)
 
 void POWER_EnableSleepRegulators(uint32_t mask)
 {
-    PMC->POWERCFG |= mask & 0x7FU; /* Ignore all mode control bits. */
+    PMC->POWERCFG &= ~(mask & 0x7FU); /* Ignore all mode control bits. */
 }
 
 void POWER_DisableSleepRegulators(uint32_t mask)
 {
-    PMC->POWERCFG &= ~(mask & 0x7FU); /* Ignore all mode control bits. */
+    PMC->POWERCFG |= mask & 0x7FU; /* Ignore all mode control bits. */
 }
 
 void POWER_SetPMICModeDelay(uint8_t value)

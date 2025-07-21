@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PUF
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PUF.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_PUF.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PUF
  *
  * CMSIS Peripheral Access Layer for PUF
  */
 
-#if !defined(PUF_H_)
-#define PUF_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PUF_H_)
+#define PERI_PUF_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -230,6 +233,7 @@ typedef struct {
 #define PUF_KEYSIZE_KEYSIZE_MASK                 (0x3FU)
 #define PUF_KEYSIZE_KEYSIZE_SHIFT                (0U)
 /*! KEYSIZE - PUF Key Size
+ *  0b000000..Key Size is 512 Bytes and KC Size is 532 Bytes
  *  0b000001..Key Size is 8 Bytes and KC Size is 52 Bytes
  *  0b000010..Key Size is 16 Bytes and KC Size is 52 Bytes
  *  0b000011..Key Size is 24 Bytes and KC Size is 52 Bytes
@@ -293,7 +297,6 @@ typedef struct {
  *  0b111101..Key Size is 488 Bytes and KC Size is 532 Bytes
  *  0b111110..Key Size is 496 Bytes and KC Size is 532 Bytes
  *  0b111111..Key Size is 504 Bytes and KC Size is 532 Bytes
- *  0b000000..Key Size is 512 Bytes and KC Size is 532 Bytes
  */
 #define PUF_KEYSIZE_KEYSIZE(x)                   (((uint32_t)(((uint32_t)(x)) << PUF_KEYSIZE_KEYSIZE_SHIFT)) & PUF_KEYSIZE_KEYSIZE_MASK)
 /*! @} */
@@ -639,20 +642,20 @@ typedef struct {
 #define PUF_KEYLOCK_LOCK0_MASK                   (0x3U)
 #define PUF_KEYLOCK_LOCK0_SHIFT                  (0U)
 /*! LOCK0 - Lock Block 0
- *  0b11..SNVS Key block locked
- *  0b10..SNVS Key block unlocked
- *  0b01..SNVS Key block locked
  *  0b00..SNVS Key block locked
+ *  0b01..SNVS Key block locked
+ *  0b10..SNVS Key block unlocked
+ *  0b11..SNVS Key block locked
  */
 #define PUF_KEYLOCK_LOCK0(x)                     (((uint32_t)(((uint32_t)(x)) << PUF_KEYLOCK_LOCK0_SHIFT)) & PUF_KEYLOCK_LOCK0_MASK)
 
 #define PUF_KEYLOCK_LOCK1_MASK                   (0xCU)
 #define PUF_KEYLOCK_LOCK1_SHIFT                  (2U)
 /*! LOCK1 - Lock Block 1
- *  0b11..OTFAD Key block locked
- *  0b10..OTFAD Key block unlocked
- *  0b01..OTFAD Key block locked
  *  0b00..OTFAD Key block locked
+ *  0b01..OTFAD Key block locked
+ *  0b10..OTFAD Key block unlocked
+ *  0b11..OTFAD Key block locked
  */
 #define PUF_KEYLOCK_LOCK1(x)                     (((uint32_t)(((uint32_t)(x)) << PUF_KEYLOCK_LOCK1_SHIFT)) & PUF_KEYLOCK_LOCK1_MASK)
 /*! @} */
@@ -663,20 +666,20 @@ typedef struct {
 #define PUF_KEYENABLE_ENABLE0_MASK               (0x3U)
 #define PUF_KEYENABLE_ENABLE0_SHIFT              (0U)
 /*! ENABLE0 - Enable Block 0
- *  0b11..Key block 0 disabled
- *  0b10..Key block 0 enabled
- *  0b01..Key block 0 disabled
  *  0b00..Key block 0 disabled
+ *  0b01..Key block 0 disabled
+ *  0b10..Key block 0 enabled
+ *  0b11..Key block 0 disabled
  */
 #define PUF_KEYENABLE_ENABLE0(x)                 (((uint32_t)(((uint32_t)(x)) << PUF_KEYENABLE_ENABLE0_SHIFT)) & PUF_KEYENABLE_ENABLE0_MASK)
 
 #define PUF_KEYENABLE_ENABLE1_MASK               (0xCU)
 #define PUF_KEYENABLE_ENABLE1_SHIFT              (2U)
 /*! ENABLE1 - Enable Block 1
- *  0b11..Key block 1 disabled
- *  0b10..Key block 1 enabled
- *  0b01..Key block 1 disabled
  *  0b00..Key block 1 disabled
+ *  0b01..Key block 1 disabled
+ *  0b10..Key block 1 enabled
+ *  0b11..Key block 1 disabled
  */
 #define PUF_KEYENABLE_ENABLE1(x)                 (((uint32_t)(((uint32_t)(x)) << PUF_KEYENABLE_ENABLE1_SHIFT)) & PUF_KEYENABLE_ENABLE1_MASK)
 /*! @} */
@@ -687,20 +690,20 @@ typedef struct {
 #define PUF_KEYRESET_RESET0_MASK                 (0x3U)
 #define PUF_KEYRESET_RESET0_SHIFT                (0U)
 /*! RESET0 - Reset Block 0
- *  0b11..Do not reset key block 0
- *  0b10..Reset key block 0
- *  0b01..Do not reset key block 0
  *  0b00..Do not reset key block 0
+ *  0b01..Do not reset key block 0
+ *  0b10..Reset key block 0
+ *  0b11..Do not reset key block 0
  */
 #define PUF_KEYRESET_RESET0(x)                   (((uint32_t)(((uint32_t)(x)) << PUF_KEYRESET_RESET0_SHIFT)) & PUF_KEYRESET_RESET0_MASK)
 
 #define PUF_KEYRESET_RESET1_MASK                 (0xCU)
 #define PUF_KEYRESET_RESET1_SHIFT                (2U)
 /*! RESET1 - Reset Block 1
- *  0b11..Do not reset key block 1
- *  0b10..Reset key block 1
- *  0b01..Do not reset key block 1
  *  0b00..Do not reset key block 1
+ *  0b01..Do not reset key block 1
+ *  0b10..Reset key block 1
+ *  0b11..Do not reset key block 1
  */
 #define PUF_KEYRESET_RESET1(x)                   (((uint32_t)(((uint32_t)(x)) << PUF_KEYRESET_RESET1_SHIFT)) & PUF_KEYRESET_RESET1_MASK)
 /*! @} */
@@ -1016,5 +1019,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PUF_H_ */
+#endif  /* PERI_PUF_H_ */
 

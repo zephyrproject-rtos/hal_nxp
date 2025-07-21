@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1891,12 +1891,14 @@ uint32_t CLOCK_GetWakeClk32KFreq(void)
             break;
         case CLKCTL3_WAKE32KCLKSEL_SEL(1):
             freq = CLOCK_GetLpOscFreq();
+            freq /= 32U;
             break;
         default:
             freq = 0U;
             break;
     }
-    return freq / ((CLKCTL3->WAKE32KCLKDIV & CLKCTL3_WAKE32KCLKDIV_DIV_MASK) + 1U);
+
+    return freq;
 }
 
 uint32_t CLOCK_GetXspiClkFreq(uint32_t id)

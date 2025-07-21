@@ -5,6 +5,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/RT/variable.cmake)
 mcux_set_variable(device MIMXRT1024)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series RT1020)
 mcux_set_variable(soc_periph periph)
 

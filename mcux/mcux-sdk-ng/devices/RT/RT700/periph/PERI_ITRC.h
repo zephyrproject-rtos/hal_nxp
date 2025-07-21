@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ITRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ITRC.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_ITRC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ITRC
  *
  * CMSIS Peripheral Access Layer for ITRC
  */
 
-#if !defined(ITRC_H_)
-#define ITRC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ITRC_H_)
+#define PERI_ITRC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -692,15 +695,10 @@ typedef struct {
 /*! IN37_SELn - Selects GLIKEY error as a trigger source. */
 #define ITRC_OUT_SEL_2_IN37_SELn(x)              (((uint32_t)(((uint32_t)(x)) << ITRC_OUT_SEL_2_IN37_SELn_SHIFT)) & ITRC_OUT_SEL_2_IN37_SELn_MASK)
 
-#define ITRC_OUT_SEL_2_IN38_SEL0_MASK            (0x3000U)
-#define ITRC_OUT_SEL_2_IN38_SEL0_SHIFT           (12U)
-/*! IN38_SEL0 - Selects XSPI1 GCM error as a trigger source. */
-#define ITRC_OUT_SEL_2_IN38_SEL0(x)              (((uint32_t)(((uint32_t)(x)) << ITRC_OUT_SEL_2_IN38_SEL0_SHIFT)) & ITRC_OUT_SEL_2_IN38_SEL0_MASK)
-
-#define ITRC_OUT_SEL_2_IN38_SEL1_MASK            (0x3000U)
-#define ITRC_OUT_SEL_2_IN38_SEL1_SHIFT           (12U)
-/*! IN38_SEL1 - Selects XSPI1 GCM error as a trigger source. */
-#define ITRC_OUT_SEL_2_IN38_SEL1(x)              (((uint32_t)(((uint32_t)(x)) << ITRC_OUT_SEL_2_IN38_SEL1_SHIFT)) & ITRC_OUT_SEL_2_IN38_SEL1_MASK)
+#define ITRC_OUT_SEL_2_IN38_SELn_MASK            (0x3000U)
+#define ITRC_OUT_SEL_2_IN38_SELn_SHIFT           (12U)
+/*! IN38_SELn - Selects XSPI1 GCM error as a trigger source. */
+#define ITRC_OUT_SEL_2_IN38_SELn(x)              (((uint32_t)(((uint32_t)(x)) << ITRC_OUT_SEL_2_IN38_SELn_SHIFT)) & ITRC_OUT_SEL_2_IN38_SELn_MASK)
 
 #define ITRC_OUT_SEL_2_IN47_SELn_MASK            (0xC0000000U)
 #define ITRC_OUT_SEL_2_IN47_SELn_SHIFT           (30U)
@@ -768,5 +766,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ITRC_H_ */
+#endif  /* PERI_ITRC_H_ */
 

@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file BLK_CTRL_WAKEUPMIX.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_BLK_CTRL_WAKEUPMIX.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
  *
  * CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
  */
 
-#if !defined(BLK_CTRL_WAKEUPMIX_H_)
-#define BLK_CTRL_WAKEUPMIX_H_                    /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_BLK_CTRL_WAKEUPMIX_H_)
+#define PERI_BLK_CTRL_WAKEUPMIX_H_               /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -170,240 +195,240 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_CAN2_MASK (0x1U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_CAN2_SHIFT (0U)
 /*! M33_CAN2 - CAN2 debug halted mode with M7
- *  0b1..CAN2 enters debug halted mode when CM33 is debug halted
  *  0b0..CAN2 does not enter debug halted mode with CM33
+ *  0b1..CAN2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_CAN2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_CAN2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_CAN2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_EDMA4_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_EDMA4_SHIFT (1U)
 /*! M33_EDMA4 - EDMA4 debug halted mode with M33
- *  0b1..EDMA4 enters debug halted mode when CM33 is debug halted
  *  0b0..EDMA4 does not enter debug halted mode with CM33
+ *  0b1..EDMA4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_EDMA4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_EDMA4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_EDMA4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO1_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO1_SHIFT (2U)
 /*! M33_FLEXIO1 - FLEXIO1 debug halted mode with M33
- *  0b1..FLEXIO1 enters debug halted mode when CM33 is debug halted
  *  0b0..FLEXIO1 does not enter debug halted mode with CM33
+ *  0b1..FLEXIO1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO2_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO2_SHIFT (3U)
 /*! M33_FLEXIO2 - FLEXIO2 debug halted mode with M33
- *  0b1..FLEXIO2 enters debug halted mode when CM33 is debug halted
  *  0b0..FLEXIO2 does not enter debug halted mode with CM33
+ *  0b1..FLEXIO2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_FLEXIO2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C3_MASK (0x10U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C3_SHIFT (4U)
 /*! M33_LPI2C3 - LPI2C3 debug halted mode with M33
- *  0b1..enters debug halted mode when CM33 is debug halted
  *  0b0..LPI2C3 does not enter debug halted mode with CM33
+ *  0b1..enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C4_MASK (0x20U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C4_SHIFT (5U)
 /*! M33_LPI2C4 - LPI2C4 debug halted mode with M33
- *  0b1..LPI2C4 enters debug halted mode when CM33 is debug halted
  *  0b0..LPI2C4 does not enter debug halted mode with CM33
+ *  0b1..LPI2C4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPI2C4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPIT2_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPIT2_SHIFT (6U)
 /*! M33_LPIT2 - LPIT2 debug halted mode with M33
- *  0b1..LPIT2 enters debug halted mode when CM33 is debug halted
  *  0b0..LPIT2 does not enter debug halted mode with CM33
+ *  0b1..LPIT2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPIT2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPIT2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPIT2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI3_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI3_SHIFT (7U)
 /*! M33_LPSPI3 - LPSPI3 debug halted mode with M33
- *  0b1..LPSPI3 enters debug halted mode when CM33 is debug halted
  *  0b0..LPSPI3 does not enter debug halted mode with CM33
+ *  0b1..LPSPI3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI4_MASK (0x100U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI4_SHIFT (8U)
 /*! M33_LPSPI4 - LPSPI4 debug halted mode with M33
- *  0b1..LPSPI4 enters debug halted mode when CM33 is debug halted
  *  0b0..LPSPI4 does not enter debug halted mode with CM33
+ *  0b1..LPSPI4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPSPI4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPTMR2_MASK (0x200U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPTMR2_SHIFT (9U)
 /*! M33_LPTMR2 - LPTMR2 debug halted mode with M33
- *  0b1..LPTMR2 enters debug halted mode when CM33 is debug halted
  *  0b0..LPTMR2 does not enter debug halted mode with CM33
+ *  0b1..LPTMR2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPTMR2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPTMR2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_LPTMR2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM3_MASK (0x400U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM3_SHIFT (10U)
 /*! M33_TPM3 - debug halted mode with M33
- *  0b1..TPM3 enters debug halted mode when CM33 is debug halted
  *  0b0..TPM3 does not enter debug halted mode with CM33
+ *  0b1..TPM3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM4_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM4_SHIFT (11U)
 /*! M33_TPM4 - TPM3 debug halted mode with M33
- *  0b1..enters debug halted mode when CM33 is debug halted
  *  0b0..does not enter debug halted mode with CM33
+ *  0b1..enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM5_MASK (0x1000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM5_SHIFT (12U)
 /*! M33_TPM5 - TPM5 debug halted mode with M33
- *  0b1..TPM5 enters debug halted mode when CM33 is debug halted
  *  0b0..TPM5 does not enter debug halted mode with CM33
+ *  0b1..TPM5 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM6_MASK (0x2000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM6_SHIFT (13U)
 /*! M33_TPM6 - TPM6 debug halted mode with M33
- *  0b1..TPM6 enters debug halted mode when CM33 is debug halted
  *  0b0..TPM6 does not enter debug halted mode with CM33
+ *  0b1..TPM6 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_TPM6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG3_MASK (0x4000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG3_SHIFT (14U)
 /*! M33_WDOG3 - WDOG3 debug halted mode with M33
- *  0b1..WDOG3 enters debug halted mode when CM33 is debug halted
  *  0b0..WDOG3 does not enter debug halted mode with CM33
+ *  0b1..WDOG3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG4_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG4_SHIFT (15U)
 /*! M33_WDOG4 - WDOG4 debug halted mode with M33
- *  0b1..WDOG4 enters debug halted mode when CM33 is debug halted
  *  0b0..WDOG4 does not enter debug halted mode with CM33
+ *  0b1..WDOG4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M33_WDOG4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_CAN2_MASK (0x10000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_CAN2_SHIFT (16U)
 /*! M7_CAN2 - CAN2 debug halted mode with M7
- *  0b1..CAN2 enters debug halted mode when CM7 is debug halted
  *  0b0..CAN2 does not enter debug halted mode with CM7
+ *  0b1..CAN2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_CAN2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_CAN2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_CAN2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_EDMA4_MASK (0x20000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_EDMA4_SHIFT (17U)
 /*! M7_EDMA4 - EDMA4 debug halted mode with M7
- *  0b1..EDMA4 enters debug halted mode when CM7 is debug halted
  *  0b0..EDMA4 does not enter debug halted mode with CM7
+ *  0b1..EDMA4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_EDMA4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_EDMA4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_EDMA4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO1_MASK (0x40000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO1_SHIFT (18U)
 /*! M7_FLEXIO1 - FLEXIO1 debug halted mode with M7
- *  0b1..FLEXIO1 enters debug halted mode when CM7 is debug halted
  *  0b0..FLEXIO1 does not enter debug halted mode with CM7
+ *  0b1..FLEXIO1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO2_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO2_SHIFT (19U)
 /*! M7_FLEXIO2 - FLEXIO2 debug halted mode with M7
- *  0b1..FLEXIO2 enters debug halted mode when CM7 is debug halted
  *  0b0..FLEXIO2 does not enter debug halted mode with CM7
+ *  0b1..FLEXIO2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_FLEXIO2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C3_MASK (0x100000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C3_SHIFT (20U)
 /*! M7_LPI2C3 - LPI2C3 debug halted mode with M7
- *  0b1..LPI2C3 enters debug halted mode when CM7 is debug halted
  *  0b0..LPI2C3 does not enter debug halted mode with CM7
+ *  0b1..LPI2C3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C4_MASK (0x200000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C4_SHIFT (21U)
 /*! M7_LPI2C4 - LPI2C4 debug halted mode with M7
- *  0b1..LPI2C4 enters debug halted mode when CM7 is debug halted
  *  0b0..LPI2C4 does not enter debug halted mode with CM7
+ *  0b1..LPI2C4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPI2C4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPIT2_MASK (0x400000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPIT2_SHIFT (22U)
 /*! M7_LPIT2 - LPIT2 debug halted mode with M7
- *  0b1..LPIT2 enters debug halted mode when CM7 is debug halted
  *  0b0..LPIT2 does not enter debug halted mode with CM7
+ *  0b1..LPIT2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPIT2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPIT2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPIT2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI3_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI3_SHIFT (23U)
 /*! M7_LPSPI3 - WDOG3 debug halted mode with M7
- *  0b1..WDOG3 enters debug halted mode when CM7 is debug halted
  *  0b0..WDOD3 does not enter debug halted mode with CM7
+ *  0b1..WDOG3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI4_MASK (0x1000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI4_SHIFT (24U)
 /*! M7_LPSPI4 - LPSPI4 debug halted mode with M7
- *  0b1..LPSPI4 enters debug halted mode when CM7 is debug halted
  *  0b0..LPSPI4 does not enter debug halted mode with CM7
+ *  0b1..LPSPI4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPSPI4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPTMR2_MASK (0x2000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPTMR2_SHIFT (25U)
 /*! M7_LPTMR2 - LPTMR2 debug halted mode with M7
- *  0b1..LPTMR2 enters debug halted mode when CM7 is debug halted
  *  0b0..LPTMR2 does not enter debug halted mode with CM7
+ *  0b1..LPTMR2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPTMR2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPTMR2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_LPTMR2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM3_MASK (0x4000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM3_SHIFT (26U)
 /*! M7_TPM3 - TPM3 debug halted mode with M7
- *  0b1..TPM3 enters debug halted mode when CM7 is debug halted
  *  0b0..TPM3 does not enter debug halted mode with CM7
+ *  0b1..TPM3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM4_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM4_SHIFT (27U)
 /*! M7_TPM4 - TPM4 debug halted mode with M7
- *  0b1..TPM4 enters debug halted mode when CM7 is debug halted
  *  0b0..TPM4 does not enter debug halted mode with CM7
+ *  0b1..TPM4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM5_MASK (0x10000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM5_SHIFT (28U)
 /*! M7_TPM5 - TPM5 debug halted mode with M7
- *  0b1..TPM5 enters debug halted mode when CM7 is debug halted
  *  0b0..TPM5 does not enter debug halted mode with CM7
+ *  0b1..TPM5 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM6_MASK (0x20000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM6_SHIFT (29U)
 /*! M7_TPM6 - TPM6 debug halted mode with M7
- *  0b1..TPM5 enters debug halted mode when CM7 is debug halted
  *  0b0..TPM5 does not enter debug halted mode with CM7
+ *  0b1..TPM5 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG1_M7_TPM6_MASK)
 
@@ -424,256 +449,256 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_WDOG5_MASK (0x1U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_WDOG5_SHIFT (0U)
 /*! M33_WDOG5 - WDOG5 debug halted mode with M7
- *  0b1..WDOG5 enters debug halted mode when CM33 is debug halted
  *  0b0..WDOG5 does not enter debug halted mode with CM33
+ *  0b1..WDOG5 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_WDOG5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_WDOG5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_WDOG5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPTMR3_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPTMR3_SHIFT (1U)
 /*! M33_LPTMR3 - LPTMR3 debug halted mode with M33
- *  0b1..LPTMR3 enters debug halted mode when CM33 is debug halted
  *  0b0..LPTMR3 does not enter debug halted mode with CM33
+ *  0b1..LPTMR3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPTMR3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPTMR3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPTMR3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI5_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI5_SHIFT (2U)
 /*! M33_LPSPI5 - LPSPI5 debug halted mode with M33
- *  0b1..LPSPI5 enters debug halted mode when CM33 is debug halted
  *  0b0..LPSPI5 does not enter debug halted mode with CM33
+ *  0b1..LPSPI5 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI6_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI6_SHIFT (3U)
 /*! M33_LPSPI6 - LPSPI6 debug halted mode with M33
- *  0b1..LPSPI6 enters debug halted mode when CM33 is debug halted
  *  0b0..LPSPI6 does not enter debug halted mode with CM33
+ *  0b1..LPSPI6 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPSPI6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPIT3_MASK (0x10U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPIT3_SHIFT (4U)
 /*! M33_LPIT3 - LPIT3 debug halted mode with M33
- *  0b1..LPIT3 enters debug halted mode when CM33 is debug halted
  *  0b0..LPIT3 does not enter debug halted mode with CM33
+ *  0b1..LPIT3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPIT3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPIT3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPIT3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C5_MASK (0x20U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C5_SHIFT (5U)
 /*! M33_LPI2C5 - LPI2C5 debug halted mode with M33
- *  0b1..LPI2C5 enters debug halted mode when CM33 is debug halted
  *  0b0..LPI2C5 does not enter debug halted mode with CM33
+ *  0b1..LPI2C5 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C6_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C6_SHIFT (6U)
 /*! M33_LPI2C6 - LPI2C6 debug halted mode with M33
- *  0b1..LPI2C6 enters debug halted mode when CM33 is debug halted
  *  0b0..LPI2C6 does not enter debug halted mode with CM33
+ *  0b1..LPI2C6 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_LPI2C6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_GPT2_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_GPT2_SHIFT (7U)
 /*! M33_GPT2 - GPT2 debug halted mode with M33
- *  0b1..GPT2 enters debug halted mode when CM33 is debug halted
  *  0b0..GPT2 does not enter debug halted mode with CM33
+ *  0b1..GPT2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_GPT2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_GPT2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_GPT2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM1_MASK (0x100U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM1_SHIFT (8U)
 /*! M33_FLEXPWM1 - FLEXPWM1 debug halted mode with M33
- *  0b1..FLEXPWM1 enters debug halted mode when CM33 is debug halted
  *  0b0..FLEXPWM1 does not enter debug halted mode with CM33
+ *  0b1..FLEXPWM1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM2_MASK (0x200U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM2_SHIFT (9U)
 /*! M33_FLEXPWM2 - FLEXPWM2 debug halted mode with M33
- *  0b1..FLEXPWM2 enters debug halted mode when CM33 is debug halted
  *  0b0..FLEXPWM2 does not enter debug halted mode with CM33
+ *  0b1..FLEXPWM2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM3_MASK (0x400U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM3_SHIFT (10U)
 /*! M33_FLEXPWM3 - FLEXPWM3 debug halted mode with M33
- *  0b1..FLEXPWM3 enters debug halted mode when CM33 is debug halted
  *  0b0..FLEXPWM3 does not enter debug halted mode with CM33
+ *  0b1..FLEXPWM3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM4_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM4_SHIFT (11U)
 /*! M33_FLEXPWM4 - FLEXPWM4 debug halted mode with M33
- *  0b1..FLEXPWM4 enters debug halted mode when CM33 is debug halted
  *  0b0..FLEXPWM4 does not enter debug halted mode with CM33
+ *  0b1..FLEXPWM4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_FLEXPWM4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_MIC_MASK (0x1000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_MIC_SHIFT (12U)
 /*! M33_MIC - MIC debug halted mode with M33
- *  0b1..MIC enters debug halted mode when CM33 is debug halted
  *  0b0..MIC does not enter debug halted mode with CM33
+ *  0b1..MIC enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_MIC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_MIC_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_MIC_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI2_MASK (0x2000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI2_SHIFT (13U)
 /*! M33_SAI2 - SAI2 debug halted mode with M33
- *  0b1..SAI2 enters debug halted mode when CM33 is debug halted
  *  0b0..SAI2 does not enter debug halted mode with CM33
+ *  0b1..SAI2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI3_MASK (0x4000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI3_SHIFT (14U)
 /*! M33_SAI3 - SAI3 debug halted mode with M33
- *  0b1..SAI3 enters debug halted mode when CM33 is debug halted
  *  0b0..SAI3 does not enter debug halted mode with CM33
+ *  0b1..SAI3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI4_MASK (0x8000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI4_SHIFT (15U)
 /*! M33_SAI4 - SAI4 debug halted mode with M33
- *  0b1..SAI4 enters debug halted mode when CM33 is debug halted
  *  0b0..SAI4 does not enter debug halted mode with CM33
+ *  0b1..SAI4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M33_SAI4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_WDOG5_MASK (0x10000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_WDOG5_SHIFT (16U)
 /*! M7_WDOG5 - WDOG5 debug halted mode with M7
- *  0b1..WDOG5 enters debug halted mode when CM7 is debug halted
  *  0b0..WDOG5 does not enter debug halted mode with CM7
+ *  0b1..WDOG5 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_WDOG5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_WDOG5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_WDOG5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPTMR3_MASK (0x20000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPTMR3_SHIFT (17U)
 /*! M7_LPTMR3 - LPTMR3 debug halted mode with M7
- *  0b1..LPTMR3 enters debug halted mode when CM7 is debug halted
  *  0b0..LPTMR3 does not enter debug halted mode with CM7
+ *  0b1..LPTMR3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPTMR3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPTMR3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPTMR3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI5_MASK (0x40000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI5_SHIFT (18U)
 /*! M7_LPSPI5 - LPTMR3 debug halted mode with M7
- *  0b1..enters debug halted mode when CM7 is debug halted
  *  0b0..LPTMR3 does not enter debug halted mode with CM7
+ *  0b1..enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI6_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI6_SHIFT (19U)
 /*! M7_LPSPI6 - LPSPI6 debug halted mode with M7
- *  0b1..LPSPI6 enters debug halted mode when CM7 is debug halted
  *  0b0..LPSPI6 does not enter debug halted mode with CM7
+ *  0b1..LPSPI6 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPSPI6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPIT3_MASK (0x100000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPIT3_SHIFT (20U)
 /*! M7_LPIT3 - LPIT3 debug halted mode with M7
- *  0b1..LPIT3 enters debug halted mode when CM7 is debug halted
  *  0b0..LPIT3 does not enter debug halted mode with CM7
+ *  0b1..LPIT3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPIT3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPIT3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPIT3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C5_MASK (0x200000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C5_SHIFT (21U)
 /*! M7_LPI2C5 - LPI2C5 debug halted mode with M7
- *  0b1..LPI2C5 enters debug halted mode when CM7 is debug halted
  *  0b0..LPI2C5 does not enter debug halted mode with CM7
+ *  0b1..LPI2C5 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C6_MASK (0x400000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C6_SHIFT (22U)
 /*! M7_LPI2C6 - LPI2C6" debug halted mode with M7
- *  0b1..LPI2C6" enters debug halted mode when CM7 is debug halted
  *  0b0..LPI2C6" does not enter debug halted mode with CM7
+ *  0b1..LPI2C6" enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_LPI2C6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_GPT2_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_GPT2_SHIFT (23U)
 /*! M7_GPT2 - GPT2 debug halted mode with M7
- *  0b1..GPT2 enters debug halted mode when CM7 is debug halted
  *  0b0..GPT2 does not enter debug halted mode with CM7
+ *  0b1..GPT2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_GPT2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_GPT2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_GPT2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM1_MASK (0x1000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM1_SHIFT (24U)
 /*! M7_FLEXPWM1 - FLEXPWM1 debug halted mode with M7
- *  0b1..FLEXPWM1 enters debug halted mode when CM7 is debug halted
  *  0b0..FLEXPWM1 does not enter debug halted mode with CM7
+ *  0b1..FLEXPWM1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM2_MASK (0x2000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM2_SHIFT (25U)
 /*! M7_FLEXPWM2 - FLEXPWM2 debug halted mode with M7
- *  0b1..FLEXPWM2 enters debug halted mode when CM7 is debug halted
  *  0b0..FLEXPWM2 does not enter debug halted mode with CM7
+ *  0b1..FLEXPWM2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM3_MASK (0x4000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM3_SHIFT (26U)
 /*! M7_FLEXPWM3 - FLEXPWM3 debug halted mode with M7
- *  0b1..FLEXPWM3 enters debug halted mode when CM7 is debug halted
  *  0b0..FLEXPWM3 does not enter debug halted mode with CM7
+ *  0b1..FLEXPWM3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM4_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM4_SHIFT (27U)
 /*! M7_FLEXPWM4 - FLEXPWM4 debug halted mode with M7
- *  0b1..FLEXPWM4 enters debug halted mode when CM7 is debug halted
  *  0b0..FLEXPWM4 does not enter debug halted mode with CM7
+ *  0b1..FLEXPWM4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_FLEXPWM4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_MIC_MASK (0x10000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_MIC_SHIFT (28U)
 /*! M7_MIC - MIC debug halted mode with M7
- *  0b1..MIC enters debug halted mode when CM7 is debug halted
  *  0b0..MIC does not enter debug halted mode with CM7
+ *  0b1..MIC enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_MIC(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_MIC_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_MIC_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI2_MASK (0x20000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI2_SHIFT (29U)
 /*! M7_SAI2 - SAI2 debug halted mode with M7
- *  0b1..SAI2 enters debug halted mode when CM7 is debug halted
  *  0b0..SAI2 does not enter debug halted mode with CM7
+ *  0b1..SAI2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI3_MASK (0x40000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI3_SHIFT (30U)
 /*! M7_SAI3 - SAI3 debug halted mode with M7
- *  0b1..SAI3 enters debug halted mode when CM7 is debug halted
  *  0b0..SAI3 does not enter debug halted mode with CM7
+ *  0b1..SAI3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI4_MASK (0x80000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI4_SHIFT (31U)
 /*! M7_SAI4 - SAI4 debug halted mode with M7
- *  0b1..SAI4 enters debug halted mode when CM7 is debug halted
  *  0b0..SAI4 does not enter debug halted mode with CM7
+ *  0b1..SAI4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG2_M7_SAI4_MASK)
 /*! @} */
@@ -684,192 +709,192 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC1_MASK (0x1U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC1_SHIFT (0U)
 /*! M33_SINC1 - I3C2 debug halted mode with M33
- *  0b1..I3C2 enters debug halted mode when CM33 is debug halted
  *  0b0..I3C2 does not enter debug halted mode with CM33
+ *  0b1..I3C2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC2_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC2_SHIFT (1U)
 /*! M33_SINC2 - SINC2 debug halted mode with M33
- *  0b1..SINC2 enters debug halted mode when CM33 is debug halted
  *  0b0..SINC2 does not enter debug halted mode with CM33
+ *  0b1..SINC2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC3_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC3_SHIFT (2U)
 /*! M33_SINC3 - SINC3 debug halted mode with M33
- *  0b1..SINC3 enters debug halted mode when CM33 is debug halted
  *  0b0..SINC3 does not enter debug halted mode with CM33
+ *  0b1..SINC3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_SINC3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER1_MASK (0x8U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER1_SHIFT (3U)
 /*! M33_QTIMER1 - QTIMER1 debug halted mode with M33
- *  0b1..QTIMER1 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER1 does not enter debug halted mode with CM33
+ *  0b1..QTIMER1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER2_MASK (0x10U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER2_SHIFT (4U)
 /*! M33_QTIMER2 - QTIMER2 debug halted mode with M33
- *  0b1..QTIMER2 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER2 does not enter debug halted mode with CM33
+ *  0b1..QTIMER2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER3_MASK (0x20U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER3_SHIFT (5U)
 /*! M33_QTIMER3 - QTIMER3 debug halted mode with M33
- *  0b1..QTIMER3 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER3 does not enter debug halted mode with CM33
+ *  0b1..QTIMER3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER4_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER4_SHIFT (6U)
 /*! M33_QTIMER4 - QTIMER4 debug halted mode with M33
- *  0b1..QTIMER4 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER4 does not enter debug halted mode with CM33
+ *  0b1..QTIMER4 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER5_MASK (0x80U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER5_SHIFT (7U)
 /*! M33_QTIMER5 - QTIMER5 debug halted mode with M33
- *  0b1..QTIMER5 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER5 does not enter debug halted mode with CM33
+ *  0b1..QTIMER5 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER6_MASK (0x100U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER6_SHIFT (8U)
 /*! M33_QTIMER6 - QTIMER6 debug halted mode with M33
- *  0b1..QTIMER6 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER6 does not enter debug halted mode with CM33
+ *  0b1..QTIMER6 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER7_MASK (0x200U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER7_SHIFT (9U)
 /*! M33_QTIMER7 - QTIMER7 debug halted mode with M33
- *  0b1..QTIMER7 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER7 does not enter debug halted mode with CM33
+ *  0b1..QTIMER7 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER8_MASK (0x400U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER8_SHIFT (10U)
 /*! M33_QTIMER8 - QTIMER8 debug halted mode with M33
- *  0b1..QTIMER8 enters debug halted mode when CM33 is debug halted
  *  0b0..QTIMER8 does not enter debug halted mode with CM33
+ *  0b1..QTIMER8 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER8(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER8_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_QTIMER8_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_I3C2_MASK (0x800U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_I3C2_SHIFT (11U)
 /*! M33_I3C2 - I3C2 debug halted mode with M33
- *  0b1..I3C2 enters debug halted mode when CM33 is debug halted
  *  0b0..I3C2 does not enter debug halted mode with CM33
+ *  0b1..I3C2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_I3C2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_I3C2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M33_I3C2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC1_MASK (0x10000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC1_SHIFT (16U)
 /*! M7_SINC1 - SINC1 debug halted mode with M7
- *  0b1..SINC1 enters debug halted mode when CM7 is debug halted
  *  0b0..SINC1 does not enter debug halted mode with CM7
+ *  0b1..SINC1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC2_MASK (0x20000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC2_SHIFT (17U)
 /*! M7_SINC2 - SINC2 debug halted mode with M7
- *  0b1..SINC2 enters debug halted mode when CM7 is debug halted
  *  0b0..SINC2 does not enter debug halted mode with CM7
+ *  0b1..SINC2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC3_MASK (0x40000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC3_SHIFT (18U)
 /*! M7_SINC3 - SINC3 debug halted mode with M7
- *  0b1..SINC3 enters debug halted mode when CM7 is debug halted
  *  0b0..SINC3 does not enter debug halted mode with CM7
+ *  0b1..SINC3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_SINC3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER1_MASK (0x80000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER1_SHIFT (19U)
 /*! M7_QTIMER1 - QTIMER1 debug halted mode with M7
- *  0b1..QTIMER1 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER1 does not enter debug halted mode with CM7
+ *  0b1..QTIMER1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER1_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER1_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER2_MASK (0x100000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER2_SHIFT (20U)
 /*! M7_QTIMER2 - QTIMER2 debug halted mode with M7
- *  0b1..QTIMER2 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER2 does not enter debug halted mode with CM7
+ *  0b1..QTIMER2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER2_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER3_MASK (0x200000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER3_SHIFT (21U)
 /*! M7_QTIMER3 - QTIMER3 debug halted mode with M7
- *  0b1..QTIMER3 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER3 does not enter debug halted mode with CM7
+ *  0b1..QTIMER3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER3_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER4_MASK (0x400000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER4_SHIFT (22U)
 /*! M7_QTIMER4 - QTIMER4 debug halted mode with M7
- *  0b1..QTIMER4 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER4 does not enter debug halted mode with CM7
+ *  0b1..QTIMER4 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER4(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER4_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER4_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER5_MASK (0x800000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER5_SHIFT (23U)
 /*! M7_QTIMER5 - QTIMER5 debug halted mode with M7
- *  0b1..QTIMER5 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER5 does not enter debug halted mode with CM7
+ *  0b1..QTIMER5 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER5_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER6_MASK (0x1000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER6_SHIFT (24U)
 /*! M7_QTIMER6 - debug halted mode with M7
- *  0b1..enters debug halted mode when CM7 is debug halted
  *  0b0..does not enter debug halted mode with CM7
+ *  0b1..enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER6(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER6_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER6_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER7_MASK (0x2000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER7_SHIFT (25U)
 /*! M7_QTIMER7 - QTIMER7 debug halted mode with M7
- *  0b1..QTIMER7 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER7 does not enter debug halted mode with CM7
+ *  0b1..QTIMER7 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER7(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER7_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER7_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER8_MASK (0x4000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER8_SHIFT (26U)
 /*! M7_QTIMER8 - QTIMER8 debug halted mode with M7
- *  0b1..QTIMER8 enters debug halted mode when CM7 is debug halted
  *  0b0..QTIMER8 does not enter debug halted mode with CM7
+ *  0b1..QTIMER8 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER8(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER8_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_QTIMER8_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_I3C2_MASK (0x8000000U)
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_I3C2_SHIFT (27U)
 /*! M7_I3C2 - debug halted mode with M7
- *  0b1..I3C2 enters debug halted mode when CM7 is debug halted
  *  0b0..I3C2 does not enter debug halted mode with CM7
+ *  0b1..I3C2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_I3C2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_I3C2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG3_M7_I3C2_MASK)
 /*! @} */
@@ -880,24 +905,24 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_SSI_SSI_IDLE_MASK     (0x1U)
 #define BLK_CTRL_WAKEUPMIX_SSI_SSI_IDLE_SHIFT    (0U)
 /*! SSI_IDLE - WAKEUP Domain to M7 SSI master idle
- *  0b1..WAKEUP Domain to M7 SSI master is idle
  *  0b0..WAKEUP Domain to M7 SSI master is not idle
+ *  0b1..WAKEUP Domain to M7 SSI master is idle
  */
 #define BLK_CTRL_WAKEUPMIX_SSI_SSI_IDLE(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_SSI_SSI_IDLE_SHIFT)) & BLK_CTRL_WAKEUPMIX_SSI_SSI_IDLE_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_SSI_BLKHOLE_MODE_B_MASK (0x2U)
 #define BLK_CTRL_WAKEUPMIX_SSI_BLKHOLE_MODE_B_SHIFT (1U)
 /*! BLKHOLE_MODE_B - WAKEUP Domain to M7 SSI master blackhole mode
- *  0b1..WAKEUP Domain to M7 SSI master will enter blackhole mode
  *  0b0..WAKEUP Domain to M7 SSI master will exit blackhole mode
+ *  0b1..WAKEUP Domain to M7 SSI master will enter blackhole mode
  */
 #define BLK_CTRL_WAKEUPMIX_SSI_BLKHOLE_MODE_B(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_SSI_BLKHOLE_MODE_B_SHIFT)) & BLK_CTRL_WAKEUPMIX_SSI_BLKHOLE_MODE_B_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_SSI_PAUSE_MODE_MASK   (0x4U)
 #define BLK_CTRL_WAKEUPMIX_SSI_PAUSE_MODE_SHIFT  (2U)
 /*! PAUSE_MODE - WAKEUP Domain to M7 SSI master pause mode
- *  0b1..WAKEUP Domain to M7 SSI master will exit pause mode
  *  0b0..WAKEUP Domain to M7 SSI master will enter pause mode
+ *  0b1..WAKEUP Domain to M7 SSI master will exit pause mode
  */
 #define BLK_CTRL_WAKEUPMIX_SSI_PAUSE_MODE(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_SSI_PAUSE_MODE_SHIFT)) & BLK_CTRL_WAKEUPMIX_SSI_PAUSE_MODE_MASK)
 /*! @} */
@@ -924,8 +949,8 @@ typedef struct {
 #define BLK_CTRL_WAKEUPMIX_ECAT_MISC_CFG_GLB_EN_MASK (0x4U)
 #define BLK_CTRL_WAKEUPMIX_ECAT_MISC_CFG_GLB_EN_SHIFT (2U)
 /*! GLB_EN - Global enable of EtherCAT
- *  0b1..EtherCAT is on
  *  0b0..EtherCAT is off
+ *  0b1..EtherCAT is on
  */
 #define BLK_CTRL_WAKEUPMIX_ECAT_MISC_CFG_GLB_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_ECAT_MISC_CFG_GLB_EN_SHIFT)) & BLK_CTRL_WAKEUPMIX_ECAT_MISC_CFG_GLB_EN_MASK)
 
@@ -2780,5 +2805,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* BLK_CTRL_WAKEUPMIX_H_ */
+#endif  /* PERI_BLK_CTRL_WAKEUPMIX_H_ */
 

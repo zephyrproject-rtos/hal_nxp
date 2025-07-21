@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ETH_LINK
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file NETC_ETH_LINK.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_NETC_ETH_LINK.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for NETC_ETH_LINK
  *
  * CMSIS Peripheral Access Layer for NETC_ETH_LINK
  */
 
-#if !defined(NETC_ETH_LINK_H_)
-#define NETC_ETH_LINK_H_                         /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_NETC_ETH_LINK_H_)
+#define PERI_NETC_ETH_LINK_H_                    /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -112,9 +137,9 @@ typedef struct {
   __IO uint32_t PM0_MAXFRM;                        /**< Port MAC 0 Maximum Frame Length Register, offset: 0x14 */
   __IO uint32_t PM0_MINFRM;                        /**< Port MAC 0 Minimum Frame Length Register, offset: 0x18 */
        uint8_t RESERVED_1[20];
-  __IO uint32_t PM0_MDIO_CFG;                      /**< Port MAC 0 Internal MDIO Configuration Register, offset: 0x30, not available in all instances (available on 27 out of 45) */
-  __IO uint32_t PM0_MDIO_CTL;                      /**< Port MAC 0 Internal MDIO Interface Control Register, offset: 0x34, not available in all instances (available on 27 out of 45) */
-  __IO uint32_t PM0_MDIO_DATA;                     /**< Port MAC 0 Internal MDIO Interface Data Register, offset: 0x38, not available in all instances (available on 27 out of 45) */
+  __IO uint32_t PM0_MDIO_CFG;                      /**< Port MAC 0 Internal MDIO Configuration Register, offset: 0x30, not available in all instances (available on 60 out of 100) */
+  __IO uint32_t PM0_MDIO_CTL;                      /**< Port MAC 0 Internal MDIO Interface Control Register, offset: 0x34, not available in all instances (available on 60 out of 100) */
+  __IO uint32_t PM0_MDIO_DATA;                     /**< Port MAC 0 Internal MDIO Interface Data Register, offset: 0x38, not available in all instances (available on 60 out of 100) */
        uint8_t RESERVED_2[4];
   __IO uint32_t PM0_IEVENT;                        /**< Port MAC 0 Interrupt Event Register, offset: 0x40 */
   __IO uint32_t PM0_TX_IPG_PREAMBLE;               /**< Port MAC 0 Transmit Inter-Packet Gap Length and Flexible Preamble length Register, offset: 0x44 */
@@ -2565,5 +2590,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* NETC_ETH_LINK_H_ */
+#endif  /* PERI_NETC_ETH_LINK_H_ */
 

@@ -3,14 +3,14 @@
 **     Processors:          MIMXRT1011CAE4A
 **                          MIMXRT1011DAE5A
 **
-**     Version:             rev. 1.2, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTWDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Update header files to align with IMXRT1010RM Rev.B.
 **     - rev. 1.2 (2021-08-10)
 **         Update header files to align with IMXRT1010RM Rev.1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RTWDOG.h
- * @version 1.2
- * @date 2021-08-10
+ * @file PERI_RTWDOG.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RTWDOG
  *
  * CMSIS Peripheral Access Layer for RTWDOG
  */
 
-#if !defined(RTWDOG_H_)
-#define RTWDOG_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RTWDOG_H_)
+#define PERI_RTWDOG_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1011CAE4A) || defined(CPU_MIMXRT1011DAE5A))
 #include "MIMXRT1011_COMMON.h"
@@ -303,5 +306,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RTWDOG_H_ */
+#endif  /* PERI_RTWDOG_H_ */
 

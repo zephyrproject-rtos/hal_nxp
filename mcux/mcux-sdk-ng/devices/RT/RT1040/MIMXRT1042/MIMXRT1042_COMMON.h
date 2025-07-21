@@ -12,14 +12,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1040RM Rev.1, 09/2022
-**     Version:             rev. 0.1, 2021-07-20
-**     Build:               b241025
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1042
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **     Revisions:
 **     - rev. 0.1 (2021-07-20)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1042_COMMON.h
- * @version 0.1
- * @date 2021-07-20
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT1042
  *
  * CMSIS Peripheral Access Layer for MIMXRT1042
@@ -46,9 +49,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0000U
+#define MCU_MEM_MAP_VERSION 0x0100U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -269,7 +272,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MIMXRT1042_SERIES
 #define MIMXRT1042_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMXRT1042_features.h"
 
@@ -372,6 +377,14 @@ typedef enum IRQn {
 #define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn }
 #define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn }
 #define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn }
+/* Backward compatibility */
+#define CAN_ECR_TXERRCNT_MASK         CAN_ECR_TX_ERR_COUNTER_MASK
+#define CAN_ECR_TXERRCNT_SHIFT        CAN_ECR_TX_ERR_COUNTER_SHIFT
+#define CAN_ECR_TXERRCNT(x)           CAN_ECR_TX_ERR_COUNTER(x)
+#define CAN_ECR_RXERRCNT_MASK         CAN_ECR_RX_ERR_COUNTER_MASK
+#define CAN_ECR_RXERRCNT_SHIFT        CAN_ECR_RX_ERR_COUNTER_SHIFT
+#define CAN_ECR_RXERRCNT(x)           CAN_ECR_RX_ERR_COUNTER(x)
+
 
 /* CCM - Peripheral instance base addresses */
 /** Peripheral CCM base address */

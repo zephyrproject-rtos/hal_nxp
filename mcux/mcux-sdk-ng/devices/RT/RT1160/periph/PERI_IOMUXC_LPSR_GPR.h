@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_LPSR_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_LPSR_GPR.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_IOMUXC_LPSR_GPR.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_LPSR_GPR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_LPSR_GPR
  */
 
-#if !defined(IOMUXC_LPSR_GPR_H_)
-#define IOMUXC_LPSR_GPR_H_                       /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_LPSR_GPR_H_)
+#define PERI_IOMUXC_LPSR_GPR_H_                  /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -212,8 +215,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR2_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR2_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR2_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR2_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR2_LOCK_MASK)
 
@@ -229,8 +232,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR3_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR3_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR3_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR3_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR3_LOCK_MASK)
 
@@ -246,8 +249,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR4_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR4_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR4_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR4_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR4_LOCK_MASK)
 
@@ -263,8 +266,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR5_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR5_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR5_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR5_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR5_LOCK_MASK)
 
@@ -280,8 +283,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR6_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR6_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR6_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR6_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR6_LOCK_MASK)
 
@@ -297,8 +300,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR7_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR7_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR7_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR7_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR7_LOCK_MASK)
 
@@ -314,8 +317,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR8_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR8_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR8_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR8_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR8_LOCK_MASK)
 
@@ -331,8 +334,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR9_LOCK_MASK           (0x1U)
 #define IOMUXC_LPSR_GPR_GPR9_LOCK_SHIFT          (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR9_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR9_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR9_LOCK_MASK)
 
@@ -348,8 +351,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR10_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR10_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR10_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR10_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR10_LOCK_MASK)
 
@@ -365,8 +368,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR11_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR11_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR11_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR11_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR11_LOCK_MASK)
 
@@ -382,8 +385,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR12_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR12_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR12_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR12_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR12_LOCK_MASK)
 
@@ -399,8 +402,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR13_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR13_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR13_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR13_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR13_LOCK_MASK)
 
@@ -416,8 +419,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR14_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR14_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR14_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR14_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR14_LOCK_MASK)
 
@@ -433,8 +436,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR15_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR15_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR15_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR15_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR15_LOCK_MASK)
 
@@ -450,8 +453,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR16_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR16_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR16_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR16_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR16_LOCK_MASK)
 
@@ -467,8 +470,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR17_LOCK_MASK          (0x1U)
 #define IOMUXC_LPSR_GPR_GPR17_LOCK_SHIFT         (0U)
 /*! LOCK - Lock the write to bit 31:1
- *  0b1..Write access to bit 31:1 is blocked
  *  0b0..Write access to bit 31:1 is not blocked
+ *  0b1..Write access to bit 31:1 is blocked
  */
 #define IOMUXC_LPSR_GPR_GPR17_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR17_LOCK_SHIFT)) & IOMUXC_LPSR_GPR_GPR17_LOCK_MASK)
 
@@ -484,8 +487,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R0_ENCRYPT_ENABLE - APC memory region-0 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE_MASK)
 
@@ -501,8 +504,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR19_APC_R1_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR19_APC_R1_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R1_ENCRYPT_ENABLE - APC memory region-1 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR19_APC_R1_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR19_APC_R1_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR19_APC_R1_ENCRYPT_ENABLE_MASK)
 
@@ -518,8 +521,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR20_APC_R2_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR20_APC_R2_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R2_ENCRYPT_ENABLE - APC memory region-2 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR20_APC_R2_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR20_APC_R2_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR20_APC_R2_ENCRYPT_ENABLE_MASK)
 
@@ -535,8 +538,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR21_APC_R3_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR21_APC_R3_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R3_ENCRYPT_ENABLE - APC memory region-3 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR21_APC_R3_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR21_APC_R3_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR21_APC_R3_ENCRYPT_ENABLE_MASK)
 
@@ -552,8 +555,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR22_APC_R4_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR22_APC_R4_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R4_ENCRYPT_ENABLE - APC memory region-4 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR22_APC_R4_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR22_APC_R4_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR22_APC_R4_ENCRYPT_ENABLE_MASK)
 
@@ -569,8 +572,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR23_APC_R5_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR23_APC_R5_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R5_ENCRYPT_ENABLE - APC memory region-5 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR23_APC_R5_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR23_APC_R5_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR23_APC_R5_ENCRYPT_ENABLE_MASK)
 
@@ -586,8 +589,8 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR24_APC_R6_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR24_APC_R6_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R6_ENCRYPT_ENABLE - APC memory region-6 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR24_APC_R6_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR24_APC_R6_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR24_APC_R6_ENCRYPT_ENABLE_MASK)
 
@@ -603,16 +606,16 @@ typedef struct {
 #define IOMUXC_LPSR_GPR_GPR25_APC_R7_ENCRYPT_ENABLE_MASK (0x10U)
 #define IOMUXC_LPSR_GPR_GPR25_APC_R7_ENCRYPT_ENABLE_SHIFT (4U)
 /*! APC_R7_ENCRYPT_ENABLE - APC memory region-7 encryption enable
- *  0b1..Encryption enabled
  *  0b0..No effect
+ *  0b1..Encryption enabled
  */
 #define IOMUXC_LPSR_GPR_GPR25_APC_R7_ENCRYPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR25_APC_R7_ENCRYPT_ENABLE_SHIFT)) & IOMUXC_LPSR_GPR_GPR25_APC_R7_ENCRYPT_ENABLE_MASK)
 
 #define IOMUXC_LPSR_GPR_GPR25_APC_VALID_MASK     (0x20U)
 #define IOMUXC_LPSR_GPR_GPR25_APC_VALID_SHIFT    (5U)
 /*! APC_VALID - APC global enable bit
- *  0b1..Enable encryption for GPRx[APC_x_ENCRYPT_ENABLE] (valid for GPR2-GPR25)
  *  0b0..No effect
+ *  0b1..Enable encryption for GPRx[APC_x_ENCRYPT_ENABLE] (valid for GPR2-GPR25)
  */
 #define IOMUXC_LPSR_GPR_GPR25_APC_VALID(x)       (((uint32_t)(((uint32_t)(x)) << IOMUXC_LPSR_GPR_GPR25_APC_VALID_SHIFT)) & IOMUXC_LPSR_GPR_GPR25_APC_VALID_MASK)
 
@@ -2169,5 +2172,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_LPSR_GPR_H_ */
+#endif  /* PERI_IOMUXC_LPSR_GPR_H_ */
 

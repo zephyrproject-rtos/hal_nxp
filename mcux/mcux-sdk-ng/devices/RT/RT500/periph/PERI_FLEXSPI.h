@@ -9,14 +9,14 @@
 **                          MIMXRT595SFFOC_cm33
 **                          MIMXRT595SFFOC_dsp
 **
-**     Version:             rev. 5.0, 2020-08-27
-**     Build:               b240705
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2020-08-27)
 **         Base on Rev.C RM.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXSPI.h
- * @version 5.0
- * @date 2020-08-27
+ * @file PERI_FLEXSPI.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXSPI
  *
  * CMSIS Peripheral Access Layer for FLEXSPI
  */
 
-#if !defined(FLEXSPI_H_)
-#define FLEXSPI_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXSPI_H_)
+#define PERI_FLEXSPI_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT533SFAWC) || defined(CPU_MIMXRT533SFFOC))
 #include "MIMXRT533S_COMMON.h"
@@ -132,7 +135,7 @@ typedef struct {
   __IO uint32_t IPCR0;                             /**< IP Control Register 0, offset: 0xA0 */
   __IO uint32_t IPCR1;                             /**< IP Control Register 1, offset: 0xA4 */
        uint8_t RESERVED_3[8];
-  __O  uint32_t IPCMD;                             /**< IP Command Register, offset: 0xB0 */
+  __IO uint32_t IPCMD;                             /**< IP Command Register, offset: 0xB0 */
   __IO uint32_t DLPR;                              /**< Data Learn Pattern Register, offset: 0xB4 */
   __IO uint32_t IPRXFCR;                           /**< IP RX FIFO Control Register, offset: 0xB8 */
   __IO uint32_t IPTXFCR;                           /**< IP TX FIFO Control Register, offset: 0xBC */
@@ -1228,5 +1231,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXSPI_H_ */
+#endif  /* PERI_FLEXSPI_H_ */
 

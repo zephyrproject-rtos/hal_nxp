@@ -9,14 +9,14 @@
 **                          MIMXRT1064DVL6A
 **                          MIMXRT1064DVL6B
 **
-**     Version:             rev. 1.3, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **     - rev. 1.3 (2021-08-10)
 **         Update header files to align with IMXRT1064RM Rev.2.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CAN.h
- * @version 1.3
- * @date 2021-08-10
+ * @file PERI_CAN.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CAN
  *
  * CMSIS Peripheral Access Layer for CAN
  */
 
-#if !defined(CAN_H_)
-#define CAN_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CAN_H_)
+#define PERI_CAN_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1064CVJ5A) || defined(CPU_MIMXRT1064CVJ5B) || defined(CPU_MIMXRT1064CVL5A) || defined(CPU_MIMXRT1064CVL5B) || defined(CPU_MIMXRT1064DVJ6A) || defined(CPU_MIMXRT1064DVJ6B) || defined(CPU_MIMXRT1064DVL6A) || defined(CPU_MIMXRT1064DVL6B))
 #include "MIMXRT1064_COMMON.h"
@@ -232,8 +235,8 @@ typedef struct {
 #define CAN_MCR_FDEN_MASK                        (0x800U)
 #define CAN_MCR_FDEN_SHIFT                       (11U)
 /*! FDEN - CAN FD operation enable
- *  0b1..CAN FD is enabled. FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats.
  *  0b0..CAN FD is disabled. FlexCAN is able to receive and transmit messages in CAN 2.0 format.
+ *  0b1..CAN FD is enabled. FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats.
  */
 #define CAN_MCR_FDEN(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_MCR_FDEN_SHIFT)) & CAN_MCR_FDEN_MASK)
 
@@ -289,16 +292,16 @@ typedef struct {
 #define CAN_MCR_WAKSRC_MASK                      (0x80000U)
 #define CAN_MCR_WAKSRC_SHIFT                     (19U)
 /*! WAKSRC - Wake Up Source
- *  0b1..FLEXCAN uses the filtered FLEXCAN_RX input to detect recessive to dominant edges on the CAN bus
  *  0b0..FLEXCAN uses the unfiltered FLEXCAN_RX input to detect recessive to dominant edges on the CAN bus.
+ *  0b1..FLEXCAN uses the filtered FLEXCAN_RX input to detect recessive to dominant edges on the CAN bus
  */
 #define CAN_MCR_WAKSRC(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_MCR_WAKSRC_SHIFT)) & CAN_MCR_WAKSRC_MASK)
 
 #define CAN_MCR_LPMACK_MASK                      (0x100000U)
 #define CAN_MCR_LPMACK_SHIFT                     (20U)
 /*! LPMACK - Low-Power Mode Acknowledge
- *  0b1..FLEXCAN is either in Disable Mode, or Stop mode
  *  0b0..FLEXCAN not in any of the low power modes
+ *  0b1..FLEXCAN is either in Disable Mode, or Stop mode
  */
 #define CAN_MCR_LPMACK(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_MCR_LPMACK_SHIFT)) & CAN_MCR_LPMACK_MASK)
 
@@ -362,8 +365,8 @@ typedef struct {
 #define CAN_MCR_HALT_MASK                        (0x10000000U)
 #define CAN_MCR_HALT_SHIFT                       (28U)
 /*! HALT - Halt FlexCAN
- *  0b0..No Freeze mode request.
- *  0b1..Enters Freeze mode if the FRZ bit is asserted.
+ *  0b0..No Freeze Mode request.
+ *  0b1..Enters Freeze Mode if the FRZ bit is asserted.
  */
 #define CAN_MCR_HALT(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_MCR_HALT_SHIFT)) & CAN_MCR_HALT_MASK)
 
@@ -419,16 +422,16 @@ typedef struct {
 #define CAN_CTRL1_TSYN_MASK                      (0x20U)
 #define CAN_CTRL1_TSYN_SHIFT                     (5U)
 /*! TSYN - Timer Sync
- *  0b0..Timer sync feature disabled
- *  0b1..Timer sync feature enabled
+ *  0b0..Timer Sync feature disabled
+ *  0b1..Timer Sync feature enabled
  */
 #define CAN_CTRL1_TSYN(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_TSYN_SHIFT)) & CAN_CTRL1_TSYN_MASK)
 
 #define CAN_CTRL1_BOFFREC_MASK                   (0x40U)
 #define CAN_CTRL1_BOFFREC_SHIFT                  (6U)
 /*! BOFFREC - Bus Off Recovery
- *  0b1..Automatic recovering from Bus Off state disabled
  *  0b0..Automatic recovering from Bus Off state enabled, according to CAN Spec 2.0 part B
+ *  0b1..Automatic recovering from Bus Off state disabled
  */
 #define CAN_CTRL1_BOFFREC(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_BOFFREC_SHIFT)) & CAN_CTRL1_BOFFREC_MASK)
 
@@ -517,8 +520,8 @@ typedef struct {
 #define CAN_RXMGMASK_MG_MASK                     (0xFFFFFFFFU)
 #define CAN_RXMGMASK_MG_SHIFT                    (0U)
 /*! MG - Rx Mailboxes Global Mask Bits
- *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked against the one received
  *  0b00000000000000000000000000000000..the corresponding bit in the filter is "don't care"
+ *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked against the one received
  */
 #define CAN_RXMGMASK_MG(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_RXMGMASK_MG_SHIFT)) & CAN_RXMGMASK_MG_MASK)
 /*! @} */
@@ -529,8 +532,8 @@ typedef struct {
 #define CAN_RX14MASK_RX14M_MASK                  (0xFFFFFFFFU)
 #define CAN_RX14MASK_RX14M_SHIFT                 (0U)
 /*! RX14M - Rx Buffer 14 Mask Bits
- *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  *  0b00000000000000000000000000000000..the corresponding bit in the filter is "don't care"
+ *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  */
 #define CAN_RX14MASK_RX14M(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_RX14MASK_RX14M_SHIFT)) & CAN_RX14MASK_RX14M_MASK)
 /*! @} */
@@ -541,8 +544,8 @@ typedef struct {
 #define CAN_RX15MASK_RX15M_MASK                  (0xFFFFFFFFU)
 #define CAN_RX15MASK_RX15M_SHIFT                 (0U)
 /*! RX15M - Rx Buffer 15 Mask Bits
- *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  *  0b00000000000000000000000000000000..the corresponding bit in the filter is "don't care"
+ *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  */
 #define CAN_RX15MASK_RX15M(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_RX15MASK_RX15M_SHIFT)) & CAN_RX15MASK_RX15M_MASK)
 /*! @} */
@@ -550,22 +553,14 @@ typedef struct {
 /*! @name ECR - Error Counter */
 /*! @{ */
 
-#define CAN_ECR_TXERRCNT_MASK                    (0xFFU)
-#define CAN_ECR_TXERRCNT_SHIFT                   (0U)
-/*! TXERRCNT - Transmit Error Counter */
-#define CAN_ECR_TXERRCNT(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ECR_TXERRCNT_SHIFT)) & CAN_ECR_TXERRCNT_MASK)
-
 #define CAN_ECR_TX_ERR_COUNTER_MASK              (0xFFU)
 #define CAN_ECR_TX_ERR_COUNTER_SHIFT             (0U)
+/*! TX_ERR_COUNTER - Transmit Error Counter */
 #define CAN_ECR_TX_ERR_COUNTER(x)                (((uint32_t)(((uint32_t)(x)) << CAN_ECR_TX_ERR_COUNTER_SHIFT)) & CAN_ECR_TX_ERR_COUNTER_MASK)
-
-#define CAN_ECR_RXERRCNT_MASK                    (0xFF00U)
-#define CAN_ECR_RXERRCNT_SHIFT                   (8U)
-/*! RXERRCNT - Receive Error Counter */
-#define CAN_ECR_RXERRCNT(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ECR_RXERRCNT_SHIFT)) & CAN_ECR_RXERRCNT_MASK)
 
 #define CAN_ECR_RX_ERR_COUNTER_MASK              (0xFF00U)
 #define CAN_ECR_RX_ERR_COUNTER_SHIFT             (8U)
+/*! RX_ERR_COUNTER - Receive Error Counter */
 #define CAN_ECR_RX_ERR_COUNTER(x)                (((uint32_t)(((uint32_t)(x)) << CAN_ECR_RX_ERR_COUNTER_SHIFT)) & CAN_ECR_RX_ERR_COUNTER_MASK)
 
 #define CAN_ECR_TXERRCNT_FAST_MASK               (0xFF0000U)
@@ -585,8 +580,8 @@ typedef struct {
 #define CAN_ESR1_WAKINT_MASK                     (0x1U)
 #define CAN_ESR1_WAKINT_SHIFT                    (0U)
 /*! WAKINT - Wake-Up Interrupt
- *  0b1..Indicates a recessive to dominant transition received on the CAN bus when the FLEXCAN module is in Stop Mode
  *  0b0..No such occurrence
+ *  0b1..Indicates a recessive to dominant transition received on the CAN bus when the FLEXCAN module is in Stop Mode
  */
 #define CAN_ESR1_WAKINT(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_WAKINT_SHIFT)) & CAN_ESR1_WAKINT_MASK)
 
@@ -659,7 +654,7 @@ typedef struct {
 #define CAN_ESR1_STFERR_SHIFT                    (10U)
 /*! STFERR - Stuffing Error
  *  0b0..No such occurrence.
- *  0b1..A stuffing error occurred since last read of this register.
+ *  0b1..A Stuffing Error occurred since last read of this register.
  */
 #define CAN_ESR1_STFERR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_STFERR_SHIFT)) & CAN_ESR1_STFERR_MASK)
 
@@ -803,8 +798,8 @@ typedef struct {
 #define CAN_IMASK2_BUFHM_MASK                    (0xFFFFFFFFU)
 #define CAN_IMASK2_BUFHM_SHIFT                   (0U)
 /*! BUFHM
- *  0b00000000000000000000000000000001..The corresponding buffer Interrupt is enabled
  *  0b00000000000000000000000000000000..The corresponding buffer Interrupt is disabled
+ *  0b00000000000000000000000000000001..The corresponding buffer Interrupt is enabled
  */
 #define CAN_IMASK2_BUFHM(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_IMASK2_BUFHM_SHIFT)) & CAN_IMASK2_BUFHM_MASK)
 /*! @} */
@@ -820,8 +815,8 @@ typedef struct {
 #define CAN_IMASK1_BUFLM_MASK                    (0xFFFFFFFFU)
 #define CAN_IMASK1_BUFLM_SHIFT                   (0U)
 /*! BUFLM
- *  0b00000000000000000000000000000001..The corresponding buffer Interrupt is enabled
  *  0b00000000000000000000000000000000..The corresponding buffer Interrupt is disabled
+ *  0b00000000000000000000000000000001..The corresponding buffer Interrupt is enabled
  */
 #define CAN_IMASK1_BUFLM(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_IMASK1_BUFLM_SHIFT)) & CAN_IMASK1_BUFLM_MASK)
 /*! @} */
@@ -837,8 +832,8 @@ typedef struct {
 #define CAN_IFLAG2_BUFHI_MASK                    (0xFFFFFFFFU)
 #define CAN_IFLAG2_BUFHI_SHIFT                   (0U)
 /*! BUFHI
- *  0b00000000000000000000000000000001..The corresponding buffer has successfully completed transmission or reception
  *  0b00000000000000000000000000000000..No such occurrence
+ *  0b00000000000000000000000000000001..The corresponding buffer has successfully completed transmission or reception
  */
 #define CAN_IFLAG2_BUFHI(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_IFLAG2_BUFHI_SHIFT)) & CAN_IFLAG2_BUFHI_MASK)
 /*! @} */
@@ -857,8 +852,8 @@ typedef struct {
 #define CAN_IFLAG1_BUF4TO0I_MASK                 (0x1FU)
 #define CAN_IFLAG1_BUF4TO0I_SHIFT                (0U)
 /*! BUF4TO0I
- *  0b00001..Corresponding MB completed transmission/reception
  *  0b00000..No such occurrence
+ *  0b00001..Corresponding MB completed transmission/reception
  */
 #define CAN_IFLAG1_BUF4TO0I(x)                   (((uint32_t)(((uint32_t)(x)) << CAN_IFLAG1_BUF4TO0I_SHIFT)) & CAN_IFLAG1_BUF4TO0I_MASK)
 
@@ -895,8 +890,8 @@ typedef struct {
 #define CAN_IFLAG1_BUF31TO8I_MASK                (0xFFFFFF00U)
 #define CAN_IFLAG1_BUF31TO8I_SHIFT               (8U)
 /*! BUF31TO8I - Buffer MBi Interrupt
- *  0b000000000000000000000001..The corresponding MB has successfully completed transmission or reception
  *  0b000000000000000000000000..No such occurrence
+ *  0b000000000000000000000001..The corresponding MB has successfully completed transmission or reception
  */
 #define CAN_IFLAG1_BUF31TO8I(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_IFLAG1_BUF31TO8I_SHIFT)) & CAN_IFLAG1_BUF31TO8I_MASK)
 /*! @} */
@@ -941,8 +936,8 @@ typedef struct {
 #define CAN_CTRL2_EACEN_MASK                     (0x10000U)
 #define CAN_CTRL2_EACEN_SHIFT                    (16U)
 /*! EACEN - Entire Frame Arbitration Field Comparison Enable For Rx Mailboxes
- *  0b0..Rx mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
- *  0b1..Enables the comparison of both Rx mailbox filter's IDE and RTR bit with their corresponding bits within
+ *  0b0..Rx Mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
+ *  0b1..Enables the comparison of both Rx Mailbox filter's IDE and RTR bit with their corresponding bits within
  *       the incoming frame. Mask bits do apply.
  */
 #define CAN_CTRL2_EACEN(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_EACEN_SHIFT)) & CAN_CTRL2_EACEN_MASK)
@@ -976,8 +971,8 @@ typedef struct {
 #define CAN_CTRL2_WRMFRZ_MASK                    (0x10000000U)
 #define CAN_CTRL2_WRMFRZ_SHIFT                   (28U)
 /*! WRMFRZ
- *  0b1..Enable unrestricted write access to FlexCAN memory
  *  0b0..Keep the write access restricted in some regions of FlexCAN memory
+ *  0b1..Enable unrestricted write access to FlexCAN memory
  */
 #define CAN_CTRL2_WRMFRZ(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_WRMFRZ_SHIFT)) & CAN_CTRL2_WRMFRZ_MASK)
 
@@ -1004,8 +999,8 @@ typedef struct {
 #define CAN_ESR2_IMB_MASK                        (0x2000U)
 #define CAN_ESR2_IMB_SHIFT                       (13U)
 /*! IMB - Inactive Mailbox
- *  0b0..If ESR2[VPS] is asserted, the ESR2[LPTM] is not an inactive mailbox.
- *  0b1..If ESR2[VPS] is asserted, there is at least one inactive mailbox. LPTM content is the number of the first one.
+ *  0b0..If ESR2[VPS] is asserted, the ESR2[LPTM] is not an inactive Mailbox.
+ *  0b1..If ESR2[VPS] is asserted, there is at least one inactive Mailbox. LPTM content is the number of the first one.
  */
 #define CAN_ESR2_IMB(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_ESR2_IMB_SHIFT)) & CAN_ESR2_IMB_MASK)
 
@@ -1043,8 +1038,8 @@ typedef struct {
 #define CAN_RXFGMASK_FGM_MASK                    (0xFFFFFFFFU)
 #define CAN_RXFGMASK_FGM_SHIFT                   (0U)
 /*! FGM - Rx FIFO Global Mask Bits
- *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  *  0b00000000000000000000000000000000..The corresponding bit in the filter is "don't care"
+ *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  */
 #define CAN_RXFGMASK_FGM(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_RXFGMASK_FGM_SHIFT)) & CAN_RXFGMASK_FGM_MASK)
 /*! @} */
@@ -2093,8 +2088,8 @@ typedef struct {
 #define CAN_RXIMR_MI_MASK                        (0xFFFFFFFFU)
 #define CAN_RXIMR_MI_SHIFT                       (0U)
 /*! MI - Individual Mask Bits
- *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  *  0b00000000000000000000000000000000..the corresponding bit in the filter is "don't care"
+ *  0b00000000000000000000000000000001..The corresponding bit in the filter is checked
  */
 #define CAN_RXIMR_MI(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_RXIMR_MI_SHIFT)) & CAN_RXIMR_MI_MASK)
 /*! @} */
@@ -2244,5 +2239,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CAN_H_ */
+#endif  /* PERI_CAN_H_ */
 

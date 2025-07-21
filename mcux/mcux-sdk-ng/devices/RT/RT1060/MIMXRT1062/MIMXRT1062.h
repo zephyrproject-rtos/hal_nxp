@@ -18,14 +18,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1060RM Rev.3, 07/2021 | IMXRT106XSRM Rev.0
-**     Version:             rev. 1.4, 2022-03-25
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1062
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -44,14 +44,17 @@
 **         Update header files to align with IMXRT1060RM Rev.3.
 **     - rev. 1.4 (2022-03-25)
 **         Add RT1060X device
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1062.h
- * @version 1.4
- * @date 2022-03-25
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT1062
  *
  * CMSIS Peripheral Access Layer for MIMXRT1062

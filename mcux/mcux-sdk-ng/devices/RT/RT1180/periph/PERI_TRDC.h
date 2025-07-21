@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file TRDC.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_TRDC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for TRDC
  *
  * CMSIS Peripheral Access Layer for TRDC
  */
 
-#if !defined(TRDC_H_)
-#define TRDC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_TRDC_H_)
+#define PERI_TRDC_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -400,14 +425,14 @@ typedef struct {
     __I  uint32_t W0;                                /**< MBC Domain Error Word0 Register, array offset: 0x400, array step: 0x10, available only on: TRDC1, TRDC2 (missing on TRDC3) */
     __I  uint32_t W1;                                /**< MBC Domain Error Word1 Register, array offset: 0x404, array step: 0x10, available only on: TRDC1, TRDC2 (missing on TRDC3) */
          uint8_t RESERVED_0[4];
-    __O  uint32_t W3;                                /**< MBC Domain Error Word3 Register, array offset: 0x40C, array step: 0x10, available only on: TRDC1, TRDC2 (missing on TRDC3) */
+    __IO uint32_t W3;                                /**< MBC Domain Error Word3 Register, array offset: 0x40C, array step: 0x10, available only on: TRDC1, TRDC2 (missing on TRDC3) */
   } MBC_DERR[TRDC_MBC_DERR_COUNT];
        uint8_t RESERVED_5[96];
   struct {                                         /* offset: 0x480, array step: 0x10 */
     __I  uint32_t W0;                                /**< MRC Domain Error Word0 Register, array offset: 0x480, array step: 0x10, irregular array, not all indices are valid */
     __I  uint32_t W1;                                /**< MRC Domain Error Word1 Register, array offset: 0x484, array step: 0x10, irregular array, not all indices are valid */
          uint8_t RESERVED_0[4];
-    __O  uint32_t W3;                                /**< MRC Domain Error Word3 Register, array offset: 0x48C, array step: 0x10, irregular array, not all indices are valid */
+    __IO uint32_t W3;                                /**< MRC Domain Error Word3 Register, array offset: 0x48C, array step: 0x10, irregular array, not all indices are valid */
   } MRC_DERR[TRDC_MRC_DERR_COUNT];
        uint8_t RESERVED_6[528];
   __IO uint32_t PID[TRDC_PID_COUNT];               /**< Process Identifier, array offset: 0x700, array step: 0x4, available only on: TRDC1 (missing on TRDC2, TRDC3) */
@@ -426,9 +451,9 @@ typedef struct {
   struct {                                         /* offset: 0x10000, array step: 0x2000 */
     __I  uint32_t MBC_MEM_GLBCFG[TRDC_MBC_INDEX_MBC_MEM_GLBCFG_COUNT];   /**< MBC Global Configuration Register, array offset: 0x10000, array step: index*0x2000, index2*0x4, available only on: TRDC1, TRDC2 (missing on TRDC3) */
     __IO uint32_t MBC_NSE_BLK_INDEX;                 /**< MBC NonSecure Enable Block Index, array offset: 0x10010, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
-    __O  uint32_t MBC_NSE_BLK_SET;                   /**< MBC NonSecure Enable Block Set, array offset: 0x10014, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
-    __O  uint32_t MBC_NSE_BLK_CLR;                   /**< MBC NonSecure Enable Block Clear, array offset: 0x10018, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
-    __O  uint32_t MBC_NSE_BLK_CLR_ALL;               /**< MBC NonSecure Enable Block Clear All, array offset: 0x1001C, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
+    __IO uint32_t MBC_NSE_BLK_SET;                   /**< MBC NonSecure Enable Block Set, array offset: 0x10014, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
+    __IO uint32_t MBC_NSE_BLK_CLR;                   /**< MBC NonSecure Enable Block Clear, array offset: 0x10018, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
+    __IO uint32_t MBC_NSE_BLK_CLR_ALL;               /**< MBC NonSecure Enable Block Clear All, array offset: 0x1001C, array step: 0x2000, available only on: TRDC1, TRDC2 (missing on TRDC3) */
     __IO uint32_t MBC_MEMN_GLBAC[TRDC_MBC_INDEX_MBC_MEMN_GLBAC_COUNT];   /**< MBC Global Access Control, array offset: 0x10020, array step: index*0x2000, index2*0x4, available only on: TRDC1, TRDC2 (missing on TRDC3) */
     __IO uint32_t MBC_DOM0_MEM0_BLK_CFG_W[TRDC_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_COUNT];   /**< MBC Memory Block Configuration Word, array offset: 0x10040, array step: index*0x2000, index2*0x4, irregular array, not all indices are valid */
          uint8_t RESERVED_0[192];
@@ -691,9 +716,9 @@ typedef struct {
     __I  uint32_t MRC_GLBCFG;                        /**< MRC Global Configuration Register, array offset: 0x14000, array step: 0x1000, irregular array, not all indices are valid */
          uint8_t RESERVED_0[12];
     __IO uint32_t MRC_NSE_RGN_INDIRECT;              /**< MRC NonSecure Enable Region Indirect, array offset: 0x14010, array step: 0x1000, irregular array, not all indices are valid */
-    __O  uint32_t MRC_NSE_RGN_SET;                   /**< MRC NonSecure Enable Region Set, array offset: 0x14014, array step: 0x1000, irregular array, not all indices are valid */
-    __O  uint32_t MRC_NSE_RGN_CLR;                   /**< MRC NonSecure Enable Region Clear, array offset: 0x14018, array step: 0x1000, irregular array, not all indices are valid */
-    __O  uint32_t MRC_NSE_RGN_CLR_ALL;               /**< MRC NonSecure Enable Region Clear All, array offset: 0x1401C, array step: 0x1000, irregular array, not all indices are valid */
+    __IO uint32_t MRC_NSE_RGN_SET;                   /**< MRC NonSecure Enable Region Set, array offset: 0x14014, array step: 0x1000, irregular array, not all indices are valid */
+    __IO uint32_t MRC_NSE_RGN_CLR;                   /**< MRC NonSecure Enable Region Clear, array offset: 0x14018, array step: 0x1000, irregular array, not all indices are valid */
+    __IO uint32_t MRC_NSE_RGN_CLR_ALL;               /**< MRC NonSecure Enable Region Clear All, array offset: 0x1401C, array step: 0x1000, irregular array, not all indices are valid */
     __IO uint32_t MRC_GLBAC[TRDC_MRC_INDEX_MRC_GLBAC_COUNT];   /**< MRC Global Access Control, array offset: 0x14020, array step: index*0x1000, index2*0x4, irregular array, not all indices are valid */
     __IO uint32_t MRC_DOM0_RGD_W[TRDC_MRC_INDEX_MRC_INDEX_DOM0_RGD_COUNT][TRDC_MRC_INDEX_MRC_INDEX_DOM0_RGD_MRC_INDEX_DOM0_RGD_W_COUNT];   /**< MRC Region Descriptor Word 0..MRC Region Descriptor Word 1, array offset: 0x14040, array step: index*0x1000, index2*0x8, index3*0x4, irregular array, not all indices are valid */
     __IO uint32_t MRC_DOM0_RGD_NSE;                  /**< MRC Region Descriptor NonSecure Enable, array offset: 0x140C0, array step: 0x1000, irregular array, not all indices are valid */
@@ -39567,5 +39592,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* TRDC_H_ */
+#endif  /* PERI_TRDC_H_ */
 

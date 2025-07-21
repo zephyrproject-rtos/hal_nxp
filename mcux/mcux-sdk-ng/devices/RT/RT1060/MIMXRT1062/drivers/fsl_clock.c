@@ -447,7 +447,7 @@ uint32_t CLOCK_GetFreq(clock_name_t name)
  */
 uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
 {
-    static const clock_name_t clockRootSourceArray[][6]  = CLOCK_ROOT_SOUCE;
+    static const clock_name_t clockRootSourceArray[][6]  = CLOCK_ROOT_SOURCE;
     static const clock_mux_t clockRootMuxTupleArray[]    = CLOCK_ROOT_MUX_TUPLE;
     static const clock_div_t clockRootDivTupleArray[][2] = CLOCK_ROOT_DIV_TUPLE;
     uint32_t freq                                        = 0UL;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -15,8 +15,8 @@
  * @{
  */
 
-/*! @brief ROM API version 1.1.1. */
-#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 1U))
+/*! @brief ROM API version 1.1.2. */
+#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 2U))
 /*! @brief ROM FLEXSPI NOR driver version 1.7.0. */
 #define FSL_ROM_FLEXSPINOR_DRIVER_VERSION (MAKE_VERSION(1U, 7U, 0U))
 

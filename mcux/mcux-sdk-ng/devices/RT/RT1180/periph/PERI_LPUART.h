@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPUART
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPUART.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_LPUART.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPUART
  *
  * CMSIS Peripheral Access Layer for LPUART
  */
 
-#if !defined(LPUART_H_)
-#define LPUART_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPUART_H_)
+#define PERI_LPUART_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -393,60 +418,60 @@ typedef struct {
 #define LPUART_STAT_MA2F_MASK                    (0x4000U)
 #define LPUART_STAT_MA2F_SHIFT                   (14U)
 /*! MA2F - Match 2 Flag
- *  0b0..Not equal to MA2
- *  0b1..Equal to MA2
  *  0b0..No effect
+ *  0b0..Not equal to MA2
  *  0b1..Clear the flag
+ *  0b1..Equal to MA2
  */
 #define LPUART_STAT_MA2F(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_MA2F_SHIFT)) & LPUART_STAT_MA2F_MASK)
 
 #define LPUART_STAT_MA1F_MASK                    (0x8000U)
 #define LPUART_STAT_MA1F_SHIFT                   (15U)
 /*! MA1F - Match 1 Flag
- *  0b0..Not equal to MA1
- *  0b1..Equal to MA1
  *  0b0..No effect
+ *  0b0..Not equal to MA1
  *  0b1..Clear the flag
+ *  0b1..Equal to MA1
  */
 #define LPUART_STAT_MA1F(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_MA1F_SHIFT)) & LPUART_STAT_MA1F_MASK)
 
 #define LPUART_STAT_PF_MASK                      (0x10000U)
 #define LPUART_STAT_PF_SHIFT                     (16U)
 /*! PF - Parity Error Flag
- *  0b0..No parity error detected
- *  0b1..Parity error detected
  *  0b0..No effect
+ *  0b0..No parity error detected
  *  0b1..Clear the flag
+ *  0b1..Parity error detected
  */
 #define LPUART_STAT_PF(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_PF_SHIFT)) & LPUART_STAT_PF_MASK)
 
 #define LPUART_STAT_FE_MASK                      (0x20000U)
 #define LPUART_STAT_FE_SHIFT                     (17U)
 /*! FE - Framing Error Flag
- *  0b0..No framing error detected (this does not guarantee that the framing is correct)
- *  0b1..Framing error detected
  *  0b0..No effect
+ *  0b0..No framing error detected (this does not guarantee that the framing is correct)
  *  0b1..Clear the flag
+ *  0b1..Framing error detected
  */
 #define LPUART_STAT_FE(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_FE_SHIFT)) & LPUART_STAT_FE_MASK)
 
 #define LPUART_STAT_NF_MASK                      (0x40000U)
 #define LPUART_STAT_NF_SHIFT                     (18U)
 /*! NF - Noise Flag
- *  0b0..No noise detected
- *  0b1..Noise detected
  *  0b0..No effect
+ *  0b0..No noise detected
  *  0b1..Clear the flag
+ *  0b1..Noise detected
  */
 #define LPUART_STAT_NF(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_NF_SHIFT)) & LPUART_STAT_NF_MASK)
 
 #define LPUART_STAT_OR_MASK                      (0x80000U)
 #define LPUART_STAT_OR_SHIFT                     (19U)
 /*! OR - Receiver Overrun Flag
- *  0b0..No overrun
- *  0b1..Receive overrun (new LPUART data is lost)
  *  0b0..No effect
+ *  0b0..No overrun
  *  0b1..Clear the flag
+ *  0b1..Receive overrun (new LPUART data is lost)
  */
 #define LPUART_STAT_OR(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_OR_SHIFT)) & LPUART_STAT_OR_MASK)
 
@@ -454,9 +479,9 @@ typedef struct {
 #define LPUART_STAT_IDLE_SHIFT                   (20U)
 /*! IDLE - Idle Line Flag
  *  0b0..Idle line detected
- *  0b1..Idle line not detected
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Idle line not detected
  */
 #define LPUART_STAT_IDLE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_IDLE_SHIFT)) & LPUART_STAT_IDLE_MASK)
 
@@ -535,20 +560,20 @@ typedef struct {
 #define LPUART_STAT_RXEDGIF_MASK                 (0x40000000U)
 #define LPUART_STAT_RXEDGIF_SHIFT                (30U)
 /*! RXEDGIF - RXD Pin Active Edge Interrupt Flag
- *  0b0..Not occurred
- *  0b1..Occurred
  *  0b0..No effect
+ *  0b0..Not occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define LPUART_STAT_RXEDGIF(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_RXEDGIF_SHIFT)) & LPUART_STAT_RXEDGIF_MASK)
 
 #define LPUART_STAT_LBKDIF_MASK                  (0x80000000U)
 #define LPUART_STAT_LBKDIF_SHIFT                 (31U)
 /*! LBKDIF - LIN Break Detect Interrupt Flag
- *  0b0..Not detected
- *  0b1..Detected
  *  0b0..No effect
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define LPUART_STAT_LBKDIF(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_LBKDIF_SHIFT)) & LPUART_STAT_LBKDIF_MASK)
 /*! @} */
@@ -1068,20 +1093,20 @@ typedef struct {
 #define LPUART_FIFO_RXUF_MASK                    (0x10000U)
 #define LPUART_FIFO_RXUF_SHIFT                   (16U)
 /*! RXUF - Receiver FIFO Underflow Flag
- *  0b0..No underflow
- *  0b1..Underflow
  *  0b0..No effect
+ *  0b0..No underflow
  *  0b1..Clear the flag
+ *  0b1..Underflow
  */
 #define LPUART_FIFO_RXUF(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXUF_SHIFT)) & LPUART_FIFO_RXUF_MASK)
 
 #define LPUART_FIFO_TXOF_MASK                    (0x20000U)
 #define LPUART_FIFO_TXOF_SHIFT                   (17U)
 /*! TXOF - Transmitter FIFO Overflow Flag
- *  0b0..No overflow
- *  0b1..Overflow
  *  0b0..No effect
+ *  0b0..No overflow
  *  0b1..Clear the flag
+ *  0b1..Overflow
  */
 #define LPUART_FIFO_TXOF(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_TXOF_SHIFT)) & LPUART_FIFO_TXOF_MASK)
 
@@ -1194,8 +1219,8 @@ typedef struct {
 #define LPUART_MSR_DCTS_SHIFT                    (0U)
 /*! DCTS - Delta Clear To Send
  *  0b0..Did not change state
- *  0b1..Changed state
  *  0b0..No effect
+ *  0b1..Changed state
  *  0b1..Clear the flag
  */
 #define LPUART_MSR_DCTS(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DCTS_SHIFT)) & LPUART_MSR_DCTS_MASK)
@@ -1204,8 +1229,8 @@ typedef struct {
 #define LPUART_MSR_DDSR_SHIFT                    (1U)
 /*! DDSR - Delta Data Set Ready
  *  0b0..Did not change state
- *  0b1..Changed state
  *  0b0..No effect
+ *  0b1..Changed state
  *  0b1..Clear the flag
  */
 #define LPUART_MSR_DDSR(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DDSR_SHIFT)) & LPUART_MSR_DDSR_MASK)
@@ -1214,8 +1239,8 @@ typedef struct {
 #define LPUART_MSR_DRI_SHIFT                     (2U)
 /*! DRI - Delta Ring Indicator
  *  0b0..Did not change state
- *  0b1..Changed state
  *  0b0..No effect
+ *  0b1..Changed state
  *  0b1..Clear the flag
  */
 #define LPUART_MSR_DRI(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DRI_SHIFT)) & LPUART_MSR_DRI_MASK)
@@ -1224,8 +1249,8 @@ typedef struct {
 #define LPUART_MSR_DDCD_SHIFT                    (3U)
 /*! DDCD - Delta Data Carrier Detect
  *  0b0..Did not change state
- *  0b1..Changed state
  *  0b0..No effect
+ *  0b1..Changed state
  *  0b1..Clear the flag
  */
 #define LPUART_MSR_DDCD(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DDCD_SHIFT)) & LPUART_MSR_DDCD_MASK)
@@ -1347,10 +1372,10 @@ typedef struct {
 #define LPUART_TOSR_TOF_MASK                     (0xF00U)
 #define LPUART_TOSR_TOF_SHIFT                    (8U)
 /*! TOF - Timeout Flag
- *  0b0000..Not occurred
- *  0b0001..Occurred
  *  0b0000..No effect
+ *  0b0000..Not occurred
  *  0b0001..Clear the flag
+ *  0b0001..Occurred
  */
 #define LPUART_TOSR_TOF(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_TOSR_TOF_SHIFT)) & LPUART_TOSR_TOF_MASK)
 /*! @} */
@@ -1441,5 +1466,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPUART_H_ */
+#endif  /* PERI_LPUART_H_ */
 

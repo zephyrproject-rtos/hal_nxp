@@ -10,14 +10,14 @@
 **                          MIMXRT1052DVL6B
 **                          MIMXRT105SDVL6B
 **
-**     Version:             rev. 1.4, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CSI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,21 +38,24 @@
 **         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **     - rev. 1.4 (2021-08-10)
 **         Update header files to align with IMXRT1050RM Rev.5.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CSI.h
- * @version 1.4
- * @date 2021-08-10
+ * @file PERI_CSI.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CSI
  *
  * CMSIS Peripheral Access Layer for CSI
  */
 
-#if !defined(CSI_H_)
-#define CSI_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CSI_H_)
+#define PERI_CSI_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1051CVJ5B) || defined(CPU_MIMXRT1051CVL5B) || defined(CPU_MIMXRT1051DVJ6B) || defined(CPU_MIMXRT1051DVL6B))
 #include "MIMXRT1051_COMMON.h"
@@ -409,18 +412,18 @@ typedef struct {
 #define CSI_CR2_DMA_BURST_TYPE_SFF_MASK          (0x30000000U)
 #define CSI_CR2_DMA_BURST_TYPE_SFF_SHIFT         (28U)
 /*! DMA_BURST_TYPE_SFF
- *  0bx0..INCR8
  *  0b01..INCR4
  *  0b11..INCR16
+ *  0bx0..INCR8
  */
 #define CSI_CR2_DMA_BURST_TYPE_SFF(x)            (((uint32_t)(((uint32_t)(x)) << CSI_CR2_DMA_BURST_TYPE_SFF_SHIFT)) & CSI_CR2_DMA_BURST_TYPE_SFF_MASK)
 
 #define CSI_CR2_DMA_BURST_TYPE_RFF_MASK          (0xC0000000U)
 #define CSI_CR2_DMA_BURST_TYPE_RFF_SHIFT         (30U)
 /*! DMA_BURST_TYPE_RFF
- *  0bx0..INCR8
  *  0b01..INCR4
  *  0b11..INCR16
+ *  0bx0..INCR8
  */
 #define CSI_CR2_DMA_BURST_TYPE_RFF(x)            (((uint32_t)(((uint32_t)(x)) << CSI_CR2_DMA_BURST_TYPE_RFF_SHIFT)) & CSI_CR2_DMA_BURST_TYPE_RFF_MASK)
 /*! @} */
@@ -891,5 +894,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CSI_H_ */
+#endif  /* PERI_CSI_H_ */
 

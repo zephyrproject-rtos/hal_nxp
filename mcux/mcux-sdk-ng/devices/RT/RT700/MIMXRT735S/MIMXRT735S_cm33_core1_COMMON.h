@@ -9,14 +9,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -27,14 +27,17 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_cm33_core1_COMMON.h
- * @version 2.0
- * @date 2024-05-28
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core1
  *
  * CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core1
@@ -45,7 +48,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -118,6 +121,7 @@ typedef enum IRQn {
   WDT2_IRQn                    = 36,               /**< WDT: Interrupt request */
   WDT3_IRQn                    = 37,               /**< WDT: Interrupt request */
   USBPHY0_IRQn                 = 38,               /**< HSUSBPHY: UTM interrupt request */
+  Reserved55_IRQn              = 39,               /**< Reserved interrupt 55 */
   I3C3_IRQn                    = 40,               /**< I3C: Interrupt Request */
   FLEXIO_IRQn                  = 41,               /**< flexio: Interrupt request */
   Reserved58_IRQn              = 42,               /**< Reserved interrupt */
@@ -197,7 +201,27 @@ typedef enum IRQn {
 #include "core_cm33.h"                 /* Core Peripheral Access Layer */
 #include "system_MIMXRT735S_cm33_core1.h" /* Device specific configuration file */
 
+/*!
+ * @}
+ */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef MIMXRT735S_cm33_core1_SERIES
+#define MIMXRT735S_cm33_core1_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "MIMXRT735S_cm33_core1_features.h"
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
 /*!
  * @addtogroup edma_request
  * @{
@@ -215,13 +239,13 @@ typedef enum IRQn {
 typedef enum _dma_request_source
 {
     kDmaRequestMuxDisabled          = 0U,          /**< Unused DMA request 0 */
-    kDmaRequestMuxMicfil            = 1U,          /**< MICFIL0 FIFO_request */
+    kDmaRequestMuxMicfil            = 1U,          /**< MICFIL FIFO_request */
     kDmaRequestMuxXspi2Rx           = 2U,          /**< XSPI2 Receive */
     kDmaRequestMuxXspi2Tx           = 3U,          /**< XSPI2 Transmit */
-    kDmaRequestMuxPinInt0           = 4U,          /**< PINT1 INT0 */
-    kDmaRequestMuxPinInt1           = 5U,          /**< PINT1 INT1 */
-    kDmaRequestMuxPinInt2           = 6U,          /**< PINT1 INT2 */
-    kDmaRequestMuxPinInt3           = 7U,          /**< PINT1 INT3 */
+    kDmaRequestMuxPinInt0           = 4U,          /**< PINT INT0 */
+    kDmaRequestMuxPinInt1           = 5U,          /**< PINT INT1 */
+    kDmaRequestMuxPinInt2           = 6U,          /**< PINT INT2 */
+    kDmaRequestMuxPinInt3           = 7U,          /**< PINT INT3 */
     kDmaRequestMuxCtimer5M0         = 8U,          /**< CTIMER5 Match channel 0 request */
     kDmaRequestMuxCtimer5M1         = 9U,          /**< CTIMER5 Match channel 1 request */
     kDmaRequestMuxCtimer6M0         = 10U,         /**< CTIMER6 Match channel 0 request */
@@ -265,8 +289,8 @@ typedef enum _dma_request_source
     kDmaRequestMuxGpio9PinEventRequest1 = 48U,     /**< GPIO9 Pin event request 1 */
     kDmaRequestMuxGpio10PinEventRequest0 = 49U,    /**< GPIO10 Pin event request 0 */
     kDmaRequestMuxGpio10PinEventRequest1 = 50U,    /**< GPIO10 Pin event request 1 */
-    kDmaRequestMuxLpi2c15Rx         = 51U,         /**< LPI2C receive request */
-    kDmaRequestMuxLpi2c15Tx         = 52U,         /**< LPI2C transmit request */
+    kDmaRequestMuxLpi2c15Rx         = 51U,         /**< LPI2C15 receive request */
+    kDmaRequestMuxLpi2c15Tx         = 52U,         /**< LPI2C15 transmit request */
 } dma_request_source_t;
 
 /* @} */
@@ -274,12 +298,8 @@ typedef enum _dma_request_source
 
 /*!
  * @}
- */ /* end of group Cortex_Core_Configuration */
+ */ /* end of group Mapping_Information */
 
-
-#define MIMXRT735S_cm33_core1_SERIES
-/* CPU specific feature definitions */
-#include "MIMXRT735S_cm33_core1_features.h"
 
 /* ADC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

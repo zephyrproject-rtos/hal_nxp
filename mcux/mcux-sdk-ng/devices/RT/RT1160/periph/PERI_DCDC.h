@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DCDC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DCDC.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_DCDC.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DCDC
  *
  * CMSIS Peripheral Access Layer for DCDC
  */
 
-#if !defined(DCDC_H_)
-#define DCDC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DCDC_H_)
+#define PERI_DCDC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -216,36 +219,36 @@ typedef struct {
 #define DCDC_CTRL1_VDD1P8CTRL_TRG_MASK           (0x1FU)
 #define DCDC_CTRL1_VDD1P8CTRL_TRG_SHIFT          (0U)
 /*! VDD1P8CTRL_TRG
- *  0b11111..2.275V
- *  0b01100..1.8V
  *  0b00000..1.5V
+ *  0b01100..1.8V
+ *  0b11111..2.275V
  */
 #define DCDC_CTRL1_VDD1P8CTRL_TRG(x)             (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL1_VDD1P8CTRL_TRG_SHIFT)) & DCDC_CTRL1_VDD1P8CTRL_TRG_MASK)
 
 #define DCDC_CTRL1_VDD1P0CTRL_TRG_MASK           (0x1F00U)
 #define DCDC_CTRL1_VDD1P0CTRL_TRG_SHIFT          (8U)
 /*! VDD1P0CTRL_TRG
- *  0b11111..1.375V
- *  0b10000..1.0V
  *  0b00000..0.6V
+ *  0b10000..1.0V
+ *  0b11111..1.375V
  */
 #define DCDC_CTRL1_VDD1P0CTRL_TRG(x)             (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL1_VDD1P0CTRL_TRG_SHIFT)) & DCDC_CTRL1_VDD1P0CTRL_TRG_MASK)
 
 #define DCDC_CTRL1_VDD1P8CTRL_STBY_TRG_MASK      (0x1F0000U)
 #define DCDC_CTRL1_VDD1P8CTRL_STBY_TRG_SHIFT     (16U)
 /*! VDD1P8CTRL_STBY_TRG
- *  0b11111..2.3V
- *  0b01011..1.8V
  *  0b00000..1.525V
+ *  0b01011..1.8V
+ *  0b11111..2.3V
  */
 #define DCDC_CTRL1_VDD1P8CTRL_STBY_TRG(x)        (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL1_VDD1P8CTRL_STBY_TRG_SHIFT)) & DCDC_CTRL1_VDD1P8CTRL_STBY_TRG_MASK)
 
 #define DCDC_CTRL1_VDD1P0CTRL_STBY_TRG_MASK      (0x1F000000U)
 #define DCDC_CTRL1_VDD1P0CTRL_STBY_TRG_SHIFT     (24U)
 /*! VDD1P0CTRL_STBY_TRG
- *  0b11111..1.4V
- *  0b01111..1.0V
  *  0b00000..0.625V
+ *  0b01111..1.0V
+ *  0b11111..1.4V
  */
 #define DCDC_CTRL1_VDD1P0CTRL_STBY_TRG(x)        (((uint32_t)(((uint32_t)(x)) << DCDC_CTRL1_VDD1P0CTRL_STBY_TRG_SHIFT)) & DCDC_CTRL1_VDD1P0CTRL_STBY_TRG_MASK)
 /*! @} */
@@ -794,5 +797,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DCDC_H_ */
+#endif  /* PERI_DCDC_H_ */
 

@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC_MIF_LN28FDSOI_SPLLRAM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SRC_MIF_LN28FDSOI_SPLLRAM.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_SRC_MIF_LN28FDSOI_SPLLRAM.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SRC_MIF_LN28FDSOI_SPLLRAM
  *
  * CMSIS Peripheral Access Layer for SRC_MIF_LN28FDSOI_SPLLRAM
  */
 
-#if !defined(SRC_MIF_LN28FDSOI_SPLLRAM_H_)
-#define SRC_MIF_LN28FDSOI_SPLLRAM_H_             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SRC_MIF_LN28FDSOI_SPLLRAM_H_)
+#define PERI_SRC_MIF_LN28FDSOI_SPLLRAM_H_        /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -231,8 +256,8 @@ typedef struct {
 #define SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_WLPD_SW_WLPD_MASK (0x10000U)
 #define SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_WLPD_SW_WLPD_SHIFT (16U)
 /*! SW_WLPD - Software control WLPD
- *  0b1..WLPD is 1.
  *  0b0..WLPD is 0.
+ *  0b1..WLPD is 1.
  */
 #define SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_WLPD_SW_WLPD(x) (((uint32_t)(((uint32_t)(x)) << SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_WLPD_SW_WLPD_SHIFT)) & SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_WLPD_SW_WLPD_MASK)
 /*! @} */
@@ -262,8 +287,8 @@ typedef struct {
 #define SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_PD_B_SW_PD_B_MASK (0x10000U)
 #define SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_PD_B_SW_PD_B_SHIFT (16U)
 /*! SW_PD_B - software control PD_B
- *  0b1..PD_B is 1.
  *  0b0..PD_B is 0.
+ *  0b1..PD_B is 1.
  */
 #define SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_PD_B_SW_PD_B(x) (((uint32_t)(((uint32_t)(x)) << SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_PD_B_SW_PD_B_SHIFT)) & SRC_MIF_LN28FDSOI_SPLLRAM_MIF_MLPL_PD_B_SW_PD_B_MASK)
 /*! @} */
@@ -316,5 +341,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SRC_MIF_LN28FDSOI_SPLLRAM_H_ */
+#endif  /* PERI_SRC_MIF_LN28FDSOI_SPLLRAM_H_ */
 

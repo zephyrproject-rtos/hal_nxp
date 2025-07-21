@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processor:           MIMXRT1173CVM8A_cm7
+**     Processors:          MIMXRT1173CVM8A_cm7
+**                          MIMXRT1173CVM8B_cm7
+**
 **     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -8,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1170RM, Rev 1, 02/2021
-**     Version:             rev. 1.0, 2020-12-29
-**     Build:               b241025
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1173_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -26,14 +28,17 @@
 **         Initial version.
 **     - rev. 1.0 (2020-12-29)
 **         Update header files to align with IMXRT1170RM Rev.0.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1173_cm7_COMMON.h
- * @version 1.0
- * @date 2020-12-29
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT1173_cm7
  *
  * CMSIS Peripheral Access Layer for MIMXRT1173_cm7
@@ -44,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -327,7 +332,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MIMXRT1173_cm7_SERIES
 #define MIMXRT1173_cm7_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMXRT1173_cm7_features.h"
 

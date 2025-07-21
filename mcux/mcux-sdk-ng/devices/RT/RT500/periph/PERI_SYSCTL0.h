@@ -9,14 +9,14 @@
 **                          MIMXRT595SFFOC_cm33
 **                          MIMXRT595SFFOC_dsp
 **
-**     Version:             rev. 5.0, 2020-08-27
-**     Build:               b240705
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCTL0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2020-08-27)
 **         Base on Rev.C RM.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SYSCTL0.h
- * @version 5.0
- * @date 2020-08-27
+ * @file PERI_SYSCTL0.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SYSCTL0
  *
  * CMSIS Peripheral Access Layer for SYSCTL0
  */
 
-#if !defined(SYSCTL0_H_)
-#define SYSCTL0_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SYSCTL0_H_)
+#define PERI_SYSCTL0_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT533SFAWC) || defined(CPU_MIMXRT533SFFOC))
 #include "MIMXRT533S_COMMON.h"
@@ -603,8 +606,8 @@ typedef struct {
 /*! WRITE_LOCK - Self Write Disable
  *  0b00..Write disable
  *  0b01..Write disable
- *  0b11..Write disable
  *  0b10..Write enable
+ *  0b11..Write disable
  */
 #define SYSCTL0_BOOTROM_LCKOUT_WRITE_LOCK(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL0_BOOTROM_LCKOUT_WRITE_LOCK_SHIFT)) & SYSCTL0_BOOTROM_LCKOUT_WRITE_LOCK_MASK)
 /*! @} */
@@ -7989,9 +7992,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_DBGEN1_MASK         (0x3U)
 #define SYSCTL0_DBG_FEATURES_DBGEN1_SHIFT        (0U)
 /*! DBGEN1 - CM33 Debug Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_DBGEN1(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_DBGEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_DBGEN1_MASK)
@@ -7999,9 +8002,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_NIDEN1_MASK         (0xCU)
 #define SYSCTL0_DBG_FEATURES_NIDEN1_SHIFT        (2U)
 /*! NIDEN1 - CM33 NID Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_NIDEN1(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_NIDEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_NIDEN1_MASK)
@@ -8009,9 +8012,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_SPIDEN1_MASK        (0x30U)
 #define SYSCTL0_DBG_FEATURES_SPIDEN1_SHIFT       (4U)
 /*! SPIDEN1 - CM33 SPID Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_SPIDEN1(x)          (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_SPIDEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_SPIDEN1_MASK)
@@ -8019,9 +8022,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_SPNIDEN1_MASK       (0xC0U)
 #define SYSCTL0_DBG_FEATURES_SPNIDEN1_SHIFT      (6U)
 /*! SPNIDEN1 - CM33 SPNIDEN Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_SPNIDEN1(x)         (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_SPNIDEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_SPNIDEN1_MASK)
@@ -8033,9 +8036,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_DP_DBGEN1_MASK      (0x3U)
 #define SYSCTL0_DBG_FEATURES_DP_DBGEN1_SHIFT     (0U)
 /*! DBGEN1 - CM33 Debug Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_DP_DBGEN1(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_DP_DBGEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_DP_DBGEN1_MASK)
@@ -8043,9 +8046,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_DP_NIDEN1_MASK      (0xCU)
 #define SYSCTL0_DBG_FEATURES_DP_NIDEN1_SHIFT     (2U)
 /*! NIDEN1 - CM33 NID Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_DP_NIDEN1(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_DP_NIDEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_DP_NIDEN1_MASK)
@@ -8053,9 +8056,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_DP_SPIDEN1_MASK     (0x30U)
 #define SYSCTL0_DBG_FEATURES_DP_SPIDEN1_SHIFT    (4U)
 /*! SPIDEN1 - CM33 SPID Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_DP_SPIDEN1(x)       (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_DP_SPIDEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_DP_SPIDEN1_MASK)
@@ -8063,9 +8066,9 @@ typedef struct {
 #define SYSCTL0_DBG_FEATURES_DP_SPNIDEN1_MASK    (0xC0U)
 #define SYSCTL0_DBG_FEATURES_DP_SPNIDEN1_SHIFT   (6U)
 /*! SPNIDEN1 - CM33 SPNIDEN Enable Control
- *  0b10..Enabled
- *  0b01..Disabled
  *  0b00..Disabled
+ *  0b01..Disabled
+ *  0b10..Enabled
  *  0b11..Disabled
  */
 #define SYSCTL0_DBG_FEATURES_DP_SPNIDEN1(x)      (((uint32_t)(((uint32_t)(x)) << SYSCTL0_DBG_FEATURES_DP_SPNIDEN1_SHIFT)) & SYSCTL0_DBG_FEATURES_DP_SPNIDEN1_MASK)
@@ -8143,5 +8146,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SYSCTL0_H_ */
+#endif  /* PERI_SYSCTL0_H_ */
 

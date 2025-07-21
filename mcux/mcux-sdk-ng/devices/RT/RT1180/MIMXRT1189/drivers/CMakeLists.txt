@@ -1,7 +1,6 @@
 include(./CMakeLists_anadig_pmu_1.txt)
 include(./CMakeLists_clock.txt)
 include(./CMakeLists_dcdc_3.txt)
-include(./CMakeLists_ecat.txt)
 include(./CMakeLists_edma_soc.txt)
 include(./CMakeLists_ele_base_api.txt)
 include(./CMakeLists_gpc_3.txt)

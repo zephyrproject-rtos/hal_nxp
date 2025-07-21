@@ -9,15 +9,17 @@
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_cm33
 **                          MIMXRT685SFVKB_dsp
+**                          MIMXRT685SVFVKB_cm33
+**                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCTL0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,27 +30,30 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SYSCTL0.h
- * @version 2.0
- * @date 2019-11-12
+ * @file PERI_SYSCTL0.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SYSCTL0
  *
  * CMSIS Peripheral Access Layer for SYSCTL0
  */
 
-#if !defined(SYSCTL0_H_)
-#define SYSCTL0_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SYSCTL0_H_)
+#define PERI_SYSCTL0_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 #include "MIMXRT633S_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33))
+#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33) || defined(CPU_MIMXRT685SVFVKB_cm33))
 #include "MIMXRT685S_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
+#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp) || defined(CPU_MIMXRT685SVFVKB_dsp))
 #include "MIMXRT685S_dsp_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -6096,6 +6101,15 @@ typedef struct {
  *    cleared, but before DMAC1 has completed its related activity.
  */
 #define SYSCTL0_HWWAKE_DMAC1WAKE(x)              (((uint32_t)(((uint32_t)(x)) << SYSCTL0_HWWAKE_DMAC1WAKE_SHIFT)) & SYSCTL0_HWWAKE_DMAC1WAKE_MASK)
+
+#define SYSCTL0_HWWAKE_ESPIWAKE_MASK             (0x20U)
+#define SYSCTL0_HWWAKE_ESPIWAKE_SHIFT            (5U)
+/*! ESPIWAKE - Wake for ESPI. When 1, ESPI being busy will cause peripheral clocking to remain
+ *    running until ESPI completes. This is generally used in conjunction with bit 1 and/or 2 in order to
+ *    prevent peripheral clocking from being shut down as soon as the cause of wake-up is cleared,
+ *    but before ESPI has completed its related activity.
+ */
+#define SYSCTL0_HWWAKE_ESPIWAKE(x)               (((uint32_t)(((uint32_t)(x)) << SYSCTL0_HWWAKE_ESPIWAKE_SHIFT)) & SYSCTL0_HWWAKE_ESPIWAKE_MASK)
 /*! @} */
 
 /*! @name TEMPSENSORCTL - tempsensor ctrl */
@@ -6434,5 +6448,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SYSCTL0_H_ */
+#endif  /* PERI_SYSCTL0_H_ */
 
