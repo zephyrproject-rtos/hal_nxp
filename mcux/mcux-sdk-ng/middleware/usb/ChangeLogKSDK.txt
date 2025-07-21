@@ -2,7 +2,18 @@
 @page middleware_log Middleware Change Log
 
 @section USB USB stack for MCUXpresso SDK
-  The current version of USB stack is 2.11.0.
+  The current version of USB stack is 2.12.0.
+  - 2.12.0
+    - Bug fixes:
+      - Fix the dependency issue to meet NPW of CONFIG tool.
+      - Fix disk mount issue for host_msd_fatfs during testing throughput.
+    - Improvement:
+      - Improve performance of example dev_cdc_ecm_nic.
+      - Pass mandatory and required rules for MSG on Coverity system.
+      - Add USB markdown documentation.
+    - New features and demos:
+      - Support eUSB functionality on RT700 including repeater mode and native mode.
+      - Enable USB device CDC ECM example: dev_cdc_ecm_nic_bm, dev_cdc_ecm_nic_freertos, dev_cdc_ecm_nic_lite_bm.
   - 2.11.0
     - Improvement:
       - Support USB for KConfig Configuration System and CMake Build System.
@@ -10,7 +21,7 @@
       - Split usb audio cases for LPC54xxx series with others.
   - 2.10.1
     - Improvement:
-      - Host cdc acm
+      - Host cdc ECM
         - Add link state detection in DHCP and DNS processing.
         - Unify and simplify application processing log.
         - Add static IP supporting.

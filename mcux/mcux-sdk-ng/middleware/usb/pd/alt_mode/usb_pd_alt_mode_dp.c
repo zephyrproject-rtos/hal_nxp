@@ -273,6 +273,10 @@ static pd_status_t PD_DpDFPGetModesCheckHaveSupportedMode(pd_alt_mode_dp_t *dpIn
         uint8_t configurePin = 0;
         pd_dp_mode_obj_t modeObj;
 
+        if ((dpInstance->selectModeIndex - 1U) >= 7U)
+        {
+            return kStatus_PD_Error; 
+        }
         modeObj.modeVal = dpInstance->pdMsgReceivedBuffer[dpInstance->selectModeIndex - 1U];
         if (modeObj.bitFields.receptacleIndication != 0U)
         {
@@ -332,6 +336,10 @@ static pd_status_t PD_DpDFPConstructConfigure(pd_alt_mode_dp_t *dpInstance)
         configurePin = dpInstance->dpConfigure.bitFields.configureUFPUPin;
     }
 #else
+    if ((dpInstance->selectModeIndex - 1U) >= 7U)
+    {
+        return kStatus_PD_Error; 
+    }
     modeObj.modeVal = dpInstance->pdMsgReceivedBuffer[dpInstance->selectModeIndex - 1U];
     /* if prefer multi function, kPinAssign_B and kPinAssign_D has high priority */
     if ((dpInstance->dpPartnerStatus.bitFields.multiFunctionPreferred != 0U) ||
@@ -622,7 +630,13 @@ static void PD_DpUFPHPDDetectAdd(pd_alt_mode_dp_t *dpInstance, pd_hpd_detect_typ
     {
         if (detectValue == kDPHPDDetect_IRQ)
         {
-            uint8_t lastIndex = dpInstance->hpdDetectQueuePutPos - 1U;
+            uint8_t lastIndex = 0U;
+            if (dpInstance->hpdDetectQueuePutPos < 1U)
+            {
+                OSA_EXIT_CRITICAL();
+                return;
+            }
+            lastIndex = dpInstance->hpdDetectQueuePutPos - 1U;
             if (dpInstance->hpdDetectQueuePutPos == 0U)
             {
                 lastIndex = HPD_DETECT_QUEUE_LEN - 1U;

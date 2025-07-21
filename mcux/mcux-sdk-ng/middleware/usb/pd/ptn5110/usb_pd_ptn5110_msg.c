@@ -369,9 +369,15 @@ static void PDPTN5110_MsgHalRcvdControlDataOrChunked(pd_instance_t *pdInstance,
             (void)Reg_BusReadBlock(pdInstance, rx_buf_obj1, (uint32_t)bytes - 3U, dest + 4U);
         }
     }
-
-    rxResult->rxLength       = (uint16_t)bytes - 1U;
-    rxResult->rxResultStatus = kStatus_PD_Success;
+    if (bytes >= 1U)
+    {
+        rxResult->rxLength       = (uint16_t)bytes - 1U;
+        rxResult->rxResultStatus = kStatus_PD_Success;
+    }
+    else
+    {
+        rxResult->rxResultStatus = kStatus_PD_Error;
+    }
 }
 
 #if defined(PD_CONFIG_EXTENDED_MSG_SUPPORT) && (PD_CONFIG_EXTENDED_MSG_SUPPORT)

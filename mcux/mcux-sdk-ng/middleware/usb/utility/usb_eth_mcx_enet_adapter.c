@@ -1,5 +1,5 @@
 /**
- * Copyright 2024 - 2025 NXP
+ * Copyright 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,7 +18,6 @@
 #define ENET_RXBD_NUM (4)
 #define ENET_TXBD_NUM (4)
 #define ENET_RXBUFF_SIZE (ENET_FRAME_MAX_FRAMELEN)
-#define ENET_TXBUFF_SIZE (ENET_FRAME_MAX_FRAMELEN)
 
 #ifndef APP_ENET_BUFF_ALIGNMENT
 #define APP_ENET_BUFF_ALIGNMENT (ENET_BUFF_ALIGNMENT)
@@ -33,11 +32,7 @@ extern uint32_t BOARD_PhySysClock;
 extern uint8_t BOARD_PhyAddress;
 extern void *BOARD_PhySource;
 
-void ETH_Callback(ENET_Type *base, enet_handle_t *handle,
-#if FSL_FEATURE_ENET_QUEUE > 1
-                  uint32_t ringId,
-#endif /* FSL_FEATURE_ENET_QUEUE > 1 */
-                  enet_event_t event, enet_frame_info_t *frameInfo, void *userData);
+void ETH_Callback(ENET_Type *base, enet_handle_t *handle, enet_event_t event, uint8_t channel, enet_tx_reclaim_info_t *txReclaimInfo, void *param);
 
 /*******************************************************************************
  * Variables
@@ -60,7 +55,8 @@ AT_NONCACHEABLE_SECTION_ALIGN(static enet_tx_bd_struct_t txBuffDescrip[ENET_TXBD
  * If use non-cache region, the alignment size is the "ENET_BUFF_ALIGNMENT".
  */
 SDK_ALIGN(static uint8_t rxDataBuff[ENET_RXBD_NUM][SDK_SIZEALIGN(ENET_RXBUFF_SIZE, APP_ENET_BUFF_ALIGNMENT)], APP_ENET_BUFF_ALIGNMENT);
-SDK_ALIGN(static uint8_t txDataBuff[ENET_TXBD_NUM][SDK_SIZEALIGN(ENET_TXBUFF_SIZE, APP_ENET_BUFF_ALIGNMENT)], APP_ENET_BUFF_ALIGNMENT);
+
+static enet_tx_reclaim_info_t txDirty[ENET_TXBD_NUM];
 
 USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE)
 static uint8_t ethFrameTxBuffer[ETH_ADAPTER_PHY_FRAME_TX_BUFFER_LENGTH][ENET_FRAME_MAX_FRAMELEN];
@@ -76,20 +72,24 @@ static eth_adapter_err_t ETH_ADAPTER_HW_Init(void)
 {
     enet_config_t config;
     phy_config_t phyConfig = {0};
+    uint32_t rxbuffer[ENET_RXBD_NUM];
+
+    for (uint8_t index = 0U; index < ENET_RXBD_NUM; index++)
+    {
+        rxbuffer[index] = (uint32_t)(&rxDataBuff[index][0]);
+    }
 
     /* Prepare the buffer configuration. */
     enet_buffer_config_t buffConfig[] = {{
         ENET_RXBD_NUM,
         ENET_TXBD_NUM,
-        SDK_SIZEALIGN(ENET_RXBUFF_SIZE, APP_ENET_BUFF_ALIGNMENT),
-        SDK_SIZEALIGN(ENET_TXBUFF_SIZE, APP_ENET_BUFF_ALIGNMENT),
-        &rxBuffDescrip[0],
         &txBuffDescrip[0],
-        &rxDataBuff[0][0],
-        &txDataBuff[0][0],
-        true,
-        true,
-        NULL,
+        &txBuffDescrip[ENET_TXBD_NUM],
+        &txDirty[0],
+        &rxBuffDescrip[0],
+        &rxBuffDescrip[ENET_RXBD_NUM],
+        &rxbuffer[0],
+        sizeof(rxDataBuff[0]),
     }};
 
     /* Get default configuration. */
@@ -112,8 +112,7 @@ static eth_adapter_err_t ETH_ADAPTER_HW_Init(void)
     config.miiDuplex = kENET_MiiFullDuplex;
 
     /* Mount callback to ENET for getting interrupt event. */
-    config.interrupt = ENET_TX_INTERRUPT | ENET_RX_INTERRUPT | ENET_ERR_INTERRUPT;
-    config.callback = ETH_Callback;
+    config.interrupt = kENET_DmaTx | kENET_DmaRx | kENET_DmaBusErr;
 
     phyConfig.phyAddr = BOARD_PhyAddress;
     phyConfig.autoNeg = true;
@@ -136,30 +135,33 @@ static eth_adapter_err_t ETH_ADAPTER_HW_Init(void)
 
 #ifdef USB_STACK_FREERTOS
     ENET_Type *const enetBases[] = ENET_BASE_PTRS;
-    const IRQn_Type enetTxIrqId[] = ENET_Transmit_IRQS;
-    const IRQn_Type enetRxIrqId[] = ENET_Receive_IRQS;
-    const IRQn_Type enetErrIrqId[] = ENET_Error_IRQS;
+    const IRQn_Type enetIrqId[] = ENET_IRQS;
 
     for (uint32_t instance = 0; instance < ARRAY_SIZE(enetBases); instance++)
     {
         if (enetBases[instance] == BOARD_Enet)
         {
-            NVIC_SetPriority(enetTxIrqId[instance], ENET_INTERRUPT_PRIORITY);
-            NVIC_SetPriority(enetRxIrqId[instance], ENET_INTERRUPT_PRIORITY);
-            NVIC_SetPriority(enetErrIrqId[instance], ENET_INTERRUPT_PRIORITY);
+            NVIC_SetPriority(enetIrqId[instance], ENET_INTERRUPT_PRIORITY);
         }
     }
 #endif
 
-    /* Init the ENET. */
-    if (ENET_Init(BOARD_Enet, &enetHandle, &config, &buffConfig[0], &macAddr[0], BOARD_PhySysClock) != kStatus_Success)
-    {
-        (void)usb_echo("ENET_Init failed.\r\n");
+    /* Initialize ENET. */
+    ENET_Init(BOARD_Enet, &config, &macAddr[0], BOARD_PhySysClock);
 
-        return ETH_ADAPTER_ERROR;
+    NVIC_SetPriority(ETHERNET_IRQn, 3U);
+
+    /* Initialize Descriptor. */
+    if (ENET_DescriptorInit(BOARD_Enet, &config, &buffConfig[0]) != kStatus_Success)
+    {
+        (void)usb_echo("ENET_DescriptorInit() occurs error.\r\n");
     }
 
-    ENET_ActiveRead(BOARD_Enet);
+    /* Create the handler. */
+    ENET_CreateHandler(BOARD_Enet, &enetHandle, &config, &buffConfig[0], ETH_Callback, NULL);
+
+    /* Active TX/RX. */
+    ENET_StartRxTx(BOARD_Enet, 1, 1);
 
     return ETH_ADAPTER_OK;
 }
@@ -246,7 +248,21 @@ eth_adapter_err_t ETH_ADAPTER_GetLinkSpeed(uint32_t *speed)
 
 eth_adapter_err_t ETH_ADAPTER_SendFrame(eth_adapter_frame_buf_t *buffer)
 {
-    status_t status = ENET_SendFrame(BOARD_Enet, &enetHandle, buffer->payload, buffer->len, 0, false, NULL);
+    enet_buffer_struct_t txBuff = {
+        .buffer = buffer->payload,
+        .length = buffer->len,
+    };
+
+    enet_tx_frame_struct_t txFrame = {
+        .context = buffer->payload,
+        .txBuffArray = &txBuff,
+        .txBuffNum = 1,
+        .txConfig = {
+            .intEnable = true,
+            .tsEnable = false,
+        }};
+
+    status_t status = ENET_SendFrame(BOARD_Enet, &enetHandle, &txFrame, 0);
 
     if (status != kStatus_Success)
     {
@@ -271,7 +287,7 @@ eth_adapter_err_t ETH_ADAPTER_RecvFrame(eth_adapter_frame_buf_t *buffer, uint32_
     }
 
     /* Get the received frame size firstly. */
-    status_t status = ENET_GetRxFrameSize(&enetHandle, &buffer->len, 0);
+    status_t status = ENET_GetRxFrameSize(BOARD_Enet, &enetHandle, &buffer->len, 0);
 
     if (buffer->len != 0)
     {
@@ -453,32 +469,21 @@ eth_adapter_err_t ETH_ADAPTER_IdentifyDstFrameType(eth_adapter_frame_buf_t *buff
     return ETH_ADAPTER_ERROR;
 }
 
-void ETH_Callback(ENET_Type *base, enet_handle_t *handle,
-#if FSL_FEATURE_ENET_QUEUE > 1
-                  uint32_t ringId,
-#endif /* FSL_FEATURE_ENET_QUEUE > 1 */
-                  enet_event_t event, enet_frame_info_t *frameInfo, void *userData)
+void ETH_Callback(ENET_Type *base, enet_handle_t *handle, enet_event_t event, uint8_t channel, enet_tx_reclaim_info_t *txReclaimInfo, void *param)
 {
     switch (event)
     {
-        case kENET_TxEvent:
+        case kENET_TxIntEvent:
             if (ethAdapterHandle.txCallback)
             {
                 ethAdapterHandle.txCallback(ethAdapterHandle.txUserInfo);
             }
             break;
 
-        case kENET_RxEvent:
+        case kENET_RxIntEvent:
             if (ethAdapterHandle.rxCallback)
             {
                 ethAdapterHandle.rxCallback(ethAdapterHandle.rxUserInfo);
-            }
-            break;
-
-        case kENET_ErrEvent:
-            if (ethAdapterHandle.errCallback)
-            {
-                ethAdapterHandle.errCallback(ethAdapterHandle.errUserInfo);
             }
             break;
 

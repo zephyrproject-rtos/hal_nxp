@@ -8,17 +8,11 @@
 
 #include "usb_host_config.h"
 #if (defined(USB_HOST_CONFIG_OHCI) && (USB_HOST_CONFIG_OHCI > 0U))
-#if (defined CONFIG_UHC_DRIVER)
-#include "usb_host_mcux_drv_port.h"
-#include "fsl_device_registers.h"
-#include "usb_host_ohci.h"
-#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "fsl_device_registers.h"
 #include "usb_host_ohci.h"
 #include "usb_host_devices.h"
-#endif
 
 /*******************************************************************************
  * Definitions

@@ -583,6 +583,14 @@ struct _usb_device_control_range_layout2_struct
     uint16_t wRES;
 } STRUCT_UNPACKED;
 typedef struct _usb_device_control_range_layout2_struct usb_device_control_range_layout2_struct_t;
+STRUCT_PACKED
+struct _usb_device_connector_control_struct
+{
+    uint8_t bNrChannels;
+    uint32_t bmChannelConfig;
+    uint8_t iChannelNames;
+} STRUCT_UNPACKED;
+typedef struct _usb_device_connector_control_struct usb_device_connector_control_struct_t;
 #endif
 
 /*******************************************************************************
