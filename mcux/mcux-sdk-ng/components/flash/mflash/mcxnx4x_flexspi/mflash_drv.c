@@ -123,7 +123,7 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
     DCACHE_InvalidateByRange(MFLASH_BASE_ADDRESS + page_addr, MFLASH_PAGE_SIZE);
 
             
-    if (primask == 0)
+    if (primask == 0UL)
     {
         __enable_irq();
     }
