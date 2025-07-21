@@ -1330,6 +1330,90 @@ static int __OtpDeInit(void)
     return ret;
 }
 
+void cau_temperature_enable_impl(void)
+{
+    uint32_t val;
+
+    val = CAU_REG32(CAU_ENABLE_ADDR);
+    val &= ~(0xC);
+    val |= (2 << 2);
+    CAU_WRITE_REG32(CAU_ENABLE_ADDR, val);
+    OSA_TimeDelay(1);
+}
+
+int32_t cau_get_temperature_impl(void)
+{
+    int32_t val                   = 0;
+    uint32_t reg_val              = 0;
+    uint32_t temp_Cau_Raw_Reading = 0;
+    status_t status               = 0;
+    uint32_t board_type           = 0;
+
+    reg_val              = CAU_REG32(CAU_TEMPERATURE_ADDR);
+    temp_Cau_Raw_Reading = ((reg_val & 0XFFC00) >> 10);
+
+    OCOTP_OtpInit();
+    status = OCOTP_ReadPackage(&board_type);
+    if (status != kStatus_Success)
+    {
+        /*If status error, use BGA as default type*/
+        board_type = RW610_PACKAGE_TYPE_BGA;
+    }
+    OCOTP_OtpDeinit();
+
+    switch (board_type)
+    {
+        case RW610_PACKAGE_TYPE_QFN:
+            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 484260) - 220040600) / 1000000);
+            break;
+
+        case RW610_PACKAGE_TYPE_CSP:
+            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 480560) - 220707000) / 1000000);
+            break;
+
+        case RW610_PACKAGE_TYPE_BGA:
+            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 480561) - 220707400) / 1000000);
+            break;
+
+        default:
+            val = (((((int32_t)(temp_Cau_Raw_Reading)) * 480561) - 220707400) / 1000000);
+            break;
+    }
+
+    return val;
+}
+
+int32_t cau_temperature_write_to_firmware_impl()
+{
+    int32_t val = 0;
+
+    val = cau_get_temperature_impl();
+    CAU_WRITE_REG32(CAU_TEMPERATURE_FW_ADDR, val);
+    return val;
+}
+
+static void cau_pmip_v33_enable()
+{
+    uint32_t val;
+
+    val = CAU_REG32(CAU_PMIP_TSEN_ADDR);
+    val &= ~(0xE);
+    val |= (5 << 1);
+    CAU_WRITE_REG32(CAU_PMIP_TSEN_ADDR, val);
+
+    val = CAU_REG32(CAU_V33_VSEN_ADDR);
+    val &= ~(0xE);
+    val |= (5 << 1);
+    CAU_WRITE_REG32(CAU_V33_VSEN_ADDR, val);
+
+    val = CAU_REG32(CAU_ADC_CTRL_ADDR);
+    val |= 1 << 0;
+    CAU_WRITE_REG32(CAU_ADC_CTRL_ADDR, val);
+
+    val = CAU_REG32(CAU_ADC_CTRL_ADDR);
+    val &= ~(1 << 0);
+    CAU_WRITE_REG32(CAU_ADC_CTRL_ADDR, val);
+}
 
 ////////////////////////////////////////////////////////////////////////////
 //! @brief load service
@@ -1497,6 +1581,10 @@ status_t load_service(LOAD_Target_Type loadTarget, uint32_t sourceAddr)
         (void)__OtpDeInit();
     }
 
+    cau_temperature_enable_impl();
+    cau_pmip_v33_enable();
+    cau_temperature_write_to_firmware_impl();
+
     if (status == kStatus_Success)
     {
         reset_device(loadTarget);
@@ -1585,6 +1673,10 @@ static status_t load_service_monolithic(LOAD_Target_Type loadTarget, uint32_t so
         /* OTP init was done here so undo it here */
         (void)__OtpDeInit();
     }
+
+    cau_temperature_enable_impl();
+    cau_pmip_v33_enable();
+    cau_temperature_write_to_firmware_impl();
 
     if (status == kStatus_Success)
     {

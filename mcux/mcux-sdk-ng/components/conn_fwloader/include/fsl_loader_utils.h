@@ -117,6 +117,22 @@ typedef uint32_t fsl_nboot_status_t;
 #define kNBOOT_RootKeyUsage_DebugCA_ImageCA_FwCA_ImageKey_FwKey (0x0u)
 #define kNBOOT_RootKeyUsage_Unused                              (0x7u)
 
+   /*! @brief The cau registers. */
+#define CAU_ENABLE_ADDR         (0x45004008U)
+#define CAU_TEMPERATURE_ADDR    (0x4500400CU)
+#define CAU_TEMPERATURE_FW_ADDR (0x41382490U)
+#define CAU_FW_WAKE_STATUS_ADDR     (0x40031068U)
+#define CAU_PMIP_TSEN_ADDR          (0x45004010U)
+#define CAU_V33_VSEN_ADDR           (0x45004028U)
+#define CAU_ADC_CTRL_ADDR           (0x45004000U)
+
+#define RW610_PACKAGE_TYPE_QFN 0
+#define RW610_PACKAGE_TYPE_CSP 1
+#define RW610_PACKAGE_TYPE_BGA 2
+
+#define CAU_REG32(x) (*(volatile unsigned int *)(x))
+#define CAU_WRITE_REG32(reg, val) (CAU_REG32(reg) = (val))
+
 //! @brief SB loader status codes.
 enum _sbloader_status
 {
@@ -663,7 +679,9 @@ status_t loader_process_sb_file(uint32_t readOffset);
 status_t fsl_sbloader_init(fsl_api_core_context_t *ctx);
 status_t fsl_sbloader_finalize(fsl_api_core_context_t *ctx);
 uint8_t get_chip_revision(void);
-
+int32_t cau_temperature_write_to_firmware_impl(void);
+int32_t cau_get_temperature_impl(void);
+void cau_temperature_enable_impl(void);
 //! @}
 
 #endif /* __FSL_LOADER_UTILS_H__ */
