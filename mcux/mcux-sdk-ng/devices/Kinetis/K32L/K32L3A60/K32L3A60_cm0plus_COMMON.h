@@ -7,14 +7,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
-**     Version:             rev. 1.0, 2019-04-22
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32L3A60_cm0plus
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,14 +23,17 @@
 **     Revisions:
 **     - rev. 1.0 (2019-04-22)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file K32L3A60_cm0plus_COMMON.h
- * @version 1.0
- * @date 2019-04-22
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for K32L3A60_cm0plus
  *
  * CMSIS Peripheral Access Layer for K32L3A60_cm0plus
@@ -41,7 +44,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -159,14 +162,16 @@ typedef enum IRQn {
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
 #include "system_K32L3A60_cm0plus.h"   /* Device specific configuration file */
 
-#define K32L3A60_cm0plus_SERIES
-/* CPU specific feature definitions */
-#include "K32L3A60_cm0plus_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef K32L3A60_cm0plus_SERIES
+#define K32L3A60_cm0plus_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "K32L3A60_cm0plus_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral LPADC0 base address */

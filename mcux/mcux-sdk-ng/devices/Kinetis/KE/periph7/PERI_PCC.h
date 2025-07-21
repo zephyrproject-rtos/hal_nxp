@@ -19,14 +19,14 @@
 **                          MKE17Z256VLH7
 **                          MKE17Z256VLL7
 **
-**     Version:             rev. 3.0, 2021-10-08
-**     Build:               b240715
+**     Version:             rev. 4.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PCC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -39,21 +39,24 @@
 **         Based on Rev.1 RM.
 **     - rev. 3.0 (2021-10-08)
 **         Add 48LQFP parts.
+**     - rev. 4.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PCC.h
- * @version 3.0
- * @date 2021-10-08
+ * @file PERI_PCC.h
+ * @version 4.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PCC
  *
  * CMSIS Peripheral Access Layer for PCC
  */
 
-#if !defined(PCC_H_)
-#define PCC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PCC_H_)
+#define PERI_PCC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE12Z128VLF7) || defined(CPU_MKE12Z128VLH7) || defined(CPU_MKE12Z128VLL7) || defined(CPU_MKE12Z256VLF7) || defined(CPU_MKE12Z256VLH7) || defined(CPU_MKE12Z256VLL7))
 #include "MKE12Z7_COMMON.h"
@@ -182,18 +185,32 @@ typedef struct {
 #define PCC_INSTANCE_0         0
 
 #define PCC_DMA0_INDEX                           8
+#define PCC_MPU_INDEX                            13
 #define PCC_FLASH_INDEX                          32
 #define PCC_DMAMUX0_INDEX                        33
+#define PCC_CAN0_INDEX                           36
+#define PCC_MSCAN0_INDEX                         36
+#define PCC_CAN1_INDEX                           37
+#define PCC_FLEXTMR3_INDEX                       38
+#define PCC_ADC1_INDEX                           39
 #define PCC_LPSPI0_INDEX                         44
+#define PCC_LPSPI1_INDEX                         45
+#define PCC_PDB1_INDEX                           49
 #define PCC_CRC_INDEX                            50
+#define PCC_PDB2_INDEX                           51
+#define PCC_PDB0_INDEX                           54
 #define PCC_LPIT0_INDEX                          55
 #define PCC_FLEXTMR0_INDEX                       56
 #define PCC_FLEXTMR1_INDEX                       57
 #define PCC_FLEXTMR2_INDEX                       58
 #define PCC_ADC0_INDEX                           59
+#define PCC_ADC2_INDEX                           60
+#define PCC_RTC_INDEX                            61
+#define PCC_DAC0_INDEX                           63
 #define PCC_LPTMR0_INDEX                         64
 #define PCC_TSI0_INDEX                           69
 #define PCC_TSI1_INDEX                           71
+#define PCC_SIM_INDEX                            72
 #define PCC_PORTA_INDEX                          73
 #define PCC_PORTB_INDEX                          74
 #define PCC_PORTC_INDEX                          75
@@ -201,14 +218,18 @@ typedef struct {
 #define PCC_PORTE_INDEX                          77
 #define PCC_PWT_INDEX                            86
 #define PCC_FLEXIO_INDEX                         90
+#define PCC_RTC_OSC_INDEX                        96
 #define PCC_EWM_INDEX                            97
 #define PCC_FLEXIOTRIG0_INDEX                    98
 #define PCC_FLEXIOTRIG1_INDEX                    99
 #define PCC_LPI2C0_INDEX                         102
+#define PCC_LPI2C1_INDEX                         103
 #define PCC_LPUART0_INDEX                        106
 #define PCC_LPUART1_INDEX                        107
 #define PCC_LPUART2_INDEX                        108
 #define PCC_CMP0_INDEX                           115
+#define PCC_CMP1_INDEX                           116
+#define PCC_CMP2_INDEX                           117
 
 
 /*!
@@ -241,5 +262,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PCC_H_ */
+#endif  /* PERI_PCC_H_ */
 

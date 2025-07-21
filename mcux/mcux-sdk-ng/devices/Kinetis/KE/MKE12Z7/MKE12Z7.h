@@ -14,14 +14,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KE1xZP100M72SF1RM, Rev. 1, Jun. 2021
-**     Version:             rev. 3.0, 2021-10-08
-**     Build:               b240715
+**     Version:             rev. 4.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MKE12Z7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,17 @@
 **         Based on Rev.1 RM.
 **     - rev. 3.0 (2021-10-08)
 **         Add 48LQFP parts.
+**     - rev. 4.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKE12Z7.h
- * @version 3.0
- * @date 2021-10-08
+ * @version 4.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MKE12Z7
  *
  * CMSIS Peripheral Access Layer for MKE12Z7

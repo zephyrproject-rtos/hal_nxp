@@ -7,14 +7,14 @@
 **                          MK22FN256VLL12
 **                          MK22FN256VMP12
 **
-**     Version:             rev. 1.8, 2015-02-19
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EWM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -42,21 +42,24 @@
 **         Interrupt INT_LPTimer renamed to INT_LPTMR0, interrupt INT_Watchdog renamed to INT_WDOG_EWM.
 **     - rev. 1.8 (2015-02-19)
 **         Renamed interrupt vector LLW to LLWU.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file EWM.h
- * @version 1.8
- * @date 2015-02-19
+ * @file PERI_EWM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for EWM
  *
  * CMSIS Peripheral Access Layer for EWM
  */
 
-#if !defined(EWM_H_)
-#define EWM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_EWM_H_)
+#define PERI_EWM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK22FN128CAH12) || defined(CPU_MK22FN256CAH12) || defined(CPU_MK22FN256VDC12) || defined(CPU_MK22FN256VLH12) || defined(CPU_MK22FN256VLL12) || defined(CPU_MK22FN256VMP12))
 #include "MK22F25612_COMMON.h"
@@ -108,7 +111,7 @@
 /** EWM - Register Layout Typedef */
 typedef struct {
   __IO uint8_t CTRL;                               /**< Control Register, offset: 0x0 */
-  __O  uint8_t SERV;                               /**< Service Register, offset: 0x1 */
+  __IO uint8_t SERV;                               /**< Service Register, offset: 0x1 */
   __IO uint8_t CMPL;                               /**< Compare Low Register, offset: 0x2 */
   __IO uint8_t CMPH;                               /**< Compare High Register, offset: 0x3 */
        uint8_t RESERVED_0[1];
@@ -216,5 +219,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* EWM_H_ */
+#endif  /* PERI_EWM_H_ */
 

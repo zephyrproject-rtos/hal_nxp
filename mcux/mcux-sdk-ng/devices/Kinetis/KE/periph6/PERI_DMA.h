@@ -9,14 +9,14 @@
 **                          MKE15Z256VLH7
 **                          MKE15Z256VLL7
 **
-**     Version:             rev. 6.0, 2016-09-20
-**     Build:               b240715
+**     Version:             rev. 7.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **         Based on rev1.x RDP.
 **     - rev. 6.0 (2016-09-20)
 **         Based on rev2 RDP.
+**     - rev. 7.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DMA.h
- * @version 6.0
- * @date 2016-09-20
+ * @file PERI_DMA.h
+ * @version 7.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DMA
  *
  * CMSIS Peripheral Access Layer for DMA
  */
 
-#if !defined(DMA_H_)
-#define DMA_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DMA_H_)
+#define PERI_DMA_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE14Z128VLH7) || defined(CPU_MKE14Z128VLL7) || defined(CPU_MKE14Z256VLH7) || defined(CPU_MKE14Z256VLL7))
 #include "MKE14Z7_COMMON.h"
@@ -218,14 +221,14 @@ typedef struct {
   __IO uint32_t ERQ;                               /**< Enable Request Register, offset: 0xC */
        uint8_t RESERVED_1[4];
   __IO uint32_t EEI;                               /**< Enable Error Interrupt Register, offset: 0x14 */
-  __O  uint8_t CEEI;                               /**< Clear Enable Error Interrupt Register, offset: 0x18 */
-  __O  uint8_t SEEI;                               /**< Set Enable Error Interrupt Register, offset: 0x19 */
-  __O  uint8_t CERQ;                               /**< Clear Enable Request Register, offset: 0x1A */
-  __O  uint8_t SERQ;                               /**< Set Enable Request Register, offset: 0x1B */
-  __O  uint8_t CDNE;                               /**< Clear DONE Status Bit Register, offset: 0x1C */
-  __O  uint8_t SSRT;                               /**< Set START Bit Register, offset: 0x1D */
-  __O  uint8_t CERR;                               /**< Clear Error Register, offset: 0x1E */
-  __O  uint8_t CINT;                               /**< Clear Interrupt Request Register, offset: 0x1F */
+  __IO uint8_t CEEI;                               /**< Clear Enable Error Interrupt Register, offset: 0x18 */
+  __IO uint8_t SEEI;                               /**< Set Enable Error Interrupt Register, offset: 0x19 */
+  __IO uint8_t CERQ;                               /**< Clear Enable Request Register, offset: 0x1A */
+  __IO uint8_t SERQ;                               /**< Set Enable Request Register, offset: 0x1B */
+  __IO uint8_t CDNE;                               /**< Clear DONE Status Bit Register, offset: 0x1C */
+  __IO uint8_t SSRT;                               /**< Set START Bit Register, offset: 0x1D */
+  __IO uint8_t CERR;                               /**< Clear Error Register, offset: 0x1E */
+  __IO uint8_t CINT;                               /**< Clear Interrupt Request Register, offset: 0x1F */
        uint8_t RESERVED_2[4];
   __IO uint32_t INT;                               /**< Interrupt Request Register, offset: 0x24 */
        uint8_t RESERVED_3[4];
@@ -1666,5 +1669,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DMA_H_ */
+#endif  /* PERI_DMA_H_ */
 

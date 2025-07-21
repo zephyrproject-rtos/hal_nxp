@@ -12,14 +12,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K32L2B3xRM, Rev.0, July 2019
-**     Version:             rev. 1.0, 2019-07-30
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32L2B31A
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **     Revisions:
 **     - rev. 1.0 (2019-07-30)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file K32L2B31A_COMMON.h
- * @version 1.0
- * @date 2019-07-30
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for K32L2B31A
  *
  * CMSIS Peripheral Access Layer for K32L2B31A
@@ -46,7 +49,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -132,14 +135,16 @@ typedef enum IRQn {
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
 #include "system_K32L2B31A.h"          /* Device specific configuration file */
 
-#define K32L2B31A_SERIES
-/* CPU specific feature definitions */
-#include "K32L2B31A_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef K32L2B31A_SERIES
+#define K32L2B31A_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "K32L2B31A_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */

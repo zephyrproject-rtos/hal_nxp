@@ -7,14 +7,14 @@
 **                          MK02FN64VLF10
 **                          MK02FN64VLH10
 **
-**     Version:             rev. 0.5, 2015-02-19
-**     Build:               b240710
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PIT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Interrupt INT_LPTimer renamed to INT_LPTMR0, interrupt INT_Watchdog renamed to INT_WDOG_EWM.
 **     - rev. 0.5 (2015-02-19)
 **         Renamed interrupt vector LLW to LLWU.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PIT.h
- * @version 0.5
- * @date 2015-02-19
+ * @file PERI_PIT.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PIT
  *
  * CMSIS Peripheral Access Layer for PIT
  */
 
-#if !defined(PIT_H_)
-#define PIT_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PIT_H_)
+#define PERI_PIT_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK02FN128VFM10) || defined(CPU_MK02FN128VLF10) || defined(CPU_MK02FN128VLH10) || defined(CPU_MK02FN64VFM10) || defined(CPU_MK02FN64VLF10) || defined(CPU_MK02FN64VLH10))
 #include "MK02F12810_COMMON.h"
@@ -246,5 +249,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PIT_H_ */
+#endif  /* PERI_PIT_H_ */
 

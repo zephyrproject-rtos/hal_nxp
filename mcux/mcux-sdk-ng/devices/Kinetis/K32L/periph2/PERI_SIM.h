@@ -13,14 +13,14 @@
 **                          K32L2B31VLH0A
 **                          K32L2B31VMP0A
 **
-**     Version:             rev. 1.0, 2019-07-30
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SIM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 1.0 (2019-07-30)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SIM.h
- * @version 1.0
- * @date 2019-07-30
+ * @file PERI_SIM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SIM
  *
  * CMSIS Peripheral Access Layer for SIM
  */
 
-#if !defined(SIM_H_)
-#define SIM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SIM_H_)
+#define PERI_SIM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32L2B11VFM0A) || defined(CPU_K32L2B11VFT0A) || defined(CPU_K32L2B11VLH0A) || defined(CPU_K32L2B11VMP0A))
 #include "K32L2B11A_COMMON.h"
@@ -491,8 +494,8 @@ typedef struct {
 #define SIM_SDID_FAMID_SHIFT                     (28U)
 /*! FAMID
  *  0b0000..K32L3A
- *  0b0100..K32L2B
  *  0b0010..K32L2A
+ *  0b0100..K32L2B
  */
 #define SIM_SDID_FAMID(x)                        (((uint32_t)(((uint32_t)(x)) << SIM_SDID_FAMID_SHIFT)) & SIM_SDID_FAMID_MASK)
 /*! @} */
@@ -951,5 +954,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SIM_H_ */
+#endif  /* PERI_SIM_H_ */
 

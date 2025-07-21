@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2021-06-25
-**     Build:               b231109
+**     Build:               b250428
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -115,6 +115,18 @@
 #define FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT (0)
 /* @brief Has C2 RRE Bit */
 #define FSL_FEATURE_ACMP_HAS_C2_RRE_BIT (1)
+/* @brief Has C3 RDIVE Bit */
+#define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (0)
+/* @brief If support round-robin mode */
+#define FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE (0)
+/* @brief If support 3v domain */
+#define FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN (1)
+/* @brief If support window mode */
+#define FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE (0)
+/* @brief If support filter mode */
+#define FSL_FEATURE_ACMP_HAS_NO_FILTER_MODE (0)
+/* @brief Has No C0 SE Bit */
+#define FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT (0)
 
 /* CRC module features */
 
@@ -617,6 +629,31 @@
     (((x) == FTM0) ? (0) : \
     (((x) == FTM1) ? (1) : \
     (((x) == FTM2) ? (1) : (-1))))
+/* @brief Has filter prescaler. */
+#define FSL_FEATURE_FTM_HAS_FILTER_PRESCALER (0)
+/* @brief Has fault output state configurable. */
+#define FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE (1)
+/* @brief Has paired deadtime. */
+#define FSL_FEATURE_FTM_HAS_PAIRED_DEADTIME (0)
+/* @brief Has PWM dithering. */
+#define FSL_FEATURE_FTM_HAS_DITHERING (1)
+/* @brief FTM instance has PWM dithering. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(x) (1)
+/* @brief Has trigger mode control. */
+#define FSL_FEATURE_FTM_HAS_TRIGGER_MODE (1)
+/* @brief Has modified combine mode. */
+#define FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM (1)
+/* @brief Has configurable channel input state. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHIS_BIT (1)
+/* @brief Has configurable channel output value. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHOV_BIT (1)
+/* @brief FTM instance has Quadrature Decoder with input filter. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (0)
+/* @brief FTM instance fault input number. */
+#define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) \
+    (((x) == FTM0) ? (4) : \
+    (((x) == FTM1) ? (0) : \
+    (((x) == FTM2) ? (0) : (-1))))
 
 /* GPIO module features */
 
@@ -629,6 +666,8 @@
 #define FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
+/* @brief Has dedicated interrupt for master and slave. */
+#define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
 
 /* LPIT module features */
 
@@ -641,10 +680,16 @@
 
 /* LPSPI module features */
 
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO. */
+#define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (4)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
+/* @brief Has no PCSCFG bit in CFGR1 register. */
+#define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
+/* @brief Has no WIDTH bits in TCR register. */
+#define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 
 /* LPTMR module features */
 
@@ -721,6 +766,16 @@
 #define FSL_FEATURE_LPUART_HAS_GLOBAL (1)
 /* @brief Has LPUART_PINCFG. */
 #define FSL_FEATURE_LPUART_HAS_PINCFG (1)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPUART_IS_LPFLEXCOMM (0)
+/* @brief Has register MODEM Control. */
+#define FSL_FEATURE_LPUART_HAS_MCR (0)
+/* @brief Has register Half Duplex Control. */
+#define FSL_FEATURE_LPUART_HAS_HDCR (0)
+/* @brief Has register Timeout. */
+#define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
+/* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
+#define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
 
 /* interrupt module features */
 

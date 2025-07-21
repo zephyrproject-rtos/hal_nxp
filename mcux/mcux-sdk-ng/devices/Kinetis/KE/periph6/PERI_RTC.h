@@ -9,14 +9,14 @@
 **                          MKE15Z256VLH7
 **                          MKE15Z256VLL7
 **
-**     Version:             rev. 6.0, 2016-09-20
-**     Build:               b240715
+**     Version:             rev. 7.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **         Based on rev1.x RDP.
 **     - rev. 6.0 (2016-09-20)
 **         Based on rev2 RDP.
+**     - rev. 7.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RTC.h
- * @version 6.0
- * @date 2016-09-20
+ * @file PERI_RTC.h
+ * @version 7.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RTC
  *
  * CMSIS Peripheral Access Layer for RTC
  */
 
-#if !defined(RTC_H_)
-#define RTC_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RTC_H_)
+#define PERI_RTC_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE14Z128VLH7) || defined(CPU_MKE14Z128VLL7) || defined(CPU_MKE14Z256VLH7) || defined(CPU_MKE14Z256VLL7))
 #include "MKE14Z7_COMMON.h"
@@ -157,11 +160,11 @@ typedef struct {
 #define RTC_TCR_TCR_MASK                         (0xFFU)
 #define RTC_TCR_TCR_SHIFT                        (0U)
 /*! TCR - Time Compensation Register
- *  0b10000000..Time Prescaler Register overflows every 32896 clock cycles.
- *  0b11111111..Time Prescaler Register overflows every 32769 clock cycles.
  *  0b00000000..Time Prescaler Register overflows every 32768 clock cycles.
  *  0b00000001..Time Prescaler Register overflows every 32767 clock cycles.
  *  0b01111111..Time Prescaler Register overflows every 32641 clock cycles.
+ *  0b10000000..Time Prescaler Register overflows every 32896 clock cycles.
+ *  0b11111111..Time Prescaler Register overflows every 32769 clock cycles.
  */
 #define RTC_TCR_TCR(x)                           (((uint32_t)(((uint32_t)(x)) << RTC_TCR_TCR_SHIFT)) & RTC_TCR_TCR_MASK)
 
@@ -571,5 +574,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RTC_H_ */
+#endif  /* PERI_RTC_H_ */
 

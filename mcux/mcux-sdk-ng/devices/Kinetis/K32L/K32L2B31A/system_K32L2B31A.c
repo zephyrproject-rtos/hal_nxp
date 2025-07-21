@@ -12,8 +12,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K32L2B3xRM, Rev.0, July 2019
-**     Version:             rev. 1.0, 2019-07-30
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -30,14 +30,17 @@
 **     Revisions:
 **     - rev. 1.0 (2019-07-30)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file K32L2B31A
- * @version 1.0
- * @date 2019-07-30
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for K32L2B31A (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -47,6 +50,8 @@
 
 #include <stdint.h>
 #include "fsl_device_registers.h"
+
+
 
 /* ----------------------------------------------------------------------------
    -- Core clock
@@ -58,62 +63,52 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-void SystemInit(void)
-{
+void SystemInit (void) {
+
 #if (ACK_ISOLATION)
-    if ((PMC->REGSC & PMC_REGSC_ACKISO_MASK) != 0U)
-    {
-        PMC->REGSC |= PMC_REGSC_ACKISO_MASK; /* VLLSx recovery */
-    }
+  if((PMC->REGSC &  PMC_REGSC_ACKISO_MASK) != 0U) {
+    PMC->REGSC |= PMC_REGSC_ACKISO_MASK; /* VLLSx recovery */
+  }
 #endif
 
 #if (DISABLE_WDOG)
-    /* SIM->COPC: ?=0,COPCLKSEL=0,COPDBGEN=0,COPSTPEN=0,COPT=0,COPCLKS=0,COPW=0 */
-    SIM->COPC = (uint32_t)0x00u;
+  /* SIM->COPC: ?=0,COPCLKSEL=0,COPDBGEN=0,COPSTPEN=0,COPT=0,COPCLKS=0,COPW=0 */
+  SIM->COPC = (uint32_t)0x00U;
 #endif /* (DISABLE_WDOG) */
 
-    SystemInitHook();
+  SystemInitHook();
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
-void SystemCoreClockUpdate(void)
-{
-    uint32_t MCGOUTClock; /* Variable to store output clock frequency of the MCG module */
-    uint16_t Divider;
+void SystemCoreClockUpdate (void) {
 
-    if ((MCG->S & MCG_S_CLKST_MASK) == 0x00U)
-    {
-        /* High internal reference clock is selected */
-        MCGOUTClock = CPU_INT_FAST_CLK_HZ; /* Fast internal reference clock selected */
-    }
-    else if ((MCG->S & MCG_S_CLKST_MASK) == 0x04U)
-    {
-        /* Internal reference clock is selected */
-        Divider     = (uint16_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
-        MCGOUTClock = (uint32_t)(CPU_INT_SLOW_CLK_HZ / Divider); /* Slow internal reference clock 8MHz selected */
-    }
-    else if ((MCG->S & MCG_S_CLKST_MASK) == 0x08U)
-    {
-        /* External reference clock is selected */
-        MCGOUTClock = CPU_XTAL_CLK_HZ;
-    }
-    else
-    {
-        /* Reserved value */
-        return;
-    } /* (!((MCG->S & MCG_S_CLKST_MASK) == 0x08U)) */
-    SystemCoreClock =
-        (MCGOUTClock / (0x01U + ((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK) >> SIM_CLKDIV1_OUTDIV1_SHIFT)));
+  uint32_t MCGOUTClock;                /* Variable to store output clock frequency of the MCG module */
+  uint16_t Divider;
+
+  if ((MCG->S & MCG_S_CLKST_MASK) == 0x00U) {
+    /* High internal reference clock is selected */
+    MCGOUTClock = CPU_INT_FAST_CLK_HZ;                                  /* Fast internal reference clock selected */
+  } else if ((MCG->S & MCG_S_CLKST_MASK) == 0x04U) {
+    /* Internal reference clock is selected */
+    Divider = (uint16_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
+    MCGOUTClock = (uint32_t) (CPU_INT_SLOW_CLK_HZ / Divider);           /* Slow internal reference clock 8MHz selected */
+  } else if ((MCG->S & MCG_S_CLKST_MASK) == 0x08U) {
+    /* External reference clock is selected */
+    MCGOUTClock = CPU_XTAL_CLK_HZ;
+  } else {
+    /* Reserved value */
+    return;
+  } /* (!((MCG->S & MCG_S_CLKST_MASK) == 0x08U)) */
+  SystemCoreClock = (MCGOUTClock / (0x01U + ((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK) >> SIM_CLKDIV1_OUTDIV1_SHIFT)));
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
-__attribute__((weak)) void SystemInitHook(void)
-{
-    /* Void implementation of the weak function. */
+__attribute__ ((weak)) void SystemInitHook (void) {
+  /* Void implementation of the weak function. */
 }
