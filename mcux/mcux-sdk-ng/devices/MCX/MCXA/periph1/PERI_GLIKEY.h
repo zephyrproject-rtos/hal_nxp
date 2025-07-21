@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GLIKEY
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file GLIKEY.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_GLIKEY.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for GLIKEY
  *
  * CMSIS Peripheral Access Layer for GLIKEY
  */
 
-#if !defined(GLIKEY_H_)
-#define GLIKEY_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_GLIKEY_H_)
+#define PERI_GLIKEY_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -120,7 +123,7 @@
 /** GLIKEY - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CTRL_0;                            /**< Control Register 0 SFR, offset: 0x0 */
-  __IO uint32_t CTRL_1;                            /**< Control Regsiter 1 SFR, offset: 0x4 */
+  __IO uint32_t CTRL_1;                            /**< Control Register 1 SFR, offset: 0x4 */
   __IO uint32_t INTR_CTRL;                         /**< Interrupt Control, offset: 0x8 */
   __I  uint32_t STATUS;                            /**< Status, offset: 0xC */
        uint8_t RESERVED_0[236];
@@ -168,7 +171,7 @@ typedef struct {
 #define GLIKEY_CTRL_0_RESERVED31(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_0_RESERVED31_SHIFT)) & GLIKEY_CTRL_0_RESERVED31_MASK)
 /*! @} */
 
-/*! @name CTRL_1 - Control Regsiter 1 SFR */
+/*! @name CTRL_1 - Control Register 1 SFR */
 /*! @{ */
 
 #define GLIKEY_CTRL_1_READ_INDEX_MASK            (0xFFU)
@@ -290,10 +293,10 @@ typedef struct {
 /*! Reserved15 - Reserved */
 #define GLIKEY_VERSION_RESERVED15(x)             (((uint32_t)(((uint32_t)(x)) << GLIKEY_VERSION_RESERVED15_SHIFT)) & GLIKEY_VERSION_RESERVED15_MASK)
 
-#define GLIKEY_VERSION_RESERVED16_MASK           (0x30000U)
-#define GLIKEY_VERSION_RESERVED16_SHIFT          (16U)
-/*! Reserved16 - Reserved */
-#define GLIKEY_VERSION_RESERVED16(x)             (((uint32_t)(((uint32_t)(x)) << GLIKEY_VERSION_RESERVED16_SHIFT)) & GLIKEY_VERSION_RESERVED16_MASK)
+#define GLIKEY_VERSION_MILESTONE_MASK            (0x30000U)
+#define GLIKEY_VERSION_MILESTONE_SHIFT           (16U)
+/*! MILESTONE - Release milestone. 00-PREL, 01-BR, 10-SI, 11-GO. */
+#define GLIKEY_VERSION_MILESTONE(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_VERSION_MILESTONE_SHIFT)) & GLIKEY_VERSION_MILESTONE_MASK)
 
 #define GLIKEY_VERSION_FSM_CONFIG_MASK           (0x40000U)
 #define GLIKEY_VERSION_FSM_CONFIG_SHIFT          (18U)
@@ -345,5 +348,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* GLIKEY_H_ */
+#endif  /* PERI_GLIKEY_H_ */
 
