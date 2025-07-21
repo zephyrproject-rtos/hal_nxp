@@ -1,0 +1,35 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "created": "2025-06-16T08:04:18Z",
+    "creators": [
+      "Organization: NXP"
+    ],
+    "licenseListVersion": "3.20"
+  },
+  "name": "mcux-devices-wireless-v25.06.00",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://nxp.com/spdx/aa9db388-4125-488f-81de-b4740576aae8",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-package-aa9db388-4125-488f-81de-b4740576aae8",
+      "name": "mcux-devices-wireless",
+      "versionInfo": "v25.06.00",
+      "licenseConcluded": "(BSD-3-Clause)",
+      "licenseDeclared": "(BSD-3-Clause)",
+      "downloadLocation": "https://github.com/nxp-mcuxpresso/mcux-devices-wireless",
+      "originator": "Organization: NXP",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-package-aa9db388-4125-488f-81de-b4740576aae8"
+    }
+  ]
+}

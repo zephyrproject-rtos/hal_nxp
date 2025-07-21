@@ -99,6 +99,9 @@ status_t FLASH_Erase(flash_config_t *config, FMU_Type *base, uint32_t start, uin
     assert(config);
     assert(base);
 
+    /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+    MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
+
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_erase_sector(config, base, start, lengthInBytes, key);
 
@@ -120,6 +123,8 @@ status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, u
     status = flash_check_param(config, base, start, lengthInBytes, FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
+        /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+        MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
         /* Align length to whole phrase */
         uint32_t alignedLength = ALIGN_DOWN(lengthInBytes, sizeof(uint8_t) * FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE);
         uint32_t extraBytes    = lengthInBytes - alignedLength;
@@ -198,6 +203,8 @@ status_t FLASH_ProgramPage(
     status = flash_check_param(config, base, start, lengthInBytes, FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE);
     if (status == kStatus_FLASH_Success)
     {
+        /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+        MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
         /* Align length to whole phrase. */
         uint32_t alignedLength = ALIGN_DOWN(lengthInBytes, sizeof(uint8_t) * FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE);
         uint32_t extraBytes    = lengthInBytes - alignedLength;

@@ -17,7 +17,9 @@
  */
 #if (defined(CPU_KW45B41Z83AFPA) || defined(CPU_KW45B41Z83AFTA))
 
+#ifndef KW45B41Z83_SERIES
 #define KW45B41Z83_SERIES
+#endif
 
 /* CMSIS-style register definitions */
 #include "KW45B41Z83.h"

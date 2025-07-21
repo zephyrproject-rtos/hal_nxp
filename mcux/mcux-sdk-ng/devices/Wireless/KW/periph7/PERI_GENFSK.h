@@ -19,14 +19,14 @@
 **                          KW45Z41083AFPA
 **                          KW45Z41083AFTA
 **
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GENFSK
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,21 +35,24 @@
 **     Revisions:
 **     - rev. 1.0 (2020-05-12)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file GENFSK.h
- * @version 1.0
- * @date 2020-05-12
+ * @file PERI_GENFSK.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for GENFSK
  *
  * CMSIS Peripheral Access Layer for GENFSK
  */
 
-#if !defined(GENFSK_H_)
-#define GENFSK_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_GENFSK_H_)
+#define PERI_GENFSK_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_KW45B41Z52AFPA) || defined(CPU_KW45B41Z52AFTA))
 #include "KW45B41Z52_COMMON.h"
@@ -2368,24 +2371,24 @@ typedef struct {
 #define GENFSK_IRQ_CTRL2_ARB_GRANT_DEASSERTION_IRQ_EN_MASK (0x10000U)
 #define GENFSK_IRQ_CTRL2_ARB_GRANT_DEASSERTION_IRQ_EN_SHIFT (16U)
 /*! ARB_GRANT_DEASSERTION_IRQ_EN - arb_grant Deassertion Interrupt enable
- *  0b1..allows arb_grant deassertion event to generate an interrupt
  *  0b0..An arb_grant deassertion event will set the ARB_GRANT_DEASSERTION_IRQ status bit, but no interrupt is not generated
+ *  0b1..allows arb_grant deassertion event to generate an interrupt
  */
 #define GENFSK_IRQ_CTRL2_ARB_GRANT_DEASSERTION_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << GENFSK_IRQ_CTRL2_ARB_GRANT_DEASSERTION_IRQ_EN_SHIFT)) & GENFSK_IRQ_CTRL2_ARB_GRANT_DEASSERTION_IRQ_EN_MASK)
 
 #define GENFSK_IRQ_CTRL2_COEX_TIMEOUT_IRQ_EN_MASK (0x20000U)
 #define GENFSK_IRQ_CTRL2_COEX_TIMEOUT_IRQ_EN_SHIFT (17U)
 /*! COEX_TIMEOUT_IRQ_EN - Coexistence Timeout Interrupt enable bit
- *  0b1..allows interrupt when coexistence timeout
  *  0b0..Interrupt generation is disabled, but a COEX_TIMEOUT_IRQ flag can be set
+ *  0b1..allows interrupt when coexistence timeout
  */
 #define GENFSK_IRQ_CTRL2_COEX_TIMEOUT_IRQ_EN(x)  (((uint32_t)(((uint32_t)(x)) << GENFSK_IRQ_CTRL2_COEX_TIMEOUT_IRQ_EN_SHIFT)) & GENFSK_IRQ_CTRL2_COEX_TIMEOUT_IRQ_EN_MASK)
 
 #define GENFSK_IRQ_CTRL2_EVENT_TIMER_OVER_FLOW_IRQ_EN_MASK (0x40000U)
 #define GENFSK_IRQ_CTRL2_EVENT_TIMER_OVER_FLOW_IRQ_EN_SHIFT (18U)
 /*! EVENT_TIMER_OVER_FLOW_IRQ_EN - Event Timer Overflow Interrupt enable bit
- *  0b1..allows interrupt when Event Timer overflow
  *  0b0..Interrupt generation is disabled, but an EVENT_TIMER_OVER_FLOW_IRQ flag can be set
+ *  0b1..allows interrupt when Event Timer overflow
  */
 #define GENFSK_IRQ_CTRL2_EVENT_TIMER_OVER_FLOW_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << GENFSK_IRQ_CTRL2_EVENT_TIMER_OVER_FLOW_IRQ_EN_SHIFT)) & GENFSK_IRQ_CTRL2_EVENT_TIMER_OVER_FLOW_IRQ_EN_MASK)
 
@@ -2456,5 +2459,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* GENFSK_H_ */
+#endif  /* PERI_GENFSK_H_ */
 
