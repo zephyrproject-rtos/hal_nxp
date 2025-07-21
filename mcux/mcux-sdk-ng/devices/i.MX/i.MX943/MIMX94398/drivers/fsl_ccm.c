@@ -19,6 +19,7 @@
 
 /* Local Variables */
 
+#ifdef CONFIG_DIRECT
 /*--------------------------------------------------------------------------*/
 /* Get CCM clock root enable status                                          */
 /*--------------------------------------------------------------------------*/
@@ -799,4 +800,5 @@ bool CCM_LpcgTimeoutSetEnable(uint32_t lpcgIdx, bool enable)
 
     return rc;
 }
+#endif
 

@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC_MBC4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file TRDC_MBC4.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_TRDC_MBC4.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for TRDC_MBC4
  *
  * CMSIS Peripheral Access Layer for TRDC_MBC4
  */
 
-#if !defined(TRDC_MBC4_H_)
-#define TRDC_MBC4_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_TRDC_MBC4_H_)
+#define PERI_TRDC_MBC4_H_                        /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -377,14 +380,14 @@ typedef struct {
     __I  uint32_t W0;                                /**< MBC Domain Error Word0 Register, array offset: 0x400, array step: 0x10 */
     __I  uint32_t W1;                                /**< MBC Domain Error Word1 Register, array offset: 0x404, array step: 0x10 */
          uint8_t RESERVED_0[4];
-    __O  uint32_t W3;                                /**< MBC Domain Error Word3 Register, array offset: 0x40C, array step: 0x10 */
+    __IO uint32_t W3;                                /**< MBC Domain Error Word3 Register, array offset: 0x40C, array step: 0x10 */
   } MBC_DERR[TRDC_MBC4_MBC_DERR_COUNT];
        uint8_t RESERVED_5[64];
   struct {                                         /* offset: 0x480, array step: 0x10 */
     __I  uint32_t W0;                                /**< MRC Domain Error Word0 Register, array offset: 0x480, array step: 0x10 */
     __I  uint32_t W1;                                /**< MRC Domain Error Word1 Register, array offset: 0x484, array step: 0x10 */
          uint8_t RESERVED_0[4];
-    __O  uint32_t W3;                                /**< MRC Domain Error Word3 Register, array offset: 0x48C, array step: 0x10 */
+    __IO uint32_t W3;                                /**< MRC Domain Error Word3 Register, array offset: 0x48C, array step: 0x10 */
   } MRC_DERR[TRDC_MBC4_MRC_DERR_COUNT];
        uint8_t RESERVED_6[880];
   struct {                                         /* offset: 0x800, array step: 0x20 */
@@ -402,9 +405,9 @@ typedef struct {
   struct {                                         /* offset: 0x10000, array step: 0x2000 */
     __I  uint32_t MBC_MEM_GLBCFG[TRDC_MBC4_MBC_INDEX_MBC_MEM_GLBCFG_COUNT];   /**< MBC Global Configuration Register, array offset: 0x10000, array step: index*0x2000, index2*0x4 */
     __IO uint32_t MBC_NSE_BLK_INDEX;                 /**< MBC NonSecure Enable Block Index, array offset: 0x10010, array step: 0x2000 */
-    __O  uint32_t MBC_NSE_BLK_SET;                   /**< MBC NonSecure Enable Block Set, array offset: 0x10014, array step: 0x2000 */
-    __O  uint32_t MBC_NSE_BLK_CLR;                   /**< MBC NonSecure Enable Block Clear, array offset: 0x10018, array step: 0x2000 */
-    __O  uint32_t MBC_NSE_BLK_CLR_ALL;               /**< MBC NonSecure Enable Block Clear All, array offset: 0x1001C, array step: 0x2000 */
+    __IO uint32_t MBC_NSE_BLK_SET;                   /**< MBC NonSecure Enable Block Set, array offset: 0x10014, array step: 0x2000 */
+    __IO uint32_t MBC_NSE_BLK_CLR;                   /**< MBC NonSecure Enable Block Clear, array offset: 0x10018, array step: 0x2000 */
+    __IO uint32_t MBC_NSE_BLK_CLR_ALL;               /**< MBC NonSecure Enable Block Clear All, array offset: 0x1001C, array step: 0x2000 */
     __IO uint32_t MBC_MEMN_GLBAC[TRDC_MBC4_MBC_INDEX_MBC_MEMN_GLBAC_COUNT];   /**< MBC Global Access Control, array offset: 0x10020, array step: index*0x2000, index2*0x4 */
     __IO uint32_t MBC_DOM0_MEM0_BLK_CFG_W[TRDC_MBC4_MBC_INDEX_MBC_INDEX_DOM0_MEM0_BLK_CFG_W_COUNT];   /**< MBC Memory Block Configuration Word, array offset: 0x10040, array step: index*0x2000, index2*0x4, valid indices: [0][0-6], [1][0], [2][0-1], [3][0-4] */
          uint8_t RESERVED_0[228];
@@ -635,9 +638,9 @@ typedef struct {
     __I  uint32_t MRC_GLBCFG;                        /**< MRC Global Configuration Register, array offset: 0x18000, array step: 0xFC4 */
          uint8_t RESERVED_0[12];
     __IO uint32_t MRC_NSE_RGN_INDIRECT;              /**< MRC NonSecure Enable Region Indirect, array offset: 0x18010, array step: 0xFC4 */
-    __O  uint32_t MRC_NSE_RGN_SET;                   /**< MRC NonSecure Enable Region Set, array offset: 0x18014, array step: 0xFC4 */
-    __O  uint32_t MRC_NSE_RGN_CLR;                   /**< MRC NonSecure Enable Region Clear, array offset: 0x18018, array step: 0xFC4 */
-    __O  uint32_t MRC_NSE_RGN_CLR_ALL;               /**< MRC NonSecure Enable Region Clear All, array offset: 0x1801C, array step: 0xFC4 */
+    __IO uint32_t MRC_NSE_RGN_SET;                   /**< MRC NonSecure Enable Region Set, array offset: 0x18014, array step: 0xFC4 */
+    __IO uint32_t MRC_NSE_RGN_CLR;                   /**< MRC NonSecure Enable Region Clear, array offset: 0x18018, array step: 0xFC4 */
+    __IO uint32_t MRC_NSE_RGN_CLR_ALL;               /**< MRC NonSecure Enable Region Clear All, array offset: 0x1801C, array step: 0xFC4 */
     __IO uint32_t MRC_GLBAC[TRDC_MBC4_MRC_INDEX_MRC_GLBAC_COUNT];   /**< MRC Global Access Control, array offset: 0x18020, array step: index*0xFC4, index2*0x4 */
     __IO uint32_t MRC_DOM0_RGD_W[TRDC_MBC4_MRC_INDEX_MRC_INDEX_DOM0_RGD_COUNT][TRDC_MBC4_MRC_INDEX_MRC_INDEX_DOM0_RGD_MRC_INDEX_DOM0_RGD_W_COUNT];   /**< MRC Region Descriptor Word 0..MRC Region Descriptor Word 1, array offset: 0x18040, array step: index*0xFC4, index2*0x8, index3*0x4 */
     __IO uint32_t MRC_DOM0_RGD_NSE;                  /**< MRC Region Descriptor NonSecure Enable, array offset: 0x180C0, array step: 0xFC4 */
@@ -39219,5 +39222,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* TRDC_MBC4_H_ */
+#endif  /* PERI_TRDC_MBC4_H_ */
 

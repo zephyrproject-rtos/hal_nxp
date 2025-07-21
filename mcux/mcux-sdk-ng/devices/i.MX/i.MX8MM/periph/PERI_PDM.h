@@ -25,14 +25,14 @@
 **                          MIMX8MM6DVTLZ_ca53
 **                          MIMX8MM6DVTLZ_cm4
 **
-**     Version:             rev. 4.0, 2019-02-18
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PDM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Rev.B Header PRC
 **     - rev. 4.0 (2019-02-18)
 **         Rev.0 Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PDM.h
- * @version 4.0
- * @date 2019-02-18
+ * @file PERI_PDM.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PDM
  *
  * CMSIS Peripheral Access Layer for PDM
  */
 
-#if !defined(PDM_H_)
-#define PDM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PDM_H_)
+#define PERI_PDM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MM1CVTKZ_ca53) || defined(CPU_MIMX8MM1DVTLZ_ca53))
 #include "MIMX8MM1_ca53_COMMON.h"
@@ -317,12 +320,12 @@ typedef struct {
 #define PDM_CTRL_2_QSEL_MASK                     (0xE000000U)
 #define PDM_CTRL_2_QSEL_SHIFT                    (25U)
 /*! QSEL - Quality Select
- *  0b001..High quality mode.
  *  0b000..Medium quality mode.
- *  0b111..Low quality mode.
- *  0b110..Very low quality 0 mode.
- *  0b101..Very low quality 1 mode.
+ *  0b001..High quality mode.
  *  0b100..Very low quality 2 mode.
+ *  0b101..Very low quality 1 mode.
+ *  0b110..Very low quality 0 mode.
+ *  0b111..Low quality mode.
  */
 #define PDM_CTRL_2_QSEL(x)                       (((uint32_t)(((uint32_t)(x)) << PDM_CTRL_2_QSEL_SHIFT)) & PDM_CTRL_2_QSEL_MASK)
 /*! @} */
@@ -413,8 +416,8 @@ typedef struct {
 #define PDM_STAT_BSY_FIL_MASK                    (0x80000000U)
 #define PDM_STAT_BSY_FIL_SHIFT                   (31U)
 /*! BSY_FIL - Decimation Filter Busy Flag
- *  0b1..At least one Decimation Filter channel is running.
  *  0b0..All Decimation Filters are stopped.
+ *  0b1..At least one Decimation Filter channel is running.
  */
 #define PDM_STAT_BSY_FIL(x)                      (((uint32_t)(((uint32_t)(x)) << PDM_STAT_BSY_FIL_SHIFT)) & PDM_STAT_BSY_FIL_MASK)
 /*! @} */
@@ -578,80 +581,80 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG0_MASK               (0x3U)
 #define PDM_DC_CTRL_DCCONFIG0_SHIFT              (0U)
 /*! DCCONFIG0 - Channel 0 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG0(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG0_SHIFT)) & PDM_DC_CTRL_DCCONFIG0_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG1_MASK               (0xCU)
 #define PDM_DC_CTRL_DCCONFIG1_SHIFT              (2U)
 /*! DCCONFIG1 - Channel 1 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG1(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG1_SHIFT)) & PDM_DC_CTRL_DCCONFIG1_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG2_MASK               (0x30U)
 #define PDM_DC_CTRL_DCCONFIG2_SHIFT              (4U)
 /*! DCCONFIG2 - Channel 2 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG2(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG2_SHIFT)) & PDM_DC_CTRL_DCCONFIG2_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG3_MASK               (0xC0U)
 #define PDM_DC_CTRL_DCCONFIG3_SHIFT              (6U)
 /*! DCCONFIG3 - Channel 3 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG3(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG3_SHIFT)) & PDM_DC_CTRL_DCCONFIG3_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG4_MASK               (0x300U)
 #define PDM_DC_CTRL_DCCONFIG4_SHIFT              (8U)
 /*! DCCONFIG4 - Channel 4 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG4(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG4_SHIFT)) & PDM_DC_CTRL_DCCONFIG4_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG5_MASK               (0xC00U)
 #define PDM_DC_CTRL_DCCONFIG5_SHIFT              (10U)
 /*! DCCONFIG5 - Channel 5 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG5(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG5_SHIFT)) & PDM_DC_CTRL_DCCONFIG5_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG6_MASK               (0x3000U)
 #define PDM_DC_CTRL_DCCONFIG6_SHIFT              (12U)
 /*! DCCONFIG6 - Channel 6 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG6(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG6_SHIFT)) & PDM_DC_CTRL_DCCONFIG6_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG7_MASK               (0xC000U)
 #define PDM_DC_CTRL_DCCONFIG7_SHIFT              (14U)
 /*! DCCONFIG7 - Channel 7 DC Remover Configuration
- *  0b11..DC Remover is bypassed.
  *  0b00..DC Remover cut-off at 21Hz.
  *  0b01..DC Remover cut-off at 83Hz.
  *  0b10..DC Remover cut-off at 152Hz.
+ *  0b11..DC Remover is bypassed.
  */
 #define PDM_DC_CTRL_DCCONFIG7(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG7_SHIFT)) & PDM_DC_CTRL_DCCONFIG7_MASK)
 /*! @} */
@@ -930,8 +933,8 @@ typedef struct {
 #define PDM_VAD0_CTRL_2_VADFRENDIS_MASK          (0x80000000U)
 #define PDM_VAD0_CTRL_2_VADFRENDIS_SHIFT         (31U)
 /*! VADFRENDIS - Voice Activity Detector Frame Energy Disable
- *  0b1..Frame energy calculus disabled.
  *  0b0..Frame energy calculus enabled.
+ *  0b1..Frame energy calculus disabled.
  */
 #define PDM_VAD0_CTRL_2_VADFRENDIS(x)            (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_CTRL_2_VADFRENDIS_SHIFT)) & PDM_VAD0_CTRL_2_VADFRENDIS_MASK)
 /*! @} */
@@ -1124,5 +1127,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PDM_H_ */
+#endif  /* PERI_PDM_H_ */
 

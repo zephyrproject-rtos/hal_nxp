@@ -61,14 +61,14 @@
 **                          MIMX8US5DVP08_dsp0
 **                          MIMX8US5DVP08_dsp1
 **
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XRDC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -85,21 +85,24 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file XRDC.h
- * @version 5.0
- * @date 2023-04-27
+ * @file PERI_XRDC.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for XRDC
  *
  * CMSIS Peripheral Access Layer for XRDC
  */
 
-#if !defined(XRDC_H_)
-#define XRDC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_XRDC_H_)
+#define PERI_XRDC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8UD3CVP08_ca35) || defined(CPU_MIMX8UD3DVK08_ca35) || defined(CPU_MIMX8UD3DVP08_ca35))
 #include "MIMX8UD3_ca35_COMMON.h"
@@ -208,81 +211,81 @@ typedef struct {
   __I  uint32_t DERR_W0_0;                         /**< Domain Error Word0 Register, offset: 0x400 */
   __I  uint32_t DERR_W1_0;                         /**< Domain Error Word1 Register, offset: 0x404 */
        uint8_t RESERVED_4[4];
-  __O  uint32_t DERR_W3_0;                         /**< Domain Error Word3 Register, offset: 0x40C */
+  __IO uint32_t DERR_W3_0;                         /**< Domain Error Word3 Register, offset: 0x40C */
   __I  uint32_t DERR_W0_1;                         /**< Domain Error Word0 Register, offset: 0x410 */
   __I  uint32_t DERR_W1_1;                         /**< Domain Error Word1 Register, offset: 0x414 */
        uint8_t RESERVED_5[4];
-  __O  uint32_t DERR_W3_1;                         /**< Domain Error Word3 Register, offset: 0x41C */
+  __IO uint32_t DERR_W3_1;                         /**< Domain Error Word3 Register, offset: 0x41C */
   __I  uint32_t DERR_W0_2;                         /**< Domain Error Word0 Register, offset: 0x420 */
   __I  uint32_t DERR_W1_2;                         /**< Domain Error Word1 Register, offset: 0x424 */
        uint8_t RESERVED_6[4];
-  __O  uint32_t DERR_W3_2;                         /**< Domain Error Word3 Register, offset: 0x42C */
+  __IO uint32_t DERR_W3_2;                         /**< Domain Error Word3 Register, offset: 0x42C */
   __I  uint32_t DERR_W0_3;                         /**< Domain Error Word0 Register, offset: 0x430 */
   __I  uint32_t DERR_W1_3;                         /**< Domain Error Word1 Register, offset: 0x434 */
        uint8_t RESERVED_7[4];
-  __O  uint32_t DERR_W3_3;                         /**< Domain Error Word3 Register, offset: 0x43C */
+  __IO uint32_t DERR_W3_3;                         /**< Domain Error Word3 Register, offset: 0x43C */
   __I  uint32_t DERR_W0_4;                         /**< Domain Error Word0 Register, offset: 0x440 */
   __I  uint32_t DERR_W1_4;                         /**< Domain Error Word1 Register, offset: 0x444 */
        uint8_t RESERVED_8[4];
-  __O  uint32_t DERR_W3_4;                         /**< Domain Error Word3 Register, offset: 0x44C */
+  __IO uint32_t DERR_W3_4;                         /**< Domain Error Word3 Register, offset: 0x44C */
   __I  uint32_t DERR_W0_5;                         /**< Domain Error Word0 Register, offset: 0x450 */
   __I  uint32_t DERR_W1_5;                         /**< Domain Error Word1 Register, offset: 0x454 */
        uint8_t RESERVED_9[4];
-  __O  uint32_t DERR_W3_5;                         /**< Domain Error Word3 Register, offset: 0x45C */
+  __IO uint32_t DERR_W3_5;                         /**< Domain Error Word3 Register, offset: 0x45C */
   __I  uint32_t DERR_W0_6;                         /**< Domain Error Word0 Register, offset: 0x460 */
   __I  uint32_t DERR_W1_6;                         /**< Domain Error Word1 Register, offset: 0x464 */
        uint8_t RESERVED_10[4];
-  __O  uint32_t DERR_W3_6;                         /**< Domain Error Word3 Register, offset: 0x46C */
+  __IO uint32_t DERR_W3_6;                         /**< Domain Error Word3 Register, offset: 0x46C */
   __I  uint32_t DERR_W0_7;                         /**< Domain Error Word0 Register, offset: 0x470 */
   __I  uint32_t DERR_W1_7;                         /**< Domain Error Word1 Register, offset: 0x474 */
        uint8_t RESERVED_11[4];
-  __O  uint32_t DERR_W3_7;                         /**< Domain Error Word3 Register, offset: 0x47C */
+  __IO uint32_t DERR_W3_7;                         /**< Domain Error Word3 Register, offset: 0x47C */
   __I  uint32_t DERR_W0_8;                         /**< Domain Error Word0 Register, offset: 0x480 */
   __I  uint32_t DERR_W1_8;                         /**< Domain Error Word1 Register, offset: 0x484 */
        uint8_t RESERVED_12[4];
-  __O  uint32_t DERR_W3_8;                         /**< Domain Error Word3 Register, offset: 0x48C */
+  __IO uint32_t DERR_W3_8;                         /**< Domain Error Word3 Register, offset: 0x48C */
   __I  uint32_t DERR_W0_9;                         /**< Domain Error Word0 Register, offset: 0x490 */
   __I  uint32_t DERR_W1_9;                         /**< Domain Error Word1 Register, offset: 0x494 */
        uint8_t RESERVED_13[4];
-  __O  uint32_t DERR_W3_9;                         /**< Domain Error Word3 Register, offset: 0x49C */
+  __IO uint32_t DERR_W3_9;                         /**< Domain Error Word3 Register, offset: 0x49C */
   __I  uint32_t DERR_W0_10;                        /**< Domain Error Word0 Register, offset: 0x4A0 */
   __I  uint32_t DERR_W1_10;                        /**< Domain Error Word1 Register, offset: 0x4A4 */
        uint8_t RESERVED_14[4];
-  __O  uint32_t DERR_W3_10;                        /**< Domain Error Word3 Register, offset: 0x4AC */
+  __IO uint32_t DERR_W3_10;                        /**< Domain Error Word3 Register, offset: 0x4AC */
   __I  uint32_t DERR_W0_11;                        /**< Domain Error Word0 Register, offset: 0x4B0 */
   __I  uint32_t DERR_W1_11;                        /**< Domain Error Word1 Register, offset: 0x4B4 */
        uint8_t RESERVED_15[4];
-  __O  uint32_t DERR_W3_11;                        /**< Domain Error Word3 Register, offset: 0x4BC */
+  __IO uint32_t DERR_W3_11;                        /**< Domain Error Word3 Register, offset: 0x4BC */
   __I  uint32_t DERR_W0_12;                        /**< Domain Error Word0 Register, offset: 0x4C0 */
   __I  uint32_t DERR_W1_12;                        /**< Domain Error Word1 Register, offset: 0x4C4 */
        uint8_t RESERVED_16[4];
-  __O  uint32_t DERR_W3_12;                        /**< Domain Error Word3 Register, offset: 0x4CC */
+  __IO uint32_t DERR_W3_12;                        /**< Domain Error Word3 Register, offset: 0x4CC */
        uint8_t RESERVED_17[48];
   __I  uint32_t DERR_W0_16;                        /**< Domain Error Word0 Register, offset: 0x500 */
   __I  uint32_t DERR_W1_16;                        /**< Domain Error Word1 Register, offset: 0x504 */
        uint8_t RESERVED_18[4];
-  __O  uint32_t DERR_W3_16;                        /**< Domain Error Word3 Register, offset: 0x50C */
+  __IO uint32_t DERR_W3_16;                        /**< Domain Error Word3 Register, offset: 0x50C */
   __I  uint32_t DERR_W0_17;                        /**< Domain Error Word0 Register, offset: 0x510 */
   __I  uint32_t DERR_W1_17;                        /**< Domain Error Word1 Register, offset: 0x514 */
        uint8_t RESERVED_19[4];
-  __O  uint32_t DERR_W3_17;                        /**< Domain Error Word3 Register, offset: 0x51C */
+  __IO uint32_t DERR_W3_17;                        /**< Domain Error Word3 Register, offset: 0x51C */
   __I  uint32_t DERR_W0_18;                        /**< Domain Error Word0 Register, offset: 0x520 */
   __I  uint32_t DERR_W1_18;                        /**< Domain Error Word1 Register, offset: 0x524 */
        uint8_t RESERVED_20[4];
-  __O  uint32_t DERR_W3_18;                        /**< Domain Error Word3 Register, offset: 0x52C */
+  __IO uint32_t DERR_W3_18;                        /**< Domain Error Word3 Register, offset: 0x52C */
        uint8_t RESERVED_21[16];
   __I  uint32_t DERR_W0_20;                        /**< Domain Error Word0 Register, offset: 0x540 */
   __I  uint32_t DERR_W1_20;                        /**< Domain Error Word1 Register, offset: 0x544 */
        uint8_t RESERVED_22[4];
-  __O  uint32_t DERR_W3_20;                        /**< Domain Error Word3 Register, offset: 0x54C */
+  __IO uint32_t DERR_W3_20;                        /**< Domain Error Word3 Register, offset: 0x54C */
   __I  uint32_t DERR_W0_21;                        /**< Domain Error Word0 Register, offset: 0x550 */
   __I  uint32_t DERR_W1_21;                        /**< Domain Error Word1 Register, offset: 0x554 */
        uint8_t RESERVED_23[4];
-  __O  uint32_t DERR_W3_21;                        /**< Domain Error Word3 Register, offset: 0x55C */
+  __IO uint32_t DERR_W3_21;                        /**< Domain Error Word3 Register, offset: 0x55C */
   __I  uint32_t DERR_W0_22;                        /**< Domain Error Word0 Register, offset: 0x560 */
   __I  uint32_t DERR_W1_22;                        /**< Domain Error Word1 Register, offset: 0x564 */
        uint8_t RESERVED_24[4];
-  __O  uint32_t DERR_W3_22;                        /**< Domain Error Word3 Register, offset: 0x56C */
+  __IO uint32_t DERR_W3_22;                        /**< Domain Error Word3 Register, offset: 0x56C */
        uint8_t RESERVED_25[400];
   __IO uint32_t PID0;                              /**< Process Identifier, offset: 0x700 */
        uint8_t RESERVED_26[252];
@@ -26206,5 +26209,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* XRDC_H_ */
+#endif  /* PERI_XRDC_H_ */
 

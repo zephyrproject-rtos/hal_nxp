@@ -25,14 +25,14 @@
 **                          MIMX8MM6DVTLZ_ca53
 **                          MIMX8MM6DVTLZ_cm4
 **
-**     Version:             rev. 4.0, 2019-02-18
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Rev.B Header PRC
 **     - rev. 4.0 (2019-02-18)
 **         Rev.0 Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file I2S.h
- * @version 4.0
- * @date 2019-02-18
+ * @file PERI_I2S.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for I2S
  *
  * CMSIS Peripheral Access Layer for I2S
  */
 
-#if !defined(I2S_H_)
-#define I2S_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_I2S_H_)
+#define PERI_I2S_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MM1CVTKZ_ca53) || defined(CPU_MIMX8MM1DVTLZ_ca53))
 #include "MIMX8MM1_ca53_COMMON.h"
@@ -145,7 +148,7 @@ typedef struct {
   __IO uint32_t TCR3;                              /**< SAI Transmit Configuration 3 Register, offset: 0x14 */
   __IO uint32_t TCR4;                              /**< SAI Transmit Configuration 4 Register, offset: 0x18 */
   __IO uint32_t TCR5;                              /**< SAI Transmit Configuration 5 Register, offset: 0x1C */
-  __O  uint32_t TDR[I2S_TDR_COUNT];                /**< SAI Transmit Data Register, array offset: 0x20, array step: 0x4 */
+  __IO uint32_t TDR[I2S_TDR_COUNT];                /**< SAI Transmit Data Register, array offset: 0x20, array step: 0x4 */
   __I  uint32_t TFR[I2S_TFR_COUNT];                /**< SAI Transmit FIFO Register, array offset: 0x40, array step: 0x4 */
   __IO uint32_t TMR;                               /**< SAI Transmit Mask Register, offset: 0x60 */
        uint8_t RESERVED_0[12];
@@ -1192,5 +1195,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* I2S_H_ */
+#endif  /* PERI_I2S_H_ */
 

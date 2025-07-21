@@ -37,14 +37,14 @@
 **                          MIMX8MN6DVTJZ_ca53
 **                          MIMX8MN6DVTJZ_cm7
 **
-**     Version:             rev. 2.0, 2019-09-23
-**     Build:               b240708
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -55,21 +55,24 @@
 **         Initial version.
 **     - rev. 2.0 (2019-09-23)
 **         Rev.B Header RFP
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_GPR.h
- * @version 2.0
- * @date 2019-09-23
+ * @file PERI_IOMUXC_GPR.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_GPR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_GPR
  */
 
-#if !defined(IOMUXC_GPR_H_)
-#define IOMUXC_GPR_H_                            /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_GPR_H_)
+#define PERI_IOMUXC_GPR_H_                       /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MN1CVPIZ_ca53) || defined(CPU_MIMX8MN1CVTIZ_ca53) || defined(CPU_MIMX8MN1DVPIZ_ca53) || defined(CPU_MIMX8MN1DVTJZ_ca53))
 #include "MIMX8MN1_ca53_COMMON.h"
@@ -207,40 +210,40 @@ typedef struct {
 #define IOMUXC_GPR_GPR2_GPR_SAI2_EXT_MCLK_EN_MASK (0x2U)
 #define IOMUXC_GPR_GPR2_GPR_SAI2_EXT_MCLK_EN_SHIFT (1U)
 /*! GPR_SAI2_EXT_MCLK_EN
- *  0b1..the corresponding pads are input.
  *  0b0..the corresponding pads are output.
+ *  0b1..the corresponding pads are input.
  */
 #define IOMUXC_GPR_GPR2_GPR_SAI2_EXT_MCLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_GPR_SAI2_EXT_MCLK_EN_SHIFT)) & IOMUXC_GPR_GPR2_GPR_SAI2_EXT_MCLK_EN_MASK)
 
 #define IOMUXC_GPR_GPR2_GPR_SAI3_EXT_MCLK_EN_MASK (0x4U)
 #define IOMUXC_GPR_GPR2_GPR_SAI3_EXT_MCLK_EN_SHIFT (2U)
 /*! GPR_SAI3_EXT_MCLK_EN
- *  0b1..the corresponding pads are input.
  *  0b0..the corresponding pads are output.
+ *  0b1..the corresponding pads are input.
  */
 #define IOMUXC_GPR_GPR2_GPR_SAI3_EXT_MCLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_GPR_SAI3_EXT_MCLK_EN_SHIFT)) & IOMUXC_GPR_GPR2_GPR_SAI3_EXT_MCLK_EN_MASK)
 
 #define IOMUXC_GPR_GPR2_GPR_SAI5_EXT_MCLK_EN_MASK (0x10U)
 #define IOMUXC_GPR_GPR2_GPR_SAI5_EXT_MCLK_EN_SHIFT (4U)
 /*! GPR_SAI5_EXT_MCLK_EN
- *  0b1..the corresponding pads are input.
  *  0b0..the corresponding pads are output.
+ *  0b1..the corresponding pads are input.
  */
 #define IOMUXC_GPR_GPR2_GPR_SAI5_EXT_MCLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_GPR_SAI5_EXT_MCLK_EN_SHIFT)) & IOMUXC_GPR_GPR2_GPR_SAI5_EXT_MCLK_EN_MASK)
 
 #define IOMUXC_GPR_GPR2_GPR_SAI6_EXT_MCLK_EN_MASK (0x20U)
 #define IOMUXC_GPR_GPR2_GPR_SAI6_EXT_MCLK_EN_SHIFT (5U)
 /*! GPR_SAI6_EXT_MCLK_EN
- *  0b1..the corresponding pads are input.
  *  0b0..the corresponding pads are output.
+ *  0b1..the corresponding pads are input.
  */
 #define IOMUXC_GPR_GPR2_GPR_SAI6_EXT_MCLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_GPR_SAI6_EXT_MCLK_EN_SHIFT)) & IOMUXC_GPR_GPR2_GPR_SAI6_EXT_MCLK_EN_MASK)
 
 #define IOMUXC_GPR_GPR2_GPR_SAI7_EXT_MCLK_EN_MASK (0x40U)
 #define IOMUXC_GPR_GPR2_GPR_SAI7_EXT_MCLK_EN_SHIFT (6U)
 /*! GPR_SAI7_EXT_MCLK_EN
- *  0b1..the corresponding pads are input.
  *  0b0..the corresponding pads are output.
+ *  0b1..the corresponding pads are input.
  */
 #define IOMUXC_GPR_GPR2_GPR_SAI7_EXT_MCLK_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_GPR_SAI7_EXT_MCLK_EN_SHIFT)) & IOMUXC_GPR_GPR2_GPR_SAI7_EXT_MCLK_EN_MASK)
 
@@ -694,16 +697,16 @@ typedef struct {
 #define IOMUXC_GPR_GPR20_SRAM_HSD_RAWL_MASK      (0x4U)
 #define IOMUXC_GPR_GPR20_SRAM_HSD_RAWL_SHIFT     (2U)
 /*! SRAM_HSD_RAWL
- *  0b1..when supermix operates on 0.8V (default)
  *  0b0..when supermix operates on 0.9V
+ *  0b1..when supermix operates on 0.8V (default)
  */
 #define IOMUXC_GPR_GPR20_SRAM_HSD_RAWL(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR20_SRAM_HSD_RAWL_SHIFT)) & IOMUXC_GPR_GPR20_SRAM_HSD_RAWL_MASK)
 
 #define IOMUXC_GPR_GPR20_SRAM_HSD_WABLM_MASK     (0x18U)
 #define IOMUXC_GPR_GPR20_SRAM_HSD_WABLM_SHIFT    (3U)
 /*! SRAM_HSD_WABLM
- *  0b01..when supermix operates on 0.8V (default)
  *  0b00..when supermix operates on 0.9V
+ *  0b01..when supermix operates on 0.8V (default)
  */
 #define IOMUXC_GPR_GPR20_SRAM_HSD_WABLM(x)       (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR20_SRAM_HSD_WABLM_SHIFT)) & IOMUXC_GPR_GPR20_SRAM_HSD_WABLM_MASK)
 
@@ -800,5 +803,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_GPR_H_ */
+#endif  /* PERI_IOMUXC_GPR_H_ */
 

@@ -61,14 +61,14 @@
 **                          MIMX8US5DVP08_dsp0
 **                          MIMX8US5DVP08_dsp1
 **
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USDHC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -85,21 +85,24 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USDHC.h
- * @version 5.0
- * @date 2023-04-27
+ * @file PERI_USDHC.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USDHC
  *
  * CMSIS Peripheral Access Layer for USDHC
  */
 
-#if !defined(USDHC_H_)
-#define USDHC_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USDHC_H_)
+#define PERI_USDHC_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8UD3CVP08_ca35) || defined(CPU_MIMX8UD3DVK08_ca35) || defined(CPU_MIMX8UD3DVP08_ca35))
 #include "MIMX8UD3_ca35_COMMON.h"
@@ -207,7 +210,7 @@ typedef struct {
   __IO uint32_t WTMK_LVL;                          /**< Watermark Level, offset: 0x44 */
   __IO uint32_t MIX_CTRL;                          /**< Mixer Control, offset: 0x48 */
        uint8_t RESERVED_0[4];
-  __O  uint32_t FORCE_EVENT;                       /**< Force Event, offset: 0x50 */
+  __IO uint32_t FORCE_EVENT;                       /**< Force Event, offset: 0x50 */
   __I  uint32_t ADMA_ERR_STATUS;                   /**< ADMA Error Status, offset: 0x54 */
   __IO uint32_t ADMA_SYS_ADDR;                     /**< ADMA System Address, offset: 0x58 */
        uint8_t RESERVED_1[4];
@@ -2115,5 +2118,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USDHC_H_ */
+#endif  /* PERI_USDHC_H_ */
 
