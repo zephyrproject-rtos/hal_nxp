@@ -1,0 +1,19 @@
+{
+	"family": "lpc55s3x",
+	"inputImageFile": "in-the-script",
+	"outputImageExecutionTarget": "xip",
+	"outputImageExecutionAddress": "0x08001000",
+	"outputImageAuthenticationType": "signed",
+	"masterBootOutputFile": "in-the-script",
+	"trustZonePresetFile" : "",
+
+	"firmwareVersion": "0x1",
+	"rootCertificate0File": ".\\workspace\\keys_certs\\ec_secp256r1_cert0.pem",
+	"rootCertificate1File": ".\\workspace\\keys_certs\\ec_secp256r1_cert1.pem",
+	"rootCertificate2File": ".\\workspace\\keys_certs\\ec_secp256r1_cert2.pem",
+	"rootCertificate3File": ".\\workspace\\keys_certs\\ec_secp256r1_cert3.pem",
+	"mainRootCertId": 0,
+	"useIsk": false,
+	"mainRootCertPrivateKeyFile": ".\\workspace\\keys_certs\\ec_pk_secp256r1_cert0.pem",
+	"rootCertificateEllipticCurve": "secp256r1"
+}

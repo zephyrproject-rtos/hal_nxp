@@ -9,30 +9,8 @@
 
 /* Wi-Fi boards configuration list */
 
-/* AzureWave AW-NM191-uSD */
-#if defined(WIFI_88W8801_BOARD_AW_NM191_USD)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
-#define SD8801
-#define SDMMCHOST_OPERATION_VOLTAGE_1V8
-#define WIFI_BT_USE_USD_INTERFACE
-#define WLAN_ED_MAC_CTRL                        \
-    {                                           \
-        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x1B \
-    }
-
-/* AzureWave AW-NM191MA */
-#elif defined(WIFI_88W8801_BOARD_AW_NM191MA)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
-#define SD8801
-#define SDMMCHOST_OPERATION_VOLTAGE_1V8
-#define WIFI_BT_USE_M2_INTERFACE
-#define WLAN_ED_MAC_CTRL                        \
-    {                                           \
-        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x1B \
-    }
-
 /* AzureWave AW-AM457-uSD */
-#elif defined(WIFI_IW416_BOARD_AW_AM457_USD)
+#if defined(WIFI_IW416_BOARD_AW_AM457_USD)
 #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
 #define SD8978
 #define SDMMCHOST_OPERATION_VOLTAGE_1V8
@@ -79,6 +57,18 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x9, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xC \
     }
 
+/* AzureWave FRDM-IW416-AW-AM510 */
+#elif defined(WIFI_IW416_BOARD_AW_AM510_ARDUINO)
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
+#define SD8978
+#define SDMMCHOST_OPERATION_VOLTAGE_3V3
+#define CONFIG_BR_SCO_PCM_DIRECTION 1
+#define WIFI_BT_USE_ARDUINO_SHIELD
+#define WLAN_ED_MAC_CTRL                                                               \
+    {                                                                                  \
+        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x9, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xC \
+    }
+
 /* AzureWave AW-CM358-uSD */
 #elif defined(WIFI_88W8987_BOARD_AW_CM358_USD)
 #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
@@ -101,38 +91,6 @@
 #define WLAN_ED_MAC_CTRL                                                               \
     {                                                                                  \
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x9, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xC \
-    }
-
-/* Murata 2DS + Murata uSD-M.2 adapter */
-#elif defined(WIFI_88W8801_BOARD_MURATA_2DS_USD)
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_CA.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_EU.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_JP.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_US.h"
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_WW.h"
-#define SD8801
-#define SDMMCHOST_OPERATION_VOLTAGE_1V8
-#define SD_TIMING_MAX kSD_TimingSDR25HighSpeedMode
-#define WIFI_BT_USE_USD_INTERFACE
-#define WLAN_ED_MAC_CTRL                        \
-    {                                           \
-        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x0E \
-    }
-
-/* Murata 2DS */
-#elif defined(WIFI_88W8801_BOARD_MURATA_2DS_M2)
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_CA.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_EU.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_JP.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_US.h"
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2DS_WW.h"
-#define SD8801
-#define SDMMCHOST_OPERATION_VOLTAGE_1V8
-#define SD_TIMING_MAX kSD_TimingSDR25HighSpeedMode
-#define WIFI_BT_USE_M2_INTERFACE
-#define WLAN_ED_MAC_CTRL                        \
-    {                                           \
-        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x0E \
     }
 
 /* Murata 1XK + Murata uSD-M.2 adapter */
@@ -259,17 +217,6 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
     }
 
-/* u-blox EVK-LILY-W131/-W132 */
-#elif defined(WIFI_88W8801_BOARD_UBX_LILY_W1_USD)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
-#define SD8801
-#define SDMMCHOST_OPERATION_VOLTAGE_3V3
-#define WIFI_BT_USE_USD_INTERFACE
-#define WLAN_ED_MAC_CTRL                        \
-    {                                           \
-        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x1B \
-    }
-
 /* u-blox EVK-JODY-W263 */
 #elif defined(WIFI_88W8987_BOARD_UBX_JODY_W2_USD)
 #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
@@ -339,10 +286,28 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x9, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xC \
     }
 
-/* Redfinch */
+/* Redfinch RW61X */
 #elif defined(WIFI_BOARD_RW610)
 #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW_rw610.h"
 #define RW610
+#define WIFI_BT_USE_IMU_INTERFACE
+#define CONFIG_SOC_SERIES_RW6XX_REVISION_A2 1
+#define WLAN_ED_MAC_CTRL                                                               \
+    {                                                                                  \
+        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x8, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0x8 \
+    }
+
+/* Redfinch FRDMRW61X */
+#elif defined(WIFI_BOARD_FRDM_RW61X)
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW_rw610.h"
+#define RW610
+#define FRDMRW610
+#define WIFI_BT_USE_IMU_INTERFACE
+#define CONFIG_SOC_SERIES_RW6XX_REVISION_A2 1
+#define WLAN_ED_MAC_CTRL                                                               \
+    {                                                                                  \
+        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x8, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0x8 \
+    }
 
 /* K32W061 transceiver */
 #elif defined(K32W061_TRANSCEIVER)
@@ -356,7 +321,7 @@
 
 /* USD IW610 module */
 #elif defined(WIFI_IW610_BOARD_RD_USD)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2LL.h"
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_NH.h"
 #define IW610
 #define SDMMCHOST_OPERATION_VOLTAGE_1V8
 #define SD_TIMING_MAX kSD_TimingDDR50Mode
@@ -368,7 +333,7 @@
 
 /* 2LL NightHawk module with M2 interface */
 #elif defined(WIFI_IW610_BOARD_MURATA_2LL_M2)
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2LL.h"
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_NH.h"
 #define IW610
 #define SDMMCHOST_OPERATION_VOLTAGE_1V8
 #define SD_TIMING_MAX kSD_TimingDDR50Mode
