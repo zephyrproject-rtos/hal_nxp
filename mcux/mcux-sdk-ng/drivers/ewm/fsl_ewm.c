@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -48,8 +48,8 @@ void EWM_Init(EWM_Type *base, const ewm_config_t *config)
     CLOCK_EnableClock(kCLOCK_Ewm0);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 #endif
-    value = EWM_CTRL_EWMEN(config->enableEwm) | EWM_CTRL_ASSIN(config->setInputAssertLogic) |
-            EWM_CTRL_INEN(config->enableEwmInput) | EWM_CTRL_INTEN(config->enableInterrupt);
+    value = EWM_CTRL_EWMEN(config->enableEwm ? 1U : 0U) | EWM_CTRL_ASSIN(config->setInputAssertLogic ? 1U : 0U) |
+            EWM_CTRL_INEN(config->enableEwmInput ? 1U : 0U) | EWM_CTRL_INTEN(config->enableInterrupt ? 1U : 0U);
 #if defined(FSL_FEATURE_EWM_HAS_PRESCALER) && FSL_FEATURE_EWM_HAS_PRESCALER
     base->CLKPRESCALER = config->prescaler;
 #endif /* FSL_FEATURE_EWM_HAS_PRESCALER */

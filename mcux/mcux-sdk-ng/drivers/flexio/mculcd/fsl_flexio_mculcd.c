@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -59,8 +59,15 @@ status_t FLEXIO_MCULCD_Init(FLEXIO_MCULCD_Type *base, flexio_mculcd_config_t *co
     assert(NULL != config);
     status_t status;
 
-    flexio_config_t flexioConfig = {config->enable, config->enableInDoze, config->enableInDebug,
-                                    config->enableFastAccess};
+    flexio_config_t flexioConfig =
+    {
+        config->enable,
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
+        config->enableInDoze,
+#endif
+        config->enableInDebug,
+        config->enableFastAccess
+    };
 
     FLEXIO_Init(base->flexioBase, &flexioConfig);
 
@@ -112,7 +119,9 @@ void FLEXIO_MCULCD_GetDefaultConfig(flexio_mculcd_config_t *config)
     (void)memset(config, 0, sizeof(*config));
 
     config->enable           = true;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     config->enableInDoze     = false;
+#endif
     config->enableInDebug    = true;
     config->enableFastAccess = true;
     config->baudRate_Bps     = 96000000U;
@@ -756,11 +765,10 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
 {
     FLEXIO_Type *flexioBase = base->flexioBase;
 
-#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     /* De-assert the RS pin. */
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setRSPin(false);
 #else
-    /* De-assert the RS pin. */
     base->setRSPin(false, base->userData);
 #endif
 
@@ -788,14 +796,12 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
     /* Stop the timer and TX shifter. */
     FLEXIO_MCULCD_ClearSingleBeatWriteConfig(base);
 
-#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     /* Assert the RS pin. */
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setRSPin(true);
 #else
-    /* Assert the RS pin. */
     base->setRSPin(true, base->userData);
 #endif
-
     /* For 6800, assert the RDWR pin. */
     if (kFLEXIO_MCULCD_6800 == base->busType)
     {
@@ -828,11 +834,10 @@ void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, const void *
 #endif
     FLEXIO_Type *flexioBase = base->flexioBase;
 
-#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     /* Assert the RS pin. */
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setRSPin(true);
 #else
-    /* Assert the RS pin. */
     base->setRSPin(true, base->userData);
 #endif
     /* For 6800, de-assert the RDWR pin. */
@@ -909,11 +914,10 @@ void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, s
 #endif
     FLEXIO_Type *flexioBase = base->flexioBase;
 
-#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     /* Assert the RS pin. */
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setRSPin(true);
 #else
-    /* Assert the RS pin. */
     base->setRSPin(true, base->userData);
 #endif
     /* For 6800, de-assert the RDWR pin. */
@@ -994,11 +998,10 @@ void FLEXIO_MCULCD_WriteSameValueBlocking(FLEXIO_MCULCD_Type *base, uint32_t sam
     size /= 2U;
 #endif
 
-#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     /* Assert the RS pin. */
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setRSPin(true);
 #else
-    /* Assert the RS pin. */
     base->setRSPin(true, base->userData);
 #endif
     /* For 6800, de-assert the RDWR pin. */
@@ -1203,7 +1206,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
 #else
                 base->setRDWRPin(false, base->userData);
 #endif
-	    }
+            }
             FLEXIO_MCULCD_SetSingleBeatWriteConfig(base);
             FLEXIO_MCULCD_EnableInterrupts(base, (uint32_t)kFLEXIO_MCULCD_TxEmptyInterruptEnable);
         }

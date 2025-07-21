@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
- * All rights reserved.
+ * Copyright 2016-2021, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -63,8 +62,10 @@ static const clock_ip_name_t s_tpmClocks[] = TPM_CLOCKS;
 /* Array of TPM callback function pointer. */
 static tpm_callback_t s_tpmCallback[ARRAY_SIZE(s_tpmBases)];
 
+#if defined(TPM_IRQS)
 /* Array to map TPM instance to IRQ number. */
 static const IRQn_Type s_tpmIRQ[] = TPM_IRQS;
+#endif
 
 #if defined(TPM_RESETS_ARRAY)
 /* Reset array */
@@ -1142,8 +1143,29 @@ void TPM_RegisterCallBack(TPM_Type *base, tpm_callback_t callback)
     /* Create TPM callback instance. */
     s_tpmCallback[instance] = callback;
 
+#if defined(TPM_IRQS)
     /* Enable IRQ. */
     (void)EnableIRQ(s_tpmIRQ[instance]);
+#endif
+}
+
+/*!
+ * @brief TPM driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for TPM.
+ *
+ * @param instance TPM instance.
+ */
+void TPM_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_tpmBases))
+    {
+        if (NULL != s_tpmCallback[instance])
+        {
+            s_tpmCallback[instance](s_tpmBases[instance]);
+        }
+    }
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(TPM0)
@@ -1165,6 +1187,18 @@ void TPM1_DriverIRQHandler(void)
     if (NULL != s_tpmCallback[1])
     {
         s_tpmCallback[1](TPM1);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if defined(TPM2)
+void TPM2_DriverIRQHandler(void);
+void TPM2_DriverIRQHandler(void)
+{
+    if (NULL != s_tpmCallback[2])
+    {
+        s_tpmCallback[2](TPM2);
     }
     SDK_ISR_EXIT_BARRIER;
 }

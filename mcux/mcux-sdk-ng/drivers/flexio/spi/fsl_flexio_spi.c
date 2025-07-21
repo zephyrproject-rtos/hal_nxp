@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022 NXP
+ * Copyright 2016-2020, 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -175,12 +175,12 @@ static void FLEXIO_SPI_TransferSendTransaction(FLEXIO_SPI_Type *base, flexio_spi
             if (handle->direction == kFLEXIO_SPI_MsbFirst)
             {
                 tmpData = (uint32_t)(handle->txData[0]) << 8U;
-                tmpData += (uint32_t)handle->txData[1];
+                tmpData |= (uint32_t)handle->txData[1];
             }
             else
             {
                 tmpData = (uint32_t)(handle->txData[1]) << 8U;
-                tmpData += (uint32_t)handle->txData[0];
+                tmpData |= (uint32_t)handle->txData[0];
             }
             handle->txData += 2U;
         }
@@ -189,16 +189,16 @@ static void FLEXIO_SPI_TransferSendTransaction(FLEXIO_SPI_Type *base, flexio_spi
             if (handle->direction == kFLEXIO_SPI_MsbFirst)
             {
                 tmpData = (uint32_t)(handle->txData[0]) << 24U;
-                tmpData += (uint32_t)(handle->txData[1]) << 16U;
-                tmpData += (uint32_t)(handle->txData[2]) << 8U;
-                tmpData += (uint32_t)handle->txData[3];
+                tmpData |= (uint32_t)(handle->txData[1]) << 16U;
+                tmpData |= (uint32_t)(handle->txData[2]) << 8U;
+                tmpData |= (uint32_t)handle->txData[3];
             }
             else
             {
                 tmpData = (uint32_t)(handle->txData[3]) << 24U;
-                tmpData += (uint32_t)(handle->txData[2]) << 16U;
-                tmpData += (uint32_t)(handle->txData[1]) << 8U;
-                tmpData += (uint32_t)handle->txData[0];
+                tmpData |= (uint32_t)(handle->txData[2]) << 16U;
+                tmpData |= (uint32_t)(handle->txData[1]) << 8U;
+                tmpData |= (uint32_t)handle->txData[0];
             }
             handle->txData += 4U;
         }
@@ -321,7 +321,7 @@ void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *ma
     flexio_shifter_config_t shifterConfig;
     flexio_timer_config_t timerConfig;
     uint32_t ctrlReg  = 0;
-    uint16_t timerDiv = 0;
+    uint32_t timerDiv = 0;
     uint16_t timerCmp = 0;
 
     /* Clear the shifterConfig & timerConfig struct. */
@@ -335,13 +335,19 @@ void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *ma
 
     /* Configure FLEXIO SPI Master */
     ctrlReg = base->flexioBase->CTRL;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     ctrlReg &= ~(FLEXIO_CTRL_DOZEN_MASK | FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
-    ctrlReg |= (FLEXIO_CTRL_DBGE(masterConfig->enableInDebug) | FLEXIO_CTRL_FASTACC(masterConfig->enableFastAccess) |
-                FLEXIO_CTRL_FLEXEN(masterConfig->enableMaster));
-    if (!masterConfig->enableInDoze)
+#else
+    ctrlReg &= ~(FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#endif
+    ctrlReg |= (FLEXIO_CTRL_DBGE(masterConfig->enableInDebug ? 1U : 0U) | FLEXIO_CTRL_FASTACC(masterConfig->enableFastAccess ? 1U : 0U) |
+                FLEXIO_CTRL_FLEXEN(masterConfig->enableMaster ? 1U : 0U));
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
+    if (!masterConfig->enableInDoze ? 1U : 0U)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
+#endif
 
     base->flexioBase->CTRL = ctrlReg;
 
@@ -404,11 +410,12 @@ void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *ma
     timerConfig.timerStop       = kFLEXIO_TimerStopBitEnableOnTimerDisable;
     timerConfig.timerStart      = kFLEXIO_TimerStartBitEnabled;
     /* Low 8-bits are used to configure baudrate. */
-    timerDiv = (uint16_t)(srcClock_Hz / masterConfig->baudRate_Bps);
+    timerDiv = (srcClock_Hz / masterConfig->baudRate_Bps);
     timerDiv = timerDiv / 2U - 1U;
+    assert(timerDiv <= UINT8_MAX);
     /* High 8-bits are used to configure shift clock edges(transfer width). */
     timerCmp = ((uint16_t)masterConfig->dataMode * 2U - 1U) << 8U;
-    timerCmp |= timerDiv;
+    timerCmp |= (uint16_t)timerDiv;
 
     timerConfig.timerCompare = timerCmp;
 
@@ -472,7 +479,9 @@ void FLEXIO_SPI_MasterGetDefaultConfig(flexio_spi_master_config_t *masterConfig)
     (void)memset(masterConfig, 0, sizeof(*masterConfig));
 
     masterConfig->enableMaster     = true;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     masterConfig->enableInDoze     = false;
+#endif
     masterConfig->enableInDebug    = true;
     masterConfig->enableFastAccess = false;
     /* Default baud rate 500kbps. */
@@ -539,13 +548,19 @@ void FLEXIO_SPI_SlaveInit(FLEXIO_SPI_Type *base, flexio_spi_slave_config_t *slav
 
     /* Configure FLEXIO SPI Slave */
     ctrlReg = base->flexioBase->CTRL;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     ctrlReg &= ~(FLEXIO_CTRL_DOZEN_MASK | FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
-    ctrlReg |= (FLEXIO_CTRL_DBGE(slaveConfig->enableInDebug) | FLEXIO_CTRL_FASTACC(slaveConfig->enableFastAccess) |
-                FLEXIO_CTRL_FLEXEN(slaveConfig->enableSlave));
-    if (!slaveConfig->enableInDoze)
+#else
+    ctrlReg &= ~(FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#endif
+    ctrlReg |= (FLEXIO_CTRL_DBGE(slaveConfig->enableInDebug ? 1U : 0U) | FLEXIO_CTRL_FASTACC(slaveConfig->enableFastAccess ? 1U : 0U) |
+                FLEXIO_CTRL_FLEXEN(slaveConfig->enableSlave ? 1U : 0U));
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
+    if (!slaveConfig->enableInDoze ? 1U : 0U)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
+#endif
 
     base->flexioBase->CTRL = ctrlReg;
 
@@ -648,7 +663,9 @@ void FLEXIO_SPI_SlaveGetDefaultConfig(flexio_spi_slave_config_t *slaveConfig)
     (void)memset(slaveConfig, 0, sizeof(*slaveConfig));
 
     slaveConfig->enableSlave      = true;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     slaveConfig->enableInDoze     = false;
+#endif
     slaveConfig->enableInDebug    = true;
     slaveConfig->enableFastAccess = false;
     /* Default CPHA = 0. */
@@ -773,17 +790,18 @@ void FLEXIO_SPI_ClearStatusFlags(FLEXIO_SPI_Type *base, uint32_t mask)
  */
 void FLEXIO_SPI_MasterSetBaudRate(FLEXIO_SPI_Type *base, uint32_t baudRate_Bps, uint32_t srcClockHz)
 {
-    uint16_t timerDiv       = 0;
+    uint32_t timerDiv       = 0;
     uint16_t timerCmp       = 0;
     FLEXIO_Type *flexioBase = base->flexioBase;
 
     /* Set TIMCMP[7:0] = (baud rate divider / 2) - 1.*/
-    timerDiv = (uint16_t)(srcClockHz / baudRate_Bps);
+    timerDiv = (srcClockHz / baudRate_Bps);
     timerDiv = timerDiv / 2U - 1U;
 
+    assert(timerDiv <= UINT8_MAX);
     timerCmp = (uint16_t)(flexioBase->TIMCMP[base->timerIndex[0]]);
     timerCmp &= 0xFF00U;
-    timerCmp |= timerDiv;
+    timerCmp |= (uint16_t)timerDiv;
 
     flexioBase->TIMCMP[base->timerIndex[0]] = timerCmp;
 }
@@ -1004,12 +1022,12 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
                 if (direction == kFLEXIO_SPI_MsbFirst)
                 {
                     tmpData = (uint32_t)(xfer->txData[0]) << 8U;
-                    tmpData += (uint32_t)xfer->txData[1];
+                    tmpData |= (uint32_t)xfer->txData[1];
                 }
                 else
                 {
                     tmpData = (uint32_t)(xfer->txData[1]) << 8U;
-                    tmpData += (uint32_t)xfer->txData[0];
+                    tmpData |= (uint32_t)xfer->txData[0];
                 }
                 xfer->txData += 2U;
             }
@@ -1018,16 +1036,16 @@ status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_tra
                 if (direction == kFLEXIO_SPI_MsbFirst)
                 {
                     tmpData = (uint32_t)(xfer->txData[0]) << 24U;
-                    tmpData += (uint32_t)(xfer->txData[1]) << 16U;
-                    tmpData += (uint32_t)(xfer->txData[2]) << 8U;
-                    tmpData += (uint32_t)xfer->txData[3];
+                    tmpData |= (uint32_t)(xfer->txData[1]) << 16U;
+                    tmpData |= (uint32_t)(xfer->txData[2]) << 8U;
+                    tmpData |= (uint32_t)xfer->txData[3];
                 }
                 else
                 {
                     tmpData = (uint32_t)(xfer->txData[3]) << 24U;
-                    tmpData += (uint32_t)(xfer->txData[2]) << 16U;
-                    tmpData += (uint32_t)(xfer->txData[1]) << 8U;
-                    tmpData += (uint32_t)xfer->txData[0];
+                    tmpData |= (uint32_t)(xfer->txData[2]) << 16U;
+                    tmpData |= (uint32_t)(xfer->txData[1]) << 8U;
+                    tmpData |= (uint32_t)xfer->txData[0];
                 }
                 xfer->txData += 4U;
             }
@@ -1134,7 +1152,9 @@ status_t FLEXIO_SPI_MasterTransferCreateHandle(FLEXIO_SPI_Type *base,
 {
     assert(handle != NULL);
 
+#if defined(FLEXIO_IRQS)
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
+#endif
 
     /* Zero the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -1143,10 +1163,12 @@ status_t FLEXIO_SPI_MasterTransferCreateHandle(FLEXIO_SPI_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 
+#if defined(FLEXIO_IRQS)
     /* Clear pending NVIC IRQ before enable NVIC IRQ. */
     NVIC_ClearPendingIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
     /* Enable interrupt in NVIC. */
     (void)EnableIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
+#endif
 
     /* Save the context in global variables to support the double weak mechanism. */
     return FLEXIO_RegisterHandleIRQ(base, handle, FLEXIO_SPI_MasterTransferHandleIRQ);
@@ -1269,12 +1291,12 @@ status_t FLEXIO_SPI_MasterTransferNonBlocking(FLEXIO_SPI_Type *base,
             if (handle->direction == kFLEXIO_SPI_MsbFirst)
             {
                 tmpData = (uint32_t)(handle->txData[0]) << 8U;
-                tmpData += (uint32_t)handle->txData[1];
+                tmpData |= (uint32_t)handle->txData[1];
             }
             else
             {
                 tmpData = (uint32_t)(handle->txData[1]) << 8U;
-                tmpData += (uint32_t)handle->txData[0];
+                tmpData |= (uint32_t)handle->txData[0];
             }
             handle->txData += 2U;
         }
@@ -1283,16 +1305,16 @@ status_t FLEXIO_SPI_MasterTransferNonBlocking(FLEXIO_SPI_Type *base,
             if (handle->direction == kFLEXIO_SPI_MsbFirst)
             {
                 tmpData = (uint32_t)(handle->txData[0]) << 24U;
-                tmpData += (uint32_t)(handle->txData[1]) << 16U;
-                tmpData += (uint32_t)(handle->txData[2]) << 8U;
-                tmpData += (uint32_t)handle->txData[3];
+                tmpData |= (uint32_t)(handle->txData[1]) << 16U;
+                tmpData |= (uint32_t)(handle->txData[2]) << 8U;
+                tmpData |= (uint32_t)handle->txData[3];
             }
             else
             {
                 tmpData = (uint32_t)(handle->txData[3]) << 24U;
-                tmpData += (uint32_t)(handle->txData[2]) << 16U;
-                tmpData += (uint32_t)(handle->txData[1]) << 8U;
-                tmpData += (uint32_t)handle->txData[0];
+                tmpData |= (uint32_t)(handle->txData[2]) << 16U;
+                tmpData |= (uint32_t)(handle->txData[1]) << 8U;
+                tmpData |= (uint32_t)handle->txData[0];
             }
             handle->txData += 4U;
         }
@@ -1439,7 +1461,9 @@ status_t FLEXIO_SPI_SlaveTransferCreateHandle(FLEXIO_SPI_Type *base,
 {
     assert(handle != NULL);
 
+#if defined(FLEXIO_IRQS)
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
+#endif
 
     /* Zero the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -1448,10 +1472,12 @@ status_t FLEXIO_SPI_SlaveTransferCreateHandle(FLEXIO_SPI_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 
+#if defined(FLEXIO_IRQS)
     /* Clear pending NVIC IRQ before enable NVIC IRQ. */
     NVIC_ClearPendingIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
     /* Enable interrupt in NVIC. */
     (void)EnableIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
+#endif
 
     /* Save the context in global variables to support the double weak mechanism. */
     return FLEXIO_RegisterHandleIRQ(base, handle, FLEXIO_SPI_SlaveTransferHandleIRQ);

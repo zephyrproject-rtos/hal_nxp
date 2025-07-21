@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2023, 2025 NXP
  * All rights reserved.
  *
  *
@@ -10,7 +10,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.lpc_smartdma"
+#define FSL_COMPONENT_ID "platform.drivers.smartdma"
 #endif
 
 /*******************************************************************************
@@ -156,4 +156,31 @@ void SMARTDMA_HandleIRQ(void)
     {
         s_smartdmaCallback(s_smartdmaCallbackParam);
     }
+}
+
+/*!
+ * brief SMARTDMA set EX flag.
+ */
+void SMARTDMA_SetExternalFlag(uint8_t flag)
+{
+    volatile uint32_t smartdma_ctrl = (SMARTDMA->CTRL & 0x0000FFFFU);
+
+    if (flag == 0U)
+    {
+    	smartdma_ctrl &= ~(1U << 1U);
+    }
+    else
+    {
+    	smartdma_ctrl |= (1U << 1U);
+    }
+
+    SMARTDMA->CTRL = (0xC0DE0000U | smartdma_ctrl);
+}
+
+/*!
+ * brief SMARTDMA access RAM.
+ */
+void SMARTDMA_AccessShareRAM(uint8_t flag)
+{
+    SMARTDMA_SetExternalFlag(flag);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -270,6 +270,13 @@ static void ASRC_EnableContextSlot(ASRC_Type *base,
                                    asrc_context_t runningContext)
 {
     assert(channelNums <= ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER);
+    assert(!(channelNums > 0U && startChannel > UINT32_MAX - (channelNums - 1U)));
+
+    if (channelNums == 0U) {
+        return;
+    }
+
+    uint32_t maxChannel = startChannel + channelNums - 1U;
 
     if (slot == 0U)
     {
@@ -277,7 +284,7 @@ static void ASRC_EnableContextSlot(ASRC_Type *base,
             ASRC_PROC_CTRL_SLOT0_R0_SLOT0_EN_MASK | ASRC_PROC_CTRL_SLOT0_R0_SLOT0_CTX_NUM(runningContext) |
             ASRC_PROC_CTRL_SLOT0_R0_SLOT0_NUM_CH(channelNums - 1U) |
             ASRC_PROC_CTRL_SLOT0_R0_SLOT0_MIN_CH(startChannel) |
-            ASRC_PROC_CTRL_SLOT0_R0_SLOT0_MAX_CH(startChannel + channelNums - 1U);
+            ASRC_PROC_CTRL_SLOT0_R0_SLOT0_MAX_CH(maxChannel);
     }
     else
     {
@@ -285,7 +292,7 @@ static void ASRC_EnableContextSlot(ASRC_Type *base,
             ASRC_PROC_CTRL_SLOT1_R0_SLOT1_EN_MASK | ASRC_PROC_CTRL_SLOT1_R0_SLOT1_CTX_NUM(runningContext) |
             ASRC_PROC_CTRL_SLOT1_R0_SLOT1_NUM_CH(channelNums - 1U) |
             ASRC_PROC_CTRL_SLOT1_R0_SLOT1_MIN_CH(startChannel) |
-            ASRC_PROC_CTRL_SLOT1_R0_SLOT1_MAX_CH(startChannel + channelNums - 1U);
+            ASRC_PROC_CTRL_SLOT1_R0_SLOT1_MAX_CH(maxChannel);
     }
 }
 
@@ -317,8 +324,9 @@ static status_t ASRC_SetSampleRateRatioConfig(ASRC_Type *base,
 
     ratio = ((uint64_t)inRate << fracBits) / outRate;
 
-    base->RS_RATIO_LOW[context].RS_RATIO_LOW  = (uint32_t)ratio & 0xFFFFFFFFU;
-    base->RS_RATIO_LOW[context].RS_RATIO_HIGH = ((uint32_t)(ratio >> 32U)) & 0xFFFFFFFFU;
+
+    base->RS_RATIO_LOW[context].RS_RATIO_LOW  = (uint32_t)(ratio & 0xFFFFFFFFUL);
+    base->RS_RATIO_LOW[context].RS_RATIO_HIGH = ((uint32_t)((ratio >> 32U)) & 0xFFFFFFFFUL);
 
     return kStatus_Success;
 }
@@ -428,6 +436,11 @@ static status_t ASRC_SetPrefilterConfig(ASRC_Type *base,
         return kStatus_InvalidArgument;
     }
 
+    if (config->filterSt1Exp == 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
     contextReg &= ~(ASRC_CTX_CTRL_EXT1_PF_INIT_MODE_MASK | ASRC_CTX_CTRL_EXT1_PF_STOP_MODE_MASK |
                     ASRC_CTX_CTRL_EXT1_PF_EXPANSION_FACTOR_MASK | ASRC_CTX_CTRL_EXT1_PF_ST1_WB_FLOAT_MASK |
                     ASRC_CTX_CTRL_EXT1_PF_TWO_STAGE_EN_MASK);
@@ -440,7 +453,7 @@ static status_t ASRC_SetPrefilterConfig(ASRC_Type *base,
 
     base->CTX_CTRL_EXT1[context] = contextReg;
     base->CTX_CTRL_EXT2[context] = ASRC_CTX_CTRL_EXT2_ST1_NUM_TAPS(config->filterSt1Taps - 1U) |
-                                   ASRC_CTX_CTRL_EXT2_ST2_NUM_TAPS(config->filterSt2Taps - 1U);
+                                   ASRC_CTX_CTRL_EXT2_ST2_NUM_TAPS((config->filterSt2Taps > 0U) ? (config->filterSt2Taps - 1U) : 0U);
 
     /* reset prefilter coefficient memory */
     ASRC_SetPrefilterCoeffMemReset(base, context);
@@ -480,8 +493,8 @@ static status_t ASRC_SetResamplerConfig(ASRC_Type *base,
     base->CTX_CTRL_EXT1[context] = contextReg;
 
     /* center tap */
-    base->RS_CT_LOW  = (uint32_t)config->filterCenterTap & 0xFFFFFFFFU;
-    base->RS_CT_HIGH = (uint32_t)(config->filterCenterTap >> 32U) & 0xFFFFFFFFU;
+    base->RS_CT_LOW  = (uint32_t)(config->filterCenterTap & 0xFFFFFFFFUL);
+    base->RS_CT_HIGH = (uint32_t)((config->filterCenterTap >> 32U) & 0xFFFFFFFFUL);
 
     /* resampler taps */
     contextReg = base->CTX_RS_COEFF_CTRL;
@@ -528,6 +541,11 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
 
     for (i = 0U; i < ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER; i++)
     {
+        if (startChannel > UINT32_MAX - availableChannel)
+        {
+            return kStatus_Fail;
+        }
+
         /* record start channel */
         startChannel += availableChannel;
 
@@ -595,13 +613,24 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
                 stage1Exp = (config->filterSt1Exp - 1U) * availableChannel;
                 stage1MemSize =
                     (config->filterSt1Taps - 1U) * config->filterSt1Exp * availableChannel + availableChannel;
-                stage1MemAddr = 0x1800U - stage1MemSize;
                 stage2MemSize = availableChannel * config->filterSt2Taps;
+
+                if (stage1MemSize > 0x1800U || stage2MemSize > 0x1800U ||
+                    (stage1MemSize + stage2MemSize > 0x1800U)) {
+                    return kStatus_Fail;
+                }
+
+                stage1MemAddr = 0x1800U - stage1MemSize;
                 stage2MemAddr = 0x1800U - stage1MemSize - stage2MemSize;
             }
             else
             {
                 stage1MemSize = availableChannel * config->filterSt1Taps;
+
+                if (stage1MemSize > 0x1800U) {
+                    return kStatus_Fail;
+                }
+
                 stage1MemAddr = 0x1800U - stage1MemSize;
             }
 
@@ -804,8 +833,7 @@ status_t ASRC_SetContextOutputConfig(ASRC_Type *base, asrc_context_t context, as
         contextReg |= ASRC_CTX_OUT_CTRL_IEC_V_DATA_MASK;
     }
 
-    contextReg |= ASRC_CTX_OUT_CTRL_DITHER_EN(config->enableDither);
-
+    contextReg |= ASRC_CTX_OUT_CTRL_DITHER_EN(config->enableDither ? 1UL : 0UL);
     contextReg |= ASRC_CTX_OUT_CTRL_SIGN_OUT(config->dataFormat.dataSign) |
                   ASRC_CTX_OUT_CTRL_FLOAT_FMT(config->dataFormat.dataType) |
                   ASRC_CTX_OUT_CTRL_BITS_PER_SAMPLE(config->dataFormat.dataWidth) |
@@ -835,6 +863,8 @@ void ASRC_GetContextDefaultConfig(asrc_context_config_t *config,
                                   uint32_t outSampleRate)
 {
     assert(config != NULL);
+
+    assert(!(channels == 0U || channels > ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER));
 
     (void)memset(config, 0, sizeof(asrc_context_config_t));
 
@@ -942,10 +972,31 @@ status_t ASRC_SetContextConfig(ASRC_Type *base, asrc_context_t context, asrc_con
 uint32_t ASRC_GetContextOutSampleSize(
     uint32_t inSampleRate, uint32_t inSamplesSize, uint32_t inWidth, uint32_t outSampleRate, uint32_t outWidth)
 {
-    uint32_t reminder = (((uint64_t)inSamplesSize / inWidth) * outSampleRate % inSampleRate) == 0U ? 0U : 1U;
-    uint32_t quotient = (uint32_t)(((uint64_t)inSamplesSize / inWidth) * outSampleRate / inSampleRate);
 
-    return (reminder + quotient) * outWidth;
+    if (inSamplesSize > UINT32_MAX / inWidth) {
+        return UINT32_MAX;
+    }
+
+    uint64_t totalInputSamples = (uint64_t)inSamplesSize / inWidth;
+
+    if (totalInputSamples > UINT64_MAX / outSampleRate) {
+        return UINT32_MAX;
+    }
+    uint64_t multipliedSamples = totalInputSamples * outSampleRate;
+
+    if (multipliedSamples / inSampleRate > UINT32_MAX / outWidth) {
+        return UINT32_MAX;
+    }
+
+    uint32_t quotient = (uint32_t)(multipliedSamples / inSampleRate);
+    uint32_t reminder = (multipliedSamples % inSampleRate) == 0U ? 0U : 1U;
+
+    uint64_t result = reminder + quotient;
+    if (result > (UINT32_MAX / outWidth)) {
+        return UINT32_MAX;
+    }
+
+    return (uint32_t)(result * outWidth);
 }
 
 /*!

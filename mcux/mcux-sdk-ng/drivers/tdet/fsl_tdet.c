@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,6 +24,10 @@
 
 /* all bits defined in the Tamper Enable Register. */
 #define TDET_ALL_TER_MASK 0x00FF0FFCu
+
+#if defined(DIGTMP_ATR_COUNT)
+#define TDET_HAS_ACTIVE_TAMPER (1)
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -65,13 +69,17 @@ static status_t tdet_PinConfigure(DIGTMP_Type *base, const tdet_pin_config_t *pi
     uint32_t mask;
     status_t status;
 
-    if ((tdet_IsRegisterWriteAllowed(
-            base, DIGTMP_LR_PDL_MASK | DIGTMP_LR_PPL_MASK | (((uint32_t)1u << DIGTMP_LR_GFL0_SHIFT) << pin))) &&
+    if ((tdet_IsRegisterWriteAllowed(base,
+#if defined(TDET_HAS_ACTIVE_TAMPER)
+                                     DIGTMP_LR_PDL_MASK |
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
+                                         DIGTMP_LR_PPL_MASK | (((uint32_t)1u << DIGTMP_LR_GFL0_SHIFT) << pin))) &&
         (pinConfig != NULL))
     {
         /* pin 0 to 7 selects bit0 to bit7 */
         mask = ((uint32_t)1u << pin);
 
+#if defined(TDET_HAS_ACTIVE_TAMPER)
         /* Pin Direction Register */
         temp = base->PDR;
         temp &= ~mask; /* clear the bit */
@@ -80,6 +88,7 @@ static status_t tdet_PinConfigure(DIGTMP_Type *base, const tdet_pin_config_t *pi
             temp |= mask; /* set the bit, if configured */
         }
         base->PDR = temp;
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
 
         /* Pin Polarity Register */
         temp = base->PPR;
@@ -96,7 +105,9 @@ static status_t tdet_PinConfigure(DIGTMP_Type *base, const tdet_pin_config_t *pi
         temp |= DIGTMP_PGFR_GFP(pinConfig->glitchFilterPrescaler);
         temp |= DIGTMP_PGFR_TPSW(pinConfig->tamperPinSampleWidth);
         temp |= DIGTMP_PGFR_TPSF(pinConfig->tamperPinSampleFrequency);
+#if defined(TDET_HAS_ACTIVE_TAMPER)
         temp |= DIGTMP_PGFR_TPEX(pinConfig->tamperPinExpected);
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
         temp |= DIGTMP_PGFR_TPE(pinConfig->tamperPullEnable);
         temp |= DIGTMP_PGFR_TPS(pinConfig->tamperPullSelect);
         /* make sure the glitch filter is disabled when we configure glitch filter width */
@@ -117,6 +128,7 @@ static status_t tdet_PinConfigure(DIGTMP_Type *base, const tdet_pin_config_t *pi
     return status;
 }
 
+#if defined(TDET_HAS_ACTIVE_TAMPER)
 static status_t tdet_ActiveTamperConfigure(DIGTMP_Type *base,
                                            const tdet_active_tamper_config_t *activeTamperConfig,
                                            uint32_t activeTamperRegister)
@@ -142,6 +154,7 @@ static status_t tdet_ActiveTamperConfigure(DIGTMP_Type *base,
 
     return status;
 }
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
 
 /*!
  * brief Initialize TDET
@@ -153,26 +166,25 @@ static status_t tdet_ActiveTamperConfigure(DIGTMP_Type *base,
  */
 status_t TDET_Init(DIGTMP_Type *base)
 {
+    /* Force system reset if TAF is 0 since DTF is cleared only if TAF is set */
+    if ((base->SR & (DIGTMP_SR_TAF_MASK | DIGTMP_SR_DTF_MASK)) == DIGTMP_SR_DTF_MASK)
+    {
+        base->CR |= DIGTMP_CR_TFSR_MASK;
+        /* system reset will occur here */
+    }
+    else
+    {
+        /* DTF and TAF are both set, so disable force system reset */
+        base->CR &= ~DIGTMP_CR_TFSR_MASK;
+    }
 
-   /* Force system reset if TAF is 0 since DTF is cleared only if TAF is set */
-   if ((base->SR & (DIGTMP_SR_TAF_MASK | DIGTMP_SR_DTF_MASK)) == DIGTMP_SR_DTF_MASK)
-   {
-       base->CR |= DIGTMP_CR_TFSR_MASK;
-       /* system reset will occur here */
-   }
-   else 
-   {
-       /* DTF and TAF are both set, so disable force system reset */
-	   base->CR &= ~DIGTMP_CR_TFSR_MASK;
-   }
+    /* Clear DTF (assumes TAF is set) */
+    base->SR |= DIGTMP_SR_DTF_MASK;
+    /* Clear TAF (assumes DTF is clear) */
+    base->SR |= DIGTMP_SR_TAF_MASK;
+    /* TDET is now in non-failing, valid state */
 
-   /* Clear DTF (assumes TAF is set) */
-   base->SR |= DIGTMP_SR_DTF_MASK;
-   /* Clear TAF (assumes DTF is clear) */
-   base->SR |= DIGTMP_SR_TAF_MASK;
-   /* TDET is now in non-failing, valid state */
-
-   return kStatus_Success;
+    return kStatus_Success;
 }
 
 /*!
@@ -184,18 +196,23 @@ status_t TDET_Init(DIGTMP_Type *base)
  */
 void TDET_Deinit(DIGTMP_Type *base)
 {
-    uint32_t i, j, k;
+    uint32_t i, j;
     j = ARRAY_SIZE(base->PGFR);
+#if defined(TDET_HAS_ACTIVE_TAMPER)
+    uint32_t k;
     k = ARRAY_SIZE(base->ATR);
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
     /* disable all glitch filters and active tampers */
     for (i = 0; i < j; i++)
     {
         base->PGFR[i] = 0;
     }
+#if defined(TDET_HAS_ACTIVE_TAMPER)
     for (i = 0; i < k; i++)
     {
         base->ATR[i] = 0;
     }
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
 
     /* disable inner TDET clock and prescaler */
     base->CR &= ~DIGTMP_CR_DEN_MASK;
@@ -258,8 +275,10 @@ status_t TDET_SetConfig(DIGTMP_Type *base, const tdet_config_t *config)
         tmpCR = 0;
         tmpCR |= DIGTMP_CR_TFSR(config->tamperForceSystemResetEnable);
         tmpCR |= DIGTMP_CR_UM(config->updateMode);
+#if defined(TDET_HAS_ACTIVE_TAMPER)
         tmpCR |= DIGTMP_CR_ATCS0(config->clockSourceActiveTamper0);
         tmpCR |= DIGTMP_CR_ATCS1(config->clockSourceActiveTamper1);
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
         tmpCR |= DIGTMP_CR_DISTAM(config->disablePrescalerAfterTamper);
         tmpCR |= DIGTMP_CR_DPR(config->prescaler);
         /* write the computed value to the CR register */
@@ -308,6 +327,7 @@ status_t TDET_SoftwareReset(DIGTMP_Type *base)
     return retval;
 }
 
+#if defined(TDET_HAS_ACTIVE_TAMPER)
 /*!
  * brief Writes to the active tamper register(s).
  *
@@ -348,6 +368,7 @@ status_t TDET_ActiveTamperSetConfig(DIGTMP_Type *base,
 
     return status;
 }
+#endif /* defined(TDET_HAS_ACTIVE_TAMPER) */
 
 /*!
  * brief Gets default values for tamper pin configuration.

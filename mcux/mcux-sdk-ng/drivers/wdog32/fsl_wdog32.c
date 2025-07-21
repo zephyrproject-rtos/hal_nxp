@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -124,7 +124,33 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config)
     config->timeoutValue         = 0xFFFFU;
 }
 
-void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
+/*!
+ * brief Initializes the WDOG32 module.
+ *
+ * This function initializes the WDOG32.
+ * To reconfigure the WDOG32 without forcing a reset first, enableUpdate must be set to true
+ * in the configuration.
+ *
+ * Example:
+ * code
+ *   wdog32_config_t config;
+ *   WDOG32_GetDefaultConfig(&config);
+ *   config.timeoutValue = 0x7ffU;
+ *   config.enableUpdate = true;
+ *   WDOG32_Init(wdog_base,&config);
+ * endcode
+ *
+ * note If there is errata ERR010536 (FSL_FEATURE_WDOG_HAS_ERRATA_010536 defined as 1),
+ * then after calling this function, user need delay at least 4 LPO clock cycles before
+ * accessing other WDOG32 registers.
+ *
+ * param base   WDOG32 peripheral base address.
+ * param config The configuration of the WDOG32.
+ *
+ * retval kStatus_Success The initialization was successful
+ * retval kStatus_Timeout The initialization timed out
+ */
+status_t WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
 {
     assert(NULL != config);
 
@@ -133,6 +159,7 @@ void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
     register WDOG_Type *regBase               = base;
     register const wdog32_config_t *regConfig = config;
     uint32_t tempPrescaler                    = (uint32_t)regConfig->prescaler;
+    status_t status                           = kStatus_Success;
 
 #if defined(WDOG_RESETS_ARRAY)
     RESET_ReleasePeripheralReset(s_wdogResets[WDOG32_GetInstance(base)]);
@@ -148,15 +175,24 @@ void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
     /* Disable the global interrupts. Otherwise, an interrupt could effectively invalidate the unlock sequence
      * and the WCT may expire. After the configuration finishes, re-enable the global interrupts. */
     primaskValue = DisableGlobalIRQ();
-    WDOG32_Unlock(base);
+    status = WDOG32_Unlock(base);
     regBase->WIN   = regConfig->windowValue;
     regBase->TOVAL = regConfig->timeoutValue;
     regBase->CS    = value;
 #ifdef WDOG_CS_RCS_MASK
+#if WDOG32_RECONFIG_TIMEOUT
+    uint32_t timeout = WDOG32_RECONFIG_TIMEOUT;
+#endif /* WDOG32_RECONFIG_TIMEOUT */
     /* Waits until for new configuration to take effect. */
     while (0U == ((base->CS) & WDOG_CS_RCS_MASK))
     {
-        ;
+#if WDOG32_RECONFIG_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            status = kStatus_Timeout; /* Reconfiguration timeout */
+            break;
+        }
+#endif /* WDOG32_RECONFIG_TIMEOUT */
     }
 #else
     /* When switches clock sources during reconfiguration, the watchdog hardware holds the counter at
@@ -170,6 +206,8 @@ void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
 #endif /* WDOG_CS_RCS_MASK */
 
     EnableGlobalIRQ(primaskValue);
+
+    return status;
 }
 
 /*!
@@ -179,16 +217,22 @@ void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
  * Ensure that the WDOG_CS.UPDATE is 1, which means that the register update is enabled.
  *
  * param base   WDOG32 peripheral base address.
+ *
+ * retval kStatus_Success The de-initialization was successful
+ * retval kStatus_Timeout The de-initialization timed out
  */
-void WDOG32_Deinit(WDOG_Type *base)
+status_t WDOG32_Deinit(WDOG_Type *base)
 {
     uint32_t primaskValue = 0U;
+    status_t status = kStatus_Success;
 
     /* Disable the global interrupts */
     primaskValue = DisableGlobalIRQ();
-    WDOG32_Unlock(base);
+    status = WDOG32_Unlock(base);
     WDOG32_Disable(base);
     EnableGlobalIRQ(primaskValue);
+
+    return status;
 }
 
 /*!
@@ -201,8 +245,11 @@ void WDOG32_Deinit(WDOG_Type *base)
  * After the configuration finishes, re-enable the global interrupts.
  *
  * param base WDOG32 peripheral base address
+ * 
+ * retval kStatus_Success The unlock sequence was successful
+ * retval kStatus_Timeout The unlock sequence timed out
  */
-void WDOG32_Unlock(WDOG_Type *base)
+status_t WDOG32_Unlock(WDOG_Type *base)
 {
     if (0U != ((base->CS) & WDOG_CS_CMD32EN_MASK))
     {
@@ -214,12 +261,21 @@ void WDOG32_Unlock(WDOG_Type *base)
         base->CNT = WDOG_SECOND_WORD_OF_UNLOCK;
     }
 #ifdef WDOG_CS_ULK_MASK
+#if WDOG32_UNLOCK_TIMEOUT
+    uint32_t timeout = WDOG32_UNLOCK_TIMEOUT;
+#endif /* WDOG32_UNLOCK_TIMEOUT */
     /* Waited until for registers to be unlocked. */
     while (0U == ((base->CS) & WDOG_CS_ULK_MASK))
     {
-        ;
+#if WDOG32_UNLOCK_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout; /* Unlock sequence timeout */
+        }
+#endif /* WDOG32_UNLOCK_TIMEOUT */
     }
 #endif /* WDOG_CS_ULK_MASK */
+    return kStatus_Success;
 }
 
 /*!

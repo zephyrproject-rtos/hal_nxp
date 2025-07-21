@@ -182,7 +182,7 @@ int CE_MatrixInvHerm_CF32(
  * @param pUout      Pointer to buffer with output Eigen Values (Mx1)
  * @param pUin       Pointer to buffer for input matrix A
  * @param M          Number of rows or columns of A
- * @param pScratch   Scratch memory, the minimum scratch size required is (M x M x 4 + 360) x 4 bytes.
+ * @param pScratch   Scratch memory, the minimum scratch size required is (40 x 40 x 4 + 360) x 4 bytes.
  * @param tol        Tolerance specifying exit condition for the iterative computation
  * @param max_iter   Upper bound on number of iterations for convergence of each Eigen value
  * @param flag_packedInput Flag indicating input matrix format.

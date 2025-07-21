@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC DMA driver version 2.4.0 */
-#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief DMIC DMA driver version 2.4.1 */
+#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*! @} */
 
 /*! @brief DMIC transfer structure. */

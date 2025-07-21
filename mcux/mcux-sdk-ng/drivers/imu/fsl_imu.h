@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
- * All rights reserved.
+ * Copyright 2020-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -106,6 +105,9 @@
 /*! @brief IMU driver returned error value. */
 #define IMU_ERR_TX_FIFO_LOCKED (-1L)
 
+/*! @brief IMU driver returned error value timeout. */
+#define IMU_ERR_TIMEOUT (-2L)
+
 /*! @brief Maximum message numbers in FIFO. */
 #define IMU_MSG_FIFO_MAX_COUNT 16U
 
@@ -122,6 +124,28 @@
 #define IMU_RD_PTR(link)                                                                   \
     IMU_FIFO_SW_WRAPAROUND((IMU_RX_FIFO_STATUS(link) & IMU_MSG_FIFO_STATUS_RD_PTR_MASK) >> \
                            IMU_MSG_FIFO_STATUS_RD_PTR_SHIFT)
+
+/*!
+ * @brief Maximum polling iterations for IMU waiting loops
+ *
+ * This parameter defines the maximum number of iterations for any polling loop
+ * in the IMU driver code before timing out and returning an error.
+ *
+ * It applies to all waiting loops in IMU driver.
+ *
+ * This is a count of loop iterations, not a time-based value.
+ *
+ * If defined as 0, polling loops will continue indefinitely until their exit condition
+ * is met, which could potentially cause the system to hang if sensors don't respond
+ * or if communication interfaces fail.
+ */
+#ifndef IMU_BUSY_POLL_COUNT
+#ifdef CONFIG_IMU_BUSY_POLL_COUNT
+    #define IMU_BUSY_POLL_COUNT CONFIG_IMU_BUSY_POLL_COUNT
+#else
+    #define IMU_BUSY_POLL_COUNT 0U
+#endif
+#endif
 
 /*!
  * @brief IMU status flags.
@@ -180,11 +204,17 @@ extern "C" {
  *   - Flush the send FIFO.
  *   - Unlock the send FIFO.
  *   - Set the water mark to (IMU_MAX_MSG_FIFO_WATER_MARK)
- *   - Flush the read FIFO.
+ *   - Flush the receive FIFO.
+ *
+ * If IMU_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return kStatus_Timeout
+ * if flushing the receive FIFO takes too long.
  *
  * @param link IMU link.
- * @retval kStatus_InvalidArgument The link is invalid.
- * @retval kStatus_Success Initialized successfully.
+ * @return status_t
+ * @retval kStatus_Success The IMU was initialized successfully.
+ * @retval kStatus_InvalidArgument Invalid link parameter.
+ * @retval kStatus_Timeout Timeout occurred while flushing the receive FIFO.
  */
 status_t IMU_Init(imu_link_t link);
 
@@ -240,14 +270,19 @@ static inline uint32_t IMU_ReadMsg(imu_link_t link)
  *   and fills the message to TX FIFO.
  * - To lock TX FIFO after filling all messages, set @p lockSendFifo to true.
  *
+ * If IMU_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return IMU_ERR_TIMEOUT
+ * if waiting for FIFO space takes too long.
+ *
  * @param link IMU link.
  * @param msgs The messages to send.
  * @param msgCount Message count, one message is a 32-bit word.
  * @param lockSendFifo If set to true, the TX FIFO is locked after all messages filled to TX FIFO.
- * @return If TX FIFO is locked, this function returns IMU_ERR_TX_FIFO_LOCKED,
- * otherwise, this function returns the actual message count sent out, it equals @p msgCount
- * because this function is blocking function, it returns until all messages have been
- * filled into TX FIFO.
+ * @return If TX FIFO is locked, this function returns IMU_ERR_TX_FIFO_LOCKED.
+ *         If a timeout occurs while waiting for FIFO space, it returns IMU_ERR_TIMEOUT.
+ *         Otherwise, this function returns the actual message count sent out, which equals @p msgCount
+ *         because this function is blocking until all messages have been filled into TX FIFO
+ *         or a timeout occurs.
  */
 int32_t IMU_SendMsgsBlocking(imu_link_t link, const uint32_t *msgs, int32_t msgCount, bool lockSendFifo);
 
@@ -332,14 +367,18 @@ int32_t IMU_ReceiveMsgsBlocking(imu_link_t link, uint32_t *msgs, int32_t desired
  * - If the TX FIFO is locked, this function returns IMU_ERR_TX_FIFO_LOCKED.
  * - If TX FIFO not locked, this function waits the available empty slot in TX FIFO,
  *   and fills the message pointer to TX FIFO.
- * - To lock TX FIFO after filling the message pointer, set @p lockSendFifo to true.
+ * - To lock TX FIFO after filling the message pointer, set lockSendFifo to true.
+ *
+ * If IMU_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return IMU_ERR_TIMEOUT
+ * if waiting for FIFO space takes too long.
  *
  * @param link IMU link.
  * @param msgPtr The buffer pointer to message to send.
- * @param needAckLock Upper layer should always check this value. When this is
- * set to true by this function, upper layer should send lock ack message to peer CPU.
- * @retval 0 The message pointer set successfully.
- * @retval IMU_ERR_TX_FIFO_LOCKED The TX FIFO is locked, send failed.
+ * @param lockSendFifo If set to true, the TX FIFO is locked after message pointer filled to TX FIFO.
+ * @return If TX FIFO is locked, this function returns IMU_ERR_TX_FIFO_LOCKED.
+ *         If a timeout occurs while waiting for FIFO space, it returns IMU_ERR_TIMEOUT.
+ *         Otherwise, this function returns 0 to indicate success.
  */
 int32_t IMU_SendMsgPtrBlocking(imu_link_t link, uint32_t msgPtr, bool lockSendFifo);
 

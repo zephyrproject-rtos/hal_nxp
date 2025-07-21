@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024 NXP
+ * Copyright 2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1164,7 +1164,8 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                     }
 
                     /* Issue command. buf is a uint8_t* pointing at the uint16 command array. */
-                    sendval    = ((uint16_t)handle->buf[0]) | (((uint16_t)handle->buf[1]) << 8U);
+                    sendval  = (uint16_t)handle->buf[0];
+                    sendval |= (((uint16_t)handle->buf[1]) << 8U);
                     base->MTDR = sendval;
                     handle->buf++;
                     handle->buf++;
@@ -1218,12 +1219,14 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
 
                 case (uint8_t)kIssueReadCommandState:
                     /* Make sure there is room in the tx fifo for the read command. */
-                    if (0U == txCount--)
+                    if (0U == txCount)
                     {
                         state_complete = true;
                         break;
                     }
+                    txCount--;
 
+                    assert(xfer->dataSize >= 1U);
                     base->MTDR = (uint32_t)kRxDataCmd | LPI2C_MTDR_DATA(xfer->dataSize - 1U);
 
                     /* Move to transfer state. */
@@ -1252,11 +1255,12 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                     {
                         /* XXX handle receive sizes > 256, use kIssueReadCommandState */
                         /* Make sure there is data in the rx fifo. */
-                        if (0U == rxCount--)
+                        if (0U == rxCount)
                         {
                             state_complete = true;
                             break;
                         }
+                        rxCount--;
 
                         /* Read byte from fifo. */
                         *(handle->buf)++ = (uint8_t)(base->MRDR & LPI2C_MRDR_DATA_MASK);
@@ -1278,11 +1282,12 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                     if ((xfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
                     {
                         /* Make sure there is room in the tx fifo for the stop command. */
-                        if (0U == txCount--)
+                        if (0U == txCount)
                         {
                             state_complete = true;
                             break;
                         }
+                        txCount--;
 
                         base->MTDR = (uint32_t)kStopCmd;
                     }

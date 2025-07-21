@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
- * All rights reserved.
+ * Copyright 2020-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -110,9 +109,9 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
                ADC_ADC_REG_ANA_INBUF_EN_MASK | ADC_ADC_REG_ANA_BIAS_SEL_MASK | ADC_ADC_REG_ANA_RES_SEL_MASK |
                ADC_ADC_REG_ANA_INBUF_CHOP_EN_MASK | ADC_ADC_REG_ANA_CHOP_EN_MASK);
     tmp32 |= ADC_ADC_REG_ANA_VREF_SEL(config->vrefSource) | ADC_ADC_REG_ANA_SINGLEDIFF(config->inputMode) |
-             ADC_ADC_REG_ANA_INBUF_GAIN(config->inputGain) | ADC_ADC_REG_ANA_INBUF_EN(config->enableInputGainBuffer) |
+             ADC_ADC_REG_ANA_INBUF_GAIN(config->inputGain) | ADC_ADC_REG_ANA_INBUF_EN(config->enableInputGainBuffer ? 1U : 0U) |
              ADC_ADC_REG_ANA_BIAS_SEL(config->powerMode) | ADC_ADC_REG_ANA_RES_SEL(config->resolution) |
-             ADC_ADC_REG_ANA_INBUF_CHOP_EN(config->enableInputBufferChop) | ADC_ADC_REG_ANA_CHOP_EN(config->enableChop);
+             ADC_ADC_REG_ANA_INBUF_CHOP_EN(config->enableInputBufferChop ? 1U : 0U) | ADC_ADC_REG_ANA_CHOP_EN(config->enableChop ? 1U : 0U);
     base->ADC_REG_ANA = tmp32;
 
     base->ADC_REG_RESULT_BUF = (base->ADC_REG_RESULT_BUF & ~(ADC_ADC_REG_RESULT_BUF_WIDTH_SEL_MASK)) |
@@ -120,7 +119,7 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
 
     tmp32 = base->ADC_REG_DMAR;
     tmp32 &= ~(ADC_ADC_REG_DMAR_DMA_EN_MASK | ADC_ADC_REG_DMAR_FIFO_THL_MASK);
-    tmp32 |= ADC_ADC_REG_DMAR_FIFO_THL(config->fifoThreshold) | ADC_ADC_REG_DMAR_DMA_EN(config->enableDMA);
+    tmp32 |= ADC_ADC_REG_DMAR_FIFO_THL(config->fifoThreshold) | ADC_ADC_REG_DMAR_DMA_EN(config->enableDMA ? 1U : 0U);
     base->ADC_REG_DMAR = tmp32;
 
     if (config->enableADC)
@@ -271,7 +270,7 @@ void ADC_ConfigAudioVoiceLevel(ADC_Type *base, bool enableDetect, adc_audio_voic
 
     tmp32 = base->ADC_REG_VOICE_DET;
     tmp32 &= ~(ADC_ADC_REG_VOICE_DET_DET_EN_MASK | ADC_ADC_REG_VOICE_DET_LEVEL_SEL_MASK);
-    tmp32 |= ADC_ADC_REG_VOICE_DET_DET_EN(enableDetect) | ADC_ADC_REG_VOICE_DET_LEVEL_SEL(voiceLevel);
+    tmp32 |= ADC_ADC_REG_VOICE_DET_DET_EN(enableDetect ? 1U : 0U) | ADC_ADC_REG_VOICE_DET_LEVEL_SEL(voiceLevel);
     base->ADC_REG_VOICE_DET = tmp32;
 }
 

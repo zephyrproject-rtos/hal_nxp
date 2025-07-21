@@ -175,7 +175,7 @@ static uint32_t ISI_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
     /* Set the sign bit. */
     if (0U != (floatBits & 0x80000000UL))
     {
-        ret = ((~ret) + 1U) & ~(((uint32_t)-1) << (intBits + fracBits + 1U));
+        ret = ((uint32_t)(-(int32_t)ret)) & ~(~0U << (intBits + fracBits + 1U));
     }
 
     return ret;
@@ -264,7 +264,7 @@ void ISI_SetConfig(ISI_Type *base, const isi_config_t *config)
     reg &= ~(ISI_CHNL_CTRL_BLANK_PXL_MASK);
 #endif
 
-    reg |= ISI_CHNL_CTRL_CHNL_BYPASS(config->isChannelBypassed) | ISI_CHNL_CTRL_CHAIN_BUF(config->chainMode) |
+    reg |= ISI_CHNL_CTRL_CHNL_BYPASS(config->isChannelBypassed ? 1 : 0) | ISI_CHNL_CTRL_CHAIN_BUF(config->chainMode) |
            ISI_CHNL_CTRL_MIPI_VC_ID(config->mipiChannel) | ISI_CHNL_CTRL_SRC_TYPE(config->isSourceMemory) | ISI_CHNL_CTRL_SRC(config->sourcePort);
 
 #if defined(ISI_CHNL_CTRL_BLANK_PXL_MASK)
@@ -276,7 +276,7 @@ void ISI_SetConfig(ISI_Type *base, const isi_config_t *config)
     reg = base->CHNL_IMG_CTRL;
     reg &= ~(ISI_CHNL_IMG_CTRL_FORMAT_MASK | ISI_CHNL_IMG_CTRL_DEINT_MASK | ISI_CHNL_IMG_CTRL_YCBCR_MODE_MASK);
     reg |= ISI_CHNL_IMG_CTRL_FORMAT(config->outputFormat) | ISI_CHNL_IMG_CTRL_DEINT(config->deintMode) |
-           ISI_CHNL_IMG_CTRL_YCBCR_MODE(config->isYCbCr);
+           ISI_CHNL_IMG_CTRL_YCBCR_MODE(config->isYCbCr ? 1 : 0);
     base->CHNL_IMG_CTRL = reg;
 
     base->CHNL_IMG_CFG = ((uint32_t)(config->inputHeight) << ISI_CHNL_IMG_CFG_HEIGHT_SHIFT) |

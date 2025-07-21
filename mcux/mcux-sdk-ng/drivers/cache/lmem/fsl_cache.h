@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief cache driver version. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*! @brief code bus cache line size is equal to system bus line size, so the unified I/D cache line size equals too. */
@@ -111,6 +111,7 @@ void L1CACHE_CleanInvalidateCodeCache(void);
  */
 void L1CACHE_CleanInvalidateCodeCacheByRange(uint32_t address, uint32_t size_byte);
 
+#if !(defined(FSL_FEATURE_LMEM_HAS_ENWRBUF_BIT_CONFIG_SUPPORT) && (FSL_FEATURE_LMEM_HAS_ENWRBUF_BIT_CONFIG_SUPPORT == 0U))
 /*!
  * @brief Enables/disables the processor code bus write buffer.
  *
@@ -129,6 +130,7 @@ static inline void L1CACHE_EnableCodeCacheWriteBuffer(bool enable)
         LMEM->PCCCR &= ~LMEM_PCCCR_ENWRBUF_MASK;
     }
 }
+#endif /* FSL_FEATURE_LMEM_HAS_ENWRBUF_BIT_CONFIG_SUPPORT */
 
 #if defined(FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE) && FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE
 /*!

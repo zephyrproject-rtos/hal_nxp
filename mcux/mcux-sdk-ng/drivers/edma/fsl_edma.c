@@ -111,7 +111,7 @@ void EDMA_InstallTCD(DMA_Type *base, uint32_t channel, edma_tcd_t *tcd)
  * brief Initializes the eDMA peripheral.
  *
  * This function ungates the eDMA clock and configures the eDMA peripheral according
- * to the configuration structure.
+ * to the configuration structure. All emda enabled request will be cleared in this function.
  *
  * param base eDMA peripheral base address.
  * param config A pointer to the configuration structure, see "edma_config_t".
@@ -233,7 +233,10 @@ void EDMA_SetTransferConfig(DMA_Type *base, uint32_t channel, const edma_transfe
 
 /* If there is address offset, convert the address */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-    nextTcd = (edma_tcd_t *)(MEMORY_ConvertMemoryMapAddress((uint32_t)nextTcd, kMEMORY_Local2DMA));
+    if(nextTcd != NULL)
+    {
+        nextTcd = (edma_tcd_t *)(MEMORY_ConvertMemoryMapAddress((uint32_t)nextTcd, kMEMORY_Local2DMA));
+    }
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
     EDMA_TcdSetTransferConfig((edma_tcd_t *)(uint32_t)&base->TCD[channel], config, nextTcd);
 }

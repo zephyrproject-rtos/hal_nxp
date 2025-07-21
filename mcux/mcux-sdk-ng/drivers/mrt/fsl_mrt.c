@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -95,7 +95,7 @@ void MRT_Init(MRT_Type *base, const mrt_config_t *config)
 
 #if !(defined(FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK) && FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK)
     /* Set timer operating mode */
-    base->MODCFG = MRT_MODCFG_MULTITASK(config->enableMultiTask);
+    base->MODCFG = MRT_MODCFG_MULTITASK(config->enableMultiTask ? 1U : 0U);
 #endif
 }
 

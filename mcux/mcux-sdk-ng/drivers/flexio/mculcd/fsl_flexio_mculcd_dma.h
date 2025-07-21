@@ -21,7 +21,7 @@
 
 /*! @{ */
 /*! @brief FlexIO MCULCD DMA driver version. */
-#define FSL_FLEXIO_MCULCD_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+#define FSL_FLEXIO_MCULCD_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*! @} */
 
 /*! @brief  typedef for flexio_mculcd_dma_handle_t in advance. */

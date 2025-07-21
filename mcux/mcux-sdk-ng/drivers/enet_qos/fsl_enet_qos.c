@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2024 NXP
+ * Copyright 2019-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1617,15 +1617,15 @@ void ENET_QOS_GetMacAddr(ENET_QOS_Type *base, uint8_t *macAddr, uint8_t index)
     uint32_t address = base->MAC_ADDRESS[index].LOW;
 
     /* Get from physical address lower register. */
-    macAddr[2] = (uint8_t)(0xFFU & (address >> 24U));
-    macAddr[3] = (uint8_t)(0xFFU & (address >> 16U));
-    macAddr[4] = (uint8_t)(0xFFU & (address >> 8U));
-    macAddr[5] = (uint8_t)(0xFFU & address);
+    macAddr[3] = (uint8_t)(0xFFU & (address >> 24U));
+    macAddr[2] = (uint8_t)(0xFFU & (address >> 16U));
+    macAddr[1] = (uint8_t)(0xFFU & (address >> 8U));
+    macAddr[0] = (uint8_t)(0xFFU & address);
 
     /* Get from physical address high register. */
     address    = base->MAC_ADDRESS[index].HIGH;
-    macAddr[0] = (uint8_t)(0xFFU & (address >> 8U));
-    macAddr[1] = (uint8_t)(0xFFU & address);
+    macAddr[5] = (uint8_t)(0xFFU & (address >> 8U));
+    macAddr[4] = (uint8_t)(0xFFU & address);
 }
 
 /*!

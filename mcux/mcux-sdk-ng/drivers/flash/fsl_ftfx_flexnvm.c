@@ -149,7 +149,21 @@ status_t FLEXNVM_ProgramPartition(flexnvm_config_t *config,
                                   uint32_t eepromDataSizeCode,
                                   uint32_t flexnvmPartitionCode)
 {
-    return FTFx_CMD_ProgramPartition(&config->ftfxConfig, option, eepromDataSizeCode, flexnvmPartitionCode);
+    return FTFx_CMD_ProgramPartition(&config->ftfxConfig, option, eepromDataSizeCode, flexnvmPartitionCode, 0xFF, 0xFF);
+}
+
+/*!
+ * @brief Prepares the FlexNVM block for use as data flash, EEPROM backup, or a combination
+ * of both and initializes the FlexRAM. Version using CSE.
+ */
+status_t FLEXNVM_ProgramPartition_CSE(flexnvm_config_t *config,
+                                  ftfx_partition_flexram_load_opt_t option,
+                                  uint32_t eepromDataSizeCode,
+                                  uint32_t flexnvmPartitionCode,
+                                  uint8_t CSEcKeySize,
+                                  uint8_t SFE)
+{
+    return FTFx_CMD_ProgramPartition(&config->ftfxConfig, option, eepromDataSizeCode, flexnvmPartitionCode, CSEcKeySize, SFE);
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD

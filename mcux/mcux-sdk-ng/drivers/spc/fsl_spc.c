@@ -1,6 +1,5 @@
 /*
- * Copyright 2019, 2021-2024 NXP
- * All rights reserved.
+ * Copyright 2019, 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -793,17 +792,22 @@ void SPC_SetExternalVoltageDomainsConfig(SPC_Type *base, uint8_t lowPowerIsoMask
  * retval kStatus_SPC_CORELDOLowDriveStrengthIgnore If any voltage detect enabled, core_ldo's drive strength can not
  * set to low.
  * retval kStatus_SPC_CORELDOVoltageWrong The selected voltage level in active mode is not allowed.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetActiveModeCoreLDORegulatorConfig(SPC_Type *base, const spc_active_mode_core_ldo_option_t *option)
 {
     assert(option != NULL);
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if defined(FSL_FEATURE_SPC_HAS_CORELDO_VDD_DS) && FSL_FEATURE_SPC_HAS_CORELDO_VDD_DS
     spc_core_ldo_voltage_level_t preVoltage;
     uint32_t state;
 #endif /* FSL_FEATURE_SPC_HAS_CORELDO_VDD_DS */
 
-#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
 #else
     if ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
@@ -843,13 +847,17 @@ status_t SPC_SetActiveModeCoreLDORegulatorConfig(SPC_Type *base, const spc_activ
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -872,11 +880,16 @@ status_t SPC_SetActiveModeCoreLDORegulatorConfig(SPC_Type *base, const spc_activ
  * retval kStatus_SPC_CORELDOVoltageWrong The selected voltage level is wrong.
  * retval kStatus_SPC_CORELDOLowDriveStrengthIgnore Set driver strength to low will be ignored.
  * retval kStatus_SPC_CORELDOVoltageSetFail. Fail to change Core LDO voltage level.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetLowPowerModeCoreLDORegulatorConfig(SPC_Type *base, const spc_lowpower_mode_core_ldo_option_t *option)
 {
     spc_core_ldo_voltage_level_t preVoltage;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -920,15 +933,19 @@ status_t SPC_SetLowPowerModeCoreLDORegulatorConfig(SPC_Type *base, const spc_low
      * $Branch Coverage Justification$
      * $ref spc_c_ref_1$.
      */
-#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
+#if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -954,6 +971,7 @@ status_t SPC_SetLowPowerModeCoreLDORegulatorConfig(SPC_Type *base, const spc_low
  * retval kStatus_SPC_SYSLDOOverDriveVoltageFail Fail to regulator to Over Drive Voltage.
  * retval kStatus_SPC_SYSLDOLowDriveStrengthIgnore Set System LDO VDD regulator's driver strength to Low will be
  * ignored.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetActiveModeSystemLDORegulatorConfig(SPC_Type *base, const spc_active_mode_sys_ldo_option_t *option)
 {
@@ -961,6 +979,10 @@ status_t SPC_SetActiveModeSystemLDORegulatorConfig(SPC_Type *base, const spc_act
 
     uint32_t reg;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if (defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY) 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -1015,13 +1037,17 @@ status_t SPC_SetActiveModeSystemLDORegulatorConfig(SPC_Type *base, const spc_act
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -1041,11 +1067,16 @@ status_t SPC_SetActiveModeSystemLDORegulatorConfig(SPC_Type *base, const spc_act
  * retval kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
  * retval kStatus_SPC_BandgapModeWrong The bandgap mode setting in Low Power Mode is wrong.
  * retval kStatus_SPC_SYSLDOLowDriveStrengthIgnore Set driver strength to low will be ignored.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetLowPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_lowpower_mode_sys_ldo_option_t *option)
 {
     uint32_t reg;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -1082,13 +1113,18 @@ status_t SPC_SetLowPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_l
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
+
     return kStatus_Success;
 }
 
@@ -1109,10 +1145,15 @@ status_t SPC_SetLowPowerModeSystemLDORegulatorConfig(SPC_Type *base, const spc_l
  * retval kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
  * retval kStatus_SPC_BandgapModeWrong The bandgap mode setting in Active mode is wrong.
  * retval kStatus_SPC_DCDCLowDriveStrengthIgnore Set driver strength to Low will be ignored.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetActiveModeDCDCRegulatorConfig(SPC_Type *base, const spc_active_mode_dcdc_option_t *option)
 {
     assert(option != NULL);
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
     uint32_t reg;
     uint32_t state;
@@ -1152,13 +1193,17 @@ status_t SPC_SetActiveModeDCDCRegulatorConfig(SPC_Type *base, const spc_active_m
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -1180,11 +1225,16 @@ status_t SPC_SetActiveModeDCDCRegulatorConfig(SPC_Type *base, const spc_active_m
  * retval kStatus_SPC_BandgapModeWrong The bandgap mode setting in Low Power mode is wrong.
  * retval kStatus_SPC_DCDCPulseRefreshModeIgnore Set driver strength to Pulse Refresh mode will be ignored.
  * retval kStatus_SPC_DCDCLowDriveStrengthIgnore Set driver strength to Low Drive Strength will be ignored.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpower_mode_dcdc_option_t *option)
 {
     uint32_t reg;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -1231,13 +1281,17 @@ status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpow
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -1247,12 +1301,19 @@ status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpow
  *
  * param base SPC peripheral base address.
  * param config Pointer to spc_DCDC_burst_config_t structure.
+ *
+ * retval kStatus_Success Successfully configured.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
-void SPC_SetDCDCBurstConfig(SPC_Type *base, spc_dcdc_burst_config_t *config)
+status_t SPC_SetDCDCBurstConfig(SPC_Type *base, spc_dcdc_burst_config_t *config)
 {
     assert(config != NULL);
 
     uint32_t reg;
+
+#if SPC_DCDC_ACK_TIMEOUT
+    uint32_t timeout = SPC_DCDC_ACK_TIMEOUT;
+#endif
 
     reg = base->DCDC_CFG;
 
@@ -1273,11 +1334,19 @@ void SPC_SetDCDCBurstConfig(SPC_Type *base, spc_dcdc_burst_config_t *config)
 
         while ((base->DCDC_BURST_CFG & SPC_DCDC_BURST_CFG_BURST_ACK_MASK) == 0U)
         {
+#if SPC_DCDC_ACK_TIMEOUT
+            if ((--timeout) == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
 
         /* DCDC burst request has completed and acknowledged, need to clear this flag. */
         base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_BURST_ACK_MASK;
     }
+
+    return kStatus_Success;
 }
 
 /*!
@@ -1314,12 +1383,16 @@ void SPC_SetDCDCRefreshCount(SPC_Type *base, uint16_t count)
  * retval kStatus_SPC_SYSLDOOverDriveVoltageFail Fail to regulator to Over Drive Voltage.
  * retval kStatus_SPC_SYSLDOLowDriveStrengthIgnore Set driver strength to Low will be ignored.
  * retval kStatus_SPC_DCDCLowDriveStrengthIgnore Set driver strength to Low will be ignored.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetActiveModeRegulatorsConfig(SPC_Type *base, const spc_active_mode_regulators_config_t *config)
 {
     assert(config != NULL);
 
     status_t status;
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
     status = SPC_SetActiveModeCoreLDORegulatorConfig(base, &config->CoreLDOOption);
     if (status == kStatus_Success)
@@ -1328,7 +1401,14 @@ status_t SPC_SetActiveModeRegulatorsConfig(SPC_Type *base, const spc_active_mode
         if (status == kStatus_Success)
         {
             while(SPC_GetBusyStatusFlag(base) == true)
-            {}
+            {
+#if SPC_BUSY_TIMEOUT
+                if ((--timeout) == 0U)
+                {
+                    status = kStatus_Timeout;
+                }
+#endif
+            }
             status = SPC_SetActiveModeSystemLDORegulatorConfig(base, &config->SysLDOOption);
             if (status == kStatus_Success)
             {
@@ -1394,22 +1474,37 @@ status_t SPC_SetLowPowerModeRegulatorsConfig(SPC_Type *base, const spc_lowpower_
  *
  * param base SPC peripheral base address.
  * param voltage Target SRAM operate voltage level, please refer to spc_sram_operat_voltage_t.
+ *
+ * retval kStatus_Success Successfully configured.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
-void SPC_SetSRAMOperateVoltage(SPC_Type *base, spc_sram_operat_voltage_t voltage)
+status_t SPC_SetSRAMOperateVoltage(SPC_Type *base, spc_sram_operat_voltage_t voltage)
 {
-    // Configure SRAM to support new voltage level.
+#if SPC_SRAM_ACK_TIMEOUT
+    uint32_t timeout = SPC_SRAM_ACK_TIMEOUT;
+#endif
+
+    /* Configure SRAM to support new voltage level. */
     base->SRAMCTL = ((base->SRAMCTL & ~SPC_SRAMCTL_VSM_MASK) | (SPC_SRAMCTL_VSM(voltage)));
 
-    // Request SRAM voltage update
+    /* Request SRAM voltage update. */
     base->SRAMCTL |= SPC_SRAMCTL_REQ_MASK;
 
-    // Wait for SRAM voltage update complete
+    /* Wait for SRAM voltage update complete. */
     while ((base->SRAMCTL & SPC_SRAMCTL_ACK_MASK) == 0U)
     {
+#if SPC_SRAM_ACK_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
-    // Clear SRAM voltage update request
+    /* Clear SRAM voltage update request. */
     base->SRAMCTL &= ~SPC_SRAMCTL_REQ_MASK;
+
+    return kStatus_Success;
 }
 
 #if (defined(FSL_FEATURE_SPC_HAS_HP_CFG_REG) && FSL_FEATURE_SPC_HAS_HP_CFG_REG)
@@ -1480,11 +1575,16 @@ status_t SPC_SetHighPowerModeBandgapModeConfig(SPC_Type *base, spc_bandgap_mode_
  * retval #kStatus_SPC_CORELDOLowDriveStrengthIgnore If any voltage detect enabled, core_ldo's drive strength can not
  * set to low.
  * retval #kStatus_SPC_CORELDOVoltageWrong The selected voltage level in high power mode is not allowed.
+ * retval #kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetHighPowerModeCoreLDORegulatorConfig(SPC_Type *base,  spc_hp_mode_core_ldo_option_t *option)
 {
     spc_core_ldo_voltage_level_t preVoltage;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -1528,13 +1628,17 @@ status_t SPC_SetHighPowerModeCoreLDORegulatorConfig(SPC_Type *base,  spc_hp_mode
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -1549,6 +1653,7 @@ status_t SPC_SetHighPowerModeCoreLDORegulatorConfig(SPC_Type *base,  spc_hp_mode
  * retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
  * retval #kStatus_SPC_SYSLDOOverDriveVoltageFail Fail to regulator to Over Drive Voltage.
  * retval #kStatus_SPC_SYSLDOLowDriveStrengthIgnore Set driver strength to Low will be ignored.
+ * retval #kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetHighPowerModeSystemLDORegulatorConfig(SPC_Type *base, spc_hp_mode_sys_ldo_option_t *option)
 {
@@ -1556,6 +1661,10 @@ status_t SPC_SetHighPowerModeSystemLDORegulatorConfig(SPC_Type *base, spc_hp_mod
 
     uint32_t reg;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if (defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY) 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -1610,13 +1719,17 @@ status_t SPC_SetHighPowerModeSystemLDORegulatorConfig(SPC_Type *base, spc_hp_mod
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }
@@ -1630,6 +1743,7 @@ status_t SPC_SetHighPowerModeSystemLDORegulatorConfig(SPC_Type *base, spc_hp_mod
  * retval #kStatus_Success Config DCDC regulator in Active power mode successful.
  * retval #kStatus_SPC_Busy The SPC instance is busy to execute any type of power mode transition.
  * retval #kStatus_SPC_DCDCLowDriveStrengthIgnore Set driver strength to Low will be ignored.
+ * retval #kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetHighPowerModeDCDCRegulatorConfig(SPC_Type *base, spc_hp_mode_dcdc_option_t *option)
 {
@@ -1637,6 +1751,10 @@ status_t SPC_SetHighPowerModeDCDCRegulatorConfig(SPC_Type *base, spc_hp_mode_dcd
 
     uint32_t reg;
     uint32_t state;
+
+#if SPC_BUSY_TIMEOUT
+    uint32_t timeout = SPC_BUSY_TIMEOUT;
+#endif
 
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     if ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
@@ -1673,13 +1791,17 @@ status_t SPC_SetHighPowerModeDCDCRegulatorConfig(SPC_Type *base, spc_hp_mode_dcd
      */
 #if defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY 
     while ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL)
-    {
-    }
 #else
     while ((base->SC & SPC_SC_BUSY_MASK) != 0UL)
-    {
-    }
 #endif
+    {
+#if SPC_BUSY_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
+    }
 
     return kStatus_Success;
 }

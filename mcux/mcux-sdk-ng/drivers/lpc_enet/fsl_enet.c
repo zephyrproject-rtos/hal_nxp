@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -952,15 +952,15 @@ void ENET_GetMacAddr(ENET_Type *base, uint8_t *macAddr)
     uint32_t address = base->MAC_ADDR_LOW;
 
     /* Get from physical address lower register. */
-    macAddr[2] = (uint8_t)(0xFFU & (address >> 24U));
-    macAddr[3] = (uint8_t)(0xFFU & (address >> 16U));
-    macAddr[4] = (uint8_t)(0xFFU & (address >> 8U));
-    macAddr[5] = (uint8_t)(0xFFU & address);
+    macAddr[3] = (uint8_t)(0xFFU & (address >> 24U));
+    macAddr[2] = (uint8_t)(0xFFU & (address >> 16U));
+    macAddr[1] = (uint8_t)(0xFFU & (address >> 8U));
+    macAddr[0] = (uint8_t)(0xFFU & address);
 
     /* Get from physical address high register. */
     address    = base->MAC_ADDR_HIGH;
-    macAddr[0] = (uint8_t)(0xFFU & (address >> 8U));
-    macAddr[1] = (uint8_t)(0xFFU & address);
+    macAddr[5] = (uint8_t)(0xFFU & (address >> 8U));
+    macAddr[4] = (uint8_t)(0xFFU & address);
 }
 
 /*!

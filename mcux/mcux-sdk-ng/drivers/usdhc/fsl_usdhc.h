@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Driver version 2.8.4. */
-#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 4U))
+/*! @brief Driver version 2.8.5. */
+#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 5U))
 /*! @} */
 
 /*! @brief Maximum block count can be set one time */

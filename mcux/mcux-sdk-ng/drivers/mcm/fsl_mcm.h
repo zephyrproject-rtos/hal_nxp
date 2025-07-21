@@ -1,6 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
- * All rights reserved.
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +21,6 @@
 #define MCM_LMFATR_BUFF_MASK (0x4U)
 #define MCM_LMFATR_CACH_MASK (0x8U)
 #define MCM_ISCR_STAT_MASK   (0xFFFFU)
-#define MCM_ISCR_CPEE_MASK   (0x200000U)
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
@@ -32,7 +30,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MCM driver version. */
-#define FSL_MCM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_MCM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*! @brief Enum _mcm_interrupt_flag. Interrupt status flag mask.
@@ -40,8 +38,12 @@
  */
 enum
 {
+#if !(defined(FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR) && (FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR == 0))
     kMCM_CacheWriteBuffer          = MCM_ISCR_CWBEE_MASK, /*!< Cache Write Buffer Error Enable. */
+#endif
+#if !(defined(FSL_FEATURE_MCM_HAS_CACHE_PARITY_ERROR) && (FSL_FEATURE_MCM_HAS_CACHE_PARITY_ERROR == 0))
     kMCM_ParityError               = MCM_ISCR_CPEE_MASK,  /*!< Cache Parity Error Enable. */
+#endif
     kMCM_FPUInvalidOperation       = MCM_ISCR_FIOCE_MASK, /*!< FPU Invalid Operation Interrupt Enable. */
     kMCM_FPUDivideByZero           = MCM_ISCR_FDZCE_MASK, /*!< FPU Divide-by-zero Interrupt Enable. */
     kMCM_FPUOverflow               = MCM_ISCR_FOFCE_MASK, /*!< FPU Overflow Interrupt Enable. */
@@ -50,10 +52,10 @@ enum
     kMCM_FPUInputDenormalInterrupt = MCM_ISCR_FIDCE_MASK, /*!< FPU Input Denormal Interrupt Enable. */
 };
 
+#if !(defined(FSL_FEATURE_MCM_HAS_BUFFER_FAULT) && (FSL_FEATURE_MCM_HAS_BUFFER_FAULT == 0))
 /*!
  * @brief The union of buffer fault attribute.
  */
-
 typedef union _mcm_buffer_fault_attribute
 {
     uint32_t attribute; /*!< Indicates the faulting attributes, when a properly-enabled cache write buffer
@@ -72,7 +74,9 @@ typedef union _mcm_buffer_fault_attribute
         uint32_t busErrorOverrun : 1; /*!< Indicates if another cache write buffer bus error is detected. */
     } attribute_memory;
 } mcm_buffer_fault_attribute_t;
+#endif /* FSL_FEATURE_MCM_HAS_BUFFER_FAULT */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_LMEM_FAULT) && (FSL_FEATURE_MCM_HAS_LMEM_FAULT == 0))
 /*!
  * @brief The union of LMEM fault attribute.
  */
@@ -93,6 +97,7 @@ typedef union _mcm_lmem_fault_attribute
         uint32_t overrun : 1; /*!< Indicates the number of faultss. */
     } attribute_memory;
 } mcm_lmem_fault_attribute_t;
+#endif /* FSL_FEATURE_MCM_HAS_LMEM_FAULT */
 
 /*****************************************************************************
  * API
@@ -112,6 +117,7 @@ extern "C" {
  */
 static inline void MCM_EnableCrossbarRoundRobin(MCM_Type *base, bool enable)
 {
+#if defined(MCM_CPCR_CBRR_MASK)
     if (enable)
     {
         base->CPCR |= MCM_CPCR_CBRR_MASK;
@@ -120,6 +126,18 @@ static inline void MCM_EnableCrossbarRoundRobin(MCM_Type *base, bool enable)
     {
         base->CPCR &= ~MCM_CPCR_CBRR_MASK;
     }
+#elif defined(MCM_CPCR_CM7_AHBSPRI_MASK)
+    if (enable)
+    {
+        base->CPCR &= ~MCM_CPCR_CM7_AHBSPRI_MASK;
+    }
+    else
+    {
+        base->CPCR |= MCM_CPCR_CM7_AHBSPRI_MASK;
+    }
+#else
+#error Unsupported MCM peripheral
+#endif
 }
 
 /*!
@@ -154,6 +172,7 @@ static inline uint16_t MCM_GetInterruptStatus(MCM_Type *base)
     return (uint16_t)(base->ISCR &= MCM_ISCR_STAT_MASK);
 }
 
+#if !(defined(FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR) && (FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR == 0))
 /*!
  * @brief Clears the Interrupt status .
  *
@@ -163,7 +182,9 @@ static inline void MCM_ClearCacheWriteBufferErroStatus(MCM_Type *base)
 {
     base->ISCR &= ~MCM_ISCR_CWBER_MASK;
 }
+#endif /* FSL_FEATURE_MCM_HAS_CACHE_WRITE_BUFFER_ERROR */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_BUFFER_FAULT) && (FSL_FEATURE_MCM_HAS_BUFFER_FAULT == 0))
 /*!
  * @brief Gets buffer fault address.
  *
@@ -194,7 +215,9 @@ static inline uint32_t MCM_GetBufferFaultData(MCM_Type *base)
 {
     return base->FDR;
 }
+#endif /* FSL_FEATURE_MCM_HAS_BUFFER_FAULT */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_CPCR2) && (FSL_FEATURE_MCM_HAS_CPCR2 == 0))
 /*!
  * @brief Limit code cache peripheral write buffering.
  *
@@ -304,7 +327,9 @@ static inline void MCM_ClearCodeBusCache(MCM_Type *base)
 {
     base->CPCR2 |= MCM_CPCR2_CCBC_MASK;
 }
+#endif /* FSL_FEATURE_MCM_HAS_CPCR2 */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_PC_PARITY) && (FSL_FEATURE_MCM_HAS_PC_PARITY == 0))
 /*!
  * @brief Enables/Disables PC Parity Fault Report.
  *
@@ -344,7 +369,9 @@ static inline void MCM_EnablePcParity(MCM_Type *base, bool enable)
         base->LMDR2 &= ~MCM_LMDR2_PCPME_MASK;
     }
 }
+#endif /* FSL_FEATURE_MCM_HAS_PC_PARITY */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_LMD_RO) && (FSL_FEATURE_MCM_HAS_LMD_RO == 0))
 /*!
  * @brief Lock the configuration state.
  *
@@ -354,7 +381,9 @@ static inline void MCM_LockConfigState(MCM_Type *base)
 {
     base->LMDR2 |= MCM_LMDR2_RO_MASK;
 }
+#endif /* FSL_FEATURE_MCM_HAS_LMD_RO */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_LMEM_PARITY) && (FSL_FEATURE_MCM_HAS_LMEM_PARITY == 0))
 /*!
  * @brief Enables/Disables cache parity reporting.
  *
@@ -374,7 +403,9 @@ static inline void MCM_EnableCacheParityReporting(MCM_Type *base, bool enable)
         base->LMPECR &= ~MCM_LMPECR_ECPR_MASK;
     }
 }
+#endif /* FSL_FEATURE_MCM_HAS_LMEM_PARITY */
 
+#if !(defined(FSL_FEATURE_MCM_HAS_LMEM_FAULT) && (FSL_FEATURE_MCM_HAS_LMEM_FAULT == 0))
 /*!
  * @brief Gets LMEM fault address.
  *
@@ -405,6 +436,7 @@ static inline uint64_t MCM_GetLmemFaultData(MCM_Type *base)
 {
     return ((uint64_t)base->LMFDHR << 32) | base->LMFDLR;
 }
+#endif /* FSL_FEATURE_MCM_HAS_LMEM_FAULT */
 
 #if defined(__cplusplus)
 }

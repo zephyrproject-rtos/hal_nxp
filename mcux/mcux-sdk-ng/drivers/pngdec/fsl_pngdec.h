@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PNGDEC driver version 2.0.0. */
-#define FSL_PNGDEC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief PNGDEC driver version. */
+#define FSL_PNGDEC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief Error codes for the PNGDEC driver. */

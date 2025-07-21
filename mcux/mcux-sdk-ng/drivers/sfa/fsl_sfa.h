@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,54 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SFA driver version 2.1.2 */
-#define FSL_SFA_DRVIER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief SFA driver version 2.1.3 */
+#define FSL_SFA_DRVIER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @} */
+
+/*! @name Configuration */
+
+/*!
+ * @brief Max loops to wait for SFA measurement started
+ *
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef SFA_MEASUREMENT_START_TIMEOUT
+    #ifdef CONFIG_SFA_MEASUREMENT_START_TIMEOUT
+        #define SFA_MEASUREMENT_START_TIMEOUT CONFIG_SFA_MEASUREMENT_START_TIMEOUT
+    #else
+        #define SFA_MEASUREMENT_START_TIMEOUT 0U
+    #endif
+#endif
+
+/*!
+ * @brief Max loops to wait for SFA CUT counter has stopped
+ *
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef SFA_CUT_COUNTER_STOP_TIMEOUT
+    #ifdef CONFIG_SFA_CUT_COUNTER_STOP_TIMEOUT
+        #define SFA_CUT_COUNTER_STOP_TIMEOUT CONFIG_SFA_CUT_COUNTER_STOP_TIMEOUT
+    #else
+        #define SFA_CUT_COUNTER_STOP_TIMEOUT 0U
+    #endif
+#endif
+
+/*!
+ * @brief Max loops to wait for SFA REF counter has stopped
+ *
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef SFA_REF_COUNTER_STOP_TIMEOUT
+    #ifdef CONFIG_SFA_REF_COUNTER_STOP_TIMEOUT
+        #define SFA_REF_COUNTER_STOP_TIMEOUT CONFIG_SFA_REF_COUNTER_STOP_TIMEOUT
+    #else
+        #define SFA_REF_COUNTER_STOP_TIMEOUT 0U
+    #endif
+#endif
+
 /*! @} */
 
 #define SFA_CUT_CLK_Enable(val) SFA_CTRL_EXT_CUT_CLK_EN(1UL << (uint32_t)(val))
@@ -246,8 +292,11 @@ void SFA_Init(SFA_Type *base);
  * @brief Clear counter, disable SFA and gate the SFA clock.
  *
  * @param base SFA peripheral base address.
+ * 
+ * @retval kStatus_Success run success.
+ * @retval kStatus_Timeout timeout occurs.
  */
-void SFA_Deinit(SFA_Type *base);
+status_t SFA_Deinit(SFA_Type *base);
 
 /*!
  * @brief Control the connection of the clock under test to an external pin.

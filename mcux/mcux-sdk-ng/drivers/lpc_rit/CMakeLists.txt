@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.rit)
-    mcux_component_version(2.1.1)
+    mcux_component_version(2.1.2)
 
     mcux_add_source(SOURCES fsl_rit.h fsl_rit.c)
 

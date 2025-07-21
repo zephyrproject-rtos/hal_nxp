@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2022, 2024 NXP
- * All rights reserved.
+ * Copyright 2020-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +19,7 @@
  ******************************************************************************/
 
 /*! @brief DAC driver version */
-#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
+#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
 
 /*!
  *  @brief DAC channel A wave mode check

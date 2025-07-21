@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
- * All rights reserved.
+ * Copyright 2016-2022, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,13 +19,13 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 8, 4)) /*!< Version 2.8.4 */
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 9, 0)) /*!< Version 2.9.0 */
 /*! @} */
 
 /*! Number of bits per submodule for software output control */
 #define PWM_SUBMODULE_SWCONTROL_WIDTH 2
-/*! Because setting the pwm duty cycle doesn't support PWMX, getting the pwm duty cycle also doesn't support PWMX. */
-#define PWM_SUBMODULE_CHANNEL 2
+/*! Submodule channels include PWMA, PWMB, PWMX. */
+#define PWM_SUBMODULE_CHANNEL 3
 
 /*! @brief List of PWM submodules */
 typedef enum _pwm_submodule
@@ -449,7 +448,14 @@ extern "C" {
 /*!
  * @brief Ungates the PWM submodule clock and configures the peripheral for basic operation.
  *
- * @note This API should be called at the beginning of the application using the PWM driver.
+ * This API should be called at the beginning of the application using the PWM driver.
+ * When user select PWMX, user must choose edge aligned output, becasue there are some limitation on center
+ * aligned PWMX output.
+ * When output PWMX in center aligned mode, VAL1 register controls both PWM period and PWMX duty cycle, PWMA
+ * and PWMB output will be corrupted. But edge aligned PWMX output do not have such limit.
+ * In master reload counter initialization mode, PWM period is depended by period of set LDOK in submodule 0
+ * because this operation will reload register.
+ * Submodule 0 counter initialization cannot be master sync or master reload.
  *
  * @param base      PWM peripheral base address
  * @param subModule PWM submodule to configure
@@ -498,14 +504,18 @@ void PWM_GetDefaultConfig(pwm_config_t *config);
  *
  * The function initializes the submodule according to the parameters passed in by the user. The function
  * also sets up the value compare registers to match the PWM signal requirements.
- * If the dead time insertion logic is enabled, the pulse period is reduced by the
- * dead time period specified by the user.
+ * If the dead time insertion logic is enabled, the pulse period is reduced by the dead time period specified
+ * by the user.
+ * When user select PWMX, user must choose edge aligned output, becasue there are some limitation on center
+ * aligned PWMX output.
+ * Due to edge aligned PWMX is negative true signal, need to configure PWMX active low true level to get
+ * correct duty cycle. The half cycle point will not be exactly in the middle of the PWM cycle when PWMX enabled.
  *
  * @param base        PWM peripheral base address
  * @param subModule   PWM submodule to configure
- * @param chnlParams  Array of PWM channel parameters to configure the channel(s), PWMX submodule is not supported.
+ * @param chnlParams  Array of PWM channel parameters to configure the channel(s).
  * @param numOfChnls  Number of channels to configure, this should be the size of the array passed in.
- *                    Array size should not be more than 2 as each submodule has 2 pins to output PWM
+ *                    Array size should not be more than 3 as each submodule has 3 pins to output PWM.
  * @param mode        PWM operation mode, options available in enumeration ::pwm_mode_t
  * @param pwmFreq_Hz  PWM signal frequency in Hz
  * @param srcClock_Hz PWM source clock of correspond submodule in Hz. If source clock of submodule1,2,3 is from
@@ -553,7 +563,7 @@ status_t PWM_SetupPwmPhaseShift(PWM_Type *base,
  *
  * @param base              PWM peripheral base address
  * @param subModule         PWM submodule to configure
- * @param pwmSignal         Signal (PWM A or PWM B) to update
+ * @param pwmSignal         Signal (PWM A, PWM B, PWM X) to update
  * @param currPwmMode       The current PWM mode set during PWM setup
  * @param dutyCyclePercent  New PWM pulse width, value should be between 0 to 100
  *                          0=inactive signal(0% duty cycle)...
@@ -574,7 +584,7 @@ void PWM_UpdatePwmDutycycle(PWM_Type *base,
  *
  * @param base              PWM peripheral base address
  * @param subModule         PWM submodule to configure
- * @param pwmSignal         Signal (PWM A or PWM B) to update
+ * @param pwmSignal         Signal (PWM A, PWM B, PWM X) to update
  * @param currPwmMode       The current PWM mode set during PWM setup
  * @param dutyCycle         New PWM pulse width, value should be between 0 to 65535
  *                          0=inactive signal(0% duty cycle)...
@@ -693,7 +703,13 @@ void PWM_SetupForceSignal(PWM_Type *base,
  * @param mask      The interrupts to enable. This is a logical OR of members of the
  *                  enumeration ::pwm_interrupt_enable_t
  */
-void PWM_EnableInterrupts(PWM_Type *base, pwm_submodule_t subModule, uint32_t mask);
+static inline void PWM_EnableInterrupts(PWM_Type *base, pwm_submodule_t subModule, uint32_t mask)
+{
+    /* Upper 16 bits are for related to the submodule */
+    base->SM[subModule].INTEN |= ((uint16_t)mask & 0xFFFFU);
+    /* Fault related interrupts */
+    base->FCTRL |= ((uint16_t)(mask >> 16U) & PWM_FCTRL_FIE_MASK);
+}
 
 /*!
  * @brief Disables the selected PWM interrupts
@@ -703,7 +719,11 @@ void PWM_EnableInterrupts(PWM_Type *base, pwm_submodule_t subModule, uint32_t ma
  * @param mask      The interrupts to enable. This is a logical OR of members of the
  *                  enumeration ::pwm_interrupt_enable_t
  */
-void PWM_DisableInterrupts(PWM_Type *base, pwm_submodule_t subModule, uint32_t mask);
+static inline void PWM_DisableInterrupts(PWM_Type *base, pwm_submodule_t subModule, uint32_t mask)
+{
+    base->SM[subModule].INTEN &= ~((uint16_t)mask & 0xFFFFU);
+    base->FCTRL &= ~((uint16_t)(mask >> 16U) & PWM_FCTRL_FIE_MASK);
+}
 
 /*!
  * @brief Gets the enabled PWM interrupts
@@ -714,7 +734,14 @@ void PWM_DisableInterrupts(PWM_Type *base, pwm_submodule_t subModule, uint32_t m
  * @return The enabled interrupts. This is the logical OR of members of the
  *         enumeration ::pwm_interrupt_enable_t
  */
-uint32_t PWM_GetEnabledInterrupts(PWM_Type *base, pwm_submodule_t subModule);
+static inline uint32_t PWM_GetEnabledInterrupts(PWM_Type *base, pwm_submodule_t subModule)
+{
+    uint32_t enabledInterrupts;
+
+    enabledInterrupts = base->SM[subModule].INTEN;
+    enabledInterrupts |= (((uint32_t)base->FCTRL & PWM_FCTRL_FIE_MASK) << 16UL);
+    return enabledInterrupts;
+}
 
 /*! @}*/
 
@@ -825,7 +852,15 @@ static inline void PWM_EnableDMAWrite(PWM_Type *base, pwm_submodule_t subModule,
  * @return The status flags. This is the logical OR of members of the
  *         enumeration ::pwm_status_flags_t
  */
-uint32_t PWM_GetStatusFlags(PWM_Type *base, pwm_submodule_t subModule);
+static inline uint32_t PWM_GetStatusFlags(PWM_Type *base, pwm_submodule_t subModule)
+{
+    uint32_t statusFlags;
+
+    statusFlags = base->SM[subModule].STS;
+    statusFlags |= (((uint32_t)base->FSTS & PWM_FSTS_FFLAG_MASK) << 16UL);
+
+    return statusFlags;
+}
 
 /*!
  * @brief Clears the PWM status flags
@@ -835,7 +870,19 @@ uint32_t PWM_GetStatusFlags(PWM_Type *base, pwm_submodule_t subModule);
  * @param mask      The status flags to clear. This is a logical OR of members of the
  *                  enumeration ::pwm_status_flags_t
  */
-void PWM_ClearStatusFlags(PWM_Type *base, pwm_submodule_t subModule, uint32_t mask);
+static inline void PWM_ClearStatusFlags(PWM_Type *base, pwm_submodule_t subModule, uint32_t mask)
+{
+    uint16_t reg;
+
+    base->SM[subModule].STS = ((uint16_t)mask & 0xFFFFU);
+    reg                     = base->FSTS;
+    /* Clear the fault flags and set only the ones we wish to clear as the fault flags are cleared
+     * by writing a login one
+     */
+    reg &= ~(uint16_t)(PWM_FSTS_FFLAG_MASK);
+    reg |= (uint16_t)((mask >> 16U) & PWM_FSTS_FFLAG_MASK);
+    base->FSTS = reg;
+}
 
 /*! @}*/
 

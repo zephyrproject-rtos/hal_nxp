@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2025 NXP
  * All rights reserved.
  *
  *
@@ -755,6 +755,10 @@ status_t PUF_GetHwKey(
         case kPUF_KeySlot3:
             keyMask_reg = &base->KEYMASK[3];
             break;
+
+        case kPUF_KeySlot4:
+            keyMask_reg = &base->KEYMASK[4];
+            break;
 #endif /* PUF_KEYMASK_COUNT > 2 */
         default:
             status = kStatus_InvalidArgument;
@@ -947,3 +951,19 @@ status_t PUF_Zeroize(PUF_Type *base)
 
     return status;
 }
+
+#if defined(FSL_FEATURE_PUF_HAS_KEYRESET) && (FSL_FEATURE_PUF_HAS_KEYRESET > 0)
+/*!
+ * brief PUF HW Key Register Clearing
+ *
+ * This function clears a desired PUF internal HW key register.
+ *
+ * param base PUF peripheral base address
+ * param keySlot Slot of the HW key to be cleared.
+ */
+void PUF_ClearKey(PUF_Type *base, puf_key_slot_t keySlot)
+{
+    uint32_t regVal = ((uint32_t)2U << ((uint32_t)2U * (uint32_t)keySlot));
+    base->KEYRESET  = regVal;
+}
+#endif /* FSL_FEATURE_PUF_HAS_KEYRESET */

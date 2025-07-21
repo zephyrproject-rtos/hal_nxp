@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2024 NXP
- * All rights reserved.
+ * Copyright 2020-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,7 +18,7 @@
  ******************************************************************************/
 
 /*! @brief ADC driver version */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1. */
 
 /*!
  * @brief The enumeration of interrupts, this enumeration can be used to enable/disable interrupts.

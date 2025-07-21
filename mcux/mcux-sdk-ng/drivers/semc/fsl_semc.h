@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 NXP
+ * Copyright 2017-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SEMC driver version. */
-#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
 /*! @} */
 
 /*! @brief SEMC status, _semc_status. */

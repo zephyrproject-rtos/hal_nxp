@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 9, 1)) /*!< Version 2.9.1 */
+#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 9, 2)) /*!< Version 2.9.2 */
 /*! @} */
 
 /*! @brief PDM XFER QUEUE SIZE */
@@ -780,7 +780,13 @@ static inline uint32_t PDM_GetDataRegisterAddress(PDM_Type *base, uint32_t chann
  */
 static inline int16_t PDM_ReadData(PDM_Type *base, uint32_t channel)
 {
-    return (int16_t)(base->DATACH[channel]);
+    uint32_t rawData = base->DATACH[channel];
+    // Clamp the value to the int16_t range
+    if (rawData > INT16_MAX) {
+        return INT16_MAX;
+    }
+
+    return (int16_t)rawData;
 }
 
 /*!
@@ -1038,7 +1044,13 @@ void PDM_SetHwvadZeroCrossDetectorConfig(PDM_Type *base, const pdm_hwvad_zero_cr
  */
 static inline uint16_t PDM_GetNoiseData(PDM_Type *base)
 {
-    return (uint16_t)base->VAD0_NDATA;
+    uint32_t noiseData = base->VAD0_NDATA;
+    if (noiseData > UINT16_MAX)
+    {
+        return UINT16_MAX;  // Saturate to maximum 16-bit value
+    }
+
+    return (uint16_t)noiseData;
 }
 
 /*!

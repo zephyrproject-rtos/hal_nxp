@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines WDOG driver version 2.0.1. */
-#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief Defines WDOG driver version 2.0.2. */
+#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @name Unlock sequence */
@@ -36,6 +36,9 @@
 #define WDOG_FIRST_WORD_OF_REFRESH  (0xA602U) /*!< First word of refresh sequence */
 #define WDOG_SECOND_WORD_OF_REFRESH (0xB480U) /*!< Second word of refresh sequence */
 /*! @} */
+
+/*!< Watchdog configuration time window */
+#define WDOG_WCT_INSTRUCITON_COUNT (256U)
 
 /*! @brief Describes WDOG clock source. */
 typedef enum _wdog_clock_source
@@ -389,6 +392,7 @@ static inline uint16_t WDOG_GetResetCount(WDOG_Type *base)
 {
     return base->RSTCNT;
 }
+
 /*!
  * @brief Clears the WDOG reset count.
  *

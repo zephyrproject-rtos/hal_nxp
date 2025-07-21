@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 - 2024 NXP
+ * Copyright 2022 - 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief cache driver version. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
 
 /*! @brief cache line size. */

@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexcomm_usart_dma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexcomm_usart)
-    mcux_component_version(2.3.3)
+    mcux_component_version(2.8.5)
 
     mcux_add_source(SOURCES fsl_usart.h fsl_usart.c)
 

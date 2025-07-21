@@ -1,6 +1,5 @@
 /*
- * Copyright 2019-2021, 2023 NXP
- * All rights reserved.
+ * Copyright 2019-2021, 2023-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -70,7 +69,7 @@ status_t FLEXIO_QSPI_TransferCreateHandleSMARTDMA(FLEXIO_QSPI_Type *base,
     handle->userData = userData;
     handle->base     = base;
 
-    SMARTDMA_InstallFirmware(SMARTDMA_DISPLAY_MEM_ADDR, s_smartdmaDisplayFirmware, SMARTDMA_DISPLAY_FIRMWARE_SIZE);
+    SMARTDMA_InstallFirmware(SMARTDMA_QSPI_MEM_ADDR, s_smartdmaQspiFirmware, SMARTDMA_QSPI_FIRMWARE_SIZE);
 
     SMARTDMA_InstallCallback(FLEXIO_QSPI_SMARTDMA_Callback, handle);
 

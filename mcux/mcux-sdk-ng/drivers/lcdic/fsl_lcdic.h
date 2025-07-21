@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*! @brief Delay used in LCDIC_ResetState
@@ -29,7 +29,35 @@
  * This should be larger than 5 * core clock / LCDIC function clock.
  */
 #ifndef LCDIC_RESET_STATE_DELAY
-#define LCDIC_RESET_STATE_DELAY 130u
+    #ifdef CONFIG_LCDIC_RESET_STATE_DELAY
+        #define LCDIC_RESET_STATE_DELAY CONFIG_LCDIC_RESET_STATE_DELAY
+    #else
+        #define LCDIC_RESET_STATE_DELAY 130u
+    #endif
+#endif
+
+/*! @brief How many loops the driver will wait when waiting for command execution done.
+ *
+ * LCDIC hardware provides command timeout (kLCDIC_CmdTimeoutInterrupt) and
+ * TE timeout feature (kLCDIC_TeTimeoutInterrupt). When LCDIC driver waits for
+ * a command finish, it checks the hardware timeout flags, and returns directly when
+ * timeout occurs.
+ *
+ * Besides the hardware timeout, LCDIC driver provides a software timeout feature,
+ * macro LCDIC_WAIT_CMD_DONE_TIMEOUT defines how many times will LCDIC driver
+ * check the hardware flags while waiting for command execution done.
+ * If kLCDIC_CmdDoneInterrupt, kLCDIC_CmdTimeoutInterrupt, and kLCDIC_TeTimeoutInterrupt
+ * flags are not set after LCDIC_WAIT_CMD_DONE_TIMEOUT times check, LCDIC driver
+ * will return kStatus_Timeout.
+ *
+ * Define LCDIC_WAIT_CMD_DONE_TIMEOUT as 0 will disable this software timeout feature.
+ */
+#ifndef LCDIC_WAIT_CMD_DONE_TIMEOUT
+    #ifdef CONFIG_LCDIC_WAIT_CMD_DONE_TIMEOUT
+        #define LCDIC_WAIT_CMD_DONE_TIMEOUT CONFIG_LCDIC_WAIT_CMD_DONE_TIMEOUT
+    #else
+        #define LCDIC_WAIT_CMD_DONE_TIMEOUT 0U
+    #endif
 #endif
 
 /* Max data send or receive in one TRX. */

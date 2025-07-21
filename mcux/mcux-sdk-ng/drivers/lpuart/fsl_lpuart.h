@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2024 NXP
- * All rights reserved.
+ * Copyright 2016-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPUART driver version. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 8, 2))
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 9, 1))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
@@ -260,6 +259,9 @@ typedef struct _lpuart_config
     lpuart_idle_config_t rxIdleConfig;        /*!< RX IDLE configuration. */
     bool enableTx;                            /*!< Enable TX */
     bool enableRx;                            /*!< Enable RX */
+#if defined(FSL_FEATURE_LPUART_HAS_CTRL_SWAP) && FSL_FEATURE_LPUART_HAS_CTRL_SWAP
+    bool swapTxdRxd;                          /*!< Swap TXD and RXD pins */
+#endif
 } lpuart_config_t;
 
 /*! @brief LPUART transfer structure. */
@@ -530,6 +532,7 @@ static inline void LPUART_EnableMatchAddress(LPUART_Type *base, bool match1, boo
  */
 static inline void LPUART_SetRxFifoWatermark(LPUART_Type *base, uint8_t water)
 {
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > water);
     base->WATER = (base->WATER & ~LPUART_WATER_RXWATER_MASK) | LPUART_WATER_RXWATER(water);
 }
@@ -542,6 +545,7 @@ static inline void LPUART_SetRxFifoWatermark(LPUART_Type *base, uint8_t water)
  */
 static inline void LPUART_SetTxFifoWatermark(LPUART_Type *base, uint8_t water)
 {
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > water);
     base->WATER = (base->WATER & ~LPUART_WATER_TXWATER_MASK) | LPUART_WATER_TXWATER(water);
 }
@@ -1116,6 +1120,15 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, void *irqHandle);
  * @param irqHandle LPUART handle pointer.
  */
 void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle);
+
+/*!
+ * @brief LPUART driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for LPUART.
+ *
+ * @param instance LPUART instance.
+ */
+void LPUART_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 

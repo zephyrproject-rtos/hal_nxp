@@ -13,14 +13,23 @@ Implementation file for CE wrapper/driver functions on ARM
 #include "fsl_mu.h"
 #include "fsl_ce.h"
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.ce"
+#endif
+
 void CE_Init(ce_copy_image_t *ceCopyImage)
 {
+#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
     assert(ceCopyImage->destAddr == CE_STCM5_BASE || ceCopyImage->destAddr == CE_STCM6_BASE ||
            ceCopyImage->destAddr == CE_STCM7_BASE);
 
     CE_InstallFirmware(ceCopyImage);
+#endif
+
     CE_InitWithoutFirmware();
 
+#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
     switch (ceCopyImage->destAddr)
     {
         case CE_STCM5_BASE:
@@ -36,10 +45,12 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
             MU_BootOtherCore(MUA, kMU_CoreBootFromSTCM5);
             break;
     }
+#endif
 }
 
 void CE_InstallFirmware(ce_copy_image_t *ceCopyImage)
 {
+#if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
     uint32_t dstAddr;
     uint32_t srcAddr;
     uint32_t size;
@@ -54,6 +65,7 @@ void CE_InstallFirmware(ce_copy_image_t *ceCopyImage)
     size    = ceCopyImage->size;
 
     memcpy((void *)(uint32_t *)dstAddr, (const void *)(uint32_t *)srcAddr, size);
+#endif
 }
 
 void CE_InitWithoutFirmware(void)

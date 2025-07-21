@@ -59,6 +59,10 @@ status_t FLASH_CMD_EraseSector(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
+#if defined(MCM_CPCR2_CCBC_MASK)
+    /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+    MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
+#endif
     flash_command_pre_sequence(base);
     /* preparing passing parameter to erase a sector flash */
     base->FCCOB[0] = FLASH_ERASE_SECTOR;
@@ -74,6 +78,10 @@ status_t FLASH_CMD_EraseAll(FMU_Type *base)
 {
     status_t returnCode = kStatus_Fail;
 
+#if defined(MCM_CPCR2_CCBC_MASK)
+    /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+    MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
+#endif
     flash_command_pre_sequence(base);
     /* preparing passing parameter to erase all flash blocks */
     base->FCCOB[0] = FLASH_ERASE_ALL;
@@ -89,6 +97,10 @@ status_t FLASH_CMD_ProgramPhrase(FMU_Type *base, uint32_t start, uint32_t *src)
     status_t returnCode = kStatus_Fail;
     uint8_t isPage      = 0;
 
+#if defined(MCM_CPCR2_CCBC_MASK)
+    /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+    MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
+#endif
     flash_command_pre_sequence(base);
     /* preparing passing parameter to program the flash block */
     base->FCCOB[0] = FLASH_PROGRAM_PHRASE;
@@ -104,6 +116,10 @@ status_t FLASH_CMD_ProgramPage(FMU_Type *base, uint32_t start, uint32_t *src)
     status_t returnCode = kStatus_Fail;
     uint8_t isPage      = 1;
 
+#if defined(MCM_CPCR2_CCBC_MASK)
+    /* Clear flash cache before every erase to prevent the possibility of returning stale data */
+    MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
+#endif
     flash_command_pre_sequence(base);
     /* preparing passing parameter to program the flash block */
     base->FCCOB[0] = FLASH_PROGRAM_PAGE;

@@ -227,27 +227,54 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
         uint8_t EEPROMDataSetSize;
         uint16_t reserved1;
     } dataIFRReadOut;
-    uint32_t flexnvmInfoIfrAddr;
-    status_t returnCode;
 
     if (config == NULL)
     {
         return kStatus_FTFx_InvalidArgument;
     }
 
-    flexnvmInfoIfrAddr =
-        config->ifrDesc.resRange.dflashIfrStart + config->ifrDesc.resRange.ifrMemSize - sizeof(dataIFRReadOut);
 
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD
     /* Get FlexNVM memory partition info from data flash IFR */
-    returnCode = FTFx_CMD_ReadResource(config, flexnvmInfoIfrAddr, (uint8_t *)&dataIFRReadOut, sizeof(dataIFRReadOut),
-                                       kFTFx_ResourceOptionFlashIfr);
-    if (returnCode != kStatus_FTFx_Success)
     {
-        return kStatus_FTFx_PartitionStatusUpdateFailure;
+        uint32_t flexnvmInfoIfrAddr;
+        status_t returnCode;
+                
+        flexnvmInfoIfrAddr =
+            config->ifrDesc.resRange.dflashIfrStart + config->ifrDesc.resRange.ifrMemSize - sizeof(dataIFRReadOut);
+        
+        returnCode = FTFx_CMD_ReadResource(config, flexnvmInfoIfrAddr, (uint8_t *)&dataIFRReadOut, sizeof(dataIFRReadOut),
+                                           kFTFx_ResourceOptionFlashIfr);
+        if (returnCode != kStatus_FTFx_Success)
+        {
+            return kStatus_FTFx_PartitionStatusUpdateFailure;
+        }
     }
+    
+#elif defined(SIM_FCFG1_DEPART_MASK)
+    {
+        uint32_t dflashSize;
+        uint32_t dflashTotalSize;
+        
+        dataIFRReadOut.FlexNVMPartitionCode = (uint8_t)((SIM->FCFG1 & SIM_FCFG1_DEPART_MASK) >> SIM_FCFG1_DEPART_SHIFT);
+        dflashSize = kDflashDensities[dataIFRReadOut.FlexNVMPartitionCode & 0x0FU];
+        dflashTotalSize = FSL_FEATURE_FLASH_FLEX_NVM_DFLASH_SIZE_FOR_DEPART_0000;
+        
+        if (dflashSize < dflashTotalSize)
+        {
+            dataIFRReadOut.EEPROMDataSetSize = (uint8_t)((SIM->FCFG1 & SIM_FCFG1_EEERAMSIZE_MASK) >> SIM_FCFG1_EEERAMSIZE_SHIFT);
+        }
+        else
+        {
+            /* EEPROM partition not set */
+            dataIFRReadOut.EEPROMDataSetSize = FSL_FEATURE_FLASH_FLEX_NVM_EEPROM_SIZE_FOR_EEESIZE_1111;
+        }
+    }
+
 #else
+    
 #error "Cannot get FlexNVM memory partition info"
+
 #endif /* FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD */
 
     /* Fill out partitioned EEPROM size */
@@ -441,6 +468,8 @@ status_t FTFx_CMD_EraseAllUnsecure(ftfx_config_t *config, uint32_t key)
 }
 #endif /* FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_UNSECURE_CMD */
 
+
+#if defined(FSL_FEATURE_FLASH_HAS_ERASE_ALL_EXECUTE_ONLY_SEGMENTS_CMD) && FSL_FEATURE_FLASH_HAS_ERASE_ALL_EXECUTE_ONLY_SEGMENTS_CMD
 /*!
  * @brief Erases all program flash execute-only segments defined by the FXACC registers.
  */
@@ -469,6 +498,7 @@ status_t FTFx_CMD_EraseAllExecuteOnlySegments(ftfx_config_t *config, uint32_t ke
 
     return returnCode;
 }
+#endif /* FSL_FEATURE_FLASH_HAS_ERASE_ALL_EXECUTE_ONLY_SEGMENTS_CMD */
 
 /*!
  * @brief Programs flash with data at locations passed in through parameters.
@@ -710,7 +740,9 @@ status_t FTFx_CMD_ProgramSection(ftfx_config_t *config, uint32_t start, const ui
 status_t FTFx_CMD_ProgramPartition(ftfx_config_t *config,
                                    ftfx_partition_flexram_load_opt_t option,
                                    uint32_t eepromDataSizeCode,
-                                   uint32_t flexnvmPartitionCode)
+                                   uint32_t flexnvmPartitionCode,
+                                   uint8_t CSEcKeySize,
+                                   uint8_t SFE)
 {
     status_t returnCode;
 
@@ -725,7 +757,7 @@ status_t FTFx_CMD_ProgramPartition(ftfx_config_t *config,
     /* flexnvmPartitionCode bit with 0x0FU; */
 
     /* preparing passing parameter to program the flash block */
-    kFCCOBx[0] = BYTE2WORD_1_2_1(FTFx_PROGRAM_PARTITION, 0xFFFFU, option);
+    kFCCOBx[0] = BYTE2WORD_1_1_1_1(FTFx_PROGRAM_PARTITION, CSEcKeySize, SFE, option);
     kFCCOBx[1] = BYTE2WORD_1_1_2(eepromDataSizeCode, flexnvmPartitionCode, 0xFFFFU);
 
     /* calling flash command sequence function to execute the command */
@@ -1189,18 +1221,26 @@ static void ftfx_init_ifr(ftfx_config_t *config)
     config->ifrDesc.feature.has8ByteIdxSupport = 1U;
     config->ifrDesc.idxInfo.mix8byteIdxStart   = 0x10U;
     config->ifrDesc.idxInfo.mix8byteIdxEnd     = 0x13U;
+
 #elif FSL_FEATURE_FLASH_IS_FTFE
     /* FTFE parts(eg. K65, KE18) only support 8-bytes unit size */
     config->ifrDesc.feature.has4ByteIdxSupport = 0U;
     config->ifrDesc.feature.has8ByteIdxSupport = 1U;
+
 #elif FSL_FEATURE_FLASH_IS_FTFL
     /* FTFL parts(eg. K20) only support 4-bytes unit size */
     config->ifrDesc.feature.has4ByteIdxSupport = 1U;
     config->ifrDesc.feature.has8ByteIdxSupport = 0U;
+
+#elif FSL_FEATURE_FLASH_IS_FTFC
+    config->ifrDesc.feature.has4ByteIdxSupport = 0U;
+    config->ifrDesc.feature.has8ByteIdxSupport = 1U;
+
 #endif
 
     config->ifrDesc.resRange.pflashIfrStart = 0x0000U;
     config->ifrDesc.resRange.versionIdSize  = 0x08U;
+
 #if FSL_FEATURE_FLASH_IS_FTFE
     config->ifrDesc.resRange.versionIdStart = 0x08U;
     config->ifrDesc.resRange.ifrMemSize     = 0x0400U;

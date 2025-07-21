@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C EDMA driver version. */
-#define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 9))
+#define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 10))
 /*! @} */
 
 /*!
@@ -30,15 +30,15 @@ typedef struct _i3c_master_edma_handle i3c_master_edma_handle_t;
 /*! @brief i3c master callback functions. */
 typedef struct _i3c_master_edma_callback
 {
-    void (*slave2Master)(I3C_Type *base, void *userData); /*!< Transfer complete callback */
+    void (*slave2Master)(I3C_Type *base, void *userData); /*!< Target asks for controller request. */
     void (*ibiCallback)(I3C_Type *base,
                         i3c_master_edma_handle_t *handle,
                         i3c_ibi_type_t ibiType,
-                        i3c_ibi_state_t ibiState); /*!< IBI event callback */
+                        i3c_ibi_state_t ibiState); /*!< IBI event callback. */
     void (*transferComplete)(I3C_Type *base,
                              i3c_master_edma_handle_t *handle,
                              status_t status,
-                             void *userData); /*!< Transfer complete callback */
+                             void *userData); /*!< Transfer complete callback. */
 } i3c_master_edma_callback_t;
 /*!
  * @brief Driver handle for master EDMA APIs.
@@ -56,10 +56,12 @@ struct _i3c_master_edma_handle
     void *userData;                      /*!< Application data passed to callback. */
     edma_handle_t *rxDmaHandle;          /*!< Handle for receive DMA channel. */
     edma_handle_t *txDmaHandle;          /*!< Handle for transmit DMA channel. */
+    bool ibiFlag;                        /*!< IBIWON flag. */
     uint8_t ibiAddress;                  /*!< Slave address which request IBI. */
     uint8_t *ibiBuff;                    /*!< Pointer to IBI buffer to keep ibi bytes. */
     size_t ibiPayloadSize;               /*!< IBI payload size. */
     i3c_ibi_type_t ibiType;              /*!< IBI type. */
+    status_t result;                     /*!< Transfer result. */
 };
 
 /*! @} */
@@ -104,6 +106,9 @@ struct _i3c_slave_edma_handle
     i3c_slave_edma_transfer_t transfer; /*!< I3C slave transfer copy. */
     bool isBusy;                        /*!< Whether transfer is busy. */
     bool wasTransmit;                   /*!< Whether the last transfer was a transmit. */
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
+    bool isDdrMode;                     /*!< Whether this is HDR-DDR transfer. */
+#endif
     uint32_t eventMask;                 /*!< Mask of enabled events. */
     i3c_slave_edma_callback_t callback; /*!< Callback function called at transfer event. */
     edma_handle_t *rxDmaHandle;         /*!< Handle for receive DMA channel. */

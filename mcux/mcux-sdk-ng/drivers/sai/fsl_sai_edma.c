@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -100,7 +100,7 @@ static void SAI_TxEDMACallback(edma_handle_t *handle, void *userData, bool done,
 
     if (saiHandle->state != (uint32_t)kSAI_BusyLoopTransfer)
     {
-        if (saiHandle->queueDriver + tcds > (uint32_t)SAI_XFER_QUEUE_SIZE)
+        if ((uint32_t)SAI_XFER_QUEUE_SIZE - saiHandle->queueDriver < tcds)
         {
             (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0,
                          sizeof(sai_transfer_t) * ((uint32_t)SAI_XFER_QUEUE_SIZE - saiHandle->queueDriver));
@@ -138,7 +138,7 @@ static void SAI_RxEDMACallback(edma_handle_t *handle, void *userData, bool done,
 
     if (saiHandle->state != (uint32_t)kSAI_BusyLoopTransfer)
     {
-        if (saiHandle->queueDriver + tcds > (uint32_t)SAI_XFER_QUEUE_SIZE)
+        if (((uint32_t)SAI_XFER_QUEUE_SIZE - saiHandle->queueDriver) < tcds)
         {
             (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0,
                          sizeof(sai_transfer_t) * ((uint32_t)SAI_XFER_QUEUE_SIZE - saiHandle->queueDriver));
@@ -318,7 +318,15 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Clear the channel enable bits until do a send/receive */
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
 #if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
-    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - saiConfig->fifo.fifoWatermark);
+    uint32_t tempCount = (uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - saiConfig->fifo.fifoWatermark;
+    if (tempCount > UINT8_MAX)
+    {
+        handle->count = UINT8_MAX;
+    }
+    else
+    {
+        handle->count = (uint8_t)tempCount;
+    }
 #else
     handle->count = 1U;
 #endif /* FSL_FEATURE_SAI_HAS_FIFO */
@@ -421,9 +429,24 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     uint32_t destOffset                    = 0U;
     uint32_t srcOffset                     = xfer->dataSize / 2U;
     edma_tcd_t *currentTCD                 = STCD_ADDR(handle->tcd);
-    edma_minor_offset_config_t minorOffset = {.enableSrcMinorOffset  = true,
-                                              .enableDestMinorOffset = false,
-                                              .minorOffset = 0xFFFFFU - 2U * srcOffset + 1U + handle->bytesPerFrame};
+    edma_minor_offset_config_t minorOffset;
+    minorOffset.enableSrcMinorOffset = true;
+    minorOffset.enableDestMinorOffset = false;
+    /* Multiplication overflow - fallback to safe value */
+    if (srcOffset > (UINT32_MAX / 2U)) 
+    {
+        minorOffset.minorOffset = handle->bytesPerFrame; 
+    }
+    /* Subtraction overflow - fallback to safe value */
+    else if ((2U * srcOffset) > (0xFFFFFU + 1U)) 
+    {
+        minorOffset.minorOffset = handle->bytesPerFrame; 
+    }
+    else
+    {
+        minorOffset.minorOffset = 0xFFFFFU - 2U * srcOffset + 1U + handle->bytesPerFrame;
+    }
+
 
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U))
@@ -478,7 +501,14 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
         EDMA_InstallTCD(handle->dmaHandle->base, handle->dmaHandle->channel, currentTCD);
     }
     /* Store the initially configured eDMA minor byte transfer count into the SAI handle */
-    handle->nbytes = handle->count * handle->bytesPerFrame;
+    if (handle->count * handle->bytesPerFrame > UINT8_MAX)
+    {
+        handle->nbytes = UINT8_MAX;
+    }
+    else
+    {
+        handle->nbytes = (uint8_t)handle->count * handle->bytesPerFrame;
+    }
 
     if (EDMA_SubmitTransfer(handle->dmaHandle, &config) != kStatus_Success)
     {
@@ -503,8 +533,10 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     /* Enable DMA enable bit */
     SAI_TxEnableDMA(base, kSAI_FIFORequestDMAEnable, true);
 
+#if (defined(MCUX_SDK_SAI_EDMA_TX_ENABLE_INTERNAL) && MCUX_SDK_SAI_EDMA_TX_ENABLE_INTERNAL)
     /* Enable SAI Tx clock */
     SAI_TxEnable(base, true);
+#endif
 
     /* Enable the channel FIFO */
     base->TCR3 |= I2S_TCR3_TCE(handle->channelMask);
@@ -552,10 +584,23 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     uint32_t srcOffset                     = 0U;
     uint32_t destOffset                    = xfer->dataSize / 2U;
     edma_tcd_t *currentTCD                 = STCD_ADDR(handle->tcd);
-    edma_minor_offset_config_t minorOffset = {
-        .enableSrcMinorOffset  = false,
-        .enableDestMinorOffset = true,
-        .minorOffset           = 0xFFFFFU - 2U * destOffset + 1U + (uint32_t)handle->bytesPerFrame};
+    edma_minor_offset_config_t minorOffset;
+    minorOffset.enableSrcMinorOffset = false;
+    minorOffset.enableDestMinorOffset = true;
+    /* Multiplication overflow - fallback to safe value */
+    if (destOffset > (UINT32_MAX / 2U)) 
+    {
+        minorOffset.minorOffset = handle->bytesPerFrame; 
+    }
+    /* Subtraction overflow - fallback to safe value */
+    else if ((2U * destOffset) > (0xFFFFFU + 1U)) 
+    {
+        minorOffset.minorOffset = handle->bytesPerFrame; 
+    }
+    else
+    {
+        minorOffset.minorOffset = 0xFFFFFU - 2U * destOffset + 1U + handle->bytesPerFrame;
+    }
 
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U))
@@ -611,7 +656,14 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     }
 
     /* Store the initially configured eDMA minor byte transfer count into the SAI handle */
-    handle->nbytes = handle->count * handle->bytesPerFrame;
+    if ((handle->count * handle->bytesPerFrame) > UINT8_MAX)
+    {
+        handle->nbytes = UINT8_MAX;
+    }
+    else
+    {
+        handle->nbytes = (uint8_t)(handle->count * handle->bytesPerFrame);
+    }
 
     if (EDMA_SubmitTransfer(handle->dmaHandle, &config) != kStatus_Success)
     {
@@ -639,8 +691,10 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Enable the channel FIFO */
     base->RCR3 |= I2S_RCR3_RCE(handle->channelMask);
 
+#if (defined(MCUX_SDK_SAI_EDMA_RX_ENABLE_INTERNAL) && MCUX_SDK_SAI_EDMA_RX_ENABLE_INTERNAL)
     /* Enable SAI Rx clock */
     SAI_RxEnable(base, true);
+#endif
 
     return kStatus_Success;
 }
@@ -1055,6 +1109,11 @@ uint32_t SAI_TransferGetValidTransferSlotsEDMA(I2S_Type *base, sai_edma_handle_t
     {
         if (handle->saiQueue[i].data == NULL)
         {
+            if (validSlot == UINT32_MAX)
+            {
+                /* We've reached the maximum count possible */
+                break;
+            }
             validSlot++;
         }
     }

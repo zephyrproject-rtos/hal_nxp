@@ -113,10 +113,10 @@
 #define CMD_RD_LEN_BIT_OFFSET (2U)
 
 /*! @brief Bit Def. Config2 register (Config2) */
-#define CONFIG2_ASYNC_INT           (1U << 3U)
-#define CONFIG2_CMD53_NEW_MODE      (1U << 8U)
-#define CONFIG2_DNLD_RDY_AUTO_RESET (1U << 10U)
-#define CONFIG2_UPLD_RDY_AUTO_RESET (1U << 11U)
+#define CONFIG2_ASYNC_INT           ((uint32_t)1U << 3U)
+#define CONFIG2_CMD53_NEW_MODE      ((uint32_t)1U << 8U)
+#define CONFIG2_DNLD_RDY_AUTO_RESET ((uint32_t)1U << 10U)
+#define CONFIG2_UPLD_RDY_AUTO_RESET ((uint32_t)1U << 11U)
 #define CONFIG2_TX_LEN_BIT_OFFSET   (12U)
 #define CONFIG2_RD_LEN_BIT_OFFSET   (14U)
 

@@ -44,7 +44,9 @@
 #endif
 
 /* Array of XBAR clock name. */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static const clock_ip_name_t s_xbaraClock[] = XBAR_CLOCKS;
+#endif
 
 static const xbar_info_t s_xbarInfo[] = XBAR_INFO;
 

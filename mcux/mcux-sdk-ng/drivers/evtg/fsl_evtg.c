@@ -119,6 +119,7 @@ void EVTG_ConfigAOIProductTerm(EVTG_Type *base,
                                evtg_aoi_product_term_t productTerm,
                                evtg_aoi_product_term_config_t *psProductTermConfig)
 {
+    uint16_t aoiConfigMask;
     volatile uint16_t *pu16AOIPT01Config;
     volatile uint16_t *pu16AOIPT23Config;
 
@@ -135,9 +136,9 @@ void EVTG_ConfigAOIProductTerm(EVTG_Type *base,
 
     if (kEVTG_ProductTerm0 == productTerm)
     {
-        *pu16AOIPT01Config &=
-            ~(uint16_t)(EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_BC_MASK |
-                        EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_DC_MASK);
+        aoiConfigMask = EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_BC_MASK |
+                        EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_DC_MASK;
+        *pu16AOIPT01Config &= ~aoiConfigMask;
         *pu16AOIPT01Config |= (EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_AC((uint8_t)psProductTermConfig->aInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_BC((uint8_t)psProductTermConfig->bInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT0_CC((uint8_t)psProductTermConfig->cInput) |
@@ -145,9 +146,9 @@ void EVTG_ConfigAOIProductTerm(EVTG_Type *base,
     }
     else if (kEVTG_ProductTerm1 == productTerm)
     {
-        *pu16AOIPT01Config &=
-            ~(uint16_t)(EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_BC_MASK |
-                        EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_DC_MASK);
+        aoiConfigMask = EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_BC_MASK |
+                        EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_DC_MASK;
+        *pu16AOIPT01Config &= ~aoiConfigMask;
         *pu16AOIPT01Config |= (EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_AC((uint8_t)psProductTermConfig->aInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_BC((uint8_t)psProductTermConfig->bInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT01_PT1_CC((uint8_t)psProductTermConfig->cInput) |
@@ -155,9 +156,9 @@ void EVTG_ConfigAOIProductTerm(EVTG_Type *base,
     }
     else if (kEVTG_ProductTerm2 == productTerm)
     {
-        *pu16AOIPT23Config &=
-            ~(uint16_t)(EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_BC_MASK |
-                        EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_DC_MASK);
+        aoiConfigMask = EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_BC_MASK |
+                        EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_DC_MASK;
+        *pu16AOIPT23Config &= ~aoiConfigMask;
         *pu16AOIPT23Config |= (EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_AC((uint8_t)psProductTermConfig->aInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_BC((uint8_t)psProductTermConfig->bInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT2_CC((uint8_t)psProductTermConfig->cInput) |
@@ -165,9 +166,9 @@ void EVTG_ConfigAOIProductTerm(EVTG_Type *base,
     }
     else
     {
-        *pu16AOIPT23Config &=
-            ~(uint16_t)(EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_BC_MASK |
-                        EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_DC_MASK);
+        aoiConfigMask = EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_AC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_BC_MASK |
+                        EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_CC_MASK | EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_DC_MASK;
+        *pu16AOIPT23Config &= ~aoiConfigMask;
         *pu16AOIPT23Config |= (EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_AC((uint8_t)psProductTermConfig->aInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_BC((uint8_t)psProductTermConfig->bInput) |
                                EVTG_EVTG_INST_EVTG_AOI0_BFT23_PT3_CC((uint8_t)psProductTermConfig->cInput) |

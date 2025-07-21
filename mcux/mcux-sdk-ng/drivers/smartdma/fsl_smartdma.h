@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2024 NXP
+ * Copyright 2019-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,6 +16,8 @@
     defined(MCXN946_cm33_core1_SERIES) || defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || \
     defined(MCXN236_SERIES) || defined(MCXN235_SERIES)
 #include "fsl_smartdma_mcxn.h"
+#elif defined(MCXA345_SERIES) || defined(MCXA346_SERIES) || defined(MCXA276_SERIES)
+#include "fsl_smartdma_mcxa.h"
 #else
 #error "Device not supported"
 #endif
@@ -32,7 +34,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SMARTDMA driver version */
-#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 0))
+#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 13, 0))
 /*@}*/
 
 /*! @brief Callback function prototype for the smartdma driver. */
@@ -125,6 +127,16 @@ void SMARTDMA_Reset(void);
  * @brief SMARTDMA IRQ.
  */
 void SMARTDMA_HandleIRQ(void);
+
+/*!
+ * @brief SMARTDMA set EX flag.
+ */
+void SMARTDMA_SetExternalFlag(uint8_t flag);
+
+/*!
+ * @brief SMARTDMA access RAM.
+ */
+void SMARTDMA_AccessShareRAM(uint8_t flag);
 
 #if defined(__cplusplus)
 }
