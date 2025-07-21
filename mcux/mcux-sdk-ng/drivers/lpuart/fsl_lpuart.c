@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -148,10 +148,16 @@ static LPUART_Type *const s_lpuartBases[] = LPUART_BASE_PTRS;
 void *s_lpuartHandle[ARRAY_SIZE(s_lpuartBases)];
 /* Array of LPUART IRQ number. */
 #if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
+#if defined(LPUART_RX_IRQS)
 static const IRQn_Type s_lpuartRxIRQ[] = LPUART_RX_IRQS;
+#endif
+#if defined(LPUART_TX_IRQS)
 const IRQn_Type s_lpuartTxIRQ[]        = LPUART_TX_IRQS;
+#endif
 #else
+#if defined(LPUART_RX_TX_IRQS)
 const IRQn_Type s_lpuartIRQ[] = LPUART_RX_TX_IRQS;
+#endif
 #endif
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Array of LPUART clock name. */
@@ -347,6 +353,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     assert(NULL != config);
     assert(0U < config->baudRate_Bps);
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > config->txFifoWatermark);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > config->rxFifoWatermark);
 #endif
@@ -479,6 +486,17 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
                 temp |= LPUART_CTRL_M_MASK; /* Eight data bits and one parity bit */
             }
         }
+
+#if defined(FSL_FEATURE_LPUART_HAS_CTRL_SWAP) && FSL_FEATURE_LPUART_HAS_CTRL_SWAP
+        if (config->swapTxdRxd == true)
+        {
+            temp |= LPUART_CTRL_SWAP_MASK;
+        }
+        else
+        {
+            temp &= ~LPUART_CTRL_SWAP_MASK;
+        }
+#endif
 
         base->CTRL = temp;
 
@@ -662,6 +680,9 @@ void LPUART_GetDefaultConfig(lpuart_config_t *config)
     config->rxIdleConfig = kLPUART_IdleCharacter1;
     config->enableTx     = false;
     config->enableRx     = false;
+#if defined(FSL_FEATURE_LPUART_HAS_CTRL_SWAP) && FSL_FEATURE_LPUART_HAS_CTRL_SWAP
+    config->swapTxdRxd   = false;
+#endif
 }
 
 /*!
@@ -1479,10 +1500,16 @@ void LPUART_TransferCreateHandle(LPUART_Type *base,
 
 /* Enable interrupt in NVIC. */
 #if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
+#if defined(LPUART_RX_IRQS)
     (void)EnableIRQ(s_lpuartRxIRQ[instance]);
+#endif
+#if defined(LPUART_TX_IRQS)
     (void)EnableIRQ(s_lpuartTxIRQ[instance]);
+#endif
 #else
+#if defined(LPUART_RX_TX_IRQS)
     (void)EnableIRQ(s_lpuartIRQ[instance]);
+#endif
 #endif
 }
 
@@ -2035,8 +2062,9 @@ static void LPUART_TransferHandleReceiveDataFull(LPUART_Type *base, lpuart_handl
     /* If use RX ring buffer, receive data to ring buffer. */
     if (NULL != handle->rxRingBuffer)
     {
-        while (0U != count--)
+        while (0U != count)
         {
+            count--;
             /* If RX ring buffer is full, trigger callback to notify over run. */
             if (LPUART_TransferIsRxRingBufferFull(base, handle))
             {
@@ -2124,6 +2152,7 @@ static void LPUART_TransferHandleSendDataEmpty(LPUART_Type *base, lpuart_handle_
     uint32_t irqMask;
 /* Get the bytes that available at this moment. */
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     count = (uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) -
             (uint8_t)((base->WATER & LPUART_WATER_TXCOUNT_MASK) >> LPUART_WATER_TXCOUNT_SHIFT);
 #else
@@ -2255,6 +2284,16 @@ void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle)
 {
     /* To be implemented by User. */
 }
+
+void LPUART_DriverIRQHandler(uint32_t instance)
+{
+    if (instance < ARRAY_SIZE(s_lpuartBases))
+    {
+        s_lpuartIsr[instance](s_lpuartBases[instance], s_lpuartHandle[instance]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+
 #if defined(FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1) && FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1
 #if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
 void LPUART0_LPUART1_RX_DriverIRQHandler(void);

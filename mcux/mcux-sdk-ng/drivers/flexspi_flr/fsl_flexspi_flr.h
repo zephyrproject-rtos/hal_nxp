@@ -1,6 +1,5 @@
 /*
- * Copyright 2023 NXP
- * All rights reserved.
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,16 +23,16 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FLEXSPI FOLLOWER driver version. */
-#define FSL_FLEXSPI_SLV_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+#define FSL_FLEXSPI_SLV_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
 /*@}*/
 
-#define FSL_FEATURE_FLEXSPI_SLV_AXI_RX_BUFFER_SIZE (2*1024)
+#define FSL_FEATURE_FLEXSPI_SLV_AXI_RX_BUFFER_SIZE (2 * 1024)
 #define FSL_FEATURE_FLEXSPI_SLV_AXI_TX_BUFFER_SIZE (1024)
 
 #define FLEXSPI_SLV_MAILBOX_CMD(x)     ((x) & 0xFFFFFFFE)
 #define FLEXSPI_SLV_MAILBOX_CMD_INT(x) ((x) | 0x1)
 
-#define FLEXSPI_SLV_CMD_DDR(x)         (((x) << 8) | (x))
+#define FLEXSPI_SLV_CMD_DDR(x) (((x) << 8) | (x))
 
 /*! @brief IO mode enumeration of FLEXSPI FOLLOWER.*/
 enum
@@ -44,86 +43,70 @@ enum
     kFLEXSPI_SLV_IOMODE_DDRx8 = 3
 };
 
-/*! @brief Clock frequency enumeration of FLEXSPI FOLLOWER.*/
-enum
-{
-    RootClock_50M   = 50,
-    RootClock_66M   = 66,
-    RootClock_80M   = 80,
-    RootClock_100M  = 100,
-    RootClock_133M  = 133,
-    RootClock_166M  = 166,
-    RootClock_200M  = 200,
-    RootClock_400M  = 400,
-};
-
 /*! @brief The read fetch size enumeration of FLEXSPI FOLLOWER.*/
 enum
 {
-    Read_Fetch_256Bytes   = 0,
-    Read_Fetch_512Bytes   = 1,
-    Read_Fetch_1KBytes    = 2,
-    Read_Fetch_2KBytes    = 3
+    Read_Fetch_256Bytes = 0,
+    Read_Fetch_512Bytes = 1,
+    Read_Fetch_1KBytes  = 2,
+    Read_Fetch_2KBytes  = 3
 };
 
 /*! @brief Clock frequency enumeration of FLEXSPI FOLLOWER.*/
 enum
 {
-    Write_Watermark_32Bytes   = 0,
-    Write_Watermark_64Bytes   = 1,
-    Write_Watermark_128Bytes  = 2,
-    Write_Watermark_256Bytes  = 3
+    Write_Watermark_32Bytes  = 0,
+    Write_Watermark_64Bytes  = 1,
+    Write_Watermark_128Bytes = 2,
+    Write_Watermark_256Bytes = 3
 };
 
 /*! @brief Interrupt status flags of FLEXSPI FOLLOWER.*/
 enum
 {
-    kFLEXSPI_SLV_Mail0InterruptFlag   = 0, /*!< Mailbox0 interrupt */
-    kFLEXSPI_SLV_Mail1InterruptFlag   = 1, /*!< Mailbox1 interrupt */
-    kFLEXSPI_SLV_Mail2InterruptFlag   = 2, /*!< Mailbox2 interrupt */
-    kFLEXSPI_SLV_Mail3InterruptFlag   = 3, /*!< Mailbox3 interrupt */
-    kFLEXSPI_SLV_Mail4InterruptFlag   = 4, /*!< Mailbox4 interrupt */
-    kFLEXSPI_SLV_Mail5InterruptFlag   = 5, /*!< Mailbox5 interrupt */
-    kFLEXSPI_SLV_Mail6InterruptFlag   = 6, /*!< Mailbox6 interrupt */
-    kFLEXSPI_SLV_Mail7InterruptFlag   = 7, /*!< Mailbox7 interrupt */
-    kFLEXSPI_SLV_Mail8InterruptFlag   = 8, /*!< Mailbox8 interrupt */
-    kFLEXSPI_SLV_WriteOverflowFlag    = 9, /*!< An IO RX FIFO overflow occurred during
-                                                command/address/write data phase */
-    kFLEXSPI_SLV_ReadUnderflowFlag    = 10, /*!< IO TX FIFO underflow has occurred
-                                                 during a read command */
-    kFLEXSPI_SLV_ErrorCommandFlag     = 11, /*!< An unknown command has been received
-                                                 from the SPI bus */
+    kFLEXSPI_SLV_Mail0InterruptFlag = 0, /*!< Mailbox0 interrupt */
+    kFLEXSPI_SLV_Mail1InterruptFlag = 1, /*!< Mailbox1 interrupt */
+    kFLEXSPI_SLV_Mail2InterruptFlag = 2, /*!< Mailbox2 interrupt */
+    kFLEXSPI_SLV_Mail3InterruptFlag = 3, /*!< Mailbox3 interrupt */
+    kFLEXSPI_SLV_Mail4InterruptFlag = 4, /*!< Mailbox4 interrupt */
+    kFLEXSPI_SLV_Mail5InterruptFlag = 5, /*!< Mailbox5 interrupt */
+    kFLEXSPI_SLV_Mail6InterruptFlag = 6, /*!< Mailbox6 interrupt */
+    kFLEXSPI_SLV_Mail7InterruptFlag = 7, /*!< Mailbox7 interrupt */
+    kFLEXSPI_SLV_Mail8InterruptFlag = 8, /*!< Mailbox8 interrupt */
+    kFLEXSPI_SLV_WriteOverflowFlag  = 9, /*!< An IO RX FIFO overflow occurred during
+                                              command/address/write data phase */
+    kFLEXSPI_SLV_ReadUnderflowFlag = 10, /*!< IO TX FIFO underflow has occurred
+                                              during a read command */
+    kFLEXSPI_SLV_ErrorCommandFlag = 11,  /*!< An unknown command has been received
+                                              from the SPI bus */
     kFLEXSPI_SLV_InvalidInterruptFlag = 12,
 };
 
 /*! @brief FLEXSPI FOLLOWER configuration structure. */
 typedef struct _flexspi_slv_config
 {
-    int         clock_freq;
-    uint32_t    baseAddr1;    /*!< Read/Write CMD1 Base Address. */
-    uint32_t    baseAddr2;    /*!< Read/Write CMD2 Base Address. */
-    uint32_t    addrRange1;   /*!< Read/Write CMD1 Addr Range. */
-    uint32_t    addrRange2;   /*!< Read/Write CMD2 Addr Range. */
-    uint8_t     io_mode;      /*!< IO mode control - SDRx4, SDRx8, DDRx4, DDRx8*/
-    uint8_t     rxFetch_size; /*!< Specifies the maximum read size triggered by a single read command. */
-    uint8_t     rxWatermark;  /*!< Triggers a new AXI read to fetch more data through the IP AXI header. */
-    uint8_t     txWatermark;  /*!< Specifies the watermark value. During the write command, if pending
-                                write data equals or exceeds the watermark level, it triggers a new AXI write. */
+    uint32_t baseAddr1;   /*!< Read/Write CMD1 Base Address. */
+    uint32_t baseAddr2;   /*!< Read/Write CMD2 Base Address. */
+    uint32_t addrRange1;  /*!< Read/Write CMD1 Addr Range. */
+    uint32_t addrRange2;  /*!< Read/Write CMD2 Addr Range. */
+    uint8_t io_mode;      /*!< IO mode control - SDRx4, SDRx8, DDRx4, DDRx8*/
+    uint8_t rxFetch_size; /*!< Specifies the maximum read size triggered by a single read command. */
+    uint8_t rxWatermark;  /*!< Triggers a new AXI read to fetch more data through the IP AXI header. */
+    uint8_t txWatermark;  /*!< Specifies the watermark value. During the write command, if pending
+                            write data equals or exceeds the watermark level, it triggers a new AXI write. */
 } flexspi_slv_config_t;
 
 /* Forward declaration of the handle typedef. */
 typedef struct _flexspi_slv_handle flexspi_slv_handle_t;
 
 /*! @brief FLEXSPI FOLLOWER interrupt callback function. */
-typedef void (*flexspi_slv_interrupt_callback_t)(FLEXSPI_SLV_Type *base,
-                                            flexspi_slv_handle_t *handle);
+typedef void (*flexspi_slv_interrupt_callback_t)(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle);
 
 /*! @brief Interrupt handle structure for FLEXSPI FOLLOWER. */
 struct _flexspi_slv_handle
 {
     uint32_t state;                            /*!< Interrupt state for FLEXSPI FOLLOWER */
     flexspi_slv_interrupt_callback_t callback; /*!< Callback for users while mailbox received or error occurred */
-    void *userData;                            /*!< FLEXSPI FOLLOWER callback function parameter.*/
 };
 
 /*******************************************************************************
@@ -311,7 +294,7 @@ static inline void FLEXSPI_SLV_Read_FetchSizeSet(FLEXSPI_SLV_Type *base, uint32_
  * This function gets the maximum read size for the FLEXSPI FOLLOWER.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
- * @return The maximum read size 
+ * @return The maximum read size
  */
 static inline uint32_t FLEXSPI_SLV_Read_FetchSizeGet(FLEXSPI_SLV_Type *base)
 {
@@ -420,11 +403,13 @@ static inline void FLEXSPI_SLV_GetOutOfRangeCounts(FLEXSPI_SLV_Type *base, size_
 {
     if (NULL != rdCount)
     {
-        *rdCount = ((base->MODULE_STATUS) & FLEXSPI_SLV_MODULE_STATUS_RDOFR_MASK) >> FLEXSPI_SLV_MODULE_STATUS_RDOFR_SHIFT;
+        *rdCount =
+            ((base->MODULE_STATUS) & FLEXSPI_SLV_MODULE_STATUS_RDOFR_MASK) >> FLEXSPI_SLV_MODULE_STATUS_RDOFR_SHIFT;
     }
     if (NULL != wrCount)
     {
-        *wrCount = ((base->MODULE_STATUS) & FLEXSPI_SLV_MODULE_STATUS_WROFR_MASK) >> FLEXSPI_SLV_MODULE_STATUS_WROFR_SHIFT;
+        *wrCount =
+            ((base->MODULE_STATUS) & FLEXSPI_SLV_MODULE_STATUS_WROFR_MASK) >> FLEXSPI_SLV_MODULE_STATUS_WROFR_SHIFT;
     }
 }
 
@@ -551,15 +536,11 @@ static inline bool FLEXSPI_SLV_GetModuleBusyStatus(FLEXSPI_SLV_Type *base)
 {
     uint32_t statusMasks = 0, idleFlags = 0;
 
-    statusMasks = FLEXSPI_SLV_MODULE_STATUS_WIP_MASK |
-                  FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_MASK |
-                  FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_MASK |
-                  FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_MASK;
+    statusMasks = FLEXSPI_SLV_MODULE_STATUS_WIP_MASK | FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_MASK |
+                  FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_MASK | FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_MASK;
 
-    idleFlags = FLEXSPI_SLV_MODULE_STATUS_WIP(0) |
-                FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE(1) |
-                FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE(1) |
-                FLEXSPI_SLV_MODULE_STATUS_SEQIDLE(1);
+    idleFlags = FLEXSPI_SLV_MODULE_STATUS_WIP(0) | FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE(1) |
+                FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE(1) | FLEXSPI_SLV_MODULE_STATUS_SEQIDLE(1);
 
     return (((base->MODULE_STATUS & statusMasks) != idleFlags) ? true : false);
 }
@@ -684,12 +665,12 @@ static inline void FLEXSPI_SLV_Write_Register_CommandSet(FLEXSPI_SLV_Type *base,
  * @param base FLEXSPI FOLLOWER peripheral base address.
  * @param handle Pointer to flexspi_slv_handle_t structure to store the interrupt state.
  * @param callback Pointer to user callback function.
- * @param userData User parameter passed to the callback function.
+ * @param interruptMask Interrupt mask to enable during handle creation. Use enumeration values ORed.
  */
 void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
                                        flexspi_slv_handle_t *handle,
                                        flexspi_slv_interrupt_callback_t callback,
-                                       void *userData);
+                                       uint32_t interruptMask);
 
 /*!
  * @brief Master interrupt handler.
@@ -706,4 +687,3 @@ void FLEXSPI_SLV_HandleIRQ(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle)
 /*@}*/
 
 #endif /* __FSL_FLEXSPI_FOLLOWER_H_ */
-

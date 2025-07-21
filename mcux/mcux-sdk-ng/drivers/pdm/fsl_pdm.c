@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -102,8 +102,16 @@ void PDM_ReadFifo(
         for (j = 0; j < channelNums; j++)
         {
 #if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH != 2U)
-            *dataAddr = base->DATACH[startChannel + j] >> (dataWidth == 4U ? 0U : 8U);
-            dataAddr  = (uint32_t *)((uint32_t)dataAddr + dataWidth);
+            if ((SIZE_MAX - j) >= startChannel)
+            {
+                *dataAddr = base->DATACH[startChannel + j] >> (dataWidth == 4U ? 0U : 8U);
+                dataAddr  = (uint32_t *)((uint32_t)dataAddr + dataWidth);
+            }
+            else
+            {
+                assert(false);
+                break;
+            }
 #else
             *dataAddr = base->DATACH[startChannel + j];
             dataAddr  = (uint32_t *)((uint32_t)dataAddr + 2U);
@@ -130,7 +138,22 @@ void PDM_ReadNonBlocking(PDM_Type *base, uint32_t startChannel, uint32_t channel
     {
         for (j = 0; j < channelNums; j++)
         {
-            *buffer++ = (int16_t)base->DATACH[startChannel + j];
+            uint32_t dataValue = base->DATACH[startChannel + j];
+
+            if (dataValue > INT16_MAX)
+            {
+                // Handle overflow: saturate to INT16_MAX or use an error handling mechanism
+                *buffer++ = INT16_MAX;
+            }
+            else if (dataValue < INT16_MIN)
+            {
+                // Handle underflow: saturate to INT16_MIN
+                *buffer++ = INT16_MIN;
+            }
+            else
+            {
+                *buffer++ = (int16_t)dataValue;
+            }
         }
     }
 }
@@ -191,7 +214,10 @@ static status_t PDM_ValidateSrcClockRate(uint32_t channelMask,
 
     /* validate the minimum clock divider */
     /* 2U is for canculating k, 100U is for determing the specific float number of clock divider */
-    if (((regDiv * k) / 2U * 100U) < (((10U + factor * enabledChannel) * 100U / (8U * osr)) * k / 2U))
+    uint32_t leftSide = (regDiv * k) / 2U * 100U;
+    uint32_t rightSide = ((10U + factor * enabledChannel) * 100U / (8U * osr)) * k / 2U;
+
+    if (leftSide < rightSide)
     {
         return kStatus_Fail;
     }
@@ -227,6 +253,12 @@ status_t PDM_SetSampleRateConfig(PDM_Type *base, uint32_t sourceClock_HZ, uint32
 
     /* get divider */
     osr          = (PDM_CTRL_2_CICOSR_MASK >> PDM_CTRL_2_CICOSR_SHIFT) + 1U - osr;
+
+    if ((sampleRate_HZ > (UINT32_MAX / 8U)) || ((sampleRate_HZ * 8U) > (UINT32_MAX / osr)))
+    {
+        return kStatus_Fail;
+    }
+
     pdmClockRate = sampleRate_HZ * osr * 8U;
     regDiv       = sourceClock_HZ / pdmClockRate;
 
@@ -343,7 +375,8 @@ void PDM_Init(PDM_Type *base, const pdm_config_t *config)
                    PDM_CTRL_2_CICOSR(config->cicOverSampleRate) | PDM_CTRL_2_QSEL(config->qualityMode);
 
 #if defined(FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS) && FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS
-    base->CTRL_2 = (base->CTRL_2 & ~PDM_CTRL_2_DEC_BYPASS_MASK) | PDM_CTRL_2_DEC_BYPASS(config->enableFilterBypass);
+    base->CTRL_2 = (base->CTRL_2 & ~PDM_CTRL_2_DEC_BYPASS_MASK) |
+                    PDM_CTRL_2_DEC_BYPASS((config->enableFilterBypass) ? 1UL : 0UL);
 #endif
     /* Set the watermark */
     base->FIFO_CTRL = PDM_FIFO_CTRL_FIFOWMK(config->fifoWatermark);
@@ -405,7 +438,10 @@ void PDM_SetChannelConfig(PDM_Type *base, uint32_t channel, const pdm_channel_co
     assert(config != NULL);
     assert(channel <= (uint32_t)FSL_FEATURE_PDM_CHANNEL_NUM);
 
+#if (defined(FSL_FEATURE_PDM_HAS_DC_OUT_CTRL) && FSL_FEATURE_PDM_HAS_DC_OUT_CTRL) || \
+    !(defined(FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED) && FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED)
     uint32_t dcCtrl = 0U;
+#endif
 
 #if (defined(FSL_FEATURE_PDM_HAS_DC_OUT_CTRL) && (FSL_FEATURE_PDM_HAS_DC_OUT_CTRL))
     dcCtrl = base->DC_OUT_CTRL;
@@ -817,8 +853,10 @@ void PDM_SetHwvadConfig(PDM_Type *base, const pdm_hwvad_config_t *config)
     /* Configure VAD0_CTRL_2 register */
     base->VAD0_CTRL_2 =
         (PDM_VAD0_CTRL_2_VADFRENDIS((config->enableFrameEnergy == true) ? 0U : 1U) |
-         PDM_VAD0_CTRL_2_VADPREFEN(config->enablePreFilter) | PDM_VAD0_CTRL_2_VADFRAMET(config->frameTime) |
-         PDM_VAD0_CTRL_2_VADINPGAIN(config->inputGain) | PDM_VAD0_CTRL_2_VADHPF(config->cutOffFreq));
+         PDM_VAD0_CTRL_2_VADPREFEN((config->enablePreFilter) ? 1UL : 0UL) |
+         PDM_VAD0_CTRL_2_VADFRAMET(config->frameTime) |
+         PDM_VAD0_CTRL_2_VADINPGAIN(config->inputGain) |
+         PDM_VAD0_CTRL_2_VADHPF(config->cutOffFreq));
 }
 
 /*!
@@ -833,7 +871,7 @@ void PDM_SetHwvadSignalFilterConfig(PDM_Type *base, bool enableMaxBlock, uint32_
     uint32_t signalConfig = base->VAD0_SCONFIG;
 
     signalConfig &= ~(PDM_VAD0_SCONFIG_VADSMAXEN_MASK | PDM_VAD0_SCONFIG_VADSGAIN_MASK);
-    signalConfig |= (PDM_VAD0_SCONFIG_VADSMAXEN(enableMaxBlock) | PDM_VAD0_SCONFIG_VADSGAIN(signalGain)) |
+    signalConfig |= (PDM_VAD0_SCONFIG_VADSMAXEN(enableMaxBlock ? 1UL : 0UL) | PDM_VAD0_SCONFIG_VADSGAIN(signalGain)) |
                     PDM_VAD0_SCONFIG_VADSFILEN_MASK;
     base->VAD0_SCONFIG = signalConfig;
 }
@@ -849,10 +887,12 @@ void PDM_SetHwvadNoiseFilterConfig(PDM_Type *base, const pdm_hwvad_noise_filter_
     assert(config != NULL);
 
     base->VAD0_NCONFIG =
-        (PDM_VAD0_NCONFIG_VADNFILAUTO(config->enableAutoNoiseFilter) |
-         PDM_VAD0_NCONFIG_VADNOREN(config->enableNoiseDetectOR) | PDM_VAD0_NCONFIG_VADNMINEN(config->enableNoiseMin) |
-         PDM_VAD0_NCONFIG_VADNDECEN(config->enableNoiseDecimation) |
-         PDM_VAD0_NCONFIG_VADNFILADJ(config->noiseFilterAdjustment) | PDM_VAD0_NCONFIG_VADNGAIN(config->noiseGain));
+        (PDM_VAD0_NCONFIG_VADNFILAUTO((uint32_t)(config->enableAutoNoiseFilter ? 1UL : 0UL)) |
+         PDM_VAD0_NCONFIG_VADNOREN((uint32_t)(config->enableNoiseDetectOR ? 1UL : 0UL)) |
+         PDM_VAD0_NCONFIG_VADNMINEN((uint32_t)(config->enableNoiseMin ? 1UL : 0UL)) |
+         PDM_VAD0_NCONFIG_VADNDECEN((uint32_t)(config->enableNoiseDecimation ? 1UL : 0UL)) |
+         PDM_VAD0_NCONFIG_VADNFILADJ(config->noiseFilterAdjustment) |
+         PDM_VAD0_NCONFIG_VADNGAIN(config->noiseGain));
 }
 
 /*!
@@ -868,8 +908,10 @@ void PDM_SetHwvadZeroCrossDetectorConfig(PDM_Type *base, const pdm_hwvad_zero_cr
     uint32_t zcd = (base->VAD0_ZCD & (~(PDM_VAD0_ZCD_VADZCDTH_MASK | PDM_VAD0_ZCD_VADZCDADJ_MASK |
                                         PDM_VAD0_ZCD_VADZCDAUTO_MASK | PDM_VAD0_ZCD_VADZCDAND_MASK)));
 
-    zcd |= (PDM_VAD0_ZCD_VADZCDTH(config->threshold) | PDM_VAD0_ZCD_VADZCDADJ(config->adjustmentThreshold) |
-            PDM_VAD0_ZCD_VADZCDAUTO(config->enableAutoThreshold) | PDM_VAD0_ZCD_VADZCDAND(config->zcdAnd)) |
+    zcd |= (PDM_VAD0_ZCD_VADZCDTH(config->threshold) |
+            PDM_VAD0_ZCD_VADZCDADJ(config->adjustmentThreshold) |
+            PDM_VAD0_ZCD_VADZCDAUTO((uint32_t)(config->enableAutoThreshold ? 1UL : 0UL)) |
+            PDM_VAD0_ZCD_VADZCDAND(config->zcdAnd)) |
            PDM_VAD0_ZCD_VADZCDEN_MASK;
 
     base->VAD0_ZCD = zcd;

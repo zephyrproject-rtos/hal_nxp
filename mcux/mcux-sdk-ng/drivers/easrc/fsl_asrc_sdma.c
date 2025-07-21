@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021,2025 NXP
  * All rights reserved.
  *
  *
@@ -138,7 +138,7 @@ static void ASRC_OutSDMACallback(sdma_handle_t *handle, void *userData, bool tra
 
     /* If finished a block, call the callback function */
     asrcHandle->outDMAHandle.asrcQueue[queueDriverIndex] = NULL;
-    asrcHandle->outDMAHandle.queueDriver                 = (uint8_t)(queueDriverIndex + 1U) % ASRC_XFER_OUT_QUEUE_SIZE;
+    asrcHandle->outDMAHandle.queueDriver                 = (uint8_t)((queueDriverIndex + 1U) % ASRC_XFER_OUT_QUEUE_SIZE);
 
     /* If all data finished, just stop the transfer */
     if (asrcHandle->outDMAHandle.asrcQueue[asrcHandle->outDMAHandle.queueDriver] == NULL)
@@ -302,8 +302,17 @@ status_t ASRC_TransferSetContextConfigSDMA(ASRC_Type *base,
     }
 
     handle->dataChannels                  = asrcConfig->contextChannelNums;
-    handle->outDMAHandle.asrcOutWatermark = (asrcConfig->contextOutput.watermark + 1U) * asrcConfig->contextChannelNums;
-    handle->inDMAHandle.asrcInWatermark   = (asrcConfig->contextInput.watermark + 1U) * asrcConfig->contextChannelNums;
+
+    uint32_t outWatermark = (asrcConfig->contextOutput.watermark + 1U) * asrcConfig->contextChannelNums;
+    uint32_t inWatermark = (asrcConfig->contextInput.watermark + 1U) * asrcConfig->contextChannelNums;
+
+    if (outWatermark > UINT8_MAX || inWatermark > UINT8_MAX)
+    {
+        return kStatus_ASRCConfigureFailed;
+    }
+
+    handle->outDMAHandle.asrcOutWatermark = (uint8_t)outWatermark;
+    handle->inDMAHandle.asrcInWatermark   = (uint8_t)inWatermark;
 
     return kStatus_Success;
 }

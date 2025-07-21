@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -123,6 +123,10 @@ status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmi
     assert(handle->rxDmaHandle != NULL);
     assert(xfer != NULL);
 
+    if (channel >= (uint32_t)kDMIC_ChannelMAX) {
+        return kStatus_InvalidArgument;
+    }
+
     dma_channel_config_t transferConfig = {0U};
     uint32_t srcAddr                    = (uint32_t)&base->CHANNEL[channel].FIFO_DATA;
     uint32_t desNum                     = 0U;
@@ -235,6 +239,7 @@ void DMIC_TransferAbortReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle)
 {
     assert(NULL != handle);
     assert(NULL != handle->rxDmaHandle);
+    assert(handle->channel >= (uint32_t)kDMIC_ChannelMAX);
 
     /* Stop transfer. */
     DMA_AbortTransfer(handle->rxDmaHandle);

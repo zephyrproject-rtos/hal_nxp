@@ -1,6 +1,5 @@
 /*
- * Copyright 2021-2022, 2024 NXP
- * All rights reserved.
+ * Copyright 2021-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief OPAMP driver version. */
-#define FSL_OPAMP_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_OPAMP_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*!

@@ -1,6 +1,5 @@
 /*
- * Copyright 2021-2022, 2024 NXP
- * All rights reserved.
+ * Copyright 2021-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,9 +19,35 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SYSPM driver version */
-#define FSL_SYSPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
-
+#define FSL_SYSPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
+
+#define SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE 0xFFFFFFFFFFFFFFFFU
+
+/*! @name Configuration */
+
+/*!
+ * @brief Max loops to wait for SYSPM event count stable (0 means wait forever)
+ */
+ #ifndef EVENT_COUNT_STABLE_TIMEOUT
+ #ifdef CONFIG_EVENT_COUNT_STABLE_TIMEOUT
+     #define EVENT_COUNT_STABLE_TIMEOUT CONFIG_EVENT_COUNT_STABLE_TIMEOUT
+ #else
+     #define EVENT_COUNT_STABLE_TIMEOUT 0U
+ #endif
+#endif
+
+/*!
+ * @brief Max loops to wait for SYSPM instruction count stable (0 means wait forever)
+ */
+#ifndef INSTRUCTION_COUNT_STABLE_TIMEOUT
+#ifdef CONFIG_INSTRUCTION_COUNT_STABLE_TIMEOUT
+    #define INSTRUCTION_COUNT_STABLE_TIMEOUT CONFIG_INSTRUCTION_COUNT_STABLE_TIMEOUT
+#else
+    #define INSTRUCTION_COUNT_STABLE_TIMEOUT 0U
+#endif
+#endif
+
 /*! @brief syspm select control monitor */
 typedef enum _syspm_monitor
 {
@@ -151,7 +176,11 @@ void SYSPM_DisableCounter(SYSPM_Type *base, syspm_monitor_t monitor);
  * @param base              SYSPM peripheral base address.
  * @param monitor           syspm control monitor, see to #syspm_monitor_t.
  * @param event             syspm select event, see to #syspm_event_t.
- * @return                  get the the 40 bits of eventx counter.
+ * @return
+ *    - When the return value is not equal to @ref SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents a 40 bits eventx counter.
+ *    - When the return value is equal to @ref SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents timeout occured.
  */
 uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_event_t event);
 
@@ -163,7 +192,11 @@ uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_
  *
  * @param base              SYSPM peripheral base address.
  * @param monitor           syspm control monitor, see to #syspm_monitor_t.
- * @return                  get the the 40 bits of instruction counter.
+ * @return
+ *    - When the return value is not equal to @ref SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents a 40 bits instruction counter.
+ *    - When the return value is equal to @ref SYSPM_COUNT_STABLE_TIMEOUT_RETURN_VALUE, 
+ *      the return value represents timeout occured.
  */
 uint64_t SYSPM_GetInstructionCounter(SYSPM_Type *base, syspm_monitor_t monitor);
 #endif

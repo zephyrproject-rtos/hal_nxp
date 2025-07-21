@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021,2025 NXP
  * All rights reserved.
  *
  *
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_ASRC_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
+#define FSL_ASRC_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4 */
 /*! @} */
 /*! @brief ASRC xfer queue size */
 #ifndef ASRC_XFER_IN_QUEUE_SIZE

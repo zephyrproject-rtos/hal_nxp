@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020, NXP
+ * Copyright 2018-2020,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PDM_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 0)) /*!< Version 2.7.0 */
+#define FSL_PDM_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 1)) /*!< Version 2.7.1 */
 /*! @} */
 
 typedef struct _pdm_sdma_handle pdm_sdma_handle_t;

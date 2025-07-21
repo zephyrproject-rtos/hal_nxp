@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 7)) /*!< Version 2.0.7 */
 /*! @} */
 
 /*! @brief ASRC fifo depth */
@@ -477,8 +477,11 @@ static inline void ASRC_EnableResamplerBypass(ASRC_Type *base, asrc_context_t co
  */
 static inline void ASRC_SetContextChannelNumber(ASRC_Type *base, asrc_context_t context, uint32_t channels)
 {
-    base->CTX_CTRL[context] &= ~ASRC_CTX_CTRL_NUM_CH_EN_MASK;
-    base->CTX_CTRL[context] |= ASRC_CTX_CTRL_NUM_CH_EN(channels - 1U);
+    if (channels > 0U && channels <= 32U)
+    {
+        base->CTX_CTRL[context] &= ~ASRC_CTX_CTRL_NUM_CH_EN_MASK;
+        base->CTX_CTRL[context] |= ASRC_CTX_CTRL_NUM_CH_EN(channels - 1U);
+    }
 }
 
 /*!

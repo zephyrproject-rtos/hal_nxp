@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,27 +19,26 @@
 enum _i3c_edma_transfer_states
 {
     kIdleState = 0,
-    kIBIWonState,
     kSlaveStartState,
-    kSendCommandState,
+    kIBIWonState,
+    kBroadcastStartCtrlDoneState,
+    kStartCtrlDoneState,
     kWaitRepeatedStartCompleteState,
-    kTransmitDataState,
-    kReceiveDataState,
-    kStopState,
     kWaitForCompletionState,
-    kAddressMatchState,
+    kStopState,
+    kStopCtrlDoneState,
 };
 
 /*! @brief Common sets of flags used by the driver. */
 enum _i3c_edma_flag_constants
 {
-    /*! All flags which are cleared by the driver upon starting a transfer. */
-    kMasterClearFlags = kI3C_MasterSlaveStartFlag | kI3C_MasterControlDoneFlag | kI3C_MasterCompleteFlag |
-                        kI3C_MasterArbitrationWonFlag | kI3C_MasterSlave2MasterFlag | kI3C_MasterErrorFlag,
+    /*! Necessary flags which are cleared by the driver upon starting a transfer. */
+    kMasterClearFlags = kI3C_MasterControlDoneFlag | kI3C_MasterCompleteFlag | kI3C_MasterArbitrationWonFlag |
+                        kI3C_MasterSlave2MasterFlag | kI3C_MasterErrorFlag,
 
-    /*! IRQ sources enabled by the non-blocking transactional API. */
-    kMasterDMAIrqFlags = kI3C_MasterSlaveStartFlag | kI3C_MasterControlDoneFlag | kI3C_MasterCompleteFlag |
-                         kI3C_MasterArbitrationWonFlag | kI3C_MasterErrorFlag | kI3C_MasterSlave2MasterFlag,
+    /*! IRQ sources enabled by initialization. */
+    kMasterDMAIrqFlags = kI3C_MasterSlaveStartFlag | kI3C_MasterArbitrationWonFlag | kI3C_MasterErrorFlag |
+                         kI3C_MasterSlave2MasterFlag | kI3C_MasterCompleteFlag | kI3C_MasterControlDoneFlag,
 
     /*! Errors to check for. */
     kMasterErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
@@ -70,14 +69,13 @@ enum _i3c_edma_flag_constants
 /*! @brief Array to map I3C instance number to base pointer. */
 static I3C_Type *const kI3cBases[] = I3C_BASE_PTRS;
 
-/*! @brief Array to store the END byte of I3C teransfer. */
-static uint8_t i3cEndByte[ARRAY_SIZE(kI3cBases)] = {0};
+/*! @brief EDMA linked transfer descriptor. */
+AT_NONCACHEABLE_SECTION_ALIGN(static edma_tcd_t s_edma_tcd[ARRAY_SIZE(kI3cBases)][3], 32);
 
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static void I3C_MasterRunEDMATransfer(
-    I3C_Type *base, i3c_master_edma_handle_t *handle, void *data, size_t dataSize, i3c_direction_t direction);
+static void I3C_MasterPrepareEDMATransfer(I3C_Type *base, i3c_master_edma_handle_t *handle, i3c_direction_t direction);
 
 /*******************************************************************************
  * Code
@@ -88,58 +86,109 @@ static void I3C_MasterTransferEDMACallbackRx(edma_handle_t *dmaHandle, void *par
 
     if (transferDone)
     {
-        /* Terminate following data if present. */
-        i3cHandle->base->MCTRL |= I3C_MCTRL_RDTERM(1U);
-
-#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
-        if (i3cHandle->transfer.dataSize > 1U)
-        {
-            size_t rxCount;
-            /* Read out the last byte data. */
-            do
-            {
-                I3C_MasterGetFifoCounts(i3cHandle->base, &rxCount, NULL);
-            } while (rxCount == 0U);
-            *(uint8_t *)((uint32_t)(uint32_t *)i3cHandle->transfer.data + i3cHandle->transfer.dataSize - 1U) =
-                (uint8_t)i3cHandle->base->MRDATAB;
-        }
-#endif
-
         /* Disable I3C Rx DMA. */
-        i3cHandle->base->MDATACTRL &= ~I3C_MDMACTRL_DMAFB_MASK;
+        i3cHandle->base->MDMACTRL &= ~I3C_MDMACTRL_DMAFB_MASK;
+
+        /* If target send back the data logner as expect and controller can't get COMPLETE, stop the transfer here.
+           If bus transfer is done normally, this function will do nothing. */
+        if (i3cHandle->state != (uint8_t)kStopCtrlDoneState)
+        {
+            /* Terminate following data if present. */
+            i3cHandle->base->MCTRL |= I3C_MCTRL_RDTERM(1U);
+            i3cHandle->state = (uint8_t)kWaitForCompletionState;
+            I3C_MasterTransferEDMAHandleIRQ(i3cHandle->base, i3cHandle);
+        }
     }
 }
 
 static void I3C_MasterTransferEDMACallbackTx(edma_handle_t *dmaHandle, void *param, bool transferDone, uint32_t tcds)
 {
     i3c_master_edma_handle_t *i3cHandle = (i3c_master_edma_handle_t *)param;
-    uint32_t instance;
 
     if (transferDone)
     {
         /* Disable I3C Tx DMA. */
         i3cHandle->base->MDATACTRL &= ~I3C_MDMACTRL_DMATB_MASK;
-
-        if (i3cHandle->transferCount != 1U)
-        {
-            instance = I3C_GetInstance(i3cHandle->base);
-            /* Ensure there's space in the Tx FIFO. */
-            while ((i3cHandle->base->MDATACTRL & I3C_MDATACTRL_TXFULL_MASK) != 0U)
-            {
-            }
-            i3cHandle->base->MWDATABE = i3cEndByte[instance];
-        }
     }
 }
+
+static void I3C_MasterEDMAEnable(I3C_Type *base, i3c_master_edma_handle_t *handle)
+{
+    bool isEnableTxDMA = false;
+    bool isEnableRxDMA = false;
+
+    if (handle->transfer.direction == kI3C_Write)
+    {
+        isEnableTxDMA = true;
+    }
+    else
+    {
+        if (handle->subaddressCount != 0U)
+        {
+            isEnableTxDMA = true;
+        }
+        isEnableRxDMA = true;
+    }
+
+    I3C_MasterEnableDMA(base, isEnableTxDMA, isEnableRxDMA, 1);
+}
+
+static status_t I3C_MasterEDMAPrepareStart(I3C_Type *base, i3c_master_edma_handle_t *handle)
+{
+    i3c_master_transfer_t *xfer = &handle->transfer;
+    status_t result             = kStatus_Success;
+    i3c_direction_t direction   = xfer->direction;
+
+    if (xfer->busType != kI3C_TypeI3CDdr)
+    {
+        direction = (0UL != xfer->subaddressSize) ? kI3C_Write : xfer->direction;
+    }
+
+    /* Handle no start option. */
+    if (0U != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
+    {
+        /* No need to send start flag, directly go to send command or data. */
+        if (direction == kI3C_Write)
+        {
+            handle->state = (uint8_t)kWaitForCompletionState;
+            I3C_MasterEDMAEnable(base, handle);
+        }
+        else
+        {
+            result = kStatus_InvalidArgument;
+        }
+    }
+    else
+    {
+        /* If repeated start is requested, send repeated start. */
+        if (0U !=
+            (xfer->flags & ((uint32_t)kI3C_TransferRepeatedStartFlag | (uint32_t)kI3C_TransferStartWithBroadcastAddr)))
+        {
+            result = I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, direction);
+        }
+        else /* For normal transfer, send start. */
+        {
+            result = I3C_MasterStart(base, xfer->busType, xfer->slaveAddress, direction);
+        }
+
+        if (result == kStatus_Success)
+        {
+            handle->state = (uint8_t)kStartCtrlDoneState;
+        }
+    }
+
+    return result;
+}
+
 /*!
  * brief Prepares the transfer state machine and fills in the command buffer.
- * param handle Master nonblocking driver handle.
+ * param base  I3C base.
+ * param handle  I3C master EDNA handle.
  */
 static status_t I3C_MasterInitTransferStateMachineEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle)
 {
     i3c_master_transfer_t *xfer = &handle->transfer;
     status_t result             = kStatus_Success;
-    i3c_direction_t direction   = xfer->direction;
 
     /* Calculate command count and put into command buffer. */
     handle->subaddressCount = 0U;
@@ -151,176 +200,179 @@ static status_t I3C_MasterInitTransferStateMachineEDMA(I3C_Type *base, i3c_maste
         }
     }
 
-    /* Start condition shall be ommited, switch directly to next phase */
-    if (xfer->dataSize == 0U)
-    {
-        handle->state = (uint8_t)kStopState;
-    }
+    /* Prepare the DMA Tx/Rx in advance. */
+    I3C_MasterPrepareEDMATransfer(base, handle, handle->transfer.direction);
 
     if (0UL != (xfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr))
     {
-        if (0UL != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        if (0UL != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
-        {
-            return kStatus_InvalidArgument;
-        }
-
         /* Issue 0x7E as start. */
         result = I3C_MasterStart(base, xfer->busType, 0x7E, kI3C_Write);
-        if (result != kStatus_Success)
+        if (result == kStatus_Success)
         {
-            return result;
-        }
-
-        result = I3C_MasterWaitForCtrlDone(base, false);
-        if (result != kStatus_Success)
-        {
-            return result;
-        }
-    }
-
-    /* Handle no start option. */
-    if (0U != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
-    {
-        /* No need to send start flag, directly go to send command or data */
-        if (xfer->subaddressSize > 0UL)
-        {
-            handle->state = (uint8_t)kSendCommandState;
-        }
-        else
-        {
-            if (direction == kI3C_Write)
-            {
-                /* Next state, send data. */
-                handle->state = (uint8_t)kTransmitDataState;
-            }
-            else
-            {
-                /* Only support write with no stop signal. */
-                return kStatus_InvalidArgument;
-            }
+            handle->state = (uint8_t)kBroadcastStartCtrlDoneState;
         }
     }
     else
     {
-        if (xfer->subaddressSize != 0U)
-        {
-            handle->state = (uint8_t)kSendCommandState;
-        }
-        else
-        {
-            if (handle->transfer.direction == kI3C_Write)
-            {
-                handle->state = (uint8_t)kTransmitDataState;
-            }
-            else if (handle->transfer.direction == kI3C_Read)
-            {
-                handle->state = (uint8_t)kReceiveDataState;
-            }
-            else
-            {
-                return kStatus_InvalidArgument;
-            }
-        }
-
-        if (handle->transfer.direction == kI3C_Read)
-        {
-            I3C_MasterRunEDMATransfer(base, handle, xfer->data, xfer->dataSize, kI3C_Read);
-        }
-
-        if (handle->state != (uint8_t)kStopState)
-        {
-            /* If repeated start is requested, send repeated start. */
-            if (0U != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
-            {
-                result = I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, direction);
-            }
-            else /* For normal transfer, send start. */
-            {
-                result = I3C_MasterStart(base, xfer->busType, xfer->slaveAddress, direction);
-            }
-        }
+        result = I3C_MasterEDMAPrepareStart(base, handle);
     }
 
-    I3C_MasterTransferEDMAHandleIRQ(base, handle);
     return result;
 }
 
-static void I3C_MasterRunEDMATransfer(
-    I3C_Type *base, i3c_master_edma_handle_t *handle, void *data, size_t dataSize, i3c_direction_t direction)
+static void I3C_SetEDMATcd(i3c_master_edma_handle_t *handle,
+                           edma_transfer_config_t *xferConfig,
+                           uint32_t tcdIdx,
+                           bool isEndTcd)
 {
-    bool isEnableTxDMA = false;
-    bool isEnableRxDMA = false;
-    edma_transfer_config_t xferConfig;
-    uint32_t instance;
-    uint32_t address;
-    uint32_t width;
+    assert(tcdIdx < (sizeof(s_edma_tcd) / sizeof(edma_tcd_t) / ARRAY_SIZE(kI3cBases)));
 
-    handle->transferCount = dataSize;
+    uint32_t instance   = I3C_GetInstance(handle->base);
+    edma_tcd_t *edmaTcd = isEndTcd ? NULL : &s_edma_tcd[instance][tcdIdx + 1U];
 
-    switch (direction)
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+    EDMA_Type *edmaBase = handle->txDmaHandle->base;
+    EDMA_TcdResetExt(edmaBase, &s_edma_tcd[instance][tcdIdx]);
+#else
+    EDMA_TcdReset(&s_edma_tcd[instance][tcdIdx]);
+#endif
+
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+    EDMA_TcdSetTransferConfigExt(edmaBase, &s_edma_tcd[instance][tcdIdx], xferConfig, edmaTcd);
+#else
+    EDMA_TcdSetTransferConfig(&s_edma_tcd[tcdIdx], xferConfig, edmaTcd);
+#endif
+
+    if (isEndTcd)
     {
-        case kI3C_Write:
-            if (dataSize != 1U)
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdEnableInterruptsExt(edmaBase, &s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
+#else
+        EDMA_TcdEnableInterrupts(&s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
+#endif
+    }
+    else
+    {
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdDisableInterruptsExt(edmaBase, &s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
+#else
+        EDMA_TcdDisableInterrupts(&s_edma_tcd[instance][tcdIdx], kEDMA_MajorInterruptEnable);
+#endif
+    }
+}
+
+static void I3C_MasterSetTxEDMA(I3C_Type *base,
+                                i3c_master_edma_handle_t *handle,
+                                edma_transfer_config_t *txChannelConfig,
+                                void *data,
+                                size_t dataSize)
+{
+    if (handle->transfer.busType == kI3C_TypeI3CDdr)
+    {
+        EDMA_PrepareTransfer(txChannelConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATAB1,
+                             sizeof(uint8_t), 1, dataSize, kEDMA_MemoryToPeripheral);
+        I3C_SetEDMATcd(handle, txChannelConfig, 0, true);
+    }
+    else
+    {
+        if (dataSize == 1U)
+        {
+            EDMA_PrepareTransfer(txChannelConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATABE,
+                                 sizeof(uint8_t), 1, dataSize, kEDMA_MemoryToPeripheral);
+            I3C_SetEDMATcd(handle, txChannelConfig, 0, true);
+        }
+        else
+        {
+            EDMA_PrepareTransfer(txChannelConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATAB1,
+                                 sizeof(uint8_t), 1, dataSize - 1U, kEDMA_MemoryToPeripheral);
+            I3C_SetEDMATcd(handle, txChannelConfig, 0, false);
+            EDMA_PrepareTransfer(txChannelConfig, (uint8_t *)data + dataSize - 1U, sizeof(uint8_t),
+                                 (uint32_t *)(uint32_t)&base->MWDATABE, sizeof(uint8_t), 1, 1U,
+                                 kEDMA_MemoryToPeripheral);
+            I3C_SetEDMATcd(handle, txChannelConfig, 1, true);
+        }
+    }
+}
+
+static void I3C_MasterPrepareEDMATransfer(I3C_Type *base, i3c_master_edma_handle_t *handle, i3c_direction_t direction)
+{
+    void *data        = handle->transfer.data;
+    size_t dataSize   = handle->transfer.dataSize;
+    uint32_t instance = I3C_GetInstance(base);
+    edma_transfer_config_t xferConfig;
+
+    handle->transferCount = handle->transfer.dataSize;
+
+    if (direction == kI3C_Write)
+    {
+        if ((handle->subaddressCount != 0U) && (dataSize != 0U))
+        {
+            EDMA_PrepareTransfer(&xferConfig, &handle->subaddressBuffer[0], sizeof(uint8_t),
+                                 (uint32_t *)(uint32_t)&base->MWDATAB1, sizeof(uint8_t), 1, handle->subaddressCount,
+                                 kEDMA_MemoryToPeripheral);
+            I3C_SetEDMATcd(handle, &xferConfig, 0, false);
+
+            if (dataSize == 1U)
             {
-                address = (uint32_t)&base->MWDATAB1;
-                /* Cause controller sends command and data with same interface, need special buffer to store the END byte. */
-                instance = I3C_GetInstance(base);
-                i3cEndByte[instance] = *(uint8_t *)((uint32_t)(uint32_t *)data + dataSize - 1U);
-                dataSize--;
+                EDMA_PrepareTransfer(&xferConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATABE,
+                                     sizeof(uint8_t), 1, 1, kEDMA_MemoryToPeripheral);
+                I3C_SetEDMATcd(handle, &xferConfig, 1, true);
             }
             else
             {
-                address = (uint32_t)&base->MWDATABE;
+                EDMA_PrepareTransfer(&xferConfig, data, sizeof(uint8_t), (uint32_t *)(uint32_t)&base->MWDATAB1,
+                                     sizeof(uint8_t), 1, dataSize - 1U, kEDMA_MemoryToPeripheral);
+                I3C_SetEDMATcd(handle, &xferConfig, 1, false);
+                EDMA_PrepareTransfer(&xferConfig, (uint8_t *)data + dataSize - 1U, sizeof(uint8_t),
+                                     (uint32_t *)(uint32_t)&base->MWDATABE, sizeof(uint8_t), 1, 1U,
+                                     kEDMA_MemoryToPeripheral);
+                I3C_SetEDMATcd(handle, &xferConfig, 2, true);
             }
-            EDMA_PrepareTransfer(&xferConfig, data, sizeof(uint8_t), (uint32_t *)address, sizeof(uint8_t), 1, dataSize,
-                                 kEDMA_MemoryToPeripheral);
-            (void)EDMA_SubmitTransfer(handle->txDmaHandle, &xferConfig);
-            EDMA_StartTransfer(handle->txDmaHandle);
-            isEnableTxDMA = true;
-            width         = 1U;
-            break;
+        }
+        else
+        {
+            data     = (handle->subaddressCount != 0U) ? (&handle->subaddressBuffer[0]) : handle->transfer.data;
+            dataSize = (handle->subaddressCount != 0U) ? handle->subaddressCount : handle->transfer.dataSize;
 
-        case kI3C_Read:
-#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
-            /* ERRATA052086: Soc integration issue results in target misses the last DMA request to copy the
-            last one byte from controler when transmission data size is > 1 byte. Resolution: Triggering DMA
-            interrupt one byte in advance, then receive the last one byte data after DMA transmission finishes. */
-            if (dataSize > 1U)
-            {
-                dataSize--;
-            }
-#endif
-            address = (uint32_t)&base->MRDATAB;
-            EDMA_PrepareTransfer(&xferConfig, (uint32_t *)address, sizeof(uint8_t), data, sizeof(uint8_t), 1, dataSize,
-                                 kEDMA_PeripheralToMemory);
-            (void)EDMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
-            EDMA_StartTransfer(handle->rxDmaHandle);
-            isEnableRxDMA = true;
-            width         = 1U;
-            break;
+            I3C_MasterSetTxEDMA(base, handle, &xferConfig, data, dataSize);
+        }
 
-        default:
-            /* This should never happen */
-            assert(false);
-            break;
+        EDMA_InstallTCD(handle->txDmaHandle->base, handle->txDmaHandle->channel, &s_edma_tcd[instance][0]);
+        EDMA_StartTransfer(handle->txDmaHandle);
     }
+    else
+    {
+        if (handle->subaddressCount != 0U)
+        {
+            I3C_MasterSetTxEDMA(base, handle, &xferConfig, &handle->subaddressBuffer[0], handle->subaddressCount);
+            EDMA_InstallTCD(handle->txDmaHandle->base, handle->txDmaHandle->channel, &s_edma_tcd[instance][0]);
+            EDMA_StartTransfer(handle->txDmaHandle);
+        }
 
-    I3C_MasterEnableDMA(base, isEnableTxDMA, isEnableRxDMA, width);
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
+        /* ERRATA052086: Soc integration issue results in target misses the last DMA request to copy the
+        last one byte from controler when transmission data size is > 1 byte. Resolution: Triggering DMA
+        interrupt one byte in advance, then receive the last one byte data after DMA transmission finishes. */
+        if (dataSize > 1U)
+        {
+            dataSize--;
+        }
+#endif
+        EDMA_PrepareTransfer(&xferConfig, (uint32_t *)(uint32_t)&base->MRDATAB, sizeof(uint8_t), data, sizeof(uint8_t),
+                             1, dataSize, kEDMA_PeripheralToMemory);
+        (void)EDMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
+        EDMA_StartTransfer(handle->rxDmaHandle);
+    }
 }
 
-static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle, bool *isDone)
+static void I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle, bool *isDone)
 {
+    bool state_complete = false;
+    size_t rxCount      = 0;
+    i3c_master_transfer_t *xfer;
+    status_t result;
     uint32_t status;
     uint32_t errStatus;
-    status_t result = kStatus_Success;
-    i3c_master_transfer_t *xfer;
-    size_t rxCount      = 0;
-    bool state_complete = false;
 
     /* Set default isDone return value. */
     *isDone = false;
@@ -334,36 +386,28 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
     result                         = I3C_MasterCheckAndClearError(base, errStatus);
     if (kStatus_Success != result)
     {
-        return result;
+        handle->state  = (uint8_t)kStopState;
+        handle->result = result;
     }
-
-    if (0UL != (status & (uint32_t)kI3C_MasterSlave2MasterFlag))
+    else
     {
-        if (handle->callback.slave2Master != NULL)
+        if (0UL != (status & (uint32_t)kI3C_MasterSlave2MasterFlag))
         {
-            handle->callback.slave2Master(base, handle->userData);
+            if (handle->callback.slave2Master != NULL)
+            {
+                handle->callback.slave2Master(base, handle->userData);
+            }
         }
-    }
 
-    if ((0UL != (status & (uint32_t)kI3C_MasterSlaveStartFlag)) && (handle->transfer.busType != kI3C_TypeI2C))
-    {
-        handle->state = (uint8_t)kSlaveStartState;
-    }
+        if ((0UL != (status & (uint32_t)kI3C_MasterSlaveStartFlag)) && (masterState == kI3C_MasterStateSlvReq))
+        {
+            handle->state = (uint8_t)kSlaveStartState;
+        }
 
-    if ((masterState == kI3C_MasterStateIbiRcv) || (masterState == kI3C_MasterStateIbiAck))
-    {
-        handle->state = (uint8_t)kIBIWonState;
-    }
-
-    if (handle->state == (uint8_t)kIdleState)
-    {
-        return result;
-    }
-
-    if (handle->state == (uint8_t)kIBIWonState)
-    {
-        /* Get fifo counts and compute room in tx fifo. */
-        rxCount = (base->MDATACTRL & I3C_MDATACTRL_RXCOUNT_MASK) >> I3C_MDATACTRL_RXCOUNT_SHIFT;
+        if (handle->state == (uint8_t)kIdleState)
+        {
+            return;
+        }
     }
 
     /* Get pointer to private data. */
@@ -375,10 +419,72 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
         switch (handle->state)
         {
             case (uint8_t)kSlaveStartState:
-                /* Emit start + 0x7E */
+                /* Emit start + 0x7E to ensure target always wins the arbrtration. */
                 I3C_MasterEmitRequest(base, kI3C_RequestAutoIbi);
                 handle->state  = (uint8_t)kIBIWonState;
                 state_complete = true;
+                break;
+
+            case (uint8_t)kBroadcastStartCtrlDoneState:
+                if (0UL != (status & (uint32_t)kI3C_MasterArbitrationWonFlag))
+                {
+                    handle->ibiFlag = true;
+                }
+
+                /* Check whether 0x7E START header succeeds or IBI wins. */
+                if (0UL != (status & (uint32_t)kI3C_MasterControlDoneFlag))
+                {
+                    if (handle->ibiFlag)
+                    {
+                        handle->state   = (uint8_t)kIBIWonState;
+                        handle->ibiFlag = false;
+                    }
+                    else
+                    {
+                        (void)I3C_MasterEDMAPrepareStart(base, handle);
+                        state_complete = true;
+                    }
+                }
+                else
+                {
+                    state_complete = true;
+                }
+                break;
+
+            case (uint8_t)kStartCtrlDoneState:
+                if (0UL != (status & (uint32_t)kI3C_MasterArbitrationWonFlag))
+                {
+                    handle->ibiFlag = true;
+                }
+
+                if (0UL != (status & (uint32_t)kI3C_MasterControlDoneFlag))
+                {
+                    if (handle->ibiFlag)
+                    {
+                        handle->state   = (uint8_t)kIBIWonState;
+                        handle->ibiFlag = false;
+                    }
+                    else
+                    {
+                        /* For combination of write address and read data, need to do ReSTART after write. */
+                        if ((xfer->subaddressSize != 0U) && (xfer->direction == kI3C_Read) &&
+                            (xfer->busType != kI3C_TypeI3CDdr) && (0UL != xfer->dataSize))
+                        {
+                            handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
+                        }
+                        else
+                        {
+                            handle->state = (uint8_t)kWaitForCompletionState;
+                        }
+
+                        I3C_MasterEDMAEnable(base, handle);
+                        state_complete = true;
+                    }
+                }
+                else
+                {
+                    state_complete = true;
+                }
                 break;
 
             case (uint8_t)kIBIWonState:
@@ -395,27 +501,31 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
                     }
                 }
 
-                /* Make sure there is data in the rx fifo. */
-                if (0UL != rxCount)
+                if (0UL != (status & (uint32_t)kI3C_MasterCompleteFlag))
                 {
-                    if ((handle->ibiBuff == NULL) && (handle->callback.ibiCallback != NULL))
+                    /* Make sure there is data in the Rx FIFO. */
+                    rxCount = (base->MDATACTRL & I3C_MDATACTRL_RXCOUNT_MASK) >> I3C_MDATACTRL_RXCOUNT_SHIFT;
+                    if (0UL != rxCount)
                     {
-                        handle->callback.ibiCallback(base, handle, kI3C_IbiNormal, kI3C_IbiDataBuffNeed);
+                        if ((handle->ibiBuff == NULL) && (handle->callback.ibiCallback != NULL))
+                        {
+                            handle->callback.ibiCallback(base, handle, kI3C_IbiNormal, kI3C_IbiDataBuffNeed);
+                        }
+
+                        do
+                        {
+                            uint8_t tempData = (uint8_t)base->MRDATAB;
+                            if (handle->ibiBuff != NULL)
+                            {
+                                handle->ibiBuff[handle->ibiPayloadSize++] = tempData;
+                            }
+                        } while (--rxCount);
                     }
-                    uint8_t tempData = (uint8_t)base->MRDATAB;
-                    if (handle->ibiBuff != NULL)
-                    {
-                        handle->ibiBuff[handle->ibiPayloadSize++] = tempData;
-                    }
-                    rxCount--;
-                    break;
-                }
-                else if (0UL != (status & (uint32_t)kI3C_MasterCompleteFlag))
-                {
+
                     handle->ibiType    = I3C_GetIBIType(base);
                     handle->ibiAddress = I3C_GetIBIAddress(base);
-                    state_complete     = true;
-                    result             = kStatus_I3C_IBIWon;
+                    handle->result     = kStatus_I3C_IBIWon;
+                    handle->state      = (uint8_t)kStopState;
                 }
                 else
                 {
@@ -423,60 +533,52 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
                 }
                 break;
 
-            case (uint8_t)kSendCommandState:
-                I3C_MasterRunEDMATransfer(base, handle, handle->subaddressBuffer, handle->subaddressCount, kI3C_Write);
-
-                if ((xfer->direction == kI3C_Read) || (0UL == xfer->dataSize))
-                {
-                    if (0UL == xfer->dataSize)
-                    {
-                        handle->state = (uint8_t)kWaitForCompletionState;
-                    }
-                    else
-                    {
-                        /* xfer->dataSize != 0U, xfer->direction = kI3C_Read */
-                        handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
-                    }
-                }
-                else
-                {
-                    /* Next state, transfer data. */
-                    handle->state = (uint8_t)kTransmitDataState;
-                }
-
-                state_complete = true;
-                break;
-
             case (uint8_t)kWaitRepeatedStartCompleteState:
-                /* We stay in this state until the maste complete. */
+                /* After Tx finishes, ReSTART receiving data. */
                 if (0UL != (status & (uint32_t)kI3C_MasterCompleteFlag))
                 {
-                    handle->state = (uint8_t)kReceiveDataState;
-                    /* Send repeated start and slave address. */
-                    result = I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, kI3C_Read);
+                    (void)I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, kI3C_Read);
+                    handle->state = (uint8_t)kWaitForCompletionState;
                 }
-
-                state_complete = true;
-                break;
-
-            case (uint8_t)kTransmitDataState:
-                I3C_MasterRunEDMATransfer(base, handle, xfer->data, xfer->dataSize, kI3C_Write);
-                handle->state = (uint8_t)kWaitForCompletionState;
-
-                state_complete = true;
-                break;
-
-            case (uint8_t)kReceiveDataState:
-                /* Do DMA read. */
-                handle->state = (uint8_t)kWaitForCompletionState;
 
                 state_complete = true;
                 break;
 
             case (uint8_t)kWaitForCompletionState:
-                /* We stay in this state until the maste complete. */
+                /* We stay in this state until the final part of data complete. */
                 if (0UL != (status & (uint32_t)kI3C_MasterCompleteFlag))
                 {
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
+                    if (handle->transfer.direction == kI3C_Read)
+                    {
+                        if (handle->transfer.dataSize > 1U)
+                        {
+                            size_t rxCount;
+                            uint32_t count;
+
+                            /* If DMA finishes whole transfer or slave sends END in advance, break and read the last
+                             * byte. */
+                            do
+                            {
+                                count = EDMA_GetRemainingMajorLoopCount(handle->rxDmaHandle->base,
+                                                                        handle->rxDmaHandle->channel);
+                                I3C_MasterGetFifoCounts(handle->base, &rxCount, NULL);
+                                if (0U == count)
+                                {
+                                    break;
+                                }
+                            } while (rxCount > 1U);
+
+                            /* Read out the last byte data if there's non-handled byte in Rx FIFO. */
+                            if (rxCount > 0U)
+                            {
+                                count = handle->transferCount - count;
+                                *(uint8_t *)((uint32_t)(uint32_t *)handle->transfer.data + count - 1U) =
+                                    (uint8_t)handle->base->MRDATAB;
+                            }
+                        }
+                    }
+#endif
                     handle->state = (uint8_t)kStopState;
                 }
                 else
@@ -487,19 +589,35 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
 
             case (uint8_t)kStopState:
                 /* Only issue a stop transition if the caller requested it. */
-                if (0UL == (xfer->flags & (uint32_t)kI3C_TransferNoStopFlag))
+                if ((0UL == (xfer->flags & (uint32_t)kI3C_TransferNoStopFlag)) || (kStatus_Success != handle->result))
                 {
-                    if (xfer->busType == kI3C_TypeI3CDdr)
+                    /* Disable this interrupt in case there's slave request IBI interrupts the STOP finish event. */
+                    I3C_MasterDisableInterrupts(base, (uint32_t)kI3C_MasterSlaveStartFlag);
+
+                    if (masterState == kI3C_MasterStateDdr)
                     {
                         I3C_MasterEmitRequest(base, kI3C_RequestForceExit);
                     }
                     else
                     {
                         I3C_MasterEmitRequest(base, kI3C_RequestEmitStop);
-                        result = I3C_MasterWaitForCtrlDone(base, false);
                     }
+                    handle->state = (uint8_t)kStopCtrlDoneState;
                 }
-                *isDone        = true;
+                else
+                {
+                    *isDone = true;
+                }
+                state_complete = true;
+                break;
+
+            case (uint8_t)kStopCtrlDoneState:
+                /* Waits for finial end event. */
+                if (0UL != (status & (uint32_t)kI3C_MasterControlDoneFlag))
+                {
+                    I3C_MasterEnableInterrupts(base, (uint32_t)kI3C_MasterSlaveStartFlag);
+                    *isDone = true;
+                }
                 state_complete = true;
                 break;
 
@@ -508,7 +626,6 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
                 break;
         }
     }
-    return result;
 }
 
 void I3C_MasterTransferCreateHandleEDMA(I3C_Type *base,
@@ -545,7 +662,7 @@ void I3C_MasterTransferCreateHandleEDMA(I3C_Type *base,
 
     /* Clear all flags. */
     I3C_MasterClearErrorStatusFlags(base, (uint32_t)kMasterErrorFlags);
-    I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
+    I3C_MasterClearStatusFlags(base, (uint32_t)kI3C_MasterClearFlags);
     /* Reset fifos. These flags clear automatically. */
     base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
 
@@ -573,25 +690,30 @@ status_t I3C_MasterTransferEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle
     assert(NULL != handle);
     assert(NULL != transfer);
     assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
+    assert(!((0UL != (transfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr)) &&
+             (0UL != (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))));
+    assert(!((0UL != (transfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr)) &&
+             (0UL != (transfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))));
+
     i3c_master_state_t masterState = I3C_MasterGetState(base);
     bool checkDdrState             = false;
+    status_t result;
 
-    /* Return busy if another transaction is in progress. */
-    if (handle->state != (uint8_t)kIdleState)
-    {
-        return kStatus_I3C_Busy;
-    }
-
-    /* Return an error if the bus is already in use not by us. */
+    /* Check bus available in first. */
     checkDdrState = (transfer->busType == kI3C_TypeI3CDdr) ? (masterState != kI3C_MasterStateDdr) : true;
     if ((masterState != kI3C_MasterStateIdle) && (masterState != kI3C_MasterStateNormAct) && checkDdrState)
     {
         return kStatus_I3C_Busy;
     }
 
-    /* Disable I3C IRQ sources while we configure stuff. */
-    I3C_MasterDisableInterrupts(
-        base, ((uint32_t)kMasterDMAIrqFlags | (uint32_t)kI3C_MasterRxReadyFlag | (uint32_t)kI3C_MasterTxReadyFlag));
+    I3C_MasterDisableInterrupts(base, (uint32_t)kMasterDMAIrqFlags);
+
+    /* Return busy if another transaction is in progress. */
+    if (handle->state != (uint8_t)kIdleState)
+    {
+        I3C_MasterEnableInterrupts(base, (uint32_t)kMasterDMAIrqFlags);
+        return kStatus_I3C_Busy;
+    }
 
     /* Save transfer into handle. */
     handle->transfer = *transfer;
@@ -603,29 +725,22 @@ status_t I3C_MasterTransferEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle
     /* Clear all flags. */
     I3C_MasterClearErrorStatusFlags(base, (uint32_t)kMasterErrorFlags);
     I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
+
     /* Reset fifos. These flags clear automatically. */
     base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
 
     /* Generate commands to send. */
-    (void)I3C_MasterInitTransferStateMachineEDMA(base, handle);
+    result = I3C_MasterInitTransferStateMachineEDMA(base, handle);
 
-    /* Enable I3C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
-    I3C_MasterEnableInterrupts(base, (uint32_t)(kMasterDMAIrqFlags));
+    I3C_MasterEnableInterrupts(base, (uint32_t)kMasterDMAIrqFlags);
 
-    if (transfer->busType == kI3C_TypeI2C)
-    {
-        I3C_MasterDisableInterrupts(base, (uint32_t)kI3C_MasterSlaveStartFlag);
-    }
-
-    return kStatus_Success;
+    return result;
 }
 
 void I3C_MasterTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 {
     i3c_master_edma_handle_t *handle = (i3c_master_edma_handle_t *)i3cHandle;
-
     bool isDone;
-    status_t result;
 
     /* Don't do anything if we don't have a valid handle. */
     if (NULL == handle)
@@ -633,39 +748,30 @@ void I3C_MasterTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
         return;
     }
 
-    result = I3C_MasterRunTransferStateMachineEDMA(base, handle, &isDone);
+    I3C_MasterRunTransferStateMachineEDMA(base, handle, &isDone);
 
-    if (handle->state == (uint8_t)kIdleState)
+    if (isDone)
     {
-        return;
-    }
+        I3C_MasterEnableDMA(base, false, false, 1);
+        EDMA_AbortTransfer(handle->txDmaHandle);
+        EDMA_AbortTransfer(handle->rxDmaHandle);
+        base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
 
-    if (isDone || (result != kStatus_Success))
-    {
-        /* XXX need to handle data that may be in rx fifo below watermark level? */
-
-        /* XXX handle error, terminate xfer */
-        if ((result == kStatus_I3C_Nak) || (result == kStatus_I3C_IBIWon))
-        {
-            I3C_MasterEmitRequest(base, kI3C_RequestEmitStop);
-            (void)I3C_MasterWaitForCtrlDone(base, false);
-        }
-
-        /* Set handle to idle state. */
         handle->state = (uint8_t)kIdleState;
 
         /* Invoke IBI user callback. */
-        if ((result == kStatus_I3C_IBIWon) && (handle->callback.ibiCallback != NULL))
+        if ((handle->result == kStatus_I3C_IBIWon) && (handle->callback.ibiCallback != NULL))
         {
             handle->callback.ibiCallback(base, handle, handle->ibiType, kI3C_IbiReady);
             handle->ibiPayloadSize = 0;
         }
 
-        /* Invoke callback. */
+        /* Invoke bus transfer complete callback. */
         if (NULL != handle->callback.transferComplete)
         {
-            handle->callback.transferComplete(base, handle, result, handle->userData);
+            handle->callback.transferComplete(base, handle, handle->result, handle->userData);
         }
+        handle->result = kStatus_Success;
     }
 }
 
@@ -719,10 +825,9 @@ void I3C_MasterTransferAbortEDMA(I3C_Type *base, i3c_master_edma_handle_t *handl
 {
     if (handle->state != (uint8_t)kIdleState)
     {
+        I3C_MasterEnableDMA(base, false, false, 1);
         EDMA_AbortTransfer(handle->txDmaHandle);
         EDMA_AbortTransfer(handle->rxDmaHandle);
-
-        I3C_MasterEnableDMA(base, false, false, 0);
 
         /* Reset fifos. These flags clear automatically. */
         base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
@@ -753,24 +858,12 @@ static void I3C_SlaveTransferEDMACallback(edma_handle_t *dmaHandle, void *param,
                 {
                 }
                 /* Send the last byte. */
-                i3cHandle->base->SWDATABE = *(uint8_t *)((uintptr_t)i3cHandle->transfer.txData + i3cHandle->transfer.txDataSize - 1U);
+                i3cHandle->base->SWDATABE =
+                    *(uint8_t *)((uintptr_t)i3cHandle->transfer.txData + i3cHandle->transfer.txDataSize - 1U);
             }
         }
         else
         {
-#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
-            if (i3cHandle->transfer.rxDataSize > 1U)
-            {
-                size_t rxCount;
-                /* Read out the last byte data. */
-                do
-                {
-                    I3C_SlaveGetFifoCounts(i3cHandle->base, &rxCount, NULL);
-                } while (rxCount == 0U);
-                *(uint8_t *)((uintptr_t)i3cHandle->transfer.rxData + i3cHandle->transfer.rxDataSize - 1U) =
-                    (uint8_t)i3cHandle->base->SRDATAB;
-            }
-#endif
             i3cHandle->base->SDMACTRL &= ~I3C_SDMACTRL_DMAFB_MASK;
         }
     }
@@ -877,8 +970,7 @@ static void I3C_SlavePrepareRxEDMA(I3C_Type *base, i3c_slave_edma_handle_t *hand
     }
 #endif
 
-    EDMA_PrepareTransfer(&rxConfig, (void *)rxFifoBase, 1, xfer->rxData, 1, 1, dataSize,
-                         kEDMA_PeripheralToMemory);
+    EDMA_PrepareTransfer(&rxConfig, (void *)rxFifoBase, 1, xfer->rxData, 1, 1, dataSize, kEDMA_PeripheralToMemory);
     (void)EDMA_SubmitTransfer(handle->rxDmaHandle, &rxConfig);
     EDMA_StartTransfer(handle->rxDmaHandle);
 }
@@ -910,7 +1002,6 @@ status_t I3C_SlaveTransferEDMA(I3C_Type *base,
     assert(NULL != transfer);
 
     bool txDmaEn = false, rxDmaEn = false;
-    uint32_t width;
 
     if (handle->isBusy)
     {
@@ -931,19 +1022,17 @@ status_t I3C_SlaveTransferEDMA(I3C_Type *base,
     {
         I3C_SlavePrepareTxEDMA(base, handle);
         txDmaEn = true;
-        width   = 1U;
     }
 
     if ((transfer->rxData != NULL) && (transfer->rxDataSize != 0U))
     {
         I3C_SlavePrepareRxEDMA(base, handle);
         rxDmaEn = true;
-        width   = 1U;
     }
 
     if (txDmaEn || rxDmaEn)
     {
-        I3C_SlaveEnableDMA(base, txDmaEn, rxDmaEn, width);
+        I3C_SlaveEnableDMA(base, txDmaEn, rxDmaEn, 1);
         return kStatus_Success;
     }
     else
@@ -1007,8 +1096,33 @@ void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 
     if (0UL != (flags & (uint32_t)kI3C_SlaveBusStopFlag))
     {
-        if (handle->isBusy == true)
+        if (handle->isBusy)
         {
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
+            if (handle->transfer.rxDataSize > 1U)
+            {
+                size_t leftCount = handle->isDdrMode ? 2U : 1U;
+                size_t rxCount;
+                size_t count;
+                do
+                {
+                    count = EDMA_GetRemainingMajorLoopCount(handle->rxDmaHandle->base, handle->rxDmaHandle->channel);
+                    I3C_SlaveGetFifoCounts(handle->base, &rxCount, NULL);
+                    if (0U == count)
+                    {
+                        break;
+                    }
+                } while (rxCount > leftCount);
+
+                if (rxCount > 0U)
+                {
+                    count                                                         = handle->transfer.rxDataSize - count;
+                    *(uint8_t *)((uintptr_t)handle->transfer.rxData + count - 1U) = (uint8_t)handle->base->SRDATAB;
+                }
+            }
+            handle->isDdrMode = false;
+#endif
+            I3C_SlaveTransferAbortEDMA(base, handle);
             xfer->event            = (uint32_t)kI3C_SlaveCompletionEvent;
             xfer->completionStatus = kStatus_Success;
             handle->isBusy         = false;
@@ -1017,7 +1131,6 @@ void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
             {
                 handle->callback(base, xfer, handle->userData);
             }
-            I3C_SlaveTransferAbortEDMA(base, handle);
         }
         else
         {
@@ -1034,6 +1147,14 @@ void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
             handle->callback(base, xfer, handle->userData);
         }
     }
+
+    if (0UL != (flags & (uint32_t)kI3C_SlaveBusHDRModeFlag))
+    {
+        handle->isBusy = true;
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052086) && (FSL_FEATURE_I3C_HAS_ERRATA_052086)
+        handle->isDdrMode = true;
+#endif
+    }
 }
 
 /*!
@@ -1044,7 +1165,7 @@ void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
  */
 void I3C_SlaveTransferAbortEDMA(I3C_Type *base, i3c_slave_edma_handle_t *handle)
 {
-    if (handle->isBusy != false)
+    if (handle->isBusy)
     {
         EDMA_AbortTransfer(handle->txDmaHandle);
         EDMA_AbortTransfer(handle->rxDmaHandle);

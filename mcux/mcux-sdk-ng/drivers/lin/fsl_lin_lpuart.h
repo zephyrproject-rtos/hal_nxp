@@ -29,6 +29,27 @@
  * Definitions
  ******************************************************************************/
 
+/*! @name Driver version */
+/*! @{ */
+/*! @brief LIN LPUART driver version */
+#define FSL_LIN_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
+/*! @} */
+
+/*!
+ * @brief Max loops to wait for LPUART transmission complete
+ *
+ * When de-initializing the LIN LPUART module, the program shall wait for the previous
+ * transmission to complete. This parameter defines how many loops to check
+ * completion before return error. If defined as 0, driver will wait forever until completion.
+ */
+#ifndef LIN_LPUART_TRANSMISSION_COMPLETE_TIMEOUT
+    #ifdef CONFIG_LIN_LPUART_TRANSMISSION_COMPLETE_TIMEOUT
+        #define LIN_LPUART_TRANSMISSION_COMPLETE_TIMEOUT CONFIG_LIN_LPUART_TRANSMISSION_COMPLETE_TIMEOUT
+    #else
+        #define LIN_LPUART_TRANSMISSION_COMPLETE_TIMEOUT 0U
+    #endif
+#endif
+
 typedef enum _lin_lpuart_stop_bit_count
 {
     kLPUART_OneStopBit = 0U, /*!< One stop bit */

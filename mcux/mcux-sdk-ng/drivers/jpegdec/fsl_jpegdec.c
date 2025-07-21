@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023,2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,6 @@
 #define JPEG_SOF0_MARKER 0xC0UL
 #define JPEG_SOF1_MARKER 0xC1UL
 #define JPEG_GET_U16(p)  ((((uint16_t)(*(p))) << 8) + ((uint16_t)(*((p) + 1))))
-
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -215,9 +214,14 @@ status_t JPEGDEC_ParseHeader(jpegdec_decoder_config_t *config)
     uint32_t imageLength = config->jpegBufSize;
     uint16_t width, height;
 
+    if (imageLength <= 16U)
+    {
+        /* The image length cannot be less than 16. */
+        return kStatus_Fail;
+    }
+
     /* Find the SOF0 marker, SOF image info need at least 16 bytes. */
-    imageLength = config->jpegBufSize;
-    imageBuf    = (uint8_t *)config->jpegBufAddr;
+    imageBuf = (uint8_t *)config->jpegBufAddr;
     while (imageLength-- > 16U)
     {
         if (*imageBuf++ == 0xFFU)
@@ -372,8 +376,8 @@ status_t JPEGDEC_ParseHeader(jpegdec_decoder_config_t *config)
 void JPEGDEC_SetDecodeOption(jpegdec_decoder_config_t *config, uint16_t pitch, bool clearStreamBuf, bool autoStart)
 {
     config->outBufPitch    = (uint32_t)pitch;
-    config->clearStreamBuf = (uint32_t)clearStreamBuf;
-    config->autoStart      = (uint32_t)autoStart;
+    config->clearStreamBuf = (clearStreamBuf ? 1UL : 0UL);
+    config->autoStart      = (autoStart ? 1UL : 0UL);
 }
 
 /*!

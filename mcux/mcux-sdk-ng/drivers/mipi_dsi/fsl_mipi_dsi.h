@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 /* The max APB transfer size. */

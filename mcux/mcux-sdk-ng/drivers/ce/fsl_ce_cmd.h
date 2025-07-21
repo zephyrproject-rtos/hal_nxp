@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -94,7 +94,8 @@ int CE_CmdLaunchBlocking();
 /*!
  * @brief Launches the current command queue and returns without waiting for completion on CE
  *
- * User has to poll to figure out command queue execution status
+ * CE Will send an interrupt via MUA->GCR to ARM upon completion of task. User can also poll to check for completion.
+ * User has to call CE_CmdReset() in the IRQ handler. IRQ::DSP_IRQn needs to be enabled.
  *
  * @return Currently only return 0.
  */

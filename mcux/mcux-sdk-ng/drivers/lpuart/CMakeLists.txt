@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.lpuart_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.lpuart)
-    mcux_component_version(2.8.2)
+    mcux_component_version(2.9.1)
 
     mcux_add_source(SOURCES fsl_lpuart.h fsl_lpuart.c)
 

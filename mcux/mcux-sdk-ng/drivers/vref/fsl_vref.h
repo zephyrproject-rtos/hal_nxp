@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,25 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2. */
+#define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3. */
+/*! @} */
+
+/*! @name Configuration */
+
+/*!
+ * @brief Max loops to wait for VREF internal voltage stable
+ *
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    #ifdef CONFIG_VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+        #define VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT CONFIG_VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    #else
+        #define VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT 0U
+    #endif
+#endif
+
 /*! @} */
 
 /* Those macros below defined to support SoC family which have VREFL (0.4V) reference */
@@ -108,8 +126,11 @@ extern "C" {
  *
  * @param base VREF peripheral address.
  * @param config Pointer to the configuration structure.
+ *
+ * @retval kStatus_Success run success.
+ * @retval kStatus_Timeout timeout occurs.
  */
-void VREF_Init(VREF_Type *base, const vref_config_t *config);
+status_t VREF_Init(VREF_Type *base, const vref_config_t *config);
 
 /*!
  * @brief Stops and disables the clock for the VREF module.
@@ -151,8 +172,11 @@ void VREF_GetDefaultConfig(vref_config_t *config);
  *
  * @param base VREF peripheral address.
  * @param trimValue Value of the trim register to set the output reference voltage (maximum 0x3F (6-bit)).
+ *
+ * @retval kStatus_Success run success.
+ * @retval kStatus_Timeout timeout occurs.
  */
-void VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue);
+status_t VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue);
 
 /*!
  * @brief Reads the value of the TRIM meaning output voltage.
@@ -176,8 +200,11 @@ static inline uint8_t VREF_GetTrimVal(VREF_Type *base)
  *
  * @param base VREF peripheral address.
  * @param trimValue Value of the trim register to set the output reference voltage (maximum 0x3F (6-bit)).
+ *
+ * @retval kStatus_Success run success.
+ * @retval kStatus_Timeout timeout occurs.
  */
-void VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue);
+status_t VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue);
 
 /*!
  * @brief Reads the value of the TRIM meaning output voltage (2V1).
@@ -205,8 +232,11 @@ static inline uint8_t VREF_GetTrim2V1Val(VREF_Type *base)
  *
  * @param base VREF peripheral address.
  * @param trimValue Value of the trim register to set output low reference voltage (maximum 0x05U (3-bit)).
+ *
+ * @retval kStatus_Success run success.
+ * @retval kStatus_Timeout timeout occurs.
  */
-void VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue);
+status_t VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue);
 
 /*!
  * @brief Reads the value of the TRIM meaning output voltage.

@@ -1,6 +1,5 @@
 /*
- * Copyright 2018-2021, 2023 NXP
- * All rights reserved.
+ * Copyright 2018-2021, 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -202,6 +201,9 @@ void OSTIMER_Init(OSTIMER_Type *base)
 void OSTIMER_Deinit(OSTIMER_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    /* Disable pending interrupts before disabling the OSTIMER clock
+     to avoid interrupts being triggered when the clock is disabled. */
+    OSTIMER_EnableInterrupt(base, false);
     /* Enable clock for OSTIMER. */
     CLOCK_DisableClock(s_ostimerClock[OSTIMER_GetInstance(base)]);
 #if (defined(FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY) && FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY)
@@ -269,7 +271,7 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
     s_ostimerHandle[instance] = cb;
 
     /* Set the match value. */
-    base->MATCH_L = (uint32_t)tmp;
+    base->MATCH_L = (uint32_t)(tmp & 0xFFFFFFFFU);
     base->MATCH_H = (uint32_t)(tmp >> 32U);
 
 #ifdef OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK

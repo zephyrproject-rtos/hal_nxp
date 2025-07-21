@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO SPI EDMA driver version. */
-#define FSL_FLEXIO_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_FLEXIO_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
 /*@}*/
 
 /*! @brief  typedef for flexio_qspi_master_edma_handle_t in advance. */
