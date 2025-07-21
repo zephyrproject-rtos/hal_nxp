@@ -3,21 +3,22 @@
 **     Processors:          MIMXRT685SFAWBR_cm33
 **                          MIMXRT685SFFOB_cm33
 **                          MIMXRT685SFVKB_cm33
+**                          MIMXRT685SVFVKB_cm33
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240823
+**     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT685S_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +29,17 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT685S_cm33_COMMON.h
- * @version 2.0
- * @date 2019-11-12
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT685S_cm33
  *
  * CMSIS Peripheral Access Layer for MIMXRT685S_cm33
@@ -46,7 +50,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -110,7 +114,7 @@ typedef enum IRQn {
   HYPERVISOR_IRQn              = 27,               /**< Hypervisor */
   SECUREVIOLATION_IRQn         = 28,               /**< Secure violation */
   HWVAD0_IRQn                  = 29,               /**< Hardware Voice Activity Detector */
-  Reserved46_IRQn              = 30,               /**< Reserved interrupt */
+  ESPI_IRQn                    = 30,               /**< eSPI interface */
   RNG_IRQn                     = 31,               /**< Random number Generator */
   RTC_IRQn                     = 32,               /**< RTC alarm and wake-up */
   DSPWAKE_IRQn                 = 33,               /**< Wake-up from DSP */
@@ -171,7 +175,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MIMXRT685S_cm33_SERIES
 #define MIMXRT685S_cm33_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMXRT685S_cm33_features.h"
 
@@ -613,6 +619,37 @@ typedef enum IRQn {
 /** Interrupt vectors for the DMIC peripheral type */
 #define DMIC_IRQS                                { DMIC0_IRQn }
 #define DMIC_HWVAD_IRQS                          { HWVAD0_IRQn }
+
+/* ESPI - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral ESPI base address */
+  #define ESPI_BASE                                (0x50037000u)
+  /** Peripheral ESPI base address */
+  #define ESPI_BASE_NS                             (0x40037000u)
+  /** Peripheral ESPI base pointer */
+  #define ESPI                                     ((ESPI_Type *)ESPI_BASE)
+  /** Peripheral ESPI base pointer */
+  #define ESPI_NS                                  ((ESPI_Type *)ESPI_BASE_NS)
+  /** Array initializer of ESPI peripheral base addresses */
+  #define ESPI_BASE_ADDRS                          { ESPI_BASE }
+  /** Array initializer of ESPI peripheral base pointers */
+  #define ESPI_BASE_PTRS                           { ESPI }
+  /** Array initializer of ESPI peripheral base addresses */
+  #define ESPI_BASE_ADDRS_NS                       { ESPI_BASE_NS }
+  /** Array initializer of ESPI peripheral base pointers */
+  #define ESPI_BASE_PTRS_NS                        { ESPI_NS }
+#else
+  /** Peripheral ESPI base address */
+  #define ESPI_BASE                                (0x40037000u)
+  /** Peripheral ESPI base pointer */
+  #define ESPI                                     ((ESPI_Type *)ESPI_BASE)
+  /** Array initializer of ESPI peripheral base addresses */
+  #define ESPI_BASE_ADDRS                          { ESPI_BASE }
+  /** Array initializer of ESPI peripheral base pointers */
+  #define ESPI_BASE_PTRS                           { ESPI }
+#endif
+/** Interrupt vectors for the ESPI peripheral type */
+#define ESPI_IRQS                                { ESPI_IRQn }
 
 /* FLEXCOMM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

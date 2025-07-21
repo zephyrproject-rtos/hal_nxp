@@ -9,15 +9,17 @@
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_cm33
 **                          MIMXRT685SFVKB_dsp
+**                          MIMXRT685SVFVKB_cm33
+**                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,27 +30,30 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXSPI.h
- * @version 2.0
- * @date 2019-11-12
+ * @file PERI_FLEXSPI.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXSPI
  *
  * CMSIS Peripheral Access Layer for FLEXSPI
  */
 
-#if !defined(FLEXSPI_H_)
-#define FLEXSPI_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXSPI_H_)
+#define PERI_FLEXSPI_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 #include "MIMXRT633S_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33))
+#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33) || defined(CPU_MIMXRT685SVFVKB_cm33))
 #include "MIMXRT685S_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
+#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp) || defined(CPU_MIMXRT685SVFVKB_dsp))
 #include "MIMXRT685S_dsp_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -141,6 +146,10 @@ typedef struct {
   __I  uint32_t RFDR[FLEXSPI_RFDR_COUNT];          /**< IP RX FIFO Data Register 0..IP RX FIFO Data Register 31, array offset: 0x100, array step: 0x4 */
   __O  uint32_t TFDR[FLEXSPI_TFDR_COUNT];          /**< IP TX FIFO Data Register 0..IP TX FIFO Data Register 31, array offset: 0x180, array step: 0x4 */
   __IO uint32_t LUT[FLEXSPI_LUT_COUNT];            /**< LUT 0..LUT 127, array offset: 0x200, array step: 0x4 */
+       uint8_t RESERVED_6[32];
+  __IO uint32_t HADDRSTART;                        /**< HADDR REMAP START ADDR, offset: 0x420 */
+  __IO uint32_t HADDREND;                          /**< HADDR REMAP END ADDR, offset: 0x424 */
+  __IO uint32_t HADDROFFSET;                       /**< HADDR REMAP OFFSET, offset: 0x428 */
 } FLEXSPI_Type;
 
 /* ----------------------------------------------------------------------------
@@ -285,8 +294,8 @@ typedef struct {
 /*! SCKBDIFFOPT - B_SCLK pad can be used as A_SCLK differential clock output (inverted clock to
  *    A_SCLK). In this case, port B flash access is not available. After changing the value of this
  *    field, MCR0[SWRESET] should be set.
- *  0b1..B_SCLK pad is used as port A SCLK inverted clock output (Differential clock to A_SCLK). Port B flash access is not available.
  *  0b0..B_SCLK pad is used as port B SCLK clock output. Port B flash access is available.
+ *  0b1..B_SCLK pad is used as port A SCLK inverted clock output (Differential clock to A_SCLK). Port B flash access is not available.
  */
 #define FLEXSPI_MCR2_SCKBDIFFOPT(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR2_SCKBDIFFOPT_SHIFT)) & FLEXSPI_MCR2_SCKBDIFFOPT_MASK)
 
@@ -1017,6 +1026,38 @@ typedef struct {
 #define FLEXSPI_LUT_OPCODE1(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_LUT_OPCODE1_SHIFT)) & FLEXSPI_LUT_OPCODE1_MASK)
 /*! @} */
 
+/*! @name HADDRSTART - HADDR REMAP START ADDR */
+/*! @{ */
+
+#define FLEXSPI_HADDRSTART_REMAPEN_MASK          (0x1U)
+#define FLEXSPI_HADDRSTART_REMAPEN_SHIFT         (0U)
+/*! REMAPEN
+ *  0b0..HADDR REMAP Disabled
+ *  0b1..HADDR REMAP Enabled
+ */
+#define FLEXSPI_HADDRSTART_REMAPEN(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_HADDRSTART_REMAPEN_SHIFT)) & FLEXSPI_HADDRSTART_REMAPEN_MASK)
+
+#define FLEXSPI_HADDRSTART_ADDRSTART_MASK        (0xFFFFF000U)
+#define FLEXSPI_HADDRSTART_ADDRSTART_SHIFT       (12U)
+#define FLEXSPI_HADDRSTART_ADDRSTART(x)          (((uint32_t)(((uint32_t)(x)) << FLEXSPI_HADDRSTART_ADDRSTART_SHIFT)) & FLEXSPI_HADDRSTART_ADDRSTART_MASK)
+/*! @} */
+
+/*! @name HADDREND - HADDR REMAP END ADDR */
+/*! @{ */
+
+#define FLEXSPI_HADDREND_ENDSTART_MASK           (0xFFFFF000U)
+#define FLEXSPI_HADDREND_ENDSTART_SHIFT          (12U)
+#define FLEXSPI_HADDREND_ENDSTART(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_HADDREND_ENDSTART_SHIFT)) & FLEXSPI_HADDREND_ENDSTART_MASK)
+/*! @} */
+
+/*! @name HADDROFFSET - HADDR REMAP OFFSET */
+/*! @{ */
+
+#define FLEXSPI_HADDROFFSET_ADDROFFSET_MASK      (0xFFFFF000U)
+#define FLEXSPI_HADDROFFSET_ADDROFFSET_SHIFT     (12U)
+#define FLEXSPI_HADDROFFSET_ADDROFFSET(x)        (((uint32_t)(((uint32_t)(x)) << FLEXSPI_HADDROFFSET_ADDROFFSET_SHIFT)) & FLEXSPI_HADDROFFSET_ADDROFFSET_MASK)
+/*! @} */
+
 
 /*!
  * @}
@@ -1053,5 +1094,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXSPI_H_ */
+#endif  /* PERI_FLEXSPI_H_ */
 

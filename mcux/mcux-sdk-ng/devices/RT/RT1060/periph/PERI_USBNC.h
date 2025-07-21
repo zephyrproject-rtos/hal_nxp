@@ -25,14 +25,14 @@
 **                          MIMXRT106LDVL6A
 **                          MIMXRT106SDVL6A
 **
-**     Version:             rev. 1.4, 2022-03-25
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBNC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -51,21 +51,24 @@
 **         Update header files to align with IMXRT1060RM Rev.3.
 **     - rev. 1.4 (2022-03-25)
 **         Add RT1060X device
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USBNC.h
- * @version 1.4
- * @date 2022-03-25
+ * @file PERI_USBNC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USBNC
  *
  * CMSIS Peripheral Access Layer for USBNC
  */
 
-#if !defined(USBNC_H_)
-#define USBNC_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USBNC_H_)
+#define PERI_USBNC_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVJ5B) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061CVL5B) || defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6A) || defined(CPU_MIMXRT1061DVL6B) || defined(CPU_MIMXRT1061XVN5B))
 #include "MIMXRT1061_COMMON.h"
@@ -149,80 +152,80 @@ typedef struct {
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_DIS_MASK    (0x80U)
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_DIS_SHIFT   (7U)
 /*! OVER_CUR_DIS
- *  0b1..Disables overcurrent detection
  *  0b0..Enables overcurrent detection
+ *  0b1..Disables overcurrent detection
  */
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_DIS(x)      (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_OVER_CUR_DIS_SHIFT)) & USBNC_USB_OTGn_CTRL_OVER_CUR_DIS_MASK)
 
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_POL_MASK    (0x100U)
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_POL_SHIFT   (8U)
 /*! OVER_CUR_POL
- *  0b1..Low active (low on this signal represents an overcurrent condition)
  *  0b0..High active (high on this signal represents an overcurrent condition)
+ *  0b1..Low active (low on this signal represents an overcurrent condition)
  */
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_POL(x)      (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_OVER_CUR_POL_SHIFT)) & USBNC_USB_OTGn_CTRL_OVER_CUR_POL_MASK)
 
 #define USBNC_USB_OTGn_CTRL_PWR_POL_MASK         (0x200U)
 #define USBNC_USB_OTGn_CTRL_PWR_POL_SHIFT        (9U)
 /*! PWR_POL
- *  0b1..PMIC Power Pin is High active.
  *  0b0..PMIC Power Pin is Low active.
+ *  0b1..PMIC Power Pin is High active.
  */
 #define USBNC_USB_OTGn_CTRL_PWR_POL(x)           (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_PWR_POL_SHIFT)) & USBNC_USB_OTGn_CTRL_PWR_POL_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WIE_MASK             (0x400U)
 #define USBNC_USB_OTGn_CTRL_WIE_SHIFT            (10U)
 /*! WIE
- *  0b1..Interrupt Enabled
  *  0b0..Interrupt Disabled
+ *  0b1..Interrupt Enabled
  */
 #define USBNC_USB_OTGn_CTRL_WIE(x)               (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WIE_SHIFT)) & USBNC_USB_OTGn_CTRL_WIE_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WKUP_SW_EN_MASK      (0x4000U)
 #define USBNC_USB_OTGn_CTRL_WKUP_SW_EN_SHIFT     (14U)
 /*! WKUP_SW_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define USBNC_USB_OTGn_CTRL_WKUP_SW_EN(x)        (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WKUP_SW_EN_SHIFT)) & USBNC_USB_OTGn_CTRL_WKUP_SW_EN_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WKUP_SW_MASK         (0x8000U)
 #define USBNC_USB_OTGn_CTRL_WKUP_SW_SHIFT        (15U)
 /*! WKUP_SW
- *  0b1..Force wake-up
  *  0b0..Inactive
+ *  0b1..Force wake-up
  */
 #define USBNC_USB_OTGn_CTRL_WKUP_SW(x)           (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WKUP_SW_SHIFT)) & USBNC_USB_OTGn_CTRL_WKUP_SW_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WKUP_ID_EN_MASK      (0x10000U)
 #define USBNC_USB_OTGn_CTRL_WKUP_ID_EN_SHIFT     (16U)
 /*! WKUP_ID_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define USBNC_USB_OTGn_CTRL_WKUP_ID_EN(x)        (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WKUP_ID_EN_SHIFT)) & USBNC_USB_OTGn_CTRL_WKUP_ID_EN_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WKUP_VBUS_EN_MASK    (0x20000U)
 #define USBNC_USB_OTGn_CTRL_WKUP_VBUS_EN_SHIFT   (17U)
 /*! WKUP_VBUS_EN
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define USBNC_USB_OTGn_CTRL_WKUP_VBUS_EN(x)      (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WKUP_VBUS_EN_SHIFT)) & USBNC_USB_OTGn_CTRL_WKUP_VBUS_EN_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WKUP_DPDM_EN_MASK    (0x20000000U)
 #define USBNC_USB_OTGn_CTRL_WKUP_DPDM_EN_SHIFT   (29U)
 /*! WKUP_DPDM_EN
- *  0b1..(Default) DPDM changes wake-up to be enabled, it is for device only.
  *  0b0..DPDM changes wake-up to be disabled only when VBUS is 0.
+ *  0b1..(Default) DPDM changes wake-up to be enabled, it is for device only.
  */
 #define USBNC_USB_OTGn_CTRL_WKUP_DPDM_EN(x)      (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WKUP_DPDM_EN_SHIFT)) & USBNC_USB_OTGn_CTRL_WKUP_DPDM_EN_MASK)
 
 #define USBNC_USB_OTGn_CTRL_WIR_MASK             (0x80000000U)
 #define USBNC_USB_OTGn_CTRL_WIR_SHIFT            (31U)
 /*! WIR
- *  0b1..Wake-up Interrupt Request received
  *  0b0..No wake-up interrupt request received
+ *  0b1..Wake-up Interrupt Request received
  */
 #define USBNC_USB_OTGn_CTRL_WIR(x)               (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WIR_SHIFT)) & USBNC_USB_OTGn_CTRL_WIR_MASK)
 /*! @} */
@@ -233,8 +236,8 @@ typedef struct {
 #define USBNC_USB_OTGn_PHY_CTRL_0_UTMI_CLK_VLD_MASK (0x80000000U)
 #define USBNC_USB_OTGn_PHY_CTRL_0_UTMI_CLK_VLD_SHIFT (31U)
 /*! UTMI_CLK_VLD
- *  0b1..Valid
  *  0b0..Invalid
+ *  0b1..Valid
  */
 #define USBNC_USB_OTGn_PHY_CTRL_0_UTMI_CLK_VLD(x) (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_PHY_CTRL_0_UTMI_CLK_VLD_SHIFT)) & USBNC_USB_OTGn_PHY_CTRL_0_UTMI_CLK_VLD_MASK)
 /*! @} */
@@ -278,5 +281,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USBNC_H_ */
+#endif  /* PERI_USBNC_H_ */
 

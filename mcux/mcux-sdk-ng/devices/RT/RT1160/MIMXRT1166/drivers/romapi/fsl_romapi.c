@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -232,7 +232,15 @@ status_t ROM_FLEXSPI_NorFlash_UpdateLut(uint32_t instance,
 /*! @brief Software reset for the FLEXSPI logic. */
 void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance)
 {
-    uint32_t clearCacheFunctionAddress = 0x0021a3b7U;
+    uint32_t clearCacheFunctionAddress;
+    if (ANADIG_MISC->MISC_DIFPROG == 0x001160a0U)
+    {
+        clearCacheFunctionAddress = 0x0021a3b7U;
+    }
+    else
+    {
+        clearCacheFunctionAddress = 0x0021a3bfU;
+    }
     clearCacheCommand_t clearCacheCommand;
     MISRA_CAST(clearCacheCommand_t, clearCacheCommand, uint32_t, clearCacheFunctionAddress);
     (void)clearCacheCommand(instance);

@@ -9,8 +9,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,6 +29,9 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
@@ -36,7 +39,7 @@
 /*!
  * @file MIMXRT758S_cm33_core0
  * @version 1.0
- * @date 2024-11-21
+ * @date 2025-05-20
  * @brief Device specific configuration file for MIMXRT758S_cm33_core0
  *  (implementation file)
  *
@@ -77,6 +80,16 @@ __attribute__((weak)) void SystemInit(void)
 
     SCB->NSACR |= ((3UL << 0) | (3UL << 10)); /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
+    if ((SYSCON3->TEMPDETECT_CTRL[0] & SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK) != 0U)
+    {
+        SYSCON3->TEMPDETECT_CTRL[0] &= ~SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK;
+    }
+    
+    if ((SYSCON3->TEMPDETECT_CTRL[1] & SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK) != 0U)
+    {
+        SYSCON3->TEMPDETECT_CTRL[1] &= ~SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK; 
+    }
+
     SYSCON0->DSPSTALL = SYSCON0_DSPSTALL_DSPSTALL_MASK;
 
     if ((XCACHE1->CCR & XCACHE_CCR_ENCACHE_MASK) == 0U) /* set XCACHE if not configured for code bus.*/
@@ -95,7 +108,7 @@ __attribute__((weak)) void SystemInit(void)
         __DSB();
     }
 
-#if STARTUP_XSPI0_CACHE_POLICY
+#if defined(STARTUP_XSPI0_CACHE_POLICY) && (STARTUP_XSPI0_CACHE_POLICY != 0U)
     if ((CACHE64_CTRL0->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) == 0U)
     {
         /* Enable XSPI0 caches */
@@ -114,7 +127,7 @@ __attribute__((weak)) void SystemInit(void)
     }
 #endif
 
-#if STARTUP_XSPI1_CACHE_POLICY
+#if defined(STARTUP_XSPI1_CACHE_POLICY) && (STARTUP_XSPI1_CACHE_POLICY != 0U)
     if ((CACHE64_CTRL1->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) == 0U)
     {
         /* Enable XSPI0 caches */

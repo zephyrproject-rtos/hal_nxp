@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  * All rights reserved.
  *
  *
@@ -29,8 +29,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IOPCTL driver version 2.0.2. */
-#define LPC_IOPCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief IOPCTL driver version 2.0.3. */
+#define LPC_IOPCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /**
@@ -71,10 +71,11 @@ typedef struct _iopctl_group
 #define IOPCTL_ANAMUX_EN    (0x1 << 9)  /*!< Enables analog mux function by setting 0 to bit 7 */
 #define IOPCTL_PSEDRAIN_EN  (0x1 << 10) /*!< Enables pseudo output drain function */
 #define IOPCTL_INV_EN       (0x1 << 11) /*!< Enables invert function on input */
-#define IOPCTL_DRIVE_100OHM (0x0 << 12) /*!< Selects transmitter current drive 100ohm */
-#define IOPCTL_DRIVE_66OHM  (0x1 << 12) /*!< Selects transmitter current drive 66ohm */
-#define IOPCTL_DRIVE_50OHM  (0x2 << 12) /*!< Selects transmitter current drive 50ohm */
-#define IOPCTL_DRIVE_33OHM  (0x3 << 12) /*!< Selects transmitter current drive 33ohm */
+#define IOPCTL_DRIVE_100OHM (0x0 << 12) /*!< Selects transmitter current drive 100ohm, avaiable for PIO0,1,3 */
+#define IOPCTL_DRIVE_66OHM  (0x1 << 12) /*!< Selects transmitter current drive 66ohm, avaiable for PIO0,1,3 */
+#define IOPCTL_DRIVE_50OHM  (0x2 << 12) /*!< Selects transmitter current drive 50ohm, avaiable for PIO0,1,3 */
+#define IOPCTL_DRIVE_33OHM  (0x3 << 12) /*!< Selects transmitter current drive 33ohm, avaiable for PIO0,1,3 */
+#define IOPCTL_FULLDRIVE_EN (0x1 << 12) /*!< Selects full drive, avaiable for PIO2,8,9,10. (Unsupported for A0 Silicon) */
 
 #if defined(__cplusplus)
 extern "C" {
@@ -124,7 +125,7 @@ __STATIC_INLINE void IOPCTL_SetPinMuxing(const iopctl_group_t *pinArray, uint32_
 
     for (i = 0U; i < arrayLength; i++)
     {
-        IOPCTL_PinMuxSet(pinArray[i].port, pinArray[i].pin, pinArray[i].modefunc);
+        IOPCTL_PinMuxSet((uint8_t)pinArray[i].port, (uint8_t)pinArray[i].pin, pinArray[i].modefunc);
     }
 }
 

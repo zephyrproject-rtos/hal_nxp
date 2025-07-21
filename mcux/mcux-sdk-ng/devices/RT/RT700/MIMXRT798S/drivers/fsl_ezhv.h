@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -211,6 +211,16 @@ void EZHV_DriverIRQHandler(void);
 static inline void EZHV_EnableEzhv2ArmIntChan(ezhv2arm_int_chan_t chan)
 {
     SYSCON4->EZHV2ARM_INT_EN |= (uint32_t)chan;
+}
+
+/*! 
+ * @brief Disable the EZH-V interrupt channel to ARM core.
+ *
+ * @param chan Ezhv to arm interrupt channel index.
+ */
+static inline void EZHV_DisableEzhv2ArmIntChan(ezhv2arm_int_chan_t chan)
+{
+    SYSCON4->EZHV2ARM_INT_EN &= ~((uint32_t)chan);
 }
 
 /*! 

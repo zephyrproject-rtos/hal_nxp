@@ -9,15 +9,17 @@
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_cm33
 **                          MIMXRT685SFVKB_dsp
+**                          MIMXRT685SVFVKB_cm33
+**                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AHB_SECURE_CTRL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,27 +30,30 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AHB_SECURE_CTRL.h
- * @version 2.0
- * @date 2019-11-12
+ * @file PERI_AHB_SECURE_CTRL.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AHB_SECURE_CTRL
  *
  * CMSIS Peripheral Access Layer for AHB_SECURE_CTRL
  */
 
-#if !defined(AHB_SECURE_CTRL_H_)
-#define AHB_SECURE_CTRL_H_                       /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AHB_SECURE_CTRL_H_)
+#define PERI_AHB_SECURE_CTRL_H_                  /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 #include "MIMXRT633S_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33))
+#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33) || defined(CPU_MIMXRT685SVFVKB_cm33))
 #include "MIMXRT685S_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
+#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp) || defined(CPU_MIMXRT685SVFVKB_dsp))
 #include "MIMXRT685S_dsp_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -4936,72 +4941,72 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_SHIFT (0U)
 /*! SEC_GPIO_MASK0_LOCK - SEC_GPIO_MASK0 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_MASK (0xCU)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_SHIFT (2U)
 /*! SEC_GPIO_MASK1_LOCK - SEC_GPIO_MASK1 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_MASK (0x30U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_SHIFT (4U)
 /*! SEC_GPIO_MASK2_LOCK - SEC_GPIO_MASK2 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_SHIFT (6U)
 /*! SEC_GPIO_MASK3_LOCK - SEC_GPIO_MASK3 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK4_LOCK_MASK (0x300U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK4_LOCK_SHIFT (8U)
 /*! SEC_GPIO_MASK4_LOCK - SEC_GPIO_MASK4 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK4_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK4_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK4_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK5_LOCK_MASK (0xC00U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK5_LOCK_SHIFT (10U)
 /*! SEC_GPIO_MASK5_LOCK - SEC_GPIO_MASK5 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK5_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK5_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK5_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK6_LOCK_MASK (0x3000U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK6_LOCK_SHIFT (12U)
 /*! SEC_GPIO_MASK6_LOCK - SEC_GPIO_MASK6 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK6_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK6_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK6_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK7_LOCK_MASK (0xC000U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK7_LOCK_SHIFT (14U)
 /*! SEC_GPIO_MASK7_LOCK - SEC_GPIO_MASK7 register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK7_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK7_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK7_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_DSP_INT_LOCK_MASK (0x30000U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_DSP_INT_LOCK_SHIFT (16U)
 /*! SEC_DSP_INT_LOCK - SEC_DSP_INT_MASK register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_DSP_INT_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_DSP_INT_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_DSP_INT_LOCK_MASK)
 /*! @} */
@@ -5072,8 +5077,8 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_SHIFT (30U)
 /*! MASTER_SEC_LEVEL_LOCK - MASTER_SEC_LEVEL register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_MASK)
 /*! @} */
@@ -5085,10 +5090,10 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_POWERQUAD_SEC_SHIFT (4U)
 /*! POWERQUAD_SEC - POWERQUAD master secure level control anti-pole value (i.e It must be written
  *    with the inverted value of the corresponding field in master_sec_reg).
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_POWERQUAD_SEC(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_POWERQUAD_SEC_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_POWERQUAD_SEC_MASK)
 
@@ -5096,10 +5101,10 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DSP_SEC_SHIFT (6U)
 /*! DSP_SEC - DSP master secure level control anti-pole value (i.e It must be written with the
  *    inverted value of the corresponding field in master_sec_reg).
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DSP_SEC(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DSP_SEC_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DSP_SEC_MASK)
 
@@ -5107,10 +5112,10 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA0_SEC_SHIFT (8U)
 /*! DMA0_SEC - DMA0 master secure level control anti-pole value (i.e It must be written with the
  *    inverted value of the corresponding field in master_sec_reg).
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA0_SEC(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA0_SEC_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA0_SEC_MASK)
 
@@ -5118,10 +5123,10 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA1_SEC_SHIFT (10U)
 /*! DMA1_SEC - DMA1 master secure level control anti-pole value (i.e It must be written with the
  *    inverted value of the corresponding field in master_sec_reg).
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA1_SEC(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA1_SEC_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_DMA1_SEC_MASK)
 
@@ -5129,10 +5134,10 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO0_SEC_SHIFT (12U)
 /*! SDIO0_SEC - SDIO0 master secure level control anti-pole value (i.e It must be written with the
  *    inverted value of the corresponding field in master_sec_reg).
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO0_SEC(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO0_SEC_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO0_SEC_MASK)
 
@@ -5140,18 +5145,18 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO1_SEC_SHIFT (14U)
 /*! SDIO1_SEC - SDIO1 master secure level control anti-pole value (i.e It must be written with the
  *    inverted value of the corresponding field in master_sec_reg).
- *  0b11..Non-secure and Non-priviledge user access allowed.
- *  0b10..Non-secure and Privilege access allowed.
- *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b11..Non-secure and Non-priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO1_SEC(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO1_SEC_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_SDIO1_SEC_MASK)
 
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_MASTER_SEC_LEVEL_ANTI_POLE_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_MASTER_SEC_LEVEL_ANTI_POLE_LOCK_SHIFT (30U)
 /*! MASTER_SEC_LEVEL_ANTI_POLE_LOCK - MASTER_SEC_LEVEL_ANTI_POL register write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_MASTER_SEC_LEVEL_ANTI_POLE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_MASTER_SEC_LEVEL_ANTI_POLE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_ANTI_POL_MASTER_SEC_LEVEL_ANTI_POLE_LOCK_MASK)
 /*! @} */
@@ -5162,48 +5167,48 @@ typedef struct {
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
 /*! LOCK_NS_VTOR - m33 LOCKNSVTOR write-lock.
- *  0b10..Writable.
  *  0b01..Restrictive mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_MASK)
 
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
 /*! LOCK_NS_MPU - m33 LOCKNSMPU write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_MASK)
 
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTOR_MASK (0x30U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTOR_SHIFT (4U)
 /*! LOCK_S_VTOR - m33 LOCKSVTOR write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTOR_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTOR_MASK)
 
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_MASK (0xC0U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_SHIFT (6U)
 /*! LOCK_S_MPU - m33 LOCKSMPU write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_MASK)
 
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_MASK (0x300U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_SHIFT (8U)
 /*! LOCK_SAU - m33 LOCKSAU write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_MASK)
 
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_SHIFT (30U)
 /*! CM33_LOCK_REG_LOCK - CM33_LOCK_REG_LOCK write-lock.
- *  0b10..Writable.
  *  0b01..Restricted mode.
+ *  0b10..Writable.
  */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_MASK)
 /*! @} */
@@ -5214,64 +5219,64 @@ typedef struct {
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT (0U)
 /*! WRITE_LOCK - Write lock.
- *  0b10..Secure control registers can be written.
  *  0b01..Restrictive mode.
+ *  0b10..Secure control registers can be written.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
 /*! ENABLE_SECURE_CHECKING - AHB bus matrix enable secure checking.
- *  0b10..Disable check.
  *  0b01..Restrictive mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
 /*! ENABLE_S_PRIV_CHECK - AHB bus matrix enable secure privilege check.
- *  0b10..Disable check.
  *  0b01..Restrictive mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
 /*! ENABLE_NS_PRIV_CHECK - AHB bus matrix enable non-secure privilege check.
- *  0b10..Disable check.
  *  0b01..Restrictive mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_MASK (0x300U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_SHIFT (8U)
 /*! DISABLE_VIOLATION_ABORT - Disable secure violation abort.
- *  0b10..Violation causes abort.
  *  0b01..Violation assert secure_violation_irq.
+ *  0b10..Violation causes abort.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT (10U)
 /*! DISABLE_SIMPLE_MASTER_STRICT_MODE - Disable simple master strict mode.
- *  0b10..Simple master in strict mode.
  *  0b01..Simple master in tier mode.
+ *  0b10..Simple master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT (12U)
 /*! DISABLE_SMART_MASTER_STRICT_MODE - Disable smart master strict mode.
- *  0b10..Smart master in strict mode.
  *  0b01..Smart master in tier mode.
+ *  0b10..Smart master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_MASK (0xC000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_SHIFT (14U)
 /*! IDAU_ALL_NS - Disable IDAU.
- *  0b10..IDAU is enabled.
  *  0b01..IDAU is disabled.
+ *  0b10..IDAU is enabled.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_MASK)
 /*! @} */
@@ -5282,64 +5287,64 @@ typedef struct {
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT (0U)
 /*! WRITE_LOCK - Write lock.
- *  0b10..Secure control registers can be written.
  *  0b01..Restrictive mode.
+ *  0b10..Secure control registers can be written.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
 /*! ENABLE_SECURE_CHECKING - AHB bus matrix enable secure checking.
- *  0b10..Disable check.
  *  0b01..Restrictive mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
 /*! ENABLE_S_PRIV_CHECK - AHB bus matrix enable secure privilege check.
- *  0b10..Disable check.
  *  0b01..Restrictive mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
 /*! ENABLE_NS_PRIV_CHECK - AHB bus matrix enable non-secure privilege check.
- *  0b10..Disable check.
  *  0b01..Restrictive mode.
+ *  0b10..Disable check.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_MASK (0x300U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_SHIFT (8U)
 /*! DISABLE_VIOLATION_ABORT - Disable secure violation abort.
- *  0b10..Violation causes abort.
  *  0b01..Violation assert secure_violation_irq.
+ *  0b10..Violation causes abort.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT (10U)
 /*! DISABLE_SIMPLE_MASTER_STRICT_MODE - Disable simple master strict mode.
- *  0b10..Simple master in strict mode.
  *  0b01..Simple master in tier mode.
+ *  0b10..Simple master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT (12U)
 /*! DISABLE_SMART_MASTER_STRICT_MODE - Disable smart master strict mode.
- *  0b10..Smart master in strict mode.
  *  0b01..Smart master in tier mode.
+ *  0b10..Smart master in strict mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK)
 
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_MASK (0xC000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_SHIFT (14U)
 /*! IDAU_ALL_NS - Disable IDAU.
- *  0b10..IDAU is enabled.
  *  0b01..IDAU is disabled.
+ *  0b10..IDAU is enabled.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_MASK)
 /*! @} */
@@ -5380,5 +5385,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AHB_SECURE_CTRL_H_ */
+#endif  /* PERI_AHB_SECURE_CTRL_H_ */
 

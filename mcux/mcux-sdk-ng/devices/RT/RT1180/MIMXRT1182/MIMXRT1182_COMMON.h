@@ -1,7 +1,9 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -9,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b241025
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1182
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -27,14 +29,17 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1182_COMMON.h
- * @version 2.0
- * @date 2024-01-18
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT1182
  *
  * CMSIS Peripheral Access Layer for MIMXRT1182
@@ -45,7 +50,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -127,11 +132,11 @@ typedef enum IRQn {
   LPUART2_IRQn                 = 20,               /**< LPUART2 interrupt */
   MU1_IRQn                     = 21,               /**< MU1 interrupt */
   MU2_IRQn                     = 22,               /**< MU2 interrupt */
-  PWM1_FAULT_IRQn              = 23,               /**< PWM1 fault or reload error interrupt */
-  PWM1_0_IRQn                  = 24,               /**< PWM1 capture 0, compare 0, or reload 0 interrupt */
-  PWM1_1_IRQn                  = 25,               /**< PWM1 capture 1, compare 1, or reload 1 interrupt */
-  PWM1_2_IRQn                  = 26,               /**< PWM1 capture 2, compare 2, or reload 2 interrupt */
-  PWM1_3_IRQn                  = 27,               /**< PWM1 capture 3, compare 3, or reload 3 interrupt */
+  Reserved39_IRQn              = 23,               /**< Reserved interrupt */
+  Reserved40_IRQn              = 24,               /**< Reserved interrupt */
+  Reserved41_IRQn              = 25,               /**< Reserved interrupt */
+  Reserved42_IRQn              = 26,               /**< Reserved interrupt */
+  Reserved43_IRQn              = 27,               /**< Reserved interrupt */
   EDGELOCK_TRUST_MUA_RX_FULL_IRQn = 28,            /**< Edgelock Trust MUA RX full interrupt */
   EDGELOCK_TRUST_MUA_TX_EMPTY_IRQn = 29,           /**< Edgelock Trust MUA TX empty interrupt */
   EDGELOCK_APPS_CORE_MUA_RX_FULL_IRQn = 30,        /**< Edgelock Apps Core MUA RX full interrupt */
@@ -155,8 +160,8 @@ typedef enum IRQn {
   CM33_TCM_ERROR_IRQn          = 48,               /**< M33 TCM Error interrupt */
   CM7_TCM_ECC_IRQn             = 49,               /**< M7 TCM ECC interrupt */
   CM7_TCM_ERROR_IRQn           = 50,               /**< M7 TCM Error interrupt */
-  CAN2_IRQn                    = 51,               /**< CAN2 interrupt */
-  CAN2_ERROR_IRQn              = 52,               /**< CAN2 error interrupt */
+  Reserved67_IRQn              = 51,               /**< Reserved interrupt */
+  Reserved68_IRQn              = 52,               /**< Reserved interrupt */
   FLEXIO1_IRQn                 = 53,               /**< FLEXIO1 interrupt */
   FLEXIO2_IRQn                 = 54,               /**< FLEXIO2 interrupt */
   FLEXSPI1_IRQn                = 55,               /**< FLEXSPI1 interrupt */
@@ -190,8 +195,8 @@ typedef enum IRQn {
   TMPSNS_INT_IRQn              = 83,               /**< Temperature alarm interrupt */
   BBSM_IRQn                    = 84,               /**< BBSM wakeup alarm interrupt */
   LDO_AON_ANA_IRQn             = 85,               /**< Brown out interrupt */
-  USDHC1_IRQn                  = 86,               /**< USDHC1 */
-  Reserved103_IRQn             = 87,               /**< Reserved interrupt */
+  Reserved102_IRQn             = 86,               /**< Reserved interrupt */
+  USDHC2_IRQn                  = 87,               /**< USDHC2 */
   TRDC_MGR_MEGA_IRQn           = 88,               /**< MEGAMIX TRDC transfer error interrupt */
   SFA_IRQn                     = 89,               /**< Signal Frequency Analyzer interrupt */
   LDO_AON_DIG_IRQn             = 90,               /**< Brown out interrupt */
@@ -250,7 +255,7 @@ typedef enum IRQn {
   DMA4_CH30_CH31_CH62_CH63_IRQn = 143,             /**< WAKEUP Domain eDMA channel 30/31/62/63 interrupt */
   XBAR1_CH0_CH1_IRQn           = 144,              /**< XBAR1 channel 0/1 interrupt */
   XBAR1_CH2_CH3_IRQn           = 145,              /**< XBAR1 channel 2/3 interrupt */
-  Reserved162_IRQn             = 146,              /**< Reserved interrupt */
+  SINC3_CH0_CH1_CH2_CH3_IRQn   = 146,              /**< SINC Filter Glue 3 channel 0/1/2/3 */
   EWM_IRQn                     = 147,              /**< EWM reset out interrupt */
   Reserved164_IRQn             = 148,              /**< Reserved interrupt */
   LPIT3_IRQn                   = 149,              /**< LPIT3 interrupt */
@@ -258,7 +263,7 @@ typedef enum IRQn {
   TMR4_IRQn                    = 151,              /**< TMR4 interrupt */
   Reserved168_IRQn             = 152,              /**< Reserved interrupt */
   Reserved169_IRQn             = 153,              /**< Reserved interrupt */
-  SAI4_IRQn                    = 154,              /**< SAI4 interrupt */
+  Reserved170_IRQn             = 154,              /**< Reserved interrupt */
   SPDIF_IRQn                   = 155,              /**< SPDIF interrupt */
   Reserved172_IRQn             = 156,              /**< Reserved interrupt */
   Reserved173_IRQn             = 157,              /**< Reserved interrupt */
@@ -274,40 +279,40 @@ typedef enum IRQn {
   M33_LOCKUP_IRQn              = 167,              /**< CM33 LOCKUP SRC reset source */
   M7_SYSRESET_REQ_IRQn         = 168,              /**< CM33 SYSREQRST SRC reset source */
   M7_LOCKUP_IRQn               = 169,              /**< CM33 LOCKUP SRC reset source */
-  PWM2_FAULT_IRQn              = 170,              /**< PWM2 fault or reload error interrupt */
-  PWM2_0_IRQn                  = 171,              /**< PWM2 capture 0, compare 0, or reload 0 interrupt */
-  PWM2_1_IRQn                  = 172,              /**< PWM2 capture 1, compare 1, or reload 1 interrupt */
-  PWM2_2_IRQn                  = 173,              /**< PWM2 capture 2, compare 2, or reload 2 interrupt */
-  PWM2_3_IRQn                  = 174,              /**< PWM2 capture 3, compare 3, or reload 3 interrupt */
-  Reserved191_IRQn             = 175,              /**< Reserved interrupt */
-  Reserved192_IRQn             = 176,              /**< Reserved interrupt */
-  Reserved193_IRQn             = 177,              /**< Reserved interrupt */
-  Reserved194_IRQn             = 178,              /**< Reserved interrupt */
-  Reserved195_IRQn             = 179,              /**< Reserved interrupt */
-  Reserved196_IRQn             = 180,              /**< Reserved interrupt */
-  Reserved197_IRQn             = 181,              /**< Reserved interrupt */
-  Reserved198_IRQn             = 182,              /**< Reserved interrupt */
-  Reserved199_IRQn             = 183,              /**< Reserved interrupt */
-  Reserved200_IRQn             = 184,              /**< Reserved interrupt */
+  Reserved186_IRQn             = 170,              /**< Reserved interrupt */
+  Reserved187_IRQn             = 171,              /**< Reserved interrupt */
+  Reserved188_IRQn             = 172,              /**< Reserved interrupt */
+  Reserved189_IRQn             = 173,              /**< Reserved interrupt */
+  Reserved190_IRQn             = 174,              /**< Reserved interrupt */
+  PWM3_FAULT_IRQn              = 175,              /**< PWM3 fault or reload error interrupt */
+  PWM3_0_IRQn                  = 176,              /**< PWM3 capture 0, compare 0, or reload 0 interrupt */
+  PWM3_1_IRQn                  = 177,              /**< PWM3 capture 1, compare 1, or reload 1 interrupt */
+  PWM3_2_IRQn                  = 178,              /**< PWM3 capture 2, compare 2, or reload 2 interrupt */
+  PWM3_3_IRQn                  = 179,              /**< PWM3 capture 3, compare 3, or reload 3 interrupt */
+  PWM4_FAULT_IRQn              = 180,              /**< PWM4 fault or reload error interrupt */
+  PWM4_0_IRQn                  = 181,              /**< PWM4 capture 0, compare 0, or reload 0 interrupt */
+  PWM4_1_IRQn                  = 182,              /**< PWM4 capture 1, compare 1, or reload 1 interrupt */
+  PWM4_2_IRQn                  = 183,              /**< PWM4 capture 2, compare 2, or reload 2 interrupt */
+  PWM4_3_IRQn                  = 184,              /**< PWM4 capture 3, compare 3, or reload 3 interrupt */
   EQDC1_IRQn                   = 185,              /**< EQDC1 interrupt */
   EQDC2_IRQn                   = 186,              /**< EQDC2 interrupt */
-  Reserved203_IRQn             = 187,              /**< Reserved interrupt */
-  Reserved204_IRQn             = 188,              /**< Reserved interrupt */
-  Reserved205_IRQn             = 189,              /**< Reserved interrupt */
+  EQDC3_IRQn                   = 187,              /**< EQDC3 interrupt */
+  EQDC4_IRQn                   = 188,              /**< EQDC4 interrupt */
+  ADC2_IRQn                    = 189,              /**< ADC2 interrupt */
   DCDC_IRQn                    = 190,              /**< DCDC brown out interrupt */
-  Reserved207_IRQn             = 191,              /**< Reserved interrupt */
-  Reserved208_IRQn             = 192,              /**< Reserved interrupt */
+  CAN3_IRQn                    = 191,              /**< CAN3 interrupt */
+  CAN3_ERROR_IRQn              = 192,              /**< CAN3 error interrupt */
   DAC_IRQn                     = 193,              /**< DAC interrupt */
-  Reserved210_IRQn             = 194,              /**< Reserved interrupt */
-  Reserved211_IRQn             = 195,              /**< Reserved interrupt */
+  LPSPI5_IRQn                  = 194,              /**< LPSPI5 interrupt */
+  LPSPI6_IRQn                  = 195,              /**< LPSPI6 interrupt */
   LPUART7_IRQn                 = 196,              /**< LPUART7 interrupt */
   LPUART8_IRQn                 = 197,              /**< LPUART8 interrupt */
-  SAI2_IRQn                    = 198,              /**< SAI2 interrupt */
-  SAI3_IRQn                    = 199,              /**< SAI3 interrupt */
-  ACMP1_IRQn                   = 200,              /**< CMP1 interrupt */
-  ACMP2_IRQn                   = 201,              /**< CMP2 interrupt */
+  Reserved214_IRQn             = 198,              /**< Reserved interrupt */
+  Reserved215_IRQn             = 199,              /**< Reserved interrupt */
+  Reserved216_IRQn             = 200,              /**< Reserved interrupt */
+  Reserved217_IRQn             = 201,              /**< Reserved interrupt */
   ACMP3_IRQn                   = 202,              /**< CMP3 interrupt */
-  ACMP4_IRQn                   = 203,              /**< CMP4 interrupt */
+  Reserved219_IRQn             = 203,              /**< Reserved interrupt */
   CM7_PS_IRQn                  = 204,              /**< M7 PS Tag/Data Parity Error */
   CM7_MCM_IRQn                 = 205,              /**< M7 MCM interrupt */
   CM33_MCM_IRQn                = 206,              /**< M33 MCM interrupt */
@@ -374,9 +379,892 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MIMXRT1182_SERIES
 #define MIMXRT1182_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMXRT1182_features.h"
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
+typedef enum _xbar_input_signal
+{
+    kXBAR1_InputLogicLow            = 0|0x10000U,  /**< LOGIC_LOW output assigned to XBAR1_IN0 input. */
+    kXBAR1_InputLogicHigh           = 1|0x10000U,  /**< LOGIC_HIGH output assigned to XBAR1_IN1 input. */
+    kXBAR1_InputLogicLow1           = 2|0x10000U,  /**< LOGIC_LOW1 output assigned to XBAR1_IN2 input. */
+    kXBAR1_InputLogicHigh1          = 3|0x10000U,  /**< LOGIC_HIGH1 output assigned to XBAR1_IN3 input. */
+    kXBAR1_InputIomuxXbarInout04    = 4|0x10000U,  /**< IOMUX_XBAR_INOUT04 output assigned to XBAR1_IN4 input. */
+    kXBAR1_InputIomuxXbarInout05    = 5|0x10000U,  /**< IOMUX_XBAR_INOUT05 output assigned to XBAR1_IN5 input. */
+    kXBAR1_InputIomuxXbarInout06    = 6|0x10000U,  /**< IOMUX_XBAR_INOUT06 output assigned to XBAR1_IN6 input. */
+    kXBAR1_InputIomuxXbarInout07    = 7|0x10000U,  /**< IOMUX_XBAR_INOUT07 output assigned to XBAR1_IN7 input. */
+    kXBAR1_InputIomuxXbarInout08    = 8|0x10000U,  /**< IOMUX_XBAR_INOUT08 output assigned to XBAR1_IN8 input. */
+    kXBAR1_InputIomuxXbarInout09    = 9|0x10000U,  /**< IOMUX_XBAR_INOUT09 output assigned to XBAR1_IN9 input. */
+    kXBAR1_InputIomuxXbarInout10    = 10|0x10000U, /**< IOMUX_XBAR_INOUT10 output assigned to XBAR1_IN10 input. */
+    kXBAR1_InputIomuxXbarInout11    = 11|0x10000U, /**< IOMUX_XBAR_INOUT11 output assigned to XBAR1_IN11 input. */
+    kXBAR1_InputIomuxXbarInout12    = 12|0x10000U, /**< IOMUX_XBAR_INOUT12 output assigned to XBAR1_IN12 input. */
+    kXBAR1_InputIomuxXbarInout13    = 13|0x10000U, /**< IOMUX_XBAR_INOUT13 output assigned to XBAR1_IN13 input. */
+    kXBAR1_InputIomuxXbarInout14    = 14|0x10000U, /**< IOMUX_XBAR_INOUT14 output assigned to XBAR1_IN14 input. */
+    kXBAR1_InputIomuxXbarInout15    = 15|0x10000U, /**< IOMUX_XBAR_INOUT15 output assigned to XBAR1_IN15 input. */
+    kXBAR1_InputIomuxXbarInout16    = 16|0x10000U, /**< IOMUX_XBAR_INOUT16 output assigned to XBAR1_IN16 input. */
+    kXBAR1_InputIomuxXbarInout17    = 17|0x10000U, /**< IOMUX_XBAR_INOUT17 output assigned to XBAR1_IN17 input. */
+    kXBAR1_InputIomuxXbarInout18    = 18|0x10000U, /**< IOMUX_XBAR_INOUT18 output assigned to XBAR1_IN18 input. */
+    kXBAR1_InputIomuxXbarInout19    = 19|0x10000U, /**< IOMUX_XBAR_INOUT19 output assigned to XBAR1_IN19 input. */
+    kXBAR1_InputIomuxXbarInout20    = 20|0x10000U, /**< IOMUX_XBAR_INOUT20 output assigned to XBAR1_IN20 input. */
+    kXBAR1_InputIomuxXbarInout21    = 21|0x10000U, /**< IOMUX_XBAR_INOUT21 output assigned to XBAR1_IN21 input. */
+    kXBAR1_InputIomuxXbarInout22    = 22|0x10000U, /**< IOMUX_XBAR_INOUT22 output assigned to XBAR1_IN22 input. */
+    kXBAR1_InputIomuxXbarInout23    = 23|0x10000U, /**< IOMUX_XBAR_INOUT23 output assigned to XBAR1_IN23 input. */
+    kXBAR1_InputIomuxXbarInout24    = 24|0x10000U, /**< IOMUX_XBAR_INOUT24 output assigned to XBAR1_IN24 input. */
+    kXBAR1_InputIomuxXbarInout25    = 25|0x10000U, /**< IOMUX_XBAR_INOUT25 output assigned to XBAR1_IN25 input. */
+    kXBAR1_InputIomuxXbarInout26    = 26|0x10000U, /**< IOMUX_XBAR_INOUT26 output assigned to XBAR1_IN26 input. */
+    kXBAR1_InputIomuxXbarInout27    = 27|0x10000U, /**< IOMUX_XBAR_INOUT27 output assigned to XBAR1_IN27 input. */
+    kXBAR1_InputIomuxXbarInout28    = 28|0x10000U, /**< IOMUX_XBAR_INOUT28 output assigned to XBAR1_IN28 input. */
+    kXBAR1_InputIomuxXbarInout29    = 29|0x10000U, /**< IOMUX_XBAR_INOUT29 output assigned to XBAR1_IN29 input. */
+    kXBAR1_InputIomuxXbarInout30    = 30|0x10000U, /**< IOMUX_XBAR_INOUT30 output assigned to XBAR1_IN30 input. */
+    kXBAR1_InputIomuxXbarInout31    = 31|0x10000U, /**< IOMUX_XBAR_INOUT31 output assigned to XBAR1_IN31 input. */
+    kXBAR1_InputIomuxXbarInout32    = 32|0x10000U, /**< IOMUX_XBAR_INOUT32 output assigned to XBAR1_IN32 input. */
+    kXBAR1_InputIomuxXbarInout33    = 33|0x10000U, /**< IOMUX_XBAR_INOUT33 output assigned to XBAR1_IN33 input. */
+    kXBAR1_InputIomuxXbarInout34    = 34|0x10000U, /**< IOMUX_XBAR_INOUT34 output assigned to XBAR1_IN34 input. */
+    kXBAR1_InputIomuxXbarInout35    = 35|0x10000U, /**< IOMUX_XBAR_INOUT35 output assigned to XBAR1_IN35 input. */
+    kXBAR1_InputIomuxXbarInout36    = 36|0x10000U, /**< IOMUX_XBAR_INOUT36 output assigned to XBAR1_IN36 input. */
+    kXBAR1_InputIomuxXbarInout37    = 37|0x10000U, /**< IOMUX_XBAR_INOUT37 output assigned to XBAR1_IN37 input. */
+    kXBAR1_InputRESERVED38          = 38|0x10000U, /**< XBAR1_IN38 input is reserved. */
+    kXBAR1_InputRESERVED39          = 39|0x10000U, /**< XBAR1_IN39 input is reserved. */
+    kXBAR1_InputAcmp3Out            = 40|0x10000U, /**< ACMP3_OUT output assigned to XBAR1_IN40 input. */
+    kXBAR1_InputRESERVED41          = 41|0x10000U, /**< XBAR1_IN41 input is reserved. */
+    kXBAR1_InputQtimer1Timer0       = 42|0x10000U, /**< QTIMER1_TIMER0 output assigned to XBAR1_IN42 input. */
+    kXBAR1_InputQtimer1Timer1       = 43|0x10000U, /**< QTIMER1_TIMER1 output assigned to XBAR1_IN43 input. */
+    kXBAR1_InputQtimer1Timer2       = 44|0x10000U, /**< QTIMER1_TIMER2 output assigned to XBAR1_IN44 input. */
+    kXBAR1_InputQtimer1Timer3       = 45|0x10000U, /**< QTIMER1_TIMER3 output assigned to XBAR1_IN45 input. */
+    kXBAR1_InputQtimer2Timer0       = 46|0x10000U, /**< QTIMER2_TIMER0 output assigned to XBAR1_IN46 input. */
+    kXBAR1_InputQtimer2Timer1       = 47|0x10000U, /**< QTIMER2_TIMER1 output assigned to XBAR1_IN47 input. */
+    kXBAR1_InputQtimer2Timer2       = 48|0x10000U, /**< QTIMER2_TIMER2 output assigned to XBAR1_IN48 input. */
+    kXBAR1_InputQtimer2Timer3       = 49|0x10000U, /**< QTIMER2_TIMER3 output assigned to XBAR1_IN49 input. */
+    kXBAR1_InputQtimer3Timer0       = 50|0x10000U, /**< QTIMER3_TIMER0 output assigned to XBAR1_IN50 input. */
+    kXBAR1_InputQtimer3Timer1       = 51|0x10000U, /**< QTIMER3_TIMER1 output assigned to XBAR1_IN51 input. */
+    kXBAR1_InputQtimer3Timer2       = 52|0x10000U, /**< QTIMER3_TIMER2 output assigned to XBAR1_IN52 input. */
+    kXBAR1_InputQtimer3Timer3       = 53|0x10000U, /**< QTIMER3_TIMER3 output assigned to XBAR1_IN53 input. */
+    kXBAR1_InputQtimer4Timer0       = 54|0x10000U, /**< QTIMER4_TIMER0 output assigned to XBAR1_IN54 input. */
+    kXBAR1_InputQtimer4Timer1       = 55|0x10000U, /**< QTIMER4_TIMER1 output assigned to XBAR1_IN55 input. */
+    kXBAR1_InputQtimer4Timer2       = 56|0x10000U, /**< QTIMER4_TIMER2 output assigned to XBAR1_IN56 input. */
+    kXBAR1_InputQtimer4Timer3       = 57|0x10000U, /**< QTIMER4_TIMER3 output assigned to XBAR1_IN57 input. */
+    kXBAR1_InputRESERVED58          = 58|0x10000U, /**< XBAR1_IN58 input is reserved. */
+    kXBAR1_InputRESERVED59          = 59|0x10000U, /**< XBAR1_IN59 input is reserved. */
+    kXBAR1_InputRESERVED60          = 60|0x10000U, /**< XBAR1_IN60 input is reserved. */
+    kXBAR1_InputRESERVED61          = 61|0x10000U, /**< XBAR1_IN61 input is reserved. */
+    kXBAR1_InputRESERVED62          = 62|0x10000U, /**< XBAR1_IN62 input is reserved. */
+    kXBAR1_InputRESERVED63          = 63|0x10000U, /**< XBAR1_IN63 input is reserved. */
+    kXBAR1_InputRESERVED64          = 64|0x10000U, /**< XBAR1_IN64 input is reserved. */
+    kXBAR1_InputRESERVED65          = 65|0x10000U, /**< XBAR1_IN65 input is reserved. */
+    kXBAR1_InputRESERVED66          = 66|0x10000U, /**< XBAR1_IN66 input is reserved. */
+    kXBAR1_InputRESERVED67          = 67|0x10000U, /**< XBAR1_IN67 input is reserved. */
+    kXBAR1_InputRESERVED68          = 68|0x10000U, /**< XBAR1_IN68 input is reserved. */
+    kXBAR1_InputRESERVED69          = 69|0x10000U, /**< XBAR1_IN69 input is reserved. */
+    kXBAR1_InputRESERVED70          = 70|0x10000U, /**< XBAR1_IN70 input is reserved. */
+    kXBAR1_InputRESERVED71          = 71|0x10000U, /**< XBAR1_IN71 input is reserved. */
+    kXBAR1_InputRESERVED72          = 72|0x10000U, /**< XBAR1_IN72 input is reserved. */
+    kXBAR1_InputRESERVED73          = 73|0x10000U, /**< XBAR1_IN73 input is reserved. */
+    kXBAR1_InputRESERVED74          = 74|0x10000U, /**< XBAR1_IN74 input is reserved. */
+    kXBAR1_InputRESERVED75          = 75|0x10000U, /**< XBAR1_IN75 input is reserved. */
+    kXBAR1_InputRESERVED76          = 76|0x10000U, /**< XBAR1_IN76 input is reserved. */
+    kXBAR1_InputRESERVED77          = 77|0x10000U, /**< XBAR1_IN77 input is reserved. */
+    kXBAR1_InputRESERVED78          = 78|0x10000U, /**< XBAR1_IN78 input is reserved. */
+    kXBAR1_InputRESERVED79          = 79|0x10000U, /**< XBAR1_IN79 input is reserved. */
+    kXBAR1_InputRESERVED80          = 80|0x10000U, /**< XBAR1_IN80 input is reserved. */
+    kXBAR1_InputRESERVED81          = 81|0x10000U, /**< XBAR1_IN81 input is reserved. */
+    kXBAR1_InputRESERVED82          = 82|0x10000U, /**< XBAR1_IN82 input is reserved. */
+    kXBAR1_InputRESERVED83          = 83|0x10000U, /**< XBAR1_IN83 input is reserved. */
+    kXBAR1_InputRESERVED84          = 84|0x10000U, /**< XBAR1_IN84 input is reserved. */
+    kXBAR1_InputRESERVED85          = 85|0x10000U, /**< XBAR1_IN85 input is reserved. */
+    kXBAR1_InputFlexpwm3Pwm0OutTrig01 = 86|0x10000U, /**< FLEXPWM3_PWM0_OUT_TRIG0_1 output assigned to XBAR1_IN86 input. */
+    kXBAR1_InputFlexpwm3Pwm1OutTrig01 = 87|0x10000U, /**< FLEXPWM3_PWM1_OUT_TRIG0_1 output assigned to XBAR1_IN87 input. */
+    kXBAR1_InputFlexpwm3Pwm2OutTrig01 = 88|0x10000U, /**< FLEXPWM3_PWM2_OUT_TRIG0_1 output assigned to XBAR1_IN88 input. */
+    kXBAR1_InputFlexpwm3Pwm3OutTrig01 = 89|0x10000U, /**< FLEXPWM3_PWM3_OUT_TRIG0_1 output assigned to XBAR1_IN89 input. */
+    kXBAR1_InputFlexpwm4Pwm0OutTrig01 = 90|0x10000U, /**< FLEXPWM4_PWM0_OUT_TRIG0_1 output assigned to XBAR1_IN90 input. */
+    kXBAR1_InputFlexpwm4Pwm1OutTrig01 = 91|0x10000U, /**< FLEXPWM4_PWM1_OUT_TRIG0_1 output assigned to XBAR1_IN91 input. */
+    kXBAR1_InputFlexpwm4Pwm2OutTrig01 = 92|0x10000U, /**< FLEXPWM4_PWM2_OUT_TRIG0_1 output assigned to XBAR1_IN92 input. */
+    kXBAR1_InputFlexpwm4Pwm3OutTrig01 = 93|0x10000U, /**< FLEXPWM4_PWM3_OUT_TRIG0_1 output assigned to XBAR1_IN93 input. */
+    kXBAR1_InputPit1Trigger0        = 94|0x10000U, /**< PIT1_TRIGGER0 output assigned to XBAR1_IN94 input. */
+    kXBAR1_InputPit1Trigger1        = 95|0x10000U, /**< PIT1_TRIGGER1 output assigned to XBAR1_IN95 input. */
+    kXBAR1_InputPit1Trigger2        = 96|0x10000U, /**< PIT1_TRIGGER2 output assigned to XBAR1_IN96 input. */
+    kXBAR1_InputPit1Trigger3        = 97|0x10000U, /**< PIT1_TRIGGER3 output assigned to XBAR1_IN97 input. */
+    kXBAR1_InputPit2Trigger0        = 98|0x10000U, /**< PIT2_TRIGGER0 output assigned to XBAR1_IN98 input. */
+    kXBAR1_InputPit2Trigger1        = 99|0x10000U, /**< PIT2_TRIGGER1 output assigned to XBAR1_IN99 input. */
+    kXBAR1_InputPit2Trigger2        = 100|0x10000U, /**< PIT2_TRIGGER2 output assigned to XBAR1_IN100 input. */
+    kXBAR1_InputPit2Trigger3        = 101|0x10000U, /**< PIT2_TRIGGER3 output assigned to XBAR1_IN101 input. */
+    kXBAR1_InputPit3Trigger0        = 102|0x10000U, /**< PIT3_TRIGGER0 output assigned to XBAR1_IN102 input. */
+    kXBAR1_InputPit3Trigger1        = 103|0x10000U, /**< PIT3_TRIGGER1 output assigned to XBAR1_IN103 input. */
+    kXBAR1_InputPit3Trigger2        = 104|0x10000U, /**< PIT3_TRIGGER2 output assigned to XBAR1_IN104 input. */
+    kXBAR1_InputPit3Trigger3        = 105|0x10000U, /**< PIT3_TRIGGER3 output assigned to XBAR1_IN105 input. */
+    kXBAR1_InputTriggerSyncOut0     = 106|0x10000U, /**< TRIGGER_SYNC_OUT0 output assigned to XBAR1_IN106 input. */
+    kXBAR1_InputTriggerSyncOut1     = 107|0x10000U, /**< TRIGGER_SYNC_OUT1 output assigned to XBAR1_IN107 input. */
+    kXBAR1_InputTriggerSyncOut2     = 108|0x10000U, /**< TRIGGER_SYNC_OUT2 output assigned to XBAR1_IN108 input. */
+    kXBAR1_InputTriggerSyncOut3     = 109|0x10000U, /**< TRIGGER_SYNC_OUT3 output assigned to XBAR1_IN109 input. */
+    kXBAR1_InputDma4TriggerOut0     = 110|0x10000U, /**< DMA4_TRIGGER_OUT0 output assigned to XBAR1_IN110 input. */
+    kXBAR1_InputDma4TriggerOut1     = 111|0x10000U, /**< DMA4_TRIGGER_OUT1 output assigned to XBAR1_IN111 input. */
+    kXBAR1_InputDma4TriggerOut2     = 112|0x10000U, /**< DMA4_TRIGGER_OUT2 output assigned to XBAR1_IN112 input. */
+    kXBAR1_InputDma4TriggerOut3     = 113|0x10000U, /**< DMA4_TRIGGER_OUT3 output assigned to XBAR1_IN113 input. */
+    kXBAR1_InputDma4TriggerOut4     = 114|0x10000U, /**< DMA4_TRIGGER_OUT4 output assigned to XBAR1_IN114 input. */
+    kXBAR1_InputDma4TriggerOut5     = 115|0x10000U, /**< DMA4_TRIGGER_OUT5 output assigned to XBAR1_IN115 input. */
+    kXBAR1_InputDma4TriggerOut6     = 116|0x10000U, /**< DMA4_TRIGGER_OUT6 output assigned to XBAR1_IN116 input. */
+    kXBAR1_InputDma4TriggerOut7     = 117|0x10000U, /**< DMA4_TRIGGER_OUT7 output assigned to XBAR1_IN117 input. */
+    kXBAR1_InputDma3TriggerOut0     = 118|0x10000U, /**< DMA3_TRIGGER_OUT0 output assigned to XBAR1_IN118 input. */
+    kXBAR1_InputDma3TriggerOut1     = 119|0x10000U, /**< DMA3_TRIGGER_OUT1 output assigned to XBAR1_IN119 input. */
+    kXBAR1_InputDma3TriggerOut2     = 120|0x10000U, /**< DMA3_TRIGGER_OUT2 output assigned to XBAR1_IN120 input. */
+    kXBAR1_InputDma3TriggerOut3     = 121|0x10000U, /**< DMA3_TRIGGER_OUT3 output assigned to XBAR1_IN121 input. */
+    kXBAR1_InputDma3TriggerOut4     = 122|0x10000U, /**< DMA3_TRIGGER_OUT4 output assigned to XBAR1_IN122 input. */
+    kXBAR1_InputDma3TriggerOut5     = 123|0x10000U, /**< DMA3_TRIGGER_OUT5 output assigned to XBAR1_IN123 input. */
+    kXBAR1_InputDma3TriggerOut6     = 124|0x10000U, /**< DMA3_TRIGGER_OUT6 output assigned to XBAR1_IN124 input. */
+    kXBAR1_InputDma3TriggerOut7     = 125|0x10000U, /**< DMA3_TRIGGER_OUT7 output assigned to XBAR1_IN125 input. */
+    kXBAR1_InputAdc1TcompPulse0     = 126|0x10000U, /**< ADC1_TCOMP_PULSE0 output assigned to XBAR1_IN126 input. */
+    kXBAR1_InputAdc1TcompPulse1     = 127|0x10000U, /**< ADC1_TCOMP_PULSE1 output assigned to XBAR1_IN127 input. */
+    kXBAR1_InputAdc1TcompPulse2     = 128|0x10000U, /**< ADC1_TCOMP_PULSE2 output assigned to XBAR1_IN128 input. */
+    kXBAR1_InputAdc1TcompPulse3     = 129|0x10000U, /**< ADC1_TCOMP_PULSE3 output assigned to XBAR1_IN129 input. */
+    kXBAR1_InputAdc1TcompPulse4     = 130|0x10000U, /**< ADC1_TCOMP_PULSE4 output assigned to XBAR1_IN130 input. */
+    kXBAR1_InputAdc1TcompPulse5     = 131|0x10000U, /**< ADC1_TCOMP_PULSE5 output assigned to XBAR1_IN131 input. */
+    kXBAR1_InputAdc1TcompPulse6     = 132|0x10000U, /**< ADC1_TCOMP_PULSE6 output assigned to XBAR1_IN132 input. */
+    kXBAR1_InputAdc1TcompPulse7     = 133|0x10000U, /**< ADC1_TCOMP_PULSE7 output assigned to XBAR1_IN133 input. */
+    kXBAR1_InputAdc2TcompPulse0     = 134|0x10000U, /**< ADC2_TCOMP_PULSE0 output assigned to XBAR1_IN134 input. */
+    kXBAR1_InputAdc2TcompPulse1     = 135|0x10000U, /**< ADC2_TCOMP_PULSE1 output assigned to XBAR1_IN135 input. */
+    kXBAR1_InputAdc2TcompPulse2     = 136|0x10000U, /**< ADC2_TCOMP_PULSE2 output assigned to XBAR1_IN136 input. */
+    kXBAR1_InputAdc2TcompPulse3     = 137|0x10000U, /**< ADC2_TCOMP_PULSE3 output assigned to XBAR1_IN137 input. */
+    kXBAR1_InputAdc2TcompPulse4     = 138|0x10000U, /**< ADC2_TCOMP_PULSE4 output assigned to XBAR1_IN138 input. */
+    kXBAR1_InputAdc2TcompPulse5     = 139|0x10000U, /**< ADC2_TCOMP_PULSE5 output assigned to XBAR1_IN139 input. */
+    kXBAR1_InputAdc2TcompPulse6     = 140|0x10000U, /**< ADC2_TCOMP_PULSE6 output assigned to XBAR1_IN140 input. */
+    kXBAR1_InputAdc2TcompPulse7     = 141|0x10000U, /**< ADC2_TCOMP_PULSE7 output assigned to XBAR1_IN141 input. */
+    kXBAR1_InputTpm1ChTrigger0      = 142|0x10000U, /**< TPM1_CH_TRIGGER0 output assigned to XBAR1_IN142 input. */
+    kXBAR1_InputTpm1ChTrigger1      = 143|0x10000U, /**< TPM1_CH_TRIGGER1 output assigned to XBAR1_IN143 input. */
+    kXBAR1_InputTpm1ChTrigger2      = 144|0x10000U, /**< TPM1_CH_TRIGGER2 output assigned to XBAR1_IN144 input. */
+    kXBAR1_InputTpm1ChTrigger3      = 145|0x10000U, /**< TPM1_CH_TRIGGER3 output assigned to XBAR1_IN145 input. */
+    kXBAR1_InputTpm1Trigger         = 146|0x10000U, /**< TPM1_TRIGGER output assigned to XBAR1_IN146 input. */
+    kXBAR1_InputTpm2ChTrigger0      = 147|0x10000U, /**< TPM2_CH_TRIGGER0 output assigned to XBAR1_IN147 input. */
+    kXBAR1_InputTpm2ChTrigger1      = 148|0x10000U, /**< TPM2_CH_TRIGGER1 output assigned to XBAR1_IN148 input. */
+    kXBAR1_InputTpm2ChTrigger2      = 149|0x10000U, /**< TPM2_CH_TRIGGER2 output assigned to XBAR1_IN149 input. */
+    kXBAR1_InputTpm2ChTrigger3      = 150|0x10000U, /**< TPM2_CH_TRIGGER3 output assigned to XBAR1_IN150 input. */
+    kXBAR1_InputTpm2Trigger         = 151|0x10000U, /**< TPM2_TRIGGER output assigned to XBAR1_IN151 input. */
+    kXBAR1_InputTpm3ChTrigger0      = 152|0x10000U, /**< TPM3_CH_TRIGGER0 output assigned to XBAR1_IN152 input. */
+    kXBAR1_InputTpm3ChTrigger1      = 153|0x10000U, /**< TPM3_CH_TRIGGER1 output assigned to XBAR1_IN153 input. */
+    kXBAR1_InputTpm3ChTrigger2      = 154|0x10000U, /**< TPM3_CH_TRIGGER2 output assigned to XBAR1_IN154 input. */
+    kXBAR1_InputTpm3ChTrigger3      = 155|0x10000U, /**< TPM3_CH_TRIGGER3 output assigned to XBAR1_IN155 input. */
+    kXBAR1_InputTpm3Trigger         = 156|0x10000U, /**< TPM3_TRIGGER output assigned to XBAR1_IN156 input. */
+    kXBAR1_InputRESERVED157         = 157|0x10000U, /**< XBAR1_IN157 input is reserved. */
+    kXBAR1_InputRESERVED158         = 158|0x10000U, /**< XBAR1_IN158 input is reserved. */
+    kXBAR1_InputRESERVED159         = 159|0x10000U, /**< XBAR1_IN159 input is reserved. */
+    kXBAR1_InputRESERVED160         = 160|0x10000U, /**< XBAR1_IN160 input is reserved. */
+    kXBAR1_InputRESERVED161         = 161|0x10000U, /**< XBAR1_IN161 input is reserved. */
+    kXBAR1_InputRESERVED162         = 162|0x10000U, /**< XBAR1_IN162 input is reserved. */
+    kXBAR1_InputRESERVED163         = 163|0x10000U, /**< XBAR1_IN163 input is reserved. */
+    kXBAR1_InputRESERVED164         = 164|0x10000U, /**< XBAR1_IN164 input is reserved. */
+    kXBAR1_InputRESERVED165         = 165|0x10000U, /**< XBAR1_IN165 input is reserved. */
+    kXBAR1_InputRESERVED166         = 166|0x10000U, /**< XBAR1_IN166 input is reserved. */
+    kXBAR1_InputRESERVED167         = 167|0x10000U, /**< XBAR1_IN167 input is reserved. */
+    kXBAR1_InputRESERVED168         = 168|0x10000U, /**< XBAR1_IN168 input is reserved. */
+    kXBAR1_InputRESERVED169         = 169|0x10000U, /**< XBAR1_IN169 input is reserved. */
+    kXBAR1_InputRESERVED170         = 170|0x10000U, /**< XBAR1_IN170 input is reserved. */
+    kXBAR1_InputRESERVED171         = 171|0x10000U, /**< XBAR1_IN171 input is reserved. */
+    kXBAR1_InputLptmr1TriggerDelay  = 172|0x10000U, /**< LPTMR1_TRIGGER_DELAY output assigned to XBAR1_IN172 input. */
+    kXBAR1_InputRESERVED173         = 173|0x10000U, /**< XBAR1_IN173 input is reserved. */
+    kXBAR1_InputRESERVED174         = 174|0x10000U, /**< XBAR1_IN174 input is reserved. */
+    kXBAR1_InputNetcTmrPp1          = 175|0x10000U, /**< NETC_TMR_PP1 output assigned to XBAR1_IN175 input. */
+    kXBAR1_InputNetcTmrPp2          = 176|0x10000U, /**< NETC_TMR_PP2 output assigned to XBAR1_IN176 input. */
+    kXBAR1_InputNetcTmrPp3          = 177|0x10000U, /**< NETC_TMR_PP3 output assigned to XBAR1_IN177 input. */
+    kXBAR1_InputRESERVED178         = 178|0x10000U, /**< XBAR1_IN178 input is reserved. */
+    kXBAR1_InputRESERVED179         = 179|0x10000U, /**< XBAR1_IN179 input is reserved. */
+    kXBAR1_InputRESERVED180         = 180|0x10000U, /**< XBAR1_IN180 input is reserved. */
+    kXBAR1_InputRESERVED181         = 181|0x10000U, /**< XBAR1_IN181 input is reserved. */
+    kXBAR1_InputRESERVED182         = 182|0x10000U, /**< XBAR1_IN182 input is reserved. */
+    kXBAR1_InputRESERVED183         = 183|0x10000U, /**< XBAR1_IN183 input is reserved. */
+    kXBAR1_InputRESERVED184         = 184|0x10000U, /**< XBAR1_IN184 input is reserved. */
+    kXBAR1_InputRESERVED185         = 185|0x10000U, /**< XBAR1_IN185 input is reserved. */
+    kXBAR1_InputSinc3IppDoBreak0    = 186|0x10000U, /**< SINC3_IPP_DO_BREAK0 output assigned to XBAR1_IN186 input. */
+    kXBAR1_InputSinc3IppDoBreak1    = 187|0x10000U, /**< SINC3_IPP_DO_BREAK1 output assigned to XBAR1_IN187 input. */
+    kXBAR1_InputSinc3IppDoBreak2    = 188|0x10000U, /**< SINC3_IPP_DO_BREAK2 output assigned to XBAR1_IN188 input. */
+    kXBAR1_InputSinc3IppDoBreak3    = 189|0x10000U, /**< SINC3_IPP_DO_BREAK3 output assigned to XBAR1_IN189 input. */
+    kXBAR1_InputAoi1Out0            = 190|0x10000U, /**< AOI1_OUT0 output assigned to XBAR1_IN190 input. */
+    kXBAR1_InputAoi1Out1            = 191|0x10000U, /**< AOI1_OUT1 output assigned to XBAR1_IN191 input. */
+    kXBAR1_InputAoi1Out2            = 192|0x10000U, /**< AOI1_OUT2 output assigned to XBAR1_IN192 input. */
+    kXBAR1_InputAoi1Out3            = 193|0x10000U, /**< AOI1_OUT3 output assigned to XBAR1_IN193 input. */
+    kXBAR1_InputAoi2Out0            = 194|0x10000U, /**< AOI2_OUT0 output assigned to XBAR1_IN194 input. */
+    kXBAR1_InputAoi2Out1            = 195|0x10000U, /**< AOI2_OUT1 output assigned to XBAR1_IN195 input. */
+    kXBAR1_InputAoi2Out2            = 196|0x10000U, /**< AOI2_OUT2 output assigned to XBAR1_IN196 input. */
+    kXBAR1_InputAoi2Out3            = 197|0x10000U, /**< AOI2_OUT3 output assigned to XBAR1_IN197 input. */
+    kXBAR1_InputTriggerSyncOut4     = 198|0x10000U, /**< TRIGGER_SYNC_OUT4 output assigned to XBAR1_IN198 input. */
+    kXBAR1_InputTriggerSyncOut5     = 199|0x10000U, /**< TRIGGER_SYNC_OUT5 output assigned to XBAR1_IN199 input. */
+    kXBAR1_InputTriggerSyncOut6     = 200|0x10000U, /**< TRIGGER_SYNC_OUT6 output assigned to XBAR1_IN200 input. */
+    kXBAR1_InputTriggerSyncOut7     = 201|0x10000U, /**< TRIGGER_SYNC_OUT7 output assigned to XBAR1_IN201 input. */
+    kXBAR1_InputRESERVED202         = 202|0x10000U, /**< XBAR1_IN202 input is reserved. */
+    kXBAR1_InputRESERVED203         = 203|0x10000U, /**< XBAR1_IN203 input is reserved. */
+    kXBAR1_InputRESERVED204         = 204|0x10000U, /**< XBAR1_IN204 input is reserved. */
+    kXBAR1_InputRESERVED205         = 205|0x10000U, /**< XBAR1_IN205 input is reserved. */
+    kXBAR1_InputAoi3Out0            = 206|0x10000U, /**< AOI3_OUT0 output assigned to XBAR1_IN206 input. */
+    kXBAR1_InputAoi3Out1            = 207|0x10000U, /**< AOI3_OUT1 output assigned to XBAR1_IN207 input. */
+    kXBAR1_InputAoi3Out2            = 208|0x10000U, /**< AOI3_OUT2 output assigned to XBAR1_IN208 input. */
+    kXBAR1_InputAoi3Out3            = 209|0x10000U, /**< AOI3_OUT3 output assigned to XBAR1_IN209 input. */
+    kXBAR1_InputAoi4Out0            = 210|0x10000U, /**< AOI4_OUT0 output assigned to XBAR1_IN210 input. */
+    kXBAR1_InputAoi4Out1            = 211|0x10000U, /**< AOI4_OUT1 output assigned to XBAR1_IN211 input. */
+    kXBAR1_InputAoi4Out2            = 212|0x10000U, /**< AOI4_OUT2 output assigned to XBAR1_IN212 input. */
+    kXBAR1_InputAoi4Out3            = 213|0x10000U, /**< AOI4_OUT3 output assigned to XBAR1_IN213 input. */
+    kXBAR1_InputEcatSyncOut0        = 214|0x10000U, /**< ECAT_SYNC_OUT0 output assigned to XBAR1_IN214 input. */
+    kXBAR1_InputEcatSyncOut1        = 215|0x10000U, /**< ECAT_SYNC_OUT1 output assigned to XBAR1_IN215 input. */
+    kXBAR2_InputLogicLow            = 0|0x20000U,  /**< LOGIC_LOW output assigned to XBAR2_IN0 input. */
+    kXBAR2_InputLogicHigh           = 1|0x20000U,  /**< LOGIC_HIGH output assigned to XBAR2_IN1 input. */
+    kXBAR2_InputLogicLow1           = 2|0x20000U,  /**< LOGIC_LOW1 output assigned to XBAR2_IN2 input. */
+    kXBAR2_InputLogicHigh1          = 3|0x20000U,  /**< LOGIC_HIGH1 output assigned to XBAR2_IN3 input. */
+    kXBAR2_InputRESERVED4           = 4|0x20000U,  /**< XBAR2_IN4 input is reserved. */
+    kXBAR2_InputRESERVED5           = 5|0x20000U,  /**< XBAR2_IN5 input is reserved. */
+    kXBAR2_InputAcmp3Out            = 6|0x20000U,  /**< ACMP3_OUT output assigned to XBAR2_IN6 input. */
+    kXBAR2_InputRESERVED7           = 7|0x20000U,  /**< XBAR2_IN7 input is reserved. */
+    kXBAR2_InputQtimer1Timer0       = 8|0x20000U,  /**< QTIMER1_TIMER0 output assigned to XBAR2_IN8 input. */
+    kXBAR2_InputQtimer1Timer1       = 9|0x20000U,  /**< QTIMER1_TIMER1 output assigned to XBAR2_IN9 input. */
+    kXBAR2_InputQtimer1Timer2       = 10|0x20000U, /**< QTIMER1_TIMER2 output assigned to XBAR2_IN10 input. */
+    kXBAR2_InputQtimer1Timer3       = 11|0x20000U, /**< QTIMER1_TIMER3 output assigned to XBAR2_IN11 input. */
+    kXBAR2_InputQtimer2Timer0       = 12|0x20000U, /**< QTIMER2_TIMER0 output assigned to XBAR2_IN12 input. */
+    kXBAR2_InputQtimer2Timer1       = 13|0x20000U, /**< QTIMER2_TIMER1 output assigned to XBAR2_IN13 input. */
+    kXBAR2_InputQtimer2Timer2       = 14|0x20000U, /**< QTIMER2_TIMER2 output assigned to XBAR2_IN14 input. */
+    kXBAR2_InputQtimer2Timer3       = 15|0x20000U, /**< QTIMER2_TIMER3 output assigned to XBAR2_IN15 input. */
+    kXBAR2_InputQtimer3Timer0       = 16|0x20000U, /**< QTIMER3_TIMER0 output assigned to XBAR2_IN16 input. */
+    kXBAR2_InputQtimer3Timer1       = 17|0x20000U, /**< QTIMER3_TIMER1 output assigned to XBAR2_IN17 input. */
+    kXBAR2_InputQtimer3Timer2       = 18|0x20000U, /**< QTIMER3_TIMER2 output assigned to XBAR2_IN18 input. */
+    kXBAR2_InputQtimer3Timer3       = 19|0x20000U, /**< QTIMER3_TIMER3 output assigned to XBAR2_IN19 input. */
+    kXBAR2_InputQtimer4Timer0       = 20|0x20000U, /**< QTIMER4_TIMER0 output assigned to XBAR2_IN20 input. */
+    kXBAR2_InputQtimer4Timer1       = 21|0x20000U, /**< QTIMER4_TIMER1 output assigned to XBAR2_IN21 input. */
+    kXBAR2_InputQtimer4Timer2       = 22|0x20000U, /**< QTIMER4_TIMER2 output assigned to XBAR2_IN22 input. */
+    kXBAR2_InputQtimer4Timer3       = 23|0x20000U, /**< QTIMER4_TIMER3 output assigned to XBAR2_IN23 input. */
+    kXBAR2_InputRESERVED24          = 24|0x20000U, /**< XBAR2_IN24 input is reserved. */
+    kXBAR2_InputRESERVED25          = 25|0x20000U, /**< XBAR2_IN25 input is reserved. */
+    kXBAR2_InputRESERVED26          = 26|0x20000U, /**< XBAR2_IN26 input is reserved. */
+    kXBAR2_InputRESERVED27          = 27|0x20000U, /**< XBAR2_IN27 input is reserved. */
+    kXBAR2_InputRESERVED28          = 28|0x20000U, /**< XBAR2_IN28 input is reserved. */
+    kXBAR2_InputRESERVED29          = 29|0x20000U, /**< XBAR2_IN29 input is reserved. */
+    kXBAR2_InputRESERVED30          = 30|0x20000U, /**< XBAR2_IN30 input is reserved. */
+    kXBAR2_InputRESERVED31          = 31|0x20000U, /**< XBAR2_IN31 input is reserved. */
+    kXBAR2_InputRESERVED32          = 32|0x20000U, /**< XBAR2_IN32 input is reserved. */
+    kXBAR2_InputRESERVED33          = 33|0x20000U, /**< XBAR2_IN33 input is reserved. */
+    kXBAR2_InputRESERVED34          = 34|0x20000U, /**< XBAR2_IN34 input is reserved. */
+    kXBAR2_InputRESERVED35          = 35|0x20000U, /**< XBAR2_IN35 input is reserved. */
+    kXBAR2_InputRESERVED36          = 36|0x20000U, /**< XBAR2_IN36 input is reserved. */
+    kXBAR2_InputRESERVED37          = 37|0x20000U, /**< XBAR2_IN37 input is reserved. */
+    kXBAR2_InputRESERVED38          = 38|0x20000U, /**< XBAR2_IN38 input is reserved. */
+    kXBAR2_InputRESERVED39          = 39|0x20000U, /**< XBAR2_IN39 input is reserved. */
+    kXBAR2_InputRESERVED40          = 40|0x20000U, /**< XBAR2_IN40 input is reserved. */
+    kXBAR2_InputRESERVED41          = 41|0x20000U, /**< XBAR2_IN41 input is reserved. */
+    kXBAR2_InputRESERVED42          = 42|0x20000U, /**< XBAR2_IN42 input is reserved. */
+    kXBAR2_InputRESERVED43          = 43|0x20000U, /**< XBAR2_IN43 input is reserved. */
+    kXBAR2_InputRESERVED44          = 44|0x20000U, /**< XBAR2_IN44 input is reserved. */
+    kXBAR2_InputRESERVED45          = 45|0x20000U, /**< XBAR2_IN45 input is reserved. */
+    kXBAR2_InputRESERVED46          = 46|0x20000U, /**< XBAR2_IN46 input is reserved. */
+    kXBAR2_InputRESERVED47          = 47|0x20000U, /**< XBAR2_IN47 input is reserved. */
+    kXBAR2_InputFlexpwm3Pwm0OutTrig01 = 48|0x20000U, /**< FLEXPWM3_PWM0_OUT_TRIG0_1 output assigned to XBAR2_IN48 input. */
+    kXBAR2_InputFlexpwm3Pwm1OutTrig01 = 49|0x20000U, /**< FLEXPWM3_PWM1_OUT_TRIG0_1 output assigned to XBAR2_IN49 input. */
+    kXBAR2_InputFlexpwm3Pwm2OutTrig01 = 50|0x20000U, /**< FLEXPWM3_PWM2_OUT_TRIG0_1 output assigned to XBAR2_IN50 input. */
+    kXBAR2_InputFlexpwm3Pwm3OutTrig01 = 51|0x20000U, /**< FLEXPWM3_PWM3_OUT_TRIG0_1 output assigned to XBAR2_IN51 input. */
+    kXBAR2_InputFlexpwm4Pwm0OutTrig01 = 52|0x20000U, /**< FLEXPWM4_PWM0_OUT_TRIG0_1 output assigned to XBAR2_IN52 input. */
+    kXBAR2_InputFlexpwm4Pwm1OutTrig01 = 53|0x20000U, /**< FLEXPWM4_PWM1_OUT_TRIG0_1 output assigned to XBAR2_IN53 input. */
+    kXBAR2_InputFlexpwm4Pwm2OutTrig01 = 54|0x20000U, /**< FLEXPWM4_PWM2_OUT_TRIG0_1 output assigned to XBAR2_IN54 input. */
+    kXBAR2_InputFlexpwm4Pwm3OutTrig01 = 55|0x20000U, /**< FLEXPWM4_PWM3_OUT_TRIG0_1 output assigned to XBAR2_IN55 input. */
+    kXBAR2_InputPit1Trigger0        = 56|0x20000U, /**< PIT1_TRIGGER0 output assigned to XBAR2_IN56 input. */
+    kXBAR2_InputPit1Trigger1        = 57|0x20000U, /**< PIT1_TRIGGER1 output assigned to XBAR2_IN57 input. */
+    kXBAR2_InputPit1Trigger2        = 58|0x20000U, /**< PIT1_TRIGGER2 output assigned to XBAR2_IN58 input. */
+    kXBAR2_InputPit1Trigger3        = 59|0x20000U, /**< PIT1_TRIGGER3 output assigned to XBAR2_IN59 input. */
+    kXBAR2_InputPit2Trigger0        = 60|0x20000U, /**< PIT2_TRIGGER0 output assigned to XBAR2_IN60 input. */
+    kXBAR2_InputPit2Trigger1        = 61|0x20000U, /**< PIT2_TRIGGER1 output assigned to XBAR2_IN61 input. */
+    kXBAR2_InputPit2Trigger2        = 62|0x20000U, /**< PIT2_TRIGGER2 output assigned to XBAR2_IN62 input. */
+    kXBAR2_InputPit2Trigger3        = 63|0x20000U, /**< PIT2_TRIGGER3 output assigned to XBAR2_IN63 input. */
+    kXBAR2_InputPit3Trigger0        = 64|0x20000U, /**< PIT3_TRIGGER0 output assigned to XBAR2_IN64 input. */
+    kXBAR2_InputPit3Trigger1        = 65|0x20000U, /**< PIT3_TRIGGER1 output assigned to XBAR2_IN65 input. */
+    kXBAR2_InputPit3Trigger2        = 66|0x20000U, /**< PIT3_TRIGGER2 output assigned to XBAR2_IN66 input. */
+    kXBAR2_InputPit3Trigger3        = 67|0x20000U, /**< PIT3_TRIGGER3 output assigned to XBAR2_IN67 input. */
+    kXBAR2_InputRESERVED68          = 68|0x20000U, /**< XBAR2_IN68 input is reserved. */
+    kXBAR2_InputRESERVED69          = 69|0x20000U, /**< XBAR2_IN69 input is reserved. */
+    kXBAR2_InputRESERVED70          = 70|0x20000U, /**< XBAR2_IN70 input is reserved. */
+    kXBAR2_InputRESERVED71          = 71|0x20000U, /**< XBAR2_IN71 input is reserved. */
+    kXBAR2_InputDma4TriggerOut0     = 72|0x20000U, /**< DMA4_TRIGGER_OUT0 output assigned to XBAR2_IN72 input. */
+    kXBAR2_InputDma4TriggerOut1     = 73|0x20000U, /**< DMA4_TRIGGER_OUT1 output assigned to XBAR2_IN73 input. */
+    kXBAR2_InputDma4TriggerOut2     = 74|0x20000U, /**< DMA4_TRIGGER_OUT2 output assigned to XBAR2_IN74 input. */
+    kXBAR2_InputDma4TriggerOut3     = 75|0x20000U, /**< DMA4_TRIGGER_OUT3 output assigned to XBAR2_IN75 input. */
+    kXBAR2_InputDma4TriggerOut4     = 76|0x20000U, /**< DMA4_TRIGGER_OUT4 output assigned to XBAR2_IN76 input. */
+    kXBAR2_InputDma4TriggerOut5     = 77|0x20000U, /**< DMA4_TRIGGER_OUT5 output assigned to XBAR2_IN77 input. */
+    kXBAR2_InputDma4TriggerOut6     = 78|0x20000U, /**< DMA4_TRIGGER_OUT6 output assigned to XBAR2_IN78 input. */
+    kXBAR2_InputDma4TriggerOut7     = 79|0x20000U, /**< DMA4_TRIGGER_OUT7 output assigned to XBAR2_IN79 input. */
+    kXBAR2_InputDma3TriggerOut0     = 80|0x20000U, /**< DMA3_TRIGGER_OUT0 output assigned to XBAR2_IN80 input. */
+    kXBAR2_InputDma3TriggerOut1     = 81|0x20000U, /**< DMA3_TRIGGER_OUT1 output assigned to XBAR2_IN81 input. */
+    kXBAR2_InputDma3TriggerOut2     = 82|0x20000U, /**< DMA3_TRIGGER_OUT2 output assigned to XBAR2_IN82 input. */
+    kXBAR2_InputDma3TriggerOut3     = 83|0x20000U, /**< DMA3_TRIGGER_OUT3 output assigned to XBAR2_IN83 input. */
+    kXBAR2_InputDma3TriggerOut4     = 84|0x20000U, /**< DMA3_TRIGGER_OUT4 output assigned to XBAR2_IN84 input. */
+    kXBAR2_InputDma3TriggerOut5     = 85|0x20000U, /**< DMA3_TRIGGER_OUT5 output assigned to XBAR2_IN85 input. */
+    kXBAR2_InputDma3TriggerOut6     = 86|0x20000U, /**< DMA3_TRIGGER_OUT6 output assigned to XBAR2_IN86 input. */
+    kXBAR2_InputDma3TriggerOut7     = 87|0x20000U, /**< DMA3_TRIGGER_OUT7 output assigned to XBAR2_IN87 input. */
+    kXBAR2_InputAdc1TcompPulse0     = 88|0x20000U, /**< ADC1_TCOMP_PULSE0 output assigned to XBAR2_IN88 input. */
+    kXBAR2_InputAdc1TcompPulse1     = 89|0x20000U, /**< ADC1_TCOMP_PULSE1 output assigned to XBAR2_IN89 input. */
+    kXBAR2_InputAdc1TcompPulse2     = 90|0x20000U, /**< ADC1_TCOMP_PULSE2 output assigned to XBAR2_IN90 input. */
+    kXBAR2_InputAdc1TcompPulse3     = 91|0x20000U, /**< ADC1_TCOMP_PULSE3 output assigned to XBAR2_IN91 input. */
+    kXBAR2_InputAdc1TcompPulse4     = 92|0x20000U, /**< ADC1_TCOMP_PULSE4 output assigned to XBAR2_IN92 input. */
+    kXBAR2_InputAdc1TcompPulse5     = 93|0x20000U, /**< ADC1_TCOMP_PULSE5 output assigned to XBAR2_IN93 input. */
+    kXBAR2_InputAdc1TcompPulse6     = 94|0x20000U, /**< ADC1_TCOMP_PULSE6 output assigned to XBAR2_IN94 input. */
+    kXBAR2_InputAdc1TcompPulse7     = 95|0x20000U, /**< ADC1_TCOMP_PULSE7 output assigned to XBAR2_IN95 input. */
+    kXBAR2_InputAdc2TcompPulse0     = 96|0x20000U, /**< ADC2_TCOMP_PULSE0 output assigned to XBAR2_IN96 input. */
+    kXBAR2_InputAdc2TcompPulse1     = 97|0x20000U, /**< ADC2_TCOMP_PULSE1 output assigned to XBAR2_IN97 input. */
+    kXBAR2_InputAdc2TcompPulse2     = 98|0x20000U, /**< ADC2_TCOMP_PULSE2 output assigned to XBAR2_IN98 input. */
+    kXBAR2_InputAdc2TcompPulse3     = 99|0x20000U, /**< ADC2_TCOMP_PULSE3 output assigned to XBAR2_IN99 input. */
+    kXBAR2_InputAdc2TcompPulse4     = 100|0x20000U, /**< ADC2_TCOMP_PULSE4 output assigned to XBAR2_IN100 input. */
+    kXBAR2_InputAdc2TcompPulse5     = 101|0x20000U, /**< ADC2_TCOMP_PULSE5 output assigned to XBAR2_IN101 input. */
+    kXBAR2_InputAdc2TcompPulse6     = 102|0x20000U, /**< ADC2_TCOMP_PULSE6 output assigned to XBAR2_IN102 input. */
+    kXBAR2_InputAdc2TcompPulse7     = 103|0x20000U, /**< ADC2_TCOMP_PULSE7 output assigned to XBAR2_IN103 input. */
+    kXBAR2_InputTpm1ChTrigger0      = 104|0x20000U, /**< TPM1_CH_TRIGGER0 output assigned to XBAR2_IN104 input. */
+    kXBAR2_InputTpm1ChTrigger1      = 105|0x20000U, /**< TPM1_CH_TRIGGER1 output assigned to XBAR2_IN105 input. */
+    kXBAR2_InputTpm1ChTrigger2      = 106|0x20000U, /**< TPM1_CH_TRIGGER2 output assigned to XBAR2_IN106 input. */
+    kXBAR2_InputTpm1ChTrigger3      = 107|0x20000U, /**< TPM1_CH_TRIGGER3 output assigned to XBAR2_IN107 input. */
+    kXBAR2_InputTpm1Trigger         = 108|0x20000U, /**< TPM1_TRIGGER output assigned to XBAR2_IN108 input. */
+    kXBAR2_InputTpm2ChTrigger0      = 109|0x20000U, /**< TPM2_CH_TRIGGER0 output assigned to XBAR2_IN109 input. */
+    kXBAR2_InputTpm2ChTrigger1      = 110|0x20000U, /**< TPM2_CH_TRIGGER1 output assigned to XBAR2_IN110 input. */
+    kXBAR2_InputTpm2ChTrigger2      = 111|0x20000U, /**< TPM2_CH_TRIGGER2 output assigned to XBAR2_IN111 input. */
+    kXBAR2_InputTpm2ChTrigger3      = 112|0x20000U, /**< TPM2_CH_TRIGGER3 output assigned to XBAR2_IN112 input. */
+    kXBAR2_InputTpm2Trigger         = 113|0x20000U, /**< TPM2_TRIGGER output assigned to XBAR2_IN113 input. */
+    kXBAR2_InputTpm3ChTrigger0      = 114|0x20000U, /**< TPM3_CH_TRIGGER0 output assigned to XBAR2_IN114 input. */
+    kXBAR2_InputTpm3ChTrigger1      = 115|0x20000U, /**< TPM3_CH_TRIGGER1 output assigned to XBAR2_IN115 input. */
+    kXBAR2_InputTpm3ChTrigger2      = 116|0x20000U, /**< TPM3_CH_TRIGGER2 output assigned to XBAR2_IN116 input. */
+    kXBAR2_InputTpm3ChTrigger3      = 117|0x20000U, /**< TPM3_CH_TRIGGER3 output assigned to XBAR2_IN117 input. */
+    kXBAR2_InputTpm3Trigger         = 118|0x20000U, /**< TPM3_TRIGGER output assigned to XBAR2_IN118 input. */
+    kXBAR2_InputRESERVED119         = 119|0x20000U, /**< XBAR2_IN119 input is reserved. */
+    kXBAR2_InputRESERVED120         = 120|0x20000U, /**< XBAR2_IN120 input is reserved. */
+    kXBAR2_InputRESERVED121         = 121|0x20000U, /**< XBAR2_IN121 input is reserved. */
+    kXBAR2_InputRESERVED122         = 122|0x20000U, /**< XBAR2_IN122 input is reserved. */
+    kXBAR2_InputRESERVED123         = 123|0x20000U, /**< XBAR2_IN123 input is reserved. */
+    kXBAR2_InputRESERVED124         = 124|0x20000U, /**< XBAR2_IN124 input is reserved. */
+    kXBAR2_InputRESERVED125         = 125|0x20000U, /**< XBAR2_IN125 input is reserved. */
+    kXBAR2_InputRESERVED126         = 126|0x20000U, /**< XBAR2_IN126 input is reserved. */
+    kXBAR2_InputRESERVED127         = 127|0x20000U, /**< XBAR2_IN127 input is reserved. */
+    kXBAR2_InputRESERVED128         = 128|0x20000U, /**< XBAR2_IN128 input is reserved. */
+    kXBAR2_InputRESERVED129         = 129|0x20000U, /**< XBAR2_IN129 input is reserved. */
+    kXBAR2_InputRESERVED130         = 130|0x20000U, /**< XBAR2_IN130 input is reserved. */
+    kXBAR2_InputRESERVED131         = 131|0x20000U, /**< XBAR2_IN131 input is reserved. */
+    kXBAR2_InputRESERVED132         = 132|0x20000U, /**< XBAR2_IN132 input is reserved. */
+    kXBAR2_InputRESERVED133         = 133|0x20000U, /**< XBAR2_IN133 input is reserved. */
+    kXBAR2_InputLptmr1TriggerDelay  = 134|0x20000U, /**< LPTMR1_TRIGGER_DELAY output assigned to XBAR2_IN134 input. */
+    kXBAR2_InputRESERVED135         = 135|0x20000U, /**< XBAR2_IN135 input is reserved. */
+    kXBAR2_InputRESERVED136         = 136|0x20000U, /**< XBAR2_IN136 input is reserved. */
+    kXBAR2_InputNetcTmrPp1          = 137|0x20000U, /**< NETC_TMR_PP1 output assigned to XBAR2_IN137 input. */
+    kXBAR2_InputNetcTmrPp2          = 138|0x20000U, /**< NETC_TMR_PP2 output assigned to XBAR2_IN138 input. */
+    kXBAR2_InputNetcTmrPp3          = 139|0x20000U, /**< NETC_TMR_PP3 output assigned to XBAR2_IN139 input. */
+    kXBAR2_InputRESERVED140         = 140|0x20000U, /**< XBAR2_IN140 input is reserved. */
+    kXBAR2_InputRESERVED141         = 141|0x20000U, /**< XBAR2_IN141 input is reserved. */
+    kXBAR2_InputRESERVED142         = 142|0x20000U, /**< XBAR2_IN142 input is reserved. */
+    kXBAR2_InputRESERVED143         = 143|0x20000U, /**< XBAR2_IN143 input is reserved. */
+    kXBAR2_InputRESERVED144         = 144|0x20000U, /**< XBAR2_IN144 input is reserved. */
+    kXBAR2_InputRESERVED145         = 145|0x20000U, /**< XBAR2_IN145 input is reserved. */
+    kXBAR2_InputRESERVED146         = 146|0x20000U, /**< XBAR2_IN146 input is reserved. */
+    kXBAR2_InputRESERVED147         = 147|0x20000U, /**< XBAR2_IN147 input is reserved. */
+    kXBAR2_InputSinc3IppDoBreak0    = 148|0x20000U, /**< SINC3_IPP_DO_BREAK0 output assigned to XBAR2_IN148 input. */
+    kXBAR2_InputSinc3IppDoBreak1    = 149|0x20000U, /**< SINC3_IPP_DO_BREAK1 output assigned to XBAR2_IN149 input. */
+    kXBAR2_InputSinc3IppDoBreak2    = 150|0x20000U, /**< SINC3_IPP_DO_BREAK2 output assigned to XBAR2_IN150 input. */
+    kXBAR2_InputSinc3IppDoBreak3    = 151|0x20000U, /**< SINC3_IPP_DO_BREAK3 output assigned to XBAR2_IN151 input. */
+    kXBAR2_InputRESERVED152         = 152|0x20000U, /**< XBAR2_IN152 input is reserved. */
+    kXBAR2_InputRESERVED153         = 153|0x20000U, /**< XBAR2_IN153 input is reserved. */
+    kXBAR2_InputRESERVED154         = 154|0x20000U, /**< XBAR2_IN154 input is reserved. */
+    kXBAR2_InputRESERVED155         = 155|0x20000U, /**< XBAR2_IN155 input is reserved. */
+    kXBAR2_InputEqdc1PosMatch0      = 156|0x20000U, /**< EQDC1_POS_MATCH0 output assigned to XBAR2_IN156 input. */
+    kXBAR2_InputEqdc1PosMatch1      = 157|0x20000U, /**< EQDC1_POS_MATCH1 output assigned to XBAR2_IN157 input. */
+    kXBAR2_InputEqdc1PosMatch2      = 158|0x20000U, /**< EQDC1_POS_MATCH2 output assigned to XBAR2_IN158 input. */
+    kXBAR2_InputEqdc1PosMatch3      = 159|0x20000U, /**< EQDC1_POS_MATCH3 output assigned to XBAR2_IN159 input. */
+    kXBAR2_InputEqdc1CompFlg0       = 160|0x20000U, /**< EQDC1_COMP_FLG0 output assigned to XBAR2_IN160 input. */
+    kXBAR2_InputEqdc1CompFlg1       = 161|0x20000U, /**< EQDC1_COMP_FLG1 output assigned to XBAR2_IN161 input. */
+    kXBAR2_InputEqdc1CompFlg2       = 162|0x20000U, /**< EQDC1_COMP_FLG2 output assigned to XBAR2_IN162 input. */
+    kXBAR2_InputEqdc1CompFlg3       = 163|0x20000U, /**< EQDC1_COMP_FLG3 output assigned to XBAR2_IN163 input. */
+    kXBAR2_InputEqdc1CntDn          = 164|0x20000U, /**< EQDC1_CNT_DN output assigned to XBAR2_IN164 input. */
+    kXBAR2_InputEqdc1CntUp          = 165|0x20000U, /**< EQDC1_CNT_UP output assigned to XBAR2_IN165 input. */
+    kXBAR2_InputEqdc1CntDir         = 166|0x20000U, /**< EQDC1_CNT_DIR output assigned to XBAR2_IN166 input. */
+    kXBAR2_InputEqdc3PosMatch0      = 167|0x20000U, /**< EQDC3_POS_MATCH0 output assigned to XBAR2_IN167 input. */
+    kXBAR2_InputEqdc3PosMatch1      = 168|0x20000U, /**< EQDC3_POS_MATCH1 output assigned to XBAR2_IN168 input. */
+    kXBAR2_InputEqdc3PosMatch2      = 169|0x20000U, /**< EQDC3_POS_MATCH2 output assigned to XBAR2_IN169 input. */
+    kXBAR2_InputEqdc3PosMatch3      = 170|0x20000U, /**< EQDC3_POS_MATCH3 output assigned to XBAR2_IN170 input. */
+    kXBAR2_InputEqdc3CompFlg0       = 171|0x20000U, /**< EQDC3_COMP_FLG0 output assigned to XBAR2_IN171 input. */
+    kXBAR2_InputEqdc3CompFlg1       = 172|0x20000U, /**< EQDC3_COMP_FLG1 output assigned to XBAR2_IN172 input. */
+    kXBAR2_InputEqdc3CompFlg2       = 173|0x20000U, /**< EQDC3_COMP_FLG2 output assigned to XBAR2_IN173 input. */
+    kXBAR2_InputEqdc3CompFlg3       = 174|0x20000U, /**< EQDC3_COMP_FLG3 output assigned to XBAR2_IN174 input. */
+    kXBAR2_InputEqdc3CntDn          = 175|0x20000U, /**< EQDC3_CNT_DN output assigned to XBAR2_IN175 input. */
+    kXBAR2_InputEqdc3CntUp          = 176|0x20000U, /**< EQDC3_CNT_UP output assigned to XBAR2_IN176 input. */
+    kXBAR2_InputEqdc3CntDir         = 177|0x20000U, /**< EQDC3_CNT_DIR output assigned to XBAR2_IN177 input. */
+    kXBAR3_InputLogicLow            = 0|0x30000U,  /**< LOGIC_LOW output assigned to XBAR3_IN0 input. */
+    kXBAR3_InputLogicHigh           = 1|0x30000U,  /**< LOGIC_HIGH output assigned to XBAR3_IN1 input. */
+    kXBAR3_InputLogicLow1           = 2|0x30000U,  /**< LOGIC_LOW1 output assigned to XBAR3_IN2 input. */
+    kXBAR3_InputLogicHigh1          = 3|0x30000U,  /**< LOGIC_HIGH1 output assigned to XBAR3_IN3 input. */
+    kXBAR3_InputRESERVED4           = 4|0x30000U,  /**< XBAR3_IN4 input is reserved. */
+    kXBAR3_InputRESERVED5           = 5|0x30000U,  /**< XBAR3_IN5 input is reserved. */
+    kXBAR3_InputAcmp3Out            = 6|0x30000U,  /**< ACMP3_OUT output assigned to XBAR3_IN6 input. */
+    kXBAR3_InputRESERVED7           = 7|0x30000U,  /**< XBAR3_IN7 input is reserved. */
+    kXBAR3_InputQtimer1Timer0       = 8|0x30000U,  /**< QTIMER1_TIMER0 output assigned to XBAR3_IN8 input. */
+    kXBAR3_InputQtimer1Timer1       = 9|0x30000U,  /**< QTIMER1_TIMER1 output assigned to XBAR3_IN9 input. */
+    kXBAR3_InputQtimer1Timer2       = 10|0x30000U, /**< QTIMER1_TIMER2 output assigned to XBAR3_IN10 input. */
+    kXBAR3_InputQtimer1Timer3       = 11|0x30000U, /**< QTIMER1_TIMER3 output assigned to XBAR3_IN11 input. */
+    kXBAR3_InputQtimer2Timer0       = 12|0x30000U, /**< QTIMER2_TIMER0 output assigned to XBAR3_IN12 input. */
+    kXBAR3_InputQtimer2Timer1       = 13|0x30000U, /**< QTIMER2_TIMER1 output assigned to XBAR3_IN13 input. */
+    kXBAR3_InputQtimer2Timer2       = 14|0x30000U, /**< QTIMER2_TIMER2 output assigned to XBAR3_IN14 input. */
+    kXBAR3_InputQtimer2Timer3       = 15|0x30000U, /**< QTIMER2_TIMER3 output assigned to XBAR3_IN15 input. */
+    kXBAR3_InputQtimer3Timer0       = 16|0x30000U, /**< QTIMER3_TIMER0 output assigned to XBAR3_IN16 input. */
+    kXBAR3_InputQtimer3Timer1       = 17|0x30000U, /**< QTIMER3_TIMER1 output assigned to XBAR3_IN17 input. */
+    kXBAR3_InputQtimer3Timer2       = 18|0x30000U, /**< QTIMER3_TIMER2 output assigned to XBAR3_IN18 input. */
+    kXBAR3_InputQtimer3Timer3       = 19|0x30000U, /**< QTIMER3_TIMER3 output assigned to XBAR3_IN19 input. */
+    kXBAR3_InputQtimer4Timer0       = 20|0x30000U, /**< QTIMER4_TIMER0 output assigned to XBAR3_IN20 input. */
+    kXBAR3_InputQtimer4Timer1       = 21|0x30000U, /**< QTIMER4_TIMER1 output assigned to XBAR3_IN21 input. */
+    kXBAR3_InputQtimer4Timer2       = 22|0x30000U, /**< QTIMER4_TIMER2 output assigned to XBAR3_IN22 input. */
+    kXBAR3_InputQtimer4Timer3       = 23|0x30000U, /**< QTIMER4_TIMER3 output assigned to XBAR3_IN23 input. */
+    kXBAR3_InputRESERVED24          = 24|0x30000U, /**< XBAR3_IN24 input is reserved. */
+    kXBAR3_InputRESERVED25          = 25|0x30000U, /**< XBAR3_IN25 input is reserved. */
+    kXBAR3_InputRESERVED26          = 26|0x30000U, /**< XBAR3_IN26 input is reserved. */
+    kXBAR3_InputRESERVED27          = 27|0x30000U, /**< XBAR3_IN27 input is reserved. */
+    kXBAR3_InputRESERVED28          = 28|0x30000U, /**< XBAR3_IN28 input is reserved. */
+    kXBAR3_InputRESERVED29          = 29|0x30000U, /**< XBAR3_IN29 input is reserved. */
+    kXBAR3_InputRESERVED30          = 30|0x30000U, /**< XBAR3_IN30 input is reserved. */
+    kXBAR3_InputRESERVED31          = 31|0x30000U, /**< XBAR3_IN31 input is reserved. */
+    kXBAR3_InputRESERVED32          = 32|0x30000U, /**< XBAR3_IN32 input is reserved. */
+    kXBAR3_InputRESERVED33          = 33|0x30000U, /**< XBAR3_IN33 input is reserved. */
+    kXBAR3_InputRESERVED34          = 34|0x30000U, /**< XBAR3_IN34 input is reserved. */
+    kXBAR3_InputRESERVED35          = 35|0x30000U, /**< XBAR3_IN35 input is reserved. */
+    kXBAR3_InputRESERVED36          = 36|0x30000U, /**< XBAR3_IN36 input is reserved. */
+    kXBAR3_InputRESERVED37          = 37|0x30000U, /**< XBAR3_IN37 input is reserved. */
+    kXBAR3_InputRESERVED38          = 38|0x30000U, /**< XBAR3_IN38 input is reserved. */
+    kXBAR3_InputRESERVED39          = 39|0x30000U, /**< XBAR3_IN39 input is reserved. */
+    kXBAR3_InputRESERVED40          = 40|0x30000U, /**< XBAR3_IN40 input is reserved. */
+    kXBAR3_InputRESERVED41          = 41|0x30000U, /**< XBAR3_IN41 input is reserved. */
+    kXBAR3_InputRESERVED42          = 42|0x30000U, /**< XBAR3_IN42 input is reserved. */
+    kXBAR3_InputRESERVED43          = 43|0x30000U, /**< XBAR3_IN43 input is reserved. */
+    kXBAR3_InputRESERVED44          = 44|0x30000U, /**< XBAR3_IN44 input is reserved. */
+    kXBAR3_InputRESERVED45          = 45|0x30000U, /**< XBAR3_IN45 input is reserved. */
+    kXBAR3_InputRESERVED46          = 46|0x30000U, /**< XBAR3_IN46 input is reserved. */
+    kXBAR3_InputRESERVED47          = 47|0x30000U, /**< XBAR3_IN47 input is reserved. */
+    kXBAR3_InputFlexpwm3Pwm0OutTrig01 = 48|0x30000U, /**< FLEXPWM3_PWM0_OUT_TRIG0_1 output assigned to XBAR3_IN48 input. */
+    kXBAR3_InputFlexpwm3Pwm1OutTrig01 = 49|0x30000U, /**< FLEXPWM3_PWM1_OUT_TRIG0_1 output assigned to XBAR3_IN49 input. */
+    kXBAR3_InputFlexpwm3Pwm2OutTrig01 = 50|0x30000U, /**< FLEXPWM3_PWM2_OUT_TRIG0_1 output assigned to XBAR3_IN50 input. */
+    kXBAR3_InputFlexpwm3Pwm3OutTrig01 = 51|0x30000U, /**< FLEXPWM3_PWM3_OUT_TRIG0_1 output assigned to XBAR3_IN51 input. */
+    kXBAR3_InputFlexpwm4Pwm0OutTrig01 = 52|0x30000U, /**< FLEXPWM4_PWM0_OUT_TRIG0_1 output assigned to XBAR3_IN52 input. */
+    kXBAR3_InputFlexpwm4Pwm1OutTrig01 = 53|0x30000U, /**< FLEXPWM4_PWM1_OUT_TRIG0_1 output assigned to XBAR3_IN53 input. */
+    kXBAR3_InputFlexpwm4Pwm2OutTrig01 = 54|0x30000U, /**< FLEXPWM4_PWM2_OUT_TRIG0_1 output assigned to XBAR3_IN54 input. */
+    kXBAR3_InputFlexpwm4Pwm3OutTrig01 = 55|0x30000U, /**< FLEXPWM4_PWM3_OUT_TRIG0_1 output assigned to XBAR3_IN55 input. */
+    kXBAR3_InputPit1Trigger0        = 56|0x30000U, /**< PIT1_TRIGGER0 output assigned to XBAR3_IN56 input. */
+    kXBAR3_InputPit1Trigger1        = 57|0x30000U, /**< PIT1_TRIGGER1 output assigned to XBAR3_IN57 input. */
+    kXBAR3_InputPit1Trigger2        = 58|0x30000U, /**< PIT1_TRIGGER2 output assigned to XBAR3_IN58 input. */
+    kXBAR3_InputPit1Trigger3        = 59|0x30000U, /**< PIT1_TRIGGER3 output assigned to XBAR3_IN59 input. */
+    kXBAR3_InputPit2Trigger0        = 60|0x30000U, /**< PIT2_TRIGGER0 output assigned to XBAR3_IN60 input. */
+    kXBAR3_InputPit2Trigger1        = 61|0x30000U, /**< PIT2_TRIGGER1 output assigned to XBAR3_IN61 input. */
+    kXBAR3_InputPit2Trigger2        = 62|0x30000U, /**< PIT2_TRIGGER2 output assigned to XBAR3_IN62 input. */
+    kXBAR3_InputPit2Trigger3        = 63|0x30000U, /**< PIT2_TRIGGER3 output assigned to XBAR3_IN63 input. */
+    kXBAR3_InputPit3Trigger0        = 64|0x30000U, /**< PIT3_TRIGGER0 output assigned to XBAR3_IN64 input. */
+    kXBAR3_InputPit3Trigger1        = 65|0x30000U, /**< PIT3_TRIGGER1 output assigned to XBAR3_IN65 input. */
+    kXBAR3_InputPit3Trigger2        = 66|0x30000U, /**< PIT3_TRIGGER2 output assigned to XBAR3_IN66 input. */
+    kXBAR3_InputPit3Trigger3        = 67|0x30000U, /**< PIT3_TRIGGER3 output assigned to XBAR3_IN67 input. */
+    kXBAR3_InputRESERVED68          = 68|0x30000U, /**< XBAR3_IN68 input is reserved. */
+    kXBAR3_InputRESERVED69          = 69|0x30000U, /**< XBAR3_IN69 input is reserved. */
+    kXBAR3_InputRESERVED70          = 70|0x30000U, /**< XBAR3_IN70 input is reserved. */
+    kXBAR3_InputRESERVED71          = 71|0x30000U, /**< XBAR3_IN71 input is reserved. */
+    kXBAR3_InputDma4TriggerOut0     = 72|0x30000U, /**< DMA4_TRIGGER_OUT0 output assigned to XBAR3_IN72 input. */
+    kXBAR3_InputDma4TriggerOut1     = 73|0x30000U, /**< DMA4_TRIGGER_OUT1 output assigned to XBAR3_IN73 input. */
+    kXBAR3_InputDma4TriggerOut2     = 74|0x30000U, /**< DMA4_TRIGGER_OUT2 output assigned to XBAR3_IN74 input. */
+    kXBAR3_InputDma4TriggerOut3     = 75|0x30000U, /**< DMA4_TRIGGER_OUT3 output assigned to XBAR3_IN75 input. */
+    kXBAR3_InputDma4TriggerOut4     = 76|0x30000U, /**< DMA4_TRIGGER_OUT4 output assigned to XBAR3_IN76 input. */
+    kXBAR3_InputDma4TriggerOut5     = 77|0x30000U, /**< DMA4_TRIGGER_OUT5 output assigned to XBAR3_IN77 input. */
+    kXBAR3_InputDma4TriggerOut6     = 78|0x30000U, /**< DMA4_TRIGGER_OUT6 output assigned to XBAR3_IN78 input. */
+    kXBAR3_InputDma4TriggerOut7     = 79|0x30000U, /**< DMA4_TRIGGER_OUT7 output assigned to XBAR3_IN79 input. */
+    kXBAR3_InputDma3TriggerOut0     = 80|0x30000U, /**< DMA3_TRIGGER_OUT0 output assigned to XBAR3_IN80 input. */
+    kXBAR3_InputDma3TriggerOut1     = 81|0x30000U, /**< DMA3_TRIGGER_OUT1 output assigned to XBAR3_IN81 input. */
+    kXBAR3_InputDma3TriggerOut2     = 82|0x30000U, /**< DMA3_TRIGGER_OUT2 output assigned to XBAR3_IN82 input. */
+    kXBAR3_InputDma3TriggerOut3     = 83|0x30000U, /**< DMA3_TRIGGER_OUT3 output assigned to XBAR3_IN83 input. */
+    kXBAR3_InputDma3TriggerOut4     = 84|0x30000U, /**< DMA3_TRIGGER_OUT4 output assigned to XBAR3_IN84 input. */
+    kXBAR3_InputDma3TriggerOut5     = 85|0x30000U, /**< DMA3_TRIGGER_OUT5 output assigned to XBAR3_IN85 input. */
+    kXBAR3_InputDma3TriggerOut6     = 86|0x30000U, /**< DMA3_TRIGGER_OUT6 output assigned to XBAR3_IN86 input. */
+    kXBAR3_InputDma3TriggerOut7     = 87|0x30000U, /**< DMA3_TRIGGER_OUT7 output assigned to XBAR3_IN87 input. */
+    kXBAR3_InputAdc1TcompPulse0     = 88|0x30000U, /**< ADC1_TCOMP_PULSE0 output assigned to XBAR3_IN88 input. */
+    kXBAR3_InputAdc1TcompPulse1     = 89|0x30000U, /**< ADC1_TCOMP_PULSE1 output assigned to XBAR3_IN89 input. */
+    kXBAR3_InputAdc1TcompPulse2     = 90|0x30000U, /**< ADC1_TCOMP_PULSE2 output assigned to XBAR3_IN90 input. */
+    kXBAR3_InputAdc1TcompPulse3     = 91|0x30000U, /**< ADC1_TCOMP_PULSE3 output assigned to XBAR3_IN91 input. */
+    kXBAR3_InputAdc1TcompPulse4     = 92|0x30000U, /**< ADC1_TCOMP_PULSE4 output assigned to XBAR3_IN92 input. */
+    kXBAR3_InputAdc1TcompPulse5     = 93|0x30000U, /**< ADC1_TCOMP_PULSE5 output assigned to XBAR3_IN93 input. */
+    kXBAR3_InputAdc1TcompPulse6     = 94|0x30000U, /**< ADC1_TCOMP_PULSE6 output assigned to XBAR3_IN94 input. */
+    kXBAR3_InputAdc1TcompPulse7     = 95|0x30000U, /**< ADC1_TCOMP_PULSE7 output assigned to XBAR3_IN95 input. */
+    kXBAR3_InputAdc2TcompPulse0     = 96|0x30000U, /**< ADC2_TCOMP_PULSE0 output assigned to XBAR3_IN96 input. */
+    kXBAR3_InputAdc2TcompPulse1     = 97|0x30000U, /**< ADC2_TCOMP_PULSE1 output assigned to XBAR3_IN97 input. */
+    kXBAR3_InputAdc2TcompPulse2     = 98|0x30000U, /**< ADC2_TCOMP_PULSE2 output assigned to XBAR3_IN98 input. */
+    kXBAR3_InputAdc2TcompPulse3     = 99|0x30000U, /**< ADC2_TCOMP_PULSE3 output assigned to XBAR3_IN99 input. */
+    kXBAR3_InputAdc2TcompPulse4     = 100|0x30000U, /**< ADC2_TCOMP_PULSE4 output assigned to XBAR3_IN100 input. */
+    kXBAR3_InputAdc2TcompPulse5     = 101|0x30000U, /**< ADC2_TCOMP_PULSE5 output assigned to XBAR3_IN101 input. */
+    kXBAR3_InputAdc2TcompPulse6     = 102|0x30000U, /**< ADC2_TCOMP_PULSE6 output assigned to XBAR3_IN102 input. */
+    kXBAR3_InputAdc2TcompPulse7     = 103|0x30000U, /**< ADC2_TCOMP_PULSE7 output assigned to XBAR3_IN103 input. */
+    kXBAR3_InputTpm1ChTrigger0      = 104|0x30000U, /**< TPM1_CH_TRIGGER0 output assigned to XBAR3_IN104 input. */
+    kXBAR3_InputTpm1ChTrigger1      = 105|0x30000U, /**< TPM1_CH_TRIGGER1 output assigned to XBAR3_IN105 input. */
+    kXBAR3_InputTpm1ChTrigger2      = 106|0x30000U, /**< TPM1_CH_TRIGGER2 output assigned to XBAR3_IN106 input. */
+    kXBAR3_InputTpm1ChTrigger3      = 107|0x30000U, /**< TPM1_CH_TRIGGER3 output assigned to XBAR3_IN107 input. */
+    kXBAR3_InputTpm1Trigger         = 108|0x30000U, /**< TPM1_TRIGGER output assigned to XBAR3_IN108 input. */
+    kXBAR3_InputTpm2ChTrigger0      = 109|0x30000U, /**< TPM2_CH_TRIGGER0 output assigned to XBAR3_IN109 input. */
+    kXBAR3_InputTpm2ChTrigger1      = 110|0x30000U, /**< TPM2_CH_TRIGGER1 output assigned to XBAR3_IN110 input. */
+    kXBAR3_InputTpm2ChTrigger2      = 111|0x30000U, /**< TPM2_CH_TRIGGER2 output assigned to XBAR3_IN111 input. */
+    kXBAR3_InputTpm2ChTrigger3      = 112|0x30000U, /**< TPM2_CH_TRIGGER3 output assigned to XBAR3_IN112 input. */
+    kXBAR3_InputTpm2Trigger         = 113|0x30000U, /**< TPM2_TRIGGER output assigned to XBAR3_IN113 input. */
+    kXBAR3_InputTpm3ChTrigger0      = 114|0x30000U, /**< TPM3_CH_TRIGGER0 output assigned to XBAR3_IN114 input. */
+    kXBAR3_InputTpm3ChTrigger1      = 115|0x30000U, /**< TPM3_CH_TRIGGER1 output assigned to XBAR3_IN115 input. */
+    kXBAR3_InputTpm3ChTrigger2      = 116|0x30000U, /**< TPM3_CH_TRIGGER2 output assigned to XBAR3_IN116 input. */
+    kXBAR3_InputTpm3ChTrigger3      = 117|0x30000U, /**< TPM3_CH_TRIGGER3 output assigned to XBAR3_IN117 input. */
+    kXBAR3_InputTpm3Trigger         = 118|0x30000U, /**< TPM3_TRIGGER output assigned to XBAR3_IN118 input. */
+    kXBAR3_InputRESERVED119         = 119|0x30000U, /**< XBAR3_IN119 input is reserved. */
+    kXBAR3_InputRESERVED120         = 120|0x30000U, /**< XBAR3_IN120 input is reserved. */
+    kXBAR3_InputRESERVED121         = 121|0x30000U, /**< XBAR3_IN121 input is reserved. */
+    kXBAR3_InputRESERVED122         = 122|0x30000U, /**< XBAR3_IN122 input is reserved. */
+    kXBAR3_InputRESERVED123         = 123|0x30000U, /**< XBAR3_IN123 input is reserved. */
+    kXBAR3_InputRESERVED124         = 124|0x30000U, /**< XBAR3_IN124 input is reserved. */
+    kXBAR3_InputRESERVED125         = 125|0x30000U, /**< XBAR3_IN125 input is reserved. */
+    kXBAR3_InputRESERVED126         = 126|0x30000U, /**< XBAR3_IN126 input is reserved. */
+    kXBAR3_InputRESERVED127         = 127|0x30000U, /**< XBAR3_IN127 input is reserved. */
+    kXBAR3_InputRESERVED128         = 128|0x30000U, /**< XBAR3_IN128 input is reserved. */
+    kXBAR3_InputRESERVED129         = 129|0x30000U, /**< XBAR3_IN129 input is reserved. */
+    kXBAR3_InputRESERVED130         = 130|0x30000U, /**< XBAR3_IN130 input is reserved. */
+    kXBAR3_InputRESERVED131         = 131|0x30000U, /**< XBAR3_IN131 input is reserved. */
+    kXBAR3_InputRESERVED132         = 132|0x30000U, /**< XBAR3_IN132 input is reserved. */
+    kXBAR3_InputRESERVED133         = 133|0x30000U, /**< XBAR3_IN133 input is reserved. */
+    kXBAR3_InputLptmr1TriggerDelay  = 134|0x30000U, /**< LPTMR1_TRIGGER_DELAY output assigned to XBAR3_IN134 input. */
+    kXBAR3_InputRESERVED135         = 135|0x30000U, /**< XBAR3_IN135 input is reserved. */
+    kXBAR3_InputRESERVED136         = 136|0x30000U, /**< XBAR3_IN136 input is reserved. */
+    kXBAR3_InputNetcTmrPp1          = 137|0x30000U, /**< NETC_TMR_PP1 output assigned to XBAR3_IN137 input. */
+    kXBAR3_InputNetcTmrPp2          = 138|0x30000U, /**< NETC_TMR_PP2 output assigned to XBAR3_IN138 input. */
+    kXBAR3_InputNetcTmrPp3          = 139|0x30000U, /**< NETC_TMR_PP3 output assigned to XBAR3_IN139 input. */
+    kXBAR3_InputRESERVED140         = 140|0x30000U, /**< XBAR3_IN140 input is reserved. */
+    kXBAR3_InputRESERVED141         = 141|0x30000U, /**< XBAR3_IN141 input is reserved. */
+    kXBAR3_InputRESERVED142         = 142|0x30000U, /**< XBAR3_IN142 input is reserved. */
+    kXBAR3_InputRESERVED143         = 143|0x30000U, /**< XBAR3_IN143 input is reserved. */
+    kXBAR3_InputRESERVED144         = 144|0x30000U, /**< XBAR3_IN144 input is reserved. */
+    kXBAR3_InputRESERVED145         = 145|0x30000U, /**< XBAR3_IN145 input is reserved. */
+    kXBAR3_InputRESERVED146         = 146|0x30000U, /**< XBAR3_IN146 input is reserved. */
+    kXBAR3_InputRESERVED147         = 147|0x30000U, /**< XBAR3_IN147 input is reserved. */
+    kXBAR3_InputSinc3IppDoBreak0    = 148|0x30000U, /**< SINC3_IPP_DO_BREAK0 output assigned to XBAR3_IN148 input. */
+    kXBAR3_InputSinc3IppDoBreak1    = 149|0x30000U, /**< SINC3_IPP_DO_BREAK1 output assigned to XBAR3_IN149 input. */
+    kXBAR3_InputSinc3IppDoBreak2    = 150|0x30000U, /**< SINC3_IPP_DO_BREAK2 output assigned to XBAR3_IN150 input. */
+    kXBAR3_InputSinc3IppDoBreak3    = 151|0x30000U, /**< SINC3_IPP_DO_BREAK3 output assigned to XBAR3_IN151 input. */
+    kXBAR3_InputRESERVED152         = 152|0x30000U, /**< XBAR3_IN152 input is reserved. */
+    kXBAR3_InputRESERVED153         = 153|0x30000U, /**< XBAR3_IN153 input is reserved. */
+    kXBAR3_InputRESERVED154         = 154|0x30000U, /**< XBAR3_IN154 input is reserved. */
+    kXBAR3_InputRESERVED155         = 155|0x30000U, /**< XBAR3_IN155 input is reserved. */
+    kXBAR3_InputEqdc2PosMatch0      = 156|0x30000U, /**< EQDC2_POS_MATCH0 output assigned to XBAR3_IN156 input. */
+    kXBAR3_InputEqdc2PosMatch1      = 157|0x30000U, /**< EQDC2_POS_MATCH1 output assigned to XBAR3_IN157 input. */
+    kXBAR3_InputEqdc2PosMatch2      = 158|0x30000U, /**< EQDC2_POS_MATCH2 output assigned to XBAR3_IN158 input. */
+    kXBAR3_InputEqdc2PosMatch3      = 159|0x30000U, /**< EQDC2_POS_MATCH3 output assigned to XBAR3_IN159 input. */
+    kXBAR3_InputEqdc2CompFlg0       = 160|0x30000U, /**< EQDC2_COMP_FLG0 output assigned to XBAR3_IN160 input. */
+    kXBAR3_InputEqdc2CompFlg1       = 161|0x30000U, /**< EQDC2_COMP_FLG1 output assigned to XBAR3_IN161 input. */
+    kXBAR3_InputEqdc2CompFlg2       = 162|0x30000U, /**< EQDC2_COMP_FLG2 output assigned to XBAR3_IN162 input. */
+    kXBAR3_InputEqdc2CompFlg3       = 163|0x30000U, /**< EQDC2_COMP_FLG3 output assigned to XBAR3_IN163 input. */
+    kXBAR3_InputEqdc2CntDn          = 164|0x30000U, /**< EQDC2_CNT_DN output assigned to XBAR3_IN164 input. */
+    kXBAR3_InputEqdc2CntUp          = 165|0x30000U, /**< EQDC2_CNT_UP output assigned to XBAR3_IN165 input. */
+    kXBAR3_InputEqdc2CntDir         = 166|0x30000U, /**< EQDC2_CNT_DIR output assigned to XBAR3_IN166 input. */
+    kXBAR3_InputEqdc4PosMatch0      = 167|0x30000U, /**< EQDC4_POS_MATCH0 output assigned to XBAR3_IN167 input. */
+    kXBAR3_InputEqdc4PosMatch1      = 168|0x30000U, /**< EQDC4_POS_MATCH1 output assigned to XBAR3_IN168 input. */
+    kXBAR3_InputEqdc4PosMatch2      = 169|0x30000U, /**< EQDC4_POS_MATCH2 output assigned to XBAR3_IN169 input. */
+    kXBAR3_InputEqdc4PosMatch3      = 170|0x30000U, /**< EQDC4_POS_MATCH3 output assigned to XBAR3_IN170 input. */
+    kXBAR3_InputEqdc4CompFlg0       = 171|0x30000U, /**< EQDC4_COMP_FLG0 output assigned to XBAR3_IN171 input. */
+    kXBAR3_InputEqdc4CompFlg1       = 172|0x30000U, /**< EQDC4_COMP_FLG1 output assigned to XBAR3_IN172 input. */
+    kXBAR3_InputEqdc4CompFlg2       = 173|0x30000U, /**< EQDC4_COMP_FLG2 output assigned to XBAR3_IN173 input. */
+    kXBAR3_InputEqdc4CompFlg3       = 174|0x30000U, /**< EQDC4_COMP_FLG3 output assigned to XBAR3_IN174 input. */
+    kXBAR3_InputEqdc4CntDn          = 175|0x30000U, /**< EQDC4_CNT_DN output assigned to XBAR3_IN175 input. */
+    kXBAR3_InputEqdc4CntUp          = 176|0x30000U, /**< EQDC4_CNT_UP output assigned to XBAR3_IN176 input. */
+    kXBAR3_InputEqdc4CntDir         = 177|0x30000U, /**< EQDC4_CNT_DIR output assigned to XBAR3_IN177 input. */
+} xbar_input_signal_t;
+
+typedef enum _xbar_output_signal
+{
+    kXBAR1_OutputDma4MuxReq154      = 0|0x10000U,  /**< XBAR1_OUT0 output assigned to DMA4_MUX_REQ154 */
+    kXBAR1_OutputDma4MuxReq155      = 1|0x10000U,  /**< XBAR1_OUT1 output assigned to DMA4_MUX_REQ155 */
+    kXBAR1_OutputDma4MuxReq156      = 2|0x10000U,  /**< XBAR1_OUT2 output assigned to DMA4_MUX_REQ156 */
+    kXBAR1_OutputDma4MuxReq157      = 3|0x10000U,  /**< XBAR1_OUT3 output assigned to DMA4_MUX_REQ157 */
+    kXBAR1_OutputIomuxXbarInout04   = 4|0x10000U,  /**< XBAR1_OUT4 output assigned to IOMUX_XBAR_INOUT04 */
+    kXBAR1_OutputIomuxXbarInout05   = 5|0x10000U,  /**< XBAR1_OUT5 output assigned to IOMUX_XBAR_INOUT05 */
+    kXBAR1_OutputIomuxXbarInout06   = 6|0x10000U,  /**< XBAR1_OUT6 output assigned to IOMUX_XBAR_INOUT06 */
+    kXBAR1_OutputIomuxXbarInout07   = 7|0x10000U,  /**< XBAR1_OUT7 output assigned to IOMUX_XBAR_INOUT07 */
+    kXBAR1_OutputIomuxXbarInout08   = 8|0x10000U,  /**< XBAR1_OUT8 output assigned to IOMUX_XBAR_INOUT08 */
+    kXBAR1_OutputIomuxXbarInout09   = 9|0x10000U,  /**< XBAR1_OUT9 output assigned to IOMUX_XBAR_INOUT09 */
+    kXBAR1_OutputIomuxXbarInout10   = 10|0x10000U, /**< XBAR1_OUT10 output assigned to IOMUX_XBAR_INOUT10 */
+    kXBAR1_OutputIomuxXbarInout11   = 11|0x10000U, /**< XBAR1_OUT11 output assigned to IOMUX_XBAR_INOUT11 */
+    kXBAR1_OutputIomuxXbarInout12   = 12|0x10000U, /**< XBAR1_OUT12 output assigned to IOMUX_XBAR_INOUT12 */
+    kXBAR1_OutputIomuxXbarInout13   = 13|0x10000U, /**< XBAR1_OUT13 output assigned to IOMUX_XBAR_INOUT13 */
+    kXBAR1_OutputIomuxXbarInout14   = 14|0x10000U, /**< XBAR1_OUT14 output assigned to IOMUX_XBAR_INOUT14 */
+    kXBAR1_OutputIomuxXbarInout15   = 15|0x10000U, /**< XBAR1_OUT15 output assigned to IOMUX_XBAR_INOUT15 */
+    kXBAR1_OutputIomuxXbarInout16   = 16|0x10000U, /**< XBAR1_OUT16 output assigned to IOMUX_XBAR_INOUT16 */
+    kXBAR1_OutputIomuxXbarInout17   = 17|0x10000U, /**< XBAR1_OUT17 output assigned to IOMUX_XBAR_INOUT17 */
+    kXBAR1_OutputIomuxXbarInout18   = 18|0x10000U, /**< XBAR1_OUT18 output assigned to IOMUX_XBAR_INOUT18 */
+    kXBAR1_OutputIomuxXbarInout19   = 19|0x10000U, /**< XBAR1_OUT19 output assigned to IOMUX_XBAR_INOUT19 */
+    kXBAR1_OutputIomuxXbarInout20   = 20|0x10000U, /**< XBAR1_OUT20 output assigned to IOMUX_XBAR_INOUT20 */
+    kXBAR1_OutputIomuxXbarInout21   = 21|0x10000U, /**< XBAR1_OUT21 output assigned to IOMUX_XBAR_INOUT21 */
+    kXBAR1_OutputIomuxXbarInout22   = 22|0x10000U, /**< XBAR1_OUT22 output assigned to IOMUX_XBAR_INOUT22 */
+    kXBAR1_OutputIomuxXbarInout23   = 23|0x10000U, /**< XBAR1_OUT23 output assigned to IOMUX_XBAR_INOUT23 */
+    kXBAR1_OutputIomuxXbarInout24   = 24|0x10000U, /**< XBAR1_OUT24 output assigned to IOMUX_XBAR_INOUT24 */
+    kXBAR1_OutputIomuxXbarInout25   = 25|0x10000U, /**< XBAR1_OUT25 output assigned to IOMUX_XBAR_INOUT25 */
+    kXBAR1_OutputIomuxXbarInout26   = 26|0x10000U, /**< XBAR1_OUT26 output assigned to IOMUX_XBAR_INOUT26 */
+    kXBAR1_OutputIomuxXbarInout27   = 27|0x10000U, /**< XBAR1_OUT27 output assigned to IOMUX_XBAR_INOUT27 */
+    kXBAR1_OutputIomuxXbarInout28   = 28|0x10000U, /**< XBAR1_OUT28 output assigned to IOMUX_XBAR_INOUT28 */
+    kXBAR1_OutputIomuxXbarInout29   = 29|0x10000U, /**< XBAR1_OUT29 output assigned to IOMUX_XBAR_INOUT29 */
+    kXBAR1_OutputTriggerSyncIn0     = 30|0x10000U, /**< XBAR1_OUT30 output assigned to TRIGGER_SYNC_IN0 */
+    kXBAR1_OutputTriggerSyncIn1     = 31|0x10000U, /**< XBAR1_OUT31 output assigned to TRIGGER_SYNC_IN1 */
+    kXBAR1_OutputTriggerSyncIn2     = 32|0x10000U, /**< XBAR1_OUT32 output assigned to TRIGGER_SYNC_IN2 */
+    kXBAR1_OutputTriggerSyncIn3     = 33|0x10000U, /**< XBAR1_OUT33 output assigned to TRIGGER_SYNC_IN3 */
+    kXBAR1_OutputTriggerSyncIn4     = 34|0x10000U, /**< XBAR1_OUT34 output assigned to TRIGGER_SYNC_IN4 */
+    kXBAR1_OutputTriggerSyncIn5     = 35|0x10000U, /**< XBAR1_OUT35 output assigned to TRIGGER_SYNC_IN5 */
+    kXBAR1_OutputTriggerSyncIn6     = 36|0x10000U, /**< XBAR1_OUT36 output assigned to TRIGGER_SYNC_IN6 */
+    kXBAR1_OutputTriggerSyncIn7     = 37|0x10000U, /**< XBAR1_OUT37 output assigned to TRIGGER_SYNC_IN7 */
+    kXBAR1_OutputRESERVED38         = 38|0x10000U, /**< XBAR1_OUT38 output is reserved. */
+    kXBAR1_OutputRESERVED39         = 39|0x10000U, /**< XBAR1_OUT39 output is reserved. */
+    kXBAR1_OutputAcmp3Sample        = 40|0x10000U, /**< XBAR1_OUT40 output assigned to ACMP3_SAMPLE */
+    kXBAR1_OutputRESERVED41         = 41|0x10000U, /**< XBAR1_OUT41 output is reserved. */
+    kXBAR1_OutputRESERVED42         = 42|0x10000U, /**< XBAR1_OUT42 output is reserved. */
+    kXBAR1_OutputRESERVED43         = 43|0x10000U, /**< XBAR1_OUT43 output is reserved. */
+    kXBAR1_OutputRESERVED44         = 44|0x10000U, /**< XBAR1_OUT44 output is reserved. */
+    kXBAR1_OutputRESERVED45         = 45|0x10000U, /**< XBAR1_OUT45 output is reserved. */
+    kXBAR1_OutputRESERVED46         = 46|0x10000U, /**< XBAR1_OUT46 output is reserved. */
+    kXBAR1_OutputRESERVED47         = 47|0x10000U, /**< XBAR1_OUT47 output is reserved. */
+    kXBAR1_OutputRESERVED48         = 48|0x10000U, /**< XBAR1_OUT48 output is reserved. */
+    kXBAR1_OutputRESERVED49         = 49|0x10000U, /**< XBAR1_OUT49 output is reserved. */
+    kXBAR1_OutputRESERVED50         = 50|0x10000U, /**< XBAR1_OUT50 output is reserved. */
+    kXBAR1_OutputRESERVED51         = 51|0x10000U, /**< XBAR1_OUT51 output is reserved. */
+    kXBAR1_OutputRESERVED52         = 52|0x10000U, /**< XBAR1_OUT52 output is reserved. */
+    kXBAR1_OutputFlexpwm1234Fault2  = 53|0x10000U, /**< XBAR1_OUT53 output assigned to FLEXPWM1_2_3_4_FAULT2 */
+    kXBAR1_OutputFlexpwm1234Fault3  = 54|0x10000U, /**< XBAR1_OUT54 output assigned to FLEXPWM1_2_3_4_FAULT3 */
+    kXBAR1_OutputRESERVED55         = 55|0x10000U, /**< XBAR1_OUT55 output is reserved. */
+    kXBAR1_OutputRESERVED56         = 56|0x10000U, /**< XBAR1_OUT56 output is reserved. */
+    kXBAR1_OutputRESERVED57         = 57|0x10000U, /**< XBAR1_OUT57 output is reserved. */
+    kXBAR1_OutputRESERVED58         = 58|0x10000U, /**< XBAR1_OUT58 output is reserved. */
+    kXBAR1_OutputRESERVED59         = 59|0x10000U, /**< XBAR1_OUT59 output is reserved. */
+    kXBAR1_OutputRESERVED60         = 60|0x10000U, /**< XBAR1_OUT60 output is reserved. */
+    kXBAR1_OutputRESERVED61         = 61|0x10000U, /**< XBAR1_OUT61 output is reserved. */
+    kXBAR1_OutputRESERVED62         = 62|0x10000U, /**< XBAR1_OUT62 output is reserved. */
+    kXBAR1_OutputRESERVED63         = 63|0x10000U, /**< XBAR1_OUT63 output is reserved. */
+    kXBAR1_OutputRESERVED64         = 64|0x10000U, /**< XBAR1_OUT64 output is reserved. */
+    kXBAR1_OutputRESERVED65         = 65|0x10000U, /**< XBAR1_OUT65 output is reserved. */
+    kXBAR1_OutputRESERVED66         = 66|0x10000U, /**< XBAR1_OUT66 output is reserved. */
+    kXBAR1_OutputRESERVED67         = 67|0x10000U, /**< XBAR1_OUT67 output is reserved. */
+    kXBAR1_OutputFlexpwm34Exta0     = 68|0x10000U, /**< XBAR1_OUT68 output assigned to FLEXPWM3_4_EXTA0 */
+    kXBAR1_OutputFlexpwm34Exta1     = 69|0x10000U, /**< XBAR1_OUT69 output assigned to FLEXPWM3_4_EXTA1 */
+    kXBAR1_OutputFlexpwm34Exta2     = 70|0x10000U, /**< XBAR1_OUT70 output assigned to FLEXPWM3_4_EXTA2 */
+    kXBAR1_OutputFlexpwm34Exta3     = 71|0x10000U, /**< XBAR1_OUT71 output assigned to FLEXPWM3_4_EXTA3 */
+    kXBAR1_OutputFlexpwm34ExtClk    = 72|0x10000U, /**< XBAR1_OUT72 output assigned to FLEXPWM3_4_EXT_CLK */
+    kXBAR1_OutputFlexpwm3ExtSync0   = 73|0x10000U, /**< XBAR1_OUT73 output assigned to FLEXPWM3_EXT_SYNC0 */
+    kXBAR1_OutputFlexpwm3ExtSync1   = 74|0x10000U, /**< XBAR1_OUT74 output assigned to FLEXPWM3_EXT_SYNC1 */
+    kXBAR1_OutputFlexpwm3ExtSync2   = 75|0x10000U, /**< XBAR1_OUT75 output assigned to FLEXPWM3_EXT_SYNC2 */
+    kXBAR1_OutputFlexpwm3ExtSync3   = 76|0x10000U, /**< XBAR1_OUT76 output assigned to FLEXPWM3_EXT_SYNC3 */
+    kXBAR1_OutputFlexpwm3Fault0     = 77|0x10000U, /**< XBAR1_OUT77 output assigned to FLEXPWM3_FAULT0 */
+    kXBAR1_OutputFlexpwm3Fault1     = 78|0x10000U, /**< XBAR1_OUT78 output assigned to FLEXPWM3_FAULT1 */
+    kXBAR1_OutputFlexpwm3ExtForce   = 79|0x10000U, /**< XBAR1_OUT79 output assigned to FLEXPWM3_EXT_FORCE */
+    kXBAR1_OutputFlexpwm4ExtSync0   = 80|0x10000U, /**< XBAR1_OUT80 output assigned to FLEXPWM4_EXT_SYNC0 */
+    kXBAR1_OutputFlexpwm4ExtSync1   = 81|0x10000U, /**< XBAR1_OUT81 output assigned to FLEXPWM4_EXT_SYNC1 */
+    kXBAR1_OutputFlexpwm4ExtSync2   = 82|0x10000U, /**< XBAR1_OUT82 output assigned to FLEXPWM4_EXT_SYNC2 */
+    kXBAR1_OutputFlexpwm4ExtSync3   = 83|0x10000U, /**< XBAR1_OUT83 output assigned to FLEXPWM4_EXT_SYNC3 */
+    kXBAR1_OutputFlexpwm4Fault0     = 84|0x10000U, /**< XBAR1_OUT84 output assigned to FLEXPWM4_FAULT0 */
+    kXBAR1_OutputFlexpwm4Fault1     = 85|0x10000U, /**< XBAR1_OUT85 output assigned to FLEXPWM4_FAULT1 */
+    kXBAR1_OutputFlexpwm4ExtForce   = 86|0x10000U, /**< XBAR1_OUT86 output assigned to FLEXPWM4_EXT_FORCE */
+    kXBAR1_OutputEqdc1Phasea        = 87|0x10000U, /**< XBAR1_OUT87 output assigned to EQDC1_PHASEA */
+    kXBAR1_OutputEqdc1Phaseb        = 88|0x10000U, /**< XBAR1_OUT88 output assigned to EQDC1_PHASEB */
+    kXBAR1_OutputEqdc1Index         = 89|0x10000U, /**< XBAR1_OUT89 output assigned to EQDC1_INDEX */
+    kXBAR1_OutputEqdc1Home          = 90|0x10000U, /**< XBAR1_OUT90 output assigned to EQDC1_HOME */
+    kXBAR1_OutputEqdc1Trigger       = 91|0x10000U, /**< XBAR1_OUT91 output assigned to EQDC1_TRIGGER */
+    kXBAR1_OutputEqdc2Phasea        = 92|0x10000U, /**< XBAR1_OUT92 output assigned to EQDC2_PHASEA */
+    kXBAR1_OutputEqdc2Phaseb        = 93|0x10000U, /**< XBAR1_OUT93 output assigned to EQDC2_PHASEB */
+    kXBAR1_OutputEqdc2Index         = 94|0x10000U, /**< XBAR1_OUT94 output assigned to EQDC2_INDEX */
+    kXBAR1_OutputEqdc2Home          = 95|0x10000U, /**< XBAR1_OUT95 output assigned to EQDC2_HOME */
+    kXBAR1_OutputEqdc2Trigger       = 96|0x10000U, /**< XBAR1_OUT96 output assigned to EQDC2_TRIGGER */
+    kXBAR1_OutputEqdc3Phasea        = 97|0x10000U, /**< XBAR1_OUT97 output assigned to EQDC3_PHASEA */
+    kXBAR1_OutputEqdc3Phaseb        = 98|0x10000U, /**< XBAR1_OUT98 output assigned to EQDC3_PHASEB */
+    kXBAR1_OutputEqdc3Index         = 99|0x10000U, /**< XBAR1_OUT99 output assigned to EQDC3_INDEX */
+    kXBAR1_OutputEqdc3Home          = 100|0x10000U, /**< XBAR1_OUT100 output assigned to EQDC3_HOME */
+    kXBAR1_OutputEqdc3Trigger       = 101|0x10000U, /**< XBAR1_OUT101 output assigned to EQDC3_TRIGGER */
+    kXBAR1_OutputEqdc4Phasea        = 102|0x10000U, /**< XBAR1_OUT102 output assigned to EQDC4_PHASEA */
+    kXBAR1_OutputEqdc4Phaseb        = 103|0x10000U, /**< XBAR1_OUT103 output assigned to EQDC4_PHASEB */
+    kXBAR1_OutputEqdc4Index         = 104|0x10000U, /**< XBAR1_OUT104 output assigned to EQDC4_INDEX */
+    kXBAR1_OutputEqdc4Home          = 105|0x10000U, /**< XBAR1_OUT105 output assigned to EQDC4_HOME */
+    kXBAR1_OutputEqdc4Trigger       = 106|0x10000U, /**< XBAR1_OUT106 output assigned to EQDC4_TRIGGER */
+    kXBAR1_OutputQtimer1Timer0      = 107|0x10000U, /**< XBAR1_OUT107 output assigned to QTIMER1_TIMER0 */
+    kXBAR1_OutputQtimer1Timer1      = 108|0x10000U, /**< XBAR1_OUT108 output assigned to QTIMER1_TIMER1 */
+    kXBAR1_OutputQtimer1Timer2      = 109|0x10000U, /**< XBAR1_OUT109 output assigned to QTIMER1_TIMER2 */
+    kXBAR1_OutputQtimer1Timer3      = 110|0x10000U, /**< XBAR1_OUT110 output assigned to QTIMER1_TIMER3 */
+    kXBAR1_OutputQtimer2Timer0      = 111|0x10000U, /**< XBAR1_OUT111 output assigned to QTIMER2_TIMER0 */
+    kXBAR1_OutputQtimer2Timer1      = 112|0x10000U, /**< XBAR1_OUT112 output assigned to QTIMER2_TIMER1 */
+    kXBAR1_OutputQtimer2Timer2      = 113|0x10000U, /**< XBAR1_OUT113 output assigned to QTIMER2_TIMER2 */
+    kXBAR1_OutputQtimer2Timer3      = 114|0x10000U, /**< XBAR1_OUT114 output assigned to QTIMER2_TIMER3 */
+    kXBAR1_OutputQtimer3Timer0      = 115|0x10000U, /**< XBAR1_OUT115 output assigned to QTIMER3_TIMER0 */
+    kXBAR1_OutputQtimer3Timer1      = 116|0x10000U, /**< XBAR1_OUT116 output assigned to QTIMER3_TIMER1 */
+    kXBAR1_OutputQtimer3Timer2      = 117|0x10000U, /**< XBAR1_OUT117 output assigned to QTIMER3_TIMER2 */
+    kXBAR1_OutputQtimer3Timer3      = 118|0x10000U, /**< XBAR1_OUT118 output assigned to QTIMER3_TIMER3 */
+    kXBAR1_OutputQtimer4Timer0      = 119|0x10000U, /**< XBAR1_OUT119 output assigned to QTIMER4_TIMER0 */
+    kXBAR1_OutputQtimer4Timer1      = 120|0x10000U, /**< XBAR1_OUT120 output assigned to QTIMER4_TIMER1 */
+    kXBAR1_OutputQtimer4Timer2      = 121|0x10000U, /**< XBAR1_OUT121 output assigned to QTIMER4_TIMER2 */
+    kXBAR1_OutputQtimer4Timer3      = 122|0x10000U, /**< XBAR1_OUT122 output assigned to QTIMER4_TIMER3 */
+    kXBAR1_OutputRESERVED123        = 123|0x10000U, /**< XBAR1_OUT123 output is reserved. */
+    kXBAR1_OutputRESERVED124        = 124|0x10000U, /**< XBAR1_OUT124 output is reserved. */
+    kXBAR1_OutputRESERVED125        = 125|0x10000U, /**< XBAR1_OUT125 output is reserved. */
+    kXBAR1_OutputRESERVED126        = 126|0x10000U, /**< XBAR1_OUT126 output is reserved. */
+    kXBAR1_OutputRESERVED127        = 127|0x10000U, /**< XBAR1_OUT127 output is reserved. */
+    kXBAR1_OutputRESERVED128        = 128|0x10000U, /**< XBAR1_OUT128 output is reserved. */
+    kXBAR1_OutputRESERVED129        = 129|0x10000U, /**< XBAR1_OUT129 output is reserved. */
+    kXBAR1_OutputRESERVED130        = 130|0x10000U, /**< XBAR1_OUT130 output is reserved. */
+    kXBAR1_OutputRESERVED131        = 131|0x10000U, /**< XBAR1_OUT131 output is reserved. */
+    kXBAR1_OutputRESERVED132        = 132|0x10000U, /**< XBAR1_OUT132 output is reserved. */
+    kXBAR1_OutputRESERVED133        = 133|0x10000U, /**< XBAR1_OUT133 output is reserved. */
+    kXBAR1_OutputRESERVED134        = 134|0x10000U, /**< XBAR1_OUT134 output is reserved. */
+    kXBAR1_OutputRESERVED135        = 135|0x10000U, /**< XBAR1_OUT135 output is reserved. */
+    kXBAR1_OutputRESERVED136        = 136|0x10000U, /**< XBAR1_OUT136 output is reserved. */
+    kXBAR1_OutputRESERVED137        = 137|0x10000U, /**< XBAR1_OUT137 output is reserved. */
+    kXBAR1_OutputRESERVED138        = 138|0x10000U, /**< XBAR1_OUT138 output is reserved. */
+    kXBAR1_OutputEwmIn              = 139|0x10000U, /**< XBAR1_OUT139 output assigned to EWM_IN */
+    kXBAR1_OutputAdc12HwTrig0       = 140|0x10000U, /**< XBAR1_OUT140 output assigned to ADC1_2_HW_TRIG0 */
+    kXBAR1_OutputAdc12HwTrig1       = 141|0x10000U, /**< XBAR1_OUT141 output assigned to ADC1_2_HW_TRIG1 */
+    kXBAR1_OutputAdc12HwTrig2       = 142|0x10000U, /**< XBAR1_OUT142 output assigned to ADC1_2_HW_TRIG2 */
+    kXBAR1_OutputAdc12HwTrig3       = 143|0x10000U, /**< XBAR1_OUT143 output assigned to ADC1_2_HW_TRIG3 */
+    kXBAR1_OutputAdc12HwTrig4       = 144|0x10000U, /**< XBAR1_OUT144 output assigned to ADC1_2_HW_TRIG4 */
+    kXBAR1_OutputAdc12HwTrig5       = 145|0x10000U, /**< XBAR1_OUT145 output assigned to ADC1_2_HW_TRIG5 */
+    kXBAR1_OutputAdc12HwTrig6       = 146|0x10000U, /**< XBAR1_OUT146 output assigned to ADC1_2_HW_TRIG6 */
+    kXBAR1_OutputAdc12HwTrig7       = 147|0x10000U, /**< XBAR1_OUT147 output assigned to ADC1_2_HW_TRIG7 */
+    kXBAR1_OutputSinc123ExtTrig0    = 148|0x10000U, /**< XBAR1_OUT148 output assigned to SINC1_2_3_EXT_TRIG0 */
+    kXBAR1_OutputSinc123ExtTrig1    = 149|0x10000U, /**< XBAR1_OUT149 output assigned to SINC1_2_3_EXT_TRIG1 */
+    kXBAR1_OutputSinc123ExtTrig2    = 150|0x10000U, /**< XBAR1_OUT150 output assigned to SINC1_2_3_EXT_TRIG2 */
+    kXBAR1_OutputSinc123ExtTrig3    = 151|0x10000U, /**< XBAR1_OUT151 output assigned to SINC1_2_3_EXT_TRIG3 */
+    kXBAR1_OutputFlexio1TrigIn0     = 152|0x10000U, /**< XBAR1_OUT152 output assigned to FLEXIO1_TRIG_IN0 */
+    kXBAR1_OutputFlexio1TrigIn1     = 153|0x10000U, /**< XBAR1_OUT153 output assigned to FLEXIO1_TRIG_IN1 */
+    kXBAR1_OutputFlexio2TrigIn0     = 154|0x10000U, /**< XBAR1_OUT154 output assigned to FLEXIO2_TRIG_IN0 */
+    kXBAR1_OutputFlexio2TrigIn1     = 155|0x10000U, /**< XBAR1_OUT155 output assigned to FLEXIO2_TRIG_IN1 */
+    kXBAR1_OutputLpi2c1TrigIn       = 156|0x10000U, /**< XBAR1_OUT156 output assigned to LPI2C1_TRIG_IN */
+    kXBAR1_OutputLpi2c2TrigIn       = 157|0x10000U, /**< XBAR1_OUT157 output assigned to LPI2C2_TRIG_IN */
+    kXBAR1_OutputLpi2c3TrigIn       = 158|0x10000U, /**< XBAR1_OUT158 output assigned to LPI2C3_TRIG_IN */
+    kXBAR1_OutputRESERVED159        = 159|0x10000U, /**< XBAR1_OUT159 output is reserved. */
+    kXBAR1_OutputRESERVED160        = 160|0x10000U, /**< XBAR1_OUT160 output is reserved. */
+    kXBAR1_OutputRESERVED161        = 161|0x10000U, /**< XBAR1_OUT161 output is reserved. */
+    kXBAR1_OutputLpspi1TrigIn       = 162|0x10000U, /**< XBAR1_OUT162 output assigned to LPSPI1_TRIG_IN */
+    kXBAR1_OutputLpspi2TrigIn       = 163|0x10000U, /**< XBAR1_OUT163 output assigned to LPSPI2_TRIG_IN */
+    kXBAR1_OutputLpspi3TrigIn       = 164|0x10000U, /**< XBAR1_OUT164 output assigned to LPSPI3_TRIG_IN */
+    kXBAR1_OutputLpspi4TrigIn       = 165|0x10000U, /**< XBAR1_OUT165 output assigned to LPSPI4_TRIG_IN */
+    kXBAR1_OutputLpspi5TrigIn       = 166|0x10000U, /**< XBAR1_OUT166 output assigned to LPSPI5_TRIG_IN */
+    kXBAR1_OutputLpspi6TrigIn       = 167|0x10000U, /**< XBAR1_OUT167 output assigned to LPSPI6_TRIG_IN */
+    kXBAR1_OutputLpuart1TrigIn      = 168|0x10000U, /**< XBAR1_OUT168 output assigned to LPUART1_TRIG_IN */
+    kXBAR1_OutputLpuart2TrigIn      = 169|0x10000U, /**< XBAR1_OUT169 output assigned to LPUART2_TRIG_IN */
+    kXBAR1_OutputLpuart3TrigIn      = 170|0x10000U, /**< XBAR1_OUT170 output assigned to LPUART3_TRIG_IN */
+    kXBAR1_OutputLpuart4TrigIn      = 171|0x10000U, /**< XBAR1_OUT171 output assigned to LPUART4_TRIG_IN */
+    kXBAR1_OutputLpuart5TrigIn      = 172|0x10000U, /**< XBAR1_OUT172 output assigned to LPUART5_TRIG_IN */
+    kXBAR1_OutputLpuart6TrigIn      = 173|0x10000U, /**< XBAR1_OUT173 output assigned to LPUART6_TRIG_IN */
+    kXBAR1_OutputLpuart7TrigIn      = 174|0x10000U, /**< XBAR1_OUT174 output assigned to LPUART7_TRIG_IN */
+    kXBAR1_OutputLpuart8TrigIn      = 175|0x10000U, /**< XBAR1_OUT175 output assigned to LPUART8_TRIG_IN */
+    kXBAR1_OutputRESERVED176        = 176|0x10000U, /**< XBAR1_OUT176 output is reserved. */
+    kXBAR1_OutputRESERVED177        = 177|0x10000U, /**< XBAR1_OUT177 output is reserved. */
+    kXBAR1_OutputRESERVED178        = 178|0x10000U, /**< XBAR1_OUT178 output is reserved. */
+    kXBAR1_OutputRESERVED179        = 179|0x10000U, /**< XBAR1_OUT179 output is reserved. */
+    kXBAR1_OutputLpit123TrigIn0     = 180|0x10000U, /**< XBAR1_OUT180 output assigned to LPIT1_2_3_TRIG_IN0 */
+    kXBAR1_OutputLpit123TrigIn1     = 181|0x10000U, /**< XBAR1_OUT181 output assigned to LPIT1_2_3_TRIG_IN1 */
+    kXBAR1_OutputLpit123TrigIn2     = 182|0x10000U, /**< XBAR1_OUT182 output assigned to LPIT1_2_3_TRIG_IN2 */
+    kXBAR1_OutputLpit123TrigIn3     = 183|0x10000U, /**< XBAR1_OUT183 output assigned to LPIT1_2_3_TRIG_IN3 */
+    kXBAR1_OutputTpm123TrigIn0      = 184|0x10000U, /**< XBAR1_OUT184 output assigned to TPM1_2_3_TRIG_IN0 */
+    kXBAR1_OutputTpm1TrigIn1        = 185|0x10000U, /**< XBAR1_OUT185 output assigned to TPM1_TRIG_IN1 */
+    kXBAR1_OutputTpm2TrigIn1        = 186|0x10000U, /**< XBAR1_OUT186 output assigned to TPM2_TRIG_IN1 */
+    kXBAR1_OutputTpm3TrigIn1        = 187|0x10000U, /**< XBAR1_OUT187 output assigned to TPM3_TRIG_IN1 */
+    kXBAR1_OutputTpm123TrigIn2      = 188|0x10000U, /**< XBAR1_OUT188 output assigned to TPM1_2_3_TRIG_IN2 */
+    kXBAR1_OutputTpm1TrigIn3        = 189|0x10000U, /**< XBAR1_OUT189 output assigned to TPM1_TRIG_IN3 */
+    kXBAR1_OutputTpm2TrigIn3        = 190|0x10000U, /**< XBAR1_OUT190 output assigned to TPM2_TRIG_IN3 */
+    kXBAR1_OutputTpm3TrigIn3        = 191|0x10000U, /**< XBAR1_OUT191 output assigned to TPM3_TRIG_IN3 */
+    kXBAR1_OutputRESERVED192        = 192|0x10000U, /**< XBAR1_OUT192 output is reserved. */
+    kXBAR1_OutputRESERVED193        = 193|0x10000U, /**< XBAR1_OUT193 output is reserved. */
+    kXBAR1_OutputRESERVED194        = 194|0x10000U, /**< XBAR1_OUT194 output is reserved. */
+    kXBAR1_OutputRESERVED195        = 195|0x10000U, /**< XBAR1_OUT195 output is reserved. */
+    kXBAR1_OutputRESERVED196        = 196|0x10000U, /**< XBAR1_OUT196 output is reserved. */
+    kXBAR1_OutputRESERVED197        = 197|0x10000U, /**< XBAR1_OUT197 output is reserved. */
+    kXBAR1_OutputRESERVED198        = 198|0x10000U, /**< XBAR1_OUT198 output is reserved. */
+    kXBAR1_OutputRESERVED199        = 199|0x10000U, /**< XBAR1_OUT199 output is reserved. */
+    kXBAR1_OutputNetcTmrTrig1       = 200|0x10000U, /**< XBAR1_OUT200 output assigned to NETC_TMR_TRIG1 */
+    kXBAR1_OutputNetcTmrTrig2       = 201|0x10000U, /**< XBAR1_OUT201 output assigned to NETC_TMR_TRIG2 */
+    kXBAR1_OutputRESERVED202        = 202|0x10000U, /**< XBAR1_OUT202 output is reserved. */
+    kXBAR1_OutputRESERVED203        = 203|0x10000U, /**< XBAR1_OUT203 output is reserved. */
+    kXBAR1_OutputRESERVED204        = 204|0x10000U, /**< XBAR1_OUT204 output is reserved. */
+    kXBAR1_OutputRESERVED205        = 205|0x10000U, /**< XBAR1_OUT205 output is reserved. */
+    kXBAR1_OutputEqdc1Icap1         = 206|0x10000U, /**< XBAR1_OUT206 output assigned to EQDC1_ICAP1 */
+    kXBAR1_OutputEqdc1Icap2         = 207|0x10000U, /**< XBAR1_OUT207 output assigned to EQDC1_ICAP2 */
+    kXBAR1_OutputEqdc1Icap3         = 208|0x10000U, /**< XBAR1_OUT208 output assigned to EQDC1_ICAP3 */
+    kXBAR1_OutputEqdc2Icap1         = 209|0x10000U, /**< XBAR1_OUT209 output assigned to EQDC2_ICAP1 */
+    kXBAR1_OutputEqdc2Icap2         = 210|0x10000U, /**< XBAR1_OUT210 output assigned to EQDC2_ICAP2 */
+    kXBAR1_OutputEqdc2Icap3         = 211|0x10000U, /**< XBAR1_OUT211 output assigned to EQDC2_ICAP3 */
+    kXBAR1_OutputEqdc3Icap1         = 212|0x10000U, /**< XBAR1_OUT212 output assigned to EQDC3_ICAP1 */
+    kXBAR1_OutputEqdc3Icap2         = 213|0x10000U, /**< XBAR1_OUT213 output assigned to EQDC3_ICAP2 */
+    kXBAR1_OutputEqdc3Icap3         = 214|0x10000U, /**< XBAR1_OUT214 output assigned to EQDC3_ICAP3 */
+    kXBAR1_OutputEqdc4Icap1         = 215|0x10000U, /**< XBAR1_OUT215 output assigned to EQDC4_ICAP1 */
+    kXBAR1_OutputEqdc4Icap2         = 216|0x10000U, /**< XBAR1_OUT216 output assigned to EQDC4_ICAP2 */
+    kXBAR1_OutputEqdc4Icap3         = 217|0x10000U, /**< XBAR1_OUT217 output assigned to EQDC4_ICAP3 */
+    kXBAR1_OutputEcatLatchIn0       = 218|0x10000U, /**< XBAR1_OUT218 output assigned to ECAT_LATCH_IN0 */
+    kXBAR1_OutputEcatLatchIn1       = 219|0x10000U, /**< XBAR1_OUT219 output assigned to ECAT_LATCH_IN1 */
+    kXBAR1_OutputDutClk             = 220|0x10000U, /**< XBAR1_OUT220 output assigned to DUT_CLK */
+    kXBAR2_OutputAoi1In00           = 0|0x20000U,  /**< XBAR2_OUT0 output assigned to AOI1_IN00 */
+    kXBAR2_OutputAoi1In01           = 1|0x20000U,  /**< XBAR2_OUT1 output assigned to AOI1_IN01 */
+    kXBAR2_OutputAoi1In02           = 2|0x20000U,  /**< XBAR2_OUT2 output assigned to AOI1_IN02 */
+    kXBAR2_OutputAoi1In03           = 3|0x20000U,  /**< XBAR2_OUT3 output assigned to AOI1_IN03 */
+    kXBAR2_OutputAoi1In04           = 4|0x20000U,  /**< XBAR2_OUT4 output assigned to AOI1_IN04 */
+    kXBAR2_OutputAoi1In05           = 5|0x20000U,  /**< XBAR2_OUT5 output assigned to AOI1_IN05 */
+    kXBAR2_OutputAoi1In06           = 6|0x20000U,  /**< XBAR2_OUT6 output assigned to AOI1_IN06 */
+    kXBAR2_OutputAoi1In07           = 7|0x20000U,  /**< XBAR2_OUT7 output assigned to AOI1_IN07 */
+    kXBAR2_OutputAoi1In08           = 8|0x20000U,  /**< XBAR2_OUT8 output assigned to AOI1_IN08 */
+    kXBAR2_OutputAoi1In09           = 9|0x20000U,  /**< XBAR2_OUT9 output assigned to AOI1_IN09 */
+    kXBAR2_OutputAoi1In10           = 10|0x20000U, /**< XBAR2_OUT10 output assigned to AOI1_IN10 */
+    kXBAR2_OutputAoi1In11           = 11|0x20000U, /**< XBAR2_OUT11 output assigned to AOI1_IN11 */
+    kXBAR2_OutputAoi1In12           = 12|0x20000U, /**< XBAR2_OUT12 output assigned to AOI1_IN12 */
+    kXBAR2_OutputAoi1In13           = 13|0x20000U, /**< XBAR2_OUT13 output assigned to AOI1_IN13 */
+    kXBAR2_OutputAoi1In14           = 14|0x20000U, /**< XBAR2_OUT14 output assigned to AOI1_IN14 */
+    kXBAR2_OutputAoi1In15           = 15|0x20000U, /**< XBAR2_OUT15 output assigned to AOI1_IN15 */
+    kXBAR2_OutputAoi3In00           = 16|0x20000U, /**< XBAR2_OUT16 output assigned to AOI3_IN00 */
+    kXBAR2_OutputAoi3In01           = 17|0x20000U, /**< XBAR2_OUT17 output assigned to AOI3_IN01 */
+    kXBAR2_OutputAoi3In02           = 18|0x20000U, /**< XBAR2_OUT18 output assigned to AOI3_IN02 */
+    kXBAR2_OutputAoi3In03           = 19|0x20000U, /**< XBAR2_OUT19 output assigned to AOI3_IN03 */
+    kXBAR2_OutputAoi3In04           = 20|0x20000U, /**< XBAR2_OUT20 output assigned to AOI3_IN04 */
+    kXBAR2_OutputAoi3In05           = 21|0x20000U, /**< XBAR2_OUT21 output assigned to AOI3_IN05 */
+    kXBAR2_OutputAoi3In06           = 22|0x20000U, /**< XBAR2_OUT22 output assigned to AOI3_IN06 */
+    kXBAR2_OutputAoi3In07           = 23|0x20000U, /**< XBAR2_OUT23 output assigned to AOI3_IN07 */
+    kXBAR2_OutputAoi3In08           = 24|0x20000U, /**< XBAR2_OUT24 output assigned to AOI3_IN08 */
+    kXBAR2_OutputAoi3In09           = 25|0x20000U, /**< XBAR2_OUT25 output assigned to AOI3_IN09 */
+    kXBAR2_OutputAoi3In10           = 26|0x20000U, /**< XBAR2_OUT26 output assigned to AOI3_IN10 */
+    kXBAR2_OutputAoi3In11           = 27|0x20000U, /**< XBAR2_OUT27 output assigned to AOI3_IN11 */
+    kXBAR2_OutputAoi3In12           = 28|0x20000U, /**< XBAR2_OUT28 output assigned to AOI3_IN12 */
+    kXBAR2_OutputAoi3In13           = 29|0x20000U, /**< XBAR2_OUT29 output assigned to AOI3_IN13 */
+    kXBAR2_OutputAoi3In14           = 30|0x20000U, /**< XBAR2_OUT30 output assigned to AOI3_IN14 */
+    kXBAR2_OutputAoi3In15           = 31|0x20000U, /**< XBAR2_OUT31 output assigned to AOI3_IN15 */
+    kXBAR3_OutputAoi2In00           = 0|0x30000U,  /**< XBAR3_OUT0 output assigned to AOI2_IN00 */
+    kXBAR3_OutputAoi2In01           = 1|0x30000U,  /**< XBAR3_OUT1 output assigned to AOI2_IN01 */
+    kXBAR3_OutputAoi2In02           = 2|0x30000U,  /**< XBAR3_OUT2 output assigned to AOI2_IN02 */
+    kXBAR3_OutputAoi2In03           = 3|0x30000U,  /**< XBAR3_OUT3 output assigned to AOI2_IN03 */
+    kXBAR3_OutputAoi2In04           = 4|0x30000U,  /**< XBAR3_OUT4 output assigned to AOI2_IN04 */
+    kXBAR3_OutputAoi2In05           = 5|0x30000U,  /**< XBAR3_OUT5 output assigned to AOI2_IN05 */
+    kXBAR3_OutputAoi2In06           = 6|0x30000U,  /**< XBAR3_OUT6 output assigned to AOI2_IN06 */
+    kXBAR3_OutputAoi2In07           = 7|0x30000U,  /**< XBAR3_OUT7 output assigned to AOI2_IN07 */
+    kXBAR3_OutputAoi2In08           = 8|0x30000U,  /**< XBAR3_OUT8 output assigned to AOI2_IN08 */
+    kXBAR3_OutputAoi2In09           = 9|0x30000U,  /**< XBAR3_OUT9 output assigned to AOI2_IN09 */
+    kXBAR3_OutputAoi2In10           = 10|0x30000U, /**< XBAR3_OUT10 output assigned to AOI2_IN10 */
+    kXBAR3_OutputAoi2In11           = 11|0x30000U, /**< XBAR3_OUT11 output assigned to AOI2_IN11 */
+    kXBAR3_OutputAoi2In12           = 12|0x30000U, /**< XBAR3_OUT12 output assigned to AOI2_IN12 */
+    kXBAR3_OutputAoi2In13           = 13|0x30000U, /**< XBAR3_OUT13 output assigned to AOI2_IN13 */
+    kXBAR3_OutputAoi2In14           = 14|0x30000U, /**< XBAR3_OUT14 output assigned to AOI2_IN14 */
+    kXBAR3_OutputAoi2In15           = 15|0x30000U, /**< XBAR3_OUT15 output assigned to AOI2_IN15 */
+    kXBAR3_OutputAoi4In00           = 16|0x30000U, /**< XBAR3_OUT16 output assigned to AOI4_IN00 */
+    kXBAR3_OutputAoi4In01           = 17|0x30000U, /**< XBAR3_OUT17 output assigned to AOI4_IN01 */
+    kXBAR3_OutputAoi4In02           = 18|0x30000U, /**< XBAR3_OUT18 output assigned to AOI4_IN02 */
+    kXBAR3_OutputAoi4In03           = 19|0x30000U, /**< XBAR3_OUT19 output assigned to AOI4_IN03 */
+    kXBAR3_OutputAoi4In04           = 20|0x30000U, /**< XBAR3_OUT20 output assigned to AOI4_IN04 */
+    kXBAR3_OutputAoi4In05           = 21|0x30000U, /**< XBAR3_OUT21 output assigned to AOI4_IN05 */
+    kXBAR3_OutputAoi4In06           = 22|0x30000U, /**< XBAR3_OUT22 output assigned to AOI4_IN06 */
+    kXBAR3_OutputAoi4In07           = 23|0x30000U, /**< XBAR3_OUT23 output assigned to AOI4_IN07 */
+    kXBAR3_OutputAoi4In08           = 24|0x30000U, /**< XBAR3_OUT24 output assigned to AOI4_IN08 */
+    kXBAR3_OutputAoi4In09           = 25|0x30000U, /**< XBAR3_OUT25 output assigned to AOI4_IN09 */
+    kXBAR3_OutputAoi4In10           = 26|0x30000U, /**< XBAR3_OUT26 output assigned to AOI4_IN10 */
+    kXBAR3_OutputAoi4In11           = 27|0x30000U, /**< XBAR3_OUT27 output assigned to AOI4_IN11 */
+    kXBAR3_OutputAoi4In12           = 28|0x30000U, /**< XBAR3_OUT28 output assigned to AOI4_IN12 */
+    kXBAR3_OutputAoi4In13           = 29|0x30000U, /**< XBAR3_OUT29 output assigned to AOI4_IN13 */
+    kXBAR3_OutputAoi4In14           = 30|0x30000U, /**< XBAR3_OUT30 output assigned to AOI4_IN14 */
+    kXBAR3_OutputAoi4In15           = 31|0x30000U, /**< XBAR3_OUT31 output assigned to AOI4_IN15 */
+} xbar_output_signal_t;
+
+
+/*!
+ * @}
+ */ /* end of group Mapping_Information */
+
 
 /* ADC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -388,26 +1276,38 @@ typedef enum IRQn {
   #define ADC1                                     ((ADC_Type *)ADC1_BASE)
   /** Peripheral ADC1 base pointer */
   #define ADC1_NS                                  ((ADC_Type *)ADC1_BASE_NS)
+  /** Peripheral ADC2 base address */
+  #define ADC2_BASE                                (0x52E00000u)
+  /** Peripheral ADC2 base address */
+  #define ADC2_BASE_NS                             (0x42E00000u)
+  /** Peripheral ADC2 base pointer */
+  #define ADC2                                     ((ADC_Type *)ADC2_BASE)
+  /** Peripheral ADC2 base pointer */
+  #define ADC2_NS                                  ((ADC_Type *)ADC2_BASE_NS)
   /** Array initializer of ADC peripheral base addresses */
-  #define ADC_BASE_ADDRS                           { 0u, ADC1_BASE }
+  #define ADC_BASE_ADDRS                           { 0u, ADC1_BASE, ADC2_BASE }
   /** Array initializer of ADC peripheral base pointers */
-  #define ADC_BASE_PTRS                            { (ADC_Type *)0u, ADC1 }
+  #define ADC_BASE_PTRS                            { (ADC_Type *)0u, ADC1, ADC2 }
   /** Array initializer of ADC peripheral base addresses */
-  #define ADC_BASE_ADDRS_NS                        { 0u, ADC1_BASE_NS }
+  #define ADC_BASE_ADDRS_NS                        { 0u, ADC1_BASE_NS, ADC2_BASE_NS }
   /** Array initializer of ADC peripheral base pointers */
-  #define ADC_BASE_PTRS_NS                         { (ADC_Type *)0u, ADC1_NS }
+  #define ADC_BASE_PTRS_NS                         { (ADC_Type *)0u, ADC1_NS, ADC2_NS }
 #else
   /** Peripheral ADC1 base address */
   #define ADC1_BASE                                (0x42600000u)
   /** Peripheral ADC1 base pointer */
   #define ADC1                                     ((ADC_Type *)ADC1_BASE)
+  /** Peripheral ADC2 base address */
+  #define ADC2_BASE                                (0x42E00000u)
+  /** Peripheral ADC2 base pointer */
+  #define ADC2                                     ((ADC_Type *)ADC2_BASE)
   /** Array initializer of ADC peripheral base addresses */
-  #define ADC_BASE_ADDRS                           { 0u, ADC1_BASE }
+  #define ADC_BASE_ADDRS                           { 0u, ADC1_BASE, ADC2_BASE }
   /** Array initializer of ADC peripheral base pointers */
-  #define ADC_BASE_PTRS                            { (ADC_Type *)0u, ADC1 }
+  #define ADC_BASE_PTRS                            { (ADC_Type *)0u, ADC1, ADC2 }
 #endif
 /** Interrupt vectors for the ADC peripheral type */
-#define ADC_IRQS                                 { NotAvail_IRQn, ADC1_IRQn }
+#define ADC_IRQS                                 { NotAvail_IRQn, ADC1_IRQn, ADC2_IRQn }
 
 /* ANADIG - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -923,43 +1823,43 @@ typedef enum IRQn {
   #define CAN1                                     ((CAN_Type *)CAN1_BASE)
   /** Peripheral CAN1 base pointer */
   #define CAN1_NS                                  ((CAN_Type *)CAN1_BASE_NS)
-  /** Peripheral CAN2 base address */
-  #define CAN2_BASE                                (0x525B0000u)
-  /** Peripheral CAN2 base address */
-  #define CAN2_BASE_NS                             (0x425B0000u)
-  /** Peripheral CAN2 base pointer */
-  #define CAN2                                     ((CAN_Type *)CAN2_BASE)
-  /** Peripheral CAN2 base pointer */
-  #define CAN2_NS                                  ((CAN_Type *)CAN2_BASE_NS)
+  /** Peripheral CAN3 base address */
+  #define CAN3_BASE                                (0x545B0000u)
+  /** Peripheral CAN3 base address */
+  #define CAN3_BASE_NS                             (0x445B0000u)
+  /** Peripheral CAN3 base pointer */
+  #define CAN3                                     ((CAN_Type *)CAN3_BASE)
+  /** Peripheral CAN3 base pointer */
+  #define CAN3_NS                                  ((CAN_Type *)CAN3_BASE_NS)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, CAN2_BASE }
+  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, 0u, CAN3_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, CAN2 }
+  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, (CAN_Type *)0u, CAN3 }
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS_NS                        { 0u, CAN1_BASE_NS, CAN2_BASE_NS }
+  #define CAN_BASE_ADDRS_NS                        { 0u, CAN1_BASE_NS, 0u, CAN3_BASE_NS }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS_NS                         { (CAN_Type *)0u, CAN1_NS, CAN2_NS }
+  #define CAN_BASE_PTRS_NS                         { (CAN_Type *)0u, CAN1_NS, (CAN_Type *)0u, CAN3_NS }
 #else
   /** Peripheral CAN1 base address */
   #define CAN1_BASE                                (0x443A0000u)
   /** Peripheral CAN1 base pointer */
   #define CAN1                                     ((CAN_Type *)CAN1_BASE)
-  /** Peripheral CAN2 base address */
-  #define CAN2_BASE                                (0x425B0000u)
-  /** Peripheral CAN2 base pointer */
-  #define CAN2                                     ((CAN_Type *)CAN2_BASE)
+  /** Peripheral CAN3 base address */
+  #define CAN3_BASE                                (0x445B0000u)
+  /** Peripheral CAN3 base pointer */
+  #define CAN3                                     ((CAN_Type *)CAN3_BASE)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, CAN2_BASE }
+  #define CAN_BASE_ADDRS                           { 0u, CAN1_BASE, 0u, CAN3_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, CAN2 }
+  #define CAN_BASE_PTRS                            { (CAN_Type *)0u, CAN1, (CAN_Type *)0u, CAN3 }
 #endif
 /** Interrupt vectors for the CAN peripheral type */
-#define CAN_Rx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Tx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
-#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn }
+#define CAN_Rx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Tx_Warning_IRQS                      { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, NotAvail_IRQn, CAN3_IRQn }
 
 /* CCM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -992,22 +1892,6 @@ typedef enum IRQn {
 
 /* CMP - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral CMP1 base address */
-  #define CMP1_BASE                                (0x52DC0000u)
-  /** Peripheral CMP1 base address */
-  #define CMP1_BASE_NS                             (0x42DC0000u)
-  /** Peripheral CMP1 base pointer */
-  #define CMP1                                     ((CMP_Type *)CMP1_BASE)
-  /** Peripheral CMP1 base pointer */
-  #define CMP1_NS                                  ((CMP_Type *)CMP1_BASE_NS)
-  /** Peripheral CMP2 base address */
-  #define CMP2_BASE                                (0x52DD0000u)
-  /** Peripheral CMP2 base address */
-  #define CMP2_BASE_NS                             (0x42DD0000u)
-  /** Peripheral CMP2 base pointer */
-  #define CMP2                                     ((CMP_Type *)CMP2_BASE)
-  /** Peripheral CMP2 base pointer */
-  #define CMP2_NS                                  ((CMP_Type *)CMP2_BASE_NS)
   /** Peripheral CMP3 base address */
   #define CMP3_BASE                                (0x52DE0000u)
   /** Peripheral CMP3 base address */
@@ -1016,46 +1900,26 @@ typedef enum IRQn {
   #define CMP3                                     ((CMP_Type *)CMP3_BASE)
   /** Peripheral CMP3 base pointer */
   #define CMP3_NS                                  ((CMP_Type *)CMP3_BASE_NS)
-  /** Peripheral CMP4 base address */
-  #define CMP4_BASE                                (0x52DF0000u)
-  /** Peripheral CMP4 base address */
-  #define CMP4_BASE_NS                             (0x42DF0000u)
-  /** Peripheral CMP4 base pointer */
-  #define CMP4                                     ((CMP_Type *)CMP4_BASE)
-  /** Peripheral CMP4 base pointer */
-  #define CMP4_NS                                  ((CMP_Type *)CMP4_BASE_NS)
   /** Array initializer of CMP peripheral base addresses */
-  #define CMP_BASE_ADDRS                           { 0u, CMP1_BASE, CMP2_BASE, CMP3_BASE, CMP4_BASE }
+  #define CMP_BASE_ADDRS                           { 0u, 0u, 0u, CMP3_BASE }
   /** Array initializer of CMP peripheral base pointers */
-  #define CMP_BASE_PTRS                            { (CMP_Type *)0u, CMP1, CMP2, CMP3, CMP4 }
+  #define CMP_BASE_PTRS                            { (CMP_Type *)0u, (CMP_Type *)0u, (CMP_Type *)0u, CMP3 }
   /** Array initializer of CMP peripheral base addresses */
-  #define CMP_BASE_ADDRS_NS                        { 0u, CMP1_BASE_NS, CMP2_BASE_NS, CMP3_BASE_NS, CMP4_BASE_NS }
+  #define CMP_BASE_ADDRS_NS                        { 0u, 0u, 0u, CMP3_BASE_NS }
   /** Array initializer of CMP peripheral base pointers */
-  #define CMP_BASE_PTRS_NS                         { (CMP_Type *)0u, CMP1_NS, CMP2_NS, CMP3_NS, CMP4_NS }
+  #define CMP_BASE_PTRS_NS                         { (CMP_Type *)0u, (CMP_Type *)0u, (CMP_Type *)0u, CMP3_NS }
 #else
-  /** Peripheral CMP1 base address */
-  #define CMP1_BASE                                (0x42DC0000u)
-  /** Peripheral CMP1 base pointer */
-  #define CMP1                                     ((CMP_Type *)CMP1_BASE)
-  /** Peripheral CMP2 base address */
-  #define CMP2_BASE                                (0x42DD0000u)
-  /** Peripheral CMP2 base pointer */
-  #define CMP2                                     ((CMP_Type *)CMP2_BASE)
   /** Peripheral CMP3 base address */
   #define CMP3_BASE                                (0x42DE0000u)
   /** Peripheral CMP3 base pointer */
   #define CMP3                                     ((CMP_Type *)CMP3_BASE)
-  /** Peripheral CMP4 base address */
-  #define CMP4_BASE                                (0x42DF0000u)
-  /** Peripheral CMP4 base pointer */
-  #define CMP4                                     ((CMP_Type *)CMP4_BASE)
   /** Array initializer of CMP peripheral base addresses */
-  #define CMP_BASE_ADDRS                           { 0u, CMP1_BASE, CMP2_BASE, CMP3_BASE, CMP4_BASE }
+  #define CMP_BASE_ADDRS                           { 0u, 0u, 0u, CMP3_BASE }
   /** Array initializer of CMP peripheral base pointers */
-  #define CMP_BASE_PTRS                            { (CMP_Type *)0u, CMP1, CMP2, CMP3, CMP4 }
+  #define CMP_BASE_PTRS                            { (CMP_Type *)0u, (CMP_Type *)0u, (CMP_Type *)0u, CMP3 }
 #endif
 /** Interrupt vectors for the CMP peripheral type */
-#define CMP_IRQS                                 { NotAvail_IRQn, ACMP1_IRQn, ACMP2_IRQn, ACMP3_IRQn, ACMP4_IRQn }
+#define CMP_IRQS                                 { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, ACMP3_IRQn }
 
 /* DAC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1553,14 +2417,30 @@ typedef enum IRQn {
   #define EQDC2                                    ((EQDC_Type *)EQDC2_BASE)
   /** Peripheral EQDC2 base pointer */
   #define EQDC2_NS                                 ((EQDC_Type *)EQDC2_BASE_NS)
+  /** Peripheral EQDC3 base address */
+  #define EQDC3_BASE                               (0x52730000u)
+  /** Peripheral EQDC3 base address */
+  #define EQDC3_BASE_NS                            (0x42730000u)
+  /** Peripheral EQDC3 base pointer */
+  #define EQDC3                                    ((EQDC_Type *)EQDC3_BASE)
+  /** Peripheral EQDC3 base pointer */
+  #define EQDC3_NS                                 ((EQDC_Type *)EQDC3_BASE_NS)
+  /** Peripheral EQDC4 base address */
+  #define EQDC4_BASE                               (0x52740000u)
+  /** Peripheral EQDC4 base address */
+  #define EQDC4_BASE_NS                            (0x42740000u)
+  /** Peripheral EQDC4 base pointer */
+  #define EQDC4                                    ((EQDC_Type *)EQDC4_BASE)
+  /** Peripheral EQDC4 base pointer */
+  #define EQDC4_NS                                 ((EQDC_Type *)EQDC4_BASE_NS)
   /** Array initializer of EQDC peripheral base addresses */
-  #define EQDC_BASE_ADDRS                          { 0u, EQDC1_BASE, EQDC2_BASE }
+  #define EQDC_BASE_ADDRS                          { 0u, EQDC1_BASE, EQDC2_BASE, EQDC3_BASE, EQDC4_BASE }
   /** Array initializer of EQDC peripheral base pointers */
-  #define EQDC_BASE_PTRS                           { (EQDC_Type *)0u, EQDC1, EQDC2 }
+  #define EQDC_BASE_PTRS                           { (EQDC_Type *)0u, EQDC1, EQDC2, EQDC3, EQDC4 }
   /** Array initializer of EQDC peripheral base addresses */
-  #define EQDC_BASE_ADDRS_NS                       { 0u, EQDC1_BASE_NS, EQDC2_BASE_NS }
+  #define EQDC_BASE_ADDRS_NS                       { 0u, EQDC1_BASE_NS, EQDC2_BASE_NS, EQDC3_BASE_NS, EQDC4_BASE_NS }
   /** Array initializer of EQDC peripheral base pointers */
-  #define EQDC_BASE_PTRS_NS                        { (EQDC_Type *)0u, EQDC1_NS, EQDC2_NS }
+  #define EQDC_BASE_PTRS_NS                        { (EQDC_Type *)0u, EQDC1_NS, EQDC2_NS, EQDC3_NS, EQDC4_NS }
 #else
   /** Peripheral EQDC1 base address */
   #define EQDC1_BASE                               (0x42710000u)
@@ -1570,17 +2450,25 @@ typedef enum IRQn {
   #define EQDC2_BASE                               (0x42720000u)
   /** Peripheral EQDC2 base pointer */
   #define EQDC2                                    ((EQDC_Type *)EQDC2_BASE)
+  /** Peripheral EQDC3 base address */
+  #define EQDC3_BASE                               (0x42730000u)
+  /** Peripheral EQDC3 base pointer */
+  #define EQDC3                                    ((EQDC_Type *)EQDC3_BASE)
+  /** Peripheral EQDC4 base address */
+  #define EQDC4_BASE                               (0x42740000u)
+  /** Peripheral EQDC4 base pointer */
+  #define EQDC4                                    ((EQDC_Type *)EQDC4_BASE)
   /** Array initializer of EQDC peripheral base addresses */
-  #define EQDC_BASE_ADDRS                          { 0u, EQDC1_BASE, EQDC2_BASE }
+  #define EQDC_BASE_ADDRS                          { 0u, EQDC1_BASE, EQDC2_BASE, EQDC3_BASE, EQDC4_BASE }
   /** Array initializer of EQDC peripheral base pointers */
-  #define EQDC_BASE_PTRS                           { (EQDC_Type *)0u, EQDC1, EQDC2 }
+  #define EQDC_BASE_PTRS                           { (EQDC_Type *)0u, EQDC1, EQDC2, EQDC3, EQDC4 }
 #endif
 /** Interrupt vectors for the EQDC peripheral type */
-#define EQDC_COMPARE_IRQS                        { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn }
-#define EQDC_HOME_IRQS                           { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn }
-#define EQDC_WDOG_IRQS                           { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn }
-#define EQDC_INDEX_IRQS                          { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn }
-#define EQDC_INPUT_SWITCH_IRQS                   { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn }
+#define EQDC_COMPARE_IRQS                        { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn, EQDC3_IRQn, EQDC4_IRQn }
+#define EQDC_HOME_IRQS                           { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn, EQDC3_IRQn, EQDC4_IRQn }
+#define EQDC_WDOG_IRQS                           { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn, EQDC3_IRQn, EQDC4_IRQn }
+#define EQDC_INDEX_IRQS                          { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn, EQDC3_IRQn, EQDC4_IRQn }
+#define EQDC_INPUT_SWITCH_IRQS                   { NotAvail_IRQn, EQDC1_IRQn, EQDC2_IRQn, EQDC3_IRQn, EQDC4_IRQn }
 
 /* ERM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1953,63 +2841,27 @@ typedef enum IRQn {
   #define SAI1                                     ((I2S_Type *)SAI1_BASE)
   /** Peripheral SAI1 base pointer */
   #define SAI1_NS                                  ((I2S_Type *)SAI1_BASE_NS)
-  /** Peripheral SAI2 base address */
-  #define SAI2_BASE                                (0x52BB0000u)
-  /** Peripheral SAI2 base address */
-  #define SAI2_BASE_NS                             (0x42BB0000u)
-  /** Peripheral SAI2 base pointer */
-  #define SAI2                                     ((I2S_Type *)SAI2_BASE)
-  /** Peripheral SAI2 base pointer */
-  #define SAI2_NS                                  ((I2S_Type *)SAI2_BASE_NS)
-  /** Peripheral SAI3 base address */
-  #define SAI3_BASE                                (0x52BC0000u)
-  /** Peripheral SAI3 base address */
-  #define SAI3_BASE_NS                             (0x42BC0000u)
-  /** Peripheral SAI3 base pointer */
-  #define SAI3                                     ((I2S_Type *)SAI3_BASE)
-  /** Peripheral SAI3 base pointer */
-  #define SAI3_NS                                  ((I2S_Type *)SAI3_BASE_NS)
-  /** Peripheral SAI4 base address */
-  #define SAI4_BASE                                (0x52BD0000u)
-  /** Peripheral SAI4 base address */
-  #define SAI4_BASE_NS                             (0x42BD0000u)
-  /** Peripheral SAI4 base pointer */
-  #define SAI4                                     ((I2S_Type *)SAI4_BASE)
-  /** Peripheral SAI4 base pointer */
-  #define SAI4_NS                                  ((I2S_Type *)SAI4_BASE_NS)
   /** Array initializer of I2S peripheral base addresses */
-  #define I2S_BASE_ADDRS                           { 0u, SAI1_BASE, SAI2_BASE, SAI3_BASE, SAI4_BASE }
+  #define I2S_BASE_ADDRS                           { 0u, SAI1_BASE }
   /** Array initializer of I2S peripheral base pointers */
-  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, SAI1, SAI2, SAI3, SAI4 }
+  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, SAI1 }
   /** Array initializer of I2S peripheral base addresses */
-  #define I2S_BASE_ADDRS_NS                        { 0u, SAI1_BASE_NS, SAI2_BASE_NS, SAI3_BASE_NS, SAI4_BASE_NS }
+  #define I2S_BASE_ADDRS_NS                        { 0u, SAI1_BASE_NS }
   /** Array initializer of I2S peripheral base pointers */
-  #define I2S_BASE_PTRS_NS                         { (I2S_Type *)0u, SAI1_NS, SAI2_NS, SAI3_NS, SAI4_NS }
+  #define I2S_BASE_PTRS_NS                         { (I2S_Type *)0u, SAI1_NS }
 #else
   /** Peripheral SAI1 base address */
   #define SAI1_BASE                                (0x443B0000u)
   /** Peripheral SAI1 base pointer */
   #define SAI1                                     ((I2S_Type *)SAI1_BASE)
-  /** Peripheral SAI2 base address */
-  #define SAI2_BASE                                (0x42BB0000u)
-  /** Peripheral SAI2 base pointer */
-  #define SAI2                                     ((I2S_Type *)SAI2_BASE)
-  /** Peripheral SAI3 base address */
-  #define SAI3_BASE                                (0x42BC0000u)
-  /** Peripheral SAI3 base pointer */
-  #define SAI3                                     ((I2S_Type *)SAI3_BASE)
-  /** Peripheral SAI4 base address */
-  #define SAI4_BASE                                (0x42BD0000u)
-  /** Peripheral SAI4 base pointer */
-  #define SAI4                                     ((I2S_Type *)SAI4_BASE)
   /** Array initializer of I2S peripheral base addresses */
-  #define I2S_BASE_ADDRS                           { 0u, SAI1_BASE, SAI2_BASE, SAI3_BASE, SAI4_BASE }
+  #define I2S_BASE_ADDRS                           { 0u, SAI1_BASE }
   /** Array initializer of I2S peripheral base pointers */
-  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, SAI1, SAI2, SAI3, SAI4 }
+  #define I2S_BASE_PTRS                            { (I2S_Type *)0u, SAI1 }
 #endif
 /** Interrupt vectors for the I2S peripheral type */
-#define I2S_RX_IRQS                              { NotAvail_IRQn, SAI1_IRQn, SAI2_IRQn, SAI3_IRQn, SAI4_IRQn }
-#define I2S_TX_IRQS                              { NotAvail_IRQn, SAI1_IRQn, SAI2_IRQn, SAI3_IRQn, SAI4_IRQn }
+#define I2S_RX_IRQS                              { NotAvail_IRQn, SAI1_IRQn }
+#define I2S_TX_IRQS                              { NotAvail_IRQn, SAI1_IRQn }
 
 /* I3C - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2403,14 +3255,30 @@ typedef enum IRQn {
   #define LPSPI4                                   ((LPSPI_Type *)LPSPI4_BASE)
   /** Peripheral LPSPI4 base pointer */
   #define LPSPI4_NS                                ((LPSPI_Type *)LPSPI4_BASE_NS)
+  /** Peripheral LPSPI5 base address */
+  #define LPSPI5_BASE                              (0x52D50000u)
+  /** Peripheral LPSPI5 base address */
+  #define LPSPI5_BASE_NS                           (0x42D50000u)
+  /** Peripheral LPSPI5 base pointer */
+  #define LPSPI5                                   ((LPSPI_Type *)LPSPI5_BASE)
+  /** Peripheral LPSPI5 base pointer */
+  #define LPSPI5_NS                                ((LPSPI_Type *)LPSPI5_BASE_NS)
+  /** Peripheral LPSPI6 base address */
+  #define LPSPI6_BASE                              (0x52D60000u)
+  /** Peripheral LPSPI6 base address */
+  #define LPSPI6_BASE_NS                           (0x42D60000u)
+  /** Peripheral LPSPI6 base pointer */
+  #define LPSPI6                                   ((LPSPI_Type *)LPSPI6_BASE)
+  /** Peripheral LPSPI6 base pointer */
+  #define LPSPI6_NS                                ((LPSPI_Type *)LPSPI6_BASE_NS)
   /** Array initializer of LPSPI peripheral base addresses */
-  #define LPSPI_BASE_ADDRS                         { 0u, LPSPI1_BASE, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE }
+  #define LPSPI_BASE_ADDRS                         { 0u, LPSPI1_BASE, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE, LPSPI5_BASE, LPSPI6_BASE }
   /** Array initializer of LPSPI peripheral base pointers */
-  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, LPSPI1, LPSPI2, LPSPI3, LPSPI4 }
+  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, LPSPI1, LPSPI2, LPSPI3, LPSPI4, LPSPI5, LPSPI6 }
   /** Array initializer of LPSPI peripheral base addresses */
-  #define LPSPI_BASE_ADDRS_NS                      { 0u, LPSPI1_BASE_NS, LPSPI2_BASE_NS, LPSPI3_BASE_NS, LPSPI4_BASE_NS }
+  #define LPSPI_BASE_ADDRS_NS                      { 0u, LPSPI1_BASE_NS, LPSPI2_BASE_NS, LPSPI3_BASE_NS, LPSPI4_BASE_NS, LPSPI5_BASE_NS, LPSPI6_BASE_NS }
   /** Array initializer of LPSPI peripheral base pointers */
-  #define LPSPI_BASE_PTRS_NS                       { (LPSPI_Type *)0u, LPSPI1_NS, LPSPI2_NS, LPSPI3_NS, LPSPI4_NS }
+  #define LPSPI_BASE_PTRS_NS                       { (LPSPI_Type *)0u, LPSPI1_NS, LPSPI2_NS, LPSPI3_NS, LPSPI4_NS, LPSPI5_NS, LPSPI6_NS }
 #else
   /** Peripheral LPSPI1 base address */
   #define LPSPI1_BASE                              (0x44360000u)
@@ -2428,13 +3296,21 @@ typedef enum IRQn {
   #define LPSPI4_BASE                              (0x42560000u)
   /** Peripheral LPSPI4 base pointer */
   #define LPSPI4                                   ((LPSPI_Type *)LPSPI4_BASE)
+  /** Peripheral LPSPI5 base address */
+  #define LPSPI5_BASE                              (0x42D50000u)
+  /** Peripheral LPSPI5 base pointer */
+  #define LPSPI5                                   ((LPSPI_Type *)LPSPI5_BASE)
+  /** Peripheral LPSPI6 base address */
+  #define LPSPI6_BASE                              (0x42D60000u)
+  /** Peripheral LPSPI6 base pointer */
+  #define LPSPI6                                   ((LPSPI_Type *)LPSPI6_BASE)
   /** Array initializer of LPSPI peripheral base addresses */
-  #define LPSPI_BASE_ADDRS                         { 0u, LPSPI1_BASE, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE }
+  #define LPSPI_BASE_ADDRS                         { 0u, LPSPI1_BASE, LPSPI2_BASE, LPSPI3_BASE, LPSPI4_BASE, LPSPI5_BASE, LPSPI6_BASE }
   /** Array initializer of LPSPI peripheral base pointers */
-  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, LPSPI1, LPSPI2, LPSPI3, LPSPI4 }
+  #define LPSPI_BASE_PTRS                          { (LPSPI_Type *)0u, LPSPI1, LPSPI2, LPSPI3, LPSPI4, LPSPI5, LPSPI6 }
 #endif
 /** Interrupt vectors for the LPSPI peripheral type */
-#define LPSPI_IRQS                               { NotAvail_IRQn, LPSPI1_IRQn, LPSPI2_IRQn, LPSPI3_IRQn, LPSPI4_IRQn }
+#define LPSPI_IRQS                               { NotAvail_IRQn, LPSPI1_IRQn, LPSPI2_IRQn, LPSPI3_IRQn, LPSPI4_IRQn, LPSPI5_IRQn, LPSPI6_IRQn }
 
 /* LPTMR - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -3360,50 +4236,50 @@ typedef enum IRQn {
 
 /* PWM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral PWM1 base address */
-  #define PWM1_BASE                                (0x52650000u)
-  /** Peripheral PWM1 base address */
-  #define PWM1_BASE_NS                             (0x42650000u)
-  /** Peripheral PWM1 base pointer */
-  #define PWM1                                     ((PWM_Type *)PWM1_BASE)
-  /** Peripheral PWM1 base pointer */
-  #define PWM1_NS                                  ((PWM_Type *)PWM1_BASE_NS)
-  /** Peripheral PWM2 base address */
-  #define PWM2_BASE                                (0x52660000u)
-  /** Peripheral PWM2 base address */
-  #define PWM2_BASE_NS                             (0x42660000u)
-  /** Peripheral PWM2 base pointer */
-  #define PWM2                                     ((PWM_Type *)PWM2_BASE)
-  /** Peripheral PWM2 base pointer */
-  #define PWM2_NS                                  ((PWM_Type *)PWM2_BASE_NS)
+  /** Peripheral PWM3 base address */
+  #define PWM3_BASE                                (0x52670000u)
+  /** Peripheral PWM3 base address */
+  #define PWM3_BASE_NS                             (0x42670000u)
+  /** Peripheral PWM3 base pointer */
+  #define PWM3                                     ((PWM_Type *)PWM3_BASE)
+  /** Peripheral PWM3 base pointer */
+  #define PWM3_NS                                  ((PWM_Type *)PWM3_BASE_NS)
+  /** Peripheral PWM4 base address */
+  #define PWM4_BASE                                (0x52680000u)
+  /** Peripheral PWM4 base address */
+  #define PWM4_BASE_NS                             (0x42680000u)
+  /** Peripheral PWM4 base pointer */
+  #define PWM4                                     ((PWM_Type *)PWM4_BASE)
+  /** Peripheral PWM4 base pointer */
+  #define PWM4_NS                                  ((PWM_Type *)PWM4_BASE_NS)
   /** Array initializer of PWM peripheral base addresses */
-  #define PWM_BASE_ADDRS                           { 0u, PWM1_BASE, PWM2_BASE }
+  #define PWM_BASE_ADDRS                           { 0u, 0u, 0u, PWM3_BASE, PWM4_BASE }
   /** Array initializer of PWM peripheral base pointers */
-  #define PWM_BASE_PTRS                            { (PWM_Type *)0u, PWM1, PWM2 }
+  #define PWM_BASE_PTRS                            { (PWM_Type *)0u, (PWM_Type *)0u, (PWM_Type *)0u, PWM3, PWM4 }
   /** Array initializer of PWM peripheral base addresses */
-  #define PWM_BASE_ADDRS_NS                        { 0u, PWM1_BASE_NS, PWM2_BASE_NS }
+  #define PWM_BASE_ADDRS_NS                        { 0u, 0u, 0u, PWM3_BASE_NS, PWM4_BASE_NS }
   /** Array initializer of PWM peripheral base pointers */
-  #define PWM_BASE_PTRS_NS                         { (PWM_Type *)0u, PWM1_NS, PWM2_NS }
+  #define PWM_BASE_PTRS_NS                         { (PWM_Type *)0u, (PWM_Type *)0u, (PWM_Type *)0u, PWM3_NS, PWM4_NS }
 #else
-  /** Peripheral PWM1 base address */
-  #define PWM1_BASE                                (0x42650000u)
-  /** Peripheral PWM1 base pointer */
-  #define PWM1                                     ((PWM_Type *)PWM1_BASE)
-  /** Peripheral PWM2 base address */
-  #define PWM2_BASE                                (0x42660000u)
-  /** Peripheral PWM2 base pointer */
-  #define PWM2                                     ((PWM_Type *)PWM2_BASE)
+  /** Peripheral PWM3 base address */
+  #define PWM3_BASE                                (0x42670000u)
+  /** Peripheral PWM3 base pointer */
+  #define PWM3                                     ((PWM_Type *)PWM3_BASE)
+  /** Peripheral PWM4 base address */
+  #define PWM4_BASE                                (0x42680000u)
+  /** Peripheral PWM4 base pointer */
+  #define PWM4                                     ((PWM_Type *)PWM4_BASE)
   /** Array initializer of PWM peripheral base addresses */
-  #define PWM_BASE_ADDRS                           { 0u, PWM1_BASE, PWM2_BASE }
+  #define PWM_BASE_ADDRS                           { 0u, 0u, 0u, PWM3_BASE, PWM4_BASE }
   /** Array initializer of PWM peripheral base pointers */
-  #define PWM_BASE_PTRS                            { (PWM_Type *)0u, PWM1, PWM2 }
+  #define PWM_BASE_PTRS                            { (PWM_Type *)0u, (PWM_Type *)0u, (PWM_Type *)0u, PWM3, PWM4 }
 #endif
 /** Interrupt vectors for the PWM peripheral type */
-#define PWM_CMP_IRQS                             { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { PWM1_0_IRQn, PWM1_1_IRQn, PWM1_2_IRQn, PWM1_3_IRQn }, { PWM2_0_IRQn, PWM2_1_IRQn, PWM2_2_IRQn, PWM2_3_IRQn } }
-#define PWM_RELOAD_IRQS                          { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { PWM1_0_IRQn, PWM1_1_IRQn, PWM1_2_IRQn, PWM1_3_IRQn }, { PWM2_0_IRQn, PWM2_1_IRQn, PWM2_2_IRQn, PWM2_3_IRQn } }
-#define PWM_CAPTURE_IRQS                         { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { PWM1_0_IRQn, PWM1_1_IRQn, PWM1_2_IRQn, PWM1_3_IRQn }, { PWM2_0_IRQn, PWM2_1_IRQn, PWM2_2_IRQn, PWM2_3_IRQn } }
-#define PWM_FAULT_IRQS                           { NotAvail_IRQn, PWM1_FAULT_IRQn, PWM2_FAULT_IRQn }
-#define PWM_RELOAD_ERROR_IRQS                    { NotAvail_IRQn, PWM1_FAULT_IRQn, PWM2_FAULT_IRQn }
+#define PWM_CMP_IRQS                             { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { PWM3_0_IRQn, PWM3_1_IRQn, PWM3_2_IRQn, PWM3_3_IRQn }, { PWM4_0_IRQn, PWM4_1_IRQn, PWM4_2_IRQn, PWM4_3_IRQn } }
+#define PWM_RELOAD_IRQS                          { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { PWM3_0_IRQn, PWM3_1_IRQn, PWM3_2_IRQn, PWM3_3_IRQn }, { PWM4_0_IRQn, PWM4_1_IRQn, PWM4_2_IRQn, PWM4_3_IRQn } }
+#define PWM_CAPTURE_IRQS                         { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { PWM3_0_IRQn, PWM3_1_IRQn, PWM3_2_IRQn, PWM3_3_IRQn }, { PWM4_0_IRQn, PWM4_1_IRQn, PWM4_2_IRQn, PWM4_3_IRQn } }
+#define PWM_FAULT_IRQS                           { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, PWM3_FAULT_IRQn, PWM4_FAULT_IRQn }
+#define PWM_RELOAD_ERROR_IRQS                    { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, PWM3_FAULT_IRQn, PWM4_FAULT_IRQn }
 
 /* RGPIO - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -3661,6 +4537,37 @@ typedef enum IRQn {
   /** Array initializer of SEMA42 peripheral base pointers */
   #define SEMA42_BASE_PTRS                         { SEMA1, SEMA2 }
 #endif
+
+/* SINC - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral SINC3 base address */
+  #define SINC3_BASE                               (0x52C10000u)
+  /** Peripheral SINC3 base address */
+  #define SINC3_BASE_NS                            (0x42C10000u)
+  /** Peripheral SINC3 base pointer */
+  #define SINC3                                    ((SINC_Type *)SINC3_BASE)
+  /** Peripheral SINC3 base pointer */
+  #define SINC3_NS                                 ((SINC_Type *)SINC3_BASE_NS)
+  /** Array initializer of SINC peripheral base addresses */
+  #define SINC_BASE_ADDRS                          { 0u, 0u, 0u, SINC3_BASE }
+  /** Array initializer of SINC peripheral base pointers */
+  #define SINC_BASE_PTRS                           { (SINC_Type *)0u, (SINC_Type *)0u, (SINC_Type *)0u, SINC3 }
+  /** Array initializer of SINC peripheral base addresses */
+  #define SINC_BASE_ADDRS_NS                       { 0u, 0u, 0u, SINC3_BASE_NS }
+  /** Array initializer of SINC peripheral base pointers */
+  #define SINC_BASE_PTRS_NS                        { (SINC_Type *)0u, (SINC_Type *)0u, (SINC_Type *)0u, SINC3_NS }
+#else
+  /** Peripheral SINC3 base address */
+  #define SINC3_BASE                               (0x42C10000u)
+  /** Peripheral SINC3 base pointer */
+  #define SINC3                                    ((SINC_Type *)SINC3_BASE)
+  /** Array initializer of SINC peripheral base addresses */
+  #define SINC_BASE_ADDRS                          { 0u, 0u, 0u, SINC3_BASE }
+  /** Array initializer of SINC peripheral base pointers */
+  #define SINC_BASE_PTRS                           { (SINC_Type *)0u, (SINC_Type *)0u, (SINC_Type *)0u, SINC3 }
+#endif
+/** Interrupt vectors for the SINC peripheral type */
+#define SINC_IRQS                                { { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }, { SINC3_CH0_CH1_CH2_CH3_IRQn, SINC3_CH0_CH1_CH2_CH3_IRQn, SINC3_CH0_CH1_CH2_CH3_IRQn, SINC3_CH0_CH1_CH2_CH3_IRQn } }
 
 /* SPDIF - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -4472,34 +5379,34 @@ typedef enum IRQn {
 
 /* USDHC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral USDHC1 base address */
-  #define USDHC1_BASE                              (0x52850000u)
-  /** Peripheral USDHC1 base address */
-  #define USDHC1_BASE_NS                           (0x42850000u)
-  /** Peripheral USDHC1 base pointer */
-  #define USDHC1                                   ((USDHC_Type *)USDHC1_BASE)
-  /** Peripheral USDHC1 base pointer */
-  #define USDHC1_NS                                ((USDHC_Type *)USDHC1_BASE_NS)
+  /** Peripheral USDHC2 base address */
+  #define USDHC2_BASE                              (0x52860000u)
+  /** Peripheral USDHC2 base address */
+  #define USDHC2_BASE_NS                           (0x42860000u)
+  /** Peripheral USDHC2 base pointer */
+  #define USDHC2                                   ((USDHC_Type *)USDHC2_BASE)
+  /** Peripheral USDHC2 base pointer */
+  #define USDHC2_NS                                ((USDHC_Type *)USDHC2_BASE_NS)
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE }
+  #define USDHC_BASE_ADDRS                         { 0u, 0u, USDHC2_BASE }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1 }
+  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, (USDHC_Type *)0u, USDHC2 }
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS_NS                      { 0u, USDHC1_BASE_NS }
+  #define USDHC_BASE_ADDRS_NS                      { 0u, 0u, USDHC2_BASE_NS }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS_NS                       { (USDHC_Type *)0u, USDHC1_NS }
+  #define USDHC_BASE_PTRS_NS                       { (USDHC_Type *)0u, (USDHC_Type *)0u, USDHC2_NS }
 #else
-  /** Peripheral USDHC1 base address */
-  #define USDHC1_BASE                              (0x42850000u)
-  /** Peripheral USDHC1 base pointer */
-  #define USDHC1                                   ((USDHC_Type *)USDHC1_BASE)
+  /** Peripheral USDHC2 base address */
+  #define USDHC2_BASE                              (0x42860000u)
+  /** Peripheral USDHC2 base pointer */
+  #define USDHC2                                   ((USDHC_Type *)USDHC2_BASE)
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE }
+  #define USDHC_BASE_ADDRS                         { 0u, 0u, USDHC2_BASE }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1 }
+  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, (USDHC_Type *)0u, USDHC2 }
 #endif
 /** Interrupt vectors for the USDHC peripheral type */
-#define USDHC_IRQS                               { NotAvail_IRQn, USDHC1_IRQn }
+#define USDHC_IRQS                               { NotAvail_IRQn, NotAvail_IRQn, USDHC2_IRQn }
 
 /* VMBANDGAP - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

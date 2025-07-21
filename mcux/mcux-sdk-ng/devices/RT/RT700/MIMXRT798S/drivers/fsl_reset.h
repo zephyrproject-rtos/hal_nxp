@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -182,7 +182,7 @@ typedef enum _RSTCTL_RSTn
     kUTICK1_RST_SHIFT_RSTn  = (RST_CTL1_PSCCTL0 << 8) | 21U,       /*!< UTICK1 reset control */
     kMU3_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL0 << 8) | 24U,       /*!< MU3 reset control */
     kSEMA423_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL0 << 8) | 25U,       /*!< SEMA42_3 reset control */
-    kPVT1_RST_SHIFT_RSTn    = (RST_CTL1_PSCCTL0 << 8) | 28U,       /*!< PVT1 reset control */
+    kPVTS1_RST_SHIFT_RSTn    = (RST_CTL1_PSCCTL0 << 8) | 28U,      /*!< PVTS1 reset control */
 
     kIOPCTL2_RST_SHIFT_RSTn = (RST_CTL2_PSCCTL0 << 8) | 1U,        /*!< IOPCTL2 reset control */
 

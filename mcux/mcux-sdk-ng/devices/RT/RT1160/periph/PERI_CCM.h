@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CCM.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_CCM.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CCM
  *
  * CMSIS Peripheral Access Layer for CCM
  */
 
-#if !defined(CCM_H_)
-#define CCM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CCM_H_)
+#define PERI_CCM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -358,40 +361,40 @@ typedef struct {
 #define CCM_CLOCK_ROOT_STATUS0_POWERDOWN_MASK    (0x8000000U)
 #define CCM_CLOCK_ROOT_STATUS0_POWERDOWN_SHIFT   (27U)
 /*! POWERDOWN - Current clock root POWERDOWN setting
- *  0b1..Clock root is Powered Down
  *  0b0..Clock root is running
+ *  0b1..Clock root is Powered Down
  */
 #define CCM_CLOCK_ROOT_STATUS0_POWERDOWN(x)      (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS0_POWERDOWN_SHIFT)) & CCM_CLOCK_ROOT_STATUS0_POWERDOWN_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS0_SLICE_BUSY_MASK   (0x10000000U)
 #define CCM_CLOCK_ROOT_STATUS0_SLICE_BUSY_SHIFT  (28U)
 /*! SLICE_BUSY - Internal updating in generation logic
- *  0b1..Clock generation logic is applying the new setting
  *  0b0..Clock generation logic is not busy
+ *  0b1..Clock generation logic is applying the new setting
  */
 #define CCM_CLOCK_ROOT_STATUS0_SLICE_BUSY(x)     (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS0_SLICE_BUSY_SHIFT)) & CCM_CLOCK_ROOT_STATUS0_SLICE_BUSY_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS0_UPDATE_FORWARD_MASK (0x20000000U)
 #define CCM_CLOCK_ROOT_STATUS0_UPDATE_FORWARD_SHIFT (29U)
 /*! UPDATE_FORWARD - Internal status synchronization to clock generation logic
- *  0b1..Synchronization in process
  *  0b0..Synchronization not in process
+ *  0b1..Synchronization in process
  */
 #define CCM_CLOCK_ROOT_STATUS0_UPDATE_FORWARD(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS0_UPDATE_FORWARD_SHIFT)) & CCM_CLOCK_ROOT_STATUS0_UPDATE_FORWARD_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS0_UPDATE_REVERSE_MASK (0x40000000U)
 #define CCM_CLOCK_ROOT_STATUS0_UPDATE_REVERSE_SHIFT (30U)
 /*! UPDATE_REVERSE - Internal status synchronization from clock generation logic
- *  0b1..Synchronization in process
  *  0b0..Synchronization not in process
+ *  0b1..Synchronization in process
  */
 #define CCM_CLOCK_ROOT_STATUS0_UPDATE_REVERSE(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS0_UPDATE_REVERSE_SHIFT)) & CCM_CLOCK_ROOT_STATUS0_UPDATE_REVERSE_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS0_CHANGING_MASK     (0x80000000U)
 #define CCM_CLOCK_ROOT_STATUS0_CHANGING_SHIFT    (31U)
 /*! CHANGING - Internal updating in clock root
- *  0b1..Clock generation logic is updating currently
  *  0b0..Clock Status is not updating currently
+ *  0b1..Clock generation logic is updating currently
  */
 #define CCM_CLOCK_ROOT_STATUS0_CHANGING(x)       (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS0_CHANGING_SHIFT)) & CCM_CLOCK_ROOT_STATUS0_CHANGING_MASK)
 /*! @} */
@@ -415,32 +418,32 @@ typedef struct {
 #define CCM_CLOCK_ROOT_STATUS1_DOWN_REQUEST_MASK (0x1000000U)
 #define CCM_CLOCK_ROOT_STATUS1_DOWN_REQUEST_SHIFT (24U)
 /*! DOWN_REQUEST - Clock frequency decrease request
- *  0b1..Frequency decrease requested
  *  0b0..Frequency decrease not requested
+ *  0b1..Frequency decrease requested
  */
 #define CCM_CLOCK_ROOT_STATUS1_DOWN_REQUEST(x)   (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS1_DOWN_REQUEST_SHIFT)) & CCM_CLOCK_ROOT_STATUS1_DOWN_REQUEST_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS1_DOWN_DONE_MASK    (0x2000000U)
 #define CCM_CLOCK_ROOT_STATUS1_DOWN_DONE_SHIFT   (25U)
 /*! DOWN_DONE - Clock frequency decrease finish
- *  0b1..Frequency decrease completed
  *  0b0..Frequency decrease not completed
+ *  0b1..Frequency decrease completed
  */
 #define CCM_CLOCK_ROOT_STATUS1_DOWN_DONE(x)      (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS1_DOWN_DONE_SHIFT)) & CCM_CLOCK_ROOT_STATUS1_DOWN_DONE_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS1_UP_REQUEST_MASK   (0x4000000U)
 #define CCM_CLOCK_ROOT_STATUS1_UP_REQUEST_SHIFT  (26U)
 /*! UP_REQUEST - Clock frequency increase request
- *  0b1..Frequency increase requested
  *  0b0..Frequency increase not requested
+ *  0b1..Frequency increase requested
  */
 #define CCM_CLOCK_ROOT_STATUS1_UP_REQUEST(x)     (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS1_UP_REQUEST_SHIFT)) & CCM_CLOCK_ROOT_STATUS1_UP_REQUEST_MASK)
 
 #define CCM_CLOCK_ROOT_STATUS1_UP_DONE_MASK      (0x8000000U)
 #define CCM_CLOCK_ROOT_STATUS1_UP_DONE_SHIFT     (27U)
 /*! UP_DONE - Clock frequency increase finish
- *  0b1..Frequency increase completed
  *  0b0..Frequency increase not completed
+ *  0b1..Frequency increase completed
  */
 #define CCM_CLOCK_ROOT_STATUS1_UP_DONE(x)        (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_STATUS1_UP_DONE_SHIFT)) & CCM_CLOCK_ROOT_STATUS1_UP_DONE_MASK)
 /*! @} */
@@ -454,8 +457,8 @@ typedef struct {
 #define CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_MASK (0x10U)
 #define CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_SHIFT (4U)
 /*! SETPOINT_PRESENT - Setpoint present
- *  0b1..Setpoint is implemented.
  *  0b0..Setpoint is not implemented.
+ *  0b1..Setpoint is implemented.
  */
 #define CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_SHIFT)) & CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_MASK)
 /*! @} */
@@ -469,8 +472,8 @@ typedef struct {
 #define CCM_CLOCK_ROOT_AUTHEN_TZ_USER_MASK       (0x1U)
 #define CCM_CLOCK_ROOT_AUTHEN_TZ_USER_SHIFT      (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode
  *  0b0..Clock cannot be changed in user mode
+ *  0b1..Clock can be changed in user mode
  */
 #define CCM_CLOCK_ROOT_AUTHEN_TZ_USER(x)         (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_AUTHEN_TZ_USER_SHIFT)) & CCM_CLOCK_ROOT_AUTHEN_TZ_USER_MASK)
 
@@ -509,16 +512,16 @@ typedef struct {
 #define CCM_CLOCK_ROOT_AUTHEN_DOMAIN_MODE_MASK   (0x10000U)
 #define CCM_CLOCK_ROOT_AUTHEN_DOMAIN_MODE_SHIFT  (16U)
 /*! DOMAIN_MODE - Low power and access control by domain
- *  0b1..Clock works in Domain Mode
  *  0b0..Clock does NOT work in Domain Mode
+ *  0b1..Clock works in Domain Mode
  */
 #define CCM_CLOCK_ROOT_AUTHEN_DOMAIN_MODE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_CLOCK_ROOT_AUTHEN_DOMAIN_MODE_MASK)
 
 #define CCM_CLOCK_ROOT_AUTHEN_SETPOINT_MODE_MASK (0x20000U)
 #define CCM_CLOCK_ROOT_AUTHEN_SETPOINT_MODE_SHIFT (17U)
 /*! SETPOINT_MODE - Low power and access control by Setpoint
- *  0b1..Clock works in Setpoint Mode
  *  0b0..Clock does NOT work in Setpoint Mode
+ *  0b1..Clock works in Setpoint Mode
  */
 #define CCM_CLOCK_ROOT_AUTHEN_SETPOINT_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_AUTHEN_SETPOINT_MODE_SHIFT)) & CCM_CLOCK_ROOT_AUTHEN_SETPOINT_MODE_MASK)
 
@@ -691,8 +694,8 @@ typedef struct {
 #define CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF_MASK (0x1000000U)
 #define CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF_SHIFT (24U)
 /*! OFF - OFF
- *  0b1..OFF
  *  0b0..ON
+ *  0b1..OFF
  */
 #define CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF_SHIFT)) & CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF_MASK)
 
@@ -823,40 +826,40 @@ typedef struct {
 #define CCM_CLOCK_GROUP_STATUS0_POWERDOWN_MASK   (0x8000000U)
 #define CCM_CLOCK_GROUP_STATUS0_POWERDOWN_SHIFT  (27U)
 /*! POWERDOWN - Current clock root POWERDOWN setting
- *  0b1..Clock root is Powered Down
  *  0b0..Clock root is running
+ *  0b1..Clock root is Powered Down
  */
 #define CCM_CLOCK_GROUP_STATUS0_POWERDOWN(x)     (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS0_POWERDOWN_SHIFT)) & CCM_CLOCK_GROUP_STATUS0_POWERDOWN_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS0_SLICE_BUSY_MASK  (0x10000000U)
 #define CCM_CLOCK_GROUP_STATUS0_SLICE_BUSY_SHIFT (28U)
 /*! SLICE_BUSY - Internal updating in generation logic
- *  0b1..Clock generation logic is applying the new setting
  *  0b0..Clock generation logic is not busy
+ *  0b1..Clock generation logic is applying the new setting
  */
 #define CCM_CLOCK_GROUP_STATUS0_SLICE_BUSY(x)    (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS0_SLICE_BUSY_SHIFT)) & CCM_CLOCK_GROUP_STATUS0_SLICE_BUSY_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS0_UPDATE_FORWARD_MASK (0x20000000U)
 #define CCM_CLOCK_GROUP_STATUS0_UPDATE_FORWARD_SHIFT (29U)
 /*! UPDATE_FORWARD - Internal status synchronization to clock generation logic
- *  0b1..Synchronization in process
  *  0b0..Synchronization not in process
+ *  0b1..Synchronization in process
  */
 #define CCM_CLOCK_GROUP_STATUS0_UPDATE_FORWARD(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS0_UPDATE_FORWARD_SHIFT)) & CCM_CLOCK_GROUP_STATUS0_UPDATE_FORWARD_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS0_UPDATE_REVERSE_MASK (0x40000000U)
 #define CCM_CLOCK_GROUP_STATUS0_UPDATE_REVERSE_SHIFT (30U)
 /*! UPDATE_REVERSE - Internal status synchronization from clock generation logic
- *  0b1..Synchronization in process
  *  0b0..Synchronization not in process
+ *  0b1..Synchronization in process
  */
 #define CCM_CLOCK_GROUP_STATUS0_UPDATE_REVERSE(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS0_UPDATE_REVERSE_SHIFT)) & CCM_CLOCK_GROUP_STATUS0_UPDATE_REVERSE_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS0_CHANGING_MASK    (0x80000000U)
 #define CCM_CLOCK_GROUP_STATUS0_CHANGING_SHIFT   (31U)
 /*! CHANGING - Internal updating in clock group
- *  0b1..Clock root logic is updating currently
  *  0b0..Clock root is not updating currently
+ *  0b1..Clock root logic is updating currently
  */
 #define CCM_CLOCK_GROUP_STATUS0_CHANGING(x)      (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS0_CHANGING_SHIFT)) & CCM_CLOCK_GROUP_STATUS0_CHANGING_MASK)
 /*! @} */
@@ -880,32 +883,32 @@ typedef struct {
 #define CCM_CLOCK_GROUP_STATUS1_DOWN_REQUEST_MASK (0x1000000U)
 #define CCM_CLOCK_GROUP_STATUS1_DOWN_REQUEST_SHIFT (24U)
 /*! DOWN_REQUEST - Clock frequency decrease request
- *  0b1..Handshake signal with GPC status indicating frequency decrease is requested
  *  0b0..No handshake signal is not requested
+ *  0b1..Handshake signal with GPC status indicating frequency decrease is requested
  */
 #define CCM_CLOCK_GROUP_STATUS1_DOWN_REQUEST(x)  (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS1_DOWN_REQUEST_SHIFT)) & CCM_CLOCK_GROUP_STATUS1_DOWN_REQUEST_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS1_DOWN_DONE_MASK   (0x2000000U)
 #define CCM_CLOCK_GROUP_STATUS1_DOWN_DONE_SHIFT  (25U)
 /*! DOWN_DONE - Clock frequency decrease complete
- *  0b1..Handshake signal with GPC status indicating frequency decrease is complete
  *  0b0..Handshake signal with GPC status indicating frequency decrease is not complete
+ *  0b1..Handshake signal with GPC status indicating frequency decrease is complete
  */
 #define CCM_CLOCK_GROUP_STATUS1_DOWN_DONE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS1_DOWN_DONE_SHIFT)) & CCM_CLOCK_GROUP_STATUS1_DOWN_DONE_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS1_UP_REQUEST_MASK  (0x4000000U)
 #define CCM_CLOCK_GROUP_STATUS1_UP_REQUEST_SHIFT (26U)
 /*! UP_REQUEST - Clock frequency increase request
- *  0b1..Handshake signal with GPC status indicating frequency increase is requested
  *  0b0..No handshake signal is not requested
+ *  0b1..Handshake signal with GPC status indicating frequency increase is requested
  */
 #define CCM_CLOCK_GROUP_STATUS1_UP_REQUEST(x)    (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS1_UP_REQUEST_SHIFT)) & CCM_CLOCK_GROUP_STATUS1_UP_REQUEST_MASK)
 
 #define CCM_CLOCK_GROUP_STATUS1_UP_DONE_MASK     (0x8000000U)
 #define CCM_CLOCK_GROUP_STATUS1_UP_DONE_SHIFT    (27U)
 /*! UP_DONE - Clock frequency increase complete
- *  0b1..Handshake signal with GPC status indicating frequency increase is complete
  *  0b0..Handshake signal with GPC status indicating frequency increase is not complete
+ *  0b1..Handshake signal with GPC status indicating frequency increase is complete
  */
 #define CCM_CLOCK_GROUP_STATUS1_UP_DONE(x)       (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_STATUS1_UP_DONE_SHIFT)) & CCM_CLOCK_GROUP_STATUS1_UP_DONE_MASK)
 /*! @} */
@@ -919,8 +922,8 @@ typedef struct {
 #define CCM_CLOCK_GROUP_CONFIG_SETPOINT_PRESENT_MASK (0x10U)
 #define CCM_CLOCK_GROUP_CONFIG_SETPOINT_PRESENT_SHIFT (4U)
 /*! SETPOINT_PRESENT - Setpoint present
- *  0b1..Setpoint is implemented.
  *  0b0..Setpoint is not implemented.
+ *  0b1..Setpoint is implemented.
  */
 #define CCM_CLOCK_GROUP_CONFIG_SETPOINT_PRESENT(x) (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_CONFIG_SETPOINT_PRESENT_SHIFT)) & CCM_CLOCK_GROUP_CONFIG_SETPOINT_PRESENT_MASK)
 /*! @} */
@@ -934,8 +937,8 @@ typedef struct {
 #define CCM_CLOCK_GROUP_AUTHEN_TZ_USER_MASK      (0x1U)
 #define CCM_CLOCK_GROUP_AUTHEN_TZ_USER_SHIFT     (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_CLOCK_GROUP_AUTHEN_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_AUTHEN_TZ_USER_SHIFT)) & CCM_CLOCK_GROUP_AUTHEN_TZ_USER_MASK)
 
@@ -971,8 +974,8 @@ typedef struct {
 #define CCM_CLOCK_GROUP_AUTHEN_DOMAIN_MODE_MASK  (0x10000U)
 #define CCM_CLOCK_GROUP_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does not work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_CLOCK_GROUP_AUTHEN_DOMAIN_MODE(x)    (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_GROUP_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_CLOCK_GROUP_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -1224,8 +1227,8 @@ typedef struct {
 #define CCM_GPR_SHARED_AUTHEN_TZ_USER_MASK       (0x1U)
 #define CCM_GPR_SHARED_AUTHEN_TZ_USER_SHIFT      (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_SHARED_AUTHEN_TZ_USER(x)         (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_SHARED_AUTHEN_TZ_USER_MASK)
 
@@ -1264,8 +1267,8 @@ typedef struct {
 #define CCM_GPR_SHARED_AUTHEN_DOMAIN_MODE_MASK   (0x10000U)
 #define CCM_GPR_SHARED_AUTHEN_DOMAIN_MODE_SHIFT  (16U)
 /*! DOMAIN_MODE - Low power and access control by domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_SHARED_AUTHEN_DOMAIN_MODE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_SHARED_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -1449,8 +1452,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE1_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE1_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE1_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE1_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE1_AUTHEN_TZ_USER_MASK)
 
@@ -1489,8 +1492,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE1_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE1_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE1_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE1_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE1_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -1662,8 +1665,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE2_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE2_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE2_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE2_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE2_AUTHEN_TZ_USER_MASK)
 
@@ -1702,8 +1705,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE2_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE2_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE2_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE2_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE2_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -1875,8 +1878,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE3_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE3_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE3_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE3_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE3_AUTHEN_TZ_USER_MASK)
 
@@ -1915,8 +1918,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE3_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE3_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE3_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE3_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE3_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -2088,8 +2091,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE4_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE4_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE4_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE4_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE4_AUTHEN_TZ_USER_MASK)
 
@@ -2128,8 +2131,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE4_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE4_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE4_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE4_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE4_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -2301,8 +2304,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE5_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE5_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE5_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE5_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE5_AUTHEN_TZ_USER_MASK)
 
@@ -2341,8 +2344,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE5_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE5_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE5_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE5_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE5_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -2514,8 +2517,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE6_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE6_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE6_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE6_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE6_AUTHEN_TZ_USER_MASK)
 
@@ -2554,8 +2557,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE6_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE6_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE6_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE6_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE6_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -2727,8 +2730,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE7_AUTHEN_TZ_USER_MASK     (0x1U)
 #define CCM_GPR_PRIVATE7_AUTHEN_TZ_USER_SHIFT    (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE7_AUTHEN_TZ_USER(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE7_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE7_AUTHEN_TZ_USER_MASK)
 
@@ -2767,8 +2770,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE7_AUTHEN_DOMAIN_MODE_MASK (0x10000U)
 #define CCM_GPR_PRIVATE7_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by Domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does NOT work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_GPR_PRIVATE7_AUTHEN_DOMAIN_MODE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE7_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_GPR_PRIVATE7_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -3011,16 +3014,16 @@ typedef struct {
 #define CCM_OSCPLL_STATUS0_STATUS_EARLY_MASK     (0x10U)
 #define CCM_OSCPLL_STATUS0_STATUS_EARLY_SHIFT    (4U)
 /*! STATUS_EARLY - Clock source active
- *  0b1..Clock source is active
  *  0b0..Clock source is not active
+ *  0b1..Clock source is active
  */
 #define CCM_OSCPLL_STATUS0_STATUS_EARLY(x)       (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS0_STATUS_EARLY_SHIFT)) & CCM_OSCPLL_STATUS0_STATUS_EARLY_MASK)
 
 #define CCM_OSCPLL_STATUS0_STATUS_LATE_MASK      (0x20U)
 #define CCM_OSCPLL_STATUS0_STATUS_LATE_SHIFT     (5U)
 /*! STATUS_LATE - Clock source ready
- *  0b1..Clock source is ready to use
  *  0b0..Clock source is not ready to use
+ *  0b1..Clock source is ready to use
  */
 #define CCM_OSCPLL_STATUS0_STATUS_LATE(x)        (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS0_STATUS_LATE_SHIFT)) & CCM_OSCPLL_STATUS0_STATUS_LATE_MASK)
 
@@ -3071,8 +3074,8 @@ typedef struct {
 #define CCM_OSCPLL_STATUS0_IN_USE_MASK           (0x10000000U)
 #define CCM_OSCPLL_STATUS0_IN_USE_SHIFT          (28U)
 /*! IN_USE - In use
- *  0b1..Clock source is being used by clock roots
  *  0b0..Clock source is not being used by clock roots
+ *  0b1..Clock source is being used by clock roots
  */
 #define CCM_OSCPLL_STATUS0_IN_USE(x)             (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS0_IN_USE_SHIFT)) & CCM_OSCPLL_STATUS0_IN_USE_MASK)
 /*! @} */
@@ -3096,16 +3099,16 @@ typedef struct {
 #define CCM_OSCPLL_STATUS1_CPU0_MODE_REQUEST_MASK (0x4U)
 #define CCM_OSCPLL_STATUS1_CPU0_MODE_REQUEST_SHIFT (2U)
 /*! CPU0_MODE_REQUEST - Domain0 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_OSCPLL_STATUS1_CPU0_MODE_REQUEST(x)  (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU0_MODE_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_CPU0_MODE_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_CPU0_MODE_DONE_MASK   (0x8U)
 #define CCM_OSCPLL_STATUS1_CPU0_MODE_DONE_SHIFT  (3U)
 /*! CPU0_MODE_DONE - Domain0 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_OSCPLL_STATUS1_CPU0_MODE_DONE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU0_MODE_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_CPU0_MODE_DONE_MASK)
 
@@ -3122,16 +3125,16 @@ typedef struct {
 #define CCM_OSCPLL_STATUS1_CPU1_MODE_REQUEST_MASK (0x40U)
 #define CCM_OSCPLL_STATUS1_CPU1_MODE_REQUEST_SHIFT (6U)
 /*! CPU1_MODE_REQUEST - Domain1 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_OSCPLL_STATUS1_CPU1_MODE_REQUEST(x)  (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU1_MODE_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_CPU1_MODE_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_CPU1_MODE_DONE_MASK   (0x80U)
 #define CCM_OSCPLL_STATUS1_CPU1_MODE_DONE_SHIFT  (7U)
 /*! CPU1_MODE_DONE - Domain1 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_OSCPLL_STATUS1_CPU1_MODE_DONE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU1_MODE_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_CPU1_MODE_DONE_MASK)
 
@@ -3148,16 +3151,16 @@ typedef struct {
 #define CCM_OSCPLL_STATUS1_CPU2_MODE_REQUEST_MASK (0x400U)
 #define CCM_OSCPLL_STATUS1_CPU2_MODE_REQUEST_SHIFT (10U)
 /*! CPU2_MODE_REQUEST - Domain2 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_OSCPLL_STATUS1_CPU2_MODE_REQUEST(x)  (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU2_MODE_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_CPU2_MODE_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_CPU2_MODE_DONE_MASK   (0x800U)
 #define CCM_OSCPLL_STATUS1_CPU2_MODE_DONE_SHIFT  (11U)
 /*! CPU2_MODE_DONE - Domain2 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_OSCPLL_STATUS1_CPU2_MODE_DONE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU2_MODE_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_CPU2_MODE_DONE_MASK)
 
@@ -3174,16 +3177,16 @@ typedef struct {
 #define CCM_OSCPLL_STATUS1_CPU3_MODE_REQUEST_MASK (0x4000U)
 #define CCM_OSCPLL_STATUS1_CPU3_MODE_REQUEST_SHIFT (14U)
 /*! CPU3_MODE_REQUEST - Domain3 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_OSCPLL_STATUS1_CPU3_MODE_REQUEST(x)  (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU3_MODE_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_CPU3_MODE_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_CPU3_MODE_DONE_MASK   (0x8000U)
 #define CCM_OSCPLL_STATUS1_CPU3_MODE_DONE_SHIFT  (15U)
 /*! CPU3_MODE_DONE - Domain3 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_OSCPLL_STATUS1_CPU3_MODE_DONE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_CPU3_MODE_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_CPU3_MODE_DONE_MASK)
 
@@ -3200,64 +3203,64 @@ typedef struct {
 #define CCM_OSCPLL_STATUS1_SETPOINT_OFF_REQUEST_MASK (0x1000000U)
 #define CCM_OSCPLL_STATUS1_SETPOINT_OFF_REQUEST_SHIFT (24U)
 /*! SETPOINT_OFF_REQUEST - Clock gate turn off request from GPC Setpoint
- *  0b1..Clock gate requested to be turned off
  *  0b0..No request
+ *  0b1..Clock gate requested to be turned off
  */
 #define CCM_OSCPLL_STATUS1_SETPOINT_OFF_REQUEST(x) (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_SETPOINT_OFF_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_SETPOINT_OFF_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_SETPOINT_OFF_DONE_MASK (0x2000000U)
 #define CCM_OSCPLL_STATUS1_SETPOINT_OFF_DONE_SHIFT (25U)
 /*! SETPOINT_OFF_DONE - Clock source turn off finish from GPC Setpoint
- *  0b1..Clock source is turned off
  *  0b0..Clock source is not turned off
+ *  0b1..Clock source is turned off
  */
 #define CCM_OSCPLL_STATUS1_SETPOINT_OFF_DONE(x)  (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_SETPOINT_OFF_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_SETPOINT_OFF_DONE_MASK)
 
 #define CCM_OSCPLL_STATUS1_SETPOINT_ON_REQUEST_MASK (0x4000000U)
 #define CCM_OSCPLL_STATUS1_SETPOINT_ON_REQUEST_SHIFT (26U)
 /*! SETPOINT_ON_REQUEST - Clock gate turn on request from GPC Setpoint
- *  0b1..Clock gate requested to be turned on
  *  0b0..No request
+ *  0b1..Clock gate requested to be turned on
  */
 #define CCM_OSCPLL_STATUS1_SETPOINT_ON_REQUEST(x) (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_SETPOINT_ON_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_SETPOINT_ON_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_SETPOINT_ON_DONE_MASK (0x8000000U)
 #define CCM_OSCPLL_STATUS1_SETPOINT_ON_DONE_SHIFT (27U)
 /*! SETPOINT_ON_DONE - Clock gate turn on finish from GPC Setpoint
- *  0b1..Request to turn on clock gate
  *  0b0..No request
+ *  0b1..Request to turn on clock gate
  */
 #define CCM_OSCPLL_STATUS1_SETPOINT_ON_DONE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_SETPOINT_ON_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_SETPOINT_ON_DONE_MASK)
 
 #define CCM_OSCPLL_STATUS1_STANDBY_IN_REQUEST_MASK (0x10000000U)
 #define CCM_OSCPLL_STATUS1_STANDBY_IN_REQUEST_SHIFT (28U)
 /*! STANDBY_IN_REQUEST - Clock gate turn off request from GPC standby
- *  0b1..Clock gate requested to be turned off
  *  0b0..No request
+ *  0b1..Clock gate requested to be turned off
  */
 #define CCM_OSCPLL_STATUS1_STANDBY_IN_REQUEST(x) (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_STANDBY_IN_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_STANDBY_IN_REQUEST_MASK)
 
 #define CCM_OSCPLL_STATUS1_STANDBY_IN_DONE_MASK  (0x20000000U)
 #define CCM_OSCPLL_STATUS1_STANDBY_IN_DONE_SHIFT (29U)
 /*! STANDBY_IN_DONE - Clock source turn off finish from GPC standby
- *  0b1..Clock source is turned off
  *  0b0..Clock source is not turned off
+ *  0b1..Clock source is turned off
  */
 #define CCM_OSCPLL_STATUS1_STANDBY_IN_DONE(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_STANDBY_IN_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_STANDBY_IN_DONE_MASK)
 
 #define CCM_OSCPLL_STATUS1_STANDBY_OUT_DONE_MASK (0x40000000U)
 #define CCM_OSCPLL_STATUS1_STANDBY_OUT_DONE_SHIFT (30U)
 /*! STANDBY_OUT_DONE - Clock gate turn on finish from GPC standby
- *  0b1..Request to turn on Clock gate is complete
  *  0b0..Request to turn on Clock gate is not complete
+ *  0b1..Request to turn on Clock gate is complete
  */
 #define CCM_OSCPLL_STATUS1_STANDBY_OUT_DONE(x)   (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_STANDBY_OUT_DONE_SHIFT)) & CCM_OSCPLL_STATUS1_STANDBY_OUT_DONE_MASK)
 
 #define CCM_OSCPLL_STATUS1_STANDBY_OUT_REQUEST_MASK (0x80000000U)
 #define CCM_OSCPLL_STATUS1_STANDBY_OUT_REQUEST_SHIFT (31U)
 /*! STANDBY_OUT_REQUEST - Clock gate turn on request from GPC standby
- *  0b1..Clock gate requested to be turned on
  *  0b0..No request
+ *  0b1..Clock gate requested to be turned on
  */
 #define CCM_OSCPLL_STATUS1_STANDBY_OUT_REQUEST(x) (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_STATUS1_STANDBY_OUT_REQUEST_SHIFT)) & CCM_OSCPLL_STATUS1_STANDBY_OUT_REQUEST_MASK)
 /*! @} */
@@ -3271,16 +3274,16 @@ typedef struct {
 #define CCM_OSCPLL_CONFIG_AUTOMODE_PRESENT_MASK  (0x2U)
 #define CCM_OSCPLL_CONFIG_AUTOMODE_PRESENT_SHIFT (1U)
 /*! AUTOMODE_PRESENT - Automode Present
- *  0b1..Present
  *  0b0..Not present
+ *  0b1..Present
  */
 #define CCM_OSCPLL_CONFIG_AUTOMODE_PRESENT(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_CONFIG_AUTOMODE_PRESENT_SHIFT)) & CCM_OSCPLL_CONFIG_AUTOMODE_PRESENT_MASK)
 
 #define CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_MASK  (0x10U)
 #define CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_SHIFT (4U)
 /*! SETPOINT_PRESENT - Setpoint present
- *  0b1..Setpoint is implemented.
  *  0b0..Setpoint is not implemented.
+ *  0b1..Setpoint is implemented.
  */
 #define CCM_OSCPLL_CONFIG_SETPOINT_PRESENT(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_SHIFT)) & CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_MASK)
 /*! @} */
@@ -3294,8 +3297,8 @@ typedef struct {
 #define CCM_OSCPLL_AUTHEN_TZ_USER_MASK           (0x1U)
 #define CCM_OSCPLL_AUTHEN_TZ_USER_SHIFT          (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_OSCPLL_AUTHEN_TZ_USER(x)             (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_AUTHEN_TZ_USER_SHIFT)) & CCM_OSCPLL_AUTHEN_TZ_USER_MASK)
 
@@ -3331,8 +3334,8 @@ typedef struct {
 #define CCM_OSCPLL_AUTHEN_DOMAIN_MODE_MASK       (0x10000U)
 #define CCM_OSCPLL_AUTHEN_DOMAIN_MODE_SHIFT      (16U)
 /*! DOMAIN_MODE - Low power and access control by domain
- *  0b1..Clock works in Domain Mode.
  *  0b0..Clock does not work in Domain Mode.
+ *  0b1..Clock works in Domain Mode.
  */
 #define CCM_OSCPLL_AUTHEN_DOMAIN_MODE(x)         (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_OSCPLL_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -3344,8 +3347,8 @@ typedef struct {
 #define CCM_OSCPLL_AUTHEN_CPULPM_MASK            (0x40000U)
 #define CCM_OSCPLL_AUTHEN_CPULPM_SHIFT           (18U)
 /*! CPULPM - CPU Low Power Mode
- *  0b1..PLL functions in Low Power Mode
  *  0b0..PLL does not function in Low power Mode
+ *  0b1..PLL functions in Low Power Mode
  */
 #define CCM_OSCPLL_AUTHEN_CPULPM(x)              (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_AUTHEN_CPULPM_SHIFT)) & CCM_OSCPLL_AUTHEN_CPULPM_MASK)
 
@@ -3535,16 +3538,16 @@ typedef struct {
 #define CCM_LPCG_STATUS1_CPU0_MODE_REQUEST_MASK  (0x4U)
 #define CCM_LPCG_STATUS1_CPU0_MODE_REQUEST_SHIFT (2U)
 /*! CPU0_MODE_REQUEST - Domain0 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_LPCG_STATUS1_CPU0_MODE_REQUEST(x)    (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU0_MODE_REQUEST_SHIFT)) & CCM_LPCG_STATUS1_CPU0_MODE_REQUEST_MASK)
 
 #define CCM_LPCG_STATUS1_CPU0_MODE_DONE_MASK     (0x8U)
 #define CCM_LPCG_STATUS1_CPU0_MODE_DONE_SHIFT    (3U)
 /*! CPU0_MODE_DONE - Domain0 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_LPCG_STATUS1_CPU0_MODE_DONE(x)       (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU0_MODE_DONE_SHIFT)) & CCM_LPCG_STATUS1_CPU0_MODE_DONE_MASK)
 
@@ -3561,16 +3564,16 @@ typedef struct {
 #define CCM_LPCG_STATUS1_CPU1_MODE_REQUEST_MASK  (0x40U)
 #define CCM_LPCG_STATUS1_CPU1_MODE_REQUEST_SHIFT (6U)
 /*! CPU1_MODE_REQUEST - Domain1 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_LPCG_STATUS1_CPU1_MODE_REQUEST(x)    (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU1_MODE_REQUEST_SHIFT)) & CCM_LPCG_STATUS1_CPU1_MODE_REQUEST_MASK)
 
 #define CCM_LPCG_STATUS1_CPU1_MODE_DONE_MASK     (0x80U)
 #define CCM_LPCG_STATUS1_CPU1_MODE_DONE_SHIFT    (7U)
 /*! CPU1_MODE_DONE - Domain1 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_LPCG_STATUS1_CPU1_MODE_DONE(x)       (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU1_MODE_DONE_SHIFT)) & CCM_LPCG_STATUS1_CPU1_MODE_DONE_MASK)
 
@@ -3587,16 +3590,16 @@ typedef struct {
 #define CCM_LPCG_STATUS1_CPU2_MODE_REQUEST_MASK  (0x400U)
 #define CCM_LPCG_STATUS1_CPU2_MODE_REQUEST_SHIFT (10U)
 /*! CPU2_MODE_REQUEST - Domain2 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_LPCG_STATUS1_CPU2_MODE_REQUEST(x)    (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU2_MODE_REQUEST_SHIFT)) & CCM_LPCG_STATUS1_CPU2_MODE_REQUEST_MASK)
 
 #define CCM_LPCG_STATUS1_CPU2_MODE_DONE_MASK     (0x800U)
 #define CCM_LPCG_STATUS1_CPU2_MODE_DONE_SHIFT    (11U)
 /*! CPU2_MODE_DONE - Domain2 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_LPCG_STATUS1_CPU2_MODE_DONE(x)       (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU2_MODE_DONE_SHIFT)) & CCM_LPCG_STATUS1_CPU2_MODE_DONE_MASK)
 
@@ -3613,16 +3616,16 @@ typedef struct {
 #define CCM_LPCG_STATUS1_CPU3_MODE_REQUEST_MASK  (0x4000U)
 #define CCM_LPCG_STATUS1_CPU3_MODE_REQUEST_SHIFT (14U)
 /*! CPU3_MODE_REQUEST - Domain3 request enter Low Power Mode
- *  0b1..Request from domain to enter Low Power Mode
  *  0b0..No request
+ *  0b1..Request from domain to enter Low Power Mode
  */
 #define CCM_LPCG_STATUS1_CPU3_MODE_REQUEST(x)    (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU3_MODE_REQUEST_SHIFT)) & CCM_LPCG_STATUS1_CPU3_MODE_REQUEST_MASK)
 
 #define CCM_LPCG_STATUS1_CPU3_MODE_DONE_MASK     (0x8000U)
 #define CCM_LPCG_STATUS1_CPU3_MODE_DONE_SHIFT    (15U)
 /*! CPU3_MODE_DONE - Domain3 Low Power Mode task done
- *  0b1..Clock is gated-off
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated-off
  */
 #define CCM_LPCG_STATUS1_CPU3_MODE_DONE(x)       (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_CPU3_MODE_DONE_SHIFT)) & CCM_LPCG_STATUS1_CPU3_MODE_DONE_MASK)
 
@@ -3639,32 +3642,32 @@ typedef struct {
 #define CCM_LPCG_STATUS1_SETPOINT_OFF_REQUEST_MASK (0x1000000U)
 #define CCM_LPCG_STATUS1_SETPOINT_OFF_REQUEST_SHIFT (24U)
 /*! SETPOINT_OFF_REQUEST - Clock gate turn off request from GPC Setpoint
- *  0b1..Clock gate requested to be turned off
  *  0b0..No request
+ *  0b1..Clock gate requested to be turned off
  */
 #define CCM_LPCG_STATUS1_SETPOINT_OFF_REQUEST(x) (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_SETPOINT_OFF_REQUEST_SHIFT)) & CCM_LPCG_STATUS1_SETPOINT_OFF_REQUEST_MASK)
 
 #define CCM_LPCG_STATUS1_SETPOINT_OFF_DONE_MASK  (0x2000000U)
 #define CCM_LPCG_STATUS1_SETPOINT_OFF_DONE_SHIFT (25U)
 /*! SETPOINT_OFF_DONE - Clock gate turn off finish from GPC Setpoint
- *  0b1..Clock gate is turned off
  *  0b0..Clock gate is not turned off
+ *  0b1..Clock gate is turned off
  */
 #define CCM_LPCG_STATUS1_SETPOINT_OFF_DONE(x)    (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_SETPOINT_OFF_DONE_SHIFT)) & CCM_LPCG_STATUS1_SETPOINT_OFF_DONE_MASK)
 
 #define CCM_LPCG_STATUS1_SETPOINT_ON_REQUEST_MASK (0x4000000U)
 #define CCM_LPCG_STATUS1_SETPOINT_ON_REQUEST_SHIFT (26U)
 /*! SETPOINT_ON_REQUEST - Clock gate turn on request from GPC Setpoint
- *  0b1..Clock gate requested to be turned on
  *  0b0..No request
+ *  0b1..Clock gate requested to be turned on
  */
 #define CCM_LPCG_STATUS1_SETPOINT_ON_REQUEST(x)  (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_SETPOINT_ON_REQUEST_SHIFT)) & CCM_LPCG_STATUS1_SETPOINT_ON_REQUEST_MASK)
 
 #define CCM_LPCG_STATUS1_SETPOINT_ON_DONE_MASK   (0x8000000U)
 #define CCM_LPCG_STATUS1_SETPOINT_ON_DONE_SHIFT  (27U)
 /*! SETPOINT_ON_DONE - Clock gate turn on finish from GPC Setpoint
- *  0b1..Clock gate is turned on
  *  0b0..Clock gate is not turned on
+ *  0b1..Clock gate is turned on
  */
 #define CCM_LPCG_STATUS1_SETPOINT_ON_DONE(x)     (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_STATUS1_SETPOINT_ON_DONE_SHIFT)) & CCM_LPCG_STATUS1_SETPOINT_ON_DONE_MASK)
 /*! @} */
@@ -3678,8 +3681,8 @@ typedef struct {
 #define CCM_LPCG_CONFIG_SETPOINT_PRESENT_MASK    (0x10U)
 #define CCM_LPCG_CONFIG_SETPOINT_PRESENT_SHIFT   (4U)
 /*! SETPOINT_PRESENT - Setpoint present
- *  0b1..Setpoint is implemented.
  *  0b0..Setpoint is not implemented.
+ *  0b1..Setpoint is implemented.
  */
 #define CCM_LPCG_CONFIG_SETPOINT_PRESENT(x)      (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_CONFIG_SETPOINT_PRESENT_SHIFT)) & CCM_LPCG_CONFIG_SETPOINT_PRESENT_MASK)
 /*! @} */
@@ -3693,8 +3696,8 @@ typedef struct {
 #define CCM_LPCG_AUTHEN_TZ_USER_MASK             (0x1U)
 #define CCM_LPCG_AUTHEN_TZ_USER_SHIFT            (0U)
 /*! TZ_USER - User access
- *  0b1..LPCG can be changed in user mode.
  *  0b0..LPCG cannot be changed in user mode.
+ *  0b1..LPCG can be changed in user mode.
  */
 #define CCM_LPCG_AUTHEN_TZ_USER(x)               (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_AUTHEN_TZ_USER_SHIFT)) & CCM_LPCG_AUTHEN_TZ_USER_MASK)
 
@@ -3730,24 +3733,24 @@ typedef struct {
 #define CCM_LPCG_AUTHEN_DOMAIN_MODE_MASK         (0x10000U)
 #define CCM_LPCG_AUTHEN_DOMAIN_MODE_SHIFT        (16U)
 /*! DOMAIN_MODE - Low power and access control by domain
- *  0b1..Clock works in Domain Mode
  *  0b0..Clock does not work in Domain Mode
+ *  0b1..Clock works in Domain Mode
  */
 #define CCM_LPCG_AUTHEN_DOMAIN_MODE(x)           (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_LPCG_AUTHEN_DOMAIN_MODE_MASK)
 
 #define CCM_LPCG_AUTHEN_SETPOINT_MODE_MASK       (0x20000U)
 #define CCM_LPCG_AUTHEN_SETPOINT_MODE_SHIFT      (17U)
 /*! SETPOINT_MODE - Low power and access control by Setpoint
- *  0b1..LPCG is functioning in Setpoint controlled Mode
  *  0b0..LPCG is not functioning in Setpoint controlled Mode
+ *  0b1..LPCG is functioning in Setpoint controlled Mode
  */
 #define CCM_LPCG_AUTHEN_SETPOINT_MODE(x)         (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_AUTHEN_SETPOINT_MODE_SHIFT)) & CCM_LPCG_AUTHEN_SETPOINT_MODE_MASK)
 
 #define CCM_LPCG_AUTHEN_CPULPM_MASK              (0x40000U)
 #define CCM_LPCG_AUTHEN_CPULPM_SHIFT             (18U)
 /*! CPULPM - CPU Low Power Mode
- *  0b1..LPCG is functioning in Low Power Mode
  *  0b0..LPCG is not functioning in Low power Mode
+ *  0b1..LPCG is functioning in Low Power Mode
  */
 #define CCM_LPCG_AUTHEN_CPULPM(x)                (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_AUTHEN_CPULPM_SHIFT)) & CCM_LPCG_AUTHEN_CPULPM_MASK)
 
@@ -3799,5 +3802,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CCM_H_ */
+#endif  /* PERI_CCM_H_ */
 

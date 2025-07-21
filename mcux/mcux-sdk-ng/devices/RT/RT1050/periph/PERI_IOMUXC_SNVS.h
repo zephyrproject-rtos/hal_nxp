@@ -10,14 +10,14 @@
 **                          MIMXRT1052DVL6B
 **                          MIMXRT105SDVL6B
 **
-**     Version:             rev. 1.4, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_SNVS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,21 +38,24 @@
 **         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **     - rev. 1.4 (2021-08-10)
 **         Update header files to align with IMXRT1050RM Rev.5.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_SNVS.h
- * @version 1.4
- * @date 2021-08-10
+ * @file PERI_IOMUXC_SNVS.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_SNVS
  *
  * CMSIS Peripheral Access Layer for IOMUXC_SNVS
  */
 
-#if !defined(IOMUXC_SNVS_H_)
-#define IOMUXC_SNVS_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_SNVS_H_)
+#define PERI_IOMUXC_SNVS_H_                      /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1051CVJ5B) || defined(CPU_MIMXRT1051CVL5B) || defined(CPU_MIMXRT1051DVJ6B) || defined(CPU_MIMXRT1051DVL6B))
 #include "MIMXRT1051_COMMON.h"
@@ -141,8 +144,8 @@ typedef struct {
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_WAKEUP_SION_MASK (0x10U)
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_WAKEUP_SION_SHIFT (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad WAKEUP
  *  0b0..Input Path is determined by functionality
+ *  0b1..Force input path of pad WAKEUP
  */
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_WAKEUP_SION(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_SW_MUX_CTL_PAD_WAKEUP_SION_SHIFT)) & IOMUXC_SNVS_SW_MUX_CTL_PAD_WAKEUP_SION_MASK)
 /*! @} */
@@ -161,8 +164,8 @@ typedef struct {
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_ON_REQ_SION_MASK (0x10U)
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_ON_REQ_SION_SHIFT (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad PMIC_ON_REQ
  *  0b0..Input Path is determined by functionality
+ *  0b1..Force input path of pad PMIC_ON_REQ
  */
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_ON_REQ_SION(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_ON_REQ_SION_SHIFT)) & IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_ON_REQ_SION_MASK)
 /*! @} */
@@ -181,8 +184,8 @@ typedef struct {
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_STBY_REQ_SION_MASK (0x10U)
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_STBY_REQ_SION_SHIFT (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad PMIC_STBY_REQ
  *  0b0..Input Path is determined by functionality
+ *  0b1..Force input path of pad PMIC_STBY_REQ
  */
 #define IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_STBY_REQ_SION(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_STBY_REQ_SION_SHIFT)) & IOMUXC_SNVS_SW_MUX_CTL_PAD_PMIC_STBY_REQ_SION_MASK)
 /*! @} */
@@ -673,5 +676,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_SNVS_H_ */
+#endif  /* PERI_IOMUXC_SNVS_H_ */
 

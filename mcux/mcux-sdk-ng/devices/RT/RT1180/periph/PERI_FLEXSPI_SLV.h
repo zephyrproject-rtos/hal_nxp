@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI_SLV
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXSPI_SLV.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_FLEXSPI_SLV.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXSPI_SLV
  *
  * CMSIS Peripheral Access Layer for FLEXSPI_SLV
  */
 
-#if !defined(FLEXSPI_SLV_H_)
-#define FLEXSPI_SLV_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXSPI_SLV_H_)
+#define PERI_FLEXSPI_SLV_H_                      /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -142,8 +167,8 @@ typedef struct {
 #define FLEXSPI_SLV_MODULE_CONTROL_SWRESET_MASK  (0x1U)
 #define FLEXSPI_SLV_MODULE_CONTROL_SWRESET_SHIFT (0U)
 /*! SWRESET - Software Reset
- *  0b1..Initiate
  *  0b0..Finished
+ *  0b1..Initiate
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_SWRESET(x)    (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_SWRESET_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_SWRESET_MASK)
 
@@ -160,72 +185,72 @@ typedef struct {
 #define FLEXSPI_SLV_MODULE_CONTROL_DQSSTOP_MASK  (0x8U)
 #define FLEXSPI_SLV_MODULE_CONTROL_DQSSTOP_SHIFT (3U)
 /*! DQSSTOP - DQS Stop Feature
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_DQSSTOP(x)    (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_DQSSTOP_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_DQSSTOP_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_CSMASK_MASK   (0x10U)
 #define FLEXSPI_SLV_MODULE_CONTROL_CSMASK_SHIFT  (4U)
 /*! CSMASK - Chip Select Mask
- *  0b1..Masked
  *  0b0..Not masked
+ *  0b1..Masked
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_CSMASK(x)     (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_CSMASK_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_CSMASK_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKREAD_MASK  (0x20U)
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKREAD_SHIFT (5U)
 /*! BLKREAD - Block Read
- *  0b1..Blocked
  *  0b0..Allowed
+ *  0b1..Blocked
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKREAD(x)    (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_BLKREAD_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_BLKREAD_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKWRITE_MASK (0x40U)
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKWRITE_SHIFT (6U)
 /*! BLKWRITE - Block Write
- *  0b1..Blocked
  *  0b0..Allowed
+ *  0b1..Blocked
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKWRITE(x)   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_BLKWRITE_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_BLKWRITE_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKNXTWR_MASK (0x80U)
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKNXTWR_SHIFT (7U)
 /*! BLKNXTWR - Block Next Write Command
- *  0b1..Blocked
  *  0b0..Allowed
+ *  0b1..Blocked
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKNXTWR(x)   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_BLKNXTWR_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_BLKNXTWR_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKNXTRD_MASK (0x100U)
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKNXTRD_SHIFT (8U)
 /*! BLKNXTRD - Block Next Read
- *  0b1..Blocked
  *  0b0..Allowed
+ *  0b1..Blocked
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_BLKNXTRD(x)   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_BLKNXTRD_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_BLKNXTRD_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_ALLOWONEWR_MASK (0x200U)
 #define FLEXSPI_SLV_MODULE_CONTROL_ALLOWONEWR_SHIFT (9U)
 /*! ALLOWONEWR - Allow One More Write
- *  0b1..Allowed
  *  0b0..Not allowed
+ *  0b1..Allowed
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_ALLOWONEWR(x) (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_ALLOWONEWR_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_ALLOWONEWR_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_ALLOWONERD_MASK (0x400U)
 #define FLEXSPI_SLV_MODULE_CONTROL_ALLOWONERD_SHIFT (10U)
 /*! ALLOWONERD - Allow One More Read
- *  0b1..Allowed
  *  0b0..Not allowed
+ *  0b1..Allowed
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_ALLOWONERD(x) (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_ALLOWONERD_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_ALLOWONERD_MASK)
 
 #define FLEXSPI_SLV_MODULE_CONTROL_CMDRANGEBASEUPDATE_MASK (0x800U)
 #define FLEXSPI_SLV_MODULE_CONTROL_CMDRANGEBASEUPDATE_SHIFT (11U)
 /*! CMDRANGEBASEUPDATE - AXI Command Range Base Update
- *  0b1..Updated
  *  0b0..Not updated
+ *  0b1..Updated
  */
 #define FLEXSPI_SLV_MODULE_CONTROL_CMDRANGEBASEUPDATE(x) (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_CONTROL_CMDRANGEBASEUPDATE_SHIFT)) & FLEXSPI_SLV_MODULE_CONTROL_CMDRANGEBASEUPDATE_MASK)
 /*! @} */
@@ -251,16 +276,16 @@ typedef struct {
 #define FLEXSPI_SLV_READ_COMMAND_CONTROL_RDOT_MASK (0x100U)
 #define FLEXSPI_SLV_READ_COMMAND_CONTROL_RDOT_SHIFT (8U)
 /*! RDOT - Read Outstanding
- *  0b1..Send requests outstandingly
  *  0b0..Send requests after previous leaders finish
+ *  0b1..Send requests outstandingly
  */
 #define FLEXSPI_SLV_READ_COMMAND_CONTROL_RDOT(x) (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_READ_COMMAND_CONTROL_RDOT_SHIFT)) & FLEXSPI_SLV_READ_COMMAND_CONTROL_RDOT_MASK)
 
 #define FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_MASK (0x200U)
 #define FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_SHIFT (9U)
 /*! WMEN - Read Water Mark Enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN(x) (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_SHIFT)) & FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_MASK)
 /*! @} */
@@ -354,32 +379,32 @@ typedef struct {
 #define FLEXSPI_SLV_MODULE_STATUS_WIP_MASK       (0x1U)
 #define FLEXSPI_SLV_MODULE_STATUS_WIP_SHIFT      (0U)
 /*! WIP - Write in Progress
- *  0b1..Busy
  *  0b0..Not busy
+ *  0b1..Busy
  */
 #define FLEXSPI_SLV_MODULE_STATUS_WIP(x)         (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_STATUS_WIP_SHIFT)) & FLEXSPI_SLV_MODULE_STATUS_WIP_MASK)
 
 #define FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_MASK (0x2U)
 #define FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_SHIFT (1U)
 /*! AXIREADIDLE - AXI Read Leader Idle
- *  0b1..Idle
  *  0b0..Busy
+ *  0b1..Idle
  */
 #define FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE(x) (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_SHIFT)) & FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_MASK)
 
 #define FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_MASK (0x4U)
 #define FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_SHIFT (2U)
 /*! REGRWIDLE - Register Read Write Idle
- *  0b1..Idle
  *  0b0..Busy
+ *  0b1..Idle
  */
 #define FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE(x)   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_SHIFT)) & FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_MASK)
 
 #define FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_MASK   (0x8U)
 #define FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_SHIFT  (3U)
 /*! SEQIDLE - SEQ Controller Idle
- *  0b1..Idle
  *  0b0..Busy
+ *  0b1..Idle
  */
 #define FLEXSPI_SLV_MODULE_STATUS_SEQIDLE(x)     (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_SHIFT)) & FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_MASK)
 
@@ -396,16 +421,16 @@ typedef struct {
 #define FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIRD_MASK (0x1000U)
 #define FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIRD_SHIFT (12U)
 /*! ALLOWAXIRD - Allow AXI Read Access
- *  0b1..Allowed
  *  0b0..Denied
+ *  0b1..Allowed
  */
 #define FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIRD(x)  (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIRD_SHIFT)) & FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIRD_MASK)
 
 #define FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIWR_MASK (0x2000U)
 #define FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIWR_SHIFT (13U)
 /*! ALLOWAXIWR - Allow AXI Write Access
- *  0b1..Allowed
  *  0b0..Denied
+ *  0b1..Allowed
  */
 #define FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIWR(x)  (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIWR_SHIFT)) & FLEXSPI_SLV_MODULE_STATUS_ALLOWAXIWR_MASK)
 /*! @} */
@@ -416,24 +441,24 @@ typedef struct {
 #define FLEXSPI_SLV_MODULE_INT_WOF_MASK          (0x1U)
 #define FLEXSPI_SLV_MODULE_INT_WOF_SHIFT         (0U)
 /*! WOF - Write Overflow Interrupt
- *  0b1..Occurred
  *  0b0..Did not occur
+ *  0b1..Occurred
  */
 #define FLEXSPI_SLV_MODULE_INT_WOF(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_INT_WOF_SHIFT)) & FLEXSPI_SLV_MODULE_INT_WOF_MASK)
 
 #define FLEXSPI_SLV_MODULE_INT_RUF_MASK          (0x2U)
 #define FLEXSPI_SLV_MODULE_INT_RUF_SHIFT         (1U)
 /*! RUF - Read Underflow
- *  0b1..Occurred
  *  0b0..Did not occur
+ *  0b1..Occurred
  */
 #define FLEXSPI_SLV_MODULE_INT_RUF(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_INT_RUF_SHIFT)) & FLEXSPI_SLV_MODULE_INT_RUF_MASK)
 
 #define FLEXSPI_SLV_MODULE_INT_ERRCMD_MASK       (0x4U)
 #define FLEXSPI_SLV_MODULE_INT_ERRCMD_SHIFT      (2U)
 /*! ERRCMD - Error Command
- *  0b1..Received
  *  0b0..Not received
+ *  0b1..Received
  */
 #define FLEXSPI_SLV_MODULE_INT_ERRCMD(x)         (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_INT_ERRCMD_SHIFT)) & FLEXSPI_SLV_MODULE_INT_ERRCMD_MASK)
 /*! @} */
@@ -444,24 +469,24 @@ typedef struct {
 #define FLEXSPI_SLV_MODULE_INTEN_WOFEN_MASK      (0x1U)
 #define FLEXSPI_SLV_MODULE_INTEN_WOFEN_SHIFT     (0U)
 /*! WOFEN - Write Overflow Interrupt Enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXSPI_SLV_MODULE_INTEN_WOFEN(x)        (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_INTEN_WOFEN_SHIFT)) & FLEXSPI_SLV_MODULE_INTEN_WOFEN_MASK)
 
 #define FLEXSPI_SLV_MODULE_INTEN_RUFEN_MASK      (0x2U)
 #define FLEXSPI_SLV_MODULE_INTEN_RUFEN_SHIFT     (1U)
 /*! RUFEN - Read Underflow Interrupt Enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXSPI_SLV_MODULE_INTEN_RUFEN(x)        (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_INTEN_RUFEN_SHIFT)) & FLEXSPI_SLV_MODULE_INTEN_RUFEN_MASK)
 
 #define FLEXSPI_SLV_MODULE_INTEN_ERRCMDEN_MASK   (0x4U)
 #define FLEXSPI_SLV_MODULE_INTEN_ERRCMDEN_SHIFT  (2U)
 /*! ERRCMDEN - Error Command Interrupt Enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXSPI_SLV_MODULE_INTEN_ERRCMDEN(x)     (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_MODULE_INTEN_ERRCMDEN_SHIFT)) & FLEXSPI_SLV_MODULE_INTEN_ERRCMDEN_MASK)
 /*! @} */
@@ -472,16 +497,16 @@ typedef struct {
 #define FLEXSPI_SLV_SPI_MAIL_CTRL_CLRINT_MASK    (0x1U)
 #define FLEXSPI_SLV_SPI_MAIL_CTRL_CLRINT_SHIFT   (0U)
 /*! CLRINT - Clear Interrupt
- *  0b1..Clear
  *  0b0..Do not clear
+ *  0b1..Clear
  */
 #define FLEXSPI_SLV_SPI_MAIL_CTRL_CLRINT(x)      (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_SPI_MAIL_CTRL_CLRINT_SHIFT)) & FLEXSPI_SLV_SPI_MAIL_CTRL_CLRINT_MASK)
 
 #define FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN_MASK  (0x2U)
 #define FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN_SHIFT (1U)
 /*! SPIINTEN - SPI Leader Interrupt Enable
- *  0b1..Enable
  *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN(x)    (((uint32_t)(((uint32_t)(x)) << FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN_SHIFT)) & FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN_MASK)
 /*! @} */
@@ -531,5 +556,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXSPI_SLV_H_ */
+#endif  /* PERI_FLEXSPI_SLV_H_ */
 

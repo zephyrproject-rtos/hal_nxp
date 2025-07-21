@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file BLK_CTRL_NS_AONMIX.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_BLK_CTRL_NS_AONMIX.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
  *
  * CMSIS Peripheral Access Layer for BLK_CTRL_NS_AONMIX
  */
 
-#if !defined(BLK_CTRL_NS_AONMIX_H_)
-#define BLK_CTRL_NS_AONMIX_H_                    /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_BLK_CTRL_NS_AONMIX_H_)
+#define PERI_BLK_CTRL_NS_AONMIX_H_               /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -153,256 +178,256 @@ typedef struct {
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN1_MASK (0x1U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN1_SHIFT (0U)
 /*! M33_CAN1 - Mask bit for CAN1 debug halted mode with M33 core
- *  0b1..CAN1 enters debug halted mode when CM33 is debug halted
  *  0b0..CAN1 does not enter debug halted mode with CM33
+ *  0b1..CAN1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_EDMA3_MASK (0x2U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_EDMA3_SHIFT (1U)
 /*! M33_EDMA3 - Mask bit for EDMA3 debug halted mode with M33 core
- *  0b1..EDMA3 enters debug halted mode when CM33 is debug halted
  *  0b0..EDMA3 does not enter debug halted mode with CM33
+ *  0b1..EDMA3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_EDMA3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_EDMA3_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_EDMA3_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C1_MASK (0x4U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C1_SHIFT (2U)
 /*! M33_LPI2C1 - Mask bit for LPI2C1 debug halted mode with M33 core
- *  0b1..LPI2C1 enters debug halted mode when CM33 is debug halted
  *  0b0..LPI2C1 does not enter debug halted mode with CM33
+ *  0b1..LPI2C1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C2_MASK (0x8U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C2_SHIFT (3U)
 /*! M33_LPI2C2 - Mask bit for LPI2C2 debug halted mode with M33 core
- *  0b1..LPI2C2 enters debug halted mode when CM33 is debug halted
  *  0b0..LPI2C2 does not enter debug halted mode with CM33
+ *  0b1..LPI2C2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPI2C2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPIT1_MASK (0x10U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPIT1_SHIFT (4U)
 /*! M33_LPIT1 - Mask bit for LPIT1 debug halted mode with M33 core
- *  0b1..LPIT1 enters debug halted mode when CM33 is debug halted
  *  0b0..LPIT1 does not enter debug halted mode with CM33
+ *  0b1..LPIT1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPIT1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPIT1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPIT1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI1_MASK (0x20U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI1_SHIFT (5U)
 /*! M33_LPSPI1 - Mask bit for LPSPI1 debug halted mode with M33 core
- *  0b1..LPSPI1 enters debug halted mode when CM33 is debug halted
  *  0b0..LPSPI1 does not enter debug halted mode with CM33
+ *  0b1..LPSPI1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI2_MASK (0x40U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI2_SHIFT (6U)
 /*! M33_LPSPI2 - Mask bit for LPSPI2 debug halted mode with M33 core
- *  0b1..LPSPI2 enters debug halted mode when CM33 is debug halted
  *  0b0..LPSPI2 does not enter debug halted mode with CM33
+ *  0b1..LPSPI2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPSPI2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPTMR1_MASK (0x80U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPTMR1_SHIFT (7U)
 /*! M33_LPTMR1 - Mask bit for LPTMR1 debug halted mode with M33 core
- *  0b1..LPTMR1 enters debug halted mode when CM33 is debug halted
  *  0b0..LPTMR1 does not enter debug halted mode with CM33
+ *  0b1..LPTMR1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPTMR1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPTMR1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_LPTMR1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_SAI1_MASK (0x100U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_SAI1_SHIFT (8U)
 /*! M33_SAI1 - Mask bit for SAI1 debug halted mode with M33 core
- *  0b1..SAI1 enters debug halted mode when CM33 is debug halted
  *  0b0..SAI1 does not enter debug halted mode with CM33
+ *  0b1..SAI1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_SAI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_SAI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_SAI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM1_MASK (0x200U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM1_SHIFT (9U)
 /*! M33_TPM1 - Mask bit for TPM1 debug halted mode with M33 core
- *  0b1..TPM1 enters debug halted mode when CM33 is debug halted
  *  0b0..TPM1 does not enter debug halted mode with CM33
+ *  0b1..TPM1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM2_MASK (0x400U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM2_SHIFT (10U)
 /*! M33_TPM2 - Mask bit for TPM2 debug halted mode with M33 core
- *  0b1..TPM2 enters debug halted mode when CM33 is debug halted
  *  0b0..TPM2 does not enter debug halted mode with CM33
+ *  0b1..TPM2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_TPM2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG1_MASK (0x800U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG1_SHIFT (11U)
 /*! M33_WDOG1 - Mask bit for WDOG1 debug halted mode with M33 core
- *  0b1..WDOG1 enters debug halted mode when CM33 is debug halted
  *  0b0..WDOG1 does not enter debug halted mode with CM33
+ *  0b1..WDOG1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG2_MASK (0x1000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG2_SHIFT (12U)
 /*! M33_WDOG2 - Mask bit for WDOG2 debug halted mode with M33 core
- *  0b1..WDOG2 enters debug halted mode when CM33 is debug halted
  *  0b0..WDOG2 does not enter debug halted mode with CM33
+ *  0b1..WDOG2 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_WDOG2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_GPT1_MASK (0x2000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_GPT1_SHIFT (13U)
 /*! M33_GPT1 - Mask bit for GPT1 debug halted mode with M33 core
- *  0b1..GPT1 enters debug halted mode when CM33 is debug halted
  *  0b0..GPT1 does not enter debug halted mode with CM33
+ *  0b1..GPT1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_GPT1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_GPT1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_GPT1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN3_MASK (0x4000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN3_SHIFT (14U)
 /*! M33_CAN3 - Mask bit for CAN3 debug halted mode with M33 core
- *  0b1..CAN3 enters debug halted mode when CM33 is debug halted
  *  0b0..CAN3 does not enter debug halted mode with CM33
+ *  0b1..CAN3 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN3_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_CAN3_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_I3C1_MASK (0x8000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_I3C1_SHIFT (15U)
 /*! M33_I3C1 - Mask bit for I3C1 debug halted mode with M33 core
- *  0b1..I3C1 enters debug halted mode when CM33 is debug halted
  *  0b0..I3C1 does not enter debug halted mode with CM33
+ *  0b1..I3C1 enters debug halted mode when CM33 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_I3C1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_I3C1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M33_I3C1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN1_MASK (0x10000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN1_SHIFT (16U)
 /*! M7_CAN1 - Mask bit for CAN1 debug halted mode with M7 core
- *  0b1..CAN1 enters debug halted mode when CM7 is debug halted
  *  0b0..CAN1 does not enter debug halted mode with CM7
+ *  0b1..CAN1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN1(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_EDMA3_MASK (0x20000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_EDMA3_SHIFT (17U)
 /*! M7_EDMA3 - Mask bit for EDMA3 debug halted mode with M7 core
- *  0b1..EDMA3 enters debug halted mode when CM7 is debug halted
  *  0b0..EDMA3 does not enter debug halted mode with CM7
+ *  0b1..EDMA3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_EDMA3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_EDMA3_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_EDMA3_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C1_MASK (0x40000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C1_SHIFT (18U)
 /*! M7_LPI2C1 - Mask bit for LPI2C1 debug halted mode with M7 core
- *  0b1..LPI2C1 enters debug halted mode when CM7 is debug halted
  *  0b0..LPI2C1 does not enter debug halted mode with CM7
+ *  0b1..LPI2C1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C2_MASK (0x80000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C2_SHIFT (19U)
 /*! M7_LPI2C2 - Mask bit for LPI2C2 debug halted mode with M7 core
- *  0b1..LPI2C2 enters debug halted mode when CM7 is debug halted
  *  0b0..LPI2C2 does not enter debug halted mode with CM7
+ *  0b1..LPI2C2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPI2C2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPIT1_MASK (0x100000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPIT1_SHIFT (20U)
 /*! M7_LPIT1 - Mask bit for LPIT1 debug halted mode with M7 core
- *  0b1..LPIT1 enters debug halted mode when CM7 is debug halted
  *  0b0..LPIT1 does not enter debug halted mode with CM7
+ *  0b1..LPIT1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPIT1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPIT1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPIT1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI1_MASK (0x200000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI1_SHIFT (21U)
 /*! M7_LPSPI1 - Mask bit for LPSPI1 debug halted mode with M7 core
- *  0b1..LPSPI1 enters debug halted mode when CM7 is debug halted
  *  0b0..LPSPI1 does not enter debug halted mode with CM7
+ *  0b1..LPSPI1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI2_MASK (0x400000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI2_SHIFT (22U)
 /*! M7_LPSPI2 - Mask bit for LPSPI2 debug halted mode with M7 core
- *  0b1..LPSPI2 enters debug halted mode when CM7 is debug halted
  *  0b0..LPSPI2 does not enter debug halted mode with CM7
+ *  0b1..LPSPI2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPSPI2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPTMR1_MASK (0x800000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPTMR1_SHIFT (23U)
 /*! M7_LPTMR1 - Mask bit for LPTMR1 debug halted mode with M7 core
- *  0b1..LPTMR1 enters debug halted mode when CM7 is debug halted
  *  0b0..LPTMR1 does not enter debug halted mode with CM7
+ *  0b1..LPTMR1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPTMR1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPTMR1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_LPTMR1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_SAI1_MASK (0x1000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_SAI1_SHIFT (24U)
 /*! M7_SAI1 - Mask bit for SAI1 debug halted mode with M7 core
- *  0b1..SAI1 enters debug halted mode when CM7 is debug halted
  *  0b0..SAI1 does not enter debug halted mode with CM7
+ *  0b1..SAI1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_SAI1(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_SAI1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_SAI1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM1_MASK (0x2000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM1_SHIFT (25U)
 /*! M7_TPM1 - Mask bit for TPM1 debug halted mode with M7 core
- *  0b1..TPM1 enters debug halted mode when CM7 is debug halted
  *  0b0..TPM1 does not enter debug halted mode with CM7
+ *  0b1..TPM1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM1(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM2_MASK (0x4000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM2_SHIFT (26U)
 /*! M7_TPM2 - Mask bit for TPM2 debug halted mode with M7 core
- *  0b1..TPM2 enters debug halted mode when CM7 is debug halted
  *  0b0..TPM2 does not enter debug halted mode with CM7
+ *  0b1..TPM2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM2(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_TPM2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG1_MASK (0x8000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG1_SHIFT (27U)
 /*! M7_WDOG1 - Mask bit for WDOG1 debug halted mode with M7 core
- *  0b1..WDOG1 enters debug halted mode when CM7 is debug halted
  *  0b0..WDOG1 does not enter debug halted mode with CM7
+ *  0b1..WDOG1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG2_MASK (0x10000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG2_SHIFT (28U)
 /*! M7_WDOG2 - Mask bit for WDOG2 debug halted mode with M7 core
- *  0b1..WDOG2 enters debug halted mode when CM7 is debug halted
  *  0b0..WDOG2 does not enter debug halted mode with CM7
+ *  0b1..WDOG2 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG2_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_WDOG2_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_GPT1_MASK (0x20000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_GPT1_SHIFT (29U)
 /*! M7_GPT1 - Mask bit for GPT1 debug halted mode with M7 core
- *  0b1..GPT1 enters debug halted mode when CM7 is debug halted
  *  0b0..GPT1 does not enter debug halted mode with CM7
+ *  0b1..GPT1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_GPT1(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_GPT1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_GPT1_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN3_MASK (0x40000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN3_SHIFT (30U)
 /*! M7_CAN3 - Mask bit for CAN3 debug halted mode with M7 core
- *  0b1..CAN3 enters debug halted mode when CM7 is debug halted
  *  0b0..CAN3 does not enter debug halted mode with CM7
+ *  0b1..CAN3 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN3(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN3_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_CAN3_MASK)
 
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_I3C1_MASK (0x80000000U)
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_I3C1_SHIFT (31U)
 /*! M7_I3C1 - Mask bit for I3C1 debug halted mode with M7 core
- *  0b1..I3C1 enters debug halted mode when CM7 is debug halted
  *  0b0..I3C1 does not enter debug halted mode with CM7
+ *  0b1..I3C1 enters debug halted mode when CM7 is debug halted
  */
 #define BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_I3C1(x)  (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_I3C1_SHIFT)) & BLK_CTRL_NS_AONMIX_IPG_DEBUG_M7_I3C1_MASK)
 /*! @} */
@@ -453,24 +478,24 @@ typedef struct {
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_IN_LOW_VOL_MASK (0x10000U)
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_IN_LOW_VOL_SHIFT (16U)
 /*! DCDC_IN_LOW_VOL - DCDC_IN low voltage detect
- *  0b1..Voltage on DCDC_IN is lower than 2.6V
  *  0b0..Voltage on DCDC_IN is higher than 2.6V
+ *  0b1..Voltage on DCDC_IN is lower than 2.6V
  */
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_IN_LOW_VOL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_IN_LOW_VOL_SHIFT)) & BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_IN_LOW_VOL_MASK)
 
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_CUR_MASK (0x20000U)
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_CUR_SHIFT (17U)
 /*! DCDC_OVER_CUR - DCDC output over current alert
- *  0b1..Overcurrent on DCDC output
  *  0b0..No Overcurrent on DCDC output
+ *  0b1..Overcurrent on DCDC output
  */
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_CUR(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_CUR_SHIFT)) & BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_CUR_MASK)
 
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_VOL_MASK (0x40000U)
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_VOL_SHIFT (18U)
 /*! DCDC_OVER_VOL - DCDC output over voltage alert
- *  0b1..Overvoltage on DCDC VDDLP0 or VDDLP8 output
  *  0b0..No Overvoltage on DCDC VDDLP0 or VDDLP8 output
+ *  0b1..Overvoltage on DCDC VDDLP0 or VDDLP8 output
  */
 #define BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_VOL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_VOL_SHIFT)) & BLK_CTRL_NS_AONMIX_DCDC_STATUS_DCDC_OVER_VOL_MASK)
 
@@ -489,24 +514,24 @@ typedef struct {
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_MASK (0x1U)
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_SHIFT (0U)
 /*! OSCCA_FUSE_READ_DIS - Fuse read disable flag
- *  0b1..Read is not allowed
  *  0b0..Read is allowed
+ *  0b1..Read is not allowed
  */
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_SHIFT)) & BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OSCCA_FUSE_READ_DIS_MASK)
 
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_CALIBRATED_MASK (0x2U)
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_CALIBRATED_SHIFT (1U)
 /*! OCOTP_CALIBRATED - Fuse calibrate flag
- *  0b1..OCOTP is calibrated
  *  0b0..OCOTP is not calibrated
+ *  0b1..OCOTP is calibrated
  */
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_CALIBRATED(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_CALIBRATED_SHIFT)) & BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_CALIBRATED_MASK)
 
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_BUSY_MASK (0x4U)
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_BUSY_SHIFT (2U)
 /*! OCOTP_BUSY - OCOTP busy flag
- *  0b1..OCOTP is busy
  *  0b0..OCOTP is not busy
+ *  0b1..OCOTP is busy
  */
 #define BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_BUSY(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_BUSY_SHIFT)) & BLK_CTRL_NS_AONMIX_FUSE_ACC_DIS_OCOTP_BUSY_MASK)
 /*! @} */
@@ -593,5 +618,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* BLK_CTRL_NS_AONMIX_H_ */
+#endif  /* PERI_BLK_CTRL_NS_AONMIX_H_ */
 

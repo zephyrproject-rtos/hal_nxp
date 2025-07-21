@@ -9,15 +9,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240705
+**     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT633S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT633S.h
- * @version 2.0
- * @date 2019-11-12
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT633S
  *
  * CMSIS Peripheral Access Layer for MIMXRT633S
@@ -57,6 +60,7 @@
 #include "PERI_CTIMER.h"
 #include "PERI_DMA.h"
 #include "PERI_DMIC.h"
+#include "PERI_ESPI.h"
 #include "PERI_FLEXCOMM.h"
 #include "PERI_FLEXSPI.h"
 #include "PERI_FREQME.h"

@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file I2S.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_I2S.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for I2S
  *
  * CMSIS Peripheral Access Layer for I2S
  */
 
-#if !defined(I2S_H_)
-#define I2S_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_I2S_H_)
+#define PERI_I2S_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -305,30 +308,30 @@ typedef struct {
 #define I2S_TCSR_FEF_MASK                        (0x40000U)
 #define I2S_TCSR_FEF_SHIFT                       (18U)
 /*! FEF - FIFO Error Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define I2S_TCSR_FEF(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCSR_FEF_SHIFT)) & I2S_TCSR_FEF_MASK)
 
 #define I2S_TCSR_SEF_MASK                        (0x80000U)
 #define I2S_TCSR_SEF_SHIFT                       (19U)
 /*! SEF - Sync Error Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define I2S_TCSR_SEF(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCSR_SEF_SHIFT)) & I2S_TCSR_SEF_MASK)
 
 #define I2S_TCSR_WSF_MASK                        (0x100000U)
 #define I2S_TCSR_WSF_SHIFT                       (20U)
 /*! WSF - Word Start Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define I2S_TCSR_WSF(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCSR_WSF_SHIFT)) & I2S_TCSR_WSF_MASK)
 
@@ -431,9 +434,9 @@ typedef struct {
 #define I2S_TCR2_MSEL_SHIFT                      (26U)
 /*! MSEL - MCLK Select
  *  0b00..Bus clock
- *  0b01..Controller clock (MCLK) option 1
- *  0b10..Controller clock (MCLK) option 2
- *  0b11..Controller clock (MCLK) option 3
+ *  0b01..Audio clock (MCLK) option 1
+ *  0b10..Audio clock (MCLK) option 2
+ *  0b11..Audio clock (MCLK) option 3
  */
 #define I2S_TCR2_MSEL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_TCR2_MSEL_SHIFT)) & I2S_TCR2_MSEL_MASK)
 
@@ -777,30 +780,30 @@ typedef struct {
 #define I2S_RCSR_FEF_MASK                        (0x40000U)
 #define I2S_RCSR_FEF_SHIFT                       (18U)
 /*! FEF - FIFO Error Flag
- *  0b0..No error
  *  0b0..No effect
- *  0b1..Receive overflow detected
+ *  0b0..No error
  *  0b1..Clear the flag
+ *  0b1..Receive overflow detected
  */
 #define I2S_RCSR_FEF(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCSR_FEF_SHIFT)) & I2S_RCSR_FEF_MASK)
 
 #define I2S_RCSR_SEF_MASK                        (0x80000U)
 #define I2S_RCSR_SEF_SHIFT                       (19U)
 /*! SEF - Sync Error Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define I2S_RCSR_SEF(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCSR_SEF_SHIFT)) & I2S_RCSR_SEF_MASK)
 
 #define I2S_RCSR_WSF_MASK                        (0x100000U)
 #define I2S_RCSR_WSF_SHIFT                       (20U)
 /*! WSF - Word Start Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define I2S_RCSR_WSF(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCSR_WSF_SHIFT)) & I2S_RCSR_WSF_MASK)
 
@@ -903,9 +906,9 @@ typedef struct {
 #define I2S_RCR2_MSEL_SHIFT                      (26U)
 /*! MSEL - MCLK Select
  *  0b00..Bus clock
- *  0b01..Controller clock (MCLK) option 1
- *  0b10..Controller clock (MCLK) option 2
- *  0b11..Controller clock (MCLK) option 3
+ *  0b01..Audio clock (MCLK) option 1
+ *  0b10..Audio clock (MCLK) option 2
+ *  0b11..Audio clock (MCLK) option 3
  */
 #define I2S_RCR2_MSEL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_RCR2_MSEL_SHIFT)) & I2S_RCR2_MSEL_MASK)
 
@@ -1197,10 +1200,10 @@ typedef struct {
 #define I2S_MCR_MSEL_MASK                        (0x3000000U)
 #define I2S_MCR_MSEL_SHIFT                       (24U)
 /*! MSEL - MCLK Select
- *  0b00..Controller clock (MCLK) option 1
+ *  0b00..Audio clock (MCLK) option 1
  *  0b01..Reserved
- *  0b10..Controller clock (MCLK) option 2
- *  0b11..Controller clock (MCLK) option 3
+ *  0b10..Audio clock (MCLK) option 2
+ *  0b11..Audio clock (MCLK) option 3
  */
 #define I2S_MCR_MSEL(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_MCR_MSEL_SHIFT)) & I2S_MCR_MSEL_MASK)
 
@@ -1249,5 +1252,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* I2S_H_ */
+#endif  /* PERI_I2S_H_ */
 

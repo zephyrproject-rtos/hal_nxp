@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PVTS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PVTS.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_PVTS.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PVTS
  *
  * CMSIS Peripheral Access Layer for PVTS
  */
 
-#if !defined(PVTS_H_)
-#define PVTS_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PVTS_H_)
+#define PERI_PVTS_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -137,16 +140,11 @@
 /** PVTS - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x80 */
-    __IO uint32_t RED_DEL_CTRL;                      /**< Red Delay Control, array offset: 0x0, array step: 0x80 */
-         uint8_t RESERVED_0[8];
-    __IO uint32_t RED_ALERT_CNT;                     /**< Red Alert Counter, array offset: 0xC, array step: 0x80 */
-    __IO uint32_t RED_ALERT_CNT_CTRL;                /**< Red Alert Counter Control, array offset: 0x10, array step: 0x80 */
-         uint8_t RESERVED_1[12];
-    __IO uint32_t AMBER_DEL_CTRL;                    /**< Amber Delay Control, array offset: 0x20, array step: 0x80 */
-    __IO uint32_t AMBER_RING_OSC_CTRL;               /**< Amber Ring OSC Control, array offset: 0x24, array step: 0x80 */
-    __I  uint32_t AMBER_RING_CNT;                    /**< Amber Ring OSC Counter, array offset: 0x28, array step: 0x80 */
-    __IO uint32_t AMBER_ALERT_CNT;                   /**< Amber Alert Counter, array offset: 0x2C, array step: 0x80 */
-    __IO uint32_t AMBER_ALERT_CNT_CTRL;              /**< Amber Alert Counter Control, array offset: 0x30, array step: 0x80 */
+         uint8_t RESERVED_0[32];
+    __IO uint32_t DEL_CTRL;                          /**< Delay Control, array offset: 0x20, array step: 0x80 */
+         uint8_t RESERVED_1[8];
+    __IO uint32_t ALERT_CNT;                         /**< Alert Counter, array offset: 0x2C, array step: 0x80 */
+    __IO uint32_t ALERT_CNT_CTRL;                    /**< Alert Counter Control, array offset: 0x30, array step: 0x80 */
          uint8_t RESERVED_2[76];
   } PVT[PVTS_PVT_COUNT];
 } PVTS_Type;
@@ -160,136 +158,49 @@ typedef struct {
  * @{
  */
 
-/*! @name RED_DEL_CTRL - Red Delay Control */
+/*! @name DEL_CTRL - Delay Control */
 /*! @{ */
 
-#define PVTS_RED_DEL_CTRL_DELAY0_MASK            (0x1FU)
-#define PVTS_RED_DEL_CTRL_DELAY0_SHIFT           (0U)
-/*! DELAY0 - Red Delay Section 0 */
-#define PVTS_RED_DEL_CTRL_DELAY0(x)              (((uint32_t)(((uint32_t)(x)) << PVTS_RED_DEL_CTRL_DELAY0_SHIFT)) & PVTS_RED_DEL_CTRL_DELAY0_MASK)
+#define PVTS_DEL_CTRL_DELAY0_MASK                (0x1FU)
+#define PVTS_DEL_CTRL_DELAY0_SHIFT               (0U)
+/*! DELAY0 - Delay Section 0 */
+#define PVTS_DEL_CTRL_DELAY0(x)                  (((uint32_t)(((uint32_t)(x)) << PVTS_DEL_CTRL_DELAY0_SHIFT)) & PVTS_DEL_CTRL_DELAY0_MASK)
 
-#define PVTS_RED_DEL_CTRL_DELAY1_MASK            (0x3E0U)
-#define PVTS_RED_DEL_CTRL_DELAY1_SHIFT           (5U)
-/*! DELAY1 - Red Delay Section 1 */
-#define PVTS_RED_DEL_CTRL_DELAY1(x)              (((uint32_t)(((uint32_t)(x)) << PVTS_RED_DEL_CTRL_DELAY1_SHIFT)) & PVTS_RED_DEL_CTRL_DELAY1_MASK)
+#define PVTS_DEL_CTRL_DELAY1_MASK                (0x3E0U)
+#define PVTS_DEL_CTRL_DELAY1_SHIFT               (5U)
+/*! DELAY1 - Delay Section 1 */
+#define PVTS_DEL_CTRL_DELAY1(x)                  (((uint32_t)(((uint32_t)(x)) << PVTS_DEL_CTRL_DELAY1_SHIFT)) & PVTS_DEL_CTRL_DELAY1_MASK)
 /*! @} */
 
-/* The count of PVTS_RED_DEL_CTRL */
-#define PVTS_RED_DEL_CTRL_COUNT                  (2U)
+/* The count of PVTS_DEL_CTRL */
+#define PVTS_DEL_CTRL_COUNT                      (2U)
 
-/*! @name RED_ALERT_CNT - Red Alert Counter */
+/*! @name ALERT_CNT - Alert Counter */
 /*! @{ */
 
-#define PVTS_RED_ALERT_CNT_CNT_MASK              (0xFFFFFU)
-#define PVTS_RED_ALERT_CNT_CNT_SHIFT             (0U)
+#define PVTS_ALERT_CNT_CNT_MASK                  (0xFFFFFU)
+#define PVTS_ALERT_CNT_CNT_SHIFT                 (0U)
 /*! CNT - Counter */
-#define PVTS_RED_ALERT_CNT_CNT(x)                (((uint32_t)(((uint32_t)(x)) << PVTS_RED_ALERT_CNT_CNT_SHIFT)) & PVTS_RED_ALERT_CNT_CNT_MASK)
+#define PVTS_ALERT_CNT_CNT(x)                    (((uint32_t)(((uint32_t)(x)) << PVTS_ALERT_CNT_CNT_SHIFT)) & PVTS_ALERT_CNT_CNT_MASK)
 /*! @} */
 
-/* The count of PVTS_RED_ALERT_CNT */
-#define PVTS_RED_ALERT_CNT_COUNT                 (2U)
+/* The count of PVTS_ALERT_CNT */
+#define PVTS_ALERT_CNT_COUNT                     (2U)
 
-/*! @name RED_ALERT_CNT_CTRL - Red Alert Counter Control */
+/*! @name ALERT_CNT_CTRL - Alert Counter Control */
 /*! @{ */
 
-#define PVTS_RED_ALERT_CNT_CTRL_CNTEN_MASK       (0x1U)
-#define PVTS_RED_ALERT_CNT_CTRL_CNTEN_SHIFT      (0U)
+#define PVTS_ALERT_CNT_CTRL_CNTEN_MASK           (0x1U)
+#define PVTS_ALERT_CNT_CTRL_CNTEN_SHIFT          (0U)
 /*! CNTEN - Counter Enable
  *  0b0..Disables
  *  0b1..Enables
  */
-#define PVTS_RED_ALERT_CNT_CTRL_CNTEN(x)         (((uint32_t)(((uint32_t)(x)) << PVTS_RED_ALERT_CNT_CTRL_CNTEN_SHIFT)) & PVTS_RED_ALERT_CNT_CTRL_CNTEN_MASK)
+#define PVTS_ALERT_CNT_CTRL_CNTEN(x)             (((uint32_t)(((uint32_t)(x)) << PVTS_ALERT_CNT_CTRL_CNTEN_SHIFT)) & PVTS_ALERT_CNT_CTRL_CNTEN_MASK)
 /*! @} */
 
-/* The count of PVTS_RED_ALERT_CNT_CTRL */
-#define PVTS_RED_ALERT_CNT_CTRL_COUNT            (2U)
-
-/*! @name AMBER_DEL_CTRL - Amber Delay Control */
-/*! @{ */
-
-#define PVTS_AMBER_DEL_CTRL_DELAY0_MASK          (0x1FU)
-#define PVTS_AMBER_DEL_CTRL_DELAY0_SHIFT         (0U)
-/*! DELAY0 - Amber Delay Section 0 */
-#define PVTS_AMBER_DEL_CTRL_DELAY0(x)            (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_DEL_CTRL_DELAY0_SHIFT)) & PVTS_AMBER_DEL_CTRL_DELAY0_MASK)
-
-#define PVTS_AMBER_DEL_CTRL_DELAY1_MASK          (0x3E0U)
-#define PVTS_AMBER_DEL_CTRL_DELAY1_SHIFT         (5U)
-/*! DELAY1 - Amber Delay Section 1 */
-#define PVTS_AMBER_DEL_CTRL_DELAY1(x)            (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_DEL_CTRL_DELAY1_SHIFT)) & PVTS_AMBER_DEL_CTRL_DELAY1_MASK)
-/*! @} */
-
-/* The count of PVTS_AMBER_DEL_CTRL */
-#define PVTS_AMBER_DEL_CTRL_COUNT                (2U)
-
-/*! @name AMBER_RING_OSC_CTRL - Amber Ring OSC Control */
-/*! @{ */
-
-#define PVTS_AMBER_RING_OSC_CTRL_RINGOSCEN_MASK  (0x1U)
-#define PVTS_AMBER_RING_OSC_CTRL_RINGOSCEN_SHIFT (0U)
-/*! RINGOSCEN - Amber Ring Enable
- *  0b0..Disables
- *  0b1..Enables
- */
-#define PVTS_AMBER_RING_OSC_CTRL_RINGOSCEN(x)    (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_RING_OSC_CTRL_RINGOSCEN_SHIFT)) & PVTS_AMBER_RING_OSC_CTRL_RINGOSCEN_MASK)
-
-#define PVTS_AMBER_RING_OSC_CTRL_CNTEN_MASK      (0x2U)
-#define PVTS_AMBER_RING_OSC_CTRL_CNTEN_SHIFT     (1U)
-/*! CNTEN - Amber Ring OSC Counter Enable
- *  0b0..Disables
- *  0b1..Enables
- */
-#define PVTS_AMBER_RING_OSC_CTRL_CNTEN(x)        (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_RING_OSC_CTRL_CNTEN_SHIFT)) & PVTS_AMBER_RING_OSC_CTRL_CNTEN_MASK)
-
-#define PVTS_AMBER_RING_OSC_CTRL_CNTRST_MASK     (0x4U)
-#define PVTS_AMBER_RING_OSC_CTRL_CNTRST_SHIFT    (2U)
-/*! CNTRST - Amber Ring OSC Counter Reset
- *  0b0..Not resets
- *  0b1..Resets
- */
-#define PVTS_AMBER_RING_OSC_CTRL_CNTRST(x)       (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_RING_OSC_CTRL_CNTRST_SHIFT)) & PVTS_AMBER_RING_OSC_CTRL_CNTRST_MASK)
-/*! @} */
-
-/* The count of PVTS_AMBER_RING_OSC_CTRL */
-#define PVTS_AMBER_RING_OSC_CTRL_COUNT           (2U)
-
-/*! @name AMBER_RING_CNT - Amber Ring OSC Counter */
-/*! @{ */
-
-#define PVTS_AMBER_RING_CNT_CNT_MASK             (0xFFFFFFFFU)
-#define PVTS_AMBER_RING_CNT_CNT_SHIFT            (0U)
-/*! CNT - Counter */
-#define PVTS_AMBER_RING_CNT_CNT(x)               (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_RING_CNT_CNT_SHIFT)) & PVTS_AMBER_RING_CNT_CNT_MASK)
-/*! @} */
-
-/* The count of PVTS_AMBER_RING_CNT */
-#define PVTS_AMBER_RING_CNT_COUNT                (2U)
-
-/*! @name AMBER_ALERT_CNT - Amber Alert Counter */
-/*! @{ */
-
-#define PVTS_AMBER_ALERT_CNT_CNT_MASK            (0xFFFFFU)
-#define PVTS_AMBER_ALERT_CNT_CNT_SHIFT           (0U)
-/*! CNT - Counter */
-#define PVTS_AMBER_ALERT_CNT_CNT(x)              (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_ALERT_CNT_CNT_SHIFT)) & PVTS_AMBER_ALERT_CNT_CNT_MASK)
-/*! @} */
-
-/* The count of PVTS_AMBER_ALERT_CNT */
-#define PVTS_AMBER_ALERT_CNT_COUNT               (2U)
-
-/*! @name AMBER_ALERT_CNT_CTRL - Amber Alert Counter Control */
-/*! @{ */
-
-#define PVTS_AMBER_ALERT_CNT_CTRL_CNTEN_MASK     (0x1U)
-#define PVTS_AMBER_ALERT_CNT_CTRL_CNTEN_SHIFT    (0U)
-/*! CNTEN - Counter Enable
- *  0b0..Disables
- *  0b1..Enables
- */
-#define PVTS_AMBER_ALERT_CNT_CTRL_CNTEN(x)       (((uint32_t)(((uint32_t)(x)) << PVTS_AMBER_ALERT_CNT_CTRL_CNTEN_SHIFT)) & PVTS_AMBER_ALERT_CNT_CTRL_CNTEN_MASK)
-/*! @} */
-
-/* The count of PVTS_AMBER_ALERT_CNT_CTRL */
-#define PVTS_AMBER_ALERT_CNT_CTRL_COUNT          (2U)
+/* The count of PVTS_ALERT_CNT_CTRL */
+#define PVTS_ALERT_CNT_CTRL_COUNT                (2U)
 
 
 /*!
@@ -327,5 +238,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PVTS_H_ */
+#endif  /* PERI_PVTS_H_ */
 

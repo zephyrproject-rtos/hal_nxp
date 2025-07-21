@@ -3,17 +3,18 @@
 **     Processors:          MIMXRT685SFAWBR_dsp
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_dsp
+**                          MIMXRT685SVFVKB_dsp
 **
 **     Compiler:            Xtensa Compiler
-**     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240823
+**     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT685S_dsp
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -24,14 +25,17 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT685S_dsp_COMMON.h
- * @version 2.0
- * @date 2019-11-12
+ * @version 3.0
+ * @date 2024-10-29
  * @brief Peripheral Access Layer for MIMXRT685S_dsp
  *
  * Peripheral Access Layer for MIMXRT685S_dsp
@@ -42,7 +46,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -91,14 +95,12 @@ typedef enum IRQn {
   /* Auxiliary constants */
   NotAvail_IRQn                = -128,             /**< Not available device specific interrupt */
 
-  /* Core interrupts */
+  /* Device specific interrupts */
   NonMaskableInt_IRQn          = 0,                /**< SysIRQ, Non Maskable Interrupt */
   Software_IRQn                = 1,                /**< Software triggered Interrupt */
   RtosTimer0_IRQn              = 2,                /**< Internal RTOS Timer0 Interrupt */
   RtosTimer1_IRQn              = 3,                /**< Internal RTOS Timer1 Interrupt */
   Profiling_IRQn               = 4,                /**< Profiling Interrupt */
-
-  /* Device specific interrupts */
   DSP_INT0_SEL0_IRQn           = 5,                /**< Interrupt selected by DSP_INT0_SEL0 */
   DSP_INT0_SEL1_IRQn           = 6,                /**< Interrupt selected by DSP_INT0_SEL1 */
   DSP_INT0_SEL2_IRQn           = 7,                /**< Interrupt selected by DSP_INT0_SEL2 */
@@ -168,7 +170,9 @@ typedef enum IRQn {
  */ /* end of group Interrupt_vector_numbers */
 
 
+#ifndef MIMXRT685S_dsp_SERIES
 #define MIMXRT685S_dsp_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMXRT685S_dsp_features.h"
 
@@ -301,6 +305,16 @@ typedef enum IRQn {
 /** Interrupt vectors for the DMIC peripheral type */
 #define DMIC_IRQS                                { DMIC0_IRQn }
 #define DMIC_HWVAD_IRQS                          { HWVAD0_IRQn }
+
+/* ESPI - Peripheral instance base addresses */
+/** Peripheral ESPI base address */
+#define ESPI_BASE                                (0x40037000u)
+/** Peripheral ESPI base pointer */
+#define ESPI                                     ((ESPI_Type *)ESPI_BASE)
+/** Array initializer of ESPI peripheral base addresses */
+#define ESPI_BASE_ADDRS                          { ESPI_BASE }
+/** Array initializer of ESPI peripheral base pointers */
+#define ESPI_BASE_PTRS                           { ESPI }
 
 /* FLEXCOMM - Peripheral instance base addresses */
 /** Peripheral FLEXCOMM0 base address */
