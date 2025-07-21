@@ -17,7 +17,9 @@
  */
 #if (defined(CPU_K32W1480VFTA))
 
+#ifndef K32W1480_SERIES
 #define K32W1480_SERIES
+#endif
 
 /* CMSIS-style register definitions */
 #include "K32W1480.h"

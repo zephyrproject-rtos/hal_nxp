@@ -1,14 +1,14 @@
 /*
 ** ###################################################################
 **     Processor:           K32W1480VFTA
-**     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ELEMU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -17,21 +17,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-01-18)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ELEMU.h
- * @version 1.0
- * @date 2021-01-18
+ * @file PERI_ELEMU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ELEMU
  *
  * CMSIS Peripheral Access Layer for ELEMU
  */
 
-#if !defined(ELEMU_H_)
-#define ELEMU_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ELEMU_H_)
+#define PERI_ELEMU_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32W1480VFTA))
 #include "K32W1480_COMMON.h"
@@ -94,7 +97,7 @@ typedef struct {
   __I  uint32_t RSR;                               /**< Receive Status Register, offset: 0x12C */
        uint8_t RESERVED_2[204];
   __IO uint32_t UNUSED1;                           /**< Unused Register 1, offset: 0x1FC */
-  __O  uint32_t TR[ELEMU_TR_COUNT];                /**< Transmit Register, array offset: 0x200, array step: 0x4 */
+  __IO uint32_t TR[ELEMU_TR_COUNT];                /**< Transmit Register, array offset: 0x200, array step: 0x4 */
        uint8_t RESERVED_3[64];
   __I  uint32_t RR[ELEMU_RR_COUNT];                /**< Receive Register, array offset: 0x280, array step: 0x4 */
        uint8_t RESERVED_4[376];
@@ -340,5 +343,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ELEMU_H_ */
+#endif  /* PERI_ELEMU_H_ */
 
