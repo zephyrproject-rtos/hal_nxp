@@ -1,5 +1,5 @@
 1.Examples that support monolithic image download do not need the steps 2-6 to load fw:
-    Wi-Fi examples: wifi_cli, wifi_wpa_supplicant, wifi_cli_static, wifi_cert, wifi_cli_fw_dump, wifi_cli_prov, wifi_test_mode
+    Wi-Fi examples: wifi_cli, wifi_wpa_supplicant, wifi_cert, wifi_cli_fw_dump, wifi_test_mode
 	ncp examples: ncp_device
 	coex examples: coex_cli, coex_supplicant_cli
 

@@ -470,7 +470,7 @@ static int32_t mflash_drv_read_internal(uint32_t addr, uint32_t *buffer, uint32_
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
     /* Check alignment */
-    if (((uint32_t)buffer % 4) || (len % 4))
+    if (((uint32_t)buffer % 4 != 0UL) || (len % 4 != 0UL))
         return kStatus_InvalidArgument;
 
     return mflash_drv_read_internal(addr, buffer, len);

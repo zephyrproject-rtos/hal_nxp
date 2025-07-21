@@ -1,5 +1,5 @@
 /*! *********************************************************************************
- * Copyright 2020-2021, 2024 NXP
+ * Copyright 2020-2021, 2024-2025 NXP
  *
  *
  * This is the source file for the OS Abstraction layer for thread.
@@ -81,6 +81,7 @@ typedef struct _osa_state
 #endif
     uint32_t basePriority;
     int32_t basePriorityNesting;
+    uint32_t interruptRegPrimask;
     uint32_t interruptDisableCount;
 } osa_state_t;
 
@@ -1034,7 +1035,15 @@ osa_status_t OSA_MsgQDestroy(osa_msgq_handle_t msgqHandle)
  *END**************************************************************************/
 void OSA_InterruptEnable(void)
 {
-    (void)tx_interrupt_control(TX_INT_ENABLE);
+    if (s_osaState.basePriorityNesting > 0U)
+    {
+        s_osaState.basePriorityNesting--;
+
+        if (0U == s_osaState.basePriorityNesting)
+        {
+            TX_RESTORE
+        }
+    }
 }
 
 /*FUNCTION**********************************************************************
@@ -1045,7 +1054,13 @@ void OSA_InterruptEnable(void)
  *END**************************************************************************/
 void OSA_InterruptDisable(void)
 {
-    (void)tx_interrupt_control(TX_INT_DISABLE);
+    if (0U == s_osaState.basePriorityNesting)
+    {
+        TX_DISABLE
+    }
+
+    /* update counter*/
+    s_osaState.basePriorityNesting++;
 }
 
 /*FUNCTION**********************************************************************
@@ -1056,7 +1071,16 @@ void OSA_InterruptDisable(void)
  *END**************************************************************************/
 void OSA_EnableIRQGlobal(void)
 {
-    TX_RESTORE
+    if (s_osaState.interruptDisableCount > 0U)
+    {
+        s_osaState.interruptDisableCount--;
+
+        if (0U == s_osaState.interruptDisableCount)
+        {
+            EnableGlobalIRQ(s_osaState.interruptRegPrimask);
+        }
+        /* call core API to enable the global interrupt*/
+    }
 }
 
 /*FUNCTION**********************************************************************
@@ -1067,7 +1091,14 @@ void OSA_EnableIRQGlobal(void)
  *END**************************************************************************/
 void OSA_DisableIRQGlobal(void)
 {
-    TX_DISABLE
+    /* call core API to disable the global interrupt*/
+    if (0 == s_osaState.interruptDisableCount)
+    {
+        s_osaState.interruptRegPrimask = DisableGlobalIRQ();
+    }
+
+    /* update counter*/
+    s_osaState.interruptDisableCount++;
 }
 
 /*FUNCTION**********************************************************************
@@ -1082,7 +1113,7 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void))
     _Pragma("diag_suppress = Pm138")
 #endif
 #if defined(ENABLE_RAM_VECTOR_TABLE)
-        (void) InstallIRQHandler((IRQn_Type)IRQNumber, (uint32_t) * (uint32_t *)&handler);
+        (void) InstallIRQHandler((IRQn_Type)IRQNumber, (uint32_t)handler);
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
 #if defined(__IAR_SYSTEMS_ICC__)
     _Pragma("diag_remark = PM138")
