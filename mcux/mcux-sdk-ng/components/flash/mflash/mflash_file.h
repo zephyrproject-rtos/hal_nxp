@@ -19,7 +19,7 @@
  */
 typedef struct
 {
-    char *path;
+    const char *path;
     uint32_t max_size;
 } mflash_file_t;
 
@@ -30,9 +30,9 @@ bool mflash_is_initialized(void);
 status_t mflash_init(const mflash_file_t *dir_template, bool init_drv);
 
 /*! @brief Saves data to file with given path. */
-status_t mflash_file_save(char *path, uint8_t *data, uint32_t size);
+status_t mflash_file_save(const char *path, const uint8_t *data, uint32_t size);
 
 /*! @brief Returns pointer for direct memory mapped access to file data. */
-status_t mflash_file_mmap(char *path, uint8_t **pdata, uint32_t *psize);
+status_t mflash_file_mmap(const char *path, const uint8_t **pdata, uint32_t *psize);
 
 #endif

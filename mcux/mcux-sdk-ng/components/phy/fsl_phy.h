@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,9 +34,10 @@
 
 /*! @brief Defines the mask flag in basic control register(Address 0x00). */
 #define PHY_BCTL_SPEED1_MASK          ((uint16_t)0x0040U) /*!< The PHY speed bit mask(MSB).*/
-#define PHY_BCTL_ISOLATE_MASK         ((uint16_t)0x0400U) /*!< The PHY isolate mask.*/
 #define PHY_BCTL_DUPLEX_MASK          ((uint16_t)0x0100U) /*!< The PHY duplex bit mask. */
+#define PHY_BCTL_ISOLATE_MASK         ((uint16_t)0x0400U) /*!< The PHY isolate mask.*/
 #define PHY_BCTL_RESTART_AUTONEG_MASK ((uint16_t)0x0200U) /*!< The PHY restart auto negotiation mask. */
+#define PHY_BCTL_POWER_DOWN_MASK      ((uint16_t)0x0800U) /*!< The PHY power down mask. */
 #define PHY_BCTL_AUTONEG_MASK         ((uint16_t)0x1000U) /*!< The PHY auto negotiation bit mask. */
 #define PHY_BCTL_SPEED0_MASK          ((uint16_t)0x2000U) /*!< The PHY speed bit mask(LSB). */
 #define PHY_BCTL_LOOP_MASK            ((uint16_t)0x4000U) /*!< The PHY loop bit mask. */
@@ -163,6 +164,7 @@ struct _phy_config
     phy_duplex_t duplex;           /*!< PHY duplex configuration. */
     bool autoNeg;                  /*!< PHY auto-negotiation, true: enable, false: disable. */
     bool enableEEE;                /*!< PHY Energy Efficient Ethernet, true: enable, false: disable. */
+    bool master;                   /*!< PHY BASE-T1 master/slave configuration, true: master, false: slave. */
     phy_interrupt_type_t intrType; /*!< PHY interrupt configuration. */
 };
 

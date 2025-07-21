@@ -123,7 +123,7 @@ void rpmsg_ack_init(void)
 
 void rpmsg_recv_ack(void)
 {
-    (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, 1U);
+    (void)MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteApplicationEvent, 1U);
 }
 
 void rpmsg_wait_ack(void)
@@ -143,7 +143,7 @@ static int32_t rpmsg_ept_read_cb(void *payload, uint32_t payload_len, uint32_t s
     return rpmsgHandle->rx.callback(rpmsgHandle->rx.param, payload, payload_len);
 }
 
-static void RPMsgPeerReadyEventHandler(uint16_t eventData, void *context)
+static void RPMsgPeerReadyEventHandler(mcmgr_core_t coreNum, uint16_t eventData, void *context)
 {
     uint16_t *data = (uint16_t *)context;
     list_element_handle_t list_element;
@@ -264,7 +264,7 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit()
             (void)MCMGR_Init();
             do
             {
-                status = MCMGR_GetStartupData(&startupData);
+                status = MCMGR_GetStartupData(kMCMGR_Core0, &startupData);
             } while (status != kStatus_MCMGR_Success);
         }
 #if defined(RL_USE_STATIC_API) && (RL_USE_STATIC_API == 1)
@@ -280,7 +280,7 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit()
         }
 
         /* Trigger event notify master */
-        (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_READY_EVENT_DATA);
+        (void)MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteApplicationEvent, APP_RPMSG_READY_EVENT_DATA);
         do
         {
         } while (RL_TRUE != rpmsg_lite_is_link_up(s_rpmsgContext));
@@ -354,7 +354,7 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
     rpmsgHandle->rx.param    = config->param;
 
     /* Send peer Edpt ready to peer device */
-    (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | config->local_addr);
+    (void)MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | config->local_addr);
     s_rpmsgPeerEptStat[s_rpmsgEptCount].rpmsgHandle = rpmsgHandle;
     (void)LIST_AddTail(&s_rpmsgEpList, (list_element_handle_t)&s_rpmsgPeerEptStat[s_rpmsgEptCount]);
     s_rpmsgEptCount++;
@@ -467,7 +467,7 @@ void *HAL_RpmsgAllocTxBufferTimeout(hal_rpmsg_handle_t handle, uint32_t size, ui
 {
     void *buf = NULL;
 #if defined(HDI_MODE) && (HDI_MODE == 1)
-    /* In HDI mode this function can be called from ISR therefore, 
+    /* In HDI mode this function can be called from ISR therefore,
      * we need to disable interrupt when this configuration is enabled */
     uint32_t primask;
     primask = DisableGlobalIRQ();
@@ -483,7 +483,7 @@ hal_rpmsg_status_t HAL_RpmsgFreeRxBuffer(hal_rpmsg_handle_t handle, uint8_t *dat
 {
     hal_rpmsg_status_t status = kStatus_HAL_RpmsgSuccess;
 #if defined(HDI_MODE) && (HDI_MODE == 1)
-    /* In HDI mode this function can be called from ISR therefore, 
+    /* In HDI mode this function can be called from ISR therefore,
      * we need to disable interrupt when this configuration is enabled */
     uint32_t primask;
     primask = DisableGlobalIRQ();
@@ -519,7 +519,7 @@ hal_rpmsg_status_t HAL_RpmsgNoCopySend(hal_rpmsg_handle_t handle, uint8_t *data,
     }
 
 #if defined(HDI_MODE) && (HDI_MODE == 1)
-    /* In HDI mode this function can be called from ISR therefore, 
+    /* In HDI mode this function can be called from ISR therefore,
      * we need to disable interrupt when this configuration is enabled */
     primask = DisableGlobalIRQ();
 #endif

@@ -243,7 +243,7 @@ cleanup:
 
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
-    memcpy(buffer, (void *)addr, len);
+    (void)memcpy(buffer, (void *)addr, len);
     return kStatus_Success;
 }
 

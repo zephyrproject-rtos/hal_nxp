@@ -1,0 +1,9 @@
+{
+	"family": "lpc55s3x",
+	"inputImageFile": "in-the-script",
+	"outputImageExecutionTarget": "xip",
+	"outputImageExecutionAddress": "0x08001000",
+	"outputImageAuthenticationType": "crc",
+	"masterBootOutputFile": "in-the-script",
+	"trustZonePresetFile" : ""
+}

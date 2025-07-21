@@ -35,7 +35,6 @@
 #endif
 
 #define millisecToTicks(millisec) (((millisec) * (uint32_t)(configTICK_RATE_HZ) + 999U) / 1000U)
-#define OSA_TICK_PERIOD_MS (1000U / (uint32_t)configTICK_RATE_HZ)
 
 #ifdef DEBUG_ASSERT
 #define OS_ASSERT(condition) \
@@ -981,7 +980,7 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
     }
     else
     {
-        timeoutTicks = millisec / (uint32_t)(OSA_TICK_PERIOD_MS);
+        timeoutTicks = millisecToTicks(millisec);
     }
 
     clearMode = (pEventStruct->autoClear != 0U) ? pdTRUE : pdFALSE;

@@ -23,13 +23,13 @@
 #define NOR_CMD_LUT_SEQ_IDX_WRITESTATUSREG     9
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUSREG      12
 
-#define CUSTOM_LUT_LENGTH        60
-#define FLASH_BUSY_STATUS_POL    1
-#define FLASH_BUSY_STATUS_OFFSET 0
+#define CUSTOM_LUT_LENGTH        60U
+#define FLASH_BUSY_STATUS_POL    1U
+#define FLASH_BUSY_STATUS_OFFSET 0U
 
 #define FLASH_SIZE 0x10000 /* mimxrt1170evkb has 64 MB*/
 
-#ifndef XIP_EXTERNAL_FLASH
+#if !defined(XIP_EXTERNAL_FLASH) || defined(MFLASH_FORCE_FLASH_INIT)
 flexspi_device_config_t deviceconfig = {
     .flexspiRootClk       = 100000000UL,
     .flashSize            = MFLASH_BSIZE / 1024U,
@@ -174,7 +174,7 @@ static status_t flexspi_nor_write_enable(FLEXSPI_Type *base, uint32_t baseAddr)
     return status;
 }
 
-#ifndef XIP_EXTERNAL_FLASH
+#if !defined(XIP_EXTERNAL_FLASH) || defined(MFLASH_FORCE_QUAD_MODE)
 static status_t flexspi_nor_enable_quad_mode(FLEXSPI_Type *base)
 {
     flexspi_transfer_t flashXfer;
@@ -298,7 +298,7 @@ static int32_t mflash_drv_init_internal(void)
     /* disable interrupts when running from XIP */
     uint32_t primask = DisableGlobalIRQ();
 
-#ifndef XIP_EXTERNAL_FLASH
+#if !defined(XIP_EXTERNAL_FLASH) || defined(MFLASH_FORCE_FLASH_INIT)
     flexspi_config_t config;
 
     /* Get FLEXSPI default settings and configure the flexspi. */
@@ -317,13 +317,14 @@ static int32_t mflash_drv_init_internal(void)
     /* Configure flash settings according to serial flash feature. */
     FLEXSPI_SetFlashConfig(MFLASH_FLEXSPI, &deviceconfig, kFLEXSPI_PortA1);
 #endif
+
     uint32_t tmpLUT[CUSTOM_LUT_LENGTH] = {0x00U};
 
     memcpy(tmpLUT, customLUT, sizeof(tmpLUT));
     /* Update LUT table. */
     FLEXSPI_UpdateLUT(MFLASH_FLEXSPI, 0, tmpLUT, CUSTOM_LUT_LENGTH);
 
-#ifndef XIP_EXTERNAL_FLASH
+#if !defined(XIP_EXTERNAL_FLASH) || defined(MFLASH_FORCE_QUAD_MODE)
     /* Enter quad mode. */
     status = flexspi_nor_enable_quad_mode(MFLASH_FLEXSPI);
 #endif

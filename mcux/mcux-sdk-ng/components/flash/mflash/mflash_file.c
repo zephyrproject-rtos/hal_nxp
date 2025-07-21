@@ -32,6 +32,10 @@ extern char __MFLASH_FS_START[];
 #define MFLASH_FS_START ((void *)__MFLASH_FS_START)
 #endif
 
+#ifdef MFLASH_STATIC_PAGEBUF
+static uint32_t static_pagebuf[MFLASH_PAGE_SIZE / sizeof(uint32_t)];
+#endif
+
 /*
  * The table header and table record structures have to be aligned
  * with pages/sectors that are expected to be of 2**n size, hence there is some padding
@@ -77,7 +81,7 @@ bool mflash_is_initialized(void)
 }
 
 /* Store path string to directory record structure */
-static bool dir_path_store(mflash_dir_record_t *dr, char *path)
+static bool dir_path_store(mflash_dir_record_t *dr, const char *path)
 {
     assert(dr);
     assert(path);
@@ -105,7 +109,7 @@ static bool dir_path_store(mflash_dir_record_t *dr, char *path)
 }
 
 /* Match path string against directory record */
-static bool dir_path_match(mflash_dir_record_t *dr, char *path)
+static bool dir_path_match(mflash_dir_record_t *dr, const char *path)
 {
     assert(dr);
     assert(path);
@@ -139,21 +143,35 @@ static bool dir_path_match(mflash_dir_record_t *dr, char *path)
 static void *mflash_page_buf_get(void)
 {
     void *page_buf;
+
+#ifdef MFLASH_STATIC_PAGEBUF
+    (void) page_buf;
+    return (void *) static_pagebuf;
+#else
+
 #ifdef SDK_OS_FREE_RTOS
     page_buf = pvPortMalloc(MFLASH_PAGE_SIZE);
 #else
     page_buf = malloc(MFLASH_PAGE_SIZE);
 #endif
     return page_buf;
+
+#endif
 }
 
 /* Buffer allocation wrapper */
 static void mflash_page_buf_release(void *page_buf)
 {
+#ifdef MFLASH_STATIC_PAGEBUF
+    (void) page_buf;
+#else
+
 #ifdef SDK_OS_FREE_RTOS
     vPortFree(page_buf);
 #else
     free(page_buf);
+#endif
+
 #endif
 }
 
@@ -310,7 +328,7 @@ static status_t mflash_file_check(mflash_fs_t *fs, mflash_dir_record_t *dr)
 }
 
 /* Searches for directory record with given path and retrieves a copy of it */
-static status_t mflash_dir_lookup(mflash_fs_t *fs, char *path, mflash_dir_record_t *dr_ptr)
+static status_t mflash_dir_lookup(mflash_fs_t *fs, const char *path, mflash_dir_record_t *dr_ptr)
 {
     uint32_t file_count     = fs->header.file_count;
     mflash_dir_record_t *dr = fs->records;
@@ -561,7 +579,7 @@ status_t mflash_init(const mflash_file_t *dir_template, bool init_drv)
 
 /* Save file */
 static status_t mflash_file_save_internal(
-    mflash_fs_t *fs, void *page_buf, mflash_dir_record_t *dr, uint8_t *data, uint32_t size)
+    mflash_fs_t *fs, void *page_buf, mflash_dir_record_t *dr, const uint8_t *data, uint32_t size)
 {
     status_t status;
 
@@ -588,7 +606,7 @@ static status_t mflash_file_save_internal(
          data_offset += MFLASH_PAGE_SIZE)
     {
         /* Pointer and size of the data portion to be programmed */
-        void *copy_ptr     = data + data_offset;
+        const void *copy_ptr = data + data_offset;
         uint32_t copy_size = size - data_offset;
         if (copy_size > MFLASH_PAGE_SIZE)
         {
@@ -629,7 +647,7 @@ static status_t mflash_file_save_internal(
 }
 
 /* API, save data to file with given path */
-status_t mflash_file_save(char *path, uint8_t *data, uint32_t size)
+status_t mflash_file_save(const char *path, const uint8_t *data, uint32_t size)
 {
     status_t status;
     mflash_dir_record_t dr;
@@ -670,7 +688,7 @@ status_t mflash_file_save(char *path, uint8_t *data, uint32_t size)
 }
 
 /* Get direct pointer to file data */
-static status_t mflash_file_mmap_internal(mflash_fs_t *fs, mflash_dir_record_t *dr, uint8_t **pdata, uint32_t *psize)
+static status_t mflash_file_mmap_internal(mflash_fs_t *fs, mflash_dir_record_t *dr, const uint8_t **pdata, uint32_t *psize)
 {
     status_t status;
     mflash_file_meta_t *meta;
@@ -690,7 +708,7 @@ static status_t mflash_file_mmap_internal(mflash_fs_t *fs, mflash_dir_record_t *
 }
 
 /* API, get direct pointer to data of file with given path */
-status_t mflash_file_mmap(char *path, uint8_t **pdata, uint32_t *psize)
+status_t mflash_file_mmap(const char *path, const uint8_t **pdata, uint32_t *psize)
 {
     status_t status;
     mflash_dir_record_t dr;

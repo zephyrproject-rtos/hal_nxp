@@ -1,0 +1,11 @@
+{
+	"fw_elf": "./nbu_15_4.out",
+	"image_version": 2,
+	"image_type_raw": true,
+	"image_partition_a": true,
+	"target_cpu1": false,
+	"target_ble": false,
+	"target_ble_audio": false,
+	"target_ble_15_4_combo": false,
+	"sb3_config": "./image_tool/elftosb/rw610_cpu2_15d4_sb.json"
+}

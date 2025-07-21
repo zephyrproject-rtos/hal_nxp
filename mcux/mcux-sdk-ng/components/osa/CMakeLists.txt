@@ -14,17 +14,6 @@ if (CONFIG_MCUX_COMPONENT_component.osa_template_config)
     )
 endif()
 
-if (CONFIG_MCUX_COMPONENT_component.osa_interface)
-
-    mcux_add_source(
-        SOURCES fsl_os_abstraction.h
-    )
-
-    mcux_add_include(
-        INCLUDES .
-    )
-endif()
-
 if (CONFIG_MCUX_PRJSEG_component.osa_interface.osa_macro_used)
 
     mcux_add_configuration(
@@ -39,6 +28,7 @@ if (CONFIG_MCUX_COMPONENT_component.osa_bm)
     mcux_add_source(
         SOURCES fsl_os_abstraction_bm.h
                 fsl_os_abstraction_bm.c
+                fsl_os_abstraction.h
     )
 
     mcux_add_include(
@@ -58,6 +48,7 @@ if (CONFIG_MCUX_COMPONENT_component.osa_free_rtos)
     mcux_add_source(
         SOURCES fsl_os_abstraction_free_rtos.h
                 fsl_os_abstraction_free_rtos.c
+                fsl_os_abstraction.h
     )
 
     mcux_add_include(
@@ -77,6 +68,7 @@ if (CONFIG_MCUX_COMPONENT_component.osa_zephyr)
     mcux_add_source(
         SOURCES fsl_os_abstraction_zephyr.h
                 fsl_os_abstraction_zephyr.c
+                fsl_os_abstraction.h
     )
 
     mcux_add_include(
@@ -96,6 +88,7 @@ if (CONFIG_MCUX_COMPONENT_component.osa_threadx)
     mcux_add_source(
         SOURCES fsl_os_abstraction_threadx.h
                 fsl_os_abstraction_threadx.c
+                fsl_os_abstraction.h
     )
 
     mcux_add_include(
