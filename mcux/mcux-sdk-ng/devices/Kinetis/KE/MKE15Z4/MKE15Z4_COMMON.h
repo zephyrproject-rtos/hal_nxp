@@ -14,14 +14,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KE1xZP48M48SF0RM, Rev. 1, Sep. 2018
-**     Version:             rev. 3.0, 2020-01-22
-**     Build:               b240712
+**     Version:             rev. 4.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MKE15Z4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,17 @@
 **         Based on rev1 RM.
 **     - rev. 3.0 (2020-01-22)
 **         Add 40 pins part numbers.
+**     - rev. 4.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKE15Z4_COMMON.h
- * @version 3.0
- * @date 2020-01-22
+ * @version 4.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MKE15Z4
  *
  * CMSIS Peripheral Access Layer for MKE15Z4
@@ -52,7 +55,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -138,14 +141,16 @@ typedef enum IRQn {
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
 #include "system_MKE15Z4.h"            /* Device specific configuration file */
 
-#define MKE15Z4_SERIES
-/* CPU specific feature definitions */
-#include "MKE15Z4_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef MKE15Z4_SERIES
+#define MKE15Z4_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "MKE15Z4_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */

@@ -8,14 +8,14 @@
 **                          MKM33Z64ACLL5
 **                          MKM34Z128ACLL5
 **
-**     Version:             rev. 1.0, 2014-07-22
-**     Build:               b240710
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SIM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -24,21 +24,24 @@
 **     Revisions:
 **     - rev. 1.0 (2014-07-22)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SIM.h
- * @version 1.0
- * @date 2014-07-22
+ * @file PERI_SIM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SIM
  *
  * CMSIS Peripheral Access Layer for SIM
  */
 
-#if !defined(SIM_H_)
-#define SIM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SIM_H_)
+#define PERI_SIM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKM14Z128ACHH5) || defined(CPU_MKM14Z64ACHH5))
 #include "MKM14ZA5_COMMON.h"
@@ -693,8 +696,8 @@ typedef struct {
 #define SIM_SCGC6_SIM_LP_MASK                    (0x40000000U)
 #define SIM_SCGC6_SIM_LP_SHIFT                   (30U)
 /*! SIM_LP - SIM_LP Clock Gate Control
- *  0b1..Clock is enabled
  *  0b0..Clock is disabled
+ *  0b1..Clock is enabled
  */
 #define SIM_SCGC6_SIM_LP(x)                      (((uint32_t)(((uint32_t)(x)) << SIM_SCGC6_SIM_LP_SHIFT)) & SIM_SCGC6_SIM_LP_MASK)
 
@@ -1078,5 +1081,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SIM_H_ */
+#endif  /* PERI_SIM_H_ */
 

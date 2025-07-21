@@ -7,14 +7,14 @@
 **                          MKE17Z512VLH9
 **                          MKE17Z512VLL9
 **
-**     Version:             rev. 2.0, 2023-10-08
-**     Build:               b240715
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Initial version.
 **     - rev. 2.0 (2023-10-08)
 **         Based on Rev.1 RM.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPSPI.h
- * @version 2.0
- * @date 2023-10-08
+ * @file PERI_LPSPI.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPSPI
  *
  * CMSIS Peripheral Access Layer for LPSPI
  */
 
-#if !defined(LPSPI_H_)
-#define LPSPI_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPSPI_H_)
+#define PERI_LPSPI_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKE12Z512VLH9) || defined(CPU_MKE12Z512VLL9))
 #include "MKE12Z9_COMMON.h"
@@ -134,7 +137,6 @@ typedef struct {
 #define LPSPI_VERID_FEATURE_SHIFT                (0U)
 /*! FEATURE - Module Identification Number
  *  0b0000000000000100..Standard feature set supporting a 32-bit shift register.
- *  *..
  */
 #define LPSPI_VERID_FEATURE(x)                   (((uint32_t)(((uint32_t)(x)) << LPSPI_VERID_FEATURE_SHIFT)) & LPSPI_VERID_FEATURE_MASK)
 
@@ -237,60 +239,60 @@ typedef struct {
 #define LPSPI_SR_WCF_MASK                        (0x100U)
 #define LPSPI_SR_WCF_SHIFT                       (8U)
 /*! WCF - Word Complete Flag
- *  0b0..Not complete
- *  0b1..Complete
  *  0b0..No effect
+ *  0b0..Not complete
  *  0b1..Clear the flag
+ *  0b1..Complete
  */
 #define LPSPI_SR_WCF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_WCF_SHIFT)) & LPSPI_SR_WCF_MASK)
 
 #define LPSPI_SR_FCF_MASK                        (0x200U)
 #define LPSPI_SR_FCF_SHIFT                       (9U)
 /*! FCF - Frame Complete Flag
- *  0b0..Not complete
- *  0b1..Complete
  *  0b0..No effect
+ *  0b0..Not complete
  *  0b1..Clear the flag
+ *  0b1..Complete
  */
 #define LPSPI_SR_FCF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_FCF_SHIFT)) & LPSPI_SR_FCF_MASK)
 
 #define LPSPI_SR_TCF_MASK                        (0x400U)
 #define LPSPI_SR_TCF_SHIFT                       (10U)
 /*! TCF - Transfer Complete Flag
- *  0b0..Not complete
- *  0b1..Complete
  *  0b0..No effect
+ *  0b0..Not complete
  *  0b1..Clear the flag
+ *  0b1..Complete
  */
 #define LPSPI_SR_TCF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_TCF_SHIFT)) & LPSPI_SR_TCF_MASK)
 
 #define LPSPI_SR_TEF_MASK                        (0x800U)
 #define LPSPI_SR_TEF_SHIFT                       (11U)
 /*! TEF - Transmit Error Flag
- *  0b0..No underrun
- *  0b1..Underrun
  *  0b0..No effect
+ *  0b0..No underrun
  *  0b1..Clear the flag
+ *  0b1..Underrun
  */
 #define LPSPI_SR_TEF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_TEF_SHIFT)) & LPSPI_SR_TEF_MASK)
 
 #define LPSPI_SR_REF_MASK                        (0x1000U)
 #define LPSPI_SR_REF_SHIFT                       (12U)
 /*! REF - Receive Error Flag
- *  0b0..No overflow
- *  0b1..Overflow
  *  0b0..No effect
+ *  0b0..No overflow
  *  0b1..Clear the flag
+ *  0b1..Overflow
  */
 #define LPSPI_SR_REF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_REF_SHIFT)) & LPSPI_SR_REF_MASK)
 
 #define LPSPI_SR_DMF_MASK                        (0x2000U)
 #define LPSPI_SR_DMF_SHIFT                       (13U)
 /*! DMF - Data Match Flag
- *  0b0..No match
- *  0b1..Match
  *  0b0..No effect
+ *  0b0..No match
  *  0b1..Clear the flag
+ *  0b1..Match
  */
 #define LPSPI_SR_DMF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_DMF_SHIFT)) & LPSPI_SR_DMF_MASK)
 
@@ -770,5 +772,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPSPI_H_ */
+#endif  /* PERI_LPSPI_H_ */
 

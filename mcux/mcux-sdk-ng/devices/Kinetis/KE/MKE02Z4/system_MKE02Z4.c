@@ -21,8 +21,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MKE02P64M40SF0RM Rev 4
-**     Version:             rev. 1.0, 2017-05-19
-**     Build:               b240710
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -30,7 +30,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -39,14 +39,17 @@
 **     Revisions:
 **     - rev. 1.0 (2017-05-19)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKE02Z4
- * @version 1.0
- * @date 2017-05-19
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for MKE02Z4 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -106,7 +109,6 @@ void SystemCoreClockUpdate (void) {
           /* Reference Divider */
           Temp = ((uint16_t)ICS->C1 & ICS_C1_RDIV_MASK) >> ICS_C1_RDIV_SHIFT;
           Temp = (Temp + 1U) * (((OSC->CR & OSC_CR_RANGE_MASK) != 0x0U) ? 32U : 1U);
-
           ICSOUTClock = CPU_XTAL_CLK_HZ / Temp * 1024UL;
       }
       break;
@@ -126,7 +128,6 @@ void SystemCoreClockUpdate (void) {
       break;
   }
   SystemCoreClock = (ICSOUTClock / Divider);
-
 }
 
 /* ----------------------------------------------------------------------------

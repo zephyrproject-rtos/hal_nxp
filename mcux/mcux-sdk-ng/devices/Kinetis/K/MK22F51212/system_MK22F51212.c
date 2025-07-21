@@ -14,8 +14,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K22P121M120SF7RM, Rev. 1, March 24, 2014
-**     Version:             rev. 2.9, 2016-03-21
-**     Build:               b240709
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -23,7 +23,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -61,14 +61,17 @@
 **     - rev. 2.9 (2016-03-21)
 **         Added MK22FN512VFX12 part.
 **         GPIO - renamed port instances: PTx -> GPIOx.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MK22F51212
- * @version 2.9
- * @date 2016-03-21
+ * @version 3.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for MK22F51212 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -154,14 +157,14 @@ void SystemCoreClockUpdate (void) {
             Divider = (uint16_t)(32LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
             break;
           }
-        } else {/* ((MCG->C2 & MCG_C2_RANGE_MASK) != 0x00U) */
+        } else {
           Divider = (uint16_t)(1LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
         }
         MCGOUTClock = (MCGOUTClock / Divider); /* Calculate the divided FLL reference clock */
-      } else { /* (!((MCG->C1 & MCG_C1_IREFS_MASK) == 0x00U)) */
+      } else {
         MCGOUTClock = CPU_INT_SLOW_CLK_HZ; /* The slow internal reference clock is selected */
-      } /* (!((MCG->C1 & MCG_C1_IREFS_MASK) == 0x00U)) */
-      /* Select correct multiplier to calculate the MCG output clock  */
+      }
+      /* Select correct multiplier to calculate the MCG output clock */
       switch (MCG->C4 & (MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) {
         case 0x00U:
           MCGOUTClock *= 640U;
@@ -202,10 +205,10 @@ void SystemCoreClockUpdate (void) {
     /* Internal reference clock is selected */
     if ((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U) {
       MCGOUTClock = CPU_INT_SLOW_CLK_HZ; /* Slow internal reference clock selected */
-    } else { /* (!((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U)) */
+    } else { /* Fast internal reference clock selected */
       Divider = (uint16_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
-      MCGOUTClock = (uint32_t) (CPU_INT_FAST_CLK_HZ / Divider); /* Fast internal reference clock selected */
-    } /* (!((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U)) */
+      MCGOUTClock = (uint32_t) (CPU_INT_FAST_CLK_HZ / Divider);
+    }
   } else if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U) {
     /* External reference clock is selected */
     switch (MCG->C7 & MCG_C7_OSCSEL_MASK) {
@@ -220,10 +223,10 @@ void SystemCoreClockUpdate (void) {
       MCGOUTClock = CPU_INT_IRC_CLK_HZ; /* IRC 48MHz oscillator drives MCG clock */
       break;
     }
-  } else { /* (!((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U)) */
+  } else {
     /* Reserved value */
     return;
-  } /* (!((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U)) */
+  }
   SystemCoreClock = (MCGOUTClock / (0x01U + ((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK) >> SIM_CLKDIV1_OUTDIV1_SHIFT)));
 }
 
