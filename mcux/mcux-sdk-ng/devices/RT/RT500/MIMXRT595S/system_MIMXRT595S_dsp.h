@@ -5,8 +5,8 @@
 **
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
-**     Version:             rev. 5.0, 2020-08-27
-**     Build:               b231102
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -14,7 +14,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -31,6 +31,9 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2020-08-27)
 **         Base on Rev.C RM.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
@@ -38,7 +41,7 @@
 /*!
  * @file MIMXRT595S
  * @version 1.0
- * @date 021123
+ * @date 200525
  * @brief Device specific configuration file for MIMXRT595S (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -46,7 +49,7 @@
  * (PLL) that is part of the microcontroller device.
  */
 #ifndef _SYSTEM_MIMXRT595S_DSP_H_
-#define _SYSTEM_MIMXRT595S_DSP_H_ /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MIMXRT595S_DSP_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,12 +59,12 @@ extern "C" {
 
 #define DEFAULT_SYSTEM_CLOCK 192000000u /* Default System clock value */
 #ifndef CLK_XTAL_OSC_CLK
-#define CLK_XTAL_OSC_CLK 24000000u      /* Default XTAL OSC clock */
+#define CLK_XTAL_OSC_CLK 24000000u /* Default XTAL OSC clock */
 #endif
-#define CLK_RTC_32K_CLK 32768u          /* RTC oscillator 32 kHz (32k_clk) */
-#define CLK_LPOSC_1MHZ  1000000u        /* Low power oscillator 1 MHz (1m_lposc) */
+#define CLK_RTC_32K_CLK   32768u   /* RTC oscillator 32 kHz (32k_clk) */
+#define CLK_LPOSC_1MHZ    1000000u /* Low power oscillator 1 MHz (1m_lposc) */
 #ifndef CLK_EXT_CLKIN
-#define CLK_EXT_CLKIN 0u                /* Default external CLKIN pin clock */
+#define CLK_EXT_CLKIN 0u /* Default external CLKIN pin clock */
 #endif
 #ifndef CLK_FRO_HIGH_FREQ
 #define CLK_FRO_HIGH_FREQ 192000000u /* The high frequency of the FRO clock */
@@ -69,14 +72,12 @@ extern "C" {
 #ifndef CLK_FRO_LOW_FREQ
 #define CLK_FRO_LOW_FREQ 96000000u /* The low frequency of the FRO clock */
 #endif
-#define CLK_OSC_CLK \
-    ((CLKCTL0->SYSOSCBYPASS == 0u) ? CLK_XTAL_OSC_CLK : ((CLKCTL0->SYSOSCBYPASS == 1u) ? CLK_EXT_CLKIN : 0u))
+#define CLK_OSC_CLK ((CLKCTL0->SYSOSCBYPASS == 0u) ? CLK_XTAL_OSC_CLK : ((CLKCTL0->SYSOSCBYPASS == 1u) ? CLK_EXT_CLKIN : 0u))
 
 #define FRO_TUNER_USED         ((CLKCTL0->FRO_CONTROL & CLKCTL0_FRO_CONTROL_EXP_COUNT_MASK) != 0u)
 #define FRO_FREQ_GET_FROM_FUSE ((CLKCTL0->FRO_SCTRIM & 0x3fu) == 0x2fu ? CLK_FRO_LOW_FREQ : CLK_FRO_HIGH_FREQ)
 /*  freq = reference_clk * (2 * FRO_CAPVAL - 6) / 4095 */
-#define FRO_FREQ_GET_FROM_TUNER \
-    (CLK_OSC_CLK / 4095u * (2u * (CLKCTL0->FRO_CAPVAL & CLKCTL0_FRO_CAPVAL_CAPVAL_MASK) - 6u) * 4u)
+#define FRO_FREQ_GET_FROM_TUNER (CLK_OSC_CLK / 4095u * (2u * (CLKCTL0->FRO_CAPVAL & CLKCTL0_FRO_CAPVAL_CAPVAL_MASK) - 6u) * 4u)
 
 #define CLK_FRO_CLK       (FRO_TUNER_USED ? FRO_FREQ_GET_FROM_TUNER : FRO_FREQ_GET_FROM_FUSE) /* FRO frequency */
 #define CLK_FRO_DIV2_CLK  (CLK_FRO_CLK / 2u)  /* FRO_DIV2 clock frequency */
@@ -102,7 +103,7 @@ extern uint32_t SystemCoreClock;
  * microcontroller device. For systems with variable clock speed it also updates
  * the variable SystemCoreClock. SystemInit is called from startup_device file.
  */
-void SystemInit(void);
+void SystemInit (void);
 
 /**
  * @brief Updates the SystemCoreClock variable.
@@ -111,7 +112,7 @@ void SystemInit(void);
  * execution. SystemCoreClockUpdate() evaluates the clock register settings and calculates
  * the current core clock.
  */
-void SystemCoreClockUpdate(void);
+void SystemCoreClockUpdate (void);
 
 /**
  * @brief SystemInit function hook.
@@ -123,10 +124,10 @@ void SystemCoreClockUpdate(void);
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
-void SystemInitHook(void);
+void SystemInitHook (void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _SYSTEM_MIMXRT595S_DSP_H_ */
+#endif  /* _SYSTEM_MIMXRT595S_DSP_H_ */

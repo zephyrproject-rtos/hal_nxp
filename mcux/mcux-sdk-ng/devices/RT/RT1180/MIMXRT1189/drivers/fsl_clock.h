@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -108,6 +108,12 @@
 #define PLL_SYS3_480_FREQ (XTAL_FREQ * PLL_SYS3_480_MFI)
 #define XTAL_FREQ         (24000000UL)
 
+/*! @brief Clock gate name array for VREF. */
+#define VREF_CLOCKS \
+    {               \
+        kCLOCK_Vref \
+    }
+      
 /*! @brief Clock gate name array for LPADC. */
 #define LPADC_CLOCKS                               \
     {                                              \
@@ -2140,20 +2146,7 @@ uint32_t CLOCK_GetFreqFromObs(uint8_t obsIndex, uint32_t obsSigIndex);
  */
 bool CLOCK_EnableUsbhs0Clock(clock_usb_src_t src, uint32_t freq);
 
-/*! @brief Enable USB HS clock.
- *
- * This function only enables the access to USB HS prepheral, upper layer
- * should first call the @ref CLOCK_EnableUsbhs0PhyPllClock to enable the PHY
- * clock to use USB HS.
- *
- * @param src  USB HS does not care about the clock source, here must be @ref kCLOCK_UsbSrcUnused.
- * @param freq USB HS does not care about the clock source, so this parameter is ignored.
- * @retval true The clock is set successfully.
- * @retval false The clock source is invalid to get proper USB HS clock.
- */
-bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq);
-
-/*! @brief Enable USB HS PHY PLL clock.
+/*! brief Enable USB HS PHY PLL clock.
  *
  * This function enables the internal 480MHz USB PHY PLL clock.
  *
@@ -2170,22 +2163,37 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq);
  */
 void CLOCK_DisableUsbhs0PhyPllClock(void);
 
-/*! @brief Enable USB HS PHY PLL clock.
+#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES))
+/*! @brief Enable USB HS clock.
  *
- * This function enables the internal 480MHz USB PHY PLL clock.
+ * This function only enables the access to USB HS prepheral, upper layer
+ * should first call the @ref CLOCK_EnableUsbhs0PhyPllClock to enable the PHY
+ * clock to use USB HS.
  *
- * @param src  USB HS PHY PLL clock source.
- * @param freq The frequency specified by src.
+ * @param src  USB HS does not care about the clock source, here must be @ref kCLOCK_UsbSrcUnused.
+ * @param freq USB HS does not care about the clock source, so this parameter is ignored.
  * @retval true The clock is set successfully.
  * @retval false The clock source is invalid to get proper USB HS clock.
  */
-bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq);
+ bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq);
+
+ /*! @brief Enable USB HS PHY PLL clock.
+  *
+  * This function enables the internal 480MHz USB PHY PLL clock.
+  *
+  * @param src  USB HS PHY PLL clock source.
+  * @param freq The frequency specified by src.
+  * @retval true The clock is set successfully.
+  * @retval false The clock source is invalid to get proper USB HS clock.
+  */
+ bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq);
 
 /*! @brief Disable USB HS PHY PLL clock.
  *
  * This function disables USB HS PHY PLL clock.
  */
 void CLOCK_DisableUsbhs1PhyPllClock(void);
+#endif
 #endif
 
 /*!

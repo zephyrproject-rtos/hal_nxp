@@ -25,14 +25,14 @@
 **                          MIMXRT106LDVL6A
 **                          MIMXRT106SDVL6A
 **
-**     Version:             rev. 1.4, 2022-03-25
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PMU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -51,21 +51,24 @@
 **         Update header files to align with IMXRT1060RM Rev.3.
 **     - rev. 1.4 (2022-03-25)
 **         Add RT1060X device
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PMU.h
- * @version 1.4
- * @date 2022-03-25
+ * @file PERI_PMU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PMU
  *
  * CMSIS Peripheral Access Layer for PMU
  */
 
-#if !defined(PMU_H_)
-#define PMU_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PMU_H_)
+#define PERI_PMU_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVJ5B) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061CVL5B) || defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6A) || defined(CPU_MIMXRT1061DVL6B) || defined(CPU_MIMXRT1061XVN5B))
 #include "MIMXRT1061_COMMON.h"
@@ -194,9 +197,9 @@ typedef struct {
 #define PMU_REG_1P1_OUTPUT_TRG_MASK              (0x1F00U)
 #define PMU_REG_1P1_OUTPUT_TRG_SHIFT             (8U)
 /*! OUTPUT_TRG
+ *  0b000x1..1.375V
  *  0b00100..0.8V
  *  0b10000..1.1V
- *  0b000x1..1.375V
  */
 #define PMU_REG_1P1_OUTPUT_TRG(x)                (((uint32_t)(((uint32_t)(x)) << PMU_REG_1P1_OUTPUT_TRG_SHIFT)) & PMU_REG_1P1_OUTPUT_TRG_MASK)
 
@@ -247,9 +250,9 @@ typedef struct {
 #define PMU_REG_1P1_SET_OUTPUT_TRG_MASK          (0x1F00U)
 #define PMU_REG_1P1_SET_OUTPUT_TRG_SHIFT         (8U)
 /*! OUTPUT_TRG
+ *  0b000x1..1.375V
  *  0b00100..0.8V
  *  0b10000..1.1V
- *  0b000x1..1.375V
  */
 #define PMU_REG_1P1_SET_OUTPUT_TRG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_1P1_SET_OUTPUT_TRG_SHIFT)) & PMU_REG_1P1_SET_OUTPUT_TRG_MASK)
 
@@ -300,9 +303,9 @@ typedef struct {
 #define PMU_REG_1P1_CLR_OUTPUT_TRG_MASK          (0x1F00U)
 #define PMU_REG_1P1_CLR_OUTPUT_TRG_SHIFT         (8U)
 /*! OUTPUT_TRG
+ *  0b000x1..1.375V
  *  0b00100..0.8V
  *  0b10000..1.1V
- *  0b000x1..1.375V
  */
 #define PMU_REG_1P1_CLR_OUTPUT_TRG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_1P1_CLR_OUTPUT_TRG_SHIFT)) & PMU_REG_1P1_CLR_OUTPUT_TRG_MASK)
 
@@ -353,9 +356,9 @@ typedef struct {
 #define PMU_REG_1P1_TOG_OUTPUT_TRG_MASK          (0x1F00U)
 #define PMU_REG_1P1_TOG_OUTPUT_TRG_SHIFT         (8U)
 /*! OUTPUT_TRG
+ *  0b000x1..1.375V
  *  0b00100..0.8V
  *  0b10000..1.1V
- *  0b000x1..1.375V
  */
 #define PMU_REG_1P1_TOG_OUTPUT_TRG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_1P1_TOG_OUTPUT_TRG_SHIFT)) & PMU_REG_1P1_TOG_OUTPUT_TRG_MASK)
 
@@ -402,8 +405,8 @@ typedef struct {
 #define PMU_REG_3P0_VBUS_SEL_MASK                (0x80U)
 #define PMU_REG_3P0_VBUS_SEL_SHIFT               (7U)
 /*! VBUS_SEL
- *  0b1..Utilize VBUS OTG1 power
  *  0b0..Utilize VBUS OTG2 power
+ *  0b1..Utilize VBUS OTG1 power
  */
 #define PMU_REG_3P0_VBUS_SEL(x)                  (((uint32_t)(((uint32_t)(x)) << PMU_REG_3P0_VBUS_SEL_SHIFT)) & PMU_REG_3P0_VBUS_SEL_MASK)
 
@@ -447,8 +450,8 @@ typedef struct {
 #define PMU_REG_3P0_SET_VBUS_SEL_MASK            (0x80U)
 #define PMU_REG_3P0_SET_VBUS_SEL_SHIFT           (7U)
 /*! VBUS_SEL
- *  0b1..Utilize VBUS OTG1 power
  *  0b0..Utilize VBUS OTG2 power
+ *  0b1..Utilize VBUS OTG1 power
  */
 #define PMU_REG_3P0_SET_VBUS_SEL(x)              (((uint32_t)(((uint32_t)(x)) << PMU_REG_3P0_SET_VBUS_SEL_SHIFT)) & PMU_REG_3P0_SET_VBUS_SEL_MASK)
 
@@ -492,8 +495,8 @@ typedef struct {
 #define PMU_REG_3P0_CLR_VBUS_SEL_MASK            (0x80U)
 #define PMU_REG_3P0_CLR_VBUS_SEL_SHIFT           (7U)
 /*! VBUS_SEL
- *  0b1..Utilize VBUS OTG1 power
  *  0b0..Utilize VBUS OTG2 power
+ *  0b1..Utilize VBUS OTG1 power
  */
 #define PMU_REG_3P0_CLR_VBUS_SEL(x)              (((uint32_t)(((uint32_t)(x)) << PMU_REG_3P0_CLR_VBUS_SEL_SHIFT)) & PMU_REG_3P0_CLR_VBUS_SEL_MASK)
 
@@ -537,8 +540,8 @@ typedef struct {
 #define PMU_REG_3P0_TOG_VBUS_SEL_MASK            (0x80U)
 #define PMU_REG_3P0_TOG_VBUS_SEL_SHIFT           (7U)
 /*! VBUS_SEL
- *  0b1..Utilize VBUS OTG1 power
  *  0b0..Utilize VBUS OTG2 power
+ *  0b1..Utilize VBUS OTG1 power
  */
 #define PMU_REG_3P0_TOG_VBUS_SEL(x)              (((uint32_t)(((uint32_t)(x)) << PMU_REG_3P0_TOG_VBUS_SEL_SHIFT)) & PMU_REG_3P0_TOG_VBUS_SEL_MASK)
 
@@ -2656,5 +2659,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PMU_H_ */
+#endif  /* PERI_PMU_H_ */
 

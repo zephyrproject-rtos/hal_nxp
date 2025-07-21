@@ -3,14 +3,14 @@
 **     Processors:          MIMXRT1011CAE4A
 **                          MIMXRT1011DAE5A
 **
-**     Version:             rev. 1.2, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Update header files to align with IMXRT1010RM Rev.B.
 **     - rev. 1.2 (2021-08-10)
 **         Update header files to align with IMXRT1010RM Rev.1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file I2S.h
- * @version 1.2
- * @date 2021-08-10
+ * @file PERI_I2S.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for I2S
  *
  * CMSIS Peripheral Access Layer for I2S
  */
 
-#if !defined(I2S_H_)
-#define I2S_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_I2S_H_)
+#define PERI_I2S_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1011CAE4A) || defined(CPU_MIMXRT1011DAE5A))
 #include "MIMXRT1011_COMMON.h"
@@ -104,7 +107,7 @@ typedef struct {
   __IO uint32_t TCR3;                              /**< Transmit Configuration 3, offset: 0x14 */
   __IO uint32_t TCR4;                              /**< Transmit Configuration 4, offset: 0x18 */
   __IO uint32_t TCR5;                              /**< Transmit Configuration 5, offset: 0x1C */
-  __O  uint32_t TDR[I2S_TDR_COUNT];                /**< Transmit Data, array offset: 0x20, array step: 0x4, irregular array, not all indices are valid */
+  __IO uint32_t TDR[I2S_TDR_COUNT];                /**< Transmit Data, array offset: 0x20, array step: 0x4, irregular array, not all indices are valid */
        uint8_t RESERVED_0[24];
   __I  uint32_t TFR[I2S_TFR_COUNT];                /**< Transmit FIFO, array offset: 0x40, array step: 0x4, irregular array, not all indices are valid */
        uint8_t RESERVED_1[24];
@@ -974,5 +977,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* I2S_H_ */
+#endif  /* PERI_I2S_H_ */
 

@@ -1,8 +1,11 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm7
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,14 +13,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1187_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +31,17 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1187_cm7.h
- * @version 2.0
- * @date 2024-01-18
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT1187_cm7
  *
  * CMSIS Peripheral Access Layer for MIMXRT1187_cm7

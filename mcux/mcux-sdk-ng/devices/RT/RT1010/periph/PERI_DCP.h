@@ -3,14 +3,14 @@
 **     Processors:          MIMXRT1011CAE4A
 **                          MIMXRT1011DAE5A
 **
-**     Version:             rev. 1.2, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DCP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -25,21 +25,24 @@
 **         Update header files to align with IMXRT1010RM Rev.B.
 **     - rev. 1.2 (2021-08-10)
 **         Update header files to align with IMXRT1010RM Rev.1.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DCP.h
- * @version 1.2
- * @date 2021-08-10
+ * @file PERI_DCP.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DCP
  *
  * CMSIS Peripheral Access Layer for DCP
  */
 
-#if !defined(DCP_H_)
-#define DCP_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DCP_H_)
+#define PERI_DCP_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1011CAE4A) || defined(CPU_MIMXRT1011DAE5A))
 #include "MIMXRT1011_COMMON.h"
@@ -225,16 +228,16 @@ typedef struct {
 #define DCP_CTRL_PRESENT_SHA_MASK                (0x10000000U)
 #define DCP_CTRL_PRESENT_SHA_SHIFT               (28U)
 /*! PRESENT_SHA
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_PRESENT_SHA(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_PRESENT_SHA_SHIFT)) & DCP_CTRL_PRESENT_SHA_MASK)
 
 #define DCP_CTRL_PRESENT_CRYPTO_MASK             (0x20000000U)
 #define DCP_CTRL_PRESENT_CRYPTO_SHIFT            (29U)
 /*! PRESENT_CRYPTO
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_PRESENT_CRYPTO(x)               (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_PRESENT_CRYPTO_MASK)
 
@@ -279,16 +282,16 @@ typedef struct {
 #define DCP_CTRL_SET_PRESENT_SHA_MASK            (0x10000000U)
 #define DCP_CTRL_SET_PRESENT_SHA_SHIFT           (28U)
 /*! PRESENT_SHA
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_SET_PRESENT_SHA(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_PRESENT_SHA_SHIFT)) & DCP_CTRL_SET_PRESENT_SHA_MASK)
 
 #define DCP_CTRL_SET_PRESENT_CRYPTO_MASK         (0x20000000U)
 #define DCP_CTRL_SET_PRESENT_CRYPTO_SHIFT        (29U)
 /*! PRESENT_CRYPTO
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_SET_PRESENT_CRYPTO(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_SET_PRESENT_CRYPTO_MASK)
 
@@ -333,16 +336,16 @@ typedef struct {
 #define DCP_CTRL_CLR_PRESENT_SHA_MASK            (0x10000000U)
 #define DCP_CTRL_CLR_PRESENT_SHA_SHIFT           (28U)
 /*! PRESENT_SHA
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_CLR_PRESENT_SHA(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_PRESENT_SHA_SHIFT)) & DCP_CTRL_CLR_PRESENT_SHA_MASK)
 
 #define DCP_CTRL_CLR_PRESENT_CRYPTO_MASK         (0x20000000U)
 #define DCP_CTRL_CLR_PRESENT_CRYPTO_SHIFT        (29U)
 /*! PRESENT_CRYPTO
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_CLR_PRESENT_CRYPTO(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_CLR_PRESENT_CRYPTO_MASK)
 
@@ -387,16 +390,16 @@ typedef struct {
 #define DCP_CTRL_TOG_PRESENT_SHA_MASK            (0x10000000U)
 #define DCP_CTRL_TOG_PRESENT_SHA_SHIFT           (28U)
 /*! PRESENT_SHA
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_TOG_PRESENT_SHA(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_PRESENT_SHA_SHIFT)) & DCP_CTRL_TOG_PRESENT_SHA_MASK)
 
 #define DCP_CTRL_TOG_PRESENT_CRYPTO_MASK         (0x20000000U)
 #define DCP_CTRL_TOG_PRESENT_CRYPTO_SHIFT        (29U)
 /*! PRESENT_CRYPTO
- *  0b1..Present
  *  0b0..Absent
+ *  0b1..Present
  */
 #define DCP_CTRL_TOG_PRESENT_CRYPTO(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_TOG_PRESENT_CRYPTO_MASK)
 
@@ -815,8 +818,8 @@ typedef struct {
 #define DCP_PACKET1_CIPHER_ENCRYPT_MASK          (0x100U)
 #define DCP_PACKET1_CIPHER_ENCRYPT_SHIFT         (8U)
 /*! CIPHER_ENCRYPT
- *  0b1..ENCRYPT
  *  0b0..DECRYPT
+ *  0b1..ENCRYPT
  */
 #define DCP_PACKET1_CIPHER_ENCRYPT(x)            (((uint32_t)(((uint32_t)(x)) << DCP_PACKET1_CIPHER_ENCRYPT_SHIFT)) & DCP_PACKET1_CIPHER_ENCRYPT_MASK)
 
@@ -2088,5 +2091,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DCP_H_ */
+#endif  /* PERI_DCP_H_ */
 

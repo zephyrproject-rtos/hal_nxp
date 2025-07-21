@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAAM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CAAM.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_CAAM.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CAAM
  *
  * CMSIS Peripheral Access Layer for CAAM
  */
 
-#if !defined(CAAM_H_)
-#define CAAM_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CAAM_H_)
+#define PERI_CAAM_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -2868,8 +2871,8 @@ typedef struct {
 #define CAAM_HT_JQ_CTRL_MS_JDDS_MASK             (0x4000U)
 #define CAAM_HT_JQ_CTRL_MS_JDDS_SHIFT            (14U)
 /*! JDDS
- *  0b1..SEQ DID
  *  0b0..Non-SEQ DID
+ *  0b1..SEQ DID
  */
 #define CAAM_HT_JQ_CTRL_MS_JDDS(x)               (((uint32_t)(((uint32_t)(x)) << CAAM_HT_JQ_CTRL_MS_JDDS_SHIFT)) & CAAM_HT_JQ_CTRL_MS_JDDS_MASK)
 
@@ -3734,8 +3737,8 @@ typedef struct {
 #define CAAM_CHAVID_LS_AESVID_MASK               (0xFU)
 #define CAAM_CHAVID_LS_AESVID_SHIFT              (0U)
 /*! AESVID
- *  0b0100..High-performance AESA, implementing ECB, CBC, CBC-CS2, CFB128, OFB, CTR, CCM, CMAC, XCBC-MAC, CBCXCBC, CTRXCBC, XTS, and GCM modes
  *  0b0011..Low-power AESA, implementing ECB, CBC, CBC-CS2, CFB128, OFB, CTR, CCM, CMAC, XCBC-MAC, and GCM modes
+ *  0b0100..High-performance AESA, implementing ECB, CBC, CBC-CS2, CFB128, OFB, CTR, CCM, CMAC, XCBC-MAC, CBCXCBC, CTRXCBC, XTS, and GCM modes
  */
 #define CAAM_CHAVID_LS_AESVID(x)                 (((uint32_t)(((uint32_t)(x)) << CAAM_CHAVID_LS_AESVID_SHIFT)) & CAAM_CHAVID_LS_AESVID_MASK)
 
@@ -4955,40 +4958,40 @@ typedef struct {
 #define CAAM_REND_REPO_MASK                      (0xFU)
 #define CAAM_REND_REPO_SHIFT                     (0U)
 /*! REPO
- *  0bxxx1..Byte Swap Memory Block A
- *  0bxx1x..Byte Swap Memory Block B
- *  0bx1xx..Byte Swap Memory Block C
  *  0b1xxx..Byte Swap Memory Block D
+ *  0bx1xx..Byte Swap Memory Block C
+ *  0bxx1x..Byte Swap Memory Block B
+ *  0bxxx1..Byte Swap Memory Block A
  */
 #define CAAM_REND_REPO(x)                        (((uint32_t)(((uint32_t)(x)) << CAAM_REND_REPO_SHIFT)) & CAAM_REND_REPO_MASK)
 
 #define CAAM_REND_RBS_MASK                       (0xF0U)
 #define CAAM_REND_RBS_SHIFT                      (4U)
 /*! RBS
- *  0bxxx1..Byte Swap Memory Block A
- *  0bxx1x..Byte Swap Memory Block B
- *  0bx1xx..Byte Swap Memory Block C
  *  0b1xxx..Byte Swap Memory Block D
+ *  0bx1xx..Byte Swap Memory Block C
+ *  0bxx1x..Byte Swap Memory Block B
+ *  0bxxx1..Byte Swap Memory Block A
  */
 #define CAAM_REND_RBS(x)                         (((uint32_t)(((uint32_t)(x)) << CAAM_REND_RBS_SHIFT)) & CAAM_REND_RBS_MASK)
 
 #define CAAM_REND_RHWS_MASK                      (0xF00U)
 #define CAAM_REND_RHWS_SHIFT                     (8U)
 /*! RHWS
- *  0bxxx1..Half-Word Swap Memory Block A
- *  0bxx1x..Half-Word Swap Memory Block B
- *  0bx1xx..Half-Word Swap Memory Block C
  *  0b1xxx..Half-Word Swap Memory Block D
+ *  0bx1xx..Half-Word Swap Memory Block C
+ *  0bxx1x..Half-Word Swap Memory Block B
+ *  0bxxx1..Half-Word Swap Memory Block A
  */
 #define CAAM_REND_RHWS(x)                        (((uint32_t)(((uint32_t)(x)) << CAAM_REND_RHWS_SHIFT)) & CAAM_REND_RHWS_MASK)
 
 #define CAAM_REND_RWS_MASK                       (0xF000U)
 #define CAAM_REND_RWS_SHIFT                      (12U)
 /*! RWS
- *  0bxxx1..Word Swap Memory Block A
- *  0bxx1x..Word Swap Memory Block B
- *  0bx1xx..Word Swap Memory Block C
  *  0b1xxx..Word Swap Memory Block D
+ *  0bx1xx..Word Swap Memory Block C
+ *  0bxx1x..Word Swap Memory Block B
+ *  0bxxx1..Word Swap Memory Block A
  */
 #define CAAM_REND_RWS(x)                         (((uint32_t)(((uint32_t)(x)) << CAAM_REND_RWS_SHIFT)) & CAAM_REND_RWS_MASK)
 /*! @} */
@@ -6716,8 +6719,8 @@ typedef struct {
 #define CAAM_DDJR_JDDS_MASK                      (0x4000U)
 #define CAAM_DDJR_JDDS_SHIFT                     (14U)
 /*! JDDS
- *  0b1..SEQ DID
  *  0b0..Non-SEQ DID
+ *  0b1..SEQ DID
  */
 #define CAAM_DDJR_JDDS(x)                        (((uint32_t)(((uint32_t)(x)) << CAAM_DDJR_JDDS_SHIFT)) & CAAM_DDJR_JDDS_MASK)
 
@@ -7091,5 +7094,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CAAM_H_ */
+#endif  /* PERI_CAAM_H_ */
 

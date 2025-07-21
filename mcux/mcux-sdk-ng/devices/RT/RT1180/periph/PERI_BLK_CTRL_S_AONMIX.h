@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file BLK_CTRL_S_AONMIX.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_BLK_CTRL_S_AONMIX.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
  *
  * CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
  */
 
-#if !defined(BLK_CTRL_S_AONMIX_H_)
-#define BLK_CTRL_S_AONMIX_H_                     /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_BLK_CTRL_S_AONMIX_H_)
+#define PERI_BLK_CTRL_S_AONMIX_H_                /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -151,8 +176,8 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_MASK   (0xFFFFFFFFU)
 #define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_SHIFT  (0U)
 /*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000001..No Mask IRQ
  *  0b00000000000000000000000000000000..Mask IRQ
+ *  0b00000000000000000000000000000001..No Mask IRQ
  */
 #define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_MASK)
 /*! @} */
@@ -166,8 +191,8 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_MASK    (0xFFFFFFFFU)
 #define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_SHIFT   (0U)
 /*! M - CM7 IRQ MASK
- *  0b00000000000000000000000000000001..No Mask IRQ
  *  0b00000000000000000000000000000000..Mask IRQ
+ *  0b00000000000000000000000000000001..No Mask IRQ
  */
 #define BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM7_IRQ_MASK_M_MASK)
 /*! @} */
@@ -181,72 +206,72 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_WDG_RESET_MASK (0x1U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_WDG_RESET_SHIFT (0U)
 /*! WDG_RESET - EdgeLock Wdog reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_WDG_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_WDG_RESET_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_WDG_RESET_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_PUF_RESET_MASK (0x2U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_PUF_RESET_SHIFT (1U)
 /*! PUF_RESET - EdgeLock PUF reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_PUF_RESET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_PUF_RESET_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_PUF_RESET_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LC_BRICKED_MASK (0x4U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LC_BRICKED_SHIFT (2U)
 /*! LC_BRICKED - EdgeLock LMDA life cycle bricked reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LC_BRICKED(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LC_BRICKED_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LC_BRICKED_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_SYS_FAIL_MASK (0x8U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_SYS_FAIL_SHIFT (3U)
 /*! LMDA_SYS_FAIL - EdgeLock system failure reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_SYS_FAIL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_SYS_FAIL_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_SYS_FAIL_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_32K_MASK (0x10U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_32K_SHIFT (4U)
 /*! NOCLK_32K - EdgeLock 32k clock loss reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_32K(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_32K_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_32K_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_RESET_REQ_MASK (0x20U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_RESET_REQ_SHIFT (5U)
 /*! LMDA_RESET_REQ - EdgeLock LMDA reset request mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_RESET_REQ_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_32K_RESET_REQ_MASK (0x40U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_32K_RESET_REQ_SHIFT (6U)
 /*! LMDA_32K_RESET_REQ - EdgeLock LMDA reset request from 32k clock domain mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_32K_RESET_REQ(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_32K_RESET_REQ_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_LMDA_32K_RESET_REQ_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF1_MASK (0x80U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF1_SHIFT (7U)
 /*! NOCLK_REF1 - EdgeLock CM33 root clock loss reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF1_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF1_MASK)
 
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF2_MASK (0x100U)
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF2_SHIFT (8U)
 /*! NOCLK_REF2 - EdgeLock OSC 24Mhz clock loss reset mask
- *  0b1..Mask reset
  *  0b0..Unmask reset
+ *  0b1..Mask reset
  */
 #define BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF2_SHIFT)) & BLK_CTRL_S_AONMIX_EDGELOCK_RESET_REQ_MASK_NOCLK_REF2_MASK)
 /*! @} */
@@ -338,10 +363,10 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_MASK  (0x18U)
 #define BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_SHIFT (3U)
 /*! TCM_SIZE - M33 TCM SIZE
- *  0b11..Reserved
- *  0b10..Double Sys TCM, 256KB Sys TCM
- *  0b01..Double Code TCM, 256KB Code TCM
  *  0b00..Regular TCM, 128KB Code TCM and 128KB Sys TCM
+ *  0b01..Double Code TCM, 256KB Code TCM
+ *  0b10..Double Sys TCM, 256KB Sys TCM
+ *  0b11..Reserved
  */
 #define BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_SHIFT)) & BLK_CTRL_S_AONMIX_M33_CFG_TCM_SIZE_MASK)
 
@@ -378,13 +403,13 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_M7_CFG_TCM_SIZE_MASK   (0x7U)
 #define BLK_CTRL_S_AONMIX_M7_CFG_TCM_SIZE_SHIFT  (0U)
 /*! TCM_SIZE - M7 TCM SIZE
- *  0b111..Reserved
- *  0b110..Reserved
- *  0b101..HALF DTCM, 384KB ITCM and 128KB DTCM
- *  0b100..HALF ITCM, 128KB ITCM and 384KB DTCM
- *  0b010..Double DTCM, 512KB DTCM
- *  0b001..Double ITCM, 512KB ITCM
  *  0b000..Regular TCM, 256KB ITCM and 256KB DTCM
+ *  0b001..Double ITCM, 512KB ITCM
+ *  0b010..Double DTCM, 512KB DTCM
+ *  0b100..HALF ITCM, 128KB ITCM and 384KB DTCM
+ *  0b101..HALF DTCM, 384KB ITCM and 128KB DTCM
+ *  0b110..Reserved
+ *  0b111..Reserved
  */
 #define BLK_CTRL_S_AONMIX_M7_CFG_TCM_SIZE(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_M7_CFG_TCM_SIZE_SHIFT)) & BLK_CTRL_S_AONMIX_M7_CFG_TCM_SIZE_MASK)
 
@@ -497,168 +522,168 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_RESET_HS_EN_MASK (0x1U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_RESET_HS_EN_SHIFT (0U)
 /*! CM33_RESET_HS_EN - CM33 reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_RESET_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_RESET_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_RESET_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_RESET_HS_EN_MASK (0x2U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_RESET_HS_EN_SHIFT (1U)
 /*! CM7_RESET_HS_EN - CM7 reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_RESET_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_RESET_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_RESET_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_SUSPEND_HS_EN_MASK (0x4U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_SUSPEND_HS_EN_SHIFT (2U)
 /*! CM7_SUSPEND_HS_EN - CM7 suspend exit reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_SUSPEND_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_SUSPEND_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_SUSPEND_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_AONMIX_RESET_HS_EN_MASK (0x8U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_AONMIX_RESET_HS_EN_SHIFT (3U)
 /*! AONMIX_RESET_HS_EN - AONMIX reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_AONMIX_RESET_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_AONMIX_RESET_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_AONMIX_RESET_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_RESET_HS_EN_MASK (0x10U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_RESET_HS_EN_SHIFT (4U)
 /*! WAKEUPMIX_RESET_HS_EN - Wakeupmix reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_RESET_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_RESET_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_WAKEUPMIX_RESET_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_RESET_HS_EN_MASK (0x20U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_RESET_HS_EN_SHIFT (5U)
 /*! MEGAMIX_RESET_HS_EN - Megamix reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_RESET_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_RESET_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_RESET_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_LPM_HS_EN_MASK (0x40U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_LPM_HS_EN_SHIFT (6U)
 /*! MEGAMIX_LPM_HS_EN - Megamix low power mode exit reset handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_LPM_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_LPM_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_MEGAMIX_LPM_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_OFF_HS_EN_MASK (0x80U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_OFF_HS_EN_SHIFT (7U)
 /*! EDGELOCK_CLK_OFF_HS_EN - EDGELOCK clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_OFF_HS_EN_MASK (0x100U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_OFF_HS_EN_SHIFT (8U)
 /*! CM33_CLK_OFF_HS_EN - CM33 clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_OFF_HS_EN_MASK (0x200U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_OFF_HS_EN_SHIFT (9U)
 /*! CM7_CLK_OFF_HS_EN - CM7 clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_OFF_HS_EN_MASK (0x400U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_OFF_HS_EN_SHIFT (10U)
 /*! TRDC_CLK_OFF_HS_EN - TRDC clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_OFF_HS_EN_MASK (0x800U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_OFF_HS_EN_SHIFT (11U)
 /*! IEE_CLK_OFF_HS_EN - IEE clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_OFF_HS_EN_MASK (0x1000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_OFF_HS_EN_SHIFT (12U)
 /*! OTFAD1_CLK_OFF_HS_EN - OTFAD1 clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_OFF_HS_EN_MASK (0x2000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_OFF_HS_EN_SHIFT (13U)
 /*! OTFAD2_CLK_OFF_HS_EN - OTFAD2 clock off handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_OFF_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_OFF_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_OFF_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_ON_HS_EN_MASK (0x4000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_ON_HS_EN_SHIFT (14U)
 /*! EDGELOCK_CLK_ON_HS_EN - EDGELOCK clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_EDGELOCK_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_ON_HS_EN_MASK (0x8000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_ON_HS_EN_SHIFT (15U)
 /*! CM33_CLK_ON_HS_EN - CM33 clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM33_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_ON_HS_EN_MASK (0x10000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_ON_HS_EN_SHIFT (16U)
 /*! CM7_CLK_ON_HS_EN - CM7 clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_CM7_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_ON_HS_EN_MASK (0x20000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_ON_HS_EN_SHIFT (17U)
 /*! TRDC_CLK_ON_HS_EN - TRDC clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_TRDC_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_ON_HS_EN_MASK (0x40000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_ON_HS_EN_SHIFT (18U)
 /*! IEE_CLK_ON_HS_EN - IEE clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_IEE_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_ON_HS_EN_MASK (0x80000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_ON_HS_EN_SHIFT (19U)
 /*! OTFAD1_CLK_ON_HS_EN - OTFAD1 clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD1_CLK_ON_HS_EN_MASK)
 
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_ON_HS_EN_MASK (0x100000U)
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_ON_HS_EN_SHIFT (20U)
 /*! OTFAD2_CLK_ON_HS_EN - OTFAD2 clock on handshake enable
- *  0b1..Handshake is enabled
  *  0b0..Handshake is not enabled
+ *  0b1..Handshake is enabled
  */
 #define BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_ON_HS_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_ON_HS_EN_SHIFT)) & BLK_CTRL_S_AONMIX_LP_HANDSHAKE_OTFAD2_CLK_ON_HS_EN_MASK)
 /*! @} */
@@ -824,5 +849,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* BLK_CTRL_S_AONMIX_H_ */
+#endif  /* PERI_BLK_CTRL_S_AONMIX_H_ */
 

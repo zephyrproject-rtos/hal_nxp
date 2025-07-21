@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ASRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ASRC.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_ASRC.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ASRC
  *
  * CMSIS Peripheral Access Layer for ASRC
  */
 
-#if !defined(ASRC_H_)
-#define ASRC_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ASRC_H_)
+#define PERI_ASRC_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -258,8 +261,8 @@ typedef struct {
 #define ASRC_ASRCTR_USRA_MASK                    (0x4000U)
 #define ASRC_ASRCTR_USRA_SHIFT                   (14U)
 /*! USRA - USRA
- *  0b1..Use ratio as the input to ASRC for pair A
  *  0b0..Do not use ratio as the input to ASRC for pair A
+ *  0b1..Use ratio as the input to ASRC for pair A
  */
 #define ASRC_ASRCTR_USRA(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRCTR_USRA_SHIFT)) & ASRC_ASRCTR_USRA_MASK)
 
@@ -274,8 +277,8 @@ typedef struct {
 #define ASRC_ASRCTR_USRB_MASK                    (0x10000U)
 #define ASRC_ASRCTR_USRB_SHIFT                   (16U)
 /*! USRB - USRB
- *  0b1..Use ratio as the input to ASRC for pair B
  *  0b0..Do not use ratio as the input to ASRC for pair B
+ *  0b1..Use ratio as the input to ASRC for pair B
  */
 #define ASRC_ASRCTR_USRB(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRCTR_USRB_SHIFT)) & ASRC_ASRCTR_USRB_MASK)
 
@@ -290,32 +293,32 @@ typedef struct {
 #define ASRC_ASRCTR_USRC_MASK                    (0x40000U)
 #define ASRC_ASRCTR_USRC_SHIFT                   (18U)
 /*! USRC - USRC
- *  0b1..Use ratio as the input to ASRC for pair C
  *  0b0..Do not use ratio as the input to ASRC for pair C
+ *  0b1..Use ratio as the input to ASRC for pair C
  */
 #define ASRC_ASRCTR_USRC(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRCTR_USRC_SHIFT)) & ASRC_ASRCTR_USRC_MASK)
 
 #define ASRC_ASRCTR_ATSA_MASK                    (0x100000U)
 #define ASRC_ASRCTR_ATSA_SHIFT                   (20U)
 /*! ATSA - ATSA
- *  0b1..Pair A automatically updates its pre-processing and post-processing options
  *  0b0..Pair A does not automatically update its pre-processing and post-processing options
+ *  0b1..Pair A automatically updates its pre-processing and post-processing options
  */
 #define ASRC_ASRCTR_ATSA(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRCTR_ATSA_SHIFT)) & ASRC_ASRCTR_ATSA_MASK)
 
 #define ASRC_ASRCTR_ATSB_MASK                    (0x200000U)
 #define ASRC_ASRCTR_ATSB_SHIFT                   (21U)
 /*! ATSB - ATSB
- *  0b1..Pair B automatically updates its pre-processing and post-processing options
  *  0b0..Pair B does not automatically update its pre-processing and post-processing options
+ *  0b1..Pair B automatically updates its pre-processing and post-processing options
  */
 #define ASRC_ASRCTR_ATSB(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRCTR_ATSB_SHIFT)) & ASRC_ASRCTR_ATSB_MASK)
 
 #define ASRC_ASRCTR_ATSC_MASK                    (0x400000U)
 #define ASRC_ASRCTR_ATSC_SHIFT                   (22U)
 /*! ATSC - ATSC
- *  0b1..Pair C automatically updates its pre-processing and post-processing options
  *  0b0..Pair C does not automatically update its pre-processing and post-processing options
+ *  0b1..Pair C automatically updates its pre-processing and post-processing options
  */
 #define ASRC_ASRCTR_ATSC(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRCTR_ATSC_SHIFT)) & ASRC_ASRCTR_ATSC_MASK)
 /*! @} */
@@ -326,64 +329,64 @@ typedef struct {
 #define ASRC_ASRIER_ADIEA_MASK                   (0x1U)
 #define ASRC_ASRIER_ADIEA_SHIFT                  (0U)
 /*! ADIEA - ADIEA
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_ADIEA(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_ADIEA_SHIFT)) & ASRC_ASRIER_ADIEA_MASK)
 
 #define ASRC_ASRIER_ADIEB_MASK                   (0x2U)
 #define ASRC_ASRIER_ADIEB_SHIFT                  (1U)
 /*! ADIEB - ADIEB
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_ADIEB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_ADIEB_SHIFT)) & ASRC_ASRIER_ADIEB_MASK)
 
 #define ASRC_ASRIER_ADIEC_MASK                   (0x4U)
 #define ASRC_ASRIER_ADIEC_SHIFT                  (2U)
 /*! ADIEC - ADIEC
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_ADIEC(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_ADIEC_SHIFT)) & ASRC_ASRIER_ADIEC_MASK)
 
 #define ASRC_ASRIER_ADOEA_MASK                   (0x8U)
 #define ASRC_ASRIER_ADOEA_SHIFT                  (3U)
 /*! ADOEA - ADOEA
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_ADOEA(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_ADOEA_SHIFT)) & ASRC_ASRIER_ADOEA_MASK)
 
 #define ASRC_ASRIER_ADOEB_MASK                   (0x10U)
 #define ASRC_ASRIER_ADOEB_SHIFT                  (4U)
 /*! ADOEB - ADOEB
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_ADOEB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_ADOEB_SHIFT)) & ASRC_ASRIER_ADOEB_MASK)
 
 #define ASRC_ASRIER_ADOEC_MASK                   (0x20U)
 #define ASRC_ASRIER_ADOEC_SHIFT                  (5U)
 /*! ADOEC - ADOEC
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_ADOEC(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_ADOEC_SHIFT)) & ASRC_ASRIER_ADOEC_MASK)
 
 #define ASRC_ASRIER_AOLIE_MASK                   (0x40U)
 #define ASRC_ASRIER_AOLIE_SHIFT                  (6U)
 /*! AOLIE - AOLIE
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_AOLIE(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_AOLIE_SHIFT)) & ASRC_ASRIER_AOLIE_MASK)
 
 #define ASRC_ASRIER_AFPWE_MASK                   (0x80U)
 #define ASRC_ASRIER_AFPWE_SHIFT                  (7U)
 /*! AFPWE - AFPWE
- *  0b1..interrupt enabled
  *  0b0..interrupt disabled
+ *  0b1..interrupt enabled
  */
 #define ASRC_ASRIER_AFPWE(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRIER_AFPWE_SHIFT)) & ASRC_ASRIER_AFPWE_MASK)
 /*! @} */
@@ -768,56 +771,56 @@ typedef struct {
 #define ASRC_ASRSTR_AIDEA_MASK                   (0x1U)
 #define ASRC_ASRSTR_AIDEA_SHIFT                  (0U)
 /*! AIDEA - AIDEA
- *  0b1..When AIDEA is set, the ASRC generates data input A interrupt request to the processor if ASRIER[AIDEA] = 1
  *  0b0..The threshold has been met and no data input A interrupt is generated
+ *  0b1..When AIDEA is set, the ASRC generates data input A interrupt request to the processor if ASRIER[AIDEA] = 1
  */
 #define ASRC_ASRSTR_AIDEA(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AIDEA_SHIFT)) & ASRC_ASRSTR_AIDEA_MASK)
 
 #define ASRC_ASRSTR_AIDEB_MASK                   (0x2U)
 #define ASRC_ASRSTR_AIDEB_SHIFT                  (1U)
 /*! AIDEB - AIDEB
- *  0b1..When AIDEB is set, the ASRC generates data input B interrupt request to the processor if ASRIER[AIDEB] = 1
  *  0b0..The threshold has been met and no data input B interrupt is generated
+ *  0b1..When AIDEB is set, the ASRC generates data input B interrupt request to the processor if ASRIER[AIDEB] = 1
  */
 #define ASRC_ASRSTR_AIDEB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AIDEB_SHIFT)) & ASRC_ASRSTR_AIDEB_MASK)
 
 #define ASRC_ASRSTR_AIDEC_MASK                   (0x4U)
 #define ASRC_ASRSTR_AIDEC_SHIFT                  (2U)
 /*! AIDEC - AIDEC
- *  0b1..When AIDEC is set, the ASRC generates data input C interrupt request to the processor if ASRIER[AIDEC] = 1
  *  0b0..The threshold has been met and no data input C interrupt is generated
+ *  0b1..When AIDEC is set, the ASRC generates data input C interrupt request to the processor if ASRIER[AIDEC] = 1
  */
 #define ASRC_ASRSTR_AIDEC(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AIDEC_SHIFT)) & ASRC_ASRSTR_AIDEC_MASK)
 
 #define ASRC_ASRSTR_AODFA_MASK                   (0x8U)
 #define ASRC_ASRSTR_AODFA_SHIFT                  (3U)
 /*! AODFA - AODFA
- *  0b1..When AODFA is set, the ASRC generates data output A interrupt request to the processor if ASRIER[ADOEA] = 1
  *  0b0..The threshold has not yet been met and no data output A interrupt is generated
+ *  0b1..When AODFA is set, the ASRC generates data output A interrupt request to the processor if ASRIER[ADOEA] = 1
  */
 #define ASRC_ASRSTR_AODFA(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AODFA_SHIFT)) & ASRC_ASRSTR_AODFA_MASK)
 
 #define ASRC_ASRSTR_AODFB_MASK                   (0x10U)
 #define ASRC_ASRSTR_AODFB_SHIFT                  (4U)
 /*! AODFB - AODFB
- *  0b1..When AODFB is set, the ASRC generates data output B interrupt request to the processor if ASRIER[ADOEB] = 1
  *  0b0..The threshold has not yet been met and no data output B interrupt is generated
+ *  0b1..When AODFB is set, the ASRC generates data output B interrupt request to the processor if ASRIER[ADOEB] = 1
  */
 #define ASRC_ASRSTR_AODFB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AODFB_SHIFT)) & ASRC_ASRSTR_AODFB_MASK)
 
 #define ASRC_ASRSTR_AODFC_MASK                   (0x20U)
 #define ASRC_ASRSTR_AODFC_SHIFT                  (5U)
 /*! AODFC - AODFC
- *  0b1..When AODFC is set, the ASRC generates data output C interrupt request to the processor if ASRIER[ADOEC] = 1
  *  0b0..The threshold has not yet been met and no data output C interrupt is generated
+ *  0b1..When AODFC is set, the ASRC generates data output C interrupt request to the processor if ASRIER[ADOEC] = 1
  */
 #define ASRC_ASRSTR_AODFC(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AODFC_SHIFT)) & ASRC_ASRSTR_AODFC_MASK)
 
 #define ASRC_ASRSTR_AOLE_MASK                    (0x40U)
 #define ASRC_ASRSTR_AOLE_SHIFT                   (6U)
 /*! AOLE - AOLE
- *  0b1..Task rate is too high
  *  0b0..No overload
+ *  0b1..Task rate is too high
  */
 #define ASRC_ASRSTR_AOLE(x)                      (((uint32_t)(((uint32_t)(x)) << ASRC_ASRSTR_AOLE_SHIFT)) & ASRC_ASRSTR_AOLE_MASK)
 
@@ -1136,16 +1139,16 @@ typedef struct {
 #define ASRC_ASRMCRA_RSYNOFA_MASK                (0x400U)
 #define ASRC_ASRMCRA_RSYNOFA_SHIFT               (10U)
 /*! RSYNOFA - RSYNOFA
- *  0b1..Force ASRCCR[ACOA]=0
  *  0b0..Do not touch ASRCCR[ACOA]
+ *  0b1..Force ASRCCR[ACOA]=0
  */
 #define ASRC_ASRMCRA_RSYNOFA(x)                  (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRA_RSYNOFA_SHIFT)) & ASRC_ASRMCRA_RSYNOFA_MASK)
 
 #define ASRC_ASRMCRA_RSYNIFA_MASK                (0x800U)
 #define ASRC_ASRMCRA_RSYNIFA_SHIFT               (11U)
 /*! RSYNIFA - RSYNIFA
- *  0b1..Force ASRCCR[ACIA]=0
  *  0b0..Do not touch ASRCCR[ACIA]
+ *  0b1..Force ASRCCR[ACIA]=0
  */
 #define ASRC_ASRMCRA_RSYNIFA(x)                  (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRA_RSYNIFA_SHIFT)) & ASRC_ASRMCRA_RSYNIFA_MASK)
 
@@ -1157,32 +1160,32 @@ typedef struct {
 #define ASRC_ASRMCRA_BYPASSPOLYA_MASK            (0x100000U)
 #define ASRC_ASRMCRA_BYPASSPOLYA_SHIFT           (20U)
 /*! BYPASSPOLYA - BYPASSPOLYA
- *  0b1..Bypass polyphase filtering.
  *  0b0..Don't bypass polyphase filtering.
+ *  0b1..Bypass polyphase filtering.
  */
 #define ASRC_ASRMCRA_BYPASSPOLYA(x)              (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRA_BYPASSPOLYA_SHIFT)) & ASRC_ASRMCRA_BYPASSPOLYA_MASK)
 
 #define ASRC_ASRMCRA_BUFSTALLA_MASK              (0x200000U)
 #define ASRC_ASRMCRA_BUFSTALLA_SHIFT             (21U)
 /*! BUFSTALLA - BUFSTALLA
- *  0b1..Stall Pair A conversion in case of near empty/full FIFO conditions.
  *  0b0..Don't stall Pair A conversion even in case of near empty/full FIFO conditions.
+ *  0b1..Stall Pair A conversion in case of near empty/full FIFO conditions.
  */
 #define ASRC_ASRMCRA_BUFSTALLA(x)                (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRA_BUFSTALLA_SHIFT)) & ASRC_ASRMCRA_BUFSTALLA_MASK)
 
 #define ASRC_ASRMCRA_EXTTHRSHA_MASK              (0x400000U)
 #define ASRC_ASRMCRA_EXTTHRSHA_SHIFT             (22U)
 /*! EXTTHRSHA - EXTTHRSHA
- *  0b1..Use external defined thresholds.
  *  0b0..Use default thresholds.
+ *  0b1..Use external defined thresholds.
  */
 #define ASRC_ASRMCRA_EXTTHRSHA(x)                (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRA_EXTTHRSHA_SHIFT)) & ASRC_ASRMCRA_EXTTHRSHA_MASK)
 
 #define ASRC_ASRMCRA_ZEROBUFA_MASK               (0x800000U)
 #define ASRC_ASRMCRA_ZEROBUFA_SHIFT              (23U)
 /*! ZEROBUFA - ZEROBUFA
- *  0b1..Don't zeroize the buffer
  *  0b0..Zeroize the buffer
+ *  0b1..Don't zeroize the buffer
  */
 #define ASRC_ASRMCRA_ZEROBUFA(x)                 (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRA_ZEROBUFA_SHIFT)) & ASRC_ASRMCRA_ZEROBUFA_MASK)
 /*! @} */
@@ -1198,8 +1201,8 @@ typedef struct {
 #define ASRC_ASRFSTA_IAEA_MASK                   (0x800U)
 #define ASRC_ASRFSTA_IAEA_SHIFT                  (11U)
 /*! IAEA - IAEA
- *  0b1..Input FIFO is near empty for Pair A
  *  0b0..Input FIFO is not near empty for Pair A
+ *  0b1..Input FIFO is near empty for Pair A
  */
 #define ASRC_ASRFSTA_IAEA(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRFSTA_IAEA_SHIFT)) & ASRC_ASRFSTA_IAEA_MASK)
 
@@ -1211,8 +1214,8 @@ typedef struct {
 #define ASRC_ASRFSTA_OAFA_MASK                   (0x800000U)
 #define ASRC_ASRFSTA_OAFA_SHIFT                  (23U)
 /*! OAFA - OAFA
- *  0b1..Output FIFO is near full for Pair A
  *  0b0..Output FIFO is not near full for Pair A
+ *  0b1..Output FIFO is near full for Pair A
  */
 #define ASRC_ASRFSTA_OAFA(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRFSTA_OAFA_SHIFT)) & ASRC_ASRFSTA_OAFA_MASK)
 /*! @} */
@@ -1228,16 +1231,16 @@ typedef struct {
 #define ASRC_ASRMCRB_RSYNOFB_MASK                (0x400U)
 #define ASRC_ASRMCRB_RSYNOFB_SHIFT               (10U)
 /*! RSYNOFB - RSYNOFB
- *  0b1..Force ASRCCR[ACOB]=0
  *  0b0..Do not touch ASRCCR[ACOB]
+ *  0b1..Force ASRCCR[ACOB]=0
  */
 #define ASRC_ASRMCRB_RSYNOFB(x)                  (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRB_RSYNOFB_SHIFT)) & ASRC_ASRMCRB_RSYNOFB_MASK)
 
 #define ASRC_ASRMCRB_RSYNIFB_MASK                (0x800U)
 #define ASRC_ASRMCRB_RSYNIFB_SHIFT               (11U)
 /*! RSYNIFB - RSYNIFB
- *  0b1..Force ASRCCR[ACIB]=0
  *  0b0..Do not touch ASRCCR[ACIB]
+ *  0b1..Force ASRCCR[ACIB]=0
  */
 #define ASRC_ASRMCRB_RSYNIFB(x)                  (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRB_RSYNIFB_SHIFT)) & ASRC_ASRMCRB_RSYNIFB_MASK)
 
@@ -1249,32 +1252,32 @@ typedef struct {
 #define ASRC_ASRMCRB_BYPASSPOLYB_MASK            (0x100000U)
 #define ASRC_ASRMCRB_BYPASSPOLYB_SHIFT           (20U)
 /*! BYPASSPOLYB - BYPASSPOLYB
- *  0b1..Bypass polyphase filtering.
  *  0b0..Don't bypass polyphase filtering.
+ *  0b1..Bypass polyphase filtering.
  */
 #define ASRC_ASRMCRB_BYPASSPOLYB(x)              (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRB_BYPASSPOLYB_SHIFT)) & ASRC_ASRMCRB_BYPASSPOLYB_MASK)
 
 #define ASRC_ASRMCRB_BUFSTALLB_MASK              (0x200000U)
 #define ASRC_ASRMCRB_BUFSTALLB_SHIFT             (21U)
 /*! BUFSTALLB - BUFSTALLB
- *  0b1..Stall Pair B conversion in case of near empty/full FIFO conditions.
  *  0b0..Don't stall Pair B conversion even in case of near empty/full FIFO conditions.
+ *  0b1..Stall Pair B conversion in case of near empty/full FIFO conditions.
  */
 #define ASRC_ASRMCRB_BUFSTALLB(x)                (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRB_BUFSTALLB_SHIFT)) & ASRC_ASRMCRB_BUFSTALLB_MASK)
 
 #define ASRC_ASRMCRB_EXTTHRSHB_MASK              (0x400000U)
 #define ASRC_ASRMCRB_EXTTHRSHB_SHIFT             (22U)
 /*! EXTTHRSHB - EXTTHRSHB
- *  0b1..Use external defined thresholds.
  *  0b0..Use default thresholds.
+ *  0b1..Use external defined thresholds.
  */
 #define ASRC_ASRMCRB_EXTTHRSHB(x)                (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRB_EXTTHRSHB_SHIFT)) & ASRC_ASRMCRB_EXTTHRSHB_MASK)
 
 #define ASRC_ASRMCRB_ZEROBUFB_MASK               (0x800000U)
 #define ASRC_ASRMCRB_ZEROBUFB_SHIFT              (23U)
 /*! ZEROBUFB - ZEROBUFB
- *  0b1..Don't zeroize the buffer
  *  0b0..Zeroize the buffer
+ *  0b1..Don't zeroize the buffer
  */
 #define ASRC_ASRMCRB_ZEROBUFB(x)                 (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRB_ZEROBUFB_SHIFT)) & ASRC_ASRMCRB_ZEROBUFB_MASK)
 /*! @} */
@@ -1290,8 +1293,8 @@ typedef struct {
 #define ASRC_ASRFSTB_IAEB_MASK                   (0x800U)
 #define ASRC_ASRFSTB_IAEB_SHIFT                  (11U)
 /*! IAEB - IAEB
- *  0b1..Input FIFO is near empty for Pair B
  *  0b0..Input FIFO is not near empty for Pair B
+ *  0b1..Input FIFO is near empty for Pair B
  */
 #define ASRC_ASRFSTB_IAEB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRFSTB_IAEB_SHIFT)) & ASRC_ASRFSTB_IAEB_MASK)
 
@@ -1303,8 +1306,8 @@ typedef struct {
 #define ASRC_ASRFSTB_OAFB_MASK                   (0x800000U)
 #define ASRC_ASRFSTB_OAFB_SHIFT                  (23U)
 /*! OAFB - OAFB
- *  0b1..Output FIFO is near full for Pair B
  *  0b0..Output FIFO is not near full for Pair B
+ *  0b1..Output FIFO is near full for Pair B
  */
 #define ASRC_ASRFSTB_OAFB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRFSTB_OAFB_SHIFT)) & ASRC_ASRFSTB_OAFB_MASK)
 /*! @} */
@@ -1320,16 +1323,16 @@ typedef struct {
 #define ASRC_ASRMCRC_RSYNOFC_MASK                (0x400U)
 #define ASRC_ASRMCRC_RSYNOFC_SHIFT               (10U)
 /*! RSYNOFC - RSYNOFC
- *  0b1..Force ASRCCR[ACOC]=0
  *  0b0..Do not touch ASRCCR[ACOC]
+ *  0b1..Force ASRCCR[ACOC]=0
  */
 #define ASRC_ASRMCRC_RSYNOFC(x)                  (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRC_RSYNOFC_SHIFT)) & ASRC_ASRMCRC_RSYNOFC_MASK)
 
 #define ASRC_ASRMCRC_RSYNIFC_MASK                (0x800U)
 #define ASRC_ASRMCRC_RSYNIFC_SHIFT               (11U)
 /*! RSYNIFC - RSYNIFC
- *  0b1..Force ASRCCR[ACIC]=0
  *  0b0..Do not touch ASRCCR[ACIC]
+ *  0b1..Force ASRCCR[ACIC]=0
  */
 #define ASRC_ASRMCRC_RSYNIFC(x)                  (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRC_RSYNIFC_SHIFT)) & ASRC_ASRMCRC_RSYNIFC_MASK)
 
@@ -1341,32 +1344,32 @@ typedef struct {
 #define ASRC_ASRMCRC_BYPASSPOLYC_MASK            (0x100000U)
 #define ASRC_ASRMCRC_BYPASSPOLYC_SHIFT           (20U)
 /*! BYPASSPOLYC - BYPASSPOLYC
- *  0b1..Bypass polyphase filtering.
  *  0b0..Don't bypass polyphase filtering.
+ *  0b1..Bypass polyphase filtering.
  */
 #define ASRC_ASRMCRC_BYPASSPOLYC(x)              (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRC_BYPASSPOLYC_SHIFT)) & ASRC_ASRMCRC_BYPASSPOLYC_MASK)
 
 #define ASRC_ASRMCRC_BUFSTALLC_MASK              (0x200000U)
 #define ASRC_ASRMCRC_BUFSTALLC_SHIFT             (21U)
 /*! BUFSTALLC - BUFSTALLC
- *  0b1..Stall Pair C conversion in case of near empty/full FIFO conditions.
  *  0b0..Don't stall Pair C conversion even in case of near empty/full FIFO conditions.
+ *  0b1..Stall Pair C conversion in case of near empty/full FIFO conditions.
  */
 #define ASRC_ASRMCRC_BUFSTALLC(x)                (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRC_BUFSTALLC_SHIFT)) & ASRC_ASRMCRC_BUFSTALLC_MASK)
 
 #define ASRC_ASRMCRC_EXTTHRSHC_MASK              (0x400000U)
 #define ASRC_ASRMCRC_EXTTHRSHC_SHIFT             (22U)
 /*! EXTTHRSHC - EXTTHRSHC
- *  0b1..Use external defined thresholds.
  *  0b0..Use default thresholds.
+ *  0b1..Use external defined thresholds.
  */
 #define ASRC_ASRMCRC_EXTTHRSHC(x)                (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRC_EXTTHRSHC_SHIFT)) & ASRC_ASRMCRC_EXTTHRSHC_MASK)
 
 #define ASRC_ASRMCRC_ZEROBUFC_MASK               (0x800000U)
 #define ASRC_ASRMCRC_ZEROBUFC_SHIFT              (23U)
 /*! ZEROBUFC - ZEROBUFC
- *  0b1..Don't zeroize the buffer
  *  0b0..Zeroize the buffer
+ *  0b1..Don't zeroize the buffer
  */
 #define ASRC_ASRMCRC_ZEROBUFC(x)                 (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCRC_ZEROBUFC_SHIFT)) & ASRC_ASRMCRC_ZEROBUFC_MASK)
 /*! @} */
@@ -1382,8 +1385,8 @@ typedef struct {
 #define ASRC_ASRFSTC_IAEC_MASK                   (0x800U)
 #define ASRC_ASRFSTC_IAEC_SHIFT                  (11U)
 /*! IAEC - IAEC
- *  0b1..Input FIFO is near empty for Pair C
  *  0b0..Input FIFO is not near empty for Pair C
+ *  0b1..Input FIFO is near empty for Pair C
  */
 #define ASRC_ASRFSTC_IAEC(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRFSTC_IAEC_SHIFT)) & ASRC_ASRFSTC_IAEC_MASK)
 
@@ -1395,8 +1398,8 @@ typedef struct {
 #define ASRC_ASRFSTC_OAFC_MASK                   (0x800000U)
 #define ASRC_ASRFSTC_OAFC_SHIFT                  (23U)
 /*! OAFC - OAFC
- *  0b1..Output FIFO is near full for Pair C
  *  0b0..Output FIFO is not near full for Pair C
+ *  0b1..Output FIFO is near full for Pair C
  */
 #define ASRC_ASRFSTC_OAFC(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRFSTC_OAFC_SHIFT)) & ASRC_ASRFSTC_OAFC_MASK)
 /*! @} */
@@ -1407,32 +1410,32 @@ typedef struct {
 #define ASRC_ASRMCR1_OW16_MASK                   (0x1U)
 #define ASRC_ASRMCR1_OW16_SHIFT                  (0U)
 /*! OW16 - OW16
- *  0b1..16-bit output data
  *  0b0..24-bit output data.
+ *  0b1..16-bit output data
  */
 #define ASRC_ASRMCR1_OW16(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCR1_OW16_SHIFT)) & ASRC_ASRMCR1_OW16_MASK)
 
 #define ASRC_ASRMCR1_OSGN_MASK                   (0x2U)
 #define ASRC_ASRMCR1_OSGN_SHIFT                  (1U)
 /*! OSGN - OSGN
- *  0b1..Sign extension.
  *  0b0..No sign extension.
+ *  0b1..Sign extension.
  */
 #define ASRC_ASRMCR1_OSGN(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCR1_OSGN_SHIFT)) & ASRC_ASRMCR1_OSGN_MASK)
 
 #define ASRC_ASRMCR1_OMSB_MASK                   (0x4U)
 #define ASRC_ASRMCR1_OMSB_SHIFT                  (2U)
 /*! OMSB - OMSB
- *  0b1..MSB aligned.
  *  0b0..LSB aligned.
+ *  0b1..MSB aligned.
  */
 #define ASRC_ASRMCR1_OMSB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCR1_OMSB_SHIFT)) & ASRC_ASRMCR1_OMSB_MASK)
 
 #define ASRC_ASRMCR1_IMSB_MASK                   (0x100U)
 #define ASRC_ASRMCR1_IMSB_SHIFT                  (8U)
 /*! IMSB - IMSB
- *  0b1..MSB aligned.
  *  0b0..LSB aligned.
+ *  0b1..MSB aligned.
  */
 #define ASRC_ASRMCR1_IMSB(x)                     (((uint32_t)(((uint32_t)(x)) << ASRC_ASRMCR1_IMSB_SHIFT)) & ASRC_ASRMCR1_IMSB_MASK)
 
@@ -1483,5 +1486,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ASRC_H_ */
+#endif  /* PERI_ASRC_H_ */
 
