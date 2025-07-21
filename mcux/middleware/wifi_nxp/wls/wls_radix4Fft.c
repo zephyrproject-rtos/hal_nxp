@@ -348,7 +348,7 @@ const INT16 radix4FftTwiddleArr[2*MAX_FFT_SIZE] = {0X7FFF,0x0000,0x7FF6,0x0324,0
 #endif
 
 #if !(defined(ARM_DS5) || defined(W8987))
-int __clz(int x){
+unsigned int __clz(uint32_t x){
 #ifdef ARM_GCC
 	int ret;
     asm ("clz %0, %1 ; \n"

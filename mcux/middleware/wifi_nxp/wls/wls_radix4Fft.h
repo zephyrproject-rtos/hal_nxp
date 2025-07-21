@@ -44,7 +44,7 @@ void radix4IfftLastStage(INT16 *pSrc, INT16 *pDst, int Nfft, const INT16 *pCoeff
 // auxiliary function
 unsigned int reverse(register unsigned int x);
 #ifndef ARM_DS5
-int __clz(int x);
+unsigned int __clz(uint32_t x);
 #endif
 
 void radix4Fft(INT16 *pSrc, INT16 *pDst, int Nfft, const INT16 *pCoeff, int lenCoeff);

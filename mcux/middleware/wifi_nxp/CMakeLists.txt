@@ -345,7 +345,7 @@ zephyr_code_relocate(FILES
                      wifidriver/wifi-sdio.c
                      wifidriver/sdio.c
                      ${ZEPHYR_BASE}/subsys/sd/sdio.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
 
 zephyr_code_relocate(FILES ${ZEPHYR_BASE}/drivers/wifi/nxp/nxp_wifi_drv.c
                      FILTER ".*\\.nxp_wifi_send|.*\\.nxp_wifi_recv"

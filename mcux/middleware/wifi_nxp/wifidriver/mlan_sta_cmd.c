@@ -112,9 +112,18 @@ static mlan_status wlan_cmd_mfg_tx_frame(pmlan_private pmpriv, HostCmd_DS_COMMAN
         mcmd->short_preamble    = wlan_cpu_to_le32(cfg->short_preamble);
         mcmd->act_sub_ch        = wlan_cpu_to_le32(cfg->act_sub_ch);
         mcmd->short_gi          = wlan_cpu_to_le32(cfg->short_gi);
+        mcmd->adv_coding         = wlan_le32_to_cpu(cfg->adv_coding);
         mcmd->tx_bf             = wlan_cpu_to_le32(cfg->tx_bf);
         mcmd->gf_mode           = wlan_cpu_to_le32(cfg->gf_mode);
         mcmd->stbc              = wlan_cpu_to_le32(cfg->stbc);
+        mcmd->signal_bw         = wlan_cpu_to_le32(cfg->signal_bw);
+        mcmd->NumPkt            = wlan_cpu_to_le32(cfg->NumPkt);
+        mcmd->MaxPE             = wlan_cpu_to_le32(cfg->MaxPE);
+        mcmd->BeamChange        = wlan_cpu_to_le32(cfg->BeamChange);
+        mcmd->Dcm               = wlan_cpu_to_le32(cfg->Dcm);
+        mcmd->Doppler           = wlan_cpu_to_le32(cfg->Doppler);
+        mcmd->MidP              = wlan_cpu_to_le32(cfg->MidP);
+        mcmd->QNum              = wlan_cpu_to_le32(cfg->QNum);
         (void)__memcpy(pmpriv->adapter, mcmd->bssid, cfg->bssid, MLAN_MAC_ADDR_LENGTH);
     }
 
@@ -1702,8 +1711,8 @@ int wlan_parse_getdata(HostCmd_DS_COMMAND *resp, mlan_ds_subscribe_evt *sub_evt)
     sub_evt->link_snr_freq         = wlan_le16_to_cpu(link_quality->link_snr_freq);
     sub_evt->link_rate             = wlan_le16_to_cpu(link_quality->link_rate);
     sub_evt->link_rate_freq        = wlan_le16_to_cpu(link_quality->link_rate_freq);
-    sub_evt->link_tx_latency       = wlan_le16_to_cpu(link_quality->link_tx_latency);
-    sub_evt->link_tx_lantency_freq = wlan_le16_to_cpu(link_quality->link_tx_lantency_freq);
+    sub_evt->link_tx_latency       = wlan_le32_to_cpu(link_quality->link_tx_latency);
+    sub_evt->link_tx_lantency_freq = wlan_le32_to_cpu(link_quality->link_tx_lantency_freq);
     tlv += link_quality->header.len + tyhdsize;
 
     /*pre beacon lost*/
@@ -1884,8 +1893,8 @@ mlan_status wlan_cmd_subscribe_event(IN pmlan_private pmpriv,
         link_quality->link_snr_freq         = wlan_cpu_to_le16(sub_evt->link_snr_freq);
         link_quality->link_rate             = wlan_cpu_to_le16(sub_evt->link_rate);
         link_quality->link_rate_freq        = wlan_cpu_to_le16(sub_evt->link_rate_freq);
-        link_quality->link_tx_latency       = wlan_cpu_to_le16(sub_evt->link_tx_latency);
-        link_quality->link_tx_lantency_freq = wlan_cpu_to_le16(sub_evt->link_tx_lantency_freq);
+        link_quality->link_tx_latency       = wlan_cpu_to_le32(sub_evt->link_tx_latency);
+        link_quality->link_tx_lantency_freq = wlan_cpu_to_le32(sub_evt->link_tx_lantency_freq);
         tlv += sizeof(MrvlIEtypes_LinkQualityThreshold_t);
         cmd_size += sizeof(MrvlIEtypes_LinkQualityThreshold_t);
     }
