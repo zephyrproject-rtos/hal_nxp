@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/Wireless/variable.cmake)
 mcux_set_variable(device KW47B42Z83)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series KW)
 mcux_set_variable(soc_periph periph6)
 
@@ -13,6 +14,6 @@ if (NOT DEFINED core_id)
     message(FATAL_ERROR "Please specify core_id for multicore device.")
 endif()
 
-include(${SdkRootDirPath}/devices/Wireless/KW/KW47B42Z83/${core_id}/variable.cmake)
+include(${SdkRootDirPath}/${device_root}/Wireless/KW/KW47B42Z83/${core_id}/variable.cmake)
 
 #### Source record

@@ -1,14 +1,14 @@
 /*
 ** ###################################################################
 **     Processor:           K32W1480VFTA
-**     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WOR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -17,21 +17,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-01-18)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file WOR.h
- * @version 1.0
- * @date 2021-01-18
+ * @file PERI_WOR.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for WOR
  *
  * CMSIS Peripheral Access Layer for WOR
  */
 
-#if !defined(WOR_H_)
-#define WOR_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_WOR_H_)
+#define PERI_WOR_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32W1480VFTA))
 #include "K32W1480_COMMON.h"
@@ -549,5 +552,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* WOR_H_ */
+#endif  /* PERI_WOR_H_ */
 

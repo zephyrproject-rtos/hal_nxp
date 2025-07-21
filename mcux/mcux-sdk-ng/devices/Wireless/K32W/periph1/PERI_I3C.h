@@ -1,14 +1,14 @@
 /*
 ** ###################################################################
 **     Processor:           K32W1480VFTA
-**     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I3C
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -17,21 +17,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-01-18)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file I3C.h
- * @version 1.0
- * @date 2021-01-18
+ * @file PERI_I3C.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for I3C
  *
  * CMSIS Peripheral Access Layer for I3C
  */
 
-#if !defined(I3C_H_)
-#define I3C_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_I3C_H_)
+#define PERI_I3C_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32W1480VFTA))
 #include "K32W1480_COMMON.h"
@@ -755,16 +758,16 @@ typedef struct {
 #define I3C_SDATACTRL_TXFULL_MASK                (0x40000000U)
 #define I3C_SDATACTRL_TXFULL_SHIFT               (30U)
 /*! TXFULL - TX is full
- *  0b1..TX is full
  *  0b0..TX is not full
+ *  0b1..TX is full
  */
 #define I3C_SDATACTRL_TXFULL(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_TXFULL_SHIFT)) & I3C_SDATACTRL_TXFULL_MASK)
 
 #define I3C_SDATACTRL_RXEMPTY_MASK               (0x80000000U)
 #define I3C_SDATACTRL_RXEMPTY_SHIFT              (31U)
 /*! RXEMPTY - RX is empty
- *  0b1..RX is empty
  *  0b0..RX is not empty
+ *  0b1..RX is empty
  */
 #define I3C_SDATACTRL_RXEMPTY(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_RXEMPTY_SHIFT)) & I3C_SDATACTRL_RXEMPTY_MASK)
 /*! @} */
@@ -945,16 +948,16 @@ typedef struct {
 #define I3C_SCAPABILITIES_INT_MASK               (0x40000000U)
 #define I3C_SCAPABILITIES_INT_SHIFT              (30U)
 /*! INT - Interrupt
- *  0b1..Interrupts are supported.
  *  0b0..Interrupts are not supported
+ *  0b1..Interrupts are supported.
  */
 #define I3C_SCAPABILITIES_INT(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_INT_SHIFT)) & I3C_SCAPABILITIES_INT_MASK)
 
 #define I3C_SCAPABILITIES_DMA_MASK               (0x80000000U)
 #define I3C_SCAPABILITIES_DMA_SHIFT              (31U)
 /*! DMA - DMA
- *  0b1..DMA is supported
  *  0b0..DMA is not supported
+ *  0b1..DMA is supported
  */
 #define I3C_SCAPABILITIES_DMA(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_DMA_SHIFT)) & I3C_SCAPABILITIES_DMA_MASK)
 /*! @} */
@@ -1768,5 +1771,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* I3C_H_ */
+#endif  /* PERI_I3C_H_ */
 
