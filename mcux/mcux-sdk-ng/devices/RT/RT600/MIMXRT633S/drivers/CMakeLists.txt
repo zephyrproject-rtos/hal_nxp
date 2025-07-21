@@ -1,10 +1,9 @@
-# Copyright 2024 NXP
-# All rights reserved.
+# Copyright 2024-2025 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (CONFIG_MCUX_COMPONENT_driver.clock)
-    mcux_component_version(2.7.3)
+    mcux_component_version(2.7.4)
     mcux_add_source( BASE_PATH ../../MIMXRT685S/drivers SOURCES fsl_clock.c fsl_clock.h )
     mcux_add_include( BASE_PATH ../../MIMXRT685S/drivers INCLUDES . )
 endif()

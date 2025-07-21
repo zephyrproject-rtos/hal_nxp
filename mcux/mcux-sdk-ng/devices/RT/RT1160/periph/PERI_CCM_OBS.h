@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM_OBS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CCM_OBS.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_CCM_OBS.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CCM_OBS
  *
  * CMSIS Peripheral Access Layer for CCM_OBS
  */
 
-#if !defined(CCM_OBS_H_)
-#define CCM_OBS_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CCM_OBS_H_)
+#define PERI_CCM_OBS_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -310,16 +313,16 @@ typedef struct {
 #define CCM_OBS_OBSERVE_STATUS0_INV_MASK         (0x2000U)
 #define CCM_OBS_OBSERVE_STATUS0_INV_SHIFT        (13U)
 /*! INV - Polarity of the observe target
- *  0b1..Polarity of the observe target is inverted
  *  0b0..Polarity is not inverted
+ *  0b1..Polarity of the observe target is inverted
  */
 #define CCM_OBS_OBSERVE_STATUS0_INV(x)           (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_STATUS0_INV_SHIFT)) & CCM_OBS_OBSERVE_STATUS0_INV_MASK)
 
 #define CCM_OBS_OBSERVE_STATUS0_RESET_MASK       (0x8000U)
 #define CCM_OBS_OBSERVE_STATUS0_RESET_SHIFT      (15U)
 /*! RESET - Reset state
- *  0b1..Observe divider is in reset state
  *  0b0..Observe divider is not in reset state
+ *  0b1..Observe divider is in reset state
  */
 #define CCM_OBS_OBSERVE_STATUS0_RESET(x)         (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_STATUS0_RESET_SHIFT)) & CCM_OBS_OBSERVE_STATUS0_RESET_MASK)
 
@@ -346,8 +349,8 @@ typedef struct {
 #define CCM_OBS_OBSERVE_AUTHEN_TZ_USER_MASK      (0x1U)
 #define CCM_OBS_OBSERVE_AUTHEN_TZ_USER_SHIFT     (0U)
 /*! TZ_USER - User access
- *  0b1..Clock can be changed in user mode.
  *  0b0..Clock cannot be changed in user mode.
+ *  0b1..Clock can be changed in user mode.
  */
 #define CCM_OBS_OBSERVE_AUTHEN_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_TZ_USER_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_TZ_USER_MASK)
 
@@ -370,12 +373,12 @@ typedef struct {
 #define CCM_OBS_OBSERVE_AUTHEN_WHITE_LIST_MASK   (0xF00U)
 #define CCM_OBS_OBSERVE_AUTHEN_WHITE_LIST_SHIFT  (8U)
 /*! WHITE_LIST - White list
- *  0b1111..All domain can change.
+ *  0b0000..No domain can change.
+ *  0b0001..Domain 0 can change.
  *  0b0010..Domain 1 can change.
  *  0b0011..Domain 0 and domain 1 can change.
- *  0b0000..No domain can change.
  *  0b0100..Domain 2 can change.
- *  0b0001..Domain 0 can change.
+ *  0b1111..All domain can change.
  */
 #define CCM_OBS_OBSERVE_AUTHEN_WHITE_LIST(x)     (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_WHITE_LIST_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_WHITE_LIST_MASK)
 
@@ -390,8 +393,8 @@ typedef struct {
 #define CCM_OBS_OBSERVE_AUTHEN_DOMAIN_MODE_MASK  (0x10000U)
 #define CCM_OBS_OBSERVE_AUTHEN_DOMAIN_MODE_SHIFT (16U)
 /*! DOMAIN_MODE - Low power and access control by domain
- *  0b1..Clock works in domain mode.
  *  0b0..Clock does not work in domain mode.
+ *  0b1..Clock works in domain mode.
  */
 #define CCM_OBS_OBSERVE_AUTHEN_DOMAIN_MODE(x)    (((uint32_t)(((uint32_t)(x)) << CCM_OBS_OBSERVE_AUTHEN_DOMAIN_MODE_SHIFT)) & CCM_OBS_OBSERVE_AUTHEN_DOMAIN_MODE_MASK)
 
@@ -605,5 +608,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CCM_OBS_H_ */
+#endif  /* PERI_CCM_OBS_H_ */
 

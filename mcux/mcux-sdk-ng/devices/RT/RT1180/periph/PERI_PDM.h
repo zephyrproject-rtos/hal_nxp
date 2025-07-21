@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PDM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PDM.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_PDM.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PDM
  *
  * CMSIS Peripheral Access Layer for PDM
  */
 
-#if !defined(PDM_H_)
-#define PDM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PDM_H_)
+#define PERI_PDM_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -277,12 +302,12 @@ typedef struct {
 #define PDM_CTRL_2_QSEL_MASK                     (0xE000000U)
 #define PDM_CTRL_2_QSEL_SHIFT                    (25U)
 /*! QSEL - Quality Mode
- *  0b001..High-Quality mode
  *  0b000..Medium-Quality mode
- *  0b111..Low-Quality mode
- *  0b110..Very-Low-Quality 0 mode
- *  0b101..Very-Low-Quality 1 mode
+ *  0b001..High-Quality mode
  *  0b100..Very-Low-Quality 2 mode
+ *  0b101..Very-Low-Quality 1 mode
+ *  0b110..Very-Low-Quality 0 mode
+ *  0b111..Low-Quality mode
  */
 #define PDM_CTRL_2_QSEL(x)                       (((uint32_t)(((uint32_t)(x)) << PDM_CTRL_2_QSEL_SHIFT)) & PDM_CTRL_2_QSEL_MASK)
 /*! @} */
@@ -373,8 +398,8 @@ typedef struct {
 #define PDM_STAT_BSY_FIL_MASK                    (0x80000000U)
 #define PDM_STAT_BSY_FIL_SHIFT                   (31U)
 /*! BSY_FIL - Busy Flag
- *  0b1..MICFIL is running
  *  0b0..MICFIL is stopped
+ *  0b1..MICFIL is running
  */
 #define PDM_STAT_BSY_FIL(x)                      (((uint32_t)(((uint32_t)(x)) << PDM_STAT_BSY_FIL_SHIFT)) & PDM_STAT_BSY_FIL_MASK)
 /*! @} */
@@ -538,80 +563,80 @@ typedef struct {
 #define PDM_DC_CTRL_DCCONFIG0_MASK               (0x3U)
 #define PDM_DC_CTRL_DCCONFIG0_SHIFT              (0U)
 /*! DCCONFIG0 - Channel 0 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG0(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG0_SHIFT)) & PDM_DC_CTRL_DCCONFIG0_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG1_MASK               (0xCU)
 #define PDM_DC_CTRL_DCCONFIG1_SHIFT              (2U)
 /*! DCCONFIG1 - Channel 1 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG1(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG1_SHIFT)) & PDM_DC_CTRL_DCCONFIG1_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG2_MASK               (0x30U)
 #define PDM_DC_CTRL_DCCONFIG2_SHIFT              (4U)
 /*! DCCONFIG2 - Channel 2 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG2(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG2_SHIFT)) & PDM_DC_CTRL_DCCONFIG2_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG3_MASK               (0xC0U)
 #define PDM_DC_CTRL_DCCONFIG3_SHIFT              (6U)
 /*! DCCONFIG3 - Channel 3 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG3(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG3_SHIFT)) & PDM_DC_CTRL_DCCONFIG3_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG4_MASK               (0x300U)
 #define PDM_DC_CTRL_DCCONFIG4_SHIFT              (8U)
 /*! DCCONFIG4 - Channel 4 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG4(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG4_SHIFT)) & PDM_DC_CTRL_DCCONFIG4_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG5_MASK               (0xC00U)
 #define PDM_DC_CTRL_DCCONFIG5_SHIFT              (10U)
 /*! DCCONFIG5 - Channel 5 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG5(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG5_SHIFT)) & PDM_DC_CTRL_DCCONFIG5_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG6_MASK               (0x3000U)
 #define PDM_DC_CTRL_DCCONFIG6_SHIFT              (12U)
 /*! DCCONFIG6 - Channel 6 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG6(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG6_SHIFT)) & PDM_DC_CTRL_DCCONFIG6_MASK)
 
 #define PDM_DC_CTRL_DCCONFIG7_MASK               (0xC000U)
 #define PDM_DC_CTRL_DCCONFIG7_SHIFT              (14U)
 /*! DCCONFIG7 - Channel 7 DC Remover Configuration
- *  0b11..DC remover is bypassed
  *  0b00..21 Hz
  *  0b01..83 Hz
  *  0b10..152 Hz
+ *  0b11..DC remover is bypassed
  */
 #define PDM_DC_CTRL_DCCONFIG7(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_DC_CTRL_DCCONFIG7_SHIFT)) & PDM_DC_CTRL_DCCONFIG7_MASK)
 /*! @} */
@@ -917,8 +942,8 @@ typedef struct {
 #define PDM_VAD0_CTRL_2_VADFRENDIS_MASK          (0x80000000U)
 #define PDM_VAD0_CTRL_2_VADFRENDIS_SHIFT         (31U)
 /*! VADFRENDIS - Voice Activity Detector Frame Energy Disable
- *  0b1..Disables
  *  0b0..Enables
+ *  0b1..Disables
  */
 #define PDM_VAD0_CTRL_2_VADFRENDIS(x)            (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_CTRL_2_VADFRENDIS_SHIFT)) & PDM_VAD0_CTRL_2_VADFRENDIS_MASK)
 /*! @} */
@@ -1123,5 +1148,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PDM_H_ */
+#endif  /* PERI_PDM_H_ */
 

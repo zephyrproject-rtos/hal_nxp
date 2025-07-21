@@ -9,14 +9,14 @@
 **                          MIMXRT595SFFOC_cm33
 **                          MIMXRT595SFFOC_dsp
 **
-**     Version:             rev. 5.0, 2020-08-27
-**     Build:               b240705
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBHSDCD
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2020-08-27)
 **         Base on Rev.C RM.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USBHSDCD.h
- * @version 5.0
- * @date 2020-08-27
+ * @file PERI_USBHSDCD.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USBHSDCD
  *
  * CMSIS Peripheral Access Layer for USBHSDCD
  */
 
-#if !defined(USBHSDCD_H_)
-#define USBHSDCD_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USBHSDCD_H_)
+#define PERI_USBHSDCD_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT533SFAWC) || defined(CPU_MIMXRT533SFFOC))
 #include "MIMXRT533S_COMMON.h"
@@ -364,5 +367,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USBHSDCD_H_ */
+#endif  /* PERI_USBHSDCD_H_ */
 

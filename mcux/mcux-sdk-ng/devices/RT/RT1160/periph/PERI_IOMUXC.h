@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_IOMUXC.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC
  *
  * CMSIS Peripheral Access Layer for IOMUXC
  */
 
-#if !defined(IOMUXC_H_)
-#define IOMUXC_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_H_)
+#define PERI_IOMUXC_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -637,9 +640,7 @@ typedef struct {
 /*! MUX_MODE - MUX Mode Select Field.
  *  0b0000..Select mux mode: ALT0 mux port: SEMC_DATA22 of instance: SEMC
  *  0b0001..Select mux mode: ALT1 mux port: GPT3_CAPTURE1 of instance: GPT3
- *  0b1010..Select mux mode: ALT10 mux port: GPIO8_IO16 of instance: GPIO8
  *  0b0010..Select mux mode: ALT2 mux port: SAI2_RX_BCLK of instance: SAI2
- *  0b1011..Select mux mode: ALT11 mux port: FLEXPWM3_PWM3_A of instance: FLEXPWM3
  *  0b0011..Select mux mode: ALT3 mux port: VIDEO_MUX_CSI_DATA19 of instance: VIDEO_MUX
  *  0b0100..Select mux mode: ALT4 mux port: FLEXSPI2_B_DATA00 of instance: FLEXSPI2
  *  0b0101..Select mux mode: ALT5 mux port: GPIO_MUX2_IO16 of instance: GPIO_MUX2
@@ -647,14 +648,16 @@ typedef struct {
  *  0b0111..Select mux mode: ALT7 mux port: ENET_1G_TX_ER of instance: ENET_1G
  *  0b1000..Select mux mode: ALT8 mux port: LPSPI3_SOUT of instance: LPSPI3
  *  0b1001..Select mux mode: ALT9 mux port: PIT1_TRIGGER1 of instance: PIT1
+ *  0b1010..Select mux mode: ALT10 mux port: GPIO8_IO16 of instance: GPIO8
+ *  0b1011..Select mux mode: ALT11 mux port: FLEXPWM3_PWM3_A of instance: FLEXPWM3
  */
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK)
 
 #define IOMUXC_SW_MUX_CTL_PAD_SION_MASK          (0x10U)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT         (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad GPIO_DISP_B1_00
  *  0b0..Input Path is determined by functionality
+ *  0b1..Force input path of pad GPIO_DISP_B1_00
  */
 #define IOMUXC_SW_MUX_CTL_PAD_SION(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_SION_MASK)
 /*! @} */
@@ -791,5 +794,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_H_ */
+#endif  /* PERI_IOMUXC_H_ */
 
