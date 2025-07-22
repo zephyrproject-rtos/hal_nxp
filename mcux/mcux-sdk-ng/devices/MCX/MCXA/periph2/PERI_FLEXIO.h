@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA345VLH
+**     Processors:          MCXA266VLH
+**                          MCXA266VLL
+**                          MCXA266VLQ
+**                          MCXA266VPN
+**                          MCXA345VLH
 **                          MCXA345VLL
 **                          MCXA345VLQ
 **                          MCXA345VPN
@@ -8,9 +12,13 @@
 **                          MCXA346VLL
 **                          MCXA346VLQ
 **                          MCXA346VPN
+**                          MCXA366VLH
+**                          MCXA366VLL
+**                          MCXA366VLQ
+**                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250417
+**     Build:               b250729
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXIO
@@ -41,10 +49,14 @@
 #if !defined(PERI_FLEXIO_H_)
 #define PERI_FLEXIO_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
+#include "MCXA266_COMMON.h"
+#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
 #include "MCXA345_COMMON.h"
 #elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
 #include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
+#include "MCXA366_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -286,8 +298,8 @@ typedef struct {
 /*! SSF - Shifter Status Flag
  *  0b0000..Clear
  *  0b0000..No effect
- *  0b0001..Set
  *  0b0001..Clear the flag
+ *  0b0001..Set
  */
 #define FLEXIO_SHIFTSTAT_SSF(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTSTAT_SSF_SHIFT)) & FLEXIO_SHIFTSTAT_SSF_MASK)
 /*! @} */
@@ -300,8 +312,8 @@ typedef struct {
 /*! SEF - Shifter Error Flag
  *  0b0000..Clear
  *  0b0000..No effect
- *  0b0001..Set
  *  0b0001..Clear the flag
+ *  0b0001..Set
  */
 #define FLEXIO_SHIFTERR_SEF(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTERR_SEF_SHIFT)) & FLEXIO_SHIFTERR_SEF_MASK)
 /*! @} */
@@ -314,8 +326,8 @@ typedef struct {
 /*! TSF - Timer Status Flag
  *  0b0000..Clear
  *  0b0000..No effect
- *  0b0001..Set
  *  0b0001..Clear the flag
+ *  0b0001..Set
  */
 #define FLEXIO_TIMSTAT_TSF(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMSTAT_TSF_SHIFT)) & FLEXIO_TIMSTAT_TSF_MASK)
 /*! @} */
@@ -382,8 +394,8 @@ typedef struct {
 /*! ETSF - External Trigger Status Flag
  *  0b0000..Clear
  *  0b0000..No effect
- *  0b0001..Set
  *  0b0001..Clear the flag
+ *  0b0001..Set
  */
 #define FLEXIO_TRGSTAT_ETSF(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_TRGSTAT_ETSF_SHIFT)) & FLEXIO_TRGSTAT_ETSF_MASK)
 /*! @} */
@@ -405,8 +417,8 @@ typedef struct {
 /*! PSF - Pin Status Flag
  *  0b00000000000000000000000000000000..Clear
  *  0b00000000000000000000000000000000..No effect
- *  0b00000000000000000000000000000001..Set
  *  0b00000000000000000000000000000001..Clear the flag
+ *  0b00000000000000000000000000000001..Set
  */
 #define FLEXIO_PINSTAT_PSF(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXIO_PINSTAT_PSF_SHIFT)) & FLEXIO_PINSTAT_PSF_MASK)
 /*! @} */

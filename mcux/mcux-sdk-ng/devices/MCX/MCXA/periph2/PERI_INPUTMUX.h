@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA345VLH
+**     Processors:          MCXA266VLH
+**                          MCXA266VLL
+**                          MCXA266VLQ
+**                          MCXA266VPN
+**                          MCXA345VLH
 **                          MCXA345VLL
 **                          MCXA345VLQ
 **                          MCXA345VPN
@@ -8,9 +12,13 @@
 **                          MCXA346VLL
 **                          MCXA346VLQ
 **                          MCXA346VPN
+**                          MCXA366VLH
+**                          MCXA366VLL
+**                          MCXA366VLQ
+**                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250519
+**     Build:               b250729
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX
@@ -41,10 +49,14 @@
 #if !defined(PERI_INPUTMUX_H_)
 #define PERI_INPUTMUX_H_                         /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
+#include "MCXA266_COMMON.h"
+#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
 #include "MCXA345_COMMON.h"
 #elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
 #include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
+#include "MCXA366_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -1121,6 +1133,7 @@ typedef struct {
  *  0b0100111..PWM1_SM2_MUX_TRIG1 input is selected
  *  0b0101000..PWM1_SM3_MUX_TRIG0 input is selected
  *  0b0101001..PWM1_SM3_MUX_TRIG1 input is selected
+ *  0b0111111..Reserved(NO Clock)
  */
 #define INPUTMUX_FREQMEAS_REF_INP(x)             (((uint32_t)(((uint32_t)(x)) << INPUTMUX_FREQMEAS_REF_INP_SHIFT)) & INPUTMUX_FREQMEAS_REF_INP_MASK)
 /*! @} */
@@ -1173,6 +1186,7 @@ typedef struct {
  *  0b0100111..PWM1_SM2_MUX_TRIG1 input is selected
  *  0b0101000..PWM1_SM3_MUX_TRIG0 input is selected
  *  0b0101001..PWM1_SM3_MUX_TRIG1 input is selected
+ *  0b0111111..Reserved(NO Clock)
  */
 #define INPUTMUX_FREQMEAS_TAR_INP(x)             (((uint32_t)(((uint32_t)(x)) << INPUTMUX_FREQMEAS_TAR_INP_SHIFT)) & INPUTMUX_FREQMEAS_TAR_INP_MASK)
 /*! @} */
