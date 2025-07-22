@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2025 NXP
+ * Copyright 2016-2024 NXP
+ * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -82,18 +83,11 @@ static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, 
             {
                 /* Enhanced Rx FIFO ID HIT offset is changed dynamically according to data length code (DLC) . */
                 idHitIndex     = (DLC_LENGTH_DECODE(framefd->length) + 3U) / 4U;
-                /* If idHitIndex is 16 or DLC is 15, no need to get idhit or hrtimestamp individually. */
-                if (idHitIndex < 16U)
+                framefd->idhit = framefd->dataWord[idHitIndex];
+                /* Clear the unused frame data. */
+                for (uint32_t j = idHitIndex; j < 16U; j++)
                 {
-                    framefd->idhit = framefd->dataWord[idHitIndex];
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
-                    framefd->hrtimestamp = framefd->dataWord[idHitIndex + 1U];
-#endif
-                    /* Clear the unused frame data. */
-                    for (uint32_t j = idHitIndex; j < 16U; j++)
-                    {
-                        framefd->dataWord[j] = 0x0U;
-                    }
+                    framefd->dataWord[j] = 0x0U;
                 }
                 framefd++;
             }
@@ -328,9 +322,6 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
 {
     assert(NULL != handle->rxFifoEdmaHandle);
     assert(NULL != pFifoXfer->framefd);
-#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn)
-    assert(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn(base) == 1);
-#endif
 
     edma_transfer_config_t dmaXferConfig;
     edma_minor_offset_config_t dmaMinorOffsetConfig;
