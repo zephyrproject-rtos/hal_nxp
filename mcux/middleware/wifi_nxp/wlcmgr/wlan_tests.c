@@ -50,7 +50,9 @@ wlan_host_tx_frame_params_t *pmgmtframe_tx_param = NULL;
 #endif
 
 #if CONFIG_HOST_SLEEP
+#if defined(RW610)
 extern uint64_t rtc_timeout;
+#endif
 #endif
 extern char *net_sprint_addr(sa_family_t af, const void *addr);
 #if defined(RW610)
@@ -1996,7 +1998,6 @@ static void test_wlan_set_multiple_mef_config(int argc, char **argv)
 #endif
 
 #if CONFIG_HOST_SLEEP
-#ifdef RW610
 static void test_wlan_wakeup_condition(int argc, char **argv)
 {
 #if CONFIG_MEF_CFG
@@ -2075,129 +2076,14 @@ static void test_wlan_wakeup_condition(int argc, char **argv)
 #endif
     return;
 }
-#endif /*RW610*/
 
 #if CONFIG_MEF_CFG
 extern wlan_flt_cfg_t g_flt_cfg;
 #endif
 
-#ifndef RW610
-static void test_wlan_host_sleep(int argc, char **argv)
-{
-    int choice = -1, wowlan = 0;
-    int ret = -WM_FAIL;
-
-    if ((argc < 2) || (argc > 4))
-    {
-        goto done;
-    }
-
-    errno  = 0;
-    choice = (int)strtol(argv[1], NULL, 10);
-    if (errno != 0)
-    {
-        (void)PRINTF("Error during strtol:host_sleep errno:%d\r\n", errno);
-        goto done;
-    }
-    if ((choice != 0) && (choice != 1))
-    {
-        goto done;
-    }
-
-    if (choice == 0)
-    {
-        ret = wlan_send_host_sleep(HOST_SLEEP_CFG_CANCEL);
-        if (ret == WM_SUCCESS)
-        {
-            (void)PRINTF("Cancel Previous configured Host sleep configuration");
-        }
-        else
-        {
-            (void)PRINTF("Failed to Cancel Previous configured Host sleep configuration, error: %d", ret);
-        }
-    }
-    else if (choice == 1)
-    {
-#if CONFIG_MEF_CFG
-        if (argc < 3)
-#else
-        if (argc < 4)
-#endif
-        {
-            goto done;
-        }
-
-        if (string_equal(argv[2], "wowlan"))
-        {
-            errno  = 0;
-            wowlan = (int)strtol(argv[3], NULL, 16);
-            if (errno != 0)
-            {
-                (void)PRINTF("Error during strtol:wowlan errno:%d\r\n", errno);
-                return;
-            }
-
-            ret = wlan_send_host_sleep(wowlan);
-            if (ret == WM_SUCCESS)
-            {
-                (void)PRINTF("Host sleep configuration req sent");
-            }
-            else
-            {
-                (void)PRINTF("Failed to host sleep configuration, error: %d", ret);
-            }
-        }
-#if CONFIG_MEF_CFG
-        else if (string_equal(argv[2], "mef"))
-        {
-            ret = wlan_send_host_sleep(HOST_SLEEP_COND_MEF);
-            if (ret == WM_SUCCESS)
-            {
-                (void)PRINTF("Host sleep configuration successs with MEF");
-            }
-            else
-            {
-                (void)PRINTF("Failed to host sleep configuration, error: %d", ret);
-            }
-        }
-#endif
-        else
-        {
-            goto done;
-        }
-    }
-    else
-    {
-    done:
-        (void)PRINTF("Error: invalid number of arguments\r\n");
-        (void)PRINTF("Usage:\r\n");
-        (void)PRINTF("    wlan-host-sleep <1/0> <wowlan [wake_up_conds]/mef>\r\n");
-        (void)PRINTF("    [wake_up_conds] -- value for host wakeup conditions\r\n");
-        (void)PRINTF("	       bit 0: WAKE_ON_ALL_BROADCAST\r\n");
-        (void)PRINTF("	       bit 1: WAKE_ON_UNICAST\r\n");
-        (void)PRINTF("	       bit 2: WAKE_ON_MAC_EVENT\r\n");
-        (void)PRINTF("	       bit 3: WAKE_ON_MULTICAST\r\n");
-        (void)PRINTF("	       bit 4: WAKE_ON_ARP_BROADCAST\r\n");
-        (void)PRINTF("	       bit 6: WAKE_ON_MGMT_FRAME\r\n");
-        (void)PRINTF("	       All bit 0 discard and not wakeup host\r\n");
-#if CONFIG_MEF_CFG
-        (void)PRINTF("    mef     -- MEF host wakeup\r\n");
-#endif
-        (void)PRINTF("Example:\r\n");
-#if CONFIG_MEF_CFG
-        (void)PRINTF("    wlan-host-sleep <1/0> mef\r\n");
-#endif
-        (void)PRINTF("    wlan-host-sleep <1/0> wowlan 0x1e\r\n");
-        return;
-    }
-}
-#endif
-
-#ifdef RW610
 #if !(CONFIG_WIFI_BLE_COEX_APP)
 static void test_wlan_auto_host_sleep(int argc, char **argv)
 {
-    bool is_manual   = MFALSE;
     t_u8 is_periodic = 0;
     t_u8 enable      = 0;
 
@@ -2235,33 +2121,9 @@ static void test_wlan_auto_host_sleep(int argc, char **argv)
         return;
     }
     is_periodic = (t_u8)atoi(argv[2]);
-    wlan_config_host_sleep(is_manual, is_periodic);
+    wlan_config_host_sleep(false, is_periodic);
 }
 #endif /* CONFIG_WIFI_BLE_COEX_APP */
-#else
-static void test_wlan_ns_offload(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    ret     = wlan_set_ipv6_ns_offload();
-    if (ret == WM_SUCCESS)
-    {
-        (void)PRINTF("Enabled  wlan IPv6 NS offload feature");
-    }
-    else
-    {
-        (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d", ret);
-    }
-}
-
-static void test_wlan_auto_arp(int argc, char **argv)
-{
-    int ret = -WM_FAIL;
-    ret     = wlan_set_auto_arp();
-    if (ret == WM_SUCCESS)
-        (void)PRINTF("Enabled  wlan auto arp offload feature\r\n");
-    else
-        (void)PRINTF("Failed to enabled wlan auto arp offload, error: %d\r\n", ret);
-}
 
 #if CONFIG_MEF_CFG
 static void dump_wlan_add_packet_filter()
@@ -2270,12 +2132,12 @@ static void dump_wlan_add_packet_filter()
     (void)PRINTF("For wowlan Add packet filter\r\n");
     (void)PRINTF("wowlan magic filter:\r\n");
     (void)PRINTF("wlan_add_packet_filter 1:\r\n");
-    (void)PRINTF("wowlan User defined pattren packet filter:\r\n");
+    (void)PRINTF("wowlan User defined pattern packet filter:\r\n");
     (void)PRINTF("wlan_add_packet_filter 0 <number of patterns> <ptn_len> <pkt_offset> <ptn> ........:\r\n");
     (void)PRINTF(
         "For 2 number of patterns Usage \r\nwlan_add_packet_filter 0 2 6 0 0xff 0xff 0xff 0xff 0xff 0xff 4 20 192 168 "
         "10 1\r\n");
-    (void)PRINTF("wowlan User defined pattren and magic packet filter:\r\n");
+    (void)PRINTF("wowlan User defined pattern and magic packet filter:\r\n");
     (void)PRINTF("wlan_add_packet_filter 1 <number of patterns> <ptn_len> <pkt_offset> <ptn> ........:\r\n");
     (void)PRINTF(
         "For 2 number of patterns Usage \r\nwlan_add_packet_filter 1 2 6 0 0xff 0xff 0xff 0xff 0xff 0xff 4 20 192 168 "
@@ -2300,11 +2162,11 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
 
     if (string_equal("sta", argv[1]))
     {
-        bss_type = MLAN_BSS_TYPE_STA;
+        bss_type = WLAN_BSS_TYPE_STA;
     }
     else if (string_equal("uap", argv[1]))
     {
-        bss_type = MLAN_BSS_TYPE_UAP;
+        bss_type = WLAN_BSS_TYPE_UAP;
     }
     else
     {
@@ -2335,6 +2197,13 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
 
     (void)memset(&wowlan_ptn_cfg, 0, sizeof(wlan_wowlan_ptn_cfg_t));
     wowlan_ptn_cfg.enable = atoi(argv[2]);
+    if((0 == wowlan_ptn_cfg.enable) && (argc < 7))
+    {
+        (void)PRINTF("Need to add user defined pattern packet filter\r\n");
+        dump_wlan_add_packet_filter();
+        return;
+    }
+
     if (argc > 3)
     {
         wowlan_ptn_cfg.n_patterns = atoi(argv[3]);
@@ -2358,7 +2227,6 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
         (void)PRINTF("Failed to enabled magic pkt filter offload, error: %d", ret);
 }
 #endif /* CONFIG_MEF_CFG */
-#endif /*RW610*/
 #endif /* CONFIG_HOST_SLEEP */
 
 #define HOSTCMD_RESP_BUFF_SIZE 1024
@@ -8990,26 +8858,16 @@ static struct cli_command tests[] = {
     {"wlan-multi-mef", "<ping/arp/multicast/del> [<action>]", test_wlan_set_multiple_mef_config},
 #endif
 #if CONFIG_HOST_SLEEP
-#ifdef RW610
 #if CONFIG_MEF_CFG
     {"wlan-wakeup-condition", "<mef/wowlan wake_up_conds>", test_wlan_wakeup_condition},
+    {"wlan-add-packet-filter", " sta/uap 0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........",
+     test_wlan_add_packet_filter},
 #else
     {"wlan-wakeup-condition", "<wowlan wake_up_conds>", test_wlan_wakeup_condition},
 #endif /*CONFIG_MEF_CFG*/
 #if !defined(CONFIG_WIFI_BLE_COEX_APP)
     {"wlan-auto-host-sleep", "<enable> <periodic>", test_wlan_auto_host_sleep},
 #endif
-#else
-    {"enable-ns-offload", NULL, test_wlan_ns_offload},
-    {"wlan-auto-arp", NULL, test_wlan_auto_arp},
-#if CONFIG_MEF_CFG
-    {"wlan-add-packet-filter", "0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........",
-     test_wlan_add_packet_filter},
-    {"wlan-host-sleep", "<0/1> mef/wowlan <wake_up_conds>", test_wlan_host_sleep},
-#else
-    {"wlan-host-sleep", "<0/1> wowlan <wake_up_conds>", test_wlan_host_sleep},
-#endif /*CONFIG_MEF_CFG*/
-#endif /*RW610*/
 #endif /*CONFIG_HOST_SLEEP*/
     {"wlan-send-hostcmd", NULL, test_wlan_send_hostcmd},
 #if defined(RW610) || defined(SD9177) || defined(IW610)
