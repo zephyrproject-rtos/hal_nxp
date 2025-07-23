@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,7 @@ static NETC_ENETC_Type *const s_netcEnetcBases[] = NETC_ENETC_BASE_PTRS;
 
 status_t NETC_SocSetMiiMode(netc_soc_link_t link, netc_hw_mii_mode_t miiMode)
 {
-    status_t result = kStatus_Success;
+    status_t result               = kStatus_Success;
     BLK_CTRL_WAKEUPMIX_Type *base = BLK_CTRL_WAKEUPMIX;
     uint8_t miiSel;
 
@@ -112,7 +112,8 @@ status_t NETC_SocSetTimer(netc_timer_exttrig_index_t timerTrigger, netc_soc_time
     BLK_CTRL_WAKEUPMIX_Type *base = BLK_CTRL_WAKEUPMIX;
 
     base->NETC_PORT_MISC_CFG &= ~(BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_TMR_TRIG1_SEL_MASK << (uint32_t)timerTrigger);
-    base->NETC_PORT_MISC_CFG |= (BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_TMR_TRIG1_SEL(inputSel) << (uint32_t)timerTrigger);
+    base->NETC_PORT_MISC_CFG |=
+        (BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_TMR_TRIG1_SEL(inputSel) << (uint32_t)timerTrigger);
 
     return kStatus_Success;
 }
@@ -123,11 +124,13 @@ status_t NETC_SocSetRmiiRefClk(netc_soc_link_t link, bool output)
 
     if (output)
     {
-        base->NETC_PORT_MISC_CFG |= ((uint32_t)BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_PORT0_RMII_REF_CLK_DIR_MASK << (uint32_t)link);
+        base->NETC_PORT_MISC_CFG |=
+            ((uint32_t)BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_PORT0_RMII_REF_CLK_DIR_MASK << (uint32_t)link);
     }
     else
     {
-        base->NETC_PORT_MISC_CFG &= ~((uint32_t)BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_PORT0_RMII_REF_CLK_DIR_MASK << (uint32_t)link);
+        base->NETC_PORT_MISC_CFG &=
+            ~((uint32_t)BLK_CTRL_WAKEUPMIX_NETC_PORT_MISC_CFG_PORT0_RMII_REF_CLK_DIR_MASK << (uint32_t)link);
     }
 
     return kStatus_Success;
@@ -146,10 +149,10 @@ void NETC_SocGetBaseResource(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
     hw->global         = (ENETC_GLOBAL_Type *)((uintptr_t)hw->base + NETC_ENETC_GLOBAL_BASE_OFFSET);
     if (siNum == 0U)
     {
-        hw->func.pf = s_netcBases[NETC_ENETC_PCIE_FUNC_OFFSET + instance];
-        hw->si      = (ENETC_SI_Type *)((uintptr_t)hw->base - 0x10000U);
-        hw->msixTable =
-            (netc_msix_entry_t *)((uint32_t)FSL_FEATURE_NETC_MSIX_TABLE_BASE + NETC_MSIX_TABLE_OFFSET * (3U + (uint32_t)siIdx));
+        hw->func.pf   = s_netcBases[NETC_ENETC_PCIE_FUNC_OFFSET + instance];
+        hw->si        = (ENETC_SI_Type *)((uintptr_t)hw->base - 0x10000U);
+        hw->msixTable = (netc_msix_entry_t *)((uint32_t)FSL_FEATURE_NETC_MSIX_TABLE_BASE +
+                                              NETC_MSIX_TABLE_OFFSET * (3U + (uint32_t)siIdx));
     }
     else
     {
@@ -202,9 +205,4 @@ status_t NETC_SocSetLinkAddr(netc_soc_link_t link, uint8_t phyAddr)
     }
 
     return result;
-}
-
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
-{
-    return kStatus_Success;
 }
