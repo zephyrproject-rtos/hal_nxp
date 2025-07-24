@@ -37,14 +37,14 @@
 **                          MIMX8MN6DVTJZ_ca53
 **                          MIMX8MN6DVTJZ_cm7
 **
-**     Version:             rev. 2.0, 2019-09-23
-**     Build:               b240708
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -55,21 +55,24 @@
 **         Initial version.
 **     - rev. 2.0 (2019-09-23)
 **         Rev.B Header RFP
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC.h
- * @version 2.0
- * @date 2019-09-23
+ * @file PERI_IOMUXC.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC
  *
  * CMSIS Peripheral Access Layer for IOMUXC
  */
 
-#if !defined(IOMUXC_H_)
-#define IOMUXC_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_H_)
+#define PERI_IOMUXC_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MN1CVPIZ_ca53) || defined(CPU_MIMX8MN1CVTIZ_ca53) || defined(CPU_MIMX8MN1DVPIZ_ca53) || defined(CPU_MIMX8MN1DVTJZ_ca53))
 #include "MIMX8MN1_ca53_COMMON.h"
@@ -561,8 +564,8 @@ typedef struct {
 #define IOMUXC_SW_MUX_CTL_PAD_SION_MASK          (0x10U)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT         (4U)
 /*! SION
- *  0b1..Force input path of pad SPDIF_EXT_CLK
  *  0b0..Input Path is determined by functionality of the selected mux mode (regular).
+ *  0b1..Force input path of pad SPDIF_EXT_CLK
  */
 #define IOMUXC_SW_MUX_CTL_PAD_SION(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_SION_MASK)
 /*! @} */
@@ -676,5 +679,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_H_ */
+#endif  /* PERI_IOMUXC_H_ */
 

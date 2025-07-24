@@ -126,13 +126,12 @@ void I2S_TxInit(I2S_Type *base, const i2s_config_t *config)
     I2S_Config(base, config);
 
     /* Configure FIFO */
-
-    cfg |= I2S_FIFOCFG_ENABLETX(1U);                 /* enable TX FIFO */
-    cfg |= I2S_FIFOCFG_EMPTYTX(1U);                  /* empty TX FIFO */
-    cfg |= I2S_FIFOCFG_TXI2SE0(config->txEmptyZero); /* transmit zero when buffer becomes empty or last item */
-    cfg |= I2S_FIFOCFG_PACK48(config->pack48);       /* set pack 48-bit format or not */
-    trig |= I2S_FIFOTRIG_TXLVLENA(1U);               /* enable TX FIFO trigger */
-    trig |= I2S_FIFOTRIG_TXLVL(config->watermark);   /* set TX FIFO trigger level */
+    cfg  |= I2S_FIFOCFG_ENABLETX(1U);                           /* enable TX FIFO */
+    cfg  |= I2S_FIFOCFG_EMPTYTX(1U);                            /* empty TX FIFO */
+    cfg  |= I2S_FIFOCFG_TXI2SE0(config->txEmptyZero ? 1U : 0U); /* transmit zero when buffer becomes empty or last item */
+    cfg  |= I2S_FIFOCFG_PACK48(config->pack48 ? 1U : 0U);       /* set pack 48-bit format or not */
+    trig |= I2S_FIFOTRIG_TXLVLENA(1U);                          /* enable TX FIFO trigger */
+    trig |= I2S_FIFOTRIG_TXLVL(config->watermark);              /* set TX FIFO trigger level */
 
     base->FIFOCFG  = cfg;
     base->FIFOTRIG = trig;
@@ -161,12 +160,11 @@ void I2S_RxInit(I2S_Type *base, const i2s_config_t *config)
     I2S_Config(base, config);
 
     /* Configure FIFO */
-
-    cfg |= I2S_FIFOCFG_ENABLERX(1U);               /* enable RX FIFO */
-    cfg |= I2S_FIFOCFG_EMPTYRX(1U);                /* empty RX FIFO */
-    cfg |= I2S_FIFOCFG_PACK48(config->pack48);     /* set pack 48-bit format or not */
-    trig |= I2S_FIFOTRIG_RXLVLENA(1U);             /* enable RX FIFO trigger */
-    trig |= I2S_FIFOTRIG_RXLVL(config->watermark); /* set RX FIFO trigger level */
+    cfg  |= I2S_FIFOCFG_ENABLERX(1U);                               /* enable RX FIFO */
+    cfg  |= I2S_FIFOCFG_EMPTYRX(1U);                                /* empty RX FIFO */
+    cfg  |= I2S_FIFOCFG_PACK48((config->pack48 == true) ? 1U : 0U); /* set pack 48-bit format or not */
+    trig |= I2S_FIFOTRIG_RXLVLENA(1U);                              /* enable RX FIFO trigger */
+    trig |= I2S_FIFOTRIG_RXLVL(config->watermark);                  /* set RX FIFO trigger level */
 
     base->FIFOCFG  = cfg;
     base->FIFOTRIG = trig;
@@ -323,10 +321,10 @@ static void I2S_Config(I2S_Type *base, const i2s_config_t *config)
     cfg1 |= I2S_CFG1_MODE(config->mode);
 
     /* set right low (channel swap) */
-    cfg1 |= I2S_CFG1_RIGHTLOW(config->rightLow);
+    cfg1 |= I2S_CFG1_RIGHTLOW((config->rightLow == true) ? 1U : 0U);
 
     /* set data justification */
-    cfg1 |= I2S_CFG1_LEFTJUST(config->leftJust);
+    cfg1 |= I2S_CFG1_LEFTJUST((config->leftJust == true) ? 1U : 0U);
 
 #if (defined(FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION) && FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION)
     if (FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_HAS_DMIC_INTERCONNECTIONn((FLEXCOMM_Type *)(uint32_t)base) > 0)
@@ -337,13 +335,13 @@ static void I2S_Config(I2S_Type *base, const i2s_config_t *config)
 #endif
 
     /* set SCLK polarity */
-    cfg1 |= I2S_CFG1_SCK_POL(config->sckPol);
+    cfg1 |= I2S_CFG1_SCK_POL((config->sckPol == true) ? 1U : 0U);
 
     /* set WS polarity */
-    cfg1 |= I2S_CFG1_WS_POL(config->wsPol);
+    cfg1 |= I2S_CFG1_WS_POL((config->wsPol == true) ? 1U : 0U);
 
     /* set mono mode */
-    cfg1 |= I2S_CFG1_ONECHANNEL(config->oneChannel);
+    cfg1 |= I2S_CFG1_ONECHANNEL((config->oneChannel == true) ? 1U : 0U);
 
     /* set data length */
     cfg1 |= I2S_CFG1_DATALEN(config->dataLength - 1UL);
@@ -829,7 +827,12 @@ void I2S_TxHandleIRQ(I2S_Type *base, i2s_handle_t *handle)
 
     if ((intstat & I2S_FIFOINTSTAT_TXERR_MASK) != 0UL)
     {
-        handle->errorCount++;
+
+         // Safe increment with overflow protection
+         if (handle->errorCount < UINT32_MAX)
+         {
+             handle->errorCount++;
+         }
 
         /* Clear TX error interrupt flag */
         base->FIFOSTAT = I2S_FIFOSTAT_TXERR(1U);
@@ -1038,7 +1041,11 @@ void I2S_RxHandleIRQ(I2S_Type *base, i2s_handle_t *handle)
 
     if ((intstat & I2S_FIFOINTSTAT_RXERR_MASK) != 0UL)
     {
-        handle->errorCount++;
+        // Safe increment with overflow protection
+        if (handle->errorCount < UINT32_MAX)
+        {
+            handle->errorCount++;
+        }
 
         /* Clear RX error interrupt flag */
         base->FIFOSTAT = I2S_FIFOSTAT_RXERR(1U);
@@ -1053,9 +1060,9 @@ void I2S_RxHandleIRQ(I2S_Type *base, i2s_handle_t *handle)
             {
                 data                   = base->FIFORD;
                 *((uint8_t *)dataAddr) = (uint8_t)(((data & 0x000F0000U) >> 12U) | (data & 0x0000000FU));
-                dataAddr++;
-                handle->transferCount++;
-                dataSize--;
+                dataAddr               = (dataAddr < UINT32_MAX) ? dataAddr + 1 : 0;
+                handle->transferCount  = (handle->transferCount < UINT32_MAX) ? handle->transferCount + 1 : 0;
+                dataSize               = dataSize > 0 ? dataSize - 1 : 0;
             }
             else if (handle->dataLength <= 8U)
             {
@@ -1104,7 +1111,7 @@ void I2S_RxHandleIRQ(I2S_Type *base, i2s_handle_t *handle)
                         data               = base->FIFORD48H;
                         handle->useFifo48H = false;
 
-                        *((volatile uint16_t *)dataAddr) = (uint16_t)data;
+                        *((volatile uint16_t *)dataAddr) = (data <= UINT16_MAX) ? (uint16_t)data : UINT16_MAX;
                         dataAddr += sizeof(uint16_t);
                         handle->transferCount += sizeof(uint16_t);
                         dataSize -= sizeof(uint16_t);

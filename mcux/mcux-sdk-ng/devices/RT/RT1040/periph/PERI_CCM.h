@@ -13,14 +13,14 @@
 **                          MIMXRT1046DFQ6B
 **                          MIMXRT1046XFQ5B
 **
-**     Version:             rev. 0.1, 2021-07-20
-**     Build:               b241021
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2021-07-20)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CCM.h
- * @version 0.1
- * @date 2021-07-20
+ * @file PERI_CCM.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CCM
  *
  * CMSIS Peripheral Access Layer for CCM
  */
 
-#if !defined(CCM_H_)
-#define CCM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CCM_H_)
+#define PERI_CCM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1041DFP6B) || defined(CPU_MIMXRT1041DJM6B) || defined(CPU_MIMXRT1041XFP5B) || defined(CPU_MIMXRT1041XJM5B))
 #include "MIMXRT1041_COMMON.h"
@@ -420,15 +423,71 @@ typedef struct {
 
 #define CCM_CSCMR1_PERCLK_PODF_MASK              (0x3FU)
 #define CCM_CSCMR1_PERCLK_PODF_SHIFT             (0U)
-/*! PERCLK_PODF
- *  0b000000..divide by 1
- *  0b000001..divide by 2
- *  0b000010..divide by 3
- *  0b000011..divide by 4
- *  0b000100..divide by 5
- *  0b000101..divide by 6
- *  0b000110..divide by 7
- *  0b111111..divide by 64
+/*! PERCLK_PODF - Divider for perclk podf.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCMR1_PERCLK_PODF(x)                (((uint32_t)(((uint32_t)(x)) << CCM_CSCMR1_PERCLK_PODF_SHIFT)) & CCM_CSCMR1_PERCLK_PODF_MASK)
 
@@ -516,10 +575,71 @@ typedef struct {
 
 #define CCM_CSCMR2_CAN_CLK_PODF_MASK             (0xFCU)
 #define CCM_CSCMR2_CAN_CLK_PODF_SHIFT            (2U)
-/*! CAN_CLK_PODF
- *  0b000000..divide by 1
- *  0b000111..divide by 8
- *  0b111111..divide by 2^6
+/*! CAN_CLK_PODF - Divider for CAN/CANFD clock podf.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCMR2_CAN_CLK_PODF(x)               (((uint32_t)(((uint32_t)(x)) << CCM_CSCMR2_CAN_CLK_PODF_SHIFT)) & CCM_CSCMR2_CAN_CLK_PODF_MASK)
 
@@ -549,9 +669,71 @@ typedef struct {
 
 #define CCM_CSCDR1_UART_CLK_PODF_MASK            (0x3FU)
 #define CCM_CSCDR1_UART_CLK_PODF_SHIFT           (0U)
-/*! UART_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! UART_CLK_PODF - Divider for uart clock podf.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCDR1_UART_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CSCDR1_UART_CLK_PODF_SHIFT)) & CCM_CSCDR1_UART_CLK_PODF_MASK)
 
@@ -607,9 +789,72 @@ typedef struct {
 
 #define CCM_CS1CDR_SAI1_CLK_PODF_MASK            (0x3FU)
 #define CCM_CS1CDR_SAI1_CLK_PODF_SHIFT           (0U)
-/*! SAI1_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! SAI1_CLK_PODF - Divider for sai1 clock podf. The input clock to this divider should be lower
+ *    than 300Mhz, the predivider can be used to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CS1CDR_SAI1_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_SAI1_CLK_PODF_SHIFT)) & CCM_CS1CDR_SAI1_CLK_PODF_MASK)
 
@@ -643,9 +888,72 @@ typedef struct {
 
 #define CCM_CS1CDR_SAI3_CLK_PODF_MASK            (0x3F0000U)
 #define CCM_CS1CDR_SAI3_CLK_PODF_SHIFT           (16U)
-/*! SAI3_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! SAI3_CLK_PODF - Divider for sai3 clock podf. The input clock to this divider should be lower
+ *    than 300Mhz, the predivider can be used to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CS1CDR_SAI3_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_SAI3_CLK_PODF_SHIFT)) & CCM_CS1CDR_SAI3_CLK_PODF_MASK)
 
@@ -665,15 +973,15 @@ typedef struct {
 
 #define CCM_CS1CDR_FLEXIO2_CLK_PODF_MASK         (0xE000000U)
 #define CCM_CS1CDR_FLEXIO2_CLK_PODF_SHIFT        (25U)
-/*! FLEXIO2_CLK_PODF
- *  0b000..divide by 1
- *  0b001..divide by 2
- *  0b010..divide by 3
- *  0b011..divide by 4
- *  0b100..divide by 5
- *  0b101..divide by 6
- *  0b110..divide by 7
- *  0b111..divide by 8
+/*! FLEXIO2_CLK_PODF - Divider for flexio2/flexio3 clock. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CS1CDR_FLEXIO2_CLK_PODF(x)           (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_FLEXIO2_CLK_PODF_SHIFT)) & CCM_CS1CDR_FLEXIO2_CLK_PODF_MASK)
 /*! @} */
@@ -683,9 +991,72 @@ typedef struct {
 
 #define CCM_CS2CDR_SAI2_CLK_PODF_MASK            (0x3FU)
 #define CCM_CS2CDR_SAI2_CLK_PODF_SHIFT           (0U)
-/*! SAI2_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! SAI2_CLK_PODF - Divider for sai2 clock podf. The input clock to this divider should be lower
+ *    than 300Mhz, the predivider can be used to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CS2CDR_SAI2_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS2CDR_SAI2_CLK_PODF_SHIFT)) & CCM_CS2CDR_SAI2_CLK_PODF_MASK)
 
@@ -719,19 +1090,29 @@ typedef struct {
 
 #define CCM_CDCDR_FLEXIO1_CLK_PODF_MASK          (0xE00U)
 #define CCM_CDCDR_FLEXIO1_CLK_PODF_SHIFT         (9U)
-/*! FLEXIO1_CLK_PODF
- *  0b000..divide by 1
- *  0b111..divide by 8
+/*! FLEXIO1_CLK_PODF - Divider for flexio1 clock podf. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CDCDR_FLEXIO1_CLK_PODF(x)            (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_FLEXIO1_CLK_PODF_SHIFT)) & CCM_CDCDR_FLEXIO1_CLK_PODF_MASK)
 
 #define CCM_CDCDR_FLEXIO1_CLK_PRED_MASK          (0x7000U)
 #define CCM_CDCDR_FLEXIO1_CLK_PRED_SHIFT         (12U)
-/*! FLEXIO1_CLK_PRED
- *  0b000..divide by 1 (do not use with high input frequencies)
- *  0b001..divide by 2
- *  0b010..divide by 3
- *  0b111..divide by 8
+/*! FLEXIO1_CLK_PRED - Divider for flexio1 clock pred. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CDCDR_FLEXIO1_CLK_PRED(x)            (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_FLEXIO1_CLK_PRED_SHIFT)) & CCM_CDCDR_FLEXIO1_CLK_PRED_MASK)
 
@@ -747,29 +1128,29 @@ typedef struct {
 
 #define CCM_CDCDR_SPDIF0_CLK_PODF_MASK           (0x1C00000U)
 #define CCM_CDCDR_SPDIF0_CLK_PODF_SHIFT          (22U)
-/*! SPDIF0_CLK_PODF
- *  0b000..divide by 1
- *  0b001..divide by 2
- *  0b010..divide by 3
- *  0b011..divide by 4
- *  0b100..divide by 5
- *  0b101..divide by 6
- *  0b110..divide by 7
- *  0b111..divide by 8
+/*! SPDIF0_CLK_PODF - Divider for spdif0 clock podf. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CDCDR_SPDIF0_CLK_PODF(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_SPDIF0_CLK_PODF_SHIFT)) & CCM_CDCDR_SPDIF0_CLK_PODF_MASK)
 
 #define CCM_CDCDR_SPDIF0_CLK_PRED_MASK           (0xE000000U)
 #define CCM_CDCDR_SPDIF0_CLK_PRED_SHIFT          (25U)
-/*! SPDIF0_CLK_PRED
- *  0b000..divide by 1 (do not use with high input frequencies)
- *  0b001..divide by 2
- *  0b010..divide by 3
- *  0b011..divide by 4
- *  0b100..divide by 5
- *  0b101..divide by 6
- *  0b110..divide by 7
- *  0b111..divide by 8
+/*! SPDIF0_CLK_PRED - Divider for spdif0 clock pred. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CDCDR_SPDIF0_CLK_PRED(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_SPDIF0_CLK_PRED_SHIFT)) & CCM_CDCDR_SPDIF0_CLK_PRED_MASK)
 /*! @} */
@@ -814,9 +1195,73 @@ typedef struct {
 
 #define CCM_CSCDR2_LPI2C_CLK_PODF_MASK           (0x1F80000U)
 #define CCM_CSCDR2_LPI2C_CLK_PODF_SHIFT          (19U)
-/*! LPI2C_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! LPI2C_CLK_PODF - Divider for lpi2c clock podf. Divider should be updated when output clock is
+ *    gated. The input clock to this divider should be lower than 300Mhz, the predivider can be used
+ *    to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCDR2_LPI2C_CLK_PODF(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CSCDR2_LPI2C_CLK_PODF_SHIFT)) & CCM_CSCDR2_LPI2C_CLK_PODF_MASK)
 /*! @} */
@@ -1833,5 +2278,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CCM_H_ */
+#endif  /* PERI_CCM_H_ */
 

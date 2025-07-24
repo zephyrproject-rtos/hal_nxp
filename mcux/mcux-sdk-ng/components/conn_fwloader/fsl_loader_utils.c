@@ -1106,18 +1106,18 @@ status_t loader_process_sb_file(uint32_t readOffset)
 static status_t loader_process_raw_file(uint32_t readOffset)
 {
     status_t status = kStatus_Fail;
-    uint32_t *src_addr;
-    uint32_t *dst_addr;
+    uint8_t *src_addr;
+    uint8_t *dst_addr;
     uint32_t code_size;
-    uint32_t *data_ptr      = (uint32_t *)readOffset;
+    uint8_t *data_ptr      = (uint8_t *)readOffset;
     uint32_t total_raw_size = 0;
 
 #ifdef CONFIG_FW_VDLLV2
-    if ((*data_ptr == LOADER_RAW_BINARY_FORMAT) && (*(data_ptr + 1) == LOADER_VDLL_RAW_BINARY_FORMAT))
+    if ((*((uint32_t*)data_ptr) == LOADER_RAW_BINARY_FORMAT) && (*((uint32_t*)(data_ptr + 4)) == LOADER_VDLL_RAW_BINARY_FORMAT))
     {
-        src_addr  = data_ptr + 4;
-        dst_addr  = (uint32_t *)*(data_ptr + 2);
-        code_size = *(data_ptr + 3);
+        src_addr  = data_ptr + 16;
+        dst_addr  = (uint8_t *)(*((uint32_t*)(data_ptr + 8)));
+        code_size = *((uint32_t*)(data_ptr + 12));
         (void)memcpy(dst_addr, src_addr, code_size);
         status = kStatus_Success;
     }
@@ -1126,16 +1126,16 @@ static status_t loader_process_raw_file(uint32_t readOffset)
     {
         do
         {
-            if (*data_ptr != LOADER_RAW_BINARY_FORMAT)
-            {
+	    if(*((uint32_t*)data_ptr) != LOADER_RAW_BINARY_FORMAT)
+	    {
                 break;
-            }
+	    }
 
-            src_addr  = data_ptr + 4;
-            dst_addr  = (uint32_t *)*(data_ptr + 2);
-            code_size = *(data_ptr + 3);
+            src_addr  = data_ptr + 16;
+            dst_addr  = (uint8_t *)(*((uint32_t*)(data_ptr + 8)));
+            code_size = *((uint32_t*)(data_ptr + 12));
             // Check for raw ending segment
-            if (((uint32_t)src_addr == 0xffffffffU) || ((uint32_t)dst_addr == 0xffffffffU))
+            if ((uint32_t)src_addr == 0xffffffffU || (uint32_t)dst_addr == 0xffffffffU)
             {
                 if (code_size == total_raw_size)
                 {
@@ -1148,7 +1148,7 @@ static status_t loader_process_raw_file(uint32_t readOffset)
             }
 
             (void)memcpy(dst_addr, src_addr, code_size);
-            data_ptr += 4U + (code_size >> 2U);
+            data_ptr += 16 + code_size;
             total_raw_size += code_size;
         } while (true);
     }

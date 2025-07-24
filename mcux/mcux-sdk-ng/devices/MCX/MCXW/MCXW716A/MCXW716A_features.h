@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-21
-**     Build:               b240426
+**     Build:               b250512
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -110,8 +110,6 @@
 #define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (1)
 /* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_MODE (1)
-/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
-#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
 #define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
 /* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
@@ -128,10 +126,6 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
-/* @brief OFSTRIM availability on the SoC. */
-#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (2)
-/* @brief Has Trigger status register. */
-#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has power select (bitfield CFG[PWRSEL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
 /* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
@@ -144,6 +138,12 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
 /* @brief Conversion averaged bitfiled width. */
 #define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
+/* @brief Enable hardware trigger command selection */
+#define FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL (0)
+/* @brief OFSTRIM availability on the SoC. */
+#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (2)
+/* @brief Has Trigger status register. */
+#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has B side channels. */
 #define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (1)
 /* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
@@ -166,6 +166,10 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
 /* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
 #define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
+/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
+/* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -238,12 +242,14 @@
 
 /* FLEXIO module features */
 
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
+/* @brief FLEXIO support reset from RSTCTL */
+#define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
 #define FSL_FEATURE_FLEXIO_HAS_SHIFTER_STATUS (1)
 /* @brief Has Pin Data Input Register (FLEXIO_PIN) */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_STATUS (1)
-/* @brief Has pin input output related registers */
-#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
 /* @brief Has Shifter Buffer N Nibble Byte Swapped Register (FLEXIO_SHIFTBUFNBSn) */
 #define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_BYTE_SWAP (1)
 /* @brief Has Shifter Buffer N Half Word Swapped Register (FLEXIO_SHIFTBUFHWSn) */
@@ -260,8 +266,12 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x2010003)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x4200808)
+/* @brief Flexio DMA request base channel */
+#define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 /* @brief Represent the bit width of the TIMDCE field (FLEXIO_TIMCFGLn[TIMDEC]) */
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
+/* @brief Has pin input output related registers */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
 
 /* MSF1 module features */
 
@@ -325,6 +335,8 @@
 #define FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
+/* @brief Has dedicated interrupt for master and slave. */
+#define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
 
 /* LPIT module features */
 
@@ -337,15 +349,15 @@
 
 /* LPSPI module features */
 
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+/* @brief Capacity (number of entries) of the transmit/receive FIFO. */
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (8)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Has CCR1 (related to existence of registers CCR1). */
 #define FSL_FEATURE_LPSPI_HAS_CCR1 (1)
-/* @brief Has no PCSCFG bit in CFGR1 register */
+/* @brief Has no PCSCFG bit in CFGR1 register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
-/* @brief Has no WIDTH bits in TCR register */
+/* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 
 /* LPTMR module features */
@@ -431,12 +443,16 @@
 #define FSL_FEATURE_LPUART_HAS_GLOBAL (1)
 /* @brief Has LPUART_PINCFG. */
 #define FSL_FEATURE_LPUART_HAS_PINCFG (1)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPUART_IS_LPFLEXCOMM (0)
 /* @brief Has register MODEM Control. */
 #define FSL_FEATURE_LPUART_HAS_MCR (0)
 /* @brief Has register Half Duplex Control. */
 #define FSL_FEATURE_LPUART_HAS_HDCR (0)
 /* @brief Has register Timeout. */
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
+/* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
+#define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
 
 /* LTC module features */
 
@@ -621,10 +637,10 @@
     (((x) == TPM2) ? (0) : (-1))))
 /* @brief Has global time base enable. */
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
-/* @brief Has counter pause on trigger. */
-#define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has global time base sync. */
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
+/* @brief Has counter pause on trigger. */
+#define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
 #define FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION (1)
 /* @brief Has TPM_COMBINE register. */
@@ -635,9 +651,9 @@
 #define FSL_FEATURE_TPM_HAS_POL (1)
 /* @brief Whether POL register has effect. */
 #define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) \
-    (((x) == TPM2) ? (0) : \
     (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : (-1))))
+    (((x) == TPM1) ? (1) : \
+    (((x) == TPM2) ? (0) : (-1))))
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -646,9 +662,9 @@
 #define FSL_FEATURE_TPM_HAS_QDCTRL (1)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) \
-    (((x) == TPM2) ? (0) : \
     (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : (-1))))
+    (((x) == TPM1) ? (1) : \
+    (((x) == TPM2) ? (0) : (-1))))
 /* @brief Has pause level select. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */

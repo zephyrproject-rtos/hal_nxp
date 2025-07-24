@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOPCTL1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOPCTL1.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_IOPCTL1.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOPCTL1
  *
  * CMSIS Peripheral Access Layer for IOPCTL1
  */
 
-#if !defined(IOPCTL1_H_)
-#define IOPCTL1_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOPCTL1_H_)
+#define PERI_IOPCTL1_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -200,14 +203,6 @@ typedef struct {
  */
 #define IOPCTL1_PIO_SLEWRATE(x)                  (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PIO_SLEWRATE_SHIFT)) & IOPCTL1_PIO_SLEWRATE_MASK)
 
-#define IOPCTL1_PIO_FULLDRIVE_MASK               (0x100U)
-#define IOPCTL1_PIO_FULLDRIVE_SHIFT              (8U)
-/*! FULLDRIVE - Drive Selector
- *  0b0..Normal output drive
- *  0b1..Full output drive, twice the drive of normal mode.
- */
-#define IOPCTL1_PIO_FULLDRIVE(x)                 (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PIO_FULLDRIVE_SHIFT)) & IOPCTL1_PIO_FULLDRIVE_MASK)
-
 #define IOPCTL1_PIO_AMENA_MASK                   (0x200U)
 #define IOPCTL1_PIO_AMENA_SHIFT                  (9U)
 /*! AMENA - Analog Mux Enable
@@ -231,6 +226,14 @@ typedef struct {
  *  0b1..Enables, input is function inverted
  */
 #define IOPCTL1_PIO_IIENA(x)                     (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PIO_IIENA_SHIFT)) & IOPCTL1_PIO_IIENA_MASK)
+
+#define IOPCTL1_PIO_DRIVE_MASK                   (0x3000U)
+#define IOPCTL1_PIO_DRIVE_SHIFT                  (12U)
+/*! DRIVE - Drive Selector
+ *  0bx0..Normal output drive
+ *  0bx1..Full output drive, twice the drive of normal mode.
+ */
+#define IOPCTL1_PIO_DRIVE(x)                     (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PIO_DRIVE_SHIFT)) & IOPCTL1_PIO_DRIVE_MASK)
 /*! @} */
 
 /* The count of IOPCTL1_PIO */
@@ -270,14 +273,6 @@ typedef struct {
  *  0b1..Enables, in slow mode.
  */
 #define IOPCTL1_PMIC_I2C_SDA_SLEWRATE(x)         (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PMIC_I2C_SDA_SLEWRATE_SHIFT)) & IOPCTL1_PMIC_I2C_SDA_SLEWRATE_MASK)
-
-#define IOPCTL1_PMIC_I2C_SDA_FULLDRIVE_MASK      (0x100U)
-#define IOPCTL1_PMIC_I2C_SDA_FULLDRIVE_SHIFT     (8U)
-/*! FULLDRIVE - Drive Selector
- *  0b0..Normal output drive
- *  0b1..Full output drive, twice the drive of normal mode.
- */
-#define IOPCTL1_PMIC_I2C_SDA_FULLDRIVE(x)        (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PMIC_I2C_SDA_FULLDRIVE_SHIFT)) & IOPCTL1_PMIC_I2C_SDA_FULLDRIVE_MASK)
 
 #define IOPCTL1_PMIC_I2C_SDA_AMENA_MASK          (0x200U)
 #define IOPCTL1_PMIC_I2C_SDA_AMENA_SHIFT         (9U)
@@ -338,14 +333,6 @@ typedef struct {
  *  0b1..Enables. Slow mode.
  */
 #define IOPCTL1_PMIC_I2C_SCL_SLEWRATE(x)         (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PMIC_I2C_SCL_SLEWRATE_SHIFT)) & IOPCTL1_PMIC_I2C_SCL_SLEWRATE_MASK)
-
-#define IOPCTL1_PMIC_I2C_SCL_FULLDRIVE_MASK      (0x100U)
-#define IOPCTL1_PMIC_I2C_SCL_FULLDRIVE_SHIFT     (8U)
-/*! FULLDRIVE - Drive Selector
- *  0b0..Normal output drive
- *  0b1..Full output drive, twice the drive of normal mode.
- */
-#define IOPCTL1_PMIC_I2C_SCL_FULLDRIVE(x)        (((uint32_t)(((uint32_t)(x)) << IOPCTL1_PMIC_I2C_SCL_FULLDRIVE_SHIFT)) & IOPCTL1_PMIC_I2C_SCL_FULLDRIVE_MASK)
 
 #define IOPCTL1_PMIC_I2C_SCL_AMENA_MASK          (0x200U)
 #define IOPCTL1_PMIC_I2C_SCL_AMENA_SHIFT         (9U)
@@ -408,5 +395,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOPCTL1_H_ */
+#endif  /* PERI_IOPCTL1_H_ */
 

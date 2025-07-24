@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 NXP
+ * Copyright 2017-2025 NXP
  * All rights reserved.
  *
  *
@@ -48,7 +48,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*! @} */
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */
@@ -177,7 +177,7 @@ enum _pxp_flags
 };
 
 #if PXP_USE_PATH
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 typedef enum _pxp_path
 {
     kPXP_Mux0SelectProcessSurfaceEngine     = PXP_PATH(0U, 0U), /*!< MUX0 select Process Surface engine. */
@@ -283,7 +283,8 @@ typedef enum _pxp_flip_mode
 typedef enum _pxp_rotate_position
 {
     kPXP_RotateOutputBuffer = 0U, /*!< Rotate the output buffer. */
-    kPXP_RotateProcessSurface,    /*!< Rotate the process surface. */
+    kPXP_RotateProcessSurface,    /*!< Rotate the process surface. Cannot be used together
+                                       with flip, scale, or decimation function. */
 } pxp_rotate_position_t;
 
 /*! @brief PXP rotate degree. */
@@ -343,7 +344,7 @@ typedef struct _pxp_output_buffer_config
 typedef enum _pxp_ps_pixel_format
 {
 #if (!(defined(FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT) && FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT)) && \
-    (!(defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3))
+    (!(defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)) && (!(defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4))
     kPXP_PsPixelFormatARGB8888 = 0x4, /*!< 32-bit pixels with alpha(when participates in blend with
         alpha surface uses pixel format that has alpha value) or without alpha (unpacked 24-bit format) */
     kPXP_PsPixelFormatARGB1555 = 0xC, /*!< 16-bit pixels with alpha(when participates in blend with
@@ -472,7 +473,7 @@ typedef struct _pxp_as_blend_config
     pxp_rop_mode_t ropMode;     /*!< ROP mode, only valid when @ref alphaMode is @ref kPXP_AlphaRop. */
 } pxp_as_blend_config_t;
 
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 /*!
  * @brief PXP secondary alpha surface blending engine configuration.
  */
@@ -1415,7 +1416,7 @@ void PXP_SetAlphaSurfaceBufferConfig(PXP_Type *base, const pxp_as_buffer_config_
  */
 void PXP_SetAlphaSurfaceBlendConfig(PXP_Type *base, const pxp_as_blend_config_t *config);
 
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 /*!
  * @brief Set the alpha surface blending configuration for the secondary engine.
  *
@@ -1521,7 +1522,7 @@ void PXP_SetAlphaSurfacePosition(
  * @name Process surface
  * @{
  */
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 /*!
  * @brief Set the back ground color of PS.
  *
@@ -1597,6 +1598,17 @@ void PXP_SetProcessSurfaceScaler(
  */
 void PXP_SetProcessSurfacePosition(
     PXP_Type *base, uint16_t upperLeftX, uint16_t upperLeftY, uint16_t lowerRightX, uint16_t lowerRightY);
+
+#if defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4
+/*!
+ * @brief Set the size of the process surface frame buffer in pixels.
+ *
+ * @param base PXP peripheral base address.
+ * @param lowerRightX X of the number of horizontal PIXELS in the processed surface.
+ * @param lowerRightY Y of the number of vertical PIXELS in the processed surface.
+ */
+void PXP_SetProcessSurfaceBufferSize(PXP_Type *base, uint16_t lowerRightX, uint16_t lowerRightY);
+#endif /* FSL_FEATURE_PXP_V4 */
 
 #if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
 /*!
@@ -1737,11 +1749,21 @@ static inline void PXP_SetRotateConfig(PXP_Type *base,
     {
         ctrl &= ~(PXP_CTRL_HFLIP0_MASK | PXP_CTRL_VFLIP0_MASK | PXP_CTRL_ROTATE0_MASK);
         ctrl |= (PXP_CTRL_ROTATE0(degree) | ((uint32_t)flipMode << PXP_CTRL_HFLIP0_SHIFT));
+#if defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4
+    {
+        ctrl |= PXP_CTRL_ENABLE_ROTATE0_MASK;
+    }
+#endif
     }
     else
     {
         ctrl &= ~(PXP_CTRL_HFLIP1_MASK | PXP_CTRL_VFLIP1_MASK | PXP_CTRL_ROTATE1_MASK);
         ctrl |= (PXP_CTRL_ROTATE1(degree) | ((uint32_t)flipMode << PXP_CTRL_HFLIP1_SHIFT));
+#if defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4
+    {
+        ctrl |= PXP_CTRL_ENABLE_ROTATE1_MASK;
+    }
+#endif
     }
 
     base->CTRL = ctrl;
@@ -2071,7 +2093,7 @@ void PXP_EnableDither(PXP_Type *base, bool enable);
  * @name Porter Duff
  * @{
  */
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 /*!
  * @brief Set the Porter Duff configuration for one of the alpha process engine.
  *
@@ -2093,7 +2115,7 @@ void PXP_SetPorterDuffConfig(PXP_Type *base, const pxp_porter_duff_config_t *con
 #endif /* FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL */
 
 #if (!(defined(FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL) && FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL)) || \
-    (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)
+    (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 
 /*!
  * @brief Get the Porter Duff configuration.

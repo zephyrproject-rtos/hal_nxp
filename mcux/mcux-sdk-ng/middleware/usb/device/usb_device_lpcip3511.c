@@ -2044,7 +2044,10 @@ static usb_status_t USB_DeviceLpc3511IpTransaction(usb_device_lpc3511ip_state_st
             epState->stateUnion.stateBitField.stallPrimed = 1u;
             status                                        = kStatus_USB_Success;
         }
-        status = kStatus_USB_Error;
+        else
+        {
+            status = kStatus_USB_Error;
+        }
         OSA_EXIT_CRITICAL();
         return status;
     }
@@ -2421,6 +2424,11 @@ usb_status_t USB_DeviceLpc3511IpControl(usb_device_controller_handle controllerH
                 {
                     epState = USB_DeviceLpc3511IpGetEndpointStateStruct(
                         lpc3511IpState, USB_LPC3511IP_ENDPOINT_DES_INDEX(endpointStatus->endpointAddress));
+                    if (epState == NULL)
+                    {
+                        error = kStatus_USB_Error;
+                        break;
+                    }
 #if (defined(USB_DEVICE_CONFIG_ROOT2_TEST) && (USB_DEVICE_CONFIG_ROOT2_TEST > 0U))
                     if (0U == epState->stateUnion.stateBitField.isOpened)
                     {

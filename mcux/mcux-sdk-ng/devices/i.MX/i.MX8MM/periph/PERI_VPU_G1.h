@@ -25,14 +25,14 @@
 **                          MIMX8MM6DVTLZ_ca53
 **                          MIMX8MM6DVTLZ_cm4
 **
-**     Version:             rev. 4.0, 2019-02-18
-**     Build:               b240708
+**     Version:             rev. 5.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VPU_G1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **         Rev.B Header PRC
 **     - rev. 4.0 (2019-02-18)
 **         Rev.0 Header RFP
+**     - rev. 5.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file VPU_G1.h
- * @version 4.0
- * @date 2019-02-18
+ * @file PERI_VPU_G1.h
+ * @version 5.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for VPU_G1
  *
  * CMSIS Peripheral Access Layer for VPU_G1
  */
 
-#if !defined(VPU_G1_H_)
-#define VPU_G1_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_VPU_G1_H_)
+#define PERI_VPU_G1_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8MM1CVTKZ_ca53) || defined(CPU_MIMX8MM1DVTLZ_ca53))
 #include "MIMX8MM1_ca53_COMMON.h"
@@ -472,8 +475,8 @@ typedef struct {
 #define VPU_G1_SWREG3_SW_FILTERING_DIS_MASK      (0x4000U)
 #define VPU_G1_SWREG3_SW_FILTERING_DIS_SHIFT     (14U)
 /*! SW_FILTERING_DIS - De-block filtering disable:
- *  0b1..filtering is disabled for current picture
  *  0b0..filtering is enabled for current picture
+ *  0b1..filtering is disabled for current picture
  */
 #define VPU_G1_SWREG3_SW_FILTERING_DIS(x)        (((uint32_t)(((uint32_t)(x)) << VPU_G1_SWREG3_SW_FILTERING_DIS_SHIFT)) & VPU_G1_SWREG3_SW_FILTERING_DIS_MASK)
 
@@ -512,8 +515,8 @@ typedef struct {
 #define VPU_G1_SWREG3_SW_PIC_INTER_E_MASK        (0x100000U)
 #define VPU_G1_SWREG3_SW_PIC_INTER_E_SHIFT       (20U)
 /*! SW_PIC_INTER_E - Picture type. Please also see SW_PIC_B_E.
- *  0b1..Inter type (P)
  *  0b0..Intra type (I)
+ *  0b1..Inter type (P)
  */
 #define VPU_G1_SWREG3_SW_PIC_INTER_E(x)          (((uint32_t)(((uint32_t)(x)) << VPU_G1_SWREG3_SW_PIC_INTER_E_SHIFT)) & VPU_G1_SWREG3_SW_PIC_INTER_E_MASK)
 
@@ -548,9 +551,9 @@ typedef struct {
 #define VPU_G1_SWREG3_SW_RLC_MODE_E_MASK         (0x8000000U)
 #define VPU_G1_SWREG3_SW_RLC_MODE_E_SHIFT        (27U)
 /*! SW_RLC_MODE_E - RLC mode enable:
+ *  0b0..HW decodes video from bit stream (VLC mode) + side information
  *  0b1..HW decodes video from RLC input data + side information (Differential MV's, separate DC coeffs, Intra 4x4
  *       modes, MB control). Valid only for H.264 Baseline.
- *  0b0..HW decodes video from bit stream (VLC mode) + side information
  */
 #define VPU_G1_SWREG3_SW_RLC_MODE_E(x)           (((uint32_t)(((uint32_t)(x)) << VPU_G1_SWREG3_SW_RLC_MODE_E_SHIFT)) & VPU_G1_SWREG3_SW_RLC_MODE_E_MASK)
 
@@ -1172,8 +1175,8 @@ typedef struct {
 #define VPU_G1_SWREG61_SW_PP_CLK_GATE_E_MASK     (0x100U)
 #define VPU_G1_SWREG61_SW_PP_CLK_GATE_E_SHIFT    (8U)
 /*! SW_PP_CLK_GATE_E - PP dynamic clock gating enable.
- *  0b1..Clock is gated from PP structures that are not used
  *  0b0..Clock is running for all PP structures
+ *  0b1..Clock is gated from PP structures that are not used
  */
 #define VPU_G1_SWREG61_SW_PP_CLK_GATE_E(x)       (((uint32_t)(((uint32_t)(x)) << VPU_G1_SWREG61_SW_PP_CLK_GATE_E_SHIFT)) & VPU_G1_SWREG61_SW_PP_CLK_GATE_E_MASK)
 
@@ -2224,9 +2227,9 @@ typedef struct {
 #define VPU_G1_SWREG102_SW_CH_BASE_E_MASK        (0x1U)
 #define VPU_G1_SWREG102_SW_CH_BASE_E_SHIFT       (0U)
 /*! SW_CH_BASE_E - chroma address separate mode enable:
- *  0b1..HW outputs decoded chroma picture to independent memory address
  *  0b0..HW outputs decoded chroma picture to the end of decoded luma picture. HW calculates the chroma picture
  *       address according to sw_dec_base and luma data length.
+ *  0b1..HW outputs decoded chroma picture to independent memory address
  */
 #define VPU_G1_SWREG102_SW_CH_BASE_E(x)          (((uint32_t)(((uint32_t)(x)) << VPU_G1_SWREG102_SW_CH_BASE_E_SHIFT)) & VPU_G1_SWREG102_SW_CH_BASE_E_MASK)
 
@@ -2417,5 +2420,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* VPU_G1_H_ */
+#endif  /* PERI_VPU_G1_H_ */
 

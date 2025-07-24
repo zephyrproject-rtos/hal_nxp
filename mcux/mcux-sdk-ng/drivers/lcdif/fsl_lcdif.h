@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021,2023 NXP
+ * Copyright (c) 2019-2021,2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_LCDIF_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_LCDIF_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 /*! @brief Construct the cursor color, every element should be in the range of 0 ~ 255. */
@@ -165,6 +165,16 @@ typedef struct _lcdif_layer_colorkey
     uint32_t highValue; /* The high value for the color key range, in 32-bit ARGB8888 format. */
 } lcdif_layer_colorkey_t;
 
+/*! @brief LCDIF layer input data decompress mode. */
+typedef enum _lcdif_layer_decompress_mode
+{
+    kLCDIF_DecompressNone              = 0U, /*!< Decompression disabled. The input is straight RGB/YUV data. */
+    kLCDIF_DecompressDECNanoNoneSample = 1U, /*!< DECNano decompression with none sample. */
+    kLCDIF_DecompressDECNanoHSample    = 2U, /*!< DECNano decompression with horizontal sample. */
+    kLCDIF_DecompressDECNanoHVSample   = 3U, /*!< DECNano decompression with both horizontal and vertical sample. */
+    kLCDIF_DecompressETC2              = 4U, /*!< ETC2 decompression. */
+} lcdif_layer_decompress_mode_t;
+
 /*!
  * @brief Alpha blend alpha component mode.
  * @anchor lcdif_layer_alpha_mode_t
@@ -277,6 +287,7 @@ typedef struct _lcdif_fb_config
                              YUV input. */
     lcdif_layer_input_order_t inOrder;        /*!< Color component order of the input pixel. */
     lcdif_layer_colorkey_t colorkey;          /*!< Color key configuration. */
+    lcdif_layer_decompress_mode_t decompress; /*!< LCDIF layer input data decompress mode. */
     lcdif_layer_rotate_flip_t rotateFlipMode; /*!< LCDIF frame buffer rotation or flip configuration. */
     lcdif_layer_alpha_blend_config_t alpha;   /*!< The alpha blending configuration. */
     /* The background layer with a constant color is used, the other layers do not need to fill the whole screen. */
@@ -1018,7 +1029,7 @@ static inline void LCDIF_SetEndianMode(LCDIF_Type *base, uint8_t displayIndex, l
  */
 static inline void LCDIF_EnableUpdate(LCDIF_Type *base, bool enable)
 {
-    base->PANELCONTROL = (uint32_t)enable;
+    base->PANELCONTROL = (enable ? 1U : 0U);
 }
 
 /*!

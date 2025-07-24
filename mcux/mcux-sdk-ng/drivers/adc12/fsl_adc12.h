@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
- * All rights reserved.
+ * Copyright 2016-2021, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +19,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC12 driver version */
-#define FSL_ADC12_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6. */
+#define FSL_ADC12_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 
 /*!
  * @brief Channel status flags' mask.

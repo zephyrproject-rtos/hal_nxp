@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_GINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Driver version. */
+#define FSL_GINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Driver version. */
 /*! @} */
 
 /*! @brief GINT combine inputs type */

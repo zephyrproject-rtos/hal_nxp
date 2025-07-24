@@ -8,14 +8,14 @@
 **                          MKM33Z64ACLL5
 **                          MKM34Z128ACLL5
 **
-**     Version:             rev. 1.0, 2014-07-22
-**     Build:               b240710
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RNG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -24,21 +24,24 @@
 **     Revisions:
 **     - rev. 1.0 (2014-07-22)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RNG.h
- * @version 1.0
- * @date 2014-07-22
+ * @file PERI_RNG.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RNG
  *
  * CMSIS Peripheral Access Layer for RNG
  */
 
-#if !defined(RNG_H_)
-#define RNG_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RNG_H_)
+#define PERI_RNG_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MKM14Z128ACHH5) || defined(CPU_MKM14Z64ACHH5))
 #include "MKM14ZA5_COMMON.h"
@@ -95,7 +98,7 @@
 typedef struct {
   __IO uint32_t CR;                                /**< RNGA Control Register, offset: 0x0 */
   __I  uint32_t SR;                                /**< RNGA Status Register, offset: 0x4 */
-  __O  uint32_t ER;                                /**< RNGA Entropy Register, offset: 0x8 */
+  __IO uint32_t ER;                                /**< RNGA Entropy Register, offset: 0x8 */
   __I  uint32_t OR;                                /**< RNGA Output Register, offset: 0xC */
 } RNG_Type;
 
@@ -270,5 +273,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RNG_H_ */
+#endif  /* PERI_RNG_H_ */
 

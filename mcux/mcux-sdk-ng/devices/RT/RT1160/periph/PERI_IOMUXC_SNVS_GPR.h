@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_SNVS_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_SNVS_GPR.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_IOMUXC_SNVS_GPR.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_SNVS_GPR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_SNVS_GPR
  */
 
-#if !defined(IOMUXC_SNVS_GPR_H_)
-#define IOMUXC_SNVS_GPR_H_                       /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_SNVS_GPR_H_)
+#define PERI_IOMUXC_SNVS_GPR_H_                  /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -158,32 +161,32 @@ typedef struct {
 #define IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_MASK (0x4U)
 #define IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_SHIFT (2U)
 /*! SNVS_BYPASS_EN - SNVS LDO_SNVS_ANA bypass enable
- *  0b1..Enable bypass
  *  0b0..Disable bypass
+ *  0b1..Enable bypass
  */
 #define IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_MASK (0x10000U)
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_SHIFT (16U)
 /*! DCDC_IN_LOW_VOL - DCDC_IN low voltage detect
- *  0b1..Voltage on DCDC_IN is lower than 2.6V
  *  0b0..Voltage on DCDC_IN is higher than 2.6V
+ *  0b1..Voltage on DCDC_IN is lower than 2.6V
  */
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_MASK (0x20000U)
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_SHIFT (17U)
 /*! DCDC_OVER_CUR - DCDC output over current alert
- *  0b1..Overcurrent on DCDC output
  *  0b0..No Overcurrent on DCDC output
+ *  0b1..Overcurrent on DCDC output
  */
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR(x)   (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_MASK (0x40000U)
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_SHIFT (18U)
 /*! DCDC_OVER_VOL - DCDC output over voltage alert
- *  0b1..Overvoltage on DCDC VDDLP0 or VDDLP8 output
  *  0b0..No Overvoltage on DCDC VDDLP0 or VDDLP8 output
+ *  0b1..Overvoltage on DCDC VDDLP0 or VDDLP8 output
  */
 #define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL(x)   (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_MASK)
 
@@ -198,8 +201,8 @@ typedef struct {
 #define IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_MASK (0x100000U)
 #define IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_SHIFT (20U)
 /*! SNVS_XTAL_CLK_OK - 32K OSC ok flag
- *  0b1..32K oscillator is stable into normal operation
  *  0b0..32K oscillator is NOT stable into normal operation
+ *  0b1..32K oscillator is stable into normal operation
  */
 #define IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_MASK)
 /*! @} */
@@ -339,8 +342,8 @@ typedef struct {
 #define IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_MASK (0x800000U)
 #define IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_SHIFT (23U)
 /*! SNVSDIG_SNVS1P8_ISO_EN - SNVS RAM isolation enable bit
- *  0b1..Enable the isolation to avoid extra leakage power before SNVS SRAM peripheral power or LDO_SNVS_DIG is switched off
  *  0b0..Enable SRAM access (It should be cleared after LDO_SNVS_DIG and SNVS SRAM peripheral power is back)
+ *  0b1..Enable the isolation to avoid extra leakage power before SNVS SRAM peripheral power or LDO_SNVS_DIG is switched off
  */
 #define IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_MASK)
 
@@ -357,40 +360,40 @@ typedef struct {
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_MASK (0x8000000U)
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_SHIFT (27U)
 /*! SNVS_SRAM_STDBY - SNVS SRAM standby enable bit
- *  0b1..SNVS SRAM enters low leakage state and large drivers are switched OFF
  *  0b0..SNVS SRAM does not enter low leakage state
+ *  0b1..SNVS SRAM enters low leakage state and large drivers are switched OFF
  */
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_MASK (0x10000000U)
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_SHIFT (28U)
 /*! SNVS_SRAM_PSWLARGEMP_FORCE - SNVS SRAM large switch control bit for peripheral
- *  0b1..Switch off SNVS SRAM power for peripheral (SRAM array power is not impacted, and data can be retained)
  *  0b0..Switch on SNVS SRAM power for peripheral
+ *  0b1..Switch off SNVS SRAM power for peripheral (SRAM array power is not impacted, and data can be retained)
  */
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_MASK (0x20000000U)
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_SHIFT (29U)
 /*! SNVS_SRAM_PSWLARGE - SNVS SRAM large switch control bit
- *  0b1..Switch off SNVS SRAM power for peripheral and array
  *  0b0..Switch on SNVS SRAM power for peripheral and array
+ *  0b1..Switch off SNVS SRAM power for peripheral and array
  */
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_MASK (0x40000000U)
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_SHIFT (30U)
 /*! SNVS_SRAM_PSWSMALLMP_FORCE - SNVS SRAM small switch control bit for peripheral
- *  0b1..Switch off SNVS SRAM power for peripheral (SRAM array power is not impacted, and data can be retained)
  *  0b0..Switch on SNVS SRAM power for peripheral
+ *  0b1..Switch off SNVS SRAM power for peripheral (SRAM array power is not impacted, and data can be retained)
  */
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_MASK)
 
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_MASK (0x80000000U)
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_SHIFT (31U)
 /*! SNVS_SRAM_PSWSMALL - SNVS SRAM small switch control bit
- *  0b1..Switch off SNVS SRAM power for peripheral and array
  *  0b0..Switch on SNVS SRAM power for peripheral and array
+ *  0b1..Switch off SNVS SRAM power for peripheral and array
  */
 #define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_MASK)
 /*! @} */
@@ -453,5 +456,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_SNVS_GPR_H_ */
+#endif  /* PERI_IOMUXC_SNVS_GPR_H_ */
 

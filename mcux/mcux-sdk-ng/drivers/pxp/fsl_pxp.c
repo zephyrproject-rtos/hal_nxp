@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 NXP
+ * Copyright 2017-2025 NXP
  * All rights reserved.
  *
  *
@@ -60,7 +60,7 @@
 #define PORTER_DUFF_ENABLE_MASK PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK
 #endif /* FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL */
 
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 #define S1_COLOR_MODE           PXP_ALPHA_A_CTRL_S1_COLOR_MODE
 #define S1_ALPHA_MODE           PXP_ALPHA_A_CTRL_S1_ALPHA_MODE
 #define S1_GLOBAL_ALPHA_MODE    PXP_ALPHA_A_CTRL_S1_GLOBAL_ALPHA_MODE
@@ -323,6 +323,17 @@ void PXP_Init(PXP_Type *base)
 
     /* Disable the alpha surface. */
     PXP_SetAlphaSurfacePosition(base, 0xFFFFU, 0xFFFFU, 0U, 0U);
+#if defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4
+    PXP_SetPath(PXP, kPXP_Mux3SelectCsc1Engine);
+    PXP_SetPath(PXP, kPXP_Mux8SelectAlphaBlending0);
+    PXP_SetPath(PXP, kPXP_Mux11SelectMux8);
+    PXP_SetPath(PXP, kPXP_Mux14SelectMux11);
+    PXP_SetPath(PXP, kPXP_Mux0SelectNone);
+    PXP_SetPath(PXP, kPXP_Mux6SelectNone);
+    PXP_SetPath(PXP, kPXP_Mux9SelectNone);
+    PXP_SetPath(PXP, kPXP_Mux12SelectNone);
+    base->CTRL = PXP_CTRL_ENABLE_PS_AS_OUT_MASK | PXP_CTRL_BLOCK_32_MASK;
+#endif
 }
 
 /*!
@@ -436,7 +447,7 @@ void PXP_SetAlphaSurfacePosition(
     base->OUT_AS_LRC = PXP_OUT_AS_LRC_Y(lowerRightY) | PXP_OUT_AS_LRC_X(lowerRightX);
 }
 
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 /*!
  * brief Set the alpha surface overlay color key.
  *
@@ -555,6 +566,20 @@ void PXP_SetProcessSurfacePosition(
     base->OUT_PS_LRC = PXP_OUT_PS_LRC_Y(lowerRightY) | PXP_OUT_PS_LRC_X(lowerRightX);
 }
 
+#if defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4
+/*!
+ * @brief Set the size of the process surface frame buffer in pixels.
+ *
+ * @param base PXP peripheral base address.
+ * @param lowerRightX X of the number of horizontal PIXELS in the processed surface.
+ * @param lowerRightY Y of the number of vertical PIXELS in the processed surface.
+ */
+void PXP_SetProcessSurfaceBufferSize(PXP_Type *base, uint16_t lowerRightX, uint16_t lowerRightY)
+{
+    base->PS_LRC = PXP_PS_LRC_Y(lowerRightY) | PXP_PS_LRC_X(lowerRightX);
+}
+#endif /* FSL_FEATURE_PXP_V4 */
+
 #if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
 /*!
  * brief Set the process surface color key.
@@ -657,7 +682,7 @@ void PXP_BuildRect(PXP_Type *base,
     assert((uint8_t)outFormat <= (uint8_t)kPXP_OutputPixelFormatRGB565);
 
     /* PS configuration */
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
     PXP_SetProcessSurfaceBackGroundColor(base, 0U, value);
 #else
     PXP_SetProcessSurfaceBackGroundColor(base, value);
@@ -678,7 +703,7 @@ void PXP_BuildRect(PXP_Type *base,
         pxp_as_blend_config_t asBlendConfig = {
             .alpha = alpha, .invertAlpha = false, .alphaMode = kPXP_AlphaOverride, .ropMode = kPXP_RopMergeAs};
         PXP_SetAlphaSurfaceBlendConfig(base, &asBlendConfig);
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
         PXP_SetAlphaSurfaceOverlayColorKey(base, 0U, 0U, 0xFFFFFFFFUL);
         PXP_EnableAlphaSurfaceOverlayColorKey(base, 0U, true);
 #else
@@ -1011,7 +1036,7 @@ void PXP_EnableDither(PXP_Type *base, bool enable)
 }
 #endif /* FSL_FEATURE_PXP_HAS_DITHER */
 
-#if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
+#if (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 /*!
  * brief Set the Porter Duff configuration for one of the alpha process engine.
  *
@@ -1073,7 +1098,7 @@ void PXP_SetPorterDuffConfig(PXP_Type *base, const pxp_porter_duff_config_t *con
 #endif /* FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL */
 
 #if (!(defined(FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL) && FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL)) || \
-    (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)
+    (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3) || (defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
 
 /*
  * brief Get the Porter Duff configuration.
@@ -1210,8 +1235,9 @@ static void PXP_StartRectCopy(PXP_Type *base,
     intMask = base->CTRL & (PXP_CTRL_NEXT_IRQ_ENABLE_MASK | PXP_CTRL_IRQ_ENABLE_MASK);
 #endif
 
+#if !(defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
     PXP_ResetControl(base);
-
+#endif
     /* Restore previous interrupt configuration. */
     PXP_EnableInterrupts(base, intMask);
 
@@ -2236,14 +2262,17 @@ void PXP_SetWfeaConfig(PXP_Type *base, const pxp_wfea_engine_config_t *config)
  */
 void PXP_SetPath(PXP_Type *base, pxp_path_t path)
 {
-    volatile uint32_t *pathReg;
+    volatile uint32_t *pathReg = NULL;
     uint32_t mux = PXP_GET_MUX_FROM_PATH((uint32_t)path);
     uint32_t sel = PXP_GET_SEL_FROM_PATH((uint32_t)path);
 
     if (mux > 15U)
     {
+#if !(defined(FSL_FEATURE_PXP_V4) && FSL_FEATURE_PXP_V4)
+        /* FSL_FEATURE_PXP_V4 do not support DATA_PATH_CTRL1 */
         pathReg = &(base->DATA_PATH_CTRL1);
         mux -= 15U;
+#endif
     }
     else
     {

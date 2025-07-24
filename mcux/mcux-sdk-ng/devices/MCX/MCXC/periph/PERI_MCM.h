@@ -3,14 +3,14 @@
 **     Processors:          MCXC041VFG
 **                          MCXC041VFK
 **
-**     Version:             rev. 1.0, 2024-03-19
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -19,21 +19,24 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-19)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MCM.h
- * @version 1.0
- * @date 2024-03-19
+ * @file PERI_MCM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCM
  *
  * CMSIS Peripheral Access Layer for MCM
  */
 
-#if !defined(MCM_H_)
-#define MCM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MCM_H_)
+#define PERI_MCM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXC041VFG) || defined(CPU_MCXC041VFK))
 #include "MCXC041_COMMON.h"
@@ -218,5 +221,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MCM_H_ */
+#endif  /* PERI_MCM_H_ */
 

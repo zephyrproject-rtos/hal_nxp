@@ -1,74 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA165VLH
-**                          MCXA165VLL
-**                          MCXA165VLQ
-**                          MCXA165VPN
-**                          MCXA166VLH
-**                          MCXA166VLL
-**                          MCXA166VLQ
-**                          MCXA166VPN
-**                          MCXA175VLH
-**                          MCXA175VLL
-**                          MCXA175VLQ
-**                          MCXA175VPN
-**                          MCXA176VLH
-**                          MCXA176VLL
-**                          MCXA176VLQ
-**                          MCXA176VPN
-**                          MCXA275VLH
-**                          MCXA275VLL
-**                          MCXA275VLQ
-**                          MCXA275VPN
-**                          MCXA276VLH
-**                          MCXA276VLL
-**                          MCXA276VLQ
-**                          MCXA276VPN
+**     Processors:          MCXA345VLH
+**                          MCXA345VLL
+**                          MCXA345VLQ
+**                          MCXA345VPN
+**                          MCXA346VLH
+**                          MCXA346VLL
+**                          MCXA346VLQ
+**                          MCXA346VPN
 **
-**     Version:             rev. 1.0, 2024-03-26
-**     Build:               b241120
+**     Version:             rev. 1.0, 2024-11-21
+**     Build:               b250519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRNG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2024-03-26)
-**         Initial version based on Rev1 DraftC RM
+**     - rev. 1.0 (2024-11-21)
+**         Initial version based on Rev1 RM
 **
 ** ###################################################################
 */
 
 /*!
- * @file TRNG.h
+ * @file PERI_TRNG.h
  * @version 1.0
- * @date 2024-03-26
+ * @date 2024-11-21
  * @brief CMSIS Peripheral Access Layer for TRNG
  *
  * CMSIS Peripheral Access Layer for TRNG
  */
 
-#if !defined(TRNG_H_)
-#define TRNG_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_TRNG_H_)
+#define PERI_TRNG_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA165VLH) || defined(CPU_MCXA165VLL) || defined(CPU_MCXA165VLQ) || defined(CPU_MCXA165VPN))
-#include "MCXA165_COMMON.h"
-#elif (defined(CPU_MCXA166VLH) || defined(CPU_MCXA166VLL) || defined(CPU_MCXA166VLQ) || defined(CPU_MCXA166VPN))
-#include "MCXA166_COMMON.h"
-#elif (defined(CPU_MCXA175VLH) || defined(CPU_MCXA175VLL) || defined(CPU_MCXA175VLQ) || defined(CPU_MCXA175VPN))
-#include "MCXA175_COMMON.h"
-#elif (defined(CPU_MCXA176VLH) || defined(CPU_MCXA176VLL) || defined(CPU_MCXA176VLQ) || defined(CPU_MCXA176VPN))
-#include "MCXA176_COMMON.h"
-#elif (defined(CPU_MCXA275VLH) || defined(CPU_MCXA275VLL) || defined(CPU_MCXA275VLQ) || defined(CPU_MCXA275VPN))
-#include "MCXA275_COMMON.h"
-#elif (defined(CPU_MCXA276VLH) || defined(CPU_MCXA276VLL) || defined(CPU_MCXA276VLQ) || defined(CPU_MCXA276VPN))
-#include "MCXA276_COMMON.h"
+#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#include "MCXA345_COMMON.h"
+#elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
+#include "MCXA346_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -112,7 +88,7 @@
  */
 
 /** TRNG - Size of Registers Arrays */
-#define TRNG_ENTA_COUNT                           1u
+#define TRNG_ENTA_COUNT                           8u
 
 /** TRNG - Register Layout Typedef */
 typedef struct {
@@ -166,7 +142,7 @@ typedef struct {
   };
   __I  uint32_t STATUS;                            /**< Status Register, offset: 0x3C */
   __I  uint32_t ENT[TRNG_ENTA_COUNT];              /**< Entropy Read Register, array offset: 0x40, array step: 0x4 */
-       uint8_t RESERVED_0[60];
+       uint8_t RESERVED_0[32];
   __I  uint32_t PKRCNT10;                          /**< Statistical Check Poker Count 1 and 0 Register, offset: 0x80 */
   __I  uint32_t PKRCNT32;                          /**< Statistical Check Poker Count 3 and 2 Register, offset: 0x84 */
   __I  uint32_t PKRCNT54;                          /**< Statistical Check Poker Count 5 and 4 Register, offset: 0x88 */
@@ -700,7 +676,7 @@ typedef struct {
 /*! @} */
 
 /* The count of TRNG_ENTA_ENT */
-#define TRNG_ENTA_ENT_COUNT                      (1U)
+#define TRNG_ENTA_ENT_COUNT                      (8U)
 
 /*! @name PKRCNT10 - Statistical Check Poker Count 1 and 0 Register */
 /*! @{ */
@@ -1146,5 +1122,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* TRNG_H_ */
+#endif  /* PERI_TRNG_H_ */
 

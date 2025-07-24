@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-10-30
-**     Build:               b240301
+**     Build:               b250428
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -924,6 +924,8 @@
 #define FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
+/* @brief Has dedicated interrupt for master and slave. */
+#define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
 
 /* LPIT module features */
 
@@ -936,10 +938,16 @@
 
 /* LPSPI module features */
 
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+/* @brief Capacity (number of entries) of the transmit/receive FIFO. */
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (4)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
+/* @brief Has no PCSCFG bit in CFGR1 register. */
+#define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
+/* @brief Has no WIDTH bits in TCR register. */
+#define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 
 /* LPTMR module features */
 
@@ -952,8 +960,6 @@
 
 /* LPUART module features */
 
-/* @brief LPUART0 and LPUART1 has shared interrupt vector. */
-#define FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1 (0)
 /* @brief Has receive FIFO overflow detection (bit field CFIFO[RXOFE]). */
 #define FSL_FEATURE_LPUART_HAS_IRQ_EXTENDED_FUNCTIONS (0)
 /* @brief Has low power features (can be enabled in wait mode via register bit C1[DOZEEN] or CTRL[DOZEEN] if the registers are 32-bit wide). */
@@ -1018,6 +1024,18 @@
 #define FSL_FEATURE_LPUART_HAS_GLOBAL (1)
 /* @brief Has LPUART_PINCFG. */
 #define FSL_FEATURE_LPUART_HAS_PINCFG (1)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPUART_IS_LPFLEXCOMM (0)
+/* @brief Has register MODEM Control. */
+#define FSL_FEATURE_LPUART_HAS_MCR (0)
+/* @brief Has register Half Duplex Control. */
+#define FSL_FEATURE_LPUART_HAS_HDCR (0)
+/* @brief Has register Timeout. */
+#define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
+/* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
+#define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief LPUART0 and LPUART1 has shared interrupt vector. */
+#define FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1 (0)
 
 /* MMDVSQ module features */
 

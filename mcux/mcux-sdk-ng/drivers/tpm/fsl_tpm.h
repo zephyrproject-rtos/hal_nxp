@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2022 NXP
- * All rights reserved.
+ * Copyright 2016-2021, 2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,8 +30,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TPM driver version 2.3.2. */
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief TPM driver version 2.3.5. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 5))
 /*! @} */
 
 /*! @brief Help macro to get the max counter value */
@@ -957,6 +956,15 @@ static inline void TPM_Reset(TPM_Type *base)
     base->GLOBAL &= ~TPM_GLOBAL_RST_MASK;
 }
 #endif
+
+/*!
+ * @brief TPM driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for TPM.
+ *
+ * @param instance TPM instance.
+ */
+void TPM_DriverIRQHandler(uint32_t instance);
 
 #if defined(__cplusplus)
 }

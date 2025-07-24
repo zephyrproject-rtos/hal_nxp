@@ -6,14 +6,14 @@
 **                          MCIMX7U5DVK07
 **                          MCIMX7U5DVP07
 **
-**     Version:             rev. 7.0, 2018-11-05
-**     Build:               b240708
+**     Version:             rev. 8.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,21 +34,24 @@
 **         RevB(B0) Header GA
 **     - rev. 7.0 (2018-11-05)
 **         RevA(B1) Header
+**     - rev. 8.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC.h
- * @version 7.0
- * @date 2018-11-05
+ * @file PERI_MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC.h
+ * @version 8.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC
  *
  * CMSIS Peripheral Access Layer for MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC
  */
 
-#if !defined(MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_H_)
-#define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_H_      /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_H_)
+#define PERI_MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_H_ /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCIMX7U3CVP06) || defined(CPU_MCIMX7U3DVK07))
 #include "MCIMX7U3_cm4_COMMON.h"
@@ -330,38 +333,38 @@ typedef struct {
 #define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CN_CN_MASK (0x1FU)
 #define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CN_CN_SHIFT (0U)
 /*! CN
- *  0b11111..Divide by 1
  *  0b00000..Divide by 2
- *  0b10000..Divide by 3
- *  0b11000..Divide by 4
- *  0b11100..Divide by 5
- *  0b01110..Divide by 6
- *  0b00111..Divide by 7
- *  0b10011..Divide by 8
- *  0b01001..Divide by 9
- *  0b00100..Divide by 10
+ *  0b00001..Divide by 32
  *  0b00010..Divide by 11
- *  0b10001..Divide by 12
+ *  0b00011..Divide by 31
+ *  0b00100..Divide by 10
+ *  0b00101..Divide by 26
+ *  0b00110..Divide by 30
+ *  0b00111..Divide by 7
  *  0b01000..Divide by 13
- *  0b10100..Divide by 14
+ *  0b01001..Divide by 9
  *  0b01010..Divide by 15
+ *  0b01011..Divide by 25
+ *  0b01100..Divide by 29
+ *  0b01101..Divide by 23
+ *  0b01110..Divide by 6
+ *  0b01111..Divide by 20
+ *  0b10000..Divide by 3
+ *  0b10001..Divide by 12
+ *  0b10010..Divide by 27
+ *  0b10011..Divide by 8
+ *  0b10100..Divide by 14
  *  0b10101..Divide by 16
+ *  0b10110..Divide by 24
+ *  0b10111..Divide by 21
+ *  0b11000..Divide by 4
+ *  0b11001..Divide by 28
  *  0b11010..Divide by 17
+ *  0b11011..Divide by 22
+ *  0b11100..Divide by 5
  *  0b11101..Divide by 18
  *  0b11110..Divide by 19
- *  0b01111..Divide by 20
- *  0b10111..Divide by 21
- *  0b11011..Divide by 22
- *  0b01101..Divide by 23
- *  0b10110..Divide by 24
- *  0b01011..Divide by 25
- *  0b00101..Divide by 26
- *  0b10010..Divide by 27
- *  0b11001..Divide by 28
- *  0b01100..Divide by 29
- *  0b00110..Divide by 30
- *  0b00011..Divide by 31
- *  0b00001..Divide by 32
+ *  0b11111..Divide by 1
  */
 #define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CN_CN(x) (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CN_CN_SHIFT)) & MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CN_CN_MASK)
 /*! @} */
@@ -372,14 +375,14 @@ typedef struct {
 #define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CM_CM_MASK (0xFFU)
 #define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CM_CM_SHIFT (0U)
 /*! CM
- *  0b111x0000..Divide by 16
- *  0b111x1111..Divide by 31
- *  0b11000000..Divide by 32
- *  0b11011111..Divide by 63
- *  0b10000000..Divide by 64
- *  0b10111111..Divide by 127
  *  0b00000000..Divide by 128
  *  0b01111111..Divide by 255
+ *  0b10000000..Divide by 64
+ *  0b10111111..Divide by 127
+ *  0b11000000..Divide by 32
+ *  0b11011111..Divide by 63
+ *  0b111x0000..Divide by 16
+ *  0b111x1111..Divide by 31
  */
 #define MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CM_CM(x) (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CM_CM_SHIFT)) & MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_DPHY_CM_CM_MASK)
 /*! @} */
@@ -486,5 +489,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_H_ */
+#endif  /* PERI_MIPI_DSI_HOST_FSL_IP1_DPHY_INTFC_H_ */
 

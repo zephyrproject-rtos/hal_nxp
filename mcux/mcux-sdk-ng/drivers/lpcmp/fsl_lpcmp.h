@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023-2024 NXP
+ * Copyright 2016-2020, 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,8 +20,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LPCMP driver version 2.2.0. */
-#define FSL_LPCMP_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief LPCMP driver version 2.3.2. */
+#define FSL_LPCMP_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*! @} */
 
 #define LPCMP_CCR1_COUTA_CFG_MASK  (LPCMP_CCR1_COUTA_OWEN_MASK | LPCMP_CCR1_COUTA_OW_MASK)
@@ -142,6 +142,7 @@ typedef enum _lpcmp_roundrobin_fixedmuxport
     kLPCMP_FixedMinusMuxPort = 1U, /*!< Fixed minus mux port. */
 } lpcmp_roundrobin_fixedmuxport_t;
 
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL) && (FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL == 0U))
 /*!
  * @brief LPCMP round robin mode clock source selection.
  *
@@ -155,7 +156,9 @@ typedef enum _lpcmp_roundrobin_clock_source
     kLPCMP_RoundRobinClockSource2 = 2U, /*!< Select roundrobin mode clock source2. */
     kLPCMP_RoundRobinClockSource3 = 3U, /*!< Select roundrobin mode clock source3. */
 } lpcmp_roundrobin_clock_source_t;
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL */
 
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL) && (FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL == 0U))
 /*!
  * @brief LPCMP round robin mode trigger source.
  */
@@ -164,7 +167,8 @@ typedef enum _lpcmp_roundrobin_trigger_source
     kLPCMP_TriggerSourceExternally = 0U, /*!< Select external trigger source. */
     kLPCMP_TriggerSourceInternally = 1U, /*!< Select internal trigger source. */
 } lpcmp_roundrobin_trigger_source_t;
-#endif                                   /* FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE */
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL */
+#endif /* FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE */
 
 /*!
  * @brief Configure the filter.
@@ -178,12 +182,36 @@ typedef struct _lpcmp_filter_config
                             So if enableSample is "false", filterSamplePeriod should be set greater than 4.*/
 } lpcmp_filter_config_t;
 
+#if defined(FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL) && FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL
+/*!
+ * @brief LPCMP plus input source.
+ */
+typedef enum _lpcmp_plus_input_src
+{
+    kLPCMP_PlusInputSrcDac = 0U, /*!< LPCMP plus input source from the internal 8-bit DAC output. */
+    kLPCMP_PlusInputSrcMux = 1U, /*!< LPCMP plus input source from the analog 8-1 mux. */
+} lpcmp_plus_input_src_t;
+#endif /* FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL */
+
+#if defined(FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL) && FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL
+/*!
+ * @brief LPCMP minus input source.
+ */
+typedef enum _lpcmp_minus_input_src
+{
+    kLPCMP_MinusInputSrcDac = 0U, /*!< LPCMP minus input source from the internal 8-bit DAC output. */
+    kLPCMP_MinusInputSrcMux = 1U, /*!< LPCMP minus input source from the analog 8-1 mux. */
+} lpcmp_minus_input_src_t;
+#endif /* FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL */
+
 /*!
  * @brief configure the internal DAC.
  */
 typedef struct _lpcmp_dac_config
 {
-    bool enableLowPowerMode;                                     /*!< Decide whether to enable DAC low power mode. */
+#if !(defined(FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD) && (FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD == 0U))
+    bool enableLowPowerMode;    /*!< Decide whether to enable DAC low power mode. */
+#endif /* FSL_FEATURE_LPCMP_HAS_DCR_DAC_HPMD */
     lpcmp_dac_reference_voltage_source_t referenceVoltageSource; /*!< Internal DAC supply voltage reference source. */
     uint8_t DACValue; /*!< Value for the DAC Output Voltage. Different devices has different available range,
                            for specific values, please refer to the reference manual.*/
@@ -198,6 +226,10 @@ typedef struct _lpcmp_config
     bool enableStopMode; /*!< Decide whether to enable the comparator when in STOP modes. */
 #endif /* FSL_FEATURE_LPCMP_HAS_CCR0_CMP_STOP_EN */
 
+#if (defined(FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN) && FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN)
+    bool enableCmpToDacLink; /*!< Controls the link from the CMP enable to the DAC enable. */
+#endif /* FSL_FEATURE_LPCMP_HAS_CCR0_LINKEN */
+
     bool enableOutputPin;     /*!< Decide whether to enable the comparator is available in selected pin. */
     bool useUnfilteredOutput; /*!< Decide whether to use unfiltered output. */
     bool enableInvertOutput;  /*!< Decide whether to inverts the comparator output. */
@@ -205,7 +237,15 @@ typedef struct _lpcmp_config
     lpcmp_power_mode_t powerMode;                          /*!< LPCMP power mode. */
 #if defined(FSL_FEATURE_LPCMP_HAS_CCR1_FUNC_CLK_SEL) && FSL_FEATURE_LPCMP_HAS_CCR1_FUNC_CLK_SEL
     lpcmp_functional_source_clock_t functionalSourceClock; /*!< Select LPCMP functional mode clock source. */
-#endif                                                     /* FSL_FEATURE_LPCMP_HAS_CCR1_FUNC_CLK_SEL */
+#endif  /* FSL_FEATURE_LPCMP_HAS_CCR1_FUNC_CLK_SEL */
+
+#if defined(FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL) && FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL
+    lpcmp_plus_input_src_t plusInputSrc; /*!< Select LPCMP plus input source. */
+#endif  /* FSL_FEATURE_LPCMP_HAS_CCR2_INPSEL */
+
+#if defined(FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL) && FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL
+    lpcmp_minus_input_src_t minusInputSrc; /*!< Select LPCMP minus input source. */
+#endif  /* FSL_FEATURE_LPCMP_HAS_CCR2_INMSEL */
 } lpcmp_config_t;
 
 #if defined(FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL) && FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL
@@ -231,15 +271,23 @@ typedef struct _lpcmp_roundrobin_config
                                      for specific value. */
     uint8_t sampleClockNumbers; /*!< Specify the number of the round robin clock cycles(0~3) to wait after scanning the
                                      active channel before sampling the channel's comparison result. */
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT) && (FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT == 0U))
     uint8_t channelSampleNumbers; /*!< Specify the number of samples for one channel, note that channelSampleNumbers
                                        must not smaller than sampleTimeThreshhold. */
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_CNT */
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD) && (FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD == 0U))
     uint8_t sampleTimeThreshhold; /*!< Specify that for one channel, when (sampleTimeThreshhold + 1) sample results are
                                        "1",the final result is "1", otherwise the final result is "0", note that the
                                        sampleTimeThreshhold must not be larger than channelSampleNumbers. */
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR0_RR_SAMPLE_THRESHOLD */
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL) && (FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL == 0U))
     lpcmp_roundrobin_clock_source_t roundrobinClockSource;     /*!< Decide which clock source to
                                                         choose in round robin mode. */
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR0_RR_CLK_SEL */
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL) && (FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL == 0U))
     lpcmp_roundrobin_trigger_source_t roundrobinTriggerSource; /*!< Decide which trigger source to
                                                         choose in round robin mode. */
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR0_RR_TRG_SEL */
     lpcmp_roundrobin_fixedmuxport_t fixedMuxPort;              /*!< Decide which mux port to choose as
                                                         fixed channel in round robin mode. */
     uint8_t fixedChannel;       /*!< Indicate which channel of the fixed mux port is used in round robin mode. */
@@ -299,11 +347,14 @@ void LPCMP_Deinit(LPCMP_Type *base);
  * @code
  *   config->enableStopMode      = false;
  *   config->enableOutputPin     = false;
+ *   config->enableCmpToDacLink  = false;
  *   config->useUnfilteredOutput = false;
  *   config->enableInvertOutput  = false;
  *   config->hysteresisMode      = kLPCMP_HysteresisLevel0;
  *   config->powerMode           = kLPCMP_LowSpeedPowerMode;
  *   config->functionalSourceClock = kLPCMP_FunctionalClockSource0;
+ *   config->plusInputSrc          = kLPCMP_PlusInputSrcMux;
+ *   config->minusInputSrc         = kLPCMP_MinusInputSrcMux;
  * @endcode
  * @param config Pointer to "lpcmp_config_t" structure.
  */
@@ -476,14 +527,6 @@ void LPCMP_SetWindowControl(LPCMP_Type *base, const lpcmp_window_control_config_
 void LPCMP_SetRoundRobinConfig(LPCMP_Type *base, const lpcmp_roundrobin_config_t *config);
 
 /*!
- * brief Configure the roundrobin internal timer reload value.
- *
- * param base LPCMP peripheral base address.
- * param value RoundRobin internal timer reload value, allowed range:0x0UL-0xFFFFFFFUL.
- */
-void LPCMP_SetRoundRobinInternalTimer(LPCMP_Type *base, uint32_t value);
-
-/*!
  * @brief Enable/Disable roundrobin mode.
  *
  * @param base LPCMP peripheral base address.
@@ -500,6 +543,15 @@ static inline void LPCMP_EnableRoundRobinMode(LPCMP_Type *base, bool enable)
         base->RRCR0 &= ~LPCMP_RRCR0_RR_EN_MASK;
     }
 }
+
+#if !(defined(FSL_FEATURE_LPCMP_HAS_RRCR2) && (FSL_FEATURE_LPCMP_HAS_RRCR2 == 0U))
+/*!
+ * brief Configure the roundrobin internal timer reload value.
+ *
+ * param base LPCMP peripheral base address.
+ * param value RoundRobin internal timer reload value, allowed range:0x0UL-0xFFFFFFFUL.
+ */
+void LPCMP_SetRoundRobinInternalTimer(LPCMP_Type *base, uint32_t value);
 
 /*!
  * @brief Enable/Disable roundrobin internal timer, note that this function is only valid
@@ -519,6 +571,7 @@ static inline void LPCMP_EnableRoundRobinInternalTimer(LPCMP_Type *base, bool en
         base->RRCR2 &= ~LPCMP_RRCR2_RR_TIMER_EN_MASK;
     }
 }
+#endif /* FSL_FEATURE_LPCMP_HAS_RRCR2 */
 
 /*!
  * @brief Set preset value for all channels, users can set all channels' preset vaule through this API,
@@ -542,7 +595,7 @@ static inline void LPCMP_SetPreSetValue(LPCMP_Type *base, uint8_t mask)
  */
 static inline uint8_t LPCMP_GetComparisonResult(LPCMP_Type *base)
 {
-    return (uint8_t)base->RRCSR;
+    return (uint8_t)(base->RRCSR & 0xFFU);
 }
 
 /*!
@@ -567,7 +620,7 @@ static inline void LPCMP_ClearInputChangedFlags(LPCMP_Type *base, uint8_t mask)
  */
 static inline uint8_t LPCMP_GetInputChangedFlags(LPCMP_Type *base)
 {
-    return (uint8_t)base->RRSR;
+    return (uint8_t)(base->RRSR & 0xFFU);
 }
 
 /*! @} */

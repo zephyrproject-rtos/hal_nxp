@@ -1,74 +1,50 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA165VLH
-**                          MCXA165VLL
-**                          MCXA165VLQ
-**                          MCXA165VPN
-**                          MCXA166VLH
-**                          MCXA166VLL
-**                          MCXA166VLQ
-**                          MCXA166VPN
-**                          MCXA175VLH
-**                          MCXA175VLL
-**                          MCXA175VLQ
-**                          MCXA175VPN
-**                          MCXA176VLH
-**                          MCXA176VLL
-**                          MCXA176VLQ
-**                          MCXA176VPN
-**                          MCXA275VLH
-**                          MCXA275VLL
-**                          MCXA275VLQ
-**                          MCXA275VPN
-**                          MCXA276VLH
-**                          MCXA276VLL
-**                          MCXA276VLQ
-**                          MCXA276VPN
+**     Processors:          MCXA345VLH
+**                          MCXA345VLL
+**                          MCXA345VLQ
+**                          MCXA345VPN
+**                          MCXA346VLH
+**                          MCXA346VLL
+**                          MCXA346VLQ
+**                          MCXA346VPN
 **
-**     Version:             rev. 1.0, 2024-03-26
-**     Build:               b241120
+**     Version:             rev. 1.0, 2024-11-21
+**     Build:               b250519
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2024-03-26)
-**         Initial version based on Rev1 DraftC RM
+**     - rev. 1.0 (2024-11-21)
+**         Initial version based on Rev1 RM
 **
 ** ###################################################################
 */
 
 /*!
- * @file DMA.h
+ * @file PERI_DMA.h
  * @version 1.0
- * @date 2024-03-26
+ * @date 2024-11-21
  * @brief CMSIS Peripheral Access Layer for DMA
  *
  * CMSIS Peripheral Access Layer for DMA
  */
 
-#if !defined(DMA_H_)
-#define DMA_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DMA_H_)
+#define PERI_DMA_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA165VLH) || defined(CPU_MCXA165VLL) || defined(CPU_MCXA165VLQ) || defined(CPU_MCXA165VPN))
-#include "MCXA165_COMMON.h"
-#elif (defined(CPU_MCXA166VLH) || defined(CPU_MCXA166VLL) || defined(CPU_MCXA166VLQ) || defined(CPU_MCXA166VPN))
-#include "MCXA166_COMMON.h"
-#elif (defined(CPU_MCXA175VLH) || defined(CPU_MCXA175VLL) || defined(CPU_MCXA175VLQ) || defined(CPU_MCXA175VPN))
-#include "MCXA175_COMMON.h"
-#elif (defined(CPU_MCXA176VLH) || defined(CPU_MCXA176VLL) || defined(CPU_MCXA176VLQ) || defined(CPU_MCXA176VPN))
-#include "MCXA176_COMMON.h"
-#elif (defined(CPU_MCXA275VLH) || defined(CPU_MCXA275VLL) || defined(CPU_MCXA275VLQ) || defined(CPU_MCXA275VPN))
-#include "MCXA275_COMMON.h"
-#elif (defined(CPU_MCXA276VLH) || defined(CPU_MCXA276VLL) || defined(CPU_MCXA276VLQ) || defined(CPU_MCXA276VPN))
-#include "MCXA276_COMMON.h"
+#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#include "MCXA345_COMMON.h"
+#elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
+#include "MCXA346_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -110,6 +86,8 @@ typedef enum _dma_request_source
     kDma0RequestLPI2C2Tx            = 4U,          /**< LPI2C2 Transmit request */
     kDma0RequestLPI2C3Rx            = 5U,          /**< LPI2C3 Receive request */
     kDma0RequestLPI2C3Tx            = 6U,          /**< LPI2C3 Transmit request */
+    kDma0RequestMuxI3c0Rx           = 7U,          /**< I3C0 Receive request */
+    kDma0RequestMuxI3c0Tx           = 8U,          /**< I3C0 Transmit request */
     kDma0RequestLPI2C0Rx            = 11U,         /**< LPI2C0 Receive request */
     kDma0RequestLPI2C0Tx            = 12U,         /**< LPI2C0 Transmit request */
     kDma0RequestLPI2C1Rx            = 13U,         /**< LPI2C1 Receive request */
@@ -151,7 +129,6 @@ typedef enum _dma_request_source
     kDma0RequestMuxAdc1FifoRequest  = 52U,         /**< ADC1 FIFO request */
     kDma0RequestMuxHsCmp0DmaRequest = 53U,         /**< CMP0 DMA_request */
     kDma0RequestMuxHsCmp1DmaRequest = 54U,         /**< CMP1 DMA_request */
-    kDma0RequestMuxHsCmp2DmaRequest = 55U,         /**< CMP2 DMA_request */
     kDma0RequestMuxDac0FifoRequest  = 56U,         /**< DAC0 FIFO request */
     kDma0RequestMuxGpio0PinEventRequest0 = 60U,    /**< GPIO0 Pin event request 0 */
     kDma0RequestMuxGpio1PinEventRequest0 = 61U,    /**< GPIO1 Pin event request 0 */
@@ -172,14 +149,13 @@ typedef enum _dma_request_source
     kDma0RequestMuxFlexPWM1ReqVal1  = 84U,         /**< FlexPWM1 value1 request */
     kDma0RequestMuxFlexPWM1ReqVal2  = 85U,         /**< FlexPWM1 value2 request */
     kDma0RequestMuxFlexPWM1ReqVal3  = 86U,         /**< FlexPWM1 value2 request */
+    kDma0RequestMuxFlexCan1DmaRequest = 87U,       /**< CAN1 DMA request */
     kDma0RequestLPUART5Rx           = 102U,        /**< LPUART5 Receive request */
     kDma0RequestLPUART5Tx           = 103U,        /**< LPUART5 Transmit request */
-    kDma0RequestMuxMau0             = 115U,        /**< MAU0 DMA request */
-    kDma0RequestMuxI3c0Rx           = 7U,          /**< I3C0 Receive request */
-    kDma0RequestMuxI3c0Tx           = 8U,          /**< I3C0 Transmit request */
-    kDma0RequestMuxFlexCan1DmaRequest = 87U,       /**< CAN1 DMA request */
     kDma0RequestSGI0Datain          = 119U,        /**< SGI0 DATAIN request */
     kDma0RequestSGI0Dataout         = 120U,        /**< SGI0 DATOUT request */
+    kDma0RequestMuxHsCmp2DmaRequest = 55U,         /**< CMP2 DMA_request */
+    kDma0RequestMuxMau0             = 115U,        /**< MAU0 DMA request */
 } dma_request_source_t;
 
 /* @} */
@@ -328,9 +304,9 @@ typedef struct {
 
 #define DMA_MP_CSR_GMRC_MASK                     (0x80U)
 #define DMA_MP_CSR_GMRC_SHIFT                    (7U)
-/*! GMRC - Global Master ID Replication Control
- *  0b0..Master ID replication disabled for all channels
- *  0b1..Master ID replication available and controlled by each channel's CHn_SBR[EMI] setting
+/*! GMRC - Global Initiator ID Replication Control
+ *  0b0..Initiator ID replication disabled for all channels
+ *  0b1..Initiator ID replication available and controlled by each channel's CHn_SBR[EMI] setting
  */
 #define DMA_MP_CSR_GMRC(x)                       (((uint32_t)(((uint32_t)(x)) << DMA_MP_CSR_GMRC_SHIFT)) & DMA_MP_CSR_GMRC_MASK)
 
@@ -631,7 +607,7 @@ typedef struct {
 
 #define DMA_CH_SBR_MID_MASK                      (0xFU)
 #define DMA_CH_SBR_MID_SHIFT                     (0U)
-/*! MID - Master ID */
+/*! MID - Initiator ID */
 #define DMA_CH_SBR_MID(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_CH_SBR_MID_SHIFT)) & DMA_CH_SBR_MID_MASK)
 
 #define DMA_CH_SBR_PAL_MASK                      (0x8000U)
@@ -644,9 +620,9 @@ typedef struct {
 
 #define DMA_CH_SBR_EMI_MASK                      (0x10000U)
 #define DMA_CH_SBR_EMI_SHIFT                     (16U)
-/*! EMI - Enable Master ID Replication
- *  0b0..Master ID replication is disabled
- *  0b1..Master ID replication is enabled
+/*! EMI - Enable Initiator ID Replication
+ *  0b0..Initiator ID replication is disabled
+ *  0b1..Initiator ID replication is enabled
  */
 #define DMA_CH_SBR_EMI(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_CH_SBR_EMI_SHIFT)) & DMA_CH_SBR_EMI_MASK)
 /*! @} */
@@ -749,7 +725,6 @@ typedef struct {
 #define DMA_TCD_ATTR_SMOD_SHIFT                  (11U)
 /*! SMOD - Source Address Modulo
  *  0b00000..Source address modulo feature disabled
- *  0b00001..Source address modulo feature enabled for any non-zero value [1-31]
  */
 #define DMA_TCD_ATTR_SMOD(x)                     (((uint16_t)(((uint16_t)(x)) << DMA_TCD_ATTR_SMOD_SHIFT)) & DMA_TCD_ATTR_SMOD_MASK)
 /*! @} */
@@ -1076,5 +1051,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DMA_H_ */
+#endif  /* PERI_DMA_H_ */
 

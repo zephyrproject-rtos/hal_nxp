@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -152,8 +152,14 @@ void GINT_GetCtrl(GINT_Type *base, gint_comb_t *comb, gint_trig_t *trig, gint_cb
  */
 void GINT_ConfigPins(GINT_Type *base, gint_port_t port, uint32_t polarityMask, uint32_t enableMask)
 {
+#if defined(GINT_PORT_POL_COUNT) && (GINT_PORT_POL_COUNT > 0U) && \
+    defined(GINT_PORT_ENA_COUNT) && (GINT_PORT_ENA_COUNT > 0U)
     base->PORT_POL[port] = polarityMask;
     base->PORT_ENA[port] = enableMask;
+#else
+    base->PORT_POL = polarityMask;
+    base->PORT_ENA = enableMask;
+#endif
 }
 
 /*!
@@ -174,8 +180,14 @@ void GINT_ConfigPins(GINT_Type *base, gint_port_t port, uint32_t polarityMask, u
  */
 void GINT_GetConfigPins(GINT_Type *base, gint_port_t port, uint32_t *polarityMask, uint32_t *enableMask)
 {
+#if defined(GINT_PORT_POL_COUNT) && (GINT_PORT_POL_COUNT > 0U) && \
+    defined(GINT_PORT_ENA_COUNT) && (GINT_PORT_ENA_COUNT > 0U)
     *polarityMask = base->PORT_POL[port];
     *enableMask   = base->PORT_ENA[port];
+#else
+    *polarityMask = base->PORT_POL;
+    *enableMask   = base->PORT_ENA;
+#endif
 }
 
 /*!

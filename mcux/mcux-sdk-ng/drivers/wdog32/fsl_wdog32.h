@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -32,8 +32,40 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief WDOG32 driver version. */
-#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
+
+/*!
+ * @brief Max loops to wait for WDOG32 unlock sequence complete.
+ *
+ * This is the maximum number of loops to wait for the wdog32 unlock sequence to complete.
+ * If set to 0, it will wait indefinitely until the unlock sequence is complete.
+ */
+#ifdef WDOG_CS_ULK_MASK
+#ifndef WDOG32_UNLOCK_TIMEOUT
+    #ifdef CONFIG_WDOG32_UNLOCK_TIMEOUT
+        #define WDOG32_UNLOCK_TIMEOUT CONFIG_WDOG32_UNLOCK_TIMEOUT
+    #else
+        #define WDOG32_UNLOCK_TIMEOUT 0U
+    #endif
+#endif /* WDOG32_UNLOCK_TIMEOUT */
+#endif /* WDOG_CS_ULK_MASK */
+
+/*!
+ * @brief Max loops to wait for WDOG32 reconfiguration complete.
+ *
+ * This is the maximum number of loops to wait for the wdog32 reconfiguration to complete.
+ * If set to 0, it will wait indefinitely until the reconfiguration is complete.
+ */
+#ifdef WDOG_CS_RCS_MASK
+#ifndef WDOG32_RECONFIG_TIMEOUT
+    #ifdef CONFIG_WDOG32_RECONFIG_TIMEOUT
+        #define WDOG32_RECONFIG_TIMEOUT WDOG32_RECONFIG_TIMEOUT
+    #else
+        #define WDOG32_RECONFIG_TIMEOUT 0U
+    #endif
+#endif /* WDOG32_RECONFIGURATION_TIMEOUT */
+#endif /* WDOG_CS_RCS_MASK */
 
 /*! @brief Describes WDOG32 clock source. */
 typedef enum _wdog32_clock_source
@@ -164,11 +196,14 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config);
  *
  * @param base   WDOG32 peripheral base address.
  * @param config The configuration of the WDOG32.
+ *
+ * @retval kStatus_Success The initialization was successful
+ * @retval kStatus_Timeout The initialization timed out
  */
 #if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
-void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config);
+status_t WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config);
 #else
-AT_QUICKACCESS_SECTION_CODE(void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config));
+AT_QUICKACCESS_SECTION_CODE(status_t WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config));
 #endif
 
 /*!
@@ -178,8 +213,11 @@ AT_QUICKACCESS_SECTION_CODE(void WDOG32_Init(WDOG_Type *base, const wdog32_confi
  * Ensure that the WDOG_CS.UPDATE is 1, which means that the register update is enabled.
  *
  * @param base   WDOG32 peripheral base address.
+ *
+ * @retval kStatus_Success The de-initialization was successful
+ * @retval kStatus_Timeout The de-initialization timed out
  */
-void WDOG32_Deinit(WDOG_Type *base);
+status_t WDOG32_Deinit(WDOG_Type *base);
 
 /*! @} */
 
@@ -198,11 +236,14 @@ void WDOG32_Deinit(WDOG_Type *base);
  * After the configuration finishes, re-enable the global interrupts.
  *
  * @param base WDOG32 peripheral base address
+ * 
+ * @retval kStatus_Success The unlock sequence was successful
+ * @retval kStatus_Timeout  The unlock sequence timed out
  */
 #if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
-void WDOG32_Unlock(WDOG_Type *base);
+status_t WDOG32_Unlock(WDOG_Type *base);
 #else
-AT_QUICKACCESS_SECTION_CODE(void WDOG32_Unlock(WDOG_Type *base));
+AT_QUICKACCESS_SECTION_CODE(status_t WDOG32_Unlock(WDOG_Type *base));
 #endif
 
 /*!

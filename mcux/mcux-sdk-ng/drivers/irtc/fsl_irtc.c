@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2023 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2023, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -332,21 +331,32 @@ void IRTC_GetDatetime(RTC_Type *base, irtc_datetime_t *datetime)
 {
     assert(NULL != datetime);
 
-    uint16_t temp = base->YEARMON;
+    uint16_t seconds, hourMin, days, yearMon;
+    uint32_t irqMask;
 
+    while ((base->STATUS & RTC_STATUS_INVAL_BIT_MASK) != 0U)
+    {
+    }
+
+    /* Disable all interrupts to prevent any context switching. */
+    irqMask = DisableGlobalIRQ();
+
+    seconds = base->SECONDS;
+    hourMin = base->HOURMIN;
+    days    = base->DAYS;
+    yearMon = base->YEARMON;
+
+    /* Restore all interrupts. */
+    EnableGlobalIRQ(irqMask);
+
+    datetime->second  = (uint8_t)(seconds & RTC_SECONDS_SEC_CNT_MASK);
+    datetime->hour    = (uint8_t)((hourMin & RTC_HOURMIN_HOUR_CNT_MASK) >> RTC_HOURMIN_HOUR_CNT_SHIFT);
+    datetime->minute  = (uint8_t)(hourMin & RTC_HOURMIN_MIN_CNT_MASK);
+    datetime->weekDay = (uint8_t)((days & RTC_DAYS_DOW_MASK) >> RTC_DAYS_DOW_SHIFT);
+    datetime->day     = (uint8_t)(days & RTC_DAYS_DAY_CNT_MASK);
+    datetime->month   = (uint8_t)(yearMon & RTC_YEARMON_MON_CNT_MASK);
     datetime->year =
-        (uint16_t)IRTC_BASE_YEAR + (uint16_t)((int8_t)(uint8_t)((temp >> RTC_YEARMON_YROFST_SHIFT) & 0xFFU));
-    datetime->month = (uint8_t)temp & RTC_YEARMON_MON_CNT_MASK;
-
-    temp              = base->DAYS;
-    datetime->weekDay = (uint8_t)((temp & RTC_DAYS_DOW_MASK) >> RTC_DAYS_DOW_SHIFT);
-    datetime->day     = (uint8_t)temp & RTC_DAYS_DAY_CNT_MASK;
-
-    temp             = base->HOURMIN;
-    datetime->hour   = (uint8_t)((temp & RTC_HOURMIN_HOUR_CNT_MASK) >> RTC_HOURMIN_HOUR_CNT_SHIFT);
-    datetime->minute = (uint8_t)temp & RTC_HOURMIN_MIN_CNT_MASK;
-
-    datetime->second = (uint8_t)(base->SECONDS) & RTC_SECONDS_SEC_CNT_MASK;
+        (uint16_t)IRTC_BASE_YEAR + (uint16_t)((int8_t)(uint8_t)((yearMon >> RTC_YEARMON_YROFST_SHIFT) & 0xFFU));
 }
 
 /*!

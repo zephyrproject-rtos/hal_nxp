@@ -11,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC540xx/LPC54S0xx User manual Rev.0.8 5 June 2018
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC54016
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,17 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC54016_COMMON.h
- * @version 1.2
- * @date 2017-06-08
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC54016
  *
  * CMSIS Peripheral Access Layer for LPC54016
@@ -52,9 +55,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0002U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -166,14 +169,16 @@ typedef enum IRQn {
 #include "core_cm4.h"                  /* Core Peripheral Access Layer */
 #include "system_LPC54016.h"           /* Device specific configuration file */
 
-#define LPC54016_SERIES
-/* CPU specific feature definitions */
-#include "LPC54016_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef LPC54016_SERIES
+#define LPC54016_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "LPC54016_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */
@@ -814,6 +819,8 @@ typedef enum IRQn {
  * @addtogroup SDK_Compatibility_Symbols SDK Compatibility
  * @{
  */
+
+#define SPIFI_IRQn SPIFI0_IRQn
 
 /** EMC CS base address */
 #define EMC_CS0_BASE                                (0x80000000u)

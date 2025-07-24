@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023,2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -89,8 +89,8 @@ void PNGDEC_Init(PNGDEC_Type *base, const pngdec_config_t *config)
     /* Reset the module before configuring it. */
     PNGDEC_Reset(base);
 
-    base->GLB_CTRL = PNGDEC_GLB_CTRL_ANC_DROP_EN((uint32_t)config->enableAncillary) |
-                     PNGDEC_GLB_CTRL_DEC_EN((uint32_t)config->enable);
+    base->GLB_CTRL = PNGDEC_GLB_CTRL_ANC_DROP_EN((config->enableAncillary ? 1U : 0U)) |
+                     PNGDEC_GLB_CTRL_DEC_EN((config->enable ? 1U : 0U));
 }
 
 /*!
@@ -174,7 +174,7 @@ status_t PNGDEC_ParseHeader(pngdec_image_t *image, uint8_t *pngBuf)
     uint8_t colorType;
 
     /* Check if the file is a PNG file and PNG header marker is there. */
-    if ((PNG_GET_U32(pngBuf) != PNG_MARKER) || (PNG_GET_U32(&pngBuf[12U]) != PNG_HEADER_MARKER))
+    if ((PNG_GET_U32(&pngBuf[0]) != PNG_MARKER) || (PNG_GET_U32(&pngBuf[12U]) != PNG_HEADER_MARKER))
     {
         return kStatus_Fail;
     }

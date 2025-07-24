@@ -6,10 +6,11 @@
 
 /* Includes */
 #include <stdio.h>
-#include "fsl_cpu.h"
-#include "fsl_power.h"
-#include "fsl_src.h"
 #include "fsl_device_registers.h"
+#include "fsl_power.h"
+#if CONFIG_DIRECT
+#include "fsl_cpu.h"
+#include "fsl_src.h"
 
 /* Local Defines */
 #define WHITELIST_MASK(cpuId)   (1UL << (CPU2GPC(cpuId)))
@@ -542,3 +543,25 @@ void PWR_LpHandshakeAck(void)
                  BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_AUTOACK(0U) |
                  BLK_CTRL_S_AONMIX_SM_LP_HANDSHAKE_STATUS_ACK(0U);
 }
+#else
+int32_t POWER_SetState(pwr_s_t *pwr_st)
+{
+    uint32_t channel = SCMI_A2P;
+    uint32_t flag = 0;
+    uint32_t domainId = pwr_st->did;
+    uint32_t state = pwr_st->st;
+
+    return SCMI_PowerStateSet(channel, domainId, flag, state);
+}
+
+uint32_t POWER_GetState(pwr_s_t *pwr_st)
+{
+    uint32_t channel = SCMI_A2P;
+    uint32_t domainId = pwr_st->did;
+    uint32_t state = SCMI_POWER_DOMAIN_STATE_OFF;
+
+    SCMI_PowerStateGet(channel, domainId, &state);
+
+    return state;
+}
+#endif

@@ -1,14 +1,14 @@
 /*
 ** ###################################################################
 **     Processor:           K32W1480VFTA
-**     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AXBS
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -17,21 +17,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-01-18)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AXBS.h
- * @version 1.0
- * @date 2021-01-18
+ * @file PERI_AXBS.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AXBS
  *
  * CMSIS Peripheral Access Layer for AXBS
  */
 
-#if !defined(AXBS_H_)
-#define AXBS_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AXBS_H_)
+#define PERI_AXBS_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32W1480VFTA))
 #include "K32W1480_COMMON.h"
@@ -227,13 +230,13 @@ typedef struct {
 #define AXBS_CRS0_PARK_MASK                      (0x7U)
 #define AXBS_CRS0_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS0_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS0_PARK_SHIFT)) & AXBS_CRS0_PARK_MASK)
 
@@ -369,13 +372,13 @@ typedef struct {
 #define AXBS_CRS1_PARK_MASK                      (0x7U)
 #define AXBS_CRS1_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS1_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS1_PARK_SHIFT)) & AXBS_CRS1_PARK_MASK)
 
@@ -511,13 +514,13 @@ typedef struct {
 #define AXBS_CRS2_PARK_MASK                      (0x7U)
 #define AXBS_CRS2_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS2_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS2_PARK_SHIFT)) & AXBS_CRS2_PARK_MASK)
 
@@ -653,13 +656,13 @@ typedef struct {
 #define AXBS_CRS3_PARK_MASK                      (0x7U)
 #define AXBS_CRS3_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS3_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS3_PARK_SHIFT)) & AXBS_CRS3_PARK_MASK)
 
@@ -795,13 +798,13 @@ typedef struct {
 #define AXBS_CRS4_PARK_MASK                      (0x7U)
 #define AXBS_CRS4_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS4_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS4_PARK_SHIFT)) & AXBS_CRS4_PARK_MASK)
 
@@ -937,13 +940,13 @@ typedef struct {
 #define AXBS_CRS5_PARK_MASK                      (0x7U)
 #define AXBS_CRS5_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS5_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS5_PARK_SHIFT)) & AXBS_CRS5_PARK_MASK)
 
@@ -1079,13 +1082,13 @@ typedef struct {
 #define AXBS_CRS6_PARK_MASK                      (0x7U)
 #define AXBS_CRS6_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS6_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS6_PARK_SHIFT)) & AXBS_CRS6_PARK_MASK)
 
@@ -1221,13 +1224,13 @@ typedef struct {
 #define AXBS_CRS7_PARK_MASK                      (0x7U)
 #define AXBS_CRS7_PARK_SHIFT                     (0U)
 /*! PARK - Park
- *  0b111..Park on master port M0.
  *  0b001..Park on master port M1.
  *  0b010..Park on master port M2.
  *  0b011..Park on master port M3.
  *  0b100..Park on master port M4.
  *  0b101..Park on master port M5.
  *  0b110..Park on master port M6.
+ *  0b111..Park on master port M0.
  */
 #define AXBS_CRS7_PARK(x)                        (((uint32_t)(((uint32_t)(x)) << AXBS_CRS7_PARK_SHIFT)) & AXBS_CRS7_PARK_MASK)
 
@@ -1411,5 +1414,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AXBS_H_ */
+#endif  /* PERI_AXBS_H_ */
 

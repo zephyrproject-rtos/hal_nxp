@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024 NXP
+ * Copyright 2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPUART driver version. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */

@@ -370,10 +370,10 @@ typedef union fsl_StandardVersion
     uint32_t version;   //!< combined version numbers
 
 #if defined(__cplusplus)
-    StandardVersion() : version(0)
+    fsl_StandardVersion() : version(0)
     {
     }
-    StandardVersion(uint32_t version) : version(version)
+    fsl_StandardVersion(uint32_t version) : version(version)
     {
     }
 #endif

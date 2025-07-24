@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-12-15
-**     Build:               b231026
+**     Build:               b241212
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -175,6 +175,10 @@
 #define FSL_FEATURE_FLEXCOMM7_I2S_INDEX  (1)
 /* @brief I2S has DMIC interconnection */
 #define FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_HAS_DMIC_INTERCONNECTIONn(x) (0)
+
+/* GINT module features */
+
+/* No feature definitions */
 
 /* I2S module features */
 

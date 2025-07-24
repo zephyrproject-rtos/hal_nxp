@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023, 2024 NXP
+ * Copyright 2016-2023, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 8, 0))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 8, 2))
 /*! @} */
 
 #if defined(FSL_FEATURE_GPIO_REGISTERS_WIDTH) && (FSL_FEATURE_GPIO_REGISTERS_WIDTH == 8U)

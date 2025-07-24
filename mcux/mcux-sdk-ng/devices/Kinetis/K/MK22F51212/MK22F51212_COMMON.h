@@ -14,14 +14,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    K22P121M120SF7RM, Rev. 1, March 24, 2014
-**     Version:             rev. 2.9, 2016-03-21
-**     Build:               b240709
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MK22F51212
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,14 +59,17 @@
 **     - rev. 2.9 (2016-03-21)
 **         Added MK22FN512VFX12 part.
 **         GPIO - renamed port instances: PTx -> GPIOx.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MK22F51212_COMMON.h
- * @version 2.9
- * @date 2016-03-21
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MK22F51212
  *
  * CMSIS Peripheral Access Layer for MK22F51212
@@ -77,9 +80,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0009U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 /**
  * @brief Macro to calculate address of an aliased word in the peripheral
@@ -257,14 +260,16 @@ typedef enum IRQn {
 #include "core_cm4.h"                  /* Core Peripheral Access Layer */
 #include "system_MK22F51212.h"         /* Device specific configuration file */
 
-#define MK22F51212_SERIES
-/* CPU specific feature definitions */
-#include "MK22F51212_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef MK22F51212_SERIES
+#define MK22F51212_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "MK22F51212_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */

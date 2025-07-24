@@ -1,0 +1,32 @@
+{
+	"family": "lpc55s3x",
+	"containerKeyBlobEncryptionKey": ".\\workspace\\keys\\redfinch.txt",
+	"isNxpContainer": false,
+	"description": "mytest",
+	"kdkAccessRights": 0,
+	"containerConfigurationWord": "0x0",
+	"firmwareVersion": "0x1",
+	"isEncrypted": true,
+	"rootCertificate0File": ".\\workspace\\keys_certs\\ec_secp256r1_cert0.pem",
+	"rootCertificate1File": ".\\workspace\\keys_certs\\ec_secp256r1_cert1.pem",
+	"rootCertificate2File": ".\\workspace\\keys_certs\\ec_secp256r1_cert2.pem",
+	"rootCertificate3File": ".\\workspace\\keys_certs\\ec_secp256r1_cert3.pem",
+	"rootCertificateEllipticCurve": "secp256r1",
+	"mainRootCertId": 0,
+	"mainRootCertPrivateKeyFile": ".\\workspace\\keys_certs\\ec_pk_secp256r1_cert0.pem",
+	"useIsk": false,
+
+	"testSb3Magic": "",
+	"testSb3ImageType": false,
+	"testSb3ImageTypeValue": 255,
+	"testCertBlockMagic": "",
+	"testCorruptRkhRecord": false,
+	"testCorruptRkhRecordId": 0,
+	"testCorruptIskSignature": false,
+
+	"commands": [
+		{"erase": {"address": "0x08100000", "size": "0x100000", "memoryId": "0x0"}},
+		{"load": {"address": "0x08100000", "file": "./sdk20-app.bin", "authentication": "none", "memoryId": "0x0"}},
+		{"execute": { "address": "0x08100000" } }
+	]
+} 

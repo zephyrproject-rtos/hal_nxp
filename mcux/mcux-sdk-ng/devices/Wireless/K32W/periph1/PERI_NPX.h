@@ -1,14 +1,14 @@
 /*
 ** ###################################################################
 **     Processor:           K32W1480VFTA
-**     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240715
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NPX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -17,21 +17,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-01-18)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file NPX.h
- * @version 1.0
- * @date 2021-01-18
+ * @file PERI_NPX.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for NPX
  *
  * CMSIS Peripheral Access Layer for NPX
  */
 
-#if !defined(NPX_H_)
-#define NPX_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_NPX_H_)
+#define PERI_NPX_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_K32W1480VFTA))
 #include "K32W1480_COMMON.h"
@@ -202,8 +205,8 @@ typedef struct {
 #define NPX_REMAP_REMAPLK_MASK                   (0x1U)
 #define NPX_REMAP_REMAPLK_SHIFT                  (0U)
 /*! REMAPLK - Remap Lock Enable
- *  0b1..Lock enabled: cannot write to REMAP
  *  0b0..Lock disabled: can write to REMAP
+ *  0b1..Lock enabled: cannot write to REMAP
  */
 #define NPX_REMAP_REMAPLK(x)                     (((uint32_t)(((uint32_t)(x)) << NPX_REMAP_REMAPLK_SHIFT)) & NPX_REMAP_REMAPLK_MASK)
 
@@ -530,5 +533,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* NPX_H_ */
+#endif  /* PERI_NPX_H_ */
 

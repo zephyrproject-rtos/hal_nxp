@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GLUE_USB
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file GLUE_USB.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_GLUE_USB.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for GLUE_USB
  *
  * CMSIS Peripheral Access Layer for GLUE_USB
  */
 
-#if !defined(GLUE_USB_H_)
-#define GLUE_USB_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_GLUE_USB_H_)
+#define PERI_GLUE_USB_H_                         /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -413,14 +440,14 @@ typedef struct {
 #define GLUE_USB_PHY_CTL3_ADDR_COMPIDISTUNE_MASK (0x7U)
 #define GLUE_USB_PHY_CTL3_ADDR_COMPIDISTUNE_SHIFT (0U)
 /*! COMPIDISTUNE - Disconnect Threshold Adjustment.
- *  0b111..+ 15.54%
- *  0b110..+ 11.86%
- *  0b101..+ 7.52%
- *  0b100..+ 4.08
- *  0b011..0 (default)
- *  0b010..- 3.04%
- *  0b001..- 6.5%
  *  0b000..- 9.01%
+ *  0b001..- 6.5%
+ *  0b010..- 3.04%
+ *  0b011..0 (default)
+ *  0b100..+ 4.08
+ *  0b101..+ 7.52%
+ *  0b110..+ 11.86%
+ *  0b111..+ 15.54%
  */
 #define GLUE_USB_PHY_CTL3_ADDR_COMPIDISTUNE(x)   (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_COMPIDISTUNE_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_COMPIDISTUNE_MASK)
 
@@ -432,45 +459,45 @@ typedef struct {
 #define GLUE_USB_PHY_CTL3_ADDR_SQRXTUNE0_MASK    (0x1C0U)
 #define GLUE_USB_PHY_CTL3_ADDR_SQRXTUNE0_SHIFT   (6U)
 /*! SQRXTUNE0 - Squelch Threshold Adjustment
- *  0b111..- 22.32%
- *  0b110..- 16.07%
- *  0b101..- 10.71%
- *  0b100..- 5.36%
- *  0b011..0 (default)
- *  0b010..+ 5.36%
- *  0b001..+ 10.71%
  *  0b000..+ 16.07%
+ *  0b001..+ 10.71%
+ *  0b010..+ 5.36%
+ *  0b011..0 (default)
+ *  0b100..- 5.36%
+ *  0b101..- 10.71%
+ *  0b110..- 16.07%
+ *  0b111..- 22.32%
  */
 #define GLUE_USB_PHY_CTL3_ADDR_SQRXTUNE0(x)      (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_SQRXTUNE0_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_SQRXTUNE0_MASK)
 
 #define GLUE_USB_PHY_CTL3_ADDR_TXFSLSTUNE0_MASK  (0x1E00U)
 #define GLUE_USB_PHY_CTL3_ADDR_TXFSLSTUNE0_SHIFT (9U)
 /*! TXFSLSTUNE0 - FS/LS Source Impedance Adjustment
- *  0b1111..- 3.5%
- *  0b0111..- 1.7%
- *  0b0011..0 (default)
- *  0b0001..+ 1.8%
  *  0b0000..+ 3.5%
+ *  0b0001..+ 1.8%
+ *  0b0011..0 (default)
+ *  0b0111..- 1.7%
+ *  0b1111..- 3.5%
  */
 #define GLUE_USB_PHY_CTL3_ADDR_TXFSLSTUNE0(x)    (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_TXFSLSTUNE0_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_TXFSLSTUNE0_MASK)
 
 #define GLUE_USB_PHY_CTL3_ADDR_TXSHXSTUNE0_MASK  (0x6000U)
 #define GLUE_USB_PHY_CTL3_ADDR_TXSHXSTUNE0_SHIFT (13U)
 /*! TXSHXSTUNE0 - Transmitter High-Speed Crossover Adjustment.
- *  0b11..0 (default)
- *  0b10..+ 14 mV
- *  0b01..- 16 mV
  *  0b00..Reserved
+ *  0b01..- 16 mV
+ *  0b10..+ 14 mV
+ *  0b11..0 (default)
  */
 #define GLUE_USB_PHY_CTL3_ADDR_TXSHXSTUNE0(x)    (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_TXSHXSTUNE0_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_TXSHXSTUNE0_MASK)
 
 #define GLUE_USB_PHY_CTL3_ADDR_TXPREEMPMPTUNE0_MASK (0x18000U)
 #define GLUE_USB_PHY_CTL3_ADDR_TXPREEMPMPTUNE0_SHIFT (15U)
 /*! TXPREEMPMPTUNE0 - HS Transmitter Pre-Emphasis Current Control
- *  0b11..3x pre-emphasis current
- *  0b10..2x pre-emphasis current
- *  0b01..1x pre-emphasis current
  *  0b00..Disabled (default)
+ *  0b01..1x pre-emphasis current
+ *  0b10..2x pre-emphasis current
+ *  0b11..3x pre-emphasis current
  */
 #define GLUE_USB_PHY_CTL3_ADDR_TXPREEMPMPTUNE0(x) (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_TXPREEMPMPTUNE0_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_TXPREEMPMPTUNE0_MASK)
 
@@ -485,32 +512,32 @@ typedef struct {
 #define GLUE_USB_PHY_CTL3_ADDR_TXRISETUNE0_MASK  (0x300000U)
 #define GLUE_USB_PHY_CTL3_ADDR_TXRISETUNE0_SHIFT (20U)
 /*! TXRISETUNE0 - HS Transmitter Rise/Fall Time Adjustment
- *  0b11..- 3%
- *  0b10..- 1%
- *  0b01..0 (default)
  *  0b00..+ 3%
+ *  0b01..0 (default)
+ *  0b10..- 1%
+ *  0b11..- 3%
  */
 #define GLUE_USB_PHY_CTL3_ADDR_TXRISETUNE0(x)    (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_TXRISETUNE0_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_TXRISETUNE0_MASK)
 
 #define GLUE_USB_PHY_CTL3_ADDR_TXREFTUNE0_MASK   (0x3C00000U)
 #define GLUE_USB_PHY_CTL3_ADDR_TXREFTUNE0_SHIFT  (22U)
 /*! TXREFTUNE0 - HS DC Voltage Level Adjustment
- *  0b1111..+ 24%
- *  0b1110..+ 22%
- *  0b1101..+ 20%
- *  0b1100..+ 18%
- *  0b1011..+ 16%
- *  0b1010..+ 14%
- *  0b1001..+ 12%
- *  0b1000..+ 10
- *  0b0111..+ 8%
- *  0b0110..+ 6%
- *  0b0101..+ 4%
- *  0b0100..+ 2%
- *  0b0011..0 (default)
- *  0b0010..- 2%
- *  0b0001..- 4%
  *  0b0000..- 6%
+ *  0b0001..- 4%
+ *  0b0010..- 2%
+ *  0b0011..0 (default)
+ *  0b0100..+ 2%
+ *  0b0101..+ 4%
+ *  0b0110..+ 6%
+ *  0b0111..+ 8%
+ *  0b1000..+ 10
+ *  0b1001..+ 12%
+ *  0b1010..+ 14%
+ *  0b1011..+ 16%
+ *  0b1100..+ 18%
+ *  0b1101..+ 20%
+ *  0b1110..+ 22%
+ *  0b1111..+ 24%
  */
 #define GLUE_USB_PHY_CTL3_ADDR_TXREFTUNE0(x)     (((uint32_t)(((uint32_t)(x)) << GLUE_USB_PHY_CTL3_ADDR_TXREFTUNE0_SHIFT)) & GLUE_USB_PHY_CTL3_ADDR_TXREFTUNE0_MASK)
 
@@ -627,5 +654,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* GLUE_USB_H_ */
+#endif  /* PERI_GLUE_USB_H_ */
 

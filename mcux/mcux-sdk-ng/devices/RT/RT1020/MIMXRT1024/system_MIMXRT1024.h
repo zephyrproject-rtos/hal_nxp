@@ -1,7 +1,9 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1024CAG4A
+**                          MIMXRT1024CAG4B
 **                          MIMXRT1024DAG5A
+**                          MIMXRT1024DAG5B
 **
 **     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
@@ -9,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1024RM Rev.0, 09/2020 | IMXRT102xSRM Rev.0
-**     Version:             rev. 0.1, 2020-01-15
-**     Build:               b201022
+**     Reference manual:    IMXRT1024RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,23 +21,32 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 0.1 (2020-01-15)
+**     - rev. 0.1 (2017-11-06)
 **         Initial version.
+**     - rev. 1.0 (2018-11-27)
+**         Update header files to align with IMXRT1020RM Rev.1.
+**     - rev. 1.1 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
+**     - rev. 1.2 (2021-08-10)
+**         Update header files to align with IMXRT1020RM Rev.2.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1024
- * @version 0.1
- * @date 2020-01-15
+ * @version 1.0
+ * @date 2025-05-21
  * @brief Device specific configuration file for MIMXRT1024 (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -44,7 +55,7 @@
  */
 
 #ifndef _SYSTEM_MIMXRT1024_H_
-#define _SYSTEM_MIMXRT1024_H_                    /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MIMXRT1024_H_                /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {

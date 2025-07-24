@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -109,11 +108,38 @@ void RTWDOG_Init(RTWDOG_Type *base, const rtwdog_config_t *config)
     uint32_t value        = 0U;
     uint32_t primaskValue = 0U;
 
-    value = RTWDOG_CS_EN(config->enableRtwdog) | RTWDOG_CS_CLK(config->clockSource) |
-            RTWDOG_CS_INT(config->enableInterrupt) | RTWDOG_CS_WIN(config->enableWindowMode) |
-            RTWDOG_CS_UPDATE(config->enableUpdate) | RTWDOG_CS_DBG(config->workMode.enableDebug) |
-            RTWDOG_CS_STOP(config->workMode.enableStop) | RTWDOG_CS_WAIT(config->workMode.enableWait) |
-            RTWDOG_CS_PRES(config->prescaler) | RTWDOG_CS_CMD32EN(1U) | RTWDOG_CS_TST(config->testMode);
+    /* Enable watch dog to start counting? */
+    value |= ((config->enableRtwdog) ? RTWDOG_CS_EN_MASK : 0U);
+
+    /* Enable watch dog interrupt? */
+    value |= ((config->enableInterrupt) ? RTWDOG_CS_INT_MASK : 0U);
+
+    /* Enable watch dog Window mode? */
+    value |= ((config->enableWindowMode) ? RTWDOG_CS_WIN_MASK : 0U);
+
+    /* Enable reconfigure watch dog without a reset? */
+    value |= ((config->enableUpdate) ? RTWDOG_CS_UPDATE_MASK : 0U);
+
+    /* Enable watch dog operate when the chip is in Debug mode? */
+    value |= ((config->workMode.enableDebug) ? RTWDOG_CS_DBG_MASK : 0U);
+
+    /* Enable watch dog operate when the chip is in Stop mode? */
+    value |= ((config->workMode.enableStop) ? RTWDOG_CS_STOP_MASK : 0U);
+
+    /* Enable watch dog operate when the chip is in Wait mode? */
+    value |= ((config->workMode.enableWait) ? RTWDOG_CS_WAIT_MASK : 0U);
+
+    /* Enable a fixed 256 prescaling of the watch dog counter reference clock? */
+    value = (value & ~RTWDOG_CS_PRES_MASK) | RTWDOG_CS_PRES((uint32_t)config->prescaler);
+
+    /* Select watch dog clock source. */
+    value = (value & ~RTWDOG_CS_CLK_MASK) | RTWDOG_CS_CLK((uint32_t)config->clockSource);
+
+    /* Select User mode or Test mode? */
+    value = (value & ~RTWDOG_CS_TST_MASK) | RTWDOG_CS_TST((uint32_t)config->testMode);
+
+    /* Enable support for 32-bit refresh or unlock command write words. */
+    value |= RTWDOG_CS_CMD32EN(1U);
 
     /* Disable the global interrupts. Otherwise, an interrupt could effectively invalidate the unlock sequence
      * and the WCT may expire. After the configuration finishes, re-enable the global interrupts. */
@@ -144,5 +170,8 @@ void RTWDOG_Deinit(RTWDOG_Type *base)
     primaskValue = DisableGlobalIRQ();
     RTWDOG_Unlock(base);
     RTWDOG_Disable(base);
+    while ((base->CS & RTWDOG_CS_RCS_MASK) == 0U)
+    {
+    }
     EnableGlobalIRQ(primaskValue);
 }

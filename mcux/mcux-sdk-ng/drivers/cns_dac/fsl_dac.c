@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
- * All rights reserved.
+ * Copyright 2020-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -158,10 +157,10 @@ void DAC_SetChannelConfig(DAC_Type *base, uint32_t channelMask, const dac_channe
             ~(DAC_ACTRL_A_EN_MASK | DAC_ACTRL_A_IO_EN_MASK | DAC_ACTRL_A_TRIG_EN_MASK | DAC_ACTRL_A_TRIG_SEL_MASK |
               DAC_ACTRL_A_TRIG_TYP_MASK | DAC_ACTRL_A_DEN_MASK | DAC_ACTRL_A_TIME_MODE_MASK | DAC_ACTRL_A_WAVE_MASK);
 
-        tmp32 |= DAC_ACTRL_A_EN(channelConfig->enableConversion) | DAC_ACTRL_A_IO_EN(channelConfig->outMode) |
-                 DAC_ACTRL_A_TRIG_EN(channelConfig->enableTrigger) |
+        tmp32 |= DAC_ACTRL_A_EN(channelConfig->enableConversion ? 1U : 0U) | DAC_ACTRL_A_IO_EN(channelConfig->outMode) |
+                 DAC_ACTRL_A_TRIG_EN(channelConfig->enableTrigger ? 1U : 0U) |
                  DAC_ACTRL_A_TRIG_SEL(channelConfig->triggerSource) | DAC_ACTRL_A_TRIG_TYP(channelConfig->triggerType) |
-                 DAC_ACTRL_A_DEN(channelConfig->enableDMA) | DAC_ACTRL_A_TIME_MODE(channelConfig->timingMode) |
+                 DAC_ACTRL_A_DEN(channelConfig->enableDMA ? 1U : 0U) | DAC_ACTRL_A_TIME_MODE(channelConfig->timingMode) |
                  DAC_ACTRL_A_WAVE(channelConfig->waveType);
 
         base->ACTRL = tmp32;
@@ -175,10 +174,10 @@ void DAC_SetChannelConfig(DAC_Type *base, uint32_t channelMask, const dac_channe
         tmp32 &=
             ~(DAC_BCTRL_B_EN_MASK | DAC_BCTRL_B_IO_EN_MASK | DAC_BCTRL_B_TRIG_EN_MASK | DAC_BCTRL_B_TRIG_SEL_MASK |
               DAC_BCTRL_B_TRIG_TYP_MASK | DAC_BCTRL_B_DEN_MASK | DAC_BCTRL_B_TIME_MODE_MASK | DAC_BCTRL_B_WAVE_MASK);
-        tmp32 |= DAC_BCTRL_B_EN(channelConfig->enableConversion) | DAC_BCTRL_B_IO_EN(channelConfig->outMode) |
-                 DAC_BCTRL_B_TRIG_EN(channelConfig->enableTrigger) |
+        tmp32 |= DAC_BCTRL_B_EN(channelConfig->enableConversion ? 1U : 0U) | DAC_BCTRL_B_IO_EN(channelConfig->outMode) |
+                 DAC_BCTRL_B_TRIG_EN(channelConfig->enableTrigger ? 1U : 0U) |
                  DAC_BCTRL_B_TRIG_SEL(channelConfig->triggerSource) | DAC_BCTRL_B_TRIG_TYP(channelConfig->triggerType) |
-                 DAC_BCTRL_B_DEN(channelConfig->enableDMA) | DAC_BCTRL_B_TIME_MODE(channelConfig->timingMode) |
+                 DAC_BCTRL_B_DEN(channelConfig->enableDMA ? 1U : 0U) | DAC_BCTRL_B_TIME_MODE(channelConfig->timingMode) |
                  DAC_BCTRL_B_WAVE(channelConfig->waveType);
 
         base->BCTRL = tmp32;

@@ -6,14 +6,14 @@
 **                          MCIMX7U5DVK07
 **                          MCIMX7U5DVP07
 **
-**     Version:             rev. 7.0, 2018-11-05
-**     Build:               b240708
+**     Version:             rev. 8.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,21 +34,24 @@
 **         RevB(B0) Header GA
 **     - rev. 7.0 (2018-11-05)
 **         RevA(B1) Header
+**     - rev. 8.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPSPI.h
- * @version 7.0
- * @date 2018-11-05
+ * @file PERI_LPSPI.h
+ * @version 8.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPSPI
  *
  * CMSIS Peripheral Access Layer for LPSPI
  */
 
-#if !defined(LPSPI_H_)
-#define LPSPI_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPSPI_H_)
+#define PERI_LPSPI_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCIMX7U3CVP06) || defined(CPU_MCIMX7U3DVK07))
 #include "MCIMX7U3_cm4_COMMON.h"
@@ -766,5 +769,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPSPI_H_ */
+#endif  /* PERI_LPSPI_H_ */
 
