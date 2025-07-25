@@ -29,6 +29,9 @@ void power_off_device(LOAD_Target_Type loadTarget);
 
 status_t sb3_fw_download(LOAD_Target_Type loadTarget, uint32_t flag, uint32_t sourceAddr);
 status_t sb3_fw_reset(LOAD_Target_Type loadTarget, uint32_t flag, uint32_t sourceAddr);
+int32_t cau_temperature_write_to_firmware(void);
+int32_t cau_get_temperature(void);
+void cau_temperature_enable(void);
 
 //! @}
 

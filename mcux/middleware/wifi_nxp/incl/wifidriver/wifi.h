@@ -24,7 +24,7 @@
 #if defined(SD9177)
 #define CONFIG_TCP_ACK_ENH 1
 #endif
-#if defined(SD9177) || defined(IW610)
+#if defined(SD9177) || defined(IW610) || defined(SD8978)
 #define CONFIG_FW_VDLL     1
 #if !CONFIG_WIFI_CAPA
 #undef CONFIG_WIFI_CAPA
@@ -46,16 +46,6 @@
 #define WIFI_WRITE_REG8(reg, val)  (WIFI_REG8(reg) = (val))
 #define WIFI_WRITE_REG16(reg, val) (WIFI_REG16(reg) = (val))
 #define WIFI_WRITE_REG32(reg, val) (WIFI_REG32(reg) = (val))
-
-#ifdef RW610
-#define WLAN_CAU_ENABLE_ADDR         (0x45004008U)
-#define WLAN_CAU_TEMPERATURE_ADDR    (0x4500400CU)
-#define WLAN_CAU_TEMPERATURE_FW_ADDR (0x41382490U)
-#define WLAN_FW_WAKE_STATUS_ADDR     (0x40031068U)
-#define WLAN_PMIP_TSEN_ADDR          (0x45004010U)
-#define WLAN_V33_VSEN_ADDR           (0x45004028U)
-#define WLAN_ADC_CTRL_ADDR           (0x45004000U)
-#endif
 
 #ifdef RW610
 #define RW610_PACKAGE_TYPE_QFN 0
@@ -1887,14 +1877,6 @@ t_u8 region_string_2_region_code(t_u8 *region_string);
 #if CONFIG_COEX_DUTY_CYCLE
 int wifi_single_ant_duty_cycle(t_u16 enable, t_u16 nbTime, t_u16 wlanTime);
 int wifi_dual_ant_duty_cycle(t_u16 enable, t_u16 nbTime, t_u16 wlanTime, t_u16 wlanBlockTime);
-#endif
-
-#ifdef RW610
-/* get CAU module temperature and write to firmware */
-void wifi_cau_temperature_enable(void);
-int wifi_cau_temperature_write_to_firmware(void);
-int32_t wifi_get_temperature(void);
-void wifi_pmip_v33_enable();
 #endif
 
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)

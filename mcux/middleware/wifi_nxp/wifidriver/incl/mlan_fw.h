@@ -6724,7 +6724,23 @@ typedef MLAN_PACK_START struct _HostCmd_DS_MFG_CMD_TX_FRAME2
     /** STBC */
     t_u32 stbc;
     /** power id */
-    t_u32 rsvd[2];
+    t_u32 rsvd[1];
+    /**signal bw*/
+    t_u32 signal_bw;
+    /** NumPkt */
+    t_u32 NumPkt;
+    /** MaxPE */
+    t_u32 MaxPE;
+    /** BeamChange */
+    t_u32 BeamChange;
+    /** Dcm */
+    t_u32 Dcm;
+    /** Doppler */
+    t_u32 Doppler;
+    /** MidP */
+    t_u32 MidP;
+    /** QNum */
+    t_u32 QNum;
 } MLAN_PACK_END HostCmd_DS_MFG_CMD_TX_FRAME2;
 
 typedef MLAN_PACK_START struct _HostCmd_DS_MFG_CMD_TX_CONT
@@ -7257,9 +7273,9 @@ typedef MLAN_PACK_START struct
     /* Second minimum rate frequency */
     t_u16 link_rate_freq;
     /* Tx latency value (us) */
-    t_u16 link_tx_latency;
+    t_u32 link_tx_latency;
     /* Tx latency frequency */
-    t_u16 link_tx_lantency_freq;
+    t_u32 link_tx_lantency_freq;
 } MLAN_PACK_END MrvlIEtypes_LinkQualityThreshold_t;
 
 /** Supported operating classes element */

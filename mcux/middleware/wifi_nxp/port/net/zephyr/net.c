@@ -519,10 +519,8 @@ bool wrapper_net_is_ip_or_ipv6(const t_u8 *buffer)
 }
 
 extern int retry_attempts;
-#if CONFIG_WIFI_PKT_FWD
 #define MAX_RETRY_PKT_FWD 3
-#endif
-int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
+int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt, bool pkt_fwd)
 {
     int ret;
     interface_t *if_handle = (interface_t *)dev->data;
@@ -593,13 +591,11 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
         }
         else
         {
-#if CONFIG_WIFI_PKT_FWD
-            if (interface == WLAN_BSS_TYPE_UAP)
+            if (pkt_fwd)
             {
                 retry = MAX_RETRY_PKT_FWD;
             }
             else
-#endif
             {
                 retry = retry_attempts;
             }
@@ -608,12 +604,9 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
         wmm_outbuf = wifi_wmm_get_outbuf_enh(&outbuf_len, (mlan_wmm_ac_e)pkt_prio, interface, ra, &is_tx_pause);
         ret        = (wmm_outbuf == NULL) ? true : false;
 
-        /* uAP case doesn't need to delay to let powersave task run,
-         * as FW won't go into sleep mode when uAP enabled. And this
-         * delay will block uAP packet forward case */
-#if CONFIG_WIFI_PKT_FWD
-        if (interface != WLAN_BSS_TYPE_UAP)
-#endif
+        /* In packet forward case, this function is called by RX thread,
+         * so the time delay is not allowed */
+        if (!pkt_fwd)
         {
             if (ret == true && is_tx_pause == true)
             {
@@ -702,9 +695,9 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
 int net_wifi_packet_send(uint8_t interface, void *stack_buffer)
 {
     if (interface == WLAN_BSS_TYPE_UAP)
-        return nxp_wifi_internal_tx(net_if_get_device((void *)g_uap.netif), (struct net_pkt *)stack_buffer);
+        return nxp_wifi_internal_tx(net_if_get_device((void *)g_uap.netif), (struct net_pkt *)stack_buffer, 1);
     else
-        return nxp_wifi_internal_tx(net_if_get_device((void *)g_mlan.netif), (struct net_pkt *)stack_buffer);
+        return nxp_wifi_internal_tx(net_if_get_device((void *)g_mlan.netif), (struct net_pkt *)stack_buffer, 1);
 }
 #endif
 

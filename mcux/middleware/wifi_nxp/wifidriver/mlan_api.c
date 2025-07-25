@@ -1993,6 +1993,14 @@ int wifi_set_rf_tx_frame(const uint32_t enable,
     wifi_mfg_cmd_tx_frame.tx_bf             = tx_bf;
     wifi_mfg_cmd_tx_frame.gf_mode           = gf_mode;
     wifi_mfg_cmd_tx_frame.stbc              = stbc;
+    wifi_mfg_cmd_tx_frame.signal_bw         = -1;
+    wifi_mfg_cmd_tx_frame.NumPkt            = -1;
+    wifi_mfg_cmd_tx_frame.MaxPE             = -1;
+    wifi_mfg_cmd_tx_frame.BeamChange        = -1;
+    wifi_mfg_cmd_tx_frame.Dcm               = -1;
+    wifi_mfg_cmd_tx_frame.Doppler           = -1;
+    wifi_mfg_cmd_tx_frame.MidP              = -1;
+    wifi_mfg_cmd_tx_frame.QNum              = -1;
 
     ret = wifi_get_set_rf_test_tx_frame(HostCmd_ACT_GEN_SET, &wifi_mfg_cmd_tx_frame, &wifi_mfg_cmd_generic_cfg);
     if (WM_SUCCESS == ret && wifi_mfg_cmd_generic_cfg.error == 0)

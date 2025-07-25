@@ -382,7 +382,6 @@ static void wlan_rf_bandwidth_get(int argc, char *argv[])
     }
 }
 
-#if !defined(SD8978)
 static void dump_wlan_get_and_reset_per_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -420,7 +419,6 @@ static void wlan_rf_per_get(int argc, char *argv[])
         dump_wlan_get_and_reset_per_usage();
     }
 }
-#endif
 
 static void dump_wlan_set_tx_cont_mode_usage(void)
 {
@@ -1411,7 +1409,9 @@ static struct cli_command wlan_test_mode_commands[] = {
      "<SSAlloc> <UlTargetRSSI> <MPDU_MU_SF> <TID_AL> <AC_PL> <Pref_AC> ",
      wlan_set_rf_trigger_frame_cfg},
     {"wlan-set-rf-he-tb-tx", "<enable> <qnum> <aid> <axq_mu_timer> <tx_power>", wlan_set_rf_he_tb_tx},
+#endif
     {"wlan-get-and-reset-rf-per", NULL, wlan_rf_per_get},
+#if !defined(SD8978)
     {"wlan-set-rf-otp-mac-addr", "<mac_addr>", wlan_rf_otp_mac_addr_set},
     {"wlan-get-rf-otp-mac-addr", NULL, wlan_rf_otp_mac_addr_get},
     {"wlan-set-rf-otp-cal-data", NULL, wlan_rf_otp_cal_data_set},

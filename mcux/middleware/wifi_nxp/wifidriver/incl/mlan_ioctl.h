@@ -3718,7 +3718,7 @@ typedef struct _mlan_ds_misc_country_code
 #define DEFAULT_PRE_BEACON_MISS 30
 
 /** Type definition of mlan_ds_subscribe_evt for MLAN_OID_MISC_CFP_CODE */
-typedef struct _mlan_ds_subscribe_evt
+typedef MLAN_PACK_START struct _mlan_ds_subscribe_evt
 {
     /** evt action */
     t_u16 evt_action;
@@ -3773,12 +3773,12 @@ typedef struct _mlan_ds_subscribe_evt
     /* Second minimum rate frequency */
     t_u16 link_rate_freq;
     /* Tx latency value (us) */
-    t_u16 link_tx_latency;
+    t_u32 link_tx_latency;
     /* Tx latency frequency */
-    t_u16 link_tx_lantency_freq;
+    t_u32 link_tx_lantency_freq;
     /* Number of pre missed beacons */
     t_u8 pre_beacon_miss;
-} mlan_ds_subscribe_evt;
+} MLAN_PACK_END mlan_ds_subscribe_evt;
 /** Max OTP user data length */
 #define MAX_OTP_USER_DATA_LEN 252U
 
@@ -3914,7 +3914,23 @@ typedef MLAN_PACK_START struct _mlan_ds_mfg_cmd_tx_frame2
     /** STBC */
     t_u32 stbc;
     /** power id */
-    t_u32 rsvd[2];
+    t_u32 rsvd[1];
+    /**signal bw*/
+    t_u32 signal_bw;
+    /** NumPkt */
+    t_u32 NumPkt;
+    /** MaxPE */
+    t_u32 MaxPE;
+    /** BeamChange */
+    t_u32 BeamChange;
+    /** Dcm */
+    t_u32 Dcm;
+    /** Doppler */
+    t_u32 Doppler;
+    /** MidP */
+    t_u32 MidP;
+    /** QNum */
+    t_u32 QNum;
 } MLAN_PACK_END mlan_ds_mfg_cmd_tx_frame2;
 
 /** Configuration for Manufacturing command Tx Continuous */

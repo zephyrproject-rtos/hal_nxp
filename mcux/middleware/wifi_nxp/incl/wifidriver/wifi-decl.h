@@ -1667,7 +1667,23 @@ typedef PACK_START struct _wifi_mfg_cmd_tx_frame
     /** STBC */
     t_u32 stbc;
     /** power id */
-    t_u32 rsvd[2];
+    t_u32 rsvd[1];
+    /**signal bw*/
+    t_u32 signal_bw;
+    /** NumPkt */
+    t_u32 NumPkt;
+    /** MaxPE */
+    t_u32 MaxPE;
+    /** BeamChange */
+    t_u32 BeamChange;
+    /** Dcm */
+    t_u32 Dcm;
+    /** Doppler */
+    t_u32 Doppler;
+    /** MidP */
+    t_u32 MidP;
+    /** QNum */
+    t_u32 QNum;
 } PACK_END wifi_mfg_cmd_tx_frame_t;
 
 /** Configuration for Manufacturing command Tx Continuous */
@@ -1879,7 +1895,7 @@ typedef struct _wifi_dot1as_info_t
 
 #if CONFIG_SUBSCRIBE_EVENT_SUPPORT
 /** Type definition of mlan_ds_subscribe_evt for subscribe events */
-typedef struct _wifi_ds_subscribe_evt
+typedef PACK_START struct _wifi_ds_subscribe_evt
 {
     /** bitmap for subscribe event */
     t_u16 evt_bitmap;
@@ -1932,12 +1948,12 @@ typedef struct _wifi_ds_subscribe_evt
     /* Second minimum rate frequency */
     t_u16 link_rate_freq;
     /* Tx latency value (us) */
-    t_u16 link_tx_latency;
+    t_u32 link_tx_latency;
     /* Tx latency frequency */
-    t_u16 link_tx_lantency_freq;
+    t_u32 link_tx_lantency_freq;
     /* Number of pre missed beacons */
     t_u8 pre_beacon_miss;
-} wifi_ds_subscribe_evt;
+} PACK_END wifi_ds_subscribe_evt;
 #endif
 
 #if CONFIG_CSI

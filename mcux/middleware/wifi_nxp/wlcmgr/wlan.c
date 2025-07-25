@@ -2782,7 +2782,8 @@ static void handle_scan_results(void)
     {
         if (wlan.roam_reassoc == true)
         {
-            if (memcmp((const void *)network->bssid, (const void *)best_ap->bssid, (size_t)IEEEtypes_ADDRESS_SIZE) == 0)
+            if (memcmp((const void *)mlan_adap->priv[0]->curr_bss_params.bss_descriptor.mac_address,
+                (const void *)best_ap->bssid, MLAN_MAC_ADDR_LENGTH) == 0)
             {
 #if CONFIG_11V
                 if (wlan.nlist_rep_param.nlist_mode == WLAN_NLIST_11V)
@@ -7998,7 +7999,7 @@ static void temperature_mon_cb(osa_timer_arg_t arg)
      */
     if ((mlan_adap != NULL) && (mlan_adap->ps_state == PS_STATE_AWAKE))
     {
-        wifi_cau_temperature_write_to_firmware();
+        cau_temperature_write_to_firmware();
     }
 }
 #endif
@@ -8189,7 +8190,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         }
         mon_thread_init = 1;
     }
-    wifi_cau_temperature_enable();
+    cau_temperature_enable();
     status = OSA_TimerCreate((osa_timer_handle_t)temperature_mon_timer, TEMPERATURE_MON_TIMEOUT,
                              &temperature_mon_cb, NULL, KOSA_TimerPeriodic, OSA_TIMER_AUTO_ACTIVATE);
     if (status != KOSA_StatusSuccess)
@@ -8295,7 +8296,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         return 0;
     }
 #endif
-#if !(CONFIG_WIFI_RF_TEST_MODE) || (CONFIG_NXP_RW610)
+#if !(CONFIG_WIFI_RF_TEST_MODE) || (CONFIG_NXP_RW610) || (CONFIG_NXP_IW610)
     ret = wlan_basic_cli_init();
     if (ret != WM_SUCCESS)
     {
@@ -16249,7 +16250,7 @@ int wlan_auto_null_tx(wlan_auto_null_tx_t *auto_null_tx, mlan_bss_type bss_type)
 #ifdef RW610
 int32_t wlan_get_temperature()
 {
-    return wifi_get_temperature();
+    return cau_get_temperature();
 }
 #endif
 

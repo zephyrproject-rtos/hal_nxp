@@ -1621,9 +1621,6 @@ mlan_status imu_wifi_init(enum wlan_type type, const uint8_t *fw_ram_start_addr,
     int ret                = 0;
     int retry_cnt          = 3;
     int retry_cnt_fw_init  = 3;
-#ifdef RW610
-    int temperature_val = 0;
-#endif
 
     ret = wlan_init_struct();
     if (ret != WM_SUCCESS)
@@ -1670,13 +1667,6 @@ retry:
     {
         wifi_shutdown_enable = false;
     }
-
-#ifdef RW610
-    wifi_cau_temperature_enable();
-    wifi_pmip_v33_enable();
-    temperature_val = wifi_cau_temperature_write_to_firmware();
-    PRINTF("Wi-Fi cau temperature : %d\r\n", temperature_val);
-#endif
 
     wifi_init_imulink();
 
