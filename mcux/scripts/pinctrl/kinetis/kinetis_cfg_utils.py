@@ -71,6 +71,7 @@ class MUXOption:
                 self._port = match.group(1)
                 self._pin = int(match.group(2))
                 self._mux = int(val, 16)
+                self._mask = assign.attrib.get('bit_field_mask')
         if self._port is None:
             # Not a valid port mapping. Clear name
             self._name = ''
@@ -569,21 +570,27 @@ class NXPSdkUtil:
         # don't conflict with pin configuration settings
         # Store the mux value at the offset it will actually be written to the
         # configuration register
+        pin_list = list(self._pins.values())
         if n9x_mode:
             mux_macro = ("#define N9X_MUX(port, pin, mux)\t\t\\\n"
-                    "\t(((((port) - '0') & 0xF) << 28) |\t\\\n"
-                    "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
-                    "\t(((mux) & 0xF) << 8))\n\n")
+                    "\t(((((port) - '0') & 0xF) << 28) |\t\\\n")
         elif a15x_mode:
             mux_macro = ("#define A15X_MUX(port, pin, mux)\t\t\\\n"
-                    "\t(((((port) - '0') & 0xF) << 28) |\t\\\n"
-                    "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
-                    "\t(((mux) & 0xF) << 8))\n\n")
+                    "\t(((((port) - '0') & 0xF) << 28) |\t\\\n")
         else:
             mux_macro = ("#define KINETIS_MUX(port, pin, mux)\t\t\\\n"
-                    "\t(((((port) - 'A') & 0xF) << 28) |\t\\\n"
-                    "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
-                    "\t(((mux) & 0x7) << 8))\n\n")
+                    "\t(((((port) - 'A') & 0xF) << 28) |\t\\\n")
+        mux_macro += "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
+
+
+        # BitShift pin mask from 0x#00 to 0x# and add it to the macro
+        pin_mux_opt = pin_list[0]._mux_options
+        pin_mux_opt_name = list(pin_mux_opt)[0]
+        macro_mask = pin_mux_opt[pin_mux_opt_name]._mask
+        macro_mask_after_bitshift = f"0x{int(macro_mask, 0) >> 8:X}"
+
+        mux_macro += "\t(((mux) & " + macro_mask_after_bitshift + ") << 8))\n\n"
+
         with open(outputfile, "w", encoding="utf8") as file:
             file.write(file_header)
             # ifdef guard
