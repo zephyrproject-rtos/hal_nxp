@@ -30,9 +30,9 @@ enum
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief CAAM driver version.
+/*! @brief CAAM driver version. Version 2.3.2.
  *
- * Current version: 2.4.0
+ * Current version: 2.3.2
  *
  * Change log:
  * - Version 2.0.0
@@ -74,14 +74,11 @@ enum
  *   - Add support for SHA HMAC.
  * - Version 2.3.1
  *   - Modified function caam_aes_ccm_check_input_args() to allow payload be empty as is specified in NIST800-38C
- *     Section 5.3.
+ * Section 5.3.
  * - Version 2.3.2
  *   - Fix MISRA-2012 issues.
- * - Version 2.4.0
- *   - Add new APIs for native asymmetric operations (RSA, ECC) instead of only accelerating mathematical primitives
- *     and support for black keys and blobs for both symmetric and asymmetric operations.
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*! @} */
 
 /*! @brief CAAM callback function. */
@@ -158,12 +155,6 @@ typedef uint32_t caam_desc_key_black_t[64];
 typedef uint32_t caam_desc_gen_enc_blob_t[64];
 typedef uint32_t caam_desc_gen_dep_blob_t[64];
 
-/*! @brief Memory buffer to hold CAAM descriptor for performing generating dek blob jobs */
-typedef uint32_t caam_desc_rsa_t[64];
-
-/*! @brief Memory buffer to hold CAAM descriptor for performing generating dek blob jobs */
-typedef uint32_t caam_desc_ecc_t[64];
-
 typedef struct _caam_job_ring_interface
 {
     uint32_t inputJobRing[4];
@@ -217,63 +208,7 @@ typedef enum _caam_ext_key_xfr_source
     kCAAM_ExtKeyXfr_KeyRegisterClass2 = 2U, /*!< The Class 2 Key Register is the source. */
     kCAAM_ExtKeyXfr_PkhaRamE          = 3U, /*!< The PKHA E RAM is the source. */
 } caam_ext_key_xfr_source_t;
-
-typedef enum _caam_ecc_ecdsel
-{
-    kCAAM_ECDSEL_P_192           = 0x00u,
-    kCAAM_ECDSEL_P_224           = 0x01u,
-    kCAAM_ECDSEL_P_256           = 0x02u,
-    kCAAM_ECDSEL_P_384           = 0x03u,
-    kCAAM_ECDSEL_P_521           = 0x04u,
-    kCAAM_ECDSEL_brainpoolP160r1 = 0x05u,
-    kCAAM_ECDSEL_brainpoolP160t1 = 0x06u,
-    kCAAM_ECDSEL_brainpoolP192r1 = 0x07u,
-    kCAAM_ECDSEL_brainpoolP192t1 = 0x08u,
-    kCAAM_ECDSEL_brainpoolP224r1 = 0x09u,
-    kCAAM_ECDSEL_brainpoolP224t1 = 0x0Au,
-    kCAAM_ECDSEL_brainpoolP256r1 = 0x0Bu,
-    kCAAM_ECDSEL_brainpoolP256t1 = 0x0Cu,
-    kCAAM_ECDSEL_brainpoolP320r1 = 0x0Du,
-    kCAAM_ECDSEL_brainpoolP320t1 = 0x0Eu,
-    kCAAM_ECDSEL_brainpoolP384r1 = 0x0Fu,
-    kCAAM_ECDSEL_brainpoolP384t1 = 0x10u,
-    kCAAM_ECDSEL_brainpoolP512r1 = 0x11u,
-    kCAAM_ECDSEL_brainpoolP512t1 = 0x12u,
-    kCAAM_ECDSEL_prime192v2      = 0x13u,
-    kCAAM_ECDSEL_prime192v3      = 0x14u,
-    kCAAM_ECDSEL_prime239v1      = 0x15u,
-    kCAAM_ECDSEL_prime239v2      = 0x16u,
-    kCAAM_ECDSEL_prime239v3      = 0x17u,
-    kCAAM_ECDSEL_secp112r1       = 0x18u,
-    kCAAM_ECDSEL_wtls8           = 0x19u,
-    kCAAM_ECDSEL_wtls9           = 0x1Au,
-    kCAAM_ECDSEL_secp160k1       = 0x1Bu,
-    kCAAM_ECDSEL_secp160r1       = 0x1Cu,
-    kCAAM_ECDSEL_secp160r2       = 0x1Du,
-    kCAAM_ECDSEL_secp192k1       = 0x1Eu,
-    kCAAM_ECDSEL_secp224k1       = 0x1Fu,
-    kCAAM_ECDSEL_secp256k1       = 0x20u,
-    kCAAM_ECDSEL_B_163           = 0x40u,
-    kCAAM_ECDSEL_B_233           = 0x41u,
-    kCAAM_ECDSEL_B_283           = 0x42u,
-    kCAAM_ECDSEL_B_409           = 0x43u,
-    kCAAM_ECDSEL_B_571           = 0x44u,
-    kCAAM_ECDSEL_K_163           = 0x45u,
-    kCAAM_ECDSEL_K_233           = 0x46u,
-    kCAAM_ECDSEL_K_283           = 0x47u,
-    kCAAM_ECDSEL_K_409           = 0x48u,
-    kCAAM_ECDSEL_K_571           = 0x49u,
-    kCAAM_ECDSEL_wtls1           = 0x4Au,
-    kCAAM_ECDSEL_sect113r1       = 0x4Bu,
-    kCAAM_ECDSEL_c2pnb163v1      = 0x4Cu,
-    kCAAM_ECDSEL_c2pnb163v2      = 0x4Du,
-    kCAAM_ECDSEL_c2pnb163v3      = 0x4Eu,
-    kCAAM_ECDSEL_sect163r1       = 0x4Fu,
-    kCAAM_ECDSEL_sect193r1       = 0x50u,
-    kCAAM_ECDSEL_sect193r2       = 0x51u,
-    kCAAM_ECDSEL_sect239k1       = 0x52u,
-} caam_ecc_ecdsel_t;
-/*! @} */ /* end of caam_driver */
+/*! @} */                                   /* end of caam_driver */
 
 /*******************************************************************************
  * AES Definitions
@@ -304,133 +239,6 @@ typedef enum _caam_ecc_ecdsel
 
 /*! @brief CAAM DES IV size - 8 bytes */
 #define CAAM_DES_IV_SIZE 8
-
-/*! @brief CAAM blacken key size for ECB encryption */
-#define CAAM_BLACKEN_ECB_SIZE(x) ((uint32_t)((x) + 15u) & ~15ul)
-
-/*! @brief CAAM blacken key size for CCM encryption */
-#define CAAM_BLACKEN_CCM_SIZE(x) (((uint32_t)((x) + 7u) & ~7ul) + 12u)
-
-/*! @brief CAAM DSA public key length for EC domain */
-#define CAAM_DSA_PUBLIC_KEY_LENGTH(domain)         \
-    ((domain) == kCAAM_ECDSEL_P_192           ? 24u : \
-     (domain) == kCAAM_ECDSEL_P_224           ? 28u : \
-     (domain) == kCAAM_ECDSEL_P_256           ? 32u : \
-     (domain) == kCAAM_ECDSEL_P_384           ? 48u : \
-     (domain) == kCAAM_ECDSEL_P_521           ? 66u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP160r1 ? 20u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP160t1 ? 20u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP192r1 ? 24u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP192t1 ? 24u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP224r1 ? 28u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP224t1 ? 28u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP256r1 ? 32u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP256t1 ? 32u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP320r1 ? 40u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP320t1 ? 40u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP384r1 ? 48u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP384t1 ? 48u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP512r1 ? 64u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP512t1 ? 64u : \
-     (domain) == kCAAM_ECDSEL_prime192v2      ? 24u : \
-     (domain) == kCAAM_ECDSEL_prime192v3      ? 24u : \
-     (domain) == kCAAM_ECDSEL_prime239v1      ? 30u : \
-     (domain) == kCAAM_ECDSEL_prime239v2      ? 30u : \
-     (domain) == kCAAM_ECDSEL_prime239v3      ? 30u : \
-     (domain) == kCAAM_ECDSEL_secp112r1       ? 14u : \
-     (domain) == kCAAM_ECDSEL_wtls8           ? 14u : \
-     (domain) == kCAAM_ECDSEL_wtls9           ? 20u : \
-     (domain) == kCAAM_ECDSEL_secp160k1       ? 20u : \
-     (domain) == kCAAM_ECDSEL_secp160r1       ? 20u : \
-     (domain) == kCAAM_ECDSEL_secp160r2       ? 20u : \
-     (domain) == kCAAM_ECDSEL_secp192k1       ? 24u : \
-     (domain) == kCAAM_ECDSEL_secp224k1       ? 28u : \
-     (domain) == kCAAM_ECDSEL_secp256k1       ? 32u : \
-     (domain) == kCAAM_ECDSEL_B_163           ? 21u : \
-     (domain) == kCAAM_ECDSEL_B_233           ? 30u : \
-     (domain) == kCAAM_ECDSEL_B_283           ? 36u : \
-     (domain) == kCAAM_ECDSEL_B_409           ? 52u : \
-     (domain) == kCAAM_ECDSEL_B_571           ? 72u : \
-     (domain) == kCAAM_ECDSEL_K_163           ? 21u : \
-     (domain) == kCAAM_ECDSEL_K_233           ? 30u : \
-     (domain) == kCAAM_ECDSEL_K_283           ? 36u : \
-     (domain) == kCAAM_ECDSEL_K_409           ? 52u : \
-     (domain) == kCAAM_ECDSEL_K_571           ? 72u : \
-     (domain) == kCAAM_ECDSEL_wtls1           ? 15u : \
-     (domain) == kCAAM_ECDSEL_sect113r1       ? 15u : \
-     (domain) == kCAAM_ECDSEL_c2pnb163v1      ? 21u : \
-     (domain) == kCAAM_ECDSEL_c2pnb163v2      ? 21u : \
-     (domain) == kCAAM_ECDSEL_c2pnb163v3      ? 21u : \
-     (domain) == kCAAM_ECDSEL_sect163r1       ? 21u : \
-     (domain) == kCAAM_ECDSEL_sect193r1       ? 25u : \
-     (domain) == kCAAM_ECDSEL_sect193r2       ? 25u : \
-     (domain) == kCAAM_ECDSEL_sect239k1       ? 25u : \
-                                              0u)
-
-/*! @brief CAAM ECC public key length for EC domain */
-#define CAAM_ECC_PUBLIC_KEY_LENGTH(domain) (CAAM_DSA_PUBLIC_KEY_LENGTH(domain) * 2u)
-
-/*! @brief CAAM ECC private key length for EC domain */
-#define CAAM_ECC_PRIVATE_KEY_LENGTH(domain)        \
-    ((domain) == kCAAM_ECDSEL_P_192           ? 24u : \
-     (domain) == kCAAM_ECDSEL_P_224           ? 28u : \
-     (domain) == kCAAM_ECDSEL_P_256           ? 32u : \
-     (domain) == kCAAM_ECDSEL_P_384           ? 48u : \
-     (domain) == kCAAM_ECDSEL_P_521           ? 66u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP160r1 ? 20u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP160t1 ? 20u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP192r1 ? 24u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP192t1 ? 24u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP224r1 ? 28u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP224t1 ? 28u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP256r1 ? 32u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP256t1 ? 32u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP320r1 ? 40u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP320t1 ? 40u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP384r1 ? 48u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP384t1 ? 48u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP512r1 ? 64u : \
-     (domain) == kCAAM_ECDSEL_brainpoolP512t1 ? 64u : \
-     (domain) == kCAAM_ECDSEL_prime192v2      ? 24u : \
-     (domain) == kCAAM_ECDSEL_prime192v3      ? 24u : \
-     (domain) == kCAAM_ECDSEL_prime239v1      ? 30u : \
-     (domain) == kCAAM_ECDSEL_prime239v2      ? 30u : \
-     (domain) == kCAAM_ECDSEL_prime239v3      ? 30u : \
-     (domain) == kCAAM_ECDSEL_secp112r1       ? 14u : \
-     (domain) == kCAAM_ECDSEL_wtls8           ? 15u : \
-     (domain) == kCAAM_ECDSEL_wtls9           ? 21u : \
-     (domain) == kCAAM_ECDSEL_secp160k1       ? 21u : \
-     (domain) == kCAAM_ECDSEL_secp160r1       ? 21u : \
-     (domain) == kCAAM_ECDSEL_secp160r2       ? 21u : \
-     (domain) == kCAAM_ECDSEL_secp192k1       ? 24u : \
-     (domain) == kCAAM_ECDSEL_secp224k1       ? 29u : \
-     (domain) == kCAAM_ECDSEL_secp256k1       ? 32u : \
-     (domain) == kCAAM_ECDSEL_B_163           ? 21u : \
-     (domain) == kCAAM_ECDSEL_B_233           ? 30u : \
-     (domain) == kCAAM_ECDSEL_B_283           ? 36u : \
-     (domain) == kCAAM_ECDSEL_B_409           ? 52u : \
-     (domain) == kCAAM_ECDSEL_B_571           ? 72u : \
-     (domain) == kCAAM_ECDSEL_K_163           ? 21u : \
-     (domain) == kCAAM_ECDSEL_K_233           ? 29u : \
-     (domain) == kCAAM_ECDSEL_K_283           ? 36u : \
-     (domain) == kCAAM_ECDSEL_K_409           ? 51u : \
-     (domain) == kCAAM_ECDSEL_K_571           ? 72u : \
-     (domain) == kCAAM_ECDSEL_wtls1           ? 14u : \
-     (domain) == kCAAM_ECDSEL_sect113r1       ? 15u : \
-     (domain) == kCAAM_ECDSEL_c2pnb163v1      ? 21u : \
-     (domain) == kCAAM_ECDSEL_c2pnb163v2      ? 21u : \
-     (domain) == kCAAM_ECDSEL_c2pnb163v3      ? 21u : \
-     (domain) == kCAAM_ECDSEL_sect163r1       ? 21u : \
-     (domain) == kCAAM_ECDSEL_sect193r1       ? 25u : \
-     (domain) == kCAAM_ECDSEL_sect193r2       ? 25u : \
-     (domain) == kCAAM_ECDSEL_sect239k1       ? 25u : \
-                                              0u)
-
-/*! @brief CAAM blacken key size for ECB encryption
- *
- * The second part of key size and buffer length needed for compution may differ.
- */
-#define CAAM_ECC_SECOND_SIGN_BUFFER_SIZE(domain) ((CAAM_ECC_PRIVATE_KEY_LENGTH(domain) + 15u) & ~15u)
 
 /*!
  *@}
@@ -553,82 +361,28 @@ typedef struct _caam_rng_user_config
 /*! @brief CAAM FIFOST types. */
 typedef enum _caam_fifost_type
 {
-    kCAAM_FIFOST_Type_Ecb_Jkek = 0x24u, /*!< Key Register, encrypted using AES-ECB with the job
-descriptor key encryption key. */
-    kCAAM_FIFOST_Type_Ecb_Tkek = 0x25u, /*!< Key Register, encrypted using AES-ECB with the
-trusted descriptor key encryption key. */
-    kCAAM_FIFOST_Type_Ccm_Jkek = 0x14u, /*!< Key Register, encrypted using AES-CCM with the
+    kCAAM_FIFOST_Type_Kek_Kek = 0x24,      /*!< Key Register, encrypted using AES-ECB with the job
+     descriptor key encryption key. */
+    kCAAM_FIFOST_Type_Kek_TKek = 0x25,     /*!< Key Register, encrypted using AES-ECB with the
+    trusted descriptor key encryption key. */
+    kCAAM_FIFOST_Type_Kek_Cmm_Jkek = 0x14, /*!< Key Register, encrypted using AES-CCM with the
 job descriptor key encryption key. */
-    kCAAM_FIFOST_Type_Ccm_Tkek = 0x15u, /*!< Key register, encrypted using AES-CCM with the
+    kCAAM_FIFOST_Type_Kek_Cmm_Tkek = 0x15, /*!< Key register, encrypted using AES-CCM with the
 trusted descriptor key encryption key. */
 } caam_fifost_type_t;
 
 /*! @brief CAAM descriptor types. */
 typedef enum _caam_desc_type
 {
-    kCAAM_Descriptor_Type_Ecb_Jkek = 0x0u, /*!< Key Register, encrypted using AES-ECB with the job
-descriptor key encryption key. */
-    kCAAM_Descriptor_Type_Ecb_Tkek = 0x2u, /*!< Key Register, encrypted using AES-ECB with the
-trusted descriptor key encryption key. */
-    kCAAM_Descriptor_Type_Ccm_Jkek = 0x1u, /*!< Key Register, encrypted using AES-CCM with the
+    kCAAM_Descriptor_Type_Kek_Kek = 0x0,      /*!< Key Register, encrypted using AES-ECB with the job
+     descriptor key encryption key. */
+    kCAAM_Descriptor_Type_Kek_TKek = 0x2,     /*!< Key Register, encrypted using AES-ECB with the
+    trusted descriptor key encryption key. */
+    kCAAM_Descriptor_Type_Kek_Ccm_Jkek = 0x1, /*!< Key Register, encrypted using AES-CCM with the
 job descriptor key encryption key. */
-    kCAAM_Descriptor_Type_Ccm_Tkek = 0x3u, /*!< Key register, encrypted using AES-CCM with the
+    kCAAM_Descriptor_Type_Kek_Ccm_Tkek = 0x3, /*!< Key register, encrypted using AES-CCM with the
 trusted descriptor key encryption key. */
 } caam_desc_type_t;
-
-/*! @brief CAAM key types. */
-typedef enum _caam_key_type
-{
-    kCAAM_Key_Type_None     = 0x0ul,
-    kCAAM_Key_Type_Ecb_Jkek = 0x80ul << 15, /*!< Key Register, encrypted using AES-ECB with the job
-  descriptor key encryption key. */
-    kCAAM_Key_Type_Ecb_Tkek = 0x81ul << 15, /*!< Key Register, encrypted using AES-ECB with the
-  trusted descriptor key encryption key. */
-    kCAAM_Key_Type_Ccm_Jkek = 0xA0ul << 15, /*!< Key Register, encrypted using AES-CCM with the
-job descriptor key encryption key. */
-    kCAAM_Key_Type_Ccm_Tkek = 0xA1ul << 15, /*!< Key register, encrypted using AES-CCM with the
-trusted descriptor key encryption key. */
-} caam_key_type_t;
-
-/*! @brief CAAM ecc encryption types. */
-typedef enum _caam_ecc_encryption_type
-{
-    kCAAM_Ecc_Encryption_Type_None     = 0x0u,
-    kCAAM_Ecc_Encryption_Type_Ecb_Jkek = 0x1u << 2, /*!< Key Register, encrypted using AES-ECB with the job
-        descriptor key encryption key. */
-    kCAAM_Ecc_Encryption_Type_Ccm_Jkek = 0x5u << 2, /*!< Key Register, encrypted using AES-CCM with the
-    job descriptor key encryption key. */
-} caam_ecc_encryption_type_t;
-
-/*! @brief CAAM rsa key encryption types. */
-typedef enum _caam_rsa_key_type
-{
-    kCAAM_Rsa_Key_Type_None     = 0x0u,
-    kCAAM_Rsa_Key_Type_Ecb_Jkek = 0x4u << 4, /*!< Key Register, encrypted using AES-ECB with the job
-        descriptor key encryption key. */
-    kCAAM_Rsa_Key_Type_Ccm_Jkek = 0x5u << 4, /*!< Key Register, encrypted using AES-CCM with the
-    job descriptor key encryption key. */
-} caam_rsa_key_type_t;
-
-/*! @brief CAAM rsa encryption types. */
-typedef enum _caam_rsa_encryption_type
-{
-    kCAAM_Rsa_Encryption_Type_None     = 0x00u,
-    kCAAM_Rsa_Encryption_Type_Ecb_Jkek = 0x01u, /*!< Key Register, encrypted using AES-ECB with the job
-      descriptor key encryption key. */
-    kCAAM_Rsa_Encryption_Type_Ecb_Tkek = 0x05u, /*!< Key Register, encrypted using AES-ECB with the
-     trusted descriptor key encryption key. */
-    kCAAM_Rsa_Encryption_Type_Ccm_Jkek = 0x03u, /*!< Key Register, encrypted using AES-CCM with the
-  job descriptor key encryption key. */
-    kCAAM_Rsa_Encryption_Type_Ccm_Tkek = 0x07u, /*!< Key register, encrypted using AES-CCM with the
-  trusted descriptor key encryption key. */
-} caam_rsa_encryption_type_t;
-
-typedef enum _caam_rsa_format_type
-{
-    kCAAM_Rsa_Format_Type_None  = 0x00u, /*!< No formatting */
-    kCAAM_Rsa_Format_Type_PKCS1 = 0x01u, /*!< EME-PKCS1-v1_5 encryption decoding function */
-} caam_rsa_format_type_t;
 
 // #define KEYBLOB_USE_SECURE_MEMORY 1  // Define when secure memory mode is used
 
@@ -830,54 +584,6 @@ status_t CAAM_AES_DecryptEcb(CAAM_Type *base,
                              size_t keySize);
 
 /*!
- * @brief Encrypts AES using the ECB block mode using black key.
- *
- * Encrypts AES using the ECB block mode.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from encrypt operation
- */
-status_t CAAM_AES_EncryptEcbExtended(CAAM_Type *base,
-                                     caam_handle_t *handle,
-                                     const uint8_t *plaintext,
-                                     uint8_t *ciphertext,
-                                     size_t size,
-                                     const uint8_t *key,
-                                     size_t keySize,
-                                     caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES using ECB block mode using black key.
- *
- * Decrypts AES using ECB block mode.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param key Input key.
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from decrypt operation
- */
-status_t CAAM_AES_DecryptEcbExtended(CAAM_Type *base,
-                                     caam_handle_t *handle,
-                                     const uint8_t *ciphertext,
-                                     uint8_t *plaintext,
-                                     size_t size,
-                                     const uint8_t *key,
-                                     size_t keySize,
-                                     caam_key_type_t blackKeyType);
-
-/*!
  * @brief Encrypts AES using CBC block mode.
  *
  * @param base CAAM peripheral base address
@@ -922,54 +628,6 @@ status_t CAAM_AES_DecryptCbc(CAAM_Type *base,
                              size_t keySize);
 
 /*!
- * @brief Encrypts AES using CBC block mode using black key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param iv Input initial vector to combine with the first input block.
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from encrypt operation
- */
-status_t CAAM_AES_EncryptCbcExtended(CAAM_Type *base,
-                                     caam_handle_t *handle,
-                                     const uint8_t *plaintext,
-                                     uint8_t *ciphertext,
-                                     size_t size,
-                                     const uint8_t iv[CAAM_AES_BLOCK_SIZE],
-                                     const uint8_t *key,
-                                     size_t keySize,
-                                     caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES using CBC block mode using black key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param iv Input initial vector to combine with the first input block.
- * @param key Input key to use for decryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from decrypt operation
- */
-status_t CAAM_AES_DecryptCbcExtended(CAAM_Type *base,
-                                     caam_handle_t *handle,
-                                     const uint8_t *ciphertext,
-                                     uint8_t *plaintext,
-                                     size_t size,
-                                     const uint8_t iv[CAAM_AES_BLOCK_SIZE],
-                                     const uint8_t *key,
-                                     size_t keySize,
-                                     caam_key_type_t blackKeyType);
-
-/*!
  * @brief Encrypts or decrypts AES using CTR block mode.
  *
  * Encrypts or decrypts AES using CTR block mode.
@@ -1002,42 +660,6 @@ status_t CAAM_AES_CryptCtr(CAAM_Type *base,
                            size_t keySize,
                            uint8_t counterlast[CAAM_AES_BLOCK_SIZE],
                            size_t *szLeft);
-
-/*!
- * @brief Encrypts or decrypts AES using CTR block mode using black key.
- *
- * Encrypts or decrypts AES using CTR block mode.
- * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
- * The only difference between encryption and decryption is that, for encryption, the input argument
- * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
- * and the output argument is plain text.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param input Input data for CTR block mode
- * @param[out] output Output data for CTR block mode
- * @param size Size of input and output data in bytes
- * @param[in,out] counter Input counter (updates on return)
- * @param key Input key to use for forward AES cipher
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param[out] counterlast Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
- * not used.
- * @param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
- * are not used.
- * @param blackKeyType Type of black key
- * @return Status from encrypt operation
- */
-status_t CAAM_AES_CryptCtrExtended(CAAM_Type *base,
-                                   caam_handle_t *handle,
-                                   const uint8_t *input,
-                                   uint8_t *output,
-                                   size_t size,
-                                   uint8_t counter[CAAM_AES_BLOCK_SIZE],
-                                   const uint8_t *key,
-                                   size_t keySize,
-                                   uint8_t counterlast[CAAM_AES_BLOCK_SIZE],
-                                   size_t *szLeft,
-                                   caam_key_type_t blackKeyType);
 
 /*!
  * @brief Encrypts AES and tags using CCM block mode.
@@ -1109,79 +731,6 @@ status_t CAAM_AES_DecryptTagCcm(CAAM_Type *base,
                                 size_t tagSize);
 
 /*!
- * @brief Encrypts AES and tags using CCM block mode using black key.
- *
- * Encrypts AES and optionally tags using CCM block mode.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text.
- * @param size Size of input and output data in bytes. Zero means authentication only.
- * @param iv Nonce
- * @param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
- * @param aad Input additional authentication data. Can be NULL if aadSize is zero.
- * @param aadSize Input size in bytes of AAD. Zero means data mode only (authentication skipped).
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param[out] tag Generated output tag. Set to NULL to skip tag processing.
- * @param tagSize Input size of the tag to generate, in bytes. Must be 4, 6, 8, 10, 12, 14, or 16.
- * @param blackKeyType Type of black key
- * @return Status from encrypt operation
- */
-status_t CAAM_AES_EncryptTagCcmExtended(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        const uint8_t *plaintext,
-                                        uint8_t *ciphertext,
-                                        size_t size,
-                                        const uint8_t *iv,
-                                        size_t ivSize,
-                                        const uint8_t *aad,
-                                        size_t aadSize,
-                                        const uint8_t *key,
-                                        size_t keySize,
-                                        uint8_t *tag,
-                                        size_t tagSize,
-                                        caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES and authenticates using CCM block mode using black key.
- *
- * Decrypts AES and optionally authenticates using CCM block mode.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text.
- * @param size Size of input and output data in bytes. Zero means authentication data only.
- * @param iv Nonce
- * @param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
- * @param aad Input additional authentication data. Can be NULL if aadSize is zero.
- * @param aadSize Input size in bytes of AAD. Zero means data mode only (authentication data skipped).
- * @param key Input key to use for decryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param tag Received tag. Set to NULL to skip tag processing.
- * @param tagSize Input size of the received tag to compare with the computed tag, in bytes. Must be 4, 6, 8, 10, 12,
- *                14, or 16.
- * @param blackKeyType Type of black key
- * @return Status from decrypt operation
- */
-status_t CAAM_AES_DecryptTagCcmExtended(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        const uint8_t *ciphertext,
-                                        uint8_t *plaintext,
-                                        size_t size,
-                                        const uint8_t *iv,
-                                        size_t ivSize,
-                                        const uint8_t *aad,
-                                        size_t aadSize,
-                                        const uint8_t *key,
-                                        size_t keySize,
-                                        const uint8_t *tag,
-                                        size_t tagSize,
-                                        caam_key_type_t blackKeyType);
-
-/*!
  * @brief Encrypts AES and tags using GCM block mode.
  *
  * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
@@ -1250,80 +799,6 @@ status_t CAAM_AES_DecryptTagGcm(CAAM_Type *base,
                                 size_t keySize,
                                 const uint8_t *tag,
                                 size_t tagSize);
-
-/*!
- * @brief Encrypts AES and tags using GCM block mode using black key.
- *
- * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
- * in the 'tag' field. Uses black key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text.
- * @param size Size of input and output data in bytes
- * @param iv Input initial vector
- * @param ivSize Size of the IV
- * @param aad Input additional authentication data
- * @param aadSize Input size in bytes of AAD
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param[out] tag Output hash tag. Set to NULL to skip tag processing.
- * @param tagSize Input size of the tag to generate, in bytes. Must be 4,8,12,13,14,15 or 16.
- * @param blackenKeyType Type of black key
- * @return Status from encrypt operation
- */
-status_t CAAM_AES_EncryptTagGcmExtended(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        const uint8_t *plaintext,
-                                        uint8_t *ciphertext,
-                                        size_t size,
-                                        const uint8_t *iv,
-                                        size_t ivSize,
-                                        const uint8_t *aad,
-                                        size_t aadSize,
-                                        const uint8_t *key,
-                                        size_t keySize,
-                                        uint8_t *tag,
-                                        size_t tagSize,
-                                        caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES and authenticates using GCM block mode using black key.
- *
- * Decrypts AES and optionally authenticates using GCM block mode. If ciphertext is NULL, only the GHASH is calculated
- * and compared with the received GHASH in 'tag' field. Uses black key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text.
- * @param size Size of input and output data in bytes
- * @param iv Input initial vector
- * @param ivSize Size of the IV
- * @param aad Input additional authentication data
- * @param aadSize Input size in bytes of AAD
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param tag Input hash tag to compare. Set to NULL to skip tag processing.
- * @param tagSize Input size of the tag, in bytes. Must be 4, 8, 12, 13, 14, 15, or 16.
- * @param blackenKeyType Type of black key
- * @return Status from decrypt operation
- */
-status_t CAAM_AES_DecryptTagGcmExtended(CAAM_Type *base,
-                                        caam_handle_t *handle,
-                                        const uint8_t *ciphertext,
-                                        uint8_t *plaintext,
-                                        size_t size,
-                                        const uint8_t *iv,
-                                        size_t ivSize,
-                                        const uint8_t *aad,
-                                        size_t aadSize,
-                                        const uint8_t *key,
-                                        size_t keySize,
-                                        const uint8_t *tag,
-                                        size_t tagSize,
-                                        caam_key_type_t blackKeyType);
 /*!
  *@}
  */ /* end of caam_driver_aes */
@@ -1381,58 +856,6 @@ status_t CAAM_AES_DecryptEcbNonBlocking(CAAM_Type *base,
                                         size_t keySize);
 
 /*!
- * @brief Encrypts AES using the ECB block mode using black key.
- *
- * Puts AES ECB encrypt descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param plaintext Input plain text to encrypt
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param[out] ciphertext Output cipher text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_EncryptEcbNonBlockingExtended(CAAM_Type *base,
-                                                caam_handle_t *handle,
-                                                caam_desc_aes_ecb_t descriptor,
-                                                const uint8_t *plaintext,
-                                                uint8_t *ciphertext,
-                                                size_t size,
-                                                const uint8_t *key,
-                                                size_t keySize,
-                                                caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES using ECB block mode using black key.
- *
- * Puts AES ECB decrypt descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param key Input key.
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_DecryptEcbNonBlockingExtended(CAAM_Type *base,
-                                                caam_handle_t *handle,
-                                                caam_desc_aes_ecb_t descriptor,
-                                                const uint8_t *ciphertext,
-                                                uint8_t *plaintext,
-                                                size_t size,
-                                                const uint8_t *key,
-                                                size_t keySize,
-                                                caam_key_type_t blackKeyType);
-
-/*!
  * @brief Encrypts AES using CBC block mode.
  *
  * Puts AES CBC encrypt descriptor to CAAM input job ring.
@@ -1485,62 +908,6 @@ status_t CAAM_AES_DecryptCbcNonBlocking(CAAM_Type *base,
                                         size_t keySize);
 
 /*!
- * @brief Encrypts AES using CBC block mode using black key.
- *
- * Puts AES CBC encrypt descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param iv Input initial vector to combine with the first input block.
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_EncryptCbcNonBlockingExtended(CAAM_Type *base,
-                                                caam_handle_t *handle,
-                                                caam_desc_aes_cbc_t descriptor,
-                                                const uint8_t *plaintext,
-                                                uint8_t *ciphertext,
-                                                size_t size,
-                                                const uint8_t *iv,
-                                                const uint8_t *key,
-                                                size_t keySize,
-                                                caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES using CBC block mode using black key.
- *
- * Puts AES CBC decrypt descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text
- * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * @param iv Input initial vector to combine with the first input block.
- * @param key Input key to use for decryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_DecryptCbcNonBlockingExtended(CAAM_Type *base,
-                                                caam_handle_t *handle,
-                                                caam_desc_aes_cbc_t descriptor,
-                                                const uint8_t *ciphertext,
-                                                uint8_t *plaintext,
-                                                size_t size,
-                                                const uint8_t *iv,
-                                                const uint8_t *key,
-                                                size_t keySize,
-                                                caam_key_type_t blackKeyType);
-
-/*!
  * @brief Encrypts or decrypts AES using CTR block mode.
  *
  * Encrypts or decrypts AES using CTR block mode.
@@ -1577,46 +944,6 @@ status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
                                       size_t keySize,
                                       uint8_t *counterlast,
                                       size_t *szLeft);
-
-/*!
- * @brief Encrypts or decrypts AES using CTR block mode using black key.
- *
- * Encrypts or decrypts AES using CTR block mode.
- * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
- * The only difference between encryption and decryption is that, for encryption, the input argument
- * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
- * and the output argument is plain text.
- *
- * Puts AES CTR crypt descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param input Input data for CTR block mode
- * @param[out] output Output data for CTR block mode
- * @param size Size of input and output data in bytes
- * @param[in,out] counter Input counter (updates on return)
- * @param key Input key to use for forward AES cipher
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param[out] counterlast Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
- * not used.
- * @param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
- * are not used.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_CryptCtrNonBlockingExtended(CAAM_Type *base,
-                                              caam_handle_t *handle,
-                                              caam_desc_aes_ctr_t descriptor,
-                                              const uint8_t *input,
-                                              uint8_t *output,
-                                              size_t size,
-                                              uint8_t *counter,
-                                              const uint8_t *key,
-                                              size_t keySize,
-                                              uint8_t *counterlast,
-                                              size_t *szLeft,
-                                              caam_key_type_t blackKeyType);
 
 /*!
  * @brief Encrypts AES and tags using CCM block mode.
@@ -1693,84 +1020,6 @@ status_t CAAM_AES_DecryptTagCcmNonBlocking(CAAM_Type *base,
                                            size_t tagSize);
 
 /*!
- * @brief Encrypts AES and tags using CCM block mode using black key.
- *
- * Puts AES CCM encrypt and tag descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text.
- * @param size Size of input and output data in bytes. Zero means authentication only.
- * @param iv Nonce
- * @param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
- * @param aad Input additional authentication data. Can be NULL if aadSize is zero.
- * @param aadSize Input size in bytes of AAD. Zero means data mode only (authentication skipped).
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param[out] tag Generated output tag. Set to NULL to skip tag processing.
- * @param tagSize Input size of the tag to generate, in bytes. Must be 4, 6, 8, 10, 12, 14, or 16.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_EncryptTagCcmNonBlockingExtended(CAAM_Type *base,
-                                                   caam_handle_t *handle,
-                                                   caam_desc_aes_ccm_t descriptor,
-                                                   const uint8_t *plaintext,
-                                                   uint8_t *ciphertext,
-                                                   size_t size,
-                                                   const uint8_t *iv,
-                                                   size_t ivSize,
-                                                   const uint8_t *aad,
-                                                   size_t aadSize,
-                                                   const uint8_t *key,
-                                                   size_t keySize,
-                                                   uint8_t *tag,
-                                                   size_t tagSize,
-                                                   caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES and authenticates using CCM block mode using black key.
- *
- * Puts AES CCM decrypt and check tag descriptor to CAAM input job ring.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text.
- * @param size Size of input and output data in bytes. Zero means authentication data only.
- * @param iv Nonce
- * @param ivSize Length of the Nonce in bytes. Must be 7, 8, 9, 10, 11, 12, or 13.
- * @param aad Input additional authentication data. Can be NULL if aadSize is zero.
- * @param aadSize Input size in bytes of AAD. Zero means data mode only (authentication data skipped).
- * @param key Input key to use for decryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param tag Received tag. Set to NULL to skip tag processing.
- * @param tagSize Input size of the received tag to compare with the computed tag, in bytes. Must be 4, 6, 8, 10, 12,
- *                14, or 16.
- * @param blackKeyType Type of black key
- * @return Status from job descriptor push
- */
-
-status_t CAAM_AES_DecryptTagCcmNonBlockingExtended(CAAM_Type *base,
-                                                   caam_handle_t *handle,
-                                                   caam_desc_aes_ccm_t descriptor,
-                                                   const uint8_t *ciphertext,
-                                                   uint8_t *plaintext,
-                                                   size_t size,
-                                                   const uint8_t *iv,
-                                                   size_t ivSize,
-                                                   const uint8_t *aad,
-                                                   size_t aadSize,
-                                                   const uint8_t *key,
-                                                   size_t keySize,
-                                                   const uint8_t *tag,
-                                                   size_t tagSize,
-                                                   caam_key_type_t blackKeyType);
-
-/*!
  * @brief Encrypts AES and tags using GCM block mode.
  *
  * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
@@ -1845,88 +1094,6 @@ status_t CAAM_AES_DecryptTagGcmNonBlocking(CAAM_Type *base,
                                            size_t keySize,
                                            const uint8_t *tag,
                                            size_t tagSize);
-
-/*!
- * @brief Encrypts AES and tags using GCM block mode using black key.
- *
- * Encrypts AES and optionally tags using GCM block mode. If plaintext is NULL, only the GHASH is calculated and output
- * in the 'tag' field.
- * Puts AES GCM encrypt and tag descriptor to CAAM input job ring.
- * Uses black key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param plaintext Input plain text to encrypt
- * @param[out] ciphertext Output cipher text.
- * @param size Size of input and output data in bytes
- * @param iv Input initial vector
- * @param ivSize Size of the IV
- * @param aad Input additional authentication data
- * @param aadSize Input size in bytes of AAD
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param[out] tag Output hash tag. Set to NULL to skip tag processing.
- * @param tagSize Input size of the tag to generate, in bytes. Must be 4,8,12,13,14,15 or 16.
- * @return Status from job descriptor push
- * @param blackenKeyType Type of black key
- */
-status_t CAAM_AES_EncryptTagGcmNonBlockingExtended(CAAM_Type *base,
-                                                   caam_handle_t *handle,
-                                                   caam_desc_aes_gcm_t descriptor,
-                                                   const uint8_t *plaintext,
-                                                   uint8_t *ciphertext,
-                                                   size_t size,
-                                                   const uint8_t *iv,
-                                                   size_t ivSize,
-                                                   const uint8_t *aad,
-                                                   size_t aadSize,
-                                                   const uint8_t *key,
-                                                   size_t keySize,
-                                                   uint8_t *tag,
-                                                   size_t tagSize,
-                                                   caam_key_type_t blackKeyType);
-
-/*!
- * @brief Decrypts AES and authenticates using GCM block mode using black key.
- *
- * Decrypts AES and optionally authenticates using GCM block mode. If ciphertext is NULL, only the GHASH is calculated
- * and compared with the received GHASH in 'tag' field.
- * Puts AES GCM decrypt and check tag descriptor to CAAM input job ring.
- * Uses black key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param[out] descriptor Memory for the CAAM descriptor.
- * @param ciphertext Input cipher text to decrypt
- * @param[out] plaintext Output plain text.
- * @param size Size of input and output data in bytes
- * @param iv Input initial vector
- * @param ivSize Size of the IV
- * @param aad Input additional authentication data
- * @param aadSize Input size in bytes of AAD
- * @param key Input key to use for encryption
- * @param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
- * @param tag Input hash tag to compare. Set to NULL to skip tag processing.
- * @param tagSize Input size of the tag, in bytes. Must be 4, 8, 12, 13, 14, 15, or 16.
- * @param blackenKeyType Type of black key
- * @return Status from job descriptor push
- */
-status_t CAAM_AES_DecryptTagGcmNonBlockingExtended(CAAM_Type *base,
-                                                   caam_handle_t *handle,
-                                                   caam_desc_aes_gcm_t descriptor,
-                                                   const uint8_t *ciphertext,
-                                                   uint8_t *plaintext,
-                                                   size_t size,
-                                                   const uint8_t *iv,
-                                                   size_t ivSize,
-                                                   const uint8_t *aad,
-                                                   size_t aadSize,
-                                                   const uint8_t *key,
-                                                   size_t keySize,
-                                                   const uint8_t *tag,
-                                                   size_t tagSize,
-                                                   caam_key_type_t blackKeyType);
 /*!
  *@}
  */ /* end of caam_nonblocking_driver_aes */
@@ -2541,16 +1708,6 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
  * @addtogroup caam_driver_black
  * @{
  */
-
-/*!
- * @brief Return size of blacken key based on encryption type and data to encrypt size
- *
- * @param fifostType Type of AES-CBC or AEC-CCM to encrypt plaintext
- * @param dataSize Size of data to be encrypted
- *
- * @return size_t Size of blacken key.
- */
-size_t CAAM_BLACK_KeyBlackenSize(caam_fifost_type_t fifostType, size_t dataSize);
 
 /*!
  * @brief Construct a black key
@@ -4368,250 +3525,6 @@ status_t CAAM_PKHA_ECC_PointMul(CAAM_Type *base,
 /*!
  *@}
  */ /* end of caam_driver_pkha */
-
-/*******************************************************************************
- * ECC
- ******************************************************************************/
-
-/*!
- * @addtogroup caam_driver_ecc
- * @{
- */
-
-/*!
- * @brief Return size of private key based on encryption type and ecliptic curve domain
- *
- * @param encryptKeyType Type of key encryption.
- * @param ecdsel Elliptic curve domain selection
- *
- * @return size_t Size of private key.
- */
-size_t CAAM_ECC_PrivateKeySize(caam_ecc_encryption_type_t encryptKeyType, caam_ecc_ecdsel_t ecdsel);
-
-/*!
- * @brief Generates public and private key for ECC.
- *
- * The buffer size of privKey can be determined using CAAM_ECC_PRIVATE_KEY_LENGTH.
- * The buffer size of pubKey can be determined using CAAM_ECC_PUBLIC_KEY_LENGTH.
- * For encrypted privKey, the buffer size can be determined using CAAM_BLACKEN_ECB_SIZE
- * or CAAM_BLACKEN_CCM_SIZE macros.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param ecdsel Elliptic curve domain selection
- * @param encryptKeyType Type of key encryption
- * @param[out] privKey Private key
- * @param[out] pubKey Public key
- * @return Operation status.
- */
-status_t CAAM_ECC_KeyPair(CAAM_Type *base,
-                          caam_handle_t *handle,
-                          caam_ecc_ecdsel_t ecdsel,
-                          caam_ecc_encryption_type_t encryptKeyType,
-                          uint8_t *privKey,
-                          uint8_t *pubKey);
-
-/*!
- * @brief Generates signature using ECC.
- *
- * The buffer size of signFirst can be determined using CAAM_ECC_PRIVATE_KEY_LENGTH.
- * ! The buffer size of signSecond can be determined using CAAM_ECC_SECOND_SIGN_BUFFER_SIZE.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param privKey Private key
- * @param data Hashed data
- * @param dataSize Hashed data length
- * @param ecdsel Elliptic curve domain selection
- * @param encryptKeyType Type of key encryption
- * @param[out] signFirst First part of the signature
- * @param[out] signSecond Second part of the signature
- * @return Operation status.
- */
-status_t CAAM_ECC_Sign(CAAM_Type *base,
-                       caam_handle_t *handle,
-                       const uint8_t *privKey,
-                       const uint8_t *data,
-                       size_t dataSize,
-                       caam_ecc_ecdsel_t ecdsel,
-                       caam_ecc_encryption_type_t encryptKeyType,
-                       uint8_t *signFirst,
-                       uint8_t *signSecond);
-
-/*!
- * @brief Verify ECC signature using public key
- *
- * The buffer size of tmp can be determined using CAAM_ECC_PUBLIC_KEY_LENGTH.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param pubKey Public key
- * @param data Hashed data
- * @param dataSize Hashed data length
- * @param signFirst First part of the signature
- * @param signSecond Second part of the signature
- * @param ecdsel Elliptic curve domain selection
- * @param[in,out] tmp Temporary storage for intermediate results
- * @return Operation status.
- */
-status_t CAAM_ECC_VerifyPublicKey(CAAM_Type *base,
-                                  caam_handle_t *handle,
-                                  const uint8_t *pubKey,
-                                  const uint8_t *data,
-                                  size_t dataSize,
-                                  const uint8_t *signFirst,
-                                  const uint8_t *signSecond,
-                                  caam_ecc_ecdsel_t ecdsel,
-                                  uint8_t *tmp);
-
-/*!
- * @brief Verify ECC signature using private key
- *
- * Faster that verifying using public key.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param privKey Private key
- * @param data Hashed data
- * @param dataSize Hashed data length
- * @param signFirst First part of the signature
- * @param signSecond Second part of the signature
- * @param ecdsel Elliptic curve domain selection
- * @param encryptKeyType Type of key encryption
- * @return Operation status.
- */
-status_t CAAM_ECC_VerifyPrivateKey(CAAM_Type *base,
-                                   caam_handle_t *handle,
-                                   const uint8_t *privKey,
-                                   const uint8_t *data,
-                                   size_t dataSize,
-                                   const uint8_t *signFirst,
-                                   const uint8_t *signSecond,
-                                   caam_ecc_ecdsel_t ecdsel,
-                                   caam_ecc_encryption_type_t encryptKeyType);
-/*!
- *@}
- */ /* end of caam_driver_ecc */
-
-/*******************************************************************************
- * RSA
- ******************************************************************************/
-
-/*!
- * @addtogroup caam_driver_rsa
- * @{
- */
-
-/*!
- * @brief Return size for private key buffer based on encryption type and ecliptic curve domain
- *
- * @param prvKeyType Type of private key
- * @param privExponentSize Expected length of private exponent without encryption padding.
- *
- * @return size_t Size for private key buffer.
- */
-size_t CAAM_RSA_PrivateExponentSize(caam_rsa_key_type_t prvKeyType, uint32_t privExponentSize);
-
-/*!
- * @brief Generates RSA key.
- *
- * Generates modulus N and private exponent D give prime numbers P and Q and public exponent E.
- * Public key is {E,N}. Private key is {D,N}.
- *
- * ! privExponentSize value may differ for different P abd Q with same bit length.
- * For encrypted privExponent, the buffer size can be determined using CAAM_BLACKEN_ECB_SIZE
- * or CAAM_BLACKEN_CCM_SIZE macros.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param primeP Prime number P
- * @param primeQ Prime number Q
- * @param primesSize Byte length of primeP or primeQ (primeP and primeQ must have the same byte length)
- * @param pubExponent Public exponent E
- * @param pubExponentSize  Byte length of pubExponent
- * @param prvKeyType Type of private key
- * @param[out] modulus Buffer for calculated modulus N
- * @param modulusSize Byte length of modulus buffer
- * @param[out] privExponent Buffer for calculated private exponent D
- * @param[out] privExponentSize Byte length of calculated private exponent.
- * @return Operation status.
- */
-status_t CAAM_RSA_KeyPair(CAAM_Type *base,
-                          caam_handle_t *handle,
-                          const uint8_t *primeP,
-                          const uint8_t *primeQ,
-                          uint32_t primesSize,
-                          const uint8_t *pubExponent,
-                          uint32_t pubExponentSize,
-                          caam_rsa_key_type_t prvKeyType,
-                          uint8_t *modulus,
-                          uint32_t modulusSize,
-                          uint8_t *privExponent,
-                          size_t *privExponentSize);
-
-/*!
- * @brief Performs the RSA public key primitive.
- *
- * Performs the RSA public key primitive which can be used when encrypting a secret or verifying a signature.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param plainText Input data
- * @param plainTextize Byte length of the input data
- * @param modulus Modulus N
- * @param modulusSize Byte length of modulus
- * @param pubExponent Public exponent E
- * @param pubExponentSize  Byte length of pubExponent
- * @param dataOutType Type of encryption of output data
- * @param[out] cipherText Buffer for RSA encrypted data
- * @return Operation status
- */
-status_t CAAM_RSA_Encrypt(CAAM_Type *base,
-                          caam_handle_t *handle,
-                          const uint8_t *plainText,
-                          uint32_t plainTextSize,
-                          const uint8_t *modulus,
-                          uint32_t modulusSize,
-                          const uint8_t *pubExponent,
-                          uint32_t pubExponentSize,
-                          caam_rsa_encryption_type_t dataOutType,
-                          caam_rsa_format_type_t format,
-                          uint8_t *cipherText);
-
-/*!
- * @brief Performs the RSA private key primitive.
- *
- * Performs the RSA private key primitive which can be used when decrypting a secret or creating a siganture.
- *
- * @param base CAAM peripheral base address
- * @param handle Handle used for this request. Specifies jobRing.
- * @param cipherText Input data
- * @param modulus Moulus N
- * @param modulusSize Byte length of modulus
- * @param privExponent Private exponent D
- * @param privExponentSize Byte length of privExponent
- * @param prvKeyType Type of private key encryption
- * @param dataOutType Type of encryption of output data
- * @param[out] plainText Buffer for RSA encrypted data
- * @param[out] rsaDecSize Returned output size
- * @return Operation status
- */
-status_t CAAM_RSA_Decrypt(CAAM_Type *base,
-                          caam_handle_t *handle,
-                          const uint8_t *cipherText,
-                          const uint8_t *modulus,
-                          uint32_t modulusSize,
-                          const uint8_t *privExponent,
-                          uint32_t privExponentSize,
-                          caam_rsa_encryption_type_t prvKeyType,
-                          caam_rsa_encryption_type_t dataOutType,
-                          caam_rsa_format_type_t format,
-                          uint8_t *plainText,
-                          size_t *rsaDecSize);
-
-/*!
- *@}
- */ /* end of caam_driver_rsa */
 
 #if defined(__cplusplus)
 }
