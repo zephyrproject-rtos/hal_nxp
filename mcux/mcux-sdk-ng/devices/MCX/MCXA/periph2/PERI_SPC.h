@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA345VLH
+**     Processors:          MCXA266VLH
+**                          MCXA266VLL
+**                          MCXA266VLQ
+**                          MCXA266VPN
+**                          MCXA345VLH
 **                          MCXA345VLL
 **                          MCXA345VLQ
 **                          MCXA345VPN
@@ -8,9 +12,13 @@
 **                          MCXA346VLL
 **                          MCXA346VLQ
 **                          MCXA346VPN
+**                          MCXA366VLH
+**                          MCXA366VLL
+**                          MCXA366VLQ
+**                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250519
+**     Build:               b250729
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
@@ -41,10 +49,14 @@
 #if !defined(PERI_SPC_H_)
 #define PERI_SPC_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
+#include "MCXA266_COMMON.h"
+#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
 #include "MCXA345_COMMON.h"
 #elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
 #include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
+#include "MCXA366_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -167,8 +179,8 @@ typedef struct {
 #define SPC_SC_SPC_LP_REQ_MASK                   (0x2U)
 #define SPC_SC_SPC_LP_REQ_SHIFT                  (1U)
 /*! SPC_LP_REQ - SPC Power Mode Configuration Status Flag
- *  0b0..SPC is in Active mode; the ACTIVE_CFG register has control
  *  0b0..No effect
+ *  0b0..SPC is in Active mode; the ACTIVE_CFG register has control
  *  0b1..All power domains requested low-power mode; SPC entered a low-power state; power-mode configuration based on the LP_CFG register
  *  0b1..Clear the flag
  */
@@ -484,8 +496,8 @@ typedef struct {
 /*! COREVDD_LVDF - Core Low-Voltage Detect Flag
  *  0b0..Event not detected
  *  0b0..No effect
- *  0b1..Event detected
  *  0b1..Clear the flag
+ *  0b1..Event detected
  */
 #define SPC_VD_STAT_COREVDD_LVDF(x)              (((uint32_t)(((uint32_t)(x)) << SPC_VD_STAT_COREVDD_LVDF_SHIFT)) & SPC_VD_STAT_COREVDD_LVDF_MASK)
 
@@ -494,8 +506,8 @@ typedef struct {
 /*! SYSVDD_LVDF - System Low-Voltage Detect Flag
  *  0b0..Event not detected
  *  0b0..No effect
- *  0b1..Event detected
  *  0b1..Clear the flag
+ *  0b1..Event detected
  */
 #define SPC_VD_STAT_SYSVDD_LVDF(x)               (((uint32_t)(((uint32_t)(x)) << SPC_VD_STAT_SYSVDD_LVDF_SHIFT)) & SPC_VD_STAT_SYSVDD_LVDF_MASK)
 
@@ -504,8 +516,8 @@ typedef struct {
 /*! SYSVDD_HVDF - System HVD Flag
  *  0b0..Event not detected
  *  0b0..No effect
- *  0b1..Event detected
  *  0b1..Clear the flag
+ *  0b1..Event detected
  */
 #define SPC_VD_STAT_SYSVDD_HVDF(x)               (((uint32_t)(((uint32_t)(x)) << SPC_VD_STAT_SYSVDD_HVDF_SHIFT)) & SPC_VD_STAT_SYSVDD_HVDF_MASK)
 /*! @} */

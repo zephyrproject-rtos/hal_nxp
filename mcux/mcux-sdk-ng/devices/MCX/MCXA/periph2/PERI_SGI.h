@@ -1,6 +1,10 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA345VLH
+**     Processors:          MCXA266VLH
+**                          MCXA266VLL
+**                          MCXA266VLQ
+**                          MCXA266VPN
+**                          MCXA345VLH
 **                          MCXA345VLL
 **                          MCXA345VLQ
 **                          MCXA345VPN
@@ -8,9 +12,13 @@
 **                          MCXA346VLL
 **                          MCXA346VLQ
 **                          MCXA346VPN
+**                          MCXA366VLH
+**                          MCXA366VLL
+**                          MCXA366VLQ
+**                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250519
+**     Build:               b250729
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SGI
@@ -41,10 +49,14 @@
 #if !defined(PERI_SGI_H_)
 #define PERI_SGI_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
+#include "MCXA266_COMMON.h"
+#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
 #include "MCXA345_COMMON.h"
 #elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
 #include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
+#include "MCXA366_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -669,10 +681,10 @@ typedef struct {
 #define SGI_SGI_STATUS_OFLOW_MASK                (0x2U)
 #define SGI_SGI_STATUS_OFLOW_SHIFT               (1U)
 /*! OFLOW - Overflow in INCR operation flag
- *  0b0..No overflow
  *  0b0..Clear the flag
- *  0b1..Overflow
+ *  0b0..No overflow
  *  0b1..No effect
+ *  0b1..Overflow
  */
 #define SGI_SGI_STATUS_OFLOW(x)                  (((uint32_t)(((uint32_t)(x)) << SGI_SGI_STATUS_OFLOW_SHIFT)) & SGI_SGI_STATUS_OFLOW_MASK)
 
@@ -703,8 +715,8 @@ typedef struct {
 #define SGI_SGI_STATUS_IRQ_MASK                  (0x80U)
 #define SGI_SGI_STATUS_IRQ_SHIFT                 (7U)
 /*! IRQ
- *  0b0..No IRQ
  *  0b0..Clear the flag
+ *  0b0..No IRQ
  *  0b1..IRQ
  *  0b1..No effect
  */
