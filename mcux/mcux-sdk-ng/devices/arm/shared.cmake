@@ -1,7 +1,9 @@
+if(CONFIG_CPU_CORTEX_M)
 # core related
 include(${SdkRootDirPath}/arch/arm/cortexm/core_${CONFIG_MCUX_HW_CORE}.cmake)
 include(${SdkRootDirPath}/arch/arm/cortexm/core_${CONFIG_MCUX_HW_FPU_TYPE}.cmake)
 include(${SdkRootDirPath}/arch/arm/cortexm/cpu_define.cmake)
+endif()
 
 if(CONFIG_MCUX_COMPONENT_device.RTE)
 
