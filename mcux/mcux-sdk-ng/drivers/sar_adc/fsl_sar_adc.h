@@ -1,6 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
- * All rights reserved.
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,8 +19,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SAR ADC driver version 2.1.1. */
-#define FSL_SAR_ADC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief SAR ADC driver version 2.3.0. */
+#define FSL_SAR_ADC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
 #define ADC_GROUP_COUNTS               FSL_FEATURE_ADC_CHANNEL_GROUPS_COUNT
@@ -40,7 +39,13 @@
 #define JCMR_IO(base, registerIndex)   REGISTER_READWRITE(((base)->JCMR0), (registerIndex))
 #define PSR_IO(base, registerIndex)    REGISTER_READWRITE(((base)->PSR0), (registerIndex))
 #define DMAR_IO(base, registerIndex)   REGISTER_READWRITE(((base)->DMAR0), (registerIndex))
+      
+#if(ADC_GROUP_COUNTS==2U)
 #define CWSELR_IO(base, registerIndex) REGISTER_READWRITE(((base)->CWSELR0), (registerIndex))
+#else /* ADC_GROUP_COUNTS==3U */
+#define CWSELR_IO(base, registerIndex) REGISTER_READWRITE(((base)->CWSELRPI[0U]), (registerIndex))
+#endif /* ADC_GROUP_COUNTS */
+
 #define CWENR_IO(base, registerIndex)  REGISTER_READWRITE(((base)->CWENR0), (registerIndex))
 #define CIMR_IO(base, registerIndex)   REGISTER_READWRITE(((base)->CIMR0), (registerIndex))
 #define CEOCFR_IO(base, registerIndex) REGISTER_READWRITE(((base)->CEOCFR0), (registerIndex))
@@ -51,11 +56,19 @@
 #define AWORR_I(base, registerIndex)  REGISTER_READONLY((base->AWORR0), (registerIndex))
 #define CDR_I(base, registerIndex)    REGISTER_READONLY((base->PCDR[0U]), (registerIndex))
 
+#if(ADC_GROUP_COUNTS==2U)
 #define WDG_SELECT_MASK(shiftIndex)  ((uint32_t)ADC_CWSELR0_WSEL_CH0_MASK << ((shiftIndex) * 4U))
 #define WDG_SELECT_SHIFT(shiftIndex) (ADC_CWSELR0_WSEL_CH0_SHIFT + ((shiftIndex) * 4U))
 #define WDG_SELECT(val, shiftIndex) \
     (((uint32_t)(((uint32_t)(val)) << WDG_SELECT_SHIFT(shiftIndex))) & WDG_SELECT_MASK(shiftIndex))
+#else /* ADC_GROUP_COUNTS==3U */
+#define WDG_SELECT_MASK(shiftIndex)  ((uint32_t)ADC_CWSELRPI_WSEL_SI0_0_MASK << ((shiftIndex) * 4U))
+#define WDG_SELECT_SHIFT(shiftIndex) (ADC_CWSELRPI_WSEL_SI0_0_SHIFT + ((shiftIndex) * 4U))
+#define WDG_SELECT(val, shiftIndex) \
+    (((uint32_t)(((uint32_t)(val)) << WDG_SELECT_SHIFT(shiftIndex))) & WDG_SELECT_MASK(shiftIndex))
+#endif /* ADC_GROUP_COUNTS */
 
+#if(ADC_SELF_TEST_THRESHOLD_COUNTS==6U)
 #define ADC_THRHLR_THRL_MASK  ADC_THRHLR0_THRL_MASK
 #define ADC_THRHLR_THRL_SHIFT ADC_THRHLR0_THRL_SHIFT
 #define ADC_THRHLR_THRL(val)  ADC_THRHLR0_THRL(val)
@@ -63,6 +76,7 @@
 #define ADC_THRHLR_THRH_MASK  ADC_THRHLR0_THRH_MASK
 #define ADC_THRHLR_THRH_SHIFT ADC_THRHLR0_THRH_SHIFT
 #define ADC_THRHLR_THRH(val)  ADC_THRHLR0_THRH(val)
+#endif
 
 #define ADC_CDR_VALID_MASK   ADC_PCDR_VALID_MASK
 #define ADC_CDR_VALID_SHIFT  ADC_PCDR_VALID_SHIFT
@@ -92,8 +106,11 @@ enum _adc_conv_int_enable
 {
     kADC_NormalConvChainEndIntEnable = ADC_IMR_MSKECH_MASK,  /*!< Enable end of normal chain conversion interrupt. */
     kADC_NormalConvEndIntEnable      = ADC_IMR_MSKEOC_MASK,  /*!< Enable end of normal conversion interrupt. */
-    kADC_InjectConvChainEndIntEnable = ADC_IMR_MSKJEOC_MASK, /*!< Enable end of inject chain conversion interrupt. */
+    kADC_InjectConvChainEndIntEnable = ADC_IMR_MSKJECH_MASK, /*!< Enable end of inject chain conversion interrupt. */
     kADC_InjectConvEndIntEnable      = ADC_IMR_MSKJEOC_MASK, /*!< Enable end of inject conversion interrupt. */
+#if defined(FSL_FEATURE_ADC_HAS_BCTUMODE) && (FSL_FEATURE_ADC_HAS_BCTUMODE==1U)
+    kADC_BctuConvEndIntEnable      = ADC_IMR_MSKEOBCTU_MASK, /*!< Enable end of BCTU conversion interrupt. */
+#endif /* FSL_FEATURE_ADC_HAS_BCTUMODE */
 };
 
 /*!
@@ -148,6 +165,10 @@ enum _adc_conv_int_flag
                                                         inject chain conversion interrupt has occurred. */
     kADC_InjectConvEndIntFlag = ADC_ISR_JEOC_MASK,      /*!< Indicates whether the end of
                                                         inject conversion interrupt has occurred. */
+#if defined(FSL_FEATURE_ADC_HAS_BCTUMODE) && (FSL_FEATURE_ADC_HAS_BCTUMODE==1U)
+    kADC_BctuConvEndIntFlag = ADC_ISR_EOBCTU_MASK,      /*!< Indicates whether the end of
+                                                        BCTU conversion interrupt has occurred. */
+#endif /* FSL_FEATURE_ADC_HAS_BCTUMODE */
 };
 
 /*!
@@ -216,6 +237,67 @@ enum _adc_self_test_int_flag
                                                          watchdog sequence error interrupt has occurred. */
 };
 
+#if defined(FSL_FEATURE_ADC_HAS_BCTUMODE) && (FSL_FEATURE_ADC_HAS_BCTUMODE==1U)
+/*!
+ * @brief This enumeration provides the selection of the Body Cross Trigger Unit (BCTU) mode.
+ */
+typedef enum _adc_bctu_mode
+{
+    kADC_BctuModeDisable        = 0x0U, /*!< BCTU disabled. */
+    kADC_BctuTrig               = 0x2U, /*!< BCTU enabled, only BCTU can trigger conversion. */
+    kADC_AllTrig                = 0x3U, /*!< BCTU enabled, all trigger sources can trigger conversion. */
+} adc_bctu_mode_t;
+#endif /* FSL_FEATURE_ADC_HAS_BCTUMODE */
+
+#if (defined(FSL_FEATURE_ADC_HAS_CALBISTREG) && (FSL_FEATURE_ADC_HAS_CALBISTREG==1U))
+/*!
+ * @brief This enumeration provides the selection of the ADC conversion resolution.
+ */
+typedef enum _adc_conv_res
+{
+    kADC_ConvRes14Bit   = 0x0U, /*!< 14-bit resolution. */
+    kADC_ConvRes12Bit   = 0x1U, /*!< 12-bit resolution. */
+    kADC_ConvRes10Bit   = 0x2U, /*!< 10-bit resolution. */
+    kADC_ConvRes8Bit   = 0x2U, /*!< 8-bit resolution. */
+} adc_conv_res_t;
+#endif /* FSL_FEATURE_ADC_HAS_CALBISTREG */
+
+/*!
+ * @brief This enumeration provides the selection of the ADC external trigger type.
+ */
+typedef enum _adc_ext_trig
+{
+    kADC_ExtTrigDisable = 0x0U, /*!< Normal trigger input does not start a conversion. */
+    kADC_ExtTrigFallingEdge = 0x2U, /*!< Normal trigger (falling edge) input starts a conversion. */
+    kADC_ExtTrigRisingEdge = 0x3U, /*!< Normal trigger (rising edge) input starts a conversion. */
+} adc_ext_trig_t;
+
+#if defined(FSL_FEATURE_ADC_HAS_AMSIO) && (FSL_FEATURE_ADC_HAS_AMSIO==1U)
+/*!
+ * @brief This enumeration provides the selection of the ADC conversion speed mode.
+ */
+typedef enum _adc_speed_mode
+{
+    kADC_SpeedModeNormal        = 0x0U, /*!< Normal conversion speed. */
+    kADC_SpeedModeHigh          = 0x3U, /*!< High-speed conversion. */
+} adc_speed_mode_t;
+#endif /* FSL_FEATURE_ADC_HAS_AMSIO */
+
+#if defined(FSL_FEATURE_ADC_HAS_MCR_AVGS) && (FSL_FEATURE_ADC_HAS_MCR_AVGS==1U)
+/*!
+ * @brief This enumeration provides the selection of the number of conversions ADC uses to calculate
+ * the conversion result.
+ */
+typedef enum _adc_conv_avg
+{
+    kADC_ConvAvgDisable = 0x0U, /*!< Conversions averaging disabled. */
+    kADC_ConvAvg4       = 0x4U, /*!< 4 conversions averaging. */
+    kADC_ConvAvg8       = 0x5U, /*!< 8 conversions averaging. */
+    kADC_ConvAvg16      = 0x6U, /*!< 16 conversions averaging. */
+    kADC_ConvAvg32      = 0x7U, /*!< 32 conversions averaging. */
+} adc_conv_avg_t;
+#endif /* FSL_FEATURE_ADC_HAS_MCR_AVGS */
+
 /*!
  * @brief This enumeration provides the selection of the ADC state.
  */
@@ -246,8 +328,16 @@ typedef enum _adc_conv_mode
  */
 typedef enum _adc_clock_frequency
 {
+#if !(defined(FSL_FEATURE_ADC_HAS_MCR_ADCLKSE) && (FSL_FEATURE_ADC_HAS_MCR_ADCLKSE==0U))
     kADC_HalfBusFrequency = 0x00U, /*!< Half of bus clock frequency. */
     kADC_FullBusFrequency = 0x01U, /*!< Equal to bus clock frequency. */
+#endif /* FSL_FEATURE_ADC_HAS_MCR_ADCLKSE */
+#if (defined(FSL_FEATURE_ADC_HAS_MCR_ADCLKSEL) && (FSL_FEATURE_ADC_HAS_MCR_ADCLKSEL==1U))
+    kADC_ModuleClockFreq            = 0x00U, /*!< Module clock frequency. */
+    kADC_ModuleClockFreqDivide2     = 0x01U, /*!< Module clock frequency / 2. */
+    kADC_ModuleClockFreqDivide4     = 0x02U, /*!< Module clock frequency / 4. */
+    kADC_ModuleClockFreqDivide8     = 0x03U, /*!< Module clock frequency / 8. */
+#endif /* FSL_FEATURE_ADC_HAS_MCR_ADCLKSEL */
 } adc_clock_frequency_t;
 
 /*!
@@ -266,10 +356,15 @@ typedef enum _adc_conv_data_align
  */
 typedef enum _adc_presample_voltage_src
 {
+#if(ADC_GROUP_COUNTS==2U)
     kADC_PresampleVoltageSrcDVDD  = 0x00U, /*!< Use DVDD0P8/2 as pre-sample voltage source. */
     kADC_PresampleVoltageSrcAVDD  = 0x01U, /*!< Use AVDD1P8/4 as pre-sample voltage source. */
     kADC_PresampleVoltageSrcVREFL = 0x02U, /*!< Use VREFL_1p8 as pre-sample voltage source. */
     kADC_PresampleVoltageSrcVREFH = 0x03U, /*!< Use VREFH_1p8 as pre-sample voltage source. */
+#else /* ADC_GROUP_COUNTS==3U */
+    kADC_PresampleVoltageSrcVREL  = 0x00U, /*!< Use VREL as pre-sample voltage source. */
+    kADC_PresampleVoltageSrcVREH  = 0x01U, /*!< Use VREH as pre-sample voltage source. */
+#endif /* ADC_GROUP_COUNTS */
 } adc_presample_voltage_src_t;
 
 /*!
@@ -288,10 +383,17 @@ typedef enum _adc_dma_request_clear_src
  */
 typedef enum _adc_average_sample_numbers
 {
+#if (defined(FSL_FEATURE_ADC_HAS_CALBISTREG) && (FSL_FEATURE_ADC_HAS_CALBISTREG==1U))
+    kADC_AverageSampleNumbers4  = 0x00U, /*!< Use 4 averaging samples during calibration. */
+    kADC_AverageSampleNumbers8  = 0x01U, /*!< Use 8 averaging samples during calibration. */
+    kADC_AverageSampleNumbers16 = 0x02U, /*!< Use 16 averaging samples during calibration. */
+    kADC_AverageSampleNumbers32 = 0x03U, /*!< Use 32 averaging samples during calibration. */
+#else
     kADC_AverageSampleNumbers16  = 0x00U, /*!< Use 16 averaging samples during calibration. */
     kADC_AverageSampleNumbers32  = 0x01U, /*!< Use 32 averaging samples during calibration. */
     kADC_AverageSampleNumbers128 = 0x02U, /*!< Use 128 averaging samples during calibration. */
     kADC_AverageSampleNumbers512 = 0x03U, /*!< Use 512 averaging samples during calibration. */
+#endif /* FSL_FEATURE_ADC_HAS_CALBISTREG */
 } adc_average_sample_numbers_t;
 
 /*!
@@ -341,10 +443,15 @@ typedef enum _adc_self_test_wdg_threshold
 {
     kADC_SelfTestWdgThresholdForAlgSStep0 = 0U,         /*!< Self-test watchdog threshold
                                                         for the algorithm S step 0. */
+#if(ADC_GROUP_COUNTS==2U)
     kADC_SelfTestWdgThresholdForAlgSStep1Integer = 1U,  /*!< Self-test watchdog threshold
                                                         for the algorithm S step 1 integer part. */
     kADC_SelfTestWdgThresholdForAlgSStep1Fraction = 2U, /*!< Self-test watchdog threshold
                                                         for the algorithm S step 1 fraction part. */
+#else /* ADC_GROUP_COUNTS==3U */
+    kADC_SelfTestWdgThresholdForAlgSStep1 = 2U, /*!< Self-test watchdog threshold
+                                                for the algorithm S step 1 fraction part. */
+#endif /* ADC_GROUP_COUNTS */
     kADC_SelfTestWdgThresholdForAlgSStep2 = 3U,         /*!< Self-test watchdog threshold
                                                         for the algorithm S step 2. */
     kADC_SelfTestWdgThresholdForAlgCStep0 = 5U,         /*!< Self-test watchdog threshold
@@ -382,6 +489,29 @@ typedef struct _adc_config
     bool enableConvertPresampleVal; /*!< Decides whether to convert the pre-sampled value, if enabled, pre-sampling is
                                     followed by the conversion, sampling will be bypassed and conversion of the
                                     pre-sampled data will be done. */
+#if defined(FSL_FEATURE_ADC_HAS_MCR_XSTARTEN) && (FSL_FEATURE_ADC_HAS_MCR_XSTARTEN==1U)
+    bool enableAuxiliaryTrig; /*!< Decides whether to enable the auxiliary normal trigger source
+                              to start a conversion. You can use this field to synchronize the 
+                              start of a conversion of two ADC instances. */
+#endif /* FSL_FEATURE_ADC_HAS_MCR_XSTARTEN */
+#if defined(FSL_FEATURE_ADC_HAS_AMSIO) && (FSL_FEATURE_ADC_HAS_AMSIO==1U)
+    adc_speed_mode_t speedMode; /*!< Selects ADC speed mode. */
+#endif /* FSL_FEATURE_ADC_HAS_AMSIO */
+#if defined(FSL_FEATURE_ADC_HAS_DSDR) && (FSL_FEATURE_ADC_HAS_DSDR==1U)
+    uint16_t convDelay;           /*!< Specifies the delay in terms of the number of module clock cycles. In case
+                                  the channel to convert changed since the last conversion and this new channel 
+                                  is an external channel, the conversion starts after a delay configured by convDelay. */
+#endif /* FSL_FEATURE_ADC_HAS_DSDR */
+#if defined(FSL_FEATURE_ADC_HAS_BCTUMODE) && (FSL_FEATURE_ADC_HAS_BCTUMODE==1U)
+    adc_bctu_mode_t bctuMode;           /*!< Selects the BCTU mode. */
+#endif /* FSL_FEATURE_ADC_HAS_BCTUMODE */
+#if (defined(FSL_FEATURE_ADC_HAS_CALBISTREG) && (FSL_FEATURE_ADC_HAS_CALBISTREG==1U))
+    adc_conv_res_t convRes;       /*!< Specifies the number of significant bits per conversion data. */
+#endif /* FSL_FEATURE_ADC_HAS_CALBISTREG */
+#if defined(FSL_FEATURE_ADC_HAS_MCR_AVGS) && (FSL_FEATURE_ADC_HAS_MCR_AVGS==1U)
+    adc_conv_avg_t convAvg; /*!< Selects the number of conversions ADC uses to calculate the conversion result. */
+#endif /* FSL_FEATURE_ADC_HAS_MCR_AVGS */
+    adc_ext_trig_t extTrig; /*!< Specifies whether the normal trigger (with trigger type) input starts a conversion. */
     adc_conv_data_align_t convDataAlign;                               /*!< Selects the conversion data alignment. */
     adc_clock_frequency_t clockFrequency;                              /*!< Selects the ADC clock frequency. */
     adc_dma_request_clear_src_t dmaRequestClearSrc;                    /*!< Selects DMA request clear source. */
@@ -576,6 +706,7 @@ static inline void ADC_SetPowerDownMode(ADC_Type *base, bool enable)
  */
 static inline void ADC_SetOperatingClock(ADC_Type *base, adc_clock_frequency_t clockSelect)
 {
+#if !(defined(FSL_FEATURE_ADC_HAS_MCR_ADCLKSE) && (FSL_FEATURE_ADC_HAS_MCR_ADCLKSE==0U))
     if (kADC_HalfBusFrequency == clockSelect)
     {
         base->MCR &= ~ADC_MCR_ADCLKSE_MASK;
@@ -584,7 +715,26 @@ static inline void ADC_SetOperatingClock(ADC_Type *base, adc_clock_frequency_t c
     {
         base->MCR |= ADC_MCR_ADCLKSE_MASK;
     }
+#endif /* FSL_FEATURE_ADC_HAS_MCR_ADCLKSE */
+#if (defined(FSL_FEATURE_ADC_HAS_MCR_ADCLKSEL) && (FSL_FEATURE_ADC_HAS_MCR_ADCLKSEL==1U))
+    base->MCR = ((base->MCR & ~ADC_MCR_ADCLKSEL_MASK) | ADC_MCR_ADCLKSEL(clockSelect));
+#endif /* FSL_FEATURE_ADC_HAS_MCR_ADCLKSEL */
 }
+
+#if defined(FSL_FEATURE_ADC_HAS_AMSIO) && (FSL_FEATURE_ADC_HAS_AMSIO==1U)
+/*!
+ * @brief This function is used to set the ADC speed mode.
+ *
+ *
+ * @param base ADC peripheral base address.
+ * @param speedMode ADC speed mode selection, please refer to @ref adc_speed_mode_t for details.
+ */
+static inline void ADC_SetAdcSpeedMode(ADC_Type *base, adc_speed_mode_t speedMode)
+{
+    base->AMSIO = ((base->AMSIO & ~ADC_AMSIO_HSEN_MASK) | ADC_AMSIO_HSEN(speedMode));
+}
+#endif /* FSL_FEATURE_ADC_HAS_AMSIO */
+
 /*!
  * @}
  */
@@ -645,6 +795,22 @@ static inline bool ADC_CheckSelfTestConvInProcess(ADC_Type *base)
     return (0UL != ((base->MSR & ADC_MSR_SELF_TEST_S_MASK) >> ADC_MSR_SELF_TEST_S_SHIFT));
 }
 
+#if defined(FSL_FEATURE_ADC_HAS_BCTUMODE) && (FSL_FEATURE_ADC_HAS_BCTUMODE==1U)
+/*!
+ * @brief This function is used to check whether the BCTU conversion was started.
+ *
+ * @param base ADC peripheral base address.
+ *
+ * @return BCTU conversion status.
+ * - \b true Ongoing conversion was triggered by BCTU.
+ * - \b false Conversion was not triggered by BCTU.
+ */
+static inline bool ADC_CheckBctuConvStatus(ADC_Type *base)
+{
+    return (0UL != ((base->MSR & ADC_MSR_BCTUSTART_MASK) >> ADC_MSR_BCTUSTART_SHIFT));
+}
+#endif /* FSL_FEATURE_ADC_HAS_BCTUMODE */
+
 /*!
  * @brief This function is used to check whether the inject conversion is in process or not.
  *
@@ -687,6 +853,47 @@ static inline bool ADC_CheckNormalConvInProcess(ADC_Type *base)
     return (0UL != ((base->MSR & ADC_MSR_NSTART_MASK) >> ADC_MSR_NSTART_SHIFT));
 }
 
+#if (defined(FSL_FEATURE_ADC_HAS_CALBISTREG) && (FSL_FEATURE_ADC_HAS_CALBISTREG==1U))
+/*!
+ * @brief This function is used to check whether the ADC is executing calibration or ready for use.
+ *
+ * @param base ADC peripheral base address.
+ *
+ * @return Calibration process status.
+ * - \b true ADC is busy in a calibration process.
+ * - \b false ADC is ready for use.
+ */
+static inline bool ADC_CheckCalibrationBusy(ADC_Type *base)
+{
+    return (0UL != ((base->CALBISTREG & ADC_CALBISTREG_C_T_BUSY_MASK) >> ADC_CALBISTREG_C_T_BUSY_SHIFT));
+}
+
+/*!
+ * @brief This function is used to check whether the calibration has failed or passed.
+ *
+ * @note When the user clears the calibration failed status and then reads the status, it will display the calibration
+ * passed. At this time, the calibration may not be successful. The user must read the MSR[CALBUSY] bit by function @ref
+ * ADC_CheckCalibrationBusy to perform a double check.
+ *
+ * @return Normal conversion status.
+ * - \b true Calibration failed.
+ * - \b false Calibration passed (must be checked with CALBUSY = 0b).
+ */
+static inline bool ADC_CheckCalibrationFailed(ADC_Type *base)
+{
+    return (0UL != ((base->CALBISTREG & ADC_CALBISTREG_TEST_FAIL_MASK) >> ADC_CALBISTREG_TEST_FAIL_SHIFT));
+}
+
+/*!
+ * @brief This function is used to clear the flag of calibration.
+ *
+ * @param base ADC peripheral base address.
+ */
+static inline void ADC_ClearCalibrationFailedFlag(ADC_Type *base)
+{
+    base->CALBISTREG = ADC_CALBISTREG_TEST_FAIL_MASK;
+}
+#else
 /*!
  * @brief This function is used to check whether the ADC is executing calibration or ready for use.
  *
@@ -726,6 +933,7 @@ static inline void ADC_ClearCalibrationFailedFlag(ADC_Type *base)
 {
     base->MSR = ADC_MSR_CALFAIL_MASK;
 }
+#endif /* FSL_FEATURE_ADC_HAS_CALBISTREG */
 
 /*!
  * @brief This function is used to check whether the calibration is successful or not.
@@ -1225,15 +1433,6 @@ static inline void ADC_ClearWdgThresholdIntStatus(ADC_Type *base, uint32_t mask)
 bool ADC_DoCalibration(ADC_Type *base, const adc_calibration_config_t *config);
 
 /*!
- * @brief This function is used to get the test result for the last failed test.
- *
- * @param base ADC peripheral base address.
- * @param result Points to a 16-bit signed variable, and it is used to store the test result for the last failing
- * test.
- */
-void ADC_GetCalibrationLastFailedTestResult(ADC_Type *base, int16_t *result);
-
-/*!
  * @brief This function is used to configure the user gain and offset.
  *
  * @param base ADC peripheral base address.
@@ -1268,6 +1467,16 @@ void ADC_SetSelfTestConfig(ADC_Type *base, const adc_self_test_config_t *config)
  */
 void ADC_SetSelfTestWdgConfig(ADC_Type *base, const adc_self_test_wdg_config_t *config);
 
+#if !(defined(FSL_FEATURE_ADC_HAS_CALSTAT) && (FSL_FEATURE_ADC_HAS_CALSTAT==0U))
+/*!
+ * @brief This function is used to get the test result for the last failed test.
+ *
+ * @param base ADC peripheral base address.
+ * @param result Points to a 16-bit signed variable, and it is used to store the test result for the last failing
+ * test.
+ */
+void ADC_GetCalibrationLastFailedTestResult(ADC_Type *base, int16_t *result);
+
 /*!
  * @brief This function is used to get the status of the calibration steps.
  *
@@ -1282,6 +1491,7 @@ static inline uint16_t ADC_GetCalibrationStepsStatus(ADC_Type *base)
 {
     return (uint16_t)(base->CALSTAT & 0xFFFFU);
 }
+#endif /* FSL_FEATURE_ADC_HAS_CALSTAT */
 
 /*!
  * @brief This function is used to enable the ADC self-test.
@@ -1330,7 +1540,11 @@ static inline void ADC_DisableSelfTest(ADC_Type *base)
  */
 static inline void ADC_EnableSelfTestWdgThreshold(ADC_Type *base, adc_self_test_wdg_threshold_t wdgID)
 {
-    if ((wdgID != kADC_SelfTestWdgThresholdForAlgSStep1Fraction) && (wdgID != kADC_SelfTestWdgThresholdForAlgCStepx))
+    if ((wdgID != kADC_SelfTestWdgThresholdForAlgCStepx)
+    #if(ADC_GROUP_COUNTS==2U)
+      &&(wdgID != kADC_SelfTestWdgThresholdForAlgSStep1Fraction)
+    #endif /* ADC_GROUP_COUNTS */
+       )
     {
         STAWR_IO(base, wdgID) |= ADC_STAWR_AWDE_MASK;
     }
@@ -1355,7 +1569,11 @@ static inline void ADC_EnableSelfTestWdgThreshold(ADC_Type *base, adc_self_test_
  */
 static inline void ADC_DisableSelfTestWdgThreshold(ADC_Type *base, adc_self_test_wdg_threshold_t wdgID)
 {
-    if ((wdgID != kADC_SelfTestWdgThresholdForAlgSStep1Fraction) && (wdgID != kADC_SelfTestWdgThresholdForAlgCStepx))
+    if ((wdgID != kADC_SelfTestWdgThresholdForAlgCStepx)
+    #if(ADC_GROUP_COUNTS==2U)
+      &&(wdgID != kADC_SelfTestWdgThresholdForAlgSStep1Fraction)
+    #endif /* ADC_GROUP_COUNTS */
+       )
     {
         STAWR_IO(base, wdgID) &= ~ADC_STAWR_AWDE_MASK;
     }
@@ -1455,12 +1673,18 @@ static inline uint16_t ADC_GetSelfTestChannelConvFailedData(ADC_Type *base, adc_
         case kADC_SelfTestWdgThresholdForAlgSStep0:
             data = (uint16_t)((base->STSR3 & ADC_STSR3_DATA0_MASK) >> ADC_STSR3_DATA0_SHIFT);
             break;
+#if(ADC_GROUP_COUNTS==2U)
         case kADC_SelfTestWdgThresholdForAlgSStep1Integer:
             data = (uint16_t)((base->STSR2 & ADC_STSR2_DATA0_MASK) >> ADC_STSR2_DATA0_SHIFT);
             break;
         case kADC_SelfTestWdgThresholdForAlgSStep1Fraction:
             data = (uint16_t)((base->STSR2 & ADC_STSR2_DATA1_MASK) >> ADC_STSR2_DATA1_SHIFT);
             break;
+#else /* ADC_GROUP_COUNTS==3U */
+        case kADC_SelfTestWdgThresholdForAlgSStep1:
+            data = (uint16_t)((base->STSR2 & ADC_STSR2_DATA0_MASK) >> ADC_STSR2_DATA0_SHIFT);
+            break;
+#endif /* ADC_GROUP_COUNTS */
         case kADC_SelfTestWdgThresholdForAlgSStep2:
             data = (uint16_t)((base->STSR3 & ADC_STSR3_DATA1_MASK) >> ADC_STSR3_DATA1_SHIFT);
             break;
@@ -1566,6 +1790,7 @@ bool ADC_GetChannelConvResult(ADC_Type *base, adc_conv_result_t *result, uint8_t
  */
 bool ADC_GetSelfTestChannelConvData(ADC_Type *base, adc_self_test_conv_result_t *result);
 
+#if !(defined(FSL_FEATURE_ADC_HAS_STDR2) && (FSL_FEATURE_ADC_HAS_STDR2==0U))
 /*!
  * @brief This function is used to get the test channel converted data when algorithm S step 1 executes.
  *
@@ -1579,6 +1804,7 @@ bool ADC_GetSelfTestChannelConvData(ADC_Type *base, adc_self_test_conv_result_t 
  * - \b false Obtaining the self-test channel conversion result failed.
  */
 bool ADC_GetSelfTestChannelConvDataForAlgSStep1(ADC_Type *base, adc_self_test_conv_result_t *result);
+#endif /* FSL_FEATURE_ADC_HAS_STDR2 */
 /*!
  * @}
  */

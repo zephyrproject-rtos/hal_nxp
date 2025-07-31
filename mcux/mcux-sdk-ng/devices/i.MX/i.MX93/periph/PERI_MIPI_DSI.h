@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIPI_DSI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MIPI_DSI.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_MIPI_DSI.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIPI_DSI
  *
  * CMSIS Peripheral Access Layer for MIPI_DSI
  */
 
-#if !defined(MIPI_DSI_H_)
-#define MIPI_DSI_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MIPI_DSI_H_)
+#define PERI_MIPI_DSI_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -285,8 +288,8 @@ typedef struct {
 #define MIPI_DSI_PWR_UP_shutdownz_MASK           (0x1U)
 #define MIPI_DSI_PWR_UP_shutdownz_SHIFT          (0U)
 /*! shutdownz - Reset or Power up
- *  0b1..Power up the controller
  *  0b0..Reset the controller
+ *  0b1..Power up the controller
  */
 #define MIPI_DSI_PWR_UP_shutdownz(x)             (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_PWR_UP_shutdownz_SHIFT)) & MIPI_DSI_PWR_UP_shutdownz_MASK)
 /*! @} */
@@ -481,8 +484,8 @@ typedef struct {
 #define MIPI_DSI_MODE_CFG_cmd_video_mode_MASK    (0x1U)
 #define MIPI_DSI_MODE_CFG_cmd_video_mode_SHIFT   (0U)
 /*! cmd_video_mode - Command/Video Mode
- *  0b1..Command mode
  *  0b0..Video mode
+ *  0b1..Command mode
  */
 #define MIPI_DSI_MODE_CFG_cmd_video_mode(x)      (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_MODE_CFG_cmd_video_mode_SHIFT)) & MIPI_DSI_MODE_CFG_cmd_video_mode_MASK)
 /*! @} */
@@ -575,8 +578,8 @@ typedef struct {
 #define MIPI_DSI_VID_MODE_CFG_vpg_mode_MASK      (0x100000U)
 #define MIPI_DSI_VID_MODE_CFG_vpg_mode_SHIFT     (20U)
 /*! vpg_mode - VPG Mode
- *  0b1..Vertical only
  *  0b0..Horizontal or vertical
+ *  0b1..Vertical only
  */
 #define MIPI_DSI_VID_MODE_CFG_vpg_mode(x)        (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_VID_MODE_CFG_vpg_mode_SHIFT)) & MIPI_DSI_VID_MODE_CFG_vpg_mode_MASK)
 
@@ -1010,8 +1013,8 @@ typedef struct {
 #define MIPI_DSI_SDF_3D_format_3d_MASK           (0xCU)
 #define MIPI_DSI_SDF_3D_format_3d_SHIFT          (2U)
 /*! format_3d - Format 3D
- *  0b01..Alternating frames of left and right data
  *  0b00..Alternating lines of left and right data
+ *  0b01..Alternating frames of left and right data
  *  0b10..Alternating pixels of left and right data
  *  0b11..
  */
@@ -1126,10 +1129,10 @@ typedef struct {
 #define MIPI_DSI_PHY_IF_CFG_n_lanes_MASK         (0x3U)
 #define MIPI_DSI_PHY_IF_CFG_n_lanes_SHIFT        (0U)
 /*! n_lanes - Number of Lanes
- *  0b11..lanes 0, 1, 2, and 3
  *  0b00..lane 0
- *  0b10..lanes 0, 1, and 2
  *  0b01..lanes 0 and 1
+ *  0b10..lanes 0, 1, and 2
+ *  0b11..lanes 0, 1, 2, and 3
  */
 #define MIPI_DSI_PHY_IF_CFG_n_lanes(x)           (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_PHY_IF_CFG_n_lanes_SHIFT)) & MIPI_DSI_PHY_IF_CFG_n_lanes_MASK)
 
@@ -1271,8 +1274,8 @@ typedef struct {
 #define MIPI_DSI_PHY_TST_CTRL1_phy_testen_MASK   (0x10000U)
 #define MIPI_DSI_PHY_TST_CTRL1_phy_testen_SHIFT  (16U)
 /*! phy_testen - PHY Test Enable
- *  0b1..Address write operation is set on the falling edge of the testclk signal.
  *  0b0..Data write operation is set on the rising edge of the testclk signal.
+ *  0b1..Address write operation is set on the falling edge of the testclk signal.
  */
 #define MIPI_DSI_PHY_TST_CTRL1_phy_testen(x)     (((uint32_t)(((uint32_t)(x)) << MIPI_DSI_PHY_TST_CTRL1_phy_testen_SHIFT)) & MIPI_DSI_PHY_TST_CTRL1_phy_testen_MASK)
 /*! @} */
@@ -2278,8 +2281,8 @@ typedef struct {
 #define MIPI_DSI_SDF_3D_ACT_format_3d_MASK       (0xCU)
 #define MIPI_DSI_SDF_3D_ACT_format_3d_SHIFT      (2U)
 /*! format_3d - Format 3D
- *  0b01..Alternating frames of left and right data
  *  0b00..Alternating lines of left and right data
+ *  0b01..Alternating frames of left and right data
  *  0b10..Alternating pixels of left and right data
  *  0b11..
  */
@@ -2341,5 +2344,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MIPI_DSI_H_ */
+#endif  /* PERI_MIPI_DSI_H_ */
 
