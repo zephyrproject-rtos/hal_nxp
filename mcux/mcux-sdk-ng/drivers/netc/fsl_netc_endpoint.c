@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -15,8 +15,8 @@
 
 /*! @name Defines some Ethernet parameters. */
 /*@{*/
-#define NETC_ENETC_TXFRAME_LEN_MAX (9600U) /*!< The Maximum length of frame length. */
-#define NETC_ENETC_TXFRAME_LEN_MIN (16U)   /*!< The Minimum length of frame length. */
+#define NETC_ENETC_TXFRAME_LEN_MAX     (9600U)        /*!< The Maximum length of frame length. */
+#define NETC_ENETC_TXFRAME_LEN_MIN     (16U)          /*!< The Minimum length of frame length. */
 /*@}*/
 
 /*! @brief Mask the cache management code if cache control is disabled. */
@@ -188,12 +188,14 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
     uint8_t idxStart = 0U;
     uint8_t ring;
 
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     /* Setup Tx/Rx buffer descriptor rings. */
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* For management ENETC, the SI 0 hardware Tx ring index 0 has been keep for direct switch enqueue feature */
         idxStart = 1;
     }
+#endif
     for (ring = 0; ring < config->siConfig.txRingUse; ring++)
     {
         if (NETC_SIConfigTxBDR(handle->hw.si, ring + idxStart, &bdrConfig->txBdrConfig[ring]) != kStatus_Success)
@@ -332,8 +334,9 @@ static status_t EP_MSIXSetEntryTable(ep_handle_t *handle, const ep_config_t *con
         return result;
     }
 
-    msixNum = (uint8_t)(
-        ((handle->hw.si->SIPCAPR1 & ENETC_SI_SIPCAPR1_NUM_MSIX_MASK) >> ENETC_SI_SIPCAPR1_NUM_MSIX_SHIFT) + 1U);
+    msixNum =
+        (uint8_t)(((handle->hw.si->SIPCAPR1 & ENETC_SI_SIPCAPR1_NUM_MSIX_MASK) >> ENETC_SI_SIPCAPR1_NUM_MSIX_SHIFT) +
+                  1U);
 
     /* Entry > 0, enable MSIX. */
     if (config->entryNum != 0U)
@@ -423,27 +426,28 @@ status_t EP_GetDefaultConfig(ep_config_t *config)
 #if (defined(FSL_FEATURE_NETC_HAS_PORT_FCSEA) && FSL_FEATURE_NETC_HAS_PORT_FCSEA)
     config->port.common.stompFcs = true;
 #endif
-    config->port.common.rxPpduBco              = 20U;
-    config->port.common.txPpduBco              = 20U;
-    config->port.common.timeGate.holdSkew      = 64;
-    config->port.common.parser.l2PloadCount    = 24;
-    config->port.common.parser.l3PayloadCount  = 24;
-    config->port.common.parser.enableL3Parser  = true;
-    config->port.common.parser.l4PayloadCount  = 24;
-    config->port.common.parser.enableL4Parser  = true;
-    config->port.ethMac.enableRevMii           = false;
-    config->port.ethMac.preemptMode            = kNETC_PreemptDisable;
-    config->port.ethMac.enMergeVerify          = false;
-    config->port.ethMac.mergeVerifyTime        = 10U;
-    config->port.ethMac.txTsSelect             = kNETC_SyncTime;
-    config->port.ethMac.enTxPad                = true;
-    config->port.ethMac.rxMinFrameSize         = 64U;
-    config->port.ethMac.rxMaxFrameSize         = 0x600U;
-    config->port.ethMac.maxBackPressOn         = 3036U;
-    config->port.ethMac.minBackPressOff        = 20U;
-    config->port.enPseudoMacTxPad              = true;
-    config->psfpCfg.isiPortConfig.defaultISEID = 0xFFFFU;
-    config->siConfig.ringPerBdrGroup           = 0x1U;
+    config->port.common.rxPpduBco                        = 20U;
+    config->port.common.txPpduBco                        = 20U;
+    config->port.common.timeGate.holdSkew                = 64;
+    config->port.common.parser.l2PloadCount              = 24;
+    config->port.common.parser.l3PayloadCount            = 24;
+    config->port.common.parser.enableL3Parser            = true;
+    config->port.common.parser.l4PayloadCount            = 24;
+    config->port.common.parser.enableL4Parser            = true;
+    config->port.ethMac.enableRevMii                     = false;
+    config->port.ethMac.txTsSelect                       = kNETC_SyncTime;
+    config->port.ethMac.enTxPad                          = true;
+    config->port.ethMac.rxMinFrameSize                   = 64U;
+    config->port.ethMac.rxMaxFrameSize                   = 0x600U;
+    config->port.ethMac.maxBackPressOn                   = 3036U;
+    config->port.ethMac.minBackPressOff                  = 20U;
+    config->port.ethMac.PreemptionConfig.preemptMode     = kNETC_PreemptDisable;
+    config->port.ethMac.PreemptionConfig.enMergeVerify   = false;
+    config->port.ethMac.PreemptionConfig.mergeVerifyTime = 10U;
+    config->port.ethMac.PreemptionConfig.raf_size        = kNETC_RafSize64;
+    config->port.enPseudoMacTxPad                        = true;
+    config->psfpCfg.isiPortConfig.defaultISEID           = 0xFFFFU;
+    config->siConfig.ringPerBdrGroup                     = 0x1U;
     for (uint8_t i = 0U; i < 8U; i++)
     {
         config->txTcCfg[i].enTcGate           = true;
@@ -668,9 +672,9 @@ status_t EP_Init(ep_handle_t *handle, uint8_t *macAddr, const ep_config_t *confi
         return result;
     }
 
-    if (siNum == 0U)
+    if (siNum == 0U && config->preinitVsi != NULL)
     {
-        result = NETC_SocPreInitVsi(&handle->hw, config->si);
+        result = config->preinitVsi(&handle->hw, config->si);
     }
     return result;
 }
@@ -718,9 +722,10 @@ status_t EP_Down(ep_handle_t *handle)
     NETC_EnetcEnableSI(handle->hw.base, getSiNum(handle->cfg.si), false);
     NETC_SIEnable(handle->hw.si, false);
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051936) && FSL_FEATURE_NETC_HAS_ERRATA_051936
-    /* ERRATA051936: MAC Tx FIFO status may not report empty after FLR when operating in RGMII half duplex mode. In some cases, the transmitter
-       may become inoperable and not be able to recover from FLR requiring a full reset instead. The issue can occur when FLR is triggered around
-       the time MAC Tx has started backing off due to a half duplex collision detection. */
+    /* ERRATA051936: MAC Tx FIFO status may not report empty after FLR when operating in RGMII half duplex mode. In some
+       cases, the transmitter may become inoperable and not be able to recover from FLR requiring a full reset instead.
+       The issue can occur when FLR is triggered around the time MAC Tx has started backing off due to a half duplex
+       collision detection. */
     handle->hw.portGroup.eth->PM0_IF_MODE &= ~NETC_ETH_LINK_PM0_IF_MODE_HD_MASK;
     handle->hw.portGroup.eth->PM1_IF_MODE &= ~NETC_ETH_LINK_PM0_IF_MODE_HD_MASK;
 #endif
@@ -759,12 +764,12 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
     status_t result              = kStatus_Success;
     netc_buffer_struct_t *txBuff = frame->buffArray;
     uint32_t totBdNum            = frame->length;
-    uint16_t frameLen            = 0;
+    uint32_t frameLen            = 0;
     bool isExtEnable             = (bool)txDesc[0].standard.isExtended;
-    uint32_t address;
     netc_tx_bd_t *txDesTemp = NULL;
+    uint32_t address;
 
-    /* Check the frame length. */
+    /* The first descriptor in a chain must not have a BUFF_LEN that is less than 16 bytes. */
     if ((frame->buffArray[0].length < NETC_ENETC_TXFRAME_LEN_MIN) || (frame->length == 0U))
     {
         result = kStatus_NETC_TxFrameOverLen;
@@ -787,7 +792,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
     }
 
     /* Check the frame total length. */
-    if ((frameLen > NETC_ENETC_TXFRAME_LEN_MAX) || (frameLen < NETC_ENETC_TXFRAME_LEN_MIN))
+    if (frameLen > NETC_ENETC_TXFRAME_LEN_MAX)
     {
         result = kStatus_NETC_TxFrameOverLen;
     }
@@ -825,6 +830,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
             {
                 /* Update latest Tx dirty frame info. */
                 txBdRing->dirtyBase[txBdRing->producerIndex].context = context;
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
                 if (0U != (txDesc[0].standard.flags & NETC_SI_TXDESCRIP_RD_TSR_MASK))
                 {
                     txBdRing->dirtyBase[txBdRing->producerIndex].isTxTsIdAvail = true;
@@ -833,6 +839,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
                 {
                     txBdRing->dirtyBase[txBdRing->producerIndex].isTxTsIdAvail = false;
                 }
+#endif
 
                 if (isExtEnable && (0U != (txDesc[1].ext.eFlags & (uint32_t)kNETC_TxExtTwoStepTs)))
                 {
@@ -843,10 +850,15 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
                     txBdRing->dirtyBase[txBdRing->producerIndex].isTsAvail = false;
                 }
                 /* Copy user Tx descriptors to hardware Tx BD. */
-                txDesTemp->standard.flags      = txDesc[0].standard.flags;
-                txDesTemp->standard.addr       = address;
-                txDesTemp->standard.bufLen     = txBuff->length;
-                txDesTemp->standard.frameLen   = frameLen;
+                txDesTemp->standard.flags  = txDesc[0].standard.flags;
+                txDesTemp->standard.addr   = address;
+                txDesTemp->standard.bufLen = txBuff->length;
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+                txDesc[1].ext.frameLenExt    = (frameLen >> 16U) & 0x7U;
+                txDesTemp->standard.frameLen = frameLen & 0xFFFFU;
+#else
+                txDesTemp->standard.frameLen = frameLen;
+#endif
                 txDesTemp->standard.isExtended = (uint32_t)isExtEnable;
                 txDesTemp->standard.enableInterrupt =
                     (uint32_t)((handle->hw.si->BDR[hwRing].TBIER & ENETC_SI_TBIER_TXFIE_MASK) != 0U);
@@ -897,12 +909,15 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
         /* Tx BD ring index is out of range */
         return kStatus_InvalidArgument;
     }
+
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
         hwRing = ring + 1U;
     }
+#endif
 
     if (opt != NULL)
     {
@@ -911,6 +926,18 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
             txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FL(0x2U) | NETC_SI_TXDESCRIP_RD_TSE_MASK |
                                        NETC_SI_TXDESCRIP_RD_TXSTART(opt->timestamp);
         }
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+        else
+        {
+            txDesc[0].standard.flags =
+                NETC_SI_TXDESCRIP_RD_LSO(opt->offload.lso) | NETC_SI_TXDESCRIP_RD_L4CS(opt->offload.l4Checksum) |
+                NETC_SI_TXDESCRIP_RD_L4T(opt->offload.l4Type) | NETC_SI_TXDESCRIP_RD_L3T(opt->offload.l3Type) |
+                NETC_SI_TXDESCRIP_RD_L3HDRSIZE(opt->offload.l3HeaderSize) |
+                NETC_SI_TXDESCRIP_RD_IPCS(opt->offload.ipv4Checksum) |
+                NETC_SI_TXDESCRIP_RD_L3START(opt->offload.l3Start);
+        }
+#endif
+
         if ((opt->flags & (uint32_t)kEP_TX_OPT_VLAN_INSERT) != 0U)
         {
             txDesc[0].standard.isExtended = 1U;
@@ -978,10 +1005,12 @@ netc_tx_frame_info_t *EP_ReclaimTxDescCommon(ep_handle_t *handle,
                 {
                     frameInfo->timestamp = txDesc->writeback.timestamp;
                 }
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
                 if (frameInfo->isTxTsIdAvail)
                 {
                     frameInfo->txtsid = (uint16_t)txDesc->writeback.txtsid;
                 }
+#endif
                 frameInfo->status = (netc_ep_tx_status_t)txDesc->writeback.status;
             }
             else if (txDesc->standard.frameLen != 0U)
@@ -1027,13 +1056,14 @@ void EP_ReclaimTxDescriptor(ep_handle_t *handle, uint8_t ring)
     netc_tx_frame_info_t *frameInfo;
     uint8_t hwRing = ring;
 
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
         hwRing = ring + 1U;
     }
-
+#endif
     do
     {
         frameInfo =
@@ -2140,7 +2170,7 @@ status_t EP_TxTGSConfigAdminGcl(ep_handle_t *handle, netc_tb_tgs_gcl_t *config)
         uint64_t time, minBaseTime;
 
         /* Read the previous active Operationa gate control list cycle time*/
-        (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_tgs_data_t));
+        (void)memset(cdbrHandle.buffer, 0, sizeof(netc_tb_tgs_req_data_t));
         cdbrHandle.buffer->tgs.request.entryID                    = config->entryID;
         cdbrHandle.buffer->tgs.request.commonHeader.updateActions = 0U;
         cdbrHandle.buffer->tgs.request.commonHeader.queryActions  = 0U;

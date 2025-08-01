@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,8 +25,7 @@
      NETC_SW_ENETC_ISIDKC0CR0_IPCPP(x.ipcpp) | NETC_SW_ENETC_ISIDKC0CR0_IVIDP(x.ividp) | \
      NETC_SW_ENETC_ISIDKC0CR0_OPCPP(x.opcpp) | NETC_SW_ENETC_ISIDKC0CR0_OVIDP(x.ovidp) | \
      NETC_SW_ENETC_ISIDKC0CR0_SMACP(x.smacp) | NETC_SW_ENETC_ISIDKC0CR0_DMACP(x.dmacp) | \
-     NETC_SW_ENETC_ISIDKC0CR0_PORTP(x.portp) | \
-     NETC_SW_ENETC_ISIDKC0CR0_VALID(x.valid))
+     NETC_SW_ENETC_ISIDKC0CR0_PORTP(x.portp) | NETC_SW_ENETC_ISIDKC0CR0_VALID(x.valid))
 #endif
 
 #define NETC_KC_PAYLOAD(x)                                                                                     \
@@ -309,8 +308,8 @@ status_t NETC_QueryIPFTableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, n
     cmdBd.req.resLength                                    = sizeof(netc_tb_ipf_rsp_data_t);
     cmdBd.req.tableId                                      = kNETC_IPFTable;
     cmdBd.req.cmd                                          = kNETC_QueryEntry;
-    cmdBd.req.accessType = kNETC_EntryIDMatch;
-    status               = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    cmdBd.req.accessType                                   = kNETC_EntryIDMatch;
+    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
     if (kStatus_Success == status)
     {
         config->keye = handle->buffer->ipf.response.keye;
@@ -416,8 +415,8 @@ status_t NETC_QueryISITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, n
     cmdBd.req.resLength                                    = sizeof(netc_tb_isi_rsp_data_t);
     cmdBd.req.tableId                                      = kNETC_ISITable;
     cmdBd.req.cmd                                          = kNETC_QueryEntry;
-    cmdBd.req.accessType = kNETC_EntryIDMatch;
-    status               = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    cmdBd.req.accessType                                   = kNETC_EntryIDMatch;
+    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
     if (kStatus_Success == status)
     {
         if (0U != cmdBd.resp.numMatched)
@@ -434,7 +433,9 @@ status_t NETC_QueryISITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, n
     return status;
 }
 
-status_t NETC_QueryISITableEntryWithKey(netc_cbdr_handle_t *handle, netc_tb_isi_keye_t *keye, netc_tb_isi_rsp_data_t *rsp)
+status_t NETC_QueryISITableEntryWithKey(netc_cbdr_handle_t *handle,
+                                        netc_tb_isi_keye_t *keye,
+                                        netc_tb_isi_rsp_data_t *rsp)
 {
     netc_cmd_bd_t cmdBd = {0};
     status_t status     = kStatus_Success;
@@ -448,7 +449,7 @@ status_t NETC_QueryISITableEntryWithKey(netc_cbdr_handle_t *handle, netc_tb_isi_
     cmdBd.req.tableId                                      = kNETC_ISITable;
     cmdBd.req.cmd                                          = kNETC_QueryEntry;
     cmdBd.req.accessType                                   = kNETC_ExactKeyMatch;
-    status               = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
     if (kStatus_Success == status)
     {
         if (0U != cmdBd.resp.numMatched)
@@ -519,14 +520,14 @@ status_t NETC_QueryISTableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, ne
     cmdBd.req.resLength                                   = sizeof(netc_tb_is_rsp_data_t);
     cmdBd.req.tableId                                     = kNETC_ISTable;
     cmdBd.req.cmd                                         = kNETC_QueryEntry;
-    cmdBd.req.accessType = kNETC_EntryIDMatch;
-    status               = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    cmdBd.req.accessType                                  = kNETC_EntryIDMatch;
+    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
     if (kStatus_Success == status)
     {
         if (0U != cmdBd.resp.numMatched)
         {
             config->entryID = handle->buffer->is.response.entryID;
-            config->cfge = handle->buffer->is.response.cfge;
+            config->cfge    = handle->buffer->is.response.cfge;
         }
         else
         {
@@ -679,10 +680,12 @@ status_t NETC_GetISCStatistic(netc_cbdr_handle_t *handle, uint32_t entryID, netc
     if (kStatus_Success == status)
     {
         *statistic = handle->buffer->isc.response.stse;
-#if (defined(FSL_FEATURE_NETC_HAS_ERRATA_052134) && FSL_FEATURE_NETC_HAS_ERRATA_052134)
-        /* ERR052134: The actual offset of the SG_DROP_COUNT in the Ingress Stream Count Table STSE_DATA element is bit 200 or the offset within
-           the entire Ingress Stream Count Table Response Data Buffer format is bit 232. Starting offset is 8-bits. */
-        statistic->sgDropCount >>= 8U;
+#if (defined(FSL_FEATURE_NETC_HAS_ERRATA_052206) && FSL_FEATURE_NETC_HAS_ERRATA_052206)
+        /* ERR052206: The actual offset of the SG_DROP_COUNT in the Ingress Stream Count Table STSE_DATA element is bit
+           199 or the offset within the entire Ingress Stream Count Table Response Data Buffer format is bit 231.
+           Starting offset from defined is 7-bits. */
+        statistic->sgDropCount >>= 7U;
+        statistic->sgDropCount += ((statistic->res3 & 0x7FU) << 25U);
 #endif
     }
     return status;
@@ -734,6 +737,36 @@ status_t NETC_AddOrUpdateSGITableEntry(netc_cbdr_handle_t *handle, netc_tb_sgi_c
     return NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
 }
 
+status_t NETC_ResetIRXOEXSGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID)
+{
+    status_t status;
+    netc_cmd_bd_t cmdBd = {0};
+    (void)memset(handle->buffer, 0, sizeof(netc_tb_sgi_req_data_t));
+    handle->buffer->sgi.request.entryID                    = entryID;
+    handle->buffer->sgi.request.commonHeader.updateActions = (uint16_t)kNETC_SGISgisEUpdate;
+    handle->buffer->sgi.request.commonHeader.queryActions  = 0U;
+    cmdBd.req.addr                                         = (uintptr_t)handle->buffer;
+    cmdBd.req.reqLength                                    = sizeof(netc_tb_sgi_req_data_t);
+    cmdBd.req.resLength                                    = 0U;
+    cmdBd.req.tableId                                      = kNETC_SGITable;
+    cmdBd.req.cmd                                          = kNETC_UpdateEntry;
+    cmdBd.req.accessType                                   = kNETC_EntryIDMatch;
+    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    if (kStatus_Success == status)
+    {
+        if (cmdBd.resp.numMatched == 0U)
+        {
+            status = kStatus_NETC_NotFound;
+        }
+        else
+        {
+            /* Intentional empty */
+        }
+    }
+
+    return status;
+}
+
 status_t NETC_DelSGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID)
 {
     netc_cmd_bd_t cmdBd = {0};
@@ -755,7 +788,7 @@ status_t NETC_GetSGIState(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_
 {
     netc_cmd_bd_t cmdBd = {0};
     status_t status     = kStatus_Success;
-    (void)memset(handle->buffer, 0, sizeof(netc_tb_sgi_rsp_data_t));
+    (void)memset(handle->buffer, 0, sizeof(netc_tb_sgi_req_data_t));
     handle->buffer->sgi.request.entryID                    = entryID;
     handle->buffer->sgi.request.commonHeader.updateActions = 0U;
     handle->buffer->sgi.request.commonHeader.queryActions  = 0U;
@@ -773,7 +806,7 @@ status_t NETC_GetSGIState(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_
     return status;
 }
 
-status_t NETC_QuerySGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_sgi_rsp_data_t *rsp)
+status_t NETC_QuerySGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_sgi_config_t *cfg)
 {
     netc_cmd_bd_t cmdBd = {0};
     status_t status     = kStatus_Success;
@@ -792,7 +825,9 @@ status_t NETC_QuerySGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, n
     {
         if (cmdBd.resp.numMatched != 0U)
         {
-            *rsp = handle->buffer->sgi.response;
+            cfg->cfge  = handle->buffer->sgi.response.cfge;
+            cfg->icfge = handle->buffer->sgi.response.icfge;
+            cfg->acfge = handle->buffer->sgi.response.acfge;
         }
         else
         {
@@ -936,7 +971,7 @@ status_t NETC_AddOrUpdateRPTableEntry(netc_cbdr_handle_t *handle, netc_tb_rp_con
 
     /* Only support Entry ID Match */
     cmdBd.req.accessType = kNETC_EntryIDMatch;
-    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    status               = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
     if (kStatus_Success == status)
     {
         if ((cmd == kNETC_AddEntry) && (cmdBd.resp.numMatched > 0U))
@@ -972,7 +1007,7 @@ status_t NETC_ResetMRRPTableEntry(netc_cbdr_handle_t *handle, uint32_t entryID)
 
     /* Only support Entry ID Match */
     cmdBd.req.accessType = kNETC_EntryIDMatch;
-    status = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
+    status               = NETC_CmdBDSendCommand(handle->base, handle->cmdr, &cmdBd, kNETC_NtmpV2_0);
     if (kStatus_Success == status)
     {
         if (cmdBd.resp.numMatched == 0U)
@@ -1007,7 +1042,7 @@ status_t NETC_DelRPTableEntry(netc_cbdr_handle_t *handle, uint32_t entryID)
 status_t NETC_QueryRPTableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, netc_tb_rp_rsp_data_t *rsp)
 {
     netc_cmd_bd_t cmdBd = {0};
-    status_t status = kStatus_Success;
+    status_t status     = kStatus_Success;
     (void)memset(handle->buffer, 0, sizeof(netc_tb_rp_rsp_data_t));
     handle->buffer->rp.request.entryID                    = entryID;
     handle->buffer->rp.request.commonHeader.updateActions = 0;
@@ -1025,7 +1060,7 @@ status_t NETC_QueryRPTableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, ne
         {
             *rsp = handle->buffer->rp.response;
         }
-        else 
+        else
         {
             status = kStatus_NETC_NotFound;
         }
