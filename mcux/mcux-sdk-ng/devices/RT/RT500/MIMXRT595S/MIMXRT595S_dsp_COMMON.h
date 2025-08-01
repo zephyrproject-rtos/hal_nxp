@@ -5,14 +5,14 @@
 **
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
-**     Version:             rev. 5.0, 2020-08-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT595S_dsp
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,14 +29,17 @@
 **         Base on Rev.B RM.
 **     - rev. 5.0 (2020-08-27)
 **         Base on Rev.C RM.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT595S_dsp_COMMON.h
- * @version 5.0
- * @date 2020-08-27
+ * @version 6.0
+ * @date 2024-10-29
  * @brief Peripheral Access Layer for MIMXRT595S_dsp
  *
  * Peripheral Access Layer for MIMXRT595S_dsp
@@ -47,7 +50,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0500U
+#define MCU_MEM_MAP_VERSION 0x0600U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -179,7 +182,9 @@ typedef enum IRQn {
  */ /* end of group Interrupt_vector_numbers */
 
 
+#ifndef MIMXRT595S_dsp_SERIES
 #define MIMXRT595S_dsp_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMXRT595S_dsp_features.h"
 

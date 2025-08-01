@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -148,8 +148,8 @@ void RIT_SetTimerCompare(RIT_Type *base, uint64_t count)
 {
     /* Disable RIT timers */
     base->CTRL &= ~RIT_CTRL_RITEN_MASK;
-    base->COMPVAL   = (uint32_t)count;
-    base->COMPVAL_H = (uint16_t)(count >> 32U);
+    base->COMPVAL   = (uint32_t)(count & 0xFFFFFFFFU);
+    base->COMPVAL_H = (uint16_t)((count >> 32U) & 0xFFFFU);
 }
 
 /*!
@@ -166,8 +166,8 @@ void RIT_SetTimerCompare(RIT_Type *base, uint64_t count)
  */
 void RIT_SetMaskBit(RIT_Type *base, uint64_t count)
 {
-    base->MASK   = (uint32_t)count;
-    base->MASK_H = (uint16_t)(count >> 32U);
+    base->MASK   = (uint32_t)((count & 0xFFFFFFFFU));
+    base->MASK_H = (uint16_t)((count >> 32U) & 0xFFFFU);
 }
 
 /*!

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -78,12 +78,19 @@ static uint32_t VREF_GetInstance(VREF_Type *base)
  *
  * param base VREF peripheral address.
  * param config Pointer to the configuration structure.
+ * 
+ * retval kStatus_Success run success.
+ * retval kStatus_Timeout timeout occurs.
  */
-void VREF_Init(VREF_Type *base, const vref_config_t *config)
+status_t VREF_Init(VREF_Type *base, const vref_config_t *config)
 {
     assert(config != NULL);
 
     uint8_t reg = 0U;
+
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    uint32_t timeout;
+#endif
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate clock for VREF */
@@ -135,6 +142,9 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
     base->TRM4 = reg;
 #endif /* FSL_FEATURE_VREF_HAS_TRM4 */
 
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    timeout = VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT;
+#endif
 /* Wait until internal voltage stable */
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0U)
@@ -142,7 +152,15 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
     while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     {
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+
+    return kStatus_Success;
 }
 
 /*!
@@ -216,23 +234,40 @@ void VREF_GetDefaultConfig(vref_config_t *config)
  *
  * param base VREF peripheral address.
  * param trimValue Value of the trim register to set the output reference voltage (maximum 0x3F (6-bit)).
+ *
+ * retval kStatus_Success run success.
+ * retval kStatus_Timeout timeout occurs.
  */
-void VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue)
+status_t VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue)
 {
     uint8_t reg = 0U;
+
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    uint32_t timeout;
+#endif
 
     /* Set TRIM bits value in voltage reference */
     reg       = base->TRM;
     reg       = (uint8_t)((reg & ~VREF_TRM_TRIM_MASK) | VREF_TRM_TRIM(trimValue));
     base->TRM = reg;
 /* Wait until internal voltage stable */
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    timeout = VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT;
+#endif
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0U)
 #else
     while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     {
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+    return kStatus_Success;
 }
 
 #if defined(FSL_FEATURE_VREF_HAS_TRM4) && FSL_FEATURE_VREF_HAS_TRM4
@@ -244,19 +279,36 @@ void VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue)
  *
  * param base VREF peripheral address.
  * param trimValue Value of the trim register to set the output reference voltage (maximum 0x3F (6-bit)).
+ *
+ * retval kStatus_Success run success.
+ * retval kStatus_Timeout timeout occurs.
  */
-void VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue)
+status_t VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue)
 {
     uint8_t reg = 0U;
+
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    uint32_t timeout;
+#endif
 
     /* Set TRIM bits value in voltage reference (2V1) */
     reg        = base->TRM4;
     reg        = (uint8_t)((reg & ~VREF_TRM4_TRIM2V1_MASK) | VREF_TRM4_TRIM2V1(trimValue));
     base->TRM4 = reg;
     /* Wait until internal voltage stable */
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    timeout = VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT;
+#endif
     while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
     {
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+    return kStatus_Success;
 }
 #endif /* FSL_FEATURE_VREF_HAS_TRM4 */
 
@@ -271,22 +323,39 @@ void VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue)
  *
  * param base VREF peripheral address.
  * param trimValue Value of the trim register to set output low reference voltage (maximum 0x05U (3-bit)).
+ *
+ * retval kStatus_Success run success.
+ * retval kStatus_Timeout timeout occurs.
  */
-void VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue)
+status_t VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue)
 {
     /* The values 111b and 110b are NOT valid/allowed */
     assert((trimValue != 0x7U) && (trimValue != 0x6U));
 
     uint8_t reg = 0U;
 
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    uint32_t timeout;
+#endif
+
     /* Set TRIM bits value in low voltage reference */
     reg             = base->VREFL_TRM;
     reg             = ((reg & (uint8_t)(~VREF_VREFL_TRM_VREFL_TRIM_MASK)) | VREF_VREFL_TRM_VREFL_TRIM(trimValue));
     base->VREFL_TRM = reg;
-    /* Wait until internal voltage stable */
 
+    /* Wait until internal voltage stable */
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+    timeout = VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT;
+#endif
     while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0U)
     {
+#if VREF_INTERNAL_VOLTAGE_STABLE_TIMEOUT
+        if ((--timeout) == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+    return kStatus_Success;
 }
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */

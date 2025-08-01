@@ -1,6 +1,5 @@
 /*
- * Copyright 2022 NXP
- * All rights reserved.
+ * Copyright 2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief INTM driver version. */
-#define FSL_INTM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_INTM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*! @brief Interrupt monitors. */
@@ -44,7 +43,7 @@ typedef struct _intm_monitor_config
 /*! @brief INTM configuration structure. */
 typedef struct _intm_config
 {
-    intm_monitor_config_t intm[FSL_FEATURE_INTM_MONITOR_COUNT]; /*! Interrupt source monitor config.*/
+    intm_monitor_config_t intm[INTM_MON_COUNT]; /*! Interrupt source monitor config.*/
     bool enable; /*!< enables the cycle count timer on a monitored interrupt request for comparison to the latency
                     register. */
 } intm_config_t;

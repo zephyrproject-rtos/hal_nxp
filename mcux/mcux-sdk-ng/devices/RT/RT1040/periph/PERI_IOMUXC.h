@@ -13,14 +13,14 @@
 **                          MIMXRT1046DFQ6B
 **                          MIMXRT1046XFQ5B
 **
-**     Version:             rev. 0.1, 2021-07-20
-**     Build:               b241021
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2021-07-20)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC.h
- * @version 0.1
- * @date 2021-07-20
+ * @file PERI_IOMUXC.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC
  *
  * CMSIS Peripheral Access Layer for IOMUXC
  */
 
-#if !defined(IOMUXC_H_)
-#define IOMUXC_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_H_)
+#define PERI_IOMUXC_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1041DFP6B) || defined(CPU_MIMXRT1041DJM6B) || defined(CPU_MIMXRT1041XFP5B) || defined(CPU_MIMXRT1041XJM5B))
 #include "MIMXRT1041_COMMON.h"
@@ -501,41 +504,53 @@ typedef enum _iomuxc_select_input
     kIOMUXC_XBAR1_IN25_SELECT_INPUT = 151U,        /**< IOMUXC select input index */
     kIOMUXC_XBAR1_IN19_SELECT_INPUT = 152U,        /**< IOMUXC select input index */
     kIOMUXC_XBAR1_IN21_SELECT_INPUT = 153U,        /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPG_CLK_RMII_SELECT_INPUT = 198U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_MDIO_SELECT_INPUT = 199U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_RXDATA_SELECT_INPUT_0 = 200U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_RXDATA_SELECT_INPUT_1 = 201U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_RXEN_SELECT_INPUT = 202U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_RXERR_SELECT_INPUT = 203U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_TIMER_SELECT_INPUT_0 = 204U, /**< IOMUXC select input index */
-    kIOMUXC_ENET2_IPP_IND_MAC0_TXCLK_SELECT_INPUT = 205U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_DQS_FA_SELECT_INPUT = 206U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT0_SELECT_INPUT = 207U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT1_SELECT_INPUT = 208U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT2_SELECT_INPUT = 209U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT3_SELECT_INPUT = 210U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT0_SELECT_INPUT = 211U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT1_SELECT_INPUT = 212U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT2_SELECT_INPUT = 213U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT3_SELECT_INPUT = 214U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_SCK_FA_SELECT_INPUT = 215U, /**< IOMUXC select input index */
-    kIOMUXC_FLEXSPI2_IPP_IND_SCK_FB_SELECT_INPUT = 216U, /**< IOMUXC select input index */
-    kIOMUXC_GPT1_IPP_IND_CAPIN1_SELECT_INPUT = 217U, /**< IOMUXC select input index */
-    kIOMUXC_GPT1_IPP_IND_CAPIN2_SELECT_INPUT = 218U, /**< IOMUXC select input index */
-    kIOMUXC_GPT1_IPP_IND_CLKIN_SELECT_INPUT = 219U, /**< IOMUXC select input index */
-    kIOMUXC_GPT2_IPP_IND_CAPIN1_SELECT_INPUT = 220U, /**< IOMUXC select input index */
-    kIOMUXC_GPT2_IPP_IND_CAPIN2_SELECT_INPUT = 221U, /**< IOMUXC select input index */
-    kIOMUXC_GPT2_IPP_IND_CLKIN_SELECT_INPUT = 222U, /**< IOMUXC select input index */
-    kIOMUXC_SAI3_IPG_CLK_SAI_MCLK_SELECT_INPUT_2 = 223U, /**< IOMUXC select input index */
-    kIOMUXC_SAI3_IPP_IND_SAI_RXBCLK_SELECT_INPUT = 224U, /**< IOMUXC select input index */
-    kIOMUXC_SAI3_IPP_IND_SAI_RXDATA_SELECT_INPUT_0 = 225U, /**< IOMUXC select input index */
-    kIOMUXC_SAI3_IPP_IND_SAI_RXSYNC_SELECT_INPUT = 226U, /**< IOMUXC select input index */
-    kIOMUXC_SAI3_IPP_IND_SAI_TXBCLK_SELECT_INPUT = 227U, /**< IOMUXC select input index */
-    kIOMUXC_SAI3_IPP_IND_SAI_TXSYNC_SELECT_INPUT = 228U, /**< IOMUXC select input index */
-    kIOMUXC_SEMC_I_IPP_IND_DQS4_SELECT_INPUT = 229U, /**< IOMUXC select input index */
-    kIOMUXC_CANFD_IPP_IND_CANRX_SELECT_INPUT = 230U, /**< IOMUXC select input index */
 } iomuxc_select_input_t;
 #endif /* IOMUXC_SELECT_INPUT_T_ */
+
+#if !defined(IOMUXC_SELECT_INPUT_1_T_)
+#define IOMUXC_SELECT_INPUT_1_T_
+/*!
+ * @brief Enumeration for the IOMUXC select input
+ *
+ * Defines the enumeration for the IOMUXC select input collections.
+ */
+typedef enum _iomuxc_select_input_1
+{
+    kIOMUXC_ENET2_IPG_CLK_RMII_SELECT_INPUT = 0U,  /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_MDIO_SELECT_INPUT = 1U, /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_RXDATA_SELECT_INPUT_0 = 2U, /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_RXDATA_SELECT_INPUT_1 = 3U, /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_RXEN_SELECT_INPUT = 4U, /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_RXERR_SELECT_INPUT = 5U, /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_TIMER_SELECT_INPUT_0 = 6U, /**< IOMUXC select input index */
+    kIOMUXC_ENET2_IPP_IND_MAC0_TXCLK_SELECT_INPUT = 7U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_DQS_FA_SELECT_INPUT = 8U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT0_SELECT_INPUT = 9U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT1_SELECT_INPUT = 10U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT2_SELECT_INPUT = 11U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT3_SELECT_INPUT = 12U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT0_SELECT_INPUT = 13U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT1_SELECT_INPUT = 14U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT2_SELECT_INPUT = 15U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT3_SELECT_INPUT = 16U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_SCK_FA_SELECT_INPUT = 17U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_SCK_FB_SELECT_INPUT = 18U, /**< IOMUXC select input index */
+    kIOMUXC_GPT1_IPP_IND_CAPIN1_SELECT_INPUT = 19U, /**< IOMUXC select input index */
+    kIOMUXC_GPT1_IPP_IND_CAPIN2_SELECT_INPUT = 20U, /**< IOMUXC select input index */
+    kIOMUXC_GPT1_IPP_IND_CLKIN_SELECT_INPUT = 21U, /**< IOMUXC select input index */
+    kIOMUXC_GPT2_IPP_IND_CAPIN1_SELECT_INPUT = 22U, /**< IOMUXC select input index */
+    kIOMUXC_GPT2_IPP_IND_CAPIN2_SELECT_INPUT = 23U, /**< IOMUXC select input index */
+    kIOMUXC_GPT2_IPP_IND_CLKIN_SELECT_INPUT = 24U, /**< IOMUXC select input index */
+    kIOMUXC_SAI3_IPG_CLK_SAI_MCLK_SELECT_INPUT_2 = 25U, /**< IOMUXC select input index */
+    kIOMUXC_SAI3_IPP_IND_SAI_RXBCLK_SELECT_INPUT = 26U, /**< IOMUXC select input index */
+    kIOMUXC_SAI3_IPP_IND_SAI_RXDATA_SELECT_INPUT_0 = 27U, /**< IOMUXC select input index */
+    kIOMUXC_SAI3_IPP_IND_SAI_RXSYNC_SELECT_INPUT = 28U, /**< IOMUXC select input index */
+    kIOMUXC_SAI3_IPP_IND_SAI_TXBCLK_SELECT_INPUT = 29U, /**< IOMUXC select input index */
+    kIOMUXC_SAI3_IPP_IND_SAI_TXSYNC_SELECT_INPUT = 30U, /**< IOMUXC select input index */
+    kIOMUXC_SEMC_I_IPP_IND_DQS4_SELECT_INPUT = 31U, /**< IOMUXC select input index */
+    kIOMUXC_CANFD_IPP_IND_CANRX_SELECT_INPUT = 32U, /**< IOMUXC select input index */
+} iomuxc_select_input_1_t;
+#endif /* IOMUXC_SELECT_INPUT_1_T_ */
 
 
 /*!
@@ -587,14 +602,17 @@ typedef enum _iomuxc_select_input
 /** IOMUXC - Size of Registers Arrays */
 #define IOMUXC_SW_MUX_CTL_PAD_COUNT               124u
 #define IOMUXC_SW_PAD_CTL_PAD_COUNT               124u
-#define IOMUXC_SELECT_INPUT_COUNT                 231u
+#define IOMUXC_SELECT_INPUT_COUNT                 154u
+#define IOMUXC_SELECT_INPUT_1_COUNT               33u
 
 /** IOMUXC - Register Layout Typedef */
 typedef struct {
        uint8_t RESERVED_0[20];
   __IO uint32_t SW_MUX_CTL_PAD[IOMUXC_SW_MUX_CTL_PAD_COUNT]; /**< SW_MUX_CTL_PAD_GPIO_EMC_00 SW MUX Control Register..SW_MUX_CTL_PAD_GPIO_SD_B1_11 SW MUX Control Register, array offset: 0x14, array step: 0x4, valid indices: [0-41, 46-123] */
   __IO uint32_t SW_PAD_CTL_PAD[IOMUXC_SW_PAD_CTL_PAD_COUNT]; /**< SW_PAD_CTL_PAD_GPIO_EMC_00 SW PAD Control Register..SW_PAD_CTL_PAD_GPIO_SD_B1_11 SW PAD Control Register, array offset: 0x204, array step: 0x4, valid indices: [0-41, 46-123] */
-  __IO uint32_t SELECT_INPUT[IOMUXC_SELECT_INPUT_COUNT]; /**< ANATOP_USB_OTG1_ID_SELECT_INPUT DAISY Register..CANFD_IPP_IND_CANRX_SELECT_INPUT DAISY Register, array offset: 0x3F4, array step: 0x4, valid indices: [0, 2, 14-117, 119-153, 198-230] */
+  __IO uint32_t SELECT_INPUT[IOMUXC_SELECT_INPUT_COUNT]; /**< ANATOP_USB_OTG1_ID_SELECT_INPUT DAISY Register..XBAR1_IN23_SELECT_INPUT DAISY Register, array offset: 0x3F4, array step: 0x4, valid indices: [0, 2, 14-117, 119-153] */
+       uint8_t RESERVED_1[176];
+  __IO uint32_t SELECT_INPUT_1[IOMUXC_SELECT_INPUT_1_COUNT]; /**< ENET2_IPG_CLK_RMII_SELECT_INPUT DAISY Register..CANFD_IPP_IND_CANRX_SELECT_INPUT DAISY Register, array offset: 0x70C, array step: 0x4 */
 } IOMUXC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -712,7 +730,7 @@ typedef struct {
 #define IOMUXC_SW_PAD_CTL_PAD_HYS(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_PAD_CTL_PAD_HYS_SHIFT)) & IOMUXC_SW_PAD_CTL_PAD_HYS_MASK)
 /*! @} */
 
-/*! @name SELECT_INPUT - ANATOP_USB_OTG1_ID_SELECT_INPUT DAISY Register..CANFD_IPP_IND_CANRX_SELECT_INPUT DAISY Register */
+/*! @name SELECT_INPUT - ANATOP_USB_OTG1_ID_SELECT_INPUT DAISY Register..XBAR1_IN23_SELECT_INPUT DAISY Register */
 /*! @{ */
 
 #define IOMUXC_SELECT_INPUT_DAISY_MASK           (0x7U)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
@@ -725,6 +743,20 @@ typedef struct {
  *  0b100..Selecting Pad: GPIO_B1_00 for Mode: ALT6
  */
 #define IOMUXC_SELECT_INPUT_DAISY(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SELECT_INPUT_DAISY_SHIFT)) & IOMUXC_SELECT_INPUT_DAISY_MASK)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
+/*! @} */
+
+/*! @name SELECT_INPUT_1 - ENET2_IPG_CLK_RMII_SELECT_INPUT DAISY Register..CANFD_IPP_IND_CANRX_SELECT_INPUT DAISY Register */
+/*! @{ */
+
+#define IOMUXC_SELECT_INPUT_1_DAISY_MASK         (0x3U)  /* Merged from fields with different position or width, of widths (1, 2), largest definition used */
+#define IOMUXC_SELECT_INPUT_1_DAISY_SHIFT        (0U)
+/*! DAISY - Selecting Pads Involved in Daisy Chain.
+ *  0b00..Selecting Pad: GPIO_SD_B0_00 for Mode: ALT9
+ *  0b01..Selecting Pad: GPIO_EMC_39 for Mode: ALT9
+ *  0b10..Selecting Pad: GPIO_AD_B0_09 for Mode: ALT9
+ *  0b11..Selecting Pad: GPIO_B1_13 for Mode: ALT8
+ */
+#define IOMUXC_SELECT_INPUT_1_DAISY(x)           (((uint32_t)(((uint32_t)(x)) << IOMUXC_SELECT_INPUT_1_DAISY_SHIFT)) & IOMUXC_SELECT_INPUT_1_DAISY_MASK)  /* Merged from fields with different position or width, of widths (1, 2), largest definition used */
 /*! @} */
 
 
@@ -763,5 +795,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_H_ */
+#endif  /* PERI_IOMUXC_H_ */
 

@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SCG.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_SCG.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SCG
  *
  * CMSIS Peripheral Access Layer for SCG
  */
 
-#if !defined(SCG_H_)
-#define SCG_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SCG_H_)
+#define PERI_SCG_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -146,8 +149,16 @@ typedef struct {
   __IO uint32_t FIRCSTAT;                          /**< FIRC Auto-trimming Status Register, offset: 0x318 */
   __IO uint32_t FIRCATC1;                          /**< FIRC Auto-trimming Counter 1, offset: 0x31C */
   __IO uint32_t FIRCATC2;                          /**< FIRC Auto-trimming Counter 2, offset: 0x320 */
-  __IO uint32_t FIRCATC3;                          /**< FIRC Auto-trimming Counter 2, offset: 0x324 */
-       uint8_t RESERVED_9[216];
+  __IO uint32_t FIRCATC3;                          /**< FIRC Auto-trimming Counter 3, offset: 0x324 */
+  __IO uint32_t FIRCATC4;                          /**< FIRC Auto-trimming Counter 4, offset: 0x328 */
+  __IO uint32_t FIRCATC5;                          /**< FIRC Auto-trimming Counter 5, offset: 0x32C */
+  __IO uint32_t FIRCATC6;                          /**< FIRC Auto-trimming Counter 6, offset: 0x330 */
+  __IO uint32_t FIRCATC7;                          /**< FIRC Auto-trimming Counter 7, offset: 0x334 */
+  __IO uint32_t FIRCATC8;                          /**< FIRC Auto-trimming Counter 8, offset: 0x338 */
+  __IO uint32_t FIRCATC9;                          /**< FIRC Auto-trimming Counter 9, offset: 0x33C */
+  __IO uint32_t FIRCATC10;                         /**< FIRC Auto-trimming Counter 10, offset: 0x340 */
+  __IO uint32_t FIRCATC11;                         /**< FIRC Auto-trimming Counter 11, offset: 0x344 */
+       uint8_t RESERVED_9[184];
   __IO uint32_t ROSCCSR;                           /**< ROSC Control Status Register, offset: 0x400 */
 } SCG_Type;
 
@@ -236,12 +247,10 @@ typedef struct {
 #define SCG_CSR_SCS_MASK                         (0x7000000U)
 #define SCG_CSR_SCS_SHIFT                        (24U)
 /*! SCS - System Clock Source
- *  0b000..Reserved
  *  0b001..SOSC
  *  0b010..SIRC
  *  0b011..FIRC
  *  0b100..ROSC
- *  0b101-0b111..Reserved
  */
 #define SCG_CSR_SCS(x)                           (((uint32_t)(((uint32_t)(x)) << SCG_CSR_SCS_SHIFT)) & SCG_CSR_SCS_MASK)
 /*! @} */
@@ -252,12 +261,10 @@ typedef struct {
 #define SCG_RCCR_SCS_MASK                        (0x7000000U)
 #define SCG_RCCR_SCS_SHIFT                       (24U)
 /*! SCS - System Clock Source
- *  0b000..Reserved
  *  0b001..SOSC
  *  0b010..SIRC
  *  0b011..FIRC
  *  0b100..ROSC
- *  0b101-0b111..Reserved
  */
 #define SCG_RCCR_SCS(x)                          (((uint32_t)(((uint32_t)(x)) << SCG_RCCR_SCS_SHIFT)) & SCG_RCCR_SCS_MASK)
 /*! @} */
@@ -336,6 +343,14 @@ typedef struct {
  *  0b1..SOSCVLD interrupt is enabled
  */
 #define SCG_SOSCCSR_SOSCVLD_IE(x)                (((uint32_t)(((uint32_t)(x)) << SCG_SOSCCSR_SOSCVLD_IE_SHIFT)) & SCG_SOSCCSR_SOSCVLD_IE_MASK)
+
+#define SCG_SOSCCSR_SOSC_SAFE_EN_MASK            (0x80000000U)
+#define SCG_SOSCCSR_SOSC_SAFE_EN_SHIFT           (31U)
+/*! SOSC_SAFE_EN - SOSC clock safety enable
+ *  0b0..SOSC clock safety is disabled
+ *  0b1..SOSC clock safety is enabled
+ */
+#define SCG_SOSCCSR_SOSC_SAFE_EN(x)              (((uint32_t)(((uint32_t)(x)) << SCG_SOSCCSR_SOSC_SAFE_EN_SHIFT)) & SCG_SOSCCSR_SOSC_SAFE_EN_MASK)
 /*! @} */
 
 /*! @name SOSCCFG - SOSC Configuration Register */
@@ -678,10 +693,10 @@ typedef struct {
 /*! TRIMCOAR - Trim Coarse */
 #define SCG_FIRCTRIM_TRIMCOAR(x)                 (((uint32_t)(((uint32_t)(x)) << SCG_FIRCTRIM_TRIMCOAR_SHIFT)) & SCG_FIRCTRIM_TRIMCOAR_MASK)
 
-#define SCG_FIRCTRIM_TRIMTEMP2_MASK              (0xC0000U)
-#define SCG_FIRCTRIM_TRIMTEMP2_SHIFT             (18U)
-/*! TRIMTEMP2 - Trim Temperature2 */
-#define SCG_FIRCTRIM_TRIMTEMP2(x)                (((uint32_t)(((uint32_t)(x)) << SCG_FIRCTRIM_TRIMTEMP2_SHIFT)) & SCG_FIRCTRIM_TRIMTEMP2_MASK)
+#define SCG_FIRCTRIM_TRIMTEMP_MASK               (0xF0000U)
+#define SCG_FIRCTRIM_TRIMTEMP_SHIFT              (16U)
+/*! TRIMTEMP - Trim Temperature */
+#define SCG_FIRCTRIM_TRIMTEMP(x)                 (((uint32_t)(((uint32_t)(x)) << SCG_FIRCTRIM_TRIMTEMP_SHIFT)) & SCG_FIRCTRIM_TRIMTEMP_MASK)
 
 #define SCG_FIRCTRIM_TRIMSTART_MASK              (0x3F000000U)
 #define SCG_FIRCTRIM_TRIMSTART_SHIFT             (24U)
@@ -706,38 +721,150 @@ typedef struct {
 /*! @name FIRCATC1 - FIRC Auto-trimming Counter 1 */
 /*! @{ */
 
-#define SCG_FIRCATC1_IDEALC_MASK                 (0xFFFFU)
-#define SCG_FIRCATC1_IDEALC_SHIFT                (0U)
-/*! IDEALC - Ideal Counter */
-#define SCG_FIRCATC1_IDEALC(x)                   (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC1_IDEALC_SHIFT)) & SCG_FIRCATC1_IDEALC_MASK)
+#define SCG_FIRCATC1_IDEALC_SOSC_MASK            (0xFFFFU)
+#define SCG_FIRCATC1_IDEALC_SOSC_SHIFT           (0U)
+/*! IDEALC_SOSC - Ideal Counter SOSC */
+#define SCG_FIRCATC1_IDEALC_SOSC(x)              (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC1_IDEALC_SOSC_SHIFT)) & SCG_FIRCATC1_IDEALC_SOSC_MASK)
+
+#define SCG_FIRCATC1_SAMCYC_SOSC_MASK            (0xFF0000U)
+#define SCG_FIRCATC1_SAMCYC_SOSC_SHIFT           (16U)
+/*! SAMCYC_SOSC - Sample Cycle SOSC */
+#define SCG_FIRCATC1_SAMCYC_SOSC(x)              (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC1_SAMCYC_SOSC_SHIFT)) & SCG_FIRCATC1_SAMCYC_SOSC_MASK)
+
+#define SCG_FIRCATC1_SETCYC_SOSC_MASK            (0xFF000000U)
+#define SCG_FIRCATC1_SETCYC_SOSC_SHIFT           (24U)
+/*! SETCYC_SOSC - Setup Cycle SOSC */
+#define SCG_FIRCATC1_SETCYC_SOSC(x)              (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC1_SETCYC_SOSC_SHIFT)) & SCG_FIRCATC1_SETCYC_SOSC_MASK)
 /*! @} */
 
 /*! @name FIRCATC2 - FIRC Auto-trimming Counter 2 */
 /*! @{ */
 
-#define SCG_FIRCATC2_COARMINC_MASK               (0xFFFFU)
-#define SCG_FIRCATC2_COARMINC_SHIFT              (0U)
-/*! COARMINC - Coarse Trim Minimum Counter */
-#define SCG_FIRCATC2_COARMINC(x)                 (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC2_COARMINC_SHIFT)) & SCG_FIRCATC2_COARMINC_MASK)
+#define SCG_FIRCATC2_COARMINC_SOSC_MASK          (0xFFFFU)
+#define SCG_FIRCATC2_COARMINC_SOSC_SHIFT         (0U)
+/*! COARMINC_SOSC - Coarse Trim Minimum Counter SOSC */
+#define SCG_FIRCATC2_COARMINC_SOSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC2_COARMINC_SOSC_SHIFT)) & SCG_FIRCATC2_COARMINC_SOSC_MASK)
 
-#define SCG_FIRCATC2_COARMAXC_MASK               (0xFFFF0000U)
-#define SCG_FIRCATC2_COARMAXC_SHIFT              (16U)
-/*! COARMAXC - Coarse Trim Maximum Counter */
-#define SCG_FIRCATC2_COARMAXC(x)                 (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC2_COARMAXC_SHIFT)) & SCG_FIRCATC2_COARMAXC_MASK)
+#define SCG_FIRCATC2_COARMAXC_SOSC_MASK          (0xFFFF0000U)
+#define SCG_FIRCATC2_COARMAXC_SOSC_SHIFT         (16U)
+/*! COARMAXC_SOSC - Coarse Trim Maximum Counter SOSC */
+#define SCG_FIRCATC2_COARMAXC_SOSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC2_COARMAXC_SOSC_SHIFT)) & SCG_FIRCATC2_COARMAXC_SOSC_MASK)
 /*! @} */
 
-/*! @name FIRCATC3 - FIRC Auto-trimming Counter 2 */
+/*! @name FIRCATC3 - FIRC Auto-trimming Counter 3 */
 /*! @{ */
 
-#define SCG_FIRCATC3_FINEMINC_MASK               (0xFFFFU)
-#define SCG_FIRCATC3_FINEMINC_SHIFT              (0U)
-/*! FINEMINC - Fine Trim Minimum Counter */
-#define SCG_FIRCATC3_FINEMINC(x)                 (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC3_FINEMINC_SHIFT)) & SCG_FIRCATC3_FINEMINC_MASK)
+#define SCG_FIRCATC3_FINEMINC_SOSC_MASK          (0xFFFFU)
+#define SCG_FIRCATC3_FINEMINC_SOSC_SHIFT         (0U)
+/*! FINEMINC_SOSC - Fine Trim Minimum Counter SOSC */
+#define SCG_FIRCATC3_FINEMINC_SOSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC3_FINEMINC_SOSC_SHIFT)) & SCG_FIRCATC3_FINEMINC_SOSC_MASK)
 
-#define SCG_FIRCATC3_FINEMAXC_MASK               (0xFFFF0000U)
-#define SCG_FIRCATC3_FINEMAXC_SHIFT              (16U)
-/*! FINEMAXC - Fine Trim Maximum Counter */
-#define SCG_FIRCATC3_FINEMAXC(x)                 (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC3_FINEMAXC_SHIFT)) & SCG_FIRCATC3_FINEMAXC_MASK)
+#define SCG_FIRCATC3_FINEMAXC_SOSC_MASK          (0xFFFF0000U)
+#define SCG_FIRCATC3_FINEMAXC_SOSC_SHIFT         (16U)
+/*! FINEMAXC_SOSC - Fine Trim Maximum Counter SOSC */
+#define SCG_FIRCATC3_FINEMAXC_SOSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC3_FINEMAXC_SOSC_SHIFT)) & SCG_FIRCATC3_FINEMAXC_SOSC_MASK)
+/*! @} */
+
+/*! @name FIRCATC4 - FIRC Auto-trimming Counter 4 */
+/*! @{ */
+
+#define SCG_FIRCATC4_IDEALC_ROSC_MASK            (0xFFFFU)
+#define SCG_FIRCATC4_IDEALC_ROSC_SHIFT           (0U)
+/*! IDEALC_ROSC - Ideal Counter ROSC */
+#define SCG_FIRCATC4_IDEALC_ROSC(x)              (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC4_IDEALC_ROSC_SHIFT)) & SCG_FIRCATC4_IDEALC_ROSC_MASK)
+
+#define SCG_FIRCATC4_SETCYC_ROSC_MASK            (0xFF0000U)
+#define SCG_FIRCATC4_SETCYC_ROSC_SHIFT           (16U)
+/*! SETCYC_ROSC - Setup Cycle ROSC */
+#define SCG_FIRCATC4_SETCYC_ROSC(x)              (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC4_SETCYC_ROSC_SHIFT)) & SCG_FIRCATC4_SETCYC_ROSC_MASK)
+
+#define SCG_FIRCATC4_SAMCYC_ROSC_MASK            (0xFF000000U)
+#define SCG_FIRCATC4_SAMCYC_ROSC_SHIFT           (24U)
+/*! SAMCYC_ROSC - Sample Cycle ROSC */
+#define SCG_FIRCATC4_SAMCYC_ROSC(x)              (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC4_SAMCYC_ROSC_SHIFT)) & SCG_FIRCATC4_SAMCYC_ROSC_MASK)
+/*! @} */
+
+/*! @name FIRCATC5 - FIRC Auto-trimming Counter 5 */
+/*! @{ */
+
+#define SCG_FIRCATC5_COARMINC_ROSC_MASK          (0xFFFFU)
+#define SCG_FIRCATC5_COARMINC_ROSC_SHIFT         (0U)
+/*! COARMINC_ROSC - Coarse Trim Minimum Counter ROSC */
+#define SCG_FIRCATC5_COARMINC_ROSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC5_COARMINC_ROSC_SHIFT)) & SCG_FIRCATC5_COARMINC_ROSC_MASK)
+
+#define SCG_FIRCATC5_COARMAXC_ROSC_MASK          (0xFFFF0000U)
+#define SCG_FIRCATC5_COARMAXC_ROSC_SHIFT         (16U)
+/*! COARMAXC_ROSC - Coarse Trim Maximum Counter ROSC */
+#define SCG_FIRCATC5_COARMAXC_ROSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC5_COARMAXC_ROSC_SHIFT)) & SCG_FIRCATC5_COARMAXC_ROSC_MASK)
+/*! @} */
+
+/*! @name FIRCATC6 - FIRC Auto-trimming Counter 6 */
+/*! @{ */
+
+#define SCG_FIRCATC6_FINEMINC_ROSC_MASK          (0xFFFFU)
+#define SCG_FIRCATC6_FINEMINC_ROSC_SHIFT         (0U)
+/*! FINEMINC_ROSC - Fine Trim Minimum Counter ROSC */
+#define SCG_FIRCATC6_FINEMINC_ROSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC6_FINEMINC_ROSC_SHIFT)) & SCG_FIRCATC6_FINEMINC_ROSC_MASK)
+
+#define SCG_FIRCATC6_FINEMAXC_ROSC_MASK          (0xFFFF0000U)
+#define SCG_FIRCATC6_FINEMAXC_ROSC_SHIFT         (16U)
+/*! FINEMAXC_ROSC - Fine Trim Maximum Counter ROSC */
+#define SCG_FIRCATC6_FINEMAXC_ROSC(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC6_FINEMAXC_ROSC_SHIFT)) & SCG_FIRCATC6_FINEMAXC_ROSC_MASK)
+/*! @} */
+
+/*! @name FIRCATC7 - FIRC Auto-trimming Counter 7 */
+/*! @{ */
+
+#define SCG_FIRCATC7_IDEALC_SOF_MASK             (0xFFFFFU)
+#define SCG_FIRCATC7_IDEALC_SOF_SHIFT            (0U)
+/*! IDEALC_SOF - Ideal Counter SOF */
+#define SCG_FIRCATC7_IDEALC_SOF(x)               (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC7_IDEALC_SOF_SHIFT)) & SCG_FIRCATC7_IDEALC_SOF_MASK)
+
+#define SCG_FIRCATC7_SETCYC_SOF_MASK             (0xF000000U)
+#define SCG_FIRCATC7_SETCYC_SOF_SHIFT            (24U)
+/*! SETCYC_SOF - Setup Cycle SOF */
+#define SCG_FIRCATC7_SETCYC_SOF(x)               (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC7_SETCYC_SOF_SHIFT)) & SCG_FIRCATC7_SETCYC_SOF_MASK)
+
+#define SCG_FIRCATC7_SAMCYC_SOF_MASK             (0xF0000000U)
+#define SCG_FIRCATC7_SAMCYC_SOF_SHIFT            (28U)
+/*! SAMCYC_SOF - Sample Cycle SOF */
+#define SCG_FIRCATC7_SAMCYC_SOF(x)               (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC7_SAMCYC_SOF_SHIFT)) & SCG_FIRCATC7_SAMCYC_SOF_MASK)
+/*! @} */
+
+/*! @name FIRCATC8 - FIRC Auto-trimming Counter 8 */
+/*! @{ */
+
+#define SCG_FIRCATC8_COARMAXC_SOF_MASK           (0xFFFFFU)
+#define SCG_FIRCATC8_COARMAXC_SOF_SHIFT          (0U)
+/*! COARMAXC_SOF - Coarse Trim Maximum Counter SOF */
+#define SCG_FIRCATC8_COARMAXC_SOF(x)             (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC8_COARMAXC_SOF_SHIFT)) & SCG_FIRCATC8_COARMAXC_SOF_MASK)
+/*! @} */
+
+/*! @name FIRCATC9 - FIRC Auto-trimming Counter 9 */
+/*! @{ */
+
+#define SCG_FIRCATC9_COARMINC_SOF_MASK           (0xFFFFFU)
+#define SCG_FIRCATC9_COARMINC_SOF_SHIFT          (0U)
+/*! COARMINC_SOF - Coarse Trim Minimum Counter SOF */
+#define SCG_FIRCATC9_COARMINC_SOF(x)             (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC9_COARMINC_SOF_SHIFT)) & SCG_FIRCATC9_COARMINC_SOF_MASK)
+/*! @} */
+
+/*! @name FIRCATC10 - FIRC Auto-trimming Counter 10 */
+/*! @{ */
+
+#define SCG_FIRCATC10_FINEMAXC_SOF_MASK          (0xFFFFFU)
+#define SCG_FIRCATC10_FINEMAXC_SOF_SHIFT         (0U)
+/*! FINEMAXC_SOF - Fine Trim Maximum Counter SOF */
+#define SCG_FIRCATC10_FINEMAXC_SOF(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC10_FINEMAXC_SOF_SHIFT)) & SCG_FIRCATC10_FINEMAXC_SOF_MASK)
+/*! @} */
+
+/*! @name FIRCATC11 - FIRC Auto-trimming Counter 11 */
+/*! @{ */
+
+#define SCG_FIRCATC11_FINEMINC_SOF_MASK          (0xFFFFFU)
+#define SCG_FIRCATC11_FINEMINC_SOF_SHIFT         (0U)
+/*! FINEMINC_SOF - Fine Trim Minimum Counter SOF */
+#define SCG_FIRCATC11_FINEMINC_SOF(x)            (((uint32_t)(((uint32_t)(x)) << SCG_FIRCATC11_FINEMINC_SOF_SHIFT)) & SCG_FIRCATC11_FINEMINC_SOF_MASK)
 /*! @} */
 
 /*! @name ROSCCSR - ROSC Control Status Register */
@@ -810,5 +937,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SCG_H_ */
+#endif  /* PERI_SCG_H_ */
 

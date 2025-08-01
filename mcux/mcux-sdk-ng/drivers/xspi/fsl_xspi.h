@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@{*/
 
 /*! @brief Formula to form XSPI instructions in LUT table. */

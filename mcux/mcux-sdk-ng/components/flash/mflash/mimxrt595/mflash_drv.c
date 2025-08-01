@@ -327,7 +327,6 @@ static status_t flexspi_nor_read_data(FLEXSPI_Type *base, uint32_t startAddress,
     flashXfer.dataSize      = length;
 
     status = FLEXSPI_TransferBlocking(base, &flashXfer);
-    
     if(status == kStatus_Success)
     {
       status = flexspi_nor_wait_bus_busy(base, true);
@@ -335,6 +334,13 @@ static status_t flexspi_nor_read_data(FLEXSPI_Type *base, uint32_t startAddress,
 
     return status;
 }
+
+/* FLEXSPI_Init in case of RT500 contains peripheral reset, this resets cache setup.
+ * For situations when cache is already configured backup its settings and do a recovery */
+
+#if (defined(FSL_SDK_ENABLE_FLEXSPI_RESET_CONTROL) && FSL_SDK_ENABLE_FLEXSPI_RESET_CONTROL)
+#define DO_CACHE64_RECOVERY
+#endif
 
 static int32_t mflash_drv_init_internal(void)
 {
@@ -356,6 +362,14 @@ static int32_t mflash_drv_init_internal(void)
 #endif
     config.ahbConfig.enableAHBBufferable = true;
     config.ahbConfig.enableAHBCachable   = true;
+
+#ifdef DO_CACHE64_RECOVERY
+    uint32_t cache64_ccr   = CACHE64_CTRL0->CCR & (CACHE64_CTRL_CCR_ENWRBUF_MASK | CACHE64_CTRL_CCR_ENCACHE_MASK);
+    uint32_t polsel_reg0   = CACHE64_POLSEL0->REG0_TOP;
+    uint32_t polsel_reg1   = CACHE64_POLSEL0->REG1_TOP;
+    uint32_t polsel_polsel = CACHE64_POLSEL0->POLSEL;
+#endif
+
     FLEXSPI_Init(MFLASH_FLEXSPI, &config);
 
     /* Configure flash settings according to serial flash feature. */
@@ -389,6 +403,28 @@ static int32_t mflash_drv_init_internal(void)
         }
         flexspi_nor_enable_octal_mode(MFLASH_FLEXSPI);
     } while (0);
+
+#ifdef DO_CACHE64_RECOVERY
+    /* set command to invalidate all ways and write GO bit to initiate command */
+    CACHE64_CTRL0->CCR = CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_INVW0_MASK;
+    CACHE64_CTRL0->CCR |= CACHE64_CTRL_CCR_GO_MASK;
+    /* Wait until the command completes */
+    while ((CACHE64_CTRL0->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0U)
+    {
+    }
+
+    /* recover cache enable bits*/
+    CACHE64_CTRL0->CCR = cache64_ccr;
+
+    /* recover polsel setup */
+    CACHE64_POLSEL0->REG0_TOP = polsel_reg0;
+    CACHE64_POLSEL0->REG1_TOP = polsel_reg1;
+    CACHE64_POLSEL0->POLSEL   = polsel_polsel;
+
+    __ISB();
+    __DSB();
+#endif
+
 
     if (primask == 0)
     {

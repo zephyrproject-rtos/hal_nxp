@@ -1,6 +1,5 @@
 /*
- * Copyright 2023 NXP
- * All rights reserved.
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -30,7 +29,7 @@ static void FLEXSPI_SLV_Memset(void *src, uint8_t value, size_t length);
 static FLEXSPI_SLV_Type *const s_flexspiSlvBases[] = FLEXSPI_SLV_BASE_PTRS;
 
 /*! @brief Pointers to Flexspi Follower IRQ number for each instance. */
-static const IRQn_Type s_flexspiSlvIrqs[] = { FLEXSPI_SLV_IRQn };
+static const IRQn_Type s_flexspiSlvIrqs[] = {FLEXSPI_SLV_IRQn};
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Clock name array */
@@ -95,7 +94,7 @@ uint32_t FLEXSPI_SLV_GetInstance(FLEXSPI_SLV_Type *base)
  */
 uint32_t FLEXSPI_SLV_CheckAndClearInterrupt(FLEXSPI_SLV_Type *base)
 {
-    uint32_t status = FLEXSPI_SLV_GetInterruptStatusFlags(base);
+    uint32_t status          = FLEXSPI_SLV_GetInterruptStatusFlags(base);
     uint32_t intEnableStatus = FLEXSPI_SLV_GetEnabledInterrupts(base);
 
     /* Check for interrupt. */
@@ -142,67 +141,6 @@ uint32_t FLEXSPI_SLV_CheckAndClearInterrupt(FLEXSPI_SLV_Type *base)
 }
 
 /*!
- * brief Sets the root clock of the FLEXSPI FOLLOWER.
- *
- * param clock_freq The expected root clock of the FLEXSPI FOLLOWER.
- */
-void FLEXSPI_SLV_ClkRootFrq(int clock_freq)
-{
-    clock_root_config_t rootCfg = {0};
-
-    switch (clock_freq) {
-        case RootClock_50M:
-            /* Configure FLEXSPI_SLV using OSC_RC_400M */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxOscRc400M;
-            rootCfg.div = 8;
-            break;
-
-        case RootClock_66M:
-            /* Configure FLEXSPI_SLV using SYS_PLL2_CLK */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxSysPll2Out;
-            rootCfg.div = 8;
-            break;
-
-        case RootClock_80M:
-            /* Configure FLEXSPI_SLV using OSC_RC_400M */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxOscRc400M;
-            rootCfg.div = 5;
-            break;
-
-        case RootClock_100M:
-            /* Configure FLEXSPI_SLV using OSC_RC_400M */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxOscRc400M;
-            rootCfg.div = 4;
-            break;
-
-        case RootClock_166M:
-            /* Configure FLEXSPI_SLV using SYS_PLL1_CLK */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxSysPll1Out;
-            rootCfg.div = 6;
-            break;
-
-        case RootClock_200M:
-            /* Configure FLEXSPI_SLV using SYS_PLL1_CLK */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxSysPll1Out;
-            rootCfg.div = 5;
-            break;
-
-        case RootClock_400M:
-            /* Configure FLEXSPI_SLV using OSC_RC_400M */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxOscRc400M;
-            rootCfg.div = 1;
-            break;
-
-	default:
-            /* RootClock_133M: Configure FLEXSPI_SLV using SYS_PLL2_CLK */
-            rootCfg.mux = kCLOCK_FLEXSPI_SLV_ClockRoot_MuxSysPll2Out;
-            rootCfg.div = 4;
-            break;
-    }
-    CLOCK_SetRootClock(kCLOCK_Root_Flexspi_Slv, &rootCfg);
-}
-
-/*!
  * brief Initializes the FLEXSPI FOLLOWER module and internal state.
  *
  * This function enables the clock for FLEXSPI FOLLOWER and also configures the FLEXSPI
@@ -217,7 +155,6 @@ void FLEXSPI_SLV_Init(FLEXSPI_SLV_Type *base, const flexspi_slv_config_t *config
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the flexspi follower clock */
     (void)CLOCK_EnableClock(s_flexspiSlvClock[FLEXSPI_SLV_GetInstance(base)]);
-    FLEXSPI_SLV_ClkRootFrq(config->clock_freq);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Reset peripheral before configuring it. */
@@ -259,15 +196,14 @@ void FLEXSPI_SLV_GetDefaultConfig(flexspi_slv_config_t *config)
     /* Initializes the configure structure to zero. */
     FLEXSPI_SLV_Memset(config, 0, sizeof(*config));
 
-    config->clock_freq     = RootClock_133M;
-    config->baseAddr1      = 0;
-    config->baseAddr2      = 0x1000;
-    config->addrRange1     = 0;
-    config->addrRange2     = 0;
-    config->io_mode        = kFLEXSPI_SLV_IOMODE_SDRx4;
-    config->rxFetch_size   = Read_Fetch_256Bytes;
-    config->rxWatermark    = 0;
-    config->txWatermark    = Write_Watermark_128Bytes;
+    config->baseAddr1    = 0;
+    config->baseAddr2    = 0x1000;
+    config->addrRange1   = 0;
+    config->addrRange2   = 0;
+    config->io_mode      = kFLEXSPI_SLV_IOMODE_SDRx4;
+    config->rxFetch_size = Read_Fetch_256Bytes;
+    config->rxWatermark  = 0;
+    config->txWatermark  = Write_Watermark_128Bytes;
 }
 
 /*!
@@ -280,7 +216,9 @@ void FLEXSPI_SLV_GetDefaultConfig(flexspi_slv_config_t *config)
 void FLEXSPI_SLV_Deinit(FLEXSPI_SLV_Type *base)
 {
     /* Reset peripheral. */
-    while (FLEXSPI_SLV_GetModuleBusyStatus(base));
+    while (FLEXSPI_SLV_GetModuleBusyStatus(base))
+    {
+    }
     FLEXSPI_SLV_SoftwareReset_SetVal(base, 1);
 }
 
@@ -289,13 +227,13 @@ void FLEXSPI_SLV_Deinit(FLEXSPI_SLV_Type *base)
  *
  * param base FLEXSPI FOLLOWER peripheral base address.
  * param handle Pointer to flexspi_slv_handle_t structure to store the interrupt state.
- * param callback Pointer to user callback function.
- * param userData User parameter passed to the callback function.
+ * param callback Pointer to user callback function. Can be NULL.
+ * param interruptMask Interrupt mask to enable during handle creation. Use enumeration values ORed.
  */
 void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
                                        flexspi_slv_handle_t *handle,
                                        flexspi_slv_interrupt_callback_t callback,
-                                       void *userData)
+                                       uint32_t interruptMask)
 {
     assert(NULL != handle);
 
@@ -306,7 +244,6 @@ void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
 
     /* Set callback and userData. */
     handle->callback = callback;
-    handle->userData = userData;
 
 #if defined(FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ
     /* Save the context in global variables to support the double weak mechanism. */
@@ -317,7 +254,7 @@ void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
     /* Enable NVIC interrupt. */
     (void)EnableIRQ(s_flexspiSlvIrqs[instance]);
 
-    FLEXSPI_SLV_EnableInterrupts(base, *(uint32_t *)userData);
+    FLEXSPI_SLV_EnableInterrupts(base, interruptMask);
 #if defined(FSL_DRIVER_FOLLOWER_MAILBOX_IRQ) && FSL_DRIVER_FOLLOWER_MAILBOX_IRQ
     FLEXSPI_SLV_EnableMailInterrupt(base, true);
 #endif
@@ -331,12 +268,10 @@ void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
  */
 void FLEXSPI_SLV_HandleIRQ(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle)
 {
-
     handle->state = FLEXSPI_SLV_CheckAndClearInterrupt(base);
 
     /* Check if interrupt is enabled and status is alerted. */
-    if ((handle->state != kFLEXSPI_SLV_InvalidInterruptFlag) &&
-        (handle->callback != NULL))
+    if ((handle->state != kFLEXSPI_SLV_InvalidInterruptFlag) && (handle->callback != NULL))
     {
         handle->callback(base, handle);
     }
@@ -352,4 +287,3 @@ void FLEXSPI_SLV_DriverIRQHandler(void)
 }
 #endif
 #endif
-

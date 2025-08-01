@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2024 NXP
- * All rights reserved.
+ * Copyright 2016-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,8 +20,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief PIT Driver Version 2.0.5 */
-#define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief PIT Driver Version 2.2.0 */
+#define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*!
@@ -48,6 +47,26 @@ typedef enum _pit_status_flags
 {
     kPIT_TimerFlag = PIT_TFLG_TIF_MASK, /*!< Timer flag */
 } pit_status_flags_t;
+
+#if defined(FSL_FEATURE_PIT_HAS_RTI) && (FSL_FEATURE_PIT_HAS_RTI)
+/*! @brief List of PIT RTI interrupts */
+typedef enum _pit_rti_interrupt_enable
+{
+    kPIT_RtiTimerInterruptEnable = PIT_RTI_TCTRL_TIE_MASK, /*!< Real time interrupt enable */
+} pit_rti_interrupt_enable_t;
+
+/*! @brief List of PIT RTI status flags */
+typedef enum _pit_rti_status_flags
+{
+    kPIT_RtiTimerFlag = PIT_RTI_TFLG_TIF_MASK, /*!< Real time interrupt flag */
+} pit_rti_status_flags_t;
+
+/*! @brief List of PIT RTI timer load value sync status flags */
+typedef enum _pit_rti_ldval_status_flags
+{
+    kPIT_RtiLoadValueSyncFlag = PIT_RTI_LDVAL_STAT_RT_STAT_MASK
+} pit_rti_ldval_status_flags_t;
+#endif /* FSL_FEATURE_PIT_HAS_RTI */
 
 /*!
  * @brief PIT configuration structure
@@ -92,6 +111,32 @@ void PIT_Init(PIT_Type *base, const pit_config_t *config);
  * @param base PIT peripheral base address
  */
 void PIT_Deinit(PIT_Type *base);
+
+
+#if defined(FSL_FEATURE_PIT_HAS_RTI) && (FSL_FEATURE_PIT_HAS_RTI)
+
+/*!
+ * @brief Enables the PIT RTI module, and configures the peripheral for basic operations.
+ *
+ * @note The RTI might take several RTI clock cycles to get enabled or updated. Hence, you must wait for at least four
+ *       RTI clock cycles after RTI configuration.
+ *
+ * @param base   PIT peripheral base address
+ * @param config Pointer to the user's PIT config structure
+ */
+void PIT_RTI_Init(PIT_Type *base, const pit_config_t *config);
+
+/*!
+ * @brief Disables the PIT RTI module.
+ *
+ * @param base PIT peripheral base address
+ */
+static inline void PIT_RTI_Deinit(PIT_Type *base)
+{
+    base->MCR |= PIT_MCR_MDIS_RTI_MASK;
+}
+
+#endif /* FSL_FEATURE_PIT_HAS_RTI */
 
 /*!
  * @brief Fills in the PIT configuration structure with the default settings.
@@ -188,6 +233,47 @@ static inline uint32_t PIT_GetEnabledInterrupts(PIT_Type *base, pit_chnl_t chann
     return (base->CHANNEL[channel].TCTRL & PIT_TCTRL_TIE_MASK);
 }
 
+#if defined(FSL_FEATURE_PIT_HAS_RTI) && (FSL_FEATURE_PIT_HAS_RTI)
+
+/*!
+* @brief Enables the PIT RTI interrupts.
+*
+* @param base    PIT peripheral base address
+* @param mask    The interrupts to enable. This is a logical OR of members of the
+*                enumeration ::pit_rti_interrupt_enable_t
+*/
+static inline void PIT_EnableRtiInterrupts(PIT_Type *base, uint32_t mask)
+{
+    base->RTI_TCTRL |= mask;
+}
+
+/*!
+ * @brief Disables the selected PIT RTI interrupts.
+ *
+ * @param base    PIT peripheral base address
+ * @param mask    The interrupts to disable. This is a logical OR of members of the
+ *                enumeration ::pit_rti_interrupt_enable_t
+ */
+static inline void PIT_DisableRtiInterrupts(PIT_Type *base, uint32_t mask)
+{
+    base->RTI_TCTRL &= ~mask;
+}
+
+/*!
+ * @brief Gets the enabled PIT RTI interrupts.
+ *
+ * @param base    PIT peripheral base address
+ *
+ * @return The enabled interrupts. This is the logical OR of members of the
+ *         enumeration ::pit_rti_interrupt_enable_t
+ */
+static inline uint32_t PIT_GetEnabledRtiInterrupts(PIT_Type *base)
+{
+    return (base->RTI_TCTRL & PIT_RTI_TCTRL_TIE_MASK);
+}
+
+#endif /* FSL_FEATURE_PIT_HAS_RTI */
+
 /*! @}*/
 
 /*!
@@ -221,6 +307,61 @@ static inline void PIT_ClearStatusFlags(PIT_Type *base, pit_chnl_t channel, uint
 {
     base->CHANNEL[channel].TFLG = mask;
 }
+
+#if defined(FSL_FEATURE_PIT_HAS_RTI) && (FSL_FEATURE_PIT_HAS_RTI)
+
+/*!
+ * @brief Gets the PIT RTI flags.
+ *
+ * @param base    PIT peripheral base address
+ *
+ * @return The status flags. This is the logical OR of members of the
+ *         enumeration ::pit_rti_status_flags_t
+ */
+static inline uint32_t PIT_GetRtiStatusFlags(PIT_Type *base)
+{
+    return (base->RTI_TFLG & PIT_RTI_TFLG_TIF_MASK);
+}
+
+/*!
+ * @brief  Clears the PIT RTI status flags.
+ *
+ * @param base    PIT peripheral base address
+ * @param mask    The status flags to clear. This is a logical OR of members of the
+ *                enumeration ::pit_rti_status_flags_t
+ */
+static inline void PIT_ClearRtiStatusFlags(PIT_Type *base, uint32_t mask)
+{
+    base->RTI_TFLG = mask;
+}
+
+/*!
+ * @brief Reads the RTI timer load synchronization status.
+ * 
+ * In the case of the RTI timer load, it will take several cycles
+ * until this value is synchronized into the RTI clock domain.
+ *
+ * @param base    PIT peripheral base address
+ *
+ * @return The status flags. This is the logical OR of members of the
+ *         enumeration ::pit_rti_ldval_status_flags_t
+ */
+static inline uint32_t PIT_GetRtiSyncStatus(PIT_Type *base)
+{
+    return (base->RTI_LDVAL_STAT & PIT_RTI_LDVAL_STAT_RT_STAT_MASK);
+}
+
+/*!
+ * @brief  Clears the RTI timer load synchronization status.
+ *
+ * @param base    PIT peripheral base address
+ */
+static inline void PIT_ClearRtiSyncStatus(PIT_Type *base)
+{
+    base->RTI_LDVAL_STAT = PIT_RTI_LDVAL_STAT_RT_STAT_MASK;
+}
+
+#endif /* FSL_FEATURE_PIT_HAS_RTI */
 
 /*! @}*/
 
@@ -268,6 +409,60 @@ static inline uint32_t PIT_GetCurrentTimerCount(PIT_Type *base, pit_chnl_t chann
     return base->CHANNEL[channel].CVAL;
 }
 
+#if defined(FSL_FEATURE_PIT_HAS_RTI) && (FSL_FEATURE_PIT_HAS_RTI)
+
+/*!
+ * @brief Sets the RTI timer period in units of count.
+ *
+ * RTI timer begin counting from the value set by this function until it reaches 0,
+ * then it generates an interrupt and load this register value again.
+ * Writing a new value to this register does not restart the timer. Instead, the value
+ * is loaded after the timer expires.
+ *
+ * @note Users can call the utility macros provided in fsl_common.h to convert to ticks.
+ * it will take several cycles until this value is synchronized into the RTI clock domain.
+ * So, in user code, it is recommended to check the RTI_LDVAL_STAT register
+ * @code
+ *   PIT_ClearRtiSyncStatus(base);
+ *   PIT_SetRtiTimerPeriod(base, count);
+ *   while(kPIT_RtiLoadValueSyncFlag != (PIT_GetRtiSyncStatus(base)))
+ *   {
+ *   }
+ * @endcode
+ * However, according to ERR050763, this is not reliable for dynamic load mode (User set a new
+ * counter period without restarting the timer). In such case, user shall manually check
+ * PIT_GetRtiTimerCount() to ensure the current timer expires and the new value was loaded.
+ *
+ * @param base    PIT peripheral base address
+ * @param count   Timer period in units of ticks
+ */
+static inline void PIT_SetRtiTimerPeriod(PIT_Type *base, uint32_t count)
+{
+    assert(count != 0U);
+
+    /* According to RM, the LDVAL trigger = clock ticks -1 */
+    base->RTI_LDVAL = count - 1U;
+}
+
+/*!
+ * @brief Reads the RTI timer counting value.
+ *
+ * This function returns the real-time RTI timer counting value, in a range from 0 to a
+ * timer period.
+ *
+ * @note Users can call the utility macros provided in fsl_common.h to convert ticks to usec or msec.
+ *
+ * @param base    PIT peripheral base address
+ *
+ * @return RTI timer counting value in ticks
+ */
+static inline uint32_t PIT_GetRtiTimerCount(PIT_Type *base)
+{
+    return base->RTI_CVAL;
+}
+
+#endif /* FSL_FEATURE_PIT_HAS_RTI */
+
 /*! @}*/
 
 /*!
@@ -303,6 +498,37 @@ static inline void PIT_StopTimer(PIT_Type *base, pit_chnl_t channel)
 {
     base->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
 }
+
+#if defined(FSL_FEATURE_PIT_HAS_RTI) && (FSL_FEATURE_PIT_HAS_RTI)
+
+/*!
+ * @brief Starts the RTI timer counting.
+ *
+ * After calling this function, RTI timer load period value, count down to 0 and
+ * then load the respective start value again. Each time RTI timer reaches 0,
+ * it generates a trigger pulse and sets the timeout interrupt flag.
+ *
+ * @param base    PIT peripheral base address
+ */
+static inline void PIT_StartRtiTimer(PIT_Type *base)
+{
+    base->RTI_TCTRL |= PIT_RTI_TCTRL_TEN_MASK;
+}
+
+/*!
+ * @brief Stops the RTI timer counting.
+ *
+ * This function stops every RTI timer counting. RTI timer reloads its periods
+ * respectively after the next time it call the PIT_DRV_StartRtiTimer.
+ *
+ * @param base    PIT peripheral base address
+ */
+static inline void PIT_StopRtiTimer(PIT_Type *base)
+{
+    base->RTI_TCTRL &= ~PIT_RTI_TCTRL_TEN_MASK;
+}
+
+#endif /* FSL_FEATURE_PIT_HAS_RTI */
 
 /*! @}*/
 

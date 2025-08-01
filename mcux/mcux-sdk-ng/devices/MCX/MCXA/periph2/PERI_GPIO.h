@@ -1,74 +1,62 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA165VLH
-**                          MCXA165VLL
-**                          MCXA165VLQ
-**                          MCXA165VPN
-**                          MCXA166VLH
-**                          MCXA166VLL
-**                          MCXA166VLQ
-**                          MCXA166VPN
-**                          MCXA175VLH
-**                          MCXA175VLL
-**                          MCXA175VLQ
-**                          MCXA175VPN
-**                          MCXA176VLH
-**                          MCXA176VLL
-**                          MCXA176VLQ
-**                          MCXA176VPN
-**                          MCXA275VLH
-**                          MCXA275VLL
-**                          MCXA275VLQ
-**                          MCXA275VPN
-**                          MCXA276VLH
-**                          MCXA276VLL
-**                          MCXA276VLQ
-**                          MCXA276VPN
+**     Processors:          MCXA266VLH
+**                          MCXA266VLL
+**                          MCXA266VLQ
+**                          MCXA266VPN
+**                          MCXA345VLH
+**                          MCXA345VLL
+**                          MCXA345VLQ
+**                          MCXA345VPN
+**                          MCXA346VLH
+**                          MCXA346VLL
+**                          MCXA346VLQ
+**                          MCXA346VPN
+**                          MCXA366VLH
+**                          MCXA366VLL
+**                          MCXA366VLQ
+**                          MCXA366VPN
 **
-**     Version:             rev. 1.0, 2024-03-26
-**     Build:               b241120
+**     Version:             rev. 1.0, 2024-11-21
+**     Build:               b250729
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2024-03-26)
-**         Initial version based on Rev1 DraftC RM
+**     - rev. 1.0 (2024-11-21)
+**         Initial version based on Rev1 RM
 **
 ** ###################################################################
 */
 
 /*!
- * @file GPIO.h
+ * @file PERI_GPIO.h
  * @version 1.0
- * @date 2024-03-26
+ * @date 2024-11-21
  * @brief CMSIS Peripheral Access Layer for GPIO
  *
  * CMSIS Peripheral Access Layer for GPIO
  */
 
-#if !defined(GPIO_H_)
-#define GPIO_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_GPIO_H_)
+#define PERI_GPIO_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA165VLH) || defined(CPU_MCXA165VLL) || defined(CPU_MCXA165VLQ) || defined(CPU_MCXA165VPN))
-#include "MCXA165_COMMON.h"
-#elif (defined(CPU_MCXA166VLH) || defined(CPU_MCXA166VLL) || defined(CPU_MCXA166VLQ) || defined(CPU_MCXA166VPN))
-#include "MCXA166_COMMON.h"
-#elif (defined(CPU_MCXA175VLH) || defined(CPU_MCXA175VLL) || defined(CPU_MCXA175VLQ) || defined(CPU_MCXA175VPN))
-#include "MCXA175_COMMON.h"
-#elif (defined(CPU_MCXA176VLH) || defined(CPU_MCXA176VLL) || defined(CPU_MCXA176VLQ) || defined(CPU_MCXA176VPN))
-#include "MCXA176_COMMON.h"
-#elif (defined(CPU_MCXA275VLH) || defined(CPU_MCXA275VLL) || defined(CPU_MCXA275VLQ) || defined(CPU_MCXA275VPN))
-#include "MCXA275_COMMON.h"
-#elif (defined(CPU_MCXA276VLH) || defined(CPU_MCXA276VLL) || defined(CPU_MCXA276VLQ) || defined(CPU_MCXA276VPN))
-#include "MCXA276_COMMON.h"
+#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
+#include "MCXA266_COMMON.h"
+#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#include "MCXA345_COMMON.h"
+#elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
+#include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
+#include "MCXA366_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -2039,10 +2027,10 @@ typedef struct {
 #define GPIO_ICR_ISF_MASK                        (0x1000000U)
 #define GPIO_ICR_ISF_SHIFT                       (24U)
 /*! ISF - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ICR_ISF(x)                          (((uint32_t)(((uint32_t)(x)) << GPIO_ICR_ISF_SHIFT)) & GPIO_ICR_ISF_MASK)
 /*! @} */
@@ -2327,320 +2315,320 @@ typedef struct {
 #define GPIO_ISFR_ISF0_MASK                      (0x1U)
 #define GPIO_ISFR_ISF0_SHIFT                     (0U)
 /*! ISF0 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF0(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF0_SHIFT)) & GPIO_ISFR_ISF0_MASK)
 
 #define GPIO_ISFR_ISF1_MASK                      (0x2U)
 #define GPIO_ISFR_ISF1_SHIFT                     (1U)
 /*! ISF1 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF1(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF1_SHIFT)) & GPIO_ISFR_ISF1_MASK)
 
 #define GPIO_ISFR_ISF2_MASK                      (0x4U)
 #define GPIO_ISFR_ISF2_SHIFT                     (2U)
 /*! ISF2 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF2(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF2_SHIFT)) & GPIO_ISFR_ISF2_MASK)
 
 #define GPIO_ISFR_ISF3_MASK                      (0x8U)
 #define GPIO_ISFR_ISF3_SHIFT                     (3U)
 /*! ISF3 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF3(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF3_SHIFT)) & GPIO_ISFR_ISF3_MASK)
 
 #define GPIO_ISFR_ISF4_MASK                      (0x10U)
 #define GPIO_ISFR_ISF4_SHIFT                     (4U)
 /*! ISF4 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF4(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF4_SHIFT)) & GPIO_ISFR_ISF4_MASK)
 
 #define GPIO_ISFR_ISF5_MASK                      (0x20U)
 #define GPIO_ISFR_ISF5_SHIFT                     (5U)
 /*! ISF5 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF5(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF5_SHIFT)) & GPIO_ISFR_ISF5_MASK)
 
 #define GPIO_ISFR_ISF6_MASK                      (0x40U)
 #define GPIO_ISFR_ISF6_SHIFT                     (6U)
 /*! ISF6 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF6(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF6_SHIFT)) & GPIO_ISFR_ISF6_MASK)
 
 #define GPIO_ISFR_ISF7_MASK                      (0x80U)
 #define GPIO_ISFR_ISF7_SHIFT                     (7U)
 /*! ISF7 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF7(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF7_SHIFT)) & GPIO_ISFR_ISF7_MASK)
 
 #define GPIO_ISFR_ISF8_MASK                      (0x100U)
 #define GPIO_ISFR_ISF8_SHIFT                     (8U)
 /*! ISF8 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF8(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF8_SHIFT)) & GPIO_ISFR_ISF8_MASK)
 
 #define GPIO_ISFR_ISF9_MASK                      (0x200U)
 #define GPIO_ISFR_ISF9_SHIFT                     (9U)
 /*! ISF9 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF9(x)                        (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF9_SHIFT)) & GPIO_ISFR_ISF9_MASK)
 
 #define GPIO_ISFR_ISF10_MASK                     (0x400U)
 #define GPIO_ISFR_ISF10_SHIFT                    (10U)
 /*! ISF10 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF10(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF10_SHIFT)) & GPIO_ISFR_ISF10_MASK)
 
 #define GPIO_ISFR_ISF11_MASK                     (0x800U)
 #define GPIO_ISFR_ISF11_SHIFT                    (11U)
 /*! ISF11 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF11(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF11_SHIFT)) & GPIO_ISFR_ISF11_MASK)
 
 #define GPIO_ISFR_ISF12_MASK                     (0x1000U)
 #define GPIO_ISFR_ISF12_SHIFT                    (12U)
 /*! ISF12 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF12(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF12_SHIFT)) & GPIO_ISFR_ISF12_MASK)
 
 #define GPIO_ISFR_ISF13_MASK                     (0x2000U)
 #define GPIO_ISFR_ISF13_SHIFT                    (13U)
 /*! ISF13 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF13(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF13_SHIFT)) & GPIO_ISFR_ISF13_MASK)
 
 #define GPIO_ISFR_ISF14_MASK                     (0x4000U)
 #define GPIO_ISFR_ISF14_SHIFT                    (14U)
 /*! ISF14 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF14(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF14_SHIFT)) & GPIO_ISFR_ISF14_MASK)
 
 #define GPIO_ISFR_ISF15_MASK                     (0x8000U)
 #define GPIO_ISFR_ISF15_SHIFT                    (15U)
 /*! ISF15 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF15(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF15_SHIFT)) & GPIO_ISFR_ISF15_MASK)
 
 #define GPIO_ISFR_ISF16_MASK                     (0x10000U)
 #define GPIO_ISFR_ISF16_SHIFT                    (16U)
 /*! ISF16 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF16(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF16_SHIFT)) & GPIO_ISFR_ISF16_MASK)
 
 #define GPIO_ISFR_ISF17_MASK                     (0x20000U)
 #define GPIO_ISFR_ISF17_SHIFT                    (17U)
 /*! ISF17 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF17(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF17_SHIFT)) & GPIO_ISFR_ISF17_MASK)
 
 #define GPIO_ISFR_ISF18_MASK                     (0x40000U)
 #define GPIO_ISFR_ISF18_SHIFT                    (18U)
 /*! ISF18 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF18(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF18_SHIFT)) & GPIO_ISFR_ISF18_MASK)
 
 #define GPIO_ISFR_ISF19_MASK                     (0x80000U)
 #define GPIO_ISFR_ISF19_SHIFT                    (19U)
 /*! ISF19 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF19(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF19_SHIFT)) & GPIO_ISFR_ISF19_MASK)
 
 #define GPIO_ISFR_ISF20_MASK                     (0x100000U)
 #define GPIO_ISFR_ISF20_SHIFT                    (20U)
 /*! ISF20 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF20(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF20_SHIFT)) & GPIO_ISFR_ISF20_MASK)
 
 #define GPIO_ISFR_ISF21_MASK                     (0x200000U)
 #define GPIO_ISFR_ISF21_SHIFT                    (21U)
 /*! ISF21 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF21(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF21_SHIFT)) & GPIO_ISFR_ISF21_MASK)
 
 #define GPIO_ISFR_ISF22_MASK                     (0x400000U)
 #define GPIO_ISFR_ISF22_SHIFT                    (22U)
 /*! ISF22 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF22(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF22_SHIFT)) & GPIO_ISFR_ISF22_MASK)
 
 #define GPIO_ISFR_ISF23_MASK                     (0x800000U)
 #define GPIO_ISFR_ISF23_SHIFT                    (23U)
 /*! ISF23 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF23(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF23_SHIFT)) & GPIO_ISFR_ISF23_MASK)
 
 #define GPIO_ISFR_ISF24_MASK                     (0x1000000U)
 #define GPIO_ISFR_ISF24_SHIFT                    (24U)
 /*! ISF24 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF24(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF24_SHIFT)) & GPIO_ISFR_ISF24_MASK)
 
 #define GPIO_ISFR_ISF25_MASK                     (0x2000000U)
 #define GPIO_ISFR_ISF25_SHIFT                    (25U)
 /*! ISF25 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF25(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF25_SHIFT)) & GPIO_ISFR_ISF25_MASK)
 
 #define GPIO_ISFR_ISF26_MASK                     (0x4000000U)
 #define GPIO_ISFR_ISF26_SHIFT                    (26U)
 /*! ISF26 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF26(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF26_SHIFT)) & GPIO_ISFR_ISF26_MASK)
 
 #define GPIO_ISFR_ISF27_MASK                     (0x8000000U)
 #define GPIO_ISFR_ISF27_SHIFT                    (27U)
 /*! ISF27 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF27(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF27_SHIFT)) & GPIO_ISFR_ISF27_MASK)
 
 #define GPIO_ISFR_ISF28_MASK                     (0x10000000U)
 #define GPIO_ISFR_ISF28_SHIFT                    (28U)
 /*! ISF28 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF28(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF28_SHIFT)) & GPIO_ISFR_ISF28_MASK)
 
 #define GPIO_ISFR_ISF29_MASK                     (0x20000000U)
 #define GPIO_ISFR_ISF29_SHIFT                    (29U)
 /*! ISF29 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF29(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF29_SHIFT)) & GPIO_ISFR_ISF29_MASK)
 
 #define GPIO_ISFR_ISF30_MASK                     (0x40000000U)
 #define GPIO_ISFR_ISF30_SHIFT                    (30U)
 /*! ISF30 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF30(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF30_SHIFT)) & GPIO_ISFR_ISF30_MASK)
 
 #define GPIO_ISFR_ISF31_MASK                     (0x80000000U)
 #define GPIO_ISFR_ISF31_SHIFT                    (31U)
 /*! ISF31 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define GPIO_ISFR_ISF31(x)                       (((uint32_t)(((uint32_t)(x)) << GPIO_ISFR_ISF31_SHIFT)) & GPIO_ISFR_ISF31_MASK)
 /*! @} */
@@ -2679,5 +2667,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* GPIO_H_ */
+#endif  /* PERI_GPIO_H_ */
 

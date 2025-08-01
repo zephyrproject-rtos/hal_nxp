@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.xspi_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.xspi)
-    mcux_component_version(2.5.0)
+    mcux_component_version(2.5.1)
 
     mcux_add_source(SOURCES fsl_xspi.c fsl_xspi.h)
 

@@ -44,13 +44,13 @@
 **                          MIMX9596XVZXN_cm7
 **
 **     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Build:               b250106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BBSM_BBNSM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -222,14 +222,14 @@ typedef struct {
 #define BBSM_BBNSM_BBNSM_CTRL_CAL_VAL_MASK       (0x1F00U)
 #define BBSM_BBNSM_BBNSM_CTRL_CAL_VAL_SHIFT      (8U)
 /*! CAL_VAL - Calibration Value
- *  0b01111..+15 counts per each 32768 ticks of the counter clock.
- *  0b00010..+2 counts per each 32768 ticks of the counter clock.
- *  0b00001..+1 counts per each 32768 ticks of the counter clock.
  *  0b00000..+0 counts per each 32768 ticks of the counter clock.
- *  0b11111..-1 counts per each 32768 ticks of the counter clock.
- *  0b11110..-2 counts per each 32768 ticks of the counter clock.
- *  0b10001..-15 counts per each 32768 ticks of the counter clock.
+ *  0b00001..+1 counts per each 32768 ticks of the counter clock.
+ *  0b00010..+2 counts per each 32768 ticks of the counter clock.
+ *  0b01111..+15 counts per each 32768 ticks of the counter clock.
  *  0b10000..-16 counts per each 32768 ticks of the counter clock.
+ *  0b10001..-15 counts per each 32768 ticks of the counter clock.
+ *  0b11110..-2 counts per each 32768 ticks of the counter clock.
+ *  0b11111..-1 counts per each 32768 ticks of the counter clock.
  */
 #define BBSM_BBNSM_BBNSM_CTRL_CAL_VAL(x)         (((uint32_t)(((uint32_t)(x)) << BBSM_BBNSM_BBNSM_CTRL_CAL_VAL_SHIFT)) & BBSM_BBNSM_BBNSM_CTRL_CAL_VAL_MASK)
 
@@ -390,6 +390,11 @@ typedef struct {
 #define BBSM_BBNSM_BBNSM_EVENTS_BI_SHIFT         (8U)
 /*! BI - Button Interrupt */
 #define BBSM_BBNSM_BBNSM_EVENTS_BI(x)            (((uint32_t)(((uint32_t)(x)) << BBSM_BBNSM_BBNSM_EVENTS_BI_SHIFT)) & BBSM_BBNSM_BBNSM_EVENTS_BI_MASK)
+
+#define BBSM_BBNSM_BBNSM_EVENTS_WUR_MASK         (0x200U)
+#define BBSM_BBNSM_BBNSM_EVENTS_WUR_SHIFT        (9U)
+/*! WUR - Wakeup Request */
+#define BBSM_BBNSM_BBNSM_EVENTS_WUR(x)           (((uint32_t)(((uint32_t)(x)) << BBSM_BBNSM_BBNSM_EVENTS_WUR_SHIFT)) & BBSM_BBNSM_BBNSM_EVENTS_WUR_MASK)
 /*! @} */
 
 /*! @name BBNSM_PAD_CTRL - BBNSM External Pad Control Register */

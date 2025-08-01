@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -77,11 +77,11 @@ void COP_Init(SIM_Type *base, const cop_config_t *config)
     uint32_t value = 0U;
 
 #if defined(FSL_FEATURE_COP_HAS_LONGTIME_MODE) && FSL_FEATURE_COP_HAS_LONGTIME_MODE
-    value = SIM_COPC_COPW(config->enableWindowMode) | SIM_COPC_COPCLKS(config->timeoutMode) |
-            SIM_COPC_COPT(config->timeoutCycles) | SIM_COPC_COPSTPEN(config->enableStop) |
-            SIM_COPC_COPDBGEN(config->enableDebug) | SIM_COPC_COPCLKSEL(config->clockSource);
+    value = SIM_COPC_COPW(config->enableWindowMode ? 1U : 0U) | SIM_COPC_COPCLKS(config->timeoutMode) |
+            SIM_COPC_COPT(config->timeoutCycles) | SIM_COPC_COPSTPEN(config->enableStop ? 1U : 0U) |
+            SIM_COPC_COPDBGEN(config->enableDebug ? 1U : 0U) | SIM_COPC_COPCLKSEL(config->clockSource);
 #else
-    value = SIM_COPC_COPW(config->enableWindowMode) | SIM_COPC_COPCLKS(config->clockSource) |
+    value = SIM_COPC_COPW(config->enableWindowMode ? 1U : 0U) | SIM_COPC_COPCLKS(config->clockSource) |
             SIM_COPC_COPT(config->timeoutCycles);
 #endif /* FSL_FEATURE_COP_HAS_LONGTIME_MODE */
     base->COPC = value;

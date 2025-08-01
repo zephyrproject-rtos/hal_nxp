@@ -1,28 +1,46 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1181CVP2B
+**                          MIMXRT1181CVP2C
 **                          MIMXRT1181XVP2B
+**                          MIMXRT1181XVP2C
 **                          MIMXRT1182CVP2B
+**                          MIMXRT1182CVP2C
 **                          MIMXRT1182XVP2B
+**                          MIMXRT1182XVP2C
+**                          MIMXRT1186CVJ8C_cm33
+**                          MIMXRT1186CVJ8C_cm7
+**                          MIMXRT1186XVJ8C_cm33
+**                          MIMXRT1186XVJ8C_cm7
 **                          MIMXRT1187AVM8B_cm33
 **                          MIMXRT1187AVM8B_cm7
+**                          MIMXRT1187AVM8C_cm33
+**                          MIMXRT1187AVM8C_cm7
 **                          MIMXRT1187CVM8B_cm33
 **                          MIMXRT1187CVM8B_cm7
+**                          MIMXRT1187CVM8C_cm33
+**                          MIMXRT1187CVM8C_cm7
 **                          MIMXRT1187XVM8B_cm33
 **                          MIMXRT1187XVM8B_cm7
+**                          MIMXRT1187XVM8C_cm33
+**                          MIMXRT1187XVM8C_cm7
 **                          MIMXRT1189CVM8B_cm33
 **                          MIMXRT1189CVM8B_cm7
+**                          MIMXRT1189CVM8C_cm33
+**                          MIMXRT1189CVM8C_cm7
 **                          MIMXRT1189XVM8B_cm33
 **                          MIMXRT1189XVM8B_cm7
+**                          MIMXRT1189XVM8C_cm33
+**                          MIMXRT1189XVM8C_cm7
 **
-**     Version:             rev. 2.0, 2024-01-18
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENETC_PCI_TYPE0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,33 +51,40 @@
 **         Initial version.
 **     - rev. 2.0 (2024-01-18)
 **         Header RFP.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ENETC_PCI_TYPE0.h
- * @version 2.0
- * @date 2024-01-18
+ * @file PERI_ENETC_PCI_TYPE0.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ENETC_PCI_TYPE0
  *
  * CMSIS Peripheral Access Layer for ENETC_PCI_TYPE0
  */
 
-#if !defined(ENETC_PCI_TYPE0_H_)
-#define ENETC_PCI_TYPE0_H_                       /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ENETC_PCI_TYPE0_H_)
+#define PERI_ENETC_PCI_TYPE0_H_                  /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181XVP2B))
+#if (defined(CPU_MIMXRT1181CVP2B) || defined(CPU_MIMXRT1181CVP2C) || defined(CPU_MIMXRT1181XVP2B) || defined(CPU_MIMXRT1181XVP2C))
 #include "MIMXRT1181_COMMON.h"
-#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182XVP2B))
+#elif (defined(CPU_MIMXRT1182CVP2B) || defined(CPU_MIMXRT1182CVP2C) || defined(CPU_MIMXRT1182XVP2B) || defined(CPU_MIMXRT1182XVP2C))
 #include "MIMXRT1182_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm33) || defined(CPU_MIMXRT1186XVJ8C_cm33))
+#include "MIMXRT1186_cm33_COMMON.h"
+#elif (defined(CPU_MIMXRT1186CVJ8C_cm7) || defined(CPU_MIMXRT1186XVJ8C_cm7))
+#include "MIMXRT1186_cm7_COMMON.h"
+#elif (defined(CPU_MIMXRT1187AVM8B_cm33) || defined(CPU_MIMXRT1187AVM8C_cm33) || defined(CPU_MIMXRT1187CVM8B_cm33) || defined(CPU_MIMXRT1187CVM8C_cm33) || defined(CPU_MIMXRT1187XVM8B_cm33) || defined(CPU_MIMXRT1187XVM8C_cm33))
 #include "MIMXRT1187_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1187AVM8B_cm7) || defined(CPU_MIMXRT1187AVM8C_cm7) || defined(CPU_MIMXRT1187CVM8B_cm7) || defined(CPU_MIMXRT1187CVM8C_cm7) || defined(CPU_MIMXRT1187XVM8B_cm7) || defined(CPU_MIMXRT1187XVM8C_cm7))
 #include "MIMXRT1187_cm7_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm33) || defined(CPU_MIMXRT1189CVM8C_cm33) || defined(CPU_MIMXRT1189XVM8B_cm33) || defined(CPU_MIMXRT1189XVM8C_cm33))
 #include "MIMXRT1189_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7))
+#elif (defined(CPU_MIMXRT1189CVM8B_cm7) || defined(CPU_MIMXRT1189CVM8C_cm7) || defined(CPU_MIMXRT1189XVM8B_cm7) || defined(CPU_MIMXRT1189XVM8C_cm7))
 #include "MIMXRT1189_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -174,22 +199,22 @@ typedef struct {
   __I  uint32_t PCIE_CFC_RTR_RTR1;                 /**< PCIe RTR readiness time reporting 1 register, offset: 0x144 */
   __I  uint32_t PCIE_CFC_RTR_RTR2;                 /**< PCIe RTR readiness time reporting 2 register, offset: 0x148 */
        uint8_t RESERVED_13[4];
-  __I  uint32_t PCIE_CFC_SRIOV_CAP_HDR;            /**< PCIe SR-IOV capability header, offset: 0x150, not available in all instances (available on 9 out of 45) */
-  __I  uint32_t PCIE_CFC_SRIOV_CAP;                /**< PCIe SR-IOV capability register, offset: 0x154, not available in all instances (available on 9 out of 45) */
-  __IO uint16_t PCIE_CFC_SRIOV_CTL;                /**< PCIe SR-IOV control register, offset: 0x158, not available in all instances (available on 9 out of 45) */
-  __I  uint16_t PCIE_CFC_SRIOV_STAT;               /**< PCIe SR-IOV status register, offset: 0x15A, not available in all instances (available on 9 out of 45) */
-  __I  uint16_t PCIE_CFC_SRIOV_INIT_VFS;           /**< PCIe SR-IOV initial VFs register, offset: 0x15C, not available in all instances (available on 9 out of 45) */
-  __I  uint16_t PCIE_CFC_SRIOV_TOTAL_VFS;          /**< PCIe SR-IOV total VFs register, offset: 0x15E, not available in all instances (available on 9 out of 45) */
-  __IO uint16_t PCIE_CFC_SRIOV_NUM_VFS;            /**< PCIe SR-IOV num VFs register, offset: 0x160, not available in all instances (available on 9 out of 45) */
-  __I  uint16_t PCIE_CFC_SRIOV_FUNC_DEP_LIST;      /**< PCIe SR-IOV function dependency list register, offset: 0x162, not available in all instances (available on 9 out of 45) */
-  __I  uint16_t PCIE_CFC_SRIOV_FIRST_VF_OFF;       /**< PCIe SR-IOV first VF offset register, offset: 0x164, not available in all instances (available on 9 out of 45) */
-  __I  uint16_t PCIE_CFC_SRIOV_VF_STRIDE;          /**< PCIe SR-IOV VF stride register, offset: 0x166, not available in all instances (available on 9 out of 45) */
+  __I  uint32_t PCIE_CFC_SRIOV_CAP_HDR;            /**< PCIe SR-IOV capability header, offset: 0x150, not available in all instances (available on 20 out of 100) */
+  __I  uint32_t PCIE_CFC_SRIOV_CAP;                /**< PCIe SR-IOV capability register, offset: 0x154, not available in all instances (available on 20 out of 100) */
+  __IO uint16_t PCIE_CFC_SRIOV_CTL;                /**< PCIe SR-IOV control register, offset: 0x158, not available in all instances (available on 20 out of 100) */
+  __I  uint16_t PCIE_CFC_SRIOV_STAT;               /**< PCIe SR-IOV status register, offset: 0x15A, not available in all instances (available on 20 out of 100) */
+  __I  uint16_t PCIE_CFC_SRIOV_INIT_VFS;           /**< PCIe SR-IOV initial VFs register, offset: 0x15C, not available in all instances (available on 20 out of 100) */
+  __I  uint16_t PCIE_CFC_SRIOV_TOTAL_VFS;          /**< PCIe SR-IOV total VFs register, offset: 0x15E, not available in all instances (available on 20 out of 100) */
+  __IO uint16_t PCIE_CFC_SRIOV_NUM_VFS;            /**< PCIe SR-IOV num VFs register, offset: 0x160, not available in all instances (available on 20 out of 100) */
+  __I  uint16_t PCIE_CFC_SRIOV_FUNC_DEP_LIST;      /**< PCIe SR-IOV function dependency list register, offset: 0x162, not available in all instances (available on 20 out of 100) */
+  __I  uint16_t PCIE_CFC_SRIOV_FIRST_VF_OFF;       /**< PCIe SR-IOV first VF offset register, offset: 0x164, not available in all instances (available on 20 out of 100) */
+  __I  uint16_t PCIE_CFC_SRIOV_VF_STRIDE;          /**< PCIe SR-IOV VF stride register, offset: 0x166, not available in all instances (available on 20 out of 100) */
        uint8_t RESERVED_14[2];
-  __I  uint16_t PCIE_CFC_SRIOV_VF_DEV_ID;          /**< PCIe SR-IOV VF device ID register, offset: 0x16A, not available in all instances (available on 9 out of 45) */
-  __I  uint32_t PCIE_CFC_SRIOV_SUP_PAGE_SIZES;     /**< PCIe SR-IOV supported page sizes ID register, offset: 0x16C, not available in all instances (available on 9 out of 45) */
-  __I  uint32_t PCIE_CFC_SRIOV_SYS_PAGE_SIZE;      /**< PCIe SR-IOV system page size ID register, offset: 0x170, not available in all instances (available on 9 out of 45) */
-  __I  uint32_t PCIE_CFC_VF_BAR[ENETC_PCI_TYPE0_NUM_VF_BARL_COUNT]; /**< PCIe SR-IOV VF base address register 0..PCIe SR-IOV VF base address register 5, array offset: 0x174, array step: 0x4, not available in all instances (available on 9 out of 45) */
-  __I  uint32_t PCIE_CFC_SRIOV_VF_MIG_STATE_ARR_OFF; /**< PCIe SR-IOV VF migration state array offset register, offset: 0x18C, not available in all instances (available on 9 out of 45) */
+  __I  uint16_t PCIE_CFC_SRIOV_VF_DEV_ID;          /**< PCIe SR-IOV VF device ID register, offset: 0x16A, not available in all instances (available on 20 out of 100) */
+  __I  uint32_t PCIE_CFC_SRIOV_SUP_PAGE_SIZES;     /**< PCIe SR-IOV supported page sizes ID register, offset: 0x16C, not available in all instances (available on 20 out of 100) */
+  __I  uint32_t PCIE_CFC_SRIOV_SYS_PAGE_SIZE;      /**< PCIe SR-IOV system page size ID register, offset: 0x170, not available in all instances (available on 20 out of 100) */
+  __I  uint32_t PCIE_CFC_VF_BAR[ENETC_PCI_TYPE0_NUM_VF_BARL_COUNT]; /**< PCIe SR-IOV VF base address register 0..PCIe SR-IOV VF base address register 5, array offset: 0x174, array step: 0x4, not available in all instances (available on 20 out of 100) */
+  __I  uint32_t PCIE_CFC_SRIOV_VF_MIG_STATE_ARR_OFF; /**< PCIe SR-IOV VF migration state array offset register, offset: 0x18C, not available in all instances (available on 20 out of 100) */
 } ENETC_PCI_TYPE0_Type;
 
 /* ----------------------------------------------------------------------------
@@ -1042,5 +1067,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ENETC_PCI_TYPE0_H_ */
+#endif  /* PERI_ENETC_PCI_TYPE0_H_ */
 

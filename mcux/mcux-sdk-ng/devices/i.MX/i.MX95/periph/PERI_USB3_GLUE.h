@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB3_GLUE
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USB3_GLUE.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_USB3_GLUE.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USB3_GLUE
  *
  * CMSIS Peripheral Access Layer for USB3_GLUE
  */
 
-#if !defined(USB3_GLUE_H_)
-#define USB3_GLUE_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USB3_GLUE_H_)
+#define PERI_USB3_GLUE_H_                        /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -133,13 +406,9 @@
 typedef struct {
   __IO uint32_t USB3_CTRL0;                        /**< USB3 Controller 0, offset: 0x0 */
   __IO uint32_t USB3_CTRL1;                        /**< USB3 Controller 1, offset: 0x4 */
-       uint8_t RESERVED_0[8];
-       uint32_t USB3_DBG0;                         /**< USB3 Debug 0, offset: 0x10 */
-       uint32_t USB3_DBG1;                         /**< USB3 Debug 1, offset: 0x14 */
-       uint32_t USB3_DBG2;                         /**< USB3 Debug 2, offset: 0x18 */
-       uint8_t RESERVED_1[4];
+       uint8_t RESERVED_0[24];
   __I  uint32_t USB3_STS0;                         /**< USB3 Status 0, offset: 0x20 */
-       uint8_t RESERVED_2[28];
+       uint8_t RESERVED_1[28];
   __IO uint32_t PHY_CTRL0;                         /**< USBPHY Control 0, offset: 0x40 */
   __IO uint32_t PHY_CTRL1;                         /**< USBPHY Control 1, offset: 0x44 */
   __IO uint32_t PHY_CTRL2;                         /**< USBPHY Control 2, offset: 0x48 */
@@ -147,10 +416,10 @@ typedef struct {
   __IO uint32_t PHY_CTRL4;                         /**< USBPHY Control 4, offset: 0x50 */
   __IO uint32_t PHY_CTRL5;                         /**< USBPHY Control 5, offset: 0x54 */
   __IO uint32_t PHY_CTRL6;                         /**< USBPHY Control 6, offset: 0x58 */
-       uint8_t RESERVED_3[20];
-  __IO uint32_t PHY_CRCTL;                         /**< USB3_PHY CR Control, offset: 0x70 */
-  __I  uint32_t PHY_CRSR;                          /**< USB3_PHY CR Status, offset: 0x74 */
-       uint8_t RESERVED_4[8];
+       uint8_t RESERVED_2[20];
+  __IO uint32_t PHY_CRCTL;                         /**< PHY CR Control, offset: 0x70 */
+  __I  uint32_t PHY_CRSR;                          /**< PHY CR Status, offset: 0x74 */
+       uint8_t RESERVED_3[8];
   __IO uint32_t PHY_STATUS0;                       /**< USB3_PHY Status 0, offset: 0x80 */
 } USB3_GLUE_Type;
 
@@ -318,8 +587,8 @@ typedef struct {
 #define USB3_GLUE_USB3_STS0_IDDIG_MASK           (0x8000U)
 #define USB3_GLUE_USB3_STS0_IDDIG_SHIFT          (15U)
 /*! IDDIG - IDDIG
- *  0b1..Connected plug is a mini-B plug
  *  0b0..Connected plug is a mini-A plug
+ *  0b1..Connected plug is a mini-B plug
  */
 #define USB3_GLUE_USB3_STS0_IDDIG(x)             (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_USB3_STS0_IDDIG_SHIFT)) & USB3_GLUE_USB3_STS0_IDDIG_MASK)
 
@@ -406,8 +675,8 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL1_COMMONONN_MASK       (0x2U)
 #define USB3_GLUE_PHY_CTRL1_COMMONONN_SHIFT      (1U)
 /*! COMMONONN - Common Block Power-Down Control
- *  0b1..In Suspend or Sleep mode, the PLL block is powered down
  *  0b0..In Suspend or Sleep mode, the PLL block remains powered and continues to draw current
+ *  0b1..In Suspend or Sleep mode, the PLL block is powered down
  */
 #define USB3_GLUE_PHY_CTRL1_COMMONONN(x)         (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_COMMONONN_SHIFT)) & USB3_GLUE_PHY_CTRL1_COMMONONN_MASK)
 
@@ -463,58 +732,58 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL1_DCDENB_MASK          (0x20000U)
 #define USB3_GLUE_PHY_CTRL1_DCDENB_SHIFT         (17U)
 /*! DCDENB - Data Contact Detection Enable
- *  0b1..IDP_SRC current is sourced onto DP<#>, pull-down resistance on DM<#> is enabled
  *  0b0..IDP_SRC current is disabled, pull-down resistance on DM<#> is disabled
+ *  0b1..IDP_SRC current is sourced onto DP<#>, pull-down resistance on DM<#> is enabled
  */
 #define USB3_GLUE_PHY_CTRL1_DCDENB(x)            (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_DCDENB_SHIFT)) & USB3_GLUE_PHY_CTRL1_DCDENB_MASK)
 
 #define USB3_GLUE_PHY_CTRL1_CHRGSEL_MASK         (0x40000U)
 #define USB3_GLUE_PHY_CTRL1_CHRGSEL_SHIFT        (18U)
 /*! CHRGSEL - Battery Charging Source Select
- *  0b1..Data source voltage (VDAT_SRC) is sourced onto DM<#> and sunk from DP<#>
  *  0b0..Data source voltage (VDAT_SRC) is sourced onto DP<#> and sunk from DM<#>
+ *  0b1..Data source voltage (VDAT_SRC) is sourced onto DM<#> and sunk from DP<#>
  */
 #define USB3_GLUE_PHY_CTRL1_CHRGSEL(x)           (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_CHRGSEL_SHIFT)) & USB3_GLUE_PHY_CTRL1_CHRGSEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL1_VDATSRCENB_MASK      (0x80000U)
 #define USB3_GLUE_PHY_CTRL1_VDATSRCENB_SHIFT     (19U)
 /*! VDATSRCENB - Battery Charging Sourcing Select
- *  0b1..Data source voltage (VDAT_SRC) is enabled
  *  0b0..Data source voltage (VDAT_SRC) is disabled
+ *  0b1..Data source voltage (VDAT_SRC) is enabled
  */
 #define USB3_GLUE_PHY_CTRL1_VDATSRCENB(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_VDATSRCENB_SHIFT)) & USB3_GLUE_PHY_CTRL1_VDATSRCENB_MASK)
 
 #define USB3_GLUE_PHY_CTRL1_VDATDETENB_MASK      (0x100000U)
 #define USB3_GLUE_PHY_CTRL1_VDATDETENB_SHIFT     (20U)
 /*! VDATDETENB - Battery Charging Attach/Connect Detection Enable
- *  0b1..Data detect voltage (CHG_DET) is enabled
  *  0b0..Data detect voltage (CHG_DET) is disabled
+ *  0b1..Data detect voltage (CHG_DET) is enabled
  */
 #define USB3_GLUE_PHY_CTRL1_VDATDETENB(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_VDATDETENB_SHIFT)) & USB3_GLUE_PHY_CTRL1_VDATDETENB_MASK)
 
 #define USB3_GLUE_PHY_CTRL1_CHRGSRCPUENB0_MASK   (0x600000U)
 #define USB3_GLUE_PHY_CTRL1_CHRGSRCPUENB0_SHIFT  (21U)
 /*! CHRGSRCPUENB0 - Charger Source Pull-Up Enable
- *  0b01..Charger source pull up is enabled
  *  0b00..Charger source pull up is disabled
+ *  0b01..Charger source pull up is enabled
  */
 #define USB3_GLUE_PHY_CTRL1_CHRGSRCPUENB0(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_CHRGSRCPUENB0_SHIFT)) & USB3_GLUE_PHY_CTRL1_CHRGSRCPUENB0_MASK)
 
 #define USB3_GLUE_PHY_CTRL1_VDATREFTUNE0_MASK    (0x1800000U)
 #define USB3_GLUE_PHY_CTRL1_VDATREFTUNE0_SHIFT   (23U)
 /*! VDATREFTUNE0 - Data Detect Voltage Adjustment
- *  0b11..- 20%
- *  0b10..- 10%
- *  0b01..0 (default)
  *  0b00..+ 10%
+ *  0b01..0
+ *  0b10..- 10%
+ *  0b11..- 20%
  */
 #define USB3_GLUE_PHY_CTRL1_VDATREFTUNE0(x)      (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_VDATREFTUNE0_SHIFT)) & USB3_GLUE_PHY_CTRL1_VDATREFTUNE0_MASK)
 
 #define USB3_GLUE_PHY_CTRL1_HSXCVREXTCTL0_MASK   (0x2000000U)
 #define USB3_GLUE_PHY_CTRL1_HSXCVREXTCTL0_SHIFT  (25U)
 /*! HSXCVREXTCTL0 - HS Transceiver Asynchronous Control
- *  0b1..HS TX/RX path is selected
  *  0b0..FS TX/RX path is selected
+ *  0b1..HS TX/RX path is selected
  */
 #define USB3_GLUE_PHY_CTRL1_HSXCVREXTCTL0(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_HSXCVREXTCTL0_SHIFT)) & USB3_GLUE_PHY_CTRL1_HSXCVREXTCTL0_MASK)
 
@@ -533,13 +802,13 @@ typedef struct {
 /*! USB_DEV_POR - PoR as USB Device */
 #define USB3_GLUE_PHY_CTRL1_USB_DEV_POR(x)       (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_USB_DEV_POR_SHIFT)) & USB3_GLUE_PHY_CTRL1_USB_DEV_POR_MASK)
 
-#define USB3_GLUE_PHY_CTRL1_TAC_APB_RESET_SW_MASK (0x40000000U)
-#define USB3_GLUE_PHY_CTRL1_TAC_APB_RESET_SW_SHIFT (30U)
-/*! TAC_APB_RESET_SW - TCA Reset SW Control
- *  0b1..TCA reset is enabled
+#define USB3_GLUE_PHY_CTRL1_TCA_APB_RESET_SW_MASK (0x40000000U)
+#define USB3_GLUE_PHY_CTRL1_TCA_APB_RESET_SW_SHIFT (30U)
+/*! TCA_APB_RESET_SW - TCA Reset SW Control
  *  0b0..TCA reset is disabled
+ *  0b1..TCA reset is enabled
  */
-#define USB3_GLUE_PHY_CTRL1_TAC_APB_RESET_SW(x)  (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_TAC_APB_RESET_SW_SHIFT)) & USB3_GLUE_PHY_CTRL1_TAC_APB_RESET_SW_MASK)
+#define USB3_GLUE_PHY_CTRL1_TCA_APB_RESET_SW(x)  (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL1_TCA_APB_RESET_SW_SHIFT)) & USB3_GLUE_PHY_CTRL1_TCA_APB_RESET_SW_MASK)
 /*! @} */
 
 /*! @name PHY_CTRL2 - USBPHY Control 2 */
@@ -578,26 +847,26 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL2_FSSE0EXT_MASK        (0x40U)
 #define USB3_GLUE_PHY_CTRL2_FSSE0EXT_SHIFT       (6U)
 /*! FSSE0EXT - USB 1.1 Transmit Data
- *  0b1..D+ and D- lines are driven to a Differential 1
  *  0b0..D+ and D- lines are driven to a Differential 0
+ *  0b1..D+ and D- lines are driven to a Differential 1
  */
 #define USB3_GLUE_PHY_CTRL2_FSSE0EXT(x)          (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_FSSE0EXT_SHIFT)) & USB3_GLUE_PHY_CTRL2_FSSE0EXT_MASK)
 
 #define USB3_GLUE_PHY_CTRL2_FSXCVROWNER_MASK     (0x80U)
 #define USB3_GLUE_PHY_CTRL2_FSXCVROWNER_SHIFT    (7U)
 /*! FSXCVROWNER - UTMI+/Serial Interface Select
+ *  0b0..Data on the D+ and D- lines is transmitted and received through the UTMI+
  *  0b1..TXENABLEN<#>, FSDATAEXT<#>, and FSSE0EXT<#> inputs drive USB 2.0 data output onto the D+ and D- lines.
  *       Data that the USB 3.0 femtoPHY receives from the D+ and D- lines appears on the FSVMINUS<#> and FSVPLUS<#>
  *       outputs
- *  0b0..Data on the D+ and D- lines is transmitted and received through the UTMI+
  */
 #define USB3_GLUE_PHY_CTRL2_FSXCVROWNER(x)       (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_FSXCVROWNER_SHIFT)) & USB3_GLUE_PHY_CTRL2_FSXCVROWNER_MASK)
 
 #define USB3_GLUE_PHY_CTRL2_TXENABLEN_MASK       (0x100U)
 #define USB3_GLUE_PHY_CTRL2_TXENABLEN_SHIFT      (8U)
 /*! TXENABLEN - USB 1.1 Data Enable
- *  0b1..FSDATAEXT<#> and FSSE0EXT<#> are disabled
  *  0b0..FSDATAEXT<#> and FSSE0EXT<#> are enabled
+ *  0b1..FSDATAEXT<#> and FSSE0EXT<#> are disabled
  */
 #define USB3_GLUE_PHY_CTRL2_TXENABLEN(x)         (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_TXENABLEN_SHIFT)) & USB3_GLUE_PHY_CTRL2_TXENABLEN_MASK)
 
@@ -609,16 +878,16 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL2_VBUSVLDEXT_MASK      (0x400U)
 #define USB3_GLUE_PHY_CTRL2_VBUSVLDEXT_SHIFT     (10U)
 /*! VBUSVLDEXT - External VBUS Valid Indicator
- *  0b1..VBUS<#> signal is valid, and the pull-up resistor on D+ is enabled
  *  0b0..VBUS<#> signal is not valid, and the pull-up resistor on D+ is disabled
+ *  0b1..VBUS<#> signal is valid, and the pull-up resistor on D+ is enabled
  */
 #define USB3_GLUE_PHY_CTRL2_VBUSVLDEXT(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_VBUSVLDEXT_SHIFT)) & USB3_GLUE_PHY_CTRL2_VBUSVLDEXT_MASK)
 
 #define USB3_GLUE_PHY_CTRL2_VBUSVLDEXTSEL_MASK   (0x800U)
 #define USB3_GLUE_PHY_CTRL2_VBUSVLDEXTSEL_SHIFT  (11U)
 /*! VBUSVLDEXTSEL - External VBUS Valid Indicator Select
- *  0b1..VBUSVLDEXT<#> input is used
  *  0b0..Internal Session Valid comparator is used
+ *  0b1..VBUSVLDEXT<#> input is used
  */
 #define USB3_GLUE_PHY_CTRL2_VBUSVLDEXTSEL(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_VBUSVLDEXTSEL_SHIFT)) & USB3_GLUE_PHY_CTRL2_VBUSVLDEXTSEL_MASK)
 
@@ -635,8 +904,8 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL2_UTMOTG_IDPULLUP_MASK (0x4000U)
 #define USB3_GLUE_PHY_CTRL2_UTMOTG_IDPULLUP_SHIFT (14U)
 /*! UTMOTG_IDPULLUP - Analog ID Input Sample Enable
- *  0b1..IDN pin sampling is enabled, and the IDDIG0 output is valid
  *  0b0..IDN pin sampling is disabled, and the IDDIG0 output is not valid
+ *  0b1..IDN pin sampling is enabled, and the IDDIG0 output is valid
  */
 #define USB3_GLUE_PHY_CTRL2_UTMOTG_IDPULLUP(x)   (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_UTMOTG_IDPULLUP_SHIFT)) & USB3_GLUE_PHY_CTRL2_UTMOTG_IDPULLUP_MASK)
 
@@ -648,8 +917,8 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL2_RX0LOSLFPSEN_MASK    (0x10000U)
 #define USB3_GLUE_PHY_CTRL2_RX0LOSLFPSEN_SHIFT   (16U)
 /*! RX0LOSLFPSEN - RX0 LOS LFPS Filter Enable
- *  0b1..Enables RX LOS LFPS filter
  *  0b0..Disables RX LOS LFPS filter
+ *  0b1..Enables RX LOS LFPS filter
  */
 #define USB3_GLUE_PHY_CTRL2_RX0LOSLFPSEN(x)      (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_RX0LOSLFPSEN_SHIFT)) & USB3_GLUE_PHY_CTRL2_RX0LOSLFPSEN_MASK)
 
@@ -666,24 +935,24 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL2_DRVVBUS_GF_EN_MASK   (0x80000U)
 #define USB3_GLUE_PHY_CTRL2_DRVVBUS_GF_EN_SHIFT  (19U)
 /*! DRVVBUS_GF_EN - DRV VBUS Enable
- *  0b1..Enables Vbus
  *  0b0..Disables Vbus
+ *  0b1..Enables Vbus
  */
 #define USB3_GLUE_PHY_CTRL2_DRVVBUS_GF_EN(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_DRVVBUS_GF_EN_SHIFT)) & USB3_GLUE_PHY_CTRL2_DRVVBUS_GF_EN_MASK)
 
 #define USB3_GLUE_PHY_CTRL2_RX1LOSLFPSEN_MASK    (0x100000U)
 #define USB3_GLUE_PHY_CTRL2_RX1LOSLFPSEN_SHIFT   (20U)
 /*! RX1LOSLFPSEN - RX1 LOS LFPS Filter Enable
- *  0b1..Enables RX LOS LFPS filter
  *  0b0..Disables RX LOS LFPS filter
+ *  0b1..Enables RX LOS LFPS filter
  */
 #define USB3_GLUE_PHY_CTRL2_RX1LOSLFPSEN(x)      (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL2_RX1LOSLFPSEN_SHIFT)) & USB3_GLUE_PHY_CTRL2_RX1LOSLFPSEN_MASK)
 
 #define USB3_GLUE_PHY_CTRL2_sys_vbusvalid_sel_MASK (0x600000U)
 #define USB3_GLUE_PHY_CTRL2_sys_vbusvalid_sel_SHIFT (21U)
 /*! sys_vbusvalid_sel - PHY sys_vbusvalid input mux selection
- *  0b01..PHY VBUSVALID0 output
  *  0b00..PHY pipe0_power_present
+ *  0b01..PHY VBUSVALID0 output
  *  0b10..PHY OTGSESSLVD0 output (for device role)
  *  0b11..PHY_CTRL1[28] - sys_vbusvalid_sw (for flexibility)
  */
@@ -696,129 +965,146 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL3_COMPDISTUNE_MASK     (0x7U)
 #define USB3_GLUE_PHY_CTRL3_COMPDISTUNE_SHIFT    (0U)
 /*! COMPDISTUNE - Disconnect Threshold Adjustment
- *  0b111..+ 15.54%
- *  0b110..+ 11.86%
- *  0b101..+ 7.52%
- *  0b100..+ 4.08%
- *  0b011..0 (default)
- *  0b010..- 3.04%
- *  0b001..- 6.5%
- *  0b000..- 9.01%
+ *  0b000..-6%
+ *  0b001..-4.5%
+ *  0b010..-3%
+ *  0b011..-1.5%
+ *  0b100..0
+ *  0b101..+1.5%
+ *  0b110..+3%
+ *  0b111..+4.5%
  */
 #define USB3_GLUE_PHY_CTRL3_COMPDISTUNE(x)       (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_COMPDISTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_COMPDISTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_OTGTUNE_MASK         (0x38U)
 #define USB3_GLUE_PHY_CTRL3_OTGTUNE_SHIFT        (3U)
 /*! OTGTUNE - VBUS Valid Threshold Adjustment
- *  0b111..+ 5.8%
- *  0b110..+ 2.9%
- *  0b101..0 (default)
- *  0b100..- 2.9%
- *  0b011..- 5.8%
- *  0b010..- 8.7%
- *  0b001..- 11.6%
- *  0b000..- 14.5%
+ *  0b000..-12%
+ *  0b001..-9%
+ *  0b010..-6%
+ *  0b011..-3%
+ *  0b100..0
+ *  0b101..+3%
+ *  0b110..+6%
+ *  0b111..+9%
  */
 #define USB3_GLUE_PHY_CTRL3_OTGTUNE(x)           (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_OTGTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_OTGTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_SQRXTUNE_MASK        (0x1C0U)
 #define USB3_GLUE_PHY_CTRL3_SQRXTUNE_SHIFT       (6U)
 /*! SQRXTUNE - Squelch Threshold Adjustment
- *  0b111..- 22.32%
- *  0b110..- 16.07%
- *  0b101..- 10.71%
- *  0b100..- 5.36%
- *  0b011..0 (default)
- *  0b010..+ 5.36%
- *  0b001..+ 10.71%
- *  0b000..+ 16.07%
+ *  0b000..+15%
+ *  0b001..+10%
+ *  0b010..+5%
+ *  0b011..0
+ *  0b100..-5%
+ *  0b101..-10%
+ *  0b110..-15%
+ *  0b111..-20%
  */
 #define USB3_GLUE_PHY_CTRL3_SQRXTUNE(x)          (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_SQRXTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_SQRXTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXFSLSTUNE_MASK      (0x1E00U)
 #define USB3_GLUE_PHY_CTRL3_TXFSLSTUNE_SHIFT     (9U)
 /*! TXFSLSTUNE - FS/LS Source Impedance Adjustment
- *  0b1111..- 3.5%
- *  0b0111..- 1.7%
- *  0b0011..0 (default)
- *  0b0001..+ 1.8%
- *  0b0000..+ 3.5%
+ *  0b0000..+5%
+ *  0b0001..+2.5%
+ *  0b0011..0
+ *  0b0111..-2.5%
+ *  0b1111..-5%
  */
 #define USB3_GLUE_PHY_CTRL3_TXFSLSTUNE(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXFSLSTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXFSLSTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXHSXVTUNE_MASK      (0x6000U)
 #define USB3_GLUE_PHY_CTRL3_TXHSXVTUNE_SHIFT     (13U)
 /*! TXHSXVTUNE - Transmitter High-Speed Crossover Adjustment
- *  0b11..0 (default)
- *  0b10..+ 14 mV
- *  0b01..- 16 mV
- *  0b00..Reserved
+ *  0b00..
+ *  0b01..-15 mV
+ *  0b10..+15 mV
+ *  0b11..0
  */
 #define USB3_GLUE_PHY_CTRL3_TXHSXVTUNE(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXHSXVTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXHSXVTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXPREEMPAMPTUNE_MASK (0x18000U)
 #define USB3_GLUE_PHY_CTRL3_TXPREEMPAMPTUNE_SHIFT (15U)
 /*! TXPREEMPAMPTUNE - HS Transmitter Pre-Emphasis Current Control
- *  0b11..3x pre-emphasis current
- *  0b10..2x pre-emphasis current
+ *  0b00..Disabled
  *  0b01..1x pre-emphasis current
- *  0b00..Disabled (default)
+ *  0b10..2x pre-emphasis current
+ *  0b11..3x pre-emphasis current
  */
 #define USB3_GLUE_PHY_CTRL3_TXPREEMPAMPTUNE(x)   (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXPREEMPAMPTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXPREEMPAMPTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXPREEMPPULSETUNE_MASK (0x20000U)
 #define USB3_GLUE_PHY_CTRL3_TXPREEMPPULSETUNE_SHIFT (17U)
 /*! TXPREEMPPULSETUNE - HS Transmitter Pre-Emphasis Duration Control
+ *  0b0..Long
  *  0b1..Short
- *  0b0..Long (default)
  */
 #define USB3_GLUE_PHY_CTRL3_TXPREEMPPULSETUNE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXPREEMPPULSETUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXPREEMPPULSETUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXRESTUNE_MASK       (0xC0000U)
 #define USB3_GLUE_PHY_CTRL3_TXRESTUNE_SHIFT      (18U)
 /*! TXRESTUNE - USB Source Impedance Adjustment
- *  0b11..- 4.5 Ohms
- *  0b10..- 3 Ohms
- *  0b01..0 (default)
- *  0b00..+ 2 Ohms
+ *  0b00..+1.5 Ω
+ *  0b01..0
+ *  0b10..-2 Ω
+ *  0b11..-4 Ω
  */
 #define USB3_GLUE_PHY_CTRL3_TXRESTUNE(x)         (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXRESTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXRESTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXRISETUNE_MASK      (0x300000U)
 #define USB3_GLUE_PHY_CTRL3_TXRISETUNE_SHIFT     (20U)
 /*! TXRISETUNE - HS Transmitter Rise/Fall Time Adjustment
- *  0b11..- 3%
- *  0b10..- 1%
- *  0b01..0 (default)
- *  0b00..+ 3%
+ *  0b00..+20%
+ *  0b01..+15%
+ *  0b10..0
+ *  0b11..-10%
  */
 #define USB3_GLUE_PHY_CTRL3_TXRISETUNE(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXRISETUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXRISETUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TXVREFTUNE_MASK      (0x3C00000U)
 #define USB3_GLUE_PHY_CTRL3_TXVREFTUNE_SHIFT     (22U)
-/*! TXVREFTUNE - HS DC Voltage Level Adjustment */
+/*! TXVREFTUNE - HS DC Voltage Level Adjustment
+ *  0b0000..-10%
+ *  0b0001..-8.75%
+ *  0b0010..-7.5%
+ *  0b0011..-6.25%
+ *  0b0100..-5%
+ *  0b0101..-3.75%
+ *  0b0110..-2.5%
+ *  0b0111..-1.25%
+ *  0b1000..0
+ *  0b1001..+1.25%
+ *  0b1010..+2.5%
+ *  0b1011..+3.75%
+ *  0b1100..+5%
+ *  0b1101..+6.25%
+ *  0b1110..+7.5%
+ *  0b1111..+8.75%
+ */
 #define USB3_GLUE_PHY_CTRL3_TXVREFTUNE(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TXVREFTUNE_SHIFT)) & USB3_GLUE_PHY_CTRL3_TXVREFTUNE_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_LOS_BIAS_MASK        (0x1C000000U)
 #define USB3_GLUE_PHY_CTRL3_LOS_BIAS_SHIFT       (26U)
 /*! LOS_BIAS - Loss-of-Signal Detector Threshold Level Control
- *  0b111..135 mV
- *  0b110..120 mV
- *  0b101..105 mV
- *  0b100..90 mV
- *  0b011..75 mV
- *  0b010..60 mV (default)
- *  0b001..45 mV
  *  0b000..Invalid
+ *  0b001..45 mV
+ *  0b010..60 mV
+ *  0b011..75 mV
+ *  0b100..90 mV
+ *  0b101..105 mV
+ *  0b110..120 mV
+ *  0b111..135 mV
  */
 #define USB3_GLUE_PHY_CTRL3_LOS_BIAS(x)          (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_LOS_BIAS_SHIFT)) & USB3_GLUE_PHY_CTRL3_LOS_BIAS_MASK)
 
 #define USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_MASK   (0xE0000000U)
 #define USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_SHIFT  (29U)
 /*! TX_VBOOST_lvl - TX Voltage Boost Level
- *  0b011..Corresponds to a launch amplitude of 1.12 V
- *  0b010..Corresponds to a launch amplitude of 1.04 V
  *  0b000..Corresponds to a launch amplitude of 0.88 V
+ *  0b010..Corresponds to a launch amplitude of 1.04 V
+ *  0b011..Corresponds to a launch amplitude of 1.12 V
  */
 #define USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_SHIFT)) & USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_MASK)
 /*! @} */
@@ -868,144 +1154,144 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL5_TERMSEL_OVERRIDE_MASK (0x1000U)
 #define USB3_GLUE_PHY_CTRL5_TERMSEL_OVERRIDE_SHIFT (12U)
 /*! TERMSEL_OVERRIDE - Utmi Term Select Value Override
- *  0b1..Override value is 1
  *  0b0..Override value is 0
+ *  0b1..Override value is 1
  */
 #define USB3_GLUE_PHY_CTRL5_TERMSEL_OVERRIDE(x)  (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_TERMSEL_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_TERMSEL_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_PHY_TERMSEL_OVERRIDE_SEL_MASK (0x2000U)
 #define USB3_GLUE_PHY_CTRL5_PHY_TERMSEL_OVERRIDE_SEL_SHIFT (13U)
 /*! PHY_TERMSEL_OVERRIDE_SEL - Utmi Term Select Value Override Selection
- *  0b1..Select utmi term select value from register
  *  0b0..Select utmi term select value from core
+ *  0b1..Select utmi term select value from register
  */
 #define USB3_GLUE_PHY_CTRL5_PHY_TERMSEL_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_PHY_TERMSEL_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_PHY_TERMSEL_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_MASK (0xC000U)
 #define USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SHIFT (14U)
 /*! OPMODE_OVERRIDE - Utmi Opmode Value Override
- *  0b01..Enables Utmi opmode
  *  0b00..Disables Utmi opmode
+ *  0b01..Enables Utmi opmode
  */
 #define USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE(x)   (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SEL_MASK (0x10000U)
 #define USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SEL_SHIFT (16U)
 /*! OPMODE_OVERRIDE_SEL - Utmi Opmode Value Override Selection
- *  0b1..Select utmi opmode override value from register
  *  0b0..Select utmi opmode override value from core
+ *  0b1..Select utmi opmode override value from register
  */
 #define USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_OPMODE_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_MASK (0x60000U)
 #define USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SHIFT (17U)
 /*! XCVRSEL_OVERRIDE - Utmi Xcvr Value Override
- *  0b01..Enables Utmi XCVR
  *  0b00..Disables Utmi XCVR
+ *  0b01..Enables Utmi XCVR
  */
 #define USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE(x)  (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SEL_MASK (0x80000U)
 #define USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SEL_SHIFT (19U)
 /*! XCVRSEL_OVERRIDE_SEL - Utmi Xcvr Value Override Selection
- *  0b1..Select xcvrsel override value from register
  *  0b0..Select xcvrsel override value from core
+ *  0b1..Select xcvrsel override value from register
  */
 #define USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_XCVRSEL_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_MASK (0x100000U)
 #define USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SHIFT (20U)
 /*! DPPULLDOWN_OVERRIDE - Utmi OTG Dp_pulldown Value Override
- *  0b1..Enables OTG dp_pulldown
  *  0b0..Disables OTG dp_pulldown
+ *  0b1..Enables OTG dp_pulldown
  */
 #define USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SEL_MASK (0x200000U)
 #define USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SEL_SHIFT (21U)
 /*! DPPULLDOWN_OVERRIDE_SEL - Utmi OTG Dp_pulldown Value Override Selection
- *  0b1..Select otg dp_pulldown override value from register
  *  0b0..Select otg dp_pulldown override value from core
+ *  0b1..Select otg dp_pulldown override value from register
  */
 #define USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_DPPULLDOWN_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_MASK (0x400000U)
 #define USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SHIFT (22U)
 /*! DMPULLDOWN_OVERRIDE - Utmi OTG Dm_pulldown Value Override
- *  0b1..Enables OTG dm_pulldown
  *  0b0..Disables OTG dm_pulldown
+ *  0b1..Enables OTG dm_pulldown
  */
 #define USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SEL_MASK (0x800000U)
 #define USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SEL_SHIFT (23U)
 /*! DMPULLDOWN_OVERRIDE_SEL - Utmi OTG Dm_pulldown Value Override Selection
- *  0b1..Select otg dm_pulldown override value from register
  *  0b0..Select otg dm_pulldown override value from core
+ *  0b1..Select otg dm_pulldown override value from register
  */
 #define USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_DMPULLDOWN_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_MASK (0x1000000U)
 #define USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SHIFT (24U)
 /*! SLEEP_N_OVERRIDE - Utmi Sleep_n Value Override
- *  0b1..OTG core is not in sleep mode
  *  0b0..OTG core is in sleep mode
+ *  0b1..OTG core is not in sleep mode
  */
 #define USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE(x)  (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SEL_MASK (0x2000000U)
 #define USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SEL_SHIFT (25U)
 /*! SLEEP_N_OVERRIDE_SEL - Utmi Sleep_n Value Override Selection
- *  0b1..Select sleep_n value override from register
  *  0b0..Select sleep_n value from core
+ *  0b1..Select sleep_n value override from register
  */
 #define USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_SLEEP_N_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_MASK (0x4000000U)
 #define USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SHIFT (26U)
 /*! SUSPEND_N_OVERRIDE - Utmi Suspend_n Value Override
- *  0b1..Put UTMI PHY in suspend mode
- *  0b0..Do not put UTMI PHY in suspend mode
+ *  0b0..Do not put UTMI PHY in Suspend mode
+ *  0b1..Put UTMI PHY in Suspend mode
  */
 #define USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SEL_MASK (0x8000000U)
 #define USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SEL_SHIFT (27U)
 /*! SUSPEND_N_OVERRIDE_SEL - Utmi Suspend_n Value Override Selection
- *  0b1..Select suspend_n value override from register
  *  0b0..Select suspend_n value from core
+ *  0b1..Select suspend_n value override from register
  */
 #define USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_SUSPEND_N_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_MASK (0x10000000U)
 #define USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SHIFT (28U)
 /*! DRVVBUS_OVERRIDE - Utmi Drv Vbus Override Value
- *  0b1..Reset drive vbus
  *  0b0..Do not reset drive vbus
+ *  0b1..Reset drive vbus
  */
 #define USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE(x)  (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SEL_MASK (0x20000000U)
 #define USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SEL_SHIFT (29U)
 /*! DRVVBUS_OVERRIDE_SEL - Utmi Drv Vbus Value Override Selection
- *  0b1..Select utmi drv vbus value override from register
  *  0b0..Select utmi drv vbus value from core
+ *  0b1..Select utmi drv vbus value override from register
  */
 #define USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_DRVVBUS_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_MASK (0x40000000U)
 #define USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SHIFT (30U)
 /*! USB2PHY_RESET_OVERRIDE - USB2PHY Reset Override
- *  0b1..Reset PHY
  *  0b0..Do not reset PHY
+ *  0b1..Reset PHY
  */
 #define USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SEL_MASK (0x80000000U)
 #define USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SEL_SHIFT (31U)
 /*! USB2PHY_RESET_OVERRIDE_SEL - USB2PHY Reset Override Selection
- *  0b1..Select usb2phy reset value override from register
  *  0b0..Select usb2phy reset value from core
+ *  0b1..Select usb2phy reset value override from register
  */
 #define USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL5_USB2PHY_RESET_OVERRIDE_SEL_MASK)
 /*! @} */
@@ -1016,8 +1302,8 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL6_ALT_CLK_SEL_MASK     (0x1U)
 #define USB3_GLUE_PHY_CTRL6_ALT_CLK_SEL_SHIFT    (0U)
 /*! ALT_CLK_SEL - Alternate Clock Source Select
- *  0b1..Uses alternate clocks
  *  0b0..Uses internal MPLL clocks
+ *  0b1..Uses alternate clocks
  */
 #define USB3_GLUE_PHY_CTRL6_ALT_CLK_SEL(x)       (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_ALT_CLK_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_ALT_CLK_SEL_MASK)
 
@@ -1039,101 +1325,101 @@ typedef struct {
 #define USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_MASK (0x80000U)
 #define USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SHIFT (19U)
 /*! PIPE3_RESET_N_OVERRIDE - Pipe3_reset_n Value Override
- *  0b1..Do not reset pipe3 PHY
  *  0b0..Resets pipe3 PHY
+ *  0b1..Do not reset pipe3 PHY
  */
 #define USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SEL_MASK (0x100000U)
 #define USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SEL_SHIFT (20U)
 /*! PIPE3_RESET_N_OVERRIDE_SEL - Pipe3_reset_n Value Override Selection
- *  0b1..Select pipe3_reset_n value from register
  *  0b0..Select pipe3_reset_n value from core
+ *  0b1..Select pipe3_reset_n value from register
  */
 #define USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_PIPE3_RESET_N_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_MASK (0x200000U)
 #define USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SHIFT (21U)
 /*! TxDetectRxLoopbk_OVERRIDE - Pipe3_TxDetectRxLoopbk Value Override
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SEL_MASK (0x400000U)
 #define USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SEL_SHIFT (22U)
 /*! TxDetectRxLoopbk_OVERRIDE_SEL - Pipe3_TxDetectRxLoopbk Value Override Selection
- *  0b1..Select pipe3_TxDetectRxLoopbk value from register
  *  0b0..Select pipe3_TxDetectRxLoopbk value from core
+ *  0b1..Select pipe3_TxDetectRxLoopbk value from register
  */
 #define USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_TxDetectRxLoopbk_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_MASK (0x800000U)
 #define USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SHIFT (23U)
 /*! TxElecIdle_OVERRIDE - Pipe3_TxElecIdle Value Override
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SEL_MASK (0x1000000U)
 #define USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SEL_SHIFT (24U)
 /*! TxElecIdle_OVERRIDE_SEL - Pipe3_TxElecIdle Value Override Selection
- *  0b1..Select pipe3_TxElecIdle value from register
  *  0b0..Select pipe3_TxElecIdle value from core
+ *  0b1..Select pipe3_TxElecIdle value from register
  */
 #define USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_TxElecIdle_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_PowerDown_OVERRIDE_MASK (0x6000000U)
 #define USB3_GLUE_PHY_CTRL6_PowerDown_OVERRIDE_SHIFT (25U)
 /*! PowerDown_OVERRIDE - Pipe3_PowerDown Value Override
- *  0b01..Active
  *  0b00..Inactive
+ *  0b01..Active
  */
 #define USB3_GLUE_PHY_CTRL6_PowerDown_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_PowerDown_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL6_PowerDown_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_POWERDOWN_OVERRIDE_SEL_MASK (0x8000000U)
 #define USB3_GLUE_PHY_CTRL6_POWERDOWN_OVERRIDE_SEL_SHIFT (27U)
 /*! POWERDOWN_OVERRIDE_SEL - Pipe3_PowerDown Value Override Selection
- *  0b1..Select pipe3_PowerDown value from register
  *  0b0..Select pipe3_PowerDown value from core
+ *  0b1..Select pipe3_PowerDown value from register
  */
 #define USB3_GLUE_PHY_CTRL6_POWERDOWN_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_POWERDOWN_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_POWERDOWN_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_MASK (0x10000000U)
 #define USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SHIFT (28U)
 /*! RXTERMINATION_OVERRIDE - Pipe3_RxTermination Value Override
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SEL_MASK (0x20000000U)
 #define USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SEL_SHIFT (29U)
 /*! RXTERMINATION_OVERRIDE_SEL - Pipe3_RxTermination Value Override Selection
- *  0b1..Select pipe3_RxTermination value from register
  *  0b0..Select pipe3_RxTermination value from core
+ *  0b1..Select pipe3_RxTermination value from register
  */
 #define USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_RXTERMINATION_OVERRIDE_SEL_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_MASK (0x40000000U)
 #define USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SHIFT (30U)
 /*! TxOnesZeros_OVERRIDE - Pipe3_TxOnesZeros Value Override
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SHIFT)) & USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_MASK)
 
 #define USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SEL_MASK (0x80000000U)
 #define USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SEL_SHIFT (31U)
 /*! TxOnesZeros_OVERRIDE_SEL - Pipe3_TxOnesZeros Value Override Selection
- *  0b1..Select pipe3_TxOnesZeros value from register
  *  0b0..Select pipe3_TxOnesZeros value from core
+ *  0b1..Select pipe3_TxOnesZeros value from register
  */
 #define USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SEL_SHIFT)) & USB3_GLUE_PHY_CTRL6_TxOnesZeros_OVERRIDE_SEL_MASK)
 /*! @} */
 
-/*! @name PHY_CRCTL - USB3_PHY CR Control */
+/*! @name PHY_CRCTL - PHY CR Control */
 /*! @{ */
 
 #define USB3_GLUE_PHY_CRCTL_CR_DATA_IN_MASK      (0xFFFFU)
@@ -1144,37 +1430,37 @@ typedef struct {
 #define USB3_GLUE_PHY_CRCTL_CR_CAP_ADDR_MASK     (0x10000U)
 #define USB3_GLUE_PHY_CRCTL_CR_CAP_ADDR_SHIFT    (16U)
 /*! CR_CAP_ADDR - PHY Control Register Capture Address
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CRCTL_CR_CAP_ADDR(x)       (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CRCTL_CR_CAP_ADDR_SHIFT)) & USB3_GLUE_PHY_CRCTL_CR_CAP_ADDR_MASK)
 
 #define USB3_GLUE_PHY_CRCTL_CR_CAP_DATA_MASK     (0x20000U)
 #define USB3_GLUE_PHY_CRCTL_CR_CAP_DATA_SHIFT    (17U)
 /*! CR_CAP_DATA - PHY Control Register Capture Data
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CRCTL_CR_CAP_DATA(x)       (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CRCTL_CR_CAP_DATA_SHIFT)) & USB3_GLUE_PHY_CRCTL_CR_CAP_DATA_MASK)
 
 #define USB3_GLUE_PHY_CRCTL_CR_WRITE_MASK        (0x40000U)
 #define USB3_GLUE_PHY_CRCTL_CR_WRITE_SHIFT       (18U)
 /*! CR_WRITE - PHY Control Register Write
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CRCTL_CR_WRITE(x)          (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CRCTL_CR_WRITE_SHIFT)) & USB3_GLUE_PHY_CRCTL_CR_WRITE_MASK)
 
 #define USB3_GLUE_PHY_CRCTL_CR_READ_MASK         (0x80000U)
 #define USB3_GLUE_PHY_CRCTL_CR_READ_SHIFT        (19U)
 /*! CR_READ - PHY Control Register Read
- *  0b1..Active
  *  0b0..Inactive
+ *  0b1..Active
  */
 #define USB3_GLUE_PHY_CRCTL_CR_READ(x)           (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CRCTL_CR_READ_SHIFT)) & USB3_GLUE_PHY_CRCTL_CR_READ_MASK)
 /*! @} */
 
-/*! @name PHY_CRSR - USB3_PHY CR Status */
+/*! @name PHY_CRSR - PHY CR Status */
 /*! @{ */
 
 #define USB3_GLUE_PHY_CRSR_CR_DATA_OUT_MASK      (0xFFFFU)
@@ -1199,32 +1485,32 @@ typedef struct {
 #define USB3_GLUE_PHY_STATUS0_FSLSRCV_MASK       (0x2U)
 #define USB3_GLUE_PHY_STATUS0_FSLSRCV_SHIFT      (1U)
 /*! FSLSRCV - Differential Data Receive Indicator
- *  0b1..Voltage on D+ is greater than the voltage on D-
  *  0b0..Voltage on D+ is less than the voltage on D-
+ *  0b1..Voltage on D+ is greater than the voltage on D-
  */
 #define USB3_GLUE_PHY_STATUS0_FSLSRCV(x)         (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_FSLSRCV_SHIFT)) & USB3_GLUE_PHY_STATUS0_FSLSRCV_MASK)
 
 #define USB3_GLUE_PHY_STATUS0_FSVMINUS_MASK      (0x4U)
 #define USB3_GLUE_PHY_STATUS0_FSVMINUS_SHIFT     (2U)
 /*! FSVMINUS - Single-Ended D- Indicator
- *  0b1..Voltage on D- is high
  *  0b0..Voltage on D- is low
+ *  0b1..Voltage on D- is high
  */
 #define USB3_GLUE_PHY_STATUS0_FSVMINUS(x)        (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_FSVMINUS_SHIFT)) & USB3_GLUE_PHY_STATUS0_FSVMINUS_MASK)
 
 #define USB3_GLUE_PHY_STATUS0_FSVPLUS_MASK       (0x8U)
 #define USB3_GLUE_PHY_STATUS0_FSVPLUS_SHIFT      (3U)
 /*! FSVPLUS - Single-Ended D+ Indicator
- *  0b1..Voltage on D+ is high
  *  0b0..Voltage on D+ is low
+ *  0b1..Voltage on D+ is high
  */
 #define USB3_GLUE_PHY_STATUS0_FSVPLUS(x)         (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_FSVPLUS_SHIFT)) & USB3_GLUE_PHY_STATUS0_FSVPLUS_MASK)
 
 #define USB3_GLUE_PHY_STATUS0_CHGDET_MASK        (0x10U)
 #define USB3_GLUE_PHY_STATUS0_CHGDET_SHIFT       (4U)
 /*! CHGDET - Battery Charger Detection Output
- *  0b1..VDP > VDAT_REF (for CHRGSEL<#> = 1'b1) or VDM > VDAT_REF (for CHRGSEL<#> = 1'b0)
  *  0b0..VDP < VDAT_REF (for CHRGSEL<#> = 1'b1) or VDM < VDAT_REF (for CHRGSEL<#> = 1'b0)
+ *  0b1..VDP > VDAT_REF (for CHRGSEL<#> = 1'b1) or VDM > VDAT_REF (for CHRGSEL<#> = 1'b0)
  */
 #define USB3_GLUE_PHY_STATUS0_CHGDET(x)          (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_CHGDET_SHIFT)) & USB3_GLUE_PHY_STATUS0_CHGDET_MASK)
 
@@ -1241,8 +1527,8 @@ typedef struct {
 #define USB3_GLUE_PHY_STATUS0_OTGSESSVLD_MASK    (0x80U)
 #define USB3_GLUE_PHY_STATUS0_OTGSESSVLD_SHIFT   (7U)
 /*! OTGSESSVLD - OTG Device Session Valid Indicator
- *  0b1..The voltage on VBUS is above the OTG Device Session Valid threshold
  *  0b0..The voltage on VBUS is below the OTG Device Session Valid threshold
+ *  0b1..The voltage on VBUS is above the OTG Device Session Valid threshold
  */
 #define USB3_GLUE_PHY_STATUS0_OTGSESSVLD(x)      (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_OTGSESSVLD_SHIFT)) & USB3_GLUE_PHY_STATUS0_OTGSESSVLD_MASK)
 
@@ -1287,10 +1573,10 @@ typedef struct {
 /*! SSRXDETDIS - SuperSpeed RxDetect Disable/Enable Request */
 #define USB3_GLUE_PHY_STATUS0_SSRXDETDIS(x)      (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_SSRXDETDIS_SHIFT)) & USB3_GLUE_PHY_STATUS0_SSRXDETDIS_MASK)
 
-#define USB3_GLUE_PHY_STATUS0_tca_drv_host_vbus_MASK (0x400000U)
-#define USB3_GLUE_PHY_STATUS0_tca_drv_host_vbus_SHIFT (22U)
-/*! tca_drv_host_vbus - Type-C Host Drive VBUS From TCA */
-#define USB3_GLUE_PHY_STATUS0_tca_drv_host_vbus(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_tca_drv_host_vbus_SHIFT)) & USB3_GLUE_PHY_STATUS0_tca_drv_host_vbus_MASK)
+#define USB3_GLUE_PHY_STATUS0_TCA_DRV_HOST_VBUS_MASK (0x400000U)
+#define USB3_GLUE_PHY_STATUS0_TCA_DRV_HOST_VBUS_SHIFT (22U)
+/*! TCA_DRV_HOST_VBUS - Type-C Host Drive VBUS From TCA */
+#define USB3_GLUE_PHY_STATUS0_TCA_DRV_HOST_VBUS(x) (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_STATUS0_TCA_DRV_HOST_VBUS_SHIFT)) & USB3_GLUE_PHY_STATUS0_TCA_DRV_HOST_VBUS_MASK)
 
 #define USB3_GLUE_PHY_STATUS0_PIPE_CLK_VLD_MASK  (0x40000000U)
 #define USB3_GLUE_PHY_STATUS0_PIPE_CLK_VLD_SHIFT (30U)
@@ -1337,5 +1623,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USB3_GLUE_H_ */
+#endif  /* PERI_USB3_GLUE_H_ */
 

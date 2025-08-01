@@ -11,5 +11,5 @@ if(NOT XTENSA_CORE)
     mcux_set_variable(XTENSA_CORE nxp_rt500_RI23_11_newlib)
 endif()
 
-mcux_set_variable(XTENSA_LSP_DEBUG ${SdkRootDirPath}/devices/RT/RT500/MIMXRT595S/xtensa/gdbio)
-mcux_set_variable(XTENSA_LSP_RELEASE ${SdkRootDirPath}/devices/RT/RT500/MIMXRT595S/xtensa/min-rt)
+mcux_set_variable(XTENSA_LSP_DEBUG ${SdkRootDirPath}/${device_root}/RT/RT500/MIMXRT595S/xtensa/gdbio)
+mcux_set_variable(XTENSA_LSP_RELEASE ${SdkRootDirPath}/${device_root}/RT/RT500/MIMXRT595S/xtensa/min-rt)

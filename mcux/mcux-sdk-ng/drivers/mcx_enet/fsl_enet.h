@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */

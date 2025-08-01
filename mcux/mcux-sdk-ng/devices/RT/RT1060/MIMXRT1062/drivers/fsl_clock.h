@@ -402,7 +402,7 @@ extern volatile uint32_t g_rtcXtalFreq;
 
 #define CLOCK_SOURCE_NONE (0xFFU)
 
-#define CLOCK_ROOT_SOUCE                                                                                 \
+#define CLOCK_ROOT_SOURCE                                                                                 \
     {                                                                                                    \
         {kCLOCK_SysPllPfd2Clk, kCLOCK_SysPllPfd0Clk, kCLOCK_NoneName,                                    \
          kCLOCK_NoneName,      kCLOCK_NoneName,      kCLOCK_NoneName}, /* USDHC1 Clock Root. */          \

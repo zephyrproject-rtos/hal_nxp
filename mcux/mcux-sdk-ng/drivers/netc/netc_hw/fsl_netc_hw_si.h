@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,15 +25,26 @@
 /*! @name Control and status bit masks of the transmit buffer descriptor. */
 /*! @{ */
 /*! @brief Defines for read format. */
-#define NETC_SI_TXDESCRIP_RD_TXSTART(n) ((uint32_t)(n)&0x1ffffffUL)
-#define NETC_SI_TXDESCRIP_RD_DR(n)      (((uint32_t)(n)&0x3U) << 10U)
-#define NETC_SI_TXDESCRIP_RD_IPV(n)     (((uint32_t)(n)&0x7U) << 12U)
-#define NETC_SI_TXDESCRIP_RD_PORT(n)    (((uint32_t)(n)&0x1fU) << 16U)
-#define NETC_SI_TXDESCRIP_RD_TSR_MASK   (1UL << 22U)
-#define NETC_SI_TXDESCRIP_RD_SMSO_MASK  (1UL << 23U)
-#define NETC_SI_TXDESCRIP_RD_FLQ(n)     (((uint32_t)(n)&0x03U) << 24U)
+#define NETC_SI_TXDESCRIP_RD_FL(n)      (((uint32_t)(n) & 0x03U) << 27U)
 #define NETC_SI_TXDESCRIP_RD_TSE_MASK   (1UL << 25U)
-#define NETC_SI_TXDESCRIP_RD_FL(n)      (((uint32_t)(n)&0x03U) << 27U)
+#define NETC_SI_TXDESCRIP_RD_TXSTART(n) ((uint32_t)(n) & 0x1fffffUL)
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
+#define NETC_SI_TXDESCRIP_RD_DR(n)     (((uint32_t)(n) & 0x3U) << 10U)
+#define NETC_SI_TXDESCRIP_RD_IPV(n)    (((uint32_t)(n) & 0x7U) << 12U)
+#define NETC_SI_TXDESCRIP_RD_PORT(n)   (((uint32_t)(n) & 0x1FU) << 16U)
+#define NETC_SI_TXDESCRIP_RD_TSR_MASK  (1UL << 22U)
+#define NETC_SI_TXDESCRIP_RD_SMSO_MASK (1UL << 23U)
+#define NETC_SI_TXDESCRIP_RD_FLQ(n)    (((uint32_t)(n) & 0x3U) << 24U)
+#else
+#define NETC_SI_TXDESCRIP_RD_L3START(n)   ((uint32_t)(n) & 0x7FU)
+#define NETC_SI_TXDESCRIP_RD_IPCS(n)      (((uint32_t)(n) & 0x1U) << 7U)
+#define NETC_SI_TXDESCRIP_RD_L3HDRSIZE(n) (((uint32_t)(n) & 0x7FU) << 8U)
+#define NETC_SI_TXDESCRIP_RD_L3T(n)       (((uint32_t)(n) & 0x1U) << 15U)
+#define NETC_SI_TXDESCRIP_RD_L4T(n)       (((uint32_t)(n) & 0x3U) << 21U)
+#define NETC_SI_TXDESCRIP_RD_L4CS(n)      (((uint32_t)(n) & 0x1U) << 24U)
+#define NETC_SI_TXDESCRIP_RD_LSO(n)       (((uint32_t)(n) & 0x1U) << 25U)
+#define NETC_SI_TXDESCRIP_RD_LSO_MASK     (((uint32_t)0x1U) << 25U)
+#endif
 /*! @} */
 
 /*!

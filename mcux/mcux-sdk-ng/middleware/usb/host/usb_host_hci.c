@@ -632,7 +632,14 @@ usb_status_t USB_HostHelperGetPeripheralInformation(usb_device_handle deviceHand
             break;
 
         case kUSB_HostGetDeviceConfigIndex: /* device config index */
-            *infoValue = (uint32_t)deviceInstance->configurationValue - 1U;
+            if (deviceInstance->configurationValue >= 1U)
+            {
+                *infoValue = (uint32_t)deviceInstance->configurationValue - 1U;
+            }
+            else
+            {
+                return kStatus_USB_Error;
+            }
             break;
 
         case kUSB_HostGetConfigurationDes: /* configuration descriptor pointer */

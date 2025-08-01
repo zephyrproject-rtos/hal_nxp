@@ -1,6 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8ML3CVNKZ_ca53
+**     Processors:          MIMX8ML2CVNKZ_ca53
+**                          MIMX8ML2CVNKZ_cm7
+**                          MIMX8ML2CVNKZ_dsp
+**                          MIMX8ML2DVNLZ_ca53
+**                          MIMX8ML2DVNLZ_cm7
+**                          MIMX8ML2DVNLZ_dsp
+**                          MIMX8ML3CVNKZ_ca53
 **                          MIMX8ML3CVNKZ_cm7
 **                          MIMX8ML3CVNKZ_dsp
 **                          MIMX8ML3DVNLZ_ca53
@@ -10,6 +16,12 @@
 **                          MIMX8ML4CVNKZ_cm7
 **                          MIMX8ML4DVNLZ_ca53
 **                          MIMX8ML4DVNLZ_cm7
+**                          MIMX8ML5CVNKZ_ca53
+**                          MIMX8ML5CVNKZ_cm7
+**                          MIMX8ML5CVNKZ_dsp
+**                          MIMX8ML5DVNLZ_ca53
+**                          MIMX8ML5DVNLZ_cm7
+**                          MIMX8ML5DVNLZ_dsp
 **                          MIMX8ML6CVNKZ_ca53
 **                          MIMX8ML6CVNKZ_cm7
 **                          MIMX8ML6DVNLZ_ca53
@@ -21,14 +33,14 @@
 **                          MIMX8ML8DVNLZ_cm7
 **                          MIMX8ML8DVNLZ_dsp
 **
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b240708
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AUDIOMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,23 +57,32 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AUDIOMIX.h
- * @version 5.0
- * @date 2021-03-01
+ * @file PERI_AUDIOMIX.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AUDIOMIX
  *
  * CMSIS Peripheral Access Layer for AUDIOMIX
  */
 
-#if !defined(AUDIOMIX_H_)
-#define AUDIOMIX_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AUDIOMIX_H_)
+#define PERI_AUDIOMIX_H_                         /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
+#if (defined(CPU_MIMX8ML2CVNKZ_ca53) || defined(CPU_MIMX8ML2DVNLZ_ca53))
+#include "MIMX8ML2_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_cm7) || defined(CPU_MIMX8ML2DVNLZ_cm7))
+#include "MIMX8ML2_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML2CVNKZ_dsp) || defined(CPU_MIMX8ML2DVNLZ_dsp))
+#include "MIMX8ML2_dsp_COMMON.h"
+#elif (defined(CPU_MIMX8ML3CVNKZ_ca53) || defined(CPU_MIMX8ML3DVNLZ_ca53))
 #include "MIMX8ML3_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML3CVNKZ_cm7) || defined(CPU_MIMX8ML3DVNLZ_cm7))
 #include "MIMX8ML3_cm7_COMMON.h"
@@ -71,6 +92,12 @@
 #include "MIMX8ML4_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML4CVNKZ_cm7) || defined(CPU_MIMX8ML4DVNLZ_cm7))
 #include "MIMX8ML4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_ca53) || defined(CPU_MIMX8ML5DVNLZ_ca53))
+#include "MIMX8ML5_ca53_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_cm7) || defined(CPU_MIMX8ML5DVNLZ_cm7))
+#include "MIMX8ML5_cm7_COMMON.h"
+#elif (defined(CPU_MIMX8ML5CVNKZ_dsp) || defined(CPU_MIMX8ML5DVNLZ_dsp))
+#include "MIMX8ML5_dsp_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_ca53) || defined(CPU_MIMX8ML6DVNLZ_ca53))
 #include "MIMX8ML6_ca53_COMMON.h"
 #elif (defined(CPU_MIMX8ML6CVNKZ_cm7) || defined(CPU_MIMX8ML6DVNLZ_cm7))
@@ -171,8 +198,8 @@ typedef struct {
 #define AUDIOMIX_CLKEN0_SAI1_MASK                (0x1U)
 #define AUDIOMIX_CLKEN0_SAI1_SHIFT               (0U)
 /*! SAI1 - SAI1 clock enable
- *  0b1..SAI1 sai clock enable
  *  0b0..SAI1 sai clock disable
+ *  0b1..SAI1 sai clock enable
  */
 #define AUDIOMIX_CLKEN0_SAI1(x)                  (((uint32_t)(((uint32_t)(x)) << AUDIOMIX_CLKEN0_SAI1_SHIFT)) & AUDIOMIX_CLKEN0_SAI1_MASK)
 
@@ -194,8 +221,8 @@ typedef struct {
 #define AUDIOMIX_CLKEN0_SAI2_MASK                (0x10U)
 #define AUDIOMIX_CLKEN0_SAI2_SHIFT               (4U)
 /*! SAI2 - SAI2 clock enable
- *  0b1..SAI2 sai clock enable
  *  0b0..SAI2 sai clock disable
+ *  0b1..SAI2 sai clock enable
  */
 #define AUDIOMIX_CLKEN0_SAI2(x)                  (((uint32_t)(((uint32_t)(x)) << AUDIOMIX_CLKEN0_SAI2_SHIFT)) & AUDIOMIX_CLKEN0_SAI2_MASK)
 
@@ -217,8 +244,8 @@ typedef struct {
 #define AUDIOMIX_CLKEN0_SAI3_MASK                (0x100U)
 #define AUDIOMIX_CLKEN0_SAI3_SHIFT               (8U)
 /*! SAI3 - SAI3 clock enable
- *  0b1..SAI3 sai clock enable
  *  0b0..SAI3 sai clock disable
+ *  0b1..SAI3 sai clock enable
  */
 #define AUDIOMIX_CLKEN0_SAI3(x)                  (((uint32_t)(((uint32_t)(x)) << AUDIOMIX_CLKEN0_SAI3_SHIFT)) & AUDIOMIX_CLKEN0_SAI3_MASK)
 
@@ -240,8 +267,8 @@ typedef struct {
 #define AUDIOMIX_CLKEN0_SAI5_MASK                (0x1000U)
 #define AUDIOMIX_CLKEN0_SAI5_SHIFT               (12U)
 /*! SAI5 - SAI5 clock enable
- *  0b1..SAI5 sai clock enable
  *  0b0..SAI5 sai clock disable
+ *  0b1..SAI5 sai clock enable
  */
 #define AUDIOMIX_CLKEN0_SAI5(x)                  (((uint32_t)(((uint32_t)(x)) << AUDIOMIX_CLKEN0_SAI5_SHIFT)) & AUDIOMIX_CLKEN0_SAI5_MASK)
 
@@ -263,8 +290,8 @@ typedef struct {
 #define AUDIOMIX_CLKEN0_SAI6_MASK                (0x10000U)
 #define AUDIOMIX_CLKEN0_SAI6_SHIFT               (16U)
 /*! SAI6 - SAI6 clock enable
- *  0b1..SAI6 IPG clock enable
  *  0b0..SAI6 IPG clock disable
+ *  0b1..SAI6 IPG clock enable
  */
 #define AUDIOMIX_CLKEN0_SAI6(x)                  (((uint32_t)(((uint32_t)(x)) << AUDIOMIX_CLKEN0_SAI6_SHIFT)) & AUDIOMIX_CLKEN0_SAI6_MASK)
 
@@ -286,8 +313,8 @@ typedef struct {
 #define AUDIOMIX_CLKEN0_SAI7_MASK                (0x100000U)
 #define AUDIOMIX_CLKEN0_SAI7_SHIFT               (20U)
 /*! SAI7 - SAI7 clock enable
- *  0b1..SAI7 sai clock enable
  *  0b0..SAI7 sai clock disable
+ *  0b1..SAI7 sai clock enable
  */
 #define AUDIOMIX_CLKEN0_SAI7(x)                  (((uint32_t)(((uint32_t)(x)) << AUDIOMIX_CLKEN0_SAI7_SHIFT)) & AUDIOMIX_CLKEN0_SAI7_MASK)
 
@@ -1058,5 +1085,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AUDIOMIX_H_ */
+#endif  /* PERI_AUDIOMIX_H_ */
 

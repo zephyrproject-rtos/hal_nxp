@@ -1,6 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
- * All rights reserved.
+ * Copyright 2019-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -163,10 +162,17 @@ void CMC_PowerOffSRAMLowPowerOnly(CMC_Type *base, uint32_t mask)
  *
  * param base CMC peripheral base address.
  * param config Pointer to cmc_sram_voltage_config structure.
+ *
+ * retval kStatus_Success Successfully configured.
+ * retval kStatus_Timeout Timeout occurs while waiting completion.
  */
-void CMC_ConfigSRAMVoltage(CMC_Type *base, const cmc_sram_voltage_config *config)
+status_t CMC_ConfigSRAMVoltage(CMC_Type *base, const cmc_sram_voltage_config *config)
 {
     assert(config != NULL);
+
+#if CMC_SRAM_BUSY_TIMEOUT
+    uint32_t timeout;
+#endif
 
     uint32_t reg;
 
@@ -176,10 +182,22 @@ void CMC_ConfigSRAMVoltage(CMC_Type *base, const cmc_sram_voltage_config *config
         reg &= ~(CMC_SRAMCTL_VSM_MASK | CMC_SRAMCTL_VSA_MASK | CMC_SRAMCTL_BUSY_MASK);
         reg |= ((uint32_t)(config->assist) | (uint32_t)(config->margin));
         base->SRAMCTL = reg;
+
+#if CMC_SRAM_BUSY_TIMEOUT
+        timeout = CMC_SRAM_BUSY_TIMEOUT;
+#endif
         while (((base->SRAMCTL) & CMC_SRAMCTL_BUSY_MASK) != 0UL)
         {
+#if CMC_SRAM_BUSY_TIMEOUT
+            if ((--timeout) == 0u)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
+
+    return kStatus_Success;
 }
 #endif /* FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER */
 
@@ -296,6 +314,12 @@ void CMC_EnterLowPowerMode(CMC_Type *base, const cmc_power_domain_config_t *conf
         __DSB();
         __WFI();
         __ISB();
+
+        /* Clear the SLEEPDEEP bitfield, when wake up from sleep mode. */
+        if ((SCB->SCR & SCB_SCR_SLEEPDEEP_Msk) == SCB_SCR_SLEEPDEEP_Msk)
+        {
+            SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+        }
     }
     else
     {
@@ -312,6 +336,12 @@ void CMC_EnterLowPowerMode(CMC_Type *base, const cmc_power_domain_config_t *conf
             __DSB();
             __WFI();
             __ISB();
+
+            /* Clear the SLEEPDEEP bitfield, when wake up from low power mode. */
+            if ((SCB->SCR & SCB_SCR_SLEEPDEEP_Msk) == SCB_SCR_SLEEPDEEP_Msk)
+            {
+                SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+            }
         }
     }
 }

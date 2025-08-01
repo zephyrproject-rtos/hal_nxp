@@ -5,7 +5,7 @@
 
 #### device spepcific drivers
 include(${SdkRootDirPath}/devices/arm/device_header.cmake)
-mcux_add_cmakelists(${SdkRootDirPath}/devices/Wireless/KW/KW45Z41083/drivers)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/Wireless/KW/KW45Z41083/drivers)
 
 #### Wireless shared drivers/components/middlewares, project segments
 include(${SdkRootDirPath}/devices/Wireless/shared.cmake)

@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.14, 2015-06-08
-**     Build:               b240417
+**     Build:               b250506
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -660,6 +660,28 @@
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
 /* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
 #define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (0)
+/* @brief Has filter prescaler. */
+#define FSL_FEATURE_FTM_HAS_FILTER_PRESCALER (0)
+/* @brief Has fault output state configurable. */
+#define FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE (0)
+/* @brief Has paired deadtime. */
+#define FSL_FEATURE_FTM_HAS_PAIRED_DEADTIME (0)
+/* @brief Has PWM dithering. */
+#define FSL_FEATURE_FTM_HAS_DITHERING (0)
+/* @brief FTM instance has PWM dithering. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(x) (0)
+/* @brief Has trigger mode control. */
+#define FSL_FEATURE_FTM_HAS_TRIGGER_MODE (0)
+/* @brief Has modified combine mode. */
+#define FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM (0)
+/* @brief Has configurable channel input state. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHIS_BIT (0)
+/* @brief Has configurable channel output value. */
+#define FSL_FEATURE_FTM_HAS_CONF_CHOV_BIT (0)
+/* @brief FTM instance has Quadrature Decoder with input filter. */
+#define FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(x) (1)
+/* @brief FTM instance fault input number. */
+#define FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(x) (4)
 
 /* GPIO module features */
 
@@ -723,6 +745,8 @@
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (0)
+/* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
+#define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
 
 /* LLWU module features */
 
@@ -1205,8 +1229,6 @@
 
 /* LPUART module features */
 
-/* @brief LPUART0 and LPUART1 has shared interrupt vector. */
-#define FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1 (0)
 /* @brief Has receive FIFO overflow detection (bit field CFIFO[RXOFE]). */
 #define FSL_FEATURE_LPUART_HAS_IRQ_EXTENDED_FUNCTIONS (0)
 /* @brief Has low power features (can be enabled in wait mode via register bit C1[DOZEEN] or CTRL[DOZEEN] if the registers are 32-bit wide). */
@@ -1271,6 +1293,18 @@
 #define FSL_FEATURE_LPUART_HAS_GLOBAL (0)
 /* @brief Has LPUART_PINCFG. */
 #define FSL_FEATURE_LPUART_HAS_PINCFG (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPUART_IS_LPFLEXCOMM (0)
+/* @brief Has register MODEM Control. */
+#define FSL_FEATURE_LPUART_HAS_MCR (0)
+/* @brief Has register Half Duplex Control. */
+#define FSL_FEATURE_LPUART_HAS_HDCR (0)
+/* @brief Has register Timeout. */
+#define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
+/* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
+#define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief LPUART0 and LPUART1 has shared interrupt vector. */
+#define FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1 (0)
 
 /* MCG module features */
 

@@ -7,14 +7,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    Rev. 1, 2024-10-13
-**     Version:             rev. 1.0, 2024-10-13
-**     Build:               b241128
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for KW47B42ZB3_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -23,14 +23,17 @@
 **     Revisions:
 **     - rev. 1.0 (2024-10-13)
 **         Rev. 1, 2024-10-13
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file KW47B42ZB3_cm33_core1_COMMON.h
- * @version 1.0
- * @date 2024-10-13
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for KW47B42ZB3_cm33_core1
  *
  * CMSIS Peripheral Access Layer for KW47B42ZB3_cm33_core1
@@ -41,7 +44,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -124,7 +127,7 @@ typedef enum IRQn {
  * @{
  */
 
-#define __MPU_PRESENT                  0         /**< Defines if an MPU is present or not */
+#define __MPU_PRESENT                  1         /**< Defines if an MPU is present or not */
 #define __NVIC_PRIO_BITS               3         /**< Number of priority bits implemented in the NVIC */
 #define __Vendor_SysTickConfig         0         /**< Vendor specific implementation of SysTickConfig is defined */
 #define __FPU_PRESENT                  0         /**< Defines if an FPU is present or not */
@@ -139,7 +142,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef KW47B42ZB3_cm33_core1_SERIES
 #define KW47B42ZB3_cm33_core1_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "KW47B42ZB3_cm33_core1_features.h"
 
@@ -212,6 +217,20 @@ typedef enum IRQn {
 #define BTU2_REG_BASE_ADDRS                      { BTU2_REG_BASE }
 /** Array initializer of BTU2_REG peripheral base pointers */
 #define BTU2_REG_BASE_PTRS                       { BTU2_REG }
+
+/* CAN - Peripheral instance base addresses */
+/** Peripheral CAN0 base address */
+#define CAN0_BASE                                (0xA91BB000u)
+/** Peripheral CAN0 base pointer */
+#define CAN0                                     ((CAN_Type *)CAN0_BASE)
+/** Peripheral CAN1 base address */
+#define CAN1_BASE                                (0xA91CF000u)
+/** Peripheral CAN1 base pointer */
+#define CAN1                                     ((CAN_Type *)CAN1_BASE)
+/** Array initializer of CAN peripheral base addresses */
+#define CAN_BASE_ADDRS                           { CAN0_BASE, CAN1_BASE }
+/** Array initializer of CAN peripheral base pointers */
+#define CAN_BASE_PTRS                            { CAN0, CAN1 }
 
 /* CCM32K - Peripheral instance base addresses */
 /** Peripheral CCM32K base address */
@@ -452,9 +471,6 @@ typedef enum IRQn {
 #define LPUART_BASE_ADDRS                        { LPUART0_BASE, LPUART1_BASE }
 /** Array initializer of LPUART peripheral base pointers */
 #define LPUART_BASE_PTRS                         { LPUART0, LPUART1 }
-/** Interrupt vectors for the LPUART peripheral type */
-#define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, NotAvail_IRQn }
-#define LPUART_ERR_IRQS                          { NotAvail_IRQn, NotAvail_IRQn }
 
 /* LTC - Peripheral instance base addresses */
 /** Peripheral LTC base address */
@@ -890,14 +906,14 @@ typedef enum IRQn {
  * @param value Value of the bit field.
  * @return Masked and shifted value.
  */
-#define NXP_VAL2FLD(field, value)    (((value) << (field ## _SHIFT)) & (field ## _MASK))
+#define NXP_VAL2FLD(field, value)    (((value) << (field##_SHIFT)) & (field##_MASK))
 /**
  * @brief Mask and right-shift a register value to extract a bit field value.
  * @param field Name of the register bit field.
  * @param value Value of the register.
  * @return Masked and shifted bit field value.
  */
-#define NXP_FLD2VAL(field, value)    (((value) & (field ## _MASK)) >> (field ## _SHIFT))
+#define NXP_FLD2VAL(field, value)    (((value) & (field##_MASK)) >> (field##_SHIFT))
 
 /*!
  * @}
@@ -918,7 +934,9 @@ typedef enum IRQn {
 #define NXP_RADIO_GEN (470)
 #define IS_APP_CORE (1)
 #define IS_RADIO_CORE (0)
+#ifndef KW47_core0_SERIES
 #define KW47_core0_SERIES
+#endif
 
 /*! @brief define LTC0 from LTC. */
 #define LTC0 LTC
@@ -945,12 +963,22 @@ static inline uint8_t Chip_GetVersion(void)
 {
     return DEVICE_REVISION_A0;
 }
+
+/*
+ * CE STCMs base address.
+ */
+#define CE_STCM5_BASE (0x20020000u)
+#define CE_STCM6_BASE (0x20028000u)
+#define CE_STCM7_BASE (0x20030000u)
+
 #elif defined(KW47B42Z83_cm33_core1_H_) || defined(KW47B42Z96_cm33_core1_H_) || defined(KW47B42Z97_cm33_core1_H_) || defined(KW47B42ZB2_cm33_core1_H_) || defined(KW47B42ZB3_cm33_core1_H_) || defined(KW47B42ZB6_cm33_core1_H_) || defined(KW47B42ZB7_cm33_core1_H_)
 #define RADIO_IS_GEN_4P7 (1)
 #define NXP_RADIO_GEN (470)
 #define IS_APP_CORE (0)
 #define IS_RADIO_CORE (1)
-#define MCXW72_core1_SERIES
+#ifndef KW47_core1_SERIES
+#define KW47_core1_SERIES
+#endif
 
 /*! @brief define LTC0 from LTC. */
 #define LTC0 LTC

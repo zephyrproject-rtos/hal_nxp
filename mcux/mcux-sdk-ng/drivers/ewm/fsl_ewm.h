@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief EWM driver version 2.0.3. */
-#define FSL_EWM_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief EWM driver version 2.0.4. */
+#define FSL_EWM_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*! @} */
 
 /*! @brief Describes EWM clock source. */
@@ -160,7 +160,7 @@ void EWM_GetDefaultConfig(ewm_config_t *config);
  */
 static inline void EWM_EnableInterrupts(EWM_Type *base, uint32_t mask)
 {
-    base->CTRL |= (uint8_t)mask;
+    base->CTRL |= (uint8_t)(mask & 0xFFU);
 }
 
 /*!
@@ -175,7 +175,7 @@ static inline void EWM_EnableInterrupts(EWM_Type *base, uint32_t mask)
  */
 static inline void EWM_DisableInterrupts(EWM_Type *base, uint32_t mask)
 {
-    base->CTRL &= (uint8_t)(~mask);
+    base->CTRL &= (uint8_t)(~mask & 0xFFU);
 }
 
 /*!

@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 1)) /*!< Version 2.10.1. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 5)) /*!< Version 2.10.5. */
 /*! @} */
 
 /*! @brief eDMA driver name */
@@ -284,7 +284,7 @@ typedef struct _edma_channel_config
     uint8_t channelDataSignExtensionBitPosition; /*!< channel data sign extension bit psition configuration */
 
 #if (defined FSL_FEATURE_EDMA_HAS_CHANNEL_MUX && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) || (defined FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX && FSL_FEATURE_EDMA_HAS_MP_CHANNEL_MUX)
-    int channelRequestSource; /*!< hardware service request source for the channel */
+    uint32_t channelRequestSource; /*!< hardware service request source for the channel */
 #endif
 
     bool enableMasterIDReplication;                  /*!< enable master ID replication */
@@ -472,7 +472,7 @@ extern "C" {
  * @brief Initializes the eDMA peripheral.
  *
  * This function ungates the eDMA clock and configures the eDMA peripheral according
- * to the configuration structure.
+ * to the configuration structure. All emda enabled request will be cleared in this function.
  *
  * @param base eDMA peripheral base address.
  * @param config A pointer to the configuration structure, see "edma_config_t".
@@ -530,11 +530,11 @@ static inline void EDMA_EnableContinuousChannelLinkMode(EDMA_Type *base, bool en
 {
     if (enable)
     {
-        EDMA_BASE(base)->CR |= DMA_CR_CLM_MASK;
+        EDMA_CORE_BASE(base)->CR |= DMA_CR_CLM_MASK;
     }
     else
     {
-        EDMA_BASE(base)->CR &= ~DMA_CR_CLM_MASK;
+        EDMA_CORE_BASE(base)->CR &= ~DMA_CR_CLM_MASK;
     }
 }
 #endif
@@ -553,11 +553,11 @@ static inline void EDMA_EnableMinorLoopMapping(EDMA_Type *base, bool enable)
 {
     if (enable)
     {
-        EDMA_BASE(base)->CR |= DMA_CR_EMLM_MASK;
+        EDMA_CORE_BASE(base)->CR |= DMA_CR_EMLM_MASK;
     }
     else
     {
-        EDMA_BASE(base)->CR &= ~DMA_CR_EMLM_MASK;
+        EDMA_CORE_BASE(base)->CR &= ~DMA_CR_EMLM_MASK;
     }
 }
 #endif
@@ -702,7 +702,7 @@ static inline void EDMA_SetChannelAccessType(EDMA_Type *base,
  *                             may use other enum type to express dma request source and User can fined it in
  *                             SOC header or fsl_edma_soc.h.
  */
-static inline void EDMA_SetChannelMux(EDMA_Type *base, uint32_t channel, int32_t channelRequestSource)
+static inline void EDMA_SetChannelMux(EDMA_Type *base, uint32_t channel, uint32_t channelRequestSource)
 {
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base));
 
@@ -987,8 +987,8 @@ static inline void EDMA_EnableAsyncRequest(EDMA_Type *base, uint32_t channel, bo
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base));
 
 #if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
-    EDMA_BASE(base)->EARS &= ~((uint32_t)1U << channel);
-    EDMA_BASE(base)->EARS |= ((uint32_t)(true == enable ? 1U : 0U) << channel);
+    EDMA_CORE_BASE(base)->EARS &= ~((uint32_t)1U << channel);
+    EDMA_CORE_BASE(base)->EARS |= ((uint32_t)(true == enable ? 1U : 0U) << channel);
 #else
     if (enable)
     {
@@ -1454,7 +1454,7 @@ static inline void EDMA_EnableChannelRequest(EDMA_Type *base, uint32_t channel)
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base));
 
 #if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
-    EDMA_BASE(base)->SERQ = DMA_SERQ_SERQ(channel);
+    EDMA_CORE_BASE(base)->SERQ = DMA_SERQ_SERQ(channel);
 #else
     EDMA_CHANNEL_BASE(base, channel)->CH_CSR |= DMA_CH_CSR_ERQ_MASK;
 #endif
@@ -1473,7 +1473,7 @@ static inline void EDMA_DisableChannelRequest(EDMA_Type *base, uint32_t channel)
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base));
 
 #if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
-    EDMA_BASE(base)->CERQ = DMA_CERQ_CERQ(channel);
+    EDMA_CORE_BASE(base)->CERQ = DMA_CERQ_CERQ(channel);
 #else
     EDMA_CHANNEL_BASE(base, channel)->CH_CSR &= ~DMA_CH_CSR_ERQ_MASK;
 #endif
@@ -1492,7 +1492,7 @@ static inline void EDMA_TriggerChannelStart(EDMA_Type *base, uint32_t channel)
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base));
 
 #if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
-    EDMA_BASE(base)->SSRT = DMA_SSRT_SSRT(channel);
+    EDMA_CORE_BASE(base)->SSRT = DMA_SSRT_SSRT(channel);
 #else
     EDMA_TCD_CSR(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) |= DMA_CSR_START_MASK;
 #endif
@@ -1537,7 +1537,7 @@ uint32_t EDMA_GetRemainingMajorLoopCount(EDMA_Type *base, uint32_t channel);
 static inline uint32_t EDMA_GetErrorStatusFlags(EDMA_Type *base)
 {
 #if defined FSL_EDMA_SOC_IP_EDMA && FSL_EDMA_SOC_IP_EDMA
-    return EDMA_BASE(base)->ES;
+    return EDMA_CORE_BASE(base)->ES;
 #else
     return EDMA_MP_BASE(base)->MP_ES;
 #endif

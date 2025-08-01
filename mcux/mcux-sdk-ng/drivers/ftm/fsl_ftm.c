@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
- * All rights reserved.
+ * Copyright 2016-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -285,6 +284,11 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     /* Set the clock prescale factor */
     base->SC = FTM_SC_PS(config->prescale);
 
+#if (defined(FSL_FEATURE_FTM_HAS_FILTER_PRESCALER) && FSL_FEATURE_FTM_HAS_FILTER_PRESCALER)
+    /* Set filter clock prescale factor */
+    base->SC |= FTM_SC_FLTPS(config->filterPrescale);
+#endif  /* FSL_FEATURE_FTM_HAS_FILTER_PRESCALER */
+
     /* Setup the counter operation */
     base->CONF = (FTM_CONF_BDMMODE(config->bdmMode) | FTM_CONF_GTBEEN(config->useGlobalTimeBase));
 
@@ -322,6 +326,10 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
         reg = base->FLTCTRL;
         reg &= ~FTM_FLTCTRL_FFVAL_MASK;
         reg |= FTM_FLTCTRL_FFVAL(config->faultFilterValue);
+#if (defined(FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE) && FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE)
+        reg &= ~FTM_FLTCTRL_FSTATE_MASK;
+        reg |= FTM_FLTCTRL_FSTATE(config->faultOutputState);
+#endif  /* FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE */
         base->FLTCTRL = reg;
     }
 #else
@@ -329,6 +337,11 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     reg = base->FLTCTRL;
     reg &= ~FTM_FLTCTRL_FFVAL_MASK;
     reg |= FTM_FLTCTRL_FFVAL(config->faultFilterValue);
+#if (defined(FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE) && FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE)
+    /* Set fault output state */
+    reg &= ~FTM_FLTCTRL_FSTATE_MASK;
+    reg |= FTM_FLTCTRL_FSTATE(config->faultOutputState);
+#endif  /* FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE */
     base->FLTCTRL = reg;
 #endif
 
@@ -382,6 +395,10 @@ void FTM_GetDefaultConfig(ftm_config_t *config)
 
     /* Divide FTM clock by 1 */
     config->prescale = kFTM_Prescale_Divide_1;
+#if (defined(FSL_FEATURE_FTM_HAS_FILTER_PRESCALER) && FSL_FEATURE_FTM_HAS_FILTER_PRESCALER)
+    /* Divide FTM clock by 1 */
+    config->filterPrescale = kFTM_Filter_Prescale_Divide_1;
+#endif  /* FSL_FEATURE_FTM_HAS_FILTER_PRESCALER */
     /* FTM behavior in BDM mode */
     config->bdmMode = kFTM_BdmMode_0;
     /* Software trigger will be used to update registers */
@@ -392,6 +409,10 @@ void FTM_GetDefaultConfig(ftm_config_t *config)
     config->faultMode = kFTM_Fault_Disable;
     /* Disable the fault filter */
     config->faultFilterValue = 0;
+#if (defined(FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE) && FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE)
+    /* Configure fault output state. */
+    config->faultOutputState = kFTM_FaultOutput_PreDefined;
+#endif  /* FSL_FEATURE_FTM_HAS_FAULT_OUTPUT_STATE */
     /* Divide the system clock by 1 */
     config->deadTimePrescale = kFTM_Deadtime_Prescale_1;
     /* No counts are inserted */
@@ -828,6 +849,155 @@ status_t FTM_SetupPwmMode(FTM_Type *base,
 }
 
 /*!
+ * brief Configure FTM edge aligned PWM or center aligned PWM by each channel.
+ * 
+ * This function configure PWM signal by setting channel n value register. Should invoke
+ * FTM_SetInitialModuloValue to configure FTM period first. Invoke FTM_SetChannelMatchValue
+ * to update PWM duty cycle.
+ *
+ * param base           FTM peripheral base address
+ * param chnlParams     PWM configuration structure pointer.
+ * param chnlPairNumber Channel number.
+ */
+void FTM_ConfigSinglePWM(FTM_Type *base,
+                         const ftm_chnl_param_t *chnlParams,
+                         ftm_chnl_t chnlNumber)
+{
+    uint32_t reg;
+
+    assert((chnlParams->mode == kFTM_EdgeAlignedPwm) || (chnlParams->mode == kFTM_CenterAlignedPwm));
+    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    assert(chnlNumber < FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
+
+    if (chnlParams->mode == kFTM_CenterAlignedPwm)
+    {
+        base->SC |= FTM_SC_CPWMS_MASK;
+    }
+    else
+    {
+        base->SC &= ~FTM_SC_CPWMS_MASK;
+    }
+
+    /* Clear the current mode and edge level bits */
+    reg = base->CONTROLS[chnlNumber].CnSC;
+    reg &= ~(FTM_CnSC_MSA_MASK | FTM_CnSC_MSB_MASK | FTM_CnSC_ELSA_MASK | FTM_CnSC_ELSB_MASK);
+
+    /* Setup the active level */
+    reg |= (uint32_t)chnlParams->level << FTM_CnSC_ELSA_SHIFT;
+
+    /* Edge-aligned mode needs MSB to be 1, don't care for Center-aligned mode */
+    reg |= FTM_CnSC_MSB(1U);
+
+#if defined(FSL_FEATURE_FTM_HAS_TRIGGER_MODE) && (FSL_FEATURE_FTM_HAS_TRIGGER_MODE)
+    reg = (chnlParams->enablePulseOutput) ? (reg | FTM_CnSC_TRIGMODE_MASK) :
+                                            (reg & ~FTM_CnSC_TRIGMODE_MASK);
+#endif  /* FSL_FEATURE_FTM_HAS_TRIGGER_MODE */
+    /* Update the mode and edge level */
+    base->CONTROLS[chnlNumber].CnSC = reg;
+
+#if (defined(FSL_FEATURE_FTM_HAS_DITHERING) && FSL_FEATURE_FTM_HAS_DITHERING)
+    if ((FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(base) == 1) && (chnlParams->enableDithering == true))
+    {
+        base->CV_MIRROR[chnlNumber] = FTM_CV_MIRROR_VAL(chnlParams->chnlValue) |
+                                      FTM_CV_MIRROR_FRACVAL(chnlParams->chnlFracValue);
+    }
+    else
+#endif
+    {
+        base->CONTROLS[chnlNumber].CnV = chnlParams->chnlValue;
+    }
+
+#if defined(FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT) && (FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT)
+    /* Set to output mode */
+    FTM_SetPwmOutputEnable(base, chnlNumber, true);
+#endif  /* FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT */
+}
+
+/*!
+ * brief Configure FTM Combine PWM, Modified Combine PWM or Asymmetrical PWM by each channel pair.
+ * 
+ * This function configure PWM signal by setting channel n and n+1 value register. Should invoke
+ * FTM_SetInitialModuloValue to configure FTM period first. Invoke FTM_SetChannelMatchValue to
+ * update PWM duty cycle.
+ *
+ * param base           FTM peripheral base address
+ * param chnlParams     PWM configuration structure pointer.
+ * param chnlPairNumber Channel pair number, options are 0, 1, 2, 3.
+ */
+void FTM_ConfigCombinePWM(FTM_Type *base,
+                          const ftm_chnl_param_t *chnlParams,
+                          ftm_chnl_t chnlPairNumber)
+{
+    uint32_t reg;
+
+    assert((chnlParams->mode != kFTM_EdgeAlignedPwm) && (chnlParams->mode != kFTM_CenterAlignedPwm));
+    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    assert(chnlPairNumber < FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2);
+
+    /* Clear Center-Aligned PWM Select for FTM */
+    base->SC &= ~FTM_SC_CPWMS_MASK;
+
+    /* Clear the current mode and edge level bits for channel n */
+    reg = base->CONTROLS[((uint32_t)chnlPairNumber) * 2U].CnSC;
+    reg &= ~(FTM_CnSC_MSA_MASK | FTM_CnSC_MSB_MASK | FTM_CnSC_ELSA_MASK | FTM_CnSC_ELSB_MASK);
+
+    /* Setup the active level for channel n */
+    reg |= (uint32_t)chnlParams->level << FTM_CnSC_ELSA_SHIFT;
+
+    /* Update the mode and edge level for channel n */
+    base->CONTROLS[(uint32_t)chnlPairNumber * 2U].CnSC = reg;
+
+    /* Clear the current mode and edge level bits for channel n + 1 */
+    reg = base->CONTROLS[((uint32_t)chnlPairNumber * 2U) + 1U].CnSC;
+    reg &= ~(FTM_CnSC_MSA_MASK | FTM_CnSC_MSB_MASK | FTM_CnSC_ELSA_MASK | FTM_CnSC_ELSB_MASK);
+
+    /* Setup the active level for channel n + 1 */
+    reg |= (uint32_t)chnlParams->level << FTM_CnSC_ELSA_SHIFT;
+
+    /* Update the mode and edge level for channel n + 1 */
+    base->CONTROLS[((uint32_t)chnlPairNumber * 2U) + 1U].CnSC = reg;
+
+    /* Set the combine bit for the channel pair */
+    base->COMBINE |= (1UL << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+
+#if (defined(FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM) && FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM)
+    if (chnlParams->mode == kFTM_ModifiedCombinedPwm)
+    {
+        /* Set the modified combine bit for the channel pair */
+        base->COMBINE |= 
+            (1UL << (FTM_COMBINE_MCOMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * (uint32_t)chnlPairNumber)));
+    }
+#endif  /* FSL_FEATURE_FTM_HAS_MODIFIED_COMBINE_PWM */
+
+    /* Set the channel pair values */
+#if (defined(FSL_FEATURE_FTM_HAS_DITHERING) && FSL_FEATURE_FTM_HAS_DITHERING)
+    if ((FSL_FEATURE_FTM_INSTANCE_HAS_DITHERINGn(base) == 1) && (chnlParams->enableDithering == true))
+    {
+        base->CV_MIRROR[(uint32_t)chnlPairNumber * 2U] = FTM_CV_MIRROR_VAL(chnlParams->chnlValue) |
+            FTM_CV_MIRROR_FRACVAL(chnlParams->chnlFracValue);
+        base->CV_MIRROR[((uint32_t)chnlPairNumber * 2U) + 1U] = FTM_CV_MIRROR_VAL(chnlParams->combinedChnlValue) |
+            FTM_CV_MIRROR_FRACVAL(chnlParams->combinedChnlFracValue);
+    }
+    else
+#endif
+    {
+        base->CONTROLS[(uint32_t)chnlPairNumber * 2U].CnV        = chnlParams->chnlValue;
+        base->CONTROLS[((uint32_t)chnlPairNumber * 2U) + 1U].CnV = chnlParams->combinedChnlValue;
+    }
+
+    /* Enable/Disable complementary output on the channel pair */
+    FTM_SetComplementaryEnable(base, chnlPairNumber, chnlParams->enableComplementary);
+    /* Enable/Disable Deadtime insertion on the channel pair */
+    FTM_SetDeadTimeEnable(base, chnlPairNumber, chnlParams->enableDeadtime);
+
+#if defined(FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT) && (FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT)
+    /* Set to output mode */
+    FTM_SetPwmOutputEnable(base, (ftm_chnl_t)(uint8_t)((uint8_t)chnlPairNumber * 2U), true);
+    FTM_SetPwmOutputEnable(base, (ftm_chnl_t)(uint8_t)((uint8_t)chnlPairNumber * 2U + 1U), true);
+#endif  /* FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT */
+}
+
+/*!
  * brief Enables capturing an input signal on the channel using the function parameters.
  *
  * When the edge specified in the captureMode argument occurs on the channel, the FTM counter is
@@ -854,8 +1024,15 @@ void FTM_SetupInputCapture(FTM_Type *base,
     base->COMBINE &=
         ~(1UL << (FTM_COMBINE_DECAPEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * ((uint32_t)chnlNumber >> 1))));
 #if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
+#if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
+    if (FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1)
+    {
+        base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+    }
+#else
     /* Clear the quadrature decoder mode beacause it's higher priority */
     base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+#endif
 #endif
 
     reg = base->CONTROLS[chnlNumber].CnSC;
@@ -903,8 +1080,15 @@ void FTM_SetupOutputCompare(FTM_Type *base,
     base->COMBINE &=
         ~(1UL << (FTM_COMBINE_DECAPEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * ((uint32_t)chnlNumber >> 1))));
 #if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
+#if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
+    if (FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1)
+    {
+        base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+    }
+#else
     /* Clear the quadrature decoder mode beacause it's higher priority */
     base->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+#endif
 #endif
 
     reg = base->CONTROLS[chnlNumber].CnSC;
@@ -995,6 +1179,10 @@ void FTM_SetupQuadDecode(FTM_Type *base,
     assert(phaseAParams != NULL);
     assert(phaseBParams != NULL);
 
+#if defined(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn)
+    assert(FSL_FEATURE_FTM_INSTANCE_HAS_QUAD_DECODEn(base) == 1);
+#endif
+
     uint32_t reg;
 
     /* Set Phase A filter value if phase filter is enabled */
@@ -1043,6 +1231,10 @@ void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ft
     /* Fault input is not supported if the instance has only basic feature.*/
 #if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     assert(0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base));
+#endif
+
+#if defined(FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn)
+    assert(((uint32_t)faultNumber + 1U) <= (uint32_t)FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(base));
 #endif
 
     if (faultParams->useFaultFilter)

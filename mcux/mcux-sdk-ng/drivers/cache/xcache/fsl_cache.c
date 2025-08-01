@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 - 2024 NXP
+ * Copyright 2022 - 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -123,6 +123,7 @@ void XCACHE_InvalidateCache(XCACHE_Type *base)
  */
 void XCACHE_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
+    assert(address < UINT32_MAX - size_byte);
     if (size_byte > 0UL)
     {
         uint32_t endAddr = address + size_byte - 0x01U;
@@ -190,6 +191,7 @@ void XCACHE_CleanCache(XCACHE_Type *base)
  */
 void XCACHE_CleanCacheByRange(uint32_t address, uint32_t size_byte)
 {
+    assert(address < UINT32_MAX - size_byte);
     if (size_byte > 0UL)
     {
         uint32_t endAddr = address + size_byte - 0x01U;
@@ -258,6 +260,7 @@ void XCACHE_CleanInvalidateCache(XCACHE_Type *base)
  */
 void XCACHE_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
+    assert(address < UINT32_MAX - size_byte);
     if (size_byte > 0UL)
     {
         uint32_t endAddr = address + size_byte - 0x01U;
