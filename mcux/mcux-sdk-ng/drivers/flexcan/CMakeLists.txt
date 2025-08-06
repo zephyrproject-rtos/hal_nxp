@@ -12,7 +12,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexcan_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexcan)
-    mcux_component_version(2.14.1)
+    mcux_component_version(2.14.3)
 
     mcux_add_source(SOURCES fsl_flexcan.h fsl_flexcan.c)
 

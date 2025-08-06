@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief DMAMUX driver version 2.1.1. */
-#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*! @} */
 
 #if (defined(FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT) && FSL_FEATURE_DMAMUX_CHANNEL_NEEDS_ENDIAN_CONVERT)
