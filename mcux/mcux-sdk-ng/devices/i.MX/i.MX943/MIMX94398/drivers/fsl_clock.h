@@ -8,9 +8,11 @@
 #define _FSL_CLOCK_H_
 
 #include "fsl_common.h"
+#ifndef CONFIG_ARM_SCMI
 #include "scmi.h"
 #include "scmi_clock.h"
 #include "scmi_internal.h"
+#endif
 
 /*!
  * @brief CCM reg macros to map corresponding registers.
