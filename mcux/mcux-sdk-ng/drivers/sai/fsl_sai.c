@@ -277,7 +277,16 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_saiBases));
+    if (instance == ARRAY_SIZE(s_saiBases)) {
+        assert(false);
+	/* asserts may not always be enabled. As such, return NULL here to
+	 * avoid compilation warnings complaining about a possible out-of-bounds
+	 * access. If the user decides to disable the asserts, it is up to them
+	 * to debug in case of out-of-bounds access as SAI_GetInstance() will
+	 * return a valid instance.
+	 */
+	return 0;
+    }
 
     return instance;
 }
@@ -1005,8 +1014,8 @@ void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 {
     assert(config != NULL);
 #if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
-    if ((config->fifoWatermark == 0U) ||
-        (config->fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base))))
+    if (config->fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base)) ||
+	(!MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK && config->fifoWatermark == 0U))
     {
         config->fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) / 2U);
     }
@@ -1051,8 +1060,8 @@ void SAI_RxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 {
     assert(config != NULL);
 #if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
-    if ((config->fifoWatermark == 0U) ||
-        (config->fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base))))
+    if (config->fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base)) ||
+	(!MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK && config->fifoWatermark == 0U))
     {
         config->fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) / 2U);
     }
@@ -1196,31 +1205,23 @@ void SAI_RxSetSerialDataConfig(I2S_Type *base, sai_serial_data_t *config)
     base->RCR4 = rcr4;
 }
 
-/*!
- * brief SAI transmitter configurations.
- *
- * param base SAI base pointer.
- * param config transmitter configurations.
- */
-void SAI_TxSetConfig(I2S_Type *base, sai_transceiver_t *config)
+#if !MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG
+static void SAI_ComputeChannelConfig(I2S_Type *base, sai_transceiver_t *config)
 {
     assert(config != NULL);
     assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
 
     uint8_t i           = 0U;
-    uint32_t val        = 0U;
     uint8_t channelNums = 0U;
-
-    /* reset transmitter */
-    SAI_TxReset(base);
 
     /* if channel mask is not set, then format->channel must be set,
      use it to get channel mask value */
     if (config->channelMask == 0U)
     {
-        if(config->startChannel <= 7)
+        if(config->startChannel < 8U)
         {
-            config->channelMask = 1U << config->startChannel;
+            config->channelMask = 1;
+            config->channelMask <<= config->startChannel;
         }
         else
         {
@@ -1232,7 +1233,16 @@ void SAI_TxSetConfig(I2S_Type *base, sai_transceiver_t *config)
     {
         if (IS_SAI_FLAG_SET(1UL << i, config->channelMask))
         {
-            channelNums++;
+            // Prevent potential addition overflow by capping at maximum value
+            if (channelNums < UINT8_MAX)
+            {
+                channelNums++;
+            }
+            else
+            {
+                channelNums = UINT8_MAX;
+            }
+
             config->endChannel = i;
         }
     }
@@ -1247,6 +1257,35 @@ void SAI_TxSetConfig(I2S_Type *base, sai_transceiver_t *config)
     }
 
     config->channelNums = channelNums;
+}
+#endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
+
+/*!
+ * brief SAI transmitter configurations.
+ *
+ * param base SAI base pointer.
+ * param config transmitter configurations.
+ */
+void SAI_TxSetConfig(I2S_Type *base, sai_transceiver_t *config)
+{
+    uint32_t val = 0U;
+
+    /* reset transmitter */
+    SAI_TxReset(base);
+
+#if !MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG
+    /* sometimes, the user of the SAI driver may want to
+     * set the channel configuration (i.e: the startChannel,
+     * channelMask, endChannel, and channelNums fields of
+     * sai_transceiver_t) before calling SAI_TxSetConfig().
+     * As such, if the user wants to do this, they can define
+     * FSL_FEATURE_SAI_DISABLE_IMPLICIT_CHAN_CONFIG which will
+     * stop SAI_TxSetConfig() from implicitly computing those
+     * values.
+     */
+    SAI_ComputeChannelConfig(base, config);
+#endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
+
 #if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && (FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE)
     /* make sure combine mode disabled while multipe channel is used */
     if (config->channelNums > 1U)
@@ -1315,6 +1354,7 @@ void SAI_TransferTxSetConfig(I2S_Type *base, sai_handle_t *handle, sai_transceiv
 {
     assert(handle != NULL);
     assert(config != NULL);
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) >= 0);
     assert(config->channelNums <= (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base));
 
     handle->bitWidth = config->serialData.dataWordNLength;
@@ -1345,49 +1385,24 @@ void SAI_TransferTxSetConfig(I2S_Type *base, sai_handle_t *handle, sai_transceiv
  */
 void SAI_RxSetConfig(I2S_Type *base, sai_transceiver_t *config)
 {
-    assert(config != NULL);
-    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
-
-    uint8_t i           = 0U;
-    uint32_t val        = 0U;
-    uint8_t channelNums = 0U;
+    uint32_t val = 0U;
 
     /* reset receiver */
     SAI_RxReset(base);
 
-    /* if channel mask is not set, then format->channel must be set,
-     use it to get channel mask value */
-    if (config->channelMask == 0U)
-    {
-        if(config->startChannel <= 7)
-        {
-            config->channelMask = 1U << config->startChannel;
-        }
-        else
-        {
-            config->channelMask = UINT8_MAX;
-        }
-    }
+#if !MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG
+    /* sometimes, the user of the SAI driver may want to
+     * set the channel configuration (i.e: the startChannel,
+     * channelMask, endChannel, and channelNums fields of
+     * sai_transceiver_t) before calling SAI_RxSetConfig().
+     * As such, if the user wants to do this, they can define
+     * FSL_FEATURE_SAI_DISABLE_IMPLICIT_CHAN_CONFIG which will
+     * stop SAI_RxSetConfig() from implicitly computing those
+     * values.
+     */
+    SAI_ComputeChannelConfig(base, config);
+#endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
 
-    for (i = 0U; i < (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base); i++)
-    {
-        if (IS_SAI_FLAG_SET((1UL << i), config->channelMask))
-        {
-            channelNums++;
-            config->endChannel = i;
-        }
-    }
-
-    for (i = 0U; i < (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base); i++)
-    {
-        if (IS_SAI_FLAG_SET((1UL << i), config->channelMask))
-        {
-            config->startChannel = i;
-            break;
-        }
-    }
-
-    config->channelNums = channelNums;
 #if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && (FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE)
     /* make sure combine mode disabled while multipe channel is used */
     if (config->channelNums > 1U)
@@ -1642,7 +1657,17 @@ void SAI_WriteBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint
     uint32_t fifoCount = (uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base);
     if (fifoCount >= base->TCR1)
     {
-        bytesPerWord = ((fifoCount - base->TCR1) * bytesPerWord);
+        fifoCount -= base->TCR1;
+
+        // Prevent potential multiplication overflow by limiting bytesPerWord
+        if ((bitWidth / 8U) < (UINT32_MAX / fifoCount))
+        {
+            bytesPerWord = (fifoCount * (bitWidth / 8U));
+        }
+        else
+        {
+            bytesPerWord = UINT32_MAX;
+        }
     }
 #endif
 
@@ -1693,7 +1718,17 @@ void SAI_WriteMultiChannelBlocking(
     uint32_t fifoCount = (uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base);
     if (fifoCount >= base->TCR1)
     {
-        bytesPerWord = ((fifoCount - base->TCR1) * bytesPerWord);
+        fifoCount -= base->TCR1;
+
+        // Prevent potential multiplication overflow by limiting bytesPerWord
+        if ((bitWidth / 8U) < (UINT32_MAX / fifoCount))
+        {
+            bytesPerWord = (fifoCount * (bitWidth / 8U));
+        }
+        else
+        {
+            bytesPerWord = UINT32_MAX;
+        }
     }
 #endif
 
@@ -1701,7 +1736,16 @@ void SAI_WriteMultiChannelBlocking(
     {
         if (IS_SAI_FLAG_SET((1UL << i), channelMask))
         {
-            channelNums++;
+            // Prevent potential addition overflow by capping at maximum value
+            if (channelNums < UINT32_MAX)
+            {
+                channelNums++;
+            }
+            else
+            {
+                channelNums = UINT32_MAX;
+            }
+
             endChannel = i;
         }
     }
@@ -1770,7 +1814,16 @@ void SAI_ReadMultiChannelBlocking(
     {
         if (IS_SAI_FLAG_SET((1UL << i), channelMask))
         {
-            channelNums++;
+            // Prevent potential addition overflow by capping at maximum value
+            if (channelNums < UINT32_MAX)
+            {
+                channelNums++;
+            }
+            else
+            {
+                channelNums = UINT32_MAX;
+            }
+
             endChannel = i;
         }
     }
@@ -1921,6 +1974,7 @@ void SAI_TransferRxCreateHandle(I2S_Type *base, sai_handle_t *handle, sai_transf
 status_t SAI_TransferSendNonBlocking(I2S_Type *base, sai_handle_t *handle, sai_transfer_t *xfer)
 {
     assert(handle != NULL);
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) >= 0);
     assert(handle->channelNums <= (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base));
 
     /* Check if the queue is full */
@@ -1970,6 +2024,7 @@ status_t SAI_TransferSendNonBlocking(I2S_Type *base, sai_handle_t *handle, sai_t
 status_t SAI_TransferReceiveNonBlocking(I2S_Type *base, sai_handle_t *handle, sai_transfer_t *xfer)
 {
     assert(handle != NULL);
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) >= 0);
     assert(handle->channelNums <= (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base));
 
     /* Check if the queue is full */
