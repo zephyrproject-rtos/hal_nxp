@@ -122,11 +122,11 @@ class MUXOption:
             self._mux = 0
         elif self._name == 'PMIC_I2C_SCL' and imx_rt == "MIMXRT7XX":
             self._index = 1
-            self._offset = 0x96
+            self._offset = 0x61
             self._mux = 0
         elif self._name == 'PMIC_I2C_SDA' and imx_rt == "MIMXRT7XX":
             self._index = 1
-            self._offset = 0x97
+            self._offset = 0x60
             self._mux = 0
         if re.match(r'^\d', self._name):
             # If string starts with a digit, it will not be a valid C name
