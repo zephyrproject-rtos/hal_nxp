@@ -28,6 +28,7 @@
 /*! @{ */
 /*! @brief LIN driver version */
 #define FSL_LIN_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @} */
 
 /* node is slave */
 #define LIN_SLAVE 0U

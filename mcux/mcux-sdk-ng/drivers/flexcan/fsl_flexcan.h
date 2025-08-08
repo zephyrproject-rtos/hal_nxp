@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
- * All rights reserved.
+ * Copyright 2016-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,12 +21,34 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexCAN driver version. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 13, 0))
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 14, 3))
 /*! @} */
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
 /* Define to 1000 means keep waiting 1000 times until the flag is assert/deassert.  */
 #define FLEXCAN_WAIT_TIMEOUT (1000U)
+#endif
+
+/*!
+ * @brief Max loops to wait for polling transfer.
+ */
+#ifndef FLEXCAN_POLLING_TIMEOUT
+#ifdef CONFIG_FLEXCAN_POLLING_TIMEOUT
+#define FLEXCAN_POLLING_TIMEOUT CONFIG_FLEXCAN_POLLING_TIMEOUT
+#else
+#define FLEXCAN_POLLING_TIMEOUT 0     /* Wait forever until polling transfer complete. */
+#endif
+#endif
+
+/*!
+ * @brief Max loops to wait for FlexCAN register access complete.
+ */
+#ifndef FLEXCAN_MODULE_TIMEOUT
+#ifdef CONFIG_FLEXCAN_MODULE_TIMEOUT
+#define FLEXCAN_MODULE_TIMEOUT CONFIG_FLEXCAN_MODULE_TIMEOUT
+#else
+#define FLEXCAN_MODULE_TIMEOUT 0     /* Wait forever until FlexCAN register access complete. */
+#endif
 #endif
 
 /*! @brief FlexCAN frame length helper macro. */
@@ -203,35 +224,35 @@
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
-#define FLEXCAN_ERROR_AND_STATUS_INIT_FLAG                                                                            \
-    ((uint32_t)kFLEXCAN_ErrorOverrunFlag | (uint32_t)kFLEXCAN_FDErrorIntFlag | (uint32_t)kFLEXCAN_BusoffDoneIntFlag | \
-     (uint32_t)kFLEXCAN_TxWarningIntFlag | (uint32_t)kFLEXCAN_RxWarningIntFlag | (uint32_t)kFLEXCAN_BusOffIntFlag |   \
-     (uint32_t)kFLEXCAN_ErrorIntFlag | FLEXCAN_MEMORY_ERROR_INIT_FLAG)
+#define FLEXCAN_ERROR_AND_STATUS_INT_FLAG                                                                            \
+    ((uint32_t)kFLEXCAN_ErrorIntFlag | (uint32_t)kFLEXCAN_FDErrorIntFlag | (uint32_t)kFLEXCAN_BusoffDoneIntFlag | \
+     (uint32_t)kFLEXCAN_TxWarningIntFlag | (uint32_t)kFLEXCAN_RxWarningIntFlag | (uint32_t)kFLEXCAN_BusOffIntFlag)
 #else
-#define FLEXCAN_ERROR_AND_STATUS_INIT_FLAG                                                                          \
+#define FLEXCAN_ERROR_AND_STATUS_INT_FLAG                                                                          \
     ((uint32_t)kFLEXCAN_TxWarningIntFlag | (uint32_t)kFLEXCAN_RxWarningIntFlag | (uint32_t)kFLEXCAN_BusOffIntFlag | \
-     (uint32_t)kFLEXCAN_ErrorIntFlag | FLEXCAN_MEMORY_ERROR_INIT_FLAG)
+     (uint32_t)kFLEXCAN_ErrorIntFlag)
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
-#define FLEXCAN_WAKE_UP_FLAG \
-    ((uint32_t)kFLEXCAN_WakeUpIntFlag | (uint64_t)kFLEXCAN_PNMatchIntFlag | (uint64_t)kFLEXCAN_PNTimeoutIntFlag)
-#endif
+#define FLEXCAN_PNWAKE_UP_FLAG ((uint64_t)kFLEXCAN_PNMatchIntFlag | (uint64_t)kFLEXCAN_PNTimeoutIntFlag)
 #else
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
-#define FLEXCAN_WAKE_UP_FLAG ((uint32_t)kFLEXCAN_WakeUpIntFlag)
+#define FLEXCAN_PNWAKE_UP_FLAG (0U)
 #endif
+
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
+#define FLEXCAN_WAKE_UP_FLAG ((uint32_t)kFLEXCAN_WakeUpIntFlag | FLEXCAN_PNWAKE_UP_FLAG)
+#else
+#define FLEXCAN_WAKE_UP_FLAG (FLEXCAN_PNWAKE_UP_FLAG)
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
-#define FLEXCAN_MEMORY_ERROR_INIT_FLAG ((uint64_t)kFLEXCAN_AllMemoryErrorFlag)
+#define FLEXCAN_MEMORY_ERROR_INT_FLAG ((uint64_t)kFLEXCAN_AllMemoryErrorIntFlag)
 #else
-#define FLEXCAN_MEMORY_ERROR_INIT_FLAG (0U)
+#define FLEXCAN_MEMORY_ERROR_INT_FLAG (0U)
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
-#define FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG                                             \
+#define FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INT_FLAG                                             \
     ((uint64_t)kFLEXCAN_ERxFifoUnderflowIntFlag | (uint64_t)kFLEXCAN_ERxFifoOverflowIntFlag | \
      (uint64_t)kFLEXCAN_ERxFifoWatermarkIntFlag | (uint64_t)kFLEXCAN_ERxFifoDataAvlIntFlag)
 #endif
@@ -240,7 +261,7 @@
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
 #define E_RX_FIFO(base) ((uintptr_t)(base) + 0x2000U)
 #else
-#define FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG (0U)
+#define FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INT_FLAG (0U)
 #endif
 
 /*! @brief FlexCAN transfer status. */
@@ -266,6 +287,9 @@ enum
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
     kStatus_FLEXCAN_RxFifoUnderflow =
         MAKE_STATUS(kStatusGroup_FLEXCAN, 15), /*!< Enhanced Rx Message FIFO is underflow. */
+#endif
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    kStatus_FLEXCAN_MemoryError = MAKE_STATUS(kStatusGroup_FLEXCAN, 16), /*!< FlexCAN Memory Error. */
 #endif
 };
 
@@ -295,7 +319,7 @@ typedef enum _flexcan_clock_source
     kFLEXCAN_ClkSrc1    = 0x1U, /*!< FlexCAN Protocol Engine clock selected by user as SRC == 1. */
 } flexcan_clock_source_t;
 
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT)
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER) && FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER)
 /*! @brief FlexCAN wake up source. */
 typedef enum _flexcan_wake_up_source
 {
@@ -311,6 +335,26 @@ typedef enum _flexcan_endianness
     kFLEXCAN_bigEndian    = 0x0U, /*!< Transmit frame with MSB first, receive frame with big-endian format. */
     kFLEXCAN_littleEndian = 0x1U, /*!< Transmit frame with LSB first, receive frame with little-endian format. */
 } flexcan_endianness_t;
+#endif
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
+/*! @brief FlexCAN timebase used for capturing 16-bit TIME_STAMP field of message buffer. */
+typedef enum _flexcan_MB_timestamp_base
+{
+    kFLEXCAN_CANTimer           = 0x0U, /*!< FlexCAN free-running timer. */
+    kFLEXCAN_Lower16bitsHRTimer = 0x1U, /*!< Lower 16 bits of high-resolution on-chip timer. */
+    kFLEXCAN_Upper16bitsHRTimer = 0x2U, /*!< Upper 16 bits of high-resolution on-chip timer. */
+} flexcan_MB_timestamp_base_t;
+
+/*! @brief FlexCAN capture point of 32-bit high resolution timebase during a CAN frame. */
+typedef enum _flexcan_capture_point
+{
+    kFLEXCAN_CANFrameID2ndBit = 0x0U,   /*!< Second bit of identifier field of any frame is on the CAN bus.
+                                             HR_TIME_STAMPn register will not capture 32-bit counter value. */
+    kFLEXCAN_CANFrameEnd      = 0x1U,   /*!< End of the CAN frame. */
+    kFLEXCAN_CANFrameStart    = 0x2U,   /*!< Start of the CAN frame. */
+    kFLEXCAN_CANFDFrameRes    = 0x3U,   /*!< Start of frame for classical CAN frames; res bit for CAN FD frames. */
+} flexcan_capture_point_t;
 #endif
 
 /*! @brief FlexCAN Rx Fifo Filter type. */
@@ -387,7 +431,10 @@ typedef enum _flexcan_efifo_dma_per_read_length
     kFLEXCAN_16WordPerRead,       /*!< Transfer 16 32-bit words (CS + ID + 53~56 bytes data).*/
     kFLEXCAN_17WordPerRead,       /*!< Transfer 17 32-bit words (CS + ID + 57~60 bytes data).*/
     kFLEXCAN_18WordPerRead,       /*!< Transfer 18 32-bit words (CS + ID + 61~64 bytes data).*/
-    kFLEXCAN_19WordPerRead        /*!< Transfer 19 32-bit words (CS + ID + 64 bytes data + ID HIT).*/
+    kFLEXCAN_19WordPerRead,       /*!< Transfer 19 32-bit words (CS + ID + 64 bytes data + ID HIT).*/
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
+    kFLEXCAN_20WordPerRead,       /*!< Transfer 20 32-bit words (CS + ID + 64 bytes data + ID HIT + HR timestamp).*/
+#endif
 } flexcan_efifo_dma_per_read_length_t;
 #endif
 
@@ -416,7 +463,7 @@ enum _flexcan_interrupt_enable
     kFLEXCAN_ErrorInterruptEnable     = CAN_CTRL1_ERRMSK_MASK,  /*!< CAN Error interrupt, use bit 14. */
     kFLEXCAN_TxWarningInterruptEnable = CAN_CTRL1_TWRNMSK_MASK, /*!< Tx Warning interrupt, use bit 11. */
     kFLEXCAN_RxWarningInterruptEnable = CAN_CTRL1_RWRNMSK_MASK, /*!< Rx Warning interrupt, use bit 10. */
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     kFLEXCAN_WakeUpInterruptEnable    = CAN_MCR_WAKMSK_MASK,    /*!< Self Wake Up interrupt, use bit 26. */
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
@@ -506,17 +553,21 @@ enum _flexcan_flags
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
     /*! Host Access With Non-Correctable Error Interrupt Flag. */
-    kFLEXCAN_HostAccessNonCorrectableErrorIntFlag = FLEXCAN_MECR_INT_MASK(CAN_ERRSR_HANCEIF_MASK),
+    kFLEXCAN_HostAccessNonCorrectableErrorIntFlag = FLEXCAN_MECR_STATUS_MASK(CAN_ERRSR_HANCEIF_MASK),
     /*! FlexCAN Access With Non-Correctable Error Interrupt Flag. */
-    kFLEXCAN_FlexCanAccessNonCorrectableErrorIntFlag = FLEXCAN_MECR_INT_MASK(CAN_ERRSR_FANCEIF_MASK),
+    kFLEXCAN_FlexCanAccessNonCorrectableErrorIntFlag = FLEXCAN_MECR_STATUS_MASK(CAN_ERRSR_FANCEIF_MASK),
     /*! Correctable Error Interrupt Flag. */
-    kFLEXCAN_CorrectableErrorIntFlag = FLEXCAN_MECR_INT_MASK(CAN_ERRSR_CEIF_MASK),
+    kFLEXCAN_CorrectableErrorIntFlag = FLEXCAN_MECR_STATUS_MASK(CAN_ERRSR_CEIF_MASK),
     /*! Host Access With Non-Correctable Error Interrupt Overrun Flag. */
-    kFLEXCAN_HostAccessNonCorrectableErrorOverrunFlag = FLEXCAN_MECR_INT_MASK(CAN_ERRSR_HANCEIOF_MASK),
+    kFLEXCAN_HostAccessNonCorrectableErrorOverrunFlag = FLEXCAN_MECR_STATUS_MASK(CAN_ERRSR_HANCEIOF_MASK),
     /*! FlexCAN Access With Non-Correctable Error Interrupt Overrun Flag. */
-    kFLEXCAN_FlexCanAccessNonCorrectableErrorOverrunFlag = FLEXCAN_MECR_INT_MASK(CAN_ERRSR_FANCEIOF_MASK),
+    kFLEXCAN_FlexCanAccessNonCorrectableErrorOverrunFlag = FLEXCAN_MECR_STATUS_MASK(CAN_ERRSR_FANCEIOF_MASK),
     /*! Correctable Error Interrupt Overrun Flag. */
-    kFLEXCAN_CorrectableErrorOverrunFlag = FLEXCAN_MECR_INT_MASK(CAN_ERRSR_CEIOF_MASK),
+    kFLEXCAN_CorrectableErrorOverrunFlag = FLEXCAN_MECR_STATUS_MASK(CAN_ERRSR_CEIOF_MASK),
+    /*! All Memory Error Interrupt Flags. */
+    kFLEXCAN_AllMemoryErrorIntFlag =
+        (kFLEXCAN_HostAccessNonCorrectableErrorIntFlag | kFLEXCAN_FlexCanAccessNonCorrectableErrorIntFlag |
+         kFLEXCAN_CorrectableErrorIntFlag),
     /*! All Memory Error Flags. */
     kFLEXCAN_AllMemoryErrorFlag =
         (kFLEXCAN_HostAccessNonCorrectableErrorIntFlag | kFLEXCAN_FlexCanAccessNonCorrectableErrorIntFlag |
@@ -690,7 +741,7 @@ typedef struct _flexcan_fd_frame
                                 length <= 8, it equal to the data length, otherwise the number of valid frame data is
                                 not equal to the length value.  user can
                                 use DLC_LENGTH_DECODE(length) macro to get the number of valid data bytes. */
-        uint32_t type : 1;   /*!< CAN Frame Type(DATA or REMOTE). */
+        uint32_t type : 1;   /*!< CAN Frame Type(DATA only). */
         uint32_t format : 1; /*!< CAN Frame Identifier(STD or EXT format). */
         uint32_t srr : 1;    /*!< Substitute Remote request. */
         uint32_t : 6;
@@ -729,6 +780,10 @@ typedef struct _flexcan_fd_frame
      * correct.*/
     uint32_t idhit; /*!< CAN Enhanced Rx FIFO filter hit id (This value is only used in Enhanced Rx FIFO receive
                        mode). */
+#endif
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
+    /*! @note HR timestamp offset is changed dynamically according to data length code (DLC). */
+    uint32_t hrtimestamp;   /*!< External 32-bit on-chip timer high-resolution timestamp. */
 #endif
 } flexcan_fd_frame_t;
 #endif
@@ -774,7 +829,7 @@ typedef struct _flexcan_config
         };
     };
     flexcan_clock_source_t clkSrc;      /*!< Clock source for FlexCAN Protocol Engine. */
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT)
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER) && FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER)
     flexcan_wake_up_source_t wakeupSrc; /*!< Wake up source selection. */
 #endif
     uint8_t maxMbNum;                   /*!< The maximum number of Message Buffers used by user. */
@@ -814,6 +869,15 @@ typedef struct _flexcan_config
                                                  receive frames, see @ref flexcan_endianness_t. */
 #endif
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTERNAL_TIME_TICK) && FSL_FEATURE_FLEXCAN_HAS_EXTERNAL_TIME_TICK)
+    bool enableExternalTimeTick;    /*!< true: External time tick clocks the free-running timer.
+                                         false: FlexCAN bit clock clocks the free-running timer. */
+#endif
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
+    flexcan_MB_timestamp_base_t captureTimeBase;    /*!< Timebase of message buffer 16-bit TIME_STAMP field. */
+    flexcan_capture_point_t capturePoint;   /*!< Point in time when 32-bit timebase is captured during CAN frame. */
+#endif
     flexcan_timing_config_t timingConfig; /* Protocol timing . */
 } flexcan_config_t;
 
@@ -831,7 +895,7 @@ typedef struct _flexcan_rx_mb_config
     uint32_t id;                   /*!< CAN Message Buffer Frame Identifier, should be set using
                                         FLEXCAN_ID_EXT() or FLEXCAN_ID_STD() macro. */
     flexcan_frame_format_t format; /*!< CAN Frame Identifier format(Standard of Extend). */
-    flexcan_frame_type_t type;     /*!< CAN Frame Type(Data or Remote). */
+    flexcan_frame_type_t type;     /*!< CAN Frame Type(Data or Remote for classical CAN only). */
 } flexcan_rx_mb_config_t;
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
@@ -1088,8 +1152,10 @@ bool FLEXCAN_IsInstanceHasFDMode(CAN_Type *base);
  * This function makes the FlexCAN work under Freeze Mode.
  *
  * @param base FlexCAN peripheral base address.
+ * @return kStatus_Success Enter Freeze Mode successful
+ *         kStatus_Timeout Timeout when wait for Freeze Mode Acknowledge
  */
-void FLEXCAN_EnterFreezeMode(CAN_Type *base);
+status_t FLEXCAN_EnterFreezeMode(CAN_Type *base);
 
 /*!
  * @brief Exit FlexCAN Freeze Mode.
@@ -1097,8 +1163,10 @@ void FLEXCAN_EnterFreezeMode(CAN_Type *base);
  * This function makes the FlexCAN leave Freeze Mode.
  *
  * @param base FlexCAN peripheral base address.
+ * @return kStatus_Success Enter Freeze Mode successful
+ *         kStatus_Timeout Timeout when wait for Freeze Mode Acknowledge
  */
-void FLEXCAN_ExitFreezeMode(CAN_Type *base);
+status_t FLEXCAN_ExitFreezeMode(CAN_Type *base);
 
 /*!
  * @brief Get the FlexCAN instance from peripheral base address.
@@ -1497,12 +1565,26 @@ static inline uint64_t FLEXCAN_GetStatusFlags(CAN_Type *base)
 {
     uint64_t tempflag = (uint64_t)base->ESR1;
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
-    /* Get PN Wake Up status. */
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn(base))
+    {
+        /* Get PN Wake Up status. */
+        tempflag |= FLEXCAN_PN_STATUS_MASK(base->WU_MTC);
+    }
+#else
     tempflag |= FLEXCAN_PN_STATUS_MASK(base->WU_MTC);
 #endif
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn(base))
+    {
+        tempflag |= FLEXCAN_EFIFO_STATUS_MASK(base->ERFSR);
+    }
+#else
     /* Get Enhanced Rx FIFO status. */
     tempflag |= FLEXCAN_EFIFO_STATUS_MASK(base->ERFSR);
+#endif
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
     /* Get Memory Error status. */
@@ -1531,12 +1613,26 @@ static inline uint32_t FLEXCAN_GetStatusFlags(CAN_Type *base)
 static inline void FLEXCAN_ClearStatusFlags(CAN_Type *base, uint64_t mask)
 {
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
-    /* Clear PN Wake Up status. */
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn(base))
+    {
+        /* Clear PN Wake Up status. */
+        base->WU_MTC = FLEXCAN_PN_STATUS_UNMASK(mask);
+    }
+#else
     base->WU_MTC = FLEXCAN_PN_STATUS_UNMASK(mask);
 #endif
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn(base))
+    {
+        base->ERFSR = FLEXCAN_EFIFO_STATUS_UNMASK(mask);
+    }
+#else
     /* Clear Enhanced Rx FIFO status. */
     base->ERFSR = FLEXCAN_EFIFO_STATUS_UNMASK(mask);
+#endif
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
     /* Clear Memory Error status. */
@@ -1575,7 +1671,7 @@ static inline void FLEXCAN_GetBusErrCount(CAN_Type *base, uint8_t *txErrBuf, uin
 }
 
 /*!
- * @brief Gets the FlexCAN Message Buffer interrupt flags.
+ * @brief Gets the FlexCAN low 64 Message Buffer interrupt flags.
  *
  * This function gets the interrupt flags of a given Message Buffers.
  *
@@ -1583,18 +1679,17 @@ static inline void FLEXCAN_GetBusErrCount(CAN_Type *base, uint8_t *txErrBuf, uin
  * @param mask The ORed FlexCAN Message Buffer mask.
  * @return The status of given Message Buffers.
  */
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
 static inline uint64_t FLEXCAN_GetMbStatusFlags(CAN_Type *base, uint64_t mask)
-#else
-static inline uint32_t FLEXCAN_GetMbStatusFlags(CAN_Type *base, uint32_t mask)
-#endif
 {
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-    uint64_t tempflag = (uint64_t)base->IFLAG1;
-    return (tempflag | (((uint64_t)base->IFLAG2) << 32)) & mask;
-#else
-    return (base->IFLAG1 & mask);
+    uint64_t tempflag = 0U;
+    tempflag = (uint64_t)base->IFLAG1;
+#if defined(CAN_IFLAG2_BUF63TO32I_MASK)
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 32)
+    {
+        tempflag |= ((uint64_t)base->IFLAG2 << 32U);
+    }
 #endif
+    return (tempflag & mask);
 }
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB) && FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB)
@@ -1610,36 +1705,38 @@ static inline uint32_t FLEXCAN_GetMbStatusFlags(CAN_Type *base, uint32_t mask)
 static inline uint64_t FLEXCAN_GetHigh64MbStatusFlags(CAN_Type *base, uint64_t mask)
 {
     uint64_t tempflag = 0U;
-#if defined(CAN_IFLAG3_BUF95TO64_MASK)
-    tempflag |= (uint64_t)base->IFLAG3;
-#endif
+    tempflag = (uint64_t)base->IFLAG3;
 #if defined(CAN_IFLAG4_BUF127TO96_MASK)
-    tempflag |= (uint64_t)base->IFLAG4;
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 96)
+    {
+        tempflag |= ((uint64_t)base->IFLAG4 << 32U);
+    }
 #endif
     return (tempflag & mask);
 }
 #endif
 
 /*!
- * @brief Clears the FlexCAN Message Buffer interrupt flags.
+ * @brief Clears the FlexCAN low 64 Message Buffer interrupt flags.
  *
  * This function clears the interrupt flags of a given Message Buffers.
  *
  * @param base FlexCAN peripheral base address.
  * @param mask The ORed FlexCAN Message Buffer mask.
  */
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
 static inline void FLEXCAN_ClearMbStatusFlags(CAN_Type *base, uint64_t mask)
-#else
-static inline void FLEXCAN_ClearMbStatusFlags(CAN_Type *base, uint32_t mask)
-#endif
 {
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-    base->IFLAG1 = (uint32_t)(mask & 0xFFFFFFFFU);
-    base->IFLAG2 = (uint32_t)(mask >> 32);
-#else
-    base->IFLAG1 = mask;
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 32)
+    {
+        base->IFLAG1 = (uint32_t)(mask & 0xFFFFFFFFU);
+#if defined(CAN_IFLAG2_BUF63TO32I_MASK)
+        base->IFLAG2 = (uint32_t)(mask >> 32U);
 #endif
+    }
+    else
+    {
+        base->IFLAG1 = (uint32_t)(mask & 0xFFFFFFFFU);
+    }
 }
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB) && FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB)
@@ -1653,12 +1750,17 @@ static inline void FLEXCAN_ClearMbStatusFlags(CAN_Type *base, uint32_t mask)
  */
 static inline void FLEXCAN_ClearHigh64MbStatusFlags(CAN_Type *base, uint64_t mask)
 {
-#if defined(CAN_IFLAG3_BUF95TO64_MASK)
-    base->IFLAG3 = (uint32_t)(mask & 0xFFFFFFFFU);
-#endif
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 96)
+    {
+        base->IFLAG3 = (uint32_t)(mask & 0xFFFFFFFFU);
 #if defined(CAN_IFLAG4_BUF127TO96_MASK)
-    base->IFLAG4 = (uint32_t)(mask >> 32U);
+        base->IFLAG4 = (uint32_t)(mask >> 32U);
 #endif
+    }
+    else
+    {
+        base->IFLAG3 = (uint32_t)(mask & 0xFFFFFFFFU);
+    }
 }
 #endif
 
@@ -1686,6 +1788,9 @@ void FLEXCAN_GetMemoryErrorReportStatus(CAN_Type *base, flexcan_memory_error_rep
  */
 static inline uint8_t FLEXCAN_GetPNMatchCount(CAN_Type *base)
 {
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn)
+    assert(1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn(base));
+#endif
     return (uint8_t)((base->WU_MTC & CAN_WU_MTC_MCOUNTER_MASK) >> CAN_WU_MTC_MCOUNTER_SHIFT);
 }
 #endif
@@ -1701,6 +1806,9 @@ static inline uint8_t FLEXCAN_GetPNMatchCount(CAN_Type *base)
  */
 static inline uint32_t FLEXCAN_GetEnhancedFifoDataCount(CAN_Type *base)
 {
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn)
+    assert(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn(base) == 1);
+#endif
     return (base->ERFSR & CAN_ERFSR_ERFEL_MASK);
 }
 #endif
@@ -1729,13 +1837,13 @@ static inline void FLEXCAN_EnableInterrupts(CAN_Type *base, uint32_t mask)
 #endif
 {
     uint32_t primask = DisableGlobalIRQ();
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     /* Solve Self Wake Up interrupt. */
     base->MCR |= (uint32_t)(mask & (uint32_t)kFLEXCAN_WakeUpInterruptEnable);
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
-    if (0 != FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(base))
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(base))
     {
         /* Solve CAN FD frames data phase error interrupt. */
         base->CTRL2 |= (uint32_t)(mask & (uint32_t)kFLEXCAN_FDErrorInterruptEnable);
@@ -1743,13 +1851,27 @@ static inline void FLEXCAN_EnableInterrupts(CAN_Type *base, uint32_t mask)
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
-    /* Solve PN Wake Up interrupt. */
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn(base))
+    {
+        /* Solve PN Wake Up interrupt. */
+        base->CTRL1_PN |= FLEXCAN_PN_INT_UNMASK(mask);
+    }
+#else
     base->CTRL1_PN |= FLEXCAN_PN_INT_UNMASK(mask);
+#endif
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn(base))
+    {
+        base->ERFIER |= FLEXCAN_EFIFO_INT_UNMASK(mask);
+    }
+#else
     /* Solve Enhanced Rx FIFO interrupt. */
     base->ERFIER |= FLEXCAN_EFIFO_INT_UNMASK(mask);
+#endif
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
@@ -1783,13 +1905,13 @@ static inline void FLEXCAN_DisableInterrupts(CAN_Type *base, uint32_t mask)
 {
     uint32_t primask = DisableGlobalIRQ();
 
-#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     /* Solve Wake Up Interrupt. */
     base->MCR &= ~(uint32_t)(mask & (uint32_t)kFLEXCAN_WakeUpInterruptEnable);
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
-    if (0 != FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(base))
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(base))
     {
         /* Solve CAN FD frames data phase error interrupt. */
         base->CTRL2 &= ~(uint32_t)(mask & (uint32_t)kFLEXCAN_FDErrorInterruptEnable);
@@ -1797,18 +1919,32 @@ static inline void FLEXCAN_DisableInterrupts(CAN_Type *base, uint32_t mask)
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
-    /* Solve PN Wake Up Interrupt. */
-    base->CTRL1_PN &= ~FLEXCAN_PN_STATUS_UNMASK(mask);
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_PN_MODEn(base))
+    {
+        /* Solve PN Wake Up Interrupt. */
+        base->CTRL1_PN &= ~FLEXCAN_PN_INT_UNMASK(mask);
+    }
+#else
+    base->CTRL1_PN &= ~FLEXCAN_PN_INT_UNMASK(mask);
+#endif
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+#if defined(FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn)
+    if (1 == FSL_FEATURE_FLEXCAN_INSTANCE_HAS_ENHANCED_RX_FIFOn(base))
+    {
+        base->ERFIER &= ~FLEXCAN_EFIFO_INT_UNMASK(mask);
+    }
+#else
     /* Solve Enhanced Rx FIFO interrupt. */
     base->ERFIER &= ~FLEXCAN_EFIFO_INT_UNMASK(mask);
+#endif
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
     /* Solve Memory Error Interrupt. */
-    base->MECR &= ~FLEXCAN_MECR_STATUS_UNMASK(mask);
+    base->MECR &= ~FLEXCAN_MECR_INT_UNMASK(mask);
 #endif
 
     /* Solve interrupt enable bits in CTRL1 register. */
@@ -1820,27 +1956,28 @@ static inline void FLEXCAN_DisableInterrupts(CAN_Type *base, uint32_t mask)
 }
 
 /*!
- * @brief Enables FlexCAN Message Buffer interrupts.
+ * @brief Enables FlexCAN low 64 Message Buffer interrupts.
  *
  * This function enables the interrupts of given Message Buffers.
  *
  * @param base FlexCAN peripheral base address.
  * @param mask The ORed FlexCAN Message Buffer mask.
  */
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
 static inline void FLEXCAN_EnableMbInterrupts(CAN_Type *base, uint64_t mask)
-#else
-static inline void FLEXCAN_EnableMbInterrupts(CAN_Type *base, uint32_t mask)
-#endif
 {
     uint32_t primask = DisableGlobalIRQ();
 
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-    base->IMASK1 |= (uint32_t)(mask & 0xFFFFFFFFU);
-    base->IMASK2 |= (uint32_t)(mask >> 32);
-#else
-    base->IMASK1 |= mask;
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 32)
+    {
+        base->IMASK1 |= (uint32_t)(mask & 0xFFFFFFFFU);
+#if defined(CAN_IMASK2_BUF63TO32M_MASK)
+        base->IMASK2 |= (uint32_t)(mask >> 32U);
 #endif
+    }
+    else
+    {
+        base->IMASK1 |= (uint32_t)(mask & 0xFFFFFFFFU);
+    }
     EnableGlobalIRQ(primask);
 }
 
@@ -1857,38 +1994,44 @@ static inline void FLEXCAN_EnableHigh64MbInterrupts(CAN_Type *base, uint64_t mas
 {
     uint32_t primask = DisableGlobalIRQ();
 
-#if defined(CAN_IMASK3_BUF95TO64M_MASK)
-    base->IMASK3 |= (uint32_t)(mask & 0xFFFFFFFFU);
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 96)
+    {
+        base->IMASK3 |= (uint32_t)(mask & 0xFFFFFFFFU);
+#if defined(CAN_IMASK4_BUF127TO96M_MASK)
+        base->IMASK4 |= (uint32_t)(mask >> 32U);
 #endif
-#if defined(CAN_IMASK4_BUF127TO96_MASK)
-    base->IMASK4 |= (uint32_t)(mask >> 32U);
-#endif
+    }
+    else
+    {
+        base->IMASK3 |= (uint32_t)(mask & 0xFFFFFFFFU);
+    }
     EnableGlobalIRQ(primask);
 }
 #endif
 
 /*!
- * @brief Disables FlexCAN Message Buffer interrupts.
+ * @brief Disables FlexCAN low 64 Message Buffer interrupts.
  *
  * This function disables the interrupts of given Message Buffers.
  *
  * @param base FlexCAN peripheral base address.
  * @param mask The ORed FlexCAN Message Buffer mask.
  */
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
 static inline void FLEXCAN_DisableMbInterrupts(CAN_Type *base, uint64_t mask)
-#else
-static inline void FLEXCAN_DisableMbInterrupts(CAN_Type *base, uint32_t mask)
-#endif
 {
     uint32_t primask = DisableGlobalIRQ();
 
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-    base->IMASK1 &= ~((uint32_t)(mask & 0xFFFFFFFFU));
-    base->IMASK2 &= ~((uint32_t)(mask >> 32));
-#else
-    base->IMASK1 &= ~mask;
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 32)
+    {
+        base->IMASK1 &= ~((uint32_t)(mask & 0xFFFFFFFFU));
+#if defined(CAN_IMASK2_BUF63TO32M_MASK)
+        base->IMASK2 &= ~((uint32_t)(mask >> 32U));
 #endif
+    }
+    else
+    {
+        base->IMASK1 &= ~((uint32_t)(mask & 0xFFFFFFFFU));
+    }
     EnableGlobalIRQ(primask);
 }
 
@@ -1905,12 +2048,17 @@ static inline void FLEXCAN_DisableHigh64MbInterrupts(CAN_Type *base, uint64_t ma
 {
     uint32_t primask = DisableGlobalIRQ();
 
-#if defined(CAN_IMASK3_BUF95TO64M_MASK)
-    base->IMASK3 &= ~((uint32_t)(mask & 0xFFFFFFFFU));
+    if (FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base) > 96)
+    {
+        base->IMASK3 &= ~((uint32_t)(mask & 0xFFFFFFFFU));
+#if defined(CAN_IMASK4_BUF127TO96M_MASK)
+        base->IMASK4 &= ~((uint32_t)(mask >> 32U));
 #endif
-#if defined(CAN_IMASK4_BUF127TO96_MASK)
-    base->IMASK4 &= ~((uint32_t)(mask >> 32U));
-#endif
+    }
+    else
+    {
+        base->IMASK3 &= ~((uint32_t)(mask & 0xFFFFFFFFU));
+    }
     EnableGlobalIRQ(primask);
 }
 #endif
@@ -1961,9 +2109,14 @@ static inline uintptr_t FLEXCAN_GetRxFifoHeadAddr(CAN_Type *base)
  *
  * @param base FlexCAN base pointer.
  * @param enable true to enable, false to disable.
+ * @return kStatus_Success Enable FlexCAN module successful
+ *         kStatus_Timeout Timeout when wait for Low-Power Mode Acknowledge
  */
-static inline void FLEXCAN_Enable(CAN_Type *base, bool enable)
+static inline status_t FLEXCAN_Enable(CAN_Type *base, bool enable)
 {
+#if FLEXCAN_MODULE_TIMEOUT
+    uint32_t timeout = FLEXCAN_MODULE_TIMEOUT;
+#endif
     if (enable)
     {
         base->MCR &= ~CAN_MCR_MDIS_MASK;
@@ -1971,17 +2124,34 @@ static inline void FLEXCAN_Enable(CAN_Type *base, bool enable)
         /* Wait FlexCAN exit from low-power mode. */
         while (0U != (base->MCR & CAN_MCR_LPMACK_MASK))
         {
+#if FLEXCAN_MODULE_TIMEOUT
+            if (--timeout == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
     else
     {
+#if (defined(FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE) && FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE)
+        /* To enter Disable Mode, FlexCAN module must first enter Freeze Mode. */
+        (void)FLEXCAN_EnterFreezeMode(base);
+#endif
         base->MCR |= CAN_MCR_MDIS_MASK;
 
         /* Wait FlexCAN enter low-power mode. */
         while (0U == (base->MCR & CAN_MCR_LPMACK_MASK))
         {
+#if FLEXCAN_MODULE_TIMEOUT
+            if (--timeout == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
+    return kStatus_Success;
 }
 
 /*!
@@ -2110,6 +2280,7 @@ status_t FLEXCAN_ReadPNWakeUpMB(CAN_Type *base, uint8_t mbIdx, flexcan_frame_t *
  * @param pTxFrame Pointer to CAN FD message frame to be sent.
  * @retval kStatus_Success - Write Tx Message Buffer Successfully.
  * @retval kStatus_Fail    - Tx Message Buffer is currently in use.
+ * @retval kStatus_Timeout - Failed to send frames within specific time.
  */
 status_t FLEXCAN_TransferFDSendBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_fd_frame_t *pTxFrame);
 
@@ -2124,6 +2295,7 @@ status_t FLEXCAN_TransferFDSendBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_f
  * @retval kStatus_Success            - Rx Message Buffer is full and has been read successfully.
  * @retval kStatus_FLEXCAN_RxOverflow - Rx Message Buffer is already overflowed and has been read successfully.
  * @retval kStatus_Fail               - Rx Message Buffer is empty.
+ * @retval kStatus_Timeout            - Failed to receive frames within specific time.
  */
 status_t FLEXCAN_TransferFDReceiveBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_fd_frame_t *pRxFrame);
 
@@ -2182,20 +2354,21 @@ void FLEXCAN_TransferFDAbortReceive(CAN_Type *base, flexcan_handle_t *handle, ui
 /*!
  * @brief Performs a polling send transaction on the CAN bus.
  *
- * @note  A transfer handle does not need to be created  before calling this API.
+ * @note  A transfer handle does not need to be created before calling this API.
  *
  * @param base FlexCAN peripheral base pointer.
  * @param mbIdx The FlexCAN Message Buffer index.
  * @param pTxFrame Pointer to CAN message frame to be sent.
  * @retval kStatus_Success - Write Tx Message Buffer Successfully.
  * @retval kStatus_Fail    - Tx Message Buffer is currently in use.
+ * @retval kStatus_Timeout - Failed to send frames within specific time.
  */
 status_t FLEXCAN_TransferSendBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_frame_t *pTxFrame);
 
 /*!
  * @brief Performs a polling receive transaction on the CAN bus.
  *
- * @note  A transfer handle does not need to be created  before calling this API.
+ * @note  A transfer handle does not need to be created before calling this API.
  *
  * @param base FlexCAN peripheral base pointer.
  * @param mbIdx The FlexCAN Message Buffer index.
@@ -2203,6 +2376,7 @@ status_t FLEXCAN_TransferSendBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_fra
  * @retval kStatus_Success            - Rx Message Buffer is full and has been read successfully.
  * @retval kStatus_FLEXCAN_RxOverflow - Rx Message Buffer is already overflowed and has been read successfully.
  * @retval kStatus_Fail               - Rx Message Buffer is empty.
+ * @retval kStatus_Timeout            - Failed to receive frames within specific time.
  */
 status_t FLEXCAN_TransferReceiveBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_frame_t *pRxFrame);
 
@@ -2215,6 +2389,7 @@ status_t FLEXCAN_TransferReceiveBlocking(CAN_Type *base, uint8_t mbIdx, flexcan_
  * @param pRxFrame Pointer to CAN message frame structure for reception.
  * @retval kStatus_Success - Read Message from Rx FIFO successfully.
  * @retval kStatus_Fail    - Rx FIFO is not enabled.
+ * @retval kStatus_Timeout - Failed to receive frames within specific time.
  */
 status_t FLEXCAN_TransferReceiveFifoBlocking(CAN_Type *base, flexcan_frame_t *pRxFrame);
 
@@ -2228,6 +2403,7 @@ status_t FLEXCAN_TransferReceiveFifoBlocking(CAN_Type *base, flexcan_frame_t *pR
  * @param pRxFrame Pointer to CAN FD message frame structure for reception.
  * @retval kStatus_Success - Read Message from Rx FIFO successfully.
  * @retval kStatus_Fail    - Rx FIFO is not enabled.
+ * @retval kStatus_Timeout - Failed to receive frames within specific time.
  */
 status_t FLEXCAN_TransferReceiveEnhancedFifoBlocking(CAN_Type *base, flexcan_fd_frame_t *pRxFrame);
 #endif
@@ -2303,7 +2479,6 @@ status_t FLEXCAN_TransferReceiveFifoNonBlocking(CAN_Type *base,
  * @retval kStatus_InvalidArgument count is Invalid.
  * @retval kStatus_Success Successfully return the count.
  */
-
 status_t FLEXCAN_TransferGetReceiveFifoCount(CAN_Type *base, flexcan_handle_t *handle, size_t *count);
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
@@ -2361,6 +2536,14 @@ static inline status_t FLEXCAN_TransferGetReceiveEnhancedFifoCount(CAN_Type *bas
  */
 uint32_t FLEXCAN_GetTimeStamp(flexcan_handle_t *handle, uint8_t mbIdx);
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
+static inline uint32_t FLEXCAN_GetHighResolutionTimeStamp(CAN_Type *base, uint8_t mbIdx)
+{
+    assert(mbIdx < CAN_HR_TIME_STAMP_COUNT);
+    return base->HR_TIME_STAMP[mbIdx];
+}
+#endif
+
 /*!
  * @brief Aborts the interrupt driven message send process.
  *
@@ -2414,6 +2597,56 @@ void FLEXCAN_TransferAbortReceiveEnhancedFifo(CAN_Type *base, flexcan_handle_t *
  * @param handle FlexCAN handle pointer.
  */
 void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
+
+/*!
+ * @brief FlexCAN Message Buffer IRQ handle function.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ * @param startMbIdx First Message Buffer to handle.
+ * @param endMbIdx Last Message Buffer to handle.
+ */
+void FLEXCAN_MbHandleIRQ(CAN_Type *base, flexcan_handle_t *handle, uint32_t startMbIdx, uint32_t endMbIdx);
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+/*!
+ * @brief FlexCAN Ehanced Rx FIFO IRQ handle function.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ */
+void FLEXCAN_EhancedRxFifoHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
+#endif
+
+/*!
+ * @brief FlexCAN Bus Off, Error and Warning IRQ handle function.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ */
+void FLEXCAN_BusoffErrorHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
+/*!
+ * @brief FlexCAN Pretended Networking Wake-up IRQ handle function.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ */
+void FLEXCAN_PNWakeUpHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
+#endif
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT)
+/*!
+ * @brief FlexCAN Memory Error IRQ handle function.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ */
+void FLEXCAN_MemoryErrorHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
+#endif
+#endif
 
 /*! @} */
 

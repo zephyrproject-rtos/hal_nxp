@@ -7,14 +7,14 @@
 **                          MK22FN512VLL12
 **                          MK22FN512VMP12
 **
-**     Version:             rev. 2.9, 2016-03-21
-**     Build:               b240709
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -52,21 +52,24 @@
 **     - rev. 2.9 (2016-03-21)
 **         Added MK22FN512VFX12 part.
 **         GPIO - renamed port instances: PTx -> GPIOx.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DMA.h
- * @version 2.9
- * @date 2016-03-21
+ * @file PERI_DMA.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DMA
  *
  * CMSIS Peripheral Access Layer for DMA
  */
 
-#if !defined(DMA_H_)
-#define DMA_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DMA_H_)
+#define PERI_DMA_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK22FN512CAP12) || defined(CPU_MK22FN512VDC12) || defined(CPU_MK22FN512VFX12) || defined(CPU_MK22FN512VLH12) || defined(CPU_MK22FN512VLL12) || defined(CPU_MK22FN512VMP12))
 #include "MK22F51212_COMMON.h"
@@ -231,14 +234,14 @@ typedef struct {
   __IO uint32_t ERQ;                               /**< Enable Request Register, offset: 0xC */
        uint8_t RESERVED_1[4];
   __IO uint32_t EEI;                               /**< Enable Error Interrupt Register, offset: 0x14 */
-  __O  uint8_t CEEI;                               /**< Clear Enable Error Interrupt Register, offset: 0x18 */
-  __O  uint8_t SEEI;                               /**< Set Enable Error Interrupt Register, offset: 0x19 */
-  __O  uint8_t CERQ;                               /**< Clear Enable Request Register, offset: 0x1A */
-  __O  uint8_t SERQ;                               /**< Set Enable Request Register, offset: 0x1B */
-  __O  uint8_t CDNE;                               /**< Clear DONE Status Bit Register, offset: 0x1C */
-  __O  uint8_t SSRT;                               /**< Set START Bit Register, offset: 0x1D */
-  __O  uint8_t CERR;                               /**< Clear Error Register, offset: 0x1E */
-  __O  uint8_t CINT;                               /**< Clear Interrupt Request Register, offset: 0x1F */
+  __IO uint8_t CEEI;                               /**< Clear Enable Error Interrupt Register, offset: 0x18 */
+  __IO uint8_t SEEI;                               /**< Set Enable Error Interrupt Register, offset: 0x19 */
+  __IO uint8_t CERQ;                               /**< Clear Enable Request Register, offset: 0x1A */
+  __IO uint8_t SERQ;                               /**< Set Enable Request Register, offset: 0x1B */
+  __IO uint8_t CDNE;                               /**< Clear DONE Status Bit Register, offset: 0x1C */
+  __IO uint8_t SSRT;                               /**< Set START Bit Register, offset: 0x1D */
+  __IO uint8_t CERR;                               /**< Clear Error Register, offset: 0x1E */
+  __IO uint8_t CINT;                               /**< Clear Interrupt Request Register, offset: 0x1F */
        uint8_t RESERVED_2[4];
   __IO uint32_t INT;                               /**< Interrupt Request Register, offset: 0x24 */
        uint8_t RESERVED_3[4];
@@ -2263,5 +2266,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DMA_H_ */
+#endif  /* PERI_DMA_H_ */
 

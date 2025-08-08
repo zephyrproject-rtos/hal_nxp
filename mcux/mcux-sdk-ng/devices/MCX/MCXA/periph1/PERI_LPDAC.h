@@ -31,14 +31,14 @@
 **                          MCXA156VMP
 **                          MCXA156VPJ
 **
-**     Version:             rev. 1.0, 2022-03-29
-**     Build:               b241120
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPDAC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -47,21 +47,24 @@
 **     Revisions:
 **     - rev. 1.0 (2022-03-29)
 **         Initial version based on v0.1UM
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPDAC.h
- * @version 1.0
- * @date 2022-03-29
+ * @file PERI_LPDAC.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPDAC
  *
  * CMSIS Peripheral Access Layer for LPDAC
  */
 
-#if !defined(LPDAC_H_)
-#define LPDAC_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPDAC_H_)
+#define PERI_LPDAC_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXA144VFT) || defined(CPU_MCXA144VLH) || defined(CPU_MCXA144VLL) || defined(CPU_MCXA144VMP) || defined(CPU_MCXA144VPJ))
 #include "MCXA144_COMMON.h"
@@ -212,7 +215,7 @@ typedef struct {
 #define LPDAC_GCR_FIFOEN_MASK                    (0x8U)
 #define LPDAC_GCR_FIFOEN_SHIFT                   (3U)
 /*! FIFOEN - FIFO Enable
- *  0b0..Enables FIFO mode and disables Buffer mode. Any data written to DATA[DATA] goes to buffer then goes to conversion.
+ *  0b0..Disables FIFO mode and enables Buffer mode. Any data written to DATA[DATA] goes to buffer then goes to conversion.
  *  0b1..Enables FIFO mode. Data will be first read from FIFO to buffer and then goes to conversion.
  */
 #define LPDAC_GCR_FIFOEN(x)                      (((uint32_t)(((uint32_t)(x)) << LPDAC_GCR_FIFOEN_SHIFT)) & LPDAC_GCR_FIFOEN_MASK)
@@ -522,5 +525,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPDAC_H_ */
+#endif  /* PERI_LPDAC_H_ */
 

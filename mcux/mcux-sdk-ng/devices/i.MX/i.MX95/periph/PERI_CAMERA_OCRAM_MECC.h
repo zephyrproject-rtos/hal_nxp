@@ -44,13 +44,13 @@
 **                          MIMX9596XVZXN_cm7
 **
 **     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Build:               b250106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAMERA_OCRAM_MECC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -395,7 +395,7 @@ typedef struct {
 #define CAMERA_OCRAM_MECC_RAMCR2_WBUF_SHIFT      (1U)
 /*! WBUF - Write Buffer Control
  *  0b00..Disable write buffer for all write transactions
- *  0b01..Enable write buffer for write transactions that come with bufferable bus attribute
+ *  0b01..Enable write buffer for write transactions that come with a bus attribute that allows writes to be buffered and merged
  *  0b10..Enable write buffer for write transactions that are not exclusive writes
  *  0b11..Reserved
  */

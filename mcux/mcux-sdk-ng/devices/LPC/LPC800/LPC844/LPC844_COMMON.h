@@ -11,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    LPC84x User manual Rev.1.6  8 Dec 2017
-**     Version:             rev. 1.2, 2017-06-08
-**     Build:               b240704
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC844
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -34,14 +34,17 @@
 **         Remove RTC_CTRL_RTC_OSC_BYPASS.
 **         SYSCON_ARMTRCLKDIV rename to SYSCON_ARMTRACECLKDIV.
 **         Remove RESET and HALT from SYSCON_AHBCLKDIV.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC844_COMMON.h
- * @version 1.2
- * @date 2017-06-08
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPC844
  *
  * CMSIS Peripheral Access Layer for LPC844
@@ -52,9 +55,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0002U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -138,14 +141,16 @@ typedef enum IRQn {
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
 #include "system_LPC844.h"             /* Device specific configuration file */
 
-#define LPC844_SERIES
-/* CPU specific feature definitions */
-#include "LPC844_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef LPC844_SERIES
+#define LPC844_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "LPC844_features.h"
 
 /* ACOMP - Peripheral instance base addresses */
 /** Peripheral ACOMP base address */

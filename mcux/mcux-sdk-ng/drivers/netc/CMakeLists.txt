@@ -30,7 +30,7 @@ if(CONFIG_MCUX_COMPONENT_driver.netc_imx943)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.netc)
-    mcux_component_version(2.8.1)
+    mcux_component_version(2.9.0)
 
     mcux_add_source(
         SOURCES
@@ -63,6 +63,7 @@ if(CONFIG_MCUX_COMPONENT_driver.netc_switch)
     mcux_add_source(
         SOURCES
         fsl_netc_switch.h
+        fsl_netc_tag.h
         fsl_netc_switch.c
     )
 

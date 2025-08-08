@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1797,17 +1797,6 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     }
     return true;
 }
-/*! brief Enable USB HS clock.
- *
- * This function only enables the access to USB HS prepheral, upper layer
- * should first call the ref CLOCK_EnableUsbhs0PhyPllClock to enable the PHY
- * clock to use USB HS.
- *
- * param src  USB HS does not care about the clock source, here must be ref kCLOCK_UsbSrcUnused.
- * param freq USB HS does not care about the clock source, so this parameter is ignored.
- * retval true The clock is set successfully.
- * retval false The clock source is invalid to get proper USB HS clock.
- */
 /*! brief Disable USB HS PHY PLL clock.
  *
  * This function disables USB HS PHY PLL clock.
@@ -1817,6 +1806,7 @@ void CLOCK_DisableUsbhs0PhyPllClock(void)
     USBPHY1->PLL_SIC_CLR = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
     USBPHY1->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
 }
+#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES))
 bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
 {
     return true;
@@ -1911,6 +1901,7 @@ void CLOCK_DisableUsbhs1PhyPllClock(void)
     USBPHY2->PLL_SIC_CLR = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
     USBPHY2->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
 }
+#endif
 #endif
 
 void CLOCK_OSCPLL_ControlByCpuLowPowerMode(clock_name_t name, uint32_t domainMap, clock_level_t level)

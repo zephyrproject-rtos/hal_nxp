@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -77,13 +77,13 @@ typedef enum _netc_timer_irq_flags
         ENETC_PF_TMR_TMR_TEVENT_ETS2_THREN_MASK, /*!< External trigger 2 timestamp FIFO threshold hit interrupt.
                                                   */
     kNETC_TimerExtTrig1TsAvailIrqFlag =
-        ENETC_PF_TMR_TMR_TEVENT_ETS1EN_MASK, /*!< External trigger 1 new timestamp available interrupt. */
+        ENETC_PF_TMR_TMR_TEVENT_ETS1EN_MASK,     /*!< External trigger 1 new timestamp available interrupt. */
     kNETC_TimerExtTrig2TsAvailIrqFlag =
-        ENETC_PF_TMR_TMR_TEVENT_ETS2EN_MASK, /*!< External trigger 2 new timestamp available interrupt. */
+        ENETC_PF_TMR_TMR_TEVENT_ETS2EN_MASK,     /*!< External trigger 2 new timestamp available interrupt. */
     kNETC_TimerExtTrig1OverflowIrqFlag =
-        ENETC_PF_TMR_TMR_TEVENT_ETS1_OVEN_MASK, /*!< External trigger 1 timestamp FIFO overflow interrupt. */
+        ENETC_PF_TMR_TMR_TEVENT_ETS1_OVEN_MASK,  /*!< External trigger 1 timestamp FIFO overflow interrupt. */
     kNETC_TimerExtTrig2OverflowIrqFlag =
-        ENETC_PF_TMR_TMR_TEVENT_ETS2_OVEN_MASK, /*!< External trigger 2 timestamp FIFO overflow interrupt. */
+        ENETC_PF_TMR_TMR_TEVENT_ETS2_OVEN_MASK,  /*!< External trigger 2 timestamp FIFO overflow interrupt. */
 } netc_timer_irq_flags_t;
 
 typedef struct _netc_timer_handle netc_timer_handle_t;

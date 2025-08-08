@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022, 2023 NXP
+ * Copyright 2016-2019, 2022, 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0 */
+#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 3, 3)) /*!< Version 2.3.3 */
 /*! @} */
 
 /*! @brief List of RTC interrupts */

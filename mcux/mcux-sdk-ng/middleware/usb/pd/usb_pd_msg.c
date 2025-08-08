@@ -141,6 +141,11 @@ pd_status_t PD_MsgSend(
     msgHeader.bitFields.portPowerRoleOrCablePlug = (uint16_t)pdInstance->curPowerRole;
     msgHeader.bitFields.portDataRole             = (uint16_t)pdInstance->curDataRole;
     msgHeader.bitFields.specRevision             = pdInstance->revision;
+    if (dataLength < 2U)
+    {
+        pdInstance->sendingResult = kStatus_PD_Error;
+        return pdInstance->sendingResult;
+    }
     msgHeader.bitFields.NumOfDataObjs            = (uint16_t)((dataLength - 2U) >> 2U); /* control, data, chunked */
     msgHeader.bitFields.messageID                = (uint16_t)pdInstance->msgId[sop];
     msgHeader.bitFields.messageType              = (uint16_t)msgType & PD_MSG_TYPE_VALUE_MASK;

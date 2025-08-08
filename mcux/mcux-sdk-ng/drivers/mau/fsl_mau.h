@@ -1,6 +1,5 @@
 /*
- * Copyright 2024 NXP
- * All rights reserved.
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,8 +20,8 @@
 /*! @name Driver version */
 /*! @{ */
 
-/*! @brief MAU driver version 2.0.0. */
-#define FSL_MAU_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief MAU driver version. */
+#define FSL_MAU_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /*! @brief MAU Q15 type. */
@@ -87,12 +86,26 @@ typedef struct _mau_config
 #define MAU_RES_SET(res)   ((res) << 7U)
 #define MAU_MOPC_SET(mopc) ((mopc) << 2U)
 
+#if defined(FSL_FEATURE_MAU_INDIRECT_IS_LOW_ADDR) && (FSL_FEATURE_MAU_INDIRECT_IS_LOW_ADDR == 1U)
+#define MAU_INDIRECT_ADDR(base, dt, ds, mopc) ((base) | MAU_DT_SET(dt) | MAU_RES_SET(ds) | MAU_MOPC_SET(mopc))
+#else
 #define MAU_INDIRECT_ADDR(base, dt, ds, mopc) ((base) | 0x800U | MAU_DT_SET(dt) | MAU_RES_SET(ds) | MAU_MOPC_SET(mopc))
+#endif
 
 #define MAU_REG_UINT32(addr) (*((volatile uint32_t *)(addr)))
 #define MAU_REG_Q15(addr)    (*((volatile mau_q15_t *)(addr)))
 #define MAU_REG_Q31(addr)    (*((volatile mau_q31_t *)(addr)))
 #define MAU_REG_FLOAT(addr)  (*((volatile float *)(addr)))
+
+/*! @brief Enable the MAU CMSIS DSP function. */
+#ifndef CONFIG_MAU_ENABLE_CMSIS_DSP_API
+#define CONFIG_MAU_ENABLE_CMSIS_DSP_API (0)
+#endif
+
+/*! @brief Enable the MAU arm_sqrt_f32 function. */
+#ifndef CONFIG_MAU_ENABLE_CMSIS_DSP_ARM_SQRT_F32_API
+#define CONFIG_MAU_ENABLE_CMSIS_DSP_ARM_SQRT_F32_API (0)
+#endif
 
 #if defined(__cplusplus)
 extern "C" {
@@ -558,6 +571,36 @@ static inline __attribute__((always_inline)) mau_q15_t MAU_AtanXDivPIQ15(MAU_Typ
     MAU_REG_Q15(addr)      = input;
     return MAU_REG_Q15((uint32_t)(&MAU0->RES0) + (res << 2));
 }
+
+#if defined(CONFIG_MAU_ENABLE_CMSIS_DSP_API) && CONFIG_MAU_ENABLE_CMSIS_DSP_API
+/*!
+ * @brief Calculates sine and cosine of a floating-point number simultaneously.
+ *
+ * @param input Input floating-point value in radians.
+ * @param sin_val Pointer to store the sine result in the range [-1,1].
+ * @param cos_val Pointer to store the cosine result in the range [-1,1].
+ */
+void arm_sin_cos_f32(float input, float *sin_val, float *cos_val);
+
+/*!
+ * @brief Calculates sine and cosine of a Q31 fixed-point number simultaneously.
+ *
+ * @param input Input Q31 value in radians.
+ * @param sin_val Pointer to store the sine result in the range [-1,1].
+ * @param cos_val Pointer to store the cosine result in the range [-1,1].
+ */
+void arm_sin_cos_q31(mau_q31_t input, mau_q31_t *sin_val, mau_q31_t *cos_val);
+
+/*!
+ * @brief Calculates sine and cosine of a Q15 fixed-point number simultaneously.
+ *
+ * @param input Input Q15 value in radians.
+ * @param sin_val Pointer to store the sine result in the range [-1,1].
+ * @param cos_val Pointer to store the cosine result in the range [-1,1].
+ */
+void arm_sin_cos_q15(mau_q15_t input, mau_q15_t *sin_val, mau_q15_t *cos_val);
+
+#endif
 
 /*! @} */
 

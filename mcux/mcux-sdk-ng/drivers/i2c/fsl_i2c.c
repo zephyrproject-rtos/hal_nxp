@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -191,7 +191,7 @@ static void I2C_SetHoldTime(I2C_Type *base, uint32_t sclStopHoldTime_ns, uint32_
         for (i = 0u; i < sizeof(s_i2cDividerTable) / sizeof(s_i2cDividerTable[0]); ++i)
         {
             /* Assume SCL hold(stop) value = s_i2cDividerTable[i]/2. */
-            computedSclHoldTime = ((multiplier * s_i2cDividerTable[i]) * 500000U) / (sourceClock_Hz / 1000U);
+            computedSclHoldTime = (uint32_t)((((uint64_t)multiplier * s_i2cDividerTable[i]) * 500000000U) / sourceClock_Hz);
             absError = sclStopHoldTime_ns > computedSclHoldTime ? (sclStopHoldTime_ns - computedSclHoldTime) :
                                                                   (computedSclHoldTime - sclStopHoldTime_ns);
 
@@ -600,7 +600,7 @@ void I2C_MasterInit(I2C_Type *base, const i2c_master_config_t *masterConfig, uin
 #if defined(FSL_FEATURE_I2C_HAS_STOP_HOLD_OFF) && FSL_FEATURE_I2C_HAS_STOP_HOLD_OFF
     /* Configure the stop / hold enable. */
     fltReg &= ~(uint8_t)(I2C_FLT_SHEN_MASK);
-    fltReg |= I2C_FLT_SHEN(masterConfig->enableStopHold);
+    fltReg |= I2C_FLT_SHEN(masterConfig->enableStopHold ? 1U : 0U);
 #endif
 
     /* Configure the glitch filter value. */
@@ -1753,12 +1753,12 @@ void I2C_SlaveInit(I2C_Type *base, const i2c_slave_config_t *slaveConfig, uint32
     /* Configure low power wake up feature. */
     tmpReg = base->C1;
     tmpReg &= ~(uint8_t)I2C_C1_WUEN_MASK;
-    base->C1 = tmpReg | I2C_C1_WUEN(slaveConfig->enableWakeUp) | I2C_C1_IICEN(slaveConfig->enableSlave);
+    base->C1 = tmpReg | I2C_C1_WUEN(slaveConfig->enableWakeUp ? 1U : 0U) | I2C_C1_IICEN(slaveConfig->enableSlave ? 1U : 0U);
 
     /* Configure general call & baud rate control. */
     tmpReg = base->C2;
     tmpReg &= ~(uint8_t)(I2C_C2_SBRC_MASK | I2C_C2_GCAEN_MASK);
-    tmpReg |= I2C_C2_SBRC(slaveConfig->enableBaudRateCtl) | I2C_C2_GCAEN(slaveConfig->enableGeneralCall);
+    tmpReg |= I2C_C2_SBRC(slaveConfig->enableBaudRateCtl ? 1U : 0U) | I2C_C2_GCAEN(slaveConfig->enableGeneralCall ? 1U : 0U);
     base->C2 = tmpReg;
 
 /* Enable/Disable double buffering. */

@@ -617,6 +617,11 @@ _Pragma("diag_suppress=Pm120")
 #define MSDK_REG_NONSECURE_ADDR(x) (x)
 #endif
 
+/*!
+ * @brief Invalid IRQ handler address.
+ */
+#define MSDK_INVALID_IRQ_HANDLER UINT32_MAX
+
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
         void DefaultISR(void);
 #endif
@@ -940,7 +945,8 @@ static inline void EnableGlobalIRQ(uint32_t primask)
  *
  * @param irq IRQ number
  * @param irqHandler IRQ handler address
- * @return The old IRQ handler address
+ * @return The old IRQ handler address, if the input @p irq is invalid, then
+ * return value is @ref MSDK_INVALID_IRQ_HANDLER.
  */
 uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler);
 #endif /* ENABLE_RAM_VECTOR_TABLE. */

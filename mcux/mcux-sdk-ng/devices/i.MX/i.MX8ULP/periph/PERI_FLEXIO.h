@@ -61,14 +61,14 @@
 **                          MIMX8US5DVP08_dsp0
 **                          MIMX8US5DVP08_dsp1
 **
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b240823
+**     Version:             rev. 6.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -85,21 +85,24 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file FLEXIO.h
- * @version 5.0
- * @date 2023-04-27
+ * @file PERI_FLEXIO.h
+ * @version 6.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for FLEXIO
  *
  * CMSIS Peripheral Access Layer for FLEXIO
  */
 
-#if !defined(FLEXIO_H_)
-#define FLEXIO_H_                                /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_FLEXIO_H_)
+#define PERI_FLEXIO_H_                           /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX8UD3CVP08_ca35) || defined(CPU_MIMX8UD3DVK08_ca35) || defined(CPU_MIMX8UD3DVP08_ca35))
 #include "MIMX8UD3_ca35_COMMON.h"
@@ -230,10 +233,10 @@ typedef struct {
   __IO uint32_t PINFEN;                            /**< Pin Falling Edge Enable, offset: 0x5C */
   __IO uint32_t PINOUTD;                           /**< Pin Output Data, offset: 0x60 */
   __IO uint32_t PINOUTE;                           /**< Pin Output Enable, offset: 0x64 */
-  __O  uint32_t PINOUTDIS;                         /**< Pin Output Disable, offset: 0x68 */
-  __O  uint32_t PINOUTCLR;                         /**< Pin Output Clear, offset: 0x6C */
-  __O  uint32_t PINOUTSET;                         /**< Pin Output Set, offset: 0x70 */
-  __O  uint32_t PINOUTTOG;                         /**< Pin Output Toggle, offset: 0x74 */
+  __IO uint32_t PINOUTDIS;                         /**< Pin Output Disable, offset: 0x68 */
+  __IO uint32_t PINOUTCLR;                         /**< Pin Output Clear, offset: 0x6C */
+  __IO uint32_t PINOUTSET;                         /**< Pin Output Set, offset: 0x70 */
+  __IO uint32_t PINOUTTOG;                         /**< Pin Output Toggle, offset: 0x74 */
        uint8_t RESERVED_5[8];
   __IO uint32_t SHIFTCTL[FLEXIO_SHIFTCTL_COUNT];   /**< Shifter Control N, array offset: 0x80, array step: 0x4 */
        uint8_t RESERVED_6[96];
@@ -978,5 +981,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* FLEXIO_H_ */
+#endif  /* PERI_FLEXIO_H_ */
 

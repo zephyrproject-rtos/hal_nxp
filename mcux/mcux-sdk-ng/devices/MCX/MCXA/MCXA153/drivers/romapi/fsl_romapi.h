@@ -165,15 +165,13 @@ enum _flash_driver_api_keys
 };
 
 /*   API prototype fields definition.
-| 31 : 24   |    23 : 20        |     19 : 16        |  15 : 04  |  03 : 00        |
-|    Tag    |   Boot mode       |   ISP interface    |  Reserved |  Image Index    |
-|           |                   |                    |           |                 |
-|           | 0: Passive mode   | 0 - Auto detection |           | For boot mode 0 |
-|           | 1: ISP mode       | 1 - USB-HID        |           |                 |
-|           |                   | 2 - UART           |           |                 |
-|           |                   | 3 - SPI            |           |                 |
-|           |                   | 4 - I2C            |           |                 |
-|           |                   | 5 - CAN            |           |                 |
+| 31 : 24 |    23 : 20       |     19 : 16        |  15 : 12             |  11 : 8     |  7 : 0    |
+|   Tag   |   Boot mode      | ISP Interface      |  Instance            | Image Index | Reserved  |
+|  0xEB   | 0: Passive mode  | 0 - Auto detection | Used For Boot mode 0 |             |           |
+|         | 1: ISP mode      | 1 - UART           |                      |             |           |
+|         |                  | 2 - SPI            |                      |             |           |
+|         |                  | 3 - I2C            |                      |             |           |
+|         |                  | 4 - USB-HID        |                      |             |           |
 */
 typedef struct
 {
@@ -181,8 +179,9 @@ typedef struct
     {
         struct
         {
+            uint32_t reserved : 8;
             uint32_t boot_image_index : 4;
-            uint32_t reserved : 12;
+            uint32_t instance : 4;
             uint32_t boot_interface : 4;
             uint32_t mode : 4;
             uint32_t tag : 8;

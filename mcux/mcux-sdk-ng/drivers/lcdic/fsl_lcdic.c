@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -448,7 +448,14 @@ static status_t LCDIC_WaitCmdComplete(LCDIC_Type *base)
     status_t status;
     uint32_t intStat;
 
+#if (LCDIC_WAIT_CMD_DONE_TIMEOUT == 0)
     while (true)
+#else
+    uint32_t timeout = LCDIC_WAIT_CMD_DONE_TIMEOUT;
+    status = kStatus_Timeout;
+
+    while((timeout--) != 0U)
+#endif
     {
         intStat = LCDIC_GetInterruptRawStatus(base);
 
@@ -465,8 +472,8 @@ static status_t LCDIC_WaitCmdComplete(LCDIC_Type *base)
         }
     }
 
-    LCDIC_ClearInterruptStatus(base, (uint32_t)kLCDIC_CmdDoneInterrupt | (uint32_t)kLCDIC_CmdTimeoutInterrupt |
-                                         (uint32_t)kLCDIC_TeTimeoutInterrupt);
+    LCDIC_ClearInterruptStatus(base, intStat & ((uint32_t)kLCDIC_CmdDoneInterrupt | (uint32_t)kLCDIC_CmdTimeoutInterrupt |
+                                         (uint32_t)kLCDIC_TeTimeoutInterrupt));
 
     return status;
 }

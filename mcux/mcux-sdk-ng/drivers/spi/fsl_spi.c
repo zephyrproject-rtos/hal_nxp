@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -219,11 +219,13 @@ static void SPI_ReadNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
     }
 }
 
-/* Get the watermark value of transfer. Please note that the entery width of FIFO is 16 bits. */
+/* Get the watermark value of transfer. Please note that the entry width of FIFO is 16 bits. */
 static uint8_t SPI_GetWatermark(SPI_Type *base)
 {
     uint8_t ret = 0U;
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
+    assert(FSL_FEATURE_SPI_FIFO_SIZEn(base) >= 0);
+
     uint8_t rxSize = 0U;
     /* Get the number to be sent if there is FIFO */
     if (FSL_FEATURE_SPI_FIFO_SIZEn(base) != 0)
@@ -461,11 +463,11 @@ void SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint32_t 
 /* Set data mode, and also pin mode and mode fault settings */
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
     base->C2 = SPI_C2_MODFEN((uint8_t)config->outputMode >> 1U) | SPI_C2_BIDIROE((uint8_t)config->pinMode >> 1U) |
-               SPI_C2_SPISWAI(config->enableStopInWaitMode) | SPI_C2_SPC0((uint8_t)config->pinMode & 1U) |
+               SPI_C2_SPISWAI(config->enableStopInWaitMode ? 1U : 0U) | SPI_C2_SPC0((uint8_t)config->pinMode & 1U) |
                SPI_C2_SPIMODE(config->dataMode);
 #else
     base->C2 = SPI_C2_MODFEN((uint8_t)config->outputMode >> 1U) | SPI_C2_BIDIROE((uint8_t)config->pinMode >> 1U) |
-               SPI_C2_SPISWAI(config->enableStopInWaitMode) | SPI_C2_SPC0((uint8_t)config->pinMode & 1U);
+               SPI_C2_SPISWAI(config->enableStopInWaitMode ? 1U : 0U) | SPI_C2_SPC0((uint8_t)config->pinMode & 1U);
 #endif /* FSL_FEATURE_SPI_16BIT_TRANSFERS */
 
 /* Set watermark, FIFO is enabled */
@@ -563,10 +565,10 @@ void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
 
 /* Configure data mode if needed */
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
-    base->C2 = SPI_C2_SPIMODE(config->dataMode) | SPI_C2_SPISWAI(config->enableStopInWaitMode) |
+    base->C2 = SPI_C2_SPIMODE(config->dataMode) | SPI_C2_SPISWAI(config->enableStopInWaitMode ? 1U : 0U) |
                SPI_C2_BIDIROE((uint8_t)config->pinMode >> 1U) | SPI_C2_SPC0((uint8_t)config->pinMode & 1U);
 #else
-    base->C2 = SPI_C2_SPISWAI(config->enableStopInWaitMode) | SPI_C2_BIDIROE((uint8_t)config->pinMode >> 1U) |
+    base->C2 = SPI_C2_SPISWAI(config->enableStopInWaitMode ? 1U : 0U) | SPI_C2_BIDIROE((uint8_t)config->pinMode >> 1U) |
                SPI_C2_SPC0((uint8_t)config->pinMode & 1U);
 #endif /* FSL_FEATURE_SPI_16BIT_TRANSFERS */
 
@@ -818,6 +820,8 @@ status_t SPI_WriteBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
     uint32_t waitTimes;
 #endif
 
+    assert(size <= (UINT32_MAX - bytesPerFrame));
+
     while (i < size)
     {
 #if SPI_RETRY_TIMES
@@ -877,10 +881,10 @@ void SPI_EnableFIFO(SPI_Type *base, bool enable)
 void SPI_WriteData(SPI_Type *base, uint16_t data)
 {
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && (FSL_FEATURE_SPI_16BIT_TRANSFERS)
-    base->DL = (uint8_t)data & 0xFFU;
-    base->DH = (uint8_t)(data >> 8U) & 0xFFU;
+    base->DL = (uint8_t)(data & 0xFFU);
+    base->DH = (uint8_t)((data >> 8U) & 0xFFU);
 #else
-    base->D = (uint8_t)data & 0xFFU;
+    base->D = (uint8_t)(data & 0xFFU);
 #endif
 }
 
@@ -930,6 +934,11 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     /* Check if 16 bits or 8 bits */
     bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
 #endif
+
+    if ((xfer->dataSize % bytesPerFrame) != 0U)
+    {
+        return (status_t)kStatus_InvalidArgument;
+    }
 
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
 
@@ -1061,7 +1070,7 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
     }
 
     /* Check if the input arguments valid */
-    if (((xfer->txData == NULL) && (xfer->rxData == NULL)) || (xfer->dataSize == 0U))
+    if (((xfer->txData == NULL) && (xfer->rxData == NULL)) || (xfer->dataSize == 0U) || ((xfer->dataSize % handle->bytePerFrame) != 0U))
     {
         return (status_t)kStatus_InvalidArgument;
     }
@@ -1310,7 +1319,7 @@ status_t SPI_SlaveTransferNonBlocking(SPI_Type *base, spi_slave_handle_t *handle
     }
 
     /* Check if the input arguments valid */
-    if (((xfer->txData == NULL) && (xfer->rxData == NULL)) || (xfer->dataSize == 0U))
+    if (((xfer->txData == NULL) && (xfer->rxData == NULL)) || (xfer->dataSize == 0U) || ((xfer->dataSize % handle->bytePerFrame) != 0U))
     {
         return (status_t)kStatus_InvalidArgument;
     }

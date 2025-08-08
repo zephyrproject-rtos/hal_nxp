@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/RT/variable.cmake)
 mcux_set_variable(device MIMXRT735S)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series RT700)
 mcux_set_variable(soc_periph periph)
 
@@ -13,6 +14,6 @@ if (NOT DEFINED core_id)
     message(FATAL_ERROR "Please specify core_id for multicore device.")
 endif()
 
-include(${SdkRootDirPath}/devices/RT/RT700/MIMXRT735S/${core_id}/variable.cmake)
+include(${SdkRootDirPath}/${device_root}/RT/RT700/MIMXRT735S/${core_id}/variable.cmake)
 
 #### Source record

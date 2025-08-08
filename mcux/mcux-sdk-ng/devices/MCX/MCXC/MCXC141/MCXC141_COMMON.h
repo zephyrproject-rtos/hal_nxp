@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXC242RM, Rev.1, Mar 2024
-**     Version:             rev. 1.6, 2016-06-24
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC141
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -55,14 +55,17 @@
 **     - rev. 1.6 (2016-06-24)
 **         USB - OTGCTL register was removed.
 **         USB - Bit RESUME was added in CTL register.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXC141_COMMON.h
- * @version 1.6
- * @date 2016-06-24
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MCXC141
  *
  * CMSIS Peripheral Access Layer for MCXC141
@@ -73,9 +76,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0006U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -159,14 +162,16 @@ typedef enum IRQn {
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
 #include "system_MCXC141.h"            /* Device specific configuration file */
 
-#define MCXC141_SERIES
-/* CPU specific feature definitions */
-#include "MCXC141_features.h"
-
 /*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
+
+#ifndef MCXC141_SERIES
+#define MCXC141_SERIES
+#endif
+/* CPU specific feature definitions */
+#include "MCXC141_features.h"
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC0 base address */

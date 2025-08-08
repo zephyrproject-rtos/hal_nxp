@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024 NXP
+ * Copyright 2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -185,13 +185,34 @@ status_t Nor_Flash_Program(nor_handle_t *handle, uint32_t address, uint8_t *buff
 
     do
     {
-        while ((address & 0xFFu) + length > 0xFFu)
+        while (length > 0xFFu - ((uint32_t)(address & 0xFFu)))
         {
             uint32_t bytes = 0x100u - (address & 0xFFu);
 
             writeStatus = LPSPI_MemWritePage(address, buffer, bytes, blocking, base);
-            length -= bytes;
-            address += bytes;
+
+            if (length >= bytes)
+            {
+                length -= bytes;
+            }
+            else
+            {
+                /* Handle underflow error */
+                writeStatus = kStatus_Fail;
+                break;
+            }
+
+            if (address <= UINT32_MAX - bytes)
+            {
+                address += bytes;
+            }
+            else
+            {
+                /* Handle overflow error */
+                writeStatus = kStatus_Fail;
+                break;
+            }
+
             buffer += bytes;
 
             if (writeStatus != kStatus_Success)

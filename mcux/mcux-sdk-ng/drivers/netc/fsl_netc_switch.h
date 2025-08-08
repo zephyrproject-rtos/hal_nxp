@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,11 +9,17 @@
 
 #include "fsl_netc.h"
 #include "fsl_netc_endpoint.h"
+#include "fsl_netc_tag.h"
 #include "netc_hw/fsl_netc_hw.h"
 #include "netc_hw/fsl_netc_hw_enetc.h"
 #include "netc_hw/fsl_netc_hw_port.h"
 #include "netc_hw/fsl_netc_hw_si.h"
 
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+#ifndef NETC_SWITCH_ID
+#define NETC_SWITCH_ID (1U)
+#endif
+#endif
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma region api_swt
 #endif
@@ -189,7 +195,9 @@ typedef struct _swt_config_const
     bool rxCacheMaintain : 1;         /*!< Enable/Disable Rx buffer cache maintain in driver. */
     bool txCacheMaintain : 1;         /*!< Enable/Disable Tx buffer cache maintain in driver. */
     bool enUseMgmtRxBdRing : 1;       /*!< Enable/Disable use Switch management Rx BD ring. */
+#if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     bool enUseMgmtTxBdRing : 1;       /*!< Enable/Disable use Switch management Tx BD ring. */
+#endif
     bool rxZeroCopy : 1;              /*!< Enable zero-copy receive mode. */
     swt_rx_alloc_cb_t rxBuffAlloc;    /*!< Callback function to alloc memory, must be provided for zero-copy Rx. */
     swt_rx_free_cb_t rxBuffFree;      /*!< Callback function to free memory, must be provided for zero-copy Rx. */
@@ -231,16 +239,6 @@ struct _swt_handle
 /*! @addtogroup netc_swt_xfer
  * @{
  */
-/*! @brief Switch management Tx Option flags */
-typedef enum _swt_mgmt_tx_opt_flags
-{
-    kSWT_TX_OPT_REQ_TS =
-        0x1, /*!< Request frame transmission timestamp, only active when use Switch Port masquerading Tx option */
-    kSWT_TX_OPT_VLAN_INSERT = 0x2U, /*!< Enable VLAN insert, only active when use Switch Port masquerading Tx option */
-    kSWT_TX_OPT_DIRECT_ENQUEUE_REQ_TSR =
-        0x4U /*!< Timestamp Reference Request, only active when use Direct Switch Enqueue Tx option */
-} swt_mgmt_tx_opt_flags;
-
 /*! @brief Switch management Tx parameter */
 typedef union _swt_mgmt_tx_arg_t
 {
@@ -253,10 +251,38 @@ typedef union _swt_mgmt_tx_arg_t
     };
 } swt_mgmt_tx_arg_t;
 
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+/*! @brief Switch management Tx Option flags */
+typedef enum _swt_mgmt_tx_opt_flags
+{
+    kSWT_TX_OPT_VLAN_INSERT = 0x1U, /*!< Enable VLAN insert, only active when use Switch Port masquerading Tx option. */
+    kSWT_TX_OPT_OFFLOAD     = 0x2U  /*!< Tx offload. */
+} swt_mgmt_tx_opt_flags;
+
+typedef struct _swt_tx_opt
+{
+    uint8_t ring;               /*!< Tx ring index. */
+    uint32_t flags;             /*!< A bitmask of @swt_mgmt_tx_opt_flags. */
+    netc_enetc_vlan_tag_t vlan; /*!< VLAN tag which will be inserted, used if enVlanInsert is set. */
+    netc_tx_offload_t offload;  /*!< Offload parameters. */
+} swt_tx_opt;
+
+#else
+
+/*! @brief Switch management Tx Option flags */
+typedef enum _swt_mgmt_tx_opt_flags
+{
+    kSWT_TX_OPT_REQ_TS =
+        0x1, /*!< Request frame transmission timestamp, only active when use Switch Port masquerading Tx option */
+    kSWT_TX_OPT_VLAN_INSERT = 0x2U, /*!< Enable VLAN insert, only active when use Switch Port masquerading Tx option */
+    kSWT_TX_OPT_DIRECT_ENQUEUE_REQ_TSR =
+        0x4U /*!< Timestamp Reference Request, only active when use Direct Switch Enqueue Tx option */
+} swt_mgmt_tx_opt_flags;
+
 /*! @brief Switch management Tx Option */
 typedef struct _swt_tx_opt
 {
-    uint32_t flags;             /*!< A bitmask of swt_mgmt_tx_opt_flags */
+    uint32_t flags;             /*!< A bitmask of @swt_mgmt_tx_opt_flags */
     netc_enetc_vlan_tag_t vlan; /*!< VLAN tag which will be inserted, used if enVlanInsert is set */
 } swt_tx_opt;
 
@@ -266,6 +292,7 @@ typedef struct _swt_tsr_resp_t
     uint32_t timestamp; /*!< Switch response timestamp. */
     uint32_t txtsid;    /*!< Transmit timestamp identifier. */
 } swt_tsr_resp_t;
+#endif /* FSL_FEATURE_NETC_HAS_SWITCH_TAG */
 
 /*!
  * @brief Transfer configuration structure for Switch
@@ -283,9 +310,9 @@ struct _swt_transfer_config
     bool enUseMgmtRxBdRing; /*!< Enable/Disable use Switch management Rx BD ring, if disabled, the Switch/EP receive
                         APIs (SWT_GetRxFrameSize()/SWT_ReceiveFrameCopy()/SWT_GetTimestampRefResp()/SWT_ReceiveFrame())
                         will use EP Rx BD ring 0 to receive frames. */
+    netc_rx_bdr_config_t mgmtRxBdrConfig; /*!< Switch management Rx BD ring configuration. */
     bool enUseMgmtTxBdRing; /*!< Enable/Disable use Switch management Tx BD ring, if disabled, can't use Switch transfer
                                API (SWT_SendFrame()) to send frames. */
-    netc_rx_bdr_config_t mgmtRxBdrConfig; /*!< Switch management Rx BD ring configuration. */
     netc_tx_bdr_config_t mgmtTxBdrConfig; /*!< Switch management Rx BD ring configuration. */
     swt_reclaim_cb_t reclaimCallback;     /*!< Callback for reclaimed Tx Switch management frames. */
     void *userData;                       /*!< User data, return in callback. */
@@ -766,7 +793,9 @@ status_t SWT_RxPSFPQueryISITableEntry(swt_handle_t *handle, uint32_t entryID, ne
  * @param rsp
  * @return status_t
  */
-status_t SWT_RxPSFPQueryISITableEntryWithKey(swt_handle_t *handle, netc_tb_isi_keye_t *keye, netc_tb_isi_rsp_data_t *rsp);
+status_t SWT_RxPSFPQueryISITableEntryWithKey(swt_handle_t *handle,
+                                             netc_tb_isi_keye_t *keye,
+                                             netc_tb_isi_rsp_data_t *rsp);
 
 /*!
  * @brief Delete an entry in the stream identification table
@@ -1077,6 +1106,15 @@ static inline uint32_t SWT_RxPSFPGetSGITableMaxEntryNum(swt_handle_t *handle)
 status_t SWT_RxPSFPAddSGITableEntry(swt_handle_t *handle, netc_tb_sgi_config_t *config);
 
 /*!
+ * @brief Reset IRX and OEX flag in stream gate instance entry
+ *
+ * @param handle
+ * @return status_t
+ * @return See @ref netc_cmd_error_t
+ */
+status_t SWT_RxPSFPResetIRXOEXSGITableEntry(swt_handle_t *handle, uint32_t entryID);
+
+/*!
  * @brief Update entry in stream gate instance table
  *
  * @param handle
@@ -1112,10 +1150,10 @@ status_t SWT_RxPSFPGetSGIState(swt_handle_t *handle, uint32_t entryID, netc_tb_s
  *
  * @param handle
  * @param entryID
- * @param rsp
+ * @param config
  * @return See @ref netc_cmd_error_t
  */
-status_t SWT_RxPSFPQuerySGITableEntry(swt_handle_t *handle, uint32_t entryID, netc_tb_sgi_rsp_data_t *rsp);
+status_t SWT_RxPSFPQuerySGITableEntry(swt_handle_t *handle, uint32_t entryID, netc_tb_sgi_config_t *config);
 
 /*!
  * @brief Get remaining available words number of Stream Gate Control List table
@@ -1240,8 +1278,7 @@ status_t SWT_BridgeConfigPort(swt_handle_t *handle,
  * @param vid
  * @return status_t
  */
-status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle,
-                              netc_hw_port_idx_t portIdx, uint16_t vid);
+status_t SWT_BridgeConfigPortDefaultVid(swt_handle_t *handle, netc_hw_port_idx_t portIdx, uint16_t vid);
 
 /*!
  * @brief Get remaining available entry number (entry size is 24 bytes) of bridge vlan filter table
@@ -1311,7 +1348,9 @@ status_t SWT_BridgeDelVFTableEntry(swt_handle_t *handle, uint32_t entryID);
  * @return status_t
  * @return See @ref netc_cmd_error_t
  */
-status_t SWT_BridgeSearchVFTableEntry(swt_handle_t *handle, netc_tb_vf_search_criteria_t *sCriteria, netc_tb_vf_rsp_data_t *rsp);
+status_t SWT_BridgeSearchVFTableEntry(swt_handle_t *handle,
+                                      netc_tb_vf_search_criteria_t *sCriteria,
+                                      netc_tb_vf_rsp_data_t *rsp);
 
 /*!
  * @brief Get remaining available entry number (entry size is 24 bytes) of bridge FDB table
@@ -1506,6 +1545,17 @@ static inline uint32_t SWT_FMGetTableRemainEntryNum(swt_handle_t *handle)
 }
 
 /*!
+ * @brief Get maximum entry number of Frame Modification table
+ *
+ * @param handle
+ * @return uint32_t
+ */
+static inline uint32_t SWT_FMGetTableMaxEntryNum(swt_handle_t *handle)
+{
+    return (handle->hw.common->FMITCAPR & NETC_SW_ENETC_FMITCAPR_NUM_ENTRIES_MASK);
+}
+
+/*!
  * @brief Add entry into the Frame Modification table
  *
  * Add entry of the frame modification table. Frame modification can be encoded into the table id directly or provided
@@ -1672,10 +1722,10 @@ status_t SWT_FRERConfigESEQRTableEntry(swt_handle_t *handle, netc_tb_eseqr_confi
  * @return See @ref netc_cmd_error_t
  */
 status_t SWT_FRERQueryESEQRTableEntry(swt_handle_t *handle,
-                                   uint32_t entryID,
-                                   netc_tb_eseqr_stse_t *statistic,
-                                   netc_tb_eseqr_cfge_t *config,
-                                   netc_tb_eseqr_srse_t *state);
+                                      uint32_t entryID,
+                                      netc_tb_eseqr_stse_t *statistic,
+                                      netc_tb_eseqr_cfge_t *config,
+                                      netc_tb_eseqr_srse_t *state);
 
 /*!
  * @brief Get FRER sequence recorvery table state and statistic
@@ -1962,6 +2012,88 @@ status_t SWT_TxETMConfigClassQueue(swt_handle_t *handle, netc_tb_etmcq_config_t 
  */
 status_t SWT_TxETMConfigCongestionGroup(swt_handle_t *handle, netc_tb_etmcg_config_t *config);
 
+/*!
+ * @brief Config Preemption for each port TC (traffic class)
+ *
+ * @param handle
+ * @param portIdx
+ * @param tcIdx
+ * @param enable
+ */
+static inline void SWT_TxTcConfigPreemption(swt_handle_t *handle,
+                                            netc_hw_port_idx_t portIdx,
+                                            netc_hw_tc_idx_t tcIdx,
+                                            const bool enable)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.ports[portIdx].port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortConfigTcPreemption(base, tcIdx, enable);
+    }
+}
+
+/*!
+ * @brief Get Preemption configuration for each port TC (traffic class)
+ *
+ * @param handle
+ * @param portIdx
+ * @param tcIdx
+ * @param enabled
+ */
+static inline void SWT_TxGetTcPreemption(swt_handle_t *handle,
+                                         netc_hw_port_idx_t portIdx,
+                                         netc_hw_tc_idx_t tcIdx,
+                                         bool *enabled)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.ports[portIdx].port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortGetTcPreemption(base, tcIdx, enabled);
+    }
+}
+
+/*!
+ * @brief Configure Preemption control configuration for an ethernet MAC
+ *
+ * @param handle
+ * @param portIdx
+ * @param config
+ */
+static inline void SWT_TxPortEthMacConfigPreemption(swt_handle_t *handle,
+                                                    netc_hw_port_idx_t portIdx,
+                                                    const netc_port_preemption_config *config)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.ports[portIdx].eth;
+    NETC_PortConfigEthMacPreemption(base, config);
+}
+
+/*!
+ * @brief Get Preemption control configuration from ethernet MAC port
+ *
+ * @param handle
+ * @param portIdx
+ * @param config
+ */
+static inline void SWT_TxPortGetEthMacPreemption(swt_handle_t *handle,
+                                                 netc_hw_port_idx_t portIdx,
+                                                 netc_port_preemption_config *config,
+                                                 netc_port_phy_mac_preemption_status_t *status)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.ports[portIdx].eth;
+
+    NETC_PortGetPhyMacPreemptionControl(base, config);
+
+    NETC_PortGetPhyMacPreemptionStatus(base, status);
+}
+
 /*! @} */ // end of netc_swt_tx
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma endregion netc_swt_tx
@@ -1984,11 +2116,53 @@ status_t SWT_TxETMConfigCongestionGroup(swt_handle_t *handle, netc_tb_etmcg_conf
  */
 status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, const swt_transfer_config_t *txRxConfig);
 
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+/*!
+ * @brief Transmits a frame on management port.
+ *
+ * @param handle The SWT handle
+ * @param frame The frame descriptor pointer
+ * @param context Private context provided back on reclaim
+ * @param opt Tx options.
+ * @retval status_t
+ */
+status_t SWT_SendFrame(swt_handle_t *handle, netc_frame_struct_t *frame, void *context, swt_tx_opt *opt);
+
+/*!
+ * @brief Wait until the EP Tx ring has completed the transfer.
+ *
+ * @note Only call after EP_SendFrame() to do a no-interrupt transfer
+ *
+ * @param handle
+ * @param ring Tx ring.
+ */
+static inline void SWT_WaitUnitilTxComplete(swt_handle_t *handle, bool enMasquerade, uint8_t ring)
+{
+    while (handle->epHandle->hw.si->BDR[ring].TBCIR != handle->epHandle->txBdRing[ring].producerIndex)
+    {
+    }
+}
+
+/*!
+ * @brief Reclaim tx descriptors.
+ * This function is used to update the tx descriptor status.
+ * For each reclaimed transmit frame the ep_reclaim_cb_t is called.
+ *
+ * This is called after being notified of a transmit completion from ISR.
+ * It runs until there are no more frames to be reclaimed in the BD ring.
+ *
+ * @param handle
+ * @param ring Tx ring.
+ */
+void SWT_ReclaimTxDescriptor(swt_handle_t *handle, uint8_t ring);
+
+#else
+
 /*!
  * @brief Transmits a management frame on a specific port.
  *
  * @param handle
- * @param ringOrQueue The ring index for Port masquerading or egress port priority/dr for direct enqueue
+ * @param txArg The ring index for Port masquerading or egress port priority/dr for direct enqueue
  * @param swtPort The ingress port for Port masquerading or egress for direct enqueue
  * @param enMasquerade Ture - Use Port masquerading Tx option, False - Use direct enqueue Tx Option
  * @param frame The frame descriptor pointer
@@ -1997,7 +2171,7 @@ status_t SWT_ManagementTxRxConfig(swt_handle_t *handle, ep_handle_t *epHandle, c
  * @retval status_t
  */
 status_t SWT_SendFrame(swt_handle_t *handle,
-                       swt_mgmt_tx_arg_t ringOrQueue,
+                       swt_mgmt_tx_arg_t txArg,
                        netc_hw_port_idx_t swtPort,
                        bool enMasquerade,
                        netc_frame_struct_t *frame,
@@ -2046,6 +2220,19 @@ static inline void SWT_WaitUnitilTxComplete(swt_handle_t *handle, bool enMasquer
 void SWT_ReclaimTxDescriptor(swt_handle_t *handle, bool enMasquerade, uint8_t ring);
 
 /*!
+ * @brief Receives Switch Transmit Timestamp Reference Response.
+ *
+ * @note MUST call SWT_GetRxFrameSize() beforehand to confirm get the kStatus_NETC_RxTsrResp status.
+ *
+ * @param handle
+ * @param tsr Timestamp Reference Response pointer
+ * @return kStatus_Success                Successfully receive Switch Transmit Timestamp Reference Response
+ * @return kStatus_InvalidArgument        No Rx BD ring is available
+ */
+status_t SWT_GetTimestampRefResp(swt_handle_t *handle, swt_tsr_resp_t *tsr);
+#endif
+
+/*!
  * @brief Receives management frames (host reason not zero) with zero copy
  *
  * @param handle
@@ -2075,18 +2262,6 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
  * @return kStatus_InvalidArgument        No Rx BD ring is available
  */
 status_t SWT_ReceiveFrameCopy(swt_handle_t *handle, void *buffer, uint32_t length, netc_frame_attr_t *attr);
-
-/*!
- * @brief Receives Switch Transmit Timestamp Reference Response.
- *
- * @note MUST call SWT_GetRxFrameSize() beforehand to confirm get the kStatus_NETC_RxTsrResp status.
- *
- * @param handle
- * @param tsr Timestamp Reference Response pointer
- * @return kStatus_Success                Successfully receive Switch Transmit Timestamp Reference Response
- * @return kStatus_InvalidArgument        No Rx BD ring is available
- */
-status_t SWT_GetTimestampRefResp(swt_handle_t *handle, swt_tsr_resp_t *tsr);
 
 /*!
  * brief Gets the size of the pending frame in the specified receive ring buffer.
@@ -2258,6 +2433,86 @@ static inline uint32_t SWT_GetPortTGSListStatus(swt_handle_t *handle, netc_hw_po
 {
     return NETC_PortGetTGSListStatus(handle->hw.ports[portIdx].port);
 }
+
+/*!
+ * @brief Set IPV to queue mapping on Switch port
+ *
+ * @param handle
+ * @param portIdx port index
+ * @param ipvToTC[] queue number of each ipv value
+ * @return kStatus_Success
+ */
+static inline status_t SWT_SetPortIPV2QMR(swt_handle_t *handle, netc_hw_port_idx_t portIdx, const uint8_t *ipvToTC)
+{
+    handle->hw.ports[portIdx].port->PIPV2QMR0 =
+        NETC_PORT_PIPV2QMR0_IPV7_Q(ipvToTC[7]) | NETC_PORT_PIPV2QMR0_IPV6_Q(ipvToTC[6]) |
+        NETC_PORT_PIPV2QMR0_IPV5_Q(ipvToTC[5]) | NETC_PORT_PIPV2QMR0_IPV4_Q(ipvToTC[4]) |
+        NETC_PORT_PIPV2QMR0_IPV3_Q(ipvToTC[3]) | NETC_PORT_PIPV2QMR0_IPV2_Q(ipvToTC[2]) |
+        NETC_PORT_PIPV2QMR0_IPV1_Q(ipvToTC[1]) | NETC_PORT_PIPV2QMR0_IPV0_Q(ipvToTC[0]);
+    return kStatus_Success;
+}
+
+/*!
+ * @brief Enable MAC station move on Switch port
+ *
+ * @param handle
+ * @param portIdx  port index
+ * @param enable  Allow MAC station move
+ * @return kStatus_Success
+ */
+static inline status_t SWT_EnablePortMacStationMove(swt_handle_t *handle, netc_hw_port_idx_t portIdx, bool enable)
+{
+    if (enable)
+    {
+        handle->hw.ports[portIdx].port->BPCR &= (~NETC_PORT_BPCR_STAMVD_MASK);
+    }
+    else
+    {
+        handle->hw.ports[portIdx].port->BPCR |= NETC_PORT_BPCR_STAMVD_MASK;
+    }
+
+    return kStatus_Success;
+}
+
+#if defined(FSL_FEATURE_NETC_HAS_PORT_PSRCR) && FSL_FEATURE_NETC_HAS_PORT_PSRCR
+/*!
+ * @brief Set the port seamless redundancy configuration
+ *
+ * Set the port seamless redundancy configuration.
+ *
+ * @param handle
+ * @param portIdx port index
+ * @param sr netc_swt_port_sr_config_t
+ * @return kStatus_Success
+ */
+static inline status_t SWT_SetPortSR(swt_handle_t *handle, netc_hw_port_idx_t portIdx, netc_swt_port_sr_config_t *sr)
+{
+    handle->hw.ports[portIdx].port->PSRCR = NETC_PORT_PSRCR_ISQG_EID(sr->isqEID) | NETC_PORT_PSRCR_PATHID(sr->pathId) |
+                                            NETC_PORT_PSRCR_TX_SQTA(sr->txSqta) |
+                                            NETC_PORT_PSRCR_SRC_PORT_FLT(sr->srcPortFlt) |
+                                            NETC_PORT_PSRCR_SDFA(sr->sdfa) | NETC_PORT_PSRCR_SR_PORT(sr->srPort);
+    return kStatus_Success;
+}
+#endif
+
+#if defined(FSL_FEATURE_NETC_HAS_PORT_PGCR) && FSL_FEATURE_NETC_HAS_PORT_PGCR
+/*!
+ * @brief Set the port group configuration
+ *
+ * Set the port group configuration.
+ *
+ * @param handle
+ * @param portIdx port index
+ * @param pgid Port Group ID
+ * @return kStatus_Success
+ */
+static inline status_t SWT_SetPortGroup(swt_handle_t *handle, netc_hw_port_idx_t portIdx, uint8_t pgid)
+{
+    handle->hw.ports[portIdx].port->PGCR = NETC_PORT_PGCR_PGID(pgid);
+    return kStatus_Success;
+}
+#endif
+
 /*! @} */ // end of netc_swt_stat
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma endregion netc_swt_stat

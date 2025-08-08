@@ -33,14 +33,14 @@
 **                          MCXN947VPB_cm33_core0
 **                          MCXN947VPB_cm33_core1
 **
-**     Version:             rev. 2.0, 2023-02-01
-**     Build:               b241120
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VBAT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -51,21 +51,24 @@
 **         Initial version
 **     - rev. 2.0 (2023-02-01)
 **         Initial version based on Rev. 2 Draft B
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file VBAT.h
- * @version 2.0
- * @date 2023-02-01
+ * @file PERI_VBAT.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for VBAT
  *
  * CMSIS Peripheral Access Layer for VBAT
  */
 
-#if !defined(VBAT_H_)
-#define VBAT_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_VBAT_H_)
+#define PERI_VBAT_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MCXN546VDF_cm33_core0) || defined(CPU_MCXN546VKL_cm33_core0) || defined(CPU_MCXN546VNL_cm33_core0) || defined(CPU_MCXN546VPB_cm33_core0))
 #include "MCXN546_cm33_core0_COMMON.h"
@@ -234,18 +237,18 @@ typedef struct {
 #define VBAT_STATUSA_POR_DET_MASK                (0x1U)
 #define VBAT_STATUSA_POR_DET_SHIFT               (0U)
 /*! POR_DET - POR Detect Flag
- *  0b0..Not reset
  *  0b0..No effect
- *  0b1..Reset
+ *  0b0..Not reset
  *  0b1..Clear the flag
+ *  0b1..Reset
  */
 #define VBAT_STATUSA_POR_DET(x)                  (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_POR_DET_SHIFT)) & VBAT_STATUSA_POR_DET_MASK)
 
 #define VBAT_STATUSA_WAKEUP_FLAG_MASK            (0x2U)
 #define VBAT_STATUSA_WAKEUP_FLAG_SHIFT           (1U)
 /*! WAKEUP_FLAG - Wakeup Pin Flag
- *  0b0..Not asserted
  *  0b0..No effect
+ *  0b0..Not asserted
  *  0b1..Asserted
  *  0b1..Clear the flag
  */
@@ -254,20 +257,20 @@ typedef struct {
 #define VBAT_STATUSA_TIMER0_FLAG_MASK            (0x4U)
 #define VBAT_STATUSA_TIMER0_FLAG_SHIFT           (2U)
 /*! TIMER0_FLAG - Bandgap Timer 0 Flag
- *  0b0..Not reached
  *  0b0..No effect
- *  0b1..Reached
+ *  0b0..Not reached
  *  0b1..Clear the flag
+ *  0b1..Reached
  */
 #define VBAT_STATUSA_TIMER0_FLAG(x)              (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_TIMER0_FLAG_SHIFT)) & VBAT_STATUSA_TIMER0_FLAG_MASK)
 
 #define VBAT_STATUSA_TIMER1_FLAG_MASK            (0x8U)
 #define VBAT_STATUSA_TIMER1_FLAG_SHIFT           (3U)
 /*! TIMER1_FLAG - Bandgap Timer 1 Flag
- *  0b0..Not reached
  *  0b0..No effect
- *  0b1..Reached
+ *  0b0..Not reached
  *  0b1..Clear the flag
+ *  0b1..Reached
  */
 #define VBAT_STATUSA_TIMER1_FLAG(x)              (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_TIMER1_FLAG_SHIFT)) & VBAT_STATUSA_TIMER1_FLAG_MASK)
 
@@ -298,20 +301,20 @@ typedef struct {
 #define VBAT_STATUSA_CONFIG_DET_MASK             (0x80U)
 #define VBAT_STATUSA_CONFIG_DET_SHIFT            (7U)
 /*! CONFIG_DET - Configuration Detect Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define VBAT_STATUSA_CONFIG_DET(x)               (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_CONFIG_DET_SHIFT)) & VBAT_STATUSA_CONFIG_DET_MASK)
 
 #define VBAT_STATUSA_VOLT_DET_MASK               (0x100U)
 #define VBAT_STATUSA_VOLT_DET_SHIFT              (8U)
 /*! VOLT_DET - Voltage Detect
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define VBAT_STATUSA_VOLT_DET(x)                 (((uint32_t)(((uint32_t)(x)) << VBAT_STATUSA_VOLT_DET_SHIFT)) & VBAT_STATUSA_VOLT_DET_MASK)
 
@@ -1463,5 +1466,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* VBAT_H_ */
+#endif  /* PERI_VBAT_H_ */
 

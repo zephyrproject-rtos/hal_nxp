@@ -9,15 +9,17 @@
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_cm33
 **                          MIMXRT685SFVKB_dsp
+**                          MIMXRT685SVFVKB_cm33
+**                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CLKCTL0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,27 +30,30 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CLKCTL0.h
- * @version 2.0
- * @date 2019-11-12
+ * @file PERI_CLKCTL0.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CLKCTL0
  *
  * CMSIS Peripheral Access Layer for CLKCTL0
  */
 
-#if !defined(CLKCTL0_H_)
-#define CLKCTL0_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CLKCTL0_H_)
+#define PERI_CLKCTL0_H_                          /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 #include "MIMXRT633S_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33))
+#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33) || defined(CPU_MIMXRT685SVFVKB_cm33))
 #include "MIMXRT685S_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
+#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp) || defined(CPU_MIMXRT685SVFVKB_dsp))
 #include "MIMXRT685S_dsp_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -157,18 +162,20 @@ typedef struct {
        uint8_t RESERVED_18[8];
   __IO uint32_t SDIO1FCLKSEL;                      /**< SDIO1 FCLK selection, offset: 0x690 */
   __IO uint32_t SDIO1FCLKDIV;                      /**< SDIO1 FCLK divider, offset: 0x694 */
-       uint8_t RESERVED_19[56];
+       uint8_t RESERVED_19[8];
+  __IO uint32_t ESPIFCLKSEL0;                      /**< ESPI clock selection, offset: 0x6A0 */
+       uint8_t RESERVED_20[44];
   __IO uint32_t ADC0FCLKSEL0;                      /**< ADC0 fclk selection 0, offset: 0x6D0 */
   __IO uint32_t ADC0FCLKSEL1;                      /**< ADC0 fclk selection 1, offset: 0x6D4 */
   __IO uint32_t ADC0FCLKDIV;                       /**< ADC0 fclk divider, offset: 0x6D8 */
-       uint8_t RESERVED_20[36];
+       uint8_t RESERVED_21[36];
   __IO uint32_t UTICKFCLKSEL;                      /**< UTICK fclk selection, offset: 0x700 */
-       uint8_t RESERVED_21[28];
+       uint8_t RESERVED_22[28];
   __IO uint32_t WDT0FCLKSEL;                       /**< wdt clock selection, offset: 0x720 */
-       uint8_t RESERVED_22[12];
+       uint8_t RESERVED_23[12];
   __IO uint32_t WAKECLK32KHZSEL;                   /**< 32k wake clock selection, offset: 0x730 */
   __IO uint32_t WAKECLK32KHZDIV;                   /**< 32k wake clock divider, offset: 0x734 */
-       uint8_t RESERVED_23[40];
+       uint8_t RESERVED_24[40];
   __IO uint32_t SYSTICKFCLKSEL;                    /**< system tick fclk selection, offset: 0x760 */
   __IO uint32_t SYSTICKFCLKDIV;                    /**< system tick fclk divider, offset: 0x764 */
 } CLKCTL0_Type;
@@ -848,12 +855,12 @@ typedef struct {
 #define CLKCTL0_SYSPLL0CTL0_MULT_MASK            (0xFF0000U)
 #define CLKCTL0_SYSPLL0CTL0_MULT_SHIFT           (16U)
 /*! MULT - Multiplication Factor for FSYSPLL0_OUTPUT:
- *  0b00100001..Div 33
- *  0b00011011..Div 27
- *  0b00010110..Div 22
- *  0b00010100..Div 20
- *  0b00010001..Div 17
  *  0b00010000..Div 16
+ *  0b00010001..Div 17
+ *  0b00010100..Div 20
+ *  0b00010110..Div 22
+ *  0b00011011..Div 27
+ *  0b00100001..Div 33
  */
 #define CLKCTL0_SYSPLL0CTL0_MULT(x)              (((uint32_t)(((uint32_t)(x)) << CLKCTL0_SYSPLL0CTL0_MULT_SHIFT)) & CLKCTL0_SYSPLL0CTL0_MULT_MASK)
 /*! @} */
@@ -1375,6 +1382,24 @@ typedef struct {
 #define CLKCTL0_SDIO1FCLKDIV_REQFLAG(x)          (((uint32_t)(((uint32_t)(x)) << CLKCTL0_SDIO1FCLKDIV_REQFLAG_SHIFT)) & CLKCTL0_SDIO1FCLKDIV_REQFLAG_MASK)
 /*! @} */
 
+/*! @name ESPIFCLKSEL0 - ESPI clock selection */
+/*! @{ */
+
+#define CLKCTL0_ESPIFCLKSEL0_SEL_MASK            (0x7U)
+#define CLKCTL0_ESPIFCLKSEL0_SEL_SHIFT           (0U)
+/*! SEL - eSPI Functional Clock Source Selection.
+ *  0b000..FFRO Clock (48/60m_irc).
+ *  0b001..Reserved.
+ *  0b010..Reserved.
+ *  0b011..Reserved.
+ *  0b100..Reserved.
+ *  0b101..Reserved.
+ *  0b110..Reserved.
+ *  0b111..None, this may be selected in order to reduce power when no output is needed.
+ */
+#define CLKCTL0_ESPIFCLKSEL0_SEL(x)              (((uint32_t)(((uint32_t)(x)) << CLKCTL0_ESPIFCLKSEL0_SEL_SHIFT)) & CLKCTL0_ESPIFCLKSEL0_SEL_MASK)
+/*! @} */
+
 /*! @name ADC0FCLKSEL0 - ADC0 fclk selection 0 */
 /*! @{ */
 
@@ -1586,5 +1611,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CLKCTL0_H_ */
+#endif  /* PERI_CLKCTL0_H_ */
 

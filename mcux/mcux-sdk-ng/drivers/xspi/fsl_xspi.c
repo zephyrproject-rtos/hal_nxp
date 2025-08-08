@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -151,10 +151,12 @@ static xspi_handle_t *s_xspiHandle[ARRAY_SIZE(s_xspiBases)];
 /* Clock name array */
 static const clock_ip_name_t s_xspiClock[] = XSPI_CLOCKS;
 
+#if defined(CACHE64_CTRL0_BASE)
 #ifdef CACHE64_CLOCKS
 /* Array of CACHE64_CTRL clock name. */
 static const clock_ip_name_t s_xspi_cache64Clocks[] = CACHE64_CLOCKS;
-#endif
+#endif /* CACHE64_CLOCKS */
+#endif /* defined(CACHE64_CTRL0_BASE) */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! brief Pointers to XSPI resets for each instance. */
@@ -532,8 +534,8 @@ void XSPI_GetDefaultConfig(xspi_config_t *ptrConfig)
         /* In default settings, FRAD check and MDAD check are both disabled. */
         ptrConfig->ptrIpAccessConfig->ptrSfpMdadConfig               = NULL;
         ptrConfig->ptrIpAccessConfig->ptrSfpFradConfig               = NULL;
-        ptrConfig->ptrIpAccessConfig->sfpArbitrationLockTimeoutValue = 0xFFFFFUL;
-        ptrConfig->ptrIpAccessConfig->ipAccessTimeoutValue           = 0xFFFFUL;
+        ptrConfig->ptrIpAccessConfig->sfpArbitrationLockTimeoutValue = 0xFFFFFFFFUL;
+        ptrConfig->ptrIpAccessConfig->ipAccessTimeoutValue           = 0xFFFFFFFFUL;
     }
 }
 

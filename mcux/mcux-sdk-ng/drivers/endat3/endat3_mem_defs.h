@@ -1,0 +1,2970 @@
+/*
+ * Copyright 2025 NXP
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+#ifndef ENDAT3_MEM_DEFS_H__
+#define ENDAT3_MEM_DEFS_H__
+
+#define ENDAT3_MEM_BASE_EL                          0x000000
+#define ENDAT3_MEM_BASE_XEL                         0x010000
+#define ENDAT3_MEM_BASE_SET                         0x020000
+#define ENDAT3_MEM_BASE_XSET                        0x030000
+#define ENDAT3_MEM_BASE_LPFSET                      0x040000
+#define ENDAT3_MEM_BASE_OEM1                        0x050000
+#define ENDAT3_MEM_BASE_OEM2                        0x060000
+#define ENDAT3_MEM_BASE_OEM3                        0x070000
+#define ENDAT3_MEM_BASE_SENSORS                     0x080000
+#define ENDAT3_MEM_BASE_LPFLIVE                     0x090000
+
+#define ENDAT3_MEM_BASE_FEATURE  0x0B0000
+#define ENDAT3_MEM_BASE_FEATURE1 0x0C0000
+#define ENDAT3_MEM_BASE_FEATURE2 0x0D0000
+
+#define ENDAT3_MEM_EL_CS_OFFSET                             0x000000
+#define ENDAT3_MEM_EL_ELSIZE_OFFSET                         0x000002
+#define ENDAT3_MEM_EL_XELSIZE_OFFSET                        0x000003
+#define ENDAT3_MEM_EL_SETSIZE_OFFSET                        0x000004
+#define ENDAT3_MEM_EL_XSETSIZE_OFFSET                       0x000005
+#define ENDAT3_MEM_EL_LPFSETSIZE_OFFSET                     0x000006
+#define ENDAT3_MEM_EL_OEM1SIZE_OFFSET                       0x000007
+#define ENDAT3_MEM_EL_OEM2SIZE_OFFSET                       0x000008
+#define ENDAT3_MEM_EL_OEM3SIZE_OFFSET                       0x000009
+#define ENDAT3_MEM_EL_SENSORSSIZE_OFFSET                    0x00000A
+#define ENDAT3_MEM_EL_LPFLIVESIZE_OFFSET                    0x00000B
+#define ENDAT3_MEM_EL_XTYPE_OFFSET                          0x000011
+#define ENDAT3_MEM_EL_MANUFACTURER_OFFSET                   0x000012
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_0_OFFSET              0x000013
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_1_OFFSET              0x000013
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_2_OFFSET              0x000014
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_3_OFFSET              0x000014
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_4_OFFSET              0x000015
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_5_OFFSET              0x000015
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_6_OFFSET              0x000016
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_7_OFFSET              0x000016
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_8_OFFSET              0x000017
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_9_OFFSET              0x000017
+#define ENDAT3_MEM_EL_DEVICEIDENT_OFFSET                    0x000018
+#define ENDAT3_MEM_EL_DEVICESERIAL_OFFSET                   0x00001B
+#define ENDAT3_MEM_EL_PHYDATARATE_OFFSET                    0x000021
+#define ENDAT3_MEM_EL_TIMEUNITWRITE_OFFSET                  0x000024
+#define ENDAT3_MEM_EL_PROTOCOLFEATURES_OFFSET               0x000027
+#define ENDAT3_MEM_EL_SUPPORTHPF_0_OFFSET                   0x000032
+#define ENDAT3_MEM_EL_SUPPORTHPF_1_OFFSET                   0x000033
+#define ENDAT3_MEM_EL_MEMENDURANCE_OFFSET                   0x000044
+#define ENDAT3_MEM_EL_MEMENDURANCE_MULT_OFFSET              0x000044
+#define ENDAT3_MEM_EL_MEMENDURANCE_EXP_OFFSET               0x000044
+#define ENDAT3_MEM_EL_FAULTID_0_OFFSET                      0x000045
+#define ENDAT3_MEM_EL_FAULTID_1_OFFSET                      0x000045
+#define ENDAT3_MEM_EL_FAULTID_2_OFFSET                      0x000046
+#define ENDAT3_MEM_EL_FAULTID_3_OFFSET                      0x000046
+#define ENDAT3_MEM_EL_WARNID_0_OFFSET                       0x000047
+#define ENDAT3_MEM_EL_WARNID_1_OFFSET                       0x000047
+#define ENDAT3_MEM_EL_WARNID_2_OFFSET                       0x000048
+#define ENDAT3_MEM_EL_WARNID_3_OFFSET                       0x000048
+
+/* XEL */
+#define ENDAT3_MEM_XEL_CS_OFFSET                            0x00000
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_OFFSET             0x00003
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_OFFSET             0x00004
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_OFFSET             0x00005
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_OFFSET             0x00006
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_OFFSET             0x00007
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_OFFSET             0x00008
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_OFFSET             0x00009
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_OFFSET             0x0000A
+#define ENDAT3_MEM_XEL_ENCODERTYPE_OFFSET                   0x00014
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_OFFSET                 0x00015
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_OFFSET       0x00015
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_OFFSET        0x00015
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_OFFSET  0x00015
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_OFFSET   0x00015
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_OFFSET       0x00015
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_OFFSET                 0x0001A
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_OFFSET    0x0001A
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_OFFSET     0x0001A
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_OFFSET    0x0001A
+#define ENDAT3_MEM_XEL_FORMATPOS2_OFFSET                    0x0001C
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_OFFSET       0x0001C
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_OFFSET        0x0001C
+#define ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_OFFSET       0x0001C
+#define ENDAT3_MEM_XEL_MEASLENGTH_OFFSET                    0x00021
+#define ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_OFFSET            0x00026
+#define ENDAT3_MEM_XEL_REFMARKDELTA_OFFSET                  0x00028
+#define ENDAT3_MEM_XEL_AUX_OFFSET                           0x00029
+#define ENDAT3_MEM_XEL_MAXSPEEDMECH_OFFSET                  0x0002A
+#define ENDAT3_MEM_XEL_MAXSPEEDDATA_OFFSET                  0x0002B
+#define ENDAT3_MEM_XEL_MAXTEMPMECH_OFFSET                   0x0002E
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_OFFSET             0x00037
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_OFFSET     0x00037
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_OFFSET     0x00037
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_OFFSET     0x00038
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_OFFSET     0x00038
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_OFFSET     0x00039
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_OFFSET     0x00039
+#define ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_OFFSET             0x0003A
+#define ENDAT3_MEM_XEL_SAFETYBITS_OFFSET                    0x0004A
+#define ENDAT3_MEM_XEL_LOWERLIMITPOS_OFFSET                 0x0004E
+#define ENDAT3_MEM_XEL_UPPERLIMITPOS_OFFSET                 0x0004E
+#define ENDAT3_MEM_XEL_OFFSETPOSFS_OFFSET                   0x00051
+#define ENDAT3_MEM_XEL_NUMSAFEPOSBITS_OFFSET                0x00054
+#define ENDAT3_MEM_XEL_SAFETYCSPOS1_OFFSET                  0x00055
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_0_OFFSET              0x00067
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_1_OFFSET              0x00068
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_2_OFFSET              0x00069
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_3_OFFSET              0x0006A
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_4_OFFSET              0x0006B
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_5_OFFSET              0x0006C
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_6_OFFSET              0x0006D
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_7_OFFSET              0x0006E
+
+/* SET */
+#define ENDAT3_MEM_SET_CS_OFFSET                            0x00000
+#define ENDAT3_MEM_SET_SELHPF_OFFSET                        0x00002
+#define ENDAT3_MEM_SET_BUSADDRESS_OFFSET                    0x00003
+#define ENDAT3_MEM_SET_AXISADDRESS_OFFSET                   0x00004
+#define ENDAT3_MEM_SET_FDSSAFETYINFOEN_OFFSET               0x00005
+#define ENDAT3_MEM_SET_FDSINITCNT_OFFSET                    0x00006
+#define ENDAT3_MEM_SET_FDSREPEATCNT_OFFSET                  0x00007
+#define ENDAT3_MEM_SET_FORMATSENSOR0123_OFFSET              0x0000C
+#define ENDAT3_MEM_SET_FORMATSENSOR4567_OFFSET              0x0000D
+#define ENDAT3_MEM_SET_FORMATSENSOR891011_OFFSET            0x0000E
+#define ENDAT3_MEM_SET_FORMATSENSOR12131415_OFFSET          0x0000F
+#define ENDAT3_MEM_SET_FORMATSENSOR0_OFFSET                 0x0000C
+#define ENDAT3_MEM_SET_FORMATSENSOR1_OFFSET                 0x0000C
+#define ENDAT3_MEM_SET_FORMATSENSOR2_OFFSET                 0x0000C
+#define ENDAT3_MEM_SET_FORMATSENSOR3_OFFSET                 0x0000C
+#define ENDAT3_MEM_SET_FORMATSENSOR4_OFFSET                 0x0000D
+#define ENDAT3_MEM_SET_FORMATSENSOR5_OFFSET                 0x0000D
+#define ENDAT3_MEM_SET_FORMATSENSOR6_OFFSET                 0x0000D
+#define ENDAT3_MEM_SET_FORMATSENSOR7_OFFSET                 0x0000D
+#define ENDAT3_MEM_SET_FORMATSENSOR8_OFFSET                 0x0000E
+#define ENDAT3_MEM_SET_FORMATSENSOR9_OFFSET                 0x0000E
+#define ENDAT3_MEM_SET_FORMATSENSOR10_OFFSET                0x0000E
+#define ENDAT3_MEM_SET_FORMATSENSOR11_OFFSET                0x0000E
+#define ENDAT3_MEM_SET_FORMATSENSOR12_OFFSET                0x0000F
+#define ENDAT3_MEM_SET_FORMATSENSOR13_OFFSET                0x0000F
+#define ENDAT3_MEM_SET_FORMATSENSOR14_OFFSET                0x0000F
+#define ENDAT3_MEM_SET_FORMATSENSOR15_OFFSET                0x0000F
+#define ENDAT3_MEM_SET_ACTUALSENSOR01_OFFSET                0x00010
+#define ENDAT3_MEM_SET_ACTUALSENSOR23_OFFSET                0x00011
+#define ENDAT3_MEM_SET_ACTUALSENSOR45_OFFSET                0x00012
+#define ENDAT3_MEM_SET_ACTUALSENSOR67_OFFSET                0x00013
+#define ENDAT3_MEM_SET_ACTUALSENSOR89_OFFSET                0x00014
+#define ENDAT3_MEM_SET_ACTUALSENSOR1011_OFFSET              0x00015
+#define ENDAT3_MEM_SET_ACTUALSENSOR1213_OFFSET              0x00016
+#define ENDAT3_MEM_SET_ACTUALSENSOR1415_OFFSET              0x00017
+#define ENDAT3_MEM_SET_ACTUALSENSOR0_OFFSET                 0x00010
+#define ENDAT3_MEM_SET_ACTUALSENSOR1_OFFSET                 0x00010
+#define ENDAT3_MEM_SET_ACTUALSENSOR2_OFFSET                 0x00011
+#define ENDAT3_MEM_SET_ACTUALSENSOR3_OFFSET                 0x00011
+#define ENDAT3_MEM_SET_ACTUALSENSOR4_OFFSET                 0x00012
+#define ENDAT3_MEM_SET_ACTUALSENSOR5_OFFSET                 0x00012
+#define ENDAT3_MEM_SET_ACTUALSENSOR6_OFFSET                 0x00013
+#define ENDAT3_MEM_SET_ACTUALSENSOR7_OFFSET                 0x00013
+#define ENDAT3_MEM_SET_ACTUALSENSOR8_OFFSET                 0x00014
+#define ENDAT3_MEM_SET_ACTUALSENSOR9_OFFSET                 0x00014
+#define ENDAT3_MEM_SET_ACTUALSENSOR10_OFFSET                0x00015
+#define ENDAT3_MEM_SET_ACTUALSENSOR11_OFFSET                0x00015
+#define ENDAT3_MEM_SET_ACTUALSENSOR12_OFFSET                0x00016
+#define ENDAT3_MEM_SET_ACTUALSENSOR13_OFFSET                0x00016
+#define ENDAT3_MEM_SET_ACTUALSENSOR14_OFFSET                0x00017
+#define ENDAT3_MEM_SET_ACTUALSENSOR15_OFFSET                0x00017
+#define ENDAT3_MEM_SET_DEVICESPECIFIC_OFFSET                0x0002C
+#define ENDAT3_MEM_SET_FREETOUSE_0_OFFSET                   0x00030
+#define ENDAT3_MEM_SET_FREETOUSE_1_OFFSET                   0x00031
+#define ENDAT3_MEM_SET_FREETOUSE_2_OFFSET                   0x00032
+#define ENDAT3_MEM_SET_FREETOUSE_3_OFFSET                   0x00033
+#define ENDAT3_MEM_SET_FREETOUSE_4_OFFSET                   0x00034
+#define ENDAT3_MEM_SET_FREETOUSE_5_OFFSET                   0x00035
+#define ENDAT3_MEM_SET_FREETOUSE_6_OFFSET                   0x00036
+#define ENDAT3_MEM_SET_FREETOUSE_7_OFFSET                   0x00037
+
+/* XSET */
+#define ENDAT3_MEM_XSET_CS_OFFSET                           0x00000
+#define ENDAT3_MEM_XSET_OFFSETPOS_OFFSET                    0x00002
+#define ENDAT3_MEM_XSET_OFFSETPOS_0_OFFSET                  0x00002
+#define ENDAT3_MEM_XSET_OFFSETPOS_1_OFFSET                  0x00003
+#define ENDAT3_MEM_XSET_OFFSETPOS_2_OFFSET                  0x00004
+#define ENDAT3_MEM_XSET_SAFETYCS_OFFSET                     0x00006
+#define ENDAT3_MEM_XSET_TEMPWARNLEVEL_OFFSET                0x0000A
+
+/* LPFSETNDAT/LPFLIVNDATE */
+#define ENDAT3_MEM_LPFSET_LPFLIVE_CS_OFFSET                         0x00000
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET             0x00002
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_OFFSET             0x00003
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_OFFSET             0x00004
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_OFFSET             0x00005
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_OFFSET             0x00006
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_OFFSET             0x00007
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_OFFSET             0x00008
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET                0x0000A
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_OFFSET                0x0000A
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_OFFSET                0x0000A
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_OFFSET                0x0000A
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_OFFSET                0x0000B
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_OFFSET                0x0000B
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_OFFSET                0x0000B
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_OFFSET                0x0000B
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_OFFSET                0x0000C
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_OFFSET                0x0000C
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_OFFSET                0x0000C
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_OFFSET                0x0000C
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_OFFSET                0x0000D
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_OFFSET                0x0000D
+
+/* SENSORNDATS */
+#define ENDAT3_MEM_SENSORS_0_OFFSET                         0x00000
+#define ENDAT3_MEM_SENSORS_SUPPORT_0_OFFSET                 0x00000
+#define ENDAT3_MEM_SENSORS_1_OFFSET                         0x00001
+#define ENDAT3_MEM_SENSORS_SUPPORT_1_OFFSET                 0x00001
+#define ENDAT3_MEM_SENSORS_2_OFFSET                         0x00002
+#define ENDAT3_MEM_SENSORS_SUPPORT_2_OFFSET                 0x00002
+#define ENDAT3_MEM_SENSORS_3_OFFSET                         0x00003
+#define ENDAT3_MEM_SENSORS_SUPPORT_3_OFFSET                 0x00003
+#define ENDAT3_MEM_SENSORS_4_OFFSET                         0x00004
+#define ENDAT3_MEM_SENSORS_SUPPORT_4_OFFSET                 0x00004
+#define ENDAT3_MEM_SENSORS_5_OFFSET                         0x00005
+#define ENDAT3_MEM_SENSORS_SUPPORT_5_OFFSET                 0x00005
+#define ENDAT3_MEM_SENSORS_6_OFFSET                         0x00006
+#define ENDAT3_MEM_SENSORS_SUPPORT_6_OFFSET                 0x00006
+#define ENDAT3_MEM_SENSORS_7_OFFSET                         0x00007
+#define ENDAT3_MEM_SENSORS_SUPPORT_7_OFFSET                 0x00007
+#define ENDAT3_MEM_SENSORS_8_OFFSET                         0x00008
+#define ENDAT3_MEM_SENSORS_SUPPORT_8_OFFSET                 0x00008
+#define ENDAT3_MEM_SENSORS_9_OFFSET                         0x00009
+#define ENDAT3_MEM_SENSORS_SUPPORT_9_OFFSET                 0x00009
+#define ENDAT3_MEM_SENSORS_10_OFFSET                        0x0000A
+#define ENDAT3_MEM_SENSORS_SUPPORT_10_OFFSET                0x0000A
+#define ENDAT3_MEM_SENSORS_11_OFFSET                        0x0000B
+#define ENDAT3_MEM_SENSORS_SUPPORT_11_OFFSET                0x0000B
+#define ENDAT3_MEM_SENSORS_12_OFFSET                        0x0000C
+#define ENDAT3_MEM_SENSORS_SUPPORT_12_OFFSET                0x0000C
+#define ENDAT3_MEM_SENSORS_13_OFFSET                        0x0000D
+#define ENDAT3_MEM_SENSORS_SUPPORT_13_OFFSET                0x0000D
+#define ENDAT3_MEM_SENSORS_14_OFFSET                        0x0000E
+#define ENDAT3_MEM_SENSORS_SUPPORT_14_OFFSET                0x0000E
+#define ENDAT3_MEM_SENSORS_15_OFFSET                        0x0000F
+#define ENDAT3_MEM_SENSORS_SUPPORT_15_OFFSET                0x0000F
+
+/* FEATURNDATE */
+#define ENDAT3_MEM_FEATURE_CS_OFFSET                        0x00000
+#define ENDAT3_MEM_FEATURE_SIZE_OFFSET                      0x00002
+
+/* FEATURNDATE1 */
+#define ENDAT3_MEM_FEATURE1_CS_OFFSET                       0x00000
+#define ENDAT3_MEM_FEATURE1_SIZE_OFFSET                     0x00002
+
+/* FEATURNDATE2 */
+#define ENDAT3_MEM_FEATURE2_CS_OFFSET                       0x00000
+#define ENDAT3_MEM_FEATURE2_SIZE_OFFSET                     0x00002
+
+#define ENDAT3_MEM_EL_CS_TYPE                            uint32_t
+#define ENDAT3_MEM_EL_ELSIZE_TYPE                        uint16_t
+#define ENDAT3_MEM_EL_XELSIZE_TYPE                       uint16_t
+#define ENDAT3_MEM_EL_SETSIZE_TYPE                       uint16_t
+#define ENDAT3_MEM_EL_XSETSIZE_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_LPFSETSIZE_TYPE                    uint16_t
+#define ENDAT3_MEM_EL_OEM1SIZE_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_OEM2SIZE_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_OEM3SIZE_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_SENSORSSIZE_TYPE                   uint16_t
+#define ENDAT3_MEM_EL_LPFLIVESIZE_TYPE                   uint16_t
+#define ENDAT3_MEM_EL_XTYPE_TYPE                         uint16_t
+#define ENDAT3_MEM_EL_MANUFACTURER_TYPE                  uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_0_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_1_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_2_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_3_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_4_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_5_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_6_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_7_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_8_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_9_TYPE             uint16_t
+#define ENDAT3_MEM_EL_DEVICEIDENT_TYPE                   uint64_t
+#define ENDAT3_MEM_EL_DEVICESERIAL_TYPE                  uint64_t
+#define ENDAT3_MEM_EL_PHYDATARATE_TYPE                   uint16_t
+#define ENDAT3_MEM_EL_TIMEUNITWRITE_TYPE                 uint16_t
+#define ENDAT3_MEM_EL_PROTOCOLFEATURES_TYPE              uint64_t
+#define ENDAT3_MEM_EL_SUPPORTHPF_0_TYPE                  uint16_t
+#define ENDAT3_MEM_EL_SUPPORTHPF_1_TYPE                  uint16_t
+#define ENDAT3_MEM_EL_MEMENDURANCE_TYPE                  uint16_t
+#define ENDAT3_MEM_EL_MEMENDURANCE_MULT_TYPE             uint16_t
+#define ENDAT3_MEM_EL_MEMENDURANCE_EXP_TYPE              uint16_t
+#define ENDAT3_MEM_EL_FAULTID_0_TYPE                     uint16_t
+#define ENDAT3_MEM_EL_FAULTID_1_TYPE                     uint16_t
+#define ENDAT3_MEM_EL_FAULTID_2_TYPE                     uint16_t
+#define ENDAT3_MEM_EL_FAULTID_3_TYPE                     uint16_t
+#define ENDAT3_MEM_EL_WARNID_0_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_WARNID_1_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_WARNID_2_TYPE                      uint16_t
+#define ENDAT3_MEM_EL_WARNID_3_TYPE                      uint16_t
+
+/* XEL */
+#define ENDAT3_MEM_XEL_CS_TYPE                           uint32_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_ENCODERTYPE_TYPE                  uint16_t
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_TYPE                uint64_t
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_TYPE      uint16_t
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_TYPE       uint16_t
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TYPEPOS_TYPE   uint16_t
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_TYPE  uint16_t
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_TYPE      uint16_t
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_TYPE                uint32_t
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_TYPE   uint16_t
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_TYPE   uint16_t
+#define ENDAT3_MEM_XEL_FORMATPOS2_TYPE                   uint32_t
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_TYPE      uint16_t
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_TYPE       uint16_t
+#define ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_TYPE      uint16_t
+#define ENDAT3_MEM_XEL_MEASLENGTH_TYPE                   uint64_t
+#define ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_TYPE           uint32_t
+#define ENDAT3_MEM_XEL_REFMARKDELTA_TYPE                 uint16_t
+#define ENDAT3_MEM_XEL_AUX_TYPE                          uint16_t
+#define ENDAT3_MEM_XEL_MAXSPEEDMECH_TYPE                 uint16_t
+#define ENDAT3_MEM_XEL_MAXSPEEDDATA_TYPE                 uint16_t
+#define ENDAT3_MEM_XEL_MAXTEMPMECH_TYPE                  uint16_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_TYPE            uint64_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_TYPE    uint16_t
+#define ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_TYPE            uint16_t
+#define ENDAT3_MEM_XEL_SAFETYBITS_TYPE                   uint16_t
+#define ENDAT3_MEM_XEL_LOWERLIMITPOS_TYPE                uint64_t
+#define ENDAT3_MEM_XEL_UPPERLIMITPOS_TYPE                uint64_t
+#define ENDAT3_MEM_XEL_TYPEPOSFS_TYPE                    uint64_t
+#define ENDAT3_MEM_XEL_NUMSAFEPOSBITS_TYPE               uint16_t
+#define ENDAT3_MEM_XEL_SAFETYCSPOS1_TYPE                 uint32_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_0_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_1_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_2_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_3_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_4_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_5_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_6_TYPE             uint16_t
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_7_TYPE             uint16_t
+
+/* SET */
+#define ENDAT3_MEM_SET_CS_TYPE                           uint32_t
+#define ENDAT3_MEM_SET_SELHPF_TYPE                       uint16_t
+#define ENDAT3_MEM_SET_BUSADDRESS_TYPE                   uint16_t
+#define ENDAT3_MEM_SET_AXISADDRESS_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FDSSAFETYINFOEN_TYPE              uint16_t
+#define ENDAT3_MEM_SET_FDSINITCNT_TYPE                   uint16_t
+#define ENDAT3_MEM_SET_FDSREPEATCNT_TYPE                 uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR0123_TYPE             uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR4567_TYPE             uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR891011_TYPE           uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR12131415_TYPE         uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR0_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR1_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR2_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR3_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR4_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR5_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR6_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR7_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR8_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR9_TYPE                uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR10_TYPE               uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR11_TYPE               uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR12_TYPE               uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR13_TYPE               uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR14_TYPE               uint16_t
+#define ENDAT3_MEM_SET_FORMATSENSOR15_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR01_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR23_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR45_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR67_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR89_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR1011_TYPE             uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR1213_TYPE             uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR1415_TYPE             uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR0_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR1_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR2_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR3_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR4_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR5_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR6_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR7_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR8_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR9_TYPE                uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR10_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR11_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR12_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR13_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR14_TYPE               uint16_t
+#define ENDAT3_MEM_SET_ACTUALSENSOR15_TYPE               uint16_t
+#define ENDAT3_MEM_SET_DEVICESPECIFIC_TYPE               uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_0_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_1_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_2_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_3_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_4_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_5_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_6_TYPE                  uint16_t
+#define ENDAT3_MEM_SET_FREETOUSE_7_TYPE                  uint16_t
+
+/* XSET */
+#define ENDAT3_MEM_XSET_CS_TYPE                          uint32_t
+#define ENDAT3_MEM_XSET_TYPEPOS_TYPE                   uint64_t
+#define ENDAT3_MEM_XSET_TYPEPOS_0_TYPE                 uint16_t
+#define ENDAT3_MEM_XSET_TYPEPOS_1_TYPE                 uint16_t
+#define ENDAT3_MEM_XSET_TYPEPOS_2_TYPE                 uint16_t
+#define ENDAT3_MEM_XSET_SAFETYCS_TYPE                    uint32_t
+#define ENDAT3_MEM_XSET_TEMPWARNLEVEL_TYPE               uint16_t
+
+
+/* LPFSETNDAT/LPFLIVNDATE */
+#define ENDAT3_MEM_LPFSET_LPFLIVE_CS_TYPE                        uint32_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_TYPE            uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_TYPE               uint16_t
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_TYPE               uint16_t
+
+/* SENSORNDATS */
+#define ENDAT3_MEM_SENSORS_0_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_0_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_1_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_1_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_2_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_2_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_3_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_3_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_4_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_4_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_5_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_5_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_6_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_6_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_7_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_7_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_8_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_8_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_9_TYPE                        uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_9_TYPE                uint16_t
+#define ENDAT3_MEM_SENSORS_10_TYPE                       uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_10_TYPE               uint16_t
+#define ENDAT3_MEM_SENSORS_11_TYPE                       uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_11_TYPE               uint16_t
+#define ENDAT3_MEM_SENSORS_12_TYPE                       uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_12_TYPE               uint16_t
+#define ENDAT3_MEM_SENSORS_13_TYPE                       uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_13_TYPE               uint16_t
+#define ENDAT3_MEM_SENSORS_14_TYPE                       uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_14_TYPE               uint16_t
+#define ENDAT3_MEM_SENSORS_15_TYPE                       uint16_t
+#define ENDAT3_MEM_SENSORS_SUPPORT_15_TYPE               uint16_t
+
+/* FEATURNDATE */
+#define ENDAT3_MEM_FEATURE_CS_TYPE                       uint32_t
+#define ENDAT3_MEM_FEATURE_SIZE_TYPE                     uint16_t
+
+/* FEATURNDATE1 */
+#define ENDAT3_MEM_FEATURE1_CS_TYPE                      uint32_t
+#define ENDAT3_MEM_FEATURE1_SIZE_TYPE                    uint16_t
+
+/* FEATURNDATE2 */
+#define ENDAT3_MEM_FEATURE2_CS_TYPE                      uint32_t
+#define ENDAT3_MEM_FEATURE2_SIZE_TYPE                    uint16_t
+
+#define ENDAT3_MEM_EL_CS_SHIFT                             0
+#define ENDAT3_MEM_EL_ELSIZE_SHIFT                         0
+#define ENDAT3_MEM_EL_XELSIZE_SHIFT                        0
+#define ENDAT3_MEM_EL_SETSIZE_SHIFT                        0
+#define ENDAT3_MEM_EL_XSETSIZE_SHIFT                       0
+#define ENDAT3_MEM_EL_LPFSETSIZE_SHIFT                     0
+#define ENDAT3_MEM_EL_OEM1SIZE_SHIFT                       0
+#define ENDAT3_MEM_EL_OEM2SIZE_SHIFT                       0
+#define ENDAT3_MEM_EL_OEM3SIZE_SHIFT                       0
+#define ENDAT3_MEM_EL_SENSORSSIZE_SHIFT                    0
+#define ENDAT3_MEM_EL_LPFLIVESIZE_SHIFT                    0
+#define ENDAT3_MEM_EL_XTYPE_SHIFT                          0
+#define ENDAT3_MEM_EL_MANUFACTURER_SHIFT                   0
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_0_SHIFT              0
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_1_SHIFT              8
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_2_SHIFT              0
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_3_SHIFT              8
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_4_SHIFT              0
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_5_SHIFT              8
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_6_SHIFT              0
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_7_SHIFT              8
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_8_SHIFT              0
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_9_SHIFT              8
+#define ENDAT3_MEM_EL_DEVICEIDENT_SHIFT                    0
+#define ENDAT3_MEM_EL_DEVICESERIAL_SHIFT                   0
+#define ENDAT3_MEM_EL_PHYDATARATE_SHIFT                    0
+#define ENDAT3_MEM_EL_TIMEUNITWRITE_SHIFT                  0
+#define ENDAT3_MEM_EL_PROTOCOLFEATURES_SHIFT               0
+#define ENDAT3_MEM_EL_SUPPORTHPF_0_SHIFT                   0
+#define ENDAT3_MEM_EL_SUPPORTHPF_1_SHIFT                   0
+#define ENDAT3_MEM_EL_MEMENDURANCE_SHIFT                   0
+#define ENDAT3_MEM_EL_MEMENDURANCE_MULT_SHIFT              0
+#define ENDAT3_MEM_EL_MEMENDURANCE_EXP_SHIFT               4
+#define ENDAT3_MEM_EL_FAULTID_0_SHIFT                      0
+#define ENDAT3_MEM_EL_FAULTID_1_SHIFT                      8
+#define ENDAT3_MEM_EL_FAULTID_2_SHIFT                      0
+#define ENDAT3_MEM_EL_FAULTID_3_SHIFT                      8
+#define ENDAT3_MEM_EL_WARNID_0_SHIFT                       0
+#define ENDAT3_MEM_EL_WARNID_1_SHIFT                       8
+#define ENDAT3_MEM_EL_WARNID_2_SHIFT                       0
+#define ENDAT3_MEM_EL_WARNID_3_SHIFT                       8
+
+/* XEL */
+#define ENDAT3_MEM_XEL_CS_SHIFT                            0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_SHIFT             0
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_SHIFT             0
+#define ENDAT3_MEM_XEL_ENCODERTYPE_SHIFT                   0
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SHIFT                 0
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_SHIFT       0
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_SHIFT        1
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_SHIFTPOS_SHIFT   2
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_SHIFT   3
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_SHIFT       4
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_SHIFT                 0
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_SHIFT    0
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_SHIFT     8
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_SHIFT    0
+#define ENDAT3_MEM_XEL_FORMATPOS2_SHIFT                    0
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_SHIFT       0
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_SHIFT        8
+#define ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_SHIFT       0
+#define ENDAT3_MEM_XEL_MEASLENGTH_SHIFT                    0
+#define ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_SHIFT            0
+#define ENDAT3_MEM_XEL_REFMARKDELTA_SHIFT                  0
+#define ENDAT3_MEM_XEL_AUX_SHIFT                           0
+#define ENDAT3_MEM_XEL_MAXSPEEDMECH_SHIFT                  0
+#define ENDAT3_MEM_XEL_MAXSPEEDDATA_SHIFT                  0
+#define ENDAT3_MEM_XEL_MAXTEMPMECH_SHIFT                   0
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_SHIFT             0
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_SHIFT     0
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_SHIFT     8
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_SHIFT     0
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_SHIFT     8
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_SHIFT     0
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_SHIFT     8
+#define ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_SHIFT             0
+#define ENDAT3_MEM_XEL_SAFETYBITS_SHIFT                    0
+#define ENDAT3_MEM_XEL_LOWERLIMITPOS_SHIFT                 0
+#define ENDAT3_MEM_XEL_UPPERLIMITPOS_SHIFT                 0
+#define ENDAT3_MEM_XEL_SHIFTPOSFS_SHIFT                    0
+#define ENDAT3_MEM_XEL_NUMSAFEPOSBITS_SHIFT                0
+#define ENDAT3_MEM_XEL_SAFETYCSPOS1_SHIFT                  0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_0_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_1_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_2_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_3_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_4_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_5_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_6_SHIFT              0
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_7_SHIFT              0
+
+/* SET */
+#define ENDAT3_MEM_SET_CS_SHIFT                            0
+#define ENDAT3_MEM_SET_SELHPF_SHIFT                        0
+#define ENDAT3_MEM_SET_BUSADDRESS_SHIFT                    0
+#define ENDAT3_MEM_SET_AXISADDRESS_SHIFT                   0
+#define ENDAT3_MEM_SET_FDSSAFETYINFOEN_SHIFT               0
+#define ENDAT3_MEM_SET_FDSINITCNT_SHIFT                    0
+#define ENDAT3_MEM_SET_FDSREPEATCNT_SHIFT                  0
+#define ENDAT3_MEM_SET_FORMATSENSOR0123_SHIFT              0
+#define ENDAT3_MEM_SET_FORMATSENSOR4567_SHIFT              0
+#define ENDAT3_MEM_SET_FORMATSENSOR891011_SHIFT            0
+#define ENDAT3_MEM_SET_FORMATSENSOR12131415_SHIFT          0
+#define ENDAT3_MEM_SET_FORMATSENSOR0_SHIFT                 0
+#define ENDAT3_MEM_SET_FORMATSENSOR1_SHIFT                 4
+#define ENDAT3_MEM_SET_FORMATSENSOR2_SHIFT                 8
+#define ENDAT3_MEM_SET_FORMATSENSOR3_SHIFT                 1
+#define ENDAT3_MEM_SET_FORMATSENSOR4_SHIFT                 0
+#define ENDAT3_MEM_SET_FORMATSENSOR5_SHIFT                 4
+#define ENDAT3_MEM_SET_FORMATSENSOR6_SHIFT                 8
+#define ENDAT3_MEM_SET_FORMATSENSOR7_SHIFT                 1
+#define ENDAT3_MEM_SET_FORMATSENSOR8_SHIFT                 0
+#define ENDAT3_MEM_SET_FORMATSENSOR9_SHIFT                 4
+#define ENDAT3_MEM_SET_FORMATSENSOR10_SHIFT                8
+#define ENDAT3_MEM_SET_FORMATSENSOR11_SHIFT                1
+#define ENDAT3_MEM_SET_FORMATSENSOR12_SHIFT                0
+#define ENDAT3_MEM_SET_FORMATSENSOR13_SHIFT                4
+#define ENDAT3_MEM_SET_FORMATSENSOR14_SHIFT                8
+#define ENDAT3_MEM_SET_FORMATSENSOR15_SHIFT                1
+#define ENDAT3_MEM_SET_ACTUALSENSOR01_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR23_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR45_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR67_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR89_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR1011_SHIFT              0
+#define ENDAT3_MEM_SET_ACTUALSENSOR1213_SHIFT              0
+#define ENDAT3_MEM_SET_ACTUALSENSOR1415_SHIFT              0
+#define ENDAT3_MEM_SET_ACTUALSENSOR0_SHIFT                 0
+#define ENDAT3_MEM_SET_ACTUALSENSOR1_SHIFT                 8
+#define ENDAT3_MEM_SET_ACTUALSENSOR2_SHIFT                 0
+#define ENDAT3_MEM_SET_ACTUALSENSOR3_SHIFT                 8
+#define ENDAT3_MEM_SET_ACTUALSENSOR4_SHIFT                 0
+#define ENDAT3_MEM_SET_ACTUALSENSOR5_SHIFT                 8
+#define ENDAT3_MEM_SET_ACTUALSENSOR6_SHIFT                 0
+#define ENDAT3_MEM_SET_ACTUALSENSOR7_SHIFT                 8
+#define ENDAT3_MEM_SET_ACTUALSENSOR8_SHIFT                 0
+#define ENDAT3_MEM_SET_ACTUALSENSOR9_SHIFT                 8
+#define ENDAT3_MEM_SET_ACTUALSENSOR10_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR11_SHIFT                8
+#define ENDAT3_MEM_SET_ACTUALSENSOR12_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR13_SHIFT                8
+#define ENDAT3_MEM_SET_ACTUALSENSOR14_SHIFT                0
+#define ENDAT3_MEM_SET_ACTUALSENSOR15_SHIFT                8
+#define ENDAT3_MEM_SET_DEVICESPECIFIC_SHIFT                0
+#define ENDAT3_MEM_SET_FREETOUSE_0_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_1_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_2_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_3_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_4_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_5_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_6_SHIFT                   0
+#define ENDAT3_MEM_SET_FREETOUSE_7_SHIFT                   0
+
+/* XSET */
+#define ENDAT3_MEM_XSET_CS_SHIFT                           0
+#define ENDAT3_MEM_XSET_SHIFTPOS_SHIFT                     0
+#define ENDAT3_MEM_XSET_SHIFTPOS_0_SHIFT                  0
+#define ENDAT3_MEM_XSET_SHIFTPOS_1_SHIFT                  0
+#define ENDAT3_MEM_XSET_SHIFTPOS_2_SHIFT                  0
+#define ENDAT3_MEM_XSET_SAFETYCS_SHIFT                     0
+#define ENDAT3_MEM_XSET_TEMPWARNLEVEL_SHIFT                0
+
+/* LPFSETNDAT/LPFLIVNDATE */
+#define ENDAT3_MEM_LPFSET_LPFLIVE_CS_SHIFT                         0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_SHIFT             0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_SHIFT                0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_SHIFT                4
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_SHIFT                8
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_SHIFT                1
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_SHIFT                0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_SHIFT                4
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_SHIFT                8
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_SHIFT                1
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_SHIFT                0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_SHIFT                4
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_SHIFT                8
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_SHIFT                1
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_SHIFT                0
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_SHIFT                4
+
+/* SENSORNDATS */
+#define ENDAT3_MEM_SENSORS_0_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_0_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_1_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_1_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_2_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_2_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_3_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_3_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_4_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_4_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_5_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_5_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_6_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_6_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_7_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_7_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_8_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_8_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_9_SHIFT                         0
+#define ENDAT3_MEM_SENSORS_SUPPORT_9_SHIFT                 0
+#define ENDAT3_MEM_SENSORS_10_SHIFT                        0
+#define ENDAT3_MEM_SENSORS_SUPPORT_10_SHIFT                0
+#define ENDAT3_MEM_SENSORS_11_SHIFT                        0
+#define ENDAT3_MEM_SENSORS_SUPPORT_11_SHIFT                0
+#define ENDAT3_MEM_SENSORS_12_SHIFT                        0
+#define ENDAT3_MEM_SENSORS_SUPPORT_12_SHIFT                0
+#define ENDAT3_MEM_SENSORS_13_SHIFT                        0
+#define ENDAT3_MEM_SENSORS_SUPPORT_13_SHIFT                0
+#define ENDAT3_MEM_SENSORS_14_SHIFT                        0
+#define ENDAT3_MEM_SENSORS_SUPPORT_14_SHIFT                0
+#define ENDAT3_MEM_SENSORS_15_SHIFT                        0
+#define ENDAT3_MEM_SENSORS_SUPPORT_15_SHIFT                0
+
+/* FEATURNDATE */
+#define ENDAT3_MEM_FEATURE_CS_SHIFT                        0
+#define ENDAT3_MEM_FEATURE_SIZE_SHIFT                      0
+
+/* FEATURNDATE1 */
+#define ENDAT3_MEM_FEATURE1_CS_SHIFT                       0
+#define ENDAT3_MEM_FEATURE1_SIZE_SHIFT                     0
+
+/* FEATURNDATE2 */
+#define ENDAT3_MEM_FEATURE2_CS_SHIFT                       0
+#define ENDAT3_MEM_FEATURE2_SIZE_SHIFT                     0
+
+#define ENDAT3_MEM_EL_CS_MASK                            0xFFFFFFFF
+#define ENDAT3_MEM_EL_ELSIZE_MASK                        0xFFFF
+#define ENDAT3_MEM_EL_XELSIZE_MASK                       0xFFFF
+#define ENDAT3_MEM_EL_SETSIZE_MASK                       0xFFFF
+#define ENDAT3_MEM_EL_XSETSIZE_MASK                      0xFFFF
+#define ENDAT3_MEM_EL_LPFSETSIZE_MASK                    0xFFFF
+#define ENDAT3_MEM_EL_OEM1SIZE_MASK                      0xFFFF
+#define ENDAT3_MEM_EL_OEM2SIZE_MASK                      0xFFFF
+#define ENDAT3_MEM_EL_OEM3SIZE_MASK                      0xFFFF
+#define ENDAT3_MEM_EL_SENSORSSIZE_MASK                   0xFFFF
+#define ENDAT3_MEM_EL_LPFLIVESIZE_MASK                   0xFFFF
+#define ENDAT3_MEM_EL_XTYPE_MASK                         0xFFFF
+#define ENDAT3_MEM_EL_MANUFACTURER_MASK                  0xFFFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_0_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_1_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_2_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_3_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_4_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_5_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_6_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_7_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_8_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICENAME_CHAR_9_MASK             0xFF
+#define ENDAT3_MEM_EL_DEVICEIDENT_MASK                   0xFFFFFFFFFFFF
+#define ENDAT3_MEM_EL_DEVICESERIAL_MASK                  0xFFFFFFFFFFFF
+#define ENDAT3_MEM_EL_PHYDATARATE_MASK                   0xFFFF
+#define ENDAT3_MEM_EL_TIMEUNITWRITE_MASK                 0xFFFF
+#define ENDAT3_MEM_EL_PROTOCOLFEATURES_MASK              0xFFFFFFFFFFFF
+#define ENDAT3_MEM_EL_SUPPORTHPF_0_MASK                  0xFFFF
+#define ENDAT3_MEM_EL_SUPPORTHPF_1_MASK                  0xFFFF
+#define ENDAT3_MEM_EL_MEMENDURANCE_MASK                  0xFFFF
+#define ENDAT3_MEM_EL_MEMENDURANCE_MULT_MASK             0xF
+#define ENDAT3_MEM_EL_MEMENDURANCE_EXP_MASK              0xF
+#define ENDAT3_MEM_EL_FAULTID_0_MASK                     0xFF
+#define ENDAT3_MEM_EL_FAULTID_1_MASK                     0xFF
+#define ENDAT3_MEM_EL_FAULTID_2_MASK                     0xFF
+#define ENDAT3_MEM_EL_FAULTID_3_MASK                     0xFF
+#define ENDAT3_MEM_EL_WARNID_0_MASK                      0xFF
+#define ENDAT3_MEM_EL_WARNID_1_MASK                      0xFF
+#define ENDAT3_MEM_EL_WARNID_2_MASK                      0xFF
+#define ENDAT3_MEM_EL_WARNID_3_MASK                      0xFF
+
+/* XEL */
+#define ENDAT3_MEM_XEL_CS_MASK                           0xFFFFFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_ENCODERTYPE_MASK                  0xFFFF
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_MASK                0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_MASK      1
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_MASK       1
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_MASKPOS_MASK 1
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_MASK  1
+#define ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_MASK      1
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_MASK                0xFFFFFFFF
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_MASK   0xFF
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_MASK    0xFF
+#define ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_MASK   0xFF
+#define ENDAT3_MEM_XEL_FORMATPOS2_MASK                   0xFFFFFFFF
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_MASK      0xFF
+#define ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_MASK       0xFF
+#define ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_MASK      0xFF
+#define ENDAT3_MEM_XEL_MEASLENGTH_MASK                   0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_MASK           0xFFFFFFFF
+#define ENDAT3_MEM_XEL_REFMARKDELTA_MASK                 0xFFFF
+#define ENDAT3_MEM_XEL_AUX_MASK                          0xFFFF
+#define ENDAT3_MEM_XEL_MAXSPEEDMECH_MASK                 0xFFFF
+#define ENDAT3_MEM_XEL_MAXSPEEDDATA_MASK                 0xFFFF
+#define ENDAT3_MEM_XEL_MAXTEMPMECH_MASK                  0xFFFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_MASK            0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_MASK    0xFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_MASK    0xFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_MASK    0xFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_MASK    0xFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_MASK    0xFF
+#define ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_MASK    0xFF
+#define ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_MASK            0xFFFF
+#define ENDAT3_MEM_XEL_SAFETYBITS_MASK                   0xFFFF
+#define ENDAT3_MEM_XEL_LOWERLIMITPOS_MASK                0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XEL_UPPERLIMITPOS_MASK                0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XEL_MASKPOSFS_MASK                    0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XEL_NUMSAFEPOSBITS_MASK               0xFFFF
+#define ENDAT3_MEM_XEL_SAFETYCSPOS1_MASK                 0xFFFFFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_0_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_1_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_2_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_3_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_4_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_5_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_6_MASK             0xFFFF
+#define ENDAT3_MEM_XEL_DEVICESPECIFIC_7_MASK             0xFFFF
+
+/* SET */
+#define ENDAT3_MEM_SET_CS_MASK                           0xFFFFFFFF
+#define ENDAT3_MEM_SET_SELHPF_MASK                       0xFF
+#define ENDAT3_MEM_SET_BUSADDRESS_MASK                   0xFF
+#define ENDAT3_MEM_SET_AXISADDRESS_MASK                  0xFF
+#define ENDAT3_MEM_SET_FDSSAFETYINFOEN_MASK              0xFFFF
+#define ENDAT3_MEM_SET_FDSINITCNT_MASK                   0xFFFF
+#define ENDAT3_MEM_SET_FDSREPEATCNT_MASK                 0xFFFF
+#define ENDAT3_MEM_SET_FORMATSENSOR0123_MASK             0xFFFF
+#define ENDAT3_MEM_SET_FORMATSENSOR4567_MASK             0xFFFF
+#define ENDAT3_MEM_SET_FORMATSENSOR891011_MASK           0xFFFF
+#define ENDAT3_MEM_SET_FORMATSENSOR12131415_MASK         0xFFFF
+#define ENDAT3_MEM_SET_FORMATSENSOR0_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR1_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR2_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR3_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR4_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR5_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR6_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR7_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR8_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR9_MASK                 0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR10_MASK                0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR11_MASK                0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR12_MASK                0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR13_MASK                0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR14_MASK                0xF
+#define ENDAT3_MEM_SET_FORMATSENSOR15_MASK                0xF
+#define ENDAT3_MEM_SET_ACTUALSENSOR01_MASK               0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR23_MASK               0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR45_MASK               0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR67_MASK               0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR89_MASK               0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR1011_MASK             0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR1213_MASK             0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR1415_MASK             0xFFFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR0_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR1_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR2_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR3_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR4_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR5_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR6_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR7_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR8_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR9_MASK                0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR10_MASK               0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR11_MASK               0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR12_MASK               0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR13_MASK               0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR14_MASK               0xFF
+#define ENDAT3_MEM_SET_ACTUALSENSOR15_MASK               0xFF
+#define ENDAT3_MEM_SET_DEVICESPECIFIC_MASK               0xFFFFFFFFFFFFFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_0_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_1_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_2_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_3_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_4_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_5_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_6_MASK                  0xFFFF
+#define ENDAT3_MEM_SET_FREETOUSE_7_MASK                  0xFFFF
+
+/* XSET */
+#define ENDAT3_MEM_XSET_CS_MASK                          0xFFFFFFFF
+#define ENDAT3_MEM_XSET_MASKPOS_MASK                     0xFFFFFFFFFFFF
+#define ENDAT3_MEM_XSET_MASKPOS_0_MASK                   0xFFFF
+#define ENDAT3_MEM_XSET_MASKPOS_1_MASK                   0xFFFF
+#define ENDAT3_MEM_XSET_MASKPOS_2_MASK                   0xFFFF
+#define ENDAT3_MEM_XSET_SAFETYCS_MASK                    0xFFFFFFFF
+#define ENDAT3_MEM_XSET_TEMPWARNLEVEL_MASK               0xFFFF
+
+/* LPFSETNDAT/LPFLIVNDATE */
+#define ENDAT3_MEM_LPFSET_LPFLIVE_CS_MASK                        0xFFFFFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_MASK            0xFFFF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_MASK                0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_MASK                0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_MASK                0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_MASK               0xF
+#define ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_MASK               0xF
+
+/* SENSORNDATS */
+#define ENDAT3_MEM_SENSORS_0_MASK                        0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_0_MASK                0xFF
+#define ENDAT3_MEM_SENSORS_1_MASK                        0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_1_MASK                0xFF
+#define ENDAT3_MEM_SENSORS_2_MASK                        0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_2_MASK                0xFF
+#define ENDAT3_MEM_SENSORS_3_MASK                        0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_3_MASK                0xFF
+#define ENDAT3_MEM_SENSORS_4_MASK                        0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_4_MASK              0xFF
+#define ENDAT3_MEM_SENSORS_5_MASK                      0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_5_MASK              0xFF
+#define ENDAT3_MEM_SENSORS_6_MASK                      0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_7_MASK              0xFF
+#define ENDAT3_MEM_SENSORS_7_MASK                      0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_7_MASK              0xFF
+#define ENDAT3_MEM_SENSORS_8_MASK                      0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_8_MASK              0xFF
+#define ENDAT3_MEM_SENSORS_9_MASK                      0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_9_MASK              0xFF
+#define ENDAT3_MEM_SENSORS_10_MASK                     0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_10_MASK             0xFF
+#define ENDAT3_MEM_SENSORS_11_MASK                     0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_11_MASK             0xFF
+#define ENDAT3_MEM_SENSORS_12_MASK                     0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_12_MASK             0xFF
+#define ENDAT3_MEM_SENSORS_13_MASK                     0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_13_MASK             0xFF
+#define ENDAT3_MEM_SENSORS_14_MASK                     0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_14_MASK             0xFF
+#define ENDAT3_MEM_SENSORS_15_MASK                     0xFFFF
+#define ENDAT3_MEM_SENSORS_SUPPORT_15_MASK             0xFF
+
+
+/* FEATURNDATE */
+#define ENDAT3_MEM_FEATURE_CS_MASK                      0xFFFFFFFF
+#define ENDAT3_MEM_FEATURE_SIZE_MASK                    0xFFFF
+
+/* FEATURNDATE1 */
+#define ENDAT3_MEM_FEATURE1_CS_MASK                     0xFFFFFFFF
+#define ENDAT3_MEM_FEATURE1_SIZE_MASK                   0xFFFF
+
+/* FEATURNDATE2 */
+#define ENDAT3_MEM_FEATURE2_CS_MASK                     0xFFFFFFFF
+#define ENDAT3_MEM_FEATURE2_SIZE_MASK                   0xFFFF
+
+#define ENDAT3_MEM_CACHE_WRITE_EL_CS(cache, val)  do { \
+             *(ENDAT3_MEM_EL_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_CS_MASK); \
+             *(ENDAT3_MEM_EL_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_CS_MASK) << ENDAT3_MEM_EL_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_ELSIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_ELSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_ELSIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_ELSIZE_MASK); \
+             *(ENDAT3_MEM_EL_ELSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_ELSIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_ELSIZE_MASK) << ENDAT3_MEM_EL_ELSIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_XELSIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_XELSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_XELSIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_XELSIZE_MASK); \
+             *(ENDAT3_MEM_EL_XELSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_XELSIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_XELSIZE_MASK) << ENDAT3_MEM_EL_XELSIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_SETSIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_SETSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SETSIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_SETSIZE_MASK); \
+             *(ENDAT3_MEM_EL_SETSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SETSIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_SETSIZE_MASK) << ENDAT3_MEM_EL_SETSIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_XSETSIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_XSETSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_XSETSIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_XSETSIZE_MASK); \
+             *(ENDAT3_MEM_EL_XSETSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_XSETSIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_XSETSIZE_MASK) << ENDAT3_MEM_EL_XSETSIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_LPFSETSIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_LPFSETSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_LPFSETSIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_LPFSETSIZE_MASK); \
+             *(ENDAT3_MEM_EL_LPFSETSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_LPFSETSIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_LPFSETSIZE_MASK) << ENDAT3_MEM_EL_LPFSETSIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_OEM1SIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_OEM1SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_OEM1SIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_OEM1SIZE_MASK); \
+             *(ENDAT3_MEM_EL_OEM1SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_OEM1SIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_OEM1SIZE_MASK) << ENDAT3_MEM_EL_OEM1SIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_OEM2SIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_OEM2SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_OEM2SIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_OEM2SIZE_MASK); \
+             *(ENDAT3_MEM_EL_OEM2SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_OEM2SIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_OEM2SIZE_MASK) << ENDAT3_MEM_EL_OEM2SIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_OEM3SIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_OEM3SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_OEM3SIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_OEM3SIZE_MASK); \
+             *(ENDAT3_MEM_EL_OEM3SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_OEM3SIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_OEM3SIZE_MASK) << ENDAT3_MEM_EL_OEM3SIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_SENSORSSIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_SENSORSSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SENSORSSIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_SENSORSSIZE_MASK); \
+             *(ENDAT3_MEM_EL_SENSORSSIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SENSORSSIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_SENSORSSIZE_MASK) << ENDAT3_MEM_EL_SENSORSSIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_LPFLIVESIZE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_LPFLIVESIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_LPFLIVESIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_LPFLIVESIZE_MASK); \
+             *(ENDAT3_MEM_EL_LPFLIVESIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_LPFLIVESIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_LPFLIVESIZE_MASK) << ENDAT3_MEM_EL_LPFLIVESIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_XTYPE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_XTYPE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_XTYPE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_XTYPE_MASK); \
+             *(ENDAT3_MEM_EL_XTYPE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_XTYPE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_XTYPE_MASK) << ENDAT3_MEM_EL_XTYPE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_MANUFACTURER(cache, val)  do { \
+             *(ENDAT3_MEM_EL_MANUFACTURER_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MANUFACTURER_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_MANUFACTURER_MASK); \
+             *(ENDAT3_MEM_EL_MANUFACTURER_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MANUFACTURER_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_MANUFACTURER_MASK) << ENDAT3_MEM_EL_MANUFACTURER_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_0(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_0_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_0_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_1(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_1_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_1_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_2(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_2_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_2_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_3(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_3_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_3_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_4(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_4_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_4_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_5(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_5_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_5_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_6(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_6_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_6_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_7(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_7_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_7_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_8(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_8_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_8_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_8_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_8_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_8_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICENAME_CHAR_9(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_9_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICENAME_CHAR_9_MASK); \
+             *(ENDAT3_MEM_EL_DEVICENAME_CHAR_9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICENAME_CHAR_9_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICENAME_CHAR_9_MASK) << ENDAT3_MEM_EL_DEVICENAME_CHAR_9_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICEIDENT(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICEIDENT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICEIDENT_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICEIDENT_MASK); \
+             *(ENDAT3_MEM_EL_DEVICEIDENT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICEIDENT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICEIDENT_MASK) << ENDAT3_MEM_EL_DEVICEIDENT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_DEVICESERIAL(cache, val)  do { \
+             *(ENDAT3_MEM_EL_DEVICESERIAL_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICESERIAL_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_DEVICESERIAL_MASK); \
+             *(ENDAT3_MEM_EL_DEVICESERIAL_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_DEVICESERIAL_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_DEVICESERIAL_MASK) << ENDAT3_MEM_EL_DEVICESERIAL_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_PHYDATARATE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_PHYDATARATE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_PHYDATARATE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_PHYDATARATE_MASK); \
+             *(ENDAT3_MEM_EL_PHYDATARATE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_PHYDATARATE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_PHYDATARATE_MASK) << ENDAT3_MEM_EL_PHYDATARATE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_TIMEUNITWRITE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_TIMEUNITWRITE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_TIMEUNITWRITE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_TIMEUNITWRITE_MASK); \
+             *(ENDAT3_MEM_EL_TIMEUNITWRITE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_TIMEUNITWRITE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_TIMEUNITWRITE_MASK) << ENDAT3_MEM_EL_TIMEUNITWRITE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_PROTOCOLFEATURES(cache, val)  do { \
+             *(ENDAT3_MEM_EL_PROTOCOLFEATURES_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_PROTOCOLFEATURES_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_PROTOCOLFEATURES_MASK); \
+             *(ENDAT3_MEM_EL_PROTOCOLFEATURES_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_PROTOCOLFEATURES_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_PROTOCOLFEATURES_MASK) << ENDAT3_MEM_EL_PROTOCOLFEATURES_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_SUPPORTHPF_0(cache, val)  do { \
+             *(ENDAT3_MEM_EL_SUPPORTHPF_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SUPPORTHPF_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_SUPPORTHPF_0_MASK); \
+             *(ENDAT3_MEM_EL_SUPPORTHPF_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SUPPORTHPF_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_SUPPORTHPF_0_MASK) << ENDAT3_MEM_EL_SUPPORTHPF_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_SUPPORTHPF_1(cache, val)  do { \
+             *(ENDAT3_MEM_EL_SUPPORTHPF_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SUPPORTHPF_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_SUPPORTHPF_1_MASK); \
+             *(ENDAT3_MEM_EL_SUPPORTHPF_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_SUPPORTHPF_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_SUPPORTHPF_1_MASK) << ENDAT3_MEM_EL_SUPPORTHPF_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_MEMENDURANCE(cache, val)  do { \
+             *(ENDAT3_MEM_EL_MEMENDURANCE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MEMENDURANCE_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_MEMENDURANCE_MASK); \
+             *(ENDAT3_MEM_EL_MEMENDURANCE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MEMENDURANCE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_MEMENDURANCE_MASK) << ENDAT3_MEM_EL_MEMENDURANCE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_MEMENDURANCE_MULT(cache, val)  do { \
+             *(ENDAT3_MEM_EL_MEMENDURANCE_MULT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MEMENDURANCE_MULT_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_MEMENDURANCE_MULT_MASK); \
+             *(ENDAT3_MEM_EL_MEMENDURANCE_MULT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MEMENDURANCE_MULT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_MEMENDURANCE_MULT_MASK) << ENDAT3_MEM_EL_MEMENDURANCE_MULT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_MEMENDURANCE_EXP(cache, val)  do { \
+             *(ENDAT3_MEM_EL_MEMENDURANCE_EXP_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MEMENDURANCE_EXP_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_MEMENDURANCE_EXP_MASK); \
+             *(ENDAT3_MEM_EL_MEMENDURANCE_EXP_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_MEMENDURANCE_EXP_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_MEMENDURANCE_EXP_MASK) << ENDAT3_MEM_EL_MEMENDURANCE_EXP_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_FAULTID_0(cache, val)  do { \
+             *(ENDAT3_MEM_EL_FAULTID_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_FAULTID_0_MASK); \
+             *(ENDAT3_MEM_EL_FAULTID_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_FAULTID_0_MASK) << ENDAT3_MEM_EL_FAULTID_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_FAULTID_1(cache, val)  do { \
+             *(ENDAT3_MEM_EL_FAULTID_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_FAULTID_1_MASK); \
+             *(ENDAT3_MEM_EL_FAULTID_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_FAULTID_1_MASK) << ENDAT3_MEM_EL_FAULTID_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_FAULTID_2(cache, val)  do { \
+             *(ENDAT3_MEM_EL_FAULTID_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_FAULTID_2_MASK); \
+             *(ENDAT3_MEM_EL_FAULTID_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_FAULTID_2_MASK) << ENDAT3_MEM_EL_FAULTID_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_FAULTID_3(cache, val)  do { \
+             *(ENDAT3_MEM_EL_FAULTID_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_FAULTID_3_MASK); \
+             *(ENDAT3_MEM_EL_FAULTID_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_FAULTID_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_FAULTID_3_MASK) << ENDAT3_MEM_EL_FAULTID_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_WARNID_0(cache, val)  do { \
+             *(ENDAT3_MEM_EL_WARNID_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_WARNID_0_MASK); \
+             *(ENDAT3_MEM_EL_WARNID_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_WARNID_0_MASK) << ENDAT3_MEM_EL_WARNID_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_WARNID_1(cache, val)  do { \
+             *(ENDAT3_MEM_EL_WARNID_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_WARNID_1_MASK); \
+             *(ENDAT3_MEM_EL_WARNID_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_WARNID_1_MASK) << ENDAT3_MEM_EL_WARNID_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_WARNID_2(cache, val)  do { \
+             *(ENDAT3_MEM_EL_WARNID_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_WARNID_2_MASK); \
+             *(ENDAT3_MEM_EL_WARNID_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_WARNID_2_MASK) << ENDAT3_MEM_EL_WARNID_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_EL_WARNID_3(cache, val)  do { \
+             *(ENDAT3_MEM_EL_WARNID_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_EL_WARNID_3_MASK); \
+             *(ENDAT3_MEM_EL_WARNID_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_EL_WARNID_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_EL_WARNID_3_MASK) << ENDAT3_MEM_EL_WARNID_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_CS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_CS_MASK); \
+             *(ENDAT3_MEM_XEL_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_CS_MASK) << ENDAT3_MEM_XEL_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_0(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_1(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_2(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_3(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_4(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_5(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_6(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_TIMEHPFOUT_RATE_7(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_MASK); \
+             *(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_MASK) << ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_ENCODERTYPE(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_ENCODERTYPE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_ENCODERTYPE_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_ENCODERTYPE_MASK); \
+             *(ENDAT3_MEM_XEL_ENCODERTYPE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_ENCODERTYPE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_ENCODERTYPE_MASK) << ENDAT3_MEM_XEL_ENCODERTYPE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICEFEATURE(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICEFEATURE_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICEFEATURE_MASK) << ENDAT3_MEM_XEL_DEVICEFEATURE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICEFEATURE_SUPP_1VPP(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_MASK) << ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICEFEATURE_SUPP_TTL(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_MASK) << ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICEFEATURE_SUPP_OFFSETPOS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_MASK) << ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICEFEATURE_SUPP_TEMPWARN(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_MASK) << ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICEFEATURE_SUPP_BBMT(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_MASK) << ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS1ABS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS1ABS_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS1ABS_MASK) << ENDAT3_MEM_XEL_FORMATPOS1ABS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS1ABS_ROT_NBITSIRR(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_MASK) << ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS1ABS_ROT_NBITSMT(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_MASK) << ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS1ABS_LIN_NBITSIRR(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_MASK) << ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS2(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS2_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS2_MASK) << ENDAT3_MEM_XEL_FORMATPOS2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS2_ROT_NBITSIRR(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_MASK) << ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS2_ROT_NBITSMT(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_MASK) << ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FORMATPOS2_LIN_NBITSIRR(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_MASK); \
+             *(ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_MASK) << ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_MEASLENGTH(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_MEASLENGTH_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MEASLENGTH_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_MEASLENGTH_MASK); \
+             *(ENDAT3_MEM_XEL_MEASLENGTH_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MEASLENGTH_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_MEASLENGTH_MASK) << ENDAT3_MEM_XEL_MEASLENGTH_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_ANALOGSIGNALPERIOD(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_MASK); \
+             *(ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_MASK) << ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_REFMARKDELTA(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_REFMARKDELTA_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_REFMARKDELTA_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_REFMARKDELTA_MASK); \
+             *(ENDAT3_MEM_XEL_REFMARKDELTA_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_REFMARKDELTA_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_REFMARKDELTA_MASK) << ENDAT3_MEM_XEL_REFMARKDELTA_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_AUX(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_AUX_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_AUX_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_AUX_MASK); \
+             *(ENDAT3_MEM_XEL_AUX_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_AUX_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_AUX_MASK) << ENDAT3_MEM_XEL_AUX_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_MAXSPEEDMECH(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_MAXSPEEDMECH_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MAXSPEEDMECH_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_MAXSPEEDMECH_MASK); \
+             *(ENDAT3_MEM_XEL_MAXSPEEDMECH_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MAXSPEEDMECH_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_MAXSPEEDMECH_MASK) << ENDAT3_MEM_XEL_MAXSPEEDMECH_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_MAXSPEEDDATA(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_MAXSPEEDDATA_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MAXSPEEDDATA_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_MAXSPEEDDATA_MASK); \
+             *(ENDAT3_MEM_XEL_MAXSPEEDDATA_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MAXSPEEDDATA_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_MAXSPEEDDATA_MASK) << ENDAT3_MEM_XEL_MAXSPEEDDATA_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_MAXTEMPMECH(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_MAXTEMPMECH_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MAXTEMPMECH_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_MAXTEMPMECH_MASK); \
+             *(ENDAT3_MEM_XEL_MAXTEMPMECH_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_MAXTEMPMECH_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_MAXTEMPMECH_MASK) << ENDAT3_MEM_XEL_MAXTEMPMECH_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES_PARAM_0(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES_PARAM_1(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES_PARAM_2(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES_PARAM_3(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES_PARAM_4(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDMOUNTADDRESSES_PARAM_5(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_MASK); \
+             *(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_MASK) << ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_FIDEVALNUMSUPPORT(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_MASK); \
+             *(ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_MASK) << ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_SAFETYBITS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_SAFETYBITS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_SAFETYBITS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_SAFETYBITS_MASK); \
+             *(ENDAT3_MEM_XEL_SAFETYBITS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_SAFETYBITS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_SAFETYBITS_MASK) << ENDAT3_MEM_XEL_SAFETYBITS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_LOWERLIMITPOS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_LOWERLIMITPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_LOWERLIMITPOS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_LOWERLIMITPOS_MASK); \
+             *(ENDAT3_MEM_XEL_LOWERLIMITPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_LOWERLIMITPOS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_LOWERLIMITPOS_MASK) << ENDAT3_MEM_XEL_LOWERLIMITPOS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_UPPERLIMITPOS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_UPPERLIMITPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_UPPERLIMITPOS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_UPPERLIMITPOS_MASK); \
+             *(ENDAT3_MEM_XEL_UPPERLIMITPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_UPPERLIMITPOS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_UPPERLIMITPOS_MASK) << ENDAT3_MEM_XEL_UPPERLIMITPOS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_OFFSETPOSFS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_OFFSETPOSFS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_OFFSETPOSFS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_OFFSETPOSFS_MASK); \
+             *(ENDAT3_MEM_XEL_OFFSETPOSFS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_OFFSETPOSFS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_OFFSETPOSFS_MASK) << ENDAT3_MEM_XEL_OFFSETPOSFS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_NUMSAFEPOSBITS(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_NUMSAFEPOSBITS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_NUMSAFEPOSBITS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_NUMSAFEPOSBITS_MASK); \
+             *(ENDAT3_MEM_XEL_NUMSAFEPOSBITS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_NUMSAFEPOSBITS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_NUMSAFEPOSBITS_MASK) << ENDAT3_MEM_XEL_NUMSAFEPOSBITS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_SAFETYCSPOS1(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_SAFETYCSPOS1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_SAFETYCSPOS1_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_SAFETYCSPOS1_MASK); \
+             *(ENDAT3_MEM_XEL_SAFETYCSPOS1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_SAFETYCSPOS1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_SAFETYCSPOS1_MASK) << ENDAT3_MEM_XEL_SAFETYCSPOS1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_0(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_0_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_0_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_1(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_1_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_1_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_2(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_2_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_2_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_3(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_3_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_3_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_4(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_4_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_4_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_5(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_5_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_5_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_6(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_6_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_6_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XEL_DEVICESPECIFIC_7(cache, val)  do { \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_XEL_DEVICESPECIFIC_7_MASK); \
+             *(ENDAT3_MEM_XEL_DEVICESPECIFIC_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XEL_DEVICESPECIFIC_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XEL_DEVICESPECIFIC_7_MASK) << ENDAT3_MEM_XEL_DEVICESPECIFIC_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_CS(cache, val)  do { \
+             *(ENDAT3_MEM_SET_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_CS_MASK); \
+             *(ENDAT3_MEM_SET_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_CS_MASK) << ENDAT3_MEM_SET_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_SELHPF(cache, val)  do { \
+             *(ENDAT3_MEM_SET_SELHPF_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_SELHPF_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_SELHPF_MASK); \
+             *(ENDAT3_MEM_SET_SELHPF_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_SELHPF_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_SELHPF_MASK) << ENDAT3_MEM_SET_SELHPF_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_BUSADDRESS(cache, val)  do { \
+             *(ENDAT3_MEM_SET_BUSADDRESS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_BUSADDRESS_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_BUSADDRESS_MASK); \
+             *(ENDAT3_MEM_SET_BUSADDRESS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_BUSADDRESS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_BUSADDRESS_MASK) << ENDAT3_MEM_SET_BUSADDRESS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_AXISADDRESS(cache, val)  do { \
+             *(ENDAT3_MEM_SET_AXISADDRESS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_AXISADDRESS_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_AXISADDRESS_MASK); \
+             *(ENDAT3_MEM_SET_AXISADDRESS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_AXISADDRESS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_AXISADDRESS_MASK) << ENDAT3_MEM_SET_AXISADDRESS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FDSSAFETYINFOEN(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FDSSAFETYINFOEN_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FDSSAFETYINFOEN_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FDSSAFETYINFOEN_MASK); \
+             *(ENDAT3_MEM_SET_FDSSAFETYINFOEN_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FDSSAFETYINFOEN_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FDSSAFETYINFOEN_MASK) << ENDAT3_MEM_SET_FDSSAFETYINFOEN_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FDSINITCNT(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FDSINITCNT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FDSINITCNT_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FDSINITCNT_MASK); \
+             *(ENDAT3_MEM_SET_FDSINITCNT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FDSINITCNT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FDSINITCNT_MASK) << ENDAT3_MEM_SET_FDSINITCNT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FDSREPEATCNT(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FDSREPEATCNT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FDSREPEATCNT_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FDSREPEATCNT_MASK); \
+             *(ENDAT3_MEM_SET_FDSREPEATCNT_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FDSREPEATCNT_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FDSREPEATCNT_MASK) << ENDAT3_MEM_SET_FDSREPEATCNT_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR0123(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR0123_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR0123_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR0123_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR0123_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR0123_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR0123_MASK) << ENDAT3_MEM_SET_FORMATSENSOR0123_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR4567(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR4567_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR4567_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR4567_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR4567_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR4567_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR4567_MASK) << ENDAT3_MEM_SET_FORMATSENSOR4567_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR891011(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR891011_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR891011_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR891011_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR891011_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR891011_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR891011_MASK) << ENDAT3_MEM_SET_FORMATSENSOR891011_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR12131415(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR12131415_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR12131415_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR12131415_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR12131415_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR12131415_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR12131415_MASK) << ENDAT3_MEM_SET_FORMATSENSOR12131415_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR0(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR0_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR0_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR0_MASK) << ENDAT3_MEM_SET_FORMATSENSOR0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR1(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR1_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR1_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR1_MASK) << ENDAT3_MEM_SET_FORMATSENSOR1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR2(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR2_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR2_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR2_MASK) << ENDAT3_MEM_SET_FORMATSENSOR2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR3(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR3_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR3_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR3_MASK) << ENDAT3_MEM_SET_FORMATSENSOR3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR4(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR4_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR4_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR4_MASK) << ENDAT3_MEM_SET_FORMATSENSOR4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR5(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR5_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR5_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR5_MASK) << ENDAT3_MEM_SET_FORMATSENSOR5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR6(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR6_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR6_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR6_MASK) << ENDAT3_MEM_SET_FORMATSENSOR6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR7(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR7_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR7_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR7_MASK) << ENDAT3_MEM_SET_FORMATSENSOR7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR8(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR8_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR8_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR8_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR8_MASK) << ENDAT3_MEM_SET_FORMATSENSOR8_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR9(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR9_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR9_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR9_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR9_MASK) << ENDAT3_MEM_SET_FORMATSENSOR9_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR10(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR10_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR10_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR10_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR10_MASK) << ENDAT3_MEM_SET_FORMATSENSOR10_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR11(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR11_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR11_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR11_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR11_MASK) << ENDAT3_MEM_SET_FORMATSENSOR11_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR12(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR12_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR12_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR12_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR12_MASK) << ENDAT3_MEM_SET_FORMATSENSOR12_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR13(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR13_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR13_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR13_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR13_MASK) << ENDAT3_MEM_SET_FORMATSENSOR13_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR14(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR14_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR14_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR14_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR14_MASK) << ENDAT3_MEM_SET_FORMATSENSOR14_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FORMATSENSOR15(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FORMATSENSOR15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR15_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FORMATSENSOR15_MASK); \
+             *(ENDAT3_MEM_SET_FORMATSENSOR15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FORMATSENSOR15_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FORMATSENSOR15_MASK) << ENDAT3_MEM_SET_FORMATSENSOR15_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR01(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR01_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR01_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR01_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR01_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR01_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR01_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR01_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR23(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR23_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR23_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR23_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR23_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR23_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR23_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR23_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR45(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR45_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR45_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR45_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR45_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR45_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR45_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR45_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR67(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR67_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR67_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR67_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR67_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR67_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR67_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR67_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR89(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR89_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR89_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR89_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR89_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR89_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR89_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR89_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR1011(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1011_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1011_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR1011_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1011_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1011_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR1011_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR1011_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR1213(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1213_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1213_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR1213_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1213_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1213_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR1213_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR1213_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR1415(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1415_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1415_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR1415_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1415_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1415_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR1415_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR1415_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR0(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR0_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR0_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR0_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR1(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR1_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR1_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR2(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR2_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR2_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR2_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR3(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR3_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR3_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR3_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR4(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR4_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR4_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR4_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR5(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR5_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR5_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR5_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR6(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR6_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR6_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR6_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR7(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR7_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR7_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR7_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR8(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR8_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR8_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR8_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR8_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR8_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR9(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR9_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR9_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR9_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR9_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR9_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR10(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR10_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR10_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR10_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR10_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR10_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR11(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR11_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR11_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR11_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR11_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR11_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR12(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR12_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR12_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR12_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR12_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR12_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR13(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR13_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR13_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR13_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR13_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR13_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR14(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR14_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR14_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR14_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR14_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR14_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_ACTUALSENSOR15(cache, val)  do { \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR15_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_ACTUALSENSOR15_MASK); \
+             *(ENDAT3_MEM_SET_ACTUALSENSOR15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_ACTUALSENSOR15_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_ACTUALSENSOR15_MASK) << ENDAT3_MEM_SET_ACTUALSENSOR15_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_DEVICESPECIFIC(cache, val)  do { \
+             *(ENDAT3_MEM_SET_DEVICESPECIFIC_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_DEVICESPECIFIC_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_DEVICESPECIFIC_MASK); \
+             *(ENDAT3_MEM_SET_DEVICESPECIFIC_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_DEVICESPECIFIC_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_DEVICESPECIFIC_MASK) << ENDAT3_MEM_SET_DEVICESPECIFIC_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_0(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_0_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_0_MASK) << ENDAT3_MEM_SET_FREETOUSE_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_1(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_1_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_1_MASK) << ENDAT3_MEM_SET_FREETOUSE_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_2(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_2_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_2_MASK) << ENDAT3_MEM_SET_FREETOUSE_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_3(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_3_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_3_MASK) << ENDAT3_MEM_SET_FREETOUSE_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_4(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_4_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_4_MASK) << ENDAT3_MEM_SET_FREETOUSE_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_5(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_5_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_5_MASK) << ENDAT3_MEM_SET_FREETOUSE_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_6(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_6_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_6_MASK) << ENDAT3_MEM_SET_FREETOUSE_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SET_FREETOUSE_7(cache, val)  do { \
+             *(ENDAT3_MEM_SET_FREETOUSE_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_SET_FREETOUSE_7_MASK); \
+             *(ENDAT3_MEM_SET_FREETOUSE_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SET_FREETOUSE_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SET_FREETOUSE_7_MASK) << ENDAT3_MEM_SET_FREETOUSE_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_CS(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_CS_MASK); \
+             *(ENDAT3_MEM_XSET_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_CS_MASK) << ENDAT3_MEM_XSET_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_OFFSETPOS(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_OFFSETPOS_MASK); \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_OFFSETPOS_MASK) << ENDAT3_MEM_XSET_OFFSETPOS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_OFFSETPOS_0(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_OFFSETPOS_0_MASK); \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_OFFSETPOS_0_MASK) << ENDAT3_MEM_XSET_OFFSETPOS_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_OFFSETPOS_1(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_OFFSETPOS_1_MASK); \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_OFFSETPOS_1_MASK) << ENDAT3_MEM_XSET_OFFSETPOS_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_OFFSETPOS_2(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_OFFSETPOS_2_MASK); \
+             *(ENDAT3_MEM_XSET_OFFSETPOS_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_OFFSETPOS_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_OFFSETPOS_2_MASK) << ENDAT3_MEM_XSET_OFFSETPOS_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_SAFETYCS(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_SAFETYCS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_SAFETYCS_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_SAFETYCS_MASK); \
+             *(ENDAT3_MEM_XSET_SAFETYCS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_SAFETYCS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_SAFETYCS_MASK) << ENDAT3_MEM_XSET_SAFETYCS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_XSET_TEMPWARNLEVEL(cache, val)  do { \
+             *(ENDAT3_MEM_XSET_TEMPWARNLEVEL_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_TEMPWARNLEVEL_OFFSET)) &= \
+              ~(ENDAT3_MEM_XSET_TEMPWARNLEVEL_MASK); \
+             *(ENDAT3_MEM_XSET_TEMPWARNLEVEL_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_XSET_TEMPWARNLEVEL_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_XSET_TEMPWARNLEVEL_MASK) << ENDAT3_MEM_XSET_TEMPWARNLEVEL_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_CS(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_CS_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_CS_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_1(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_2(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_3(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_4(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_5(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_6(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_POINTER_7(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_1(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_1(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_2(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_2(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_3(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_3(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_4(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_4(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_5(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_5(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_6(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_6(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_YDIM_7(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_LPFSET_LPFLIVE_HEAD_XDIM_7(cache, val)  do { \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_MASK); \
+             *(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_MASK) << ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_0(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_0_MASK); \
+             *(ENDAT3_MEM_SENSORS_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_0_MASK) << ENDAT3_MEM_SENSORS_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_0(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_0_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_0_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_0_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_0_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_0_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_0_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_1(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_1_MASK); \
+             *(ENDAT3_MEM_SENSORS_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_1_MASK) << ENDAT3_MEM_SENSORS_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_1(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_1_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_1_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_1_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_1_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_1_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_1_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_2(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_2_MASK); \
+             *(ENDAT3_MEM_SENSORS_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_2_MASK) << ENDAT3_MEM_SENSORS_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_2(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_2_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_2_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_2_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_2_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_2_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_2_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_3(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_3_MASK); \
+             *(ENDAT3_MEM_SENSORS_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_3_MASK) << ENDAT3_MEM_SENSORS_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_3(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_3_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_3_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_3_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_3_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_3_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_3_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_4(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_4_MASK); \
+             *(ENDAT3_MEM_SENSORS_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_4_MASK) << ENDAT3_MEM_SENSORS_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_4(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_4_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_4_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_4_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_4_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_4_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_4_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_5(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_5_MASK); \
+             *(ENDAT3_MEM_SENSORS_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_5_MASK) << ENDAT3_MEM_SENSORS_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_5(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_5_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_5_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_5_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_5_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_5_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_5_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_6(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_6_MASK); \
+             *(ENDAT3_MEM_SENSORS_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_6_MASK) << ENDAT3_MEM_SENSORS_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_6(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_6_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_6_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_6_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_6_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_6_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_6_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_7(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_7_MASK); \
+             *(ENDAT3_MEM_SENSORS_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_7_MASK) << ENDAT3_MEM_SENSORS_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_7(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_7_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_7_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_7_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_7_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_7_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_7_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_8(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_8_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_8_MASK); \
+             *(ENDAT3_MEM_SENSORS_8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_8_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_8_MASK) << ENDAT3_MEM_SENSORS_8_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_8(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_8_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_8_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_8_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_8_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_8_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_8_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_9(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_9_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_9_MASK); \
+             *(ENDAT3_MEM_SENSORS_9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_9_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_9_MASK) << ENDAT3_MEM_SENSORS_9_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_9(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_9_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_9_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_9_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_9_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_9_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_9_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_10(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_10_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_10_MASK); \
+             *(ENDAT3_MEM_SENSORS_10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_10_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_10_MASK) << ENDAT3_MEM_SENSORS_10_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_10(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_10_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_10_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_10_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_10_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_10_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_10_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_11(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_11_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_11_MASK); \
+             *(ENDAT3_MEM_SENSORS_11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_11_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_11_MASK) << ENDAT3_MEM_SENSORS_11_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_11(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_11_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_11_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_11_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_11_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_11_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_11_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_12(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_12_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_12_MASK); \
+             *(ENDAT3_MEM_SENSORS_12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_12_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_12_MASK) << ENDAT3_MEM_SENSORS_12_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_12(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_12_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_12_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_12_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_12_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_12_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_12_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_13(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_13_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_13_MASK); \
+             *(ENDAT3_MEM_SENSORS_13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_13_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_13_MASK) << ENDAT3_MEM_SENSORS_13_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_13(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_13_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_13_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_13_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_13_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_13_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_13_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_14(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_14_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_14_MASK); \
+             *(ENDAT3_MEM_SENSORS_14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_14_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_14_MASK) << ENDAT3_MEM_SENSORS_14_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_14(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_14_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_14_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_14_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_14_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_14_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_14_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_15(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_15_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_15_MASK); \
+             *(ENDAT3_MEM_SENSORS_15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_15_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_15_MASK) << ENDAT3_MEM_SENSORS_15_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_SENSORS_SUPPORT_15(cache, val)  do { \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_15_OFFSET)) &= \
+              ~(ENDAT3_MEM_SENSORS_SUPPORT_15_MASK); \
+             *(ENDAT3_MEM_SENSORS_SUPPORT_15_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_SENSORS_SUPPORT_15_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_SENSORS_SUPPORT_15_MASK) << ENDAT3_MEM_SENSORS_SUPPORT_15_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_FEATURE_CS(cache, val)  do { \
+             *(ENDAT3_MEM_FEATURE_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_FEATURE_CS_MASK); \
+             *(ENDAT3_MEM_FEATURE_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_FEATURE_CS_MASK) << ENDAT3_MEM_FEATURE_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_FEATURE_SIZE(cache, val)  do { \
+             *(ENDAT3_MEM_FEATURE_SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE_SIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_FEATURE_SIZE_MASK); \
+             *(ENDAT3_MEM_FEATURE_SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE_SIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_FEATURE_SIZE_MASK) << ENDAT3_MEM_FEATURE_SIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_FEATURE1_CS(cache, val)  do { \
+             *(ENDAT3_MEM_FEATURE1_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE1_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_FEATURE1_CS_MASK); \
+             *(ENDAT3_MEM_FEATURE1_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE1_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_FEATURE1_CS_MASK) << ENDAT3_MEM_FEATURE1_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_FEATURE1_SIZE(cache, val)  do { \
+             *(ENDAT3_MEM_FEATURE1_SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE1_SIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_FEATURE1_SIZE_MASK); \
+             *(ENDAT3_MEM_FEATURE1_SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE1_SIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_FEATURE1_SIZE_MASK) << ENDAT3_MEM_FEATURE1_SIZE_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_FEATURE2_CS(cache, val)  do { \
+             *(ENDAT3_MEM_FEATURE2_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE2_CS_OFFSET)) &= \
+              ~(ENDAT3_MEM_FEATURE2_CS_MASK); \
+             *(ENDAT3_MEM_FEATURE2_CS_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE2_CS_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_FEATURE2_CS_MASK) << ENDAT3_MEM_FEATURE2_CS_SHIFT; \
+          } while(0)
+#define ENDAT3_MEM_CACHE_WRITE_FEATURE2_SIZE(cache, val)  do { \
+             *(ENDAT3_MEM_FEATURE2_SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE2_SIZE_OFFSET)) &= \
+              ~(ENDAT3_MEM_FEATURE2_SIZE_MASK); \
+             *(ENDAT3_MEM_FEATURE2_SIZE_TYPE *)(((cache)->cacheMem) + (ENDAT3_MEM_FEATURE2_SIZE_OFFSET)) |= \
+              ((val) & ENDAT3_MEM_FEATURE2_SIZE_MASK) << ENDAT3_MEM_FEATURE2_SIZE_SHIFT; \
+          } while(0)
+
+#define ENDAT3_MEM_CACHE_READ_EL_CS(cache) ((*(ENDAT3_MEM_EL_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_CS_OFFSET)) >> ENDAT3_MEM_EL_CS_SHIFT) \
+                 & ENDAT3_MEM_EL_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_ELSIZE(cache) ((*(ENDAT3_MEM_EL_ELSIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_ELSIZE_OFFSET)) >> ENDAT3_MEM_EL_ELSIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_ELSIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_XELSIZE(cache) ((*(ENDAT3_MEM_EL_XELSIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_XELSIZE_OFFSET)) >> ENDAT3_MEM_EL_XELSIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_XELSIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_SETSIZE(cache) ((*(ENDAT3_MEM_EL_SETSIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_SETSIZE_OFFSET)) >> ENDAT3_MEM_EL_SETSIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_SETSIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_XSETSIZE(cache) ((*(ENDAT3_MEM_EL_XSETSIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_XSETSIZE_OFFSET)) >> ENDAT3_MEM_EL_XSETSIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_XSETSIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_LPFSETSIZE(cache) ((*(ENDAT3_MEM_EL_LPFSETSIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_LPFSETSIZE_OFFSET)) >> ENDAT3_MEM_EL_LPFSETSIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_LPFSETSIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_OEM1SIZE(cache) ((*(ENDAT3_MEM_EL_OEM1SIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_OEM1SIZE_OFFSET)) >> ENDAT3_MEM_EL_OEM1SIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_OEM1SIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_OEM2SIZE(cache) ((*(ENDAT3_MEM_EL_OEM2SIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_OEM2SIZE_OFFSET)) >> ENDAT3_MEM_EL_OEM2SIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_OEM2SIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_OEM3SIZE(cache) ((*(ENDAT3_MEM_EL_OEM3SIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_OEM3SIZE_OFFSET)) >> ENDAT3_MEM_EL_OEM3SIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_OEM3SIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_SENSORSSIZE(cache) ((*(ENDAT3_MEM_EL_SENSORSSIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_SENSORSSIZE_OFFSET)) >> ENDAT3_MEM_EL_SENSORSSIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_SENSORSSIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_LPFLIVESIZE(cache) ((*(ENDAT3_MEM_EL_LPFLIVESIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_LPFLIVESIZE_OFFSET)) >> ENDAT3_MEM_EL_LPFLIVESIZE_SHIFT) \
+                 & ENDAT3_MEM_EL_LPFLIVESIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_XTYPE(cache) ((*(ENDAT3_MEM_EL_XTYPE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_XTYPE_OFFSET)) >> ENDAT3_MEM_EL_XTYPE_SHIFT) \
+                 & ENDAT3_MEM_EL_XTYPE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_MANUFACTURER(cache) ((*(ENDAT3_MEM_EL_MANUFACTURER_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_MANUFACTURER_OFFSET)) >> ENDAT3_MEM_EL_MANUFACTURER_SHIFT) \
+                 & ENDAT3_MEM_EL_MANUFACTURER_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_0(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_0_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_0_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_1(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_1_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_1_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_2(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_2_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_2_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_3(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_3_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_3_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_4(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_4_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_4_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_5(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_5_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_5_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_6(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_6_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_6_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_7(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_7_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_7_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_8(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_8_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_8_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_8_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_8_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICENAME_CHAR_9(cache) ((*(ENDAT3_MEM_EL_DEVICENAME_CHAR_9_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICENAME_CHAR_9_OFFSET)) >> ENDAT3_MEM_EL_DEVICENAME_CHAR_9_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICENAME_CHAR_9_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICEIDENT(cache) ((*(ENDAT3_MEM_EL_DEVICEIDENT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICEIDENT_OFFSET)) >> ENDAT3_MEM_EL_DEVICEIDENT_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICEIDENT_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_DEVICESERIAL(cache) ((*(ENDAT3_MEM_EL_DEVICESERIAL_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_DEVICESERIAL_OFFSET)) >> ENDAT3_MEM_EL_DEVICESERIAL_SHIFT) \
+                 & ENDAT3_MEM_EL_DEVICESERIAL_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_PHYDATARATE(cache) ((*(ENDAT3_MEM_EL_PHYDATARATE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_PHYDATARATE_OFFSET)) >> ENDAT3_MEM_EL_PHYDATARATE_SHIFT) \
+                 & ENDAT3_MEM_EL_PHYDATARATE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_TIMEUNITWRITE(cache) ((*(ENDAT3_MEM_EL_TIMEUNITWRITE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_TIMEUNITWRITE_OFFSET)) >> ENDAT3_MEM_EL_TIMEUNITWRITE_SHIFT) \
+                 & ENDAT3_MEM_EL_TIMEUNITWRITE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_PROTOCOLFEATURES(cache) ((*(ENDAT3_MEM_EL_PROTOCOLFEATURES_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_PROTOCOLFEATURES_OFFSET)) >> ENDAT3_MEM_EL_PROTOCOLFEATURES_SHIFT) \
+                 & ENDAT3_MEM_EL_PROTOCOLFEATURES_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_SUPPORTHPF_0(cache) ((*(ENDAT3_MEM_EL_SUPPORTHPF_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_SUPPORTHPF_0_OFFSET)) >> ENDAT3_MEM_EL_SUPPORTHPF_0_SHIFT) \
+                 & ENDAT3_MEM_EL_SUPPORTHPF_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_SUPPORTHPF_1(cache) ((*(ENDAT3_MEM_EL_SUPPORTHPF_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_SUPPORTHPF_1_OFFSET)) >> ENDAT3_MEM_EL_SUPPORTHPF_1_SHIFT) \
+                 & ENDAT3_MEM_EL_SUPPORTHPF_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_MEMENDURANCE(cache) ((*(ENDAT3_MEM_EL_MEMENDURANCE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_MEMENDURANCE_OFFSET)) >> ENDAT3_MEM_EL_MEMENDURANCE_SHIFT) \
+                 & ENDAT3_MEM_EL_MEMENDURANCE_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_MEMENDURANCE_MULT(cache) ((*(ENDAT3_MEM_EL_MEMENDURANCE_MULT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_MEMENDURANCE_MULT_OFFSET)) >> ENDAT3_MEM_EL_MEMENDURANCE_MULT_SHIFT) \
+                 & ENDAT3_MEM_EL_MEMENDURANCE_MULT_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_MEMENDURANCE_EXP(cache) ((*(ENDAT3_MEM_EL_MEMENDURANCE_EXP_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_MEMENDURANCE_EXP_OFFSET)) >> ENDAT3_MEM_EL_MEMENDURANCE_EXP_SHIFT) \
+                 & ENDAT3_MEM_EL_MEMENDURANCE_EXP_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_FAULTID_0(cache) ((*(ENDAT3_MEM_EL_FAULTID_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_FAULTID_0_OFFSET)) >> ENDAT3_MEM_EL_FAULTID_0_SHIFT) \
+                 & ENDAT3_MEM_EL_FAULTID_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_FAULTID_1(cache) ((*(ENDAT3_MEM_EL_FAULTID_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_FAULTID_1_OFFSET)) >> ENDAT3_MEM_EL_FAULTID_1_SHIFT) \
+                 & ENDAT3_MEM_EL_FAULTID_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_FAULTID_2(cache) ((*(ENDAT3_MEM_EL_FAULTID_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_FAULTID_2_OFFSET)) >> ENDAT3_MEM_EL_FAULTID_2_SHIFT) \
+                 & ENDAT3_MEM_EL_FAULTID_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_FAULTID_3(cache) ((*(ENDAT3_MEM_EL_FAULTID_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_FAULTID_3_OFFSET)) >> ENDAT3_MEM_EL_FAULTID_3_SHIFT) \
+                 & ENDAT3_MEM_EL_FAULTID_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_WARNID_0(cache) ((*(ENDAT3_MEM_EL_WARNID_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_WARNID_0_OFFSET)) >> ENDAT3_MEM_EL_WARNID_0_SHIFT) \
+                 & ENDAT3_MEM_EL_WARNID_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_WARNID_1(cache) ((*(ENDAT3_MEM_EL_WARNID_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_WARNID_1_OFFSET)) >> ENDAT3_MEM_EL_WARNID_1_SHIFT) \
+                 & ENDAT3_MEM_EL_WARNID_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_WARNID_2(cache) ((*(ENDAT3_MEM_EL_WARNID_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_WARNID_2_OFFSET)) >> ENDAT3_MEM_EL_WARNID_2_SHIFT) \
+                 & ENDAT3_MEM_EL_WARNID_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_EL_WARNID_3(cache) ((*(ENDAT3_MEM_EL_WARNID_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_EL_WARNID_3_OFFSET)) >> ENDAT3_MEM_EL_WARNID_3_SHIFT) \
+                 & ENDAT3_MEM_EL_WARNID_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_CS(cache) ((*(ENDAT3_MEM_XEL_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_CS_OFFSET)) >> ENDAT3_MEM_XEL_CS_SHIFT) \
+                 & ENDAT3_MEM_XEL_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_0(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_1(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_2(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_3(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_4(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_5(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_6(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_TIMEHPFOUT_RATE_7(cache) ((*(ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_OFFSET)) >> ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_SHIFT) \
+                 & ENDAT3_MEM_XEL_TIMEHPFOUT_RATE_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_ENCODERTYPE(cache) ((*(ENDAT3_MEM_XEL_ENCODERTYPE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_ENCODERTYPE_OFFSET)) >> ENDAT3_MEM_XEL_ENCODERTYPE_SHIFT) \
+                 & ENDAT3_MEM_XEL_ENCODERTYPE_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICEFEATURE(cache) ((*(ENDAT3_MEM_XEL_DEVICEFEATURE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICEFEATURE_OFFSET)) >> ENDAT3_MEM_XEL_DEVICEFEATURE_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICEFEATURE_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICEFEATURE_SUPP_1VPP(cache) ((*(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_OFFSET)) >> ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_1VPP_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICEFEATURE_SUPP_TTL(cache) ((*(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_OFFSET)) >> ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TTL_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICEFEATURE_SUPP_OFFSETPOS(cache) ((*(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_OFFSET)) >> ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_OFFSETPOS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICEFEATURE_SUPP_TEMPWARN(cache) ((*(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_OFFSET)) >> ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_TEMPWARN_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICEFEATURE_SUPP_BBMT(cache) ((*(ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_OFFSET)) >> ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICEFEATURE_SUPP_BBMT_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS1ABS(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS1ABS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS1ABS_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS1ABS_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS1ABS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS1ABS_ROT_NBITSIRR(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSIRR_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS1ABS_ROT_NBITSMT(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS1ABS_ROT_NBITSMT_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS1ABS_LIN_NBITSIRR(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS1ABS_LIN_NBITSIRR_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS2(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS2_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS2_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS2_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS2_ROT_NBITSIRR(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSIRR_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS2_ROT_NBITSMT(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS2_ROT_NBITSMT_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FORMATPOS2_LIN_NBITSIRR(cache) ((*(ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_OFFSET)) >> ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_SHIFT) \
+                 & ENDAT3_MEM_XEL_FORMATPOS2_LIN_NBITSIRR_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_MEASLENGTH(cache) ((*(ENDAT3_MEM_XEL_MEASLENGTH_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_MEASLENGTH_OFFSET)) >> ENDAT3_MEM_XEL_MEASLENGTH_SHIFT) \
+                 & ENDAT3_MEM_XEL_MEASLENGTH_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_ANALOGSIGNALPERIOD(cache) ((*(ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_OFFSET)) >> ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_SHIFT) \
+                 & ENDAT3_MEM_XEL_ANALOGSIGNALPERIOD_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_REFMARKDELTA(cache) ((*(ENDAT3_MEM_XEL_REFMARKDELTA_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_REFMARKDELTA_OFFSET)) >> ENDAT3_MEM_XEL_REFMARKDELTA_SHIFT) \
+                 & ENDAT3_MEM_XEL_REFMARKDELTA_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_AUX(cache) ((*(ENDAT3_MEM_XEL_AUX_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_AUX_OFFSET)) >> ENDAT3_MEM_XEL_AUX_SHIFT) \
+                 & ENDAT3_MEM_XEL_AUX_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_MAXSPEEDMECH(cache) ((*(ENDAT3_MEM_XEL_MAXSPEEDMECH_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_MAXSPEEDMECH_OFFSET)) >> ENDAT3_MEM_XEL_MAXSPEEDMECH_SHIFT) \
+                 & ENDAT3_MEM_XEL_MAXSPEEDMECH_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_MAXSPEEDDATA(cache) ((*(ENDAT3_MEM_XEL_MAXSPEEDDATA_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_MAXSPEEDDATA_OFFSET)) >> ENDAT3_MEM_XEL_MAXSPEEDDATA_SHIFT) \
+                 & ENDAT3_MEM_XEL_MAXSPEEDDATA_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_MAXTEMPMECH(cache) ((*(ENDAT3_MEM_XEL_MAXTEMPMECH_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_MAXTEMPMECH_OFFSET)) >> ENDAT3_MEM_XEL_MAXTEMPMECH_SHIFT) \
+                 & ENDAT3_MEM_XEL_MAXTEMPMECH_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES_PARAM_0(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES_PARAM_1(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES_PARAM_2(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES_PARAM_3(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES_PARAM_4(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDMOUNTADDRESSES_PARAM_5(cache) ((*(ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_OFFSET)) >> ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDMOUNTADDRESSES_PARAM_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_FIDEVALNUMSUPPORT(cache) ((*(ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_OFFSET)) >> ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_SHIFT) \
+                 & ENDAT3_MEM_XEL_FIDEVALNUMSUPPORT_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_SAFETYBITS(cache) ((*(ENDAT3_MEM_XEL_SAFETYBITS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_SAFETYBITS_OFFSET)) >> ENDAT3_MEM_XEL_SAFETYBITS_SHIFT) \
+                 & ENDAT3_MEM_XEL_SAFETYBITS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_LOWERLIMITPOS(cache) ((*(ENDAT3_MEM_XEL_LOWERLIMITPOS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_LOWERLIMITPOS_OFFSET)) >> ENDAT3_MEM_XEL_LOWERLIMITPOS_SHIFT) \
+                 & ENDAT3_MEM_XEL_LOWERLIMITPOS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_UPPERLIMITPOS(cache) ((*(ENDAT3_MEM_XEL_UPPERLIMITPOS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_UPPERLIMITPOS_OFFSET)) >> ENDAT3_MEM_XEL_UPPERLIMITPOS_SHIFT) \
+                 & ENDAT3_MEM_XEL_UPPERLIMITPOS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_OFFSETPOSFS(cache) ((*(ENDAT3_MEM_XEL_OFFSETPOSFS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_OFFSETPOSFS_OFFSET)) >> ENDAT3_MEM_XEL_OFFSETPOSFS_SHIFT) \
+                 & ENDAT3_MEM_XEL_OFFSETPOSFS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_NUMSAFEPOSBITS(cache) ((*(ENDAT3_MEM_XEL_NUMSAFEPOSBITS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_NUMSAFEPOSBITS_OFFSET)) >> ENDAT3_MEM_XEL_NUMSAFEPOSBITS_SHIFT) \
+                 & ENDAT3_MEM_XEL_NUMSAFEPOSBITS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_SAFETYCSPOS1(cache) ((*(ENDAT3_MEM_XEL_SAFETYCSPOS1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_SAFETYCSPOS1_OFFSET)) >> ENDAT3_MEM_XEL_SAFETYCSPOS1_SHIFT) \
+                 & ENDAT3_MEM_XEL_SAFETYCSPOS1_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_0(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_0_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_0_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_1(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_1_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_1_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_2(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_2_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_2_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_3(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_3_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_3_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_4(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_4_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_4_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_5(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_5_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_5_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_6(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_6_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_6_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_XEL_DEVICESPECIFIC_7(cache) ((*(ENDAT3_MEM_XEL_DEVICESPECIFIC_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XEL_DEVICESPECIFIC_7_OFFSET)) >> ENDAT3_MEM_XEL_DEVICESPECIFIC_7_SHIFT) \
+                 & ENDAT3_MEM_XEL_DEVICESPECIFIC_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_CS(cache) ((*(ENDAT3_MEM_SET_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_CS_OFFSET)) >> ENDAT3_MEM_SET_CS_SHIFT) \
+                 & ENDAT3_MEM_SET_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_SELHPF(cache) ((*(ENDAT3_MEM_SET_SELHPF_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_SELHPF_OFFSET)) >> ENDAT3_MEM_SET_SELHPF_SHIFT) \
+                 & ENDAT3_MEM_SET_SELHPF_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_BUSADDRESS(cache) ((*(ENDAT3_MEM_SET_BUSADDRESS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_BUSADDRESS_OFFSET)) >> ENDAT3_MEM_SET_BUSADDRESS_SHIFT) \
+                 & ENDAT3_MEM_SET_BUSADDRESS_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_AXISADDRESS(cache) ((*(ENDAT3_MEM_SET_AXISADDRESS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_AXISADDRESS_OFFSET)) >> ENDAT3_MEM_SET_AXISADDRESS_SHIFT) \
+                 & ENDAT3_MEM_SET_AXISADDRESS_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FDSSAFETYINFOEN(cache) ((*(ENDAT3_MEM_SET_FDSSAFETYINFOEN_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FDSSAFETYINFOEN_OFFSET)) >> ENDAT3_MEM_SET_FDSSAFETYINFOEN_SHIFT) \
+                 & ENDAT3_MEM_SET_FDSSAFETYINFOEN_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FDSINITCNT(cache) ((*(ENDAT3_MEM_SET_FDSINITCNT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FDSINITCNT_OFFSET)) >> ENDAT3_MEM_SET_FDSINITCNT_SHIFT) \
+                 & ENDAT3_MEM_SET_FDSINITCNT_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FDSREPEATCNT(cache) ((*(ENDAT3_MEM_SET_FDSREPEATCNT_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FDSREPEATCNT_OFFSET)) >> ENDAT3_MEM_SET_FDSREPEATCNT_SHIFT) \
+                 & ENDAT3_MEM_SET_FDSREPEATCNT_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR0123(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR0123_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR0123_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR0123_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR0123_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR4567(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR4567_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR4567_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR4567_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR4567_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR891011(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR891011_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR891011_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR891011_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR891011_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR12131415(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR12131415_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR12131415_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR12131415_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR12131415_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR0(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR0_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR0_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR0_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR1(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR1_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR1_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR1_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR2(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR2_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR2_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR2_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR3(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR3_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR3_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR3_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR4(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR4_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR4_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR4_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR5(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR5_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR5_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR5_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR6(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR6_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR6_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR6_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR7(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR7_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR7_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR7_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR8(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR8_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR8_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR8_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR8_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR9(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR9_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR9_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR9_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR9_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR10(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR10_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR10_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR10_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR10_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR11(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR11_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR11_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR11_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR11_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR12(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR12_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR12_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR12_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR12_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR13(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR13_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR13_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR13_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR13_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR14(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR14_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR14_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR14_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR14_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FORMATSENSOR15(cache) ((*(ENDAT3_MEM_SET_FORMATSENSOR15_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FORMATSENSOR15_OFFSET)) >> ENDAT3_MEM_SET_FORMATSENSOR15_SHIFT) \
+                 & ENDAT3_MEM_SET_FORMATSENSOR15_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR01(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR01_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR01_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR01_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR01_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR23(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR23_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR23_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR23_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR23_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR45(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR45_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR45_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR45_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR45_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR67(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR67_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR67_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR67_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR67_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR89(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR89_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR89_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR89_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR89_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR1011(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR1011_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR1011_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR1011_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR1011_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR1213(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR1213_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR1213_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR1213_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR1213_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR1415(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR1415_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR1415_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR1415_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR1415_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR0(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR0_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR0_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR0_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR1(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR1_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR1_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR1_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR2(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR2_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR2_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR2_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR3(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR3_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR3_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR3_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR4(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR4_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR4_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR4_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR5(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR5_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR5_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR5_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR6(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR6_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR6_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR6_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR7(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR7_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR7_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR7_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR8(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR8_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR8_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR8_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR8_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR9(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR9_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR9_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR9_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR9_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR10(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR10_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR10_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR10_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR10_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR11(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR11_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR11_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR11_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR11_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR12(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR12_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR12_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR12_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR12_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR13(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR13_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR13_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR13_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR13_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR14(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR14_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR14_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR14_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR14_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_ACTUALSENSOR15(cache) ((*(ENDAT3_MEM_SET_ACTUALSENSOR15_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_ACTUALSENSOR15_OFFSET)) >> ENDAT3_MEM_SET_ACTUALSENSOR15_SHIFT) \
+                 & ENDAT3_MEM_SET_ACTUALSENSOR15_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_DEVICESPECIFIC(cache) ((*(ENDAT3_MEM_SET_DEVICESPECIFIC_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_DEVICESPECIFIC_OFFSET)) >> ENDAT3_MEM_SET_DEVICESPECIFIC_SHIFT) \
+                 & ENDAT3_MEM_SET_DEVICESPECIFIC_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_0(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_0_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_0_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_1(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_1_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_1_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_2(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_2_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_2_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_3(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_3_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_3_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_4(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_4_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_4_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_5(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_5_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_5_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_6(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_6_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_6_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_SET_FREETOUSE_7(cache) ((*(ENDAT3_MEM_SET_FREETOUSE_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SET_FREETOUSE_7_OFFSET)) >> ENDAT3_MEM_SET_FREETOUSE_7_SHIFT) \
+                 & ENDAT3_MEM_SET_FREETOUSE_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_CS(cache) ((*(ENDAT3_MEM_XSET_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_CS_OFFSET)) >> ENDAT3_MEM_XSET_CS_SHIFT) \
+                 & ENDAT3_MEM_XSET_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_OFFSETPOS(cache) ((*(ENDAT3_MEM_XSET_OFFSETPOS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_OFFSETPOS_OFFSET)) >> ENDAT3_MEM_XSET_OFFSETPOS_SHIFT) \
+                 & ENDAT3_MEM_XSET_OFFSETPOS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_OFFSETPOS_0(cache) ((*(ENDAT3_MEM_XSET_OFFSETPOS_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_OFFSETPOS_0_OFFSET)) >> ENDAT3_MEM_XSET_OFFSETPOS_0_SHIFT) \
+                 & ENDAT3_MEM_XSET_OFFSETPOS_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_OFFSETPOS_1(cache) ((*(ENDAT3_MEM_XSET_OFFSETPOS_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_OFFSETPOS_1_OFFSET)) >> ENDAT3_MEM_XSET_OFFSETPOS_1_SHIFT) \
+                 & ENDAT3_MEM_XSET_OFFSETPOS_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_OFFSETPOS_2(cache) ((*(ENDAT3_MEM_XSET_OFFSETPOS_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_OFFSETPOS_2_OFFSET)) >> ENDAT3_MEM_XSET_OFFSETPOS_2_SHIFT) \
+                 & ENDAT3_MEM_XSET_OFFSETPOS_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_SAFETYCS(cache) ((*(ENDAT3_MEM_XSET_SAFETYCS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_SAFETYCS_OFFSET)) >> ENDAT3_MEM_XSET_SAFETYCS_SHIFT) \
+                 & ENDAT3_MEM_XSET_SAFETYCS_MASK)
+#define ENDAT3_MEM_CACHE_READ_XSET_TEMPWARNLEVEL(cache) ((*(ENDAT3_MEM_XSET_TEMPWARNLEVEL_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_XSET_TEMPWARNLEVEL_OFFSET)) >> ENDAT3_MEM_XSET_TEMPWARNLEVEL_SHIFT) \
+                 & ENDAT3_MEM_XSET_TEMPWARNLEVEL_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_CS(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_CS_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_CS_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_1(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_2(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_3(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_4(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_5(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_6(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_POINTER_7(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_POINTER_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_1(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_1(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_2(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_2(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_3(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_3(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_4(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_4(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_5(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_5(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_6(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_6(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_YDIM_7(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_LPFSET_LPFLIVE_HEAD_XDIM_7(cache) ((*(ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_OFFSET)) >> ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_SHIFT) \
+                 & ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_XDIM_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_0(cache) ((*(ENDAT3_MEM_SENSORS_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_0_OFFSET)) >> ENDAT3_MEM_SENSORS_0_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_0(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_0_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_0_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_0_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_0_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_1(cache) ((*(ENDAT3_MEM_SENSORS_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_1_OFFSET)) >> ENDAT3_MEM_SENSORS_1_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_1(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_1_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_1_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_1_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_1_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_2(cache) ((*(ENDAT3_MEM_SENSORS_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_2_OFFSET)) >> ENDAT3_MEM_SENSORS_2_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_2(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_2_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_2_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_2_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_2_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_3(cache) ((*(ENDAT3_MEM_SENSORS_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_3_OFFSET)) >> ENDAT3_MEM_SENSORS_3_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_3(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_3_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_3_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_3_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_3_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_4(cache) ((*(ENDAT3_MEM_SENSORS_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_4_OFFSET)) >> ENDAT3_MEM_SENSORS_4_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_4(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_4_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_4_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_4_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_4_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_5(cache) ((*(ENDAT3_MEM_SENSORS_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_5_OFFSET)) >> ENDAT3_MEM_SENSORS_5_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_5(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_5_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_5_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_5_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_5_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_6(cache) ((*(ENDAT3_MEM_SENSORS_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_6_OFFSET)) >> ENDAT3_MEM_SENSORS_6_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_6(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_6_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_6_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_6_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_6_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_7(cache) ((*(ENDAT3_MEM_SENSORS_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_7_OFFSET)) >> ENDAT3_MEM_SENSORS_7_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_7(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_7_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_7_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_7_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_7_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_8(cache) ((*(ENDAT3_MEM_SENSORS_8_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_8_OFFSET)) >> ENDAT3_MEM_SENSORS_8_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_8_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_8(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_8_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_8_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_8_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_8_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_9(cache) ((*(ENDAT3_MEM_SENSORS_9_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_9_OFFSET)) >> ENDAT3_MEM_SENSORS_9_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_9_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_9(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_9_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_9_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_9_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_9_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_10(cache) ((*(ENDAT3_MEM_SENSORS_10_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_10_OFFSET)) >> ENDAT3_MEM_SENSORS_10_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_10_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_10(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_10_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_10_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_10_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_10_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_11(cache) ((*(ENDAT3_MEM_SENSORS_11_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_11_OFFSET)) >> ENDAT3_MEM_SENSORS_11_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_11_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_11(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_11_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_11_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_11_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_11_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_12(cache) ((*(ENDAT3_MEM_SENSORS_12_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_12_OFFSET)) >> ENDAT3_MEM_SENSORS_12_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_12_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_12(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_12_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_12_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_12_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_12_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_13(cache) ((*(ENDAT3_MEM_SENSORS_13_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_13_OFFSET)) >> ENDAT3_MEM_SENSORS_13_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_13_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_13(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_13_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_13_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_13_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_13_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_14(cache) ((*(ENDAT3_MEM_SENSORS_14_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_14_OFFSET)) >> ENDAT3_MEM_SENSORS_14_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_14_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_14(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_14_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_14_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_14_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_14_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_15(cache) ((*(ENDAT3_MEM_SENSORS_15_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_15_OFFSET)) >> ENDAT3_MEM_SENSORS_15_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_15_MASK)
+#define ENDAT3_MEM_CACHE_READ_SENSORS_SUPPORT_15(cache) ((*(ENDAT3_MEM_SENSORS_SUPPORT_15_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_SENSORS_SUPPORT_15_OFFSET)) >> ENDAT3_MEM_SENSORS_SUPPORT_15_SHIFT) \
+                 & ENDAT3_MEM_SENSORS_SUPPORT_15_MASK)
+#define ENDAT3_MEM_CACHE_READ_FEATURE_CS(cache) ((*(ENDAT3_MEM_FEATURE_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_FEATURE_CS_OFFSET)) >> ENDAT3_MEM_FEATURE_CS_SHIFT) \
+                 & ENDAT3_MEM_FEATURE_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_FEATURE_SIZE(cache) ((*(ENDAT3_MEM_FEATURE_SIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_FEATURE_SIZE_OFFSET)) >> ENDAT3_MEM_FEATURE_SIZE_SHIFT) \
+                 & ENDAT3_MEM_FEATURE_SIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_FEATURE1_CS(cache) ((*(ENDAT3_MEM_FEATURE1_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_FEATURE1_CS_OFFSET)) >> ENDAT3_MEM_FEATURE1_CS_SHIFT) \
+                 & ENDAT3_MEM_FEATURE1_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_FEATURE1_SIZE(cache) ((*(ENDAT3_MEM_FEATURE1_SIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_FEATURE1_SIZE_OFFSET)) >> ENDAT3_MEM_FEATURE1_SIZE_SHIFT) \
+                 & ENDAT3_MEM_FEATURE1_SIZE_MASK)
+#define ENDAT3_MEM_CACHE_READ_FEATURE2_CS(cache) ((*(ENDAT3_MEM_FEATURE2_CS_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_FEATURE2_CS_OFFSET)) >> ENDAT3_MEM_FEATURE2_CS_SHIFT) \
+                 & ENDAT3_MEM_FEATURE2_CS_MASK)
+#define ENDAT3_MEM_CACHE_READ_FEATURE2_SIZE(cache) ((*(ENDAT3_MEM_FEATURE2_SIZE_TYPE *)(((cache)->cacheMem) \
+                 + (ENDAT3_MEM_FEATURE2_SIZE_OFFSET)) >> ENDAT3_MEM_FEATURE2_SIZE_SHIFT) \
+                 & ENDAT3_MEM_FEATURE2_SIZE_MASK)
+
+#endif

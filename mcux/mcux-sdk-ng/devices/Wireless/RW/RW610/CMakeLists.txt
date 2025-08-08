@@ -5,7 +5,7 @@
 
 #### device spepcific drivers
 include(${SdkRootDirPath}/devices/arm/device_header.cmake)
-mcux_add_cmakelists(${SdkRootDirPath}/devices/Wireless/RW/RW610/drivers)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/Wireless/RW/RW610/drivers)
 
 #### Wireless shared drivers/components/middlewares, project segments
 include(${SdkRootDirPath}/devices/Wireless/shared.cmake)

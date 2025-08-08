@@ -7,14 +7,14 @@
 **                          MK22FN256VLL12
 **                          MK22FN256VMP12
 **
-**     Version:             rev. 1.8, 2015-02-19
-**     Build:               b240709
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PORT
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -42,21 +42,24 @@
 **         Interrupt INT_LPTimer renamed to INT_LPTMR0, interrupt INT_Watchdog renamed to INT_WDOG_EWM.
 **     - rev. 1.8 (2015-02-19)
 **         Renamed interrupt vector LLW to LLWU.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PORT.h
- * @version 1.8
- * @date 2015-02-19
+ * @file PERI_PORT.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PORT
  *
  * CMSIS Peripheral Access Layer for PORT
  */
 
-#if !defined(PORT_H_)
-#define PORT_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PORT_H_)
+#define PERI_PORT_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MK22FN128CAH12) || defined(CPU_MK22FN256CAH12) || defined(CPU_MK22FN256VDC12) || defined(CPU_MK22FN256VLH12) || defined(CPU_MK22FN256VLL12) || defined(CPU_MK22FN256VMP12))
 #include "MK22F25612_COMMON.h"
@@ -111,8 +114,8 @@
 /** PORT - Register Layout Typedef */
 typedef struct {
   __IO uint32_t PCR[PORT_PCR_COUNT];               /**< Pin Control Register n, array offset: 0x0, array step: 0x4 */
-  __O  uint32_t GPCLR;                             /**< Global Pin Control Low Register, offset: 0x80 */
-  __O  uint32_t GPCHR;                             /**< Global Pin Control High Register, offset: 0x84 */
+  __IO uint32_t GPCLR;                             /**< Global Pin Control Low Register, offset: 0x80 */
+  __IO uint32_t GPCHR;                             /**< Global Pin Control High Register, offset: 0x84 */
        uint8_t RESERVED_0[24];
   __IO uint32_t ISFR;                              /**< Interrupt Status Flag Register, offset: 0xA0 */
        uint8_t RESERVED_1[28];
@@ -351,5 +354,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PORT_H_ */
+#endif  /* PERI_PORT_H_ */
 

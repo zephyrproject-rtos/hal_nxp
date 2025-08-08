@@ -65,14 +65,14 @@
 **                          MIMX9352XVVXM_ca55
 **                          MIMX9352XVVXM_cm33
 **
-**     Version:             rev. 1.0, 2021-11-16
-**     Build:               b240711
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -81,21 +81,24 @@
 **     Revisions:
 **     - rev. 1.0 (2021-11-16)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file CCM.h
- * @version 1.0
- * @date 2021-11-16
+ * @file PERI_CCM.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for CCM
  *
  * CMSIS Peripheral Access Layer for CCM
  */
 
-#if !defined(CCM_H_)
-#define CCM_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_CCM_H_)
+#define PERI_CCM_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX9301CVVXD_ca55) || defined(CPU_MIMX9301DVVXD_ca55))
 #include "MIMX9301_ca55_COMMON.h"
@@ -326,9 +329,9 @@ typedef struct {
 #define CCM_CLOCK_ROOT_MUX_MASK                  (0x300U)
 #define CCM_CLOCK_ROOT_MUX_SHIFT                 (8U)
 /*! MUX - Clock multiplexer.
- *  0b10..Select clock source 2
  *  0b00..Select clock source 0
  *  0b01..Select clock source 1
+ *  0b10..Select clock source 2
  *  0b11..Select clock source 3
  */
 #define CCM_CLOCK_ROOT_MUX(x)                    (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_MUX_SHIFT)) & CCM_CLOCK_ROOT_MUX_MASK)
@@ -389,8 +392,8 @@ typedef struct {
 #define CCM_CLOCK_ROOT_TZ_USER_MASK              (0x100U)
 #define CCM_CLOCK_ROOT_TZ_USER_SHIFT             (8U)
 /*! TZ_USER - User access permission
- *  0b1..Clock Root settings can be changed in user mode.
  *  0b0..Clock Root settings cannot be changed in user mode.
+ *  0b1..Clock Root settings can be changed in user mode.
  */
 #define CCM_CLOCK_ROOT_TZ_USER(x)                (((uint32_t)(((uint32_t)(x)) << CCM_CLOCK_ROOT_TZ_USER_SHIFT)) & CCM_CLOCK_ROOT_TZ_USER_MASK)
 
@@ -430,8 +433,8 @@ typedef struct {
 #define CCM_GPR_SHARED0_AUTHEN_TZ_USER_MASK      (0x100U)
 #define CCM_GPR_SHARED0_AUTHEN_TZ_USER_SHIFT     (8U)
 /*! TZ_USER - User access permission
- *  0b1..Registers of shared GPR slice can be changed in user mode.
  *  0b0..Registers of shared GPR slice cannot be changed in user mode.
+ *  0b1..Registers of shared GPR slice can be changed in user mode.
  */
 #define CCM_GPR_SHARED0_AUTHEN_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED0_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_SHARED0_AUTHEN_TZ_USER_MASK)
 
@@ -483,8 +486,8 @@ typedef struct {
 #define CCM_GPR_SHARED1_AUTHEN_TZ_USER_MASK      (0x100U)
 #define CCM_GPR_SHARED1_AUTHEN_TZ_USER_SHIFT     (8U)
 /*! TZ_USER - User access permission
- *  0b1..Registers of shared GPR slice can be changed in user mode.
  *  0b0..Registers of shared GPR slice cannot be changed in user mode.
+ *  0b1..Registers of shared GPR slice can be changed in user mode.
  */
 #define CCM_GPR_SHARED1_AUTHEN_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED1_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_SHARED1_AUTHEN_TZ_USER_MASK)
 
@@ -536,8 +539,8 @@ typedef struct {
 #define CCM_GPR_SHARED2_AUTHEN_TZ_USER_MASK      (0x100U)
 #define CCM_GPR_SHARED2_AUTHEN_TZ_USER_SHIFT     (8U)
 /*! TZ_USER - User access permission
- *  0b1..Registers of shared GPR slice can be changed in user mode.
  *  0b0..Registers of shared GPR slice cannot be changed in user mode.
+ *  0b1..Registers of shared GPR slice can be changed in user mode.
  */
 #define CCM_GPR_SHARED2_AUTHEN_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED2_AUTHEN_TZ_USER_SHIFT)) & CCM_GPR_SHARED2_AUTHEN_TZ_USER_MASK)
 
@@ -577,8 +580,8 @@ typedef struct {
 #define CCM_GPR_SHARED_TZ_USER_MASK              (0x100U)
 #define CCM_GPR_SHARED_TZ_USER_SHIFT             (8U)
 /*! TZ_USER - User access permission
- *  0b1..Registers of shared GPR slice can be changed in user mode.
  *  0b0..Registers of shared GPR slice cannot be changed in user mode.
+ *  0b1..Registers of shared GPR slice can be changed in user mode.
  */
 #define CCM_GPR_SHARED_TZ_USER(x)                (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED_TZ_USER_SHIFT)) & CCM_GPR_SHARED_TZ_USER_MASK)
 
@@ -627,8 +630,8 @@ typedef struct {
 #define CCM_GPR_PRIVATE_TZ_USER_MASK             (0x100U)
 #define CCM_GPR_PRIVATE_TZ_USER_SHIFT            (8U)
 /*! TZ_USER - User access permission
- *  0b1..Registers of private GPR can be changed in user mode.
  *  0b0..Registers of privat GPR cannot be changed in user mode.
+ *  0b1..Registers of private GPR can be changed in user mode.
  */
 #define CCM_GPR_PRIVATE_TZ_USER(x)               (((uint32_t)(((uint32_t)(x)) << CCM_GPR_PRIVATE_TZ_USER_SHIFT)) & CCM_GPR_PRIVATE_TZ_USER_MASK)
 
@@ -1211,8 +1214,8 @@ typedef struct {
 #define CCM_OSCPLL_AUTHEN_TZ_USER_MASK           (0x100U)
 #define CCM_OSCPLL_AUTHEN_TZ_USER_SHIFT          (8U)
 /*! TZ_USER - User access permission
- *  0b1..Clock Source settings can be changed in user mode.
  *  0b0..Clock Source settings cannot be changed in user mode.
+ *  0b1..Clock Source settings can be changed in user mode.
  */
 #define CCM_OSCPLL_AUTHEN_TZ_USER(x)             (((uint32_t)(((uint32_t)(x)) << CCM_OSCPLL_AUTHEN_TZ_USER_SHIFT)) & CCM_OSCPLL_AUTHEN_TZ_USER_MASK)
 
@@ -1779,8 +1782,8 @@ typedef struct {
 #define CCM_LPCG_AUTHEN_TZ_USER_MASK             (0x100U)
 #define CCM_LPCG_AUTHEN_TZ_USER_SHIFT            (8U)
 /*! TZ_USER - User access permission
- *  0b1..LPCG settings can be changed in user mode.
  *  0b0..LPCG settings cannot be changed in user mode.
+ *  0b1..LPCG settings can be changed in user mode.
  */
 #define CCM_LPCG_AUTHEN_TZ_USER(x)               (((uint32_t)(((uint32_t)(x)) << CCM_LPCG_AUTHEN_TZ_USER_SHIFT)) & CCM_LPCG_AUTHEN_TZ_USER_MASK)
 
@@ -1851,5 +1854,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* CCM_H_ */
+#endif  /* PERI_CCM_H_ */
 

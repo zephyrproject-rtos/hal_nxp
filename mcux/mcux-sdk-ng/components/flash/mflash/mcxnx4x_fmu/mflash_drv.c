@@ -25,6 +25,42 @@
 
 #define IFLASH_ERROR_STAT_FLAGS (FMU_FSTAT_ACCERR_MASK | FMU_FSTAT_PVIOL_MASK | FMU_FSTAT_CMDABT_MASK)
 
+
+static void speculation_buffer_clear(void)
+{
+    /* Clear Flash/Flash data speculation. */
+    if(((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK) == 0U)
+        && ((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK) == 0U))
+    {
+        if((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK) == 0U)
+        {
+            /* Disable flash speculation first. */
+            SYSCON->NVM_CTRL |= SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK;
+            /* Re-enable flash speculation. */
+            SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_FLASH_SPEC_MASK;
+        }
+        if((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_DATA_SPEC_MASK) == 0U)
+        {
+            /* Disable flash data speculation first. */
+            SYSCON->NVM_CTRL |= SYSCON_NVM_CTRL_DIS_DATA_SPEC_MASK;
+            /* Re-enable flash data speculation. */
+            SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_DATA_SPEC_MASK;
+        }
+    }
+}
+
+
+static void flash_cache_clear(void)
+{
+    /* Clear Flash cache. */
+    if((SYSCON->NVM_CTRL & SYSCON_NVM_CTRL_DIS_FLASH_CACHE_MASK) == 0U)
+    {
+        SYSCON->NVM_CTRL |= SYSCON_NVM_CTRL_CLR_FLASH_CACHE_MASK;
+        SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_CLR_FLASH_CACHE_MASK;
+    }
+}
+
+
 static void iflash_prepare(void)
 {
     uint32_t fmu_fstat = FMU0->FSTAT;
@@ -133,6 +169,9 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
 
     ret = iflash_finish_command(true);
 
+    speculation_buffer_clear();
+    flash_cache_clear();
+
 cleanup:
 
     if (primask == 0UL)
@@ -178,6 +217,9 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 
     ret = iflash_finish_command(true);
 
+    speculation_buffer_clear();
+    flash_cache_clear();
+
 cleanup:
 
     if (primask == 0UL)
@@ -197,7 +239,7 @@ int32_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data)
     status_t ret;
     uint32_t primask;
 
-    if ((phrase_addr % MFLASH_PHRASE_SIZE) != 0UL)
+    if ((phrase_addr % (uint32_t)MFLASH_PHRASE_SIZE) != 0UL)
     {
         return kStatus_InvalidArgument;
     }
@@ -216,12 +258,15 @@ int32_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data)
         goto cleanup;
     }
 
-    for (uint32_t i = 0UL; i < MFLASH_PHRASE_SIZE; i += 4UL)
+    for (uint32_t i = 0UL; i < (uint32_t)MFLASH_PHRASE_SIZE; i += 4UL)
     {
         *(uint32_t *)(phrase_addr + i) = ((uint32_t *)data)[i / 4UL];
     }
 
     ret = iflash_finish_command(true);
+
+    speculation_buffer_clear();
+    flash_cache_clear();
 
 cleanup:
 

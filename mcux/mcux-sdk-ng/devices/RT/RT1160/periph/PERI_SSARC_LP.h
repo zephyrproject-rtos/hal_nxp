@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SSARC_LP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file SSARC_LP.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_SSARC_LP.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for SSARC_LP
  *
  * CMSIS Peripheral Access Layer for SSARC_LP
  */
 
-#if !defined(SSARC_LP_H_)
-#define SSARC_LP_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_SSARC_LP_H_)
+#define PERI_SSARC_LP_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -227,16 +230,16 @@ typedef struct {
 #define SSARC_LP_DESC_CTRL1_SW_TRIG_SV_MASK      (0x1U)
 #define SSARC_LP_DESC_CTRL1_SW_TRIG_SV_SHIFT     (0U)
 /*! SW_TRIG_SV - Software trigger save
- *  0b1..Request a software save operation/software restore operation in progress
  *  0b0..No software save request/software restore request complete
+ *  0b1..Request a software save operation/software restore operation in progress
  */
 #define SSARC_LP_DESC_CTRL1_SW_TRIG_SV(x)        (((uint32_t)(((uint32_t)(x)) << SSARC_LP_DESC_CTRL1_SW_TRIG_SV_SHIFT)) & SSARC_LP_DESC_CTRL1_SW_TRIG_SV_MASK)
 
 #define SSARC_LP_DESC_CTRL1_SW_TRIG_RT_MASK      (0x2U)
 #define SSARC_LP_DESC_CTRL1_SW_TRIG_RT_SHIFT     (1U)
 /*! SW_TRIG_RT - Software trigger restore
- *  0b1..Request a software restore operation/software restore operation in progress
  *  0b0..No software restore request/software restore request complete
+ *  0b1..Request a software restore operation/software restore operation in progress
  */
 #define SSARC_LP_DESC_CTRL1_SW_TRIG_RT(x)        (((uint32_t)(((uint32_t)(x)) << SSARC_LP_DESC_CTRL1_SW_TRIG_RT_SHIFT)) & SSARC_LP_DESC_CTRL1_SW_TRIG_RT_MASK)
 
@@ -280,24 +283,24 @@ typedef struct {
 #define SSARC_LP_DESC_CTRL1_RL_MASK              (0x40000U)
 #define SSARC_LP_DESC_CTRL1_RL_SHIFT             (18U)
 /*! RL - Read Lock
- *  0b1..Group is locked (read access not allowed)
  *  0b0..Group is unlocked (read access allowed)
+ *  0b1..Group is locked (read access not allowed)
  */
 #define SSARC_LP_DESC_CTRL1_RL(x)                (((uint32_t)(((uint32_t)(x)) << SSARC_LP_DESC_CTRL1_RL_SHIFT)) & SSARC_LP_DESC_CTRL1_RL_MASK)
 
 #define SSARC_LP_DESC_CTRL1_WL_MASK              (0x80000U)
 #define SSARC_LP_DESC_CTRL1_WL_SHIFT             (19U)
 /*! WL - Write Lock
- *  0b1..Group is locked (write access not allowed)
  *  0b0..Group is unlocked (write access allowed)
+ *  0b1..Group is locked (write access not allowed)
  */
 #define SSARC_LP_DESC_CTRL1_WL(x)                (((uint32_t)(((uint32_t)(x)) << SSARC_LP_DESC_CTRL1_WL_SHIFT)) & SSARC_LP_DESC_CTRL1_WL_MASK)
 
 #define SSARC_LP_DESC_CTRL1_DL_MASK              (0x100000U)
 #define SSARC_LP_DESC_CTRL1_DL_SHIFT             (20U)
 /*! DL - Domain lock
- *  0b1..Lock
  *  0b0..Unlock
+ *  0b1..Lock
  */
 #define SSARC_LP_DESC_CTRL1_DL(x)                (((uint32_t)(((uint32_t)(x)) << SSARC_LP_DESC_CTRL1_DL_SHIFT)) & SSARC_LP_DESC_CTRL1_DL_MASK)
 /*! @} */
@@ -362,40 +365,40 @@ typedef struct {
 #define SSARC_LP_INT_STATUS_GROUP_CONFLICT_MASK  (0x8000000U)
 #define SSARC_LP_INT_STATUS_GROUP_CONFLICT_SHIFT (27U)
 /*! GROUP_CONFLICT - Group Conflict field
- *  0b1..A group conflict error has occurred
  *  0b0..No group conflict error
+ *  0b1..A group conflict error has occurred
  */
 #define SSARC_LP_INT_STATUS_GROUP_CONFLICT(x)    (((uint32_t)(((uint32_t)(x)) << SSARC_LP_INT_STATUS_GROUP_CONFLICT_SHIFT)) & SSARC_LP_INT_STATUS_GROUP_CONFLICT_MASK)
 
 #define SSARC_LP_INT_STATUS_TIMEOUT_MASK         (0x10000000U)
 #define SSARC_LP_INT_STATUS_TIMEOUT_SHIFT        (28U)
 /*! TIMEOUT - Timeout field
- *  0b1..A timeout event has occurred
  *  0b0..No timeout event
+ *  0b1..A timeout event has occurred
  */
 #define SSARC_LP_INT_STATUS_TIMEOUT(x)           (((uint32_t)(((uint32_t)(x)) << SSARC_LP_INT_STATUS_TIMEOUT_SHIFT)) & SSARC_LP_INT_STATUS_TIMEOUT_MASK)
 
 #define SSARC_LP_INT_STATUS_SW_REQ_DONE_MASK     (0x20000000U)
 #define SSARC_LP_INT_STATUS_SW_REQ_DONE_SHIFT    (29U)
 /*! SW_REQ_DONE - Software Request Done
- *  0b1..Atleast one software triggered has been complete
  *  0b0..No software triggered requests or software triggered request still in progress
+ *  0b1..Atleast one software triggered has been complete
  */
 #define SSARC_LP_INT_STATUS_SW_REQ_DONE(x)       (((uint32_t)(((uint32_t)(x)) << SSARC_LP_INT_STATUS_SW_REQ_DONE_SHIFT)) & SSARC_LP_INT_STATUS_SW_REQ_DONE_MASK)
 
 #define SSARC_LP_INT_STATUS_AHB_ERR_MASK         (0x40000000U)
 #define SSARC_LP_INT_STATUS_AHB_ERR_SHIFT        (30U)
 /*! AHB_ERR - AHB Error field
- *  0b1..An AHB error has occurred
  *  0b0..No AHB error
+ *  0b1..An AHB error has occurred
  */
 #define SSARC_LP_INT_STATUS_AHB_ERR(x)           (((uint32_t)(((uint32_t)(x)) << SSARC_LP_INT_STATUS_AHB_ERR_SHIFT)) & SSARC_LP_INT_STATUS_AHB_ERR_MASK)
 
 #define SSARC_LP_INT_STATUS_ADDR_ERR_MASK        (0x80000000U)
 #define SSARC_LP_INT_STATUS_ADDR_ERR_SHIFT       (31U)
 /*! ADDR_ERR - Address Error field
- *  0b1..An address error has occurred
  *  0b0..No address error
+ *  0b1..An address error has occurred
  */
 #define SSARC_LP_INT_STATUS_ADDR_ERR(x)          (((uint32_t)(((uint32_t)(x)) << SSARC_LP_INT_STATUS_ADDR_ERR_SHIFT)) & SSARC_LP_INT_STATUS_ADDR_ERR_MASK)
 /*! @} */
@@ -473,5 +476,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* SSARC_LP_H_ */
+#endif  /* PERI_SSARC_LP_H_ */
 

@@ -10,8 +10,8 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MCXC444RM, Rev.1, Mar 2024
-**     Version:             rev. 1.0, 2024-03-11
-**     Build:               b240401
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250521
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,14 +28,17 @@
 **     Revisions:
 **     - rev. 1.0 (2024-03-11)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXC143
- * @version 1.0
- * @date 2024-03-11
+ * @version 2.0
+ * @date 2024-10-29
  * @brief Device specific configuration file for MCXC143 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains

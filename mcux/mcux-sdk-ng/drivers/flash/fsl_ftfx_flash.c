@@ -571,6 +571,7 @@ status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable)
 }
 #endif /* FSL_FEATURE_FLASH_HAS_PFLASH_BLOCK_SWAP */
 
+
 /*!
  * @brief Returns the protection state of the desired flash area via the pointer passed into the function.
  */
@@ -1351,12 +1352,14 @@ static uint32_t flash_calculate_mem_size(uint32_t pflashBlockCount,
                                          uint32_t pfsizeMask,
                                          uint32_t pfsizeShift)
 {
-    uint8_t pfsize;
+    uint8_t pfsize = 0xfU;
     uint32_t flashDensity;
 
+#ifndef SIM_FLASH_NOT_USED
     /* PFSIZE=0xf means that on customer parts the IFR was not correctly programmed.
      * We just use the pre-defined flash size in feature file here to support pre-production parts */
     pfsize = (uint8_t)((SIM_FCFG1_REG & pfsizeMask) >> pfsizeShift);
+#endif
     if (pfsize == 0xfU)
     {
         flashDensity = pflashBlockCount * pflashBlockSize;

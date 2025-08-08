@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 5)) /*!< Version 2.4.5. */
 /*! @} */
 
 /*! @brief Compute the offset unit from DCHPRI3 */
@@ -271,7 +271,7 @@ extern "C" {
  * @brief Initializes the eDMA peripheral.
  *
  * This function ungates the eDMA clock and configures the eDMA peripheral according
- * to the configuration structure.
+ * to the configuration structure. All emda enabled request will be cleared in this function.
  *
  * @param base eDMA peripheral base address.
  * @param config A pointer to the configuration structure, see "edma_config_t".

@@ -1,17 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_cm7
-**                          MIMX9596AVZXN_cm7
+**     Processors:          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_cm7
 **
 **     Compilers:           GNU C Compiler
@@ -19,14 +14,14 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    iMX95RM rev1 draftM
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240823
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9596_cm7
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,14 +30,17 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX9596_cm7_COMMON.h
- * @version 1.0
- * @date 2023-01-10
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMX9596_cm7
  *
  * CMSIS Peripheral Access Layer for MIMX9596_cm7
@@ -53,7 +51,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -504,7 +502,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MIMX9596_cm7_SERIES
 #define MIMX9596_cm7_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MIMX9596_cm7_features.h"
 
@@ -517,16 +517,6 @@ typedef enum IRQn {
 #define ADC_BASE_ADDRS                           { ADC_BASE }
 /** Array initializer of ADC peripheral base pointers */
 #define ADC_BASE_PTRS                            { ADC }
-
-/* ALIAS - Peripheral instance base addresses */
-/** Peripheral CAMERA__ISP__ALIAS base address */
-#define CAMERA__ISP__ALIAS_BASE                  (0x4AE02000u)
-/** Peripheral CAMERA__ISP__ALIAS base pointer */
-#define CAMERA__ISP__ALIAS                       ((ALIAS_Type *)CAMERA__ISP__ALIAS_BASE)
-/** Array initializer of ALIAS peripheral base addresses */
-#define ALIAS_BASE_ADDRS                         { CAMERA__ISP__ALIAS_BASE }
-/** Array initializer of ALIAS peripheral base pointers */
-#define ALIAS_BASE_PTRS                          { CAMERA__ISP__ALIAS }
 
 /* ANALOG_AGDET - Peripheral instance base addresses */
 /** Peripheral ANALOG__AGDET base address */
@@ -568,16 +558,6 @@ typedef enum IRQn {
 /** Array initializer of ANALOG_PMRO peripheral base pointers */
 #define ANALOG_PMRO_BASE_PTRS                    { ANALOG__PMRO }
 
-/* ANALOG_SFA - Peripheral instance base addresses */
-/** Peripheral ANALOG__SFA base address */
-#define ANALOG__SFA_BASE                         (0x44483000u)
-/** Peripheral ANALOG__SFA base pointer */
-#define ANALOG__SFA                              ((ANALOG_SFA_Type *)ANALOG__SFA_BASE)
-/** Array initializer of ANALOG_SFA peripheral base addresses */
-#define ANALOG_SFA_BASE_ADDRS                    { ANALOG__SFA_BASE }
-/** Array initializer of ANALOG_SFA peripheral base pointers */
-#define ANALOG_SFA_BASE_PTRS                     { ANALOG__SFA }
-
 /* ANALOG_TCU - Peripheral instance base addresses */
 /** Peripheral ANALOG__TCU base address */
 #define ANALOG__TCU_BASE                         (0x444C0000u)
@@ -608,16 +588,6 @@ typedef enum IRQn {
 /** Array initializer of ANALOG_VDET peripheral base pointers */
 #define ANALOG_VDET_BASE_PTRS                    { ANALOG__VDET }
 
-/* AON_AXBS - Peripheral instance base addresses */
-/** Peripheral AON__AXBS base address */
-#define AON__AXBS_BASE                           (0x44510000u)
-/** Peripheral AON__AXBS base pointer */
-#define AON__AXBS                                ((AON_AXBS_Type *)AON__AXBS_BASE)
-/** Array initializer of AON_AXBS peripheral base addresses */
-#define AON_AXBS_BASE_ADDRS                      { AON__AXBS_BASE }
-/** Array initializer of AON_AXBS peripheral base pointers */
-#define AON_AXBS_BASE_PTRS                       { AON__AXBS }
-
 /* AON_BLK_CTRL_NS_AONMIX - Peripheral instance base addresses */
 /** Peripheral AON__BLK_CTRL_NS_AONMIX1 base address */
 #define AON__BLK_CTRL_NS_AONMIX1_BASE            (0x44210000u)
@@ -638,35 +608,19 @@ typedef enum IRQn {
 /** Array initializer of AON_BLK_CTRL_S_AONMIX peripheral base pointers */
 #define AON_BLK_CTRL_S_AONMIX_BASE_PTRS          { AON__BLK_CTRL_S_AONMIX2 }
 
-/* AON_CRC - Peripheral instance base addresses */
-/** Peripheral AON__CRCA base address */
-#define AON__CRCA_BASE                           (0x44660000u)
-/** Peripheral AON__CRCA base pointer */
-#define AON__CRCA                                ((AON_CRC_Type *)AON__CRCA_BASE)
-/** Array initializer of AON_CRC peripheral base addresses */
-#define AON_CRC_BASE_ADDRS                       { AON__CRCA_BASE }
-/** Array initializer of AON_CRC peripheral base pointers */
-#define AON_CRC_BASE_PTRS                        { AON__CRCA }
-
-/* AON_CSTCU - Peripheral instance base addresses */
-/** Peripheral AON__CSTCU base address */
-#define AON__CSTCU_BASE                          (0x44590000u)
-/** Peripheral AON__CSTCU base pointer */
-#define AON__CSTCU                               ((AON_CSTCU_Type *)AON__CSTCU_BASE)
-/** Array initializer of AON_CSTCU peripheral base addresses */
-#define AON_CSTCU_BASE_ADDRS                     { AON__CSTCU_BASE }
-/** Array initializer of AON_CSTCU peripheral base pointers */
-#define AON_CSTCU_BASE_PTRS                      { AON__CSTCU }
-
-/* AON_EIM - Peripheral instance base addresses */
-/** Peripheral AON__EIMA base address */
-#define AON__EIMA_BASE                           (0x44550000u)
-/** Peripheral AON__EIMA base pointer */
-#define AON__EIMA                                ((AON_EIM_Type *)AON__EIMA_BASE)
-/** Array initializer of AON_EIM peripheral base addresses */
-#define AON_EIM_BASE_ADDRS                       { AON__EIMA_BASE }
-/** Array initializer of AON_EIM peripheral base pointers */
-#define AON_EIM_BASE_PTRS                        { AON__EIMA }
+/* AON_CMU - Peripheral instance base addresses */
+/** Peripheral AON_CMUA1 base address */
+#define AON_CMUA1_BASE                           (0x44540000u)
+/** Peripheral AON_CMUA1 base pointer */
+#define AON_CMUA1                                ((AON_CMU_Type *)AON_CMUA1_BASE)
+/** Peripheral AON_CMUA2 base address */
+#define AON_CMUA2_BASE                           (0x44650000u)
+/** Peripheral AON_CMUA2 base pointer */
+#define AON_CMUA2                                ((AON_CMU_Type *)AON_CMUA2_BASE)
+/** Array initializer of AON_CMU peripheral base addresses */
+#define AON_CMU_BASE_ADDRS                       { AON_CMUA1_BASE, AON_CMUA2_BASE }
+/** Array initializer of AON_CMU peripheral base pointers */
+#define AON_CMU_BASE_PTRS                        { AON_CMUA1, AON_CMUA2 }
 
 /* AON_FCCU - Peripheral instance base addresses */
 /** Peripheral AON__FCCU base address */
@@ -677,26 +631,6 @@ typedef enum IRQn {
 #define AON_FCCU_BASE_ADDRS                      { AON__FCCU_BASE }
 /** Array initializer of AON_FCCU peripheral base pointers */
 #define AON_FCCU_BASE_PTRS                       { AON__FCCU }
-
-/* AON_INTM - Peripheral instance base addresses */
-/** Peripheral AON__INTM base address */
-#define AON__INTM_BASE                           (0x44580000u)
-/** Peripheral AON__INTM base pointer */
-#define AON__INTM                                ((AON_INTM_Type *)AON__INTM_BASE)
-/** Array initializer of AON_INTM peripheral base addresses */
-#define AON_INTM_BASE_ADDRS                      { AON__INTM_BASE }
-/** Array initializer of AON_INTM peripheral base pointers */
-#define AON_INTM_BASE_PTRS                       { AON__INTM }
-
-/* AON_LSTCU - Peripheral instance base addresses */
-/** Peripheral AON__LSTCUA base address */
-#define AON__LSTCUA_BASE                         (0x445A0000u)
-/** Peripheral AON__LSTCUA base pointer */
-#define AON__LSTCUA                              ((AON_LSTCU_Type *)AON__LSTCUA_BASE)
-/** Array initializer of AON_LSTCU peripheral base addresses */
-#define AON_LSTCU_BASE_ADDRS                     { AON__LSTCUA_BASE }
-/** Array initializer of AON_LSTCU peripheral base pointers */
-#define AON_LSTCU_BASE_PTRS                      { AON__LSTCUA }
 
 /* AON_MCM - Peripheral instance base addresses */
 /** Peripheral AON__MCM base address */
@@ -742,6 +676,16 @@ typedef enum IRQn {
 /** Array initializer of AON_TCU peripheral base pointers */
 #define AON_TCU_BASE_PTRS                        { AON__TCU }
 
+/* AUDIO_XCVR - Peripheral instance base addresses */
+/** Peripheral WAKEUP__AUDIO_XCVR base address */
+#define WAKEUP__AUDIO_XCVR_BASE                  (0x42680000u)
+/** Peripheral WAKEUP__AUDIO_XCVR base pointer */
+#define WAKEUP__AUDIO_XCVR                       ((AUDIO_XCVR_Type *)WAKEUP__AUDIO_XCVR_BASE)
+/** Array initializer of AUDIO_XCVR peripheral base addresses */
+#define AUDIO_XCVR_BASE_ADDRS                    { WAKEUP__AUDIO_XCVR_BASE }
+/** Array initializer of AUDIO_XCVR peripheral base pointers */
+#define AUDIO_XCVR_BASE_PTRS                     { WAKEUP__AUDIO_XCVR }
+
 /* AUTOFOCUS - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__AUTOFOCUS base address */
 #define CAMERA__ISP__AUTOFOCUS_BASE              (0x4AE01700u)
@@ -752,15 +696,25 @@ typedef enum IRQn {
 /** Array initializer of AUTOFOCUS peripheral base pointers */
 #define AUTOFOCUS_BASE_PTRS                      { CAMERA__ISP__AUTOFOCUS }
 
-/* BBSM_BBNSM - Peripheral instance base addresses */
+/* AXBS - Peripheral instance base addresses */
+/** Peripheral AON__AXBS base address */
+#define AON__AXBS_BASE                           (0x44510000u)
+/** Peripheral AON__AXBS base pointer */
+#define AON__AXBS                                ((AXBS_Type *)AON__AXBS_BASE)
+/** Array initializer of AXBS peripheral base addresses */
+#define AXBS_BASE_ADDRS                          { AON__AXBS_BASE }
+/** Array initializer of AXBS peripheral base pointers */
+#define AXBS_BASE_PTRS                           { AON__AXBS }
+
+/* BBNSM - Peripheral instance base addresses */
 /** Peripheral BBSM__BBNSM base address */
 #define BBSM__BBNSM_BASE                         (0x44440000u)
 /** Peripheral BBSM__BBNSM base pointer */
-#define BBSM__BBNSM                              ((BBSM_BBNSM_Type *)BBSM__BBNSM_BASE)
-/** Array initializer of BBSM_BBNSM peripheral base addresses */
-#define BBSM_BBNSM_BASE_ADDRS                    { BBSM__BBNSM_BASE }
-/** Array initializer of BBSM_BBNSM peripheral base pointers */
-#define BBSM_BBNSM_BASE_PTRS                     { BBSM__BBNSM }
+#define BBSM__BBNSM                              ((BBNSM_Type *)BBSM__BBNSM_BASE)
+/** Array initializer of BBNSM peripheral base addresses */
+#define BBNSM_BASE_ADDRS                         { BBSM__BBNSM_BASE }
+/** Array initializer of BBNSM peripheral base pointers */
+#define BBNSM_BASE_PTRS                          { BBSM__BBNSM }
 
 /* BBSM_BLK_CTRL_BBSMMIX - Peripheral instance base addresses */
 /** Peripheral BBSM__BLK_CTRL_BBSMMIX_BBSMMIX1 base address */
@@ -892,16 +846,6 @@ typedef enum IRQn {
 /** Array initializer of CAMERA_MIPI_CSI2 peripheral base pointers */
 #define CAMERA_MIPI_CSI2_BASE_PTRS               { MIPI_CSI2 }
 
-/* CAMERA_OCRAM_MECC - Peripheral instance base addresses */
-/** Peripheral CAMERA__OCRAM_MECC base address */
-#define CAMERA__OCRAM_MECC_BASE                  (0x4ADD0000u)
-/** Peripheral CAMERA__OCRAM_MECC base pointer */
-#define CAMERA__OCRAM_MECC                       ((CAMERA_OCRAM_MECC_Type *)CAMERA__OCRAM_MECC_BASE)
-/** Array initializer of CAMERA_OCRAM_MECC peripheral base addresses */
-#define CAMERA_OCRAM_MECC_BASE_ADDRS             { CAMERA__OCRAM_MECC_BASE }
-/** Array initializer of CAMERA_OCRAM_MECC peripheral base pointers */
-#define CAMERA_OCRAM_MECC_BASE_PTRS              { CAMERA__OCRAM_MECC }
-
 /* CAMERA_TCU - Peripheral instance base addresses */
 /** Peripheral CAMERA__TCU base address */
 #define CAMERA__TCU_BASE                         (0x4AC00000u)
@@ -985,19 +929,21 @@ typedef enum IRQn {
 /** Array initializer of CCONVMED peripheral base pointers */
 #define CCONVMED_BASE_PTRS                       { CAMERA__ISP__CCONVMED }
 
+/* CM0_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR_BASE (0x4AFF1500u)
+/** Peripheral CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR     ((CM0_I_main_QosGenerator_Type *)CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of CM0_I_main_QosGenerator peripheral base addresses */
+#define CM0_I_main_QosGenerator_BASE_ADDRS       { CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of CM0_I_main_QosGenerator peripheral base pointers */
+#define CM0_I_main_QosGenerator_BASE_PTRS        { CAMERA__GPV__CM0_I_MAIN_QOSGENERATOR }
+
 /* CMU - Peripheral instance base addresses */
 /** Peripheral ANALOG_CMU0 base address */
 #define ANALOG_CMU0_BASE                         (0x44670000u)
 /** Peripheral ANALOG_CMU0 base pointer */
 #define ANALOG_CMU0                              ((CMU_Type *)ANALOG_CMU0_BASE)
-/** Peripheral AON_CMUA1 base address */
-#define AON_CMUA1_BASE                           (0x44540000u)
-/** Peripheral AON_CMUA1 base pointer */
-#define AON_CMUA1                                ((CMU_Type *)AON_CMUA1_BASE)
-/** Peripheral AON_CMUA2 base address */
-#define AON_CMUA2_BASE                           (0x44650000u)
-/** Peripheral AON_CMUA2 base pointer */
-#define AON_CMUA2                                ((CMU_Type *)AON_CMUA2_BASE)
 /** Peripheral DDRC_CMU1 base address */
 #define DDRC_CMU1_BASE                           (0x4E060000u)
 /** Peripheral DDRC_CMU1 base pointer */
@@ -1014,14 +960,6 @@ typedef enum IRQn {
 #define M7_CMUM1_BASE                            (0x4A090000u)
 /** Peripheral M7_CMUM1 base pointer */
 #define M7_CMUM1                                 ((CMU_Type *)M7_CMUM1_BASE)
-/** Peripheral NOC_CMUN0 base address */
-#define NOC_CMUN0_BASE                           (0x49070000u)
-/** Peripheral NOC_CMUN0 base pointer */
-#define NOC_CMUN0                                ((CMU_Type *)NOC_CMUN0_BASE)
-/** Peripheral NOC_CMUN1 base address */
-#define NOC_CMUN1_BASE                           (0x49080000u)
-/** Peripheral NOC_CMUN1 base pointer */
-#define NOC_CMUN1                                ((CMU_Type *)NOC_CMUN1_BASE)
 /** Peripheral WAKEUP_CMU1 base address */
 #define WAKEUP_CMU1_BASE                         (0x42750000u)
 /** Peripheral WAKEUP_CMU1 base pointer */
@@ -1031,9 +969,9 @@ typedef enum IRQn {
 /** Peripheral WAKEUP_CMU2 base pointer */
 #define WAKEUP_CMU2                              ((CMU_Type *)WAKEUP_CMU2_BASE)
 /** Array initializer of CMU peripheral base addresses */
-#define CMU_BASE_ADDRS                           { ANALOG_CMU0_BASE, AON_CMUA1_BASE, AON_CMUA2_BASE, DDRC_CMU1_BASE, DDRC_CMU2_BASE, M7_CMUM0_BASE, M7_CMUM1_BASE, NOC_CMUN0_BASE, NOC_CMUN1_BASE, WAKEUP_CMU1_BASE, WAKEUP_CMU2_BASE }
+#define CMU_BASE_ADDRS                           { ANALOG_CMU0_BASE, DDRC_CMU1_BASE, DDRC_CMU2_BASE, M7_CMUM0_BASE, M7_CMUM1_BASE, WAKEUP_CMU1_BASE, WAKEUP_CMU2_BASE }
 /** Array initializer of CMU peripheral base pointers */
-#define CMU_BASE_PTRS                            { ANALOG_CMU0, AON_CMUA1, AON_CMUA2, DDRC_CMU1, DDRC_CMU2, M7_CMUM0, M7_CMUM1, NOC_CMUN0, NOC_CMUN1, WAKEUP_CMU1, WAKEUP_CMU2 }
+#define CMU_BASE_PTRS                            { ANALOG_CMU0, DDRC_CMU1, DDRC_CMU2, M7_CMUM0, M7_CMUM1, WAKEUP_CMU1, WAKEUP_CMU2 }
 
 /* COLOR_TEMP - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__COLOR_TEMP base address */
@@ -1045,6 +983,40 @@ typedef enum IRQn {
 /** Array initializer of COLOR_TEMP peripheral base pointers */
 #define COLOR_TEMP_BASE_PTRS                     { CAMERA__ISP__COLOR_TEMP }
 
+/* COREMIX - Peripheral instance base addresses */
+/** Peripheral CORTEX_A55_CORE base address */
+#define CORTEX_A55_CORE_BASE                     (0x44461800u)
+/** Peripheral CORTEX_A55_CORE base pointer */
+#define CORTEX_A55_CORE                          ((COREMIX_Type *)CORTEX_A55_CORE_BASE)
+/** Array initializer of COREMIX peripheral base addresses */
+#define COREMIX_BASE_ADDRS                       { CORTEX_A55_CORE_BASE }
+/** Array initializer of COREMIX peripheral base pointers */
+#define COREMIX_BASE_PTRS                        { CORTEX_A55_CORE }
+
+/* CORE_CLK - Peripheral instance base addresses */
+/** Peripheral GPC_CTRL_CM33 base address */
+#define GPC_CTRL_CM33_BASE                       (0x44470000u)
+/** Peripheral GPC_CTRL_CM33 base pointer */
+#define GPC_CTRL_CM33                            ((CORE_CLK_Type *)GPC_CTRL_CM33_BASE)
+/** Peripheral GPC_CTRL_CM7 base address */
+#define GPC_CTRL_CM7_BASE                        (0x44470800u)
+/** Peripheral GPC_CTRL_CM7 base pointer */
+#define GPC_CTRL_CM7                             ((CORE_CLK_Type *)GPC_CTRL_CM7_BASE)
+/** Array initializer of CORE_CLK peripheral base addresses */
+#define CORE_CLK_BASE_ADDRS                      { GPC_CTRL_CM33_BASE, GPC_CTRL_CM7_BASE }
+/** Array initializer of CORE_CLK peripheral base pointers */
+#define CORE_CLK_BASE_PTRS                       { GPC_CTRL_CM33, GPC_CTRL_CM7 }
+
+/* CORE_PLATFORM - Peripheral instance base addresses */
+/** Peripheral CORTEX_A55_PLATFORM base address */
+#define CORTEX_A55_PLATFORM_BASE                 (0x44463000u)
+/** Peripheral CORTEX_A55_PLATFORM base pointer */
+#define CORTEX_A55_PLATFORM                      ((CORE_PLATFORM_Type *)CORTEX_A55_PLATFORM_BASE)
+/** Array initializer of CORE_PLATFORM peripheral base addresses */
+#define CORE_PLATFORM_BASE_ADDRS                 { CORTEX_A55_PLATFORM_BASE }
+/** Array initializer of CORE_PLATFORM peripheral base pointers */
+#define CORE_PLATFORM_BASE_PTRS                  { CORTEX_A55_PLATFORM }
+
 /* CORTEXA_TCU - Peripheral instance base addresses */
 /** Peripheral CORTEXA__TCU base address */
 #define CORTEXA__TCU_BASE                        (0x4A400000u)
@@ -1055,6 +1027,16 @@ typedef enum IRQn {
 /** Array initializer of CORTEXA_TCU peripheral base pointers */
 #define CORTEXA_TCU_BASE_PTRS                    { CORTEXA__TCU }
 
+/* CRCA - Peripheral instance base addresses */
+/** Peripheral AON__CRCA base address */
+#define AON__CRCA_BASE                           (0x44660000u)
+/** Peripheral AON__CRCA base pointer */
+#define AON__CRCA                                ((CRCA_Type *)AON__CRCA_BASE)
+/** Array initializer of CRCA peripheral base addresses */
+#define CRCA_BASE_ADDRS                          { AON__CRCA_BASE }
+/** Array initializer of CRCA peripheral base pointers */
+#define CRCA_BASE_PTRS                           { AON__CRCA }
+
 /* CSI - Peripheral instance base addresses */
 /** Peripheral CAMERA__DSI_CSI_COMBO_COMPLEX_CSI1__CSI base address */
 #define CAMERA__DSI_CSI_COMBO_COMPLEX_CSI1__CSI_BASE (0x4AD40000u)
@@ -1064,6 +1046,16 @@ typedef enum IRQn {
 #define CSI_BASE_ADDRS                           { CAMERA__DSI_CSI_COMBO_COMPLEX_CSI1__CSI_BASE }
 /** Array initializer of CSI peripheral base pointers */
 #define CSI_BASE_PTRS                            { CAMERA__DSI_CSI_COMBO_COMPLEX_CSI1__CSI }
+
+/* CSTCU - Peripheral instance base addresses */
+/** Peripheral AON__CSTCU base address */
+#define AON__CSTCU_BASE                          (0x44590000u)
+/** Peripheral AON__CSTCU base pointer */
+#define AON__CSTCU                               ((CSTCU_Type *)AON__CSTCU_BASE)
+/** Array initializer of CSTCU peripheral base addresses */
+#define CSTCU_BASE_ADDRS                         { AON__CSTCU_BASE }
+/** Array initializer of CSTCU peripheral base pointers */
+#define CSTCU_BASE_PTRS                          { AON__CSTCU }
 
 /* DDRC - Peripheral instance base addresses */
 /** Peripheral DDRC base address */
@@ -1084,16 +1076,6 @@ typedef enum IRQn {
 #define DDR_BLK_CTRL_DDRMIX_BASE_ADDRS           { DDRC__BLK_CTRL_DDRMIX_BASE }
 /** Array initializer of DDR_BLK_CTRL_DDRMIX peripheral base pointers */
 #define DDR_BLK_CTRL_DDRMIX_BASE_PTRS            { DDRC__BLK_CTRL_DDRMIX }
-
-/* DDR_LSTCU - Peripheral instance base addresses */
-/** Peripheral DDRC__LSTCU base address */
-#define DDRC__LSTCU_BASE                         (0x4E050000u)
-/** Peripheral DDRC__LSTCU base pointer */
-#define DDRC__LSTCU                              ((DDR_LSTCU_Type *)DDRC__LSTCU_BASE)
-/** Array initializer of DDR_LSTCU peripheral base addresses */
-#define DDR_LSTCU_BASE_ADDRS                     { DDRC__LSTCU_BASE }
-/** Array initializer of DDR_LSTCU peripheral base pointers */
-#define DDR_LSTCU_BASE_PTRS                      { DDRC__LSTCU }
 
 /* DDR_TCU - Peripheral instance base addresses */
 /** Peripheral DDRC__TCU base address */
@@ -1135,25 +1117,15 @@ typedef enum IRQn {
 /** Array initializer of DISPLAY_BLK_CTRL_DISPLAYMIX peripheral base pointers */
 #define DISPLAY_BLK_CTRL_DISPLAYMIX_BASE_PTRS    { DISPLAY__BLK_CTRL_DISPLAYMIX }
 
-/* DISPLAY_OCRAM_MECC - Peripheral instance base addresses */
-/** Peripheral DISPLAY__OCRAM_MECC base address */
-#define DISPLAY__OCRAM_MECC_BASE                 (0x4B0F0000u)
-/** Peripheral DISPLAY__OCRAM_MECC base pointer */
-#define DISPLAY__OCRAM_MECC                      ((DISPLAY_OCRAM_MECC_Type *)DISPLAY__OCRAM_MECC_BASE)
-/** Array initializer of DISPLAY_OCRAM_MECC peripheral base addresses */
-#define DISPLAY_OCRAM_MECC_BASE_ADDRS            { DISPLAY__OCRAM_MECC_BASE }
-/** Array initializer of DISPLAY_OCRAM_MECC peripheral base pointers */
-#define DISPLAY_OCRAM_MECC_BASE_PTRS             { DISPLAY__OCRAM_MECC }
-
-/* DISPLAY_PIXEL_INTERLEAVER - Peripheral instance base addresses */
+/* DISPLAY_INTERLEAVER - Peripheral instance base addresses */
 /** Peripheral DISPLAY__PIXEL_INTERLEAVER1 base address */
 #define DISPLAY__PIXEL_INTERLEAVER1_BASE         (0x4B0D0000u)
 /** Peripheral DISPLAY__PIXEL_INTERLEAVER1 base pointer */
-#define DISPLAY__PIXEL_INTERLEAVER1              ((DISPLAY_PIXEL_INTERLEAVER_Type *)DISPLAY__PIXEL_INTERLEAVER1_BASE)
-/** Array initializer of DISPLAY_PIXEL_INTERLEAVER peripheral base addresses */
-#define DISPLAY_PIXEL_INTERLEAVER_BASE_ADDRS     { DISPLAY__PIXEL_INTERLEAVER1_BASE }
-/** Array initializer of DISPLAY_PIXEL_INTERLEAVER peripheral base pointers */
-#define DISPLAY_PIXEL_INTERLEAVER_BASE_PTRS      { DISPLAY__PIXEL_INTERLEAVER1 }
+#define DISPLAY__PIXEL_INTERLEAVER1              ((DISPLAY_INTERLEAVER_Type *)DISPLAY__PIXEL_INTERLEAVER1_BASE)
+/** Array initializer of DISPLAY_INTERLEAVER peripheral base addresses */
+#define DISPLAY_INTERLEAVER_BASE_ADDRS           { DISPLAY__PIXEL_INTERLEAVER1_BASE }
+/** Array initializer of DISPLAY_INTERLEAVER peripheral base pointers */
+#define DISPLAY_INTERLEAVER_BASE_PTRS            { DISPLAY__PIXEL_INTERLEAVER1 }
 
 /* DISPLAY_PIXEL_MAPPER - Peripheral instance base addresses */
 /** Peripheral DISPLAY__PIXEL_MAPPER base address */
@@ -1216,6 +1188,16 @@ typedef enum IRQn {
 /** Array initializer of DMA5 peripheral base pointers */
 #define DMA5_BASE_PTRS                           { (DMA5_Type *)0u, (DMA5_Type *)0u, EDMA5_2, EDMA5_3, EDMA5_4 }
 
+/* DOORBELLS - Peripheral instance base addresses */
+/** Peripheral GPU__REG__DOORBELLS base address */
+#define GPU__REG__DOORBELLS_BASE                 (0x4D980000u)
+/** Peripheral GPU__REG__DOORBELLS base pointer */
+#define GPU__REG__DOORBELLS                      ((DOORBELLS_Type *)GPU__REG__DOORBELLS_BASE)
+/** Array initializer of DOORBELLS peripheral base addresses */
+#define DOORBELLS_BASE_ADDRS                     { GPU__REG__DOORBELLS_BASE }
+/** Array initializer of DOORBELLS peripheral base pointers */
+#define DOORBELLS_BASE_PTRS                      { GPU__REG__DOORBELLS }
+
 /* DPU_IRQSTEER - Peripheral instance base addresses */
 /** Peripheral DPU_IRQSTEER base address */
 #define DPU_IRQSTEER_BASE                        (0x4B0B0000u)
@@ -1246,15 +1228,43 @@ typedef enum IRQn {
 /** Array initializer of EE peripheral base pointers */
 #define EE_BASE_PTRS                             { CAMERA__ISP__EE }
 
+/* EIM - Peripheral instance base addresses */
+/** Peripheral AON__EIMA base address */
+#define AON__EIMA_BASE                           (0x44550000u)
+/** Peripheral AON__EIMA base pointer */
+#define AON__EIMA                                ((EIM_Type *)AON__EIMA_BASE)
+/** Peripheral M7__EIM base address */
+#define M7__EIM_BASE                             (0x4A060000u)
+/** Peripheral M7__EIM base pointer */
+#define M7__EIM                                  ((EIM_Type *)M7__EIM_BASE)
+/** Peripheral NPU__EIM_NPUMIX base address */
+#define NPU__EIM_NPUMIX_BASE                     (0x4A860000u)
+/** Peripheral NPU__EIM_NPUMIX base pointer */
+#define NPU__EIM_NPUMIX                          ((EIM_Type *)NPU__EIM_NPUMIX_BASE)
+/** Peripheral WAKEUP__EIMW base address */
+#define WAKEUP__EIMW_BASE                        (0x42780000u)
+/** Peripheral WAKEUP__EIMW base pointer */
+#define WAKEUP__EIMW                             ((EIM_Type *)WAKEUP__EIMW_BASE)
+/** Array initializer of EIM peripheral base addresses */
+#define EIM_BASE_ADDRS                           { AON__EIMA_BASE, M7__EIM_BASE, NPU__EIM_NPUMIX_BASE, WAKEUP__EIMW_BASE }
+/** Array initializer of EIM peripheral base pointers */
+#define EIM_BASE_PTRS                            { AON__EIMA, M7__EIM, NPU__EIM_NPUMIX, WAKEUP__EIMW }
+
+/* ENETC - Peripheral instance base addresses */
+/** Peripheral ENETC0_GLOBAL base address */
+#define ENETC0_GLOBAL_BASE                       (0x4CC20000u)
+/** Peripheral ENETC0_GLOBAL base pointer */
+#define ENETC0_GLOBAL                            ((ENETC_Type *)ENETC0_GLOBAL_BASE)
+/** Array initializer of ENETC peripheral base addresses */
+#define ENETC_BASE_ADDRS                         { ENETC0_GLOBAL_BASE }
+/** Array initializer of ENETC peripheral base pointers */
+#define ENETC_BASE_PTRS                          { ENETC0_GLOBAL }
+
 /* ENETC_GLOBAL - Peripheral instance base addresses */
 /** Peripheral EMDIO_GLOBAL base address */
 #define EMDIO_GLOBAL_BASE                        (0x4CCF0000u)
 /** Peripheral EMDIO_GLOBAL base pointer */
 #define EMDIO_GLOBAL                             ((ENETC_GLOBAL_Type *)EMDIO_GLOBAL_BASE)
-/** Peripheral ENETC0_GLOBAL base address */
-#define ENETC0_GLOBAL_BASE                       (0x4CC20000u)
-/** Peripheral ENETC0_GLOBAL base pointer */
-#define ENETC0_GLOBAL                            ((ENETC_GLOBAL_Type *)ENETC0_GLOBAL_BASE)
 /** Peripheral ENETC1_GLOBAL base address */
 #define ENETC1_GLOBAL_BASE                       (0x4CC60000u)
 /** Peripheral ENETC1_GLOBAL base pointer */
@@ -1268,9 +1278,9 @@ typedef enum IRQn {
 /** Peripheral TMR0_GLOBAL base pointer */
 #define TMR0_GLOBAL                              ((ENETC_GLOBAL_Type *)TMR0_GLOBAL_BASE)
 /** Array initializer of ENETC_GLOBAL peripheral base addresses */
-#define ENETC_GLOBAL_BASE_ADDRS                  { EMDIO_GLOBAL_BASE, ENETC0_GLOBAL_BASE, ENETC1_GLOBAL_BASE, ENETC2_GLOBAL_BASE, TMR0_GLOBAL_BASE }
+#define ENETC_GLOBAL_BASE_ADDRS                  { EMDIO_GLOBAL_BASE, ENETC1_GLOBAL_BASE, ENETC2_GLOBAL_BASE, TMR0_GLOBAL_BASE }
 /** Array initializer of ENETC_GLOBAL peripheral base pointers */
-#define ENETC_GLOBAL_BASE_PTRS                   { EMDIO_GLOBAL, ENETC0_GLOBAL, ENETC1_GLOBAL, ENETC2_GLOBAL, TMR0_GLOBAL }
+#define ENETC_GLOBAL_BASE_PTRS                   { EMDIO_GLOBAL, ENETC1_GLOBAL, ENETC2_GLOBAL, TMR0_GLOBAL }
 
 /* ENETC_PCI_TYPE0 - Peripheral instance base addresses */
 /** Peripheral EMDIO0_PCI_HDR_TYPE0 base address */
@@ -1420,16 +1430,6 @@ typedef enum IRQn {
 /** Array initializer of ENET_PHY_VS_MII_MMD peripheral base pointers */
 #define ENET_PHY_VS_MII_MMD_BASE_PTRS            { ENET_PHY_VS_MII_MMD }
 
-/* ENET_PHY_VS_MMD1 - Peripheral instance base addresses */
-/** Peripheral ENET_PHY_VS_MMD1 base address */
-#define ENET_PHY_VS_MMD1_BASE                    (0x3C0000u)
-/** Peripheral ENET_PHY_VS_MMD1 base pointer */
-#define ENET_PHY_VS_MMD1                         ((ENET_PHY_VS_MMD1_Type *)ENET_PHY_VS_MMD1_BASE)
-/** Array initializer of ENET_PHY_VS_MMD1 peripheral base addresses */
-#define ENET_PHY_VS_MMD1_BASE_ADDRS              { ENET_PHY_VS_MMD1_BASE }
-/** Array initializer of ENET_PHY_VS_MMD1 peripheral base pointers */
-#define ENET_PHY_VS_MMD1_BASE_PTRS               { ENET_PHY_VS_MMD1 }
-
 /* ENET_PHY_XS_PCS_MMD - Peripheral instance base addresses */
 /** Peripheral ENET_PHY_XS_PCS_MMD base address */
 #define ENET_PHY_XS_PCS_MMD_BASE                 (0x60000u)
@@ -1439,6 +1439,16 @@ typedef enum IRQn {
 #define ENET_PHY_XS_PCS_MMD_BASE_ADDRS           { ENET_PHY_XS_PCS_MMD_BASE }
 /** Array initializer of ENET_PHY_XS_PCS_MMD peripheral base pointers */
 #define ENET_PHY_XS_PCS_MMD_BASE_PTRS            { ENET_PHY_XS_PCS_MMD }
+
+/* ERM - Peripheral instance base addresses */
+/** Peripheral M7__ERM base address */
+#define M7__ERM_BASE                             (0x4A070000u)
+/** Peripheral M7__ERM base pointer */
+#define M7__ERM                                  ((ERM_Type *)M7__ERM_BASE)
+/** Array initializer of ERM peripheral base addresses */
+#define ERM_BASE_ADDRS                           { M7__ERM_BASE }
+/** Array initializer of ERM peripheral base pointers */
+#define ERM_BASE_PTRS                            { M7__ERM }
 
 /* FLEXIO - Peripheral instance base addresses */
 /** Peripheral FLEXIO1 base address */
@@ -1494,14 +1504,6 @@ typedef enum IRQn {
 #define GCM_BASE_PTRS                            { CAMERA__ISP__GCM }
 
 /* GPC - Peripheral instance base addresses */
-/** Peripheral GPC_CTRL_CM33 base address */
-#define GPC_CTRL_CM33_BASE                       (0x44470000u)
-/** Peripheral GPC_CTRL_CM33 base pointer */
-#define GPC_CTRL_CM33                            ((GPC_Type *)GPC_CTRL_CM33_BASE)
-/** Peripheral GPC_CTRL_CM7 base address */
-#define GPC_CTRL_CM7_BASE                        (0x44470800u)
-/** Peripheral GPC_CTRL_CM7 base pointer */
-#define GPC_CTRL_CM7                             ((GPC_Type *)GPC_CTRL_CM7_BASE)
 /** Peripheral GPC_CTRL_CA55_0 base address */
 #define GPC_CTRL_CA55_0_BASE                     (0x44471000u)
 /** Peripheral GPC_CTRL_CA55_0 base pointer */
@@ -1531,9 +1533,9 @@ typedef enum IRQn {
 /** Peripheral GPC_CTRL_CA55_CLUSTER base pointer */
 #define GPC_CTRL_CA55_CLUSTER                    ((GPC_Type *)GPC_CTRL_CA55_CLUSTER_BASE)
 /** Array initializer of GPC peripheral base addresses */
-#define GPC_BASE_ADDRS                           { GPC_CTRL_CM33_BASE, GPC_CTRL_CM7_BASE, GPC_CTRL_CA55_0_BASE, GPC_CTRL_CA55_1_BASE, GPC_CTRL_CA55_2_BASE, GPC_CTRL_CA55_3_BASE, GPC_CTRL_CA55_4_BASE, GPC_CTRL_CA55_5_BASE, GPC_CTRL_CA55_CLUSTER_BASE }
+#define GPC_BASE_ADDRS                           { 0u, 0u, GPC_CTRL_CA55_0_BASE, GPC_CTRL_CA55_1_BASE, GPC_CTRL_CA55_2_BASE, GPC_CTRL_CA55_3_BASE, GPC_CTRL_CA55_4_BASE, GPC_CTRL_CA55_5_BASE, GPC_CTRL_CA55_CLUSTER_BASE }
 /** Array initializer of GPC peripheral base pointers */
-#define GPC_BASE_PTRS                            { GPC_CTRL_CM33, GPC_CTRL_CM7, GPC_CTRL_CA55_0, GPC_CTRL_CA55_1, GPC_CTRL_CA55_2, GPC_CTRL_CA55_3, GPC_CTRL_CA55_4, GPC_CTRL_CA55_5, GPC_CTRL_CA55_CLUSTER }
+#define GPC_BASE_PTRS                            { (GPC_Type *)0u, (GPC_Type *)0u, GPC_CTRL_CA55_0, GPC_CTRL_CA55_1, GPC_CTRL_CA55_2, GPC_CTRL_CA55_3, GPC_CTRL_CA55_4, GPC_CTRL_CA55_5, GPC_CTRL_CA55_CLUSTER }
 
 /* GPC_GLOBAL - Peripheral instance base addresses */
 /** Peripheral CCMSRCGPC__GPC__GPC_GLOBAL base address */
@@ -1555,45 +1557,15 @@ typedef enum IRQn {
 /** Array initializer of GPU_BLK_CTRL_GPUMIX peripheral base pointers */
 #define GPU_BLK_CTRL_GPUMIX_BASE_PTRS            { GPU__BLK_CTRL_GPUMIX }
 
-/* GPU_MALI_DOORBELLS - Peripheral instance base addresses */
-/** Peripheral GPU__REG__GPU_MALI_DOORBELLS base address */
-#define GPU__REG__GPU_MALI_DOORBELLS_BASE        (0x4D980000u)
-/** Peripheral GPU__REG__GPU_MALI_DOORBELLS base pointer */
-#define GPU__REG__GPU_MALI_DOORBELLS             ((GPU_MALI_DOORBELLS_Type *)GPU__REG__GPU_MALI_DOORBELLS_BASE)
-/** Array initializer of GPU_MALI_DOORBELLS peripheral base addresses */
-#define GPU_MALI_DOORBELLS_BASE_ADDRS            { GPU__REG__GPU_MALI_DOORBELLS_BASE }
-/** Array initializer of GPU_MALI_DOORBELLS peripheral base pointers */
-#define GPU_MALI_DOORBELLS_BASE_PTRS             { GPU__REG__GPU_MALI_DOORBELLS }
-
-/* GPU_MALI_GPU_REGISTERS - Peripheral instance base addresses */
-/** Peripheral GPU__REG__GPU_MALI_GPU_REGISTERS base address */
-#define GPU__REG__GPU_MALI_GPU_REGISTERS_BASE    (0x4D900000u)
-/** Peripheral GPU__REG__GPU_MALI_GPU_REGISTERS base pointer */
-#define GPU__REG__GPU_MALI_GPU_REGISTERS         ((GPU_MALI_GPU_REGISTERS_Type *)GPU__REG__GPU_MALI_GPU_REGISTERS_BASE)
-/** Array initializer of GPU_MALI_GPU_REGISTERS peripheral base addresses */
-#define GPU_MALI_GPU_REGISTERS_BASE_ADDRS        { GPU__REG__GPU_MALI_GPU_REGISTERS_BASE }
-/** Array initializer of GPU_MALI_GPU_REGISTERS peripheral base pointers */
-#define GPU_MALI_GPU_REGISTERS_BASE_PTRS         { GPU__REG__GPU_MALI_GPU_REGISTERS }
-
-/* GPU_MALI_IPA_CONTROL - Peripheral instance base addresses */
-/** Peripheral GPU__REG__GPU_MALI_IPA_CONTROL base address */
-#define GPU__REG__GPU_MALI_IPA_CONTROL_BASE      (0x4D940000u)
-/** Peripheral GPU__REG__GPU_MALI_IPA_CONTROL base pointer */
-#define GPU__REG__GPU_MALI_IPA_CONTROL           ((GPU_MALI_IPA_CONTROL_Type *)GPU__REG__GPU_MALI_IPA_CONTROL_BASE)
-/** Array initializer of GPU_MALI_IPA_CONTROL peripheral base addresses */
-#define GPU_MALI_IPA_CONTROL_BASE_ADDRS          { GPU__REG__GPU_MALI_IPA_CONTROL_BASE }
-/** Array initializer of GPU_MALI_IPA_CONTROL peripheral base pointers */
-#define GPU_MALI_IPA_CONTROL_BASE_PTRS           { GPU__REG__GPU_MALI_IPA_CONTROL }
-
-/* GPU_MALI_USER - Peripheral instance base addresses */
-/** Peripheral GPU__REG__GPU_MALI_USER base address */
-#define GPU__REG__GPU_MALI_USER_BASE             (0x4D910000u)
-/** Peripheral GPU__REG__GPU_MALI_USER base pointer */
-#define GPU__REG__GPU_MALI_USER                  ((GPU_MALI_USER_Type *)GPU__REG__GPU_MALI_USER_BASE)
-/** Array initializer of GPU_MALI_USER peripheral base addresses */
-#define GPU_MALI_USER_BASE_ADDRS                 { GPU__REG__GPU_MALI_USER_BASE }
-/** Array initializer of GPU_MALI_USER peripheral base pointers */
-#define GPU_MALI_USER_BASE_PTRS                  { GPU__REG__GPU_MALI_USER }
+/* GPU_REGISTERS - Peripheral instance base addresses */
+/** Peripheral GPU__REG__GPU_REGISTERS base address */
+#define GPU__REG__GPU_REGISTERS_BASE             (0x4D900000u)
+/** Peripheral GPU__REG__GPU_REGISTERS base pointer */
+#define GPU__REG__GPU_REGISTERS                  ((GPU_REGISTERS_Type *)GPU__REG__GPU_REGISTERS_BASE)
+/** Array initializer of GPU_REGISTERS peripheral base addresses */
+#define GPU_REGISTERS_BASE_ADDRS                 { GPU__REG__GPU_REGISTERS_BASE }
+/** Array initializer of GPU_REGISTERS peripheral base pointers */
+#define GPU_REGISTERS_BASE_PTRS                  { GPU__REG__GPU_REGISTERS }
 
 /* GPU_TCU - Peripheral instance base addresses */
 /** Peripheral GPU__TCU base address */
@@ -1740,6 +1712,16 @@ typedef enum IRQn {
 /** Array initializer of IDBG2 peripheral base pointers */
 #define IDBG2_BASE_PTRS                          { CAMERA__ISP__IDBG2 }
 
+/* INTM - Peripheral instance base addresses */
+/** Peripheral INTM base address */
+#define INTM_BASE                                (0x44580000u)
+/** Peripheral INTM base pointer */
+#define INTM                                     ((INTM_Type *)INTM_BASE)
+/** Array initializer of INTM peripheral base addresses */
+#define INTM_BASE_ADDRS                          { INTM_BASE }
+/** Array initializer of INTM peripheral base pointers */
+#define INTM_BASE_PTRS                           { INTM }
+
 /* IOMUXC - Peripheral instance base addresses */
 /** Peripheral IOMUXC base address */
 #define IOMUXC_BASE                              (0x443C0000u)
@@ -1759,6 +1741,16 @@ typedef enum IRQn {
 #define IOMUXC_GPR_BASE_ADDRS                    { AON__IOMUXC0__IOMUXC_GPR_BASE }
 /** Array initializer of IOMUXC_GPR peripheral base pointers */
 #define IOMUXC_GPR_BASE_PTRS                     { AON__IOMUXC0__IOMUXC_GPR }
+
+/* IPA_CONTROL - Peripheral instance base addresses */
+/** Peripheral GPU__REG__IPA_CONTROL base address */
+#define GPU__REG__IPA_CONTROL_BASE               (0x4D940000u)
+/** Peripheral GPU__REG__IPA_CONTROL base pointer */
+#define GPU__REG__IPA_CONTROL                    ((IPA_CONTROL_Type *)GPU__REG__IPA_CONTROL_BASE)
+/** Array initializer of IPA_CONTROL peripheral base addresses */
+#define IPA_CONTROL_BASE_ADDRS                   { GPU__REG__IPA_CONTROL_BASE }
+/** Array initializer of IPA_CONTROL peripheral base pointers */
+#define IPA_CONTROL_BASE_PTRS                    { GPU__REG__IPA_CONTROL }
 
 /* IRQSTEER - Peripheral instance base addresses */
 /** Peripheral IRQSTEER base address */
@@ -1790,25 +1782,494 @@ typedef enum IRQn {
 /** Array initializer of ISI peripheral base pointers */
 #define ISI_BASE_PTRS                            { CAMERA__ISI }
 
+/* ISI_RD_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR_BASE (0x4AFF0C00u)
+/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR  ((ISI_RD_I_main_QosGenerator_Type *)CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISI_RD_I_main_QosGenerator peripheral base addresses */
+#define ISI_RD_I_main_QosGenerator_BASE_ADDRS    { CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISI_RD_I_main_QosGenerator peripheral base pointers */
+#define ISI_RD_I_main_QosGenerator_BASE_PTRS     { CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR }
+
+/* ISI_RD_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1000u)
+/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER ((ISI_RD_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISI_RD_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISI_RD_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISI_RD_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISI_RD_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISI_WR_U_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR_BASE (0x4AFF0C80u)
+/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR ((ISI_WR_U_I_main_QosGenerator_Type *)CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISI_WR_U_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISI_WR_U_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISI_WR_U_I_main_QosGenerator peripheral base pointers */
+#define ISI_WR_U_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR }
+
+/* ISI_WR_U_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1080u)
+/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER ((ISI_WR_U_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISI_WR_U_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISI_WR_U_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISI_WR_U_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISI_WR_U_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISI_WR_V_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR_BASE (0x4AFF0D00u)
+/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR ((ISI_WR_V_I_main_QosGenerator_Type *)CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISI_WR_V_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISI_WR_V_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISI_WR_V_I_main_QosGenerator peripheral base pointers */
+#define ISI_WR_V_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR }
+
+/* ISI_WR_V_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1100u)
+/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER ((ISI_WR_V_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISI_WR_V_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISI_WR_V_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISI_WR_V_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISI_WR_V_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISI_WR_Y_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR_BASE (0x4AFF0D80u)
+/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR ((ISI_WR_Y_I_main_QosGenerator_Type *)CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISI_WR_Y_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISI_WR_Y_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISI_WR_Y_I_main_QosGenerator peripheral base pointers */
+#define ISI_WR_Y_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR }
+
+/* ISI_WR_Y_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1180u)
+/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER ((ISI_WR_Y_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISI_WR_Y_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISI_WR_Y_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISI_WR_Y_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISI_WR_Y_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISP - Peripheral instance base addresses */
+/** Peripheral CAMERA__ISP__ALIAS base address */
+#define CAMERA__ISP__ALIAS_BASE                  (0x4AE02000u)
+/** Peripheral CAMERA__ISP__ALIAS base pointer */
+#define CAMERA__ISP__ALIAS                       ((ISP_Type *)CAMERA__ISP__ALIAS_BASE)
+/** Array initializer of ISP peripheral base addresses */
+#define ISP_BASE_ADDRS                           { CAMERA__ISP__ALIAS_BASE }
+/** Array initializer of ISP peripheral base pointers */
+#define ISP_BASE_PTRS                            { CAMERA__ISP__ALIAS }
+
+/* ISP_RD_0_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR_BASE (0x4AFF0E00u)
+/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR ((ISP_RD_0_I_main_QosGenerator_Type *)CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISP_RD_0_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISP_RD_0_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISP_RD_0_I_main_QosGenerator peripheral base pointers */
+#define ISP_RD_0_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR }
+
+/* ISP_RD_0_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1200u)
+/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER ((ISP_RD_0_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISP_RD_0_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISP_RD_0_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISP_RD_0_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISP_RD_0_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISP_RD_1_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR_BASE (0x4AFF0E80u)
+/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR ((ISP_RD_1_I_main_QosGenerator_Type *)CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISP_RD_1_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISP_RD_1_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISP_RD_1_I_main_QosGenerator peripheral base pointers */
+#define ISP_RD_1_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR }
+
+/* ISP_RD_1_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1280u)
+/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER ((ISP_RD_1_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISP_RD_1_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISP_RD_1_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISP_RD_1_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISP_RD_1_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISP_WR_0_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR_BASE (0x4AFF0F00u)
+/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR ((ISP_WR_0_I_main_QosGenerator_Type *)CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISP_WR_0_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISP_WR_0_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISP_WR_0_I_main_QosGenerator peripheral base pointers */
+#define ISP_WR_0_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR }
+
+/* ISP_WR_0_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1300u)
+/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER ((ISP_WR_0_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISP_WR_0_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISP_WR_0_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISP_WR_0_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISP_WR_0_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* ISP_WR_1_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR_BASE (0x4AFF0F80u)
+/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR ((ISP_WR_1_I_main_QosGenerator_Type *)CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of ISP_WR_1_I_main_QosGenerator peripheral base addresses
+ * */
+#define ISP_WR_1_I_main_QosGenerator_BASE_ADDRS  { CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of ISP_WR_1_I_main_QosGenerator peripheral base pointers */
+#define ISP_WR_1_I_main_QosGenerator_BASE_PTRS   { CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR }
+
+/* ISP_WR_1_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1380u)
+/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER ((ISP_WR_1_I_main_TransactionStatFilter_Type *)CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of ISP_WR_1_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define ISP_WR_1_I_main_TransactionStatFilter_BASE_ADDRS { CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of ISP_WR_1_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define ISP_WR_1_I_main_TransactionStatFilter_BASE_PTRS { CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_2D_blitter_FU_rd_0_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR
+ * base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR_BASE (0x4B3F0800u)
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR
+ * base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR ((I_Seeris_2D_blitter_FU_rd_0_I_main_QosGenerator_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of I_Seeris_2D_blitter_FU_rd_0_I_main_QosGenerator
+ * peripheral base addresses */
+#define I_Seeris_2D_blitter_FU_rd_0_I_main_QosGenerator_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of I_Seeris_2D_blitter_FU_rd_0_I_main_QosGenerator
+ * peripheral base pointers */
+#define I_Seeris_2D_blitter_FU_rd_0_I_main_QosGenerator_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR }
+
+/* I_Seeris_2D_blitter_FU_rd_0_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0A00u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_2D_blitter_FU_rd_0_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_2D_blitter_FU_rd_0_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_2D_blitter_FU_rd_0_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_2D_blitter_FU_rd_0_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_2D_blitter_FU_rd_0_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_2D_blitter_FU_rd_1_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR
+ * base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR_BASE (0x4B3F0880u)
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR
+ * base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR ((I_Seeris_2D_blitter_FU_rd_1_I_main_QosGenerator_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of I_Seeris_2D_blitter_FU_rd_1_I_main_QosGenerator
+ * peripheral base addresses */
+#define I_Seeris_2D_blitter_FU_rd_1_I_main_QosGenerator_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of I_Seeris_2D_blitter_FU_rd_1_I_main_QosGenerator
+ * peripheral base pointers */
+#define I_Seeris_2D_blitter_FU_rd_1_I_main_QosGenerator_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR }
+
+/* I_Seeris_2D_blitter_FU_rd_1_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0A80u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_2D_blitter_FU_rd_1_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_2D_blitter_FU_rd_1_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_2D_blitter_FU_rd_1_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_2D_blitter_FU_rd_1_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_2D_blitter_FU_rd_1_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_2D_blitter_FU_rd_2_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR
+ * base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR_BASE (0x4B3F0900u)
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR
+ * base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR ((I_Seeris_2D_blitter_FU_rd_2_I_main_QosGenerator_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of I_Seeris_2D_blitter_FU_rd_2_I_main_QosGenerator
+ * peripheral base addresses */
+#define I_Seeris_2D_blitter_FU_rd_2_I_main_QosGenerator_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of I_Seeris_2D_blitter_FU_rd_2_I_main_QosGenerator
+ * peripheral base pointers */
+#define I_Seeris_2D_blitter_FU_rd_2_I_main_QosGenerator_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR }
+
+/* I_Seeris_2D_blitter_FU_rd_2_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0B00u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_2D_blitter_FU_rd_2_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_2D_blitter_FU_rd_2_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_2D_blitter_FU_rd_2_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_2D_blitter_FU_rd_2_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_2D_blitter_FU_rd_2_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_2D_blitter_Store_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR
+ * base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR_BASE (0x4B3F0980u)
+/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR
+ * base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR ((I_Seeris_2D_blitter_Store_wr_I_main_QosGenerator_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of I_Seeris_2D_blitter_Store_wr_I_main_QosGenerator
+ * peripheral base addresses */
+#define I_Seeris_2D_blitter_Store_wr_I_main_QosGenerator_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of I_Seeris_2D_blitter_Store_wr_I_main_QosGenerator
+ * peripheral base pointers */
+#define I_Seeris_2D_blitter_Store_wr_I_main_QosGenerator_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR }
+
+/* I_Seeris_2D_blitter_Store_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0B80u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_2D_blitter_Store_wr_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_2D_blitter_Store_wr_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_2D_blitter_Store_wr_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_2D_blitter_Store_wr_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_2D_blitter_Store_wr_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Cmd_Seq_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER
+ * base address */
+#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0C00u)
+/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER
+ * base pointer */
+#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Cmd_Seq_rd_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of I_Seeris_Cmd_Seq_rd_I_main_TransactionStatFilter
+ * peripheral base addresses */
+#define I_Seeris_Cmd_Seq_rd_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of I_Seeris_Cmd_Seq_rd_I_main_TransactionStatFilter
+ * peripheral base pointers */
+#define I_Seeris_Cmd_Seq_rd_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Cmd_Seq_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER
+ * base address */
+#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0C80u)
+/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER
+ * base pointer */
+#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Cmd_Seq_wr_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of I_Seeris_Cmd_Seq_wr_I_main_TransactionStatFilter
+ * peripheral base addresses */
+#define I_Seeris_Cmd_Seq_wr_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of I_Seeris_Cmd_Seq_wr_I_main_TransactionStatFilter
+ * peripheral base pointers */
+#define I_Seeris_Cmd_Seq_wr_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_0_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0D00u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_0_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_0_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_0_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_0_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_0_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_1_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0D80u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_1_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_1_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_1_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_1_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_1_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_2_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0E00u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_2_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_2_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_2_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_2_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_2_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_3_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0E80u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_3_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_3_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_3_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_3_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_3_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_4_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0F00u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_4_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_4_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_4_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_4_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_4_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_5_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F0F80u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_5_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_5_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_5_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_5_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_5_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_6_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F1000u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_6_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_6_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_6_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_6_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_6_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_7_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F1080u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_7_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_7_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_7_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_7_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_7_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* I_Seeris_Display_Ctrl_FU_rd_8_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B3F1100u)
+/** Peripheral
+ * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER ((I_Seeris_Display_Ctrl_FU_rd_8_I_main_TransactionStatFilter_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_8_I_main_TransactionStatFilter peripheral base addresses */
+#define I_Seeris_Display_Ctrl_FU_rd_8_I_main_TransactionStatFilter_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of
+ * I_Seeris_Display_Ctrl_FU_rd_8_I_main_TransactionStatFilter peripheral base pointers */
+#define I_Seeris_Display_Ctrl_FU_rd_8_I_main_TransactionStatFilter_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER }
+
 /* JPEG_DEC - Peripheral instance base addresses */
-/** Peripheral VPU__JPEG_DEC base address */
-#define VPU__JPEG_DEC_BASE                       (0x4C500100u)
-/** Peripheral VPU__JPEG_DEC base pointer */
-#define VPU__JPEG_DEC                            ((JPEG_DEC_Type *)VPU__JPEG_DEC_BASE)
+/** Peripheral VPU__JPEG_DEC1 base address */
+#define VPU__JPEG_DEC1_BASE                      (0x4C500100u)
+/** Peripheral VPU__JPEG_DEC1 base pointer */
+#define VPU__JPEG_DEC1                           ((JPEG_DEC_Type *)VPU__JPEG_DEC1_BASE)
 /** Array initializer of JPEG_DEC peripheral base addresses */
-#define JPEG_DEC_BASE_ADDRS                      { VPU__JPEG_DEC_BASE }
+#define JPEG_DEC_BASE_ADDRS                      { VPU__JPEG_DEC1_BASE }
 /** Array initializer of JPEG_DEC peripheral base pointers */
-#define JPEG_DEC_BASE_PTRS                       { VPU__JPEG_DEC }
+#define JPEG_DEC_BASE_PTRS                       { VPU__JPEG_DEC1 }
 
 /* JPEG_DEC_WRAP - Peripheral instance base addresses */
-/** Peripheral VPU__JPEG_DEC_WRAP base address */
-#define VPU__JPEG_DEC_WRAP_BASE                  (0x4C500000u)
-/** Peripheral VPU__JPEG_DEC_WRAP base pointer */
-#define VPU__JPEG_DEC_WRAP                       ((JPEG_DEC_WRAP_Type *)VPU__JPEG_DEC_WRAP_BASE)
+/** Peripheral VPU__JPEG_DEC_WRAP0 base address */
+#define VPU__JPEG_DEC_WRAP0_BASE                 (0x4C500000u)
+/** Peripheral VPU__JPEG_DEC_WRAP0 base pointer */
+#define VPU__JPEG_DEC_WRAP0                      ((JPEG_DEC_WRAP_Type *)VPU__JPEG_DEC_WRAP0_BASE)
 /** Array initializer of JPEG_DEC_WRAP peripheral base addresses */
-#define JPEG_DEC_WRAP_BASE_ADDRS                 { VPU__JPEG_DEC_WRAP_BASE }
+#define JPEG_DEC_WRAP_BASE_ADDRS                 { VPU__JPEG_DEC_WRAP0_BASE }
 /** Array initializer of JPEG_DEC_WRAP peripheral base pointers */
-#define JPEG_DEC_WRAP_BASE_PTRS                  { VPU__JPEG_DEC_WRAP }
+#define JPEG_DEC_WRAP_BASE_PTRS                  { VPU__JPEG_DEC_WRAP0 }
+
+/* JPEG_ENC - Peripheral instance base addresses */
+/** Peripheral VPU__JPEG_ENC base address */
+#define VPU__JPEG_ENC_BASE                       (0x4C550100u)
+/** Peripheral VPU__JPEG_ENC base pointer */
+#define VPU__JPEG_ENC                            ((JPEG_ENC_Type *)VPU__JPEG_ENC_BASE)
+/** Array initializer of JPEG_ENC peripheral base addresses */
+#define JPEG_ENC_BASE_ADDRS                      { VPU__JPEG_ENC_BASE }
+/** Array initializer of JPEG_ENC peripheral base pointers */
+#define JPEG_ENC_BASE_PTRS                       { VPU__JPEG_ENC }
 
 /* LDB - Peripheral instance base addresses */
 /** Peripheral LVDS base address */
@@ -1968,6 +2429,28 @@ typedef enum IRQn {
 /** Interrupt vectors for the LPUART peripheral type */
 #define LPUART_RX_TX_IRQS                        { NotAvail_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
+/* LSTCU - Peripheral instance base addresses */
+/** Peripheral AON__LSTCUA base address */
+#define AON__LSTCUA_BASE                         (0x445A0000u)
+/** Peripheral AON__LSTCUA base pointer */
+#define AON__LSTCUA                              ((LSTCU_Type *)AON__LSTCUA_BASE)
+/** Peripheral DDRC__LSTCU base address */
+#define DDRC__LSTCU_BASE                         (0x4E050000u)
+/** Peripheral DDRC__LSTCU base pointer */
+#define DDRC__LSTCU                              ((LSTCU_Type *)DDRC__LSTCU_BASE)
+/** Peripheral M7__LSTCU_M7MIX base address */
+#define M7__LSTCU_M7MIX_BASE                     (0x4A050000u)
+/** Peripheral M7__LSTCU_M7MIX base pointer */
+#define M7__LSTCU_M7MIX                          ((LSTCU_Type *)M7__LSTCU_M7MIX_BASE)
+/** Peripheral NPU__LSTCU_NPUMIX base address */
+#define NPU__LSTCU_NPUMIX_BASE                   (0x4A850000u)
+/** Peripheral NPU__LSTCU_NPUMIX base pointer */
+#define NPU__LSTCU_NPUMIX                        ((LSTCU_Type *)NPU__LSTCU_NPUMIX_BASE)
+/** Array initializer of LSTCU peripheral base addresses */
+#define LSTCU_BASE_ADDRS                         { AON__LSTCUA_BASE, DDRC__LSTCU_BASE, M7__LSTCU_M7MIX_BASE, NPU__LSTCU_NPUMIX_BASE }
+/** Array initializer of LSTCU peripheral base pointers */
+#define LSTCU_BASE_PTRS                          { AON__LSTCUA, DDRC__LSTCU, M7__LSTCU_M7MIX, NPU__LSTCU_NPUMIX }
+
 /* M7_A7_APB_MCM - Peripheral instance base addresses */
 /** Peripheral M7__A7_APB_MCM1 base address */
 #define M7__A7_APB_MCM1_BASE                     (0x4A0A0000u)
@@ -1977,36 +2460,6 @@ typedef enum IRQn {
 #define M7_A7_APB_MCM_BASE_ADDRS                 { M7__A7_APB_MCM1_BASE }
 /** Array initializer of M7_A7_APB_MCM peripheral base pointers */
 #define M7_A7_APB_MCM_BASE_PTRS                  { M7__A7_APB_MCM1 }
-
-/* M7_EIM - Peripheral instance base addresses */
-/** Peripheral M7__EIM base address */
-#define M7__EIM_BASE                             (0x4A060000u)
-/** Peripheral M7__EIM base pointer */
-#define M7__EIM                                  ((M7_EIM_Type *)M7__EIM_BASE)
-/** Array initializer of M7_EIM peripheral base addresses */
-#define M7_EIM_BASE_ADDRS                        { M7__EIM_BASE }
-/** Array initializer of M7_EIM peripheral base pointers */
-#define M7_EIM_BASE_PTRS                         { M7__EIM }
-
-/* M7_ERM - Peripheral instance base addresses */
-/** Peripheral M7__ERM base address */
-#define M7__ERM_BASE                             (0x4A070000u)
-/** Peripheral M7__ERM base pointer */
-#define M7__ERM                                  ((M7_ERM_Type *)M7__ERM_BASE)
-/** Array initializer of M7_ERM peripheral base addresses */
-#define M7_ERM_BASE_ADDRS                        { M7__ERM_BASE }
-/** Array initializer of M7_ERM peripheral base pointers */
-#define M7_ERM_BASE_PTRS                         { M7__ERM }
-
-/* M7_LSTCU - Peripheral instance base addresses */
-/** Peripheral M7__LSTCU_M7MIX base address */
-#define M7__LSTCU_M7MIX_BASE                     (0x4A050000u)
-/** Peripheral M7__LSTCU_M7MIX base pointer */
-#define M7__LSTCU_M7MIX                          ((M7_LSTCU_Type *)M7__LSTCU_M7MIX_BASE)
-/** Array initializer of M7_LSTCU peripheral base addresses */
-#define M7_LSTCU_BASE_ADDRS                      { M7__LSTCU_M7MIX_BASE }
-/** Array initializer of M7_LSTCU peripheral base pointers */
-#define M7_LSTCU_BASE_PTRS                       { M7__LSTCU_M7MIX }
 
 /* M7_TCU - Peripheral instance base addresses */
 /** Peripheral M7__TCU base address */
@@ -2218,7 +2671,7 @@ typedef enum IRQn {
 /** Array initializer of MU peripheral base pointers */
 #define MU_BASE_PTRS                             { MU5_MUA, MU7_MUB, MU8_MUB, CAMERA__MUI_A1__MUA, CAMERA__MUI_A2__MUA, CAMERA__MUI_A3__MUA, CAMERA__MUI_A4__MUA, CAMERA__MUI_A5__MUA, CAMERA__MUI_A6__MUA, CAMERA__MUI_A7__MUA, CAMERA__MUI_A8__MUA, CAMERA__MUI_A9__MUA }
 /** Interrupt vectors for the MU peripheral type */
-#define MU_IRQS                                  { MU5_A_IRQn, MU7_B_IRQn, MU8_B_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+#define MU_IRQS                                  { MU5_A_IRQn, MU7_B_IRQn, MU8_B_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
 /* NETC_ENETC - Peripheral instance base addresses */
 /** Peripheral ENETC0_BASE base address */
@@ -2348,16 +2801,15 @@ typedef enum IRQn {
 /** Array initializer of NEUTRON peripheral base pointers */
 #define NEUTRON_BASE_PTRS                        { NPU__NEUTRON_NPU__NEUTRON0__NEUTRON, NPU__NEUTRON_NPU__NEUTRON1__NEUTRON, NPU__NEUTRON_NPU__NEUTRON2__NEUTRON, NPU__NEUTRON_NPU__NEUTRON3__NEUTRON, NPU__NEUTRON_NPU__NEUTRON_GANGED__NEUTRON }
 
-/* NOC_ALWAYS_ON_MAIN_RESFAULTC - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER base address */
-#define NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE (0x49063080u)
-/** Peripheral NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER base pointer */
-#define NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER ((NOC_ALWAYS_ON_MAIN_RESFAULTC_Type *)NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE)
-/** Array initializer of NOC_ALWAYS_ON_MAIN_RESFAULTC peripheral base addresses
- * */
-#define NOC_ALWAYS_ON_MAIN_RESFAULTC_BASE_ADDRS  { NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE }
-/** Array initializer of NOC_ALWAYS_ON_MAIN_RESFAULTC peripheral base pointers */
-#define NOC_ALWAYS_ON_MAIN_RESFAULTC_BASE_PTRS   { NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER }
+/* NEUTRON_NPU - Peripheral instance base addresses */
+/** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC base address */
+#define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE (0x4AB00000u)
+/** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC base pointer */
+#define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC     ((NEUTRON_NPU_Type *)NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE)
+/** Array initializer of NEUTRON_NPU peripheral base addresses */
+#define NEUTRON_NPU_BASE_ADDRS                   { NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE }
+/** Array initializer of NEUTRON_NPU peripheral base pointers */
+#define NEUTRON_NPU_BASE_PTRS                    { NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC }
 
 /* NOC_BLK_CTRL_NOCMIX - Peripheral instance base addresses */
 /** Peripheral NOC__BLK_CTRL_NOCMIX base address */
@@ -2368,6 +2820,20 @@ typedef enum IRQn {
 #define NOC_BLK_CTRL_NOCMIX_BASE_ADDRS           { NOC__BLK_CTRL_NOCMIX_BASE }
 /** Array initializer of NOC_BLK_CTRL_NOCMIX peripheral base pointers */
 #define NOC_BLK_CTRL_NOCMIX_BASE_PTRS            { NOC__BLK_CTRL_NOCMIX }
+
+/* NOC_CMU - Peripheral instance base addresses */
+/** Peripheral NOC_CMUN0 base address */
+#define NOC_CMUN0_BASE                           (0x49070000u)
+/** Peripheral NOC_CMUN0 base pointer */
+#define NOC_CMUN0                                ((NOC_CMU_Type *)NOC_CMUN0_BASE)
+/** Peripheral NOC_CMUN1 base address */
+#define NOC_CMUN1_BASE                           (0x49080000u)
+/** Peripheral NOC_CMUN1 base pointer */
+#define NOC_CMUN1                                ((NOC_CMU_Type *)NOC_CMUN1_BASE)
+/** Array initializer of NOC_CMU peripheral base addresses */
+#define NOC_CMU_BASE_ADDRS                       { NOC_CMUN0_BASE, NOC_CMUN1_BASE }
+/** Array initializer of NOC_CMU peripheral base pointers */
+#define NOC_CMU_BASE_PTRS                        { NOC_CMUN0, NOC_CMUN1 }
 
 /* NOC_EIM - Peripheral instance base addresses */
 /** Peripheral NOC__EIMN base address */
@@ -2569,189 +3035,9 @@ typedef enum IRQn {
 /** Array initializer of NOC_GITS0TRANSLATER peripheral base pointers */
 #define NOC_GITS0TRANSLATER_BASE_PTRS            { NOC__GIC__GITS0TRANSLATER }
 
-/* NOC_ISI_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_PROBE base address */
-#define CAMERA__GPV__PROBE_ISI_MAIN_PROBE_BASE   (0x4AFF0000u)
-/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_PROBE base pointer */
-#define CAMERA__GPV__PROBE_ISI_MAIN_PROBE        ((NOC_ISI_MAIN_PROBE_Type *)CAMERA__GPV__PROBE_ISI_MAIN_PROBE_BASE)
-/** Array initializer of NOC_ISI_MAIN_PROBE peripheral base addresses */
-#define NOC_ISI_MAIN_PROBE_BASE_ADDRS            { CAMERA__GPV__PROBE_ISI_MAIN_PROBE_BASE }
-/** Array initializer of NOC_ISI_MAIN_PROBE peripheral base pointers */
-#define NOC_ISI_MAIN_PROBE_BASE_PTRS             { CAMERA__GPV__PROBE_ISI_MAIN_PROBE }
-
-/* NOC_ISI_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR_BASE (0x4AFF0C00u)
-/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR  ((NOC_ISI_RD_I_QOSGENERATOR_Type *)CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISI_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_ISI_RD_I_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISI_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_ISI_RD_I_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISI_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISI_RD_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1000u)
-/** Peripheral CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISI_RD_XSTATFILTER_Type *)CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISI_RD_XSTATFILTER peripheral base addresses */
-#define NOC_ISI_RD_XSTATFILTER_BASE_ADDRS        { CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISI_RD_XSTATFILTER peripheral base pointers */
-#define NOC_ISI_RD_XSTATFILTER_BASE_PTRS         { CAMERA__GPV__ISI_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISI_WR_U_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR_BASE (0x4AFF0C80u)
-/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR ((NOC_ISI_WR_U_QOSGENERATOR_Type *)CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISI_WR_U_QOSGENERATOR peripheral base addresses */
-#define NOC_ISI_WR_U_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISI_WR_U_QOSGENERATOR peripheral base pointers */
-#define NOC_ISI_WR_U_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISI_WR_U_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISI_WR_U_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1080u)
-/** Peripheral CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISI_WR_U_XSTATFILTER_Type *)CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISI_WR_U_XSTATFILTER peripheral base addresses */
-#define NOC_ISI_WR_U_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISI_WR_U_XSTATFILTER peripheral base pointers */
-#define NOC_ISI_WR_U_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISI_WR_U_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISI_WR_V_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR_BASE (0x4AFF0D00u)
-/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR ((NOC_ISI_WR_V_QOSGENERATOR_Type *)CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISI_WR_V_QOSGENERATOR peripheral base addresses */
-#define NOC_ISI_WR_V_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISI_WR_V_QOSGENERATOR peripheral base pointers */
-#define NOC_ISI_WR_V_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISI_WR_V_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISI_WR_V_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1100u)
-/** Peripheral CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISI_WR_V_XSTATFILTER_Type *)CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISI_WR_V_XSTATFILTER peripheral base addresses */
-#define NOC_ISI_WR_V_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISI_WR_V_XSTATFILTER peripheral base pointers */
-#define NOC_ISI_WR_V_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISI_WR_V_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISI_WR_Y_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR_BASE (0x4AFF0D80u)
-/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR ((NOC_ISI_WR_Y_QOSGENERATOR_Type *)CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISI_WR_Y_QOSGENERATOR peripheral base addresses */
-#define NOC_ISI_WR_Y_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISI_WR_Y_QOSGENERATOR peripheral base pointers */
-#define NOC_ISI_WR_Y_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISI_WR_Y_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISI_WR_Y_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1180u)
-/** Peripheral CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISI_WR_Y_XSTATFILTER_Type *)CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISI_WR_Y_XSTATFILTER peripheral base addresses */
-#define NOC_ISI_WR_Y_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISI_WR_Y_XSTATFILTER peripheral base pointers */
-#define NOC_ISI_WR_Y_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISI_WR_Y_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISP_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_PROBE base address */
-#define CAMERA__GPV__PROBE_ISP_MAIN_PROBE_BASE   (0x4AFF0400u)
-/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_PROBE base pointer */
-#define CAMERA__GPV__PROBE_ISP_MAIN_PROBE        ((NOC_ISP_MAIN_PROBE_Type *)CAMERA__GPV__PROBE_ISP_MAIN_PROBE_BASE)
-/** Array initializer of NOC_ISP_MAIN_PROBE peripheral base addresses */
-#define NOC_ISP_MAIN_PROBE_BASE_ADDRS            { CAMERA__GPV__PROBE_ISP_MAIN_PROBE_BASE }
-/** Array initializer of NOC_ISP_MAIN_PROBE peripheral base pointers */
-#define NOC_ISP_MAIN_PROBE_BASE_PTRS             { CAMERA__GPV__PROBE_ISP_MAIN_PROBE }
-
-/* NOC_ISP_RD_0_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR_BASE (0x4AFF0E00u)
-/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR ((NOC_ISP_RD_0_QOSGENERATOR_Type *)CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISP_RD_0_QOSGENERATOR peripheral base addresses */
-#define NOC_ISP_RD_0_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISP_RD_0_QOSGENERATOR peripheral base pointers */
-#define NOC_ISP_RD_0_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISP_RD_0_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISP_RD_0_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1200u)
-/** Peripheral CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISP_RD_0_XSTATFILTER_Type *)CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISP_RD_0_XSTATFILTER peripheral base addresses */
-#define NOC_ISP_RD_0_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISP_RD_0_XSTATFILTER peripheral base pointers */
-#define NOC_ISP_RD_0_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISP_RD_0_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISP_RD_1_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR_BASE (0x4AFF0E80u)
-/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR ((NOC_ISP_RD_1_QOSGENERATOR_Type *)CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISP_RD_1_QOSGENERATOR peripheral base addresses */
-#define NOC_ISP_RD_1_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISP_RD_1_QOSGENERATOR peripheral base pointers */
-#define NOC_ISP_RD_1_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISP_RD_1_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISP_RD_1_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1280u)
-/** Peripheral CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISP_RD_1_XSTATFILTER_Type *)CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISP_RD_1_XSTATFILTER peripheral base addresses */
-#define NOC_ISP_RD_1_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISP_RD_1_XSTATFILTER peripheral base pointers */
-#define NOC_ISP_RD_1_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISP_RD_1_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISP_WR_0_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR_BASE (0x4AFF0F00u)
-/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR ((NOC_ISP_WR_0_QOSGENERATOR_Type *)CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISP_WR_0_QOSGENERATOR peripheral base addresses */
-#define NOC_ISP_WR_0_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISP_WR_0_QOSGENERATOR peripheral base pointers */
-#define NOC_ISP_WR_0_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISP_WR_0_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISP_WR_0_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1300u)
-/** Peripheral CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISP_WR_0_XSTATFILTER_Type *)CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISP_WR_0_XSTATFILTER peripheral base addresses */
-#define NOC_ISP_WR_0_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISP_WR_0_XSTATFILTER peripheral base pointers */
-#define NOC_ISP_WR_0_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISP_WR_0_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_ISP_WR_1_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR base address */
-#define CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR_BASE (0x4AFF0F80u)
-/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR base pointer */
-#define CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR ((NOC_ISP_WR_1_QOSGENERATOR_Type *)CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_ISP_WR_1_QOSGENERATOR peripheral base addresses */
-#define NOC_ISP_WR_1_QOSGENERATOR_BASE_ADDRS     { CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_ISP_WR_1_QOSGENERATOR peripheral base pointers */
-#define NOC_ISP_WR_1_QOSGENERATOR_BASE_PTRS      { CAMERA__GPV__ISP_WR_1_I_MAIN_QOSGENERATOR }
-
-/* NOC_ISP_WR_1_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4AFF1380u)
-/** Peripheral CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER ((NOC_ISP_WR_1_XSTATFILTER_Type *)CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_ISP_WR_1_XSTATFILTER peripheral base addresses */
-#define NOC_ISP_WR_1_XSTATFILTER_BASE_ADDRS      { CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_ISP_WR_1_XSTATFILTER peripheral base pointers */
-#define NOC_ISP_WR_1_XSTATFILTER_BASE_PTRS       { CAMERA__GPV__ISP_WR_1_I_MAIN_TRANSACTIONSTATFILTER }
-
 /* NOC_JPEG_DEC_MAIN_PROBE - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_DEC_PROBE_MAIN_PROBE base address */
-#define VPU__GPV__JPEG_DEC_PROBE_MAIN_PROBE_BASE (0x4C801000u)
+#define VPU__GPV__JPEG_DEC_PROBE_MAIN_PROBE_BASE (0x4C601000u)
 /** Peripheral VPU__GPV__JPEG_DEC_PROBE_MAIN_PROBE base pointer */
 #define VPU__GPV__JPEG_DEC_PROBE_MAIN_PROBE      ((NOC_JPEG_DEC_MAIN_PROBE_Type *)VPU__GPV__JPEG_DEC_PROBE_MAIN_PROBE_BASE)
 /** Array initializer of NOC_JPEG_DEC_MAIN_PROBE peripheral base addresses */
@@ -2762,7 +3048,7 @@ typedef enum IRQn {
 /* NOC_JPEG_DEC_PROBE_XSTATPROFILER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_DEC_PROBE_MAIN_TRANSACTIONSTATPROFILER base
  * address */
-#define VPU__GPV__JPEG_DEC_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C801580u)
+#define VPU__GPV__JPEG_DEC_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C601580u)
 /** Peripheral VPU__GPV__JPEG_DEC_PROBE_MAIN_TRANSACTIONSTATPROFILER base
  * pointer */
 #define VPU__GPV__JPEG_DEC_PROBE_MAIN_TRANSACTIONSTATPROFILER ((NOC_JPEG_DEC_PROBE_XSTATPROFILER_Type *)VPU__GPV__JPEG_DEC_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE)
@@ -2775,7 +3061,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_DEC_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_DEC_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define VPU__GPV__JPEG_DEC_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C801480u)
+#define VPU__GPV__JPEG_DEC_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C601480u)
 /** Peripheral VPU__GPV__JPEG_DEC_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define VPU__GPV__JPEG_DEC_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_JPEG_DEC_RD_I_XSTATFILTER_Type *)VPU__GPV__JPEG_DEC_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
 /** Array initializer of NOC_JPEG_DEC_RD_I_XSTATFILTER peripheral base addresses
@@ -2787,7 +3073,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_DEC_WR_I_QOSGENERATOR - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_DEC_WR_I_MAIN_QOSGENERATOR base address */
-#define VPU__GPV__JPEG_DEC_WR_I_MAIN_QOSGENERATOR_BASE (0x4C801400u)
+#define VPU__GPV__JPEG_DEC_WR_I_MAIN_QOSGENERATOR_BASE (0x4C601400u)
 /** Peripheral VPU__GPV__JPEG_DEC_WR_I_MAIN_QOSGENERATOR base pointer */
 #define VPU__GPV__JPEG_DEC_WR_I_MAIN_QOSGENERATOR ((NOC_JPEG_DEC_WR_I_QOSGENERATOR_Type *)VPU__GPV__JPEG_DEC_WR_I_MAIN_QOSGENERATOR_BASE)
 /** Array initializer of NOC_JPEG_DEC_WR_I_QOSGENERATOR peripheral base
@@ -2799,7 +3085,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_DEC_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_DEC_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define VPU__GPV__JPEG_DEC_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C801500u)
+#define VPU__GPV__JPEG_DEC_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C601500u)
 /** Peripheral VPU__GPV__JPEG_DEC_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define VPU__GPV__JPEG_DEC_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_JPEG_DEC_WR_I_XSTATFILTER_Type *)VPU__GPV__JPEG_DEC_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
 /** Array initializer of NOC_JPEG_DEC_WR_I_XSTATFILTER peripheral base addresses
@@ -2811,7 +3097,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_ENC_MAIN_PROBE - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_ENC_PROBE_MAIN_PROBE base address */
-#define VPU__GPV__JPEG_ENC_PROBE_MAIN_PROBE_BASE (0x4C802000u)
+#define VPU__GPV__JPEG_ENC_PROBE_MAIN_PROBE_BASE (0x4C602000u)
 /** Peripheral VPU__GPV__JPEG_ENC_PROBE_MAIN_PROBE base pointer */
 #define VPU__GPV__JPEG_ENC_PROBE_MAIN_PROBE      ((NOC_JPEG_ENC_MAIN_PROBE_Type *)VPU__GPV__JPEG_ENC_PROBE_MAIN_PROBE_BASE)
 /** Array initializer of NOC_JPEG_ENC_MAIN_PROBE peripheral base addresses */
@@ -2822,7 +3108,7 @@ typedef enum IRQn {
 /* NOC_JPEG_ENC_PROBE_XSTATPROFILER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_ENC_PROBE_MAIN_TRANSACTIONSTATPROFILER base
  * address */
-#define VPU__GPV__JPEG_ENC_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C802580u)
+#define VPU__GPV__JPEG_ENC_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C602580u)
 /** Peripheral VPU__GPV__JPEG_ENC_PROBE_MAIN_TRANSACTIONSTATPROFILER base
  * pointer */
 #define VPU__GPV__JPEG_ENC_PROBE_MAIN_TRANSACTIONSTATPROFILER ((NOC_JPEG_ENC_PROBE_XSTATPROFILER_Type *)VPU__GPV__JPEG_ENC_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE)
@@ -2835,7 +3121,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_ENC_RD_I_QOSGENERATOR - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_ENC_RD_I_MAIN_QOSGENERATOR base address */
-#define VPU__GPV__JPEG_ENC_RD_I_MAIN_QOSGENERATOR_BASE (0x4C802400u)
+#define VPU__GPV__JPEG_ENC_RD_I_MAIN_QOSGENERATOR_BASE (0x4C602400u)
 /** Peripheral VPU__GPV__JPEG_ENC_RD_I_MAIN_QOSGENERATOR base pointer */
 #define VPU__GPV__JPEG_ENC_RD_I_MAIN_QOSGENERATOR ((NOC_JPEG_ENC_RD_I_QOSGENERATOR_Type *)VPU__GPV__JPEG_ENC_RD_I_MAIN_QOSGENERATOR_BASE)
 /** Array initializer of NOC_JPEG_ENC_RD_I_QOSGENERATOR peripheral base
@@ -2847,7 +3133,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_ENC_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_ENC_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define VPU__GPV__JPEG_ENC_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C802480u)
+#define VPU__GPV__JPEG_ENC_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C602480u)
 /** Peripheral VPU__GPV__JPEG_ENC_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define VPU__GPV__JPEG_ENC_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_JPEG_ENC_RD_I_XSTATFILTER_Type *)VPU__GPV__JPEG_ENC_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
 /** Array initializer of NOC_JPEG_ENC_RD_I_XSTATFILTER peripheral base addresses
@@ -2859,7 +3145,7 @@ typedef enum IRQn {
 
 /* NOC_JPEG_ENC_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__JPEG_ENC_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define VPU__GPV__JPEG_ENC_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C802500u)
+#define VPU__GPV__JPEG_ENC_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C602500u)
 /** Peripheral VPU__GPV__JPEG_ENC_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define VPU__GPV__JPEG_ENC_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_JPEG_ENC_WR_I_XSTATFILTER_Type *)VPU__GPV__JPEG_ENC_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
 /** Array initializer of NOC_JPEG_ENC_WR_I_XSTATFILTER peripheral base addresses
@@ -2879,508 +3165,10 @@ typedef enum IRQn {
 /** Array initializer of NOC_LSTCU peripheral base pointers */
 #define NOC_LSTCU_BASE_PTRS                      { NOC__LSTCUN }
 
-/* NOC_M_E_0_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE    (0x49060000u)
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_0_MAIN_PROBE         ((NOC_M_E_0_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_0_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_0_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_0_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_0_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_0_MAIN_PROBE }
-
-/* NOC_M_E_0_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE (0x49062400u)
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_0_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_0_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_0_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_0_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_0_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_0_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063100u)
-/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_0_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_0_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_0_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_0_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_0_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_0_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE (0x49062480u)
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_0_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_0_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_0_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_0_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_0_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_0_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063180u)
-/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_0_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_0_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_0_WR_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_0_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_0_WR_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_10_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_10_MAIN_PROBE_BASE   (0x49061C00u)
-/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_10_MAIN_PROBE        ((NOC_M_E_10_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_10_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_10_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_10_MAIN_PROBE_BASE_ADDRS         { NOC__GPV__PROBE_M_E_10_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_10_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_10_MAIN_PROBE_BASE_PTRS          { NOC__GPV__PROBE_M_E_10_MAIN_PROBE }
-
-/* NOC_M_E_10_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR_BASE (0x49062E80u)
-/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR  ((NOC_M_E_10_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_10_RD_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_10_RD_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_10_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_10_RD_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_10_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063780u)
-/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_10_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_10_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_10_RD_I_XSTATFILTER_BASE_ADDRS   { NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_10_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_10_RD_I_XSTATFILTER_BASE_PTRS    { NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_10_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR_BASE (0x49062F00u)
-/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR  ((NOC_M_E_10_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_10_WR_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_10_WR_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_10_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_10_WR_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_10_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063800u)
-/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_10_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_10_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_10_WR_I_XSTATFILTER_BASE_ADDRS   { NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_10_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_10_WR_I_XSTATFILTER_BASE_PTRS    { NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_11_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_11_MAIN_PROBE_BASE   (0x49062000u)
-/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_11_MAIN_PROBE        ((NOC_M_E_11_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_11_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_11_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_11_MAIN_PROBE_BASE_ADDRS         { NOC__GPV__PROBE_M_E_11_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_11_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_11_MAIN_PROBE_BASE_PTRS          { NOC__GPV__PROBE_M_E_11_MAIN_PROBE }
-
-/* NOC_M_E_11_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR_BASE (0x49062F80u)
-/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR  ((NOC_M_E_11_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_11_RD_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_11_RD_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_11_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_11_RD_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_11_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063880u)
-/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_11_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_11_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_11_RD_I_XSTATFILTER_BASE_ADDRS   { NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_11_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_11_RD_I_XSTATFILTER_BASE_PTRS    { NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_11_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR_BASE (0x49063000u)
-/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR  ((NOC_M_E_11_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_11_WR_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_11_WR_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_11_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_11_WR_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_11_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063900u)
-/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_11_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_11_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_11_WR_I_XSTATFILTER_BASE_ADDRS   { NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_11_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_11_WR_I_XSTATFILTER_BASE_PTRS    { NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_1A_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE (0x49062500u)
-/** Peripheral NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR  ((NOC_M_E_1A_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_1A_RD_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_1A_RD_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_1A_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_1A_RD_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_1A_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE (0x49062580u)
-/** Peripheral NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR  ((NOC_M_E_1A_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_1A_WR_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_1A_WR_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_1A_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_1A_WR_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_1B_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE (0x49062600u)
-/** Peripheral NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR  ((NOC_M_E_1B_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_1B_RD_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_1B_RD_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_1B_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_1B_RD_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_1B_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE (0x49062680u)
-/** Peripheral NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR  ((NOC_M_E_1B_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_1B_WR_I_QOSGENERATOR peripheral base addresses
- * */
-#define NOC_M_E_1B_WR_I_QOSGENERATOR_BASE_ADDRS  { NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_1B_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_1B_WR_I_QOSGENERATOR_BASE_PTRS   { NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_3_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE    (0x49060400u)
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_3_MAIN_PROBE         ((NOC_M_E_3_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_3_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_3_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_3_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_3_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_3_MAIN_PROBE }
-
-/* NOC_M_E_3_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE (0x49062800u)
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_3_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_3_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_3_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_3_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_3_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_3_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063200u)
-/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_3_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_3_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_3_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_3_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_3_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_3_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE (0x49062880u)
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_3_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_3_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_3_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_3_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_3_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_3_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063280u)
-/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_3_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_3_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_3_WR_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_3_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_3_WR_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_4_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_4_MAIN_PROBE_BASE    (0x49060800u)
-/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_4_MAIN_PROBE         ((NOC_M_E_4_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_4_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_4_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_4_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_4_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_4_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_4_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_4_MAIN_PROBE }
-
-/* NOC_M_E_4_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR_BASE (0x49062900u)
-/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_4_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_4_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_4_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_4_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_4_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_4_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063300u)
-/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_4_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_4_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_4_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_4_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_4_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_4_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR_BASE (0x49062980u)
-/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_4_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_4_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_4_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_4_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_4_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_4_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063380u)
-/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_4_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_4_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_4_WR_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_4_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_4_WR_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_5_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_5_MAIN_PROBE_BASE    (0x49060C00u)
-/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_5_MAIN_PROBE         ((NOC_M_E_5_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_5_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_5_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_5_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_5_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_5_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_5_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_5_MAIN_PROBE }
-
-/* NOC_M_E_5_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR_BASE (0x49062A00u)
-/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_5_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_5_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_5_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_5_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_5_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_5_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063400u)
-/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_5_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_5_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_5_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_5_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_5_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_5_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR_BASE (0x49062A80u)
-/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_5_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_5_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_5_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_5_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_5_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_5_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063480u)
-/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_5_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_5_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_5_WR_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_5_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_5_WR_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_6_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE    (0x49061000u)
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_6_MAIN_PROBE         ((NOC_M_E_6_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_6_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_6_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_6_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_6_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_6_MAIN_PROBE }
-
-/* NOC_M_E_6_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE (0x49062B00u)
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_6_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_6_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_6_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_6_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_6_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_6_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063500u)
-/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_6_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_6_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_6_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_6_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_6_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_7_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE    (0x49061400u)
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_7_MAIN_PROBE         ((NOC_M_E_7_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_7_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_7_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_7_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_7_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_7_MAIN_PROBE }
-
-/* NOC_M_E_7_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE (0x49062B80u)
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_7_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_7_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_7_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_7_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_7_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_7_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063580u)
-/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_7_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_7_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_7_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_7_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_7_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_7_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE (0x49062C00u)
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_7_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_7_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_7_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_7_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_7_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_7_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063600u)
-/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_7_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_7_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_7_WR_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_7_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_7_WR_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_8_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR_BASE (0x49062C80u)
-/** Peripheral NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_8_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_8_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_8_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_8_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_8_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_8_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR_BASE (0x49062D00u)
-/** Peripheral NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_8_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_8_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_8_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_8_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_8_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_9_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_PROBE base address */
-#define NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE    (0x49061800u)
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_PROBE base pointer */
-#define NOC__GPV__PROBE_M_E_9_MAIN_PROBE         ((NOC_M_E_9_MAIN_PROBE_Type *)NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE)
-/** Array initializer of NOC_M_E_9_MAIN_PROBE peripheral base addresses */
-#define NOC_M_E_9_MAIN_PROBE_BASE_ADDRS          { NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE }
-/** Array initializer of NOC_M_E_9_MAIN_PROBE peripheral base pointers */
-#define NOC_M_E_9_MAIN_PROBE_BASE_PTRS           { NOC__GPV__PROBE_M_E_9_MAIN_PROBE }
-
-/* NOC_M_E_9_RD_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE (0x49062D80u)
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR   ((NOC_M_E_9_RD_I_QOSGENERATOR_Type *)NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_9_RD_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_9_RD_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_9_RD_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_9_RD_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_9_RD_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063680u)
-/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_9_RD_I_XSTATFILTER_Type *)NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_9_RD_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_9_RD_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_9_RD_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_9_RD_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_M_E_9_WR_I_QOSGENERATOR - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR base address */
-#define NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE (0x49062E00u)
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR base pointer */
-#define NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR   ((NOC_M_E_9_WR_I_QOSGENERATOR_Type *)NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_M_E_9_WR_I_QOSGENERATOR peripheral base addresses */
-#define NOC_M_E_9_WR_I_QOSGENERATOR_BASE_ADDRS   { NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_M_E_9_WR_I_QOSGENERATOR peripheral base pointers */
-#define NOC_M_E_9_WR_I_QOSGENERATOR_BASE_PTRS    { NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_M_E_9_WR_I_XSTATFILTER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063700u)
-/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_M_E_9_WR_I_XSTATFILTER_Type *)NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_M_E_9_WR_I_XSTATFILTER peripheral base addresses */
-#define NOC_M_E_9_WR_I_XSTATFILTER_BASE_ADDRS    { NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_M_E_9_WR_I_XSTATFILTER peripheral base pointers */
-#define NOC_M_E_9_WR_I_XSTATFILTER_BASE_PTRS     { NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
 /* NOC_PCIE1_AXI_SLAVE_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0480u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060480u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_PCIE1_AXI_SLAVE_RD_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -3394,7 +3182,7 @@ typedef enum IRQn {
 /* NOC_PCIE1_AXI_SLAVE_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0400u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060400u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_PCIE1_AXI_SLAVE_WR_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -3408,7 +3196,7 @@ typedef enum IRQn {
 /* NOC_PCIE2_AXI_SLAVE_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0380u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060380u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_PCIE2_AXI_SLAVE_RD_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -3422,7 +3210,7 @@ typedef enum IRQn {
 /* NOC_PCIE2_AXI_SLAVE_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0300u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060300u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_PCIE2_AXI_SLAVE_WR_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -3433,206 +3221,10 @@ typedef enum IRQn {
  * pointers */
 #define NOC_PCIE2_AXI_SLAVE_WR_I_XSTATFILTER_BASE_PTRS { HSIO__GPV__SSI_AXI_SLAVE_RD_PCIE2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER }
 
-/* NOC_POWER_MAIN_RESFAULTCONTROLLER - Peripheral instance base addresses */
-/** Peripheral WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER base
- * address */
-#define WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER_BASE (0x42830000u)
-/** Peripheral WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER base
- * pointer */
-#define WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER ((NOC_POWER_MAIN_RESFAULTCONTROLLER_Type *)WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER_BASE)
-/** Array initializer of NOC_POWER_MAIN_RESFAULTCONTROLLER peripheral base
- * addresses */
-#define NOC_POWER_MAIN_RESFAULTCONTROLLER_BASE_ADDRS { WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER_BASE }
-/** Array initializer of NOC_POWER_MAIN_RESFAULTCONTROLLER peripheral base
- * pointers */
-#define NOC_POWER_MAIN_RESFAULTCONTROLLER_BASE_PTRS { WAKEUP__GPV_NOCM__POWER_MEGA_RESILIENCEFAULTCONTROLLER }
-
-/* NOC_POWER_RESILIENCEFAULTCONTROLLER - Peripheral instance base addresses */
-/** Peripheral WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER base
- * address */
-#define WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE (0x43900000u)
-/** Peripheral WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER base
- * pointer */
-#define WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER ((NOC_POWER_RESILIENCEFAULTCONTROLLER_Type *)WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE)
-/** Array initializer of NOC_POWER_RESILIENCEFAULTCONTROLLER peripheral base
- * addresses */
-#define NOC_POWER_RESILIENCEFAULTCONTROLLER_BASE_ADDRS { WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE }
-/** Array initializer of NOC_POWER_RESILIENCEFAULTCONTROLLER peripheral base
- * pointers */
-#define NOC_POWER_RESILIENCEFAULTCONTROLLER_BASE_PTRS { WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER }
-
-/* NOC_PROBE1_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE1_MAIN_PROBE base address */
-#define DISPLAY__GPV__PROBE1_MAIN_PROBE_BASE     (0x4B7E0000u)
-/** Peripheral DISPLAY__GPV__PROBE1_MAIN_PROBE base pointer */
-#define DISPLAY__GPV__PROBE1_MAIN_PROBE          ((NOC_PROBE1_MAIN_PROBE_Type *)DISPLAY__GPV__PROBE1_MAIN_PROBE_BASE)
-/** Array initializer of NOC_PROBE1_MAIN_PROBE peripheral base addresses */
-#define NOC_PROBE1_MAIN_PROBE_BASE_ADDRS         { DISPLAY__GPV__PROBE1_MAIN_PROBE_BASE }
-/** Array initializer of NOC_PROBE1_MAIN_PROBE peripheral base pointers */
-#define NOC_PROBE1_MAIN_PROBE_BASE_PTRS          { DISPLAY__GPV__PROBE1_MAIN_PROBE }
-
-/* NOC_PROBE1_MAIN_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER base address */
-#define DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4B7E1180u)
-/** Peripheral DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE1_MAIN_XSTATPROFILER_Type *)DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE1_MAIN_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE1_MAIN_XSTATPROFILER_BASE_ADDRS { DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE1_MAIN_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE1_MAIN_XSTATPROFILER_BASE_PTRS  { DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_ISI_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER base address
- * */
-#define CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4AFF1400u)
-/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER base pointer
- * */
-#define CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_ISI_XSTATPROFILER_Type *)CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_ISI_XSTATPROFILER peripheral base addresses */
-#define NOC_PROBE_ISI_XSTATPROFILER_BASE_ADDRS   { CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_ISI_XSTATPROFILER peripheral base pointers */
-#define NOC_PROBE_ISI_XSTATPROFILER_BASE_PTRS    { CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_ISP_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER base address
- * */
-#define CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4AFF1480u)
-/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER base pointer
- * */
-#define CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_ISP_XSTATPROFILER_Type *)CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_ISP_XSTATPROFILER peripheral base addresses */
-#define NOC_PROBE_ISP_XSTATPROFILER_BASE_ADDRS   { CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_ISP_XSTATPROFILER peripheral base pointers */
-#define NOC_PROBE_ISP_XSTATPROFILER_BASE_PTRS    { CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__PROBE_MAIN_PROBE base address */
-#define DISPLAY__GPV__PROBE_MAIN_PROBE_BASE      (0x4B7E0400u)
-/** Peripheral DISPLAY__GPV__PROBE_MAIN_PROBE base pointer */
-#define DISPLAY__GPV__PROBE_MAIN_PROBE           ((NOC_PROBE_MAIN_PROBE_Type *)DISPLAY__GPV__PROBE_MAIN_PROBE_BASE)
-/** Array initializer of NOC_PROBE_MAIN_PROBE peripheral base addresses */
-#define NOC_PROBE_MAIN_PROBE_BASE_ADDRS          { DISPLAY__GPV__PROBE_MAIN_PROBE_BASE }
-/** Array initializer of NOC_PROBE_MAIN_PROBE peripheral base pointers */
-#define NOC_PROBE_MAIN_PROBE_BASE_PTRS           { DISPLAY__GPV__PROBE_MAIN_PROBE }
-
-/* NOC_PROBE_M_E_0_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063980u)
-/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_0_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_0_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_0_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_0_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_0_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_10_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER base address
- * */
-#define NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063D00u)
-/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER base pointer
- * */
-#define NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_10_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_10_XSTATPROFILER peripheral base
- * addresses */
-#define NOC_PROBE_M_E_10_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_10_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_10_XSTATPROFILER_BASE_PTRS { NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_11_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER base address
- * */
-#define NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063D80u)
-/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER base pointer
- * */
-#define NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_11_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_11_XSTATPROFILER peripheral base
- * addresses */
-#define NOC_PROBE_M_E_11_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_11_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_11_XSTATPROFILER_BASE_PTRS { NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_3_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063A00u)
-/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_3_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_3_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_3_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_3_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_3_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_4_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063A80u)
-/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_4_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_4_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_4_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_4_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_4_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_5_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063B00u)
-/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_5_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_5_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_5_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_5_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_5_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_6_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063B80u)
-/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_6_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_6_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_6_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_6_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_6_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_7_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063C00u)
-/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_7_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_7_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_7_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_7_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_7_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER }
-
-/* NOC_PROBE_M_E_9_XSTATPROFILER - Peripheral instance base addresses */
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER base address */
-#define NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063C80u)
-/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER base pointer */
-#define NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_M_E_9_XSTATPROFILER_Type *)NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE)
-/** Array initializer of NOC_PROBE_M_E_9_XSTATPROFILER peripheral base addresses
- * */
-#define NOC_PROBE_M_E_9_XSTATPROFILER_BASE_ADDRS { NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE }
-/** Array initializer of NOC_PROBE_M_E_9_XSTATPROFILER peripheral base pointers
- * */
-#define NOC_PROBE_M_E_9_XSTATPROFILER_BASE_PTRS  { NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER }
-
 /* NOC_PROBE_TRANSACTION_XSTATPROFILER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_TRANSACTIONSTATPROFILER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_TRANSACTIONSTATPROFILER_BASE (0x980C0280u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C060280u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_TRANSACTIONSTATPROFILER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_TRANSACTIONSTATPROFILER ((NOC_PROBE_TRANSACTION_XSTATPROFILER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_TRANSACTIONSTATPROFILER_BASE)
@@ -3646,7 +3238,7 @@ typedef enum IRQn {
 /* NOC_RD_TRANSACTION_PROBE - Peripheral instance base addresses */
 /** Peripheral HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE base
  * address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE_BASE (0x980C0800u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE_BASE (0x4C060800u)
 /** Peripheral HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE base
  * pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE ((NOC_RD_TRANSACTION_PROBE_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE_BASE)
@@ -3654,268 +3246,6 @@ typedef enum IRQn {
 #define NOC_RD_TRANSACTION_PROBE_BASE_ADDRS      { HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE_BASE }
 /** Array initializer of NOC_RD_TRANSACTION_PROBE peripheral base pointers */
 #define NOC_RD_TRANSACTION_PROBE_BASE_PTRS       { HSIO__GPV__SSI_AXI_SLAVE_RD_PROBE_TRANSACTION_MAIN_PROBE }
-
-/* NOC_SEERIS_2D_BLITTER_FU_RD_0_QOS - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR
- * base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR_BASE (0x4B7E0800u)
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR
- * base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR ((NOC_SEERIS_2D_BLITTER_FU_RD_0_QOS_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_0_QOS peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_0_QOS_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_0_QOS peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_0_QOS_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_QOSGENERATOR }
-
-/* NOC_SEERIS_2D_BLITTER_FU_RD_0_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0A00u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_2D_BLITTER_FU_RD_0_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_0_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_0_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_0_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_0_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_2D_BLITTER_FU_RD_1_QOS - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR
- * base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR_BASE (0x4B7E0880u)
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR
- * base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR ((NOC_SEERIS_2D_BLITTER_FU_RD_1_QOS_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_1_QOS peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_1_QOS_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_1_QOS peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_1_QOS_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_QOSGENERATOR }
-
-/* NOC_SEERIS_2D_BLITTER_FU_RD_1_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0A80u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_2D_BLITTER_FU_RD_1_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_1_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_1_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_1_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_1_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_2D_BLITTER_FU_RD_2_QOS - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR
- * base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR_BASE (0x4B7E0900u)
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR
- * base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR ((NOC_SEERIS_2D_BLITTER_FU_RD_2_QOS_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_2_QOS peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_2_QOS_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_2_QOS peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_2_QOS_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_QOSGENERATOR }
-
-/* NOC_SEERIS_2D_BLITTER_FU_RD_2_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0B00u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_2D_BLITTER_FU_RD_2_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_2_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_2_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_FU_RD_2_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_FU_RD_2_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_2D_BLITTER_STORE_WR_QOS - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR
- * base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR_BASE (0x4B7E0980u)
-/** Peripheral DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR
- * base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR ((NOC_SEERIS_2D_BLITTER_STORE_WR_QOS_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_STORE_WR_QOS peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_STORE_WR_QOS_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_STORE_WR_QOS peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_STORE_WR_QOS_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_QOSGENERATOR }
-
-/* NOC_SEERIS_2D_BLITTER_STORE_WR_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0B80u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_2D_BLITTER_STORE_WR_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_2D_BLITTER_STORE_WR_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_2D_BLITTER_STORE_WR_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_2D_BLITTER_STORE_WR_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_2D_BLITTER_STORE_WR_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_2D_BLITTER_STORE_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_CMD_SEQ_RD_XSTAT - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER
- * base address */
-#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0C00u)
-/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER
- * base pointer */
-#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_CMD_SEQ_RD_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_CMD_SEQ_RD_XSTAT peripheral base addresses */
-#define NOC_SEERIS_CMD_SEQ_RD_XSTAT_BASE_ADDRS   { DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_CMD_SEQ_RD_XSTAT peripheral base pointers */
-#define NOC_SEERIS_CMD_SEQ_RD_XSTAT_BASE_PTRS    { DISPLAY__GPV__I_SEERIS_CMD_SEQ_RD_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_CMD_SEQ_WR_XSTAT - Peripheral instance base addresses */
-/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER
- * base address */
-#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0C80u)
-/** Peripheral DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER
- * base pointer */
-#define DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_CMD_SEQ_WR_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_CMD_SEQ_WR_XSTAT peripheral base addresses */
-#define NOC_SEERIS_CMD_SEQ_WR_XSTAT_BASE_ADDRS   { DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_CMD_SEQ_WR_XSTAT peripheral base pointers */
-#define NOC_SEERIS_CMD_SEQ_WR_XSTAT_BASE_PTRS    { DISPLAY__GPV__I_SEERIS_CMD_SEQ_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_0_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0D00u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_0_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_0_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_0_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_0_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_0_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_0_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_1_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0D80u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_1_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_1_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_1_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_1_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_1_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_1_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_2_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0E00u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_2_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_2_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_2_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_2_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_2_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_2_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_3_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0E80u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_3_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_3_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_3_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_3_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_3_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_3_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_4_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0F00u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_4_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_4_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_4_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_4_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_4_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_4_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_5_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E0F80u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_5_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_5_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_5_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_5_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_5_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_5_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_6_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E1000u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_6_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_6_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_6_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_6_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_6_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_6_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_7_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E1080u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_7_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_7_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_7_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_7_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_7_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_7_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NOC_SEERIS_DISPLAY_CTRL_RD_8_XSTAT - Peripheral instance base addresses */
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4B7E1100u)
-/** Peripheral
- * DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER base pointer */
-#define DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER ((NOC_SEERIS_DISPLAY_CTRL_RD_8_XSTAT_Type *)DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER_BASE)
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_8_XSTAT peripheral base
- * addresses */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_8_XSTAT_BASE_ADDRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER_BASE }
-/** Array initializer of NOC_SEERIS_DISPLAY_CTRL_RD_8_XSTAT peripheral base
- * pointers */
-#define NOC_SEERIS_DISPLAY_CTRL_RD_8_XSTAT_BASE_PTRS { DISPLAY__GPV__I_SEERIS_DISPLAY_CTRL_FU_RD_8_I_MAIN_TRANSACTIONSTATFILTER }
 
 /* NOC_SRAMCTL - Peripheral instance base addresses */
 /** Peripheral NOC__SRAMCTL base address */
@@ -3927,20 +3257,10 @@ typedef enum IRQn {
 /** Array initializer of NOC_SRAMCTL peripheral base pointers */
 #define NOC_SRAMCTL_BASE_PTRS                    { NOC__SRAMCTL }
 
-/* NOC_SSI_FWD_MAIN_PROBE - Peripheral instance base addresses */
-/** Peripheral CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE base address */
-#define CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE_BASE (0x4AFF0800u)
-/** Peripheral CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE base pointer */
-#define CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE    ((NOC_SSI_FWD_MAIN_PROBE_Type *)CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE_BASE)
-/** Array initializer of NOC_SSI_FWD_MAIN_PROBE peripheral base addresses */
-#define NOC_SSI_FWD_MAIN_PROBE_BASE_ADDRS        { CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE_BASE }
-/** Array initializer of NOC_SSI_FWD_MAIN_PROBE peripheral base pointers */
-#define NOC_SSI_FWD_MAIN_PROBE_BASE_PTRS         { CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE }
-
 /* NOC_SSI_MASTER_ERROR_ERRLOG_0 - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_OBSERVER_SSI_MASTER_ERROR_MAIN_ERRORLOGGER_0 base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_OBSERVER_SSI_MASTER_ERROR_MAIN_ERRORLOGGER_0_BASE (0x980C0000u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_OBSERVER_SSI_MASTER_ERROR_MAIN_ERRORLOGGER_0_BASE (0x4C060000u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_OBSERVER_SSI_MASTER_ERROR_MAIN_ERRORLOGGER_0 base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_OBSERVER_SSI_MASTER_ERROR_MAIN_ERRORLOGGER_0 ((NOC_SSI_MASTER_ERROR_ERRLOG_0_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_OBSERVER_SSI_MASTER_ERROR_MAIN_ERRORLOGGER_0_BASE)
@@ -3953,7 +3273,7 @@ typedef enum IRQn {
 
 /* NOC_SSI_PRI_MAIN_PROBE - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__SSI_PRI_PROBE_MAIN_PROBE base address */
-#define VPU__GPV__SSI_PRI_PROBE_MAIN_PROBE_BASE  (0x4C800000u)
+#define VPU__GPV__SSI_PRI_PROBE_MAIN_PROBE_BASE  (0x4C600000u)
 /** Peripheral VPU__GPV__SSI_PRI_PROBE_MAIN_PROBE base pointer */
 #define VPU__GPV__SSI_PRI_PROBE_MAIN_PROBE       ((NOC_SSI_PRI_MAIN_PROBE_Type *)VPU__GPV__SSI_PRI_PROBE_MAIN_PROBE_BASE)
 /** Array initializer of NOC_SSI_PRI_MAIN_PROBE peripheral base addresses */
@@ -3974,7 +3294,7 @@ typedef enum IRQn {
 /* NOC_USB1_AXI_SLAVE_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0200u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060200u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_USB1_AXI_SLAVE_RD_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -3988,7 +3308,7 @@ typedef enum IRQn {
 /* NOC_USB1_AXI_SLAVE_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0180u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060180u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_USB1_AXI_SLAVE_WR_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_USB1_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -4002,7 +3322,7 @@ typedef enum IRQn {
 /* NOC_USB2_AXI_SLAVE_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0100u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060100u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_USB2_AXI_SLAVE_RD_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -4016,7 +3336,7 @@ typedef enum IRQn {
 /* NOC_USB2_AXI_SLAVE_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x980C0080u)
+#define HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C060080u)
 /** Peripheral
  * HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_USB2_AXI_SLAVE_WR_I_XSTATFILTER_Type *)HSIO__GPV__SSI_AXI_SLAVE_RD_USB2_AXI_SLAVE_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
@@ -4029,7 +3349,7 @@ typedef enum IRQn {
 
 /* NOC_VPU_PRI_MAIN_PROBE - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__VPU_PRI_PROBE_MAIN_PROBE base address */
-#define VPU__GPV__VPU_PRI_PROBE_MAIN_PROBE_BASE  (0x4C800400u)
+#define VPU__GPV__VPU_PRI_PROBE_MAIN_PROBE_BASE  (0x4C600400u)
 /** Peripheral VPU__GPV__VPU_PRI_PROBE_MAIN_PROBE base pointer */
 #define VPU__GPV__VPU_PRI_PROBE_MAIN_PROBE       ((NOC_VPU_PRI_MAIN_PROBE_Type *)VPU__GPV__VPU_PRI_PROBE_MAIN_PROBE_BASE)
 /** Array initializer of NOC_VPU_PRI_MAIN_PROBE peripheral base addresses */
@@ -4040,7 +3360,7 @@ typedef enum IRQn {
 /* NOC_VPU_PRI_PROBE_XSTATPROFILER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__VPU_PRI_PROBE_MAIN_TRANSACTIONSTATPROFILER base address
  * */
-#define VPU__GPV__VPU_PRI_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C800A00u)
+#define VPU__GPV__VPU_PRI_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4C600A00u)
 /** Peripheral VPU__GPV__VPU_PRI_PROBE_MAIN_TRANSACTIONSTATPROFILER base pointer
  * */
 #define VPU__GPV__VPU_PRI_PROBE_MAIN_TRANSACTIONSTATPROFILER ((NOC_VPU_PRI_PROBE_XSTATPROFILER_Type *)VPU__GPV__VPU_PRI_PROBE_MAIN_TRANSACTIONSTATPROFILER_BASE)
@@ -4053,7 +3373,7 @@ typedef enum IRQn {
 
 /* NOC_VPU_PRI_RD_I_QOSGENERATOR - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__VPU_PRI_RD_I_MAIN_QOSGENERATOR base address */
-#define VPU__GPV__VPU_PRI_RD_I_MAIN_QOSGENERATOR_BASE (0x4C800800u)
+#define VPU__GPV__VPU_PRI_RD_I_MAIN_QOSGENERATOR_BASE (0x4C600800u)
 /** Peripheral VPU__GPV__VPU_PRI_RD_I_MAIN_QOSGENERATOR base pointer */
 #define VPU__GPV__VPU_PRI_RD_I_MAIN_QOSGENERATOR ((NOC_VPU_PRI_RD_I_QOSGENERATOR_Type *)VPU__GPV__VPU_PRI_RD_I_MAIN_QOSGENERATOR_BASE)
 /** Array initializer of NOC_VPU_PRI_RD_I_QOSGENERATOR peripheral base addresses
@@ -4065,7 +3385,7 @@ typedef enum IRQn {
 
 /* NOC_VPU_PRI_RD_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__VPU_PRI_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define VPU__GPV__VPU_PRI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C800900u)
+#define VPU__GPV__VPU_PRI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C600900u)
 /** Peripheral VPU__GPV__VPU_PRI_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define VPU__GPV__VPU_PRI_RD_I_MAIN_TRANSACTIONSTATFILTER ((NOC_VPU_PRI_RD_I_XSTATFILTER_Type *)VPU__GPV__VPU_PRI_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
 /** Array initializer of NOC_VPU_PRI_RD_I_XSTATFILTER peripheral base addresses
@@ -4076,7 +3396,7 @@ typedef enum IRQn {
 
 /* NOC_VPU_PRI_WR_I_QOSGENERATOR - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__VPU_PRI_WR_I_MAIN_QOSGENERATOR base address */
-#define VPU__GPV__VPU_PRI_WR_I_MAIN_QOSGENERATOR_BASE (0x4C800880u)
+#define VPU__GPV__VPU_PRI_WR_I_MAIN_QOSGENERATOR_BASE (0x4C600880u)
 /** Peripheral VPU__GPV__VPU_PRI_WR_I_MAIN_QOSGENERATOR base pointer */
 #define VPU__GPV__VPU_PRI_WR_I_MAIN_QOSGENERATOR ((NOC_VPU_PRI_WR_I_QOSGENERATOR_Type *)VPU__GPV__VPU_PRI_WR_I_MAIN_QOSGENERATOR_BASE)
 /** Array initializer of NOC_VPU_PRI_WR_I_QOSGENERATOR peripheral base addresses
@@ -4088,7 +3408,7 @@ typedef enum IRQn {
 
 /* NOC_VPU_PRI_WR_I_XSTATFILTER - Peripheral instance base addresses */
 /** Peripheral VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
-#define VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C800980u)
+#define VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x4C600980u)
 /** Peripheral VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
 #define VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER ((NOC_VPU_PRI_WR_I_XSTATFILTER_Type *)VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
 /** Array initializer of NOC_VPU_PRI_WR_I_XSTATFILTER peripheral base addresses
@@ -4096,26 +3416,6 @@ typedef enum IRQn {
 #define NOC_VPU_PRI_WR_I_XSTATFILTER_BASE_ADDRS  { VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
 /** Array initializer of NOC_VPU_PRI_WR_I_XSTATFILTER peripheral base pointers */
 #define NOC_VPU_PRI_WR_I_XSTATFILTER_BASE_PTRS   { VPU__GPV__VPU_PRI_WR_I_MAIN_TRANSACTIONSTATFILTER }
-
-/* NPU_EIM - Peripheral instance base addresses */
-/** Peripheral NPU__EIM_NPUMIX base address */
-#define NPU__EIM_NPUMIX_BASE                     (0x4A860000u)
-/** Peripheral NPU__EIM_NPUMIX base pointer */
-#define NPU__EIM_NPUMIX                          ((NPU_EIM_Type *)NPU__EIM_NPUMIX_BASE)
-/** Array initializer of NPU_EIM peripheral base addresses */
-#define NPU_EIM_BASE_ADDRS                       { NPU__EIM_NPUMIX_BASE }
-/** Array initializer of NPU_EIM peripheral base pointers */
-#define NPU_EIM_BASE_PTRS                        { NPU__EIM_NPUMIX }
-
-/* NPU_LSTCU - Peripheral instance base addresses */
-/** Peripheral NPU__LSTCU_NPUMIX base address */
-#define NPU__LSTCU_NPUMIX_BASE                   (0x4A850000u)
-/** Peripheral NPU__LSTCU_NPUMIX base pointer */
-#define NPU__LSTCU_NPUMIX                        ((NPU_LSTCU_Type *)NPU__LSTCU_NPUMIX_BASE)
-/** Array initializer of NPU_LSTCU peripheral base addresses */
-#define NPU_LSTCU_BASE_ADDRS                     { NPU__LSTCU_NPUMIX_BASE }
-/** Array initializer of NPU_LSTCU peripheral base pointers */
-#define NPU_LSTCU_BASE_PTRS                      { NPU__LSTCU_NPUMIX }
 
 /* NPU_TCU - Peripheral instance base addresses */
 /** Peripheral NPU__TCU base address */
@@ -4166,6 +3466,30 @@ typedef enum IRQn {
 #define OB_WB2_BASE_ADDRS                        { CAMERA__ISP__OB_WB2_BASE }
 /** Array initializer of OB_WB2 peripheral base pointers */
 #define OB_WB2_BASE_PTRS                         { CAMERA__ISP__OB_WB2 }
+
+/* OCRAM - Peripheral instance base addresses */
+/** Peripheral CAMERA__OCRAM_MECC base address */
+#define CAMERA__OCRAM_MECC_BASE                  (0x4ADD0000u)
+/** Peripheral CAMERA__OCRAM_MECC base pointer */
+#define CAMERA__OCRAM_MECC                       ((OCRAM_Type *)CAMERA__OCRAM_MECC_BASE)
+/** Peripheral DISPLAY__OCRAM_MECC base address */
+#define DISPLAY__OCRAM_MECC_BASE                 (0x4B0F0000u)
+/** Peripheral DISPLAY__OCRAM_MECC base pointer */
+#define DISPLAY__OCRAM_MECC                      ((OCRAM_Type *)DISPLAY__OCRAM_MECC_BASE)
+/** Array initializer of OCRAM peripheral base addresses */
+#define OCRAM_BASE_ADDRS                         { CAMERA__OCRAM_MECC_BASE, DISPLAY__OCRAM_MECC_BASE }
+/** Array initializer of OCRAM peripheral base pointers */
+#define OCRAM_BASE_PTRS                          { CAMERA__OCRAM_MECC, DISPLAY__OCRAM_MECC }
+
+/* OTFAD - Peripheral instance base addresses */
+/** Peripheral OTFAD base address */
+#define OTFAD_BASE                               (0x425E0000u)
+/** Peripheral OTFAD base pointer */
+#define OTFAD                                    ((OTFAD_Type *)OTFAD_BASE)
+/** Array initializer of OTFAD peripheral base addresses */
+#define OTFAD_BASE_ADDRS                         { OTFAD_BASE }
+/** Array initializer of OTFAD peripheral base pointers */
+#define OTFAD_BASE_PTRS                          { OTFAD }
 
 /* PACKETIZER - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__PACKETIZER base address */
@@ -4286,6 +3610,298 @@ typedef enum IRQn {
 #define PLL_BASE_ADDRS                           { ANALOG__SYS_FRACT_PLL1_BASE, ANALOG__AUDIO_FRACT_PLL1_BASE, ANALOG__AUDIO_FRACT_PLL2_BASE, ANALOG__VIDEO_FRACT_PLL1_BASE, CORTEXA__FRACT_PLL_ARMPLL_BASE, DDRC__FRACT_PLL_BASE, DISPLAY__FRACT_PLL_BASE }
 /** Array initializer of PLL peripheral base pointers */
 #define PLL_BASE_PTRS                            { ANALOG__SYS_FRACT_PLL1, ANALOG__AUDIO_FRACT_PLL1, ANALOG__AUDIO_FRACT_PLL2, ANALOG__VIDEO_FRACT_PLL1, CORTEXA__FRACT_PLL_ARMPLL, DDRC__FRACT_PLL, DISPLAY__FRACT_PLL }
+
+/* Probe1_main_Probe - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__PROBE1_MAIN_PROBE base address */
+#define DISPLAY__GPV__PROBE1_MAIN_PROBE_BASE     (0x4B3F0000u)
+/** Peripheral DISPLAY__GPV__PROBE1_MAIN_PROBE base pointer */
+#define DISPLAY__GPV__PROBE1_MAIN_PROBE          ((Probe1_main_Probe_Type *)DISPLAY__GPV__PROBE1_MAIN_PROBE_BASE)
+/** Array initializer of Probe1_main_Probe peripheral base addresses */
+#define Probe1_main_Probe_BASE_ADDRS             { DISPLAY__GPV__PROBE1_MAIN_PROBE_BASE }
+/** Array initializer of Probe1_main_Probe peripheral base pointers */
+#define Probe1_main_Probe_BASE_PTRS              { DISPLAY__GPV__PROBE1_MAIN_PROBE }
+
+/* Probe1_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER base address */
+#define DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4B3F1180u)
+/** Peripheral DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER ((Probe1_main_TransactionStatProfiler_Type *)DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe1_main_TransactionStatProfiler peripheral base
+ * addresses */
+#define Probe1_main_TransactionStatProfiler_BASE_ADDRS { DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe1_main_TransactionStatProfiler peripheral base
+ * pointers */
+#define Probe1_main_TransactionStatProfiler_BASE_PTRS { DISPLAY__GPV__PROBE1_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_ISI_main_Probe - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_PROBE base address */
+#define CAMERA__GPV__PROBE_ISI_MAIN_PROBE_BASE   (0x4AFF0000u)
+/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_PROBE base pointer */
+#define CAMERA__GPV__PROBE_ISI_MAIN_PROBE        ((Probe_ISI_main_Probe_Type *)CAMERA__GPV__PROBE_ISI_MAIN_PROBE_BASE)
+/** Array initializer of Probe_ISI_main_Probe peripheral base addresses */
+#define Probe_ISI_main_Probe_BASE_ADDRS          { CAMERA__GPV__PROBE_ISI_MAIN_PROBE_BASE }
+/** Array initializer of Probe_ISI_main_Probe peripheral base pointers */
+#define Probe_ISI_main_Probe_BASE_PTRS           { CAMERA__GPV__PROBE_ISI_MAIN_PROBE }
+
+/* Probe_ISI_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER base address
+ * */
+#define CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4AFF1400u)
+/** Peripheral CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER base pointer
+ * */
+#define CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER ((Probe_ISI_main_TransactionStatProfiler_Type *)CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_ISI_main_TransactionStatProfiler peripheral base
+ * addresses */
+#define Probe_ISI_main_TransactionStatProfiler_BASE_ADDRS { CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_ISI_main_TransactionStatProfiler peripheral base
+ * pointers */
+#define Probe_ISI_main_TransactionStatProfiler_BASE_PTRS { CAMERA__GPV__PROBE_ISI_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_ISP_main_Probe - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_PROBE base address */
+#define CAMERA__GPV__PROBE_ISP_MAIN_PROBE_BASE   (0x4AFF0400u)
+/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_PROBE base pointer */
+#define CAMERA__GPV__PROBE_ISP_MAIN_PROBE        ((Probe_ISP_main_Probe_Type *)CAMERA__GPV__PROBE_ISP_MAIN_PROBE_BASE)
+/** Array initializer of Probe_ISP_main_Probe peripheral base addresses */
+#define Probe_ISP_main_Probe_BASE_ADDRS          { CAMERA__GPV__PROBE_ISP_MAIN_PROBE_BASE }
+/** Array initializer of Probe_ISP_main_Probe peripheral base pointers */
+#define Probe_ISP_main_Probe_BASE_PTRS           { CAMERA__GPV__PROBE_ISP_MAIN_PROBE }
+
+/* Probe_ISP_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER base address
+ * */
+#define CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER_BASE (0x4AFF1480u)
+/** Peripheral CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER base pointer
+ * */
+#define CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER ((Probe_ISP_main_TransactionStatProfiler_Type *)CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_ISP_main_TransactionStatProfiler peripheral base
+ * addresses */
+#define Probe_ISP_main_TransactionStatProfiler_BASE_ADDRS { CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_ISP_main_TransactionStatProfiler peripheral base
+ * pointers */
+#define Probe_ISP_main_TransactionStatProfiler_BASE_PTRS { CAMERA__GPV__PROBE_ISP_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_SSI_FWD_main_Probe - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE base address */
+#define CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE_BASE (0x4AFF0800u)
+/** Peripheral CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE base pointer */
+#define CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE    ((Probe_SSI_FWD_main_Probe_Type *)CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE_BASE)
+/** Array initializer of Probe_SSI_FWD_main_Probe peripheral base addresses */
+#define Probe_SSI_FWD_main_Probe_BASE_ADDRS      { CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE_BASE }
+/** Array initializer of Probe_SSI_FWD_main_Probe peripheral base pointers */
+#define Probe_SSI_FWD_main_Probe_BASE_PTRS       { CAMERA__GPV__PROBE_SSI_FWD_MAIN_PROBE }
+
+/* Probe_m_e_0_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE    (0x49060000u)
+/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_0_MAIN_PROBE         ((Probe_m_e_0_main_Probe_Type *)NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_0_main_Probe peripheral base addresses */
+#define Probe_m_e_0_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_0_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_0_main_Probe peripheral base pointers */
+#define Probe_m_e_0_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_0_MAIN_PROBE }
+
+/* Probe_m_e_0_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063980u)
+/** Peripheral NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_0_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_0_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_0_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_0_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_0_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_0_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_10_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_10_MAIN_PROBE_BASE   (0x49061C00u)
+/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_10_MAIN_PROBE        ((Probe_m_e_10_main_Probe_Type *)NOC__GPV__PROBE_M_E_10_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_10_main_Probe peripheral base addresses */
+#define Probe_m_e_10_main_Probe_BASE_ADDRS       { NOC__GPV__PROBE_M_E_10_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_10_main_Probe peripheral base pointers */
+#define Probe_m_e_10_main_Probe_BASE_PTRS        { NOC__GPV__PROBE_M_E_10_MAIN_PROBE }
+
+/* Probe_m_e_10_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER base address
+ * */
+#define NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063D00u)
+/** Peripheral NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER base pointer
+ * */
+#define NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_10_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_10_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_10_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_10_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_10_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_10_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_11_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_11_MAIN_PROBE_BASE   (0x49062000u)
+/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_11_MAIN_PROBE        ((Probe_m_e_11_main_Probe_Type *)NOC__GPV__PROBE_M_E_11_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_11_main_Probe peripheral base addresses */
+#define Probe_m_e_11_main_Probe_BASE_ADDRS       { NOC__GPV__PROBE_M_E_11_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_11_main_Probe peripheral base pointers */
+#define Probe_m_e_11_main_Probe_BASE_PTRS        { NOC__GPV__PROBE_M_E_11_MAIN_PROBE }
+
+/* Probe_m_e_11_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER base address
+ * */
+#define NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063D80u)
+/** Peripheral NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER base pointer
+ * */
+#define NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_11_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_11_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_11_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_11_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_11_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_11_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_3_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE    (0x49060400u)
+/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_3_MAIN_PROBE         ((Probe_m_e_3_main_Probe_Type *)NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_3_main_Probe peripheral base addresses */
+#define Probe_m_e_3_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_3_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_3_main_Probe peripheral base pointers */
+#define Probe_m_e_3_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_3_MAIN_PROBE }
+
+/* Probe_m_e_3_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063A00u)
+/** Peripheral NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_3_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_3_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_3_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_3_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_3_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_3_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_4_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_4_MAIN_PROBE_BASE    (0x49060800u)
+/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_4_MAIN_PROBE         ((Probe_m_e_4_main_Probe_Type *)NOC__GPV__PROBE_M_E_4_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_4_main_Probe peripheral base addresses */
+#define Probe_m_e_4_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_4_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_4_main_Probe peripheral base pointers */
+#define Probe_m_e_4_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_4_MAIN_PROBE }
+
+/* Probe_m_e_4_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063A80u)
+/** Peripheral NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_4_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_4_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_4_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_4_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_4_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_4_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_5_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_5_MAIN_PROBE_BASE    (0x49060C00u)
+/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_5_MAIN_PROBE         ((Probe_m_e_5_main_Probe_Type *)NOC__GPV__PROBE_M_E_5_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_5_main_Probe peripheral base addresses */
+#define Probe_m_e_5_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_5_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_5_main_Probe peripheral base pointers */
+#define Probe_m_e_5_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_5_MAIN_PROBE }
+
+/* Probe_m_e_5_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063B00u)
+/** Peripheral NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_5_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_5_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_5_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_5_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_5_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_5_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_6_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE    (0x49061000u)
+/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_6_MAIN_PROBE         ((Probe_m_e_6_main_Probe_Type *)NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_6_main_Probe peripheral base addresses */
+#define Probe_m_e_6_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_6_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_6_main_Probe peripheral base pointers */
+#define Probe_m_e_6_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_6_MAIN_PROBE }
+
+/* Probe_m_e_6_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063B80u)
+/** Peripheral NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_6_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_6_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_6_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_6_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_6_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_6_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_7_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE    (0x49061400u)
+/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_7_MAIN_PROBE         ((Probe_m_e_7_main_Probe_Type *)NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_7_main_Probe peripheral base addresses */
+#define Probe_m_e_7_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_7_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_7_main_Probe peripheral base pointers */
+#define Probe_m_e_7_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_7_MAIN_PROBE }
+
+/* Probe_m_e_7_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063C00u)
+/** Peripheral NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_7_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_7_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_7_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_7_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_7_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_7_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_m_e_9_main_Probe - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_PROBE base address */
+#define NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE    (0x49061800u)
+/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_PROBE base pointer */
+#define NOC__GPV__PROBE_M_E_9_MAIN_PROBE         ((Probe_m_e_9_main_Probe_Type *)NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE)
+/** Array initializer of Probe_m_e_9_main_Probe peripheral base addresses */
+#define Probe_m_e_9_main_Probe_BASE_ADDRS        { NOC__GPV__PROBE_M_E_9_MAIN_PROBE_BASE }
+/** Array initializer of Probe_m_e_9_main_Probe peripheral base pointers */
+#define Probe_m_e_9_main_Probe_BASE_PTRS         { NOC__GPV__PROBE_M_E_9_MAIN_PROBE }
+
+/* Probe_m_e_9_main_TransactionStatProfiler - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER base address */
+#define NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE (0x49063C80u)
+/** Peripheral NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER base pointer */
+#define NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER ((Probe_m_e_9_main_TransactionStatProfiler_Type *)NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE)
+/** Array initializer of Probe_m_e_9_main_TransactionStatProfiler peripheral
+ * base addresses */
+#define Probe_m_e_9_main_TransactionStatProfiler_BASE_ADDRS { NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER_BASE }
+/** Array initializer of Probe_m_e_9_main_TransactionStatProfiler peripheral
+ * base pointers */
+#define Probe_m_e_9_main_TransactionStatProfiler_BASE_PTRS { NOC__GPV__PROBE_M_E_9_MAIN_TRANSACTIONSTATPROFILER }
+
+/* Probe_main_Probe - Peripheral instance base addresses */
+/** Peripheral DISPLAY__GPV__PROBE_MAIN_PROBE base address */
+#define DISPLAY__GPV__PROBE_MAIN_PROBE_BASE      (0x4B3F0400u)
+/** Peripheral DISPLAY__GPV__PROBE_MAIN_PROBE base pointer */
+#define DISPLAY__GPV__PROBE_MAIN_PROBE           ((Probe_main_Probe_Type *)DISPLAY__GPV__PROBE_MAIN_PROBE_BASE)
+/** Array initializer of Probe_main_Probe peripheral base addresses */
+#define Probe_main_Probe_BASE_ADDRS              { DISPLAY__GPV__PROBE_MAIN_PROBE_BASE }
+/** Array initializer of Probe_main_Probe peripheral base pointers */
+#define Probe_main_Probe_BASE_PTRS               { DISPLAY__GPV__PROBE_MAIN_PROBE }
 
 /* RGBIR - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__RGBIR base address */
@@ -4470,10 +4086,6 @@ typedef enum IRQn {
 #define CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX_BASE   (0x44461400u)
 /** Peripheral CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX base pointer */
 #define CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX        ((SRC_XSPR_Type *)CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX_BASE)
-/** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0 base address */
-#define CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0_BASE (0x44461800u)
-/** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0 base pointer */
-#define CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0     ((SRC_XSPR_Type *)CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0_BASE)
 /** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1 base address */
 #define CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1_BASE (0x44461C00u)
 /** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1 base pointer */
@@ -4494,10 +4106,6 @@ typedef enum IRQn {
 #define CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5_BASE (0x44462C00u)
 /** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5 base pointer */
 #define CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5     ((SRC_XSPR_Type *)CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5_BASE)
-/** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM base address */
-#define CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM_BASE (0x44463000u)
-/** Peripheral CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM base pointer */
-#define CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM  ((SRC_XSPR_Type *)CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM_BASE)
 /** Peripheral CCMSRCGPC__SRC__XSPR_DDRMIX base address */
 #define CCMSRCGPC__SRC__XSPR_DDRMIX_BASE         (0x44463400u)
 /** Peripheral CCMSRCGPC__SRC__XSPR_DDRMIX base pointer */
@@ -4543,9 +4151,9 @@ typedef enum IRQn {
 /** Peripheral CCMSRCGPC__SRC__XSPR_WAKEUPMIX base pointer */
 #define CCMSRCGPC__SRC__XSPR_WAKEUPMIX           ((SRC_XSPR_Type *)CCMSRCGPC__SRC__XSPR_WAKEUPMIX_BASE)
 /** Array initializer of SRC_XSPR peripheral base addresses */
-#define SRC_XSPR_BASE_ADDRS                      { CCMSRCGPC__SRC__XSPR_ANAMIX_BASE, CCMSRCGPC__SRC__XSPR_AONMIX_BASE, CCMSRCGPC__SRC__XSPR_BBSMMIX_BASE, CCMSRCGPC__SRC__XSPR_CAMERAMIX_BASE, CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE2_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE3_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE4_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM_BASE, CCMSRCGPC__SRC__XSPR_DDRMIX_BASE, CCMSRCGPC__SRC__XSPR_DISPLAYMIX_BASE, CCMSRCGPC__SRC__XSPR_GPUMIX_BASE, CCMSRCGPC__SRC__XSPR_HSIOMIX_TOP_BASE, CCMSRCGPC__SRC__XSPR_HSIOMIX_WAON_BASE, CCMSRCGPC__SRC__XSPR_M7MIX_BASE, CCMSRCGPC__SRC__XSPR_NETCMIX_BASE, CCMSRCGPC__SRC__XSPR_NOCMIX_BASE, CCMSRCGPC__SRC__XSPR_NPUMIX_BASE, CCMSRCGPC__SRC__XSPR_VPUMIX_BASE, CCMSRCGPC__SRC__XSPR_WAKEUPMIX_BASE }
+#define SRC_XSPR_BASE_ADDRS                      { CCMSRCGPC__SRC__XSPR_ANAMIX_BASE, CCMSRCGPC__SRC__XSPR_AONMIX_BASE, CCMSRCGPC__SRC__XSPR_BBSMMIX_BASE, CCMSRCGPC__SRC__XSPR_CAMERAMIX_BASE, CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE2_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE3_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE4_BASE, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5_BASE, CCMSRCGPC__SRC__XSPR_DDRMIX_BASE, CCMSRCGPC__SRC__XSPR_DISPLAYMIX_BASE, CCMSRCGPC__SRC__XSPR_GPUMIX_BASE, CCMSRCGPC__SRC__XSPR_HSIOMIX_TOP_BASE, CCMSRCGPC__SRC__XSPR_HSIOMIX_WAON_BASE, CCMSRCGPC__SRC__XSPR_M7MIX_BASE, CCMSRCGPC__SRC__XSPR_NETCMIX_BASE, CCMSRCGPC__SRC__XSPR_NOCMIX_BASE, CCMSRCGPC__SRC__XSPR_NPUMIX_BASE, CCMSRCGPC__SRC__XSPR_VPUMIX_BASE, CCMSRCGPC__SRC__XSPR_WAKEUPMIX_BASE }
 /** Array initializer of SRC_XSPR peripheral base pointers */
-#define SRC_XSPR_BASE_PTRS                       { CCMSRCGPC__SRC__XSPR_ANAMIX, CCMSRCGPC__SRC__XSPR_AONMIX, CCMSRCGPC__SRC__XSPR_BBSMMIX, CCMSRCGPC__SRC__XSPR_CAMERAMIX, CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE0, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE2, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE3, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE4, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5, CCMSRCGPC__SRC__XSPR_CORTEXMIX_PLATFORM, CCMSRCGPC__SRC__XSPR_DDRMIX, CCMSRCGPC__SRC__XSPR_DISPLAYMIX, CCMSRCGPC__SRC__XSPR_GPUMIX, CCMSRCGPC__SRC__XSPR_HSIOMIX_TOP, CCMSRCGPC__SRC__XSPR_HSIOMIX_WAON, CCMSRCGPC__SRC__XSPR_M7MIX, CCMSRCGPC__SRC__XSPR_NETCMIX, CCMSRCGPC__SRC__XSPR_NOCMIX, CCMSRCGPC__SRC__XSPR_NPUMIX, CCMSRCGPC__SRC__XSPR_VPUMIX, CCMSRCGPC__SRC__XSPR_WAKEUPMIX }
+#define SRC_XSPR_BASE_PTRS                       { CCMSRCGPC__SRC__XSPR_ANAMIX, CCMSRCGPC__SRC__XSPR_AONMIX, CCMSRCGPC__SRC__XSPR_BBSMMIX, CCMSRCGPC__SRC__XSPR_CAMERAMIX, CCMSRCGPC__SRC__XSPR_CCMSRCGPCMIX, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE1, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE2, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE3, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE4, CCMSRCGPC__SRC__XSPR_CORTEXMIX_CORE5, CCMSRCGPC__SRC__XSPR_DDRMIX, CCMSRCGPC__SRC__XSPR_DISPLAYMIX, CCMSRCGPC__SRC__XSPR_GPUMIX, CCMSRCGPC__SRC__XSPR_HSIOMIX_TOP, CCMSRCGPC__SRC__XSPR_HSIOMIX_WAON, CCMSRCGPC__SRC__XSPR_M7MIX, CCMSRCGPC__SRC__XSPR_NETCMIX, CCMSRCGPC__SRC__XSPR_NOCMIX, CCMSRCGPC__SRC__XSPR_NPUMIX, CCMSRCGPC__SRC__XSPR_VPUMIX, CCMSRCGPC__SRC__XSPR_WAKEUPMIX }
 
 /* STAT - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__STAT base address */
@@ -4557,6 +4165,16 @@ typedef enum IRQn {
 /** Array initializer of STAT peripheral base pointers */
 #define STAT_BASE_PTRS                           { CAMERA__ISP__STAT }
 
+/* SYS_CTR1 - Peripheral instance base addresses */
+/** Peripheral AON__SYS_CTR1__SYS_CTR_CONTROL base address */
+#define AON__SYS_CTR1__SYS_CTR_CONTROL_BASE      (0x44290000u)
+/** Peripheral AON__SYS_CTR1__SYS_CTR_CONTROL base pointer */
+#define AON__SYS_CTR1__SYS_CTR_CONTROL           ((SYS_CTR1_Type *)AON__SYS_CTR1__SYS_CTR_CONTROL_BASE)
+/** Array initializer of SYS_CTR1 peripheral base addresses */
+#define SYS_CTR1_BASE_ADDRS                      { AON__SYS_CTR1__SYS_CTR_CONTROL_BASE }
+/** Array initializer of SYS_CTR1 peripheral base pointers */
+#define SYS_CTR1_BASE_PTRS                       { AON__SYS_CTR1__SYS_CTR_CONTROL }
+
 /* SYS_CTR_COMPARE - Peripheral instance base addresses */
 /** Peripheral AON__SYS_CTR1__SYS_CTR_COMPARE base address */
 #define AON__SYS_CTR1__SYS_CTR_COMPARE_BASE      (0x442A0000u)
@@ -4566,16 +4184,6 @@ typedef enum IRQn {
 #define SYS_CTR_COMPARE_BASE_ADDRS               { AON__SYS_CTR1__SYS_CTR_COMPARE_BASE }
 /** Array initializer of SYS_CTR_COMPARE peripheral base pointers */
 #define SYS_CTR_COMPARE_BASE_PTRS                { AON__SYS_CTR1__SYS_CTR_COMPARE }
-
-/* SYS_CTR_CONTROL - Peripheral instance base addresses */
-/** Peripheral AON__SYS_CTR1__SYS_CTR_CONTROL base address */
-#define AON__SYS_CTR1__SYS_CTR_CONTROL_BASE      (0x44290000u)
-/** Peripheral AON__SYS_CTR1__SYS_CTR_CONTROL base pointer */
-#define AON__SYS_CTR1__SYS_CTR_CONTROL           ((SYS_CTR_CONTROL_Type *)AON__SYS_CTR1__SYS_CTR_CONTROL_BASE)
-/** Array initializer of SYS_CTR_CONTROL peripheral base addresses */
-#define SYS_CTR_CONTROL_BASE_ADDRS               { AON__SYS_CTR1__SYS_CTR_CONTROL_BASE }
-/** Array initializer of SYS_CTR_CONTROL peripheral base pointers */
-#define SYS_CTR_CONTROL_BASE_PTRS                { AON__SYS_CTR1__SYS_CTR_CONTROL }
 
 /* SYS_CTR_READ - Peripheral instance base addresses */
 /** Peripheral AON__SYS_CTR1__SYS_CTR_READ base address */
@@ -4651,11 +4259,11 @@ typedef enum IRQn {
 /** Peripheral TPM6 base pointer */
 #define TPM6                                     ((TPM_Type *)TPM6_BASE)
 /** Array initializer of TPM peripheral base addresses */
-#define TPM_BASE_ADDRS                           { TPM1_BASE, TPM2_BASE, TPM3_BASE, TPM4_BASE, TPM5_BASE, TPM6_BASE }
+#define TPM_BASE_ADDRS                           { 0u, TPM1_BASE, TPM2_BASE, TPM3_BASE, TPM4_BASE, TPM5_BASE, TPM6_BASE }
 /** Array initializer of TPM peripheral base pointers */
-#define TPM_BASE_PTRS                            { TPM1, TPM2, TPM3, TPM4, TPM5, TPM6 }
+#define TPM_BASE_PTRS                            { (TPM_Type *)0u, TPM1, TPM2, TPM3, TPM4, TPM5, TPM6 }
 /** Interrupt vectors for the TPM peripheral type */
-#define TPM_IRQS                                 { TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
+#define TPM_IRQS                                 { NotAvail_IRQn, TPM1_IRQn, TPM2_IRQn, TPM3_IRQn, TPM4_IRQn, TPM5_IRQn, TPM6_IRQn }
 
 /* TRDC_MBC2 - Peripheral instance base addresses */
 /** Peripheral TRDC1 base address */
@@ -4731,6 +4339,34 @@ typedef enum IRQn {
 /** Array initializer of USBNC peripheral base pointers */
 #define USBNC_BASE_PTRS                          { USBNC }
 
+/* USDHC - Peripheral instance base addresses */
+/** Peripheral USDHC1 base address */
+#define USDHC1_BASE                              (0x42850000u)
+/** Peripheral USDHC1 base pointer */
+#define USDHC1                                   ((USDHC_Type *)USDHC1_BASE)
+/** Peripheral USDHC2 base address */
+#define USDHC2_BASE                              (0x42860000u)
+/** Peripheral USDHC2 base pointer */
+#define USDHC2                                   ((USDHC_Type *)USDHC2_BASE)
+/** Peripheral USDHC3 base address */
+#define USDHC3_BASE                              (0x428B0000u)
+/** Peripheral USDHC3 base pointer */
+#define USDHC3                                   ((USDHC_Type *)USDHC3_BASE)
+/** Array initializer of USDHC peripheral base addresses */
+#define USDHC_BASE_ADDRS                         { USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
+/** Array initializer of USDHC peripheral base pointers */
+#define USDHC_BASE_PTRS                          { USDHC1, USDHC2, USDHC3 }
+
+/* USER - Peripheral instance base addresses */
+/** Peripheral GPU__REG__USER base address */
+#define GPU__REG__USER_BASE                      (0x4D910000u)
+/** Peripheral GPU__REG__USER base pointer */
+#define GPU__REG__USER                           ((USER_Type *)GPU__REG__USER_BASE)
+/** Array initializer of USER peripheral base addresses */
+#define USER_BASE_ADDRS                          { GPU__REG__USER_BASE }
+/** Array initializer of USER peripheral base pointers */
+#define USER_BASE_PTRS                           { GPU__REG__USER }
+
 /* VIGNETTING - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__VIGNETTING base address */
 #define CAMERA__ISP__VIGNETTING_BASE             (0x4AE00900u)
@@ -4760,16 +4396,6 @@ typedef enum IRQn {
 #define VPU_BLK_CTRL_VPUMIX_BASE_ADDRS           { VPU__BLK_CTRL_VPUMIX_BASE }
 /** Array initializer of VPU_BLK_CTRL_VPUMIX peripheral base pointers */
 #define VPU_BLK_CTRL_VPUMIX_BASE_PTRS            { VPU__BLK_CTRL_VPUMIX }
-
-/* VPU_JPEG_ENC - Peripheral instance base addresses */
-/** Peripheral VPU__JPEG_ENC base address */
-#define VPU__JPEG_ENC_BASE                       (0x4C550100u)
-/** Peripheral VPU__JPEG_ENC base pointer */
-#define VPU__JPEG_ENC                            ((VPU_JPEG_ENC_Type *)VPU__JPEG_ENC_BASE)
-/** Array initializer of VPU_JPEG_ENC peripheral base addresses */
-#define VPU_JPEG_ENC_BASE_ADDRS                  { VPU__JPEG_ENC_BASE }
-/** Array initializer of VPU_JPEG_ENC peripheral base pointers */
-#define VPU_JPEG_ENC_BASE_PTRS                   { VPU__JPEG_ENC }
 
 /* VPU_JPEG_ENC_WRAP - Peripheral instance base addresses */
 /** Peripheral VPU__JPEG_ENC_WRAP base address */
@@ -4815,16 +4441,6 @@ typedef enum IRQn {
 /** Array initializer of WAKEUP_ATU peripheral base pointers */
 #define WAKEUP_ATU_BASE_PTRS                     { WAKEUP__ATUA, WAKEUP__ATUM }
 
-/* WAKEUP_AUDIO_XCVR - Peripheral instance base addresses */
-/** Peripheral WAKEUP__AUDIO_XCVR base address */
-#define WAKEUP__AUDIO_XCVR_BASE                  (0x42680000u)
-/** Peripheral WAKEUP__AUDIO_XCVR base pointer */
-#define WAKEUP__AUDIO_XCVR                       ((WAKEUP_AUDIO_XCVR_Type *)WAKEUP__AUDIO_XCVR_BASE)
-/** Array initializer of WAKEUP_AUDIO_XCVR peripheral base addresses */
-#define WAKEUP_AUDIO_XCVR_BASE_ADDRS             { WAKEUP__AUDIO_XCVR_BASE }
-/** Array initializer of WAKEUP_AUDIO_XCVR peripheral base pointers */
-#define WAKEUP_AUDIO_XCVR_BASE_PTRS              { WAKEUP__AUDIO_XCVR }
-
 /* WAKEUP_DMA_CRC - Peripheral instance base addresses */
 /** Peripheral WAKEUP__DMA_CRC2 base address */
 #define WAKEUP__DMA_CRC2_BASE                    (0x427B0000u)
@@ -4835,26 +4451,6 @@ typedef enum IRQn {
 /** Array initializer of WAKEUP_DMA_CRC peripheral base pointers */
 #define WAKEUP_DMA_CRC_BASE_PTRS                 { WAKEUP__DMA_CRC2 }
 
-/* WAKEUP_EIM - Peripheral instance base addresses */
-/** Peripheral WAKEUP__EIMW base address */
-#define WAKEUP__EIMW_BASE                        (0x42780000u)
-/** Peripheral WAKEUP__EIMW base pointer */
-#define WAKEUP__EIMW                             ((WAKEUP_EIM_Type *)WAKEUP__EIMW_BASE)
-/** Array initializer of WAKEUP_EIM peripheral base addresses */
-#define WAKEUP_EIM_BASE_ADDRS                    { WAKEUP__EIMW_BASE }
-/** Array initializer of WAKEUP_EIM peripheral base pointers */
-#define WAKEUP_EIM_BASE_PTRS                     { WAKEUP__EIMW }
-
-/* WAKEUP_FLEXSPI_OTFAD - Peripheral instance base addresses */
-/** Peripheral WAKEUP__FLEXSPI_OTFAD base address */
-#define WAKEUP__FLEXSPI_OTFAD_BASE               (0x425E0000u)
-/** Peripheral WAKEUP__FLEXSPI_OTFAD base pointer */
-#define WAKEUP__FLEXSPI_OTFAD                    ((WAKEUP_FLEXSPI_OTFAD_Type *)WAKEUP__FLEXSPI_OTFAD_BASE)
-/** Array initializer of WAKEUP_FLEXSPI_OTFAD peripheral base addresses */
-#define WAKEUP_FLEXSPI_OTFAD_BASE_ADDRS          { WAKEUP__FLEXSPI_OTFAD_BASE }
-/** Array initializer of WAKEUP_FLEXSPI_OTFAD peripheral base pointers */
-#define WAKEUP_FLEXSPI_OTFAD_BASE_PTRS           { WAKEUP__FLEXSPI_OTFAD }
-
 /* WAKEUP_ROMCP - Peripheral instance base addresses */
 /** Peripheral WAKEUP__ROMCP2 base address */
 #define WAKEUP__ROMCP2_BASE                      (0x42640000u)
@@ -4864,24 +4460,6 @@ typedef enum IRQn {
 #define WAKEUP_ROMCP_BASE_ADDRS                  { WAKEUP__ROMCP2_BASE }
 /** Array initializer of WAKEUP_ROMCP peripheral base pointers */
 #define WAKEUP_ROMCP_BASE_PTRS                   { WAKEUP__ROMCP2 }
-
-/* WAKEUP_USDHC - Peripheral instance base addresses */
-/** Peripheral WAKEUP__USDHC1 base address */
-#define WAKEUP__USDHC1_BASE                      (0x42850000u)
-/** Peripheral WAKEUP__USDHC1 base pointer */
-#define WAKEUP__USDHC1                           ((WAKEUP_USDHC_Type *)WAKEUP__USDHC1_BASE)
-/** Peripheral WAKEUP__USDHC2 base address */
-#define WAKEUP__USDHC2_BASE                      (0x42860000u)
-/** Peripheral WAKEUP__USDHC2 base pointer */
-#define WAKEUP__USDHC2                           ((WAKEUP_USDHC_Type *)WAKEUP__USDHC2_BASE)
-/** Peripheral WAKEUP__USDHC3 base address */
-#define WAKEUP__USDHC3_BASE                      (0x428B0000u)
-/** Peripheral WAKEUP__USDHC3 base pointer */
-#define WAKEUP__USDHC3                           ((WAKEUP_USDHC_Type *)WAKEUP__USDHC3_BASE)
-/** Array initializer of WAKEUP_USDHC peripheral base addresses */
-#define WAKEUP_USDHC_BASE_ADDRS                  { WAKEUP__USDHC1_BASE, WAKEUP__USDHC2_BASE, WAKEUP__USDHC3_BASE }
-/** Array initializer of WAKEUP_USDHC peripheral base pointers */
-#define WAKEUP_USDHC_BASE_PTRS                   { WAKEUP__USDHC1, WAKEUP__USDHC2, WAKEUP__USDHC3 }
 
 /* WAKEUP_XSPI_RESPONDER - Peripheral instance base addresses */
 /** Peripheral WAKEUP__XSPI_RESPONDER base address */
@@ -4933,6 +4511,38 @@ typedef enum IRQn {
 /** Array initializer of XCACHE peripheral base pointers */
 #define XCACHE_BASE_PTRS                         { M33_CACHE_CTRLPC, M33_CACHE_CTRLPS }
 
+/* always_on_main_ResilienceFaultController - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER base address */
+#define NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE (0x49063080u)
+/** Peripheral NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER base pointer */
+#define NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER ((always_on_main_ResilienceFaultController_Type *)NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE)
+/** Array initializer of always_on_main_ResilienceFaultController peripheral
+ * base addresses */
+#define always_on_main_ResilienceFaultController_BASE_ADDRS { NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER_BASE }
+/** Array initializer of always_on_main_ResilienceFaultController peripheral
+ * base pointers */
+#define always_on_main_ResilienceFaultController_BASE_PTRS { NOC__GPV__ALWAYS_ON_MAIN_RESILIENCEFAULTCONTROLLER }
+
+/* eDMA_RD_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR_BASE (0x4AFF1580u)
+/** Peripheral CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR ((eDMA_RD_I_main_QosGenerator_Type *)CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of eDMA_RD_I_main_QosGenerator peripheral base addresses */
+#define eDMA_RD_I_main_QosGenerator_BASE_ADDRS   { CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of eDMA_RD_I_main_QosGenerator peripheral base pointers */
+#define eDMA_RD_I_main_QosGenerator_BASE_PTRS    { CAMERA__GPV__EDMA_RD_I_MAIN_QOSGENERATOR }
+
+/* eDMA_WR_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR base address */
+#define CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR_BASE (0x4AFF1600u)
+/** Peripheral CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR base pointer */
+#define CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR ((eDMA_WR_I_main_QosGenerator_Type *)CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of eDMA_WR_I_main_QosGenerator peripheral base addresses */
+#define eDMA_WR_I_main_QosGenerator_BASE_ADDRS   { CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of eDMA_WR_I_main_QosGenerator peripheral base pointers */
+#define eDMA_WR_I_main_QosGenerator_BASE_PTRS    { CAMERA__GPV__EDMA_WR_I_MAIN_QOSGENERATOR }
+
 /* ieprc_ierb - Peripheral instance base addresses */
 /** Peripheral NETC__IEPRC_1__IEPRC_IERB base address */
 #define NETC__IEPRC_1__IEPRC_IERB_BASE           (0x4C8A0000u)
@@ -4967,19 +4577,500 @@ typedef enum IRQn {
 /** Array initializer of ieprc_prb peripheral base pointers */
 #define ieprc_prb_BASE_PTRS                      { NETC__IEPRC_1__IEPRC_PRB }
 
+/* m_e_0_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE (0x49062400u)
+/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR   ((m_e_0_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_0_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_0_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_0_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_0_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_0_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_0_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063100u)
+/** Peripheral NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_0_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_0_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_0_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_0_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_0_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_0_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_0_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE (0x49062480u)
+/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR   ((m_e_0_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_0_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_0_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_0_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_0_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_0_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_0_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063180u)
+/** Peripheral NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_0_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_0_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_0_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_0_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_0_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_0_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_10_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR_BASE (0x49062E80u)
+/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR  ((m_e_10_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_10_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_10_rd_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_10_rd_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_10_rd_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_10_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_10_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063780u)
+/** Peripheral NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_10_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_10_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_10_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_10_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_10_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_10_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_10_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR_BASE (0x49062F00u)
+/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR  ((m_e_10_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_10_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_10_wr_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_10_wr_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_10_wr_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_10_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_10_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063800u)
+/** Peripheral NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_10_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_10_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_10_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_10_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_10_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_10_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_11_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR_BASE (0x49062F80u)
+/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR  ((m_e_11_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_11_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_11_rd_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_11_rd_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_11_rd_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_11_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_11_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063880u)
+/** Peripheral NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_11_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_11_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_11_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_11_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_11_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_11_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_11_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR_BASE (0x49063000u)
+/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR  ((m_e_11_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_11_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_11_wr_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_11_wr_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_11_wr_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_11_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_11_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063900u)
+/** Peripheral NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_11_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_11_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_11_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_11_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_11_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_11_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_1a_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE (0x49062500u)
+/** Peripheral NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR  ((m_e_1a_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_1a_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_1a_rd_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_1a_rd_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_1a_rd_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_1A_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_1a_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE (0x49062580u)
+/** Peripheral NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR  ((m_e_1a_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_1a_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_1a_wr_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_1a_wr_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_1a_wr_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_1A_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_1b_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE (0x49062600u)
+/** Peripheral NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR  ((m_e_1b_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_1b_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_1b_rd_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_1b_rd_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_1b_rd_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_1B_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_1b_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE (0x49062680u)
+/** Peripheral NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR  ((m_e_1b_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_1b_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_1b_wr_I_main_QosGenerator_BASE_ADDRS { NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_1b_wr_I_main_QosGenerator peripheral base pointers
+ * */
+#define m_e_1b_wr_I_main_QosGenerator_BASE_PTRS  { NOC__GPV__M_E_1B_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_3_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE (0x49062800u)
+/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR   ((m_e_3_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_3_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_3_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_3_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_3_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_3_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_3_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063200u)
+/** Peripheral NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_3_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_3_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_3_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_3_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_3_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_3_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_3_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE (0x49062880u)
+/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR   ((m_e_3_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_3_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_3_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_3_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_3_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_3_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_3_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063280u)
+/** Peripheral NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_3_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_3_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_3_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_3_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_3_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_3_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_4_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR_BASE (0x49062900u)
+/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR   ((m_e_4_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_4_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_4_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_4_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_4_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_4_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_4_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063300u)
+/** Peripheral NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_4_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_4_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_4_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_4_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_4_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_4_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_4_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR_BASE (0x49062980u)
+/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR   ((m_e_4_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_4_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_4_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_4_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_4_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_4_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_4_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063380u)
+/** Peripheral NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_4_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_4_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_4_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_4_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_4_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_4_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_5_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR_BASE (0x49062A00u)
+/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR   ((m_e_5_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_5_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_5_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_5_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_5_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_5_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_5_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063400u)
+/** Peripheral NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_5_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_5_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_5_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_5_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_5_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_5_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_5_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR_BASE (0x49062A80u)
+/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR   ((m_e_5_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_5_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_5_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_5_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_5_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_5_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_5_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063480u)
+/** Peripheral NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_5_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_5_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_5_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_5_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_5_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_5_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_6_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE (0x49062B00u)
+/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR   ((m_e_6_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_6_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_6_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_6_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_6_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_6_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_6_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063500u)
+/** Peripheral NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_6_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_6_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_6_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_6_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_6_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_6_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_7_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE (0x49062B80u)
+/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR   ((m_e_7_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_7_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_7_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_7_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_7_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_7_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_7_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063580u)
+/** Peripheral NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_7_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_7_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_7_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_7_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_7_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_7_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_7_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE (0x49062C00u)
+/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR   ((m_e_7_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_7_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_7_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_7_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_7_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_7_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_7_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063600u)
+/** Peripheral NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_7_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_7_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_7_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_7_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_7_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_7_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_8_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR_BASE (0x49062C80u)
+/** Peripheral NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR   ((m_e_8_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_8_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_8_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_8_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_8_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_8_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_8_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR_BASE (0x49062D00u)
+/** Peripheral NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR   ((m_e_8_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_8_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_8_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_8_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_8_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_8_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_9_rd_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE (0x49062D80u)
+/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR   ((m_e_9_rd_I_main_QosGenerator_Type *)NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_9_rd_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_9_rd_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_9_rd_I_main_QosGenerator peripheral base pointers */
+#define m_e_9_rd_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_9_RD_I_MAIN_QOSGENERATOR }
+
+/* m_e_9_rd_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063680u)
+/** Peripheral NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER ((m_e_9_rd_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_9_rd_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_9_rd_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_9_rd_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_9_rd_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_9_RD_I_MAIN_TRANSACTIONSTATFILTER }
+
+/* m_e_9_wr_I_main_QosGenerator - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR base address */
+#define NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE (0x49062E00u)
+/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR base pointer */
+#define NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR   ((m_e_9_wr_I_main_QosGenerator_Type *)NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE)
+/** Array initializer of m_e_9_wr_I_main_QosGenerator peripheral base addresses
+ * */
+#define m_e_9_wr_I_main_QosGenerator_BASE_ADDRS  { NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR_BASE }
+/** Array initializer of m_e_9_wr_I_main_QosGenerator peripheral base pointers */
+#define m_e_9_wr_I_main_QosGenerator_BASE_PTRS   { NOC__GPV__M_E_9_WR_I_MAIN_QOSGENERATOR }
+
+/* m_e_9_wr_I_main_TransactionStatFilter - Peripheral instance base addresses */
+/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER base address */
+#define NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE (0x49063700u)
+/** Peripheral NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER base pointer */
+#define NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER ((m_e_9_wr_I_main_TransactionStatFilter_Type *)NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE)
+/** Array initializer of m_e_9_wr_I_main_TransactionStatFilter peripheral base
+ * addresses */
+#define m_e_9_wr_I_main_TransactionStatFilter_BASE_ADDRS { NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER_BASE }
+/** Array initializer of m_e_9_wr_I_main_TransactionStatFilter peripheral base
+ * pointers */
+#define m_e_9_wr_I_main_TransactionStatFilter_BASE_PTRS { NOC__GPV__M_E_9_WR_I_MAIN_TRANSACTIONSTATFILTER }
+
 /* neutrons - Peripheral instance base addresses */
-/** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC base address */
-#define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE (0x4AB00000u)
-/** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC base pointer */
-#define NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC     ((neutrons_Type *)NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE)
 /** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV base address */
 #define NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV_BASE (0x4AB80000u)
 /** Peripheral NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV base pointer */
 #define NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV      ((neutrons_Type *)NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV_BASE)
 /** Array initializer of neutrons peripheral base addresses */
-#define neutrons_BASE_ADDRS                      { NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC_BASE, NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV_BASE }
+#define neutrons_BASE_ADDRS                      { NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV_BASE }
 /** Array initializer of neutrons peripheral base pointers */
-#define neutrons_BASE_PTRS                       { NPU__NEUTRON_NPU__NEUTRON_S__MMR_SOC, NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV }
+#define neutrons_BASE_PTRS                       { NPU__NEUTRON_NPU__NEUTRON_S__MMR_ZV }
+
+/* power_main_ResilienceFaultController - Peripheral instance base addresses */
+/** Peripheral WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER base
+ * address */
+#define WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE (0x42830000u)
+/** Peripheral WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER base
+ * pointer */
+#define WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER ((power_main_ResilienceFaultController_Type *)WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE)
+/** Peripheral WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER base
+ * address */
+#define WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE (0x43900000u)
+/** Peripheral WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER base
+ * pointer */
+#define WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER ((power_main_ResilienceFaultController_Type *)WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE)
+/** Array initializer of power_main_ResilienceFaultController peripheral base
+ * addresses */
+#define power_main_ResilienceFaultController_BASE_ADDRS { WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE, WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER_BASE }
+/** Array initializer of power_main_ResilienceFaultController peripheral base
+ * pointers */
+#define power_main_ResilienceFaultController_BASE_PTRS { WAKEUP__GPV_NOCM__POWER_MAIN_RESILIENCEFAULTCONTROLLER, WAKEUP__GPV_NOC__POWER_MAIN_RESILIENCEFAULTCONTROLLER }
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).

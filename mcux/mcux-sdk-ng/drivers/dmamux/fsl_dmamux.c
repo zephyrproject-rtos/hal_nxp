@@ -28,7 +28,7 @@
  * @param base DMAMUX peripheral base address.
  */
 static uint32_t DMAMUX_GetInstance(DMAMUX_Type *base);
-#endif
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * Variables
@@ -63,7 +63,7 @@ static uint32_t DMAMUX_GetInstance(DMAMUX_Type *base)
 
     return instance;
 }
-#endif
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Initializes the DMAMUX peripheral.

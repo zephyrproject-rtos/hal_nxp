@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexspi_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexspi)
-    mcux_component_version(2.6.2)
+    mcux_component_version(2.7.0)
 
     mcux_add_source(SOURCES fsl_flexspi.c fsl_flexspi.h)
 

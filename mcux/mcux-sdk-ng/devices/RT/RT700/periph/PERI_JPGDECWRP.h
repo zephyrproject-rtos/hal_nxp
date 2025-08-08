@@ -27,14 +27,14 @@
 **                          MIMXRT798SGFOA_hifi1
 **                          MIMXRT798SGFOA_hifi4
 **
-**     Version:             rev. 2.0, 2024-05-28
-**     Build:               b241121
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250526
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for JPGDECWRP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -45,21 +45,24 @@
 **         Initial version.
 **     - rev. 2.0 (2024-05-28)
 **         Rev2 DraftA.
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file JPGDECWRP.h
- * @version 2.0
- * @date 2024-05-28
+ * @file PERI_JPGDECWRP.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for JPGDECWRP
  *
  * CMSIS Peripheral Access Layer for JPGDECWRP
  */
 
-#if !defined(JPGDECWRP_H_)
-#define JPGDECWRP_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_JPGDECWRP_H_)
+#define PERI_JPGDECWRP_H_                        /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
@@ -333,30 +336,30 @@ typedef struct {
 #define JPGDECWRP_SLOT_STATUS_STMBUF_HALF_MASK   (0x1U)
 #define JPGDECWRP_SLOT_STATUS_STMBUF_HALF_SHIFT  (0U)
 /*! STMBUF_HALF - Stream Buffer Half Flag
- *  0b0..The bit stream buffer pointer for the current slot has not passed half of the buffer size.
  *  0b0..No effect
- *  0b1..The bit stream buffer pointer for the current slot passed half of the buffer size.
+ *  0b0..The bit stream buffer pointer for the current slot has not passed half of the buffer size.
  *  0b1..Clears the flag.
+ *  0b1..The bit stream buffer pointer for the current slot passed half of the buffer size.
  */
 #define JPGDECWRP_SLOT_STATUS_STMBUF_HALF(x)     (((uint32_t)(((uint32_t)(x)) << JPGDECWRP_SLOT_STATUS_STMBUF_HALF_SHIFT)) & JPGDECWRP_SLOT_STATUS_STMBUF_HALF_MASK)
 
 #define JPGDECWRP_SLOT_STATUS_STMBUF_RTND_MASK   (0x2U)
 #define JPGDECWRP_SLOT_STATUS_STMBUF_RTND_SHIFT  (1U)
 /*! STMBUF_RTND - Stream Buffer Returned Flag
- *  0b0..The bit stream buffer pointer for the current slot has not passed the top mark of the buffer.
  *  0b0..No effect
- *  0b1..The bit stream buffer pointer for the current slot passed the top mark of the buffer.
+ *  0b0..The bit stream buffer pointer for the current slot has not passed the top mark of the buffer.
  *  0b1..Clears the flag.
+ *  0b1..The bit stream buffer pointer for the current slot passed the top mark of the buffer.
  */
 #define JPGDECWRP_SLOT_STATUS_STMBUF_RTND(x)     (((uint32_t)(((uint32_t)(x)) << JPGDECWRP_SLOT_STATUS_STMBUF_RTND_SHIFT)) & JPGDECWRP_SLOT_STATUS_STMBUF_RTND_MASK)
 
 #define JPGDECWRP_SLOT_STATUS_SWITCHED_IN_MASK   (0x4U)
 #define JPGDECWRP_SLOT_STATUS_SWITCHED_IN_SHIFT  (2U)
 /*! SWITCHED_IN - Switched In Flag
- *  0b0..The current slot is not switched in during context switching.
  *  0b0..No effect
- *  0b1..The current slot is switched in during context switching.
+ *  0b0..The current slot is not switched in during context switching.
  *  0b1..Clears the flag.
+ *  0b1..The current slot is switched in during context switching.
  */
 #define JPGDECWRP_SLOT_STATUS_SWITCHED_IN(x)     (((uint32_t)(((uint32_t)(x)) << JPGDECWRP_SLOT_STATUS_SWITCHED_IN_SHIFT)) & JPGDECWRP_SLOT_STATUS_SWITCHED_IN_MASK)
 
@@ -365,8 +368,8 @@ typedef struct {
 /*! FRMDONE - Frame Done Flag
  *  0b0..Decoding is not completed.
  *  0b0..No effect
- *  0b1..Decoding is completed.
  *  0b1..Clears the flag.
+ *  0b1..Decoding is completed.
  */
 #define JPGDECWRP_SLOT_STATUS_FRMDONE(x)         (((uint32_t)(((uint32_t)(x)) << JPGDECWRP_SLOT_STATUS_FRMDONE_SHIFT)) & JPGDECWRP_SLOT_STATUS_FRMDONE_MASK)
 
@@ -403,8 +406,8 @@ typedef struct {
 #define JPGDECWRP_SLOT_STATUS_PIXEL_WT_ERR_MASK  (0x800U)
 #define JPGDECWRP_SLOT_STATUS_PIXEL_WT_ERR_SHIFT (11U)
 /*! PIXEL_WT_ERR - Pixel Write Error Flag
- *  0b0..No pixel write error occurred.
  *  0b0..No effect
+ *  0b0..No pixel write error occurred.
  *  0b1..A pixel write error occurred.
  *  0b1..Clears the flag.
  */
@@ -578,5 +581,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* JPGDECWRP_H_ */
+#endif  /* PERI_JPGDECWRP_H_ */
 

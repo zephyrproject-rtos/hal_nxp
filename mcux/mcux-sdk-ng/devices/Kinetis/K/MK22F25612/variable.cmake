@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/Kinetis/variable.cmake)
 mcux_set_variable(device MK22F25612)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series K)
 mcux_set_variable(soc_periph periph14)
 mcux_set_variable(core_id_suffix_name "")

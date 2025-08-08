@@ -13,14 +13,14 @@
 **                          MIMXRT1166XVM5A_cm4
 **                          MIMXRT1166XVM5A_cm7
 **
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b240705
+**     Version:             rev. 1.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ANADIG_PLL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -29,21 +29,24 @@
 **     Revisions:
 **     - rev. 0.1 (2020-12-29)
 **         Initial version.
+**     - rev. 1.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file ANADIG_PLL.h
- * @version 0.1
- * @date 2020-12-29
+ * @file PERI_ANADIG_PLL.h
+ * @version 1.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for ANADIG_PLL
  *
  * CMSIS Peripheral Access Layer for ANADIG_PLL
  */
 
-#if !defined(ANADIG_PLL_H_)
-#define ANADIG_PLL_H_                            /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_ANADIG_PLL_H_)
+#define PERI_ANADIG_PLL_H_                       /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4))
 #include "MIMXRT1165_cm4_COMMON.h"
@@ -178,8 +181,8 @@ typedef struct {
 #define ANADIG_PLL_ARM_PLL_CTRL_POWERUP_MASK     (0x2000U)
 #define ANADIG_PLL_ARM_PLL_CTRL_POWERUP_SHIFT    (13U)
 /*! POWERUP - Powers up the PLL.
- *  0b1..Power Up the PLL
  *  0b0..Power down the PLL
+ *  0b1..Power Up the PLL
  */
 #define ANADIG_PLL_ARM_PLL_CTRL_POWERUP(x)       (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_ARM_PLL_CTRL_POWERUP_SHIFT)) & ANADIG_PLL_ARM_PLL_CTRL_POWERUP_MASK)
 
@@ -204,24 +207,24 @@ typedef struct {
 #define ANADIG_PLL_ARM_PLL_CTRL_BYPASS_MASK      (0x20000U)
 #define ANADIG_PLL_ARM_PLL_CTRL_BYPASS_SHIFT     (17U)
 /*! BYPASS - Bypass the pll.
- *  0b1..Bypass Mode
  *  0b0..Function mode
+ *  0b1..Bypass Mode
  */
 #define ANADIG_PLL_ARM_PLL_CTRL_BYPASS(x)        (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_ARM_PLL_CTRL_BYPASS_SHIFT)) & ANADIG_PLL_ARM_PLL_CTRL_BYPASS_MASK)
 
 #define ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE_MASK (0x20000000U)
 #define ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE_SHIFT (29U)
 /*! ARM_PLL_STABLE - ARM_PLL_STABLE
- *  0b1..ARM PLL is stable
  *  0b0..ARM PLL is not stable
+ *  0b1..ARM PLL is stable
  */
 #define ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE_SHIFT)) & ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE_MASK)
 
 #define ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_MASK (0x40000000U)
 #define ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_SHIFT (30U)
 /*! ARM_PLL_GATE - ARM_PLL_GATE
- *  0b1..Clock is gated
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated
  */
 #define ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE(x)  (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_SHIFT)) & ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_MASK)
 
@@ -266,16 +269,16 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_MASK     (0x10000U)
 #define ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_SHIFT    (16U)
 /*! BYPASS - BYPASS
- *  0b1..Bypass Mode
  *  0b0..Function mode
+ *  0b1..Bypass Mode
  */
 #define ANADIG_PLL_SYS_PLL3_CTRL_BYPASS(x)       (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_SHIFT)) & ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_MASK)
 
 #define ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_MASK    (0x200000U)
 #define ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_SHIFT   (21U)
 /*! POWERUP - Powers up the PLL.
- *  0b1..Power Up the PLL
  *  0b0..Power down the PLL
+ *  0b1..Power Up the PLL
  */
 #define ANADIG_PLL_SYS_PLL3_CTRL_POWERUP(x)      (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_SHIFT)) & ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_MASK)
 
@@ -295,8 +298,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_MASK (0x40000000U)
 #define ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_SHIFT (30U)
 /*! SYS_PLL3_GATE - SYS_PLL3_GATE
- *  0b1..Clock is gated
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated
  */
 #define ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_SHIFT)) & ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_MASK)
 
@@ -381,8 +384,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD0_DIV1_CLKGATE_MASK (0x80U)
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD0_DIV1_CLKGATE_SHIFT (7U)
 /*! PFD0_DIV1_CLKGATE - PFD0_DIV1_CLKGATE
- *  0b1..Fractional divider clock (reference ref_pfd0) is off (power savings
  *  0b0..ref_pfd0 fractional divider clock is enabled
+ *  0b1..Fractional divider clock (reference ref_pfd0) is off (power savings
  */
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD0_DIV1_CLKGATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_PFD_PFD0_DIV1_CLKGATE_SHIFT)) & ANADIG_PLL_SYS_PLL3_PFD_PFD0_DIV1_CLKGATE_MASK)
 
@@ -399,8 +402,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD1_DIV1_CLKGATE_MASK (0x8000U)
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD1_DIV1_CLKGATE_SHIFT (15U)
 /*! PFD1_DIV1_CLKGATE - PFD1_DIV1_CLKGATE
- *  0b1..Fractional divider clock (reference ref_pfd1) is off (power savings)
  *  0b0..ref_pfd1 fractional divider clock is enabled
+ *  0b1..Fractional divider clock (reference ref_pfd1) is off (power savings)
  */
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD1_DIV1_CLKGATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_PFD_PFD1_DIV1_CLKGATE_SHIFT)) & ANADIG_PLL_SYS_PLL3_PFD_PFD1_DIV1_CLKGATE_MASK)
 
@@ -417,8 +420,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD2_DIV1_CLKGATE_MASK (0x800000U)
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD2_DIV1_CLKGATE_SHIFT (23U)
 /*! PFD2_DIV1_CLKGATE - PFD2_DIV1_CLKGATE
- *  0b1..Fractional divider clock (reference ref_pfd2) is off (power savings)
  *  0b0..ref_pfd2 fractional divider clock is enabled
+ *  0b1..Fractional divider clock (reference ref_pfd2) is off (power savings)
  */
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD2_DIV1_CLKGATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_PFD_PFD2_DIV1_CLKGATE_SHIFT)) & ANADIG_PLL_SYS_PLL3_PFD_PFD2_DIV1_CLKGATE_MASK)
 
@@ -435,8 +438,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD3_DIV1_CLKGATE_MASK (0x80000000U)
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD3_DIV1_CLKGATE_SHIFT (31U)
 /*! PFD3_DIV1_CLKGATE - PFD3_DIV1_CLKGATE
- *  0b1..Fractional divider clock (reference ref_pfd3) is off (power savings)
  *  0b0..ref_pfd3 fractional divider clock is enabled
+ *  0b1..Fractional divider clock (reference ref_pfd3) is off (power savings)
  */
 #define ANADIG_PLL_SYS_PLL3_PFD_PFD3_DIV1_CLKGATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL3_PFD_PFD3_DIV1_CLKGATE_SHIFT)) & ANADIG_PLL_SYS_PLL3_PFD_PFD3_DIV1_CLKGATE_MASK)
 /*! @} */
@@ -468,8 +471,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_MASK     (0x10000U)
 #define ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_SHIFT    (16U)
 /*! BYPASS - Bypass the pll.
- *  0b1..Bypass Mode
  *  0b0..Function mode
+ *  0b1..Bypass Mode
  */
 #define ANADIG_PLL_SYS_PLL2_CTRL_BYPASS(x)       (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_SHIFT)) & ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_MASK)
 
@@ -494,8 +497,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL2_CTRL_POWERUP_MASK    (0x800000U)
 #define ANADIG_PLL_SYS_PLL2_CTRL_POWERUP_SHIFT   (23U)
 /*! POWERUP - Powers up the PLL.
- *  0b1..Power Up the PLL
  *  0b0..Power down the PLL
+ *  0b1..Power Up the PLL
  */
 #define ANADIG_PLL_SYS_PLL2_CTRL_POWERUP(x)      (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL2_CTRL_POWERUP_SHIFT)) & ANADIG_PLL_SYS_PLL2_CTRL_POWERUP_MASK)
 
@@ -507,8 +510,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE_MASK (0x40000000U)
 #define ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE_SHIFT (30U)
 /*! SYS_PLL2_GATE - SYS_PLL2_GATE
- *  0b1..Clock is gated
  *  0b0..Clock is not gated
+ *  0b1..Clock is gated
  */
 #define ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE_SHIFT)) & ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE_MASK)
 
@@ -588,8 +591,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL2_SS_ENABLE_MASK       (0x8000U)
 #define ANADIG_PLL_SYS_PLL2_SS_ENABLE_SHIFT      (15U)
 /*! ENABLE - ENABLE
- *  0b1..Enable Spread Spectrum
  *  0b0..Disable Spread Spectrum
+ *  0b1..Enable Spread Spectrum
  */
 #define ANADIG_PLL_SYS_PLL2_SS_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL2_SS_ENABLE_SHIFT)) & ANADIG_PLL_SYS_PLL2_SS_ENABLE_MASK)
 
@@ -683,8 +686,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL1_SS_ENABLE_MASK       (0x8000U)
 #define ANADIG_PLL_SYS_PLL1_SS_ENABLE_SHIFT      (15U)
 /*! ENABLE - ENABLE
- *  0b1..Enable Spread Spectrum
  *  0b0..Disable Spread Spectrum
+ *  0b1..Enable Spread Spectrum
  */
 #define ANADIG_PLL_SYS_PLL1_SS_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL1_SS_ENABLE_SHIFT)) & ANADIG_PLL_SYS_PLL1_SS_ENABLE_MASK)
 
@@ -705,8 +708,8 @@ typedef struct {
 #define ANADIG_PLL_SYS_PLL1_CTRL_SYS_PLL1_GATE_MASK (0x4000U)
 #define ANADIG_PLL_SYS_PLL1_CTRL_SYS_PLL1_GATE_SHIFT (14U)
 /*! SYS_PLL1_GATE - SYS_PLL1_GATE
- *  0b1..Gate the output
  *  0b0..No gate
+ *  0b1..Gate the output
  */
 #define ANADIG_PLL_SYS_PLL1_CTRL_SYS_PLL1_GATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_SYS_PLL1_CTRL_SYS_PLL1_GATE_SHIFT)) & ANADIG_PLL_SYS_PLL1_CTRL_SYS_PLL1_GATE_MASK)
 
@@ -793,8 +796,8 @@ typedef struct {
 #define ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_GATE_MASK (0x4000U)
 #define ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_GATE_SHIFT (14U)
 /*! PLL_AUDIO_GATE - PLL_AUDIO_GATE
- *  0b1..Gate the output
  *  0b0..No gate
+ *  0b1..Gate the output
  */
 #define ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_GATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_GATE_SHIFT)) & ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_GATE_MASK)
 
@@ -828,8 +831,8 @@ typedef struct {
 #define ANADIG_PLL_PLL_AUDIO_SS_ENABLE_MASK      (0x8000U)
 #define ANADIG_PLL_PLL_AUDIO_SS_ENABLE_SHIFT     (15U)
 /*! ENABLE - ENABLE
- *  0b1..Enable Spread Spectrum
  *  0b0..Disable Spread Spectrum
+ *  0b1..Enable Spread Spectrum
  */
 #define ANADIG_PLL_PLL_AUDIO_SS_ENABLE(x)        (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_PLL_AUDIO_SS_ENABLE_SHIFT)) & ANADIG_PLL_PLL_AUDIO_SS_ENABLE_MASK)
 
@@ -877,8 +880,8 @@ typedef struct {
 #define ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_GATE_MASK (0x4000U)
 #define ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_GATE_SHIFT (14U)
 /*! PLL_VIDEO_GATE - PLL_VIDEO_GATE
- *  0b1..Gate the output
  *  0b0..No gate
+ *  0b1..Gate the output
  */
 #define ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_GATE(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_GATE_SHIFT)) & ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_GATE_MASK)
 
@@ -917,8 +920,8 @@ typedef struct {
 #define ANADIG_PLL_PLL_VIDEO_SS_ENABLE_MASK      (0x8000U)
 #define ANADIG_PLL_PLL_VIDEO_SS_ENABLE_SHIFT     (15U)
 /*! ENABLE - ENABLE
- *  0b1..Enable Spread Spectrum
  *  0b0..Disable Spread Spectrum
+ *  0b1..Enable Spread Spectrum
  */
 #define ANADIG_PLL_PLL_VIDEO_SS_ENABLE(x)        (((uint32_t)(((uint32_t)(x)) << ANADIG_PLL_PLL_VIDEO_SS_ENABLE_SHIFT)) & ANADIG_PLL_PLL_VIDEO_SS_ENABLE_MASK)
 
@@ -991,5 +994,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* ANADIG_PLL_H_ */
+#endif  /* PERI_ANADIG_PLL_H_ */
 

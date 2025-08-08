@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/RT/variable.cmake)
 mcux_set_variable(device MIMXRT533S)
+mcux_set_variable(device_root devices)
 mcux_set_variable(soc_series RT500)
 mcux_set_variable(soc_periph periph)
 mcux_set_variable(core_id_suffix_name "")

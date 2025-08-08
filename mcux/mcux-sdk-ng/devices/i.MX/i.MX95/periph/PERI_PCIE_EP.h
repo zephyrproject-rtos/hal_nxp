@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PCIE_EP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PCIE_EP.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_PCIE_EP.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PCIE_EP
  *
  * CMSIS Peripheral Access Layer for PCIE_EP
  */
 
-#if !defined(PCIE_EP_H_)
-#define PCIE_EP_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PCIE_EP_H_)
+#define PERI_PCIE_EP_H_                          /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -475,8 +748,8 @@ typedef struct {
 #define PCIE_EP_BIST_HEADER_TYPE_LATENCY_CACHE_LINE_SIZE_REG_BIST_MASK (0xFF000000U)
 #define PCIE_EP_BIST_HEADER_TYPE_LATENCY_CACHE_LINE_SIZE_REG_BIST_SHIFT (24U)
 /*! BIST - BIST.
- *  0b11111111..Max value
  *  0b00000000..Zero value
+ *  0b11111111..Max value
  */
 #define PCIE_EP_BIST_HEADER_TYPE_LATENCY_CACHE_LINE_SIZE_REG_BIST(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BIST_HEADER_TYPE_LATENCY_CACHE_LINE_SIZE_REG_BIST_SHIFT)) & PCIE_EP_BIST_HEADER_TYPE_LATENCY_CACHE_LINE_SIZE_REG_BIST_MASK)
 /*! @} */
@@ -493,8 +766,8 @@ typedef struct {
 #define PCIE_EP_BAR0_REG_BAR0_TYPE_SHIFT         (1U)
 /*! BAR0_TYPE - - BAR0 Type.
  *  0b00..Base register is 32 bits wide and can be mapped anywhere in the 32 address bit Memory Space.
- *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b01..Reserved.
+ *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b11..Reserved.
  */
 #define PCIE_EP_BAR0_REG_BAR0_TYPE(x)            (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BAR0_REG_BAR0_TYPE_SHIFT)) & PCIE_EP_BAR0_REG_BAR0_TYPE_MASK)
@@ -522,8 +795,8 @@ typedef struct {
 #define PCIE_EP_BAR1_REG_BAR1_TYPE_SHIFT         (1U)
 /*! BAR1_TYPE - - BAR1 Type.
  *  0b00..Base register is 32 bits wide and can be mapped anywhere in the 32 address bit Memory Space.
- *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b01..Reserved.
+ *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b11..Reserved.
  */
 #define PCIE_EP_BAR1_REG_BAR1_TYPE(x)            (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BAR1_REG_BAR1_TYPE_SHIFT)) & PCIE_EP_BAR1_REG_BAR1_TYPE_MASK)
@@ -551,8 +824,8 @@ typedef struct {
 #define PCIE_EP_BAR2_REG_BAR2_TYPE_SHIFT         (1U)
 /*! BAR2_TYPE - BAR2 Type.
  *  0b00..Base register is 32 bits wide and can be mapped anywhere in the 32 address bit Memory Space.
- *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b01..Reserved.
+ *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b11..Reserved.
  */
 #define PCIE_EP_BAR2_REG_BAR2_TYPE(x)            (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BAR2_REG_BAR2_TYPE_SHIFT)) & PCIE_EP_BAR2_REG_BAR2_TYPE_MASK)
@@ -580,8 +853,8 @@ typedef struct {
 #define PCIE_EP_BAR3_REG_BAR3_TYPE_SHIFT         (1U)
 /*! BAR3_TYPE - BAR3 Type.
  *  0b00..Base register is 32 bits wide and can be mapped anywhere in the 32 address bit Memory Space.
- *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b01..Reserved.
+ *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b11..Reserved.
  */
 #define PCIE_EP_BAR3_REG_BAR3_TYPE(x)            (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BAR3_REG_BAR3_TYPE_SHIFT)) & PCIE_EP_BAR3_REG_BAR3_TYPE_MASK)
@@ -609,8 +882,8 @@ typedef struct {
 #define PCIE_EP_BAR4_REG_BAR4_TYPE_SHIFT         (1U)
 /*! BAR4_TYPE - BAR4 Type.
  *  0b00..Base register is 32 bits wide and can be mapped anywhere in the 32 address bit Memory Space.
- *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b01..Reserved.
+ *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b11..Reserved.
  */
 #define PCIE_EP_BAR4_REG_BAR4_TYPE(x)            (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BAR4_REG_BAR4_TYPE_SHIFT)) & PCIE_EP_BAR4_REG_BAR4_TYPE_MASK)
@@ -638,8 +911,8 @@ typedef struct {
 #define PCIE_EP_BAR5_REG_BAR5_TYPE_SHIFT         (1U)
 /*! BAR5_TYPE - BAR5 Type.
  *  0b00..Base register is 32 bits wide and can be mapped anywhere in the 32 address bit Memory Space.
- *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b01..Reserved.
+ *  0b10..Base register is 64 bits wide and can be mapped anywhere in the 64 address bit Memory Space.
  *  0b11..Reserved.
  */
 #define PCIE_EP_BAR5_REG_BAR5_TYPE(x)            (((uint32_t)(((uint32_t)(x)) << PCIE_EP_BAR5_REG_BAR5_TYPE_SHIFT)) & PCIE_EP_BAR5_REG_BAR5_TYPE_MASK)
@@ -684,22 +957,22 @@ typedef struct {
 #define PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_ENABLE_MASK (0x1U)
 #define PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_ENABLE_SHIFT (0U)
 /*! ROM_BAR_ENABLE - Expansion ROM Enable.
- *  0b1..When the bit is 1b, address decoding is enabled using the parameters in the other part of the Expansion ROM Base Address register.
  *  0b0..When this bit is 0b, the Function's expansion ROM address space is disabled.
+ *  0b1..When the bit is 1b, address decoding is enabled using the parameters in the other part of the Expansion ROM Base Address register.
  */
 #define PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_ENABLE_SHIFT)) & PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_ENABLE_MASK)
 
 #define PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_VALIDATION_STATUS_MASK (0xEU)
 #define PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_VALIDATION_STATUS_SHIFT (1U)
 /*! ROM_BAR_VALIDATION_STATUS - Expansion ROM Validation Status.
- *  0b101..Validation Fail Valid but untrusted contents (For example, Out of Date, Expired or Revoked Certificate).
- *  0b100..Validation Fail Invalid contents.
- *  0b001..Validation in Progress.
- *  0b111..Warning Pass Validation Passed with implementation-specific warning. Valid and trusted contents.
- *  0b110..Warning Pass Validation Passed with implementation-specific warning. Valid contents, trust test was not performed.
- *  0b011..Validation Pass Valid and trusted contents.
- *  0b010..Validation Pass Valid contents, trust test was not performed.
  *  0b000..Validation not supported.
+ *  0b001..Validation in Progress.
+ *  0b010..Validation Pass Valid contents, trust test was not performed.
+ *  0b011..Validation Pass Valid and trusted contents.
+ *  0b100..Validation Fail Invalid contents.
+ *  0b101..Validation Fail Valid but untrusted contents (For example, Out of Date, Expired or Revoked Certificate).
+ *  0b110..Warning Pass Validation Passed with implementation-specific warning. Valid contents, trust test was not performed.
+ *  0b111..Warning Pass Validation Passed with implementation-specific warning. Valid and trusted contents.
  */
 #define PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_VALIDATION_STATUS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_VALIDATION_STATUS_SHIFT)) & PCIE_EP_EXP_ROM_BASE_ADDR_REG_ROM_BAR_VALIDATION_STATUS_MASK)
 
@@ -734,11 +1007,11 @@ typedef struct {
 #define PCIE_EP_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG_INT_PIN_MASK (0xFF00U)
 #define PCIE_EP_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG_INT_PIN_SHIFT (8U)
 /*! INT_PIN - Interrupt Pin.
+ *  0b00000000..Indicates that the Function uses no legacy interrupt Message(s).
  *  0b00000001..Map to legacy interrupt Messages for INTA
  *  0b00000010..Map to legacy interrupt Messages for INTB
  *  0b00000011..Map to legacy interrupt Messages for INTC
  *  0b00000100..Map to legacy interrupt Messages for INTD
- *  0b00000000..Indicates that the Function uses no legacy interrupt Message(s).
  */
 #define PCIE_EP_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG_INT_PIN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG_INT_PIN_SHIFT)) & PCIE_EP_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG_INT_PIN_MASK)
 /*! @} */
@@ -876,24 +1149,24 @@ typedef struct {
 #define PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_CAP_MASK (0xE0000U)
 #define PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_CAP_SHIFT (17U)
 /*! PCI_MSI_MULTIPLE_MSG_CAP - Multiple Message Capable.
- *  0b100..16 vectors requested
  *  0b000..1 vector requested
  *  0b001..2 vectors requested
- *  0b101..32 vectors requested
  *  0b010..4 vectors requested
  *  0b011..8 vectors requested
+ *  0b100..16 vectors requested
+ *  0b101..32 vectors requested
  */
 #define PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_CAP(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_CAP_SHIFT)) & PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_CAP_MASK)
 
 #define PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_EN_MASK (0x700000U)
 #define PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_EN_SHIFT (20U)
 /*! PCI_MSI_MULTIPLE_MSG_EN - Multiple Message Enable.
- *  0b100..16 vectors allocated
  *  0b000..1 vector allocated
  *  0b001..2 vectors allocated
- *  0b101..32 vectors allocated
  *  0b010..4 vectors allocated
  *  0b011..8 vectors allocated
+ *  0b100..16 vectors allocated
+ *  0b101..32 vectors allocated
  */
 #define PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_EN_SHIFT)) & PCIE_EP_PCI_MSI_CAP_ID_NEXT_CTRL_REG_PCI_MSI_MULTIPLE_MSG_EN_MASK)
 
@@ -999,11 +1272,11 @@ typedef struct {
 #define PCIE_EP_PCIE_CAP_ID_PCIE_NEXT_CAP_PTR_PCIE_CAP_REG_PCIE_DEV_PORT_TYPE_MASK (0xF00000U)
 #define PCIE_EP_PCIE_CAP_ID_PCIE_NEXT_CAP_PTR_PCIE_CAP_REG_PCIE_DEV_PORT_TYPE_SHIFT (20U)
 /*! PCIE_DEV_PORT_TYPE - Device/Port Type.
- *  0b0110..Downstream Port of PCI Express Switch
  *  0b0000..PCI Express Endpoint
  *  0b0001..Legacy PCI Express Endpoint
  *  0b0100..Root Port of PCI Express Root Complex
  *  0b0101..Upstream Port of PCI Express Switch
+ *  0b0110..Downstream Port of PCI Express Switch
  */
 #define PCIE_EP_PCIE_CAP_ID_PCIE_NEXT_CAP_PTR_PCIE_CAP_REG_PCIE_DEV_PORT_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PCIE_CAP_ID_PCIE_NEXT_CAP_PTR_PCIE_CAP_REG_PCIE_DEV_PORT_TYPE_SHIFT)) & PCIE_EP_PCIE_CAP_ID_PCIE_NEXT_CAP_PTR_PCIE_CAP_REG_PCIE_DEV_PORT_TYPE_MASK)
 
@@ -1029,18 +1302,19 @@ typedef struct {
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_MAX_PAYLOAD_SIZE_MASK (0x7U)
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_MAX_PAYLOAD_SIZE_SHIFT (0U)
 /*! PCIE_CAP_MAX_PAYLOAD_SIZE - Max_Payload_Size Supported.
- *  0b011..1024 bytes max payload size
  *  0b000..128 bytes max payload size
- *  0b100..2048 bytes max payload size
  *  0b001..256 bytes max payload size
- *  0b101..4096 bytes max payload size
  *  0b010..512 bytes max payload size
+ *  0b011..1024 bytes max payload size
+ *  0b100..2048 bytes max payload size
+ *  0b101..4096 bytes max payload size
  */
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_MAX_PAYLOAD_SIZE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_MAX_PAYLOAD_SIZE_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_MAX_PAYLOAD_SIZE_MASK)
 
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_PHANTOM_FUNC_SUPPORT_MASK (0x18U)
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_PHANTOM_FUNC_SUPPORT_SHIFT (3U)
 /*! PCIE_CAP_PHANTOM_FUNC_SUPPORT - Phantom Functions Supported.
+ *  0b00..No Function Number bits are used for Phantom Functions. Multi-Function Devices are permitted to implement up to 8 independent functions.
  *  0b01..The most significant bit of the Function number in Requester ID is used for Phantom Functions; a
  *        Multi-Function Device is permitted to implement Functions 0-3. Functions 0, 1, 2, and 3 are permitted to use
  *        Function Numbers 4, 5, 6, and 7 respectively as Phantom Functions.
@@ -1048,7 +1322,6 @@ typedef struct {
  *        Multi-Function Device is permitted to implement Functions 0-1. Function 0 is permitted to use Function Numbers
  *        2, 4, and 6 for Phantom Functions. Function 1 is permitted to use Function Numbers 3, 5, and 7 as
  *        Phantom Functions.
- *  0b00..No Function Number bits are used for Phantom Functions. Multi-Function Devices are permitted to implement up to 8 independent functions.
  *  0b11..All 3 bits of Function Number in Requester ID used for Phantom Functions. The device must have a single
  *        Function 0 that is permitted to use all other Function Numbers as Phantom Functions.
  */
@@ -1065,13 +1338,13 @@ typedef struct {
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L0S_ACCPT_LATENCY_MASK (0x1C0U)
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L0S_ACCPT_LATENCY_SHIFT (6U)
 /*! PCIE_CAP_EP_L0S_ACCPT_LATENCY - Endpoint L0s Acceptable Latency.
+ *  0b000..Maximum of 64 ns
  *  0b001..Maximum of 128 ns
- *  0b100..Maximum of 1 us
  *  0b010..Maximum of 256 ns
+ *  0b011..Maximum of 512 ns
+ *  0b100..Maximum of 1 us
  *  0b101..Maximum of 2 us
  *  0b110..Maximum of 4 us
- *  0b011..Maximum of 512 ns
- *  0b000..Maximum of 64 ns
  *  0b111..No limit
  */
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L0S_ACCPT_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L0S_ACCPT_LATENCY_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L0S_ACCPT_LATENCY_MASK)
@@ -1079,13 +1352,13 @@ typedef struct {
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L1_ACCPT_LATENCY_MASK (0xE00U)
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L1_ACCPT_LATENCY_SHIFT (9U)
 /*! PCIE_CAP_EP_L1_ACCPT_LATENCY - Endpoint L1 Acceptable Latency.
- *  0b100..Maximum of 16 us
  *  0b000..Maximum of 1 us
  *  0b001..Maximum of 2 us
- *  0b101..Maximum of 32 us
  *  0b010..Maximum of 4 us
- *  0b110..Maximum of 64 us
  *  0b011..Maximum of 8 us
+ *  0b100..Maximum of 16 us
+ *  0b101..Maximum of 32 us
+ *  0b110..Maximum of 64 us
  *  0b111..No limit
  */
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L1_ACCPT_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L1_ACCPT_LATENCY_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_EP_L1_ACCPT_LATENCY_MASK)
@@ -1103,10 +1376,10 @@ typedef struct {
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_CAP_SLOT_PWR_LMT_SCALE_MASK (0xC000000U)
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_CAP_SLOT_PWR_LMT_SCALE_SHIFT (26U)
 /*! PCIE_CAP_CAP_SLOT_PWR_LMT_SCALE - Captured Slot Power Limit Scale.
- *  0b11..0.001x
- *  0b10..0.01x
- *  0b01..0.1x
  *  0b00..1.0x
+ *  0b01..0.1x
+ *  0b10..0.01x
+ *  0b11..0.001x
  */
 #define PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_CAP_SLOT_PWR_LMT_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_CAP_SLOT_PWR_LMT_SCALE_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES_REG_PCIE_CAP_CAP_SLOT_PWR_LMT_SCALE_MASK)
 
@@ -1147,12 +1420,12 @@ typedef struct {
 #define PCIE_EP_DEVICE_CONTROL_DEVICE_STATUS_PCIE_CAP_MAX_PAYLOAD_SIZE_CS_MASK (0xE0U)
 #define PCIE_EP_DEVICE_CONTROL_DEVICE_STATUS_PCIE_CAP_MAX_PAYLOAD_SIZE_CS_SHIFT (5U)
 /*! PCIE_CAP_MAX_PAYLOAD_SIZE_CS - Max_Payload_Size.
- *  0b011..1024 bytes maximum Read Request size
  *  0b000..128 bytes maximum Read Request size
- *  0b100..2048 bytes maximum Read Request size
  *  0b001..256 bytes maximum Read Request size
- *  0b101..4096 bytes maximum Read Request size
  *  0b010..512 bytes maximum Read Request size
+ *  0b011..1024 bytes maximum Read Request size
+ *  0b100..2048 bytes maximum Read Request size
+ *  0b101..4096 bytes maximum Read Request size
  *  0b110..RESERVED
  *  0b111..RESERVED
  */
@@ -1176,12 +1449,12 @@ typedef struct {
 #define PCIE_EP_DEVICE_CONTROL_DEVICE_STATUS_PCIE_CAP_MAX_READ_REQ_SIZE_MASK (0x7000U)
 #define PCIE_EP_DEVICE_CONTROL_DEVICE_STATUS_PCIE_CAP_MAX_READ_REQ_SIZE_SHIFT (12U)
 /*! PCIE_CAP_MAX_READ_REQ_SIZE - Max_Read_Request_Size.
- *  0b011..1024 bytes maximum Read Request size
  *  0b000..128 bytes maximum Read Request size
- *  0b100..2048 bytes maximum Read Request size
  *  0b001..256 bytes maximum Read Request size
- *  0b101..4096 bytes maximum Read Request size
  *  0b010..512 bytes maximum Read Request size
+ *  0b011..1024 bytes maximum Read Request size
+ *  0b100..2048 bytes maximum Read Request size
+ *  0b101..4096 bytes maximum Read Request size
  *  0b110..RESERVED
  *  0b111..RESERVED
  */
@@ -1243,50 +1516,50 @@ typedef struct {
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_MAX_LINK_WIDTH_SHIFT (4U)
 /*! PCIE_CAP_MAX_LINK_WIDTH - Maximum Link Width.
  *  0b000001..x1
- *  0b001100..x12
- *  0b010000..x16
  *  0b000010..x2
- *  0b100000..x32
  *  0b000100..x4
  *  0b001000..x8
+ *  0b001100..x12
+ *  0b010000..x16
+ *  0b100000..x32
  */
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_MAX_LINK_WIDTH(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_MAX_LINK_WIDTH_SHIFT)) & PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_MAX_LINK_WIDTH_MASK)
 
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_SUPPORT_MASK (0xC00U)
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_SUPPORT_SHIFT (10U)
 /*! PCIE_CAP_ACTIVE_STATE_LINK_PM_SUPPORT - Active State Power Management (ASPM) Support.
- *  0b11..L0s and L1 Supported
+ *  0b00..No ASPM Support
  *  0b01..L0s Supported
  *  0b10..L1 Supported
- *  0b00..No ASPM Support
+ *  0b11..L0s and L1 Supported
  */
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_SUPPORT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_SUPPORT_SHIFT)) & PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_SUPPORT_MASK)
 
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L0S_EXIT_LATENCY_MASK (0x7000U)
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L0S_EXIT_LATENCY_SHIFT (12U)
 /*! PCIE_CAP_L0S_EXIT_LATENCY - L0s Exit Latency.
- *  0b111..More than 4 us
  *  0b000..Less than 64 ns
- *  0b010..128 ns to less than 256 ns
- *  0b101..1 us to less than 2 us
- *  0b011..256 ns to less than 512 ns
- *  0b110..2 us to 4 us
- *  0b100..512 ns to less than 1 us
  *  0b001..64 ns to less than 128 ns
+ *  0b010..128 ns to less than 256 ns
+ *  0b011..256 ns to less than 512 ns
+ *  0b100..512 ns to less than 1 us
+ *  0b101..1 us to less than 2 us
+ *  0b110..2 us to 4 us
+ *  0b111..More than 4 us
  */
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L0S_EXIT_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L0S_EXIT_LATENCY_SHIFT)) & PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L0S_EXIT_LATENCY_MASK)
 
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L1_EXIT_LATENCY_MASK (0x38000U)
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L1_EXIT_LATENCY_SHIFT (15U)
 /*! PCIE_CAP_L1_EXIT_LATENCY - L1 Exit Latency.
- *  0b111..More than 64 us
  *  0b000..Less than 1us
- *  0b101..16 us to less than 32 us
  *  0b001..1 us to less than 2 us
  *  0b010..2 us to less than 4 us
- *  0b110..32 us to 64 us
  *  0b011..4 us to less than 8 us
  *  0b100..8 us to less than 16 us
+ *  0b101..16 us to less than 32 us
+ *  0b110..32 us to 64 us
+ *  0b111..More than 64 us
  */
 #define PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L1_EXIT_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L1_EXIT_LATENCY_SHIFT)) & PCIE_EP_LINK_CAPABILITIES_REG_PCIE_CAP_L1_EXIT_LATENCY_MASK)
 
@@ -1329,16 +1602,16 @@ typedef struct {
 /*! PCIE_CAP_ACTIVE_STATE_LINK_PM_CONTROL - Active State Power Management (ASPM) Control.
  *  0b00..Disabled
  *  0b01..L0s Entry Enabled
- *  0b11..L0s and L1 Entry Enabled
  *  0b10..L1 Entry Enabled
+ *  0b11..L0s and L1 Entry Enabled
  */
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_CONTROL_SHIFT)) & PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_ACTIVE_STATE_LINK_PM_CONTROL_MASK)
 
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_RCB_MASK (0x8U)
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_RCB_SHIFT (3U)
 /*! PCIE_CAP_RCB - Read Completion Boundary (RCB).
- *  0b1..128 byte
  *  0b0..64 byte
+ *  0b1..128 byte
  */
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_RCB(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_RCB_SHIFT)) & PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_RCB_MASK)
 
@@ -1365,9 +1638,9 @@ typedef struct {
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_EN_CLK_POWER_MAN_MASK (0x100U)
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_EN_CLK_POWER_MAN_SHIFT (8U)
 /*! PCIE_CAP_EN_CLK_POWER_MAN - Enable Clock Power Management.
+ *  0b0..Clock power management is disabled and device must hold CLKREQ# signal low.
  *  0b1..When this bit is set, the device is permitted to use CLKREQ# signal to power manage Link clock according
  *       to protocol defined in appropriate form factor specification.
- *  0b0..Clock power management is disabled and device must hold CLKREQ# signal low.
  */
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_EN_CLK_POWER_MAN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_EN_CLK_POWER_MAN_SHIFT)) & PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_EN_CLK_POWER_MAN_MASK)
 
@@ -1389,8 +1662,8 @@ typedef struct {
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_DRS_SIGNALING_CONTROL_MASK (0xC000U)
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_DRS_SIGNALING_CONTROL_SHIFT (14U)
 /*! PCIE_CAP_DRS_SIGNALING_CONTROL - DRS Signaling Control.
- *  0b01..DRS Interrupt Enabled
  *  0b00..DRS not Reported
+ *  0b01..DRS Interrupt Enabled
  *  0b10..DRS to FRS Signaling Enabled
  */
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_DRS_SIGNALING_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_DRS_SIGNALING_CONTROL_SHIFT)) & PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_DRS_SIGNALING_CONTROL_MASK)
@@ -1412,12 +1685,12 @@ typedef struct {
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_NEGO_LINK_WIDTH_SHIFT (20U)
 /*! PCIE_CAP_NEGO_LINK_WIDTH - Negotiated Link Width.
  *  0b000001..x1
- *  0b001100..x12
- *  0b010000..x16
  *  0b000010..x2
- *  0b100000..x32
  *  0b000100..x4
  *  0b001000..x8
+ *  0b001100..x12
+ *  0b010000..x16
+ *  0b100000..x32
  */
 #define PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_NEGO_LINK_WIDTH(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_NEGO_LINK_WIDTH_SHIFT)) & PCIE_EP_LINK_CONTROL_LINK_STATUS_REG_PCIE_CAP_NEGO_LINK_WIDTH_MASK)
 
@@ -1455,12 +1728,12 @@ typedef struct {
 /*! PCIE_CAP_CPL_TIMEOUT_RANGE - Completion Timeout Ranges Supported.
  *  0b0000..Completion Timeout programming not supported, the Function must implement a timeout value in the range 50 us to 50 ms.
  *  0b0001..Range A
- *  0b0011..Ranges A and B
- *  0b0111..Ranges A, B, and C
- *  0b1111..Ranges A, B, C, and D
  *  0b0010..Range B
+ *  0b0011..Ranges A and B
  *  0b0110..Ranges B and C
+ *  0b0111..Ranges A, B, and C
  *  0b1110..Ranges B, C, and D
+ *  0b1111..Ranges A, B, C, and D
  */
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_CPL_TIMEOUT_RANGE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_CPL_TIMEOUT_RANGE_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_CPL_TIMEOUT_RANGE_MASK)
 
@@ -1521,9 +1794,9 @@ typedef struct {
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP2_LN_SYS_CLS_MASK (0xC000U)
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP2_LN_SYS_CLS_SHIFT (14U)
 /*! PCIE_CAP2_LN_SYS_CLS - LN System CLS.
- *  0b10..LN Completer with 128-byte cachelines in effect
- *  0b01..LN Completer with 64-byte cachelines in effect
  *  0b00..LN Completer either not supported or not in effect
+ *  0b01..LN Completer with 64-byte cachelines in effect
+ *  0b10..LN Completer with 128-byte cachelines in effect
  */
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP2_LN_SYS_CLS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP2_LN_SYS_CLS_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP2_LN_SYS_CLS_MASK)
 
@@ -1545,8 +1818,8 @@ typedef struct {
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_DMWR_LEN_SUPP_MASK (0x60000000U)
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_DMWR_LEN_SUPP_SHIFT (29U)
 /*! PCIE_CAP_DMWR_LEN_SUPP - Deferrable Memory Write (DMWr) Lengths Supported.
- *  0b01..1 up to 128 bytes
  *  0b00..0 up to 64 bytes
+ *  0b01..1 up to 128 bytes
  */
 #define PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_DMWR_LEN_SUPP(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_DMWR_LEN_SUPP_SHIFT)) & PCIE_EP_DEVICE_CAPABILITIES2_REG_PCIE_CAP_DMWR_LEN_SUPP_MASK)
 /*! @} */
@@ -1558,14 +1831,14 @@ typedef struct {
 #define PCIE_EP_DEVICE_CONTROL2_DEVICE_STATUS2_REG_PCIE_CAP_CPL_TIMEOUT_VALUE_SHIFT (0U)
 /*! PCIE_CAP_CPL_TIMEOUT_VALUE - Completion Timeout Value.
  *  0b0000..Default range: 50 us to 50 ms
- *  0b0101..16 ms to 55 ms
- *  0b1110..17 s to 64 s
- *  0b0010..1 ms to 10 ms
- *  0b1010..1 s to 3.5 s
- *  0b1001..260 ms to 900 ms
- *  0b1101..4 s to 13 s
  *  0b0001..50 us to 100 us
+ *  0b0010..1 ms to 10 ms
+ *  0b0101..16 ms to 55 ms
  *  0b0110..65 ms to 210 ms
+ *  0b1001..260 ms to 900 ms
+ *  0b1010..1 s to 3.5 s
+ *  0b1101..4 s to 13 s
+ *  0b1110..17 s to 64 s
  */
 #define PCIE_EP_DEVICE_CONTROL2_DEVICE_STATUS2_REG_PCIE_CAP_CPL_TIMEOUT_VALUE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_DEVICE_CONTROL2_DEVICE_STATUS2_REG_PCIE_CAP_CPL_TIMEOUT_VALUE_SHIFT)) & PCIE_EP_DEVICE_CONTROL2_DEVICE_STATUS2_REG_PCIE_CAP_CPL_TIMEOUT_VALUE_MASK)
 
@@ -1591,8 +1864,8 @@ typedef struct {
 #define PCIE_EP_LINK_CAPABILITIES2_REG_PCIE_CAP_SUPPORT_LINK_SPEED_VECTOR_MASK (0xFEU)
 #define PCIE_EP_LINK_CAPABILITIES2_REG_PCIE_CAP_SUPPORT_LINK_SPEED_VECTOR_SHIFT (1U)
 /*! PCIE_CAP_SUPPORT_LINK_SPEED_VECTOR - Supported Link Speeds Vector.
- *  0b1111111..last default value.
  *  0b0000000..Zero value.
+ *  0b1111111..last default value.
  */
 #define PCIE_EP_LINK_CAPABILITIES2_REG_PCIE_CAP_SUPPORT_LINK_SPEED_VECTOR(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CAPABILITIES2_REG_PCIE_CAP_SUPPORT_LINK_SPEED_VECTOR_SHIFT)) & PCIE_EP_LINK_CAPABILITIES2_REG_PCIE_CAP_SUPPORT_LINK_SPEED_VECTOR_MASK)
 
@@ -1631,8 +1904,8 @@ typedef struct {
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_SEL_DEEMPHASIS_MASK (0x40U)
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_SEL_DEEMPHASIS_SHIFT (6U)
 /*! PCIE_CAP_SEL_DEEMPHASIS - Selectable De-emphasis.
- *  0b1..-3.5 dB
  *  0b0..-6 dB
+ *  0b1..-3.5 dB
  */
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_SEL_DEEMPHASIS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_SEL_DEEMPHASIS_SHIFT)) & PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_SEL_DEEMPHASIS_MASK)
 
@@ -1656,16 +1929,16 @@ typedef struct {
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_COMPLIANCE_PRESET_MASK (0xF000U)
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_COMPLIANCE_PRESET_SHIFT (12U)
 /*! PCIE_CAP_COMPLIANCE_PRESET - Compliance Preset/De-emphasis.
- *  0b0001..-3.5 dB (for 5.0 GT/s Data Rate)
  *  0b0000..-6 dB (for 5.0 GT/s Data Rate)
+ *  0b0001..-3.5 dB (for 5.0 GT/s Data Rate)
  */
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_COMPLIANCE_PRESET(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_COMPLIANCE_PRESET_SHIFT)) & PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_COMPLIANCE_PRESET_MASK)
 
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_CURR_DEEMPHASIS_MASK (0x10000U)
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_CURR_DEEMPHASIS_SHIFT (16U)
 /*! PCIE_CAP_CURR_DEEMPHASIS - Current De-emphasis Level.
- *  0b1..-3.5 dB
  *  0b0..-6 dB
+ *  0b1..-3.5 dB
  */
 #define PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_CURR_DEEMPHASIS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_CURR_DEEMPHASIS_SHIFT)) & PCIE_EP_LINK_CONTROL2_LINK_STATUS2_REG_PCIE_CAP_CURR_DEEMPHASIS_MASK)
 
@@ -2261,24 +2534,24 @@ typedef struct {
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_EXTENDED_CAP_ID_MASK (0xFFFFU)
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_EXTENDED_CAP_ID_SHIFT (0U)
 /*! EXTENDED_CAP_ID - Secondary PCI Express Extended Capability ID.
- *  0b1111111111111111..Max value
  *  0b0000000000000000..Min value
+ *  0b1111111111111111..Max value
  */
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_EXTENDED_CAP_ID(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_SPCIE_CAP_HEADER_REG_EXTENDED_CAP_ID_SHIFT)) & PCIE_EP_SPCIE_CAP_HEADER_REG_EXTENDED_CAP_ID_MASK)
 
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_CAP_VERSION_MASK (0xF0000U)
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_CAP_VERSION_SHIFT (16U)
 /*! CAP_VERSION - Capability Version.
- *  0b1111..Max value
  *  0b0000..Min value
+ *  0b1111..Max value
  */
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_CAP_VERSION(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_SPCIE_CAP_HEADER_REG_CAP_VERSION_SHIFT)) & PCIE_EP_SPCIE_CAP_HEADER_REG_CAP_VERSION_MASK)
 
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_NEXT_OFFSET_MASK (0xFFF00000U)
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_NEXT_OFFSET_SHIFT (20U)
 /*! NEXT_OFFSET - Next Capability Offset.
- *  0b111111111111..Max value.
  *  0b000000000000..Min value
+ *  0b111111111111..Max value.
  */
 #define PCIE_EP_SPCIE_CAP_HEADER_REG_NEXT_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_SPCIE_CAP_HEADER_REG_NEXT_OFFSET_SHIFT)) & PCIE_EP_SPCIE_CAP_HEADER_REG_NEXT_OFFSET_MASK)
 /*! @} */
@@ -2462,10 +2735,10 @@ typedef struct {
 #define PCIE_EP_L1SUB_CAPABILITY_REG_PWR_ON_SCALE_SUPPORT_MASK (0x30000U)
 #define PCIE_EP_L1SUB_CAPABILITY_REG_PWR_ON_SCALE_SUPPORT_SHIFT (16U)
 /*! PWR_ON_SCALE_SUPPORT - Port T Power On Scale.
- *  0b11..Reserved
- *  0b10..Scale is 100us
- *  0b01..Scale is 10us
  *  0b00..Scale is 2us
+ *  0b01..Scale is 10us
+ *  0b10..Scale is 100us
+ *  0b11..Reserved
  */
 #define PCIE_EP_L1SUB_CAPABILITY_REG_PWR_ON_SCALE_SUPPORT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_L1SUB_CAPABILITY_REG_PWR_ON_SCALE_SUPPORT_SHIFT)) & PCIE_EP_L1SUB_CAPABILITY_REG_PWR_ON_SCALE_SUPPORT_MASK)
 
@@ -2520,10 +2793,10 @@ typedef struct {
 #define PCIE_EP_L1SUB_CONTROL2_REG_T_POWER_ON_SCALE_MASK (0x3U)
 #define PCIE_EP_L1SUB_CONTROL2_REG_T_POWER_ON_SCALE_SHIFT (0U)
 /*! T_POWER_ON_SCALE - T Power On Scale.
- *  0b11..Reserved
- *  0b10..Scale is 100us
- *  0b01..Scale is 10us
  *  0b00..Scale is 2us
+ *  0b01..Scale is 10us
+ *  0b10..Scale is 100us
+ *  0b11..Reserved
  */
 #define PCIE_EP_L1SUB_CONTROL2_REG_T_POWER_ON_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_L1SUB_CONTROL2_REG_T_POWER_ON_SCALE_SHIFT)) & PCIE_EP_L1SUB_CONTROL2_REG_T_POWER_ON_SCALE_MASK)
 
@@ -2579,10 +2852,10 @@ typedef struct {
 /*! MAP_FORMAT - Defines the register map format and features to be one of the following values:
  *  0b000..Legacy DMA register map accessed by the port-logic registers
  *  0b001..Legacy DMA register map, mapped to a PF/BAR
- *  0b101..HDMA compatibility mode (CC_LEGACY_DMA_MAP =1) register map, mapped to a PF/BAR
  *  0b100..HDMA/DMA compatibility (CC_LEGACY_DMA_MAP =1) register map without access through the Wire
- *  0b111..HDMA native (CC_LEGACY_DMA_MAP =0) register map, mapped to a PF/BAR
+ *  0b101..HDMA compatibility mode (CC_LEGACY_DMA_MAP =1) register map, mapped to a PF/BAR
  *  0b110..HDMA native (CC_LEGACY_DMA_MAP =0) register map without access through the Wire
+ *  0b111..HDMA native (CC_LEGACY_DMA_MAP =0) register map, mapped to a PF/BAR
  */
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MAP_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MAP_FORMAT_SHIFT)) & PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MAP_FORMAT_MASK)
 
@@ -2599,14 +2872,14 @@ typedef struct {
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_CHANNEL_SEPARATION_MASK (0x70000U)
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_CHANNEL_SEPARATION_SHIFT (16U)
 /*! CHANNEL_SEPARATION - If the MAP_FORMAT is set to HDMA_NATIVE, this field specifies the read write channel address separation.
- *  0b110..16k separated
- *  0b010..1k separated
  *  0b000..256 separated
- *  0b011..2k separated
- *  0b111..32k separated
- *  0b100..4k separated
  *  0b001..512 separated
+ *  0b010..1k separated
+ *  0b011..2k separated
+ *  0b100..4k separated
  *  0b101..8k separated
+ *  0b110..16k separated
+ *  0b111..32k separated
  */
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_CHANNEL_SEPARATION(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_CHANNEL_SEPARATION_SHIFT)) & PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_CHANNEL_SEPARATION_MASK)
 
@@ -2618,11 +2891,11 @@ typedef struct {
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BUS_WIDTH_MASK (0x700000U)
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BUS_WIDTH_SHIFT (20U)
 /*! MASTER_BUS_WIDTH - This field provides information regarding the AXI master data bus width.
+ *  0b000..32 bits
+ *  0b001..64 bits
  *  0b010..128 bits
  *  0b011..256 bits
- *  0b000..32 bits
  *  0b100..512 bits
- *  0b001..64 bits
  */
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BUS_WIDTH(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BUS_WIDTH_SHIFT)) & PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BUS_WIDTH_MASK)
 
@@ -2630,13 +2903,13 @@ typedef struct {
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BURST_LENGTH_SHIFT (23U)
 /*! MASTER_BURST_LENGTH - Reports the CC_MSTR_BURST_LEN configuration parameter.
  *  0b000..Reserved
- *  0b110..128 beats
- *  0b011..16 beats
- *  0b111..256 beats
- *  0b100..32 beats
  *  0b001..4 beats
- *  0b101..64 beats
  *  0b010..8 beats
+ *  0b011..16 beats
+ *  0b100..32 beats
+ *  0b101..64 beats
+ *  0b110..128 beats
+ *  0b111..256 beats
  */
 #define PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BURST_LENGTH(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BURST_LENGTH_SHIFT)) & PCIE_EP_VSECDMA_DEVICE_INFORMATION_OFF_MASTER_BURST_LENGTH_MASK)
 
@@ -2698,8 +2971,8 @@ typedef struct {
 #define PCIE_EP_VENDOR_SPEC_DLLP_OFF_VENDOR_SPEC_DLLP_MASK (0xFFFFFFFFU)
 #define PCIE_EP_VENDOR_SPEC_DLLP_OFF_VENDOR_SPEC_DLLP_SHIFT (0U)
 /*! VENDOR_SPEC_DLLP - Vendor Specific DLLP Register.
- *  0b11111111111111111111111111111111..Max value
  *  0b00000000000000000000000000000000..Zero value
+ *  0b11111111111111111111111111111111..Max value
  */
 #define PCIE_EP_VENDOR_SPEC_DLLP_OFF_VENDOR_SPEC_DLLP(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VENDOR_SPEC_DLLP_OFF_VENDOR_SPEC_DLLP_SHIFT)) & PCIE_EP_VENDOR_SPEC_DLLP_OFF_VENDOR_SPEC_DLLP_MASK)
 /*! @} */
@@ -2733,12 +3006,12 @@ typedef struct {
 #define PCIE_EP_PORT_FORCE_OFF_SUPPORT_PART_LANES_RXEI_EXIT_MASK (0x400000U)
 #define PCIE_EP_PORT_FORCE_OFF_SUPPORT_PART_LANES_RXEI_EXIT_SHIFT (22U)
 /*! SUPPORT_PART_LANES_RXEI_EXIT - Support LTSSM transition from Polling.
- *  0b1..Any lanes receives 8 consecutive TS OSs, LTSSM moves from Polling.Active to Polling.Config. If all lanes
- *       do not receive 8 consecutive TS OSs and any predetermined lanes are still on Rx ElecIdle, LTSSM moves from
- *       Polling.Active to Polling.Compliance.
  *  0b0..Any lanes receives 8 consecutive TS OS and all predetermined lanes have Rx ElecIdle exit, LTSSM moves
  *       from Polling.Active to Polling.Config. This is legacy mode from Base Spec. Any predetermined lanes are still
  *       on Rx ElecIdle, LTSSM moves from Polling.Active to Polling.Compliance.
+ *  0b1..Any lanes receives 8 consecutive TS OSs, LTSSM moves from Polling.Active to Polling.Config. If all lanes
+ *       do not receive 8 consecutive TS OSs and any predetermined lanes are still on Rx ElecIdle, LTSSM moves from
+ *       Polling.Active to Polling.Compliance.
  */
 #define PCIE_EP_PORT_FORCE_OFF_SUPPORT_PART_LANES_RXEI_EXIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PORT_FORCE_OFF_SUPPORT_PART_LANES_RXEI_EXIT_SHIFT)) & PCIE_EP_PORT_FORCE_OFF_SUPPORT_PART_LANES_RXEI_EXIT_MASK)
 
@@ -2754,24 +3027,24 @@ typedef struct {
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_FREQ_MASK (0xFFU)
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_FREQ_SHIFT (0U)
 /*! ACK_FREQ - Ack Frequency.
- *  0b11111111..Any value between 1 and 255 indicates that the controller will schedule a high-priority ACK after receiving the specified number of TLPs.
  *  0b00000000..The value '0' indicates that this Ack Frequency Counter feature is turned off.
+ *  0b11111111..Any value between 1 and 255 indicates that the controller will schedule a high-priority ACK after receiving the specified number of TLPs.
  */
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_FREQ(x)  (((uint32_t)(((uint32_t)(x)) << PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_FREQ_SHIFT)) & PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_FREQ_MASK)
 
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_N_FTS_MASK (0xFF00U)
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_N_FTS_SHIFT (8U)
 /*! ACK_N_FTS - The number of Fast Training Sequence(N_FTS) ordered sets to be transmitted when transitioning from L0s to L0.
- *  0b11111111..The maximum number of FTS ordered-sets that a component can request is 255.
  *  0b00000000..The controller does not support a value of zero; a value of zero can cause the LTSSM to go into the recovery state when exiting from L0s.
+ *  0b11111111..The maximum number of FTS ordered-sets that a component can request is 255.
  */
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_N_FTS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_N_FTS_SHIFT)) & PCIE_EP_ACK_F_ASPM_CTRL_OFF_ACK_N_FTS_MASK)
 
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_COMMON_CLK_N_FTS_MASK (0xFF0000U)
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_COMMON_CLK_N_FTS_SHIFT (16U)
 /*! COMMON_CLK_N_FTS - Common Clock N_FTS.
- *  0b11111111..The maximum number of FTS ordered-sets that a component can request is 255.
  *  0b00000000..The controller does not support a value of zero; a value of zero can cause the LTSSM to go into the recovery state when exiting from L0s.
+ *  0b11111111..The maximum number of FTS ordered-sets that a component can request is 255.
  */
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_COMMON_CLK_N_FTS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_ACK_F_ASPM_CTRL_OFF_COMMON_CLK_N_FTS_SHIFT)) & PCIE_EP_ACK_F_ASPM_CTRL_OFF_COMMON_CLK_N_FTS_MASK)
 
@@ -2784,30 +3057,30 @@ typedef struct {
  *  0b011..4 us
  *  0b100..5 us
  *  0b101..6 us
- *  0b111..7 us
  *  0b110..7 US
+ *  0b111..7 us
  */
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_L0S_ENTRANCE_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_ACK_F_ASPM_CTRL_OFF_L0S_ENTRANCE_LATENCY_SHIFT)) & PCIE_EP_ACK_F_ASPM_CTRL_OFF_L0S_ENTRANCE_LATENCY_MASK)
 
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_L1_ENTRANCE_LATENCY_MASK (0x38000000U)
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_L1_ENTRANCE_LATENCY_SHIFT (27U)
 /*! L1_ENTRANCE_LATENCY - L1 Entrance Latency.
- *  0b100..16 us
  *  0b000..1 us
  *  0b001..2 us
- *  0b101..32 us
  *  0b010..4 us
- *  0b111..64 us
- *  0b110..64Us
  *  0b011..8 us
+ *  0b100..16 us
+ *  0b101..32 us
+ *  0b110..64Us
+ *  0b111..64 us
  */
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_L1_ENTRANCE_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_ACK_F_ASPM_CTRL_OFF_L1_ENTRANCE_LATENCY_SHIFT)) & PCIE_EP_ACK_F_ASPM_CTRL_OFF_L1_ENTRANCE_LATENCY_MASK)
 
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ENTER_ASPM_MASK (0x40000000U)
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ENTER_ASPM_SHIFT (30U)
 /*! ENTER_ASPM - ASPM L1 Entry Control.
- *  0b1..Controller enters ASPM L1 after a period in which it has been idle.
  *  0b0..Controller enters ASPM L1 only after idle period during which both receive and transmit are in L0s.
+ *  0b1..Controller enters ASPM L1 after a period in which it has been idle.
  */
 #define PCIE_EP_ACK_F_ASPM_CTRL_OFF_ENTER_ASPM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_ACK_F_ASPM_CTRL_OFF_ENTER_ASPM_SHIFT)) & PCIE_EP_ACK_F_ASPM_CTRL_OFF_ENTER_ASPM_MASK)
 
@@ -2886,11 +3159,11 @@ typedef struct {
 #define PCIE_EP_PORT_LINK_CTRL_OFF_LINK_CAPABLE_SHIFT (16U)
 /*! LINK_CAPABLE - Link Mode Enable.
  *  0b000001..x1
- *  0b011111..x16
  *  0b000011..x2
- *  0b111111..x32 (not supported)
  *  0b000111..x4
  *  0b001111..x8
+ *  0b011111..x16
+ *  0b111111..x32 (not supported)
  */
 #define PCIE_EP_PORT_LINK_CTRL_OFF_LINK_CAPABLE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PORT_LINK_CTRL_OFF_LINK_CAPABLE_SHIFT)) & PCIE_EP_PORT_LINK_CTRL_OFF_LINK_CAPABLE_MASK)
 
@@ -2921,8 +3194,8 @@ typedef struct {
 #define PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_MAX_FUNC_NUM_MASK (0xFFU)
 #define PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_MAX_FUNC_NUM_SHIFT (0U)
 /*! MAX_FUNC_NUM - Maximum function number that can be used in a request.
- *  0b11111111..Max value
  *  0b00000000..Zero value
+ *  0b11111111..Max value
  */
 #define PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_MAX_FUNC_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_MAX_FUNC_NUM_SHIFT)) & PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_MAX_FUNC_NUM_MASK)
 
@@ -2946,9 +3219,9 @@ typedef struct {
 /*! FAST_LINK_SCALING_FACTOR - Fast Link Timer Scaling Factor.
  *  0b00..Scaling Factor is 1024 (1ms is 1us). When the LTSSM is in Config or L12 Entry State, 1ms timer is 2us,
  *        2ms timer is 4us and 3ms timer is 6us.
- *  0b11..Scaling Factor is 16 (1ms is 64us)
  *  0b01..Scaling Factor is 256 (1ms is 4us)
  *  0b10..Scaling Factor is 64 (1ms is 16us)
+ *  0b11..Scaling Factor is 16 (1ms is 64us)
  */
 #define PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_FAST_LINK_SCALING_FACTOR(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_FAST_LINK_SCALING_FACTOR_SHIFT)) & PCIE_EP_TIMER_CTRL_MAX_FUNC_NUM_OFF_FAST_LINK_SCALING_FACTOR_MASK)
 /*! @} */
@@ -2977,8 +3250,8 @@ typedef struct {
 #define PCIE_EP_SYMBOL_TIMER_FILTER_1_OFF_MASK_RADM_1_MASK (0xFFFF0000U)
 #define PCIE_EP_SYMBOL_TIMER_FILTER_1_OFF_MASK_RADM_1_SHIFT (16U)
 /*! MASK_RADM_1 - Filter Mask 1.
- *  0b1111111111111111..Max value
  *  0b0000000000000000..Zero value
+ *  0b1111111111111111..Max value
  */
 #define PCIE_EP_SYMBOL_TIMER_FILTER_1_OFF_MASK_RADM_1(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_SYMBOL_TIMER_FILTER_1_OFF_MASK_RADM_1_SHIFT)) & PCIE_EP_SYMBOL_TIMER_FILTER_1_OFF_MASK_RADM_1_MASK)
 /*! @} */
@@ -2989,8 +3262,8 @@ typedef struct {
 #define PCIE_EP_FILTER_MASK_2_OFF_MASK_RADM_2_MASK (0xFFFFFFFFU)
 #define PCIE_EP_FILTER_MASK_2_OFF_MASK_RADM_2_SHIFT (0U)
 /*! MASK_RADM_2 - Filter Mask 2.
- *  0b11111111111111111111111111111111..Max value
  *  0b00000000000000000000000000000000..Zero value
+ *  0b11111111111111111111111111111111..Max value
  */
 #define PCIE_EP_FILTER_MASK_2_OFF_MASK_RADM_2(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_FILTER_MASK_2_OFF_MASK_RADM_2_SHIFT)) & PCIE_EP_FILTER_MASK_2_OFF_MASK_RADM_2_MASK)
 /*! @} */
@@ -3001,8 +3274,8 @@ typedef struct {
 #define PCIE_EP_PL_DEBUG0_OFF_DEB_REG_0_MASK     (0xFFFFFFFFU)
 #define PCIE_EP_PL_DEBUG0_OFF_DEB_REG_0_SHIFT    (0U)
 /*! DEB_REG_0 - The value on cxpl_debug_info[31:0].
- *  0b11111111111111111111111111111111..Max value.
  *  0b00000000000000000000000000000000..Zero value.
+ *  0b11111111111111111111111111111111..Max value.
  */
 #define PCIE_EP_PL_DEBUG0_OFF_DEB_REG_0(x)       (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PL_DEBUG0_OFF_DEB_REG_0_SHIFT)) & PCIE_EP_PL_DEBUG0_OFF_DEB_REG_0_MASK)
 /*! @} */
@@ -3013,8 +3286,8 @@ typedef struct {
 #define PCIE_EP_PL_DEBUG1_OFF_DEB_REG_1_MASK     (0xFFFFFFFFU)
 #define PCIE_EP_PL_DEBUG1_OFF_DEB_REG_1_SHIFT    (0U)
 /*! DEB_REG_1 - The value on cxpl_debug_info[63:32].
- *  0b11111111111111111111111111111111..Max value.
  *  0b00000000000000000000000000000000..Zero value.
+ *  0b11111111111111111111111111111111..Max value.
  */
 #define PCIE_EP_PL_DEBUG1_OFF_DEB_REG_1(x)       (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PL_DEBUG1_OFF_DEB_REG_1_SHIFT)) & PCIE_EP_PL_DEBUG1_OFF_DEB_REG_1_MASK)
 /*! @} */
@@ -3189,16 +3462,16 @@ typedef struct {
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_CREDIT_MASK (0xFFFU)
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_CREDIT_SHIFT (0U)
 /*! VC0_P_DATA_CREDIT - VC0 Posted Data Credits.
- *  0b111111111111..Max value
  *  0b000000000000..Zero value
+ *  0b111111111111..Max value
  */
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_CREDIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_CREDIT_SHIFT)) & PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_CREDIT_MASK)
 
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HEADER_CREDIT_MASK (0xFF000U)
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HEADER_CREDIT_SHIFT (12U)
 /*! VC0_P_HEADER_CREDIT - VC0 Posted Header Credits.
- *  0b11111111..Max value
  *  0b00000000..Zero value
+ *  0b11111111..Max value
  */
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HEADER_CREDIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HEADER_CREDIT_SHIFT)) & PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HEADER_CREDIT_MASK)
 
@@ -3215,16 +3488,16 @@ typedef struct {
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HDR_SCALE_MASK (0x3000000U)
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HDR_SCALE_SHIFT (24U)
 /*! VC0_P_HDR_SCALE - VC0 Scale Posted Header Credits.
- *  0b11..Max value
  *  0b00..Zero value
+ *  0b11..Max value
  */
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HDR_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HDR_SCALE_SHIFT)) & PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_HDR_SCALE_MASK)
 
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_SCALE_MASK (0xC000000U)
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_SCALE_SHIFT (26U)
 /*! VC0_P_DATA_SCALE - VC0 Scale Posted Data Credits.
- *  0b11..Max value
  *  0b00..Zero value
+ *  0b11..Max value
  */
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_SCALE_SHIFT)) & PCIE_EP_VC0_P_RX_Q_CTRL_OFF_VC0_P_DATA_SCALE_MASK)
 
@@ -3236,8 +3509,8 @@ typedef struct {
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_TLP_TYPE_ORDERING_VC0_MASK (0x40000000U)
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_TLP_TYPE_ORDERING_VC0_SHIFT (30U)
 /*! TLP_TYPE_ORDERING_VC0 - TLP Type Ordering for VC0.
- *  0b1..PCIe ordering rules (recommended)
  *  0b0..Strict ordering: posted, completion, then non-posted
+ *  0b1..PCIe ordering rules (recommended)
  */
 #define PCIE_EP_VC0_P_RX_Q_CTRL_OFF_TLP_TYPE_ORDERING_VC0(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_P_RX_Q_CTRL_OFF_TLP_TYPE_ORDERING_VC0_SHIFT)) & PCIE_EP_VC0_P_RX_Q_CTRL_OFF_TLP_TYPE_ORDERING_VC0_MASK)
 
@@ -3256,16 +3529,16 @@ typedef struct {
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_CREDIT_MASK (0xFFFU)
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_CREDIT_SHIFT (0U)
 /*! VC0_NP_DATA_CREDIT - VC0 Non-Posted Data Credits.
- *  0b111111111111..Max value
  *  0b000000000000..Zero value
+ *  0b111111111111..Max value
  */
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_CREDIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_CREDIT_SHIFT)) & PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_CREDIT_MASK)
 
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HEADER_CREDIT_MASK (0xFF000U)
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HEADER_CREDIT_SHIFT (12U)
 /*! VC0_NP_HEADER_CREDIT - VC0 Non-Posted Header Credits.
- *  0b11111111..Max value
  *  0b00000000..Zero value
+ *  0b11111111..Max value
  */
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HEADER_CREDIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HEADER_CREDIT_SHIFT)) & PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HEADER_CREDIT_MASK)
 
@@ -3282,16 +3555,16 @@ typedef struct {
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HDR_SCALE_MASK (0x3000000U)
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HDR_SCALE_SHIFT (24U)
 /*! VC0_NP_HDR_SCALE - VC0 Scale Non-Posted Header Credits.
- *  0b11..Max value
  *  0b00..Zero value
+ *  0b11..Max value
  */
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HDR_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HDR_SCALE_SHIFT)) & PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_HDR_SCALE_MASK)
 
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_SCALE_MASK (0xC000000U)
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_SCALE_SHIFT (26U)
 /*! VC0_NP_DATA_SCALE - VC0 Scale Non-Posted Data Credits.
- *  0b11..Max value
  *  0b00..Zero value
+ *  0b11..Max value
  */
 #define PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_SCALE_SHIFT)) & PCIE_EP_VC0_NP_RX_Q_CTRL_OFF_VC0_NP_DATA_SCALE_MASK)
 
@@ -3307,16 +3580,16 @@ typedef struct {
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_CREDIT_MASK (0xFFFU)
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_CREDIT_SHIFT (0U)
 /*! VC0_CPL_DATA_CREDIT - VC0 Completion Data Credits.
- *  0b111111111111..Max value
  *  0b000000000000..Zero value
+ *  0b111111111111..Max value
  */
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_CREDIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_CREDIT_SHIFT)) & PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_CREDIT_MASK)
 
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HEADER_CREDIT_MASK (0xFF000U)
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HEADER_CREDIT_SHIFT (12U)
 /*! VC0_CPL_HEADER_CREDIT - VC0 Completion Header Credits.
- *  0b11111111..Max value
  *  0b00000000..Zero value
+ *  0b11111111..Max value
  */
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HEADER_CREDIT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HEADER_CREDIT_SHIFT)) & PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HEADER_CREDIT_MASK)
 
@@ -3333,16 +3606,16 @@ typedef struct {
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HDR_SCALE_MASK (0x3000000U)
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HDR_SCALE_SHIFT (24U)
 /*! VC0_CPL_HDR_SCALE - VC0 Scale CPL Header Credits.
- *  0b11..Max value
  *  0b00..Zero value
+ *  0b11..Max value
  */
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HDR_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HDR_SCALE_SHIFT)) & PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_HDR_SCALE_MASK)
 
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_SCALE_MASK (0xC000000U)
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_SCALE_SHIFT (26U)
 /*! VC0_CPL_DATA_SCALE - VC0 Scale CPL Data Credits.
- *  0b11..Max value
  *  0b00..Zero value
+ *  0b11..Max value
  */
 #define PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_SCALE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_SCALE_SHIFT)) & PCIE_EP_VC0_CPL_RX_Q_CTRL_OFF_VC0_CPL_DATA_SCALE_MASK)
 
@@ -3408,8 +3681,8 @@ typedef struct {
 #define PCIE_EP_GEN2_CTRL_OFF_SEL_DEEMPHASIS_MASK (0x100000U)
 #define PCIE_EP_GEN2_CTRL_OFF_SEL_DEEMPHASIS_SHIFT (20U)
 /*! SEL_DEEMPHASIS - Used to set the de-emphasis level for upstream ports.
- *  0b1..-3.5 dB
  *  0b0..-6 dB
+ *  0b1..-3.5 dB
  */
 #define PCIE_EP_GEN2_CTRL_OFF_SEL_DEEMPHASIS(x)  (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN2_CTRL_OFF_SEL_DEEMPHASIS_SHIFT)) & PCIE_EP_GEN2_CTRL_OFF_SEL_DEEMPHASIS_MASK)
 
@@ -3424,8 +3697,8 @@ typedef struct {
 #define PCIE_EP_GEN2_CTRL_OFF_SELECT_DEEMPH_VAR_MUX_MASK (0x400000U)
 #define PCIE_EP_GEN2_CTRL_OFF_SELECT_DEEMPH_VAR_MUX_SHIFT (22U)
 /*! SELECT_DEEMPH_VAR_MUX - The select_deemphasis variable for DSP on entry to Recovery.
- *  0b1..The value from the Selectable De-emphasis field in the Link Control 2 register
  *  0b0..The value requested by USP in Recovery.RcvrLock state through Tx TS1s from USP
+ *  0b1..The value from the Selectable De-emphasis field in the Link Control 2 register
  */
 #define PCIE_EP_GEN2_CTRL_OFF_SELECT_DEEMPH_VAR_MUX(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN2_CTRL_OFF_SELECT_DEEMPH_VAR_MUX_SHIFT)) & PCIE_EP_GEN2_CTRL_OFF_SELECT_DEEMPH_VAR_MUX_MASK)
 
@@ -3440,8 +3713,8 @@ typedef struct {
 #define PCIE_EP_GEN2_CTRL_OFF_LANE_UNDER_TEST_MASK (0xF000000U)
 #define PCIE_EP_GEN2_CTRL_OFF_LANE_UNDER_TEST_SHIFT (24U)
 /*! LANE_UNDER_TEST - The Lane Under Test is the lane for Forced Lane Flip or for Loopback Eq.
- *  0b0001..One
  *  0b0000..Zero
+ *  0b0001..One
  */
 #define PCIE_EP_GEN2_CTRL_OFF_LANE_UNDER_TEST(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN2_CTRL_OFF_LANE_UNDER_TEST_SHIFT)) & PCIE_EP_GEN2_CTRL_OFF_LANE_UNDER_TEST_MASK)
 
@@ -3460,8 +3733,8 @@ typedef struct {
 #define PCIE_EP_PHY_STATUS_OFF_PHY_STATUS_MASK   (0xFFFFFFFFU)
 #define PCIE_EP_PHY_STATUS_OFF_PHY_STATUS_SHIFT  (0U)
 /*! PHY_STATUS - PHY Status.
- *  0b11111111111111111111111111111111..Max value
  *  0b00000000000000000000000000000000..Zero value
+ *  0b11111111111111111111111111111111..Max value
  */
 #define PCIE_EP_PHY_STATUS_OFF_PHY_STATUS(x)     (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_STATUS_OFF_PHY_STATUS_SHIFT)) & PCIE_EP_PHY_STATUS_OFF_PHY_STATUS_MASK)
 /*! @} */
@@ -3472,8 +3745,8 @@ typedef struct {
 #define PCIE_EP_PHY_CONTROL_OFF_PHY_CONTROL_MASK (0xFFFFFFFFU)
 #define PCIE_EP_PHY_CONTROL_OFF_PHY_CONTROL_SHIFT (0U)
 /*! PHY_CONTROL - PHY Control.
- *  0b11111111111111111111111111111111..Max value
  *  0b00000000000000000000000000000000..Zero value
+ *  0b11111111111111111111111111111111..Max value
  */
 #define PCIE_EP_PHY_CONTROL_OFF_PHY_CONTROL(x)   (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_CONTROL_OFF_PHY_CONTROL_SHIFT)) & PCIE_EP_PHY_CONTROL_OFF_PHY_CONTROL_MASK)
 /*! @} */
@@ -3573,8 +3846,8 @@ typedef struct {
 #define PCIE_EP_GEN3_RELATED_OFF_RXEQ_PH01_EN_MASK (0x1000U)
 #define PCIE_EP_GEN3_RELATED_OFF_RXEQ_PH01_EN_SHIFT (12U)
 /*! RXEQ_PH01_EN - Rx Equalization Phase 0/Phase 1 Hold Enable.
- *  0b1..No Tx equalization
  *  0b0..Tx equalization only in phase 2/3
+ *  0b1..No Tx equalization
  */
 #define PCIE_EP_GEN3_RELATED_OFF_RXEQ_PH01_EN(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_RELATED_OFF_RXEQ_PH01_EN_SHIFT)) & PCIE_EP_GEN3_RELATED_OFF_RXEQ_PH01_EN_MASK)
 
@@ -3621,8 +3894,8 @@ typedef struct {
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PHASE23_EXIT_MODE_MASK (0x10U)
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PHASE23_EXIT_MODE_SHIFT (4U)
 /*! GEN3_EQ_PHASE23_EXIT_MODE - Behavior After 24 ms Timeout (when optimal settings are not found).
- *  0b1..USP: Recovery.Equalization.Phase3; DSP: Recovery.Equalization.RcvrLock
  *  0b0..Recovery.Speed
+ *  0b1..USP: Recovery.Equalization.Phase3; DSP: Recovery.Equalization.RcvrLock
  */
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PHASE23_EXIT_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PHASE23_EXIT_MODE_SHIFT)) & PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PHASE23_EXIT_MODE_MASK)
 
@@ -3646,8 +3919,8 @@ typedef struct {
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PSET_REQ_VEC_MASK (0xFFFF00U)
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PSET_REQ_VEC_SHIFT (8U)
 /*! GEN3_EQ_PSET_REQ_VEC - Preset Request Vector.
- *  0b1111111111111111..Max value
  *  0b0000000000000000..Zero value
+ *  0b1111111111111111..Max value
  */
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PSET_REQ_VEC(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PSET_REQ_VEC_SHIFT)) & PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_PSET_REQ_VEC_MASK)
 
@@ -3675,16 +3948,16 @@ typedef struct {
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_REQ_NUM_MASK (0x38000000U)
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_REQ_NUM_SHIFT (27U)
 /*! GEN3_EQ_REQ_NUM - The number of back-to-back equalization redo requests at a given Gen3, Gen4 and Gen5 data rate for USP.
- *  0b111..Max value
  *  0b000..Min value
+ *  0b111..Max value
  */
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_REQ_NUM(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_REQ_NUM_SHIFT)) & PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_EQ_REQ_NUM_MASK)
 
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_SUPPORT_FINITE_EQ_REQUEST_MASK (0x40000000U)
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_SUPPORT_FINITE_EQ_REQUEST_SHIFT (30U)
 /*! GEN3_SUPPORT_FINITE_EQ_REQUEST - Support finite EQ requests for USP.
- *  0b1..Support
  *  0b0..Do not support
+ *  0b1..Support
  */
 #define PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_SUPPORT_FINITE_EQ_REQUEST(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_SUPPORT_FINITE_EQ_REQUEST_SHIFT)) & PCIE_EP_GEN3_EQ_CONTROL_OFF_GEN3_SUPPORT_FINITE_EQ_REQUEST_MASK)
 /*! @} */
@@ -3695,32 +3968,32 @@ typedef struct {
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_T_MIN_PHASE23_MASK (0x1FU)
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_T_MIN_PHASE23_SHIFT (0U)
 /*! GEN3_EQ_FMDC_T_MIN_PHASE23 - Minimum Time (in ms) To Remain in EQ Master Phase.
- *  0b11000..Max value
  *  0b00000..Min value
+ *  0b11000..Max value
  */
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_T_MIN_PHASE23(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_T_MIN_PHASE23_SHIFT)) & PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_T_MIN_PHASE23_MASK)
 
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_N_EVALS_MASK (0x3E0U)
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_N_EVALS_SHIFT (5U)
 /*! GEN3_EQ_FMDC_N_EVALS - Convergence Window Depth.
- *  0b11111..Maximum of CX_GEN3_EQ_COEFQ_DEPTH
  *  0b00000..Min value
+ *  0b11111..Maximum of CX_GEN3_EQ_COEFQ_DEPTH
  */
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_N_EVALS(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_N_EVALS_SHIFT)) & PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_N_EVALS_MASK)
 
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_PRE_CUSROR_DELTA_MASK (0x3C00U)
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_PRE_CUSROR_DELTA_SHIFT (10U)
 /*! GEN3_EQ_FMDC_MAX_PRE_CUSROR_DELTA - Convergence Window Aperture for C-1.
- *  0b1111..Max value
  *  0b0000..Min value
+ *  0b1111..Max value
  */
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_PRE_CUSROR_DELTA(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_PRE_CUSROR_DELTA_SHIFT)) & PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_PRE_CUSROR_DELTA_MASK)
 
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_POST_CUSROR_DELTA_MASK (0x3C000U)
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_POST_CUSROR_DELTA_SHIFT (14U)
 /*! GEN3_EQ_FMDC_MAX_POST_CUSROR_DELTA - Convergence Window Aperture for C+1.
- *  0b1111..Max value
  *  0b0000..Min value
+ *  0b1111..Max value
  */
 #define PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_POST_CUSROR_DELTA(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_POST_CUSROR_DELTA_SHIFT)) & PCIE_EP_GEN3_EQ_FB_MODE_DIR_CHANGE_OFF_GEN3_EQ_FMDC_MAX_POST_CUSROR_DELTA_MASK)
 /*! @} */
@@ -3832,9 +4105,9 @@ typedef struct {
 #define PCIE_EP_MISC_CONTROL_1_OFF_CFG_TLP_BYPASS_EN_REG_MASK (0x80U)
 #define PCIE_EP_MISC_CONTROL_1_OFF_CFG_TLP_BYPASS_EN_REG_SHIFT (7U)
 /*! CFG_TLP_BYPASS_EN_REG - Setting of this field defines how to decide the destination of Configuration requests.
- *  0b1..Configuration TLPs are routed according to the setting of TARGET_ABOVE_CONFIG_LIMIT_REG, regardless the value of CONFIG_LIMIT_REG.
  *  0b0..Configuration TLPs are routed according to the setting of TARGET_ABOVE_CONFIG_LIMIT_REG, depending on the
  *       setting of CONFIG_LIMIT_REG. Refer to the definition of CONFIG_LIMIT_REG for details.
+ *  0b1..Configuration TLPs are routed according to the setting of TARGET_ABOVE_CONFIG_LIMIT_REG, regardless the value of CONFIG_LIMIT_REG.
  */
 #define PCIE_EP_MISC_CONTROL_1_OFF_CFG_TLP_BYPASS_EN_REG(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_MISC_CONTROL_1_OFF_CFG_TLP_BYPASS_EN_REG_SHIFT)) & PCIE_EP_MISC_CONTROL_1_OFF_CFG_TLP_BYPASS_EN_REG_MASK)
 
@@ -3881,11 +4154,11 @@ typedef struct {
 /*! TARGET_LINK_WIDTH - Target Link Width.
  *  0b000000..Controller does not start upconfigure or autonomous width downsizing in the Configuration state.
  *  0b000001..x1
- *  0b010000..x16
  *  0b000010..x2
- *  0b100000..x32
  *  0b000100..x4
  *  0b001000..x8
+ *  0b010000..x16
+ *  0b100000..x32
  */
 #define PCIE_EP_MULTI_LANE_CONTROL_OFF_TARGET_LINK_WIDTH(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_MULTI_LANE_CONTROL_OFF_TARGET_LINK_WIDTH_SHIFT)) & PCIE_EP_MULTI_LANE_CONTROL_OFF_TARGET_LINK_WIDTH_MASK)
 
@@ -3909,24 +4182,24 @@ typedef struct {
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_RXSTANDBY_CONTROL_MASK (0x7FU)
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_RXSTANDBY_CONTROL_SHIFT (0U)
 /*! RXSTANDBY_CONTROL - Rxstandby Control.
- *  0b1111111..Max value
  *  0b0000000..Zero value
+ *  0b1111111..Max value
  */
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_RXSTANDBY_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_INTEROP_CTRL_OFF_RXSTANDBY_CONTROL_SHIFT)) & PCIE_EP_PHY_INTEROP_CTRL_OFF_RXSTANDBY_CONTROL_MASK)
 
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_L1SUB_EXIT_MODE_MASK (0x100U)
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_L1SUB_EXIT_MODE_SHIFT (8U)
 /*! L1SUB_EXIT_MODE - L1 Exit Control Using phy_mac_pclkack_n.
- *  0b1..Controller exits L1 without waiting for the PHY to assert phy_mac_pclkack_n.
  *  0b0..Controller waits for the PHY to assert phy_mac_pclkack_n before exiting L1.
+ *  0b1..Controller exits L1 without waiting for the PHY to assert phy_mac_pclkack_n.
  */
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_L1SUB_EXIT_MODE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_INTEROP_CTRL_OFF_L1SUB_EXIT_MODE_SHIFT)) & PCIE_EP_PHY_INTEROP_CTRL_OFF_L1SUB_EXIT_MODE_MASK)
 
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_L1_NOWAIT_P1_MASK (0x200U)
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_L1_NOWAIT_P1_SHIFT (9U)
 /*! L1_NOWAIT_P1 - L1 entry control bit.
- *  0b1..Controller does not wait for PHY to acknowledge transition to P1 before entering L1.
  *  0b0..Controller waits for the PHY to acknowledge transition to P1 before entering L1.
+ *  0b1..Controller does not wait for PHY to acknowledge transition to P1 before entering L1.
  */
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_L1_NOWAIT_P1(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_INTEROP_CTRL_OFF_L1_NOWAIT_P1_SHIFT)) & PCIE_EP_PHY_INTEROP_CTRL_OFF_L1_NOWAIT_P1_MASK)
 
@@ -3941,8 +4214,8 @@ typedef struct {
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_PHY_RST_TIMER_MASK (0x3FFFF000U)
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_PHY_RST_TIMER_SHIFT (12U)
 /*! PHY_RST_TIMER - Control the duration of the PHY reset (PIPE and PMA).
- *  0b111111111111111111..Max value.
  *  0b000000000000000000..Zero value.
+ *  0b111111111111111111..Max value.
  */
 #define PCIE_EP_PHY_INTEROP_CTRL_OFF_PHY_RST_TIMER(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_INTEROP_CTRL_OFF_PHY_RST_TIMER_SHIFT)) & PCIE_EP_PHY_INTEROP_CTRL_OFF_PHY_RST_TIMER_MASK)
 
@@ -3996,16 +4269,16 @@ typedef struct {
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_GLOBAL_MASK (0x1U)
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_GLOBAL_SHIFT (0U)
 /*! AMBA_ERROR_RESPONSE_GLOBAL - Global Slave Error Response Mapping.
- *  0b1..SLVERR/DECERR (the AXI_ERROR_RESPONSE_MAP field determines the PCIe-to-AXI Slave error response mapping)
  *  0b0..OKAY (with FFFF data for non-posted requests)
+ *  0b1..SLVERR/DECERR (the AXI_ERROR_RESPONSE_MAP field determines the PCIe-to-AXI Slave error response mapping)
  */
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_GLOBAL(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_GLOBAL_SHIFT)) & PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_GLOBAL_MASK)
 
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_VENDORID_MASK (0x4U)
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_VENDORID_SHIFT (2U)
 /*! AMBA_ERROR_RESPONSE_VENDORID - Vendor ID Non-existent Slave Error Response Mapping.
- *  0b1..SLVERR/DECERR (the AXI_ERROR_RESPONSE_MAP field determines the PCIe-to-AXI Slave error response mapping)
  *  0b0..OKAY (with FFFF data).
+ *  0b1..SLVERR/DECERR (the AXI_ERROR_RESPONSE_MAP field determines the PCIe-to-AXI Slave error response mapping)
  */
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_VENDORID(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_VENDORID_SHIFT)) & PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_VENDORID_MASK)
 
@@ -4022,8 +4295,8 @@ typedef struct {
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_MAP_MASK (0xFC00U)
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_MAP_SHIFT (10U)
 /*! AMBA_ERROR_RESPONSE_MAP - AXI Slave Response Error Map.
- *  0b111111..Max value
  *  0b000000..Zero value
+ *  0b111111..Max value
  */
 #define PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_MAP(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_MAP_SHIFT)) & PCIE_EP_AMBA_ERROR_RESPONSE_DEFAULT_OFF_AMBA_ERROR_RESPONSE_MAP_MASK)
 /*! @} */
@@ -4039,8 +4312,8 @@ typedef struct {
 #define PCIE_EP_AMBA_LINK_TIMEOUT_OFF_LINK_TIMEOUT_ENABLE_DEFAULT_MASK (0x100U)
 #define PCIE_EP_AMBA_LINK_TIMEOUT_OFF_LINK_TIMEOUT_ENABLE_DEFAULT_SHIFT (8U)
 /*! LINK_TIMEOUT_ENABLE_DEFAULT - Disable Flush.
- *  0b1..You can disable the flush feature by setting this field to '1'.
  *  0b0..Enable
+ *  0b1..You can disable the flush feature by setting this field to '1'.
  */
 #define PCIE_EP_AMBA_LINK_TIMEOUT_OFF_LINK_TIMEOUT_ENABLE_DEFAULT(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_AMBA_LINK_TIMEOUT_OFF_LINK_TIMEOUT_ENABLE_DEFAULT_SHIFT)) & PCIE_EP_AMBA_LINK_TIMEOUT_OFF_LINK_TIMEOUT_ENABLE_DEFAULT_MASK)
 /*! @} */
@@ -4059,19 +4332,19 @@ typedef struct {
 #define PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ORDR_P_EVENT_SEL_MASK (0x18U)
 #define PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ORDR_P_EVENT_SEL_SHIFT (3U)
 /*! AX_MSTR_ORDR_P_EVENT_SEL - AXI Master Posted Ordering Event Selector.
- *  0b01..AW'last event: wait until the complete Posted transaction has left the AXI address channel at the bridge master.
  *  0b00..B'last event: wait for the all of the write responses on the B channel thereby ensuring that the
  *        complete Posted transaction has effectively reached the application slave (default).
- *  0b11..Reserved
+ *  0b01..AW'last event: wait until the complete Posted transaction has left the AXI address channel at the bridge master.
  *  0b10..W'last event: wait until the complete Posted transaction has left the AXI data channel at the bridge master.
+ *  0b11..Reserved
  */
 #define PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ORDR_P_EVENT_SEL(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ORDR_P_EVENT_SEL_SHIFT)) & PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ORDR_P_EVENT_SEL_MASK)
 
 #define PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ZEROLREAD_FW_MASK (0x80U)
 #define PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ZEROLREAD_FW_SHIFT (7U)
 /*! AX_MSTR_ZEROLREAD_FW - AXI Master Zero Length Read Forward to the application.
- *  0b1..The zero length Read is forward to the application.
  *  0b0..The zero length Read is terminated at the DW PCIe AXI bridge master
+ *  0b1..The zero length Read is forward to the application.
  */
 #define PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ZEROLREAD_FW(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ZEROLREAD_FW_SHIFT)) & PCIE_EP_AMBA_ORDERING_CTRL_OFF_AX_MSTR_ZEROLREAD_FW_MASK)
 /*! @} */
@@ -4082,8 +4355,8 @@ typedef struct {
 #define PCIE_EP_COHERENCY_CONTROL_1_OFF_CFG_MEMTYPE_VALUE_MASK (0x1U)
 #define PCIE_EP_COHERENCY_CONTROL_1_OFF_CFG_MEMTYPE_VALUE_SHIFT (0U)
 /*! CFG_MEMTYPE_VALUE - Sets the memory type for the lower and upper parts of the address space:
- *  0b1..lower = Memory type; upper = Peripheral
  *  0b0..lower = Peripheral; upper = Memory
+ *  0b1..lower = Memory type; upper = Peripheral
  */
 #define PCIE_EP_COHERENCY_CONTROL_1_OFF_CFG_MEMTYPE_VALUE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_COHERENCY_CONTROL_1_OFF_CFG_MEMTYPE_VALUE_SHIFT)) & PCIE_EP_COHERENCY_CONTROL_1_OFF_CFG_MEMTYPE_VALUE_MASK)
 
@@ -4187,8 +4460,8 @@ typedef struct {
 #define PCIE_EP_PCIE_VERSION_NUMBER_OFF_VERSION_NUMBER_MASK (0xFFFFFFFFU)
 #define PCIE_EP_PCIE_VERSION_NUMBER_OFF_VERSION_NUMBER_SHIFT (0U)
 /*! VERSION_NUMBER - Version Number.
- *  0b11111111111111111111111111111111..Max value
  *  0b00000000000000000000000000000000..Zero value
+ *  0b11111111111111111111111111111111..Max value
  */
 #define PCIE_EP_PCIE_VERSION_NUMBER_OFF_VERSION_NUMBER(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PCIE_VERSION_NUMBER_OFF_VERSION_NUMBER_SHIFT)) & PCIE_EP_PCIE_VERSION_NUMBER_OFF_VERSION_NUMBER_MASK)
 /*! @} */
@@ -4199,8 +4472,8 @@ typedef struct {
 #define PCIE_EP_PCIE_VERSION_TYPE_OFF_VERSION_TYPE_MASK (0xFFFFFFFFU)
 #define PCIE_EP_PCIE_VERSION_TYPE_OFF_VERSION_TYPE_SHIFT (0U)
 /*! VERSION_TYPE - Version Type.
- *  0b11111111111111111111111111111111..Max value
  *  0b00000000000000000000000000000000..Zero value
+ *  0b11111111111111111111111111111111..Max value
  */
 #define PCIE_EP_PCIE_VERSION_TYPE_OFF_VERSION_TYPE(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PCIE_VERSION_TYPE_OFF_VERSION_TYPE_SHIFT)) & PCIE_EP_PCIE_VERSION_TYPE_OFF_VERSION_TYPE_MASK)
 /*! @} */
@@ -4297,24 +4570,24 @@ typedef struct {
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_POWER_OFF_MASK (0x3U)
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_POWER_OFF_SHIFT (0U)
 /*! L1SUB_T_POWER_OFF - Duration (in 1us units) of L1.
- *  0b11..Max value
  *  0b00..Min value
+ *  0b11..Max value
  */
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_POWER_OFF(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_POWER_OFF_SHIFT)) & PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_POWER_OFF_MASK)
 
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_L1_2_MASK (0x3CU)
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_L1_2_SHIFT (2U)
 /*! L1SUB_T_L1_2 - Duration (in 1us units) of L1.
- *  0b1111..Max value
  *  0b0000..Min value
+ *  0b1111..Max value
  */
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_L1_2(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_L1_2_SHIFT)) & PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_L1_2_MASK)
 
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_LOW_MASK (0xC0U)
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_LOW_SHIFT (6U)
 /*! L1SUB_T_PCLKACK_LOW - Lower 2-bits of L1SUB_T_PCLKACK.
- *  0b11..Max value
  *  0b00..Min value
+ *  0b11..Max value
  */
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_LOW(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_LOW_SHIFT)) & PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_LOW_MASK)
 
@@ -4329,8 +4602,8 @@ typedef struct {
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_HIGH_MASK (0x3E00U)
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_HIGH_SHIFT (9U)
 /*! L1SUB_T_PCLKACK_HIGH - Higher 5-bits of L1SUB_T_PCLKACK.
- *  0b11111..Max value
  *  0b00000..Min value
+ *  0b11111..Max value
  */
 #define PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_HIGH(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_HIGH_SHIFT)) & PCIE_EP_L1_SUBSTATES_OFF_L1SUB_T_PCLKACK_HIGH_MASK)
 /*! @} */
@@ -4373,16 +4646,16 @@ typedef struct {
 #define PCIE_EP_PHY_INTEROP_CTRL_2_OFF_PMA_PIPE_RST_DELAY_TIMER_SHIFT (0U)
 /*! PMA_PIPE_RST_DELAY_TIMER - Control how long the controller should wait to release a PIPE reset
  *    (pm_req_phy_rst) after releasing a PMA reset (pm_req_phy_perst).
- *  0b111111..Max value.
  *  0b001010..Min value.
+ *  0b111111..Max value.
  */
 #define PCIE_EP_PHY_INTEROP_CTRL_2_OFF_PMA_PIPE_RST_DELAY_TIMER(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_INTEROP_CTRL_2_OFF_PMA_PIPE_RST_DELAY_TIMER_SHIFT)) & PCIE_EP_PHY_INTEROP_CTRL_2_OFF_PMA_PIPE_RST_DELAY_TIMER_MASK)
 
 #define PCIE_EP_PHY_INTEROP_CTRL_2_OFF_DSP_PCIPM_L1_ENTER_DELAY_MASK (0xF00U)
 #define PCIE_EP_PHY_INTEROP_CTRL_2_OFF_DSP_PCIPM_L1_ENTER_DELAY_SHIFT (8U)
 /*! DSP_PCIPM_L1_ENTER_DELAY - DSP_PCIPM_L1_ENTER_DELAY
- *  0b1111..Max value.
  *  0b0000..Zero value.
+ *  0b1111..Max value.
  */
 #define PCIE_EP_PHY_INTEROP_CTRL_2_OFF_DSP_PCIPM_L1_ENTER_DELAY(x) (((uint32_t)(((uint32_t)(x)) << PCIE_EP_PHY_INTEROP_CTRL_2_OFF_DSP_PCIPM_L1_ENTER_DELAY_SHIFT)) & PCIE_EP_PHY_INTEROP_CTRL_2_OFF_DSP_PCIPM_L1_ENTER_DELAY_MASK)
 /*! @} */
@@ -4451,5 +4724,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PCIE_EP_H_ */
+#endif  /* PERI_PCIE_EP_H_ */
 

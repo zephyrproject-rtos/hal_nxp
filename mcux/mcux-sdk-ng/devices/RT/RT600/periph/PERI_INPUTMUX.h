@@ -9,15 +9,17 @@
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_cm33
 **                          MIMXRT685SFVKB_dsp
+**                          MIMXRT685SVFVKB_cm33
+**                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 2.0, 2019-11-12
-**     Build:               b240705
+**     Version:             rev. 3.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -28,27 +30,30 @@
 **         Initial version.
 **     - rev. 2.0 (2019-11-12)
 **         Base on rev 0.95 RM (B0 Header)
+**     - rev. 3.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file INPUTMUX.h
- * @version 2.0
- * @date 2019-11-12
+ * @file PERI_INPUTMUX.h
+ * @version 3.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for INPUTMUX
  *
  * CMSIS Peripheral Access Layer for INPUTMUX
  */
 
-#if !defined(INPUTMUX_H_)
-#define INPUTMUX_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_INPUTMUX_H_)
+#define PERI_INPUTMUX_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 #include "MIMXRT633S_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33))
+#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33) || defined(CPU_MIMXRT685SVFVKB_cm33))
 #include "MIMXRT685S_cm33_COMMON.h"
-#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
+#elif (defined(CPU_MIMXRT685SFAWBR_dsp) || defined(CPU_MIMXRT685SFFOB_dsp) || defined(CPU_MIMXRT685SFVKB_dsp) || defined(CPU_MIMXRT685SVFVKB_dsp))
 #include "MIMXRT685S_dsp_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -127,27 +132,29 @@ typedef struct {
   __IO uint32_t FMEASURE_CH_SEL[INPUTMUX_FMEASURE_CH_SEL_COUNT]; /**< Frequency Measurement Input Channel Multiplexers, array offset: 0x700, array step: 0x4 */
        uint8_t RESERVED_8[56];
   __IO uint32_t DMAC0_REQ_ENA0;                    /**< DMAC0 request enable 0, offset: 0x740 */
-       uint8_t RESERVED_9[4];
+  __IO uint32_t DMAC0_REQ_ENA1;                    /**< DMAC0 request enable 1, offset: 0x744 */
   __O  uint32_t DMAC0_REQ_ENA0_SET;                /**< DMAC0 request enable set 0, offset: 0x748 */
-       uint8_t RESERVED_10[4];
+  __O  uint32_t DMAC0_REQ_ENA1_SET;                /**< DMAC0 request enable set 1, offset: 0x74C */
   __O  uint32_t DMAC0_REQ_ENA0_CLR;                /**< DMAC0 request enable clear 0, offset: 0x750 */
-       uint8_t RESERVED_11[12];
+  __O  uint32_t DMAC0_REQ_ENA1_CLR;                /**< DMAC0 request enable clear 1, offset: 0x754 */
+       uint8_t RESERVED_9[8];
   __IO uint32_t DMAC1_REQ_ENA0;                    /**< DMAC1 request enable 0, offset: 0x760 */
-       uint8_t RESERVED_12[4];
+  __IO uint32_t DMAC1_REQ_ENA1;                    /**< DMAC1 request enable 1, offset: 0x764 */
   __O  uint32_t DMAC1_REQ_ENA0_SET;                /**< DMAC1 request enable set 0, offset: 0x768 */
-       uint8_t RESERVED_13[4];
+  __O  uint32_t DMAC1_REQ_ENA1_SET;                /**< DMAC1 request enable set 1, offset: 0x76C */
   __O  uint32_t DMAC1_REQ_ENA0_CLR;                /**< DMAC1 request enable clear 0, offset: 0x770 */
-       uint8_t RESERVED_14[12];
+  __O  uint32_t DMAC1_REQ_ENA1_CLR;                /**< DMAC1 request enable clear 1, offset: 0x774 */
+       uint8_t RESERVED_10[8];
   __IO uint32_t DMAC0_ITRIG_ENA0;                  /**< DMAC0 input trigger enable 0, offset: 0x780 */
-       uint8_t RESERVED_15[4];
+       uint8_t RESERVED_11[4];
   __O  uint32_t DMAC0_ITRIG_ENA0_SET;              /**< DMAC0 input trigger enable set 0, offset: 0x788 */
-       uint8_t RESERVED_16[4];
+       uint8_t RESERVED_12[4];
   __O  uint32_t DMAC0_ITRIG_ENA0_CLR;              /**< DMAC0 input trigger enable clear 0, offset: 0x790 */
-       uint8_t RESERVED_17[12];
+       uint8_t RESERVED_13[12];
   __IO uint32_t DMAC1_ITRIG_ENA0;                  /**< DMAC1 input trigger enable 0, offset: 0x7A0 */
-       uint8_t RESERVED_18[4];
+       uint8_t RESERVED_14[4];
   __O  uint32_t DMAC1_ITRIG_ENA0_SET;              /**< DMAC1 input trigger enable set 0, offset: 0x7A8 */
-       uint8_t RESERVED_19[4];
+       uint8_t RESERVED_15[4];
   __O  uint32_t DMAC1_ITRIG_ENA0_CLR;              /**< DMAC1 input trigger enable clear 0, offset: 0x7B0 */
 } INPUTMUX_Type;
 
@@ -784,6 +791,26 @@ typedef struct {
  *  0b1..enable
  */
 #define INPUTMUX_DMAC0_REQ_ENA0_HASHCRYPT(x)     (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA0_HASHCRYPT_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA0_HASHCRYPT_MASK)
+
+#define INPUTMUX_DMAC0_REQ_ENA0_ESPI_CH0_MASK    (0x80000000U)
+#define INPUTMUX_DMAC0_REQ_ENA0_ESPI_CH0_SHIFT   (31U)
+/*! ESPI_CH0 - ESPI Channel 0 enable
+ *  0b0..disable
+ *  0b1..enable
+ */
+#define INPUTMUX_DMAC0_REQ_ENA0_ESPI_CH0(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA0_ESPI_CH0_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA0_ESPI_CH0_MASK)
+/*! @} */
+
+/*! @name DMAC0_REQ_ENA1 - DMAC0 request enable 1 */
+/*! @{ */
+
+#define INPUTMUX_DMAC0_REQ_ENA1_ESPI_CH1_MASK    (0x1U)
+#define INPUTMUX_DMAC0_REQ_ENA1_ESPI_CH1_SHIFT   (0U)
+/*! ESPI_CH1 - ESPI Channel 1 enable
+ *  0b0..disable
+ *  0b1..enable
+ */
+#define INPUTMUX_DMAC0_REQ_ENA1_ESPI_CH1(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA1_ESPI_CH1_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA1_ESPI_CH1_MASK)
 /*! @} */
 
 /*! @name DMAC0_REQ_ENA0_SET - DMAC0 request enable set 0 */
@@ -1020,6 +1047,26 @@ typedef struct {
  *  0b1..Sets the ENA0 Bit
  */
 #define INPUTMUX_DMAC0_REQ_ENA0_SET_HASHCRYPT(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA0_SET_HASHCRYPT_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA0_SET_HASHCRYPT_MASK)
+
+#define INPUTMUX_DMAC0_REQ_ENA0_SET_ESPI_CH0_MASK (0x80000000U)
+#define INPUTMUX_DMAC0_REQ_ENA0_SET_ESPI_CH0_SHIFT (31U)
+/*! ESPI_CH0 - ESPI Channel 0 enable set
+ *  0b0..No Effect
+ *  0b1..Sets the ENA0 Bit
+ */
+#define INPUTMUX_DMAC0_REQ_ENA0_SET_ESPI_CH0(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA0_SET_ESPI_CH0_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA0_SET_ESPI_CH0_MASK)
+/*! @} */
+
+/*! @name DMAC0_REQ_ENA1_SET - DMAC0 request enable set 1 */
+/*! @{ */
+
+#define INPUTMUX_DMAC0_REQ_ENA1_SET_ESPI_CH1_MASK (0x1U)
+#define INPUTMUX_DMAC0_REQ_ENA1_SET_ESPI_CH1_SHIFT (0U)
+/*! ESPI_CH1 - ESPI Channel 1 enable set
+ *  0b0..No Effect
+ *  0b1..Sets the ENA1 Bit
+ */
+#define INPUTMUX_DMAC0_REQ_ENA1_SET_ESPI_CH1(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA1_SET_ESPI_CH1_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA1_SET_ESPI_CH1_MASK)
 /*! @} */
 
 /*! @name DMAC0_REQ_ENA0_CLR - DMAC0 request enable clear 0 */
@@ -1256,6 +1303,26 @@ typedef struct {
  *  0b1..Clears the ENA0 Bit
  */
 #define INPUTMUX_DMAC0_REQ_ENA0_CLR_HASHCRYPT(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA0_CLR_HASHCRYPT_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA0_CLR_HASHCRYPT_MASK)
+
+#define INPUTMUX_DMAC0_REQ_ENA0_CLR_ESPI_CH0_MASK (0x80000000U)
+#define INPUTMUX_DMAC0_REQ_ENA0_CLR_ESPI_CH0_SHIFT (31U)
+/*! ESPI_CH0 - ESPI Channel 0 enable clear
+ *  0b0..No Effect
+ *  0b1..Clears the ENA0 Bit
+ */
+#define INPUTMUX_DMAC0_REQ_ENA0_CLR_ESPI_CH0(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA0_CLR_ESPI_CH0_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA0_CLR_ESPI_CH0_MASK)
+/*! @} */
+
+/*! @name DMAC0_REQ_ENA1_CLR - DMAC0 request enable clear 1 */
+/*! @{ */
+
+#define INPUTMUX_DMAC0_REQ_ENA1_CLR_ESPI_CH1_MASK (0x1U)
+#define INPUTMUX_DMAC0_REQ_ENA1_CLR_ESPI_CH1_SHIFT (0U)
+/*! ESPI_CH1 - ESPI Channel 1 enable clear
+ *  0b0..No Effect
+ *  0b1..Clears the ENA1 Bit
+ */
+#define INPUTMUX_DMAC0_REQ_ENA1_CLR_ESPI_CH1(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_REQ_ENA1_CLR_ESPI_CH1_SHIFT)) & INPUTMUX_DMAC0_REQ_ENA1_CLR_ESPI_CH1_MASK)
 /*! @} */
 
 /*! @name DMAC1_REQ_ENA0 - DMAC1 request enable 0 */
@@ -1492,6 +1559,26 @@ typedef struct {
  *  0b1..enable
  */
 #define INPUTMUX_DMAC1_REQ_ENA0_HASHCRYPT(x)     (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA0_HASHCRYPT_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA0_HASHCRYPT_MASK)
+
+#define INPUTMUX_DMAC1_REQ_ENA0_ESPI_CH0_MASK    (0x80000000U)
+#define INPUTMUX_DMAC1_REQ_ENA0_ESPI_CH0_SHIFT   (31U)
+/*! ESPI_CH0 - ESPI Channel 0 enable
+ *  0b0..disable
+ *  0b1..enable
+ */
+#define INPUTMUX_DMAC1_REQ_ENA0_ESPI_CH0(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA0_ESPI_CH0_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA0_ESPI_CH0_MASK)
+/*! @} */
+
+/*! @name DMAC1_REQ_ENA1 - DMAC1 request enable 1 */
+/*! @{ */
+
+#define INPUTMUX_DMAC1_REQ_ENA1_ESPI_CH1_MASK    (0x1U)
+#define INPUTMUX_DMAC1_REQ_ENA1_ESPI_CH1_SHIFT   (0U)
+/*! ESPI_CH1 - ESPI Channel 1 enable
+ *  0b0..disable
+ *  0b1..enable
+ */
+#define INPUTMUX_DMAC1_REQ_ENA1_ESPI_CH1(x)      (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA1_ESPI_CH1_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA1_ESPI_CH1_MASK)
 /*! @} */
 
 /*! @name DMAC1_REQ_ENA0_SET - DMAC1 request enable set 0 */
@@ -1728,6 +1815,26 @@ typedef struct {
  *  0b1..Sets the ENA0 Bit
  */
 #define INPUTMUX_DMAC1_REQ_ENA0_SET_HASHCRYPT(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA0_SET_HASHCRYPT_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA0_SET_HASHCRYPT_MASK)
+
+#define INPUTMUX_DMAC1_REQ_ENA0_SET_ESPI_CH0_MASK (0x80000000U)
+#define INPUTMUX_DMAC1_REQ_ENA0_SET_ESPI_CH0_SHIFT (31U)
+/*! ESPI_CH0 - ESPI Channel 0 enable set
+ *  0b0..No Effect
+ *  0b1..Sets the ENA0 Bit
+ */
+#define INPUTMUX_DMAC1_REQ_ENA0_SET_ESPI_CH0(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA0_SET_ESPI_CH0_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA0_SET_ESPI_CH0_MASK)
+/*! @} */
+
+/*! @name DMAC1_REQ_ENA1_SET - DMAC1 request enable set 1 */
+/*! @{ */
+
+#define INPUTMUX_DMAC1_REQ_ENA1_SET_ESPI_CH1_MASK (0x1U)
+#define INPUTMUX_DMAC1_REQ_ENA1_SET_ESPI_CH1_SHIFT (0U)
+/*! ESPI_CH1 - ESPI Channel 1 enable set
+ *  0b0..No Effect
+ *  0b1..Sets the ENA1 Bit
+ */
+#define INPUTMUX_DMAC1_REQ_ENA1_SET_ESPI_CH1(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA1_SET_ESPI_CH1_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA1_SET_ESPI_CH1_MASK)
 /*! @} */
 
 /*! @name DMAC1_REQ_ENA0_CLR - DMAC1 request enable clear 0 */
@@ -1964,6 +2071,26 @@ typedef struct {
  *  0b1..Clears the ENA0 Bit
  */
 #define INPUTMUX_DMAC1_REQ_ENA0_CLR_HASHCRYPT(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA0_CLR_HASHCRYPT_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA0_CLR_HASHCRYPT_MASK)
+
+#define INPUTMUX_DMAC1_REQ_ENA0_CLR_ESPI_CH0_MASK (0x80000000U)
+#define INPUTMUX_DMAC1_REQ_ENA0_CLR_ESPI_CH0_SHIFT (31U)
+/*! ESPI_CH0 - ESPI Channel 0 enable clear
+ *  0b0..No Effect
+ *  0b1..Clears the ENA0 Bit
+ */
+#define INPUTMUX_DMAC1_REQ_ENA0_CLR_ESPI_CH0(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA0_CLR_ESPI_CH0_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA0_CLR_ESPI_CH0_MASK)
+/*! @} */
+
+/*! @name DMAC1_REQ_ENA1_CLR - DMAC1 request enable clear 1 */
+/*! @{ */
+
+#define INPUTMUX_DMAC1_REQ_ENA1_CLR_ESPI_CH1_MASK (0x1U)
+#define INPUTMUX_DMAC1_REQ_ENA1_CLR_ESPI_CH1_SHIFT (0U)
+/*! ESPI_CH1 - ESPI Channel 1 enable clear
+ *  0b0..No Effect
+ *  0b1..Clears the ENA1 Bit
+ */
+#define INPUTMUX_DMAC1_REQ_ENA1_CLR_ESPI_CH1(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_REQ_ENA1_CLR_ESPI_CH1_SHIFT)) & INPUTMUX_DMAC1_REQ_ENA1_CLR_ESPI_CH1_MASK)
 /*! @} */
 
 /*! @name DMAC0_ITRIG_ENA0 - DMAC0 input trigger enable 0 */
@@ -3550,5 +3677,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* INPUTMUX_H_ */
+#endif  /* PERI_INPUTMUX_H_ */
 

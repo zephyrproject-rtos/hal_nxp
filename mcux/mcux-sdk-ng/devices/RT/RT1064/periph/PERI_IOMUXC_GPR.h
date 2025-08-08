@@ -9,14 +9,14 @@
 **                          MIMXRT1064DVL6A
 **                          MIMXRT1064DVL6B
 **
-**     Version:             rev. 1.3, 2021-08-10
-**     Build:               b240705
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250520
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IOMUXC_GPR
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,21 +33,24 @@
 **         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **     - rev. 1.3 (2021-08-10)
 **         Update header files to align with IMXRT1064RM Rev.2.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file IOMUXC_GPR.h
- * @version 1.3
- * @date 2021-08-10
+ * @file PERI_IOMUXC_GPR.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for IOMUXC_GPR
  *
  * CMSIS Peripheral Access Layer for IOMUXC_GPR
  */
 
-#if !defined(IOMUXC_GPR_H_)
-#define IOMUXC_GPR_H_                            /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_IOMUXC_GPR_H_)
+#define PERI_IOMUXC_GPR_H_                       /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT1064CVJ5A) || defined(CPU_MIMXRT1064CVJ5B) || defined(CPU_MIMXRT1064CVL5A) || defined(CPU_MIMXRT1064CVL5B) || defined(CPU_MIMXRT1064DVJ6A) || defined(CPU_MIMXRT1064DVJ6B) || defined(CPU_MIMXRT1064DVL6A) || defined(CPU_MIMXRT1064DVL6B))
 #include "MIMXRT1064_COMMON.h"
@@ -2506,5 +2509,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* IOMUXC_GPR_H_ */
+#endif  /* PERI_IOMUXC_GPR_H_ */
 

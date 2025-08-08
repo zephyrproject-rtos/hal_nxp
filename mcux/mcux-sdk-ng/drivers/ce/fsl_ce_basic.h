@@ -59,7 +59,7 @@ int CE_NullCmd();
  *
  * @return Return 0 if succeeded, otherwise return error code.
  */
-int CE_Copy(int *pDst, int *pSrc, const unsigned int N);
+int CE_Copy(int *pDst, int *pSrc, const int N);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2024 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -29,21 +29,28 @@ typedef uint8_t bool;
 
 /*! @name Timer utilities */
 /*! @{ */
+#if FSL_FEATURE_SOC_HAS_FPU
 /*! Macro to convert a microsecond period to raw count value */
-/* To avoid overflow, us is maximum to 42949us */
-#define USEC_TO_COUNT(us, clockFreqInHz) SDK_CovertUsToCount(us, clockFreqInHz)
-
+#define USEC_TO_COUNT(us, clockFreqInHz) ((float)clockFreqInHz * ((float))us / 1000000UL)
 /*! Macro to convert a raw count value to microsecond */
-/* To avoid overflow, count is maximum to 4294967 */
-#define COUNT_TO_USEC(count, clockFreqInHz) SDK_CovertCountToUs(count, clockFreqInHz)
-
+#define COUNT_TO_USEC(count, clockFreqInHz) ((float)count * 1000000UL / (float)clockFreqInHz)
 /*! Macro to convert a millisecond period to raw count value */
-/* To avoid overflow, ms is maximum to 42949ms */
-#define MSEC_TO_COUNT(ms, clockFreqInHz) SDK_CovertMsToCount(ms, clockFreqInHz)
-
+#define MSEC_TO_COUNT(ms, clockFreqInHz) ((float)clockFreqInHz * ((float))ms / 1000UL)
 /*! Macro to convert a raw count value to millisecond */
-/* To avoid overflow, count is maximum to 4294967 */
+#define COUNT_TO_MSEC(count, clockFreqInHz) ((float)count * 1000UL / (float)clockFreqInHz)
+
+#else
+/*! Macro to convert a microsecond period to raw count value */
+/* To avoid overflow, us is maximum to 4294us */
+#define USEC_TO_COUNT(us, clockFreqInHz) SDK_CovertUsToCount(us, clockFreqInHz)
+/*! Macro to convert a raw count value to microsecond */
+#define COUNT_TO_USEC(count, clockFreqInHz) SDK_CovertCountToUs(count, clockFreqInHz)
+/*! Macro to convert a millisecond period to raw count value */
+/* To avoid overflow, ms is maximum to 42949ms @ clockFreqInHz = 100MHz */
+#define MSEC_TO_COUNT(ms, clockFreqInHz) SDK_CovertMsToCount(ms, clockFreqInHz)
+/*! Macro to convert a raw count value to millisecond */
 #define COUNT_TO_MSEC(count, clockFreqInHz) SDK_CovertCountToMs(count, clockFreqInHz)
+#endif
 /*! @} */
 
 #define SDK_ISR_EXIT_BARRIER
