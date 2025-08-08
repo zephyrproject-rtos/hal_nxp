@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -60,6 +60,14 @@ status_t NETC_PortSetMII(NETC_ETH_LINK_Type *base,
                          netc_hw_mii_speed_t speed,
                          netc_hw_mii_duplex_t duplex)
 {
+#if (defined(FSL_FEATURE_NETC_HAS_ERRATA_052167) && FSL_FEATURE_NETC_HAS_ERRATA_052167)
+    /* ERR052167: Actual MAC Tx IPG is longer than configured when transmitting back-to-back packets in MII half duplex
+    mode by approximately 15 extra bytes. For example, when configured for IPG=12, the actual IPG will be
+    approximately 27. The net result is that maximum throughput will be reduced also in the absence of half-duplex
+    collision/retry events. When using MII protocol, using full-duplex mode is recommended instead of half-duplex. If
+    using MII half-duplex mode, additional bandwidth loss should be expected and accounted for due to extended IPG. */
+#endif
+
     uint32_t reg = base->PM0_IF_MODE;
 
     /* Set MAC interface mode */
@@ -99,12 +107,16 @@ status_t NETC_PortSetMII(NETC_ETH_LINK_Type *base,
             reg |= NETC_ETH_LINK_PM0_IF_MODE_HD(duplex != kNETC_MiiFullDuplex);
         }
     }
-    else /* kNETC_GmiiMode, force 1Gbps and full speed */
+    else if (miiMode == kNETC_GmiiMode) /* kNETC_GmiiMode, force 1Gbps and full speed */
     {
         if ((speed < kNETC_MiiSpeed1000M) || (duplex != kNETC_MiiFullDuplex))
         {
             return kStatus_InvalidArgument;
         }
+    }
+    else
+    {
+        /* Avoid MISRA 2012 rule 15.7 */
     }
     base->PM0_IF_MODE = reg;
     base->PM1_IF_MODE = reg;
@@ -179,9 +191,7 @@ status_t NETC_PortConfigEthMac(NETC_ETH_LINK_Type *base, const netc_port_ethmac_
     base->PM0_IF_MODE = reg;
     base->PM1_IF_MODE = reg;
 
-    base->MAC_MERGE_MMCSR = NETC_ETH_LINK_MAC_MERGE_MMCSR_VT(config->mergeVerifyTime) |
-                            NETC_ETH_LINK_MAC_MERGE_MMCSR_VDIS(!config->enMergeVerify) |
-                            NETC_ETH_LINK_MAC_MERGE_MMCSR_ME(config->preemptMode);
+    NETC_PortConfigEthMacPreemption(base, &config->PreemptionConfig);
 
 #if !(defined(FSL_FEATURE_NETC_HAS_ERRATA_051255) && FSL_FEATURE_NETC_HAS_ERRATA_051255)
     reg = NETC_ETH_LINK_PM0_SINGLE_STEP_CH(config->enChUpdate) |
@@ -212,8 +222,9 @@ status_t NETC_PortConfigEthMac(NETC_ETH_LINK_Type *base, const netc_port_ethmac_
     }
 
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051994) && FSL_FEATURE_NETC_HAS_ERRATA_051994
-    /* ERRATA051994: The NETC does not always obey the wakeup time in PMn_LPWAKETIMER. and as a result may transmit frames before the PHY
-       has woken up from low power state. Such frames would be lost. Disable autonomous low power idle on Tx in case this issue. */
+    /* ERRATA051994: The NETC does not always obey the wakeup time in PMn_LPWAKETIMER. and as a result may transmit
+       frames before the PHY has woken up from low power state. Such frames would be lost. Disable autonomous low power
+       idle on Tx in case this issue. */
     if (config->txSleepTimeCycleEEE != 0U)
     {
         return kStatus_NETC_Unsupported;
@@ -258,7 +269,10 @@ void NETC_ClearPortMacInterruptFlags(NETC_ETH_LINK_Type *base, netc_port_phy_mac
     }
 }
 
-void NETC_EnablePortMacInterrupts(NETC_ETH_LINK_Type *base, netc_port_phy_mac_type_t macType, uint32_t mask, bool enable)
+void NETC_EnablePortMacInterrupts(NETC_ETH_LINK_Type *base,
+                                  netc_port_phy_mac_type_t macType,
+                                  uint32_t mask,
+                                  bool enable)
 {
     if (macType == kNETC_ExpressMAC)
     {
@@ -376,7 +390,9 @@ void NETC_PortGetPhyMacTxStatistic(NETC_ETH_LINK_Type *base,
         /* ERRATA051711: MAC statistic counters TEOCT and TOCT are inaccurate after Pause frames are transmitted with
            flexible preamble enabled (PM0_TX_IPG_PREAMBLE[FLEX_PREAMBLE_EN] = 1) and flexible preamble count
            (PM0_TX_IPG_PREAMBLE[FLEX_PREAMBLE_CNT]) set to less than 7. */
-        uint32_t flexPreambleCnt = (base->PM0_TX_IPG_PREAMBLE & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_MASK) >> NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT;
+        uint32_t flexPreambleCnt =
+            (base->PM0_TX_IPG_PREAMBLE & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_MASK) >>
+            NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_CNT_SHIFT;
         if ((base->PM0_TX_IPG_PREAMBLE & NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK) != 0U)
         {
             statistic->totalOctet = base->PM0_TEOCTN - base->PM0_TXPFN * ((uint64_t)7U - flexPreambleCnt);
@@ -391,13 +407,14 @@ void NETC_PortGetPhyMacTxStatistic(NETC_ETH_LINK_Type *base,
         statistic->totalOctet = base->PM0_TEOCTN;
         statistic->validOctet = base->PM0_TOCTN;
 #endif
-        statistic->pauseFrame             = base->PM0_TXPFN;
+        statistic->pauseFrame = base->PM0_TXPFN;
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051710) && FSL_FEATURE_NETC_HAS_ERRATA_051710
-        /* ERRATA051710: After one or more late collision or excessive collision events, counters PMa_TOCTn and PMa_TFRMn will be higher than
-           expected. The accurate value cannot be recovered for PMa_TOCTn, but PMa_TRFMn can be recovered as follows formula. */
-        statistic->validFrame             = base->PM0_TFRMN - base->PM0_TLCOLN - base->PM0_TECOLN;
+        /* ERRATA051710: After one or more late collision or excessive collision events, counters PMa_TOCTn and
+           PMa_TFRMn will be higher than expected. The accurate value cannot be recovered for PMa_TOCTn, but PMa_TRFMn
+           can be recovered as follows formula. */
+        statistic->validFrame = base->PM0_TFRMN - base->PM0_TLCOLN - base->PM0_TECOLN;
 #else
-        statistic->validFrame             = base->PM0_TFRMN;
+        statistic->validFrame = base->PM0_TFRMN;
 #endif
         statistic->vlanFrame              = base->PM0_TVLANN;
         statistic->unicastFrame           = base->PM0_TUCAN;
@@ -415,15 +432,16 @@ void NETC_PortGetPhyMacTxStatistic(NETC_ETH_LINK_Type *base,
     }
     else if (macType == kNETC_PreemptableMAC)
     {
-        statistic->totalOctet             = base->PM1_TEOCTN;
-        statistic->validOctet             = base->PM1_TOCTN;
-        statistic->pauseFrame             = base->PM1_TXPFN;
+        statistic->totalOctet = base->PM1_TEOCTN;
+        statistic->validOctet = base->PM1_TOCTN;
+        statistic->pauseFrame = base->PM1_TXPFN;
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051710) && FSL_FEATURE_NETC_HAS_ERRATA_051710
-        /* ERRATA051710: After one or more late collision or excessive collision events, counters PMa_TOCTn and PMa_TFRMn will be higher than
-           expected. The accurate value cannot be recovered for PMa_TOCTn, but PMa_TRFMn can be recovered as follows formula. */
-        statistic->validFrame             = base->PM1_TFRMN - base->PM1_TLCOLN - base->PM1_TECOLN;
+        /* ERRATA051710: After one or more late collision or excessive collision events, counters PMa_TOCTn and
+           PMa_TFRMn will be higher than expected. The accurate value cannot be recovered for PMa_TOCTn, but PMa_TRFMn
+           can be recovered as follows formula. */
+        statistic->validFrame = base->PM1_TFRMN - base->PM1_TLCOLN - base->PM1_TECOLN;
 #else
-        statistic->validFrame             = base->PM1_TFRMN;
+        statistic->validFrame = base->PM1_TFRMN;
 #endif
         statistic->vlanFrame              = base->PM1_TVLANN;
         statistic->unicastFrame           = base->PM1_TUCAN;
@@ -479,7 +497,7 @@ void NETC_PortGetPhyMacRxStatistic(NETC_ETH_LINK_Type *base,
         statistic->total1523ToMaxBPacket  = base->PM0_R1523XN;
         statistic->controlPacket          = base->PM0_RCNPN;
 #if defined(NETC_ETH_LINK_PM0_RMIN63N_RMIN63n_MASK)
-        statistic->rxMinPacket            = base->PM0_RMIN63N;
+        statistic->rxMinPacket = base->PM0_RMIN63N;
 #endif
     }
     else if (macType == kNETC_PreemptableMAC)
@@ -502,7 +520,7 @@ void NETC_PortGetPhyMacRxStatistic(NETC_ETH_LINK_Type *base,
         statistic->total1523ToMaxBPacket  = base->PM1_R1523XN;
         statistic->controlPacket          = base->PM1_RCNPN;
 #if defined(NETC_ETH_LINK_PM1_RMIN63N_RMIN63n_MASK)
-        statistic->rxMinPacket            = base->PM1_RMIN63N;
+        statistic->rxMinPacket = base->PM1_RMIN63N;
 #endif
     }
     else
@@ -564,17 +582,17 @@ void NETC_PortGetPhyMacPreemptionStatistic(NETC_ETH_LINK_Type *base,
 {
     statistic->rxReassembledFrame = base->MAC_MERGE_MMFAOCR;
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051707) && FSL_FEATURE_NETC_HAS_ERRATA_051707
-    /* ERRATA051707: The host that is reading MAC_MERGE_MMFAECR register should check status of PM1_RFCS. If the PM1_RFCS indicates no
-       error then MAC_MERGE_MMFAECR is valid and can be used if on other hand there is an error reported in PM1_RFCS register
-       then MAC_MERGE_MMFAECR might be incorrect and should be treated accordingly. */
+    /* ERRATA051707: The host that is reading MAC_MERGE_MMFAECR register should check status of PM1_RFCS. If the
+       PM1_RFCS indicates no error then MAC_MERGE_MMFAECR is valid and can be used if on other hand there is an error
+       reported in PM1_RFCS register then MAC_MERGE_MMFAECR might be incorrect and should be treated accordingly. */
     statistic->rxReassembledError = (base->PM1_RFCSN == 0U) ? base->MAC_MERGE_MMFAECR : 0U;
 #else
     statistic->rxReassembledError = base->MAC_MERGE_MMFAECR;
 #endif
-    statistic->rxMPacket          = base->MAC_MERGE_MMFCRXR;
-    statistic->rxSMDError         = base->MAC_MERGE_MMFSECR;
-    statistic->txPreemptionReq    = base->MAC_MERGE_MMHCR;
-    statistic->txMPacket          = base->MAC_MERGE_MMFCTXR;
+    statistic->rxMPacket       = base->MAC_MERGE_MMFCRXR;
+    statistic->rxSMDError      = base->MAC_MERGE_MMFSECR;
+    statistic->txPreemptionReq = base->MAC_MERGE_MMHCR;
+    statistic->txMPacket       = base->MAC_MERGE_MMFCTXR;
 }
 
 #if !(defined(FSL_FEATURE_NETC_HAS_NO_SWITCH) && FSL_FEATURE_NETC_HAS_NO_SWITCH)
@@ -612,14 +630,16 @@ status_t NETC_PortConfigTxIpgPreamble(NETC_ETH_LINK_Type *base, uint8_t preamble
     assert((preambleCnt >= 1U) && (preambleCnt <= 7U));
     assert((ipgLen >= 4U) && (ipgLen <= 24U));
 #if (defined(FSL_FEATURE_NETC_HAS_ERRATA_052129) && FSL_FEATURE_NETC_HAS_ERRATA_052129)
-    /* ERR052129: The receiving NETC MAC cannot reliably detect the frame when IPG length and flexiable preamble are set to the minimum value.
-       As a result, frames may be lost, or partially received with a CRC error (e.g. if there is a data octet later in the frame that matches SFD).
-       When connecting NETC MAC to NETC MAC, for IPG_LEN=4, the minimum supported preamble is 2 bytes. When connecting NETC MAC to another device
-       that supports shorter-than standard IPG and preamble, ensure that the minimum IPG + preamble is 6 octets. */
+    /* ERR052129: The receiving NETC MAC cannot reliably detect the frame when IPG length and flexiable preamble are set
+       to the minimum value. As a result, frames may be lost, or partially received with a CRC error (e.g. if there is a
+       data octet later in the frame that matches SFD). When connecting NETC MAC to NETC MAC, for IPG_LEN=4, the minimum
+       supported preamble is 2 bytes. When connecting NETC MAC to another device that supports shorter-than standard IPG
+       and preamble, ensure that the minimum IPG + preamble is 6 octets. */
     assert((ipgLen + preambleCnt) >= 6U);
 #endif
 
-#if defined(NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK) && defined(NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK)
+#if defined(NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK) && \
+    defined(NETC_ETH_LINK_PM1_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN_MASK)
     bool enable = (preambleCnt < 7U) ? true : false;
 
     base->PM0_TX_IPG_PREAMBLE = NETC_ETH_LINK_PM0_TX_IPG_PREAMBLE_FLEX_PREAMBLE_EN(enable) |
