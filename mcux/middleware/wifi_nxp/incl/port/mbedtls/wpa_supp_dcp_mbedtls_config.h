@@ -3782,6 +3782,10 @@
 #define PSA_WANT_ALG_SHA_256                    1
 #define PSA_WANT_ALG_SHA_384                    1
 #define PSA_WANT_ALG_SHA_512                    1
+#define PSA_WANT_ALG_HKDF_EXTRACT               1
+#define PSA_WANT_ALG_HKDF_EXPAND                1
+#define MBEDTLS_PSA_BUILTIN_ALG_HKDF_EXTRACT    1
+#define MBEDTLS_PSA_BUILTIN_ALG_HKDF_EXPAND     1
 //#define PSA_WANT_ALG_STREAM_CIPHER              1
 #define PSA_WANT_ALG_TLS12_PRF                  1
 #define PSA_WANT_ALG_TLS12_PSK_TO_MS            1
