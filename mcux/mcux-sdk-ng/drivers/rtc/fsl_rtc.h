@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 3, 3)) /*!< Version 2.3.3 */
+#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version 2.4.0 */
 /*! @} */
 
 /*! @brief List of RTC interrupts */
@@ -86,8 +86,24 @@ typedef enum _rtc_osc_cap_load
     kRTC_Capacitor_8p  = RTC_CR_SC8P_MASK, /*!< 8 pF capacitor load */
     kRTC_Capacitor_16p = RTC_CR_SC16P_MASK /*!< 16 pF capacitor load */
 } rtc_osc_cap_load_t;
-
 #endif /* FSL_FEATURE_SCG_HAS_OSC_SCXP */
+
+#if defined(FSL_FEATURE_RTC_HAS_TSIC) && FSL_FEATURE_RTC_HAS_TSIC
+
+/*! @brief List of RTC Timer Seconds Interrupt Frequencies */
+typedef enum _rtc_timer_seconds_interrupt_frequency
+{
+    kRTC_TimerSecondsFrequency1Hz = 0U,   /*!< Timer seconds frequency is 1Hz */
+    kRTC_TimerSecondsFrequency2Hz = 1U,   /*!< Timer seconds frequency is 2Hz */
+    kRTC_TimerSecondsFrequency4Hz = 2U,   /*!< Timer seconds frequency is 4Hz */
+    kRTC_TimerSecondsFrequency8Hz = 3U,   /*!< Timer seconds frequency is 8Hz */
+    kRTC_TimerSecondsFrequency16Hz = 4U,  /*!< Timer seconds frequency is 16Hz */
+    kRTC_TimerSecondsFrequency32Hz = 5U,  /*!< Timer seconds frequency is 32Hz */
+    kRTC_TimerSecondsFrequency64Hz = 6U,  /*!< Timer seconds frequency is 64Hz */
+    kRTC_TimerSecondsFrequency128Hz = 7U  /*!< Timer seconds frequency is 128Hz */
+} rtc_timer_seconds_interrupt_frequency_t;
+
+#endif /* FSL_FEATURE_RTC_HAS_TSIC */
 
 /*! @brief Structure is used to hold the date and time */
 typedef struct _rtc_datetime
@@ -132,6 +148,11 @@ typedef struct _rtc_pin_config
  */
 typedef struct _rtc_config
 {
+#if !(defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT == 0)
+    bool clockOutput;              /*!< true: The 32 kHz clock is not output to other
+                                      peripherals;  false: The 32 kHz clock is output to other
+                                      peripherals */
+#endif                             /* FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT */
     bool wakeupSelect;             /*!< true: Wakeup pin outputs the 32 KHz clock;
                                         false:Wakeup pin used to wakeup the chip  */
     bool updateMode;               /*!< true: Registers can be written even when locked under certain
@@ -190,6 +211,7 @@ static inline void RTC_Deinit(RTC_Type *base)
  *
  * The default values are as follows.
  * @code
+ *    config->clockOutput = false;
  *    config->wakeupSelect = false;
  *    config->updateMode = false;
  *    config->supervisorAccess = false;
@@ -540,6 +562,43 @@ static inline void RTC_EnableWakeUpPin(RTC_Type *base, bool enable)
     }
 }
 #endif
+
+#if !(defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT == 0)
+/*!
+ * @brief Enables or disables the RTC 32 kHz clock output.
+ *
+ * This function enables or disables the RTC 32 kHz clock output.
+ *
+ * @param base RTC_Type base pointer.
+ * @param enable true to enable, false to disable.
+ */
+static inline void RTC_EnableClockOutput(RTC_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CR |= RTC_CR_CLKO_MASK;
+    }
+    else
+    {
+        base->CR &= ~RTC_CR_CLKO_MASK;
+    }
+}
+#endif /* FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT */
+
+#if defined(FSL_FEATURE_RTC_HAS_TSIC) && FSL_FEATURE_RTC_HAS_TSIC
+
+/*!
+ * @brief Sets the RTC timer seconds interrupt frequency.
+ *
+ * This function sets the RTC timer seconds interrupt frequency.
+ *
+ * @param base   RTC peripheral base address
+ * @param freq   The timer seconds interrupt frequency. This is a member of the
+ *               enumeration ::rtc_timer_seconds_interrupt_frequency_t
+ */
+void RTC_SetTimerSecondsInterruptFrequency(RTC_Type *base, rtc_timer_seconds_interrupt_frequency_t freq);
+
+#endif /* FSL_FEATURE_RTC_HAS_TSIC */
 
 #if defined(__cplusplus)
 }
