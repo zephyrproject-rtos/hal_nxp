@@ -14,8 +14,8 @@
 	(((offset) & 0xFFF) << 20) |		\
 	(((mux) & 0xF) << 0))
 
-#define PMIC_I2C_SCL IOPCTL_MUX(1, 150, 0) /* PIO0_0 */
-#define PMIC_I2C_SDA IOPCTL_MUX(1, 151, 0) /* PIO0_0 */
+#define PMIC_I2C_SCL IOPCTL_MUX(1, 97, 0) /* PIO0_0 */
+#define PMIC_I2C_SDA IOPCTL_MUX(1, 96, 0) /* PIO0_0 */
 #define CTIMER0_CAPTURE0_PIO0_0 IOPCTL_MUX(0, 0, 4) /* PIO0_0 */
 #define CTIMER0_CAPTURE1_PIO0_0 IOPCTL_MUX(0, 0, 4) /* PIO0_0 */
 #define CTIMER0_CAPTURE2_PIO0_0 IOPCTL_MUX(0, 0, 4) /* PIO0_0 */
