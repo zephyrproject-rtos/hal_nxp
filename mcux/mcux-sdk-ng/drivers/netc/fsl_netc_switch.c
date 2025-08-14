@@ -47,7 +47,7 @@ static void SWT_GetBaseResource(swt_handle_t *handle, netc_hw_switch_idx_t sw)
         handle->hw.ports[i].eth = (NETC_ETH_LINK_Type *)((uintptr_t)handle->hw.ports[i].port + 0x1000U);
     }
     handle->hw.msixTable =
-        (netc_msix_entry_t *)((uint32_t)FSL_FEATURE_NETC_MSIX_TABLE_BASE +
+        (netc_msix_entry_t *)((uintptr_t)FSL_FEATURE_NETC_MSIX_TABLE_BASE +
                               NETC_MSIX_TABLE_OFFSET * (NETC_SOC_SWT_MSI_FUNC_OFFSET + (uint32_t)sw));
 }
 
