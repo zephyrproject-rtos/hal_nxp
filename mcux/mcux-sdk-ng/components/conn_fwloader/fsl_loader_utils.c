@@ -127,10 +127,10 @@ static void sb3_DelayUs(uint32_t us)
     sb3_Delay((instNum + 2U) / 3U);
 }
 
-static uint32_t _ActiveApplicationRemapOffset(void)
-{
-    return (MFLASH_FLEXSPI->HADDROFFSET);
-}
+//static uint32_t _ActiveApplicationRemapOffset(void)
+//{
+//    return (MFLASH_FLEXSPI->HADDROFFSET);
+//}
 ////////////////////////////////////////////////////////////////////////////
 //! @brief power on device implementation
 ////////////////////////////////////////////////////////////////////////////
@@ -267,7 +267,7 @@ status_t sb3_fw_download_impl(LOAD_Target_Type loadTarget, uint32_t flag, uint32
 {
     volatile uint32_t *magic_pattern_addr = NULL;
     status_t status                       = kStatus_Fail;
-    int wait_count                        = 200;
+    int wait_count                        = 500;
     uint8_t target_type                   = ((uint8_t)loadTarget & ~0x80);
 
     if ((g_bootloaderTree_v1 == NULL) && ((get_chip_revision() == 1U) || (get_chip_revision() == 2U)))
@@ -920,7 +920,7 @@ static status_t fsl_sbloader_pump(fsl_api_core_context_t *ctx, uint8_t *data, ui
 
 ////////////////////////////////////////////////////////////////////////////
 //! @brief Read flash area loading to RAM buffer.
-// Direct read from flash is not allowed when remapping is active.
+//
 // buf             : pointer to RAM buffer, its size must be sufficient to receive
 //                   the required number of bytes.
 // src_flash_offset: 'virtual' address in flash relative to start of flash storage.
@@ -929,32 +929,9 @@ static status_t fsl_sbloader_pump(fsl_api_core_context_t *ctx, uint8_t *data, ui
 ////////////////////////////////////////////////////////////////////////////
 static status_t ldr_ReadFromFlash(uint8_t * buf, uint32_t src_flash_offset, size_t read_sz)
 {
-    status_t st;
-    static const uint32_t mflash_base = (1u << 27);
-    uint32_t remap_offset = _ActiveApplicationRemapOffset();
-    if (remap_offset == 0U)
-    {
-        memcpy(buf, (void*)src_flash_offset, read_sz);
-        st = kStatus_Success;
-    }
-    else
-    {
-        // similar to mflash_drv_log2phys
-        uint32_t phys_offset = (src_flash_offset + remap_offset) & ~mflash_base;
-        st = mflash_drv_read(phys_offset, (uint32_t *)buf, read_sz);
-    }
-    return st;
-}
-
-////////////////////////////////////////////////////////////////////////////
-//! @brief Read SB3 area descriptor.
-// Direct read from flash is not allowed when remapping is active.
-// hdr       : pointer to RAM fsl_nboot_sb3_header_t structure.
-// sourceAddr: 'virtual' address where SB3 header is expected.
-////////////////////////////////////////////////////////////////////////////
-status_t read_nboot_sb3_header(fsl_nboot_sb3_header_t * hdr, uint32_t sourceAddr)
-{
-   return ldr_ReadFromFlash((uint8_t*)hdr, sourceAddr, sizeof(fsl_nboot_sb3_header_t));
+    /* When running from the remapped slot, using memcpy is valid, as long as accesses are not done in the overlaid region */
+    memcpy(buf, (void*)src_flash_offset, read_sz);
+    return kStatus_Success;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1113,11 +1090,11 @@ static status_t loader_process_raw_file(uint32_t readOffset)
     uint32_t total_raw_size = 0;
 
 #ifdef CONFIG_FW_VDLLV2
-    if ((*((uint32_t*)data_ptr) == LOADER_RAW_BINARY_FORMAT) && (*((uint32_t*)(data_ptr + 4)) == LOADER_VDLL_RAW_BINARY_FORMAT))
+    if ((*((volatile uint32_t*)data_ptr) == LOADER_RAW_BINARY_FORMAT) && (*((volatile uint32_t*)(data_ptr + 4)) == LOADER_VDLL_RAW_BINARY_FORMAT))
     {
         src_addr  = data_ptr + 16;
-        dst_addr  = (uint8_t *)(*((uint32_t*)(data_ptr + 8)));
-        code_size = *((uint32_t*)(data_ptr + 12));
+        dst_addr  = (uint8_t *)(*((volatile uint32_t*)(data_ptr + 8)));
+        code_size = *((volatile uint32_t*)(data_ptr + 12));
         (void)memcpy(dst_addr, src_addr, code_size);
         status = kStatus_Success;
     }
@@ -1126,14 +1103,14 @@ static status_t loader_process_raw_file(uint32_t readOffset)
     {
         do
         {
-	    if(*((uint32_t*)data_ptr) != LOADER_RAW_BINARY_FORMAT)
-	    {
+            if(*((volatile uint32_t*)data_ptr) != LOADER_RAW_BINARY_FORMAT)
+            {
                 break;
-	    }
+            }
 
             src_addr  = data_ptr + 16;
-            dst_addr  = (uint8_t *)(*((uint32_t*)(data_ptr + 8)));
-            code_size = *((uint32_t*)(data_ptr + 12));
+            dst_addr  = (uint8_t *)(*((volatile uint32_t*)(data_ptr + 8)));
+            code_size = *((volatile uint32_t*)(data_ptr + 12));
             // Check for raw ending segment
             if ((uint32_t)src_addr == 0xffffffffU || (uint32_t)dst_addr == 0xffffffffU)
             {

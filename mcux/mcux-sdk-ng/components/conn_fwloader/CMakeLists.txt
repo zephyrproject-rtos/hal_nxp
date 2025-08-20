@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (CONFIG_MCUX_COMPONENT_driver.conn_fwloader)
@@ -14,7 +14,15 @@ if (CONFIG_MCUX_COMPONENT_driver.conn_fwloader)
                 nboot_hal.c
                 life_cycle.c
                 readme.txt
-                script/fw_bin2c_conv.py
+    )
+    mcux_add_include(
+        INCLUDES include
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_driver.conn_fwloader.fw_bin)
+    mcux_add_source(
+        SOURCES script/fw_bin2c_conv.py
                 fw_bin/rw61x_sb_wifi_a2.bin
                 fw_bin/rw61x_sb_ble_a2.bin
                 fw_bin/rw61x_sb_ble_15d4_combo_a2.bin
@@ -24,8 +32,7 @@ if (CONFIG_MCUX_COMPONENT_driver.conn_fwloader)
                 fw_bin/rw61x/rw61x_cpu2.c
     )
     mcux_add_include(
-        INCLUDES include
-                 fw_bin
+        INCLUDES fw_bin
                  fw_bin/inc
                  fw_bin/rw61x
                  fw_bin/script

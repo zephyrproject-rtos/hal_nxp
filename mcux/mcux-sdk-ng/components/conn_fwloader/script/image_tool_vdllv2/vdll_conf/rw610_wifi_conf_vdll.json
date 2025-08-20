@@ -1,8 +1,0 @@
-{
-	"fw_elf": "./rw610w.axf",
-	"image_type_raw": true,
-	"image_partition_a": true,
-	"target_cpu1": true,
-	"target_ble": false,
-	"sb3_config": "./image_tool/elftosb/rw610_cpu1_sb.json"
-}
