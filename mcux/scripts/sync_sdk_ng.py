@@ -51,7 +51,6 @@ def copy_filtered_files(src_dir, dest_dir, file_pattern="*", dir_ignore_func=Non
                 
             shutil.copy2(src_file, dest_file)
 
-# 特定模块的拷贝函数
 def copy_arch(src_sdk, dest_root):
     print("Copying arch...")
     arch_dirs = {
@@ -85,8 +84,7 @@ def copy_drivers(src_sdk, dest_root):
     if not os.path.exists(src_dir):
         print(f"  Warning: Drivers source not found - {src_dir}")
         return
-    
-    # 文件忽略规则
+
     def ignore_file(filename, _):
         return filename.endswith('template') or filename == 'template.readme'
         
@@ -159,165 +157,6 @@ def copy_cmake_extension(src_sdk, dest_root):
         else:
             print(f"  Warning: CMake file not found - {src_file}")
 
-def copy_boards(src_sdk, dest_root):
-    print("Copying boards...")
-    board_map = [
-        {
-            "src_path": "evkbimxrt1050", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkbimxrt1050"
-        },
-        {
-            "src_path": "evkbmimxrt1060", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkbmimxrt1060"
-        },
-        {
-            "src_path": "evkbmimxrt1170", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h", "xmcd.c", "xmcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkbmimxrt1170"
-        },
-        {
-            "src_path": "evkcmimxrt1060", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["xip"],
-            "dest": "evkcmimxrt1060"
-        },
-        {
-            "src_path": "evkmimxrt595", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["flash_config"],
-            "dest": "evkmimxrt595"
-        },
-        {
-            "src_path": "evkmimxrt685", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["flash_config"],
-            "dest": "evkmimxrt685"
-        },
-        {
-            "src_path": "evkmimxrt1010", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1010"
-        },
-        {
-            "src_path": "evkmimxrt1015", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1015"
-        },
-        {
-            "src_path": "evkmimxrt1020", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1020"
-        },
-        {
-            "src_path": "evkmimxrt1024", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1024"
-        },
-        {
-            "src_path": "evkmimxrt1040", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1040"
-        },
-        {
-            "src_path": "evkmimxrt1060", 
-            "src_dir": os.path.join(src_sdk, "examples_int", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1060"
-        },
-        {
-            "src_path": "evkmimxrt1064", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1064"
-        },
-        {
-            "src_path": "evkmimxrt1160", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "files": ["dcd.c", "dcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1160"
-        },
-        {
-            "src_path": "evkmimxrt1170", 
-            "src_dir": os.path.join(src_sdk, "examples_int", "_boards"),
-            "files": ["dcd.c", "dcd.h", "xmcd.c", "xmcd.h"],
-            "dirs": ["xip"],
-            "dest": "evkmimxrt1170"
-        },
-        {
-            "src_path": "evkmimxrt1180", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["xip", "jlinkscript"],
-            "dest": "evkmimxrt1180"
-        },
-        {
-            "src_path": "frdmmcxn947", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["xip"],
-            "dest": "frdmmcxn947"
-        },
-        {
-            "src_path": "mcxn9xxevk", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["xip"],
-            "dest": "mcxn9xxevk"
-        },
-        {
-            "src_path": "mimxrt700evk", 
-            "src_dir": os.path.join(src_sdk, "examples", "_boards"),
-            "dirs": ["flash_config"],
-            "dest": "mimxrt700evk"
-        },
-    ]
-    
-    boards_dir = os.path.join(dest_root, 'boards')
-    os.makedirs(boards_dir, exist_ok=True)
-    
-    for board_info in board_map:
-        base_src = board_info['src_dir']
-        src_path = os.path.join(base_src, board_info['src_path'])
-        dest_path = os.path.join(boards_dir, board_info['dest'])
-        
-        if not os.path.exists(src_path):
-            print(f"  Warning: Board source not found - {src_path}")
-            continue
-        
-        os.makedirs(dest_path, exist_ok=True)
-        
-        for file in board_info.get('files', []):
-            src_file = os.path.join(src_path, file)
-            if os.path.isfile(src_file) and is_non_empty_file(src_file):
-                dest_file = os.path.join(dest_path, file)
-                shutil.copy2(src_file, dest_file)
-            else:
-                print(f"  Warning: Board file not found - {src_file}")
-        
-        for dir in board_info.get('dirs', []):
-            src_dir = os.path.join(src_path, dir)
-            dest_dir = os.path.join(dest_path, dir)
-            if os.path.isdir(src_dir):
-                copy_filtered_files(src_dir, dest_dir, skip_empty=True)
-            else:
-                print(f"  Warning: Board directory not found - {src_dir}")
-
 def copy_device_family(family, src_sdk, dest_root):
     print(f"Copying devices: {family}...")
     src_dir = os.path.join(src_sdk, 'devices', family)
@@ -364,7 +203,7 @@ def main():
     parser = argparse.ArgumentParser(description='MCUx SDK SYNC TOOL')
     parser.add_argument('--mcuxsdk_dir', required=True, help='mcux sdk source dir')
     parser.add_argument('--copy_module', nargs='*', choices=[
-        'arch', 'drivers', 'boards', 'components',
+        'arch', 'drivers', 'components',
         'middleware/usb', 'devices/arch', 'devices/i.MX',
         'devices/Kinetis', 'devices/LPC', 'devices/MCX',
         'devices/RT', 'devices/Wireless', 'cmake_extension'
@@ -377,7 +216,7 @@ def main():
     os.makedirs(dest_root, exist_ok=True)
     
     all_modules = [
-        'arch', 'drivers', 'boards', 'components',
+        'arch', 'drivers', 'components',
         'middleware/usb', 'devices/arch', 'devices/i.MX',
         'devices/Kinetis', 'devices/LPC', 'devices/MCX',
         'devices/RT', 'devices/Wireless', 'cmake_extension'
@@ -389,7 +228,6 @@ def main():
     module_actions = {
         'arch': copy_arch,
         'drivers': copy_drivers,
-        'boards': copy_boards,
         'components': copy_components,
         'middleware/usb': copy_middleware_usb,
         'cmake_extension': copy_cmake_extension,
