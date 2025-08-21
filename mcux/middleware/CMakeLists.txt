@@ -12,6 +12,11 @@ if(CONFIG_BT OR CONFIG_NET_L2_OPENTHREAD OR CONFIG_IEEE802154)
         )
 
         zephyr_include_directories(
+            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/inc
+            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/inc/platform/mcxw716
+        )
+
+        zephyr_include_directories(
             ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/include
             ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/include/platform/kw45b41
             ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/include/environment/zephyr

@@ -1,8 +1,6 @@
 /*
  * Copyright (c) 2014-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
- * All rights reserved.
- *
+ * Copyright 2016-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -12,6 +10,8 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+
+#include "mcmgr_platform.h"
 
 /*!
  * @addtogroup mcmgr
@@ -66,7 +66,11 @@ typedef enum _mcmgr_core_type
     /*! @brief Cortex M7 */
     kMCMGR_CoreTypeCortexM7,
     /*! @brief Cortex M3 */
-    kMCMGR_CoreTypeCortexM3
+    kMCMGR_CoreTypeCortexM3,
+    /*! @brief Cortex M3 */
+    kMCMGR_CoreTypeDSPHifi1,
+    /*! @brief Cortex M3 */
+    kMCMGR_CoreTypeDSPHifi4
 } mcmgr_core_type_t;
 
 /*! @brief Enumeration that defines core. */
@@ -75,7 +79,10 @@ typedef enum _mcmgr_core
     /*! @brief Enum value for Core 0. */
     kMCMGR_Core0,
     /*! @brief Enum value for Core 1. */
-    kMCMGR_Core1
+    kMCMGR_Core1,
+    kMCMGR_Core2,
+    kMCMGR_Core3,
+    kMCMGR_Core_Num
 } mcmgr_core_t;
 
 /*! @brief Enumeration that defines start type. */
@@ -103,12 +110,42 @@ typedef enum _mcmgr_event_type_t
 } mcmgr_event_type_t;
 
 /*! @brief Type definition of event callback function pointer. */
-typedef void (*mcmgr_event_callback_t)(uint16_t data, void *context);
+typedef void (*mcmgr_event_callback_t)(mcmgr_core_t coreNum, uint16_t data, void *context);
 
 /*! @brief Set to 1 to enable exception handling. */
 #ifndef MCMGR_HANDLE_EXCEPTIONS
 #define MCMGR_HANDLE_EXCEPTIONS (0)
 #endif
+
+/*! @brief Set to 1 to enable deferred call in isr. */
+#ifndef MCMGR_DEFERRED_CALLBACK_ALLOWED
+#define MCMGR_DEFERRED_CALLBACK_ALLOWED (0)
+#endif
+
+/*!
+ * @brief Maximum polling iterations for MCMGR waiting loops
+ *
+ * This parameter defines the maximum number of iterations for any polling loop
+ * in the MCMGR code before timing out and returning an error.
+ *
+ * It applies to all waiting loops in MCMGR, such as waiting for a core to start,
+ * waiting for a response from another core, or waiting for a resource to become
+ * available.
+ *
+ * This is a count of loop iterations, not a time-based value.
+ *
+ * If defined as 0, polling loops will continue indefinitely until their exit condition
+ * is met, which could potentially cause the system to hang if a core becomes
+ * unresponsive.
+ */
+#ifndef MCMGR_BUSY_POLL_COUNT
+    #ifdef CONFIG_MCMGR_BUSY_POLL_COUNT
+        #define MCMGR_BUSY_POLL_COUNT CONFIG_MCMGR_BUSY_POLL_COUNT
+    #else
+        #define MCMGR_BUSY_POLL_COUNT 0U
+    #endif
+#endif
+
 /*!
  * @brief Version of MCMGR
  *
@@ -116,7 +153,7 @@ typedef void (*mcmgr_event_callback_t)(uint16_t data, void *context);
  */
 enum mcmgr_version_enum
 {
-    kMCMGR_Version = 0x00040105
+    kMCMGR_Version = 0x00050000
 };
 
 #if defined(__cplusplus)
@@ -164,11 +201,12 @@ mcmgr_status_t MCMGR_StartCore(mcmgr_core_t coreNum, void *bootAddress, uint32_t
  * This function read startup data provided by the master core.
  * Use only on the slave core during the startup.
  *
+ * @param[in] coreNum Enum of the core from which to get statup data.
  * @param[out] startupData Data to read by this function.
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
-mcmgr_status_t MCMGR_GetStartupData(uint32_t *startupData);
+mcmgr_status_t MCMGR_GetStartupData(mcmgr_core_t coreNum, uint32_t *startupData);
 
 /*!
  * @brief Stop a selected core
@@ -245,12 +283,13 @@ mcmgr_status_t MCMGR_RegisterEvent(mcmgr_event_type_t type, mcmgr_event_callback
  * This function triggers an event handler
  * on the remote core.
  *
+ * @param[in] coreNum Enum of core to be triggered.
  * @param[in] type Type of the event.
  * @param[in] eventData Data to send to remote core.
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
-mcmgr_status_t MCMGR_TriggerEvent(mcmgr_event_type_t type, uint16_t eventData);
+mcmgr_status_t MCMGR_TriggerEvent(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData);
 
 /*!
  * @brief Trigger event handler, force version
@@ -258,12 +297,25 @@ mcmgr_status_t MCMGR_TriggerEvent(mcmgr_event_type_t type, uint16_t eventData);
  * This function triggers an event handler
  * on the remote core, force version that does not check the consumption of previously sent data.
  *
+ * @param[in] coreNum Enum of core to be triggered.
  * @param[in] type Type of the event.
  * @param[in] eventData Data to send to remote core.
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
-mcmgr_status_t MCMGR_TriggerEventForce(mcmgr_event_type_t type, uint16_t eventData);
+mcmgr_status_t MCMGR_TriggerEventForce(mcmgr_core_t coreNum, mcmgr_event_type_t type, uint16_t eventData);
+
+/*!
+ * @brief Process RX data in deffered rx task.
+ *
+ * This function used to be called from the application specific deffered rx task to trigger rx data processing outside the interrupt context.
+ * The purpose is to make the interrupt service routine as short as possible, performing only really necessary steps
+ * in the interrupt context and defer the processing outside the interrupt context.
+ *
+ * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_NotImplemented when not supported.
+ */
+mcmgr_status_t MCMGR_ProcessDeferredRxIsr(void);
+
 
 #if defined(__cplusplus)
 }

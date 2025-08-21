@@ -136,6 +136,7 @@ static inline int32_t vring_size(uint32_t num, uint32_t align)
     size += sizeof(struct vring_avail) + (num * sizeof(uint16_t)) + sizeof(uint16_t);
     size = (size + align - 1UL) & ~(align - 1UL);
     size += sizeof(struct vring_used) + (num * sizeof(struct vring_used_elem)) + sizeof(uint16_t);
+
     return ((int32_t)size);
 }
 
@@ -158,7 +159,7 @@ static inline int32_t vring_need_event(uint16_t event_idx, uint16_t new_idx, uin
 {
     /* coco begin validated: This function does not need to be tested because it is not used in rpmsg_lite
      * implementation (only called from unused part of vq_ring_must_notify_host() ). */
-    if ((uint16_t)(new_idx - event_idx - 1U) < (uint16_t)(new_idx - old))
+    if (((uint16_t)new_idx - (uint16_t)event_idx - (uint16_t)1U) < ((uint16_t)new_idx - (uint16_t)old))
     {
         return 1;
     }

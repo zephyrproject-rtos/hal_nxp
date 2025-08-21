@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
- * All rights reserved.
+ * Copyright 2020-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -13,21 +12,17 @@
 
 #if defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 1U)
 #define IMU_LINK kIMU_LinkCpu1Cpu2
+#define MCMGR_BUILD_FOR_CORE_0
 #elif defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 2U)
 #define IMU_LINK kIMU_LinkCpu2Cpu1
+#define MCMGR_BUILD_FOR_CORE_1
+#else
+#error "Building for not supported platform!"
 #endif
-/* Count of cores in the system */
-#define MCMGR_CORECOUNT 2
-
-/* Count of memory regions in the system */
-#define MCMGR_MEMREGCOUNT 2
-
-/* MCMGR MU channel index - used for passing startupData */
-#define MCMGR_IMU_CHANNEL 1
 
 #define IMU_RX_ISR_Handler(x)    IMU_RX_ISR(x)
 #define IMU_RX_ISR(number)       MU_RxFullFlagISR
-#define mcmgr_mu_channel_handler IMU_RX_ISR_Handler(MCMGR_IMU_CHANNEL)
+#define mcmgr_imu_channel_handler IMU_RX_ISR_Handler(MCMGR_IMU_CHANNEL)
 
 __attribute__((weak)) void mcmgr_imu_remote_active_req(void){};
 __attribute__((weak)) void mcmgr_imu_remote_active_rel(void){};
@@ -59,7 +54,11 @@ mcmgr_status_t mcmgr_early_init_internal(mcmgr_core_t coreNum)
     }
 
     /* Trigger core up event here, core is starting! */
-    status = MCMGR_TriggerEvent(kMCMGR_RemoteCoreUpEvent, 0);
+#if (defined(MCMGR_BUILD_FOR_CORE_0))
+    status = MCMGR_TriggerEvent(kMCMGR_Core1, kMCMGR_RemoteCoreUpEvent, 0);
+#else
+    status = MCMGR_TriggerEvent(kMCMGR_Core0, kMCMGR_RemoteCoreUpEvent, 0);
+#endif
 
     mcmgr_imu_remote_active_rel();
 
@@ -131,7 +130,7 @@ mcmgr_status_t mcmgr_stop_core_internal(mcmgr_core_t coreNum)
         return kStatus_MCMGR_Error;
     }
     /* TODO IMU not supported */
-    return kStatus_MCMGR_Success;
+    return kStatus_MCMGR_NotImplemented;
 }
 
 mcmgr_status_t mcmgr_get_core_property_internal(mcmgr_core_t coreNum,
@@ -142,8 +141,11 @@ mcmgr_status_t mcmgr_get_core_property_internal(mcmgr_core_t coreNum,
     return kStatus_MCMGR_NotImplemented;
 }
 
-mcmgr_status_t mcmgr_trigger_event_internal(uint32_t remoteData, bool forcedWrite)
+mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remoteData, bool forcedWrite)
 {
+    (void)coreNum; /* Unused. IMU_LINK is making selections what core to trigger */
+    (void)forcedWrite;
+
     int32_t ret;
     mcmgr_status_t status = kStatus_MCMGR_Error;
 
@@ -175,7 +177,7 @@ mcmgr_status_t mcmgr_trigger_event_internal(uint32_t remoteData, bool forcedWrit
  *
  * This function is called when data from MU is received
  */
-void mcmgr_mu_channel_handler(void)
+void mcmgr_imu_channel_handler(mcmgr_core_t coreNum)
 {
     uint32_t data;
     uint16_t eventType;
@@ -187,7 +189,7 @@ void mcmgr_mu_channel_handler(void)
 
     /* Non-blocking version of the receive function needs to be called here to avoid
        deadlock in ISR. The RX register must contain the payload now because the RX flag/event
-       has been identified before reaching this point (mcmgr_mu_channel_handler function). */
+       has been identified before reaching this point (mcmgr_imu_channel_handler function). */
     receivedCount = IMU_TryReceiveMsgs(IMU_LINK, &data, 1, &needAckLock);
     if (receivedCount != 0)
     {
@@ -203,7 +205,7 @@ void mcmgr_mu_channel_handler(void)
                 if (MCMGR_eventTable[(mcmgr_event_type_t)eventType].callback != ((void *)0))
                 {
                     MCMGR_eventTable[(mcmgr_event_type_t)eventType].callback(
-                        eventData, MCMGR_eventTable[(mcmgr_event_type_t)eventType].callbackData);
+                        coreNum, eventData, MCMGR_eventTable[(mcmgr_event_type_t)eventType].callbackData);
                 }
             }
         }
@@ -212,14 +214,33 @@ void mcmgr_mu_channel_handler(void)
     mcmgr_imu_remote_active_rel();
 }
 
+mcmgr_status_t mcmgr_process_deferred_rx_isr_internal(void)
+{
+#if defined(MCMGR_BUILD_FOR_CORE_0)
+    MU_RxFullFlagISR(kMCMGR_Core1);
+#else
+    MU_RxFullFlagISR(kMCMGR_Core0);
+#endif
+    return kStatus_MCMGR_Success;
+}
+
 #if defined(MCMGR_HANDLE_EXCEPTIONS) && (MCMGR_HANDLE_EXCEPTIONS == 1)
 /* coco begin validated: reached after __coveragescanner_save() call becasue it is not possible to return from this ISR
  * and coverage data would not be stored */
 /* This overrides the weak DefaultISR implementation from startup file */
 void DefaultISR(void)
 {
+    mcmgr_core_t target_core;
     uint32_t exceptionNumber = __get_IPSR();
-    (void)MCMGR_TriggerEvent(kMCMGR_RemoteExceptionEvent, (uint16_t)exceptionNumber);
+
+    /* Select what core to trigger in case of exception */
+#if defined(MCMGR_BUILD_FOR_CORE_0)
+    target_core = kMCMGR_Core1;
+#else
+    target_core = kMCMGR_Core0;
+#endif
+
+    (void)MCMGR_TriggerEvent(target_core, kMCMGR_RemoteExceptionEvent, (uint16_t)exceptionNumber);
     for (;;)
     {
     } /* stop here */

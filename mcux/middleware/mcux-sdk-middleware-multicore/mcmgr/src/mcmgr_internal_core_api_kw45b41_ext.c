@@ -1,6 +1,5 @@
 /*
  * Copyright 2022 NXP
- * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,6 +23,8 @@
 
 mcmgr_status_t mcmgr_late_init_internal(mcmgr_core_t coreNum)
 {
+    (void)coreNum; /* Unused */
+
 #if defined(IMU_CPU_INDEX) && (IMU_CPU_INDEX == 1U)
     NVIC_SetPriority((IRQn_Type)RF_IMU0_IRQn, IMU_ISR_PRIORITY);
     NVIC_EnableIRQ((IRQn_Type)RF_IMU0_IRQn);
