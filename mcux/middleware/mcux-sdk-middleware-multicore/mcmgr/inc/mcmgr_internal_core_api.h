@@ -1,8 +1,6 @@
 /*
  * Copyright (c) 2014-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
- * All rights reserved.
- *
+ * Copyright 2016-2019, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -71,7 +69,7 @@ extern const mcmgr_system_info_t g_mcmgrSystem;
 /*!
  * @brief Array of mcmgr_event_t
  *
- * This array contains registred callbacks for event handling.
+ * This array contains registered callbacks for event handling.
  */
 extern mcmgr_event_t MCMGR_eventTable[];
 
@@ -163,7 +161,7 @@ mcmgr_status_t mcmgr_get_core_property_internal(mcmgr_core_t coreNum,
  *
  * @return kStatus_MCMGR_Success on success or kStatus_MCMGR_Error on failure.
  */
-mcmgr_status_t mcmgr_trigger_event_internal(uint32_t remoteData, bool forcedWrite);
+mcmgr_status_t mcmgr_trigger_event_internal(mcmgr_core_t coreNum, uint32_t remoteData, bool forcedWrite);
 
 /*!
  * @brief Internal platform-specific function to get current CPU core.
@@ -173,6 +171,9 @@ mcmgr_status_t mcmgr_trigger_event_internal(uint32_t remoteData, bool forcedWrit
  * @return Enum of current core.
  */
 mcmgr_core_t mcmgr_get_current_core_internal(void);
+
+mcmgr_status_t mcmgr_process_deferred_rx_isr_internal(void);
+
 
 /*! @} */
 

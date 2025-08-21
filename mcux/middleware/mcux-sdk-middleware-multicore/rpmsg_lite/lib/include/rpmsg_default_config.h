@@ -33,6 +33,11 @@
 #ifndef RPMSG_DEFAULT_CONFIG_H_
 #define RPMSG_DEFAULT_CONFIG_H_
 
+//! @def RL_USE_CUSTOM_CONFIG
+//!
+//! When set to 1, custom configuration from "rpmsg_config.h" is used.
+//! This allows applications to override the default configuration.
+//! The default value is 1 (custom configuration enabled).
 #define RL_USE_CUSTOM_CONFIG (1)
 
 #if RL_USE_CUSTOM_CONFIG
@@ -41,7 +46,7 @@
 
 /*!
  * @addtogroup config
- * @{
+ *
  * @file
  */
 
@@ -129,6 +134,16 @@
 #define RL_CLEAR_USED_BUFFERS (0)
 #endif
 
+//! @def RL_USE_DCACHE
+//!
+//! Memory cache management of shared memory.
+//! Use in case of data cache is enabled for shared memory.
+//! enabled/disabled.
+//! The default value is 0 (disabled).
+#ifndef RL_USE_DCACHE
+#define RL_USE_DCACHE (0)
+#endif
+
 //! @def RL_USE_MCMGR_IPC_ISR_HANDLER
 //!
 //! When enabled IPC interrupts are managed by the Multicore Manager (IPC
@@ -181,6 +196,11 @@ static inline void RL_HANG(void)
 }
 /* coco end */
 
+//! @def RL_ASSERT_BOOL
+//!
+//! Boolean assertion macro used internally by RL_ASSERT.
+//! It checks if the boolean condition is true and calls RL_HANG() if not.
+
 //! @def RL_ASSERT
 //!
 //! Assert implementation.
@@ -196,6 +216,5 @@ static inline void RL_HANG(void)
 #define RL_ASSERT(x) RL_ASSERT_BOOL((int32_t)(x) != 0)
 
 #endif
-//@}
 
 #endif /* RPMSG_DEFAULT_CONFIG_H_ */

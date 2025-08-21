@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2024 NXP
+ * Copyright 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,7 +11,7 @@
 #include "virtio_ring.h"
 
 /*
- * No need to align the VRING as defined in Linux because kw45b41 is not intended
+ * No need to align the VRING as defined in Linux because mcxw71x is not intended
  * to run the Linux
  */
 #ifndef VRING_ALIGN
@@ -39,7 +39,7 @@
 #define RL_GET_LINK_ID(id)              (((id)&0xFFFFFFFEU) >> 1U)
 #define RL_GET_Q_ID(id)                 ((id)&0x1U)
 
-#define RL_PLATFORM_KW45B41_LINK_ID (0U)
+#define RL_PLATFORM_MCXW71X_LINK_ID   (0U)
 #define RL_PLATFORM_HIGHEST_LINK_ID (0U)
 
 typedef struct rpmsg_platform_shmem_config
