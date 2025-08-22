@@ -76,7 +76,7 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
                 dest = addr + FSL_MEM_M33_TCM_OFFSET;
             }
 #elif (__CORTEX_M == 7U)
-            if ((addr > FSL_MEM_M7_TCM_BEGIN) && (addr <= FSL_MEM_M7_TCM_END))
+            if ((addr >= FSL_MEM_M7_TCM_BEGIN) && (addr <= FSL_MEM_M7_TCM_END))
             {
                 dest = addr + FSL_MEM_M7_TCM_OFFSET;
             }

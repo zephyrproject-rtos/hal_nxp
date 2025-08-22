@@ -44,13 +44,13 @@
 **                          MIMX9596XVZXN_cm7
 **
 **     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Build:               b250106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WAKEUP_EIM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -147,6 +147,8 @@ typedef struct {
   __IO uint32_t EICHD4_WORD1;                      /**< Error Injection Channel Descriptor 4, Word1, offset: 0x204 */
        uint8_t RESERVED_4[60];
   __IO uint32_t EICHD5_WORD1;                      /**< Error Injection Channel Descriptor 5, Word1, offset: 0x244 */
+       uint8_t RESERVED_5[60];
+  __IO uint32_t EICHD6_WORD1;                      /**< Error Injection Channel Descriptor 6, Word1, offset: 0x284 */
 } WAKEUP_EIM_Type;
 
 /* ----------------------------------------------------------------------------
@@ -172,6 +174,14 @@ typedef struct {
 
 /*! @name EICHEN - Error Injection Channel Enable register */
 /*! @{ */
+
+#define WAKEUP_EIM_EICHEN_EICH6EN_MASK           (0x2000000U)
+#define WAKEUP_EIM_EICHEN_EICH6EN_SHIFT          (25U)
+/*! EICH6EN - Error Injection Channel 6 Enable
+ *  0b0..Error injection is disabled on Error Injection Channel 6
+ *  0b1..Error injection is enabled on Error Injection Channel 6
+ */
+#define WAKEUP_EIM_EICHEN_EICH6EN(x)             (((uint32_t)(((uint32_t)(x)) << WAKEUP_EIM_EICHEN_EICH6EN_SHIFT)) & WAKEUP_EIM_EICHEN_EICH6EN_MASK)
 
 #define WAKEUP_EIM_EICHEN_EICH5EN_MASK           (0x4000000U)
 #define WAKEUP_EIM_EICHEN_EICH5EN_SHIFT          (26U)
@@ -293,6 +303,15 @@ typedef struct {
 #define WAKEUP_EIM_EICHD5_WORD1_B0_3DATA_MASK_SHIFT (0U)
 /*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
 #define WAKEUP_EIM_EICHD5_WORD1_B0_3DATA_MASK(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_EIM_EICHD5_WORD1_B0_3DATA_MASK_SHIFT)) & WAKEUP_EIM_EICHD5_WORD1_B0_3DATA_MASK_MASK)
+/*! @} */
+
+/*! @name EICHD6_WORD1 - Error Injection Channel Descriptor 6, Word1 */
+/*! @{ */
+
+#define WAKEUP_EIM_EICHD6_WORD1_B0_3DATA_MASK_MASK (0xFFU)
+#define WAKEUP_EIM_EICHD6_WORD1_B0_3DATA_MASK_SHIFT (0U)
+/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+#define WAKEUP_EIM_EICHD6_WORD1_B0_3DATA_MASK(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_EIM_EICHD6_WORD1_B0_3DATA_MASK_SHIFT)) & WAKEUP_EIM_EICHD6_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
 

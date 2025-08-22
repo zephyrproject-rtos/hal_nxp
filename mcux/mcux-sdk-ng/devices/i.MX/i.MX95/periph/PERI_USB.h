@@ -1,56 +1,260 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9594AVZXN_ca55
+**     Processors:          MIMX9506AVZXN_ca55
+**                          MIMX9506AVZXN_cm33
+**                          MIMX9506AVZXN_cm7
+**                          MIMX9506XVZXN_ca55
+**                          MIMX9506XVZXN_cm33
+**                          MIMX9506XVZXN_cm7
+**                          MIMX9534AVZXN_ca55
+**                          MIMX9534AVZXN_cm33
+**                          MIMX9534AVZXN_cm7
+**                          MIMX9534CVTXN_ca55
+**                          MIMX9534CVTXN_cm33
+**                          MIMX9534CVTXN_cm7
+**                          MIMX9534CVZXN_ca55
+**                          MIMX9534CVZXN_cm33
+**                          MIMX9534CVZXN_cm7
+**                          MIMX9534DVTXN_ca55
+**                          MIMX9534DVTXN_cm33
+**                          MIMX9534DVTXN_cm7
+**                          MIMX9534DVZXN_ca55
+**                          MIMX9534DVZXN_cm33
+**                          MIMX9534DVZXN_cm7
+**                          MIMX9534XVTXN_ca55
+**                          MIMX9534XVTXN_cm33
+**                          MIMX9534XVTXN_cm7
+**                          MIMX9534XVZXN_ca55
+**                          MIMX9534XVZXN_cm33
+**                          MIMX9534XVZXN_cm7
+**                          MIMX9536AVZXN_ca55
+**                          MIMX9536AVZXN_cm33
+**                          MIMX9536AVZXN_cm7
+**                          MIMX9536CVTXN_ca55
+**                          MIMX9536CVTXN_cm33
+**                          MIMX9536CVTXN_cm7
+**                          MIMX9536CVZXN_ca55
+**                          MIMX9536CVZXN_cm33
+**                          MIMX9536CVZXN_cm7
+**                          MIMX9536DVTXN_ca55
+**                          MIMX9536DVTXN_cm33
+**                          MIMX9536DVTXN_cm7
+**                          MIMX9536DVZXN_ca55
+**                          MIMX9536DVZXN_cm33
+**                          MIMX9536DVZXN_cm7
+**                          MIMX9536DVZXQ_ca55
+**                          MIMX9536DVZXQ_cm33
+**                          MIMX9536DVZXQ_cm7
+**                          MIMX9536XVTXN_ca55
+**                          MIMX9536XVTXN_cm33
+**                          MIMX9536XVTXN_cm7
+**                          MIMX9536XVZXN_ca55
+**                          MIMX9536XVZXN_cm33
+**                          MIMX9536XVZXN_cm7
+**                          MIMX9546AVZXN_ca55
+**                          MIMX9546AVZXN_cm33
+**                          MIMX9546AVZXN_cm7
+**                          MIMX9546XVZXN_ca55
+**                          MIMX9546XVZXN_cm33
+**                          MIMX9546XVZXN_cm7
+**                          MIMX9554AVTXN_ca55
+**                          MIMX9554AVTXN_cm33
+**                          MIMX9554AVTXN_cm7
+**                          MIMX9554AVZXN_ca55
+**                          MIMX9554AVZXN_cm33
+**                          MIMX9554AVZXN_cm7
+**                          MIMX9554CVTXN_ca55
+**                          MIMX9554CVTXN_cm33
+**                          MIMX9554CVTXN_cm7
+**                          MIMX9554CVZXN_ca55
+**                          MIMX9554CVZXN_cm33
+**                          MIMX9554CVZXN_cm7
+**                          MIMX9554DVTXN_ca55
+**                          MIMX9554DVTXN_cm33
+**                          MIMX9554DVTXN_cm7
+**                          MIMX9554DVZXN_ca55
+**                          MIMX9554DVZXN_cm33
+**                          MIMX9554DVZXN_cm7
+**                          MIMX9554XVTXN_ca55
+**                          MIMX9554XVTXN_cm33
+**                          MIMX9554XVTXN_cm7
+**                          MIMX9554XVZXN_ca55
+**                          MIMX9554XVZXN_cm33
+**                          MIMX9554XVZXN_cm7
+**                          MIMX9556AVZXN_ca55
+**                          MIMX9556AVZXN_cm33
+**                          MIMX9556AVZXN_cm7
+**                          MIMX9556CVTXN_ca55
+**                          MIMX9556CVTXN_cm33
+**                          MIMX9556CVTXN_cm7
+**                          MIMX9556CVZXN_ca55
+**                          MIMX9556CVZXN_cm33
+**                          MIMX9556CVZXN_cm7
+**                          MIMX9556DVTXN_ca55
+**                          MIMX9556DVTXN_cm33
+**                          MIMX9556DVTXN_cm7
+**                          MIMX9556DVZXN_ca55
+**                          MIMX9556DVZXN_cm33
+**                          MIMX9556DVZXN_cm7
+**                          MIMX9556XVTXN_ca55
+**                          MIMX9556XVTXN_cm33
+**                          MIMX9556XVTXN_cm7
+**                          MIMX9556XVZXN_ca55
+**                          MIMX9556XVZXN_cm33
+**                          MIMX9556XVZXN_cm7
+**                          MIMX9574AVZXN_ca55
+**                          MIMX9574AVZXN_cm33
+**                          MIMX9574AVZXN_cm7
+**                          MIMX9574CVTXN_ca55
+**                          MIMX9574CVTXN_cm33
+**                          MIMX9574CVTXN_cm7
+**                          MIMX9574CVZXN_ca55
+**                          MIMX9574CVZXN_cm33
+**                          MIMX9574CVZXN_cm7
+**                          MIMX9574DVTXN_ca55
+**                          MIMX9574DVTXN_cm33
+**                          MIMX9574DVTXN_cm7
+**                          MIMX9574DVZXN_ca55
+**                          MIMX9574DVZXN_cm33
+**                          MIMX9574DVZXN_cm7
+**                          MIMX9574XVTXN_ca55
+**                          MIMX9574XVTXN_cm33
+**                          MIMX9574XVTXN_cm7
+**                          MIMX9574XVZXN_ca55
+**                          MIMX9574XVZXN_cm33
+**                          MIMX9574XVZXN_cm7
+**                          MIMX9576AVZXN_ca55
+**                          MIMX9576AVZXN_cm33
+**                          MIMX9576AVZXN_cm7
+**                          MIMX9576CVTXN_ca55
+**                          MIMX9576CVTXN_cm33
+**                          MIMX9576CVTXN_cm7
+**                          MIMX9576CVZXN_ca55
+**                          MIMX9576CVZXN_cm33
+**                          MIMX9576CVZXN_cm7
+**                          MIMX9576DVTXN_ca55
+**                          MIMX9576DVTXN_cm33
+**                          MIMX9576DVTXN_cm7
+**                          MIMX9576DVZXN_ca55
+**                          MIMX9576DVZXN_cm33
+**                          MIMX9576DVZXN_cm7
+**                          MIMX9576XVTXN_ca55
+**                          MIMX9576XVTXN_cm33
+**                          MIMX9576XVTXN_cm7
+**                          MIMX9576XVZXN_ca55
+**                          MIMX9576XVZXN_cm33
+**                          MIMX9576XVZXN_cm7
+**                          MIMX9586AVZXN_ca55
+**                          MIMX9586AVZXN_cm33
+**                          MIMX9586AVZXN_cm7
+**                          MIMX9586XVZXN_ca55
+**                          MIMX9586XVZXN_cm33
+**                          MIMX9586XVZXN_cm7
+**                          MIMX9594AVZXN_ca55
 **                          MIMX9594AVZXN_cm33
 **                          MIMX9594AVZXN_cm7
-**                          MIMX9596AVTXN_ca55
-**                          MIMX9596AVTXN_cm33
-**                          MIMX9596AVTXN_cm7
-**                          MIMX9596AVYXN_ca55
-**                          MIMX9596AVYXN_cm33
-**                          MIMX9596AVYXN_cm7
+**                          MIMX9594CVTXN_ca55
+**                          MIMX9594CVTXN_cm33
+**                          MIMX9594CVTXN_cm7
+**                          MIMX9594CVZXN_ca55
+**                          MIMX9594CVZXN_cm33
+**                          MIMX9594CVZXN_cm7
+**                          MIMX9594DVTXN_ca55
+**                          MIMX9594DVTXN_cm33
+**                          MIMX9594DVTXN_cm7
+**                          MIMX9594DVZXN_ca55
+**                          MIMX9594DVZXN_cm33
+**                          MIMX9594DVZXN_cm7
+**                          MIMX9594XVTXN_ca55
+**                          MIMX9594XVTXN_cm33
+**                          MIMX9594XVTXN_cm7
+**                          MIMX9594XVZXN_ca55
+**                          MIMX9594XVZXN_cm33
+**                          MIMX9594XVZXN_cm7
 **                          MIMX9596AVZXN_ca55
 **                          MIMX9596AVZXN_cm33
 **                          MIMX9596AVZXN_cm7
 **                          MIMX9596CVTXN_ca55
 **                          MIMX9596CVTXN_cm33
 **                          MIMX9596CVTXN_cm7
-**                          MIMX9596CVYXN_ca55
-**                          MIMX9596CVYXN_cm33
-**                          MIMX9596CVYXN_cm7
 **                          MIMX9596CVZXN_ca55
 **                          MIMX9596CVZXN_cm33
 **                          MIMX9596CVZXN_cm7
 **                          MIMX9596DVTXN_ca55
 **                          MIMX9596DVTXN_cm33
 **                          MIMX9596DVTXN_cm7
-**                          MIMX9596DVYXN_ca55
-**                          MIMX9596DVYXN_cm33
-**                          MIMX9596DVYXN_cm7
-**                          MIMX9596DVYXQ_ca55
-**                          MIMX9596DVYXQ_cm33
-**                          MIMX9596DVYXQ_cm7
 **                          MIMX9596DVZXN_ca55
 **                          MIMX9596DVZXN_cm33
 **                          MIMX9596DVZXN_cm7
+**                          MIMX9596DVZXQ_ca55
+**                          MIMX9596DVZXQ_cm33
+**                          MIMX9596DVZXQ_cm7
 **                          MIMX9596XVTXN_ca55
 **                          MIMX9596XVTXN_cm33
 **                          MIMX9596XVTXN_cm7
-**                          MIMX9596XVYXN_ca55
-**                          MIMX9596XVYXN_cm33
-**                          MIMX9596XVYXN_cm7
 **                          MIMX9596XVZXN_ca55
 **                          MIMX9596XVZXN_cm33
 **                          MIMX9596XVZXN_cm7
+**                          MIMX95N4AVTXN_ca55
+**                          MIMX95N4AVTXN_cm33
+**                          MIMX95N4AVTXN_cm7
+**                          MIMX95N4AVZXN_ca55
+**                          MIMX95N4AVZXN_cm33
+**                          MIMX95N4AVZXN_cm7
+**                          MIMX95N4CVTXN_ca55
+**                          MIMX95N4CVTXN_cm33
+**                          MIMX95N4CVTXN_cm7
+**                          MIMX95N4CVZXN_ca55
+**                          MIMX95N4CVZXN_cm33
+**                          MIMX95N4CVZXN_cm7
+**                          MIMX95N4DVTXN_ca55
+**                          MIMX95N4DVTXN_cm33
+**                          MIMX95N4DVTXN_cm7
+**                          MIMX95N4DVZXN_ca55
+**                          MIMX95N4DVZXN_cm33
+**                          MIMX95N4DVZXN_cm7
+**                          MIMX95N4XVTXN_ca55
+**                          MIMX95N4XVTXN_cm33
+**                          MIMX95N4XVTXN_cm7
+**                          MIMX95N4XVZXN_ca55
+**                          MIMX95N4XVZXN_cm33
+**                          MIMX95N4XVZXN_cm7
+**                          MIMX95N6AVTXN_ca55
+**                          MIMX95N6AVTXN_cm33
+**                          MIMX95N6AVTXN_cm7
+**                          MIMX95N6AVZXN_ca55
+**                          MIMX95N6AVZXN_cm33
+**                          MIMX95N6AVZXN_cm7
+**                          MIMX95N6CVTXN_ca55
+**                          MIMX95N6CVTXN_cm33
+**                          MIMX95N6CVTXN_cm7
+**                          MIMX95N6CVYXN_ca55
+**                          MIMX95N6CVYXN_cm33
+**                          MIMX95N6CVYXN_cm7
+**                          MIMX95N6CVZXN_ca55
+**                          MIMX95N6CVZXN_cm33
+**                          MIMX95N6CVZXN_cm7
+**                          MIMX95N6DVTXN_ca55
+**                          MIMX95N6DVTXN_cm33
+**                          MIMX95N6DVTXN_cm7
+**                          MIMX95N6DVZXN_ca55
+**                          MIMX95N6DVZXN_cm33
+**                          MIMX95N6DVZXN_cm7
+**                          MIMX95N6XVTXN_ca55
+**                          MIMX95N6XVTXN_cm33
+**                          MIMX95N6XVTXN_cm7
+**                          MIMX95N6XVZXN_ca55
+**                          MIMX95N6XVZXN_cm33
+**                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 1.0, 2023-01-10
-**     Build:               b240728
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250522
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -59,34 +263,103 @@
 **     Revisions:
 **     - rev. 1.0 (2023-01-10)
 **         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file USB.h
- * @version 1.0
- * @date 2023-01-10
+ * @file PERI_USB.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for USB
  *
  * CMSIS Peripheral Access Layer for USB
  */
 
-#if !defined(USB_H_)
-#define USB_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_USB_H_)
+#define PERI_USB_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMX9594AVZXN_ca55))
+#if (defined(CPU_MIMX9506AVZXN_ca55) || defined(CPU_MIMX9506XVZXN_ca55))
+#include "MIMX9506_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm33) || defined(CPU_MIMX9506XVZXN_cm33))
+#include "MIMX9506_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9506AVZXN_cm7) || defined(CPU_MIMX9506XVZXN_cm7))
+#include "MIMX9506_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_ca55) || defined(CPU_MIMX9534CVTXN_ca55) || defined(CPU_MIMX9534CVZXN_ca55) || defined(CPU_MIMX9534DVTXN_ca55) || defined(CPU_MIMX9534DVZXN_ca55) || defined(CPU_MIMX9534XVTXN_ca55) || defined(CPU_MIMX9534XVZXN_ca55))
+#include "MIMX9534_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm33) || defined(CPU_MIMX9534CVTXN_cm33) || defined(CPU_MIMX9534CVZXN_cm33) || defined(CPU_MIMX9534DVTXN_cm33) || defined(CPU_MIMX9534DVZXN_cm33) || defined(CPU_MIMX9534XVTXN_cm33) || defined(CPU_MIMX9534XVZXN_cm33))
+#include "MIMX9534_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9534AVZXN_cm7) || defined(CPU_MIMX9534CVTXN_cm7) || defined(CPU_MIMX9534CVZXN_cm7) || defined(CPU_MIMX9534DVTXN_cm7) || defined(CPU_MIMX9534DVZXN_cm7) || defined(CPU_MIMX9534XVTXN_cm7) || defined(CPU_MIMX9534XVZXN_cm7))
+#include "MIMX9534_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_ca55) || defined(CPU_MIMX9536CVTXN_ca55) || defined(CPU_MIMX9536CVZXN_ca55) || defined(CPU_MIMX9536DVTXN_ca55) || defined(CPU_MIMX9536DVZXN_ca55) || defined(CPU_MIMX9536DVZXQ_ca55) || defined(CPU_MIMX9536XVTXN_ca55) || defined(CPU_MIMX9536XVZXN_ca55))
+#include "MIMX9536_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm33) || defined(CPU_MIMX9536CVTXN_cm33) || defined(CPU_MIMX9536CVZXN_cm33) || defined(CPU_MIMX9536DVTXN_cm33) || defined(CPU_MIMX9536DVZXN_cm33) || defined(CPU_MIMX9536DVZXQ_cm33) || defined(CPU_MIMX9536XVTXN_cm33) || defined(CPU_MIMX9536XVZXN_cm33))
+#include "MIMX9536_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9536AVZXN_cm7) || defined(CPU_MIMX9536CVTXN_cm7) || defined(CPU_MIMX9536CVZXN_cm7) || defined(CPU_MIMX9536DVTXN_cm7) || defined(CPU_MIMX9536DVZXN_cm7) || defined(CPU_MIMX9536DVZXQ_cm7) || defined(CPU_MIMX9536XVTXN_cm7) || defined(CPU_MIMX9536XVZXN_cm7))
+#include "MIMX9536_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_ca55) || defined(CPU_MIMX9546XVZXN_ca55))
+#include "MIMX9546_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm33) || defined(CPU_MIMX9546XVZXN_cm33))
+#include "MIMX9546_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9546AVZXN_cm7) || defined(CPU_MIMX9546XVZXN_cm7))
+#include "MIMX9546_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_ca55) || defined(CPU_MIMX9554AVZXN_ca55) || defined(CPU_MIMX9554CVTXN_ca55) || defined(CPU_MIMX9554CVZXN_ca55) || defined(CPU_MIMX9554DVTXN_ca55) || defined(CPU_MIMX9554DVZXN_ca55) || defined(CPU_MIMX9554XVTXN_ca55) || defined(CPU_MIMX9554XVZXN_ca55))
+#include "MIMX9554_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm33) || defined(CPU_MIMX9554AVZXN_cm33) || defined(CPU_MIMX9554CVTXN_cm33) || defined(CPU_MIMX9554CVZXN_cm33) || defined(CPU_MIMX9554DVTXN_cm33) || defined(CPU_MIMX9554DVZXN_cm33) || defined(CPU_MIMX9554XVTXN_cm33) || defined(CPU_MIMX9554XVZXN_cm33))
+#include "MIMX9554_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9554AVTXN_cm7) || defined(CPU_MIMX9554AVZXN_cm7) || defined(CPU_MIMX9554CVTXN_cm7) || defined(CPU_MIMX9554CVZXN_cm7) || defined(CPU_MIMX9554DVTXN_cm7) || defined(CPU_MIMX9554DVZXN_cm7) || defined(CPU_MIMX9554XVTXN_cm7) || defined(CPU_MIMX9554XVZXN_cm7))
+#include "MIMX9554_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_ca55) || defined(CPU_MIMX9556CVTXN_ca55) || defined(CPU_MIMX9556CVZXN_ca55) || defined(CPU_MIMX9556DVTXN_ca55) || defined(CPU_MIMX9556DVZXN_ca55) || defined(CPU_MIMX9556XVTXN_ca55) || defined(CPU_MIMX9556XVZXN_ca55))
+#include "MIMX9556_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm33) || defined(CPU_MIMX9556CVTXN_cm33) || defined(CPU_MIMX9556CVZXN_cm33) || defined(CPU_MIMX9556DVTXN_cm33) || defined(CPU_MIMX9556DVZXN_cm33) || defined(CPU_MIMX9556XVTXN_cm33) || defined(CPU_MIMX9556XVZXN_cm33))
+#include "MIMX9556_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9556AVZXN_cm7) || defined(CPU_MIMX9556CVTXN_cm7) || defined(CPU_MIMX9556CVZXN_cm7) || defined(CPU_MIMX9556DVTXN_cm7) || defined(CPU_MIMX9556DVZXN_cm7) || defined(CPU_MIMX9556XVTXN_cm7) || defined(CPU_MIMX9556XVZXN_cm7))
+#include "MIMX9556_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_ca55) || defined(CPU_MIMX9574CVTXN_ca55) || defined(CPU_MIMX9574CVZXN_ca55) || defined(CPU_MIMX9574DVTXN_ca55) || defined(CPU_MIMX9574DVZXN_ca55) || defined(CPU_MIMX9574XVTXN_ca55) || defined(CPU_MIMX9574XVZXN_ca55))
+#include "MIMX9574_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm33) || defined(CPU_MIMX9574CVTXN_cm33) || defined(CPU_MIMX9574CVZXN_cm33) || defined(CPU_MIMX9574DVTXN_cm33) || defined(CPU_MIMX9574DVZXN_cm33) || defined(CPU_MIMX9574XVTXN_cm33) || defined(CPU_MIMX9574XVZXN_cm33))
+#include "MIMX9574_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9574AVZXN_cm7) || defined(CPU_MIMX9574CVTXN_cm7) || defined(CPU_MIMX9574CVZXN_cm7) || defined(CPU_MIMX9574DVTXN_cm7) || defined(CPU_MIMX9574DVZXN_cm7) || defined(CPU_MIMX9574XVTXN_cm7) || defined(CPU_MIMX9574XVZXN_cm7))
+#include "MIMX9574_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_ca55) || defined(CPU_MIMX9576CVTXN_ca55) || defined(CPU_MIMX9576CVZXN_ca55) || defined(CPU_MIMX9576DVTXN_ca55) || defined(CPU_MIMX9576DVZXN_ca55) || defined(CPU_MIMX9576XVTXN_ca55) || defined(CPU_MIMX9576XVZXN_ca55))
+#include "MIMX9576_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm33) || defined(CPU_MIMX9576CVTXN_cm33) || defined(CPU_MIMX9576CVZXN_cm33) || defined(CPU_MIMX9576DVTXN_cm33) || defined(CPU_MIMX9576DVZXN_cm33) || defined(CPU_MIMX9576XVTXN_cm33) || defined(CPU_MIMX9576XVZXN_cm33))
+#include "MIMX9576_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9576AVZXN_cm7) || defined(CPU_MIMX9576CVTXN_cm7) || defined(CPU_MIMX9576CVZXN_cm7) || defined(CPU_MIMX9576DVTXN_cm7) || defined(CPU_MIMX9576DVZXN_cm7) || defined(CPU_MIMX9576XVTXN_cm7) || defined(CPU_MIMX9576XVZXN_cm7))
+#include "MIMX9576_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_ca55) || defined(CPU_MIMX9586XVZXN_ca55))
+#include "MIMX9586_ca55_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm33) || defined(CPU_MIMX9586XVZXN_cm33))
+#include "MIMX9586_cm33_COMMON.h"
+#elif (defined(CPU_MIMX9586AVZXN_cm7) || defined(CPU_MIMX9586XVZXN_cm7))
+#include "MIMX9586_cm7_COMMON.h"
+#elif (defined(CPU_MIMX9594AVZXN_ca55) || defined(CPU_MIMX9594CVTXN_ca55) || defined(CPU_MIMX9594CVZXN_ca55) || defined(CPU_MIMX9594DVTXN_ca55) || defined(CPU_MIMX9594DVZXN_ca55) || defined(CPU_MIMX9594XVTXN_ca55) || defined(CPU_MIMX9594XVZXN_ca55))
 #include "MIMX9594_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm33))
+#elif (defined(CPU_MIMX9594AVZXN_cm33) || defined(CPU_MIMX9594CVTXN_cm33) || defined(CPU_MIMX9594CVZXN_cm33) || defined(CPU_MIMX9594DVTXN_cm33) || defined(CPU_MIMX9594DVZXN_cm33) || defined(CPU_MIMX9594XVTXN_cm33) || defined(CPU_MIMX9594XVZXN_cm33))
 #include "MIMX9594_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9594AVZXN_cm7))
+#elif (defined(CPU_MIMX9594AVZXN_cm7) || defined(CPU_MIMX9594CVTXN_cm7) || defined(CPU_MIMX9594CVZXN_cm7) || defined(CPU_MIMX9594DVTXN_cm7) || defined(CPU_MIMX9594DVZXN_cm7) || defined(CPU_MIMX9594XVTXN_cm7) || defined(CPU_MIMX9594XVZXN_cm7))
 #include "MIMX9594_cm7_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVYXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVYXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVYXN_ca55) || defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVYXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
+#elif (defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596CVTXN_ca55) || defined(CPU_MIMX9596CVZXN_ca55) || defined(CPU_MIMX9596DVTXN_ca55) || defined(CPU_MIMX9596DVZXN_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXN_ca55) || defined(CPU_MIMX9596XVZXN_ca55))
 #include "MIMX9596_ca55_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm33) || defined(CPU_MIMX9596AVYXN_cm33) || defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVYXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVYXN_cm33) || defined(CPU_MIMX9596DVYXQ_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVYXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
+#elif (defined(CPU_MIMX9596AVZXN_cm33) || defined(CPU_MIMX9596CVTXN_cm33) || defined(CPU_MIMX9596CVZXN_cm33) || defined(CPU_MIMX9596DVTXN_cm33) || defined(CPU_MIMX9596DVZXN_cm33) || defined(CPU_MIMX9596DVZXQ_cm33) || defined(CPU_MIMX9596XVTXN_cm33) || defined(CPU_MIMX9596XVZXN_cm33))
 #include "MIMX9596_cm33_COMMON.h"
-#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVYXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVYXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVYXN_cm7) || defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVYXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
+#elif (defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596CVTXN_cm7) || defined(CPU_MIMX9596CVZXN_cm7) || defined(CPU_MIMX9596DVTXN_cm7) || defined(CPU_MIMX9596DVZXN_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXN_cm7) || defined(CPU_MIMX9596XVZXN_cm7))
 #include "MIMX9596_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_ca55) || defined(CPU_MIMX95N4AVZXN_ca55) || defined(CPU_MIMX95N4CVTXN_ca55) || defined(CPU_MIMX95N4CVZXN_ca55) || defined(CPU_MIMX95N4DVTXN_ca55) || defined(CPU_MIMX95N4DVZXN_ca55) || defined(CPU_MIMX95N4XVTXN_ca55) || defined(CPU_MIMX95N4XVZXN_ca55))
+#include "MIMX95N4_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm33) || defined(CPU_MIMX95N4AVZXN_cm33) || defined(CPU_MIMX95N4CVTXN_cm33) || defined(CPU_MIMX95N4CVZXN_cm33) || defined(CPU_MIMX95N4DVTXN_cm33) || defined(CPU_MIMX95N4DVZXN_cm33) || defined(CPU_MIMX95N4XVTXN_cm33) || defined(CPU_MIMX95N4XVZXN_cm33))
+#include "MIMX95N4_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N4AVTXN_cm7) || defined(CPU_MIMX95N4AVZXN_cm7) || defined(CPU_MIMX95N4CVTXN_cm7) || defined(CPU_MIMX95N4CVZXN_cm7) || defined(CPU_MIMX95N4DVTXN_cm7) || defined(CPU_MIMX95N4DVZXN_cm7) || defined(CPU_MIMX95N4XVTXN_cm7) || defined(CPU_MIMX95N4XVZXN_cm7))
+#include "MIMX95N4_cm7_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_ca55) || defined(CPU_MIMX95N6AVZXN_ca55) || defined(CPU_MIMX95N6CVTXN_ca55) || defined(CPU_MIMX95N6CVYXN_ca55) || defined(CPU_MIMX95N6CVZXN_ca55) || defined(CPU_MIMX95N6DVTXN_ca55) || defined(CPU_MIMX95N6DVZXN_ca55) || defined(CPU_MIMX95N6XVTXN_ca55) || defined(CPU_MIMX95N6XVZXN_ca55))
+#include "MIMX95N6_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm33) || defined(CPU_MIMX95N6AVZXN_cm33) || defined(CPU_MIMX95N6CVTXN_cm33) || defined(CPU_MIMX95N6CVYXN_cm33) || defined(CPU_MIMX95N6CVZXN_cm33) || defined(CPU_MIMX95N6DVTXN_cm33) || defined(CPU_MIMX95N6DVZXN_cm33) || defined(CPU_MIMX95N6XVTXN_cm33) || defined(CPU_MIMX95N6XVZXN_cm33))
+#include "MIMX95N6_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95N6AVTXN_cm7) || defined(CPU_MIMX95N6AVZXN_cm7) || defined(CPU_MIMX95N6CVTXN_cm7) || defined(CPU_MIMX95N6CVYXN_cm7) || defined(CPU_MIMX95N6CVZXN_cm7) || defined(CPU_MIMX95N6DVTXN_cm7) || defined(CPU_MIMX95N6DVZXN_cm7) || defined(CPU_MIMX95N6XVTXN_cm7) || defined(CPU_MIMX95N6XVZXN_cm7))
+#include "MIMX95N6_cm7_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -141,11 +414,11 @@ typedef struct {
   __I  uint32_t HWTXBUF;                           /**< TX Buffer Hardware Parameters, offset: 0x10 */
   __I  uint32_t HWRXBUF;                           /**< RX Buffer Hardware Parameters, offset: 0x14 */
        uint8_t RESERVED_0[104];
-  __IO uint32_t GPTIMER0LD;                        /**< General Purpose Timer #0 Load, offset: 0x80 */
-  __IO uint32_t GPTIMER0CTRL;                      /**< General Purpose Timer #0 Controller, offset: 0x84 */
-  __IO uint32_t GPTIMER1LD;                        /**< General Purpose Timer #1 Load, offset: 0x88 */
-  __IO uint32_t GPTIMER1CTRL;                      /**< General Purpose Timer #1 Controller, offset: 0x8C */
-  __IO uint32_t SBUSCFG;                           /**< System Bus Config, offset: 0x90 */
+  __IO uint32_t GPTIMER0LD;                        /**< General Purpose Timer 0 Load, offset: 0x80 */
+  __IO uint32_t GPTIMER0CTRL;                      /**< General Purpose Timer 0 Controller, offset: 0x84 */
+  __IO uint32_t GPTIMER1LD;                        /**< General Purpose Timer 1 Load, offset: 0x88 */
+  __IO uint32_t GPTIMER1CTRL;                      /**< General Purpose Timer 1 Controller, offset: 0x8C */
+  __IO uint32_t SBUSCFG;                           /**< System Bus Configuration, offset: 0x90 */
        uint8_t RESERVED_1[108];
   __I  uint8_t CAPLENGTH;                          /**< Capability Registers Length, offset: 0x100 */
        uint8_t RESERVED_2[1];
@@ -167,7 +440,7 @@ typedef struct {
     __IO uint32_t PERIODICLISTBASE;                  /**< Frame List Base Address, offset: 0x154 */
   };
   union {                                          /* offset: 0x158 */
-    __IO uint32_t ASYNCLISTADDR;                     /**< Next Asynch. Address, offset: 0x158 */
+    __IO uint32_t ASYNCLISTADDR;                     /**< Next Asynchronous Address, offset: 0x158 */
     __IO uint32_t ENDPTLISTADDR;                     /**< Endpoint List Address, offset: 0x158 */
   };
        uint8_t RESERVED_7[4];
@@ -175,18 +448,18 @@ typedef struct {
   __IO uint32_t TXFILLTUNING;                      /**< TX FIFO Fill Tuning, offset: 0x164 */
        uint8_t RESERVED_8[16];
   __IO uint32_t ENDPTNAK;                          /**< Endpoint NAK, offset: 0x178 */
-  __IO uint32_t ENDPTNAKEN;                        /**< Endpoint NAK Enable, offset: 0x17C */
+  __IO uint32_t ENDPTNAKEN;                        /**< Endpoint NAK Indication Enable, offset: 0x17C */
   __I  uint32_t CONFIGFLAG;                        /**< Configure Flag, offset: 0x180 */
-  __IO uint32_t PORTSC1;                           /**< Port Status & Control, offset: 0x184 */
+  __IO uint32_t PORTSC1;                           /**< Port Status and Control, offset: 0x184 */
        uint8_t RESERVED_9[28];
-  __IO uint32_t OTGSC;                             /**< On-The-Go Status & control, offset: 0x1A4 */
+  __IO uint32_t OTGSC;                             /**< On-The-Go Status & Control, offset: 0x1A4 */
   __IO uint32_t USBMODE;                           /**< USB Device Mode, offset: 0x1A8 */
   __IO uint32_t ENDPTSETUPSTAT;                    /**< Endpoint Setup Status, offset: 0x1AC */
   __IO uint32_t ENDPTPRIME;                        /**< Endpoint Prime, offset: 0x1B0 */
   __IO uint32_t ENDPTFLUSH;                        /**< Endpoint Flush, offset: 0x1B4 */
   __I  uint32_t ENDPTSTAT;                         /**< Endpoint Status, offset: 0x1B8 */
   __IO uint32_t ENDPTCOMPLETE;                     /**< Endpoint Complete, offset: 0x1BC */
-  __IO uint32_t ENDPTCTRL0;                        /**< Endpoint Control0, offset: 0x1C0 */
+  __IO uint32_t ENDPTCTRL0;                        /**< Endpoint Control 0, offset: 0x1C0 */
   __IO uint32_t ENDPTCTRL[USB_ENDPTCTRL_COUNT];    /**< Endpoint Control 1..Endpoint Control 7, array offset: 0x1C4, array step: 0x4 */
 } USB_Type;
 
@@ -204,17 +477,17 @@ typedef struct {
 
 #define USB_ID_ID_MASK                           (0x3FU)
 #define USB_ID_ID_SHIFT                          (0U)
-/*! ID - ID */
+/*! ID - Configuration Number */
 #define USB_ID_ID(x)                             (((uint32_t)(((uint32_t)(x)) << USB_ID_ID_SHIFT)) & USB_ID_ID_MASK)
 
 #define USB_ID_NID_MASK                          (0x3F00U)
 #define USB_ID_NID_SHIFT                         (8U)
-/*! NID - NID */
+/*! NID - Complement Version */
 #define USB_ID_NID(x)                            (((uint32_t)(((uint32_t)(x)) << USB_ID_NID_SHIFT)) & USB_ID_NID_MASK)
 
 #define USB_ID_REVISION_MASK                     (0xFF0000U)
 #define USB_ID_REVISION_SHIFT                    (16U)
-/*! REVISION - REVISION */
+/*! REVISION - Revision Number */
 #define USB_ID_REVISION(x)                       (((uint32_t)(((uint32_t)(x)) << USB_ID_REVISION_SHIFT)) & USB_ID_REVISION_MASK)
 /*! @} */
 
@@ -223,29 +496,29 @@ typedef struct {
 
 #define USB_HWGENERAL_PHYW_MASK                  (0x30U)
 #define USB_HWGENERAL_PHYW_SHIFT                 (4U)
-/*! PHYW - PHYW
- *  0b00..8 bit wide data bus (Software non-programmable)
- *  0b01..16 bit wide data bus (Software non-programmable)
- *  0b10..Reset to 8 bit wide data bus (Software programmable)
- *  0b11..Reset to 16 bit wide data bus (Software programmable)
+/*! PHYW - PHY Width
+ *  0b00..8-bit wide data bus (software nonprogrammable)
+ *  0b01..16-bit wide data bus (software nonprogrammable)
+ *  0b10..Reset to 8-bit wide data bus (software programmable)
+ *  0b11..Reset to 16-bit wide data bus (software programmable)
  */
 #define USB_HWGENERAL_PHYW(x)                    (((uint32_t)(((uint32_t)(x)) << USB_HWGENERAL_PHYW_SHIFT)) & USB_HWGENERAL_PHYW_MASK)
 
 #define USB_HWGENERAL_PHYM_MASK                  (0x3C0U)
 #define USB_HWGENERAL_PHYM_SHIFT                 (6U)
-/*! PHYM - PHYM
+/*! PHYM - Transceiver Type
  *  0b0000..UTMI/UMTI+
  *  0b0001..ULPI DDR
  *  0b0010..ULPI
  *  0b0011..Serial only
- *  0b0100..Software programmable - reset to UTMI/UTMI+
- *  0b0101..Software programmable - reset to ULPI DDR
- *  0b0110..Software programmable - reset to ULPI
- *  0b0111..Software programmable - reset to serial
- *  0b1000..IC - USB
- *  0b1001..Software programmable - reset to IC - USB
+ *  0b0100..Software programmable: reset to UTMI/UTMI+
+ *  0b0101..Software programmable: reset to ULPI DDR
+ *  0b0110..Software programmable: reset to ULPI
+ *  0b0111..Software programmable: reset to serial
+ *  0b1000..IC-USB
+ *  0b1001..Software programmable: reset to IC-USB
  *  0b1010..HSIC
- *  0b1011..Software programmable - reset to HSIC
+ *  0b1011..Software programmable: reset to HSIC
  *  0b1100..Reserved
  *  0b1111..Reserved
  */
@@ -253,11 +526,11 @@ typedef struct {
 
 #define USB_HWGENERAL_SM_MASK                    (0xC00U)
 #define USB_HWGENERAL_SM_SHIFT                   (10U)
-/*! SM - SM
- *  0b00..No Serial Engine, always use parallel signalling.
- *  0b01..Serial Engine present, always use serial signalling for FS/LS.
- *  0b10..Software programmable - Reset to use parallel signalling for FS/LS
- *  0b11..Software programmable - Reset to use serial signalling for FS/LS
+/*! SM - Serial Interface Mode Capability
+ *  0b00..No serial engine; always use parallel signaling
+ *  0b01..Serial engine present; always use serial signaling for FS/LS
+ *  0b10..Software programmable; reset to use parallel signaling for FS/LS
+ *  0b11..Software programmable; reset to use serial signaling for FS/LS
  */
 #define USB_HWGENERAL_SM(x)                      (((uint32_t)(((uint32_t)(x)) << USB_HWGENERAL_SM_SHIFT)) & USB_HWGENERAL_SM_MASK)
 /*! @} */
@@ -267,15 +540,15 @@ typedef struct {
 
 #define USB_HWHOST_HC_MASK                       (0x1U)
 #define USB_HWHOST_HC_SHIFT                      (0U)
-/*! HC - HC
- *  0b1..Supported
+/*! HC - Host Capable
  *  0b0..Not supported
+ *  0b1..Supported
  */
 #define USB_HWHOST_HC(x)                         (((uint32_t)(((uint32_t)(x)) << USB_HWHOST_HC_SHIFT)) & USB_HWHOST_HC_MASK)
 
 #define USB_HWHOST_NPORT_MASK                    (0xEU)
 #define USB_HWHOST_NPORT_SHIFT                   (1U)
-/*! NPORT - NPORT */
+/*! NPORT - Number of Ports */
 #define USB_HWHOST_NPORT(x)                      (((uint32_t)(((uint32_t)(x)) << USB_HWHOST_NPORT_SHIFT)) & USB_HWHOST_NPORT_MASK)
 /*! @} */
 
@@ -284,15 +557,15 @@ typedef struct {
 
 #define USB_HWDEVICE_DC_MASK                     (0x1U)
 #define USB_HWDEVICE_DC_SHIFT                    (0U)
-/*! DC - DC
- *  0b1..Supported
+/*! DC - Device Capable
  *  0b0..Not supported
+ *  0b1..Supported
  */
 #define USB_HWDEVICE_DC(x)                       (((uint32_t)(((uint32_t)(x)) << USB_HWDEVICE_DC_SHIFT)) & USB_HWDEVICE_DC_MASK)
 
 #define USB_HWDEVICE_DEVEP_MASK                  (0x3EU)
 #define USB_HWDEVICE_DEVEP_SHIFT                 (1U)
-/*! DEVEP - DEVEP */
+/*! DEVEP - Device Endpoint Number */
 #define USB_HWDEVICE_DEVEP(x)                    (((uint32_t)(((uint32_t)(x)) << USB_HWDEVICE_DEVEP_SHIFT)) & USB_HWDEVICE_DEVEP_MASK)
 /*! @} */
 
@@ -301,12 +574,12 @@ typedef struct {
 
 #define USB_HWTXBUF_TXBURST_MASK                 (0xFFU)
 #define USB_HWTXBUF_TXBURST_SHIFT                (0U)
-/*! TXBURST - TXBURST */
+/*! TXBURST - TX Burst */
 #define USB_HWTXBUF_TXBURST(x)                   (((uint32_t)(((uint32_t)(x)) << USB_HWTXBUF_TXBURST_SHIFT)) & USB_HWTXBUF_TXBURST_MASK)
 
 #define USB_HWTXBUF_TXCHANADD_MASK               (0xFF0000U)
 #define USB_HWTXBUF_TXCHANADD_SHIFT              (16U)
-/*! TXCHANADD - TXCHANADD */
+/*! TXCHANADD - TX Channel Add */
 #define USB_HWTXBUF_TXCHANADD(x)                 (((uint32_t)(((uint32_t)(x)) << USB_HWTXBUF_TXCHANADD_SHIFT)) & USB_HWTXBUF_TXCHANADD_MASK)
 /*! @} */
 
@@ -315,110 +588,110 @@ typedef struct {
 
 #define USB_HWRXBUF_RXBURST_MASK                 (0xFFU)
 #define USB_HWRXBUF_RXBURST_SHIFT                (0U)
-/*! RXBURST - RXBURST */
+/*! RXBURST - RX Burst */
 #define USB_HWRXBUF_RXBURST(x)                   (((uint32_t)(((uint32_t)(x)) << USB_HWRXBUF_RXBURST_SHIFT)) & USB_HWRXBUF_RXBURST_MASK)
 
 #define USB_HWRXBUF_RXADD_MASK                   (0xFF00U)
 #define USB_HWRXBUF_RXADD_SHIFT                  (8U)
-/*! RXADD - RXADD */
+/*! RXADD - RX Add */
 #define USB_HWRXBUF_RXADD(x)                     (((uint32_t)(((uint32_t)(x)) << USB_HWRXBUF_RXADD_SHIFT)) & USB_HWRXBUF_RXADD_MASK)
 /*! @} */
 
-/*! @name GPTIMER0LD - General Purpose Timer #0 Load */
+/*! @name GPTIMER0LD - General Purpose Timer 0 Load */
 /*! @{ */
 
 #define USB_GPTIMER0LD_GPTLD_MASK                (0xFFFFFFU)
 #define USB_GPTIMER0LD_GPTLD_SHIFT               (0U)
-/*! GPTLD - GPTLD */
+/*! GPTLD - General Purpose Timer Load Value */
 #define USB_GPTIMER0LD_GPTLD(x)                  (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER0LD_GPTLD_SHIFT)) & USB_GPTIMER0LD_GPTLD_MASK)
 /*! @} */
 
-/*! @name GPTIMER0CTRL - General Purpose Timer #0 Controller */
+/*! @name GPTIMER0CTRL - General Purpose Timer 0 Controller */
 /*! @{ */
 
 #define USB_GPTIMER0CTRL_GPTCNT_MASK             (0xFFFFFFU)
 #define USB_GPTIMER0CTRL_GPTCNT_SHIFT            (0U)
-/*! GPTCNT - GPTCNT */
+/*! GPTCNT - General Purpose Timer Counter */
 #define USB_GPTIMER0CTRL_GPTCNT(x)               (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER0CTRL_GPTCNT_SHIFT)) & USB_GPTIMER0CTRL_GPTCNT_MASK)
 
 #define USB_GPTIMER0CTRL_GPTMODE_MASK            (0x1000000U)
 #define USB_GPTIMER0CTRL_GPTMODE_SHIFT           (24U)
-/*! GPTMODE - GPTMODE
- *  0b0..One Shot Mode
- *  0b1..Repeat Mode
+/*! GPTMODE - General Purpose Timer Mode
+ *  0b0..One Shot mode
+ *  0b1..Repeat mode
  */
 #define USB_GPTIMER0CTRL_GPTMODE(x)              (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER0CTRL_GPTMODE_SHIFT)) & USB_GPTIMER0CTRL_GPTMODE_MASK)
 
 #define USB_GPTIMER0CTRL_GPTRST_MASK             (0x40000000U)
 #define USB_GPTIMER0CTRL_GPTRST_SHIFT            (30U)
-/*! GPTRST - GPTRST
+/*! GPTRST - General Purpose Timer Reset
  *  0b0..No action
- *  0b1..Load counter value from GPTLD bits in n_GPTIMER0LD
+ *  0b1..Load counter value
  */
 #define USB_GPTIMER0CTRL_GPTRST(x)               (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER0CTRL_GPTRST_SHIFT)) & USB_GPTIMER0CTRL_GPTRST_MASK)
 
 #define USB_GPTIMER0CTRL_GPTRUN_MASK             (0x80000000U)
 #define USB_GPTIMER0CTRL_GPTRUN_SHIFT            (31U)
-/*! GPTRUN - GPTRUN
+/*! GPTRUN - General Purpose Timer Run
  *  0b0..Stop counting
  *  0b1..Run
  */
 #define USB_GPTIMER0CTRL_GPTRUN(x)               (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER0CTRL_GPTRUN_SHIFT)) & USB_GPTIMER0CTRL_GPTRUN_MASK)
 /*! @} */
 
-/*! @name GPTIMER1LD - General Purpose Timer #1 Load */
+/*! @name GPTIMER1LD - General Purpose Timer 1 Load */
 /*! @{ */
 
 #define USB_GPTIMER1LD_GPTLD_MASK                (0xFFFFFFU)
 #define USB_GPTIMER1LD_GPTLD_SHIFT               (0U)
-/*! GPTLD - GPTLD */
+/*! GPTLD - General Purpose Timer Load Value */
 #define USB_GPTIMER1LD_GPTLD(x)                  (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER1LD_GPTLD_SHIFT)) & USB_GPTIMER1LD_GPTLD_MASK)
 /*! @} */
 
-/*! @name GPTIMER1CTRL - General Purpose Timer #1 Controller */
+/*! @name GPTIMER1CTRL - General Purpose Timer 1 Controller */
 /*! @{ */
 
 #define USB_GPTIMER1CTRL_GPTCNT_MASK             (0xFFFFFFU)
 #define USB_GPTIMER1CTRL_GPTCNT_SHIFT            (0U)
-/*! GPTCNT - GPTCNT */
+/*! GPTCNT - General Purpose Timer Counter */
 #define USB_GPTIMER1CTRL_GPTCNT(x)               (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER1CTRL_GPTCNT_SHIFT)) & USB_GPTIMER1CTRL_GPTCNT_MASK)
 
 #define USB_GPTIMER1CTRL_GPTMODE_MASK            (0x1000000U)
 #define USB_GPTIMER1CTRL_GPTMODE_SHIFT           (24U)
-/*! GPTMODE - GPTMODE
- *  0b0..One Shot Mode
- *  0b1..Repeat Mode
+/*! GPTMODE - General Purpose Timer Mode
+ *  0b0..One Shot mode
+ *  0b1..Repeat mode
  */
 #define USB_GPTIMER1CTRL_GPTMODE(x)              (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER1CTRL_GPTMODE_SHIFT)) & USB_GPTIMER1CTRL_GPTMODE_MASK)
 
 #define USB_GPTIMER1CTRL_GPTRST_MASK             (0x40000000U)
 #define USB_GPTIMER1CTRL_GPTRST_SHIFT            (30U)
-/*! GPTRST - GPTRST
+/*! GPTRST - General Purpose Timer Reset
  *  0b0..No action
- *  0b1..Load counter value from GPTLD bits in USB_n_GPTIMER0LD
+ *  0b1..Load counter value
  */
 #define USB_GPTIMER1CTRL_GPTRST(x)               (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER1CTRL_GPTRST_SHIFT)) & USB_GPTIMER1CTRL_GPTRST_MASK)
 
 #define USB_GPTIMER1CTRL_GPTRUN_MASK             (0x80000000U)
 #define USB_GPTIMER1CTRL_GPTRUN_SHIFT            (31U)
-/*! GPTRUN - GPTRUN
+/*! GPTRUN - General Purpose Timer Run
  *  0b0..Stop counting
  *  0b1..Run
  */
 #define USB_GPTIMER1CTRL_GPTRUN(x)               (((uint32_t)(((uint32_t)(x)) << USB_GPTIMER1CTRL_GPTRUN_SHIFT)) & USB_GPTIMER1CTRL_GPTRUN_MASK)
 /*! @} */
 
-/*! @name SBUSCFG - System Bus Config */
+/*! @name SBUSCFG - System Bus Configuration */
 /*! @{ */
 
 #define USB_SBUSCFG_AHBBRST_MASK                 (0x7U)
 #define USB_SBUSCFG_AHBBRST_SHIFT                (0U)
-/*! AHBBRST - AHBBRST
+/*! AHBBRST - AHB Controller Interface Burst Configuration
  *  0b000..Incremental burst of unspecified length only
  *  0b001..INCR4 burst, then single transfer
  *  0b010..INCR8 burst, INCR4 burst, then single transfer
  *  0b011..INCR16 burst, INCR8 burst, INCR4 burst, then single transfer
- *  0b100..Reserved, don't use
+ *  0b100..Reserved; do not use
  *  0b101..INCR4 burst, then incremental burst of unspecified length
  *  0b110..INCR8 burst, INCR4 burst, then incremental burst of unspecified length
  *  0b111..INCR16 burst, INCR8 burst, INCR4 burst, then incremental burst of unspecified length
@@ -431,7 +704,7 @@ typedef struct {
 
 #define USB_CAPLENGTH_CAPLENGTH_MASK             (0xFFU)
 #define USB_CAPLENGTH_CAPLENGTH_SHIFT            (0U)
-/*! CAPLENGTH - CAPLENGTH */
+/*! CAPLENGTH - Capability Length */
 #define USB_CAPLENGTH_CAPLENGTH(x)               (((uint8_t)(((uint8_t)(x)) << USB_CAPLENGTH_CAPLENGTH_SHIFT)) & USB_CAPLENGTH_CAPLENGTH_MASK)
 /*! @} */
 
@@ -440,7 +713,7 @@ typedef struct {
 
 #define USB_HCIVERSION_HCIVERSION_MASK           (0xFFFFU)
 #define USB_HCIVERSION_HCIVERSION_SHIFT          (0U)
-/*! HCIVERSION - HCIVERSION */
+/*! HCIVERSION - Host Controller Interface Version Number */
 #define USB_HCIVERSION_HCIVERSION(x)             (((uint16_t)(((uint16_t)(x)) << USB_HCIVERSION_HCIVERSION_SHIFT)) & USB_HCIVERSION_HCIVERSION_MASK)
 /*! @} */
 
@@ -449,40 +722,43 @@ typedef struct {
 
 #define USB_HCSPARAMS_N_PORTS_MASK               (0xFU)
 #define USB_HCSPARAMS_N_PORTS_SHIFT              (0U)
-/*! N_PORTS - N_PORTS */
+/*! N_PORTS - Number of Ports */
 #define USB_HCSPARAMS_N_PORTS(x)                 (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_N_PORTS_SHIFT)) & USB_HCSPARAMS_N_PORTS_MASK)
 
 #define USB_HCSPARAMS_PPC_MASK                   (0x10U)
 #define USB_HCSPARAMS_PPC_SHIFT                  (4U)
-/*! PPC - PPC */
+/*! PPC - Port Power Control
+ *  0b0..No port power switches
+ *  0b1..Port power switches exist
+ */
 #define USB_HCSPARAMS_PPC(x)                     (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_PPC_SHIFT)) & USB_HCSPARAMS_PPC_MASK)
 
 #define USB_HCSPARAMS_N_PCC_MASK                 (0xF00U)
 #define USB_HCSPARAMS_N_PCC_SHIFT                (8U)
-/*! N_PCC - N_PCC */
+/*! N_PCC - Number of Ports Per Companion Controller */
 #define USB_HCSPARAMS_N_PCC(x)                   (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_N_PCC_SHIFT)) & USB_HCSPARAMS_N_PCC_MASK)
 
 #define USB_HCSPARAMS_N_CC_MASK                  (0xF000U)
 #define USB_HCSPARAMS_N_CC_SHIFT                 (12U)
-/*! N_CC - N_CC
- *  0b0000..There is no internal Companion Controller and port-ownership hand-off is not supported.
- *  0b0001..There are internal companion controller(s) and port-ownership hand-offs is supported.
+/*! N_CC - Number of Companion Controller
+ *  0b0000..No internal companion controller exists
+ *  0b0001..Internal companion controllers exist
  */
 #define USB_HCSPARAMS_N_CC(x)                    (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_N_CC_SHIFT)) & USB_HCSPARAMS_N_CC_MASK)
 
 #define USB_HCSPARAMS_PI_MASK                    (0x10000U)
 #define USB_HCSPARAMS_PI_SHIFT                   (16U)
-/*! PI - PI */
+/*! PI - Port Indicators (P_INDICATOR) */
 #define USB_HCSPARAMS_PI(x)                      (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_PI_SHIFT)) & USB_HCSPARAMS_PI_MASK)
 
 #define USB_HCSPARAMS_N_PTT_MASK                 (0xF00000U)
 #define USB_HCSPARAMS_N_PTT_SHIFT                (20U)
-/*! N_PTT - N_PTT */
+/*! N_PTT - Number of Ports Per Transaction Translator */
 #define USB_HCSPARAMS_N_PTT(x)                   (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_N_PTT_SHIFT)) & USB_HCSPARAMS_N_PTT_MASK)
 
 #define USB_HCSPARAMS_N_TT_MASK                  (0xF000000U)
 #define USB_HCSPARAMS_N_TT_SHIFT                 (24U)
-/*! N_TT - N_TT */
+/*! N_TT - Number of Transaction Translators */
 #define USB_HCSPARAMS_N_TT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_HCSPARAMS_N_TT_SHIFT)) & USB_HCSPARAMS_N_TT_MASK)
 /*! @} */
 
@@ -491,27 +767,27 @@ typedef struct {
 
 #define USB_HCCPARAMS_ADC_MASK                   (0x1U)
 #define USB_HCCPARAMS_ADC_SHIFT                  (0U)
-/*! ADC - ADC */
+/*! ADC - Addressing Capability */
 #define USB_HCCPARAMS_ADC(x)                     (((uint32_t)(((uint32_t)(x)) << USB_HCCPARAMS_ADC_SHIFT)) & USB_HCCPARAMS_ADC_MASK)
 
 #define USB_HCCPARAMS_PFL_MASK                   (0x2U)
 #define USB_HCCPARAMS_PFL_SHIFT                  (1U)
-/*! PFL - PFL */
+/*! PFL - Programmable Frame List Flag */
 #define USB_HCCPARAMS_PFL(x)                     (((uint32_t)(((uint32_t)(x)) << USB_HCCPARAMS_PFL_SHIFT)) & USB_HCCPARAMS_PFL_MASK)
 
 #define USB_HCCPARAMS_ASP_MASK                   (0x4U)
 #define USB_HCCPARAMS_ASP_SHIFT                  (2U)
-/*! ASP - ASP */
+/*! ASP - Asynchronous Schedule Park Capability */
 #define USB_HCCPARAMS_ASP(x)                     (((uint32_t)(((uint32_t)(x)) << USB_HCCPARAMS_ASP_SHIFT)) & USB_HCCPARAMS_ASP_MASK)
 
 #define USB_HCCPARAMS_IST_MASK                   (0xF0U)
 #define USB_HCCPARAMS_IST_SHIFT                  (4U)
-/*! IST - IST */
+/*! IST - Isochronous Scheduling Threshold */
 #define USB_HCCPARAMS_IST(x)                     (((uint32_t)(((uint32_t)(x)) << USB_HCCPARAMS_IST_SHIFT)) & USB_HCCPARAMS_IST_MASK)
 
 #define USB_HCCPARAMS_EECP_MASK                  (0xFF00U)
 #define USB_HCCPARAMS_EECP_SHIFT                 (8U)
-/*! EECP - EECP */
+/*! EECP - EHCI Extended Capabilities Pointer */
 #define USB_HCCPARAMS_EECP(x)                    (((uint32_t)(((uint32_t)(x)) << USB_HCCPARAMS_EECP_SHIFT)) & USB_HCCPARAMS_EECP_MASK)
 /*! @} */
 
@@ -520,7 +796,7 @@ typedef struct {
 
 #define USB_DCIVERSION_DCIVERSION_MASK           (0xFFFFU)
 #define USB_DCIVERSION_DCIVERSION_SHIFT          (0U)
-/*! DCIVERSION - DCIVERSION */
+/*! DCIVERSION - Device Controller Interface Version Number */
 #define USB_DCIVERSION_DCIVERSION(x)             (((uint16_t)(((uint16_t)(x)) << USB_DCIVERSION_DCIVERSION_SHIFT)) & USB_DCIVERSION_DCIVERSION_MASK)
 /*! @} */
 
@@ -529,17 +805,26 @@ typedef struct {
 
 #define USB_DCCPARAMS_DEN_MASK                   (0x1FU)
 #define USB_DCCPARAMS_DEN_SHIFT                  (0U)
-/*! DEN - DEN */
+/*! DEN - Device Endpoint Number
+ *  0b00000..Not device capable
+ *  0b00001..Device capable
+ */
 #define USB_DCCPARAMS_DEN(x)                     (((uint32_t)(((uint32_t)(x)) << USB_DCCPARAMS_DEN_SHIFT)) & USB_DCCPARAMS_DEN_MASK)
 
 #define USB_DCCPARAMS_DC_MASK                    (0x80U)
 #define USB_DCCPARAMS_DC_SHIFT                   (7U)
-/*! DC - DC */
+/*! DC - Device Capable
+ *  0b0..Not device capable
+ *  0b1..Device capable
+ */
 #define USB_DCCPARAMS_DC(x)                      (((uint32_t)(((uint32_t)(x)) << USB_DCCPARAMS_DC_SHIFT)) & USB_DCCPARAMS_DC_MASK)
 
 #define USB_DCCPARAMS_HC_MASK                    (0x100U)
 #define USB_DCCPARAMS_HC_SHIFT                   (8U)
-/*! HC - HC */
+/*! HC - Host Capable
+ *  0b0..Not host capable
+ *  0b1..Host capable
+ */
 #define USB_DCCPARAMS_HC(x)                      (((uint32_t)(((uint32_t)(x)) << USB_DCCPARAMS_HC_SHIFT)) & USB_DCCPARAMS_HC_MASK)
 /*! @} */
 
@@ -548,76 +833,82 @@ typedef struct {
 
 #define USB_USBCMD_RS_MASK                       (0x1U)
 #define USB_USBCMD_RS_SHIFT                      (0U)
-/*! RS - RS */
+/*! RS - Run/Stop
+ *  0b0..Stop executing
+ *  0b1..Running
+ */
 #define USB_USBCMD_RS(x)                         (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_RS_SHIFT)) & USB_USBCMD_RS_MASK)
 
 #define USB_USBCMD_RST_MASK                      (0x2U)
 #define USB_USBCMD_RST_SHIFT                     (1U)
-/*! RST - RST */
+/*! RST - Controller Reset */
 #define USB_USBCMD_RST(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_RST_SHIFT)) & USB_USBCMD_RST_MASK)
 
 #define USB_USBCMD_FS_1_MASK                     (0xCU)
 #define USB_USBCMD_FS_1_SHIFT                    (2U)
-/*! FS_1 - FS_1 */
+/*! FS_1 - Frame List Size 1 */
 #define USB_USBCMD_FS_1(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_FS_1_SHIFT)) & USB_USBCMD_FS_1_MASK)
 
 #define USB_USBCMD_PSE_MASK                      (0x10U)
 #define USB_USBCMD_PSE_SHIFT                     (4U)
-/*! PSE - PSE
- *  0b0..Do not process the Periodic Schedule
- *  0b1..Use the PERIODICLISTBASE register to access the Periodic Schedule.
+/*! PSE - Periodic Schedule Enable
+ *  0b0..Do not process the periodic schedule
+ *  0b1..Process the periodic schedule
  */
 #define USB_USBCMD_PSE(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_PSE_SHIFT)) & USB_USBCMD_PSE_MASK)
 
 #define USB_USBCMD_ASE_MASK                      (0x20U)
 #define USB_USBCMD_ASE_SHIFT                     (5U)
-/*! ASE - ASE
- *  0b0..Do not process the Asynchronous Schedule.
- *  0b1..Use the ASYNCLISTADDR register to access the Asynchronous Schedule.
+/*! ASE - Asynchronous Schedule Enable
+ *  0b0..Do not process the asynchronous schedule
+ *  0b1..Access the asynchronous schedule
  */
 #define USB_USBCMD_ASE(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_ASE_SHIFT)) & USB_USBCMD_ASE_MASK)
 
 #define USB_USBCMD_IAA_MASK                      (0x40U)
 #define USB_USBCMD_IAA_SHIFT                     (6U)
-/*! IAA - IAA */
+/*! IAA - Interrupt on Async Advance Doorbell */
 #define USB_USBCMD_IAA(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_IAA_SHIFT)) & USB_USBCMD_IAA_MASK)
 
 #define USB_USBCMD_ASP_MASK                      (0x300U)
 #define USB_USBCMD_ASP_SHIFT                     (8U)
-/*! ASP - ASP */
+/*! ASP - Asynchronous Schedule Park Mode Count */
 #define USB_USBCMD_ASP(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_ASP_SHIFT)) & USB_USBCMD_ASP_MASK)
 
 #define USB_USBCMD_ASPE_MASK                     (0x800U)
 #define USB_USBCMD_ASPE_SHIFT                    (11U)
-/*! ASPE - ASPE */
+/*! ASPE - Asynchronous Schedule Park Mode Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBCMD_ASPE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_ASPE_SHIFT)) & USB_USBCMD_ASPE_MASK)
 
 #define USB_USBCMD_SUTW_MASK                     (0x2000U)
 #define USB_USBCMD_SUTW_SHIFT                    (13U)
-/*! SUTW - SUTW */
+/*! SUTW - Setup TripWire (Device mode only) */
 #define USB_USBCMD_SUTW(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_SUTW_SHIFT)) & USB_USBCMD_SUTW_MASK)
 
 #define USB_USBCMD_ATDTW_MASK                    (0x4000U)
 #define USB_USBCMD_ATDTW_SHIFT                   (14U)
-/*! ATDTW - ATDTW */
+/*! ATDTW - Add dTD TripWire (Device mode only) */
 #define USB_USBCMD_ATDTW(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_ATDTW_SHIFT)) & USB_USBCMD_ATDTW_MASK)
 
 #define USB_USBCMD_FS_2_MASK                     (0x8000U)
 #define USB_USBCMD_FS_2_SHIFT                    (15U)
-/*! FS_2 - FS_2 */
+/*! FS_2 - Frame List Size 2 (Host mode only) */
 #define USB_USBCMD_FS_2(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_FS_2_SHIFT)) & USB_USBCMD_FS_2_MASK)
 
 #define USB_USBCMD_ITC_MASK                      (0xFF0000U)
 #define USB_USBCMD_ITC_SHIFT                     (16U)
-/*! ITC - ITC
+/*! ITC - Interrupt Threshold Control
  *  0b00000000..Immediate (no threshold)
- *  0b00000001..1 micro-frame
- *  0b00000010..2 micro-frames
- *  0b00000100..4 micro-frames
- *  0b00001000..8 micro-frames
- *  0b00010000..16 micro-frames
- *  0b00100000..32 micro-frames
- *  0b01000000..64 micro-frames
+ *  0b00000001..1 microframe
+ *  0b00000010..2 microframes
+ *  0b00000100..4 microframes
+ *  0b00001000..8 microframes
+ *  0b00010000..16 microframes
+ *  0b00100000..32 microframes
+ *  0b01000000..64 microframes
  */
 #define USB_USBCMD_ITC(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBCMD_ITC_SHIFT)) & USB_USBCMD_ITC_MASK)
 /*! @} */
@@ -627,107 +918,176 @@ typedef struct {
 
 #define USB_USBSTS_UI_MASK                       (0x1U)
 #define USB_USBSTS_UI_SHIFT                      (0U)
-/*! UI - UI */
+/*! UI - USB Interrupt (USBINT) Flag
+ *  0b0..Interrupt did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
+ */
 #define USB_USBSTS_UI(x)                         (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UI_SHIFT)) & USB_USBSTS_UI_MASK)
 
 #define USB_USBSTS_UEI_MASK                      (0x2U)
 #define USB_USBSTS_UEI_SHIFT                     (1U)
-/*! UEI - UEI */
+/*! UEI - USB Error Interrupt (USBERRINT) Flag
+ *  0b0..Interrupt did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
+ */
 #define USB_USBSTS_UEI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UEI_SHIFT)) & USB_USBSTS_UEI_MASK)
 
 #define USB_USBSTS_PCI_MASK                      (0x4U)
 #define USB_USBSTS_PCI_SHIFT                     (2U)
-/*! PCI - PCI */
+/*! PCI - Port Change Detect Flag
+ *  0b0..No effect
+ *  0b0..Port change not detected
+ *  0b1..Clear the flag
+ *  0b1..Port change detected
+ */
 #define USB_USBSTS_PCI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_PCI_SHIFT)) & USB_USBSTS_PCI_MASK)
 
 #define USB_USBSTS_FRI_MASK                      (0x8U)
 #define USB_USBSTS_FRI_SHIFT                     (3U)
-/*! FRI - FRI */
+/*! FRI - Frame List Rollover Flag
+ *  0b0..Frame list index did not roll over
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Frame list index rolled over
+ */
 #define USB_USBSTS_FRI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_FRI_SHIFT)) & USB_USBSTS_FRI_MASK)
 
 #define USB_USBSTS_SEI_MASK                      (0x10U)
 #define USB_USBSTS_SEI_SHIFT                     (4U)
-/*! SEI - SEI */
+/*! SEI - System Error Flag
+ *  0b0..Error response did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Error response occurred
+ */
 #define USB_USBSTS_SEI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_SEI_SHIFT)) & USB_USBSTS_SEI_MASK)
 
 #define USB_USBSTS_AAI_MASK                      (0x20U)
 #define USB_USBSTS_AAI_SHIFT                     (5U)
-/*! AAI - AAI */
+/*! AAI - Interrupt on Async Advance Flag
+ *  0b0..Interrupt did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
+ */
 #define USB_USBSTS_AAI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_AAI_SHIFT)) & USB_USBSTS_AAI_MASK)
 
 #define USB_USBSTS_URI_MASK                      (0x40U)
 #define USB_USBSTS_URI_SHIFT                     (6U)
-/*! URI - URI */
+/*! URI - USB Reset Received Flag
+ *  0b0..No effect
+ *  0b0..USB reset not received
+ *  0b1..Clear the flag
+ *  0b1..USB reset received
+ */
 #define USB_USBSTS_URI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_URI_SHIFT)) & USB_USBSTS_URI_MASK)
 
 #define USB_USBSTS_SRI_MASK                      (0x80U)
 #define USB_USBSTS_SRI_SHIFT                     (7U)
-/*! SRI - SRI */
+/*! SRI - SOF Received Flag
+ *  0b0..No effect
+ *  0b0..SOF not received
+ *  0b1..Clear the flag
+ *  0b1..SOF received
+ */
 #define USB_USBSTS_SRI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_SRI_SHIFT)) & USB_USBSTS_SRI_MASK)
 
 #define USB_USBSTS_SLI_MASK                      (0x100U)
 #define USB_USBSTS_SLI_SHIFT                     (8U)
-/*! SLI - SLI */
+/*! SLI - Device Controller Suspend Flag
+ *  0b0..Did not enter Suspended state
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Entered Suspended state
+ */
 #define USB_USBSTS_SLI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_SLI_SHIFT)) & USB_USBSTS_SLI_MASK)
 
 #define USB_USBSTS_ULPII_MASK                    (0x400U)
 #define USB_USBSTS_ULPII_SHIFT                   (10U)
-/*! ULPII - ULPII */
+/*! ULPII - ULPI Interrupt Flag
+ *  0b0..Event completion did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Event completion occurred
+ */
 #define USB_USBSTS_ULPII(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_ULPII_SHIFT)) & USB_USBSTS_ULPII_MASK)
 
 #define USB_USBSTS_HCH_MASK                      (0x1000U)
 #define USB_USBSTS_HCH_SHIFT                     (12U)
-/*! HCH - HCH */
+/*! HCH - HC Halted */
 #define USB_USBSTS_HCH(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_HCH_SHIFT)) & USB_USBSTS_HCH_MASK)
 
 #define USB_USBSTS_RCL_MASK                      (0x2000U)
 #define USB_USBSTS_RCL_SHIFT                     (13U)
-/*! RCL - RCL */
+/*! RCL - Reclamation
+ *  0b0..Not detected
+ *  0b1..Detected
+ */
 #define USB_USBSTS_RCL(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_RCL_SHIFT)) & USB_USBSTS_RCL_MASK)
 
 #define USB_USBSTS_PS_MASK                       (0x4000U)
 #define USB_USBSTS_PS_SHIFT                      (14U)
-/*! PS - PS */
+/*! PS - Periodic Schedule Status
+ *  0b0..Disabled
+ *  0b1..Enabled
+ */
 #define USB_USBSTS_PS(x)                         (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_PS_SHIFT)) & USB_USBSTS_PS_MASK)
 
 #define USB_USBSTS_AS_MASK                       (0x8000U)
 #define USB_USBSTS_AS_SHIFT                      (15U)
-/*! AS - AS */
+/*! AS - Asynchronous Schedule Status
+ *  0b0..Disabled
+ *  0b1..Enabled
+ */
 #define USB_USBSTS_AS(x)                         (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_AS_SHIFT)) & USB_USBSTS_AS_MASK)
 
 #define USB_USBSTS_NAKI_MASK                     (0x10000U)
 #define USB_USBSTS_NAKI_SHIFT                    (16U)
-/*! NAKI - NAKI */
+/*! NAKI - NAK Interrupt */
 #define USB_USBSTS_NAKI(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_NAKI_SHIFT)) & USB_USBSTS_NAKI_MASK)
 
 #define USB_USBSTS_UAI_MASK                      (0x40000U)
 #define USB_USBSTS_UAI_SHIFT                     (18U)
-/*! UAI - USB Host Asynchronous Interrupt
+/*! UAI - USB Host Asynchronous Interrupt Flag
  *  0b0..Interrupt did not occur
- *  0b1..Interrupt occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_UAI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UAI_SHIFT)) & USB_USBSTS_UAI_MASK)
 
 #define USB_USBSTS_UPI_MASK                      (0x80000U)
 #define USB_USBSTS_UPI_SHIFT                     (19U)
-/*! UPI - USB Host Periodic Interrupt
+/*! UPI - USB Host Periodic Interrupt Flag
  *  0b0..Interrupt did not occur
- *  0b1..Interrupt occurred
  *  0b0..No effect
  *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
  */
 #define USB_USBSTS_UPI(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_UPI_SHIFT)) & USB_USBSTS_UPI_MASK)
 
 #define USB_USBSTS_TI0_MASK                      (0x1000000U)
 #define USB_USBSTS_TI0_SHIFT                     (24U)
-/*! TI0 - TI0 */
+/*! TI0 - General Purpose Timer Interrupt 0 (GPTINT0) Flag
+ *  0b0..Interrupt did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
+ */
 #define USB_USBSTS_TI0(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_TI0_SHIFT)) & USB_USBSTS_TI0_MASK)
 
 #define USB_USBSTS_TI1_MASK                      (0x2000000U)
 #define USB_USBSTS_TI1_SHIFT                     (25U)
-/*! TI1 - TI1 */
+/*! TI1 - General Purpose Timer Interrupt 1 (GPTINT1) Flag
+ *  0b0..Interrupt did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt occurred
+ */
 #define USB_USBSTS_TI1(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBSTS_TI1_SHIFT)) & USB_USBSTS_TI1_MASK)
 /*! @} */
 
@@ -736,72 +1096,114 @@ typedef struct {
 
 #define USB_USBINTR_UE_MASK                      (0x1U)
 #define USB_USBINTR_UE_SHIFT                     (0U)
-/*! UE - UE */
+/*! UE - USB Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_UE(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_UE_SHIFT)) & USB_USBINTR_UE_MASK)
 
 #define USB_USBINTR_UEE_MASK                     (0x2U)
 #define USB_USBINTR_UEE_SHIFT                    (1U)
-/*! UEE - UEE */
+/*! UEE - USB Error Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_UEE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_UEE_SHIFT)) & USB_USBINTR_UEE_MASK)
 
 #define USB_USBINTR_PCE_MASK                     (0x4U)
 #define USB_USBINTR_PCE_SHIFT                    (2U)
-/*! PCE - PCE */
+/*! PCE - Port Change Detect Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_PCE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_PCE_SHIFT)) & USB_USBINTR_PCE_MASK)
 
 #define USB_USBINTR_FRE_MASK                     (0x8U)
 #define USB_USBINTR_FRE_SHIFT                    (3U)
-/*! FRE - FRE */
+/*! FRE - Frame List Rollover Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_FRE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_FRE_SHIFT)) & USB_USBINTR_FRE_MASK)
 
 #define USB_USBINTR_SEE_MASK                     (0x10U)
 #define USB_USBINTR_SEE_SHIFT                    (4U)
-/*! SEE - SEE */
+/*! SEE - System Error Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_SEE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_SEE_SHIFT)) & USB_USBINTR_SEE_MASK)
 
 #define USB_USBINTR_AAE_MASK                     (0x20U)
 #define USB_USBINTR_AAE_SHIFT                    (5U)
-/*! AAE - AAE */
+/*! AAE - Async Advance Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_AAE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_AAE_SHIFT)) & USB_USBINTR_AAE_MASK)
 
 #define USB_USBINTR_URE_MASK                     (0x40U)
 #define USB_USBINTR_URE_SHIFT                    (6U)
-/*! URE - URE */
+/*! URE - USB Reset Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_URE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_URE_SHIFT)) & USB_USBINTR_URE_MASK)
 
 #define USB_USBINTR_SRE_MASK                     (0x80U)
 #define USB_USBINTR_SRE_SHIFT                    (7U)
-/*! SRE - SRE */
+/*! SRE - SOF Received Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_SRE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_SRE_SHIFT)) & USB_USBINTR_SRE_MASK)
 
 #define USB_USBINTR_SLE_MASK                     (0x100U)
 #define USB_USBINTR_SLE_SHIFT                    (8U)
-/*! SLE - SLE */
+/*! SLE - Sleep Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_SLE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_SLE_SHIFT)) & USB_USBINTR_SLE_MASK)
 
 #define USB_USBINTR_NAKE_MASK                    (0x10000U)
 #define USB_USBINTR_NAKE_SHIFT                   (16U)
-/*! NAKE - NAKE */
+/*! NAKE - NAK Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_NAKE(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_NAKE_SHIFT)) & USB_USBINTR_NAKE_MASK)
 
 #define USB_USBINTR_UAIE_MASK                    (0x40000U)
 #define USB_USBINTR_UAIE_SHIFT                   (18U)
-/*! UAIE - UAIE */
+/*! UAIE - USB Host Asynchronous Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_UAIE(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_UAIE_SHIFT)) & USB_USBINTR_UAIE_MASK)
 
 #define USB_USBINTR_UPIE_MASK                    (0x80000U)
 #define USB_USBINTR_UPIE_SHIFT                   (19U)
-/*! UPIE - UPIE */
+/*! UPIE - USB Host Periodic Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_UPIE(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_UPIE_SHIFT)) & USB_USBINTR_UPIE_MASK)
 
 #define USB_USBINTR_TIE0_MASK                    (0x1000000U)
 #define USB_USBINTR_TIE0_SHIFT                   (24U)
-/*! TIE0 - TIE0 */
+/*! TIE0 - General Purpose Timer 0 Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_TIE0(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_TIE0_SHIFT)) & USB_USBINTR_TIE0_MASK)
 
 #define USB_USBINTR_TIE1_MASK                    (0x2000000U)
 #define USB_USBINTR_TIE1_SHIFT                   (25U)
-/*! TIE1 - TIE1 */
+/*! TIE1 - General Purpose Timer 1 Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBINTR_TIE1(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBINTR_TIE1_SHIFT)) & USB_USBINTR_TIE1_MASK)
 /*! @} */
 
@@ -810,7 +1212,7 @@ typedef struct {
 
 #define USB_FRINDEX_FRINDEX_MASK                 (0x3FFFU)
 #define USB_FRINDEX_FRINDEX_SHIFT                (0U)
-/*! FRINDEX - FRINDEX
+/*! FRINDEX - Frame Index
  *  0b00000000000000..(1024) 12
  *  0b00000000000001..(512) 11
  *  0b00000000000010..(256) 10
@@ -828,12 +1230,12 @@ typedef struct {
 
 #define USB_DEVICEADDR_USBADRA_MASK              (0x1000000U)
 #define USB_DEVICEADDR_USBADRA_SHIFT             (24U)
-/*! USBADRA - USBADRA */
+/*! USBADRA - Device Address Advance */
 #define USB_DEVICEADDR_USBADRA(x)                (((uint32_t)(((uint32_t)(x)) << USB_DEVICEADDR_USBADRA_SHIFT)) & USB_DEVICEADDR_USBADRA_MASK)
 
 #define USB_DEVICEADDR_USBADR_MASK               (0xFE000000U)
 #define USB_DEVICEADDR_USBADR_SHIFT              (25U)
-/*! USBADR - USBADR */
+/*! USBADR - Device Address */
 #define USB_DEVICEADDR_USBADR(x)                 (((uint32_t)(((uint32_t)(x)) << USB_DEVICEADDR_USBADR_SHIFT)) & USB_DEVICEADDR_USBADR_MASK)
 /*! @} */
 
@@ -842,16 +1244,16 @@ typedef struct {
 
 #define USB_PERIODICLISTBASE_BASEADR_MASK        (0xFFFFF000U)
 #define USB_PERIODICLISTBASE_BASEADR_SHIFT       (12U)
-/*! BASEADR - BASEADR */
+/*! BASEADR - Base Address (Low) */
 #define USB_PERIODICLISTBASE_BASEADR(x)          (((uint32_t)(((uint32_t)(x)) << USB_PERIODICLISTBASE_BASEADR_SHIFT)) & USB_PERIODICLISTBASE_BASEADR_MASK)
 /*! @} */
 
-/*! @name ASYNCLISTADDR - Next Asynch. Address */
+/*! @name ASYNCLISTADDR - Next Asynchronous Address */
 /*! @{ */
 
 #define USB_ASYNCLISTADDR_ASYBASE_MASK           (0xFFFFFFE0U)
 #define USB_ASYNCLISTADDR_ASYBASE_SHIFT          (5U)
-/*! ASYBASE - ASYBASE */
+/*! ASYBASE - Link Pointer Low (LPL) */
 #define USB_ASYNCLISTADDR_ASYBASE(x)             (((uint32_t)(((uint32_t)(x)) << USB_ASYNCLISTADDR_ASYBASE_SHIFT)) & USB_ASYNCLISTADDR_ASYBASE_MASK)
 /*! @} */
 
@@ -860,7 +1262,7 @@ typedef struct {
 
 #define USB_ENDPTLISTADDR_EPBASE_MASK            (0xFFFFF800U)
 #define USB_ENDPTLISTADDR_EPBASE_SHIFT           (11U)
-/*! EPBASE - EPBASE */
+/*! EPBASE - Endpoint List Pointer (Low) */
 #define USB_ENDPTLISTADDR_EPBASE(x)              (((uint32_t)(((uint32_t)(x)) << USB_ENDPTLISTADDR_EPBASE_SHIFT)) & USB_ENDPTLISTADDR_EPBASE_MASK)
 /*! @} */
 
@@ -869,12 +1271,12 @@ typedef struct {
 
 #define USB_BURSTSIZE_RXPBURST_MASK              (0xFFU)
 #define USB_BURSTSIZE_RXPBURST_SHIFT             (0U)
-/*! RXPBURST - RXPBURST */
+/*! RXPBURST - Programmable RX Burst Size */
 #define USB_BURSTSIZE_RXPBURST(x)                (((uint32_t)(((uint32_t)(x)) << USB_BURSTSIZE_RXPBURST_SHIFT)) & USB_BURSTSIZE_RXPBURST_MASK)
 
 #define USB_BURSTSIZE_TXPBURST_MASK              (0xFF00U)
 #define USB_BURSTSIZE_TXPBURST_SHIFT             (8U)
-/*! TXPBURST - TXPBURST */
+/*! TXPBURST - Programmable TX Burst Size */
 #define USB_BURSTSIZE_TXPBURST(x)                (((uint32_t)(((uint32_t)(x)) << USB_BURSTSIZE_TXPBURST_SHIFT)) & USB_BURSTSIZE_TXPBURST_MASK)
 /*! @} */
 
@@ -883,17 +1285,17 @@ typedef struct {
 
 #define USB_TXFILLTUNING_TXSCHOH_MASK            (0x7FU)
 #define USB_TXFILLTUNING_TXSCHOH_SHIFT           (0U)
-/*! TXSCHOH - TXSCHOH */
+/*! TXSCHOH - Scheduler Overhead */
 #define USB_TXFILLTUNING_TXSCHOH(x)              (((uint32_t)(((uint32_t)(x)) << USB_TXFILLTUNING_TXSCHOH_SHIFT)) & USB_TXFILLTUNING_TXSCHOH_MASK)
 
 #define USB_TXFILLTUNING_TXSCHHEALTH_MASK        (0x1F00U)
 #define USB_TXFILLTUNING_TXSCHHEALTH_SHIFT       (8U)
-/*! TXSCHHEALTH - TXSCHHEALTH */
+/*! TXSCHHEALTH - Scheduler Health Counter */
 #define USB_TXFILLTUNING_TXSCHHEALTH(x)          (((uint32_t)(((uint32_t)(x)) << USB_TXFILLTUNING_TXSCHHEALTH_SHIFT)) & USB_TXFILLTUNING_TXSCHHEALTH_MASK)
 
 #define USB_TXFILLTUNING_TXFIFOTHRES_MASK        (0x3F0000U)
 #define USB_TXFILLTUNING_TXFIFOTHRES_SHIFT       (16U)
-/*! TXFIFOTHRES - TXFIFOTHRES */
+/*! TXFIFOTHRES - FIFO Burst Threshold */
 #define USB_TXFILLTUNING_TXFIFOTHRES(x)          (((uint32_t)(((uint32_t)(x)) << USB_TXFILLTUNING_TXFIFOTHRES_SHIFT)) & USB_TXFILLTUNING_TXFIFOTHRES_MASK)
 /*! @} */
 
@@ -902,26 +1304,36 @@ typedef struct {
 
 #define USB_ENDPTNAK_EPRN_MASK                   (0xFFU)
 #define USB_ENDPTNAK_EPRN_SHIFT                  (0U)
-/*! EPRN - EPRN */
+/*! EPRN - RX Endpoint NAK Flag
+ *  0b00000000..No NACK
+ *  0b00000000..No effect
+ *  0b00000001..Clear the flag
+ *  0b00000001..NACK
+ */
 #define USB_ENDPTNAK_EPRN(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTNAK_EPRN_SHIFT)) & USB_ENDPTNAK_EPRN_MASK)
 
 #define USB_ENDPTNAK_EPTN_MASK                   (0xFF0000U)
 #define USB_ENDPTNAK_EPTN_SHIFT                  (16U)
-/*! EPTN - EPTN */
+/*! EPTN - TX Endpoint NAK Flag
+ *  0b00000000..No NACK
+ *  0b00000000..No effect
+ *  0b00000001..Clear the flag
+ *  0b00000001..NACK
+ */
 #define USB_ENDPTNAK_EPTN(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTNAK_EPTN_SHIFT)) & USB_ENDPTNAK_EPTN_MASK)
 /*! @} */
 
-/*! @name ENDPTNAKEN - Endpoint NAK Enable */
+/*! @name ENDPTNAKEN - Endpoint NAK Indication Enable */
 /*! @{ */
 
 #define USB_ENDPTNAKEN_EPRNE_MASK                (0xFFU)
 #define USB_ENDPTNAKEN_EPRNE_SHIFT               (0U)
-/*! EPRNE - EPRNE */
+/*! EPRNE - RX Endpoint NAK Enable */
 #define USB_ENDPTNAKEN_EPRNE(x)                  (((uint32_t)(((uint32_t)(x)) << USB_ENDPTNAKEN_EPRNE_SHIFT)) & USB_ENDPTNAKEN_EPRNE_MASK)
 
 #define USB_ENDPTNAKEN_EPTNE_MASK                (0xFF0000U)
 #define USB_ENDPTNAKEN_EPTNE_SHIFT               (16U)
-/*! EPTNE - EPTNE */
+/*! EPTNE - TX Endpoint NAK Enable */
 #define USB_ENDPTNAKEN_EPTNE(x)                  (((uint32_t)(((uint32_t)(x)) << USB_ENDPTNAKEN_EPTNE_SHIFT)) & USB_ENDPTNAKEN_EPTNE_MASK)
 /*! @} */
 
@@ -930,92 +1342,125 @@ typedef struct {
 
 #define USB_CONFIGFLAG_CF_MASK                   (0x1U)
 #define USB_CONFIGFLAG_CF_SHIFT                  (0U)
-/*! CF - CF
- *  0b0..Port routing control logic default-routes each port to an implementation dependent classic host controller.
- *  0b1..Port routing control logic default-routes all ports to this host controller.
+/*! CF - Configure Flag
+ *  0b0..Port routing to classic host controller
+ *  0b1..Port routing to this host controller
  */
 #define USB_CONFIGFLAG_CF(x)                     (((uint32_t)(((uint32_t)(x)) << USB_CONFIGFLAG_CF_SHIFT)) & USB_CONFIGFLAG_CF_MASK)
 /*! @} */
 
-/*! @name PORTSC1 - Port Status & Control */
+/*! @name PORTSC1 - Port Status and Control */
 /*! @{ */
 
 #define USB_PORTSC1_CCS_MASK                     (0x1U)
 #define USB_PORTSC1_CCS_SHIFT                    (0U)
-/*! CCS - CCS */
+/*! CCS - Current Connect Status */
 #define USB_PORTSC1_CCS(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_CCS_SHIFT)) & USB_PORTSC1_CCS_MASK)
 
 #define USB_PORTSC1_CSC_MASK                     (0x2U)
 #define USB_PORTSC1_CSC_SHIFT                    (1U)
-/*! CSC - CSC */
+/*! CSC - Connect Status Change Flag
+ *  0b0..No change occurred
+ *  0b0..No effect
+ *  0b1..Change occurred
+ *  0b1..Clear the flag
+ */
 #define USB_PORTSC1_CSC(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_CSC_SHIFT)) & USB_PORTSC1_CSC_MASK)
 
 #define USB_PORTSC1_PE_MASK                      (0x4U)
 #define USB_PORTSC1_PE_SHIFT                     (2U)
-/*! PE - PE */
+/*! PE - Port Enable and Disable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_PORTSC1_PE(x)                        (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PE_SHIFT)) & USB_PORTSC1_PE_MASK)
 
 #define USB_PORTSC1_PEC_MASK                     (0x8U)
 #define USB_PORTSC1_PEC_SHIFT                    (3U)
-/*! PEC - PEC */
+/*! PEC - Port Enable and Disable Change Flag
+ *  0b0..No change occurred
+ *  0b0..No effect
+ *  0b1..Change occurred
+ *  0b1..Clear the flag
+ */
 #define USB_PORTSC1_PEC(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PEC_SHIFT)) & USB_PORTSC1_PEC_MASK)
 
 #define USB_PORTSC1_OCA_MASK                     (0x10U)
 #define USB_PORTSC1_OCA_SHIFT                    (4U)
-/*! OCA - OCA
- *  0b1..This port currently has an over-current condition
- *  0b0..This port does not have an over-current condition.
+/*! OCA - Overcurrent Active
+ *  0b0..Overcurrent condition exists
+ *  0b1..No overcurrent condition exists
  */
 #define USB_PORTSC1_OCA(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_OCA_SHIFT)) & USB_PORTSC1_OCA_MASK)
 
 #define USB_PORTSC1_OCC_MASK                     (0x20U)
 #define USB_PORTSC1_OCC_SHIFT                    (5U)
-/*! OCC - OCC */
+/*! OCC - Overcurrent Change Flag
+ *  0b0..No change occurred
+ *  0b0..No effect
+ *  0b1..Change occurred
+ *  0b1..Clear the flag
+ */
 #define USB_PORTSC1_OCC(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_OCC_SHIFT)) & USB_PORTSC1_OCC_MASK)
 
 #define USB_PORTSC1_FPR_MASK                     (0x40U)
 #define USB_PORTSC1_FPR_SHIFT                    (6U)
-/*! FPR - FPR */
+/*! FPR - Force Port Resume
+ *  0b0..No resume (K-state) detected or driven on port
+ *  0b1..Resume detected or driven on port
+ */
 #define USB_PORTSC1_FPR(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_FPR_SHIFT)) & USB_PORTSC1_FPR_MASK)
 
 #define USB_PORTSC1_SUSP_MASK                    (0x80U)
 #define USB_PORTSC1_SUSP_SHIFT                   (7U)
-/*! SUSP - SUSP */
+/*! SUSP - Suspend
+ *  0b0..Port not in Suspended state
+ *  0b1..Port in Suspended state
+ */
 #define USB_PORTSC1_SUSP(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_SUSP_SHIFT)) & USB_PORTSC1_SUSP_MASK)
 
 #define USB_PORTSC1_PR_MASK                      (0x100U)
 #define USB_PORTSC1_PR_SHIFT                     (8U)
-/*! PR - PR */
+/*! PR - Port Reset
+ *  0b0..Port not in reset
+ *  0b1..Port in reset
+ */
 #define USB_PORTSC1_PR(x)                        (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PR_SHIFT)) & USB_PORTSC1_PR_MASK)
 
 #define USB_PORTSC1_HSP_MASK                     (0x200U)
 #define USB_PORTSC1_HSP_SHIFT                    (9U)
-/*! HSP - HSP */
+/*! HSP - High-Speed Port
+ *  0b0..Not in HS mode
+ *  0b1..In HS mode
+ */
 #define USB_PORTSC1_HSP(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_HSP_SHIFT)) & USB_PORTSC1_HSP_MASK)
 
 #define USB_PORTSC1_LS_MASK                      (0xC00U)
 #define USB_PORTSC1_LS_SHIFT                     (10U)
-/*! LS - LS
+/*! LS - Line Status
  *  0b00..SE0
- *  0b10..J-state
  *  0b01..K-state
+ *  0b10..J-state
  *  0b11..Undefined
  */
 #define USB_PORTSC1_LS(x)                        (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_LS_SHIFT)) & USB_PORTSC1_LS_MASK)
 
 #define USB_PORTSC1_PP_MASK                      (0x1000U)
 #define USB_PORTSC1_PP_SHIFT                     (12U)
-/*! PP - PP */
+/*! PP - Port Power
+ *  0b0..Off
+ *  0b1..On
+ */
 #define USB_PORTSC1_PP(x)                        (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PP_SHIFT)) & USB_PORTSC1_PP_MASK)
 
 #define USB_PORTSC1_PO_MASK                      (0x2000U)
 #define USB_PORTSC1_PO_SHIFT                     (13U)
-/*! PO - PO */
+/*! PO - Port Owner */
 #define USB_PORTSC1_PO(x)                        (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PO_SHIFT)) & USB_PORTSC1_PO_MASK)
 
 #define USB_PORTSC1_PIC_MASK                     (0xC000U)
 #define USB_PORTSC1_PIC_SHIFT                    (14U)
-/*! PIC - PIC
+/*! PIC - Port Indicator Control
  *  0b00..Port indicators are off
  *  0b01..Amber
  *  0b10..Green
@@ -1025,11 +1470,11 @@ typedef struct {
 
 #define USB_PORTSC1_PTC_MASK                     (0xF0000U)
 #define USB_PORTSC1_PTC_SHIFT                    (16U)
-/*! PTC - PTC
+/*! PTC - Port Test Control
  *  0b0000..TEST_MODE_DISABLE
  *  0b0001..J_STATE
  *  0b0010..K_STATE
- *  0b0011..SE0 (host) / NAK (device)
+ *  0b0011..SE0 (host) or NAK (device)
  *  0b0100..Packet
  *  0b0101..FORCE_ENABLE_HS
  *  0b0110..FORCE_ENABLE_FS
@@ -1040,200 +1485,242 @@ typedef struct {
 
 #define USB_PORTSC1_WKCN_MASK                    (0x100000U)
 #define USB_PORTSC1_WKCN_SHIFT                   (20U)
-/*! WKCN - WKCN */
+/*! WKCN - Wake on Connect Enable (WKCNNT_E)
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_PORTSC1_WKCN(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_WKCN_SHIFT)) & USB_PORTSC1_WKCN_MASK)
 
 #define USB_PORTSC1_WKDC_MASK                    (0x200000U)
 #define USB_PORTSC1_WKDC_SHIFT                   (21U)
-/*! WKDC - WKDC */
+/*! WKDC - Wake on Disconnect Enable (WKDSCNNT_E)
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_PORTSC1_WKDC(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_WKDC_SHIFT)) & USB_PORTSC1_WKDC_MASK)
 
 #define USB_PORTSC1_WKOC_MASK                    (0x400000U)
 #define USB_PORTSC1_WKOC_SHIFT                   (22U)
-/*! WKOC - WKOC */
+/*! WKOC - Wake on Overcurrent Enable (WKOC_E) */
 #define USB_PORTSC1_WKOC(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_WKOC_SHIFT)) & USB_PORTSC1_WKOC_MASK)
 
 #define USB_PORTSC1_PHCD_MASK                    (0x800000U)
 #define USB_PORTSC1_PHCD_SHIFT                   (23U)
-/*! PHCD - PHCD
- *  0b1..Disable PHY clock
- *  0b0..Enable PHY clock
+/*! PHCD - PHY Low-Power Suspend - Clock Disable (PLPSCD)
+ *  0b0..Enable
+ *  0b1..Disable
  */
 #define USB_PORTSC1_PHCD(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PHCD_SHIFT)) & USB_PORTSC1_PHCD_MASK)
 
 #define USB_PORTSC1_PFSC_MASK                    (0x1000000U)
 #define USB_PORTSC1_PFSC_SHIFT                   (24U)
-/*! PFSC - PFSC
- *  0b1..Forced to full speed
+/*! PFSC - Port Force Full Speed Connect
  *  0b0..Normal operation
+ *  0b1..Forced to full speed
  */
 #define USB_PORTSC1_PFSC(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PFSC_SHIFT)) & USB_PORTSC1_PFSC_MASK)
 
 #define USB_PORTSC1_PTS_2_MASK                   (0x2000000U)
 #define USB_PORTSC1_PTS_2_SHIFT                  (25U)
-/*! PTS_2 - PTS_2 */
+/*! PTS_2 - Parallel Transceiver Select 2 */
 #define USB_PORTSC1_PTS_2(x)                     (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PTS_2_SHIFT)) & USB_PORTSC1_PTS_2_MASK)
 
 #define USB_PORTSC1_PSPD_MASK                    (0xC000000U)
 #define USB_PORTSC1_PSPD_SHIFT                   (26U)
-/*! PSPD - PSPD
- *  0b00..Full Speed
- *  0b01..Low Speed
- *  0b10..High Speed
+/*! PSPD - Port Speed
+ *  0b00..FS
+ *  0b01..LS
+ *  0b10..HS
  *  0b11..Undefined
  */
 #define USB_PORTSC1_PSPD(x)                      (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PSPD_SHIFT)) & USB_PORTSC1_PSPD_MASK)
 
 #define USB_PORTSC1_PTW_MASK                     (0x10000000U)
 #define USB_PORTSC1_PTW_SHIFT                    (28U)
-/*! PTW - PTW
- *  0b0..Select the 8-bit UTMI interface [60MHz]
- *  0b1..Select the 16-bit UTMI interface [30MHz]
+/*! PTW - Parallel Transceiver Width
+ *  0b0..8-bit UTMI interface [60 MHz]
+ *  0b1..16-bit UTMI interface [30 MHz]
  */
 #define USB_PORTSC1_PTW(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PTW_SHIFT)) & USB_PORTSC1_PTW_MASK)
 
 #define USB_PORTSC1_STS_MASK                     (0x20000000U)
 #define USB_PORTSC1_STS_SHIFT                    (29U)
-/*! STS - STS */
+/*! STS - Serial Transceiver Select
+ *  0b0..Parallel interface signals
+ *  0b1..Serial interface engine
+ */
 #define USB_PORTSC1_STS(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_STS_SHIFT)) & USB_PORTSC1_STS_MASK)
 
 #define USB_PORTSC1_PTS_1_MASK                   (0xC0000000U)
 #define USB_PORTSC1_PTS_1_SHIFT                  (30U)
-/*! PTS_1 - PTS_1 */
+/*! PTS_1 - Parallel Transceiver Select 1 */
 #define USB_PORTSC1_PTS_1(x)                     (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PTS_1_SHIFT)) & USB_PORTSC1_PTS_1_MASK)
 /*! @} */
 
-/*! @name OTGSC - On-The-Go Status & control */
+/*! @name OTGSC - On-The-Go Status & Control */
 /*! @{ */
 
 #define USB_OTGSC_VD_MASK                        (0x1U)
 #define USB_OTGSC_VD_SHIFT                       (0U)
-/*! VD - VD */
+/*! VD - VBUS Discharge */
 #define USB_OTGSC_VD(x)                          (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_VD_SHIFT)) & USB_OTGSC_VD_MASK)
 
 #define USB_OTGSC_VC_MASK                        (0x2U)
 #define USB_OTGSC_VC_SHIFT                       (1U)
-/*! VC - VC */
+/*! VC - VBUS Charge */
 #define USB_OTGSC_VC(x)                          (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_VC_SHIFT)) & USB_OTGSC_VC_MASK)
 
 #define USB_OTGSC_OT_MASK                        (0x8U)
 #define USB_OTGSC_OT_SHIFT                       (3U)
-/*! OT - OT */
+/*! OT - OTG Termination */
 #define USB_OTGSC_OT(x)                          (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_OT_SHIFT)) & USB_OTGSC_OT_MASK)
 
 #define USB_OTGSC_DP_MASK                        (0x10U)
 #define USB_OTGSC_DP_SHIFT                       (4U)
-/*! DP - DP */
+/*! DP - Data Pulsing */
 #define USB_OTGSC_DP(x)                          (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_DP_SHIFT)) & USB_OTGSC_DP_MASK)
 
 #define USB_OTGSC_IDPU_MASK                      (0x20U)
 #define USB_OTGSC_IDPU_SHIFT                     (5U)
-/*! IDPU - IDPU */
+/*! IDPU - ID Pullup */
 #define USB_OTGSC_IDPU(x)                        (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_IDPU_SHIFT)) & USB_OTGSC_IDPU_MASK)
 
 #define USB_OTGSC_ID_MASK                        (0x100U)
 #define USB_OTGSC_ID_SHIFT                       (8U)
-/*! ID - ID */
+/*! ID - USB ID
+ *  0b0..A device
+ *  0b1..B device
+ */
 #define USB_OTGSC_ID(x)                          (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_ID_SHIFT)) & USB_OTGSC_ID_MASK)
 
 #define USB_OTGSC_AVV_MASK                       (0x200U)
 #define USB_OTGSC_AVV_SHIFT                      (9U)
-/*! AVV - AVV */
+/*! AVV - A VBUS Valid */
 #define USB_OTGSC_AVV(x)                         (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_AVV_SHIFT)) & USB_OTGSC_AVV_MASK)
 
 #define USB_OTGSC_ASV_MASK                       (0x400U)
 #define USB_OTGSC_ASV_SHIFT                      (10U)
-/*! ASV - ASV */
+/*! ASV - A Session Valid */
 #define USB_OTGSC_ASV(x)                         (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_ASV_SHIFT)) & USB_OTGSC_ASV_MASK)
 
 #define USB_OTGSC_BSV_MASK                       (0x800U)
 #define USB_OTGSC_BSV_SHIFT                      (11U)
-/*! BSV - BSV */
+/*! BSV - B Session Valid */
 #define USB_OTGSC_BSV(x)                         (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_BSV_SHIFT)) & USB_OTGSC_BSV_MASK)
 
 #define USB_OTGSC_BSE_MASK                       (0x1000U)
 #define USB_OTGSC_BSE_SHIFT                      (12U)
-/*! BSE - BSE */
+/*! BSE - B Session End */
 #define USB_OTGSC_BSE(x)                         (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_BSE_SHIFT)) & USB_OTGSC_BSE_MASK)
 
 #define USB_OTGSC_TOG_1MS_MASK                   (0x2000U)
 #define USB_OTGSC_TOG_1MS_SHIFT                  (13U)
-/*! TOG_1MS - TOG_1MS */
+/*! TOG_1MS - 1 Millisecond Timer Toggle */
 #define USB_OTGSC_TOG_1MS(x)                     (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_TOG_1MS_SHIFT)) & USB_OTGSC_TOG_1MS_MASK)
 
 #define USB_OTGSC_DPS_MASK                       (0x4000U)
 #define USB_OTGSC_DPS_SHIFT                      (14U)
-/*! DPS - DPS */
+/*! DPS - Data Bus Pulsing Status */
 #define USB_OTGSC_DPS(x)                         (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_DPS_SHIFT)) & USB_OTGSC_DPS_MASK)
 
 #define USB_OTGSC_IDIS_MASK                      (0x10000U)
 #define USB_OTGSC_IDIS_SHIFT                     (16U)
-/*! IDIS - IDIS */
+/*! IDIS - USB ID Interrupt Status Flag
+ *  0b0..Change not detected
+ *  0b0..No effect
+ *  0b1..Change detected
+ *  0b1..Clear the flag
+ */
 #define USB_OTGSC_IDIS(x)                        (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_IDIS_SHIFT)) & USB_OTGSC_IDIS_MASK)
 
 #define USB_OTGSC_AVVIS_MASK                     (0x20000U)
 #define USB_OTGSC_AVVIS_SHIFT                    (17U)
-/*! AVVIS - AVVIS */
+/*! AVVIS - A VBUS Valid Interrupt Status Flag
+ *  0b0..No change
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Risen above or fallen below the threshold
+ */
 #define USB_OTGSC_AVVIS(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_AVVIS_SHIFT)) & USB_OTGSC_AVVIS_MASK)
 
 #define USB_OTGSC_ASVIS_MASK                     (0x40000U)
 #define USB_OTGSC_ASVIS_SHIFT                    (18U)
-/*! ASVIS - ASVIS */
+/*! ASVIS - A Session Valid Interrupt Status Flag
+ *  0b0..No change
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Risen above or fallen below the threshold
+ */
 #define USB_OTGSC_ASVIS(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_ASVIS_SHIFT)) & USB_OTGSC_ASVIS_MASK)
 
 #define USB_OTGSC_BSVIS_MASK                     (0x80000U)
 #define USB_OTGSC_BSVIS_SHIFT                    (19U)
-/*! BSVIS - BSVIS */
+/*! BSVIS - B Session Valid Interrupt Status Flag
+ *  0b0..No change
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Risen above or fallen below the threshold
+ */
 #define USB_OTGSC_BSVIS(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_BSVIS_SHIFT)) & USB_OTGSC_BSVIS_MASK)
 
 #define USB_OTGSC_BSEIS_MASK                     (0x100000U)
 #define USB_OTGSC_BSEIS_SHIFT                    (20U)
-/*! BSEIS - BSEIS */
+/*! BSEIS - B Session End Interrupt Status Flag
+ *  0b0..No change
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Fallen below the threshold
+ */
 #define USB_OTGSC_BSEIS(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_BSEIS_SHIFT)) & USB_OTGSC_BSEIS_MASK)
 
 #define USB_OTGSC_STATUS_1MS_MASK                (0x200000U)
 #define USB_OTGSC_STATUS_1MS_SHIFT               (21U)
-/*! STATUS_1MS - STATUS_1MS */
+/*! STATUS_1MS - 1 Millisecond Timer Interrupt Status Flag */
 #define USB_OTGSC_STATUS_1MS(x)                  (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_STATUS_1MS_SHIFT)) & USB_OTGSC_STATUS_1MS_MASK)
 
 #define USB_OTGSC_DPIS_MASK                      (0x400000U)
 #define USB_OTGSC_DPIS_SHIFT                     (22U)
-/*! DPIS - DPIS */
+/*! DPIS - Data Pulse Interrupt Status Flag
+ *  0b0..Data pulse did not occur
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Data pulse occurred
+ */
 #define USB_OTGSC_DPIS(x)                        (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_DPIS_SHIFT)) & USB_OTGSC_DPIS_MASK)
 
 #define USB_OTGSC_IDIE_MASK                      (0x1000000U)
 #define USB_OTGSC_IDIE_SHIFT                     (24U)
-/*! IDIE - IDIE */
+/*! IDIE - USB ID Interrupt Enable */
 #define USB_OTGSC_IDIE(x)                        (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_IDIE_SHIFT)) & USB_OTGSC_IDIE_MASK)
 
 #define USB_OTGSC_AVVIE_MASK                     (0x2000000U)
 #define USB_OTGSC_AVVIE_SHIFT                    (25U)
-/*! AVVIE - AVVIE */
+/*! AVVIE - A VBUS Valid Interrupt Enable */
 #define USB_OTGSC_AVVIE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_AVVIE_SHIFT)) & USB_OTGSC_AVVIE_MASK)
 
 #define USB_OTGSC_ASVIE_MASK                     (0x4000000U)
 #define USB_OTGSC_ASVIE_SHIFT                    (26U)
-/*! ASVIE - ASVIE */
+/*! ASVIE - A Session Valid Interrupt Enable */
 #define USB_OTGSC_ASVIE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_ASVIE_SHIFT)) & USB_OTGSC_ASVIE_MASK)
 
 #define USB_OTGSC_BSVIE_MASK                     (0x8000000U)
 #define USB_OTGSC_BSVIE_SHIFT                    (27U)
-/*! BSVIE - BSVIE */
+/*! BSVIE - B Session Valid Interrupt Enable */
 #define USB_OTGSC_BSVIE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_BSVIE_SHIFT)) & USB_OTGSC_BSVIE_MASK)
 
 #define USB_OTGSC_BSEIE_MASK                     (0x10000000U)
 #define USB_OTGSC_BSEIE_SHIFT                    (28U)
-/*! BSEIE - BSEIE */
+/*! BSEIE - B Session End Interrupt Enable */
 #define USB_OTGSC_BSEIE(x)                       (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_BSEIE_SHIFT)) & USB_OTGSC_BSEIE_MASK)
 
 #define USB_OTGSC_EN_1MS_MASK                    (0x20000000U)
 #define USB_OTGSC_EN_1MS_SHIFT                   (29U)
-/*! EN_1MS - EN_1MS */
+/*! EN_1MS - 1 Millisecond Timer Interrupt Enable */
 #define USB_OTGSC_EN_1MS(x)                      (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_EN_1MS_SHIFT)) & USB_OTGSC_EN_1MS_MASK)
 
 #define USB_OTGSC_DPIE_MASK                      (0x40000000U)
 #define USB_OTGSC_DPIE_SHIFT                     (30U)
-/*! DPIE - DPIE */
+/*! DPIE - Data Pulse Interrupt Enable */
 #define USB_OTGSC_DPIE(x)                        (((uint32_t)(((uint32_t)(x)) << USB_OTGSC_DPIE_SHIFT)) & USB_OTGSC_DPIE_MASK)
 /*! @} */
 
@@ -1242,33 +1729,36 @@ typedef struct {
 
 #define USB_USBMODE_CM_MASK                      (0x3U)
 #define USB_USBMODE_CM_SHIFT                     (0U)
-/*! CM - CM
- *  0b00..Idle [Default for combination host/device]
+/*! CM - Controller Mode
+ *  0b00..Idle (default for host and device combination)
  *  0b01..Reserved
- *  0b10..Device Controller [Default for device only controller]
- *  0b11..Host Controller [Default for host only controller]
+ *  0b10..Device controller (default for device-only controller)
+ *  0b11..Host controller (default for host-only controller)
  */
 #define USB_USBMODE_CM(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBMODE_CM_SHIFT)) & USB_USBMODE_CM_MASK)
 
 #define USB_USBMODE_ES_MASK                      (0x4U)
 #define USB_USBMODE_ES_SHIFT                     (2U)
-/*! ES - ES
- *  0b0..Little Endian [Default]
- *  0b1..Big Endian
+/*! ES - Endian Select
+ *  0b0..Little endian (default)
+ *  0b1..Big endian
  */
 #define USB_USBMODE_ES(x)                        (((uint32_t)(((uint32_t)(x)) << USB_USBMODE_ES_SHIFT)) & USB_USBMODE_ES_MASK)
 
 #define USB_USBMODE_SLOM_MASK                    (0x8U)
 #define USB_USBMODE_SLOM_SHIFT                   (3U)
-/*! SLOM - SLOM
- *  0b0..Setup Lockouts On (default);
- *  0b1..Setup Lockouts Off
+/*! SLOM - Setup Lockout Mode
+ *  0b0..On (default)
+ *  0b1..Off
  */
 #define USB_USBMODE_SLOM(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBMODE_SLOM_SHIFT)) & USB_USBMODE_SLOM_MASK)
 
 #define USB_USBMODE_SDIS_MASK                    (0x10U)
 #define USB_USBMODE_SDIS_SHIFT                   (4U)
-/*! SDIS - SDIS */
+/*! SDIS - Stream Disable Mode
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_USBMODE_SDIS(x)                      (((uint32_t)(((uint32_t)(x)) << USB_USBMODE_SDIS_SHIFT)) & USB_USBMODE_SDIS_MASK)
 /*! @} */
 
@@ -1277,7 +1767,12 @@ typedef struct {
 
 #define USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_MASK   (0xFFFFU)
 #define USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_SHIFT  (0U)
-/*! ENDPTSETUPSTAT - ENDPTSETUPSTAT */
+/*! ENDPTSETUPSTAT - Endpoint Setup Status Flag
+ *  0b0000000000000000..No effect
+ *  0b0000000000000000..Not received
+ *  0b0000000000000001..Clear the flag
+ *  0b0000000000000001..Received
+ */
 #define USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT(x)     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_SHIFT)) & USB_ENDPTSETUPSTAT_ENDPTSETUPSTAT_MASK)
 /*! @} */
 
@@ -1286,12 +1781,12 @@ typedef struct {
 
 #define USB_ENDPTPRIME_PERB_MASK                 (0xFFU)
 #define USB_ENDPTPRIME_PERB_SHIFT                (0U)
-/*! PERB - PERB */
+/*! PERB - Prime Endpoint Receive Buffer */
 #define USB_ENDPTPRIME_PERB(x)                   (((uint32_t)(((uint32_t)(x)) << USB_ENDPTPRIME_PERB_SHIFT)) & USB_ENDPTPRIME_PERB_MASK)
 
 #define USB_ENDPTPRIME_PETB_MASK                 (0xFF0000U)
 #define USB_ENDPTPRIME_PETB_SHIFT                (16U)
-/*! PETB - PETB */
+/*! PETB - Prime Endpoint Transmit Buffer */
 #define USB_ENDPTPRIME_PETB(x)                   (((uint32_t)(((uint32_t)(x)) << USB_ENDPTPRIME_PETB_SHIFT)) & USB_ENDPTPRIME_PETB_MASK)
 /*! @} */
 
@@ -1300,12 +1795,12 @@ typedef struct {
 
 #define USB_ENDPTFLUSH_FERB_MASK                 (0xFFU)
 #define USB_ENDPTFLUSH_FERB_SHIFT                (0U)
-/*! FERB - FERB */
+/*! FERB - Flush Endpoint Receive Buffer */
 #define USB_ENDPTFLUSH_FERB(x)                   (((uint32_t)(((uint32_t)(x)) << USB_ENDPTFLUSH_FERB_SHIFT)) & USB_ENDPTFLUSH_FERB_MASK)
 
 #define USB_ENDPTFLUSH_FETB_MASK                 (0xFF0000U)
 #define USB_ENDPTFLUSH_FETB_SHIFT                (16U)
-/*! FETB - FETB */
+/*! FETB - Flush Endpoint Transmit Buffer */
 #define USB_ENDPTFLUSH_FETB(x)                   (((uint32_t)(((uint32_t)(x)) << USB_ENDPTFLUSH_FETB_SHIFT)) & USB_ENDPTFLUSH_FETB_MASK)
 /*! @} */
 
@@ -1314,12 +1809,12 @@ typedef struct {
 
 #define USB_ENDPTSTAT_ERBR_MASK                  (0xFFU)
 #define USB_ENDPTSTAT_ERBR_SHIFT                 (0U)
-/*! ERBR - ERBR */
+/*! ERBR - Endpoint Receive Buffer Ready */
 #define USB_ENDPTSTAT_ERBR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTSTAT_ERBR_SHIFT)) & USB_ENDPTSTAT_ERBR_MASK)
 
 #define USB_ENDPTSTAT_ETBR_MASK                  (0xFF0000U)
 #define USB_ENDPTSTAT_ETBR_SHIFT                 (16U)
-/*! ETBR - ETBR */
+/*! ETBR - Endpoint Transmit Buffer Ready */
 #define USB_ENDPTSTAT_ETBR(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTSTAT_ETBR_SHIFT)) & USB_ENDPTSTAT_ETBR_MASK)
 /*! @} */
 
@@ -1328,46 +1823,68 @@ typedef struct {
 
 #define USB_ENDPTCOMPLETE_ERCE_MASK              (0xFFU)
 #define USB_ENDPTCOMPLETE_ERCE_SHIFT             (0U)
-/*! ERCE - ERCE */
+/*! ERCE - Endpoint Receive Complete Event Flag
+ *  0b00000000..No effect
+ *  0b00000000..Receive did not complete
+ *  0b00000001..Clear the flag
+ *  0b00000001..Receive completed
+ */
 #define USB_ENDPTCOMPLETE_ERCE(x)                (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCOMPLETE_ERCE_SHIFT)) & USB_ENDPTCOMPLETE_ERCE_MASK)
 
 #define USB_ENDPTCOMPLETE_ETCE_MASK              (0xFF0000U)
 #define USB_ENDPTCOMPLETE_ETCE_SHIFT             (16U)
-/*! ETCE - ETCE */
+/*! ETCE - Endpoint Transmit Complete Event Flag
+ *  0b00000000..No effect
+ *  0b00000000..Transmit did not complete
+ *  0b00000001..Clear the flag
+ *  0b00000001..Transmit completed
+ */
 #define USB_ENDPTCOMPLETE_ETCE(x)                (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCOMPLETE_ETCE_SHIFT)) & USB_ENDPTCOMPLETE_ETCE_MASK)
 /*! @} */
 
-/*! @name ENDPTCTRL0 - Endpoint Control0 */
+/*! @name ENDPTCTRL0 - Endpoint Control 0 */
 /*! @{ */
 
 #define USB_ENDPTCTRL0_RXS_MASK                  (0x1U)
 #define USB_ENDPTCTRL0_RXS_SHIFT                 (0U)
-/*! RXS - RXS */
+/*! RXS - RX Endpoint Stall
+ *  0b0..Endpoint OK
+ *  0b1..Endpoint stalled
+ */
 #define USB_ENDPTCTRL0_RXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_RXS_SHIFT)) & USB_ENDPTCTRL0_RXS_MASK)
 
 #define USB_ENDPTCTRL0_RXT_MASK                  (0xCU)
 #define USB_ENDPTCTRL0_RXT_SHIFT                 (2U)
-/*! RXT - RXT */
+/*! RXT - RX Endpoint Type */
 #define USB_ENDPTCTRL0_RXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_RXT_SHIFT)) & USB_ENDPTCTRL0_RXT_MASK)
 
 #define USB_ENDPTCTRL0_RXE_MASK                  (0x80U)
 #define USB_ENDPTCTRL0_RXE_SHIFT                 (7U)
-/*! RXE - RXE */
+/*! RXE - RX Endpoint Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_ENDPTCTRL0_RXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_RXE_SHIFT)) & USB_ENDPTCTRL0_RXE_MASK)
 
 #define USB_ENDPTCTRL0_TXS_MASK                  (0x10000U)
 #define USB_ENDPTCTRL0_TXS_SHIFT                 (16U)
-/*! TXS - TXS */
+/*! TXS - TX Endpoint Stall
+ *  0b0..Endpoint OK
+ *  0b1..Endpoint stalled
+ */
 #define USB_ENDPTCTRL0_TXS(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_TXS_SHIFT)) & USB_ENDPTCTRL0_TXS_MASK)
 
 #define USB_ENDPTCTRL0_TXT_MASK                  (0xC0000U)
 #define USB_ENDPTCTRL0_TXT_SHIFT                 (18U)
-/*! TXT - TXT */
+/*! TXT - TX Endpoint Type */
 #define USB_ENDPTCTRL0_TXT(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_TXT_SHIFT)) & USB_ENDPTCTRL0_TXT_MASK)
 
 #define USB_ENDPTCTRL0_TXE_MASK                  (0x800000U)
 #define USB_ENDPTCTRL0_TXE_SHIFT                 (23U)
-/*! TXE - TXE */
+/*! TXE - TX Endpoint Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_ENDPTCTRL0_TXE(x)                    (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL0_TXE_SHIFT)) & USB_ENDPTCTRL0_TXE_MASK)
 /*! @} */
 
@@ -1376,62 +1893,96 @@ typedef struct {
 
 #define USB_ENDPTCTRL_RXS_MASK                   (0x1U)
 #define USB_ENDPTCTRL_RXS_SHIFT                  (0U)
-/*! RXS - RXS */
+/*! RXS - RX Endpoint Stall
+ *  0b0..Endpoint OK
+ *  0b1..Endpoint stalled
+ */
 #define USB_ENDPTCTRL_RXS(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXS_SHIFT)) & USB_ENDPTCTRL_RXS_MASK)
 
 #define USB_ENDPTCTRL_RXD_MASK                   (0x2U)
 #define USB_ENDPTCTRL_RXD_SHIFT                  (1U)
-/*! RXD - RXD */
+/*! RXD - RX Endpoint Data Sink */
 #define USB_ENDPTCTRL_RXD(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXD_SHIFT)) & USB_ENDPTCTRL_RXD_MASK)
 
 #define USB_ENDPTCTRL_RXT_MASK                   (0xCU)
 #define USB_ENDPTCTRL_RXT_SHIFT                  (2U)
-/*! RXT - RXT */
+/*! RXT - RX Endpoint Type
+ *  0b00..Control
+ *  0b01..Isochronous
+ *  0b10..Bulk
+ *  0b11..Interrupt
+ */
 #define USB_ENDPTCTRL_RXT(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXT_SHIFT)) & USB_ENDPTCTRL_RXT_MASK)
 
 #define USB_ENDPTCTRL_RXI_MASK                   (0x20U)
 #define USB_ENDPTCTRL_RXI_SHIFT                  (5U)
-/*! RXI - RXI */
+/*! RXI - RX Data Toggle Inhibit
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_ENDPTCTRL_RXI(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXI_SHIFT)) & USB_ENDPTCTRL_RXI_MASK)
 
 #define USB_ENDPTCTRL_RXR_MASK                   (0x40U)
 #define USB_ENDPTCTRL_RXR_SHIFT                  (6U)
-/*! RXR - RXR */
+/*! RXR - RX Data Toggle Reset
+ *  0b0..Does not reset
+ *  0b1..Resets
+ */
 #define USB_ENDPTCTRL_RXR(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXR_SHIFT)) & USB_ENDPTCTRL_RXR_MASK)
 
 #define USB_ENDPTCTRL_RXE_MASK                   (0x80U)
 #define USB_ENDPTCTRL_RXE_SHIFT                  (7U)
-/*! RXE - RXE */
+/*! RXE - RX Endpoint Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_ENDPTCTRL_RXE(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_RXE_SHIFT)) & USB_ENDPTCTRL_RXE_MASK)
 
 #define USB_ENDPTCTRL_TXS_MASK                   (0x10000U)
 #define USB_ENDPTCTRL_TXS_SHIFT                  (16U)
-/*! TXS - TXS */
+/*! TXS - TX Endpoint Stall
+ *  0b0..Endpoint OK
+ *  0b1..Endpoint stalled
+ */
 #define USB_ENDPTCTRL_TXS(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXS_SHIFT)) & USB_ENDPTCTRL_TXS_MASK)
 
 #define USB_ENDPTCTRL_TXD_MASK                   (0x20000U)
 #define USB_ENDPTCTRL_TXD_SHIFT                  (17U)
-/*! TXD - TXD */
+/*! TXD - TX Endpoint Data Source */
 #define USB_ENDPTCTRL_TXD(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXD_SHIFT)) & USB_ENDPTCTRL_TXD_MASK)
 
 #define USB_ENDPTCTRL_TXT_MASK                   (0xC0000U)
 #define USB_ENDPTCTRL_TXT_SHIFT                  (18U)
-/*! TXT - TXT */
+/*! TXT - TX Endpoint Type
+ *  0b00..Control
+ *  0b01..Isochronous
+ *  0b10..Bulk
+ *  0b11..Interrupt
+ */
 #define USB_ENDPTCTRL_TXT(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXT_SHIFT)) & USB_ENDPTCTRL_TXT_MASK)
 
 #define USB_ENDPTCTRL_TXI_MASK                   (0x200000U)
 #define USB_ENDPTCTRL_TXI_SHIFT                  (21U)
-/*! TXI - TXI */
+/*! TXI - TX Data Toggle Inhibit
+ *  0b0..Allow
+ *  0b1..Inhibit
+ */
 #define USB_ENDPTCTRL_TXI(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXI_SHIFT)) & USB_ENDPTCTRL_TXI_MASK)
 
 #define USB_ENDPTCTRL_TXR_MASK                   (0x400000U)
 #define USB_ENDPTCTRL_TXR_SHIFT                  (22U)
-/*! TXR - TXR */
+/*! TXR - TX Data Toggle Reset
+ *  0b0..Does not reset
+ *  0b1..Resets
+ */
 #define USB_ENDPTCTRL_TXR(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXR_SHIFT)) & USB_ENDPTCTRL_TXR_MASK)
 
 #define USB_ENDPTCTRL_TXE_MASK                   (0x800000U)
 #define USB_ENDPTCTRL_TXE_SHIFT                  (23U)
-/*! TXE - TXE */
+/*! TXE - TX Endpoint Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
 #define USB_ENDPTCTRL_TXE(x)                     (((uint32_t)(((uint32_t)(x)) << USB_ENDPTCTRL_TXE_SHIFT)) & USB_ENDPTCTRL_TXE_MASK)
 /*! @} */
 
@@ -2041,5 +2592,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* USB_H_ */
+#endif  /* PERI_USB_H_ */
 
