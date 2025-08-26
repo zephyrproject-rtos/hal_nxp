@@ -95,12 +95,6 @@ int PLATFORM_TerminateOt(void)
             break;
         }
 
-        if (PLATFORM_TerminateControllers((uint8_t)conn802_15_4_c) != 0)
-        {
-            ret = -3;
-            break;
-        }
-
     } while (false);
 
     return ret;

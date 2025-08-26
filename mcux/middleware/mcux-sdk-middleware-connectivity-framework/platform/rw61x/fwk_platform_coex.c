@@ -22,22 +22,28 @@
 #endif
 
 #if (defined gPlatformMonolithicApp_d && (gPlatformMonolithicApp_d != 0))
+#define WIFI_LD_TARGET LOAD_WIFI_FW_MONOLITHIC
 #ifndef WIFI_FW_ADDRESS
 extern const uint32_t fw_cpu1[];
-#define WIFI_FW_ADDRESS (uint32_t) & fw_cpu1[0]
+#define WIFI_FW_ADDRESS ((uint32_t)&fw_cpu1[0])
 #endif
+#define BLE_LD_TARGET LOAD_BLE_FW_MONOLITHIC
 #ifndef BLE_FW_ADDRESS
 extern const uint32_t fw_cpu2_ble[];
-#define BLE_FW_ADDRESS (uint32_t) & fw_cpu2_ble[0]
+#define BLE_FW_ADDRESS ((uint32_t)&fw_cpu2_ble[0])
 #endif
+#define COMBO_LD_TARGET LOAD_15D4_FW_MONOLITHIC
 #ifndef COMBO_FW_ADDRESS
 extern const uint32_t fw_cpu2_combo[];
-#define COMBO_FW_ADDRESS (uint32_t) & fw_cpu2_combo[0]
+#define COMBO_FW_ADDRESS ((uint32_t)&fw_cpu2_combo[0])
 #endif
 #else
 #define WIFI_FW_ADDRESS  0U
+#define WIFI_LD_TARGET   LOAD_WIFI_FIRMWARE
 #define BLE_FW_ADDRESS   0U
+#define BLE_LD_TARGET    LOAD_BLE_FIRMWARE
 #define COMBO_FW_ADDRESS 0U
+#define COMBO_LD_TARGET  LOAD_15D4_FIRMWARE
 #endif
 
 /* -------------------------------------------------------------------------- */
@@ -67,7 +73,7 @@ int PLATFORM_InitControllers(uint8_t controllersMask)
         /* Wifi controller runs on CPU1 */
         if (((protocols & connWlan_c) != 0U) && ((runningControllers & connWlan_c) == 0U))
         {
-            if (sb3_fw_reset(LOAD_WIFI_FIRMWARE, 1, WIFI_FW_ADDRESS) != kStatus_Success)
+            if (sb3_fw_reset(WIFI_LD_TARGET, 1, WIFI_FW_ADDRESS) != kStatus_Success)
             {
                 ret = -1;
                 break;
@@ -81,7 +87,7 @@ int PLATFORM_InitControllers(uint8_t controllersMask)
             if (((controllersMask & connBle_c) != 0U) && ((controllersMask & conn802_15_4_c) == 0U))
             {
                 /* BLE only */
-                if (sb3_fw_reset(LOAD_BLE_FIRMWARE, 1, BLE_FW_ADDRESS) != kStatus_Success)
+                if (sb3_fw_reset(BLE_LD_TARGET, 1, BLE_FW_ADDRESS) != kStatus_Success)
                 {
                     ret = -2;
                     break;
@@ -91,7 +97,7 @@ int PLATFORM_InitControllers(uint8_t controllersMask)
             else
             {
                 /* BLE/15.4 combo */
-                if (sb3_fw_reset(LOAD_15D4_FIRMWARE, 1, COMBO_FW_ADDRESS) != kStatus_Success)
+                if (sb3_fw_reset(COMBO_LD_TARGET, 1, COMBO_FW_ADDRESS) != kStatus_Success)
                 {
                     ret = -3;
                     break;
