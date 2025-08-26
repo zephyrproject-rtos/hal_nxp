@@ -6,8 +6,6 @@
 #include "fsl_device_registers.h"
 #include "fsl_common.h"
 #include "fsl_system.h"
-#include "fsl_gpio.h"
-#include "fsl_debug_console.h"
 
 /*******************************************************************************
  * Definitions
@@ -15,19 +13,19 @@
 
 #define kFREQMEAS_target_clock_32MHz_XTAL (0U)
 
-/* typical values from datasheet */
-#define kSTEPSIZE_1MHZ_FRO_PPM  (5000)
-#define kSTEPSIZE_12MHZ_FRO_PPM (1200)
-#define kSTEPSIZE_32KHZ_FRO_PPM (2000)
-#define kFREQ_1MHZ              (1000000)
-#define kFREQ_12MHZ             (12000000)
-#define kFREQ_32MHZ             (32000000)
-#define kFREQ_32KHZ             (32768)
-#define KSTEPSIZE_1MHZ          (int32_t)((kSTEPSIZE_1MHZ_FRO_PPM * (int64_t)kFREQ_1MHZ) / 1000000)
-#define KSTEPSIZE_12MHZ         (int32_t)((kSTEPSIZE_12MHZ_FRO_PPM * (int64_t)kFREQ_12MHZ) / 1000000)
-#define KSTEPSIZE_32KHZ         ((kSTEPSIZE_32KHZ_FRO_PPM * kFREQ_32KHZ) / 1000000)
-#define kRTC_TARGET_1KHZ        (993)
-#define kRTC_TARGET_1HZ         (1)
+/* Typical values from datasheet */
+#define STEPSIZE_1MHZ_FRO_PPM  (5000)
+#define STEPSIZE_12MHZ_FRO_PPM (1200)
+#define STEPSIZE_32KHZ_FRO_PPM (2000)
+#define FREQ_1MHZ              (1000000)
+#define FREQ_12MHZ             (12000000)
+#define FREQ_32MHZ             (32000000)
+#define FREQ_32KHZ             (32768)
+#define STEPSIZE_1MHZ          (int32_t)((STEPSIZE_1MHZ_FRO_PPM * (int64_t)FREQ_1MHZ) / 1000000)
+#define STEPSIZE_12MHZ         (int32_t)((STEPSIZE_12MHZ_FRO_PPM * (int64_t)FREQ_12MHZ) / 1000000)
+#define STEPSIZE_32KHZ         ((STEPSIZE_32KHZ_FRO_PPM * FREQ_32KHZ) / 1000000)
+#define RTC_TARGET_1KHZ        (993)
+#define RTC_TARGET_1HZ         (1)
 
 #define PMC_RTCOSC32K_CLK1KHZDIV_MAX    (PMC_RTCOSC32K_CLK1KHZDIV_MASK >> PMC_RTCOSC32K_CLK1KHZDIV_SHIFT)
 #define PMC_RTCOSC32K_CLK1KHZDIV_MIN    (0)
@@ -40,7 +38,7 @@
  * Variables
  ******************************************************************************/
 
-static const uint32_t threshold[kFREQMEAS_ref_time_exp_31 + 1] = {
+static const uint32_t s_freqMeasureRefTimeThreshold[kFREQMEAS_count] = {
     /*ppm 32.768kHz  ppm 12MHz  ppm 1MHz*/
     0xffffffff, /*  0 */
     0xffffffff, /*  1 */
@@ -76,261 +74,21 @@ static const uint32_t threshold[kFREQMEAS_ref_time_exp_31 + 1] = {
     0           /*  kFREQMEAS_ref_time_exp_31               0           0          0      */
 };
 
-void pmc_delay_us(uint32_t delay)
-{
-#ifdef DEBUG
-    if (SystemCoreClock == kFreq_12MHz)
-    {
-        while (delay--)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
-    }
-    else if (SystemCoreClock == kFreq_24MHz)
-    {
-        while (delay--)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
-    }
-    else if (SystemCoreClock == kFreq_32MHz)
-    {
-        while (delay--)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
-    }
-#else
-    if (SystemCoreClock == kFreq_12MHz)
-    {
-        while (delay--)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
-    }
-    else if (SystemCoreClock == kFreq_24MHz)
-    {
-        while (delay--)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
-    }
-    else if (SystemCoreClock == kFreq_32MHz)
-    {
-        while (delay--)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
-    }
-#endif
-}
-
-static uint32_t CountCycles(freq_meas_target_clock_t target_clock,
-                            freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+/**
+ * @brief Count clock cycles for frequency measurement
+ * 
+ * @param targetClock Target clock to measure (e.g., kFREQMEAS_target_clock_32kHz_FRO)
+ * @param refClockPowerOf2Cycles Exponent for reference clock cycles (2^N)
+ * @return uint32_t Measured cycle count
+ * 
+ * @note Saves/restores peripheral registers to avoid side effects
+ */
+static uint32_t CountClockCycles(freq_meas_target_clock_t targetClock,
+                            freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
     /* Save relevant potentially altered registers */
-    uint32_t Pdruncfg0        = PMC->PDRUNCFG0;
-    uint32_t SysconClock_Ctrl = SYSCON->CLOCK_CTRL;
+    uint32_t pdruncfg0        = PMC->PDRUNCFG0;
+    uint32_t sysconClockCtrl = SYSCON->CLOCK_CTRL;
     uint32_t AHBClkCtrl0      = SYSCON->AHBCLKCTRL.AHBCLKCTRL0; /* For CLOCK_EnableClock functions */
     uint32_t AHBClkCtrl1      = SYSCON->AHBCLKCTRL.AHBCLKCTRL1; /* For CLOCK_EnableClock functions */
     uint32_t AHBClkCtrl2      = SYSCON->AHBCLKCTRL.AHBCLKCTRL2; /* For CLOCK_EnableClock functions */
@@ -352,12 +110,12 @@ static uint32_t CountCycles(freq_meas_target_clock_t target_clock,
      * FPGA) by swapping ref with target, but duration needs to be re-calculated */
     INPUTMUX->FREQMEAS_REF = kFREQMEAS_target_clock_32MHz_XTAL << INPUTMUX_FREQMEAS_REF_CLKIN_SHIFT;
 
-    INPUTMUX->FREQMEAS_TARGET = target_clock << INPUTMUX_FREQMEAS_TARGET_CLKIN_SHIFT;
+    INPUTMUX->FREQMEAS_TARGET = targetClock << INPUTMUX_FREQMEAS_TARGET_CLKIN_SHIFT;
     /* Set scale and start measurement (must be done in one go, cannot use read-modify-write as read and write point to
      * different physical registers) */
     ANACTRL->FREQ_ME_CTRL =
-        ANACTRL_FREQ_ME_CTRL_PROG_MASK | (ref_clock_power_of_2_cycles << ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE_SHIFT);
-    /* wait till measurement done - should take 2^ref_clock_power_of_2_cycles-1 ref clock cycles -  2.05 ms */
+        ANACTRL_FREQ_ME_CTRL_PROG_MASK | (refClockPowerOf2Cycles << ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE_SHIFT);
+    /* wait till measurement done - should take 2^refClockPowerOf2Cycles-1 ref clock cycles -  2.05 ms */
     while (ANACTRL->FREQ_ME_CTRL & ANACTRL_FREQ_ME_CTRL_PROG_MASK)
         ;
     /* Now get the value */
@@ -370,25 +128,24 @@ static uint32_t CountCycles(freq_meas_target_clock_t target_clock,
     SYSCON->AHBCLKCTRL.AHBCLKCTRL0 = AHBClkCtrl0;
     SYSCON->AHBCLKCTRL.AHBCLKCTRL1 = AHBClkCtrl1;
     SYSCON->AHBCLKCTRL.AHBCLKCTRL2 = AHBClkCtrl2;
-    SYSCON->CLOCK_CTRL             = SysconClock_Ctrl;
-    PMC->PDRUNCFG0                 = Pdruncfg0;
+    SYSCON->CLOCK_CTRL             = sysconClockCtrl;
+    PMC->PDRUNCFG0                 = pdruncfg0;
 
     return val;
 }
 
-/*!
- * @brief Measures and corrects frequency of 32.768kHz FRO referenced to 32MHz XTAL oscillator.
- *
- * @param ref_clock_power_of_2_cycles
- * @return freq         Clock frequency in Hz
- *
+/**
+ * @brief Measure and calibrate the 32kHz FRO clock frequency
+ * 
+ * @param refClockPowerOf2Cycles Measurement duration exponent (2^N cycles)
+ * 
  */
-static void MeasureAndCorrect32kHzFRO(freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+static void MeasureAndCorrect32kHzFRO(freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
     uint32_t capcal = (PMC->FRO32K & PMC_FRO32K_CAPCAL_MASK) >> PMC_FRO32K_CAPCAL_SHIFT;
-    uint32_t freq   = SYSTEM_MeasureFrequency(kFREQMEAS_target_clock_32kHz_FRO, ref_clock_power_of_2_cycles);
+    uint32_t freq   = SYSTEM_MeasureFrequency(kFREQMEAS_target_clock_32kHz_FRO, refClockPowerOf2Cycles);
     /* Error calculation */
-    int32_t error = freq - kFREQ_32KHZ;
+    int32_t error = freq - FREQ_32KHZ;
 
     /*
      * some rules:
@@ -396,18 +153,18 @@ static void MeasureAndCorrect32kHzFRO(freq_meas_ref_time_exponent_t ref_clock_po
      * -2- subtract half of the measurement accuracy to not make things worse
      * -3- do not correct below 1/2 step
      */
-    if (abs(error) > threshold[ref_clock_power_of_2_cycles]) // rule -1-
+    if (abs(error) > s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles]) /* rule -1- */
     {
         int32_t correction;
         if (error > 0)
         {
-            error -= (threshold[ref_clock_power_of_2_cycles] >> 1);       // rule -2-
-            correction = (error + KSTEPSIZE_32KHZ / 2) / KSTEPSIZE_32KHZ; // rule -3-
+            error -= (s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles] >> 1);       /* rule -2- */ 
+            correction = (error + STEPSIZE_32KHZ / 2) / STEPSIZE_32KHZ; /* rule -3- */
         }
         else
         {
-            error += (threshold[ref_clock_power_of_2_cycles] >> 1);       // rule -2-
-            correction = (error - KSTEPSIZE_32KHZ / 2) / KSTEPSIZE_32KHZ; // rule -3-
+            error += (s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles] >> 1);       /* rule -2- */
+            correction = (error - STEPSIZE_32KHZ / 2) / STEPSIZE_32KHZ; /* rule -3- */
         }
         /* Do correction */
         capcal          = (uint32_t)((int32_t)capcal + correction);
@@ -422,48 +179,48 @@ static void MeasureAndCorrect32kHzFRO(freq_meas_ref_time_exponent_t ref_clock_po
  * @brief Measures frequency of 32.768kHz FRO referenced to 32MHz XTAL oscillator and corrects RTC dividers.
  * Correction aims to be as close as possible to targets 1Hz and 32768/33 = 993Hz.
  *
- * @param ref_clock_power_of_2_cycles
+ * @param refClockPowerOf2Cycles Measurement duration exponent
  */
-static void MeasureAndCorrect32kHzRTCdividers(freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+static void MeasureAndCorrect32kHzRTCdividers(freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
-    uint32_t val = CountCycles(kFREQMEAS_target_clock_32kHz_FRO, ref_clock_power_of_2_cycles);
+    uint32_t val = CountClockCycles(kFREQMEAS_target_clock_32kHz_FRO, refClockPowerOf2Cycles);
     /* Calculate frequency in mHz */
-    int32_t freq_in_mHz = (int32_t)(((uint64_t)val * kFREQ_32MHZ * 1000) / ((1 << ref_clock_power_of_2_cycles) - 1));
+    int32_t freqMHz = (int32_t)(((uint64_t)val * FREQ_32MHZ * 1000) / ((1 << refClockPowerOf2Cycles) - 1));
 
-    int32_t setting_1kHz =
-        (freq_in_mHz + kRTC_TARGET_1KHZ * (1000 / 2)) / (kRTC_TARGET_1KHZ * 1000) - PMC_RTCOSC32K_CLK1KHZDIV_OFFSET;
-    if (setting_1kHz < PMC_RTCOSC32K_CLK1KHZDIV_MIN)
-        setting_1kHz = PMC_RTCOSC32K_CLK1KHZDIV_MIN;
-    if (setting_1kHz > PMC_RTCOSC32K_CLK1KHZDIV_MAX)
-        setting_1kHz = PMC_RTCOSC32K_CLK1KHZDIV_MAX;
+    int32_t setting1kHz =
+        (freqMHz + RTC_TARGET_1KHZ * (1000 / 2)) / (RTC_TARGET_1KHZ * 1000) - PMC_RTCOSC32K_CLK1KHZDIV_OFFSET;
+    if (setting1kHz < PMC_RTCOSC32K_CLK1KHZDIV_MIN)
+        setting1kHz = PMC_RTCOSC32K_CLK1KHZDIV_MIN;
+    if (setting1kHz > PMC_RTCOSC32K_CLK1KHZDIV_MAX)
+        setting1kHz = PMC_RTCOSC32K_CLK1KHZDIV_MAX;
 
-    int32_t setting_1Hz =
-        (freq_in_mHz + kRTC_TARGET_1HZ * (1000 / 2)) / (kRTC_TARGET_1HZ * 1000) - PMC_RTCOSC32K_CLK1HZDIV_OFFSET;
-    if (setting_1Hz < PMC_RTCOSC32K_CLK1HZDIV_MIN)
-        setting_1Hz = PMC_RTCOSC32K_CLK1HZDIV_MIN;
-    if (setting_1Hz > PMC_RTCOSC32K_CLK1HZDIV_MAX)
-        setting_1Hz = PMC_RTCOSC32K_CLK1HZDIV_MAX;
+    int32_t setting1Hz =
+        (freqMHz + RTC_TARGET_1HZ * (1000 / 2)) / (RTC_TARGET_1HZ * 1000) - PMC_RTCOSC32K_CLK1HZDIV_OFFSET;
+    if (setting1Hz < PMC_RTCOSC32K_CLK1HZDIV_MIN)
+        setting1Hz = PMC_RTCOSC32K_CLK1HZDIV_MIN;
+    if (setting1Hz > PMC_RTCOSC32K_CLK1HZDIV_MAX)
+        setting1Hz = PMC_RTCOSC32K_CLK1HZDIV_MAX;
 
     /* Do correction */
     uint32_t rtcosc32k = PMC->RTCOSC32K;
     rtcosc32k &= ~(PMC_RTCOSC32K_CLK1KHZDIV_MASK | PMC_RTCOSC32K_CLK1HZDIV_MASK);
-    rtcosc32k |= (PMC_RTCOSC32K_CLK1KHZDIV(setting_1kHz) | PMC_RTCOSC32K_CLK1HZDIV(setting_1Hz));
+    rtcosc32k |= (PMC_RTCOSC32K_CLK1KHZDIV(setting1kHz) | PMC_RTCOSC32K_CLK1HZDIV(setting1Hz));
     PMC->RTCOSC32K = rtcosc32k;
 }
 
 /*!
  * @brief Measures 12MHz FRO output and corrects frequency of 192MHz FRO referenced to 32MHz XTAL oscillator.
  *
- * @param ref_clock_power_of_2_cycles
+ * @param refClockPowerOf2Cycles Measurement duration exponent
  */
-static void MeasureAndCorrect12MHzFRO(freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+static void MeasureAndCorrect12MHzFRO(freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
     uint32_t curdac = (PMC->FRO192M & PMC_FRO192M_CUR_DAC_MASK) >>
                       PMC_FRO192M_CUR_DAC_SHIFT; /* fine, 8 bits, increase value is increase frequency, 1 step = 215 kHz
                                                     on 192MHz or 0.12% */
-    uint32_t freq = SYSTEM_MeasureFrequency(kFREQMEAS_target_clock_12_24_32MHz_FRO, ref_clock_power_of_2_cycles);
+    uint32_t freq = SYSTEM_MeasureFrequency(kFREQMEAS_target_clock_12_24_32MHz_FRO, refClockPowerOf2Cycles);
     /* Error calculation */
-    int32_t error = freq - kFREQ_12MHZ;
+    int32_t error = freq - FREQ_12MHZ;
 
     /*
      * some rules:
@@ -471,18 +228,18 @@ static void MeasureAndCorrect12MHzFRO(freq_meas_ref_time_exponent_t ref_clock_po
      * -2- subtract half of the measurement accuracy to not make things worse
      * -3- do not correct below 1/2 step
      */
-    if (abs(error) > threshold[ref_clock_power_of_2_cycles]) // rule -1-
+    if (abs(error) > s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles]) /* rule -1- */
     {
         int32_t correction;
         if (error > 0)
         {
-            error -= (threshold[ref_clock_power_of_2_cycles] >> 1);       // rule -2-
-            correction = (error + KSTEPSIZE_12MHZ / 2) / KSTEPSIZE_12MHZ; // rule -3-
+            error -= (s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles] >> 1);       /* rule -2- */ 
+            correction = (error + STEPSIZE_12MHZ / 2) / STEPSIZE_12MHZ; /* rule -3- */
         }
         else
         {
-            error += (threshold[ref_clock_power_of_2_cycles] >> 1);       // rule -2-
-            correction = (error - KSTEPSIZE_12MHZ / 2) / KSTEPSIZE_12MHZ; // rule -3-
+            error += (s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles] >> 1);      /* rule -2- */ 
+            correction = (error - STEPSIZE_12MHZ / 2) / STEPSIZE_12MHZ; /* rule -3- */
         }
         /* Do fine correction */
         curdac           = (uint32_t)((int32_t)curdac - correction);
@@ -496,33 +253,33 @@ static void MeasureAndCorrect12MHzFRO(freq_meas_ref_time_exponent_t ref_clock_po
 /*!
  * @brief Measures and corrects frequency of 1MHz FRO referenced to 32MHz XTAL oscillator.
  *
- * @param ref_clock_power_of_2_cycles
+ * @param refClockPowerOf2Cycles Measurement duration exponent
  */
-static void MeasureAndCorrect1MHzFRO(freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+static void MeasureAndCorrect1MHzFRO(freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
     uint32_t freqsel = (PMC->FRO1M & PMC_FRO1M_FREQSEL_MASK) >>
                        PMC_FRO1M_FREQSEL_SHIFT; /* 7 bits, increase value is increase frequency */
-    uint32_t freq = SYSTEM_MeasureFrequency(kFREQMEAS_target_clock_1MHz_FRO, ref_clock_power_of_2_cycles);
+    uint32_t freq = SYSTEM_MeasureFrequency(kFREQMEAS_target_clock_1MHz_FRO, refClockPowerOf2Cycles);
     /* Error calculation */
-    int32_t error = (int32_t)freq - kFREQ_1MHZ;
+    int32_t error = (int32_t)freq - FREQ_1MHZ;
     /*
      * some rules:
      * -1- do not correct when below measurement accuracy
      * -2- subtract half of the measurement accuracy to not make things worse
      * -3- do not correct below 1/2 step
      */
-    if (abs(error) > threshold[ref_clock_power_of_2_cycles]) // rule -1-
+    if (abs(error) > s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles]) /* rule -1- */
     {
         int32_t correction;
         if (error > 0)
         {
-            error -= (threshold[ref_clock_power_of_2_cycles] >> 1);     // rule -2-
-            correction = (error + KSTEPSIZE_1MHZ / 2) / KSTEPSIZE_1MHZ; // rule -3-
+            error -= (s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles] >> 1);    /* rule -2- */ 
+            correction = (error + STEPSIZE_1MHZ / 2) / STEPSIZE_1MHZ; /* rule -3- */
         }
         else
         {
-            error += (threshold[ref_clock_power_of_2_cycles] >> 1);     // rule -2-
-            correction = (error - KSTEPSIZE_1MHZ / 2) / KSTEPSIZE_1MHZ; // rule -3-
+            error += (s_freqMeasureRefTimeThreshold[refClockPowerOf2Cycles] >> 1);     /* rule -2- */ 
+            correction = (error - STEPSIZE_1MHZ / 2) / STEPSIZE_1MHZ; /* rule -3- */
         }
         /* Do correction */
         freqsel        = (uint32_t)((int32_t)freqsel + correction);
@@ -536,63 +293,79 @@ static void MeasureAndCorrect1MHzFRO(freq_meas_ref_time_exponent_t ref_clock_pow
 /*******************************************************************************
  * Functions
  ******************************************************************************/
-uint32_t SYSTEM_MeasureFrequency32kHzAccurate(freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+/**
+ * @brief Measure 32kHz FRO frequency with high accuracy (returns mHz)
+ * 
+ * @param refClockPowerOf2Cycles Measurement duration exponent
+ * @return uint32_t Frequency in millihertz (mHz)
+ * 
+ * @note Uses 32MHz XTAL as reference clock
+ */
+ uint32_t SYSTEM_MeasureFrequency32kHzAccurate(freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
-    uint32_t freq_in_mHz = 0;
+    uint32_t freqMHz = 0;
 
     /* Save relevant potentially altered registers */
-    uint32_t Pdruncfg0            = PMC->PDRUNCFG0;
-    uint32_t SysconClock_Ctrl     = SYSCON->CLOCK_CTRL;
-    uint32_t SavedSystemCoreClock = SystemCoreClock;
+    uint32_t pdruncfg0            = PMC->PDRUNCFG0;
+    uint32_t sysconClockCtrl     = SYSCON->CLOCK_CTRL;
+    uint32_t savedSystemCoreClock = SystemCoreClock;
 
     /* Enable BLE clock / CLKIN clock / 32MHz XTAL clock already here to gain time */
     PMC->PDRUNCFGCLR0 = PMC_PDRUNCFG0_PDEN_BLE_MASK;
 
-    uint32_t val = CountCycles(kFREQMEAS_target_clock_32kHz_FRO, ref_clock_power_of_2_cycles);
+    uint32_t val = CountClockCycles(kFREQMEAS_target_clock_32kHz_FRO, refClockPowerOf2Cycles);
     /* Calculate frequency in mHz */
-    freq_in_mHz = (uint32_t)(((uint64_t)val * kFREQ_32MHZ * 1000) / ((1 << ref_clock_power_of_2_cycles) - 1));
+    freqMHz = (uint32_t)(((uint64_t)val * FREQ_32MHZ * 1000) / ((1 << refClockPowerOf2Cycles) - 1));
 
     /* Restore relevant potentially altered registers */
-    SystemCoreClock    = SavedSystemCoreClock;
-    SYSCON->CLOCK_CTRL = SysconClock_Ctrl;
-    PMC->PDRUNCFG0     = Pdruncfg0;
+    SystemCoreClock    = savedSystemCoreClock;
+    SYSCON->CLOCK_CTRL = sysconClockCtrl;
+    PMC->PDRUNCFG0     = pdruncfg0;
 
-    return freq_in_mHz;
+    return freqMHz;
 }
 
-uint32_t SYSTEM_MeasureFrequency(freq_meas_target_clock_t target_clock,
-                                 freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles)
+/**
+ * @brief Measure clock frequency in Hz
+ * 
+ * @param targetClock Clock to measure (see freq_meas_target_clock_t)
+ * @param refClockPowerOf2Cycles Measurement duration exponent
+ * @return uint32_t Frequency in Hz
+ */
+uint32_t SYSTEM_MeasureFrequency(freq_meas_target_clock_t targetClock,
+                                 freq_meas_ref_time_exponent_t refClockPowerOf2Cycles)
 {
     uint32_t freq = 0;
 
     /* Save relevant potentially altered registers */
-    uint32_t Pdruncfg0            = PMC->PDRUNCFG0;
-    uint32_t SysconClock_Ctrl     = SYSCON->CLOCK_CTRL;
-    uint32_t PmcRTCOsc32k         = PMC->RTCOSC32K;
-    uint32_t Fro192M_ctrl         = ANACTRL->FRO192M_CTRL;
-    uint32_t SavedSystemCoreClock = SystemCoreClock;
+    uint32_t pdruncfg0            = PMC->PDRUNCFG0;
+    uint32_t sysconClockCtrl     = SYSCON->CLOCK_CTRL;
+    uint32_t pmcRTCOsc32k         = PMC->RTCOSC32K;
+    uint32_t fro192MCtrl         = ANACTRL->FRO192M_CTRL;
+    uint32_t savedSystemCoreClock = SystemCoreClock;
+    uint32_t val;
 
     /* Enable BLE clock / CLKIN clock / 32MHz XTAL clock already here to gain time */
     PMC->PDRUNCFGCLR0 = PMC_PDRUNCFG0_PDEN_BLE_MASK;
 
-    if (target_clock == kFREQMEAS_target_clock_32kHz_FRO)
+    if (targetClock == kFREQMEAS_target_clock_32kHz_FRO)
     {
         PMC->PDRUNCFG0 &= ~(PMC_PDRUNCFG0_PDEN_FRO32K_MASK);
-        pmc_delay_us(100);                      /* startup time of FRO32kHz? spec: max 100us to be within +/-2.2% */
+        SDK_DelayAtLeastUs(100, SystemCoreClock);                      /* startup time of FRO32kHz? spec: max 100us to be within +/-2.2% */
         PMC->RTCOSC32K |= PMC_RTCOSC32K_SEL(0); /* use 32 kHz fro as 32k osc */
-        pmc_delay_us(100);                      /* delay 3 32kHz cycles to switch (and increase accuracy) */
+        SDK_DelayAtLeastUs(100, SystemCoreClock);                      /* delay 3 32kHz cycles to switch (and increase accuracy) */
     }
-    else if (target_clock == kFREQMEAS_target_clock_12_24_32MHz_FRO)
+    else if (targetClock == kFREQMEAS_target_clock_12_24_32MHz_FRO)
     {
         PMC->PDRUNCFGCLR0 = PMC_PDRUNCFG0_PDEN_FRO192M_MASK;
-        pmc_delay_us(100); /* startup time of FRO192MHz? spec: 15us time it takes to release clock after enable */
-        ANACTRL->FRO192M_CTRL = Fro192M_ctrl | ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK;
+        SDK_DelayAtLeastUs(100, SystemCoreClock); /* startup time of FRO192MHz? spec: 15us time it takes to release clock after enable */
+        ANACTRL->FRO192M_CTRL = fro192MCtrl | ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK;
         SYSCON->CLOCK_CTRL |= SYSCON_CLOCK_CTRL_FRO12MHZ_FREQM_ENA_MASK;
     }
-    else if (target_clock == kFREQMEAS_target_clock_1MHz_FRO)
+    else if (targetClock == kFREQMEAS_target_clock_1MHz_FRO)
     {
         PMC->PDRUNCFGCLR0 = PMC_PDRUNCFG0_PDEN_FRO1M_MASK;
-        pmc_delay_us(2000); /* startup time of FRO1MHz?  spec: 25us till 10% of final value.
+        SDK_DelayAtLeastUs(2000, SystemCoreClock); /* startup time of FRO1MHz?  spec: 25us till 10% of final value.
         From experiments: 2000us is ok  1500 nok  this is with PMC running on 1MHz FRO which is already running -
         probably ldo stabilization time after previous activity
         200us FRO startup time measured to stabilize within one correction step when PMC is running on 12MHz */
@@ -604,18 +377,18 @@ uint32_t SYSTEM_MeasureFrequency(freq_meas_target_clock_t target_clock,
         goto func_exit;
     }
 
-    uint32_t val = CountCycles(target_clock, ref_clock_power_of_2_cycles);
+    val = CountClockCycles(targetClock, refClockPowerOf2Cycles);
 
     /* Calculate frequency in Hz */
-    freq = (uint32_t)(((uint64_t)val * kFREQ_32MHZ) / ((1 << ref_clock_power_of_2_cycles) - 1));
+    freq = (uint32_t)(((uint64_t)val * FREQ_32MHZ) / ((1 << refClockPowerOf2Cycles) - 1));
 
 func_exit:
     /* Restore relevant potentially altered registers */
-    SystemCoreClock       = SavedSystemCoreClock;
-    ANACTRL->FRO192M_CTRL = Fro192M_ctrl;
-    PMC->RTCOSC32K        = PmcRTCOsc32k;
-    SYSCON->CLOCK_CTRL    = SysconClock_Ctrl;
-    PMC->PDRUNCFG0        = Pdruncfg0;
+    SystemCoreClock       = savedSystemCoreClock;
+    ANACTRL->FRO192M_CTRL = fro192MCtrl;
+    PMC->RTCOSC32K        = pmcRTCOsc32k;
+    SYSCON->CLOCK_CTRL    = sysconClockCtrl;
+    PMC->PDRUNCFG0        = pdruncfg0;
 
     return freq;
 }
@@ -624,7 +397,7 @@ func_exit:
  * @brief Calibrates clock referenced to 32MHz XTAL oscillator using a successive calibration algorithm for large
  * deviations.
  *
- * @param target_clock  Clock to calibrate.
+ * @param targetClock Clock to calibrate (32kHz/12MHz/1MHz FRO)
  */
 void SYSTEM_CalibrateClock(freq_meas_target_clock_t targetClock)
 {
@@ -669,7 +442,7 @@ void SYSTEM_CalibrateClock(freq_meas_target_clock_t targetClock)
 /*!
  * @brief Calibrates clock referenced to 32MHz XTAL oscillator for small deviations.
  *
- * @param target_clock  Clock to calibrate.
+ * @param targetClock Clock to calibrate
  */
 void SYSTEM_CalibrateClockFine(freq_meas_target_clock_t targetClock)
 {
@@ -707,11 +480,18 @@ chip_version_t SYSTEM_GetChipVersion(void)
     chip_version_t chipVersion = kCHIPVERSION_UNKNOWN;
     uint32_t metalFixNr        = ((uint32_t)FLASH_NMPA->GPO1.GPO1_0 & FLASH_NMPA_GPO1_0_METAL_REVISION_ID_MASK) >>
                           FLASH_NMPA_GPO1_0_METAL_REVISION_ID_SHIFT;
-    uint32_t netListNr = (SYSCON->DEVICE_ID0 & SYSCON_DEVICE_ID0_PARTCONFIG_MASK) >> SYSCON_DEVICE_ID0_PARTCONFIG_SHIFT;
-    chipVersion = metalFixNr | 0xA0;
+    chipVersion = (chip_version_t)(metalFixNr | 0xA0);
     return chipVersion;
 }
 
+/**
+ * @brief Get device type information
+ * 
+ * @param[out] typeNr Device type number
+ * @param[out] securityEnabled Security feature status
+ * @param[out] packageType Chip package type
+ * @param[out] nrOfPins Number of pins
+ */
 void SYSTEM_GetDeviceType(uint16_t *typeNr, bool *securityEnabled, chip_package_type_t *packageType, uint8_t *nrOfPins)
 {
     FLASH_NMPA_Type *nmpa = ((FLASH_NMPA_Type *)(FLASH_NMPA_BASE));
@@ -719,7 +499,7 @@ void SYSTEM_GetDeviceType(uint16_t *typeNr, bool *securityEnabled, chip_package_
                          FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_NUM_SHIFT);
     *securityEnabled      = (bool)((nmpa->DEVICE_TYPE & FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_SEC_MASK) >>
                               FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_SEC_SHIFT);
-    *packageType          = (uint8_t)((nmpa->DEVICE_TYPE & FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_PKG_MASK) >>
+    *packageType          = (chip_package_type_t)((nmpa->DEVICE_TYPE & FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_PKG_MASK) >>
                              FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_PKG_SHIFT);
     *nrOfPins             = (uint8_t)((nmpa->DEVICE_TYPE & FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_PIN_MASK) >>
                           FLASH_NMPA_DEVICE_TYPE_DEVICE_TYPE_PIN_SHIFT);

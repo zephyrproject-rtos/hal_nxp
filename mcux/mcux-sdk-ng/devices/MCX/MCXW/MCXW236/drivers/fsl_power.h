@@ -1,5 +1,5 @@
 /*
- * Copyright 2017,2020-2024 NXP
+ * Copyright 2017,2020-2025 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -30,9 +30,8 @@
 enum _power_status
 {
     kStatus_Power_Success                    = kStatus_Success,
-    kStatus_Power_ChipVersionNotSupported    = MAKE_STATUS(kStatusGroup_POWER, 1U),
-    kStatus_Power_SupplyModeModeNotSupported = MAKE_STATUS(kStatusGroup_POWER, 2U),
-    kStatus_Power_SupplyModeModeInvalid      = MAKE_STATUS(kStatusGroup_POWER, 3U),
+    kStatus_Power_SupplyModeModeNotSupported = MAKE_STATUS(kStatusGroup_POWER, 1U),
+    kStatus_Power_SupplyModeModeInvalid      = MAKE_STATUS(kStatusGroup_POWER, 2U),
 };
 
 /**
@@ -390,27 +389,27 @@ uint32_t POWER_GetLibVersion(void);
 
 /*!
  * @brief Function to disable the power of an analog peripheral when the device is in active mode.
- * @param power_config_bit    peripheral for which to disable the power
+ * @param powerConfigBit    peripheral for which to disable the power
  */
-void POWER_PeripheralPowerOff(power_config_bit_t power_config_bit);
+void POWER_PeripheralPowerOff(power_config_bit_t powerConfigBit);
 
 /*!
  * @brief Function to enable the power of an analog peripheral when the device is in active mode.
- * @param power_config_bit    peripheral for which to enable the power
+ * @param powerConfigBit    peripheral for which to enable the power
  */
-void POWER_PeripheralPowerOn(power_config_bit_t power_config_bit);
+void POWER_PeripheralPowerOn(power_config_bit_t powerConfigBit);
 
 /*!
  * @brief Function to power off certain SRAM segments.
- * @param sram_ctrl    mask of sram_ctrl_bit_t bits to power off.
+ * @param sramCtrl    mask of sram_ctrl_bit_t bits to power off.
  */
-void POWER_DisableSRAM(uint32_t sram_ctrl);
+void POWER_DisableSRAM(uint32_t sramCtrl);
 
 /*!
  * @brief Function to power on certain SRAM segments. By default all SRAM segments are on.
- * @param sram_ctrl    mask of sram_ctrl_bit_t bits to power on.
+ * @param sramCtrl    mask of sram_ctrl_bit_t bits to power on.
  */
-void POWER_EnableSRAM(uint32_t sram_ctrl);
+void POWER_EnableSRAM(uint32_t sramCtrl);
 
 /*!
  * @brief Function to return power status of all SRAM segments.
@@ -482,14 +481,14 @@ void POWER_EnterSleep(void);
 /**
  * @brief Function to enter deep sleep mode: stop CPU and power down flash, active srams put in retention, continues
  * execution after wakeup
- * @param exclude_from_pd       mask of power domain peripheral bits to specify which not to power down during
+ * @param excludeFromPd       mask of power domain peripheral bits to specify which not to power down during
  *                              the low power mode. See comments in low_power_config_bit_t to understand which values
  *                              are valid for this power mode.
- * @param wakeup_interrupts     mask of wake up interrupt bits (see wakeup_irq_t) to specify which interrupt sources can
+ * @param wakeupInterrupts     mask of wake up interrupt bits (see wakeup_irq_t) to specify which interrupt sources can
  *                              cause a wake up from the low power mode. See comments in wakeup_irq_t to understand
  *                              which values are valid for this power mode.
  * @note If any interrupt that is used as wake up source is pending, the system will not go to the low power mode. To
- * avoid this, all interrupts that are configured as wakeup_interrupts will be briefly enabled in the NVIC so they can
+ * avoid this, all interrupts that are configured as wakeupInterrupts will be briefly enabled in the NVIC so they can
  * be handled just before entering the low power mode. This means that the application must have an interrupt handler
  *       installed for every interrupt that is used as a wakeup source. Special care must be given to WDT, BOD1 and BOD2
  *       because they can be handled by the kWAKEUP_SYS interrupt or by their individual kWAKEUP_WDT, kWAKEUP_BOD1 or
@@ -499,8 +498,8 @@ void POWER_EnterSleep(void);
  * @retval kStatus_Success Successfully woken up from low power mode.
  * @retval kStatus_InvalidArgument Invalid argument(s), low power mode was never entered.
  *  Reasons why this function could return kStatus_InvalidArgument:
- *  @li Non existing low_power_config_bit_t value passed to exclude_from_pd
- *  @li FRO32K or XTAL32K not enabled (not added to exclude_from_pd), when BLE_WUP is exluded from pd (BLE can only
+ *  @li Non existing low_power_config_bit_t value passed to excludeFromPd
+ *  @li FRO32K or XTAL32K not enabled (not added to excludeFromPd), when BLE_WUP is exluded from pd (BLE can only
  * remain on, if it has a clock)
  *  @li FRO192M excluded from pd, but HFDSM not
  *  @li BOD Resets enabled (using POWER_ConfigureBOD1 and POWER_ConfigureBOD2) but BOD not powered (using
@@ -508,72 +507,72 @@ void POWER_EnterSleep(void);
  *  @li utick timer clock enabled, while going to deep sleep, but HFDSM not added to exclude from pd list.
  *  @li FRO1M clock routed to ctimerX, while going to deep sleep, but HFDSM not added to exclude from pd list.
  */
-status_t POWER_EnterDeepSleep(uint32_t exclude_from_pd, uint64_t wakeup_interrupts);
+status_t POWER_EnterDeepSleep(uint32_t excludeFromPd, uint64_t wakeupInterrupts);
 
 /**
  * @brief Function to enter power down mode: power down flash and CPU, active srams put in retention, continues
  * execution after wakeup if CPU retention is enabled and resets after wake up if CPU retention is disabled.
  * interrupt
- * @param exclude_from_pd       mask of power domain peripheral bits to specify which not to power down during
+ * @param excludeFromPd       mask of power domain peripheral bits to specify which not to power down during
  *                              the low power mode. See comments in low_power_config_bit_t to understand which values
  *                              are valid for this power mode.
- * @param wakeup_interrupts     mask of wake up interrupt bits (see wakeup_irq_t) to specify which interrupt sources can
+ * @param wakeupInterrupts     mask of wake up interrupt bits (see wakeup_irq_t) to specify which interrupt sources can
  *                              cause a wake up from the low power mode. See comments in wakeup_irq_t to understand
  *                              which values are valid for this power mode.
- * @param cpu_retention_ctrl    0 = CPU retention is disable / 1 = CPU retention is enabled, all other values are
+ * @param cpuRetentionCtrl    0 = CPU retention is disable / 1 = CPU retention is enabled, all other values are
  * RESERVED (see cpu_retention_config_t).
  * @note If any interrupt that is used as wake up source is pending, the system will not go to the low power mode. To
- * avoid this, all interrupts that are configured as wakeup_interrupts will be briefly enabled in the NVIC so they can
+ * avoid this, all interrupts that are configured as wakeupInterrupts will be briefly enabled in the NVIC so they can
  * be handled just before entering the low power mode. This means that the application must have an interrupt handler
  *       installed for every interrupt that is used as a wakeup source.
  * @retval kStatus_Success Successfully woken up from low power mode if CPU retention was enabled. If CPU retention was
  * not enabled, function will never return because application reboot is expected.
  * @retval kStatus_InvalidArgument Invalid argument(s), low power mode was never entered.
  *  Reasons why this function could return kStatus_InvalidArgument:
- *  @li Non existing low_power_config_bit_t value passed to exclude_from_pd
- *  @li FRO32K or XTAL32K not enabled (not added to exclude_from_pd), when BLE_WUP is exluded from pd (BLE can only
+ *  @li Non existing low_power_config_bit_t value passed to excludeFromPd
+ *  @li FRO32K or XTAL32K not enabled (not added to excludeFromPd), when BLE_WUP is exluded from pd (BLE can only
  * remain on, if it has a clock)
  *  @li BOD Resets enabled (using POWER_ConfigureBOD1 and POWER_ConfigureBOD2) but BOD not powered (using
  * POWER_PeripheralPowerOn)
  *  @li Invalid wake up interrupt used for this power mode.
  */
-status_t POWER_EnterPowerDown(uint32_t exclude_from_pd, uint64_t wakeup_interrupts, uint32_t cpu_retention_ctrl);
+status_t POWER_EnterPowerDown(uint32_t excludeFromPd, uint64_t wakeupInterrupts, uint32_t cpuRetentionCtrl);
 
 /**
  * @brief Function to enter deep power down mode: power down almost whole chip, reset/wake up by pin, RTC or OS Timer
- * @param exclude_from_pd       mask of power domain peripheral bits to specify which not to power down during
+ * @param excludeFromPd       mask of power domain peripheral bits to specify which not to power down during
  *                              the low power mode. See comments in low_power_config_bit_t to understand which values
  *                              are valid for this power mode.
- * @param wakeup_interrupts     mask of wake up interrupt bits (see wakeup_irq_t) to specify which interrupt sources can
+ * @param wakeupInterrupts     mask of wake up interrupt bits (see wakeup_irq_t) to specify which interrupt sources can
  *                              cause a wake up from the low power mode. See comments in wakeup_irq_t to understand
  *                              values are valid for this power mode.
- * @param wakeup_io_ctrl        mask of wake up pin control bits (see wakeup_io_bits_t) to configure the wakeup pin.
+ * @param wakeupIoCtrl        mask of wake up pin control bits (see wakeup_io_bits_t) to configure the wakeup pin.
  * @note If any interrupt that is used as wake up source is pending, the system will not go to the low power mode. To
- * avoid this, all interrupts that are configured as wakeup_interrupts will be briefly enabled in the NVIC so they can
+ * avoid this, all interrupts that are configured as wakeupInterrupts will be briefly enabled in the NVIC so they can
  * be handled just before entering the low power mode. This means that the application must have an interrupt handler
  *       installed for every interrupt that is used as a wakeup source.
  * @retval kStatus_InvalidArgument Invalid argument(s), low power mode was never entered (in case of successful
  * execution, function will never return because application reboot is expected).
  *  Reasons why this function could return kStatus_InvalidArgument:
- *  @li Non existing low_power_config_bit_t value passed to exclude_from_pd
+ *  @li Non existing low_power_config_bit_t value passed to excludeFromPd
  *  @li BOD Resets enabled (using POWER_ConfigureBOD1 and POWER_ConfigureBOD2) but BOD not powered (using
  * POWER_PeripheralPowerOn)
  *  @li Invalid wake up interrupt used for this power mode.
  */
-status_t POWER_EnterDeepPowerDown(uint32_t exclude_from_pd, uint64_t wakeup_interrupts, uint32_t wakeup_io_ctrl);
+status_t POWER_EnterDeepPowerDown(uint32_t excludeFromPd, uint64_t wakeupInterrupts, uint32_t wakeupIoCtrl);
 
 /**
  * @brief Function to enter power off mode: power down almost whole chip, reset/wake up by pin only
- * @param exclude_from_pd       mask of power domain peripheral bits to specify which not to power down during
+ * @param excludeFromPd       mask of power domain peripheral bits to specify which not to power down during
  *                              the low power mode. See comments in low_power_config_bit_t to understand which values
  *                              are valid for this power mode.
- * @param wakeup_io_ctrl        mask of wake up pin control bits (see wakeup_io_bits_t) to configure the wakeup pin.
+ * @param wakeupIoCtrl        mask of wake up pin control bits (see wakeup_io_bits_t) to configure the wakeup pin.
  * @retval kStatus_InvalidArgument Invalid argument(s), low power mode was never entered (in case of successful
  * execution, function will never return because application reboot is expected).
  *  Reasons why this function could return kStatus_InvalidArgument:
- *  @li Non existing low_power_config_bit_t value passed to exclude_from_pd
+ *  @li Non existing low_power_config_bit_t value passed to excludeFromPd
  */
-status_t POWER_EnterPowerOff(uint32_t exclude_from_pd, uint32_t wakeup_io_ctrl);
+status_t POWER_EnterPowerOff(uint32_t excludeFromPd, uint32_t wakeupIoCtrl);
 
 /*!
  * @brief Function that returns the Supply Mode.
@@ -607,16 +606,16 @@ void POWER_DCDC_Enable(void);
 /*!
  * @brief Function to configure output level of DC/DC convertor when configured in buck mode.
  * @pre Can only be used supply mode kDCDC_MODE_HV_SM is used.
- * @param output_lvl    The output level of the DC/DC convertor.
+ * @param outputLvl    The output level of the DC/DC convertor.
  */
-void POWER_DCDC_ConfigureBuckOutput(dcdc_buck_output_level_t output_lvl);
+void POWER_DCDC_ConfigureBuckOutput(dcdc_buck_output_level_t outputLvl);
 
 /*!
  * @brief Function to configure output level of DC/DC convertor when configured in boost mode.
  * @pre Can only be used supply mode kDCDC_MODE_LV_SM is used.
- * @param output_lvl    The output level of the DC/DC convertor.
+ * @param outputLvl    The output level of the DC/DC convertor.
  */
-void POWER_DCDC_ConfigureBoostOutput(dcdc_boost_output_level_t output_lvl);
+void POWER_DCDC_ConfigureBoostOutput(dcdc_boost_output_level_t outputLvl);
 
 /*!
  * @brief Function to retrieve the time it took for the DC/DC to have stable output level. Note that the measurement

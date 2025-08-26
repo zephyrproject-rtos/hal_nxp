@@ -8,7 +8,7 @@
 **                          MCXW236BIUKAR
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250624
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -99,18 +99,24 @@
 #define SYSCON_CTIMERCLKSEL_CTIMERCLKSELX_CTIMERCLKSELX_COUNT 5u
 #define SYSCON_FCCLKSEL_FCCLKSELX_FCCLKSELX_COUNT 8u
 #define SYSCON_FLEXFRGCTRL_FLEXFRGXCTRL_FLEXFRGXCTRL_COUNT 8u
+#define SYSCON_STARTER_COUNT                      2u
+#define SYSCON_STARTERSET_COUNT                   2u
+#define SYSCON_STARTERCLR_COUNT                   2u
 
 /** SYSCON - Register Layout Typedef */
 typedef struct {
   __IO uint32_t MEMORYREMAP;                       /**< Memory Remap control register, offset: 0x0 */
        uint8_t RESERVED_0[12];
   __IO uint32_t AHBMATPRIO;                        /**< AHB Matrix priority control register Priority values are 3 = highest, 0 = lowest, offset: 0x10 */
-       uint8_t RESERVED_1[36];
+       uint8_t RESERVED_1[12];
+  __IO uint32_t BUFFERINGAHB2VPB0;                 /**< Buffering of write accesses on Synchronous System configuration APB interface, offset: 0x20 */
+  __IO uint32_t BUFFERINGAHB2VPB1;                 /**< Buffering of write accesses on Synchronous System configuration APB interface, offset: 0x24 */
+       uint8_t RESERVED_2[16];
   __IO uint32_t CPU0STCKCAL;                       /**< System tick calibration for secure part of CPU0, offset: 0x38 */
   __IO uint32_t CPU0NSTCKCAL;                      /**< System tick calibration for non-secure part of CPU0, offset: 0x3C */
-       uint8_t RESERVED_2[8];
+       uint8_t RESERVED_3[8];
   __IO uint32_t NMISRC;                            /**< NMI Source Select, offset: 0x48 */
-       uint8_t RESERVED_3[180];
+       uint8_t RESERVED_4[180];
   union {                                          /* offset: 0x100 */
     struct {                                         /* offset: 0x100 */
       __IO uint32_t PRESETCTRL0;                       /**< Peripheral reset control 0, offset: 0x100 */
@@ -119,13 +125,13 @@ typedef struct {
     } PRESETCTRL;
     __IO uint32_t PRESETCTRLX[SYSCON_PRESETCTRL_PRESETCTRLX_PRESETCTRLX_COUNT];   /**< Peripheral reset control register, array offset: 0x100, array step: 0x4 */
   };
-       uint8_t RESERVED_4[20];
-  __IO uint32_t PRESETCTRLSET[SYSCON_PRESETCTRLSET_COUNT]; /**< Peripheral reset control set register, array offset: 0x120, array step: 0x4 */
        uint8_t RESERVED_5[20];
-  __IO uint32_t PRESETCTRLCLR[SYSCON_PRESETCTRLCLR_COUNT]; /**< Peripheral reset control clear register, array offset: 0x140, array step: 0x4 */
+  __IO uint32_t PRESETCTRLSET[SYSCON_PRESETCTRLSET_COUNT]; /**< Peripheral reset control set register, array offset: 0x120, array step: 0x4 */
        uint8_t RESERVED_6[20];
+  __IO uint32_t PRESETCTRLCLR[SYSCON_PRESETCTRLCLR_COUNT]; /**< Peripheral reset control clear register, array offset: 0x140, array step: 0x4 */
+       uint8_t RESERVED_7[20];
   __O  uint32_t SWR_RESET;                         /**< generate a software_reset, offset: 0x160 */
-       uint8_t RESERVED_7[156];
+       uint8_t RESERVED_8[156];
   union {                                          /* offset: 0x200 */
     struct {                                         /* offset: 0x200 */
       __IO uint32_t AHBCLKCTRL0;                       /**< AHB Clock control 0, offset: 0x200 */
@@ -134,16 +140,16 @@ typedef struct {
     } AHBCLKCTRL;
     __IO uint32_t AHBCLKCTRLX[SYSCON_AHBCLKCTRL_AHBCLKCTRLX_AHBCLKCTRLX_COUNT];   /**< Peripheral reset control register, array offset: 0x200, array step: 0x4 */
   };
-       uint8_t RESERVED_8[20];
-  __IO uint32_t AHBCLKCTRLSET[SYSCON_AHBCLKCTRLSET_COUNT]; /**< Peripheral reset control register, array offset: 0x220, array step: 0x4 */
        uint8_t RESERVED_9[20];
-  __IO uint32_t AHBCLKCTRLCLR[SYSCON_AHBCLKCTRLCLR_COUNT]; /**< Peripheral reset control register, array offset: 0x240, array step: 0x4 */
+  __IO uint32_t AHBCLKCTRLSET[SYSCON_AHBCLKCTRLSET_COUNT]; /**< Peripheral reset control register, array offset: 0x220, array step: 0x4 */
        uint8_t RESERVED_10[20];
+  __IO uint32_t AHBCLKCTRLCLR[SYSCON_AHBCLKCTRLCLR_COUNT]; /**< Peripheral reset control register, array offset: 0x240, array step: 0x4 */
+       uint8_t RESERVED_11[20];
   union {                                          /* offset: 0x260 */
     __IO uint32_t SYSTICKCLKSEL0;                    /**< System Tick Timer for CPU0 source select, offset: 0x260 */
     __IO uint32_t SYSTICKCLKSELX[SYSCON_SYSTICKCLKSEL_SYSTICKCLKSELX_SYSTICKCLKSELX_COUNT];   /**< System Tick Timer source select register, array offset: 0x260, array step: 0x4 */
   };
-       uint8_t RESERVED_11[4];
+       uint8_t RESERVED_12[4];
   __IO uint32_t TRACECLKSEL;                       /**< Trace clock source select, offset: 0x268 */
   union {                                          /* offset: 0x26C */
     struct {                                         /* offset: 0x26C */
@@ -158,7 +164,7 @@ typedef struct {
   __IO uint32_t MAINCLKSELA;                       /**< Main clock A source select, offset: 0x280 */
   __IO uint32_t MAINCLKSELB;                       /**< Main clock source select, offset: 0x284 */
   __IO uint32_t CLKOUTSEL;                         /**< CLKOUT clock source select, offset: 0x288 */
-       uint8_t RESERVED_12[36];
+       uint8_t RESERVED_13[36];
   union {                                          /* offset: 0x2B0 */
     struct {                                         /* offset: 0x2B0 */
       __IO uint32_t FCCLKSEL0;                         /**< Flexcomm Interface 0 clock source select for Fractional Rate Divider, offset: 0x2B0 */
@@ -168,13 +174,13 @@ typedef struct {
     __IO uint32_t FCCLKSELX[SYSCON_FCCLKSEL_FCCLKSELX_FCCLKSELX_COUNT];   /**< Flexcomm clock source select register for Fractional Rate Divider, array offset: 0x2B0, array step: 0x4 */
   };
   __IO uint32_t SPIFICLKSEL;                       /**< QuadSPI Flash Interface clock source select, offset: 0x2D0 */
-       uint8_t RESERVED_13[28];
+       uint8_t RESERVED_14[28];
   __IO uint32_t SCTCLKSEL;                         /**< SCTimer/PWM clock source select, offset: 0x2F0 */
-       uint8_t RESERVED_14[12];
+       uint8_t RESERVED_15[12];
   __IO uint32_t SYSTICKCLKDIV0;                    /**< System Tick Timer divider for CPU0, offset: 0x300 */
-       uint8_t RESERVED_15[4];
+       uint8_t RESERVED_16[4];
   __IO uint32_t TRACECLKDIV;                       /**< TRACE clock divider, offset: 0x308 */
-       uint8_t RESERVED_16[20];
+       uint8_t RESERVED_17[20];
   union {                                          /* offset: 0x320 */
     struct {                                         /* offset: 0x320 */
       __IO uint32_t FLEXFRG0CTRL;                      /**< Fractional rate divider for flexcomm 0, offset: 0x320 */
@@ -183,31 +189,59 @@ typedef struct {
     } FLEXFRGCTRL;
     __IO uint32_t FLEXFRGXCTRL[SYSCON_FLEXFRGCTRL_FLEXFRGXCTRL_FLEXFRGXCTRL_COUNT];   /**< Peripheral reset control register, array offset: 0x320, array step: 0x4 */
   };
-       uint8_t RESERVED_17[64];
+       uint8_t RESERVED_18[64];
   __IO uint32_t AHBCLKDIV;                         /**< System clock divider, offset: 0x380 */
   __IO uint32_t CLKOUTDIV;                         /**< CLKOUT clock divider, offset: 0x384 */
   __IO uint32_t FROHFDIV;                          /**< FRO_HF (32MHz) clock divider, offset: 0x388 */
   __IO uint32_t WDTCLKDIV;                         /**< WDT clock divider, offset: 0x38C */
-       uint8_t RESERVED_18[36];
+       uint8_t RESERVED_19[36];
   __IO uint32_t SCTCLKDIV;                         /**< SCT/PWM clock divider, offset: 0x3B4 */
-       uint8_t RESERVED_19[24];
+       uint8_t RESERVED_20[24];
   __IO uint32_t SPIFICLKDIV;                       /**< QuadSPI Flash Interface Clock divider, offset: 0x3D0 */
-       uint8_t RESERVED_20[40];
+       uint8_t RESERVED_21[40];
   __IO uint32_t CLOCKGENUPDATELOCKOUT;             /**< Control clock configuration registers access (like xxxDIV, xxxSEL), offset: 0x3FC */
-       uint8_t RESERVED_21[64];
+       uint8_t RESERVED_22[4];
+  __IO uint32_t ROMCR;                             /**< ROM access configuration register, offset: 0x404 */
+       uint8_t RESERVED_23[12];
+  __IO uint32_t EZHINT;                            /**< EZH interrupt hijack, offset: 0x414 */
+       uint8_t RESERVED_24[40];
   __IO uint32_t FLASHREMAP_SIZE;                   /**< This 32-bit register contains the size of the image to remap, in bytes. The 12 LSBs are ignored, so the size granularity is 4KB., offset: 0x440 */
   __IO uint32_t FLASHREMAP_SIZE_DP;                /**< This 32-bit register is a duplicate of FLASHREMAPSIZE for increased security., offset: 0x444 */
   __IO uint32_t FLASHREMAP_OFFSET;                 /**< This 32-bit register contains the offset by which the image is to be remapped. The 12 LSBs are ignored, so the remap granularity is 4KB., offset: 0x448 */
   __IO uint32_t FLASHREMAP_OFFSET_DP;              /**< This 32-bit register is a duplicate of FLASHREMAPOFFSET for increased security., offset: 0x44C */
-       uint8_t RESERVED_22[12];
+  __IO uint32_t FLASHBANKENABLE;                   /**< Flash Banks control, offset: 0x450 */
+       uint8_t RESERVED_25[8];
   __IO uint32_t FLASHREMAP_LOCK;                   /**< Control write access to FLASHREMAP_SIZE and FLASHREMAP_OFFSET registers., offset: 0x45C */
-       uint8_t RESERVED_23[16];
+       uint8_t RESERVED_26[16];
   __IO uint32_t CASPER_CTRL;                       /**< Control CASPER integration., offset: 0x470 */
-       uint8_t RESERVED_24[656];
+       uint8_t RESERVED_27[12];
+  __IO uint32_t BOOT_LOCKOUT_ADDR;                 /**< When ROM address is below the Address Offset. The access to ROM is block if BOOT_LOCKOUT is LOCK., offset: 0x480 */
+  __IO uint32_t BOOT_LOCKOUT_ADDR_DP;              /**< When ROM address is below the Address Offset. The access to ROM is block if BOOT_LOCKOUT is LOCK. Duplicate of BOOT_LOCKOUT_ADDR., offset: 0x484 */
+  __IO uint32_t BOOT_LOCKOUT;                      /**< Control write access to BOOT_LOCKOUT_ADDR and BOOT_LOCKOUT_ADDR registers and ROM memory., offset: 0x488 */
+       uint8_t RESERVED_28[500];
+  __IO uint32_t STARTER[SYSCON_STARTER_COUNT];     /**< Start logic wake-up enable register, array offset: 0x680, array step: 0x4 */
+       uint8_t RESERVED_29[24];
+  __O  uint32_t STARTERSET[SYSCON_STARTERSET_COUNT]; /**< Set bits in STARTER, array offset: 0x6A0, array step: 0x4 */
+       uint8_t RESERVED_30[24];
+  __O  uint32_t STARTERCLR[SYSCON_STARTERCLR_COUNT]; /**< Clear bits in STARTER, array offset: 0x6C0, array step: 0x4 */
+       uint8_t RESERVED_31[60];
   __IO uint32_t FUNCRETENTIONCTRL;                 /**< Functional retention control register, offset: 0x704 */
-       uint8_t RESERVED_25[260];
+       uint8_t RESERVED_32[4];
+  __IO uint32_t POWERDOWNSAFETY;                   /**< Override some powerdown control signals (for debug purposes), offset: 0x70C */
+  __IO uint32_t MAINCLKSAFETY;                     /**< main clock is enable after MAINCLKSAFETY cycle, offset: 0x710 */
+       uint8_t RESERVED_33[108];
+  __IO uint32_t HARDWARESLEEP;                     /**< Hardware Sleep control, offset: 0x780 */
+       uint8_t RESERVED_34[136];
   __I  uint32_t CPSTAT;                            /**< CPU Status, offset: 0x80C */
-       uint8_t RESERVED_26[272];
+       uint8_t RESERVED_35[240];
+  __IO uint32_t DICE_REG0;                         /**< Composite Device Identifier, offset: 0x900 */
+  __IO uint32_t DICE_REG1;                         /**< Composite Device Identifier, offset: 0x904 */
+  __IO uint32_t DICE_REG2;                         /**< Composite Device Identifier, offset: 0x908 */
+  __IO uint32_t DICE_REG3;                         /**< Composite Device Identifier, offset: 0x90C */
+  __IO uint32_t DICE_REG4;                         /**< Composite Device Identifier, offset: 0x910 */
+  __IO uint32_t DICE_REG5;                         /**< Composite Device Identifier, offset: 0x914 */
+  __IO uint32_t DICE_REG6;                         /**< Composite Device Identifier, offset: 0x918 */
+  __IO uint32_t DICE_REG7;                         /**< Composite Device Identifier, offset: 0x91C */
   __IO uint32_t BOOT_SEED_REG0;                    /**< boot seed (256-bit random value), offset: 0x920 */
   __IO uint32_t BOOT_SEED_REG1;                    /**< boot seed (256-bit random value), offset: 0x924 */
   __IO uint32_t BOOT_SEED_REG2;                    /**< boot seed (256-bit random value), offset: 0x928 */
@@ -225,26 +259,34 @@ typedef struct {
   __IO uint32_t HMAC_REG6;                         /**< HMAC, offset: 0x958 */
   __IO uint32_t HMAC_REG7;                         /**< HMAC, offset: 0x95C */
   __IO uint32_t BOOT_LOCK;                         /**< Control write access to boot seed security registers., offset: 0x960 */
-       uint8_t RESERVED_27[108];
+       uint8_t RESERVED_36[108];
   __I  uint32_t CSS_AS_CFG0;                       /**< CSS AS configuration, offset: 0x9D0 */
-       uint8_t RESERVED_28[68];
+       uint8_t RESERVED_37[68];
   __IO uint32_t CLOCK_CTRL;                        /**< Various system clock controls : Clocks to Frequency Measures, offset: 0xA18 */
-       uint8_t RESERVED_29[1000];
+       uint8_t RESERVED_38[1000];
   __IO uint32_t AUTOCLKGATEOVERRIDE;               /**< Control automatic clock gating, offset: 0xE04 */
   __IO uint32_t GPIOPSYNC;                         /**< Enable bypass of the first stage of synchonization inside GPIO_INT module, offset: 0xE08 */
-       uint8_t RESERVED_30[380];
+       uint8_t RESERVED_39[20];
+  __IO uint32_t INVERTMAINCLK;                     /**< Invert Main clock, offset: 0xE20 */
+       uint8_t RESERVED_40[356];
   __IO uint32_t HASHRESTHWKEY;                     /**< Controls whether the HASH AES hardware secret key is restricted to use by secure code, offset: 0xF88 */
-       uint8_t RESERVED_31[20];
+       uint8_t RESERVED_41[20];
   __IO uint32_t DEBUG_LOCK_EN;                     /**< Write-once register to control write access to security registers., offset: 0xFA0 */
   __IO uint32_t DEBUG_FEATURES;                    /**< Cortex debug features control., offset: 0xFA4 */
   __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex debug features control. (duplicate), offset: 0xFA8 */
-       uint8_t RESERVED_32[8];
+       uint8_t RESERVED_42[4];
+  __O  uint32_t CODESECURITYPROTTEST;              /**< Security code to allow test (Design for Testability) access., offset: 0xFB0 */
   __IO uint32_t SWD_ACCESS_CPU0;                   /**< This register is used by ROM during DEBUG authentication mechanism to enable debug access port for CPU0., offset: 0xFB4 */
-       uint8_t RESERVED_33[4];
+       uint8_t RESERVED_43[4];
   __O  uint32_t KEY_BLOCK;                         /**< block quiddikey/PUF all index., offset: 0xFBC */
   __IO uint32_t DEBUG_AUTH_BEACON;                 /**< Debug authentication BEACON register, offset: 0xFC0 */
-       uint8_t RESERVED_34[52];
-  __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
+       uint8_t RESERVED_44[28];
+  __IO uint32_t FLASHSIZECFG;                      /**< Flash size configuration, offset: 0xFE0 */
+  __IO uint32_t CONFIGLOCKOUT;                     /**< Disable write access to FLASHSIZECFG, SRAMSIZECFG, CPUCFG., offset: 0xFE4 */
+  __IO uint32_t RAMSIZECFG;                        /**< RAM size, offset: 0xFE8 */
+  __IO uint32_t PERIPHENCFG;                       /**< Peripheral enable configuration, offset: 0xFEC */
+       uint8_t RESERVED_45[8];
+  __IO uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
   __I  uint32_t DIEID;                             /**< Chip revision ID and Number, offset: 0xFFC */
 } SYSCON_Type;
 
@@ -294,10 +336,260 @@ typedef struct {
 /*! PRI_SDMA1 - DMA1 controller priority. */
 #define SYSCON_AHBMATPRIO_PRI_SDMA1(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_SDMA1_SHIFT)) & SYSCON_AHBMATPRIO_PRI_SDMA1_MASK)
 
+#define SYSCON_AHBMATPRIO_PRI_EZH_B_D_MASK       (0x3000U)
+#define SYSCON_AHBMATPRIO_PRI_EZH_B_D_SHIFT      (12U)
+/*! PRI_EZH_B_D - EZH B data bus. */
+#define SYSCON_AHBMATPRIO_PRI_EZH_B_D(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_EZH_B_D_SHIFT)) & SYSCON_AHBMATPRIO_PRI_EZH_B_D_MASK)
+
+#define SYSCON_AHBMATPRIO_PRI_EZH_B_I_MASK       (0xC000U)
+#define SYSCON_AHBMATPRIO_PRI_EZH_B_I_SHIFT      (14U)
+/*! PRI_EZH_B_I - EZH B instruction bus. */
+#define SYSCON_AHBMATPRIO_PRI_EZH_B_I(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_EZH_B_I_SHIFT)) & SYSCON_AHBMATPRIO_PRI_EZH_B_I_MASK)
+
 #define SYSCON_AHBMATPRIO_PRI_HASH_AES_MASK      (0x30000U)
 #define SYSCON_AHBMATPRIO_PRI_HASH_AES_SHIFT     (16U)
 /*! PRI_HASH_AES - HASH_AES. */
 #define SYSCON_AHBMATPRIO_PRI_HASH_AES(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_HASH_AES_SHIFT)) & SYSCON_AHBMATPRIO_PRI_HASH_AES_MASK)
+/*! @} */
+
+/*! @name BUFFERINGAHB2VPB0 - Buffering of write accesses on Synchronous System configuration APB interface */
+/*! @{ */
+
+#define SYSCON_BUFFERINGAHB2VPB0_SYSCON_MASK     (0x1U)
+#define SYSCON_BUFFERINGAHB2VPB0_SYSCON_SHIFT    (0U)
+/*! SYSCON - Enable buffering of write accesses on Synchronous System configuration APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_SYSCON(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_SYSCON_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_SYSCON_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_IOCON_MASK      (0x2U)
+#define SYSCON_BUFFERINGAHB2VPB0_IOCON_SHIFT     (1U)
+/*! IOCON - Enable buffering of write accesses on IO Configuration APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_IOCON(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_IOCON_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_IOCON_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_GPIOGLOBALINT0_MASK (0x4U)
+#define SYSCON_BUFFERINGAHB2VPB0_GPIOGLOBALINT0_SHIFT (2U)
+/*! GPIOGLOBALINT0 - Enable buffering of write accesses on GPIO Global Interrupt APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_GPIOGLOBALINT0(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_GPIOGLOBALINT0_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_GPIOGLOBALINT0_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_GPIOINT_MASK    (0x10U)
+#define SYSCON_BUFFERINGAHB2VPB0_GPIOINT_SHIFT   (4U)
+/*! GPIOINT - Enable buffering of write accesses on GPIO Int APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_GPIOINT(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_GPIOINT_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_GPIOINT_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_SECGPIOINT_MASK (0x20U)
+#define SYSCON_BUFFERINGAHB2VPB0_SECGPIOINT_SHIFT (5U)
+/*! SECGPIOINT - Enable buffering of write accesses on secure GPIO Int APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_SECGPIOINT(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_SECGPIOINT_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_SECGPIOINT_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_INPUTMUX_MASK   (0x40U)
+#define SYSCON_BUFFERINGAHB2VPB0_INPUTMUX_SHIFT  (6U)
+/*! INPUTMUX - Enable buffering of write accesses on Peripheral Input Mux APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_INPUTMUX(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_INPUTMUX_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_INPUTMUX_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_CT32B0_MASK     (0x100U)
+#define SYSCON_BUFFERINGAHB2VPB0_CT32B0_SHIFT    (8U)
+/*! CT32B0 - Enable buffering of write accesses on Counter/Timer0 APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_CT32B0(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_CT32B0_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_CT32B0_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_CT32B1_MASK     (0x200U)
+#define SYSCON_BUFFERINGAHB2VPB0_CT32B1_SHIFT    (9U)
+/*! CT32B1 - Enable buffering of write accesses on Counter/Timer1 APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_CT32B1(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_CT32B1_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_CT32B1_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_WWDT_MASK       (0x1000U)
+#define SYSCON_BUFFERINGAHB2VPB0_WWDT_SHIFT      (12U)
+/*! WWDT - Enable buffering of write accesses on Watchdog Timer APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_WWDT(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_WWDT_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_WWDT_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_MRT_MASK        (0x2000U)
+#define SYSCON_BUFFERINGAHB2VPB0_MRT_SHIFT       (13U)
+/*! MRT - Enable buffering of write ac.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_MRT(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_MRT_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_MRT_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_UTICK_MASK      (0x4000U)
+#define SYSCON_BUFFERINGAHB2VPB0_UTICK_SHIFT     (14U)
+/*! UTICK - Enable buffering of write accesses on micro Tick APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_UTICK(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_UTICK_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_UTICK_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_ANACTRL_MASK    (0x80000U)
+#define SYSCON_BUFFERINGAHB2VPB0_ANACTRL_SHIFT   (19U)
+/*! ANACTRL - Enable buffering of write accesses on analog control APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_ANACTRL(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_ANACTRL_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_ANACTRL_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_SCTIUP_MASK     (0x8000000U)
+#define SYSCON_BUFFERINGAHB2VPB0_SCTIUP_SHIFT    (27U)
+/*! SCTIUP - Enable buffering of write accesses on SCTIUP APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_SCTIUP(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_SCTIUP_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_SCTIUP_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_EZH_MASK        (0x20000000U)
+#define SYSCON_BUFFERINGAHB2VPB0_EZH_SHIFT       (29U)
+/*! EZH - Enable buffering of write accesses on EZH APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_EZH(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_EZH_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_EZH_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_PROBSYNC_MASK   (0x40000000U)
+#define SYSCON_BUFFERINGAHB2VPB0_PROBSYNC_SHIFT  (30U)
+/*! PROBSYNC - Enable buffering of write accesses on prob IS (sync) APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_PROBSYNC(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_PROBSYNC_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_PROBSYNC_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB0_PROBXVC_MASK    (0x80000000U)
+#define SYSCON_BUFFERINGAHB2VPB0_PROBXVC_SHIFT   (31U)
+/*! PROBXVC - Enable buffering of write accesses on prob IS (XVC) APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB0_PROBXVC(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB0_PROBXVC_SHIFT)) & SYSCON_BUFFERINGAHB2VPB0_PROBXVC_MASK)
+/*! @} */
+
+/*! @name BUFFERINGAHB2VPB1 - Buffering of write accesses on Synchronous System configuration APB interface */
+/*! @{ */
+
+#define SYSCON_BUFFERINGAHB2VPB1_PMC_MASK        (0x1U)
+#define SYSCON_BUFFERINGAHB2VPB1_PMC_SHIFT       (0U)
+/*! PMC - Enable buffering of write accesses on Power Management Controller APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_PMC(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_PMC_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_PMC_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_SYSCTL_MASK     (0x8U)
+#define SYSCON_BUFFERINGAHB2VPB1_SYSCTL_SHIFT    (3U)
+/*! SYSCTL - Enable buffering of write accesses on system control APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_SYSCTL(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_SYSCTL_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_SYSCTL_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B2_MASK     (0x100U)
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B2_SHIFT    (8U)
+/*! CT32B2 - Enable buffering of write accesses on Counter/Timer2 APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B2(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_CT32B2_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_CT32B2_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B3_MASK     (0x200U)
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B3_SHIFT    (9U)
+/*! CT32B3 - Enable buffering of write accesses on Counter/Timer3 APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B3(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_CT32B3_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_CT32B3_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B4_MASK     (0x400U)
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B4_SHIFT    (10U)
+/*! CT32B4 - Enable buffering of write accesses on Counter/Timer4 APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_CT32B4(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_CT32B4_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_CT32B4_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_RTC_MASK        (0x1000U)
+#define SYSCON_BUFFERINGAHB2VPB1_RTC_SHIFT       (12U)
+/*! RTC - Enable buffering of write accesses on RTC APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_RTC(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_RTC_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_RTC_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_OSEVENT_MASK    (0x2000U)
+#define SYSCON_BUFFERINGAHB2VPB1_OSEVENT_SHIFT   (13U)
+/*! OSEVENT - Enable buffering of write accesses on OS event timer APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_OSEVENT(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_OSEVENT_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_OSEVENT_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_FLASHCTRL_MASK  (0x100000U)
+#define SYSCON_BUFFERINGAHB2VPB1_FLASHCTRL_SHIFT (20U)
+/*! FLASHCTRL - Enable buffering of write accesses on Flash Controller APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_FLASHCTRL(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_FLASHCTRL_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_FLASHCTRL_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_PRINCE_MASK     (0x200000U)
+#define SYSCON_BUFFERINGAHB2VPB1_PRINCE_SHIFT    (21U)
+/*! PRINCE - Enable buffering of write accesses on Prince APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_PRINCE(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_PRINCE_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_PRINCE_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_RNG_MASK        (0x4000000U)
+#define SYSCON_BUFFERINGAHB2VPB1_RNG_SHIFT       (26U)
+/*! RNG - Enable buffering of write accesses on Random Number Generator APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_RNG(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_RNG_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_RNG_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_PUFF_MASK       (0x8000000U)
+#define SYSCON_BUFFERINGAHB2VPB1_PUFF_SHIFT      (27U)
+/*! PUFF - Enable buffering of write accesses on PUFF interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_PUFF(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_PUFF_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_PUFF_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_PLU_LUT_MASK    (0x20000000U)
+#define SYSCON_BUFFERINGAHB2VPB1_PLU_LUT_SHIFT   (29U)
+/*! PLU_LUT - Enable buffering of write accesses on PLU LUT interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_PLU_LUT(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_PLU_LUT_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_PLU_LUT_MASK)
+
+#define SYSCON_BUFFERINGAHB2VPB1_CODEPATCH_MASK  (0x40000000U)
+#define SYSCON_BUFFERINGAHB2VPB1_CODEPATCH_SHIFT (30U)
+/*! CODEPATCH - Enable buffering of write accesses on Code Patch Unit APB interface:.
+ *  0b0..Disable buffering.
+ *  0b1..Enable buffering.
+ */
+#define SYSCON_BUFFERINGAHB2VPB1_CODEPATCH(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_BUFFERINGAHB2VPB1_CODEPATCH_SHIFT)) & SYSCON_BUFFERINGAHB2VPB1_CODEPATCH_MASK)
 /*! @} */
 
 /*! @name CPU0STCKCAL - System tick calibration for secure part of CPU0 */
@@ -954,6 +1246,22 @@ typedef struct {
  *  0b1..Enable Clock.
  */
 #define SYSCON_AHBCLKCTRL1_TIMER1(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_TIMER1_SHIFT)) & SYSCON_AHBCLKCTRL1_TIMER1_MASK)
+
+#define SYSCON_AHBCLKCTRL1_EZHA_MASK             (0x40000000U)
+#define SYSCON_AHBCLKCTRL1_EZHA_SHIFT            (30U)
+/*! EZHA - Enables the clock for the EZH a.
+ *  0b0..Disable Clock.
+ *  0b1..Enable Clock.
+ */
+#define SYSCON_AHBCLKCTRL1_EZHA(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_EZHA_SHIFT)) & SYSCON_AHBCLKCTRL1_EZHA_MASK)
+
+#define SYSCON_AHBCLKCTRL1_EZHB_MASK             (0x80000000U)
+#define SYSCON_AHBCLKCTRL1_EZHB_SHIFT            (31U)
+/*! EZHB - Enables the clock for the EZH b.
+ *  0b0..Disable Clock.
+ *  0b1..Enable Clock.
+ */
+#define SYSCON_AHBCLKCTRL1_EZHB(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_EZHB_SHIFT)) & SYSCON_AHBCLKCTRL1_EZHB_MASK)
 /*! @} */
 
 /*! @name AHBCLKCTRL2 - AHB Clock control 2 */
@@ -1278,10 +1586,10 @@ typedef struct {
  *  0b001..CLKIN clock.
  *  0b010..FRO 1MHz clock.
  *  0b011..FRO 32 MHz clock.
- *  0b100..Reserved.
- *  0b101..Reserved.
- *  0b110..Reserved.
- *  0b111..Reserved.
+ *  0b100..FRO 12 MHz clock.
+ *  0b101..CLKIN clock.
+ *  0b110..FRO 1MHz clock.
+ *  0b111..FRO 32 MHz clock.
  */
 #define SYSCON_MAINCLKSELA_SEL(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_MAINCLKSELA_SEL_SHIFT)) & SYSCON_MAINCLKSELA_SEL_MASK)
 /*! @} */
@@ -1730,6 +2038,27 @@ typedef struct {
 #define SYSCON_CLOCKGENUPDATELOCKOUT_CLOCKGENUPDATELOCKOUT(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_CLOCKGENUPDATELOCKOUT_CLOCKGENUPDATELOCKOUT_SHIFT)) & SYSCON_CLOCKGENUPDATELOCKOUT_CLOCKGENUPDATELOCKOUT_MASK)
 /*! @} */
 
+/*! @name ROMCR - ROM access configuration register */
+/*! @{ */
+
+#define SYSCON_ROMCR_WAIT_MASK                   (0x1U)
+#define SYSCON_ROMCR_WAIT_SHIFT                  (0U)
+/*! WAIT - An extra-wait state between ARM master and ROM access.
+ *  0b0..No extra-wait state between ARM master and ROM access.
+ *  0b1..An extra-wait state between ARM master and ROM access.
+ */
+#define SYSCON_ROMCR_WAIT(x)                     (((uint32_t)(((uint32_t)(x)) << SYSCON_ROMCR_WAIT_SHIFT)) & SYSCON_ROMCR_WAIT_MASK)
+/*! @} */
+
+/*! @name EZHINT - EZH interrupt hijack */
+/*! @{ */
+
+#define SYSCON_EZHINT_EZHINT_MASK                (0xFFFFFFU)
+#define SYSCON_EZHINT_EZHINT_SHIFT               (0U)
+/*! EZHINT - EZH interrupt hijack. */
+#define SYSCON_EZHINT_EZHINT(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_EZHINT_EZHINT_SHIFT)) & SYSCON_EZHINT_EZHINT_MASK)
+/*! @} */
+
 /*! @name FLASHREMAP_SIZE - This 32-bit register contains the size of the image to remap, in bytes. The 12 LSBs are ignored, so the size granularity is 4KB. */
 /*! @{ */
 
@@ -1762,6 +2091,50 @@ typedef struct {
 #define SYSCON_FLASHREMAP_OFFSET_DP_FLASHREMAP_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHREMAP_OFFSET_DP_FLASHREMAP_OFFSET_SHIFT)) & SYSCON_FLASHREMAP_OFFSET_DP_FLASHREMAP_OFFSET_MASK)
 /*! @} */
 
+/*! @name FLASHBANKENABLE - Flash Banks control */
+/*! @{ */
+
+#define SYSCON_FLASHBANKENABLE_BANK0_MASK        (0xFU)
+#define SYSCON_FLASHBANKENABLE_BANK0_SHIFT       (0U)
+/*! BANK0 - Flash Bank0 control.
+ *  0b0000..Flash BANK0 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
+ *  0b1010..Flash BANK0 checker is disabled (all Flash pages inside this bank can be erased and programmed).
+ */
+#define SYSCON_FLASHBANKENABLE_BANK0(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK0_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK0_MASK)
+
+#define SYSCON_FLASHBANKENABLE_BANK1_MASK        (0xF0U)
+#define SYSCON_FLASHBANKENABLE_BANK1_SHIFT       (4U)
+/*! BANK1 - Flash Bank1 control.
+ *  0b0000..Flash BANK1 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
+ *  0b1010..Flash BANK1 checker is disabled (all Flash pages inside this bank can be erased and programmed).
+ */
+#define SYSCON_FLASHBANKENABLE_BANK1(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK1_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK1_MASK)
+
+#define SYSCON_FLASHBANKENABLE_BANK2_MASK        (0xF00U)
+#define SYSCON_FLASHBANKENABLE_BANK2_SHIFT       (8U)
+/*! BANK2 - Flash Bank2 control.
+ *  0b0000..Flash BANK2 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
+ *  0b1010..Flash BANK2 checker is disabled (all Flash pages inside this bank can be erased and programmed).
+ */
+#define SYSCON_FLASHBANKENABLE_BANK2(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK2_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK2_MASK)
+
+#define SYSCON_FLASHBANKENABLE_BANK3_MASK        (0xF000U)
+#define SYSCON_FLASHBANKENABLE_BANK3_SHIFT       (12U)
+/*! BANK3 - Flash Bank3 control.
+ *  0b0000..Flash BANK3 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
+ *  0b1010..Flash BANK3 checker is disabled (all Flash pages inside this bank can be erased and programmed).
+ */
+#define SYSCON_FLASHBANKENABLE_BANK3(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK3_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK3_MASK)
+
+#define SYSCON_FLASHBANKENABLE_IFR1_MASK         (0xF0000U)
+#define SYSCON_FLASHBANKENABLE_IFR1_SHIFT        (16U)
+/*! IFR1 - IFR1 read access control.
+ *  0b0000..IFR1 bank is disabled to read.
+ *  0b1010..IFR1 bank is enabled to read.
+ */
+#define SYSCON_FLASHBANKENABLE_IFR1(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_IFR1_SHIFT)) & SYSCON_FLASHBANKENABLE_IFR1_MASK)
+/*! @} */
+
 /*! @name FLASHREMAP_LOCK - Control write access to FLASHREMAP_SIZE and FLASHREMAP_OFFSET registers. */
 /*! @{ */
 
@@ -1787,6 +2160,783 @@ typedef struct {
 #define SYSCON_CASPER_CTRL_INTERLEAVE(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_CASPER_CTRL_INTERLEAVE_SHIFT)) & SYSCON_CASPER_CTRL_INTERLEAVE_MASK)
 /*! @} */
 
+/*! @name BOOT_LOCKOUT_ADDR - When ROM address is below the Address Offset. The access to ROM is block if BOOT_LOCKOUT is LOCK. */
+/*! @{ */
+
+#define SYSCON_BOOT_LOCKOUT_ADDR_ADDR_OFFSET_MASK (0x7FFFU)
+#define SYSCON_BOOT_LOCKOUT_ADDR_ADDR_OFFSET_SHIFT (0U)
+/*! ADDR_OFFSET - Address offset (32 bits addressing). Under this value the ROM access is blocked if BOOT_LOCKOUT is LOCK. */
+#define SYSCON_BOOT_LOCKOUT_ADDR_ADDR_OFFSET(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_BOOT_LOCKOUT_ADDR_ADDR_OFFSET_SHIFT)) & SYSCON_BOOT_LOCKOUT_ADDR_ADDR_OFFSET_MASK)
+/*! @} */
+
+/*! @name BOOT_LOCKOUT_ADDR_DP - When ROM address is below the Address Offset. The access to ROM is block if BOOT_LOCKOUT is LOCK. Duplicate of BOOT_LOCKOUT_ADDR. */
+/*! @{ */
+
+#define SYSCON_BOOT_LOCKOUT_ADDR_DP_ADDR_OFFSET_MASK (0x7FFFU)
+#define SYSCON_BOOT_LOCKOUT_ADDR_DP_ADDR_OFFSET_SHIFT (0U)
+/*! ADDR_OFFSET - Address offset (32 bits addressing). Under this value the ROM access is blocked if BOOT_LOCKOUT is LOCK. */
+#define SYSCON_BOOT_LOCKOUT_ADDR_DP_ADDR_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_BOOT_LOCKOUT_ADDR_DP_ADDR_OFFSET_SHIFT)) & SYSCON_BOOT_LOCKOUT_ADDR_DP_ADDR_OFFSET_MASK)
+/*! @} */
+
+/*! @name BOOT_LOCKOUT - Control write access to BOOT_LOCKOUT_ADDR and BOOT_LOCKOUT_ADDR registers and ROM memory. */
+/*! @{ */
+
+#define SYSCON_BOOT_LOCKOUT_LOCK_MASK            (0xFFFFFFFFU)
+#define SYSCON_BOOT_LOCKOUT_LOCK_SHIFT           (0U)
+/*! LOCK - Control write access to BOOT_LOCKOUT_ADDR and BOOT_LOCKOUT_ADDR registers and ROM memory.
+ *  0b00111100110000110101101010100101..ROM access is alowed, and registers BOOT_LOCKOUT_ADDR and BOOT_LOCKOUT_ADDR_DP is writable.
+ *  0b11000011001111001010010101011010..ROM access is locked, and registers BOOT_LOCKOUT_ADDR and BOOT_LOCKOUT_ADDR_DP is write protected.
+ */
+#define SYSCON_BOOT_LOCKOUT_LOCK(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_BOOT_LOCKOUT_LOCK_SHIFT)) & SYSCON_BOOT_LOCKOUT_LOCK_MASK)
+/*! @} */
+
+/*! @name STARTER - Start logic wake-up enable register */
+/*! @{ */
+
+#define SYSCON_STARTER_GPIO_INT04_MASK           (0x1U)
+#define SYSCON_STARTER_GPIO_INT04_SHIFT          (0U)
+/*! GPIO_INT04 - GPIO_INT04 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_GPIO_INT04(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT04_SHIFT)) & SYSCON_STARTER_GPIO_INT04_MASK)
+
+#define SYSCON_STARTER_SYS_MASK                  (0x1U)
+#define SYSCON_STARTER_SYS_SHIFT                 (0U)
+/*! SYS - SYS interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SYS(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SYS_SHIFT)) & SYSCON_STARTER_SYS_MASK)
+
+#define SYSCON_STARTER_GPIO_INT05_MASK           (0x2U)
+#define SYSCON_STARTER_GPIO_INT05_SHIFT          (1U)
+/*! GPIO_INT05 - GPIO_INT05 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_GPIO_INT05(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT05_SHIFT)) & SYSCON_STARTER_GPIO_INT05_MASK)
+
+#define SYSCON_STARTER_SDMA0_MASK                (0x2U)
+#define SYSCON_STARTER_SDMA0_SHIFT               (1U)
+/*! SDMA0 - SDMA0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SDMA0(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SDMA0_SHIFT)) & SYSCON_STARTER_SDMA0_MASK)
+
+#define SYSCON_STARTER_GINT0_MASK                (0x4U)
+#define SYSCON_STARTER_GINT0_SHIFT               (2U)
+/*! GINT0 - GINT0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_GINT0(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GINT0_SHIFT)) & SYSCON_STARTER_GINT0_MASK)
+
+#define SYSCON_STARTER_GPIO_INT06_MASK           (0x4U)
+#define SYSCON_STARTER_GPIO_INT06_SHIFT          (2U)
+/*! GPIO_INT06 - GPIO_INT06 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_GPIO_INT06(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT06_SHIFT)) & SYSCON_STARTER_GPIO_INT06_MASK)
+
+#define SYSCON_STARTER_GPIO_INT07_MASK           (0x8U)
+#define SYSCON_STARTER_GPIO_INT07_SHIFT          (3U)
+/*! GPIO_INT07 - GPIO_INT07 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_GPIO_INT07(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT07_SHIFT)) & SYSCON_STARTER_GPIO_INT07_MASK)
+
+#define SYSCON_STARTER_CTIMER2_MASK              (0x10U)
+#define SYSCON_STARTER_CTIMER2_SHIFT             (4U)
+/*! CTIMER2 - CTIMER2 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_CTIMER2(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER2_SHIFT)) & SYSCON_STARTER_CTIMER2_MASK)
+
+#define SYSCON_STARTER_PIO_INT0_MASK             (0x10U)
+#define SYSCON_STARTER_PIO_INT0_SHIFT            (4U)
+/*! PIO_INT0 - PIO_INT0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_PIO_INT0(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT0_SHIFT)) & SYSCON_STARTER_PIO_INT0_MASK)
+
+#define SYSCON_STARTER_CTIMER4_MASK              (0x20U)
+#define SYSCON_STARTER_CTIMER4_SHIFT             (5U)
+/*! CTIMER4 - CTIMER4 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_CTIMER4(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER4_SHIFT)) & SYSCON_STARTER_CTIMER4_MASK)
+
+#define SYSCON_STARTER_PIO_INT1_MASK             (0x20U)
+#define SYSCON_STARTER_PIO_INT1_SHIFT            (5U)
+/*! PIO_INT1 - PIO_INT1 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_PIO_INT1(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT1_SHIFT)) & SYSCON_STARTER_PIO_INT1_MASK)
+
+#define SYSCON_STARTER_OS_EVENT_MASK             (0x40U)
+#define SYSCON_STARTER_OS_EVENT_SHIFT            (6U)
+/*! OS_EVENT - OS_EVENT interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_OS_EVENT(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_OS_EVENT_SHIFT)) & SYSCON_STARTER_OS_EVENT_MASK)
+
+#define SYSCON_STARTER_PIO_INT2_MASK             (0x40U)
+#define SYSCON_STARTER_PIO_INT2_SHIFT            (6U)
+/*! PIO_INT2 - PIO_INT2 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_PIO_INT2(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT2_SHIFT)) & SYSCON_STARTER_PIO_INT2_MASK)
+
+#define SYSCON_STARTER_PIO_INT3_MASK             (0x80U)
+#define SYSCON_STARTER_PIO_INT3_SHIFT            (7U)
+/*! PIO_INT3 - PIO_INT3 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_PIO_INT3(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT3_SHIFT)) & SYSCON_STARTER_PIO_INT3_MASK)
+
+#define SYSCON_STARTER_SPIFI_MASK                (0x80U)
+#define SYSCON_STARTER_SPIFI_SHIFT               (7U)
+/*! SPIFI - SPIFI interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SPIFI(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SPIFI_SHIFT)) & SYSCON_STARTER_SPIFI_MASK)
+
+#define SYSCON_STARTER_UTICK0_MASK               (0x100U)
+#define SYSCON_STARTER_UTICK0_SHIFT              (8U)
+/*! UTICK0 - UTICK0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_UTICK0(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_UTICK0_SHIFT)) & SYSCON_STARTER_UTICK0_MASK)
+
+#define SYSCON_STARTER_MRT0_MASK                 (0x200U)
+#define SYSCON_STARTER_MRT0_SHIFT                (9U)
+/*! MRT0 - MRT0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_MRT0(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_MRT0_SHIFT)) & SYSCON_STARTER_MRT0_MASK)
+
+#define SYSCON_STARTER_CTIMER0_MASK              (0x400U)
+#define SYSCON_STARTER_CTIMER0_SHIFT             (10U)
+/*! CTIMER0 - CTIMER0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_CTIMER0(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER0_SHIFT)) & SYSCON_STARTER_CTIMER0_MASK)
+
+#define SYSCON_STARTER_CTIMER1_MASK              (0x800U)
+#define SYSCON_STARTER_CTIMER1_SHIFT             (11U)
+/*! CTIMER1 - CTIMER1 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_CTIMER1(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER1_SHIFT)) & SYSCON_STARTER_CTIMER1_MASK)
+
+#define SYSCON_STARTER_SCT0_MASK                 (0x1000U)
+#define SYSCON_STARTER_SCT0_SHIFT                (12U)
+/*! SCT0 - SCT0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SCT0(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SCT0_SHIFT)) & SYSCON_STARTER_SCT0_MASK)
+
+#define SYSCON_STARTER_CTIMER3_MASK              (0x2000U)
+#define SYSCON_STARTER_CTIMER3_SHIFT             (13U)
+/*! CTIMER3 - CTIMER3 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_CTIMER3(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER3_SHIFT)) & SYSCON_STARTER_CTIMER3_MASK)
+
+#define SYSCON_STARTER_FLEXINT0_MASK             (0x4000U)
+#define SYSCON_STARTER_FLEXINT0_SHIFT            (14U)
+/*! FLEXINT0 - FLEXINT0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_FLEXINT0(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT0_SHIFT)) & SYSCON_STARTER_FLEXINT0_MASK)
+
+#define SYSCON_STARTER_FLEXINT1_MASK             (0x8000U)
+#define SYSCON_STARTER_FLEXINT1_SHIFT            (15U)
+/*! FLEXINT1 - FLEXINT1 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_FLEXINT1(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT1_SHIFT)) & SYSCON_STARTER_FLEXINT1_MASK)
+
+#define SYSCON_STARTER_FLEXINT2_MASK             (0x10000U)
+#define SYSCON_STARTER_FLEXINT2_SHIFT            (16U)
+/*! FLEXINT2 - FLEXINT2 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_FLEXINT2(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT2_SHIFT)) & SYSCON_STARTER_FLEXINT2_MASK)
+
+#define SYSCON_STARTER_SEC_HYPERVISOR_CALL_MASK  (0x20000U)
+#define SYSCON_STARTER_SEC_HYPERVISOR_CALL_SHIFT (17U)
+/*! SEC_HYPERVISOR_CALL - SEC_HYPERVISOR_CALL interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SEC_HYPERVISOR_CALL(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_HYPERVISOR_CALL_SHIFT)) & SYSCON_STARTER_SEC_HYPERVISOR_CALL_MASK)
+
+#define SYSCON_STARTER_SEC_GPIO_INT00_MASK       (0x40000U)
+#define SYSCON_STARTER_SEC_GPIO_INT00_SHIFT      (18U)
+/*! SEC_GPIO_INT00 - SEC_GPIO_INT00 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SEC_GPIO_INT00(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_GPIO_INT00_SHIFT)) & SYSCON_STARTER_SEC_GPIO_INT00_MASK)
+
+#define SYSCON_STARTER_SEC_GPIO_INT01_MASK       (0x80000U)
+#define SYSCON_STARTER_SEC_GPIO_INT01_SHIFT      (19U)
+/*! SEC_GPIO_INT01 - SEC_GPIO_INT01 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SEC_GPIO_INT01(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_GPIO_INT01_SHIFT)) & SYSCON_STARTER_SEC_GPIO_INT01_MASK)
+
+#define SYSCON_STARTER_PLU_MASK                  (0x100000U)
+#define SYSCON_STARTER_PLU_SHIFT                 (20U)
+/*! PLU - PLU interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_PLU(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PLU_SHIFT)) & SYSCON_STARTER_PLU_MASK)
+
+#define SYSCON_STARTER_SEC_VIO_MASK              (0x200000U)
+#define SYSCON_STARTER_SEC_VIO_SHIFT             (21U)
+/*! SEC_VIO - SEC_VIO interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SEC_VIO(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_VIO_SHIFT)) & SYSCON_STARTER_SEC_VIO_MASK)
+
+#define SYSCON_STARTER_BLE_LL_MASK               (0x400000U)
+#define SYSCON_STARTER_BLE_LL_SHIFT              (22U)
+/*! BLE_LL - BLE link layer interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_BLE_LL(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_BLE_LL_SHIFT)) & SYSCON_STARTER_BLE_LL_MASK)
+
+#define SYSCON_STARTER_SHA_MASK                  (0x400000U)
+#define SYSCON_STARTER_SHA_SHIFT                 (22U)
+/*! SHA - SHA interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SHA(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SHA_SHIFT)) & SYSCON_STARTER_SHA_MASK)
+
+#define SYSCON_STARTER_BLE_SLP_TMR_MASK          (0x800000U)
+#define SYSCON_STARTER_BLE_SLP_TMR_SHIFT         (23U)
+/*! BLE_SLP_TMR - BLE sleep timer interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_BLE_SLP_TMR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_BLE_SLP_TMR_SHIFT)) & SYSCON_STARTER_BLE_SLP_TMR_MASK)
+
+#define SYSCON_STARTER_CASPER_MASK               (0x800000U)
+#define SYSCON_STARTER_CASPER_SHIFT              (23U)
+/*! CASPER - CASPER interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_CASPER(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CASPER_SHIFT)) & SYSCON_STARTER_CASPER_MASK)
+
+#define SYSCON_STARTER_QDDKEY_MASK               (0x1000000U)
+#define SYSCON_STARTER_QDDKEY_SHIFT              (24U)
+/*! QDDKEY - QDDKEY interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_QDDKEY(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_QDDKEY_SHIFT)) & SYSCON_STARTER_QDDKEY_MASK)
+
+#define SYSCON_STARTER_SDMA1_MASK                (0x4000000U)
+#define SYSCON_STARTER_SDMA1_SHIFT               (26U)
+/*! SDMA1 - SDMA1 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_SDMA1(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SDMA1_SHIFT)) & SYSCON_STARTER_SDMA1_MASK)
+
+#define SYSCON_STARTER_BOD1_MASK                 (0x8000000U)
+#define SYSCON_STARTER_BOD1_SHIFT                (27U)
+/*! BOD1 - BOD1 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_BOD1(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_BOD1_SHIFT)) & SYSCON_STARTER_BOD1_MASK)
+
+#define SYSCON_STARTER_BOD2_MASK                 (0x10000000U)
+#define SYSCON_STARTER_BOD2_SHIFT                (28U)
+/*! BOD2 - BOD2 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_BOD2(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_BOD2_SHIFT)) & SYSCON_STARTER_BOD2_MASK)
+
+#define SYSCON_STARTER_RTC_LITE0_MASK            (0x20000000U)
+#define SYSCON_STARTER_RTC_LITE0_SHIFT           (29U)
+/*! RTC_LITE0 - RTC_LITE0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_RTC_LITE0(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_RTC_LITE0_SHIFT)) & SYSCON_STARTER_RTC_LITE0_MASK)
+
+#define SYSCON_STARTER_EZH_ARCH_B0_MASK          (0x40000000U)
+#define SYSCON_STARTER_EZH_ARCH_B0_SHIFT         (30U)
+/*! EZH_ARCH_B0 - EZH_ARCH_B0 interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_EZH_ARCH_B0(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_EZH_ARCH_B0_SHIFT)) & SYSCON_STARTER_EZH_ARCH_B0_MASK)
+
+#define SYSCON_STARTER_WAKEUP_MASK               (0x80000000U)
+#define SYSCON_STARTER_WAKEUP_SHIFT              (31U)
+/*! WAKEUP - WAKEUP from deepsleep interrupt wake-up.
+ *  0b0..Wake-up disabled.
+ *  0b1..Wake-up enabled.
+ */
+#define SYSCON_STARTER_WAKEUP(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_WAKEUP_SHIFT)) & SYSCON_STARTER_WAKEUP_MASK)
+
+#define SYSCON_STARTER_WAKEUPPADS_MASK           (0x80000000U)
+#define SYSCON_STARTER_WAKEUPPADS_SHIFT          (31U)
+/*! WAKEUPPADS - WAKEUPPADS interrupt wake-up. */
+#define SYSCON_STARTER_WAKEUPPADS(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_WAKEUPPADS_SHIFT)) & SYSCON_STARTER_WAKEUPPADS_MASK)
+/*! @} */
+
+/*! @name STARTERSET - Set bits in STARTER */
+/*! @{ */
+
+#define SYSCON_STARTERSET_GPIO_INT04_SET_MASK    (0x1U)
+#define SYSCON_STARTERSET_GPIO_INT04_SET_SHIFT   (0U)
+/*! GPIO_INT04_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_GPIO_INT04_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT04_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT04_SET_MASK)
+
+#define SYSCON_STARTERSET_SYS_SET_MASK           (0x1U)
+#define SYSCON_STARTERSET_SYS_SET_SHIFT          (0U)
+/*! SYS_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_SYS_SET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SYS_SET_SHIFT)) & SYSCON_STARTERSET_SYS_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT05_SET_MASK    (0x2U)
+#define SYSCON_STARTERSET_GPIO_INT05_SET_SHIFT   (1U)
+/*! GPIO_INT05_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_GPIO_INT05_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT05_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT05_SET_MASK)
+
+#define SYSCON_STARTERSET_SDMA0_SET_MASK         (0x2U)
+#define SYSCON_STARTERSET_SDMA0_SET_SHIFT        (1U)
+/*! SDMA0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_SDMA0_SET(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SDMA0_SET_SHIFT)) & SYSCON_STARTERSET_SDMA0_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_MASK (0x4U)
+#define SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_SHIFT (2U)
+/*! GPIO_GLOBALINT0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_GPIO_GLOBALINT0_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT06_SET_MASK    (0x4U)
+#define SYSCON_STARTERSET_GPIO_INT06_SET_SHIFT   (2U)
+/*! GPIO_INT06_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_GPIO_INT06_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT06_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT06_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT07_SET_MASK    (0x8U)
+#define SYSCON_STARTERSET_GPIO_INT07_SET_SHIFT   (3U)
+/*! GPIO_INT07_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_GPIO_INT07_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT07_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT07_SET_MASK)
+
+#define SYSCON_STARTERSET_CTIMER2_SET_MASK       (0x10U)
+#define SYSCON_STARTERSET_CTIMER2_SET_SHIFT      (4U)
+/*! CTIMER2_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_CTIMER2_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER2_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER2_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT00_SET_MASK    (0x10U)
+#define SYSCON_STARTERSET_GPIO_INT00_SET_SHIFT   (4U)
+/*! GPIO_INT00_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_GPIO_INT00_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT00_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT00_SET_MASK)
+
+#define SYSCON_STARTERSET_CTIMER4_SET_MASK       (0x20U)
+#define SYSCON_STARTERSET_CTIMER4_SET_SHIFT      (5U)
+/*! CTIMER4_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_CTIMER4_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER4_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER4_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT01_SET_MASK    (0x20U)
+#define SYSCON_STARTERSET_GPIO_INT01_SET_SHIFT   (5U)
+/*! GPIO_INT01_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_GPIO_INT01_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT01_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT01_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT02_SET_MASK    (0x40U)
+#define SYSCON_STARTERSET_GPIO_INT02_SET_SHIFT   (6U)
+/*! GPIO_INT02_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_GPIO_INT02_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT02_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT02_SET_MASK)
+
+#define SYSCON_STARTERSET_OS_EVENT_SET_MASK      (0x40U)
+#define SYSCON_STARTERSET_OS_EVENT_SET_SHIFT     (6U)
+/*! OS_EVENT_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_OS_EVENT_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_OS_EVENT_SET_SHIFT)) & SYSCON_STARTERSET_OS_EVENT_SET_MASK)
+
+#define SYSCON_STARTERSET_GPIO_INT03_SET_MASK    (0x80U)
+#define SYSCON_STARTERSET_GPIO_INT03_SET_SHIFT   (7U)
+/*! GPIO_INT03_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_GPIO_INT03_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT03_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT03_SET_MASK)
+
+#define SYSCON_STARTERSET_SPIFI_SET_MASK         (0x80U)
+#define SYSCON_STARTERSET_SPIFI_SET_SHIFT        (7U)
+/*! SPIFI_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SPIFI_SET(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SPIFI_SET_SHIFT)) & SYSCON_STARTERSET_SPIFI_SET_MASK)
+
+#define SYSCON_STARTERSET_UTICK0_SET_MASK        (0x100U)
+#define SYSCON_STARTERSET_UTICK0_SET_SHIFT       (8U)
+/*! UTICK0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_UTICK0_SET(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_UTICK0_SET_SHIFT)) & SYSCON_STARTERSET_UTICK0_SET_MASK)
+
+#define SYSCON_STARTERSET_MRT0_SET_MASK          (0x200U)
+#define SYSCON_STARTERSET_MRT0_SET_SHIFT         (9U)
+/*! MRT0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_MRT0_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_MRT0_SET_SHIFT)) & SYSCON_STARTERSET_MRT0_SET_MASK)
+
+#define SYSCON_STARTERSET_CTIMER0_SET_MASK       (0x400U)
+#define SYSCON_STARTERSET_CTIMER0_SET_SHIFT      (10U)
+/*! CTIMER0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_CTIMER0_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER0_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER0_SET_MASK)
+
+#define SYSCON_STARTERSET_CTIMER1_SET_MASK       (0x800U)
+#define SYSCON_STARTERSET_CTIMER1_SET_SHIFT      (11U)
+/*! CTIMER1_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_CTIMER1_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER1_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER1_SET_MASK)
+
+#define SYSCON_STARTERSET_SCT0_SET_MASK          (0x1000U)
+#define SYSCON_STARTERSET_SCT0_SET_SHIFT         (12U)
+/*! SCT0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_SCT0_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SCT0_SET_SHIFT)) & SYSCON_STARTERSET_SCT0_SET_MASK)
+
+#define SYSCON_STARTERSET_CTIMER3_SET_MASK       (0x2000U)
+#define SYSCON_STARTERSET_CTIMER3_SET_SHIFT      (13U)
+/*! CTIMER3_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_CTIMER3_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER3_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER3_SET_MASK)
+
+#define SYSCON_STARTERSET_FLEXINT0_SET_MASK      (0x4000U)
+#define SYSCON_STARTERSET_FLEXINT0_SET_SHIFT     (14U)
+/*! FLEXINT0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_FLEXINT0_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT0_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT0_SET_MASK)
+
+#define SYSCON_STARTERSET_FLEXINT1_SET_MASK      (0x8000U)
+#define SYSCON_STARTERSET_FLEXINT1_SET_SHIFT     (15U)
+/*! FLEXINT1_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_FLEXINT1_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT1_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT1_SET_MASK)
+
+#define SYSCON_STARTERSET_FLEXINT2_SET_MASK      (0x10000U)
+#define SYSCON_STARTERSET_FLEXINT2_SET_SHIFT     (16U)
+/*! FLEXINT2_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_FLEXINT2_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT2_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT2_SET_MASK)
+
+#define SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_MASK (0x20000U)
+#define SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_SHIFT (17U)
+/*! SEC_HYPERVISOR_CALL_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_SHIFT)) & SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_MASK)
+
+#define SYSCON_STARTERSET_SEC_GPIO_INT00_SET_MASK (0x40000U)
+#define SYSCON_STARTERSET_SEC_GPIO_INT00_SET_SHIFT (18U)
+/*! SEC_GPIO_INT00_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SEC_GPIO_INT00_SET(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_GPIO_INT00_SET_SHIFT)) & SYSCON_STARTERSET_SEC_GPIO_INT00_SET_MASK)
+
+#define SYSCON_STARTERSET_SEC_GPIO_INT01_SET_MASK (0x80000U)
+#define SYSCON_STARTERSET_SEC_GPIO_INT01_SET_SHIFT (19U)
+/*! SEC_GPIO_INT01_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SEC_GPIO_INT01_SET(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_GPIO_INT01_SET_SHIFT)) & SYSCON_STARTERSET_SEC_GPIO_INT01_SET_MASK)
+
+#define SYSCON_STARTERSET_PLU_SET_MASK           (0x100000U)
+#define SYSCON_STARTERSET_PLU_SET_SHIFT          (20U)
+/*! PLU_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_PLU_SET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_PLU_SET_SHIFT)) & SYSCON_STARTERSET_PLU_SET_MASK)
+
+#define SYSCON_STARTERSET_SEC_VIO_SET_MASK       (0x200000U)
+#define SYSCON_STARTERSET_SEC_VIO_SET_SHIFT      (21U)
+/*! SEC_VIO_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SEC_VIO_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_VIO_SET_SHIFT)) & SYSCON_STARTERSET_SEC_VIO_SET_MASK)
+
+#define SYSCON_STARTERSET_BLE_LL_INT_SET_MASK    (0x400000U)
+#define SYSCON_STARTERSET_BLE_LL_INT_SET_SHIFT   (22U)
+/*! BLE_LL_INT_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_BLE_LL_INT_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_BLE_LL_INT_SET_SHIFT)) & SYSCON_STARTERSET_BLE_LL_INT_SET_MASK)
+
+#define SYSCON_STARTERSET_SHA_SET_MASK           (0x400000U)
+#define SYSCON_STARTERSET_SHA_SET_SHIFT          (22U)
+/*! SHA_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SHA_SET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SHA_SET_SHIFT)) & SYSCON_STARTERSET_SHA_SET_MASK)
+
+#define SYSCON_STARTERSET_BLE_SLP_TMR_INT_SET_MASK (0x800000U)
+#define SYSCON_STARTERSET_BLE_SLP_TMR_INT_SET_SHIFT (23U)
+/*! BLE_SLP_TMR_INT_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_BLE_SLP_TMR_INT_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_BLE_SLP_TMR_INT_SET_SHIFT)) & SYSCON_STARTERSET_BLE_SLP_TMR_INT_SET_MASK)
+
+#define SYSCON_STARTERSET_CASPER_SET_MASK        (0x800000U)
+#define SYSCON_STARTERSET_CASPER_SET_SHIFT       (23U)
+/*! CASPER_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_CASPER_SET(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CASPER_SET_SHIFT)) & SYSCON_STARTERSET_CASPER_SET_MASK)
+
+#define SYSCON_STARTERSET_QDDKEY_SET_MASK        (0x1000000U)
+#define SYSCON_STARTERSET_QDDKEY_SET_SHIFT       (24U)
+/*! QDDKEY_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_QDDKEY_SET(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_QDDKEY_SET_SHIFT)) & SYSCON_STARTERSET_QDDKEY_SET_MASK)
+
+#define SYSCON_STARTERSET_SDMA1_SET_MASK         (0x4000000U)
+#define SYSCON_STARTERSET_SDMA1_SET_SHIFT        (26U)
+/*! SDMA1_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_SDMA1_SET(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SDMA1_SET_SHIFT)) & SYSCON_STARTERSET_SDMA1_SET_MASK)
+
+#define SYSCON_STARTERSET_BOD1INT_SET_MASK       (0x8000000U)
+#define SYSCON_STARTERSET_BOD1INT_SET_SHIFT      (27U)
+/*! BOD1INT_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_BOD1INT_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_BOD1INT_SET_SHIFT)) & SYSCON_STARTERSET_BOD1INT_SET_MASK)
+
+#define SYSCON_STARTERSET_BOD2INT_SET_MASK       (0x10000000U)
+#define SYSCON_STARTERSET_BOD2INT_SET_SHIFT      (28U)
+/*! BOD2INT_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_BOD2INT_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_BOD2INT_SET_SHIFT)) & SYSCON_STARTERSET_BOD2INT_SET_MASK)
+
+#define SYSCON_STARTERSET_RTC_LITE0_SET_MASK     (0x20000000U)
+#define SYSCON_STARTERSET_RTC_LITE0_SET_SHIFT    (29U)
+/*! RTC_LITE0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_RTC_LITE0_SET(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_RTC_LITE0_SET_SHIFT)) & SYSCON_STARTERSET_RTC_LITE0_SET_MASK)
+
+#define SYSCON_STARTERSET_EZH_ARCH_B0_SET_MASK   (0x40000000U)
+#define SYSCON_STARTERSET_EZH_ARCH_B0_SET_SHIFT  (30U)
+/*! EZH_ARCH_B0_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_EZH_ARCH_B0_SET(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_EZH_ARCH_B0_SET_SHIFT)) & SYSCON_STARTERSET_EZH_ARCH_B0_SET_MASK)
+
+#define SYSCON_STARTERSET_WAKEUPPADS_SET_MASK    (0x80000000U)
+#define SYSCON_STARTERSET_WAKEUPPADS_SET_SHIFT   (31U)
+/*! WAKEUPPADS_SET - Writing ones to this register sets the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERSET_WAKEUPPADS_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_WAKEUPPADS_SET_SHIFT)) & SYSCON_STARTERSET_WAKEUPPADS_SET_MASK)
+
+#define SYSCON_STARTERSET_WAKEUP_SET_MASK        (0x80000000U)
+#define SYSCON_STARTERSET_WAKEUP_SET_SHIFT       (31U)
+/*! WAKEUP_SET - Writing ones to this register sets the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERSET_WAKEUP_SET(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_WAKEUP_SET_SHIFT)) & SYSCON_STARTERSET_WAKEUP_SET_MASK)
+/*! @} */
+
+/*! @name STARTERCLR - Clear bits in STARTER */
+/*! @{ */
+
+#define SYSCON_STARTERCLR_GPIO_INT04_CLR_MASK    (0x1U)
+#define SYSCON_STARTERCLR_GPIO_INT04_CLR_SHIFT   (0U)
+/*! GPIO_INT04_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_GPIO_INT04_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT04_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT04_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SYS_CLR_MASK           (0x1U)
+#define SYSCON_STARTERCLR_SYS_CLR_SHIFT          (0U)
+/*! SYS_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_SYS_CLR(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SYS_CLR_SHIFT)) & SYSCON_STARTERCLR_SYS_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT05_CLR_MASK    (0x2U)
+#define SYSCON_STARTERCLR_GPIO_INT05_CLR_SHIFT   (1U)
+/*! GPIO_INT05_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_GPIO_INT05_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT05_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT05_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SDMA0_CLR_MASK         (0x2U)
+#define SYSCON_STARTERCLR_SDMA0_CLR_SHIFT        (1U)
+/*! SDMA0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_SDMA0_CLR(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SDMA0_CLR_SHIFT)) & SYSCON_STARTERCLR_SDMA0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_MASK (0x4U)
+#define SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_SHIFT (2U)
+/*! GPIO_GLOBALINT0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT06_CLR_MASK    (0x4U)
+#define SYSCON_STARTERCLR_GPIO_INT06_CLR_SHIFT   (2U)
+/*! GPIO_INT06_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_GPIO_INT06_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT06_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT06_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT07_CLR_MASK    (0x8U)
+#define SYSCON_STARTERCLR_GPIO_INT07_CLR_SHIFT   (3U)
+/*! GPIO_INT07_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_GPIO_INT07_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT07_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT07_CLR_MASK)
+
+#define SYSCON_STARTERCLR_CTIMER2_CLR_MASK       (0x10U)
+#define SYSCON_STARTERCLR_CTIMER2_CLR_SHIFT      (4U)
+/*! CTIMER2_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_CTIMER2_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER2_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER2_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT00_CLR_MASK    (0x10U)
+#define SYSCON_STARTERCLR_GPIO_INT00_CLR_SHIFT   (4U)
+/*! GPIO_INT00_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_GPIO_INT00_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT00_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT00_CLR_MASK)
+
+#define SYSCON_STARTERCLR_CTIMER4_CLR_MASK       (0x20U)
+#define SYSCON_STARTERCLR_CTIMER4_CLR_SHIFT      (5U)
+/*! CTIMER4_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_CTIMER4_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER4_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER4_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT01_CLR_MASK    (0x20U)
+#define SYSCON_STARTERCLR_GPIO_INT01_CLR_SHIFT   (5U)
+/*! GPIO_INT01_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_GPIO_INT01_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT01_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT01_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT02_CLR_MASK    (0x40U)
+#define SYSCON_STARTERCLR_GPIO_INT02_CLR_SHIFT   (6U)
+/*! GPIO_INT02_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_GPIO_INT02_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT02_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT02_CLR_MASK)
+
+#define SYSCON_STARTERCLR_OS_EVENT_CLR_MASK      (0x40U)
+#define SYSCON_STARTERCLR_OS_EVENT_CLR_SHIFT     (6U)
+/*! OS_EVENT_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_OS_EVENT_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_OS_EVENT_CLR_SHIFT)) & SYSCON_STARTERCLR_OS_EVENT_CLR_MASK)
+
+#define SYSCON_STARTERCLR_GPIO_INT03_CLR_MASK    (0x80U)
+#define SYSCON_STARTERCLR_GPIO_INT03_CLR_SHIFT   (7U)
+/*! GPIO_INT03_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_GPIO_INT03_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT03_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT03_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SPIFI_CLR_MASK         (0x80U)
+#define SYSCON_STARTERCLR_SPIFI_CLR_SHIFT        (7U)
+/*! SPIFI_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SPIFI_CLR(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SPIFI_CLR_SHIFT)) & SYSCON_STARTERCLR_SPIFI_CLR_MASK)
+
+#define SYSCON_STARTERCLR_UTICK0_CLR_MASK        (0x100U)
+#define SYSCON_STARTERCLR_UTICK0_CLR_SHIFT       (8U)
+/*! UTICK0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_UTICK0_CLR(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_UTICK0_CLR_SHIFT)) & SYSCON_STARTERCLR_UTICK0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_MRT0_CLR_MASK          (0x200U)
+#define SYSCON_STARTERCLR_MRT0_CLR_SHIFT         (9U)
+/*! MRT0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_MRT0_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_MRT0_CLR_SHIFT)) & SYSCON_STARTERCLR_MRT0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_CTIMER0_CLR_MASK       (0x400U)
+#define SYSCON_STARTERCLR_CTIMER0_CLR_SHIFT      (10U)
+/*! CTIMER0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_CTIMER0_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER0_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_CTIMER1_CLR_MASK       (0x800U)
+#define SYSCON_STARTERCLR_CTIMER1_CLR_SHIFT      (11U)
+/*! CTIMER1_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_CTIMER1_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER1_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER1_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SCT0_CLR_MASK          (0x1000U)
+#define SYSCON_STARTERCLR_SCT0_CLR_SHIFT         (12U)
+/*! SCT0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_SCT0_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SCT0_CLR_SHIFT)) & SYSCON_STARTERCLR_SCT0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_CTIMER3_CLR_MASK       (0x2000U)
+#define SYSCON_STARTERCLR_CTIMER3_CLR_SHIFT      (13U)
+/*! CTIMER3_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_CTIMER3_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER3_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER3_CLR_MASK)
+
+#define SYSCON_STARTERCLR_FLEXINT0_CLR_MASK      (0x4000U)
+#define SYSCON_STARTERCLR_FLEXINT0_CLR_SHIFT     (14U)
+/*! FLEXINT0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_FLEXINT0_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT0_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_FLEXINT1_CLR_MASK      (0x8000U)
+#define SYSCON_STARTERCLR_FLEXINT1_CLR_SHIFT     (15U)
+/*! FLEXINT1_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_FLEXINT1_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT1_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT1_CLR_MASK)
+
+#define SYSCON_STARTERCLR_FLEXINT2_CLR_MASK      (0x10000U)
+#define SYSCON_STARTERCLR_FLEXINT2_CLR_SHIFT     (16U)
+/*! FLEXINT2_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_FLEXINT2_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT2_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT2_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_MASK (0x20000U)
+#define SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_SHIFT (17U)
+/*! SEC_HYPERVISOR_CALL_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_MASK (0x40000U)
+#define SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_SHIFT (18U)
+/*! SEC_GPIO_INT00_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_MASK (0x80000U)
+#define SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_SHIFT (19U)
+/*! SEC_GPIO_INT01_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_MASK)
+
+#define SYSCON_STARTERCLR_PLU_CLR_MASK           (0x100000U)
+#define SYSCON_STARTERCLR_PLU_CLR_SHIFT          (20U)
+/*! PLU_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_PLU_CLR(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_PLU_CLR_SHIFT)) & SYSCON_STARTERCLR_PLU_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SEC_VIO_CLR_MASK       (0x200000U)
+#define SYSCON_STARTERCLR_SEC_VIO_CLR_SHIFT      (21U)
+/*! SEC_VIO_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SEC_VIO_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_VIO_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_VIO_CLR_MASK)
+
+#define SYSCON_STARTERCLR_BLE_LL_INT_CLR_MASK    (0x400000U)
+#define SYSCON_STARTERCLR_BLE_LL_INT_CLR_SHIFT   (22U)
+/*! BLE_LL_INT_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_BLE_LL_INT_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_BLE_LL_INT_CLR_SHIFT)) & SYSCON_STARTERCLR_BLE_LL_INT_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SHA_CLR_MASK           (0x400000U)
+#define SYSCON_STARTERCLR_SHA_CLR_SHIFT          (22U)
+/*! SHA_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SHA_CLR(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SHA_CLR_SHIFT)) & SYSCON_STARTERCLR_SHA_CLR_MASK)
+
+#define SYSCON_STARTERCLR_BLE_SLP_TMR_INT_CLR_MASK (0x800000U)
+#define SYSCON_STARTERCLR_BLE_SLP_TMR_INT_CLR_SHIFT (23U)
+/*! BLE_SLP_TMR_INT_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_BLE_SLP_TMR_INT_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_BLE_SLP_TMR_INT_CLR_SHIFT)) & SYSCON_STARTERCLR_BLE_SLP_TMR_INT_CLR_MASK)
+
+#define SYSCON_STARTERCLR_CASPER_CLR_MASK        (0x800000U)
+#define SYSCON_STARTERCLR_CASPER_CLR_SHIFT       (23U)
+/*! CASPER_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_CASPER_CLR(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CASPER_CLR_SHIFT)) & SYSCON_STARTERCLR_CASPER_CLR_MASK)
+
+#define SYSCON_STARTERCLR_QDDKEY_CLR_MASK        (0x1000000U)
+#define SYSCON_STARTERCLR_QDDKEY_CLR_SHIFT       (24U)
+/*! QDDKEY_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_QDDKEY_CLR(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_QDDKEY_CLR_SHIFT)) & SYSCON_STARTERCLR_QDDKEY_CLR_MASK)
+
+#define SYSCON_STARTERCLR_SDMA1_CLR_MASK         (0x4000000U)
+#define SYSCON_STARTERCLR_SDMA1_CLR_SHIFT        (26U)
+/*! SDMA1_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_SDMA1_CLR(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SDMA1_CLR_SHIFT)) & SYSCON_STARTERCLR_SDMA1_CLR_MASK)
+
+#define SYSCON_STARTERCLR_BOD1INT_CLR_MASK       (0x8000000U)
+#define SYSCON_STARTERCLR_BOD1INT_CLR_SHIFT      (27U)
+/*! BOD1INT_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_BOD1INT_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_BOD1INT_CLR_SHIFT)) & SYSCON_STARTERCLR_BOD1INT_CLR_MASK)
+
+#define SYSCON_STARTERCLR_BOD2INT_CLR_MASK       (0x10000000U)
+#define SYSCON_STARTERCLR_BOD2INT_CLR_SHIFT      (28U)
+/*! BOD2INT_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_BOD2INT_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_BOD2INT_CLR_SHIFT)) & SYSCON_STARTERCLR_BOD2INT_CLR_MASK)
+
+#define SYSCON_STARTERCLR_RTC_LITE0_CLR_MASK     (0x20000000U)
+#define SYSCON_STARTERCLR_RTC_LITE0_CLR_SHIFT    (29U)
+/*! RTC_LITE0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_RTC_LITE0_CLR(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_RTC_LITE0_CLR_SHIFT)) & SYSCON_STARTERCLR_RTC_LITE0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_MASK   (0x40000000U)
+#define SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_SHIFT  (30U)
+/*! EZH_ARCH_B0_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_EZH_ARCH_B0_CLR(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_SHIFT)) & SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_MASK)
+
+#define SYSCON_STARTERCLR_WAKEUPPADS_CLR_MASK    (0x80000000U)
+#define SYSCON_STARTERCLR_WAKEUPPADS_CLR_SHIFT   (31U)
+/*! WAKEUPPADS_CLR - Writing ones to this register clears the corresponding bit in the STARTER1 register. */
+#define SYSCON_STARTERCLR_WAKEUPPADS_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_WAKEUPPADS_CLR_SHIFT)) & SYSCON_STARTERCLR_WAKEUPPADS_CLR_MASK)
+
+#define SYSCON_STARTERCLR_WAKEUP_CLR_MASK        (0x80000000U)
+#define SYSCON_STARTERCLR_WAKEUP_CLR_SHIFT       (31U)
+/*! WAKEUP_CLR - Writing ones to this register clears the corresponding bit in the STARTER0 register. */
+#define SYSCON_STARTERCLR_WAKEUP_CLR(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_WAKEUP_CLR_SHIFT)) & SYSCON_STARTERCLR_WAKEUP_CLR_MASK)
+/*! @} */
+
 /*! @name FUNCRETENTIONCTRL - Functional retention control register */
 /*! @{ */
 
@@ -1809,6 +2959,48 @@ typedef struct {
 #define SYSCON_FUNCRETENTIONCTRL_RET_LENTH(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_FUNCRETENTIONCTRL_RET_LENTH_SHIFT)) & SYSCON_FUNCRETENTIONCTRL_RET_LENTH_MASK)
 /*! @} */
 
+/*! @name POWERDOWNSAFETY - Override some powerdown control signals (for debug purposes) */
+/*! @{ */
+
+#define SYSCON_POWERDOWNSAFETY_OVERRIDEFRO_MASK  (0x1U)
+#define SYSCON_POWERDOWNSAFETY_OVERRIDEFRO_SHIFT (0U)
+/*! OVERRIDEFRO - Overrides the fro_is_dead' signal in Sleepcon module, in case this doesn't work on silicon. */
+#define SYSCON_POWERDOWNSAFETY_OVERRIDEFRO(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_POWERDOWNSAFETY_OVERRIDEFRO_SHIFT)) & SYSCON_POWERDOWNSAFETY_OVERRIDEFRO_MASK)
+/*! @} */
+
+/*! @name MAINCLKSAFETY - main clock is enable after MAINCLKSAFETY cycle */
+/*! @{ */
+
+#define SYSCON_MAINCLKSAFETY_MAINCLKSAFETY_MASK  (0xFFFFFFFFU)
+#define SYSCON_MAINCLKSAFETY_MAINCLKSAFETY_SHIFT (0U)
+/*! MAINCLKSAFETY - main clock is enable after MAINCLKSAFETY cycle. */
+#define SYSCON_MAINCLKSAFETY_MAINCLKSAFETY(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_MAINCLKSAFETY_MAINCLKSAFETY_SHIFT)) & SYSCON_MAINCLKSAFETY_MAINCLKSAFETY_MASK)
+/*! @} */
+
+/*! @name HARDWARESLEEP - Hardware Sleep control */
+/*! @{ */
+
+#define SYSCON_HARDWARESLEEP_FORCED_MASK         (0x1U)
+#define SYSCON_HARDWARESLEEP_FORCED_SHIFT        (0U)
+/*! FORCED - Force peripheral clocking to stay on during Deep Sleep and Power-down modes. */
+#define SYSCON_HARDWARESLEEP_FORCED(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_FORCED_SHIFT)) & SYSCON_HARDWARESLEEP_FORCED_MASK)
+
+#define SYSCON_HARDWARESLEEP_PERIPHERALS_MASK    (0x2U)
+#define SYSCON_HARDWARESLEEP_PERIPHERALS_SHIFT   (1U)
+/*! PERIPHERALS - Wake for Flexcomms. */
+#define SYSCON_HARDWARESLEEP_PERIPHERALS(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_PERIPHERALS_SHIFT)) & SYSCON_HARDWARESLEEP_PERIPHERALS_MASK)
+
+#define SYSCON_HARDWARESLEEP_SDMA0_MASK          (0x8U)
+#define SYSCON_HARDWARESLEEP_SDMA0_SHIFT         (3U)
+/*! SDMA0 - Wake for DMA0. */
+#define SYSCON_HARDWARESLEEP_SDMA0(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_SDMA0_SHIFT)) & SYSCON_HARDWARESLEEP_SDMA0_MASK)
+
+#define SYSCON_HARDWARESLEEP_SDMA1_MASK          (0x20U)
+#define SYSCON_HARDWARESLEEP_SDMA1_SHIFT         (5U)
+/*! SDMA1 - Wake for DMA1. */
+#define SYSCON_HARDWARESLEEP_SDMA1(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_SDMA1_SHIFT)) & SYSCON_HARDWARESLEEP_SDMA1_MASK)
+/*! @} */
+
 /*! @name CPSTAT - CPU Status */
 /*! @{ */
 
@@ -1827,6 +3019,70 @@ typedef struct {
  *  0b1..the CPU is in lockup.
  */
 #define SYSCON_CPSTAT_CPU0LOCKUP(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPSTAT_CPU0LOCKUP_SHIFT)) & SYSCON_CPSTAT_CPU0LOCKUP_MASK)
+/*! @} */
+
+/*! @name DICE_REG0 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG0_DICE_REG0_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG0_DICE_REG0_SHIFT         (0U)
+#define SYSCON_DICE_REG0_DICE_REG0(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG0_DICE_REG0_SHIFT)) & SYSCON_DICE_REG0_DICE_REG0_MASK)
+/*! @} */
+
+/*! @name DICE_REG1 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG1_DICE_REG1_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG1_DICE_REG1_SHIFT         (0U)
+#define SYSCON_DICE_REG1_DICE_REG1(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG1_DICE_REG1_SHIFT)) & SYSCON_DICE_REG1_DICE_REG1_MASK)
+/*! @} */
+
+/*! @name DICE_REG2 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG2_DICE_REG2_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG2_DICE_REG2_SHIFT         (0U)
+#define SYSCON_DICE_REG2_DICE_REG2(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG2_DICE_REG2_SHIFT)) & SYSCON_DICE_REG2_DICE_REG2_MASK)
+/*! @} */
+
+/*! @name DICE_REG3 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG3_DICE_REG3_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG3_DICE_REG3_SHIFT         (0U)
+#define SYSCON_DICE_REG3_DICE_REG3(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG3_DICE_REG3_SHIFT)) & SYSCON_DICE_REG3_DICE_REG3_MASK)
+/*! @} */
+
+/*! @name DICE_REG4 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG4_DICE_REG4_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG4_DICE_REG4_SHIFT         (0U)
+#define SYSCON_DICE_REG4_DICE_REG4(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG4_DICE_REG4_SHIFT)) & SYSCON_DICE_REG4_DICE_REG4_MASK)
+/*! @} */
+
+/*! @name DICE_REG5 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG5_DICE_REG5_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG5_DICE_REG5_SHIFT         (0U)
+#define SYSCON_DICE_REG5_DICE_REG5(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG5_DICE_REG5_SHIFT)) & SYSCON_DICE_REG5_DICE_REG5_MASK)
+/*! @} */
+
+/*! @name DICE_REG6 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG6_DICE_REG6_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG6_DICE_REG6_SHIFT         (0U)
+#define SYSCON_DICE_REG6_DICE_REG6(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG6_DICE_REG6_SHIFT)) & SYSCON_DICE_REG6_DICE_REG6_MASK)
+/*! @} */
+
+/*! @name DICE_REG7 - Composite Device Identifier */
+/*! @{ */
+
+#define SYSCON_DICE_REG7_DICE_REG7_MASK          (0xFFFFFFFFU)
+#define SYSCON_DICE_REG7_DICE_REG7_SHIFT         (0U)
+#define SYSCON_DICE_REG7_DICE_REG7(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG7_DICE_REG7_SHIFT)) & SYSCON_DICE_REG7_DICE_REG7_MASK)
 /*! @} */
 
 /*! @name BOOT_SEED_REG0 - boot seed (256-bit random value) */
@@ -2119,6 +3375,22 @@ typedef struct {
  */
 #define SYSCON_AUTOCLKGATEOVERRIDE_SYNC1_APB(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_SYNC1_APB_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_SYNC1_APB_MASK)
 
+#define SYSCON_AUTOCLKGATEOVERRIDE_FLASH_MASK    (0x200U)
+#define SYSCON_AUTOCLKGATEOVERRIDE_FLASH_SHIFT   (9U)
+/*! FLASH - Control automatic clock gating of FLASH controller.
+ *  0b0..Automatic clock gating is not overridden.
+ *  0b1..Automatic clock gating is overridden (Clock gating is disabled).
+ */
+#define SYSCON_AUTOCLKGATEOVERRIDE_FLASH(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_FLASH_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_FLASH_MASK)
+
+#define SYSCON_AUTOCLKGATEOVERRIDE_FMC_MASK      (0x400U)
+#define SYSCON_AUTOCLKGATEOVERRIDE_FMC_SHIFT     (10U)
+/*! FMC - Control automatic clock gating of FMC controller.
+ *  0b0..Automatic clock gating is not overridden.
+ *  0b1..Automatic clock gating is overridden (Clock gating is disabled).
+ */
+#define SYSCON_AUTOCLKGATEOVERRIDE_FMC(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_FMC_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_FMC_MASK)
+
 #define SYSCON_AUTOCLKGATEOVERRIDE_CRCGEN_MASK   (0x800U)
 #define SYSCON_AUTOCLKGATEOVERRIDE_CRCGEN_SHIFT  (11U)
 /*! CRCGEN - Control automatic clock gating of CRCGEN controller.
@@ -2170,6 +3442,15 @@ typedef struct {
  *  0b1..bypass of the first stage of synchonization inside GPIO_INT module.
  */
 #define SYSCON_GPIOPSYNC_PSYNC(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_GPIOPSYNC_PSYNC_SHIFT)) & SYSCON_GPIOPSYNC_PSYNC_MASK)
+/*! @} */
+
+/*! @name INVERTMAINCLK - Invert Main clock */
+/*! @{ */
+
+#define SYSCON_INVERTMAINCLK_INVERT_MASK         (0x1U)
+#define SYSCON_INVERTMAINCLK_INVERT_SHIFT        (0U)
+/*! INVERT - Invert main_clock (AHB system clock). */
+#define SYSCON_INVERTMAINCLK_INVERT(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_INVERTMAINCLK_INVERT_SHIFT)) & SYSCON_INVERTMAINCLK_INVERT_MASK)
 /*! @} */
 
 /*! @name HASHRESTHWKEY - Controls whether the HASH AES hardware secret key is restricted to use by secure code */
@@ -2269,6 +3550,18 @@ typedef struct {
 #define SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN_MASK)
 /*! @} */
 
+/*! @name CODESECURITYPROTTEST - Security code to allow test (Design for Testability) access. */
+/*! @{ */
+
+#define SYSCON_CODESECURITYPROTTEST_SEC_CODE_MASK (0xFFFFFFFFU)
+#define SYSCON_CODESECURITYPROTTEST_SEC_CODE_SHIFT (0U)
+/*! SEC_CODE - Security code to allow test access : 0x12345678.
+ *  0b00000000000000000000000000000000..test access is not allowed.
+ *  0b00010010001101000101011001111000..Security code to allow test access.
+ */
+#define SYSCON_CODESECURITYPROTTEST_SEC_CODE(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CODESECURITYPROTTEST_SEC_CODE_SHIFT)) & SYSCON_CODESECURITYPROTTEST_SEC_CODE_MASK)
+/*! @} */
+
 /*! @name SWD_ACCESS_CPU0 - This register is used by ROM during DEBUG authentication mechanism to enable debug access port for CPU0. */
 /*! @{ */
 
@@ -2301,13 +3594,231 @@ typedef struct {
 #define SYSCON_DEBUG_AUTH_BEACON_BEACON(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_AUTH_BEACON_BEACON_SHIFT)) & SYSCON_DEBUG_AUTH_BEACON_BEACON_MASK)
 /*! @} */
 
+/*! @name FLASHSIZECFG - Flash size configuration */
+/*! @{ */
+
+#define SYSCON_FLASHSIZECFG_FLASHSIZE_MASK       (0x1FFU)
+#define SYSCON_FLASHSIZECFG_FLASHSIZE_SHIFT      (0U)
+/*! FLASHSIZE - Flash_size.
+ *  0b000000000..0KB when 9'b000000000.
+ *  0b000000001..0KB when 9'b000000001.
+ *  0b000000010..256KB when 9'b000000010.
+ *  0b000000011..256KB when 9'b000000011.
+ *  0b000000100..512KB when 9'b000000100.
+ *  0b000000101..512KB when 9'b000000101.
+ *  0b000000110..768KB when 9'b000000110.
+ *  0b000000111..768KB when 9'b000000111.
+ *  0b111111111..1016KB when others.
+ */
+#define SYSCON_FLASHSIZECFG_FLASHSIZE(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHSIZECFG_FLASHSIZE_SHIFT)) & SYSCON_FLASHSIZECFG_FLASHSIZE_MASK)
+
+#define SYSCON_FLASHSIZECFG_FLASHSTART_MASK      (0x200U)
+#define SYSCON_FLASHSIZECFG_FLASHSTART_SHIFT     (9U)
+/*! FLASHSTART - Flash start address.
+ *  0b0..No private flash space in the main flash array
+ *  0b1..Private flash start 8kB before last address.
+ */
+#define SYSCON_FLASHSIZECFG_FLASHSTART(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHSIZECFG_FLASHSTART_SHIFT)) & SYSCON_FLASHSIZECFG_FLASHSTART_MASK)
+/*! @} */
+
+/*! @name CONFIGLOCKOUT - Disable write access to FLASHSIZECFG, SRAMSIZECFG, CPUCFG. */
+/*! @{ */
+
+#define SYSCON_CONFIGLOCKOUT_LOCK_MASK           (0x1U)
+#define SYSCON_CONFIGLOCKOUT_LOCK_SHIFT          (0U)
+/*! LOCK - Disable write access to FLASHSIZECFG, SRAMSIZECFG and PERIPHENCFG
+ *  0b0..Enable write access to FLASHSIZECFG, SRAMSIZECFG and PERIPHENCFG
+ *  0b1..Disable write access to FLASHSIZECFG, SRAMSIZECFG and PERIPHENCFG
+ */
+#define SYSCON_CONFIGLOCKOUT_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_CONFIGLOCKOUT_LOCK_SHIFT)) & SYSCON_CONFIGLOCKOUT_LOCK_MASK)
+
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK0_LOCK_MASK (0x4U)
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK0_LOCK_SHIFT (2U)
+/*! FLASHBANK0_LOCK - Disable write access to the BANK0 field in the FLASHBANKENABLE register.
+ *  0b0..Enable write access to the BANK0 field in the FLASHBANKENABLE register.
+ *  0b1..Disable write access to the BANK0 field in the FLASHBANKENABLE register.
+ */
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK0_LOCK(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CONFIGLOCKOUT_FLASHBANK0_LOCK_SHIFT)) & SYSCON_CONFIGLOCKOUT_FLASHBANK0_LOCK_MASK)
+
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK1_LOCK_MASK (0x8U)
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK1_LOCK_SHIFT (3U)
+/*! FLASHBANK1_LOCK - Disable write access to the BANK1 field in the FLASHBANKENABLE register.
+ *  0b0..Enable write access to the BANK1 field in the FLASHBANKENABLE register.
+ *  0b1..Disable write access to the BANK1 field in the FLASHBANKENABLE register.
+ */
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK1_LOCK(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CONFIGLOCKOUT_FLASHBANK1_LOCK_SHIFT)) & SYSCON_CONFIGLOCKOUT_FLASHBANK1_LOCK_MASK)
+
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK2_LOCK_MASK (0x10U)
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK2_LOCK_SHIFT (4U)
+/*! FLASHBANK2_LOCK - Disable write access to the BANK2 field in the FLASHBANKENABLE register.
+ *  0b0..Enable write access to the BANK2 field in the FLASHBANKENABLE register.
+ *  0b1..Disable write access to the BANK2 field in the FLASHBANKENABLE register.
+ */
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK2_LOCK(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CONFIGLOCKOUT_FLASHBANK2_LOCK_SHIFT)) & SYSCON_CONFIGLOCKOUT_FLASHBANK2_LOCK_MASK)
+
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK3_LOCK_MASK (0x20U)
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK3_LOCK_SHIFT (5U)
+/*! FLASHBANK3_LOCK - Disable write access to the BANK3 field in the FLASHBANKENABLE register.
+ *  0b0..Enable write access to the BANK3 field in the FLASHBANKENABLE register.
+ *  0b1..Disable write access to the BANK3 field in the FLASHBANKENABLE register.
+ */
+#define SYSCON_CONFIGLOCKOUT_FLASHBANK3_LOCK(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CONFIGLOCKOUT_FLASHBANK3_LOCK_SHIFT)) & SYSCON_CONFIGLOCKOUT_FLASHBANK3_LOCK_MASK)
+/*! @} */
+
+/*! @name RAMSIZECFG - RAM size */
+/*! @{ */
+
+#define SYSCON_RAMSIZECFG_RAMX_SIZE_MASK         (0x3U)
+#define SYSCON_RAMSIZECFG_RAMX_SIZE_SHIFT        (0U)
+/*! RAMX_SIZE - RAMX size:.
+ *  0b00..RAMX size is 0 KByte.
+ *  0b01..RAMX size is 8 KByte.
+ *  0b11..RAMX size is 16 KByte. (same for value 0b10)
+ */
+#define SYSCON_RAMSIZECFG_RAMX_SIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_RAMSIZECFG_RAMX_SIZE_SHIFT)) & SYSCON_RAMSIZECFG_RAMX_SIZE_MASK)
+
+#define SYSCON_RAMSIZECFG_RAM0_SIZE_MASK         (0xCU)
+#define SYSCON_RAMSIZECFG_RAM0_SIZE_SHIFT        (2U)
+/*! RAM0_SIZE - RAM0 size:.
+ *  0b00..RAM0 size is 0 KByte.
+ *  0b01..RAM0 size is 8 Kbyte.
+ *  0b11..RAM0 size is 16 Kbyte. (same for value 0b10)
+ */
+#define SYSCON_RAMSIZECFG_RAM0_SIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_RAMSIZECFG_RAM0_SIZE_SHIFT)) & SYSCON_RAMSIZECFG_RAM0_SIZE_MASK)
+
+#define SYSCON_RAMSIZECFG_RAM1_SIZE_MASK         (0x30U)
+#define SYSCON_RAMSIZECFG_RAM1_SIZE_SHIFT        (4U)
+/*! RAM1_SIZE - RAM1 size:.
+ *  0b00..RAM1 size is 0 KByte.
+ *  0b01..RAM1 size is 16 Kbyte.
+ *  0b11..RAM1 size is 32 Kbyte. (same for value 0b10)
+ */
+#define SYSCON_RAMSIZECFG_RAM1_SIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_RAMSIZECFG_RAM1_SIZE_SHIFT)) & SYSCON_RAMSIZECFG_RAM1_SIZE_MASK)
+
+#define SYSCON_RAMSIZECFG_RAM2_SIZE_MASK         (0xC0U)
+#define SYSCON_RAMSIZECFG_RAM2_SIZE_SHIFT        (6U)
+/*! RAM2_SIZE - RAM2 size:.
+ *  0b00..RAM2 size is 0 KByte.
+ *  0b01..RAM2 size is 16 Kbyte.
+ *  0b10..RAM2 size is 32 Kbyte.
+ *  0b11..RAM2 size is 64 Kbyte.
+ */
+#define SYSCON_RAMSIZECFG_RAM2_SIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_RAMSIZECFG_RAM2_SIZE_SHIFT)) & SYSCON_RAMSIZECFG_RAM2_SIZE_MASK)
+/*! @} */
+
+/*! @name PERIPHENCFG - Peripheral enable configuration */
+/*! @{ */
+
+#define SYSCON_PERIPHENCFG_SCTEN_MASK            (0x1U)
+#define SYSCON_PERIPHENCFG_SCTEN_SHIFT           (0U)
+/*! SCTEN - SCT enable.
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_SCTEN(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_SCTEN_SHIFT)) & SYSCON_PERIPHENCFG_SCTEN_MASK)
+
+#define SYSCON_PERIPHENCFG_DMA1EN_MASK           (0x8U)
+#define SYSCON_PERIPHENCFG_DMA1EN_SHIFT          (3U)
+/*! DMA1EN - DMA1 enable.
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_DMA1EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_DMA1EN_SHIFT)) & SYSCON_PERIPHENCFG_DMA1EN_MASK)
+
+#define SYSCON_PERIPHENCFG_PUFFEN_MASK           (0x40U)
+#define SYSCON_PERIPHENCFG_PUFFEN_SHIFT          (6U)
+/*! PUFFEN - Puff enable.
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_PUFFEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_PUFFEN_SHIFT)) & SYSCON_PERIPHENCFG_PUFFEN_MASK)
+
+#define SYSCON_PERIPHENCFG_CASPEREN_MASK         (0x80U)
+#define SYSCON_PERIPHENCFG_CASPEREN_SHIFT        (7U)
+/*! CASPEREN - CASPER enable.
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_CASPEREN(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_CASPEREN_SHIFT)) & SYSCON_PERIPHENCFG_CASPEREN_MASK)
+
+#define SYSCON_PERIPHENCFG_EZHBEN_MASK           (0x200U)
+#define SYSCON_PERIPHENCFG_EZHBEN_SHIFT          (9U)
+/*! EZHBEN - EZH B enable.
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_EZHBEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_EZHBEN_SHIFT)) & SYSCON_PERIPHENCFG_EZHBEN_MASK)
+
+#define SYSCON_PERIPHENCFG_GPIOEN_MASK           (0x800U)
+#define SYSCON_PERIPHENCFG_GPIOEN_SHIFT          (11U)
+/*! GPIOEN - Enable pins PIO0_5/6/7/8/9/10
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_GPIOEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_GPIOEN_SHIFT)) & SYSCON_PERIPHENCFG_GPIOEN_MASK)
+
+#define SYSCON_PERIPHENCFG_HASHEN_MASK           (0x1000U)
+#define SYSCON_PERIPHENCFG_HASHEN_SHIFT          (12U)
+/*! HASHEN - HASH enable.
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_HASHEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_HASHEN_SHIFT)) & SYSCON_PERIPHENCFG_HASHEN_MASK)
+
+#define SYSCON_PERIPHENCFG_SPIFIEN_MASK          (0x2000U)
+#define SYSCON_PERIPHENCFG_SPIFIEN_SHIFT         (13U)
+/*! SPIFIEN - Enable SPIFI
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_SPIFIEN(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_SPIFIEN_SHIFT)) & SYSCON_PERIPHENCFG_SPIFIEN_MASK)
+
+#define SYSCON_PERIPHENCFG_PRINCEEN_MASK         (0x4000U)
+#define SYSCON_PERIPHENCFG_PRINCEEN_SHIFT        (14U)
+/*! PRINCEEN - PRINCE
+ *  0b0..peripheral is disable.
+ *  0b1..peripheral is enable.
+ */
+#define SYSCON_PERIPHENCFG_PRINCEEN(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_PRINCEEN_SHIFT)) & SYSCON_PERIPHENCFG_PRINCEEN_MASK)
+
+#define SYSCON_PERIPHENCFG_SWFRO_MASK            (0x8000U)
+#define SYSCON_PERIPHENCFG_SWFRO_SHIFT           (15U)
+/*! SWFRO - Spare bit available for boot ROM to select FRO mode. */
+#define SYSCON_PERIPHENCFG_SWFRO(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_SWFRO_SHIFT)) & SYSCON_PERIPHENCFG_SWFRO_MASK)
+/*! @} */
+
 /*! @name DEVICE_ID0 - Device ID */
 /*! @{ */
+
+#define SYSCON_DEVICE_ID0_PARTCONFIG_MASK        (0x7FU)
+#define SYSCON_DEVICE_ID0_PARTCONFIG_SHIFT       (0U)
+/*! PARTCONFIG - Device type number. (E.g : NHS5204 stored as 04 decimal) */
+#define SYSCON_DEVICE_ID0_PARTCONFIG(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_PARTCONFIG_SHIFT)) & SYSCON_DEVICE_ID0_PARTCONFIG_MASK)
+
+#define SYSCON_DEVICE_ID0_DEVICE_TYPE_SEC_MASK   (0x80U)
+#define SYSCON_DEVICE_ID0_DEVICE_TYPE_SEC_SHIFT  (7U)
+/*! DEVICE_TYPE_SEC - Security device type */
+#define SYSCON_DEVICE_ID0_DEVICE_TYPE_SEC(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_DEVICE_TYPE_SEC_SHIFT)) & SYSCON_DEVICE_ID0_DEVICE_TYPE_SEC_MASK)
+
+#define SYSCON_DEVICE_ID0_SRAM_SIZE_MASK         (0xF00U)
+#define SYSCON_DEVICE_ID0_SRAM_SIZE_SHIFT        (8U)
+/*! SRAM_SIZE - SRAM size */
+#define SYSCON_DEVICE_ID0_SRAM_SIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_SRAM_SIZE_SHIFT)) & SYSCON_DEVICE_ID0_SRAM_SIZE_MASK)
+
+#define SYSCON_DEVICE_ID0_FLASH_SIZE_MASK        (0x7000U)
+#define SYSCON_DEVICE_ID0_FLASH_SIZE_SHIFT       (12U)
+/*! FLASH_SIZE - Flash size */
+#define SYSCON_DEVICE_ID0_FLASH_SIZE(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_FLASH_SIZE_SHIFT)) & SYSCON_DEVICE_ID0_FLASH_SIZE_MASK)
 
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK     (0xF00000U)
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT    (20U)
 /*! ROM_REV_MINOR - ROM revision. */
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT)) & SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK)
+
+#define SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_MASK (0x7000000U)
+#define SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_SHIFT (24U)
+/*! MODELNUM_EXTENTION - Model number extention */
+#define SYSCON_DEVICE_ID0_MODELNUM_EXTENTION(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_SHIFT)) & SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_MASK)
 /*! @} */
 
 /*! @name DIEID - Chip revision ID and Number */
