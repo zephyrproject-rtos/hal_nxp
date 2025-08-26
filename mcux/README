@@ -156,7 +156,6 @@ Patch List:
         - Remove include of usb_device.h and usb_device_dci.h.
 
   - mcux-sdk-middleware-connectivity-framework: Add new CMake file connectivity_framework.cmake
-  - mcux-sdk-middleware-connectivity-framework: rw61x: Fix assertion OSA Mutex Alloc fail
   - mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
   - mcux-sdk-middleware-connectivity-framework: connected_mcu: Modified to remove a large amount of dependencies and adapt code to be supported with Zephyr
   - Patched mcux-sdk\components\conn_fwloader\mcux-sdk\components\conn_fwloader\driver_conn_fwloader.cmake for TFM support
