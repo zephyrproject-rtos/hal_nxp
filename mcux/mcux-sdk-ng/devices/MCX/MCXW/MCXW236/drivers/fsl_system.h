@@ -25,9 +25,6 @@
 typedef enum chip_version_s
 {
     kCHIPVERSION_UNKNOWN = 0x00U,
-    kCHIPVERSION_A0      = 0xA0U,
-    kCHIPVERSION_A1      = 0xA1U,
-    kCHIPVERSION_A2      = 0xA2U,
     kCHIPVERSION_A3      = 0xA3U,
     kCHIPVERSION_A4      = 0xA4U,
     kCHIPVERSION_A5      = 0xA5U
@@ -77,6 +74,7 @@ typedef enum freq_meas_ref_time_exponent_s
     kFREQMEAS_ref_time_exp_29 = 29U, /*                 16777216      2                         0          0         */
     kFREQMEAS_ref_time_exp_30 = 30U, /*                 33554432      1                         0          0         */
     kFREQMEAS_ref_time_exp_31 = 31U, /*hw limit         67108864      0                         0          0         */
+    kFREQMEAS_count = 32U
 } freq_meas_ref_time_exponent_t;
 
 /*******************************************************************************
@@ -107,12 +105,12 @@ void SYSTEM_GetDeviceType(uint16_t *typeNr, bool *securityEnabled, chip_package_
  * This function measures the 32kHz frequency referenced to an accurate 32MHz (BLE) XTAL.
  * The formula is: Ftarget = (Count * Freference) / ((1<<SCALE)-1)
  *
- * @ref_clock_power_of_2_cycles Define the power of 2 count that ref counter counts to during measurement.
+ * @refClockPowerOf2Cycles Define the power of 2 count that ref counter counts to during measurement.
  * @return measured frequency of the target clock in mHz.
  *
  * @Note the minimum count (scale) is 2.
  */
-uint32_t SYSTEM_MeasureFrequency32kHzAccurate(freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles);
+uint32_t SYSTEM_MeasureFrequency32kHzAccurate(freq_meas_ref_time_exponent_t refClockPowerOf2Cycles);
 
 /*!
  * @brief Measure Frequency
@@ -121,13 +119,13 @@ uint32_t SYSTEM_MeasureFrequency32kHzAccurate(freq_meas_ref_time_exponent_t ref_
  * The formula is: Ftarget = (Count * Freference) / ((1<<SCALE)-1)
  *
  * @targetClock target clock.
- * @ref_clock_power_of_2_cycles Define the power of 2 count that ref counter counts to during measurement.
+ * @refClockPowerOf2Cycles Define the power of 2 count that ref counter counts to during measurement.
  * @return measured frequency of the target clock.
  *
  * @Note the minimum count (scale) is 2.
  */
 uint32_t SYSTEM_MeasureFrequency(freq_meas_target_clock_t targetClock,
-                                 freq_meas_ref_time_exponent_t ref_clock_power_of_2_cycles);
+                                 freq_meas_ref_time_exponent_t refClockPowerOf2Cycles);
 /* @} */
 
 /*!
@@ -146,7 +144,7 @@ void SYSTEM_CalibrateClock(freq_meas_target_clock_t targetClock);
 /*!
  * @brief Calibrates clock referenced to 32MHz XTAL oscillator for small deviations.
  *
- * @param target_clock  Clock to calibrate.
+ * @param targetClock  Clock to calibrate.
  */
 void SYSTEM_CalibrateClockFine(freq_meas_target_clock_t targetClock);
 

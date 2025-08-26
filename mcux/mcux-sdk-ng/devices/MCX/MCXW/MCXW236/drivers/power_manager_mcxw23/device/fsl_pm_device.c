@@ -450,8 +450,8 @@ void PMDEVICE_StopSleepTimer(void)
 uint64_t PMDEVICE_GetSleepTimer(void)
 {
 #ifdef TIMER_PORT_TYPE_CTIMER
-    return (CTIMER_GetTimerCountValue(CTIMER0) * 1e6 / CLOCK_GetCTimerClkFreq(0));
+    return (uint64_t)(CTIMER_GetTimerCountValue(CTIMER0) * 1e6 / CLOCK_GetCTimerClkFreq(0));
 #else
-    return (OSTIMER_GetCurrentTimerValue(OSTIMER) * 1e6 / CLOCK_GetOSTimerClkFreq());
+    return (uint64_t)(OSTIMER_GetCurrentTimerValue(OSTIMER) * 1e6 / CLOCK_GetOSTimerClkFreq());
 #endif /* TIMER_PORT_TYPE_CTIMER */
 }

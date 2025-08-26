@@ -50,7 +50,7 @@
 #define PROCESSING_TIME_UPDATE_MATCH_US \
     (200U +                             \
      50U) /* Value defined by measuring HAL_TimerUpdateMatchValueInTicks using fsl_adapter_ostimer, added 50 us margin */
-#endif 
+#endif
 
 /**@brief Timer status. */
 typedef enum _timer_state
@@ -187,7 +187,7 @@ static uint8_t IsGreaterThan(hal_timer_time_t a, hal_timer_time_t b)
     if (resolution == 32)
     {
         /* Take into account wrapping for 32 bit counters */
-        return ((uint32_t)b - (uint32_t)a > (1 << 31));
+        return ((uint32_t)b - (uint32_t)a > (1U << 31));
     }
     else if (resolution == 42)
     {
@@ -213,7 +213,7 @@ static hal_timer_time_t GetTimerResolutionMask(void)
 
 /*!-------------------------------------------------------------------------
  * \brief     Computes the first value after a timer wrap-around based on its resolution in ticks.
- * \details   This function determines the smallest timer value after an overflow occurs, 
+ * \details   This function determines the smallest timer value after an overflow occurs,
  *            given the timer's bit range.
  * \return    The first value after the timer wraps around.
  *---------------------------------------------------------------------------*/
@@ -224,7 +224,7 @@ static hal_timer_time_t HAL_TimerGetFirstOverflowValueInTicks(void)
 
 /*!-------------------------------------------------------------------------
  * \brief     Computes the first value after a timer wrap-around based on its resolution in milliseconds.
- * \details   This function determines the smallest timer value after an overflow occurs, 
+ * \details   This function determines the smallest timer value after an overflow occurs,
  *            given the timer's bit range.
  * \return    The first value after the timer wraps around.
  *---------------------------------------------------------------------------*/

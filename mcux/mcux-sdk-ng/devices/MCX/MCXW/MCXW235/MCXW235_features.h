@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-08
-**     Build:               b250512
+**     Build:               b250603
 **
 **     Abstract:
 **         Chip specific module features.
@@ -124,10 +124,6 @@
 #define FSL_FEATURE_CDOG_HAS_NO_RESET (0)
 /* @brief CDOG Load default configurations during init function */
 #define FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF (0)
-
-/* CRC module features */
-
-/* No feature definitions */
 
 /* CTIMER module features */
 

@@ -99,7 +99,8 @@ status_t PMAPP_EnterLowPower(uint32_t sleepDuration)
     /* Re-enable systicks before releasing interrupts in case an interrupt fires
      * directly, otherwise we could loose some precision */
     SysTick->CTRL |= (SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
-
+#else
+    (void)s_initialSysTickLoad;
 #endif /* SDK_OS_FREE_RTOS */
 
     return status;
