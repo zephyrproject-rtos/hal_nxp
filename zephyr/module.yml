@@ -43,18 +43,18 @@ blobs:
 
 #For MCXW71
   - path: mcxw71/mcxw71_nbu_ble.sb3
-    sha256: f952d3df86b781982586d0737f29d46c4b7480b6b6e7905c002625f807ac60f4
+    sha256: b5d766a676f9646d2baab3b4b3ced8c9665ece952ccb373ed7c79eaf75785a8a
     type: img
-    version: '24.12.00'
+    version: '25.06.00'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/36fec038f52171d46a0804434144c600c4233e9f/bin/mcxw71_nbu_ble_hosted.sb3
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/25.06.00/bin/mcxw71_nbu_ble_hosted.sb3
     description: "BLE Controller for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_ble_all_hosted.bin
-    sha256: 753705fa39971bc0350ed2db220814b702792f42db2ea0047f7f8bfb8bf09830
+    sha256: 336ec94d63a28d68cf791c85cb76b0266d4834db8888e0ddd713ecc2e3e5f581
     type: img
-    version: '24.12.00'
+    version: '25.06.00'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/36fec038f52171d46a0804434144c600c4233e9f/bin/mcxw72_nbu_ble_all_hosted.bin
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/25.06.00/bin/mcxw72_nbu_ble_all_hosted.bin
     description: "BLE Controller for MCXW72 boards"
   - path: mcxw71/mcxw71_nbu_ble_15_4_dyn.sb3
     sha256: a5b61fbb09fd89bad25046258c8c7e4ae2ce9fc57246671314b4924ac9442883
