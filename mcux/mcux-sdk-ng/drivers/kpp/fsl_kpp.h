@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019, 2024 NXP
+ * Copyright 2017, 2019, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief KPP driver version. */
-#define FSL_KPP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_KPP_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 #define KPP_KEYPAD_COLUMNNUM_MAX (8U)
@@ -165,8 +165,9 @@ static inline void KPP_SetSynchronizeChain(KPP_Type *base, uint16_t mask)
  * the data pointer is recommended to be a array like uint8_t data[KPP_KEYPAD_COLUMNNUM_MAX].
  * for example the data[2] = 4, that means in column 1 row 2 has a key press event.
  * @param clockSrc_Hz Source clock.
+ * @retval kStatus_Success kpp press scan succeed.
  */
-void KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz);
+status_t KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz);
 
 /*! @} */
 
