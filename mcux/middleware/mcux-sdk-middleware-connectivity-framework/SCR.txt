@@ -8,33 +8,7 @@ Description:            Connectivity Framework middleware for Connectivity stack
 Outgoing License:       LA_OPT_Online_Code_Hosting
 License File:           LICENSE
 
-Package: SecLib_RNG
-Version: 7.0.2
-Outgoing License: LA_OPT_Online_Code_Hosting
-License File: services/SecLib_RNG/LA_OPT_Online_Code_Hosting.txt
-Files:
-    services/SecLib_RNG/lib_crypto_m33_nodsp_nofp.a
-    services/SecLib_RNG/lib_crypto_m33_nodsp.a
-    services/SecLib_RNG/lib_crypto_m33.a
-Type of Content: Binary libraries
-Description and comments: Connectivity Security Library
-Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
-URL: None
-Origin:
-      NXP
-
-Package: Zephyr subsys
-Version: 7.0.2
-Outgoing License: Apache-2.0
-License File: Zephyr/subsys/LICENSE
-Type of Content: source code & header files
-Description and comments: Zephyr components implementation over OSA in mcux SDK
-Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
-URL: None
-Origin:
-      NXP and Zephyr
-
-Package: FWK except above packages
+Package: FWK common/platform files
 Version: 7.0.2
 Outgoing License: BSD-3-Clause
 License File: LICENSE_BSD-3-Clause.txt
