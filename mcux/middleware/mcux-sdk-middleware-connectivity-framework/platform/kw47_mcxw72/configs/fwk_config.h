@@ -183,7 +183,7 @@
  * thread stack (this can be configured).
  */
 #ifndef gPlatformIcsUseWorkqueueRxProcessing_d
-#define gPlatformIcsUseWorkqueueRxProcessing_d 1
+#define gPlatformIcsUseWorkqueueRxProcessing_d 0
 #endif
 
 /* Address which can trigger a dummy interrupt on NBU. Used in PLATFORM_RemoteActiveReq() to ensure code is executed on

@@ -12,9 +12,7 @@
 #include "fwk_config.h"
 #include "fwk_platform_ics.h"
 #include "fwk_platform.h"
-#include "FunctionLib.h"
 #include "fsl_adapter_rpmsg.h"
-#include "fwk_debug.h"
 
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 #include "fwk_workq.h"
@@ -212,7 +210,7 @@ int PLATFORM_FwkSrvSendPacket(eFwkSrvMsgType msg_type, void *msg, uint16_t msg_l
 
             if (msg != NULL && msg_lg != 0U)
             {
-                FLib_MemCpy(&buf[1], (uint8_t *)msg, msg_lg);
+                memcpy(&buf[1], (uint8_t *)msg, msg_lg);
             }
 
             if (kStatus_HAL_RpmsgSuccess != HAL_RpmsgNoCopySend((hal_rpmsg_handle_t)fwkRpmsgHandle, buf, (uint32_t)sz))
@@ -298,8 +296,6 @@ int PLATFORM_SendChipRevision(void)
     {
         ret = PLATFORM_FwkSrvSendPacket(gFwkSrvHostChipRevision_c, (void *)&chip_rev, 1);
     }
-
-    PWR_DBG_LOG("chip rev sent:%d", chip_rev);
 
     return ret;
 }
@@ -417,7 +413,7 @@ bool_t PLATFORM_NbuApiReq(uint8_t *api_return, uint16_t api_id, const uint8_t *f
 
         /* API executed */
         assert(m_nbu_api_return_param_len == nb_returns);
-        FLib_MemCpy(api_return, (void *)&m_nbu_api_return_param[0], m_nbu_api_return_param_len);
+        memcpy(api_return, (void *)&m_nbu_api_return_param[0], m_nbu_api_return_param_len);
     } while (0U != 0U);
 
     /* Release wake up to other CPU */
@@ -565,7 +561,7 @@ static void PLATFORM_RxNbuVersionIndicationService(uint8_t *data, uint32_t len)
     if (g_nbu_info_p != NULL)
     {
         g_nbu_info_resp_received = true;
-        FLib_MemCpy(g_nbu_info_p, &data[1], sizeof(NbuInfo_t));
+        memcpy(g_nbu_info_p, &data[1], sizeof(NbuInfo_t));
 
 #if defined(NBU_VERSION_DBG) && (NBU_VERSION_DBG == 1)
         PRINTF("NBU v%d.%d.%d\r\n", g_nbu_info_p->versionNumber[0], g_nbu_info_p->versionNumber[1],
@@ -593,7 +589,7 @@ static void PLATFORM_RxNbuMemFullIndicationService(uint8_t *data, uint32_t len)
     if (nbu_mem_error_callback != NULL)
     {
         NbuDbgMemInfo_t memInfo;
-        FLib_MemCpy(&memInfo, &data[1], sizeof(NbuDbgMemInfo_t));
+        memcpy(&memInfo, &data[1], sizeof(NbuDbgMemInfo_t));
         (*nbu_mem_error_callback)((void *)&memInfo);
     }
     NOT_USED(len);
@@ -607,7 +603,7 @@ static void PLATFORM_RxNbuApiIndicationService(uint8_t *data, uint32_t len)
     m_nbu_api_rpmsg_status = (data[1] == 0U) ? false : true;
 
     m_nbu_api_return_param_len = len - 2U;
-    FLib_MemCpy((void *)&m_nbu_api_return_param[0U], &data[2U], m_nbu_api_return_param_len);
+    memcpy((void *)&m_nbu_api_return_param[0U], &data[2U], m_nbu_api_return_param_len);
 }
 
 static void PLATFORM_RxHostSetLowPowerConstraintService(uint8_t *data, uint32_t len)
@@ -641,7 +637,7 @@ static void PLATFORM_RxFroNotificationService(uint8_t *data, uint32_t len)
 
     if (len >= (sizeof(fro_data_t) + 1U))
     {
-        FLib_MemCpy((void *)&fro_notif_data, (void *)&data[1], sizeof(fro_data_t));
+        memcpy((void *)&fro_notif_data, (void *)&data[1], sizeof(fro_data_t));
         pfPlatformDebugCallback(fro_notif_data.freq, fro_notif_data.ppm_mean, fro_notif_data.ppm,
                                 fro_notif_data.fro_trim);
     }
@@ -662,7 +658,7 @@ static void PLATFORM_RxNbuSecurityEventIndicationService(uint8_t *data, uint32_t
     if (nbu_security_event_callback != NULL)
     {
         uint32_t securityEventBitmask;
-        FLib_MemCpy(&securityEventBitmask, &data[1], sizeof(uint32_t));
+        memcpy(&securityEventBitmask, &data[1], sizeof(uint32_t));
         (*nbu_security_event_callback)(securityEventBitmask);
     }
     NOT_USED(len);
@@ -687,7 +683,7 @@ static void PLATFORM_RxNbuRequestTemperature(uint8_t *data, uint32_t len)
         assert(len == (sizeof(uint32_t) + 1));
 
         /* Data corresponds to the periodic measurement interval requested by NBU (in Ms) */
-        FLib_MemCpy((void *)&periodic_interval, (void *)&data[1], sizeof(uint32_t));
+        memcpy((void *)&periodic_interval, (void *)&data[1], sizeof(uint32_t));
         (*nbu_request_temperature_callback)(periodic_interval);
     }
     (void)len;
