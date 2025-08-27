@@ -1376,7 +1376,12 @@ typedef struct _netc_tb_ipf_cfge
     netc_host_reason_t hr : 4;              /*!< Host Reason metadata when frame is redirected/copied to
                                               the switch management port */
     uint32_t timecape : 1;                  /*!< Timestam capture enable */
+#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
+    uint32_t rrt : 1;                       /*!< Report Receive Timestamp */
+    uint32_t : 8;
+#else
     uint32_t : 9;
+#endif
     uint32_t fltaTgt;                       /*!< Target for selected switch forwarding action or filter action*/
 } netc_tb_ipf_cfge_t;
 
