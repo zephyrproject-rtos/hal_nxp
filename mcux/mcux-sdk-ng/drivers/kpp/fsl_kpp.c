@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019 NXP
+ * Copyright 2017, 2019, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -134,17 +134,20 @@ void KPP_Deinit(KPP_Type *base)
  * the data pointer is recommended to be a array like uint8_t data[KPP_KEYPAD_COLUMNNUM_MAX].
  * for example the data[2] = 4, that means in column 1 row 2 has a key press event.
  * param clockSrc_Hz Source clock.
+ * retval kStatus_Success kpp press scan succeed.
  */
-void KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz)
+status_t KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz)
 {
+    
     assert(data);
 
+    status_t status = kStatus_Success;
     uint16_t kppKCO      = base->KPCR & KPP_KPCR_KCO_MASK;
     uint8_t columIndex   = 0;
     uint8_t activeColumn = (uint8_t)((base->KPCR & KPP_KPCR_KCO_MASK) >> KPP_KPCR_KCO_SHIFT);
     uint8_t times;
     uint8_t rowData[KPP_KEYPAD_SCAN_TIMES][KPP_KEYPAD_COLUMNNUM_MAX];
-    bool press = false;
+    bool dataStable = true;
     uint8_t column;
 
     /* Initialize row data to zero. */
@@ -186,18 +189,22 @@ void KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz)
     /* Check if three time scan data is the same. */
     for (columIndex = 0; columIndex < KPP_KEYPAD_COLUMNNUM_MAX; columIndex++)
     {
-        if (((uint8_t)(rowData[0][columIndex] & rowData[1][columIndex]) & rowData[2][columIndex]) != 0U)
+        if (!((rowData[0][columIndex] == rowData[1][columIndex]) &&
+              (rowData[1][columIndex] == rowData[2][columIndex])))
         {
-            press = true;
+            dataStable = false;
         }
     }
 
-    if (press)
+    if (dataStable)
     {
         (void)memcpy(data, &rowData[0][0], sizeof(rowData[0]));
     }
     else
     {
         (void)memset(data, 0, sizeof(rowData[0]));
+        status = kStatus_Fail;
     }
+
+    return status;
 }
