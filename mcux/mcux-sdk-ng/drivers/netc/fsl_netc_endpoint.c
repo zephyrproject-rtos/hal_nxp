@@ -1146,6 +1146,7 @@ status_t EP_GetRxFrameSizeCommon(ep_handle_t *handle, netc_rx_bdr_t *rxBdRing, u
         else
         {
             /* Get Transmit Timestamp Reference Response messages */
+            *length = rxDesc->writeback.bufLen;
             result = kStatus_NETC_RxTsrResp;
         }
     }
