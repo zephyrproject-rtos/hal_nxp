@@ -3052,7 +3052,7 @@ void XSPI_Cache64_InvalidateCacheByRange(uint32_t address, size_t size)
 {
     if (size > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size - 0x01U);
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
         uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)FSL_FEATURE_CACHE64_LINESIZE_BYTE - 1U));
@@ -3068,7 +3068,7 @@ void XSPI_Cache64_InvalidateCacheByRange(uint32_t address, size_t size)
             return;
         }
         base    = s_xspi_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance] + phyMemSize[instance] - 0x01U);
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance] + phyMemSize[instance]);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the invalidate by line command and use the physical address. */
@@ -3118,7 +3118,7 @@ void XSPI_Cache64_CleanCacheByRange(uint32_t address, size_t size)
 {
     if (size > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size - 0x01U);
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
         uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)FSL_FEATURE_CACHE64_LINESIZE_BYTE - 1U));
@@ -3134,7 +3134,7 @@ void XSPI_Cache64_CleanCacheByRange(uint32_t address, size_t size)
             return;
         }
         base    = s_xspi_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance] + phyMemSize[instance] - 0x01U);
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance] + phyMemSize[instance]);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the push by line command. */
@@ -3186,7 +3186,7 @@ void XSPI_Cache64_CleanInvalidateByRange(uint32_t address, size_t size)
 {
     if (size > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size - 0x01U);
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
         uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)FSL_FEATURE_CACHE64_LINESIZE_BYTE - 1U));
@@ -3202,7 +3202,7 @@ void XSPI_Cache64_CleanInvalidateByRange(uint32_t address, size_t size)
             return;
         }
         base    = s_xspi_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance] + phyMemSize[instance] - 0x01U);
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance] + phyMemSize[instance]);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the push by line command. */
