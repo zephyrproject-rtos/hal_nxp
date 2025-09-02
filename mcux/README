@@ -239,3 +239,7 @@ Patch List:
    - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
      This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/612/commits was created, so it
      did not enter PR#612 via cherry-pick but rather via rebasing onto the master branch.
+
+  - mcux-sdk-ng: drivers: xspi: cache64: Fix cache management issue.
+   - PR: https://github.com/zephyrproject-rtos/hal_nxp/pull/597
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
