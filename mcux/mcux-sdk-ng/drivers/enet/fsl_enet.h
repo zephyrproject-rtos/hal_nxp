@@ -1954,6 +1954,14 @@ void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, en
 void ENET_Ptp1588GetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_t *ptpTime);
 
 /*!
+ * @brief Gets the last captured ENET time from the PTP 1588 timer.
+ *
+ * @param base  ENET peripheral base address.
+ * @param channel The ENET PTP timer channel number.
+ */
+uint32_t ENET_Ptp1588GetCapture(ENET_Type *base, enet_ptp_timer_channel_t channel);
+
+/*!
  * @brief Sets the ENET PTP 1588 timer to the assigned time.
  *
  * @param base  ENET peripheral base address.
