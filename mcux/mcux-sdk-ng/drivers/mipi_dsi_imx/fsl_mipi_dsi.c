@@ -5,7 +5,6 @@
  */
 
 #include "fsl_mipi_dsi.h"
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -391,7 +390,7 @@ void DSI_SetDpiConfig(MIPI_DSI_Type *base, const dsi_dpi_config_t *config, uint8
  *
  * param base MIPI DSI host peripheral base address.
  * param config Pointer to the command mode configuration structure.
- * param phyByteClkFreq_Hz Bit clock frequency in each lane.
+ * param phyByteClkFreq_Hz Byte clock frequency in each lane.
  */
 void DSI_SetCommandModeConfig(MIPI_DSI_Type *base, const dsi_command_config_t *config, uint32_t phyByteClkFreq_Hz)
 {
@@ -429,15 +428,14 @@ void DSI_GetDefaultDphyConfig(dsi_dphy_config_t *config, uint32_t phyByteClkFreq
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));
     uint8_t i;
-
-    /* 4 lanes */
+    /* Config lane number */
     config->numLanes = laneNum;
     /* Calculate lane bit clock frequency. */
     uint32_t laneBitClkFreq_Hz = phyByteClkFreq_Hz * 8U / laneNum;
-    /* Max read length is 10000 bytes. This should be changed according to device specific max read leagth. */
+    /* Max read length is 10000 bytes. This should be changed according to device specific max read length. */
     config->maxRead_ByteClk = 10000U;
     /* Min time PHY needs to stay in StopState before requesting an hs transmission. */
-    config->tStopState_ByteClk = 0x20U;
+    config->tStopState_ByteClk = 0x28U;
 
     /* Get the clock&data lane state change timing parameters according to the lane bit clock frequency. */
     for (i = 0U; i < ARRAY_SIZE(HsLpTimingTable); i++)
@@ -569,7 +567,7 @@ status_t DSI_PowerUp(MIPI_DSI_Type *base)
 
     waitTimes = FSL_MIPI_DSI_TIMEOUT;
     /* Wait for the PHY stopstateclklane to set. */
-    while (((base->PHY_STATUS & MIPI_DSI_PHY_STATUS_phy_stopstate0lane_MASK) != 0U) && (0U != waitTimes))
+    while (((base->PHY_STATUS & MIPI_DSI_PHY_STATUS_phy_stopstate0lane_MASK) == 0U) && (0U != waitTimes))
     {
         waitTimes--;
     }
@@ -1030,10 +1028,10 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 }
 
 /*!
- * brief Lookup table method to obtain HS frequency range of operation selection override.
+ * @brief Lookup table method to obtain HS frequency range of operation selection override.
  *
- * param bnd_width band width frequncy in Hz
- * return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
+ * @param bnd_width band width frequncy in Hz
+ * @return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
  */
 uint16_t Pll_Set_Hs_Freqrange(uint32_t bnd_width) {
     uint16_t set_hs_freqrange = 0U;
@@ -1071,10 +1069,10 @@ uint16_t Pll_Set_Hs_Freqrange(uint32_t bnd_width) {
 }
 
 /*!
- * brief Lookup table method to obtain PLL Proportional Charge Pump control.
+ * @brief Lookup table method to obtain PLL Proportional Charge Pump control.
  *
- * param pll_freq_sel PLL frequency in Mhz
- * return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
+ * @param pll_freq_sel PLL frequency in Mhz
+ * @return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
  */
 uint16_t Pll_Set_Pll_Prop_Param(uint32_t pll_freq_sel)
 {
@@ -1089,10 +1087,10 @@ uint16_t Pll_Set_Pll_Prop_Param(uint32_t pll_freq_sel)
 }
 
 /*!
- * brief Lookup table method to obtain DDL target oscillation frequency.
+ * @brief Lookup table method to obtain DDL target oscillation frequency.
  *
- * param pll_freq_sel PLL frequency in Mhz
- * return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
+ * @param pll_freq_sel PLL frequency in Mhz
+ * @return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
  */
 uint16_t Pll_Set_Sr_Osc_Freq_Target(uint32_t pll_freq_sel)
 {
@@ -1110,24 +1108,34 @@ uint16_t Pll_Set_Sr_Osc_Freq_Target(uint32_t pll_freq_sel)
 }
 
 /*!
- * brief Lookup table method to obtain VCO parameter.
+ * @brief calculate VCO frequency.
  *
- * param pll_freq_sel PLL frequency in Mhz
- * return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
+ * @param pll_freq_sel PLL frequency in Hz
+ * @return the vco_freq_clk value
+ */
+uint32_t Pll_Set_Pll_Vco_Freq(uint32_t pll_freq_sel)
+{
+    uint32_t vco_freq_clk;
+    if (pll_freq_sel >= 320000000)
+        vco_freq_clk = pll_freq_sel;
+    else if (pll_freq_sel >= 160000000)
+        vco_freq_clk = pll_freq_sel * 2;
+    else if (pll_freq_sel >= 80000000)
+        vco_freq_clk = pll_freq_sel * 4;
+    else
+        vco_freq_clk = pll_freq_sel * 8;
+
+    return vco_freq_clk;
+};
+
+/*!
+ * @brief Lookup table method to obtain VCO parameter.
+ *
+ * @param pll_freq_sel PLL frequency in Mhz
+ * @return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
  * find suitable value, return default value 63.
  */
 uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel) {
-    uint16_t vco_freq;
-
-    if (pll_freq_sel >= 320)
-        vco_freq = pll_freq_sel;
-    else if (pll_freq_sel >= 160)
-        vco_freq = pll_freq_sel * 2;
-    else if (pll_freq_sel >= 80)
-        vco_freq = pll_freq_sel * 4;
-    else
-        vco_freq = pll_freq_sel * 8;
-
     static const struct {
         uint16_t vco_freq;
         uint16_t param;
@@ -1137,9 +1145,115 @@ uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel) {
     };
 
     for (size_t i = 0; i < sizeof(vco_table) / sizeof(vco_table[0]); i++) {
-        if (vco_freq >= vco_table[i].vco_freq) {
+        if (pll_freq_sel >= vco_table[i].vco_freq) {
             return vco_table[i].param;
         }
     }
     return 63;
+}
+
+/*!
+ * @brief Dphy tx write control.
+ *
+ * @param testcode Dphy TX register.
+ * @param testwrite value for Dphy TX register.
+ */
+static void tx_dphy_write_control(uint16_t testcode, uint8_t testwrite)
+{
+    /* Writing the 4-it testcode MSBs */
+    MIPI_DSI->PHY_TST_CTRL0 = 0U;
+    MIPI_DSI->PHY_TST_CTRL1 = 0U;
+    MIPI_DSI->PHY_TST_CTRL1 = 0x00010000U;
+    MIPI_DSI->PHY_TST_CTRL0 = 0x2U;
+    MIPI_DSI->PHY_TST_CTRL1 = 0x00010000U;
+
+    MIPI_DSI->PHY_TST_CTRL0 = 0U;
+    MIPI_DSI->PHY_TST_CTRL1 = 0U;
+    MIPI_DSI->PHY_TST_CTRL1 = (testcode >> 8);
+    MIPI_DSI->PHY_TST_CTRL0 = 0x2U;
+
+    MIPI_DSI->PHY_TST_CTRL0 = 0U;
+    MIPI_DSI->PHY_TST_CTRL1 = 0x00010000U;
+    MIPI_DSI->PHY_TST_CTRL0 = 0x2U;
+    MIPI_DSI->PHY_TST_CTRL1 = (0x00010000 | (testcode & 0xFF));
+    MIPI_DSI->PHY_TST_CTRL0 = 0U;
+    MIPI_DSI->PHY_TST_CTRL1 = 0U;
+
+    MIPI_DSI->PHY_TST_CTRL1 = testwrite;
+    MIPI_DSI->PHY_TST_CTRL0 = 0x2U;
+}
+
+/*!
+ * @brief config to set Dphy.
+ *
+ * @param phyRefClkFreq_Hz Dphy reference clock frequency in Hz
+ * @param dataRateFreq_Hz line rate clock frequency.
+ */
+void DSI_ConfigDphy(MIPI_DSI_Type *base, uint32_t phyRefClkFreq_Hz, uint32_t dataRateFreq_Hz)
+{
+    uint32_t m;
+    uint32_t n;
+    uint16_t pll_prop_cntrl;
+    uint16_t pll_vco_cntrl;
+    uint16_t sr_osc_freq_target;
+    uint32_t dphyClkFreq_Hz;
+    uint16_t dphyClkFreq_Mhz;
+    uint32_t vcoClkFreq_Hz;
+
+    dphyClkFreq_Hz = dataRateFreq_Hz / 2U;
+    dphyClkFreq_Mhz = dphyClkFreq_Hz / 1000000U;
+    vcoClkFreq_Hz = Pll_Set_Pll_Vco_Freq(dphyClkFreq_Hz);
+    DSI_DphyGetPllDivider(&m, &n, phyRefClkFreq_Hz, vcoClkFreq_Hz);
+
+    pll_prop_cntrl = Pll_Set_Pll_Prop_Param(dphyClkFreq_Mhz);
+    sr_osc_freq_target = Pll_Set_Sr_Osc_Freq_Target(dphyClkFreq_Mhz);
+    pll_vco_cntrl = Pll_Set_Pll_Vco_Param(dphyClkFreq_Mhz);
+    /* cfg TX PHY registers */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_13, 0x3U);  /* pll_mpll_prog_rw = 2'b11 */
+    tx_dphy_write_control(TX_DPHY_TX_CB_1, 0x6U);  /* cb_sel_vref_lprx_rw = 2'b10 */
+    tx_dphy_write_control(TX_DPHY_TX_CB_0, 0x53U); /* cb_sel_vrefcd_lprx_rw = 2'b10 */
+
+    /* When operating as master or when in High-Speed BIST modes,
+     * for datarates below 450 Mbps, clkdiv_clk_en must be enabled.
+     */
+    if (dataRateFreq_Hz < 450000000U)
+    {
+        tx_dphy_write_control(TX_DPHY_TX_CB_2, 0x10U);
+    }
+    else
+    {
+        /* Do nothing*/
+    }
+
+    tx_dphy_write_control(TX_DPHY_TX_CLK_TERMLOWCAP, 0x2U);  /* txclk_term_lowcap_lp00_en_ovr_en = 1'b1, txclk_term_lowcap_lp00_en_ovr = 1'b0 */
+
+    /* set the value of slew rate calibration for 1.5Gbps or below */
+    tx_dphy_write_control(TX_DPHY_TX_SLEW_7, 0x0U);  /* sr_range=0, 0x272 */
+    tx_dphy_write_control(TX_DPHY_TX_SLEW_6, sr_osc_freq_target >> 8);  /* sr_osc_freq_target[11:8], 0x271 */
+    tx_dphy_write_control(TX_DPHY_TX_SLEW_5, sr_osc_freq_target & 0xFF); /* sr_osc_freq_target[7:0], 0x270 */
+    /* enable slew rate calibration */
+    tx_dphy_write_control(TX_DPHY_TX_SLEW_7, 0x10U); /* sr_range=0,sr_sel_tester_rw=2'b01(slew rate on), 0x272 */
+
+    /* Configure the PLL */
+    /* set PLL M */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_29, (m >> 8));   /* pll_m_ovr_rw[9:8]=0, 0x17A */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_28, (m & 0xFF)); /* pll_m_ovr_rw[7:0]='hC6, 0x179 */
+    /* set PLL N */
+    /* enable PLL divider and PLL feedback multiplication parameter overrides */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_27, (0x1 << 7 | (n << 3))); /* pll_n_ovr_en_rw =1, pll_n_ovr_rw[3:0]=7, 0x178 */
+    /* configure VCO control and PLL charge pump */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_30, 1 << 7 | pll_vco_cntrl << 1 | 1); /* pll_vco_cntrl_ovr_en_rw =1, pll_vco_cntrl_ovr_rw[5:0]=9, pll_m_ovr_en_rw=1, 0x17B */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_1, 0x10U);  /* pll_cpbias_cntrl_rw[6:0]='h10, 0x15E */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_5, 0x1U);   /* pll_gmp_cntrl_rw[1:0]='b01,pll_int_cntrl_rw[5:0]=0, 0x162 */
+    /* Configure PLL lock fields */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_22, 0x2U);  /* pll_th1_rw[7:0]=2; 0x173 */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_23, 0x0U);  /* pll_th1_rw[9:8]=0;0x174 */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_24, 0x60U); /* pll_th2_rw[7:0] ='h60, 0x175 */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_25, 0x3U);  /* pll_th3_rw[7:0]=3, 0x176 */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_9, 0x4U);   /* pll_lock_sel_rw=1, 0x166 */
+    /* Power on PLL */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_17, pll_prop_cntrl); /* pll_prop_cntrl_rw[5:0]='hd,pll_pwron_ovr_rw=1,pll_pwron_ovr_en_rw=1, 0x16E */
+    /* Enable the PLL right and left side buffers */
+    tx_dphy_write_control(TX_DPHY_TX_PLL_31, 0x3U);  /* pll_clkouten_right_rw =1, pll_clkouten_left_rw=1, 0x17c */
+    SDK_DelayAtLeastUs(100000U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 }
