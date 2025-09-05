@@ -410,7 +410,7 @@ static inline void SPDIF_EnableDMA(SPDIF_Type *base, uint32_t mask, bool enable)
  */
 static inline uint32_t SPDIF_TxGetLeftDataRegisterAddress(SPDIF_Type *base)
 {
-    return (uint32_t)(&(base->STL));
+    return (uint32_t)(uintptr_t)(&(base->STL));
 }
 
 /*!
@@ -423,7 +423,7 @@ static inline uint32_t SPDIF_TxGetLeftDataRegisterAddress(SPDIF_Type *base)
  */
 static inline uint32_t SPDIF_TxGetRightDataRegisterAddress(SPDIF_Type *base)
 {
-    return (uint32_t)(&(base->STR));
+    return (uint32_t)(uintptr_t)(&(base->STR));
 }
 
 /*!
@@ -436,7 +436,7 @@ static inline uint32_t SPDIF_TxGetRightDataRegisterAddress(SPDIF_Type *base)
  */
 static inline uint32_t SPDIF_RxGetLeftDataRegisterAddress(SPDIF_Type *base)
 {
-    return (uint32_t)(&(base->SRL));
+    return (uint32_t)(uintptr_t)(&(base->SRL));
 }
 
 /*!
@@ -449,7 +449,7 @@ static inline uint32_t SPDIF_RxGetLeftDataRegisterAddress(SPDIF_Type *base)
  */
 static inline uint32_t SPDIF_RxGetRightDataRegisterAddress(SPDIF_Type *base)
 {
-    return (uint32_t)(&(base->SRR));
+    return (uint32_t)(uintptr_t)(&(base->SRR));
 }
 
 /*! @} */
