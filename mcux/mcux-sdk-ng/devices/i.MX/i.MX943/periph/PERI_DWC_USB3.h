@@ -244,6 +244,7 @@ typedef struct {
   __I  uint32_t HCCPARAMS2;                        /**< Host Controller Capability Parameters 2, offset: 0x1C */
   __IO uint32_t USBCMD;                            /**< USB Command, offset: 0x20 */
   __IO uint32_t USBSTS;                            /**< USB Status, offset: 0x24 */
+#undef PAGESIZE
   __I  uint32_t PAGESIZE;                          /**< Page Size, offset: 0x28 */
        uint8_t RESERVED_0[8];
   __IO uint32_t DNCTRL;                            /**< Device Notification, offset: 0x34 */
