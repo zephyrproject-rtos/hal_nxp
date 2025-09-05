@@ -20,8 +20,31 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
+
+#define TX_DPHY_TX_PLL_1             0x15E
+#define TX_DPHY_TX_PLL_5             0x162
+#define TX_DPHY_TX_PLL_9             0x166
+#define TX_DPHY_TX_PLL_13            0x16A
+#define TX_DPHY_TX_PLL_17            0x16E
+#define TX_DPHY_TX_PLL_22            0x173
+#define TX_DPHY_TX_PLL_23            0x174
+#define TX_DPHY_TX_PLL_24            0x175
+#define TX_DPHY_TX_PLL_25            0x176
+#define TX_DPHY_TX_PLL_27            0x178
+#define TX_DPHY_TX_PLL_28            0x179
+#define TX_DPHY_TX_PLL_29            0x17A
+#define TX_DPHY_TX_PLL_30            0x17B
+#define TX_DPHY_TX_PLL_31            0x17C
+#define TX_DPHY_TX_CB_0              0x1AA
+#define TX_DPHY_TX_CB_1              0x1AB
+#define TX_DPHY_TX_CB_2              0x1AC
+#define TX_DPHY_TX_SLEW_5            0x270
+#define TX_DPHY_TX_SLEW_6            0x271
+#define TX_DPHY_TX_SLEW_7            0x272
+#define TX_DPHY_TX_CLK_TERMLOWCAP    0x402
+
 
 /*! @brief Error codes for the MIPI DSI driver. */
 enum
@@ -531,7 +554,7 @@ void DSI_SetDpiConfig(MIPI_DSI_Type *base, const dsi_dpi_config_t *config, uint8
  *
  * @param base MIPI DSI host peripheral base address.
  * @param config Pointer to the command mode configuration structure.
- * @param phyByteClkFreq_Hz Bit clock frequency in each lane.
+ * @param phyByteClkFreq_Hz Byte clock frequency in each lane.
  */
 void DSI_SetCommandModeConfig(MIPI_DSI_Type *base, const dsi_command_config_t *config, uint32_t phyByteClkFreq_Hz);
 
@@ -554,6 +577,27 @@ static inline void DSI_EnableCommandMode(MIPI_DSI_Type *base, bool enable)
         base->MODE_CFG = 0UL;
     }
 }
+
+/*!
+ * @brief Enables the VPG mode.
+ *
+ * This function configures video mode pattern generator.
+ *
+ * @param base MIPI DSI host peripheral base address.
+ * @param enable true to enable video mode pattern generator.
+ */
+static inline void DSI_EnableVpgEnMode(MIPI_DSI_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->VID_MODE_CFG |= MIPI_DSI_VID_MODE_CFG_vpg_en_MASK;
+    }
+    else
+    {
+        base->VID_MODE_CFG &= ~MIPI_DSI_VID_MODE_CFG_vpg_en_MASK;
+    }
+}
+
 /*! @} */
 
 /*!
@@ -568,7 +612,7 @@ static inline void DSI_EnableCommandMode(MIPI_DSI_Type *base, bool enable)
  * the parameters according device specific requirements.
  *
  * @param config Pointer to the D-PHY configuration.
- * @param phyByteClkFreq_Hz Byte clock frequency.
+ * @param phyByteClkFreq_Hz Byte clock frequency in each lane.
  * @param laneNum How may lanes in use.
  */
 void DSI_GetDefaultDphyConfig(dsi_dphy_config_t *config, uint32_t phyByteClkFreq_Hz, uint8_t laneNum);
@@ -686,37 +730,53 @@ void DSI_ReadRxData(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
 status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer);
 
 /*!
- * brief Lookup table method to obtain HS frequency range of operation selection override.
+ * @brief Lookup table method to obtain HS frequency range of operation selection override.
  *
- * param bnd_width band width frequncy in Hz
- * return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
+ * @param bnd_width band width frequncy in Hz
+ * @return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
  */
 uint16_t Pll_Set_Hs_Freqrange(uint32_t bnd_width);
 
 /*!
- * brief Lookup table method to obtain PLL Proportional Charge Pump control.
+ * @brief Lookup table method to obtain PLL Proportional Charge Pump control.
  *
- * param pll_freq_sel PLL frequency in Mhz
- * return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
+ * @param pll_freq_sel PLL frequency in Mhz
+ * @return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
  */
 uint16_t Pll_Set_Pll_Prop_Param(uint32_t pll_freq_sel);
 
 /*!
- * brief Lookup table method to obtain DDL target oscillation frequency.
+ * @brief Lookup table method to obtain DDL target oscillation frequency.
  *
- * param pll_freq_sel PLL frequency in Mhz
- * return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
+ * @param pll_freq_sel PLL frequency in Mhz
+ * @return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
  */
 uint16_t Pll_Set_Sr_Osc_Freq_Target(uint32_t pll_freq_sel);
 
 /*!
- * brief Lookup table method to obtain VCO parameter.
+ * @brief calculate VCO frequency.
  *
- * param pll_freq_sel PLL frequency in Mhz
- * return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
+ * @param pll_freq_sel PLL frequency in Hz
+ * @return the vco_freq_clk value
+ */
+uint32_t Pll_Set_Pll_Vco_Freq(uint32_t pll_freq_sel);
+
+/*!
+ * @brief Lookup table method to obtain VCO parameter.
+ *
+ * @param pll_freq_sel PLL frequency in Mhz
+ * @return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
  * find suitable value, return default value 63.
  */
 uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel);
+
+/*!
+ * @brief config to set Dphy.
+ *
+ * @param phyRefClkFreq_Hz Dphy reference clock frequency in Hz
+ * @param dataRateFreq_Hz line rate clock frequency.
+ */
+void DSI_ConfigDphy(MIPI_DSI_Type *base, uint32_t phyRefClkFreq_Hz, uint32_t dataRateFreq_Hz);
 /*! @} */
 
 #if defined(__cplusplus)
