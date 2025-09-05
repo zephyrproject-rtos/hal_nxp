@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -10,11 +10,11 @@
 #include <stdint.h>
 #include "fsl_common.h"
 
-//!@brief OTP driver API Interface
+/*! @brief OTP driver API Interface */
 typedef struct
 {
     uint32_t version;
-    void (*init)(void);
+    void (*init)(uint32_t src_clk_freq);
     status_t (*deinit)(void);
     status_t (*p_efuse_read)(uint32_t addr, uint32_t *data);
     status_t (*p_efuse_program)(uint32_t addr, uint32_t data);
@@ -28,25 +28,27 @@ typedef struct
 extern "C" {
 #endif
 
-/*
+/*!
  * @brief Initialize OTP controller
  *
  * This function enables OTP Controller clock.
  *
+ * @param src_clk_freq The OTP clock source frequency in Hz.
  */
-void otp_init(void);
+void otp_init(uint32_t src_clk_freq);
 
-/*
+/*!
  * @brief De-Initialize OTP controller
  *
  * This functin disables OTP Controller Clock.
  *
  * @return
- *      kStatus_Success
+ *      kStatus_Success - Operation succeeded without error.
+ *      kStatus_Fail - The operation failed with a generic error.
  */
 status_t otp_deinit(void);
 
-/*
+/*!
  * @brief Read Fuse value from OTP eFuse Block
  *
  * This function read fuse data from OTP Fuse block to specified data buffer.
@@ -56,28 +58,20 @@ status_t otp_deinit(void);
  *
  * @return kStatus_Success - Operation succeeded without error.
  *         kStatus_Fail - The operation failed with a generic error.
- *         kStatus_ReadOnly - Requested value cannot be changed because it is read-only.
- *         kStatus_OutOfRange - Requested value is out of range.
- *         kStatus_InvalidArgument - The requested command's argument is undefined.
- *         kStatus_Timeout - A timeout occurred.
  */
 status_t otp_fuse_read(uint32_t addr, uint32_t *data);
 
-/*
+/*!
  * @brief Program value to OTP eFuse block
  *
  * This function program data to specified OTP Fuse address.
  *
  * @return kStatus_Success - Operation succeeded without error.
  *         kStatus_Fail - The operation failed with a generic error.
- *         kStatus_ReadOnly - Requested value cannot be changed because it is read-only.
- *         kStatus_OutOfRange - Requested value is out of range.
- *         kStatus_InvalidArgument - The requested command's argument is undefined.
- *         kStatus_Timeout - A timeout occurred.
  */
 status_t otp_fuse_program(uint32_t addr, uint32_t data);
 
-/*
+/*!
  * @brief Return OTP controller version
  *
  * @return Version of the OCOTP controller
