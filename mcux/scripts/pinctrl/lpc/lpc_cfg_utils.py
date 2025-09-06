@@ -29,10 +29,12 @@ class MUXOption:
         @param connection XML connection option from signal_configuration.xml
         """
         self._name = connection.attrib.get('name_part')
-        logging.debug("\t\t %s", self._name)
         if self._name is None:
             self._name = ''
             return
+
+        self._name = re.sub(r'[^a-zA-Z0-9_]', '', self._name)
+        logging.debug("\t\t %s", self._name)
         # Get MUX settings
         self._offset = -1
         # Get default instance index
