@@ -762,6 +762,8 @@
 #define FSL_FEATURE_RTC_HAS_NO_CR_SUP (1)
 /* @brief Has no oscillator enable bit (CR). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (1)
+/* @brief Has clock output (bitfield CR[CLKO]). */
+#define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (0)
 
 /* SPC module features */
 
