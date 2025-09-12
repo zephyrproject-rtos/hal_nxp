@@ -143,7 +143,7 @@ static void *USB_EhciGetBase(uint8_t controllerId, uint32_t *baseArray, uint8_t 
         return NULL;
     }
 
-    return (void *)(uint8_t *)baseArray[controllerId];
+    return (void *)(uint8_t *)(uintptr_t)baseArray[controllerId];
 }
 #endif
 
@@ -166,8 +166,8 @@ static void USB_DeviceEhciSetDefaultState(usb_device_ehci_state_struct_t *ehciSt
     p                  = ehciState->dtdFree;
     for (uint32_t i = 1U; i < USB_DEVICE_CONFIG_EHCI_MAX_DTD; i++)
     {
-        p->nextDtdPointer = (uint32_t)&ehciState->dtd[i];
-        p                 = (usb_device_ehci_dtd_struct_t *)p->nextDtdPointer;
+        p->nextDtdPointer = (uint32_t)(uintptr_t)&ehciState->dtd[i];
+        p                 = (usb_device_ehci_dtd_struct_t *)(uintptr_t)p->nextDtdPointer;
     }
     p->nextDtdPointer   = 0U;
     ehciState->dtdCount = USB_DEVICE_CONFIG_EHCI_MAX_DTD;
@@ -201,7 +201,7 @@ static void USB_DeviceEhciSetDefaultState(usb_device_ehci_state_struct_t *ehciSt
     ehciState->registerBase->EPLISTADDR = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA(ehciState->qh);
 #else
     /* Add QH buffer address to USBHS_EPLISTADDR_REG */
-    ehciState->registerBase->EPLISTADDR = (uint32_t)ehciState->qh;
+    ehciState->registerBase->EPLISTADDR = (uint32_t)(uintptr_t)ehciState->qh;
 #endif
 
     /* Clear device address */
@@ -532,7 +532,7 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
     message.length = 0U;
     /* Get the dtd of the control pipe */
     currentDtd =
-        (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+        (usb_device_ehci_dtd_struct_t *)((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
     while (NULL != currentDtd)
     {
         /* Pass the transfer buffer address */
@@ -543,7 +543,7 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
 #else
             uint32_t bufferAddress    = currentDtd->bufferPointerPage[0];
 #endif
-            message.buffer = (uint8_t *)((bufferAddress & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
+            message.buffer = (uint8_t *)(uintptr_t)((bufferAddress & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                          (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
         }
         /* If the dtd is active, set the message length to USB_CANCELLED_TRANSFER_LENGTH. Or set the length by using
@@ -595,13 +595,13 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
             ehciState->dtdHard[index] =
                 (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(ehciState->dtdHard[index]->nextDtdPointer);
 #else
-            ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)ehciState->dtdHard[index]->nextDtdPointer;
+            ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)(uintptr_t)ehciState->dtdHard[index]->nextDtdPointer;
 #endif
         }
 
         /* When the ioc is set or the dtd queue is empty, the up layer will be notified. */
         if ((0U != currentDtd->dtdTokenUnion.dtdTokenBitmap.ioc) ||
-            (0U == ((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK)))
+            (0U == ((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK)))
         {
             message.code    = endpoint | (uint8_t)((uint32_t)direction << 0x07U);
             message.isSetup = 0U;
@@ -613,13 +613,13 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
         /* Clear the token field of the dtd. */
         currentDtd->dtdTokenUnion.dtdToken = 0U;
         /* Add the dtd to the free dtd queue. */
-        currentDtd->nextDtdPointer = (uint32_t)ehciState->dtdFree;
+        currentDtd->nextDtdPointer = (uint32_t)(uintptr_t)ehciState->dtdFree;
         ehciState->dtdFree         = currentDtd;
         ehciState->dtdCount++;
 
         /* Get the next in-used dtd. */
         currentDtd =
-            (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+            (usb_device_ehci_dtd_struct_t *)((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
     }
 }
 
@@ -717,13 +717,13 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                     }
                 }
                 /* Get the in-used dtd of the specified endpoint. */
-                currentDtd = (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] &
+                currentDtd = (usb_device_ehci_dtd_struct_t *)(uintptr_t)((uintptr_t)ehciState->dtdHard[index] &
                                                               USB_DEVICE_ECHI_DTD_POINTER_MASK);
                 while (NULL != currentDtd)
                 {
                     uint8_t isTokenDone = 0;
                     /* Get the in-used dtd of the specified endpoint. */
-                    currentDtd = (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] &
+                    currentDtd = (usb_device_ehci_dtd_struct_t *)(uintptr_t)((uintptr_t)ehciState->dtdHard[index] &
                                                                   USB_DEVICE_ECHI_DTD_POINTER_MASK);
 
                     while (NULL != currentDtd)
@@ -744,7 +744,7 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                             }
                             break;
                         }
-                        currentDtd = (usb_device_ehci_dtd_struct_t *)(currentDtd->nextDtdPointer &
+                        currentDtd = (usb_device_ehci_dtd_struct_t *)(uintptr_t)(currentDtd->nextDtdPointer &
                                                                       USB_DEVICE_ECHI_DTD_POINTER_MASK);
                     }
 
@@ -754,7 +754,7 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                     }
 
                     /* Get the in-used dtd of the specified endpoint. */
-                    currentDtd = (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] &
+                    currentDtd = (usb_device_ehci_dtd_struct_t *)(uintptr_t)((uintptr_t)ehciState->dtdHard[index] &
                                                                   USB_DEVICE_ECHI_DTD_POINTER_MASK);
                     while (NULL != currentDtd)
                     {
@@ -771,7 +771,7 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                         if (NULL == message.buffer)
                         {
                             message.buffer =
-                                (uint8_t *)((currentDtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
+                                (uint8_t *)(uintptr_t)((currentDtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                             (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                             message.buffer = (uint8_t *)USB_DEV_MEMORY_DMA_2_CPU(message.buffer);
@@ -800,13 +800,13 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                                 (uint8_t *)ehciState->dtdHard[index]->nextDtdPointer);
 #else
                             ehciState->dtdHard[index] =
-                                (usb_device_ehci_dtd_struct_t *)ehciState->dtdHard[index]->nextDtdPointer;
+                                (usb_device_ehci_dtd_struct_t *)(uintptr_t)ehciState->dtdHard[index]->nextDtdPointer;
 #endif
                         }
 
                         /* When the ioc is set or the dtd queue is empty, the up layer will be notified. */
                         if ((0U != currentDtd->dtdTokenUnion.dtdTokenBitmap.ioc) ||
-                            (0U == ((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK)))
+                            (0U == ((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK)))
                         {
                             message.code    = endpoint | (uint8_t)((uint32_t)direction << 0x07U);
                             message.isSetup = 0U;
@@ -816,11 +816,11 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                         }
                         /* Clear the token field of the dtd */
                         currentDtd->dtdTokenUnion.dtdToken = 0U;
-                        currentDtd->nextDtdPointer         = (uint32_t)ehciState->dtdFree;
+                        currentDtd->nextDtdPointer         = (uint32_t)(uintptr_t)ehciState->dtdFree;
                         ehciState->dtdFree                 = currentDtd;
                         ehciState->dtdCount++;
                         /* Get the next in-used dtd */
-                        currentDtd = (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] &
+                        currentDtd = (usb_device_ehci_dtd_struct_t *)(uintptr_t)((uintptr_t)ehciState->dtdHard[index] &
                                                                       USB_DEVICE_ECHI_DTD_POINTER_MASK);
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                         currentDtd = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU((uint8_t *)currentDtd);
@@ -850,7 +850,7 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                                         (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_CPU_2_DMA((uint8_t *)currentDtd);
 #endif
                                     /* Prime next dtd and prime the transfer */
-                                    ehciState->qh[index].nextDtdPointer         = (uint32_t)currentDtd;
+                                    ehciState->qh[index].nextDtdPointer         = (uint32_t)(uintptr_t)currentDtd;
                                     ehciState->qh[index].dtdTokenUnion.dtdToken = 0U;
                                     ehciState->registerBase->EPPRIME            = primeBit;
                                 }
@@ -1139,7 +1139,7 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         /* Get a free dtd */
         dtd = ehciState->dtdFree;
 
-        ehciState->dtdFree = (usb_device_ehci_dtd_struct_t *)dtd->nextDtdPointer;
+        ehciState->dtdFree = (usb_device_ehci_dtd_struct_t *)(uintptr_t)dtd->nextDtdPointer;
         ehciState->dtdCount--;
 
         /* Save the dtd head when current active buffer offset is zero. */
@@ -1154,7 +1154,7 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
         dtd->bufferPointerPage[0] = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA((buffer + currentIndex));
 #else
-        dtd->bufferPointerPage[0] = (uint32_t)(buffer + currentIndex);
+        dtd->bufferPointerPage[0] = (uint32_t)(uintptr_t)(buffer + currentIndex);
 #endif
         dtd->bufferPointerPage[1] =
             (dtd->bufferPointerPage[0] + USB_DEVICE_ECHI_DTD_PAGE_BLOCK) & USB_DEVICE_ECHI_DTD_PAGE_MASK;
@@ -1192,9 +1192,9 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         if (NULL != (ehciState->dtdTail[index]))
         {
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA(dtd);
+            ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)(uintptr_t)USB_DEV_MEMORY_CPU_2_DMA(dtd);
 #else
-            ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)dtd;
+            ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)(uintptr_t)dtd;
 #endif
             ehciState->dtdTail[index] = dtd;
         }
@@ -1260,9 +1260,9 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
     if ((0U != qhIdle) || (0U == (epStatus & primeBit)))
     {
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        ehciState->qh[index].nextDtdPointer = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA(dtdHard);
+        ehciState->qh[index].nextDtdPointer = (uint32_t)(uintptr_t)USB_DEV_MEMORY_CPU_2_DMA(dtdHard);
 #else
-        ehciState->qh[index].nextDtdPointer = (uint32_t)dtdHard;
+        ehciState->qh[index].nextDtdPointer = (uint32_t)(uintptr_t)dtdHard;
 #endif
         ehciState->qh[index].dtdTokenUnion.dtdToken = 0U;
         /*make sure dtd is linked to dqh*/
@@ -1504,7 +1504,7 @@ usb_status_t USB_DeviceEhciInit(uint8_t controllerId,
 
     ehciState->controllerId = controllerId;
 
-    ehciState->registerBase = (USBHS_Type *)ehci_base[controllerId - (uint8_t)kUSB_ControllerEhci0];
+    ehciState->registerBase = (USBHS_Type *)(uintptr_t)ehci_base[controllerId - (uint8_t)kUSB_ControllerEhci0];
 #if (defined(USB_DEVICE_CONFIG_LOW_POWER_MODE) && (USB_DEVICE_CONFIG_LOW_POWER_MODE > 0U))
 #if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
 #if defined(FSL_FEATURE_USBHS_SUPPORT_EUSBn)
@@ -1796,7 +1796,7 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
 
     /* Get the first dtd */
     currentDtd =
-        (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+        (usb_device_ehci_dtd_struct_t *)((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
 
     /* In the next loop, USB_DeviceNotificationTrigger function may trigger a new transfer and the context always
      * keep in the critical section, so the Dtd sequence would still keep non-empty and the loop would be endless.
@@ -1810,13 +1810,13 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
         currentDtd = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(currentDtd->nextDtdPointer &
                                                                               USB_DEVICE_ECHI_DTD_POINTER_MASK);
 #else
-        currentDtd = (usb_device_ehci_dtd_struct_t *)(currentDtd->nextDtdPointer & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+        currentDtd = (usb_device_ehci_dtd_struct_t *)(uintptr_t)(currentDtd->nextDtdPointer & USB_DEVICE_ECHI_DTD_POINTER_MASK);
 #endif
     }
 
     /* Get the first dtd */
     currentDtd =
-        (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+        (usb_device_ehci_dtd_struct_t *)((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
     while (NULL != currentDtd)
     {
         /* this if statement is used with  the previous while loop to avoid the endless loop */
@@ -1851,10 +1851,10 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
             {
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                 convert_addr   = (uint32_t)USB_DEV_MEMORY_DMA_2_CPU(currentDtd->bufferPointerPage[0]);
-                message.buffer = (uint8_t *)((convert_addr & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
+                message.buffer = (uint8_t *)(uintptr_t)((convert_addr & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                              (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
 #else
-                message.buffer = (uint8_t *)((currentDtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
+                message.buffer = (uint8_t *)(uintptr_t)((currentDtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                              (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
 #endif
             }
@@ -1871,26 +1871,26 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
                 ehciState->dtdHard[index] =
                     (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(ehciState->dtdHard[index]->nextDtdPointer);
 #else
-                ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)ehciState->dtdHard[index]->nextDtdPointer;
+                ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)(uintptr_t)ehciState->dtdHard[index]->nextDtdPointer;
 #endif
             }
 
             /* When the ioc is set or the dtd queue is empty, the up layer will be notified. */
             if ((0U != currentDtd->dtdTokenUnion.dtdTokenBitmap.ioc) ||
-                (0U == ((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK)))
+                (0U == ((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK)))
             {
                 flag = 1;
             }
             /* Clear the token field. */
             currentDtd->dtdTokenUnion.dtdToken = 0U;
             /* Save the dtd to the free queue. */
-            currentDtd->nextDtdPointer = (uint32_t)ehciState->dtdFree;
+            currentDtd->nextDtdPointer = (uint32_t)(uintptr_t)ehciState->dtdFree;
             ehciState->dtdFree         = currentDtd;
             ehciState->dtdCount++;
         }
         /* Get the next dtd. */
         currentDtd =
-            (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+            (usb_device_ehci_dtd_struct_t *)((uintptr_t)ehciState->dtdHard[index] & USB_DEVICE_ECHI_DTD_POINTER_MASK);
     }
     if (NULL == currentDtd)
     {
