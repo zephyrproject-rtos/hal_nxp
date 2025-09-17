@@ -128,10 +128,12 @@ class Register:
         for bit_field in register_xml.findall('bit_field'):
             bit_field_map = {}
             for bit_field_value in bit_field.findall('bit_field_value'):
-                # Some iMX8 fields have a ?, remove that
-                bit_field_str = bit_field_value.attrib['value'].strip('?')
-                field_val = int(bit_field_str, 0)
-                bit_field_map[field_val] = bit_field_value.attrib
+                desc = bit_field_value.attrib['description']
+                if desc not in ('Reserved', ''):
+                    # Some iMX8 fields have a ?, remove that
+                    bit_field_str = bit_field_value.attrib['value'].strip('?')
+                    field_val = int(bit_field_str, 0)
+                    bit_field_map[field_val] = bit_field_value.attrib
             # Save bit field mapping
             self._bit_field_map[bit_field.attrib['name']] = bit_field_map
 
@@ -190,10 +192,12 @@ class TemplatedRegister(Register):
         for bit_field in template_xml.findall('bit_field'):
             bit_field_map = {}
             for bit_field_value in bit_field.findall('bit_field_value'):
-                # Some iMX8 fields have a ?, remove that
-                bit_field_str = bit_field_value.attrib['value'].strip('?')
-                field_val = int(bit_field_str, 0)
-                bit_field_map[field_val] = bit_field_value.attrib
+                desc = bit_field_value.attrib['description']
+                if desc not in ('Reserved', ''):
+                    # Some iMX8 fields have a ?, remove that
+                    bit_field_str = bit_field_value.attrib['value'].strip('?')
+                    field_val = int(bit_field_str, 0)
+                    bit_field_map[field_val] = bit_field_value.attrib
             # Save bit field mapping
             self._bit_field_map[bit_field.attrib['name']] = bit_field_map
 
@@ -415,36 +419,54 @@ class IOMUXOption:
         else:
             self._is_gpio = False
             self._gpio = (0, 0)
-        # Get connection register names
-        for assignment in connection.findall('configuration/assign'):
-            match = re.match(r'init_([\w_]+)', assignment.attrib['configuration_step'])
-            periph_name = match.group(1)
-            match = re.match(re.escape(periph_name) + r'_(\w+)', assignment.attrib['register'])
-            reg_name = match.group(1)
-            full_name = f"{periph_name}_{reg_name}"
-            periph = peripheral_map[periph_name]
-            addr = periph.get_reg_addr(reg_name)
-            value = int(assignment.attrib['bit_field_value'], 0)
-            if assignment.attrib.get('bit_field') == 'DAISY':
-                self._daisy = addr
-                self._daisy_val = value
-            elif assignment.attrib.get('bit_field') == 'MUX_MODE':
-                self._mux = addr
-                self._mux_val = value
-            elif periph_name == 'IOMUXC_GPR':
-                # GPR register can be used as a secondary pinmux selection,
-                # record this setting
-                self._has_gpr = True
-                self._gpr_reg = addr
-                gpr_mask = int(assignment.attrib.get('bit_field_mask'), 0)
-                # Calculate gpr bit shift
-                self._gpr_shift = ((gpr_mask) & -(gpr_mask)).bit_length() - 1
-                self._gpr_val = int(assignment.attrib.get('bit_field_value'), 0)
-            else:
-                # Add register name and bit field value to extra configuration
-                self._has_extended_config = True
-                config = {full_name : assignment.attrib['bit_field_value']}
-                self._extended_config.append(config)
+        # Process all configurations for this connection
+        configurations = connection.findall('configuration')
+        # handle 'assign' if only one configuration node, and it has no id
+        if len(configurations) == 1 and 'id' not in configurations[0].attrib:
+            for assignment in configurations[0].findall('assign'):
+                self._process_assignment(assignment, peripheral_map)
+        # handle multiple configurations
+        else:
+            for config in configurations:
+                # only process configurations with an id containing 'alt'
+                config_id = config.attrib.get('id')
+                if config_id and 'alt' in config_id:
+                    for assignment in config.findall('assign'):
+                        self._process_assignment(assignment, peripheral_map)
+                # ignore configurations without an id containing 'alt'
+                else:
+                    continue
+
+    def _process_assignment(self, assignment, peripheral_map):
+        """
+        Process a single register assignment XML object
+        """
+        match = re.match(r'init_([\w_]+)', assignment.attrib['configuration_step'])
+        periph_name = match.group(1)
+        match = re.match(re.escape(periph_name) + r'_(\w+)', assignment.attrib['register'])
+        reg_name = match.group(1)
+        full_name = f"{periph_name}_{reg_name}"
+        periph = peripheral_map[periph_name]
+        addr = periph.get_reg_addr(reg_name)
+        value = int(assignment.attrib['bit_field_value'], 0)
+
+        if assignment.attrib.get('bit_field') == 'DAISY':
+            self._daisy = addr
+            self._daisy_val = value
+        elif assignment.attrib.get('bit_field') == 'MUX_MODE':
+            self._mux = addr
+            self._mux_val = value
+        elif periph_name == 'IOMUXC_GPR':
+            self._has_gpr = True
+            self._gpr_reg = addr
+            gpr_mask = int(assignment.attrib.get('bit_field_mask'), 0)
+            self._gpr_shift = ((gpr_mask) & -(gpr_mask)).bit_length() - 1
+            self._gpr_val = int(assignment.attrib.get('bit_field_value'), 0)
+        else:
+            self._has_extended_config = True
+            config = {full_name: assignment.attrib['bit_field_value']}
+            self._extended_config.append(config)
+
 
     def __repr__(self):
         """
@@ -1024,7 +1046,7 @@ class NXPSdkUtil:
             for pin in sorted(self._signal_map.values()):
                 for iomux_opt in sorted(pin.get_mux_options()):
                     # Get iomuxc constant values
-                    iomuxc_name = iomux_opt.get_name()
+                    iomuxc_name = re.sub(r'\[(\d+)\]', r'_\1', iomux_opt.get_name())
                     register = iomux_opt.get_mux_reg()
                     mode = iomux_opt.get_mux_val()
                     input_reg = iomux_opt.get_daisy_reg()

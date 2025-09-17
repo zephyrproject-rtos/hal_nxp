@@ -129,8 +129,8 @@ def main():
 
     data_version = get_pack_version(temp_dir.name)
     print(f"Found data pack version {data_version}")
-    if round(data_version) != 16:
-        print("Warning: This tool is only verified for data pack version 16, "
+    if round(data_version) != '25.06':
+        print("Warning: This tool is only verified for data pack version 25.06, "
             "other versions may not work")
 
     # Attempt to locate the signal XML files we will generate from
