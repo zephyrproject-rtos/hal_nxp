@@ -200,11 +200,15 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config);
  * @retval kStatus_Success The initialization was successful
  * @retval kStatus_Timeout The initialization timed out
  */
+
+#define DOXYGEN_OUTPUT 1
+
 #if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
 status_t WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config);
 #else
 AT_QUICKACCESS_SECTION_CODE(status_t WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config));
 #endif
+
 
 /*!
  * @brief De-initializes the WDOG32 module.
@@ -395,6 +399,7 @@ void WDOG32_SetWindowValue(WDOG_Type *base, uint16_t windowValue);
 AT_QUICKACCESS_SECTION_CODE(void WDOG32_SetWindowValue(WDOG_Type *base, uint16_t windowValue));
 #endif
 
+#undef DOXYGEN_OUTPUT
 /*!
  * @brief Refreshes the WDOG32 timer.
  *
