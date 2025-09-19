@@ -333,7 +333,7 @@ typedef enum _fsl_loader_command_sb3
 //! The all of the allowed command
 #define SBLOADER_V3_CMD_SET_ALL ((1u << kSB3_CmdLoad) | (1u << kSB3_CmdExecute))
 
-#define SB3_DATA_BUFFER_SIZE_IN_BYTE (MAX(128, NBOOT_KEY_BLOB_SIZE_IN_BYTE_MAX))
+#define SB3_DATA_BUFFER_SIZE_IN_BYTE (GENERIC_MAX(128, NBOOT_KEY_BLOB_SIZE_IN_BYTE_MAX))
 
 /*! @brief Data structure holding secure counter value used by nboot library */
 typedef struct _fsl_nboot_secure_counter
@@ -629,8 +629,8 @@ struct _fsl_ldr_Context_v3
     uint32_t block_data_total;  //!< data max size in bytes (block_size * data_size
     uint32_t block_buffer_size; //!< block0 and block size
     uint32_t block_buffer_position;
-    uint8_t block_buffer[MAX(NBOOT_SB3_MANIFEST_MAX_SIZE_IN_BYTES,
-                             NBOOT_SB3_BLOCK_MAX_SIZE_IN_BYTES)]; //! will be used for both block0 and blockx
+    uint8_t block_buffer[GENERIC_MAX(NBOOT_SB3_MANIFEST_MAX_SIZE_IN_BYTES,
+				     NBOOT_SB3_BLOCK_MAX_SIZE_IN_BYTES)]; //! will be used for both block0 and blockx
     uint32_t processedBlocks;
 
     uint8_t data_block_offset; //! data block offset in a block.
