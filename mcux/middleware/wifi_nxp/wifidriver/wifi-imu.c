@@ -1609,10 +1609,13 @@ void WL_MCI_WAKEUP_DONE0_DriverIRQHandler(void)
 
 void mlan_init_wakeup_irq()
 {
+    NVIC_EnableIRQ(WL_MCI_WAKEUP_DONE0_IRQn);
 }
 
 void mlan_deinit_wakeup_irq()
 {
+    NVIC_DisableIRQ(WL_MCI_WAKEUP_DONE0_IRQn);
+    NVIC_ClearPendingIRQ(WL_MCI_WAKEUP_DONE0_IRQn);
 }
 
 mlan_status imu_wifi_init(enum wlan_type type, const uint8_t *fw_ram_start_addr, const size_t size)
