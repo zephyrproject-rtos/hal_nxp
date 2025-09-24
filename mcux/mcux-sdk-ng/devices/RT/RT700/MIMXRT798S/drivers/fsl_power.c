@@ -1121,7 +1121,7 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
     uint32_t pmc_ctrl;
     uint32_t pmicMode;
     uint32_t pdsleepcfg0;
-    bool cacheEnabled[2];
+    bool cacheEnabled[2] = {0};
     bool backupCache[2];
 
     uint32_t pmsk = __get_PRIMASK();
