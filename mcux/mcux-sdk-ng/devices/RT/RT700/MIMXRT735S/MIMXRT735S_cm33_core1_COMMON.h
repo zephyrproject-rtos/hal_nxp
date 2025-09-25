@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_cm33_core1
-**                          MIMXRT735SGFOA_cm33_core1
+**     Processors:          MIMXRT735SGAWBR_cm33_core1
+**                          MIMXRT735SGFOB_cm33_core1
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core1
@@ -30,14 +31,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_cm33_core1_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core1
  *
  * CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core1
@@ -48,7 +51,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -126,7 +129,7 @@ typedef enum IRQn {
   FLEXIO_IRQn                  = 41,               /**< flexio: Interrupt request */
   Reserved58_IRQn              = 42,               /**< Reserved interrupt */
   Reserved59_IRQn              = 43,               /**< Reserved interrupt */
-  Reserved60_IRQn              = 44,               /**< Reserved interrupt */
+  MIPI_IRQn                    = 44,               /**< DSI: Interrupt request */
   EDMA2_CH0_IRQn               = 45,               /**< edma2: Channel 0 interrupt */
   EDMA2_CH1_IRQn               = 46,               /**< edma2: Channel 1 interrupt */
   EDMA2_CH2_IRQn               = 47,               /**< edma2: Channel 2 interrupt */
@@ -1517,6 +1520,37 @@ typedef enum _dma_request_source
 /** Interrupt vectors for the LP_FLEXCOMM peripheral type */
 #define LP_FLEXCOMM_IRQS                         { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, LP_FLEXCOMM17_IRQn, LP_FLEXCOMM18_IRQn, LP_FLEXCOMM19_IRQn, LP_FLEXCOMM20_IRQn }
 
+/* MIPI_DSI_HOST - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral MIPI_DSI_HOST base address */
+  #define MIPI_DSI_HOST_BASE                       (0x50417000u)
+  /** Peripheral MIPI_DSI_HOST base address */
+  #define MIPI_DSI_HOST_BASE_NS                    (0x40417000u)
+  /** Peripheral MIPI_DSI_HOST base pointer */
+  #define MIPI_DSI_HOST                            ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE)
+  /** Peripheral MIPI_DSI_HOST base pointer */
+  #define MIPI_DSI_HOST_NS                         ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE_NS)
+  /** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+  #define MIPI_DSI_HOST_BASE_ADDRS                 { MIPI_DSI_HOST_BASE }
+  /** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+  #define MIPI_DSI_HOST_BASE_PTRS                  { MIPI_DSI_HOST }
+  /** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+  #define MIPI_DSI_HOST_BASE_ADDRS_NS              { MIPI_DSI_HOST_BASE_NS }
+  /** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+  #define MIPI_DSI_HOST_BASE_PTRS_NS               { MIPI_DSI_HOST_NS }
+#else
+  /** Peripheral MIPI_DSI_HOST base address */
+  #define MIPI_DSI_HOST_BASE                       (0x40417000u)
+  /** Peripheral MIPI_DSI_HOST base pointer */
+  #define MIPI_DSI_HOST                            ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE)
+  /** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+  #define MIPI_DSI_HOST_BASE_ADDRS                 { MIPI_DSI_HOST_BASE }
+  /** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+  #define MIPI_DSI_HOST_BASE_PTRS                  { MIPI_DSI_HOST }
+#endif
+/** Interrupt vectors for the MIPI_DSI_HOST peripheral type */
+#define MIPI_DSI_HOST_IRQS                       { MIPI_IRQn }
+
 /* MMU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral MMU2 base address */
@@ -1990,6 +2024,9 @@ typedef enum _dma_request_source
   /** Array initializer of RTC peripheral base pointers */
   #define RTC_BASE_PTRS                            { RTC1 }
 #endif
+/** Interrupt vectors for the RTC peripheral type */
+#define RTC_ALARM_IRQS                           { RTC1_ALARM_IRQn }
+#define RTC_WAKEUP_IRQS                          { RTC1_IRQn }
 
 /* SCT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

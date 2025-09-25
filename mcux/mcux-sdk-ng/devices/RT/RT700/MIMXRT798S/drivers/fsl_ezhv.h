@@ -32,7 +32,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief cache driver version. */
-#define FSL_EZHV_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_EZHV_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*! @brief define callback function for EZH-V 
@@ -244,7 +244,7 @@ static inline void EZHV_ClearEzhv2ArmIntChan(ezhv2arm_int_chan_t chan)
 /*!
  * @brief Get EZH-V stop status flag
  */
-static inline bool EZHV_GetEzhvStopStatusFlag()
+static inline bool EZHV_GetEzhvStopStatusFlag(void)
 {
     return (bool)((SLEEPCON0->SHA_MED_CSTAT0 & SLEEPCON0_SHA_MED_CSTAT0_EZHV_STOPPED_MASK) >> SLEEPCON0_SHA_MED_CSTAT0_EZHV_STOPPED_SHIFT);
 }
@@ -252,7 +252,7 @@ static inline bool EZHV_GetEzhvStopStatusFlag()
 /*!
  * @brief Get EZH-V halt status flag
  */
-static inline bool EZHV_GetEzhvHaltStatusFlag()
+static inline bool EZHV_GetEzhvHaltStatusFlag(void)
 {
     return (bool)((SLEEPCON0->SHA_MED_CSTAT0 & SLEEPCON0_SHA_MED_CSTAT0_EZHV_HALTED_MASK) >> SLEEPCON0_SHA_MED_CSTAT0_EZHV_HALTED_SHIFT);
 }
@@ -260,7 +260,7 @@ static inline bool EZHV_GetEzhvHaltStatusFlag()
 /*!
  * @brief Get EZH-V wait status flag
  */
-static inline bool EZHV_GetEzhvWaitStatusFlag()
+static inline bool EZHV_GetEzhvWaitStatusFlag(void)
 {
     return (bool)((SLEEPCON0->SHA_MED_CSTAT0 & SLEEPCON0_SHA_MED_CSTAT0_EZHV_WAITING_MASK) >> SLEEPCON0_SHA_MED_CSTAT0_EZHV_WAITING_SHIFT);
 }
@@ -268,7 +268,7 @@ static inline bool EZHV_GetEzhvWaitStatusFlag()
 /*!
  * @brief Get EZH-V wakeup status flag
  */
-static inline bool EZHV_GetEzhvWakeupStatusFlag()
+static inline bool EZHV_GetEzhvWakeupStatusFlag(void)
 {
     return (bool)((SLEEPCON0->SHA_MED_CSTAT0 & SLEEPCON0_SHA_MED_CSTAT0_EZHV_WAKEUP_MASK) >> SLEEPCON0_SHA_MED_CSTAT0_EZHV_WAKEUP_SHIFT);
 }

@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1189_cm7
@@ -395,6 +395,40 @@ typedef enum IRQn {
  */
 
 /** Mapping Information */
+/*!
+ * @addtogroup asrc_clock_source_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief The ASRC clock source
+ */
+typedef enum _asrc_clock_source
+{
+    kASRC_ClockSourceNotAvalible    = -1,          /**< not avalible */
+    kASRC_ClockSourceBitClock0_SAI1_TX = 0U,       /**< SAI1 TX */
+    kASRC_ClockSourceBitClock1_SAI1_RX = 1U,       /**< SAI1 RX */
+    kASRC_ClockSourceBitClock2_SAI2_TX = 2U,       /**< SAI2 TX */
+    kASRC_ClockSourceBitClock3_SAI2_RX = 3U,       /**< SAI2 RX */
+    kASRC_ClockSourceBitClock4_SAI3_TX = 4U,       /**< SAI3 TX */
+    kASRC_ClockSourceBitClock5_SAI3_RX = 5U,       /**< SAI3 RX */
+    kASRC_ClockSourceBitClock6_SAI4_TX = 6U,       /**< SAI4 TX */
+    kASRC_ClockSourceBitClock7_SAI4_RX = 7U,       /**< SAI4 RX */
+    kASRC_ClockSourceBitClock8_SPDIF_TX = 8U,      /**< SPDIF TX */
+    kASRC_ClockSourceBitClock9_SPDIF_RX = 9U,      /**< SPDIF RX */
+    kASRC_ClockSourceBitClocka_SAI2_CLOCK_ROOT = 10U, /**< SAI2 CLOCK ROOT */
+    kASRC_ClockSourceBitClockb_SAI3_CLOCK_ROOT = 11U, /**< SAI3 CLOCK ROOT */
+    kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
+    kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
+    kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
+} asrc_clock_source_t;
+
+/* @} */
+
 typedef enum _xbar_input_signal
 {
     kXBAR1_InputLogicLow            = 0|0x10000U,  /**< LOGIC_LOW output assigned to XBAR1_IN0 input. */
@@ -1301,16 +1335,6 @@ typedef enum _xbar_output_signal
 #define ANADIG_LDO_BBSM_BASE_ADDRS               { ANADIG_LDO_BBSM_BASE }
 /** Array initializer of ANADIG_LDO_BBSM peripheral base pointers */
 #define ANADIG_LDO_BBSM_BASE_PTRS                { ANADIG_LDO_BBSM }
-
-/* ANADIG_MISC - Peripheral instance base addresses */
-/** Peripheral ANADIG_MISC base address */
-#define ANADIG_MISC_BASE                         (0x44480000u)
-/** Peripheral ANADIG_MISC base pointer */
-#define ANADIG_MISC                              ((ANADIG_MISC_Type *)ANADIG_MISC_BASE)
-/** Array initializer of ANADIG_MISC peripheral base addresses */
-#define ANADIG_MISC_BASE_ADDRS                   { ANADIG_MISC_BASE }
-/** Array initializer of ANADIG_MISC peripheral base pointers */
-#define ANADIG_MISC_BASE_PTRS                    { ANADIG_MISC }
 
 /* ANADIG_OSC - Peripheral instance base addresses */
 /** Peripheral ANADIG_OSC base address */
@@ -2840,6 +2864,9 @@ typedef enum _xbar_output_signal
 #define TSTMR_BASE_ADDRS                         { TSTMR1_TSTMRA_BASE, TSTMR2_TSTMRA_BASE }
 /** Array initializer of TSTMR peripheral base pointers */
 #define TSTMR_BASE_PTRS                          { TSTMR1_TSTMRA, TSTMR2_TSTMRA }
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
+
 
 /* USB - Peripheral instance base addresses */
 /** Peripheral USB_OTG1 base address */

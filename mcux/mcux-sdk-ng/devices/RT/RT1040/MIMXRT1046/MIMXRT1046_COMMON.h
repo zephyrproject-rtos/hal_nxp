@@ -11,7 +11,7 @@
 **
 **     Reference manual:    IMXRT1040RM Rev.1, 09/2022
 **     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1046
@@ -536,15 +536,15 @@ typedef enum IRQn {
 /** Peripheral ENET2 base pointer */
 #define ENET2                                    ((ENET_Type *)ENET2_BASE)
 /** Array initializer of ENET peripheral base addresses */
-#define ENET_BASE_ADDRS                          { ENET_BASE, ENET2_BASE }
+#define ENET_BASE_ADDRS                          { ENET_BASE, 0u, ENET2_BASE }
 /** Array initializer of ENET peripheral base pointers */
-#define ENET_BASE_PTRS                           { ENET, ENET2 }
+#define ENET_BASE_PTRS                           { ENET, (ENET_Type *)0u, ENET2 }
 /** Interrupt vectors for the ENET peripheral type */
-#define ENET_Transmit_IRQS                       { ENET_IRQn, ENET2_IRQn }
-#define ENET_Receive_IRQS                        { ENET_IRQn, ENET2_IRQn }
-#define ENET_Error_IRQS                          { ENET_IRQn, ENET2_IRQn }
-#define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn, ENET2_1588_Timer_IRQn }
-#define ENET_Ts_IRQS                             { ENET_IRQn, ENET2_IRQn }
+#define ENET_Transmit_IRQS                       { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
+#define ENET_Receive_IRQS                        { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
+#define ENET_Error_IRQS                          { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
+#define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn, NotAvail_IRQn, ENET2_1588_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
 
 /* EWM - Peripheral instance base addresses */
 /** Peripheral EWM base address */
@@ -608,9 +608,9 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 /* FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                 { {0x60000000u}, {0u}, {0x70000000u} }
+#define FlexSPI_AMBA_BASE_ARRAY                  { {0x60000000u}, {0u}, {0x70000000u} }
 /* FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                  { {0x6FFFFFFFu}, {0u}, {0x7EFFFFFFu} }
+#define FlexSPI_AMBA_END_ARRAY                   { {0x6FFFFFFFu}, {0u}, {0x7EFFFFFFu} }
 /* FlexSPI AMBA address. */
 #define FlexSPI_AMBA_BASE                        (0x60000000u)
 /* FlexSPI ASFM address. */
@@ -621,7 +621,7 @@ typedef enum IRQn {
 #define FlexSPI_ATDF_BASE                        (0x7F800000u)
 /* FlexSPI2 AMBA address. */
 #define FlexSPI2_AMBA_BASE                       (0x70000000u)
-/* FlexSPI ASFM address. */
+/* FlexSPI2 ASFM address. */
 #define FlexSPI2_ASFM_BASE                       (0x70000000u)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
 #define FlexSPI2_ARDF_BASE                       (0x7F400000u)
@@ -934,6 +934,10 @@ typedef enum IRQn {
 #define RTWDOG_BASE_PTRS                         { RTWDOG }
 /** Interrupt vectors for the RTWDOG peripheral type */
 #define RTWDOG_IRQS                              { RTWDOG_IRQn }
+/* Extra definition */
+#define RTWDOG_UPDATE_KEY                        (0xD928C520U)
+#define RTWDOG_REFRESH_KEY                       (0xB480A602U)
+
 
 /* SEMC - Peripheral instance base addresses */
 /** Peripheral SEMC base address */

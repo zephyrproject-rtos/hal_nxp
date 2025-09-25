@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1186_cm7
@@ -50,7 +50,6 @@
 #include "PERI_ADC.h"
 #include "PERI_ANADIG.h"
 #include "PERI_ANADIG_LDO_BBSM.h"
-#include "PERI_ANADIG_MISC.h"
 #include "PERI_ANADIG_OSC.h"
 #include "PERI_ANADIG_PLL.h"
 #include "PERI_ANADIG_PMU.h"

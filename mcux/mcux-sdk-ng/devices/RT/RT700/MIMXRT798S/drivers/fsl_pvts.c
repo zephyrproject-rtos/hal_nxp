@@ -35,7 +35,7 @@
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static uint32_t delay_to_control_word(uint8_t delay_value);
+static uint32_t delay_to_control_word(pvts_delay_t delay_value);
 
 #if defined(PVTS0)
 const uint32_t cpu_freq[PVTS_PVT_COUNT][PVTS_NUM_OF_SP]   = {{110000000U, 192000000U, 325000000U},
@@ -76,11 +76,11 @@ status_t PVTS_ReadDelayFromOTP(bool otp_initialized,
                                uint32_t *delayValues)
 {
     uint32_t new_delay;
-    int32_t pvts_fuse_addr_index;
+    uint32_t pvts_fuse_addr_index;
 
     if (!otp_initialized)
     {
-        otp_init();
+        otp_init(core_freq_hz);
     }
 
     pvts_fuse_addr_index = PVTS_GetFuseAddrIndex(core_freq_hz, (uint32_t)instance);
@@ -96,7 +96,7 @@ status_t PVTS_ReadDelayFromOTP(bool otp_initialized,
 
     if (!otp_initialized)
     {
-        otp_deinit();
+        (void)otp_deinit();
     }
 
     if (!IS_DELAY_VALID(PVTS_GET_DELAY0_FROM_FUSE_VALUE(new_delay)))
@@ -121,11 +121,15 @@ status_t PVTS_ReadDelayFromOTP(bool otp_initialized,
  */
 static uint32_t delay_to_control_word(pvts_delay_t delay_value)
 {
-    uint32_t delay1, delay0;
+    uint8_t delay1, delay0;
 
     if (delay_value >= PVTS_DELAY_MAX)
     {
         return PVTS_DELAY_MAX_CTRL_WORD;
+    }
+    if (delay_value < PVTS_DELAY_MIN)
+    {
+        return PVTS_DELAY_OFF;
     }
 
     delay1 = delay_value >> 1U;

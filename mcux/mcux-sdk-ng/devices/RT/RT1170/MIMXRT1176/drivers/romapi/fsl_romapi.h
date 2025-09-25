@@ -16,7 +16,7 @@
  */
 
 /*! @brief ROM API version 1.1.2. */
-#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 2U))
+#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 3U))
 /*! @brief ROM FLEXSPI NOR driver version 1.7.0. */
 #define FSL_ROM_FLEXSPINOR_DRIVER_VERSION (MAKE_VERSION(1U, 7U, 0U))
 
@@ -716,7 +716,7 @@ status_t ROM_FLEXSPI_NorFlash_WaitBusy(uint32_t instance,
  *
  * @param instance storage the index of FLEXSPI.
  */
-void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance);
+AT_QUICKACCESS_SECTION_CODE(void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance));
 
 /*@}*/
 

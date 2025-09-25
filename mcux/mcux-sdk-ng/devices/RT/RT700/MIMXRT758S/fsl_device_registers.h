@@ -13,13 +13,13 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMXRT758SGAWAR_cm33_core0) || defined(CPU_MIMXRT758SGFOA_cm33_core0))
+#if (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
 #include "MIMXRT758S_cm33_core0.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core1) || defined(CPU_MIMXRT758SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
 #include "MIMXRT758S_cm33_core1.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_ezhv) || defined(CPU_MIMXRT758SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
 #include "MIMXRT758S_ezhv.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_hifi1) || defined(CPU_MIMXRT758SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
 #include "MIMXRT758S_hifi1.h"
 #else
   #error "No valid CPU defined!"

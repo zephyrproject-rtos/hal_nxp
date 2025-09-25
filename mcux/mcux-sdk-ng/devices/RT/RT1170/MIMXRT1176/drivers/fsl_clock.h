@@ -1,6 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
- * All rights reserved.
+ * Copyright 2019-2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +39,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 6))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -1764,6 +1763,37 @@ typedef enum _clock_pll_post_div
 } clock_pll_post_div_t;
 
 /*!
+ * @brief The enumerater of clock output1's clock source.
+ */
+typedef enum _clock_output1_selection
+{
+    kCLOCK_CKO1OutputMuxOscRc48MDiv2 = 0U, /*!< CKO1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CKO1OutputMuxOsc24MOut    = 1U, /*!< CKO1 mux from MuxOsc24MOut. */
+    kCLOCK_CKO1OutputMuxOscRc400M    = 2U, /*!< CKO1 mux from MuxOscRc400M. */
+    kCLOCK_CKO1OutputMuxOscRc16M     = 3U, /*!< CKO1 mux from MuxOscRc16M. */
+    kCLOCK_CKO1OutputMuxSysPll2Pfd2  = 4U, /*!< CKO1 mux from MuxSysPll2Pfd2. */
+    kCLOCK_CKO1OutputMuxSysPll2Out   = 5U, /*!< CKO1 mux from MuxSysPll2Out. */
+    kkCLOCK_CKO1OutputMuxSysPll3Pfd1 = 6U, /*!< CKO1 mux from MuxSysPll3Pfd1. */
+    kCLOCK_CKO1OutputMuxSysPll1Div5  = 7U, /*!< CKO1 mux from MuxSysPll1Div5. */
+} clock_output1_selection_t;
+
+/*!
+ * @brief The enumerater of clock output2's clock source.
+ *
+ */
+typedef enum _clock_output2_selection
+{
+    kCLOCK_CKO2OutputOscRc48MDiv2   = 0U, /*!< CKO2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CKO2OutputOsc24MOut      = 1U, /*!< CKO2 mux from MuxOsc24MOut. */
+    kCLOCK_CKO2OutputOscRc400M      = 2U, /*!< CKO2 mux from MuxOscRc400M. */
+    kCLOCK_CKO2OutputOscRc16M       = 3U, /*!< CKO2 mux from MuxOscRc16M. */
+    kCLOCK_CKO2OutputSysPll2Pfd3    = 4U, /*!< CKO2 mux from MuxSysPll2Pfd3. */
+    kCLOCK_CKO2OutputMuxOscRc48M    = 5U, /*!< CKO2 mux from MuxOscRc48M. */
+    kCLOCK_CKO2OutputMuxSysPll3Pfd1 = 6U, /*!< CKO2 mux from MuxSysPll3Pfd1. */
+    kCLOCK_CKO2OutputMuxAudioPllOut = 7U, /*!< CKO2 mux from MuxAudioPllOut. */
+} clock_output2_selection_t;
+
+/*!
  * @brief PLL configuration for ARM.
  *
  * The output clock frequency is:
@@ -3246,6 +3276,61 @@ static inline void CLOCK_LPCG_ControlByDomainMode(clock_lpcg_t name, uint8_t dom
         (CCM->LPCG[name].AUTHEN &
          ~(CCM_LPCG_AUTHEN_SETPOINT_MODE_MASK | CCM_LPCG_AUTHEN_CPULPM_MASK | CCM_LPCG_AUTHEN_WHITE_LIST_MASK)) |
         CCM_LPCG_AUTHEN_DOMAIN_MODE_MASK | CCM_LPCG_AUTHEN_WHITE_LIST(domainId);
+}
+
+/*!
+ * @name Clock Output Inferfaces
+ * @{
+ */
+
+/*!
+ * @brief Set the clock source and the divider of the clock output1.
+ *
+ * param selection The clock source to be output, please refer to clock_output1_selection_t.
+ * param divider The divider of the output clock signal.
+ */
+static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, uint32_t divider)
+{
+    clock_root_config_t rootCfg = {0};
+
+    rootCfg.mux = selection;
+    rootCfg.div = divider;
+    CLOCK_SetRootClock(kCLOCK_Root_Cko1, &rootCfg);
+}
+
+/*!
+ * @brief Set the clock source and the divider of the clock output2.
+ *
+ * param selection The clock source to be output, please refer to clock_output2_selection_t.
+ * param divider The divider of the output clock signal.
+ */
+static inline void CLOCK_SetClockOutput2(clock_output2_selection_t selection, uint32_t divider)
+{
+    clock_root_config_t rootCfg = {0};
+
+    rootCfg.mux = selection;
+    rootCfg.div = divider;
+    CLOCK_SetRootClock(kCLOCK_Root_Cko2, &rootCfg);
+}
+
+/*!
+ * @brief Get the frequency of clock output1 clock signal.
+ *
+ * @return The frequency of clock output1 clock signal.
+ */
+static inline uint32_t CLOCK_GetClockOutCLKO1Freq(void)
+{
+    return CLOCK_GetRootClockFreq(kCLOCK_Root_Cko1);
+}
+
+/*!
+ * @brief Get the frequency of clock output2 clock signal.
+ *
+ * @return The frequency of clock output2 clock signal.
+ */
+static inline uint32_t CLOCK_GetClockOutClkO2Freq(void)
+{
+    return CLOCK_GetRootClockFreq(kCLOCK_Root_Cko2);
 }
 
 /* @} */

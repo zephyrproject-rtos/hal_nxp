@@ -608,9 +608,9 @@ static uint32_t CLOCK_CalFroFreq(FRO_Type *base)
     {
         if ((base->TEXPCNT.RW & FRO_TEXPCNT_TEXPCNT_MASK) != 0u)
         {
-            freq = ((uint32_t)((uint64_t)(base->TEXPCNT.RW & FRO_TEXPCNT_TEXPCNT_MASK) *
-                               ((uint64_t)refFreq / (uint64_t)((base->CNFG1.RW & FRO_CNFG1_REFDIV_MASK) + 1UL)) /
-                               (uint64_t)((base->CNFG1.RW & FRO_CNFG1_RFCLKCNT_MASK) >> FRO_CNFG1_RFCLKCNT_SHIFT)));
+            freq = ((uint32_t)(((uint64_t)base->TEXPCNT.RW & FRO_TEXPCNT_TEXPCNT_MASK) *
+                               ((uint64_t)refFreq / (((uint64_t)base->CNFG1.RW & FRO_CNFG1_REFDIV_MASK) + 1ULL)) /
+                               (((uint64_t)base->CNFG1.RW & FRO_CNFG1_RFCLKCNT_MASK) >> FRO_CNFG1_RFCLKCNT_SHIFT)));
         }
         else
         {
@@ -787,6 +787,126 @@ status_t CLOCK_EnableFroAutoTuning(FRO_Type *base, const clock_fro_config_t *con
     return ret;
 }
 
+static uint32_t CLOCK_CalFroFreqFromTrimcnt(FRO_Type *base)
+{
+    uint32_t freq    = 0U;
+    uint32_t refFreq = 0U;
+
+    refFreq = (g_xtalFreq != 0U) ? g_xtalFreq : g_clkinFreq;
+    freq    = ((uint32_t)((uint64_t)(base->TRIMCNT.RW & FRO_TRIMCNT_TRIMCNT_MASK) *
+                       ((uint64_t)refFreq / (uint64_t)((base->CNFG1.RW & FRO_CNFG1_REFDIV_MASK) + 1UL)) /
+                       (uint64_t)((base->CNFG1.RW & FRO_CNFG1_RFCLKCNT_MASK) >> FRO_CNFG1_RFCLKCNT_SHIFT)));
+
+    return freq;
+}
+
+/*!
+ * @brief Check if current frequency is in the set range of target frequency.
+ * @param curFreq current frequency
+ * @param targetFreq target frequency
+ * @param range The percentage value, The value/100 is the % deviation.
+ */
+static bool CLOCK_CheckFreqWithinRange(uint32_t curFreq, uint32_t targetFreq, uint32_t range)
+{
+    uint64_t temp = 0U;
+    if (curFreq >= targetFreq)
+    {
+        temp = ((uint64_t)curFreq - targetFreq) * 10000ULL / targetFreq;
+    }
+    else
+    {
+        temp = ((uint64_t)targetFreq - curFreq) * 10000ULL / targetFreq;
+    }
+
+    return ((uint32_t)temp > range ? false : true);
+}
+
+/*
+ * Calculate the approximate delay(count per reference clock) for FRO auto tuner lock.
+ */
+static uint32_t CLOCK_CalFroAutoTuneTimeout(FRO_Type *base)
+{
+    uint32_t count;
+    uint32_t refCnt     = (base->CNFG1.RW & FRO_CNFG1_RFCLKCNT_MASK) >> FRO_CNFG1_RFCLKCNT_SHIFT;
+    uint32_t trim1Delay = (base->CNFG2.RW & FRO_CNFG2_TRIM1_DELAY_MASK) >> FRO_CNFG2_TRIM1_DELAY_SHIFT;
+    uint32_t trim2Delay = (base->CNFG2.RW & FRO_CNFG2_TRIM2_DELAY_MASK) >> FRO_CNFG2_TRIM2_DELAY_SHIFT;
+
+    /* Coarse tuning involves delay 4096 / 16 (COARSE=0) or 4096 / 128 (COARSEN=1). */
+    count = (((base->CSR.RW & FRO_CSR_COARSEN_MASK) != 0U) ? 32U : 256U) * (refCnt + trim2Delay + 1U);
+    count += (refCnt + trim1Delay + 1U) * 22U;
+
+    return count;
+}
+
+uint32_t CLOCK_FroTuneOnce(FRO_Type *base, uint16_t trimVal)
+{
+    uint32_t targetFreq = 0U;
+    uint32_t refFreq;
+    uint32_t delayUs;
+
+    refFreq = (g_xtalFreq != 0U) ? g_xtalFreq : g_clkinFreq;
+
+    if (refFreq != 0U)
+    {
+        /* Disable auto-tuner to use FROTRIM to control FRO frequency. */
+        base->CSR.CLR = FRO_CSR_TREN_MASK | FRO_CSR_TRUPEN_MASK;
+
+        /* 1. Program the desired trim in FROTRIM */
+        base->FROTRIM.RW =
+            (base->FROTRIM.RW & (~(FRO_FROTRIM_COARSE_TRIM_MASK | FRO_FROTRIM_FINE_TRIM_MASK))) | trimVal;
+        base->CSR.CLR = FRO_CSR_TUNEONCE_DONE_MASK;
+        /* 2. Make sure you wait enough time for the frequency to settle after applying the trim. */
+        refFreq /= ((base->CNFG1.RW & FRO_CNFG1_REFDIV_MASK) >> FRO_CNFG1_REFDIV_SHIFT) + 1U;
+        delayUs = (base->CNFG2.RW & FRO_CNFG2_TRIM2_DELAY_MASK) >> FRO_CNFG2_TRIM2_DELAY_SHIFT;
+        delayUs = delayUs * 1000000UL / refFreq;
+        SDK_DelayAtLeastUs(delayUs, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        /* 3. Enable TUNEONCE, TREN, but keep TRUPEN=0 -> this will allow the trims to be controlled by FROTRIM register
+         * instead of the auto-tuner. */
+        base->CSR.SET = FRO_CSR_TUNEONCE_MASK;
+        base->CSR.SET = FRO_CSR_TREN_MASK;
+        /* 4. Wait until TUNEONCE_DONE=1. */
+        while (!(base->CSR.RW & FRO_CSR_TUNEONCE_DONE_MASK))
+        {
+        }
+        /* 5. Read TRIMCNT to get the frequency measurement for the FROTRIM in step 1 */
+        targetFreq    = CLOCK_CalFroFreqFromTrimcnt(base);
+        base->CSR.CLR = FRO_CSR_TUNEONCE_MASK;
+        base->CSR.CLR = FRO_CSR_TREN_MASK;
+    }
+
+    return targetFreq;
+}
+
+/*! Check the T+1, T, T-1 trim value and pick the closet one to targetFreq. */
+void CLOCK_FroFineTune(FRO_Type *base, uint32_t targetFreq, uint16_t trimVal)
+{
+    uint32_t prevFreq, curFreq, nextFreq, prevDelta, curDelta, nextDelta;
+    uint32_t fineTrim = 0U;
+
+    prevFreq = CLOCK_FroTuneOnce(base, trimVal - 1U);
+    curFreq  = CLOCK_FroTuneOnce(base, trimVal);
+    nextFreq = CLOCK_FroTuneOnce(base, trimVal + 1U);
+
+    prevDelta = (targetFreq < prevFreq) ? (prevFreq - targetFreq) : (targetFreq - prevFreq);
+    curDelta  = (targetFreq < curFreq) ? (curFreq - targetFreq) : (targetFreq - curFreq);
+    nextDelta = (targetFreq < nextFreq) ? (nextFreq - targetFreq) : (targetFreq - nextFreq);
+
+    if (curDelta <= prevDelta && curDelta <= nextDelta)
+    {
+        fineTrim = trimVal;
+    }
+    else if (prevDelta < nextDelta)
+    {
+        fineTrim = trimVal - 1U;
+    }
+    else
+    {
+        fineTrim = trimVal + 1U;
+    }
+
+    CLOCK_ConfigFroTrim(base, fineTrim);
+}
+
 void CLOCK_EnableFroClkFreq(FRO_Type *base, uint32_t targetFreq, uint32_t divOutEnable)
 {
     const clock_fro_config_t froAutotrimCfg = {
@@ -798,8 +918,16 @@ void CLOCK_EnableFroClkFreq(FRO_Type *base, uint32_t targetFreq, uint32_t divOut
         .enableInt    = 0U,
         .coarseTrimEn = true,
     };
-    (void)CLOCK_EnableFroClkFreqCloseLoop(base, &froAutotrimCfg, divOutEnable);
-    (void)CLOCK_EnableFroAutoTuning(base, &froAutotrimCfg, false);
+
+    if (kStatus_Success == CLOCK_EnableFroClkFreqCloseLoop(base, &froAutotrimCfg, divOutEnable))
+    {
+        (void)CLOCK_EnableFroAutoTuning(base, &froAutotrimCfg, false);
+    }
+    else /* If the close loop not work, switch to open loop mode and search the nearest target frequency. */
+    {
+        CLOCK_FroFineTune(base, targetFreq, (uint16_t)(base->AUTOTRIM.RW & FRO_AUTOTRIM_AUTOTRIM_MASK));
+        CLOCK_EnableFroClkOutput(base, divOutEnable);
+    }
 }
 
 void CLOCK_ConfigFroTrim(FRO_Type *base, uint16_t trimVal)
@@ -811,8 +939,10 @@ void CLOCK_ConfigFroTrim(FRO_Type *base, uint16_t trimVal)
 
 status_t CLOCK_EnableFroClkFreqCloseLoop(FRO_Type *base, const clock_fro_config_t *config, uint32_t divOutEnable)
 {
-    status_t ret   = kStatus_Success;
-    uint32_t flags = 0U;
+    status_t ret     = kStatus_Success;
+    uint32_t freq    = 0U;
+    uint32_t timeout = 0U;
+    uint32_t refFreq = 0U;
 
     /*Power up FRO */
 #if defined(FSL_CLOCK_DRIVER_COMPUTE) || defined(FSL_CLOCK_DRIVER_MEDIA)
@@ -823,31 +953,60 @@ status_t CLOCK_EnableFroClkFreqCloseLoop(FRO_Type *base, const clock_fro_config_
 
     /* Disable output before changeing frequency. */
     CLOCK_EnableFroClkOutput(base, 0U);
-    ret = CLOCK_EnableFroAutoTuning(base, config, true);
+    /* Clear TUNE_ERR LOL_ERR flags. */
+    base->CSR.CLR = FRO_CSR_TUNE_ERR_MASK | FRO_CSR_LOL_ERR_MASK;
+    ret           = CLOCK_EnableFroAutoTuning(base, config, true);
+
+    timeout = CLOCK_CalFroAutoTuneTimeout(base);
+    refFreq = (g_xtalFreq != 0U) ? g_xtalFreq : g_clkinFreq;
+    timeout = (SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY >> 2U) / refFreq * timeout;
 
     if (ret == kStatus_Success)
     {
         /* Polling wait tune finish. */
-        do
+        while ((base->CSR.RW & FRO_CSR_TRIM_LOCK_MASK) == 0U)
         {
-            flags = CLOCK_GetFroFlags(base);
-
-        } while ((flags & FRO_CSR_TRIM_LOCK_MASK) == 0U);
-
-        if ((flags & (FRO_CSR_TUNE_ERR_MASK | FRO_CSR_LOL_ERR_MASK)) != 0U)
-        {
-            ret = kStatus_Fail; /* Error occures. */
+            timeout--;
+            if (timeout == 0U)
+            {
+                ret = kStatus_Timeout;
+                break;
+            }
         }
-        else
+        if (ret == kStatus_Success)
         {
-            ret = kStatus_Success;
-            /* Configure the FROTRIM with autotrim value. */
-            CLOCK_ConfigFroTrim(base, (uint16_t)(base->AUTOTRIM.RW & FRO_AUTOTRIM_AUTOTRIM_MASK));
+            /* Check error. */
+            if ((base->CSR.RW & (FRO_CSR_TUNE_ERR_MASK | FRO_CSR_LOL_ERR_MASK)) != 0U)
+            {
+                /* This is trim lock has happened and LOC comes back immediately. If measured freq matches the target
+                freq. clear the LOL error like nothing has happened. */
+                base->CSR.CLR = FRO_CSR_TUNE_ERR_MASK | FRO_CSR_LOL_ERR_MASK;
+
+                freq = CLOCK_CalFroFreqFromTrimcnt(base);
+
+                if (CLOCK_CheckFreqWithinRange(freq, config->targetFreq, config->range))
+                {
+                    /* Configure the FROTRIM with autotrim value. */
+                    CLOCK_ConfigFroTrim(base, (uint16_t)(base->AUTOTRIM.RW & FRO_AUTOTRIM_AUTOTRIM_MASK));
+                    /* Enable output */
+                    CLOCK_EnableFroClkOutput(base, divOutEnable);
+                    ret = kStatus_Success;
+                }
+                else
+                {
+                    /* Error occurs, suggest to use tuneonce feature to tune to desired frrequnency. */
+                    ret = kStatus_Fail;
+                }
+            }
+            else /* This is a normal case, no timeout, no errors. */
+            {
+                /* Configure the FROTRIM with autotrim value. */
+                CLOCK_ConfigFroTrim(base, (uint16_t)(base->AUTOTRIM.RW & FRO_AUTOTRIM_AUTOTRIM_MASK));
+                /* Enable output */
+                CLOCK_EnableFroClkOutput(base, divOutEnable);
+            }
         }
     }
-
-    /* Enable output */
-    CLOCK_EnableFroClkOutput(base, divOutEnable);
 
     return ret;
 }
@@ -1251,7 +1410,42 @@ uint32_t CLOCK_GetComputeAudioClkFreq(void)
 
 uint32_t CLOCK_GetSenseAudioClkFreq(void)
 {
-    return g_senseAudioClkFreq;
+    uint32_t freq   = 0U;
+    uint32_t clkSel = 0U;
+
+    if (SYSCON3->SILICONREV_ID == 0xA0000UL)
+    {
+        freq = g_senseAudioClkFreq;
+    }
+    else
+    {
+        clkSel = CLKCTL3->SENSEBASECLKSEL & CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL_MASK;
+
+        /* Read again to avoid glitch. */
+        if (clkSel == (CLKCTL3->SENSEBASECLKSEL & CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL_MASK))
+        {
+            switch (clkSel)
+            {
+                case CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL(0U):
+                    freq = CLOCK_GetMclkInClkFreq();
+                    break;
+                case CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL(1U):
+                    freq = CLOCK_GetXtalInClkFreq();
+                    break;
+                case CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL(2U):
+                    freq = CLOCK_GetFroClkFreq(2U) / 8U;
+                    break;
+                case CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL(3U):
+                    freq = CLOCK_GetAudioPfdFreq(kCLOCK_Pfd3);
+                    break;
+                default:
+                    freq = 0U;
+                    break;
+            }
+        }
+    }
+
+    return freq;
 }
 
 /* Get FCCLK Clk frequency */
@@ -1660,6 +1854,8 @@ void CLOCK_EnableMainPllPfdClkForDomain(clock_pfd_t pfd, uint32_t domainEnable)
     uint32_t pfdIndex = (uint32_t)pfd;
     uint32_t pfdValue;
 
+    assert(pfdIndex < 4U);
+
     pfdValue = CLKCTL2->MAINPLL0PFDDOMAINEN & (~(0x7FUL << (8UL * pfdIndex)));
 
     CLKCTL2->MAINPLL0PFDDOMAINEN = pfdValue | ((domainEnable & (uint32_t)kCLOCK_AllDomainEnable) << (8UL * pfdIndex));
@@ -1669,6 +1865,8 @@ void CLOCK_EnableAudioPllPfdClkForDomain(clock_pfd_t pfd, uint32_t domainEnable)
 {
     uint32_t pfdIndex = (uint32_t)pfd;
     uint32_t pfdValue;
+
+    assert(pfdIndex < 4U);
 
     pfdValue = CLKCTL2->AUDIOPLL0PFDDOMAINEN & (~(0x7FUL << (8UL * pfdIndex)));
 

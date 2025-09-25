@@ -1,11 +1,11 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_ezhv
-**                          MIMXRT735SGFOA_ezhv
+**     Processors:          MIMXRT735SGAWBR_ezhv
+**                          MIMXRT735SGFOB_ezhv
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT735S_ezhv
@@ -25,14 +25,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_ezhv_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief Peripheral Access Layer for MIMXRT735S_ezhv
  *
  * Peripheral Access Layer for MIMXRT735S_ezhv
@@ -43,7 +45,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -1009,6 +1011,16 @@ typedef enum IRQn {
 #define LP_FLEXCOMM_BASE_PTRS                    { LP_FLEXCOMM0, LP_FLEXCOMM1, LP_FLEXCOMM2, LP_FLEXCOMM3, LP_FLEXCOMM4, LP_FLEXCOMM5, LP_FLEXCOMM6, LP_FLEXCOMM7, LP_FLEXCOMM8, LP_FLEXCOMM9, LP_FLEXCOMM10, LP_FLEXCOMM11, LP_FLEXCOMM12, LP_FLEXCOMM13, (LP_FLEXCOMM_Type *)0u, (LP_FLEXCOMM_Type *)0u, (LP_FLEXCOMM_Type *)0u, LP_FLEXCOMM17, LP_FLEXCOMM18, LP_FLEXCOMM19, LP_FLEXCOMM20 }
 #define LP_FLEXCOMM_IRQS                         { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
+
+/* MIPI_DSI_HOST - Peripheral instance base addresses */
+/** Peripheral MIPI_DSI_HOST base address */
+#define MIPI_DSI_HOST_BASE                       (0x40417000u)
+/** Peripheral MIPI_DSI_HOST base pointer */
+#define MIPI_DSI_HOST                            ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE)
+/** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+#define MIPI_DSI_HOST_BASE_ADDRS                 { MIPI_DSI_HOST_BASE }
+/** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+#define MIPI_DSI_HOST_BASE_PTRS                  { MIPI_DSI_HOST }
 
 /* MMU - Peripheral instance base addresses */
 /** Peripheral MMU0 base address */

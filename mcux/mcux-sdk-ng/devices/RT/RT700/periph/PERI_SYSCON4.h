@@ -1,34 +1,34 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_cm33_core0
-**                          MIMXRT735SGAWAR_cm33_core1
-**                          MIMXRT735SGAWAR_ezhv
-**                          MIMXRT735SGAWAR_hifi1
-**                          MIMXRT735SGFOA_cm33_core0
-**                          MIMXRT735SGFOA_cm33_core1
-**                          MIMXRT735SGFOA_ezhv
-**                          MIMXRT735SGFOA_hifi1
-**                          MIMXRT758SGAWAR_cm33_core0
-**                          MIMXRT758SGAWAR_cm33_core1
-**                          MIMXRT758SGAWAR_ezhv
-**                          MIMXRT758SGAWAR_hifi1
-**                          MIMXRT758SGFOA_cm33_core0
-**                          MIMXRT758SGFOA_cm33_core1
-**                          MIMXRT758SGFOA_ezhv
-**                          MIMXRT758SGFOA_hifi1
-**                          MIMXRT798SGAWAR_cm33_core0
-**                          MIMXRT798SGAWAR_cm33_core1
-**                          MIMXRT798SGAWAR_ezhv
-**                          MIMXRT798SGAWAR_hifi1
-**                          MIMXRT798SGAWAR_hifi4
-**                          MIMXRT798SGFOA_cm33_core0
-**                          MIMXRT798SGFOA_cm33_core1
-**                          MIMXRT798SGFOA_ezhv
-**                          MIMXRT798SGFOA_hifi1
-**                          MIMXRT798SGFOA_hifi4
+**     Processors:          MIMXRT735SGAWBR_cm33_core0
+**                          MIMXRT735SGAWBR_cm33_core1
+**                          MIMXRT735SGAWBR_ezhv
+**                          MIMXRT735SGAWBR_hifi1
+**                          MIMXRT735SGFOB_cm33_core0
+**                          MIMXRT735SGFOB_cm33_core1
+**                          MIMXRT735SGFOB_ezhv
+**                          MIMXRT735SGFOB_hifi1
+**                          MIMXRT758SGAWBR_cm33_core0
+**                          MIMXRT758SGAWBR_cm33_core1
+**                          MIMXRT758SGAWBR_ezhv
+**                          MIMXRT758SGAWBR_hifi1
+**                          MIMXRT758SGFOB_cm33_core0
+**                          MIMXRT758SGFOB_cm33_core1
+**                          MIMXRT758SGFOB_ezhv
+**                          MIMXRT758SGFOB_hifi1
+**                          MIMXRT798SGAWBR_cm33_core0
+**                          MIMXRT798SGAWBR_cm33_core1
+**                          MIMXRT798SGAWBR_ezhv
+**                          MIMXRT798SGAWBR_hifi1
+**                          MIMXRT798SGAWBR_hifi4
+**                          MIMXRT798SGFOB_cm33_core0
+**                          MIMXRT798SGFOB_cm33_core1
+**                          MIMXRT798SGFOB_ezhv
+**                          MIMXRT798SGFOB_hifi1
+**                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250526
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON4
@@ -48,14 +48,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SYSCON4.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief CMSIS Peripheral Access Layer for SYSCON4
  *
  * CMSIS Peripheral Access Layer for SYSCON4
@@ -64,31 +66,31 @@
 #if !defined(PERI_SYSCON4_H_)
 #define PERI_SYSCON4_H_                          /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
+#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWAR_cm33_core1) || defined(CPU_MIMXRT735SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
 #include "MIMXRT735S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWAR_ezhv) || defined(CPU_MIMXRT735SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
 #include "MIMXRT735S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWAR_hifi1) || defined(CPU_MIMXRT735SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
 #include "MIMXRT735S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core0) || defined(CPU_MIMXRT758SGFOA_cm33_core0))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
 #include "MIMXRT758S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core1) || defined(CPU_MIMXRT758SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
 #include "MIMXRT758S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_ezhv) || defined(CPU_MIMXRT758SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
 #include "MIMXRT758S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_hifi1) || defined(CPU_MIMXRT758SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
 #include "MIMXRT758S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_cm33_core0) || defined(CPU_MIMXRT798SGFOA_cm33_core0))
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
 #include "MIMXRT798S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_cm33_core1) || defined(CPU_MIMXRT798SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
 #include "MIMXRT798S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_ezhv) || defined(CPU_MIMXRT798SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
 #include "MIMXRT798S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_hifi1) || defined(CPU_MIMXRT798SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
 #include "MIMXRT798S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_hifi4) || defined(CPU_MIMXRT798SGFOA_hifi4))
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
 #include "MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"

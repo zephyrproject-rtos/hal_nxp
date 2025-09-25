@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT758SGAWAR_cm33_core0
-**                          MIMXRT758SGFOA_cm33_core0
+**     Processors:          MIMXRT758SGAWBR_cm33_core0
+**                          MIMXRT758SGFOB_cm33_core0
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
@@ -30,14 +31,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT758S_cm33_core0_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
  *
  * CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
@@ -48,7 +51,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -3532,6 +3535,9 @@ typedef enum _dma_request_source
   /** Array initializer of RTC peripheral base pointers */
   #define RTC_BASE_PTRS                            { RTC0 }
 #endif
+/** Interrupt vectors for the RTC peripheral type */
+#define RTC_ALARM_IRQS                           { RTC0_ALARM_IRQn }
+#define RTC_WAKEUP_IRQS                          { RTC0_IRQn }
 
 /* SCT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

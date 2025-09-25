@@ -17,6 +17,24 @@
 #define FSL_COMPONENT_ID "platform.drivers.inputmux_connections"
 #endif
 
+/*! @name Driver version */
+/*@{*/
+/*! @brief INPUTMUX_CONNECTION driver version 2.0.1. */
+#define FSL_INPUTMUX_CONNECTION_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*@}*/
+
+/* Driver compatibility definitions. */
+#ifndef INPUTMUX_BASE_PTRS
+#if defined(INPUTMUX0) && defined(INPUTMUX1)
+#define INPUTMUX_BASE_PTRS { INPUTMUX0, INPUTMUX1 }
+#elif defined(INPUTMUX0)
+#define INPUTMUX_BASE_PTRS { INPUTMUX0 }
+#elif defined(INPUTMUX1)
+#define INPUTMUX_BASE_PTRS { INPUTMUX1 }
+#else
+#error "Unsupported core!"
+#endif /* INPUTMUX0 && INPUTMUX1 */
+#endif /* INPUTMUX_BASE_PTRS */
 /*!
  * @addtogroup inputmux_driver
  * @{

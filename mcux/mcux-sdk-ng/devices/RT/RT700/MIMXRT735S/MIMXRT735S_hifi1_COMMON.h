@@ -1,12 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_hifi1
-**                          MIMXRT735SGFOA_hifi1
+**     Processors:          MIMXRT735SGAWBR_hifi1
+**                          MIMXRT735SGFOB_hifi1
 **
 **     Compiler:            Xtensa Compiler
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT735S_hifi1
@@ -26,14 +26,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_hifi1_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief Peripheral Access Layer for MIMXRT735S_hifi1
  *
  * Peripheral Access Layer for MIMXRT735S_hifi1
@@ -44,7 +46,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -1477,6 +1479,35 @@ typedef enum _dma_request_source
 #endif
 /** Interrupt vectors for the LP_FLEXCOMM peripheral type */
 #define LP_FLEXCOMM_IRQS                         { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, LP_FLEXCOMM17_IRQn, LP_FLEXCOMM18_IRQn, LP_FLEXCOMM19_IRQn, LP_FLEXCOMM20_IRQn }
+
+/* MIPI_DSI_HOST - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral MIPI_DSI_HOST base address */
+  #define MIPI_DSI_HOST_BASE                       (0x50417000u)
+  /** Peripheral MIPI_DSI_HOST base address */
+  #define MIPI_DSI_HOST_BASE_NS                    (0x40417000u)
+  /** Peripheral MIPI_DSI_HOST base pointer */
+  #define MIPI_DSI_HOST                            ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE)
+  /** Peripheral MIPI_DSI_HOST base pointer */
+  #define MIPI_DSI_HOST_NS                         ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE_NS)
+  /** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+  #define MIPI_DSI_HOST_BASE_ADDRS                 { MIPI_DSI_HOST_BASE }
+  /** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+  #define MIPI_DSI_HOST_BASE_PTRS                  { MIPI_DSI_HOST }
+  /** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+  #define MIPI_DSI_HOST_BASE_ADDRS_NS              { MIPI_DSI_HOST_BASE_NS }
+  /** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+  #define MIPI_DSI_HOST_BASE_PTRS_NS               { MIPI_DSI_HOST_NS }
+#else
+  /** Peripheral MIPI_DSI_HOST base address */
+  #define MIPI_DSI_HOST_BASE                       (0x40417000u)
+  /** Peripheral MIPI_DSI_HOST base pointer */
+  #define MIPI_DSI_HOST                            ((MIPI_DSI_HOST_Type *)MIPI_DSI_HOST_BASE)
+  /** Array initializer of MIPI_DSI_HOST peripheral base addresses */
+  #define MIPI_DSI_HOST_BASE_ADDRS                 { MIPI_DSI_HOST_BASE }
+  /** Array initializer of MIPI_DSI_HOST peripheral base pointers */
+  #define MIPI_DSI_HOST_BASE_PTRS                  { MIPI_DSI_HOST }
+#endif
 
 /* MMU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

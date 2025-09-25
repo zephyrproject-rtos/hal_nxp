@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_SW_ENETC
@@ -175,9 +175,9 @@ typedef struct {
   __I  uint32_t TCRPTSR;                           /**< Time capture receive port timestamp register, offset: 0x1114, available only on: SW0_COMMON (missing on ENETC0_COMMON, ENETC1_COMMON) */
   __IO uint32_t TCMSIVR;                           /**< Time capture MSI-X vector register, offset: 0x1118, available only on: SW0_COMMON (missing on ENETC0_COMMON, ENETC1_COMMON) */
        uint8_t RESERVED_11[228];
-  __IO uint32_t CVLANR1;                           /**< Custom VLAN Ethertype register 1, offset: 0x1200 */
-  __IO uint32_t CVLANR2;                           /**< Custom VLAN Ethertype register 2, offset: 0x1204 */
-  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG Ethertype register, offset: 0x1208, available only on: SW0_COMMON (missing on ENETC0_COMMON, ENETC1_COMMON) */
+  __IO uint32_t CVLANR1;                           /**< Custom VLAN EtherType register 1, offset: 0x1200 */
+  __IO uint32_t CVLANR2;                           /**< Custom VLAN EtherType register 2, offset: 0x1204 */
+  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG EtherType register, offset: 0x1208, available only on: SW0_COMMON (missing on ENETC0_COMMON, ENETC1_COMMON) */
        uint8_t RESERVED_12[20];
   __IO uint32_t DOSL2CR;                           /**< DoS L2 configuration register, offset: 0x1220 */
        uint8_t RESERVED_13[220];
@@ -740,7 +740,7 @@ typedef struct {
 #define NETC_SW_ENETC_TCMSIVR_VECTOR(x)          (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_TCMSIVR_VECTOR_SHIFT)) & NETC_SW_ENETC_TCMSIVR_VECTOR_MASK)
 /*! @} */
 
-/*! @name CVLANR1 - Custom VLAN Ethertype register 1 */
+/*! @name CVLANR1 - Custom VLAN EtherType register 1 */
 /*! @{ */
 
 #define NETC_SW_ENETC_CVLANR1_ETYPE_MASK         (0xFFFFU)
@@ -753,7 +753,7 @@ typedef struct {
 #define NETC_SW_ENETC_CVLANR1_V(x)               (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_CVLANR1_V_SHIFT)) & NETC_SW_ENETC_CVLANR1_V_MASK)
 /*! @} */
 
-/*! @name CVLANR2 - Custom VLAN Ethertype register 2 */
+/*! @name CVLANR2 - Custom VLAN EtherType register 2 */
 /*! @{ */
 
 #define NETC_SW_ENETC_CVLANR2_ETYPE_MASK         (0xFFFFU)
@@ -766,7 +766,7 @@ typedef struct {
 #define NETC_SW_ENETC_CVLANR2_V(x)               (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_CVLANR2_V_SHIFT)) & NETC_SW_ENETC_CVLANR2_V_MASK)
 /*! @} */
 
-/*! @name PSRTAGETR - Pre-Standard RTAG Ethertype register */
+/*! @name PSRTAGETR - Pre-Standard RTAG EtherType register */
 /*! @{ */
 
 #define NETC_SW_ENETC_PSRTAGETR_ETHERTYPE_MASK   (0xFFFFU)
@@ -1533,8 +1533,8 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC0CR0_OVIDP_MASK      (0x20U)
 #define NETC_SW_ENETC_ISIDKC0CR0_OVIDP_SHIFT     (5U)
 /*! OVIDP - Outer VID Present
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Outer VLAN ID is not present in the key
+ *  0b1..Outer VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC0CR0_OVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC0CR0_OVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC0CR0_OVIDP_MASK)
 
@@ -1549,16 +1549,16 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC0CR0_IVIDP_MASK      (0x80U)
 #define NETC_SW_ENETC_ISIDKC0CR0_IVIDP_SHIFT     (7U)
 /*! IVIDP - Inner VID Present.
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Inner VLAN ID is not present in the key
+ *  0b1..Inner VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC0CR0_IVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC0CR0_IVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC0CR0_IVIDP_MASK)
 
 #define NETC_SW_ENETC_ISIDKC0CR0_IPCPP_MASK      (0x100U)
 #define NETC_SW_ENETC_ISIDKC0CR0_IPCPP_SHIFT     (8U)
-/*! IPCPP - Inner PCP Present.
- *  0b0..Not present
- *  0b1..Present
+/*! IPCPP - Inner PCP Present
+ *  0b0..Inner PCP is not present in the key
+ *  0b1..Inner PCP is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC0CR0_IPCPP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC0CR0_IPCPP_SHIFT)) & NETC_SW_ENETC_ISIDKC0CR0_IPCPP_MASK)
 
@@ -1733,8 +1733,8 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC1CR0_OVIDP_MASK      (0x20U)
 #define NETC_SW_ENETC_ISIDKC1CR0_OVIDP_SHIFT     (5U)
 /*! OVIDP - Outer VID Present
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Outer VLAN ID is not present in the key
+ *  0b1..Outer VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC1CR0_OVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC1CR0_OVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC1CR0_OVIDP_MASK)
 
@@ -1749,16 +1749,16 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC1CR0_IVIDP_MASK      (0x80U)
 #define NETC_SW_ENETC_ISIDKC1CR0_IVIDP_SHIFT     (7U)
 /*! IVIDP - Inner VID Present.
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Inner VLAN ID is not present in the key
+ *  0b1..Inner VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC1CR0_IVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC1CR0_IVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC1CR0_IVIDP_MASK)
 
 #define NETC_SW_ENETC_ISIDKC1CR0_IPCPP_MASK      (0x100U)
 #define NETC_SW_ENETC_ISIDKC1CR0_IPCPP_SHIFT     (8U)
-/*! IPCPP - Inner PCP Present.
- *  0b0..Not present
- *  0b1..Present
+/*! IPCPP - Inner PCP Present
+ *  0b0..Inner PCP is not present in the key
+ *  0b1..Inner PCP is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC1CR0_IPCPP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC1CR0_IPCPP_SHIFT)) & NETC_SW_ENETC_ISIDKC1CR0_IPCPP_MASK)
 
@@ -1933,8 +1933,8 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC2CR0_OVIDP_MASK      (0x20U)
 #define NETC_SW_ENETC_ISIDKC2CR0_OVIDP_SHIFT     (5U)
 /*! OVIDP - Outer VID Present
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Outer VLAN ID is not present in the key
+ *  0b1..Outer VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC2CR0_OVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC2CR0_OVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC2CR0_OVIDP_MASK)
 
@@ -1949,16 +1949,16 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC2CR0_IVIDP_MASK      (0x80U)
 #define NETC_SW_ENETC_ISIDKC2CR0_IVIDP_SHIFT     (7U)
 /*! IVIDP - Inner VID Present.
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Inner VLAN ID is not present in the key
+ *  0b1..Inner VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC2CR0_IVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC2CR0_IVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC2CR0_IVIDP_MASK)
 
 #define NETC_SW_ENETC_ISIDKC2CR0_IPCPP_MASK      (0x100U)
 #define NETC_SW_ENETC_ISIDKC2CR0_IPCPP_SHIFT     (8U)
-/*! IPCPP - Inner PCP Present.
- *  0b0..Not present
- *  0b1..Present
+/*! IPCPP - Inner PCP Present
+ *  0b0..Inner PCP is not present in the key
+ *  0b1..Inner PCP is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC2CR0_IPCPP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC2CR0_IPCPP_SHIFT)) & NETC_SW_ENETC_ISIDKC2CR0_IPCPP_MASK)
 
@@ -2133,8 +2133,8 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC3CR0_OVIDP_MASK      (0x20U)
 #define NETC_SW_ENETC_ISIDKC3CR0_OVIDP_SHIFT     (5U)
 /*! OVIDP - Outer VID Present
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Outer VLAN ID is not present in the key
+ *  0b1..Outer VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC3CR0_OVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC3CR0_OVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC3CR0_OVIDP_MASK)
 
@@ -2149,16 +2149,16 @@ typedef struct {
 #define NETC_SW_ENETC_ISIDKC3CR0_IVIDP_MASK      (0x80U)
 #define NETC_SW_ENETC_ISIDKC3CR0_IVIDP_SHIFT     (7U)
 /*! IVIDP - Inner VID Present.
- *  0b0..Not present
- *  0b1..Present
+ *  0b0..Inner VLAN ID is not present in the key
+ *  0b1..Inner VLAN ID is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC3CR0_IVIDP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC3CR0_IVIDP_SHIFT)) & NETC_SW_ENETC_ISIDKC3CR0_IVIDP_MASK)
 
 #define NETC_SW_ENETC_ISIDKC3CR0_IPCPP_MASK      (0x100U)
 #define NETC_SW_ENETC_ISIDKC3CR0_IPCPP_SHIFT     (8U)
-/*! IPCPP - Inner PCP Present.
- *  0b0..Not present
- *  0b1..Present
+/*! IPCPP - Inner PCP Present
+ *  0b0..Inner PCP is not present in the key
+ *  0b1..Inner PCP is present in the key
  */
 #define NETC_SW_ENETC_ISIDKC3CR0_IPCPP(x)        (((uint32_t)(((uint32_t)(x)) << NETC_SW_ENETC_ISIDKC3CR0_IPCPP_SHIFT)) & NETC_SW_ENETC_ISIDKC3CR0_IPCPP_MASK)
 

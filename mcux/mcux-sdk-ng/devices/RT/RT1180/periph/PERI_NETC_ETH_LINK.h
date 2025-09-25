@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ETH_LINK
@@ -739,7 +739,10 @@ typedef struct {
 
 #define NETC_ETH_LINK_PM0_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_MASK (0x80000000U)
 #define NETC_ETH_LINK_PM0_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_SHIFT (31U)
-/*! SW_ENTROPY_VALID - SW programmable entropy valid */
+/*! SW_ENTROPY_VALID - Software programmable entropy valid
+ *  0b0..Not valid
+ *  0b1..VALID
+ */
 #define NETC_ETH_LINK_PM0_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_SHIFT)) & NETC_ETH_LINK_PM0_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_MASK)
 /*! @} */
 
@@ -1610,7 +1613,10 @@ typedef struct {
 
 #define NETC_ETH_LINK_PM1_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_MASK (0x80000000U)
 #define NETC_ETH_LINK_PM1_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_SHIFT (31U)
-/*! SW_ENTROPY_VALID - SW programmable entropy valid */
+/*! SW_ENTROPY_VALID - Software programmable entropy valid
+ *  0b0..Not valid
+ *  0b1..VALID
+ */
 #define NETC_ETH_LINK_PM1_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID(x) (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_SHIFT)) & NETC_ETH_LINK_PM1_HD_BACKOFF_ENTROPY_SW_ENTROPY_VALID_MASK)
 /*! @} */
 

@@ -1,34 +1,34 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_cm33_core0
-**                          MIMXRT735SGAWAR_cm33_core1
-**                          MIMXRT735SGAWAR_ezhv
-**                          MIMXRT735SGAWAR_hifi1
-**                          MIMXRT735SGFOA_cm33_core0
-**                          MIMXRT735SGFOA_cm33_core1
-**                          MIMXRT735SGFOA_ezhv
-**                          MIMXRT735SGFOA_hifi1
-**                          MIMXRT758SGAWAR_cm33_core0
-**                          MIMXRT758SGAWAR_cm33_core1
-**                          MIMXRT758SGAWAR_ezhv
-**                          MIMXRT758SGAWAR_hifi1
-**                          MIMXRT758SGFOA_cm33_core0
-**                          MIMXRT758SGFOA_cm33_core1
-**                          MIMXRT758SGFOA_ezhv
-**                          MIMXRT758SGFOA_hifi1
-**                          MIMXRT798SGAWAR_cm33_core0
-**                          MIMXRT798SGAWAR_cm33_core1
-**                          MIMXRT798SGAWAR_ezhv
-**                          MIMXRT798SGAWAR_hifi1
-**                          MIMXRT798SGAWAR_hifi4
-**                          MIMXRT798SGFOA_cm33_core0
-**                          MIMXRT798SGFOA_cm33_core1
-**                          MIMXRT798SGFOA_ezhv
-**                          MIMXRT798SGFOA_hifi1
-**                          MIMXRT798SGFOA_hifi4
+**     Processors:          MIMXRT735SGAWBR_cm33_core0
+**                          MIMXRT735SGAWBR_cm33_core1
+**                          MIMXRT735SGAWBR_ezhv
+**                          MIMXRT735SGAWBR_hifi1
+**                          MIMXRT735SGFOB_cm33_core0
+**                          MIMXRT735SGFOB_cm33_core1
+**                          MIMXRT735SGFOB_ezhv
+**                          MIMXRT735SGFOB_hifi1
+**                          MIMXRT758SGAWBR_cm33_core0
+**                          MIMXRT758SGAWBR_cm33_core1
+**                          MIMXRT758SGAWBR_ezhv
+**                          MIMXRT758SGAWBR_hifi1
+**                          MIMXRT758SGFOB_cm33_core0
+**                          MIMXRT758SGFOB_cm33_core1
+**                          MIMXRT758SGFOB_ezhv
+**                          MIMXRT758SGFOB_hifi1
+**                          MIMXRT798SGAWBR_cm33_core0
+**                          MIMXRT798SGAWBR_cm33_core1
+**                          MIMXRT798SGAWBR_ezhv
+**                          MIMXRT798SGAWBR_hifi1
+**                          MIMXRT798SGAWBR_hifi4
+**                          MIMXRT798SGFOB_cm33_core0
+**                          MIMXRT798SGFOB_cm33_core1
+**                          MIMXRT798SGFOB_ezhv
+**                          MIMXRT798SGFOB_hifi1
+**                          MIMXRT798SGFOB_hifi4
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250526
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CLKCTL3
@@ -48,14 +48,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CLKCTL3.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief CMSIS Peripheral Access Layer for CLKCTL3
  *
  * CMSIS Peripheral Access Layer for CLKCTL3
@@ -64,31 +66,31 @@
 #if !defined(PERI_CLKCTL3_H_)
 #define PERI_CLKCTL3_H_                          /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
+#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
 #include "MIMXRT735S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWAR_cm33_core1) || defined(CPU_MIMXRT735SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
 #include "MIMXRT735S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWAR_ezhv) || defined(CPU_MIMXRT735SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
 #include "MIMXRT735S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWAR_hifi1) || defined(CPU_MIMXRT735SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
 #include "MIMXRT735S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core0) || defined(CPU_MIMXRT758SGFOA_cm33_core0))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
 #include "MIMXRT758S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core1) || defined(CPU_MIMXRT758SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
 #include "MIMXRT758S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_ezhv) || defined(CPU_MIMXRT758SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
 #include "MIMXRT758S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWAR_hifi1) || defined(CPU_MIMXRT758SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
 #include "MIMXRT758S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_cm33_core0) || defined(CPU_MIMXRT798SGFOA_cm33_core0))
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
 #include "MIMXRT798S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_cm33_core1) || defined(CPU_MIMXRT798SGFOA_cm33_core1))
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
 #include "MIMXRT798S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_ezhv) || defined(CPU_MIMXRT798SGFOA_ezhv))
+#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
 #include "MIMXRT798S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_hifi1) || defined(CPU_MIMXRT798SGFOA_hifi1))
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
 #include "MIMXRT798S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWAR_hifi4) || defined(CPU_MIMXRT798SGFOA_hifi4))
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
 #include "MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"
@@ -170,8 +172,7 @@ typedef struct {
   __IO uint32_t SARADCFCLKDIV;                     /**< ADC0 (SARADC) Functional Clock Divider, offset: 0x624 */
        uint8_t RESERVED_14[296];
   __IO uint32_t WAKE32KCLKSEL;                     /**< Wake 32 kHZ Clock Source Select, offset: 0x750 */
-  __IO uint32_t WAKE32KCLKDIV;                     /**< Wake 32kHZ Clock Divider, offset: 0x754 */
-       uint8_t RESERVED_15[40];
+       uint8_t RESERVED_15[44];
   __IO uint32_t MICFILFCLKSEL;                     /**< MICFIL Functional Clock Source Select, offset: 0x780 */
   __IO uint32_t MICFILFCLKDIV;                     /**< MICFIL Functional Clock Divider, offset: 0x784 */
   __IO uint32_t LPI2C15FCLKSEL;                    /**< LPI2C15 Functional Clock Source Select, offset: 0x788 */
@@ -662,6 +663,16 @@ typedef struct {
  *  0b11..1m_lposc
  */
 #define CLKCTL3_SENSEBASECLKSEL_SEL(x)           (((uint32_t)(((uint32_t)(x)) << CLKCTL3_SENSEBASECLKSEL_SEL_SHIFT)) & CLKCTL3_SENSEBASECLKSEL_SEL_MASK)
+
+#define CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL_MASK (0xCU)
+#define CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL_SHIFT (2U)
+/*! AUDIOCLKSEL - VDD1_SENSE Audio Clock Source Select
+ *  0b00..mclk_in
+ *  0b01..osc_clk
+ *  0b10..fro2_div8
+ *  0b11..audio_pll_pfd3
+ */
+#define CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL(x)   (((uint32_t)(((uint32_t)(x)) << CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL_SHIFT)) & CLKCTL3_SENSEBASECLKSEL_AUDIOCLKSEL_MASK)
 /*! @} */
 
 /*! @name FRO2CLKSTATUS - FRO_TUNER2 Clock Status */
@@ -1015,47 +1026,6 @@ typedef struct {
  *  0b11..Tied to logic 0. This may be selected to reduce power when no output is needed.
  */
 #define CLKCTL3_WAKE32KCLKSEL_SEL(x)             (((uint32_t)(((uint32_t)(x)) << CLKCTL3_WAKE32KCLKSEL_SEL_SHIFT)) & CLKCTL3_WAKE32KCLKSEL_SEL_MASK)
-/*! @} */
-
-/*! @name WAKE32KCLKDIV - Wake 32kHZ Clock Divider */
-/*! @{ */
-
-#define CLKCTL3_WAKE32KCLKDIV_DIV_MASK           (0xFFU)
-#define CLKCTL3_WAKE32KCLKDIV_DIV_SHIFT          (0U)
-/*! DIV - Clock Divider Value Select */
-#define CLKCTL3_WAKE32KCLKDIV_DIV(x)             (((uint32_t)(((uint32_t)(x)) << CLKCTL3_WAKE32KCLKDIV_DIV_SHIFT)) & CLKCTL3_WAKE32KCLKDIV_DIV_MASK)
-
-#define CLKCTL3_WAKE32KCLKDIV_BUSY_MASK          (0x10000000U)
-#define CLKCTL3_WAKE32KCLKDIV_BUSY_SHIFT         (28U)
-/*! BUSY - Busy Flag
- *  0b0..The CLKOUT is outputted with the new divider value.
- *  0b1..A change is being made to the divider value.
- */
-#define CLKCTL3_WAKE32KCLKDIV_BUSY(x)            (((uint32_t)(((uint32_t)(x)) << CLKCTL3_WAKE32KCLKDIV_BUSY_SHIFT)) & CLKCTL3_WAKE32KCLKDIV_BUSY_MASK)
-
-#define CLKCTL3_WAKE32KCLKDIV_RESET_MASK         (0x20000000U)
-#define CLKCTL3_WAKE32KCLKDIV_RESET_SHIFT        (29U)
-/*! RESET - Divider Counter Reset
- *  0b0..No effect
- *  0b1..Resets the divider counter.
- */
-#define CLKCTL3_WAKE32KCLKDIV_RESET(x)           (((uint32_t)(((uint32_t)(x)) << CLKCTL3_WAKE32KCLKDIV_RESET_SHIFT)) & CLKCTL3_WAKE32KCLKDIV_RESET_MASK)
-
-#define CLKCTL3_WAKE32KCLKDIV_HALT_MASK          (0x40000000U)
-#define CLKCTL3_WAKE32KCLKDIV_HALT_SHIFT         (30U)
-/*! HALT - Divider Counter Halt
- *  0b0..No effect
- *  0b1..Halts (stops) the divider counter.
- */
-#define CLKCTL3_WAKE32KCLKDIV_HALT(x)            (((uint32_t)(((uint32_t)(x)) << CLKCTL3_WAKE32KCLKDIV_HALT_SHIFT)) & CLKCTL3_WAKE32KCLKDIV_HALT_MASK)
-
-#define CLKCTL3_WAKE32KCLKDIV_REQFLAG_MASK       (0x80000000U)
-#define CLKCTL3_WAKE32KCLKDIV_REQFLAG_SHIFT      (31U)
-/*! REQFLAG - Request Flag
- *  0b0..The change to the divider value has been finished.
- *  0b1..A change is being made to the divider value.
- */
-#define CLKCTL3_WAKE32KCLKDIV_REQFLAG(x)         (((uint32_t)(((uint32_t)(x)) << CLKCTL3_WAKE32KCLKDIV_REQFLAG_SHIFT)) & CLKCTL3_WAKE32KCLKDIV_REQFLAG_MASK)
 /*! @} */
 
 /*! @name MICFILFCLKSEL - MICFIL Functional Clock Source Select */

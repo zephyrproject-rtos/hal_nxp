@@ -17,7 +17,7 @@
 **
 **     Reference manual:    IMXRT1064RM Rev.2, 7/2021 | IMXRT106XSRM Rev.0
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250701
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1064
@@ -634,9 +634,9 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 /* FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                 { {0x60000000u}, {0u}, {0x70000000u} }
+#define FlexSPI_AMBA_BASE_ARRAY                  { {0x60000000u}, {0u}, {0x70000000u} }
 /* FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                  { {0x6FFFFFFFu}, {0u}, {0x7EFFFFFFu} }
+#define FlexSPI_AMBA_END_ARRAY                   { {0x6FFFFFFFu}, {0u}, {0x7EFFFFFFu} }
 /* FlexSPI AMBA address. */
 #define FlexSPI_AMBA_BASE                        (0x60000000u)
 /* FlexSPI ASFM address. */
@@ -647,7 +647,7 @@ typedef enum IRQn {
 #define FlexSPI_ATDF_BASE                        (0x7F800000u)
 /* FlexSPI2 AMBA address. */
 #define FlexSPI2_AMBA_BASE                       (0x70000000u)
-/* FlexSPI ASFM address. */
+/* FlexSPI2 ASFM address. */
 #define FlexSPI2_ASFM_BASE                       (0x70000000u)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
 #define FlexSPI2_ARDF_BASE                       (0x7F400000u)
@@ -1009,6 +1009,10 @@ typedef enum IRQn {
 #define RTWDOG_BASE_PTRS                         { RTWDOG }
 /** Interrupt vectors for the RTWDOG peripheral type */
 #define RTWDOG_IRQS                              { RTWDOG_IRQn }
+/* Extra definition */
+#define RTWDOG_UPDATE_KEY                        (0xD928C520U)
+#define RTWDOG_REFRESH_KEY                       (0xB480A602U)
+
 
 /* SEMC - Peripheral instance base addresses */
 /** Peripheral SEMC base address */

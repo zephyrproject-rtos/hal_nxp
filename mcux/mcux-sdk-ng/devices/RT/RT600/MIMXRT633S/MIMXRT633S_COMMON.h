@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250619
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT633S
@@ -822,24 +822,24 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                  { {0x18000000u} }
-/** FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                   { {0x1FFFFFFFu} }
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x08000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY_NS                { {0x0FFFFFFFu} }
-/* FlexSPI AMBA address. */
-#define FlexSPI_AMBA_BASE                        (0x18000000u)
-#define FlexSPI_AMBA_BASE_NS                      (0x08000000u)
+  /** FlexSPI AMBA base address array. */
+  #define FlexSPI_AMBA_BASE_ARRAY                   { {0x18000000u} }
+  /** FlexSPI AMBA end address array. */
+  #define FlexSPI_AMBA_END_ARRAY                    { {0x1FFFFFFFu} }
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY_NS                { {0x08000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY_NS                 { {0x0FFFFFFFu} }
+  /* FlexSPI AMBA address. */
+  #define FlexSPI_AMBA_BASE                         (0x18000000u)
+  #define FlexSPI_AMBA_BASE_NS                      (0x08000000u)
 #else
-/** FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                  { {0x08000000u} }
-/** FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                   { {0x0FFFFFFFu} }
-/* FlexSPI AMBA address. */
-#define FlexSPI_AMBA_BASE                        (0x08000000u)
+  /** FlexSPI AMBA base address array. */
+  #define FlexSPI_AMBA_BASE_ARRAY                   { {0x08000000u} }
+  /** FlexSPI AMBA end address array. */
+  #define FlexSPI_AMBA_END_ARRAY                    { {0x0FFFFFFFu} }
+  /* FlexSPI AMBA address. */
+  #define FlexSPI_AMBA_BASE                         (0x08000000u)
 #endif
 
 
