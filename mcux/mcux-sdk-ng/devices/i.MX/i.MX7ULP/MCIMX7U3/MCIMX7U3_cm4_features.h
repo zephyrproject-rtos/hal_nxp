@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 7.0, 2018-11-05
-**     Build:               b250512
+**     Build:               b250723
 **
 **     Abstract:
 **         Chip specific module features.
@@ -235,8 +235,6 @@
 #define FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT (1)
 /* @brief Has C2 RRE Bit */
 #define FSL_FEATURE_ACMP_HAS_C2_RRE_BIT (0)
-/* @brief Has C3 RDIVE Bit */
-#define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (1)
 /* @brief Has C0 HYSTCTR Bit */
 #define FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT (1)
 /* @brief If support round-robin mode */
@@ -249,6 +247,8 @@
 #define FSL_FEATURE_ACMP_HAS_NO_FILTER_MODE (0)
 /* @brief Has No C0 SE Bit */
 #define FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT (0)
+/* @brief Has C3 RDIVE Bit */
+#define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (1)
 
 /* CRC module features */
 
@@ -307,8 +307,6 @@
 
 /* FLEXIO module features */
 
-/* @brief Has DOZEN bit(CTRL[DOZEN]) */
-#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
@@ -337,6 +335,8 @@
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (2)
 /* @brief Has pin input output related registers */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (0)
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
 /* GPIO module features */
 
@@ -353,8 +353,6 @@
 
 /* SAI module features */
 
-/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
-#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
 #define FSL_FEATURE_SAI_FIFO_COUNTn(x) (16)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
@@ -385,14 +383,18 @@
 #define FSL_FEATURE_SAI_HAS_MDR (0)
 /* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
 #define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (0)
-/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]). */
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Support synchronous with another SAI. */
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 /* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
+/* @brief SAI5 and SAI6 share one irq number. */
+#define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (0)
 
 /* LLWU module features */
 
@@ -726,16 +728,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) \
-    (((x) == LPUART0) ? (4) : \
-    (((x) == LPUART1) ? (4) : \
-    (((x) == LPUART2) ? (8) : \
-    (((x) == LPUART3) ? (8) : \
-    (((x) == LPUART4) ? (8) : \
-    (((x) == LPUART5) ? (8) : \
-    (((x) == LPUART6) ? (8) : \
-    (((x) == LPUART7) ? (8) : (-1)))))))))
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -778,6 +770,18 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) \
+    (((x) == LPUART0) ? (4) : \
+    (((x) == LPUART1) ? (4) : \
+    (((x) == LPUART2) ? (8) : \
+    (((x) == LPUART3) ? (8) : \
+    (((x) == LPUART4) ? (8) : \
+    (((x) == LPUART5) ? (8) : \
+    (((x) == LPUART6) ? (8) : \
+    (((x) == LPUART7) ? (8) : (-1)))))))))
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* LTC module features */
 
@@ -1449,15 +1453,7 @@
 /* @brief Has TPM_TRIG. */
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
-#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) \
-    (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (0) : \
-    (((x) == TPM2) ? (0) : \
-    (((x) == TPM3) ? (1) : \
-    (((x) == TPM4) ? (1) : \
-    (((x) == TPM5) ? (0) : \
-    (((x) == TPM6) ? (0) : \
-    (((x) == TPM7) ? (1) : (-1)))))))))
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (1)
 /* @brief Has global time base enable. */
 #define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
 /* @brief Has global time base sync. */
@@ -1473,15 +1469,7 @@
 /* @brief Has TPM_POL. */
 #define FSL_FEATURE_TPM_HAS_POL (1)
 /* @brief Whether POL register has effect. */
-#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) \
-    (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (0) : \
-    (((x) == TPM2) ? (0) : \
-    (((x) == TPM3) ? (1) : \
-    (((x) == TPM4) ? (1) : \
-    (((x) == TPM5) ? (0) : \
-    (((x) == TPM6) ? (0) : \
-    (((x) == TPM7) ? (1) : (-1)))))))))
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -1522,6 +1510,33 @@
 #define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (1)
 /* @brief USBPHY is 28FDSOI */
 #define FSL_FEATURE_USBPHY_28FDSOI (0)
+
+/* USDHC module features */
+
+/* @brief Has external DMA support (VEND_SPEC[EXT_DMA_EN]) */
+#define FSL_FEATURE_USDHC_HAS_EXT_DMA (0)
+/* @brief Has HS400 mode (MIX_CTRL[HS400_MODE]) */
+#define FSL_FEATURE_USDHC_HAS_HS400_MODE (1)
+/* @brief Has SDR50 support (HOST_CTRL_CAP[SDR50_SUPPORT]) */
+#define FSL_FEATURE_USDHC_HAS_SDR50_MODE (1)
+/* @brief Has SDR104 support (HOST_CTRL_CAP[SDR104_SUPPORT]) */
+#define FSL_FEATURE_USDHC_HAS_SDR104_MODE (1)
+/* @brief USDHC has reset control */
+#define FSL_FEATURE_USDHC_HAS_RESET (0)
+/* @brief USDHC has no bitfield WTMK_LVL[WR_BRST_LEN] and WTMK_LVL[RD_BRST_LEN] */
+#define FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN (0)
+/* @brief If USDHC instance support 8 bit width */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_8_BIT_WIDTHn(x) (1)
+/* @brief If USDHC instance support HS400 mode */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_HS400_MODEn(x) (0)
+/* @brief If USDHC instance support 1v8 signal */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
+/* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
+#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (0)
+/* @brief Has no VSELECT bit in VEND_SPEC register */
+#define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (0)
+/* @brief Has no VS18 bit in HOST_CTRL_CAP register */
+#define FSL_FEATURE_USDHC_HAS_NO_VS18 (0)
 
 /* WDOG module features */
 

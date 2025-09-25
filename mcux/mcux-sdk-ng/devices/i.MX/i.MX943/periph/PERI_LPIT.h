@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPIT
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file LPIT.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_LPIT.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for LPIT
  *
  * CMSIS Peripheral Access Layer for LPIT
  */
 
-#if !defined(LPIT_H_)
-#define LPIT_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_LPIT_H_)
+#define PERI_LPIT_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -330,40 +333,40 @@ typedef struct {
 #define LPIT_MSR_TIF0_MASK                       (0x1U)
 #define LPIT_MSR_TIF0_SHIFT                      (0U)
 /*! TIF0 - Channel 0 Timer Interrupt Flag
- *  0b0..Not timed out
  *  0b0..No effect
- *  0b1..Timed out
+ *  0b0..Not timed out
  *  0b1..Clear the flag
+ *  0b1..Timed out
  */
 #define LPIT_MSR_TIF0(x)                         (((uint32_t)(((uint32_t)(x)) << LPIT_MSR_TIF0_SHIFT)) & LPIT_MSR_TIF0_MASK)
 
 #define LPIT_MSR_TIF1_MASK                       (0x2U)
 #define LPIT_MSR_TIF1_SHIFT                      (1U)
 /*! TIF1 - Channel 1 Timer Interrupt Flag
- *  0b0..Not timed out
  *  0b0..No effect
- *  0b1..Timed out
+ *  0b0..Not timed out
  *  0b1..Clear the flag
+ *  0b1..Timed out
  */
 #define LPIT_MSR_TIF1(x)                         (((uint32_t)(((uint32_t)(x)) << LPIT_MSR_TIF1_SHIFT)) & LPIT_MSR_TIF1_MASK)
 
 #define LPIT_MSR_TIF2_MASK                       (0x4U)
 #define LPIT_MSR_TIF2_SHIFT                      (2U)
 /*! TIF2 - Channel 2 Timer Interrupt Flag
- *  0b0..Not timed out
  *  0b0..No effect
- *  0b1..Timed out
+ *  0b0..Not timed out
  *  0b1..Clear the flag
+ *  0b1..Timed out
  */
 #define LPIT_MSR_TIF2(x)                         (((uint32_t)(((uint32_t)(x)) << LPIT_MSR_TIF2_SHIFT)) & LPIT_MSR_TIF2_MASK)
 
 #define LPIT_MSR_TIF3_MASK                       (0x8U)
 #define LPIT_MSR_TIF3_SHIFT                      (3U)
 /*! TIF3 - Channel 3 Timer Interrupt Flag
- *  0b0..Not timed out
  *  0b0..No effect
- *  0b1..Timed out
+ *  0b0..Not timed out
  *  0b1..Clear the flag
+ *  0b1..Timed out
  */
 #define LPIT_MSR_TIF3(x)                         (((uint32_t)(((uint32_t)(x)) << LPIT_MSR_TIF3_SHIFT)) & LPIT_MSR_TIF3_MASK)
 /*! @} */
@@ -610,5 +613,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* LPIT_H_ */
+#endif  /* PERI_LPIT_H_ */
 

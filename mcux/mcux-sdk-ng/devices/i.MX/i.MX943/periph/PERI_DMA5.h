@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA5
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file DMA5.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_DMA5.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for DMA5
  *
  * CMSIS Peripheral Access Layer for DMA5
  */
 
-#if !defined(DMA5_H_)
-#define DMA5_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_DMA5_H_)
+#define PERI_DMA5_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -681,10 +684,10 @@ typedef struct {
 #define DMA5_CH_CSR_DONE_MASK                    (0x40000000U)
 #define DMA5_CH_CSR_DONE_SHIFT                   (30U)
 /*! DONE - Channel Done Flag
- *  0b0..Not done
  *  0b0..No effect
- *  0b1..Done
+ *  0b0..Not done
  *  0b1..Clear the flag
+ *  0b1..Done
  */
 #define DMA5_CH_CSR_DONE(x)                      (((uint32_t)(((uint32_t)(x)) << DMA5_CH_CSR_DONE_SHIFT)) & DMA5_CH_CSR_DONE_MASK)
 
@@ -783,10 +786,10 @@ typedef struct {
 #define DMA5_CH_ES_ERR_MASK                      (0x80000000U)
 #define DMA5_CH_ES_ERR_SHIFT                     (31U)
 /*! ERR - Error in Channel Flag
- *  0b0..Not occurred
  *  0b0..No effect
- *  0b1..Occurred
+ *  0b0..Not occurred
  *  0b1..Clear the flag
+ *  0b1..Occurred
  */
 #define DMA5_CH_ES_ERR(x)                        (((uint32_t)(((uint32_t)(x)) << DMA5_CH_ES_ERR_SHIFT)) & DMA5_CH_ES_ERR_MASK)
 /*! @} */
@@ -1379,5 +1382,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* DMA5_H_ */
+#endif  /* PERI_DMA5_H_ */
 

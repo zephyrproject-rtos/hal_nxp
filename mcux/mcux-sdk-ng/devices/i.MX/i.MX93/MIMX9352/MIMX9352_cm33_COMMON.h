@@ -11,7 +11,7 @@
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250818
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9352_cm33
@@ -906,6 +906,9 @@ typedef enum IRQn {
 #define ENET_Error_IRQS                          { ENET_IRQn }
 #define ENET_1588_Timer_IRQS                     { ENET_IRQn }
 #define ENET_Ts_IRQS                             { ENET_IRQn }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* ENET_QOS - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1015,37 +1018,37 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /* FlexSPI AMBA base address array. */
-  #define FlexSPI_AMBA_BASE_ARRAY                 { {0x38000000u} }
-  #define FlexSPI_AMBA_BASE_ARRAY_NS              { {0x28000000u} }
-  /* FlexSPI AMBA end address array. */
-  #define FlexSPI_AMBA_END_ARRAY                  { {0x3FFFFFFFu} }
-  #define FlexSPI_AMBA_END_ARRAY_NS               { {0x2FFFFFFFu} }
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x38000000u} }
+  #define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x28000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x3FFFFFFFu} }
+  #define FlexSPI_AMBA_END_ARRAY_NS                { {0x2FFFFFFFu} }
   /* FlexSPI AMBA address. */
-  #define FlexSPI_AMBA_BASE                       (0x38000000u)
-  #define FlexSPI_AMBA_BASE_NS                    (0x28000000u)
+  #define FlexSPI_AMBA_BASE                        (0x38000000u)
+  #define FlexSPI_AMBA_BASE_NS                     (0x28000000u)
   /* FlexSPI ASFM address. */
-  #define FlexSPI_ASFM_BASE                       (0x38000000u)
-  #define FlexSPI_ASFM_BASE_NS                    (0x28000000u)
+  #define FlexSPI_ASFM_BASE                        (0x38000000u)
+  #define FlexSPI_ASFM_BASE_NS                     (0x28000000u)
   /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI_ARDF_BASE                       (0x57420000u)
-  #define FlexSPI_ARDF_BASE_NS                    (0x47420000u)
+  #define FlexSPI_ARDF_BASE                        (0x57420000u)
+  #define FlexSPI_ARDF_BASE_NS                     (0x47420000u)
   /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI_ATDF_BASE                       (0x57430000u)
-  #define FlexSPI_ATDF_BASE_NS                    (0x47430000u)
+  #define FlexSPI_ATDF_BASE                        (0x57430000u)
+  #define FlexSPI_ATDF_BASE_NS                     (0x47430000u)
 #else
-  /* FlexSPI AMBA base address array. */
-  #define FlexSPI_AMBA_BASE_ARRAY                 { {0x28000000u} }
-  /* FlexSPI AMBA end address array. */
-  #define FlexSPI_AMBA_END_ARRAY                  { {0x2FFFFFFFu} }
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x28000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x2FFFFFFFu} }
   /* FlexSPI AMBA address. */
-  #define FlexSPI_AMBA_BASE                       (0x28000000u)
+  #define FlexSPI_AMBA_BASE                        (0x28000000u)
   /* FlexSPI ASFM address. */
-  #define FlexSPI_ASFM_BASE                       (0x28000000u)
+  #define FlexSPI_ASFM_BASE                        (0x28000000u)
   /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI_ARDF_BASE                       (0x47420000u)
+  #define FlexSPI_ARDF_BASE                        (0x47420000u)
   /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI_ATDF_BASE                       (0x47430000u)
+  #define FlexSPI_ATDF_BASE                        (0x47430000u)
 #endif
 
 
@@ -3362,13 +3365,13 @@ typedef enum IRQn {
   /** Peripheral USDHC3 base pointer */
   #define USDHC3_NS                                ((USDHC_Type *)USDHC3_BASE_NS)
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS                         { USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
+  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS                          { USDHC1, USDHC2, USDHC3 }
+  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1, USDHC2, USDHC3 }
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS_NS                      { USDHC1_BASE_NS, USDHC2_BASE_NS, USDHC3_BASE_NS }
+  #define USDHC_BASE_ADDRS_NS                      { 0u, USDHC1_BASE_NS, USDHC2_BASE_NS, USDHC3_BASE_NS }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS_NS                       { USDHC1_NS, USDHC2_NS, USDHC3_NS }
+  #define USDHC_BASE_PTRS_NS                       { (USDHC_Type *)0u, USDHC1_NS, USDHC2_NS, USDHC3_NS }
 #else
   /** Peripheral USDHC1 base address */
   #define USDHC1_BASE                              (0x42850000u)
@@ -3383,12 +3386,12 @@ typedef enum IRQn {
   /** Peripheral USDHC3 base pointer */
   #define USDHC3                                   ((USDHC_Type *)USDHC3_BASE)
   /** Array initializer of USDHC peripheral base addresses */
-  #define USDHC_BASE_ADDRS                         { USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
+  #define USDHC_BASE_ADDRS                         { 0u, USDHC1_BASE, USDHC2_BASE, USDHC3_BASE }
   /** Array initializer of USDHC peripheral base pointers */
-  #define USDHC_BASE_PTRS                          { USDHC1, USDHC2, USDHC3 }
+  #define USDHC_BASE_PTRS                          { (USDHC_Type *)0u, USDHC1, USDHC2, USDHC3 }
 #endif
 /** Interrupt vectors for the USDHC peripheral type */
-#define USDHC_IRQS                               { uSDHC1_IRQn, uSDHC2_IRQn, NotAvail_IRQn }
+#define USDHC_IRQS                               { NotAvail_IRQn, uSDHC1_IRQn, uSDHC2_IRQn, uSDHC3_IRQn }
 
 /* WAKEUP_AHBRM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -134,6 +134,19 @@ extern "C" {
 #define SYSTEM_PLATFORM_RTC_NOTIFY 0
 #endif
 
+#ifndef SCMI_LMM_POWER_CHANGE_PROCESSED
+#define SCMI_LMM_POWER_CHANGE_PROCESSED (0)
+#endif
+
+/* SCMI lmm protocol cpu id */
+#define SYSTEM_LMID_SM                  (0U)
+#define SYSTEM_LMID_M33S                (1U)
+#define SYSTEM_LMID_M70                 (2U)
+#define SYSTEM_LMID_M71                 (3U)
+#define SYSTEM_LMID_A55                 (4U)
+
+#define SCMI_MU_IRQ_PRIORITY   (3U)
+
 /**
  * @brief System clock frequency (core clock)
  *
