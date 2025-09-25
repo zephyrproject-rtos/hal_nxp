@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-05-16
-**     Build:               b250512
+**     Build:               b250801
 **
 **     Abstract:
 **         Chip specific module features.
@@ -404,6 +404,8 @@
 #define FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE (16)
 /* @brief Number of outputs */
 #define FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS (10)
+/* @brief Writing a zero asserts the SCT reset. */
+#define FSL_FEATURE_SCT_WRITE_ZERO_ASSERT_RESET (0)
 
 /* SDIF module features */
 
@@ -496,12 +498,20 @@
 /* @brief Number of the endpoint in USB HS */
 #define FSL_FEATURE_USBPHY_EP_NUM (6)
 
+/* UTICK module features */
+
+/* No feature definitions */
+
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
-#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 /* @brief WWDT does not support oscillator lock. */
 #define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (1)
+/* @brief soc has reset. */
+#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
+/* @brief Has LPOSC as clock source. */
+#define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (0)
+/* @brief WWDT WDTOF is not set in case of WD reset - get info from PMC instead. */
+#define FSL_FEATURE_WWDT_WDTRESET_FROM_PMC (0)
 
 #endif /* _LPC55S69_cm33_core0_FEATURES_H_ */
 

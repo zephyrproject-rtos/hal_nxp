@@ -145,9 +145,9 @@ typedef enum _SYSCON_RSTn
     {                       \
         kMRT_RST_SHIFT_RSTn \
     } /* Reset bits for MRT peripheral */
-#define PINT_RSTS            \
-    {                        \
-        kPINT_RST_SHIFT_RSTn \
+#define PINT_RSTS                                        \
+    {                                                    \
+        kPINT_RST_SHIFT_RSTn, kGPIOSECINT_RST_SHIFT_RSTn \
     } /* Reset bits for PINT peripheral */
 #define CDOG_RSTS            \
     {                        \

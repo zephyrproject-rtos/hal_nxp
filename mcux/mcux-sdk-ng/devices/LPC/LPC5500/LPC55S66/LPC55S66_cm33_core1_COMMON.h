@@ -11,7 +11,7 @@
 **
 **     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250529
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S66_cm33_core1
