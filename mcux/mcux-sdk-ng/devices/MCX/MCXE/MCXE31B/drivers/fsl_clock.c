@@ -234,6 +234,7 @@ void CLOCK_ProgressiveClockFrequencySwitch(clock_attach_id_t connection, clock_p
     MC_CGM->PCFS_SDUR  = MC_CGM_PCFS_SDUR_SDUR(sdur);
     MC_CGM->PCFS_DIVC8 = MC_CGM_PCFS_DIVC8_RATE(divcRate) | MC_CGM_PCFS_DIVC8_INIT(divcInit);
     MC_CGM->PCFS_DIVE8 = MC_CGM_PCFS_DIVE8_DIVE(divEndValue);
+    assert(divStartValue <= MC_CGM_PCFS_DIVS8_DIVS_MASK);
     MC_CGM->PCFS_DIVS8 = MC_CGM_PCFS_DIVS8_DIVS((uint32_t)divStartValue);
 
     while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_SWIP_MASK) != 0)

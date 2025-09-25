@@ -32,7 +32,7 @@ void CAN2_Error_DriverIRQHandler(void);
 void CAN2_ORed_0_15_MB_DriverIRQHandler(void);
 void CAN2_ORed_16_31_MB_DriverIRQHandler(void);
 extern void FLEXCAN_DriverEventIRQHandler(uint32_t instance);
-extern void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t startMbIdx, uint32_t endMbIdx, uint32_t type);
+extern void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t startMbIdx, uint32_t endMbIdx);
 
 /*******************************************************************************
  * Code
@@ -75,7 +75,7 @@ void CAN0_Wake_Up_DriverIRQHandler(void)
 void CAN0_ORed_0_15_MB_DriverIRQHandler(void)
 {
     /* Instance 0, MB 0-15 */
-    FLEXCAN_DriverDataIRQHandler(0U, 0U, 15U, 0U);
+    FLEXCAN_DriverDataIRQHandler(0U, 0U, 15U);
 }
 
 /*!
@@ -85,7 +85,7 @@ void CAN0_ORed_0_15_MB_DriverIRQHandler(void)
 void CAN0_ORed_16_31_MB_DriverIRQHandler(void)
 {
     /* Instance 0, MB 16-31 */
-    FLEXCAN_DriverDataIRQHandler(0U, 16U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(0U, 16U, 31U);
 }
 
 /*!
@@ -115,7 +115,7 @@ void CAN1_Error_DriverIRQHandler(void)
 void CAN1_ORed_0_15_MB_DriverIRQHandler(void)
 {
     /* Instance 1, MB 0-15 */
-    FLEXCAN_DriverDataIRQHandler(1U, 0U, 15U, 0U);
+    FLEXCAN_DriverDataIRQHandler(1U, 0U, 15U);
 }
 
 /*!
@@ -125,7 +125,7 @@ void CAN1_ORed_0_15_MB_DriverIRQHandler(void)
 void CAN1_ORed_16_31_MB_DriverIRQHandler(void)
 {
     /* Instance 1, MB 16-31 */
-    FLEXCAN_DriverDataIRQHandler(1U, 16U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(1U, 16U, 31U);
 }
 
 /*!
@@ -155,7 +155,7 @@ void CAN2_Error_DriverIRQHandler(void)
 void CAN2_ORed_0_15_MB_DriverIRQHandler(void)
 {
     /* Instance 2, MB 0-15 */
-    FLEXCAN_DriverDataIRQHandler(2U, 0U, 15U, 0U);
+    FLEXCAN_DriverDataIRQHandler(2U, 0U, 15U);
 }
 
 /*!
@@ -165,5 +165,5 @@ void CAN2_ORed_0_15_MB_DriverIRQHandler(void)
 void CAN2_ORed_16_31_MB_DriverIRQHandler(void)
 {
     /* Instance 2*, MB 16-31 */
-    FLEXCAN_DriverDataIRQHandler(2U, 16U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(2U, 16U, 31U);
 }

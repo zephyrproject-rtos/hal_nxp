@@ -13,7 +13,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250520
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA345
@@ -97,7 +97,7 @@ typedef enum IRQn {
   MBC0_IRQn                    = 14,               /**< MBC secure violation interrupt */
   SCG0_IRQn                    = 15,               /**< System Clock Generator interrupt */
   SPC0_IRQn                    = 16,               /**< System Power Controller interrupt */
-  Reserved33_IRQn              = 17,               /**< Reserved interrupt */
+  TDET_IRQn                    = 17,               /**< TDET interrrupt */
   WUU0_IRQn                    = 18,               /**< Wake Up Unit interrupt */
   CAN0_IRQn                    = 19,               /**< Controller Area Network 0 interrupt */
   Reserved36_IRQn              = 20,               /**< Reserved interrupt */
@@ -161,7 +161,7 @@ typedef enum IRQn {
   LPUART5_IRQn                 = 95,               /**< Low-Power Universal Asynchronous Receive/Transmit interrupt */
   MAU_IRQn                     = 107,              /**< MAU interrupt */
   SMARTDMA_IRQn                = 108,              /**< SmartDMA interrupt */
-  Reserved125_IRQn             = 109,              /**< Reserved interrupt */
+  CDOG1_IRQn                   = 109,              /**< Code Watchdog Timer 1 interrupt */
   Reserved126_IRQn             = 110,              /**< Reserved interrupt */
   Reserved127_IRQn             = 111,              /**< Reserved interrupt */
   Reserved129_IRQn             = 113,              /**< Reserved interrupt */
@@ -268,12 +268,16 @@ typedef enum IRQn {
 #define CDOG0_BASE                               (0x40100000u)
 /** Peripheral CDOG0 base pointer */
 #define CDOG0                                    ((CDOG_Type *)CDOG0_BASE)
+/** Peripheral CDOG1 base address */
+#define CDOG1_BASE                               (0x40107000u)
+/** Peripheral CDOG1 base pointer */
+#define CDOG1                                    ((CDOG_Type *)CDOG1_BASE)
 /** Array initializer of CDOG peripheral base addresses */
-#define CDOG_BASE_ADDRS                          { CDOG0_BASE }
+#define CDOG_BASE_ADDRS                          { CDOG0_BASE, CDOG1_BASE }
 /** Array initializer of CDOG peripheral base pointers */
-#define CDOG_BASE_PTRS                           { CDOG0 }
+#define CDOG_BASE_PTRS                           { CDOG0, CDOG1 }
 /** Interrupt vectors for the CDOG peripheral type */
-#define CDOG_IRQS                                { CDOG0_IRQn }
+#define CDOG_IRQS                                { CDOG0_IRQn, CDOG1_IRQn }
 
 /* CMC - Peripheral instance base addresses */
 /** Peripheral CMC base address */
@@ -332,6 +336,16 @@ typedef enum IRQn {
 #define DEBUGMAILBOX_BASE_ADDRS                  { DBGMAILBOX_BASE }
 /** Array initializer of DEBUGMAILBOX peripheral base pointers */
 #define DEBUGMAILBOX_BASE_PTRS                   { DBGMAILBOX }
+
+/* DIGTMP - Peripheral instance base addresses */
+/** Peripheral TDET0 base address */
+#define TDET0_BASE                               (0x400E9000u)
+/** Peripheral TDET0 base pointer */
+#define TDET0                                    ((DIGTMP_Type *)TDET0_BASE)
+/** Array initializer of DIGTMP peripheral base addresses */
+#define DIGTMP_BASE_ADDRS                        { TDET0_BASE }
+/** Array initializer of DIGTMP peripheral base pointers */
+#define DIGTMP_BASE_PTRS                         { TDET0 }
 
 /* DMA - Peripheral instance base addresses */
 /** Peripheral DMA0 base address */
@@ -412,6 +426,8 @@ typedef enum IRQn {
 #define FREQME_BASE_ADDRS                        { FREQME0_BASE }
 /** Array initializer of FREQME peripheral base pointers */
 #define FREQME_BASE_PTRS                         { FREQME0 }
+/** Interrupt vectors for the FREQME peripheral type */
+#define FREQME_IRQS                              { FREQME0_IRQn }
 
 /* GLIKEY - Peripheral instance base addresses */
 /** Peripheral GLIKEY0 base address */
@@ -748,16 +764,6 @@ typedef enum IRQn {
 #define MBC3_MEMORY_NSE_WORD_COUNT {1,0,0,0}
 #define MBC_MEMORY_NSE_WORD_COUNT {MBC0_MEMORY_NSE_WORD_COUNT , MBC1_MEMORY_NSE_WORD_COUNT, MBC2_MEMORY_NSE_WORD_COUNT, MBC3_MEMORY_NSE_WORD_COUNT}
 
-
-/* UDF - Peripheral instance base addresses */
-/** Peripheral UDF0 base address */
-#define UDF0_BASE                                (0x400ED000u)
-/** Peripheral UDF0 base pointer */
-#define UDF0                                     ((UDF_Type *)UDF0_BASE)
-/** Array initializer of UDF peripheral base addresses */
-#define UDF_BASE_ADDRS                           { UDF0_BASE }
-/** Array initializer of UDF peripheral base pointers */
-#define UDF_BASE_PTRS                            { UDF0 }
 
 /* UTICK - Peripheral instance base addresses */
 /** Peripheral UTICK0 base address */

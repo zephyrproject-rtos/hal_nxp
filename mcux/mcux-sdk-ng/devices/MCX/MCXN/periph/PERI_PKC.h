@@ -1,6 +1,38 @@
 /*
 ** ###################################################################
-**     Processors:          MCXN546VDF_cm33_core0
+**     Processors:          MCXN247VAB
+**                          MCXN247VDF
+**                          MCXN247VKL
+**                          MCXN247VPB
+**                          MCXN526VDF_cm33_core0
+**                          MCXN526VDF_cm33_core1
+**                          MCXN526VKL_cm33_core0
+**                          MCXN526VKL_cm33_core1
+**                          MCXN527VAB_cm33_core0
+**                          MCXN527VAB_cm33_core1
+**                          MCXN527VDF_cm33_core0
+**                          MCXN527VDF_cm33_core1
+**                          MCXN527VKL_cm33_core0
+**                          MCXN527VKL_cm33_core1
+**                          MCXN536VAB_cm33_core0
+**                          MCXN536VAB_cm33_core1
+**                          MCXN536VDF_cm33_core0
+**                          MCXN536VDF_cm33_core1
+**                          MCXN536VKL_cm33_core0
+**                          MCXN536VKL_cm33_core1
+**                          MCXN536VPB_cm33_core0
+**                          MCXN536VPB_cm33_core1
+**                          MCXN537VAB_cm33_core0
+**                          MCXN537VAB_cm33_core1
+**                          MCXN537VDF_cm33_core0
+**                          MCXN537VDF_cm33_core1
+**                          MCXN537VKL_cm33_core0
+**                          MCXN537VKL_cm33_core1
+**                          MCXN537VPB_cm33_core0
+**                          MCXN537VPB_cm33_core1
+**                          MCXN546VAB_cm33_core0
+**                          MCXN546VAB_cm33_core1
+**                          MCXN546VDF_cm33_core0
 **                          MCXN546VDF_cm33_core1
 **                          MCXN546VKL_cm33_core0
 **                          MCXN546VKL_cm33_core1
@@ -8,6 +40,8 @@
 **                          MCXN546VNL_cm33_core1
 **                          MCXN546VPB_cm33_core0
 **                          MCXN546VPB_cm33_core1
+**                          MCXN547VAB_cm33_core0
+**                          MCXN547VAB_cm33_core1
 **                          MCXN547VDF_cm33_core0
 **                          MCXN547VDF_cm33_core1
 **                          MCXN547VKL_cm33_core0
@@ -16,6 +50,10 @@
 **                          MCXN547VNL_cm33_core1
 **                          MCXN547VPB_cm33_core0
 **                          MCXN547VPB_cm33_core1
+**                          MCXN556SCDF_cm33_core0
+**                          MCXN556SCDF_cm33_core1
+**                          MCXN946VAB_cm33_core0
+**                          MCXN946VAB_cm33_core1
 **                          MCXN946VDF_cm33_core0
 **                          MCXN946VDF_cm33_core1
 **                          MCXN946VKL_cm33_core0
@@ -24,6 +62,8 @@
 **                          MCXN946VNL_cm33_core1
 **                          MCXN946VPB_cm33_core0
 **                          MCXN946VPB_cm33_core1
+**                          MCXN947VAB_cm33_core0
+**                          MCXN947VAB_cm33_core1
 **                          MCXN947VDF_cm33_core0
 **                          MCXN947VDF_cm33_core1
 **                          MCXN947VKL_cm33_core0
@@ -34,7 +74,7 @@
 **                          MCXN947VPB_cm33_core1
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250811
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PKC
@@ -70,21 +110,43 @@
 #if !defined(PERI_PKC_H_)
 #define PERI_PKC_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXN546VDF_cm33_core0) || defined(CPU_MCXN546VKL_cm33_core0) || defined(CPU_MCXN546VNL_cm33_core0) || defined(CPU_MCXN546VPB_cm33_core0))
+#if (defined(CPU_MCXN247VAB) || defined(CPU_MCXN247VDF) || defined(CPU_MCXN247VKL) || defined(CPU_MCXN247VPB))
+#include "MCXN247_COMMON.h"
+#elif (defined(CPU_MCXN526VDF_cm33_core0) || defined(CPU_MCXN526VKL_cm33_core0))
+#include "MCXN526_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN526VDF_cm33_core1) || defined(CPU_MCXN526VKL_cm33_core1))
+#include "MCXN526_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN527VAB_cm33_core0) || defined(CPU_MCXN527VDF_cm33_core0) || defined(CPU_MCXN527VKL_cm33_core0))
+#include "MCXN527_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN527VAB_cm33_core1) || defined(CPU_MCXN527VDF_cm33_core1) || defined(CPU_MCXN527VKL_cm33_core1))
+#include "MCXN527_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN536VAB_cm33_core0) || defined(CPU_MCXN536VDF_cm33_core0) || defined(CPU_MCXN536VKL_cm33_core0) || defined(CPU_MCXN536VPB_cm33_core0))
+#include "MCXN536_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN536VAB_cm33_core1) || defined(CPU_MCXN536VDF_cm33_core1) || defined(CPU_MCXN536VKL_cm33_core1) || defined(CPU_MCXN536VPB_cm33_core1))
+#include "MCXN536_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN537VAB_cm33_core0) || defined(CPU_MCXN537VDF_cm33_core0) || defined(CPU_MCXN537VKL_cm33_core0) || defined(CPU_MCXN537VPB_cm33_core0))
+#include "MCXN537_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN537VAB_cm33_core1) || defined(CPU_MCXN537VDF_cm33_core1) || defined(CPU_MCXN537VKL_cm33_core1) || defined(CPU_MCXN537VPB_cm33_core1))
+#include "MCXN537_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN546VAB_cm33_core0) || defined(CPU_MCXN546VDF_cm33_core0) || defined(CPU_MCXN546VKL_cm33_core0) || defined(CPU_MCXN546VNL_cm33_core0) || defined(CPU_MCXN546VPB_cm33_core0))
 #include "MCXN546_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN546VDF_cm33_core1) || defined(CPU_MCXN546VKL_cm33_core1) || defined(CPU_MCXN546VNL_cm33_core1) || defined(CPU_MCXN546VPB_cm33_core1))
+#elif (defined(CPU_MCXN546VAB_cm33_core1) || defined(CPU_MCXN546VDF_cm33_core1) || defined(CPU_MCXN546VKL_cm33_core1) || defined(CPU_MCXN546VNL_cm33_core1) || defined(CPU_MCXN546VPB_cm33_core1))
 #include "MCXN546_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN547VDF_cm33_core0) || defined(CPU_MCXN547VKL_cm33_core0) || defined(CPU_MCXN547VNL_cm33_core0) || defined(CPU_MCXN547VPB_cm33_core0))
+#elif (defined(CPU_MCXN547VAB_cm33_core0) || defined(CPU_MCXN547VDF_cm33_core0) || defined(CPU_MCXN547VKL_cm33_core0) || defined(CPU_MCXN547VNL_cm33_core0) || defined(CPU_MCXN547VPB_cm33_core0))
 #include "MCXN547_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN547VDF_cm33_core1) || defined(CPU_MCXN547VKL_cm33_core1) || defined(CPU_MCXN547VNL_cm33_core1) || defined(CPU_MCXN547VPB_cm33_core1))
+#elif (defined(CPU_MCXN547VAB_cm33_core1) || defined(CPU_MCXN547VDF_cm33_core1) || defined(CPU_MCXN547VKL_cm33_core1) || defined(CPU_MCXN547VNL_cm33_core1) || defined(CPU_MCXN547VPB_cm33_core1))
 #include "MCXN547_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VKL_cm33_core0) || defined(CPU_MCXN946VNL_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0))
+#elif (defined(CPU_MCXN556SCDF_cm33_core0))
+#include "MCXN556S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN556SCDF_cm33_core1))
+#include "MCXN556S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN946VAB_cm33_core0) || defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VKL_cm33_core0) || defined(CPU_MCXN946VNL_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0))
 #include "MCXN946_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN946VDF_cm33_core1) || defined(CPU_MCXN946VKL_cm33_core1) || defined(CPU_MCXN946VNL_cm33_core1) || defined(CPU_MCXN946VPB_cm33_core1))
+#elif (defined(CPU_MCXN946VAB_cm33_core1) || defined(CPU_MCXN946VDF_cm33_core1) || defined(CPU_MCXN946VKL_cm33_core1) || defined(CPU_MCXN946VNL_cm33_core1) || defined(CPU_MCXN946VPB_cm33_core1))
 #include "MCXN946_cm33_core1_COMMON.h"
-#elif (defined(CPU_MCXN947VDF_cm33_core0) || defined(CPU_MCXN947VKL_cm33_core0) || defined(CPU_MCXN947VNL_cm33_core0) || defined(CPU_MCXN947VPB_cm33_core0))
+#elif (defined(CPU_MCXN947VAB_cm33_core0) || defined(CPU_MCXN947VDF_cm33_core0) || defined(CPU_MCXN947VKL_cm33_core0) || defined(CPU_MCXN947VNL_cm33_core0) || defined(CPU_MCXN947VPB_cm33_core0))
 #include "MCXN947_cm33_core0_COMMON.h"
-#elif (defined(CPU_MCXN947VDF_cm33_core1) || defined(CPU_MCXN947VKL_cm33_core1) || defined(CPU_MCXN947VNL_cm33_core1) || defined(CPU_MCXN947VPB_cm33_core1))
+#elif (defined(CPU_MCXN947VAB_cm33_core1) || defined(CPU_MCXN947VDF_cm33_core1) || defined(CPU_MCXN947VKL_cm33_core1) || defined(CPU_MCXN947VNL_cm33_core1) || defined(CPU_MCXN947VPB_cm33_core1))
 #include "MCXN947_cm33_core1_COMMON.h"
 #else
   #error "No valid CPU defined!"

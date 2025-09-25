@@ -11,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXW23x User manual Rev.0.1  1 September 2022
+**     Reference manual:    MCXW23x User manual Rev. 1.0 - 7 April 2025
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250526
+**     Build:               b250819
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW236
@@ -1654,7 +1654,7 @@ typedef enum IRQn {
   #define WWDT_BASE_PTRS                           { WWDT }
 #endif
 /** Interrupt vectors for the WWDT peripheral type */
-#define WWDT_IRQS                                { { WDT_BOD_IRQn, WDT_IRQn } }
+#define WWDT_IRQS                                { { WDT_IRQn, WDT_BOD_IRQn } }
 
 /* ----------------------------------------------------------------------------
    -- Macros for use with bit field definitions (xxx_SHIFT, xxx_MASK).
@@ -1679,14 +1679,14 @@ typedef enum IRQn {
  * @param value Value of the bit field.
  * @return Masked and shifted value.
  */
-#define NXP_VAL2FLD(field, value)    (((value) << (field ## _SHIFT)) & (field ## _MASK))
+#define NXP_VAL2FLD(field, value)    (((value) << (field##_SHIFT)) & (field##_MASK))
 /**
  * @brief Mask and right-shift a register value to extract a bit field value.
  * @param field Name of the register bit field.
  * @param value Value of the register.
  * @return Masked and shifted bit field value.
  */
-#define NXP_FLD2VAL(field, value)    (((value) & (field ## _MASK)) >> (field ## _SHIFT))
+#define NXP_FLD2VAL(field, value)    (((value) & (field##_MASK)) >> (field##_SHIFT))
 
 /*!
  * @}

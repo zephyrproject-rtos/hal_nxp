@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXE24x RM Rev.1
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250424
+**     Build:               b250813
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE246
@@ -350,6 +350,8 @@ typedef enum IRQn {
 #define EWM_BASE_ADDRS                           { EWM_BASE }
 /** Array initializer of EWM peripheral base pointers */
 #define EWM_BASE_PTRS                            { EWM }
+/** Interrupt vectors for the EWM peripheral type */
+#define EWM_IRQS                                 { WDOG_EWM_IRQn }
 
 /* FLEXIO - Peripheral instance base addresses */
 /** Peripheral FLEXIO base address */

@@ -3,14 +3,15 @@
 **     Processors:          MCXE315MLF
 **                          MCXE315MPA
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXE31 RM Rev1
-**     Version:             rev. 0.1, 2024-11-19
-**     Build:               b250527
+**     Reference manual:    MCXE31 RM Rev2
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250728
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE315
@@ -25,14 +26,16 @@
 **     Revisions:
 **     - rev. 0.1 (2024-11-19)
 **         Initial version.
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXE315_COMMON.h
- * @version 0.1
- * @date 2024-11-19
+ * @version 1.0
+ * @date 2025-07-18
  * @brief CMSIS Peripheral Access Layer for MCXE315
  *
  * CMSIS Peripheral Access Layer for MCXE315
@@ -43,9 +46,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0000U
+#define MCU_MEM_MAP_VERSION 0x0100U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
 
 /* ----------------------------------------------------------------------------
@@ -121,8 +124,8 @@ typedef enum IRQn {
   SWT0_IRQn                    = 42,               /**< Platform watchdog initial time-out */
   Reserved59_IRQn              = 43,               /**< Reserved interrupt */
   Reserved60_IRQn              = 44,               /**< Reserved interrupt */
-  Reserved61_IRQn              = 45,               /**< Reserved interrupt */
-  Reserved62_IRQn              = 46,               /**< Reserved interrupt */
+  CTI_INT0_IRQn                = 45,               /**< CTI interrupt0 */
+  CTI_INT1_IRQn                = 46,               /**< CTI interrupt1 */
   Reserved63_IRQn              = 47,               /**< Reserved interrupt */
   FLASH_0_IRQn                 = 48,               /**< Program or erase operation is completed */
   FLASH_1_IRQn                 = 49,               /**< Main watchdog timeout interrupt */
@@ -245,7 +248,7 @@ typedef enum IRQn {
   Reserved201_IRQn             = 185,              /**< Reserved interrupt */
   FCCU_0_IRQn                  = 189,              /**< Interrupt request (ALARM state) */
   FCCU_1_IRQn                  = 190,              /**< Interrupt request (miscellaneous conditions) */
-  Reserved207_IRQn             = 191,              /**< Reserved interrupt */
+  STCU_IRQn                    = 191,              /**< LBIST and MBIST IRQ */
   MU0_B_TX_IRQn                = 192,              /**< ORed TX interrupt to MU-0 */
   MU0_B_RX_IRQn                = 193,              /**< ORed RX interrupt to MU-0 */
   MU0_B_IRQn                   = 194,              /**< ORed general purpose interrupt request to MU-0 */
@@ -268,12 +271,12 @@ typedef enum IRQn {
   Reserved227_IRQn             = 211,              /**< Reserved interrupt */
   PLL_LOL_IRQn                 = 212,              /**< PLL LOL interrupt */
   CORE_CLK_FAIL_IRQn           = 213,              /**< CORE_CLK_FAIL CMU reset reaction interrupt */
-  Reserved230_IRQn             = 214,              /**< PLL2 LOL interrupt */
+  Reserved230_IRQn             = 214,              /**< Reserved interrupt */
   AIPS_PLAT_CLK_FAIL_IRQn      = 215,              /**< AIPS_PLAT_CLK_FAIL CMU reset reaction interrupt */
-  Reserved232_IRQn             = 216,              /**< XRDC Error Interrupt */
+  Reserved232_IRQn             = 216,              /**< Reserved interrupt */
   HSE_B_CLK_FAIL_IRQn          = 217,              /**< HSE_B_CLK_FAIL CMU reset reaction interrupt */
   Reserved234_IRQn             = 218,              /**< Reserved interrupt */
-  Reserved235_IRQn             = 219,              /**< CM7_CORE_CLK_FAIL CMU reset reaction interrupt */
+  Reserved235_IRQn             = 219,              /**< Reserved interrupt */
   Reserved236_IRQn             = 220,              /**< Reserved interrupt */
   Reserved237_IRQn             = 221,              /**< Reserved interrupt */
   Reserved238_IRQn             = 222,              /**< Reserved interrupt */
@@ -929,6 +932,8 @@ typedef enum _xbic_slave_port
 #define DMA_BASE_ADDRS                           { EDMA_BASE }
 /** Array initializer of DMA peripheral base pointers */
 #define DMA_BASE_PTRS                            { EDMA }
+/** Interrupt vectors for the DMA peripheral type */
+#define DMA_IRQS                                 { { DMATCD0_IRQn, DMATCD1_IRQn, DMATCD2_IRQn, DMATCD3_IRQn, DMATCD4_IRQn, DMATCD5_IRQn, DMATCD6_IRQn, DMATCD7_IRQn, DMATCD8_IRQn, DMATCD9_IRQn, DMATCD10_IRQn, DMATCD11_IRQn, DMATCD12_IRQn, DMATCD13_IRQn, DMATCD14_IRQn, DMATCD15_IRQn, DMATCD16_IRQn, DMATCD17_IRQn, DMATCD18_IRQn, DMATCD19_IRQn, DMATCD20_IRQn, DMATCD21_IRQn, DMATCD22_IRQn, DMATCD23_IRQn, DMATCD24_IRQn, DMATCD25_IRQn, DMATCD26_IRQn, DMATCD27_IRQn, DMATCD28_IRQn, DMATCD29_IRQn, DMATCD30_IRQn, DMATCD31_IRQn } }
 
 /* DMAMUX - Peripheral instance base addresses */
 /** Peripheral DMAMUX_0 base address */
@@ -1313,6 +1318,16 @@ typedef enum _xbic_slave_port
 #define SIUL2_BASE_ADDRS                         { SIUL2_BASE }
 /** Array initializer of SIUL2 peripheral base pointers */
 #define SIUL2_BASE_PTRS                          { SIUL2 }
+/** Interrupt vectors for the SIUL2 peripheral type */
+#define SIUL2_IRQS                               { { SIUL2_0_IRQn, SIUL2_1_IRQn, SIUL2_2_IRQn, SIUL2_3_IRQn } }
+/*! Maximum pins which share the same EIRQ request */
+#define SIUL2_MAX_PINS_PER_EIRQ                  (3U)
+/*! Pins and EIRQ mapping array */
+#define SIUL2_EIRQ_PINS_MAP                      {{0, 64, 128}, {1, 65, 129}, {2, 66, 130}, {3, 67, 131}, {4, 16, 68}, {5, 69, -1}, {6, 70, 134}, {7, 71, 136}, \
+                                                  {32, 96, 137}, {33, 97, 138}, {34, 98, 139}, {35, 99, 140}, {36, 100, 141}, {37, 101, -1}, {40, 102, 143}, {41, 103, 144}, \
+                                                  {8, 72, -1}, {9, 73, -1}, {10, 74, -1}, {11, 75, -1}, {12, 76, -1}, {13, 77, -1}, {14, 78, -1}, {15, 79, -1}, \
+                                                  {42, 104, 113}, {43, 105, -1}, {44, 106, -1}, {45, 107, -1}, {46, 108, -1}, {47, 109, -1}, {48, 110, -1}, {49, 111, -1}}
+
 
 /* STCU - Peripheral instance base addresses */
 /** Peripheral STCU base address */

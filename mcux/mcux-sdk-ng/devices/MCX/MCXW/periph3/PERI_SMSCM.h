@@ -8,7 +8,7 @@
 **                          MCXW727DMFTA_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMSCM
@@ -769,14 +769,6 @@ typedef struct {
  *  0b1..AXBS0 in round robin arbitration mode at reset.
  */
 #define SMSCM_CPCR_AXBS0_RREN(x)                 (((uint32_t)(((uint32_t)(x)) << SMSCM_CPCR_AXBS0_RREN_SHIFT)) & SMSCM_CPCR_AXBS0_RREN_MASK)
-
-#define SMSCM_CPCR_AXBS1_RREN_MASK               (0x2U)
-#define SMSCM_CPCR_AXBS1_RREN_SHIFT              (1U)
-/*! AXBS1_RREN - AXBS1 Round Robin Enable
- *  0b0..AXBS1 in fixed priority arbitration mode at reset.
- *  0b1..AXBS1 in round robin arbitration mode at reset.
- */
-#define SMSCM_CPCR_AXBS1_RREN(x)                 (((uint32_t)(((uint32_t)(x)) << SMSCM_CPCR_AXBS1_RREN_SHIFT)) & SMSCM_CPCR_AXBS1_RREN_MASK)
 /*! @} */
 
 

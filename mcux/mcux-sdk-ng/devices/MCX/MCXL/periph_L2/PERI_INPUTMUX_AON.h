@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX_AON
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_INPUTMUX_AON.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for INPUTMUX_AON
  *
  * CMSIS Peripheral Access Layer for INPUTMUX_AON
@@ -158,10 +158,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 counter[0] direction is selected
+ *  0b001011..QTMR1 counter[1] direction is selected
+ *  0b001100..QTMR1 counter[2] direction is selected
+ *  0b001101..QTMR1 counter[3] direction is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -174,24 +174,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
  *  0b011110..LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -201,10 +201,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 counter[0] direction is selected
+ *  0b110110..QTMR0 counter[1] direction is selected
+ *  0b110111..QTMR0 counter[2] direction is selected
+ *  0b111000..QTMR0 counter[3] direction is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_QTMR0_TMR_INP(x)            (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_QTMR0_TMR_INP_SHIFT)) & INPUTMUX_AON_QTMR0_TMR_INP_MASK)
@@ -229,10 +229,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -245,24 +245,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -272,10 +272,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_SOC_GLUE_XOR0_IN_INP(x)     (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_SOC_GLUE_XOR0_IN_INP_SHIFT)) & INPUTMUX_AON_SOC_GLUE_XOR0_IN_INP_MASK)
@@ -300,10 +300,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -316,24 +316,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -343,10 +343,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_SOC_GLUE_CMPPADS_PCTRL_XOR_IN0_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_SOC_GLUE_CMPPADS_PCTRL_XOR_IN0_INP_SHIFT)) & INPUTMUX_AON_SOC_GLUE_CMPPADS_PCTRL_XOR_IN0_INP_MASK)
@@ -368,10 +368,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -384,24 +384,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -411,10 +411,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_SOC_GLUE_CTRLPADS_PCTRL_XOR_IN0_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_SOC_GLUE_CTRLPADS_PCTRL_XOR_IN0_INP_SHIFT)) & INPUTMUX_AON_SOC_GLUE_CTRLPADS_PCTRL_XOR_IN0_INP_MASK)
@@ -425,7 +425,7 @@ typedef struct {
 
 #define INPUTMUX_AON_QTMR1_TMR_INP_MASK          (0x3FU)
 #define INPUTMUX_AON_QTMR1_TMR_INP_SHIFT         (0U)
-/*! INP - Input number for AON QTMR0
+/*! INP - Input number for AON QTMR1
  *  0b000000..Reserved
  *  0b000001..AON_TRIG_IN0 input is selected
  *  0b000010..AON_TRIG_IN1 input is selected
@@ -436,10 +436,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -452,24 +452,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -479,10 +479,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_QTMR1_TMR_INP(x)            (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_QTMR1_TMR_INP_SHIFT)) & INPUTMUX_AON_QTMR1_TMR_INP_MASK)
@@ -507,10 +507,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -523,24 +523,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -550,10 +550,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_LC_ROT_SOC_LOGIC_IN_INP(x)  (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LC_ROT_SOC_LOGIC_IN_INP_SHIFT)) & INPUTMUX_AON_LC_ROT_SOC_LOGIC_IN_INP_MASK)
@@ -575,10 +575,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -591,24 +591,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -618,10 +618,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_LCSENSE_SEQ_PTRIG_GLUE_IN_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LCSENSE_SEQ_PTRIG_GLUE_IN_INP_SHIFT)) & INPUTMUX_AON_LCSENSE_SEQ_PTRIG_GLUE_IN_INP_MASK)
@@ -643,10 +643,10 @@ typedef struct {
  *  0b000111..AON_TRIG_IN6 input is selected
  *  0b001000..AON_TRIG_IN7 input is selected
  *  0b001001..CM33 transmit event is selected
- *  0b001010..QTMR1_tmr0_output is selected
- *  0b001011..QTMR1_tmr1_output is selected
- *  0b001100..QTMR1_tmr2_output is selected
- *  0b001101..QTMR1_tmr3_output is selected
+ *  0b001010..QTMR1 channel[0] output is selected
+ *  0b001011..QTMR1 channel[1] output is selected
+ *  0b001100..QTMR1 channel[2] output is selected
+ *  0b001101..QTMR1 channel[3] output is selected
  *  0b001110..CMP0_OUT is selected
  *  0b001111..Reserved
  *  0b010000..LPI2C0 Controller End of Packet is selected
@@ -659,24 +659,24 @@ typedef struct {
  *  0b010111..Reserved
  *  0b011000..Reserved
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
- *  0b011110..LPTMR0 output is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
+ *  0b011110..AON.LPTMR0 output is selected
  *  0b011111..Reserved
  *  0b100000..LC_ROT_SOC_LOGIC_OUT1 is selected
  *  0b100001..LC_ROT_SOC_LOGIC_OUT2 is selected
  *  0b100010..LC_ROT_SOC_LOGIC_OUT3 is selected
  *  0b100011..LC_ROT_SOC_LOGIC_OUT4 is selected
- *  0b100100..QTMR0_tmr0_dir is selected
- *  0b100101..QTMR0_tmr1_dir is selected
- *  0b100110..QTMR0_tmr2_dir is selected
- *  0b100111..QTMR0_tmr3_dir is selected
- *  0b101000..QTMR1_tmr0_dir is selected
- *  0b101001..QTMR1_tmr1_dir is selected
- *  0b101010..QTMR1_tmr2_dir is selected
- *  0b101011..QTMR1_tmr3_dir is selected
+ *  0b100100..QTMR0 counter[0] direction is selected
+ *  0b100101..QTMR0 counter[1] direction is selected
+ *  0b100110..QTMR0 counter[2] direction is selected
+ *  0b100111..QTMR0 counter[3] direction is selected
+ *  0b101000..QTMR1 counter[0] direction is selected
+ *  0b101001..QTMR1 counter[1] direction is selected
+ *  0b101010..QTMR1 counter[2] direction is selected
+ *  0b101011..QTMR1 counter[3] direction is selected
  *  0b101100..ACMP0 raw analog comparator output is selected
  *  0b101101..ACMP0_AON_cout is selected
  *  0b101110..logic_0 is selected
@@ -686,10 +686,10 @@ typedef struct {
  *  0b110010..Reserved
  *  0b110011..soc_glue_XOR0_out is selected
  *  0b110100..Reserved
- *  0b110101..QTMR0_tmr0_output is selected
- *  0b110110..QTMR0_tmr1_output is selected
- *  0b110111..QTMR0_tmr2_output is selected
- *  0b111000..QTMR0_tmr3_output is selected
+ *  0b110101..QTMR0 channel[0] output is selected
+ *  0b110110..QTMR0 channel[1] output is selected
+ *  0b110111..QTMR0 channel[2] output is selected
+ *  0b111000..QTMR0 channel[3] output is selected
  *  0b111001..LCSense_Sequencer_Primary_Trigger_glue_out is selected
  */
 #define INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP_SHIFT)) & INPUTMUX_AON_LCSENSE_SEQ_TICKS_GLUE_IN_INP_MASK)
@@ -713,24 +713,24 @@ typedef struct {
  *  0b001001..CM33 transmit event is selected
  *  0b001010..Reserved
  *  0b001011..Reserved
- *  0b001100..QTMR0_tmr0_output is selected
- *  0b001101..QTMR0_tmr1_output is selected
- *  0b001110..QTMR0_tmr2_output is selected
- *  0b001111..QTMR0_tmr3_output is selected
- *  0b010000..LPTMR0 output is selected
+ *  0b001100..QTMR0 channel[0] output is selected
+ *  0b001101..QTMR0 channel[1] output is selected
+ *  0b001110..QTMR0 channel[2] output is selected
+ *  0b001111..QTMR0 channel[3] output is selected
+ *  0b010000..AON.LPTMR0 output is selected
  *  0b010001..Reserved
- *  0b010010..QTMR1_tmr0_output is selected
- *  0b010011..QTMR1_tmr1_output is selected
- *  0b010100..QTMR1_tmr2_output is selected
- *  0b010101..QTMR1_tmr3_output is selected
+ *  0b010010..QTMR1 channel[0] output is selected
+ *  0b010011..QTMR1 channel[1] output is selected
+ *  0b010100..QTMR1 channel[2] output is selected
+ *  0b010101..QTMR1 channel[3] output is selected
  *  0b010110..Reserved
- *  0b010111..WUU is selected
+ *  0b010111..WUU output is selected
  *  0b011000..GPIO (AON) Pin Event Trig 0 is selected
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
  *  0b011110..ACMP0 raw analog comparator output is selected
  *  0b011111..ACMP0_AON_cout is selected
  *  0b100000..Reserved
@@ -762,18 +762,18 @@ typedef struct {
  *  0b01001..CM33 transmit event is selected
  *  0b01010..LPCMP_OUT is selected
  *  0b01011..Reserved
- *  0b01100..QTMR0_tmr0_output is selected
- *  0b01101..QTMR0_tmr1_output is selected
- *  0b01110..QTMR0_tmr2_output is selected
- *  0b01111..QTMR0_tmr3_output is selected
- *  0b10000..LPTMR0 output is selected
+ *  0b01100..QTMR0 channel[0] output is selected
+ *  0b01101..QTMR0 channel[1] output is selected
+ *  0b01110..QTMR0 channel[2] output is selected
+ *  0b01111..QTMR0 channel[3] output is selected
+ *  0b10000..AON.LPTMR0 output is selected
  *  0b10001..Reserved
- *  0b10010..QTMR1_tmr0_output is selected
- *  0b10011..QTMR1_tmr1_output is selected
- *  0b10100..QTMR1_tmr2_output is selected
- *  0b10101..QTMR1_tmr3_output is selected
+ *  0b10010..QTMR1 channel[0] output is selected
+ *  0b10011..QTMR1 channel[1] output is selected
+ *  0b10100..QTMR1 channel[2] output is selected
+ *  0b10101..QTMR1 channel[3] output is selected
  *  0b10110..Reserved
- *  0b10111..WUU is selected
+ *  0b10111..WUU output is selected
  *  0b11000..GPIO (AON) Pin Event Trig 0 is selected
  *  0b11001..ACMP0 raw analog comparator output is selected
  *  0b11010..ACMP0_AON_cout is selected
@@ -796,17 +796,17 @@ typedef struct {
 /*! INP - EXT trigger input connections
  *  0b00000..Reserved
  *  0b00001..CM33 transmit event is selected
- *  0b00010..AON_LPUART0 (ipp_do_lpuart_txd) is selected
+ *  0b00010..AON_LPUART0 is selected
  *  0b00011..Reserved
  *  0b00100..Reserved
  *  0b00101..Reserved
  *  0b00110..Reserved
  *  0b00111..Reserved
- *  0b01000..LPADC_trigger_out[0] is selected
- *  0b01001..LPADC_trigger_out[1] is selected
- *  0b01010..LPADC_trigger_out[2] is selected
+ *  0b01000..LPADC trigger complete pulse output[0] is selected
+ *  0b01001..LPADC trigger complete pulse output[1] is selected
+ *  0b01010..LPADC trigger complete pulse output[2] is selected
  *  0b01011..parked_out_intverted is selected
- *  0b01100..AON_LPTMR0 output is selected
+ *  0b01100..AON.LPTMR0 output is selected
  *  0b01101..Reserved
  *  0b01110..LPCOMP0_out is selected
  *  0b01111..Reserved
@@ -814,14 +814,14 @@ typedef struct {
  *  0b10001..ACMP0_AON_cout is selected
  *  0b10010..Reserved
  *  0b10011..Reserved
- *  0b10100..QTMR0_tmr0_output is selected
- *  0b10101..QTMR0_tmr1_output is selected
- *  0b10110..QTMR0_tmr2_output is selected
- *  0b10111..QTMR0_tmr3_output is selected
- *  0b11000..QTMR1_tmr0_output is selected
- *  0b11001..QTMR1_tmr1_output is selected
- *  0b11010..QTMR1_tmr2_output is selected
- *  0b11011..QTMR1_tmr3_output is selected
+ *  0b10100..QTMR0 channel[0] output is selected
+ *  0b10101..QTMR0 channel[1] output is selected
+ *  0b10110..QTMR0 channel[2] output is selected
+ *  0b10111..QTMR0 channel[3] output is selected
+ *  0b11000..QTMR1 channel[0] output is selected
+ *  0b11001..QTMR1 channel[1] output is selected
+ *  0b11010..QTMR1 channel[2] output is selected
+ *  0b11011..QTMR1 channel[3] output is selected
  */
 #define INPUTMUX_AON_AON_TRIG_OUT_INP(x)         (((uint32_t)(((uint32_t)(x)) << INPUTMUX_AON_AON_TRIG_OUT_INP_SHIFT)) & INPUTMUX_AON_AON_TRIG_OUT_INP_MASK)
 /*! @} */
@@ -847,24 +847,24 @@ typedef struct {
  *  0b001001..CM33 transmit event is selected
  *  0b001010..LPCMP_OUT is selected
  *  0b001011..Reserved
- *  0b001100..QTMR0_tmr0_output is selected
- *  0b001101..QTMR0_tmr1_output is selected
- *  0b001110..QTMR0_tmr2_output is selected
- *  0b001111..QTMR0_tmr3_output is selected
- *  0b010000..LPTMR0 output is selected
+ *  0b001100..QTMR0 channel[0] output is selected
+ *  0b001101..QTMR0 channel[1] output is selected
+ *  0b001110..QTMR0 channel[2] output is selected
+ *  0b001111..QTMR0 channel[3] output is selected
+ *  0b010000..AON.LPTMR0 output is selected
  *  0b010001..Reserved
- *  0b010010..QTMR1_tmr0_output is selected
- *  0b010011..QTMR1_tmr1_output is selected
- *  0b010100..QTMR1_tmr2_output is selected
- *  0b010101..QTMR1_tmr3_output is selected
+ *  0b010010..QTMR1 channel[0] output is selected
+ *  0b010011..QTMR1 channel[1] output is selected
+ *  0b010100..QTMR1 channel[2] output is selected
+ *  0b010101..QTMR1 channel[3] output is selected
  *  0b010110..Reserved
- *  0b010111..WUU is selected
+ *  0b010111..WUU output is selected
  *  0b011000..GPIO (AON) Pin Event Trig 0 is selected
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
  *  0b011110..Reserved
  *  0b011111..Reserved
  *  0b100000..Reserved
@@ -893,24 +893,24 @@ typedef struct {
  *  0b001001..CM33 transmit event is selected
  *  0b001010..LPCMP_OUT is selected
  *  0b001011..Reserved
- *  0b001100..QTMR0_tmr0_output is selected
- *  0b001101..QTMR0_tmr1_output is selected
- *  0b001110..QTMR0_tmr2_output is selected
- *  0b001111..QTMR0_tmr3_output is selected
- *  0b010000..LPTMR0 output is selected
+ *  0b001100..QTMR0 channel[0] output is selected
+ *  0b001101..QTMR0 channel[1] output is selected
+ *  0b001110..QTMR0 channel[2] output is selected
+ *  0b001111..QTMR0 channel[3] output is selected
+ *  0b010000..AON.LPTMR0 output is selected
  *  0b010001..Reserved
- *  0b010010..QTMR1_tmr0_output is selected
- *  0b010011..QTMR1_tmr1_output is selected
- *  0b010100..QTMR1_tmr2_output is selected
- *  0b010101..QTMR1_tmr3_output is selected
+ *  0b010010..QTMR1 channel[0] output is selected
+ *  0b010011..QTMR1 channel[1] output is selected
+ *  0b010100..QTMR1 channel[2] output is selected
+ *  0b010101..QTMR1 channel[3] output is selected
  *  0b010110..Reserved
- *  0b010111..WUU is selected
+ *  0b010111..WUU output is selected
  *  0b011000..GPIO (AON) Pin Event Trig 0 is selected
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
  *  0b011110..Reserved
  *  0b011111..Reserved
  *  0b100000..Reserved
@@ -939,24 +939,24 @@ typedef struct {
  *  0b001001..CM33 transmit event is selected
  *  0b001010..LPCMP_OUT is selected
  *  0b001011..Reserved
- *  0b001100..QTMR0_tmr0_output is selected
- *  0b001101..QTMR0_tmr1_output is selected
- *  0b001110..QTMR0_tmr2_output is selected
- *  0b001111..QTMR0_tmr3_output is selected
- *  0b010000..LPTMR0 output is selected
+ *  0b001100..QTMR0 channel[0] output is selected
+ *  0b001101..QTMR0 channel[1] output is selected
+ *  0b001110..QTMR0 channel[2] output is selected
+ *  0b001111..QTMR0 channel[3] output is selected
+ *  0b010000..AON.LPTMR0 output is selected
  *  0b010001..Reserved
- *  0b010010..QTMR1_tmr0_output is selected
- *  0b010011..QTMR1_tmr1_output is selected
- *  0b010100..QTMR1_tmr2_output is selected
- *  0b010101..QTMR1_tmr3_output is selected
+ *  0b010010..QTMR1 channel[0] output is selected
+ *  0b010011..QTMR1 channel[1] output is selected
+ *  0b010100..QTMR1 channel[2] output is selected
+ *  0b010101..QTMR1 channel[3] output is selected
  *  0b010110..Reserved
- *  0b010111..WUU is selected
+ *  0b010111..WUU output is selected
  *  0b011000..GPIO (AON) Pin Event Trig 0 is selected
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
  *  0b011110..ACMP0 raw analog comparator output is selected
  *  0b011111..ACMP0_AON_cout is selected
  *  0b100000..Reserved
@@ -985,24 +985,24 @@ typedef struct {
  *  0b001001..CM33 transmit event is selected
  *  0b001010..LPCMP_OUT is selected
  *  0b001011..Reserved
- *  0b001100..QTMR0_tmr0_output is selected
- *  0b001101..QTMR0_tmr1_output is selected
- *  0b001110..QTMR0_tmr2_output is selected
- *  0b001111..QTMR0_tmr3_output is selected
- *  0b010000..LPTMR0 output is selected
+ *  0b001100..QTMR0 channel[0] output is selected
+ *  0b001101..QTMR0 channel[1] output is selected
+ *  0b001110..QTMR0 channel[2] output is selected
+ *  0b001111..QTMR0 channel[3] output is selected
+ *  0b010000..AON.LPTMR0 output is selected
  *  0b010001..Reserved
- *  0b010010..QTMR1_tmr0_output is selected
- *  0b010011..QTMR1_tmr1_output is selected
- *  0b010100..QTMR1_tmr2_output is selected
- *  0b010101..QTMR1_tmr3_output is selected
+ *  0b010010..QTMR1 channel[0] output is selected
+ *  0b010011..QTMR1 channel[1] output is selected
+ *  0b010100..QTMR1 channel[2] output is selected
+ *  0b010101..QTMR1 channel[3] output is selected
  *  0b010110..Reserved
- *  0b010111..WUU is selected
+ *  0b010111..WUU output is selected
  *  0b011000..GPIO (AON) Pin Event Trig 0 is selected
  *  0b011001..Reserved
- *  0b011010..LPADC_trigger_out[0] is selected
- *  0b011011..LPADC_trigger_out[1] is selected
- *  0b011100..LPADC_trigger_out[2] is selected
- *  0b011101..LPADC_trigger_out[3] is selected
+ *  0b011010..LPADC trigger complete pulse output[0] is selected
+ *  0b011011..LPADC trigger complete pulse output[1] is selected
+ *  0b011100..LPADC trigger complete pulse output[2] is selected
+ *  0b011101..LPADC trigger complete pulse output[3] is selected
  *  0b011110..ACMP0 raw analog comparator output is selected
  *  0b011111..ACMP0_AON_cout is selected
  *  0b100000..Reserved

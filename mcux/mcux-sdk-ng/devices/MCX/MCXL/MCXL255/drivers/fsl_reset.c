@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, NXP
+ * Copyright 2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,7 +58,7 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
     /* clear bit */
     if (regIndex == 2U)
     {
-        AON__CGU->RST_SUB_BLK |= bitMask;
+        AON__CGU->RST_SUB_BLK &= ~bitMask;
     }
     else
     {

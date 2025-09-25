@@ -80,12 +80,12 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
             if ((addr >= (FSL_MEM_M7_ITCM_BEGIN + FSL_MEM_M7_ITCM_BACKDOOR_OFFSET)) &&
                 (addr <= (FSL_MEM_M7_ITCM_END + FSL_MEM_M7_ITCM_BACKDOOR_OFFSET)))
             {
-                dest = addr + FSL_MEM_M7_ITCM_BACKDOOR_OFFSET;
+                dest = addr - FSL_MEM_M7_ITCM_BACKDOOR_OFFSET;
             }
             else if ((addr >= (FSL_MEM_M7_DTCM_BEGIN + FSL_MEM_M7_DTCM_BACKDOOR_OFFSET)) &&
                      (addr <= (FSL_MEM_M7_DTCM_END + FSL_MEM_M7_DTCM_BACKDOOR_OFFSET)))
             {
-                dest = addr + FSL_MEM_M7_DTCM_BACKDOOR_OFFSET;
+                dest = addr - FSL_MEM_M7_DTCM_BACKDOOR_OFFSET;
             }
             else
             {

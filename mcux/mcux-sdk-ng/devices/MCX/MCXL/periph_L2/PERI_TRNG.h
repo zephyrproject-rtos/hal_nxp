@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRNG
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_TRNG.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for TRNG
  *
  * CMSIS Peripheral Access Layer for TRNG
@@ -520,6 +520,14 @@ typedef struct {
  *  0b1..Enables the INT_STATUS[FRQ_CT_FAIL] bit to be set, thereby enabling interrupt generation for the FRQ_CT_FAIL condition.
  */
 #define TRNG_INT_CTRL_FRQ_CT_FAIL(x)             (((uint32_t)(((uint32_t)(x)) << TRNG_INT_CTRL_FRQ_CT_FAIL_SHIFT)) & TRNG_INT_CTRL_FRQ_CT_FAIL_MASK)
+
+#define TRNG_INT_CTRL_INTG_FLT_MASK              (0x8U)
+#define TRNG_INT_CTRL_INTG_FLT_SHIFT             (3U)
+/*! INTG_FLT
+ *  0b0..Clears the INT_STATUS[INTG_FLT] bit. Will automatically set after writing.
+ *  0b1..Enables the INT_STATUS[INTG_FLT] bit to be set, thereby enabling interrupt generation for the INTG_FLT condition.
+ */
+#define TRNG_INT_CTRL_INTG_FLT(x)                (((uint32_t)(((uint32_t)(x)) << TRNG_INT_CTRL_INTG_FLT_SHIFT)) & TRNG_INT_CTRL_INTG_FLT_MASK)
 /*! @} */
 
 /*! @name INT_MASK - Mask Register */
@@ -548,6 +556,14 @@ typedef struct {
  *  0b1..FRQ_CT_FAIL interrupt is enabled.
  */
 #define TRNG_INT_MASK_FRQ_CT_FAIL(x)             (((uint32_t)(((uint32_t)(x)) << TRNG_INT_MASK_FRQ_CT_FAIL_SHIFT)) & TRNG_INT_MASK_FRQ_CT_FAIL_MASK)
+
+#define TRNG_INT_MASK_INTG_FLT_MASK              (0x8U)
+#define TRNG_INT_MASK_INTG_FLT_SHIFT             (3U)
+/*! INTG_FLT
+ *  0b0..INTG_FLT interrupt is disabled.
+ *  0b1..INTG_FLT interrupt is enabled.
+ */
+#define TRNG_INT_MASK_INTG_FLT(x)                (((uint32_t)(((uint32_t)(x)) << TRNG_INT_MASK_INTG_FLT_SHIFT)) & TRNG_INT_MASK_INTG_FLT_MASK)
 /*! @} */
 
 /*! @name INT_STATUS - Interrupt Status Register */
@@ -576,6 +592,14 @@ typedef struct {
  *  0b1..The frequency counter has detected a failure.
  */
 #define TRNG_INT_STATUS_FRQ_CT_FAIL(x)           (((uint32_t)(((uint32_t)(x)) << TRNG_INT_STATUS_FRQ_CT_FAIL_SHIFT)) & TRNG_INT_STATUS_FRQ_CT_FAIL_MASK)
+
+#define TRNG_INT_STATUS_INTG_FLT_MASK            (0x8U)
+#define TRNG_INT_STATUS_INTG_FLT_SHIFT           (3U)
+/*! INTG_FLT
+ *  0b0..No internal fault has been detected.
+ *  0b1..TRNG has detected internal fault.
+ */
+#define TRNG_INT_STATUS_INTG_FLT(x)              (((uint32_t)(((uint32_t)(x)) << TRNG_INT_STATUS_INTG_FLT_SHIFT)) & TRNG_INT_STATUS_INTG_FLT_MASK)
 /*! @} */
 
 /*! @name CSER - Common Security Error Register */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.4.0 */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief reset driver version 2.4.1 */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*!
@@ -35,6 +35,8 @@
  */
 typedef enum _SYSCON_RSTn
 {
+    kRST_None, /*!< None RESET gate. */
+
     kFMU_RST_SHIFT_RSTn     = 0 | 9U,  /**< Flash management unit reset control */
     kFLEXSPI_RST_SHIFT_RSTn = 0 | 11U, /**< FLEXSPI reset control */
     kMUX_RST_SHIFT_RSTn     = 0 | 12U, /**< Input mux reset control */
@@ -153,7 +155,7 @@ typedef enum _SYSCON_RSTn
 #define GPIO_RSTS_N                                                                                 \
     {                                                                                               \
         kGPIO0_RST_SHIFT_RSTn, kGPIO1_RST_SHIFT_RSTn, kGPIO2_RST_SHIFT_RSTn, kGPIO3_RST_SHIFT_RSTn, \
-            kGPIO4_RST_SHIFT_RSTn                                                                   \
+            kGPIO4_RST_SHIFT_RSTn, kRST_None                                                        \
     } /* Reset bits for GPIO peripheral */
 #define INPUTMUX_RSTS       \
     {                       \

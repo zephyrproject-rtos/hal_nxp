@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PMU
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_PMU.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for PMU
  *
  * CMSIS Peripheral Access Layer for PMU
@@ -102,8 +102,8 @@
 /** PMU - Register Layout Typedef */
 typedef struct {
   __IO uint32_t PCTRL;                             /**< Power Control, offset: 0x0 */
-  __IO uint32_t VDD_CORE_PCONFIG;                  /**< VDD Core Power Configuration, offset: 0x4 */
-  __IO uint32_t VDD_CORE_1P1_CONFIG;               /**< VDD_CORE_1P1 Configuration, offset: 0x8 */
+  __IO uint32_t VDD_CORE_PCONFIG;                  /**< VDD_CORE DCDC_AON Power Configuration, offset: 0x4 */
+  __IO uint32_t VDD_CORE_1P1_CONFIG;               /**< VDD_CORE DCDC_MAIN Configuration, offset: 0x8 */
        uint8_t RESERVED_0[4];
   __IO uint32_t FRO_CTRL;                          /**< 16KHz FRO Control, offset: 0x10 */
        uint8_t RESERVED_1[72];
@@ -127,33 +127,38 @@ typedef struct {
 #define PMU_PCTRL_VDDP_EN_SHIFT                  (0U)
 /*! VDDP_EN - VDD Power Enable */
 #define PMU_PCTRL_VDDP_EN(x)                     (((uint32_t)(((uint32_t)(x)) << PMU_PCTRL_VDDP_EN_SHIFT)) & PMU_PCTRL_VDDP_EN_MASK)
+
+#define PMU_PCTRL_VDD_CORE_1P1_EN_MASK           (0x2U)
+#define PMU_PCTRL_VDD_CORE_1P1_EN_SHIFT          (1U)
+/*! VDD_CORE_1P1_EN - VDD_CORE_1P1 Power Enable */
+#define PMU_PCTRL_VDD_CORE_1P1_EN(x)             (((uint32_t)(((uint32_t)(x)) << PMU_PCTRL_VDD_CORE_1P1_EN_SHIFT)) & PMU_PCTRL_VDD_CORE_1P1_EN_MASK)
 /*! @} */
 
-/*! @name VDD_CORE_PCONFIG - VDD Core Power Configuration */
+/*! @name VDD_CORE_PCONFIG - VDD_CORE DCDC_AON Power Configuration */
 /*! @{ */
 
 #define PMU_VDD_CORE_PCONFIG_VDD_ACONFIG_MASK    (0x3FU)
 #define PMU_VDD_CORE_PCONFIG_VDD_ACONFIG_SHIFT   (0U)
-/*! VDD_ACONFIG - VDD_CORE Active Configuration */
+/*! VDD_ACONFIG - VDD_CORE DCDC_AON Active Configuration */
 #define PMU_VDD_CORE_PCONFIG_VDD_ACONFIG(x)      (((uint32_t)(((uint32_t)(x)) << PMU_VDD_CORE_PCONFIG_VDD_ACONFIG_SHIFT)) & PMU_VDD_CORE_PCONFIG_VDD_ACONFIG_MASK)
 
 #define PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG_MASK   (0xFC0U)
 #define PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG_SHIFT  (6U)
-/*! VDD_DSCONFIG - VDD_CORE Deep Sleep mode Configuration */
+/*! VDD_DSCONFIG - VDD_CORE Deep Sleep Mode Configuration */
 #define PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG(x)     (((uint32_t)(((uint32_t)(x)) << PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG_SHIFT)) & PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG_MASK)
 /*! @} */
 
-/*! @name VDD_CORE_1P1_CONFIG - VDD_CORE_1P1 Configuration */
+/*! @name VDD_CORE_1P1_CONFIG - VDD_CORE DCDC_MAIN Configuration */
 /*! @{ */
 
 #define PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG_MASK (0xFFU)
 #define PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG_SHIFT (0U)
-/*! VDD_CORE_1P1_ACONFIG - VDD_CORE_1P1 Active Configuration */
+/*! VDD_CORE_1P1_ACONFIG - VDD_CORE DCDC_MAIN Active Configuration */
 #define PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG(x) (((uint32_t)(((uint32_t)(x)) << PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG_SHIFT)) & PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG_MASK)
 
 #define PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR_MASK (0x1F00U)
 #define PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR_SHIFT (8U)
-/*! VDD_CORE_1P1_VOUTSEL_LPWR - VDD_CORE_1P1 Voute Select Low Power */
+/*! VDD_CORE_1P1_VOUTSEL_LPWR - VDD CORE DCDC_MAIN Vout Select Low Power */
 #define PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR(x) (((uint32_t)(((uint32_t)(x)) << PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR_SHIFT)) & PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR_MASK)
 /*! @} */
 
@@ -162,7 +167,10 @@ typedef struct {
 
 #define PMU_FRO_CTRL_FRO16K_EN_MASK              (0x1U)
 #define PMU_FRO_CTRL_FRO16K_EN_SHIFT             (0U)
-/*! FRO16K_EN - FRO16K Enable */
+/*! FRO16K_EN - FRO16K Enable
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define PMU_FRO_CTRL_FRO16K_EN(x)                (((uint32_t)(((uint32_t)(x)) << PMU_FRO_CTRL_FRO16K_EN_SHIFT)) & PMU_FRO_CTRL_FRO16K_EN_MASK)
 
 #define PMU_FRO_CTRL_CLOCK_SEL_MASK              (0x2000U)
@@ -179,7 +187,7 @@ typedef struct {
 
 #define PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG_MASK    (0x7FFFU)
 #define PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG_SHIFT   (0U)
-/*! DCDC_WKUP_WDOG - DCDC Wakeup Watchdog */
+/*! DCDC_WKUP_WDOG - DCDC_AON Wakeup Watchdog */
 #define PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG(x)      (((uint32_t)(((uint32_t)(x)) << PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG_SHIFT)) & PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG_MASK)
 /*! @} */
 

@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW235BIHNAR
+**     Processors:          MCXW235AIHNAR
+**                          MCXW235AIUKAR
+**                          MCXW235BIHNAR
 **                          MCXW235BIUKAR
 **                          MCXW236AIHNAR
 **                          MCXW236AIUKAR
@@ -8,7 +10,7 @@
 **                          MCXW236BIUKAR
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250821
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX
@@ -42,7 +44,7 @@
 #if !defined(PERI_INPUTMUX_H_)
 #define PERI_INPUTMUX_H_                         /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW235BIHNAR) || defined(CPU_MCXW235BIUKAR))
+#if (defined(CPU_MCXW235AIHNAR) || defined(CPU_MCXW235AIUKAR) || defined(CPU_MCXW235BIHNAR) || defined(CPU_MCXW235BIUKAR))
 #include "MCXW235_COMMON.h"
 #elif (defined(CPU_MCXW236AIHNAR) || defined(CPU_MCXW236AIUKAR) || defined(CPU_MCXW236BIHNAR) || defined(CPU_MCXW236BIUKAR))
 #include "MCXW236_COMMON.h"
@@ -332,7 +334,7 @@ typedef struct {
  *  0b01011..Timer CTIMER3 Match 1
  *  0b01100..Timer CTIMER4 Match 0
  *  0b01101..Timer CTIMER4 Match 1
- *  0b01110..COMP_OUTPUT
+ *  0b01110..Reserved
  *  0b01111..DMA0 output trigger mux 0
  *  0b10000..DMA0 output trigger mux 1
  *  0b10001..DMA0 output trigger mux 1

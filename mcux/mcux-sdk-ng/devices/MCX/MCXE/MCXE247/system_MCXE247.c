@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCXE24x RM Rev.1
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250325
+**     Build:               b250530
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -44,6 +44,8 @@
 
 #include <stdint.h>
 #include "fsl_device_registers.h"
+
+
 
 /* ----------------------------------------------------------------------------
    -- Core clock
@@ -142,9 +144,9 @@ __attribute__ ((weak)) void SystemInitHook (void) {
    ---------------------------------------------------------------------------- */
 
 int __low_level_init(void)
-{  
+{
   /* Errata ERR050877 workaround. Enable FZ mode in the FPSCR. */
   __set_FPSCR(__get_FPSCR() | FPSCR_FZ_MASK);
-  
+
   return 1;
 }

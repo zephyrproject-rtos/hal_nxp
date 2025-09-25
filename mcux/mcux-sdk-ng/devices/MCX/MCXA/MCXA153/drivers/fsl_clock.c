@@ -1024,41 +1024,8 @@ uint32_t CLOCK_GetClkoutClkFreq(void)
     return freq / ((clkdiv & 0xFFU) + 1U);
 }
 
-/*! brief  Return Frequency of Systick Clock
- *  return Frequency of Systick.
- */
-uint32_t CLOCK_GetSystickClkFreq(void)
-{
-    uint32_t freq   = 0U;
-    uint32_t clksel = (MRCC0->MRCC_SYSTICK_CLKSEL);
-    uint32_t clkdiv = (MRCC0->MRCC_SYSTICK_CLKDIV);
-
-    if (true == CLOCK_IsDivHalt(clkdiv))
-    {
-        return 0;
-    }
-
-    switch (clksel)
-    {
-        case 0U:
-            freq = CLOCK_GetCoreSysClkFreq();
-            break;
-        case 1U:
-            freq = CLOCK_GetClk1MFreq();
-            break;
-        case 2U:
-            freq = CLOCK_GetClk16KFreq(1);
-            break;
-        default:
-            freq = 0U;
-            break;
-    }
-
-    return freq / ((clkdiv & 0xFFU) + 1U);
-}
-
-/*! brief  Return Frequency of Systick Clock
- *  return Frequency of Systick.
+/*! brief  Return Frequency of WWDT Clock
+ *  return Frequency of WWDT.
  */
 uint32_t CLOCK_GetWwdtClkFreq(void)
 {
