@@ -270,6 +270,7 @@ uint32_t CLOCK_GetIpFreq(clock_ip_name_t name)
 
     if (0U != (reg & (PCC_CLKCFG_PCD_MASK | PCC_CLKCFG_FRAC_MASK)))
     {
+        assert((UINT32_MAX / freq) >= (PCC_FRAC_VAL(reg) + 1U));
         return freq * (PCC_FRAC_VAL(reg) + 1U) / (PCC_PCD_VAL(reg) + 1U);
     }
     else
@@ -297,7 +298,7 @@ bool CLOCK_EnableUsbfs0Clock(clock_usb_src_t src, uint32_t freq)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     USBVREG->CTRL |= USBVREG_CTRL_EN_MASK;
-    USB0->CONTROL &= (uint8_t)(~USB_CONTROL_DPPULLUPNONOTG_MASK);
+    USB0->CONTROL &= (uint8_t)((~USB_CONTROL_DPPULLUPNONOTG_MASK) & 0xFFU);
 
     if (kCLOCK_UsbSrcIrc48M == src)
     {

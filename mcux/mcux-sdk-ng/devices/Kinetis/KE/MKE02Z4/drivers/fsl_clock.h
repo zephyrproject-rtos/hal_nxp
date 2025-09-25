@@ -522,7 +522,7 @@ static inline void CLOCK_SetLowPowerEnable(bool enable)
     }
     else
     {
-        ICS->C2 &= (uint8_t)(~ICS_C2_LP_MASK);
+        ICS->C2 &= (uint8_t)((~ICS_C2_LP_MASK) & 0xFFU);
     }
 }
 
@@ -540,7 +540,7 @@ static inline void CLOCK_SetLowPowerEnable(bool enable)
 static inline void CLOCK_SetInternalRefClkConfig(uint8_t enableMode)
 {
     /* Set internal reference clock selection. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~(ICS_C1_IRCLKEN_MASK | ICS_C1_IREFSTEN_MASK)) | (uint8_t)enableMode);
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~(ICS_C1_IRCLKEN_MASK | ICS_C1_IREFSTEN_MASK)) | (uint8_t)enableMode) & 0xFFU);
 }
 
 /*!
@@ -553,7 +553,7 @@ static inline void CLOCK_SetInternalRefClkConfig(uint8_t enableMode)
  */
 static inline void CLOCK_SetFllExtRefDiv(uint8_t rdiv)
 {
-    ICS->C1 = (uint8_t)((ICS->C1 & ~ICS_C1_RDIV_MASK) | ICS_C1_RDIV(rdiv));
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~ICS_C1_RDIV_MASK) | ICS_C1_RDIV(rdiv)) & 0xFFU);
 }
 
 /*@}*/
@@ -576,7 +576,7 @@ static inline void CLOCK_SetOsc0MonitorMode(bool enable)
     }
     else
     {
-        ICS->C4 &= (uint8_t)(~ICS_C4_CME_MASK);
+        ICS->C4 &= (uint8_t)((~ICS_C4_CME_MASK) & 0xFFU);
     }
 }
 
@@ -627,7 +627,7 @@ static inline void CLOCK_SetXtal0Freq(uint32_t freq)
  */
 static inline void CLOCK_SetOsc0Enable(uint8_t enable)
 {
-    OSC0->CR |= (uint8_t)((OSC0->CR & (~(OSC_CR_OSCSTEN_MASK | OSC_CR_OSCEN_MASK))) | enable);
+    OSC0->CR |= (uint8_t)(((OSC0->CR & (~(OSC_CR_OSCSTEN_MASK | OSC_CR_OSCEN_MASK))) | enable) & 0xFFU);
 }
 
 /* @} */

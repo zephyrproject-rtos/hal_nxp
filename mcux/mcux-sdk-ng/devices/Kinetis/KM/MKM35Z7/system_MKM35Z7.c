@@ -57,7 +57,7 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
-
+#define SAFE_MULTI(multi, max) ((multi) > (max) ? 0U : (multi))
 
 /* ----------------------------------------------------------------------------
    -- Core clock
@@ -95,6 +95,7 @@ void SystemCoreClockUpdate (void) {
 
   uint32_t MCGOUTClock;                /* Variable to store output clock frequency of the MCG module */
   uint16_t Divider;
+  uint32_t max;
 
   if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x00U) {
     /* Output of FLL or PLL is selected */
@@ -116,44 +117,45 @@ void SystemCoreClockUpdate (void) {
             Divider = 1280U;
             break;
           default:
-            Divider = (uint16_t)(32LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
+            Divider = (uint16_t)((32LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT)) & 0xFFFFU);
             break;
           }
         } else {/* ((MCG->C2 & MCG_C2_RANGE0_MASK) != 0x00U) */
-          Divider = (uint16_t)(1LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
+          Divider = (uint16_t)((1LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT)) & 0xFFFFU);
         }
         MCGOUTClock = (MCGOUTClock / Divider); /* Calculate the divided FLL reference clock */
       } else {
         MCGOUTClock = CPU_INT_SLOW_CLK_HZ; /* The slow internal reference clock is selected */
       }
       /* Select correct multiplier to calculate the MCG output clock */
+      max = UINT32_MAX / MCGOUTClock;
       switch (MCG->C4 & (MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) {
         case 0x00U:
-          MCGOUTClock *= 640U;
+          MCGOUTClock *= SAFE_MULTI(640U, max);
           break;
         case 0x20U:
-          MCGOUTClock *= 1280U;
+          MCGOUTClock *= SAFE_MULTI(1280U, max);
           break;
         case 0x40U:
-          MCGOUTClock *= 1920U;
+          MCGOUTClock *= SAFE_MULTI(1920U, max);
           break;
         case 0x60U:
-          MCGOUTClock *= 2560U;
+          MCGOUTClock *= SAFE_MULTI(2560U, max);
           break;
         case 0x80U:
-          MCGOUTClock *= 732U;
+          MCGOUTClock *= SAFE_MULTI(732U, max);
           break;
         case 0xA0U:
-          MCGOUTClock *= 1464U;
+          MCGOUTClock *= SAFE_MULTI(1464U, max);
           break;
         case 0xC0U:
-          MCGOUTClock *= 2197U;
+          MCGOUTClock *= SAFE_MULTI(2197U, max);
           break;
         case 0xE0U:
-          MCGOUTClock *= 2929U;
+          MCGOUTClock *= SAFE_MULTI(2929U, max);
           break;
         default:
-          MCGOUTClock *= 640U;
+          MCGOUTClock *= SAFE_MULTI(640U, max);
           break;
       }
     }
@@ -181,25 +183,26 @@ void SystemCoreClockUpdate (void) {
             Divider = 1280U;
             break;
           default:
-            Divider = (uint16_t)(32LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
+            Divider = (uint16_t)((32LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT)) & 0xFFFFU);
             break;
           }
         } else {/* ((MCG->C2 & MCG_C2_RANGE0_MASK) != 0x00U) */
-          Divider = (uint16_t)(1LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
+          Divider = (uint16_t)((1LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT)) & 0xFFFFU);
         }
         MCGOUTClock = (MCGOUTClock / Divider); /* Calculate the divided FLL reference clock */
       } else { /* (MCG->C7 & MCG_C7_PLL32KREFSEL_MASK) == 0xB0U */
         /* Reserved value */
         return;
       }
-      MCGOUTClock *= 375U; /* Calculate the MCG output clock */
+      max = UINT32_MAX / MCGOUTClock;
+      MCGOUTClock *= SAFE_MULTI(375U, max); /* Calculate the MCG output clock */
     }
   } else if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x40U) {
     /* Internal reference clock is selected */
     if ((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U) {
       MCGOUTClock = CPU_INT_SLOW_CLK_HZ; /* Slow internal reference clock selected */
     } else { /* Fast internal reference clock selected */
-      Divider = (uint16_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
+      Divider = (uint16_t)((0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT)) & 0xFFFFU);
       MCGOUTClock = (uint32_t) (CPU_INT_FAST_CLK_HZ / Divider);
     }
   } else if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U) {
