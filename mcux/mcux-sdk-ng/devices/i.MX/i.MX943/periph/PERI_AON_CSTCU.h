@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_CSTCU
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AON_CSTCU.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_AON_CSTCU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AON_CSTCU
  *
  * CMSIS Peripheral Access Layer for AON_CSTCU
  */
 
-#if !defined(AON_CSTCU_H_)
-#define AON_CSTCU_H_                             /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AON_CSTCU_H_)
+#define PERI_AON_CSTCU_H_                        /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -273,8 +276,8 @@ typedef struct {
 #define AON_CSTCU_RUNSWREG_RUNSW_MASK            (0x1U)
 #define AON_CSTCU_RUNSWREG_RUNSW_SHIFT           (0U)
 /*! RUNSW - Run Software
- *  0b0..No self-test run in progress
  *  0b0..No effect
+ *  0b0..No self-test run in progress
  *  0b1..Self-test in progress
  *  0b1..Starts self-test
  */
@@ -283,8 +286,8 @@ typedef struct {
 #define AON_CSTCU_RUNSWREG_SW_ABORT_MASK         (0x10U)
 #define AON_CSTCU_RUNSWREG_SW_ABORT_SHIFT        (4U)
 /*! SW_ABORT - Software Abort
- *  0b0..No self-test abort request
  *  0b0..No effect
+ *  0b0..No self-test abort request
  *  0b1..Aborts self-test
  */
 #define AON_CSTCU_RUNSWREG_SW_ABORT(x)           (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_RUNSWREG_SW_ABORT_SHIFT)) & AON_CSTCU_RUNSWREG_SW_ABORT_MASK)
@@ -320,10 +323,10 @@ typedef struct {
 #define AON_CSTCU_IF_STEND_IF_MASK               (0x1U)
 #define AON_CSTCU_IF_STEND_IF_SHIFT              (0U)
 /*! STEND_IF - Self-Test End Interrupt Flag
- *  0b0..No pending interrupt
  *  0b0..No effect
- *  0b1..Pending interrupt
+ *  0b0..No pending interrupt
  *  0b1..Clear the flag
+ *  0b1..Pending interrupt
  */
 #define AON_CSTCU_IF_STEND_IF(x)                 (((uint32_t)(((uint32_t)(x)) << AON_CSTCU_IF_STEND_IF_SHIFT)) & AON_CSTCU_IF_STEND_IF_MASK)
 /*! @} */
@@ -711,5 +714,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AON_CSTCU_H_ */
+#endif  /* PERI_AON_CSTCU_H_ */
 

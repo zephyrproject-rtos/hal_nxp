@@ -4116,7 +4116,6 @@ typedef enum
         } \
     }
 #include "fsl_elec_spec.h"
-#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (1700000000UL)
 
 
 /* XSPI - Peripheral instance base addresses */

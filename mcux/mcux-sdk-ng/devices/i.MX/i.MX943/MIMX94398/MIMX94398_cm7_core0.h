@@ -30,8 +30,8 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    iMX943RM rev1 draftK
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250115
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX94398_cm7_core0
@@ -66,14 +66,17 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX94398_cm7_core0.h
- * @version 1.0
- * @date 2023-11-01
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMX94398_cm7_core0
  *
  * CMSIS Peripheral Access Layer for MIMX94398_cm7_core0
@@ -121,9 +124,9 @@
 #include "PERI_CCMSRCGPC_TCU.h"
 #include "PERI_CORTEXA_TCU.h"
 #include "PERI_DCIF.h"
+#include "PERI_DDRC.h"
 #include "PERI_DDR_BLK_CTRL_DDRMIX.h"
 #include "PERI_DDR_CMU.h"
-#include "PERI_DDR_DDRC.h"
 #include "PERI_DDR_LSTCU.h"
 #include "PERI_DDR_TCU.h"
 #include "PERI_DISPLAY_BLK_CTRL_DISPLAYMIX.h"
@@ -314,8 +317,6 @@
 #include "PERI_WAKEUP_DMA_CRC.h"
 #include "PERI_WAKEUP_EIM.h"
 #include "PERI_WAKEUP_ERM.h"
-#include "PERI_WAKEUP_GPT.h"
-#include "PERI_WAKEUP_SAI.h"
 #include "PERI_WAKEUP_TCW.h"
 #include "PERI_WAKEUP_TRDC_MGR_MEGA.h"
 #include "PERI_WAKEUP_USDHC.h"

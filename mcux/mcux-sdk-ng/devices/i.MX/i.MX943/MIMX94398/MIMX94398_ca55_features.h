@@ -605,7 +605,7 @@
 /* MEMORY module features */
 
 /* @brief Memory map has offset between subsystems. */
-#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (0)
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
 
 /* MU module features */
 

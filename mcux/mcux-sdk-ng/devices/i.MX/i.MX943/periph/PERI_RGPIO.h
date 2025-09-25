@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RGPIO
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file RGPIO.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_RGPIO.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for RGPIO
  *
  * CMSIS Peripheral Access Layer for RGPIO
  */
 
-#if !defined(RGPIO_H_)
-#define RGPIO_H_                                 /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_RGPIO_H_)
+#define PERI_RGPIO_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -2771,10 +2774,10 @@ typedef struct {
 #define RGPIO_ICR_ISF_MASK                       (0x1000000U)
 #define RGPIO_ICR_ISF_SHIFT                      (24U)
 /*! ISF - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ICR_ISF(x)                         (((uint32_t)(((uint32_t)(x)) << RGPIO_ICR_ISF_SHIFT)) & RGPIO_ICR_ISF_MASK)
 /*! @} */
@@ -3059,320 +3062,320 @@ typedef struct {
 #define RGPIO_ISFR_ISF0_MASK                     (0x1U)
 #define RGPIO_ISFR_ISF0_SHIFT                    (0U)
 /*! ISF0 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF0(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF0_SHIFT)) & RGPIO_ISFR_ISF0_MASK)
 
 #define RGPIO_ISFR_ISF1_MASK                     (0x2U)
 #define RGPIO_ISFR_ISF1_SHIFT                    (1U)
 /*! ISF1 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF1(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF1_SHIFT)) & RGPIO_ISFR_ISF1_MASK)
 
 #define RGPIO_ISFR_ISF2_MASK                     (0x4U)
 #define RGPIO_ISFR_ISF2_SHIFT                    (2U)
 /*! ISF2 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF2(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF2_SHIFT)) & RGPIO_ISFR_ISF2_MASK)
 
 #define RGPIO_ISFR_ISF3_MASK                     (0x8U)
 #define RGPIO_ISFR_ISF3_SHIFT                    (3U)
 /*! ISF3 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF3(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF3_SHIFT)) & RGPIO_ISFR_ISF3_MASK)
 
 #define RGPIO_ISFR_ISF4_MASK                     (0x10U)
 #define RGPIO_ISFR_ISF4_SHIFT                    (4U)
 /*! ISF4 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF4(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF4_SHIFT)) & RGPIO_ISFR_ISF4_MASK)
 
 #define RGPIO_ISFR_ISF5_MASK                     (0x20U)
 #define RGPIO_ISFR_ISF5_SHIFT                    (5U)
 /*! ISF5 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF5(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF5_SHIFT)) & RGPIO_ISFR_ISF5_MASK)
 
 #define RGPIO_ISFR_ISF6_MASK                     (0x40U)
 #define RGPIO_ISFR_ISF6_SHIFT                    (6U)
 /*! ISF6 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF6(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF6_SHIFT)) & RGPIO_ISFR_ISF6_MASK)
 
 #define RGPIO_ISFR_ISF7_MASK                     (0x80U)
 #define RGPIO_ISFR_ISF7_SHIFT                    (7U)
 /*! ISF7 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF7(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF7_SHIFT)) & RGPIO_ISFR_ISF7_MASK)
 
 #define RGPIO_ISFR_ISF8_MASK                     (0x100U)
 #define RGPIO_ISFR_ISF8_SHIFT                    (8U)
 /*! ISF8 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF8(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF8_SHIFT)) & RGPIO_ISFR_ISF8_MASK)
 
 #define RGPIO_ISFR_ISF9_MASK                     (0x200U)
 #define RGPIO_ISFR_ISF9_SHIFT                    (9U)
 /*! ISF9 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF9(x)                       (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF9_SHIFT)) & RGPIO_ISFR_ISF9_MASK)
 
 #define RGPIO_ISFR_ISF10_MASK                    (0x400U)
 #define RGPIO_ISFR_ISF10_SHIFT                   (10U)
 /*! ISF10 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF10(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF10_SHIFT)) & RGPIO_ISFR_ISF10_MASK)
 
 #define RGPIO_ISFR_ISF11_MASK                    (0x800U)
 #define RGPIO_ISFR_ISF11_SHIFT                   (11U)
 /*! ISF11 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF11(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF11_SHIFT)) & RGPIO_ISFR_ISF11_MASK)
 
 #define RGPIO_ISFR_ISF12_MASK                    (0x1000U)
 #define RGPIO_ISFR_ISF12_SHIFT                   (12U)
 /*! ISF12 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF12(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF12_SHIFT)) & RGPIO_ISFR_ISF12_MASK)
 
 #define RGPIO_ISFR_ISF13_MASK                    (0x2000U)
 #define RGPIO_ISFR_ISF13_SHIFT                   (13U)
 /*! ISF13 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF13(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF13_SHIFT)) & RGPIO_ISFR_ISF13_MASK)
 
 #define RGPIO_ISFR_ISF14_MASK                    (0x4000U)
 #define RGPIO_ISFR_ISF14_SHIFT                   (14U)
 /*! ISF14 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF14(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF14_SHIFT)) & RGPIO_ISFR_ISF14_MASK)
 
 #define RGPIO_ISFR_ISF15_MASK                    (0x8000U)
 #define RGPIO_ISFR_ISF15_SHIFT                   (15U)
 /*! ISF15 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF15(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF15_SHIFT)) & RGPIO_ISFR_ISF15_MASK)
 
 #define RGPIO_ISFR_ISF16_MASK                    (0x10000U)
 #define RGPIO_ISFR_ISF16_SHIFT                   (16U)
 /*! ISF16 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF16(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF16_SHIFT)) & RGPIO_ISFR_ISF16_MASK)
 
 #define RGPIO_ISFR_ISF17_MASK                    (0x20000U)
 #define RGPIO_ISFR_ISF17_SHIFT                   (17U)
 /*! ISF17 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF17(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF17_SHIFT)) & RGPIO_ISFR_ISF17_MASK)
 
 #define RGPIO_ISFR_ISF18_MASK                    (0x40000U)
 #define RGPIO_ISFR_ISF18_SHIFT                   (18U)
 /*! ISF18 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF18(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF18_SHIFT)) & RGPIO_ISFR_ISF18_MASK)
 
 #define RGPIO_ISFR_ISF19_MASK                    (0x80000U)
 #define RGPIO_ISFR_ISF19_SHIFT                   (19U)
 /*! ISF19 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF19(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF19_SHIFT)) & RGPIO_ISFR_ISF19_MASK)
 
 #define RGPIO_ISFR_ISF20_MASK                    (0x100000U)
 #define RGPIO_ISFR_ISF20_SHIFT                   (20U)
 /*! ISF20 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF20(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF20_SHIFT)) & RGPIO_ISFR_ISF20_MASK)
 
 #define RGPIO_ISFR_ISF21_MASK                    (0x200000U)
 #define RGPIO_ISFR_ISF21_SHIFT                   (21U)
 /*! ISF21 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF21(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF21_SHIFT)) & RGPIO_ISFR_ISF21_MASK)
 
 #define RGPIO_ISFR_ISF22_MASK                    (0x400000U)
 #define RGPIO_ISFR_ISF22_SHIFT                   (22U)
 /*! ISF22 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF22(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF22_SHIFT)) & RGPIO_ISFR_ISF22_MASK)
 
 #define RGPIO_ISFR_ISF23_MASK                    (0x800000U)
 #define RGPIO_ISFR_ISF23_SHIFT                   (23U)
 /*! ISF23 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF23(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF23_SHIFT)) & RGPIO_ISFR_ISF23_MASK)
 
 #define RGPIO_ISFR_ISF24_MASK                    (0x1000000U)
 #define RGPIO_ISFR_ISF24_SHIFT                   (24U)
 /*! ISF24 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF24(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF24_SHIFT)) & RGPIO_ISFR_ISF24_MASK)
 
 #define RGPIO_ISFR_ISF25_MASK                    (0x2000000U)
 #define RGPIO_ISFR_ISF25_SHIFT                   (25U)
 /*! ISF25 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF25(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF25_SHIFT)) & RGPIO_ISFR_ISF25_MASK)
 
 #define RGPIO_ISFR_ISF26_MASK                    (0x4000000U)
 #define RGPIO_ISFR_ISF26_SHIFT                   (26U)
 /*! ISF26 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF26(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF26_SHIFT)) & RGPIO_ISFR_ISF26_MASK)
 
 #define RGPIO_ISFR_ISF27_MASK                    (0x8000000U)
 #define RGPIO_ISFR_ISF27_SHIFT                   (27U)
 /*! ISF27 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF27(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF27_SHIFT)) & RGPIO_ISFR_ISF27_MASK)
 
 #define RGPIO_ISFR_ISF28_MASK                    (0x10000000U)
 #define RGPIO_ISFR_ISF28_SHIFT                   (28U)
 /*! ISF28 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF28(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF28_SHIFT)) & RGPIO_ISFR_ISF28_MASK)
 
 #define RGPIO_ISFR_ISF29_MASK                    (0x20000000U)
 #define RGPIO_ISFR_ISF29_SHIFT                   (29U)
 /*! ISF29 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF29(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF29_SHIFT)) & RGPIO_ISFR_ISF29_MASK)
 
 #define RGPIO_ISFR_ISF30_MASK                    (0x40000000U)
 #define RGPIO_ISFR_ISF30_SHIFT                   (30U)
 /*! ISF30 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF30(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF30_SHIFT)) & RGPIO_ISFR_ISF30_MASK)
 
 #define RGPIO_ISFR_ISF31_MASK                    (0x80000000U)
 #define RGPIO_ISFR_ISF31_SHIFT                   (31U)
 /*! ISF31 - Interrupt Status Flag
- *  0b0..Not detected
  *  0b0..No effect
- *  0b1..Detected
+ *  0b0..Not detected
  *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define RGPIO_ISFR_ISF31(x)                      (((uint32_t)(((uint32_t)(x)) << RGPIO_ISFR_ISF31_SHIFT)) & RGPIO_ISFR_ISF31_MASK)
 /*! @} */
@@ -3411,5 +3414,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* RGPIO_H_ */
+#endif  /* PERI_RGPIO_H_ */
 
