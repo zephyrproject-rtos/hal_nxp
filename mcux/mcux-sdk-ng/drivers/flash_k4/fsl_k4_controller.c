@@ -36,13 +36,13 @@
  * Prototypes
  ******************************************************************************/
 
-static void flash_command_pre_sequence(FMU_Type *base);
+static status_t flash_command_pre_sequence(FMU_Type *base);
 
-static void flash_command_sequence(FMU_Type *base);
+static status_t flash_command_sequence(FMU_Type *base);
 
-static void flash_erase_sequence(FMU_Type *base, uint32_t start);
+static status_t flash_erase_sequence(FMU_Type *base, uint32_t start);
 
-static void flash_pgm_sequence(FMU_Type *base, uint32_t start, uint32_t *src, uint8_t isPage);
+static status_t flash_pgm_sequence(FMU_Type *base, uint32_t start, uint32_t *src, uint8_t isPage);
 
 /*! @brief Internal function Flash command*/
 static status_t flash_command_complete(FMU_Type *base);
@@ -63,11 +63,19 @@ status_t FLASH_CMD_EraseSector(FMU_Type *base, uint32_t start)
     /* Clear flash cache before every erase to prevent the possibility of returning stale data */
     MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
 #endif
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to erase a sector flash */
     base->FCCOB[0] = FLASH_ERASE_SECTOR;
     /* Erase Command sequence */
-    flash_erase_sequence(base, start);
+    returnCode = flash_erase_sequence(base, start);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* check command completion and error handling */
     returnCode = flash_command_complete(base);
 
@@ -82,10 +90,20 @@ status_t FLASH_CMD_EraseAll(FMU_Type *base)
     /* Clear flash cache before every erase to prevent the possibility of returning stale data */
     MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
 #endif
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
+
     /* preparing passing parameter to erase all flash blocks */
     base->FCCOB[0] = FLASH_ERASE_ALL;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
+
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -101,11 +119,20 @@ status_t FLASH_CMD_ProgramPhrase(FMU_Type *base, uint32_t start, uint32_t *src)
     /* Clear flash cache before every erase to prevent the possibility of returning stale data */
     MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
 #endif
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to program the flash block */
     base->FCCOB[0] = FLASH_PROGRAM_PHRASE;
     /* Program Command sequence */
-    flash_pgm_sequence(base, start, src, isPage);
+    returnCode = flash_pgm_sequence(base, start, src, isPage);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
+
     returnCode = flash_command_complete(base);
 
     return returnCode;
@@ -120,11 +147,20 @@ status_t FLASH_CMD_ProgramPage(FMU_Type *base, uint32_t start, uint32_t *src)
     /* Clear flash cache before every erase to prevent the possibility of returning stale data */
     MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
 #endif
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to program the flash block */
     base->FCCOB[0] = FLASH_PROGRAM_PAGE;
     /* Program Command sequence */
-    flash_pgm_sequence(base, start, src, isPage);
+    returnCode = flash_pgm_sequence(base, start, src, isPage);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
+
     returnCode = flash_command_complete(base);
 
     return returnCode;
@@ -134,11 +170,19 @@ status_t FLASH_CMD_VerifyErasePhrase(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* Fill in verify erase phrase command parameters. */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_PHRASE;
     base->FCCOB[2] = start;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -149,11 +193,19 @@ status_t FLASH_CMD_VerifyErasePage(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* Fill in verify erase page command parameters. */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_PAGE;
     base->FCCOB[2] = start;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -164,11 +216,19 @@ status_t FLASH_CMD_VerifyEraseSector(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* Fill in verify erase sector command parameters. */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_SECTOR;
     base->FCCOB[2] = start;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -179,11 +239,19 @@ status_t FLASH_CMD_VerifyEraseIFRPhrase(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* Fill in verify erase ifr phrase command parameters. */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_IFR_PHRASE;
     base->FCCOB[2] = start;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -194,11 +262,19 @@ status_t FLASH_CMD_VerifyEraseIFRPage(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* Fill in verify erase ifr page command parameters. */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_IFR_PAGE;
     base->FCCOB[2] = start;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -209,11 +285,19 @@ status_t FLASH_CMD_VerifyEraseIFRSector(FMU_Type *base, uint32_t start)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* Fill in verify erase ifr sector command parameters. */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_IFR_SECTOR;
     base->FCCOB[2] = start;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -224,11 +308,19 @@ status_t FLASH_CMD_VerifyEraseBlock(FMU_Type *base, uint32_t blockaddr)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to verify erase block command */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_BLOCK;
     base->FCCOB[2] = blockaddr;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -239,10 +331,18 @@ status_t FLASH_CMD_VerifyEraseAll(FMU_Type *base)
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to verify erase all command */
     base->FCCOB[0] = FLASH_VERIFY_ERASE_ALL;
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
     return returnCode;
@@ -252,7 +352,11 @@ status_t FLASH_CMD_ReadIntoMISR(FMU_Type *base, uint32_t start, uint32_t ending,
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to read into misr command */
     base->FCCOB[0] = FLASH_READ_INTO_MISR;
     base->FCCOB[2] = start;
@@ -261,7 +365,11 @@ status_t FLASH_CMD_ReadIntoMISR(FMU_Type *base, uint32_t start, uint32_t ending,
     base->FCCOB[5] = seed[1];
     base->FCCOB[6] = seed[2];
     base->FCCOB[7] = seed[3];
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -280,7 +388,11 @@ status_t FLASH_CMD_ReadIFRIntoMISR(FMU_Type *base, uint32_t start, uint32_t endi
 {
     status_t returnCode = kStatus_Fail;
 
-    flash_command_pre_sequence(base);
+    returnCode = flash_command_pre_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* preparing passing parameter to read into misr command */
     base->FCCOB[0] = FLASH_READ_IFR_INTO_MISR;
     base->FCCOB[2] = start;
@@ -289,7 +401,11 @@ status_t FLASH_CMD_ReadIFRIntoMISR(FMU_Type *base, uint32_t start, uint32_t endi
     base->FCCOB[5] = seed[1];
     base->FCCOB[6] = seed[2];
     base->FCCOB[7] = seed[3];
-    flash_command_sequence(base);
+    returnCode = flash_command_sequence(base);
+    if (kStatus_FLASH_Success != returnCode)
+    {
+        return returnCode;
+    }
     /* calling flash command sequence function to execute the command */
     returnCode = flash_command_complete(base);
 
@@ -319,8 +435,12 @@ __ramfunc
 __attribute__((section(".ramfunc"))) __attribute__((__noinline__))
 #endif
 #endif
-static void flash_command_pre_sequence(FMU_Type *base)
+static status_t flash_command_pre_sequence(FMU_Type *base)
 {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+    uint32_t cmdCompleteTimeout = FLASH_COMMAND_COMPLETE_TIMEOUT;
+#endif
+
     if ((base->FSTAT & FLASH_FSTAT_DFDIF_MASK) != 0U)
     {
         /* Acknowledge previous ECC fault. The fault occured during a previous read or verify erase but too late to  */
@@ -329,10 +449,18 @@ static void flash_command_pre_sequence(FMU_Type *base)
     // Check if previous command complete, CCIF==1, wait for CCIF set
     while (((base->FSTAT) & FLASH_FSTAT_CCIF_MASK) == 0U)
     {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+        if (--cmdCompleteTimeout == 0U)
+        {
+            return kStatus_FLASH_CommandCompleteTimeout;
+        }
+#endif
     }
 
     /* clear CMDABT & ACCERR & PVIOL flag in flash status register */
     base->FSTAT = (FLASH_FSTAT_CMDABT_MASK | FLASH_FSTAT_ACCERR_MASK | FLASH_FSTAT_PVIOL_MASK);
+
+    return kStatus_FLASH_Success;
 }
 
 /*!
@@ -350,15 +478,26 @@ __ramfunc
 __attribute__((section(".ramfunc"))) __attribute__((__noinline__))
 #endif
 #endif
-static void flash_command_sequence(FMU_Type *base)
+static status_t flash_command_sequence(FMU_Type *base)
 {
+ #if FLASH_COMMAND_COMPLETE_TIMEOUT
+    uint32_t cmdCompleteTimeout = FLASH_COMMAND_COMPLETE_TIMEOUT;
+#endif
     /* clear CCIF bit to launch the command */
     base->FSTAT = FLASH_FSTAT_CCIF_MASK;
 
     /* Check CCIF bit of the flash status register, wait till it is set */
     while ((base->FSTAT & FLASH_FSTAT_CCIF_MASK) == 0U)
     {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+        if (--cmdCompleteTimeout == 0U)
+        {
+            return kStatus_FLASH_CommandCompleteTimeout;
+        }
+#endif
     }
+
+    return kStatus_FLASH_Success;
 }
 
 /*!
@@ -376,13 +515,28 @@ __ramfunc
 __attribute__((section(".ramfunc"))) __attribute__((__noinline__))
 #endif
 #endif
-static void flash_erase_sequence(FMU_Type *base, uint32_t start)
+static status_t flash_erase_sequence(FMU_Type *base, uint32_t start)
 {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+    uint32_t cmdCompleteTimeout = FLASH_COMMAND_COMPLETE_TIMEOUT;
+#endif
+#if FLASH_WRITE_ENABLE_TIMEOUT
+    uint32_t writeEnableTimeout = FLASH_WRITE_ENABLE_TIMEOUT;
+#endif
+#if FLASH_PROGRAM_ERASE_READY_TIMEOUT
+    uint32_t programEraseReadyTimeout = FLASH_PROGRAM_ERASE_READY_TIMEOUT;
+#endif
     /* clear CCIF bit to launch the command */
     base->FSTAT = FLASH_FSTAT_CCIF_MASK;
 
     while ((base->FSTAT & FLASH_FSTAT_PEWEN_MASK) == 0U)
     {
+#if FLASH_WRITE_ENABLE_TIMEOUT
+        if (--writeEnableTimeout == 0U)
+        {
+            return kStatus_FLASH_WriteEnableTimeout;
+        }
+#endif
     }
 
     for (uint32_t i = 0u; i < 4u; i++)
@@ -392,6 +546,12 @@ static void flash_erase_sequence(FMU_Type *base, uint32_t start)
 
     while ((base->FSTAT & FLASH_FSTAT_PERDY_MASK) == 0U)
     {
+#if FLASH_PROGRAM_ERASE_READY_TIMEOUT
+        if (--programEraseReadyTimeout == 0U)
+        {
+            return kStatus_FLASH_ProgramEraseReadyTimeout;
+        }
+#endif
     }
 
     base->FSTAT = FLASH_FSTAT_PERDY_MASK;
@@ -399,7 +559,15 @@ static void flash_erase_sequence(FMU_Type *base, uint32_t start)
     /* Check CCIF bit of the flash status register, wait till it is set */
     while ((base->FSTAT & FLASH_FSTAT_CCIF_MASK) == 0U)
     {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+        if (--cmdCompleteTimeout == 0U)
+        {
+            return kStatus_FLASH_CommandCompleteTimeout;
+        }
+#endif
     }
+
+    return kStatus_FLASH_Success;
 }
 
 /*!
@@ -417,13 +585,28 @@ __ramfunc
 __attribute__((section(".ramfunc"))) __attribute__((__noinline__))
 #endif
 #endif
-static void flash_pgm_sequence(FMU_Type *base, uint32_t start, uint32_t *src, uint8_t isPage)
+static status_t flash_pgm_sequence(FMU_Type *base, uint32_t start, uint32_t *src, uint8_t isPage)
 {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+    uint32_t cmdCompleteTimeout = FLASH_COMMAND_COMPLETE_TIMEOUT;
+#endif
+#if FLASH_WRITE_ENABLE_TIMEOUT
+    uint32_t writeEnableTimeout = FLASH_WRITE_ENABLE_TIMEOUT;
+#endif
+#if FLASH_PROGRAM_ERASE_READY_TIMEOUT
+    uint32_t programEraseReadyTimeout = FLASH_PROGRAM_ERASE_READY_TIMEOUT;
+#endif
     /* clear CCIF bit to launch the command */
     base->FSTAT = FLASH_FSTAT_CCIF_MASK;
 
     while ((base->FSTAT & FLASH_FSTAT_PEWEN_MASK) == 0U)
     {
+#if FLASH_WRITE_ENABLE_TIMEOUT
+        if (--writeEnableTimeout == 0U)
+        {
+            return kStatus_FLASH_WriteEnableTimeout;
+        }
+#endif
     }
 
     uint8_t lengthInWord;
@@ -444,6 +627,12 @@ static void flash_pgm_sequence(FMU_Type *base, uint32_t start, uint32_t *src, ui
 
     while ((base->FSTAT & FLASH_FSTAT_PERDY_MASK) == 0U)
     {
+#if FLASH_PROGRAM_ERASE_READY_TIMEOUT
+        if (--programEraseReadyTimeout == 0U)
+        {
+            return kStatus_FLASH_ProgramEraseReadyTimeout;
+        }
+#endif
     }
 
     base->FSTAT = FLASH_FSTAT_PERDY_MASK;
@@ -451,7 +640,15 @@ static void flash_pgm_sequence(FMU_Type *base, uint32_t start, uint32_t *src, ui
     /* Check CCIF bit of the flash status register, wait till it is set */
     while ((base->FSTAT & FLASH_FSTAT_CCIF_MASK) == 0U)
     {
+#if FLASH_COMMAND_COMPLETE_TIMEOUT
+        if (--cmdCompleteTimeout == 0U)
+        {
+            return kStatus_FLASH_CommandCompleteTimeout;
+        }
+#endif
     }
+
+    return kStatus_FLASH_Success;
 }
 
 /*!

@@ -142,12 +142,12 @@ static void CSI_InitBufferQueue(buf_queue_t *bq)
 
 static bool CSI_IsBufferQueueEmpty(buf_queue_t *bq)
 {
-    return bq->head == -1;
+    return (bq->head == -1) && (bq->tail == -1);
 }
 
 static bool CSI_IsBufferQueueFull(buf_queue_t *bq)
 {
-    return bq->tail == (CSI_DRIVER_QUEUE_SIZE - 1);
+    return bq->tail == ((int)CSI_DRIVER_QUEUE_SIZE - 1);
 }
 
 static uint32_t CSI_BufferQueueCount(buf_queue_t *bq)
@@ -156,7 +156,7 @@ static uint32_t CSI_BufferQueueCount(buf_queue_t *bq)
     {
         return 0;
     }
-    return bq->tail - bq->head + 1;
+    return (uint32_t)(bq->tail - bq->head) + 1U;
 }
 
 static status_t CSI_EnqueueBuffer(buf_queue_t *bq, uint32_t addr)

@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines CMU_FC driver version. */
-#define FSL_CMU_FC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_CMU_FC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 /*! @brief List of CMU_FC status */

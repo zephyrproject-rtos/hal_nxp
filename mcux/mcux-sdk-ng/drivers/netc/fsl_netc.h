@@ -50,7 +50,7 @@
  */
 
 /*! @brief Driver Version */
-#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
+#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 10, 1))
 
 /*! @brief Macro to divides an address into a low 32 bits and a possible high 32 bits */
 #define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)(x) & 0xFFFFFFFFU)
@@ -1376,12 +1376,7 @@ typedef struct _netc_tb_ipf_cfge
     netc_host_reason_t hr : 4;              /*!< Host Reason metadata when frame is redirected/copied to
                                               the switch management port */
     uint32_t timecape : 1;                  /*!< Timestam capture enable */
-#if defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG
-    uint32_t rrt : 1;                       /*!< Report Receive Timestamp */
-    uint32_t : 8;
-#else
     uint32_t : 9;
-#endif
     uint32_t fltaTgt;                       /*!< Target for selected switch forwarding action or filter action*/
 } netc_tb_ipf_cfge_t;
 
@@ -3646,7 +3641,22 @@ typedef union _netc_tx_bd
         uint32_t written : 1; /*!< Write-back flag. */
         uint32_t : 5;
     } writeback;
+
+    uint64_t dword[2];
 } netc_tx_bd_t;
+
+
+static inline void NETC_ClearTxDescriptor(netc_tx_bd_t *txDesc)
+{
+    txDesc->dword[0] = 0;
+    txDesc->dword[1] = 0;
+}
+
+static inline void NETC_CopyTxDescriptor(netc_tx_bd_t *txDescDst, netc_tx_bd_t *txDescSrc)
+{
+    txDescDst->dword[0] = txDescSrc->dword[0];
+    txDescDst->dword[1] = txDescSrc->dword[1];
+}
 
 /*!
  * @brief Receive Buffer Descriptor format.
@@ -3806,6 +3816,7 @@ typedef enum _netc_psi_msg_flags_t
 {
     kNETC_PsiRxMsgFromVsi1Flag = 0x2,     /*!< Message receive interrupt enable, initiated by VSI1. */
     kNETC_PsiRxMsgFromVsi2Flag = 0x4,     /*!< Message receive interrupt enable, initiated by VSI2. */
+    kNETC_PsiRxMsgFromVsi3Flag = 0x8,     /*!< Message receive interrupt enable, initiated by VSI3. */
     kNETC_PsiFLRFromVsi1Flag   = 0x20000, /*!< Function level reset interrupt enable, initiated by VSI1. */
 } netc_psi_msg_flags_t;
 
@@ -3825,6 +3836,7 @@ typedef enum _netc_vsi_number
 {
     kNETC_Vsi1 = 0x1 << 1U,
     kNETC_Vsi2 = 0x1 << 2U,
+    kNETC_Vsi3 = 0x1 << 3U,
     /* Reserved for multiple VSIs. */
 } netc_vsi_number_t;
 

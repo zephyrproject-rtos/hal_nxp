@@ -810,7 +810,7 @@ status_t NETC_QuerySGITableEntry(netc_cbdr_handle_t *handle, uint32_t entryID, n
 {
     netc_cmd_bd_t cmdBd = {0};
     status_t status     = kStatus_Success;
-    (void)memset(handle->buffer, 0, sizeof(netc_tb_sgi_rsp_data_t));
+    (void)memset(handle->buffer, 0, sizeof(netc_tb_sgi_req_data_t));
     handle->buffer->sgi.request.entryID                    = entryID;
     handle->buffer->sgi.request.commonHeader.updateActions = 0U;
     handle->buffer->sgi.request.commonHeader.queryActions  = 0U;
@@ -1153,7 +1153,7 @@ status_t NETC_GetTGSOperationList(netc_cbdr_handle_t *handle, netc_tb_tgs_gcl_t 
     {
         return kStatus_InvalidArgument;
     }
-    (void)memset(handle->buffer, 0, sizeof(netc_tb_tgs_data_t));
+    (void)memset(handle->buffer, 0, sizeof(netc_tb_tgs_req_data_t));
     handle->buffer->tgs.request.entryID                    = gcl->entryID;
     handle->buffer->tgs.request.commonHeader.updateActions = 0U;
     handle->buffer->tgs.request.commonHeader.queryActions  = 0U;

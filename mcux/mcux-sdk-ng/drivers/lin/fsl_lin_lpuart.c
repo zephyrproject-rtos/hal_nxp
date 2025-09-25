@@ -70,6 +70,16 @@
  * $Justification lin_lpuart_c_ref_13$
  * The LIN driver test cases are run in bare metal environment and can only be usd
  * in non-blocking interrupt way.
+ * 
+ * $Justification lin_lpuart_c_ref_14$
+ * Normally no other interrupt status can be detected, the false branch can only be
+ * covered when the interrupt enablement is corrupted in user application such as
+ * other unrelated interrupt is enabled by mistake.
+ * 
+ * $Justification lin_lpuart_c_ref_15$
+ * The measurement overflow can only happen when the registered function uses a timer
+ * whose counter's clock source is not set properly, and the autobaud sequence the LIN
+ * master send uses an invalid baudrate.
  */
 
 /*******************************************************************************
@@ -150,6 +160,8 @@ status_t LIN_LPUART_CalculateBaudRate(
     LPUART_Type *base, uint32_t baudRate_Bps, uint32_t srcClock_Hz, uint32_t *osr, uint16_t *sbr)
 {
     assert(0U != baudRate_Bps);
+    assert((srcClock_Hz / baudRate_Bps / 4U) <= 0xFFFFU);
+
     status_t status = kStatus_Success;
 
     uint16_t sbrTemp;
@@ -589,9 +601,9 @@ static void LIN_LPUART_EvalTwoBitTimeLength(uint32_t instance, uint32_t twoBitTi
                 {
                     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_7 $ */
                     if ((twoBitTimeLength <
-                         ((100U - BIT_RATE_TOLERANCE_UNSYNC) * s_previousTwoBitTimeLength[instance] / 100U)) ||
+                         ((100U - BIT_RATE_TOLERANCE_UNSYNC) * (s_previousTwoBitTimeLength[instance] / 100U))) ||
                         (twoBitTimeLength >
-                         ((100U + BIT_RATE_TOLERANCE_UNSYNC) * s_previousTwoBitTimeLength[instance] / 100U)))
+                         ((100U + BIT_RATE_TOLERANCE_UNSYNC) * (s_previousTwoBitTimeLength[instance] / 100U))))
                     {
                         /* cancel capturing */
                         (void)LIN_LPUART_GotoIdleState(base);
@@ -1864,10 +1876,16 @@ lin_status_t LIN_LPUART_AutoBaudCapture(uint32_t instance)
         /* Calculate time between two bit (for service autobaud) */
         (void)linUserConfig->timerGetTimeIntervalCallback(&tmpTime);
 
+        /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_15$ */
+        if (s_timeMeasure[instance] > (0xFFFFFFFFUL - tmpTime))
+        {
+            return LIN_ERROR;
+        }
+        
         /* Get two bits time length */
         s_timeMeasure[instance] += tmpTime;
         s_countMeasure[instance]++;
-        if ((s_countMeasure[instance] > 1U))
+        if (s_countMeasure[instance] > 1U)
         {
             switch (linCurrentState->currentNodeState)
             {
@@ -2053,6 +2071,7 @@ void LIN_LPUART_IRQHandler(LPUART_Type *base)
             }
             else
             {
+                /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_14$ */
                 if (0U != (LIN_LPUART_GetStatusFlags(base) & (uint32_t)kLPUART_RxDataRegFullFlag))
                 {
                     (void)LIN_LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_RxDataRegFullFlag);

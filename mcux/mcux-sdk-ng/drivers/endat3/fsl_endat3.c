@@ -29,9 +29,10 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+uint32_t timerstamp = 0;
 __WEAK uint32_t getTimestampMS()
 {
-	return 0;
+	return timerstamp++;
 }
 
 status_t ENDAT3_RxTxClkConfig(ENDAT3_Type *base, uint32_t clk_sys, uint8_t rate, uint16_t watchdag_us)
@@ -66,6 +67,7 @@ status_t ENDAT3_RxTxClkConfig(ENDAT3_Type *base, uint32_t clk_sys, uint8_t rate,
 	base->CONFIG_1 = ENDAT3_CONFIG_1_CFG_CLKDIV(clkdiv);
 	base->CONFIG_2 = ENDAT3_CONFIG_2_CFG_DEC_1(dec[1]) | ENDAT3_CONFIG_2_CFG_DEC_0(dec[0]);
 	base->CONFIG_3 = ENDAT3_CONFIG_3_CFG_DEC_3(dec[3]) | ENDAT3_CONFIG_3_CFG_DEC_2(dec[2]);
+
 	if (watchDogVal == 0 || watchDogVal > 0xFFFF) {
 		base->CONFIG_4 = ENDAT3_CONFIG_4_CFG_WATCHDOG(0xffff);
 	} else {
@@ -83,15 +85,20 @@ status_t ENDAT3_FG_WaitingMasterReady(ENDAT3_Type *base)
 		fg_status = base->FG_STATUS & 0xFF;
 	}
 
-	if (fg_status & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK | ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK)) {
-		if (fg_status & ENDAT3_FG_STATUS_STROBE_ERROR_MASK)
-			return kStatus_Endat3_FG_Strobe_Error;
-		else if (fg_status & ENDAT3_FG_STATUS_WD_ERROR_MASK)
+	if (fg_status & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK |
+					ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK)) {
+		if (fg_status & ENDAT3_FG_STATUS_STROBE_ERROR_MASK) {
+				return kStatus_Endat3_FG_Strobe_Error;
+			}
+		else if (fg_status & ENDAT3_FG_STATUS_WD_ERROR_MASK) {
 			return kStatus_Endat3_FG_Watchdog_Error;
-		else if (fg_status & ENDAT3_FG_STATUS_PHY_ERROR_MASK)
+		}
+		else if (fg_status & ENDAT3_FG_STATUS_PHY_ERROR_MASK) {
 			return kStatus_Endat3_FG_PHY_Error;
-		else if (fg_status & ENDAT3_FG_STATUS_CS_ERROR_MASK)
+		}
+		else if (fg_status & ENDAT3_FG_STATUS_CS_ERROR_MASK) {
 			return kStatus_Endat3_FG_CRC_Error;
+		}
 	}
 
 	return kStatus_Success;
@@ -99,7 +106,8 @@ status_t ENDAT3_FG_WaitingMasterReady(ENDAT3_Type *base)
 
 bool ENDAT3_FG_CheckStatus(ENDAT3_Type *base)
 {
-	if (base->FG_STATUS & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK | ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK))
+	if (base->FG_STATUS & (ENDAT3_FG_STATUS_STROBE_ERROR_MASK | ENDAT3_FG_STATUS_WD_ERROR_MASK |
+							ENDAT3_FG_STATUS_PHY_ERROR_MASK | ENDAT3_FG_STATUS_CS_ERROR_MASK))
 		return false;
 	else
 		return true;
@@ -156,6 +164,7 @@ status_t ENDAT3_FG_Hello(ENDAT3_Type *base)
 	return kStatus_Endat3_FG_Hello_Failed;
 }
 
+
 /*FG Request: Echo */
 status_t ENDAT3_FG_Echo(ENDAT3_Type *base, uint16_t arbitrary_data)
 {
@@ -183,7 +192,8 @@ status_t ENDAT3_FG_Echo(ENDAT3_Type *base, uint16_t arbitrary_data)
 
 /* FG requests for BUS mode */
 
-status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t req, uint16_t data, uint8_t busCode, uint16_t busData, endat3_rsp_t *rsp)
+status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t req, uint16_t data, uint8_t busCode,
+								uint16_t busData, endat3_rsp_t *rsp)
 {
 	status_t status;
 	ENDAT3_FG_Bus_Req(base, req, data, busCode, busData);
@@ -202,7 +212,7 @@ status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t req,
 status_t ENDAT3_FG_Bus_P2P_Hello(ENDAT3_Type *base, uint8_t addr)
 {
 	status_t status;
-	uint32_t timeOutMS = getTimestampMS() + ENDAT3_HELLO_TIMEOUT;
+	uint32_t timeOutMS = getTimestampMS() + 200;
 
 	do {
 		status = ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_HELLO, ENDAT3_FG_DATA_HELLO, NULL);
@@ -213,6 +223,29 @@ status_t ENDAT3_FG_Bus_P2P_Hello(ENDAT3_Type *base, uint8_t addr)
 	} while (getTimestampMS() < timeOutMS);
 
 	return kStatus_Endat3_FG_Hello_Failed;
+}
+
+/* FG Request: RATE */
+status_t ENDAT3_FG_Bus_Rate_Switch(ENDAT3_Type *base, uint8_t nodes_num, uint8_t rate)
+{
+	status_t status = kStatus_Success;
+	uint8_t addr = 1;
+
+	while (addr <= nodes_num ) {
+		if (ENDAT3_FG_Bus_P2P_Rate(base, addr, rate) != kStatus_Success) {
+			status = kStatus_Endat3_FG_RATE_Failed;
+		}
+		addr++;
+	}
+
+	addr = 1;
+	while (addr <= nodes_num) {
+		if (ENDAT3_FG_Bus_P2P_Hello(base, addr) != kStatus_Success) {
+			status = kStatus_Endat3_FG_Hello_Failed;
+		}
+		addr++;
+	}
+	return status;
 }
 
 /*FG Request: Echo */
@@ -248,32 +281,21 @@ void ENDAT3_BG_Req(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint8
 	uint64_t req64 = ((uint64_t)req_h32 << 32) | req_l32;
 	base->BG_REQ_0 = ENDAT3_BG_REQ_0_BG_ADDR(bus_addr);
 	base->BG_REQ_1 = ENDAT3_BG_REQ_1_BG_REQ_LO(req64 & 0xFFFFFFFF);
-	base->BG_REQ_2 = ENDAT3_BG_REQ_2_BG_REQ_HI(req64 >> 32) | ENDAT3_BG_REQ_2_BG_STROBE(1) | ENDAT3_BG_REQ_2_WAIT_RSP(wait_rsp);
+	base->BG_REQ_2 = ENDAT3_BG_REQ_2_BG_REQ_HI(req64 >> 32) | ENDAT3_BG_REQ_2_BG_STROBE(1) |
+						ENDAT3_BG_REQ_2_WAIT_RSP(wait_rsp);
 }
 
-void ENDAT3_BG_WaitReqEmpty(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes)
-{
-	while (!(base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_REQ_EMPTY_MASK)) {
-		if (fg_strobes) {
-#if (ENDAT3_PARTICIPANTS_NUM > 1)
-				ENDAT3_FG_Bus_P2P_Data(base, bus_addr, ENDAT3_FG_REQ_DATA0, NULL);
-#else
-				ENDAT3_FG_Data(base, ENDAT3_FG_REQ_DATA0, NULL);
-#endif
-		}
-	}
-}
-
-status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms)
+status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms,
+									enum op_mode op)
 {
 	uint32_t timeout = getTimestampMS() + timeout_ms;
 	while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_HANDLER_IDLE_MASK | ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK))) {
 		if (fg_strobes) {
-#if (ENDAT3_PARTICIPANTS_NUM > 1)
-			ENDAT3_FG_Bus_P2P_Data(base, bus_addr, ENDAT3_FG_REQ_DATA0, NULL);
-#else
-			ENDAT3_FG_Data(base, ENDAT3_FG_REQ_DATA0, NULL);
-#endif
+			if (op == Point2Point) {
+				ENDAT3_FG_Data(base, ENDAT3_FG_REQ_DATA0, NULL);
+			} else if (op == Peer2Peer) {
+				ENDAT3_FG_Bus_P2P_Data(base, bus_addr, ENDAT3_FG_REQ_DATA0, NULL);
+			}
 		}
 
 		if (base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK) {
@@ -281,36 +303,53 @@ status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t 
 		}
 
 		if (timeout_ms && getTimestampMS() > timeout) {
+			base->BG_REQ_2 |= ENDAT3_BG_REQ_2_BG_ABORT_MASK;
 			return kStatus_Timeout;
 		}
 	}
 	return kStatus_Success;
 }
 
-uint64_t ENDAT3_BG_GetRsp(ENDAT3_Type *base)
+status_t ENDAT3_BG_GetRsp(ENDAT3_Type *base, uint64_t *rsp, uint32_t timeout_ms)
 {
-	uint64_t temp = ((base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_RSP_HI_MASK));
-	return ((temp <<32) | base->BG_RSP_0);
-}
-
-status_t ENDAT3_BG_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint64_t *rsp, uint8_t fg_strobes, uint32_t timeout_ms)
-{
-	ENDAT3_BG_WaitReqEmpty(base, bus_addr, fg_strobes);
-	ENDAT3_BG_Req(base, bus_addr, req, 1);
-	ENDAT3_BG_WaitReqFinished(base, bus_addr, fg_strobes, timeout_ms);
-
-	if (base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_HANDLER_ERROR_MASK) {
-		return kStatus_Endat3_BG_Handler_Error;
+	uint32_t timeout = getTimestampMS() + timeout_ms;
+	uint64_t temp;
+	while (!(base->BG_RSP_1 & (ENDAT3_BG_RSP_1_BG_RSP_DATA_UPDATED_MASK))) {
+		if (timeout_ms && getTimestampMS() > timeout) {
+			return kStatus_Timeout;
+		}
 	}
-
-	*rsp = ENDAT3_BG_GetRsp(base);
-	if (base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_ERR_EXEC_MASK) {
-		return kStatus_Endat3_BG_Excute_Error;
-	}
+	temp = ((base->BG_RSP_1 & ENDAT3_BG_RSP_1_BG_RSP_HI_MASK));
+	*rsp = (((temp)) <<32) | base->BG_RSP_0;
 	return kStatus_Success;
 }
 
-status_t ENDAT3_BG_Nop(ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, uint64_t *bg_rsp, uint8_t fg_strobes)
+status_t ENDAT3_BG_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint64_t *rsp, uint8_t fg_strobes,
+							uint32_t timeout_ms, enum op_mode op)
+{
+	uint8_t wait_rsp;
+	status_t status;
+	if (rsp != NULL)
+		wait_rsp = 1;
+	else
+		wait_rsp = 0;
+
+	ENDAT3_BG_Req(base, bus_addr, req, wait_rsp);
+	if ((status = ENDAT3_BG_WaitReqFinished(base, bus_addr, fg_strobes, timeout_ms, op)) != kStatus_Success) {
+		return status;
+	}
+
+	if (rsp != NULL) {
+		if ((status = ENDAT3_BG_GetRsp(base, rsp, timeout_ms) != kStatus_Success)) {
+			return status;
+		}
+	}
+
+	return kStatus_Success;
+}
+
+status_t ENDAT3_BG_Nop_OP(ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, uint64_t *bg_rsp, uint8_t fg_strobes,
+						enum op_mode op)
 {
 	struct BGREQ req = {0};
 
@@ -321,10 +360,10 @@ status_t ENDAT3_BG_Nop(ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, 
 	req.NOP.arbitrary[3] = (arbitrary >> 8) & 0xFF;
 	req.NOP.arbitrary[4] = arbitrary & 0xFF;
 
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, bg_rsp, fg_strobes, 2);
+	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Reconfigure(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes)
+status_t ENDAT3_BG_Reconfigure_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
@@ -335,10 +374,11 @@ status_t ENDAT3_BG_Reconfigure(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_s
 	req.RECONFIGURE.res1[2] = 0;
 	req.RECONFIGURE.res1[3] = 0;
 	req.RECONFIGURE.res1[4] = 0;
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 100);
+	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Read(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t num_words, uint16_t *words, uint8_t fg_strobes)
+status_t ENDAT3_BG_Read_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t num_words, uint16_t *words,
+							uint8_t fg_strobes, enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
@@ -349,8 +389,9 @@ status_t ENDAT3_BG_Read(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint
 	req.READ.addr[2] = (addr) & 0xFF;
 	req.READ.num_words = num_words;
 
-	status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 6);
-
+	status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
+	if (status != kStatus_Success)
+		return status;
 	if (num_words > 0) {
 		words[0] = bg_rsp & 0xFFFF;
 	}
@@ -366,7 +407,8 @@ status_t ENDAT3_BG_Read(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint
 	return status;
 }
 
-status_t ENDAT3_BG_Write(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, const uint16_t word, uint8_t fg_strobes)
+status_t ENDAT3_BG_Write_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, const uint16_t word,
+							uint8_t fg_strobes, enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
@@ -377,31 +419,33 @@ status_t ENDAT3_BG_Write(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, con
 	req.WRITE.addr[2] = (addr) & 0xFF;
 	req.WRITE.data[0] = (word >> 8) & 0xFF;
 	req.WRITE.data[1] = (word) & 0xFF;
-
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 10);
+	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Auth(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes)
+status_t ENDAT3_BG_Auth_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes,
+						enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
 	req.AUTH.code = ENDAT3_BG_OPCODE_AUTH;
 	req.AUTH.usrlevel = usrlevel;
 	req.AUTH.pass = BSWAP32(pass);
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 20);
+	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Setpass(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes)
+status_t ENDAT3_BG_Setpass_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes,
+							enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
 	req.SETPASS.code = ENDAT3_BG_OPCODE_SETPASS;
 	req.SETPASS.usrlevel = usrlevel;
 	req.SETPASS.pass = BSWAP32(pass);
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 20);
+	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_BG_Protect(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t mode, const uint8_t acclevel, uint8_t *al_write, uint8_t *al_read, uint8_t fg_strobes)
+status_t ENDAT3_BG_Protect_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t mode, const uint8_t acclevel,
+							uint8_t *al_write, uint8_t *al_read, uint8_t fg_strobes, enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
@@ -413,7 +457,7 @@ status_t ENDAT3_BG_Protect(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, u
 	req.PROTECT.mode = mode;
 	req.PROTECT.acclevel = acclevel;
 
-	status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 20);
+	status = ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 
 	*al_write = (bg_rsp >> 8) & 0xFF;
 	*al_read  = bg_rsp & 0xFF;
@@ -421,16 +465,17 @@ status_t ENDAT3_BG_Protect(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, u
 	return status;
 }
 
-status_t ENDAT3_BG_Locate(ENDAT3_Type *base, uint8_t bus_addr, uint8_t ctrl, uint8_t fg_strobes)
+status_t ENDAT3_BG_Locate_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t ctrl, uint8_t fg_strobes, enum op_mode op)
 {
 	struct BGREQ req = {0};
 	uint64_t bg_rsp;
 	req.LOCATE.code = ENDAT3_BG_OPCODE_LOCATE;
 	req.LOCATE.ctrl = ctrl;
-	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, 20);
+	return ENDAT3_BG_Req_Rsp(base, bus_addr, &req, &bg_rsp, fg_strobes, ENDAT3_BG_REQ_TIMEOUT, op);
 }
 
-status_t ENDAT3_memRead(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf, uint8_t fg_strobes)
+status_t ENDAT3_memRead_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf,
+						uint8_t fg_strobes, enum op_mode op)
 {
 	int n;
 	uint16_t words[3];
@@ -447,7 +492,7 @@ status_t ENDAT3_memRead(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uin
 			n_words = 0;
 		}
 
-		if ((status = ENDAT3_BG_Read(base, bus_addr, addr, n, words, fg_strobes)) != kStatus_Success) {
+		if ((status = ENDAT3_BG_Read_OP(base, bus_addr, addr, n, words, fg_strobes, op)) != kStatus_Success) {
 			return status;
 		}
 
@@ -458,11 +503,12 @@ status_t ENDAT3_memRead(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uin
 	return kStatus_Success;
 }
 
-status_t ENDAT3_memWrite(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf, uint8_t fg_strobes)
+status_t ENDAT3_memWrite_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf,
+							uint8_t fg_strobes, enum op_mode op)
 {
 	status_t status;
 	while (n_words > 0) {
-		if ((status = ENDAT3_BG_Write(base, bus_addr, addr, *pbuf, fg_strobes)) != kStatus_Success) {
+		if ((status = ENDAT3_BG_Write_OP(base, bus_addr, addr, *pbuf, fg_strobes, op)) != kStatus_Success) {
 			return status;
 		}
 		addr++;
@@ -473,12 +519,13 @@ status_t ENDAT3_memWrite(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  ui
 	return kStatus_Success;
 }
 
-status_t ENDAT3_memCacheInit(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, endat3_mem_cache_t *cache, uint16_t *pbuf, uint32_t pbufSize, uint8_t fg_strobes)
+status_t ENDAT3_memCacheInit_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, endat3_mem_cache_t *cache,
+								uint16_t *pbuf, uint32_t pbufSize, uint8_t fg_strobes, enum op_mode op)
 {
 	cache->memBase = mem_base;
 	cache->cacheMem = pbuf;
 	cache->cacheMemSize = pbufSize;
-	cache->memSize = ENDAT3_memGetRangeSize(base, bus_addr, mem_base, fg_strobes);
+	cache->memSize = ENDAT3_memGetRangeSize_OP(base, bus_addr, mem_base, fg_strobes, op);
 	if (cache->memSize == 0) {
 		return kStatus_Endat3_MEM_Cache_Not_Initialized;
 	}
@@ -510,13 +557,14 @@ int ENDAT3_memCacheDirty(endat3_mem_cache_t *cache, int word_index)
 	return cache->dirtyWordMap[mod_index] & (1 << mod_bit);
 }
 
-status_t ENDAT3_memCacheFlush(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes)
+status_t ENDAT3_memCacheFlush_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes,
+								enum op_mode op)
 {
 	int i;
 	status_t status;
 	for (i = 0; i < cache->memSize; i++) {
 		if (ENDAT3_memCacheDirty(cache, i)) {
-			status = ENDAT3_BG_Write(base, bus_addr, cache->memBase + i, cache->cacheMem[i], fg_strobes);
+			status = ENDAT3_BG_Write_OP(base, bus_addr, cache->memBase + i, cache->cacheMem[i], fg_strobes, op);
 			if (status != kStatus_Success) {
 				return status;
 			}
@@ -526,17 +574,19 @@ status_t ENDAT3_memCacheFlush(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_ca
 	return kStatus_Success;
 }
 
-status_t ENDAT3_memCacheFetch(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes)
+status_t ENDAT3_memCacheFetch_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes,
+								enum op_mode op)
 {
 	status_t status;
-	if ((status = ENDAT3_memRead(base, bus_addr, cache->memBase, cache->memSize, cache->cacheMem, fg_strobes)) != kStatus_Success) {
+	if ((status = ENDAT3_memRead_OP(base, bus_addr, cache->memBase, cache->memSize, cache->cacheMem, fg_strobes, op))
+			 != kStatus_Success) {
 		return status;
 	}
 	memset(cache->dirtyWordMap, 0, sizeof(uint32_t) * MAX_MEMORY_AREA_SIZE/32);
 	return status;
 }
 
-uint16_t ENDAT3_memGetRangeSize(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, uint8_t fg_strobes)
+uint16_t ENDAT3_memGetRangeSize_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, uint8_t fg_strobes, enum op_mode op)
 {
 	uint32_t addr;
 	uint16_t size;
@@ -570,10 +620,9 @@ uint16_t ENDAT3_memGetRangeSize(ENDAT3_Type *base, uint8_t bus_addr, uint32_t me
 		case ENDAT3_MEM_BASE_FEATURE2:
 			addr = ENDAT3_MEM_FEATURE2_SIZE_OFFSET; break;
 		default: return 0;
-
 	}
 
-	if (ENDAT3_memRead(base, bus_addr, addr, 1, &size, fg_strobes) != kStatus_Success) {
+	if (ENDAT3_memRead_OP(base, bus_addr, addr, 1, &size, fg_strobes, op) != kStatus_Success) {
 		return 0;
 	}
 
@@ -679,11 +728,12 @@ void ENDAT3_lpfCacheSetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache, uint16_
 void ENDAT3_lpfCacheSetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t y_dim)
 {
 	uint8_t z_list, xy_dim, *addr;
-	if (y_dim == 0) {
-		return;
-	}
 	z_list = z - 1;
-	xy_dim = (xdim << 4) | ((y_dim - 1) & 0xF);
+	if (y_dim == 0) {
+		xy_dim = (xdim << 4) | ((y_dim) & 0xF);
+	} else {
+		xy_dim = (xdim << 4) | ((y_dim - 1) & 0xF);
+	}
 	addr = (uint8_t *)(lpf_cache->cacheMem + ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET + z_list / 2);
 	ENDAT3_memCacheSetDirty(lpf_cache, ENDAT3_MEM_LPFSET_LPFLIVE_HEAD_YDIM_1_OFFSET  + z_list / 2, 1);
 	addr += z_list % 2;
@@ -698,12 +748,13 @@ void ENDAT3_lpfCacheListSetFid(endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint
 	*addr = fid;
 }
 
-void ENDAT3_lpfCacheListSetSendlist(endat3_mem_cache_t *lpf_cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fids)
+void ENDAT3_lpfCacheListSetSendlist(endat3_mem_cache_t *lpf_cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer,
+									uint8_t *fids)
 {
 	uint8_t x, y;
 	ENDAT3_lpfCacheSetPointer(z, lpf_cache, pointer);
 	ENDAT3_lpfCacheSetXdimYdim(z, lpf_cache, xdim, ydim);
-	for(y = 0;y < ydim; y++) {
+	for(y = 0; y < ydim; y++) {
 		for (x = 0; x < xdim; x++) {
 			ENDAT3_lpfCacheListSetFid(lpf_cache, xdim, x, y, pointer, fids[y * xdim + x]);
 		}
@@ -717,15 +768,16 @@ uint8_t ENDAT3_lpfCacheListGetFid(endat3_mem_cache_t *lpf_cache, uint8_t xdim, u
 	return *addr;
 }
 
-status_t ENDAT3_lpfCacheUpdateFromEnconder(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache, uint16_t *pdat, uint32_t pdat_size, uint8_t from_set, uint8_t fg_strobes)
+status_t ENDAT3_lpfCacheUpdateFromEnconder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache, uint16_t *pdat,
+											uint32_t pdat_size, uint8_t from_set, uint8_t fg_strobes, enum op_mode op)
 {
 	uint32_t mem_actual_size;
 	status_t status;
 	if (from_set) {
-		mem_actual_size = ENDAT3_memGetRangeSize(base, bus_addr, ENDAT3_MEM_BASE_LPFSET, fg_strobes);
+		mem_actual_size = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFSET, fg_strobes, op);
 		lpf_cache->memBase = ENDAT3_MEM_BASE_LPFSET;
 	} else {
-		mem_actual_size = ENDAT3_memGetRangeSize(base, bus_addr, ENDAT3_MEM_BASE_LPFLIVE, fg_strobes);
+		mem_actual_size = ENDAT3_memGetRangeSize_OP(base, bus_addr, ENDAT3_MEM_BASE_LPFLIVE, fg_strobes, op);
 		lpf_cache->memBase = ENDAT3_MEM_BASE_LPFLIVE;
 	}
 
@@ -736,7 +788,7 @@ status_t ENDAT3_lpfCacheUpdateFromEnconder(ENDAT3_Type *base, uint8_t bus_addr, 
 	lpf_cache->memSize = mem_actual_size;
 	lpf_cache->cacheMem = pdat;
 
-	if ((status = ENDAT3_memCacheFetch(base, bus_addr, lpf_cache, fg_strobes)) != kStatus_Success) {
+	if ((status = ENDAT3_memCacheFetch_OP(base, bus_addr, lpf_cache, fg_strobes, op)) != kStatus_Success) {
 		return status;
 	}
 
@@ -744,13 +796,15 @@ status_t ENDAT3_lpfCacheUpdateFromEnconder(ENDAT3_Type *base, uint8_t bus_addr, 
 	return status;
 }
 
-status_t ENDAT3_lpfCacheFlushToEncoder(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache, uint8_t fg_strobes)
+status_t ENDAT3_lpfCacheFlushToEncoder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *lpf_cache,
+										uint8_t fg_strobes, enum op_mode op)
 {
 	ENDAT3_memCacheUpdataCS(lpf_cache);
-	return ENDAT3_memCacheFlush(base, bus_addr, lpf_cache, fg_strobes);
+	return ENDAT3_memCacheFlush_OP(base, bus_addr, lpf_cache, fg_strobes, op);
 }
 
-void ENDAT3_lpfCacheListUpdate(endat3_mem_cache_t *global_cache, endat3_mem_cache_t *lpf_cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fid)
+void ENDAT3_lpfCacheListUpdate(endat3_mem_cache_t *global_cache, endat3_mem_cache_t *lpf_cache, uint8_t z,
+								uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fid)
 {
 	int32_t i,j;
 	ENDAT3_lpfCacheSetPointer(z, global_cache, pointer);
@@ -777,7 +831,6 @@ uint8_t ENDAT3_FIDMEM_getTimestamp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t 
 	return temp->fid.timeStamp;
 }
 
-
 uint8_t ENDAT3_lpfGetLPFVByFID(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fid)
 {
 
@@ -793,30 +846,56 @@ uint64_t ENDAT3_FIDMEM_getData(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fid)
 }
 
 /* Assign bus address for all encoders */
-status_t ENDAT3_Bus_Assign_Address(ENDAT3_Type *base, uint8_t encoderNum)
+status_t ENDAT3_Bus_Assign_Address(ENDAT3_Type *base, uint8_t address)
 {
-	int i;
 	status_t status;
-	uint16_t cache_buf[0x100];
+	uint16_t cache_buf[0x100] = {0};
 	endat3_mem_cache_t mem_cache;
 
-	for (i = encoderNum; i > 0; i--) {
-		if ((status = ENDAT3_memCacheInit(base, 0, ENDAT3_MEM_BASE_SET, &mem_cache, cache_buf, 0x100, 1)) != kStatus_Success)
-			return status;
-		if ((status = ENDAT3_memCacheFetch(base, 0, &mem_cache, 1)) != kStatus_Success)
-			return status;
-		if ((status = ENDAT3_memCacheCheckCS(&mem_cache)) != kStatus_Success)
-			return status;
-
-		ENDAT3_MEM_CACHE_WRITE_SET_BUSADDRESS(&mem_cache, i);
-		if ((status = ENDAT3_lpfCacheFlushToEncoder(base, 0, &mem_cache, 1)) != kStatus_Success)
-			return status;
-		if ((status = ENDAT3_FG_Bus_P2P_Reset(base, 0)) != kStatus_Success)
-			return status;
-		if ((status = ENDAT3_FG_Bus_P2P_Hello(base, i)) != kStatus_Success)
-			return status;
+	if ((status = ENDAT3_memCacheInit_OP(base, 0, ENDAT3_MEM_BASE_SET, &mem_cache, cache_buf, 0x100, 1, Peer2Peer)) != kStatus_Success) {
+		return status;
 	}
+	if ((status = ENDAT3_memCacheFetch_OP(base, 0, &mem_cache, 1, Peer2Peer)) != kStatus_Success) {
+		return status;
+	}
+
+	ENDAT3_MEM_CACHE_WRITE_SET_BUSADDRESS(&mem_cache, address);
+	ENDAT3_memCacheUpdataCS(&mem_cache);
+	if ((status = ENDAT3_Bus_P2P_memCacheFlush(base, 0, &mem_cache, 1)) != kStatus_Success) {
+		return status;
+	}
+
+	ENDAT3_FG_Bus_P2P_Reset(base, 0);
+
 	return kStatus_Success;
+}
+
+status_t ENDAT3_Bus_Hello_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
+{
+	status_t status = kStatus_Success;
+	for (int i = nodes_num; i > 0;  i--) {
+		ENDAT3_FG_Hello(base);
+		if (ENDAT3_FG_Bus_P2P_Hello(base, i) != kStatus_Success) {
+			status = kStatus_Endat3_FG_ECHO_Failed;
+		}
+	}
+	return status;
+}
+
+void ENDAT3_Bus_Init_ForAllParticipants(ENDAT3_Type *base, int nodes_num)
+{
+	uint32_t address[8] = {0};
+	uint32_t index = 0;
+		for (int i = nodes_num; i >= 0;  i--) {
+			ENDAT3_FG_Hello(base);
+			if (ENDAT3_FG_Bus_P2P_Hello(base, i) == kStatus_Success) {
+				address[index++] = i;
+			}
+		}
+
+		for (int i = 0; i < index; i++) {
+			ENDAT3_FG_Bus_P2P_BUSINIT(base, address[i]);
+		}
 }
 
 char* ENDAT3_FID2str(const uint8_t fid)

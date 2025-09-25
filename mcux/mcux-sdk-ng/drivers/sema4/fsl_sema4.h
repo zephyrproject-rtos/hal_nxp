@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SEMA4 driver version */
-#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 /*! @brief The number to reset all SEMA4 gates. */
@@ -213,7 +213,7 @@ static inline status_t SEMA4_ResetAllGates(SEMA4_Type *base)
  */
 static inline void SEMA4_EnableGateNotifyInterrupt(SEMA4_Type *base, uint8_t procNum, uint16_t mask)
 {
-    mask = __REV(__RBIT(mask));
+    mask = (uint16_t)(__REV(__RBIT(mask)) & 0xFFFFU);
     base->CPINE[procNum].CPINE |= mask;
 }
 
@@ -230,7 +230,7 @@ static inline void SEMA4_EnableGateNotifyInterrupt(SEMA4_Type *base, uint8_t pro
  */
 static inline void SEMA4_DisableGateNotifyInterrupt(SEMA4_Type *base, uint8_t procNum, uint16_t mask)
 {
-    mask = __REV(__RBIT(mask));
+    mask = (uint16_t)(__REV(__RBIT(mask)) & 0xFFFFU);
     base->CPINE[procNum].CPINE &= (~mask);
 }
 

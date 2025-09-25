@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022,2024 NXP
+ * Copyright 2020-2022,2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -329,9 +329,9 @@ typedef struct _dsi_transfer
     uint8_t *rxData;               /*!< The TX data buffer. */
     uint16_t txDataSize;           /*!< Size of the TX data. */
     uint16_t rxDataSize;           /*!< Size of the RX data. */
-    bool sendDscCmd;               /*!< If set to true, the DSC command is specified by @ref dscCmd, otherwise
-                                        the DSC command is included in the @ref txData. */
-    uint8_t dscCmd;                /*!< The DSC command to send, only valid when @ref sendDscCmd is true. */
+    bool sendDcsCmd;               /*!< If set to true, the DCS command is specified by @ref dcsCmd, otherwise
+                                        the DCS command is included in the @ref txData. */
+    uint8_t dcsCmd;                /*!< The DCS command to send, only valid when @ref sendDcsCmd is true. */
 } dsi_transfer_t;
 
 /*! @brief MIPI DSI transfer handle. */
@@ -578,24 +578,24 @@ void DSI_WriteApbTxPayload(const MIPI_DSI_Type *base, const uint8_t *payload, ui
  *
  * Write the long packet payload to TX FIFO. This function could be used in two ways
  *
- * 1. Include the DSC command in parameter @p payload. In this case, the DSC command
- *    is the first byte of @p payload. The parameter @p sendDscCmd is set to false,
- *    the @p dscCmd is not used. This function is the same as @ref DSI_WriteApbTxPayload
+ * 1. Include the DCS command in parameter @p payload. In this case, the DCS command
+ *    is the first byte of @p payload. The parameter @p sendDcsCmd is set to false,
+ *    the @p dcsCmd is not used. This function is the same as @ref DSI_WriteApbTxPayload
  *    when used in this way.
  *
- * 2. The DSC command in not in parameter @p payload, but specified by parameter @p dscCmd.
- *    In this case, the parameter @p sendDscCmd is set to true, the @p dscCmd is the DSC
- *    command to send. The @p payload is sent after @p dscCmd.
+ * 2. The DCS command in not in parameter @p payload, but specified by parameter @p dcsCmd.
+ *    In this case, the parameter @p sendDcsCmd is set to true, the @p dcsCmd is the DCS
+ *    command to send. The @p payload is sent after @p dcsCmd.
  *
  * @param base MIPI DSI host peripheral base address.
  * @param payload Pointer to the payload.
  * @param payloadSize Payload size in byte.
- * @param sendDscCmd If set to true, the DSC command is specified by @p dscCmd,
- *        otherwise the DSC command is included in the @p payload.
- * @param dscCmd The DSC command to send, only used when @p sendDscCmd is true.
+ * @param sendDcsCmd If set to true, the DCS command is specified by @p dcsCmd,
+ *        otherwise the DCS command is included in the @p payload.
+ * @param dcsCmd The DCS command to send, only used when @p sendDcsCmd is true.
  */
 void DSI_WriteApbTxPayloadExt(
-    const MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize, bool sendDscCmd, uint8_t dscCmd);
+    const MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize, bool sendDcsCmd, uint8_t dcsCmd);
 
 /*!
  * @brief Read the long APB packet payload.

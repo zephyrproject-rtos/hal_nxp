@@ -1604,6 +1604,9 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
     uint32_t devCount     = 0;
     uint8_t rxSize        = 0;
     bool mctrlDone        = false;
+#if I3C_RETRY_TIMES
+    uint32_t waitTimes = I3C_RETRY_TIMES;
+#endif
     i3c_baudrate_hz_t baudRate_Hz;
     uint32_t errStatus;
     uint32_t status;
@@ -1663,6 +1666,9 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
             {
                 I3C_MasterClearStatusFlags(base, (uint32_t)kI3C_MasterControlDoneFlag);
                 mctrlDone = true;
+#if I3C_RETRY_TIMES
+                waitTimes = I3C_RETRY_TIMES;
+#endif
             }
         }
         else if ((I3C_MasterGetState(base) == kI3C_MasterStateDaa) &&
@@ -1693,11 +1699,22 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
             /* Ready to handle next device. */
             mctrlDone = false;
             rxSize    = 0;
+#if I3C_RETRY_TIMES
+            waitTimes = I3C_RETRY_TIMES;
+#endif
         }
         else
         {
             /* Intentional empty */
         }
+
+#if I3C_RETRY_TIMES
+        if (--waitTimes == 0U)
+        {
+            result = kStatus_I3C_Timeout;
+            break;
+        }
+#endif
     } while ((status & (uint32_t)kI3C_MasterCompleteFlag) != (uint32_t)kI3C_MasterCompleteFlag);
 
     /* Master stops DAA if slave device number exceeds the prepared address number. */

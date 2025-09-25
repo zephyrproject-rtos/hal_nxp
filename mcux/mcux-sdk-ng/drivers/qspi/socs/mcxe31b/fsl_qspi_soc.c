@@ -7,13 +7,13 @@
 #include "fsl_qspi_soc.h"
 
 /*! brief Defines the QuadSPI SOCCR mask field. */
-#define QuadSPI_SOCCR_OBE_PULL_TIMING_RELAX_MASK             (1U << 0)
-#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_INPUT_MASK         (1U << 1)
-#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_OUTPUT_MASK        (1U << 2)
-#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_DRIVE_MASK         (1U << 3)
-#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_PULL_ENABLE_MASK   (1U << 4)
-#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_PULLUP_ENABLE_MASK (1U << 5)
-#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_SLEW_RATE_MASK     (1U << 6)
+#define QuadSPI_SOCCR_OBE_PULL_TIMING_RELAX_MASK             ((uint32_t)1U << 0)
+#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_INPUT_MASK         ((uint32_t)1U << 1)
+#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_OUTPUT_MASK        ((uint32_t)1U << 2)
+#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_DRIVE_MASK         ((uint32_t)1U << 3)
+#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_PULL_ENABLE_MASK   ((uint32_t)1U << 4)
+#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_PULLUP_ENABLE_MASK ((uint32_t)1U << 5)
+#define QuadSPI_SOCCR_QSPIA_SCK_DUMMY_PAD_SLEW_RATE_MASK     ((uint32_t)1U << 6)
 
 /*!
  * brief Set QuadSPI Soc specific configuration.

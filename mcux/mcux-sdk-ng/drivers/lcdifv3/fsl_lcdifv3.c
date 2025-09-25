@@ -79,18 +79,18 @@ static void LCDIFV3_ResetRegister(LCDIF_Type *base)
     base->INT_STATUS_D0     = 0xFFFFFFFFU;
     base->INT_STATUS_D1     = 0xFFFFFFFFU;
 
-    base->CTRLDESCL_1       = 0U;
-    base->CTRLDESCL_3       = 0U;
-    base->CTRLDESCL_LOW_4   = 0U;
-    base->CTRLDESCL_HIGH_4  = 0U;
-    base->CTRLDESCL_5       = 0U;
+    base->CTRLDESCL_1[0]       = 0U;
+    base->CTRLDESCL_3[0]       = 0U;
+    base->CTRLDESCL_LOW_4[0]   = 0U;
+    base->CTRLDESCL_HIGH_4[0]  = 0U;
+    base->CTRLDESCL_5[0]       = 0U;
 
-    base->CSC_COEF0 = 0x0U;
-    base->CSC_COEF1 = 0x0U;
-    base->CSC_COEF2 = 0x0U;
-    base->CSC_COEF3 = 0x0U;
-    base->CSC_COEF4 = 0x0U;
-    base->CSC_COEF5 = 0x0U;
+    base->CSC_COEF0[0] = 0x0U;
+    base->CSC_COEF1[0] = 0x0U;
+    base->CSC_COEF2[0] = 0x0U;
+    base->CSC_COEF3[0] = 0x0U;
+    base->CSC_COEF4[0] = 0x0U;
+    base->CSC_COEF5[0] = 0x0U;
 }
 
 /*!
@@ -185,10 +185,10 @@ void LCDIFV3_SetDisplayConfig(LCDIF_Type *base, const lcdifv3_display_config_t *
 
     base->VSYN_PARA = ((uint32_t)config->vbp << LCDIF_VSYN_PARA_BP_V_SHIFT) |
                       ((uint32_t)config->vfp << LCDIF_VSYN_PARA_FP_V_SHIFT);
-     
+
     base->VSYN_HSYN_WIDTH = ((uint32_t)config->hsw << LCDIF_VSYN_HSYN_WIDTH_PW_H_SHIFT) |
                             ((uint32_t)config->vsw << LCDIF_VSYN_HSYN_WIDTH_PW_V_SHIFT);
-    
+
     base->DISP_PARA = LCDIF_DISP_PARA_LINE_PATTERN((uint32_t)config->lineOrder);
 
     base->CTRL.RW = (uint32_t)(config->polarityFlags);
@@ -219,50 +219,50 @@ void LCDIFV3_SetCscMode(LCDIF_Type *base, lcdifv3_csc_mode_t mode)
      * V = C1*R + C2*G + C3*B + D3
      */
 
-    base->CSC_CTRL &= ~(LCDIF_CSC_CTRL_CSC_MODE_MASK | LCDIF_CSC_CTRL_BYPASS_MASK);
+    base->CSC_CTRL[0] &= ~(LCDIF_CSC_CTRL_CSC_MODE_MASK | LCDIF_CSC_CTRL_BYPASS_MASK);
     if (kLCDIFV3_CscYUV2RGB == mode || kLCDIFV3_CscYCbCr2RGB == mode)
     {
-        base->CSC_COEF0 = LCDIF_CSC_COEF0_A1(0x0U)
+        base->CSC_COEF0[0] = LCDIF_CSC_COEF0_A1(0x0U)
                                             | LCDIF_CSC_COEF0_A2(0x0U);
-        base->CSC_COEF1 = LCDIF_CSC_COEF1_A3(0x0U)
+        base->CSC_COEF1[0] = LCDIF_CSC_COEF1_A3(0x0U)
                                             | LCDIF_CSC_COEF1_B1(0x0U);
-        base->CSC_COEF2 = LCDIF_CSC_COEF2_B2(0x0U)
+        base->CSC_COEF2[0] = LCDIF_CSC_COEF2_B2(0x0U)
                                             | LCDIF_CSC_COEF2_B3(0x0U);
-        base->CSC_COEF3 = LCDIF_CSC_COEF3_C1(0x0U)
+        base->CSC_COEF3[0] = LCDIF_CSC_COEF3_C1(0x0U)
                                             | LCDIF_CSC_COEF3_C2(0x0U);
-        base->CSC_COEF4 = LCDIF_CSC_COEF4_C3(0x0U)
+        base->CSC_COEF4[0] = LCDIF_CSC_COEF4_C3(0x0U)
                                             | LCDIF_CSC_COEF4_D1(0x0U);
-        base->CSC_COEF5 = LCDIF_CSC_COEF5_D2(0x0U)
+        base->CSC_COEF5[0] = LCDIF_CSC_COEF5_D2(0x0U)
                                             | LCDIF_CSC_COEF5_D3(0x0U);
 
     }
     else if (kLCDIFV3_CscRGB2YUV == mode || kLCDIFV3_CscRGB2YCbCr == mode)
     {
 
-        base->CSC_COEF0 = LCDIF_CSC_COEF0_A1(0x0U)
+        base->CSC_COEF0[0] = LCDIF_CSC_COEF0_A1(0x0U)
                                             | LCDIF_CSC_COEF0_A2(0x0U);
-        base->CSC_COEF1 = LCDIF_CSC_COEF1_A3(0x0U)
+        base->CSC_COEF1[0] = LCDIF_CSC_COEF1_A3(0x0U)
                                             | LCDIF_CSC_COEF1_B1(0x0U);
-        base->CSC_COEF2 = LCDIF_CSC_COEF2_B2(0x0U)
+        base->CSC_COEF2[0] = LCDIF_CSC_COEF2_B2(0x0U)
                                             | LCDIF_CSC_COEF2_B3(0x0U);
-        base->CSC_COEF3 = LCDIF_CSC_COEF3_C1(0x0U)
+        base->CSC_COEF3[0] = LCDIF_CSC_COEF3_C1(0x0U)
                                             | LCDIF_CSC_COEF3_C2(0x0U);
-        base->CSC_COEF4 = LCDIF_CSC_COEF4_C3(0x0U)
+        base->CSC_COEF4[0] = LCDIF_CSC_COEF4_C3(0x0U)
                                             | LCDIF_CSC_COEF4_D1(0x0U);
-        base->CSC_COEF5 = LCDIF_CSC_COEF5_D2(0x0U)
+        base->CSC_COEF5[0] = LCDIF_CSC_COEF5_D2(0x0U)
                                             | LCDIF_CSC_COEF5_D3(0x0U);
     }
     else
     {
-        base->CSC_COEF0 = 0x0U;
-        base->CSC_COEF1 = 0x0U;
-        base->CSC_COEF2 = 0x0U;
-        base->CSC_COEF3 = 0x0U;
-        base->CSC_COEF4 = 0x0U;
-        base->CSC_COEF5 = 0x0U;
-	base->CSC_CTRL |= LCDIF_CSC_CTRL_BYPASS(1);
+        base->CSC_COEF0[0] = 0x0U;
+        base->CSC_COEF1[0] = 0x0U;
+        base->CSC_COEF2[0] = 0x0U;
+        base->CSC_COEF3[0] = 0x0U;
+        base->CSC_COEF4[0] = 0x0U;
+        base->CSC_COEF5[0] = 0x0U;
+        base->CSC_CTRL[0] |= LCDIF_CSC_CTRL_BYPASS(1);
     }
-    base->CSC_CTRL |= LCDIF_CSC_CTRL_CSC_MODE(mode);
+    base->CSC_CTRL[0] |= LCDIF_CSC_CTRL_CSC_MODE(mode);
 }
 
 /*!
@@ -275,9 +275,45 @@ void LCDIFV3_SetLayerBufferConfig(LCDIF_Type *base, uint8_t layerIndex, const lc
 {
     assert(NULL != config);
     uint32_t reg;
-    base->CTRLDESCL_3 = config->strideBytes;
-    reg = base->CTRLDESCL_5;
+    base->CTRLDESCL_3[0] = config->strideBytes;
+    reg = base->CTRLDESCL_5[0];
     reg = (reg & ~(LCDIF_CTRLDESCL_5_BPP_MASK | LCDIF_CTRLDESCL_5_YUV_FORMAT_MASK)) | (uint32_t)config->pixelFormat;
 
-    base->CTRLDESCL_5 = reg;
+    base->CTRLDESCL_5[0] = reg;
+}
+
+/*!
+ * @brief Enable plane panic to avoid underrun.
+ *
+ * @param base LCDIFv3 peripheral base address.
+ */
+void LCDIFV3_EnablePlanePanic(LCDIF_Type *base)
+{
+    uint32_t panic_thres, thres_low, thres_high;
+
+    /* apb clock has been enabled */
+
+    /* As suggestion, the thres_low should be 1/3 FIFO,
+     * and thres_high should be 2/3 FIFO (The FIFO size
+     * is 8KB = 512 * 128bit).
+     * threshold = n * 128bit (n: 0 ~ 511)
+     */
+    thres_low  = 511 * 1 / 3;
+
+    thres_high = 511 * 2 / 3;
+
+    panic_thres = thres_low << LCDIF_PANIC_THRES_PANIC_THRES_LOW_SHIFT |
+                  thres_high << LCDIF_PANIC_THRES_PANIC_THRES_HIGH_SHIFT;
+
+    base->PANIC_THRES[0] = panic_thres;
+
+    /* Enable Panic:
+     *
+     * As designed, the panic won't trigger an irq,
+     * so it is unnecessary to handle this as an irq
+     * and NoC + QoS modules will handle panic
+     * automatically.
+     */
+    base->INT_ENABLE_D1 = LCDIF_INT_STATUS_D1_PLANE_PANIC_MASK;
+
 }

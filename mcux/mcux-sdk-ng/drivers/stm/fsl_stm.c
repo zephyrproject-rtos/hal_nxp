@@ -180,7 +180,7 @@ void STM_DriverIRQHandler(uint32_t index)
     uint32_t int_stat = 0U;
     uint32_t i;
 
-    if (index > ARRAY_SIZE(s_stmBases))
+    if (index >= ARRAY_SIZE(s_stmBases))
     {
         return;
     }

@@ -17,6 +17,18 @@
 #define FSL_COMPONENT_ID "platform.drivers.flash_k4"
 #endif
 
+#if defined(__IAR_SYSTEMS_ICC__)
+#define __RAMFUNC __ramfunc
+#elif defined(__GNUC__)
+#define __RAMFUNC __attribute__((section(".ramfunc"))) __attribute__((__noinline__))
+#endif
+
+#if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && (FLASH_DRIVER_IS_FLASH_RESIDENT == 1)
+#define FCT_PLACEMENT __RAMFUNC
+#else
+#define FCT_PLACEMENT
+#endif
+
 #if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && FLASH_DRIVER_IS_FLASH_RESIDENT
 /*!
  * @brief Constants for execute-in-RAM flash function.
@@ -204,6 +216,11 @@ status_t FLASH_Erase(flash_config_t *config, FMU_Type *base, uint32_t start, uin
                 start += FLASH_FEATURE_SECTOR_SIZE;
             }
         }
+        /*
+         * Data cache may contain stale values following a flash programming or erasing operation.
+         * Data cache invalidation is only on KW43.
+         */
+        flash_cache_invalidate();
     }
     else
     {
@@ -234,6 +251,11 @@ status_t FLASH_EraseAll(FMU_Type *base, uint32_t key)
     if (kStatus_FLASH_Success == status)
     {
         status = FLASH_CMD_EraseAll(base);
+        /*
+         * Data cache may contain stale values following a flash programming or erasing operation.
+         * Data cache invalidation is only on KW43.
+         */
+        flash_cache_invalidate();
     }
     else
     {
@@ -315,6 +337,11 @@ status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, u
 
             status = FLASH_CMD_ProgramPhrase(base, start, extraData);
         }
+        /*
+         * Data cache may contain stale values following a flash programming or erasing operation.
+         * Data cache invalidation is only on KW43.
+         */
+        flash_cache_invalidate();
     }
     else
     {
@@ -400,6 +427,11 @@ status_t FLASH_ProgramPage(flash_config_t *config, FMU_Type *base, uint32_t star
 
             status = FLASH_CMD_ProgramPage(base, start, extraData);
         }
+        /*
+         * Data cache may contain stale values following a flash programming or erasing operation.
+         * Data cache invalidation is only on KW43.
+         */
+        flash_cache_invalidate();
     }
     else
     {
@@ -766,6 +798,7 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
             *value = config->msf1Config[0].flashDesc.blockBase;
             break;
         case kFLASH_PropertyPflash0SectorSize:
+        case kFLASH_PropertyPflash1SectorSize:
             *value = FLASH_FEATURE_SECTOR_SIZE;
             break;
         case kFLASH_PropertyPflash1TotalSize:
@@ -789,15 +822,7 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
 }
 
 #if defined(SMSCM)
-#if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && (FLASH_DRIVER_IS_FLASH_RESIDENT == 1)
-#if defined(__IAR_SYSTEMS_ICC__)
-__ramfunc
-#elif defined(__GNUC__)
-__attribute__ ((section (".ramfunc")))
-#endif
-#endif
-    void
-    flash_cache_disable(void)
+FCT_PLACEMENT void flash_cache_disable(void)
 {
     SMSCM->OCMDR0 = (SMSCM->OCMDR0 & (~SMSCM_FLASH_CACHE_CTRL_MASK)) | SMSCM_FLASH_CACHE_CTRL(0x1);
     SMSCM->OCMDR0 = (SMSCM->OCMDR0 & (~SMSCM_FLASH_CACHE_CTRL_MASK)) | SMSCM_FLASH_CACHE_CTRL(0x8);
@@ -807,15 +832,7 @@ __attribute__ ((section (".ramfunc")))
 
 }
 
-#if defined(FLASH_DRIVER_IS_FLASH_RESIDENT) && (FLASH_DRIVER_IS_FLASH_RESIDENT == 1)
-#if defined(__IAR_SYSTEMS_ICC__)
-__ramfunc
-#elif defined(__GNUC__)
-__attribute__ ((section (".ramfunc")))
-#endif
-#endif
-    void
-    flash_cache_speculation_control(bool isPreProcess, FMU_Type *base)
+FCT_PLACEMENT void flash_cache_speculation_control(bool isPreProcess, FMU_Type *base)
 {
     if (base == FLASH)
     {
@@ -855,6 +872,73 @@ __attribute__ ((section (".ramfunc")))
     __DSB();
 }
 
+void flash_cache_invalidate(void)
+{
+}
+
+#else
+
+#if defined SYSCON_FMC0_CTRL_DFC_MASK
+
+FCT_PLACEMENT void flash_cache_invalidate(void)
+{
+    SYSCON->AUTHENTICATE = 0xaaaaaaaa;
+    __ISB();
+    __DSB();
+    SYSCON->FMC0_CTRL |= SYSCON_FMC0_CTRL_ECFC_MASK; /* Execute clear cache */
+    __ISB();
+    __DSB();
+    SYSCON->FMC0_CTRL |= (SYSCON_FMC0_CTRL_DFDC_MASK|SYSCON_FMC0_CTRL_DFS_MASK|SYSCON_FMC0_CTRL_DDP_MASK); /* Disable Data Cache - Disable Data Prefetch - Disable Flash Speculation */
+    __ISB();
+    __DSB();
+    SYSCON->FMC0_CTRL &= ~(SYSCON_FMC0_CTRL_DFDC_MASK|SYSCON_FMC0_CTRL_ECFC_MASK|SYSCON_FMC0_CTRL_DFS_MASK|SYSCON_FMC0_CTRL_DDP_MASK); /* re-enable all the disabled bits */
+    __ISB();
+    __DSB();
+}
+
+FCT_PLACEMENT void flash_cache_disable(void)
+{
+    SYSCON->AUTHENTICATE = 0xaaaaaaaa;
+    SYSCON->FMC0_CTRL |= (SYSCON_FMC0_CTRL_DFDC_MASK | SYSCON_FMC0_CTRL_DFC_MASK | SYSCON_FMC0_CTRL_DFIC_MASK);
+    SYSCON->FMC0_CTRL |= SYSCON_FMC0_CTRL_ECFC_MASK;
+    /* Memory barriers for good measure.
+     * All Cache, Branch predictor and TLB maintenance operations before this instruction complete */
+    __ISB();
+    __DSB();
+}
+FCT_PLACEMENT void flash_cache_enable(void)
+{
+    SYSCON->AUTHENTICATE = 0xaaaaaaaa;
+    SYSCON->FMC0_CTRL &= ~(SYSCON_FMC0_CTRL_DFDC_MASK | SYSCON_FMC0_CTRL_DFC_MASK | SYSCON_FMC0_CTRL_DFIC_MASK);
+    /* Memory barriers for good measure.
+     * All Cache, Branch predictor and TLB maintenance operations before this instruction complete */
+    __ISB();
+    __DSB();
+}
+
+#endif
+
+#if defined SYSCON_FMC0_CTRL_DFS_MASK
+
+FCT_PLACEMENT void flash_cache_speculation_control(bool isPreProcess, FMU_Type *base)
+{
+    (void)base;
+    SYSCON->AUTHENTICATE = 0xaaaaaaaa;
+
+    if (isPreProcess == false)
+    {
+         SYSCON->FMC0_CTRL |=  SYSCON_FMC0_CTRL_DFS_MASK;
+    }
+    else
+    {
+         SYSCON->FMC0_CTRL &= ~SYSCON_FMC0_CTRL_DFS_MASK;
+    }
+    /* Memory barriers for good measure.
+     * All Cache, Branch predictor and TLB maintenance operations before this instruction complete */
+    __ISB();
+    __DSB();
+}
+#endif
 #endif
 
 static status_t flash_check_param(

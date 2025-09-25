@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.8.0. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 8, 0))
+/*! @brief SPC driver version 2.8.1. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
 /*! @} */
 
 #define SPC_EVD_CFG_REG_EVDISO_SHIFT   0UL
@@ -1439,9 +1439,9 @@ static inline uint32_t SPC_GetLowPowerModeEnabledAnalogModules(SPC_Type *base)
  * @param base SPC peripheral base address.
  * @return Voltage Detect Status Flags. See @ref _spc_voltage_detect_flags for details.
  */
-static inline uint8_t SPC_GetVoltageDetectStatusFlag(SPC_Type *base)
+static inline uint32_t SPC_GetVoltageDetectStatusFlag(SPC_Type *base)
 {
-    return (uint8_t)(base->VD_STAT);
+    return (uint32_t)(base->VD_STAT);
 }
 
 /*!
@@ -1836,7 +1836,9 @@ void SPC_SetExternalVoltageDomainsConfig(SPC_Type *base, uint8_t lowPowerIsoMask
  */
 static inline uint8_t SPC_GetExternalDomainsStatus(SPC_Type *base)
 {
-    return (uint8_t)(base->EVD_CFG >> SPC_EVD_CFG_REG_EVDSTAT_SHIFT);
+    uint32_t tmp32 = (base->EVD_CFG >> SPC_EVD_CFG_REG_EVDSTAT_SHIFT);
+    assert(tmp32 <= UINT8_MAX);
+    return (uint8_t)(tmp32);
 }
 
 /*! @} */

@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.6.1. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @brief SPC driver version 2.7.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*! @} */
 
 /*! @name Configuration */
@@ -43,11 +43,11 @@
  * If defined as 0, the driver will wait until completion.
  */
 #ifndef SPC_BUSY_TIMEOUT
-    #ifdef CONFIG_SPC_BUSY_TIMEOUT
-        #define SPC_BUSY_TIMEOUT CONFIG_SPC_BUSY_TIMEOUT
-    #else
-        #define SPC_BUSY_TIMEOUT 0U
-    #endif
+#ifdef CONFIG_SPC_BUSY_TIMEOUT
+#define SPC_BUSY_TIMEOUT CONFIG_SPC_BUSY_TIMEOUT
+#else
+#define SPC_BUSY_TIMEOUT 0U
+#endif
 #endif
 
 /*!
@@ -58,11 +58,11 @@
  * If defined as 0, the driver will wait until completion.
  */
 #ifndef SPC_SRAM_ACK_TIMEOUT
-    #ifdef CONFIG_SPC_SRAM_ACK_TIMEOUT
-        #define SPC_SRAM_ACK_TIMEOUT CONFIG_SPC_SRAM_ACK_TIMEOUT
-    #else
-        #define SPC_SRAM_ACK_TIMEOUT 0U
-    #endif
+#ifdef CONFIG_SPC_SRAM_ACK_TIMEOUT
+#define SPC_SRAM_ACK_TIMEOUT CONFIG_SPC_SRAM_ACK_TIMEOUT
+#else
+#define SPC_SRAM_ACK_TIMEOUT 0U
+#endif
 #endif
 
 /*!
@@ -73,13 +73,27 @@
  * If defined as 0, the driver will wait until it completes.
  */
 #ifndef SPC_DCDC_ACK_TIMEOUT
-    #ifdef CONFIG_SPC_DCDC_ACK_TIMEOUT
-        #define SPC_DCDC_ACK_TIMEOUT CONFIG_SPC_DCDC_ACK_TIMEOUT
-    #else
-        #define SPC_DCDC_ACK_TIMEOUT 0U
-    #endif
+#ifdef CONFIG_SPC_DCDC_ACK_TIMEOUT
+#define SPC_DCDC_ACK_TIMEOUT CONFIG_SPC_DCDC_ACK_TIMEOUT
+#else
+#define SPC_DCDC_ACK_TIMEOUT 0U
+#endif
 #endif
 
+#if (defined(SPC_GLITCH_DETECT_SC_CNT_SELECT_MASK))
+#define VDD_CORE_GLITCH_DETECT_SC                             GLITCH_DETECT_SC
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG_MASK SPC_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG_MASK
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG      SPC_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_LOCK_MASK               SPC_GLITCH_DETECT_SC_LOCK_MASK
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_CNT_SELECT_MASK         SPC_GLITCH_DETECT_SC_CNT_SELECT_MASK
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_CNT_SELECT              SPC_GLITCH_DETECT_SC_CNT_SELECT
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_RE_MASK                 SPC_GLITCH_DETECT_SC_RE_MASK
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_RE                      SPC_GLITCH_DETECT_SC_RE
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_TIMEOUT_MASK            SPC_GLITCH_DETECT_SC_TIMEOUT_MASK
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_TIMEOUT                 SPC_GLITCH_DETECT_SC_TIMEOUT
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_IE_MASK                 SPC_GLITCH_DETECT_SC_IE_MASK
+#define SPC_VDD_CORE_GLITCH_DETECT_SC_IE                      SPC_GLITCH_DETECT_SC_IE
+#endif
 
 /*!
  * @brief SPC status enumeration.
@@ -193,11 +207,11 @@ typedef enum _spc_dcdc_voltage_level
     kSPC_DCDC_MidVoltage      = 0x2U, /*!< DCDC VDD Regulator regulate to Mid Voltage. */
     kSPC_DCDC_LowUnderVoltage = 0x3U, /*!< DCDC VDD Regulator regulate to Low Under Voltage. */
 #else
-    kSPC_DCDC_LowUnderVoltage      = 0x0U, /*!< DCDC VDD Regulator regulate to Low Under Voltage. */
-    kSPC_DCDC_MidVoltage           = 0x1U, /*!< DCDC VDD Regulator regulate to Mid Voltage. */
-    kSPC_DCDC_NormalVoltage        = 0x2U, /*!< DCDC VDD Regulator regulate to Normal Voltage. */
-    kSPC_DCDC_SafeModeVoltage      = 0x3U, /*!< DCDC VDD Regulator regulate to Safe-Mode Voltage. */
-#endif /* FSL_FEATURE_SPC_DCDC_VOLTAGE_LEVEL_DECREASE */
+    kSPC_DCDC_LowUnderVoltage = 0x0U, /*!< DCDC VDD Regulator regulate to Low Under Voltage. */
+    kSPC_DCDC_MidVoltage      = 0x1U, /*!< DCDC VDD Regulator regulate to Mid Voltage. */
+    kSPC_DCDC_NormalVoltage   = 0x2U, /*!< DCDC VDD Regulator regulate to Normal Voltage. */
+    kSPC_DCDC_SafeModeVoltage = 0x3U, /*!< DCDC VDD Regulator regulate to Safe-Mode Voltage. */
+#endif                                /* FSL_FEATURE_SPC_DCDC_VOLTAGE_LEVEL_DECREASE */
 } spc_dcdc_voltage_level_t;
 
 /*!
@@ -245,7 +259,7 @@ typedef enum _spc_core_ldo_voltage_level
     kSPC_CoreLDO_MidDriveVoltage   = 0x1U, /*!< Core LDO VDD regulator regulate to Mid Drive Voltage. */
     kSPC_CoreLDO_NormalVoltage     = 0x2U, /*!< Core LDO VDD regulator regulate to Normal Voltage. */
     kSPC_CoreLDO_SafeModeVoltage   = 0x3U, /*!< Core LDO VDD regulator regulate to Safe-Mode Voltages. */
-#endif /* FSL_FEATURE_SPC_LDO_VOLTAGE_LEVEL_DECREASE */
+#endif                                     /* FSL_FEATURE_SPC_LDO_VOLTAGE_LEVEL_DECREASE */
 } spc_core_ldo_voltage_level_t;
 
 /*!
@@ -295,7 +309,7 @@ typedef struct _spc_intergrated_power_switch_config
     bool wakeup; /*!< Assert an output pin to un-gate the integrated power switch. */
     bool sleep;  /*!< Assert an output pin to power gate the intergrated power switch. */
 } spc_intergrated_power_switch_config_t;
-#endif /* FSL_FEATURE_SPC_HAS_CFG_REGISTER */
+#endif           /* FSL_FEATURE_SPC_HAS_CFG_REGISTER */
 
 /*!
  * @brief Core LDO regulator options in Active mode.
@@ -316,7 +330,7 @@ typedef struct _spc_active_mode_sys_ldo_option
 {
     spc_sys_ldo_voltage_level_t SysLDOVoltage; /*!< System LDO Regulator Voltage Level selection in Active mode. */
     spc_sys_ldo_drive_strength_t
-        SysLDODriveStrength; /*!< System LDO Regulator Drive Strength selection in Active mode. */
+        SysLDODriveStrength;                   /*!< System LDO Regulator Drive Strength selection in Active mode. */
 } spc_active_mode_sys_ldo_option_t;
 
 /*!
@@ -335,7 +349,7 @@ typedef struct _spc_lowpower_mode_core_ldo_option
 {
     spc_core_ldo_voltage_level_t CoreLDOVoltage; /*!< Core LDO Regulator Voltage Level selection in Low Power mode. */
     spc_core_ldo_drive_strength_t
-        CoreLDODriveStrength; /*!< Core LDO Regulator Drive Strength selection in Low Power mode */
+        CoreLDODriveStrength;                    /*!< Core LDO Regulator Drive Strength selection in Low Power mode */
 } spc_lowpower_mode_core_ldo_option_t;
 
 /*!
@@ -438,19 +452,47 @@ typedef struct _spc_lowpower_mode_regulators_config
 typedef enum _spc_hp_request_override_option
 {
     kSPC_HpRequestOverrideDisable = 0U, /*!< Disable high power request override feature. */
-    kSPC_HpRequestOverride0 = 1U,       /*!< Enable high power request override feature and force value as 0. */
-    kSPC_HpReqestOverride1 = 3U,        /*!< Enable high power request override feature and force value as 1. */
+    kSPC_HpRequestOverride0       = 1U, /*!< Enable high power request override feature and force value as 0. */
+    kSPC_HpReqestOverride1        = 3U, /*!< Enable high power request override feature and force value as 1. */
 } spc_hp_override_request_option_t;
 
-#define SPC_HP_CNFG_CTRL_OVERRIDE_OPT_MASK (0x6UL)
+#define SPC_HP_CNFG_CTRL_OVERRIDE_OPT_MASK  (0x6UL)
 #define SPC_HP_CNFG_CTRL_OVERRIDE_OPT_SHIFT (1UL)
-#define SPC_HP_CNFG_CTRL_OVERRIDE_OPT(x)  (((uint32_t)(((uint32_t)(x)) << SPC_HP_CNFG_CTRL_OVERRIDE_OPT_SHIFT)) & SPC_HP_CNFG_CTRL_OVERRIDE_OPT_MASK)
+#define SPC_HP_CNFG_CTRL_OVERRIDE_OPT(x) \
+    (((uint32_t)(((uint32_t)(x)) << SPC_HP_CNFG_CTRL_OVERRIDE_OPT_SHIFT)) & SPC_HP_CNFG_CTRL_OVERRIDE_OPT_MASK)
 
-typedef spc_active_mode_dcdc_option_t       spc_hp_mode_dcdc_option_t;
-typedef spc_active_mode_sys_ldo_option_t    spc_hp_mode_sys_ldo_option_t;
-typedef spc_active_mode_core_ldo_option_t   spc_hp_mode_core_ldo_option_t;
+typedef spc_active_mode_dcdc_option_t spc_hp_mode_dcdc_option_t;
+typedef spc_active_mode_sys_ldo_option_t spc_hp_mode_sys_ldo_option_t;
+typedef spc_active_mode_core_ldo_option_t spc_hp_mode_core_ldo_option_t;
 typedef spc_active_mode_regulators_config_t spc_hp_mode_regulators_config_t;
 #endif /* (defined(FSL_FEATURE_SPC_HAS_HP_CFG_REG) && FSL_FEATURE_SPC_HAS_HP_CFG_REG) */
+
+/*!
+ * @brief Used to select output of 4-bit ripple counter is used to monitor a glitch on VDD core.
+ */
+typedef enum _spc_vdd_core_glitch_ripple_counter_select
+{
+    kSPC_selectBit0Of4bitRippleCounter = 0x0U, /*!< Select bit-0 of 4-bit Ripple Counter
+                                                    to detect glitch on VDD Core. */
+    kSPC_selectBit1Of4bitRippleCounter = 0x1U, /*!< Select bit-1 of 4-bit Ripple Counter
+                                                    to detect glitch on VDD Core. */
+    kSPC_selectBit2Of4bitRippleCounter = 0x2U, /*!< Select bit-2 of 4-bit Ripple Counter
+                                                    to detect glitch on VDD Core. */
+    kSPC_selectBit3Of4bitRippleCounter = 0x3U, /*!< Select bit-3 of 4-bit Ripple Counter
+                                                    to detect glitch on VDD Core. */
+} spc_vdd_core_glitch_ripple_counter_select_t;
+
+/*!
+ * @brief The configuration of VDD Core glitch detector.
+ */
+typedef struct _spc_vdd_core_glitch_detector_config
+{
+    spc_vdd_core_glitch_ripple_counter_select_t rippleCounterSelect; /*!< Used to set ripple counter. */
+    uint8_t resetTimeoutValue; /*!< The timeout value used to reset glitch detect/compare logic after an initial
+                              glitch is detected. */
+    bool enableReset;          /*!< Used to enable/disable POR/LVD reset that caused by CORE VDD glitch detect error. */
+    bool enableInterrupt;      /*!< Used to enable/disable hardware interrupt if CORE VDD glitch detect error. */
+} spc_vdd_core_glitch_detector_config_t;
 
 /*******************************************************************************
  * API
@@ -506,14 +548,14 @@ static inline void SPC_ClearPeriphIOIsolationFlag(SPC_Type *base)
  */
 static inline bool SPC_GetBusyStatusFlag(SPC_Type *base)
 {
-#if (defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY ) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY)
+#if (defined(FSL_FEATURE_SPC_HAS_SC_REG_BUSY) && FSL_FEATURE_SPC_HAS_SC_REG_BUSY)
     return ((base->SC & SPC_SC_REG_BUSY_MASK) != 0UL);
 #else
     return ((base->SC & SPC_SC_BUSY_MASK) != 0UL);
 #endif
 }
 
-#if !(defined(FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT) && (FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT==0U))
+#if !(defined(FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT) && (FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT == 0U))
 /*!
  * @brief Checks system low power request.
  *
@@ -693,11 +735,11 @@ static inline uint32_t SPC_GetWakeUpValue(SPC_Type *base)
 
 /*!
  * @brief Check if HP_CFG selected as active configuration register.
- * 
+ *
  * @param base SPC peripheral base address.
- * 
+ *
  * @retval false ACTIVE_CFG selected as the active configuration register.
- * @retval true HP_CFG selected as the active configuration register. 
+ * @retval true HP_CFG selected as the active configuration register.
  */
 static inline bool SPC_CheckHPCfgSelected(SPC_Type *base)
 {
@@ -706,7 +748,7 @@ static inline bool SPC_CheckHPCfgSelected(SPC_Type *base)
 
 /*!
  * @brief Enable/disable high power request feature.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to specify enable/disable the high power request feature:
  *        - \b true Enable high power request;
@@ -726,29 +768,31 @@ static inline void SPC_EnableHighPowerRequest(SPC_Type *base, bool enable)
 
 /*!
  * @brief Override high power request manually.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param opt Specify the option of high power override request, please refer to @ref spc_hp_override_request_option_t.
  */
 static inline void SPC_OverrideHighPowerRequest(SPC_Type *base, spc_hp_override_request_option_t opt)
 {
-    base->HP_CNFG_CTRL = ((base->HP_CNFG_CTRL) & (~SPC_HP_CNFG_CTRL_OVERRIDE_OPT_MASK)) | SPC_HP_CNFG_CTRL_OVERRIDE_OPT(opt);
+    base->HP_CNFG_CTRL =
+        ((base->HP_CNFG_CTRL) & (~SPC_HP_CNFG_CTRL_OVERRIDE_OPT_MASK)) | SPC_HP_CNFG_CTRL_OVERRIDE_OPT(opt);
 }
 
 /*!
  * @brief Get voltage level of CORE LDO in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @return The voltage level of CORE LDO in high power mode, please refer to @ref spc_core_ldo_voltage_level_t.
  */
 static inline spc_core_ldo_voltage_level_t SPC_GetHighPowerModeCoreLDOVDDVoltageLevel(SPC_Type *base)
 {
-    return (spc_core_ldo_voltage_level_t)(uint32_t)((base->HP_CFG & SPC_HP_CFG_CORELDO_VDD_LVL_MASK) >> SPC_HP_CFG_CORELDO_VDD_LVL_SHIFT);
+    return (spc_core_ldo_voltage_level_t)(uint32_t)((base->HP_CFG & SPC_HP_CFG_CORELDO_VDD_LVL_MASK) >>
+                                                    SPC_HP_CFG_CORELDO_VDD_LVL_SHIFT);
 }
 
 /*!
  * @brief Get bandgap mode in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @return The bandgap mode in high power mode, please refer to @ref spc_bandgap_mode_t.
  */
@@ -759,7 +803,7 @@ static inline spc_bandgap_mode_t SPC_GetHighPowerModeBandgapMode(SPC_Type *base)
 
 /*!
  * @brief Get enabled state of all voltage detectors.
- * 
+ *
  * @param base SPC peripheral base address.
  * @return All enabled status of all voltage detectors, 1b1 means the corrsponding voltage detector is enabled.
  */
@@ -768,14 +812,14 @@ static inline uint32_t SPC_GetHighPowerModeVoltageDetectStatus(SPC_Type *base)
     uint32_t state;
 
     state = base->HP_CFG & (SPC_HP_CFG_CORE_LVDE_MASK | SPC_HP_CFG_SYS_LVDE_MASK | SPC_HP_CFG_IO_LVDE_MASK |
-            SPC_HP_CFG_CORE_HVDE_MASK | SPC_HP_CFG_SYS_HVDE_MASK | SPC_HP_CFG_IO_HVDE_MASK);
+                            SPC_HP_CFG_CORE_HVDE_MASK | SPC_HP_CFG_SYS_HVDE_MASK | SPC_HP_CFG_IO_HVDE_MASK);
 
     return state;
 }
 
 /*!
  * @brief Set bandgap mode in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param mode Specify the bandgap mode in high power mode.
  *
@@ -786,7 +830,7 @@ status_t SPC_SetHighPowerModeBandgapModeConfig(SPC_Type *base, spc_bandgap_mode_
 
 /*!
  * @brief Enable/disable CMP buffer in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable CMP buffer:
  *       - \b true Enable CMP buffer in high power mode;
@@ -806,7 +850,7 @@ static inline void SPC_EnableHighPowerModeCMPBandgapBuffer(SPC_Type *base, bool 
 
 /*!
  * @brief Disable/enable VDD Core Glitch detect feature in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param disable Used to disable/enable VDD Core Glitch detect feature:
  *          - \b true Disable VDD Core Glitch detect feature;
@@ -826,7 +870,7 @@ static inline void SPC_DisableHighPowerModeVddCoreGlitchDetect(SPC_Type *base, b
 
 /*!
  * @brief Configure CORE LDO regulator in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param option Pointer to the CORE LDO regulator configuration, please refer to @ref spc_hp_mode_core_ldo_option_t.
  *
@@ -837,11 +881,11 @@ static inline void SPC_DisableHighPowerModeVddCoreGlitchDetect(SPC_Type *base, b
  * @retval #kStatus_SPC_CORELDOVoltageWrong The selected voltage level in high power mode is not allowed.
  * @retval #kStatus_Timeout Timeout occurs while waiting completion.
  */
-status_t SPC_SetHighPowerModeCoreLDORegulatorConfig(SPC_Type *base,  spc_hp_mode_core_ldo_option_t *option);
+status_t SPC_SetHighPowerModeCoreLDORegulatorConfig(SPC_Type *base, spc_hp_mode_core_ldo_option_t *option);
 
 /*!
  * @brief Configure System LDO regulator in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param option Pointer to the SYSTEM LDO regulator configuration, please refer to @ref spc_hp_mode_sys_ldo_option_t.
  *
@@ -855,7 +899,7 @@ status_t SPC_SetHighPowerModeSystemLDORegulatorConfig(SPC_Type *base, spc_hp_mod
 
 /*!
  * @brief Configure DCDC regulator in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param option Pointer to the DCDC regulator configuration, please refer to @ref spc_hp_mode_dcdc_option_t.
  *
@@ -868,7 +912,7 @@ status_t SPC_SetHighPowerModeDCDCRegulatorConfig(SPC_Type *base, spc_hp_mode_dcd
 
 /*!
  * @brief Set configuration of regulators in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param config Pointer to the regulator configuration, please refer to @ref spc_hp_mode_regulators_config_t.
  *
@@ -884,7 +928,7 @@ status_t SPC_SetHighPowerModeRegulatorsConfig(SPC_Type *base, spc_hp_mode_regula
 
 /*!
  * @brief Enable/disable low voltage detect for VDD_CORE in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable low voltage detect feature for VDD_CORE in high power mode:
  *          - \b true Enable low voltage detect feature for VDD_CORE in high power mode;
@@ -904,7 +948,7 @@ static inline void SPC_EnableHighPowerModeCoreLowVoltageDetect(SPC_Type *base, b
 
 /*!
  * @brief Enable/disable high voltage detect for VDD_CORE in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable high voltage detect feature for VDD_CORE in high power mode:
  *          - \b true Enable low voltage detect feature for VDD_CORE in high power mode;
@@ -924,7 +968,7 @@ static inline void SPC_EnableHighPowerModeCoreHighVoltageDetect(SPC_Type *base, 
 
 /*!
  * @brief Enable/disable low voltage detect for VDD_SYS in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable low voltage detect feature for VDD_SYS in high power mode:
  *          - \b true Enable low voltage detect feature for VDD_SYS in high power mode;
@@ -944,7 +988,7 @@ static inline void SPC_EnableHighPowerModeSystemLowVoltageDetect(SPC_Type *base,
 
 /*!
  * @brief Enable/disable high voltage detect for VDD_SYS in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable high voltage detect feature for VDD_SYS in high power mode:
  *          - \b true Enable high voltage detect feature for VDD_SYS in high power mode;
@@ -964,7 +1008,7 @@ static inline void SPC_EnableHighPowerModeSystemHighVoltageDetect(SPC_Type *base
 
 /*!
  * @brief Enable/disable low voltage detect for VDD_IO_ABC in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable low voltage detect feature for VDD_IO_ABC in high power mode:
  *          - \b true Enable low voltage detect feature for VDD_IO_ABC in high power mode;
@@ -984,7 +1028,7 @@ static inline void SPC_EnableHighPowerModeIOLowVoltageDetect(SPC_Type *base, boo
 
 /*!
  * @brief Enable/disable high voltage detect for VDD_IO_ABC in high power mode.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param enable Used to enable/disable high voltage detect feature for VDD_IO_ABC in high power mode:
  *          - \b true Enable high voltage detect feature for VDD_IO_ABC in high power mode;
@@ -1066,7 +1110,7 @@ void SPC_SetActiveModeIntegratedPowerSwitchConfig(SPC_Type *base, const spc_inte
 /*!
  * @brief Configs Bandgap mode in Active mode.
  *
- * @note In active mode, beacause CORELDO_VDD_DS is reserved and set to Normal, so it is impossible to
+ * @note In active mode, because CORELDO_VDD_DS is reserved and set to Normal, so it is impossible to
  * disable Bandgap in active mode
  *
  * @param base SPC peripheral base address.
@@ -1536,7 +1580,7 @@ status_t SPC_EnableLowPowerModeCoreLowVoltageDetect(SPC_Type *base, bool enable)
  * must be done after disabling the System VDD low voltage reset and interrupt.
  *
  * @deprecated In latest RM, reserved for all devices, will removed in next release.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param level System VDD Low-Voltage level selection.
  */
@@ -2092,6 +2136,84 @@ status_t SPC_SetLowPowerModeDCDCRegulatorConfig(SPC_Type *base, const spc_lowpow
  * @retval kStatus_Timeout Timeout occurs while waiting completion.
  */
 status_t SPC_SetSRAMOperateVoltage(SPC_Type *base, spc_sram_operat_voltage_t voltage);
+
+/*! @} */
+
+/*!
+ * @name VDD Core Glitch Detector Control APIs
+ * @{
+ */
+
+/*!
+ * @brief Configures VDD Core Glitch detector, including ripple counter selection, timeout value and so on.
+ *
+ * @param base SPC peripheral base address.
+ * @param config Pointer to the structure in type of @ref spc_vdd_core_glitch_detector_config_t.
+ */
+void SPC_ConfigVddCoreGlitchDetector(SPC_Type *base, const spc_vdd_core_glitch_detector_config_t *config);
+
+/*!
+ * @brief Checks selected 4-bit glitch ripple counter's output.
+ *
+ * @param base SPC peripheral base address.
+ * @param rippleCounter The ripple counter to check, please refer to @ref spc_vdd_core_glitch_ripple_counter_select_t.
+ *
+ * @retval true The selected ripple counter output is 1, will generate interrupt or reset based on settings.
+ * @retval false The selected ripple counter output is 0.
+ */
+
+static inline bool SPC_CheckGlitchRippleCounterOutput(SPC_Type *base,
+                                                      spc_vdd_core_glitch_ripple_counter_select_t rippleCounter)
+{
+    return ((base->VDD_CORE_GLITCH_DETECT_SC & SPC_VDD_CORE_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG_MASK) ==
+            SPC_VDD_CORE_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG(1UL << (uint32_t)(rippleCounter)));
+}
+
+/*!
+ * @brief Clears output of selected glitch ripple counter.
+ *
+ * @param base SPC peripheral base address.
+ * @param rippleCounter The ripple counter to check, please refer to @ref spc_vdd_core_glitch_ripple_counter_select_t.
+ */
+static inline void SPC_ClearGlitchRippleCounterOutput(SPC_Type *base,
+                                                      spc_vdd_core_glitch_ripple_counter_select_t rippleCounter)
+{
+    base->VDD_CORE_GLITCH_DETECT_SC |=
+        SPC_VDD_CORE_GLITCH_DETECT_SC_GLITCH_DETECT_FLAG(1UL << (uint32_t)(rippleCounter));
+}
+
+/*!
+ * @brief After invoking this function, writes to SPC_VDD_CORE_GLITCH_DETECT_SC[RE] register are ignored.
+ *
+ * @param base SPC peripheral base address.
+ */
+static inline void SPC_LockVddCoreVoltageGlitchDetectResetControl(SPC_Type *base)
+{
+    base->VDD_CORE_GLITCH_DETECT_SC |= SPC_VDD_CORE_GLITCH_DETECT_SC_LOCK_MASK;
+}
+
+/*!
+ * @brief After invoking this function, writes to SPC_VDD_CORE_GLITCH_DETECT_SC[RE] register are allowed.
+ *
+ * @param base SPC peripheral base address.
+ */
+static inline void SPC_UnlockVddCoreVoltageGlitchDetectResetControl(SPC_Type *base)
+{
+    base->VDD_CORE_GLITCH_DETECT_SC &= ~SPC_VDD_CORE_GLITCH_DETECT_SC_LOCK_MASK;
+}
+
+/*!
+ * @brief Checks if SPC_VDD_CORE_GLITCH_DETECT_SC[RE] register is writable.
+ *
+ * @param base SPC peripheral base address.
+ *
+ * @retval true SPC_VDD_CORE_GLITCH_DETECT_SC[RE] register is writable.
+ * @retval false SPC_VDD_CORE_GLITCH_DETECT_SC[RE] register is not writable.
+ */
+static inline bool SPC_CheckVddCoreVoltageGlitchResetControlState(SPC_Type *base)
+{
+    return ((base->VDD_CORE_GLITCH_DETECT_SC & SPC_VDD_CORE_GLITCH_DETECT_SC_LOCK_MASK) != 0UL);
+}
 
 /*! @} */
 

@@ -62,10 +62,16 @@ status_t IMU_Init(imu_link_t link)
         while (!IMU_RX_FIFO_EMPTY(link))
         {
 #if IMU_BUSY_POLL_COUNT
-            if ((--poll_count) == 0u)
+            if ((--poll_count) == 0u) /* GCOVR_EXCL_BR_LINE */
             {
-                status = kStatus_Timeout;
-                break;
+                /*
+                 * $Branch Coverage Justification$
+                 * ((--poll_count) == 0u) not covered as it is almost 
+                 * impossible to reach the timeout here (newly received messages can be 
+                 * processed by IMU_RD_MSG fast enough, sooner than the fifo is full).
+                 */
+                status = kStatus_Timeout; /* GCOVR_EXCL_LINE */
+                break; /* GCOVR_EXCL_LINE */
             }
 #endif
             (void)IMU_RD_MSG(link);

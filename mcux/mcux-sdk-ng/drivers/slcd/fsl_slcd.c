@@ -139,7 +139,7 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
 #endif
 #if FSL_FEATURE_SLCD_HAS_FRAME_FREQUENCY_INTERRUPT
     /* Configure for frame frequency interrupt. */
-    gcrReg |= LCD_GCR_LCDIEN(configure->frameFreqIntEnable);
+    gcrReg |= LCD_GCR_LCDIEN(configure->frameFreqIntEnable ? 1U : 0U);
     gcrMsk |= LCD_GCR_LCDIEN_MASK;
 #endif /* FSL_FEATURE_SLCD_HAS_FRAME_FREQUENCY_INTERRUPT */
 #if FSL_FEATURE_SLCD_HAS_MULTI_ALTERNATE_CLOCK_SOURCE

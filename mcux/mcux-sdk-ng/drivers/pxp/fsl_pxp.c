@@ -418,7 +418,7 @@ void PXP_SetAlphaSurfaceBlendSecondaryConfig(PXP_Type *base, const pxp_as_blend_
 
     base->ALPHA_B_CTRL_1 =
         (base->ALPHA_B_CTRL_1 & ~(PXP_ALPHA_B_CTRL_1_ROP_MASK | PXP_ALPHA_B_CTRL_1_ROP_ENABLE_MASK)) |
-        PXP_ALPHA_B_CTRL_1_ROP((uint32_t)config->ropMode) | PXP_ALPHA_B_CTRL_1_ROP_ENABLE((uint32_t)config->ropEnable);
+        PXP_ALPHA_B_CTRL_1_ROP((uint32_t)config->ropMode) | PXP_ALPHA_B_CTRL_1_ROP_ENABLE(config->ropEnable ? 1U : 0U);
 
     if (config->invertAlpha)
     {
@@ -516,7 +516,7 @@ void PXP_SetProcessSurfaceBufferConfig(PXP_Type *base, const pxp_ps_buffer_confi
     assert(NULL != config);
 
     base->PS_CTRL = ((base->PS_CTRL & ~(PXP_PS_CTRL_FORMAT_MASK | PXP_PS_CTRL_WB_SWAP_MASK)) |
-                     PXP_PS_CTRL_FORMAT(config->pixelFormat) | PXP_PS_CTRL_WB_SWAP(config->swapByte));
+                     PXP_PS_CTRL_FORMAT(config->pixelFormat) | PXP_PS_CTRL_WB_SWAP(config->swapByte ? 1U : 0U));
 
     base->PS_BUF   = PXP_ADDR_CPU_2_IP(config->bufferAddr);
     base->PS_UBUF  = PXP_ADDR_CPU_2_IP(config->bufferAddrU);
@@ -710,12 +710,12 @@ void PXP_BuildRect(PXP_Type *base,
         PXP_SetAlphaSurfaceOverlayColorKey(base, 0U, 0xFFFFFFFFUL);
         PXP_EnableAlphaSurfaceOverlayColorKey(base, true);
 #endif
-        PXP_SetAlphaSurfacePosition(base, 0, 0, width, height);
+        PXP_SetAlphaSurfacePosition(base, 0U, 0U, width, height);
     }
     else
     {
         /* No need to configure AS for formats that do not have alpha value. */
-        PXP_SetAlphaSurfacePosition(base, 0xFFFFU, 0xFFFFU, 0, 0);
+        PXP_SetAlphaSurfacePosition(base, 0xFFFFU, 0xFFFFU, 0U, 0U);
     }
 
     /* Output config. */
@@ -976,9 +976,9 @@ status_t PXP_LoadLutTable(
  * param data Pointer to the data to write.
  * param memStartAddr The start address in the internal memory to write the data.
  */
-void PXP_SetInternalRamData(PXP_Type *base, pxp_ram_t ram, uint32_t bytesNum, uint8_t *data, uint16_t memStartAddr)
+void PXP_SetInternalRamData(PXP_Type *base, pxp_ram_t ram, uint16_t bytesNum, uint8_t *data, uint16_t memStartAddr)
 {
-    assert(((uint32_t)memStartAddr + bytesNum) <= (uint32_t)PXP_INTERNAL_RAM_LUT_BYTE);
+    assert(((uint32_t)memStartAddr + (uint32_t)bytesNum) <= (uint32_t)PXP_INTERNAL_RAM_LUT_BYTE);
 
     base->INIT_MEM_CTRL =
         PXP_INIT_MEM_CTRL_ADDR(memStartAddr) | PXP_INIT_MEM_CTRL_SELECT(ram) | PXP_INIT_MEM_CTRL_START_MASK;
@@ -1224,6 +1224,9 @@ static void PXP_StartRectCopy(PXP_Type *base,
                               uint16_t height,
                               pxp_as_pixel_format_t pixelFormat)
 {
+    assert(width >= 1U);
+    assert(height >= 1U);
+
     pxp_output_buffer_config_t outputBufferConfig;
     pxp_as_buffer_config_t asBufferConfig;
     uint32_t intMask;
@@ -1380,6 +1383,11 @@ status_t PXP_MemCopy(PXP_Type *base, uint32_t srcAddr, uint32_t destAddr, uint32
     /* For 512 not aligned part, copy by CPU. */
     unalignedSize = size % 512U;
 
+    if ((unalignedSize > (0xFFFFFFFFUL - destAddr)) || (unalignedSize > (0xFFFFFFFFUL - srcAddr)))
+    {
+        return kStatus_InvalidArgument;
+    }
+
     if (0UL != unalignedSize)
     {
         (void)memcpy((uint8_t *)destAddr, (uint8_t *)srcAddr, unalignedSize);
@@ -1497,16 +1505,16 @@ status_t PXP_SetFetchEngineConfig(PXP_Type *base,
               ((uint32_t)config->flipMode << PXP_INPUT_FETCH_CTRL_CH0_HFLIP_SHIFT) |
               PXP_INPUT_FETCH_CTRL_CH0_HIGH_BYTE((uint32_t)config->wordOrder) |
               ((uint32_t)config->interface << PXP_INPUT_FETCH_CTRL_CH0_HANDSHAKE_EN_SHIFT) |
-              PXP_INPUT_FETCH_CTRL_CH0_BLOCK_EN((uint32_t)config->fetchFormat.enableblock) |
-              PXP_INPUT_FETCH_CTRL_CH0_BLOCK_16((uint32_t)config->fetchFormat.blockSize16) |
-              PXP_INPUT_FETCH_CTRL_CH0_CH_EN((uint32_t)config->channelEnable);
+              PXP_INPUT_FETCH_CTRL_CH0_BLOCK_EN(config->fetchFormat.enableblock ? 1U : 0U) |
+              PXP_INPUT_FETCH_CTRL_CH0_BLOCK_16(config->fetchFormat.blockSize16 ? 1U : 0U) |
+              PXP_INPUT_FETCH_CTRL_CH0_CH_EN(config->channelEnable ? 1U : 0U);
     ulcReg       = (((uint32_t)config->ulcY) << 16U) | (uint32_t)config->ulcX;
     lrcReg       = (((uint32_t)config->lrcY) << 16U) | (uint32_t)config->lrcX;
     fetchSizeReg = (((uint32_t)config->totalHeight) << 16U) | ((uint32_t)config->totalWidth);
     shiftCtrlReg = PXP_INPUT_FETCH_SHIFT_CTRL_CH0_INPUT_ACTIVE_BPP((uint32_t)config->activeBits) |
                    PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_FORMAT((uint32_t)config->pixelFormat) |
                    PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_EN((uint32_t)config->expandEnable) |
-                   PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS((uint32_t)config->shiftConfig.shiftBypass);
+                   PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS(config->shiftConfig.shiftBypass ? 1U : 0U);
     if (!config->shiftConfig.shiftBypass)
     {
         shiftOffsetReg = (uint32_t)config->shiftConfig.component0.offset |
@@ -1677,15 +1685,15 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
     uint32_t flagShiftWidthRegAddr = 0U;
 
     ctrlReg = PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES((uint32_t)config->storeFormat.burstLength) |
-              PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN((uint32_t)config->useFixedData) |
-              PXP_INPUT_STORE_CTRL_CH0_PACK_IN_SEL((uint32_t)config->packInSelect) |
+              PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN(config->useFixedData ? 1U : 0U) |
+              PXP_INPUT_STORE_CTRL_CH0_PACK_IN_SEL(config->packInSelect ? 1U : 0U) |
               ((uint32_t)config->interface << PXP_INPUT_STORE_CTRL_CH0_HANDSHAKE_EN_SHIFT) |
               // PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM((uint32_t)config->arraySize) |
               PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM(0U) |
-              PXP_INPUT_STORE_CTRL_CH0_BLOCK_16((uint32_t)config->storeFormat.blockSize16) |
-              PXP_INPUT_STORE_CTRL_CH0_BLOCK_EN((uint32_t)config->storeFormat.enableblock) |
-              PXP_INPUT_STORE_CTRL_CH0_CH_EN((uint32_t)config->channelEnable);
-    shiftCtrlReg = PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS((uint32_t)config->shiftConfig.shiftBypass) |
+              PXP_INPUT_STORE_CTRL_CH0_BLOCK_16(config->storeFormat.blockSize16 ? 1U : 0U) |
+              PXP_INPUT_STORE_CTRL_CH0_BLOCK_EN(config->storeFormat.enableblock ? 1U : 0U) |
+              PXP_INPUT_STORE_CTRL_CH0_CH_EN(config->channelEnable ? 1U : 0U);
+    shiftCtrlReg = PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS(config->shiftConfig.shiftBypass ? 1U : 0U) |
                    ((uint32_t)config->yuvMode << PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUT_YUV422_1P_EN_SHIFT) |
                    PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUTPUT_ACTIVE_BPP((uint32_t)config->activeBits);
     sizeReg = (((uint32_t)config->totalHeight) << 16U) | ((uint32_t)config->totalWidth);
@@ -1846,7 +1854,7 @@ status_t PXP_SetCfaConfig(PXP_Type *base, const pxp_cfa_config_t *config)
     base->CFA_CTRL = PXP_CFA_CTRL_CFA_ARRAY_HSIZE((uint32_t)config->arrayWidth) |
                      PXP_CFA_CTRL_CFA_ARRAY_VSIZE((uint32_t)config->arrayHeight) |
                      PXP_CFA_CTRL_CFA_IN_RGB444((uint32_t)config->pixelInFormat) |
-                     PXP_CFA_CTRL_CFA_BYPASS((uint32_t)config->bypass);
+                     PXP_CFA_CTRL_CFA_BYPASS(config->bypass ? 1U : 0U);
     base->CFA_SIZE = ((uint32_t)(config->totalWidth) << 16U) | (uint32_t)(config->totalHeight);
 
     /* Calculate how many registers to configure. If the value is not divisible then add 1 no matter the remainder. */
@@ -1884,10 +1892,10 @@ status_t PXP_SetHistogramConfig(PXP_Type *base, uint8_t num, const pxp_histogram
     uint32_t ctrlReg = 0U;
     uint32_t maskReg = 0U;
 
-    ctrlReg = PXP_HIST_A_CTRL_ENABLE((uint32_t)config->enable) |
+    ctrlReg = PXP_HIST_A_CTRL_ENABLE(config->enable ? 1U : 0U) |
               PXP_HIST_A_CTRL_PIXEL_OFFSET((uint32_t)config->lutValueOffset) |
               PXP_HIST_A_CTRL_PIXEL_WIDTH((uint32_t)config->lutValueWidth);
-    maskReg = PXP_HIST_A_MASK_MASK_EN((uint32_t)config->enableMask) |
+    maskReg = PXP_HIST_A_MASK_MASK_EN(config->enableMask ? 1U : 0U) |
               PXP_HIST_A_MASK_MASK_MODE((uint32_t)config->condition) |
               PXP_HIST_A_MASK_MASK_OFFSET((uint32_t)config->maskOffset) |
               PXP_HIST_A_MASK_MASK_WIDTH((uint32_t)config->maskWidth) |
@@ -1991,7 +1999,7 @@ void PXP_WfeaInit(PXP_Type *base, bool ditherHandshake)
        length 4, normal border pixels select(not sw reg mode), 1 line fetch, done IRQ disabled. */
     base->WFA_FETCH_CTRL = PXP_WFA_FETCH_CTRL_BF1_EN(1UL) | PXP_WFA_FETCH_CTRL_BF2_EN(1UL) |
                            PXP_WFA_FETCH_CTRL_BF2_BYTES_PP(1UL) |
-                           PXP_WFA_FETCH_CTRL_BF1_HSK_MODE((uint32_t)ditherHandshake);
+                           PXP_WFA_FETCH_CTRL_BF1_HSK_MODE(ditherHandshake ? 1U : 0U);
     /* Select pixel from bufer 2, set the right/left bit position on the original pixel as 0/3 */
     /* Other default configurations: x/y offset=0, positive offset. */
     base->WFA_ARRAY_PIXEL0_MASK = PXP_WFA_ARRAY_PIXEL0_MASK_BUF_SEL(1UL) | PXP_WFA_ARRAY_PIXEL0_MASK_L_OFS(3UL);
@@ -2185,6 +2193,10 @@ void PXP_WfeaInit(PXP_Type *base, bool ditherHandshake)
  */
 void PXP_SetWfeaConfig(PXP_Type *base, const pxp_wfea_engine_config_t *config)
 {
+    assert(config->updateWidth >= 1UL);
+    assert(config->updateHeight >= 1UL);
+    assert(((uint64_t)config->wbAddr + ((uint64_t)config->ulcX + (uint64_t)config->ulcY * (uint64_t)config->resX) * 2ULL) <= 0xFFFFFFFFULL);
+
     /* Fetch */
     base->WFA_FETCH_BUF1_ADDR  = config->y4Addr;
     base->WFA_FETCH_BUF1_PITCH = config->updatePitch;
@@ -2209,8 +2221,7 @@ void PXP_SetWfeaConfig(PXP_Type *base, const pxp_wfea_engine_config_t *config)
     base->WFE_A_STORE_ADDR_0_CH0 = PXP_WFE_A_STORE_ADDR_0_CH0_OUT_BASE_ADDR0(config->y4cAddr);
     base->WFE_A_STORE_ADDR_1_CH0 = 0U;
     /* Channel 1: 2 bytes per pixel. */
-    base->WFE_A_STORE_ADDR_0_CH1 = PXP_WFE_A_STORE_ADDR_0_CH1_OUT_BASE_ADDR0(
-        (uint32_t)config->wbAddr + ((uint32_t)config->ulcX + (uint32_t)config->ulcY * (uint32_t)config->resX) * 2UL);
+    base->WFE_A_STORE_ADDR_0_CH1 = (uint32_t)config->wbAddr + ((uint32_t)config->ulcX + (uint32_t)config->ulcY * (uint32_t)config->resX) * 2UL;
     base->WFE_A_STORE_ADDR_1_CH1 = 0U;
 
     /* ALU */

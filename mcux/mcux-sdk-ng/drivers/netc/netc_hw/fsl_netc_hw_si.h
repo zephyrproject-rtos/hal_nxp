@@ -27,7 +27,7 @@
 /*! @brief Defines for read format. */
 #define NETC_SI_TXDESCRIP_RD_FL(n)      (((uint32_t)(n) & 0x03U) << 27U)
 #define NETC_SI_TXDESCRIP_RD_TSE_MASK   (1UL << 25U)
-#define NETC_SI_TXDESCRIP_RD_TXSTART(n) ((uint32_t)(n) & 0x1fffffUL)
+#define NETC_SI_TXDESCRIP_RD_TXSTART(n) ((uint32_t)(n) & 0x1FFFFFFUL)
 #if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
 #define NETC_SI_TXDESCRIP_RD_DR(n)     (((uint32_t)(n) & 0x3U) << 10U)
 #define NETC_SI_TXDESCRIP_RD_IPV(n)    (((uint32_t)(n) & 0x7U) << 12U)

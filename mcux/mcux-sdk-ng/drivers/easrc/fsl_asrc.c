@@ -324,7 +324,6 @@ static status_t ASRC_SetSampleRateRatioConfig(ASRC_Type *base,
 
     ratio = ((uint64_t)inRate << fracBits) / outRate;
 
-
     base->RS_RATIO_LOW[context].RS_RATIO_LOW  = (uint32_t)(ratio & 0xFFFFFFFFUL);
     base->RS_RATIO_LOW[context].RS_RATIO_HIGH = ((uint32_t)((ratio >> 32U)) & 0xFFFFFFFFUL);
 

@@ -26,12 +26,16 @@
  * @{
  */
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2C_RETRY_TIMES
+#ifdef CONFIG_I2C_RETRY_TIMES
+#define I2C_RETRY_TIMES CONFIG_I2C_RETRY_TIMES
+#else
 #define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
 #endif
 
 /*! @brief LPI2C status return codes. */

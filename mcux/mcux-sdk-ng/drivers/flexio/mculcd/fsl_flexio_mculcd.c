@@ -511,6 +511,7 @@ void FLEXIO_MCULCD_ClearSingleBeatReadConfig(FLEXIO_MCULCD_Type *base)
  */
 void FLEXIO_MCULCD_SetMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base)
 {
+    assert(base->txShifterEndIndex > base->txShifterStartIndex);
     /*
      * This function will be called at the beginning of every data writing. For
      * performance consideration, it access the FlexIO registers directly, but not
@@ -627,6 +628,8 @@ void FLEXIO_MCULCD_ClearMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base)
  */
 void FLEXIO_MCULCD_SetMultiBeatsReadConfig(FLEXIO_MCULCD_Type *base)
 {
+    assert(base->rxShifterEndIndex > base->rxShifterStartIndex);
+
     /*
      * This function will be called at the beginning of every data reading. For
      * performance consideration, it access the FlexIO registers directly, but not

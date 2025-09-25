@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Driver version. */
-#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_DPU_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*! @brief DPU palette entery number. */
@@ -154,6 +154,36 @@
 #define DPU_EXT_DST1_OFFSET         0x150000U
 #define DPU_CONST_FRAME5_OFFSET     0x140000U
 #define DPU_EXT_DST5_OFFSET         0x160000U
+#define DPU_LAYER_BLEND1_OFFSET     0x170000U
+#define DPU_LAYER_BLEND2_OFFSET     0x180000U
+#define DPU_LAYER_BLEND3_OFFSET     0x190000U
+#define DPU_LAYER_BLEND4_OFFSET     0x1A0000U
+#define DPU_LAYER_BLEND5_OFFSET     0x1B0000U
+#define DPU_DOMAIN_BLEND0_OFFSET    0x2A0000U
+#define DPU_FRAME_GEN0_OFFSET       0x2B0000U
+#define DPU_PIPELINE_EXTDST0_OFFSET 0x111000U
+#define DPU_PIPELINE_EXTDST1_OFFSET 0x151000U
+#define DPU_PIPELINE_EXTDST4_OFFSET 0x121000U
+#define DPU_PIPELINE_EXTDST5_OFFSET 0x161000U
+#define DPU_PIPELINE_STORE9_OFFSET  0xE1000U
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+#define DPU_FETCH_ECO0_OFFSET       0x200000U
+#define DPU_FETCH_ECO1_OFFSET       0x220000U
+#define DPU_FETCH_LAYER0_OFFSET     0x1c0000U
+#define DPU_FETCH_LAYER1_OFFSET     0x1d0000U
+#define DPU_H_SCALER4_OFFSET        0x240000U
+#define DPU_V_SCALER4_OFFSET        0x250000U
+#define DPU_FETCH_YUV0_OFFSET       0x1F0000U
+#define DPU_FETCH_YUV1_OFFSET       0x210000U
+#define DPU_FETCH_YUV3_OFFSET       0x1E0000U
+#define DPU_DOMAIN_BLEND1_OFFSET    0x330000U
+#define DPU_FRAME_GEN1_OFFSET       0x340000U
+#define DPU_ID_HASH0_OFFSET         0x300000U
+#define DPU_SIG0_OFFSET             0x310000U
+#define DPU_SIG1_OFFSET             0x3A0000U
+#define DPU_DITHER0_CONFIG_OFFSET   0x2F0000U /* Dither 0 config offset */
+#define DPU_DITHER1_CONFIG_OFFSET   0x380000U /* Dither 1 config offset */
+#else
 #define DPU_FETCH_ECO0_OFFSET       0x210000U
 #define DPU_FETCH_ECO1_OFFSET       0x230000U
 #define DPU_FETCH_ECO2_OFFSET       0x250000U
@@ -161,19 +191,12 @@
 #define DPU_FETCH_LAYER1_OFFSET     0x1e0000U
 #define DPU_H_SCALER4_OFFSET        0x270000U
 #define DPU_V_SCALER4_OFFSET        0x280000U
-#define DPU_LAYER_BLEND1_OFFSET     0x170000U
-#define DPU_LAYER_BLEND2_OFFSET     0x180000U
-#define DPU_LAYER_BLEND3_OFFSET     0x190000U
-#define DPU_LAYER_BLEND4_OFFSET     0x1A0000U
-#define DPU_LAYER_BLEND5_OFFSET     0x1B0000U
 #define DPU_LAYER_BLEND6_OFFSET     0x1C0000U
 #define DPU_FETCH_YUV0_OFFSET       0x200000U
 #define DPU_FETCH_YUV1_OFFSET       0x220000U
 #define DPU_FETCH_YUV2_OFFSET       0x240000U
 #define DPU_FETCH_YUV3_OFFSET       0x1F0000U
-#define DPU_DOMAIN_BLEND0_OFFSET    0x2a0000U
 #define DPU_DOMAIN_BLEND1_OFFSET    0x320000U
-#define DPU_FRAME_GEN0_OFFSET       0x2B0000U
 #define DPU_FRAME_GEN1_OFFSET       0x330000U
 #define DPU_ID_HASH0_OFFSET         0x2C0000U
 #define DPU_SIG0_OFFSET             0x2d0000U
@@ -181,11 +204,7 @@
 #define DPU_SIG2_OFFSET             0x2E0000U
 #define DPU_DITHER0_CONFIG_OFFSET   0x311000U /* Dither 0 config offset */
 #define DPU_DITHER1_CONFIG_OFFSET   0x371020U /* Dither 1 config offset */
-#define DPU_PIPELINE_EXTDST0_OFFSET 0x111000U
-#define DPU_PIPELINE_EXTDST1_OFFSET 0x151000U
-#define DPU_PIPELINE_EXTDST4_OFFSET 0x121000U
-#define DPU_PIPELINE_EXTDST5_OFFSET 0x161000U
-#define DPU_PIPELINE_STORE9_OFFSET  0xE1000U
+#endif
 
 #define DPU_ROP_CONTROL_Mode_MASK      (1U << 0U)
 #define DPU_ROP_CONTROL_RedMode_MASK   (1U << 7U)
@@ -274,16 +293,14 @@ typedef enum _dpu_unit
     kDPU_ExtDst1         = DPU_MAKE_UNIT(kDPU_ExtDst, kDPU_UnitAttrHasSrc, DPU_EXT_DST1_OFFSET),
     kDPU_ConstFrame5     = DPU_MAKE_UNIT(kDPU_ConstFrame, 0U, DPU_CONST_FRAME5_OFFSET),
     kDPU_ExtDst5         = DPU_MAKE_UNIT(kDPU_ExtDst, kDPU_UnitAttrHasSrc, DPU_EXT_DST5_OFFSET),
-    kDPU_FetchEco2       = DPU_MAKE_UNIT(kDPU_FetchEco, kDPU_UnitAttrIsFetch, DPU_FETCH_ECO2_OFFSET),
     kDPU_FetchEco0       = DPU_MAKE_UNIT(kDPU_FetchEco, kDPU_UnitAttrIsFetch, DPU_FETCH_ECO0_OFFSET),
     kDPU_FetchEco1       = DPU_MAKE_UNIT(kDPU_FetchEco, kDPU_UnitAttrIsFetch, DPU_FETCH_ECO1_OFFSET),
-    kDPU_FetchLayer0 =
+    kDPU_FetchLayer0  =
         DPU_MAKE_UNIT(kDPU_FetchLayer, kDPU_UnitAttrIsFetch | kDPU_UnitAttrSubLayer, DPU_FETCH_LAYER0_OFFSET),
-    kDPU_FetchLayer1 =
+    kDPU_FetchLayer1  =
         DPU_MAKE_UNIT(kDPU_FetchLayer, kDPU_UnitAttrIsFetch | kDPU_UnitAttrSubLayer, DPU_FETCH_LAYER1_OFFSET),
     kDPU_FetchYuv0    = DPU_MAKE_UNIT(KDPU_FetchYuv, kDPU_UnitAttrIsFetch | kDPU_UnitAttrHasSrc, DPU_FETCH_YUV0_OFFSET),
     kDPU_FetchYuv1    = DPU_MAKE_UNIT(KDPU_FetchYuv, kDPU_UnitAttrIsFetch | kDPU_UnitAttrHasSrc, DPU_FETCH_YUV1_OFFSET),
-    kDPU_FetchYuv2    = DPU_MAKE_UNIT(KDPU_FetchYuv, kDPU_UnitAttrIsFetch | kDPU_UnitAttrHasSrc, DPU_FETCH_YUV2_OFFSET),
     kDPU_FetchYuv3    = DPU_MAKE_UNIT(KDPU_FetchYuv, kDPU_UnitAttrIsFetch | kDPU_UnitAttrHasSrc, DPU_FETCH_YUV3_OFFSET),
     kDPU_Hscaler4     = DPU_MAKE_UNIT(kDPU_HScaler, kDPU_UnitAttrHasSrc, DPU_H_SCALER4_OFFSET),
     kDPU_Vscaler4     = DPU_MAKE_UNIT(kDPU_VScaler, kDPU_UnitAttrHasSrc, DPU_V_SCALER4_OFFSET),
@@ -292,7 +309,11 @@ typedef enum _dpu_unit
     kDPU_LayerBlend3  = DPU_MAKE_UNIT(kDPU_LayerBlend, kDPU_UnitAttrHasSrc, DPU_LAYER_BLEND3_OFFSET),
     kDPU_LayerBlend4  = DPU_MAKE_UNIT(kDPU_LayerBlend, kDPU_UnitAttrHasSrc, DPU_LAYER_BLEND4_OFFSET),
     kDPU_LayerBlend5  = DPU_MAKE_UNIT(kDPU_LayerBlend, kDPU_UnitAttrHasSrc, DPU_LAYER_BLEND5_OFFSET),
+#if !(defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7)
     kDPU_LayerBlend6  = DPU_MAKE_UNIT(kDPU_LayerBlend, kDPU_UnitAttrHasSrc, DPU_LAYER_BLEND6_OFFSET),
+    kDPU_FetchYuv2    = DPU_MAKE_UNIT(KDPU_FetchYuv, kDPU_UnitAttrIsFetch | kDPU_UnitAttrHasSrc, DPU_FETCH_YUV2_OFFSET),
+    kDPU_FetchEco2    = DPU_MAKE_UNIT(kDPU_FetchEco, kDPU_UnitAttrIsFetch, DPU_FETCH_ECO2_OFFSET),
+#endif
     kDPU_DomainBlend0 = DPU_MAKE_UNIT(kDPU_DomainBlend, kDPU_UnitAttrHasSrc, DPU_DOMAIN_BLEND0_OFFSET),
     kDPU_DomainBlend1 = DPU_MAKE_UNIT(kDPU_DomainBlend, kDPU_UnitAttrHasSrc, DPU_DOMAIN_BLEND1_OFFSET),
 
@@ -318,6 +339,76 @@ enum _dpu_interrupt
     kDPU_Group0ExtDst5SeqCompleteInterrupt        = (1U << 14U), /*!< ExtDst5 sequence complete interrupt. */
     kDPU_Group0DomainBlend0ShadowLoadInterrupt    = (1U << 15U), /*!< DomainBlend0 shadow load interrupt. */
     kDPU_Group0DomainBlend0FrameCompleteInterrupt = (1U << 16U), /*!< DomainBlend0 frame complete interrupt. */
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+    kDPU_Group0DiSengcfgShadowLoad0Interrupt      = (1U << 17U), /*!< DiSengcfg shadow load0 interrupt */
+    kDPU_Group0DiSengcfgFrameComplete0Interrupt   = (1U << 18U), /*!< DiSengcfg frame complete0 interrupt. */
+    kDPU_Group0DiSengcfgSeqComplete0Interrupt     = (1U << 19U), /*!< DiSengcfg sequence complete0 interrupt. */
+    kDPU_Group0FrameGen0Int0Interrupt             = (1U << 20U), /*!< FrameGen 0 interrupt 0. */
+    kDPU_Group0FrameGen0Int1Interrupt             = (1U << 21U), /*!< FrameGen 0 interrupt 1. */
+    kDPU_Group0FrameGen0Int2Interrupt             = (1U << 22U), /*!< FrameGen 0 interrupt 2. */
+    kDPU_Group0FrameGen0Int3Interrupt             = (1U << 23U), /*!< FrameGen 0 interrupt 3. */
+    kDPU_Group0Sig0ShadowLoadInterrupt            = (1U << 24U), /*!< Sig0 shadow load interrupt. */
+    kDPU_Group0Sig0ValidInterrupt                 = (1U << 25U), /*!< Sig0 measurement valid interrupt. */
+    kDPU_Group0Sig0ErrorInterrupt                 = (1U << 26U), /*!< Sig0 error interrupt. */
+    kDPU_Group0Sig0ClusterErrorInterrupt          = (1U << 27U), /*!< Sig0 cluster error interrupt. */
+    kDPU_Group0Sig0ClusterMatchInterrupt          = (1U << 28U), /*!< Sig0 cluster match interrupt. */
+    kDPU_Group0Sig0Idash0ShadowLoadInterrupt      = (1U << 29U), /*!< Sig0 IDash0 shadow load interrupt. */
+    kDPU_Group0Sig0Idash0ValidInterrupt           = (1U << 30U), /*!< Sig0 IDash0 valid interrupt. */
+    kDPU_Group0Sig0Idash0WindowErrorInterrupt     = (1U << 31U), /*!< Sig0 IDash0 window error interrupt. */
+    kDPU_Group1LocalDimming0Irq0Interrupt         = (1U << 0U),  /*!< Local dimming 0 interrupt 0. */
+    kDPU_Group1LocalDimming0Irq1Interrupt         = (1U << 1U),  /*!< Local dimming 0 interrupt 1. */
+    kDPU_Group1LocalDimming0Irq2Interrupt         = (1U << 2U),  /*!< Local dimming 0 interrupt 2. */
+    kDPU_Group1DomainBlend1ShadowLoadInterrupt    = (1U << 3U),  /*!< DomainBlend1 shadow load interrupt. */
+    kDPU_Group1DomainBlend1FrameCompleteInterrupt = (1U << 4U),  /*!< DomainBlend1 frame complete interrupt. */
+    kDPU_Group1DiSengcfgShadowLoad1Interrupt      = (1U << 5U),  /*!< DiSengcfg shadow load1 interrupt */
+    kDPU_Group1DiSengcfgFrameComplete1Interrupt   = (1U << 6U),  /*!< DiSengcfg frame complete1 interrupt. */
+    kDPU_Group1DiSengcfgSeqComplete1Interrupt     = (1U << 7U),  /*!< DiSengcfg sequence complete1 interrupt. */
+    kDPU_Group1FrameGen1Int0Interrupt             = (1U << 8U),  /*!< FrameGen 1 interrupt 0. */
+    kDPU_Group1FrameGen1Int1Interrupt             = (1U << 9U),  /*!< FrameGen 1 interrupt 1. */
+    kDPU_Group1FrameGen1Int2Interrupt             = (1U << 10U), /*!< FrameGen 1 interrupt 2. */
+    kDPU_Group1FrameGen1Int3Interrupt             = (1U << 11U), /*!< FrameGen 1 interrupt 3. */
+    kDPU_Group1Sig1ShadowLoadInterrupt            = (1U << 12U), /*!< Sig1 shadow load interrupt. */
+    kDPU_Group1Sig1ValidInterrupt                 = (1U << 13U), /*!< Sig1 measurement valid interrupt. */
+    kDPU_Group1Sig1ErrorInterrupt                 = (1U << 14U), /*!< Sig1 error interrupt. */
+    kDPU_Group1Sig1ClusterErrorInterrupt          = (1U << 15U), /*!< Sig1 cluster error interrupt. */
+    kDPU_Group1Sig1ClusterMatchInterrupt          = (1U << 16U), /*!< Sig1 cluster match interrupt. */
+    kDPU_Group1Sig1Idash1ShadowLoadInterrupt      = (1U << 17U), /*!< Sig1 IDash1 shadow load interrupt. */
+    kDPU_Group1Sig1Idash1ValidInterrupt           = (1U << 18U), /*!< Sig1 IDash1 valid interrupt. */
+    kDPU_Group1Sig1Idash1WindowErrorInterrupt     = (1U << 19U), /*!< Sig1 IDash1 window error interrupt. */
+    kDPU_Group1CmdSeqErrorInterrupt               = (1U << 20U), /*!< CmdSeq Error interrupt. */
+    kDPU_Group1ComCtrlSw0Interrupt                = (1U << 21U), /*!< ComCtrlSw0 interrupt. */
+    kDPU_Group1ComCtrlSw1Interrupt                = (1U << 22U), /*!< ComCtrlSw1 interrupt. */
+    kDPU_Group1ComCtrlSw2Interrupt                = (1U << 23U), /*!< ComCtrlSw1 interrupt. */
+    kDPU_Group1ComCtrlSw3Interrupt                = (1U << 24U), /*!< ComCtrlSw1 interrupt. */
+    kDPU_Group1FrameGen0PrimSyncOnInterrupt       = (1U << 25U), /*!< FrameGen 0 primary sync on interrupt. */
+    kDPU_Group1FrameGen0PrimSyncOffInterrupt      = (1U << 26U), /*!< FrameGen 0 primary sync off interrupt. */
+    kDPU_Group1FrameGen0OverFlow0OnInterrupt      = (1U << 27U), /*!< FrameGen 0 over flow0  on interrupt. */
+    kDPU_Group1FrameGen0OverFlow0OffInterrupt     = (1U << 28U), /*!< FrameGen 0 over flow0 off interrupt. */
+    kDPU_Group1FrameGen0UnderRun0OnInterrupt      = (1U << 29U), /*!< FrameGen 0 under run0  on interrupt. */
+    kDPU_Group1FrameGen0UnderRun0OffInterrupt     = (1U << 30U), /*!< FrameGen 0 under run0  off interrupt. */
+    kDPU_Group1FrameGen0Threshold0RiseInterrupt   = (1U << 31U), /*!< FrameGen 0 Threshold0  rise interrupt. */
+    kDPU_Group2FrameGen0Threshold0FailInterrupt   = (1U << 0U),  /*!< FrameGen 0 Threshold0  fail interrupt. */
+    kDPU_Group2FrameGen0OverFlow1OnInterrupt      = (1U << 1U),  /*!< FrameGen 0 over flow1  on interrupt. */
+    kDPU_Group2FrameGen0OverFlow1OffInterrupt     = (1U << 2U),  /*!< FrameGen 0 over flow1 off interrupt. */
+    kDPU_Group2FrameGen0UnderRun1OnInterrupt      = (1U << 3U),  /*!< FrameGen 0 under run1  on interrupt. */
+    kDPU_Group2FrameGen0UnderRun1OffInterrupt     = (1U << 4U),  /*!< FrameGen 0 under run1  off interrupt. */
+    kDPU_Group2FrameGen0Threshold1RiseInterrupt   = (1U << 5U),  /*!< FrameGen 0 Threshold1  rise interrupt. */
+    kDPU_Group2FrameGen0Threshold1FailInterrupt   = (1U << 6U),  /*!< FrameGen 0 Threshold1  fail interrupt. */
+    kDPU_Group2FrameGen1PrimSyncOnInterrupt       = (1U << 7U),  /*!< FrameGen 1 primary sync on interrupt. */
+    kDPU_Group2FrameGen1PrimSyncOffInterrupt      = (1U << 8U),  /*!< FrameGen 1 primary sync off interrupt. */
+    kDPU_Group2FrameGen1OverFlow0OnInterrupt      = (1U << 9U),  /*!< FrameGen 1 over flow0  on interrupt. */
+    kDPU_Group2FrameGen1OverFlow0OffInterrupt     = (1U << 10U), /*!< FrameGen 1 over flow0 off interrupt. */
+    kDPU_Group2FrameGen1UnderRun0OnInterrupt      = (1U << 11U), /*!< FrameGen 1 under run0  on interrupt. */
+    kDPU_Group2FrameGen1UnderRun0OffInterrupt     = (1U << 12U), /*!< FrameGen 1 under run0  off interrupt. */
+    kDPU_Group2FrameGen1Threshold0RiseInterrupt   = (1U << 13U), /*!< FrameGen 1 Threshold0  rise interrupt. */
+    kDPU_Group2FrameGen1Threshold0FailInterrupt   = (1U << 14U), /*!< FrameGen 1 Threshold0  fail interrupt. */
+    kDPU_Group2FrameGen1OverFlow1OnInterrupt      = (1U << 15U), /*!< FrameGen 1 over flow1  on interrupt. */
+    kDPU_Group2FrameGen1OverFlow1OffInterrupt     = (1U << 16U), /*!< FrameGen 1 over flow1 off interrupt. */
+    kDPU_Group2FrameGen1UnderRun1OnInterrupt      = (1U << 17U), /*!< FrameGen 1 under run1  on interrupt. */
+    kDPU_Group2FrameGen1UnderRun1OffInterrupt     = (1U << 18U), /*!< FrameGen 1 under run1  off interrupt. */
+    kDPU_Group2FrameGen1Threshold1RiseInterrupt   = (1U << 19U), /*!< FrameGen 1 Threshold1  rise interrupt. */
+    kDPU_Group2FrameGen1Threshold1FailInterrupt   = (1U << 20U), /*!< FrameGen 1 Threshold1  fail interrupt. */
+#else
     kDPU_Group0DomainBlend0SeqCompleteInterrupt   = (1U << 17U), /*!< DomainBlend0 sequence complete interrupt. */
     kDPU_Group0DiSengcfgShadowLoad0Interrupt      = (1U << 18U), /*!< DiSengcfg shadow load0 interrupt */
     kDPU_Group0DiSengcfgFrameComplete0Interrupt   = (1U << 19U), /*!< DiSengcfg frame complete0 interrupt. */
@@ -387,6 +478,7 @@ enum _dpu_interrupt
     kDPU_Group2FrameGen1UnderRun1OffInterrupt     = (1U << 19U), /*!< FrameGen 1 under run1  off interrupt. */
     kDPU_Group2FrameGen1Threshold1RiseInterrupt   = (1U << 20U), /*!< FrameGen 1 Threshold1  rise interrupt. */
     kDPU_Group2FrameGen1Threshold1FailInterrupt   = (1U << 21U), /*!< FrameGen 1 Threshold1  fail interrupt. */
+#endif
 };
 
 enum _dpu_unit_source
@@ -399,8 +491,9 @@ enum _dpu_unit_source
     kDPU_UnitSrcFetchRot9    = 5U,  /*!< The input source is Rot 9. */
     kDPU_UnitSrcFetchDecode9 = 6U,  /*!< The input source is fetch decode 9. */
     kDPU_UnitSrcFetchEco9    = 7U,  /*!< input source is fetch eco 9. */
-    kDPU_UnitSrcVScaler9     = 8U,  /*!< The input source is VScaler 9. */
-    kDPU_UnitSrcFilter9      = 9U,  /*!< The input source is Filter 9. */
+    kDPU_UnitSrcHscaler9     = 8U,  /*!< The input source is HScaler 9. */
+    kDPU_UnitSrcVScaler9     = 9U,  /*!< The input source is VScaler 9. */
+    kDPU_UnitSrcFilter9      = 10U, /*!< The input source is Filter 9. */
     kDPU_UnitSrcConstFrame0  = 12U, /*!< The input source is ConstFrame 0. */
     kDPU_UnitSrcConstFrame4  = 13U, /*!< The input source is ConstFrame 4. */
     kDPU_UnitSrcConstFrame1  = 16U, /*!< The input source is ConstFrame 1. */
@@ -410,20 +503,32 @@ enum _dpu_unit_source
     kDPU_UnitSrcLayerBlend3  = 22U, /*!< The input source is LayerBlend 3. */
     kDPU_UnitSrcLayerBlend4  = 23U, /*!< The input source is LayerBlend 4. */
     kDPU_UnitSrcLayerBlend5  = 24U, /*!< The input source is LayerBlend 5. */
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+    kDPU_UnitSrcFetchLayer0  = 25U, /*!< The input source is FetchLayer 0. */
+    kDPU_UnitSrcFetchLayer1  = 26U, /*!< The input source is FetchLayer 1. */
+    kDPU_UnitSrcFetchYUV3    = 27U, /*!< The input source is Fetchyuv 3. */
+    kDPU_UnitSrcFetchYUV0    = 28U, /*!< The input source is Fetchyuv 0. */
+    kDPU_UnitSrcFetchEco0    = 29U, /*!< The input source is FetchEco 0. */
+    kDPU_UnitSrcFetchYUV1    = 30U, /*!< The input source is Fetchyuv 1. */
+    kDPU_UnitSrcFetchEco1    = 31U, /*!< The input source is FetchEco 1. */
+    kDPU_UnitSrcMatrix4      = 32U, /*!< The input source is Matrix 4. */
+    kDPU_UnitSrcHScaler4     = 33U, /*!< The input source is HScaler 4. */
+    kDPU_UnitSrcVScaler4     = 34U, /*!< The input source is VScaler 4. */
+#else
     kDPU_UnitSrcLayerBlend6  = 25U, /*!< The input source is LayerBlend 6. */
     kDPU_UnitSrcFetchLayer0  = 26U, /*!< The input source is FetchLayer 0. */
     kDPU_UnitSrcFetchLayer1  = 27U, /*!< The input source is FetchLayer 1. */
     kDPU_UnitSrcFetchYUV3    = 28U, /*!< The input source is Fetchyuv 3. */
     kDPU_UnitSrcFetchYUV0    = 29U, /*!< The input source is Fetchyuv 0. */
-    kDPU_UnitSrcFetchEco0    = 30U, /*!< The input source is FetchEco 0. */
     kDPU_UnitSrcFetchYUV1    = 31U, /*!< The input source is Fetchyuv 1. */
-    kDPU_UnitSrcFetchEco1    = 32U, /*!< The input source is FetchEco 1. */
     kDPU_UnitSrcFetchYUV2    = 33U, /*!< The input source is Fetchyuv 2. */
-    kDPU_UnitSrcFetchEco2    = 34U, /*!< The input source is FetchEco 2. */
     kDPU_UnitSrcMatrix4      = 35U, /*!< The input source is Matrix 4. */
     kDPU_UnitSrcHScaler4     = 36U, /*!< The input source is HScaler 4. */
     kDPU_UnitSrcVScaler4     = 37U, /*!< The input source is VScaler 4. */
-    KDPU_UnitSrcExtDst1      = 38U, /*!< The input source is ExtDst 1. */
+    kDPU_UnitSrcFetchEco0    = 30U, /*!< The input source is FetchEco 0. */
+    kDPU_UnitSrcFetchEco1    = 32U, /*!< The input source is FetchEco 1. */
+    kDPU_UnitSrcFetchEco2    = 34U, /*!< The input source is FetchEco 2. */
+#endif
 };
 
 /*! @brief LayerBlend unit shadow token generate mode. */

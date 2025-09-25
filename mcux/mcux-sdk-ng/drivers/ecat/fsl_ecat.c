@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,7 +17,9 @@ status_t ECAT_EscMdioRead(ECAT_Type *ecat, uint8_t phy_addr, uint8_t reg_addr, u
     ecat->MII_MANAGEMENT_PDI_ACCESS_STATE = ECAT_MII_MANAGEMENT_PDI_ACCESS_STATE_BF0_MASK;
 
     if ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF15_MASK) != 0U)
+    {
         return kStatus_Busy;
+    }
 
     /*Clear the error bits*/
     ecat->MII_MANAGEMENT_CONTROL_OR_STATUS = ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF8(0x00);
@@ -31,12 +33,18 @@ status_t ECAT_EscMdioRead(ECAT_Type *ecat, uint8_t phy_addr, uint8_t reg_addr, u
 
     /*wait command done*/
     while ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF15_MASK) != 0U)
+    {
         ;
+    }
 
     if ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF13_MASK) != 0U)
+    {
         return kStatus_Fail;
+    }
     if ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF14_MASK) != 0U)
+    {
         return kStatus_Fail;
+    }
 
     *data = ecat->PHY_DATA;
 
@@ -49,7 +57,9 @@ status_t ECAT_EscMdioWrite(ECAT_Type *ecat, uint8_t phy_addr, uint8_t reg_addr, 
     ecat->MII_MANAGEMENT_PDI_ACCESS_STATE = ECAT_MII_MANAGEMENT_PDI_ACCESS_STATE_BF0_MASK;
 
     if ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF15_MASK) != 0U)
+    {
         return kStatus_Busy;
+    }
 
     /*Clear the error bits*/
     ecat->MII_MANAGEMENT_CONTROL_OR_STATUS = ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF8(0x00);
@@ -65,12 +75,18 @@ status_t ECAT_EscMdioWrite(ECAT_Type *ecat, uint8_t phy_addr, uint8_t reg_addr, 
 
     /*wait command done*/
     while ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF15_MASK) != 0U)
+    {
         ;
+    }
 
     if ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF13_MASK) != 0U)
+    {
         return kStatus_Fail;
+    }
     if ((ecat->MII_MANAGEMENT_CONTROL_OR_STATUS & ECAT_MII_MANAGEMENT_CONTROL_OR_STATUS_BF14_MASK) != 0U)
+    {
         return kStatus_Fail;
+    }
 
     return kStatus_Success;
 }

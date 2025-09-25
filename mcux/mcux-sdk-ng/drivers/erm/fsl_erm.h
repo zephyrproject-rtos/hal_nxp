@@ -1,7 +1,6 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
- *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Driver version. */
-#define FSL_ERM_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 1U))
+#define FSL_ERM_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 2U))
 /*! @} */
 
 /*!
@@ -143,12 +142,12 @@ static inline uint32_t ERM_GetInterruptStatus(ERM_Type *base, erm_memory_channel
 {
     if ((uint32_t)channel <= 0x07U)
     {
-        return ((base->SR0 & (uint32_t)kERM_AllIntsFlag) >> (0x07U - (uint32_t)channel) * 4U);
+        return ((base->SR0 & (uint32_t)kERM_AllIntsFlag) >> (0x07U - (uint32_t)channel) * 4U) & 0xFU;
     }
 #ifdef ERM_SR1_SBC8_MASK
     else
     {
-        return ((base->SR1 & (uint32_t)kERM_AllIntsFlag) >> ((0x07U + 0x08U - (uint32_t)channel) * 4U));
+        return ((base->SR1 & (uint32_t)kERM_AllIntsFlag) >> ((0x07U + 0x08U - (uint32_t)channel) * 4U)) & 0xFU;
     }
 #else
     {

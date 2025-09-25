@@ -111,9 +111,9 @@ void SLCD_Init(SLCD_Type *base, const slcd_config_t *configure)
     gcrReg = SGLCD_CONTROL_GCR_DUTY(configure->dutyCycle) | SGLCD_CONTROL_GCR_LCDSTP((uint32_t)configure->lowPowerBehavior & 0x1U) |
              SGLCD_CONTROL_GCR_LCLK(configure->clkPrescaler) | SGLCD_CONTROL_GCR_SHCYCLE(configure->sampleHold & 0x1U) |
              SGLCD_CONTROL_GCR_SHEN((configure->sampleHold & 0x2U) >> 1U) | SGLCD_CONTROL_GCR_VLL2TRIM(configure->voltageTrimVLL2) |
-             SGLCD_CONTROL_GCR_VLL1TRIM(configure->voltageTrimVLL1) | SGLCD_CONTROL_GCR_LCDLP(configure->lowPowerWaveform) |
+             SGLCD_CONTROL_GCR_VLL1TRIM(configure->voltageTrimVLL1) | SGLCD_CONTROL_GCR_LCDLP(configure->lowPowerWaveform ? 1U : 0U) |
              SGLCD_CONTROL_GCR_LCDDOZE(((uint32_t)configure->lowPowerBehavior >> 1U) & 0x1U) |
-             SGLCD_CONTROL_GCR_LCDIEN(configure->frameFreqIntEnable);
+             SGLCD_CONTROL_GCR_LCDIEN(configure->frameFreqIntEnable ? 1U : 0U);
 
     base->control->GCR = (base->control->GCR & ~gcrMsk) | gcrReg;
 

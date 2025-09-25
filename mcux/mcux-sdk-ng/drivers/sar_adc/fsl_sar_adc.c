@@ -187,24 +187,24 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
     /* Set GROUPn sample phase duration. */
     base->CTR0 = ((base->CTR0 & (~ADC_CTR0_INPSAMP_MASK)) | ADC_CTR0_INPSAMP(config->samplePhaseDuration[0U]));
     base->CTR1 = ((base->CTR1 & (~ADC_CTR1_INPSAMP_MASK)) | ADC_CTR1_INPSAMP(config->samplePhaseDuration[1U]));
-#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3)
-    if(1U == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3(base))
+#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
+    if(1U == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
     {
         base->CTR2 = ((base->CTR2 & (~ADC_CTR2_INPSAMP_MASK)) | ADC_CTR2_INPSAMP(config->samplePhaseDuration[2U]));
     }
-#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3 */
+#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n */
 
     /* Set GROUPn pre-sample voltage sources and decide whether to convert the pre-sample value. */
     base->PSCR = ((base->PSCR & (~(ADC_PSCR_PREVAL0_MASK | ADC_PSCR_PREVAL1_MASK | ADC_PSCR_PRECONV_MASK)))
                   | (ADC_PSCR_PREVAL0(config->presampleVoltageSrc[0U]) | ADC_PSCR_PREVAL1(config->presampleVoltageSrc[1U])
                   | ADC_PSCR_PRECONV(config->enableConvertPresampleVal ? 1U : 0U)));
 
-#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3)
-    if(1U == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3(base))
+#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
+    if(1U == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
     {
         base->PSCR = ((base->PSCR & (~ADC_PSCR_PREVAL2_MASK)) | ADC_PSCR_PREVAL1(config->presampleVoltageSrc[2U]));
     }
-#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3 */
+#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n */
 }
 
 /*!
@@ -265,12 +265,12 @@ void ADC_SetConvChainConfig(ADC_Type *base, const adc_chain_config_t *config)
 
     for (uint8_t index = 0U; index < (uint8_t)ADC_GROUP_COUNTS; ++index)
     {
-#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3)
-        if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3(base))
+#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
+        if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
         {
             break;
         }
-#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3 */
+#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n */
             
         /* 1. Set conversion channel's interrupt.*/
         *(((volatile uint32_t *)(&(base->CIMR0))) + index) = convChannelIntMask[index];
@@ -291,12 +291,12 @@ void ADC_SetConvChainConfig(ADC_Type *base, const adc_chain_config_t *config)
     {
         for (uint8_t index = 0U; index < (uint8_t)ADC_GROUP_COUNTS; ++index)
         {
-#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3)
-            if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3(base))
+#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
+            if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
             {
                 break;
             }
-#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3 */
+#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n */
             *(((volatile uint32_t *)(&(base->JCMR0))) + index) = convChannelMask[index];
         }
 
@@ -313,12 +313,12 @@ void ADC_SetConvChainConfig(ADC_Type *base, const adc_chain_config_t *config)
     {
         for (uint8_t index = 0U; index < (uint8_t)ADC_GROUP_COUNTS; ++index)
         {
-#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3)
-            if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3(base))
+#if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
+            if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
             {
                 break;
             }
-#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3 */
+#endif /* FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n */
             *(((volatile uint32_t *)(&(base->NCMR0))) + index) = convChannelMask[index];
         }
 

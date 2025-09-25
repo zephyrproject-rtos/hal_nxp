@@ -129,6 +129,7 @@ static status_t FLEXIO_UART_CalculateBaudRate(uint32_t baudRate_Bps, uint32_t sr
 
     for (i=0; i<ARRAY_SIZE(timerSourceDividers); i++)
     {
+        assert(baudRate_Bps <= (UINT32_MAX / timerSourceDividers[i]));
         timerDiv = srcClock_Hz / (baudRate_Bps * timerSourceDividers[i]);
         timerDiv = timerDiv / 2U - 1U;
 

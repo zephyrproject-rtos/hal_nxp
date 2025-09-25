@@ -1,7 +1,6 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
- *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Driver version. */
-#define FSL_ERM_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 1U))
+#define FSL_ERM_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 2U))
 /*! @} */
 
 /*******************************************************************************
