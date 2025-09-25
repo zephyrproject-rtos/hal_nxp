@@ -23,12 +23,14 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TRNG driver version 2.0.18.
+/*! @brief TRNG driver version 2.0.19.
  *
- * Current version: 2.0.18
+ * Current version: 2.0.19
  *
  *
  * Change log:
+ * - version 2.0.19
+ *   - Added support for MCXA and MCXL.
  * - version 2.0.18
  *   - TRNG health checks now done in software on RT5xx and RT6xx.
  * - version 2.0.17

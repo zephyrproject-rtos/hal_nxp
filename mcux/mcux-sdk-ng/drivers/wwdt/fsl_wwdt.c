@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,7 +39,7 @@ static const clock_ip_name_t s_wwdtClocks[] = WWDT_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-#if !(defined(FSL_FEATURE_WWDT_HAS_NO_RESET) && FSL_FEATURE_WWDT_HAS_NO_RESET)
+#if defined(WWDT_RSTS)
 /*! @brief Pointers to WWDT resets for each instance. */
 static const reset_ip_name_t s_wwdtResets[] = WWDT_RSTS;
 #endif
@@ -146,7 +146,7 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-#if !(defined(FSL_FEATURE_WWDT_HAS_NO_RESET) && FSL_FEATURE_WWDT_HAS_NO_RESET)
+#if defined(WWDT_RSTS)
     /* Reset the module. */
     RESET_PeripheralReset(s_wwdtResets[WWDT_GetInstance(base)]);
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,14 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 2, 2)) /*!< Version */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version */
 /*! @} */
+
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+typedef uint32_t qtmrRegType;
+#else
+typedef uint16_t qtmrRegType;
+#endif
 
 /*! @brief Quad Timer primary clock source selection*/
 typedef enum _qtmr_primary_count_source
@@ -360,7 +366,11 @@ void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uin
  * @param channel  Quad Timer channel number
  * @param ticks Timer period in units of ticks
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t ticks);
+#else
 void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint16_t ticks);
+#endif
 
 /*!
  * @brief Set compare value.
@@ -371,7 +381,11 @@ void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint1
  * @param channel  Quad Timer channel number
  * @param ticks    Timer period in units of ticks.
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t ticks);
+#else
 void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint16_t ticks);
+#endif
 
 /*!
  * @brief Set load value.
@@ -382,11 +396,19 @@ void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint
  * @param channel  Quad Timer channel number
  * @param value    Load register initialization value.
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+static inline void QTMR_SetLoadValue(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t value)
+{
+    base->CHANNEL[channel].LOAD &= ~TMR_LOAD_LOAD_MASK;
+    base->CHANNEL[channel].LOAD = value;
+}
+#else
 static inline void QTMR_SetLoadValue(TMR_Type *base, qtmr_channel_selection_t channel, uint16_t value)
 {
     base->CHANNEL[channel].LOAD &= (uint16_t)(~TMR_LOAD_LOAD_MASK);
     base->CHANNEL[channel].LOAD = value;
 }
+#endif
 
 /*!
  * @brief Reads the current timer counting value.
@@ -401,7 +423,11 @@ static inline void QTMR_SetLoadValue(TMR_Type *base, qtmr_channel_selection_t ch
  *
  * @return Current counter value in ticks
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+static inline uint32_t QTMR_GetCurrentTimerCount(TMR_Type *base, qtmr_channel_selection_t channel)
+#else
 static inline uint16_t QTMR_GetCurrentTimerCount(TMR_Type *base, qtmr_channel_selection_t channel)
+#endif
 {
     return base->CHANNEL[channel].CNTR;
 }
@@ -421,6 +447,16 @@ static inline uint16_t QTMR_GetCurrentTimerCount(TMR_Type *base, qtmr_channel_se
  * @param channel     Quad Timer channel number
  * @param clockSource Quad Timer clock source
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t channel, qtmr_counting_mode_t clockSource)
+{
+    uint32_t reg = base->CHANNEL[channel].CTRL;
+
+    reg &= ~TMR_CTRL_CM_MASK;
+    reg |= TMR_CTRL_CM(clockSource);
+    base->CHANNEL[channel].CTRL = reg;
+}
+#else
 static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t channel, qtmr_counting_mode_t clockSource)
 {
     uint16_t reg = base->CHANNEL[channel].CTRL;
@@ -429,6 +465,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
     reg |= TMR_CTRL_CM(clockSource);
     base->CHANNEL[channel].CTRL = reg;
 }
+#endif
 
 /*!
  * @brief Stops the Quad Timer counter.
@@ -436,10 +473,17 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
  * @param base     Quad Timer peripheral base address
  * @param channel  Quad Timer channel number
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t channel)
+{
+    base->CHANNEL[channel].CTRL &= ~TMR_CTRL_CM_MASK;
+}
+#else
 static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t channel)
 {
     base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
 }
+#endif
 
 /*! @}*/
 

@@ -5,7 +5,7 @@
  */
 
 #ifndef FSL_TSPC_H_
-#define FSL_XTSPC_H_
+#define FSL_TSPC_H_
 
 #include "fsl_common.h"
 

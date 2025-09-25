@@ -353,7 +353,7 @@ static inline void LCDIFV3_ClearInterruptStatus(LCDIF_Type *base, uint32_t mask)
  */
 static inline void LCDIFV3_SetLayerSize(LCDIF_Type *base, uint8_t layerIndex, uint16_t width, uint16_t height)
 {
-    base->CTRLDESCL_1 =
+    base->CTRLDESCL_1[0] =
         ((uint32_t)height << LCDIF_CTRLDESCL_1_HEIGHT_SHIFT) | ((uint32_t)width << LCDIF_CTRLDESCL_1_WIDTH_SHIFT);
 }
 
@@ -377,7 +377,7 @@ void LCDIFV3_SetLayerBufferConfig(LCDIF_Type *base, uint8_t layerIndex, const lc
  */
 static inline void LCDIFV3_SetLayerBufferAddr(LCDIF_Type *base, uint8_t layerIndex, uint32_t addr)
 {
-    base->CTRLDESCL_LOW_4 = LCDIFV3_ADDR_CPU_2_IP(addr);
+    base->CTRLDESCL_LOW_4[0] = LCDIFV3_ADDR_CPU_2_IP(addr);
 }
 
 /*!
@@ -392,11 +392,11 @@ static inline void LCDIFV3_EnableLayer(LCDIF_Type *base, uint8_t layerIndex, boo
 {
     if (enable)
     {
-        base->CTRLDESCL_5 |= LCDIF_CTRLDESCL_5_EN_MASK;
+        base->CTRLDESCL_5[0] |= LCDIF_CTRLDESCL_5_EN_MASK;
     }
     else
     {
-        base->CTRLDESCL_5 &= ~LCDIF_CTRLDESCL_5_EN_MASK;
+        base->CTRLDESCL_5[0] &= ~LCDIF_CTRLDESCL_5_EN_MASK;
     }
 }
 
@@ -414,7 +414,7 @@ static inline void LCDIFV3_EnableLayer(LCDIF_Type *base, uint8_t layerIndex, boo
  */
 static inline void LCDIFV3_TriggerLayerShadowLoad(LCDIF_Type *base, uint8_t layerIndex)
 {
-    base->CTRLDESCL_5 |= LCDIF_CTRLDESCL_5_SHADOW_LOAD_EN_MASK;
+    base->CTRLDESCL_5[0] |= LCDIF_CTRLDESCL_5_SHADOW_LOAD_EN_MASK;
 }
 
 /*!
@@ -427,6 +427,13 @@ static inline void LCDIFV3_TriggerLayerShadowLoad(LCDIF_Type *base, uint8_t laye
  * @param mode The conversion mode.
  */
 void LCDIFV3_SetCscMode(LCDIF_Type *base, lcdifv3_csc_mode_t mode);
+
+/*!
+ * @brief Enable plane panic to avoid underrun.
+ *
+ * @param base LCDIFv3 peripheral base address.
+ */
+void LCDIFV3_EnablePlanePanic(LCDIF_Type *base);
 
 /*! @} */
 

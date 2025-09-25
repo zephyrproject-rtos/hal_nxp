@@ -36,15 +36,12 @@ static const IRQn_Type s_flexspiSlvIrqs[] = {FLEXSPI_SLV_IRQn};
 static const clock_ip_name_t s_flexspiSlvClock[] = FLEXSPI_SLV_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-#if defined(FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ
 /*! @brief Pointers to Flexspi Follower handles for each instance. */
 static flexspi_slv_handle_t *s_flexspiSlvHandle[ARRAY_SIZE(s_flexspiSlvBases)];
-#endif
 
-#if defined(FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ
 /*! @brief Pointer to Flexspi Follower IRQ handler. */
 static flexspi_slv_isr_t s_flexspiSlvIsr;
-#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -52,6 +49,7 @@ static flexspi_slv_isr_t s_flexspiSlvIsr;
 #if defined(__ICCARM__)
 #pragma optimize = none
 #endif /* defined(__ICCARM__) */
+
 static void FLEXSPI_SLV_Memset(void *src, uint8_t value, size_t length)
 {
     assert(src != NULL);
@@ -88,59 +86,6 @@ uint32_t FLEXSPI_SLV_GetInstance(FLEXSPI_SLV_Type *base)
 }
 
 /*!
- * brief Returns the interrupt status and clear the interrupt flag.
- *
- * param base FLEXSPI FOLLOWER peripheral base address.
- */
-uint32_t FLEXSPI_SLV_CheckAndClearInterrupt(FLEXSPI_SLV_Type *base)
-{
-    uint32_t status          = FLEXSPI_SLV_GetInterruptStatusFlags(base);
-    uint32_t intEnableStatus = FLEXSPI_SLV_GetEnabledInterrupts(base);
-
-    /* Check for interrupt. */
-    status &= intEnableStatus;
-    if (0U != status)
-    {
-        /* Clear the flags. */
-        FLEXSPI_SLV_ClearInterruptStatusFlags(base, status);
-
-        /* Select the correct interrupt flag. */
-        if (0U != (status & (uint32_t)FLEXSPI_SLV_MODULE_INT_WOF_MASK))
-        {
-            status = kFLEXSPI_SLV_WriteOverflowFlag;
-        }
-        else if (0U != (status & (uint32_t)FLEXSPI_SLV_MODULE_INT_RUF_MASK))
-        {
-            status = kFLEXSPI_SLV_ReadUnderflowFlag;
-        }
-        else if (0U != (status & (uint32_t)FLEXSPI_SLV_MODULE_INT_ERRCMD_MASK))
-        {
-            status = kFLEXSPI_SLV_ErrorCommandFlag;
-        }
-        else
-        {
-            status = kFLEXSPI_SLV_InvalidInterruptFlag;
-        }
-    }
-    else if (FLEXSPI_SLV_GetEnabledMailInterrupt(base))
-    {
-        status = FLEXSPI_SLV_GetMailInterruptIndex(base);
-        if (status >= FLEXSPI_SLV_SPIMAIL_COUNT)
-        {
-            status = kFLEXSPI_SLV_InvalidInterruptFlag;
-        }
-        /* Clear the flag. */
-        FLEXSPI_SLV_ClearMailInterruptFlag(base);
-    }
-    else
-    {
-        status = kFLEXSPI_SLV_InvalidInterruptFlag;
-    }
-
-    return status;
-}
-
-/*!
  * brief Initializes the FLEXSPI FOLLOWER module and internal state.
  *
  * This function enables the clock for FLEXSPI FOLLOWER and also configures the FLEXSPI
@@ -158,32 +103,36 @@ void FLEXSPI_SLV_Init(FLEXSPI_SLV_Type *base, const flexspi_slv_config_t *config
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Reset peripheral before configuring it. */
-    FLEXSPI_SLV_SoftwareReset_SetVal(base, 1);
-    FLEXSPI_SLV_SoftwareReset_SetVal(base, 0);
+    FLEXSPI_SLV_SoftwareReset(base);
 
     /* Set IO mode. */
-    FLEXSPI_SLV_IOMode_SetVal(base, config->io_mode);
+    FLEXSPI_SLV_SetIOMode(base, config->ioMode);
 
     /* Set RW base address and range */
-    FLEXSPI_SLV_RW_CMD_BaseAddr1_SetVal(base, (config->baseAddr1) >> 16);
-    FLEXSPI_SLV_RW_CMD_BaseAddr2_SetVal(base, (config->baseAddr2) >> 16);
-    FLEXSPI_SLV_Update_RWCMD_Base_Range(base);
+    FLEXSPI_SLV_SetRWCmdBaseAddr(base, (config->baseAddr1 >> 16U), (config->baseAddr2 >> 16U));
+    FLEXSPI_SLV_UpdateRWCmdBaseRange(base);
 
-    FLEXSPI_SLV_AddrRange_SetVal(base, 0x0, config->addrRange1);
-    FLEXSPI_SLV_AddrRange_SetVal(base, 0x1, config->addrRange2);
-    FLEXSPI_SLV_Update_RWCMD_Base_Range(base);
+    FLEXSPI_SLV_SetAddrRange(base, 0x0, config->addrRange1);
+    FLEXSPI_SLV_SetAddrRange(base, 0x1, config->addrRange2);
+    FLEXSPI_SLV_UpdateRWCmdBaseRange(base);
 
     /* Set read water mark level */
-    FLEXSPI_SLV_Read_WMEN_SetVal(base, 1);
-    FLEXSPI_SLV_Read_RDWM_SetVal(base, config->rxWatermark);
-
-    FLEXSPI_SLV_Read_FetchSizeSet(base, config->rxFetch_size);
+    FLEXSPI_SLV_SetReadWatermark(base, config->rxWatermark, true);
+    FLEXSPI_SLV_SetReadFetchSize(base, config->rxFetchSize);
 
     /* Set write water mark level */
-    FLEXSPI_SLV_Write_WRWM_SetVal(base, config->txWatermark);
+    FLEXSPI_SLV_SetWriteWatermark(base, config->txWatermark);
 
-    /* Clear CS mask*/
-    FLEXSPI_SLV_CSMASK_SetVal(base, 0);
+    /* Clear CS mask. */
+    FLEXSPI_SLV_MaskChipSelect(base, 0);
+
+    /* Set the commands. */
+    FLEXSPI_SLV_SetReadRegCommand(base, config->readRegCmd, config->readRegDummyCycle);
+    FLEXSPI_SLV_SetWriteRegCommand(base, config->writeRegCmd);
+    FLEXSPI_SLV_SetReadMemCommand(base, 0, config->readMemCmd1, config->readMemDummyCycle1);
+    FLEXSPI_SLV_SetReadMemCommand(base, 1, config->readMemCmd2, config->readMemDummyCycle2);
+    FLEXSPI_SLV_SetWriteMemCommand(base, 0, config->writeMemCmd1);
+    FLEXSPI_SLV_SetWriteMemCommand(base, 1, config->writeMemCmd2);
 }
 
 /*!
@@ -196,14 +145,14 @@ void FLEXSPI_SLV_GetDefaultConfig(flexspi_slv_config_t *config)
     /* Initializes the configure structure to zero. */
     FLEXSPI_SLV_Memset(config, 0, sizeof(*config));
 
-    config->baseAddr1    = 0;
-    config->baseAddr2    = 0x1000;
-    config->addrRange1   = 0;
-    config->addrRange2   = 0;
-    config->io_mode      = kFLEXSPI_SLV_IOMODE_SDRx4;
-    config->rxFetch_size = Read_Fetch_256Bytes;
-    config->rxWatermark  = 0;
-    config->txWatermark  = Write_Watermark_128Bytes;
+    config->baseAddr1   = 0;
+    config->baseAddr2   = 0x1000;
+    config->addrRange1  = 0;
+    config->addrRange2  = 0;
+    config->ioMode      = kFLEXSPI_SLV_IOMODE_SDRx4;
+    config->rxFetchSize = kFLEXSPI_SLV_Read_Fetch_256Bytes;
+    config->rxWatermark = 0;
+    config->txWatermark = kFLEXSPI_SLV_Write_Watermark_128Bytes;
 }
 
 /*!
@@ -216,10 +165,7 @@ void FLEXSPI_SLV_GetDefaultConfig(flexspi_slv_config_t *config)
 void FLEXSPI_SLV_Deinit(FLEXSPI_SLV_Type *base)
 {
     /* Reset peripheral. */
-    while (FLEXSPI_SLV_GetModuleBusyStatus(base))
-    {
-    }
-    FLEXSPI_SLV_SoftwareReset_SetVal(base, 1);
+    FLEXSPI_SLV_SoftwareReset(base);
 }
 
 /*!
@@ -232,32 +178,27 @@ void FLEXSPI_SLV_Deinit(FLEXSPI_SLV_Type *base)
  */
 void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
                                        flexspi_slv_handle_t *handle,
-                                       flexspi_slv_interrupt_callback_t callback,
+                                       flexspi_slv_callback_t callback,
                                        uint32_t interruptMask)
 {
     assert(NULL != handle);
 
     uint32_t instance = FLEXSPI_SLV_GetInstance(base);
 
-    /* Zero handle. */
     (void)memset(handle, 0, sizeof(*handle));
 
-    /* Set callback and userData. */
+    /* Set callback. */
     handle->callback = callback;
 
-#if defined(FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ
     /* Save the context in global variables to support the double weak mechanism. */
     s_flexspiSlvHandle[instance] = handle;
     s_flexspiSlvIsr              = FLEXSPI_SLV_HandleIRQ;
-#endif
 
     /* Enable NVIC interrupt. */
     (void)EnableIRQ(s_flexspiSlvIrqs[instance]);
 
     FLEXSPI_SLV_EnableInterrupts(base, interruptMask);
-#if defined(FSL_DRIVER_FOLLOWER_MAILBOX_IRQ) && FSL_DRIVER_FOLLOWER_MAILBOX_IRQ
     FLEXSPI_SLV_EnableMailInterrupt(base, true);
-#endif
 }
 
 /*!
@@ -268,22 +209,36 @@ void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
  */
 void FLEXSPI_SLV_HandleIRQ(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle)
 {
-    handle->state = FLEXSPI_SLV_CheckAndClearInterrupt(base);
+    uint32_t status          = FLEXSPI_SLV_GetInterruptStatusFlags(base);
+    uint32_t intEnableStatus = FLEXSPI_SLV_GetEnabledInterrupts(base);
+
+    status &= intEnableStatus;
+    if (0U != status)
+    {
+        FLEXSPI_SLV_ClearInterruptStatusFlags(base, status);
+    }
+    else if (FLEXSPI_SLV_GetEnabledMailInterrupt(base))
+    {
+        status |= (uint32_t)kFLEXSPI_SLV_MailInterruptFlag;
+        FLEXSPI_SLV_ClearMailInterruptFlag(base);
+    }
+    else
+    {
+        /* Intentional empty. */
+    }
+
+    handle->intrMask = status;
 
     /* Check if interrupt is enabled and status is alerted. */
-    if ((handle->state != kFLEXSPI_SLV_InvalidInterruptFlag) && (handle->callback != NULL))
+    if (handle->callback != NULL)
     {
         handle->callback(base, handle);
     }
 }
 
-#if defined(FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_FOLLOWER_DOUBLE_WEAK_IRQ
-#if defined(FLEXSPI_SLV)
 void FLEXSPI_SLV_DriverIRQHandler(void);
 void FLEXSPI_SLV_DriverIRQHandler(void)
 {
     s_flexspiSlvIsr(FLEXSPI_SLV, s_flexspiSlvHandle[0]);
     SDK_ISR_EXIT_BARRIER;
 }
-#endif
-#endif

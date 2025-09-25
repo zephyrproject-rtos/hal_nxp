@@ -16,6 +16,7 @@ if(CONFIG_MCUX_COMPONENT_driver.common)
         cm7f
         cm33
         cm0p
+        cm85
         SOURCES
         fsl_common_arm.c
         fsl_common_arm.h

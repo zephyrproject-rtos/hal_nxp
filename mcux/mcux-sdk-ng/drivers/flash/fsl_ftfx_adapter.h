@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -115,6 +115,10 @@
 #define FTFx_FCCOB5_REG (FTFx->FCCOB5)
 #define FTFx_FCCOB6_REG (FTFx->FCCOB6)
 #define FTFx_FCCOB7_REG (FTFx->FCCOB7)
+#if defined(FTFC)
+#define FTFx_FCCOB8_REG (FTFx->FCCOB8)
+#define FTFx_FCCOB9_REG (FTFx->FCCOB9)
+#endif
 
 #if defined(FSL_FEATURE_FLASH_HAS_MULTIPLE_FLASH) || defined(FSL_FEATURE_FLASH_PFLASH_1_START_ADDRESS)
 #if defined(FTFA_FPROTSL_PROTS_MASK) || defined(FTFE_FPROTSL_PROTS_MASK) || defined(FTFL_FPROTSL_PROTS_MASK)
@@ -190,7 +194,7 @@
 	#define MCM0_CACHE_REG MCM0->PLACR
 #elif defined(MCM) && (!defined(MCM1))
 	#define MCM0_CACHE_REG MCM->PLACR
-#else 
+#else
 	#define MCM0_CACHE_REG        (INVALID_REG_ADDRESS)
 #endif
 

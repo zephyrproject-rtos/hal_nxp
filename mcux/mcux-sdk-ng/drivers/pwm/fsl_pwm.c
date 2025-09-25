@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -506,6 +506,7 @@ status_t PWM_SetupPwm(PWM_Type *base,
     uint32_t pwmClock;
     uint16_t pulseCnt = 0, pwmHighPulse = 0;
     uint8_t i, polarityShift = 0, outputEnableShift = 0;
+    uint32_t temp;
 
     for (i = 0; i < numOfChnls; i++)
     {
@@ -518,7 +519,10 @@ status_t PWM_SetupPwm(PWM_Type *base,
 
     /* Divide the clock by the prescale value */
     pwmClock = (srcClock_Hz / (1UL << ((base->SM[subModule].CTRL & PWM_CTRL_PRSC_MASK) >> PWM_CTRL_PRSC_SHIFT)));
-    pulseCnt = (uint16_t)(pwmClock / pwmFreq_Hz);
+
+    temp = pwmClock / pwmFreq_Hz;
+    assert(temp <= 0xFFFFU);
+    pulseCnt = (uint16_t)(temp);
 
     /* Update register about period */
     PWM_SetPeriodRegister(base, subModule, mode, pulseCnt);

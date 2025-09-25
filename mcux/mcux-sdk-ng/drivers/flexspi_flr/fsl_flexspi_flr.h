@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_FLEXSPI_FOLLOWER_H_
-#define __FSL_FLEXSPI_FOLLOWER_H_
+#ifndef FSL_FLEXSPI_FLR_H_
+#define FSL_FLEXSPI_FLR_H_
 
 #include <stddef.h>
 #include "fsl_device_registers.h"
@@ -26,13 +26,7 @@
 #define FSL_FLEXSPI_SLV_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
 /*@}*/
 
-#define FSL_FEATURE_FLEXSPI_SLV_AXI_RX_BUFFER_SIZE (2 * 1024)
-#define FSL_FEATURE_FLEXSPI_SLV_AXI_TX_BUFFER_SIZE (1024)
-
-#define FLEXSPI_SLV_MAILBOX_CMD(x)     ((x) & 0xFFFFFFFE)
-#define FLEXSPI_SLV_MAILBOX_CMD_INT(x) ((x) | 0x1)
-
-#define FLEXSPI_SLV_CMD_DDR(x) (((x) << 8) | (x))
+#define FLEXSPI_SLV_CMD_DDR(x) (((uint16_t)(x) << 8U) | (uint16_t)(x))
 
 /*! @brief IO mode enumeration of FLEXSPI FOLLOWER.*/
 enum
@@ -46,67 +40,69 @@ enum
 /*! @brief The read fetch size enumeration of FLEXSPI FOLLOWER.*/
 enum
 {
-    Read_Fetch_256Bytes = 0,
-    Read_Fetch_512Bytes = 1,
-    Read_Fetch_1KBytes  = 2,
-    Read_Fetch_2KBytes  = 3
+    kFLEXSPI_SLV_Read_Fetch_256Bytes = 0,
+    kFLEXSPI_SLV_Read_Fetch_512Bytes = 1,
+    kFLEXSPI_SLV_Read_Fetch_1KBytes  = 2,
+    kFLEXSPI_SLV_Read_Fetch_2KBytes  = 3
 };
 
-/*! @brief Clock frequency enumeration of FLEXSPI FOLLOWER.*/
+/*! @brief The write watermark enumeration of FLEXSPI FOLLOWER.*/
 enum
 {
-    Write_Watermark_32Bytes  = 0,
-    Write_Watermark_64Bytes  = 1,
-    Write_Watermark_128Bytes = 2,
-    Write_Watermark_256Bytes = 3
+    kFLEXSPI_SLV_Write_Watermark_32Bytes  = 0,
+    kFLEXSPI_SLV_Write_Watermark_64Bytes  = 1,
+    kFLEXSPI_SLV_Write_Watermark_128Bytes = 2,
+    kFLEXSPI_SLV_Write_Watermark_256Bytes = 3
 };
 
 /*! @brief Interrupt status flags of FLEXSPI FOLLOWER.*/
 enum
 {
-    kFLEXSPI_SLV_Mail0InterruptFlag = 0, /*!< Mailbox0 interrupt */
-    kFLEXSPI_SLV_Mail1InterruptFlag = 1, /*!< Mailbox1 interrupt */
-    kFLEXSPI_SLV_Mail2InterruptFlag = 2, /*!< Mailbox2 interrupt */
-    kFLEXSPI_SLV_Mail3InterruptFlag = 3, /*!< Mailbox3 interrupt */
-    kFLEXSPI_SLV_Mail4InterruptFlag = 4, /*!< Mailbox4 interrupt */
-    kFLEXSPI_SLV_Mail5InterruptFlag = 5, /*!< Mailbox5 interrupt */
-    kFLEXSPI_SLV_Mail6InterruptFlag = 6, /*!< Mailbox6 interrupt */
-    kFLEXSPI_SLV_Mail7InterruptFlag = 7, /*!< Mailbox7 interrupt */
-    kFLEXSPI_SLV_Mail8InterruptFlag = 8, /*!< Mailbox8 interrupt */
-    kFLEXSPI_SLV_WriteOverflowFlag  = 9, /*!< An IO RX FIFO overflow occurred during
-                                              command/address/write data phase */
-    kFLEXSPI_SLV_ReadUnderflowFlag = 10, /*!< IO TX FIFO underflow has occurred
-                                              during a read command */
-    kFLEXSPI_SLV_ErrorCommandFlag = 11,  /*!< An unknown command has been received
-                                              from the SPI bus */
-    kFLEXSPI_SLV_InvalidInterruptFlag = 12,
+    kFLEXSPI_SLV_WriteOverflowFlag = FLEXSPI_SLV_MODULE_INTEN_WOFEN_MASK,   /*!< An IO RX FIFO overflow occurred during
+                                               command/address/write data phase. */
+    kFLEXSPI_SLV_ReadUnderflowFlag = FLEXSPI_SLV_MODULE_INTEN_RUFEN_MASK,   /*!< IO TX FIFO underflow has occurred
+                                                during a read command. */
+    kFLEXSPI_SLV_ErrorCommandFlag = FLEXSPI_SLV_MODULE_INTEN_ERRCMDEN_MASK, /*!< An unknown command has been received
+                                             from the SPI bus. */
+    kFLEXSPI_SLV_MailInterruptFlag = 0x8U,                                  /*!< Mailbox interrupt. */
+    kFLEXSPI_SLV_AllInterruptFlags = kFLEXSPI_SLV_WriteOverflowFlag | kFLEXSPI_SLV_ReadUnderflowFlag |
+                                     kFLEXSPI_SLV_ErrorCommandFlag | kFLEXSPI_SLV_MailInterruptFlag, /*!< All flags. */
 };
 
 /*! @brief FLEXSPI FOLLOWER configuration structure. */
 typedef struct _flexspi_slv_config
 {
-    uint32_t baseAddr1;   /*!< Read/Write CMD1 Base Address. */
-    uint32_t baseAddr2;   /*!< Read/Write CMD2 Base Address. */
-    uint32_t addrRange1;  /*!< Read/Write CMD1 Addr Range. */
-    uint32_t addrRange2;  /*!< Read/Write CMD2 Addr Range. */
-    uint8_t io_mode;      /*!< IO mode control - SDRx4, SDRx8, DDRx4, DDRx8*/
-    uint8_t rxFetch_size; /*!< Specifies the maximum read size triggered by a single read command. */
-    uint8_t rxWatermark;  /*!< Triggers a new AXI read to fetch more data through the IP AXI header. */
-    uint8_t txWatermark;  /*!< Specifies the watermark value. During the write command, if pending
-                            write data equals or exceeds the watermark level, it triggers a new AXI write. */
+    uint32_t baseAddr1;          /*!< Read/Write CMD1 Base Address. */
+    uint32_t baseAddr2;          /*!< Read/Write CMD2 Base Address. */
+    uint32_t addrRange1;         /*!< Read/Write CMD1 Addr Range. */
+    uint32_t addrRange2;         /*!< Read/Write CMD2 Addr Range. */
+    uint8_t ioMode;              /*!< IO mode control - SDRx4, SDRx8, DDRx4, DDRx8. */
+    uint8_t rxFetchSize;         /*!< Specifies the maximum read size triggered by a single read command. */
+    uint8_t rxWatermark;         /*!< Triggers a new AXI read to fetch more data through the IP AXI header. */
+    uint8_t txWatermark;         /*!< Specifies the watermark value. During the write command, if pending
+                                   write data equals or exceeds the watermark level, it triggers a new AXI write. */
+    uint16_t readRegCmd;         /*!< Read register command. */
+    uint16_t readRegDummyCycle;  /*!< Read register dymmy cycle. */
+    uint16_t writeRegCmd;        /*!< Write register command. */
+    uint16_t readMemCmd1;        /*!< Read memory command1. */
+    uint16_t readMemDummyCycle1; /*!< Read memory dymmy cycle1. */
+    uint16_t readMemCmd2;        /*!< Read memory command2. */
+    uint16_t readMemDummyCycle2; /*!< Read memory dymmy cycle2. */
+    uint16_t writeMemCmd1;       /*!< Write memory command1. */
+    uint16_t writeMemCmd2;       /*!< Write memory command2. */
 } flexspi_slv_config_t;
 
 /* Forward declaration of the handle typedef. */
 typedef struct _flexspi_slv_handle flexspi_slv_handle_t;
 
 /*! @brief FLEXSPI FOLLOWER interrupt callback function. */
-typedef void (*flexspi_slv_interrupt_callback_t)(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle);
+typedef void (*flexspi_slv_callback_t)(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle);
 
 /*! @brief Interrupt handle structure for FLEXSPI FOLLOWER. */
 struct _flexspi_slv_handle
 {
-    uint32_t state;                            /*!< Interrupt state for FLEXSPI FOLLOWER */
-    flexspi_slv_interrupt_callback_t callback; /*!< Callback for users while mailbox received or error occurred */
+    uint32_t intrMask;               /*!< Interrupt state for FLEXSPI FOLLOWER. */
+    flexspi_slv_callback_t callback; /*!< Callback for users while mailbox received or error occurred. */
 };
 
 /*******************************************************************************
@@ -128,14 +124,6 @@ extern "C" {
  * @param base FLEXSPI FOLLOWER base pointer.
  */
 uint32_t FLEXSPI_SLV_GetInstance(FLEXSPI_SLV_Type *base);
-
-/*!
- * @brief Check and clear interrupt flags.
- *
- * @param base FLEXSPI FOLLOWER base pointer.
- * @return Interrupt flag.
- */
-uint32_t FLEXSPI_SLV_CheckAndClearInterrupt(FLEXSPI_SLV_Type *base);
 
 /*!
  * @brief Initializes the FLEXSPI FOLLOWER module and internal state.
@@ -167,15 +155,21 @@ void FLEXSPI_SLV_Deinit(FLEXSPI_SLV_Type *base);
 /*!
  * @brief Software reset for the FLEXSPI FOLLOWER logic.
  *
- * This function sets the software reset flags for the FLEXSPI FOLLOWER.
+ * This function does software reset for the FLEXSPI FOLLOWER.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val 0(Finished) or 1(Initiate)
  */
-static inline void FLEXSPI_SLV_SoftwareReset_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SoftwareReset(FLEXSPI_SLV_Type *base)
 {
+#if (defined(FSL_FEATURE_NETC_HAS_ERRATA_052145) && FSL_FEATURE_NETC_HAS_ERRATA_052145)
+    /* Errata 052145: AWhen setting the block operations (Block Read, Block Write, Block Next Read and Block Next Write)
+       in MODULE_CONTROL register and implementing the software reset, the block behavior will mismatch the bit
+       definition in the register after the reset. */
+    base->MODULE_CONTROL = 0;
+#endif
+
+    base->MODULE_CONTROL |= FLEXSPI_SLV_MODULE_CONTROL_SWRESET_MASK;
     base->MODULE_CONTROL &= ~FLEXSPI_SLV_MODULE_CONTROL_SWRESET_MASK;
-    base->MODULE_CONTROL |= FLEXSPI_SLV_MODULE_CONTROL_SWRESET(val);
 }
 
 /*!
@@ -184,12 +178,12 @@ static inline void FLEXSPI_SLV_SoftwareReset_SetVal(FLEXSPI_SLV_Type *base, uint
  * This function sets the IO mode flags for the FLEXSPI FOLLOWER.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val Set IO Mode for FLEXSPI FOLLOWER
+ * @param ioMode Set IO Mode for FLEXSPI FOLLOWER
  */
-static inline void FLEXSPI_SLV_IOMode_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetIOMode(FLEXSPI_SLV_Type *base, uint32_t ioMode)
 {
-    base->MODULE_CONTROL &= ~FLEXSPI_SLV_MODULE_CONTROL_IOMODE_MASK;
-    base->MODULE_CONTROL |= FLEXSPI_SLV_MODULE_CONTROL_IOMODE(val);
+    base->MODULE_CONTROL =
+        (base->MODULE_CONTROL & ~FLEXSPI_SLV_MODULE_CONTROL_IOMODE_MASK) | FLEXSPI_SLV_MODULE_CONTROL_IOMODE(ioMode);
 }
 
 /*!
@@ -199,7 +193,7 @@ static inline void FLEXSPI_SLV_IOMode_SetVal(FLEXSPI_SLV_Type *base, uint32_t va
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
  */
-static inline void FLEXSPI_SLV_Update_RWCMD_Base_Range(FLEXSPI_SLV_Type *base)
+static inline void FLEXSPI_SLV_UpdateRWCmdBaseRange(FLEXSPI_SLV_Type *base)
 {
     base->MODULE_CONTROL |= FLEXSPI_SLV_MODULE_CONTROL_CMDRANGEBASEUPDATE_MASK;
 }
@@ -210,26 +204,12 @@ static inline void FLEXSPI_SLV_Update_RWCMD_Base_Range(FLEXSPI_SLV_Type *base)
  * This function sets the RW command base address1 for the FLEXSPI FOLLOWER.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val The high 16-bit base address of the RW command
+ * @param addr1 The high 16-bit base address of the RW command0.
+ * @param addr2 The high 16-bit base address of the RW command1.
  */
-static inline void FLEXSPI_SLV_RW_CMD_BaseAddr1_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetRWCmdBaseAddr(FLEXSPI_SLV_Type *base, uint32_t addr1, uint32_t addr2)
 {
-    base->RW_COMMAND_BASE &= ~FLEXSPI_SLV_RW_COMMAND_BASE_ADDRBASE1_MASK;
-    base->RW_COMMAND_BASE |= FLEXSPI_SLV_RW_COMMAND_BASE_ADDRBASE1(val);
-}
-
-/*!
- * @brief Set RW command base address2 for the FLEXSPI FOLLOWER module.
- *
- * This function sets the RW command base address2 for the FLEXSPI FOLLOWER.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val The high 16-bit base address of the RW command
- */
-static inline void FLEXSPI_SLV_RW_CMD_BaseAddr2_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
-{
-    base->RW_COMMAND_BASE &= ~FLEXSPI_SLV_RW_COMMAND_BASE_ADDRBASE2_MASK;
-    base->RW_COMMAND_BASE |= FLEXSPI_SLV_RW_COMMAND_BASE_ADDRBASE2(val);
+    base->RW_COMMAND_BASE = FLEXSPI_SLV_RW_COMMAND_BASE_ADDRBASE1(addr1) | FLEXSPI_SLV_RW_COMMAND_BASE_ADDRBASE2(addr2);
 }
 
 /*!
@@ -238,26 +218,13 @@ static inline void FLEXSPI_SLV_RW_CMD_BaseAddr2_SetVal(FLEXSPI_SLV_Type *base, u
  * This function sets the address1/2 range for the FLEXSPI FOLLOWER.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param i The index of RW command, 0 or 1.
+ * @param index The index of RW command, 0 or 1.
  * @param val The size of the memory range in 1KB units.
  */
-static inline void FLEXSPI_SLV_AddrRange_SetVal(FLEXSPI_SLV_Type *base, uint32_t i, uint32_t val)
+static inline void FLEXSPI_SLV_SetAddrRange(FLEXSPI_SLV_Type *base, uint32_t index, uint32_t val)
 {
-    base->CMD_RANGE[i] = FLEXSPI_SLV_CMD_RANGE_RANGE(val);
-}
-
-/*!
- * @brief Enable or disable read water mark  for the FLEXSPI FOLLOWER module.
- *
- * This function enables or disables read water mark for the FLEXSPI FOLLOWER.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val 0(Disable) or 1(Enable)
- */
-static inline void FLEXSPI_SLV_Read_WMEN_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
-{
-    base->READ_COMMAND_CONTROL &= ~FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_MASK;
-    base->READ_COMMAND_CONTROL |= FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN(val);
+    assert(index < FLEXSPI_SLV_CMD_RANGE_COUNT);
+    base->CMD_RANGE[index] = FLEXSPI_SLV_CMD_RANGE_RANGE(val);
 }
 
 /*!
@@ -268,10 +235,12 @@ static inline void FLEXSPI_SLV_Read_WMEN_SetVal(FLEXSPI_SLV_Type *base, uint32_t
  * @param base FLEXSPI FOLLOWER peripheral base address.
  * @param val Read watermark level in bytes
  */
-static inline void FLEXSPI_SLV_Read_RDWM_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetReadWatermark(FLEXSPI_SLV_Type *base, uint32_t rxWatermark, bool enable)
 {
-    base->READ_COMMAND_CONTROL &= ~FLEXSPI_SLV_READ_COMMAND_CONTROL_RDWM_MASK;
-    base->READ_COMMAND_CONTROL |= FLEXSPI_SLV_READ_COMMAND_CONTROL_RDWM(val);
+    base->READ_COMMAND_CONTROL =
+        (base->READ_COMMAND_CONTROL &
+         ~(FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_MASK | FLEXSPI_SLV_READ_COMMAND_CONTROL_RDWM_MASK)) |
+        (enable ? FLEXSPI_SLV_READ_COMMAND_CONTROL_WMEN_MASK : 0U) | FLEXSPI_SLV_READ_COMMAND_CONTROL_RDWM(rxWatermark);
 }
 
 /*!
@@ -279,28 +248,13 @@ static inline void FLEXSPI_SLV_Read_RDWM_SetVal(FLEXSPI_SLV_Type *base, uint32_t
  *
  * This function sets the maximum read size for the FLEXSPI FOLLOWER.
  *
- * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val The maximum read size
+ * @param base FLEXSPI  FOLLOWER peripheral base address.
+ * @param rxFetchSize  The maximum read size triggered by a single read command.
  */
-static inline void FLEXSPI_SLV_Read_FetchSizeSet(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetReadFetchSize(FLEXSPI_SLV_Type *base, uint32_t rxFetchSize)
 {
-    base->READ_COMMAND_CONTROL &= ~FLEXSPI_SLV_READ_COMMAND_CONTROL_RDFETCHSIZE_MASK;
-    base->READ_COMMAND_CONTROL |= FLEXSPI_SLV_READ_COMMAND_CONTROL_RDFETCHSIZE(val);
-}
-
-/*!
- * @brief Gets the maximum read size triggered by a single read command.
- *
- * This function gets the maximum read size for the FLEXSPI FOLLOWER.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address.
- * @return The maximum read size
- */
-static inline uint32_t FLEXSPI_SLV_Read_FetchSizeGet(FLEXSPI_SLV_Type *base)
-{
-    uint32_t regBitVal = base->READ_COMMAND_CONTROL & FLEXSPI_SLV_READ_COMMAND_CONTROL_RDFETCHSIZE_MASK;
-
-    return (regBitVal >> FLEXSPI_SLV_READ_COMMAND_CONTROL_RDFETCHSIZE_SHIFT);
+    base->READ_COMMAND_CONTROL = (base->WRITE_COMMAND_CONTROL & ~FLEXSPI_SLV_READ_COMMAND_CONTROL_RDFETCHSIZE_MASK) |
+                                 FLEXSPI_SLV_READ_COMMAND_CONTROL_RDFETCHSIZE(rxFetchSize);
 }
 
 /*!
@@ -309,12 +263,12 @@ static inline uint32_t FLEXSPI_SLV_Read_FetchSizeGet(FLEXSPI_SLV_Type *base)
  * This function sets write water mark level for the FLEXSPI FOLLOWER.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val Write watermark level
+ * @param txWatermark Write watermark level
  */
-static inline void FLEXSPI_SLV_Write_WRWM_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetWriteWatermark(FLEXSPI_SLV_Type *base, uint32_t txWatermark)
 {
-    base->WRITE_COMMAND_CONTROL &= ~FLEXSPI_SLV_WRITE_COMMAND_CONTROL_WRWM_MASK;
-    base->WRITE_COMMAND_CONTROL |= FLEXSPI_SLV_WRITE_COMMAND_CONTROL_WRWM(val);
+    base->WRITE_COMMAND_CONTROL = (base->WRITE_COMMAND_CONTROL & ~FLEXSPI_SLV_WRITE_COMMAND_CONTROL_WRWM_MASK) |
+                                  FLEXSPI_SLV_WRITE_COMMAND_CONTROL_WRWM(txWatermark);
 }
 
 /*!
@@ -322,13 +276,13 @@ static inline void FLEXSPI_SLV_Write_WRWM_SetVal(FLEXSPI_SLV_Type *base, uint32_
  *
  * This function sets CS mask value for the FLEXSPI FOLLOWER.
  *
- * @param base FLEXSPI FOLLOWER peripheral base address.
- * @param val 0(Not masked) or 1(Masked)
+ * @param base  FLEXSPI FOLLOWER peripheral base address.
+ * @param mask  0 - Not masked, 1 - Masked.
  */
-static inline void FLEXSPI_SLV_CSMASK_SetVal(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_MaskChipSelect(FLEXSPI_SLV_Type *base, uint32_t mask)
 {
-    base->MODULE_CONTROL &= ~FLEXSPI_SLV_MODULE_CONTROL_CSMASK_MASK;
-    base->MODULE_CONTROL |= FLEXSPI_SLV_MODULE_CONTROL_CSMASK(val);
+    base->MODULE_CONTROL =
+        (base->MODULE_CONTROL & ~FLEXSPI_SLV_MODULE_CONTROL_CSMASK_MASK) | FLEXSPI_SLV_MODULE_CONTROL_CSMASK(mask);
 }
 /* @} */
 
@@ -365,7 +319,7 @@ static inline void FLEXSPI_SLV_DisableInterrupts(FLEXSPI_SLV_Type *base, uint32_
  */
 static inline uint32_t FLEXSPI_SLV_GetEnabledInterrupts(FLEXSPI_SLV_Type *base)
 {
-    return (base->MODULE_INTEN);
+    return base->MODULE_INTEN;
 }
 
 /*!
@@ -386,7 +340,7 @@ static inline void FLEXSPI_SLV_EnableMailInterrupt(FLEXSPI_SLV_Type *base, bool 
  */
 static inline bool FLEXSPI_SLV_GetEnabledMailInterrupt(FLEXSPI_SLV_Type *base)
 {
-    return ((base->SPI_MAIL_CTRL & FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN_MASK) ? true : false);
+    return (0U != (base->SPI_MAIL_CTRL & FLEXSPI_SLV_SPI_MAIL_CTRL_SPIINTEN_MASK));
 }
 /* @} */
 
@@ -426,26 +380,6 @@ static inline void FLEXSPI_SLV_GetOutOfRangeCounts(FLEXSPI_SLV_Type *base, size_
 static inline uint32_t FLEXSPI_SLV_GetInterruptStatusFlags(FLEXSPI_SLV_Type *base)
 {
     return (base->MODULE_INT);
-}
-
-/*!
- * @brief Get the FLEXSPI FOLLOWER mailbox interrupt register.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address.
- * @return Return the index of the FLEXSPI FOLLOWER mail interrupt register
- */
-static inline uint32_t FLEXSPI_SLV_GetMailInterruptIndex(FLEXSPI_SLV_Type *base)
-{
-    uint32_t index;
-
-    for (index = 0; index < FLEXSPI_SLV_SPIMAIL_COUNT; index++)
-    {
-        if (base->SPIMAIL[index] & 0x1U)
-        {
-            break;
-        }
-    }
-    return index;
 }
 
 /*!
@@ -489,7 +423,7 @@ static inline void FLEXSPI_SLV_ClearMailInterruptFlag(FLEXSPI_SLV_Type *base)
  */
 static inline bool FLEXSPI_SLV_GetAXIWriteBusyStatus(FLEXSPI_SLV_Type *base)
 {
-    return ((base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_WIP_MASK) ? true : false);
+    return (0U != (base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_WIP_MASK));
 }
 
 /*! @brief Returns whether the AXI read leader is busy with a read request or else idle with no pending
@@ -501,7 +435,7 @@ static inline bool FLEXSPI_SLV_GetAXIWriteBusyStatus(FLEXSPI_SLV_Type *base)
  */
 static inline bool FLEXSPI_SLV_GetAXIReadIdleStatus(FLEXSPI_SLV_Type *base)
 {
-    return ((base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_MASK) ? true : false);
+    return (0U != (base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_AXIREADIDLE_MASK));
 }
 
 /*! @brief Returns whether the SPI to read/write register queue is idle.
@@ -512,7 +446,7 @@ static inline bool FLEXSPI_SLV_GetAXIReadIdleStatus(FLEXSPI_SLV_Type *base)
  */
 static inline bool FLEXSPI_SLV_GetRegReadWriteIdleStatus(FLEXSPI_SLV_Type *base)
 {
-    return ((base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_MASK) ? true : false);
+    return (0U != (base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_REGRWIDLE_MASK));
 }
 
 /*! @brief Returns whether the SEQ control logic is idle or else busy with an ongoing SPI request.
@@ -523,7 +457,7 @@ static inline bool FLEXSPI_SLV_GetRegReadWriteIdleStatus(FLEXSPI_SLV_Type *base)
  */
 static inline bool FLEXSPI_SLV_GetSEQIdleStatus(FLEXSPI_SLV_Type *base)
 {
-    return ((base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_MASK) ? true : false);
+    return (0U != (base->MODULE_STATUS & FLEXSPI_SLV_MODULE_STATUS_SEQIDLE_MASK));
 }
 
 /*! @brief Returns whether the FLEXSPI FOLLOWER module is busy.
@@ -554,102 +488,56 @@ static inline bool FLEXSPI_SLV_GetModuleBusyStatus(FLEXSPI_SLV_Type *base)
 /*!
  * @brief Sets the read memory command.
  *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param i The read command setting register index
- * @param val The read command value.
+ * @param base FLEXSPI FOLLOWER peripheral base address.
+ * @param index  The read command setting register index.
+ * @param command The read command value.
+ * @param dummyCycle The dummy cycle value of the read command.
  */
-static inline void FLEXSPI_SLV_Read_CommandSet(FLEXSPI_SLV_Type *base, uint32_t i, uint32_t val)
+static inline void FLEXSPI_SLV_SetReadMemCommand(FLEXSPI_SLV_Type *base,
+                                                 uint32_t index,
+                                                 uint16_t command,
+                                                 uint16_t dummyCycle)
 {
-    base->READ_COMMAND[i] &= ~FLEXSPI_SLV_READ_COMMAND_COMMANDSET_MASK;
-    base->READ_COMMAND[i] |= FLEXSPI_SLV_READ_COMMAND_COMMANDSET(val);
-}
-
-/*!
- * @brief Gets the read memory command.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param i The read command setting register index
- */
-static inline uint32_t FLEXSPI_SLV_Read_CommandGet(FLEXSPI_SLV_Type *base, uint32_t i)
-{
-    uint32_t regBitVal = base->READ_COMMAND[i] & FLEXSPI_SLV_READ_COMMAND_COMMANDSET_MASK;
-
-    return (regBitVal >> FLEXSPI_SLV_READ_COMMAND_COMMANDSET_SHIFT);
-}
-
-/*!
- * @brief Sets the dummy cycle for the read memory command.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param i The read command dummy cycle setting register index
- * @param val The dummy cycle value of the read command.
- */
-static inline void FLEXSPI_SLV_Read_Command_DummyCyclesSet(FLEXSPI_SLV_Type *base, uint32_t i, uint32_t val)
-{
-    base->READ_COMMAND[i] &= ~FLEXSPI_SLV_READ_COMMAND_DUMMYCYCLES_MASK;
-    base->READ_COMMAND[i] |= FLEXSPI_SLV_READ_COMMAND_DUMMYCYCLES(val);
-}
-
-/*!
- * @brief Gets the dummy cycle for the read memory command.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param i The read command dummy cycle setting register index
- */
-static inline uint32_t FLEXSPI_SLV_Read_Command_DummyCyclesGet(FLEXSPI_SLV_Type *base, uint32_t i)
-{
-    uint32_t regBitVal = base->READ_COMMAND[i] & FLEXSPI_SLV_READ_COMMAND_DUMMYCYCLES_MASK;
-
-    return (regBitVal >> FLEXSPI_SLV_READ_COMMAND_DUMMYCYCLES_SHIFT);
+    assert(index < FLEXSPI_SLV_READ_COMMAND_COUNT);
+    base->READ_COMMAND[index] =
+        FLEXSPI_SLV_READ_COMMAND_COMMANDSET(command) | FLEXSPI_SLV_READ_COMMAND_DUMMYCYCLES(dummyCycle);
 }
 
 /*!
  * @brief Sets the write memory command.
  *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param i The write command setting register index
- * @param val The write command value.
+ * @param base  FLEXSPI FOLLOWER peripheral base address.
+ * @param index  The write command setting register index.
+ * @param command  The write command value.
  */
-static inline void FLEXSPI_SLV_Write_CommandSet(FLEXSPI_SLV_Type *base, uint32_t i, uint32_t val)
+static inline void FLEXSPI_SLV_SetWriteMemCommand(FLEXSPI_SLV_Type *base, uint32_t index, uint32_t command)
 {
-    base->WRITE_COMMAND[i] &= ~FLEXSPI_SLV_WRITE_COMMAND_COMMANDSET_MASK;
-    base->WRITE_COMMAND[i] |= FLEXSPI_SLV_WRITE_COMMAND_COMMANDSET(val);
+    assert(index < FLEXSPI_SLV_WRITE_COMMAND_COUNT);
+    base->WRITE_COMMAND[index] = FLEXSPI_SLV_WRITE_COMMAND_COMMANDSET(command);
 }
 
 /*!
  * @brief Sets the read register command.
  *
  * @param base FLEXSPI FOLLOWER peripheral base address
- * @param val The read register command value.
+ * @param command The read command value.
+ * @param dummyCycle The dummy cycle value of the read command.
  */
-static inline void FLEXSPI_SLV_Read_Register_CommandSet(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetReadRegCommand(FLEXSPI_SLV_Type *base, uint16_t command, uint16_t dummyCycle)
 {
-    base->READ_REGISTER_COMMAND0 &= ~FLEXSPI_SLV_READ_REGISTER_COMMAND0_COMMANDSET_MASK;
-    base->READ_REGISTER_COMMAND0 |= FLEXSPI_SLV_READ_REGISTER_COMMAND0_COMMANDSET(val);
-}
-
-/*!
- * @brief Sets the dummy cycle for the read register command.
- *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param val The dummy cycle value of the read register command.
- */
-static inline void FLEXSPI_SLV_Read_Register_Command_DummyCyclesSet(FLEXSPI_SLV_Type *base, uint32_t val)
-{
-    base->READ_REGISTER_COMMAND0 &= ~FLEXSPI_SLV_READ_REGISTER_COMMAND0_DUMMYCYCLES_MASK;
-    base->READ_REGISTER_COMMAND0 |= FLEXSPI_SLV_READ_REGISTER_COMMAND0_DUMMYCYCLES(val);
+    base->READ_REGISTER_COMMAND0 = FLEXSPI_SLV_READ_REGISTER_COMMAND0_COMMANDSET(command) |
+                                   FLEXSPI_SLV_READ_REGISTER_COMMAND0_DUMMYCYCLES(dummyCycle);
 }
 
 /*!
  * @brief Sets the write register command.
  *
- * @param base FLEXSPI FOLLOWER peripheral base address
- * @param val The write register command value.
+ * @param base FLEXSPI FOLLOWER peripheral base address.
+ * @param command The write register command value.
  */
-static inline void FLEXSPI_SLV_Write_Register_CommandSet(FLEXSPI_SLV_Type *base, uint32_t val)
+static inline void FLEXSPI_SLV_SetWriteRegCommand(FLEXSPI_SLV_Type *base, uint32_t command)
 {
-    base->WRITE_REGISTER_COMMAND0 &= ~FLEXSPI_SLV_WRITE_REGISTER_COMMAND0_COMMANDSET_MASK;
-    base->WRITE_REGISTER_COMMAND0 |= FLEXSPI_SLV_WRITE_REGISTER_COMMAND0_COMMANDSET(val);
+    base->WRITE_REGISTER_COMMAND0 = FLEXSPI_SLV_WRITE_REGISTER_COMMAND0_COMMANDSET(command);
 }
 
 /*! @} */
@@ -669,7 +557,7 @@ static inline void FLEXSPI_SLV_Write_Register_CommandSet(FLEXSPI_SLV_Type *base,
  */
 void FLEXSPI_SLV_InterruptCreateHandle(FLEXSPI_SLV_Type *base,
                                        flexspi_slv_handle_t *handle,
-                                       flexspi_slv_interrupt_callback_t callback,
+                                       flexspi_slv_callback_t callback,
                                        uint32_t interruptMask);
 
 /*!
@@ -686,4 +574,4 @@ void FLEXSPI_SLV_HandleIRQ(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle)
 #endif /*_cplusplus. */
 /*@}*/
 
-#endif /* __FSL_FLEXSPI_FOLLOWER_H_ */
+#endif /* FSL_FLEXSPI_FLR_H_ */

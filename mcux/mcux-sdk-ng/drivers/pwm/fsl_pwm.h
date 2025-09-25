@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -71,7 +71,7 @@ enum _pwm_value_register_mask
 /*! @brief PWM clock source selection.*/
 typedef enum _pwm_clock_source
 {
-    kPWM_BusClock = 0U,  /*!< The IPBus clock is used as the clock */
+    kPWM_BusClock = 0U,  /*!< Device specific IPBus clock, refer reference manual for frequency */
     kPWM_ExternalClock,  /*!< EXT_CLK is used as the clock */
     kPWM_Submodule0Clock /*!< Clock of the submodule 0 (AUX_CLK) is used as the source clock */
 } pwm_clock_source_t;

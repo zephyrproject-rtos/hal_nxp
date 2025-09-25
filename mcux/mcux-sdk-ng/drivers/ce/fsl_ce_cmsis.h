@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,7 +13,7 @@
 /*!
  * @ingroup ce
  * @defgroup ce_cmsis CE CMSIS Functions
- * @brief Functional API definitions CMSIS compatible functions
+ * @brief Functional API definitions for CMSIS compatible functions
  * @{
  */
 
@@ -23,10 +23,10 @@
 /*! @brief FFT/IFFT float32 */
 typedef struct
 {
-    uint16_t fftLen;              /**< length of the FFT. */
-    const float *pTwiddle;        /**< points to the Twiddle factor table. */
-    const uint16_t *pBitRevTable; /**< points to the bit reversal table. */
-    uint16_t bitRevLength;        /**< bit reversal table length. */
+    uint16_t fftLen;              /*!< Length of the FFT. */
+    const float *pTwiddle;        /*!< Points to the twiddle factor table. */
+    const uint16_t *pBitRevTable; /*!< Points to the bit reversal table. */
+    uint16_t bitRevLength;        /*!< Length of the bit reversal table. */
 } arm_cfft_instance_f32;
 
 /*******************************************************************************
@@ -41,6 +41,17 @@ typedef struct
 extern "C" {
 #endif
 
+/*!
+ * @brief CMSIS-compatible FFT implementation using ZV2117 backend.
+ *
+ * @details This API is designed to be compatible with the ARM CM33 FFT interface.
+ * It delegates the FFT computation to the ZV2117 CE module.
+ * Please refer to CM33 documentation for details.
+ *
+ * @return Command execution status.
+ * 
+ * @note This API only support float32 FFTs.
+ */
 void ce_arm_cfft_f32(const arm_cfft_instance_f32 *S,
                      float *p1, /* input pointer */
                      uint8_t ifftFlag,

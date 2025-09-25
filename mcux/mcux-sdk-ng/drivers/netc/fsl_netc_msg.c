@@ -238,7 +238,6 @@ static uint16_t EP_RxL2MFQueryDeleteEMTableEntry(ep_handle_t *handle, uint8_t si
                                  *(uint32_t *)(uintptr_t)&macAddr[m];
         }
 
-        cmdBd.generic.addr     = 0;
         cmdBd.generic.en       = 1;
         cmdBd.generic.siBitMap = siBitMap;
         cmdBd.generic.index    = result[i].index;
@@ -997,6 +996,30 @@ static uint16_t EP_PsiHandleLinkSpeed(ep_handle_t *handle, uint8_t vsi, netc_psi
     return ret;
 }
 
+static uint16_t EP_PsiHandleIpVersion(ep_handle_t *handle, uint8_t vsi, netc_psi_rx_msg_t *msgInfo)
+{
+    netc_msg_header_t *header = (netc_msg_header_t *)(uint32_t)(msgInfo->msgBuff);
+    uint16_t ret = (uint16_t)kNETC_MsgClassIpVersion << 8 | kNETC_MsgIpVersionNotAvail;
+    uint8_t version;
+
+    switch (header->cmdId)
+    {
+        case (uint8_t)kNETC_MsgIpVersionMJ:
+            version = (handle->hw.global->IPBRR0 & ENETC_GLOBAL_IPBRR0_IP_MJ_MASK) >> ENETC_GLOBAL_IPBRR0_IP_MJ_SHIFT;
+            ret = (uint16_t)kNETC_MsgClassIpVersion << 8 | version;
+            break;
+        case (uint8_t)kNETC_MsgIpVersionMN:
+            version = (handle->hw.global->IPBRR0 & ENETC_GLOBAL_IPBRR0_IP_MN_MASK) >> ENETC_GLOBAL_IPBRR0_IP_MN_SHIFT;
+            ret = (uint16_t)kNETC_MsgClassIpVersion << 8 | version;
+            break;
+        default:
+            /* To avoid MISRA-C 2012 rule 16.4 issue. */
+            break;
+    }
+
+    return ret;
+}
+
 void EP_PsiNotifyLink(ep_handle_t *handle)
 {
     ENETC_SI_Type *base = handle->hw.si;
@@ -1108,6 +1131,7 @@ void EP_PsiHandleRxMsg(ep_handle_t *handle, uint8_t vsi, netc_psi_rx_msg_t *msgI
         case (uint8_t)kNETC_MsgClassTimerSyncStatus:
             break;
         case (uint8_t)kNETC_MsgClassIpVersion:
+            code = EP_PsiHandleIpVersion(handle, vsi, msgInfo);
             break;
         default:
             /* To avoid MISRA-C 2012 rule 16.4 issue. */
@@ -1115,7 +1139,7 @@ void EP_PsiHandleRxMsg(ep_handle_t *handle, uint8_t vsi, netc_psi_rx_msg_t *msgI
     }
 
 out:
-    base->PSI_A.PSIMSGRR = ((uint32_t)vsi << 1U) | ((uint32_t)code << 16U);
+    base->PSI_A.PSIMSGRR = ((uint32_t)1U << vsi) | ((uint32_t)code << 16U);
 
     if (notify)
     {

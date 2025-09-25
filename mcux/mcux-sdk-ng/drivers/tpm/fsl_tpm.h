@@ -30,9 +30,24 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TPM driver version 2.3.5. */
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 5))
+/*! @brief TPM driver version 2.4.0. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*! @} */
+
+/*!
+ * @brief Max loops to wait for writing register.
+ *
+ * When writing MOD CnV CnSC and SC register, driver will wait until register is updated.
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef TPM_TIMEOUT
+#ifdef CONFIG_TPM_TIMEOUT
+#define TPM_TIMEOUT CONFIG_TPM_TIMEOUT
+#else
+#define TPM_TIMEOUT 0
+#endif
+#endif
 
 /*! @brief Help macro to get the max counter value */
 #define TPM_MAX_COUNTER_VALUE(x) ((1U != (uint8_t)FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x)) ? 0xFFFFU : 0xFFFFFFFFU)
@@ -454,8 +469,9 @@ tpm_clock_prescale_t TPM_CalculateCounterClkDiv(TPM_Type *base, uint32_t counter
  * @param pwmFreq_Hz  PWM signal frequency in Hz
  * @param srcClock_Hz TPM counter clock in Hz
  *
- * @return kStatus_Success if the PWM setup was successful,
- *         kStatus_Error on failure
+ * @return kStatus_Success PWM setup successful
+ *         kStatus_Error   PWM setup failed
+ *         kStatus_Timeout PWM setup timeout when write register CnV or MOD
  */
 status_t TPM_SetupPwm(TPM_Type *base,
                       const tpm_chnl_pwm_signal_param_t *chnlParams,
@@ -519,11 +535,22 @@ static inline uint8_t TPM_GetChannelContorlBits(TPM_Type *base, tpm_chnl_t chnlN
  *
  * @param base       TPM peripheral base address
  * @param chnlNumber The channel number
+ * @return kStatus_Success PWM setup successful
+ *         kStatus_Timeout PWM setup timeout when write register CnSC
  */
-static inline void TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
+static inline status_t TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
 {
+#if TPM_TIMEOUT
+    uint32_t timeout = TPM_TIMEOUT;
+#endif
     do
     {
+#if TPM_TIMEOUT
+        if (timeout-- == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
         /* Clear channel MSnB:MSnA and ELSnB:ELSnA to disable its output. */
         base->CONTROLS[chnlNumber].CnSC &=
             ~(TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK);
@@ -534,9 +561,10 @@ static inline void TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
          *           (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)))
          * not covered.  $ref tpm_h_ref_1$.
          */
-
     } while (0U != (base->CONTROLS[chnlNumber].CnSC &
                     (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
+
+    return kStatus_Success;
 }
 
 /*!
@@ -548,15 +576,25 @@ static inline void TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
  * @param chnlNumber The channel number
  * @param control     The contorl bits value. This is the logical OR of members of the
  *                    enumeration @ref tpm_chnl_control_bit_mask_t.
+ * @return kStatus_Success PWM setup successful
+ *         kStatus_Timeout PWM setup timeout when write register CnSC
  */
-static inline void TPM_EnableChannel(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t control)
+static inline status_t TPM_EnableChannel(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t control)
 {
+#if TPM_TIMEOUT
+    uint32_t timeout = TPM_TIMEOUT;
+#endif
 #if defined(FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR) && FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR
     control |= TPM_CnSC_CHF_MASK;
 #endif
-
     do
     {
+#if TPM_TIMEOUT
+        if (timeout-- == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
         /* Set channel MSB:MSA and ELSB:ELSA bits. */
         base->CONTROLS[chnlNumber].CnSC =
             (base->CONTROLS[chnlNumber].CnSC &
@@ -573,6 +611,8 @@ static inline void TPM_EnableChannel(TPM_Type *base, tpm_chnl_t chnlNumber, uint
     } while ((control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) !=
              (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
                        (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
+
+    return kStatus_Success;
 }
 
 /*!
@@ -597,11 +637,13 @@ void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capt
  * @param chnlNumber   The channel number
  * @param compareMode  Action to take on the channel output when the compare condition is met
  * @param compareValue Value to be programmed in the CnV register.
+ * @return kStatus_Success PWM setup successful
+ *         kStatus_Timeout PWM setup timeout when write register CnV
  */
-void TPM_SetupOutputCompare(TPM_Type *base,
-                            tpm_chnl_t chnlNumber,
-                            tpm_output_compare_mode_t compareMode,
-                            uint32_t compareValue);
+status_t TPM_SetupOutputCompare(TPM_Type *base,
+                                tpm_chnl_t chnlNumber,
+                                tpm_output_compare_mode_t compareMode,
+                                uint32_t compareValue);
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
 /*!
@@ -845,9 +887,14 @@ static inline void TPM_ClearStatusFlags(TPM_Type *base, uint32_t mask)
  *
  * @param base TPM peripheral base address
  * @param ticks A timer period in units of ticks, which should be equal or greater than 1.
+ * @return kStatus_Success PWM setup successful
+ *         kStatus_Timeout PWM setup timeout when write register CnSC
  */
-static inline void TPM_SetTimerPeriod(TPM_Type *base, uint32_t ticks)
+static inline status_t TPM_SetTimerPeriod(TPM_Type *base, uint32_t ticks)
 {
+#if TPM_TIMEOUT
+    uint32_t timeout = TPM_TIMEOUT;
+#endif
     if (1U != (uint8_t)FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(base))
     {
         assert(ticks <= 0xFFFFU);
@@ -863,12 +910,20 @@ static inline void TPM_SetTimerPeriod(TPM_Type *base, uint32_t ticks)
      */
     do
     {
+#if TPM_TIMEOUT
+        if (timeout-- == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
         base->MOD = ticks;
         /*
          * $Branch Coverage Justification$
          * (ticks != base->MOD) not covered. $ref tpm_h_ref_2$.
          */
     } while (ticks != base->MOD);
+
+    return kStatus_Success;
 }
 
 /*!
@@ -916,9 +971,15 @@ static inline void TPM_StartTimer(TPM_Type *base, tpm_clock_source_t clockSource
  * @brief Stops the TPM counter.
  *
  * @param base TPM peripheral base address
+ * @return kStatus_Success PWM setup successful
+ *         kStatus_Timeout PWM setup timeout when write register CnSC
  */
-static inline void TPM_StopTimer(TPM_Type *base)
+static inline status_t TPM_StopTimer(TPM_Type *base)
 {
+#if TPM_TIMEOUT
+    uint32_t timeout = TPM_TIMEOUT;
+#endif
+
 #if defined(FSL_FEATURE_TPM_HAS_SC_CLKS) && FSL_FEATURE_TPM_HAS_SC_CLKS
     /* Set clock source to none to disable counter */
     base->SC &= ~(TPM_SC_CLKS_MASK);
@@ -926,6 +987,12 @@ static inline void TPM_StopTimer(TPM_Type *base)
     /* Wait till this reads as zero acknowledging the counter is disabled */
     while (0U != (base->SC & TPM_SC_CLKS_MASK))
     {
+#if TPM_TIMEOUT
+        if (--timeout == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 #else
     /* Set clock source to none to disable counter */
@@ -934,8 +1001,16 @@ static inline void TPM_StopTimer(TPM_Type *base)
     /* Wait till this reads as zero acknowledging the counter is disabled */
     while (0U != (base->SC & TPM_SC_CMOD_MASK))
     {
+#if TPM_TIMEOUT
+        if (--timeout == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 #endif
+
+    return kStatus_Success;
 }
 
 /*! @}*/

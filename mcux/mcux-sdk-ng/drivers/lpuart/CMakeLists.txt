@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.lpuart_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.lpuart)
-    mcux_component_version(2.9.1)
+    mcux_component_version(2.10.0)
 
     mcux_add_source(SOURCES fsl_lpuart.h fsl_lpuart.c)
 

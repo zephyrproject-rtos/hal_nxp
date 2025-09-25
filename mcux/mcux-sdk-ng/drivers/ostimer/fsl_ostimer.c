@@ -246,10 +246,10 @@ void OSTIMER_ClearStatusFlags(OSTIMER_Type *base, uint32_t mask)
  *
  * This function will set a match value for OSTIMER with an optional callback. And this callback
  * will be called while the data in dedicated pair match register is equals to the value of central EVTIMER.
- * Please note that, the data format is gray-code, if decimal data was desired, please using OSTIMER_SetMatchValue().
+ * Please note that, the data format may be gray-code, if so, please using OSTIMER_SetMatchValue().
  *
  * @param base   OSTIMER peripheral base address.
- * @param count  OSTIMER timer match value.(Value is gray-code format)
+ * @param count  OSTIMER timer match value.(Value may be gray-code format)
  *
  * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
  * @retval kStatus_Success - Set match raw value and enable interrupt Successfully.
@@ -294,7 +294,10 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
      * (2) If current timer value has not gone ahead of match value, we will enable interrupt and return success.
      */
     decValueTimer = OSTIMER_GetCurrentTimerValue(base);
-    if ((decValueTimer >= OSTIMER_GrayToDecimal(tmp)) &&
+#if !(defined(FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER) && FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER)
+    tmp = OSTIMER_GrayToDecimal(tmp);
+#endif /* FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER */
+    if ((decValueTimer >= tmp) &&
         (0U == (base->OSEVENT_CTRL & (uint32_t)kOSTIMER_MatchInterruptFlag)))
     {
         status = kStatus_Fail;
@@ -318,26 +321,30 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
  *
  * @param base   OSTIMER peripheral base address.
  * @param count  OSTIMER timer match value.(Value is decimal format, and this value will be translate to Gray code in
- * API. )
+ * API if the IP counter is gray encoded. )
  * @param cb  OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
  * @retval kStatus_Success - Set match value and enable interrupt Successfully.
  * @retval kStatus_Fail    - Set match value fail.
  */
 status_t OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb)
 {
+#if (defined(FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER) && FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER)
+    return OSTIMER_SetMatchRawValue(base, count, cb);
+#else
     uint64_t tmp = OSTIMER_DecimalToGray(count);
 
     return OSTIMER_SetMatchRawValue(base, tmp, cb);
+#endif /* FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER */
 }
 
 /*!
  * @brief Get current timer count value from OSTIMER.
  *
  * This function will get a decimal timer count value.
- * The RAW value of timer count is gray code format, will be translated to decimal data internally.
+ * If the RAW value of timer count is gray code format, it will be translated to decimal data internally.
  *
  * @param base   OSTIMER peripheral base address.
- * @return Value of OSTIMER which will formated to decimal value.
+ * @return       Value of OSTIMER which will be formated to decimal value.
  */
 uint64_t OSTIMER_GetCurrentTimerValue(OSTIMER_Type *base)
 {
@@ -345,17 +352,21 @@ uint64_t OSTIMER_GetCurrentTimerValue(OSTIMER_Type *base)
 
     tmp = OSTIMER_GetCurrentTimerRawValue(base);
 
+#if (defined(FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER) && FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER)
+    return tmp;
+#else
     return OSTIMER_GrayToDecimal(tmp);
+#endif /* FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER */
 }
 
 /*!
  * @brief Get the capture value from OSTIMER.
  *
  * This function will get a capture decimal-value from OSTIMER.
- * The RAW value of timer capture is gray code format, will be translated to decimal data internally.
+ * If the RAW value of timer count is gray code format, it will be translated to decimal data internally.
  *
  * @param base   OSTIMER peripheral base address.
- * @return Value of capture register, data format is decimal.
+ * @return       Value of capture register, data format is decimal.
  */
 uint64_t OSTIMER_GetCaptureValue(OSTIMER_Type *base)
 {
@@ -363,7 +374,11 @@ uint64_t OSTIMER_GetCaptureValue(OSTIMER_Type *base)
 
     tmp = OSTIMER_GetCaptureRawValue(base);
 
+#if (defined(FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER) && FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER)
+    return tmp;
+#else
     return OSTIMER_GrayToDecimal(tmp);
+#endif /* FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER */
 }
 
 void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb)

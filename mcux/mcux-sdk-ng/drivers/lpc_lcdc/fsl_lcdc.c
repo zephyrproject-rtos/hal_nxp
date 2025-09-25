@@ -108,7 +108,7 @@ static bool LCDC_GetClockDivider(const lcdc_config_t *config, uint32_t srcClock_
     *divider = 0U;
 
     /* Find the PCD. */
-    pcd = (srcClock_Hz + (config->panelClock_Hz / 2U)) / config->panelClock_Hz;
+    pcd = (srcClock_Hz + (config->panelClock_Hz / 2UL)) / config->panelClock_Hz;
 
     if (pcd <= 1U)
     {

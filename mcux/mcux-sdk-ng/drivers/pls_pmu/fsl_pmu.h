@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief pls_pmu driver version 2.0.0. */
-#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief pls_pmu driver version 2.0.1. */
+#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*!
@@ -75,8 +75,8 @@ static inline void PMU_EnableFixedDCDC(PMU_Type *base, bool enable)
  */
 static inline void PMU_UpdateVDDCoreInActiveMode(PMU_Type *base, uint8_t value)
 {
-    base->VDD_CORE_PCONFIG = ((base->VDD_CORE_PCONFIG) & ~(PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG_MASK)) | \
-                            PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG(value);
+    base->VDD_CORE_PCONFIG = ((base->VDD_CORE_PCONFIG) & ~(PMU_VDD_CORE_PCONFIG_VDD_ACONFIG_MASK)) | \
+                            PMU_VDD_CORE_PCONFIG_VDD_ACONFIG(value);
 }
 
 /*!
@@ -87,8 +87,8 @@ static inline void PMU_UpdateVDDCoreInActiveMode(PMU_Type *base, uint8_t value)
  */
 static inline void PMU_UpdateVDDCoreInLpMode(PMU_Type *base, uint8_t value)
 {
-    base->VDD_CORE_PCONFIG = ((base->VDD_CORE_PCONFIG) & ~(PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR_MASK)) | \
-                            PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR(value);
+    base->VDD_CORE_PCONFIG = ((base->VDD_CORE_PCONFIG) & ~(PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG_MASK)) | \
+                            PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG(value);
 }
 
 /*!

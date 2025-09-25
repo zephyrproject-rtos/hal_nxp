@@ -1060,16 +1060,16 @@ void TRDC_MrcSetMemoryAccessConfig(TRDC_Type *base,
                                    uint8_t regIdx);
 
 /*!
- * @brief Enables the update of the selected domians.
+ * @brief Enables the update of the selected domains.
  *
- * After the domians' update are enabled, their regions' NSE bits can be set or clear.
+ * After the domains' update are enabled, their regions' NSE bits can be set or clear.
  *
  * @param base TRDC peripheral base address.
  * @param mrcIdx MRC index.
- * @param domianMask Bit mask of the domains to be enabled.
+ * @param domainMask Bit mask of the domains to be enabled.
  * @param enable True to enable, false to disable.
  */
-void TRDC_MrcEnableDomainNseUpdate(TRDC_Type *base, uint8_t mrcIdx, uint16_t domianMask, bool enable);
+void TRDC_MrcEnableDomainNseUpdate(TRDC_Type *base, uint8_t mrcIdx, uint16_t domainMask, bool enable);
 
 /*!
  * @brief Sets the NSE bits of the selected regions for domains.
@@ -1100,7 +1100,7 @@ void TRDC_MrcRegionNseClear(TRDC_Type *base, uint8_t mrcIdx, uint16_t regionMask
  *
  * @param base TRDC peripheral base address.
  * @param mrcIdx MRC index.
- * @param domainMask Bit mask of the domians whose NSE bits to clear.
+ * @param domainMask Bit mask of the domains whose NSE bits to clear.
  */
 void TRDC_MrcDomainNseClear(TRDC_Type *base, uint8_t mrcIdx, uint16_t domainMask);
 

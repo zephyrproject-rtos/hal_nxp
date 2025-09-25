@@ -253,6 +253,9 @@ static bool FLEXIO_I2C_MasterTransferStateMachineSendCommand(FLEXIO_I2C_Type *ba
                                                              flexio_i2c_master_handle_t *handle,
                                                              uint32_t statusFlags)
 {
+#if I2C_RETRY_TIMES
+    uint32_t waitTimes = I2C_RETRY_TIMES;
+#endif
     if ((statusFlags & (uint32_t)kFLEXIO_I2C_TxEmptyFlag) != 0U)
     {
         if (handle->transfer.subaddressSize > 0U)
@@ -302,6 +305,7 @@ static bool FLEXIO_I2C_MasterTransferStateMachineSendCommand(FLEXIO_I2C_Type *ba
                     FLEXIO_I2C_MasterStop(base);
 
 #if I2C_RETRY_TIMES
+                    waitTimes = I2C_RETRY_TIMES;
                     while ((0U == (FLEXIO_I2C_MasterGetStatusFlags(base) & (uint32_t)kFLEXIO_I2C_RxFullFlag)) &&
                            (0U != --waitTimes))
                     {
@@ -354,6 +358,7 @@ static bool FLEXIO_I2C_MasterTransferStateMachineSendData(FLEXIO_I2C_Type *base,
             FLEXIO_I2C_MasterStop(base);
 
 #if I2C_RETRY_TIMES
+            uint32_t waitTimes = I2C_RETRY_TIMES;
             while ((0U == (FLEXIO_I2C_MasterGetStatusFlags(base) & (uint32_t)kFLEXIO_I2C_RxFullFlag)) &&
                    (0U != --waitTimes))
             {
@@ -387,6 +392,7 @@ static bool FLEXIO_I2C_MasterTransferStateMachineReceiveDataBegin(FLEXIO_I2C_Typ
         {
             FLEXIO_I2C_MasterEnableAck(base, false);
 #if I2C_RETRY_TIMES
+            uint32_t waitTimes = I2C_RETRY_TIMES;
             while ((0U == (FLEXIO_GetShifterStatusFlags(base->flexioBase) & (1UL << base->shifterIndex[0]))) &&
                    (0U != --waitTimes))
             {
@@ -446,6 +452,7 @@ static status_t FLEXIO_I2C_MasterTransferStateMachineReceiveData(FLEXIO_I2C_Type
             {
                 FLEXIO_I2C_MasterEnableAck(base, false);
 #if I2C_RETRY_TIMES
+                uint32_t waitTimes = I2C_RETRY_TIMES;
                 while ((0U == (FLEXIO_GetShifterStatusFlags(base->flexioBase) & (1UL << base->shifterIndex[0]))) &&
                        (0U != --waitTimes))
                 {
@@ -482,9 +489,6 @@ static status_t FLEXIO_I2C_MasterTransferRunStateMachine(FLEXIO_I2C_Type *base,
                                                          uint32_t statusFlags)
 {
     status_t status;
-#if I2C_RETRY_TIMES
-    uint32_t waitTimes = I2C_RETRY_TIMES;
-#endif
 
     if ((statusFlags & (uint32_t)kFLEXIO_I2C_ReceiveNakFlag) != 0U)
     {
@@ -1220,10 +1224,19 @@ status_t FLEXIO_I2C_MasterTransferBlocking(FLEXIO_I2C_Type *base, flexio_i2c_mas
 
     } while ((tmpHandle.state != (uint8_t)kFLEXIO_I2C_Idle) && (result == kStatus_Success));
 
+#if I2C_RETRY_TIMES
+    waitTimes = I2C_RETRY_TIMES;
+#endif
     /* Timer disable on timer compare, wait until bit clock TSF set, which means timer disable and stop has been sent.
      */
     while (0U == (FLEXIO_GetTimerStatusFlags(base->flexioBase) & (1UL << base->timerIndex[1])))
     {
+#if I2C_RETRY_TIMES
+        if (--waitTimes == 0U)
+        {
+            return kStatus_FLEXIO_I2C_Timeout;
+        }
+#endif
     }
 
     return result;

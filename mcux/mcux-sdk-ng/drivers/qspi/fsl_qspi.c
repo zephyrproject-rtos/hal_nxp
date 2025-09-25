@@ -187,8 +187,8 @@ void QSPI_GetDefaultQspiConfig(qspi_config_t *config)
 
 #if (!defined(FSL_FEATURE_QSPI_HAS_SOC_SPECIFIC_CONFIG)) || (!FSL_FEATURE_QSPI_HAS_SOC_SPECIFIC_CONFIG)
 #if !defined(FSL_FEATURE_QSPI_CLOCK_CONTROL_EXTERNAL) || (!FSL_FEATURE_QSPI_CLOCK_CONTROL_EXTERNAL)
-    config->clockSource               = 2U;
-    config->baudRate                  = 24000000U;
+    config->clockSource = 2U;
+    config->baudRate    = 24000000U;
 #endif
 #endif
     config->AHBbufferMaster[0]        = 0xE;
@@ -226,6 +226,8 @@ void QSPI_Deinit(QuadSPI_Type *base)
  */
 void QSPI_SetFlashConfig(QuadSPI_Type *base, qspi_flash_config_t *config)
 {
+    assert(FSL_FEATURE_QSPI_AMBA_BASE + config->flashA1Size > FSL_FEATURE_QSPI_AMBA_BASE);
+
     uint32_t address = FSL_FEATURE_QSPI_AMBA_BASE + config->flashA1Size;
     uint32_t val     = 0;
     uint32_t i       = 0;
@@ -238,7 +240,8 @@ void QSPI_SetFlashConfig(QuadSPI_Type *base, qspi_flash_config_t *config)
     address += config->flashA2Size;
     base->SFA2AD = address;
 #if defined(FSL_FEATURE_QSPI_SUPPORT_SINGLE_MODE) && (FSL_FEATURE_QSPI_SUPPORT_SINGLE_MODE)
-    /* For single mode configuration, you must write the same value to SFB1AD and SFB2AD registers that you write to the SFA2AD register. */
+    /* For single mode configuration, you must write the same value to SFB1AD and SFB2AD registers that you write to the
+     * SFA2AD register. */
     base->SFB1AD = address;
     base->SFB2AD = address;
 #endif /* FSL_FEATURE_QSPI_SUPPORT_SINGLE_MODE */
@@ -365,12 +368,15 @@ void QSPI_SetDqsConfig(QuadSPI_Type *base, qspi_dqs_config_t *config)
 void QSPI_SetDelayChainConfig(QuadSPI_Type *base, qspi_delay_chain_config_t *config)
 {
     QUADSPI->DLLCRA &= ~(QuadSPI_DLLCRA_SLV_UPD_MASK | QuadSPI_DLLCRA_SLV_DLL_BYPASS_MASK | QuadSPI_DLLCRA_SLV_EN_MASK |
-                         QuadSPI_DLLCRA_SLV_DLY_COARSE_MASK | QuadSPI_DLLCRA_SLV_DLY_OFFSET_MASK | QuadSPI_DLLCRA_SLV_FINE_OFFSET_MASK |
-                         QuadSPI_DLLCRA_FREQEN_MASK);
+                         QuadSPI_DLLCRA_SLV_DLY_COARSE_MASK | QuadSPI_DLLCRA_SLV_DLY_OFFSET_MASK |
+                         QuadSPI_DLLCRA_SLV_FINE_OFFSET_MASK | QuadSPI_DLLCRA_FREQEN_MASK);
 
-    QUADSPI->DLLCRA |= QuadSPI_DLLCRA_FREQEN(config->highFreqDelay) | QuadSPI_DLLCRA_SLV_FINE_OFFSET(config->fineDelay) | QuadSPI_DLLCRA_SLV_DLY_OFFSET(config->div16Delay) |
-                       QuadSPI_DLLCRA_SLV_DLY_COARSE(config->coarseDelay) | QuadSPI_DLLCRA_SLV_EN(config->dqsDelayEnable) | QuadSPI_DLLCRA_SLV_DLL_BYPASS(config->coarseDelayEnable) |
-                       QuadSPI_DLLCRA_SLV_UPD_MASK;
+    QUADSPI->DLLCRA |= (config->highFreqDelay ? QuadSPI_DLLCRA_FREQEN_MASK : 0U) |
+                       (config->dqsDelayEnable ? QuadSPI_DLLCRA_SLV_EN_MASK : 0U) |
+                       (config->coarseDelayEnable ? QuadSPI_DLLCRA_SLV_DLL_BYPASS_MASK : 0U) |
+                       QuadSPI_DLLCRA_SLV_FINE_OFFSET(config->fineDelay) |
+                       QuadSPI_DLLCRA_SLV_DLY_OFFSET(config->div16Delay) |
+                       QuadSPI_DLLCRA_SLV_DLY_COARSE(config->coarseDelay) | QuadSPI_DLLCRA_SLV_UPD_MASK;
 }
 #endif
 
@@ -443,7 +449,8 @@ void QSPI_ExecuteIPCommand(QuadSPI_Type *base, uint32_t index)
     QSPI_ClearCommandSequence(base, kQSPI_IPSeq);
 
     /* Write the seqid bit */
-    base->IPCR = ((base->IPCR & (~QuadSPI_IPCR_SEQID_MASK)) | QuadSPI_IPCR_SEQID(index / FSL_FEATURE_QSPI_LUT_SEQ_UNIT));
+    base->IPCR =
+        ((base->IPCR & (~QuadSPI_IPCR_SEQID_MASK)) | QuadSPI_IPCR_SEQID(index / FSL_FEATURE_QSPI_LUT_SEQ_UNIT));
 }
 
 /*! brief Executes AHB commands located in LUT table.
@@ -457,7 +464,8 @@ void QSPI_ExecuteAHBCommand(QuadSPI_Type *base, uint32_t index)
     {
     }
     QSPI_ClearCommandSequence(base, kQSPI_BufferSeq);
-    base->BFGENCR = ((base->BFGENCR & (~QuadSPI_BFGENCR_SEQID_MASK)) | QuadSPI_BFGENCR_SEQID(index / FSL_FEATURE_QSPI_LUT_SEQ_UNIT));
+    base->BFGENCR = ((base->BFGENCR & (~QuadSPI_BFGENCR_SEQID_MASK)) |
+                     QuadSPI_BFGENCR_SEQID(index / FSL_FEATURE_QSPI_LUT_SEQ_UNIT));
 }
 
 /*! brief Updates the LUT table.
@@ -468,7 +476,7 @@ void QSPI_ExecuteAHBCommand(QuadSPI_Type *base, uint32_t index)
  */
 void QSPI_UpdateLUT(QuadSPI_Type *base, uint32_t index, uint32_t *cmd)
 {
-    assert(index <= (FSL_FEATURE_QSPI_LUT_DEPTH - FSL_FEATURE_QSPI_LUT_SEQ_UNIT));
+    assert(index <= ((uint32_t)FSL_FEATURE_QSPI_LUT_DEPTH - FSL_FEATURE_QSPI_LUT_SEQ_UNIT));
     assert((index % FSL_FEATURE_QSPI_LUT_SEQ_UNIT) == 0U);
 
     uint8_t i = 0;

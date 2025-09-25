@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -76,8 +75,11 @@ void DAC12_GetHardwareInfo(DAC_Type *base, dac12_hardware_info_t *info)
 {
     assert(NULL != info);
 
-    info->fifoSizeInfo =
-        (dac12_fifo_size_info_t)(uint32_t)((DAC_PARAM_FIFOSZ_MASK & base->PARAM) >> DAC_PARAM_FIFOSZ_SHIFT);
+    uint32_t tmp = ((DAC_PARAM_FIFOSZ_MASK & base->PARAM) >> DAC_PARAM_FIFOSZ_SHIFT);
+
+    assert(tmp <= kDAC12_FIFOSize256);
+
+    info->fifoSizeInfo = (dac12_fifo_size_info_t)tmp;
 }
 
 /*!

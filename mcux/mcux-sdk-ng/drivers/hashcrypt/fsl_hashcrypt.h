@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 NXP
+ * Copyright 2017-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -96,8 +96,10 @@ enum _hashcrypt_status
  *    - Add wait on DIGEST BIT inside hashcrypt_sha_one_block() to fix issues with some optimization flags
  * - Version 2.2.16
  *    - Add DSB instruction inside hashcrypt_sha_ldm_stm_16_words() to fix issues with some optimization flags
+ * - Version 2.2.17
+ *    - Fix context size when hashcrypt built with reload feature
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 16))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 17))
 /*! @} */
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/
@@ -179,7 +181,7 @@ typedef struct _hashcrypt_handle hashcrypt_handle_t;
 
 /*! @brief HASHCRYPT HASH Context size. */
 #if defined(FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE) && (FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE > 0)
-#define HASHCRYPT_HASH_CTX_SIZE 30
+#define HASHCRYPT_HASH_CTX_SIZE 31
 #else
 #define HASHCRYPT_HASH_CTX_SIZE 22
 #endif

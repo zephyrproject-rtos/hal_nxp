@@ -270,18 +270,7 @@ void EDMA_ResetChannel(DMA_Type *base, uint32_t channel)
     base->CH[channel].CH_ES |= DMA_CH_ES_ERR_MASK;
     base->CH[channel].CH_CSR |= DMA_CH_CSR_DONE_MASK;
 
-    /* Reset channel TCD */
-    base->CH[channel].TCD_SADDR          = 0U;
-    base->CH[channel].TCD_SOFF           = 0U;
-    base->CH[channel].TCD_ATTR           = 0U;
-    base->CH[channel].TCD_NBYTES_MLOFFNO = 0U;
-    base->CH[channel].TCD_SLAST_SDA      = 0U;
-    base->CH[channel].TCD_DADDR          = 0U;
-    base->CH[channel].TCD_DOFF           = 0U;
-    base->CH[channel].TCD_CITER_ELINKNO  = 0U;
-    base->CH[channel].TCD_DLAST_SGA      = 0U;
-    base->CH[channel].TCD_CSR            = 0U;
-    base->CH[channel].TCD_BITER_ELINKNO  = 0U;
+    EDMA_TcdReset((edma_tcd_t *)((uint32_t)&base->CH[channel] + 0x00000020));
 }
 
 /*!
@@ -860,6 +849,7 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
 
     uint32_t edmaInstance;
     uint32_t channelIndex;
+    edma_tcd_t *tcdRegs;
 
     handle->base    = base;
     handle->channel = (uint8_t)channel;
@@ -879,7 +869,18 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
        CSR will be 0. Because in order to suit EDMA busy check mechanism in
        EDMA_SubmitTransfer, CSR must be set 0.
     */
-    EDMA_ResetChannel(base, channel);
+    tcdRegs = (edma_tcd_t *)((uint32_t)&handle->base->CH[handle->channel] + 0x00000020);
+    tcdRegs->SADDR = 0;
+    tcdRegs->SOFF = 0;
+    tcdRegs->ATTR = 0;
+    tcdRegs->NBYTES = 0;
+    tcdRegs->SLAST = 0;
+    tcdRegs->DADDR = 0;
+    tcdRegs->DOFF = 0;
+    tcdRegs->CITER = 0;
+    tcdRegs->DLAST_SGA = 0;
+    tcdRegs->CSR = 0;
+    tcdRegs->BITER = 0;
 }
 
 /*!

@@ -32,7 +32,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief WDOG32 driver version. */
-#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*! @} */
 
 /*!
@@ -60,7 +60,7 @@
 #ifdef WDOG_CS_RCS_MASK
 #ifndef WDOG32_RECONFIG_TIMEOUT
     #ifdef CONFIG_WDOG32_RECONFIG_TIMEOUT
-        #define WDOG32_RECONFIG_TIMEOUT WDOG32_RECONFIG_TIMEOUT
+        #define WDOG32_RECONFIG_TIMEOUT CONFIG_WDOG32_RECONFIG_TIMEOUT
     #else
         #define WDOG32_RECONFIG_TIMEOUT 0U
     #endif
@@ -431,7 +431,7 @@ static inline void WDOG32_Refresh(WDOG_Type *base)
  */
 static inline uint16_t WDOG32_GetCounterValue(WDOG_Type *base)
 {
-    return (uint16_t)base->CNT;
+    return (uint16_t)(base->CNT & 0xffffu);
 }
 
 /*! @} */

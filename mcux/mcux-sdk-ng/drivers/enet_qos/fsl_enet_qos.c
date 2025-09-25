@@ -19,8 +19,10 @@
 /*! @brief Defines 10^6 microsecond.*/
 #define ENET_QOS_MICRSECS_ONESECOND (1000000U)
 
+#ifndef ENET_QOS_RXBUFF_IGNORELSB_BITS
 /*! @brief Rx buffer LSB ignore bits. */
 #define ENET_QOS_RXBUFF_IGNORELSB_BITS (3U)
+#endif /* ENET_QOS_RXBUFF_IGNORELSB_BITS */
 /*! @brief ENET FIFO size unit. */
 #define ENET_QOS_FIFOSIZE_UNIT (256U)
 /*! @brief ENET half-dulpex default IPG. */
@@ -284,6 +286,7 @@ static status_t ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_confi
         return kStatus_InvalidArgument;
     }
 
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
     if (kENET_QOS_RmiiMode == config->miiMode)
     {
         /* Disable enet qos clock first. */
@@ -294,6 +297,10 @@ static status_t ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_confi
         /* Enable enet qos clock. */
         ENET_QOS_EnableClock(true);
     }
+#else
+    /* Enable enet qos clock. */
+    ENET_QOS_EnableClock(true);
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
 
     /* Set MII mode*/
     ENET_QOS_SetSYSControl(config->miiMode);
@@ -316,8 +323,10 @@ static status_t ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_confi
             reg |= ENET_QOS_MAC_CONFIGURATION_IPG(ENET_QOS_HALFDUPLEX_DEFAULTIPG);
         }
         base->MAC_CONFIGURATION = reg;
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
         /* Enable enet qos clock. */
         ENET_QOS_EnableClock(true);
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
         for (uint32_t i = 0U; i < 100UL; i++)
         {
             __NOP();
@@ -407,7 +416,11 @@ static void ENET_QOS_SetMTL(ENET_QOS_Type *base, const enet_qos_config_t *config
             rxqOpReg |= ENET_QOS_MTL_RXQX_OP_MODE_RQS(
                 ((uint32_t)ENET_QOS_MTL_RXFIFOSIZE / ((uint32_t)multiqCfg->rxQueueUse * ENET_QOS_FIFOSIZE_UNIT)) - 1U);
             base->MTL_QUEUE[index].MTL_RXQX_OP_MODE = rxqOpReg;
+#if ENET_QOS_MAC_RXQ_CTRL_COUNT > 3
             mtlrxQuemapReg                          = (index < 4U) ? &base->MTL_RXQ_DMA_MAP0 : &base->MTL_RXQ_DMA_MAP1;
+#else
+            mtlrxQuemapReg                          = &base->MTL_RXQ_DMA_MAP0;
+#endif /* ENET_QOS_MAC_RXQ_CTRL_COUNT > 3 */
             configIndex                             = (index & 0x3U);
             *mtlrxQuemapReg &= ~((uint32_t)ENET_QOS_MTL_RXQ_DMA_MAP0_Q0MDMACH_MASK << (8U * configIndex));
             *mtlrxQuemapReg |= (uint32_t)ENET_QOS_MTL_RXQ_DMA_MAP0_Q0MDMACH(multiqCfg->rxQueueConfig[index].mapChannel)
@@ -459,9 +472,11 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
         base->MAC_TX_FLOW_CTRL_Q[0] = ENET_QOS_MAC_TX_FLOW_CTRL_Q_PT(config->pauseDuration);
     }
 
+#ifdef ENET_QOS_MAC_ONEUS_TIC_COUNTER_TIC_1US_CNTR
     /* Set the 1us ticket. */
     reg                         = config->csrClock_Hz / ENET_QOS_MICRSECS_ONESECOND - 1U;
     base->MAC_ONEUS_TIC_COUNTER = ENET_QOS_MAC_ONEUS_TIC_COUNTER_TIC_1US_CNTR(reg);
+#endif /* ENET_QOS_MAC_ONEUS_TIC_COUNTER_TIC_1US_CNTR */
 
     /* Set the speed and duplex. */
     reg = ENET_QOS_MAC_CONFIGURATION_DM(config->miiDuplex) | (uint32_t)config->miiSpeed |
@@ -480,12 +495,17 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
         reg = 0U;
         uint8_t configIndex;
         enet_qos_multiqueue_config_t *multiqCfg = config->multiqueueCfg;
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
         uint32_t txQueuePrioMap0                = base->MAC_TXQ_PRTY_MAP0;
         uint32_t txQueuePrioMap1                = base->MAC_TXQ_PRTY_MAP1;
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
         uint32_t rxQueuePrioMap0                = base->MAC_RXQ_CTRL[2];
+#if ENET_QOS_MAC_RXQ_CTRL_COUNT > 3
         uint32_t rxQueuePrioMap1                = base->MAC_RXQ_CTRL[3];
+#endif /* ENET_QOS_MAC_RXQ_CTRL_COUNT > 3 */
         uint32_t rxCtrlReg1                     = base->MAC_RXQ_CTRL[1];
 
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
         for (uint8_t index = 0U; index < multiqCfg->txQueueUse; index++)
         {
             configIndex = index & 0x3U;
@@ -504,6 +524,7 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
                                    << (8U * configIndex);
             }
         }
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
 
         for (uint8_t index = 0U; index < multiqCfg->rxQueueUse; index++)
         {
@@ -516,12 +537,14 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
                 rxQueuePrioMap0 |= (uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0(multiqCfg->rxQueueConfig[index].priority)
                                    << (8U * configIndex);
             }
+#if ENET_QOS_MAC_RXQ_CTRL_COUNT > 3
             else
-            {
+            {              
                 rxQueuePrioMap1 &= ~((uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0_MASK << (8U * configIndex));
                 rxQueuePrioMap1 |= (uint32_t)ENET_QOS_MAC_RXQ_CTRL_PSRQ0(multiqCfg->rxQueueConfig[index].priority)
                                    << (8U * configIndex);
             }
+#endif /* ENET_QOS_MAC_RXQ_CTRL_COUNT > 3 */
 
             /* Configure queue enable mode. */
             reg |= ENET_QOS_MAC_RXQ_CTRL_RXQ0EN((uint32_t)multiqCfg->rxQueueConfig[index].mode) << (2U * index);
@@ -539,11 +562,13 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
                 rxCtrlReg1 |= ENET_QOS_MAC_RXQ_CTRL_PTPQ(index);
             }
 
+#if defined(ENET_QOS_MAC_RXQ_CTRL_DCBCPQ_MASK) && defined(ENET_QOS_MAC_RXQ_CTRL_DCBCPQ)
             if (((uint8_t)multiqCfg->rxQueueConfig[index].packetRoute & (uint8_t)kENET_QOS_PacketDCBCPQ) != 0U)
             {
                 rxCtrlReg1 &= ~ENET_QOS_MAC_RXQ_CTRL_DCBCPQ_MASK;
                 rxCtrlReg1 |= ENET_QOS_MAC_RXQ_CTRL_DCBCPQ(index);
             }
+#endif /* ENET_QOS_MAC_RXQ_CTRL_DCBCPQ_MASK && ENET_QOS_MAC_RXQ_CTRL_DCBCPQ */
 
             if (((uint8_t)multiqCfg->rxQueueConfig[index].packetRoute & (uint8_t)kENET_QOS_PacketUPQ) != 0U)
             {
@@ -558,10 +583,14 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
             }
         }
 
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
         base->MAC_TXQ_PRTY_MAP0 = txQueuePrioMap0;
         base->MAC_TXQ_PRTY_MAP1 = txQueuePrioMap1;
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
         base->MAC_RXQ_CTRL[2]   = rxQueuePrioMap0;
+#if ENET_QOS_MAC_RXQ_CTRL_COUNT > 3
         base->MAC_RXQ_CTRL[3]   = rxQueuePrioMap1;
+#endif /* ENET_QOS_MAC_RXQ_CTRL_COUNT > 3 */
         base->MAC_RXQ_CTRL[1]   = rxCtrlReg1;
     }
     else
@@ -578,7 +607,9 @@ static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
      */
     base->MAC_MMC_RX_INTERRUPT_MASK     = 0xFFFFFFFFU;
     base->MAC_MMC_TX_INTERRUPT_MASK     = 0xFFFFFFFFU;
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
     base->MAC_MMC_IPC_RX_INTERRUPT_MASK = 0xFFFFFFFFU;
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
     base->MAC_MMC_FPE_RX_INTERRUPT_MASK = 0xFFFFFFFFU;
     base->MAC_MMC_FPE_TX_INTERRUPT_MASK = 0xFFFFFFFFU;
 
@@ -1418,10 +1449,12 @@ void ENET_QOS_ClearMacInterruptStatus(ENET_QOS_Type *base, uint32_t mask)
     {
         dummy = base->MAC_TIMESTAMP_STATUS;
     }
+#ifdef ENET_QOS_MAC_INTERRUPT_ENABLE_PMTIE_MASK
     else if ((mask & (uint32_t)kENET_QOS_MacPmt) != 0U)
     {
         dummy = base->MAC_PMT_CONTROL_STATUS;
     }
+#endif /* ENET_QOS_MAC_INTERRUPT_ENABLE_PMTIE_MASK */
     else
     {
         /* Add for avoid the misra 2004 rule 14.10 */
@@ -2021,6 +2054,7 @@ status_t ENET_QOS_MDIOC45Read(ENET_QOS_Type *base, uint8_t portAddr, uint8_t dev
     return result;
 }
 
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
 /*!
  * brief Set the MAC to enter into power down mode.
  * the remote power wake up frame and magic frame can wake up
@@ -2059,6 +2093,7 @@ void ENET_QOS_EnterPowerDown(ENET_QOS_Type *base, uint32_t *wakeFilter)
     /* Enable the MAC rx. */
     base->MAC_CONFIGURATION |= ENET_QOS_MAC_CONFIGURATION_RE_MASK;
 }
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
 
 /*!
  * brief Enable/Disable Rx parser, please notice that for enable/disable Rx Parser,
@@ -3792,6 +3827,7 @@ status_t ENET_QOS_ReadRxParser(ENET_QOS_Type *base, enet_qos_rxp_config_t *rxpCo
     return result;
 }
 
+#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
 /*!
  * brief Configure flexible rx parser.
  *
@@ -3895,6 +3931,7 @@ status_t ENET_QOS_ConfigureRxParser(ENET_QOS_Type *base, enet_qos_rxp_config_t *
 
     return result;
 }
+#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
 
 /*!
  * brief Gets statistical data in transfer.
@@ -3925,6 +3962,8 @@ void ENET_QOS_GetStatistics(ENET_QOS_Type *base, enet_qos_transfer_stats_t *stat
 void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
 {
     /* Check for the interrupt source type. */
+
+#ifdef ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK
     /* DMA CHANNEL 0. */
     if ((base->DMA_INTERRUPT_STATUS & ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK) != 0U)
     {
@@ -3943,7 +3982,9 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             ENET_QOS_ReclaimTxDescriptor(base, handle, 0);
         }
     }
+#endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC0IS_MASK */
 
+#ifdef ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK
     /* DMA CHANNEL 1. */
     if ((base->DMA_INTERRUPT_STATUS & ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK) != 0U)
     {
@@ -3962,7 +4003,9 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             ENET_QOS_ReclaimTxDescriptor(base, handle, 1);
         }
     }
+#endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC1IS_MASK */
 
+#ifdef ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_MASK
     /* DMA CHANNEL 2. */
     if ((base->DMA_INTERRUPT_STATUS & ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_MASK) != 0U)
     {
@@ -3981,7 +4024,9 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             ENET_QOS_ReclaimTxDescriptor(base, handle, 2);
         }
     }
+#endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC2IS_MASK */
 
+#ifdef ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_MASK
     /* DMA CHANNEL 3. */
     if ((base->DMA_INTERRUPT_STATUS & ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_MASK) != 0U)
     {
@@ -4000,6 +4045,7 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle)
             ENET_QOS_ReclaimTxDescriptor(base, handle, 3);
         }
     }
+#endif /* ENET_QOS_DMA_INTERRUPT_STATUS_DC3IS_MASK */
 
     /* MAC TIMESTAMP. */
     if ((base->DMA_INTERRUPT_STATUS & ENET_QOS_DMA_INTERRUPT_STATUS_MACIS_MASK) != 0U)
@@ -4028,5 +4074,13 @@ void CONNECTIVITY_EQOS_INT_DriverIRQHandler(void);
 void CONNECTIVITY_EQOS_INT_DriverIRQHandler(void)
 {
     s_enetqosIsr(CONNECTIVITY__ENET_QOS, s_ENETHandle[0]);
+}
+#endif
+
+#if defined(ENET_QOS_EMAC_USED_AS_ENET_QOS)
+void EMAC_0_DriverIRQHandler(void);
+void EMAC_0_DriverIRQHandler(void)
+{
+    s_enetqosIsr(EMAC, s_ENETHandle[0]);
 }
 #endif

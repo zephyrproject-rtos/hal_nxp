@@ -18,7 +18,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_FLASH_C40_DRIVER_VERSION (MAKE_VERSION(1, 1, 0))
+#define FSL_FLASH_C40_DRIVER_VERSION (MAKE_VERSION(1, 2, 0))
 /*! @} */
 
 

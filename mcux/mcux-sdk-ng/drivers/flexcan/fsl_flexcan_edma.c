@@ -82,8 +82,8 @@ static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, 
             {
                 /* Enhanced Rx FIFO ID HIT offset is changed dynamically according to data length code (DLC) . */
                 idHitIndex     = (DLC_LENGTH_DECODE(framefd->length) + 3U) / 4U;
-                /* If idHitIndex is 16 or DLC is 15, no need to get idhit or hrtimestamp individually. */
-                if (idHitIndex < 16U)
+                /* If idHitIndex is 12 or DLC is 14, need to get idhit or hrtimestamp individually. */
+                if (idHitIndex <= 12U)
                 {
                     framefd->idhit = framefd->dataWord[idHitIndex];
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)

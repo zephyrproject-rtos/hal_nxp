@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -149,9 +149,13 @@ typedef enum _ftfx_security_state
  */
 typedef enum _ftfx_flexram_function_option
 {
-    kFTFx_FlexramFuncOptAvailableAsRam     = 0xFFU, /*!< An option used to make FlexRAM available as RAM */
-    kFTFx_FlexramFuncOptAvailableForEeprom = 0x00U  /*!< An option used to make FlexRAM available for EEPROM */
+    kFTFx_FlexramFuncOptAvailableAsRam               = 0xFFU, /*!< An option used to make FlexRAM available as RAM */
+    kFTFx_FlexramFuncOptEepromQuickWriteRecovery     = 0xAAU, /*!< An option used to complete interrupted EEPROM quick write process */
+    kFTFx_FlexramFuncOptEepromQuickWriteStatus       = 0x77U, /*!< An option used to make EEPROM quick write status query */
+    kFTFx_FlexramFuncOptAvailableForEepromQuickWrite = 0x55U, /*!< An option used to make FlexRAM available for EEPROM in Quick Write mode */
+    kFTFx_FlexramFuncOptAvailableForEeprom           = 0x00U  /*!< An option used to make FlexRAM available for EEPROM */
 } ftfx_flexram_func_opt_t;
+
 
 /*!
  * @brief Enumeration for acceleration ram property.
@@ -210,6 +214,33 @@ typedef struct _ftfx_swap_state_config
     ftfx_swap_block_status_t nextSwapBlockStatus;    /*!< The next Swap block status.*/
 } ftfx_swap_state_config_t;
 #endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */
+
+
+#ifdef FSL_FEATURE_FLASH_IS_FTFC
+
+/*!
+ * @brief Enumeration for EEPROM Quick Write Brown-out detection codes
+ */
+typedef enum _ftfx_eeprom_qw_bo_code
+{
+    kFTFx_EepromQW_BO_NoIssue             = 0x00U, /*!< No EEPROM issues detected. */
+    kFTFx_EepromQW_BO_BeforeQWMaintenance = 0x01U, /*!< BO detected before completing EEPROM quick write maintenance.*/
+    kFTFx_EepromQW_BO_BeforeQW            = 0x02U, /*!< BO detected before completing EEPROM quick writes.*/
+    kFTFx_EepromQW_BO_DuringNormalWrite   = 0x04U, /*!< BO detected during normal EEPROM write activity.*/
+} ftfx_eeprom_qw_bo_code;
+
+/*!
+ * @brief EEPROM Quick Write Status
+ */
+
+typedef struct _ftfx_flexram_eeprom_qw_status
+{
+    ftfx_eeprom_qw_bo_code brownoutStatus;
+    uint16_t recordsRequireMaintenanceCount;
+    uint16_t sectorEraseCount;
+} ftfx_flexram_eeprom_qw_status;
+
+#endif /* FSL_FEATURE_FLASH_IS_FTFC */
 
 /*!
  * @brief Enumeration for FTFx memory type.
@@ -793,6 +824,7 @@ status_t FTFx_CMD_SecurityBypass(ftfx_config_t *config, const uint8_t *backdoorK
  */
 
 #if defined(FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD) && FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD
+
 /*!
  * @brief Sets the FlexRAM function command.
  *
@@ -806,7 +838,31 @@ status_t FTFx_CMD_SecurityBypass(ftfx_config_t *config, const uint8_t *backdoorK
  * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
+
 status_t FTFx_CMD_SetFlexramFunction(ftfx_config_t *config, ftfx_flexram_func_opt_t option);
+
+#ifdef FSL_FEATURE_FLASH_IS_FTFC
+
+/*!
+ * @brief Sets the FlexRAM function command with EEPROM Quick Write feature
+ *
+ * @param config A pointer to the storage for the driver runtime state.
+ * @param option The option used to set the work mode of FlexRAM.
+ * @param qwSize Number of FlexRAM bytes allocated for EEPROM quick writes
+ * @param returnInfo Pointer to Quick Write Status info, can be NULL when not used.
+ *
+ * @retval #kStatus_FTFx_Success API was executed successfully.
+ * @retval #kStatus_FTFx_InvalidArgument An invalid argument is provided.
+ * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
+ * @retval #kStatus_FTFx_AccessError Invalid instruction codes and out-of bounds addresses.
+ * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
+ * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
+ */
+
+status_t FTFx_CMD_SetFlexramFunction_QuickWrite(ftfx_config_t *config, ftfx_flexram_func_opt_t option, uint16_t qwSize, ftfx_flexram_eeprom_qw_status *returnInfo);
+
+#endif /* #ifdef FSL_FEATURE_FLASH_IS_FTFC */
+
 #endif /* FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD */
 
 /*! @} */

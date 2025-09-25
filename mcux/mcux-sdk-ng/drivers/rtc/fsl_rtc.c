@@ -118,6 +118,10 @@ static uint32_t RTC_ConvertDatetimeToSeconds(const rtc_datetime_t *datetime)
      * represented in the hours, minutes and seconds field*/
     seconds += ((uint32_t)datetime->day - 1U);
     /* For leap year if month less than or equal to Febraury, decrement day counter*/
+    /*
+     * $Branch Coverage Justification$
+     * ((0U == (datetime->year & 3U)) && (datetime->month <= 2U) && 0U == seconds) cannot be covered, when it is leap year(>1970), the seconds cannot be 0U
+     */
     if ((0U == (datetime->year & 3U)) && (datetime->month <= 2U) && 0U != seconds)
     {
         seconds--;
@@ -248,13 +252,19 @@ void RTC_Init(RTC_Type *base, const rtc_config_t *config)
     reg &= ~(RTC_CR_WPS_MASK);
     reg |= RTC_CR_WPS(config->wakeupSelect ? 1U : 0U);
 #endif /* FSL_FEATURE_RTC_HAS_WAKEUP_PIN */
+
+#if !(defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT == 0)
+    reg &= ~RTC_CR_CLKO_MASK;
+    reg |= RTC_CR_CLKO(config->clockOutput ? 1U : 0U);
+#endif /* FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT */
+
     base->CR = reg;
 
     /* Configure the RTC time compensation register */
     base->TCR = (RTC_TCR_CIR(config->compensationInterval) | RTC_TCR_TCR(config->compensationTime));
 
 #if defined(FSL_FEATURE_RTC_HAS_TSIC) && FSL_FEATURE_RTC_HAS_TSIC
-    /* Configure RTC timer seconds interrupt to be generated once per second */
+    /* Configure RTC timer seconds interrupt to be generated once per second and disable the interrupt */
     base->IER &= ~(RTC_IER_TSIC_MASK | RTC_IER_TSIE_MASK);
 #endif
 }
@@ -279,6 +289,10 @@ void RTC_GetDefaultConfig(rtc_config_t *config)
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));
 
+#if !(defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT == 0)
+    /* Clock output is disabled by default */
+    config->clockOutput = false;
+#endif /* FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT */
     /* Wakeup pin will assert if the RTC interrupt asserts or if the wakeup pin is turned on */
     config->wakeupSelect = false;
     /* Registers cannot be written when locked */
@@ -902,3 +916,33 @@ status_t RTC_IncrementMonotonicCounter(RTC_Type *base)
 }
 
 #endif /* FSL_FEATURE_RTC_HAS_MONOTONIC */
+
+#if defined(FSL_FEATURE_RTC_HAS_TSIC) && FSL_FEATURE_RTC_HAS_TSIC
+
+/*!
+ * brief Sets the RTC timer seconds interrupt frequency.
+ *
+ * This function sets the RTC timer seconds interrupt frequency.
+ *
+ * param base   RTC peripheral base address
+ * param freq   The timer seconds interrupt frequency. This is a member of the
+ *               enumeration ::rtc_timer_seconds_interrupt_frequency_t
+ */
+void RTC_SetTimerSecondsInterruptFrequency(RTC_Type *base, rtc_timer_seconds_interrupt_frequency_t freq)
+{
+    assert(freq < kRTC_TimerSecondsFrequency128Hz);
+    uint32_t reg = base->IER;
+
+    reg &= ~(RTC_IER_TSIC_MASK);
+    reg |= RTC_IER_TSIC(freq);
+
+    /* Enable the timer seconds interrupt if not enabled */
+    if ((reg & RTC_IER_TSIE_MASK) != 0U)
+    {
+        reg |= RTC_IER_TSIE_MASK;
+    }
+
+    base->IER = reg;
+}
+
+#endif /* FSL_FEATURE_RTC_HAS_TSIC */

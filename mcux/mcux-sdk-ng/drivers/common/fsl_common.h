@@ -161,6 +161,7 @@ enum _status_groups
     kStatusGroup_XSPI                  = 108, /*!< Group number for XSPI status codes */
     kStatusGroup_PNGDEC                = 109, /*!< Group number for PNGDEC status codes */
     kStatusGroup_JPEGDEC               = 110, /*!< Group number for JPEGDEC status codes */
+    kStatusGroup_AUDMIX                = 111, /*!< Group number for AUDMIX status codes */
 
     kStatusGroup_HAL_GPIO       = 121, /*!< Group number for HAL GPIO status codes. */
     kStatusGroup_HAL_UART       = 122, /*!< Group number for HAL UART status codes. */

@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexio_uart_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_uart)
-    mcux_component_version(2.6.2)
+    mcux_component_version(2.6.4)
 
     mcux_add_source(SOURCES fsl_flexio_uart.c fsl_flexio_uart.h)
 

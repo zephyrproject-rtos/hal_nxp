@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2023,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -373,7 +373,8 @@ void TRDC_SetFlashLogicalWindow(TRDC_Type *base, const trdc_flw_config_t *flwCon
 
     base->TRDC_FLW_ABASE = flwConfiguration->arrayBaseAddr;
     base->TRDC_FLW_BCNT  = flwConfiguration->blockCount;
-    base->TRDC_FLW_CTL   = TRDC_TRDC_FLW_CTL_V(flwConfiguration->enable) | TRDC_TRDC_FLW_CTL_LK(flwConfiguration->lock);
+    base->TRDC_FLW_CTL   = TRDC_TRDC_FLW_CTL_V(flwConfiguration->enable ? 1U : 0U) |
+                            TRDC_TRDC_FLW_CTL_LK(flwConfiguration->lock ? 1U : 0U);
 }
 
 #if (((__CORTEX_M == 0U) && (defined(__ICCARM__))) || (defined(__XTENSA__)))
@@ -579,26 +580,26 @@ void TRDC_MrcSetMemoryAccessConfig(TRDC_Type *base,
 }
 
 /*!
- * brief Enables the update of the selected domians.
+ * brief Enables the update of the selected domains.
  *
- * After the domians' update are enabled, their regions' NSE bits can be set or clear.
+ * After the domains' update are enabled, their regions' NSE bits can be set or clear.
  *
  * param base TRDC peripheral base address.
  * param mrcIdx MRC index.
- * param domianMask Bit mask of the domains to be enabled.
+ * param domainMask Bit mask of the domains to be enabled.
  * param enable True to enable, false to disable.
  */
-void TRDC_MrcEnableDomainNseUpdate(TRDC_Type *base, uint8_t mrcIdx, uint16_t domianMask, bool enable)
+void TRDC_MrcEnableDomainNseUpdate(TRDC_Type *base, uint8_t mrcIdx, uint16_t domainMask, bool enable)
 {
     assert(NULL != base);
 
     if (enable)
     {
-        base->MRC_INDEX[mrcIdx].MRC_NSE_RGN_INDIRECT |= ((uint32_t)domianMask << 16U);
+        base->MRC_INDEX[mrcIdx].MRC_NSE_RGN_INDIRECT |= ((uint32_t)domainMask << 16U);
     }
     else
     {
-        base->MRC_INDEX[mrcIdx].MRC_NSE_RGN_INDIRECT &= ~((uint32_t)domianMask << 16U);
+        base->MRC_INDEX[mrcIdx].MRC_NSE_RGN_INDIRECT &= ~((uint32_t)domainMask << 16U);
     }
 }
 
@@ -641,7 +642,7 @@ void TRDC_MrcRegionNseClear(TRDC_Type *base, uint8_t mrcIdx, uint16_t regionMask
  *
  * param base TRDC peripheral base address.
  * param mrcIdx MRC index.
- * param domainMask Bit mask of the domians whose NSE bits to clear.
+ * param domainMask Bit mask of the domains whose NSE bits to clear.
  */
 void TRDC_MrcDomainNseClear(TRDC_Type *base, uint8_t mrcIdx, uint16_t domainMask)
 {
@@ -690,7 +691,7 @@ void TRDC_MrcSetRegionDescriptorConfig(TRDC_Type *base, const trdc_mrc_region_de
 
     /* Set configuration for word 1 */
     regAddr += 4U;
-    data = TRDC_MRC_DOM0_RGD_W_VLD(config->valid) | TRDC_MRC_DOM0_RGD_W_NSE(config->nseEnable) |
+    data = TRDC_MRC_DOM0_RGD_W_VLD(config->valid ? 1U : 0U) | TRDC_MRC_DOM0_RGD_W_NSE(config->nseEnable ? 1U : 0U) |
            ((config->endAddr) & ~(TRDC_MRC_DOM0_RGD_W_VLD_MASK | TRDC_MRC_DOM0_RGD_W_NSE_MASK));
     *(uint32_t *)regAddr = data;
 }

@@ -203,6 +203,8 @@ static void FLEXIO_MCULCD_RxEDMACallback(edma_handle_t *DmaHandle, void *param, 
 
 static void FLEXIO_MCULCD_EDMAConfig(FLEXIO_MCULCD_Type *base, flexio_mculcd_edma_handle_t *handle)
 {
+    assert(handle->remainingCount / handle->minorLoopBytes != 0U);
+
     edma_transfer_config_t xferConfig = {0};
     edma_transfer_size_t transferSize = kEDMA_TransferSize1Bytes;
     int16_t offset;
@@ -326,6 +328,8 @@ status_t FLEXIO_MCULCD_TransferCreateHandleEDMA(FLEXIO_MCULCD_Type *base,
                                                 edma_handle_t *rxDmaHandle)
 {
     assert(NULL != handle);
+    assert(base->txShifterEndIndex > base->txShifterStartIndex);
+    assert(base->rxShifterEndIndex > base->rxShifterStartIndex);
 
     /* Zero the handle. */
     (void)memset(handle, 0, sizeof(*handle));

@@ -239,7 +239,7 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
     base->CFGR1 = (base->CFGR1 & ~(LPSPI_CFGR1_OUTCFG_MASK | LPSPI_CFGR1_PINCFG_MASK | LPSPI_CFGR1_NOSTALL_MASK |
                                    LPSPI_CFGR1_SAMPLE_MASK | LPSPI_CFGR1_PCSCFG_MASK )) |
                   LPSPI_CFGR1_OUTCFG(masterConfig->dataOutConfig) | LPSPI_CFGR1_PINCFG(masterConfig->pinCfg) |
-                  LPSPI_CFGR1_NOSTALL(0) | LPSPI_CFGR1_SAMPLE((uint32_t)masterConfig->enableInputDelay )|
+                  LPSPI_CFGR1_NOSTALL(0) | LPSPI_CFGR1_SAMPLE(masterConfig->enableInputDelay ? 1U : 0U) |
                   LPSPI_CFGR1_PCSCFG(masterConfig->pcsFunc);
 
     /* Set baudrate and delay times*/
@@ -764,6 +764,7 @@ uint32_t LPSPI_MasterSetDelayTimes(LPSPI_Type *base,
     /* write the best scaler value for the delay */
     LPSPI_MasterSetDelayScaler(base, bestScaler, whichDelay);
 
+    assert(bestDelay <= UINT32_MAX);
     /* return the actual calculated delay value (in ns) */
     return (uint32_t)bestDelay;
 }

@@ -189,9 +189,9 @@ void CMU_FC_CalcOptimumThreshold(cmu_fc_config_t *config,
     float f_ref_clk_min = (float)ref_clk * (1.0f - ref_clk_deviation);
 
     config->highThresholdCnt =
-        (uint32_t)(ceil((double)((f_m_clk_max / f_ref_clk_min) * (float)config->refClockCount + 3.0f)));
+        (uint32_t)ceilf((f_m_clk_max / f_ref_clk_min) * (float)config->refClockCount + 3.0f);
     config->lowThresholdCnt =
-        (uint32_t)(ceil((double)((f_m_clk_min / f_ref_clk_max) * (float)config->refClockCount - 3.0f)));
+        (uint32_t)ceilf((f_m_clk_min / f_ref_clk_max) * (float)config->refClockCount - 3.0f);
 }
 
 /*!
@@ -209,7 +209,7 @@ void CMU_FC_RegisterCallBack(CMU_FC_Type *base, cmu_fc_callback_t cb_func)
 /* IRQ handler functions overloading weak symbols in the startup */
 void CMU_FC_DriverIRQHandler(uint32_t idx)
 {
-    if (idx > ARRAY_SIZE(s_cmufcBases))
+    if (idx >= ARRAY_SIZE(s_cmufcBases))
     {
         return;
     }

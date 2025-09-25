@@ -1542,3 +1542,71 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask)
     /* Clear the channel status flags by writing a 0 to the bit */
     base->STATUS &= ~(mask & 0xFFU);
 }
+
+#if (defined(FSL_FEATURE_FTM_HAS_ERRATA_010856) && FSL_FEATURE_FTM_HAS_ERRATA_010856)
+/*!
+ * brief Workaround for ERR010856.
+ *
+ * This API should be invoked in TOF interrupt handler when a fault is detected to ensure that the outputs
+ * return to the value configured by SWOCTRL, then FTM should be configured as follows:
+ *  - MODE[FAULTM] configured for manual fault clearing. (MODE[FAULTM] = 0b10)
+ *  - For devices that include the CONF[NUMTOF] field, it must be cleared to 0b00000.
+ *  - SYNC[SYNCHOM] and SYNCONF[SWOC] configured for update OUTMASK and SWOCTRL register at each rising
+ *    edge of system clock. (SYNC[SYNCHOM] = 0, SYNCONF[SWOC] = 0)
+ *
+ * param base         FTM peripheral base address
+ * param faultFlag    Pointer to variable to indicate that a fault was detected
+ * param channel      Channels controlled by Software output, logical OR of enumeration ::ftm_channel_index_t
+ * param channelValue Channels value controlled by Software output, logical OR of enumeration ::ftm_channel_index_t
+ */
+void FTM_ERRATA_010856(FTM_Type *base, uint8_t *faultFlag, uint32_t channel, uint32_t channelValue)
+{
+    /* 
+     * Step1: Check the value of FMS[FAULTF].
+     *  - If FMS[FAULTF] = 1 (fault occurred or is occurring), then set a variable to indicate
+     *    that a fault was detected and continue to step 2.
+     *  - If FMS[FAULTF] = 0 but the fault variable is set (fault is not active, but was previously
+     *    detected), continue to step 6.
+     */
+    if ((base->FMS & FTM_FMS_FAULTF_MASK) != 0U)
+    {
+        *faultFlag = 1U;
+
+        /* 
+         * Step2: Write OUTMASK register to set bits corresponding to any channels that are
+         * controlled by SWOCTRL to temporarily inactivate the channel output.
+         */
+        base->OUTMASK |= channel;
+
+        /* Step3: Clear fault conditions by reading FMS register and writing FMS with all zeroes. */
+        base->FMS &= 0U;
+
+        /* Step4: Clear the SC[TOF] bit by reading the SC register, then writing a 0 to SC[TOF]. */
+        base->SC &= ~FTM_SC_TOF_MASK;
+
+        /* Step5: Exit the interrupt handler. */
+    }
+    else if (((base->FMS & FTM_FMS_FAULTF_MASK) == 0U) && (*faultFlag == 1U))
+    {
+        /* Step6: Clear SWOCTRL by writing all zeroes to it. */
+        base->SWOCTRL = 0U;
+
+        /* Step7: Write FTM_SWOCTRL with the desired value again. */
+        base->SWOCTRL = (channel | (channelValue << FTM_SWOCTRL_CH0OCV_SHIFT));
+
+        /* Step8: Clear the FTM_OUTMASK bits that were set in Step2. */
+        base->OUTMASK &= ~channel;
+
+        /* Step9: Clear fault variable that was set in Step1 when fault condition was originally detected. */
+        *faultFlag = 0U;
+
+        /* Step10: Clear the SC[TOF] bit by reading the SC register, then writing a 0 to SC[TOF]. */
+        base->SC &= ~FTM_SC_TOF_MASK;
+    }
+    else
+    {
+        /* If fault is not active and previously not detected, Clear the SC[TOF] bit. */
+        base->SC &= ~FTM_SC_TOF_MASK;
+    }
+}
+#endif

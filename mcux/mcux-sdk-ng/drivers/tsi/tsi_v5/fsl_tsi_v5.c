@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -95,7 +95,7 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     temp       = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK);
     base->MODE = temp | (TSI_MODE_S_SEN(config->enableSensitivity) | TSI_MODE_SETCLK(config->commonConfig.mainClock) |
                          TSI_MODE_MODE(config->commonConfig.mode));
-    base->SHIELD |= (uint32_t)config->enableShield;
+    base->SHIELD = (uint32_t)config->enableShield;
 #endif
 
     base->GENCS =

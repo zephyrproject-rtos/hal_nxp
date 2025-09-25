@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC DMA driver version 2.4.1 */
-#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+/*! @brief DMIC DMA driver version 2.4.2 */
+#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
 /*! @brief DMIC transfer structure. */
