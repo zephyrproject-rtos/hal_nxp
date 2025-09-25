@@ -193,8 +193,8 @@ static void CLOCK_FllStableDelay(void)
        Should wait at least 1ms. Because in these modes, the core clock is 100MHz
        at most, so this function could obtain the 1ms delay.
      */
-    volatile uint32_t i = 30000U;
-    while (0U != (i--))
+    volatile uint32_t i = 30001U;
+    while (0U != (--i))
     {
         __NOP();
     }
@@ -796,6 +796,7 @@ uint32_t CLOCK_GetPll0Freq(void)
         mcgpll0prdiv = ((uint8_t)FSL_FEATURE_MCG_PLL_PRDIV_BASE + MCG_C5_PRDIV0_VAL);
         mcgpll0clk /= (uint32_t)mcgpll0prdiv;
         mcgpll0vdiv = ((uint8_t)FSL_FEATURE_MCG_PLL_VDIV_BASE + MCG_C6_VDIV0_VAL);
+        assert((UINT32_MAX / mcgpll0clk) >= mcgpll0vdiv);
         mcgpll0clk *= (uint32_t)mcgpll0vdiv;
 
         freq = mcgpll0clk;
@@ -839,12 +840,12 @@ status_t CLOCK_SetExternalRefClkConfig(mcg_oscsel_t oscsel)
         needDelay = false;
     }
 
-    MCG->C7 = (uint8_t)(MCG->C7 & ~MCG_C7_OSCSEL_MASK) | MCG_C7_OSCSEL(oscsel);
+    MCG->C7 = (uint8_t)((MCG->C7 & ~MCG_C7_OSCSEL_MASK) & 0xFFU) | MCG_C7_OSCSEL(oscsel);
     if (needDelay)
     {
         /* ERR009878 Delay at least 50 micro-seconds for external clock change valid. */
-        i = 1500U;
-        while (0U != (i--))
+        i = 1501U;
+        while (0U != (--i))
         {
             __NOP();
         }
@@ -894,19 +895,19 @@ status_t CLOCK_SetInternalRefClkConfig(uint8_t enableMode, mcg_irc_mode_t ircs, 
         if (((0U != (MCG->C1 & MCG_C1_IRCLKEN_MASK)) || (mcgOutClkState == (uint32_t)kMCG_ClkOutStatInt)) &&
             (kMCG_IrcFast == curIrcs))
         {
-            MCG->C2 = (uint8_t)((MCG->C2 & ~MCG_C2_IRCS_MASK) | (MCG_C2_IRCS(kMCG_IrcSlow)));
+            MCG->C2 = (uint8_t)(((MCG->C2 & ~MCG_C2_IRCS_MASK) | (MCG_C2_IRCS(kMCG_IrcSlow))) & 0xFFU);
             while (MCG_S_IRCST_VAL != (uint8_t)kMCG_IrcSlow)
             {
             }
         }
         /* Update FCRDIV. */
         MCG->SC =
-            (uint8_t)(MCG->SC & ~(MCG_SC_FCRDIV_MASK | MCG_SC_ATMF_MASK | MCG_SC_LOCS0_MASK)) | MCG_SC_FCRDIV(fcrdiv);
+            (uint8_t)((MCG->SC & ~(MCG_SC_FCRDIV_MASK | MCG_SC_ATMF_MASK | MCG_SC_LOCS0_MASK)) & 0xFFU) | MCG_SC_FCRDIV(fcrdiv);
     }
 
     /* Set internal reference clock selection. */
-    MCG->C2 = (uint8_t)((MCG->C2 & ~MCG_C2_IRCS_MASK) | (MCG_C2_IRCS(ircs)));
-    MCG->C1 = (uint8_t)((MCG->C1 & ~(MCG_C1_IRCLKEN_MASK | MCG_C1_IREFSTEN_MASK)) | (uint8_t)enableMode);
+    MCG->C2 = (uint8_t)(((MCG->C2 & ~MCG_C2_IRCS_MASK) | (MCG_C2_IRCS(ircs))) & 0xFFU);
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_IRCLKEN_MASK | MCG_C1_IREFSTEN_MASK)) | (uint8_t)enableMode) & 0xFFU);
 
     /* If MCGIRCLK is used, need to wait for MCG_S_IRCST. */
     if ((mcgOutClkState == (uint32_t)kMCG_ClkOutStatInt) || (0U != (enableMode & (uint32_t)kMCG_IrclkEnable)))
@@ -972,13 +973,22 @@ uint32_t CLOCK_CalcPllDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *prdiv,
     prdiv_min =
         (uint8_t)((refFreq + (uint32_t)FSL_FEATURE_MCG_PLL_REF_MAX - 1U) / (uint32_t)FSL_FEATURE_MCG_PLL_REF_MAX);
 
+    assert(prdiv_min >= 1U);
+
     /* PRDIV traversal. */
     for (prdiv_cur = prdiv_max; prdiv_cur >= prdiv_min; prdiv_cur--)
     {
         /* Reference frequency after PRDIV. */
         ref_div = refFreq / prdiv_cur;
 
-        vdiv_cur = (uint8_t)(desireFreq / ref_div);
+        if ((desireFreq / ref_div) > 0xFFU)
+        {
+            continue;
+        }
+        else
+        {
+            vdiv_cur = (uint8_t)((desireFreq / ref_div) & 0xFFU);
+        }
 
         if ((vdiv_cur < ((uint8_t)FSL_FEATURE_MCG_PLL_VDIV_BASE - 1U)) ||
             (vdiv_cur > (uint8_t)FSL_FEATURE_MCG_PLL_VDIV_BASE + 31U))
@@ -998,6 +1008,7 @@ uint32_t CLOCK_CalcPllDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *prdiv,
                 return ret_freq;
             }
             /* New PRDIV/VDIV is closer. */
+            assert(desireFreq > ret_freq);
             if (diff > desireFreq - ret_freq)
             {
                 diff      = desireFreq - ret_freq;
@@ -1054,7 +1065,7 @@ void CLOCK_EnablePll0(mcg_pll_config_t const *config)
     mcg_c5 |= MCG_C5_PRDIV0(config->prdiv);
     MCG->C5 = mcg_c5; /* Disable the PLL first. */
 
-    MCG->C6 = (uint8_t)((MCG->C6 & ~MCG_C6_VDIV0_MASK) | MCG_C6_VDIV0(config->vdiv));
+    MCG->C6 = (uint8_t)(((MCG->C6 & ~MCG_C6_VDIV0_MASK) | MCG_C6_VDIV0(config->vdiv)) & 0xFFU);
 
     /* Set enable mode. */
     MCG->C5 |= ((uint8_t)kMCG_PllEnableIndependent | (uint8_t)config->enableMode);
@@ -1075,17 +1086,17 @@ void CLOCK_EnablePll0(mcg_pll_config_t const *config)
 void CLOCK_SetOsc0MonitorMode(mcg_monitor_mode_t mode)
 {
     /* Clear the previous flag, MCG_SC[LOCS0]. */
-    MCG->SC &= ~(uint8_t)MCG_SC_ATMF_MASK;
+    MCG->SC &= (uint8_t)((~MCG_SC_ATMF_MASK) & 0xFFU);
 
     if (kMCG_MonitorNone == mode)
     {
-        MCG->C6 &= ~(uint8_t)MCG_C6_CME0_MASK;
+        MCG->C6 &= (uint8_t)((~MCG_C6_CME0_MASK) & 0xFFU);
     }
     else
     {
         if (kMCG_MonitorInt == mode)
         {
-            MCG->C2 &= ~(uint8_t)MCG_C2_LOCRE0_MASK;
+            MCG->C2 &= (uint8_t)((~MCG_C2_LOCRE0_MASK) & 0xFFU);
         }
         else
         {
@@ -1106,7 +1117,7 @@ void CLOCK_SetRtcOscMonitorMode(mcg_monitor_mode_t mode)
 {
     uint8_t mcg_c8 = MCG->C8;
 
-    mcg_c8 &= ~(uint8_t)(MCG_C8_CME1_MASK | MCG_C8_LOCRE1_MASK);
+    mcg_c8 &= (uint8_t)(~(MCG_C8_CME1_MASK | MCG_C8_LOCRE1_MASK) & 0xFFU);
 
     if (kMCG_MonitorNone != mode)
     {
@@ -1135,17 +1146,17 @@ void CLOCK_SetPll0MonitorMode(mcg_monitor_mode_t mode)
 
     if (kMCG_MonitorNone == mode)
     {
-        MCG->C6 &= (uint8_t)(~MCG_C6_LOLIE0_MASK);
+        MCG->C6 &= (uint8_t)((~MCG_C6_LOLIE0_MASK) & 0xFFU);
     }
     else
     {
         mcg_c8 = MCG->C8;
 
-        mcg_c8 &= (uint8_t)(~MCG_C8_LOCS1_MASK);
+        mcg_c8 &= (uint8_t)((~MCG_C8_LOCS1_MASK) & 0xFFU);
 
         if (kMCG_MonitorInt == mode)
         {
-            mcg_c8 &= (uint8_t)(~MCG_C8_LOLRE_MASK);
+            mcg_c8 &= (uint8_t)((~MCG_C8_LOLRE_MASK) & 0xFFU);
         }
         else
         {
@@ -1232,7 +1243,7 @@ void CLOCK_ClearStatusFlags(uint32_t mask)
 
     if ((mask & (uint32_t)kMCG_Osc0LostFlag) != 0UL)
     {
-        MCG->SC &= (uint8_t)(~MCG_SC_ATMF_MASK);
+        MCG->SC &= (uint8_t)((~MCG_SC_ATMF_MASK) & 0xFFU);
     }
     if (0U != (mask & (uint32_t)kMCG_RtcOscLostFlag))
     {
@@ -1258,7 +1269,7 @@ void CLOCK_InitOsc0(osc_config_t const *config)
 
     OSC_SetCapLoad(OSC0, config->capLoad);
 
-    MCG->C2 = (uint8_t)((MCG->C2 & ~OSC_MODE_MASK) | MCG_C2_RANGE(range) | (uint8_t)config->workMode);
+    MCG->C2 = (uint8_t)(((MCG->C2 & ~OSC_MODE_MASK) | MCG_C2_RANGE(range) | (uint8_t)config->workMode) & 0xFFU);
     OSC_SetExtRefClkConfig(OSC0, &config->oscerConfig);
 
     if ((kOSC_ModeExt != config->workMode) && ((OSC0->CR & OSC_CR_ERCLKEN_MASK) != 0U))
@@ -1278,7 +1289,7 @@ void CLOCK_InitOsc0(osc_config_t const *config)
 void CLOCK_DeinitOsc0(void)
 {
     OSC0->CR = 0U;
-    MCG->C2 &= ~(uint8_t)OSC_MODE_MASK;
+    MCG->C2 &= (uint8_t)((~OSC_MODE_MASK) & 0xFFU);
 }
 
 /*!
@@ -1551,9 +1562,9 @@ status_t CLOCK_SetFeiMode(mcg_dmx32_t dmx32, mcg_drs_t drs, void (*fllStableDela
     }
 
     /* Set CLKS and IREFS. */
-    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK))) |
-                        (MCG_C1_CLKS(kMCG_ClkOutSrcOut)         /* CLKS = 0 */
-                         | MCG_C1_IREFS(kMCG_FllSrcInternal))); /* IREFS = 1 */
+    MCG->C1 = (uint8_t)((((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK))) |
+                        (MCG_C1_CLKS(kMCG_ClkOutSrcOut)                  /* CLKS = 0 */
+                         | MCG_C1_IREFS(kMCG_FllSrcInternal))) & 0xFFU); /* IREFS = 1 */
 
     /* Wait and check status. */
     while ((uint8_t)kMCG_FllSrcInternal != MCG_S_IREFST_VAL)
@@ -1567,8 +1578,8 @@ status_t CLOCK_SetFeiMode(mcg_dmx32_t dmx32, mcg_drs_t drs, void (*fllStableDela
     }
 
     /* In FEI mode, the MCG_C4[DMX32] is set to 0U. */
-    MCG->C4 = (uint8_t)((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
-                        (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs)));
+    MCG->C4 = (uint8_t)(((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
+                        (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs))) & 0xFFU);
 
     /* Check MCG_S[CLKST] */
     while ((uint8_t)kMCG_ClkOutStatFll != MCG_S_CLKST_VAL)
@@ -1627,10 +1638,10 @@ status_t CLOCK_SetFeeMode(uint8_t frdiv, mcg_dmx32_t dmx32, mcg_drs_t drs, void 
     }
 
     /* Set CLKS and IREFS. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_FRDIV_MASK | MCG_C1_IREFS_MASK)) |
-                        (MCG_C1_CLKS(kMCG_ClkOutSrcOut)         /* CLKS = 0 */
-                         | MCG_C1_FRDIV(frdiv)                  /* FRDIV */
-                         | MCG_C1_IREFS(kMCG_FllSrcExternal))); /* IREFS = 0 */
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_FRDIV_MASK | MCG_C1_IREFS_MASK)) |
+                        (MCG_C1_CLKS(kMCG_ClkOutSrcOut)                  /* CLKS = 0 */
+                         | MCG_C1_FRDIV(frdiv)                           /* FRDIV */
+                         | MCG_C1_IREFS(kMCG_FllSrcExternal))) & 0xFFU); /* IREFS = 0 */
 
     /* If use external crystal as clock source, wait for it stable. */
     if (MCG_C7_OSCSEL(kMCG_OscselOsc) == (MCG->C7 & MCG_C7_OSCSEL_MASK))
@@ -1655,8 +1666,8 @@ status_t CLOCK_SetFeeMode(uint8_t frdiv, mcg_dmx32_t dmx32, mcg_drs_t drs, void 
     }
 
     /* Set DRS and DMX32. */
-    mcg_c4  = (uint8_t)((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
-                       (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs)));
+    mcg_c4  = (uint8_t)(((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
+                       (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs))) & 0xFFU);
     MCG->C4 = mcg_c4;
 
     /* Wait for DRST_DRS update. */
@@ -1712,7 +1723,7 @@ status_t CLOCK_SetFbiMode(mcg_dmx32_t dmx32, mcg_drs_t drs, void (*fllStableDela
 
     mcg_c4 = MCG->C4;
 
-    MCG->C2 &= ~(uint8_t)MCG_C2_LP_MASK; /* Disable lowpower. */
+    MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU); /* Disable lowpower. */
 
     /*
        Errata: ERR007993
@@ -1728,9 +1739,9 @@ status_t CLOCK_SetFbiMode(mcg_dmx32_t dmx32, mcg_drs_t drs, void (*fllStableDela
     }
 
     /* Set CLKS and IREFS. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK)) |
-                        (MCG_C1_CLKS(kMCG_ClkOutSrcInternal)    /* CLKS = 1 */
-                         | MCG_C1_IREFS(kMCG_FllSrcInternal))); /* IREFS = 1 */
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK)) |
+                        (MCG_C1_CLKS(kMCG_ClkOutSrcInternal)             /* CLKS = 1 */
+                         | MCG_C1_IREFS(kMCG_FllSrcInternal))) & 0xFFU); /* IREFS = 1 */
 
     /* Wait and check status. */
     while ((uint8_t)kMCG_FllSrcInternal != MCG_S_IREFST_VAL)
@@ -1747,8 +1758,8 @@ status_t CLOCK_SetFbiMode(mcg_dmx32_t dmx32, mcg_drs_t drs, void (*fllStableDela
     {
     }
 
-    MCG->C4 = (uint8_t)((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
-                        (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs)));
+    MCG->C4 = (uint8_t)(((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
+                        (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs))) & 0xFFU);
 
     /* Wait for FLL stable time. */
     if (NULL != fllStableDelay)
@@ -1789,13 +1800,13 @@ status_t CLOCK_SetFbeMode(uint8_t frdiv, mcg_dmx32_t dmx32, mcg_drs_t drs, void 
 #endif
 
     /* Change to FLL mode. */
-    MCG->C6 &= ~(uint8_t)MCG_C6_PLLS_MASK;
+    MCG->C6 &= (uint8_t)((~MCG_C6_PLLS_MASK) & 0xFFU);
     while ((MCG->S & MCG_S_PLLST_MASK) != 0U)
     {
     }
 
     /* Set LP bit to enable the FLL */
-    MCG->C2 &= ~(uint8_t)MCG_C2_LP_MASK;
+    MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU);
 
     mcg_c4 = MCG->C4;
 
@@ -1813,10 +1824,10 @@ status_t CLOCK_SetFbeMode(uint8_t frdiv, mcg_dmx32_t dmx32, mcg_drs_t drs, void 
     }
 
     /* Set CLKS and IREFS. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_FRDIV_MASK | MCG_C1_IREFS_MASK)) |
-                        (MCG_C1_CLKS(kMCG_ClkOutSrcExternal)    /* CLKS = 2 */
-                         | MCG_C1_FRDIV(frdiv)                  /* FRDIV = frdiv */
-                         | MCG_C1_IREFS(kMCG_FllSrcExternal))); /* IREFS = 0 */
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_FRDIV_MASK | MCG_C1_IREFS_MASK)) |
+                        (MCG_C1_CLKS(kMCG_ClkOutSrcExternal)             /* CLKS = 2 */
+                         | MCG_C1_FRDIV(frdiv)                           /* FRDIV = frdiv */
+                         | MCG_C1_IREFS(kMCG_FllSrcExternal))) & 0xFFU); /* IREFS = 0 */
 
     /* If use external crystal as clock source, wait for it stable. */
     if (MCG_C7_OSCSEL(kMCG_OscselOsc) == (MCG->C7 & MCG_C7_OSCSEL_MASK))
@@ -1841,8 +1852,8 @@ status_t CLOCK_SetFbeMode(uint8_t frdiv, mcg_dmx32_t dmx32, mcg_drs_t drs, void 
     }
 
     /* Set DRST_DRS and DMX32. */
-    mcg_c4 = (uint8_t)((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
-                       (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs)));
+    mcg_c4 = (uint8_t)(((mcg_c4 & ~(MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) |
+                       (MCG_C4_DMX32(dmx32) | MCG_C4_DRST_DRS(drs))) & 0xFFU);
     MCG->C4 = mcg_c4;
 
     /* Wait for clock status bits to show clock source is ext ref clk */
@@ -1934,10 +1945,10 @@ status_t CLOCK_SetPbeMode(mcg_pll_clk_select_t pllcs, mcg_pll_config_t const *co
        This function is designed to change MCG to PBE mode from PEE/BLPE/FBE,
        but with this workflow, the source mode could be all modes except PEI/PBI.
      */
-    MCG->C2 &= (uint8_t)(~MCG_C2_LP_MASK); /* Disable lowpower. */
+    MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU); /* Disable lowpower. */
 
     /* Change to use external clock first. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK)) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK)) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal)) & 0xFFU);
 
     /* Wait for CLKST clock status bits to show clock source is ext ref clk */
     while ((MCG->S & (MCG_S_IREFST_MASK | MCG_S_CLKST_MASK)) !=
@@ -1946,7 +1957,7 @@ status_t CLOCK_SetPbeMode(mcg_pll_clk_select_t pllcs, mcg_pll_config_t const *co
     }
 
     /* Disable PLL first, then configure PLL. */
-    MCG->C6 &= (uint8_t)(~MCG_C6_PLLS_MASK);
+    MCG->C6 &= (uint8_t)((~MCG_C6_PLLS_MASK) & 0xFFU);
     while ((MCG->S & MCG_S_PLLST_MASK) != 0U)
     {
     }
@@ -1990,7 +2001,7 @@ status_t CLOCK_SetPeeMode(void)
 #endif
 
     /* Change to use PLL/FLL output clock first. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcOut));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcOut)) & 0xFFU);
 
     /* Wait for clock status bits to update */
     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatPll)
@@ -2026,15 +2037,15 @@ status_t CLOCK_ExternalModeToFbeModeQuick(void)
 #endif /* MCG_CONFIG_CHECK_PARAM */
 
     /* Disable low power */
-    MCG->C2 &= (uint8_t)(~MCG_C2_LP_MASK);
+    MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU);
 
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal)) & 0xFFU);
     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatExt)
     {
     }
 
     /* Disable PLL. */
-    MCG->C6 &= ~(uint8_t)MCG_C6_PLLS_MASK;
+    MCG->C6 &= (uint8_t)((~MCG_C6_PLLS_MASK) & 0xFFU);
     while ((MCG->S & MCG_S_PLLST_MASK) != 0U)
     {
     }
@@ -2068,9 +2079,9 @@ status_t CLOCK_InternalModeToFbiModeQuick(void)
 #endif
 
     /* Disable low power */
-    MCG->C2 &= ~(uint8_t)MCG_C2_LP_MASK;
+    MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU);
 
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcInternal));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcInternal)) & 0xFFU);
     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatInt)
     {
     }
@@ -2140,7 +2151,7 @@ status_t CLOCK_BootToBlpiMode(uint8_t fcrdiv, mcg_irc_mode_t ircs, uint8_t ircEn
     (void)CLOCK_SetInternalRefClkConfig(ircEnableMode, ircs, fcrdiv);
 
     /* If reset mode is not BLPI, first enter FBI mode. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcInternal));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcInternal)) & 0xFFU);
     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatInt)
     {
     }
@@ -2167,9 +2178,9 @@ status_t CLOCK_BootToBlpeMode(mcg_oscsel_t oscsel)
     (void)CLOCK_SetExternalRefClkConfig(oscsel);
 
     /* Set to FBE mode. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK)) |
-                        (MCG_C1_CLKS(kMCG_ClkOutSrcExternal)    /* CLKS = 2 */
-                         | MCG_C1_IREFS(kMCG_FllSrcExternal))); /* IREFS = 0 */
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~(MCG_C1_CLKS_MASK | MCG_C1_IREFS_MASK)) |
+                        (MCG_C1_CLKS(kMCG_ClkOutSrcExternal)             /* CLKS = 2 */
+                         | MCG_C1_IREFS(kMCG_FllSrcExternal))) & 0xFFU); /* IREFS = 0 */
 
     /* If use external crystal as clock source, wait for it stable. */
     if (MCG_C7_OSCSEL(kMCG_OscselOsc) == (MCG->C7 & MCG_C7_OSCSEL_MASK))
@@ -2216,7 +2227,7 @@ status_t CLOCK_BootToPeeMode(mcg_oscsel_t oscsel, mcg_pll_clk_select_t pllcs, mc
     (void)CLOCK_SetPbeMode(pllcs, config);
 
     /* Change to use PLL output clock. */
-    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcOut));
+    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcOut)) & 0xFFU);
     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatPll)
     {
     }
@@ -2291,7 +2302,7 @@ status_t CLOCK_SetMcgConfig(const mcg_config_t *config)
     /* Re-configure MCGIRCLK, if MCGIRCLK is used as system clock source, then change to FEI/PEI first. */
     if (MCG_S_CLKST_VAL == (uint8_t)kMCG_ClkOutStatInt)
     {
-        MCG->C2 &= ~(uint8_t)MCG_C2_LP_MASK; /* Disable lowpower. */
+        MCG->C2 &= (uint8_t)((~MCG_C2_LP_MASK) & 0xFFU); /* Disable lowpower. */
 
         {
             (void)CLOCK_SetFeiMode(config->dmx32, config->drs, CLOCK_FllStableDelay);
@@ -2342,7 +2353,7 @@ status_t CLOCK_SetMcgConfig(const mcg_config_t *config)
                 }
                 else
                 {
-                    MCG->C1 = (uint8_t)((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal));
+                    MCG->C1 = (uint8_t)(((MCG->C1 & ~MCG_C1_CLKS_MASK) | MCG_C1_CLKS(kMCG_ClkOutSrcExternal)) & 0xFFU);
                     while (MCG_S_CLKST_VAL != (uint8_t)kMCG_ClkOutStatExt)
                     {
                     }
@@ -2369,7 +2380,7 @@ status_t CLOCK_SetMcgConfig(const mcg_config_t *config)
         }
         else
         {
-            MCG->C5 &= ~(uint8_t)kMCG_PllEnableIndependent;
+            MCG->C5 &= (uint8_t)((~kMCG_PllEnableIndependent) & 0xFFU);
         }
     }
 

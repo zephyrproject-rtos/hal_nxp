@@ -251,7 +251,7 @@ void OSC32_Init(OSC32_Type *base, osc32_mode_t mode)
     /* Set work mode. */
     base->CR = (uint8_t)mode;
 
-    if (((uint8_t)mode & OSC32_CR_ROSCEREFS_MASK) != 0U)
+    if (((uint8_t)((uint32_t)mode & 0xFFU) & OSC32_CR_ROSCEREFS_MASK) != 0U)
     {
         /* If use crystal mode, wait for stable. */
         while (0U == (base->CR & OSC32_CR_ROSCSTB_MASK))

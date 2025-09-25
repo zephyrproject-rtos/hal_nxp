@@ -95,7 +95,7 @@ void SystemCoreClockUpdate (void) {
   uint16_t Divider;
   uint16_t Temp;
 
-  Divider = (uint16_t)(0x01U) << (((uint16_t)ICS->C2 & ICS_C2_BDIV_MASK) >> ICS_C2_BDIV_SHIFT);
+  Divider = (uint16_t)(((0x01U) << (((uint16_t)(ICS->C2) & ICS_C2_BDIV_MASK) >> ICS_C2_BDIV_SHIFT)) & 0xFFFFU);
 
   switch ((ICS->C1 & ICS_C1_CLKS_MASK) >> ICS_C1_CLKS_SHIFT) {
     case 0x0:
@@ -109,7 +109,14 @@ void SystemCoreClockUpdate (void) {
           /* Reference Divider */
           Temp = ((uint16_t)ICS->C1 & ICS_C1_RDIV_MASK) >> ICS_C1_RDIV_SHIFT;
           Temp = (Temp + 1U) * (((OSC->CR & OSC_CR_RANGE_MASK) != 0x0U) ? 32U : 1U);
-          ICSOUTClock = CPU_XTAL_CLK_HZ / Temp * 1024UL;
+          if (Temp >= 3U)
+          {
+              ICSOUTClock = CPU_XTAL_CLK_HZ / Temp * 1024UL;
+          }
+          else /* Wrong Temp value handling */
+          {
+              ICSOUTClock = 0U;
+          }
       }
       break;
 

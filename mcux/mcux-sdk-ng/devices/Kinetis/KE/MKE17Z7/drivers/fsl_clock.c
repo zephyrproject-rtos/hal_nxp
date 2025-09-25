@@ -871,6 +871,7 @@ uint32_t CLOCK_GetLpFllFreq(void)
 
     if ((SCG->LPFLLCSR & SCG_LPFLLCSR_LPFLLVLD_MASK) != 0UL) /* LPFLL is valid. */
     {
+        assert(SCG_LPFLLCFG_FSEL_VAL < ARRAY_SIZE(lpfllFreq));
         freq = lpfllFreq[SCG_LPFLLCFG_FSEL_VAL];
     }
     else
