@@ -30,6 +30,14 @@
 /*                                Public macros                               */
 /* -------------------------------------------------------------------------- */
 
+#if !defined(gAppMaxTxPowerDbm_c)
+/*!
+ * \brief Default max tx power used in case of BLE
+ *        this is required to correctly configure voltages output
+ */
+#define gAppMaxTxPowerDbm_c 10
+#endif /* gAppMaxTxPowerDbm_c */
+
 /* -------------------------------------------------------------------------- */
 /*                              Public prototypes                             */
 /* -------------------------------------------------------------------------- */
@@ -67,6 +75,21 @@ int  PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *dat
  * \return int 0 if success, negative value if error
  */
 int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len);
+
+/*!
+ * \brief Sends a HCI message to Controller with packet type specification.
+ *        This is an alternative version of PLATFORM_SendHciMessage that allows
+ *        specifying the packet type instead of serializing it into the original packet.
+ *        This is well suited for platforms where the controller runs on the same core
+ *        than the Host stack.
+ *        Usually called from Host's HCI transport layers.
+ *
+ * \param[in] packetType HCI packet type identifier
+ * \param[in] msg pointer to HCI message buffer
+ * \param[in] len size of the message
+ * \return int 0 if success, negative value if error
+ */
+int PLATFORM_SendHciMessageAlt(uint8_t packetType, uint8_t *msg, uint32_t len);
 
 /* \brief Shutdown BLE Controller
  *
