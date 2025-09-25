@@ -1,4 +1,4 @@
-LA_OPT_Online Code Hosting NXP_Software_License - v1.2 October 2023
+LA_OPT_Online Code Hosting NXP_Software_License - v1.4 May 2025
 IMPORTANT.  Read the following NXP Online Code Hosting Software License
 Agreement (“Agreement”) completely. By selecting the “I Accept” button
 at the end of this page, or by downloading, installing, or using the Licensed
@@ -81,7 +81,7 @@ combination with a NXP Product;
 
 (c)	to manufacture (or have manufactured), distribute, and market object
 code of the Licensed Software (and its Derivative Works prepared under the
-license in 2.2(b)) only as part of, or embedded within, Authorized Systems and
+license in 2.1(b)) only as part of, or embedded within, Authorized Systems and
 not on a standalone basis;
 
 (d)	to copy and distribute as needed, solely in connection with an
@@ -255,21 +255,53 @@ AGREEMENT IS LIMITED TO THE AGGREGATE AMOUNT PAID BY YOU TO NXP IN CONNECTION
 WITH THE LICENSED SOFTWARE PROVIDED UNDER THIS AGREEMENT TO WHICH LOSSES OR
 DAMAGES ARE CLAIMED.
 
-12.	EXPORT COMPLIANCE. Each party shall comply with all applicable export
-and import control laws and regulations including but not limited to the US
-Export Administration Regulation (including restrictions on certain military
-end uses and military end users as specified in Section 15 C.F.R. § 744.21 and
-prohibited party lists issued by other federal governments), Catch-all
-regulations and all national and international embargoes. Each party further
-agrees that it will not knowingly transfer, divert, export or re-export,
-directly or indirectly, any product, software, including software source code,
-or technology restricted by such regulations or by other applicable national
-regulations, received from the other party under this Agreement, or any direct
-product of such software or technical data to any person, firm, entity, country
-or destination to which such transfer, diversion, export or re-export is
-restricted or prohibited, without obtaining prior written authorization from
-the applicable competent government authorities to the extent required by those
-laws.
+12.	EXPORT COMPLIANCE.
+
+12.1	Each party shall comply with all applicable export and import control
+laws and regulations including but not limited to the US Export Administration
+Regulation (including restrictions on certain military end uses and military
+end users as specified in Section 15 C.F.R. § 744.21 and prohibited party
+lists issued by other federal governments), Catch-all regulations and all
+national and international embargoes. Each party further agrees that it will
+not knowingly transfer, divert, export or re-export, directly or indirectly,
+any product, software, including software source code, or technology restricted
+by such regulations or by other applicable national regulations, received from
+the other party under this Agreement, or any direct product of such software or
+technical data to any person, firm, entity, country or destination to which
+such transfer, diversion, export or re-export is restricted or prohibited,
+without obtaining prior written authorization from the applicable competent
+government authorities to the extent required by those laws.
+
+12.2	Prohibition of Export to Russian Federation
+
+(a)	With respect to activities that fall under the scope of Article 12g,
+12ga of Council Regulation (EU) No 833/2014, or Council Regulation (EU) No
+765/2006 (as the case requires), Licensee (a) will not sell, export or
+re-export, directly or indirectly any item, and (b) will not sell, license or
+sublicense any intellectual property rights or trade secrets, to the Russian
+Federation or Belarus, or for use in the Russian Federation or Belarus.
+
+(b)	Licensee will ensure that the purpose of paragraph (a) above is not
+frustrated by any third parties further down the commercial chain, including by
+either resellers, sublicensees, or both.
+
+(c)	Licensee will set up and maintain an adequate monitoring mechanism to
+detect conduct by any third parties further down the commercial chain,
+including by either resellers, sublicensees, or both, that would frustrate the
+purpose of paragraph (a).
+
+(d)	Any violation of paragraphs (a), (b) or (c) will constitute a material
+breach of this Agreement, and NXP will be entitled to seek appropriate
+remedies, including, but not limited to: (i) termination of this Agreement;
+(ii) suspension of any of its business relationships with Licensee,
+Licensee’s affiliates or both, until the breach of paragraph (a) above is
+remedied, and (iii) a plan to remedy the breach.
+
+(e)	Licensee will immediately inform NXP about any problems in applying
+paragraphs (a), (b) or (c), above, including any relevant activities by third
+parties that could frustrate the purpose of paragraph (a). Licensee will make
+available to NXP information concerning compliance with the obligations under
+paragraphs (a), (b) and (c) within 2 weeks of the request for information.
 
 13.	GOVERNMENT CONTRACT COMPLIANCE
 
@@ -382,4 +414,4 @@ but not limited to name, email address, and location, for the purpose of
 NXP’s internal analysis regarding future software offerings.  NXP’s
 complete Privacy Statement can be found at:
 https://www.nxp.com/company/our-company/about-nxp/privacy-statement:PRIVACYPRACT
-ICES
+ICES.
