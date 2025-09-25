@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 function(mcux_add_source)
@@ -61,19 +61,24 @@ function(mcux_add_source)
     get_filename_component(directory ${source_abs_path} DIRECTORY)
 
     set(files "")
-    # check if the file_name follow the pattern *.* and **
-    string(REGEX MATCH "\\*\\..*" match "${file}")
-    if (match)
+
+    if ("${file}" MATCHES "\\*\\*\\..*")
+      # If the file_name follows the pattern **.*, will search the type of files
+      # recursively in the folder.
+      file(GLOB_RECURSE files "${directory}/${file}")
+    elseif ("${file}" MATCHES "\\*\\..*")
+      # If the file_name follows the pattern *.*, will search the type of files
+      # in the folder.
       file(GLOB files "${directory}/${file}")
+    elseif ("${file}" MATCHES "\\*\\*")
+      # If the file_name follows the pattern **, will search all types of files
+      # recursively in the folder.
+      file(GLOB_RECURSE files "${directory}/*")
     else ()
-      string(REGEX MATCH "\\*\\*" match "${file}")
-      if (match)
-        file(GLOB_RECURSE files "${directory}/*")
-      else ()
-        # add source_abs_path to list file
-        list(APPEND files "${source_abs_path}")
-      endif ()
+      # add source_abs_path to list file
+      list(APPEND files "${source_abs_path}")
     endif ()
+
     foreach(source_abs_path ${files})
         # process config files, project customized config files have higher priority
         # over component default config files
@@ -159,21 +164,28 @@ function(mcux_add_source)
 
         if (__PREINCLUDE)
           set(pre_flag "")
+          # MCUX-81203: If the build folder's path contains space, need to wrap the include file with quotes
+          string(FIND "${source_abs_path}" " " space_index)
+          if(space_index EQUAL -1)
+            set(pre_include_flag ${source_abs_path})
+          else()
+            set(pre_include_flag \"${source_abs_path}\")
+          endif()
           if(${CONFIG_TOOLCHAIN} STREQUAL "iar")
-            set(pre_flag "--preinclude ${source_abs_path}")
-            set(as_pre_flag "-P ${source_abs_path}")
+            set(pre_flag "--preinclude ${pre_include_flag}")
+            set(as_pre_flag "-P ${pre_include_flag}")
           elseif(${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
-            set(pre_flag "-include ${source_abs_path}")
+            set(pre_flag "-include ${pre_include_flag}")
           elseif(${CONFIG_TOOLCHAIN} STREQUAL "zephyr")
-            set(pre_flag "-include ${source_abs_path}")            
+            set(pre_flag "-include ${pre_include_flag}")            
           elseif(${CONFIG_TOOLCHAIN} STREQUAL "mdk")
-            set(pre_flag "-include ${source_abs_path}")
+            set(pre_flag "-include ${pre_include_flag}")
           elseif(${CONFIG_TOOLCHAIN} STREQUAL "xtensa")
-            set(pre_flag "-include ${source_abs_path}")
+            set(pre_flag "-include ${pre_include_flag}")
           elseif(${CONFIG_TOOLCHAIN} STREQUAL "codewarrior")
-            set(pre_flag "-include ${source_abs_path}")
+            set(pre_flag "-include ${pre_include_flag}")
           elseif(${CONFIG_TOOLCHAIN} STREQUAL "riscvllvm")
-            set(pre_flag "-include ${source_abs_path}")
+            set(pre_flag "-include ${pre_include_flag}")
           endif()
           if (pre_flag)
             if(__PREINCLUDE_TYPE)
@@ -541,7 +553,7 @@ endfunction()
 
 function(mcux_convert_binary)
   set(single_value BINARY TARGET)
-  set(multi_value TOOLCHAINS EXTRA_ARGS)
+  set(multi_value TOOLCHAINS EXTRA_ARGS CONVERT_CUSTOM_COMMANDS)
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
@@ -579,10 +591,21 @@ function(mcux_convert_binary)
 
   log_debug("Convert to binary file ${binary_name}")
 
+  if(__CONVERT_CUSTOM_COMMANDS)
+    add_custom_command(
+      TARGET ${target_name}
+      POST_BUILD
+      ${__CONVERT_CUSTOM_COMMANDS}
+    )
+    return()
+  endif()
+
   # Get file extension name and set proper OBJDUMP_BIN_CMD
   get_filename_component(FILE_EXT ${binary_name} EXT)
   if(${FILE_EXT} STREQUAL ".srec")
     if (${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
+      set(OBJDUMP_BIN_CMD "-Osrec")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "riscvllvm")
       set(OBJDUMP_BIN_CMD "-Osrec")
     elseif (${CONFIG_TOOLCHAIN} STREQUAL "iar")
         set(OBJDUMP_BIN_CMD "--srec")
@@ -590,7 +613,23 @@ function(mcux_convert_binary)
       set(OBJDUMP_BIN_CMD "--m32combined")
     elseif (${CONFIG_TOOLCHAIN} STREQUAL "codewarrior")
       set(OBJDUMP_BIN_CMD "-srec")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "xtensa")
+      set(OBJDUMP_BIN_CMD "-Osrec")
     endif ()
+  elseif(${FILE_EXT} STREQUAL ".hex")
+    if (${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
+      set(OBJDUMP_BIN_CMD "-Oihex")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "riscvllvm")
+      set(OBJDUMP_BIN_CMD "-Oihex")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "iar")
+      set(OBJDUMP_BIN_CMD "--ihex")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "mdk")
+      set(OBJDUMP_BIN_CMD "--i32combined")
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "codewarrior")
+      log_debug("Codewarrior does not support hex format, use bin instead" ${CMAKE_CURRENT_LIST_FILE})
+    elseif (${CONFIG_TOOLCHAIN} STREQUAL "xtensa")
+      set(OBJDUMP_BIN_CMD "-Oihex")
+    endif()
   endif()
   if (${CONFIG_TOOLCHAIN} STREQUAL "codewarrior")
     if(NOT __EXTRA_ARGS)
@@ -1150,8 +1189,26 @@ function(mcux_add_riscvllvm_linker_script)
   endif()
 endfunction()
 
+macro(_mcux_get_binary_path binary_path path relative_path)
+    # Check if path is on a different drive by looking for drive letter pattern (e.g., "D:/")
+    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+      string(REGEX MATCH "^([A-Za-z]:)" path_drive "${path}")
+      string(REGEX MATCH "^([A-Za-z]:)" sdk_drive "${SdkRootDirPath}")
+      if(path_drive AND sdk_drive AND NOT "${path_drive}" STREQUAL "${sdk_drive}")
+        set(${binary_path} "${path}")
+      else()
+        get_filename_component(${binary_path} "${APPLICATION_BINARY_DIR}/${relative_path}" ABSOLUTE)
+      endif()
+    else()
+      # On non-Windows platforms, always use the relative path
+      get_filename_component(${binary_path} "${APPLICATION_BINARY_DIR}/${relative_path}" ABSOLUTE)
+    endif()
+endmacro()
+
 function(mcux_add_cmakelists path)
   set(add_cmakelist 0)
+  # Convert path to CMake standard path (forward slashes)
+  file(TO_CMAKE_PATH "${path}" path)
   set(cmakelist_path ${path}/CMakeLists.txt)
   file(RELATIVE_PATH relative_path ${SdkRootDirPath} ${path})
 
@@ -1162,13 +1219,13 @@ function(mcux_add_cmakelists path)
 
   if(ARGC EQUAL 1)
     set(add_cmakelist 1)
-    get_filename_component(binary_path "${APPLICATION_BINARY_DIR}/${relative_path}" ABSOLUTE)
+    _mcux_get_binary_path(binary_path "${path}" "${relative_path}")
   elseif(ARGC EQUAL 2)
     string(TOUPPER ${ARGV1} ARGV1)
     if(${ARGV1} STREQUAL OPTIONAL)
       if(EXISTS ${cmakelist_path})
         set(add_cmakelist 1)
-        get_filename_component(binary_path "${APPLICATION_BINARY_DIR}/${relative_path}" ABSOLUTE)
+        _mcux_get_binary_path(binary_path "${path}" "${relative_path}")
       else()
         log_debug("No CMakeLists.txt in ${path}" ${CMAKE_CURRENT_LIST_FILE})
       endif()
@@ -1597,12 +1654,40 @@ endfunction()
 
 function(mcux_project_remove_source)
   set(single_value BASE_PATH)
-  set(multi_value SOURCES)
+  set(multi_value SOURCES ${MCUX_SOURCE_CONDITION})
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
   # remove sources
   foreach(item ${__SOURCES})
+    foreach(cond ${MCUX_SOURCE_CONDITION})
+      if(__${cond})
+
+        list(FIND MCUX_SOURCE_CONDITION ${cond} INDEX)
+
+        if(${INDEX} GREATER -1)
+
+          list(GET CMAKE_CONDITION ${INDEX} _cmake_cond)
+
+          if(_cmake_cond IN_LIST LIST_CMAKE_CONDITION)
+            set(condition_meet 0)
+            foreach(cmake_condition_item ${${_cmake_cond}})
+              if(cmake_condition_item IN_LIST __${cond})
+                set(condition_meet 1)
+              endif()
+            endforeach()
+            if(NOT condition_meet)
+              return()
+            endif()
+          elseif(NOT ${${_cmake_cond}} IN_LIST __${cond})
+            return()
+          endif()
+        endif()
+
+      endif()
+
+    endforeach()
+
     if(__BASE_PATH)
       set(source_abs_path ${__BASE_PATH}/${item})
     else()
@@ -1638,12 +1723,39 @@ endfunction()
 
 function(mcux_project_remove_include)
   set(single_value BASE_PATH)
-  set(multi_value INCLUDES)
+  set(multi_value INCLUDES ${MCUX_SOURCE_CONDITION})
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
   # remove includes
   foreach(item ${__INCLUDES})
+    foreach(cond ${MCUX_SOURCE_CONDITION})
+      if(__${cond})
+
+        list(FIND MCUX_SOURCE_CONDITION ${cond} INDEX)
+
+        if(${INDEX} GREATER -1)
+
+          list(GET CMAKE_CONDITION ${INDEX} _cmake_cond)
+
+          if(_cmake_cond IN_LIST LIST_CMAKE_CONDITION)
+            set(condition_meet 0)
+            foreach(cmake_condition_item ${${_cmake_cond}})
+              if(cmake_condition_item IN_LIST __${cond})
+                set(condition_meet 1)
+              endif()
+            endforeach()
+            if(NOT condition_meet)
+              return()
+            endif()
+          elseif(NOT ${${_cmake_cond}} IN_LIST __${cond})
+            return()
+          endif()
+        endif()
+
+      endif()
+    endforeach()
+
     set(include_abs_path "")
 
     if(__BASE_PATH)
@@ -1776,6 +1888,10 @@ function(mcux_load_sysbuild_config)
   endif()
 
   foreach(name ${sysbuild_variable_names})
+    # SB_CONF_FILE is used for sysbuild only, no need to be set for sub projects
+    if("${name}" MATCHES "SB_CONF_FILE")
+      continue()
+    endif()
     # For main app, all variables are valid, for other apps, only those with
     # prefix is valid
     if(SYSBUILD_MAIN_APP)
@@ -2540,4 +2656,57 @@ function(_get_subfolder_file OUTPUT_VAR CURRENT_DIR PATTERN LEVEL)
     endif ()
   endforeach ()
 
+endfunction()
+
+function(mcux_add_config_mex_path)
+  set(single_value BASE_PATH PATH)
+  set(multi_value)
+  cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}" ${ARGN})
+
+  # Validate that PATH is provided
+  if(NOT __PATH)
+    log_error("PATH parameter is required for mcux_add_config_mex_path" ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  # Resolve directory path
+  if(__BASE_PATH)
+    set(dir_abs_path ${__BASE_PATH}/${__PATH})
+  else()
+    set(dir_abs_path ${CMAKE_CURRENT_LIST_DIR}/${__PATH})
+  endif()
+
+  file(TO_CMAKE_PATH ${dir_abs_path} dir_abs_path)
+  get_filename_component(dir_abs_path ${dir_abs_path} ABSOLUTE)
+
+  if(NOT IS_DIRECTORY ${dir_abs_path})
+    if(DEFINED MCUXPRESSO_CONFIG_TOOL_MEX_PATH)
+      unset(MCUXPRESSO_CONFIG_TOOL_MEX_PATH CACHE)
+      log_debug("Cleared MCUXPRESSO_CONFIG_TOOL_MEX_PATH (not a directory)" ${CMAKE_CURRENT_LIST_FILE})
+      log_warn("Config MEX directory ${dir_abs_path} does not exist or is not a directory" ${CMAKE_CURRENT_LIST_FILE})
+    endif()
+    return()
+  endif()
+
+  # Non-recursive search for *.mex in the given directory
+  file(GLOB mex_files "${dir_abs_path}/*.mex")
+
+  list(LENGTH mex_files mex_count)
+  if(mex_count EQUAL 0)
+    log_error("No .mex file found in ${dir_abs_path}" ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  list(GET mex_files 0 mex_file)
+  if(mex_count GREATER 1)
+    log_warn("Multiple .mex files found in ${dir_abs_path}" ${CMAKE_CURRENT_LIST_FILE})
+  endif()
+
+  # Re-configure when mex changes in this directory
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${mex_files})
+
+  # Set cache var to the directory that contains the .mex file
+  get_filename_component(mex_dir "${mex_file}" DIRECTORY)
+  set(MCUXPRESSO_CONFIG_TOOL_MEX_PATH "${mex_dir}" CACHE STRING "Directory containing the MEX file consumed by MCUXpresso Config Tool" FORCE)
+  log_debug("Set MCUXPRESSO_CONFIG_TOOL_MEX_PATH ${mex_dir}" ${CMAKE_CURRENT_LIST_FILE})
 endfunction()

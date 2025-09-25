@@ -1,5 +1,5 @@
-if(CONFIG_CPU_CORTEX_M)
 # core related
+if(CONFIG_CPU_CORTEX_M)
 include(${SdkRootDirPath}/arch/arm/cortexm/core_${CONFIG_MCUX_HW_CORE}.cmake)
 include(${SdkRootDirPath}/arch/arm/cortexm/core_${CONFIG_MCUX_HW_FPU_TYPE}.cmake)
 include(${SdkRootDirPath}/arch/arm/cortexm/cpu_define.cmake)
