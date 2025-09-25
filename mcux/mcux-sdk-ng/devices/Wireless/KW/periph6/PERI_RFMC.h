@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RFMC
@@ -154,6 +154,7 @@ typedef struct {
   __IO uint32_t RF2P4GHZ_HOST2RADIO;               /**< RF 2.4GHz Buffer from Host to Radio, offset: 0x48 */
   __I  uint32_t RF2P4GHZ_RADIO2HOST;               /**< RF 2.4GHz Buffer from Radio to Host, offset: 0x4C */
   __IO uint32_t RF2P4GHZ_CFG;                      /**< 2.4GHz Radio Configuration Register, offset: 0x50 */
+  __I  uint32_t RF2P4GHZ_WKUP_SRC;                 /**< 2.4GHz Radio WakeUp Source Register, offset: 0x54 */
 } RFMC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -401,8 +402,8 @@ typedef struct {
 #define RFMC_XO_TEST_CDAC_MASK                   (0x3F0U)
 #define RFMC_XO_TEST_CDAC_SHIFT                  (4U)
 /*! CDAC - XO On-chip Load Capacitor Trim
- *  0b000000..6pF
- *  0b111111..11pF
+ *  0b000000..C_FIX
+ *  0b111111..C_FIX + 14.36pF
  */
 #define RFMC_XO_TEST_CDAC(x)                     (((uint32_t)(((uint32_t)(x)) << RFMC_XO_TEST_CDAC_SHIFT)) & RFMC_XO_TEST_CDAC_MASK)
 
@@ -456,7 +457,12 @@ typedef struct {
 
 #define RFMC_XO_TEST_XO_CDAC_TRIM_MASK           (0x600000U)
 #define RFMC_XO_TEST_XO_CDAC_TRIM_SHIFT          (21U)
-/*! XO_CDAC_TRIM - reg_xo_cdac_trim[1:0] */
+/*! XO_CDAC_TRIM - XO fixed cap bank C_FIX trimming
+ *  0b00..5.19pF
+ *  0b01..3.81pF
+ *  0b10..2.44pF
+ *  0b11..1.98pF
+ */
 #define RFMC_XO_TEST_XO_CDAC_TRIM(x)             (((uint32_t)(((uint32_t)(x)) << RFMC_XO_TEST_XO_CDAC_TRIM_SHIFT)) & RFMC_XO_TEST_XO_CDAC_TRIM_MASK)
 /*! @} */
 
@@ -975,6 +981,40 @@ typedef struct {
 #define RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_SHIFT (4U)
 /*! FORCE_DBG_PWRUP_ACK - Controls the Radio ack so that Radio can go into power down in debug mode also */
 #define RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_SHIFT)) & RFMC_RF2P4GHZ_CFG_FORCE_DBG_PWRUP_ACK_MASK)
+/*! @} */
+
+/*! @name RF2P4GHZ_WKUP_SRC - 2.4GHz Radio WakeUp Source Register */
+/*! @{ */
+
+#define RFMC_RF2P4GHZ_WKUP_SRC_RFMC_RADIO_DEBUG_REQ_STATUS_MASK (0x1U)
+#define RFMC_RF2P4GHZ_WKUP_SRC_RFMC_RADIO_DEBUG_REQ_STATUS_SHIFT (0U)
+/*! RFMC_RADIO_DEBUG_REQ_STATUS - Radio debug request status */
+#define RFMC_RF2P4GHZ_WKUP_SRC_RFMC_RADIO_DEBUG_REQ_STATUS(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_WKUP_SRC_RFMC_RADIO_DEBUG_REQ_STATUS_SHIFT)) & RFMC_RF2P4GHZ_WKUP_SRC_RFMC_RADIO_DEBUG_REQ_STATUS_MASK)
+
+#define RFMC_RF2P4GHZ_WKUP_SRC_RFMC_EXT_WAKEUP_STATUS_MASK (0x6U)
+#define RFMC_RF2P4GHZ_WKUP_SRC_RFMC_EXT_WAKEUP_STATUS_SHIFT (1U)
+/*! RFMC_EXT_WAKEUP_STATUS - Radio wakeup by external source status */
+#define RFMC_RF2P4GHZ_WKUP_SRC_RFMC_EXT_WAKEUP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_WKUP_SRC_RFMC_EXT_WAKEUP_STATUS_SHIFT)) & RFMC_RF2P4GHZ_WKUP_SRC_RFMC_EXT_WAKEUP_STATUS_MASK)
+
+#define RFMC_RF2P4GHZ_WKUP_SRC_BLE_WKUP_STATUS_MASK (0x8U)
+#define RFMC_RF2P4GHZ_WKUP_SRC_BLE_WKUP_STATUS_SHIFT (3U)
+/*! BLE_WKUP_STATUS - RFMC BLE Wakeup status (Host Controlled) */
+#define RFMC_RF2P4GHZ_WKUP_SRC_BLE_WKUP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_WKUP_SRC_BLE_WKUP_STATUS_SHIFT)) & RFMC_RF2P4GHZ_WKUP_SRC_BLE_WKUP_STATUS_MASK)
+
+#define RFMC_RF2P4GHZ_WKUP_SRC_MAN_WKUP_STATUS_MASK (0x10U)
+#define RFMC_RF2P4GHZ_WKUP_SRC_MAN_WKUP_STATUS_SHIFT (4U)
+/*! MAN_WKUP_STATUS - RFMC MAN Wakeup status (Host Controlled) */
+#define RFMC_RF2P4GHZ_WKUP_SRC_MAN_WKUP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_WKUP_SRC_MAN_WKUP_STATUS_SHIFT)) & RFMC_RF2P4GHZ_WKUP_SRC_MAN_WKUP_STATUS_MASK)
+
+#define RFMC_RF2P4GHZ_WKUP_SRC_WOR_WKUP_STATUS_MASK (0x20U)
+#define RFMC_RF2P4GHZ_WKUP_SRC_WOR_WKUP_STATUS_SHIFT (5U)
+/*! WOR_WKUP_STATUS - RFMC WOR Wakeup status (Host Controlled) */
+#define RFMC_RF2P4GHZ_WKUP_SRC_WOR_WKUP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_WKUP_SRC_WOR_WKUP_STATUS_SHIFT)) & RFMC_RF2P4GHZ_WKUP_SRC_WOR_WKUP_STATUS_MASK)
+
+#define RFMC_RF2P4GHZ_WKUP_SRC_RF_CMC_BLE_WKUP_STATUS_MASK (0x40U)
+#define RFMC_RF2P4GHZ_WKUP_SRC_RF_CMC_BLE_WKUP_STATUS_SHIFT (6U)
+/*! RF_CMC_BLE_WKUP_STATUS - RF_CMC BLE Wakeup status */
+#define RFMC_RF2P4GHZ_WKUP_SRC_RF_CMC_BLE_WKUP_STATUS(x) (((uint32_t)(((uint32_t)(x)) << RFMC_RF2P4GHZ_WKUP_SRC_RF_CMC_BLE_WKUP_STATUS_SHIFT)) & RFMC_RF2P4GHZ_WKUP_SRC_RF_CMC_BLE_WKUP_STATUS_MASK)
 /*! @} */
 
 

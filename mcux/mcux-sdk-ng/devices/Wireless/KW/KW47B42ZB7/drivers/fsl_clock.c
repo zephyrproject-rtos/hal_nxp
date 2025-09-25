@@ -739,7 +739,7 @@ status_t CLOCK_InitRfFro192M(const fro192m_rf_clk_config_t *config)
  */
 uint32_t CLOCK_GetRfFro192MFreq(void)
 {
-    static const uint32_t fro192mFreq[] = {16000000U, 24000000U, 32000000U, 48000000U, 64000000U};
+    static const uint32_t fro192mFreq[] = {16000000U, 24000000U, 32000000U, 48000000U, 64000000U, 0U, 0U, 0U};
 
     /*
      * $Branch Coverage Justification$

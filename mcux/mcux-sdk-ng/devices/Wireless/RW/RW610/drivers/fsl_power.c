@@ -711,7 +711,7 @@ void POWER_ConfigCauInSleep(bool pdCau)
     }
     else
     {
-        CAU->PD_CTRL_ONE_REG &= ~CAU_PD_CTRL_ONE_REG_SLPBIAS_PD_MASK;
+        CAU->PD_CTRL_ONE_REG &= (uint8_t)((~CAU_PD_CTRL_ONE_REG_SLPBIAS_PD_MASK) & 0xFFU);
         CAU->SLP_CTRL_ONE_REG = 0x9EU;
         CAU->SLP_CTRL_TWO_REG = 0x6AU;
     }
@@ -1264,7 +1264,7 @@ void POWER_InitVoltage(uint32_t dro, uint32_t pack)
     SystemCoreClockUpdate();
 
     /* LPBG trim */
-    BUCK11->BUCK_CTRL_EIGHTEEN_REG &= ~BUCK11_BUCK_CTRL_EIGHTEEN_REG_LPBG_TRIM_MASK;
+    BUCK11->BUCK_CTRL_EIGHTEEN_REG &= (uint8_t)((~BUCK11_BUCK_CTRL_EIGHTEEN_REG_LPBG_TRIM_MASK) & 0xFFU);
 
     if (dro == 0U)
     { /* Boot voltage 1.11V */
