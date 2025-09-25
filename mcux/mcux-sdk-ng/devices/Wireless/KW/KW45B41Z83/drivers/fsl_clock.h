@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief CLOCK driver version 2.2.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -350,6 +350,13 @@ typedef enum _scg_sys_clk
 
 /*!
  * @brief SCG system clock source.
+ *
+ * ERR052742: FRO6M clock(kSCG_SysClkSrcSirc) is not stable.
+ * The FRO6M clock is not stable on some parts. FRO6M outputs lower frequency
+ * signal instead of 6MHz when device is reset or wakes up from low power.
+ * It can impact peripherals using it as a clock source. Please use clock source
+ * other than the FRO6M. For example, use FRO192M instead of FRO6M as clock
+ * source for peripherals.
  */
 typedef enum _scg_sys_clk_src
 {
@@ -682,6 +689,12 @@ static inline void CLOCK_DisableTPM2(void)
  * Set the clock source for specific IP, not all modules need to set the
  * clock source, should only use this function for the modules need source
  * setting.
+ * ERR052742: FRO6M clock is not stable.
+ * The FRO6M clock is not stable on some parts. FRO6M outputs lower frequency
+ * signal instead of 6MHz when device is reset or wakes up from low power.
+ * It can impact peripherals using it as a clock source. Please use clock source
+ * other than the FRO6M. For example, use FRO192M instead of FRO6M as clock
+ * source for peripherals.
  *
  * @param name Which peripheral to check, see \ref clock_ip_name_t.
  * @param src Clock source to set.
