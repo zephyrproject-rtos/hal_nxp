@@ -17,6 +17,9 @@
 /* 54-27-8D is assigned by IEEE, and 45-54-48 is ANSCII code of string 'ETH'. */
 #define ETH_ADAPTER_MAC_ADDRESS {0x54, 0x27, 0x8d, 0x45, 0x54, 0x48}
 
+#define ETH_ADAPTER_PHY_STABILITY_DELAY_US (500000U)
+#define ETH_ADAPTER_PHY_AUTONEGOTIATION_COUNT (10U)
+
 #define ETH_ADAPTER_PHY_FRAME_TX_BUFFER_LENGTH (10U)
 #define ETH_ADAPTER_PHY_RRAME_RX_BUFFER_LENGTH (10U)
 
@@ -31,7 +34,7 @@
 #endif
 
 #define ETH_ADAPTER_ENTER_CRITICAL() \
-    OSA_SR_ALLOC(); \
+    OSA_SR_ALLOC();                  \
     OSA_ENTER_CRITICAL()
 #define ETH_ADAPTER_EXIT_CRITICAL() OSA_EXIT_CRITICAL()
 
@@ -291,6 +294,8 @@ static inline eth_adapter_err_t ETH_ADAPTER_FrameQueueClear(eth_adapter_frame_qu
 }
 
 eth_adapter_err_t ETH_ADAPTER_Init(void);
+
+eth_adapter_err_t ETH_ADAPTER_Reset(void);
 
 eth_adapter_err_t ETH_ADAPTER_GetMacAddress(uint8_t *address);
 

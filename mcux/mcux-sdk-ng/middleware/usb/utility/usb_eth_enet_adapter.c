@@ -72,10 +72,34 @@ eth_adapter_handle_t ethAdapterHandle;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static eth_adapter_err_t ETH_ADAPTER_HW_Init(void)
+static eth_adapter_err_t ETH_ADAPTER_PHY_Init(void)
+{
+    phy_config_t phyConfig = {
+        .phyAddr = BOARD_PhyAddress,
+        .autoNeg = true,
+        .ops = BOARD_PhyOps,
+        .resource = BOARD_PhySource,
+    };
+
+    /* Initialize PHY and wait auto-negotiation over. */
+    while (PHY_Init(&phyHandle, &phyConfig) != kStatus_Success)
+    {
+        (void)usb_echo("PHY_Init failed.\r\n");
+
+        return ETH_ADAPTER_ERROR;
+    }
+
+    /* Wait a moment for PHY status to be stable. */
+    SDK_DelayAtLeastUs(ETH_ADAPTER_PHY_STABILITY_DELAY_US, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+
+    return ETH_ADAPTER_OK;
+}
+
+static eth_adapter_err_t ETH_ADAPTER_MAC_Init(void)
 {
     enet_config_t config;
-    phy_config_t phyConfig = {0};
+    bool link = false;
+    bool autonego = false;
 
     /* Prepare the buffer configuration. */
     enet_buffer_config_t buffConfig[] = {{
@@ -101,38 +125,36 @@ static eth_adapter_err_t ETH_ADAPTER_HW_Init(void)
      */
     ENET_GetDefaultConfig(&config);
 
+    for (uint32_t cnt = 0; cnt < ETH_ADAPTER_PHY_AUTONEGOTIATION_COUNT && !autonego; cnt++)
+    {
+        (void)PHY_GetLinkStatus(&phyHandle, &link);
+        if (link)
+        {
+            (void)PHY_GetAutoNegotiationStatus(&phyHandle, &autonego);
+        }
+    }
+
+    if (autonego)
+    {
+        /* Get the actual PHY link speed and set in MAC. */
+        if (PHY_GetLinkSpeedDuplex(&phyHandle, (phy_speed_t *)(&config.miiSpeed), (phy_duplex_t *)(&config.miiDuplex)) != kStatus_Success)
+        {
+            (void)usb_echo("PHY_GetLinkSpeedDuplex failed.\r\n");
+
+            return ETH_ADAPTER_ERROR;
+        }
+    }
+
     /* The miiMode should be set according to the different PHY interfaces. */
 #ifdef EXAMPLE_PHY_INTERFACE_RGMII
     config.miiMode = kENET_RgmiiMode;
-    config.miiSpeed = kENET_MiiSpeed1000M;
 #else
     config.miiMode = kENET_RmiiMode;
-    config.miiSpeed = kENET_MiiSpeed100M;
 #endif
-    config.miiDuplex = kENET_MiiFullDuplex;
 
     /* Mount callback to ENET for getting interrupt event. */
     config.interrupt = ENET_TX_INTERRUPT | ENET_RX_INTERRUPT | ENET_ERR_INTERRUPT;
     config.callback = ETH_Callback;
-
-    phyConfig.phyAddr = BOARD_PhyAddress;
-    phyConfig.autoNeg = true;
-    phyConfig.ops = BOARD_PhyOps;
-    phyConfig.resource = BOARD_PhySource;
-
-    /* Initialize PHY and wait auto-negotiation over. */
-    while (PHY_Init(&phyHandle, &phyConfig) != kStatus_Success)
-    {
-        (void)usb_echo("PHY_Init failed.\r\n");
-
-        return ETH_ADAPTER_ERROR;
-    }
-
-    /* set PHY link speed/duplex. */
-    PHY_SetLinkSpeedDuplex(&phyHandle, (phy_speed_t)config.miiSpeed, (phy_duplex_t)config.miiDuplex);
-
-    /* Wait a moment for PHY status to be stable. */
-    SDK_DelayAtLeastUs(100000U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
 #ifdef USB_STACK_FREERTOS
     ENET_Type *const enetBases[] = ENET_BASE_PTRS;
@@ -186,7 +208,32 @@ eth_adapter_err_t ETH_ADAPTER_Init(void)
     ethAdapterHandle.multicastFramePass = true;
     ethAdapterHandle.boardcastFramePass = true;
 
-    return ETH_ADAPTER_HW_Init();
+    if (ETH_ADAPTER_PHY_Init() != ETH_ADAPTER_OK)
+    {
+        return ETH_ADAPTER_ERROR;
+    }
+
+    if (ETH_ADAPTER_MAC_Init() != ETH_ADAPTER_OK)
+    {
+        return ETH_ADAPTER_ERROR;
+    }
+
+    return ETH_ADAPTER_OK;
+}
+
+eth_adapter_err_t ETH_ADAPTER_Reset(void)
+{
+    if (ETH_ADAPTER_FrameQueueClear(&ethAdapterHandle.txFrameQueue) != ETH_ADAPTER_OK)
+    {
+        return ETH_ADAPTER_ERROR;
+    }
+
+    if (ETH_ADAPTER_FrameQueueClear(&ethAdapterHandle.rxFrameQueue) != ETH_ADAPTER_OK)
+    {
+        return ETH_ADAPTER_ERROR;
+    }
+
+    return ETH_ADAPTER_MAC_Init();
 }
 
 eth_adapter_err_t ETH_ADAPTER_GetMacAddress(uint8_t *address)
