@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -103,7 +103,9 @@ status_t Nor_Flash_Page_Program(nor_handle_t *handle, uint32_t address, uint8_t 
  * @param address  The address to be programed.
  * @param buffer  The buffer to be programed to the page.
  * @param length  The data length to be programed to the page.
- * @retval execution status
+ *
+ * @retval kStatus_Success Program specific region successfully.
+ * @retval kStatus_InvalidArgument address or length not sector size aligned.
  */
 status_t Nor_Flash_Program(nor_handle_t *handle, uint32_t address, uint8_t *buffer, uint32_t length);
 
@@ -131,7 +133,9 @@ status_t Nor_Flash_Erase_Block(nor_handle_t *handle, uint32_t address);
  * @param handle    The NOR Flash handler.
  * @param address   The start address to be erased.
  * @param size_Byte Erase flash size.
- * @retval execution status
+ *
+ * @retval kStatus_Success Erase specific region successfully.
+ * @retval kStatus_InvalidArgument Address or size_Byte not sector size aligned.
  */
 status_t Nor_Flash_Erase(nor_handle_t *handle, uint32_t address, uint32_t size_Byte);
 

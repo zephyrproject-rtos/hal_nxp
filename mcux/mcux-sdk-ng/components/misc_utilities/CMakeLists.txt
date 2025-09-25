@@ -1,4 +1,4 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (CONFIG_MCUX_COMPONENT_utilities.misc_utilities)
@@ -19,8 +19,8 @@ if (CONFIG_MCUX_COMPONENT_utilities.misc_utilities)
     mcux_add_source(
         SOURCES fsl_memcpy.S
         TOOLCHAINS armgcc mcux mdk
-        CORES cm3 cm4 cm4f cm7 cm7f cm23 cm33 cm33f
-    )    
+        CORES cm3 cm4 cm4f cm7 cm7f cm33 cm33f
+    )
 
 endif()
 

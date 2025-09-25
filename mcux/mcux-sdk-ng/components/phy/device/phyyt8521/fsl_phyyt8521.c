@@ -17,13 +17,25 @@
 #define PHY_INER_REG 0x12U /*!< Interrupt Enable Register */
 #define PHY_INSR_REG 0x13U /*!< Interrupt Status Register */
 
-/*! @brief Defines the YT8521 PHY ID number. */
-#define PHY_CONTROL_ID1 (0x001CU) /*!< The PHY ID1 . */
+/*! @brief Defines the PHY YT8521 device ID information. */
+#define PHY_OUI1                 0x0U  /*!< The PHY organizationally unique identifier. */
+#define PHY_MODEL_NUM1           0x11U /*!< The PHY manufacturer's type number. */
+#define PHY_DEVICE_REVISION_NUM1 0xAU  /*!< The PHY manufacturer's revision number. */
+#define PHY_DEVICE_ID1           ((PHY_OUI1 << 10U) | (PHY_MODEL_NUM1 << 4U) | (PHY_DEVICE_REVISION_NUM1))
+
+/*! @brief Defines the PHY YT8531 device ID information. */
+#define PHY_OUI                 0x3AU /*!< The PHY organizationally unique identifier. */
+#define PHY_MODEL_NUM           0x11U /*!< The PHY manufacturer's type number. */
+#define PHY_DEVICE_REVISION_NUM 0xAU  /*!< The PHY manufacturer's revision number. */
+#define PHY_DEVICE_ID           ((PHY_OUI << 10U) | (PHY_MODEL_NUM << 4U) | (PHY_DEVICE_REVISION_NUM))
 
 /*! @brief Defines the mask flag in interrupt enable register. */
-#define PHY_INER_LINKSTATUS_SUCCESS_MASK ((uint16_t)0x0400U) /*!< bit 10, The PHY link status success interrupt mask. */
-#define PHY_INER_LINKSTATUS_FAILURE_MASK ((uint16_t)0x0800U) /*!< bit 11, The PHY link status failure interrupt mask. */
-
+#define PHY_INER_LINKSTATUS_SUCCESS_MASK                                         \
+    ((uint16_t)0x0400U) /*!< bit 10, The PHY link status success interrupt mask. \
+                         */
+#define PHY_INER_LINKSTATUS_FAILURE_MASK                                         \
+    ((uint16_t)0x0800U) /*!< bit 11, The PHY link status failure interrupt mask. \
+                         */
 /*! @brief Defines the mask flag in specific status register. */
 #define PHY_SSTATUS_LINKSTATUS_MASK ((uint16_t)0x0400U) /*!< The PHY link status mask. */
 #define PHY_SSTATUS_LINKSPEED_MASK  ((uint16_t)0xC000U) /*!< bit 15:14 The PHY link speed mask. */
@@ -66,6 +78,7 @@ status_t PHY_YT8521_Init(phy_handle_t *handle, const phy_config_t *config)
 {
     uint32_t counter  = PHY_READID_TIMEOUT_COUNT;
     uint16_t regValue = 0U;
+    uint32_t devId    = 0U;
     status_t result;
 
     /* Assign PHY address and operation resource. */
@@ -80,8 +93,17 @@ status_t PHY_YT8521_Init(phy_handle_t *handle, const phy_config_t *config)
         {
             return result;
         }
+        devId = regValue << 16U;
+
+        result = PHY_YT8521_READ(handle, PHY_ID2_REG, &regValue);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+        devId += regValue;
+
         counter--;
-    } while ((regValue != PHY_CONTROL_ID1) && (counter != 0U));
+    } while ((regValue != PHY_DEVICE_ID) && (regValue != PHY_DEVICE_ID1) && (counter != 0U));
 
     if (counter == 0U)
     {
