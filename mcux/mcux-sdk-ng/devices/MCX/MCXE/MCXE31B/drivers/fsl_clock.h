@@ -19,8 +19,8 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.0 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief CLOCK driver version 2.1.2 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real
@@ -120,6 +120,30 @@ extern volatile uint32_t g_xtal0Freq;
     {               \
         kCLOCK_Edma \
     }
+
+/*! @brief Clock ip name array for EMAC. */
+#define EMAC_CLOCKS \
+    {               \
+        kCLOCK_Emac \
+    }
+
+/*! @brief Clock ip name array for EDMA TCD. */
+#if defined(FSL_FEATURE_MC_ME_HAS_PRTN2) && (FSL_FEATURE_MC_ME_HAS_PRTN2 != 0U)
+#define EDMA_TCD_CLOCKS                                                                                         \
+    {                                                                                                           \
+        kCLOCK_Tcd0, kCLOCK_Tcd1, kCLOCK_Tcd2, kCLOCK_Tcd3, kCLOCK_Tcd4, kCLOCK_Tcd5, kCLOCK_Tcd6, kCLOCK_Tcd7, \
+            kCLOCK_Tcd8, kCLOCK_Tcd9, kCLOCK_Tcd10, kCLOCK_Tcd11, kCLOCK_Tcd12, kCLOCK_Tcd13, kCLOCK_Tcd14,     \
+            kCLOCK_Tcd15, kCLOCK_Tcd16, kCLOCK_Tcd17, kCLOCK_Tcd18, kCLOCK_Tcd19, kCLOCK_Tcd20, kCLOCK_Tcd21,   \
+            kCLOCK_Tcd22, kCLOCK_Tcd23, kCLOCK_Tcd24, kCLOCK_Tcd25, kCLOCK_Tcd26, kCLOCK_Tcd27, kCLOCK_Tcd28,   \
+            kCLOCK_Tcd29, kCLOCK_Tcd30, kCLOCK_Tcd31                                                            \
+    }
+#else
+#define EDMA_TCD_CLOCKS                                                                                         \
+    {                                                                                                           \
+        kCLOCK_Tcd0, kCLOCK_Tcd1, kCLOCK_Tcd2, kCLOCK_Tcd3, kCLOCK_Tcd4, kCLOCK_Tcd5, kCLOCK_Tcd6, kCLOCK_Tcd7, \
+            kCLOCK_Tcd8, kCLOCK_Tcd9, kCLOCK_Tcd10, kCLOCK_Tcd11,                                               \
+    }
+#endif /* FSL_FEATURE_MC_ME_HAS_PRTN2 */
 
 /*! @brief Clock ip name array for EIM. */
 #define EIM_CLOCKS \
@@ -431,7 +455,7 @@ typedef enum _clock_ip_name
     kCLOCK_Sema42 = MC_ME_COFB_TUPLE(0x530U, 24), /*!< Semaphores2 (PRTN2_COFB0) */
     kCLOCK_Stm1   = MC_ME_COFB_TUPLE(0x530U, 29), /*!< System Timer Module 1 (PRTN2_COFB0) */
     /* PRTN2_COFB1_CLKEN Bit Fields */
-    kCLOCK_Enet     = MC_ME_COFB_TUPLE(0x534U, 0),   /*!< ENET (PRTN2_COFB1) */
+    kCLOCK_Emac     = MC_ME_COFB_TUPLE(0x534U, 0),   /*!< EMAC (PRTN2_COFB1) */
     kCLOCK_Lpuart8  = MC_ME_COFB_TUPLE(0x534U, 3U),  /*!< Low Power UART 8 (PRTN2_COFB1). */
     kCLOCK_Lpuart9  = MC_ME_COFB_TUPLE(0x534U, 4U),  /*!< Low Power UART 9 (PRTN2_COFB1). */
     kCLOCK_Lpuart10 = MC_ME_COFB_TUPLE(0x534U, 5U),  /*!< Low Power UART 10 (PRTN2_COFB1). */
@@ -584,6 +608,9 @@ typedef enum _clock_attach_id
         CLOCK_DIV_TUPLE(8U, CLOCK_EMAC_RMII_TX_CLK), /*!< Select EMAC_RMII_TX_CLK(pin) as EMAC_TX_CLK  clock source. */
 
     kFIRC_CLK_to_EMAC_TS = CLOCK_DIV_TUPLE(9U, CLOCK_FIRC_CLK), /*!< Select FIRC as EMAC_TS_CLK clock source. */
+    kFXOSC_CLK_to_EMAC_TS = CLOCK_DIV_TUPLE(9U, CLOCK_FXOSC_CLK), /*!< Select FXOSC as EMAC_TS_CLK clock source. */
+    kPLL_PHI0_CLK_to_EMAC_TS =
+        CLOCK_DIV_TUPLE(9U, CLOCK_PLL_PHI0_CLK), /*!< Select PLL_PHI0_CLK as EMAC_TS_CLK clock source. */
     kEMAC_RMII_TX_CLK_to_EMAC_TS =
         CLOCK_DIV_TUPLE(9U, CLOCK_EMAC_RMII_TX_CLK), /*!< Select EMAC_RMII_TX_CLK(pin) as EMAC_TS_CLK  clock source. */
     kEMAC_RX_CLK_to_EMAC_TS =
@@ -593,14 +620,8 @@ typedef enum _clock_attach_id
 #if defined(FSL_FEATURE_CLOCK_HAS_QSPI) && (FSL_FEATURE_CLOCK_HAS_QSPI != 0U)
     kFIRC_CLK_to_QSPI_SFCK  = CLOCK_DIV_TUPLE(10U, CLOCK_FIRC_CLK),  /*!< Select FIRC as QSPI_SFCK clock source. */
     kFXOSC_CLK_to_QSPI_SFCK = CLOCK_DIV_TUPLE(10U, CLOCK_FXOSC_CLK), /*!< Select FXOSC as QSPI_SFCK clock source. */
-    kPLL_PHI0_CLK_to_QSPI_SFCK =
-        CLOCK_DIV_TUPLE(10U, CLOCK_PLL_PHI0_CLK),     /*!< Select PLL_PHI0_CLK as QSPI_SFCK clock source. */
     kPLL_PHI1_CLK_to_QSPI_SFCK =
         CLOCK_DIV_TUPLE(10U, CLOCK_PLL_PHI1_CLK),     /*!< Select PLL_PHI1_CLK as QSPI_SFCK clock source. */
-    kEMAC_RMII_TX_CLK_to_QSPI_SFCK =
-        CLOCK_DIV_TUPLE(10U, CLOCK_EMAC_RMII_TX_CLK), /*!< Select EMAC_RMII_TX_CLK(pin) as QSPI_SFCKe clock source. */
-    kEMAC_RX_CLK_to_QSPI_SFCK =
-        CLOCK_DIV_TUPLE(10U, CLOCK_EMAC_RX_CLK),      /*!< Select EMAC_RX_CLK(pin) as QSPI_SFCK clock source. */
 #endif                                                /* FSL_FEATURE_CLOCK_HAS_QSPI */
 
     kFIRC_CLK_to_TRACE  = CLOCK_DIV_TUPLE(11U, CLOCK_FIRC_CLK),  /*!< Select FIRC as TRACE clock source. */

@@ -1,10 +1,6 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA266VLH
-**                          MCXA266VLL
-**                          MCXA266VLQ
-**                          MCXA266VPN
-**                          MCXA345VLH
+**     Processors:          MCXA345VLH
 **                          MCXA345VLL
 **                          MCXA345VLQ
 **                          MCXA345VPN
@@ -12,13 +8,25 @@
 **                          MCXA346VLL
 **                          MCXA346VLQ
 **                          MCXA346VPN
+**                          MCXA355VLH
+**                          MCXA355VLL
+**                          MCXA355VLQ
+**                          MCXA355VPN
+**                          MCXA356VLH
+**                          MCXA356VLL
+**                          MCXA356VLQ
+**                          MCXA356VPN
+**                          MCXA365VLH
+**                          MCXA365VLL
+**                          MCXA365VLQ
+**                          MCXA365VPN
 **                          MCXA366VLH
 **                          MCXA366VLL
 **                          MCXA366VLQ
 **                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250729
+**     Build:               b250902
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
@@ -49,12 +57,16 @@
 #if !defined(PERI_DMA_H_)
 #define PERI_DMA_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
-#include "MCXA266_COMMON.h"
-#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
 #include "MCXA345_COMMON.h"
 #elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
 #include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA355VLH) || defined(CPU_MCXA355VLL) || defined(CPU_MCXA355VLQ) || defined(CPU_MCXA355VPN))
+#include "MCXA355_COMMON.h"
+#elif (defined(CPU_MCXA356VLH) || defined(CPU_MCXA356VLL) || defined(CPU_MCXA356VLQ) || defined(CPU_MCXA356VPN))
+#include "MCXA356_COMMON.h"
+#elif (defined(CPU_MCXA365VLH) || defined(CPU_MCXA365VLL) || defined(CPU_MCXA365VLQ) || defined(CPU_MCXA365VPN))
+#include "MCXA365_COMMON.h"
 #elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
 #include "MCXA366_COMMON.h"
 #else
@@ -141,6 +153,7 @@ typedef enum _dma_request_source
     kDma0RequestMuxAdc1FifoRequest  = 52U,         /**< ADC1 FIFO request */
     kDma0RequestMuxHsCmp0DmaRequest = 53U,         /**< CMP0 DMA_request */
     kDma0RequestMuxHsCmp1DmaRequest = 54U,         /**< CMP1 DMA_request */
+    kDma0RequestMuxHsCmp2DmaRequest = 55U,         /**< CMP2 DMA_request */
     kDma0RequestMuxDac0FifoRequest  = 56U,         /**< DAC0 FIFO request */
     kDma0RequestMuxGpio0PinEventRequest0 = 60U,    /**< GPIO0 Pin event request 0 */
     kDma0RequestMuxGpio1PinEventRequest0 = 61U,    /**< GPIO1 Pin event request 0 */
@@ -164,10 +177,11 @@ typedef enum _dma_request_source
     kDma0RequestMuxFlexCan1DmaRequest = 87U,       /**< CAN1 DMA request */
     kDma0RequestLPUART5Rx           = 102U,        /**< LPUART5 Receive request */
     kDma0RequestLPUART5Tx           = 103U,        /**< LPUART5 Transmit request */
+    kDma0RequestMuxMau0             = 115U,        /**< MAU0 DMA request */
     kDma0RequestSGI0Datain          = 119U,        /**< SGI0 DATAIN request */
     kDma0RequestSGI0Dataout         = 120U,        /**< SGI0 DATOUT request */
-    kDma0RequestMuxHsCmp2DmaRequest = 55U,         /**< CMP2 DMA_request */
-    kDma0RequestMuxMau0             = 115U,        /**< MAU0 DMA request */
+    kDma0RequestMuxAdc2FifoRequest  = 123U,        /**< ADC2 FIFO request */
+    kDma0RequestMuxAdc3FifoRequest  = 124U,        /**< ADC3 FIFO request */
 } dma_request_source_t;
 
 /* @} */

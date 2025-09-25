@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2024-11-18
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250829
 **
 **     Abstract:
 **         Chip specific module features.
@@ -14,8 +14,10 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2024-11-18)
+**     - rev. 0.1 (2024-11-18)
 **
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
@@ -39,6 +41,8 @@
 #define FSL_FEATURE_SOC_EDMA_COUNT (1)
 /* @brief EIM availability on the SoC. */
 #define FSL_FEATURE_SOC_EIM_COUNT (1)
+/* @brief EMAC availability on the SoC. */
+#define FSL_FEATURE_SOC_EMAC_COUNT (1)
 /* @brief EMIOS availability on the SoC. */
 #define FSL_FEATURE_SOC_EMIOS_COUNT (3)
 /* @brief FLEXCAN availability on the SoC. */
@@ -71,6 +75,8 @@
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
 /* @brief SEMA42 availability on the SoC. */
 #define FSL_FEATURE_SOC_SEMA42_COUNT (1)
+/* @brief SIUL2 availability on the SoC. */
+#define FSL_FEATURE_SOC_SIUL2_COUNT (1)
 /* @brief STM availability on the SoC. */
 #define FSL_FEATURE_SOC_STM_COUNT (2)
 /* @brief TRGMUX availability on the SoC. */
@@ -216,7 +222,7 @@
 /* @brief If channel clock controlled independently */
 #define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
 /* @brief If 128 bytes transfer supported. */
-#define FSL_FEATURE_EDMA_INSTANCE_SUPPORT_128_BYTES_TRANSFERn(x) (1)
+#define FSL_FEATURE_EDMA_INSTANCE_SUPPORT_128_BYTES_TRANSFERn(x) (0)
 /* @brief Number of channel for each EDMA instance, (only defined for soc with different channel numbers for difference instance) */
 #define FSL_FEATURE_EDMA_INSTANCE_CHANNELn(x) (32)
 /* @brief Has register CH_CSR. */
@@ -277,6 +283,8 @@
 #define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
 /* @brief Number of DMA channels with asynchronous request capability. */
 #define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (32)
+/* @brief TCD has clock control. */
+#define FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE (1)
 
 /* FLASH_C40 module features */
 
@@ -379,11 +387,15 @@
 #define FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE (0)
 /* @brief Is affected by errata with ID 8341 (FlexCAN: Entering Freeze Mode or Low Power Mode from Normal Mode can cause the FlexCAN module to stop operating). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (0)
+/* @brief Is affected by errata with ID 052403. */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_052403 (1)
+/* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
+/* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (1)
 
 /* FLEXIO module features */
 
-/* @brief Has DOZEN bit(CTRL[DOZEN]) */
-#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (0)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
@@ -412,6 +424,8 @@
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
 /* @brief Has pin input output related registers */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (0)
 
 /* INTM module features */
 
@@ -480,6 +494,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Has ERRATA050456. */
+#define FSL_FEATURE_LPSPI_HAS_ERRATA_050456 (1)
 
 /* LPUART module features */
 
@@ -513,8 +529,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -557,6 +571,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* MCM module features */
 
@@ -671,12 +689,10 @@
 /* @brief Lowest interrupt request number. */
 #define FSL_FEATURE_INTERRUPT_IRQ_MIN (-14)
 /* @brief Highest interrupt request number. */
-#define FSL_FEATURE_INTERRUPT_IRQ_MAX (207)
+#define FSL_FEATURE_INTERRUPT_IRQ_MAX (223)
 
 /* PIT module features */
 
-/* @brief Has Real Time Interrupt. */
-#define FSL_FEATURE_PIT_HAS_RTI (1)
 /* @brief Number of channels (related to number of registers LDVALn, CVALn, TCTRLn, TFLGn). */
 #define FSL_FEATURE_PIT_TIMER_COUNT (4)
 /* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). */
@@ -687,6 +703,10 @@
 #define FSL_FEATURE_PIT_HAS_SHARED_IRQ_HANDLER (1)
 /* @brief Has timer enable control. */
 #define FSL_FEATURE_PIT_HAS_MDIS (1)
+/* @brief Has Real Time Interrupt. */
+#define FSL_FEATURE_PIT_HAS_RTI (1)
+/* @brief Has ERRATA 7914. */
+#define FSL_FEATURE_PIT_HAS_ERRATA_7914 (0)
 
 /* PMC module features */
 
@@ -802,6 +822,10 @@
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 /* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (0)
+/* @brief SAI5 and SAI6 share one irq number. */
+#define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (0)
+/* @brief Is affected by errata with ID 051421 (SAI: Synchronous mode with bypass is not supported). */
+#define FSL_FEATURE_SAI_HAS_ERRATA_051421 (1)
 
 /* SEMA42 module features */
 

@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_ADC.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for ADC
  *
  * CMSIS Peripheral Access Layer for ADC
@@ -988,9 +988,9 @@ typedef struct {
 #define ADC_DE_FWMDE_MASK                         ADC_DE_FWMDE0_MASK
 #define ADC_DE_FWMDE_SHIFT                        ADC_DE_FWMDE0_SHIFT
 #define ADC_DE_FWMDE(x)                           ADC_DE_FWMDE0(x)
-/* ADC temperature sensor related parameters */
+/* ADC temperature sensor related parameters (see ADC0 electrical characteristics in datasheet) */
 /* @brief Temperature sensor parameter A (slope). */
-#define TEMP_PARAMETER_A (783.0f)
+#define TEMP_PARAMETER_A (738.0f)
 /* @brief Temperature sensor parameter B (offset). */
 #define TEMP_PARAMETER_B (287.5f)
 /* @brief Temperature sensor parameter Alpha. */

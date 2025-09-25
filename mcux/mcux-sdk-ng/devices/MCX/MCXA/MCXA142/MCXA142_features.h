@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b250512
+**     Build:               b250813
 **
 **     Abstract:
 **         Chip specific module features.
@@ -337,6 +337,8 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (0)
 /* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
+/* @brief Is affected by errata with ID 51989. */
+#define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
 
 /* GLIKEY module features */
 
@@ -368,14 +370,14 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (1)
 /* @brief Register SCONFIG has HDROK bitfield. */
 #define FSL_FEATURE_I3C_HAS_HDROK (1)
-/* @brief SOC doesn't support slave IBI/MR/HJ. */
-#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has ERRATA_051617. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_051617 (0)
-/* @brief Has ERRATA_052123. */
-#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
+/* @brief SOC does not support slave IBI/MR/HJ */
+#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has ERRATA_052086. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_052086 (0)
+/* @brief Has ERRATA_052123. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
 /* @brief Has IBI bytes. */
 #define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (1)
 /* @brief Has SCL delay after START. */
@@ -454,8 +456,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -498,6 +498,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* TRDC module features */
 
@@ -662,7 +666,7 @@
 
 /* UTICK module features */
 
-/* @brief UTICK does not support PD configure. */
+/* @brief UTICK does not support power down configure. */
 #define FSL_FEATURE_UTICK_HAS_NO_PDCFG (1)
 
 /* VBAT module features */
@@ -684,8 +688,14 @@
 
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
+/* @brief WWDT does not support oscillator lock. */
+#define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (0)
+/* @brief soc has reset. */
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
+/* @brief Has LPOSC as clock source. */
+#define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (0)
+/* @brief WWDT WDTOF is not set in case of WD reset - get info from PMC instead. */
+#define FSL_FEATURE_WWDT_WDTRESET_FROM_PMC (0)
 
 #endif /* _MCXA142_FEATURES_H_ */
 

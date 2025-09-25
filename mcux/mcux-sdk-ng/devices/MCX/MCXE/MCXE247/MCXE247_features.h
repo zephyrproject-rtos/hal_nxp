@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250526
+**     Build:               b250814
 **
 **     Abstract:
 **         Chip specific module features.
@@ -181,6 +181,10 @@
 #define FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE (1)
 /* @brief Is affected by errata with ID 8341 (FlexCAN: Entering Freeze Mode or Low Power Mode from Normal Mode can cause the FlexCAN module to stop operating). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (1)
+/* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (1)
+/* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (0)
 
 /* ACMP module features */
 
@@ -217,10 +221,8 @@
 
 /* CRC module features */
 
-/* @brief If CRC has CRC register */
-#define FSL_FEATURE_CRC_HAS_CRC_REGISTER (0)
-/* @brief CRC16 type of the peripheral. */
-#define FSL_FEATURE_CRC_CRC16_TYPE (0)
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
 
 /* EDMA module features */
 
@@ -325,12 +327,14 @@
 #define FSL_FEATURE_ENET_INSTANCE_HAS_ADD_1588_TIMER_CHN_INTn(x) (1)
 /* @brief Has threshold for the number of frames in the receive FIFO (register bit field RSEM[STAT_SECTION_EMPTY]). */
 #define FSL_FEATURE_ENET_HAS_RECEIVE_STATUS_THRESHOLD (1)
-/* @brief Has trasfer clock delay (register bit field ECR[TXC_DLY]). */
+/* @brief Has transfer clock delay (register bit field ECR[TXC_DLY]). */
 #define FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY (0)
 /* @brief Has receive clock delay (register bit field ECR[RXC_DLY]). */
 #define FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY (0)
 /* @brief PTP Timestamp CAPTURE bit always returns 0 when the capture is not over. */
 #define FSL_FEATURE_ENET_TIMESTAMP_CAPTURE_BIT_INVALID (0)
+/* @brief ENET Has Extra Clock Gate (RW610). */
+#define FSL_FEATURE_ENET_HAS_EXTRA_CLOCK_GATE (0)
 
 /* EWM module features */
 
@@ -341,8 +345,6 @@
 
 /* FLEXIO module features */
 
-/* @brief Has DOZEN bit(CTRL[DOZEN]) */
-#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
@@ -371,6 +373,8 @@
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (2)
 /* @brief Has pin input output related registers */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (0)
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
 /* FLASH module features */
 
@@ -667,8 +671,6 @@
 
 /* SAI module features */
 
-/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
-#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
 #define FSL_FEATURE_SAI_FIFO_COUNTn(x) (8)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
@@ -699,14 +701,18 @@
 #define FSL_FEATURE_SAI_HAS_MDR (0)
 /* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
 #define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (0)
-/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]). */
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Support synchronous with another SAI. */
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 /* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (0)
+/* @brief SAI5 and SAI6 share one irq number. */
+#define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (0)
 
 /* LMEM module features */
 
@@ -805,8 +811,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -849,6 +853,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* MSCM module features */
 
@@ -1072,8 +1080,12 @@
 #define FSL_FEATURE_RTC_HAS_PCR (0)
 /* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (1)
+/* @brief Has no supervisor access bit (CR[SUP]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (0)
 /* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
 #define FSL_FEATURE_RTC_HAS_ERRATA_010716 (1)
+/* @brief Has clock output bit (CR[CLKO]). */
+#define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (1)
 
 /* SCG module features */
 

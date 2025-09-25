@@ -8,7 +8,7 @@
 **                          MCXW727DMFTA_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DSB
@@ -157,6 +157,14 @@ typedef struct {
  *  0b1..Error interrupt requests enabled
  */
 #define DSB_CSR_ERR_EN(x)                        (((uint32_t)(((uint32_t)(x)) << DSB_CSR_ERR_EN_SHIFT)) & DSB_CSR_ERR_EN_MASK)
+
+#define DSB_CSR_CBT_EN_MASK                      (0x20U)
+#define DSB_CSR_CBT_EN_SHIFT                     (5U)
+/*! CBT_EN - Continuous Burst Transfer Enable
+ *  0b0..Disabled
+ *  0b1..Enabled
+ */
+#define DSB_CSR_CBT_EN(x)                        (((uint32_t)(((uint32_t)(x)) << DSB_CSR_CBT_EN_SHIFT)) & DSB_CSR_CBT_EN_MASK)
 /*! @} */
 
 /*! @name INT - Interrupt Request Status */

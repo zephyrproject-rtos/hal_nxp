@@ -1,10 +1,6 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA266VLH
-**                          MCXA266VLL
-**                          MCXA266VLQ
-**                          MCXA266VPN
-**                          MCXA345VLH
+**     Processors:          MCXA345VLH
 **                          MCXA345VLL
 **                          MCXA345VLQ
 **                          MCXA345VPN
@@ -12,13 +8,25 @@
 **                          MCXA346VLL
 **                          MCXA346VLQ
 **                          MCXA346VPN
+**                          MCXA355VLH
+**                          MCXA355VLL
+**                          MCXA355VLQ
+**                          MCXA355VPN
+**                          MCXA356VLH
+**                          MCXA356VLL
+**                          MCXA356VLQ
+**                          MCXA356VPN
+**                          MCXA365VLH
+**                          MCXA365VLL
+**                          MCXA365VLQ
+**                          MCXA365VPN
 **                          MCXA366VLH
 **                          MCXA366VLL
 **                          MCXA366VLQ
 **                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250729
+**     Build:               b250804
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DIGTMP
@@ -49,12 +57,16 @@
 #if !defined(PERI_DIGTMP_H_)
 #define PERI_DIGTMP_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXA266VLH) || defined(CPU_MCXA266VLL) || defined(CPU_MCXA266VLQ) || defined(CPU_MCXA266VPN))
-#include "MCXA266_COMMON.h"
-#elif (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
+#if (defined(CPU_MCXA345VLH) || defined(CPU_MCXA345VLL) || defined(CPU_MCXA345VLQ) || defined(CPU_MCXA345VPN))
 #include "MCXA345_COMMON.h"
 #elif (defined(CPU_MCXA346VLH) || defined(CPU_MCXA346VLL) || defined(CPU_MCXA346VLQ) || defined(CPU_MCXA346VPN))
 #include "MCXA346_COMMON.h"
+#elif (defined(CPU_MCXA355VLH) || defined(CPU_MCXA355VLL) || defined(CPU_MCXA355VLQ) || defined(CPU_MCXA355VPN))
+#include "MCXA355_COMMON.h"
+#elif (defined(CPU_MCXA356VLH) || defined(CPU_MCXA356VLL) || defined(CPU_MCXA356VLQ) || defined(CPU_MCXA356VPN))
+#include "MCXA356_COMMON.h"
+#elif (defined(CPU_MCXA365VLH) || defined(CPU_MCXA365VLL) || defined(CPU_MCXA365VLQ) || defined(CPU_MCXA365VPN))
+#include "MCXA365_COMMON.h"
 #elif (defined(CPU_MCXA366VLH) || defined(CPU_MCXA366VLL) || defined(CPU_MCXA366VLQ) || defined(CPU_MCXA366VPN))
 #include "MCXA366_COMMON.h"
 #else

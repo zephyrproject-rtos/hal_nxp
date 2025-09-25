@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXE31 RM Rev1
-**     Version:             rev. 0.1, 2024-11-19
-**     Build:               b250512
+**     Reference manual:    MCXE31 RM Rev2
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250811
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -27,6 +27,8 @@
 **     Revisions:
 **     - rev. 0.1 (2024-11-19)
 **         Initial version.
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
@@ -34,7 +36,7 @@
 /*!
  * @file MCXE316
  * @version 1.0
- * @date 2025-05-12
+ * @date 2025-08-11
  * @brief Device specific configuration file for MCXE316 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -58,6 +60,15 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 void SystemInit(void)
 {
+#if (DISABLE_WDOG)
+    if ((SWT_0->CR & SWT_CR_WEN_MASK) != 0U)
+    {
+        SWT_0->SR = 0xC520;
+        SWT_0->SR = 0xD928;
+        SWT_0->CR &= ~SWT_CR_WEN_MASK;
+    }
+#endif /* (DISABLE_WDOG) */
+
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
     SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2));    /* set CP10, CP11 Full Access */
 #endif                                                    /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */

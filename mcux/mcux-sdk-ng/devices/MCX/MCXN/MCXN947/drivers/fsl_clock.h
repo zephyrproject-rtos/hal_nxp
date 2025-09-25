@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief CLOCK driver version 2.0.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -51,7 +51,11 @@
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
+#if defined(MCXN556S_cm33_core0_SERIES) || defined(MCXN556S_cm33_core1_SERIES)
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (170000000UL)
+#else
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (150000000UL)
+#endif
 #endif
 
 /*! @brief Clock ip name array for ROM. */
@@ -80,9 +84,9 @@
         kCLOCK_Enet \
     }
 /*! @brief Clock ip name array for GPIO. */
-#define GPIO_CLOCKS                                                          \
-    {                                                                        \
-        kCLOCK_Gpio0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3, kCLOCK_Gpio4 \
+#define GPIO_CLOCKS                                                                       \
+    {                                                                                     \
+        kCLOCK_Gpio0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3, kCLOCK_Gpio4, kCLOCK_None \
     }
 /*! @brief Clock ip name array for GDET. */
 #define GDET_CLOCKS                                                          \
@@ -1490,6 +1494,11 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
     uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
 
+    if (clk == kCLOCK_None)
+    {
+        return;
+    }
+
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {
         SYSCON->PWM0SUBCTL |= (1UL << bit);
@@ -1515,6 +1524,11 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
     uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
     uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
+
+    if (clk == kCLOCK_None)
+    {
+        return;
+    }
 
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {
