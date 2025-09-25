@@ -38,7 +38,7 @@
 **                          MIMX8MN6DVTJZ_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250815
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENET
@@ -2163,9 +2163,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group ENET_Register_Masks */
-
-/* ENET Buffer Descriptor and Buffer Address Alignment. */
-#define ENET_BUFF_ALIGNMENT                      (64U)
 
 
 /*!

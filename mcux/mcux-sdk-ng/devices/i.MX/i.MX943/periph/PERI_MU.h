@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file MU.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_MU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MU
  *
  * CMSIS Peripheral Access Layer for MU
  */
 
-#if !defined(MU_H_)
-#define MU_H_                                    /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_MU_H_)
+#define PERI_MU_H_                               /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -353,10 +356,10 @@ typedef struct {
 #define MU_SR_MURIP_MASK                         (0x2U)
 #define MU_SR_MURIP_SHIFT                        (1U)
 /*! MURIP - MU Reset Interrupt Pending Flag
- *  0b0..Reset not issued
  *  0b0..No effect
- *  0b1..Reset issued
+ *  0b0..Reset not issued
  *  0b1..Clear the flag
+ *  0b1..Reset issued
  */
 #define MU_SR_MURIP(x)                           (((uint32_t)(((uint32_t)(x)) << MU_SR_MURIP_SHIFT)) & MU_SR_MURIP_MASK)
 
@@ -777,40 +780,40 @@ typedef struct {
 #define MU_GSR_GIP0_MASK                         (0x1U)
 #define MU_GSR_GIP0_SHIFT                        (0U)
 /*! GIP0 - MUB General-Purpose Interrupt Request Pending
- *  0b0..Not pending
  *  0b0..No effect
- *  0b1..Pending
+ *  0b0..Not pending
  *  0b1..Clear the flag
+ *  0b1..Pending
  */
 #define MU_GSR_GIP0(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP0_SHIFT)) & MU_GSR_GIP0_MASK)
 
 #define MU_GSR_GIP1_MASK                         (0x2U)
 #define MU_GSR_GIP1_SHIFT                        (1U)
 /*! GIP1 - MUB General-Purpose Interrupt Request Pending
- *  0b0..Not pending
  *  0b0..No effect
- *  0b1..Pending
+ *  0b0..Not pending
  *  0b1..Clear the flag
+ *  0b1..Pending
  */
 #define MU_GSR_GIP1(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP1_SHIFT)) & MU_GSR_GIP1_MASK)
 
 #define MU_GSR_GIP2_MASK                         (0x4U)
 #define MU_GSR_GIP2_SHIFT                        (2U)
 /*! GIP2 - MUB General-Purpose Interrupt Request Pending
- *  0b0..Not pending
  *  0b0..No effect
- *  0b1..Pending
+ *  0b0..Not pending
  *  0b1..Clear the flag
+ *  0b1..Pending
  */
 #define MU_GSR_GIP2(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP2_SHIFT)) & MU_GSR_GIP2_MASK)
 
 #define MU_GSR_GIP3_MASK                         (0x8U)
 #define MU_GSR_GIP3_SHIFT                        (3U)
 /*! GIP3 - MUB General-Purpose Interrupt Request Pending
- *  0b0..Not pending
  *  0b0..No effect
- *  0b1..Pending
+ *  0b0..Not pending
  *  0b1..Clear the flag
+ *  0b1..Pending
  */
 #define MU_GSR_GIP3(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP3_SHIFT)) & MU_GSR_GIP3_MASK)
 /*! @} */
@@ -1011,5 +1014,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* MU_H_ */
+#endif  /* PERI_MU_H_ */
 

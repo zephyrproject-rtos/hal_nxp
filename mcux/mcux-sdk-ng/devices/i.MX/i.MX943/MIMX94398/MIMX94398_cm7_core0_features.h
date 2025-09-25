@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250513
+**     Build:               b250814
 **
 **     Abstract:
 **         Chip specific module features.
@@ -53,8 +53,8 @@
 #define FSL_FEATURE_SOC_AXBS_COUNT (2)
 /* @brief BBNSM availability on the SoC. */
 #define FSL_FEATURE_SOC_BBNSM_COUNT (1)
-/* @brief DDR availability on the SoC. */
-#define FSL_FEATURE_SOC_DDR_COUNT (1)
+/* @brief DDRC availability on the SoC. */
+#define FSL_FEATURE_SOC_DDRC_COUNT (1)
 /* @brief EDMA availability on the SoC. */
 #define FSL_FEATURE_SOC_EDMA_COUNT (4)
 /* @brief EIM availability on the SoC. */
@@ -74,7 +74,7 @@
 /* @brief I3C availability on the SoC. */
 #define FSL_FEATURE_SOC_I3C_COUNT (2)
 /* @brief I2S availability on the SoC. */
-#define FSL_FEATURE_SOC_I2S_COUNT (3)
+#define FSL_FEATURE_SOC_I2S_COUNT (4)
 /* @brief IOMUXC availability on the SoC. */
 #define FSL_FEATURE_SOC_IOMUXC_COUNT (1)
 /* @brief IOMUXC_GPR availability on the SoC. */
@@ -132,6 +132,8 @@
 #define FSL_FEATURE_ADC_THRESHOLDS_COUNT (8)
 /* @brief Self-test threshold counts of ADC. */
 #define FSL_FEATURE_ADC_SELF_TEST_THRESHOLDS_COUNT (6)
+/* @brief Has external trigger or not. */
+#define FSL_FEATURE_ADC_HAS_EXTERNAL_TRIGGER (1)
 
 /* AOI module features */
 
@@ -229,6 +231,10 @@
 #define FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE (0)
 /* @brief Is affected by errata with ID 8341 (FlexCAN: Entering Freeze Mode or Low Power Mode from Normal Mode can cause the FlexCAN module to stop operating). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (0)
+/* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
+/* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (1)
 
 /* TMPSNS module features */
 
@@ -398,8 +404,6 @@
 
 /* FLEXIO module features */
 
-/* @brief Has DOZEN bit(CTRL[DOZEN]) */
-#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
@@ -428,6 +432,8 @@
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
 /* @brief Has pin input output related registers */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
 /* RGPIO module features */
 
@@ -457,14 +463,14 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (1)
 /* @brief Register SCONFIG has HDROK bitfield. */
 #define FSL_FEATURE_I3C_HAS_HDROK (1)
-/* @brief SOC doesn't support slave IBI/MR/HJ. */
-#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has ERRATA_051617. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_051617 (0)
-/* @brief Has ERRATA_052123. */
-#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
+/* @brief SOC does not support slave IBI/MR/HJ */
+#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has ERRATA_052086. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_052086 (0)
+/* @brief Has ERRATA_052123. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
 /* @brief Has IBI bytes. */
 #define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (0)
 /* @brief Has SCL delay after START. */
@@ -563,8 +569,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (16)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -607,6 +611,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (1)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (16)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* MEMORY module features */
 
@@ -762,6 +770,18 @@
 #define FSL_FEATURE_NETC_HAS_NO_XGMII (1)
 /* @brief NXP Switch Tag support. */
 #define FSL_FEATURE_NETC_HAS_SWITCH_TAG (1)
+/* @brief Actual MAC Tx IPG is longer than configured when transmitting back-to-back packets in MII half duplex mode. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052167 (0)
+/* @brief The actual offset of the SG_DROP_COUNT in the Ingress Stream Count Table STSE_DATA element is not as document. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052206 (0)
+/* @brief The receiving NETC MAC cannot reliably detect the frame when IPG length and flexiable preamble are set to the minimum value. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052129 (0)
+/* @brief PTCaTSDR registers are implemented in the wrong order within the memory map. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052031 (0)
+/* @brief The NETC does not always obey the wakeup time in PMn_LPWAKETIMER. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_051994 (0)
+/* @brief MAC Tx FIFO status may not report empty after FLR when operating in RGMII half duplex mode. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_051936 (0)
 /* @brief NXP Switch port seamless redundacy support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PSRCR (1)
 /* @brief NXP Switch port group support. */
@@ -854,18 +874,18 @@
 
 /* SAI module features */
 
-/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
-#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
 #define FSL_FEATURE_SAI_FIFO_COUNTn(x) \
     (((x) == SAI1) ? (32) : \
+    (((x) == SAI2) ? (128) : \
     (((x) == SAI3) ? (128) : \
-    (((x) == SAI4) ? (128) : (-1))))
+    (((x) == SAI4) ? (128) : (-1)))))
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
 #define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) \
     (((x) == SAI1) ? (2) : \
+    (((x) == SAI2) ? (1) : \
     (((x) == SAI3) ? (1) : \
-    (((x) == SAI4) ? (1) : (-1))))
+    (((x) == SAI4) ? (1) : (-1)))))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (32)
 /* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
@@ -890,14 +910,18 @@
 #define FSL_FEATURE_SAI_HAS_MDR (0)
 /* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
 #define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (1)
-/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]). */
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (1)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Support synchronous with another SAI. */
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 /* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
+/* @brief SAI5 and SAI6 share one irq number. */
+#define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (0)
 
 /* SEMA42 module features */
 

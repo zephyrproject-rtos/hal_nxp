@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMX8ULPRM, Rev. D, December. 2022
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250815
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8UD7_cm33
@@ -944,6 +944,9 @@ typedef enum IRQn {
   /** Array initializer of ENET peripheral base pointers */
   #define ENET_BASE_PTRS                           { ENET }
 #endif
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* EPDC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1107,31 +1110,31 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY                    { {0x14000000u}, {0x50000000u}, {0x70000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY                     { {0x1BFFFFFFu}, {0x5FFFFFFFu}, {0x7FFFFFFFu} }
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY_NS                 { {0x04000000u}, {0x40000000u}, {0x60000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY_NS                  { {0x0BFFFFFFu}, {0x4FFFFFFFu}, {0x6FFFFFFFu} }
-/* FlexSPI0 AMBA base address. */
-#define FlexSPI0_AMBA_BASE                         (0x14000000u)
-/* FlexSPI1 AMBA base address. */
-#define FlexSPI1_AMBA_BASE                         (0x50000000u)
-/* FlexSPI2 AMBA base address. */
-#define FlexSPI2_AMBA_BASE                         (0x70000000u)
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x14000000u}, {0x50000000u}, {0x70000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x1BFFFFFFu}, {0x5FFFFFFFu}, {0x7FFFFFFFu} }
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x04000000u}, {0x40000000u}, {0x60000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY_NS                { {0x0BFFFFFFu}, {0x4FFFFFFFu}, {0x6FFFFFFFu} }
+  /* FlexSPI0 AMBA base address. */
+  #define FlexSPI0_AMBA_BASE                       (0x14000000u)
+  /* FlexSPI1 AMBA base address. */
+  #define FlexSPI1_AMBA_BASE                       (0x50000000u)
+  /* FlexSPI2 AMBA base address. */
+  #define FlexSPI2_AMBA_BASE                       (0x70000000u)
 #else
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY                    { {0x04000000u}, {0x40000000u}, {0x60000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY                     { {0x0BFFFFFFu}, {0x4FFFFFFFu}, {0x6FFFFFFFu} }
-/* FlexSPI0 AMBA base address. */
-#define FlexSPI0_AMBA_BASE                         (0x04000000u)
-/* FlexSPI1 AMBA base address. */
-#define FlexSPI1_AMBA_BASE                         (0x40000000u)
-/* FlexSPI2 AMBA base address. */
-#define FlexSPI2_AMBA_BASE                         (0x60000000u)
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x04000000u}, {0x40000000u}, {0x60000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x0BFFFFFFu}, {0x4FFFFFFFu}, {0x6FFFFFFFu} }
+  /* FlexSPI0 AMBA base address. */
+  #define FlexSPI0_AMBA_BASE                       (0x04000000u)
+  /* FlexSPI1 AMBA base address. */
+  #define FlexSPI1_AMBA_BASE                       (0x40000000u)
+  /* FlexSPI2 AMBA base address. */
+  #define FlexSPI2_AMBA_BASE                       (0x60000000u)
 #endif
 
 

@@ -7,7 +7,7 @@
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    IMX8ULPRM, Rev. D, December. 2022
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250815
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMX8UD5_dsp0
@@ -358,6 +358,9 @@ typedef enum IRQn {
 #define ENET_BASE_ADDRS                          { ENET_BASE }
 /** Array initializer of ENET peripheral base pointers */
 #define ENET_BASE_PTRS                           { ENET }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* EWM - Peripheral instance base addresses */
 /** Peripheral EWM0 base address */

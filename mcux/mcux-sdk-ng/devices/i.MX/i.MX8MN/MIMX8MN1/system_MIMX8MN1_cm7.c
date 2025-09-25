@@ -58,6 +58,25 @@
  */
 #define CCM_ANALOG_REG_VAL(base, off) (*((volatile uint32_t *)((uint32_t)(base) + (off))))
 
+extern void Reset_Handler(void);
+
+#if defined(__ARMCC_VERSION) || defined(__GNUC__)
+extern uint32_t __StackTop;
+__attribute__((section(".stacktop_and_pc")))
+#elif defined(__ICCARM__)
+extern void __StackTop;
+#pragma location = ".stacktop_and_pc"
+#else
+#error Compiler not supported!
+#endif
+
+/*
+ * stackTopAndPc[0]: stack top address
+ * stackTopAndPc[1]: pc
+ * Linux will copy stack top address and pc to load address.
+ */
+const uint32_t stackTopAndPc[2] = { (uint32_t)&__StackTop, (uint32_t)Reset_Handler};
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
