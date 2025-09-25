@@ -1,12 +1,12 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_hifi1
-**                          MIMXRT735SGFOA_hifi1
+**     Processors:          MIMXRT735SGAWBR_hifi1
+**                          MIMXRT735SGFOB_hifi1
 **
 **     Compiler:            Xtensa Compiler
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT735S_hifi1
@@ -26,14 +26,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_hifi1.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief Peripheral Access Layer for MIMXRT735S_hifi1
  *
  * Peripheral Access Layer for MIMXRT735S_hifi1
@@ -69,6 +71,7 @@
 #include "PERI_LPSPI.h"
 #include "PERI_LPUART.h"
 #include "PERI_LP_FLEXCOMM.h"
+#include "PERI_MIPI_DSI_HOST.h"
 #include "PERI_MMU.h"
 #include "PERI_MRT.h"
 #include "PERI_MU.h"

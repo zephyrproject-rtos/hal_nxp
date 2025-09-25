@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,8 +18,17 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ROMAPI driver version 2.0.0. */
-#define FSL_ROMAPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief ROMAPI driver version 2.1.0.
+ *
+ * Current version: 2.1.0
+ *
+ * Change log:
+ * - version 2.1.0
+ *   - Updated OTP API to support Silicon B0.
+ * - version 2.0.0
+ *   - Initial version.
+ */
+#define FSL_ROMAPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 #define ROM_API_TREE_ADDR (0x1303FC00U)
@@ -46,8 +55,8 @@
 |           |                   | Prime boot mode    |                      |          |          |          |          |
 |           |                   | 4 - XSPI NOR       |                      |          |          |          |          |
 |           |                   | 5 - LPSPI NOR      |                      |          |          |          |          |
-|           |                   | 6 - DFU            |                      |          |          |          |          |
 |           |                   | 7 - eMMC           |                      |          |          |          |          |
+|           |                   | 9 - XSPI NAND      |                      |          |          |          |          |
 
 */
 /* clang-format on */

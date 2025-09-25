@@ -515,11 +515,9 @@ static inline uint32_t RESET_GetDomainResetStatus(void)
  * can be used by ROM to reset the flash to default working mode.
  * @code
  *     FLASH_run_context_t run_ctx = {.U = 0 };
- *     // Set the current FLASH mode
  *     run_ctx.B.current_mode = kFlashInstMode_OPI_DDR;
- *     // Select the FLASH reset sequences
  *     run_ctx.B.restore_sequence = kRestoreSeqence_Send_6699_9966;
- *     RESET_SetFlashStateContext(run_ctx.U) // Update the context register
+ *     RESET_SetFlashStateContext(run_ctx.U);
  * @endcode
  *
  * @param context Flash state context defined by @ref FLASH_run_context_t.

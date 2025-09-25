@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -103,9 +103,9 @@
     (SLEEPCON1_SHA_MEDSEN_TSTAT0_FLEXIO_B_LPACCEPT_MASK | SLEEPCON1_SHA_MEDSEN_TSTAT0_MICFIL_STOP_MASK)
 #endif
 /* PMC PDSLEEPCFG0. Note, when V2COM_DSR other VDD2 and VDDN switches should be off.   */
-#define PCFG0_DEEP_SLEEP                                                                             \
-    (PMC_PDSLEEPCFG0_V2DSP_PD_MASK | PMC_PDSLEEPCFG0_V2MIPI_PD_MASK | PMC_PDSLEEPCFG0_DCDC_LP_MASK | \
-     PMC_PDSLEEPCFG0_V2NMED_DSR_MASK | PMC_PDSLEEPCFG0_VNCOM_DSR_MASK)
+#define PCFG0_DEEP_SLEEP                                                                                \
+    (PMC_PDSLEEPCFG0_V2DSP_PD_MASK | PMC_PDSLEEPCFG0_V2MIPI_PD_MASK | PMC_PDSLEEPCFG0_V2NMED_DSR_MASK | \
+     PMC_PDSLEEPCFG0_VNCOM_DSR_MASK)
 #define PCFG0_DSR                                                                                         \
     (PMC_PDSLEEPCFG0_V2COMP_DSR_MASK | PMC_PDSLEEPCFG0_V2NMED_DSR_MASK | PMC_PDSLEEPCFG0_V2COM_DSR_MASK | \
      PMC_PDSLEEPCFG0_VNCOM_DSR_MASK)
@@ -121,8 +121,7 @@
 #define PCFG4_DEEP_SLEEP (0xFFFFFFFFU)
 #define PCFG5_DEEP_SLEEP (0xFFFFFFFFU)
 
-#define POWER_FREQ_LEVELS_NUM  (5U)
-#define POWER_DEFAULT_LVD_VOLT (200000U)       /* Default LVD threshold 200mV. */
+#define POWER_FREQ_LEVELS_NUM (5U)
 
 #define POWER_INVALID_VOLT_LEVEL (0xFFFFFFFFU) /*! Invalid voltage level. */
 #define POWER_MINI_ACTIVE_VOLT   (700000U)     /* Minimum VDD1/VDD2 volt for active mode. */
@@ -321,6 +320,8 @@ void POWER_DisableInterrupts(uint32_t interruptMask)
 
 void EnableDeepSleepIRQ(IRQn_Type interrupt)
 {
+    assert(interrupt < NUMBER_OF_INT_VECTORS - 16U);
+
     uint32_t intNumber = (uint32_t)interrupt;
 
 #if defined(PMC0)
@@ -354,6 +355,8 @@ void EnableDeepSleepIRQ(IRQn_Type interrupt)
 
 void DisableDeepSleepIRQ(IRQn_Type interrupt)
 {
+    assert(interrupt < NUMBER_OF_INT_VECTORS - 16U);
+
     uint32_t intNumber = (uint32_t)interrupt;
 
     /* also disable interrupt at NVIC */
@@ -456,7 +459,8 @@ static uint32_t POWER_CalRegValueFromVolt(uint32_t volt, uint32_t base, uint32_t
     }
     else
     {
-        temp     = volt - base - 1U; /* Rounding up.*/
+        temp = volt - base - 1U; /* Rounding up.*/
+        assert(temp < (UINT32_MAX - slope));
         regValue = (uint32_t)((temp + slope) / slope);
     }
 
@@ -497,7 +501,7 @@ uint32_t POWER_CalcVoltLevel(power_regulator_t regulator, uint32_t maxFreqHz, ui
 
 static void POWER_SetRegulatorRegister(power_regulator_t regulator, uint32_t ldoVolt, uint32_t lvdVolt, uint32_t index)
 {
-    assert(index < 4);
+    assert(index < 4U);
 
     uint32_t shift  = index * 8UL;
     uint32_t ldoReg = POWER_CalRegValueFromVolt(ldoVolt, POWER_MINI_LDO_VOLT, POWER_LDO_VOLT_SLOPE);
@@ -753,10 +757,20 @@ void POWER_SelectSleepSetpoint(power_regulator_t regulator, uint32_t setpoint)
 
 void POWER_SetRunRegulatorMode(power_regulator_t regulator, uint32_t mode)
 {
+    assert(mode <= 3U);
+
     if (regulator == kRegulator_DCDC)
     {
-        PMC->PDRUNCFG0 &= ~PMC_PDRUNCFG0_DCDC_LP_MASK;
-        PMC->PDRUNCFG0 |= PMC_PDRUNCFG0_DCDC_LP(mode);
+        if (SYSCON3->SILICONREV_ID == 0xA0000UL)
+        {
+            PMC->PDRUNCFG0 &= ~PMC_PDRUNCFG0_DCDC_MODE_MASK;
+            PMC->PDRUNCFG0 |= PMC_PDRUNCFG0_DCDC_MODE(mode << 1U); /* A0 only has Bit12 for HP/LP. */
+        }
+        else
+        {
+            PMC->PDRUNCFG0 &= ~PMC_PDRUNCFG0_DCDC_MODE_MASK;
+            PMC->PDRUNCFG0 |= PMC_PDRUNCFG0_DCDC_MODE(mode);
+        }
     }
     else if (regulator == kRegulator_Vdd2LDO)
     {
@@ -772,10 +786,20 @@ void POWER_SetRunRegulatorMode(power_regulator_t regulator, uint32_t mode)
 
 void POWER_SetSleepRegulatorMode(power_regulator_t regulator, uint32_t mode)
 {
+    assert(mode <= 3U);
+
     if (regulator == kRegulator_DCDC)
     {
-        PMC->PDSLEEPCFG0 &= ~PMC_PDSLEEPCFG0_DCDC_LP_MASK;
-        PMC->PDSLEEPCFG0 |= PMC_PDSLEEPCFG0_DCDC_LP(mode);
+        if (SYSCON3->SILICONREV_ID == 0xA0000UL)
+        {
+            PMC->PDSLEEPCFG0 &= ~PMC_PDSLEEPCFG0_DCDC_MODE_MASK;
+            PMC->PDSLEEPCFG0 |= PMC_PDSLEEPCFG0_DCDC_MODE(mode << 1U); /* A0 only has Bit12 for HP/LP. */
+        }
+        else
+        {
+            PMC->PDSLEEPCFG0 &= ~PMC_PDSLEEPCFG0_DCDC_MODE_MASK;
+            PMC->PDSLEEPCFG0 |= PMC_PDSLEEPCFG0_DCDC_MODE(mode);
+        }
     }
     else if (regulator == kRegulator_Vdd2LDO)
     {
@@ -822,8 +846,9 @@ void POWER_ConfigRBBVolt(const power_rbb_voltage_t *config)
 
 void POWER_SetVddnSupplySrc(power_vdd_src_t src)
 {
+#if defined(FSL_FEATURE_SILICON_VERSION_A) && (FSL_FEATURE_SILICON_VERSION_A != 0U)
     assert(src == kVddSrc_PMIC); /* The VDDN can't be supplied by DCDC due to ERRATA052405. */
-
+#endif
     s_vddnSrc = src;
     if (s_vddnSrc == kVddSrc_PMIC) /* If powered by external PMIC, power down DCDC. */
     {
@@ -1208,6 +1233,8 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
             pdsleepcfg0 &= ~(PMC_PDSLEEPCFG0_PMICMODE_MASK | PMC_PDSLEEPCFG0_FDSR_MASK);
             PMC->PDSLEEPCFG0 =
                 pdsleepcfg0 | ((PCFG0_DEEP_SLEEP | PCFG0_DSR) & ~exclude_from_pd[1]) | PMC_PDSLEEPCFG0_DPD_MASK;
+            /* Clear DSR bits in PDRUNCFG0. */
+            PMC->PDRUNCFG0 &= ~(PMC_PDRUNCFG0_V2NMED_DSR_MASK | PMC_PDRUNCFG0_VNCOM_DSR_MASK);
             break;
 
         case kPower_FullDeepPowerDown:
@@ -1359,6 +1386,9 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_EnterLowPower_FullConfig(const uin
     /* Init XSPI in case XIP */
     initXip();
 
+    /* Clear LVD flags */
+    PMC->FLAGS = PMC_FLAGS_LVDVDD1F_MASK | PMC_FLAGS_LVDVDD2F_MASK | PMC_FLAGS_LVDVDDNF_MASK | PMC_FLAGS_AGDET1F_MASK |
+                 PMC_FLAGS_AGDET2F_MASK;
     /* Restore PMC LVD core reset and OTP switch setting */
     PMC->CTRL = pmc_ctrl;
 
@@ -1574,6 +1604,9 @@ AT_QUICKACCESS_SECTION_CODE(void static POWER_EnterLowPower_FullConfig(const uin
         POWER_DMA_HWWake_LPRestore();
     }
 
+    /* Clear LVD flags */
+    PMC->FLAGS = PMC_FLAGS_LVDVDD1F_MASK | PMC_FLAGS_LVDVDD2F_MASK | PMC_FLAGS_LVDVDDNF_MASK | PMC_FLAGS_AGDET1F_MASK |
+                 PMC_FLAGS_AGDET2F_MASK;
     /* Restore PMC LVD core reset and OTP switch setting */
     PMC->CTRL = pmc_ctrl;
 
