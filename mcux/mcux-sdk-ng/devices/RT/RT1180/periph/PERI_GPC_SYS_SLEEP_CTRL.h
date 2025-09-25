@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPC_SYS_SLEEP_CTRL
@@ -302,6 +302,21 @@ typedef struct {
 /*! @name SS_PMIC_IN_CTRL - System Sleep PMIC in control */
 /*! @{ */
 
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_STEP_CNT_MASK (0xFFFFU)
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_STEP_CNT_SHIFT (0U)
+/*! STEP_CNT - Step count, useage depends on CNT_MODE */
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_STEP_CNT(x) (((uint32_t)(((uint32_t)(x)) << GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_STEP_CNT_SHIFT)) & GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_STEP_CNT_MASK)
+
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_CNT_MODE_MASK (0x30000000U)
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_CNT_MODE_SHIFT (28U)
+/*! CNT_MODE - Count mode
+ *  0b00..Counter disable mode: not use step counter, step completes once receiving step_done
+ *  0b01..Counter delay mode: delay after receiving step_done, delay cycle number is STEP_CNT
+ *  0b10..Ignore step_done response, the counter starts to count once step begins, when counter reaches STEP_CNT value, the step completes
+ *  0b11..Time out mode, the counter starts to count once step begins, the step completes when either step_done received or counting to STEP_CNT value
+ */
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_CNT_MODE(x) (((uint32_t)(((uint32_t)(x)) << GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_CNT_MODE_SHIFT)) & GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_CNT_MODE_MASK)
+
 #define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_DISABLE_MASK (0x80000000U)
 #define GPC_SYS_SLEEP_CTRL_SS_PMIC_IN_CTRL_DISABLE_SHIFT (31U)
 /*! DISABLE - Disable this step
@@ -313,6 +328,21 @@ typedef struct {
 
 /*! @name SS_PMIC_OUT_CTRL - System Sleep PMIC out control */
 /*! @{ */
+
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_STEP_CNT_MASK (0xFFFFU)
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_STEP_CNT_SHIFT (0U)
+/*! STEP_CNT - Step count, useage depends on CNT_MODE */
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_STEP_CNT(x) (((uint32_t)(((uint32_t)(x)) << GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_STEP_CNT_SHIFT)) & GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_STEP_CNT_MASK)
+
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_CNT_MODE_MASK (0x30000000U)
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_CNT_MODE_SHIFT (28U)
+/*! CNT_MODE - Count mode
+ *  0b00..Counter disable mode: not use step counter, step completes once receiving step_done
+ *  0b01..Counter delay mode: delay after receiving step_done, delay cycle number is STEP_CNT
+ *  0b10..Ignore step_done response, the counter starts to count once step begins, when counter reaches STEP_CNT value, the step completes
+ *  0b11..Time out mode, the counter starts to count once step begins, the step completes when either step_done received or counting to STEP_CNT value
+ */
+#define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_CNT_MODE(x) (((uint32_t)(((uint32_t)(x)) << GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_CNT_MODE_SHIFT)) & GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_CNT_MODE_MASK)
 
 #define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_DISABLE_MASK (0x80000000U)
 #define GPC_SYS_SLEEP_CTRL_SS_PMIC_OUT_CTRL_DISABLE_SHIFT (31U)

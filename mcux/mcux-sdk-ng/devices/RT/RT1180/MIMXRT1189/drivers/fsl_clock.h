@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -1279,6 +1279,29 @@ typedef enum _clock_pll_post_div
 } clock_pll_post_div_t;
 
 /*!
+ * @brief The enumerater of clock output1's clock source.
+ */
+typedef enum _clock_output1_selection
+{
+    kCLOCK_CKO1OutputMuxOscRc24M    = 0U, /*!< CKO1 mux from OscRc24M. */
+    kCLOCK_CKO1OutputMuxOscRc400M   = 1U, /*!< CKO1 mux from OscRc400M. */
+    kCLOCK_CKO1OutputMuxSysPll3Div2 = 2U, /*!< CKO1 mux from SysPll3Div2. */
+    kCLOCK_CKO1OutputMuxSysPll1Div2 = 3U, /*!< CKO1 mux from SysPll1Div2. */
+} clock_output1_selection_t;
+
+/*!
+ * @brief The enumerater of clock output2's clock source.
+ *
+ */
+typedef enum _clock_output2_selection
+{
+    kCLOCK_CKO2OutputMuxOscRc24M    = 0U, /*!< CKO2 mux from OscRc24M. */
+    kCLOCK_CKO2OutputMuxOscRc400M   = 1U, /*!< CKO2 mux from OscRc400M. */
+    kCLOCK_CKO2OutputMuxSysPll1Div5 = 2U, /*!< CKO2 mux from SysPll1Div5. */
+    kCLOCK_CKO2OutputMuxArmPllOut   = 3U, /*!< CKO2 mux from ArmPllOut. */
+} clock_output2_selection_t;
+
+/*!
  * @brief PLL configuration for ARM.
  *
  * The output clock frequency is:
@@ -1787,25 +1810,6 @@ void CLOCK_OSC_SetOsc24MWorkMode(clock_24MOsc_mode_t workMode);
 void CLOCK_OSC_EnableOscRc400M(void);
 
 /*!
- * @brief Gate/ungate 400MHz RC oscillator.
- *
- * @param enableGate Used to gate/ungate 400MHz RC oscillator.
- *          - \b true Gate the 400MHz RC oscillator.
- *          - \b false Ungate the 400MHz RC oscillator.
- */
-static inline void CLOCK_OSC_GateOscRc400M(bool enableGate)
-{
-    if (enableGate)
-    {
-        ANADIG_OSC->OSC_400M_CTRL1 |= ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK;
-    }
-    else
-    {
-        ANADIG_OSC->OSC_400M_CTRL1 &= ~ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK;
-    }
-}
-
-/*!
  * @brief Trims OSC RC 400MHz.
  *
  * @param enable Used to enable trim function.
@@ -2295,6 +2299,61 @@ static inline void CLOCK_LPCG_SetWhiteList(clock_lpcg_t name, uint8_t domainId)
  * @param level Depend level of this clock.
  */
 void CLOCK_LPCG_ControlByCpuLowPowerMode(clock_lpcg_t name, uint32_t domainMap, clock_level_t level);
+
+/*!
+ * @name Clock Output Inferfaces
+ * @{
+ */
+
+/*!
+ * @brief Set the clock source and the divider of the clock output1.
+ *
+ * param selection The clock source to be output, please refer to clock_output1_selection_t.
+ * param divider The divider of the output clock signal.
+ */
+static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, uint32_t divider)
+{
+    clock_root_config_t rootCfg = {0};
+
+    rootCfg.mux = selection;
+    rootCfg.div = divider;
+    CLOCK_SetRootClock(kCLOCK_Root_Cko1, &rootCfg);
+}
+
+/*!
+ * @brief Set the clock source and the divider of the clock output2.
+ *
+ * param selection The clock source to be output, please refer to clock_output2_selection_t.
+ * param divider The divider of the output clock signal.
+ */
+static inline void CLOCK_SetClockOutput2(clock_output2_selection_t selection, uint32_t divider)
+{
+    clock_root_config_t rootCfg = {0};
+
+    rootCfg.mux = selection;
+    rootCfg.div = divider;
+    CLOCK_SetRootClock(kCLOCK_Root_Cko2, &rootCfg);
+}
+
+/*!
+ * @brief Get the frequency of clock output1 clock signal.
+ *
+ * @return The frequency of clock output1 clock signal.
+ */
+static inline uint32_t CLOCK_GetClockOutCLKO1Freq(void)
+{
+    return CLOCK_GetRootClockFreq(kCLOCK_Root_Cko1);
+}
+
+/*!
+ * @brief Get the frequency of clock output2 clock signal.
+ *
+ * @return The frequency of clock output2 clock signal.
+ */
+static inline uint32_t CLOCK_GetClockOutClkO2Freq(void)
+{
+    return CLOCK_GetRootClockFreq(kCLOCK_Root_Cko2);
+}
 
 /* @} */
 

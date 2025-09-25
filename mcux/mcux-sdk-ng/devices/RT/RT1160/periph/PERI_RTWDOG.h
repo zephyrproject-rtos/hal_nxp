@@ -14,7 +14,7 @@
 **                          MIMXRT1166XVM5A_cm7
 **
 **     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250701
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTWDOG
@@ -280,10 +280,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group RTWDOG_Register_Masks */
-
-/* Extra definition */
-#define RTWDOG_UPDATE_KEY                        (0xD928C520U)
-#define RTWDOG_REFRESH_KEY                       (0xB480A602U)
 
 
 /*!

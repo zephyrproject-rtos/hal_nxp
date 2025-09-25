@@ -11,7 +11,7 @@
 **
 **     Reference manual:    IMXRT1010RM Rev.1, 10/2021 | IMXRT1010SRM Rev.0
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250701
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1011
@@ -393,9 +393,9 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 /* FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                 { {0x60000000u} }
+#define FlexSPI_AMBA_BASE_ARRAY                  { {0x60000000u} }
 /* FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                  { {0x7F7FFFFFu} }
+#define FlexSPI_AMBA_END_ARRAY                   { {0x7F7FFFFFu} }
 /* FlexSPI AMBA address. */
 #define FlexSPI_AMBA_BASE                        (0x60000000u)
 /* FlexSPI ASFM address. */
@@ -659,6 +659,10 @@ typedef enum IRQn {
 #define RTWDOG_BASE_PTRS                         { RTWDOG }
 /** Interrupt vectors for the RTWDOG peripheral type */
 #define RTWDOG_IRQS                              { RTWDOG_IRQn }
+/* Extra definition */
+#define RTWDOG_UPDATE_KEY                        (0xD928C520U)
+#define RTWDOG_REFRESH_KEY                       (0xB480A602U)
+
 
 /* SNVS - Peripheral instance base addresses */
 /** Peripheral SNVS base address */

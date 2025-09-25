@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT798SGAWAR_cm33_core0
-**                          MIMXRT798SGFOA_cm33_core0
+**     Processors:          MIMXRT798SGAWBR_cm33_core0
+**                          MIMXRT798SGFOB_cm33_core0
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -32,6 +33,8 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
@@ -39,7 +42,7 @@
 /*!
  * @file MIMXRT798S_cm33_core0
  * @version 1.0
- * @date 2025-05-20
+ * @date 2025-07-22
  * @brief Device specific configuration file for MIMXRT798S_cm33_core0
  *  (implementation file)
  *
@@ -57,6 +60,28 @@
    ---------------------------------------------------------------------------- */
 
 uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
+
+/* ----------------------------------------------------------------------------
+   -- GlikeyWriteEnable
+   ---------------------------------------------------------------------------- */
+static void GlikeyWriteEnable(GLIKEY_Type *base, uint8_t idx)
+{
+    base->CTRL_0 |= GLIKEY_CTRL_0_SFT_RST_MASK;
+    base->CTRL_0 |= idx;
+    base->CTRL_0 = GLIKEY_CTRL_0_WR_EN_0(1U) | idx;
+    base->CTRL_1 = 0x00290000U;
+    base->CTRL_0 = GLIKEY_CTRL_0_WR_EN_0(2U) | idx;
+    base->CTRL_1 = 0x00280000U;
+    base->CTRL_0 = idx; /* Write enable*/
+}
+
+/* ----------------------------------------------------------------------------
+   -- GlikeyClearConfig
+   ---------------------------------------------------------------------------- */
+static void GlikeyClearConfig(GLIKEY_Type *base)
+{
+    base->CTRL_0 |= GLIKEY_CTRL_0_SFT_RST_MASK;
+}
 
 /* ----------------------------------------------------------------------------
    -- SystemInit()
@@ -84,10 +109,40 @@ __attribute__((weak)) void SystemInit(void)
     {
         SYSCON3->TEMPDETECT_CTRL[0] &= ~SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK;
     }
-    
+
     if ((SYSCON3->TEMPDETECT_CTRL[1] & SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK) != 0U)
     {
-        SYSCON3->TEMPDETECT_CTRL[1] &= ~SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK; 
+        SYSCON3->TEMPDETECT_CTRL[1] &= ~SYSCON3_TEMPDETECT_CTRL_ENABLE_MASK;
+    }
+
+    if ((SYSCON0->ELS_AS_CFG0 & 0x06009500U) == 0x06009500U) /* Disable aGDET, dGDET, HVD, LVD reset. */
+    {
+        PMC0->CTRL &= ~(PMC_CTRL_AGDET1RE_MASK | PMC_CTRL_AGDET2RE_MASK);
+        PMC0->INTRCTRL &= ~ (PMC_INTRCTRL_AGDET1IE_MASK | PMC_INTRCTRL_AGDET2IE_MASK);
+
+        if (GDET0->GDET_ENABLE1 != 0U) /* Disable GDET0 */
+        {
+            GlikeyWriteEnable(GLIKEY3, 0U);
+            SYSCON0->GDET_CTRL[0] = (SYSCON0->GDET_CTRL[0] & (~SYSCON0_GDET_CTRL_GDET_ISO_SW_MASK)) | SYSCON0_GDET_CTRL_GDET_ISO_SW(0x2U);
+            GDET0->GDET_ENABLE1 = 0U;
+            CLKCTL0->ONE_SRC_CLKSLICE_ENABLE &= ~CLKCTL0_ONE_SRC_CLKSLICE_ENABLE_DGDET0_FCLK_EN_MASK;
+            GlikeyClearConfig(GLIKEY3);
+        }
+
+        if (GDET3->GDET_ENABLE1 != 0U) /* Disable GDET3 */
+        {
+            GlikeyWriteEnable(GLIKEY4, 0U);
+            SYSCON3->GDET_CTRL[0] = (SYSCON3->GDET_CTRL[0] & (~SYSCON3_GDET_CTRL_GDET_ISO_SW_MASK)) | SYSCON3_GDET_CTRL_GDET_ISO_SW(0x2U);
+            GDET3->GDET_ENABLE1 = 0U;
+            CLKCTL3->ONE_SRC_CLKSLICE_ENABLE_SENSE &= ~CLKCTL3_ONE_SRC_CLKSLICE_ENABLE_SENSE_DGDET3_FCLK_EN_MASK;
+            GlikeyClearConfig(GLIKEY4);
+        }
+
+        /* Disable aGDET/LVD/HVD input for RAM_ZEROIZE and CHIP_RESET */
+        ITRC->OUT_SEL[3][0] = (ITRC->OUT_SEL[3][0] & (~(ITRC_OUT_SEL_IN13_SELn_MASK | ITRC_OUT_SEL_IN14_SELn_MASK | ITRC_OUT_SEL_IN15_SELn_MASK))) | 0xA8000000U;
+        ITRC->OUT_SEL[4][0] = (ITRC->OUT_SEL[4][0] & (~(ITRC_OUT_SEL_IN13_SELn_MASK | ITRC_OUT_SEL_IN14_SELn_MASK | ITRC_OUT_SEL_IN15_SELn_MASK))) | 0xA8000000U;
+        ITRC->OUT_SEL_1[3][0] = (ITRC->OUT_SEL_1[3][0] & (~ITRC_OUT_SEL_1_IN16_SELn_MASK)) | 0x2U;
+        ITRC->OUT_SEL_1[4][0] = (ITRC->OUT_SEL_1[4][0] & (~ITRC_OUT_SEL_1_IN16_SELn_MASK)) | 0x2U;
     }
 
     SYSCON0->DSPSTALL = SYSCON0_DSPSTALL_DSPSTALL_MASK;

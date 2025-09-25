@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT798SGAWAR_cm33_core1
-**                          MIMXRT798SGFOA_cm33_core1
+**     Processors:          MIMXRT798SGAWBR_cm33_core1
+**                          MIMXRT798SGFOB_cm33_core1
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -32,6 +33,8 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
@@ -39,7 +42,7 @@
 /*!
  * @file MIMXRT798S_cm33_core1
  * @version 1.0
- * @date 2025-05-20
+ * @date 2025-07-22
  * @brief Device specific configuration file for MIMXRT798S_cm33_core1
  *  (implementation file)
  *

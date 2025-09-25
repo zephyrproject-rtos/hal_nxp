@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ANADIG_OSC
@@ -256,14 +256,6 @@ typedef struct {
  *  0b1..Power down
  */
 #define ANADIG_OSC_OSC_400M_CTRL1_PWD(x)         (((uint32_t)(((uint32_t)(x)) << ANADIG_OSC_OSC_400M_CTRL1_PWD_SHIFT)) & ANADIG_OSC_OSC_400M_CTRL1_PWD_MASK)
-
-#define ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK (0x2U)
-#define ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_SHIFT (1U)
-/*! CLKGATE_400MEG - Clock gate control for 400MHz RCOSC
- *  0b0..Not Gated
- *  0b1..Gated
- */
-#define ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG(x) (((uint32_t)(((uint32_t)(x)) << ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_SHIFT)) & ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK)
 
 #define ANADIG_OSC_OSC_400M_CTRL1_RC_400M_CONTROL_MODE_MASK (0x80000000U)
 #define ANADIG_OSC_OSC_400M_CTRL1_RC_400M_CONTROL_MODE_SHIFT (31U)

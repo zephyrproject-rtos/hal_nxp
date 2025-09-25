@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
 **     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250701
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1166_cm7
@@ -1555,6 +1555,10 @@ typedef enum IRQn {
 #define RTWDOG_BASE_PTRS                         { (RTWDOG_Type *)0u, (RTWDOG_Type *)0u, (RTWDOG_Type *)0u, RTWDOG3, RTWDOG4 }
 /** Interrupt vectors for the RTWDOG peripheral type */
 #define RTWDOG_IRQS                              { NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, RTWDOG3_IRQn, NotAvail_IRQn }
+/* Extra definition */
+#define RTWDOG_UPDATE_KEY                        (0xD928C520U)
+#define RTWDOG_REFRESH_KEY                       (0xB480A602U)
+
 
 /* SEMA4 - Peripheral instance base addresses */
 /** Peripheral SEMA4 base address */

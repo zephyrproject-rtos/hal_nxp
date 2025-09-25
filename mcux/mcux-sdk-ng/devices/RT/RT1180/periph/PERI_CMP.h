@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMP
