@@ -597,13 +597,12 @@ static usb_status_t USB_HostNotifyDevice(usb_host_handle hostHandle,
     {
         if (hostInstance->deviceCallback != NULL)
         {
-            (void)hostInstance->deviceCallback(NULL, NULL, eventCode);
             return kStatus_USB_InvalidHandle;
         }
         else
         {
             return status1;
-        }    
+        }
     }
 
 #if ((defined USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB))

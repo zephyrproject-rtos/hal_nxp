@@ -409,7 +409,10 @@ static void PDPTN5110_MsgHalRcvdExtMsgUnChunked(pd_instance_t *pdInstance, uint8
         /* Returned data format is {readable_byte_count, frame type, data0, data1 ... dataN} */
         /* Need to store data0 at dst[0], so read buffer from */
         (void)Reg_BusReadBlock(pdInstance, receive_byte_count, (uint32_t)rx_buf_count + 1U, dst);
-        total_bytes_received += (uint16_t)rx_buf_count - 1U;
+		if (rx_buf_count >= 1U)
+		{
+            total_bytes_received += (uint16_t)rx_buf_count - 1U;
+		}
 
         if ((Reg_CacheRead(pdInstance, INTERRUPT, alert) & TCPC_ALERT_BEGINNING_SOP_MESSAGE_STATUS_MASK) != 0U)
         {
