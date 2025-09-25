@@ -239,7 +239,10 @@ void DMIC_TransferAbortReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle)
 {
     assert(NULL != handle);
     assert(NULL != handle->rxDmaHandle);
-    assert(handle->channel >= (uint32_t)kDMIC_ChannelMAX);
+    if (handle->channel >= (uint32_t)kDMIC_ChannelMAX)
+    {
+        handle->channel =  kDMIC_Channel0; // Reset channel to a safe default value
+    }
 
     /* Stop transfer. */
     DMA_AbortTransfer(handle->rxDmaHandle);

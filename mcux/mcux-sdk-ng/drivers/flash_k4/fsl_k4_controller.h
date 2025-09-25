@@ -76,7 +76,57 @@ enum
     kStatus_FLASH_CommandAborOption =
         MAKE_STATUS(kStatusGroupFlashDriver, 21), /*!< The option of flash prefetch speculation is invalid.*/
     kStatus_FLASH_EccFaultDetected = MAKE_STATUS(kStatusGroupFlashDriver, 22), /*!< An ECC double fault occurred.*/
+    kStatus_FLASH_CommandCompleteTimeout = MAKE_STATUS(kStatusGroupFlashDriver, 23), /*!< Flash command complete timeout occurred.*/
+    kStatus_FLASH_WriteEnableTimeout = MAKE_STATUS(kStatusGroupFlashDriver, 24), /*!< Flash writes are enabled timeout occurred.*/
+    kStatus_FLASH_ProgramEraseReadyTimeout = MAKE_STATUS(kStatusGroupFlashDriver, 25), /*!< Flash program-erase ready timeout occurred.*/
 };
+
+/*!
+ * @brief Maximum loop wait time for flash command operations.
+ *
+ * When flash is processing the command, driver will wait for the command to complete.
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef FLASH_COMMAND_COMPLETE_TIMEOUT
+    #ifdef CONFIG_FLASH_COMMAND_COMPLETE_TIMEOUT
+        #define FLASH_COMMAND_COMPLETE_TIMEOUT CONFIG_FLASH_COMMAND_COMPLETE_TIMEOUT
+    #else
+        #define FLASH_COMMAND_COMPLETE_TIMEOUT 0U
+    #endif
+#endif
+
+/*!
+ * @brief Maximum loop wait time for flash program-erase write enable.
+ *
+ * During program or sector erase command operations, driver will wait for the operations to complete.
+ * This parameter defines how many loops to check completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef FLASH_WRITE_ENABLE_TIMEOUT
+    #ifdef CONFIG_FLASH_WRITE_ENABLE_TIMEOUT
+        #define FLASH_WRITE_ENABLE_TIMEOUT CONFIG_FLASH_WRITE_ENABLE_TIMEOUT
+    #else
+        #define FLASH_WRITE_ENABLE_TIMEOUT 0U
+    #endif
+#endif
+
+/*!
+ * @brief Maximum loop wait time for flash program-erase ready.
+ *
+ * The program-erase ready flag is set by the command controller when a program or sector erase command
+ * operation has successfully completed the write phase. This parameter defines how many loops to check
+ * completion before return timeout.
+ * If defined as 0, driver will wait forever until completion.
+ */
+#ifndef FLASH_PROGRAM_ERASE_READY_TIMEOUT
+    #ifdef CONFIG_FLASH_PROGRAM_ERASE_READY_TIMEOUT
+        #define FLASH_PROGRAM_ERASE_READY_TIMEOUT CONFIG_FLASH_PROGRAM_ERASE_READY_TIMEOUT
+    #else
+        #define FLASH_PROGRAM_ERASE_READY_TIMEOUT 0U
+    #endif
+#endif
+
 /*! @} */
 /*******************************************************************************
  * API

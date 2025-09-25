@@ -7,6 +7,9 @@
  */
 
 /*
+    Version 1.2.0:
+        - UTEST write support
+
     Version 1.1.0:
         - Generic setup for entire family
 
@@ -36,7 +39,7 @@
 #if defined(__IAR_SYSTEMS_ICC__)
 #define RAMFUNC __ramfunc
 #elif defined(__GNUC__)
-#define RAMFUNC __attribute__((section(".ramfunc"))) __attribute__((__noinline__))
+#define RAMFUNC __attribute__((section("CodeQuickAccess"), __noinline__))
 #else
 #error "Unsupported toolchain"
 #endif
@@ -58,6 +61,9 @@
 
 #define C40_BASE_ADDR_DATA       (0x10000000)
 #define C40_END_ADDR_DATA        (C40_BASE_ADDR_DATA + (C40_BLOCK_SIZE_DATA * C40_BLOCK_COUNT_DATA) - 1)
+
+#define C40_BASE_ADDR_UTEST      (0x1B000000)
+#define C40_END_ADDR_UTEST       (0x1B001FFF)
 
 
 #define C40_SECTOR_SIZE        ( 8 * 1024)
@@ -100,8 +106,9 @@
 #define C40_WRITE_SIZE_MAX       C40_QUAD_PAGE_SIZE
 
 
-#define LOGADDR_IN_CODE_REGION(a) ((a) >= C40_BASE_ADDR_CODE && (a) <= C40_END_ADDR_CODE)
-#define LOGADDR_IN_DATA_REGION(a) ((a) >= C40_BASE_ADDR_DATA && (a) <= C40_END_ADDR_DATA)
+#define LOGADDR_IN_CODE_REGION(a)  ((a) >= C40_BASE_ADDR_CODE && (a) <= C40_END_ADDR_CODE)
+#define LOGADDR_IN_DATA_REGION(a)  ((a) >= C40_BASE_ADDR_DATA && (a) <= C40_END_ADDR_DATA)
+#define LOGADDR_IN_UTEST_REGION(a) ((a) >= C40_BASE_ADDR_UTEST && (a) <= C40_END_ADDR_UTEST)
 
 
 /* The driver partly works with Core Domain ID support.
@@ -247,6 +254,12 @@ static status_t C40_AddrToSectorNum(uint32_t address, uint32_t *sectorNum)
         sector = (address - C40_BASE_ADDR_DATA) / C40_SECTOR_SIZE;
         sector += C40_SECTOR_COUNT_CODE;
     }
+    else if (LOGADDR_IN_UTEST_REGION(address))
+    {
+        /* UTEST flash */
+        /* Writing to UTEST is considered as a special case */
+        sector = C40_SECTOR_COUNT_TOTAL;
+    }
     else
     {
         return kStatus_FLASH_AddressError;
@@ -277,13 +290,21 @@ static status_t C40_LockSectorIndex(uint32_t sectorNum, uint32_t *lockSectorInde
     uint32_t index;
     volatile uint32_t *reg;
 
-    if (sectorNum >= C40_SECTOR_COUNT_TOTAL)
+    if (sectorNum > C40_SECTOR_COUNT_TOTAL)
     {
         return kStatus_FLASH_AddressError;
     }
 
 
-    if (sectorNum >= C40_SECTOR_COUNT_CODE)
+    if (sectorNum == C40_SECTOR_COUNT_TOTAL)
+    {
+        /* UTEST flash */
+
+        index = 0;
+        reg = &(PFLASH->PFCBLKU_SPELOCK[0]);
+
+    }
+    else if (sectorNum >= C40_SECTOR_COUNT_CODE)
     {
         /* DATA Flash */
 
@@ -560,7 +581,7 @@ static status_t C40_SectorErase(uint32_t sectorNum, uint8_t callerDomainId)
 static void C40_FillDataBuff(uint32_t dataRegIndex, const uint8_t *src, uint32_t length)
 {
     assert(dataRegIndex < FLASH_DATA_COUNT);
-    assert(dataRegIndex + (length/4) < FLASH_DATA_COUNT);
+    assert(dataRegIndex + (length/4) <= FLASH_DATA_COUNT);
 
     const uint32_t *src32 = (const uint32_t *) src;
     const uint8_t  *src8  = src;

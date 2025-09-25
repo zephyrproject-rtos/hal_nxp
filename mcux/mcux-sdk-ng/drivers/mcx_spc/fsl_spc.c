@@ -1471,7 +1471,15 @@ void SPC_SetDCDCBurstConfig(SPC_Type *base, spc_dcdc_burst_config_t *config)
         /* Clear DCDC burst acknowledge flag. */
         base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_BURST_ACK_MASK;
     }
-    base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_EXT_BURST_EN(config->externalBurstRequest);
+    
+    if (config->externalBurstRequest)
+    {
+        base->DCDC_BURST_CFG |= SPC_DCDC_BURST_CFG_EXT_BURST_EN_MASK;
+    }
+    else
+    {
+        base->DCDC_BURST_CFG &= ~SPC_DCDC_BURST_CFG_EXT_BURST_EN_MASK;
+    }
 
     if (config->sofwareBurstRequest)
     {

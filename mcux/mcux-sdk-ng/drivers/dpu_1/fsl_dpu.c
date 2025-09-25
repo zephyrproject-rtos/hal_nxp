@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -580,6 +580,11 @@ typedef struct
 #define DPU_FRAMEGEN_VTCFG2_Vsbp(x)   (((uint32_t)(x)&0x3FFFU) << 16U)
 #define DPU_FRAMEGEN_VTCFG2_VsEn_MASK (1UL << 31U)
 
+/* Bit in MDR7 only */
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+#define DPU_FRAMEGEN_VTCFG2_VsAlign_MASK (1UL << 30U)
+#endif
+
 #define DPU_FRAMEGEN_PKICKCONFIG_PKickRow(x)  (((uint32_t)(x)&0x3FFFU) << 16U)
 #define DPU_FRAMEGEN_PKICKCONFIG_PKickCol(x)  (((uint32_t)(x)&0x3FFFU) << 0U)
 #define DPU_FRAMEGEN_PKICKCONFIG_PKickEn_MASK (1UL << 31U)
@@ -644,7 +649,6 @@ typedef union _u32_f32
 #define DPU_FETCHDECODE9_DYNAMIC_OFFSET 0x91008U
 #define DPU_FETCHROT9_DYNAMIC_OFFSET    0x86008U
 #define DPU_ROP9_DYNAMIC_OFFSET         0x41008U
-#define DPU_FETCHYUV0_DYNAMIC_OFFSET    0x201008U
 #define DPU_BLITBLEND9_DYNAMIC_OFFSET   0x71008U
 #define DPU_H_SCALER9_DYNAMIC_OFFSET    0xB1008U
 #define DPU_V_SCALER9_DYNAMIC_OFFSET    0xC1008U
@@ -652,8 +656,15 @@ typedef union _u32_f32
 #define DPU_EXTDST4_DYNAMIC_OFFSET      0x12100CU
 #define DPU_EXTDST1_DYNAMIC_OFFSET      0x15100CU
 #define DPU_EXTDST5_DYNAMIC_OFFSET      0x16100CU
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+#define DPU_FETCHYUV0_DYNAMIC_OFFSET    0x1F1008U
+#define DPU_H_SCALER4_DYNAMIC_OFFSET    0x241008U
+#define DPU_V_SCALER4_DYNAMIC_OFFSET    0x251008U
+#else
+#define DPU_FETCHYUV0_DYNAMIC_OFFSET    0x201008U
 #define DPU_H_SCALER4_DYNAMIC_OFFSET    0x271008U
 #define DPU_V_SCALER4_DYNAMIC_OFFSET    0x281008U
+#endif
 #define DPU_LAYERBLEND1_DYNAMIC_OFFSET  0x171008U
 #define DPU_LAYERBLEND2_DYNAMIC_OFFSET  0x181008U
 #define DPU_LAYERBLEND3_DYNAMIC_OFFSET  0x191008U
@@ -937,10 +948,12 @@ static const dpu_unit_dynamic_reg_offset_t s_dpuUnitDynamicRegOffsetTable[] = {
         .unit   = kDPU_LayerBlend5,
         .offset = DPU_LAYERBLEND5_DYNAMIC_OFFSET,
     },
+#if !(defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7)
     {
         .unit   = kDPU_LayerBlend6,
         .offset = DPU_LAYERBLEND6_DYNAMIC_OFFSET,
     },
+#endif
 };
 
 /*!
@@ -1019,7 +1032,7 @@ static DPU_SUBLAYER_CONTROL_Type *DPU_GetSubLayer(DISPLAY_SEERIS_Type *base, dpu
 static uint32_t DPU_ConvertFloat(float floatValue, uint8_t intBits, uint8_t fracBits)
 {
     /* One bit reserved for sign bit. */
-    assert(intBits + fracBits < 32U);
+    assert(intBits + fracBits + 1U < 32U);
 
     u32_f32_t u32_f32;
     uint32_t ret;
@@ -1051,7 +1064,7 @@ static uint32_t DPU_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
     /* Set the sign bit. */
     if (0U != (floatBits & 0x80000000UL))
     {
-        ret = ((~ret) + 1U) & ~(((uint32_t)-1) << (intBits + fracBits + 1U));
+        ret = ((~(uint32_t)ret) + 1U) & ~(0xFFFFFFFFU << (intBits + fracBits + 1U));
     }
 
     return ret;
@@ -1059,13 +1072,25 @@ static uint32_t DPU_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
 
 void DPU_Init(DISPLAY_SEERIS_Type *base)
 {
-    /* No dpu dedicate clock, related root clocks were enabled in dpu_board.c */
-    /* Enable domainmask for store9 and extdst0, 1, 4, 5 */
+    /*
+     * No dpu dedicate clock, related root clocks were enabled in dpu_board.c.
+     * Enable domainmask for store9 and extdst0, 1, 4, 5.
+     */
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+    /* MDR7 version. */
+    DISPLAY__SEERIS__DOMAINMA->STOR9DM |= DOMAINMASK_ENABLE;
+    DISPLAY__SEERIS__DOMAINMA->EXTD0DK0 |= DOMAINMASK_ENABLE;
+    DISPLAY__SEERIS__DOMAINMA->EXTD4DK0 |= DOMAINMASK_ENABLE;
+    DISPLAY__SEERIS__DOMAINMA->EXTD1DK0 |= DOMAINMASK_ENABLE;
+    DISPLAY__SEERIS__DOMAINMA->EXTD5DK0 |= DOMAINMASK_ENABLE;
+#else
+    /* MDR5 version */
     base->DOMAINMASK_STORE9_DOMAIN_MASK0 |= DOMAINMASK_ENABLE;
     base->DOMAINMASK_EXTDST0_DOMAIN_MASK0 |= DOMAINMASK_ENABLE;
     base->DOMAINMASK_EXTDST4_DOMAIN_MASK0 |= DOMAINMASK_ENABLE;
     base->DOMAINMASK_EXTDST1_DOMAIN_MASK0 |= DOMAINMASK_ENABLE;
     base->DOMAINMASK_EXTDST5_DOMAIN_MASK0 |= DOMAINMASK_ENABLE;
+#endif
 }
 
 /*!
@@ -1131,17 +1156,25 @@ void DPU_PreparePathConfig(DISPLAY_SEERIS_Type *base)
         kDPU_FetchDecode9, kDPU_Hscaler9,    kDPU_Vscaler9,    kDPU_Rop9,        kDPU_BlitBlend9,
         kDPU_Store9,       kDPU_ExtDst0,     kDPU_ExtDst4,     kDPU_ExtDst1,     kDPU_ExtDst5,
         kDPU_Hscaler4,     kDPU_Vscaler4,    kDPU_FetchRot9,   kDPU_FetchYuv0,   kDPU_FetchYuv1,
-        kDPU_LayerBlend1,  kDPU_LayerBlend2, kDPU_LayerBlend3, kDPU_LayerBlend4, kDPU_FetchYuv2,
-        kDPU_LayerBlend5,  kDPU_LayerBlend6, kDPU_FetchYuv3
+        kDPU_LayerBlend1,  kDPU_LayerBlend2, kDPU_LayerBlend3, kDPU_LayerBlend4, kDPU_FetchYuv3,
+        kDPU_LayerBlend5,
+#if !(defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7)
+	kDPU_LayerBlend6,  kDPU_FetchYuv2
+#endif
     };
     for (uint32_t i = 0; i < ARRAY_SIZE(dpuUnits); i++)
     {
         DPU_SetUnitSrc(base, dpuUnits[i], 0U);
     }
 
-    /* Enable fetchlayer shdldreq Sticky */
+/* Enable fetchlayer shdldreq Sticky */
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+    DISPLAY__SEERIS__FETCHLAY->SHDLRCON |= SHDLDREQSTICKY_ENABLE;
+    DISPLAY__SEERIS__FETCHL13->SHDLRCON |= SHDLDREQSTICKY_ENABLE;
+#else
     base->PIXENG_FETCHLAYER0_SHDLDREQCONTROL |= SHDLDREQSTICKY_ENABLE;
     base->PIXENG_FETCHLAYER1_SHDLDREQCONTROL |= SHDLDREQSTICKY_ENABLE;
+#endif
 }
 
 /*!
@@ -1570,7 +1603,7 @@ void DPU_SetLayerBlendConfig(DISPLAY_SEERIS_Type *base, dpu_unit_t unit, const d
     /* Set alpha mask config. */
     layerBlend->CONTROL = ((layerBlend->CONTROL & ~(DPU_LAYERBLEND_CONTROL_AlphaMaskEnable_MASK |
                                                     DPU_LAYERBLEND_CONTROL_AlphaMaskMode_MASK)) |
-                           DPU_LAYERBLEND_CONTROL_AlphaMaskEnable(config->enableAlphaMask) |
+                           DPU_LAYERBLEND_CONTROL_AlphaMaskEnable(config->enableAlphaMask ? 1U : 0U) |
                            DPU_LAYERBLEND_CONTROL_AlphaMaskMode(config->alphaMaskMode));
 }
 
@@ -2300,15 +2333,18 @@ void DPU_InitDisplayTiming(DISPLAY_SEERIS_Type *base, uint8_t displayIndex, cons
 
     display->VTCFG2 = DPU_FRAMEGEN_VTCFG2_Vsync(config->vsw - 1UL) |
                       DPU_FRAMEGEN_VTCFG2_Vsbp((uint32_t)config->vbp + config->vsw - 1UL) |
+#if defined(FSL_FEATURE_DISPLAY_SEERIS_MDR7) && FSL_FEATURE_DISPLAY_SEERIS_MDR7
+                      DPU_FRAMEGEN_VTCFG2_VsEn_MASK | DPU_FRAMEGEN_VTCFG2_VsAlign_MASK;
+#else
                       DPU_FRAMEGEN_VTCFG2_VsEn_MASK;
+#endif
 
-    /* KICK signal set to start of last vertical blanking line. */
-    display->PKICKCONFIG = DPU_FRAMEGEN_PKICKCONFIG_PKickRow(config->height) |
-                           DPU_FRAMEGEN_PKICKCONFIG_PKickCol(config->width + 1UL) |
+    /* Kick signal set to start of last vertical blanking line. */
+    display->PKICKCONFIG = DPU_FRAMEGEN_PKICKCONFIG_PKickRow(vtotal + 1UL) |
+                           DPU_FRAMEGEN_PKICKCONFIG_PKickCol((uint32_t)config->width + config->hfp + config->hbp + config->hsw) |
                            DPU_FRAMEGEN_PKICKCONFIG_PKickEn_MASK;
-
-    display->SKICKCONFIG = DPU_FRAMEGEN_SKICKCONFIG_SKickRow(config->height) |
-                           DPU_FRAMEGEN_SKICKCONFIG_SKickCol(config->width + 1UL) |
+    display->SKICKCONFIG = DPU_FRAMEGEN_SKICKCONFIG_SKickRow(vtotal + 1UL) |
+                           DPU_FRAMEGEN_SKICKCONFIG_SKickCol((uint32_t)config->width + config->hfp + config->hbp + config->hsw) |
                            DPU_FRAMEGEN_SKICKCONFIG_SKickEn_MASK;
 }
 
@@ -2719,7 +2755,7 @@ status_t DPU_InitFetchUnitWarp(DISPLAY_SEERIS_Type *base, dpu_unit_t unit, const
     /* Setup warping. */
     fetchWarp->WARPCONTROL = DPU_FETCHWARP_WARPCONTROL_WarpBitsPerPixel(config->warpBitsPerPixel) |
                              DPU_FETCHWARP_WARPCONTROL_WarpCoordinateMode(config->coordMode) |
-                             DPU_FETCHWARP_WARPCONTROL_WarpSymmetricOffset(config->enableSymmetricOffset);
+                             DPU_FETCHWARP_WARPCONTROL_WarpSymmetricOffset(config->enableSymmetricOffset ? 1UL : 0UL);
 
     fetchWarp->ARBSTARTX = config->arbStartX;
     fetchWarp->ARBSTARTY = config->arbStartY;
@@ -2820,3 +2856,4 @@ status_t DPU_InitWarpCoordinates(DISPLAY_SEERIS_Type *base, dpu_unit_t unit, con
 
     return kStatus_Success;
 }
+

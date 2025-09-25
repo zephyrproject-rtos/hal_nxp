@@ -1145,8 +1145,8 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 
     /* Selects the byte order for the payload of transmit and receive frames. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION) && FSL_FEATURE_FLEXCAN_HAS_ENDIANNESS_SELECTION)
-    ctrl2Temp = (pConfig->payloadEndianness) ? ctrl2Temp | CAN_CTRL2_PES_MASK :
-                                               ctrl2Temp & ~CAN_CTRL2_PES_MASK;
+    ctrl2Temp = (pConfig->payloadEndianness == kFLEXCAN_littleEndian) ? ctrl2Temp | CAN_CTRL2_PES_MASK :
+                                                                        ctrl2Temp & ~CAN_CTRL2_PES_MASK;
 #endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTERNAL_TIME_TICK) && FSL_FEATURE_FLEXCAN_HAS_EXTERNAL_TIME_TICK)
@@ -3543,8 +3543,8 @@ status_t FLEXCAN_ReadEnhancedRxFifo(CAN_Type *base, flexcan_fd_frame_t *pRxFrame
          * message which is being read. */
         (void)memcpy((void *)pRxFrame, (void *)(uint32_t *)E_RX_FIFO(base), sizeof(uint32_t) * idHitOff);
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP) && FSL_FEATURE_FLEXCAN_HAS_HIGH_RESOLUTION_TIMESTAMP)
-        /* If idHitOff is 20 or DLC is 15, no need to get idhit and hrtimestamp individually. */
-        if (idHitOff < 20U)
+        /* If idHitOff is 16 or DLC is 14, need to get idhit and hrtimestamp individually. */
+        if (idHitOff <= 16U)
         {
             pRxFrame->idhit = pRxFrame->dataWord[idHitOff - 4U];
             pRxFrame->hrtimestamp = pRxFrame->dataWord[idHitOff - 3U];
@@ -3555,8 +3555,8 @@ status_t FLEXCAN_ReadEnhancedRxFifo(CAN_Type *base, flexcan_fd_frame_t *pRxFrame
             }
         }
 #else
-        /* If idHitOff is 19 or DLC is 15, no need to get idhit individually. */
-        if (idHitOff < 19U)
+        /* If idHitOff is 15 or DLC is 14, need to get idhit individually. */
+        if (idHitOff <= 15U)
         {
             pRxFrame->idhit = pRxFrame->dataWord[idHitOff - 3U];
             /* Clear the unused frame data. */
@@ -4964,8 +4964,8 @@ static status_t FLEXCAN_SubHandlerForDataTransfered(CAN_Type *base,
     {
         if (intflag[i] != 0U)
         {
-            bitStart = (i == startIdx) ? (startMbIdx % 32) : 0;
-            bitEnd = (i == endIdx) ? (endMbIdx % 32) : 31;
+            bitStart = (i == startIdx) ? (startMbIdx % 32U) : 0U;
+            bitEnd = (i == endIdx) ? (endMbIdx % 32U) : 31U;
             for (uint32_t j = bitStart; j <= bitEnd; j++)
             {
                 if (0UL != (intflag[i] & ((uint32_t)1UL << j)))
@@ -5391,6 +5391,7 @@ void FLEXCAN_MemoryErrorHandleIRQ(CAN_Type *base, flexcan_handle_t *handle)
 #endif
 #endif
 
+void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t startMbIdx, uint32_t endMbIdx);
 void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t startMbIdx, uint32_t endMbIdx)
 {
     assert(NULL != s_flexcanHandle[instance]);
@@ -5408,6 +5409,7 @@ void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t startMbIdx, uint32
     SDK_ISR_EXIT_BARRIER;
 }
 
+void FLEXCAN_DriverEventIRQHandler(uint32_t instance);
 void FLEXCAN_DriverEventIRQHandler(uint32_t instance)
 {
     assert(NULL != s_flexcanHandle[instance]);
@@ -5431,6 +5433,7 @@ void FLEXCAN_DriverEventIRQHandler(uint32_t instance)
     SDK_ISR_EXIT_BARRIER;
 }
 
+void FLEXCAN_DriverIRQHandler(uint32_t instance);
 void FLEXCAN_DriverIRQHandler(uint32_t instance)
 {
     assert(NULL != s_flexcanHandle[instance]);

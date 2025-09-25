@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.lpflexcomm_lpuart)
-    mcux_component_version(2.3.3)
+    mcux_component_version(2.3.4)
 
     mcux_add_source(SOURCES fsl_lpuart.h fsl_lpuart.c)
 

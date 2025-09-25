@@ -20,13 +20,22 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 1))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 2))
 /*! @} */
 
-/*! @brief Timeout times for waiting flag. */
+/*!
+ * @brief Max loops to wait for I3C operation status complete.
+ *
+ * This is the maximum number of loops to wait for I3C operation status complete.
+ * If set to 0, it will wait indefinitely.
+ */
 #ifndef I3C_RETRY_TIMES
-#define I3C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#ifdef CONFIG_I3C_RETRY_TIMES
+#define I3C_RETRY_TIMES CONFIG_I3C_RETRY_TIMES
+#else
+#define I3C_RETRY_TIMES 0U
 #endif
+#endif /* I3C_RETRY_TIMES */
 
 #ifndef I3C_MAX_DEVCNT
 #define I3C_MAX_DEVCNT 10U

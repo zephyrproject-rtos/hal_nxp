@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FTM driver version 2.7.1. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 7, 2))
 /*! @} */
 
 /*!
@@ -745,6 +745,25 @@ void FTM_SetupDualEdgeCapture(FTM_Type *base,
  * @param faultParams Parameters passed in to set up the fault
  */
 void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ftm_fault_param_t *faultParams);
+
+#if (defined(FSL_FEATURE_FTM_HAS_ERRATA_010856) && FSL_FEATURE_FTM_HAS_ERRATA_010856)
+/*!
+ * @brief Workaround for ERR010856.
+ *
+ * This API should be invoked in TOF interrupt handler when a fault is detected to ensure that the outputs
+ * return to the value configured by SWOCTRL, then FTM should be configured as follows:
+ *  - MODE[FAULTM] configured for manual fault clearing. (MODE[FAULTM] = 0b10)
+ *  - For devices that include the CONF[NUMTOF] field, it must be cleared to 0b00000.
+ *  - SYNC[SYNCHOM] and SYNCONF[SWOC] configured for update OUTMASK and SWOCTRL register at each rising
+ *    edge of system clock. (SYNC[SYNCHOM] = 0, SYNCONF[SWOC] = 0)
+ *
+ * @param base         FTM peripheral base address
+ * @param faultFlag    Pointer to variable to indicate that a fault was detected
+ * @param channel      Channels controlled by Software output, logical OR of enumeration ::ftm_channel_index_t
+ * @param channelValue Channels value controlled by Software output, logical OR of enumeration ::ftm_channel_index_t
+ */
+void FTM_ERRATA_010856(FTM_Type *base, uint8_t *faultFlag, uint32_t channel, uint32_t channelValue);
+#endif
 
 /*!
  * @name Interrupt Interface

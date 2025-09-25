@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022,2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -91,18 +91,26 @@ typedef enum _tsi_sensitivity_xdn_option
  *
  * These constants define the shield pin used for HW shielding functionality. One or more shield pin can be selected.
  * The involved bitfield is not fix can change from device to device (KE16Z7 and KE17Z7 support 3 shield pins, other KE
- * serials only support 1 shield pin).
+ * serials only support 1 shield pin, MCXN devices has 4 shield pins).
  */
 typedef enum _tsi_shield
 {
-    kTSI_shieldAllOff  = 0U, /*!< No pin used */
-    kTSI_shield0On     = 1U, /*!< Shield 0   pin used */
-    kTSI_shield1On     = 2U, /*!< Shield 1   pin used */
-    kTSI_shield1and0On = 3U, /*!< Shield 0,1 pins used */
-    kTSI_shield2On     = 4U, /*!< Shield 2   pin used */
-    kTSI_shield2and0On = 5U, /*!< Shield 2,0 pins used */
-    kTSI_shield2and1On = 6U, /*!< Shield 2,1 pins used */
-    kTSI_shieldAllOn   = 7U, /*!< Shield 2,1,0 pins used */
+    kTSI_shieldAllOff      = 0U,  /*!< No pin used */
+    kTSI_shield0On         = 1U,  /*!< Shield 0       pin used */
+    kTSI_shield1On         = 2U,  /*!< Shield 1       pin used */
+    kTSI_shield1and0On     = 3U,  /*!< Shield 0,1     pins used */
+    kTSI_shield2On         = 4U,  /*!< Shield 2       pin used */
+    kTSI_shield2and0On     = 5U,  /*!< Shield 2,0     pins used */
+    kTSI_shield2and1On     = 6U,  /*!< Shield 2,1     pins used */
+    kTSI_shield2and1and0On = 7U,  /*!< Shield 2,1,0   pins used */
+    kTSI_shield3On         = 8U,  /*!< Shield 3       pin used */
+    kTSI_shield3and0On     = 9U,  /*!< Shield 3,0     pins used */
+    kTSI_shield3and1On     = 10U, /*!< Shield 3,1     pins used */
+    kTSI_shield3and1and0On = 11U, /*!< Shield 3,1,0   pins used */
+    kTSI_shield3and2On     = 12U, /*!< Shield 3,2     pin used */
+    kTSI_shield3and2and0On = 13U, /*!< Shield 3,2,0   pins used */
+    kTSI_shield3and2and1On = 14U, /*!< Shield 3,2,1   pins used */
+    kTSI_shieldAllOn       = 15U, /*!< Shield 3,2,1,0 pins used */
 } tsi_shield_t;
 
 /*!

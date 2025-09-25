@@ -156,6 +156,15 @@ typedef enum _netc_msg_ip_version_cmd
 } netc_msg_ip_version_cmd_t;
 
 /*!
+ * @brief Get IP version class specific code
+ */
+typedef enum _netc_msg_ip_version_code
+{
+    kNETC_MsgIpVersionNotAvail   = 0xffU, /* verion not available */
+} netc_msg_ip_version_code_t;
+
+
+/*!
  * @brief VSI-PSI message header format
  */
 typedef struct _netc_msg_header

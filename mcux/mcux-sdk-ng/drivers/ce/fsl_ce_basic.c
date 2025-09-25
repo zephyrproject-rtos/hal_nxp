@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -12,15 +12,31 @@ Implementation file for CE wrapper/driver functions on ARM
 #include "fsl_ce_basic.h"
 #include "fsl_ce_cmd.h"
 
-int CE_ExecCmd()
+/*!
+ * brief Executes commands in the command queue.
+ * 
+ * return Command execution status.
+ */
+int32_t CE_ExecCmd(void)
 {
-    int status = CE_CmdLaunch(1);
+    int32_t status = CE_CmdLaunch(1);
+
     return status;
 }
 
-int CE_NullCmd()
+/*!
+ * brief Sends a basic command to verify that ZV2117 is operational
+ * and that the command interface is functioning properly.
+ *
+ * details This function passes through the command processing interface
+ * and returns a success status.
+ * 
+ * return Command execution status.
+ */
+int32_t CE_NullCmd(void)
 {
-    int status;
+    int32_t status;
+
     ce_cmdstruct_t cmdstruct;
     cmdstruct.n_ptr_args   = 0;
     cmdstruct.n_param_args = 0;
@@ -35,9 +51,22 @@ int CE_NullCmd()
     return status;
 }
 
-int CE_Copy(int *pDst, int *pSrc, const int N)
+/*!
+ * brief Copies data between buffers in the ZV2117 memory section.
+ *
+ * details Copies a specified number of 32-bit words from the source
+ * to the destination buffer. Both buffers must reside in the ZV2117
+ * data memory section.
+ *
+ * param [out] pDst Pointer to destination buffer
+ * param [in]  pSrc Pointer to source buffer
+ * param [in]  N    Number of 32-bit words to copy
+ *
+ * return Command execution status.
+ */
+int32_t CE_Copy(int32_t *pDst, int32_t *pSrc, const int32_t N)
 {
-    int status;
+    int32_t status;
 
     ce_cmdstruct_t cmdstruct;
     cmdstruct.n_ptr_args         = 2;

@@ -174,7 +174,7 @@ void CMU_FM_RegisterCallBack(CMU_FM_Type *base, cmu_fm_callback_t cb_func)
 /* IRQ handler functions overloading weak symbols in the startup */
 void CMU_FM_DriverIRQHandler(uint32_t idx)
 {
-    if (idx > ARRAY_SIZE(s_cmufmBases))
+    if (idx >= ARRAY_SIZE(s_cmufmBases))
     {
         return;
     }

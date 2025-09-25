@@ -165,11 +165,11 @@ status_t WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
     RESET_ReleasePeripheralReset(s_wdogResets[WDOG32_GetInstance(base)]);
 #endif
 
-    value = WDOG_CS_EN((uint32_t)regConfig->enableWdog32) | WDOG_CS_CLK((uint32_t)regConfig->clockSource) |
-            WDOG_CS_INT((uint32_t)regConfig->enableInterrupt) | WDOG_CS_WIN((uint32_t)regConfig->enableWindowMode) |
-            WDOG_CS_UPDATE((uint32_t)regConfig->enableUpdate) | WDOG_CS_DBG((uint32_t)regConfig->workMode.enableDebug) |
-            WDOG_CS_STOP((uint32_t)regConfig->workMode.enableStop) |
-            WDOG_CS_WAIT((uint32_t)regConfig->workMode.enableWait) | WDOG_CS_PRES(tempPrescaler) |
+    value = WDOG_CS_EN((uint32_t)(regConfig->enableWdog32 ? 1: 0)) | WDOG_CS_CLK((uint32_t)regConfig->clockSource) |
+            WDOG_CS_INT((uint32_t)(regConfig->enableInterrupt ? 1 : 0)) | WDOG_CS_WIN((uint32_t)(regConfig->enableWindowMode ? 1 : 0)) |
+            WDOG_CS_UPDATE((uint32_t)(regConfig->enableUpdate ? 1 : 0)) | WDOG_CS_DBG((uint32_t)(regConfig->workMode.enableDebug ? 1 : 0)) |
+            WDOG_CS_STOP((uint32_t)(regConfig->workMode.enableStop ? 1 : 0)) |
+            WDOG_CS_WAIT((uint32_t)(regConfig->workMode.enableWait ? 1 : 0)) | WDOG_CS_PRES(tempPrescaler) |
             WDOG_CS_CMD32EN(1UL) | WDOG_CS_TST((uint32_t)regConfig->testMode);
 
     /* Disable the global interrupts. Otherwise, an interrupt could effectively invalidate the unlock sequence

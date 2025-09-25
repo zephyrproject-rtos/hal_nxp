@@ -633,7 +633,7 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
 /*
  * Introduces the FGPIO feature.
  *
- * The FGPIO features are only support on some Kinetis MCUs. The FGPIO registers are aliased to the IOPORT
+ * The FGPIO registers are aliased to the IOPORT
  * interface. Accesses via the IOPORT interface occur in parallel with any instruction fetches and
  * complete in a single cycle. This aliased Fast GPIO memory map is called FGPIO.
  */

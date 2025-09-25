@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2023, 2024 NXP
+ * Copyright 2016-2019, 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -189,13 +189,14 @@ status_t IRTC_Init(RTC_Type *base, const irtc_config_t *config)
                (uint16_t)RTC_CTRL_ALM_MATCH_MASK);
         reg |= (
 #if !defined(FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK) || (!FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK)
-               RTC_CTRL_TIMER_STB_MASK(config->timerStdMask) |
+               RTC_CTRL_TIMER_STB_MASK(config->timerStdMask ? 1U : 0U) |
+
 #endif
 #if defined(FSL_FEATURE_RTC_HAS_CLOCK_SELECT) && FSL_FEATURE_RTC_HAS_CLOCK_SELECT
                RTC_CTRL_CLK_SEL(config->clockSelect) |
 #endif
 #if defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE
-               RTC_CTRL_CLKO_DIS(config->disableClockOutput) |
+               RTC_CTRL_CLKO_DIS(config->disableClockOutput ? 1U : 0U) |
 #endif
                RTC_CTRL_ALM_MATCH(config->alrmMatch));
         base->CTRL = reg;
@@ -653,7 +654,7 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
             reg = base->FILTER01_CFG;
             reg &= ~((uint16_t)RTC_FILTER01_CFG_POL0_MASK | (uint16_t)RTC_FILTER01_CFG_FIL_DUR0_MASK |
                      (uint16_t)RTC_FILTER01_CFG_CLK_SEL0_MASK);
-            reg |= (RTC_FILTER01_CFG_POL0(tamperConfig->pinPolarity) |
+            reg |= (RTC_FILTER01_CFG_POL0(tamperConfig->pinPolarity ? 1U : 0U) |
                     RTC_FILTER01_CFG_FIL_DUR0(tamperConfig->filterDuration) |
                     RTC_FILTER01_CFG_CLK_SEL0(tamperConfig->filterClk));
             base->FILTER01_CFG = reg;
@@ -662,7 +663,7 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
             reg = base->FILTER01_CFG;
             reg &= ~((uint16_t)RTC_FILTER01_CFG_POL1_MASK | (uint16_t)RTC_FILTER01_CFG_FIL_DUR1_MASK |
                      (uint16_t)RTC_FILTER01_CFG_CLK_SEL1_MASK);
-            reg |= (RTC_FILTER01_CFG_POL1(tamperConfig->pinPolarity) |
+            reg |= (RTC_FILTER01_CFG_POL1(tamperConfig->pinPolarity ? 1U : 0U) |
                     RTC_FILTER01_CFG_FIL_DUR1(tamperConfig->filterDuration) |
                     RTC_FILTER01_CFG_CLK_SEL1(tamperConfig->filterClk));
             base->FILTER01_CFG = reg;
@@ -672,7 +673,7 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
             reg = base->FILTER23_CFG;
             reg &= ~((uint16_t)RTC_FILTER23_CFG_POL2_MASK | (uint16_t)RTC_FILTER23_CFG_FIL_DUR2_MASK |
                      (uint16_t)RTC_FILTER23_CFG_CLK_SEL2_MASK);
-            reg |= (RTC_FILTER23_CFG_POL2(tamperConfig->pinPolarity) |
+            reg |= (RTC_FILTER23_CFG_POL2(tamperConfig->pinPolarity ? 1U : 0U) |
                     RTC_FILTER23_CFG_FIL_DUR2(tamperConfig->filterDuration) |
                     RTC_FILTER23_CFG_CLK_SEL2(tamperConfig->filterClk));
             base->FILTER23_CFG = reg;
@@ -681,7 +682,7 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
             reg = base->FILTER23_CFG;
             reg &= ~((uint16_t)RTC_FILTER23_CFG_POL3_MASK | (uint16_t)RTC_FILTER23_CFG_FIL_DUR3_MASK |
                      (uint16_t)RTC_FILTER23_CFG_CLK_SEL3_MASK);
-            reg |= (RTC_FILTER23_CFG_POL3(tamperConfig->pinPolarity) |
+            reg |= (RTC_FILTER23_CFG_POL3(tamperConfig->pinPolarity ? 1U : 0U) |
                     RTC_FILTER23_CFG_FIL_DUR3(tamperConfig->filterDuration) |
                     RTC_FILTER23_CFG_CLK_SEL3(tamperConfig->filterClk));
             base->FILTER23_CFG = reg;
@@ -691,7 +692,7 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
             reg = base->FILTER2_CFG;
             reg &= ~((uint16_t)RTC_FILTER2_CFG_POL2_MASK | (uint16_t)RTC_FILTER2_CFG_FIL_DUR2_MASK |
                      (uint16_t)RTC_FILTER2_CFG_CLK_SEL2_MASK);
-            reg |= (RTC_FILTER2_CFG_POL2(tamperConfig->pinPolarity) |
+            reg |= (RTC_FILTER2_CFG_POL2(tamperConfig->pinPolarity ? 1U : 0U) |
                     RTC_FILTER2_CFG_FIL_DUR2(tamperConfig->filterDuration) |
                     RTC_FILTER2_CFG_CLK_SEL2(tamperConfig->filterClk));
             base->FILTER2_CFG = reg;

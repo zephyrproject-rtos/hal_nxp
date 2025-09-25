@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -239,10 +239,10 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
     {
         uint32_t flexnvmInfoIfrAddr;
         status_t returnCode;
-                
+
         flexnvmInfoIfrAddr =
             config->ifrDesc.resRange.dflashIfrStart + config->ifrDesc.resRange.ifrMemSize - sizeof(dataIFRReadOut);
-        
+
         returnCode = FTFx_CMD_ReadResource(config, flexnvmInfoIfrAddr, (uint8_t *)&dataIFRReadOut, sizeof(dataIFRReadOut),
                                            kFTFx_ResourceOptionFlashIfr);
         if (returnCode != kStatus_FTFx_Success)
@@ -250,16 +250,16 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
             return kStatus_FTFx_PartitionStatusUpdateFailure;
         }
     }
-    
+
 #elif defined(SIM_FCFG1_DEPART_MASK)
     {
         uint32_t dflashSize;
         uint32_t dflashTotalSize;
-        
+
         dataIFRReadOut.FlexNVMPartitionCode = (uint8_t)((SIM->FCFG1 & SIM_FCFG1_DEPART_MASK) >> SIM_FCFG1_DEPART_SHIFT);
         dflashSize = kDflashDensities[dataIFRReadOut.FlexNVMPartitionCode & 0x0FU];
         dflashTotalSize = FSL_FEATURE_FLASH_FLEX_NVM_DFLASH_SIZE_FOR_DEPART_0000;
-        
+
         if (dflashSize < dflashTotalSize)
         {
             dataIFRReadOut.EEPROMDataSetSize = (uint8_t)((SIM->FCFG1 & SIM_FCFG1_EEERAMSIZE_MASK) >> SIM_FCFG1_EEERAMSIZE_SHIFT);
@@ -272,7 +272,7 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
     }
 
 #else
-    
+
 #error "Cannot get FlexNVM memory partition info"
 
 #endif /* FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD */
@@ -1140,12 +1140,15 @@ status_t FTFx_REG_GetSecurityState(ftfx_config_t *config, ftfx_security_state_t 
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD) && FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD
+
 /*!
  * @brief Sets the FlexRAM function command.
  */
+
 status_t FTFx_CMD_SetFlexramFunction(ftfx_config_t *config, ftfx_flexram_func_opt_t option)
 {
     status_t status;
+
     if (config == NULL)
     {
         return kStatus_FTFx_InvalidArgument;
@@ -1157,12 +1160,54 @@ status_t FTFx_CMD_SetFlexramFunction(ftfx_config_t *config, ftfx_flexram_func_op
         return status;
     }
 
-    /* preparing passing parameter to verify all block command */
     kFCCOBx[0] = BYTE2WORD_1_1_2(FTFx_SET_FLEXRAM_FUNCTION, option, 0xFFFFU);
 
-    /* calling flash command sequence function to execute the command */
     return ftfx_command_sequence(config);
 }
+
+#ifdef FSL_FEATURE_FLASH_IS_FTFC
+
+/*!
+ * @brief Sets the FlexRAM function command with EEPROM Quick Write support
+ */
+
+status_t FTFx_CMD_SetFlexramFunction_QuickWrite(ftfx_config_t *config, ftfx_flexram_func_opt_t option, uint16_t qwSize, ftfx_flexram_eeprom_qw_status *returnInfo)
+{
+    status_t status;
+    status_t returnCode;
+
+    if (config == NULL)
+    {
+        return kStatus_FTFx_InvalidArgument;
+    }
+
+    status = ftfx_check_flexram_function_option(option);
+    if (kStatus_FTFx_Success != status)
+    {
+        return status;
+    }
+
+    kFCCOBx[0] = BYTE2WORD_1_1_2(FTFx_SET_FLEXRAM_FUNCTION, option, 0xFFFFU);
+
+    if (option == kFTFx_FlexramFuncOptAvailableForEepromQuickWrite)
+    {
+        kFCCOBx[1] = BYTE2WORD_2_2(qwSize, 0xFFFFU);
+    }
+
+    returnCode = ftfx_command_sequence(config);
+
+    if (returnInfo != NULL)
+    {
+        returnInfo->brownoutStatus                 = (ftfx_eeprom_qw_bo_code)FTFx_FCCOB5_REG;
+        returnInfo->recordsRequireMaintenanceCount = (FTFx_FCCOB6_REG << 8) | FTFx_FCCOB7_REG;
+        returnInfo->sectorEraseCount               = (FTFx_FCCOB8_REG << 8) | FTFx_FCCOB9_REG;
+    }
+
+    return returnCode;
+}
+
+#endif /* FSL_FEATURE_FLASH_IS_FTFC */
+
 #endif /* FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD */
 
 #if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
@@ -1525,7 +1570,13 @@ static status_t ftfx_check_resource_range(ftfx_config_t *config,
 /*! @brief Validates the given flexram function option.*/
 static inline status_t ftfx_check_flexram_function_option(ftfx_flexram_func_opt_t option)
 {
-    if ((option != kFTFx_FlexramFuncOptAvailableAsRam) && (option != kFTFx_FlexramFuncOptAvailableForEeprom))
+    if ((option != kFTFx_FlexramFuncOptAvailableAsRam) && (option != kFTFx_FlexramFuncOptAvailableForEeprom)
+#ifdef FSL_FEATURE_FLASH_IS_FTFC
+        && (option != kFTFx_FlexramFuncOptEepromQuickWriteRecovery)
+        && (option != kFTFx_FlexramFuncOptEepromQuickWriteStatus)
+        && (option != kFTFx_FlexramFuncOptAvailableForEepromQuickWrite)
+#endif
+       )
     {
         return kStatus_FTFx_InvalidArgument;
     }

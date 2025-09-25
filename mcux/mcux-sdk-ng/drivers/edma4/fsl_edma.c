@@ -56,6 +56,13 @@ static EDMA_Type *const s_edmaBases[] = EDMA_BASE_PTRS;
 static const clock_ip_name_t s_edmaClockName[] = EDMA_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if defined(FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE) && FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE
+/*! @brief Array to map EDMA instance number to clock name. */
+static const clock_ip_name_t s_edmaTcdClockName[] = EDMA_TCD_CLOCKS;
+#endif
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
 #if defined(EDMA_RESETS_ARRAY)
 /* Reset array */
 static const reset_ip_name_t s_edmaResets[] = EDMA_RESETS_ARRAY;
@@ -203,6 +210,12 @@ void EDMA_Init(EDMA_Type *base, const edma_config_t *config)
     /* channel transfer configuration */
     for (i = 0U; i < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base); i++)
     {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if defined(FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE) && FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE
+        /* Ungate EDMA TCD peripheral clock */
+        CLOCK_EnableClock(s_edmaTcdClockName[i]);
+#endif
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
         if (config->channelConfig[i] != NULL)
         {
             EDMA_InitChannel(base, i, config->channelConfig[i]);
@@ -224,6 +237,16 @@ void EDMA_Deinit(EDMA_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate EDMA peripheral clock */
     CLOCK_DisableClock(s_edmaClockName[EDMA_GetInstance(base)]);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if defined(FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE) && FSL_FEATURE_EDMA_HAS_EDMA_TCD_CLOCK_ENABLE
+    for (uint32_t i = 0U; i < (uint32_t)FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base); i++)
+    {
+        /* Gate EDMA TCD peripheral clock */
+        CLOCK_DisableClock(s_edmaTcdClockName[i]);
+    }
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 

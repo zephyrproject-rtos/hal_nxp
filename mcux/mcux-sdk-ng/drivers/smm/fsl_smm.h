@@ -25,9 +25,35 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief smm driver version 2.0.0. */
-#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief smm driver version 2.1.0. */
+#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
+
+/*!
+ * @brief The enumeration of interrupt to enable.
+ * @anchor smm_interrupt_enable_t.
+ */
+enum _smm_interrupt_enable
+{
+    kSMM_QChannelTimeoutInt = 1UL << 12UL,
+    kSMM_QChannelDenyInt = 1UL << 14UL,
+    kSMM_DeepSleepCounterInt = 1UL << 9UL,
+    kSMM_ComparatorMatchInt = 1UL << 8UL,
+    kSMM_AllSupportedInts = (kSMM_QChannelTimeoutInt | kSMM_QChannelDenyInt | \
+                            kSMM_DeepSleepCounterInt | kSMM_ComparatorMatchInt),
+};
+
+/*!
+ * @brief The enumeration of interrupt flag.
+ * @anchor smm_interrupt_flag_t
+ */
+enum _smm_interrupt_flag
+{
+    kSMM_QChannelTimeoutIntFlag = 1UL << 13UL,
+    kSMM_QChannelDenyIntFlag = 1UL << 15UL,
+
+    kSMM_AllIntFlags = kSMM_QChannelTimeoutIntFlag | kSMM_QChannelDenyIntFlag,
+};
 
 /*!
  * @brief The enumeration of external interrupt polarity.
@@ -55,6 +81,15 @@ typedef struct _smm_backup_reg_content
     uint32_t word1; /* The first word of backend register 1. */
     uint32_t word2; /* The second word of backend register 2. */
 } smm_backup_reg_content_t;
+
+/*!
+ * @brief Watchdog alarm use enumeration.
+ */
+typedef enum _smm_watchdog_alarm_use
+{
+    kSMM_WatchdogAlarmAsReset = 0U,       /*!< Watchdog alarm as reset. */
+    kSMM_WatchdogAlarmAsInterrupt = 1U    /*!< Watchdog alarm as interrupt. */
+} smm_watchdog_alarm_use_t;
 
 /*******************************************************************************
 * API
@@ -99,7 +134,7 @@ static inline void SMM_DisableMainCpuIsoSingal(SMM_Type *base)
  */
 static inline void SMM_EnableWakeupSourceToMainCpu(SMM_Type *base, uint32_t wakeupSources)
 {
-    base->WKUP_MAIN = SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU(1UL << wakeupSources);
+    base->WKUP_MAIN = SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU(wakeupSources);
 }
 
 /*!
@@ -110,7 +145,7 @@ static inline void SMM_EnableWakeupSourceToMainCpu(SMM_Type *base, uint32_t wake
  */
 static inline void SMM_DisableWakeupSourceToMainCpu(SMM_Type *base, uint32_t wakeupSources)
 {
-    base->WKUP_MAIN &= ~SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU(1UL<< wakeupSources);
+    base->WKUP_MAIN &= ~SMM_WKUP_MAIN_WKUP_SRC_MAIN_CPU(wakeupSources);
 }
 
 /*!
@@ -133,7 +168,7 @@ static inline uint32_t SMM_GetEnabledWakeupSourceToMainCpu(SMM_Type *base)
  */
 static inline void SMM_EnableWakeupSourceToAonCpu(SMM_Type *base, uint32_t wakeupSources)
 {
-    base->AON_CPU = SMM_AON_CPU_WKUP_SRC_AON_CPU(1UL << wakeupSources);
+    base->AON_CPU = SMM_AON_CPU_WKUP_SRC_AON_CPU(wakeupSources);
 }
 
 /*!
@@ -144,7 +179,7 @@ static inline void SMM_EnableWakeupSourceToAonCpu(SMM_Type *base, uint32_t wakeu
  */
 static inline void SMM_DisableWakeupSourceToAonCpu(SMM_Type *base, uint32_t wakeupSources)
 {
-    base->AON_CPU &= ~SMM_AON_CPU_WKUP_SRC_AON_CPU(1UL << wakeupSources);
+    base->AON_CPU &= ~SMM_AON_CPU_WKUP_SRC_AON_CPU(wakeupSources);
 }
 
 /*!
@@ -280,7 +315,7 @@ static inline void SMM_PowerOnAonSramManually(SMM_Type *base, uint8_t sramCuts)
 static inline void SMM_PowerOffAonSramAutomatically(SMM_Type *base, uint8_t sramCuts)
 {
     base->PWDN_CONFIG |=  SMM_PWDN_CONFIG_CTRL_SRAM_DPD2_MASK;
-    base->MEMORY_RTN  = ((base->MEMORY_RTN & ~SMM_MEMORY_RTN_CPU_RAM_PWD_MASK) | SMM_MEMORY_RTN_CPU_RAM_PWD(sramCuts));
+    base->MEMORY_RTN  = ((base->MEMORY_RTN & ~SMM_MEMORY_RTN_CPU_SRAMBn_PWD_MASK) | SMM_MEMORY_RTN_CPU_SRAMBn_PWD(sramCuts));
 }
 
 /*!
@@ -399,7 +434,26 @@ static inline void SMM_ClearExternalIntFlag(SMM_Type *base)
 static inline void SMM_DisableMainCpuIso(SMM_Type *base)
 {
     base->CNFG |= (SMM_CNFG_MAIN_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
     base->CNFG &= ~(SMM_CNFG_MAIN_ISO_DSBL_MASK);
+    
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
+    base->CNFG |= (SMM_CNFG_MAIN_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
+    base->CNFG &= ~(SMM_CNFG_MAIN_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
 }
 
 /*!
@@ -410,7 +464,25 @@ static inline void SMM_DisableMainCpuIso(SMM_Type *base)
 static inline void SMM_DisableAonCpuIso(SMM_Type *base)
 {
     base->CNFG |= (SMM_CNFG_AON_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
     base->CNFG &= ~(SMM_CNFG_AON_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
+    base->CNFG |= (SMM_CNFG_AON_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
+    base->CNFG &= ~(SMM_CNFG_AON_ISO_DSBL_MASK);
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
 }
 
 /*!
@@ -436,13 +508,189 @@ static inline void SMM_ClearMainCpuWakeupSources(SMM_Type *base)
 /*!
  * @brief Clear all wakeup sources to AON domain.
  * 
- * @param base 
+ * @param base SMM base address.
  */
 static inline void SMM_ClearAonCpuWakeupSources(SMM_Type *base)
 {
     base->AON_CPU &= ~SMM_AON_CPU_WKUP_SRC_AON_CPU_MASK;
 }
 
+/*!
+ * @brief Config the watchdog alarm use.
+ *
+ * @param base SMM base address.
+ * @param alarmUse The watchdog alarm use.
+ */
+static inline void SMM_ConfigWatchdogAlarmUse(SMM_Type *base, smm_watchdog_alarm_use_t alarmUse)
+{
+    base->CNFG &= ~(SMM_CNFG_WTCHDG_USE_INT_MASK);
+    base->CNFG |= SMM_CNFG_WTCHDG_USE_INT(alarmUse);
+}
+
+/*!
+ * @brief Use the deep sleep counter for general software needs.
+ * 
+ * @param base SMM base address.
+ */
+static inline void SMM_UseDeepSleepCounterInSoftwareMethod(SMM_Type *base)
+{
+    base->CNFG |= SMM_CNFG_DSLP_COUNT_USE_MASK;
+}
+
+/*!
+ * @brief Use the deep sleep counter by hardware to wakeup from low power mode.
+ * 
+ * @param base SMM base address.
+ */
+static inline void SMM_UseDeepSleepCounterInHardwareMethod(SMM_Type *base)
+{
+    base->CNFG &= ~SMM_CNFG_DSLP_COUNT_USE_MASK;
+}
+
+/*!
+ * @brief Reset the deep sleep counter and disable count.
+ * 
+ * @param base SMM base address.
+ */
+static inline void SMM_ResetAndDisableDeepSleepCounter(SMM_Type *base)
+{
+    base->CNFG |= SMM_CNFG_DSLP_COUNT_RST_MASK;
+    for (uint32_t i = 0UL; i < 1000UL; i++)
+    {
+        i++;
+    }
+    base->CNFG &= ~SMM_CNFG_DSLP_COUNT_RST_MASK;
+}
+
+/*!
+ * @brief Enable the countdown start of the deep sleep counter when at sofware use.
+ * 
+ * @param base SMM base address.
+ */
+static inline void SMM_StartDeepSleepCounter(SMM_Type *base)
+{
+    base->CNFG |= SMM_CNFG_DSLP_COUNT_STRT_MASK;
+}
+
+/*!
+ * @brief Update the deep sleep counter, the counter is counting the AON clocks.
+ * 
+ * @param base SMM base address.
+ * @param value Value to update the deep sleep counter.
+ */
+static inline void SMM_UpdateDeepSleepCounter(SMM_Type *base, uint16_t value)
+{
+    base->DPSLP_COUNT = SMM_DPSLP_COUNT_DPSLP_CNT(value);
+}
+
+/*!
+ * @brief Read value of deep sleep counter.
+ * 
+ * @param base SMM base address.
+ *
+ * @return Count of deep sleep counter.
+ */
+static inline uint16_t SMM_ReadDeepSleepCounter(SMM_Type *base)
+{
+    return (uint16_t)(base->DPSLP_COUNT);
+}
+
+/*!
+ * @brief Enable specific interrupts.
+ * 
+ * @param base SMM base address.
+ * @param masks The mask of interrupts to enable, should be OR'ed value of @ref smm_interrupt_enable_t.
+ */
+static inline void SMM_EnableInterrupts(SMM_Type *base, uint32_t masks)
+{
+    uint32_t tmp32 = base->STAT;
+
+    tmp32 &= ~(kSMM_AllSupportedInts);
+    base->STAT = (tmp32 | (masks & kSMM_AllSupportedInts));
+}
+
+/*!
+ * @brief Disable specific interrupts.
+ * 
+ * @param base SMM base address.
+ * @param masks The mask of interrupts to disable, should be OR'ed value of @ref smm_interrupt_enable_t.
+ */
+static inline void SMM_DisableInterrupts(SMM_Type *base, uint32_t masks)
+{
+    uint32_t tmp32 = base->STAT;
+
+     tmp32 &= ~(kSMM_AllSupportedInts);
+    base->STAT = tmp32 & (~(masks & kSMM_AllSupportedInts));
+}
+
+/*!
+ * @brief Get interrupt flags.
+ * 
+ * @param base SMM base address.
+ *
+ * @return The mask of all asserted interrupt flags, should be the OR'ed value of @ref smm_interrupt_flag_t.
+ */
+static inline uint32_t SMM_GetInterruptFlags(SMM_Type *base)
+{
+    return ((base->STAT) & kSMM_AllIntFlags);
+}
+
+/*!
+ * @brief Clear interrupt flags.
+ * 
+ * @param base SMM base address.
+ * @param flags The mask of interrupt flags to clear, should be the OR'ed value of @ref smm_interrupt_flag_t.
+ */
+static inline void SMM_ClearInterruptFlags(SMM_Type *base, uint32_t flags)
+{
+    base->STAT = (flags & kSMM_AllIntFlags);
+}
+
+/*!
+ * @brief Check if deep sleep counter reach zero at software use.
+ * 
+ * @param base SMM base address.
+ *
+ * @retval false Deep sleep counter do not reach zero.
+ * @retval true Deep sleep counter reach zero.
+ */
+static inline bool SMM_CheckDeepSleepCounterMatch(SMM_Type *base)
+{
+    return ((base->STAT & SMM_STAT_DPSLP_CNTR_M_MASK) != 0UL);
+}
+
+/*!
+ * @brief Clear deep sleep counter match flag.
+ * 
+ * @param base SMM base address.
+ */
+static inline void SMM_ClearDeepSleepCounterMatchFlag(SMM_Type *base)
+{
+    base->STAT = SMM_STAT_DPSLP_CNTR_M_MASK;
+}
+
+/*!
+ * @brief Check if comparator match was active.
+ * 
+ * @param base SMM base address.
+ *
+ * @retval false Comparator match is not active.
+ * @retval true Comparator match is active.
+ */
+static inline bool SMM_CheckComparatorMatch(SMM_Type *base)
+{
+    return ((base->STAT & SMM_STAT_COMP_MATCH_MASK) != 0UL);
+}
+
+/*!
+ * @brief Clear comparator match flag.
+ * 
+ * @param base SMM base address.
+ */
+static inline void SMM_ClearComparatorMatchFlag(SMM_Type *base)
+{
+    base->STAT = SMM_STAT_COMP_MATCH_MASK;
+}
 
 #if defined(__cplusplus)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eCAT driver version */
-#define FSL_ECAT_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_ECAT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
 /*! @} */
 
 /*! @brief Returns the first 16Bit of the AL Event register (0x220).*/

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017,2019-2023 NXP
+ * Copyright 2017,2019-2023,2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -350,9 +350,9 @@ typedef struct _dsi_transfer
     uint8_t *rxData;               /*!< The RX data buffer. */
     uint16_t txDataSize;           /*!< Size of the TX data. */
     uint16_t rxDataSize;           /*!< Size of the RX data. */
-    bool sendDscCmd;               /*!< If set to true, the DCS command is specified by @ref dscCmd, otherwise
+    bool sendDcsCmd;               /*!< If set to true, the DCS command is specified by @ref dcsCmd, otherwise
                                         the DCS command is included in the @ref txData. */
-    uint8_t dscCmd;                /*!< The DCS command to send, only valid when @ref sendDscCmd is true. */
+    uint8_t dcsCmd;                /*!< The DCS command to send, only valid when @ref sendDcsCmd is true. */
 } dsi_transfer_t;
 
 /*! @brief MIPI DSI transfer handle. */

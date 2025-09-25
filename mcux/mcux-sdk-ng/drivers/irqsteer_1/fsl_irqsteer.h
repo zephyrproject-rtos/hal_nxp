@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! Version 2.0.2. */
-#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! Version 2.0.1. */
+#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 /*

@@ -1077,3 +1077,49 @@ void ASRC_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif /* ASRC */
+
+#if defined ASRC1
+void ASRC1_DriverIRQHandler(void);
+void ASRC1_DriverIRQHandler(void)
+{
+    /* channel PAIR A interrupt handling*/
+    if ((ASRC1->ASRSTR & (uint32_t)kASRC_StatusPairAInterrupt) != 0U)
+    {
+        s_asrcIsr(ASRC1, s_asrcHandle[0][0U]);
+    }
+    /* channel PAIR B interrupt handling*/
+    if ((ASRC1->ASRSTR & (uint32_t)kASRC_StatusPairBInterrupt) != 0U)
+    {
+        s_asrcIsr(ASRC1, s_asrcHandle[0][1U]);
+    }
+    /* channel PAIR C interrupt handling*/
+    if ((ASRC1->ASRSTR & (uint32_t)kASRC_StatusPairCInterrupt) != 0U)
+    {
+        s_asrcIsr(ASRC1, s_asrcHandle[0][2U]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif /* ASRC1 */
+
+#if defined ASRC2
+void ASRC2_DriverIRQHandler(void);
+void ASRC2_DriverIRQHandler(void)
+{
+    /* channel PAIR A interrupt handling*/
+    if ((ASRC2->ASRSTR & (uint32_t)kASRC_StatusPairAInterrupt) != 0U)
+    {
+        s_asrcIsr(ASRC2, s_asrcHandle[1][0U]);
+    }
+    /* channel PAIR B interrupt handling*/
+    if ((ASRC2->ASRSTR & (uint32_t)kASRC_StatusPairBInterrupt) != 0U)
+    {
+        s_asrcIsr(ASRC2, s_asrcHandle[1][1U]);
+    }
+    /* channel PAIR C interrupt handling*/
+    if ((ASRC2->ASRSTR & (uint32_t)kASRC_StatusPairCInterrupt) != 0U)
+    {
+        s_asrcIsr(ASRC2, s_asrcHandle[1][2U]);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif /* ASRC2 */

@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SEMA42 driver version */
-#define FSL_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*! @} */
 
 /*!

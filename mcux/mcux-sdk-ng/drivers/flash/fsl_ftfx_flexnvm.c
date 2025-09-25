@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -242,6 +242,7 @@ status_t FLEXNVM_SecurityBypass(flexnvm_config_t *config, const uint8_t *backdoo
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD) && FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD
+
 /*!
  * @brief Sets the FlexRAM function command.
  */
@@ -249,6 +250,19 @@ status_t FLEXNVM_SetFlexramFunction(flexnvm_config_t *config, ftfx_flexram_func_
 {
     return FTFx_CMD_SetFlexramFunction(&config->ftfxConfig, option);
 }
+
+#ifdef FSL_FEATURE_FLASH_IS_FTFC
+
+/*!
+ * @brief Sets the FlexRAM function command with EEPROM Quick Write support
+ */
+status_t FLEXNVM_SetFlexramFunction_QuickWrite(flexnvm_config_t *config, ftfx_flexram_func_opt_t option, uint16_t qwSize, ftfx_flexram_eeprom_qw_status *returnInfo)
+{
+    return FTFx_CMD_SetFlexramFunction_QuickWrite(&config->ftfxConfig, option, qwSize, returnInfo);
+}
+
+#endif /* FSL_FEATURE_FLASH_IS_FTFC */
+
 #endif /* FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD */
 
 /*!

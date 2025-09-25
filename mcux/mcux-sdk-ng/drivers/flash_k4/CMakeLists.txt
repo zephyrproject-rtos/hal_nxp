@@ -1,9 +1,9 @@
-# Copyright 2024 NXP
+# Copyright 2024-2025 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.flash_k4)
-    mcux_component_version(2.2.1)
+    mcux_component_version(2.3.3)
 
     mcux_add_source(
         SOURCES
