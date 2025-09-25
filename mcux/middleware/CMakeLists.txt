@@ -1,7 +1,7 @@
 if(CONFIG_BT OR CONFIG_NET_L2_OPENTHREAD OR CONFIG_IEEE802154)
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk-middleware-connectivity-framework)
     include(connectivity_framework)
-    if(CONFIG_SOC_FAMILY_MCXW)
+    if(CONFIG_SOC_SERIES_MCXW7XX)
         zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src)
 
         zephyr_library_sources(
@@ -44,6 +44,11 @@ if(CONFIG_BT OR CONFIG_NET_L2_OPENTHREAD OR CONFIG_IEEE802154)
             zephyr_compile_definitions(MEM_USE_ZEPHYR=1U)
         endif()
     endif()
+endif()
+
+if(CONFIG_SOC_SERIES_MCXW2XX AND CONFIG_BT)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk-middleware-bluetooth-controller)
+    include(bluetooth_controller)
 endif()
 
 if(CONFIG_ENTROPY_NXP_ELE_TRNG)

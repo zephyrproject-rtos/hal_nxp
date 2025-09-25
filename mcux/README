@@ -162,6 +162,7 @@ Patch List:
   - mcux-sdk-middleware-connectivity-framework: Add new CMake file connectivity_framework.cmake
   - mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
   - mcux-sdk-middleware-connectivity-framework: connected_mcu: Modified to remove a large amount of dependencies and adapt code to be supported with Zephyr
+  - mcux-sdk-middleware-bluetooth-controller: Add new CMake file bluetooth_controller.cmake
   - Patched mcux-sdk\components\conn_fwloader\mcux-sdk\components\conn_fwloader\driver_conn_fwloader.cmake for TFM support
   - mcux-sdk/drivers/s3mu/fsl_s3mu.c: rename _BIT macro to avoid collision from util_macro.h in Zephyr
   - Modifed mcux\mcux-sdk\drivers\mipi_dsi_split\fsl_mipi_dsi.c line 541 to force 8.0 to float (8.0f) to avoid [-Double-promotion] warning
