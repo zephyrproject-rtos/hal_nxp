@@ -1,4 +1,4 @@
-/*
+	/*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
  * Copyright 2016,2019 - 2020 NXP
  * All rights reserved.
@@ -3932,7 +3932,10 @@ static void USB_HostEhciTransferCallback(usb_host_transfer_t *transfer, usb_stat
         DCACHE_InvalidateByRange((uint32_t)transfer->transferBuffer, transfer->transferSofar);
     }
 #endif
-    transfer->callbackFn(transfer->callbackParam, transfer, status); 
+    if ((transfer->callbackFn != NULL) && (transfer->callbackParam != NULL))
+    {
+        transfer->callbackFn(transfer->callbackParam, transfer, status);
+    }
 }
 
 void USB_HostEhciTransactionDone(usb_host_ehci_instance_t *ehciInstance)

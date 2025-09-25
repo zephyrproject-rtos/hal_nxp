@@ -917,7 +917,10 @@ usb_status_t USB_HostMsdInit(usb_device_handle deviceHandle, usb_host_class_hand
     msdInstance->msdCommand.cbwBlock = (usb_host_cbw_t *)OSA_MemoryAllocate(sizeof(usb_host_cbw_t));
     msdInstance->msdCommand.cswBlock = (usb_host_csw_t *)OSA_MemoryAllocate(sizeof(usb_host_csw_t));
 #endif
-
+    if (NULL == msdInstance->msdCommand.cbwBlock)
+	{
+		return kStatus_USB_AllocFail;
+	}
     /* initialize msd instance */
     msdInstance->deviceHandle    = deviceHandle;
     msdInstance->interfaceHandle = NULL;
