@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-05-09
-**     Build:               b250428
+**     Build:               b250811
 **
 **     Abstract:
 **         Chip specific module features.
@@ -660,8 +660,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -704,6 +702,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (4)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* MMDVSQ module features */
 
@@ -870,6 +872,12 @@
 #define FSL_FEATURE_RTC_HAS_TTSR (0)
 /* @brief Has Pin Configuration Register (register PCR). */
 #define FSL_FEATURE_RTC_HAS_PCR (0)
+/* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (0)
+/* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
+#define FSL_FEATURE_RTC_HAS_ERRATA_010716 (0)
+/* @brief Has clock output (bitfield CR[CLKO]). */
+#define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (1)
 
 /* SCG module features */
 
@@ -994,6 +1002,8 @@
 #define FSL_FEATURE_SMC_HAS_SRS_SECVIO (0)
 /* @brief Width of SMC registers. */
 #define FSL_FEATURE_SMC_REG_WIDTH (32)
+/* @brief Is affected by errata with ID 011063 (SMC: An asynchronous wakeup event during VLPS mode entry may result in possible system hang scenario). */
+#define FSL_FEATURE_SMC_HAS_ERRATA_011063 (0)
 
 /* SysTick module features */
 
