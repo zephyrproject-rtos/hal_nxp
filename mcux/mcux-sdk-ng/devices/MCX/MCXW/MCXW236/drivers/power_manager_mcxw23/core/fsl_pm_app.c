@@ -11,6 +11,9 @@
 #ifdef SDK_OS_FREE_RTOS
 #include "task.h"
 #endif /* SDK_OS_FREE_RTOS */
+#ifdef FSL_RTOS_THREADX
+#include "tx_low_power.h"
+#endif
 
 static uint32_t s_initialSysTickLoad = 0;
 static uint64_t s_systickStopTimeUs  = 0;
@@ -35,7 +38,7 @@ status_t PMAPP_EnterLowPower(uint32_t sleepDuration)
     /* Capture the time at which the systick timer is stopped */
     s_systickStopTimeUs = PMDEVICE_GetSleepTimer();
 
-#ifdef SDK_OS_FREE_RTOS
+#if defined(SDK_OS_FREE_RTOS) || defined(FSL_RTOS_THREADX)
     /* Disable Systicks for tickless mode */
     SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
 #endif /* SDK_OS_FREE_RTOS */
@@ -68,7 +71,7 @@ status_t PMAPP_EnterLowPower(uint32_t sleepDuration)
             s_smallestHeadroom = wakeupHeadroom;
         }
     }
-#ifdef SDK_OS_FREE_RTOS
+#if defined(SDK_OS_FREE_RTOS) || defined(FSL_RTOS_THREADX)
     uint32_t systickValue;
     uint64_t systickRestartTimeUs;
 
@@ -88,7 +91,11 @@ status_t PMAPP_EnterLowPower(uint32_t sleepDuration)
 
     uint32_t correction = systickValue / s_initialSysTickLoad;
     /* Inform OS about the skipped OS ticks */
+#if defined(SDK_OS_FREE_RTOS)
     vTaskStepTick(correction);
+#elif defined(FSL_RTOS_THREADX)
+    tx_time_increment(correction);
+#endif
 
     /* Adjust the phase of systick. SysTick->VAL does not accept any value other than 0.
      * Hence, LOAD is manipulated to adjust the phase. It is restored to the

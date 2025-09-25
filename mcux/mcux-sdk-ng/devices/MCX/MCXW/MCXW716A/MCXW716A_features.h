@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-21
-**     Build:               b250512
+**     Build:               b250814
 **
 **     Abstract:
 **         Chip specific module features.
@@ -203,6 +203,11 @@
 /* @brief Does not have SRAMCTL register */
 #define FSL_FEATURE_CMC_HAS_NO_SRAMCTL_REGISTER (1)
 
+/* CRC module features */
+
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
+
 /* EDMA module features */
 
 /* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
@@ -242,8 +247,6 @@
 
 /* FLEXIO module features */
 
-/* @brief Has DOZEN bit(CTRL[DOZEN]) */
-#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
@@ -272,6 +275,8 @@
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
 /* @brief Has pin input output related registers */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
 /* MSF1 module features */
 
@@ -321,8 +326,30 @@
 
 /* I3C module features */
 
+/* @brief Has TERM bitfile in MERRWARN register. */
+#define FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM (0)
 /* @brief SOC has no reset driver. */
 #define FSL_FEATURE_I3C_HAS_NO_RESET (1)
+/* @brief Use fixed BAMATCH count, do not provide editable BAMATCH. */
+#define FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH (0)
+/* @brief Register SCONFIG do not have IDRAND bitfield. */
+#define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
+/* @brief Register SCONFIG has HDROK bitfield. */
+#define FSL_FEATURE_I3C_HAS_HDROK (0)
+/* @brief Has ERRATA_051617. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_051617 (0)
+/* @brief SOC does not support slave IBI/MR/HJ */
+#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
+/* @brief Has ERRATA_052086. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052086 (0)
+/* @brief Has ERRATA_052123. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
+/* @brief Has IBI bytes. */
+#define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (0)
+/* @brief Has SCL delay after START. */
+#define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (0)
+/* @brief Has no the master write data register for DMA. */
+#define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 
 /* LPCMP module features */
 
@@ -409,8 +436,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (8)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -453,6 +478,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (8)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* LTC module features */
 
@@ -546,14 +575,26 @@
 
 /* RTC module features */
 
-/* @brief Has no supervisor access bit (CR). */
-#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (1)
-/* @brief Has no oscillator enable bit (CR). */
-#define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (1)
+/* @brief Has wakeup pin. */
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (0)
+/* @brief Has wakeup pin selection (bit field CR[WPS]). */
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION (0)
 /* @brief Has low power features (registers MER, MCLR and MCHR). */
 #define FSL_FEATURE_RTC_HAS_MONOTONIC (1)
+/* @brief Has read/write access control (registers WAR and RAR). */
+#define FSL_FEATURE_RTC_HAS_ACCESS_CONTROL (1)
+/* @brief Has security features (registers TTSR, MER, MCLR and MCHR). */
+#define FSL_FEATURE_RTC_HAS_SECURITY (1)
+/* @brief Has RTC_CLKIN available. */
+#define FSL_FEATURE_RTC_HAS_RTC_CLKIN (0)
+/* @brief Has prescaler adjust for LPO. */
+#define FSL_FEATURE_RTC_HAS_LPO_ADJUST (0)
 /* @brief Has Clock Pin Enable field. */
 #define FSL_FEATURE_RTC_HAS_CPE (1)
+/* @brief Has Timer Seconds Interrupt Configuration field. */
+#define FSL_FEATURE_RTC_HAS_TSIC (1)
+/* @brief Has OSC capacitor setting RTC_CR[SC2P ~ SC16P] */
+#define FSL_FEATURE_RTC_HAS_OSC_SCXP (0)
 /* @brief Has Tamper Interrupt Register (register TIR). */
 #define FSL_FEATURE_RTC_HAS_TIR (1)
 /* @brief Has Tamper Pin Interrupt Enable (bitfield TIR[TPIE]). */
@@ -576,6 +617,14 @@
 #define FSL_FEATURE_RTC_HAS_TTSR (1)
 /* @brief Has Pin Configuration Register (register PCR). */
 #define FSL_FEATURE_RTC_HAS_PCR (1)
+/* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (1)
+/* @brief Has no supervisor access bit (CR[SUP]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (1)
+/* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
+#define FSL_FEATURE_RTC_HAS_ERRATA_010716 (0)
+/* @brief Has clock output bit (CR[CLKO]). */
+#define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (1)
 
 /* SEMA42 module features */
 

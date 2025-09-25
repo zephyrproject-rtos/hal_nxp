@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b250512
+**     Build:               b250814
 **
 **     Abstract:
 **         Chip specific module features.
@@ -25,239 +25,124 @@
 
 /* SOC module features */
 
-#if defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0)
-    /* @brief CACHE64_CTRL availability on the SoC. */
-    #define FSL_FEATURE_SOC_CACHE64_CTRL_COUNT (1)
-    /* @brief CACHE64_POLSEL availability on the SoC. */
-    #define FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT (1)
-    /* @brief CDOG availability on the SoC. */
-    #define FSL_FEATURE_SOC_CDOG_COUNT (2)
-    /* @brief CMC availability on the SoC. */
-    #define FSL_FEATURE_SOC_CMC_COUNT (1)
-    /* @brief CRC availability on the SoC. */
-    #define FSL_FEATURE_SOC_CRC_COUNT (1)
-    /* @brief CTIMER availability on the SoC. */
-    #define FSL_FEATURE_SOC_CTIMER_COUNT (5)
-    /* @brief EDMA availability on the SoC. */
-    #define FSL_FEATURE_SOC_EDMA_COUNT (2)
-    /* @brief EIM availability on the SoC. */
-    #define FSL_FEATURE_SOC_EIM_COUNT (1)
-    /* @brief EVTG availability on the SoC. */
-    #define FSL_FEATURE_SOC_EVTG_COUNT (1)
-    /* @brief EWM availability on the SoC. */
-    #define FSL_FEATURE_SOC_EWM_COUNT (1)
-    /* @brief FLEXCAN availability on the SoC. */
-    #define FSL_FEATURE_SOC_FLEXCAN_COUNT (2)
-    /* @brief FLEXIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
-    /* @brief FLEXSPI availability on the SoC. */
-    #define FSL_FEATURE_SOC_FLEXSPI_COUNT (1)
-    /* @brief FMC availability on the SoC. */
-    #define FSL_FEATURE_SOC_FMC_COUNT (1)
-    /* @brief FREQME availability on the SoC. */
-    #define FSL_FEATURE_SOC_FREQME_COUNT (1)
-    /* @brief GPIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_GPIO_COUNT (12)
-    /* @brief SPC availability on the SoC. */
-    #define FSL_FEATURE_SOC_SPC_COUNT (1)
-    /* @brief HPDAC availability on the SoC. */
-    #define FSL_FEATURE_SOC_HPDAC_COUNT (1)
-    /* @brief I3C availability on the SoC. */
-    #define FSL_FEATURE_SOC_I3C_COUNT (2)
-    /* @brief I2S availability on the SoC. */
-    #define FSL_FEATURE_SOC_I2S_COUNT (2)
-    /* @brief INPUTMUX availability on the SoC. */
-    #define FSL_FEATURE_SOC_INPUTMUX_COUNT (1)
-    /* @brief ITRC availability on the SoC. */
-    #define FSL_FEATURE_SOC_ITRC_COUNT (1)
-    /* @brief LPADC availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPADC_COUNT (2)
-    /* @brief LPCMP availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPCMP_COUNT (3)
-    /* @brief LPDAC availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPDAC_COUNT (2)
-    /* @brief LPI2C availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPI2C_COUNT (10)
-    /* @brief LPSPI availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPSPI_COUNT (10)
-    /* @brief LPTMR availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPTMR_COUNT (2)
-    /* @brief LPUART availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPUART_COUNT (10)
-    /* @brief MAILBOX availability on the SoC. */
-    #define FSL_FEATURE_SOC_MAILBOX_COUNT (1)
-    /* @brief MCX_ENET availability on the SoC. */
-    #define FSL_FEATURE_SOC_MCX_ENET_COUNT (1)
-    /* @brief MPU availability on the SoC. */
-    #define FSL_FEATURE_SOC_MPU_COUNT (1)
-    /* @brief MRT availability on the SoC. */
-    #define FSL_FEATURE_SOC_MRT_COUNT (1)
-    /* @brief OPAMP availability on the SoC. */
-    #define FSL_FEATURE_SOC_OPAMP_COUNT (3)
-    /* @brief OSTIMER availability on the SoC. */
-    #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
-    /* @brief PINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PINT_COUNT (1)
-    /* @brief PKC availability on the SoC. */
-    #define FSL_FEATURE_SOC_PKC_COUNT (1)
-    /* @brief POWERQUAD availability on the SoC. */
-    #define FSL_FEATURE_SOC_POWERQUAD_COUNT (1)
-    /* @brief PORT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PORT_COUNT (6)
-    /* @brief PWM availability on the SoC. */
-    #define FSL_FEATURE_SOC_PWM_COUNT (2)
-    /* @brief PUF availability on the SoC. */
-    #define FSL_FEATURE_SOC_PUF_COUNT (4)
-    /* @brief QDC availability on the SoC. */
-    #define FSL_FEATURE_SOC_QDC_COUNT (2)
-    /* @brief RTC availability on the SoC. */
-    #define FSL_FEATURE_SOC_RTC_COUNT (1)
-    /* @brief SCG availability on the SoC. */
-    #define FSL_FEATURE_SOC_SCG_COUNT (1)
-    /* @brief SCT availability on the SoC. */
-    #define FSL_FEATURE_SOC_SCT_COUNT (1)
-    /* @brief SEMA42 availability on the SoC. */
-    #define FSL_FEATURE_SOC_SEMA42_COUNT (1)
-    /* @brief SINC availability on the SoC. */
-    #define FSL_FEATURE_SOC_SINC_COUNT (1)
-    /* @brief SMARTDMA availability on the SoC. */
-    #define FSL_FEATURE_SOC_SMARTDMA_COUNT (1)
-    /* @brief SYSCON availability on the SoC. */
-    #define FSL_FEATURE_SOC_SYSCON_COUNT (1)
-    /* @brief SYSPM availability on the SoC. */
-    #define FSL_FEATURE_SOC_SYSPM_COUNT (2)
-    /* @brief USB availability on the SoC. */
-    #define FSL_FEATURE_SOC_USB_COUNT (1)
-    /* @brief USBC availability on the SoC. */
-    #define FSL_FEATURE_SOC_USBC_COUNT (1)
-    /* @brief USBHSDCD availability on the SoC. */
-    #define FSL_FEATURE_SOC_USBHSDCD_COUNT (2)
-    /* @brief USBNC availability on the SoC. */
-    #define FSL_FEATURE_SOC_USBNC_COUNT (1)
-    /* @brief USBPHY availability on the SoC. */
-    #define FSL_FEATURE_SOC_USBPHY_COUNT (1)
-    /* @brief UTICK availability on the SoC. */
-    #define FSL_FEATURE_SOC_UTICK_COUNT (1)
-    /* @brief VREF availability on the SoC. */
-    #define FSL_FEATURE_SOC_VREF_COUNT (1)
-    /* @brief WWDT availability on the SoC. */
-    #define FSL_FEATURE_SOC_WWDT_COUNT (2)
-    /* @brief WUU availability on the SoC. */
-    #define FSL_FEATURE_SOC_WUU_COUNT (1)
-#elif defined(CPU_MCXN946VKL_cm33_core0) || defined(CPU_MCXN946VNL_cm33_core0)
-    /* @brief CACHE64_CTRL availability on the SoC. */
-    #define FSL_FEATURE_SOC_CACHE64_CTRL_COUNT (1)
-    /* @brief CACHE64_POLSEL availability on the SoC. */
-    #define FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT (1)
-    /* @brief CDOG availability on the SoC. */
-    #define FSL_FEATURE_SOC_CDOG_COUNT (2)
-    /* @brief CMC availability on the SoC. */
-    #define FSL_FEATURE_SOC_CMC_COUNT (1)
-    /* @brief CRC availability on the SoC. */
-    #define FSL_FEATURE_SOC_CRC_COUNT (1)
-    /* @brief CTIMER availability on the SoC. */
-    #define FSL_FEATURE_SOC_CTIMER_COUNT (5)
-    /* @brief EDMA availability on the SoC. */
-    #define FSL_FEATURE_SOC_EDMA_COUNT (2)
-    /* @brief EIM availability on the SoC. */
-    #define FSL_FEATURE_SOC_EIM_COUNT (1)
-    /* @brief EVTG availability on the SoC. */
-    #define FSL_FEATURE_SOC_EVTG_COUNT (1)
-    /* @brief EWM availability on the SoC. */
-    #define FSL_FEATURE_SOC_EWM_COUNT (1)
-    /* @brief FLEXCAN availability on the SoC. */
-    #define FSL_FEATURE_SOC_FLEXCAN_COUNT (2)
-    /* @brief FLEXIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
-    /* @brief FLEXSPI availability on the SoC. */
-    #define FSL_FEATURE_SOC_FLEXSPI_COUNT (1)
-    /* @brief FMC availability on the SoC. */
-    #define FSL_FEATURE_SOC_FMC_COUNT (1)
-    /* @brief FREQME availability on the SoC. */
-    #define FSL_FEATURE_SOC_FREQME_COUNT (1)
-    /* @brief GPIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_GPIO_COUNT (12)
-    /* @brief SPC availability on the SoC. */
-    #define FSL_FEATURE_SOC_SPC_COUNT (1)
-    /* @brief HPDAC availability on the SoC. */
-    #define FSL_FEATURE_SOC_HPDAC_COUNT (1)
-    /* @brief I3C availability on the SoC. */
-    #define FSL_FEATURE_SOC_I3C_COUNT (2)
-    /* @brief I2S availability on the SoC. */
-    #define FSL_FEATURE_SOC_I2S_COUNT (2)
-    /* @brief INPUTMUX availability on the SoC. */
-    #define FSL_FEATURE_SOC_INPUTMUX_COUNT (1)
-    /* @brief ITRC availability on the SoC. */
-    #define FSL_FEATURE_SOC_ITRC_COUNT (1)
-    /* @brief LPADC availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPADC_COUNT (2)
-    /* @brief LPCMP availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPCMP_COUNT (3)
-    /* @brief LPDAC availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPDAC_COUNT (2)
-    /* @brief LPI2C availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPI2C_COUNT (10)
-    /* @brief LPSPI availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPSPI_COUNT (10)
-    /* @brief LPTMR availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPTMR_COUNT (2)
-    /* @brief LPUART availability on the SoC. */
-    #define FSL_FEATURE_SOC_LPUART_COUNT (10)
-    /* @brief MAILBOX availability on the SoC. */
-    #define FSL_FEATURE_SOC_MAILBOX_COUNT (1)
-    /* @brief MCX_ENET availability on the SoC. */
-    #define FSL_FEATURE_SOC_MCX_ENET_COUNT (1)
-    /* @brief MPU availability on the SoC. */
-    #define FSL_FEATURE_SOC_MPU_COUNT (1)
-    /* @brief MRT availability on the SoC. */
-    #define FSL_FEATURE_SOC_MRT_COUNT (1)
-    /* @brief OPAMP availability on the SoC. */
-    #define FSL_FEATURE_SOC_OPAMP_COUNT (3)
-    /* @brief OSTIMER availability on the SoC. */
-    #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
-    /* @brief PINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PINT_COUNT (1)
-    /* @brief PKC availability on the SoC. */
-    #define FSL_FEATURE_SOC_PKC_COUNT (1)
-    /* @brief POWERQUAD availability on the SoC. */
-    #define FSL_FEATURE_SOC_POWERQUAD_COUNT (1)
-    /* @brief PORT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PORT_COUNT (6)
-    /* @brief PWM availability on the SoC. */
-    #define FSL_FEATURE_SOC_PWM_COUNT (2)
-    /* @brief PUF availability on the SoC. */
-    #define FSL_FEATURE_SOC_PUF_COUNT (4)
-    /* @brief QDC availability on the SoC. */
-    #define FSL_FEATURE_SOC_QDC_COUNT (2)
-    /* @brief RTC availability on the SoC. */
-    #define FSL_FEATURE_SOC_RTC_COUNT (1)
-    /* @brief SCG availability on the SoC. */
-    #define FSL_FEATURE_SOC_SCG_COUNT (1)
-    /* @brief SCT availability on the SoC. */
-    #define FSL_FEATURE_SOC_SCT_COUNT (1)
-    /* @brief SEMA42 availability on the SoC. */
-    #define FSL_FEATURE_SOC_SEMA42_COUNT (1)
-    /* @brief SINC availability on the SoC. */
-    #define FSL_FEATURE_SOC_SINC_COUNT (1)
-    /* @brief SMARTDMA availability on the SoC. */
-    #define FSL_FEATURE_SOC_SMARTDMA_COUNT (1)
-    /* @brief SYSCON availability on the SoC. */
-    #define FSL_FEATURE_SOC_SYSCON_COUNT (1)
-    /* @brief SYSPM availability on the SoC. */
-    #define FSL_FEATURE_SOC_SYSPM_COUNT (2)
-    /* @brief USB availability on the SoC. */
-    #define FSL_FEATURE_SOC_USB_COUNT (1)
-    /* @brief USBHSDCD availability on the SoC. */
-    #define FSL_FEATURE_SOC_USBHSDCD_COUNT (1)
-    /* @brief UTICK availability on the SoC. */
-    #define FSL_FEATURE_SOC_UTICK_COUNT (1)
-    /* @brief VREF availability on the SoC. */
-    #define FSL_FEATURE_SOC_VREF_COUNT (1)
-    /* @brief WWDT availability on the SoC. */
-    #define FSL_FEATURE_SOC_WWDT_COUNT (2)
-    /* @brief WUU availability on the SoC. */
-    #define FSL_FEATURE_SOC_WUU_COUNT (1)
-#endif
+/* @brief CACHE64_CTRL availability on the SoC. */
+#define FSL_FEATURE_SOC_CACHE64_CTRL_COUNT (1)
+/* @brief CACHE64_POLSEL availability on the SoC. */
+#define FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT (1)
+/* @brief CDOG availability on the SoC. */
+#define FSL_FEATURE_SOC_CDOG_COUNT (2)
+/* @brief CMC availability on the SoC. */
+#define FSL_FEATURE_SOC_CMC_COUNT (1)
+/* @brief CRC availability on the SoC. */
+#define FSL_FEATURE_SOC_CRC_COUNT (1)
+/* @brief CTIMER availability on the SoC. */
+#define FSL_FEATURE_SOC_CTIMER_COUNT (5)
+/* @brief EDMA availability on the SoC. */
+#define FSL_FEATURE_SOC_EDMA_COUNT (2)
+/* @brief EIM availability on the SoC. */
+#define FSL_FEATURE_SOC_EIM_COUNT (1)
+/* @brief EVTG availability on the SoC. */
+#define FSL_FEATURE_SOC_EVTG_COUNT (1)
+/* @brief EWM availability on the SoC. */
+#define FSL_FEATURE_SOC_EWM_COUNT (1)
+/* @brief FLEXCAN availability on the SoC. */
+#define FSL_FEATURE_SOC_FLEXCAN_COUNT (2)
+/* @brief FLEXIO availability on the SoC. */
+#define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
+/* @brief FLEXSPI availability on the SoC. */
+#define FSL_FEATURE_SOC_FLEXSPI_COUNT (1)
+/* @brief FMC availability on the SoC. */
+#define FSL_FEATURE_SOC_FMC_COUNT (1)
+/* @brief FREQME availability on the SoC. */
+#define FSL_FEATURE_SOC_FREQME_COUNT (1)
+/* @brief GPIO availability on the SoC. */
+#define FSL_FEATURE_SOC_GPIO_COUNT (12)
+/* @brief SPC availability on the SoC. */
+#define FSL_FEATURE_SOC_SPC_COUNT (1)
+/* @brief HPDAC availability on the SoC. */
+#define FSL_FEATURE_SOC_HPDAC_COUNT (1)
+/* @brief I3C availability on the SoC. */
+#define FSL_FEATURE_SOC_I3C_COUNT (2)
+/* @brief I2S availability on the SoC. */
+#define FSL_FEATURE_SOC_I2S_COUNT (2)
+/* @brief INPUTMUX availability on the SoC. */
+#define FSL_FEATURE_SOC_INPUTMUX_COUNT (1)
+/* @brief ITRC availability on the SoC. */
+#define FSL_FEATURE_SOC_ITRC_COUNT (1)
+/* @brief LPADC availability on the SoC. */
+#define FSL_FEATURE_SOC_LPADC_COUNT (2)
+/* @brief LPCMP availability on the SoC. */
+#define FSL_FEATURE_SOC_LPCMP_COUNT (3)
+/* @brief LPDAC availability on the SoC. */
+#define FSL_FEATURE_SOC_LPDAC_COUNT (2)
+/* @brief LPI2C availability on the SoC. */
+#define FSL_FEATURE_SOC_LPI2C_COUNT (10)
+/* @brief LPSPI availability on the SoC. */
+#define FSL_FEATURE_SOC_LPSPI_COUNT (10)
+/* @brief LPTMR availability on the SoC. */
+#define FSL_FEATURE_SOC_LPTMR_COUNT (2)
+/* @brief LPUART availability on the SoC. */
+#define FSL_FEATURE_SOC_LPUART_COUNT (10)
+/* @brief MAILBOX availability on the SoC. */
+#define FSL_FEATURE_SOC_MAILBOX_COUNT (1)
+/* @brief MCX_ENET availability on the SoC. */
+#define FSL_FEATURE_SOC_MCX_ENET_COUNT (1)
+/* @brief MPU availability on the SoC. */
+#define FSL_FEATURE_SOC_MPU_COUNT (1)
+/* @brief MRT availability on the SoC. */
+#define FSL_FEATURE_SOC_MRT_COUNT (1)
+/* @brief OPAMP availability on the SoC. */
+#define FSL_FEATURE_SOC_OPAMP_COUNT (3)
+/* @brief OSTIMER availability on the SoC. */
+#define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
+/* @brief PINT availability on the SoC. */
+#define FSL_FEATURE_SOC_PINT_COUNT (1)
+/* @brief PKC availability on the SoC. */
+#define FSL_FEATURE_SOC_PKC_COUNT (1)
+/* @brief POWERQUAD availability on the SoC. */
+#define FSL_FEATURE_SOC_POWERQUAD_COUNT (1)
+/* @brief PORT availability on the SoC. */
+#define FSL_FEATURE_SOC_PORT_COUNT (6)
+/* @brief PWM availability on the SoC. */
+#define FSL_FEATURE_SOC_PWM_COUNT (2)
+/* @brief PUF availability on the SoC. */
+#define FSL_FEATURE_SOC_PUF_COUNT (4)
+/* @brief QDC availability on the SoC. */
+#define FSL_FEATURE_SOC_QDC_COUNT (2)
+/* @brief RTC availability on the SoC. */
+#define FSL_FEATURE_SOC_RTC_COUNT (1)
+/* @brief SCG availability on the SoC. */
+#define FSL_FEATURE_SOC_SCG_COUNT (1)
+/* @brief SCT availability on the SoC. */
+#define FSL_FEATURE_SOC_SCT_COUNT (1)
+/* @brief SEMA42 availability on the SoC. */
+#define FSL_FEATURE_SOC_SEMA42_COUNT (1)
+/* @brief SINC availability on the SoC. */
+#define FSL_FEATURE_SOC_SINC_COUNT (1)
+/* @brief SMARTDMA availability on the SoC. */
+#define FSL_FEATURE_SOC_SMARTDMA_COUNT (1)
+/* @brief SYSCON availability on the SoC. */
+#define FSL_FEATURE_SOC_SYSCON_COUNT (1)
+/* @brief SYSPM availability on the SoC. */
+#define FSL_FEATURE_SOC_SYSPM_COUNT (2)
+/* @brief USB availability on the SoC. */
+#define FSL_FEATURE_SOC_USB_COUNT (1)
+/* @brief USBC availability on the SoC. */
+#define FSL_FEATURE_SOC_USBC_COUNT (1)
+/* @brief USBHSDCD availability on the SoC. */
+#define FSL_FEATURE_SOC_USBHSDCD_COUNT (2)
+/* @brief USBNC availability on the SoC. */
+#define FSL_FEATURE_SOC_USBNC_COUNT (1)
+/* @brief USBPHY availability on the SoC. */
+#define FSL_FEATURE_SOC_USBPHY_COUNT (1)
+/* @brief UTICK availability on the SoC. */
+#define FSL_FEATURE_SOC_UTICK_COUNT (1)
+/* @brief VREF availability on the SoC. */
+#define FSL_FEATURE_SOC_VREF_COUNT (1)
+/* @brief WWDT availability on the SoC. */
+#define FSL_FEATURE_SOC_WWDT_COUNT (2)
+/* @brief WUU availability on the SoC. */
+#define FSL_FEATURE_SOC_WUU_COUNT (1)
 
 /* LPADC module features */
 
@@ -423,6 +308,10 @@
 #define FSL_FEATURE_FLEXCAN_ENTER_FREEZE_MODE (0)
 /* @brief Is affected by errata with ID 8341 (FlexCAN: Entering Freeze Mode or Low Power Mode from Normal Mode can cause the FlexCAN module to stop operating). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (0)
+/* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
+/* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (0)
 
 /* CDOG module features */
 
@@ -430,6 +319,8 @@
 #define FSL_FEATURE_CDOG_HAS_NO_RESET (1)
 /* @brief CDOG Load default configurations during init function */
 #define FSL_FEATURE_CDOG_NEED_LOAD_DEFAULT_CONF (0)
+/* @brief CDOG Uses restart */
+#define FSL_FEATURE_CDOG_USE_RESTART (1)
 
 /* CMC module features */
 
@@ -598,8 +489,6 @@
 
 /* FLEXIO module features */
 
-/* @brief Has DOZEN bit(CTRL[DOZEN]) */
-#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 /* @brief FLEXIO support reset from RSTCTL */
 #define FSL_FEATURE_FLEXIO_HAS_RESET (0)
 /* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
@@ -628,27 +517,67 @@
 #define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
 /* @brief Has pin input output related registers */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
+/* @brief Has DOZEN bit(CTRL[DOZEN]) */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
 /* FLEXSPI module features */
 
 /* @brief FlexSPI AHB buffer count */
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (8)
-/* @brief FlexSPI0 and FlexSPI1 have shared IRQ */
-#define FSL_FEATURE_FLEXSPI_HAS_SHARED_IRQ0_IRQ1 (0)
+/* @brief FlexSPI has no data learn. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (0)
+/* @brief There is AHBBUSERROREN bit in INTEN register. */
+#define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
+/* @brief There is CLRAHBTX_RXBUF bit in AHBCR register. */
+#define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (1)
+/* @brief FLEXSPI has no IP parallel mode. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_IP_PARALLEL_MODE (0)
+/* @brief FLEXSPI has no AHB parallel mode. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (0)
+/* @brief FLEXSPI support address shift. */
+#define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (1)
 /* @brief FlexSPI has no MCR0 ARDFEN bit */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN (1)
 /* @brief FlexSPI has no MCR0 ATDFEN bit */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (1)
-/* @brief FlexSPI DMA needs multiple DES to transfer */
-#define FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES (1)
+/* @brief FlexSPI has no MCR0 COMBINATIONEN bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN (0)
+/* @brief FlexSPI has no FLSHCR4 WMENB bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_FLSHCR4_WMENB (0)
+/* @brief FlexSPI has no STS0 DATALEARNPHASEB bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (0)
+/* @brief FlexSPI has no MCR2 SCKBDIFFOPT bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT (0)
 /* @brief FlexSPI AHB RX buffer size (byte) */
 #define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
-/* @brief FlexSPI IPED REGION COUNT */
-#define FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT (7)
 /* @brief FlexSPI Array Length */
 #define FSL_FEATURE_FLEXSPI_ARRAY_LEN (1)
+/* @brief FlexSPI has no STS2 BSLVLOCK bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_STS2_BSLVLOCK (0)
+/* @brief FlexSPI has no STS2 BREFLOCK bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_STS2_BREFLOCK (0)
+/* @brief FlexSPI supports Port A only, do not support Port B. */
+#define FSL_FEATURE_FLEXSPI_NO_SUPPORT_PORTB (0)
+/* @brief FlexSPI LUTKEY is read only. */
+#define FSL_FEATURE_FLEXSPI_LUTKEY_IS_RO (0)
+/* @brief FlexSPI0 and FlexSPI1 have shared IRQ */
+#define FSL_FEATURE_FLEXSPI_HAS_SHARED_IRQ0_IRQ1 (0)
+/* @brief FlexSPI DMA needs multiple DES to transfer */
+#define FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES (1)
+/* @brief FlexSPI uses min DQS delay */
+#define FSL_FEATURE_FLEXSPI_DQS_DELAY_MIN (0)
+/* @brief FlexSPI support sample clock source selection */
+#define FSL_FEATURE_FLEXSPI_SUPPORT_SEPERATE_RXCLKSRC_PORTB (1)
+/* @brief FlexSPI support sample clock source or source_b selection */
+#define FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF (1)
+/* @brief FlexSPI IPED REGION COUNT */
+#define FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT (7)
 /* @brief FlexSPI Has ERRATA052733 */
 #define FSL_FEATURE_FLEXSPI_HAS_ERRATA_052733 (1)
+/* @brief FlexSPI Has ERRATA051426 */
+#define FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426 (0)
+/* @brief FlexSPI has AHBCR RESUMEDISABLE bit */
+#define FSL_FEATURE_FLEXSPI_HAS_RESUMEDISABLE_BIT_CONFIG_SUPPORT (1)
 
 /* FMU module features */
 
@@ -692,6 +621,22 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH (0)
 /* @brief Register SCONFIG do not have IDRAND bitfield. */
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
+/* @brief Register SCONFIG has HDROK bitfield. */
+#define FSL_FEATURE_I3C_HAS_HDROK (0)
+/* @brief Has ERRATA_051617. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_051617 (0)
+/* @brief SOC does not support slave IBI/MR/HJ */
+#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
+/* @brief Has ERRATA_052086. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052086 (0)
+/* @brief Has ERRATA_052123. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_052123 (0)
+/* @brief Has IBI bytes. */
+#define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (0)
+/* @brief Has SCL delay after START. */
+#define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (0)
+/* @brief Has no the master write data register for DMA. */
+#define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 
 /* INPUTMUX module features */
 
@@ -776,8 +721,6 @@
 #define FSL_FEATURE_LPUART_HAS_BOTH_EDGE_SAMPLING_SUPPORT (1)
 /* @brief Peripheral type. */
 #define FSL_FEATURE_LPUART_IS_SCI (1)
-/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
-#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (8)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -820,6 +763,10 @@
 #define FSL_FEATURE_LPUART_HAS_TIMEOUT (1)
 /* @brief UART support swap TX and RX (has bit CTRL[SWAP]). */
 #define FSL_FEATURE_LPUART_HAS_CTRL_SWAP (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (8)
+/* @brief UART support receive rts configuration (has bit MODIR[RTSWATER]). */
+#define FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER (1)
 
 /* LP_FLEXCOMM module features */
 
@@ -950,7 +897,7 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (1)
 /* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
-/* @brief Has ERRATA_51989. */
+/* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (1)
 
 /* QDC module features */
@@ -995,8 +942,6 @@
 
 /* SAI module features */
 
-/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
-#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
 #define FSL_FEATURE_SAI_FIFO_COUNTn(x) (8)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
@@ -1025,14 +970,18 @@
 #define FSL_FEATURE_SAI_HAS_MDR (0)
 /* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
 #define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (1)
-/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]). */
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (1)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Support synchronous with another SAI. */
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (1)
 /* @brief Has Bit Clock Swap option (register bit fields RCR2[BCS]) */
 #define FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP (1)
+/* @brief SAI5 and SAI6 share one irq number. */
+#define FSL_FEATURE_SAI_SAI5_SAI6_SHARE_IRQ (0)
 
 /* SCT module features */
 
@@ -1044,6 +993,8 @@
 #define FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE (16)
 /* @brief Number of outputs */
 #define FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS (10)
+/* @brief Writing a zero asserts the SCT reset. */
+#define FSL_FEATURE_SCT_WRITE_ZERO_ASSERT_RESET (0)
 
 /* SEMA42 module features */
 
@@ -1173,18 +1124,16 @@
 
 /* USBPHY module features */
 
-#if defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0)
-    /* @brief USBPHY contain DCD analog module */
-    #define FSL_FEATURE_USBPHY_HAS_DCD_ANALOG (0)
-    /* @brief USBPHY has register TRIM_OVERRIDE_EN */
-    #define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (1)
-    /* @brief USBPHY is 28FDSOI */
-    #define FSL_FEATURE_USBPHY_28FDSOI (0)
-#endif /* defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0) */
+/* @brief USBPHY contain DCD analog module */
+#define FSL_FEATURE_USBPHY_HAS_DCD_ANALOG (0)
+/* @brief USBPHY has register TRIM_OVERRIDE_EN */
+#define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (1)
+/* @brief USBPHY is 28FDSOI */
+#define FSL_FEATURE_USBPHY_28FDSOI (0)
 
 /* UTICK module features */
 
-/* @brief UTICK does not support PD configure. */
+/* @brief UTICK does not support power down configure. */
 #define FSL_FEATURE_UTICK_HAS_NO_PDCFG (1)
 
 /* VBAT module features */
@@ -1208,10 +1157,16 @@
 
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
-#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
-/* @brief WWDT does not support power down configure */
+/* @brief WWDT does not support oscillator lock. */
+#define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (0)
+/* @brief WWDT does not support power down configure. */
 #define FSL_FEATURE_WWDT_HAS_NO_PDCFG (1)
+/* @brief soc has reset. */
+#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
+/* @brief Has LPOSC as clock source. */
+#define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (0)
+/* @brief WWDT WDTOF is not set in case of WD reset - get info from PMC instead. */
+#define FSL_FEATURE_WWDT_WDTRESET_FROM_PMC (0)
 
 #endif /* _MCXN946_cm33_core0_FEATURES_H_ */
 

@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250623
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN235
@@ -1004,14 +1004,6 @@ typedef enum IRQn {
   #define GPIO0                                    ((GPIO_Type *)GPIO0_BASE)
   /** Peripheral GPIO0 base pointer */
   #define GPIO0_NS                                 ((GPIO_Type *)GPIO0_BASE_NS)
-  /** Peripheral GPIO0_ALIAS1 base address */
-  #define GPIO0_ALIAS1_BASE                        (0x50097000u)
-  /** Peripheral GPIO0_ALIAS1 base address */
-  #define GPIO0_ALIAS1_BASE_NS                     (0x40097000u)
-  /** Peripheral GPIO0_ALIAS1 base pointer */
-  #define GPIO0_ALIAS1                             ((GPIO_Type *)GPIO0_ALIAS1_BASE)
-  /** Peripheral GPIO0_ALIAS1 base pointer */
-  #define GPIO0_ALIAS1_NS                          ((GPIO_Type *)GPIO0_ALIAS1_BASE_NS)
   /** Peripheral GPIO1 base address */
   #define GPIO1_BASE                               (0x50098000u)
   /** Peripheral GPIO1 base address */
@@ -1020,14 +1012,6 @@ typedef enum IRQn {
   #define GPIO1                                    ((GPIO_Type *)GPIO1_BASE)
   /** Peripheral GPIO1 base pointer */
   #define GPIO1_NS                                 ((GPIO_Type *)GPIO1_BASE_NS)
-  /** Peripheral GPIO1_ALIAS1 base address */
-  #define GPIO1_ALIAS1_BASE                        (0x50099000u)
-  /** Peripheral GPIO1_ALIAS1 base address */
-  #define GPIO1_ALIAS1_BASE_NS                     (0x40099000u)
-  /** Peripheral GPIO1_ALIAS1 base pointer */
-  #define GPIO1_ALIAS1                             ((GPIO_Type *)GPIO1_ALIAS1_BASE)
-  /** Peripheral GPIO1_ALIAS1 base pointer */
-  #define GPIO1_ALIAS1_NS                          ((GPIO_Type *)GPIO1_ALIAS1_BASE_NS)
   /** Peripheral GPIO2 base address */
   #define GPIO2_BASE                               (0x5009A000u)
   /** Peripheral GPIO2 base address */
@@ -1036,14 +1020,6 @@ typedef enum IRQn {
   #define GPIO2                                    ((GPIO_Type *)GPIO2_BASE)
   /** Peripheral GPIO2 base pointer */
   #define GPIO2_NS                                 ((GPIO_Type *)GPIO2_BASE_NS)
-  /** Peripheral GPIO2_ALIAS1 base address */
-  #define GPIO2_ALIAS1_BASE                        (0x5009B000u)
-  /** Peripheral GPIO2_ALIAS1 base address */
-  #define GPIO2_ALIAS1_BASE_NS                     (0x4009B000u)
-  /** Peripheral GPIO2_ALIAS1 base pointer */
-  #define GPIO2_ALIAS1                             ((GPIO_Type *)GPIO2_ALIAS1_BASE)
-  /** Peripheral GPIO2_ALIAS1 base pointer */
-  #define GPIO2_ALIAS1_NS                          ((GPIO_Type *)GPIO2_ALIAS1_BASE_NS)
   /** Peripheral GPIO3 base address */
   #define GPIO3_BASE                               (0x5009C000u)
   /** Peripheral GPIO3 base address */
@@ -1052,14 +1028,6 @@ typedef enum IRQn {
   #define GPIO3                                    ((GPIO_Type *)GPIO3_BASE)
   /** Peripheral GPIO3 base pointer */
   #define GPIO3_NS                                 ((GPIO_Type *)GPIO3_BASE_NS)
-  /** Peripheral GPIO3_ALIAS1 base address */
-  #define GPIO3_ALIAS1_BASE                        (0x5009D000u)
-  /** Peripheral GPIO3_ALIAS1 base address */
-  #define GPIO3_ALIAS1_BASE_NS                     (0x4009D000u)
-  /** Peripheral GPIO3_ALIAS1 base pointer */
-  #define GPIO3_ALIAS1                             ((GPIO_Type *)GPIO3_ALIAS1_BASE)
-  /** Peripheral GPIO3_ALIAS1 base pointer */
-  #define GPIO3_ALIAS1_NS                          ((GPIO_Type *)GPIO3_ALIAS1_BASE_NS)
   /** Peripheral GPIO4 base address */
   #define GPIO4_BASE                               (0x5009E000u)
   /** Peripheral GPIO4 base address */
@@ -1068,14 +1036,6 @@ typedef enum IRQn {
   #define GPIO4                                    ((GPIO_Type *)GPIO4_BASE)
   /** Peripheral GPIO4 base pointer */
   #define GPIO4_NS                                 ((GPIO_Type *)GPIO4_BASE_NS)
-  /** Peripheral GPIO4_ALIAS1 base address */
-  #define GPIO4_ALIAS1_BASE                        (0x5009F000u)
-  /** Peripheral GPIO4_ALIAS1 base address */
-  #define GPIO4_ALIAS1_BASE_NS                     (0x4009F000u)
-  /** Peripheral GPIO4_ALIAS1 base pointer */
-  #define GPIO4_ALIAS1                             ((GPIO_Type *)GPIO4_ALIAS1_BASE)
-  /** Peripheral GPIO4_ALIAS1 base pointer */
-  #define GPIO4_ALIAS1_NS                          ((GPIO_Type *)GPIO4_ALIAS1_BASE_NS)
   /** Peripheral GPIO5 base address */
   #define GPIO5_BASE                               (0x50040000u)
   /** Peripheral GPIO5 base address */
@@ -1084,6 +1044,46 @@ typedef enum IRQn {
   #define GPIO5                                    ((GPIO_Type *)GPIO5_BASE)
   /** Peripheral GPIO5 base pointer */
   #define GPIO5_NS                                 ((GPIO_Type *)GPIO5_BASE_NS)
+  /** Peripheral GPIO0_ALIAS1 base address */
+  #define GPIO0_ALIAS1_BASE                        (0x50097000u)
+  /** Peripheral GPIO0_ALIAS1 base address */
+  #define GPIO0_ALIAS1_BASE_NS                     (0x40097000u)
+  /** Peripheral GPIO0_ALIAS1 base pointer */
+  #define GPIO0_ALIAS1                             ((GPIO_Type *)GPIO0_ALIAS1_BASE)
+  /** Peripheral GPIO0_ALIAS1 base pointer */
+  #define GPIO0_ALIAS1_NS                          ((GPIO_Type *)GPIO0_ALIAS1_BASE_NS)
+  /** Peripheral GPIO1_ALIAS1 base address */
+  #define GPIO1_ALIAS1_BASE                        (0x50099000u)
+  /** Peripheral GPIO1_ALIAS1 base address */
+  #define GPIO1_ALIAS1_BASE_NS                     (0x40099000u)
+  /** Peripheral GPIO1_ALIAS1 base pointer */
+  #define GPIO1_ALIAS1                             ((GPIO_Type *)GPIO1_ALIAS1_BASE)
+  /** Peripheral GPIO1_ALIAS1 base pointer */
+  #define GPIO1_ALIAS1_NS                          ((GPIO_Type *)GPIO1_ALIAS1_BASE_NS)
+  /** Peripheral GPIO2_ALIAS1 base address */
+  #define GPIO2_ALIAS1_BASE                        (0x5009B000u)
+  /** Peripheral GPIO2_ALIAS1 base address */
+  #define GPIO2_ALIAS1_BASE_NS                     (0x4009B000u)
+  /** Peripheral GPIO2_ALIAS1 base pointer */
+  #define GPIO2_ALIAS1                             ((GPIO_Type *)GPIO2_ALIAS1_BASE)
+  /** Peripheral GPIO2_ALIAS1 base pointer */
+  #define GPIO2_ALIAS1_NS                          ((GPIO_Type *)GPIO2_ALIAS1_BASE_NS)
+  /** Peripheral GPIO3_ALIAS1 base address */
+  #define GPIO3_ALIAS1_BASE                        (0x5009D000u)
+  /** Peripheral GPIO3_ALIAS1 base address */
+  #define GPIO3_ALIAS1_BASE_NS                     (0x4009D000u)
+  /** Peripheral GPIO3_ALIAS1 base pointer */
+  #define GPIO3_ALIAS1                             ((GPIO_Type *)GPIO3_ALIAS1_BASE)
+  /** Peripheral GPIO3_ALIAS1 base pointer */
+  #define GPIO3_ALIAS1_NS                          ((GPIO_Type *)GPIO3_ALIAS1_BASE_NS)
+  /** Peripheral GPIO4_ALIAS1 base address */
+  #define GPIO4_ALIAS1_BASE                        (0x5009F000u)
+  /** Peripheral GPIO4_ALIAS1 base address */
+  #define GPIO4_ALIAS1_BASE_NS                     (0x4009F000u)
+  /** Peripheral GPIO4_ALIAS1 base pointer */
+  #define GPIO4_ALIAS1                             ((GPIO_Type *)GPIO4_ALIAS1_BASE)
+  /** Peripheral GPIO4_ALIAS1 base pointer */
+  #define GPIO4_ALIAS1_NS                          ((GPIO_Type *)GPIO4_ALIAS1_BASE_NS)
   /** Peripheral GPIO5_ALIAS1 base address */
   #define GPIO5_ALIAS1_BASE                        (0x50041000u)
   /** Peripheral GPIO5_ALIAS1 base address */
@@ -1093,72 +1093,66 @@ typedef enum IRQn {
   /** Peripheral GPIO5_ALIAS1 base pointer */
   #define GPIO5_ALIAS1_NS                          ((GPIO_Type *)GPIO5_ALIAS1_BASE_NS)
   /** Array initializer of GPIO peripheral base addresses */
-  #define GPIO_BASE_ADDRS                          { GPIO0_BASE, GPIO1_BASE, GPIO2_BASE, GPIO3_BASE, GPIO4_BASE, GPIO5_BASE }
-  #define GPIO_ALIAS1_BASE_ADDRS                   { GPIO0_ALIAS1_BASE, GPIO1_ALIAS1_BASE, GPIO2_ALIAS1_BASE, GPIO3_ALIAS1_BASE, GPIO4_ALIAS1_BASE, GPIO5_ALIAS1_BASE }
+  #define GPIO_BASE_ADDRS                          { GPIO0_BASE, GPIO1_BASE, GPIO2_BASE, GPIO3_BASE, GPIO4_BASE, GPIO5_BASE, GPIO0_ALIAS1_BASE, GPIO1_ALIAS1_BASE, GPIO2_ALIAS1_BASE, GPIO3_ALIAS1_BASE, GPIO4_ALIAS1_BASE, GPIO5_ALIAS1_BASE }
   /** Array initializer of GPIO peripheral base pointers */
-  #define GPIO_BASE_PTRS                           { GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5 }
-  #define GPIO_ALIAS1_BASE_PTRS                    { GPIO0_ALIAS1, GPIO1_ALIAS1, GPIO2_ALIAS1, GPIO3_ALIAS1, GPIO4_ALIAS1, GPIO5_ALIAS1 }
+  #define GPIO_BASE_PTRS                           { GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO0_ALIAS1, GPIO1_ALIAS1, GPIO2_ALIAS1, GPIO3_ALIAS1, GPIO4_ALIAS1, GPIO5_ALIAS1 }
   /** Array initializer of GPIO peripheral base addresses */
-  #define GPIO_BASE_ADDRS_NS                       { GPIO0_BASE_NS, GPIO1_BASE_NS, GPIO2_BASE_NS, GPIO3_BASE_NS, GPIO4_BASE_NS, GPIO5_BASE_NS }
-  #define GPIO_ALIAS1_BASE_ADDRS_NS                { GPIO0_ALIAS1_BASE_NS, GPIO1_ALIAS1_BASE_NS, GPIO2_ALIAS1_BASE_NS, GPIO3_ALIAS1_BASE_NS, GPIO4_ALIAS1_BASE_NS, GPIO5_ALIAS1_BASE_NS }
+  #define GPIO_BASE_ADDRS_NS                       { GPIO0_BASE_NS, GPIO1_BASE_NS, GPIO2_BASE_NS, GPIO3_BASE_NS, GPIO4_BASE_NS, GPIO5_BASE_NS, GPIO0_ALIAS1_BASE_NS, GPIO1_ALIAS1_BASE_NS, GPIO2_ALIAS1_BASE_NS, GPIO3_ALIAS1_BASE_NS, GPIO4_ALIAS1_BASE_NS, GPIO5_ALIAS1_BASE_NS }
   /** Array initializer of GPIO peripheral base pointers */
-  #define GPIO_BASE_PTRS_NS                        { GPIO0_NS, GPIO1_NS, GPIO2_NS, GPIO3_NS, GPIO4_NS, GPIO5_NS }
-  #define GPIO_ALIAS1_BASE_PTRS_NS                 { GPIO0_ALIAS1_NS, GPIO1_ALIAS1_NS, GPIO2_ALIAS1_NS, GPIO3_ALIAS1_NS, GPIO4_ALIAS1_NS, GPIO5_ALIAS1_NS }
+  #define GPIO_BASE_PTRS_NS                        { GPIO0_NS, GPIO1_NS, GPIO2_NS, GPIO3_NS, GPIO4_NS, GPIO5_NS, GPIO0_ALIAS1_NS, GPIO1_ALIAS1_NS, GPIO2_ALIAS1_NS, GPIO3_ALIAS1_NS, GPIO4_ALIAS1_NS, GPIO5_ALIAS1_NS }
 #else
   /** Peripheral GPIO0 base address */
   #define GPIO0_BASE                               (0x40096000u)
   /** Peripheral GPIO0 base pointer */
   #define GPIO0                                    ((GPIO_Type *)GPIO0_BASE)
-  /** Peripheral GPIO0_ALIAS1 base address */
-  #define GPIO0_ALIAS1_BASE                        (0x40097000u)
-  /** Peripheral GPIO0_ALIAS1 base pointer */
-  #define GPIO0_ALIAS1                             ((GPIO_Type *)GPIO0_ALIAS1_BASE)
   /** Peripheral GPIO1 base address */
   #define GPIO1_BASE                               (0x40098000u)
   /** Peripheral GPIO1 base pointer */
   #define GPIO1                                    ((GPIO_Type *)GPIO1_BASE)
-  /** Peripheral GPIO1_ALIAS1 base address */
-  #define GPIO1_ALIAS1_BASE                        (0x40099000u)
-  /** Peripheral GPIO1_ALIAS1 base pointer */
-  #define GPIO1_ALIAS1                             ((GPIO_Type *)GPIO1_ALIAS1_BASE)
   /** Peripheral GPIO2 base address */
   #define GPIO2_BASE                               (0x4009A000u)
   /** Peripheral GPIO2 base pointer */
   #define GPIO2                                    ((GPIO_Type *)GPIO2_BASE)
-  /** Peripheral GPIO2_ALIAS1 base address */
-  #define GPIO2_ALIAS1_BASE                        (0x4009B000u)
-  /** Peripheral GPIO2_ALIAS1 base pointer */
-  #define GPIO2_ALIAS1                             ((GPIO_Type *)GPIO2_ALIAS1_BASE)
   /** Peripheral GPIO3 base address */
   #define GPIO3_BASE                               (0x4009C000u)
   /** Peripheral GPIO3 base pointer */
   #define GPIO3                                    ((GPIO_Type *)GPIO3_BASE)
-  /** Peripheral GPIO3_ALIAS1 base address */
-  #define GPIO3_ALIAS1_BASE                        (0x4009D000u)
-  /** Peripheral GPIO3_ALIAS1 base pointer */
-  #define GPIO3_ALIAS1                             ((GPIO_Type *)GPIO3_ALIAS1_BASE)
   /** Peripheral GPIO4 base address */
   #define GPIO4_BASE                               (0x4009E000u)
   /** Peripheral GPIO4 base pointer */
   #define GPIO4                                    ((GPIO_Type *)GPIO4_BASE)
-  /** Peripheral GPIO4_ALIAS1 base address */
-  #define GPIO4_ALIAS1_BASE                        (0x4009F000u)
-  /** Peripheral GPIO4_ALIAS1 base pointer */
-  #define GPIO4_ALIAS1                             ((GPIO_Type *)GPIO4_ALIAS1_BASE)
   /** Peripheral GPIO5 base address */
   #define GPIO5_BASE                               (0x40040000u)
   /** Peripheral GPIO5 base pointer */
   #define GPIO5                                    ((GPIO_Type *)GPIO5_BASE)
+  /** Peripheral GPIO0_ALIAS1 base address */
+  #define GPIO0_ALIAS1_BASE                        (0x40097000u)
+  /** Peripheral GPIO0_ALIAS1 base pointer */
+  #define GPIO0_ALIAS1                             ((GPIO_Type *)GPIO0_ALIAS1_BASE)
+  /** Peripheral GPIO1_ALIAS1 base address */
+  #define GPIO1_ALIAS1_BASE                        (0x40099000u)
+  /** Peripheral GPIO1_ALIAS1 base pointer */
+  #define GPIO1_ALIAS1                             ((GPIO_Type *)GPIO1_ALIAS1_BASE)
+  /** Peripheral GPIO2_ALIAS1 base address */
+  #define GPIO2_ALIAS1_BASE                        (0x4009B000u)
+  /** Peripheral GPIO2_ALIAS1 base pointer */
+  #define GPIO2_ALIAS1                             ((GPIO_Type *)GPIO2_ALIAS1_BASE)
+  /** Peripheral GPIO3_ALIAS1 base address */
+  #define GPIO3_ALIAS1_BASE                        (0x4009D000u)
+  /** Peripheral GPIO3_ALIAS1 base pointer */
+  #define GPIO3_ALIAS1                             ((GPIO_Type *)GPIO3_ALIAS1_BASE)
+  /** Peripheral GPIO4_ALIAS1 base address */
+  #define GPIO4_ALIAS1_BASE                        (0x4009F000u)
+  /** Peripheral GPIO4_ALIAS1 base pointer */
+  #define GPIO4_ALIAS1                             ((GPIO_Type *)GPIO4_ALIAS1_BASE)
   /** Peripheral GPIO5_ALIAS1 base address */
   #define GPIO5_ALIAS1_BASE                        (0x40041000u)
   /** Peripheral GPIO5_ALIAS1 base pointer */
   #define GPIO5_ALIAS1                             ((GPIO_Type *)GPIO5_ALIAS1_BASE)
   /** Array initializer of GPIO peripheral base addresses */
-  #define GPIO_BASE_ADDRS                          { GPIO0_BASE, GPIO1_BASE, GPIO2_BASE, GPIO3_BASE, GPIO4_BASE, GPIO5_BASE }
-  #define GPIO_ALIAS1_BASE_ADDRS                   { GPIO0_ALIAS1_BASE, GPIO1_ALIAS1_BASE, GPIO2_ALIAS1_BASE, GPIO3_ALIAS1_BASE, GPIO4_ALIAS1_BASE, GPIO5_ALIAS1_BASE }
+  #define GPIO_BASE_ADDRS                          { GPIO0_BASE, GPIO1_BASE, GPIO2_BASE, GPIO3_BASE, GPIO4_BASE, GPIO5_BASE, GPIO0_ALIAS1_BASE, GPIO1_ALIAS1_BASE, GPIO2_ALIAS1_BASE, GPIO3_ALIAS1_BASE, GPIO4_ALIAS1_BASE, GPIO5_ALIAS1_BASE }
   /** Array initializer of GPIO peripheral base pointers */
-  #define GPIO_BASE_PTRS                           { GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5 }
-  #define GPIO_ALIAS1_BASE_PTRS                    { GPIO0_ALIAS1, GPIO1_ALIAS1, GPIO2_ALIAS1, GPIO3_ALIAS1, GPIO4_ALIAS1, GPIO5_ALIAS1 }
+  #define GPIO_BASE_PTRS                           { GPIO0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO0_ALIAS1, GPIO1_ALIAS1, GPIO2_ALIAS1, GPIO3_ALIAS1, GPIO4_ALIAS1, GPIO5_ALIAS1 }
 #endif
 
 /* I2S - Peripheral instance base addresses */
@@ -2655,9 +2649,9 @@ typedef enum IRQn {
 /* USBHSDCD - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral USBHS1_PHY_DCD base address */
-  #define USBHS1_PHY_DCD_BASE                      (0x5010A000u)
+  #define USBHS1_PHY_DCD_BASE                      (0x5010A800u)
   /** Peripheral USBHS1_PHY_DCD base address */
-  #define USBHS1_PHY_DCD_BASE_NS                   (0x4010A000u)
+  #define USBHS1_PHY_DCD_BASE_NS                   (0x4010A800u)
   /** Peripheral USBHS1_PHY_DCD base pointer */
   #define USBHS1_PHY_DCD                           ((USBHSDCD_Type *)USBHS1_PHY_DCD_BASE)
   /** Peripheral USBHS1_PHY_DCD base pointer */
@@ -2672,7 +2666,7 @@ typedef enum IRQn {
   #define USBHSDCD_BASE_PTRS_NS                    { USBHS1_PHY_DCD_NS }
 #else
   /** Peripheral USBHS1_PHY_DCD base address */
-  #define USBHS1_PHY_DCD_BASE                      (0x4010A000u)
+  #define USBHS1_PHY_DCD_BASE                      (0x4010A800u)
   /** Peripheral USBHS1_PHY_DCD base pointer */
   #define USBHS1_PHY_DCD                           ((USBHSDCD_Type *)USBHS1_PHY_DCD_BASE)
   /** Array initializer of USBHSDCD peripheral base addresses */

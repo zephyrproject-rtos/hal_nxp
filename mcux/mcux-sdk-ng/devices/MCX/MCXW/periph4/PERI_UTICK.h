@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW235BIHNAR
+**     Processors:          MCXW235AIHNAR
+**                          MCXW235AIUKAR
+**                          MCXW235BIHNAR
 **                          MCXW235BIUKAR
 **                          MCXW236AIHNAR
 **                          MCXW236AIUKAR
@@ -8,7 +10,7 @@
 **                          MCXW236BIUKAR
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250819
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for UTICK
@@ -42,7 +44,7 @@
 #if !defined(PERI_UTICK_H_)
 #define PERI_UTICK_H_                            /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MCXW235BIHNAR) || defined(CPU_MCXW235BIUKAR))
+#if (defined(CPU_MCXW235AIHNAR) || defined(CPU_MCXW235AIUKAR) || defined(CPU_MCXW235BIHNAR) || defined(CPU_MCXW235BIUKAR))
 #include "MCXW235_COMMON.h"
 #elif (defined(CPU_MCXW236AIHNAR) || defined(CPU_MCXW236AIUKAR) || defined(CPU_MCXW236BIHNAR) || defined(CPU_MCXW236BIUKAR))
 #include "MCXW236_COMMON.h"

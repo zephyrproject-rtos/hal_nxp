@@ -8,7 +8,7 @@
 **                          MCXW727DMFTA_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
@@ -718,6 +718,14 @@ typedef struct {
  *  0b11..Lowest priority, Level 4
  */
 #define ADC_TCTRL_TPRI(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_TCTRL_TPRI_SHIFT)) & ADC_TCTRL_TPRI_MASK)
+
+#define ADC_TCTRL_RSYNC_MASK                     (0x8000U)
+#define ADC_TCTRL_RSYNC_SHIFT                    (15U)
+/*! RSYNC - Trigger Resync
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define ADC_TCTRL_RSYNC(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_TCTRL_RSYNC_SHIFT)) & ADC_TCTRL_RSYNC_MASK)
 
 #define ADC_TCTRL_TDLY_MASK                      (0xF0000U)
 #define ADC_TCTRL_TDLY_SHIFT                     (16U)

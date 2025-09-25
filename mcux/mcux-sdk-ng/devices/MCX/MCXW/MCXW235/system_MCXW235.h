@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW235BIHNAR
+**     Processors:          MCXW235AIHNAR
+**                          MCXW235AIUKAR
+**                          MCXW235BIHNAR
 **                          MCXW235BIUKAR
 **
 **     Compilers:
@@ -9,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXW23x User manual Rev.0.1  1 September 2022
+**     Reference manual:    MCXW23x User manual Rev. 1.0 - 7 April 2025
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250819
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -56,7 +58,7 @@ extern "C" {
 #include <stdint.h>
 #if defined(SDK_OS_FREE_RTOS)
 #include "FreeRTOSConfig.h"
-#endif  
+#endif
 
 #define DEFAULT_SYSTEM_CLOCK           12000000u           /* Default System clock value */
 #define CLK_RTC_32K_CLK                32768u              /* RTC oscillator 32 kHz output (32k_clk */

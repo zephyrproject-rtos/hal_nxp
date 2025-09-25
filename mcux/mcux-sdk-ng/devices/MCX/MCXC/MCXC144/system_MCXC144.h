@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXC444RM, Rev.1, Mar 2024
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250630
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -73,7 +73,6 @@ extern "C" {
 
 #define DEFAULT_SYSTEM_CLOCK           8000000U            /* Default System clock value */
 #define CPU_INT_SLOW_CLK_HZ            8000000U            /* Value of the slow internal oscillator clock frequency in Hz */
-
 
 
 /**

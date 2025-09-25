@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for INPUTMUX_MAIN
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_INPUTMUX_MAIN.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for INPUTMUX_MAIN
  *
  * CMSIS Peripheral Access Layer for INPUTMUX_MAIN
@@ -117,26 +117,29 @@ typedef struct {
   __IO uint32_t CTIMER1TRIG;                       /**< Trigger register for CTIMER1, offset: 0x50 */
        uint8_t RESERVED_2[12];
   __IO uint32_t CTIMER2CAP[INPUTMUX_MAIN_CTIMERC_COUNT]; /**< Capture select register for CTIMER2 inputs, array offset: 0x60, array step: 0x4 */
-  __IO uint32_t TIMER2TRIG;                        /**< Trigger register for CTIMER2 inputs, offset: 0x70 */
-       uint8_t RESERVED_3[492];
+  __IO uint32_t CTIMER2TRIG;                       /**< Trigger register for CTIMER2 inputs, offset: 0x70 */
+       uint8_t RESERVED_3[268];
+  __IO uint32_t FREQMEAS_REF;                      /**< Selection for frequency measurement reference clock, offset: 0x180 */
+  __IO uint32_t FREQMEAS_TAR;                      /**< Selection for frequency measurement target clock, offset: 0x184 */
+       uint8_t RESERVED_4[216];
   __IO uint32_t CMP0_TRIG;                         /**< CMP0 Input Connections, offset: 0x260 */
-       uint8_t RESERVED_4[28];
+       uint8_t RESERVED_5[28];
   __IO uint32_t ADC0_TRIG[INPUTMUX_MAIN_ADC0_TRIGM_COUNT]; /**< ADC Trigger Input Connections, array offset: 0x280, array step: 0x4 */
-       uint8_t RESERVED_5[432];
+       uint8_t RESERVED_6[432];
   __IO uint32_t AOI0_MUX[INPUTMUX_MAIN_AOI0_MUXK_COUNT]; /**< AOI0 Trigger Input Connections, array offset: 0x440, array step: 0x4 */
-       uint8_t RESERVED_6[64];
+       uint8_t RESERVED_7[64];
   __IO uint32_t EXT_TRIG[INPUTMUX_MAIN_EXT_TRIGN_COUNT]; /**< EXT Trigger Connections, array offset: 0x4C0, array step: 0x4 */
-       uint8_t RESERVED_7[192];
+       uint8_t RESERVED_8[192];
   __IO uint32_t LPI2C0_TRIG;                       /**< LPI2C0 Trigger Input Connections, offset: 0x5A0 */
-       uint8_t RESERVED_8[28];
-  __IO uint32_t LPI2C1_TRIG;                       /**< LPI2C1 Trigger Input Connections, offset: 0x5C0 */
        uint8_t RESERVED_9[28];
-  __IO uint32_t LPSPI0_TRIG;                       /**< LPSPI0 Trigger Input Connections, offset: 0x5E0 */
+  __IO uint32_t LPI2C1_TRIG;                       /**< LPI2C1 Trigger Input Connections, offset: 0x5C0 */
        uint8_t RESERVED_10[28];
-  __IO uint32_t LPSPI1_TRIG;                       /**< LPSPI1 Trigger Input Connections, offset: 0x600 */
+  __IO uint32_t LPSPI0_TRIG;                       /**< LPSPI0 Trigger Input Connections, offset: 0x5E0 */
        uint8_t RESERVED_11[28];
-  __IO uint32_t LPUART0r;                          /**< LPUART0 Trigger Input Connections, offset: 0x620, 'r' suffix has been added to avoid a clash with peripheral base pointer macro 'LPUART0' */
+  __IO uint32_t LPSPI1_TRIG;                       /**< LPSPI1 Trigger Input Connections, offset: 0x600 */
        uint8_t RESERVED_12[28];
+  __IO uint32_t LPUART0r;                          /**< LPUART0 Trigger Input Connections, offset: 0x620, 'r' suffix has been added to avoid a clash with peripheral base pointer macro 'LPUART0' */
+       uint8_t RESERVED_13[28];
   __IO uint32_t LPUART1r;                          /**< LPUART1 Trigger Input Connections, offset: 0x640, 'r' suffix has been added to avoid a clash with peripheral base pointer macro 'LPUART1' */
 } INPUTMUX_MAIN_Type;
 
@@ -156,26 +159,26 @@ typedef struct {
 #define INPUTMUX_MAIN_CTIMER0CAP_INP_SHIFT       (0U)
 /*! INP - Input number for CTIMER0
  *  0b0000000..Reserved
- *  0b0000001..CT_INP0 input is selected
- *  0b0000010..CT_INP1 input is selected
- *  0b0000011..CT_INP2 input is selected
- *  0b0000100..CT_INP3 input is selected
- *  0b0000101..CT_INP4 input is selected
- *  0b0000110..CT_INP5 input is selected
- *  0b0000111..CT_INP6 input is selected
- *  0b0001000..CT_INP7 input is selected
- *  0b0001001..CT_INP8 input is selected
- *  0b0001010..CT_INP9 input is selected
- *  0b0001011..CT_INP10 input is selected
- *  0b0001100..CT_INP11 input is selected
- *  0b0001101..CT_INP12 input is selected
- *  0b0001110..CT_INP13 input is selected
- *  0b0001111..CT_INP14 input is selected
- *  0b0010000..CT_INP15 input is selected
- *  0b0010001..CT_INP16 input is selected
- *  0b0010010..CT_INP17 input is selected
- *  0b0010011..CT_INP18 input is selected
- *  0b0010100..CT_INP19 input is selected
+ *  0b0000001..TRIG_INP0 input is selected
+ *  0b0000010..TRIG_INP1 input is selected
+ *  0b0000011..TRIG_INP2 input is selected
+ *  0b0000100..TRIG_INP3 input is selected
+ *  0b0000101..TRIG_INP4 input is selected
+ *  0b0000110..TRIG_INP5 input is selected
+ *  0b0000111..TRIG_INP6 input is selected
+ *  0b0001000..TRIG_INP7 input is selected
+ *  0b0001001..TRIG_INP8 input is selected
+ *  0b0001010..TRIG_INP9 input is selected
+ *  0b0001011..TRIG_INP10 input is selected
+ *  0b0001100..TRIG_INP11 input is selected
+ *  0b0001101..TRIG_INP12 input is selected
+ *  0b0001110..TRIG_INP13 input is selected
+ *  0b0001111..TRIG_INP14 input is selected
+ *  0b0010000..TRIG_INP15 input is selected
+ *  0b0010001..TRIG_INP16 input is selected
+ *  0b0010010..TRIG_INP17 input is selected
+ *  0b0010011..TRIG_INP18 input is selected
+ *  0b0010100..TRIG_INP19 input is selected
  *  0b0010101..Reserved
  *  0b0010110..AOI0_OUT0 input is selected
  *  0b0010111..AOI0_OUT1 input is selected
@@ -234,26 +237,26 @@ typedef struct {
 #define INPUTMUX_MAIN_CTIMER0TRIG_INP_SHIFT      (0U)
 /*! INP - Input number for CTIMER0
  *  0b0000000..Reserved
- *  0b0000001..CT_INP0 input is selected
- *  0b0000010..CT_INP1 input is selected
- *  0b0000011..CT_INP2 input is selected
- *  0b0000100..CT_INP3 input is selected
- *  0b0000101..CT_INP4 input is selected
- *  0b0000110..CT_INP5 input is selected
- *  0b0000111..CT_INP6 input is selected
- *  0b0001000..CT_INP7 input is selected
- *  0b0001001..CT_INP8 input is selected
- *  0b0001010..CT_INP9 input is selected
- *  0b0001011..CT_INP10 input is selected
- *  0b0001100..CT_INP11 input is selected
- *  0b0001101..CT_INP12 input is selected
- *  0b0001110..CT_INP13 input is selected
- *  0b0001111..CT_INP14 input is selected
- *  0b0010000..CT_INP15 input is selected
- *  0b0010001..CT_INP16 input is selected
- *  0b0010010..CT_INP17 input is selected
- *  0b0010011..CT_INP18 input is selected
- *  0b0010100..CT_INP19 input is selected
+ *  0b0000001..TRIG_INP0 input is selected
+ *  0b0000010..TRIG_INP1 input is selected
+ *  0b0000011..TRIG_INP2 input is selected
+ *  0b0000100..TRIG_INP3 input is selected
+ *  0b0000101..TRIG_INP4 input is selected
+ *  0b0000110..TRIG_INP5 input is selected
+ *  0b0000111..TRIG_INP6 input is selected
+ *  0b0001000..TRIG_INP7 input is selected
+ *  0b0001001..TRIG_INP8 input is selected
+ *  0b0001010..TRIG_INP9 input is selected
+ *  0b0001011..TRIG_INP10 input is selected
+ *  0b0001100..TRIG_INP11 input is selected
+ *  0b0001101..TRIG_INP12 input is selected
+ *  0b0001110..TRIG_INP13 input is selected
+ *  0b0001111..TRIG_INP14 input is selected
+ *  0b0010000..TRIG_INP15 input is selected
+ *  0b0010001..TRIG_INP16 input is selected
+ *  0b0010010..TRIG_INP17 input is selected
+ *  0b0010011..TRIG_INP18 input is selected
+ *  0b0010100..TRIG_INP19 input is selected
  *  0b0010101..Reserved
  *  0b0010110..AOI0_OUT0 input is selected
  *  0b0010111..AOI0_OUT1 input is selected
@@ -309,26 +312,26 @@ typedef struct {
 #define INPUTMUX_MAIN_CTIMER1CAP_INP_SHIFT       (0U)
 /*! INP - Input number for CTIMER1
  *  0b0000000..Reserved
- *  0b0000001..CT_INP0 input is selected
- *  0b0000010..CT_INP1 input is selected
- *  0b0000011..CT_INP2 input is selected
- *  0b0000100..CT_INP3 input is selected
- *  0b0000101..Reserved
- *  0b0000110..CT_INP5 input is selected
- *  0b0000111..CT_INP6 input is selected
- *  0b0001000..CT_INP7 input is selected
- *  0b0001001..CT_INP8 input is selected
- *  0b0001010..CT_INP9 input is selected
- *  0b0001011..CT_INP10 input is selected
- *  0b0001100..CT_INP11 input is selected
- *  0b0001101..CT_INP12 input is selected
- *  0b0001110..CT_INP13 input is selected
- *  0b0001111..CT_INP14 input is selected
- *  0b0010000..CT_INP15 input is selected
- *  0b0010001..CT_INP16 input is selected
- *  0b0010010..CT_INP17 input is selected
- *  0b0010011..CT_INP18 input is selected
- *  0b0010100..CT_INP19 input is selected
+ *  0b0000001..TRIG_INP0 input is selected
+ *  0b0000010..TRIG_INP1 input is selected
+ *  0b0000011..TRIG_INP2 input is selected
+ *  0b0000100..TRIG_INP3 input is selected
+ *  0b0000101..TRIG_INP4 input is selected
+ *  0b0000110..TRIG_INP5 input is selected
+ *  0b0000111..TRIG_INP6 input is selected
+ *  0b0001000..TRIG_INP7 input is selected
+ *  0b0001001..TRIG_INP8 input is selected
+ *  0b0001010..TRIG_INP9 input is selected
+ *  0b0001011..TRIG_INP10 input is selected
+ *  0b0001100..TRIG_INP11 input is selected
+ *  0b0001101..TRIG_INP12 input is selected
+ *  0b0001110..TRIG_INP13 input is selected
+ *  0b0001111..TRIG_INP14 input is selected
+ *  0b0010000..TRIG_INP15 input is selected
+ *  0b0010001..TRIG_INP16 input is selected
+ *  0b0010010..TRIG_INP17 input is selected
+ *  0b0010011..TRIG_INP18 input is selected
+ *  0b0010100..TRIG_INP19 input is selected
  *  0b0010101..Reserved
  *  0b0010110..AOI0_OUT0 input is selected
  *  0b0010111..AOI0_OUT1 input is selected
@@ -387,26 +390,26 @@ typedef struct {
 #define INPUTMUX_MAIN_CTIMER1TRIG_INP_SHIFT      (0U)
 /*! INP - Input number for CTIMER1
  *  0b0000000..Reserved
- *  0b0000001..CT_INP0 input is selected
- *  0b0000010..CT_INP1 input is selected
- *  0b0000011..CT_INP2 input is selected
- *  0b0000100..CT_INP3 input is selected
- *  0b0000101..Reserved
- *  0b0000110..CT_INP5 input is selected
- *  0b0000111..CT_INP6 input is selected
- *  0b0001000..CT_INP7 input is selected
- *  0b0001001..CT_INP8 input is selected
- *  0b0001010..CT_INP9 input is selected
- *  0b0001011..CT_INP10 input is selected
- *  0b0001100..CT_INP11 input is selected
- *  0b0001101..CT_INP12 input is selected
- *  0b0001110..CT_INP13 input is selected
- *  0b0001111..CT_INP14 input is selected
- *  0b0010000..CT_INP15 input is selected
- *  0b0010001..CT_INP16 input is selected
- *  0b0010010..CT_INP17 input is selected
- *  0b0010011..CT_INP18 input is selected
- *  0b0010100..CT_INP19 input is selected
+ *  0b0000001..TRIG_INP0 input is selected
+ *  0b0000010..TRIG_INP1 input is selected
+ *  0b0000011..TRIG_INP2 input is selected
+ *  0b0000100..TRIG_INP3 input is selected
+ *  0b0000101..TRIG_INP4 input is selected
+ *  0b0000110..TRIG_INP5 input is selected
+ *  0b0000111..TRIG_INP6 input is selected
+ *  0b0001000..TRIG_INP7 input is selected
+ *  0b0001001..TRIG_INP8 input is selected
+ *  0b0001010..TRIG_INP9 input is selected
+ *  0b0001011..TRIG_INP10 input is selected
+ *  0b0001100..TRIG_INP11 input is selected
+ *  0b0001101..TRIG_INP12 input is selected
+ *  0b0001110..TRIG_INP13 input is selected
+ *  0b0001111..TRIG_INP14 input is selected
+ *  0b0010000..TRIG_INP15 input is selected
+ *  0b0010001..TRIG_INP16 input is selected
+ *  0b0010010..TRIG_INP17 input is selected
+ *  0b0010011..TRIG_INP18 input is selected
+ *  0b0010100..TRIG_INP19 input is selected
  *  0b0010101..Reserved
  *  0b0010110..AOI0_OUT0 input is selected
  *  0b0010111..AOI0_OUT1 input is selected
@@ -462,26 +465,26 @@ typedef struct {
 #define INPUTMUX_MAIN_CTIMER2CAP_INP_SHIFT       (0U)
 /*! INP - Input number for CTIMER2
  *  0b0000000..Reserved
- *  0b0000001..CT_INP0 input is selected
- *  0b0000010..CT_INP1 input is selected
- *  0b0000011..CT_INP2 input is selected
- *  0b0000100..CT_INP3 input is selected
- *  0b0000101..Reserved
- *  0b0000110..CT_INP5 input is selected
- *  0b0000111..CT_INP6 input is selected
- *  0b0001000..CT_INP7 input is selected
- *  0b0001001..CT_INP8 input is selected
- *  0b0001010..CT_INP9 input is selected
- *  0b0001011..CT_INP10 input is selected
- *  0b0001100..CT_INP11 input is selected
- *  0b0001101..CT_INP12 input is selected
- *  0b0001110..CT_INP13 input is selected
- *  0b0001111..CT_INP14 input is selected
- *  0b0010000..CT_INP15 input is selected
- *  0b0010001..CT_INP16 input is selected
- *  0b0010010..CT_INP17 input is selected
- *  0b0010011..CT_INP18 input is selected
- *  0b0010100..CT_INP19 input is selected
+ *  0b0000001..TRIG_INP0 input is selected
+ *  0b0000010..TRIG_INP1 input is selected
+ *  0b0000011..TRIG_INP2 input is selected
+ *  0b0000100..TRIG_INP3 input is selected
+ *  0b0000101..TRIG_INP4 input is selected
+ *  0b0000110..TRIG_INP5 input is selected
+ *  0b0000111..TRIG_INP6 input is selected
+ *  0b0001000..TRIG_INP7 input is selected
+ *  0b0001001..TRIG_INP8 input is selected
+ *  0b0001010..TRIG_INP9 input is selected
+ *  0b0001011..TRIG_INP10 input is selected
+ *  0b0001100..TRIG_INP11 input is selected
+ *  0b0001101..TRIG_INP12 input is selected
+ *  0b0001110..TRIG_INP13 input is selected
+ *  0b0001111..TRIG_INP14 input is selected
+ *  0b0010000..TRIG_INP15 input is selected
+ *  0b0010001..TRIG_INP16 input is selected
+ *  0b0010010..TRIG_INP17 input is selected
+ *  0b0010011..TRIG_INP18 input is selected
+ *  0b0010100..TRIG_INP19 input is selected
  *  0b0010101..Reserved
  *  0b0010110..AOI0_OUT0 input is selected
  *  0b0010111..AOI0_OUT1 input is selected
@@ -533,33 +536,33 @@ typedef struct {
 /* The count of INPUTMUX_MAIN_CTIMER2CAP */
 #define INPUTMUX_MAIN_CTIMER2CAP_COUNT           (4U)
 
-/*! @name TIMER2TRIG - Trigger register for CTIMER2 inputs */
+/*! @name CTIMER2TRIG - Trigger register for CTIMER2 inputs */
 /*! @{ */
 
-#define INPUTMUX_MAIN_TIMER2TRIG_INP_MASK        (0x7FU)
-#define INPUTMUX_MAIN_TIMER2TRIG_INP_SHIFT       (0U)
+#define INPUTMUX_MAIN_CTIMER2TRIG_INP_MASK       (0x7FU)
+#define INPUTMUX_MAIN_CTIMER2TRIG_INP_SHIFT      (0U)
 /*! INP - Input number for CTIMER2
  *  0b0000000..Reserved
- *  0b0000001..CT_INP0 input is selected
- *  0b0000010..CT_INP1 input is selected
- *  0b0000011..CT_INP2 input is selected
- *  0b0000100..CT_INP3 input is selected
- *  0b0000101..Reserved
- *  0b0000110..CT_INP5 input is selected
- *  0b0000111..CT_INP6 input is selected
- *  0b0001000..CT_INP7 input is selected
- *  0b0001001..CT_INP8 input is selected
- *  0b0001010..CT_INP9 input is selected
- *  0b0001011..CT_INP10 input is selected
- *  0b0001100..CT_INP11 input is selected
- *  0b0001101..CT_INP12 input is selected
- *  0b0001110..CT_INP13 input is selected
- *  0b0001111..CT_INP14 input is selected
- *  0b0010000..CT_INP15 input is selected
- *  0b0010001..CT_INP16 input is selected
- *  0b0010010..CT_INP17 input is selected
- *  0b0010011..CT_INP18 input is selected
- *  0b0010100..CT_INP19 input is selected
+ *  0b0000001..TRIG_INP0 input is selected
+ *  0b0000010..TRIG_INP1 input is selected
+ *  0b0000011..TRIG_INP2 input is selected
+ *  0b0000100..TRIG_INP3 input is selected
+ *  0b0000101..TRIG_INP4 input is selected
+ *  0b0000110..TRIG_INP5 input is selected
+ *  0b0000111..TRIG_INP6 input is selected
+ *  0b0001000..TRIG_INP7 input is selected
+ *  0b0001001..TRIG_INP8 input is selected
+ *  0b0001010..TRIG_INP9 input is selected
+ *  0b0001011..TRIG_INP10 input is selected
+ *  0b0001100..TRIG_INP11 input is selected
+ *  0b0001101..TRIG_INP12 input is selected
+ *  0b0001110..TRIG_INP13 input is selected
+ *  0b0001111..TRIG_INP14 input is selected
+ *  0b0010000..TRIG_INP15 input is selected
+ *  0b0010001..TRIG_INP16 input is selected
+ *  0b0010010..TRIG_INP17 input is selected
+ *  0b0010011..TRIG_INP18 input is selected
+ *  0b0010100..TRIG_INP19 input is selected
  *  0b0010101..Reserved
  *  0b0010110..AOI0_OUT0 input is selected
  *  0b0010111..AOI0_OUT1 input is selected
@@ -605,7 +608,61 @@ typedef struct {
  *  0b0111111..Reserved
  *  0b1000000..Reserved
  */
-#define INPUTMUX_MAIN_TIMER2TRIG_INP(x)          (((uint32_t)(((uint32_t)(x)) << INPUTMUX_MAIN_TIMER2TRIG_INP_SHIFT)) & INPUTMUX_MAIN_TIMER2TRIG_INP_MASK)
+#define INPUTMUX_MAIN_CTIMER2TRIG_INP(x)         (((uint32_t)(((uint32_t)(x)) << INPUTMUX_MAIN_CTIMER2TRIG_INP_SHIFT)) & INPUTMUX_MAIN_CTIMER2TRIG_INP_MASK)
+/*! @} */
+
+/*! @name FREQMEAS_REF - Selection for frequency measurement reference clock */
+/*! @{ */
+
+#define INPUTMUX_MAIN_FREQMEAS_REF_INP_MASK      (0x1FU)
+#define INPUTMUX_MAIN_FREQMEAS_REF_INP_SHIFT     (0U)
+/*! INP - Clock source number (binary value) for frequency measure function target clock.
+ *  0b00000..Reserved
+ *  0b00001..Reserved
+ *  0b00010..FRO12M input is selected
+ *  0b00011..fro_hf_div input is selected
+ *  0b00100..XTAL32K[2] input is selected
+ *  0b00101..clk_16k[0] input is selected
+ *  0b00110..SLOW_CLK input is selected
+ *  0b00111..FREQME_CLK_IN0 input is selected
+ *  0b01000..FREQME_CLK_IN1 input is selected input is selected
+ *  0b01001..AOI0_OUT0 input is selected
+ *  0b01010..AOI0_OUT1
+ *  0b01011..Reserved
+ *  0b01100..Reserved
+ *  0b01101..Reserved
+ *  0b01110..Reserved
+ *  0b01111..Reserved
+ *  0b10000..Reserved
+ */
+#define INPUTMUX_MAIN_FREQMEAS_REF_INP(x)        (((uint32_t)(((uint32_t)(x)) << INPUTMUX_MAIN_FREQMEAS_REF_INP_SHIFT)) & INPUTMUX_MAIN_FREQMEAS_REF_INP_MASK)
+/*! @} */
+
+/*! @name FREQMEAS_TAR - Selection for frequency measurement target clock */
+/*! @{ */
+
+#define INPUTMUX_MAIN_FREQMEAS_TAR_INP_MASK      (0x1FU)
+#define INPUTMUX_MAIN_FREQMEAS_TAR_INP_SHIFT     (0U)
+/*! INP - Clock source number (binary value) for frequency measure function target clock.
+ *  0b00000..Reserved
+ *  0b00001..Reserved
+ *  0b00010..FRO12M input is selected
+ *  0b00011..fro_hf_div input is selected
+ *  0b00100..XTAL32K[2] input is selected
+ *  0b00101..clk_16k[0] input is selected
+ *  0b00110..SLOW_CLK input is selected
+ *  0b00111..FREQME_CLK_IN0 input is selected
+ *  0b01000..FREQME_CLK_IN1 input is selected input is selected
+ *  0b01001..AOI0_OUT0 input is selected
+ *  0b01010..AOI0_OUT1
+ *  0b01011..Reserved
+ *  0b01100..Reserved
+ *  0b01101..Reserved
+ *  0b01110..Reserved
+ *  0b01111..Reserved
+ *  0b10000..Reserved
+ */
+#define INPUTMUX_MAIN_FREQMEAS_TAR_INP(x)        (((uint32_t)(((uint32_t)(x)) << INPUTMUX_MAIN_FREQMEAS_TAR_INP_SHIFT)) & INPUTMUX_MAIN_FREQMEAS_TAR_INP_MASK)
 /*! @} */
 
 /*! @name CMP0_TRIG - CMP0 Input Connections */
@@ -615,7 +672,7 @@ typedef struct {
 #define INPUTMUX_MAIN_CMP0_TRIG_TRIGIN_SHIFT     (0U)
 /*! TRIGIN - CMP0 input trigger
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV input is selected
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -656,7 +713,7 @@ typedef struct {
 #define INPUTMUX_MAIN_ADC0_TRIG_TRIGIN_SHIFT     (0U)
 /*! TRIGIN - ADC0 trigger inputs
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV input is selected
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -670,7 +727,7 @@ typedef struct {
  *  0b001100..CTIMER1_MAT1 input is selected
  *  0b001101..CTIMER2_MAT0 input is selected
  *  0b001110..CTIMER2_MAT1 input is selected
- *  0b001111..Reserved
+ *  0b001111..LPTMR0 is selected
  *  0b010000..Reserved
  *  0b010001..Reserved
  *  0b010010..Reserved
@@ -686,7 +743,7 @@ typedef struct {
  *  0b011100..GPIO2 Pin Event Trig 0 input is selected
  *  0b011101..GPIO3 Pin Event Trig 0 input is selected
  *  0b011110..Reserved
- *  0b011111..WUU
+ *  0b011111..WUU is selected
  */
 #define INPUTMUX_MAIN_ADC0_TRIG_TRIGIN(x)        (((uint32_t)(((uint32_t)(x)) << INPUTMUX_MAIN_ADC0_TRIG_TRIGIN_SHIFT)) & INPUTMUX_MAIN_ADC0_TRIG_TRIGIN_MASK)
 /*! @} */
@@ -720,7 +777,7 @@ typedef struct {
  *  0b010001..CTIMER2_MAT1 input is selected
  *  0b010010..CTIMER2_MAT2 input is selected
  *  0b010011..CTIMER2_MAT3 input is selected
- *  0b010100..Reserved
+ *  0b010100..LPTMR0 is selected
  *  0b010101..Reserved
  *  0b010110..Reserved
  *  0b010111..Reserved
@@ -765,7 +822,7 @@ typedef struct {
 #define INPUTMUX_MAIN_EXT_TRIG_INP_SHIFT         (0U)
 /*! INP - EXT trigger input connections
  *  0b00000..Reserved
- *  0b00001..ARM_TXEV input is selected
+ *  0b00001..CM33 transmit event is selected
  *  0b00010..AOI0_OUT0 input is selected
  *  0b00011..AOI0_OUT1 input is selected
  *  0b00100..AOI0_OUT2 input is selected
@@ -773,8 +830,8 @@ typedef struct {
  *  0b00110..CMP0_OUT input is selected
  *  0b00111..Reserved
  *  0b01000..Reserved
- *  0b01001..LPUART0 input is selected
- *  0b01010..LPUART1 input is selected
+ *  0b01001..LPUART0 (Transmit data) input is selected
+ *  0b01010..LPUART1 (Transmit data) input is selected
  *  0b01011..Reserved
  */
 #define INPUTMUX_MAIN_EXT_TRIG_INP(x)            (((uint32_t)(((uint32_t)(x)) << INPUTMUX_MAIN_EXT_TRIG_INP_SHIFT)) & INPUTMUX_MAIN_EXT_TRIG_INP_MASK)
@@ -790,7 +847,7 @@ typedef struct {
 #define INPUTMUX_MAIN_LPI2C0_TRIG_INP_SHIFT      (0U)
 /*! INP - LPI2C0 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -816,8 +873,8 @@ typedef struct {
  *  0b011000..TRIG_IN7 input is selected
  *  0b011001..Reserved
  *  0b011010..GPIO1 Pin Event Trig 0 input is selected
- *  0b011011..GPIO1 Pin Event Trig 0 input is selected
- *  0b011100..GPIO2 Pin Event Trig 0 input is selected
+ *  0b011011..GPIO2 Pin Event Trig 0 input is selected
+ *  0b011100..GPIO3 Pin Event Trig 0 input is selected
  *  0b011101..Reserved
  *  0b011110..WUU input is selected
  */
@@ -831,7 +888,7 @@ typedef struct {
 #define INPUTMUX_MAIN_LPI2C1_TRIG_INP_SHIFT      (0U)
 /*! INP - LPI2C1 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -872,7 +929,7 @@ typedef struct {
 #define INPUTMUX_MAIN_LPSPI0_TRIG_INP_SHIFT      (0U)
 /*! INP - LPSPI0 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -913,7 +970,7 @@ typedef struct {
 #define INPUTMUX_MAIN_LPSPI1_TRIG_INP_SHIFT      (0U)
 /*! INP - LPSPI1 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -954,7 +1011,7 @@ typedef struct {
 #define INPUTMUX_MAIN_LPUART0_INP_SHIFT          (0U)
 /*! INP - LPUART0 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected
@@ -999,7 +1056,7 @@ typedef struct {
 #define INPUTMUX_MAIN_LPUART1_INP_SHIFT          (0U)
 /*! INP - LPUART1 trigger input connections
  *  0b000000..Reserved
- *  0b000001..ARM_TXEV
+ *  0b000001..CM33 transmit event is selected
  *  0b000010..AOI0_OUT0 input is selected
  *  0b000011..AOI0_OUT1 input is selected
  *  0b000100..AOI0_OUT2 input is selected

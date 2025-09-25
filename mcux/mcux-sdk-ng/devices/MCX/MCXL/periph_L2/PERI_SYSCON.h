@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_SYSCON.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for SYSCON
  *
  * CMSIS Peripheral Access Layer for SYSCON
@@ -433,17 +433,17 @@ typedef struct {
 
 #define SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK  (0x10000U)
 #define SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_SHIFT (16U)
-/*! DIS_MBECC_ERR_INST - Bus error on instruction multi-bit ecc error control
- *  0b0..Enables bus error on multi-bit ecc error for instruction
- *  0b1..Disables bus error on multi-bit ecc error for instruction
+/*! DIS_MBECC_ERR_INST - Bus error on instruction multi-bit ECC error control
+ *  0b0..Enables bus error on multi-bit ECC error for instruction
+ *  0b1..Disables bus error on multi-bit ECC error for instruction
  */
 #define SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_SHIFT)) & SYSCON_NVM_CTRL_DIS_MBECC_ERR_INST_MASK)
 
 #define SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK  (0x20000U)
 #define SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_SHIFT (17U)
-/*! DIS_MBECC_ERR_DATA - Bus error on data multi-bit ecc error control
- *  0b0..Enables bus error on multi-bit ecc error for data
- *  0b1..Disables bus error on multi-bit ecc error for data
+/*! DIS_MBECC_ERR_DATA - Bus error on data multi-bit ECC error control
+ *  0b0..Enables bus error on multi-bit ECC error for data
+ *  0b1..Disables bus error on multi-bit ECC error for data
  */
 #define SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_SHIFT)) & SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK)
 /*! @} */
@@ -453,7 +453,7 @@ typedef struct {
 
 #define SYSCON_ROMCR_ROM_WAIT_MASK               (0x1U)
 #define SYSCON_ROMCR_ROM_WAIT_SHIFT              (0U)
-/*! ROM_WAIT - ROM waiting Arm core and other masters */
+/*! ROM_WAIT - ROM waiting Arm CM33 core and other controllers */
 #define SYSCON_ROMCR_ROM_WAIT(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_ROMCR_ROM_WAIT_SHIFT)) & SYSCON_ROMCR_ROM_WAIT_MASK)
 /*! @} */
 
@@ -494,12 +494,12 @@ typedef struct {
 
 #define SYSCON_SRAMCTL_SRAMCTL_TMTR_REQ_MASK     (0x40000000U)
 #define SYSCON_SRAMCTL_SRAMCTL_TMTR_REQ_SHIFT    (30U)
-/*! SRAMCTL_TMTR_REQ - This bit will give TMTR values written req */
+/*! SRAMCTL_TMTR_REQ - This bit will give TMTR values written on request. */
 #define SYSCON_SRAMCTL_SRAMCTL_TMTR_REQ(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAMCTL_SRAMCTL_TMTR_REQ_SHIFT)) & SYSCON_SRAMCTL_SRAMCTL_TMTR_REQ_MASK)
 
 #define SYSCON_SRAMCTL_SRAMCTL_TMTR_ACK_MASK     (0x80000000U)
 #define SYSCON_SRAMCTL_SRAMCTL_TMTR_ACK_SHIFT    (31U)
-/*! SRAMCTL_TMTR_ACK - This bit will give TMTR values written ack. write this bit 1 to clear the ack */
+/*! SRAMCTL_TMTR_ACK - This bit will give TMTR values written on acknowledgment. Write this bit 1 to clear the acknowledgment. */
 #define SYSCON_SRAMCTL_SRAMCTL_TMTR_ACK(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAMCTL_SRAMCTL_TMTR_ACK_SHIFT)) & SYSCON_SRAMCTL_SRAMCTL_TMTR_ACK_MASK)
 /*! @} */
 
@@ -522,13 +522,13 @@ typedef struct {
  */
 #define SYSCON_PULSECAPSYNC_BYPASS_LPUART1_0(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_LPUART1_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_LPUART1_0_MASK)
 
-#define SYSCON_PULSECAPSYNC_BYPASS_LPCMP0_0_MASK (0x4U)
-#define SYSCON_PULSECAPSYNC_BYPASS_LPCMP0_0_SHIFT (2U)
-/*! LPCMP0_0 - LPCMP0 Trigger Bypass Control Bit
+#define SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_MASK   (0x4U)
+#define SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_SHIFT  (2U)
+/*! CMP0_0 - CMP0 Trigger Bypass Control Bit
  *  0b0..Pulse capture sync bypassed
  *  0b1..Pulse capture sync enabled
  */
-#define SYSCON_PULSECAPSYNC_BYPASS_LPCMP0_0(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_LPCMP0_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_LPCMP0_0_MASK)
+#define SYSCON_PULSECAPSYNC_BYPASS_CMP0_0(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_MASK)
 
 #define SYSCON_PULSECAPSYNC_BYPASS_CTIMER2_4_MASK (0x8U)
 #define SYSCON_PULSECAPSYNC_BYPASS_CTIMER2_4_SHIFT (3U)
@@ -985,80 +985,80 @@ typedef struct {
 #define SYSCON_SRAM_XEN_RAMX0_XEN_MASK           (0x1U)
 #define SYSCON_SRAM_XEN_RAMX0_XEN_SHIFT          (0U)
 /*! RAMX0_XEN - RAMX0 Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
+ *  0b0..Execute permission is disabled, Read/Write are enabled.
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled.
  */
 #define SYSCON_SRAM_XEN_RAMX0_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMX0_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMX0_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMX1_XEN_MASK           (0x2U)
 #define SYSCON_SRAM_XEN_RAMX1_XEN_SHIFT          (1U)
 /*! RAMX1_XEN - RAMX1 Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
+ *  0b0..Execute permission is disabled, Read/Write are enabled.
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled.
  */
 #define SYSCON_SRAM_XEN_RAMX1_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMX1_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMX1_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMA0_XEN_MASK           (0x4U)
 #define SYSCON_SRAM_XEN_RAMA0_XEN_SHIFT          (2U)
 /*! RAMA0_XEN - RAMA0 Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
+ *  0b0..Execute permission is disabled, Read/Write are enabled.
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled.
  */
 #define SYSCON_SRAM_XEN_RAMA0_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMA0_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMA0_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMA1_XEN_MASK           (0x8U)
 #define SYSCON_SRAM_XEN_RAMA1_XEN_SHIFT          (3U)
 /*! RAMA1_XEN - RAMA1 Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
+ *  0b0..Execute permission is disabled, Read/Write are enabled.
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled.
  */
 #define SYSCON_SRAM_XEN_RAMA1_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMA1_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMA1_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMB0_XEN_MASK           (0x10U)
 #define SYSCON_SRAM_XEN_RAMB0_XEN_SHIFT          (4U)
 /*! RAMB0_XEN - RAMB0 Executable Permission Control
- *  0b0..Execute permission is disabled, R/W are enabled
- *  0b1..Execute permission is enabled, R/W/X are enabled
+ *  0b0..Execute permission is disabled, Read/Write are enabled
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled
  */
 #define SYSCON_SRAM_XEN_RAMB0_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMB0_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMB0_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMA2_XEN_MASK           (0x20U)
 #define SYSCON_SRAM_XEN_RAMA2_XEN_SHIFT          (5U)
 /*! RAMA2_XEN - RAMA1 Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
+ *  0b0..Execute permission is disabled, Read/Write are enabled.
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled.
  */
 #define SYSCON_SRAM_XEN_RAMA2_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMA2_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMA2_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMA3_XEN_MASK           (0x40U)
 #define SYSCON_SRAM_XEN_RAMA3_XEN_SHIFT          (6U)
 /*! RAMA3_XEN - RAMA1 Execute permission control.
- *  0b0..Execute permission is disabled, R/W are enabled.
- *  0b1..Execute permission is enabled, R/W/X are enabled.
+ *  0b0..Execute permission is disabled, Read/Write are enabled.
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled.
  */
 #define SYSCON_SRAM_XEN_RAMA3_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMA3_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMA3_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMB1_XEN_MASK           (0x80U)
 #define SYSCON_SRAM_XEN_RAMB1_XEN_SHIFT          (7U)
 /*! RAMB1_XEN - RAMB1 Executable Permission Control
- *  0b0..Execute permission is disabled, R/W are enabled
- *  0b1..Execute permission is enabled, R/W/X are enabled
+ *  0b0..Execute permission is disabled, Read/Write are enabled
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled
  */
 #define SYSCON_SRAM_XEN_RAMB1_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMB1_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMB1_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMB2_XEN_MASK           (0x100U)
 #define SYSCON_SRAM_XEN_RAMB2_XEN_SHIFT          (8U)
 /*! RAMB2_XEN - RAMB2 Executable Permission Control
- *  0b0..Execute permission is disabled, R/W are enabled
- *  0b1..Execute permission is enabled, R/W/X are enabled
+ *  0b0..Execute permission is disabled, Read/Write are enabled
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled
  */
 #define SYSCON_SRAM_XEN_RAMB2_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMB2_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMB2_XEN_MASK)
 
 #define SYSCON_SRAM_XEN_RAMB3_XEN_MASK           (0x200U)
 #define SYSCON_SRAM_XEN_RAMB3_XEN_SHIFT          (9U)
 /*! RAMB3_XEN - RAMB3 and RAMB4 Interleaved Executable Permission Control
- *  0b0..Execute permission is disabled, R/W are enabled
- *  0b1..Execute permission is enabled, R/W/X are enabled
+ *  0b0..Execute permission is disabled, Read/Write are enabled
+ *  0b1..Execute permission is enabled, Read/Write/Execute are enabled
  */
 #define SYSCON_SRAM_XEN_RAMB3_XEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_RAMB3_XEN_SHIFT)) & SYSCON_SRAM_XEN_RAMB3_XEN_MASK)
 

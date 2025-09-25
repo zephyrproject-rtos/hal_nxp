@@ -8,7 +8,7 @@
 **                          MCXW727DMFTA_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC
@@ -268,10 +268,10 @@ typedef struct {
     __IO uint32_t W3;                                /**< MRC Domain Error Word3 Register, array offset: 0x48C, array step: 0x10 */
   } MRC_DERR[TRDC_MRC_DERR_COUNT];
        uint8_t RESERVED_8[880];
-  __IO uint32_t MDA_W0_0_DFMT0;                    /**< DAC Master Domain Assignment Register, offset: 0x800 */
+  __IO uint32_t MDA_W0_0_DFMT0;                    /**< DAC Initiator Domain Assignment Register, offset: 0x800 */
        uint8_t RESERVED_9[28];
   struct {                                         /* offset: 0x820, array step: 0x20 */
-    __IO uint32_t MDA_W0_x_DFMT1;                    /**< DAC Master Domain Assignment Register, array offset: 0x820, array step: 0x20 */
+    __IO uint32_t MDA_W0_x_DFMT1;                    /**< DAC Initiator Domain Assignment Register, array offset: 0x820, array step: 0x20 */
          uint8_t RESERVED_0[28];
   } MDA_W0_DFMT1[TRDC_MDA_W0_DFMT1_COUNT];
        uint8_t RESERVED_10[1888];
@@ -413,7 +413,7 @@ typedef struct {
 
 #define TRDC_TRDC_HWCFG0_NMSTR_MASK              (0xFF00U)
 #define TRDC_TRDC_HWCFG0_NMSTR_SHIFT             (8U)
-/*! NMSTR - Number of bus masters */
+/*! NMSTR - Number of bus initiators */
 #define TRDC_TRDC_HWCFG0_NMSTR(x)                (((uint32_t)(((uint32_t)(x)) << TRDC_TRDC_HWCFG0_NMSTR_SHIFT)) & TRDC_TRDC_HWCFG0_NMSTR_MASK)
 
 #define TRDC_TRDC_HWCFG0_NMBC_MASK               (0x70000U)
@@ -446,14 +446,14 @@ typedef struct {
 
 #define TRDC_DACFG_NMDAR_MASK                    (0xFU)
 #define TRDC_DACFG_NMDAR_SHIFT                   (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define TRDC_DACFG_NMDAR(x)                      (((uint8_t)(((uint8_t)(x)) << TRDC_DACFG_NMDAR_SHIFT)) & TRDC_DACFG_NMDAR_MASK)
 
 #define TRDC_DACFG_NCM_MASK                      (0x80U)
 #define TRDC_DACFG_NCM_SHIFT                     (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define TRDC_DACFG_NCM(x)                        (((uint8_t)(((uint8_t)(x)) << TRDC_DACFG_NCM_SHIFT)) & TRDC_DACFG_NCM_MASK)
 /*! @} */
@@ -463,42 +463,42 @@ typedef struct {
 
 #define TRDC_CFG_SLV0_NMBLK_MASK                 (0x3FFU)
 #define TRDC_CFG_SLV0_NMBLK_SHIFT                (0U)
-/*! SLV0_NMBLK - Number of blocks in slave 0. */
+/*! SLV0_NMBLK - Number of blocks in target 0. */
 #define TRDC_CFG_SLV0_NMBLK(x)                   (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV0_NMBLK_SHIFT)) & TRDC_CFG_SLV0_NMBLK_MASK)
 
 #define TRDC_CFG_SLV2_NMBLK_MASK                 (0x3FFU)
 #define TRDC_CFG_SLV2_NMBLK_SHIFT                (0U)
-/*! SLV2_NMBLK - Number of blocks in slave 2. */
+/*! SLV2_NMBLK - Number of blocks in target 2. */
 #define TRDC_CFG_SLV2_NMBLK(x)                   (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV2_NMBLK_SHIFT)) & TRDC_CFG_SLV2_NMBLK_MASK)
 
 #define TRDC_CFG_SLV0_BLKSZL2_MASK               (0x7C00U)
 #define TRDC_CFG_SLV0_BLKSZL2_SHIFT              (10U)
-/*! SLV0_BLKSZL2 - Block size log2 in slave 0. */
+/*! SLV0_BLKSZL2 - Block size log2 in target 0. */
 #define TRDC_CFG_SLV0_BLKSZL2(x)                 (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV0_BLKSZL2_SHIFT)) & TRDC_CFG_SLV0_BLKSZL2_MASK)
 
 #define TRDC_CFG_SLV2_BLKSZL2_MASK               (0x7C00U)
 #define TRDC_CFG_SLV2_BLKSZL2_SHIFT              (10U)
-/*! SLV2_BLKSZL2 - Block size log2 in slave 2. */
+/*! SLV2_BLKSZL2 - Block size log2 in target 2. */
 #define TRDC_CFG_SLV2_BLKSZL2(x)                 (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV2_BLKSZL2_SHIFT)) & TRDC_CFG_SLV2_BLKSZL2_MASK)
 
 #define TRDC_CFG_SLV1_NMBLK_MASK                 (0x3FF0000U)
 #define TRDC_CFG_SLV1_NMBLK_SHIFT                (16U)
-/*! SLV1_NMBLK - Number of blocks in slave 1. */
+/*! SLV1_NMBLK - Number of blocks in target 1. */
 #define TRDC_CFG_SLV1_NMBLK(x)                   (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV1_NMBLK_SHIFT)) & TRDC_CFG_SLV1_NMBLK_MASK)
 
 #define TRDC_CFG_SLV3_NMBLK_MASK                 (0x3FF0000U)
 #define TRDC_CFG_SLV3_NMBLK_SHIFT                (16U)
-/*! SLV3_NMBLK - Number of blocks in slave 3. */
+/*! SLV3_NMBLK - Number of blocks in target 3. */
 #define TRDC_CFG_SLV3_NMBLK(x)                   (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV3_NMBLK_SHIFT)) & TRDC_CFG_SLV3_NMBLK_MASK)
 
 #define TRDC_CFG_SLV1_BLKSZL2_MASK               (0x7C000000U)
 #define TRDC_CFG_SLV1_BLKSZL2_SHIFT              (26U)
-/*! SLV1_BLKSZL2 - Block size log2 in slave 1. */
+/*! SLV1_BLKSZL2 - Block size log2 in target 1. */
 #define TRDC_CFG_SLV1_BLKSZL2(x)                 (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV1_BLKSZL2_SHIFT)) & TRDC_CFG_SLV1_BLKSZL2_MASK)
 
 #define TRDC_CFG_SLV3_BLKSZL2_MASK               (0x7C000000U)
 #define TRDC_CFG_SLV3_BLKSZL2_SHIFT              (26U)
-/*! SLV3_BLKSZL2 - Block size log2 in slave 3. */
+/*! SLV3_BLKSZL2 - Block size log2 in target 3. */
 #define TRDC_CFG_SLV3_BLKSZL2(x)                 (((uint32_t)(((uint32_t)(x)) << TRDC_CFG_SLV3_BLKSZL2_SHIFT)) & TRDC_CFG_SLV3_BLKSZL2_MASK)
 /*! @} */
 
@@ -724,6 +724,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define TRDC_W1_EDID(x)                          (((uint32_t)(((uint32_t)(x)) << TRDC_W1_EDID_SHIFT)) & TRDC_W1_EDID_MASK)
 
+#define TRDC_W1_SLV_DID_ERR_MASK                 (0x10U)
+#define TRDC_W1_SLV_DID_ERR_SHIFT                (4U)
+/*! SLV_DID_ERR - DID check error */
+#define TRDC_W1_SLV_DID_ERR(x)                   (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_DID_ERR_SHIFT)) & TRDC_W1_SLV_DID_ERR_MASK)
+
+#define TRDC_W1_SLV_PA_ERR_MASK                  (0x20U)
+#define TRDC_W1_SLV_PA_ERR_SHIFT                 (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define TRDC_W1_SLV_PA_ERR(x)                    (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_PA_ERR_SHIFT)) & TRDC_W1_SLV_PA_ERR_MASK)
+
+#define TRDC_W1_SLV_SA_ERR_MASK                  (0x40U)
+#define TRDC_W1_SLV_SA_ERR_SHIFT                 (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define TRDC_W1_SLV_SA_ERR(x)                    (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_SA_ERR_SHIFT)) & TRDC_W1_SLV_SA_ERR_MASK)
+
+#define TRDC_W1_SLV_ABORT_MASK                   (0x80U)
+#define TRDC_W1_SLV_ABORT_SHIFT                  (7U)
+/*! SLV_ABORT - Bus protect error */
+#define TRDC_W1_SLV_ABORT(x)                     (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_ABORT_SHIFT)) & TRDC_W1_SLV_ABORT_MASK)
+
 #define TRDC_W1_EATR_MASK                        (0x700U)
 #define TRDC_W1_EATR_SHIFT                       (8U)
 /*! EATR - Error attributes
@@ -803,6 +823,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define TRDC_W1_EDID(x)                          (((uint32_t)(((uint32_t)(x)) << TRDC_W1_EDID_SHIFT)) & TRDC_W1_EDID_MASK)
 
+#define TRDC_W1_SLV_DID_ERR_MASK                 (0x10U)
+#define TRDC_W1_SLV_DID_ERR_SHIFT                (4U)
+/*! SLV_DID_ERR - DID check error */
+#define TRDC_W1_SLV_DID_ERR(x)                   (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_DID_ERR_SHIFT)) & TRDC_W1_SLV_DID_ERR_MASK)
+
+#define TRDC_W1_SLV_PA_ERR_MASK                  (0x20U)
+#define TRDC_W1_SLV_PA_ERR_SHIFT                 (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define TRDC_W1_SLV_PA_ERR(x)                    (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_PA_ERR_SHIFT)) & TRDC_W1_SLV_PA_ERR_MASK)
+
+#define TRDC_W1_SLV_SA_ERR_MASK                  (0x40U)
+#define TRDC_W1_SLV_SA_ERR_SHIFT                 (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define TRDC_W1_SLV_SA_ERR(x)                    (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_SA_ERR_SHIFT)) & TRDC_W1_SLV_SA_ERR_MASK)
+
+#define TRDC_W1_SLV_ABORT_MASK                   (0x80U)
+#define TRDC_W1_SLV_ABORT_SHIFT                  (7U)
+/*! SLV_ABORT - Bus protect error */
+#define TRDC_W1_SLV_ABORT(x)                     (((uint32_t)(((uint32_t)(x)) << TRDC_W1_SLV_ABORT_SHIFT)) & TRDC_W1_SLV_ABORT_MASK)
+
 #define TRDC_W1_EATR_MASK                        (0x700U)
 #define TRDC_W1_EATR_SHIFT                       (8U)
 /*! EATR - Error attributes
@@ -857,7 +897,7 @@ typedef struct {
 /* The count of TRDC_W3 */
 #define TRDC_MRC_DERR_W3_COUNT                   (1U)
 
-/*! @name MDA_W0_0_DFMT0 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_0_DFMT0 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define TRDC_MDA_W0_0_DFMT0_DID_MASK             (0xFU)
@@ -878,20 +918,12 @@ typedef struct {
 #define TRDC_MDA_W0_0_DFMT0_SA_MASK              (0xC000U)
 #define TRDC_MDA_W0_0_DFMT0_SA_SHIFT             (14U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define TRDC_MDA_W0_0_DFMT0_SA(x)                (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_0_DFMT0_SA_SHIFT)) & TRDC_MDA_W0_0_DFMT0_SA_MASK)
-
-#define TRDC_MDA_W0_0_DFMT0_KPA_MASK             (0x10000000U)
-#define TRDC_MDA_W0_0_DFMT0_KPA_SHIFT            (28U)
-/*! KPA - Known Physical Address
- *  0b0..The address is non-physical and requires SMMU translation.
- *  0b1..The address is physical and bypasses any downstream SMMU.
- */
-#define TRDC_MDA_W0_0_DFMT0_KPA(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_0_DFMT0_KPA_SHIFT)) & TRDC_MDA_W0_0_DFMT0_KPA_MASK)
 
 #define TRDC_MDA_W0_0_DFMT0_DFMT_MASK            (0x20000000U)
 #define TRDC_MDA_W0_0_DFMT0_DFMT_SHIFT           (29U)
@@ -918,7 +950,7 @@ typedef struct {
 #define TRDC_MDA_W0_0_DFMT0_VLD(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_0_DFMT0_VLD_SHIFT)) & TRDC_MDA_W0_0_DFMT0_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_x_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_x_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define TRDC_MDA_W0_x_DFMT1_DID_MASK             (0xFU)
@@ -929,20 +961,20 @@ typedef struct {
 #define TRDC_MDA_W0_x_DFMT1_PA_MASK              (0x30U)
 #define TRDC_MDA_W0_x_DFMT1_PA_SHIFT             (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define TRDC_MDA_W0_x_DFMT1_PA(x)                (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_x_DFMT1_PA_SHIFT)) & TRDC_MDA_W0_x_DFMT1_PA_MASK)
 
 #define TRDC_MDA_W0_x_DFMT1_SA_MASK              (0xC0U)
 #define TRDC_MDA_W0_x_DFMT1_SA_SHIFT             (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define TRDC_MDA_W0_x_DFMT1_SA(x)                (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_x_DFMT1_SA_SHIFT)) & TRDC_MDA_W0_x_DFMT1_SA_MASK)
 
@@ -953,14 +985,6 @@ typedef struct {
  *  0b1..Use the DID input as the domain identifier.
  */
 #define TRDC_MDA_W0_x_DFMT1_DIDB(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_x_DFMT1_DIDB_SHIFT)) & TRDC_MDA_W0_x_DFMT1_DIDB_MASK)
-
-#define TRDC_MDA_W0_x_DFMT1_KPA_MASK             (0x10000000U)
-#define TRDC_MDA_W0_x_DFMT1_KPA_SHIFT            (28U)
-/*! KPA - Known Physical Address
- *  0b0..The address is non-physical and requires SMMU translation.
- *  0b1..The address is physical and bypasses any downstream SMMU.
- */
-#define TRDC_MDA_W0_x_DFMT1_KPA(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MDA_W0_x_DFMT1_KPA_SHIFT)) & TRDC_MDA_W0_x_DFMT1_KPA_MASK)
 
 #define TRDC_MDA_W0_x_DFMT1_DFMT_MASK            (0x20000000U)
 #define TRDC_MDA_W0_x_DFMT1_DFMT_SHIFT           (29U)

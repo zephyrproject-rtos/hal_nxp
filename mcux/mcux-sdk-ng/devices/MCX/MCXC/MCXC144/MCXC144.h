@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXC444RM, Rev.1, Mar 2024
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250630
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXC144

@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXA1 User manual
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250704
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA142
@@ -368,6 +368,8 @@ typedef enum IRQn {
 #define FREQME_BASE_ADDRS                        { FREQME0_BASE }
 /** Array initializer of FREQME peripheral base pointers */
 #define FREQME_BASE_PTRS                         { FREQME0 }
+/** Interrupt vectors for the FREQME peripheral type */
+#define FREQME_IRQS                              { FREQME0_IRQn }
 
 /* GLIKEY - Peripheral instance base addresses */
 /** Peripheral GLIKEY0 base address */

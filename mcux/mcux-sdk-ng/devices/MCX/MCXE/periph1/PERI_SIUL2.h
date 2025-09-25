@@ -1,8 +1,8 @@
 /*
 ** ###################################################################
 **     Processor:           MCXE31BMPB
-**     Version:             rev. 0.1, 2024-11-19
-**     Build:               b250512
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250718
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SIUL2
@@ -17,14 +17,16 @@
 **     Revisions:
 **     - rev. 0.1 (2024-11-19)
 **         Initial version.
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_SIUL2.h
- * @version 0.1
- * @date 2024-11-19
+ * @version 1.0
+ * @date 2025-07-18
  * @brief CMSIS Peripheral Access Layer for SIUL2
  *
  * CMSIS Peripheral Access Layer for SIUL2
@@ -1869,7 +1871,7 @@ typedef struct {
 #define SIUL2_MIDR4_SEC_FET_MASK                 (0x60U)
 #define SIUL2_MIDR4_SEC_FET_SHIFT                (5U)
 /*! SEC_FET - Security Feature
- *  0b01..HSE-B
+ *  0b01..ELE_HSEB
  */
 #define SIUL2_MIDR4_SEC_FET(x)                   (((uint32_t)(((uint32_t)(x)) << SIUL2_MIDR4_SEC_FET_SHIFT)) & SIUL2_MIDR4_SEC_FET_MASK)
 /*! @} */
