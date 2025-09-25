@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_ANALOG
@@ -505,8 +505,8 @@ typedef struct {
 /*! PLL_PD_TRIM_FCAL_BIAS - reg_pd_trim_fcal_bias_dig[1:0]
  *  0b00..0.276V (recommended setting for legacy operation)
  *  0b01..0.164V
- *  0b10..0.320V
- *  0b11..0.391V (recommended setting for PIC use)
+ *  0b10..0.320V (recommended setting for PIC use)
+ *  0b11..0.391V
  */
 #define XCVR_ANALOG_PLL_PLL_PD_TRIM_FCAL_BIAS(x) (((uint32_t)(((uint32_t)(x)) << XCVR_ANALOG_PLL_PLL_PD_TRIM_FCAL_BIAS_SHIFT)) & XCVR_ANALOG_PLL_PLL_PD_TRIM_FCAL_BIAS_MASK)
 

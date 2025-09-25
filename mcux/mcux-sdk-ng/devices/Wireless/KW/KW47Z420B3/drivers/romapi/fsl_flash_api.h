@@ -1,5 +1,5 @@
 /*
- * Copyright 2021,2024 NXP
+ * Copyright 2021,2024-2025 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 1)) /*!< Version 1.2.1. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 3)) /*!< Version 1.2.3. */
 /*@}*/
 
 /*! @brief Constructs the four character code for the Flash driver API key. */
@@ -113,21 +113,11 @@ typedef enum _flash_property_tag
     kFLASH_PropertyPflash0BlockSize          = 0x02U, /*!< Pflash block size property.*/
     kFLASH_PropertyPflash0BlockCount         = 0x03U, /*!< Pflash block count property.*/
     kFLASH_PropertyPflash0BlockBaseAddr      = 0x04U, /*!< Pflash block base address property.*/
-    kFLASH_PropertyPflash0FacSupport         = 0x05U, /*!< Pflash fac support property.*/
-    kFLASH_PropertyPflash0AccessSegmentSize  = 0x06U, /*!< Pflash access segment size property.*/
-    kFLASH_PropertyPflash0AccessSegmentCount = 0x07U, /*!< Pflash access segment count property.*/
 
-    kFLASH_PropertyPflash1SectorSize         = 0x10U, /*!< Pflash sector size property.*/
     kFLASH_PropertyPflash1TotalSize          = 0x11U, /*!< Pflash total size property.*/
     kFLASH_PropertyPflash1BlockSize          = 0x12U, /*!< Pflash block size property.*/
     kFLASH_PropertyPflash1BlockCount         = 0x13U, /*!< Pflash block count property.*/
     kFLASH_PropertyPflash1BlockBaseAddr      = 0x14U, /*!< Pflash block base address property.*/
-    kFLASH_PropertyPflash1FacSupport         = 0x15U, /*!< Pflash fac support property.*/
-    kFLASH_PropertyPflash1AccessSegmentSize  = 0x16U, /*!< Pflash access segment size property.*/
-    kFLASH_PropertyPflash1AccessSegmentCount = 0x17U, /*!< Pflash access segment count property.*/
-
-    kFLASH_PropertyFlexRamBlockBaseAddr = 0x20U, /*!< FlexRam block base address property.*/
-    kFLASH_PropertyFlexRamTotalSize     = 0x21U, /*!< FlexRam total size property.*/
 } flash_property_tag_t;
 
 /*!
@@ -190,7 +180,8 @@ typedef struct FlashDriverInterface
     status_t (*flash_program_page)(
         flash_config_t *config, FMU_Type *base, uint32_t start, uint32_t *src, uint32_t lengthInBytes);
     status_t (*flash_verify_erase_all)(FMU_Type *base);
-    status_t *reserved;
+    status_t (*flash_verify_erase_block)(
+        flash_config_t *config, FMU_Type *base, uint32_t blockaddr);
     status_t (*flash_verify_erase_phrase)(flash_config_t *config,
                                           FMU_Type *base,
                                           uint32_t start,

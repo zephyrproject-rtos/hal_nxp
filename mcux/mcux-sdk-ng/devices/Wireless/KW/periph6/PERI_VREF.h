@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for VREF
@@ -266,7 +266,7 @@ typedef struct {
 
 #define VREF_UTRIM_TRIM2V1_MASK                  (0xFU)
 #define VREF_UTRIM_TRIM2V1_SHIFT                 (0U)
-/*! TRIM2V1 - VREF 2.1 V Trim */
+/*! TRIM2V1 - VREF 2.048 V Trim */
 #define VREF_UTRIM_TRIM2V1(x)                    (((uint32_t)(((uint32_t)(x)) << VREF_UTRIM_TRIM2V1_SHIFT)) & VREF_UTRIM_TRIM2V1_MASK)
 
 #define VREF_UTRIM_VREFTRIM_MASK                 (0x3F00U)

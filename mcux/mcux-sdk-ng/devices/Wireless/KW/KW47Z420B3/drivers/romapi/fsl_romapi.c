@@ -1,5 +1,5 @@
 /*
- * Copyright 2021,2024 NXP
+ * Copyright 2021,2024-2025 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,7 +16,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "driver.romapi"
+#define FSL_COMPONENT_ID "driver.romapi_soc"
 #endif
 
 /*
@@ -331,6 +331,21 @@ status_t FLASH_VerifyEraseSector(flash_config_t *config, FMU_Type *base, uint32_
 }
 
 /*!
+ * @brief Checking if a flash block is in the erased state.
+ */
+status_t FLASH_VerifyEraseBlock(flash_config_t *config, FMU_Type *base, uint32_t blockaddr)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(config);
+    assert(base);
+
+    status_t status;
+    status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_verify_erase_block(config, base, blockaddr);
+
+    return status;
+}
+
+/*!
  * @brief Read into MISR
  *
  * The Read into MISR operation generates a signature based on the contents of the selected
@@ -362,6 +377,7 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
 
     status_t status;
     status = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_get_property(config, whichProperty, value);
+    status = kStatus_FLASH_Success;
 
     return status;
 }
@@ -417,12 +433,12 @@ static status_t flash_check_param(
         status = kStatus_FLASH_Success;
     }
 #if defined(RF_FMU)
-    else if ((config == NULL) || (base == NULL) || ((base != FMU0) && (base != RF_FMU)))
+    else if ((config == NULL) || (base == NULL) || ((base != FMU0) && (base != RF_FMU)) || (0u == alignmentBaseline))
     {
         status = kStatus_FLASH_InvalidArgument;
     }
 #else
-    else if ((config == NULL) || (base == NULL) || (base != FMU0))
+    else if ((config == NULL) || (base == NULL) || (base != FMU0) || (0u == alignmentBaseline))
     {
         status = kStatus_FLASH_InvalidArgument;
     }
