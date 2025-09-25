@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -8,6 +8,7 @@
 
 #include "fsl_common.h"
 #include "fsl_spifi.h"
+#include "fsl_nor_flash.h"
 
 /*!
  * @addtogroup spifi_nor_flash
@@ -119,9 +120,38 @@ typedef struct _spifi_mem_nor_handle
     spifi_command_type_t commandType;           /*!< Opcode and address type */
     spifi_command_format_t readmemCommandFormt; /*!< Command formt for read memory opration */
     uint8_t intermediateLen;                    /*!< Intermediate bytes precede the data  */
+    uint8_t lock;                               /*!< Lock to protect flash operation */
     serial_nor_command_set_t commandSet;        /*!< Serial NOR basic command set */
 } spifi_mem_nor_handle_t;
 
 /*! @}*/
+
+/*******************************************************************************
+ * API
+ ******************************************************************************/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*!
+ * @brief Prepare the NOR flash for low power entry
+ *
+ * @param handle The NOR Flash handler.
+ * @retval status_t execution status
+ */
+status_t Nor_Flash_Enter_Lowpower(nor_handle_t *handle);
+
+/*!
+ * @brief Prepare the NOR flash for low power exit
+ *
+ * @param handle The NOR Flash handler.
+ * @retval status_t execution status
+ */
+status_t Nor_Flash_Exit_Lowpower(nor_handle_t *handle);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __FSL_SPIFI_NOR_FLASH_H__ */

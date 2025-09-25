@@ -52,7 +52,9 @@ typedef struct _hal_rpmsg_peer_ept_state
 
 #ifndef RPMSG_GLOBAL_VARIABLE_ALLOC
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
+#ifndef SH_MEM_TOTAL_SIZE
 #define SH_MEM_TOTAL_SIZE (6144U)
+#endif /* SH_MEM_TOTAL_SIZE */
 #if defined(__ICCARM__) /* IAR Workbench */
 #pragma location = "rpmsg_sh_mem_section"
 static char rpmsg_lite_base[SH_MEM_TOTAL_SIZE];
@@ -70,7 +72,9 @@ extern uint32_t rpmsg_sh_mem_end[];
 #else
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
+#ifndef SH_MEM_TOTAL_SIZE
 #define SH_MEM_TOTAL_SIZE (6144U)
+#endif /* SH_MEM_TOTAL_SIZE */
 extern char *rpmsg_lite_base;
 #endif /* HAL_RPMSG_SELECT_ROLE */
 

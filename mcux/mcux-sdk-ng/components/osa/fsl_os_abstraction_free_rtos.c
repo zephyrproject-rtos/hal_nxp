@@ -1,6 +1,6 @@
 /*! *********************************************************************************
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2019 NXP
+ * Copyright 2016-2017, 2019, 2025 NXP
  *
  *
  * This is the source file for the OS Abstraction layer for freertos.
@@ -34,8 +34,6 @@
 #define __WEAK_FUNC __attribute__((weak))
 #endif
 
-#define millisecToTicks(millisec) (((millisec) * (uint32_t)(configTICK_RATE_HZ) + 999U) / 1000U)
-
 #ifdef DEBUG_ASSERT
 #define OS_ASSERT(condition) \
     if (!(condition))        \
@@ -46,8 +44,7 @@
 #endif
 
 /*! @brief Converts milliseconds to ticks*/
-#define MSEC_TO_TICK(msec) \
-    (((uint32_t)(msec) + 500uL / (uint32_t)configTICK_RATE_HZ) * (uint32_t)configTICK_RATE_HZ / 1000uL)
+#define MSEC_TO_TICKS(msec) (((msec) * (uint32_t)(configTICK_RATE_HZ) + 999U) / 1000U)
 #define TICKS_TO_MSEC(tick) ((uint32_t)((uint64_t)(tick)*1000uL / (uint64_t)configTICK_RATE_HZ))
 
 #define OSA_MEM_MAGIC_NUMBER (12345U)
@@ -80,9 +77,10 @@ typedef struct _osa_state
     OSA_TASK_HANDLE_DEFINE(mainTaskHandle);
 #endif
 #endif
-    uint32_t basePriority;
-    int32_t basePriorityNesting;
-    uint32_t interruptDisableCount;
+    uint32_t interruptReg;
+    int32_t interruptDisableNesting;
+    uint32_t interruptRegPrimask;
+    uint32_t disableIRQGlobalNesting;
 } osa_state_t;
 
 /*! @brief Definition structure contains allocated memory information.*/
@@ -117,10 +115,8 @@ static osa_state_t s_osaState = {0};
 #if (defined(FSL_OSA_ALLOCATED_HEAP) && (FSL_OSA_ALLOCATED_HEAP > 0U))
 #if defined(configAPPLICATION_ALLOCATED_HEAP) && (configAPPLICATION_ALLOCATED_HEAP)
 #if defined(DATA_SECTION_IS_CACHEABLE) && (DATA_SECTION_IS_CACHEABLE)
-extern uint8_t ucHeap[configTOTAL_HEAP_SIZE];
 AT_NONCACHEABLE_SECTION_ALIGN(uint8_t ucHeap[configTOTAL_HEAP_SIZE], 4);
 #else
-extern uint8_t ucHeap[configTOTAL_HEAP_SIZE];
 SDK_ALIGN(uint8_t ucHeap[configTOTAL_HEAP_SIZE], 4);
 #endif /* DATA_SECTION_IS_CACHEABLE */
 #endif /* configAPPLICATION_ALLOCATED_HEAP */
@@ -178,6 +174,11 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
     osa_mem_align_cb_t *p_cb = NULL;
     uint32_t alignedsize;
 
+    if ((alignbytes < 1U) || (alignbytes > UINT16_MAX))
+    {
+        return NULL;
+    }
+
     /* Check overflow. */
     alignedsize = (uint32_t)(unsigned int)OSA_MEM_SIZE_ALIGN(memLength, alignbytes);
     if (alignedsize < memLength)
@@ -185,7 +186,7 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
         return NULL;
     }
 
-    if (alignedsize > 0xFFFFFFFFU - alignbytes - sizeof(osa_mem_align_cb_t))
+    if (alignedsize > UINT32_MAX - alignbytes - sizeof(osa_mem_align_cb_t))
     {
         return NULL;
     }
@@ -342,6 +343,8 @@ osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle)
 osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority_t taskPriority)
 {
     assert(NULL != taskHandle);
+    assert(taskPriority <= OSA_TASK_PRIORITY_MIN);
+    assert(OSA_TASK_PRIORITY_MIN > OSA_TASK_PRIORITY_MAX);
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
     vTaskPrioritySet((task_handler_t)ptask->taskHandle, PRIORITY_OSA_TO_RTOS(((uint32_t)taskPriority)));
     return KOSA_StatusSuccess;
@@ -368,6 +371,9 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     assert(sizeof(osa_freertos_task_t) == OSA_TASK_HANDLE_SIZE);
 #endif
     assert(NULL != taskHandle);
+    assert(NULL != thread_def);
+    assert(thread_def->tpriority <= OSA_TASK_PRIORITY_MIN);
+    assert(OSA_TASK_PRIORITY_MIN > OSA_TASK_PRIORITY_MAX);
 #if defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0)
     TaskHandle_t pxCreatedTask;
 #endif
@@ -382,7 +388,7 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     xHandle =
         xTaskCreateStatic((TaskFunction_t)thread_def->pthread, /* pointer to the task */
                           (const char *)thread_def->tname,     /* task name for kernel awareness debugging */
-                          (uint32_t)((uint16_t)thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
+                          (uint32_t)(thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
                           (task_param_t)task_param,                      /* optional task startup argument */
                           PRIORITY_OSA_TO_RTOS((thread_def->tpriority)), /* initial priority */
                           (StackType_t *)thread_def->tstack,             /*Array to use as the task's stack*/
@@ -399,7 +405,7 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     if (xTaskCreate(
             (TaskFunction_t)thread_def->pthread, /* pointer to the task */
             (char const *)thread_def->tname,     /* task name for kernel awareness debugging */
-            (configSTACK_DEPTH_TYPE)((uint16_t)thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
+            (configSTACK_DEPTH_TYPE)(thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
             (task_param_t)task_param,                      /* optional task startup argument */
             PRIORITY_OSA_TO_RTOS((thread_def->tpriority)), /* initial priority */
             &pxCreatedTask                                 /* optional task handle to create */
@@ -458,7 +464,8 @@ osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle)
  *END**************************************************************************/
 void OSA_TimeDelay(uint32_t millisec)
 {
-    vTaskDelay(millisecToTicks(millisec));
+    assert(millisec <= (UINT32_MAX - 999U) / (uint32_t)(configTICK_RATE_HZ));
+    vTaskDelay(MSEC_TO_TICKS(millisec));
 }
 /*FUNCTION**********************************************************************
  *
@@ -613,7 +620,8 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
     }
     else
     {
-        timeoutTicks = MSEC_TO_TICK(millisec);
+        assert(millisec <= (UINT32_MAX - 999U) / (uint32_t)(configTICK_RATE_HZ));
+        timeoutTicks = MSEC_TO_TICKS(millisec);
     }
 
     if (((BaseType_t)0) == (BaseType_t)xSemaphoreTake(sem, timeoutTicks))
@@ -729,7 +737,8 @@ osa_status_t OSA_MutexLock(osa_mutex_handle_t mutexHandle, uint32_t millisec)
     }
     else
     {
-        timeoutTicks = MSEC_TO_TICK(millisec);
+        assert(millisec <= (UINT32_MAX - 999U) / (uint32_t)(configTICK_RATE_HZ));
+        timeoutTicks = MSEC_TO_TICKS(millisec);
     }
 
     if (((BaseType_t)0) == (BaseType_t)xSemaphoreTakeRecursive(mutex, timeoutTicks))
@@ -980,7 +989,8 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
     }
     else
     {
-        timeoutTicks = millisecToTicks(millisec);
+        assert(millisec <= (UINT32_MAX - 999U) / (uint32_t)(configTICK_RATE_HZ));
+        timeoutTicks = MSEC_TO_TICKS(millisec);
     }
 
     clearMode = (pEventStruct->autoClear != 0U) ? pdTRUE : pdFALSE;
@@ -1127,7 +1137,8 @@ osa_status_t OSA_MsgQGet(osa_msgq_handle_t msgqHandle, osa_msg_handle_t pMessage
     }
     else
     {
-        timeoutTicks = MSEC_TO_TICK(millisec);
+        assert(millisec <= (UINT32_MAX - 999U) / (uint32_t)(configTICK_RATE_HZ));
+        timeoutTicks = MSEC_TO_TICKS(millisec);
     }
     if (pdPASS != xQueueReceive(handler, pMessage, timeoutTicks))
     {
@@ -1181,14 +1192,14 @@ void OSA_InterruptEnable(void)
 {
     if (0U != __get_IPSR())
     {
-        if (1 == s_osaState.basePriorityNesting)
+        if (1 == s_osaState.interruptDisableNesting)
         {
-            portCLEAR_INTERRUPT_MASK_FROM_ISR(s_osaState.basePriority);
+            portCLEAR_INTERRUPT_MASK_FROM_ISR(s_osaState.interruptReg);
         }
 
-        if (s_osaState.basePriorityNesting > 0)
+        if (s_osaState.interruptDisableNesting > 0)
         {
-            s_osaState.basePriorityNesting--;
+            s_osaState.interruptDisableNesting--;
         }
     }
     else
@@ -1207,11 +1218,11 @@ void OSA_InterruptDisable(void)
 {
     if (0U != __get_IPSR())
     {
-        if (0 == s_osaState.basePriorityNesting)
+        if (0 == s_osaState.interruptDisableNesting)
         {
-            s_osaState.basePriority = portSET_INTERRUPT_MASK_FROM_ISR();
+            s_osaState.interruptReg = portSET_INTERRUPT_MASK_FROM_ISR();
         }
-        s_osaState.basePriorityNesting++;
+        s_osaState.interruptDisableNesting++;
     }
     else
     {
@@ -1227,13 +1238,13 @@ void OSA_InterruptDisable(void)
  *END**************************************************************************/
 void OSA_EnableIRQGlobal(void)
 {
-    if (s_osaState.interruptDisableCount > 0U)
+    if (s_osaState.disableIRQGlobalNesting > 0U)
     {
-        s_osaState.interruptDisableCount--;
+        s_osaState.disableIRQGlobalNesting--;
 
-        if (0U == s_osaState.interruptDisableCount)
+        if (0U == s_osaState.disableIRQGlobalNesting)
         {
-            __enable_irq();
+            EnableGlobalIRQ(s_osaState.interruptRegPrimask);
         }
         /* call core API to enable the global interrupt*/
     }
@@ -1248,10 +1259,13 @@ void OSA_EnableIRQGlobal(void)
 void OSA_DisableIRQGlobal(void)
 {
     /* call core API to disable the global interrupt*/
-    __disable_irq();
+    if (0 == s_osaState.disableIRQGlobalNesting)
+    {
+        s_osaState.interruptRegPrimask = DisableGlobalIRQ();
+    }
 
     /* update counter*/
-    s_osaState.interruptDisableCount++;
+    s_osaState.disableIRQGlobalNesting++;
 }
 
 /*FUNCTION**********************************************************************
@@ -1332,8 +1346,8 @@ int main(void)
 void OSA_Init(void)
 {
     LIST_Init((&s_osaState.taskList), 0);
-    s_osaState.basePriorityNesting   = 0;
-    s_osaState.interruptDisableCount = 0;
+    s_osaState.interruptDisableNesting = 0;
+    s_osaState.disableIRQGlobalNesting = 0;
 }
 #endif
 

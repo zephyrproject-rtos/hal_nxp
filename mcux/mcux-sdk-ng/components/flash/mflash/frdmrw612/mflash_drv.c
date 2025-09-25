@@ -353,6 +353,25 @@ static int32_t mflash_drv_init_internal(void)
 #endif
     config.ahbConfig.enableAHBBufferable = true;
     config.ahbConfig.enableAHBCachable   = true;
+    
+#ifdef ENCRYPTED_XIP_IPED
+    /* MCUX-73057: Make sure that there is only one buffer per master as multiple
+     * buffers for a single AHB master make a conflict between IPED and PKC 
+     */
+    for (uint8_t i = 0; i < ((uint8_t)FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT - 1U); i++)
+    {
+        config.ahbConfig.buffer[i].enablePrefetch = true; /* Default enable AHB prefetch. */
+        config.ahbConfig.buffer[i].masterIndex = 0xFU;    /* Invalid master index which is not used, so will never hit. */
+        config.ahbConfig.buffer[i].bufferSize = 0x0U;     /* Default buffer size 0 for buffer0 to buffer(FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT - 1U)*/
+        config.ahbConfig.buffer[i].priority = 0;
+    }
+    /* AHBRXBUF7CR0 */
+    config.ahbConfig.buffer[7].enablePrefetch = true;
+    config.ahbConfig.buffer[7].masterIndex = 0x0U;
+    config.ahbConfig.buffer[7].bufferSize = 0x0U;
+    config.ahbConfig.buffer[7].priority = 0;
+#endif
+    
     FLEXSPI_Init(MFLASH_FLEXSPI, &config);
 
     /* Configure flash settings according to serial flash feature. */
