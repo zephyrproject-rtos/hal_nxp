@@ -30,7 +30,11 @@
 #define FLASH_BUSY_STATUS_POL    1
 #define FLASH_BUSY_STATUS_OFFSET 0
 
-#define FLASH_SIZE 0x8000
+// on-board QSPI Flash 64Mb/8MB IS25LP064
+// flash memory size [KB] JEDEC unit definition,
+// 1 KB = 1024 bytes, 1 MB = 1024 KB,
+// 8 MB = 0x800000 B = 8388608 B => 8388608/1024 = 8192 KB = 0x2000 KB
+#define FLASH_SIZE 0x2000
 
 #ifndef XIP_EXTERNAL_FLASH
 flexspi_device_config_t deviceconfig = {
@@ -62,7 +66,7 @@ const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     /* Fast read mode - SDR */
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST] =
         FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
-    /* In XIP, the speed of external flash is set to 133MHz, and the external flash require to match 8 corresponding dummy cycles. 
+    /* In XIP, the speed of external flash is set to 133MHz, and the external flash require to match 8 corresponding dummy cycles.
      * However, other non XIP boot targets are not suitable for XIP boot flow, uses flash default configuration */
 #if defined(XIP_BOOT_HEADER_ENABLE) && XIP_BOOT_HEADER_ENABLE
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST + 1] = FLEXSPI_LUT_SEQ(
@@ -81,7 +85,7 @@ const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
 #else
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD + 1] = FLEXSPI_LUT_SEQ(
         kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 0x06, kFLEXSPI_Command_READ_SDR, kFLEXSPI_4PAD, 0x04),
-#endif    
+#endif
 
     /* Read extend parameters */
     [4 * NOR_CMD_LUT_SEQ_IDX_READSTATUS] =
