@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -569,7 +569,11 @@ _Pragma("diag_suppress=Pm120")
  * Place data in a section which can be accessed quickly by core, and the variable
  * address is set to align with \a alignbytes.
  */
-#if (defined(__ICCARM__))
+#if (defined(FSL_SDK_DRIVER_QUICK_ACCESS_DISABLE) && (FSL_SDK_DRIVER_QUICK_ACCESS_DISABLE + 0))
+#define AT_QUICKACCESS_SECTION_CODE(func) func
+#define AT_QUICKACCESS_SECTION_DATA(var) var
+#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) SDK_ALIGN(var, alignbytes)
+#elif (defined(__ICCARM__))
 #define AT_QUICKACCESS_SECTION_CODE(func) func @"CodeQuickAccess"
 #define AT_QUICKACCESS_SECTION_DATA(var)  var @"DataQuickAccess"
 #define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) \
@@ -586,7 +590,7 @@ _Pragma("diag_suppress=Pm120")
     __attribute__((section("DataQuickAccess"))) var __attribute__((aligned(alignbytes)))
 #else
 #error Toolchain not supported.
-#endif /* defined(__ICCARM__) */
+#endif /* QuickAccess section macro */
 /*! @} */
 
 /*!
