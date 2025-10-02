@@ -145,6 +145,14 @@ typedef enum _SYSCON_RSTn
     {                          \
         kUTICK0_RST_SHIFT_RSTn \
     } /* Reset bits for UTICK peripheral */
+#define EIM_RSTS_N           \
+    {                       \
+        kEIM_RST_SHIFT_RSTn \
+    } /* Reset bits for EIM peripheral */
+#define ERM_RSTS_N           \
+    {                       \
+        kERM_RST_SHIFT_RSTn \
+    } /* Reset bits for ERM peripheral */
 
 typedef SYSCON_RSTn_t reset_ip_name_t;
 

@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
 /*! @} */
 
 #ifndef FLEXIO_SPI_DUMMYDATA
@@ -34,7 +34,11 @@
 
 /*! @brief Retry times for waiting flag. */
 #ifndef SPI_RETRY_TIMES
+#ifdef CONFIG_SPI_RETRY_TIMES
+#define SPI_RETRY_TIMES CONFIG_SPI_RETRY_TIMES
+#else
 #define SPI_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
 #endif
 
 /*! @brief Get the transfer data format of width and bit order. */

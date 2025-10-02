@@ -66,7 +66,7 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250619
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
@@ -183,11 +183,11 @@
  */
 
 /** FLEXSPI - Size of Registers Arrays */
-#define FLEXSPI_AHBRXBUFXCR0_COUNT                8u
-#define FLEXSPI_FLSHXCR0_COUNT                    4u
-#define FLEXSPI_FLSHXCR1_COUNT                    4u
-#define FLEXSPI_FLSHXCR2_COUNT                    4u
-#define FLEXSPI_DLLXCR_COUNT                      2u
+#define FLEXSPI_AHBRXBUFCR0_COUNT                 8u
+#define FLEXSPI_FLSHCR0_COUNT                     4u
+#define FLEXSPI_FLSHCR1_COUNT                     4u
+#define FLEXSPI_FLSHCR2_COUNT                     4u
+#define FLEXSPI_DLLCR_COUNT                       2u
 #define FLEXSPI_RFDR_COUNT                        32u
 #define FLEXSPI_TFDR_COUNT                        32u
 #define FLEXSPI_LUT_COUNT                         128u
@@ -202,11 +202,11 @@ typedef struct {
   __IO uint32_t INTR;                              /**< Interrupt, offset: 0x14 */
   __IO uint32_t LUTKEY;                            /**< LUT Key, offset: 0x18 */
   __IO uint32_t LUTCR;                             /**< LUT Control, offset: 0x1C */
-  __IO uint32_t AHBRXBUFCR0[FLEXSPI_AHBRXBUFXCR0_COUNT]; /**< AHB Receive Buffer 0 Control 0..AHB Receive Buffer 7 Control 0, array offset: 0x20, array step: 0x4 */
+  __IO uint32_t AHBRXBUFCR0[FLEXSPI_AHBRXBUFCR0_COUNT]; /**< AHB Receive Buffer 0 Control 0..AHB Receive Buffer 7 Control 0, array offset: 0x20, array step: 0x4 */
        uint8_t RESERVED_0[32];
-  __IO uint32_t FLSHCR0[FLEXSPI_FLSHXCR0_COUNT];   /**< Flash Control 0, array offset: 0x60, array step: 0x4 */
-  __IO uint32_t FLSHCR1[FLEXSPI_FLSHXCR1_COUNT];   /**< Flash Control 1, array offset: 0x70, array step: 0x4 */
-  __IO uint32_t FLSHCR2[FLEXSPI_FLSHXCR2_COUNT];   /**< Flash Control 2, array offset: 0x80, array step: 0x4 */
+  __IO uint32_t FLSHCR0[FLEXSPI_FLSHCR0_COUNT];    /**< Flash Control 0, array offset: 0x60, array step: 0x4 */
+  __IO uint32_t FLSHCR1[FLEXSPI_FLSHCR1_COUNT];    /**< Flash Control 1, array offset: 0x70, array step: 0x4 */
+  __IO uint32_t FLSHCR2[FLEXSPI_FLSHCR2_COUNT];    /**< Flash Control 2, array offset: 0x80, array step: 0x4 */
        uint8_t RESERVED_1[4];
   __IO uint32_t FLSHCR4;                           /**< Flash Control 4, offset: 0x94 */
        uint8_t RESERVED_2[8];
@@ -217,7 +217,7 @@ typedef struct {
   __IO uint32_t DLPR;                              /**< Data Learning Pattern, offset: 0xB4 */
   __IO uint32_t IPRXFCR;                           /**< IP Receive FIFO Control, offset: 0xB8 */
   __IO uint32_t IPTXFCR;                           /**< IP Transmit FIFO Control, offset: 0xBC */
-  __IO uint32_t DLLCR[FLEXSPI_DLLXCR_COUNT];       /**< DLL Control 0, array offset: 0xC0, array step: 0x4 */
+  __IO uint32_t DLLCR[FLEXSPI_DLLCR_COUNT];        /**< DLL Control 0, array offset: 0xC0, array step: 0x4 */
        uint8_t RESERVED_4[24];
   __I  uint32_t STS0;                              /**< Status 0, offset: 0xE0 */
   __I  uint32_t STS1;                              /**< Status 1, offset: 0xE4 */
@@ -797,9 +797,6 @@ typedef struct {
 #define FLEXSPI_AHBRXBUFCR0_PREFETCHEN(x)        (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBRXBUFCR0_PREFETCHEN_SHIFT)) & FLEXSPI_AHBRXBUFCR0_PREFETCHEN_MASK)
 /*! @} */
 
-/* The count of FLEXSPI_AHBRXBUFCR0 */
-#define FLEXSPI_AHBRXBUFCR0_COUNT                (8U)
-
 /*! @name FLSHCR0 - Flash Control 0 */
 /*! @{ */
 
@@ -816,9 +813,6 @@ typedef struct {
  */
 #define FLEXSPI_FLSHCR0_ADDRSHIFT(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR0_ADDRSHIFT_SHIFT)) & FLEXSPI_FLSHCR0_ADDRSHIFT_MASK)
 /*! @} */
-
-/* The count of FLEXSPI_FLSHCR0 */
-#define FLEXSPI_FLSHCR0_COUNT                    (4U)
 
 /*! @name FLSHCR1 - Flash Control 1 */
 /*! @{ */
@@ -859,9 +853,6 @@ typedef struct {
 /*! CSINTERVAL - Chip Select Interval */
 #define FLEXSPI_FLSHCR1_CSINTERVAL(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR1_CSINTERVAL_SHIFT)) & FLEXSPI_FLSHCR1_CSINTERVAL_MASK)
 /*! @} */
-
-/* The count of FLEXSPI_FLSHCR1 */
-#define FLEXSPI_FLSHCR1_COUNT                    (4U)
 
 /*! @name FLSHCR2 - Flash Control 2 */
 /*! @{ */
@@ -910,9 +901,6 @@ typedef struct {
 /*! CLRINSTRPTR - Clear Instruction Pointer */
 #define FLEXSPI_FLSHCR2_CLRINSTRPTR(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR2_CLRINSTRPTR_SHIFT)) & FLEXSPI_FLSHCR2_CLRINSTRPTR_MASK)
 /*! @} */
-
-/* The count of FLEXSPI_FLSHCR2 */
-#define FLEXSPI_FLSHCR2_COUNT                    (4U)
 
 /*! @name FLSHCR4 - Flash Control 4 */
 /*! @{ */
@@ -1087,9 +1075,6 @@ typedef struct {
 /*! REFPHASEGAP - Reference Clock Delay Line Phase Adjust Gap. REFPHASEGAP setting of 2h is recommended if DLLEN is set. */
 #define FLEXSPI_DLLCR_REFPHASEGAP(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_DLLCR_REFPHASEGAP_SHIFT)) & FLEXSPI_DLLCR_REFPHASEGAP_MASK)
 /*! @} */
-
-/* The count of FLEXSPI_DLLCR */
-#define FLEXSPI_DLLCR_COUNT                      (2U)
 
 /*! @name STS0 - Status 0 */
 /*! @{ */

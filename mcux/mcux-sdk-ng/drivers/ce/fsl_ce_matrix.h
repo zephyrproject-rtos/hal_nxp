@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -30,190 +30,233 @@ extern "C" {
 #endif
 
 /*!
- * @brief Adds two MxN matrices with data in specified format
+ * @brief Calculates the sum of two real 16-bit integer (Q15) matrices.
  *
- * Adds two MxN matrices; matrices can be in either of row or columns major
- * formats.
- * Data precision and format is as defined by the argument type
+ * @details Computes C = A + B, where A, B, and C are an M × N real int16_t matrices.
+ * All matrices are assumed to have the same format and dimensions.
  *
- * @param pDst Pointer to buffer for output matrix
- * @param pA Pointer to buffer for input matrix A
- * @param pB Pointer to buffer for input matrix B
- * @param M  Number of rows for each input matrix
- * @param N  Number of columns for each input matrix
+ * @param [out] pDst Pointer to the output matrix C (size M × N).
+ * @param [in]  pA   Pointer to the input matrix A (size M × N).
+ * @param [in]  pB   Pointer to the input matrix B (size M × N).
+ * @param [in]  M    Number of rows of matrices A, B, and C.
+ * @param [in]  N    Number of columns of matrices A, B, and C.
  *
- * @return Return 0 if succeeded, otherwise return error code.
+ * @return Command execution status.
  */
-int CE_MatrixAdd_Q15(int16_t *pDst, int16_t *pA, int16_t *pB, int M, int N);
+int32_t CE_MatrixAdd_Q15(int16_t *pDst, int16_t *pA, int16_t *pB, int32_t M, int32_t N);
 
 /*!
- * @copydoc CE_MatrixAdd_Q15
+ * @brief Calculates the sum of two real 32-bit integer (Q31) matrices.
+ *
+ * @details Computes C = A + B, where A, B, and C are an M × N real int32_t matrices.
+ * All matrices are assumed to have the same format and dimensions.
+ *
+ * @param [out] pDst Pointer to the output matrix C (size M × N).
+ * @param [in]  pA   Pointer to the input matrix A (size M × N).
+ * @param [in]  pB   Pointer to the input matrix B (size M × N).
+ * @param [in]  M    Number of rows of matrices A, B, and C.
+ * @param [in]  N    Number of columns of matrices A, B, and C.
+ *
+ * @return Command execution status.
  */
-int CE_MatrixAdd_Q31(int32_t *pDst, int32_t *pA, int32_t *pB, int M, int N);
+int32_t CE_MatrixAdd_Q31(int32_t *pDst, int32_t *pA, int32_t *pB, int32_t M, int32_t N);
 
 /*!
- * @copydoc CE_MatrixAdd_Q15
+ * @brief Calculates the sum of two real 32-bit floating-point matrices.
+ *
+ * @details Computes C = A + B, where A, B, and C are an M × N real float32 matrices.
+ * All matrices are assumed to have the same format and dimensions.
+ *
+ * @param [out] pDst Pointer to the output matrix C (size M × N).
+ * @param [in]  pA   Pointer to the input matrix A (size M × N).
+ * @param [in]  pB   Pointer to the input matrix B (size M × N).
+ * @param [in]  M    Number of rows of matrices A, B, and C.
+ * @param [in]  N    Number of columns of matrices A, B, and C.
+ *
+ * @return Command execution status.
  */
-int CE_MatrixAdd_F32(float *pDst, float *pA, float *pB, int M, int N);
+int32_t CE_MatrixAdd_F32(float *pDst, float *pA, float *pB, int32_t M, int32_t N);
 
 /*!
- * @brief Element wise multiply between two MxN matrices
+ * @brief Calculates the element-wise product of two real 32-bit floating-point matrices.
  *
- * Elementwise multiplies two MxN matrices; matrices can be in either of row or
- * columns major formats.
+ * @details Computes C = A .× B, where A, B, and C are an M × N real float32 matrices.
+ * All matrices are assumed to have the same format and dimensions.
  *
- * Data precision and format is as defined by the argument type
+ * @param [out] pDst Pointer to the output matrix C (size M × N).
+ * @param [in]  pA   Pointer to the input matrix A (size M × N).
+ * @param [in]  pB   Pointer to the input matrix B (size M × N).
+ * @param [in]  M    Number of rows of matrices A, B, and C.
+ * @param [in]  N    Number of columns of matrices A, B, and C.
  *
- * @param pDst Pointer to buffer for output matrix
- * @param pA   Pointer to buffer for input matrix A
- * @param pB   Pointer to buffer for input matrix B
- * @param M    Number of rows for each input matrix
- * @param N    Number of columns for each input matrix
- *
- * @return Return 0 if succeeded, otherwise return error code.
+ * @return Command execution status.
  */
-int CE_MatrixElemMul_F32(float *pDst, float *pA, float *pB, int M, int N);
+int32_t CE_MatrixElemMul_F32(float *pDst, float *pA, float *pB, int32_t M, int32_t N);
 
 /*!
- * @brief Matrix multiply between two MxN matrices
+ * @brief Calculates the matrix product of two real 32-bit floating-point matrices.
  *
- * Matrix multiply C[MxP] = A[MxN] x B[NxP] matrices with data in specified
- * format.
- * Multiply between MxN and NxP matrices; matrices must be in row major format
+ * @details Computes C = A × B, where:
+ * - A is an M × N real float32 matrix,
+ * - B is an N × P real float32 matrix,
+ * - C is the resulting M × P real float32 matrix.
  *
- * @param pDst Pointer to buffer for output matrix [MxP]
- * @param pA   Pointer to buffer for input matrix A [MxN]
- * @param pB   Pointer to buffer for input matrix B [NxP]
- * @param M    Number of rows for input matrix A
- * @param N    Number of columns for input matrix A, or, Number of rows for input matrix B
- * @param P    Number of columns for input matrix B
+ * All matrices are assumed to be in row-major format.
  *
- * Data precision and format is as defined by the argument type
- * @note Limits on max value of N: For F32: N < 128; For CF32: N < 64
+ * @param [out] pDst Pointer to the output matrix C (size M × P)
+ * @param [in]  pA   Pointer to the input matrix A (size M × N).
+ * @param [in]  pB   Pointer to the input matrix B (size N × P).
+ * @param [in]  M    Number of rows of matrix A.
+ * @param [in]  N    Number of columns in matrix A (and rows in matrix B).
+ * @param [in]  P    Number of columns of matrix B.
+ *
+ * @return Command execution status.
+ *
+ * @note Data precision and format is as defined by the argument type.
+ * Limits on max value of N:
+ * - For F32: N < 128;
+ * - For CF32: N < 64.
  */
-int CE_MatrixMul_F32(float *pDst, float *pA, float *pB, int M, int N, int P);
+int32_t CE_MatrixMul_F32(float *pDst, float *pA, float *pB, int32_t M, int32_t N, int32_t P);
 
 /*!
- * @copydoc CE_MatrixMul_F32
+ * @brief Calculates the matrix product of two complex 32-bit floating point matrices.
+ *
+ * @details Computes C = A × B, where:
+ * - A is an M × N complex float32 matrix,
+ * - B is an N × P complex float32 matrix,
+ * - C is the resulting M × P complex float32 matrix.
+ *
+ * All matrices are assumed to be in row-major format.
+ *
+ * @param [out] pDst Pointer to the output matrix C (size M × P).
+ * @param [in]  pA   Pointer to the input matrix A (size M × N).
+ * @param [in]  pB   Pointer to the input matrix B (size N × P).
+ * @param [in]  M    Number of rows of matrix A.
+ * @param [in]  N    Number of columns in matrix A (and rows in matrix B).
+ * @param [in]  P    Number of columns of matrix B.
+ *
+ * @return Command execution status.
  */
-int CE_MatrixMul_CF32(float *pDst, float *pA, float *pB, int M, int N, int P);
-
-/*
- * @brief Matrix Inversion
- *
- * Calculates inv(A) where A is a MxM real matrix
- *
- * @param pAinv Pointer to buffer for output inverse matrix
- * @param pA    Pointer to buffer for input matrix A
- * @param M     Number of rows or columns of A
- *
- * @return Return 0 if succeeded, otherwise return error code.
- */
-int CE_MatrixInv_F32(float *pAinv, float *pA, int M);
-
-/*
- * @brief Matrix Inversion
- *
- * Calculates inv(A) where A is a MxM symmetric real matrix
- *
- * @param pAinv Pointer to buffer for output inverse matrix
- * @param pA    Pointer to buffer for input matrix A
- * @param M     Number of rows or columns of A
- *
- * @return Return 0 if succeeded, otherwise return error code.
- */
-int CE_MatrixInvSymm_F32(float *pAinv, float *pA, int M);
-
-/*
- * @brief Matrix Inversion
- *
- * Calculates inv(A) where A is a MxM complex matrix
- *
- * @param pAinv Pointer to buffer for output inverse matrix
- * @param pA    Pointer to buffer for input matrix A
- * @param M     Number of rows or columns of A
- *
- * @return Return 0 if succeeded, otherwise return error code.
- */
-int CE_MatrixInv_CF32(float *pAinv, float *pA, int M);
+int32_t CE_MatrixMul_CF32(float *pDst, float *pA, float *pB, int32_t M, int32_t N, int32_t P);
 
 /*!
- * @brief Matrix Inversion
+ * @brief Calculates the inverse or Cholesky inverse of a complex Hermitian matrix
+ * (in float32 precision).
  *
- * Based on an user specified flag, calculates either
- *   \li Ainv = inv(A), or,
- *   \li Linv = inv(chol(A)),
+ * @details Computes one of the following:
+ * - Ainv = inv(A)
+ * - Ainv = inv(chol(A))
  *
- * where chol() is the lower triangular Cholesky Decomposition of A.
- * A is a MxM complex Hermitian matrix.
- * A is expected to be in row major format and can either be packed (only
- * upper traingular elements) or full
+ * where chol(A) is the lower triangular Cholesky decomposition of matrix A.
  *
- * @param[out] pAinv Pointer to buffer for output inverse matrix.
- * Only the upper triangular elements of the output matrix are written out. The
- * output is written in row major order. Output size is Mc*8 bytes.
- * Mc = *((1+M)*M)/2.
- * @param[in] pA Pointer to buffer for input matrix A. If flag_packedInput=0,
- * MxM matrix expected in row major format. If flag_packedInput=1, Only
- * upper triangular part of A is expected in row major format (Mc CF32 elements).
- * @param[in] pScratch Scratch memory of size (Mc*3)*8 bytes.
- * @param M   Number of rows or columns of A
- * @param flag_packedInput Flag indicating input matrix format.
- *   - 0: full matrix
- *   - 1: upper triangular part only
- * @param flag_cholInv Flag indicating inverse type.
- *   - 0: Out = inv(A)
- *   - 1: Out = inv(chol(A))
+ * The input matrix must be in row-major format and can be either:
+ * - A full M × M matrix, or
+ * - A packed upper triangular matrix (containing only the upper triangle).
  *
- * @return Return 0 if succeeded, otherwise return error code.
+ * The output matrix is written in row-major format, and only
+ * the lower triangle is stored. The total number of output elements is:
+ * - Mc = (M + 1) × M / 2
+ *
+ * @param[out] pAinv            Pointer to the output matrix inverse.
+ * Mc elements are written (complex float32).
+ * @param[in]  pA               Pointer to the input matrix A (complex float32, size M × M).
+ * @param[in]  pScratch         Pointer to scratch buffer (minimum size Mc × 3 × 8 bytes).
+ * @param[in]  M                Number of rows/columns in matrix A.
+ * @param[in]  flag_packedInput Format of input matrix:
+ * - 0: full matrix
+ * - 1: packed upper triangular matrix
+ * @param[in]  flag_cholInv Type of inverse to compute:
+ * - 0: inv(A)
+ * - 1: inv(chol(A))
+ *
+ * @return Command execution status.
+ *
+ * @note The input, output and scratch buffers must be separately allocated and non-overlapping.
  */
-int CE_MatrixInvHerm_CF32(
-    float *pAinv, float *pA, float *pScratch, int M, uint8_t flag_packedInput, uint8_t flag_cholInv);
+int32_t CE_MatrixInvHerm_CF32(
+    float *pAinv, float *pA, float *pScratch, int32_t M, uint8_t flag_packedInput, uint8_t flag_cholInv);
 
 /*!
- * @brief Eigen Value Decompositions
+ * @brief Calculates the Eigenvalue Decomposition (EVD) of a complex Hermitian matrix
+ * (float32 precision).
  *
- * Calculates Eigen Value Decompositions of a MxM matrix.
- * Calculates [U, T] = evd(A) where A is a MxM complex Hermitian matrix, U is
- * the output matrix of eigen vectors, and T is the diagonal matrix of eigen
- * values.
+ * @details Performs EVD on an M×M complex Hermitian matrix A:
+ * - [U, T] = eig(A)
  *
- * @param pLambdaOut Pointer to buffer for output Eigen Vectors (MxM)
- * @param pUout      Pointer to buffer with output Eigen Values (Mx1)
- * @param pUin       Pointer to buffer for input matrix A
- * @param M          Number of rows or columns of A
- * @param pScratch   Scratch memory, the minimum scratch size required is (40 x 40 x 4 + 360) x 4 bytes.
- * @param tol        Tolerance specifying exit condition for the iterative computation
- * @param max_iter   Upper bound on number of iterations for convergence of each Eigen value
- * @param flag_packedInput Flag indicating input matrix format.
- *   - 0: full matrix
- *   - 1: upper triangular part only
+ * The input matrix must be in column-major format and can be either:
+ * - A full M × M matrix, or
+ * - A packed upper triangular matrix.
  *
- * @return Return 0 if succeeded, otherwise return error code.
+ * The decomposition uses an iterative QR algorithm to compute:
+ * - U: matrix of eigenvectors (M × M, column-major)
+ * - T: vector of eigenvalues (M × 1)
+ *
+ * Maximum supported matrix size: M ≤ 40.
+ *
+ * @param [out] pLambdaOut Pointer to the output vector of eigenvalues
+ * (size M × 1, complex float32).
+ * @param [out] pUout      Pointer to the output matrix of eigenvectors
+ * (size M × M, column-major, complex float32).
+ * @param [in]  pUin       Pointer to the input matrix A
+ * (size M × M, column-major, complex float32).
+ * @param [in]  pScratch   Pointer to scratch buffer
+ * (minimum size: (M × M × 4 + 360) × 4 bytes).
+ * @param [in]  M          Number of rows/columns in matrix A.
+ * @param [in]  tol        Tolerance value for QR convergence.
+ * Smaller values yield better accuracy but require more iterations.
+ * @param [in]  max_iter   Maximum number of QR iterations.
+ * If exceeded, the function terminates regardless of convergence.
+ * @param [in] flag_packedInput Format of input matrix:
+ * - 0: full matrix
+ * - 1: packed upper triangular part only
+ *
+ * @return Command execution status.
+ * The number of QR iterations is returned in status[3] register.
+ *
+ * @note If input and output buffers overlap,
+ * the output U matrix will overwrite the input matrix A.
  */
-int CE_MatrixEvdHerm_CF32(float *pLambdaOut,
-                          float *pUout,
-                          float *pUin,
-                          float *pScratch,
-                          int M,
-                          float tol,
-                          int max_iter,
-                          uint8_t flag_packedInput);
+int32_t CE_MatrixEvdHerm_CF32(float *pLambdaOut,
+                              float *pUout,
+                              float *pUin,
+                              float *pScratch,
+                              int32_t M,
+                              float tol,
+                              int32_t max_iter,
+                              uint8_t flag_packedInput);
 
 /*!
- * @brief Cholesky Decomposition
+ * @brief Calculates the Cholesky Decomposition of a complex Hermitian matrix
+ * (float32 precision).
  *
- * Calculates L = chol(A) where A is a MxM complex Hermitian matrix
- * This Cholesky Decomposition returns a lower triangular matrix L,
- * such that A = L*L^H, A and L are expected to be in column major format
+ * @details Calculates L = chol(A), where A is a complex Hermitian M × M matrix and
+ * L is a lower triangular matrix such that A = L × L ^ H.
  *
- * @param pL Pointer to buffer for output triangular matrix L
- * @param pA Pointer to buffer for input matrix A
- * @param M  Number of rows or columns of A
+ * The input matrix must be in row-major format and can be either:
+ * - A full M × M matrix, or
+ * - A packed format containing only the upper triangular elements.
  *
- * @return Return 0 if succeeded, otherwise return error code.
+ * The output matrix is also in row-major format,
+ * and only the lower triangular part is written.
+ * The total number of output elements is Mc, where:
+ * - Mc = (M + 1) × M / 2
+ *
+ * @param [out] pL               Pointer to the output lower triangular matrix L.
+ * Only Mc elements are written (complex-valued float32 data in row-major format).
+ * @param [in]  pA               Pointer to the input matrix A (full or packed format).
+ * Must be complex-valued float32 data in row-major format.
+ * @param [in]  pScratch         Pointer to a scratch buffer (at least Mc × 8 bytes).
+ * @param [in]  M                Number of rows/columns of matrix A.
+ * @param [in]  flag_packedInput Format flag for input matrix:
+ * - 0: full matrix
+ * - 1: packed upper triangular matrix
+ *
+ * @return Command execution status.
+ *
+ * @note The input, output and scratch buffers must be separately allocated and non-overlapping.
  */
-int CE_MatrixChol_CF32(float *pL, float *pA, int M);
+int32_t CE_MatrixChol_CF32(float *pL, float *pA, float *pScratch, int32_t M, uint8_t flag_packedInput);
 
 #ifdef __cplusplus
 }

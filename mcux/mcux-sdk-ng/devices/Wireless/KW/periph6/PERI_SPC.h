@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
@@ -475,8 +475,7 @@ typedef struct {
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK      (0xCU)
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT     (2U)
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
- *  0b00..
- *  0b00..Regulate to under voltage (0.95 V)
+ *  0b00..Regulate to boost voltage (0.95 V)
  *  0b01..Regulate to mid voltage (1.0 V)
  *  0b10..Regulate to normal voltage (1.1 V)
  *  0b11..Regulate to safe-mode voltage (1.15 V)
@@ -510,10 +509,10 @@ typedef struct {
 #define SPC_ACTIVE_CFG_DCDC_VDD_LVL_MASK         (0xC00U)
 #define SPC_ACTIVE_CFG_DCDC_VDD_LVL_SHIFT        (10U)
 /*! DCDC_VDD_LVL - DCDC VDD Regulator Voltage Level
- *  0b00..Low undervoltage (1.25 V)
- *  0b01..Midvoltage (1.35 V)
- *  0b10..Normal voltage (1.5 V)
- *  0b11..Safe-mode voltage (1.8 V)
+ *  0b00..Low undervoltage voltage (0.95 V)
+ *  0b01..Mid voltage (1 V)
+ *  0b10..Normal voltage (1.1 V)
+ *  0b11..Overdrive voltage (1.8 V)
  */
 #define SPC_ACTIVE_CFG_DCDC_VDD_LVL(x)           (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_DCDC_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_DCDC_VDD_LVL_MASK)
 
@@ -634,10 +633,10 @@ typedef struct {
 #define SPC_LP_CFG_DCDC_VDD_LVL_MASK             (0xC00U)
 #define SPC_LP_CFG_DCDC_VDD_LVL_SHIFT            (10U)
 /*! DCDC_VDD_LVL - DCDC VDD Regulator Voltage Level
- *  0b00..Low under voltage (1.25 V)
- *  0b01..Mid voltage (1.35 V)
- *  0b10..
- *  0b11..Safe-mode voltage (1.8 V)
+ *  0b00..Low undervoltage (0.95 V)
+ *  0b01..Mid voltage (1 V)
+ *  0b10..Normal voltage (1.1 V)
+ *  0b11..Overdrive voltage (1.8 V)
  */
 #define SPC_LP_CFG_DCDC_VDD_LVL(x)               (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_DCDC_VDD_LVL_SHIFT)) & SPC_LP_CFG_DCDC_VDD_LVL_MASK)
 
@@ -780,10 +779,10 @@ typedef struct {
 #define SPC_HP_CFG_DCDC_VDD_LVL_MASK             (0xC00U)
 #define SPC_HP_CFG_DCDC_VDD_LVL_SHIFT            (10U)
 /*! DCDC_VDD_LVL - DCDC VDD Regulator Voltage Level
- *  0b00..Low undervoltage (1.25 V)
- *  0b01..Midvoltage (1.35 V)
- *  0b10..Normal voltage (1.5 V)
- *  0b11..Safe-mode voltage (1.8 V)
+ *  0b00..Low undervoltage (0.95 V)
+ *  0b01..Mid voltage (1 V)
+ *  0b10..Normal voltage (1.1 V)
+ *  0b11..Overdrive voltage (1.8 V)
  */
 #define SPC_HP_CFG_DCDC_VDD_LVL(x)               (((uint32_t)(((uint32_t)(x)) << SPC_HP_CFG_DCDC_VDD_LVL_SHIFT)) & SPC_HP_CFG_DCDC_VDD_LVL_MASK)
 
@@ -1022,6 +1021,14 @@ typedef struct {
  *  0b1..Enable
  */
 #define SPC_VD_SYS_CFG_HVDIE(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_VD_SYS_CFG_HVDIE_SHIFT)) & SPC_VD_SYS_CFG_HVDIE_MASK)
+
+#define SPC_VD_SYS_CFG_LVSEL_MASK                (0x100U)
+#define SPC_VD_SYS_CFG_LVSEL_SHIFT               (8U)
+/*! LVSEL - System Low-Voltage Level Select
+ *  0b0..Normal
+ *  0b1..Safe
+ */
+#define SPC_VD_SYS_CFG_LVSEL(x)                  (((uint32_t)(((uint32_t)(x)) << SPC_VD_SYS_CFG_LVSEL_SHIFT)) & SPC_VD_SYS_CFG_LVSEL_MASK)
 
 #define SPC_VD_SYS_CFG_LOCK_MASK                 (0x10000U)
 #define SPC_VD_SYS_CFG_LOCK_SHIFT                (16U)

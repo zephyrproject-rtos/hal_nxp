@@ -171,7 +171,15 @@ static status_t PDM_ValidateSrcClockRate(uint32_t channelMask,
     {
         if (((channelMask >> i) & 0x01U) != 0U)
         {
-            enabledChannel++;
+            // Prevent potential addition overflow by capping at maximum value
+            if (enabledChannel < UINT32_MAX)
+            {
+                enabledChannel++;
+            }
+            else
+            {
+                enabledChannel = UINT32_MAX;
+            }
         }
     }
 
@@ -213,11 +221,52 @@ static status_t PDM_ValidateSrcClockRate(uint32_t channelMask,
     }
 
     /* validate the minimum clock divider */
-    /* 2U is for canculating k, 100U is for determing the specific float number of clock divider */
-    uint32_t leftSide = (regDiv * k) / 2U * 100U;
-    uint32_t rightSide = ((10U + factor * enabledChannel) * 100U / (8U * osr)) * k / 2U;
+    /* 2U is for calculating k, 100U is for determining the specific float number of clock divider */
 
-    if (leftSide < rightSide)
+    uint32_t leftSide = 0U; // Calculation: (regDiv * k) / 2U * 100U
+
+    // Prevent potential multiplication overflow
+    if (regDiv < (UINT32_MAX / k))
+    {
+        leftSide = (regDiv * k) / 2U * 100U;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+
+    uint32_t rightSide = 0U; // Calculation: ((10U + factor * enabledChannel) * 100U / (8U * osr)) * k / 2U
+
+    // Prevent potential multiplication overflow
+    if ((10U + factor) < (UINT32_MAX / enabledChannel))
+    {
+        rightSide = 10U + factor * enabledChannel;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+
+    if (rightSide < (UINT32_MAX / 100U))
+    {
+        rightSide *= 100U;
+        rightSide /= (8U * osr);
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+
+    if (rightSide < (UINT32_MAX / k))
+    {
+        rightSide *= k / 2U;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+
+    if (leftSide < rightSide) // Compare calculated values to validate clock divider
     {
         return kStatus_Fail;
     }

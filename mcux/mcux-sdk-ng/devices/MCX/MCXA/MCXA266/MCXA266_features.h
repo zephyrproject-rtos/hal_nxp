@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2024-03-26
-**     Build:               b250725
+**     Build:               b250814
 **
 **     Abstract:
 **         Chip specific module features.
@@ -270,6 +270,8 @@
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (0)
 /* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
+/* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (0)
 
 /* CDOG module features */
 
@@ -481,6 +483,8 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (0)
 /* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
+/* @brief Is affected by errata with ID 51989. */
+#define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
 
 /* FMU module features */
 
@@ -782,10 +786,56 @@
 
 /* RTC module features */
 
-/* @brief Has no supervisor access bit (CR). */
-#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (1)
-/* @brief Has no oscillator enable bit (CR). */
+/* @brief Has wakeup pin. */
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN (0)
+/* @brief Has wakeup pin selection (bit field CR[WPS]). */
+#define FSL_FEATURE_RTC_HAS_WAKEUP_PIN_SELECTION (0)
+/* @brief Has low power features (registers MER, MCLR and MCHR). */
+#define FSL_FEATURE_RTC_HAS_MONOTONIC (0)
+/* @brief Has read/write access control (registers WAR and RAR). */
+#define FSL_FEATURE_RTC_HAS_ACCESS_CONTROL (0)
+/* @brief Has security features (registers TTSR, MER, MCLR and MCHR). */
+#define FSL_FEATURE_RTC_HAS_SECURITY (0)
+/* @brief Has RTC_CLKIN available. */
+#define FSL_FEATURE_RTC_HAS_RTC_CLKIN (0)
+/* @brief Has prescaler adjust for LPO. */
+#define FSL_FEATURE_RTC_HAS_LPO_ADJUST (1)
+/* @brief Has Clock Pin Enable field. */
+#define FSL_FEATURE_RTC_HAS_CPE (0)
+/* @brief Has Timer Seconds Interrupt Configuration field. */
+#define FSL_FEATURE_RTC_HAS_TSIC (1)
+/* @brief Has OSC capacitor setting RTC_CR[SC2P ~ SC16P] */
+#define FSL_FEATURE_RTC_HAS_OSC_SCXP (0)
+/* @brief Has Tamper Interrupt Register (register TIR). */
+#define FSL_FEATURE_RTC_HAS_TIR (0)
+/* @brief Has Tamper Pin Interrupt Enable (bitfield TIR[TPIE]). */
+#define FSL_FEATURE_RTC_HAS_TIR_TPIE (0)
+/* @brief Has Security Interrupt Enable (bitfield TIR[SIE]). */
+#define FSL_FEATURE_RTC_HAS_TIR_SIE (0)
+/* @brief Has Loss of Clock Interrupt Enable (bitfield TIR[LCIE]). */
+#define FSL_FEATURE_RTC_HAS_TIR_LCIE (0)
+/* @brief Has Tamper Interrupt Detect Flag (bitfield SR[TIDF]). */
+#define FSL_FEATURE_RTC_HAS_SR_TIDF (0)
+/* @brief Has Tamper Detect Register (register TDR). */
+#define FSL_FEATURE_RTC_HAS_TDR (0)
+/* @brief Has Tamper Pin Flag (bitfield TDR[TPF]). */
+#define FSL_FEATURE_RTC_HAS_TDR_TPF (0)
+/* @brief Has Security Tamper Flag (bitfield TDR[STF]). */
+#define FSL_FEATURE_RTC_HAS_TDR_STF (0)
+/* @brief Has Loss of Clock Tamper Flag (bitfield TDR[LCTF]). */
+#define FSL_FEATURE_RTC_HAS_TDR_LCTF (0)
+/* @brief Has Tamper Time Seconds Register (register TTSR). */
+#define FSL_FEATURE_RTC_HAS_TTSR (0)
+/* @brief Has Pin Configuration Register (register PCR). */
+#define FSL_FEATURE_RTC_HAS_PCR (0)
+/* @brief Has Oscillator Enable(bitfield CR[OSCE]). */
 #define FSL_FEATURE_RTC_HAS_NO_CR_OSCE (1)
+/* @brief Has no supervisor access bit (CR[SUP]). */
+#define FSL_FEATURE_RTC_HAS_NO_CR_SUP (1)
+/* @brief Is affected by errata with ID 010716 (RTC: Timer Alarm Flag can assert erroneously). */
+#define FSL_FEATURE_RTC_HAS_ERRATA_010716 (0)
+/* @brief Has clock output bit (CR[CLKO]). */
+#define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT (0)
 
 /* SPC module features */
 
@@ -906,7 +956,7 @@
 
 /* UTICK module features */
 
-/* @brief UTICK does not support PD configure. */
+/* @brief UTICK does not support power down configure. */
 #define FSL_FEATURE_UTICK_HAS_NO_PDCFG (1)
 
 /* VBAT module features */
@@ -928,8 +978,14 @@
 
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
+/* @brief WWDT does not support oscillator lock. */
+#define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (0)
+/* @brief soc has reset. */
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
+/* @brief Has LPOSC as clock source. */
+#define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (0)
+/* @brief WWDT WDTOF is not set in case of WD reset - get info from PMC instead. */
+#define FSL_FEATURE_WWDT_WDTRESET_FROM_PMC (0)
 
 #endif /* _MCXA266_FEATURES_H_ */
 

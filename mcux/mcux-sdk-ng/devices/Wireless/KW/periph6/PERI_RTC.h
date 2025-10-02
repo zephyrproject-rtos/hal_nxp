@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
@@ -231,7 +231,7 @@ typedef struct {
 #define RTC_CR_SWR_SHIFT                         (0U)
 /*! SWR - Software Reset
  *  0b0..No effect.
- *  0b1..Resets all RTC registers except for the SWR bit . The SWR bit is cleared by POR and by software explicitly clearing it.
+ *  0b1..Resets all RTC registers except for this bit . This bit is cleared by POR and by software explicitly clearing it.
  */
 #define RTC_CR_SWR(x)                            (((uint32_t)(((uint32_t)(x)) << RTC_CR_SWR_SHIFT)) & RTC_CR_SWR_MASK)
 
@@ -271,7 +271,7 @@ typedef struct {
 #define RTC_CR_CPE_SHIFT                         (24U)
 /*! CPE - Clock Pin Enable
  *  0b000..Disables
- *  0b001..Enables on RTC_TAMPER[1]
+ *  0b001..Enables RTC_CLKOUT function on RTC_TAMPER[1].
  *  0b010..Enables RTC_CLKOUT function on RTC_TAMPER[2].
  *  0b011..Enables RTC_CLKOUT function on RTC_TAMPER[3].
  *  0b100..Enables RTC_CLKOUT function on RTC_TAMPER[4].
@@ -419,7 +419,10 @@ typedef struct {
 
 #define RTC_LR_PCL_MASK                          (0xFF0000U)
 #define RTC_LR_PCL_SHIFT                         (16U)
-/*! PCL - Pin Configuration Lock */
+/*! PCL - Pin Configuration Lock
+ *  0b00000000..Pin Configuration Register is locked and writes are ignored.
+ *  0b00000001..Pin Configuration Register is not locked and writes complete as normal.
+ */
 #define RTC_LR_PCL(x)                            (((uint32_t)(((uint32_t)(x)) << RTC_LR_PCL_SHIFT)) & RTC_LR_PCL_MASK)
 /*! @} */
 

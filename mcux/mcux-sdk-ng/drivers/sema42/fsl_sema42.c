@@ -67,14 +67,14 @@ uint32_t SEMA42_GetInstance(SEMA42_Type *base)
      * (instance >= ARRAY_SIZE(s_sema42Bases)) not covered. The peripheral base
      * address is always valid and checked by assert.
      */
-    for (instance = 0; instance < ARRAY_SIZE(s_sema42Bases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_sema42Bases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_sema42Bases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_sema42Bases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_sema42Bases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -140,7 +140,7 @@ status_t SEMA42_TryLock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
 
     assert(gateNum < (uint8_t)FSL_FEATURE_SEMA42_GATE_COUNT);
 
-    if (procNum < UINT8_MAX) {
+    if (procNum < (0xFEU)) {
         ++procNum;
     } else {
         /* Handle error case - procNum is at maximum value */
@@ -226,13 +226,13 @@ status_t SEMA42_ResetGate(SEMA42_Type *base, uint8_t gateNum)
      * (0U == (base->RSTGT_R & SEMA42_RSTGT_R_RSTGSM_MASK))) not covered. Test unfeasible,
      * the reset state is too short to catch.
      */
-    if (0U != (base->RSTGT_R & SEMA42_RSTGT_R_RSTGSM_MASK))
+    if (0U != (base->RSTGT_R & SEMA42_RSTGT_R_RSTGSM_MASK)) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Line Coverage Justification$
          * Block not covered. Test unfeasible, the reset state is too short to catch.
          */
-        status = kStatus_SEMA42_Reseting;
+        status = kStatus_SEMA42_Reseting; /* GCOVR_EXCL_LINE */
     }
     else
     {

@@ -436,7 +436,7 @@ void CLOCK_InitOsc0(osc_config_t const *config)
 {
     uint8_t range = CLOCK_GetOscRangeFromFreq(config->freq);
 
-    OSC0->CR = ((OSC0->CR & (uint8_t)(~OSC_MODE_MASK)) | (uint8_t)(OSC_CR_RANGE(range)) | ((uint8_t)config->workMode) |
+    OSC0->CR = ((OSC0->CR & (uint8_t)((~OSC_MODE_MASK) & 0xFFU)) | (uint8_t)(OSC_CR_RANGE(range)) | ((uint8_t)config->workMode) |
                 ((uint8_t)config->enableMode));
 
     if (((uint8_t)kOSC_ModeExt != config->workMode) && ((OSC0->CR & OSC_CR_OSCEN_MASK) != 0U))
@@ -560,12 +560,12 @@ status_t CLOCK_SetFeiMode(uint8_t bDiv)
 #endif
 
     /* Set IREFS. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~(ICS_C1_IREFS_MASK)) | ICS_C1_IREFS(kICS_FllSrcInternal)); /* IREFS = 1 */
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~(ICS_C1_IREFS_MASK)) | ICS_C1_IREFS(kICS_FllSrcInternal)) & 0xFFU); /* IREFS = 1 */
 
     /* Set CLKS */
-    ICS->C1 = (uint8_t)((ICS->C1 & (~ICS_C1_CLKS_MASK)) | ICS_C1_CLKS(kICS_ClkOutSrcFll)); /* CLKS = 0 */
+    ICS->C1 = (uint8_t)(((ICS->C1 & (~ICS_C1_CLKS_MASK)) | ICS_C1_CLKS(kICS_ClkOutSrcFll)) & 0xFFU); /* CLKS = 0 */
     /* set bus clock divider */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv));
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv)) & 0xFFU);
 
     /* Wait and check status. */
     while ((uint8_t)kICS_FllSrcInternal != ICS_S_IREFST_VAL)
@@ -610,12 +610,12 @@ status_t CLOCK_SetFeeMode(uint8_t bDiv, uint8_t rDiv)
 #endif
 
     /* Set CLKS, rDiv and IREFS. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_RDIV_MASK | ICS_C1_IREFS_MASK)) |
-                        (ICS_C1_CLKS(kICS_ClkOutSrcFll)         /* CLKS = 0 */
-                         | ICS_C1_RDIV(rDiv)                    /* FRDIV */
-                         | ICS_C1_IREFS(kICS_FllSrcExternal))); /* IREFS = 0 */
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_RDIV_MASK | ICS_C1_IREFS_MASK)) |
+                        (ICS_C1_CLKS(kICS_ClkOutSrcFll)                  /* CLKS = 0 */
+                         | ICS_C1_RDIV(rDiv)                             /* FRDIV */
+                         | ICS_C1_IREFS(kICS_FllSrcExternal))) & 0xFFU); /* IREFS = 0 */
     /* set bus clock divider */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv));
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv)) & 0xFFU);
 
     /* If use external crystal as clock source, wait for it stable. */
     {
@@ -672,11 +672,11 @@ status_t CLOCK_SetFbiMode(uint8_t bDiv)
 #endif
 
     /* set bus clock divider and disable low power */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~(ICS_C2_BDIV_MASK | ICS_C2_LP_MASK))) | ICS_C2_BDIV(bDiv));
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~(ICS_C2_BDIV_MASK | ICS_C2_LP_MASK))) | ICS_C2_BDIV(bDiv)) & 0xFFU);
     /* Set CLKS and IREFS. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_IREFS_MASK)) |
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_IREFS_MASK)) |
                         (ICS_C1_CLKS(kICS_ClkOutSrcInternal)    /* CLKS = 1 */
-                         | ICS_C1_IREFS(kICS_FllSrcInternal))); /* IREFS = 1 */
+                         | ICS_C1_IREFS(kICS_FllSrcInternal))) & 0xFFU); /* IREFS = 1 */
 
     /* Wait and check status. */
     while ((uint8_t)kICS_FllSrcInternal != ICS_S_IREFST_VAL)
@@ -717,13 +717,13 @@ status_t CLOCK_SetFbeMode(uint8_t bDiv, uint8_t rDiv)
 #endif
 
     /* set bus clock divider and disable low power */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~(ICS_C2_BDIV_MASK | ICS_C2_LP_MASK))) | ICS_C2_BDIV(bDiv));
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~(ICS_C2_BDIV_MASK | ICS_C2_LP_MASK))) | ICS_C2_BDIV(bDiv)) & 0xFFU);
 
     /* Set CLKS and IREFS. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_RDIV_MASK | ICS_C1_IREFS_MASK)) |
-                        (ICS_C1_CLKS(kICS_ClkOutSrcExternal)    /* CLKS = 2 */
-                         | ICS_C1_RDIV(rDiv)                    /* FRDIV = frDiv */
-                         | ICS_C1_IREFS(kICS_FllSrcExternal))); /* IREFS = 0 */
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_RDIV_MASK | ICS_C1_IREFS_MASK)) |
+                        (ICS_C1_CLKS(kICS_ClkOutSrcExternal)             /* CLKS = 2 */
+                         | ICS_C1_RDIV(rDiv)                             /* FRDIV = frDiv */
+                         | ICS_C1_IREFS(kICS_FllSrcExternal))) & 0xFFU); /* IREFS = 0 */
 
     /* If use external crystal as clock source, wait for it stable. */
     {
@@ -771,7 +771,7 @@ status_t CLOCK_SetBilpMode(uint8_t bDiv)
 #endif /* ICS_CONFIG_CHECK_PARAM */
 
     /* set bus clock divider and enable low power */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK);
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK) & 0xFFU);
 
     return kStatus_Success;
 }
@@ -796,7 +796,7 @@ status_t CLOCK_SetBelpMode(uint8_t bDiv)
 #endif
 
     /* set bus clock divider and enable low power */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK);
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK) & 0xFFU);
 
     return kStatus_Success;
 }
@@ -847,13 +847,13 @@ status_t CLOCK_BootToFeeMode(uint8_t bDiv, uint8_t rDiv)
 status_t CLOCK_BootToBilpMode(uint8_t bDiv)
 {
     /* If reset mode is not BILP, first enter FBI mode. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~ICS_C1_CLKS_MASK) | ICS_C1_CLKS(kICS_ClkOutSrcInternal));
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~ICS_C1_CLKS_MASK) | ICS_C1_CLKS(kICS_ClkOutSrcInternal)) & 0xFFU);
     while (ICS_S_CLKST_VAL != (uint8_t)kICS_ClkOutStatInt)
     {
     }
 
     /* set bus clock divider and enable low power */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK);
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK) & 0xFFU);
 
     return kStatus_Success;
 }
@@ -871,9 +871,9 @@ status_t CLOCK_BootToBilpMode(uint8_t bDiv)
 status_t CLOCK_BootToBelpMode(uint8_t bDiv)
 {
     /* Set to FBE mode. */
-    ICS->C1 = (uint8_t)((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_IREFS_MASK)) |
-                        (ICS_C1_CLKS(kICS_ClkOutSrcExternal)    /* CLKS = 2 */
-                         | ICS_C1_IREFS(kICS_FllSrcExternal))); /* IREFS = 0 */
+    ICS->C1 = (uint8_t)(((ICS->C1 & ~(ICS_C1_CLKS_MASK | ICS_C1_IREFS_MASK)) |
+                        (ICS_C1_CLKS(kICS_ClkOutSrcExternal)             /* CLKS = 2 */
+                         | ICS_C1_IREFS(kICS_FllSrcExternal))) & 0xFFU); /* IREFS = 0 */
 
     /* If use external crystal as clock source, wait for it stable. */
     {
@@ -892,7 +892,7 @@ status_t CLOCK_BootToBelpMode(uint8_t bDiv)
     }
 
     /* set bus clock divider and enable low power */
-    ICS->C2 = (uint8_t)((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK);
+    ICS->C2 = (uint8_t)(((ICS->C2 & (~ICS_C2_BDIV_MASK)) | ICS_C2_BDIV(bDiv) | ICS_C2_LP_MASK) & 0xFFU);
 
     return kStatus_Success;
 }

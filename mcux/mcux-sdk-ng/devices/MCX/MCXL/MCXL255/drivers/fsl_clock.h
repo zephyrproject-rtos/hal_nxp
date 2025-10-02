@@ -10,6 +10,10 @@
 
 #include "fsl_common.h"
 
+#if defined(ADVC_DRIVER_USED) & ADVC_DRIVER_USED
+#include "fsl_advc.h"
+#endif
+
 /*! @addtogroup clock */
 /*! @{ */
 
@@ -80,7 +84,6 @@ typedef enum _clock_ip_name
 #if __CORTEX_M == (33U) /* Building on the main core */
 
     /* Check syscon mrcc reg, in RM */
-    kCLOCK_InputMux          = (0xFFFFFFF0U),                          /*!< Clock gate name: INPUTMUX0 + AON_INPUTMUX1 */
     kCLOCK_GateINPUTMUX0     = (0x00U | (0U)),                         /*!< Clock gate name: INPUTMUX0      */
     kCLOCK_GateCTIMER0       = (0x00U | (1U)),                         /*!< Clock gate name: CTIMER0        */
     kCLOCK_GateCTIMER1       = (0x00U | (2U)),                         /*!< Clock gate name: CTIMER1        */
@@ -100,7 +103,7 @@ typedef enum _clock_ip_name
     kCLOCK_GateLPUART0       = (0x00U | (18U)),                        /*!< Clock gate name: LPUART0        */
     kCLOCK_GateADC0          = (0x00U | (19U)),                        /*!< Clock gate name: ADC0           */
     kCLOCK_GateATX0          = (0x00U | (20U)),                        /*!< Clock gate name: ATX0           */
-    kCLOCK_GateCMP0          = (0x00U | (21U)),                        /*!< Clock gate name: CMP0           */
+    kCLOCK_GateACMP0         = (0x00U | (21U)),                        /*!< Clock gate name: ACMP0           */
     kCLOCK_GateDMA1          = (0x00U | (22U)),                        /*!< Clock gate name: DMA1           */
     kCLOCK_GateSRAMA0A1      = (0x00U | (23U)),                        /*!< Clock gate name: SRAMA0A1       */
     kCLOCK_GateGPIO1         = (0x00U | (24U)),                        /*!< Clock gate name: GPIO1          */
@@ -117,13 +120,11 @@ typedef enum _clock_ip_name
     kCLOCK_GatePORT2         = ((0x4U << 16U) | (0x10U << 8U) | (2U)), /*!< Clock gate name: PORT2          */
     kCLOCK_GatePORT3         = ((0x4U << 16U) | (0x10U << 8U) | (3U)), /*!< Clock gate name: PORT3          */
     kCLOCK_GateROMCP         = ((0x4U << 16U) | (0x10U << 8U) | (4U)), /*!< Clock gate name: ROMCP          */
-    kCLOCK_GateSGIO0         = ((0x4U << 16U) | (0x10U << 8U) | (5U)), /*!< Clock gate name: SGIO0          */
+    kCLOCK_GateSGI0          = ((0x4U << 16U) | (0x10U << 8U) | (5U)), /*!< Clock gate name: SGI0           */
     kCLOCK_GateSGLCD         = ((0x4U << 16U) | (0x10U << 8U) | (6U)), /*!< Clock gate name: SGLCD          */
     kCLOCK_GateTCU           = ((0x4U << 16U) | (0x10U << 8U) | (7U)), /*!< Clock gate name: TCU            */
     kCLOCK_GateTRNG0         = ((0x4U << 16U) | (0x10U << 8U) | (8U)), /*!< Clock gate name: TRNG0          */
     kCLOCK_GateUDF0          = ((0x4U << 16U) | (0x10U << 8U) | (9U)), /*!< Clock gate name: UDF0           */
-#else
-    kCLOCK_InputMux          = ((1U<<24U) | (16U)),                    /*!< Clock gate name: AON INPUTMUX  (only)*/
 #endif /* Building on the main core */
 
     /* Check AON CGU PER_CLK_EN in RM */
@@ -138,10 +139,10 @@ typedef enum _clock_ip_name
     kCLOCK_GateAonKPP        = ((1U<<24U) | (10U)),                    /*!< Clock gate name: AON KPP        */
     kCLOCK_GateAonLPADC      = ((1U<<24U) | (11U)),                    /*!< Clock gate name: AON LPADC      */
     kCLOCK_GateAonSYS        = ((1U<<24U) | (12U)),                    /*!< Clock gate name: AON SYS (tick) */
-    kCLOCK_GateAonCMP0       = ((1U<<24U) | (13U)),                    /*!< Clock gate name: AON comparator */
+    kCLOCK_GateAonACMP0      = ((1U<<24U) | (13U)),                    /*!< Clock gate name: AON comparator */
     kCLOCK_GateAonLCD        = ((1U<<24U) | (14U)),                    /*!< Clock gate name: AON LCD        */
     kCLOCK_GateAonAVDC2P0    = ((1U<<24U) | (15U)),                    /*!< Clock gate name: AON AVDC2P0    */
-    kCLOCK_GateAonINPUTMUX1   = ((1U<<24U) | (16U)),                    /*!< Clock gate name: AON INPUTMUX   */
+    kCLOCK_GateAonINPUTMUX1  = ((1U<<24U) | (16U)),                    /*!< Clock gate name: AON INPUTMUX   */
 
     kCLOCK_GateNotAvail      = (0xFFFFFFFFU),                          /**< Clock gate name: None           */
 } clock_ip_name_t;
@@ -161,6 +162,12 @@ typedef enum _clock_ip_name
 #define SLCD_CONTROL_CLOCKS \
     {                       \
         kCLOCK_GateAonLCD   \
+    }
+
+/*! @brief Clock ip name array for LPACMP. */
+#define LPACMP_CLOCKS      \
+    {                   \
+        kCLOCK_GateAonACMP0 \
     }
 
 /*! @brief Clock ip name array for AOI. */
@@ -234,14 +241,14 @@ typedef enum _clock_ip_name
 
 /*! @brief Clock ip name array for LPCMP. */
 #if __CORTEX_M == (33U) /* Building on the main core */
-#define LPCMP_CLOCKS                        \
-    {                                       \
-        kCLOCK_GateAonCMP0, kCLOCK_GateCMP0 \
+#define LPCMP_CLOCKS                          \
+    {                                         \
+        kCLOCK_GateACMP0, kCLOCK_GateAonACMP0 \
     }
 #else
     #define LPCMP_CLOCKS                    \
     {                                       \
-        kCLOCK_GateAonCMP0                  \
+        kCLOCK_GateAonACMP0                 \
     }
 #endif
 
@@ -327,6 +334,11 @@ typedef enum _clock_ip_name
 #define TCU_CLOCKS     \
     {                  \
         kCLOCK_GateTCU \
+    }
+/*! @brief Clock ip name array for TRNG. */
+#define TRNG_CLOCKS      \
+    {                    \
+        kCLOCK_GateTRNG0 \
     }
 /*! @brief Clock ip name array for UTICK. */
 #define UTICK_CLOCKS      \
@@ -431,7 +443,7 @@ typedef enum _clock_select_name
 
 typedef enum _clock_attach_id
 {
-    kXTAL32K_to_AON_ROOT_AUX     = CLK_ATTACH_MUX(kCLOKC_SelAonROOT_AUX, 0U),         /*!< Attach XTAL32K to AON AUX.   */
+    kXTAL32K_to_AON_ROOT_AUX  = CLK_ATTACH_MUX(kCLOKC_SelAonROOT_AUX, 0U),         /*!< Attach XTAL32K to AON AUX.   */
     kAUX_to_AON_ROOT_AUX      = CLK_ATTACH_MUX(kCLOKC_SelAonROOT_AUX, 1U),         /*!< Attach AUX to AON AUX.    */
 
     kFROdiv1_to_AON_CPU     = CLK_ATTACH_MUX(kCLOKC_SelAonROOT, 0U),         /*!< Attach FRO div 1 to AON_CPU.   */
@@ -451,8 +463,8 @@ typedef enum _clock_attach_id
     kFROdiv2_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 1U),         /*!< Attach FRO div 2 to AON LPADC.   */
     kFROdiv4_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 2U),         /*!< Attach FRO div 4 to AON LPADC.   */
     kROOT_AUX_to_AON_LPADC    = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 3U),         /*!< Attach ROOT AUX to AON LPADC.    */
-    kXTAL32K_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLCD,   4U),         /*!< Attach FRO RTC to AON LPADC.     */
-    kFRO16K_to_AON_LPADC      = CLK_ATTACH_MUX(kCLOKC_SelAonLCD,   5U),         /*!< Attach FRO fro16k to AON LPADC.  */
+    kXTAL32K_to_AON_LPADC     = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 4U),         /*!< Attach FRO RTC to AON LPADC.     */
+    kFRO16K_to_AON_LPADC      = CLK_ATTACH_MUX(kCLOKC_SelAonLPADC, 5U),         /*!< Attach FRO fro16k to AON LPADC.  */
 
     kFROdiv1_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOKC_SelAonSYSTICK, 0U),     /*!< Attach FRO div 1 to AON SYSTICK.   */
     kFROdiv2_to_AON_SYSTICK     = CLK_ATTACH_MUX(kCLOKC_SelAonSYSTICK, 1U),     /*!< Attach FRO div 2 to AON SYSTICK.   */
@@ -505,7 +517,7 @@ typedef enum _clock_attach_id
 
     kCLK_16K_to_OSTIMER0 = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 0U),          /*!< Attach CLK_16K to OSTIMER0. */
     kFRO_16k_to_OSTIMER0 = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 1U),          /*!< Attach FRO_16K to OSTIMER0. */
-    kCLK_1M_to_OSTIMER0  = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 2U),          /*!< Attach CLK_1M to OSTIMER0.  */
+    kCLK_1M_to_OSTIMER0  = CLK_ATTACH_MUX(kCLOCK_SelOSTIMER0, 3U),          /*!< Attach CLK_1M to OSTIMER0.  */
 
     kFRO12M_to_ADC0     = CLK_ATTACH_MUX(kCLOCK_SelADC0, 0U),               /*!< Attach FRO12M to ADC0.     */
     kXTAL32K_to_ADC0    = CLK_ATTACH_MUX(kCLOCK_SelADC0, 1U),               /*!< Attach XTAL32K to ADC0.    */
@@ -599,8 +611,8 @@ typedef enum _clock_div_name
     kCLOCK_DIVAonCPU       = (0x400U), /*!< Aon CPU    clock divider */
     kCLOCK_DIVAonCMP       = (0x401U), /*!< Aon Comp grp clock divider */
     kCLOCK_DIVAonSYS       = (0x402U), /*!< Aon SYSTICK clock divider */
-    kCLOCK_DIVAonCMP0CLK0  = (0x410U), /*!< Aon CMP0 CLK0 clock divider */
-    kCLOCK_DIVAonCMP0CLK1  = (0x411U), /*!< Aon CMP0 CLK1 clock divider */
+    kCLOCK_DIVAonACMP0CLK0  = (0x410U), /*!< Aon CMP0 CLK0 clock divider */
+    kCLOCK_DIVAonACMP0CLK1  = (0x411U), /*!< Aon CMP0 CLK1 clock divider */
     kCLOCK_DivMax          = (0x411U), /*!< MAX        clock divider */
 } clock_div_name_t;
 
@@ -733,21 +745,12 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     {
         return;
     }
- 
-#if __CORTEX_M == (33U) /* Building on the main core */
-    if (clk == kCLOCK_InputMux) /* Workaround for inputmux driver */
-    {
-        CLOCK_EnableClock(kCLOCK_GateAonINPUTMUX1);
-        CLOCK_EnableClock(kCLOCK_GateINPUTMUX0);
-        return;
-    }
-#endif    
 
     if (CLK_OF_AON(clk))
     {
         if(clk == kCLOCK_GateAonINPUTMUX1) 
         {
-            AON__SYSCON_AON->PINMUXCLKCTRL = SYSCON_AON_PINMUXCLKCTRL_PINMUX_CLK_CTRL(0);
+            AON__SYSCON_AON->INPUTMUXCLKCTRL = SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL(0);
         }
         else
         {
@@ -766,7 +769,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
         /* Unlock clock configuration */
         SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_CLKGEN_LOCKOUT_MASK;
 
-        if (clk != kCLOCK_InputMux && clk != kCLOCK_GateWWDT0 && clk != kCLOCK_GateSRAMA0A1 && clk != kCLOCK_GateROMCP )
+        if (clk != kCLOCK_GateWWDT0 && clk != kCLOCK_GateSRAMA0A1 && clk != kCLOCK_GateROMCP)
         {
             *pPeripheralEnCtrl |= (1UL << bit_shift);
         }
@@ -834,7 +837,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
             *pClkCtrl = (1UL << bit_shift);
         }
 
-        if (clk != kCLOCK_InputMux && clk != kCLOCK_GateWWDT0 && clk != kCLOCK_GateSRAMA0A1 && clk != kCLOCK_GateROMCP)
+        if (clk != kCLOCK_GateWWDT0 && clk != kCLOCK_GateSRAMA0A1 && clk != kCLOCK_GateROMCP)
         {
             *pPeripheralEnCtrl &= ~(1UL << bit_shift);
         }
@@ -905,6 +908,11 @@ void CLOCK_HaltClockDiv(clock_div_name_t div_name);
  */
 status_t CLOCK_SetupFROAonClocking(uint32_t iFreq);
 
+/*! @brief  Return Frequency of the AON core
+ *  @return Frequency of the core
+ */
+uint32_t CLOCK_GetAonCoreSysClkFreq(void);
+
 #if __CORTEX_M == (33U) /* Building on the main core */
 /**
  * @brief   Initialize the FROHF to given frequency.
@@ -962,7 +970,7 @@ status_t CLOCK_DeinitRosc(void);
 uint32_t CLOCK_GetFreq(clock_name_t clockName);
 
 #if __CORTEX_M == (33U) /* Building on the main core */
-/*! @brief  Return Frequency of core
+/*! @brief  Return Frequency of the main core
  *  @return Frequency of the core
  */
 uint32_t CLOCK_GetCoreSysClkFreq(void);
@@ -1066,23 +1074,6 @@ status_t CLOCK_FROHFTrimConfig(firc_trim_config_t config);
  */
 status_t CLOCK_FRO12MTrimConfig(sirc_trim_config_t config);
 
-#endif /* Building on the main core */
-
-/**
- * @brief   Sets AON FRO 10M or 2M trim.
- * @param   is_fro2m : 0 for FRO10M, 1 for FRO2M
- * @param   config   : trim value
- */
-void CLOCK_AON_FRO_Trim_Set(uint8_t is_fro2m, aon_fro_trim_config_t config);
-
-/**
- * @brief   Reads AON FRO 10M or 2M trim values.
- * @param   is_fro2m : 0 for FRO10M, 1 for FRO2M
- * @param   config   : ptr to aon_fro_trim_config_t struct.
- */
-void CLOCK_AON_FRO_Trim_Get(uint8_t is_fro2m, aon_fro_trim_config_t * config);
-
-#if __CORTEX_M == (33U) /* Building on the main core */
 
 /*!
  * @brief Sets the ROSC monitor mode.
@@ -1135,6 +1126,26 @@ static inline void CLOCK_SetXtal32Freq(uint32_t freq)
 {
     g_xtal32Freq = freq;
 }
+
+#if __CORTEX_M == (33U) /* Building on the main core */
+/*!
+ * @brief Set flash wait state.
+ * @param state Flash wait state (0-15)
+ */
+void CLOCK_SetFlashWaitState(uint8_t state);
+
+/*!
+ * @brief Set flash wait state based on frequency.
+ * @param freq Core frequency.
+ */
+void CLOCK_SetFlashWaitStateBasedOnFreq(uint32_t freq);
+
+/*!
+ * @brief Get flash wait state.
+ * @return Returns flash wait state.
+ */
+uint8_t CLOCK_GetFlashWaitState(void);
+#endif /* Building on the main core */
 
 
 #if defined(__cplusplus)

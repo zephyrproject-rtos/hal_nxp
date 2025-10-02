@@ -13,7 +13,7 @@
 **                          MCXC444VMP
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250630
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SIM
@@ -482,15 +482,17 @@ typedef struct {
 
 #define SIM_SDID_SERIESID_MASK                   (0xF00000U)
 #define SIM_SDID_SERIESID_SHIFT                  (20U)
-/*! SERIESID - Kinetis Series ID
- *  0b0001..KL family
+/*! SERIESID - Series ID
+ *  0b0001..MCXC family
  */
 #define SIM_SDID_SERIESID(x)                     (((uint32_t)(((uint32_t)(x)) << SIM_SDID_SERIESID_SHIFT)) & SIM_SDID_SERIESID_MASK)
 
 #define SIM_SDID_SUBFAMID_MASK                   (0xF000000U)
 #define SIM_SDID_SUBFAMID_SHIFT                  (24U)
-/*! SUBFAMID - TBD Sub-Family ID
- *  0b0011..TBD Subfamily
+/*! SUBFAMID - Sub-Family ID
+ *  0b0001..MCX C14x/24x Subfamily
+ *  0b0010..MCX C44x Subfamily
+ *  0b0011..MCX C041 Subfamily
  */
 #define SIM_SDID_SUBFAMID(x)                     (((uint32_t)(((uint32_t)(x)) << SIM_SDID_SUBFAMID_SHIFT)) & SIM_SDID_SUBFAMID_MASK)
 

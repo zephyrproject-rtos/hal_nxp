@@ -586,7 +586,10 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
      * Command Buffers that have a corresponding Compare Value register. Therefore, assertion judgment needs to be
      * made before setting the CV register.
      */
-
+    /*
+     * $Branch Coverage Justification$
+     * For some chips, the LPADC command compare function is always supported.
+     */
     if ((kLPADC_HardwareCompareDisabled != config->hardwareCompareMode) && (commandId < ADC_CV_COUNT))
     {
         /* Set CV register. */

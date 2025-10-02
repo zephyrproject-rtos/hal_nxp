@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25xRM DraftF
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Reference manual:    MCXL25xRM DraftH
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250812
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL255_cm0plus
@@ -23,8 +23,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -32,7 +32,7 @@
 /*!
  * @file MCXL255_cm0plus_COMMON.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for MCXL255_cm0plus
  *
  * CMSIS Peripheral Access Layer for MCXL255_cm0plus
@@ -66,10 +66,10 @@ typedef enum IRQn {
 
   /* Core interrupts */
   NonMaskableInt_IRQn          = -14,              /**< Non Maskable Interrupt */
-  HardFault_IRQn               = -13,              /**< Cortex-M0 SV Hard Fault Interrupt */
-  SVCall_IRQn                  = -5,               /**< Cortex-M0 SV Call Interrupt */
-  PendSV_IRQn                  = -2,               /**< Cortex-M0 Pend SV Interrupt */
-  SysTick_IRQn                 = -1,               /**< Cortex-M0 System Tick Interrupt */
+  HardFault_IRQn               = -13,              /**< Cortex-M0P SV Hard Fault Interrupt */
+  SVCall_IRQn                  = -5,               /**< Cortex-M0P SV Call Interrupt */
+  PendSV_IRQn                  = -2,               /**< Cortex-M0P Pend SV Interrupt */
+  SysTick_IRQn                 = -1,               /**< Cortex-M0P System Tick Interrupt */
 
   /* Device specific interrupts */
   LPI2C0_AON_IRQn              = 1,                /**< Low-Power Inter Integrated Circuit interrupt */
@@ -91,12 +91,12 @@ typedef enum IRQn {
   PMU_IRQn                     = 20,               /**< PMU IRQ */
   KPP_IRQn                     = 21,               /**< Keypad Interrupt */
   LPADC_AON_IRQn               = 22,               /**< Analog-to-Digital Converter interrupt */
-  SGLCD_AON_IRQn               = 23,               /**< SLCD frame start interrupt */
+  SLCD_FRAME_AON_IRQn          = 23,               /**< SLCD frame start interrupt */
   TMR0_AON_IRQn                = 24,               /**< ORed QTMR Interrupts */
   TMR1_AON_IRQn                = 25,               /**< ORed QTMR Interrupts */
   LCSENSE_IRQn                 = 27,               /**< LCSense Fault/Tamper Interrupt */
   LPTMR_AON_IRQn               = 28,               /**< Low Power Timer 0 interrupt */
-  CMP0_AON_IRQn                = 30,               /**< Comparator interrupt */
+  ACMP0_AON_IRQn               = 30,               /**< Comparator interrupt */
   ADVC_IRQn                    = 31                /**< ADVC_2.0 Controller Interrupt */
 } IRQn_Type;
 
@@ -128,7 +128,9 @@ typedef enum IRQn {
  */ /* end of group Cortex_Core_Configuration */
 
 
+#ifndef MCXL255_cm0plus_SERIES
 #define MCXL255_cm0plus_SERIES
+#endif
 /* CPU specific feature definitions */
 #include "MCXL255_cm0plus_features.h"
 
@@ -312,32 +314,34 @@ typedef enum IRQn {
 
 /* LPCMP - Peripheral instance base addresses */
 #if ((defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2)) || defined(CPU1_IS_SECURE_MASTER))
-  /** Peripheral AON__CMP0 base address */
-  #define AON__CMP0_BASE                           (0xB0086000u)
-  /** Peripheral AON__CMP0 base address */
-  #define AON__CMP0_BASE_NS                        (0xA0086000u)
-  /** Peripheral AON__CMP0 base pointer */
-  #define AON__CMP0                                ((LPCMP_Type *)AON__CMP0_BASE)
-  /** Peripheral AON__CMP0 base pointer */
-  #define AON__CMP0_NS                             ((LPCMP_Type *)AON__CMP0_BASE_NS)
+  /** Peripheral AON__ACMP0 base address */
+  #define AON__ACMP0_BASE                          (0xB0086000u)
+  /** Peripheral AON__ACMP0 base address */
+  #define AON__ACMP0_BASE_NS                       (0xA0086000u)
+  /** Peripheral AON__ACMP0 base pointer */
+  #define AON__ACMP0                               ((LPCMP_Type *)AON__ACMP0_BASE)
+  /** Peripheral AON__ACMP0 base pointer */
+  #define AON__ACMP0_NS                            ((LPCMP_Type *)AON__ACMP0_BASE_NS)
   /** Array initializer of LPCMP peripheral base addresses */
-  #define LPCMP_BASE_ADDRS                         { AON__CMP0_BASE }
+  #define LPCMP_BASE_ADDRS                         { AON__ACMP0_BASE }
   /** Array initializer of LPCMP peripheral base pointers */
-  #define LPCMP_BASE_PTRS                          { AON__CMP0 }
+  #define LPCMP_BASE_PTRS                          { AON__ACMP0 }
   /** Array initializer of LPCMP peripheral base addresses */
-  #define LPCMP_BASE_ADDRS_NS                      { AON__CMP0_BASE_NS }
+  #define LPCMP_BASE_ADDRS_NS                      { AON__ACMP0_BASE_NS }
   /** Array initializer of LPCMP peripheral base pointers */
-  #define LPCMP_BASE_PTRS_NS                       { AON__CMP0_NS }
+  #define LPCMP_BASE_PTRS_NS                       { AON__ACMP0_NS }
 #else
-  /** Peripheral AON__CMP0 base address */
-  #define AON__CMP0_BASE                           (0xA0086000u)
-  /** Peripheral AON__CMP0 base pointer */
-  #define AON__CMP0                                ((LPCMP_Type *)AON__CMP0_BASE)
+  /** Peripheral AON__ACMP0 base address */
+  #define AON__ACMP0_BASE                          (0xA0086000u)
+  /** Peripheral AON__ACMP0 base pointer */
+  #define AON__ACMP0                               ((LPCMP_Type *)AON__ACMP0_BASE)
   /** Array initializer of LPCMP peripheral base addresses */
-  #define LPCMP_BASE_ADDRS                         { AON__CMP0_BASE }
+  #define LPCMP_BASE_ADDRS                         { AON__ACMP0_BASE }
   /** Array initializer of LPCMP peripheral base pointers */
-  #define LPCMP_BASE_PTRS                          { AON__CMP0 }
+  #define LPCMP_BASE_PTRS                          { AON__ACMP0 }
 #endif
+/** Interrupt vectors for the LPCMP peripheral type */
+#define LPCMP_IRQS                               { ACMP0_AON_IRQn }
 
 /* LPI2C - Peripheral instance base addresses */
 #if ((defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2)) || defined(CPU1_IS_SECURE_MASTER))
@@ -574,9 +578,9 @@ typedef enum IRQn {
   /** Array initializer of SGLCD_CONTROL peripheral base pointers */
   #define SGLCD_CONTROL_BASE_PTRS                  { AON__SGLCD0_AON }
 #endif
+/** Interrupt vectors for the SGLCD */
+#define SGLCD_CONTROL_IRQS { SLCD_FRAME_AON_IRQn }
 
-/** Interrupt vectors for the LCD_CONTROL peripheral type */
-#define SGLCD_CONTROL_IRQS { SGLCD_AON_IRQn }
 
 /* SMM - Peripheral instance base addresses */
 #if ((defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2)) || defined(CPU1_IS_SECURE_MASTER))

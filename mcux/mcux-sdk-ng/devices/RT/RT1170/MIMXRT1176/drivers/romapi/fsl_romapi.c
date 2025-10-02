@@ -246,22 +246,25 @@ status_t ROM_FLEXSPI_NorFlash_UpdateLut(uint32_t instance,
 /*! @brief Software reset for the FLEXSPI logic. */
 void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance)
 {
-    uint32_t clearCacheFunctionAddress;
-    if (ANADIG_MISC->MISC_DIFPROG == 0x001170a0U)
-    {
-        clearCacheFunctionAddress = 0x0020426bU;
-    }
-    else if (ANADIG_MISC->MISC_DIFPROG == 0x001170b0U)
-    {
-        clearCacheFunctionAddress = 0x0021a3b7U;
-    }
+    /*
+     * Use Direct Manipulation of FlexSPI Instance
+     */
+    FLEXSPI_Type* base = FLEXSPI1;
+
+    if (instance == 1)
+        base = FLEXSPI1;
+    else if (instance == 2)
+        base = FLEXSPI2;
     else
+        assert(false);
+
+    base->MCR0 |= FLEXSPI_MCR0_SWRESET_MASK;
+    while (base->MCR0 & FLEXSPI_MCR0_SWRESET_MASK)
     {
-        clearCacheFunctionAddress = 0x0021a3bfU;
     }
-    clearCacheCommand_t clearCacheCommand;
-    MISRA_CAST(clearCacheCommand_t, clearCacheCommand, uint32_t, clearCacheFunctionAddress);
-    (void)clearCacheCommand(instance);
+
+    // ISB is added here to make sure no instruction is fetched during flash reset process
+    __ISB();
 }
 
 /*! @brief Wait until device is idle*/

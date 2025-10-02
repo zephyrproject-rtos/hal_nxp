@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XSPI
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file XSPI.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_XSPI.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for XSPI
  *
  * CMSIS Peripheral Access Layer for XSPI
  */
 
-#if !defined(XSPI_H_)
-#define XSPI_H_                                  /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_XSPI_H_)
+#define PERI_XSPI_H_                             /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -657,8 +660,8 @@ typedef struct {
 /*! IPS_TG_RST - Software Reset for IPS Target Group Queue 0
  *  0b0..No action
  *  0b0..No action
- *  0b1..Resets
  *  0b1..Reset of IPS TG queue is in progress if is having TG Grant
+ *  0b1..Resets
  */
 #define XSPI_MCR_IPS_TG_RST(x)                   (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_IPS_TG_RST_SHIFT)) & XSPI_MCR_IPS_TG_RST_MASK)
 
@@ -1715,230 +1718,230 @@ typedef struct {
 #define XSPI_FR_TFF_MASK                         (0x1U)
 #define XSPI_FR_TFF_SHIFT                        (0U)
 /*! TFF - IP Command Transaction Finished Flag
- *  0b0..Not completed
  *  0b0..No action
- *  0b1..Completed
+ *  0b0..Not completed
  *  0b1..Clears flag
+ *  0b1..Completed
  */
 #define XSPI_FR_TFF(x)                           (((uint32_t)(((uint32_t)(x)) << XSPI_FR_TFF_SHIFT)) & XSPI_FR_TFF_MASK)
 
 #define XSPI_FR_RDADDR_MASK                      (0x2U)
 #define XSPI_FR_RDADDR_SHIFT                     (1U)
 /*! RDADDR - AHB Read Address Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears flag
+ *  0b1..Error
  */
 #define XSPI_FR_RDADDR(x)                        (((uint32_t)(((uint32_t)(x)) << XSPI_FR_RDADDR_SHIFT)) & XSPI_FR_RDADDR_MASK)
 
 #define XSPI_FR_PERFOVF_MASK                     (0x4U)
 #define XSPI_FR_PERFOVF_SHIFT                    (2U)
 /*! PERFOVF - AHB Performance Monitor Overflow Flag
- *  0b0..No overflow
  *  0b0..No action
- *  0b1..Overflow
+ *  0b0..No overflow
  *  0b1..Clears flags
+ *  0b1..Overflow
  */
 #define XSPI_FR_PERFOVF(x)                       (((uint32_t)(((uint32_t)(x)) << XSPI_FR_PERFOVF_SHIFT)) & XSPI_FR_PERFOVF_MASK)
 
 #define XSPI_FR_ARDB_TO_MASK                     (0x8U)
 #define XSPI_FR_ARDB_TO_SHIFT                    (3U)
 /*! ARDB_TO - ARDB Timeout
- *  0b0..No timeout
  *  0b0..No action
- *  0b1..Timeout
+ *  0b0..No timeout
  *  0b1..Clears flags
+ *  0b1..Timeout
  */
 #define XSPI_FR_ARDB_TO(x)                       (((uint32_t)(((uint32_t)(x)) << XSPI_FR_ARDB_TO_SHIFT)) & XSPI_FR_ARDB_TO_MASK)
 
 #define XSPI_FR_IPEDERR_MASK                     (0x20U)
 #define XSPI_FR_IPEDERR_SHIFT                    (5U)
 /*! IPEDERR - IPED RX Decryption Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_IPEDERR(x)                       (((uint32_t)(((uint32_t)(x)) << XSPI_FR_IPEDERR_SHIFT)) & XSPI_FR_IPEDERR_MASK)
 
 #define XSPI_FR_IPIEF_MASK                       (0x40U)
 #define XSPI_FR_IPIEF_SHIFT                      (6U)
 /*! IPIEF - IP Command Trigger Fail Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_IPIEF(x)                         (((uint32_t)(((uint32_t)(x)) << XSPI_FR_IPIEF_SHIFT)) & XSPI_FR_IPIEF_MASK)
 
 #define XSPI_FR_PPWF_MASK                        (0x100U)
 #define XSPI_FR_PPWF_SHIFT                       (8U)
 /*! PPWF - Page-Program Wait Flag
- *  0b0..No page program wait
  *  0b0..No action
- *  0b1..Page program wait in effect
+ *  0b0..No page program wait
  *  0b1..Clears flag
+ *  0b1..Page program wait in effect
  */
 #define XSPI_FR_PPWF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_PPWF_SHIFT)) & XSPI_FR_PPWF_MASK)
 
 #define XSPI_FR_CRCAEF_MASK                      (0x400U)
 #define XSPI_FR_CRCAEF_SHIFT                     (10U)
 /*! CRCAEF - CRC Error Flash Memory A Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_CRCAEF(x)                        (((uint32_t)(((uint32_t)(x)) << XSPI_FR_CRCAEF_SHIFT)) & XSPI_FR_CRCAEF_MASK)
 
 #define XSPI_FR_ABOF_MASK                        (0x1000U)
 #define XSPI_FR_ABOF_SHIFT                       (12U)
 /*! ABOF - AHB Buffer Overflow Flag
- *  0b0..No overflow
  *  0b0..No action
- *  0b1..Overflow
+ *  0b0..No overflow
  *  0b1..Clears overflow flag
+ *  0b1..Overflow
  */
 #define XSPI_FR_ABOF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_ABOF_SHIFT)) & XSPI_FR_ABOF_MASK)
 
 #define XSPI_FR_AIBSEF_MASK                      (0x2000U)
 #define XSPI_FR_AIBSEF_SHIFT                     (13U)
 /*! AIBSEF - AHB Illegal Burst Size Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_AIBSEF(x)                        (((uint32_t)(((uint32_t)(x)) << XSPI_FR_AIBSEF_SHIFT)) & XSPI_FR_AIBSEF_MASK)
 
 #define XSPI_FR_AITEF_MASK                       (0x4000U)
 #define XSPI_FR_AITEF_SHIFT                      (14U)
 /*! AITEF - AHB Illegal Transaction Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_AITEF(x)                         (((uint32_t)(((uint32_t)(x)) << XSPI_FR_AITEF_SHIFT)) & XSPI_FR_AITEF_MASK)
 
 #define XSPI_FR_AAEF_MASK                        (0x8000U)
 #define XSPI_FR_AAEF_SHIFT                       (15U)
 /*! AAEF - AHB Abort Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_AAEF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_AAEF_SHIFT)) & XSPI_FR_AAEF_MASK)
 
 #define XSPI_FR_RBDF_MASK                        (0x10000U)
 #define XSPI_FR_RBDF_SHIFT                       (16U)
 /*! RBDF - RX Buffer Drain Flag
- *  0b0..RX buffer is not over the watermark
  *  0b0..No action
- *  0b1..RX buffer is over the watermark
+ *  0b0..RX buffer is not over the watermark
  *  0b1..Clears flag if RX buffer is not over the watermark after POP
+ *  0b1..RX buffer is over the watermark
  */
 #define XSPI_FR_RBDF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_RBDF_SHIFT)) & XSPI_FR_RBDF_MASK)
 
 #define XSPI_FR_RBOF_MASK                        (0x20000U)
 #define XSPI_FR_RBOF_SHIFT                       (17U)
 /*! RBOF - RX Buffer Overflow Flag
- *  0b0..No overflow
  *  0b0..No action
- *  0b1..Overflow
+ *  0b0..No overflow
  *  0b1..Clears flag
+ *  0b1..Overflow
  */
 #define XSPI_FR_RBOF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_RBOF_SHIFT)) & XSPI_FR_RBOF_MASK)
 
 #define XSPI_FR_PECMDF_MASK                      (0x200000U)
 #define XSPI_FR_PECMDF_SHIFT                     (21U)
 /*! PECMDF - Program Execute Command Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears flag
+ *  0b1..Error
  */
 #define XSPI_FR_PECMDF(x)                        (((uint32_t)(((uint32_t)(x)) << XSPI_FR_PECMDF_SHIFT)) & XSPI_FR_PECMDF_MASK)
 
 #define XSPI_FR_ILLACC_MASK                      (0x400000U)
 #define XSPI_FR_ILLACC_SHIFT                     (22U)
 /*! ILLACC - Illegal Access Event Flag
- *  0b0..No event
  *  0b0..No action
- *  0b1..Illegal access event
+ *  0b0..No event
  *  0b1..Clears flag
+ *  0b1..Illegal access event
  */
 #define XSPI_FR_ILLACC(x)                        (((uint32_t)(((uint32_t)(x)) << XSPI_FR_ILLACC_SHIFT)) & XSPI_FR_ILLACC_MASK)
 
 #define XSPI_FR_ILLINE_MASK                      (0x800000U)
 #define XSPI_FR_ILLINE_SHIFT                     (23U)
 /*! ILLINE - Illegal Instruction Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_ILLINE(x)                        (((uint32_t)(((uint32_t)(x)) << XSPI_FR_ILLINE_SHIFT)) & XSPI_FR_ILLINE_MASK)
 
 #define XSPI_FR_DLLUNLCK_MASK                    (0x1000000U)
 #define XSPI_FR_DLLUNLCK_SHIFT                   (24U)
 /*! DLLUNLCK - DLL Unlock
- *  0b0..No unlock event
  *  0b0..No action
- *  0b1..Unlock event has occurred
+ *  0b0..No unlock event
  *  0b1..Clears the flag
+ *  0b1..Unlock event has occurred
  */
 #define XSPI_FR_DLLUNLCK(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_DLLUNLCK_SHIFT)) & XSPI_FR_DLLUNLCK_MASK)
 
 #define XSPI_FR_PRWF_MASK                        (0x2000000U)
 #define XSPI_FR_PRWF_SHIFT                       (25U)
 /*! PRWF - Page-Read Wait Flag
- *  0b0..No page read wait
  *  0b0..No action
- *  0b1..Page read wait in effect
+ *  0b0..No page read wait
  *  0b1..Clears flag
+ *  0b1..Page read wait in effect
  */
 #define XSPI_FR_PRWF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_PRWF_SHIFT)) & XSPI_FR_PRWF_MASK)
 
 #define XSPI_FR_TBUF_MASK                        (0x4000000U)
 #define XSPI_FR_TBUF_SHIFT                       (26U)
 /*! TBUF - TX Buffer Underrun Flag
- *  0b0..No underrun
  *  0b0..No action
- *  0b1..Underrun
+ *  0b0..No underrun
  *  0b1..Clears flag
+ *  0b1..Underrun
  */
 #define XSPI_FR_TBUF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_TBUF_SHIFT)) & XSPI_FR_TBUF_MASK)
 
 #define XSPI_FR_TBFF_MASK                        (0x8000000U)
 #define XSPI_FR_TBFF_SHIFT                       (27U)
 /*! TBFF - TX Buffer Fill Flag
- *  0b0..No room in the TX buffer
  *  0b0..No action
- *  0b1..TX buffer has room
+ *  0b0..No room in the TX buffer
  *  0b1..Clears flag
+ *  0b1..TX buffer has room
  */
 #define XSPI_FR_TBFF(x)                          (((uint32_t)(((uint32_t)(x)) << XSPI_FR_TBFF_SHIFT)) & XSPI_FR_TBFF_MASK)
 
 #define XSPI_FR_DLLABRT_MASK                     (0x10000000U)
 #define XSPI_FR_DLLABRT_SHIFT                    (28U)
 /*! DLLABRT - DLL Terminate
- *  0b0..No lock has occurred
  *  0b0..No action
- *  0b1..DLL unlock occurred
+ *  0b0..No lock has occurred
  *  0b1..Clears flag
+ *  0b1..DLL unlock occurred
  */
 #define XSPI_FR_DLLABRT(x)                       (((uint32_t)(((uint32_t)(x)) << XSPI_FR_DLLABRT_SHIFT)) & XSPI_FR_DLLABRT_MASK)
 
 #define XSPI_FR_DLPFF_MASK                       (0x80000000U)
 #define XSPI_FR_DLPFF_SHIFT                      (31U)
 /*! DLPFF - Data Learning Pattern Failure Flag
- *  0b0..No failure
  *  0b0..No action
- *  0b1..Failure
+ *  0b0..No failure
  *  0b1..Clears flag
+ *  0b1..Failure
  */
 #define XSPI_FR_DLPFF(x)                         (((uint32_t)(((uint32_t)(x)) << XSPI_FR_DLPFF_SHIFT)) & XSPI_FR_DLPFF_MASK)
 /*! @} */
@@ -2825,40 +2828,40 @@ typedef struct {
 #define XSPI_MCR_EXT_IPS_TG_RST1_MASK            (0x1U)
 #define XSPI_MCR_EXT_IPS_TG_RST1_SHIFT           (0U)
 /*! IPS_TG_RST1 - TG Software Reset
- *  0b0..No action
  *  0b0..Contains no useful information
- *  0b1..Resets
+ *  0b0..No action
  *  0b1..Contains no useful information
+ *  0b1..Resets
  */
 #define XSPI_MCR_EXT_IPS_TG_RST1(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_EXT_IPS_TG_RST1_SHIFT)) & XSPI_MCR_EXT_IPS_TG_RST1_MASK)
 
 #define XSPI_MCR_EXT_IPS_TG_RST2_MASK            (0x2U)
 #define XSPI_MCR_EXT_IPS_TG_RST2_SHIFT           (1U)
 /*! IPS_TG_RST2 - TG Software Reset
- *  0b0..No action
  *  0b0..Contains no useful information
- *  0b1..Resets
+ *  0b0..No action
  *  0b1..Contains no useful information
+ *  0b1..Resets
  */
 #define XSPI_MCR_EXT_IPS_TG_RST2(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_EXT_IPS_TG_RST2_SHIFT)) & XSPI_MCR_EXT_IPS_TG_RST2_MASK)
 
 #define XSPI_MCR_EXT_IPS_TG_RST3_MASK            (0x4U)
 #define XSPI_MCR_EXT_IPS_TG_RST3_SHIFT           (2U)
 /*! IPS_TG_RST3 - TG Software Reset
- *  0b0..No action
  *  0b0..Contains no useful information
- *  0b1..Resets
+ *  0b0..No action
  *  0b1..Contains no useful information
+ *  0b1..Resets
  */
 #define XSPI_MCR_EXT_IPS_TG_RST3(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_EXT_IPS_TG_RST3_SHIFT)) & XSPI_MCR_EXT_IPS_TG_RST3_MASK)
 
 #define XSPI_MCR_EXT_IPS_TG_RST4_MASK            (0x8U)
 #define XSPI_MCR_EXT_IPS_TG_RST4_SHIFT           (3U)
 /*! IPS_TG_RST4 - TG Software Reset
- *  0b0..No action
  *  0b0..Contains no useful information
- *  0b1..Resets
+ *  0b0..No action
  *  0b1..Contains no useful information
+ *  0b1..Resets
  */
 #define XSPI_MCR_EXT_IPS_TG_RST4(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_EXT_IPS_TG_RST4_SHIFT)) & XSPI_MCR_EXT_IPS_TG_RST4_MASK)
 /*! @} */
@@ -4848,90 +4851,90 @@ typedef struct {
 #define XSPI_ERRSTAT_FRADMTCH_MASK               (0x1U)
 #define XSPI_ERRSTAT_FRADMTCH_SHIFT              (0U)
 /*! FRADMTCH - No FRAD Match Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRADMTCH(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRADMTCH_SHIFT)) & XSPI_ERRSTAT_FRADMTCH_MASK)
 
 #define XSPI_ERRSTAT_FRAD0ACC_MASK               (0x2U)
 #define XSPI_ERRSTAT_FRAD0ACC_SHIFT              (1U)
 /*! FRAD0ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD0ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD0ACC_SHIFT)) & XSPI_ERRSTAT_FRAD0ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD1ACC_MASK               (0x4U)
 #define XSPI_ERRSTAT_FRAD1ACC_SHIFT              (2U)
 /*! FRAD1ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD1ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD1ACC_SHIFT)) & XSPI_ERRSTAT_FRAD1ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD2ACC_MASK               (0x8U)
 #define XSPI_ERRSTAT_FRAD2ACC_SHIFT              (3U)
 /*! FRAD2ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD2ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD2ACC_SHIFT)) & XSPI_ERRSTAT_FRAD2ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD3ACC_MASK               (0x10U)
 #define XSPI_ERRSTAT_FRAD3ACC_SHIFT              (4U)
 /*! FRAD3ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD3ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD3ACC_SHIFT)) & XSPI_ERRSTAT_FRAD3ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD4ACC_MASK               (0x20U)
 #define XSPI_ERRSTAT_FRAD4ACC_SHIFT              (5U)
 /*! FRAD4ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD4ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD4ACC_SHIFT)) & XSPI_ERRSTAT_FRAD4ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD5ACC_MASK               (0x40U)
 #define XSPI_ERRSTAT_FRAD5ACC_SHIFT              (6U)
 /*! FRAD5ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD5ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD5ACC_SHIFT)) & XSPI_ERRSTAT_FRAD5ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD6ACC_MASK               (0x80U)
 #define XSPI_ERRSTAT_FRAD6ACC_SHIFT              (7U)
 /*! FRAD6ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD6ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD6ACC_SHIFT)) & XSPI_ERRSTAT_FRAD6ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD7ACC_MASK               (0x100U)
 #define XSPI_ERRSTAT_FRAD7ACC_SHIFT              (8U)
 /*! FRAD7ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD7ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD7ACC_SHIFT)) & XSPI_ERRSTAT_FRAD7ACC_MASK)
 
@@ -4962,120 +4965,120 @@ typedef struct {
 #define XSPI_ERRSTAT_TO_ERR_MASK                 (0x4000U)
 #define XSPI_ERRSTAT_TO_ERR_SHIFT                (14U)
 /*! TO_ERR - Timeout Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_TO_ERR(x)                   (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_TO_ERR_SHIFT)) & XSPI_ERRSTAT_TO_ERR_MASK)
 
 #define XSPI_ERRSTAT_FRAD8ACC_MASK               (0x10000U)
 #define XSPI_ERRSTAT_FRAD8ACC_SHIFT              (16U)
 /*! FRAD8ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD8ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD8ACC_SHIFT)) & XSPI_ERRSTAT_FRAD8ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD9ACC_MASK               (0x20000U)
 #define XSPI_ERRSTAT_FRAD9ACC_SHIFT              (17U)
 /*! FRAD9ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD9ACC(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD9ACC_SHIFT)) & XSPI_ERRSTAT_FRAD9ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD10ACC_MASK              (0x40000U)
 #define XSPI_ERRSTAT_FRAD10ACC_SHIFT             (18U)
 /*! FRAD10ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD10ACC(x)                (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD10ACC_SHIFT)) & XSPI_ERRSTAT_FRAD10ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD11ACC_MASK              (0x80000U)
 #define XSPI_ERRSTAT_FRAD11ACC_SHIFT             (19U)
 /*! FRAD11ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD11ACC(x)                (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD11ACC_SHIFT)) & XSPI_ERRSTAT_FRAD11ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD12ACC_MASK              (0x100000U)
 #define XSPI_ERRSTAT_FRAD12ACC_SHIFT             (20U)
 /*! FRAD12ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD12ACC(x)                (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD12ACC_SHIFT)) & XSPI_ERRSTAT_FRAD12ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD13ACC_MASK              (0x200000U)
 #define XSPI_ERRSTAT_FRAD13ACC_SHIFT             (21U)
 /*! FRAD13ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD13ACC(x)                (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD13ACC_SHIFT)) & XSPI_ERRSTAT_FRAD13ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD14ACC_MASK              (0x400000U)
 #define XSPI_ERRSTAT_FRAD14ACC_SHIFT             (22U)
 /*! FRAD14ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD14ACC(x)                (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD14ACC_SHIFT)) & XSPI_ERRSTAT_FRAD14ACC_MASK)
 
 #define XSPI_ERRSTAT_FRAD15ACC_MASK              (0x800000U)
 #define XSPI_ERRSTAT_FRAD15ACC_SHIFT             (23U)
 /*! FRAD15ACC - FRAD Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_FRAD15ACC(x)                (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_FRAD15ACC_SHIFT)) & XSPI_ERRSTAT_FRAD15ACC_MASK)
 
 #define XSPI_ERRSTAT_ARB_WIN_MASK                (0x10000000U)
 #define XSPI_ERRSTAT_ARB_WIN_SHIFT               (28U)
 /*! ARB_WIN - Arbitration Win Event Status
- *  0b0..Request not granted or the interrupt is already cleared
  *  0b0..No action
- *  0b1..Request granted and interrupt generated
+ *  0b0..Request not granted or the interrupt is already cleared
  *  0b1..Clears interrupt
+ *  0b1..Request granted and interrupt generated
  */
 #define XSPI_ERRSTAT_ARB_WIN(x)                  (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_ARB_WIN_SHIFT)) & XSPI_ERRSTAT_ARB_WIN_MASK)
 
 #define XSPI_ERRSTAT_ARB_LOCK_TO_MASK            (0x20000000U)
 #define XSPI_ERRSTAT_ARB_LOCK_TO_SHIFT           (29U)
 /*! ARB_LOCK_TO - Arbitration Lock Timeout Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears flag
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_ARB_LOCK_TO(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_ARB_LOCK_TO_SHIFT)) & XSPI_ERRSTAT_ARB_LOCK_TO_MASK)
 
 #define XSPI_ERRSTAT_LOCK_ERR_MASK               (0x40000000U)
 #define XSPI_ERRSTAT_LOCK_ERR_SHIFT              (30U)
 /*! LOCK_ERR - Lock Register Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_LOCK_ERR(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_LOCK_ERR_SHIFT)) & XSPI_ERRSTAT_LOCK_ERR_MASK)
 /*! @} */
@@ -6809,10 +6812,10 @@ typedef struct {
 #define XSPI_MCR_SUB_IPS_TG_RST_MASK             (0x200U)
 #define XSPI_MCR_SUB_IPS_TG_RST_SHIFT            (9U)
 /*! IPS_TG_RST - IPS TG3 Software Reset
- *  0b0..No action
  *  0b0..Contains no useful information
- *  0b1..Resets
+ *  0b0..No action
  *  0b1..Contains no useful information
+ *  0b1..Resets
  */
 #define XSPI_MCR_SUB_IPS_TG_RST(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_MCR_SUB_IPS_TG_RST_SHIFT)) & XSPI_MCR_SUB_IPS_TG_RST_MASK)
 
@@ -7223,20 +7226,20 @@ typedef struct {
 #define XSPI_FR_SUB_TFF_MASK                     (0x1U)
 #define XSPI_FR_SUB_TFF_SHIFT                    (0U)
 /*! TFF - IP Command Transaction Finished Flag
- *  0b0..Not completed
  *  0b0..No action
- *  0b1..Completed
+ *  0b0..Not completed
  *  0b1..Clears flag
+ *  0b1..Completed
  */
 #define XSPI_FR_SUB_TFF(x)                       (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_TFF_SHIFT)) & XSPI_FR_SUB_TFF_MASK)
 
 #define XSPI_FR_SUB_RDADDR_MASK                  (0x2U)
 #define XSPI_FR_SUB_RDADDR_SHIFT                 (1U)
 /*! RDADDR - AHB Read Address Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears flag
+ *  0b1..Error
  */
 #define XSPI_FR_SUB_RDADDR(x)                    (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_RDADDR_SHIFT)) & XSPI_FR_SUB_RDADDR_MASK)
 
@@ -7251,40 +7254,40 @@ typedef struct {
 #define XSPI_FR_SUB_ARDB_TO_MASK                 (0x8U)
 #define XSPI_FR_SUB_ARDB_TO_SHIFT                (3U)
 /*! ARDB_TO - ARDB Timeout
- *  0b0..No timeout
  *  0b0..No action
- *  0b1..Timeout
+ *  0b0..No timeout
  *  0b1..Clears flags
+ *  0b1..Timeout
  */
 #define XSPI_FR_SUB_ARDB_TO(x)                   (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_ARDB_TO_SHIFT)) & XSPI_FR_SUB_ARDB_TO_MASK)
 
 #define XSPI_FR_SUB_IPEDERR_MASK                 (0x20U)
 #define XSPI_FR_SUB_IPEDERR_SHIFT                (5U)
 /*! IPEDERR - IPED RX Decryption Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_SUB_IPEDERR(x)                   (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_IPEDERR_SHIFT)) & XSPI_FR_SUB_IPEDERR_MASK)
 
 #define XSPI_FR_SUB_IPIEF_MASK                   (0x40U)
 #define XSPI_FR_SUB_IPIEF_SHIFT                  (6U)
 /*! IPIEF - IP Command Trigger Fail Error Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears error flag
+ *  0b1..Error
  */
 #define XSPI_FR_SUB_IPIEF(x)                     (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_IPIEF_SHIFT)) & XSPI_FR_SUB_IPIEF_MASK)
 
 #define XSPI_FR_SUB_PPWF_MASK                    (0x100U)
 #define XSPI_FR_SUB_PPWF_SHIFT                   (8U)
 /*! PPWF - Page-Program Wait Flag
- *  0b0..No page program wait
  *  0b0..No action
- *  0b1..Page program wait in effect
+ *  0b0..No page program wait
  *  0b1..Clears flag
+ *  0b1..Page program wait in effect
  */
 #define XSPI_FR_SUB_PPWF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_PPWF_SHIFT)) & XSPI_FR_SUB_PPWF_MASK)
 
@@ -7299,10 +7302,10 @@ typedef struct {
 #define XSPI_FR_SUB_ABOF_MASK                    (0x1000U)
 #define XSPI_FR_SUB_ABOF_SHIFT                   (12U)
 /*! ABOF - AHB Buffer Overflow Flag
- *  0b0..No overflow
  *  0b0..No action
- *  0b1..Overflow
+ *  0b0..No overflow
  *  0b1..Clears overflow flag
+ *  0b1..Overflow
  */
 #define XSPI_FR_SUB_ABOF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_ABOF_SHIFT)) & XSPI_FR_SUB_ABOF_MASK)
 
@@ -7333,40 +7336,40 @@ typedef struct {
 #define XSPI_FR_SUB_RBDF_MASK                    (0x10000U)
 #define XSPI_FR_SUB_RBDF_SHIFT                   (16U)
 /*! RBDF - RX Buffer Drain Flag
- *  0b0..RX buffer is not over the watermark
  *  0b0..No action
- *  0b1..RX buffer is over the watermark
+ *  0b0..RX buffer is not over the watermark
  *  0b1..Clears flag if RX buffer is not over the watermark after POP
+ *  0b1..RX buffer is over the watermark
  */
 #define XSPI_FR_SUB_RBDF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_RBDF_SHIFT)) & XSPI_FR_SUB_RBDF_MASK)
 
 #define XSPI_FR_SUB_RBOF_MASK                    (0x20000U)
 #define XSPI_FR_SUB_RBOF_SHIFT                   (17U)
 /*! RBOF - RX Buffer Overflow Flag
- *  0b0..No overflow
  *  0b0..No action
- *  0b1..Overflow
+ *  0b0..No overflow
  *  0b1..Clears flag
+ *  0b1..Overflow
  */
 #define XSPI_FR_SUB_RBOF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_RBOF_SHIFT)) & XSPI_FR_SUB_RBOF_MASK)
 
 #define XSPI_FR_SUB_PECMDF_MASK                  (0x200000U)
 #define XSPI_FR_SUB_PECMDF_SHIFT                 (21U)
 /*! PECMDF - Program Execute Command Flag
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears flag
+ *  0b1..Error
  */
 #define XSPI_FR_SUB_PECMDF(x)                    (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_PECMDF_SHIFT)) & XSPI_FR_SUB_PECMDF_MASK)
 
 #define XSPI_FR_SUB_ILLACC_MASK                  (0x400000U)
 #define XSPI_FR_SUB_ILLACC_SHIFT                 (22U)
 /*! ILLACC - Illegal Access Event Flag
- *  0b0..No event
  *  0b0..No action
- *  0b1..Illegal access event
+ *  0b0..No event
  *  0b1..Clears flag
+ *  0b1..Illegal access event
  */
 #define XSPI_FR_SUB_ILLACC(x)                    (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_ILLACC_SHIFT)) & XSPI_FR_SUB_ILLACC_MASK)
 
@@ -7381,40 +7384,40 @@ typedef struct {
 #define XSPI_FR_SUB_PRWF_MASK                    (0x2000000U)
 #define XSPI_FR_SUB_PRWF_SHIFT                   (25U)
 /*! PRWF - Page-Read Wait Flag
- *  0b0..No page read wait
  *  0b0..No action
- *  0b1..Page read wait in effect
+ *  0b0..No page read wait
  *  0b1..Clears flag
+ *  0b1..Page read wait in effect
  */
 #define XSPI_FR_SUB_PRWF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_PRWF_SHIFT)) & XSPI_FR_SUB_PRWF_MASK)
 
 #define XSPI_FR_SUB_TBUF_MASK                    (0x4000000U)
 #define XSPI_FR_SUB_TBUF_SHIFT                   (26U)
 /*! TBUF - TX Buffer Underrun Flag
- *  0b0..No underrun
  *  0b0..No action
- *  0b1..Underrun
+ *  0b0..No underrun
  *  0b1..Clears flag
+ *  0b1..Underrun
  */
 #define XSPI_FR_SUB_TBUF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_TBUF_SHIFT)) & XSPI_FR_SUB_TBUF_MASK)
 
 #define XSPI_FR_SUB_TBFF_MASK                    (0x8000000U)
 #define XSPI_FR_SUB_TBFF_SHIFT                   (27U)
 /*! TBFF - TX Buffer Fill Flag
- *  0b0..No room in the TX buffer
  *  0b0..No action
- *  0b1..TX buffer has room
+ *  0b0..No room in the TX buffer
  *  0b1..Clears flag
+ *  0b1..TX buffer has room
  */
 #define XSPI_FR_SUB_TBFF(x)                      (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_TBFF_SHIFT)) & XSPI_FR_SUB_TBFF_MASK)
 
 #define XSPI_FR_SUB_DLLABRT_MASK                 (0x10000000U)
 #define XSPI_FR_SUB_DLLABRT_SHIFT                (28U)
 /*! DLLABRT - DLL Abort
- *  0b0..No lock has occurred
  *  0b0..No action
- *  0b1..DLL unlock occurred
+ *  0b0..No lock has occurred
  *  0b1..Clears flag
+ *  0b1..DLL unlock occurred
  */
 #define XSPI_FR_SUB_DLLABRT(x)                   (((uint32_t)(((uint32_t)(x)) << XSPI_FR_SUB_DLLABRT_SHIFT)) & XSPI_FR_SUB_DLLABRT_MASK)
 
@@ -8538,90 +8541,90 @@ typedef struct {
 #define XSPI_ERRSTAT_SUB_FRADMTCH_MASK           (0x1U)
 #define XSPI_ERRSTAT_SUB_FRADMTCH_SHIFT          (0U)
 /*! FRADMTCH - No FRAD Match Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRADMTCH(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRADMTCH_SHIFT)) & XSPI_ERRSTAT_SUB_FRADMTCH_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD0ACC_MASK           (0x2U)
 #define XSPI_ERRSTAT_SUB_FRAD0ACC_SHIFT          (1U)
 /*! FRAD0ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD0ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD0ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD0ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD1ACC_MASK           (0x4U)
 #define XSPI_ERRSTAT_SUB_FRAD1ACC_SHIFT          (2U)
 /*! FRAD1ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD1ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD1ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD1ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD2ACC_MASK           (0x8U)
 #define XSPI_ERRSTAT_SUB_FRAD2ACC_SHIFT          (3U)
 /*! FRAD2ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD2ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD2ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD2ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD3ACC_MASK           (0x10U)
 #define XSPI_ERRSTAT_SUB_FRAD3ACC_SHIFT          (4U)
 /*! FRAD3ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD3ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD3ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD3ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD4ACC_MASK           (0x20U)
 #define XSPI_ERRSTAT_SUB_FRAD4ACC_SHIFT          (5U)
 /*! FRAD4ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD4ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD4ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD4ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD5ACC_MASK           (0x40U)
 #define XSPI_ERRSTAT_SUB_FRAD5ACC_SHIFT          (6U)
 /*! FRAD5ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD5ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD5ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD5ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD6ACC_MASK           (0x80U)
 #define XSPI_ERRSTAT_SUB_FRAD6ACC_SHIFT          (7U)
 /*! FRAD6ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD6ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD6ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD6ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD7ACC_MASK           (0x100U)
 #define XSPI_ERRSTAT_SUB_FRAD7ACC_SHIFT          (8U)
 /*! FRAD7ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD7ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD7ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD7ACC_MASK)
 
@@ -8652,100 +8655,100 @@ typedef struct {
 #define XSPI_ERRSTAT_SUB_TO_ERR_MASK             (0x4000U)
 #define XSPI_ERRSTAT_SUB_TO_ERR_SHIFT            (14U)
 /*! TO_ERR - Timeout Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_TO_ERR(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_TO_ERR_SHIFT)) & XSPI_ERRSTAT_SUB_TO_ERR_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD8ACC_MASK           (0x10000U)
 #define XSPI_ERRSTAT_SUB_FRAD8ACC_SHIFT          (16U)
 /*! FRAD8ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD8ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD8ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD8ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD9ACC_MASK           (0x20000U)
 #define XSPI_ERRSTAT_SUB_FRAD9ACC_SHIFT          (17U)
 /*! FRAD9ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD9ACC(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD9ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD9ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD10ACC_MASK          (0x40000U)
 #define XSPI_ERRSTAT_SUB_FRAD10ACC_SHIFT         (18U)
 /*! FRAD10ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD10ACC(x)            (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD10ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD10ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD11ACC_MASK          (0x80000U)
 #define XSPI_ERRSTAT_SUB_FRAD11ACC_SHIFT         (19U)
 /*! FRAD11ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD11ACC(x)            (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD11ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD11ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD12ACC_MASK          (0x100000U)
 #define XSPI_ERRSTAT_SUB_FRAD12ACC_SHIFT         (20U)
 /*! FRAD12ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD12ACC(x)            (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD12ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD12ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD13ACC_MASK          (0x200000U)
 #define XSPI_ERRSTAT_SUB_FRAD13ACC_SHIFT         (21U)
 /*! FRAD13ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD13ACC(x)            (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD13ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD13ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD14ACC_MASK          (0x400000U)
 #define XSPI_ERRSTAT_SUB_FRAD14ACC_SHIFT         (22U)
 /*! FRAD14ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD14ACC(x)            (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD14ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD14ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_FRAD15ACC_MASK          (0x800000U)
 #define XSPI_ERRSTAT_SUB_FRAD15ACC_SHIFT         (23U)
 /*! FRAD15ACC - FRADn Access Error
- *  0b0..No error
  *  0b0..No action
- *  0b1..Error
+ *  0b0..No error
  *  0b1..Clears
+ *  0b1..Error
  */
 #define XSPI_ERRSTAT_SUB_FRAD15ACC(x)            (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_FRAD15ACC_SHIFT)) & XSPI_ERRSTAT_SUB_FRAD15ACC_MASK)
 
 #define XSPI_ERRSTAT_SUB_ARB_WIN_MASK            (0x10000000U)
 #define XSPI_ERRSTAT_SUB_ARB_WIN_SHIFT           (28U)
 /*! ARB_WIN - Arbitration Win Event Status
- *  0b0..Request not granted or the interrupt is already cleared
  *  0b0..No action
- *  0b1..Request granted and interrupt generated
+ *  0b0..Request not granted or the interrupt is already cleared
  *  0b1..Clears interrupt
+ *  0b1..Request granted and interrupt generated
  */
 #define XSPI_ERRSTAT_SUB_ARB_WIN(x)              (((uint32_t)(((uint32_t)(x)) << XSPI_ERRSTAT_SUB_ARB_WIN_SHIFT)) & XSPI_ERRSTAT_SUB_ARB_WIN_MASK)
 
@@ -9520,5 +9523,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* XSPI_H_ */
+#endif  /* PERI_XSPI_H_ */
 

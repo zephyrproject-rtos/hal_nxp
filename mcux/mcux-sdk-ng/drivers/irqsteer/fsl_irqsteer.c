@@ -151,21 +151,18 @@ uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t i
      *    So each master 0 has 32 interrupt sources connected, and for other masters,
      *    every master has 64 interrupt sources connected.
      */
-    if (((uint32_t)FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2U) == 0U)
+#if ((FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2U) == 0U)
+    count = IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM;
+#else
+    if (intMasterIndex == kIRQSTEER_InterruptMaster0)
     {
-        count = IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM;
+        count = IRQSTEER_INT_SRC_REG_WIDTH;
     }
     else
     {
-        if (intMasterIndex == kIRQSTEER_InterruptMaster0)
-        {
-            count = IRQSTEER_INT_SRC_REG_WIDTH;
-        }
-        else
-        {
-            count = IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM;
-        }
+        count = IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM;
     }
+#endif
 
     return count;
 }
@@ -175,10 +172,9 @@ static uint32_t IRQSTEER_GetRegIndex(irqsteer_int_master_t intMasterIndex,
 {
     uint32_t base = (uint32_t)FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1u - ((uint32_t)intMasterIndex * 2u);
 
-    if (0u != ((uint32_t)FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2u))
-    {
-        base += sliceNum - 1;
-    }
+#if (0u != (FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2u))
+    base += sliceNum - 1u;
+#endif
 
     return base - slice;
 }
@@ -259,7 +255,7 @@ uint64_t IRQSTEER_GetMasterInterruptsStatus(IRQSTEER_Type *base, irqsteer_int_ma
     sliceNum = IRQSTEER_GetMasterIrqCount(base, intMasterIndex) / 32u - 1u;
 
     for (i = 0; i <= sliceNum; i++) {
-        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i, sliceNum + 1);
+        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i, sliceNum + 1u);
 
         chanStatus = base->CHn_STATUS[regIndex];
 

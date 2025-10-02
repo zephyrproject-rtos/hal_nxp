@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines CMU_FM driver version. */
-#define FSL_CMU_FM_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_CMU_FM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*! @} */
 
 /*! @brief List of CMU_FM status */
@@ -214,7 +214,8 @@ static inline void CMU_FM_StopFreqMetering(CMU_FM_Type *base)
  */
 static inline uint32_t CMU_FM_CalcMeteredClkFreq(uint32_t meteredClkCnt, uint32_t refClKCnt, uint32_t refClkFreq)
 {
-    return (uint32_t)(((float)meteredClkCnt * (float)refClkFreq) / (float)refClKCnt);
+    float result = ((float)meteredClkCnt * (float)refClkFreq) / (float)refClKCnt;
+    return (uint32_t)result;
 }
 
 /*!

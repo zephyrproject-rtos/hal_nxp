@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! Driver version. */
-#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*! @} */
 
 /*!
@@ -146,7 +146,7 @@ void IRQSTEER_Deinit(IRQSTEER_Type *base);
  */
 static inline void IRQSTEER_EnableInterrupt(IRQSTEER_Type *base, IRQn_Type irq)
 {
-    assert((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
+    assert(((int)irq >= 0) && ((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
 
     base->CHn_MASK[((uint32_t)IRQSTEER_INT_SRC_REG_INDEX(((uint32_t)irq)))] |=
         (1UL << ((uint32_t)IRQSTEER_INT_SRC_BIT_OFFSET(((uint32_t)irq))));
@@ -160,7 +160,7 @@ static inline void IRQSTEER_EnableInterrupt(IRQSTEER_Type *base, IRQn_Type irq)
  */
 static inline void IRQSTEER_DisableInterrupt(IRQSTEER_Type *base, IRQn_Type irq)
 {
-    assert(((uint32_t)irq) >= ((uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
+    assert(((int)irq >= 0) && ((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
 
     base->CHn_MASK[(IRQSTEER_INT_SRC_REG_INDEX(((uint32_t)irq)))] &=
         ~(1UL << ((uint32_t)IRQSTEER_INT_SRC_BIT_OFFSET(((uint32_t)irq))));
@@ -175,7 +175,7 @@ static inline void IRQSTEER_DisableInterrupt(IRQSTEER_Type *base, IRQn_Type irq)
  */
 static inline bool IRQSTEER_InterruptIsEnabled(IRQSTEER_Type *base, IRQn_Type irq)
 {
-    assert((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
+    assert(((int)irq >= 0) && ((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
 
     return (0U != (base->CHn_MASK[((uint32_t)IRQSTEER_INT_SRC_REG_INDEX(((uint32_t)irq)))] &
            (1UL << ((uint32_t)IRQSTEER_INT_SRC_BIT_OFFSET(((uint32_t)irq))))));
@@ -192,7 +192,7 @@ static inline bool IRQSTEER_InterruptIsEnabled(IRQSTEER_Type *base, IRQn_Type ir
  */
 static inline void IRQSTEER_SetInterrupt(IRQSTEER_Type *base, IRQn_Type irq, bool set)
 {
-    assert(((uint32_t)irq) >= ((uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
+    assert(((int)irq >= 0) && ((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
 
     if (set)
     {
@@ -262,7 +262,7 @@ static inline void IRQSTEER_DisableMasterInterrupt(IRQSTEER_Type *base, irqsteer
  */
 static inline bool IRQSTEER_IsInterruptSet(IRQSTEER_Type *base, IRQn_Type irq)
 {
-    assert(((uint32_t)irq) >= ((uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
+    assert(((int)irq >= 0) && ((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX));
 
     return (0U != ((base->CHn_STATUS[((uint32_t)(IRQSTEER_INT_SRC_REG_INDEX(((uint32_t)irq))))] &
                   (1UL << ((uint32_t)(IRQSTEER_INT_SRC_BIT_OFFSET(((uint32_t)irq))))))));

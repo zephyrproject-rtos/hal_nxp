@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023, 2024 NXP
+ * Copyright 2019-2023, 2024-2025 NXP
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -3653,7 +3653,18 @@ status_t Nor_Flash_Erase(nor_handle_t *handle, uint32_t address, uint32_t size_B
     uint32_t startAddress = address;
     status_t status       = kStatus_Success;
 
-    for (uint32_t i = 0x00U; i <= (size_Byte / handle->bytesInSectorSize); i++)
+    if ((address % (handle->bytesInSectorSize)) != 0UL)
+    {
+        /* Invalid address. */
+        return kStatus_InvalidArgument;
+    }
+    if ((size_Byte % (handle->bytesInSectorSize)) != 0UL)
+    {
+        /* Invalid size_byte. */
+        return kStatus_InvalidArgument;
+    }
+
+    for (uint32_t i = 0x00U; i < (size_Byte / handle->bytesInSectorSize); i++)
     {
         status = Nor_Flash_Erase_Sector(handle, startAddress);
         startAddress += handle->bytesInSectorSize;
@@ -3714,7 +3725,17 @@ status_t Nor_Flash_Program(nor_handle_t *handle, uint32_t address, uint8_t *buff
     uint32_t startAddress = address;
     status_t status       = kStatus_Success;
 
-    for (uint32_t i = 0x00U; i <= (length / handle->bytesInPageSize); i++)
+    if ((address % (handle->bytesInPageSize)) != 0UL)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    if ((length % (handle->bytesInPageSize)) != 0UL)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    for (uint32_t i = 0x00U; i < (length / handle->bytesInPageSize); i++)
     {
         status = Nor_Flash_Page_Program(handle, startAddress, buffer);
         /* Avoid buffer overflow. */

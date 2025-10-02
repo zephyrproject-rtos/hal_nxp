@@ -13,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1024RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250529
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -46,7 +46,7 @@
 /*!
  * @file MIMXRT1024
  * @version 1.0
- * @date 210525
+ * @date 290525
  * @brief Device specific configuration file for MIMXRT1024 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -109,7 +109,7 @@ void SystemInit (void) {
     {
       *dstAddr++ = *srcAddr++;
     }
-    
+
     flexspi_nor_config[12] = 1U;  /* kFLEXSPIReadSampleClk_LoopbackFromDqsPad */
     flexspi_nor_config[70] = 7U;  /* kFLEXSPISerialClk_133MHz */
 

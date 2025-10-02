@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMM
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_SMM.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for SMM
  *
  * CMSIS Peripheral Access Layer for SMM
@@ -302,7 +302,7 @@ typedef struct {
 
 #define SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_MASK     (0x2U)
 #define SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_SHIFT    (1U)
-/*! DPD1_VDD1P1_SRC - DPD1 VDD1P1 power supply
+/*! DPD1_VDD1P1_SRC - DPD1_MAIN power supply
  *  0b0..Keep as is
  *  0b1..Move to Low Power mode of the DCDC fixed.
  */
@@ -535,10 +535,10 @@ typedef struct {
 /*! MAIN_CPU_SRAM_RET - SRAM retain */
 #define SMM_MEMORY_RTN_MAIN_CPU_SRAM_RET(x)      (((uint32_t)(((uint32_t)(x)) << SMM_MEMORY_RTN_MAIN_CPU_SRAM_RET_SHIFT)) & SMM_MEMORY_RTN_MAIN_CPU_SRAM_RET_MASK)
 
-#define SMM_MEMORY_RTN_CPU_RAM_PWD_MASK          (0x1C00U)
-#define SMM_MEMORY_RTN_CPU_RAM_PWD_SHIFT         (10U)
-/*! CPU_RAM_PWD - AON CPU core RAM powerdown */
-#define SMM_MEMORY_RTN_CPU_RAM_PWD(x)            (((uint32_t)(((uint32_t)(x)) << SMM_MEMORY_RTN_CPU_RAM_PWD_SHIFT)) & SMM_MEMORY_RTN_CPU_RAM_PWD_MASK)
+#define SMM_MEMORY_RTN_CPU_SRAMBn_PWD_MASK       (0x1C00U)
+#define SMM_MEMORY_RTN_CPU_SRAMBn_PWD_SHIFT      (10U)
+/*! CPU_SRAMBn_PWD - AON CPU core RAM powerdown */
+#define SMM_MEMORY_RTN_CPU_SRAMBn_PWD(x)         (((uint32_t)(((uint32_t)(x)) << SMM_MEMORY_RTN_CPU_SRAMBn_PWD_SHIFT)) & SMM_MEMORY_RTN_CPU_SRAMBn_PWD_MASK)
 
 #define SMM_MEMORY_RTN_IVS_EN_MASK               (0x4000U)
 #define SMM_MEMORY_RTN_IVS_EN_SHIFT              (14U)
@@ -578,15 +578,15 @@ typedef struct {
 /*! @name XTAL_TRIM - XTAL Trim */
 /*! @{ */
 
-#define SMM_XTAL_TRIM_TRIM_DIR_MASK              (0x3FFU)
-#define SMM_XTAL_TRIM_TRIM_DIR_SHIFT             (0U)
-/*! TRIM_DIR - XTAL Trim interval */
-#define SMM_XTAL_TRIM_TRIM_DIR(x)                (((uint32_t)(((uint32_t)(x)) << SMM_XTAL_TRIM_TRIM_DIR_SHIFT)) & SMM_XTAL_TRIM_TRIM_DIR_MASK)
+#define SMM_XTAL_TRIM_TRIM_INTV_MASK             (0x3FFU)
+#define SMM_XTAL_TRIM_TRIM_INTV_SHIFT            (0U)
+/*! TRIM_INTV - XTAL Trim interval */
+#define SMM_XTAL_TRIM_TRIM_INTV(x)               (((uint32_t)(((uint32_t)(x)) << SMM_XTAL_TRIM_TRIM_INTV_SHIFT)) & SMM_XTAL_TRIM_TRIM_INTV_MASK)
 
-#define SMM_XTAL_TRIM_TRIM_VAL_MASK              (0x400U)
-#define SMM_XTAL_TRIM_TRIM_VAL_SHIFT             (10U)
-/*! TRIM_VAL - XTAL Trim up */
-#define SMM_XTAL_TRIM_TRIM_VAL(x)                (((uint32_t)(((uint32_t)(x)) << SMM_XTAL_TRIM_TRIM_VAL_SHIFT)) & SMM_XTAL_TRIM_TRIM_VAL_MASK)
+#define SMM_XTAL_TRIM_TRIM_UP_MASK               (0x400U)
+#define SMM_XTAL_TRIM_TRIM_UP_SHIFT              (10U)
+/*! TRIM_UP - XTAL Trim up */
+#define SMM_XTAL_TRIM_TRIM_UP(x)                 (((uint32_t)(((uint32_t)(x)) << SMM_XTAL_TRIM_TRIM_UP_SHIFT)) & SMM_XTAL_TRIM_TRIM_UP_MASK)
 /*! @} */
 
 /*! @name TAMP_CTRL - Tamper Control */

@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MCXA346 startup code
 //
-// Version : 100625
+// Version : 300725
 //*****************************************************************************
 //
 // Copyright 2016-2025 NXP
@@ -105,7 +105,7 @@ WEAK void GLIKEY0_IRQHandler(void);
 WEAK void MBC0_IRQHandler(void);
 WEAK void SCG0_IRQHandler(void);
 WEAK void SPC0_IRQHandler(void);
-WEAK void Reserved33_IRQHandler(void);
+WEAK void TDET_IRQHandler(void);
 WEAK void WUU0_IRQHandler(void);
 WEAK void CAN0_IRQHandler(void);
 WEAK void Reserved36_IRQHandler(void);
@@ -197,7 +197,7 @@ WEAK void Reserved121_IRQHandler(void);
 WEAK void Reserved122_IRQHandler(void);
 WEAK void MAU_IRQHandler(void);
 WEAK void SMARTDMA_IRQHandler(void);
-WEAK void Reserved125_IRQHandler(void);
+WEAK void CDOG1_IRQHandler(void);
 WEAK void Reserved126_IRQHandler(void);
 WEAK void Reserved127_IRQHandler(void);
 WEAK void Reserved128_IRQHandler(void);
@@ -233,7 +233,7 @@ void GLIKEY0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void MBC0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SCG0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SPC0_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved33_DriverIRQHandler(void) ALIAS(DefaultISR);
+void TDET_DriverIRQHandler(void) ALIAS(DefaultISR);
 void WUU0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void CAN0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved36_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -325,7 +325,7 @@ void Reserved121_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved122_DriverIRQHandler(void) ALIAS(DefaultISR);
 void MAU_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SMARTDMA_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved125_DriverIRQHandler(void) ALIAS(DefaultISR);
+void CDOG1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved126_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved127_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved128_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -460,7 +460,7 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     MBC0_IRQHandler,                  // 30 : MBC secure violation interrupt
     SCG0_IRQHandler,                  // 31 : System Clock Generator interrupt
     SPC0_IRQHandler,                  // 32 : System Power Controller interrupt
-    Reserved33_IRQHandler,            // 33 : Reserved interrupt
+    TDET_IRQHandler,                  // 33 : TDET interrrupt
     WUU0_IRQHandler,                  // 34 : Wake Up Unit interrupt
     CAN0_IRQHandler,                  // 35 : Controller Area Network 0 interrupt
     Reserved36_IRQHandler,            // 36 : Reserved interrupt
@@ -552,7 +552,7 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     Reserved122_IRQHandler,           // 122: Reserved interrupt
     MAU_IRQHandler,                   // 123: MAU interrupt
     SMARTDMA_IRQHandler,              // 124: SmartDMA interrupt
-    Reserved125_IRQHandler,           // 125: Reserved interrupt
+    CDOG1_IRQHandler,                 // 125: Code Watchdog Timer 1 interrupt
     Reserved126_IRQHandler,           // 126: Reserved interrupt
     Reserved127_IRQHandler,           // 127: Reserved interrupt
     Reserved128_IRQHandler,           // 128: Reserved interrupt
@@ -935,9 +935,9 @@ WEAK void SPC0_IRQHandler(void)
     SPC0_DriverIRQHandler();
 }
 
-WEAK void Reserved33_IRQHandler(void)
+WEAK void TDET_IRQHandler(void)
 {
-    Reserved33_DriverIRQHandler();
+    TDET_DriverIRQHandler();
 }
 
 WEAK void WUU0_IRQHandler(void)
@@ -1395,9 +1395,9 @@ WEAK void SMARTDMA_IRQHandler(void)
     SMARTDMA_DriverIRQHandler();
 }
 
-WEAK void Reserved125_IRQHandler(void)
+WEAK void CDOG1_IRQHandler(void)
 {
-    Reserved125_DriverIRQHandler();
+    CDOG1_DriverIRQHandler();
 }
 
 WEAK void Reserved126_IRQHandler(void)

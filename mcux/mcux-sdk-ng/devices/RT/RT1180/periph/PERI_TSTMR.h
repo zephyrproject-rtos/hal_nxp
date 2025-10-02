@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TSTMR
@@ -165,9 +165,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group TSTMR_Register_Masks */
-
-/* Extra definition */
-#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
 
 
 /*!

@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CGU
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_CGU.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for CGU
  *
  * CMSIS Peripheral Access Layer for CGU
@@ -102,17 +102,12 @@
 /** CGU - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CLK_CONFIG;                        /**< AON Clock Configuration, offset: 0x0 */
-  __IO uint32_t PER_CLK_CONFIG;                    /**< Peripheral Clock Enable, offset: 0x4 */
+  __IO uint32_t PER_CLK_CONFIG;                    /**< Peripheral Clock Configuration, offset: 0x4 */
   __IO uint32_t CLOCK_DIV;                         /**< Clock Divider, offset: 0x8 */
   __IO uint32_t PER_CLK_EN;                        /**< Peripheral Clock Enable, offset: 0xC */
   __IO uint32_t RST_SUB_BLK;                       /**< Reset Subsystem Blocks, offset: 0x10 */
-       uint8_t RESERVED_0[28];
-  __IO uint32_t FRO10M_CONFIG;                     /**< FRO10M Configuration, offset: 0x30 */
-  __IO uint32_t FRO10M_TRIM;                       /**< FRO10M Trim, offset: 0x34 */
-       uint8_t RESERVED_1[4];
-  __IO uint32_t FRO2M_CONFIG;                      /**< FRO2M Configuration, offset: 0x3C */
-  __IO uint32_t FRO2M_TRIM;                        /**< FRO2M_TRIM, offset: 0x40 */
-  __IO uint32_t ACMP_CLK_DIV;                      /**< ACMP Clock Divider, offset: 0x44 */
+       uint8_t RESERVED_0[48];
+  __IO uint32_t ACMP_CLK;                          /**< ACMP Clock, offset: 0x44 */
   __IO uint32_t INT;                               /**< Interrupt Flag, offset: 0x48 */
 } CGU_Type;
 
@@ -147,12 +142,9 @@ typedef struct {
 #define CGU_CLK_CONFIG_ROOT_CLK_SEL_MASK         (0xCU)
 #define CGU_CLK_CONFIG_ROOT_CLK_SEL_SHIFT        (2U)
 /*! ROOT_CLK_SEL - Root Clock Select
- *  0b00..Option between 10.0 MHz or 2.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
- *  0b01..Option between 5.0 MHz or 1.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
- *  0b10..Option between 2.5 MHz or 0.5 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
+ *  0b00..Option based on the selected FRO, if FRO10M is used then the clock will be 10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
+ *  0b01..Option based on the selected FRO, if FRO10M is used then the clock will be 5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
+ *  0b10..Option based on the selected FRO, if FRO10M is used then the clock will be 2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
  *  0b11..32 kHz
  */
 #define CGU_CLK_CONFIG_ROOT_CLK_SEL(x)           (((uint32_t)(((uint32_t)(x)) << CGU_CLK_CONFIG_ROOT_CLK_SEL_SHIFT)) & CGU_CLK_CONFIG_ROOT_CLK_SEL_MASK)
@@ -172,7 +164,7 @@ typedef struct {
 
 #define CGU_CLK_CONFIG_XTAL32_OUT_EN_MASK        (0x40U)
 #define CGU_CLK_CONFIG_XTAL32_OUT_EN_SHIFT       (6U)
-/*! XTAL32_OUT_EN - XTAL32 Output Enable
+/*! XTAL32_OUT_EN - XTAL32K[1] Output Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -195,18 +187,15 @@ typedef struct {
 #define CGU_CLK_CONFIG_FRO2M_EN(x)               (((uint32_t)(((uint32_t)(x)) << CGU_CLK_CONFIG_FRO2M_EN_SHIFT)) & CGU_CLK_CONFIG_FRO2M_EN_MASK)
 /*! @} */
 
-/*! @name PER_CLK_CONFIG - Peripheral Clock Enable */
+/*! @name PER_CLK_CONFIG - Peripheral Clock Configuration */
 /*! @{ */
 
 #define CGU_PER_CLK_CONFIG_COM_GRP_SEL_MASK      (0x3U)
 #define CGU_PER_CLK_CONFIG_COM_GRP_SEL_SHIFT     (0U)
-/*! COM_GRP_SEL - Comparator Group Select
- *  0b00..Option between 10.0 MHz or 2.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
- *  0b01..Option between 5.0 MHz or 1.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
- *  0b10..Option between 2.5 MHz or 0.5 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
+/*! COM_GRP_SEL - Communication Group Select
+ *  0b00..Option based on the selected FRO, if FRO10M is used then the clock will be 10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
+ *  0b01..Option based on the selected FRO, if FRO10M is used then the clock will be 5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
+ *  0b10..Option based on the selected FRO, if FRO10M is used then the clock will be 2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
  *  0b11..32 kHz
  */
 #define CGU_PER_CLK_CONFIG_COM_GRP_SEL(x)        (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_COM_GRP_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_COM_GRP_SEL_MASK)
@@ -214,12 +203,9 @@ typedef struct {
 #define CGU_PER_CLK_CONFIG_TMR_GRP_SEL_MASK      (0xCU)
 #define CGU_PER_CLK_CONFIG_TMR_GRP_SEL_SHIFT     (2U)
 /*! TMR_GRP_SEL - Timer Group Select
- *  0b00..Option between 10.0 MHz or 2.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
- *  0b01..Option between 5.0 MHz or 1.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
- *  0b10..Option between 2.5 MHz or 0.5 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
+ *  0b00..Option based on the selected FRO, if FRO10M is used then the clock will be 10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
+ *  0b01..Option based on the selected FRO, if FRO10M is used then the clock will be 5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
+ *  0b10..Option based on the selected FRO, if FRO10M is used then the clock will be 2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
  *  0b11..32 kHz
  */
 #define CGU_PER_CLK_CONFIG_TMR_GRP_SEL(x)        (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_TMR_GRP_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_TMR_GRP_SEL_MASK)
@@ -227,10 +213,10 @@ typedef struct {
 #define CGU_PER_CLK_CONFIG_LPTMR_GRP_SEL_MASK    (0x30U)
 #define CGU_PER_CLK_CONFIG_LPTMR_GRP_SEL_SHIFT   (4U)
 /*! LPTMR_GRP_SEL - Low-Power Timer Group Select
- *  0b00..aon_timer_clk
- *  0b01..fro16K
- *  0b10..16K_clk
- *  0b11..Empty
+ *  0b00..AON_TIMER_CLK
+ *  0b01..FRO16K
+ *  0b10..clk_16k
+ *  0b11..Reserved
  */
 #define CGU_PER_CLK_CONFIG_LPTMR_GRP_SEL(x)      (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_LPTMR_GRP_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_LPTMR_GRP_SEL_MASK)
 
@@ -238,59 +224,49 @@ typedef struct {
 #define CGU_PER_CLK_CONFIG_KPP_CLK_SEL_SHIFT     (6U)
 /*! KPP_CLK_SEL - KPP Clock Select
  *  0b0..Xtal 32 kHz.
- *  0b1..fro16K
+ *  0b1..FRO16K
  */
 #define CGU_PER_CLK_CONFIG_KPP_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_KPP_CLK_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_KPP_CLK_SEL_MASK)
 
 #define CGU_PER_CLK_CONFIG_AON_SYS_CLK_SEL_MASK  (0x180U)
 #define CGU_PER_CLK_CONFIG_AON_SYS_CLK_SEL_SHIFT (7U)
-/*! AON_SYS_CLK_SEL - AON System Clock Select
- *  0b00..Option between 10.0 MHz or 2.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
- *  0b01..Option between 5.0 MHz or 1.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        5.0 MHz and if FRO2M is used then clock will be 1.0 MHz.
- *  0b10..Option between 2.5 MHz or 0.5 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
- *  0b11..Empty
+/*! AON_SYS_CLK_SEL - AON SysTick Clock Select
+ *  0b00..Option based on the selected FRO, if FRO10M is used then the clock will be 10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
+ *  0b01..Option based on the selected FRO, if FRO10M is used then the clock will be 5.0 MHz and if FRO2M is used then clock will be 1.0 MHz.
+ *  0b10..Option based on the selected FRO, if FRO10M is used then the clock will be 2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
+ *  0b11..Reserved
  */
 #define CGU_PER_CLK_CONFIG_AON_SYS_CLK_SEL(x)    (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_AON_SYS_CLK_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_AON_SYS_CLK_SEL_MASK)
 
 #define CGU_PER_CLK_CONFIG_LPADC_CLK_SEL_MASK    (0xE00U)
 #define CGU_PER_CLK_CONFIG_LPADC_CLK_SEL_SHIFT   (9U)
 /*! LPADC_CLK_SEL - LPADC Clock Select
- *  0b000..Option between 10.0 MHz or 2.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *         10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
- *  0b001..Option between 5.0 MHz or 1.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *         5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
- *  0b010..Option between 2.5 MHz or 0.5 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *         2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
- *  0b011..Option between 32 kHz clock (from RTC) or aon_aux_clk based on the selected FRO, if FRO10M is used then
- *         clock will be aon_aux_clk and if FRO2M is used then clock will be aon_aux_clk.
- *  0b100..XTAL 32 K
+ *  0b000..Option based on the selected FRO, if FRO10M is used then the clock will be 10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
+ *  0b001..Option based on the selected FRO, if FRO10M is used then the clock will be 5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
+ *  0b010..Option based on the selected FRO, if FRO10M is used then the clock will be 2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
+ *  0b011..Option based on the selected FRO, if FRO10M is used then clock will be aon_aux_clk and if FRO2M is used then clock will be aon_aux_clk.
+ *  0b100..XTAL32K
  *  0b101..FRO16K
- *  0b110..Empty
- *  0b111..Empty
+ *  0b110..Reserved
+ *  0b111..Reserved
  */
 #define CGU_PER_CLK_CONFIG_LPADC_CLK_SEL(x)      (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_LPADC_CLK_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_LPADC_CLK_SEL_MASK)
 
 #define CGU_PER_CLK_CONFIG_LCD_CLK_SEL_MASK      (0x1000U)
 #define CGU_PER_CLK_CONFIG_LCD_CLK_SEL_SHIFT     (12U)
 /*! LCD_CLK_SEL - LCD Clock Select
- *  0b0..clk_16K
- *  0b1..fro16K
+ *  0b0..clk_16k[1]
+ *  0b1..FRO16K
  */
 #define CGU_PER_CLK_CONFIG_LCD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_LCD_CLK_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_LCD_CLK_SEL_MASK)
 
 #define CGU_PER_CLK_CONFIG_ACMP0_CLK_SEL_MASK    (0x6000U)
 #define CGU_PER_CLK_CONFIG_ACMP0_CLK_SEL_SHIFT   (13U)
 /*! ACMP0_CLK_SEL - ACMP0 clock mux select
- *  0b00..Option between 10.0 MHz or 2.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
- *  0b01..Option between 5.0 MHz or 1.0 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
- *  0b10..Option between 2.5 MHz or 0.5 MHz based on the selected FRO, if FRO10M is used then the clock will be
- *        2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
- *  0b11..fro16K
+ *  0b00..Option based on the selected FRO, if FRO10M is used then the clock will be 10.0 MHz and if FRO2M is used then the clock will be 2.0 MHz.
+ *  0b01..Option based on the selected FRO, if FRO10M is used then the clock will be 5.0 MHz and if FRO2M is used then the clock will be 1.0 MHz.
+ *  0b10..Option based on the selected FRO, if FRO10M is used then the clock will be 2.5 MHz and if FRO2M is used then the clock will be 0.5 MHz.
+ *  0b11..FRO16K
  */
 #define CGU_PER_CLK_CONFIG_ACMP0_CLK_SEL(x)      (((uint32_t)(((uint32_t)(x)) << CGU_PER_CLK_CONFIG_ACMP0_CLK_SEL_SHIFT)) & CGU_PER_CLK_CONFIG_ACMP0_CLK_SEL_MASK)
 /*! @} */
@@ -308,7 +284,7 @@ typedef struct {
 
 #define CGU_CLOCK_DIV_COM_GRP_CLK_EN_MASK        (0x2U)
 #define CGU_CLOCK_DIV_COM_GRP_CLK_EN_SHIFT       (1U)
-/*! COM_GRP_CLK_EN - Comparator Group Clock Divider Enable
+/*! COM_GRP_CLK_EN - Communication Group Clock Divider Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -316,25 +292,25 @@ typedef struct {
 
 #define CGU_CLOCK_DIV_SYS_CLK_DIV_EN_MASK        (0x4U)
 #define CGU_CLOCK_DIV_SYS_CLK_DIV_EN_SHIFT       (2U)
-/*! SYS_CLK_DIV_EN - SysTic Clock Divider Enable
+/*! SYS_CLK_DIV_EN - SysTick Clock Divider Enable
  *  0b0..Disable
  *  0b1..Enable
  */
 #define CGU_CLOCK_DIV_SYS_CLK_DIV_EN(x)          (((uint32_t)(((uint32_t)(x)) << CGU_CLOCK_DIV_SYS_CLK_DIV_EN_SHIFT)) & CGU_CLOCK_DIV_SYS_CLK_DIV_EN_MASK)
 
-#define CGU_CLOCK_DIV_AONCPU_CLK_DIV_MASK        (0x38U)
-#define CGU_CLOCK_DIV_AONCPU_CLK_DIV_SHIFT       (3U)
-/*! AONCPU_CLK_DIV - AON CPU Clock Divider */
-#define CGU_CLOCK_DIV_AONCPU_CLK_DIV(x)          (((uint32_t)(((uint32_t)(x)) << CGU_CLOCK_DIV_AONCPU_CLK_DIV_SHIFT)) & CGU_CLOCK_DIV_AONCPU_CLK_DIV_MASK)
+#define CGU_CLOCK_DIV_AON_CPU_CLK_DIV_MASK       (0x38U)
+#define CGU_CLOCK_DIV_AON_CPU_CLK_DIV_SHIFT      (3U)
+/*! AON_CPU_CLK_DIV - AON CPU Clock Divider */
+#define CGU_CLOCK_DIV_AON_CPU_CLK_DIV(x)         (((uint32_t)(((uint32_t)(x)) << CGU_CLOCK_DIV_AON_CPU_CLK_DIV_SHIFT)) & CGU_CLOCK_DIV_AON_CPU_CLK_DIV_MASK)
 
 #define CGU_CLOCK_DIV_COM_GRP_CLK_DIV_MASK       (0x1C0U)
 #define CGU_CLOCK_DIV_COM_GRP_CLK_DIV_SHIFT      (6U)
-/*! COM_GRP_CLK_DIV - Comparator Group Clock Divider */
+/*! COM_GRP_CLK_DIV - Communication Group Clock Divider */
 #define CGU_CLOCK_DIV_COM_GRP_CLK_DIV(x)         (((uint32_t)(((uint32_t)(x)) << CGU_CLOCK_DIV_COM_GRP_CLK_DIV_SHIFT)) & CGU_CLOCK_DIV_COM_GRP_CLK_DIV_MASK)
 
 #define CGU_CLOCK_DIV_AON_SYS_CLK_DIV_MASK       (0xE00U)
 #define CGU_CLOCK_DIV_AON_SYS_CLK_DIV_SHIFT      (9U)
-/*! AON_SYS_CLK_DIV - AON SysTic Clock Divider */
+/*! AON_SYS_CLK_DIV - AON SysTick Clock Divider */
 #define CGU_CLOCK_DIV_AON_SYS_CLK_DIV(x)         (((uint32_t)(((uint32_t)(x)) << CGU_CLOCK_DIV_AON_SYS_CLK_DIV_SHIFT)) & CGU_CLOCK_DIV_AON_SYS_CLK_DIV_MASK)
 /*! @} */
 
@@ -399,7 +375,7 @@ typedef struct {
 
 #define CGU_PER_CLK_EN_QTMR0_CLK_EN_MASK         (0x80U)
 #define CGU_PER_CLK_EN_QTMR0_CLK_EN_SHIFT        (7U)
-/*! QTMR0_CLK_EN - Qtimer0 Clock Enable
+/*! QTMR0_CLK_EN - QTimer0 Clock Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -431,7 +407,7 @@ typedef struct {
 
 #define CGU_PER_CLK_EN_SYS_CLK_EN_MASK           (0x1000U)
 #define CGU_PER_CLK_EN_SYS_CLK_EN_SHIFT          (12U)
-/*! SYS_CLK_EN - SysTic Clock Enable
+/*! SYS_CLK_EN - SysTick Clock Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -439,7 +415,7 @@ typedef struct {
 
 #define CGU_PER_CLK_EN_COMP_CLK_EN_MASK          (0x2000U)
 #define CGU_PER_CLK_EN_COMP_CLK_EN_SHIFT         (13U)
-/*! COMP_CLK_EN - Comparator Clock Enable
+/*! COMP_CLK_EN - Communication Clock Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -467,27 +443,39 @@ typedef struct {
 
 #define CGU_RST_SUB_BLK_UART_RST_N_MASK          (0x1U)
 #define CGU_RST_SUB_BLK_UART_RST_N_SHIFT         (0U)
-/*! UART_RST_N - UART Reset N */
+/*! UART_RST_N - UART Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_UART_RST_N(x)            (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_UART_RST_N_SHIFT)) & CGU_RST_SUB_BLK_UART_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_I2C_RST_N_MASK           (0x2U)
 #define CGU_RST_SUB_BLK_I2C_RST_N_SHIFT          (1U)
-/*! I2C_RST_N - I2C Software Reset N */
+/*! I2C_RST_N - I2C Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_I2C_RST_N(x)             (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_I2C_RST_N_SHIFT)) & CGU_RST_SUB_BLK_I2C_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_CAL_RST_N_MASK           (0x4U)
 #define CGU_RST_SUB_BLK_CAL_RST_N_SHIFT          (2U)
-/*! CAL_RST_N - Calibration Software Reset N */
+/*! CAL_RST_N - Calibration Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_CAL_RST_N(x)             (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_CAL_RST_N_SHIFT)) & CGU_RST_SUB_BLK_CAL_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_CPU_SW_RST_N_MASK        (0x8U)
 #define CGU_RST_SUB_BLK_CPU_SW_RST_N_SHIFT       (3U)
-/*! CPU_SW_RST_N - CPU Software Reset N */
+/*! CPU_SW_RST_N - CPU Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_CPU_SW_RST_N(x)          (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_CPU_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_CPU_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_CM0P_RST_REL_MASK        (0x10U)
 #define CGU_RST_SUB_BLK_CM0P_RST_REL_SHIFT       (4U)
-/*! CM0P_RST_REL - CMOP_RST_REL
+/*! CM0P_RST_REL - CM0P_RST_REL
  *  0b0..Keep CM0+ at reset state.
  *  0b1..Release CM0+ at reset
  */
@@ -495,143 +483,147 @@ typedef struct {
 
 #define CGU_RST_SUB_BLK_QTMR0_SW_RST_N_MASK      (0x20U)
 #define CGU_RST_SUB_BLK_QTMR0_SW_RST_N_SHIFT     (5U)
-/*! QTMR0_SW_RST_N - Qtimer0 Software Reset N */
+/*! QTMR0_SW_RST_N - Qtimer0 Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_QTMR0_SW_RST_N(x)        (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_QTMR0_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_QTMR0_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_LPTMR_SW_RST_N_MASK      (0x80U)
 #define CGU_RST_SUB_BLK_LPTMR_SW_RST_N_SHIFT     (7U)
-/*! LPTMR_SW_RST_N - LP Timer Software Reset N */
+/*! LPTMR_SW_RST_N - LP Timer Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_LPTMR_SW_RST_N(x)        (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_LPTMR_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_LPTMR_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_KPP_SW_RST_N_MASK        (0x100U)
 #define CGU_RST_SUB_BLK_KPP_SW_RST_N_SHIFT       (8U)
-/*! KPP_SW_RST_N - KPP Timer Software Reset N */
+/*! KPP_SW_RST_N - KPP Timer Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_KPP_SW_RST_N(x)          (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_KPP_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_KPP_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_LPADC_SW_RST_N_MASK      (0x200U)
 #define CGU_RST_SUB_BLK_LPADC_SW_RST_N_SHIFT     (9U)
-/*! LPADC_SW_RST_N - LPADC Timer Software Reset N */
+/*! LPADC_SW_RST_N - LPADC Timer Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_LPADC_SW_RST_N(x)        (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_LPADC_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_LPADC_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_LCD_SW_RST_N_MASK        (0x400U)
 #define CGU_RST_SUB_BLK_LCD_SW_RST_N_SHIFT       (10U)
-/*! LCD_SW_RST_N - LCD Software Reset N */
+/*! LCD_SW_RST_N - LCD Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_LCD_SW_RST_N(x)          (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_LCD_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_LCD_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_EN_RST_SEC_DET_MASK      (0x800U)
 #define CGU_RST_SUB_BLK_EN_RST_SEC_DET_SHIFT     (11U)
-/*! EN_RST_SEC_DET - Enable Reset Security Detect. */
+/*! EN_RST_SEC_DET - Enable Reset Security Detect.
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_EN_RST_SEC_DET(x)        (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_EN_RST_SEC_DET_SHIFT)) & CGU_RST_SUB_BLK_EN_RST_SEC_DET_MASK)
 
 #define CGU_RST_SUB_BLK_ACMP_SW_RST_N_MASK       (0x1000U)
 #define CGU_RST_SUB_BLK_ACMP_SW_RST_N_SHIFT      (12U)
-/*! ACMP_SW_RST_N - ACMP Software Reset N */
+/*! ACMP_SW_RST_N - ACMP Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_ACMP_SW_RST_N(x)         (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_ACMP_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_ACMP_SW_RST_N_MASK)
 
 #define CGU_RST_SUB_BLK_ADVC2P0_SW_RST_N_MASK    (0x2000U)
 #define CGU_RST_SUB_BLK_ADVC2P0_SW_RST_N_SHIFT   (13U)
-/*! ADVC2P0_SW_RST_N - ADVC2P0 Software Reset N */
+/*! ADVC2P0_SW_RST_N - ADVC2P0 Software Reset
+ *  0b0..Enable
+ *  0b1..Disable
+ */
 #define CGU_RST_SUB_BLK_ADVC2P0_SW_RST_N(x)      (((uint32_t)(((uint32_t)(x)) << CGU_RST_SUB_BLK_ADVC2P0_SW_RST_N_SHIFT)) & CGU_RST_SUB_BLK_ADVC2P0_SW_RST_N_MASK)
 /*! @} */
 
-/*! @name FRO10M_CONFIG - FRO10M Configuration */
+/*! @name ACMP_CLK - ACMP Clock */
 /*! @{ */
 
-#define CGU_FRO10M_CONFIG_TRIM_CCO_LV_MASK       (0x3FU)
-#define CGU_FRO10M_CONFIG_TRIM_CCO_LV_SHIFT      (0U)
-/*! TRIM_CCO_LV - TRIM CCO Coarse Calibrate */
-#define CGU_FRO10M_CONFIG_TRIM_CCO_LV(x)         (((uint32_t)(((uint32_t)(x)) << CGU_FRO10M_CONFIG_TRIM_CCO_LV_SHIFT)) & CGU_FRO10M_CONFIG_TRIM_CCO_LV_MASK)
+#define CGU_ACMP_CLK_ACMP0_CLK_EN_MASK           (0x1U)
+#define CGU_ACMP_CLK_ACMP0_CLK_EN_SHIFT          (0U)
+/*! ACMP0_CLK_EN - ACMP0 Clock Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define CGU_ACMP_CLK_ACMP0_CLK_EN(x)             (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_ACMP0_CLK_EN_SHIFT)) & CGU_ACMP_CLK_ACMP0_CLK_EN_MASK)
 
-#define CGU_FRO10M_CONFIG_TRIM_CLK_LV_MASK       (0xFC0U)
-#define CGU_FRO10M_CONFIG_TRIM_CLK_LV_SHIFT      (6U)
-/*! TRIM_CLK_LV - TRIM CCO Fine Calibrate */
-#define CGU_FRO10M_CONFIG_TRIM_CLK_LV(x)         (((uint32_t)(((uint32_t)(x)) << CGU_FRO10M_CONFIG_TRIM_CLK_LV_SHIFT)) & CGU_FRO10M_CONFIG_TRIM_CLK_LV_MASK)
-/*! @} */
+#define CGU_ACMP_CLK_ACMP1_CLK_EN_MASK           (0x2U)
+#define CGU_ACMP_CLK_ACMP1_CLK_EN_SHIFT          (1U)
+/*! ACMP1_CLK_EN - ACMP1 Clock Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define CGU_ACMP_CLK_ACMP1_CLK_EN(x)             (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_ACMP1_CLK_EN_SHIFT)) & CGU_ACMP_CLK_ACMP1_CLK_EN_MASK)
 
-/*! @name FRO10M_TRIM - FRO10M Trim */
-/*! @{ */
+#define CGU_ACMP_CLK_ACMP_CLK0_DIV_EN_MASK       (0x4U)
+#define CGU_ACMP_CLK_ACMP_CLK0_DIV_EN_SHIFT      (2U)
+/*! ACMP_CLK0_DIV_EN - ACMP Clock 0 Divider Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define CGU_ACMP_CLK_ACMP_CLK0_DIV_EN(x)         (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_ACMP_CLK0_DIV_EN_SHIFT)) & CGU_ACMP_CLK_ACMP_CLK0_DIV_EN_MASK)
 
-#define CGU_FRO10M_TRIM_TRIM_TC_LV_MASK          (0x1FU)
-#define CGU_FRO10M_TRIM_TRIM_TC_LV_SHIFT         (0U)
-/*! TRIM_TC_LV - TRIM_TC_LV */
-#define CGU_FRO10M_TRIM_TRIM_TC_LV(x)            (((uint32_t)(((uint32_t)(x)) << CGU_FRO10M_TRIM_TRIM_TC_LV_SHIFT)) & CGU_FRO10M_TRIM_TRIM_TC_LV_MASK)
+#define CGU_ACMP_CLK_ACMP_CLK1_DIV_EN_MASK       (0x8U)
+#define CGU_ACMP_CLK_ACMP_CLK1_DIV_EN_SHIFT      (3U)
+/*! ACMP_CLK1_DIV_EN - ACMP Clock 1 Divider Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define CGU_ACMP_CLK_ACMP_CLK1_DIV_EN(x)         (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_ACMP_CLK1_DIV_EN_SHIFT)) & CGU_ACMP_CLK_ACMP_CLK1_DIV_EN_MASK)
 
-#define CGU_FRO10M_TRIM_TRIM_FVCH_LV_MASK        (0x3E0U)
-#define CGU_FRO10M_TRIM_TRIM_FVCH_LV_SHIFT       (5U)
-/*! TRIM_FVCH_LV - TRIM_FVCH_LV */
-#define CGU_FRO10M_TRIM_TRIM_FVCH_LV(x)          (((uint32_t)(((uint32_t)(x)) << CGU_FRO10M_TRIM_TRIM_FVCH_LV_SHIFT)) & CGU_FRO10M_TRIM_TRIM_FVCH_LV_MASK)
-/*! @} */
+#define CGU_ACMP_CLK_AON_ACMP_CLK0_DIV_MASK      (0xF0U)
+#define CGU_ACMP_CLK_AON_ACMP_CLK0_DIV_SHIFT     (4U)
+/*! AON_ACMP_CLK0_DIV - ACMP Clock 0 Divider Control
+ *  0b0000..Divide by 1
+ *  0b0001..Divide by 2
+ *  0b0010..Divide by 3
+ *  0b0011..Divide by 4
+ *  0b0100..Divide by 5
+ *  0b0101..Divide by 6
+ *  0b0110..Divide by 7
+ *  0b0111..Divide by 8
+ *  0b1000..Divide by 9
+ *  0b1001..Divide by 10
+ *  0b1010..Divide by 11
+ *  0b1011..Divide by 12
+ *  0b1100..Divide by 13
+ *  0b1101..Divide by 14
+ *  0b1110..Divide by 15
+ *  0b1111..Divide by 16
+ */
+#define CGU_ACMP_CLK_AON_ACMP_CLK0_DIV(x)        (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_AON_ACMP_CLK0_DIV_SHIFT)) & CGU_ACMP_CLK_AON_ACMP_CLK0_DIV_MASK)
 
-/*! @name FRO2M_CONFIG - FRO2M Configuration */
-/*! @{ */
-
-#define CGU_FRO2M_CONFIG_TRIM_COA_LV_MASK        (0x3FU)
-#define CGU_FRO2M_CONFIG_TRIM_COA_LV_SHIFT       (0U)
-/*! TRIM_COA_LV - TRIM Bus Coarse Calibrate */
-#define CGU_FRO2M_CONFIG_TRIM_COA_LV(x)          (((uint32_t)(((uint32_t)(x)) << CGU_FRO2M_CONFIG_TRIM_COA_LV_SHIFT)) & CGU_FRO2M_CONFIG_TRIM_COA_LV_MASK)
-
-#define CGU_FRO2M_CONFIG_TRIM_FINE_LV_MASK       (0xFC0U)
-#define CGU_FRO2M_CONFIG_TRIM_FINE_LV_SHIFT      (6U)
-/*! TRIM_FINE_LV - TRIM Fine Calibrate */
-#define CGU_FRO2M_CONFIG_TRIM_FINE_LV(x)         (((uint32_t)(((uint32_t)(x)) << CGU_FRO2M_CONFIG_TRIM_FINE_LV_SHIFT)) & CGU_FRO2M_CONFIG_TRIM_FINE_LV_MASK)
-/*! @} */
-
-/*! @name FRO2M_TRIM - FRO2M_TRIM */
-/*! @{ */
-
-#define CGU_FRO2M_TRIM_TRIM_TC_LV_MASK           (0x1FU)
-#define CGU_FRO2M_TRIM_TRIM_TC_LV_SHIFT          (0U)
-/*! TRIM_TC_LV - Trim Bus to Calibrate Fraquency. */
-#define CGU_FRO2M_TRIM_TRIM_TC_LV(x)             (((uint32_t)(((uint32_t)(x)) << CGU_FRO2M_TRIM_TRIM_TC_LV_SHIFT)) & CGU_FRO2M_TRIM_TRIM_TC_LV_MASK)
-
-#define CGU_FRO2M_TRIM_TRIM_FVCH_LV_MASK         (0x3E0U)
-#define CGU_FRO2M_TRIM_TRIM_FVCH_LV_SHIFT        (5U)
-/*! TRIM_FVCH_LV - Trim Bus to Calibrate Voltage. */
-#define CGU_FRO2M_TRIM_TRIM_FVCH_LV(x)           (((uint32_t)(((uint32_t)(x)) << CGU_FRO2M_TRIM_TRIM_FVCH_LV_SHIFT)) & CGU_FRO2M_TRIM_TRIM_FVCH_LV_MASK)
-
-#define CGU_FRO2M_TRIM_TEST_EN_LV_MASK           (0x400U)
-#define CGU_FRO2M_TRIM_TEST_EN_LV_SHIFT          (10U)
-/*! TEST_EN_LV - TEST_EN_LV */
-#define CGU_FRO2M_TRIM_TEST_EN_LV(x)             (((uint32_t)(((uint32_t)(x)) << CGU_FRO2M_TRIM_TEST_EN_LV_SHIFT)) & CGU_FRO2M_TRIM_TEST_EN_LV_MASK)
-
-#define CGU_FRO2M_TRIM_EN_CKO_DIV16_LV_MASK      (0x800U)
-#define CGU_FRO2M_TRIM_EN_CKO_DIV16_LV_SHIFT     (11U)
-/*! EN_CKO_DIV16_LV - Test pin for BACEs test IDD */
-#define CGU_FRO2M_TRIM_EN_CKO_DIV16_LV(x)        (((uint32_t)(((uint32_t)(x)) << CGU_FRO2M_TRIM_EN_CKO_DIV16_LV_SHIFT)) & CGU_FRO2M_TRIM_EN_CKO_DIV16_LV_MASK)
-/*! @} */
-
-/*! @name ACMP_CLK_DIV - ACMP Clock Divider */
-/*! @{ */
-
-#define CGU_ACMP_CLK_DIV_ACMP0_CLK_EN_MASK       (0x1U)
-#define CGU_ACMP_CLK_DIV_ACMP0_CLK_EN_SHIFT      (0U)
-/*! ACMP0_CLK_EN - ACMP0 Clock Enable */
-#define CGU_ACMP_CLK_DIV_ACMP0_CLK_EN(x)         (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_DIV_ACMP0_CLK_EN_SHIFT)) & CGU_ACMP_CLK_DIV_ACMP0_CLK_EN_MASK)
-
-#define CGU_ACMP_CLK_DIV_ACMP1_CLK_EN_MASK       (0x2U)
-#define CGU_ACMP_CLK_DIV_ACMP1_CLK_EN_SHIFT      (1U)
-/*! ACMP1_CLK_EN - ACMP1 Clock Enable */
-#define CGU_ACMP_CLK_DIV_ACMP1_CLK_EN(x)         (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_DIV_ACMP1_CLK_EN_SHIFT)) & CGU_ACMP_CLK_DIV_ACMP1_CLK_EN_MASK)
-
-#define CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_MASK   (0x4U)
-#define CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_SHIFT  (2U)
-/*! ACMP_CLK0_DIV_EN - ACMP Clock 0 Divider Enable */
-#define CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN(x)     (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_SHIFT)) & CGU_ACMP_CLK_DIV_ACMP_CLK0_DIV_EN_MASK)
-
-#define CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_MASK   (0x8U)
-#define CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_SHIFT  (3U)
-/*! ACMP_CLK1_DIV_EN - ACMP Clock 1 Divider Enable */
-#define CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN(x)     (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_SHIFT)) & CGU_ACMP_CLK_DIV_ACMP_CLK1_DIV_EN_MASK)
-
-#define CGU_ACMP_CLK_DIV_AON_ACMP_CLK0_DIV_MASK  (0xF0U)
-#define CGU_ACMP_CLK_DIV_AON_ACMP_CLK0_DIV_SHIFT (4U)
-/*! AON_ACMP_CLK0_DIV - ACMP Clock 0 Divider Enable */
-#define CGU_ACMP_CLK_DIV_AON_ACMP_CLK0_DIV(x)    (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_DIV_AON_ACMP_CLK0_DIV_SHIFT)) & CGU_ACMP_CLK_DIV_AON_ACMP_CLK0_DIV_MASK)
-
-#define CGU_ACMP_CLK_DIV_AON_ACMP_CLK1_DIV_MASK  (0xF00U)
-#define CGU_ACMP_CLK_DIV_AON_ACMP_CLK1_DIV_SHIFT (8U)
-/*! AON_ACMP_CLK1_DIV - ACMP Clock 1 Divider Enable */
-#define CGU_ACMP_CLK_DIV_AON_ACMP_CLK1_DIV(x)    (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_DIV_AON_ACMP_CLK1_DIV_SHIFT)) & CGU_ACMP_CLK_DIV_AON_ACMP_CLK1_DIV_MASK)
+#define CGU_ACMP_CLK_AON_ACMP_CLK1_DIV_MASK      (0xF00U)
+#define CGU_ACMP_CLK_AON_ACMP_CLK1_DIV_SHIFT     (8U)
+/*! AON_ACMP_CLK1_DIV - ACMP Clock 1 Divider Control
+ *  0b0000..Divide by 1
+ *  0b0001..Divide by 2
+ *  0b0010..Divide by 3
+ *  0b0011..Divide by 4
+ *  0b0100..Divide by 5
+ *  0b0101..Divide by 6
+ *  0b0110..Divide by 7
+ *  0b0111..Divide by 8
+ *  0b1000..Divide by 9
+ *  0b1001..Divide by 10
+ *  0b1010..Divide by 11
+ *  0b1011..Divide by 12
+ *  0b1100..Divide by 13
+ *  0b1101..Divide by 14
+ *  0b1110..Divide by 15
+ *  0b1111..Divide by 16
+ */
+#define CGU_ACMP_CLK_AON_ACMP_CLK1_DIV(x)        (((uint32_t)(((uint32_t)(x)) << CGU_ACMP_CLK_AON_ACMP_CLK1_DIV_SHIFT)) & CGU_ACMP_CLK_AON_ACMP_CLK1_DIV_MASK)
 /*! @} */
 
 /*! @name INT - Interrupt Flag */
@@ -649,7 +641,7 @@ typedef struct {
 
 #define CGU_INT_SEC_RST_IE_MASK                  (0x4U)
 #define CGU_INT_SEC_RST_IE_SHIFT                 (2U)
-/*! SEC_RST_IE - Security Reset Interrupt */
+/*! SEC_RST_IE - Security Reset Interrupt Enable */
 #define CGU_INT_SEC_RST_IE(x)                    (((uint32_t)(((uint32_t)(x)) << CGU_INT_SEC_RST_IE_SHIFT)) & CGU_INT_SEC_RST_IE_MASK)
 
 #define CGU_INT_AUTO_CAL_VAL_IF_MASK             (0x100U)

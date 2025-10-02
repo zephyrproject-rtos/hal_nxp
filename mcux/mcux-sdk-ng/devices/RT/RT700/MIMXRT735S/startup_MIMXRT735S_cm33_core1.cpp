@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MIMXRT735S_cm33_core1 startup code
 //
-// Version : 200525
+// Version : 220725
 //*****************************************************************************
 //
 // Copyright 2016-2025 NXP
@@ -132,7 +132,7 @@ WEAK void I3C3_IRQHandler(void);
 WEAK void FLEXIO_IRQHandler(void);
 WEAK void Reserved58_IRQHandler(void);
 WEAK void Reserved59_IRQHandler(void);
-WEAK void Reserved60_IRQHandler(void);
+WEAK void MIPI_IRQHandler(void);
 WEAK void EDMA2_CH0_IRQHandler(void);
 WEAK void EDMA2_CH1_IRQHandler(void);
 WEAK void EDMA2_CH2_IRQHandler(void);
@@ -231,7 +231,7 @@ void I3C3_DriverIRQHandler(void) ALIAS(DefaultISR);
 void FLEXIO_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved58_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved59_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved60_DriverIRQHandler(void) ALIAS(DefaultISR);
+void MIPI_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EDMA2_CH0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EDMA2_CH1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EDMA2_CH2_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -429,7 +429,7 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     FLEXIO_IRQHandler,           // 57 : flexio: Interrupt request
     Reserved58_IRQHandler,       // 58 : Reserved interrupt
     Reserved59_IRQHandler,       // 59 : Reserved interrupt
-    Reserved60_IRQHandler,       // 60 : Reserved interrupt
+    MIPI_IRQHandler,             // 60 : DSI: Interrupt request
     EDMA2_CH0_IRQHandler,        // 61 : edma2: Channel 0 interrupt
     EDMA2_CH1_IRQHandler,        // 62 : edma2: Channel 1 interrupt
     EDMA2_CH2_IRQHandler,        // 63 : edma2: Channel 2 interrupt
@@ -983,9 +983,9 @@ WEAK void Reserved59_IRQHandler(void)
     Reserved59_DriverIRQHandler();
 }
 
-WEAK void Reserved60_IRQHandler(void)
+WEAK void MIPI_IRQHandler(void)
 {
-    Reserved60_DriverIRQHandler();
+    MIPI_DriverIRQHandler();
 }
 
 WEAK void EDMA2_CH0_IRQHandler(void)

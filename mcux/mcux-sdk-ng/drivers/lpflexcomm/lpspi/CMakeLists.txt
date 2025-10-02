@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.lpflexcomm_lpspi)
-    mcux_component_version(2.2.8)
+    mcux_component_version(2.2.9)
 
     mcux_add_source(SOURCES fsl_lpspi.h fsl_lpspi.c)
 

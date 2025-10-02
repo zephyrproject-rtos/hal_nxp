@@ -1460,7 +1460,7 @@ static inline void PXP_EnableAlphaSurfaceOverlayColorKey(PXP_Type *base, uint32_
 
         case 1:
             base->ALPHA_B_CTRL_1 = (base->ALPHA_B_CTRL_1 & ~PXP_ALPHA_B_CTRL_1_OL_CLRKEY_ENABLE_MASK) |
-                                   PXP_ALPHA_B_CTRL_1_OL_CLRKEY_ENABLE((uint32_t)enable);
+                                   PXP_ALPHA_B_CTRL_1_OL_CLRKEY_ENABLE(enable ? 1U : 0U);
             break;
 
         default:
@@ -2027,7 +2027,7 @@ static inline void PXP_Select8kLutBank(PXP_Type *base, pxp_lut_8k_bank_t bank)
  * @param data Pointer to the data to write.
  * @param memStartAddr The start address in the internal memory to write the data.
  */
-void PXP_SetInternalRamData(PXP_Type *base, pxp_ram_t ram, uint32_t bytesNum, uint8_t *data, uint16_t memStartAddr);
+void PXP_SetInternalRamData(PXP_Type *base, pxp_ram_t ram, uint16_t bytesNum, uint8_t *data, uint16_t memStartAddr);
 
 /*!
  * @brief Set the dither final LUT data.
@@ -2604,12 +2604,12 @@ static inline void PXP_EnableHistogram(PXP_Type *base, uint8_t num, bool enable)
     {
         case 0:
             base->HIST_A_CTRL =
-                (base->HIST_A_CTRL & ~PXP_HIST_A_CTRL_ENABLE_MASK) | PXP_HIST_A_CTRL_ENABLE((uint32_t)enable);
+                (base->HIST_A_CTRL & ~PXP_HIST_A_CTRL_ENABLE_MASK) | PXP_HIST_A_CTRL_ENABLE(enable ? 1U : 0U);
             break;
 
         case 1:
             base->HIST_B_CTRL =
-                (base->HIST_B_CTRL & ~PXP_HIST_B_CTRL_ENABLE_MASK) | PXP_HIST_B_CTRL_ENABLE((uint32_t)enable);
+                (base->HIST_B_CTRL & ~PXP_HIST_B_CTRL_ENABLE_MASK) | PXP_HIST_B_CTRL_ENABLE(enable ? 1U : 0U);
             break;
 
         default:

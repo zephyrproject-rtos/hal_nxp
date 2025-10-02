@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PXP
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file PXP.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_PXP.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for PXP
  *
  * CMSIS Peripheral Access Layer for PXP
  */
 
-#if !defined(PXP_H_)
-#define PXP_H_                                   /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_PXP_H_)
+#define PERI_PXP_H_                              /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -331,32 +334,32 @@ typedef struct {
        uint8_t RESERVED_40[12];
   __IO uint32_t POWER_REG1;                        /**< Power Control Register 1, offset: 0x330 */
        uint8_t RESERVED_41[12];
-  __IO uint32_t DATA_PATH_CTRL0;                                /**< Data Path Control 0 Register, offset: 0x340 */
-  __IO uint32_t DATA_PATH_CTRL0_SET;                               /**< Data Path Control 0 Register, offset: 0x344 */
-  __IO uint32_t DATA_PATH_CTRL0_CLR;                               /**< Data Path Control 0 Register, offset: 0x348 */
-  __IO uint32_t DATA_PATH_CTRL0_TOG;                               /**< Data Path Control 0 Register, offset: 0x34C */
-  uint8_t RESERVED_42[64];
-  __IO uint32_t IRQ_MASK;                          /**< PXP IRQ Mask Register, offset: 0x390 */
-  __IO uint32_t IRQ_MASK_SET;                      /**< PXP IRQ Mask Register, offset: 0x394 */
-  __IO uint32_t IRQ_MASK_CLR;                      /**< PXP IRQ Mask Register, offset: 0x398 */
-  __IO uint32_t IRQ_MASK_TOG;                      /**< PXP IRQ Mask Register, offset: 0x39C */
-  __IO uint32_t IRQ;                               /**< PXP Interrupt Register, offset: 0x3A0 */
-  __IO uint32_t IRQ_SET;                           /**< PXP Interrupt Register, offset: 0x3A4 */
-  __IO uint32_t IRQ_CLR;                           /**< PXP Interrupt Register, offset: 0x3A8 */
-  __IO uint32_t IRQ_TOG;                           /**< PXP Interrupt Register, offset: 0x3AC */
+  __IO uint32_t DATA_PATH_CTRL0;                   /**< Data Path Control 0 Register, offset: 0x340 */
+  __IO uint32_t DATA_PATH_CTRL0_SET;               /**< Data Path Control 0 Register, offset: 0x344 */
+  __IO uint32_t DATA_PATH_CTRL0_CLR;               /**< Data Path Control 0 Register, offset: 0x348 */
+  __IO uint32_t DATA_PATH_CTRL0_TOG;               /**< Data Path Control 0 Register, offset: 0x34C */
+       uint8_t RESERVED_42[64];
+  __IO uint32_t IRQ_MASK;                          /**< IRQ Mask Register, offset: 0x390 */
+  __IO uint32_t IRQ_MASK_SET;                      /**< IRQ Mask Register, offset: 0x394 */
+  __IO uint32_t IRQ_MASK_CLR;                      /**< IRQ Mask Register, offset: 0x398 */
+  __IO uint32_t IRQ_MASK_TOG;                      /**< IRQ Mask Register, offset: 0x39C */
+  __IO uint32_t IRQ;                               /**< Interrupt Register, offset: 0x3A0 */
+  __IO uint32_t IRQ_SET;                           /**< Interrupt Register, offset: 0x3A4 */
+  __IO uint32_t IRQ_CLR;                           /**< Interrupt Register, offset: 0x3A8 */
+  __IO uint32_t IRQ_TOG;                           /**< Interrupt Register, offset: 0x3AC */
        uint8_t RESERVED_43[80];
   __IO uint32_t NEXT;                              /**< Next Frame Pointer Register, offset: 0x400 */
        uint8_t RESERVED_44[60];
   __IO uint32_t OUT_BUF3;                          /**< Output Frame Buffer Pointer #3 Register, offset: 0x440 */
        uint8_t RESERVED_45[12];
-  __IO uint32_t INPUT_FETCH_CTRL_CH0;              /**< Pre-fetch engine Control Channel 0 Register, offset: 0x450 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH0_SET;          /**< Pre-fetch engine Control Channel 0 Register, offset: 0x454 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH0_CLR;          /**< Pre-fetch engine Control Channel 0 Register, offset: 0x458 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH0_TOG;          /**< Pre-fetch engine Control Channel 0 Register, offset: 0x45C */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1;              /**< Pre-fetch engine Control Channel 1 Register, offset: 0x460 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1_SET;          /**< Pre-fetch engine Control Channel 1 Register, offset: 0x464 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1_CLR;          /**< Pre-fetch engine Control Channel 1 Register, offset: 0x468 */
-  __IO uint32_t INPUT_FETCH_CTRL_CH1_TOG;          /**< Pre-fetch engine Control Channel 1 Register, offset: 0x46C */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0;              /**< Input Fetch Control Channel 0 Register, offset: 0x450 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0_SET;          /**< Input Fetch Control Channel 0 Register, offset: 0x454 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0_CLR;          /**< Input Fetch Control Channel 0 Register, offset: 0x458 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH0_TOG;          /**< Input Fetch Control Channel 0 Register, offset: 0x45C */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1;              /**< Input Fetch Control Channel 1 Register, offset: 0x460 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1_SET;          /**< Input Fetch Control Channel 1 Register, offset: 0x464 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1_CLR;          /**< Input Fetch Control Channel 1 Register, offset: 0x468 */
+  __IO uint32_t INPUT_FETCH_CTRL_CH1_TOG;          /**< Input Fetch Control Channel 1 Register, offset: 0x46C */
   __I  uint32_t INPUT_FETCH_STATUS_CH0;            /**< Input Fetch Status Channel 0 Register, offset: 0x470 */
        uint8_t RESERVED_46[12];
   __I  uint32_t INPUT_FETCH_STATUS_CH1;            /**< Input Fetch Status Channel 1 Register, offset: 0x480 */
@@ -379,30 +382,30 @@ typedef struct {
        uint8_t RESERVED_55[12];
   __IO uint32_t INPUT_FETCH_PITCH;                 /**< Input Fetch Pitch Register, offset: 0x510 */
        uint8_t RESERVED_56[12];
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0;        /**< offset: 0x520 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_SET;    /**< offset: 0x524 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_CLR;    /**< offset: 0x528 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_TOG;    /**< offset: 0x52C */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1;        /**< offset: 0x530 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_SET;    /**< offset: 0x534 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_CLR;    /**< offset: 0x538 */
-  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_TOG;    /**< offset: 0x53C */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0;      /**< offset: 0x540 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_SET;  /**< offset: 0x544 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_CLR;  /**< offset: 0x548 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_TOG;  /**< offset: 0x54C */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1;      /**< offset: 0x550 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_SET;  /**< offset: 0x554 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_CLR;  /**< offset: 0x558 */
-  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_TOG;  /**< offset: 0x55C */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0;       /**< offset: 0x560 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_SET;   /**< offset: 0x564 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_CLR;   /**< offset: 0x568 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_TOG;   /**< offset: 0x56C */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1;       /**< offset: 0x570 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_SET;   /**< offset: 0x574 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_CLR;   /**< offset: 0x578 */
-  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_TOG;   /**< offset: 0x57C */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0;        /**< Input Fetch Shift Control Channel 0 Register, offset: 0x520 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_SET;    /**< Input Fetch Shift Control Channel 0 Register, offset: 0x524 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_CLR;    /**< Input Fetch Shift Control Channel 0 Register, offset: 0x528 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH0_TOG;    /**< Input Fetch Shift Control Channel 0 Register, offset: 0x52C */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1;        /**< Input Fetch Shift Control Channel 1 Register, offset: 0x530 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_SET;    /**< Input Fetch Shift Control Channel 1 Register, offset: 0x534 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_CLR;    /**< Input Fetch Shift Control Channel 1 Register, offset: 0x538 */
+  __IO uint32_t INPUT_FETCH_SHIFT_CTRL_CH1_TOG;    /**< Input Fetch Shift Control Channel 1 Register, offset: 0x53C */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0;      /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x540 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_SET;  /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x544 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_CLR;  /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x548 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH0_TOG;  /**< Input Fetch Shift Offset Channel 0 Register, offset: 0x54C */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1;      /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x550 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_SET;  /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x554 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_CLR;  /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x558 */
+  __IO uint32_t INPUT_FETCH_SHIFT_OFFSET_CH1_TOG;  /**< Input Fetch Shift Offset Channel 1 Register, offset: 0x55C */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0;       /**< Input Fetch Shift Width Channel 0 Register, offset: 0x560 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_SET;   /**< Input Fetch Shift Width Channel 0 Register, offset: 0x564 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_CLR;   /**< Input Fetch Shift Width Channel 0 Register, offset: 0x568 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH0_TOG;   /**< Input Fetch Shift Width Channel 0 Register, offset: 0x56C */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1;       /**< Input Fetch Shift Width Channel 1 Register, offset: 0x570 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_SET;   /**< Input Fetch Shift Width Channel 1 Register, offset: 0x574 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_CLR;   /**< Input Fetch Shift Width Channel 1 Register, offset: 0x578 */
+  __IO uint32_t INPUT_FETCH_SHIFT_WIDTH_CH1_TOG;   /**< Input Fetch Shift Width Channel 1 Register, offset: 0x57C */
   __IO uint32_t INPUT_FETCH_ADDR_0_CH0;            /**< Input Fetch Address 0 Channel 0 Register, offset: 0x580 */
        uint8_t RESERVED_57[12];
   __IO uint32_t INPUT_FETCH_ADDR_1_CH0;            /**< Input Fetch Address 1 Channel 0 Register, offset: 0x590 */
@@ -411,14 +414,14 @@ typedef struct {
        uint8_t RESERVED_59[12];
   __IO uint32_t INPUT_FETCH_ADDR_1_CH1;            /**< Input Fetch Address 1 Channel 1 Register, offset: 0x5B0 */
        uint8_t RESERVED_60[12];
-  __IO uint32_t INPUT_STORE_CTRL_CH0;              /**< Store engine Control Channel 0 Register, offset: 0x5C0 */
-  __IO uint32_t INPUT_STORE_CTRL_CH0_SET;          /**< Store engine Control Channel 0 Register, offset: 0x5C4 */
-  __IO uint32_t INPUT_STORE_CTRL_CH0_CLR;          /**< Store engine Control Channel 0 Register, offset: 0x5C8 */
-  __IO uint32_t INPUT_STORE_CTRL_CH0_TOG;          /**< Store engine Control Channel 0 Register, offset: 0x5CC */
-  __IO uint32_t INPUT_STORE_CTRL_CH1;              /**< Store engine Control Channel 1 Register, offset: 0x5D0 */
-  __IO uint32_t INPUT_STORE_CTRL_CH1_SET;          /**< Store engine Control Channel 1 Register, offset: 0x5D4 */
-  __IO uint32_t INPUT_STORE_CTRL_CH1_CLR;          /**< Store engine Control Channel 1 Register, offset: 0x5D8 */
-  __IO uint32_t INPUT_STORE_CTRL_CH1_TOG;          /**< Store engine Control Channel 1 Register, offset: 0x5DC */
+  __IO uint32_t INPUT_STORE_CTRL_CH0;              /**< Input Store Control Channel 0 Register, offset: 0x5C0 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0_SET;          /**< Input Store Control Channel 0 Register, offset: 0x5C4 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0_CLR;          /**< Input Store Control Channel 0 Register, offset: 0x5C8 */
+  __IO uint32_t INPUT_STORE_CTRL_CH0_TOG;          /**< Input Store Control Channel 0 Register, offset: 0x5CC */
+  __IO uint32_t INPUT_STORE_CTRL_CH1;              /**< Input Store Control Channel 1 Register, offset: 0x5D0 */
+  __IO uint32_t INPUT_STORE_CTRL_CH1_SET;          /**< Input Store Control Channel 1 Register, offset: 0x5D4 */
+  __IO uint32_t INPUT_STORE_CTRL_CH1_CLR;          /**< Input Store Control Channel 1 Register, offset: 0x5D8 */
+  __IO uint32_t INPUT_STORE_CTRL_CH1_TOG;          /**< Input Store Control Channel 1 Register, offset: 0x5DC */
   __I  uint32_t INPUT_STORE_STATUS_CH0;            /**< Input Store Status Channel 0 Register, offset: 0x5E0 */
        uint8_t RESERVED_61[12];
   __I  uint32_t INPUT_STORE_STATUS_CH1;            /**< Input Store Status Channel 1 Register, offset: 0x5F0 */
@@ -429,14 +432,14 @@ typedef struct {
        uint8_t RESERVED_64[12];
   __IO uint32_t INPUT_STORE_PITCH;                 /**< Input Store Pitch Register, offset: 0x620 */
        uint8_t RESERVED_65[12];
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0;        /**< offset: 0x630 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_SET;    /**< offset: 0x634 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_CLR;    /**< offset: 0x638 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_TOG;    /**< offset: 0x63C */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1;        /**< offset: 0x640 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_SET;    /**< offset: 0x644 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_CLR;    /**< offset: 0x648 */
-  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_TOG;    /**< offset: 0x64C */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0;        /**< Input Store Shift Control Channel 0 Register, offset: 0x630 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_SET;    /**< Input Store Shift Control Channel 0 Register, offset: 0x634 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_CLR;    /**< Input Store Shift Control Channel 0 Register, offset: 0x638 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH0_TOG;    /**< Input Store Shift Control Channel 0 Register, offset: 0x63C */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1;        /**< Input Store Shift Control Channel 1 Register, offset: 0x640 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_SET;    /**< Input Store Shift Control Channel 1 Register, offset: 0x644 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_CLR;    /**< Input Store Shift Control Channel 1 Register, offset: 0x648 */
+  __IO uint32_t INPUT_STORE_SHIFT_CTRL_CH1_TOG;    /**< Input Store Shift Control Channel 1 Register, offset: 0x64C */
        uint8_t RESERVED_66[64];
   __IO uint32_t INPUT_STORE_ADDR_0_CH0;            /**< Input Store Address 0 Channel 0 Register, offset: 0x690 */
        uint8_t RESERVED_67[12];
@@ -620,6 +623,318 @@ typedef struct {
 #define PXP_CTRL_SFTRST(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SFTRST_SHIFT)) & PXP_CTRL_SFTRST_MASK)
 /*! @} */
 
+/*! @name CTRL_SET - Control Register 0 */
+/*! @{ */
+
+#define PXP_CTRL_SET_ENABLE_MASK                 (0x1U)
+#define PXP_CTRL_SET_ENABLE_SHIFT                (0U)
+/*! ENABLE - ENABLE */
+#define PXP_CTRL_SET_ENABLE(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_SHIFT)) & PXP_CTRL_SET_ENABLE_MASK)
+
+#define PXP_CTRL_SET_IRQ_ENABLE_MASK             (0x2U)
+#define PXP_CTRL_SET_IRQ_ENABLE_SHIFT            (1U)
+/*! IRQ_ENABLE - IRQ_ENABLE */
+#define PXP_CTRL_SET_IRQ_ENABLE(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_IRQ_ENABLE_SHIFT)) & PXP_CTRL_SET_IRQ_ENABLE_MASK)
+
+#define PXP_CTRL_SET_NEXT_IRQ_ENABLE_MASK        (0x4U)
+#define PXP_CTRL_SET_NEXT_IRQ_ENABLE_SHIFT       (2U)
+/*! NEXT_IRQ_ENABLE - NEXT_IRQ_ENABLE */
+#define PXP_CTRL_SET_NEXT_IRQ_ENABLE(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_NEXT_IRQ_ENABLE_SHIFT)) & PXP_CTRL_SET_NEXT_IRQ_ENABLE_MASK)
+
+#define PXP_CTRL_SET_ENABLE_LCD0_HANDSHAKE_MASK  (0x10U)
+#define PXP_CTRL_SET_ENABLE_LCD0_HANDSHAKE_SHIFT (4U)
+/*! ENABLE_LCD0_HANDSHAKE - ENABLE_LCD0_HANDSHAKE */
+#define PXP_CTRL_SET_ENABLE_LCD0_HANDSHAKE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_LCD0_HANDSHAKE_SHIFT)) & PXP_CTRL_SET_ENABLE_LCD0_HANDSHAKE_MASK)
+
+#define PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_MASK   (0x20U)
+#define PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_SHIFT  (5U)
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+#define PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP(x)     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_SET_HANDSHAKE_ABORT_SKIP_MASK)
+
+#define PXP_CTRL_SET_ROTATE0_MASK                (0x300U)
+#define PXP_CTRL_SET_ROTATE0_SHIFT               (8U)
+/*! ROTATE0 - ROTATE0 */
+#define PXP_CTRL_SET_ROTATE0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ROTATE0_SHIFT)) & PXP_CTRL_SET_ROTATE0_MASK)
+
+#define PXP_CTRL_SET_HFLIP0_MASK                 (0x400U)
+#define PXP_CTRL_SET_HFLIP0_SHIFT                (10U)
+/*! HFLIP0 - HFLIP0 */
+#define PXP_CTRL_SET_HFLIP0(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_HFLIP0_SHIFT)) & PXP_CTRL_SET_HFLIP0_MASK)
+
+#define PXP_CTRL_SET_VFLIP0_MASK                 (0x800U)
+#define PXP_CTRL_SET_VFLIP0_SHIFT                (11U)
+/*! VFLIP0 - VFLIP0 */
+#define PXP_CTRL_SET_VFLIP0(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_VFLIP0_SHIFT)) & PXP_CTRL_SET_VFLIP0_MASK)
+
+#define PXP_CTRL_SET_ROTATE1_MASK                (0x3000U)
+#define PXP_CTRL_SET_ROTATE1_SHIFT               (12U)
+/*! ROTATE1 - ROTATE1 */
+#define PXP_CTRL_SET_ROTATE1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ROTATE1_SHIFT)) & PXP_CTRL_SET_ROTATE1_MASK)
+
+#define PXP_CTRL_SET_HFLIP1_MASK                 (0x4000U)
+#define PXP_CTRL_SET_HFLIP1_SHIFT                (14U)
+/*! HFLIP1 - HFLIP1 */
+#define PXP_CTRL_SET_HFLIP1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_HFLIP1_SHIFT)) & PXP_CTRL_SET_HFLIP1_MASK)
+
+#define PXP_CTRL_SET_VFLIP1_MASK                 (0x8000U)
+#define PXP_CTRL_SET_VFLIP1_SHIFT                (15U)
+/*! VFLIP1 - VFLIP1 */
+#define PXP_CTRL_SET_VFLIP1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_VFLIP1_SHIFT)) & PXP_CTRL_SET_VFLIP1_MASK)
+
+#define PXP_CTRL_SET_ENABLE_PS_AS_OUT_MASK       (0x10000U)
+#define PXP_CTRL_SET_ENABLE_PS_AS_OUT_SHIFT      (16U)
+/*! ENABLE_PS_AS_OUT - ENABLE_PS_AS_OUT */
+#define PXP_CTRL_SET_ENABLE_PS_AS_OUT(x)         (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_PS_AS_OUT_SHIFT)) & PXP_CTRL_SET_ENABLE_PS_AS_OUT_MASK)
+
+#define PXP_CTRL_SET_ENABLE_ALPHA_B_MASK         (0x200000U)
+#define PXP_CTRL_SET_ENABLE_ALPHA_B_SHIFT        (21U)
+/*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
+#define PXP_CTRL_SET_ENABLE_ALPHA_B(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL_SET_ENABLE_ALPHA_B_MASK)
+
+#define PXP_CTRL_SET_BLOCK_32_MASK               (0x400000U)
+#define PXP_CTRL_SET_BLOCK_32_SHIFT              (22U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_CTRL_SET_BLOCK_32(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_BLOCK_32_SHIFT)) & PXP_CTRL_SET_BLOCK_32_MASK)
+
+#define PXP_CTRL_SET_BLOCK_SIZE_MASK             (0x800000U)
+#define PXP_CTRL_SET_BLOCK_SIZE_SHIFT            (23U)
+/*! BLOCK_SIZE - BLOCK_SIZE */
+#define PXP_CTRL_SET_BLOCK_SIZE(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_BLOCK_SIZE_SHIFT)) & PXP_CTRL_SET_BLOCK_SIZE_MASK)
+
+#define PXP_CTRL_SET_ENABLE_CSC2_MASK            (0x1000000U)
+#define PXP_CTRL_SET_ENABLE_CSC2_SHIFT           (24U)
+/*! ENABLE_CSC2 - ENABLE_CSC2 */
+#define PXP_CTRL_SET_ENABLE_CSC2(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_CSC2_SHIFT)) & PXP_CTRL_SET_ENABLE_CSC2_MASK)
+
+#define PXP_CTRL_SET_ENABLE_ROTATE0_MASK         (0x4000000U)
+#define PXP_CTRL_SET_ENABLE_ROTATE0_SHIFT        (26U)
+/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
+#define PXP_CTRL_SET_ENABLE_ROTATE0(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL_SET_ENABLE_ROTATE0_MASK)
+
+#define PXP_CTRL_SET_ENABLE_ROTATE1_MASK         (0x8000000U)
+#define PXP_CTRL_SET_ENABLE_ROTATE1_SHIFT        (27U)
+/*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
+#define PXP_CTRL_SET_ENABLE_ROTATE1(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL_SET_ENABLE_ROTATE1_MASK)
+
+#define PXP_CTRL_SET_CLKGATE_MASK                (0x40000000U)
+#define PXP_CTRL_SET_CLKGATE_SHIFT               (30U)
+/*! CLKGATE - CLKGATE */
+#define PXP_CTRL_SET_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_CLKGATE_SHIFT)) & PXP_CTRL_SET_CLKGATE_MASK)
+
+#define PXP_CTRL_SET_SFTRST_MASK                 (0x80000000U)
+#define PXP_CTRL_SET_SFTRST_SHIFT                (31U)
+/*! SFTRST - SFTRST */
+#define PXP_CTRL_SET_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_SET_SFTRST_SHIFT)) & PXP_CTRL_SET_SFTRST_MASK)
+/*! @} */
+
+/*! @name CTRL_CLR - Control Register 0 */
+/*! @{ */
+
+#define PXP_CTRL_CLR_ENABLE_MASK                 (0x1U)
+#define PXP_CTRL_CLR_ENABLE_SHIFT                (0U)
+/*! ENABLE - ENABLE */
+#define PXP_CTRL_CLR_ENABLE(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_SHIFT)) & PXP_CTRL_CLR_ENABLE_MASK)
+
+#define PXP_CTRL_CLR_IRQ_ENABLE_MASK             (0x2U)
+#define PXP_CTRL_CLR_IRQ_ENABLE_SHIFT            (1U)
+/*! IRQ_ENABLE - IRQ_ENABLE */
+#define PXP_CTRL_CLR_IRQ_ENABLE(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_IRQ_ENABLE_SHIFT)) & PXP_CTRL_CLR_IRQ_ENABLE_MASK)
+
+#define PXP_CTRL_CLR_NEXT_IRQ_ENABLE_MASK        (0x4U)
+#define PXP_CTRL_CLR_NEXT_IRQ_ENABLE_SHIFT       (2U)
+/*! NEXT_IRQ_ENABLE - NEXT_IRQ_ENABLE */
+#define PXP_CTRL_CLR_NEXT_IRQ_ENABLE(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_NEXT_IRQ_ENABLE_SHIFT)) & PXP_CTRL_CLR_NEXT_IRQ_ENABLE_MASK)
+
+#define PXP_CTRL_CLR_ENABLE_LCD0_HANDSHAKE_MASK  (0x10U)
+#define PXP_CTRL_CLR_ENABLE_LCD0_HANDSHAKE_SHIFT (4U)
+/*! ENABLE_LCD0_HANDSHAKE - ENABLE_LCD0_HANDSHAKE */
+#define PXP_CTRL_CLR_ENABLE_LCD0_HANDSHAKE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_LCD0_HANDSHAKE_SHIFT)) & PXP_CTRL_CLR_ENABLE_LCD0_HANDSHAKE_MASK)
+
+#define PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_MASK   (0x20U)
+#define PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_SHIFT  (5U)
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+#define PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP(x)     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_CLR_HANDSHAKE_ABORT_SKIP_MASK)
+
+#define PXP_CTRL_CLR_ROTATE0_MASK                (0x300U)
+#define PXP_CTRL_CLR_ROTATE0_SHIFT               (8U)
+/*! ROTATE0 - ROTATE0 */
+#define PXP_CTRL_CLR_ROTATE0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ROTATE0_SHIFT)) & PXP_CTRL_CLR_ROTATE0_MASK)
+
+#define PXP_CTRL_CLR_HFLIP0_MASK                 (0x400U)
+#define PXP_CTRL_CLR_HFLIP0_SHIFT                (10U)
+/*! HFLIP0 - HFLIP0 */
+#define PXP_CTRL_CLR_HFLIP0(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_HFLIP0_SHIFT)) & PXP_CTRL_CLR_HFLIP0_MASK)
+
+#define PXP_CTRL_CLR_VFLIP0_MASK                 (0x800U)
+#define PXP_CTRL_CLR_VFLIP0_SHIFT                (11U)
+/*! VFLIP0 - VFLIP0 */
+#define PXP_CTRL_CLR_VFLIP0(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_VFLIP0_SHIFT)) & PXP_CTRL_CLR_VFLIP0_MASK)
+
+#define PXP_CTRL_CLR_ROTATE1_MASK                (0x3000U)
+#define PXP_CTRL_CLR_ROTATE1_SHIFT               (12U)
+/*! ROTATE1 - ROTATE1 */
+#define PXP_CTRL_CLR_ROTATE1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ROTATE1_SHIFT)) & PXP_CTRL_CLR_ROTATE1_MASK)
+
+#define PXP_CTRL_CLR_HFLIP1_MASK                 (0x4000U)
+#define PXP_CTRL_CLR_HFLIP1_SHIFT                (14U)
+/*! HFLIP1 - HFLIP1 */
+#define PXP_CTRL_CLR_HFLIP1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_HFLIP1_SHIFT)) & PXP_CTRL_CLR_HFLIP1_MASK)
+
+#define PXP_CTRL_CLR_VFLIP1_MASK                 (0x8000U)
+#define PXP_CTRL_CLR_VFLIP1_SHIFT                (15U)
+/*! VFLIP1 - VFLIP1 */
+#define PXP_CTRL_CLR_VFLIP1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_VFLIP1_SHIFT)) & PXP_CTRL_CLR_VFLIP1_MASK)
+
+#define PXP_CTRL_CLR_ENABLE_PS_AS_OUT_MASK       (0x10000U)
+#define PXP_CTRL_CLR_ENABLE_PS_AS_OUT_SHIFT      (16U)
+/*! ENABLE_PS_AS_OUT - ENABLE_PS_AS_OUT */
+#define PXP_CTRL_CLR_ENABLE_PS_AS_OUT(x)         (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_PS_AS_OUT_SHIFT)) & PXP_CTRL_CLR_ENABLE_PS_AS_OUT_MASK)
+
+#define PXP_CTRL_CLR_ENABLE_ALPHA_B_MASK         (0x200000U)
+#define PXP_CTRL_CLR_ENABLE_ALPHA_B_SHIFT        (21U)
+/*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
+#define PXP_CTRL_CLR_ENABLE_ALPHA_B(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL_CLR_ENABLE_ALPHA_B_MASK)
+
+#define PXP_CTRL_CLR_BLOCK_32_MASK               (0x400000U)
+#define PXP_CTRL_CLR_BLOCK_32_SHIFT              (22U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_CTRL_CLR_BLOCK_32(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_BLOCK_32_SHIFT)) & PXP_CTRL_CLR_BLOCK_32_MASK)
+
+#define PXP_CTRL_CLR_BLOCK_SIZE_MASK             (0x800000U)
+#define PXP_CTRL_CLR_BLOCK_SIZE_SHIFT            (23U)
+/*! BLOCK_SIZE - BLOCK_SIZE */
+#define PXP_CTRL_CLR_BLOCK_SIZE(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_BLOCK_SIZE_SHIFT)) & PXP_CTRL_CLR_BLOCK_SIZE_MASK)
+
+#define PXP_CTRL_CLR_ENABLE_CSC2_MASK            (0x1000000U)
+#define PXP_CTRL_CLR_ENABLE_CSC2_SHIFT           (24U)
+/*! ENABLE_CSC2 - ENABLE_CSC2 */
+#define PXP_CTRL_CLR_ENABLE_CSC2(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_CSC2_SHIFT)) & PXP_CTRL_CLR_ENABLE_CSC2_MASK)
+
+#define PXP_CTRL_CLR_ENABLE_ROTATE0_MASK         (0x4000000U)
+#define PXP_CTRL_CLR_ENABLE_ROTATE0_SHIFT        (26U)
+/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
+#define PXP_CTRL_CLR_ENABLE_ROTATE0(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL_CLR_ENABLE_ROTATE0_MASK)
+
+#define PXP_CTRL_CLR_ENABLE_ROTATE1_MASK         (0x8000000U)
+#define PXP_CTRL_CLR_ENABLE_ROTATE1_SHIFT        (27U)
+/*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
+#define PXP_CTRL_CLR_ENABLE_ROTATE1(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL_CLR_ENABLE_ROTATE1_MASK)
+
+#define PXP_CTRL_CLR_CLKGATE_MASK                (0x40000000U)
+#define PXP_CTRL_CLR_CLKGATE_SHIFT               (30U)
+/*! CLKGATE - CLKGATE */
+#define PXP_CTRL_CLR_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_CLKGATE_SHIFT)) & PXP_CTRL_CLR_CLKGATE_MASK)
+
+#define PXP_CTRL_CLR_SFTRST_MASK                 (0x80000000U)
+#define PXP_CTRL_CLR_SFTRST_SHIFT                (31U)
+/*! SFTRST - SFTRST */
+#define PXP_CTRL_CLR_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_CLR_SFTRST_SHIFT)) & PXP_CTRL_CLR_SFTRST_MASK)
+/*! @} */
+
+/*! @name CTRL_TOG - Control Register 0 */
+/*! @{ */
+
+#define PXP_CTRL_TOG_ENABLE_MASK                 (0x1U)
+#define PXP_CTRL_TOG_ENABLE_SHIFT                (0U)
+/*! ENABLE - ENABLE */
+#define PXP_CTRL_TOG_ENABLE(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_SHIFT)) & PXP_CTRL_TOG_ENABLE_MASK)
+
+#define PXP_CTRL_TOG_IRQ_ENABLE_MASK             (0x2U)
+#define PXP_CTRL_TOG_IRQ_ENABLE_SHIFT            (1U)
+/*! IRQ_ENABLE - IRQ_ENABLE */
+#define PXP_CTRL_TOG_IRQ_ENABLE(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_IRQ_ENABLE_SHIFT)) & PXP_CTRL_TOG_IRQ_ENABLE_MASK)
+
+#define PXP_CTRL_TOG_NEXT_IRQ_ENABLE_MASK        (0x4U)
+#define PXP_CTRL_TOG_NEXT_IRQ_ENABLE_SHIFT       (2U)
+/*! NEXT_IRQ_ENABLE - NEXT_IRQ_ENABLE */
+#define PXP_CTRL_TOG_NEXT_IRQ_ENABLE(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_NEXT_IRQ_ENABLE_SHIFT)) & PXP_CTRL_TOG_NEXT_IRQ_ENABLE_MASK)
+
+#define PXP_CTRL_TOG_ENABLE_LCD0_HANDSHAKE_MASK  (0x10U)
+#define PXP_CTRL_TOG_ENABLE_LCD0_HANDSHAKE_SHIFT (4U)
+/*! ENABLE_LCD0_HANDSHAKE - ENABLE_LCD0_HANDSHAKE */
+#define PXP_CTRL_TOG_ENABLE_LCD0_HANDSHAKE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_LCD0_HANDSHAKE_SHIFT)) & PXP_CTRL_TOG_ENABLE_LCD0_HANDSHAKE_MASK)
+
+#define PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_MASK   (0x20U)
+#define PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_SHIFT  (5U)
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+#define PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP(x)     (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_TOG_HANDSHAKE_ABORT_SKIP_MASK)
+
+#define PXP_CTRL_TOG_ROTATE0_MASK                (0x300U)
+#define PXP_CTRL_TOG_ROTATE0_SHIFT               (8U)
+/*! ROTATE0 - ROTATE0 */
+#define PXP_CTRL_TOG_ROTATE0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ROTATE0_SHIFT)) & PXP_CTRL_TOG_ROTATE0_MASK)
+
+#define PXP_CTRL_TOG_HFLIP0_MASK                 (0x400U)
+#define PXP_CTRL_TOG_HFLIP0_SHIFT                (10U)
+/*! HFLIP0 - HFLIP0 */
+#define PXP_CTRL_TOG_HFLIP0(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_HFLIP0_SHIFT)) & PXP_CTRL_TOG_HFLIP0_MASK)
+
+#define PXP_CTRL_TOG_VFLIP0_MASK                 (0x800U)
+#define PXP_CTRL_TOG_VFLIP0_SHIFT                (11U)
+/*! VFLIP0 - VFLIP0 */
+#define PXP_CTRL_TOG_VFLIP0(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_VFLIP0_SHIFT)) & PXP_CTRL_TOG_VFLIP0_MASK)
+
+#define PXP_CTRL_TOG_ROTATE1_MASK                (0x3000U)
+#define PXP_CTRL_TOG_ROTATE1_SHIFT               (12U)
+/*! ROTATE1 - ROTATE1 */
+#define PXP_CTRL_TOG_ROTATE1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ROTATE1_SHIFT)) & PXP_CTRL_TOG_ROTATE1_MASK)
+
+#define PXP_CTRL_TOG_HFLIP1_MASK                 (0x4000U)
+#define PXP_CTRL_TOG_HFLIP1_SHIFT                (14U)
+/*! HFLIP1 - HFLIP1 */
+#define PXP_CTRL_TOG_HFLIP1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_HFLIP1_SHIFT)) & PXP_CTRL_TOG_HFLIP1_MASK)
+
+#define PXP_CTRL_TOG_VFLIP1_MASK                 (0x8000U)
+#define PXP_CTRL_TOG_VFLIP1_SHIFT                (15U)
+/*! VFLIP1 - VFLIP1 */
+#define PXP_CTRL_TOG_VFLIP1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_VFLIP1_SHIFT)) & PXP_CTRL_TOG_VFLIP1_MASK)
+
+#define PXP_CTRL_TOG_ENABLE_PS_AS_OUT_MASK       (0x10000U)
+#define PXP_CTRL_TOG_ENABLE_PS_AS_OUT_SHIFT      (16U)
+/*! ENABLE_PS_AS_OUT - ENABLE_PS_AS_OUT */
+#define PXP_CTRL_TOG_ENABLE_PS_AS_OUT(x)         (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_PS_AS_OUT_SHIFT)) & PXP_CTRL_TOG_ENABLE_PS_AS_OUT_MASK)
+
+#define PXP_CTRL_TOG_ENABLE_ALPHA_B_MASK         (0x200000U)
+#define PXP_CTRL_TOG_ENABLE_ALPHA_B_SHIFT        (21U)
+/*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
+#define PXP_CTRL_TOG_ENABLE_ALPHA_B(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL_TOG_ENABLE_ALPHA_B_MASK)
+
+#define PXP_CTRL_TOG_BLOCK_32_MASK               (0x400000U)
+#define PXP_CTRL_TOG_BLOCK_32_SHIFT              (22U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_CTRL_TOG_BLOCK_32(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_BLOCK_32_SHIFT)) & PXP_CTRL_TOG_BLOCK_32_MASK)
+
+#define PXP_CTRL_TOG_BLOCK_SIZE_MASK             (0x800000U)
+#define PXP_CTRL_TOG_BLOCK_SIZE_SHIFT            (23U)
+/*! BLOCK_SIZE - BLOCK_SIZE */
+#define PXP_CTRL_TOG_BLOCK_SIZE(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_BLOCK_SIZE_SHIFT)) & PXP_CTRL_TOG_BLOCK_SIZE_MASK)
+
+#define PXP_CTRL_TOG_ENABLE_CSC2_MASK            (0x1000000U)
+#define PXP_CTRL_TOG_ENABLE_CSC2_SHIFT           (24U)
+/*! ENABLE_CSC2 - ENABLE_CSC2 */
+#define PXP_CTRL_TOG_ENABLE_CSC2(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_CSC2_SHIFT)) & PXP_CTRL_TOG_ENABLE_CSC2_MASK)
+
+#define PXP_CTRL_TOG_ENABLE_ROTATE0_MASK         (0x4000000U)
+#define PXP_CTRL_TOG_ENABLE_ROTATE0_SHIFT        (26U)
+/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
+#define PXP_CTRL_TOG_ENABLE_ROTATE0(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL_TOG_ENABLE_ROTATE0_MASK)
+
+#define PXP_CTRL_TOG_ENABLE_ROTATE1_MASK         (0x8000000U)
+#define PXP_CTRL_TOG_ENABLE_ROTATE1_SHIFT        (27U)
+/*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
+#define PXP_CTRL_TOG_ENABLE_ROTATE1(x)           (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL_TOG_ENABLE_ROTATE1_MASK)
+
+#define PXP_CTRL_TOG_CLKGATE_MASK                (0x40000000U)
+#define PXP_CTRL_TOG_CLKGATE_SHIFT               (30U)
+/*! CLKGATE - CLKGATE */
+#define PXP_CTRL_TOG_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_CLKGATE_SHIFT)) & PXP_CTRL_TOG_CLKGATE_MASK)
+
+#define PXP_CTRL_TOG_SFTRST_MASK                 (0x80000000U)
+#define PXP_CTRL_TOG_SFTRST_SHIFT                (31U)
+/*! SFTRST - SFTRST */
+#define PXP_CTRL_TOG_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_TOG_SFTRST_SHIFT)) & PXP_CTRL_TOG_SFTRST_MASK)
+/*! @} */
+
 /*! @name STAT - Status Register */
 /*! @{ */
 
@@ -674,6 +989,168 @@ typedef struct {
 #define PXP_STAT_BLOCKX(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_STAT_BLOCKX_SHIFT)) & PXP_STAT_BLOCKX_MASK)
 /*! @} */
 
+/*! @name STAT_SET - Status Register */
+/*! @{ */
+
+#define PXP_STAT_SET_IRQ0_MASK                   (0x1U)
+#define PXP_STAT_SET_IRQ0_SHIFT                  (0U)
+/*! IRQ0 - IRQ0 */
+#define PXP_STAT_SET_IRQ0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_IRQ0_SHIFT)) & PXP_STAT_SET_IRQ0_MASK)
+
+#define PXP_STAT_SET_AXI_WRITE_ERROR_0_MASK      (0x2U)
+#define PXP_STAT_SET_AXI_WRITE_ERROR_0_SHIFT     (1U)
+/*! AXI_WRITE_ERROR_0 - AXI_WRITE_ERROR_0 */
+#define PXP_STAT_SET_AXI_WRITE_ERROR_0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_AXI_WRITE_ERROR_0_SHIFT)) & PXP_STAT_SET_AXI_WRITE_ERROR_0_MASK)
+
+#define PXP_STAT_SET_AXI_READ_ERROR_0_MASK       (0x4U)
+#define PXP_STAT_SET_AXI_READ_ERROR_0_SHIFT      (2U)
+/*! AXI_READ_ERROR_0 - AXI_READ_ERROR_0 */
+#define PXP_STAT_SET_AXI_READ_ERROR_0(x)         (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_AXI_READ_ERROR_0_SHIFT)) & PXP_STAT_SET_AXI_READ_ERROR_0_MASK)
+
+#define PXP_STAT_SET_NEXT_IRQ_MASK               (0x8U)
+#define PXP_STAT_SET_NEXT_IRQ_SHIFT              (3U)
+/*! NEXT_IRQ - NEXT_IRQ */
+#define PXP_STAT_SET_NEXT_IRQ(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_NEXT_IRQ_SHIFT)) & PXP_STAT_SET_NEXT_IRQ_MASK)
+
+#define PXP_STAT_SET_AXI_ERROR_ID_0_MASK         (0xF0U)
+#define PXP_STAT_SET_AXI_ERROR_ID_0_SHIFT        (4U)
+/*! AXI_ERROR_ID_0 - AXI_ERROR_ID_0 */
+#define PXP_STAT_SET_AXI_ERROR_ID_0(x)           (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_AXI_ERROR_ID_0_SHIFT)) & PXP_STAT_SET_AXI_ERROR_ID_0_MASK)
+
+#define PXP_STAT_SET_AXI_WRITE_ERROR_1_MASK      (0x200U)
+#define PXP_STAT_SET_AXI_WRITE_ERROR_1_SHIFT     (9U)
+/*! AXI_WRITE_ERROR_1 - AXI_WRITE_ERROR_1 */
+#define PXP_STAT_SET_AXI_WRITE_ERROR_1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_AXI_WRITE_ERROR_1_SHIFT)) & PXP_STAT_SET_AXI_WRITE_ERROR_1_MASK)
+
+#define PXP_STAT_SET_AXI_READ_ERROR_1_MASK       (0x400U)
+#define PXP_STAT_SET_AXI_READ_ERROR_1_SHIFT      (10U)
+/*! AXI_READ_ERROR_1 - AXI_READ_ERROR_1 */
+#define PXP_STAT_SET_AXI_READ_ERROR_1(x)         (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_AXI_READ_ERROR_1_SHIFT)) & PXP_STAT_SET_AXI_READ_ERROR_1_MASK)
+
+#define PXP_STAT_SET_AXI_ERROR_ID_1_MASK         (0xF000U)
+#define PXP_STAT_SET_AXI_ERROR_ID_1_SHIFT        (12U)
+/*! AXI_ERROR_ID_1 - AXI_ERROR_ID_1 */
+#define PXP_STAT_SET_AXI_ERROR_ID_1(x)           (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_AXI_ERROR_ID_1_SHIFT)) & PXP_STAT_SET_AXI_ERROR_ID_1_MASK)
+
+#define PXP_STAT_SET_BLOCKY_MASK                 (0xFF0000U)
+#define PXP_STAT_SET_BLOCKY_SHIFT                (16U)
+/*! BLOCKY - BLOCKY */
+#define PXP_STAT_SET_BLOCKY(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_BLOCKY_SHIFT)) & PXP_STAT_SET_BLOCKY_MASK)
+
+#define PXP_STAT_SET_BLOCKX_MASK                 (0xFF000000U)
+#define PXP_STAT_SET_BLOCKX_SHIFT                (24U)
+/*! BLOCKX - BLOCKX */
+#define PXP_STAT_SET_BLOCKX(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_SET_BLOCKX_SHIFT)) & PXP_STAT_SET_BLOCKX_MASK)
+/*! @} */
+
+/*! @name STAT_CLR - Status Register */
+/*! @{ */
+
+#define PXP_STAT_CLR_IRQ0_MASK                   (0x1U)
+#define PXP_STAT_CLR_IRQ0_SHIFT                  (0U)
+/*! IRQ0 - IRQ0 */
+#define PXP_STAT_CLR_IRQ0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_IRQ0_SHIFT)) & PXP_STAT_CLR_IRQ0_MASK)
+
+#define PXP_STAT_CLR_AXI_WRITE_ERROR_0_MASK      (0x2U)
+#define PXP_STAT_CLR_AXI_WRITE_ERROR_0_SHIFT     (1U)
+/*! AXI_WRITE_ERROR_0 - AXI_WRITE_ERROR_0 */
+#define PXP_STAT_CLR_AXI_WRITE_ERROR_0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_AXI_WRITE_ERROR_0_SHIFT)) & PXP_STAT_CLR_AXI_WRITE_ERROR_0_MASK)
+
+#define PXP_STAT_CLR_AXI_READ_ERROR_0_MASK       (0x4U)
+#define PXP_STAT_CLR_AXI_READ_ERROR_0_SHIFT      (2U)
+/*! AXI_READ_ERROR_0 - AXI_READ_ERROR_0 */
+#define PXP_STAT_CLR_AXI_READ_ERROR_0(x)         (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_AXI_READ_ERROR_0_SHIFT)) & PXP_STAT_CLR_AXI_READ_ERROR_0_MASK)
+
+#define PXP_STAT_CLR_NEXT_IRQ_MASK               (0x8U)
+#define PXP_STAT_CLR_NEXT_IRQ_SHIFT              (3U)
+/*! NEXT_IRQ - NEXT_IRQ */
+#define PXP_STAT_CLR_NEXT_IRQ(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_NEXT_IRQ_SHIFT)) & PXP_STAT_CLR_NEXT_IRQ_MASK)
+
+#define PXP_STAT_CLR_AXI_ERROR_ID_0_MASK         (0xF0U)
+#define PXP_STAT_CLR_AXI_ERROR_ID_0_SHIFT        (4U)
+/*! AXI_ERROR_ID_0 - AXI_ERROR_ID_0 */
+#define PXP_STAT_CLR_AXI_ERROR_ID_0(x)           (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_AXI_ERROR_ID_0_SHIFT)) & PXP_STAT_CLR_AXI_ERROR_ID_0_MASK)
+
+#define PXP_STAT_CLR_AXI_WRITE_ERROR_1_MASK      (0x200U)
+#define PXP_STAT_CLR_AXI_WRITE_ERROR_1_SHIFT     (9U)
+/*! AXI_WRITE_ERROR_1 - AXI_WRITE_ERROR_1 */
+#define PXP_STAT_CLR_AXI_WRITE_ERROR_1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_AXI_WRITE_ERROR_1_SHIFT)) & PXP_STAT_CLR_AXI_WRITE_ERROR_1_MASK)
+
+#define PXP_STAT_CLR_AXI_READ_ERROR_1_MASK       (0x400U)
+#define PXP_STAT_CLR_AXI_READ_ERROR_1_SHIFT      (10U)
+/*! AXI_READ_ERROR_1 - AXI_READ_ERROR_1 */
+#define PXP_STAT_CLR_AXI_READ_ERROR_1(x)         (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_AXI_READ_ERROR_1_SHIFT)) & PXP_STAT_CLR_AXI_READ_ERROR_1_MASK)
+
+#define PXP_STAT_CLR_AXI_ERROR_ID_1_MASK         (0xF000U)
+#define PXP_STAT_CLR_AXI_ERROR_ID_1_SHIFT        (12U)
+/*! AXI_ERROR_ID_1 - AXI_ERROR_ID_1 */
+#define PXP_STAT_CLR_AXI_ERROR_ID_1(x)           (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_AXI_ERROR_ID_1_SHIFT)) & PXP_STAT_CLR_AXI_ERROR_ID_1_MASK)
+
+#define PXP_STAT_CLR_BLOCKY_MASK                 (0xFF0000U)
+#define PXP_STAT_CLR_BLOCKY_SHIFT                (16U)
+/*! BLOCKY - BLOCKY */
+#define PXP_STAT_CLR_BLOCKY(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_BLOCKY_SHIFT)) & PXP_STAT_CLR_BLOCKY_MASK)
+
+#define PXP_STAT_CLR_BLOCKX_MASK                 (0xFF000000U)
+#define PXP_STAT_CLR_BLOCKX_SHIFT                (24U)
+/*! BLOCKX - BLOCKX */
+#define PXP_STAT_CLR_BLOCKX(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_CLR_BLOCKX_SHIFT)) & PXP_STAT_CLR_BLOCKX_MASK)
+/*! @} */
+
+/*! @name STAT_TOG - Status Register */
+/*! @{ */
+
+#define PXP_STAT_TOG_IRQ0_MASK                   (0x1U)
+#define PXP_STAT_TOG_IRQ0_SHIFT                  (0U)
+/*! IRQ0 - IRQ0 */
+#define PXP_STAT_TOG_IRQ0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_IRQ0_SHIFT)) & PXP_STAT_TOG_IRQ0_MASK)
+
+#define PXP_STAT_TOG_AXI_WRITE_ERROR_0_MASK      (0x2U)
+#define PXP_STAT_TOG_AXI_WRITE_ERROR_0_SHIFT     (1U)
+/*! AXI_WRITE_ERROR_0 - AXI_WRITE_ERROR_0 */
+#define PXP_STAT_TOG_AXI_WRITE_ERROR_0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_AXI_WRITE_ERROR_0_SHIFT)) & PXP_STAT_TOG_AXI_WRITE_ERROR_0_MASK)
+
+#define PXP_STAT_TOG_AXI_READ_ERROR_0_MASK       (0x4U)
+#define PXP_STAT_TOG_AXI_READ_ERROR_0_SHIFT      (2U)
+/*! AXI_READ_ERROR_0 - AXI_READ_ERROR_0 */
+#define PXP_STAT_TOG_AXI_READ_ERROR_0(x)         (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_AXI_READ_ERROR_0_SHIFT)) & PXP_STAT_TOG_AXI_READ_ERROR_0_MASK)
+
+#define PXP_STAT_TOG_NEXT_IRQ_MASK               (0x8U)
+#define PXP_STAT_TOG_NEXT_IRQ_SHIFT              (3U)
+/*! NEXT_IRQ - NEXT_IRQ */
+#define PXP_STAT_TOG_NEXT_IRQ(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_NEXT_IRQ_SHIFT)) & PXP_STAT_TOG_NEXT_IRQ_MASK)
+
+#define PXP_STAT_TOG_AXI_ERROR_ID_0_MASK         (0xF0U)
+#define PXP_STAT_TOG_AXI_ERROR_ID_0_SHIFT        (4U)
+/*! AXI_ERROR_ID_0 - AXI_ERROR_ID_0 */
+#define PXP_STAT_TOG_AXI_ERROR_ID_0(x)           (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_AXI_ERROR_ID_0_SHIFT)) & PXP_STAT_TOG_AXI_ERROR_ID_0_MASK)
+
+#define PXP_STAT_TOG_AXI_WRITE_ERROR_1_MASK      (0x200U)
+#define PXP_STAT_TOG_AXI_WRITE_ERROR_1_SHIFT     (9U)
+/*! AXI_WRITE_ERROR_1 - AXI_WRITE_ERROR_1 */
+#define PXP_STAT_TOG_AXI_WRITE_ERROR_1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_AXI_WRITE_ERROR_1_SHIFT)) & PXP_STAT_TOG_AXI_WRITE_ERROR_1_MASK)
+
+#define PXP_STAT_TOG_AXI_READ_ERROR_1_MASK       (0x400U)
+#define PXP_STAT_TOG_AXI_READ_ERROR_1_SHIFT      (10U)
+/*! AXI_READ_ERROR_1 - AXI_READ_ERROR_1 */
+#define PXP_STAT_TOG_AXI_READ_ERROR_1(x)         (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_AXI_READ_ERROR_1_SHIFT)) & PXP_STAT_TOG_AXI_READ_ERROR_1_MASK)
+
+#define PXP_STAT_TOG_AXI_ERROR_ID_1_MASK         (0xF000U)
+#define PXP_STAT_TOG_AXI_ERROR_ID_1_SHIFT        (12U)
+/*! AXI_ERROR_ID_1 - AXI_ERROR_ID_1 */
+#define PXP_STAT_TOG_AXI_ERROR_ID_1(x)           (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_AXI_ERROR_ID_1_SHIFT)) & PXP_STAT_TOG_AXI_ERROR_ID_1_MASK)
+
+#define PXP_STAT_TOG_BLOCKY_MASK                 (0xFF0000U)
+#define PXP_STAT_TOG_BLOCKY_SHIFT                (16U)
+/*! BLOCKY - BLOCKY */
+#define PXP_STAT_TOG_BLOCKY(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_BLOCKY_SHIFT)) & PXP_STAT_TOG_BLOCKY_MASK)
+
+#define PXP_STAT_TOG_BLOCKX_MASK                 (0xFF000000U)
+#define PXP_STAT_TOG_BLOCKX_SHIFT                (24U)
+/*! BLOCKX - BLOCKX */
+#define PXP_STAT_TOG_BLOCKX(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_STAT_TOG_BLOCKX_SHIFT)) & PXP_STAT_TOG_BLOCKX_MASK)
+/*! @} */
+
 /*! @name OUT_CTRL - Output Buffer Control Register */
 /*! @{ */
 
@@ -725,6 +1202,78 @@ typedef struct {
 #define PXP_OUT_CTRL_ALPHA_SHIFT                 (24U)
 /*! ALPHA - ALPHA */
 #define PXP_OUT_CTRL_ALPHA(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_ALPHA_SHIFT)) & PXP_OUT_CTRL_ALPHA_MASK)
+/*! @} */
+
+/*! @name OUT_CTRL_SET - Output Buffer Control Register */
+/*! @{ */
+
+#define PXP_OUT_CTRL_SET_FORMAT_MASK             (0x1FU)
+#define PXP_OUT_CTRL_SET_FORMAT_SHIFT            (0U)
+/*! FORMAT - FORMAT */
+#define PXP_OUT_CTRL_SET_FORMAT(x)               (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_SET_FORMAT_SHIFT)) & PXP_OUT_CTRL_SET_FORMAT_MASK)
+
+#define PXP_OUT_CTRL_SET_INTERLACED_OUTPUT_MASK  (0x300U)
+#define PXP_OUT_CTRL_SET_INTERLACED_OUTPUT_SHIFT (8U)
+/*! INTERLACED_OUTPUT - INTERLACED_OUTPUT */
+#define PXP_OUT_CTRL_SET_INTERLACED_OUTPUT(x)    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_SET_INTERLACED_OUTPUT_SHIFT)) & PXP_OUT_CTRL_SET_INTERLACED_OUTPUT_MASK)
+
+#define PXP_OUT_CTRL_SET_ALPHA_OUTPUT_MASK       (0x800000U)
+#define PXP_OUT_CTRL_SET_ALPHA_OUTPUT_SHIFT      (23U)
+/*! ALPHA_OUTPUT - ALPHA_OUTPUT */
+#define PXP_OUT_CTRL_SET_ALPHA_OUTPUT(x)         (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_SET_ALPHA_OUTPUT_SHIFT)) & PXP_OUT_CTRL_SET_ALPHA_OUTPUT_MASK)
+
+#define PXP_OUT_CTRL_SET_ALPHA_MASK              (0xFF000000U)
+#define PXP_OUT_CTRL_SET_ALPHA_SHIFT             (24U)
+/*! ALPHA - ALPHA */
+#define PXP_OUT_CTRL_SET_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_SET_ALPHA_SHIFT)) & PXP_OUT_CTRL_SET_ALPHA_MASK)
+/*! @} */
+
+/*! @name OUT_CTRL_CLR - Output Buffer Control Register */
+/*! @{ */
+
+#define PXP_OUT_CTRL_CLR_FORMAT_MASK             (0x1FU)
+#define PXP_OUT_CTRL_CLR_FORMAT_SHIFT            (0U)
+/*! FORMAT - FORMAT */
+#define PXP_OUT_CTRL_CLR_FORMAT(x)               (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_CLR_FORMAT_SHIFT)) & PXP_OUT_CTRL_CLR_FORMAT_MASK)
+
+#define PXP_OUT_CTRL_CLR_INTERLACED_OUTPUT_MASK  (0x300U)
+#define PXP_OUT_CTRL_CLR_INTERLACED_OUTPUT_SHIFT (8U)
+/*! INTERLACED_OUTPUT - INTERLACED_OUTPUT */
+#define PXP_OUT_CTRL_CLR_INTERLACED_OUTPUT(x)    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_CLR_INTERLACED_OUTPUT_SHIFT)) & PXP_OUT_CTRL_CLR_INTERLACED_OUTPUT_MASK)
+
+#define PXP_OUT_CTRL_CLR_ALPHA_OUTPUT_MASK       (0x800000U)
+#define PXP_OUT_CTRL_CLR_ALPHA_OUTPUT_SHIFT      (23U)
+/*! ALPHA_OUTPUT - ALPHA_OUTPUT */
+#define PXP_OUT_CTRL_CLR_ALPHA_OUTPUT(x)         (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_CLR_ALPHA_OUTPUT_SHIFT)) & PXP_OUT_CTRL_CLR_ALPHA_OUTPUT_MASK)
+
+#define PXP_OUT_CTRL_CLR_ALPHA_MASK              (0xFF000000U)
+#define PXP_OUT_CTRL_CLR_ALPHA_SHIFT             (24U)
+/*! ALPHA - ALPHA */
+#define PXP_OUT_CTRL_CLR_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_CLR_ALPHA_SHIFT)) & PXP_OUT_CTRL_CLR_ALPHA_MASK)
+/*! @} */
+
+/*! @name OUT_CTRL_TOG - Output Buffer Control Register */
+/*! @{ */
+
+#define PXP_OUT_CTRL_TOG_FORMAT_MASK             (0x1FU)
+#define PXP_OUT_CTRL_TOG_FORMAT_SHIFT            (0U)
+/*! FORMAT - FORMAT */
+#define PXP_OUT_CTRL_TOG_FORMAT(x)               (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_TOG_FORMAT_SHIFT)) & PXP_OUT_CTRL_TOG_FORMAT_MASK)
+
+#define PXP_OUT_CTRL_TOG_INTERLACED_OUTPUT_MASK  (0x300U)
+#define PXP_OUT_CTRL_TOG_INTERLACED_OUTPUT_SHIFT (8U)
+/*! INTERLACED_OUTPUT - INTERLACED_OUTPUT */
+#define PXP_OUT_CTRL_TOG_INTERLACED_OUTPUT(x)    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_TOG_INTERLACED_OUTPUT_SHIFT)) & PXP_OUT_CTRL_TOG_INTERLACED_OUTPUT_MASK)
+
+#define PXP_OUT_CTRL_TOG_ALPHA_OUTPUT_MASK       (0x800000U)
+#define PXP_OUT_CTRL_TOG_ALPHA_OUTPUT_SHIFT      (23U)
+/*! ALPHA_OUTPUT - ALPHA_OUTPUT */
+#define PXP_OUT_CTRL_TOG_ALPHA_OUTPUT(x)         (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_TOG_ALPHA_OUTPUT_SHIFT)) & PXP_OUT_CTRL_TOG_ALPHA_OUTPUT_MASK)
+
+#define PXP_OUT_CTRL_TOG_ALPHA_MASK              (0xFF000000U)
+#define PXP_OUT_CTRL_TOG_ALPHA_SHIFT             (24U)
+/*! ALPHA - ALPHA */
+#define PXP_OUT_CTRL_TOG_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_TOG_ALPHA_SHIFT)) & PXP_OUT_CTRL_TOG_ALPHA_MASK)
 /*! @} */
 
 /*! @name OUT_BUF - Output Frame Buffer Pointer Register */
@@ -881,6 +1430,78 @@ typedef struct {
  *  0b11..DECX8 : Decimate PS by 8.
  */
 #define PXP_PS_CTRL_DECX(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_DECX_SHIFT)) & PXP_PS_CTRL_DECX_MASK)
+/*! @} */
+
+/*! @name PS_CTRL_SET - Processed Surface (PS) Control Register */
+/*! @{ */
+
+#define PXP_PS_CTRL_SET_FORMAT_MASK              (0x3FU)
+#define PXP_PS_CTRL_SET_FORMAT_SHIFT             (0U)
+/*! FORMAT - FORMAT */
+#define PXP_PS_CTRL_SET_FORMAT(x)                (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_SET_FORMAT_SHIFT)) & PXP_PS_CTRL_SET_FORMAT_MASK)
+
+#define PXP_PS_CTRL_SET_WB_SWAP_MASK             (0x40U)
+#define PXP_PS_CTRL_SET_WB_SWAP_SHIFT            (6U)
+/*! WB_SWAP - WB_SWAP */
+#define PXP_PS_CTRL_SET_WB_SWAP(x)               (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_SET_WB_SWAP_SHIFT)) & PXP_PS_CTRL_SET_WB_SWAP_MASK)
+
+#define PXP_PS_CTRL_SET_DECY_MASK                (0x300U)
+#define PXP_PS_CTRL_SET_DECY_SHIFT               (8U)
+/*! DECY - DECY */
+#define PXP_PS_CTRL_SET_DECY(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_SET_DECY_SHIFT)) & PXP_PS_CTRL_SET_DECY_MASK)
+
+#define PXP_PS_CTRL_SET_DECX_MASK                (0xC00U)
+#define PXP_PS_CTRL_SET_DECX_SHIFT               (10U)
+/*! DECX - DECX */
+#define PXP_PS_CTRL_SET_DECX(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_SET_DECX_SHIFT)) & PXP_PS_CTRL_SET_DECX_MASK)
+/*! @} */
+
+/*! @name PS_CTRL_CLR - Processed Surface (PS) Control Register */
+/*! @{ */
+
+#define PXP_PS_CTRL_CLR_FORMAT_MASK              (0x3FU)
+#define PXP_PS_CTRL_CLR_FORMAT_SHIFT             (0U)
+/*! FORMAT - FORMAT */
+#define PXP_PS_CTRL_CLR_FORMAT(x)                (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_CLR_FORMAT_SHIFT)) & PXP_PS_CTRL_CLR_FORMAT_MASK)
+
+#define PXP_PS_CTRL_CLR_WB_SWAP_MASK             (0x40U)
+#define PXP_PS_CTRL_CLR_WB_SWAP_SHIFT            (6U)
+/*! WB_SWAP - WB_SWAP */
+#define PXP_PS_CTRL_CLR_WB_SWAP(x)               (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_CLR_WB_SWAP_SHIFT)) & PXP_PS_CTRL_CLR_WB_SWAP_MASK)
+
+#define PXP_PS_CTRL_CLR_DECY_MASK                (0x300U)
+#define PXP_PS_CTRL_CLR_DECY_SHIFT               (8U)
+/*! DECY - DECY */
+#define PXP_PS_CTRL_CLR_DECY(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_CLR_DECY_SHIFT)) & PXP_PS_CTRL_CLR_DECY_MASK)
+
+#define PXP_PS_CTRL_CLR_DECX_MASK                (0xC00U)
+#define PXP_PS_CTRL_CLR_DECX_SHIFT               (10U)
+/*! DECX - DECX */
+#define PXP_PS_CTRL_CLR_DECX(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_CLR_DECX_SHIFT)) & PXP_PS_CTRL_CLR_DECX_MASK)
+/*! @} */
+
+/*! @name PS_CTRL_TOG - Processed Surface (PS) Control Register */
+/*! @{ */
+
+#define PXP_PS_CTRL_TOG_FORMAT_MASK              (0x3FU)
+#define PXP_PS_CTRL_TOG_FORMAT_SHIFT             (0U)
+/*! FORMAT - FORMAT */
+#define PXP_PS_CTRL_TOG_FORMAT(x)                (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_TOG_FORMAT_SHIFT)) & PXP_PS_CTRL_TOG_FORMAT_MASK)
+
+#define PXP_PS_CTRL_TOG_WB_SWAP_MASK             (0x40U)
+#define PXP_PS_CTRL_TOG_WB_SWAP_SHIFT            (6U)
+/*! WB_SWAP - WB_SWAP */
+#define PXP_PS_CTRL_TOG_WB_SWAP(x)               (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_TOG_WB_SWAP_SHIFT)) & PXP_PS_CTRL_TOG_WB_SWAP_MASK)
+
+#define PXP_PS_CTRL_TOG_DECY_MASK                (0x300U)
+#define PXP_PS_CTRL_TOG_DECY_SHIFT               (8U)
+/*! DECY - DECY */
+#define PXP_PS_CTRL_TOG_DECY(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_TOG_DECY_SHIFT)) & PXP_PS_CTRL_TOG_DECY_MASK)
+
+#define PXP_PS_CTRL_TOG_DECX_MASK                (0xC00U)
+#define PXP_PS_CTRL_TOG_DECX_SHIFT               (10U)
+/*! DECX - DECX */
+#define PXP_PS_CTRL_TOG_DECX(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_TOG_DECX_SHIFT)) & PXP_PS_CTRL_TOG_DECX_MASK)
 /*! @} */
 
 /*! @name PS_BUF - PS Input Buffer Address Register */
@@ -1597,6 +2218,228 @@ typedef struct {
 #define PXP_CTRL2_ENABLE_ROTATE1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_ENABLE_ROTATE1_MASK)
 /*! @} */
 
+/*! @name CTRL2_SET - Control Register 2 */
+/*! @{ */
+
+#define PXP_CTRL2_SET_ENABLE_MASK                (0x1U)
+#define PXP_CTRL2_SET_ENABLE_SHIFT               (0U)
+/*! ENABLE - ENABLE */
+#define PXP_CTRL2_SET_ENABLE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_SHIFT)) & PXP_CTRL2_SET_ENABLE_MASK)
+
+#define PXP_CTRL2_SET_ROTATE0_MASK               (0x300U)
+#define PXP_CTRL2_SET_ROTATE0_SHIFT              (8U)
+/*! ROTATE0 - ROTATE0 */
+#define PXP_CTRL2_SET_ROTATE0(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ROTATE0_SHIFT)) & PXP_CTRL2_SET_ROTATE0_MASK)
+
+#define PXP_CTRL2_SET_HFLIP0_MASK                (0x400U)
+#define PXP_CTRL2_SET_HFLIP0_SHIFT               (10U)
+/*! HFLIP0 - HFLIP0 */
+#define PXP_CTRL2_SET_HFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_HFLIP0_SHIFT)) & PXP_CTRL2_SET_HFLIP0_MASK)
+
+#define PXP_CTRL2_SET_VFLIP0_MASK                (0x800U)
+#define PXP_CTRL2_SET_VFLIP0_SHIFT               (11U)
+/*! VFLIP0 - VFLIP0 */
+#define PXP_CTRL2_SET_VFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_VFLIP0_SHIFT)) & PXP_CTRL2_SET_VFLIP0_MASK)
+
+#define PXP_CTRL2_SET_ROTATE1_MASK               (0x3000U)
+#define PXP_CTRL2_SET_ROTATE1_SHIFT              (12U)
+/*! ROTATE1 - ROTATE1 */
+#define PXP_CTRL2_SET_ROTATE1(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ROTATE1_SHIFT)) & PXP_CTRL2_SET_ROTATE1_MASK)
+
+#define PXP_CTRL2_SET_HFLIP1_MASK                (0x4000U)
+#define PXP_CTRL2_SET_HFLIP1_SHIFT               (14U)
+/*! HFLIP1 - HFLIP1 */
+#define PXP_CTRL2_SET_HFLIP1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_HFLIP1_SHIFT)) & PXP_CTRL2_SET_HFLIP1_MASK)
+
+#define PXP_CTRL2_SET_VFLIP1_MASK                (0x8000U)
+#define PXP_CTRL2_SET_VFLIP1_SHIFT               (15U)
+/*! VFLIP1 - VFLIP1 */
+#define PXP_CTRL2_SET_VFLIP1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_VFLIP1_SHIFT)) & PXP_CTRL2_SET_VFLIP1_MASK)
+
+#define PXP_CTRL2_SET_ENABLE_INPUT_FETCH_STORE_MASK (0x100000U)
+#define PXP_CTRL2_SET_ENABLE_INPUT_FETCH_STORE_SHIFT (20U)
+/*! ENABLE_INPUT_FETCH_STORE - ENABLE_INPUT_FETCH_STORE */
+#define PXP_CTRL2_SET_ENABLE_INPUT_FETCH_STORE(x) (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_INPUT_FETCH_STORE_SHIFT)) & PXP_CTRL2_SET_ENABLE_INPUT_FETCH_STORE_MASK)
+
+#define PXP_CTRL2_SET_ENABLE_ALPHA_B_MASK        (0x200000U)
+#define PXP_CTRL2_SET_ENABLE_ALPHA_B_SHIFT       (21U)
+/*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
+#define PXP_CTRL2_SET_ENABLE_ALPHA_B(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL2_SET_ENABLE_ALPHA_B_MASK)
+
+#define PXP_CTRL2_SET_BLOCK_32_MASK              (0x400000U)
+#define PXP_CTRL2_SET_BLOCK_32_SHIFT             (22U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_CTRL2_SET_BLOCK_32(x)                (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_BLOCK_32_SHIFT)) & PXP_CTRL2_SET_BLOCK_32_MASK)
+
+#define PXP_CTRL2_SET_BLOCK_SIZE_MASK            (0x800000U)
+#define PXP_CTRL2_SET_BLOCK_SIZE_SHIFT           (23U)
+/*! BLOCK_SIZE - BLOCK_SIZE */
+#define PXP_CTRL2_SET_BLOCK_SIZE(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_BLOCK_SIZE_SHIFT)) & PXP_CTRL2_SET_BLOCK_SIZE_MASK)
+
+#define PXP_CTRL2_SET_ENABLE_CSC2_MASK           (0x1000000U)
+#define PXP_CTRL2_SET_ENABLE_CSC2_SHIFT          (24U)
+/*! ENABLE_CSC2 - ENABLE_CSC2 */
+#define PXP_CTRL2_SET_ENABLE_CSC2(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_SET_ENABLE_CSC2_MASK)
+
+#define PXP_CTRL2_SET_ENABLE_ROTATE0_MASK        (0x4000000U)
+#define PXP_CTRL2_SET_ENABLE_ROTATE0_SHIFT       (26U)
+/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
+#define PXP_CTRL2_SET_ENABLE_ROTATE0(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_SET_ENABLE_ROTATE0_MASK)
+
+#define PXP_CTRL2_SET_ENABLE_ROTATE1_MASK        (0x8000000U)
+#define PXP_CTRL2_SET_ENABLE_ROTATE1_SHIFT       (27U)
+/*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
+#define PXP_CTRL2_SET_ENABLE_ROTATE1(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_SET_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_SET_ENABLE_ROTATE1_MASK)
+/*! @} */
+
+/*! @name CTRL2_CLR - Control Register 2 */
+/*! @{ */
+
+#define PXP_CTRL2_CLR_ENABLE_MASK                (0x1U)
+#define PXP_CTRL2_CLR_ENABLE_SHIFT               (0U)
+/*! ENABLE - ENABLE */
+#define PXP_CTRL2_CLR_ENABLE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_SHIFT)) & PXP_CTRL2_CLR_ENABLE_MASK)
+
+#define PXP_CTRL2_CLR_ROTATE0_MASK               (0x300U)
+#define PXP_CTRL2_CLR_ROTATE0_SHIFT              (8U)
+/*! ROTATE0 - ROTATE0 */
+#define PXP_CTRL2_CLR_ROTATE0(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ROTATE0_SHIFT)) & PXP_CTRL2_CLR_ROTATE0_MASK)
+
+#define PXP_CTRL2_CLR_HFLIP0_MASK                (0x400U)
+#define PXP_CTRL2_CLR_HFLIP0_SHIFT               (10U)
+/*! HFLIP0 - HFLIP0 */
+#define PXP_CTRL2_CLR_HFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_HFLIP0_SHIFT)) & PXP_CTRL2_CLR_HFLIP0_MASK)
+
+#define PXP_CTRL2_CLR_VFLIP0_MASK                (0x800U)
+#define PXP_CTRL2_CLR_VFLIP0_SHIFT               (11U)
+/*! VFLIP0 - VFLIP0 */
+#define PXP_CTRL2_CLR_VFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_VFLIP0_SHIFT)) & PXP_CTRL2_CLR_VFLIP0_MASK)
+
+#define PXP_CTRL2_CLR_ROTATE1_MASK               (0x3000U)
+#define PXP_CTRL2_CLR_ROTATE1_SHIFT              (12U)
+/*! ROTATE1 - ROTATE1 */
+#define PXP_CTRL2_CLR_ROTATE1(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ROTATE1_SHIFT)) & PXP_CTRL2_CLR_ROTATE1_MASK)
+
+#define PXP_CTRL2_CLR_HFLIP1_MASK                (0x4000U)
+#define PXP_CTRL2_CLR_HFLIP1_SHIFT               (14U)
+/*! HFLIP1 - HFLIP1 */
+#define PXP_CTRL2_CLR_HFLIP1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_HFLIP1_SHIFT)) & PXP_CTRL2_CLR_HFLIP1_MASK)
+
+#define PXP_CTRL2_CLR_VFLIP1_MASK                (0x8000U)
+#define PXP_CTRL2_CLR_VFLIP1_SHIFT               (15U)
+/*! VFLIP1 - VFLIP1 */
+#define PXP_CTRL2_CLR_VFLIP1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_VFLIP1_SHIFT)) & PXP_CTRL2_CLR_VFLIP1_MASK)
+
+#define PXP_CTRL2_CLR_ENABLE_INPUT_FETCH_STORE_MASK (0x100000U)
+#define PXP_CTRL2_CLR_ENABLE_INPUT_FETCH_STORE_SHIFT (20U)
+/*! ENABLE_INPUT_FETCH_STORE - ENABLE_INPUT_FETCH_STORE */
+#define PXP_CTRL2_CLR_ENABLE_INPUT_FETCH_STORE(x) (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_INPUT_FETCH_STORE_SHIFT)) & PXP_CTRL2_CLR_ENABLE_INPUT_FETCH_STORE_MASK)
+
+#define PXP_CTRL2_CLR_ENABLE_ALPHA_B_MASK        (0x200000U)
+#define PXP_CTRL2_CLR_ENABLE_ALPHA_B_SHIFT       (21U)
+/*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
+#define PXP_CTRL2_CLR_ENABLE_ALPHA_B(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL2_CLR_ENABLE_ALPHA_B_MASK)
+
+#define PXP_CTRL2_CLR_BLOCK_32_MASK              (0x400000U)
+#define PXP_CTRL2_CLR_BLOCK_32_SHIFT             (22U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_CTRL2_CLR_BLOCK_32(x)                (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_BLOCK_32_SHIFT)) & PXP_CTRL2_CLR_BLOCK_32_MASK)
+
+#define PXP_CTRL2_CLR_BLOCK_SIZE_MASK            (0x800000U)
+#define PXP_CTRL2_CLR_BLOCK_SIZE_SHIFT           (23U)
+/*! BLOCK_SIZE - BLOCK_SIZE */
+#define PXP_CTRL2_CLR_BLOCK_SIZE(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_BLOCK_SIZE_SHIFT)) & PXP_CTRL2_CLR_BLOCK_SIZE_MASK)
+
+#define PXP_CTRL2_CLR_ENABLE_CSC2_MASK           (0x1000000U)
+#define PXP_CTRL2_CLR_ENABLE_CSC2_SHIFT          (24U)
+/*! ENABLE_CSC2 - ENABLE_CSC2 */
+#define PXP_CTRL2_CLR_ENABLE_CSC2(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_CLR_ENABLE_CSC2_MASK)
+
+#define PXP_CTRL2_CLR_ENABLE_ROTATE0_MASK        (0x4000000U)
+#define PXP_CTRL2_CLR_ENABLE_ROTATE0_SHIFT       (26U)
+/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
+#define PXP_CTRL2_CLR_ENABLE_ROTATE0(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_CLR_ENABLE_ROTATE0_MASK)
+
+#define PXP_CTRL2_CLR_ENABLE_ROTATE1_MASK        (0x8000000U)
+#define PXP_CTRL2_CLR_ENABLE_ROTATE1_SHIFT       (27U)
+/*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
+#define PXP_CTRL2_CLR_ENABLE_ROTATE1(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_CLR_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_CLR_ENABLE_ROTATE1_MASK)
+/*! @} */
+
+/*! @name CTRL2_TOG - Control Register 2 */
+/*! @{ */
+
+#define PXP_CTRL2_TOG_ENABLE_MASK                (0x1U)
+#define PXP_CTRL2_TOG_ENABLE_SHIFT               (0U)
+/*! ENABLE - ENABLE */
+#define PXP_CTRL2_TOG_ENABLE(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_SHIFT)) & PXP_CTRL2_TOG_ENABLE_MASK)
+
+#define PXP_CTRL2_TOG_ROTATE0_MASK               (0x300U)
+#define PXP_CTRL2_TOG_ROTATE0_SHIFT              (8U)
+/*! ROTATE0 - ROTATE0 */
+#define PXP_CTRL2_TOG_ROTATE0(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ROTATE0_SHIFT)) & PXP_CTRL2_TOG_ROTATE0_MASK)
+
+#define PXP_CTRL2_TOG_HFLIP0_MASK                (0x400U)
+#define PXP_CTRL2_TOG_HFLIP0_SHIFT               (10U)
+/*! HFLIP0 - HFLIP0 */
+#define PXP_CTRL2_TOG_HFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_HFLIP0_SHIFT)) & PXP_CTRL2_TOG_HFLIP0_MASK)
+
+#define PXP_CTRL2_TOG_VFLIP0_MASK                (0x800U)
+#define PXP_CTRL2_TOG_VFLIP0_SHIFT               (11U)
+/*! VFLIP0 - VFLIP0 */
+#define PXP_CTRL2_TOG_VFLIP0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_VFLIP0_SHIFT)) & PXP_CTRL2_TOG_VFLIP0_MASK)
+
+#define PXP_CTRL2_TOG_ROTATE1_MASK               (0x3000U)
+#define PXP_CTRL2_TOG_ROTATE1_SHIFT              (12U)
+/*! ROTATE1 - ROTATE1 */
+#define PXP_CTRL2_TOG_ROTATE1(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ROTATE1_SHIFT)) & PXP_CTRL2_TOG_ROTATE1_MASK)
+
+#define PXP_CTRL2_TOG_HFLIP1_MASK                (0x4000U)
+#define PXP_CTRL2_TOG_HFLIP1_SHIFT               (14U)
+/*! HFLIP1 - HFLIP1 */
+#define PXP_CTRL2_TOG_HFLIP1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_HFLIP1_SHIFT)) & PXP_CTRL2_TOG_HFLIP1_MASK)
+
+#define PXP_CTRL2_TOG_VFLIP1_MASK                (0x8000U)
+#define PXP_CTRL2_TOG_VFLIP1_SHIFT               (15U)
+/*! VFLIP1 - VFLIP1 */
+#define PXP_CTRL2_TOG_VFLIP1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_VFLIP1_SHIFT)) & PXP_CTRL2_TOG_VFLIP1_MASK)
+
+#define PXP_CTRL2_TOG_ENABLE_INPUT_FETCH_STORE_MASK (0x100000U)
+#define PXP_CTRL2_TOG_ENABLE_INPUT_FETCH_STORE_SHIFT (20U)
+/*! ENABLE_INPUT_FETCH_STORE - ENABLE_INPUT_FETCH_STORE */
+#define PXP_CTRL2_TOG_ENABLE_INPUT_FETCH_STORE(x) (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_INPUT_FETCH_STORE_SHIFT)) & PXP_CTRL2_TOG_ENABLE_INPUT_FETCH_STORE_MASK)
+
+#define PXP_CTRL2_TOG_ENABLE_ALPHA_B_MASK        (0x200000U)
+#define PXP_CTRL2_TOG_ENABLE_ALPHA_B_SHIFT       (21U)
+/*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
+#define PXP_CTRL2_TOG_ENABLE_ALPHA_B(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL2_TOG_ENABLE_ALPHA_B_MASK)
+
+#define PXP_CTRL2_TOG_BLOCK_32_MASK              (0x400000U)
+#define PXP_CTRL2_TOG_BLOCK_32_SHIFT             (22U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_CTRL2_TOG_BLOCK_32(x)                (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_BLOCK_32_SHIFT)) & PXP_CTRL2_TOG_BLOCK_32_MASK)
+
+#define PXP_CTRL2_TOG_BLOCK_SIZE_MASK            (0x800000U)
+#define PXP_CTRL2_TOG_BLOCK_SIZE_SHIFT           (23U)
+/*! BLOCK_SIZE - BLOCK_SIZE */
+#define PXP_CTRL2_TOG_BLOCK_SIZE(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_BLOCK_SIZE_SHIFT)) & PXP_CTRL2_TOG_BLOCK_SIZE_MASK)
+
+#define PXP_CTRL2_TOG_ENABLE_CSC2_MASK           (0x1000000U)
+#define PXP_CTRL2_TOG_ENABLE_CSC2_SHIFT          (24U)
+/*! ENABLE_CSC2 - ENABLE_CSC2 */
+#define PXP_CTRL2_TOG_ENABLE_CSC2(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_TOG_ENABLE_CSC2_MASK)
+
+#define PXP_CTRL2_TOG_ENABLE_ROTATE0_MASK        (0x4000000U)
+#define PXP_CTRL2_TOG_ENABLE_ROTATE0_SHIFT       (26U)
+/*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
+#define PXP_CTRL2_TOG_ENABLE_ROTATE0(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_ROTATE0_SHIFT)) & PXP_CTRL2_TOG_ENABLE_ROTATE0_MASK)
+
+#define PXP_CTRL2_TOG_ENABLE_ROTATE1_MASK        (0x8000000U)
+#define PXP_CTRL2_TOG_ENABLE_ROTATE1_SHIFT       (27U)
+/*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
+#define PXP_CTRL2_TOG_ENABLE_ROTATE1(x)          (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_TOG_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_TOG_ENABLE_ROTATE1_MASK)
+/*! @} */
+
 /*! @name POWER_REG0 - Power Control Register 0 */
 /*! @{ */
 
@@ -1779,6 +2622,258 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_MUX15_SEL(x)         (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_MUX15_SEL_MASK)
 /*! @} */
 
+/*! @name DATA_PATH_CTRL0_SET - Data Path Control 0 Register */
+/*! @{ */
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX0_SEL_MASK    (0x3U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX0_SEL_SHIFT   (0U)
+/*! MUX0_SEL - MUX0_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX0_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX0_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX0_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX1_SEL_MASK    (0xCU)
+#define PXP_DATA_PATH_CTRL0_SET_MUX1_SEL_SHIFT   (2U)
+/*! MUX1_SEL - MUX1_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX1_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX1_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX1_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX2_SEL_MASK    (0x30U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX2_SEL_SHIFT   (4U)
+/*! MUX2_SEL - MUX2_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX2_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX2_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX2_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX3_SEL_MASK    (0xC0U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX3_SEL_SHIFT   (6U)
+/*! MUX3_SEL - MUX3_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX3_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX3_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_MASK    (0x300U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_SHIFT   (8U)
+/*! MUX4_SEL - MUX4_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX4_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX4_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX5_SEL_MASK    (0xC00U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX5_SEL_SHIFT   (10U)
+/*! MUX5_SEL - MUX5_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX5_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX5_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX5_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX6_SEL_MASK    (0x3000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX6_SEL_SHIFT   (12U)
+/*! MUX6_SEL - MUX6_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX6_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX6_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX6_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX7_SEL_MASK    (0xC000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX7_SEL_SHIFT   (14U)
+/*! MUX7_SEL - MUX7_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX7_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX7_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX7_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_MASK    (0x30000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_SHIFT   (16U)
+/*! MUX8_SEL - MUX8_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX8_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX8_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_MASK    (0xC0000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_SHIFT   (18U)
+/*! MUX9_SEL - MUX9_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX9_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX9_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX10_SEL_MASK   (0x300000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX10_SEL_SHIFT  (20U)
+/*! MUX10_SEL - MUX10_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX10_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX10_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX10_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX11_SEL_MASK   (0xC00000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX11_SEL_SHIFT  (22U)
+/*! MUX11_SEL - MUX11_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX11_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX11_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX11_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX12_SEL_MASK   (0x3000000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX12_SEL_SHIFT  (24U)
+/*! MUX12_SEL - MUX12_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX12_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX12_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX12_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX13_SEL_MASK   (0xC000000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX13_SEL_SHIFT  (26U)
+/*! MUX13_SEL - MUX13_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX13_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX13_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX13_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX14_SEL_MASK   (0x30000000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX14_SEL_SHIFT  (28U)
+/*! MUX14_SEL - MUX14_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX14_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX14_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX14_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_SET_MUX15_SEL_MASK   (0xC0000000U)
+#define PXP_DATA_PATH_CTRL0_SET_MUX15_SEL_SHIFT  (30U)
+/*! MUX15_SEL - MUX15_SEL */
+#define PXP_DATA_PATH_CTRL0_SET_MUX15_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_SET_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_SET_MUX15_SEL_MASK)
+/*! @} */
+
+/*! @name DATA_PATH_CTRL0_CLR - Data Path Control 0 Register */
+/*! @{ */
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX0_SEL_MASK    (0x3U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX0_SEL_SHIFT   (0U)
+/*! MUX0_SEL - MUX0_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX0_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX0_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX0_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX1_SEL_MASK    (0xCU)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX1_SEL_SHIFT   (2U)
+/*! MUX1_SEL - MUX1_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX1_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX1_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX1_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX2_SEL_MASK    (0x30U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX2_SEL_SHIFT   (4U)
+/*! MUX2_SEL - MUX2_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX2_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX2_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX2_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL_MASK    (0xC0U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL_SHIFT   (6U)
+/*! MUX3_SEL - MUX3_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX3_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_MASK    (0x300U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_SHIFT   (8U)
+/*! MUX4_SEL - MUX4_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX4_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL_MASK    (0xC00U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL_SHIFT   (10U)
+/*! MUX5_SEL - MUX5_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX5_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX6_SEL_MASK    (0x3000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX6_SEL_SHIFT   (12U)
+/*! MUX6_SEL - MUX6_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX6_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX6_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX6_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX7_SEL_MASK    (0xC000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX7_SEL_SHIFT   (14U)
+/*! MUX7_SEL - MUX7_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX7_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX7_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX7_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_MASK    (0x30000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_SHIFT   (16U)
+/*! MUX8_SEL - MUX8_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX8_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_MASK    (0xC0000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_SHIFT   (18U)
+/*! MUX9_SEL - MUX9_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX9_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL_MASK   (0x300000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL_SHIFT  (20U)
+/*! MUX10_SEL - MUX10_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX10_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX11_SEL_MASK   (0xC00000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX11_SEL_SHIFT  (22U)
+/*! MUX11_SEL - MUX11_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX11_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX11_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX11_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX12_SEL_MASK   (0x3000000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX12_SEL_SHIFT  (24U)
+/*! MUX12_SEL - MUX12_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX12_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX12_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX12_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX13_SEL_MASK   (0xC000000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX13_SEL_SHIFT  (26U)
+/*! MUX13_SEL - MUX13_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX13_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX13_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX13_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX14_SEL_MASK   (0x30000000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX14_SEL_SHIFT  (28U)
+/*! MUX14_SEL - MUX14_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX14_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX14_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX14_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL_MASK   (0xC0000000U)
+#define PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL_SHIFT  (30U)
+/*! MUX15_SEL - MUX15_SEL */
+#define PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_CLR_MUX15_SEL_MASK)
+/*! @} */
+
+/*! @name DATA_PATH_CTRL0_TOG - Data Path Control 0 Register */
+/*! @{ */
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX0_SEL_MASK    (0x3U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX0_SEL_SHIFT   (0U)
+/*! MUX0_SEL - MUX0_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX0_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX0_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX0_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX1_SEL_MASK    (0xCU)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX1_SEL_SHIFT   (2U)
+/*! MUX1_SEL - MUX1_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX1_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX1_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX1_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX2_SEL_MASK    (0x30U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX2_SEL_SHIFT   (4U)
+/*! MUX2_SEL - MUX2_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX2_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX2_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX2_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL_MASK    (0xC0U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL_SHIFT   (6U)
+/*! MUX3_SEL - MUX3_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX3_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_MASK    (0x300U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_SHIFT   (8U)
+/*! MUX4_SEL - MUX4_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX4_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL_MASK    (0xC00U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL_SHIFT   (10U)
+/*! MUX5_SEL - MUX5_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX5_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX6_SEL_MASK    (0x3000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX6_SEL_SHIFT   (12U)
+/*! MUX6_SEL - MUX6_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX6_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX6_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX6_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX7_SEL_MASK    (0xC000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX7_SEL_SHIFT   (14U)
+/*! MUX7_SEL - MUX7_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX7_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX7_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX7_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_MASK    (0x30000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_SHIFT   (16U)
+/*! MUX8_SEL - MUX8_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX8_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_MASK    (0xC0000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_SHIFT   (18U)
+/*! MUX9_SEL - MUX9_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL(x)      (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX9_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL_MASK   (0x300000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL_SHIFT  (20U)
+/*! MUX10_SEL - MUX10_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX10_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX11_SEL_MASK   (0xC00000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX11_SEL_SHIFT  (22U)
+/*! MUX11_SEL - MUX11_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX11_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX11_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX11_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX12_SEL_MASK   (0x3000000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX12_SEL_SHIFT  (24U)
+/*! MUX12_SEL - MUX12_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX12_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX12_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX12_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX13_SEL_MASK   (0xC000000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX13_SEL_SHIFT  (26U)
+/*! MUX13_SEL - MUX13_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX13_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX13_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX13_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX14_SEL_MASK   (0x30000000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX14_SEL_SHIFT  (28U)
+/*! MUX14_SEL - MUX14_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX14_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX14_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX14_SEL_MASK)
+
+#define PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL_MASK   (0xC0000000U)
+#define PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL_SHIFT  (30U)
+/*! MUX15_SEL - MUX15_SEL */
+#define PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL(x)     (((uint32_t)(((uint32_t)(x)) << PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL_SHIFT)) & PXP_DATA_PATH_CTRL0_TOG_MUX15_SEL_MASK)
+/*! @} */
+
 /*! @name IRQ_MASK - IRQ Mask Register */
 /*! @{ */
 
@@ -1808,6 +2903,93 @@ typedef struct {
 #define PXP_IRQ_MASK_FIRST_STORE_IRQ_EN(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_MASK)
 /*! @} */
 
+/*! @name IRQ_MASK_SET - IRQ Mask Register */
+/*! @{ */
+
+#define PXP_IRQ_MASK_SET_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
+#define PXP_IRQ_MASK_SET_FIRST_CH0_PREFETCH_IRQ_EN_SHIFT (0U)
+/*! FIRST_CH0_PREFETCH_IRQ_EN - FIRST_CH0_PREFETCH_IRQ_EN */
+#define PXP_IRQ_MASK_SET_FIRST_CH0_PREFETCH_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_SET_FIRST_CH0_PREFETCH_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_SET_FIRST_CH0_PREFETCH_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_SET_FIRST_CH1_PREFETCH_IRQ_EN_MASK (0x2U)
+#define PXP_IRQ_MASK_SET_FIRST_CH1_PREFETCH_IRQ_EN_SHIFT (1U)
+/*! FIRST_CH1_PREFETCH_IRQ_EN - FIRST_CH1_PREFETCH_IRQ_EN */
+#define PXP_IRQ_MASK_SET_FIRST_CH1_PREFETCH_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_SET_FIRST_CH1_PREFETCH_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_SET_FIRST_CH1_PREFETCH_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_SET_FIRST_CH0_STORE_IRQ_EN_MASK (0x4U)
+#define PXP_IRQ_MASK_SET_FIRST_CH0_STORE_IRQ_EN_SHIFT (2U)
+/*! FIRST_CH0_STORE_IRQ_EN - FIRST_CH0_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_SET_FIRST_CH0_STORE_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_SET_FIRST_CH0_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_SET_FIRST_CH0_STORE_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_SET_FIRST_CH1_STORE_IRQ_EN_MASK (0x8U)
+#define PXP_IRQ_MASK_SET_FIRST_CH1_STORE_IRQ_EN_SHIFT (3U)
+/*! FIRST_CH1_STORE_IRQ_EN - FIRST_CH1_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_SET_FIRST_CH1_STORE_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_SET_FIRST_CH1_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_SET_FIRST_CH1_STORE_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN_MASK (0x1000U)
+#define PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN_SHIFT (12U)
+/*! FIRST_STORE_IRQ_EN - FIRST_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_SET_FIRST_STORE_IRQ_EN_MASK)
+/*! @} */
+
+/*! @name IRQ_MASK_CLR - IRQ Mask Register */
+/*! @{ */
+
+#define PXP_IRQ_MASK_CLR_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
+#define PXP_IRQ_MASK_CLR_FIRST_CH0_PREFETCH_IRQ_EN_SHIFT (0U)
+/*! FIRST_CH0_PREFETCH_IRQ_EN - FIRST_CH0_PREFETCH_IRQ_EN */
+#define PXP_IRQ_MASK_CLR_FIRST_CH0_PREFETCH_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_CLR_FIRST_CH0_PREFETCH_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_CLR_FIRST_CH0_PREFETCH_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_CLR_FIRST_CH1_PREFETCH_IRQ_EN_MASK (0x2U)
+#define PXP_IRQ_MASK_CLR_FIRST_CH1_PREFETCH_IRQ_EN_SHIFT (1U)
+/*! FIRST_CH1_PREFETCH_IRQ_EN - FIRST_CH1_PREFETCH_IRQ_EN */
+#define PXP_IRQ_MASK_CLR_FIRST_CH1_PREFETCH_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_CLR_FIRST_CH1_PREFETCH_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_CLR_FIRST_CH1_PREFETCH_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_CLR_FIRST_CH0_STORE_IRQ_EN_MASK (0x4U)
+#define PXP_IRQ_MASK_CLR_FIRST_CH0_STORE_IRQ_EN_SHIFT (2U)
+/*! FIRST_CH0_STORE_IRQ_EN - FIRST_CH0_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_CLR_FIRST_CH0_STORE_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_CLR_FIRST_CH0_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_CLR_FIRST_CH0_STORE_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_CLR_FIRST_CH1_STORE_IRQ_EN_MASK (0x8U)
+#define PXP_IRQ_MASK_CLR_FIRST_CH1_STORE_IRQ_EN_SHIFT (3U)
+/*! FIRST_CH1_STORE_IRQ_EN - FIRST_CH1_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_CLR_FIRST_CH1_STORE_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_CLR_FIRST_CH1_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_CLR_FIRST_CH1_STORE_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN_MASK (0x1000U)
+#define PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN_SHIFT (12U)
+/*! FIRST_STORE_IRQ_EN - FIRST_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_CLR_FIRST_STORE_IRQ_EN_MASK)
+/*! @} */
+
+/*! @name IRQ_MASK_TOG - IRQ Mask Register */
+/*! @{ */
+
+#define PXP_IRQ_MASK_TOG_FIRST_CH0_PREFETCH_IRQ_EN_MASK (0x1U)
+#define PXP_IRQ_MASK_TOG_FIRST_CH0_PREFETCH_IRQ_EN_SHIFT (0U)
+/*! FIRST_CH0_PREFETCH_IRQ_EN - FIRST_CH0_PREFETCH_IRQ_EN */
+#define PXP_IRQ_MASK_TOG_FIRST_CH0_PREFETCH_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_TOG_FIRST_CH0_PREFETCH_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_TOG_FIRST_CH0_PREFETCH_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_TOG_FIRST_CH1_PREFETCH_IRQ_EN_MASK (0x2U)
+#define PXP_IRQ_MASK_TOG_FIRST_CH1_PREFETCH_IRQ_EN_SHIFT (1U)
+/*! FIRST_CH1_PREFETCH_IRQ_EN - FIRST_CH1_PREFETCH_IRQ_EN */
+#define PXP_IRQ_MASK_TOG_FIRST_CH1_PREFETCH_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_TOG_FIRST_CH1_PREFETCH_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_TOG_FIRST_CH1_PREFETCH_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_TOG_FIRST_CH0_STORE_IRQ_EN_MASK (0x4U)
+#define PXP_IRQ_MASK_TOG_FIRST_CH0_STORE_IRQ_EN_SHIFT (2U)
+/*! FIRST_CH0_STORE_IRQ_EN - FIRST_CH0_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_TOG_FIRST_CH0_STORE_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_TOG_FIRST_CH0_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_TOG_FIRST_CH0_STORE_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_TOG_FIRST_CH1_STORE_IRQ_EN_MASK (0x8U)
+#define PXP_IRQ_MASK_TOG_FIRST_CH1_STORE_IRQ_EN_SHIFT (3U)
+/*! FIRST_CH1_STORE_IRQ_EN - FIRST_CH1_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_TOG_FIRST_CH1_STORE_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_TOG_FIRST_CH1_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_TOG_FIRST_CH1_STORE_IRQ_EN_MASK)
+
+#define PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN_MASK (0x1000U)
+#define PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN_SHIFT (12U)
+/*! FIRST_STORE_IRQ_EN - FIRST_STORE_IRQ_EN */
+#define PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_TOG_FIRST_STORE_IRQ_EN_MASK)
+/*! @} */
+
 /*! @name IRQ - Interrupt Register */
 /*! @{ */
 
@@ -1835,6 +3017,93 @@ typedef struct {
 #define PXP_IRQ_FIRST_STORE_IRQ_SHIFT            (12U)
 /*! FIRST_STORE_IRQ - FIRST_STORE_IRQ */
 #define PXP_IRQ_FIRST_STORE_IRQ(x)               (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_FIRST_STORE_IRQ_MASK)
+/*! @} */
+
+/*! @name IRQ_SET - Interrupt Register */
+/*! @{ */
+
+#define PXP_IRQ_SET_FIRST_CH0_PREFETCH_IRQ_MASK  (0x1U)
+#define PXP_IRQ_SET_FIRST_CH0_PREFETCH_IRQ_SHIFT (0U)
+/*! FIRST_CH0_PREFETCH_IRQ - FIRST_CH0_PREFETCH_IRQ */
+#define PXP_IRQ_SET_FIRST_CH0_PREFETCH_IRQ(x)    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_SET_FIRST_CH0_PREFETCH_IRQ_SHIFT)) & PXP_IRQ_SET_FIRST_CH0_PREFETCH_IRQ_MASK)
+
+#define PXP_IRQ_SET_FIRST_CH1_PREFETCH_IRQ_MASK  (0x2U)
+#define PXP_IRQ_SET_FIRST_CH1_PREFETCH_IRQ_SHIFT (1U)
+/*! FIRST_CH1_PREFETCH_IRQ - FIRST_CH1_PREFETCH_IRQ */
+#define PXP_IRQ_SET_FIRST_CH1_PREFETCH_IRQ(x)    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_SET_FIRST_CH1_PREFETCH_IRQ_SHIFT)) & PXP_IRQ_SET_FIRST_CH1_PREFETCH_IRQ_MASK)
+
+#define PXP_IRQ_SET_FIRST_CH0_STORE_IRQ_MASK     (0x4U)
+#define PXP_IRQ_SET_FIRST_CH0_STORE_IRQ_SHIFT    (2U)
+/*! FIRST_CH0_STORE_IRQ - FIRST_CH0_STORE_IRQ */
+#define PXP_IRQ_SET_FIRST_CH0_STORE_IRQ(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_SET_FIRST_CH0_STORE_IRQ_SHIFT)) & PXP_IRQ_SET_FIRST_CH0_STORE_IRQ_MASK)
+
+#define PXP_IRQ_SET_FIRST_CH1_STORE_IRQ_MASK     (0x8U)
+#define PXP_IRQ_SET_FIRST_CH1_STORE_IRQ_SHIFT    (3U)
+/*! FIRST_CH1_STORE_IRQ - FIRST_CH1_STORE_IRQ */
+#define PXP_IRQ_SET_FIRST_CH1_STORE_IRQ(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_SET_FIRST_CH1_STORE_IRQ_SHIFT)) & PXP_IRQ_SET_FIRST_CH1_STORE_IRQ_MASK)
+
+#define PXP_IRQ_SET_FIRST_STORE_IRQ_MASK         (0x1000U)
+#define PXP_IRQ_SET_FIRST_STORE_IRQ_SHIFT        (12U)
+/*! FIRST_STORE_IRQ - FIRST_STORE_IRQ */
+#define PXP_IRQ_SET_FIRST_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_SET_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_SET_FIRST_STORE_IRQ_MASK)
+/*! @} */
+
+/*! @name IRQ_CLR - Interrupt Register */
+/*! @{ */
+
+#define PXP_IRQ_CLR_FIRST_CH0_PREFETCH_IRQ_MASK  (0x1U)
+#define PXP_IRQ_CLR_FIRST_CH0_PREFETCH_IRQ_SHIFT (0U)
+/*! FIRST_CH0_PREFETCH_IRQ - FIRST_CH0_PREFETCH_IRQ */
+#define PXP_IRQ_CLR_FIRST_CH0_PREFETCH_IRQ(x)    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_CLR_FIRST_CH0_PREFETCH_IRQ_SHIFT)) & PXP_IRQ_CLR_FIRST_CH0_PREFETCH_IRQ_MASK)
+
+#define PXP_IRQ_CLR_FIRST_CH1_PREFETCH_IRQ_MASK  (0x2U)
+#define PXP_IRQ_CLR_FIRST_CH1_PREFETCH_IRQ_SHIFT (1U)
+/*! FIRST_CH1_PREFETCH_IRQ - FIRST_CH1_PREFETCH_IRQ */
+#define PXP_IRQ_CLR_FIRST_CH1_PREFETCH_IRQ(x)    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_CLR_FIRST_CH1_PREFETCH_IRQ_SHIFT)) & PXP_IRQ_CLR_FIRST_CH1_PREFETCH_IRQ_MASK)
+
+#define PXP_IRQ_CLR_FIRST_CH0_STORE_IRQ_MASK     (0x4U)
+#define PXP_IRQ_CLR_FIRST_CH0_STORE_IRQ_SHIFT    (2U)
+/*! FIRST_CH0_STORE_IRQ - FIRST_CH0_STORE_IRQ */
+#define PXP_IRQ_CLR_FIRST_CH0_STORE_IRQ(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_CLR_FIRST_CH0_STORE_IRQ_SHIFT)) & PXP_IRQ_CLR_FIRST_CH0_STORE_IRQ_MASK)
+
+#define PXP_IRQ_CLR_FIRST_CH1_STORE_IRQ_MASK     (0x8U)
+#define PXP_IRQ_CLR_FIRST_CH1_STORE_IRQ_SHIFT    (3U)
+/*! FIRST_CH1_STORE_IRQ - FIRST_CH1_STORE_IRQ */
+#define PXP_IRQ_CLR_FIRST_CH1_STORE_IRQ(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_CLR_FIRST_CH1_STORE_IRQ_SHIFT)) & PXP_IRQ_CLR_FIRST_CH1_STORE_IRQ_MASK)
+
+#define PXP_IRQ_CLR_FIRST_STORE_IRQ_MASK         (0x1000U)
+#define PXP_IRQ_CLR_FIRST_STORE_IRQ_SHIFT        (12U)
+/*! FIRST_STORE_IRQ - FIRST_STORE_IRQ */
+#define PXP_IRQ_CLR_FIRST_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_CLR_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_CLR_FIRST_STORE_IRQ_MASK)
+/*! @} */
+
+/*! @name IRQ_TOG - Interrupt Register */
+/*! @{ */
+
+#define PXP_IRQ_TOG_FIRST_CH0_PREFETCH_IRQ_MASK  (0x1U)
+#define PXP_IRQ_TOG_FIRST_CH0_PREFETCH_IRQ_SHIFT (0U)
+/*! FIRST_CH0_PREFETCH_IRQ - FIRST_CH0_PREFETCH_IRQ */
+#define PXP_IRQ_TOG_FIRST_CH0_PREFETCH_IRQ(x)    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_TOG_FIRST_CH0_PREFETCH_IRQ_SHIFT)) & PXP_IRQ_TOG_FIRST_CH0_PREFETCH_IRQ_MASK)
+
+#define PXP_IRQ_TOG_FIRST_CH1_PREFETCH_IRQ_MASK  (0x2U)
+#define PXP_IRQ_TOG_FIRST_CH1_PREFETCH_IRQ_SHIFT (1U)
+/*! FIRST_CH1_PREFETCH_IRQ - FIRST_CH1_PREFETCH_IRQ */
+#define PXP_IRQ_TOG_FIRST_CH1_PREFETCH_IRQ(x)    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_TOG_FIRST_CH1_PREFETCH_IRQ_SHIFT)) & PXP_IRQ_TOG_FIRST_CH1_PREFETCH_IRQ_MASK)
+
+#define PXP_IRQ_TOG_FIRST_CH0_STORE_IRQ_MASK     (0x4U)
+#define PXP_IRQ_TOG_FIRST_CH0_STORE_IRQ_SHIFT    (2U)
+/*! FIRST_CH0_STORE_IRQ - FIRST_CH0_STORE_IRQ */
+#define PXP_IRQ_TOG_FIRST_CH0_STORE_IRQ(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_TOG_FIRST_CH0_STORE_IRQ_SHIFT)) & PXP_IRQ_TOG_FIRST_CH0_STORE_IRQ_MASK)
+
+#define PXP_IRQ_TOG_FIRST_CH1_STORE_IRQ_MASK     (0x8U)
+#define PXP_IRQ_TOG_FIRST_CH1_STORE_IRQ_SHIFT    (3U)
+/*! FIRST_CH1_STORE_IRQ - FIRST_CH1_STORE_IRQ */
+#define PXP_IRQ_TOG_FIRST_CH1_STORE_IRQ(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_TOG_FIRST_CH1_STORE_IRQ_SHIFT)) & PXP_IRQ_TOG_FIRST_CH1_STORE_IRQ_MASK)
+
+#define PXP_IRQ_TOG_FIRST_STORE_IRQ_MASK         (0x1000U)
+#define PXP_IRQ_TOG_FIRST_STORE_IRQ_SHIFT        (12U)
+/*! FIRST_STORE_IRQ - FIRST_STORE_IRQ */
+#define PXP_IRQ_TOG_FIRST_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_TOG_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_TOG_FIRST_STORE_IRQ_MASK)
 /*! @} */
 
 /*! @name NEXT - Next Frame Pointer Register */
@@ -1944,6 +3213,153 @@ typedef struct {
 #define PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN(x)     (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_MASK)
 /*! @} */
 
+/*! @name INPUT_FETCH_CTRL_CH0_SET - Input Fetch Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_CH_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_CH_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_16_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_16_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_32_MASK (0x40U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_32_SHIFT (6U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_32_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_BLOCK_32_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_HFLIP_MASK  (0x200U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_HFLIP_SHIFT (9U)
+/*! HFLIP - HFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_HFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_HFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_HFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_VFLIP_MASK  (0x400U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_VFLIP_SHIFT (10U)
+/*! VFLIP - VFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_VFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_VFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_ROTATION_ANGLE_MASK (0x3000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_ROTATION_ANGLE_SHIFT (12U)
+/*! ROTATION_ANGLE - ROTATION_ANGLE */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_ROTATION_ANGLE_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_RD_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_RD_NUM_BYTES_SHIFT (16U)
+/*! RD_NUM_BYTES - RD_NUM_BYTES */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_RD_NUM_BYTES_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN_MASK (0x80000000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN_SHIFT (31U)
+/*! ARBIT_EN - ARBIT_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_SET_ARBIT_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_CTRL_CH0_CLR - Input Fetch Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_CH_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_CH_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_16_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_16_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_32_MASK (0x40U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_32_SHIFT (6U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_32_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_BLOCK_32_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_HFLIP_MASK  (0x200U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_HFLIP_SHIFT (9U)
+/*! HFLIP - HFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_HFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_HFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_HFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_VFLIP_MASK  (0x400U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_VFLIP_SHIFT (10U)
+/*! VFLIP - VFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_VFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_VFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_ROTATION_ANGLE_MASK (0x3000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_ROTATION_ANGLE_SHIFT (12U)
+/*! ROTATION_ANGLE - ROTATION_ANGLE */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_ROTATION_ANGLE_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_RD_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_RD_NUM_BYTES_SHIFT (16U)
+/*! RD_NUM_BYTES - RD_NUM_BYTES */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_RD_NUM_BYTES_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN_MASK (0x80000000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN_SHIFT (31U)
+/*! ARBIT_EN - ARBIT_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_CLR_ARBIT_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_CTRL_CH0_TOG - Input Fetch Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_CH_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_CH_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_16_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_16_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_32_MASK (0x40U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_32_SHIFT (6U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_32_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_BLOCK_32_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_HFLIP_MASK  (0x200U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_HFLIP_SHIFT (9U)
+/*! HFLIP - HFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_HFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_HFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_HFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_VFLIP_MASK  (0x400U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_VFLIP_SHIFT (10U)
+/*! VFLIP - VFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_VFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_VFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_ROTATION_ANGLE_MASK (0x3000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_ROTATION_ANGLE_SHIFT (12U)
+/*! ROTATION_ANGLE - ROTATION_ANGLE */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_ROTATION_ANGLE_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_RD_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_RD_NUM_BYTES_SHIFT (16U)
+/*! RD_NUM_BYTES - RD_NUM_BYTES */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_RD_NUM_BYTES_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN_MASK (0x80000000U)
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN_SHIFT (31U)
+/*! ARBIT_EN - ARBIT_EN */
+#define PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_TOG_ARBIT_EN_MASK)
+/*! @} */
+
 /*! @name INPUT_FETCH_CTRL_CH1 - Input Fetch Control Channel 1 Register */
 /*! @{ */
 
@@ -2018,6 +3434,138 @@ typedef struct {
  *  0b111..reserved
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_CTRL_CH1_SET - Input Fetch Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_CH_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_CH_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_16_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_16_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_32_MASK (0x40U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_32_SHIFT (6U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_32_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_BLOCK_32_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_HFLIP_MASK  (0x200U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_HFLIP_SHIFT (9U)
+/*! HFLIP - HFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_HFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_HFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_HFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_VFLIP_MASK  (0x400U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_VFLIP_SHIFT (10U)
+/*! VFLIP - VFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_VFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_VFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_ROTATION_ANGLE_MASK (0x3000U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_ROTATION_ANGLE_SHIFT (12U)
+/*! ROTATION_ANGLE - ROTATION_ANGLE */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_ROTATION_ANGLE_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES_SHIFT (16U)
+/*! RD_NUM_BYTES - RD_NUM_BYTES */
+#define PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_SET_RD_NUM_BYTES_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_CTRL_CH1_CLR - Input Fetch Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_CH_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_CH_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_16_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_16_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_32_MASK (0x40U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_32_SHIFT (6U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_32_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_BLOCK_32_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_HFLIP_MASK  (0x200U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_HFLIP_SHIFT (9U)
+/*! HFLIP - HFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_HFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_HFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_HFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_VFLIP_MASK  (0x400U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_VFLIP_SHIFT (10U)
+/*! VFLIP - VFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_VFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_VFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_ROTATION_ANGLE_MASK (0x3000U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_ROTATION_ANGLE_SHIFT (12U)
+/*! ROTATION_ANGLE - ROTATION_ANGLE */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_ROTATION_ANGLE_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES_SHIFT (16U)
+/*! RD_NUM_BYTES - RD_NUM_BYTES */
+#define PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_CLR_RD_NUM_BYTES_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_CTRL_CH1_TOG - Input Fetch Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_CH_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_CH_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_EN_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_16_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_16_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_32_MASK (0x40U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_32_SHIFT (6U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_32_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_BLOCK_32_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_HFLIP_MASK  (0x200U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_HFLIP_SHIFT (9U)
+/*! HFLIP - HFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_HFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_HFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_HFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_VFLIP_MASK  (0x400U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_VFLIP_SHIFT (10U)
+/*! VFLIP - VFLIP */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_VFLIP(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_VFLIP_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_ROTATION_ANGLE_MASK (0x3000U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_ROTATION_ANGLE_SHIFT (12U)
+/*! ROTATION_ANGLE - ROTATION_ANGLE */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_ROTATION_ANGLE_MASK)
+
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES_SHIFT (16U)
+/*! RD_NUM_BYTES - RD_NUM_BYTES */
+#define PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_TOG_RD_NUM_BYTES_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_STATUS_CH0 - Input Fetch Status Channel 0 Register */
@@ -2208,6 +3756,78 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK)
 /*! @} */
 
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_SET - Input Fetch Shift Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_INPUT_ACTIVE_BPP_MASK (0x3U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_INPUT_ACTIVE_BPP_SHIFT (0U)
+/*! INPUT_ACTIVE_BPP - INPUT_ACTIVE_BPP */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_INPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_FORMAT_MASK (0x700U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_FORMAT_SHIFT (8U)
+/*! EXPAND_FORMAT - EXPAND_FORMAT */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_FORMAT_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_FORMAT_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_EN_MASK (0x800U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_EN_SHIFT (11U)
+/*! EXPAND_EN - EXPAND_EN */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_EXPAND_EN_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_MASK (0x1000U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_SHIFT (12U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_CLR - Input Fetch Shift Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_INPUT_ACTIVE_BPP_MASK (0x3U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_INPUT_ACTIVE_BPP_SHIFT (0U)
+/*! INPUT_ACTIVE_BPP - INPUT_ACTIVE_BPP */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_INPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_FORMAT_MASK (0x700U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_FORMAT_SHIFT (8U)
+/*! EXPAND_FORMAT - EXPAND_FORMAT */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_FORMAT_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_FORMAT_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_EN_MASK (0x800U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_EN_SHIFT (11U)
+/*! EXPAND_EN - EXPAND_EN */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_EXPAND_EN_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_MASK (0x1000U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_SHIFT (12U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH0_TOG - Input Fetch Shift Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_INPUT_ACTIVE_BPP_MASK (0x3U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_INPUT_ACTIVE_BPP_SHIFT (0U)
+/*! INPUT_ACTIVE_BPP - INPUT_ACTIVE_BPP */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_INPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_FORMAT_MASK (0x700U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_FORMAT_SHIFT (8U)
+/*! EXPAND_FORMAT - EXPAND_FORMAT */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_FORMAT_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_FORMAT_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_EN_MASK (0x800U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_EN_SHIFT (11U)
+/*! EXPAND_EN - EXPAND_EN */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_EXPAND_EN_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_MASK (0x1000U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_SHIFT (12U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_MASK)
+/*! @} */
+
 /*! @name INPUT_FETCH_SHIFT_CTRL_CH1 - Input Fetch Shift Control Channel 1 Register */
 /*! @{ */
 
@@ -2252,6 +3872,78 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_MASK)
 /*! @} */
 
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_SET - Input Fetch Shift Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_INPUT_ACTIVE_BPP_MASK (0x3U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_INPUT_ACTIVE_BPP_SHIFT (0U)
+/*! INPUT_ACTIVE_BPP - INPUT_ACTIVE_BPP */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_INPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_FORMAT_MASK (0x700U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_FORMAT_SHIFT (8U)
+/*! EXPAND_FORMAT - EXPAND_FORMAT */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_FORMAT_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_FORMAT_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_EN_MASK (0x800U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_EN_SHIFT (11U)
+/*! EXPAND_EN - EXPAND_EN */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_EXPAND_EN_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS_MASK (0x1000U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS_SHIFT (12U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SET_SHIFT_BYPASS_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_CLR - Input Fetch Shift Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_INPUT_ACTIVE_BPP_MASK (0x3U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_INPUT_ACTIVE_BPP_SHIFT (0U)
+/*! INPUT_ACTIVE_BPP - INPUT_ACTIVE_BPP */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_INPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_FORMAT_MASK (0x700U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_FORMAT_SHIFT (8U)
+/*! EXPAND_FORMAT - EXPAND_FORMAT */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_FORMAT_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_FORMAT_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_EN_MASK (0x800U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_EN_SHIFT (11U)
+/*! EXPAND_EN - EXPAND_EN */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_EXPAND_EN_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS_MASK (0x1000U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS_SHIFT (12U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_CLR_SHIFT_BYPASS_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_CTRL_CH1_TOG - Input Fetch Shift Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_INPUT_ACTIVE_BPP_MASK (0x3U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_INPUT_ACTIVE_BPP_SHIFT (0U)
+/*! INPUT_ACTIVE_BPP - INPUT_ACTIVE_BPP */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_INPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_FORMAT_MASK (0x700U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_FORMAT_SHIFT (8U)
+/*! EXPAND_FORMAT - EXPAND_FORMAT */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_FORMAT(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_FORMAT_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_FORMAT_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_EN_MASK (0x800U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_EN_SHIFT (11U)
+/*! EXPAND_EN - EXPAND_EN */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_EN_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_EXPAND_EN_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS_MASK (0x1000U)
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS_SHIFT (12U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_TOG_SHIFT_BYPASS_MASK)
+/*! @} */
+
 /*! @name INPUT_FETCH_SHIFT_OFFSET_CH0 - Input Fetch Shift Offset Channel 0 Register */
 /*! @{ */
 
@@ -2274,6 +3966,78 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_SHIFT (24U)
 /*! OFFSET3 - OFFSET3 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_SET - Input Fetch Shift Offset Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET0_MASK (0x1FU)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET0_SHIFT (0U)
+/*! OFFSET0 - OFFSET0 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET1_MASK (0x1F00U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET1_SHIFT (8U)
+/*! OFFSET1 - OFFSET1 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET2_MASK (0x1F0000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET2_SHIFT (16U)
+/*! OFFSET2 - OFFSET2 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3_MASK (0x1F000000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3_SHIFT (24U)
+/*! OFFSET3 - OFFSET3 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_SET_OFFSET3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_CLR - Input Fetch Shift Offset Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET0_MASK (0x1FU)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET0_SHIFT (0U)
+/*! OFFSET0 - OFFSET0 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET1_MASK (0x1F00U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET1_SHIFT (8U)
+/*! OFFSET1 - OFFSET1 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET2_MASK (0x1F0000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET2_SHIFT (16U)
+/*! OFFSET2 - OFFSET2 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3_MASK (0x1F000000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3_SHIFT (24U)
+/*! OFFSET3 - OFFSET3 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_CLR_OFFSET3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH0_TOG - Input Fetch Shift Offset Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET0_MASK (0x1FU)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET0_SHIFT (0U)
+/*! OFFSET0 - OFFSET0 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET1_MASK (0x1F00U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET1_SHIFT (8U)
+/*! OFFSET1 - OFFSET1 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET2_MASK (0x1F0000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET2_SHIFT (16U)
+/*! OFFSET2 - OFFSET2 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3_MASK (0x1F000000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3_SHIFT (24U)
+/*! OFFSET3 - OFFSET3 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_TOG_OFFSET3_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_SHIFT_OFFSET_CH1 - Input Fetch Shift Offset Channel 1 Register */
@@ -2300,6 +4064,78 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_MASK)
 /*! @} */
 
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_SET - Input Fetch Shift Offset Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET0_MASK (0x1FU)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET0_SHIFT (0U)
+/*! OFFSET0 - OFFSET0 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET1_MASK (0x1F00U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET1_SHIFT (8U)
+/*! OFFSET1 - OFFSET1 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET2_MASK (0x1F0000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET2_SHIFT (16U)
+/*! OFFSET2 - OFFSET2 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3_MASK (0x1F000000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3_SHIFT (24U)
+/*! OFFSET3 - OFFSET3 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_SET_OFFSET3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_CLR - Input Fetch Shift Offset Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET0_MASK (0x1FU)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET0_SHIFT (0U)
+/*! OFFSET0 - OFFSET0 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET1_MASK (0x1F00U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET1_SHIFT (8U)
+/*! OFFSET1 - OFFSET1 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET2_MASK (0x1F0000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET2_SHIFT (16U)
+/*! OFFSET2 - OFFSET2 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3_MASK (0x1F000000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3_SHIFT (24U)
+/*! OFFSET3 - OFFSET3 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_CLR_OFFSET3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_OFFSET_CH1_TOG - Input Fetch Shift Offset Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET0_MASK (0x1FU)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET0_SHIFT (0U)
+/*! OFFSET0 - OFFSET0 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET1_MASK (0x1F00U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET1_SHIFT (8U)
+/*! OFFSET1 - OFFSET1 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET2_MASK (0x1F0000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET2_SHIFT (16U)
+/*! OFFSET2 - OFFSET2 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3_MASK (0x1F000000U)
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3_SHIFT (24U)
+/*! OFFSET3 - OFFSET3 */
+#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_TOG_OFFSET3_MASK)
+/*! @} */
+
 /*! @name INPUT_FETCH_SHIFT_WIDTH_CH0 - Input Fetch Shift Width Channel 0 Register */
 /*! @{ */
 
@@ -2324,6 +4160,78 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_MASK)
 /*! @} */
 
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_SET - Input Fetch Shift Width Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH0_MASK (0xFU)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH0_SHIFT (0U)
+/*! WIDTH0 - WIDTH0 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH1_MASK (0xF0U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH1_SHIFT (4U)
+/*! WIDTH1 - WIDTH1 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH2_MASK (0xF00U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH2_SHIFT (8U)
+/*! WIDTH2 - WIDTH2 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3_MASK (0xF000U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3_SHIFT (12U)
+/*! WIDTH3 - WIDTH3 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_SET_WIDTH3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_CLR - Input Fetch Shift Width Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH0_MASK (0xFU)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH0_SHIFT (0U)
+/*! WIDTH0 - WIDTH0 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH1_MASK (0xF0U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH1_SHIFT (4U)
+/*! WIDTH1 - WIDTH1 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH2_MASK (0xF00U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH2_SHIFT (8U)
+/*! WIDTH2 - WIDTH2 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3_MASK (0xF000U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3_SHIFT (12U)
+/*! WIDTH3 - WIDTH3 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_CLR_WIDTH3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH0_TOG - Input Fetch Shift Width Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH0_MASK (0xFU)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH0_SHIFT (0U)
+/*! WIDTH0 - WIDTH0 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH1_MASK (0xF0U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH1_SHIFT (4U)
+/*! WIDTH1 - WIDTH1 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH2_MASK (0xF00U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH2_SHIFT (8U)
+/*! WIDTH2 - WIDTH2 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3_MASK (0xF000U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3_SHIFT (12U)
+/*! WIDTH3 - WIDTH3 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_TOG_WIDTH3_MASK)
+/*! @} */
+
 /*! @name INPUT_FETCH_SHIFT_WIDTH_CH1 - Input Fetch Shift Width Channel 1 Register */
 /*! @{ */
 
@@ -2346,6 +4254,78 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_SHIFT (12U)
 /*! WIDTH3 - WIDTH3 */
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_SET - Input Fetch Shift Width Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH0_MASK (0xFU)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH0_SHIFT (0U)
+/*! WIDTH0 - WIDTH0 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH1_MASK (0xF0U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH1_SHIFT (4U)
+/*! WIDTH1 - WIDTH1 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH2_MASK (0xF00U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH2_SHIFT (8U)
+/*! WIDTH2 - WIDTH2 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3_MASK (0xF000U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3_SHIFT (12U)
+/*! WIDTH3 - WIDTH3 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_SET_WIDTH3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_CLR - Input Fetch Shift Width Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH0_MASK (0xFU)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH0_SHIFT (0U)
+/*! WIDTH0 - WIDTH0 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH1_MASK (0xF0U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH1_SHIFT (4U)
+/*! WIDTH1 - WIDTH1 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH2_MASK (0xF00U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH2_SHIFT (8U)
+/*! WIDTH2 - WIDTH2 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3_MASK (0xF000U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3_SHIFT (12U)
+/*! WIDTH3 - WIDTH3 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_CLR_WIDTH3_MASK)
+/*! @} */
+
+/*! @name INPUT_FETCH_SHIFT_WIDTH_CH1_TOG - Input Fetch Shift Width Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH0_MASK (0xFU)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH0_SHIFT (0U)
+/*! WIDTH0 - WIDTH0 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH0_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH1_MASK (0xF0U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH1_SHIFT (4U)
+/*! WIDTH1 - WIDTH1 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH1_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH2_MASK (0xF00U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH2_SHIFT (8U)
+/*! WIDTH2 - WIDTH2 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH2_MASK)
+
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3_MASK (0xF000U)
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3_SHIFT (12U)
+/*! WIDTH3 - WIDTH3 */
+#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_TOG_WIDTH3_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_ADDR_0_CH0 - Input Fetch Address 0 Channel 0 Register */
@@ -2458,6 +4438,138 @@ typedef struct {
 #define PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN(x)     (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_MASK)
 /*! @} */
 
+/*! @name INPUT_STORE_CTRL_CH0_SET - Input Store Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_CH_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_CH_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_16_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_16_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_STORE_MEMORY_EN_MASK (0x200U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_STORE_MEMORY_EN_SHIFT (9U)
+/*! STORE_MEMORY_EN - STORE_MEMORY_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_STORE_MEMORY_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_FILL_DATA_EN_MASK (0x800U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_FILL_DATA_EN_SHIFT (11U)
+/*! FILL_DATA_EN - FILL_DATA_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_FILL_DATA_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_FILL_DATA_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_FILL_DATA_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_32_MASK (0x1000U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_32_SHIFT (12U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_32_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_BLOCK_32_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_WR_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_WR_NUM_BYTES_SHIFT (16U)
+/*! WR_NUM_BYTES - WR_NUM_BYTES */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_WR_NUM_BYTES_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN_MASK (0x80000000U)
+#define PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN_SHIFT (31U)
+/*! ARBIT_EN - ARBIT_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_SET_ARBIT_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_CTRL_CH0_CLR - Input Store Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_CH_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_CH_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_16_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_16_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_STORE_MEMORY_EN_MASK (0x200U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_STORE_MEMORY_EN_SHIFT (9U)
+/*! STORE_MEMORY_EN - STORE_MEMORY_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_STORE_MEMORY_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_FILL_DATA_EN_MASK (0x800U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_FILL_DATA_EN_SHIFT (11U)
+/*! FILL_DATA_EN - FILL_DATA_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_FILL_DATA_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_FILL_DATA_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_FILL_DATA_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_32_MASK (0x1000U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_32_SHIFT (12U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_32_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_BLOCK_32_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_WR_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_WR_NUM_BYTES_SHIFT (16U)
+/*! WR_NUM_BYTES - WR_NUM_BYTES */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_WR_NUM_BYTES_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN_MASK (0x80000000U)
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN_SHIFT (31U)
+/*! ARBIT_EN - ARBIT_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_CLR_ARBIT_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_CTRL_CH0_TOG - Input Store Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_CH_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_CH_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_16_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_16_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_STORE_MEMORY_EN_MASK (0x200U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_STORE_MEMORY_EN_SHIFT (9U)
+/*! STORE_MEMORY_EN - STORE_MEMORY_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_STORE_MEMORY_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_FILL_DATA_EN_MASK (0x800U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_FILL_DATA_EN_SHIFT (11U)
+/*! FILL_DATA_EN - FILL_DATA_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_FILL_DATA_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_FILL_DATA_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_FILL_DATA_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_32_MASK (0x1000U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_32_SHIFT (12U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_32_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_BLOCK_32_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_WR_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_WR_NUM_BYTES_SHIFT (16U)
+/*! WR_NUM_BYTES - WR_NUM_BYTES */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_WR_NUM_BYTES_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN_MASK (0x80000000U)
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN_SHIFT (31U)
+/*! ARBIT_EN - ARBIT_EN */
+#define PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_TOG_ARBIT_EN_MASK)
+/*! @} */
+
 /*! @name INPUT_STORE_CTRL_CH1 - Input Store Control Channel 1 Register */
 /*! @{ */
 
@@ -2514,6 +4626,108 @@ typedef struct {
  *  0b111..reserved
  */
 #define PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_CTRL_CH1_SET - Input Store Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_CTRL_CH1_SET_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_STORE_CTRL_CH1_SET_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_SET_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_CH_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_CH_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_16_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_16_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_SET_STORE_MEMORY_EN_MASK (0x200U)
+#define PXP_INPUT_STORE_CTRL_CH1_SET_STORE_MEMORY_EN_SHIFT (9U)
+/*! STORE_MEMORY_EN - STORE_MEMORY_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_SET_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_STORE_MEMORY_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_32_MASK (0x1000U)
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_32_SHIFT (12U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_32_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_BLOCK_32_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES_SHIFT (16U)
+/*! WR_NUM_BYTES - WR_NUM_BYTES */
+#define PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_SET_WR_NUM_BYTES_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_CTRL_CH1_CLR - Input Store Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_CH_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_CH_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_16_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_16_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_STORE_MEMORY_EN_MASK (0x200U)
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_STORE_MEMORY_EN_SHIFT (9U)
+/*! STORE_MEMORY_EN - STORE_MEMORY_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_STORE_MEMORY_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_32_MASK (0x1000U)
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_32_SHIFT (12U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_32_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_BLOCK_32_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES_SHIFT (16U)
+/*! WR_NUM_BYTES - WR_NUM_BYTES */
+#define PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_CLR_WR_NUM_BYTES_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_CTRL_CH1_TOG - Input Store Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_CH_EN_MASK  (0x1U)
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_CH_EN_SHIFT (0U)
+/*! CH_EN - CH_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_CH_EN(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_CH_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_CH_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_EN_MASK (0x2U)
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_EN_SHIFT (1U)
+/*! BLOCK_EN - BLOCK_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_16_MASK (0x4U)
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_16_SHIFT (2U)
+/*! BLOCK_16 - BLOCK_16 */
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_16(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_16_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_16_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_STORE_MEMORY_EN_MASK (0x200U)
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_STORE_MEMORY_EN_SHIFT (9U)
+/*! STORE_MEMORY_EN - STORE_MEMORY_EN */
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_STORE_MEMORY_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_STORE_MEMORY_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_STORE_MEMORY_EN_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_32_MASK (0x1000U)
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_32_SHIFT (12U)
+/*! BLOCK_32 - BLOCK_32 */
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_32(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_32_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_BLOCK_32_MASK)
+
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES_MASK (0x70000U)
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES_SHIFT (16U)
+/*! WR_NUM_BYTES - WR_NUM_BYTES */
+#define PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_TOG_WR_NUM_BYTES_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_STATUS_CH0 - Input Store Status Channel 0 Register */
@@ -2624,6 +4838,78 @@ typedef struct {
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK)
 /*! @} */
 
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0_SET - Input Store Shift Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUTPUT_ACTIVE_BPP_MASK (0xCU)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUTPUT_ACTIVE_BPP_SHIFT (2U)
+/*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUTPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUTPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUTPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_1P_EN_MASK (0x10U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_1P_EN_SHIFT (4U)
+/*! OUT_YUV422_1P_EN - OUT_YUV422_1P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_1P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_1P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_1P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_2P_EN_MASK (0x20U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_2P_EN_SHIFT (5U)
+/*! OUT_YUV422_2P_EN - OUT_YUV422_2P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_OUT_YUV422_2P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_MASK (0x80U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_SHIFT (7U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SET_SHIFT_BYPASS_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0_CLR - Input Store Shift Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUTPUT_ACTIVE_BPP_MASK (0xCU)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUTPUT_ACTIVE_BPP_SHIFT (2U)
+/*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUTPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUTPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUTPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_1P_EN_MASK (0x10U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_1P_EN_SHIFT (4U)
+/*! OUT_YUV422_1P_EN - OUT_YUV422_1P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_1P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_1P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_1P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_2P_EN_MASK (0x20U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_2P_EN_SHIFT (5U)
+/*! OUT_YUV422_2P_EN - OUT_YUV422_2P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_OUT_YUV422_2P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_MASK (0x80U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_SHIFT (7U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_CLR_SHIFT_BYPASS_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_SHIFT_CTRL_CH0_TOG - Input Store Shift Control Channel 0 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUTPUT_ACTIVE_BPP_MASK (0xCU)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUTPUT_ACTIVE_BPP_SHIFT (2U)
+/*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUTPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUTPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUTPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_1P_EN_MASK (0x10U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_1P_EN_SHIFT (4U)
+/*! OUT_YUV422_1P_EN - OUT_YUV422_1P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_1P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_1P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_1P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_2P_EN_MASK (0x20U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_2P_EN_SHIFT (5U)
+/*! OUT_YUV422_2P_EN - OUT_YUV422_2P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_OUT_YUV422_2P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_MASK (0x80U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_SHIFT (7U)
+/*! SHIFT_BYPASS - SHIFT_BYPASS */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_TOG_SHIFT_BYPASS_MASK)
+/*! @} */
+
 /*! @name INPUT_STORE_SHIFT_CTRL_CH1 - Input Store Shift Control Channel 1 Register */
 /*! @{ */
 
@@ -2652,6 +4938,63 @@ typedef struct {
  *  0b1..YUYV422 2 plane enabled.
  */
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1_SET - Input Store Shift Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUTPUT_ACTIVE_BPP_MASK (0xCU)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUTPUT_ACTIVE_BPP_SHIFT (2U)
+/*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUTPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUTPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUTPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_1P_EN_MASK (0x10U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_1P_EN_SHIFT (4U)
+/*! OUT_YUV422_1P_EN - OUT_YUV422_1P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_1P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_1P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_1P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN_MASK (0x20U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN_SHIFT (5U)
+/*! OUT_YUV422_2P_EN - OUT_YUV422_2P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_SET_OUT_YUV422_2P_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1_CLR - Input Store Shift Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUTPUT_ACTIVE_BPP_MASK (0xCU)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUTPUT_ACTIVE_BPP_SHIFT (2U)
+/*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUTPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUTPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUTPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_1P_EN_MASK (0x10U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_1P_EN_SHIFT (4U)
+/*! OUT_YUV422_1P_EN - OUT_YUV422_1P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_1P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_1P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_1P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN_MASK (0x20U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN_SHIFT (5U)
+/*! OUT_YUV422_2P_EN - OUT_YUV422_2P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_CLR_OUT_YUV422_2P_EN_MASK)
+/*! @} */
+
+/*! @name INPUT_STORE_SHIFT_CTRL_CH1_TOG - Input Store Shift Control Channel 1 Register */
+/*! @{ */
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUTPUT_ACTIVE_BPP_MASK (0xCU)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUTPUT_ACTIVE_BPP_SHIFT (2U)
+/*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUTPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUTPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUTPUT_ACTIVE_BPP_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_1P_EN_MASK (0x10U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_1P_EN_SHIFT (4U)
+/*! OUT_YUV422_1P_EN - OUT_YUV422_1P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_1P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_1P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_1P_EN_MASK)
+
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN_MASK (0x20U)
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN_SHIFT (5U)
+/*! OUT_YUV422_2P_EN - OUT_YUV422_2P_EN */
+#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_TOG_OUT_YUV422_2P_EN_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_ADDR_0_CH0 - Input Store Address 0 Channel 0 Register */
@@ -3002,5 +5345,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* PXP_H_ */
+#endif  /* PERI_PXP_H_ */
 

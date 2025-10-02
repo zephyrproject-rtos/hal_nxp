@@ -129,7 +129,7 @@ static void sb3_DelayUs(uint32_t us)
 
 //static uint32_t _ActiveApplicationRemapOffset(void)
 //{
-//    return (MFLASH_FLEXSPI->HADDROFFSET);
+//   return (MFLASH_FLEXSPI->HADDROFFSET);
 //}
 ////////////////////////////////////////////////////////////////////////////
 //! @brief power on device implementation

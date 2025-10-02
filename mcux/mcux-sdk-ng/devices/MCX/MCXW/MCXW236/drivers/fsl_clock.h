@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief CLOCK driver version 2.1.3. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -523,6 +523,7 @@ typedef enum _clock_attach_id
     kEXT_CLK_to_SCT_CLK  = MUX_A(CM_SCTCLKSEL, SCTCLKSEL_CLKIN),
     kFRO_HF_to_SCT_CLK   = MUX_A(CM_SCTCLKSEL, SCTCLKSEL_FRO_32MHz),
     kFRO24M_to_SCT_CLK   = MUX_A(CM_SCTCLKSEL, SCTCLKSEL_FRO_24MHz),
+    kNONE_to_SCT_CLK     = MUX_A(CM_SCTCLKSEL, SCTCLKSEL_NO_CLOCK),
 
     kFRO32K_to_OSC32K  = MUX_A(CM_RTCOSC32KCLKSEL, RTCOSC32K_SEL_FRO),
     kXTAL32K_to_OSC32K = MUX_A(CM_RTCOSC32KCLKSEL, RTCOSC32K_SEL_XTAL),

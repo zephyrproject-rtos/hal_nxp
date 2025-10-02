@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MCXE24x RM Rev.1
 **     Version:             rev. 1.0, 2025-02-21
-**     Build:               b250429
+**     Build:               b250530
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

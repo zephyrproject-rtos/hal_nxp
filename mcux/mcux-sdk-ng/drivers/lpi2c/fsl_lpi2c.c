@@ -112,8 +112,10 @@ static void LPI2C_CommonIRQHandler(LPI2C_Type *base, uint32_t instance);
  * @param base The I2C peripheral base address.
  * @param handle Master nonblocking driver handle.
  * @param variable_set Pass the address of the parent function variable.
+ * @retval #kStatus_Success
+ * @retval #kStatus_LPI2C_Timeout
  */
-static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
+static status_t LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
                                                   lpi2c_master_handle_t *handle,
                                                   lpi2c_state_machine_param_t *stateParams);
 
@@ -1210,7 +1212,7 @@ void LPI2C_MasterTransferCreateHandle(LPI2C_Type *base,
 #endif
 }
 
-static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
+static status_t LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
                                                   lpi2c_master_handle_t *handle,
                                                   lpi2c_state_machine_param_t *stateParams)
 {
@@ -1222,7 +1224,7 @@ static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
     if (0U == (stateParams->txCount)--)
     {
         stateParams->state_complete = true;
-        return;
+        return kStatus_Success;
     }
 
     /* Issue command. buf is a uint8_t* pointing at the uint16 command array. */
@@ -1253,6 +1255,10 @@ static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
                 while (tmpRxSize != 0U)
                 {
                     LPI2C_MasterGetFifoCounts(base, NULL, &stateParams->txCount);
+
+#if I2C_RETRY_TIMES != 0U
+                    uint32_t waitTimes = I2C_RETRY_TIMES;
+#endif
                     /*
                      * $Branch Coverage Justification$
                      * The transmission commands will not exceed FIFO SIZE.(will improve)
@@ -1260,6 +1266,13 @@ static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
                     while ((size_t)FSL_FEATURE_LPI2C_FIFO_SIZEn(base) == stateParams->txCount)
                     {
                         LPI2C_MasterGetFifoCounts(base, NULL, &stateParams->txCount);
+
+#if I2C_RETRY_TIMES != 0U
+                        if (--waitTimes == 0U)
+                        {
+                            return kStatus_LPI2C_Timeout;
+                        }
+#endif
                     }
 
                     if (tmpRxSize > 256U)
@@ -1281,6 +1294,8 @@ static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
             handle->state = (uint8_t)kStopState;
         }
     }
+
+    return kStatus_Success;
 }
 
 static void LPI2C_TransferStateMachineReadCommand(LPI2C_Type *base,
@@ -1419,6 +1434,7 @@ static void LPI2C_TransferStateMachineWaitState(LPI2C_Type *base,
  * @retval #kStatus_LPI2C_ArbitrationLost
  * @retval #kStatus_LPI2C_Nak
  * @retval #kStatus_LPI2C_FifoError
+ * @retval #kStatus_LPI2C_Timeout
  */
 static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_handle_t *handle, bool *isDone)
 {
@@ -1472,7 +1488,7 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
             switch (handle->state)
             {
                 case (uint8_t)kSendCommandState:
-                    LPI2C_TransferStateMachineSendCommand(base, handle, &stateParams);
+                    result = LPI2C_TransferStateMachineSendCommand(base, handle, &stateParams);
                     break;
 
                 case (uint8_t)kIssueReadCommandState:
@@ -1493,6 +1509,11 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                 default:
                     assert(false);
                     break;
+            }
+
+            if (result != kStatus_Success)
+            {
+                break;
             }
         }
     }

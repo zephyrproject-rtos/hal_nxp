@@ -22,8 +22,4 @@ if (CONFIG_MCUX_COMPONENT_component.power_manager.mcxw23)
     mcux_add_include(
         INCLUDES power_manager_mcxw23/device
     )
-
-    mcux_add_configuration(
-        CC "-DENABLE_LOW_POWER=1"
-    )
 endif()

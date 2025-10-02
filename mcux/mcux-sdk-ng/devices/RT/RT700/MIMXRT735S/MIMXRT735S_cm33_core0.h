@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT735SGAWAR_cm33_core0
-**                          MIMXRT735SGFOA_cm33_core0
+**     Processors:          MIMXRT735SGAWBR_cm33_core0
+**                          MIMXRT735SGFOB_cm33_core0
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core0
@@ -30,14 +31,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_cm33_core0.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core0
  *
  * CMSIS Peripheral Access Layer for MIMXRT735S_cm33_core0
@@ -82,6 +85,7 @@
 #include "PERI_LPSPI.h"
 #include "PERI_LPUART.h"
 #include "PERI_LP_FLEXCOMM.h"
+#include "PERI_MIPI_DSI_HOST.h"
 #include "PERI_MMU.h"
 #include "PERI_MRT.h"
 #include "PERI_MU.h"

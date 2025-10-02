@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,6 +18,11 @@ Implementation file for CE wrapper/driver functions on ARM
 #define FSL_COMPONENT_ID "platform.drivers.ce"
 #endif
 
+/*!
+ * brief Initializes the CE.
+ *
+ * param [in] ceCopyImage The information about the CE image to copy.
+ */
 void CE_Init(ce_copy_image_t *ceCopyImage)
 {
 #if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
@@ -30,6 +35,11 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
     CE_InitWithoutFirmware();
 
 #if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
+    /*
+     * $Branch Coverage Justification$
+     * The CE images released in the SDK use the STCM6 as the stack and the STCM7 as the data RAM.
+     * In this case, the CE core cannot boot from the STCM6 and STCM7.
+     */
     switch (ceCopyImage->destAddr)
     {
         case CE_STCM5_BASE:
@@ -48,6 +58,11 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
 #endif
 }
 
+/*!
+ * brief Installs CE firmware by given image info
+ *
+ * param [in] ceCopyImage The information about the CE image to copy.
+ */
 void CE_InstallFirmware(ce_copy_image_t *ceCopyImage)
 {
 #if (defined(KW47_core0_SERIES) || defined(MCXW72_core0_SERIES))
@@ -64,10 +79,16 @@ void CE_InstallFirmware(ce_copy_image_t *ceCopyImage)
     srcAddr = ceCopyImage->srcAddr;
     size    = ceCopyImage->size;
 
-    memcpy((void *)(uint32_t *)dstAddr, (const void *)(uint32_t *)srcAddr, size);
+    (void)memcpy((void *)(uint32_t *)dstAddr, (const void *)(uint32_t *)srcAddr, size);
 #endif
 }
 
+/*!
+ * brief Initializes the CE.
+ *
+ * details This function is similar to CE_Init, but it does not install
+ * the firmware, the firmware can be installed using CE_InstallFirmware.
+ */
 void CE_InitWithoutFirmware(void)
 {
     CLOCK_EnableClock(kCLOCK_DSP0);

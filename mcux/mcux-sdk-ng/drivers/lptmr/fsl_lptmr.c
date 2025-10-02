@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,10 +13,14 @@
 #define FSL_COMPONENT_ID "platform.drivers.lptmr"
 #endif
 
+#if (defined(LPTMR_CLOCKS) && !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
+#define LPTMR_DRIVER_CLK_CTRL 1
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if defined(LPTMR_CLOCKS)
+#if defined(LPTMR_DRIVER_CLK_CTRL)
 /*!
  * @brief Gets the instance from the base address to be used to gate or ungate the module clock
  *
@@ -25,16 +29,16 @@
  * @return The LPTMR instance
  */
 static uint32_t LPTMR_GetInstance(LPTMR_Type *base);
-#endif /* LPTMR_CLOCKS */
+#endif /* LPTMR_DRIVER_CLK_CTRL */
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#if defined(LPTMR_CLOCKS)
+#if defined(LPTMR_DRIVER_CLK_CTRL)
+
 /*! @brief Pointers to LPTMR bases for each instance. */
 static LPTMR_Type *const s_lptmrBases[] = LPTMR_BASE_PTRS;
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to LPTMR clocks for each instance. */
 static const clock_ip_name_t s_lptmrClocks[] = LPTMR_CLOCKS;
 
@@ -43,13 +47,12 @@ static const clock_ip_name_t s_lptmrClocks[] = LPTMR_CLOCKS;
 static const clock_ip_name_t s_lptmrPeriphClocks[] = LPTMR_PERIPH_CLOCKS;
 #endif
 
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* LPTMR_CLOCKS */
+#endif /* LPTMR_DRIVER_CLK_CTRL */
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if defined(LPTMR_CLOCKS)
+#if defined(LPTMR_DRIVER_CLK_CTRL)
 static uint32_t LPTMR_GetInstance(LPTMR_Type *base)
 {
     uint32_t instance;
@@ -67,7 +70,7 @@ static uint32_t LPTMR_GetInstance(LPTMR_Type *base)
 
     return instance;
 }
-#endif /* LPTMR_CLOCKS */
+#endif /* LPTMR_DRIVER_CLK_CTRL */
 
 /*!
  * brief Ungates the LPTMR clock and configures the peripheral for a basic operation.
@@ -81,9 +84,7 @@ void LPTMR_Init(LPTMR_Type *base, const lptmr_config_t *config)
 {
     assert(NULL != config);
 
-#if defined(LPTMR_CLOCKS)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-
+#if defined(LPTMR_DRIVER_CLK_CTRL)
     uint32_t instance = LPTMR_GetInstance(base);
 
     /* Ungate the LPTMR clock*/
@@ -91,16 +92,14 @@ void LPTMR_Init(LPTMR_Type *base, const lptmr_config_t *config)
 #if defined(LPTMR_PERIPH_CLOCKS)
     CLOCK_EnableClock(s_lptmrPeriphClocks[instance]);
 #endif
-
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* LPTMR_CLOCKS */
+#endif /* LPTMR_DRIVER_CLK_CTRL */
 
     /* Configure the timers operation mode and input pin setup */
-    base->CSR = (LPTMR_CSR_TMS(config->timerMode) | LPTMR_CSR_TFC(config->enableFreeRunning) |
+    base->CSR = (LPTMR_CSR_TMS(config->timerMode) | LPTMR_CSR_TFC(config->enableFreeRunning ? 1U : 0U) |
                  LPTMR_CSR_TPP(config->pinPolarity) | LPTMR_CSR_TPS(config->pinSelect));
 
     /* Configure the prescale value and clock source */
-    base->PSR = (LPTMR_PSR_PRESCALE(config->value) | LPTMR_PSR_PBYP(config->bypassPrescaler) |
+    base->PSR = (LPTMR_PSR_PRESCALE(config->value) | LPTMR_PSR_PBYP(config->bypassPrescaler ? 1U : 0U) |
                  LPTMR_PSR_PCS(config->prescalerClockSource));
 }
 
@@ -114,8 +113,7 @@ void LPTMR_Deinit(LPTMR_Type *base)
     /* Disable the LPTMR and reset the internal logic */
     base->CSR &= ~LPTMR_CSR_TEN_MASK;
 
-#if defined(LPTMR_CLOCKS)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if defined(LPTMR_DRIVER_CLK_CTRL)
 
     uint32_t instance = LPTMR_GetInstance(base);
 
@@ -125,8 +123,7 @@ void LPTMR_Deinit(LPTMR_Type *base)
     CLOCK_DisableClock(s_lptmrPeriphClocks[instance]);
 #endif
 
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* LPTMR_CLOCKS */
+#endif /* LPTMR_DRIVER_CLK_CTRL */
 }
 
 /*!

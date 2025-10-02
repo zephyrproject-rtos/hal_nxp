@@ -1,7 +1,6 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
- *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,6 +30,11 @@ static ERM_Type *const s_ermBases[] = ERM_BASE_PTRS;
 /*! @brief Pointers to ERM clocks for each instance. */
 static const clock_ip_name_t s_ermClocks[] = ERM_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ERM_RSTS_N)
+/*! @brief Pointers to ERM clocks for each instance. */
+static const clock_ip_name_t s_ermResets[] = ERM_RSTS_N;
+#endif
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -63,6 +67,11 @@ void ERM_Init(ERM_Type *base)
     /* Ungate ERM clock. */
     CLOCK_EnableClock(s_ermClocks[ERM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ERM_RSTS_N)
+    /* Reset the ERM module */
+    RESET_PeripheralReset(s_ermResets[ERM_GetInstance(base)]);
+#endif
 
     base->CR0 = 0x00U;
 #ifdef ERM_CR1_ENCIE8_MASK

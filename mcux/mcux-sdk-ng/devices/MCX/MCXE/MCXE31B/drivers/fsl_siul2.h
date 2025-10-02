@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SIUL2 driver version. */
-#define FSL_SIUL2_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_SIUL2_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 
 /*! @brief SIUL2 module maximum number of input signal on a pin */
 #define FEATURE_SIUL2_MAX_NUMBER_OF_INPUT (16U)
@@ -30,7 +30,8 @@
 #define FEATURE_ADC_INTERLEAVE_MAX_MUX_MODE \
     (2U) /*!< Some pins have two ADC interleave config, such as GPIO45 can be muxed as ADC0_S8 & ADC2_S8. */
 #endif
-#define DCM_DCMRWF4_ADC_INTERLEAVE_MASK (uint32_t)0x00001FFFUL /*!< Mask all adc interleave bits, some bit may not exist on some parts. */
+#define DCM_DCMRWF4_ADC_INTERLEAVE_MASK \
+    (uint32_t)0x00001FFFUL /*!< Mask all adc interleave bits, some bit may not exist on some parts. */
 
 #define SIUL2_PORT_WRITE8(address, value)  ((*(volatile uint8_t *)(address)) = (value))
 #define SIUL2_PORT_WRITE32(address, value) ((*(volatile uint32_t *)(address)) = (value))
@@ -202,7 +203,7 @@ typedef enum siul2_port_direction
 
 /*!
  * @brief Configures adc interleave mux mode.
- * Note! Not all are supported for a given part, please refer to IOMUX table for supported interleaves. 
+ * Note! Not all are supported for a given part, please refer to IOMUX table for supported interleaves.
  */
 typedef enum siul2_adc_interleaves
 {
@@ -238,7 +239,7 @@ typedef enum siul2_adc_interleaves
     kMUX_MODE_EN_ADC0_S12_0 =
         (uint32_t)0x0000FF7FUL, /*!< With bits 15-0, only clear ADC0_S12 bit, the other bits set to 1 */
     kMUX_MODE_EN_ADC0_S13_0 =
-        (uint32_t)0x0000FEFFUL, /*!< With bits 15-0, only clear ADC0_S13 bit, the other bits set to 1 */  
+        (uint32_t)0x0000FEFFUL, /*!< With bits 15-0, only clear ADC0_S13 bit, the other bits set to 1 */
     kMUX_MODE_EN_ADC2_S8_0 =
         (uint32_t)0x0000FDFFUL, /*!< With bits 15-0, only clear ADC2_S8 bit, the other bits set to 1  */
     kMUX_MODE_EN_ADC2_S9_0 =
@@ -290,20 +291,32 @@ typedef enum _siul2_port_num
     kSIUL2_PTG = 6U, /*!< PTG. */
 } siul2_port_num_t;
 
+/*!
+ * @brief SIUL2 Interrupt Filter Configuration
+ *
+ * This structure is used to configure the filter for interrupt.
+ */
 typedef struct siul2_filter_config
 {
     uint8_t preScaler : 4; /*!< Interrupt Filter clock prescaler setting, 0-15. */
     uint8_t maxCount : 4;  /*!< Interrupt Filter Maximum Counter, 0-15. */
 } siul2_filter_config_t;
 
+/*!
+ * @brief SIUL2 Interrupt Configuration
+ *
+ * This structure is used to configure the interrupt.
+ */
 typedef enum siul2_interrupt_config
 {
-    kSIUL2_InterruptStatusFlagDisabled = 0U, /*!< Interrupt status flag is disabled. */
-    kSIUL2_InterruptRisingEdge         = 0x1U,
-    kSIUL2_InterruptFallingEdge        = 0x2U,
-    kSIUL2_InterruptBothEdge           = 0x3U,
+    kSIUL2_InterruptStatusFlagDisabled = 0U,   /*!< Interrupt status flag is disabled. */
+    kSIUL2_InterruptRisingEdge         = 0x1U, /*!< Interrupt on rising edge. */
+    kSIUL2_InterruptFallingEdge        = 0x2U, /*!< Interrupt on falling edge. */
+    kSIUL2_InterruptBothEdge           = 0x3U, /*!< Interrupt on both edges. */
 } siul2_interrupt_config_t;
 
+/* Typedef for interrupt callback. */
+typedef void (*siul2_cb_t)(SIUL2_Type *base, uint32_t status);
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -324,11 +337,12 @@ void SIUL2_PinInit(const siul2_pin_settings_t *config);
  *
  * @param base SIUL2 peripheral base pointer
  * @param pin pin number, 0, 1...511, see RM for available pins
- * @param enable Enable output buffer
+ * @param enable Enable input buffer
  * @param inputMuxReg Pin muxing register slot selection
  * @param inputMux Pin muxing slot selection
  */
-void SIUL2_SetPinInputBuffer(SIUL2_Type *base, uint32_t pin, bool enable, uint32_t inputMuxReg, siul2_port_inputmux_t inputMux);
+void SIUL2_SetPinInputBuffer(
+    SIUL2_Type *base, uint32_t pin, bool enable, uint32_t inputMuxReg, siul2_port_inputmux_t inputMux);
 
 /*!
  * @brief Set the pin Output Buffer.
@@ -429,7 +443,6 @@ inline static uint32_t SIUL2_PortPinRead(SIUL2_Type *base, siul2_port_num_t port
     return SIUL2_PORT_READ8(SIUL2_GPDI_ADDR(base, pinIndex));
 }
 
-
 /*!
  * @brief Set the pin output.
  *
@@ -497,7 +510,7 @@ void SIUL2_SetDmaInterruptConfig(SIUL2_Type *base, uint32_t req, siul2_interrupt
  * @brief Enable external interrupt.
  *
  * @param base SIUL2 peripheral base pointer
- * @param req which interrupt/DMA request to set, 0...31
+ * @param req which interrupt request to set, 0...31
  * @param config interrupt configuration, @ref siul2_interrupt_config_t
  * @param filterCount Maximum filter count 0...15, < 0 disable filterCount.
  */
@@ -507,7 +520,7 @@ void SIUL2_EnableExtInterrupt(SIUL2_Type *base, uint32_t req, siul2_interrupt_co
  * @brief Enable external DMA request.
  *
  * @param base SIUL2 peripheral base pointer
- * @param req which interrupt/DMA request to set, 0...31
+ * @param req which DMA request to set, refer to RM for supported external DMA request number. 
  * @param config interrupt configuration, @ref siul2_interrupt_config_t
  * @param filterCount Maximum filter count 0...15, < 0 disable filterCount.
  */
@@ -539,7 +552,7 @@ inline static void SIUL2_DisableExtDmaAndInterrupts(SIUL2_Type *base, uint32_t m
  * @brief Enable mutliple external interrupts.
  *
  * @param base SIUL2 peripheral base pointer
- * @param mask bit mask ofinterrupt requests
+ * @param mask bit mask of interrupt requests
  * @param config interrupt configuration, @ref siul2_interrupt_config_t
  * @param filterCount Maximum filter count 0...15, < 0 disable filterCount.
  */
@@ -576,6 +589,38 @@ inline static void SIUL2_ClearExtDmaInterruptStatusFlags(SIUL2_Type *base, uint3
 {
     base->DISR0 |= mask;
 }
+
+/*!
+ * @brief Get the external interrupt request number for the pin.
+ *
+ * @param pin GPIO pin number, 0...511, refer to RM for avaiable Pins.
+ * @return 0...31 the EIRQ number, > 32 means the pin is not capable for EIRQ.
+ */
+uint32_t SIUL2_GetPinEirqNumber(uint32_t pin);
+
+/*!
+ * @brief Enable EIRQ with callback.
+ * This function enables the interrupt for the selected EIRQ. It enables interrupt both in SIUL2 and NIVC.
+ * So, the callback function will be called when interrupt comes.
+ *
+ * @param base SIUL2 peripheral base pointer
+ * @param req which interrupt request to set, 0...31
+ * @param config interrupt configuration, @ref siul2_interrupt_config_t
+ * @param filterCount Maximum filter count 0...15, < 0 disable filterCount.
+ */
+void SIUL2_EnableExtInteruptWithCallback(
+    SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config, int8_t filterCount, siul2_cb_t cb);
+
+/*!
+ * @brief Disable EIRQ callback.
+
+ * This function disables the interrupt for the selected EIRQ. It disables interrupt in SIUL2 and NIVC.
+ *
+ * @param base SIUL2 peripheral base pointer
+ * @param req which interrupt request to set, 0...31
+ */
+void SIUL2_DisableExtInterruptCallback(SIUL2_Type *base, uint32_t req);
+
 #if defined(__cplusplus)
 }
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -34,32 +34,37 @@ extern "C" {
 #endif
 
 /*!
- * @brief Execute command in command queue
- *
- * @return Return 0 if succeeded, otherwise return error code.
+ * @brief Executes commands in the command queue.
+ * 
+ * @return Command execution status.
  */
-int CE_ExecCmd();
+int32_t CE_ExecCmd(void);
 
 /*!
- * @brief Simple echo test cmd
+ * @brief Sends a basic command to verify that ZV2117 is operational
+ * and that the command interface is functioning properly.
  *
- * @return Return 0 if succeeded, otherwise return error code.
+ * @details This function passes through the command processing interface
+ * and returns a success status.
+ * 
+ * @return Command execution status.
  */
-int CE_NullCmd();
+int32_t CE_NullCmd(void);
 
 /*!
- * @brief Copies one memory buffer to another
+ * @brief Copies data between buffers in the ZV2117 memory section.
  *
- * Copies one memory buffer to another. Copy is in units of words. Any data type
- * can be used.
+ * @details Copies a specified number of 32-bit words from the source
+ * to the destination buffer. Both buffers must reside in the ZV2117
+ * data memory section.
  *
- * @param pDst Pointer to destination buffer
- * @param pSrc Pointer to source buffer
- * @param N    Number of words to copy
+ * @param [out] pDst Pointer to destination buffer
+ * @param [in]  pSrc Pointer to source buffer
+ * @param [in]  N    Number of 32-bit words to copy
  *
- * @return Return 0 if succeeded, otherwise return error code.
+ * @return Command execution status.
  */
-int CE_Copy(int *pDst, int *pSrc, const int N);
+int32_t CE_Copy(int32_t *pDst, int32_t *pSrc, const int32_t N);
 
 #ifdef __cplusplus
 }

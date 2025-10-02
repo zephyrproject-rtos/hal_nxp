@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DCDC
@@ -520,10 +520,9 @@ typedef struct {
 
 #define DCDC_CURRENT_TRG_LP_EN_1P0_MASK          (0x80000000U)
 #define DCDC_CURRENT_TRG_LP_EN_1P0_SHIFT         (31U)
-/*! LP_EN_1P0 - This value comes from the smaller one between TRG_SW_0 and TRG_SW_1. This bit only
- *    controls 1P0. 1P8 is always controlled by VDD1P8CTRL_TRG
- *  0b0..DCDC 1P0 works in run mode. Its output voltage is controlled by VDD1P0CTRL_TRG.
- *  0b1..DCDC 1P0 works in low power mode. Its output voltage is controlled by VDD1P0CTRL_LP_TRG and its output current is less than 50mA.
+/*! LP_EN_1P0 - Low-Power Enable. This value comes from the smaller one between TRG_SW_0 and TRG_SW_1.
+ *  0b0..DCDC works in run mode. Its output voltage is controlled by VDD1P0CTRL_TRG.
+ *  0b1..DCDC works in low power mode.
  */
 #define DCDC_CURRENT_TRG_LP_EN_1P0(x)            (((uint32_t)(((uint32_t)(x)) << DCDC_CURRENT_TRG_LP_EN_1P0_SHIFT)) & DCDC_CURRENT_TRG_LP_EN_1P0_MASK)
 /*! @} */
@@ -612,7 +611,7 @@ typedef struct {
 
 #define DCDC_TRG_SW_0_LP_EN_1P0_MASK             (0x80000000U)
 #define DCDC_TRG_SW_0_LP_EN_1P0_SHIFT            (31U)
-/*! LP_EN_1P0 - LP_EN_1P0 only controls 1P0. 1P8 is always controlled by VDD1P8CTRL_TRG */
+/*! LP_EN_1P0 - Low-Power Enable */
 #define DCDC_TRG_SW_0_LP_EN_1P0(x)               (((uint32_t)(((uint32_t)(x)) << DCDC_TRG_SW_0_LP_EN_1P0_SHIFT)) & DCDC_TRG_SW_0_LP_EN_1P0_MASK)
 /*! @} */
 
@@ -633,7 +632,7 @@ typedef struct {
 
 #define DCDC_TRG_GPC_0_LP_EN_1P0_MASK            (0x80000000U)
 #define DCDC_TRG_GPC_0_LP_EN_1P0_SHIFT           (31U)
-/*! LP_EN_1P0 - LP_EN_1P0 only controls 1P0. 1P8 is always controlled by VDD1P8CTRL_TRG */
+/*! LP_EN_1P0 - Low-Power Enable */
 #define DCDC_TRG_GPC_0_LP_EN_1P0(x)              (((uint32_t)(((uint32_t)(x)) << DCDC_TRG_GPC_0_LP_EN_1P0_SHIFT)) & DCDC_TRG_GPC_0_LP_EN_1P0_MASK)
 /*! @} */
 
@@ -712,7 +711,7 @@ typedef struct {
 
 #define DCDC_TRG_SW_1_LP_EN_1P0_MASK             (0x80000000U)
 #define DCDC_TRG_SW_1_LP_EN_1P0_SHIFT            (31U)
-/*! LP_EN_1P0 - LP_EN_1P0 only controls 1P0. 1P8 is always controlled by VDD1P8CTRL_TRG */
+/*! LP_EN_1P0 - Low-Power Enable */
 #define DCDC_TRG_SW_1_LP_EN_1P0(x)               (((uint32_t)(((uint32_t)(x)) << DCDC_TRG_SW_1_LP_EN_1P0_SHIFT)) & DCDC_TRG_SW_1_LP_EN_1P0_MASK)
 /*! @} */
 
@@ -733,7 +732,7 @@ typedef struct {
 
 #define DCDC_TRG_GPC_1_LP_EN_1P0_MASK            (0x80000000U)
 #define DCDC_TRG_GPC_1_LP_EN_1P0_SHIFT           (31U)
-/*! LP_EN_1P0 - LP_EN_1P0 only controls 1P0. 1P8 is always controlled by VDD1P8CTRL_TRG */
+/*! LP_EN_1P0 - Low-Power Enable */
 #define DCDC_TRG_GPC_1_LP_EN_1P0(x)              (((uint32_t)(((uint32_t)(x)) << DCDC_TRG_GPC_1_LP_EN_1P0_SHIFT)) & DCDC_TRG_GPC_1_LP_EN_1P0_MASK)
 /*! @} */
 

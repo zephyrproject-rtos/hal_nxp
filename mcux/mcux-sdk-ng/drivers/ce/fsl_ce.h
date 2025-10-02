@@ -18,13 +18,16 @@ Functional API definitions for ARM drivers for CE
 #include "fsl_ce_transform.h"
 
 /*!
- * @defgroup ce Computer Engine (CE) Driver
+ * @ingroup ce
+ * @defgroup ce_init CE Initialization Functions
+ * @brief Functional API definitions for CE initialization functions.
+ * @{
  */
 
 /*! @name Driver version */
 /*! @{ */
 /*! @brief CE driver version. */
-#define FSL_CE_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_CE_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*! @} */
 
 /*!
@@ -47,30 +50,33 @@ extern "C" {
 #endif
 
 /*!
- * @brief Initialize the CE.
+ * @brief Initializes the CE.
  *
- * @param ceCopyImage The information about the CE image to copy.
+ * @param [in] ceCopyImage The information about the CE image to copy.
  */
 void CE_Init(ce_copy_image_t *ceCopyImage);
 
 /*!
- * @brief Initialize the CE.
+ * @brief Installs CE firmware by given image info
  *
- * This function is similar with CE_Init, the difference is this function
- * does not install the firmware, the firmware could be installed using
- * CE_InstallFirmware.
- */
-void CE_InitWithoutFirmware(void);
-
-/*!
- * @brief install CE firmware by given image info
- *
- * @param ceCopyImage The information about the CE image to copy.
+ * @param [in] ceCopyImage The information about the CE image to copy.
  */
 void CE_InstallFirmware(ce_copy_image_t *ceCopyImage);
+
+/*!
+ * @brief Initializes the CE.
+ *
+ * @details This function is similar to CE_Init, but it does not install
+ * the firmware, the firmware can be installed using CE_InstallFirmware.
+ */
+void CE_InitWithoutFirmware(void);
 
 #if defined(__cplusplus)
 }
 #endif
+
+/*!
+ * @}
+ */
 
 #endif /*FSL_CE_H*/

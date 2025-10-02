@@ -21,7 +21,7 @@ if(CONFIG_MCUX_COMPONENT_driver.flexio_mculcd_edma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.flexio_mculcd_smartdma)
-    mcux_component_version(2.0.5)
+    mcux_component_version(2.0.6)
 
     mcux_add_source(SOURCES fsl_flexio_mculcd_smartdma.c fsl_flexio_mculcd_smartdma.h)
 
