@@ -1440,8 +1440,11 @@ void EDMA_ClearChannelStatusFlags(EDMA_Type *base, uint32_t channel, uint32_t ma
  *               parameters.
  * param base eDMA peripheral base address.
  * param channel eDMA channel number.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_InvalidArgument
  */
-void EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel)
+status_t EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel)
 {
     assert(handle != NULL);
     assert(FSL_FEATURE_EDMA_INSTANCE_CHANNELn(base) != -1);
@@ -1457,6 +1460,10 @@ void EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel)
 
     /* Get the DMA instance number */
     edmaInstance                        = EDMA_GetInstance(base);
+    if (edmaInstance >= ARRAY_SIZE(s_edmaBases))
+    {
+        return kStatus_InvalidArgument;
+    }
     s_EDMAHandle[edmaInstance][channel] = handle;
 
     handle->tcdBase     = EDMA_TCD_BASE(base, channel);
@@ -1484,6 +1491,8 @@ void EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel)
 
     /* Enable NVIC interrupt */
     (void)EnableIRQ(s_edmaIRQNumber[edmaInstance][channel]);
+
+    return kStatus_Success;
 }
 
 /*!

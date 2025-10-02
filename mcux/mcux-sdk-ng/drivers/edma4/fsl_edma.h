@@ -1578,8 +1578,11 @@ void EDMA_ClearChannelStatusFlags(EDMA_Type *base, uint32_t channel, uint32_t ma
  *               parameters.
  * @param base eDMA peripheral base address.
  * @param channel eDMA channel number.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_InvalidArgument
  */
-void EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel);
+status_t EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel);
 
 /*!
  * @brief Installs the TCDs memory pool into the eDMA handle.
