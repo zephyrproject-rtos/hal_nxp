@@ -2943,17 +2943,12 @@ void ENET_Ptp1588StartTimer(ENET_Type *base, uint32_t ptpClkSrc)
 }
 
 /*!
- * brief Gets the current ENET time from the PTP 1588 timer.
+ * brief Initiates and waits for successful 1588 nanosecond capture.
  *       Interrupts are not disabled.
  *
  * param base  ENET peripheral base address.
- * param handle The ENET state pointer. This is the same state pointer used in the ENET_Init.
- * param ptpTime The PTP timer structure.
  */
-void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_t *ptpTime)
-{
-    /* Get the current PTP time. */
-    ptpTime->second = handle->msTimerSecond;
+void ENET_Ptp1588WaitForCapture(ENET_Type *base) {
     /* Get the nanosecond from the master timer. */
     base->ATCR |= ENET_ATCR_CAPTURE_MASK;
 
@@ -2971,6 +2966,23 @@ void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, en
     {
     }
 #endif
+}
+
+/*!
+ * brief Gets the current ENET time from the PTP 1588 timer.
+ *       Interrupts are not disabled.
+ *
+ * param base  ENET peripheral base address.
+ * param handle The ENET state pointer. This is the same state pointer used in the ENET_Init.
+ * param ptpTime The PTP timer structure.
+ */
+void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_t *ptpTime)
+{
+    /* Get the current PTP time. */
+    ptpTime->second = handle->msTimerSecond;
+
+    /* Capture current time in ATVR */
+    ENET_Ptp1588WaitForCapture(base);
 
     /* Get the captured time. */
     ptpTime->nanosecond = base->ATVR;
@@ -3024,6 +3036,46 @@ void ENET_Ptp1588SetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
     /* Sets PTP timer. */
     handle->msTimerSecond = ptpTime->second;
     base->ATVR            = ptpTime->nanosecond;
+
+    /* Enables the interrupt. */
+    EnableGlobalIRQ(primask);
+}
+
+/*!
+ * @brief Adjusts the ENET PTP 1588 timer by jumping a relative time difference.
+ *
+ * Compared to ENET_Ptp1588SetTimer, this function yields more accurate results when
+ * the relative time difference between the PTP clock and the target clock is known
+ * (e.g., though a capture event retrieved by ENET_Ptp1588GetChannelCaptureValue).
+ *
+ * @param base  ENET peripheral base address.
+ * @param nanosecond_diff The offset that is added/subtracted from the current PTP time
+ */
+void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecond_diff) 
+{
+    assert(handle != NULL);
+    assert(ptpTime != NULL);
+
+    /* Disables interrupts */
+    uint32_t primask = DisableGlobalIRQ();
+
+    uint32_t instance     = ENET_GetInstance(base);
+    enet_handle_t *handle = s_ENETHandle[instance];
+
+    ENET_Ptp1588WaitForCapture(base);
+    int64_t second_diff = nanosecond_diff / ENET_NANOSECOND_ONE_SECOND;
+    int32_t residual_nanosecond_diff = nanosecond_diff % ENET_NANOSECOND_ONE_SECOND;
+
+    if (base->ATVR % ENET_NANOSECOND_ONE_SECOND + residual_nanosecond_diff >= ENET_NANOSECOND_ONE_SECOND) {
+      // compensate positive wrap-around
+      second_diff++;
+    } else if (base->ATVR % ENET_NANOSECOND_ONE_SECOND < -residual_nanosecond_diff) {
+      // compensate negative wrap-around
+      second_diff--;
+    }
+
+    handle->msTimerSecond += second_diff;
+    base->ATVR = (base->ATVR + residual_nanosecond_diff) % ENET_NANOSECOND_ONE_SECOND;
 
     /* Enables the interrupt. */
     EnableGlobalIRQ(primask);
