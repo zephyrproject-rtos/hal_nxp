@@ -35,7 +35,7 @@ if(CONFIG_SOC_SERIES_RW6XX)
     endif()
 endif()
 
-if(CONFIG_SOC_FAMILY_MCXW)
+if(CONFIG_SOC_SERIES_MCXW7XX)
     target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/platform/wireless_mcu/fwk_platform.c
         ${CMAKE_CURRENT_LIST_DIR}/platform/wireless_mcu/fwk_platform_ics.c
@@ -61,4 +61,16 @@ if(CONFIG_SOC_FAMILY_MCXW)
         set(CONFIG_USE_component_osa_zephyr true)
     endif()
 
+endif()
+
+if(CONFIG_SOC_SERIES_MCXW2XX)
+    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/platform/mcxw23/fwk_platform_ble.c
+    )
+
+    zephyr_include_directories(
+        ${CMAKE_CURRENT_LIST_DIR}/Common
+        ${CMAKE_CURRENT_LIST_DIR}/platform/wireless_mcu
+        ${CMAKE_CURRENT_LIST_DIR}/platform/mcxw23
+    )
 endif()
