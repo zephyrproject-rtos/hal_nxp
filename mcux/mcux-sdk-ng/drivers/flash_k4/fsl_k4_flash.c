@@ -216,11 +216,13 @@ status_t FLASH_Erase(flash_config_t *config, FMU_Type *base, uint32_t start, uin
                 start += FLASH_FEATURE_SECTOR_SIZE;
             }
         }
+#if defined(SMSCM) || defined (SYSCON_FMC0_CTRL_DFC_MASK)
         /*
          * Data cache may contain stale values following a flash programming or erasing operation.
          * Data cache invalidation is only on KW43.
          */
         flash_cache_invalidate();
+#endif
     }
     else
     {
@@ -251,11 +253,13 @@ status_t FLASH_EraseAll(FMU_Type *base, uint32_t key)
     if (kStatus_FLASH_Success == status)
     {
         status = FLASH_CMD_EraseAll(base);
+#if defined(SMSCM) || defined (SYSCON_FMC0_CTRL_DFC_MASK)
         /*
          * Data cache may contain stale values following a flash programming or erasing operation.
          * Data cache invalidation is only on KW43.
          */
         flash_cache_invalidate();
+#endif
     }
     else
     {
@@ -337,11 +341,13 @@ status_t FLASH_Program(flash_config_t *config, FMU_Type *base, uint32_t start, u
 
             status = FLASH_CMD_ProgramPhrase(base, start, extraData);
         }
+#if defined(SMSCM) || defined (SYSCON_FMC0_CTRL_DFC_MASK)
         /*
          * Data cache may contain stale values following a flash programming or erasing operation.
          * Data cache invalidation is only on KW43.
          */
         flash_cache_invalidate();
+#endif
     }
     else
     {
@@ -427,11 +433,13 @@ status_t FLASH_ProgramPage(flash_config_t *config, FMU_Type *base, uint32_t star
 
             status = FLASH_CMD_ProgramPage(base, start, extraData);
         }
+#if defined(SMSCM) || defined (SYSCON_FMC0_CTRL_DFC_MASK)
         /*
          * Data cache may contain stale values following a flash programming or erasing operation.
          * Data cache invalidation is only on KW43.
          */
         flash_cache_invalidate();
+#endif
     }
     else
     {
