@@ -17,7 +17,6 @@
 #if CONFIG_WIFI_FEATURES
 
 #ifdef ENABLE_OFFLOAD
-
 #if (CONFIG_HOST_SLEEP && CONFIG_MEF_CFG)
 static void dump_wlan_add_packet_filter()
 {

@@ -18,6 +18,7 @@
 #include <osa.h>
 
 #include <wifi.h>
+#include <wm_net.h>
 
 #if defined(RW610)
 #include "wifi-imu.h"
@@ -183,6 +184,34 @@ int wifi_get_eeprom_data(uint32_t offset, uint32_t byte_count, uint8_t *buf)
     (void)wifi_wait_for_cmdresp(buf);
     return wm_wifi.cmd_resp_status;
 }
+
+#if CONFIG_IPV6
+int wifi_set_ipv6_ra_offload(t_u8 enable)
+{
+    wifi_get_command_lock();
+    HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
+    (void)memset(cmd, 0x00, sizeof(HostCmd_DS_COMMAND));
+    HostCmd_DS_IPV6_RA_OFFLOAD *ipv6_ra_cfg = &cmd->params.ipv6_ra_offload;
+
+    cmd->command = wlan_cpu_to_le16(HostCmd_CMD_IPV6_RA_OFFLOAD_CFG);
+    ipv6_ra_cfg->action = wlan_cpu_to_le16(HostCmd_ACT_GEN_SET);
+    ipv6_ra_cfg->enable = wlan_cpu_to_le16(enable);
+    ipv6_ra_cfg->ipv6_addr_count = net_get_all_if_ipv6_addr_and_cnt((char *)(&ipv6_ra_cfg->ipv6_addr_param.ipv6_addrs));
+    if (ipv6_ra_cfg->ipv6_addr_count == 0)
+    {
+        wifi_d("No IPv6 address configured");
+        wifi_put_command_lock();
+        return WM_SUCCESS;
+    }
+
+    ipv6_ra_cfg->ipv6_addr_param.Header.type = wlan_cpu_to_le16(TLV_TYPE_IPV6_RA_OFFLOAD);
+    ipv6_ra_cfg->ipv6_addr_param.Header.len = wlan_cpu_to_le16(16 * ipv6_ra_cfg->ipv6_addr_count);
+    cmd->size = S_DS_GEN + sizeof(HostCmd_DS_IPV6_RA_OFFLOAD) + 16 * ipv6_ra_cfg->ipv6_addr_count;
+    cmd->size = wlan_cpu_to_le16(cmd->size);
+
+    return wifi_wait_for_cmdresp(NULL);
+}
+#endif
 
 int wifi_reg_access(wifi_reg_t reg_type, uint16_t action, uint32_t offset, uint32_t *value)
 {
@@ -5777,8 +5806,7 @@ int wifi_set_ecsa_cfg(t_u8 block_tx, t_u8 oper_class, t_u8 channel, t_u8 switch_
         else if (band_width == CHANNEL_BW_80MHZ)
         {
             pbwchansw_ie->new_channel_width        = 1;
-            pbwchansw_ie->new_channel_center_freq0 = center_freq_idx - 4;
-            pbwchansw_ie->new_channel_center_freq1 = center_freq_idx + 4;
+            pbwchansw_ie->new_channel_center_freq0 = center_freq_idx;
         }
         else if (band_width == CHANNEL_BW_160MHZ)
         {
@@ -6097,7 +6125,11 @@ static int wlan_send_mgmt_auth_request(mlan_private *pmpriv,
 
         tx_frame.bandcfg.chanBand = channel > 14 ? BAND_5GHZ : BAND_2GHZ;
         tx_frame.channel          = channel;
+#ifdef SD8978
+        tx_frame.data_len         = HEADER_SIZE + pkt_len - 2 + 2 * sizeof(pkt_len);
+#else
         tx_frame.data_len         = HEADER_SIZE + pkt_len + 2 * sizeof(pkt_len);
+#endif
         tx_frame.buf_type         = MLAN_BUF_TYPE_RAW_DATA;
         tx_frame.priority         = 7;
 
@@ -6693,11 +6725,13 @@ int wifi_ftm_11mc_cfg(ftm_11mc_nego_cfg_t *ftm_11mc_nego_cfg)
 int wifi_ftm_location_cfg(location_cfg_info_t *ftm_location_cfg)
 {
     wlan_location_ftm_cfg(ftm_location_cfg);
+    return 0;
 }
 
 int wifi_ftm_civic_cfg(location_civic_rep_t *ftm_civic_cfg)
 {
     wlan_civic_ftm_cfg(ftm_civic_cfg);
+    return 0;
 }
 
 int wifi_ftm_cfg(const t_u8 protocol, ranging_11az_cfg_t *ftm_ranging_cfg)

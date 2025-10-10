@@ -578,7 +578,6 @@ static struct
     bool reassoc_control : 1;
     bool reassoc_request : 1;
     unsigned int reassoc_count;
-    bool hs_configured;
     unsigned int hs_wakeup_condition;
     wifi_scan_chan_list_t scan_chan_list;
 #if CONFIG_WPA2_ENTP
@@ -983,9 +982,10 @@ int wlan_send_host_sleep_int()
     {
         ipv4_addr = 0;
     }
-
+#if CONFIG_IPV6
+    wifi_set_ipv6_ra_offload(MTRUE);
+#endif
     wifi_send_hs_cfg_cmd((mlan_bss_type)type, ipv4_addr, HS_CONFIGURE, wlan.hs_wakeup_condition);
-
 exit:
     if (ret != WM_SUCCESS)
     {
@@ -1183,6 +1183,9 @@ void wlan_cancel_host_sleep(void)
         wlcm_e("Error: Failed to send host sleep cancel command");
         return;
     }
+#if CONFIG_IPV6
+    wifi_set_ipv6_ra_offload(MFALSE);
+#endif
 }
 
 void wlan_clear_host_sleep_config(void)
@@ -5172,6 +5175,38 @@ static void wpa_supplicant_msg_cb(const char *buf, size_t len)
 
     wlcm_d("%s: %s", __func__, buf);
 
+#if CONFIG_WPA_SUPP && CONFIG_ROAMING
+    if (strstr(buf, "selected current BSS ") != NULL)
+    {
+        t_u8 addr[MLAN_MAC_ADDR_LENGTH];
+
+        s = strstr(buf, "BSS");
+        if (s == NULL)
+        {
+            return;
+        }
+
+        s = s + 4;
+        if (hwaddr_aton(s, addr))
+        {
+            return;
+        }
+
+        if (memcmp(addr, network->bssid, MLAN_MAC_ADDR_LENGTH) == 0)
+        {
+            (void)wifi_set_rssi_low_threshold(&wlan.rssi_low_threshold);
+            wlan.roam_reassoc = false;
+        }
+        return;
+    }
+    if (strstr(buf, "Skip roam ") != NULL)
+    {
+        (void)wifi_set_rssi_low_threshold(&wlan.rssi_low_threshold);
+        wlan.roam_reassoc = false;
+        return;
+    }
+#endif
+
     if (strstr(buf, WPA_EVENT_SCAN_FAILED))
     {
         wlcm_process_scan_failed();
@@ -5864,6 +5899,7 @@ static void wlcm_process_fw_hang_event(struct wifi_message *msg, enum cm_sta_sta
     if (is_uap_starting())
     {
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
+        netif = net_get_uap_interface();
         net_mgmt(NET_REQUEST_WIFI_AP_DISABLE, (struct net_if *)netif, NULL, 0);
 #else
         (void)do_stop(&wlan.networks[wlan.cur_uap_network_idx]);
@@ -7180,10 +7216,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             break;
 #if CONFIG_HOST_SLEEP
         case WIFI_EVENT_HS_CONFIG:
-            if (wlan.hs_configured == MTRUE)
-            {
-                wlcm_process_hs_config_event();
-            }
+            wlcm_process_hs_config_event();
             break;
 #endif
 #if CONFIG_11N
@@ -7878,13 +7911,8 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     wlan.rssi_low_threshold = 70;
 #endif
 
-#ifdef RW610
-#if (CONFIG_WIFI_BLE_COEX_APP) && (CONFIG_WIFI_BLE_COEX_APP == 1)
-    wlan.wakeup_conditions = (unsigned int)WAKE_ON_UNICAST | (unsigned int)WAKE_ON_MAC_EVENT |
-                             (unsigned int)WAKE_ON_MULTICAST | (unsigned int)WAKE_ON_ARP_BROADCAST;
-#else
+#if defined(RW610) || defined(IW610)
     wlan.wakeup_conditions = 0;
-#endif
 #else
     wlan.wakeup_conditions = (unsigned int)WAKE_ON_UNICAST | (unsigned int)WAKE_ON_MAC_EVENT |
                              (unsigned int)WAKE_ON_MULTICAST | (unsigned int)WAKE_ON_ARP_BROADCAST;
@@ -14556,7 +14584,7 @@ int wlan_tx_ampdu_prot_mode(tx_ampdu_prot_mode_para *prot_mode, t_u16 action)
 #if CONFIG_MEF_CFG
 int wlan_mef_set_auto_arp(t_u8 mef_action)
 {
-    int ret, index;
+    int ret, index = -1, found = 0;
     unsigned int ipv4_addr[2];
     int ipv4_addr_num = 0;
     int filter_num = 0;
@@ -14597,7 +14625,24 @@ int wlan_mef_set_auto_arp(t_u8 mef_action)
         ipv4_addr_num++;
     }
 #endif
-    index = g_flt_cfg.nentries;
+    for (int i = 0; i < g_flt_cfg.nentries; i++)
+    {
+        if (g_flt_cfg.mef_entry[i].action & MEF_AUTO_ARP)
+        {
+            index = i;
+            found = 1;
+            break;
+        }
+    }
+    if (!found)
+    {
+        index = g_flt_cfg.nentries;
+    }
+    else
+    {
+        g_flt_cfg.mef_entry[index].action = (MEF_AUTO_ARP | (mef_action & 0xF));
+        goto out;
+    }
     g_flt_cfg.criteria |= (CRITERIA_BROADCAST | CRITERIA_UNICAST);
     g_flt_cfg.nentries++;
 
@@ -14636,13 +14681,13 @@ int wlan_mef_set_auto_arp(t_u8 mef_action)
         (void)memcpy(g_flt_cfg.mef_entry[index].filter_item[filter_num - 1].byte_seq,
                      &ipv4_addr[1], 4); // UAP IP address
     }
-
+out:
     return WM_SUCCESS;
 }
 
 int wlan_mef_set_auto_ping(t_u8 mef_action)
 {
-    int ret, index;
+    int ret, index = -1, found = 0;;
     unsigned int ipv4_addr[2];
     int ipv4_addr_num = 0;
     int filter_num = 0;
@@ -14683,7 +14728,24 @@ int wlan_mef_set_auto_ping(t_u8 mef_action)
         ipv4_addr_num++;
     }
 #endif
-    index = g_flt_cfg.nentries;
+    for (int i = 0; i < g_flt_cfg.nentries; i++)
+    {
+        if (g_flt_cfg.mef_entry[i].action & MEF_AUTO_PING)
+        {
+            index = i;
+            found = 1;
+            break;
+        }
+    }
+    if (!found)
+    {
+        index = g_flt_cfg.nentries;
+    }
+    else
+    {
+        g_flt_cfg.mef_entry[index].action = (MEF_AUTO_PING | (mef_action & 0xF));
+        goto out;
+    }
     g_flt_cfg.criteria |= (CRITERIA_BROADCAST | CRITERIA_UNICAST);
     g_flt_cfg.nentries++;
     g_flt_cfg.mef_entry[index].mode                        = MEF_MODE_HOST_SLEEP;
@@ -14727,25 +14789,41 @@ int wlan_mef_set_auto_ping(t_u8 mef_action)
         (void)memcpy(g_flt_cfg.mef_entry[index].filter_item[filter_num - 1].byte_seq,
                      &ipv4_addr[1], 4); // UAP IP address
     }
-
+out:
     return WM_SUCCESS;
 }
 
 int wlan_set_ipv6_ns_mef(t_u8 mef_action)
 {
-	int index;
-
+    int index = -1, found = 0;
     if (g_flt_cfg.nentries >= MAX_NUM_ENTRIES)
     {
         wlcm_e("Number of MEF entries(%d) exceeds limit(8)!", g_flt_cfg.nentries);
         return -WM_FAIL;
     }
 
-    index = g_flt_cfg.nentries;
+    for (int i = 0; i < g_flt_cfg.nentries; i++)
+    {
+        if (g_flt_cfg.mef_entry[i].action & MEF_NS_RESP)
+        {
+            index = i;
+            found = 1;
+            break;
+        }
+    }
+    if (!found)
+    {
+        index = g_flt_cfg.nentries;
+    }
+    else
+    {
+        g_flt_cfg.mef_entry[index].action = (MEF_NS_RESP | (mef_action & 0xF));
+        goto out;
+    }
     g_flt_cfg.criteria |= (CRITERIA_UNICAST | CRITERIA_MULTICAST);
     g_flt_cfg.nentries++;
     g_flt_cfg.mef_entry[index].mode = MEF_MODE_HOST_SLEEP;
-    g_flt_cfg.mef_entry[index].action = (MEF_NS_RESP| (mef_action & 0xF));
+    g_flt_cfg.mef_entry[index].action = (MEF_NS_RESP | (mef_action & 0xF));
     g_flt_cfg.mef_entry[index].filter_num = 2;
 
 	g_flt_cfg.mef_entry[index].filter_item[0].fill_flag = (FILLING_TYPE | FILLING_REPEAT | FILLING_OFFSET | FILLING_BYTE_SEQ);
@@ -14763,19 +14841,39 @@ int wlan_set_ipv6_ns_mef(t_u8 mef_action)
     g_flt_cfg.mef_entry[index].filter_item[1].num_byte_seq = 1;
     (void)memcpy(g_flt_cfg.mef_entry[index].filter_item[1].byte_seq, "\x87", 1);
 
+out:
     return WM_SUCCESS;
 }
 
 int wlan_mef_set_multicast(t_u8 mef_action)
 {
-    t_u32 index = 0;
+    t_u32 index = -1, found = 0;
 
     if (g_flt_cfg.nentries >= MAX_NUM_ENTRIES)
     {
         wlcm_e("Number of MEF entries(%d) exceeds limit(8)!", g_flt_cfg.nentries);
         return -WM_FAIL;
     }
-    index = g_flt_cfg.nentries;
+
+    for (int i = 0; i < g_flt_cfg.nentries; i++)
+    {
+        if (g_flt_cfg.mef_entry[i].mode == MEF_MODE_HOST_SLEEP
+            && !(g_flt_cfg.mef_entry[i].action & 0xfe) && (g_flt_cfg.mef_entry[i].action & 0x1))
+        {
+            index = i;
+            found = 1;
+            break;
+        }
+    }
+    if (!found)
+    {
+        index = g_flt_cfg.nentries;
+    }
+    else
+    {
+        g_flt_cfg.mef_entry[index].action = mef_action;
+        goto out;
+    }
     g_flt_cfg.criteria |= (CRITERIA_MULTICAST | CRITERIA_UNICAST);
     g_flt_cfg.nentries++;
 
@@ -14796,7 +14894,7 @@ int wlan_mef_set_multicast(t_u8 mef_action)
     g_flt_cfg.mef_entry[index].filter_item[1].byte_seq[0]  = 0xE0;
     g_flt_cfg.mef_entry[index].filter_item[1].num_mask_seq = 1;
     g_flt_cfg.mef_entry[index].filter_item[1].mask_seq[0]  = 0xF0;
-
+out:
     return WM_SUCCESS;
 }
 

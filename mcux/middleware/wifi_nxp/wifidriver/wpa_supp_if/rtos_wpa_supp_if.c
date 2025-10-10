@@ -2079,9 +2079,10 @@ void wifi_nxp_wpa_supp_event_acs_channel_selected(void *if_priv, nxp_wifi_acs_pa
     }
 }
 
-void wifi_nxp_wpa_supp_event_mgmt_tx_status(void *if_priv, nxp_wifi_event_mlme_t *mlme_event, unsigned int event_len)
+void wifi_nxp_wpa_supp_event_mgmt_tx_status(void *if_priv, nxp_wifi_event_mlme_t *mlme_event, unsigned int event_len, enum wifi_event_reason result)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    bool ack                                   = 0;
 
     if (!if_priv)
     {
@@ -2120,19 +2121,21 @@ void wifi_nxp_wpa_supp_event_mgmt_tx_status(void *if_priv, nxp_wifi_event_mlme_t
         return;
     }
 
+    ack = (result == WIFI_EVENT_REASON_SUCCESS) ? true : false;
+
 #if CONFIG_WPA_SUPP_AP
     if (wifi_if_ctx_rtos->hostapd)
     {
         wifi_if_ctx_rtos->hostapd_callbk_fns.mgmt_tx_status(wifi_if_ctx_rtos->hapd_drv_if_ctx,
                                                             (const unsigned char *)mlme_event->frame.frame,
-                                                            mlme_event->frame.frame_len, true);
+                                                            mlme_event->frame.frame_len, ack);
     }
     else
 #endif
     {
         wifi_if_ctx_rtos->supp_callbk_fns.mgmt_tx_status(wifi_if_ctx_rtos->supp_drv_if_ctx,
                                                          (const unsigned char *)mlme_event->frame.frame,
-                                                         mlme_event->frame.frame_len, true);
+                                                         mlme_event->frame.frame_len, ack);
     }
 }
 
