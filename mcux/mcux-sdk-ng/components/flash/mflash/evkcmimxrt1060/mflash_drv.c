@@ -10,7 +10,6 @@
 
 #include "fsl_flexspi.h"
 #include "fsl_cache.h"
-#include "pin_mux.h"
 
 #define NOR_CMD_LUT_SEQ_IDX_READ_NORMAL        7
 #define NOR_CMD_LUT_SEQ_IDX_READ_FAST          13
