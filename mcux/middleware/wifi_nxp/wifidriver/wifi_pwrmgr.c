@@ -36,6 +36,9 @@
 #define MIN_LISTEN_INTERVAL_IN_TU       50
 #define MAX_LISTEN_INTERVAL_IN_TU       65000
 #define CLOSEST_DTIM_TO_LISTEN_INTERVAL 65534
+/** To enable PreAsleep in firmware set CONFIG_ENABLE_PRESLEEP to '1' */
+/** **WAR** PreAsleep is disabled in driver due to issues seen on mcux toolchain. */
+#define CONFIG_ENABLE_PRESLEEP          0
 
 static bool ieeeps_enabled;
 static bool deepsleepps_enabled;
@@ -311,7 +314,9 @@ int wifi_set_power_save_mode(void)
 {
     t_u32 mode = BLOCK_CMD_IN_PRE_ASLEEP;
 #if defined(SD9177) || defined(IW610) || defined (RW610)
+#if !CONFIG_ENABLE_PRESLEEP
     mode = (mode & ~BLOCK_CMD_IN_PRE_ASLEEP);
+#endif
 #endif
 
     return wifi_send_power_save_command(EXT_PS_PARAM, 0U, MLAN_BSS_TYPE_STA, &mode);

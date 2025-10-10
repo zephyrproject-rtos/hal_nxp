@@ -572,6 +572,16 @@ char *ipv6_addr_addr_to_desc(struct net_ipv6_config *ipv6_conf);
  * \return IPv6 address type description
  */
 char *ipv6_addr_type_to_desc(struct net_ipv6_config *ipv6_conf);
+
+/** Get all interface IPv6 Addresses and count
+ *
+ * This function will get the IPv6 addresses and the count of all interfaces.
+ *
+ * \param[out] buf buffer to saving the IPv6 addresses.
+ *
+ * \return IPv6 address count.
+ */
+uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf);
 #endif /* CONFIG_IPV6 */
 
 /** Get interface Name string containing name and number

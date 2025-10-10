@@ -69,10 +69,6 @@ extern wifi_ecsa_status_control ecsa_status_control;
 #define MAX_WAIT_TIME 3000
 #endif
 
-#ifndef USB_SUPPORT_ENABLE
-#define _T(x) x
-#endif
-
 #if CONFIG_WMM
 #define BOARD_DATA_BUFFER_ALIGN_SIZE 32
 
@@ -346,648 +342,6 @@ void wifi_reset_set_state(bool enable)
     wifi_reset_in_process = enable;
 }
 
-#if CONFIG_WIFI_FW_DEBUG
-
-void wifi_register_fw_dump_cb(int (*wifi_usb_mount_cb)(),
-                              int (*wifi_usb_file_open_cb)(char *test_file_name),
-                              int (*wifi_usb_file_write_cb)(uint8_t *data, size_t data_len),
-                              int (*wifi_usb_file_close_cb)())
-{
-    wm_wifi.wifi_usb_mount_cb      = wifi_usb_mount_cb;
-    wm_wifi.wifi_usb_file_open_cb  = wifi_usb_file_open_cb;
-    wm_wifi.wifi_usb_file_write_cb = wifi_usb_file_write_cb;
-    wm_wifi.wifi_usb_file_close_cb = wifi_usb_file_close_cb;
-}
-
-#ifdef SD8801
-
-#define DEBUG_HOST_READY     0xEE
-#define DEBUG_FW_DONE        0xFF
-#define DEBUG_MEMDUMP_FINISH 0xFE
-#define SDIO_SCRATCH_REG     0x60
-#define DEBUG_ITCM_DONE      0xaa
-#define DEBUG_DTCM_DONE      0xbb
-#define DEBUG_SQRAM_DONE     0xcc
-
-#define DEBUG_DUMP_CTRL_REG  0x63
-#define DEBUG_DUMP_FIRST_REG 0x62
-#define DEBUG_DUMP_START_REG 0x64
-#define DEBUG_DUMP_END_REG   0x6a
-#define ITCM_SIZE            0x60000
-
-#define SQRAM_SIZE 0x33500
-
-#define DTCM_SIZE 0x14000
-
-char itcm_dump_file_name[]  = _T("1:/itcm.bin");
-char dtcm_dump_file_name[]  = _T("1:/dtcm.bin");
-char sqram_dump_file_name[] = _T("1:/sqram.bin");
-
-/**
- *  @brief This function dump firmware memory to file
- *
- *  @return         N/A
- */
-void wifi_dump_firmware_info()
-{
-    int ret = 0;
-    unsigned int reg, reg_start, reg_end;
-    t_u8 ctrl_data = 0;
-    int tries;
-    t_u8 data[8], i;
-    uint32_t resp;
-    if (wm_wifi.wifi_usb_file_open_cb != NULL)
-    {
-        ret = wm_wifi.wifi_usb_file_open_cb(itcm_dump_file_name);
-        if (ret != WM_SUCCESS)
-        {
-            wifi_e("File opening failed");
-            goto done;
-        }
-    }
-    else
-    {
-        wifi_e("File open callback is not registered");
-        goto done;
-    }
-    reg_start = DEBUG_DUMP_START_REG;
-    reg_end   = DEBUG_DUMP_END_REG;
-    do
-    {
-        ret = sdio_drv_creg_write(DEBUG_DUMP_CTRL_REG, 1, DEBUG_HOST_READY, &resp);
-        if (!ret)
-        {
-            wifi_e("SDIO Write ERR");
-            goto done;
-        }
-
-        for (tries = 0; tries < MAX_POLL_TRIES; tries++)
-        {
-            ret = sdio_drv_creg_read(DEBUG_DUMP_CTRL_REG, 1, &resp);
-            if (!ret)
-            {
-                wifi_e("SDIO READ ERR");
-                goto done;
-            }
-            ctrl_data = resp & 0xff;
-
-            if ((ctrl_data == DEBUG_FW_DONE) || (ctrl_data == DEBUG_ITCM_DONE) || (ctrl_data == DEBUG_DTCM_DONE) ||
-                (ctrl_data == DEBUG_SQRAM_DONE))
-                break;
-            if (ctrl_data != DEBUG_HOST_READY)
-            {
-                ret = sdio_drv_creg_write(DEBUG_DUMP_CTRL_REG, 1, DEBUG_HOST_READY, &resp);
-                if (!ret)
-                {
-                    wifi_e("SDIO Write ERR");
-                    goto done;
-                }
-            }
-            OSA_TimeDelay(10);
-        }
-        if (ctrl_data == DEBUG_HOST_READY)
-        {
-            wifi_e("Fail to pull ctrl_data");
-            goto done;
-        }
-        reg = DEBUG_DUMP_FIRST_REG;
-        ret = sdio_drv_creg_read(reg, 1, &resp);
-        if (!ret)
-        {
-            wifi_e("SDIO READ ERR");
-            goto done;
-        }
-
-        i = 0;
-        for (reg = reg_start; reg <= reg_end; reg++)
-        {
-            ret = sdio_drv_creg_read(reg, 1, &resp);
-            if (!ret)
-            {
-                wifi_e("SDIO READ ERR");
-                goto done;
-            }
-            data[i++] = resp & 0xff;
-        }
-
-        dump_hex(data, sizeof(data));
-
-        if (wm_wifi.wifi_usb_file_write_cb != NULL)
-        {
-            ret = wm_wifi.wifi_usb_file_write_cb(data, sizeof(data));
-            if (ret != WM_SUCCESS)
-            {
-                wifi_e("File writing failed");
-                goto done;
-            }
-        }
-        else
-        {
-            wifi_e("File write callback is not registered");
-            goto done;
-        }
-        switch (ctrl_data)
-        {
-            case DEBUG_ITCM_DONE:
-                if (wm_wifi.wifi_usb_file_close_cb != NULL)
-                {
-                    ret = wm_wifi.wifi_usb_file_close_cb();
-                    if (ret != WM_SUCCESS)
-                    {
-                        wifi_e("File closing failed");
-                        goto done;
-                    }
-                }
-                else
-                {
-                    wifi_e("File close callback is not registered");
-                    goto done;
-                }
-                if (wm_wifi.wifi_usb_file_open_cb != NULL)
-                {
-                    ret = wm_wifi.wifi_usb_file_open_cb(dtcm_dump_file_name);
-                    if (ret != WM_SUCCESS)
-                    {
-                        wifi_e("File opening failed");
-                        goto done;
-                    }
-                }
-                else
-                {
-                    wifi_e("USB open callback is not registered");
-                    goto done;
-                }
-                break;
-            case DEBUG_DTCM_DONE:
-                if (wm_wifi.wifi_usb_file_close_cb != NULL)
-                {
-                    ret = wm_wifi.wifi_usb_file_close_cb();
-                    if (ret != WM_SUCCESS)
-                    {
-                        wifi_e("File closing failed");
-                        goto done;
-                    }
-                }
-                else
-                {
-                    wifi_e("File close callback is not registered");
-                    goto done;
-                }
-                if (wm_wifi.wifi_usb_file_open_cb != NULL)
-                {
-                    ret = wm_wifi.wifi_usb_file_open_cb(sqram_dump_file_name);
-                    if (ret != WM_SUCCESS)
-                    {
-                        wifi_e("File opening failed");
-                        goto done;
-                    }
-                }
-                else
-                {
-                    wifi_e("USB open cb is not registered");
-                    goto done;
-                }
-                break;
-            case DEBUG_SQRAM_DONE:
-                if (wm_wifi.wifi_usb_file_close_cb != NULL)
-                {
-                    ret = wm_wifi.wifi_usb_file_close_cb();
-                    if (ret != WM_SUCCESS)
-                    {
-                        wifi_e("File closing failed");
-                        goto done;
-                    }
-                    wifi_d("End output!");
-                }
-                else
-                {
-                    wifi_e("File close callback is not registered");
-                    goto done;
-                }
-                break;
-            default:
-                wifi_d("Unexpected wifi debug \n");
-                break;
-        }
-    } while (ctrl_data != DEBUG_SQRAM_DONE);
-
-    wifi_d("The output ITCM/DTCM/SQRAM have been saved to files successfully!");
-    /* end dump fw memory */
-done:
-
-    while (1)
-        ;
-}
-
-#ifndef RW610
-/**
- *  @brief This function reads and displays SDIO registers for debugging
- *
- *  @return         N/A
- */
-void wifi_sdio_reg_dbg()
-{
-    int ret = 0;
-    t_u8 loop, index = 0, func, data;
-    unsigned int reg, reg_start, reg_end;
-    unsigned int scratch_reg = SDIO_SCRATCH_REG;
-    unsigned int reg_table[] = {0x28, 0x30, 0x34, 0x38, 0x3c};
-    char buf[256], *ptr;
-    uint32_t resp;
-
-    for (loop = 0; loop < 5; loop++)
-    {
-        (void)memset(buf, 0, sizeof(buf));
-        ptr = buf;
-        if (loop == 0)
-        {
-            /* Read the registers of SDIO function0 */
-            func      = loop;
-            reg_start = 0;
-            reg_end   = 9;
-        }
-        else if (loop == 1)
-        {
-            /* Read the registers of SDIO function1 */
-            func      = loop;
-            reg_start = 4;
-            reg_end   = 9;
-        }
-        else if (loop == 2)
-        {
-            /* Read specific registers of SDIO function1 */
-            index     = 0;
-            func      = 1;
-            reg_start = reg_table[index++];
-            reg_end   = reg_table[ARRAY_SIZE(reg_table) - 1];
-        }
-        else
-        {
-            /* Read the scratch registers of SDIO function1 */
-            if (loop == 4)
-                OSA_TimeDelay(1);
-            func      = 1;
-            reg_start = scratch_reg;
-            reg_end   = scratch_reg + 10;
-        }
-        if (loop != 2)
-            ptr += sprintf(ptr, "SDIO Func%d (%#x-%#x): ", func, reg_start, reg_end);
-        else
-            ptr += sprintf(ptr, "SDIO Func%d: ", func);
-        for (reg = reg_start; reg <= reg_end;)
-        {
-#ifndef RW610
-            ret = sdio_drv_creg_read(reg, func, &resp);
-#endif
-            data = resp & 0xff;
-            if (loop == 2)
-                ptr += sprintf(ptr, "(%#x) ", reg);
-            if (!ret)
-                ptr += sprintf(ptr, "%02x ", data);
-            else
-            {
-                ptr += sprintf(ptr, "ERR");
-                break;
-            }
-            if (loop == 2 && reg < reg_end)
-                reg = reg_table[index++];
-            else
-                reg++;
-        }
-        wifi_d("%s", buf);
-    }
-}
-#endif
-#elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || \
-    defined(SD9177) || defined(RW610_SERIES) || defined(IW610)
-
-#define DEBUG_HOST_READY     0xCC
-#define DEBUG_FW_DONE        0xFF
-#define DEBUG_MEMDUMP_FINISH 0xFE
-
-#define DEBUG_DUMP_CTRL_REG    0xF9
-#define DEBUG_DUMP_START_REG   0xF1
-#define DEBUG_DUMP_END_REG     0xF8
-#define SDIO_SCRATCH_REG       0xE8
-#define DEBUG_DUMP_SCRATCH_REG (void *)0x41382488
-
-char fw_dump_file_name[] = _T("1:/fw_dump.bin");
-
-typedef enum
-{
-    DUMP_TYPE_ITCM        = 0,
-    DUMP_TYPE_DTCM        = 1,
-    DUMP_TYPE_SQRAM       = 2,
-    DUMP_TYPE_APU_REGS    = 3,
-    DUMP_TYPE_CIU_REGS    = 4,
-    DUMP_TYPE_ICU_REGS    = 5,
-    DUMP_TYPE_MAC_REGS    = 6,
-    DUMP_TYPE_EXTEND_7    = 7,
-    DUMP_TYPE_EXTEND_8    = 8,
-    DUMP_TYPE_EXTEND_9    = 9,
-    DUMP_TYPE_EXTEND_10   = 10,
-    DUMP_TYPE_EXTEND_11   = 11,
-    DUMP_TYPE_EXTEND_12   = 12,
-    DUMP_TYPE_EXTEND_13   = 13,
-    DUMP_TYPE_EXTEND_LAST = 14
-} dumped_mem_type;
-
-#define MAX_NAME_LEN      8
-#define MAX_FULL_NAME_LEN 32
-
-typedef struct
-{
-    t_u8 mem_name[MAX_NAME_LEN];
-    t_u8 *mem_Ptr;
-    struct file *pfile_mem;
-    t_u8 done_flag;
-    t_u8 type;
-} memory_type_mapping;
-
-memory_type_mapping mem_type_mapping_tbl = {"DUMP", NULL, NULL, 0xDD};
-
-typedef enum
-{
-    RDWR_STATUS_SUCCESS = 0,
-    RDWR_STATUS_FAILURE = 1,
-    RDWR_STATUS_DONE    = 2
-} rdwr_status;
-
-/**
- *  @brief This function read/write firmware via cmd52
- *
- *  @param doneflag  A flag
- *
- *  @return         MLAN_STATUS_SUCCESS
- */
-rdwr_status wifi_cmd52_rdwr_firmware(t_u8 doneflag)
-{
-    int ret                = 0;
-    int tries              = 0;
-    t_u8 ctrl_data         = 0;
-    t_u8 dbg_dump_ctrl_reg = 0;
-    t_u8 debug_host_ready  = 0;
-    uint32_t resp;
-
-    dbg_dump_ctrl_reg = DEBUG_DUMP_CTRL_REG;
-    debug_host_ready  = DEBUG_HOST_READY;
-
-    ret = sdio_drv_creg_write(dbg_dump_ctrl_reg, 1, debug_host_ready, &resp);
-    if (!ret)
-    {
-        wifi_e("SDIO Write ERR");
-        return RDWR_STATUS_FAILURE;
-    }
-    for (tries = 0; tries < MAX_POLL_TRIES; tries++)
-    {
-        ret = sdio_drv_creg_read(dbg_dump_ctrl_reg, 1, &resp);
-        if (!ret)
-        {
-            wifi_e("SDIO READ ERR");
-            return RDWR_STATUS_FAILURE;
-        }
-        ctrl_data = resp & 0xff;
-        if (ctrl_data == DEBUG_FW_DONE)
-            break;
-        if (doneflag && ctrl_data == doneflag)
-            return RDWR_STATUS_DONE;
-        if (ctrl_data != debug_host_ready)
-        {
-            ret = sdio_drv_creg_write(dbg_dump_ctrl_reg, 1, debug_host_ready, &resp);
-            if (!ret)
-            {
-                wifi_e("SDIO Write ERR");
-                return RDWR_STATUS_FAILURE;
-            }
-        }
-        OSA_TimeDelay(1);
-    }
-    if (ctrl_data == debug_host_ready)
-    {
-        wifi_e("Fail to pull ctrl_data");
-        return RDWR_STATUS_FAILURE;
-    }
-
-    return RDWR_STATUS_SUCCESS;
-}
-
-/**
- *  @brief This function dump firmware memory to file
- *
- *  @return         N/A
- */
-void wifi_dump_firmware_info()
-{
-    int ret   = 0;
-    int tries = 0;
-    unsigned int reg, reg_start, reg_end;
-    t_u8 start_flag = 0;
-    t_u8 doneflag   = 0;
-    rdwr_status stat;
-    t_u8 dbg_dump_start_reg                    = 0;
-    t_u8 dbg_dump_end_reg                      = 0;
-    memory_type_mapping *pmem_type_mapping_tbl = &mem_type_mapping_tbl;
-    t_u8 data[8], i;
-    uint32_t resp;
-
-    dbg_dump_start_reg = DEBUG_DUMP_START_REG;
-    dbg_dump_end_reg   = DEBUG_DUMP_END_REG;
-
-    /* read the number of the memories which will dump */
-    if (RDWR_STATUS_FAILURE == wifi_cmd52_rdwr_firmware(doneflag))
-        goto done;
-
-    /** check the reg which indicate dump starting */
-    for (reg = dbg_dump_start_reg; reg <= dbg_dump_end_reg; reg++)
-    {
-        for (tries = 0; tries < MAX_POLL_TRIES; tries++)
-        {
-            ret = sdio_drv_creg_read(reg, 1, &resp);
-            if (!ret)
-            {
-                wifi_e("SDIO READ ERR");
-                goto done;
-            }
-            start_flag = resp & 0xff;
-            /** 0 means dump starting*/
-            if (start_flag == 0)
-                break;
-            OSA_TimeDelay(1);
-        }
-        if (tries == MAX_POLL_TRIES)
-        {
-            wifi_d("FW not ready to dump");
-            goto done;
-        }
-    }
-    if (wm_wifi.wifi_usb_file_open_cb != NULL)
-    {
-        ret = wm_wifi.wifi_usb_file_open_cb(fw_dump_file_name);
-        if (ret != WM_SUCCESS)
-        {
-            wifi_e("File opening failed");
-            goto done;
-        }
-    }
-    else
-    {
-        wifi_e("File open callback is not registered");
-        goto done;
-    }
-
-    doneflag = pmem_type_mapping_tbl->done_flag;
-    do
-    {
-        stat = wifi_cmd52_rdwr_firmware(doneflag);
-        if (RDWR_STATUS_FAILURE == stat)
-            goto done;
-
-        reg_start = dbg_dump_start_reg;
-        reg_end   = dbg_dump_end_reg;
-        i         = 0;
-        for (reg = reg_start; reg <= reg_end; reg++)
-        {
-            ret = sdio_drv_creg_read(reg, 1, &resp);
-            if (!ret)
-            {
-                wifi_e("SDIO READ ERR");
-                goto done;
-            }
-            data[i++] = (resp & 0xff);
-        }
-        if (wm_wifi.wifi_usb_file_write_cb != NULL)
-        {
-            ret = wm_wifi.wifi_usb_file_write_cb(data, sizeof(data));
-            if (ret != WM_SUCCESS)
-            {
-                wifi_e("File writing failed");
-                goto done;
-            }
-        }
-        else
-        {
-            wifi_e("File write callback is not registered");
-            goto done;
-        }
-
-        if (RDWR_STATUS_DONE == stat)
-        {
-            if (wm_wifi.wifi_usb_file_close_cb != NULL)
-            {
-                ret = wm_wifi.wifi_usb_file_close_cb();
-                if (ret != WM_SUCCESS)
-                {
-                    wifi_e("File closing failed");
-                    goto done;
-                }
-            }
-            else
-            {
-                wifi_e("File close callback is not registered");
-                goto done;
-            }
-            break;
-        }
-    } while (1);
-
-    /* end dump fw memory */
-done:
-    while (1)
-        ;
-}
-
-#ifndef RW610
-/**
- *  @brief This function reads and displays SDIO registers for debugging
- *
- *  @return         N/A
- */
-void wifi_sdio_reg_dbg()
-{
-    int ret = 0;
-    t_u8 loop, index = 0, func, data;
-    unsigned int reg, reg_start, reg_end;
-    unsigned int scratch_reg = SDIO_SCRATCH_REG;
-    unsigned int reg_table[] = {0x08, 0x58, 0x5C, 0x5D, 0x60, 0x61, 0x62, 0x64, 0x65, 0x66, 0x68, 0x69, 0x6a};
-    char buf[256], *ptr;
-    uint32_t resp;
-
-    for (loop = 0; loop < 5; loop++)
-    {
-        (void)memset(buf, 0, sizeof(buf));
-        ptr = buf;
-        if (loop == 0)
-        {
-            /* Read the registers of SDIO function0 */
-            func      = loop;
-            reg_start = 0;
-            reg_end   = 9;
-        }
-        else if (loop == 1)
-        {
-            /* Read the registers of SDIO function1 */
-            func      = loop;
-            reg_start = 0x10;
-            reg_end   = 0x17;
-        }
-        else if (loop == 2)
-        {
-            /* Read specific registers of SDIO function1 */
-            index     = 0;
-            func      = 1;
-            reg_start = reg_table[index++];
-            reg_end   = reg_table[ARRAY_SIZE(reg_table) - 1];
-        }
-        else
-        {
-            /* Read the scratch registers of SDIO function1 */
-            if (loop == 4)
-                OSA_TimeDelay(1);
-            func      = 1;
-            reg_start = scratch_reg;
-            reg_end   = scratch_reg + 10;
-        }
-        if (loop != 2)
-            ptr += sprintf(ptr, "SDIO Func%d (%#x-%#x): ", func, reg_start, reg_end);
-        else
-            ptr += sprintf(ptr, "SDIO Func%d: ", func);
-        for (reg = reg_start; reg <= reg_end;)
-        {
-            ret  = sdio_drv_creg_read(reg, func, &resp);
-            data = resp & 0xff;
-            if (loop == 2)
-                ptr += sprintf(ptr, "(%#x) ", reg);
-            if (ret)
-                ptr += sprintf(ptr, "%02x ", data);
-            else
-            {
-                ptr += sprintf(ptr, "ERR");
-                break;
-            }
-            if (loop == 2 && reg < reg_end)
-                reg = reg_table[index++];
-            else
-                reg++;
-        }
-        wifi_d("%s", buf);
-    }
-}
-#endif
-
-#elif defined(RW610)
-/**
- *  @brief This function dump firmware memory to file
- *
- *  @return         N/A
- */
-void wifi_dump_firmware_info()
-{
-    /*Dummy for RW610 */
-}
-
-#endif
-#endif
-
 #if CONFIG_FW_VDLL
 int wifi_wait_for_vdllcmdresp(void *cmd_resp_priv)
 {
@@ -1203,6 +557,25 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
 #endif
         // wakelock_put(WL_ID_LL_OUTPUT);
         (void)wifi_put_command_lock();
+#if CONFIG_WIFI_FW_DEBUG
+#ifndef RW610
+        wifi_sdio_reg_dbg();
+#endif
+        if (wm_wifi.wifi_usb_mount_cb != NULL)
+        {
+            ret = wm_wifi.wifi_usb_mount_cb();
+            if (ret == WM_SUCCESS)
+                wifi_dump_firmware_info();
+            else
+            {
+                wifi_e("USB mounting failed");
+            }
+        }
+        else
+        {
+            wifi_dump_firmware_info();
+        }
+#endif
 #if CONFIG_WIFI_RECOVERY
         wifi_recovery_enable = true;
         return -WM_FAIL;
@@ -1258,6 +631,7 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
 #if CONFIG_WIFI_FW_DEBUG
 #ifndef RW610
         wifi_sdio_reg_dbg();
+#endif
         if (wm_wifi.wifi_usb_mount_cb != NULL)
         {
             ret = wm_wifi.wifi_usb_mount_cb();
@@ -1269,10 +643,9 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
             }
         }
         else
-            wifi_e("USB mount callback is not registered");
-#else
-        wifi_dump_firmware_info();
-#endif
+        {
+            wifi_dump_firmware_info();
+        }
 #endif
 #if CONFIG_WIFI_RECOVERY
         wifi_recovery_enable = true;
@@ -3468,6 +2841,25 @@ void wifi_tx_card_awake_lock(void)
 #if CONFIG_WIFI_PS_DEBUG
         wifi_e("Failed to wakeup card for Tx");
 #endif
+#if CONFIG_WIFI_FW_DEBUG
+#ifndef RW610
+        wifi_sdio_reg_dbg();
+#endif
+        if (wm_wifi.wifi_usb_mount_cb != NULL)
+        {
+            ret = wm_wifi.wifi_usb_mount_cb();
+            if (ret == WM_SUCCESS)
+                wifi_dump_firmware_info();
+            else
+            {
+                wifi_e("USB mounting failed");
+            }
+        }
+        else
+        {
+            wifi_dump_firmware_info();
+        }
+#endif
 #if CONFIG_WIFI_RECOVERY
         wifi_recovery_enable = true;
 #else
@@ -4171,7 +3563,14 @@ int wifi_add_to_bypassq(const t_u8 interface, void *pkt, t_u32 len)
         (void)net_stack_buffer_copy_partial(pkt, (void *)((t_u8 *)poutbuf + link_point_len + pkt_len), (t_u16)len, 0);
 
         /* process packet headers with interface header and TxPD */
-        process_pkt_hdrs((void *)((t_u8 *)poutbuf + link_point_len), pkt_len + len, interface, 0, 0);
+        if (eth_type == MLAN_ETHER_PKT_TYPE_EAPOL)
+        {
+            process_pkt_hdrs((void *)((t_u8 *)poutbuf + link_point_len), pkt_len + len, interface, 7, 0);
+        }
+        else
+        {
+            process_pkt_hdrs((void *)((t_u8 *)poutbuf + link_point_len), pkt_len + len, interface, 0, 0);
+        }
 
         wlan_add_buf_bypass_txq((t_u8 *)poutbuf, interface);
         send_wifi_driver_bypass_data_event(interface);
@@ -5007,7 +4406,7 @@ static int supp_low_level_output(const t_u8 interface, const t_u8 *buf, t_u32 le
 
     (void)memcpy((void *)((t_u8 *)poutbuf + link_point_len + pkt_len), (const void *)buf, (size_t)len);
     /* process packet headers with interface header and TxPD */
-    process_pkt_hdrs((void *)((t_u8 *)poutbuf + link_point_len), pkt_len + len, interface, 0, 0);
+    process_pkt_hdrs((void *)((t_u8 *)poutbuf + link_point_len), pkt_len + len, interface, 7, 0);
 
     wlan_add_buf_bypass_txq((t_u8 *)poutbuf, interface);
     send_wifi_driver_bypass_data_event(interface);

@@ -328,7 +328,9 @@ void wifi_request_get_fw_info(mlan_private *priv, mlan_fw_info *fw_info);
 int wifi_mmsf_cfg(const t_u16 action, t_u8 *enable, t_u8 *Density, t_u8 *MMSF);
 #endif
 #endif
-
+#if CONFIG_IPV6
+int wifi_set_ipv6_ra_offload(t_u8 enable);
+#endif
 #if CONFIG_WIFI_RECOVERY 
 int wifi_recovery_test(void);
 #endif
