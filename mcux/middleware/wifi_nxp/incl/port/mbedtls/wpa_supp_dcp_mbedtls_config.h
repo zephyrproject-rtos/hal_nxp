@@ -46,6 +46,14 @@
 #define PSA_WANT_ALG_RSA_PKCS1V15_SIGN_RAW 1
 #endif
 
+#if defined(CONFIG_PSA_CRYPTO_DRIVER_DCP)
+#define PSA_CRYPTO_DRIVER_DCP
+#endif
+
+#if defined(CONFIG_PSA_CRYPTO_DRIVER_THREAD_EN) && !defined(PSA_CRYPTO_DRIVER_THREAD_EN)
+#define PSA_CRYPTO_DRIVER_THREAD_EN
+#endif
+
 /**************************** MCUX CSS_PKC end ****************************************/
 /**
  * \name SECTION: System support

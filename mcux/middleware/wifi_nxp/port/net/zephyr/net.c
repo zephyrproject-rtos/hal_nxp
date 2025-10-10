@@ -1332,6 +1332,32 @@ int net_get_if_ipv6_addr(struct net_ip_config *addr, void *intrfc_handle)
     return WM_SUCCESS;
 }
 
+uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf)
+{
+    struct net_if_ipv6 *ipv6 = NULL;
+    struct net_if_addr *unicast;
+    uint8_t count = 0, i;
+
+    STRUCT_SECTION_FOREACH(net_if, iface)
+    {
+        ipv6 = iface->config.ip.ipv6;
+        for (i = 0; ipv6 && i < CONFIG_MAX_IPV6_ADDRESSES; i++)
+        {
+            unicast = &ipv6->unicast[i];
+            if (!unicast->is_used)
+            {
+                continue;
+            }
+
+            (void)memcpy(buf, &unicast->address.in6_addr, 16);
+            buf += 16;
+            count ++;
+        }
+    }
+
+    return count;
+}
+
 int net_get_if_ipv6_pref_addr(struct net_ip_config *addr, void *intrfc_handle)
 {
     int i, ret = 0;

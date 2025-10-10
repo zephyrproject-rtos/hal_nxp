@@ -318,16 +318,32 @@ zephyr_library_compile_definitions_ifdef(CONFIG_WIFI_NM_HOSTAPD_AP
 )
 
 if(CONFIG_CODE_DATA_RELOCATION)
-if(CONFIG_SPEED_OPTIMIZATIONS OR CONFIG_SIZE_OPTIMIZATIONS)
 
 if(CONFIG_NXP_RW610)
-	set(QUICK_ACCESS_CODE_AREA RAM_TEXT)
-	set(QUICK_ACCESS_CODE_AREA_2 RAM_TEXT)
+    set(QUICK_ACCESS_CODE_AREA RAM_TEXT)
+    set(QUICK_ACCESS_CODE_AREA_2 RAM_TEXT)
 else()
-	set(QUICK_ACCESS_CODE_AREA ITCM_TEXT)
-	set(QUICK_ACCESS_CODE_AREA_2 DTCM_TEXT)
+    set(QUICK_ACCESS_CODE_AREA ITCM_TEXT)
+    set(QUICK_ACCESS_CODE_AREA_2 DTCM_TEXT)
 endif()
 
+if(CONFIG_NXP_WIFI_FW_DEBUG)
+if (CONFIG_BOARD MATCHES rw612)
+    set(drv_folder rdrw612bga)
+endif()
+if (CONFIG_BOARD MATCHES mimxrt1060_evk)
+if (CONFIG_BOARD_REVISION STREQUAL C)
+    set(drv_folder evkcmimxrt1060)
+endif()
+endif()
+
+zephyr_code_relocate(FILES
+                     ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/drivers/flexspi/fsl_flexspi.c
+                     ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/flash/mflash/${drv_folder}/mflash_drv.c
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+endif()
+
+if(CONFIG_SPEED_OPTIMIZATIONS OR CONFIG_SIZE_OPTIMIZATIONS)
 # critical path code relocated to SRAM
 zephyr_code_relocate(FILES
                      port/osa/osa.c

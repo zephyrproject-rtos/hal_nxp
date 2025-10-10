@@ -2,8 +2,23 @@ Name: NXP Wi-Fi driver
 Outgoing License: BSD 3-Clause "New" or "Revised" License
 License File: LICENSE
 Version: v1.3.r51.z_up.p3
+
+Package: wifi_bt_firmware
+Outgoing License: NXP Proprietary LA_OPT_NXP_Software_License v63 May 2025 - Additional distribution license granted, Section 2.3 applies
+License File: LA_OPT_NXP_Software_License.txt
+Files: inc files under wifi_bt_firmware
+Format: Binaries
+Description: wifi bt firmware
+Location: https://github.com/NXP/wifi_nxp
+Origin: NXP (Proprietary)
+
+Package: NXP Wi-Fi driver except above wifi_bt_firmware package
+Outgoing License: BSD 3-Clause "New" or "Revised" License
+License File: LICENSE
 Format: source code, header files
 Description: NXP Wi-Fi driver and networking utilities
 Location: https://github.com/NXP/wifi_nxp/
 Origin: NXP (BSD-3-Clause)
         mbedtls (Apache License 2.0) - http://tracker.debian.org/pkg/mbedtls
+        Amazon FreeRTOS (MIT License) - https://github.com/aws/amazon-freertos
+        michaelbecker/freertos-addons (MIT License) - https://github.com/michaelbecker/freertos-addons

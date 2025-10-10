@@ -1292,7 +1292,7 @@ mlan_status wlan_ret_get_hw_spec(IN pmlan_private pmpriv, IN HostCmd_DS_COMMAND 
         tlv = (MrvlIEtypesHeader_t *)(void *)((t_u8 *)tlv + tlv_len + sizeof(MrvlIEtypesHeader_t));
     }
 
-#if defined(SD8987) || defined(SD9177) || defined(IW610)
+#if defined(SD8978) || defined(SD8987) || defined(SD9177) || defined(IW610)
     pmadapter->cmd_tx_data = IS_FW_SUPPORT_CMD_TX_DATA(pmadapter) ? 0x01 : 0x00;
 #endif
 
@@ -2444,14 +2444,24 @@ mlan_status wlan_cmd_tx_frame(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd, t_u
         data_len -= sizeof(pkt_type) + sizeof(tx_control);
         pdata += sizeof(pkt_type) + sizeof(tx_control);
     }
+#ifdef SD8978
+    (void)__memcpy(pmpriv->adapter, tx_frame_cmd->buffer + sizeof(TxPD) - 2, pdata, data_len);
+
+    (void)__memset(pmpriv->adapter, plocal_tx_pd, 0, sizeof(TxPD) - 2);
+#else
     (void)__memcpy(pmpriv->adapter, tx_frame_cmd->buffer + sizeof(TxPD), pdata, data_len);
 
     (void)__memset(pmpriv->adapter, plocal_tx_pd, 0, sizeof(TxPD));
+#endif
     plocal_tx_pd->bss_num       = GET_BSS_NUM(pmpriv);
     plocal_tx_pd->bss_type      = pmpriv->bss_type;
     plocal_tx_pd->tx_pkt_length = (t_u16)data_len;
     plocal_tx_pd->priority      = (t_u8)tx_frame->priority;
+#ifdef SD8978
+    plocal_tx_pd->tx_pkt_offset = sizeof(TxPD) - 2;
+#else
     plocal_tx_pd->tx_pkt_offset = sizeof(TxPD);
+#endif
     plocal_tx_pd->pkt_delay_2ms = 0xff;
 
     if (tx_frame->buf_type == MLAN_BUF_TYPE_RAW_DATA)

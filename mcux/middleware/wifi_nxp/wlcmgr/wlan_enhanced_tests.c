@@ -368,7 +368,7 @@ static void print_ds_rate(wlan_ds_rate ds_rate)
                 (void)PRINTF("    Rate setting: Preamble type/BW/GI/STBC/.. : auto \r\n");
             else
             {
-                (void)PRINTF("    HE Rate setting:   0x%x\r\n", ds_rate.param.rate_cfg.rate_setting);
+                (void)PRINTF("    Rate setting:      0x%x\r\n", ds_rate.param.rate_cfg.rate_setting);
                 (void)PRINTF("        Preamble type: %x\r\n", (ds_rate.param.rate_cfg.rate_setting & 0x0003));
                 (void)PRINTF("        BW:            %x\r\n", (ds_rate.param.rate_cfg.rate_setting & 0x001C) >> 2);
                 (void)PRINTF("        LTF + GI size: %x\r\n", (ds_rate.param.rate_cfg.rate_setting & 0x0060) >> 5);
@@ -595,10 +595,8 @@ static void dump_wlan_set_txratecfg_usage(void)
     (void)PRINTF("\t        7       18 Mbps\r\n");
     (void)PRINTF("\t        8       24 Mbps\r\n");
     (void)PRINTF("\t        9       36 Mbps\r\n");
-#if !defined(RW610) && !defined(IW610)
     (void)PRINTF("\t        10      48 Mbps\r\n");
     (void)PRINTF("\t        11      54 Mbps\r\n");
-#endif
     (void)PRINTF("\tIf <format> is 1 (HT),\r\n");
     (void)PRINTF("\t        0       MCS0\r\n");
     (void)PRINTF("\t        1       MCS1\r\n");
