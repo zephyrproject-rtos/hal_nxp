@@ -142,26 +142,24 @@ void wifi_process_mgmt_tx_status(struct wifi_message *msg)
     nxp_wifi_event_mlme_t *resp = &wm_wifi.mgmt_resp;
     resp->frame.frame_len       = 0;
 
-    if (msg->reason == WIFI_EVENT_REASON_SUCCESS)
+    if (wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn)
     {
-        if (wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn)
+        if ((t_u32)(msg->data) == MLAN_BSS_TYPE_UAP)
         {
-            if ((t_u32)(msg->data) == MLAN_BSS_TYPE_UAP)
-            {
-                wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn(wm_wifi.hapd_if_priv, resp, resp->frame.frame_len);
-            }
-            else
-            {
-                wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn(wm_wifi.if_priv, resp, resp->frame.frame_len);
-            }
+            wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn(wm_wifi.hapd_if_priv, resp, resp->frame.frame_len, msg->reason);
+        }
+        else
+        {
+            wm_wifi.supp_if_callbk_fns->mgmt_tx_status_callbk_fn(wm_wifi.if_priv, resp, resp->frame.frame_len, msg->reason);
         }
     }
-    else
-    {
+
 #if CONFIG_ROAMING
+    if (msg->reason != WIFI_EVENT_REASON_SUCCESS)
+    {
         wlan_subscribe_rssi_low_event();
-#endif
     }
+#endif
 }
 
 int wifi_setup_ht_cap(t_u16 *ht_capab, t_u8 *pmcs_set, t_u8 *a_mpdu_params, t_u8 band)

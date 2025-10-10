@@ -2226,7 +2226,7 @@ static void test_wlan_add_packet_filter(int argc, char **argv)
     else
         (void)PRINTF("Failed to enabled magic pkt filter offload, error: %d", ret);
 }
-#endif /* CONFIG_MEF_CFG */
+#endif
 #endif /* CONFIG_HOST_SLEEP */
 
 #define HOSTCMD_RESP_BUFF_SIZE 1024

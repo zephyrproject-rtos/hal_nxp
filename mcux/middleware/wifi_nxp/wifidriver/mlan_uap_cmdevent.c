@@ -1212,6 +1212,7 @@ static mlan_status wlan_uap_cmd_add_station(pmlan_private pmpriv,
 
             pos += sizeof(MrvlIEtypesHeader_t);
             (void)__memcpy(NULL, pos, (t_u8 *)&sta_ptr->he_cap.ext_id, tlv->len);
+            pos += tlv->len;
             travel_len += sizeof(MrvlIEtypesHeader_t) + tlv->len;
         }
     }

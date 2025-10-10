@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r52.z_up.p4"
+#define WLAN_DRV_VERSION "v1.3.r52.z_up.p11"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -2378,7 +2378,6 @@ int wlan_remove_all_network_profiles(void);
  */
 void wlan_reset(cli_reset_option ResetOption);
 
-#if defined(RW610) || defined(IW610)
 /** Stop and remove all Wi-Fi network (access point).
  *
  *  \return WM_SUCCESS if successful.
@@ -2396,7 +2395,6 @@ void wlan_destroy_all_tasks(void);
  *  \return FALSE if not started.
  */
 int wlan_is_started(void);
-#endif // RW610
 
 #if CONFIG_NCP_BRIDGE
 /** uAP provisioning deinit callback function */
@@ -4083,6 +4081,13 @@ int wlan_wowlan_cfg_ptn_match(wlan_wowlan_ptn_cfg_t *ptn_cfg);
 #endif
 
 #if CONFIG_HOST_SLEEP
+
+/** Use this API to set configuration before going to host sleep */
+void wlan_hs_pre_cfg(void);
+
+/** Use this API to get and print the reason of waking up from host sleep */
+void wlan_hs_post_cfg(void);
+
 /**
  * Use this API to get host sleep wakeup reason from Wi-Fi firmware after waking up from host sleep by Wi-Fi.
  *
@@ -6688,6 +6693,17 @@ enum wlan_mef_type
  *
  */
 int wlan_mef_set_auto_arp(t_u8 mef_action);
+/** This function set auto ping configuration.
+ *
+ * \param[in] mef_action: To be\n
+ *                        0--discard ping packet and not wake host\n
+ *                        1--discard ping packet and wake host\n
+ *                        3--allow ping packet and wake host.
+ *
+ * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
+ *
+ */
+int wlan_mef_set_auto_ping(t_u8 mef_action);
 
 /** This function set multicast packet as low power wake up condition.
  *
@@ -6700,18 +6716,6 @@ int wlan_mef_set_auto_arp(t_u8 mef_action);
  *
  */
 int wlan_mef_set_multicast(t_u8 mef_action);
-
-/** This function set auto ping configuration.
- *
- * \param[in] mef_action: To be\n
- *                        0--discard ping packet and not wake host\n
- *                        1--discard ping packet and wake host\n
- *                        3--allow ping packet and wake host.
- *
- * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
- *
- */
-int wlan_mef_set_auto_ping(t_u8 mef_action);
 
 /** This function set/delete MEF entries configuration.
  *

@@ -1168,21 +1168,6 @@ mlan_status wlan_xmit_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 tx_co
     if (ret != kStatus_HAL_ImumcSuccess)
     {
         wifi_io_e("Send tx data via imu failed (%d)", ret);
-#if CONFIG_WIFI_FW_DEBUG
-#if 0
-        if (wm_wifi.wifi_usb_mount_cb != NULL)
-        {
-            ret = wm_wifi.wifi_usb_mount_cb();
-            if (ret == WM_SUCCESS)
-                wifi_dump_firmware_info(NULL);
-            else
-                wifi_e("USB mounting failed");
-        }
-        else
-            wifi_e("USB mount callback is not registered");
-#endif
-        wifi_dump_firmware_info();
-#endif
         return MLAN_STATUS_FAILURE;
     }
     return MLAN_STATUS_SUCCESS;
@@ -1202,22 +1187,6 @@ mlan_status wlan_xmit_bypass_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface)
     if (ret != kStatus_HAL_ImumcSuccess)
     {
         wifi_io_e("Send tx data via imu failed (%d)", ret);
-#if CONFIG_WIFI_FW_DEBUG
-#if 0
-        if (wm_wifi.wifi_usb_mount_cb != NULL)
-        {
-            ret = wm_wifi.wifi_usb_mount_cb();
-            if (ret == WM_SUCCESS)
-                wifi_dump_firmware_info(NULL);
-            else
-                wifi_e("USB mounting failed");
-        }
-        else
-            wifi_e("USB mount callback is not registered");
-#endif
-        wifi_dump_firmware_info();
-#endif
-
         wifi_imu_unlock();
         return MLAN_STATUS_FAILURE;
     }
@@ -1306,21 +1275,6 @@ mlan_status wlan_flush_wmm_pkt(int pkt_cnt)
     if (ret != kStatus_HAL_ImumcSuccess)
     {
         wifi_io_e("wlan_flush_wmm_pkt failed (%d)", ret);
-#if CONFIG_WIFI_FW_DEBUG
-#if 0
-        if (wm_wifi.wifi_usb_mount_cb != NULL)
-        {
-            ret = wm_wifi.wifi_usb_mount_cb();
-            if (ret == WM_SUCCESS)
-                wifi_dump_firmware_info(NULL);
-            else
-                wifi_e("USB mounting failed");
-        }
-        else
-            wifi_e("USB mount callback is not registered");
-#endif
-        wifi_dump_firmware_info();
-#endif
         return MLAN_STATUS_FAILURE;
     }
     return MLAN_STATUS_SUCCESS;
@@ -1403,7 +1357,7 @@ mlan_status wlan_send_null_packet(pmlan_private priv, t_u8 flags)
     ptxpd->tx_pkt_offset = 0x16; /* we'll just make this constant */
     ptxpd->tx_pkt_length = 0;
     ptxpd->tx_control    = 0;
-    ptxpd->priority      = 0;
+    ptxpd->priority      = 7;
     ptxpd->flags         = flags;
     ptxpd->pkt_delay_2ms = 0;
 
