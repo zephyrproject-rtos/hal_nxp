@@ -43,6 +43,10 @@
 #include "wifi_ping.h"
 #endif
 
+#if (CONFIG_CSI) && (CONFIG_CSI_AMI)
+#include "event.h"
+#endif
+
 #if CONFIG_HOST_SLEEP
 #ifdef RW610
 #include  "fsl_power.h"
@@ -139,6 +143,11 @@
 
 #if UAP_SUPPORT
 static bool wlan_uap_scan_chan_list_set;
+#endif
+
+#if (CONFIG_CSI) && (CONFIG_CSI_AMI)
+ami_cfg_t g_ami_cfg;
+static void wlan_init_ami_cfg(void);
 #endif
 
 #if CONFIG_MEF_CFG
@@ -3197,6 +3206,92 @@ void wlcm_process_csi_status_report(struct wifi_message *msg)
 #endif
     }
 }
+
+#if CONFIG_CSI_AMI
+void wlan_set_ami_cfg(wlan_csi_proc_cfg *cfg)
+{
+    (void)memcpy(g_ami_cfg.gcsi_filter_param.peer_mac, cfg->peer_mac, MLAN_MAC_ADDR_LENGTH);
+    g_ami_cfg.gcsi_filter_param.num_csi            = cfg->num_csi;
+    g_ami_cfg.gcsi_filter_param.packet_bandwidth   = cfg->packet_bandwidth;
+    g_ami_cfg.gcsi_filter_param.packet_format      = cfg->packet_format;
+    g_ami_cfg.gcsi_filter_param.reference_update   = cfg->reference_update;
+
+    g_ami_cfg.csiFilterSet                   = AMI_FILTER_SET;
+
+    return;
+}
+
+void wlan_start_stop_ami(uint8_t start)
+{
+    g_ami_cfg.start = start;
+
+    if(!start)
+    {
+        g_ami_cfg.gcsi_filter_param.num_csi = 0;
+        mlan_adap->ami_num                  = 0;
+        g_ami_cfg.start                     = AMI_STOP;
+
+        if (g_ami_cfg.csiFilterSet == AMI_FILTER_AUTO_SET)
+        {
+            g_ami_cfg.csiFilterSet = AMI_FILTER_NOT_SET;
+        }
+
+        g_ami_cfg.ami_reference_init = AMI_REF_UNINIT;
+    }
+
+    return;
+}
+
+static void wlcm_process_csi_data(void *p_data)
+{
+    wifi_process_csi_data(p_data);
+}
+
+static void wlan_init_ami_cfg(void)
+{
+    (void)memset(&g_ami_cfg, 0x00, sizeof(ami_cfg_t));
+
+    g_ami_cfg.channel                                      = 0;
+    g_ami_cfg.start                                        = AMI_STOP;
+
+    g_ami_cfg.wls_processing_input.enableCsi		        = 1; // turn on CSI processing
+	g_ami_cfg.wls_processing_input.enableAoA		        = AOA_DEFAULT; // turn on AoA (req. enableCsi==1)
+	g_ami_cfg.wls_processing_input.nTx				        = MAX_TX; // limit # tx streams to process
+	g_ami_cfg.wls_processing_input.nRx				        = MAX_RX; // limit # rx to process
+	g_ami_cfg.wls_processing_input.selCal			        = 0; // choose cal values
+	g_ami_cfg.wls_processing_input.dumpMul			        = 0; // dump extra peaks in AoA
+	g_ami_cfg.wls_processing_input.enableAntCycling        = 0; // enable antenna cycling
+	g_ami_cfg.wls_processing_input.dumpRawAngle 	        = 0;  // Dump Raw Angle
+	g_ami_cfg.wls_processing_input.useToaMin		        = TOA_MIN_DEFAULT; // 1: use min combining, 0: power combining;
+	g_ami_cfg.wls_processing_input.useSubspace		        = SUBSPACE_DEFAULT; // 1: use subspace algo; 0: no;
+	g_ami_cfg.wls_processing_input.useFindAngleDelayPeaks  = ENABLE_DELAY_PEAKS; // use this algorithm for AoA
+
+    g_ami_cfg.gcsi_filter_param.num_csi            = 0;
+    g_ami_cfg.gcsi_filter_param.packet_bandwidth   = 0xff;
+    g_ami_cfg.gcsi_filter_param.packet_format      = 0xff;
+    g_ami_cfg.gcsi_filter_param.reference_update   = 0;
+	g_ami_cfg.gcsi_filter_param.IIR_alpha          = PI_ALPHA_FACTOR;
+	g_ami_cfg.gcsi_filter_param.kalman_p0          = KALMAN_P0;
+	g_ami_cfg.gcsi_filter_param.kalman_alpha       = KALMAN_ALPHA;
+	g_ami_cfg.gcsi_filter_param.kalman_N0          = KALMAN_N0;
+	g_ami_cfg.gcsi_filter_param.num_rx             = 0xff;
+	g_ami_cfg.gcsi_filter_param.num_tx             = 0xff;
+	g_ami_cfg.gcsi_filter_param.peer_mac[0]        = 0xff;
+	g_ami_cfg.gcsi_filter_param.peer_mac[1]        = 0xff;
+	g_ami_cfg.gcsi_filter_param.peer_mac[2]        = 0xff;
+	g_ami_cfg.gcsi_filter_param.peer_mac[3]        = 0xff;
+	g_ami_cfg.gcsi_filter_param.peer_mac[4]        = 0xff;
+	g_ami_cfg.gcsi_filter_param.peer_mac[5]        = 0xff;
+
+    g_ami_cfg.csiFilterSet                         = AMI_FILTER_NOT_SET;
+    g_ami_cfg.ami_reference_init                   = AMI_REF_UNINIT;
+
+    mlan_adap->ami_num                             = 0;
+    mlan_adap->ami_ongoing                         = 0;
+
+    return;
+}
+#endif /* CONFIG_CSI_AMI */
 #endif
 
 #if CONFIG_WPA_SUPP
@@ -7160,6 +7255,15 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             wlcm_d("got event: csi status report");
             wlcm_process_csi_status_report(msg);
             break;
+#if CONFIG_CSI_AMI
+        case WIFI_EVENT_CSI_PROC:
+            if(g_ami_cfg.start == AMI_START)
+            {
+                wlcm_d("got event: csi data process");
+                wlcm_process_csi_data(msg->data);
+            }
+            break;
+#endif
 #endif
 
         case WIFI_EVENT_SLEEP:
@@ -7701,6 +7805,11 @@ int wlan_init(const uint8_t *fw_start_addr, const size_t size)
     else
         wifi_d("USB init callback is not registered");
 #endif
+
+#if (CONFIG_CSI) && (CONFIG_CSI_AMI)
+    wlan_init_ami_cfg();
+#endif
+
     return ret;
 }
 
