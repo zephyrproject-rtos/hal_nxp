@@ -496,6 +496,10 @@ void wls_csi_process_event(void *p_data);
 #endif
 #endif
 
+#if CONFIG_CSI_AMI
+void wifi_process_csi_data(void *p_data);
+#endif
+
 #if UAP_SUPPORT
 int wifi_set_custom_ie(custom_ie *beacon_ies_data,
                        custom_ie *beacon_wps_ies_data,
