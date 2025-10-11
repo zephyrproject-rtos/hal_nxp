@@ -21,11 +21,19 @@
 #include "fsl_c40_flash.h"
 #include "fsl_common.h"
 #include "fsl_device_registers.h"
+#include "fsl_c40_flash_features.h"
 
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+#if !defined(FLASH)  && defined(IP_FLASH)
+#define FLASH  IP_FLASH /* Define a local alias for C40 flash memory */
+#endif
+#if !defined(PFLASH) && defined(IP_PFLASH)
+#define PFLASH IP_PFLASH /* Define a local alias for flash memory controller */
+#endif
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
@@ -797,7 +805,7 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
 
 status_t FLASH_Program(flash_config_t *config, uint32_t start, uint32_t *src, uint32_t lengthInBytes)
 {
-    status_t ret;
+    status_t ret = kStatus_FLASH_Success;
     size_t chunkSize;
     size_t sizeLeft = lengthInBytes;
     uint8_t *src8 = (uint8_t *) src;
