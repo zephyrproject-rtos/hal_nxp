@@ -12,6 +12,22 @@ else()
     set(MCUX_SDK_DIR ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng)
 endif()
 
+if(CONFIG_NXP_WIFI_CSI_AMI)
+add_library(libcsi STATIC IMPORTED)
+if(CONFIG_NXP_LIBCSI_CM33)
+    set_target_properties(libcsi PROPERTIES IMPORTED_LOCATION ${ZEPHYR_HAL_NXP_MODULE_DIR}/zephyr/blobs/libcsi/cm33/libcsi.a)
+elseif(CONFIG_NXP_LIBCSI_CM7_20M)
+    set_target_properties(libcsi PROPERTIES IMPORTED_LOCATION ${ZEPHYR_HAL_NXP_MODULE_DIR}/zephyr/blobs/libcsi/cm7/cm7f_sta_20_only/libcsi.a)
+else()
+    set_target_properties(libcsi PROPERTIES IMPORTED_LOCATION ${ZEPHYR_HAL_NXP_MODULE_DIR}/zephyr/blobs/libcsi/cm7/cm7f/libcsi.a)
+endif()
+target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libcsi/incl)
+zephyr_include_directories(
+    libcsi/incl
+)
+target_link_libraries(app PRIVATE libcsi)
+endif()
+
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987
     SD8987
 )
