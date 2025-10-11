@@ -2498,6 +2498,12 @@ struct _mlan_adapter
     /* board type info from FW */
     t_u8 board_type;
 #endif
+#if CONFIG_CSI_AMI
+    /** Indicates AMI computation status.  */
+    t_u8 ami_ongoing;
+    /** Number of processed CSI event data. */
+    t_u32 ami_num;
+#endif
 };
 
 /** Ethernet packet type for EAPOL */
