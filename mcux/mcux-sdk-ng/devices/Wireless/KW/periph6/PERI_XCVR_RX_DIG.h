@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCVR_RX_DIG
@@ -234,6 +234,10 @@ typedef struct {
   __IO uint32_t CTRL2;                             /**< RXDIG Control 2, offset: 0x184 */
   __IO uint32_t NADM_CTRL;                         /**< Controls for the NADM module, offset: 0x188 */
   __I  uint32_t NADM_RES;                          /**< NADM latest packet results., offset: 0x18C */
+  __IO uint32_t FCFO_CTRL;                         /**< Fine CFO module controls., offset: 0x190 */
+  __IO uint32_t FCFO_TN;                           /**< Tone parameters., offset: 0x194 */
+  __IO uint32_t FCFO_TN_PH;                        /**< F2 carrier iq phases, offset: 0x198 */
+  __I  uint32_t FCFO_RES;                          /**< Fine CFO results., offset: 0x19C */
 } XCVR_RX_DIG_Type;
 
 /* ----------------------------------------------------------------------------
@@ -3260,10 +3264,12 @@ typedef struct {
 
 #define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_MASK (0xFFFFU)
 #define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_SHIFT (0U)
+/*! rx_tone_ana_out_q - Accumulator Q path result. */
 #define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_q_MASK)
 
 #define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_MASK (0xFFFF0000U)
 #define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_SHIFT (16U)
+/*! rx_tone_ana_out_i - Accumulator I path result */
 #define XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_SHIFT)) & XCVR_RX_DIG_DFT_TONE_ANALYZER2_rx_tone_ana_out_i_MASK)
 /*! @} */
 
@@ -3335,7 +3341,7 @@ typedef struct {
 
 #define XCVR_RX_DIG_TQI_CTRL_TQI_EN_MASK         (0x10000U)
 #define XCVR_RX_DIG_TQI_CTRL_TQI_EN_SHIFT        (16U)
-/*! TQI_EN
+/*! TQI_EN - Enables TQI operation.
  *  0b0..TQI operation is disabled.
  *  0b1..TQI operation is enabled.
  */
@@ -3413,6 +3419,16 @@ typedef struct {
 #define XCVR_RX_DIG_NADM_CTRL_NADM_FIR_LATENCY_SHIFT (17U)
 /*! NADM_FIR_LATENCY - FM correlator path, delay between reference start and correlator start. */
 #define XCVR_RX_DIG_NADM_CTRL_NADM_FIR_LATENCY(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_NADM_CTRL_NADM_FIR_LATENCY_SHIFT)) & XCVR_RX_DIG_NADM_CTRL_NADM_FIR_LATENCY_MASK)
+
+#define XCVR_RX_DIG_NADM_CTRL_NADM_SIZE_MASK     (0x1C00000U)
+#define XCVR_RX_DIG_NADM_CTRL_NADM_SIZE_SHIFT    (22U)
+/*! NADM_SIZE - NADM size aligned on RTT_TYPE standard value */
+#define XCVR_RX_DIG_NADM_CTRL_NADM_SIZE(x)       (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_NADM_CTRL_NADM_SIZE_SHIFT)) & XCVR_RX_DIG_NADM_CTRL_NADM_SIZE_MASK)
+
+#define XCVR_RX_DIG_NADM_CTRL_NADM_IDX_CAPTURE_MASK (0xE000000U)
+#define XCVR_RX_DIG_NADM_CTRL_NADM_IDX_CAPTURE_SHIFT (25U)
+/*! NADM_IDX_CAPTURE - Index used to get optimum fm_diff in DMA_DBG */
+#define XCVR_RX_DIG_NADM_CTRL_NADM_IDX_CAPTURE(x) (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_NADM_CTRL_NADM_IDX_CAPTURE_SHIFT)) & XCVR_RX_DIG_NADM_CTRL_NADM_IDX_CAPTURE_MASK)
 /*! @} */
 
 /*! @name NADM_RES - NADM latest packet results. */
@@ -3427,6 +3443,122 @@ typedef struct {
 #define XCVR_RX_DIG_NADM_RES_NADM_INST_SHIFT     (12U)
 /*! NADM_INST - NADM correlator instance yielding maximum correlation value. */
 #define XCVR_RX_DIG_NADM_RES_NADM_INST(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_NADM_RES_NADM_INST_SHIFT)) & XCVR_RX_DIG_NADM_RES_NADM_INST_MASK)
+/*! @} */
+
+/*! @name FCFO_CTRL - Fine CFO module controls. */
+/*! @{ */
+
+#define XCVR_RX_DIG_FCFO_CTRL_A_MUL_MASK         (0xFFU)
+#define XCVR_RX_DIG_FCFO_CTRL_A_MUL_SHIFT        (0U)
+/*! A_MUL - Alpha linear multiplication coeficient */
+#define XCVR_RX_DIG_FCFO_CTRL_A_MUL(x)           (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_A_MUL_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_A_MUL_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_A_DIV_MASK         (0xF000U)
+#define XCVR_RX_DIG_FCFO_CTRL_A_DIV_SHIFT        (12U)
+/*! A_DIV - Alpha linear division coeficient */
+#define XCVR_RX_DIG_FCFO_CTRL_A_DIV(x)           (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_A_DIV_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_A_DIV_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_ENA_MASK      (0x10000U)
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_ENA_SHIFT     (16U)
+/*! FCFO_ENA - Enables FCFO module.
+ *  0b0..Fcfo algorithm disabled.
+ *  0b1..Fcfo algorithm enabled.
+ */
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_ENA(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_FCFO_ENA_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_FCFO_ENA_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_OUT_IQ_MASK        (0x40000U)
+#define XCVR_RX_DIG_FCFO_CTRL_OUT_IQ_SHIFT       (18U)
+/*! OUT_IQ - FCFO output format.
+ *  0b0..Fcfo output are g function values (previous/current).
+ *  0b1..Fcfo output are IQ values.
+ */
+#define XCVR_RX_DIG_FCFO_CTRL_OUT_IQ(x)          (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_OUT_IQ_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_OUT_IQ_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_TRIG_SRC_MASK      (0x300000U)
+#define XCVR_RX_DIG_FCFO_CTRL_TRIG_SRC_SHIFT     (20U)
+/*! TRIG_SRC - Selects FCFO trigger source.
+ *  0b00..Selects TPM as trigger source
+ *  0b01..Selects TFM as trigger source
+ *  0b10..Selects software as trigger source.
+ */
+#define XCVR_RX_DIG_FCFO_CTRL_TRIG_SRC(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_TRIG_SRC_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_TRIG_SRC_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_TRIG_DLY_MASK      (0x3000000U)
+#define XCVR_RX_DIG_FCFO_CTRL_TRIG_DLY_SHIFT     (24U)
+/*! TRIG_DLY - Delay between trigger and fcfo start.
+ *  0b00..Selects 2us trigger delay.
+ *  0b01..Selects 5us trigger delay.
+ *  0b10..Selects 10us trigger delay.
+ *  0b11..Selects 15us trigger delay.
+ */
+#define XCVR_RX_DIG_FCFO_CTRL_TRIG_DLY(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_TRIG_DLY_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_TRIG_DLY_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_A_OVF_MASK         (0x10000000U)
+#define XCVR_RX_DIG_FCFO_CTRL_A_OVF_SHIFT        (28U)
+/*! A_OVF - Alpha multiplier overflow. */
+#define XCVR_RX_DIG_FCFO_CTRL_A_OVF(x)           (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_A_OVF_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_A_OVF_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_ERR_MASK      (0x20000000U)
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_ERR_SHIFT     (29U)
+/*! FCFO_ERR - FCFO value error. */
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_ERR(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_FCFO_ERR_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_FCFO_ERR_MASK)
+
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_DONE_MASK     (0x40000000U)
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_DONE_SHIFT    (30U)
+/*! FCFO_DONE - FCFO done. */
+#define XCVR_RX_DIG_FCFO_CTRL_FCFO_DONE(x)       (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_CTRL_FCFO_DONE_SHIFT)) & XCVR_RX_DIG_FCFO_CTRL_FCFO_DONE_MASK)
+/*! @} */
+
+/*! @name FCFO_TN - Tone parameters. */
+/*! @{ */
+
+#define XCVR_RX_DIG_FCFO_TN_TN_F1_INC_MASK       (0x7FU)
+#define XCVR_RX_DIG_FCFO_TN_TN_F1_INC_SHIFT      (0U)
+/*! TN_F1_INC - Tone F1 increment. */
+#define XCVR_RX_DIG_FCFO_TN_TN_F1_INC(x)         (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_TN_TN_F1_INC_SHIFT)) & XCVR_RX_DIG_FCFO_TN_TN_F1_INC_MASK)
+
+#define XCVR_RX_DIG_FCFO_TN_TN_F1_DIV_MASK       (0x700U)
+#define XCVR_RX_DIG_FCFO_TN_TN_F1_DIV_SHIFT      (8U)
+/*! TN_F1_DIV - Tone F1 clock divisor. */
+#define XCVR_RX_DIG_FCFO_TN_TN_F1_DIV(x)         (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_TN_TN_F1_DIV_SHIFT)) & XCVR_RX_DIG_FCFO_TN_TN_F1_DIV_MASK)
+
+#define XCVR_RX_DIG_FCFO_TN_TN_F2_INC_MASK       (0x7F0000U)
+#define XCVR_RX_DIG_FCFO_TN_TN_F2_INC_SHIFT      (16U)
+/*! TN_F2_INC - Tone F2 increment. */
+#define XCVR_RX_DIG_FCFO_TN_TN_F2_INC(x)         (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_TN_TN_F2_INC_SHIFT)) & XCVR_RX_DIG_FCFO_TN_TN_F2_INC_MASK)
+
+#define XCVR_RX_DIG_FCFO_TN_TN_F2_DIV_MASK       (0x7000000U)
+#define XCVR_RX_DIG_FCFO_TN_TN_F2_DIV_SHIFT      (24U)
+/*! TN_F2_DIV - Tone F2 clock divisor. */
+#define XCVR_RX_DIG_FCFO_TN_TN_F2_DIV(x)         (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_TN_TN_F2_DIV_SHIFT)) & XCVR_RX_DIG_FCFO_TN_TN_F2_DIV_MASK)
+/*! @} */
+
+/*! @name FCFO_TN_PH - F2 carrier iq phases */
+/*! @{ */
+
+#define XCVR_RX_DIG_FCFO_TN_PH_F2_PH_I_MASK      (0x1FFU)
+#define XCVR_RX_DIG_FCFO_TN_PH_F2_PH_I_SHIFT     (0U)
+/*! F2_PH_I - F2 carrier I start phase */
+#define XCVR_RX_DIG_FCFO_TN_PH_F2_PH_I(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_TN_PH_F2_PH_I_SHIFT)) & XCVR_RX_DIG_FCFO_TN_PH_F2_PH_I_MASK)
+
+#define XCVR_RX_DIG_FCFO_TN_PH_F2_PH_Q_MASK      (0x1FF0000U)
+#define XCVR_RX_DIG_FCFO_TN_PH_F2_PH_Q_SHIFT     (16U)
+/*! F2_PH_Q - F2 carrier Q start phase */
+#define XCVR_RX_DIG_FCFO_TN_PH_F2_PH_Q(x)        (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_TN_PH_F2_PH_Q_SHIFT)) & XCVR_RX_DIG_FCFO_TN_PH_F2_PH_Q_MASK)
+/*! @} */
+
+/*! @name FCFO_RES - Fine CFO results. */
+/*! @{ */
+
+#define XCVR_RX_DIG_FCFO_RES_G_CUR_MASK          (0xFFFFU)
+#define XCVR_RX_DIG_FCFO_RES_G_CUR_SHIFT         (0U)
+/*! G_CUR - g function, current value. */
+#define XCVR_RX_DIG_FCFO_RES_G_CUR(x)            (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_RES_G_CUR_SHIFT)) & XCVR_RX_DIG_FCFO_RES_G_CUR_MASK)
+
+#define XCVR_RX_DIG_FCFO_RES_G_PRV_MASK          (0xFFFF0000U)
+#define XCVR_RX_DIG_FCFO_RES_G_PRV_SHIFT         (16U)
+/*! G_PRV - g function, previous value. */
+#define XCVR_RX_DIG_FCFO_RES_G_PRV(x)            (((uint32_t)(((uint32_t)(x)) << XCVR_RX_DIG_FCFO_RES_G_PRV_SHIFT)) & XCVR_RX_DIG_FCFO_RES_G_PRV_MASK)
 /*! @} */
 
 

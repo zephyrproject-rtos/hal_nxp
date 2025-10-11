@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-08
-**     Build:               b250603
+**     Build:               b250819
 **
 **     Abstract:
 **         Chip specific module features.
@@ -228,6 +228,8 @@
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_ADDRESS (1079304)
 /* @brief Puf Activation Code Size. */
 #define FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE (1192)
+/* @brief PUF has key reset. */
+#define FSL_FEATURE_PUF_HAS_KEYRESET (1)
 
 /* RTC module features */
 
@@ -244,6 +246,8 @@
 #define FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE (16)
 /* @brief Number of outputs */
 #define FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS (10)
+/* @brief Writing a zero asserts the SCT reset. */
+#define FSL_FEATURE_SCT_WRITE_ZERO_ASSERT_RESET (0)
 
 /* SECPINT module features */
 
@@ -266,17 +270,22 @@
 
 /* @brief Flash phrase size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_PHRASE_SIZE_BYTES (16)
-#define FSL_FEATURE_FLASH_PHRASE_SIZE_BYTES        FSL_FEATURE_SYSCON_FLASH_PHRASE_SIZE_BYTES
+/* @brief Flash phrase size in bytes */
+#define FSL_FEATURE_FLASH_PHRASE_SIZE_BYTES (FSL_FEATURE_SYSCON_FLASH_PHRASE_SIZE_BYTES)
 /* @brief Flash page size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES (128)
-#define FSL_FEATURE_FLASH_PAGE_SIZE_BYTES        FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES
+/* @brief Flash page size in bytes */
+#define FSL_FEATURE_FLASH_PAGE_SIZE_BYTES (FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES)
 /* @brief Flash sector size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES (8192)
-#define FSL_FEATURE_FLASH_SECTOR_SIZE_BYTES        FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES
-#define FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE       FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE        (FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES * 56)
+/* @brief Flash sector size in bytes */
+#define FSL_FEATURE_FLASH_SECTOR_SIZE_BYTES (FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES)
+/* @brief Flash sector size in bytes */
+#define FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE (FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES)
+/* @brief Flash block size in bytes */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (458752)
 /* @brief Flash size in bytes */
-#define FSL_FEATURE_SYSCON_FLASH_SIZE_BYTES (655360)
+#define FSL_FEATURE_SYSCON_FLASH_SIZE_BYTES (524288)
 /* @brief Has Power Down mode */
 #define FSL_FEATURE_SYSCON_HAS_POWERDOWN_MODE (1)
 /* @brief CCM_ANALOG availability on the SoC.  */
@@ -301,12 +310,20 @@
 /* @brief TRNG has no TRNG_ACC bitfield. */
 #define FSL_FEATURE_TRNG_HAS_NO_TRNG_ACC (0)
 
+/* UTICK module features */
+
+/* No feature definitions */
+
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
-#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 /* @brief WWDT does not support oscillator lock. */
 #define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (1)
+/* @brief soc has reset. */
+#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
+/* @brief Has LPOSC as clock source. */
+#define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (0)
+/* @brief WWDT WDTOF is not set in case of WD reset - get info from PMC instead. */
+#define FSL_FEATURE_WWDT_WDTRESET_FROM_PMC (0)
 
 #endif /* _MCXW235_FEATURES_H_ */
 

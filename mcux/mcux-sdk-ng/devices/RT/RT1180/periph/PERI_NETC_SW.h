@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_SW
@@ -403,19 +403,22 @@ typedef struct {
 
 #define NETC_SW_IMDCR0_MIRDEST_MASK              (0x2U)
 #define NETC_SW_IMDCR0_MIRDEST_SHIFT             (1U)
-/*! MIRDEST - Indicates the mirror destination */
+/*! MIRDEST - Mirror destination */
 #define NETC_SW_IMDCR0_MIRDEST(x)                (((uint32_t)(((uint32_t)(x)) << NETC_SW_IMDCR0_MIRDEST_SHIFT)) & NETC_SW_IMDCR0_MIRDEST_MASK)
 
 #define NETC_SW_IMDCR0_IPV_MASK                  (0x1CU)
 #define NETC_SW_IMDCR0_IPV_SHIFT                 (2U)
+/*! IPV - Internal Priority Value (IPV) */
 #define NETC_SW_IMDCR0_IPV(x)                    (((uint32_t)(((uint32_t)(x)) << NETC_SW_IMDCR0_IPV_SHIFT)) & NETC_SW_IMDCR0_IPV_MASK)
 
 #define NETC_SW_IMDCR0_DR_MASK                   (0xC0U)
 #define NETC_SW_IMDCR0_DR_SHIFT                  (6U)
+/*! DR - Drop Resilience (DR) */
 #define NETC_SW_IMDCR0_DR(x)                     (((uint32_t)(((uint32_t)(x)) << NETC_SW_IMDCR0_DR_SHIFT)) & NETC_SW_IMDCR0_DR_MASK)
 
 #define NETC_SW_IMDCR0_PORT_MASK                 (0x1F00U)
 #define NETC_SW_IMDCR0_PORT_SHIFT                (8U)
+/*! PORT - Port number. */
 #define NETC_SW_IMDCR0_PORT(x)                   (((uint32_t)(((uint32_t)(x)) << NETC_SW_IMDCR0_PORT_SHIFT)) & NETC_SW_IMDCR0_PORT_MASK)
 /*! @} */
 

@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250815
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8ML4_cm7
@@ -616,15 +616,18 @@ typedef enum IRQn {
 /** Peripheral ENET1 base pointer */
 #define ENET1                                    ((ENET_Type *)ENET1_BASE)
 /** Array initializer of ENET peripheral base addresses */
-#define ENET_BASE_ADDRS                          { ENET1_BASE }
+#define ENET_BASE_ADDRS                          { 0u, ENET1_BASE }
 /** Array initializer of ENET peripheral base pointers */
-#define ENET_BASE_PTRS                           { ENET1 }
+#define ENET_BASE_PTRS                           { (ENET_Type *)0u, ENET1 }
 /** Interrupt vectors for the ENET peripheral type */
-#define ENET_Transmit_IRQS                       { ENET1_IRQn }
-#define ENET_Receive_IRQS                        { ENET1_IRQn }
-#define ENET_Error_IRQS                          { ENET1_IRQn }
-#define ENET_1588_Timer_IRQS                     { ENET1_1588_Timer_IRQn }
-#define ENET_Ts_IRQS                             { ENET1_1588_Timer_IRQn }
+#define ENET_Transmit_IRQS                       { NotAvail_IRQn, ENET1_IRQn }
+#define ENET_Receive_IRQS                        { NotAvail_IRQn, ENET1_IRQn }
+#define ENET_Error_IRQS                          { NotAvail_IRQn, ENET1_IRQn }
+#define ENET_1588_Timer_IRQS                     { NotAvail_IRQn, ENET1_1588_Timer_IRQn }
+#define ENET_Ts_IRQS                             { NotAvail_IRQn, ENET1_1588_Timer_IRQn }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (64U)
+
 
 /* ENET_QOS - Peripheral instance base addresses */
 /** Peripheral ENET_QOS base address */

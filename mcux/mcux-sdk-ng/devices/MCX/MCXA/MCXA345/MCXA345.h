@@ -13,7 +13,7 @@
 **
 **     Reference manual:    MCXAP144M180FS6_RM_Rev.1
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250520
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA345
@@ -53,6 +53,7 @@
 #include "PERI_CRC.h"
 #include "PERI_CTIMER.h"
 #include "PERI_DEBUGMAILBOX.h"
+#include "PERI_DIGTMP.h"
 #include "PERI_DMA.h"
 #include "PERI_EIM.h"
 #include "PERI_EQDC.h"
@@ -81,7 +82,6 @@
 #include "PERI_SPC.h"
 #include "PERI_SYSCON.h"
 #include "PERI_TRDC.h"
-#include "PERI_UDF.h"
 #include "PERI_UTICK.h"
 #include "PERI_VBAT.h"
 #include "PERI_WAKETIMER.h"

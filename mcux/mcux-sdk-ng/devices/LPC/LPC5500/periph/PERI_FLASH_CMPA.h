@@ -30,7 +30,7 @@
 **                          LPC55S69JEV98_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250529
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLASH_CMPA

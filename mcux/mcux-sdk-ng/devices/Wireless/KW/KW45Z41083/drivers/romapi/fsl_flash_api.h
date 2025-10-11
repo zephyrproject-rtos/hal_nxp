@@ -1,5 +1,5 @@
 /*
- * Copyright 2021,2024 NXP
+ * Copyright 2021,2024-2025 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 1)) /*!< Version 1.2.1. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 2)) /*!< Version 1.2.2. */
 /*@}*/
 
 /*! @brief Constructs the four character code for the Flash driver API key. */

@@ -6,9 +6,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    Rev. 1, 2024-10-13
+**     Reference manual:    Rev. 2, 2025-05-01
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXW727D_cm33_core1
@@ -962,22 +962,28 @@ typedef enum IRQn {
  * Macros below define the chip revision.
  */
 #define DEVICE_REVISION_A0     (0x10U)
-#define DEVICE_REVISION_A1     (0x11U)
-#define DEVICE_REVISION_A2     (0x12U)
+#define DEVICE_REVISION_A1     (0x10U)
+#define DEVICE_REVISION_A2     (0x10U)
+#define DEVICE_REVISION_A2_1   (0x13U)
 #define DEVICE_REVISION_OTHERS (0xFFU)
 
-#define IS_CHIP_REVISION_A0() (DEVICE_REVISION_A0 == Chip_GetVersion())
-#define IS_CHIP_REVISION_A1() (DEVICE_REVISION_A1 == Chip_GetVersion())
-#define IS_CHIP_REVISION_A2() (DEVICE_REVISION_A2 == Chip_GetVersion())
+#define IS_CHIP_REVISION_A0()   (DEVICE_REVISION_A0 == Chip_GetVersion())
+#define IS_CHIP_REVISION_A1()   (DEVICE_REVISION_A1 == Chip_GetVersion())
+#define IS_CHIP_REVISION_A2()   (DEVICE_REVISION_A2 == Chip_GetVersion())
+#define IS_CHIP_REVISION_A2_1() (DEVICE_REVISION_A2_1 == Chip_GetVersion())
 
 /*!
 * @brief Get the chip value.
 *
-* @return chip version, 0x10: A0 version chip, 0x11: A1 version chip, 0x12: A2 version chip, 0xFF: invalid version.
+* @return chip version, 0x10: A0, A1 or A2 version chip, 0x13: A2.1 version chip, 0xFF: invalid version.
 */
 static inline uint8_t Chip_GetVersion(void)
 {
-    return DEVICE_REVISION_A0;
+    uint8_t deviceRevision;
+
+    deviceRevision = (uint8_t)(*((uint8_t *)0x14817FCC)) & 0xFFu;
+
+    return deviceRevision;
 }
 
 /*
@@ -986,6 +992,55 @@ static inline uint8_t Chip_GetVersion(void)
 #define CE_STCM5_BASE (0x20020000u)
 #define CE_STCM6_BASE (0x20028000u)
 #define CE_STCM7_BASE (0x20030000u)
+
+#define PLATFORM_CTCM0_IDX 0U
+#define PLATFORM_CTCM1_IDX 1U
+#define PLATFORM_STCM0_IDX 2U
+#define PLATFORM_STCM1_IDX 3U
+#define PLATFORM_STCM2_IDX 4U
+#define PLATFORM_STCM3_IDX 5U
+#define PLATFORM_STCM4_IDX 6U
+#define PLATFORM_STCM5_IDX 7U
+#define PLATFORM_STCM6_IDX 8U
+#define PLATFORM_STCM7_IDX 9U
+#define PLATFORM_STCM8_IDX 10U
+
+#define PLATFORM_CTCM0_START_ADDR (0x04000000U)
+#define PLATFORM_CTCM0_END_ADDR   (0x04003FFFU)
+#define PLATFORM_CTCM1_START_ADDR (0x04004000U)
+#define PLATFORM_CTCM1_END_ADDR   (0x04007FFFU)
+#define PLATFORM_STCM0_START_ADDR (0x20000000U)
+#define PLATFORM_STCM0_END_ADDR   (0x20003FFFU)
+#define PLATFORM_STCM1_START_ADDR (0x20004000U)
+#define PLATFORM_STCM1_END_ADDR   (0x20007FFFU)
+#define PLATFORM_STCM2_START_ADDR (0x20008000U)
+#define PLATFORM_STCM2_END_ADDR   (0x2000FFFFU)
+#define PLATFORM_STCM3_START_ADDR (0x20010000U)
+#define PLATFORM_STCM3_END_ADDR   (0x20017FFFU)
+#define PLATFORM_STCM4_START_ADDR (0x20018000U)
+#define PLATFORM_STCM4_END_ADDR   (0x2001FFFFU)
+#define PLATFORM_STCM5_START_ADDR (0x20020000U)
+#define PLATFORM_STCM5_END_ADDR   (0x20027FFFU)
+#define PLATFORM_STCM6_START_ADDR (0x20028000U)
+#define PLATFORM_STCM6_END_ADDR   (0x2002FFFFU)
+#define PLATFORM_STCM7_START_ADDR (0x20030000U)
+#define PLATFORM_STCM7_END_ADDR   (0x20037FFFU)
+#define PLATFORM_STCM8_START_ADDR (0x20038000U)
+#define PLATFORM_STCM8_END_ADDR   (0x20039FFFU)
+
+#define PLATFORM_BANK_START_ADDR                                                                                    \
+    PLATFORM_CTCM0_START_ADDR, PLATFORM_CTCM1_START_ADDR, PLATFORM_STCM0_START_ADDR, PLATFORM_STCM1_START_ADDR,     \
+        PLATFORM_STCM2_START_ADDR, PLATFORM_STCM3_START_ADDR, PLATFORM_STCM4_START_ADDR, PLATFORM_STCM5_START_ADDR, \
+        PLATFORM_STCM6_START_ADDR, PLATFORM_STCM7_START_ADDR, PLATFORM_STCM8_START_ADDR
+
+#define PLATFORM_BANK_END_ADDR                                                                              \
+    PLATFORM_CTCM0_END_ADDR, PLATFORM_CTCM1_END_ADDR, PLATFORM_STCM0_END_ADDR, PLATFORM_STCM1_END_ADDR,     \
+        PLATFORM_STCM2_END_ADDR, PLATFORM_STCM3_END_ADDR, PLATFORM_STCM4_END_ADDR, PLATFORM_STCM5_END_ADDR, \
+        PLATFORM_STCM6_END_ADDR, PLATFORM_STCM7_END_ADDR, PLATFORM_STCM8_END_ADDR
+
+#define PLATFORM_BANK_IS_ECC TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
+
+#define PLATFORM_VBAT_LDORAM_IDX PLATFORM_STCM8_IDX
 
 #elif defined(MCXW727A_cm33_core1_H_) || defined(MCXW727C_cm33_core1_H_) || defined(MCXW727D_cm33_core1_H_)
 #define RADIO_IS_GEN_4P7 (1)

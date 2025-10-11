@@ -8,7 +8,7 @@
 **                          MCXW727DMFTA_cm33_core1
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCM
@@ -330,7 +330,7 @@ typedef struct {
 
 #define MCM_FATR_BEMN_MASK                       (0xF00U)
 #define MCM_FATR_BEMN_SHIFT                      (8U)
-/*! BEMN - Bus Error Master Number */
+/*! BEMN - Bus Error Initiator Number */
 #define MCM_FATR_BEMN(x)                         (((uint32_t)(((uint32_t)(x)) << MCM_FATR_BEMN_SHIFT)) & MCM_FATR_BEMN_MASK)
 
 #define MCM_FATR_BEOVR_MASK                      (0x80000000U)

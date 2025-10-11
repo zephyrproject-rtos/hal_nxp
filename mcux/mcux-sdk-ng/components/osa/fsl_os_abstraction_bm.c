@@ -1,6 +1,6 @@
 /*!
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019,2022 NXP
+ * Copyright 2016-2019,2022,2025 NXP
  *
  *
  * This is the source file for the OS Abstraction layer for MQXLite.
@@ -146,7 +146,7 @@ typedef struct _osa_state
     list_label_t taskList;
     task_handler_t curTaskHandler;
 #endif
-    volatile uint32_t interruptDisableCount;
+    volatile uint32_t disableIRQGlobalNesting;
     volatile uint32_t interruptRegPrimask;
     volatile uint32_t tickCounter;
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
@@ -227,6 +227,11 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
     osa_mem_align_cb_t *p_cb = NULL;
     uint32_t alignedsize;
 
+    if ((alignbytes < 1U) || (alignbytes > UINT16_MAX))
+    {
+        return NULL;
+    }
+
     /* Check overflow. */
     alignedsize = (uint32_t)(unsigned int)OSA_MEM_SIZE_ALIGN(memLength, alignbytes);
     if (alignedsize < memLength)
@@ -234,7 +239,7 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
         return NULL;
     }
 
-    if (alignedsize > 0xFFFFFFFFU - alignbytes - sizeof(osa_mem_align_cb_t))
+    if (alignedsize > UINT32_MAX - alignbytes - sizeof(osa_mem_align_cb_t))
     {
         return NULL;
     }
@@ -301,11 +306,11 @@ void OSA_ExitCritical(uint32_t sr)
  *END**************************************************************************/
 void OSA_EnableIRQGlobal(void)
 {
-    if (s_osaState.interruptDisableCount > 0U)
+    if (s_osaState.disableIRQGlobalNesting > 0U)
     {
-        s_osaState.interruptDisableCount--;
+        s_osaState.disableIRQGlobalNesting--;
 
-        if (0U == s_osaState.interruptDisableCount)
+        if (0U == s_osaState.disableIRQGlobalNesting)
         {
             EnableGlobalIRQ(s_osaState.interruptRegPrimask);
         }
@@ -323,13 +328,13 @@ void OSA_EnableIRQGlobal(void)
 void OSA_DisableIRQGlobal(void)
 {
     /* call API to disable the global interrupt*/
-    if (0U == s_osaState.interruptDisableCount)
+    if (0U == s_osaState.disableIRQGlobalNesting)
     {
         s_osaState.interruptRegPrimask = DisableGlobalIRQ();
     }
 
     /* update counter*/
-    s_osaState.interruptDisableCount++;
+    s_osaState.disableIRQGlobalNesting++;
 }
 
 /*FUNCTION**********************************************************************
@@ -479,6 +484,8 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     uint32_t regPrimask;
     assert(sizeof(task_control_block_t) == OSA_TASK_HANDLE_SIZE);
     assert(taskHandle);
+    assert(thread_def->tpriority <= OSA_TASK_PRIORITY_MIN);
+    assert(OSA_TASK_PRIORITY_MIN > OSA_TASK_PRIORITY_MAX);
 
     ptaskStruct->p_func    = thread_def->pthread;
     ptaskStruct->haveToRun = 1U;
@@ -604,12 +611,15 @@ void OSA_TimeDelay(uint32_t millisec)
 #if (FSL_OSA_BM_TIMER_CONFIG != FSL_OSA_BM_TIMER_NONE)
     uint32_t currTime, timeStart;
 
-    timeStart = OSA_TimeGetMsec();
-
-    do
+    if (millisec > 0U)
     {
-        currTime = OSA_TimeGetMsec(); /* Get current time stamp */
-    } while (millisec >= OSA_TimeDiff(timeStart, currTime));
+        timeStart = OSA_TimeGetMsec();
+
+        do
+        {
+            currTime = OSA_TimeGetMsec(); /* Get current time stamp */
+        } while (millisec >= OSA_TimeDiff(timeStart, currTime));
+    }
 #endif
 }
 /*FUNCTION**********************************************************************
@@ -655,6 +665,7 @@ osa_status_t OSA_SemaphoreCreate(osa_semaphore_handle_t semaphoreHandle, uint32_
     semaphore_t *pSemStruct = (semaphore_t *)semaphoreHandle;
     assert(sizeof(semaphore_t) <= OSA_SEM_HANDLE_SIZE);
     assert(semaphoreHandle);
+    assert(initValue <= UINT8_MAX);
 
     pSemStruct->semCount      = (uint8_t)initValue;
     pSemStruct->isWaiting     = 0U;
@@ -1477,9 +1488,9 @@ int main(void)
 void OSA_Init(void)
 {
     LIST_Init((&s_osaState.taskList), 0);
-    s_osaState.curTaskHandler        = NULL;
-    s_osaState.interruptDisableCount = 0U;
-    s_osaState.tickCounter           = 0U;
+    s_osaState.curTaskHandler          = NULL;
+    s_osaState.disableIRQGlobalNesting = 0U;
+    s_osaState.tickCounter             = 0U;
 }
 #endif
 

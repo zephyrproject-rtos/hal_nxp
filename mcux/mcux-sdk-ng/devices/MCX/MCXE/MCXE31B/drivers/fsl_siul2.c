@@ -15,10 +15,20 @@
 #endif
 
 #define PORT_PIN_LEVEL_NOTCHANGED_U8 ((uint8_t)2) /**< @brief Not changed port pin logic. */
+
+#define SIUL2_NUMBER_OF_EIRQ 32U
+#define SIUL2_NUMBER_OF_IRQN 4U
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
+/* Array of SIUL2 IRQ number. */
+const IRQn_Type s_siul2IRQ[][SIUL2_NUMBER_OF_IRQN]      = SIUL2_IRQS;
+static siul2_cb_t s_siul2Callback[SIUL2_NUMBER_OF_EIRQ] = {0U}; /*!< Array of SIUL2 ISR. */
+static uint8_t s_irqEnabledCount[SIUL2_NUMBER_OF_IRQN]  = {0U};
+/* Array of SIUL2 IRQ number. */
+const int16_t s_siul2EIRQ[SIUL2_NUMBER_OF_EIRQ][SIUL2_MAX_PINS_PER_EIRQ] = SIUL2_EIRQ_PINS_MAP;
+static SIUL2_Type *s_siul2EirqBase = NULL; /* SIUL2 base for IRQ related registers access. */
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -178,13 +188,14 @@ static uint16_t SIUL2_Reverse_Bit_16(uint16_t value)
     for (i = 0U; i < 8U; i++)
     {
         temp = (((value >> i) & 1U) << (15U - i)) | (((value << i) & 0x8000U) >> (15U - i));
-        ret |= (uint16_t)(temp & 0xFFFFU); 
+        ret |= (uint16_t)(temp & 0xFFFFU);
     }
 
     return ret;
 }
 
-void SIUL2_SetPinInputBuffer(SIUL2_Type *base, uint32_t pin, bool enable, uint32_t inputMuxReg, siul2_port_inputmux_t inputMux)
+void SIUL2_SetPinInputBuffer(
+    SIUL2_Type *base, uint32_t pin, bool enable, uint32_t inputMuxReg, siul2_port_inputmux_t inputMux)
 {
     uint32_t imcrRegIdx = inputMuxReg;
     uint32_t imcrVal;
@@ -192,7 +203,7 @@ void SIUL2_SetPinInputBuffer(SIUL2_Type *base, uint32_t pin, bool enable, uint32
     base->MSCR[pin] &= ~SIUL2_MSCR_IBE_MASK;
     base->MSCR[pin] |= SIUL2_MSCR_IBE(enable ? 1UL : 0UL);
 
-    imcrVal  = base->IMCR[imcrRegIdx % SIUL2_IMCR_COUNT];
+    imcrVal = base->IMCR[imcrRegIdx % SIUL2_IMCR_COUNT];
     imcrVal &= ~SIUL2_IMCR_SSS_MASK;
 
     /* Check input mux to configure input signal */
@@ -305,8 +316,8 @@ void SIUL2_PortMaskWrite(SIUL2_Type *base, siul2_port_num_t port, uint32_t pins,
     maskRevH = SIUL2_Reverse_Bit_16((uint16_t)((mask & 0xFFFF0000U) >> 16U));
     pinsRevH = SIUL2_Reverse_Bit_16((uint16_t)((pins & 0xFFFF0000U) >> 16U));
 
-    base->MPGPDO[(uint8_t)port * 2U] = (maskRevL << (uint32_t)16U) | pinsRevL;
-    base->MPGPDO[(uint8_t)port * 2U + 1U]      = (maskRevH << (uint32_t)16U) | pinsRevH;
+    base->MPGPDO[(uint8_t)port * 2U]      = (maskRevL << (uint32_t)16U) | pinsRevL;
+    base->MPGPDO[(uint8_t)port * 2U + 1U] = (maskRevH << (uint32_t)16U) | pinsRevH;
 }
 
 void SIUL2_PortSet(SIUL2_Type *base, siul2_port_num_t port, uint32_t pins)
@@ -329,6 +340,7 @@ void SIUL2_PortToggle(SIUL2_Type *base, siul2_port_num_t port, uint32_t pins)
 
 void SIUL2_SetDmaInterruptConfig(SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config)
 {
+    assert(req < SIUL2_NUMBER_OF_EIRQ);
     /*Configure edge*/
     switch (config)
     {
@@ -355,6 +367,8 @@ void SIUL2_SetDmaInterruptConfig(SIUL2_Type *base, uint32_t req, siul2_interrupt
 
 void SIUL2_EnableExtInterrupt(SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config, int8_t filterCount)
 {
+    assert(req < SIUL2_NUMBER_OF_EIRQ);
+    base->DISR0 = 1 << req;       /* Clear interrupt flag. */
     base->DIRER0 |= (1U << req);  /* Enable Int/DMA request. */
     base->DIRSR0 &= ~(1U << req); /* Select interrupt. */
 
@@ -365,6 +379,8 @@ void SIUL2_EnableExtInterrupt(SIUL2_Type *base, uint32_t req, siul2_interrupt_co
 
 void SIUL2_EnableExtDma(SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config, int8_t filterCount)
 {
+    assert(req < SIUL2_NUMBER_OF_EIRQ);
+    base->DISR0 = 1 << req;      /* Clear flag. */
     base->DIRER0 |= (1U << req); /* Enable Int/DMA request. */
     base->DIRSR0 |= (1U << req); /* Select DMA. */
 
@@ -375,7 +391,8 @@ void SIUL2_EnableExtDma(SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t
 
 void SIUL2_EnableExtInterrupts(SIUL2_Type *base, uint32_t mask, siul2_interrupt_config_t config, int8_t filterCount)
 {
-    uint32_t i = 0U;
+    uint32_t i  = 0U;
+    base->DISR0 = mask;    /* Clear Int/DMA flag. */
     base->DIRER0 |= mask;  /* Enable Int/DMA request. */
     base->DIRSR0 &= ~mask; /* Select interrupt. */
 
@@ -391,7 +408,8 @@ void SIUL2_EnableExtInterrupts(SIUL2_Type *base, uint32_t mask, siul2_interrupt_
 
 void SIUL2_EnableExtDmaRequests(SIUL2_Type *base, uint32_t mask, siul2_interrupt_config_t config, int8_t filterCount)
 {
-    uint32_t i = 0U;
+    uint32_t i  = 0U;
+    base->DISR0 = mask;   /* Clear Int/DMA flag. */
     base->DIRER0 |= mask; /* Enable Int/DMA request. */
     base->DIRSR0 |= mask; /* Select interrupt. */
 
@@ -403,4 +421,116 @@ void SIUL2_EnableExtDmaRequests(SIUL2_Type *base, uint32_t mask, siul2_interrupt
             SIUL2_SetGlitchFilterMaxCount(base, i, filterCount);
         }
     }
+}
+
+uint32_t SIUL2_GetPinEirqNumber(uint32_t pin)
+{
+    assert(pin < SIUL2_MSCR_COUNT);
+
+    for (uint32_t eirq = 0; eirq < SIUL2_NUMBER_OF_EIRQ; eirq++)
+    {
+        for (uint32_t i = 0; i < SIUL2_MAX_PINS_PER_EIRQ; i++)
+        {
+            if (s_siul2EIRQ[eirq][i] == (int16_t)pin)
+            {
+                return eirq;
+            }
+
+            if (s_siul2EIRQ[eirq][i] < 0)
+            {
+                break;
+            }
+        }
+    }
+
+    /* Return an invalid value if not found. */
+    return UINT32_MAX;
+}
+
+void SIUL2_EnableExtInteruptWithCallback(
+    SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config, int8_t filterCount, siul2_cb_t cb)
+{
+    assert(req < SIUL2_NUMBER_OF_EIRQ);
+
+    uint32_t eirq = req / (SIUL2_NUMBER_OF_EIRQ / SIUL2_NUMBER_OF_IRQN);
+
+    s_siul2Callback[req] = cb;
+    s_siul2EirqBase      = base;
+
+    SIUL2_EnableExtInterrupt(base, req, config, filterCount);
+
+    if (s_irqEnabledCount[eirq] == 0U) /* Enable interrupt if not enabled yet. */
+    {
+        NVIC_ClearPendingIRQ(s_siul2IRQ[0U][eirq]);
+        EnableIRQ(s_siul2IRQ[0U][eirq]);
+    }
+    s_irqEnabledCount[eirq]++;
+}
+
+void SIUL2_DisableExtInterruptCallback(SIUL2_Type *base, uint32_t req)
+{
+    assert(req < SIUL2_NUMBER_OF_EIRQ);
+
+    uint32_t eirq = req / (SIUL2_NUMBER_OF_EIRQ / SIUL2_NUMBER_OF_IRQN);
+
+    s_siul2Callback[req] = NULL;
+
+    SIUL2_DisableExtDmaAndInterrupt(base, req);
+    if (s_irqEnabledCount[eirq] > 0U)
+    {
+        s_irqEnabledCount[eirq]--;
+    }
+    if (s_irqEnabledCount[eirq] == 0U)
+    {
+        DisableIRQ(s_siul2IRQ[0U][eirq]);
+    }
+}
+
+void SIUL2_CommonDriverIRQHandler(SIUL2_Type *base, uint8_t irqn)
+{
+    uint32_t bitMask     = 0xFFUL;
+    uint32_t status      = SIUL2_GetExtDmaInterruptStatusFlags(base);
+    uint32_t eirqsPerInt = SIUL2_NUMBER_OF_EIRQ / SIUL2_NUMBER_OF_IRQN;
+
+    assert(irqn < SIUL2_NUMBER_OF_IRQN);
+
+    SIUL2_ClearExtDmaInterruptStatusFlags(base, bitMask << (eirqsPerInt * irqn));
+
+    for (uint32_t i = 0U; i < eirqsPerInt; i++)
+    {
+        uint32_t eirq = i + eirqsPerInt * irqn;
+        /* Call callback when IRQ fired and callback enabled. */
+        if ((s_siul2Callback[eirq] != NULL) && ((status & (1U << eirq)) != 0U))
+        {
+            s_siul2Callback[eirq](base, status);
+        }
+    }
+}
+
+void SIUL2_0_DriverIRQHandler(void);
+void SIUL2_0_DriverIRQHandler(void)
+{
+    SIUL2_CommonDriverIRQHandler(s_siul2EirqBase, 0U);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void SIUL2_1_DriverIRQHandler(void);
+void SIUL2_1_DriverIRQHandler(void)
+{
+    SIUL2_CommonDriverIRQHandler(s_siul2EirqBase, 1U);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void SIUL2_2_DriverIRQHandler(void);
+void SIUL2_2_DriverIRQHandler(void)
+{
+    SIUL2_CommonDriverIRQHandler(s_siul2EirqBase, 2U);
+    SDK_ISR_EXIT_BARRIER;
+}
+
+void SIUL2_3_DriverIRQHandler(void);
+void SIUL2_3_DriverIRQHandler(void)
+{
+    SIUL2_CommonDriverIRQHandler(s_siul2EirqBase, 3U);
+    SDK_ISR_EXIT_BARRIER;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -172,7 +172,7 @@ status_t QTMR_SetupPwm(TMR_Type *base,
                        uint32_t srcClock_Hz)
 {
     uint32_t periodCount, highCount, lowCount;
-    uint16_t reg;
+    qtmrRegType reg;
     status_t status;
 
     if (dutyCyclePercent <= 100U)
@@ -194,6 +194,13 @@ status_t QTMR_SetupPwm(TMR_Type *base,
             lowCount -= 1U;
         }
 
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+        base->CHANNEL[channel].COMP1 = lowCount;
+        base->CHANNEL[channel].COMP2 = highCount;
+
+        base->CHANNEL[channel].CMPLD1 = lowCount;
+        base->CHANNEL[channel].CMPLD2 = highCount;
+#else
         if ((highCount > 0xFFFFU) || (lowCount > 0xFFFFU))
         {
             /* This should not be a 16-bit overflow value. If it is, change to a larger divider for clock source. */
@@ -207,6 +214,7 @@ status_t QTMR_SetupPwm(TMR_Type *base,
         /* Setup the pre-load registers for PWM output */
         base->CHANNEL[channel].CMPLD1 = (uint16_t)lowCount;
         base->CHANNEL[channel].CMPLD2 = (uint16_t)highCount;
+#endif
 
         reg = base->CHANNEL[channel].CSCTRL;
         /* Setup the compare load control for COMP1 and COMP2.
@@ -280,7 +288,7 @@ void QTMR_SetupInputCapture(TMR_Type *base,
                             bool reloadOnCapture,
                             qtmr_input_capture_edge_t captureMode)
 {
-    uint16_t reg;
+    qtmrRegType reg;
 
     /* Clear the prior value for the input source for capture */
     reg = base->CHANNEL[channel].CTRL & (uint16_t)(~TMR_CTRL_SCS_MASK);
@@ -317,7 +325,7 @@ void QTMR_SetupInputCapture(TMR_Type *base,
  */
 void QTMR_EnableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t mask)
 {
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].SCTRL;
     /* Compare interrupt */
@@ -363,7 +371,7 @@ void QTMR_EnableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, uin
  */
 void QTMR_DisableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t mask)
 {
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].SCTRL;
     /* Compare interrupt */
@@ -409,7 +417,7 @@ void QTMR_DisableInterrupts(TMR_Type *base, qtmr_channel_selection_t channel, ui
 uint32_t QTMR_GetEnabledInterrupts(TMR_Type *base, qtmr_channel_selection_t channel)
 {
     uint32_t enabledInterrupts = 0;
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].SCTRL;
     /* Compare interrupt */
@@ -455,7 +463,7 @@ uint32_t QTMR_GetEnabledInterrupts(TMR_Type *base, qtmr_channel_selection_t chan
 uint32_t QTMR_GetStatus(TMR_Type *base, qtmr_channel_selection_t channel)
 {
     uint32_t statusFlags = 0;
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].SCTRL;
     /* Timer compare flag */
@@ -499,7 +507,7 @@ uint32_t QTMR_GetStatus(TMR_Type *base, qtmr_channel_selection_t channel)
  */
 void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t mask)
 {
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].SCTRL;
     /* Timer compare flag */
@@ -551,13 +559,21 @@ void QTMR_ClearStatusFlags(TMR_Type *base, qtmr_channel_selection_t channel, uin
  * param channel  Quad Timer channel number
  * param ticks Timer period in units of ticks
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t ticks)
+#else
 void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint16_t ticks)
+#endif
 {
     /* Set the length bit to reinitialize the counters on a match */
     base->CHANNEL[channel].CTRL |= TMR_CTRL_LENGTH_MASK;
 
     /* Reset LOAD register to reinitialize the counters */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+    base->CHANNEL[channel].LOAD &= ~TMR_LOAD_LOAD_MASK;
+#else
     base->CHANNEL[channel].LOAD &= (uint16_t)(~TMR_LOAD_LOAD_MASK);
+#endif
 
     if ((base->CHANNEL[channel].CTRL & TMR_CTRL_DIR_MASK) != 0U)
     {
@@ -580,7 +596,11 @@ void QTMR_SetTimerPeriod(TMR_Type *base, qtmr_channel_selection_t channel, uint1
  * param channel  Quad Timer channel number
  * param ticks    Timer period in units of ticks.
  */
+#if (defined(FSL_FEATURE_TMR_HAS_32BIT_REGISTER) && FSL_FEATURE_TMR_HAS_32BIT_REGISTER)
+void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t ticks)
+#else
 void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint16_t ticks)
+#endif
 {
     base->CHANNEL[channel].CTRL |= TMR_CTRL_LENGTH_MASK;
 
@@ -606,7 +626,7 @@ void QTMR_SetCompareValue(TMR_Type *base, qtmr_channel_selection_t channel, uint
  */
 void QTMR_EnableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t mask)
 {
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].DMA;
     /* Input Edge Flag DMA Enable */
@@ -639,7 +659,7 @@ void QTMR_EnableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t m
  */
 void QTMR_DisableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t mask)
 {
-    uint16_t reg;
+    qtmrRegType reg;
 
     reg = base->CHANNEL[channel].DMA;
     /* Input Edge Flag DMA Enable */
@@ -671,7 +691,7 @@ void QTMR_DisableDma(TMR_Type *base, qtmr_channel_selection_t channel, uint32_t 
  */
 void QTMR_SetPwmOutputToIdle(TMR_Type *base, qtmr_channel_selection_t channel, bool idleStatus)
 {
-    uint16_t reg = base->CHANNEL[channel].SCTRL;
+    qtmrRegType reg = base->CHANNEL[channel].SCTRL;
 
     /* Stop qtimer channel counter first */
     base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
@@ -717,7 +737,7 @@ void QTMR_SetPwmClockMode(TMR_Type *base, qtmr_channel_selection_t channel, qtmr
 {
     assert((uint32_t)prescaler > 7U);
 
-    uint16_t reg = base->CHANNEL[channel].CTRL;
+    qtmrRegType reg = base->CHANNEL[channel].CTRL;
 
     /* Clear qtimer channel counter mode */
     base->CHANNEL[channel].CTRL = reg & (uint16_t)(~TMR_CTRL_CM_MASK);

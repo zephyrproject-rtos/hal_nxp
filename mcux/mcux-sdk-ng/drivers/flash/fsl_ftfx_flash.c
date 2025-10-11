@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023 NXP
+ * Copyright 2016-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -176,7 +176,7 @@ status_t FLASH_Init(flash_config_t *config)
 
     for (uint8_t flashIndex = 0U; flashIndex < FTFx_FLASH_COUNT; flashIndex++)
     {
-        /* init flash type, kinetis has Pflash and flxnvm, pflash is often used to store executable code
+        /* init flash type, for chips which have Pflash and flxnvm, pflash is often used to store executable code
          * and flexnvm can be used as date flash to store user data, and can also be configured as eeprom backup space
          * with flexram.
          */

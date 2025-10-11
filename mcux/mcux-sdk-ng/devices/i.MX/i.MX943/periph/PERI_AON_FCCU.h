@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_FCCU
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file AON_FCCU.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_AON_FCCU.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for AON_FCCU
  *
  * CMSIS Peripheral Access Layer for AON_FCCU
  */
 
-#if !defined(AON_FCCU_H_)
-#define AON_FCCU_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_AON_FCCU_H_)
+#define PERI_AON_FCCU_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -2808,320 +2811,320 @@ typedef struct {
 #define AON_FCCU_FHFLTS0_0_STAT0_MASK            (0x1U)
 #define AON_FCCU_FHFLTS0_0_STAT0_SHIFT           (0U)
 /*! STAT0 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT0(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT0_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT0_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT1_MASK            (0x2U)
 #define AON_FCCU_FHFLTS0_0_STAT1_SHIFT           (1U)
 /*! STAT1 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT1(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT1_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT1_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT2_MASK            (0x4U)
 #define AON_FCCU_FHFLTS0_0_STAT2_SHIFT           (2U)
 /*! STAT2 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT2(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT2_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT2_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT3_MASK            (0x8U)
 #define AON_FCCU_FHFLTS0_0_STAT3_SHIFT           (3U)
 /*! STAT3 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT3(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT3_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT3_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT4_MASK            (0x10U)
 #define AON_FCCU_FHFLTS0_0_STAT4_SHIFT           (4U)
 /*! STAT4 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT4(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT4_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT4_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT5_MASK            (0x20U)
 #define AON_FCCU_FHFLTS0_0_STAT5_SHIFT           (5U)
 /*! STAT5 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT5(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT5_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT5_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT6_MASK            (0x40U)
 #define AON_FCCU_FHFLTS0_0_STAT6_SHIFT           (6U)
 /*! STAT6 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT6(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT6_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT6_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT7_MASK            (0x80U)
 #define AON_FCCU_FHFLTS0_0_STAT7_SHIFT           (7U)
 /*! STAT7 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT7(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT7_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT7_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT8_MASK            (0x100U)
 #define AON_FCCU_FHFLTS0_0_STAT8_SHIFT           (8U)
 /*! STAT8 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT8(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT8_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT8_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT9_MASK            (0x200U)
 #define AON_FCCU_FHFLTS0_0_STAT9_SHIFT           (9U)
 /*! STAT9 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT9(x)              (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT9_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT9_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT10_MASK           (0x400U)
 #define AON_FCCU_FHFLTS0_0_STAT10_SHIFT          (10U)
 /*! STAT10 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT10(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT10_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT10_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT11_MASK           (0x800U)
 #define AON_FCCU_FHFLTS0_0_STAT11_SHIFT          (11U)
 /*! STAT11 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT11(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT11_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT11_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT12_MASK           (0x1000U)
 #define AON_FCCU_FHFLTS0_0_STAT12_SHIFT          (12U)
 /*! STAT12 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT12(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT12_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT12_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT13_MASK           (0x2000U)
 #define AON_FCCU_FHFLTS0_0_STAT13_SHIFT          (13U)
 /*! STAT13 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT13(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT13_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT13_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT14_MASK           (0x4000U)
 #define AON_FCCU_FHFLTS0_0_STAT14_SHIFT          (14U)
 /*! STAT14 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT14(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT14_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT14_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT15_MASK           (0x8000U)
 #define AON_FCCU_FHFLTS0_0_STAT15_SHIFT          (15U)
 /*! STAT15 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT15(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT15_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT15_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT16_MASK           (0x10000U)
 #define AON_FCCU_FHFLTS0_0_STAT16_SHIFT          (16U)
 /*! STAT16 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT16(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT16_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT16_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT17_MASK           (0x20000U)
 #define AON_FCCU_FHFLTS0_0_STAT17_SHIFT          (17U)
 /*! STAT17 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT17(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT17_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT17_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT18_MASK           (0x40000U)
 #define AON_FCCU_FHFLTS0_0_STAT18_SHIFT          (18U)
 /*! STAT18 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT18(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT18_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT18_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT19_MASK           (0x80000U)
 #define AON_FCCU_FHFLTS0_0_STAT19_SHIFT          (19U)
 /*! STAT19 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT19(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT19_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT19_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT20_MASK           (0x100000U)
 #define AON_FCCU_FHFLTS0_0_STAT20_SHIFT          (20U)
 /*! STAT20 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT20(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT20_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT20_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT21_MASK           (0x200000U)
 #define AON_FCCU_FHFLTS0_0_STAT21_SHIFT          (21U)
 /*! STAT21 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT21(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT21_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT21_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT22_MASK           (0x400000U)
 #define AON_FCCU_FHFLTS0_0_STAT22_SHIFT          (22U)
 /*! STAT22 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT22(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT22_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT22_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT23_MASK           (0x800000U)
 #define AON_FCCU_FHFLTS0_0_STAT23_SHIFT          (23U)
 /*! STAT23 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT23(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT23_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT23_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT24_MASK           (0x1000000U)
 #define AON_FCCU_FHFLTS0_0_STAT24_SHIFT          (24U)
 /*! STAT24 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT24(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT24_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT24_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT25_MASK           (0x2000000U)
 #define AON_FCCU_FHFLTS0_0_STAT25_SHIFT          (25U)
 /*! STAT25 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT25(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT25_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT25_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT26_MASK           (0x4000000U)
 #define AON_FCCU_FHFLTS0_0_STAT26_SHIFT          (26U)
 /*! STAT26 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT26(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT26_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT26_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT27_MASK           (0x8000000U)
 #define AON_FCCU_FHFLTS0_0_STAT27_SHIFT          (27U)
 /*! STAT27 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT27(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT27_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT27_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT28_MASK           (0x10000000U)
 #define AON_FCCU_FHFLTS0_0_STAT28_SHIFT          (28U)
 /*! STAT28 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT28(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT28_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT28_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT29_MASK           (0x20000000U)
 #define AON_FCCU_FHFLTS0_0_STAT29_SHIFT          (29U)
 /*! STAT29 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT29(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT29_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT29_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT30_MASK           (0x40000000U)
 #define AON_FCCU_FHFLTS0_0_STAT30_SHIFT          (30U)
 /*! STAT30 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT30(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT30_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT30_MASK)
 
 #define AON_FCCU_FHFLTS0_0_STAT31_MASK           (0x80000000U)
 #define AON_FCCU_FHFLTS0_0_STAT31_SHIFT          (31U)
 /*! STAT31 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_0_STAT31(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_0_STAT31_SHIFT)) & AON_FCCU_FHFLTS0_0_STAT31_MASK)
 /*! @} */
@@ -3132,320 +3135,320 @@ typedef struct {
 #define AON_FCCU_FHFLTS0_1_STAT32_MASK           (0x1U)
 #define AON_FCCU_FHFLTS0_1_STAT32_SHIFT          (0U)
 /*! STAT32 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT32(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT32_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT32_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT33_MASK           (0x2U)
 #define AON_FCCU_FHFLTS0_1_STAT33_SHIFT          (1U)
 /*! STAT33 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT33(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT33_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT33_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT34_MASK           (0x4U)
 #define AON_FCCU_FHFLTS0_1_STAT34_SHIFT          (2U)
 /*! STAT34 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT34(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT34_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT34_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT35_MASK           (0x8U)
 #define AON_FCCU_FHFLTS0_1_STAT35_SHIFT          (3U)
 /*! STAT35 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT35(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT35_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT35_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT36_MASK           (0x10U)
 #define AON_FCCU_FHFLTS0_1_STAT36_SHIFT          (4U)
 /*! STAT36 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT36(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT36_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT36_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT37_MASK           (0x20U)
 #define AON_FCCU_FHFLTS0_1_STAT37_SHIFT          (5U)
 /*! STAT37 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT37(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT37_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT37_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT38_MASK           (0x40U)
 #define AON_FCCU_FHFLTS0_1_STAT38_SHIFT          (6U)
 /*! STAT38 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT38(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT38_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT38_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT39_MASK           (0x80U)
 #define AON_FCCU_FHFLTS0_1_STAT39_SHIFT          (7U)
 /*! STAT39 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT39(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT39_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT39_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT40_MASK           (0x100U)
 #define AON_FCCU_FHFLTS0_1_STAT40_SHIFT          (8U)
 /*! STAT40 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT40(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT40_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT40_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT41_MASK           (0x200U)
 #define AON_FCCU_FHFLTS0_1_STAT41_SHIFT          (9U)
 /*! STAT41 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT41(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT41_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT41_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT42_MASK           (0x400U)
 #define AON_FCCU_FHFLTS0_1_STAT42_SHIFT          (10U)
 /*! STAT42 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT42(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT42_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT42_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT43_MASK           (0x800U)
 #define AON_FCCU_FHFLTS0_1_STAT43_SHIFT          (11U)
 /*! STAT43 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT43(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT43_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT43_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT44_MASK           (0x1000U)
 #define AON_FCCU_FHFLTS0_1_STAT44_SHIFT          (12U)
 /*! STAT44 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT44(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT44_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT44_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT45_MASK           (0x2000U)
 #define AON_FCCU_FHFLTS0_1_STAT45_SHIFT          (13U)
 /*! STAT45 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT45(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT45_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT45_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT46_MASK           (0x4000U)
 #define AON_FCCU_FHFLTS0_1_STAT46_SHIFT          (14U)
 /*! STAT46 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT46(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT46_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT46_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT47_MASK           (0x8000U)
 #define AON_FCCU_FHFLTS0_1_STAT47_SHIFT          (15U)
 /*! STAT47 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT47(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT47_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT47_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT48_MASK           (0x10000U)
 #define AON_FCCU_FHFLTS0_1_STAT48_SHIFT          (16U)
 /*! STAT48 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT48(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT48_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT48_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT49_MASK           (0x20000U)
 #define AON_FCCU_FHFLTS0_1_STAT49_SHIFT          (17U)
 /*! STAT49 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT49(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT49_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT49_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT50_MASK           (0x40000U)
 #define AON_FCCU_FHFLTS0_1_STAT50_SHIFT          (18U)
 /*! STAT50 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT50(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT50_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT50_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT51_MASK           (0x80000U)
 #define AON_FCCU_FHFLTS0_1_STAT51_SHIFT          (19U)
 /*! STAT51 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT51(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT51_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT51_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT52_MASK           (0x100000U)
 #define AON_FCCU_FHFLTS0_1_STAT52_SHIFT          (20U)
 /*! STAT52 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT52(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT52_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT52_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT53_MASK           (0x200000U)
 #define AON_FCCU_FHFLTS0_1_STAT53_SHIFT          (21U)
 /*! STAT53 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT53(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT53_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT53_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT54_MASK           (0x400000U)
 #define AON_FCCU_FHFLTS0_1_STAT54_SHIFT          (22U)
 /*! STAT54 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT54(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT54_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT54_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT55_MASK           (0x800000U)
 #define AON_FCCU_FHFLTS0_1_STAT55_SHIFT          (23U)
 /*! STAT55 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT55(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT55_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT55_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT56_MASK           (0x1000000U)
 #define AON_FCCU_FHFLTS0_1_STAT56_SHIFT          (24U)
 /*! STAT56 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT56(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT56_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT56_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT57_MASK           (0x2000000U)
 #define AON_FCCU_FHFLTS0_1_STAT57_SHIFT          (25U)
 /*! STAT57 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT57(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT57_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT57_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT58_MASK           (0x4000000U)
 #define AON_FCCU_FHFLTS0_1_STAT58_SHIFT          (26U)
 /*! STAT58 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT58(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT58_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT58_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT59_MASK           (0x8000000U)
 #define AON_FCCU_FHFLTS0_1_STAT59_SHIFT          (27U)
 /*! STAT59 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT59(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT59_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT59_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT60_MASK           (0x10000000U)
 #define AON_FCCU_FHFLTS0_1_STAT60_SHIFT          (28U)
 /*! STAT60 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT60(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT60_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT60_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT61_MASK           (0x20000000U)
 #define AON_FCCU_FHFLTS0_1_STAT61_SHIFT          (29U)
 /*! STAT61 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT61(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT61_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT61_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT62_MASK           (0x40000000U)
 #define AON_FCCU_FHFLTS0_1_STAT62_SHIFT          (30U)
 /*! STAT62 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT62(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT62_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT62_MASK)
 
 #define AON_FCCU_FHFLTS0_1_STAT63_MASK           (0x80000000U)
 #define AON_FCCU_FHFLTS0_1_STAT63_SHIFT          (31U)
 /*! STAT63 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_1_STAT63(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_1_STAT63_SHIFT)) & AON_FCCU_FHFLTS0_1_STAT63_MASK)
 /*! @} */
@@ -3456,320 +3459,320 @@ typedef struct {
 #define AON_FCCU_FHFLTS0_2_STAT64_MASK           (0x1U)
 #define AON_FCCU_FHFLTS0_2_STAT64_SHIFT          (0U)
 /*! STAT64 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT64(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT64_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT64_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT65_MASK           (0x2U)
 #define AON_FCCU_FHFLTS0_2_STAT65_SHIFT          (1U)
 /*! STAT65 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT65(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT65_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT65_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT66_MASK           (0x4U)
 #define AON_FCCU_FHFLTS0_2_STAT66_SHIFT          (2U)
 /*! STAT66 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT66(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT66_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT66_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT67_MASK           (0x8U)
 #define AON_FCCU_FHFLTS0_2_STAT67_SHIFT          (3U)
 /*! STAT67 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT67(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT67_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT67_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT68_MASK           (0x10U)
 #define AON_FCCU_FHFLTS0_2_STAT68_SHIFT          (4U)
 /*! STAT68 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT68(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT68_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT68_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT69_MASK           (0x20U)
 #define AON_FCCU_FHFLTS0_2_STAT69_SHIFT          (5U)
 /*! STAT69 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT69(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT69_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT69_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT70_MASK           (0x40U)
 #define AON_FCCU_FHFLTS0_2_STAT70_SHIFT          (6U)
 /*! STAT70 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT70(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT70_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT70_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT71_MASK           (0x80U)
 #define AON_FCCU_FHFLTS0_2_STAT71_SHIFT          (7U)
 /*! STAT71 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT71(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT71_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT71_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT72_MASK           (0x100U)
 #define AON_FCCU_FHFLTS0_2_STAT72_SHIFT          (8U)
 /*! STAT72 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT72(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT72_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT72_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT73_MASK           (0x200U)
 #define AON_FCCU_FHFLTS0_2_STAT73_SHIFT          (9U)
 /*! STAT73 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT73(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT73_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT73_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT74_MASK           (0x400U)
 #define AON_FCCU_FHFLTS0_2_STAT74_SHIFT          (10U)
 /*! STAT74 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT74(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT74_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT74_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT75_MASK           (0x800U)
 #define AON_FCCU_FHFLTS0_2_STAT75_SHIFT          (11U)
 /*! STAT75 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT75(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT75_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT75_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT76_MASK           (0x1000U)
 #define AON_FCCU_FHFLTS0_2_STAT76_SHIFT          (12U)
 /*! STAT76 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT76(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT76_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT76_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT77_MASK           (0x2000U)
 #define AON_FCCU_FHFLTS0_2_STAT77_SHIFT          (13U)
 /*! STAT77 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT77(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT77_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT77_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT78_MASK           (0x4000U)
 #define AON_FCCU_FHFLTS0_2_STAT78_SHIFT          (14U)
 /*! STAT78 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT78(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT78_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT78_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT79_MASK           (0x8000U)
 #define AON_FCCU_FHFLTS0_2_STAT79_SHIFT          (15U)
 /*! STAT79 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT79(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT79_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT79_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT80_MASK           (0x10000U)
 #define AON_FCCU_FHFLTS0_2_STAT80_SHIFT          (16U)
 /*! STAT80 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT80(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT80_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT80_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT81_MASK           (0x20000U)
 #define AON_FCCU_FHFLTS0_2_STAT81_SHIFT          (17U)
 /*! STAT81 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT81(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT81_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT81_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT82_MASK           (0x40000U)
 #define AON_FCCU_FHFLTS0_2_STAT82_SHIFT          (18U)
 /*! STAT82 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT82(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT82_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT82_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT83_MASK           (0x80000U)
 #define AON_FCCU_FHFLTS0_2_STAT83_SHIFT          (19U)
 /*! STAT83 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT83(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT83_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT83_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT84_MASK           (0x100000U)
 #define AON_FCCU_FHFLTS0_2_STAT84_SHIFT          (20U)
 /*! STAT84 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT84(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT84_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT84_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT85_MASK           (0x200000U)
 #define AON_FCCU_FHFLTS0_2_STAT85_SHIFT          (21U)
 /*! STAT85 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT85(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT85_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT85_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT86_MASK           (0x400000U)
 #define AON_FCCU_FHFLTS0_2_STAT86_SHIFT          (22U)
 /*! STAT86 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT86(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT86_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT86_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT87_MASK           (0x800000U)
 #define AON_FCCU_FHFLTS0_2_STAT87_SHIFT          (23U)
 /*! STAT87 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT87(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT87_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT87_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT88_MASK           (0x1000000U)
 #define AON_FCCU_FHFLTS0_2_STAT88_SHIFT          (24U)
 /*! STAT88 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT88(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT88_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT88_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT89_MASK           (0x2000000U)
 #define AON_FCCU_FHFLTS0_2_STAT89_SHIFT          (25U)
 /*! STAT89 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT89(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT89_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT89_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT90_MASK           (0x4000000U)
 #define AON_FCCU_FHFLTS0_2_STAT90_SHIFT          (26U)
 /*! STAT90 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT90(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT90_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT90_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT91_MASK           (0x8000000U)
 #define AON_FCCU_FHFLTS0_2_STAT91_SHIFT          (27U)
 /*! STAT91 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT91(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT91_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT91_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT92_MASK           (0x10000000U)
 #define AON_FCCU_FHFLTS0_2_STAT92_SHIFT          (28U)
 /*! STAT92 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT92(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT92_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT92_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT93_MASK           (0x20000000U)
 #define AON_FCCU_FHFLTS0_2_STAT93_SHIFT          (29U)
 /*! STAT93 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT93(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT93_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT93_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT94_MASK           (0x40000000U)
 #define AON_FCCU_FHFLTS0_2_STAT94_SHIFT          (30U)
 /*! STAT94 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT94(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT94_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT94_MASK)
 
 #define AON_FCCU_FHFLTS0_2_STAT95_MASK           (0x80000000U)
 #define AON_FCCU_FHFLTS0_2_STAT95_SHIFT          (31U)
 /*! STAT95 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_2_STAT95(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_2_STAT95_SHIFT)) & AON_FCCU_FHFLTS0_2_STAT95_MASK)
 /*! @} */
@@ -3780,320 +3783,320 @@ typedef struct {
 #define AON_FCCU_FHFLTS0_3_STAT96_MASK           (0x1U)
 #define AON_FCCU_FHFLTS0_3_STAT96_SHIFT          (0U)
 /*! STAT96 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT96(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT96_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT96_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT97_MASK           (0x2U)
 #define AON_FCCU_FHFLTS0_3_STAT97_SHIFT          (1U)
 /*! STAT97 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT97(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT97_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT97_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT98_MASK           (0x4U)
 #define AON_FCCU_FHFLTS0_3_STAT98_SHIFT          (2U)
 /*! STAT98 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT98(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT98_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT98_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT99_MASK           (0x8U)
 #define AON_FCCU_FHFLTS0_3_STAT99_SHIFT          (3U)
 /*! STAT99 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT99(x)             (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT99_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT99_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT100_MASK          (0x10U)
 #define AON_FCCU_FHFLTS0_3_STAT100_SHIFT         (4U)
 /*! STAT100 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT100(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT100_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT100_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT101_MASK          (0x20U)
 #define AON_FCCU_FHFLTS0_3_STAT101_SHIFT         (5U)
 /*! STAT101 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT101(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT101_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT101_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT102_MASK          (0x40U)
 #define AON_FCCU_FHFLTS0_3_STAT102_SHIFT         (6U)
 /*! STAT102 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT102(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT102_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT102_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT103_MASK          (0x80U)
 #define AON_FCCU_FHFLTS0_3_STAT103_SHIFT         (7U)
 /*! STAT103 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT103(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT103_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT103_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT104_MASK          (0x100U)
 #define AON_FCCU_FHFLTS0_3_STAT104_SHIFT         (8U)
 /*! STAT104 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT104(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT104_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT104_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT105_MASK          (0x200U)
 #define AON_FCCU_FHFLTS0_3_STAT105_SHIFT         (9U)
 /*! STAT105 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT105(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT105_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT105_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT106_MASK          (0x400U)
 #define AON_FCCU_FHFLTS0_3_STAT106_SHIFT         (10U)
 /*! STAT106 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT106(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT106_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT106_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT107_MASK          (0x800U)
 #define AON_FCCU_FHFLTS0_3_STAT107_SHIFT         (11U)
 /*! STAT107 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT107(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT107_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT107_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT108_MASK          (0x1000U)
 #define AON_FCCU_FHFLTS0_3_STAT108_SHIFT         (12U)
 /*! STAT108 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT108(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT108_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT108_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT109_MASK          (0x2000U)
 #define AON_FCCU_FHFLTS0_3_STAT109_SHIFT         (13U)
 /*! STAT109 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT109(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT109_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT109_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT110_MASK          (0x4000U)
 #define AON_FCCU_FHFLTS0_3_STAT110_SHIFT         (14U)
 /*! STAT110 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT110(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT110_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT110_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT111_MASK          (0x8000U)
 #define AON_FCCU_FHFLTS0_3_STAT111_SHIFT         (15U)
 /*! STAT111 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT111(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT111_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT111_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT112_MASK          (0x10000U)
 #define AON_FCCU_FHFLTS0_3_STAT112_SHIFT         (16U)
 /*! STAT112 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT112(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT112_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT112_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT113_MASK          (0x20000U)
 #define AON_FCCU_FHFLTS0_3_STAT113_SHIFT         (17U)
 /*! STAT113 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT113(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT113_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT113_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT114_MASK          (0x40000U)
 #define AON_FCCU_FHFLTS0_3_STAT114_SHIFT         (18U)
 /*! STAT114 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT114(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT114_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT114_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT115_MASK          (0x80000U)
 #define AON_FCCU_FHFLTS0_3_STAT115_SHIFT         (19U)
 /*! STAT115 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT115(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT115_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT115_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT116_MASK          (0x100000U)
 #define AON_FCCU_FHFLTS0_3_STAT116_SHIFT         (20U)
 /*! STAT116 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT116(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT116_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT116_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT117_MASK          (0x200000U)
 #define AON_FCCU_FHFLTS0_3_STAT117_SHIFT         (21U)
 /*! STAT117 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT117(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT117_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT117_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT118_MASK          (0x400000U)
 #define AON_FCCU_FHFLTS0_3_STAT118_SHIFT         (22U)
 /*! STAT118 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT118(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT118_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT118_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT119_MASK          (0x800000U)
 #define AON_FCCU_FHFLTS0_3_STAT119_SHIFT         (23U)
 /*! STAT119 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT119(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT119_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT119_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT120_MASK          (0x1000000U)
 #define AON_FCCU_FHFLTS0_3_STAT120_SHIFT         (24U)
 /*! STAT120 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT120(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT120_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT120_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT121_MASK          (0x2000000U)
 #define AON_FCCU_FHFLTS0_3_STAT121_SHIFT         (25U)
 /*! STAT121 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT121(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT121_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT121_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT122_MASK          (0x4000000U)
 #define AON_FCCU_FHFLTS0_3_STAT122_SHIFT         (26U)
 /*! STAT122 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT122(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT122_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT122_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT123_MASK          (0x8000000U)
 #define AON_FCCU_FHFLTS0_3_STAT123_SHIFT         (27U)
 /*! STAT123 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT123(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT123_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT123_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT124_MASK          (0x10000000U)
 #define AON_FCCU_FHFLTS0_3_STAT124_SHIFT         (28U)
 /*! STAT124 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT124(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT124_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT124_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT125_MASK          (0x20000000U)
 #define AON_FCCU_FHFLTS0_3_STAT125_SHIFT         (29U)
 /*! STAT125 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT125(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT125_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT125_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT126_MASK          (0x40000000U)
 #define AON_FCCU_FHFLTS0_3_STAT126_SHIFT         (30U)
 /*! STAT126 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT126(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT126_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT126_MASK)
 
 #define AON_FCCU_FHFLTS0_3_STAT127_MASK          (0x80000000U)
 #define AON_FCCU_FHFLTS0_3_STAT127_SHIFT         (31U)
 /*! STAT127 - Fault Status
- *  0b0..Not latched
  *  0b0..No effect
- *  0b1..Latched
+ *  0b0..Not latched
  *  0b1..Deasserts (clear)
+ *  0b1..Latched
  */
 #define AON_FCCU_FHFLTS0_3_STAT127(x)            (((uint32_t)(((uint32_t)(x)) << AON_FCCU_FHFLTS0_3_STAT127_SHIFT)) & AON_FCCU_FHFLTS0_3_STAT127_MASK)
 /*! @} */
@@ -6756,5 +6759,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* AON_FCCU_H_ */
+#endif  /* PERI_AON_FCCU_H_ */
 

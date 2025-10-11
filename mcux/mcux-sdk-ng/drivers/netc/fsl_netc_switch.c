@@ -765,9 +765,13 @@ status_t SWT_SendFrame(swt_handle_t *handle,
                        void *context,
                        swt_tx_opt *opt)
 {
-    netc_tx_bd_t txDesc[2] = {0};
+    netc_tx_bd_t txDesc[2];
     uint8_t hwRing;
     netc_tx_bdr_t *txBdRing;
+
+    NETC_ClearTxDescriptor(&txDesc[0]);
+    NETC_ClearTxDescriptor(&txDesc[1]);
+
     if (enMasquerade)
     {
         if (getSiNum(handle->epHandle->cfg.si) == 0U)
@@ -858,7 +862,6 @@ void SWT_ReclaimTxDescriptor(swt_handle_t *handle, bool enMasquerade, uint8_t ri
             {
                 (void)handle->cfg.reclaimCallback(handle, frameInfo, handle->cfg.userData);
             }
-            (void)memset(frameInfo, 0, sizeof(netc_tx_frame_info_t));
         }
     } while (frameInfo != NULL);
 }

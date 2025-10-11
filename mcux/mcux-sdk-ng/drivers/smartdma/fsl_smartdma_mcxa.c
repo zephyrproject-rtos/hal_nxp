@@ -6,8 +6,15 @@
 
 #include "fsl_smartdma.h"
 
-#if defined(MCXA276_SERIES) || defined(MCXA275_SERIES) || defined(MCXA176_SERIES) || defined(MCXA175_SERIES)|| \
-    defined(MCXA166_SERIES) || defined(MCXA165_SERIES) || defined(MCXA345_SERIES) || defined(MCXA346_SERIES)
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.smartdma_mcxa"
+#endif
+
+#if defined(MCXA175_SERIES) || defined(MCXA176_SERIES) || defined(MCXA185_SERIES) || defined(MCXA186_SERIES) || \
+    defined(MCXA255_SERIES) || defined(MCXA256_SERIES) || defined(MCXA265_SERIES) || defined(MCXA266_SERIES) || \
+    defined(MCXA345_SERIES) || defined(MCXA346_SERIES) || defined(MCXA355_SERIES) || defined(MCXA356_SERIES) || \
+    defined(MCXA365_SERIES) || defined(MCXA366_SERIES) || defined(MCXA343_SERIES) || defined(MCXA344_SERIES)
 
 /*******************************************************************************
  * Definitions

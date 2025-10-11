@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MIMXRT735S_cm33_core0 startup code
 //
-// Version : 200525
+// Version : 220725
 //*****************************************************************************
 //
 // Copyright 2016-2025 NXP
@@ -146,7 +146,7 @@ WEAK void I3C1_IRQHandler(void);
 WEAK void FLEXIO_IRQHandler(void);
 WEAK void Reserved72_IRQHandler(void);
 WEAK void Reserved73_IRQHandler(void);
-WEAK void Reserved74_IRQHandler(void);
+WEAK void MIPI_IRQHandler(void);
 WEAK void EDMA0_CH0_IRQHandler(void);
 WEAK void EDMA0_CH1_IRQHandler(void);
 WEAK void EDMA0_CH2_IRQHandler(void);
@@ -311,7 +311,7 @@ void I3C1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void FLEXIO_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved72_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved73_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved74_DriverIRQHandler(void) ALIAS(DefaultISR);
+void MIPI_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EDMA0_CH0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EDMA0_CH1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EDMA0_CH2_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -597,7 +597,7 @@ __attribute__((used, section(".isr_vector"))) void (*const __isr_vector[])(void)
     FLEXIO_IRQHandler,                 // 71 : FLEXIO: Interrupt request
     Reserved72_IRQHandler,             // 72 : Reserved interrupt
     Reserved73_IRQHandler,             // 73 : Reserved interrupt
-    Reserved74_IRQHandler,             // 74 : Reserved interrupt
+    MIPI_IRQHandler,                   // 74 : DSI: Interrupt request
     EDMA0_CH0_IRQHandler,              // 75 : EDMA: Channel 0 interrupt
     EDMA0_CH1_IRQHandler,              // 76 : EDMA: Channel 1 interrupt
     EDMA0_CH2_IRQHandler,              // 77 : EDMA: Channel 2 interrupt
@@ -1286,9 +1286,9 @@ WEAK void Reserved73_IRQHandler(void)
     Reserved73_DriverIRQHandler();
 }
 
-WEAK void Reserved74_IRQHandler(void)
+WEAK void MIPI_IRQHandler(void)
 {
-    Reserved74_DriverIRQHandler();
+    MIPI_DriverIRQHandler();
 }
 
 WEAK void EDMA0_CH0_IRQHandler(void)

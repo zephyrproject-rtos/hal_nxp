@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25xRM DraftF
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Reference manual:    MCXL25xRM DraftH
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL255_cm0plus
@@ -23,8 +23,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -32,7 +32,7 @@
 /*!
  * @file MCXL255_cm0plus.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for MCXL255_cm0plus
  *
  * CMSIS Peripheral Access Layer for MCXL255_cm0plus

@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.4.1. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+/*! @brief power driver version 2.4.2. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*@}*/
 
 /* Define the default PMIC modes for power modes. */
@@ -35,6 +35,11 @@
 #endif
 #ifndef POWER_DEFAULT_PMICMODE_FDPD
 #define POWER_DEFAULT_PMICMODE_FDPD 3U
+#endif
+
+/* Define the default LVD threshold.  */
+#ifndef POWER_DEFAULT_LVD_VOLT
+#define POWER_DEFAULT_LVD_VOLT (100000U)       /*<! Default LVD threshold 100mV. */
 #endif
 
 #define MAKE_PD_BITS(reg, slot)   (((reg) << 8) | (slot))
@@ -84,7 +89,6 @@ typedef enum pd_bits
     kPDRUNCFG_DSR_VDDN_COM = MAKE_PD_BITS(PMC_PDRCFG0, 8U), /*!< Power Switch and DSR Enable for the VDDN_COM domain. */
     kPDRUNCFG_PD_VDD2_DSP  = MAKE_PD_BITS(PMC_PDRCFG0, 9U), /*!< Power switch for the HiFi4 DSP. */
     kPDRUNCFG_PD_VDD2_MIPI = MAKE_PD_BITS(PMC_PDRCFG0, 10U),        /*!< Power Switch for the MIPI PHY. */
-    kPDRUNCFG_LP_DCDC      = MAKE_PD_BITS(PMC_PDRCFG0, 12U),        /*!< DCDC Low-Power Mode. Deprecated, use POWER_SetRunRegulatorMode. */
     kPDRUNCFG_PD_RBB_VDD1  = MAKE_PD_BITS(PMC_PDRCFG0, 22U),        /*!< Power Down RBB in VDD1. */
     kPDRUNCFG_PD_AFBB_VDD1 = MAKE_PD_BITS(PMC_PDRCFG0, 23U),        /*!< Power Down AFBB in VDD1 Domain. */
     kPDRUNCFG_PD_RBB_VDD2  = MAKE_PD_BITS(PMC_PDRCFG0, 24U),        /*!< Power Down RBB in VDD2 Domain.*/
@@ -549,8 +553,9 @@ enum _power_ldo_mode
  */
 enum _power_dcdc_mode
 {
-    kPower_DCDCMode_HP = 0U, /*!< LDO High Power mode. */
-    kPower_DCDCMode_LP = 1U, /*!< LDO Low Power mode. */
+    kPower_DCDCMode_HP = 0U,  /*!< DCDC High Power mode. */
+    kPower_DCDCMode_LP = 1U,  /*!< DCDC Low Power mode. */
+    kPower_DCDCMode_ULP = 3U, /*!< DCDC Ultra Low Power mode. A0 Silicon does not support this mode and will default to low power mode when configured. */
 };
 
 /*! @brief VDDN, VDD1 or VDD2 supply source. */

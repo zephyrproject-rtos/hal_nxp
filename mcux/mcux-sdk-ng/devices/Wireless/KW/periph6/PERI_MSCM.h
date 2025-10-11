@@ -20,7 +20,7 @@
 **                          KW47Z420B3AFTA
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250730
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MSCM
@@ -1119,19 +1119,21 @@ typedef struct {
 #define MSCM_SID_PINID_MASK                      (0x70U)
 #define MSCM_SID_PINID_SHIFT                     (4U)
 /*! PINID - Pin Identification
- *  0b010..40HVQFN
+ *  0b010..Reserved
  *  0b011..48HVQFN
- *  0b100..56HVQFN
+ *  0b100..Reserved
+ *  0b101..Reserved
+ *  0b110..Reserved
  */
 #define MSCM_SID_PINID(x)                        (((uint32_t)(((uint32_t)(x)) << MSCM_SID_PINID_SHIFT)) & MSCM_SID_PINID_MASK)
 
-#define MSCM_SID_CMP_MASK                        (0x80U)
-#define MSCM_SID_CMP_SHIFT                       (7U)
-/*! CMP - CMP Presence
- *  0b0..No CMP
- *  0b1..CMP present
+#define MSCM_SID_LCE_MASK                        (0x80U)
+#define MSCM_SID_LCE_SHIFT                       (7U)
+/*! LCE - LCE Presence
+ *  0b0..No LCE
+ *  0b1..LCE present
  */
-#define MSCM_SID_CMP(x)                          (((uint32_t)(((uint32_t)(x)) << MSCM_SID_CMP_SHIFT)) & MSCM_SID_CMP_MASK)
+#define MSCM_SID_LCE(x)                          (((uint32_t)(((uint32_t)(x)) << MSCM_SID_LCE_SHIFT)) & MSCM_SID_LCE_MASK)
 
 #define MSCM_SID_FLXIO_MASK                      (0x100U)
 #define MSCM_SID_FLXIO_SHIFT                     (8U)
@@ -1176,16 +1178,19 @@ typedef struct {
 #define MSCM_SID_RAMSZ_MASK                      (0xE000U)
 #define MSCM_SID_RAMSZ_SHIFT                     (13U)
 /*! RAMSZ - RAM Size
- *  0b000..96 KB
- *  0b111..128 KB
+ *  0b101..136 KB + 171 KB
+ *  0b110..Reserved
+ *  0b111..264 KB + 171 KB
  */
 #define MSCM_SID_RAMSZ(x)                        (((uint32_t)(((uint32_t)(x)) << MSCM_SID_RAMSZ_SHIFT)) & MSCM_SID_RAMSZ_MASK)
 
 #define MSCM_SID_FLSZ_MASK                       (0xF0000U)
 #define MSCM_SID_FLSZ_SHIFT                      (16U)
 /*! FLSZ - Flash Size
- *  0b1101..1 MB
- *  0b1111..512 KB
+ *  0b1011..Reserved
+ *  0b1101..1 MB + 512 KB
+ *  0b1110..Reserved
+ *  0b1111..2 MB + 512 KB
  */
 #define MSCM_SID_FLSZ(x)                         (((uint32_t)(((uint32_t)(x)) << MSCM_SID_FLSZ_SHIFT)) & MSCM_SID_FLSZ_MASK)
 
@@ -1193,9 +1198,11 @@ typedef struct {
 #define MSCM_SID_BLEF_SHIFT                      (20U)
 /*! BLEF - Bluetooth LE Feature
  *  0b0000..No Bluetooth LE present
- *  0b0001..Bluetooth LE 5.1
- *  0b0010..Bluetooth LE 5.2
- *  0b0011..Bluetooth LE 5.3
+ *  0b0001..Reserved
+ *  0b0010..Reserved
+ *  0b0011..Reserved
+ *  0b0100..Reserved
+ *  0b1000..Reserved
  *  0b1111..Bluetooth LE Upgrade
  */
 #define MSCM_SID_BLEF(x)                         (((uint32_t)(((uint32_t)(x)) << MSCM_SID_BLEF_SHIFT)) & MSCM_SID_BLEF_MASK)
@@ -1203,9 +1210,9 @@ typedef struct {
 #define MSCM_SID_RADIOF_MASK                     (0xF000000U)
 #define MSCM_SID_RADIOF_SHIFT                    (24U)
 /*! RADIOF - Radio Feature
- *  0b0000..802.15.4
+ *  0b0000..Reserved
  *  0b0001..Bluetooth LE
- *  0b0010..Bluetooth LE + 802.15.4
+ *  0b0010..Reserved
  */
 #define MSCM_SID_RADIOF(x)                       (((uint32_t)(((uint32_t)(x)) << MSCM_SID_RADIOF_SHIFT)) & MSCM_SID_RADIOF_MASK)
 

@@ -79,10 +79,9 @@ typedef struct _osa_state
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
     list_label_t taskList;
 #endif
-    uint32_t basePriority;
-    int32_t basePriorityNesting;
+    int32_t interruptDisableNesting;
     uint32_t interruptRegPrimask;
-    uint32_t interruptDisableCount;
+    uint32_t disableIRQGlobalNesting;
 } osa_state_t;
 
 /*! @brief Definition structure contains allocated memory information.*/
@@ -148,6 +147,11 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
     osa_mem_align_cb_t *p_cb = NULL;
     uint32_t alignedsize;
 
+    if ((alignbytes < 1U) || (alignbytes > UINT16_MAX))
+    {
+        return NULL;
+    }
+
     /* Check overflow. */
     alignedsize = (uint32_t)(unsigned int)OSA_MEM_SIZE_ALIGN(memLength, alignbytes);
     if (alignedsize < memLength)
@@ -155,7 +159,7 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
         return NULL;
     }
 
-    if (alignedsize > 0xFFFFFFFFU - alignbytes - sizeof(osa_mem_align_cb_t))
+    if (alignedsize > UINT32_MAX - alignbytes - sizeof(osa_mem_align_cb_t))
     {
         return NULL;
     }
@@ -237,8 +241,8 @@ void OSA_ExitCritical(uint32_t sr)
 void OSA_Init(void)
 {
     LIST_Init((&s_osaState.taskList), 0);
-    s_osaState.basePriorityNesting   = 0;
-    s_osaState.interruptDisableCount = 0;
+    s_osaState.interruptDisableNesting = 0;
+    s_osaState.disableIRQGlobalNesting = 0;
 }
 #endif
 
@@ -349,6 +353,8 @@ osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle)
 osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority_t taskPriority)
 {
     assert(taskHandle);
+    assert(taskPriority <= OSA_TASK_PRIORITY_MIN);
+    assert(OSA_TASK_PRIORITY_MIN > OSA_TASK_PRIORITY_MAX);
     osa_thread_task_t *ptask = (osa_thread_task_t *)taskHandle;
     UINT status              = 0;
     UINT priority;
@@ -502,8 +508,7 @@ osa_status_t OSA_SemaphoreCreate(osa_semaphore_handle_t semaphoreHandle, uint32_
  *END**************************************************************************/
 osa_status_t OSA_SemaphoreCreateBinary(osa_semaphore_handle_t semaphoreHandle)
 {
-    /* TODO */
-    return KOSA_StatusError;
+    return OSA_SemaphoreCreate(semaphoreHandle, 1U);
 }
 
 /*FUNCTION**********************************************************************
@@ -915,10 +920,15 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle)
 osa_status_t OSA_MsgQCreate(osa_msgq_handle_t msgqHandle, uint32_t msgNo, uint32_t msgSize)
 {
     assert(NULL != msgqHandle);
+    assert(msgSize <= UINT32_MAX - sizeof(uint32_t) + 1);
 
-    /* Create the message queue where the number and size is specified by msgNo and msgSize */
-    if (TX_SUCCESS == tx_queue_create((TX_QUEUE *)msgqHandle, (CHAR *)"queue 0", msgSize,
-                                      (uint8_t *)msgqHandle + OSA_MSGQ_HANDLE_SIZE, msgNo * msgSize))
+    /* ThreadX expects sizes in word, but OSA API passes byte size, so we have to convert it */
+    uint32_t sizeWord = (msgSize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+    assert(msgNo <= UINT32_MAX / sizeWord);
+
+    /* Create the message queue where the number and size is specified by msgNo and sizeWord */
+    if (TX_SUCCESS == tx_queue_create((TX_QUEUE *)msgqHandle, (CHAR *)"queue 0", sizeWord,
+                                      (uint8_t *)msgqHandle + OSA_MSGQ_HANDLE_SIZE, msgNo * sizeWord))
     {
         return KOSA_StatusSuccess;
     }
@@ -1035,11 +1045,11 @@ osa_status_t OSA_MsgQDestroy(osa_msgq_handle_t msgqHandle)
  *END**************************************************************************/
 void OSA_InterruptEnable(void)
 {
-    if (s_osaState.basePriorityNesting > 0U)
+    if (s_osaState.interruptDisableNesting > 0)
     {
-        s_osaState.basePriorityNesting--;
+        s_osaState.interruptDisableNesting--;
 
-        if (0U == s_osaState.basePriorityNesting)
+        if (0 == s_osaState.interruptDisableNesting)
         {
             TX_RESTORE
         }
@@ -1054,13 +1064,13 @@ void OSA_InterruptEnable(void)
  *END**************************************************************************/
 void OSA_InterruptDisable(void)
 {
-    if (0U == s_osaState.basePriorityNesting)
+    if (0 == s_osaState.interruptDisableNesting)
     {
         TX_DISABLE
     }
 
     /* update counter*/
-    s_osaState.basePriorityNesting++;
+    s_osaState.interruptDisableNesting++;
 }
 
 /*FUNCTION**********************************************************************
@@ -1071,11 +1081,11 @@ void OSA_InterruptDisable(void)
  *END**************************************************************************/
 void OSA_EnableIRQGlobal(void)
 {
-    if (s_osaState.interruptDisableCount > 0U)
+    if (s_osaState.disableIRQGlobalNesting > 0U)
     {
-        s_osaState.interruptDisableCount--;
+        s_osaState.disableIRQGlobalNesting--;
 
-        if (0U == s_osaState.interruptDisableCount)
+        if (0U == s_osaState.disableIRQGlobalNesting)
         {
             EnableGlobalIRQ(s_osaState.interruptRegPrimask);
         }
@@ -1092,13 +1102,13 @@ void OSA_EnableIRQGlobal(void)
 void OSA_DisableIRQGlobal(void)
 {
     /* call core API to disable the global interrupt*/
-    if (0 == s_osaState.interruptDisableCount)
+    if (0 == s_osaState.disableIRQGlobalNesting)
     {
         s_osaState.interruptRegPrimask = DisableGlobalIRQ();
     }
 
     /* update counter*/
-    s_osaState.interruptDisableCount++;
+    s_osaState.disableIRQGlobalNesting++;
 }
 
 /*FUNCTION**********************************************************************

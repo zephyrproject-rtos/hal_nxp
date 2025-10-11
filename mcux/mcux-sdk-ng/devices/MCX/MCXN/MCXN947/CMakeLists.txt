@@ -6,6 +6,7 @@
 #### device spepcific drivers
 include(${SdkRootDirPath}/devices/arm/device_header_multicore.cmake)
 mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/MCX/MCXN/MCXN947/drivers)
+mcux_add_cmakelists(${SdkRootDirPath}/${device_root}/MCX/MCXN/MCXN947/drivers/romapi)
 
 #### MCX shared drivers/components/middlewares, project segments
 include(${SdkRootDirPath}/devices/MCX/shared.cmake)

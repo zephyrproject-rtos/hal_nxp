@@ -109,7 +109,7 @@ void DCIF_Init(DCIF_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     uint32_t instance = DCIF_GetInstance(base);
     /* Enable the clock. */
-    CLOCK_EnableClock(s_dcifClocks[instance]);
+    (void)CLOCK_EnableClock(s_dcifClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     DCIF_ResetRegister(base);
@@ -130,7 +130,7 @@ void DCIF_Deinit(DCIF_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     uint32_t instance = DCIF_GetInstance(base);
     /* Disable the clock. */
-    CLOCK_DisableClock(s_dcifClocks[instance]);
+    (void)CLOCK_DisableClock(s_dcifClocks[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 

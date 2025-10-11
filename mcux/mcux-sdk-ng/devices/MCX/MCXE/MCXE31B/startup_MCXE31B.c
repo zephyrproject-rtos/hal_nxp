@@ -2,7 +2,7 @@
 //*****************************************************************************
 // MCXE31B startup code
 //
-// Version : 120525
+// Version : 110825
 //*****************************************************************************
 //
 // Copyright 2016-2025 NXP
@@ -130,8 +130,8 @@ WEAK void Reserved57_IRQHandler(void);
 WEAK void SWT0_IRQHandler(void);
 WEAK void Reserved59_IRQHandler(void);
 WEAK void Reserved60_IRQHandler(void);
-WEAK void Reserved61_IRQHandler(void);
-WEAK void Reserved62_IRQHandler(void);
+WEAK void CTI_INT0_IRQHandler(void);
+WEAK void CTI_INT1_IRQHandler(void);
 WEAK void Reserved63_IRQHandler(void);
 WEAK void FLASH_0_IRQHandler(void);
 WEAK void FLASH_1_IRQHandler(void);
@@ -276,7 +276,7 @@ WEAK void Reserved203_IRQHandler(void);
 WEAK void Reserved204_IRQHandler(void);
 WEAK void FCCU_0_IRQHandler(void);
 WEAK void FCCU_1_IRQHandler(void);
-WEAK void Reserved207_IRQHandler(void);
+WEAK void STCU_IRQHandler(void);
 WEAK void MU0_B_TX_IRQHandler(void);
 WEAK void MU0_B_RX_IRQHandler(void);
 WEAK void MU0_B_IRQHandler(void);
@@ -354,8 +354,8 @@ void Reserved57_DriverIRQHandler(void) ALIAS(DefaultISR);
 void SWT0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved59_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved60_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved61_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved62_DriverIRQHandler(void) ALIAS(DefaultISR);
+void CTI_INT0_DriverIRQHandler(void) ALIAS(DefaultISR);
+void CTI_INT1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved63_DriverIRQHandler(void) ALIAS(DefaultISR);
 void FLASH_0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void FLASH_1_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -417,7 +417,7 @@ void EMAC_0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EMAC_1_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EMAC_2_DriverIRQHandler(void) ALIAS(DefaultISR);
 void EMAC_3_DriverIRQHandler(void) ALIAS(DefaultISR);
-void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t start, uint32_t end, uint32_t type) ALIAS(DefaultISR4);
+void FLEXCAN_DriverDataIRQHandler(uint32_t instance, uint32_t start, uint32_t end) ALIAS(DefaultISR3);
 void FLEXCAN_DriverEventIRQHandler(uint32_t instance) ALIAS(DefaultISR1);
 void Reserved141_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved142_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -463,7 +463,7 @@ void Reserved203_DriverIRQHandler(void) ALIAS(DefaultISR);
 void Reserved204_DriverIRQHandler(void) ALIAS(DefaultISR);
 void FCCU_0_DriverIRQHandler(void) ALIAS(DefaultISR);
 void FCCU_1_DriverIRQHandler(void) ALIAS(DefaultISR);
-void Reserved207_DriverIRQHandler(void) ALIAS(DefaultISR);
+void STCU_DriverIRQHandler(void) ALIAS(DefaultISR);
 void MU0_B_TX_DriverIRQHandler(void) ALIAS(DefaultISR);
 void MU0_B_RX_DriverIRQHandler(void) ALIAS(DefaultISR);
 void MU0_B_DriverIRQHandler(void) ALIAS(DefaultISR);
@@ -579,6 +579,8 @@ void (* const g_pfnVectors[])(void) = {
     ResetISR,                          // The reset handler
 #elif defined (__ICCARM__)
 extern void (* const __vector_table[])(void);
+/* The vector table is not needed for initialization. */
+extern void (*const __iar_init$$done[])(void) __attribute__((alias("__vector_table")));
 __attribute__ ((used, section(".intvec")))
 void (* const __vector_table[])(void) = {
     (void(*)())(uint32_t)__StackTop,   // The initial stack pointer
@@ -653,8 +655,8 @@ void (* const __isr_vector[])(void) = {
     SWT0_IRQHandler,               // 58 : Platform watchdog initial time-out
     Reserved59_IRQHandler,         // 59 : Reserved interrupt
     Reserved60_IRQHandler,         // 60 : Reserved interrupt
-    Reserved61_IRQHandler,         // 61 : Reserved interrupt
-    Reserved62_IRQHandler,         // 62 : Reserved interrupt
+    CTI_INT0_IRQHandler,           // 61 : CTI interrupt0
+    CTI_INT1_IRQHandler,           // 62 : CTI interrupt1
     Reserved63_IRQHandler,         // 63 : Reserved interrupt
     FLASH_0_IRQHandler,            // 64 : Program or erase operation is completed
     FLASH_1_IRQHandler,            // 65 : Main watchdog timeout interrupt
@@ -799,7 +801,7 @@ void (* const __isr_vector[])(void) = {
     Reserved204_IRQHandler,        // 204: Reserved interrupt
     FCCU_0_IRQHandler,             // 205: Interrupt request(ALARM state)
     FCCU_1_IRQHandler,             // 206: Interrupt request(miscellaneous conditions)
-    Reserved207_IRQHandler,        // 207: Reserved interrupt
+    STCU_IRQHandler,               // 207: LBIST and MBIST IRQ
     MU0_B_TX_IRQHandler,           // 208: ORed TX interrupt to MU-0
     MU0_B_RX_IRQHandler,           // 209: ORed RX interrupt to MU-0
     MU0_B_IRQHandler,              // 210: ORed general purpose interrupt request to MU-0
@@ -888,6 +890,14 @@ extern unsigned int __bss_section_table_end;
 #define SRAM_BASE_ADDR 0x20400000UL
 #define SRAM_END_ADDR  0x20407fffUL
 
+//  ITCM1 backdoor base and end addresses
+#define ITCM1_BASE_ADDR 0x11400000UL
+#define ITCM1_END_ADDR 0x11407fffUL
+
+// DTCM1 backdoor base and end addresses
+#define DTCM1_BASE_ADDR 0x21400000UL
+#define DTCM1_END_ADDR 0x2140ffffUL
+
 // patterns for initial ecc, heap and stack sections initialization
 #ifndef STARTUP_ECC_INITVALUE
 #define STARTUP_ECC_INITVALUE   0xFEEDFACECAFEBEEFULL
@@ -957,6 +967,34 @@ void Reset_Handler(void) {
                     "STMIA   R0!, {R2 - R5}      \n"
                     "CMP     R0, R1              \n"
                     "BCC.N   .loop03             \n"
+                    );
+#endif
+
+#if !defined(BYPASS_ECC_ITCM1_INIT)
+    __asm volatile ("LDR     R0, =0x11400000     \n"
+                    "LDR     R1, =0x11407FFF     \n"
+                    "LDR     R2, =0              \n"
+                    "LDR     R3, =0              \n"
+                    "LDR     R4, =0              \n"
+                    "LDR     R5, =0              \n"
+                    ".loop04:                    \n"
+                    "STMIA   R0!, {R2 - R5}      \n"
+                    "CMP     R0, R1              \n"
+                    "BCC.N   .loop04             \n"
+                    );
+#endif
+
+#if !defined(BYPASS_ECC_DTCM1_INIT)
+    __asm volatile ("LDR     R0, =0x21400000     \n"
+                    "LDR     R1, =0x2140FFFF     \n"
+                    "LDR     R2, =0              \n"
+                    "LDR     R3, =0              \n"
+                    "LDR     R4, =0              \n"
+                    "LDR     R5, =0              \n"
+                    ".loop05:                    \n"
+                    "STMIA   R0!, {R2 - R5}      \n"
+                    "CMP     R0, R1              \n"
+                    "BCC.N   .loop05             \n"
                     );
 #endif
 
@@ -1035,6 +1073,25 @@ void Reset_Handler(void) {
       pDest = (uint64_t*)SRAM_BASE_ADDR;
       while (pDest < (uint64_t*)SRAM_END_ADDR) { *pDest++ = STARTUP_ECC_INITVALUE; }
     }
+#endif
+
+#if !defined(BYPASS_ECC_ITCM1_INIT)
+    __asm volatile ("LDR     R0, =0x11400000     \n"
+                    "LDR     R1, =0x11407FFF     \n"
+                    "LDR     R2, =0              \n"
+                    "LDR     R3, =0              \n"
+                    "LDR     R4, =0              \n"
+                    "LDR     R5, =0              \n"
+                    "loopITCM1:                  \n"
+                    "STMIA   R0!, {R2 - R5}      \n"
+                    "CMP     R0, R1              \n"
+                    "BCC.N   loopITCM1           \n"
+                    );
+#endif
+
+#if !defined(BYPASS_ECC_DTCM1_INIT)
+    pDest = (uint64_t*)DTCM1_BASE_ADDR;
+    while (pDest < (uint64_t*)DTCM1_END_ADDR) { *pDest++ = STARTUP_ECC_INITVALUE; }
 #endif
 
     SystemInit();
@@ -1266,7 +1323,7 @@ WEAK_AV void DefaultISR1(uint32_t instance)
     }
 }
 
-WEAK_AV void DefaultISR4(uint32_t instance, uint32_t start, uint32_t end, uint32_t type)
+WEAK_AV void DefaultISR3(uint32_t instance, uint32_t start, uint32_t end)
 {
     while(1)
     {
@@ -1504,14 +1561,14 @@ WEAK void Reserved60_IRQHandler(void)
     Reserved60_DriverIRQHandler();
 }
 
-WEAK void Reserved61_IRQHandler(void)
+WEAK void CTI_INT0_IRQHandler(void)
 {
-    Reserved61_DriverIRQHandler();
+    CTI_INT0_DriverIRQHandler();
 }
 
-WEAK void Reserved62_IRQHandler(void)
+WEAK void CTI_INT1_IRQHandler(void)
 {
-    Reserved62_DriverIRQHandler();
+    CTI_INT1_DriverIRQHandler();
 }
 
 WEAK void Reserved63_IRQHandler(void)
@@ -1831,17 +1888,17 @@ WEAK void FlexCAN0_0_IRQHandler(void)
 
 WEAK void FlexCAN0_1_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(0U, 0U, 31U, 1U);
+    FLEXCAN_DriverDataIRQHandler(0U, 0U, 31U);
 }
 
 WEAK void FlexCAN0_2_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(0U, 32U, 63U, 0U);
+    FLEXCAN_DriverDataIRQHandler(0U, 32U, 63U);
 }
 
 WEAK void FlexCAN0_3_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(0U, 64U, 95U, 0U);
+    FLEXCAN_DriverDataIRQHandler(0U, 64U, 95U);
 }
 
 WEAK void FlexCAN1_0_IRQHandler(void)
@@ -1851,12 +1908,12 @@ WEAK void FlexCAN1_0_IRQHandler(void)
 
 WEAK void FlexCAN1_1_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(1U, 0U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(1U, 0U, 31U);
 }
 
 WEAK void FlexCAN1_2_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(1U, 32U, 63U, 0U);
+    FLEXCAN_DriverDataIRQHandler(1U, 32U, 63U);
 }
 
 WEAK void FlexCAN2_0_IRQHandler(void)
@@ -1866,12 +1923,12 @@ WEAK void FlexCAN2_0_IRQHandler(void)
 
 WEAK void FlexCAN2_1_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(2U, 0U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(2U, 0U, 31U);
 }
 
 WEAK void FlexCAN2_2_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(2U, 32U, 63U, 0U);
+    FLEXCAN_DriverDataIRQHandler(2U, 32U, 63U);
 }
 
 WEAK void FlexCAN3_0_IRQHandler(void)
@@ -1881,7 +1938,7 @@ WEAK void FlexCAN3_0_IRQHandler(void)
 
 WEAK void FlexCAN3_1_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(3U, 0U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(3U, 0U, 31U);
 }
 
 WEAK void FlexCAN4_0_IRQHandler(void)
@@ -1891,7 +1948,7 @@ WEAK void FlexCAN4_0_IRQHandler(void)
 
 WEAK void FlexCAN4_1_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(4U, 0U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(4U, 0U, 31U);
 }
 
 WEAK void FlexCAN5_0_IRQHandler(void)
@@ -1901,7 +1958,7 @@ WEAK void FlexCAN5_0_IRQHandler(void)
 
 WEAK void FlexCAN5_1_IRQHandler(void)
 {
-    FLEXCAN_DriverDataIRQHandler(5U, 0U, 31U, 0U);
+    FLEXCAN_DriverDataIRQHandler(5U, 0U, 31U);
 }
 
 WEAK void Reserved141_IRQHandler(void)
@@ -2234,9 +2291,9 @@ WEAK void FCCU_1_IRQHandler(void)
     FCCU_1_DriverIRQHandler();
 }
 
-WEAK void Reserved207_IRQHandler(void)
+WEAK void STCU_IRQHandler(void)
 {
-    Reserved207_DriverIRQHandler();
+    STCU_DriverIRQHandler();
 }
 
 WEAK void MU0_B_TX_IRQHandler(void)

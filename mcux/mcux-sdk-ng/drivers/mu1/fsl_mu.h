@@ -1,6 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
- * All rights reserved.
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -52,6 +51,29 @@
 /* General Purpose Interrupts count. */
 #ifndef FSL_FEATURE_MU_GPI_COUNT
 #define FSL_FEATURE_MU_GPI_COUNT 4U
+#endif
+
+/*!
+ * @brief Maximum polling iterations for MU waiting loops
+ *
+ * This parameter defines the maximum number of iterations for any polling loop
+ * in the MU code before timing out and returning an error.
+ *
+ * It applies to all waiting loops in MU driver, such as waiting for TX register
+ * to be empty or waiting for RX register to be full.
+ *
+ * This is a count of loop iterations, not a time-based value.
+ *
+ * If defined as 0, polling loops will continue indefinitely until their exit condition
+ * is met, which could potentially cause the system to hang if a core becomes
+ * unresponsive.
+ */
+#ifndef MU1_BUSY_POLL_COUNT
+    #ifdef CONFIG_MU1_BUSY_POLL_COUNT
+        #define MU1_BUSY_POLL_COUNT CONFIG_MU1_BUSY_POLL_COUNT
+    #else
+        #define MU1_BUSY_POLL_COUNT 0U
+    #endif
 #endif
 
 /*!
@@ -416,12 +438,18 @@ static inline void MU_SendMsgNonBlocking(MU_Type *base, uint32_t regIndex, uint3
  * @brief Blocks to send a message.
  *
  * This function waits until the TX register is empty and sends the message.
+ * If MU1_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and returns kStatus_Timeout.
  *
  * @param base MU peripheral base address.
- * @param regIndex  MU message register, see @ref mu_msg_reg_index_t.
+ * @param regIndex MU message register, see @ref mu_msg_reg_index_t.
  * @param msg      Message to send.
+ *
+ * @return status_t
+ * @retval kStatus_Success Message sent successfully.
+ * @retval kStatus_Timeout Timeout occurred while waiting for TX register to be empty.
  */
-void MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg);
+status_t MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg);
 
 /*!
  * @brief Reads a message from the RX register.
@@ -452,12 +480,47 @@ static inline uint32_t MU_ReceiveMsgNonBlocking(MU_Type *base, uint32_t regIndex
 }
 
 /*!
- * @brief Blocks to receive a message.
+ * @brief Blocks to receive a message with timeout protection.
  *
  * This function waits until the RX register is full and receives the message.
+ * If MU_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return kStatus_Timeout.
+ *
+ * This function provides the same blocking behavior as MU_ReceiveMsg() but
+ * with additional timeout protection to prevent system hangs if the other
+ * core becomes unresponsive or if hardware issues occur.
+ *
+ * @note Both MU_ReceiveMsg() and MU_ReceiveMsgTimeout() are blocking functions.
+ * The difference is that this function includes timeout protection while
+ * MU_ReceiveMsg() waits indefinitely.
  *
  * @param base MU peripheral base address.
- * @param regIndex  MU message register, see @ref mu_msg_reg_index_t
+ * @param regIndex RX register index, see @ref mu_msg_reg_index_t.
+ * @param readValue Pointer to store the received message.
+ *
+ * @return status_t
+ * @retval kStatus_Success Message received successfully.
+ * @retval kStatus_InvalidArgument Invalid readValue pointer.
+ * @retval kStatus_Timeout Timeout occurred while waiting for RX register to be full.
+ */
+status_t MU_ReceiveMsgTimeout(MU_Type *base, uint32_t regIndex, uint32_t *readValue);
+
+/*!
+ * @brief Blocks to receive a message (infinite wait, no timeout protection).
+ *
+ * This function waits until the RX register is full and receives the message.
+ * This function will wait indefinitely until a message is received.
+ *
+ * @note Both MU_ReceiveMsg() and MU_ReceiveMsgTimeout() are blocking functions.
+ * The difference is that MU_ReceiveMsgTimeout() includes timeout protection
+ * while this function waits indefinitely.
+ *
+ * @warning This function does not include timeout protection and may cause
+ * system hangs if the other core becomes unresponsive. For applications
+ * requiring timeout protection, use MU_ReceiveMsgTimeout() instead.
+ *
+ * @param base MU peripheral base address.
+ * @param regIndex RX register index, see @ref mu_msg_reg_index_t.
  * @return The received message.
  */
 uint32_t MU_ReceiveMsg(MU_Type *base, uint32_t regIndex);
@@ -496,7 +559,7 @@ static inline void MU_SetFlagsNonBlocking(MU_Type *base, uint32_t flags)
 }
 
 /*!
- * @brief Blocks setting the 3-bit MU flags reflect on the other MU side.
+ * brief Blocks setting the 3-bit MU flags reflect on the other MU side.
  *
  * This function blocks setting the 3-bit MU flags. Every time the 3-bit MU flags are changed,
  * the status flag \c kMU_FlagsUpdatingFlag asserts indicating the 3-bit MU flags are
@@ -505,10 +568,17 @@ static inline void MU_SetFlagsNonBlocking(MU_Type *base, uint32_t flags)
  * the flags cannot be changed. This function waits for the MU status flag
  * \c kMU_FlagsUpdatingFlag cleared and sets the 3-bit MU flags.
  *
+ * If MU1_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return kStatus_Timeout.
+ *
  * @param base MU peripheral base address.
  * @param flags The 3-bit MU flags to set.
+ *
+ * return status_t
+ * retval kStatus_Success Flags were set successfully.
+ * retval kStatus_Timeout Timeout occurred while waiting for flags to update.
  */
-void MU_SetFlags(MU_Type *base, uint32_t flags);
+status_t MU_SetFlags(MU_Type *base, uint32_t flags);
 
 /*!
  * @brief Gets the current value of the 3-bit MU flags set by the other side.
@@ -1033,15 +1103,37 @@ void MU_HoldOtherCoreReset(MU_Type *base);
  * recommended to interrupt processor B, because this function may affect the
  * ongoing processor B programs.
  *
+ * If MU1_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations if waiting for the other side
+ * to come out of reset takes too long.
+ *
  * @param base MU peripheral base address.
+ * @return status_t
+ * @retval kStatus_Success The MU was reset successfully.
+ * @retval kStatus_Timeout Timeout occurred while waiting for the other side to come out of reset.
+ *
+ * @note For some platforms, only MU side A could use this function, check
+ * reference manual for details.
  */
-static inline void MU_ResetBothSides(MU_Type *base)
+static inline status_t MU_ResetBothSides(MU_Type *base)
 {
     base->CR |= MU_CR_MUR_MASK;
 
+#if MU1_BUSY_POLL_COUNT
+    uint32_t poll_count = MU1_BUSY_POLL_COUNT;
+#endif /* MU1_BUSY_POLL_COUNT */
+
     while (0U != (base->SR & MU_SR_MURS_MASK))
     {
+#if MU1_BUSY_POLL_COUNT
+        if ((--poll_count) == 0u)
+        {
+            return kStatus_Timeout;
+        }
+#endif /* MU1_BUSY_POLL_COUNT */
     }
+
+    return kStatus_Success;
 }
 
 #if !(defined(FSL_FEATURE_MU_NO_CLKE) && (0 != FSL_FEATURE_MU_NO_CLKE))
@@ -1080,6 +1172,10 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  * This function could be used together with MU_BootOtherCore to control the
  * other core reset workflow.
  *
+ * If MU1_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * after the specified number of polling iterations and return kStatus_Timeout
+ * if waiting for the other core to enter or exit reset takes too long.
+ *
  * Example 1: Reset the other core, and no hold reset
  * @code
  * MU_HardwareResetOtherCore(MU_A, true, false, bootMode);
@@ -1087,10 +1183,12 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  * In this example, the core at MU side B will reset with the specified boot mode.
  *
  * Example 2: Reset the other core and hold it, then boot the other core later.
- * @code
  *  Here the other core enters reset, and the reset is hold
+ * @code
  * MU_HardwareResetOtherCore(MU_A, true, true, modeDontCare);
+ * @endcode
  *  Current core boot the other core when necessary.
+ * @code
  * MU_BootOtherCore(MU_A, bootMode);
  * @endcode
  *
@@ -1103,20 +1201,24 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  * defined as 0.
  *
  * @param base MU peripheral base address.
- * @param waitReset Wait the other core enters reset. Only work when there is CSSR0[RAIP]
+ * @param waitReset Wait the other core enters reset. Only work when there is CSSR0[RAIP].
  *                    - true: Wait until the other core enters reset, if the other
  *                      core has masked the hardware reset, then this function will
  *                      be blocked.
  *                    - false: Don't wait the reset.
- * @param holdReset Hold the other core reset or not. Only work when there is CCR0[RSTH]
+ * @param holdReset Hold the other core reset or not. Only work when there is CCR0[RSTH].
  *                    - true: Hold the other core in reset, this function returns
  *                      directly when the other core enters reset.
  *                    - false: Don't hold the other core in reset, this function
  *                      waits until the other core out of reset.
  * @param bootMode Boot mode of the other core, if @p holdReset is true, this
  *                 parameter is useless.
+ *
+ * @return status_t
+ * @retval kStatus_Success The other core was reset successfully.
+ * @retval kStatus_Timeout Timeout occurred while waiting for the other core to enter or exit reset.
  */
-void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu_core_boot_mode_t bootMode);
+status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu_core_boot_mode_t bootMode);
 #endif /* FSL_FEATURE_MU_HAS_HR */
 
 #if (defined(FSL_FEATURE_MU_HAS_HRM) && FSL_FEATURE_MU_HAS_HRM)

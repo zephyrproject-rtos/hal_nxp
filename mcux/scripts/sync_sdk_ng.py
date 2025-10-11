@@ -12,11 +12,19 @@ from functools import partial
 
 def should_ignore(name):
     name_lower = name.lower()
-    ignored_names = {'.git', '.gitignore', 'doc', 'docs', 'doxygen', 'Doxygen'}
-    
+    # Ignore by exact name (mostly directories and control files)
+    ignored_names = {'.git', '.gitignore', 'doc', 'docs', 'doxygen'}
+    # Ignore by file extension (binary/artifact files)
+    ignored_exts = ('.a', '.o', '.d', '.elf', '.bin', '.hex', '.img', '.lib',
+                    '.dll', '.exe', '.pdb', '.map')
+
     if name_lower in ignored_names:
         return True
-    if name_lower.startswith('kconfig') or name_lower == 'kconfig':
+    # Ignore any Kconfig files/dirs
+    if name_lower.startswith('kconfig'):
+        return True
+    # Ignore known binary/artifact extensions
+    if name_lower.endswith(ignored_exts):
         return True
     return False
 
@@ -125,7 +133,14 @@ def copy_components(src_sdk, dest_root):
             continue
             
         if os.path.isdir(src):
-            copy_filtered_files(src, dest, skip_empty=True)
+            # Exclude specific subdirectories when copying certain components
+            dir_ignore = None
+            if comp_path == 'conn_fwloader':
+                # Do not copy the 'script' directory directly under components/conn_fwloader
+                def dir_ignore(dirname, parent_path, base=src):
+                    return dirname.lower() == 'script' and os.path.abspath(parent_path) == os.path.abspath(base)
+
+            copy_filtered_files(src, dest, dir_ignore_func=dir_ignore, skip_empty=True)
         else:
             print(f"  Warning: Component is not a directory - {src}")
     
@@ -203,10 +218,10 @@ def main():
     parser = argparse.ArgumentParser(description='MCUx SDK SYNC TOOL')
     parser.add_argument('--mcuxsdk_dir', required=True, help='mcux sdk source dir')
     parser.add_argument('--copy_module', nargs='*', choices=[
-        'arch', 'drivers', 'components',
-        'middleware/usb', 'devices/arch', 'devices/i.MX',
-        'devices/Kinetis', 'devices/LPC', 'devices/MCX',
-        'devices/RT', 'devices/Wireless', 'cmake_extension'
+        'arch', 'devices/arch', 'cmake_extension',
+        'drivers', 'components', 'middleware/usb',
+        'devices/i.MX', 'devices/Kinetis', 'devices/LPC',
+        'devices/MCX', 'devices/RT', 'devices/Wireless',
     ], help='Please select the module to copy (default sync all modules)')
     
     args = parser.parse_args()
@@ -216,10 +231,10 @@ def main():
     os.makedirs(dest_root, exist_ok=True)
     
     all_modules = [
-        'arch', 'drivers', 'components',
-        'middleware/usb', 'devices/arch', 'devices/i.MX',
-        'devices/Kinetis', 'devices/LPC', 'devices/MCX',
-        'devices/RT', 'devices/Wireless', 'cmake_extension'
+        'arch', 'devices/arch', 'cmake_extension',
+        'drivers', 'components', 'middleware/usb',
+        'devices/i.MX', 'devices/Kinetis', 'devices/LPC',
+        'devices/MCX', 'devices/RT', 'devices/Wireless',
     ]
     
     selected_modules = args.copy_module if args.copy_module else all_modules
@@ -227,11 +242,11 @@ def main():
     
     module_actions = {
         'arch': copy_arch,
+        'devices/arch': copy_device_arch,
+        'cmake_extension': copy_cmake_extension,
         'drivers': copy_drivers,
         'components': copy_components,
         'middleware/usb': copy_middleware_usb,
-        'cmake_extension': copy_cmake_extension,
-        'devices/arch': copy_device_arch,
         'devices/i.MX': partial(copy_device_family, 'i.MX'),
         'devices/Kinetis': partial(copy_device_family, 'Kinetis'),
         'devices/LPC': partial(copy_device_family, 'LPC'),

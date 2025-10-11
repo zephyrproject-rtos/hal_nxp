@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXE31 RM Rev1
-**     Version:             rev. 0.1, 2024-11-19
-**     Build:               b250512
+**     Reference manual:    MCXE31 RM Rev2
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250811
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -27,6 +27,8 @@
 **     Revisions:
 **     - rev. 0.1 (2024-11-19)
 **         Initial version.
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
@@ -34,7 +36,7 @@
 /*!
  * @file MCXE315
  * @version 1.0
- * @date 2025-05-12
+ * @date 2025-08-11
  * @brief Device specific configuration file for MCXE315 (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -50,6 +52,10 @@
 #endif
 #define DEFAULT_SYSTEM_CLOCK 48000000U
 #define CLK_FIRC_CLOCK_FREQ  48000000U /**< FIRC clock frequency */
+
+#ifndef DISABLE_WDOG
+  #define DISABLE_WDOG  1
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -11,7 +11,7 @@
 **
 **     Reference manual:    RW61X User manual Rev. 0.95, June 2022
 **     Version:             rev. 3.0, 2025-04-07
-**     Build:               b250519
+**     Build:               b250619
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RW610
@@ -1222,35 +1222,35 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (3)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/* FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                    { {0x18000000u, 0x38000000u, 0x58000000u} }
-#define FlexSPI_AMBA_BASE_ARRAY_NS                 { {0x08000000u, 0x28000000u, 0x48000000u} }
-/* FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                     { {0x1FFFFFFFu, 0x3FFFFFFFu, 0x5FFFFFFFu} }
-#define FlexSPI_AMBA_END_ARRAY_NS                  { {0x0FFFFFFFu, 0x2FFFFFFFu, 0x4FFFFFFFu} }
-/** FlexSPI AMBA Cache0 address. */
-#define FlexSPI_AMBA_PC_CACHE_BASE                 (0x18000000u)
-/** FlexSPI AMBA Cache1 address. */
-#define FlexSPI_AMBA_PS_CACHE_BASE                 (0x38000000u)
-/** FlexSPI AMBA Non-Cache address. */
-#define FlexSPI_AMBA_PS_NCACHE_BASE                (0x58000000u)
-/** FlexSPI AMBA Cache0 address */
-#define FlexSPI_AMBA_PC_CACHE_BASE_NS              (0x08000000u)
-/** FlexSPI AMBA Cache1 address */
-#define FlexSPI_AMBA_PS_CACHE_BASE_NS              (0x28000000u)
-/** FlexSPI AMBA Non-Cache address */
-#define FlexSPI_AMBA_PS_NCACHE_BASE_NS             (0x48000000u)
+  /* FlexSPI AMBA base address array. */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x18000000u, 0x38000000u, 0x58000000u} }
+  #define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x08000000u, 0x28000000u, 0x48000000u} }
+  /* FlexSPI AMBA end address array. */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x1FFFFFFFu, 0x3FFFFFFFu, 0x5FFFFFFFu} }
+  #define FlexSPI_AMBA_END_ARRAY_NS                { {0x0FFFFFFFu, 0x2FFFFFFFu, 0x4FFFFFFFu} }
+  /** FlexSPI AMBA Cache0 address. */
+  #define FlexSPI_AMBA_PC_CACHE_BASE               (0x18000000u)
+  /** FlexSPI AMBA Cache1 address. */
+  #define FlexSPI_AMBA_PS_CACHE_BASE               (0x38000000u)
+  /** FlexSPI AMBA Non-Cache address. */
+  #define FlexSPI_AMBA_PS_NCACHE_BASE              (0x58000000u)
+  /** FlexSPI AMBA Cache0 address */
+  #define FlexSPI_AMBA_PC_CACHE_BASE_NS            (0x08000000u)
+  /** FlexSPI AMBA Cache1 address */
+  #define FlexSPI_AMBA_PS_CACHE_BASE_NS            (0x28000000u)
+  /** FlexSPI AMBA Non-Cache address */
+  #define FlexSPI_AMBA_PS_NCACHE_BASE_NS           (0x48000000u)
 #else
-/* FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                    { {0x08000000u, 0x28000000u, 0x48000000u} }
-/* FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                     { {0x0FFFFFFFu, 0x2FFFFFFFu, 0x4FFFFFFFu} }
-/** FlexSPI AMBA Cache0 address. */
-#define FlexSPI_AMBA_PC_CACHE_BASE                 (0x08000000u)
-/** FlexSPI AMBA Cache1 address. */
-#define FlexSPI_AMBA_PS_CACHE_BASE                 (0x28000000u)
-/** FlexSPI AMBA Non-cache address. */
-#define FlexSPI_AMBA_PS_NCACHE_BASE                (0x48000000u)
+  /* FlexSPI AMBA base address array. */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x08000000u, 0x28000000u, 0x48000000u} }
+  /* FlexSPI AMBA end address array. */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x0FFFFFFFu, 0x2FFFFFFFu, 0x4FFFFFFFu} }
+  /** FlexSPI AMBA Cache0 address. */
+  #define FlexSPI_AMBA_PC_CACHE_BASE               (0x08000000u)
+  /** FlexSPI AMBA Cache1 address. */
+  #define FlexSPI_AMBA_PS_CACHE_BASE               (0x28000000u)
+  /** FlexSPI AMBA Non-cache address. */
+  #define FlexSPI_AMBA_PS_NCACHE_BASE              (0x48000000u)
 #endif
 
 

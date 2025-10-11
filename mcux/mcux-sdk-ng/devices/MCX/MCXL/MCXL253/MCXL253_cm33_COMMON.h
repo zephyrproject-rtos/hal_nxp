@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXL25xRM DraftF
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250422
+**     Reference manual:    MCXL25xRM DraftH
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250812
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL253_cm33
@@ -23,8 +23,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -32,7 +32,7 @@
 /*!
  * @file MCXL253_cm33_COMMON.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for MCXL253_cm33
  *
  * CMSIS Peripheral Access Layer for MCXL253_cm33
@@ -104,7 +104,7 @@ typedef enum IRQn {
   UTICK0_IRQn                  = 59,               /**< Micro-Tick Timer interrupt */
   WWDT0_IRQn                   = 60,               /**< Windowed Watchdog Timer 0 interrupt */
   ADC0_IRQn                    = 62,               /**< Analog-to-Digital Converter interrupt */
-  CMP0_IRQn                    = 64,               /**< Comparator interrupt */
+  ACMP0_IRQn                   = 64,               /**< Comparator interrupt */
   GPIO10_IRQn                  = 71,               /**< General Purpose Input/Output 1 interrupt 0 */
   GPIO11_IRQn                  = 72,               /**< General Purpose Input/Output 1 interrupt 1 */
   GPIO20_IRQn                  = 73,               /**< General Purpose Input/Output 2 interrupt 0 */
@@ -140,10 +140,10 @@ typedef enum IRQn {
   TMR1_AON_IRQn                = 152,              /**< ORed QTMR Interrupts */
   LCSENSE_IRQn                 = 154,              /**< LCSense Fault/Tamper Interrupt */
   LPTMR_AON_IRQn               = 155,              /**< Low Power Timer 0 interrupt */
-  CMP0_AON_IRQn                = 157,              /**< Comparator interrupt */
+  ACMP0_AON_IRQn               = 157,              /**< Comparator interrupt */
   ADVC_IRQn                    = 158,              /**< ADVC_2.0 Controller Interrupt */
-  SGLCD_FRAME_AON_IRQn         = 160,              /**< Frame Update Interrupt */
-  SGLCD_FFAULT_AON_IRQn        = 161               /**< Fault Detect Interrupt */
+  SLCD_FRAME_AON_IRQn          = 160,              /**< Frame Update Interrupt */
+  SLCD_FFAULT_AON_IRQn         = 161               /**< Fault Detect Interrupt */
 } IRQn_Type;
 
 /*!
@@ -700,6 +700,8 @@ typedef enum IRQn {
   /** Array initializer of FREQME peripheral base pointers */
   #define FREQME_BASE_PTRS                         { FREQME0 }
 #endif
+/** Interrupt vectors for the FREQME peripheral type */
+#define FREQME_IRQS                              { FREQME0_IRQn }
 
 /* GLIKEY - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -948,46 +950,46 @@ typedef enum IRQn {
 
 /* LPCMP - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral AON__CMP0 base address */
-  #define AON__CMP0_BASE                           (0xB0086000u)
-  /** Peripheral AON__CMP0 base address */
-  #define AON__CMP0_BASE_NS                        (0xA0086000u)
-  /** Peripheral AON__CMP0 base pointer */
-  #define AON__CMP0                                ((LPCMP_Type *)AON__CMP0_BASE)
-  /** Peripheral AON__CMP0 base pointer */
-  #define AON__CMP0_NS                             ((LPCMP_Type *)AON__CMP0_BASE_NS)
-  /** Peripheral CMP0 base address */
-  #define CMP0_BASE                                (0x500B1000u)
-  /** Peripheral CMP0 base address */
-  #define CMP0_BASE_NS                             (0x400B1000u)
-  /** Peripheral CMP0 base pointer */
-  #define CMP0                                     ((LPCMP_Type *)CMP0_BASE)
-  /** Peripheral CMP0 base pointer */
-  #define CMP0_NS                                  ((LPCMP_Type *)CMP0_BASE_NS)
+  /** Peripheral ACMP0 base address */
+  #define ACMP0_BASE                               (0x500B1000u)
+  /** Peripheral ACMP0 base address */
+  #define ACMP0_BASE_NS                            (0x400B1000u)
+  /** Peripheral ACMP0 base pointer */
+  #define ACMP0                                    ((LPCMP_Type *)ACMP0_BASE)
+  /** Peripheral ACMP0 base pointer */
+  #define ACMP0_NS                                 ((LPCMP_Type *)ACMP0_BASE_NS)
+  /** Peripheral AON__ACMP0 base address */
+  #define AON__ACMP0_BASE                          (0xB0086000u)
+  /** Peripheral AON__ACMP0 base address */
+  #define AON__ACMP0_BASE_NS                       (0xA0086000u)
+  /** Peripheral AON__ACMP0 base pointer */
+  #define AON__ACMP0                               ((LPCMP_Type *)AON__ACMP0_BASE)
+  /** Peripheral AON__ACMP0 base pointer */
+  #define AON__ACMP0_NS                            ((LPCMP_Type *)AON__ACMP0_BASE_NS)
   /** Array initializer of LPCMP peripheral base addresses */
-  #define LPCMP_BASE_ADDRS                         { AON__CMP0_BASE, CMP0_BASE }
+  #define LPCMP_BASE_ADDRS                         { ACMP0_BASE, AON__ACMP0_BASE }
   /** Array initializer of LPCMP peripheral base pointers */
-  #define LPCMP_BASE_PTRS                          { AON__CMP0, CMP0 }
+  #define LPCMP_BASE_PTRS                          { ACMP0, AON__ACMP0 }
   /** Array initializer of LPCMP peripheral base addresses */
-  #define LPCMP_BASE_ADDRS_NS                      { AON__CMP0_BASE_NS, CMP0_BASE_NS }
+  #define LPCMP_BASE_ADDRS_NS                      { ACMP0_BASE_NS, AON__ACMP0_BASE_NS }
   /** Array initializer of LPCMP peripheral base pointers */
-  #define LPCMP_BASE_PTRS_NS                       { AON__CMP0_NS, CMP0_NS }
+  #define LPCMP_BASE_PTRS_NS                       { ACMP0_NS, AON__ACMP0_NS }
 #else
-  /** Peripheral AON__CMP0 base address */
-  #define AON__CMP0_BASE                           (0xA0086000u)
-  /** Peripheral AON__CMP0 base pointer */
-  #define AON__CMP0                                ((LPCMP_Type *)AON__CMP0_BASE)
-  /** Peripheral CMP0 base address */
-  #define CMP0_BASE                                (0x400B1000u)
-  /** Peripheral CMP0 base pointer */
-  #define CMP0                                     ((LPCMP_Type *)CMP0_BASE)
+  /** Peripheral ACMP0 base address */
+  #define ACMP0_BASE                               (0x400B1000u)
+  /** Peripheral ACMP0 base pointer */
+  #define ACMP0                                    ((LPCMP_Type *)ACMP0_BASE)
+  /** Peripheral AON__ACMP0 base address */
+  #define AON__ACMP0_BASE                          (0xA0086000u)
+  /** Peripheral AON__ACMP0 base pointer */
+  #define AON__ACMP0                               ((LPCMP_Type *)AON__ACMP0_BASE)
   /** Array initializer of LPCMP peripheral base addresses */
-  #define LPCMP_BASE_ADDRS                         { AON__CMP0_BASE, CMP0_BASE }
+  #define LPCMP_BASE_ADDRS                         { ACMP0_BASE, AON__ACMP0_BASE }
   /** Array initializer of LPCMP peripheral base pointers */
-  #define LPCMP_BASE_PTRS                          { AON__CMP0, CMP0 }
+  #define LPCMP_BASE_PTRS                          { ACMP0, AON__ACMP0 }
 #endif
 /** Interrupt vectors for the LPCMP peripheral type */
-#define LPCMP_IRQS                               { NotAvail_IRQn, CMP0_IRQn }
+#define LPCMP_IRQS                               { ACMP0_IRQn, ACMP0_AON_IRQn }
 
 /* LPI2C - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1171,35 +1173,6 @@ typedef enum IRQn {
 /** Interrupt vectors for the LPUART peripheral type */
 #define LPUART_RX_TX_IRQS                        { LPUART0_IRQn, LPUART1_IRQn, LPUART0_AON_IRQn }
 
-/* MBC - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral MBC0 base address */
-  #define MBC0_BASE                                (0x5008E000u)
-  /** Peripheral MBC0 base address */
-  #define MBC0_BASE_NS                             (0x4008E000u)
-  /** Peripheral MBC0 base pointer */
-  #define MBC0                                     ((MBC_Type *)MBC0_BASE)
-  /** Peripheral MBC0 base pointer */
-  #define MBC0_NS                                  ((MBC_Type *)MBC0_BASE_NS)
-  /** Array initializer of MBC peripheral base addresses */
-  #define MBC_BASE_ADDRS                           { MBC0_BASE }
-  /** Array initializer of MBC peripheral base pointers */
-  #define MBC_BASE_PTRS                            { MBC0 }
-  /** Array initializer of MBC peripheral base addresses */
-  #define MBC_BASE_ADDRS_NS                        { MBC0_BASE_NS }
-  /** Array initializer of MBC peripheral base pointers */
-  #define MBC_BASE_PTRS_NS                         { MBC0_NS }
-#else
-  /** Peripheral MBC0 base address */
-  #define MBC0_BASE                                (0x4008E000u)
-  /** Peripheral MBC0 base pointer */
-  #define MBC0                                     ((MBC_Type *)MBC0_BASE)
-  /** Array initializer of MBC peripheral base addresses */
-  #define MBC_BASE_ADDRS                           { MBC0_BASE }
-  /** Array initializer of MBC peripheral base pointers */
-  #define MBC_BASE_PTRS                            { MBC0 }
-#endif
-
 /* MRCC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral MRCC base address */
@@ -1291,31 +1264,31 @@ typedef enum IRQn {
 
 /* PKC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral PKC0__PKC base address */
-  #define PKC0__PKC_BASE                           (0x500D0000u)
-  /** Peripheral PKC0__PKC base address */
-  #define PKC0__PKC_BASE_NS                        (0x400D0000u)
-  /** Peripheral PKC0__PKC base pointer */
-  #define PKC0__PKC                                ((PKC_Type *)PKC0__PKC_BASE)
-  /** Peripheral PKC0__PKC base pointer */
-  #define PKC0__PKC_NS                             ((PKC_Type *)PKC0__PKC_BASE_NS)
+  /** Peripheral PKC0 base address */
+  #define PKC0_BASE                                (0x500D0000u)
+  /** Peripheral PKC0 base address */
+  #define PKC0_BASE_NS                             (0x400D0000u)
+  /** Peripheral PKC0 base pointer */
+  #define PKC0                                     ((PKC_Type *)PKC0_BASE)
+  /** Peripheral PKC0 base pointer */
+  #define PKC0_NS                                  ((PKC_Type *)PKC0_BASE_NS)
   /** Array initializer of PKC peripheral base addresses */
-  #define PKC_BASE_ADDRS                           { PKC0__PKC_BASE }
+  #define PKC_BASE_ADDRS                           { PKC0_BASE }
   /** Array initializer of PKC peripheral base pointers */
-  #define PKC_BASE_PTRS                            { PKC0__PKC }
+  #define PKC_BASE_PTRS                            { PKC0 }
   /** Array initializer of PKC peripheral base addresses */
-  #define PKC_BASE_ADDRS_NS                        { PKC0__PKC_BASE_NS }
+  #define PKC_BASE_ADDRS_NS                        { PKC0_BASE_NS }
   /** Array initializer of PKC peripheral base pointers */
-  #define PKC_BASE_PTRS_NS                         { PKC0__PKC_NS }
+  #define PKC_BASE_PTRS_NS                         { PKC0_NS }
 #else
-  /** Peripheral PKC0__PKC base address */
-  #define PKC0__PKC_BASE                           (0x400D0000u)
-  /** Peripheral PKC0__PKC base pointer */
-  #define PKC0__PKC                                ((PKC_Type *)PKC0__PKC_BASE)
+  /** Peripheral PKC0 base address */
+  #define PKC0_BASE                                (0x400D0000u)
+  /** Peripheral PKC0 base pointer */
+  #define PKC0                                     ((PKC_Type *)PKC0_BASE)
   /** Array initializer of PKC peripheral base addresses */
-  #define PKC_BASE_ADDRS                           { PKC0__PKC_BASE }
+  #define PKC_BASE_ADDRS                           { PKC0_BASE }
   /** Array initializer of PKC peripheral base pointers */
-  #define PKC_BASE_PTRS                            { PKC0__PKC }
+  #define PKC_BASE_PTRS                            { PKC0 }
 #endif
 
 /* PMU - Peripheral instance base addresses */
@@ -1527,35 +1500,41 @@ typedef enum IRQn {
   /** Array initializer of SGLCD_CONTROL peripheral base pointers */
   #define SGLCD_CONTROL_BASE_PTRS                  { AON__SGLCD0_AON }
 #endif
+/** Interrupt vectors for the SGLCD */
+#define SGLCD_CONTROL_IRQS { SLCD_FRAME_AON_IRQn }
+
 
 /* SGLCD_FAULT_DETECT - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral SGLCD0_MAIN base address */
-  #define SGLCD0_MAIN_BASE                         (0x500C7000u)
-  /** Peripheral SGLCD0_MAIN base address */
-  #define SGLCD0_MAIN_BASE_NS                      (0x400C7000u)
-  /** Peripheral SGLCD0_MAIN base pointer */
-  #define SGLCD0_MAIN                              ((SGLCD_FAULT_DETECT_Type *)SGLCD0_MAIN_BASE)
-  /** Peripheral SGLCD0_MAIN base pointer */
-  #define SGLCD0_MAIN_NS                           ((SGLCD_FAULT_DETECT_Type *)SGLCD0_MAIN_BASE_NS)
+  /** Peripheral SGLCD_FAULT_DETECT base address */
+  #define SGLCD_FAULT_DETECT_BASE                  (0x500C7000u)
+  /** Peripheral SGLCD_FAULT_DETECT base address */
+  #define SGLCD_FAULT_DETECT_BASE_NS               (0x400C7000u)
+  /** Peripheral SGLCD_FAULT_DETECT base pointer */
+  #define SGLCD_FAULT_DETECT                       ((SGLCD_FAULT_DETECT_Type *)SGLCD_FAULT_DETECT_BASE)
+  /** Peripheral SGLCD_FAULT_DETECT base pointer */
+  #define SGLCD_FAULT_DETECT_NS                    ((SGLCD_FAULT_DETECT_Type *)SGLCD_FAULT_DETECT_BASE_NS)
   /** Array initializer of SGLCD_FAULT_DETECT peripheral base addresses */
-  #define SGLCD_FAULT_DETECT_BASE_ADDRS            { SGLCD0_MAIN_BASE }
+  #define SGLCD_FAULT_DETECT_BASE_ADDRS            { SGLCD_FAULT_DETECT_BASE }
   /** Array initializer of SGLCD_FAULT_DETECT peripheral base pointers */
-  #define SGLCD_FAULT_DETECT_BASE_PTRS             { SGLCD0_MAIN }
+  #define SGLCD_FAULT_DETECT_BASE_PTRS             { SGLCD_FAULT_DETECT }
   /** Array initializer of SGLCD_FAULT_DETECT peripheral base addresses */
-  #define SGLCD_FAULT_DETECT_BASE_ADDRS_NS         { SGLCD0_MAIN_BASE_NS }
+  #define SGLCD_FAULT_DETECT_BASE_ADDRS_NS         { SGLCD_FAULT_DETECT_BASE_NS }
   /** Array initializer of SGLCD_FAULT_DETECT peripheral base pointers */
-  #define SGLCD_FAULT_DETECT_BASE_PTRS_NS          { SGLCD0_MAIN_NS }
+  #define SGLCD_FAULT_DETECT_BASE_PTRS_NS          { SGLCD_FAULT_DETECT_NS }
 #else
-  /** Peripheral SGLCD0_MAIN base address */
-  #define SGLCD0_MAIN_BASE                         (0x400C7000u)
-  /** Peripheral SGLCD0_MAIN base pointer */
-  #define SGLCD0_MAIN                              ((SGLCD_FAULT_DETECT_Type *)SGLCD0_MAIN_BASE)
+  /** Peripheral SGLCD_FAULT_DETECT base address */
+  #define SGLCD_FAULT_DETECT_BASE                  (0x400C7000u)
+  /** Peripheral SGLCD_FAULT_DETECT base pointer */
+  #define SGLCD_FAULT_DETECT                       ((SGLCD_FAULT_DETECT_Type *)SGLCD_FAULT_DETECT_BASE)
   /** Array initializer of SGLCD_FAULT_DETECT peripheral base addresses */
-  #define SGLCD_FAULT_DETECT_BASE_ADDRS            { SGLCD0_MAIN_BASE }
+  #define SGLCD_FAULT_DETECT_BASE_ADDRS            { SGLCD_FAULT_DETECT_BASE }
   /** Array initializer of SGLCD_FAULT_DETECT peripheral base pointers */
-  #define SGLCD_FAULT_DETECT_BASE_PTRS             { SGLCD0_MAIN }
+  #define SGLCD_FAULT_DETECT_BASE_PTRS             { SGLCD_FAULT_DETECT }
 #endif
+/** Interrupt vectors for the SGLCD */
+#define SGLCD_FAULT_DETECT_IRQS { SLCD_FFAULT_AON_IRQn }
+
 
 /* SMM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1684,6 +1663,46 @@ typedef enum IRQn {
   /** Array initializer of TMR peripheral base pointers */
   #define TMR_BASE_PTRS                            { AON__TMR0, AON__TMR1 }
 #endif
+
+/* TRDC - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral MBC0 base address */
+  #define MBC0_BASE                                (0x5008E000u)
+  /** Peripheral MBC0 base address */
+  #define MBC0_BASE_NS                             (0x4008E000u)
+  /** Peripheral MBC0 base pointer */
+  #define MBC0                                     ((TRDC_Type *)MBC0_BASE)
+  /** Peripheral MBC0 base pointer */
+  #define MBC0_NS                                  ((TRDC_Type *)MBC0_BASE_NS)
+  /** Array initializer of TRDC peripheral base addresses */
+  #define TRDC_BASE_ADDRS                          { MBC0_BASE }
+  /** Array initializer of TRDC peripheral base pointers */
+  #define TRDC_BASE_PTRS                           { MBC0 }
+  /** Array initializer of TRDC peripheral base addresses */
+  #define TRDC_BASE_ADDRS_NS                       { MBC0_BASE_NS }
+  /** Array initializer of TRDC peripheral base pointers */
+  #define TRDC_BASE_PTRS_NS                        { MBC0_NS }
+#else
+  /** Peripheral MBC0 base address */
+  #define MBC0_BASE                                (0x4008E000u)
+  /** Peripheral MBC0 base pointer */
+  #define MBC0                                     ((TRDC_Type *)MBC0_BASE)
+  /** Array initializer of TRDC peripheral base addresses */
+  #define TRDC_BASE_ADDRS                          { MBC0_BASE }
+  /** Array initializer of TRDC peripheral base pointers */
+  #define TRDC_BASE_PTRS                           { MBC0 }
+#endif
+#define MBC0_MEMORY_CFG_WORD_COUNT {1,2,4,1}
+#define MBC1_MEMORY_CFG_WORD_COUNT {1,1,1,1}
+#define MBC2_MEMORY_CFG_WORD_COUNT {9,6,1,1}
+#define MBC3_MEMORY_CFG_WORD_COUNT {3,0,0,0}
+#define MBC_MEMORY_CFG_WORD_COUNT {MBC0_MEMORY_CFG_WORD_COUNT , MBC1_MEMORY_CFG_WORD_COUNT, MBC2_MEMORY_CFG_WORD_COUNT, MBC3_MEMORY_CFG_WORD_COUNT}
+#define MBC0_MEMORY_NSE_WORD_COUNT {1,1,1,1}
+#define MBC1_MEMORY_NSE_WORD_COUNT {1,1,1,1}
+#define MBC2_MEMORY_NSE_WORD_COUNT {3,2,1,1}
+#define MBC3_MEMORY_NSE_WORD_COUNT {1,0,0,0}
+#define MBC_MEMORY_NSE_WORD_COUNT {MBC0_MEMORY_NSE_WORD_COUNT , MBC1_MEMORY_NSE_WORD_COUNT, MBC2_MEMORY_NSE_WORD_COUNT, MBC3_MEMORY_NSE_WORD_COUNT}
+
 
 /* TRNG - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1888,3 +1907,4 @@ typedef enum IRQn {
 
 
 #endif  /* MCXL253_CM33_COMMON_H_ */
+

@@ -13,8 +13,8 @@
 **                          MCXL255VLL_cm0plus
 **                          MCXL255VLL_cm33
 **
-**     Version:             rev. 1.0, 2023-01-09
-**     Build:               b250520
+**     Version:             rev. 1.0, 2025-06-13
+**     Build:               b250723
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON_AON
@@ -27,8 +27,8 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2023-01-09)
-**         Generated based on Rev1 DraftI.
+**     - rev. 1.0 (2025-06-13)
+**         Generated based on Rev1 DraftH.
 **
 ** ###################################################################
 */
@@ -36,7 +36,7 @@
 /*!
  * @file PERI_SYSCON_AON.h
  * @version 1.0
- * @date 2023-01-09
+ * @date 2025-06-13
  * @brief CMSIS Peripheral Access Layer for SYSCON_AON
  *
  * CMSIS Peripheral Access Layer for SYSCON_AON
@@ -110,7 +110,7 @@ typedef struct {
        uint8_t RESERVED_1[4];
   __IO uint32_t CPU_SLEEP_SELECT;                  /**< CPU Sleep Select, offset: 0x1C */
   __IO uint32_t PULSE_CAP_ACMP_CLK_MUXSEL;         /**< CMP Pulse Capture Clock MUXSEL, offset: 0x20 */
-  __IO uint32_t PINMUXCLKCTRL;                     /**< Pinmux Clock Control, offset: 0x24 */
+  __IO uint32_t INPUTMUXCLKCTRL;                   /**< INPUTMUX Clock Control, offset: 0x24 */
   __IO uint32_t SYNC_EN_INPUTMUX_AON;              /**< Synchronization Enable INPUTMUX, offset: 0x28 */
        uint8_t RESERVED_2[4];
   __IO uint32_t IPG_DEBUG_ENABLE;                  /**< IPG Debug Enable, offset: 0x30 */
@@ -289,16 +289,16 @@ typedef struct {
 #define SYSCON_AON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_SHIFT)) & SYSCON_AON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_MASK)
 /*! @} */
 
-/*! @name PINMUXCLKCTRL - Pinmux Clock Control */
+/*! @name INPUTMUXCLKCTRL - INPUTMUX Clock Control */
 /*! @{ */
 
-#define SYSCON_AON_PINMUXCLKCTRL_PINMUX_CLK_CTRL_MASK (0x1U)
-#define SYSCON_AON_PINMUXCLKCTRL_PINMUX_CLK_CTRL_SHIFT (0U)
-/*! PINMUX_CLK_CTRL - This signal acts as a clock disable signal for pinmux clock
- *  0b0..Clock is not disabled
- *  0b1..Clock is disabled
+#define SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL_MASK (0x1U)
+#define SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL_SHIFT (0U)
+/*! INPUTMUX_CLK_CTRL - This signal acts as a clock enable/disable signal
+ *  0b0..Clock Enable
+ *  0b1..Clock Disable
  */
-#define SYSCON_AON_PINMUXCLKCTRL_PINMUX_CLK_CTRL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_PINMUXCLKCTRL_PINMUX_CLK_CTRL_SHIFT)) & SYSCON_AON_PINMUXCLKCTRL_PINMUX_CLK_CTRL_MASK)
+#define SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL_SHIFT)) & SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL_MASK)
 /*! @} */
 
 /*! @name SYNC_EN_INPUTMUX_AON - Synchronization Enable INPUTMUX */

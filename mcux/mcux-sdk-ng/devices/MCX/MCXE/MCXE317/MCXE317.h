@@ -3,14 +3,15 @@
 **     Processors:          MCXE317MPA
 **                          MCXE317MPB
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXE31 RM Rev1
-**     Version:             rev. 0.1, 2024-11-19
-**     Build:               b250512
+**     Reference manual:    MCXE31 RM Rev2
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250718
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXE317
@@ -25,14 +26,16 @@
 **     Revisions:
 **     - rev. 0.1 (2024-11-19)
 **         Initial version.
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MCXE317.h
- * @version 0.1
- * @date 2024-11-19
+ * @version 1.0
+ * @date 2025-07-18
  * @brief CMSIS Peripheral Access Layer for MCXE317
  *
  * CMSIS Peripheral Access Layer for MCXE317

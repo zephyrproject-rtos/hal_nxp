@@ -331,7 +331,7 @@ static inline void DCIF_ClearInterruptStatus(DCIF_Type *base, uint32_t mask)
  */
 static inline void DCIF_SetLayerPosition(DCIF_Type *base, uint8_t layerIndex, uint16_t posy, uint16_t posx)
 {
-    if (layerIndex == 0)
+    if (layerIndex == 0U)
     {
         base->CTRLDESC1_L0 =
             ((uint32_t)posx << DCIF_CTRLDESC1_L0_POSX_SHIFT) | ((uint32_t)posy << DCIF_CTRLDESC1_L0_POSY_SHIFT);
@@ -354,7 +354,7 @@ static inline void DCIF_SetLayerPosition(DCIF_Type *base, uint8_t layerIndex, ui
  */
 static inline void DCIF_SetLayerSize(DCIF_Type *base, uint8_t layerIndex, uint16_t width, uint16_t height)
 {
-    if (layerIndex == 0)
+    if (layerIndex == 0U)
     {
         base->CTRLDESC2_L0 =
             ((uint32_t)height << DCIF_CTRLDESC2_L0_HEIGHT_SHIFT) | ((uint32_t)width << DCIF_CTRLDESC2_L0_WIDTH_SHIFT);
@@ -386,7 +386,7 @@ void DCIF_SetLayerBufferConfig(DCIF_Type *base, uint8_t layerIndex, const dcif_b
  */
 static inline void DCIF_SetLayerBufferAddr(DCIF_Type *base, uint8_t layerIndex, uint32_t addr)
 {
-    if (layerIndex == 0)
+    if (layerIndex == 0U)
     {
         base->CTRLDESC4_L0 = DCIF_CTRLDESC4_L0_ADDR(addr);
     }
@@ -430,7 +430,7 @@ static inline void DCIF_EnableLayer(DCIF_Type *base, uint8_t layerIndex, bool en
  */
 static inline void DCIF_TriggerLayerShadowLoad(DCIF_Type *base, uint8_t layerIndex)
 {
-    if (layerIndex == 0)
+    if (layerIndex == 0U)
     {
         base->CTRLDESC0_L0 |= DCIF_CTRLDESC0_L0_SHADOW_LOAD_EN_MASK;
     }

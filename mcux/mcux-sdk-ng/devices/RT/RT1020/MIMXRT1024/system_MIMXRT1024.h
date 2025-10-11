@@ -13,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1024RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b250529
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -46,7 +46,7 @@
 /*!
  * @file MIMXRT1024
  * @version 1.0
- * @date 2025-05-21
+ * @date 2025-05-29
  * @brief Device specific configuration file for MIMXRT1024 (header file)
  *
  * Provides a system configuration function and a global variable that contains

@@ -31,6 +31,7 @@ typedef struct _endat3_dev
 enum {
 	kStatus_Endat3_FG_Hello_Failed = MAKE_STATUS(kStatusGroup_ENDAT3, 0),
 	kStatus_Endat3_FG_ECHO_Failed = MAKE_STATUS(kStatusGroup_ENDAT3, 0),
+	kStatus_Endat3_FG_RATE_Failed = MAKE_STATUS(kStatusGroup_ENDAT3, 0),
 	kStatus_Endat3_FG_Strobe_Error = MAKE_STATUS(kStatusGroup_ENDAT3, 1),
 	kStatus_Endat3_FG_Watchdog_Error = MAKE_STATUS(kStatusGroup_ENDAT3, 2),
 	kStatus_Endat3_FG_PHY_Error = MAKE_STATUS(kStatusGroup_ENDAT3, 3),
@@ -85,8 +86,14 @@ enum {
 };
 
 enum {
-	ENDAT3_RXTX_RATE_25MBPS = 0x0,
-	ENDAT3_RXTX_RATE_12_5MBPS,
+	ENDAT3_RXTX_RATE_12_5MBPS = 0x0,
+	ENDAT3_RXTX_RATE_25MBPS = 0x01
+};
+
+enum op_mode {
+	Point2Point,
+	Peer2Peer,
+	Broadcast
 };
 
 __PACKED_STRUCT HPF {
@@ -202,6 +209,15 @@ typedef struct _Endat3_res
 	struct LPF lpf[15];
 } endat3_rsp_t;
 
+typedef struct _Endat3_bg_req
+{
+	ENDAT3_Type *base;
+	uint8_t bus_addr;
+	uint8_t fg_strobes;
+	enum op_mode op;
+	uint32_t timeout_ms;
+} endat3_bg_req_t;
+
 #define MAX_MEMORY_AREA_SIZE	 0x100
 
 typedef struct {
@@ -236,7 +252,7 @@ typedef struct {
 #define ENDAT3_FG_DATA_HELLO  			0x2222
 #define ENDAT3_FG_DATA_RESET  			0xBBBB
 #define ENDAT3_FG_DATA_RATE_12_5MBPS  	0x0001
-#define ENDAT3_FG_DATA_RATE_25MBPS		0x0000
+#define ENDAT3_FG_DATA_RATE_25_MBPS		0x0000
 #define ENDAT3_FG_DATA_ClearF			0x0000
 #define ENDAT3_FG_DATA_ClearW			0x0001
 #define ENDAT3_FG_DATA_ClearREF			0x0002
@@ -272,7 +288,7 @@ typedef struct {
 #define ENDAT3_BG_OPCODE_AUTH			0x80
 #define ENDAT3_BG_OPCODE_PROTECT		0x81
 #define ENDAT3_BG_OPCODE_SETPASS		0x83
-#define ENDAT3_BG_OPCODE_LOCATE		  	0x83
+#define ENDAT3_BG_OPCODE_LOCATE		  	0x84
 
 // EnDat 3 Background Request Data
 #define ENDAT3_BG_PROTECT_MODE_QUERY	 0x01
@@ -284,42 +300,6 @@ typedef struct {
 #define ENDAT3_BG_ACCLEVEL_OEM1				2
 #define ENDAT3_BG_ACCLEVEL_MANUFACTURER		3
 
-// Timing
-#define ENDAT3_HELLO_TIMEOUT 302
-
-/////////////
-#define CYCLE_BASED_MEM_HPF_LPF 0x1000
-#define CYCLE_BASED_MEM_LPH		0x2000
-#define FID_BASED_MEM			0x8000
-#define SAFETY_COLLECTOR_MEM	0x3000
-
-#define ENDAT3_GET_HPF_ADDR(base, bus_addr) 					(struct HPF *)(((uint8_t *) (base)) + CYCLE_BASED_MEM_HPF_LPF + ((bus_addr) << 7))
-#define ENDAT3_GET_LPF_ADDR(base, bus_addr, index) 				(struct LPF *)(((uint8_t *) (base)) + CYCLE_BASED_MEM_HPF_LPF + ((bus_addr) << 7) + (((index) + 1) << 3))
-#define ENDAT3_GET_LPH_ADDR(base, bus_addr) 					(struct LPH *)(((uint8_t *) (base)) + CYCLE_BASED_MEM_LPH + ((bus_addr) << 3))
-#define ENDAT3_GET_FID_ADDR(base, bus_addr, fid) 				(struct FID *)(((uint8_t *) (base)) + FID_BASED_MEM + ((bus_addr) << 10) + ((fid) << 3))
-#define ENDAT3_GET_SAFETY_FID_SD1_HPF(base, bus_addr, packet)	(struct HPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5))
-#define ENDAT3_GET_SAFETY_FID_SD1_LPF(base, bus_addr, packet)	(struct LPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5))
-#define ENDAT3_GET_SAFETY_FID_SD2_LPF(base, bus_addr, packet)	(struct LPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5) + 0x8)
-#define ENDAT3_GET_SAFETY_FID_SF_LPF(base, bus_addr, packet)	(struct LPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5) + 0x10)
-
-#define ENDAT3_FG_Bus_P2P_Req_Rsp(base, bus_addr, code, data, rsp) 				ENDAT3_FG_Bus_Req_Rsp(base, bus_addr, code, data, ENDAT3_FG_REQ_BUSP2P, (uint16_t)bus_addr, rsp)
-#define ENDAT3_FG_Bus_BC_with_individual_FG_Req(base, bus_addr, code, data) 	ENDAT3_FG_Bus_Req(base, code, data, ENDAT3_FG_REQ_BUSBC, (uint16_t)bus_addr)
-#define ENDAT3_FG_Bus_BC_without_individual_FG_Req(base, code, data) 			ENDAT3_FG_Bus_Req(base, code, data, ENDAT3_FG_REQ_BUSBC, 0)
-#define ENDAT3_FG_Bus_BC_without_individual_FG_Req_and_strobe(base, code, data) ENDAT3_FG_Bus_Req_without_strobe(base, code, data, ENDAT3_FG_REQ_BUSBC, 0)
-
-#define ENDAT3_FG_Reset(base)		   		ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_RESET, ENDAT3_FG_DATA_RESET, NULL)
-#define ENDAT3_FG_Rate(base, rate)	 		ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_RATE, rate, NULL)
-#define ENDAT3_FG_Clear(base, flag)			ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_RATE, flag, NULL)
-#define ENDAT3_FG_Force(base)	  			ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_FORCE, 0x0, NULL)
-#define ENDAT3_FG_BusInit(base)		 		ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_BUSINIT, ENDAT3_FG_DATA_BUSINIT, NULL)
-#define ENDAT3_FG_Data(base, DATAx, rsp)	ENDAT3_FG_Req_Rsp(base, DATAx, 0, rsp)
-
-#define ENDAT3_FG_Bus_P2P_Reset(base, addr)		   		ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_RESET, ENDAT3_FG_DATA_RESET, NULL)
-#define ENDAT3_FG_Bus_P2P_Rate(base, addr, rate)	  	ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_RATE, rate, NULL)
-#define ENDAT3_FG_Bus_P2P_Clear(base, addr, flag)	 	ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_RATE, flag, NULL)
-#define ENDAT3_FG_Bus_P2P_Force(base, addr)		  		ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_FORCE, 0x0, NULL)
-#define ENDAT3_FG_Bus_P2P_BUSINIT(base, addr)			ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_BUSINIT, ENDAT3_FG_DATA_BUSINIT, NULL)
-#define ENDAT3_FG_Bus_P2P_Data(base, addr, DATAx, rsp)	ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, DATAx, 0, rsp)
 
 #define ENDAT3_LPF_HEAD_SIZE_WORDS 0x0E
 
@@ -584,6 +564,93 @@ typedef struct {
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+// Timing
+#define ENDAT3_HELLO_TIMEOUT 3020
+#define ENDAT3_RATE_TIMEOUT 2
+#define ENDAT3_BG_REQ_TIMEOUT  1000 //ms
+
+/////////////
+#define CYCLE_BASED_MEM_HPF_LPF 0x1000
+#define CYCLE_BASED_MEM_LPH		0x2000
+#define FID_BASED_MEM			0x8000
+#define SAFETY_COLLECTOR_MEM	0x3000
+
+#define ENDAT3_GET_HPF_ADDR(base, bus_addr) 					(struct HPF *)(((uint8_t *) (base)) + CYCLE_BASED_MEM_HPF_LPF + ((bus_addr) << 7))
+#define ENDAT3_GET_LPF_ADDR(base, bus_addr, index) 				(struct LPF *)(((uint8_t *) (base)) + CYCLE_BASED_MEM_HPF_LPF + ((bus_addr) << 7) + (((index) + 1) << 3))
+#define ENDAT3_GET_LPH_ADDR(base, bus_addr) 					(struct LPH *)(((uint8_t *) (base)) + CYCLE_BASED_MEM_LPH + ((bus_addr) << 2))
+#define ENDAT3_GET_FID_ADDR(base, bus_addr, fid) 				(struct FID *)(((uint8_t *) (base)) + FID_BASED_MEM + ((bus_addr) << 10) + ((fid) << 3))
+#define ENDAT3_GET_SAFETY_FID_SD1_HPF(base, bus_addr, packet)	(struct HPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5))
+#define ENDAT3_GET_SAFETY_FID_SD1_LPF(base, bus_addr, packet)	(struct LPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5))
+#define ENDAT3_GET_SAFETY_FID_SD2_LPF(base, bus_addr, packet)	(struct LPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5) + 0x8)
+#define ENDAT3_GET_SAFETY_FID_SF_LPF(base, bus_addr, packet)	(struct LPF *)(((uint8_t *) (base)) + SAFETY_COLLECTOR_MEM + ((bus_addr) << 6) + ((packet) << 5) + 0x10)
+
+#define ENDAT3_FG_Bus_BC_Req(base) 														ENDAT3_FG_Bus_Req(base, 0, 0, ENDAT3_FG_REQ_BUSBC, 0)
+#define ENDAT3_FG_Bus_BC_with_FG_Req(base, fg_addr, fg_code, fg_data) 					ENDAT3_FG_Bus_Req(base, fg_code, fg_data, ENDAT3_FG_REQ_BUSBC, (uint16_t)(fg_addr))
+#define ENDAT3_FG_Bus_BC_with_BG_Req(base, bg_addr) 									ENDAT3_FG_Bus_Req(base, 0, 0, ENDAT3_FG_REQ_BUSBC, (uint16_t)(bg_addr << 8))
+#define ENDAT3_FG_Bus_BC_with_FG_BG_Req(base, fg_addr, fg_code, fg_data, bg_addr) 		ENDAT3_FG_Bus_Req(base, fg_code, fg_data, ENDAT3_FG_REQ_BUSBC, (uint16_t)((bg_addr << 8) | fg_addr))
+
+#define ENDAT3_FG_Bus_BC_Req_Rsp(base) 													ENDAT3_FG_Bus_Req_Rsp(base, 0, 0, 0, ENDAT3_FG_REQ_BUSBC, 0, NULL)
+#define ENDAT3_FG_Bus_BC_with_FG_Req_Rsp(base, fg_addr, fg_code, fg_data) 				ENDAT3_FG_Bus_Req_Rsp(base, 0, fg_code, fg_data, ENDAT3_FG_REQ_BUSBC, (uint16_t)(fg_addr), NULL)
+#define ENDAT3_FG_Bus_BC_with_BG_Req_Rsp(base, bg_addr) 								ENDAT3_FG_Bus_Req_Rsp(base, 0, 0, 0, ENDAT3_FG_REQ_BUSBC, (uint16_t)(bg_addr << 8), NULL)
+#define ENDAT3_FG_Bus_BC_with_FG_BG_Req_Rsp(base, fg_addr, fg_code, fg_data, bg_addr) 	ENDAT3_FG_Bus_Req_Rsp(base, 0, fg_code, fg_data, ENDAT3_FG_REQ_BUSBC, (uint16_t)((bg_addr << 8) | fg_addr), NULL)
+
+#define ENDAT3_FG_Reset(base)		   		ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_RESET, ENDAT3_FG_DATA_RESET, NULL)
+#define ENDAT3_FG_Rate(base, rate)	 		ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_RATE, rate, NULL)
+#define ENDAT3_FG_Clear(base, flag)			ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_CLEAR, flag, NULL)
+#define ENDAT3_FG_Force(base)	  			ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_FORCE, 0x0, NULL)
+#define ENDAT3_FG_BusInit(base)		 		ENDAT3_FG_Req_Rsp(base, ENDAT3_FG_REQ_BUSINIT, ENDAT3_FG_DATA_BUSINIT, NULL)
+#define ENDAT3_FG_Data(base, DATAx, rsp)	ENDAT3_FG_Req_Rsp(base, DATAx, 0, rsp)
+
+#define ENDAT3_FG_Bus_P2P_Req_Rsp(base, bus_addr, code, data, rsp)		ENDAT3_FG_Bus_Req_Rsp(base, bus_addr, code, data, ENDAT3_FG_REQ_BUSP2P, (uint16_t)(bus_addr), rsp)
+#define ENDAT3_FG_Bus_P2P_Reset(base, addr)		   						ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_RESET, ENDAT3_FG_DATA_RESET, NULL)
+#define ENDAT3_FG_Bus_P2P_Rate(base, addr, rate)	  					ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_RATE, rate, NULL)
+#define ENDAT3_FG_Bus_P2P_Clear(base, addr, flag)	 					ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_RATE, flag, NULL)
+#define ENDAT3_FG_Bus_P2P_Force(base, addr)		  						ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_FORCE, 0x0, NULL)
+#define ENDAT3_FG_Bus_P2P_BUSINIT(base, addr)							ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, ENDAT3_FG_REQ_BUSINIT, ENDAT3_FG_DATA_BUSINIT, NULL)
+#define ENDAT3_FG_Bus_P2P_Data(base, addr, DATAx, rsp)					ENDAT3_FG_Bus_P2P_Req_Rsp(base, addr, DATAx, 0, rsp)
+
+#define ENDAT3_BG_Nop(base, arbitrary, bg_rsp, fg_strobes)					ENDAT3_BG_Nop_OP(base, 0, arbitrary, bg_rsp, fg_strobes, Point2Point)
+#define ENDAT3_BG_Reconfigure(base, fg_strobes)								ENDAT3_BG_Reconfigure_OP(base, 0, fg_strobes, Point2Point)
+#define ENDAT3_BG_Read(base, addr, num_words, words, fg_strobes)			ENDAT3_BG_Read_OP(base, 0, addr, num_words, words, fg_strobes, Point2Point)
+#define ENDAT3_BG_Write(base, addr, word, fg_strobes)						ENDAT3_BG_Write_OP(base, 0, addr, word, fg_strobes, Point2Point)
+#define ENDAT3_BG_Auth(base, usrlevel, pass, fg_strobes)					ENDAT3_BG_Auth_OP(base, 0, usrlevel, pass, fg_strobes, Point2Point)
+#define ENDAT3_BG_Setpass(base, usrlevel, pass, fg_strobes)					ENDAT3_BG_Setpass_OP(base, 0, usrlevel, pass, fg_strobes, Point2Point)
+#define ENDAT3_BG_Protect(base, addr, mode, acclevel, al_write, al_read, fg_strobes) 	\
+					ENDAT3_BG_Protect_OP(base, 0, addr, mode, acclevel, al_write, al_read, fg_strobes, Point2Point)
+#define ENDAT3_BG_Locate(base, ctrl, fg_strobes)							ENDAT3_BG_Locate_OP(base, 0, ctrl, fg_strobes, Point2Point)
+
+#define ENDAT3_BG_Bus_P2P_Nop(base, bus_addr, arbitrary, bg_rsp, fg_strobes) 			ENDAT3_BG_Nop_OP(base, bus_addr, arbitrary, bg_rsp, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Reconfigure(base, bus_addr, fg_strobes)						ENDAT3_BG_Reconfigure_OP(base, bus_addr, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Read(base, bus_addr, addr, num_words, words, fg_strobes)		ENDAT3_BG_Read_OP(base, bus_addr, addr, num_words, words, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Write(base, bus_addr, addr, word, fg_strobes)					ENDAT3_BG_Write_OP(base, bus_addr, addr, word, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Auth(base, bus_addr, usrlevel, pass, fg_strobes)				ENDAT3_BG_Auth_OP(base, bus_addr, usrlevel, pass, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Setpass(base, bus_addr, usrlevel, pass, fg_strobes)			ENDAT3_BG_Setpass_OP(base, bus_addr, usrlevel, pass, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Protect(base, bus_addr, addr, mode, acclevel, al_write, al_read, fg_strobes) 	\
+					ENDAT3_BG_Protect_OP(base, bus_addr, addr, mode, acclevel, al_write, al_read, fg_strobes, Peer2Peer)
+#define ENDAT3_BG_Bus_P2P_Locate(base, bus_addr, ctrl, fg_strobes)						ENDAT3_BG_Locate_OP(base, bus_addr, ctrl, fg_strobes, Peer2Peer)
+
+#define ENDAT3_memCacheInit(base, mem_base, cache, pbuf, pbufSize, fg_strobes)		ENDAT3_memCacheInit_OP(base, 0, mem_base, cache, pbuf, pbufSize, fg_strobes, Point2Point)
+#define ENDAT3_memRead(base, addr, n_words, pbuf, fg_strobes)						ENDAT3_memRead_OP(base, 0, addr, n_words, pbuf, fg_strobes, Point2Point)
+#define ENDAT3_memWrite(base, addr, n_words, pbuf, fg_strobes)						ENDAT3_memWrite_OP(base, 0, addr, n_words, pbuf, fg_strobes, Point2Point)
+#define ENDAT3_memCacheFlush(base, cache, fg_strobes)								ENDAT3_memCacheFlush_OP(base, 0, cache, fg_strobes, Point2Point)
+#define ENDAT3_memCacheFetch(base, cache, fg_strobes)								ENDAT3_memCacheFetch_OP(base, 0, cache, fg_strobes, Point2Point)
+#define ENDAT3_memGetRangeSize(base, mem_base, fg_strobes)							ENDAT3_memGetRangeSize_OP(base, 0, mem_base, fg_strobes, Point2Point)
+
+#define ENDAT3_Bus_P2P_memCacheInit(base, bus_addr, mem_base, cache, pbuf, pbufSize, fg_strobes)	ENDAT3_memCacheInit_OP(base, bus_addr, mem_base, cache, pbuf, pbufSize, fg_strobes, Peer2Peer)
+#define ENDAT3_Bus_P2P_memRead(base, bus_addr, addr, n_words, pbuf, fg_strobes)						ENDAT3_memRead_OP(base, bus_addr, addr, n_words, pbuf, fg_strobes, Peer2Peer)
+#define ENDAT3_Bus_P2P_memWrite(base, bus_addr, addr, n_words, pbuf, fg_strobes)					ENDAT3_memWrite_OP(base, bus_addr, addr, n_words, pbuf, fg_strobes, Peer2Peer)
+#define ENDAT3_Bus_P2P_memCacheFlush(base, bus_addr, cache, fg_strobes)								ENDAT3_memCacheFlush_OP(base, bus_addr, cache, fg_strobes, Peer2Peer)
+#define ENDAT3_Bus_P2P_memCacheFetch(base, bus_addr, cache, fg_strobes)								ENDAT3_memCacheFetch_OP(base, bus_addr, cache, fg_strobes, Peer2Peer)
+#define ENDAT3_Bus_P2P_memGetRangeSize(base, bus_addr, mem_base, fg_strobes)						ENDAT3_memGetRangeSize_OP(base, bus_addr, mem_base, fg_strobes, Peer2Peer)
+
+
+#define ENDAT3_lpfCacheUpdateFromEnconder(base, lpf_cache, pdat, pdat_size, from_set, fg_strobes) \
+										ENDAT3_lpfCacheUpdateFromEnconder_OP(base, 0, lpf_cache, pdat, pdat_size, from_set, fg_strobes, Point2Point)
+#define ENDAT3_lpfCacheFlushToEncoder(base, lpf_cache, fg_strobes)		ENDAT3_lpfCacheFlushToEncoder_OP(base, 0, lpf_cache, fg_strobes, Point2Point)
+
+#define ENDAT3_Bus_P2P_lpfCacheUpdateFromEnconder(base, bus_addr, lpf_cache, pdat, pdat_size, from_set, fg_strobes) \
+										ENDAT3_lpfCacheUpdateFromEnconder_OP(base, bus_addr, lpf_cache, pdat, pdat_size, from_set, fg_strobes, Peer2Peer)
+#define ENDAT3_Bus_P2P_lpfCacheFlushToEncoder(base, bus_addr, lpf_cache, fg_strobes)		ENDAT3_lpfCacheFlushToEncoder_OP(base, bus_addr, lpf_cache, fg_strobes, Peer2Peer)
 
 
 /*******************************************************************************
@@ -625,7 +692,6 @@ static inline void ENDAT3_Set_Bus_Participants_Num(ENDAT3_Type *base, uint8_t nu
 }
 
 /* API interface for FG commnunication*/
-
 static inline void ENDAT3_FG_IRQ_Enable_With_FIxM_Frame_Count(ENDAT3_Type *base, uint32_t irq_index, uint8_t counter)
 {
 	base->FG_IRQ_MASK[irq_index] &= ~ENDAT3_FG_IRQ_MASK_FIxM_FRAME_CNT_MASK;
@@ -711,6 +777,7 @@ static inline uint32_t ENDAT3_Safety_Packet_status(ENDAT3_Type *base, uint8_t pa
 
 static inline void ENDAT3_FG_Req(ENDAT3_Type *base, uint8_t code, uint16_t dat)
 {
+	base->FG_REQ_0 = 0;
 	base->FG_REQ_1 = ENDAT3_FG_REQ_1_REQ_CODE(code) | ENDAT3_FG_REQ_1_REQ_DATA(dat) | ENDAT3_FG_REQ_1_FG_STROBE(1);
 }
 
@@ -743,30 +810,30 @@ status_t ENDAT3_FG_Echo(ENDAT3_Type *base, uint16_t arbitrary_data);
 status_t ENDAT3_FG_Bus_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, uint8_t req, uint16_t data, uint8_t busCode, uint16_t busData, endat3_rsp_t *rsp);
 status_t ENDAT3_FG_Bus_P2P_Hello(ENDAT3_Type *base, uint8_t addr);
 status_t ENDAT3_FG_Bus_P2P_Echo(ENDAT3_Type *base, uint8_t addr, uint16_t arbitrary_data);
-
+status_t ENDAT3_FG_Bus_Rate_Switch(ENDAT3_Type *base, uint8_t nodes_num, uint8_t rate);
 /* API interface for BG commnunication*/
 void ENDAT3_BG_Req(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint8_t wait_rsp);
-void ENDAT3_BG_WaitReqEmpty(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes);
-status_t ENDAT3_BG_WaitReqFinished(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms);
-uint64_t ENDAT3_BG_GetRsp(ENDAT3_Type *base);
-status_t ENDAT3_BG_Req_Rsp(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint64_t *rsp, uint8_t fg_strobes, uint32_t timeout_ms);
-status_t ENDAT3_BG_Nop(ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, uint64_t *bg_rsp, uint8_t fg_strobes);
-status_t ENDAT3_BG_Reconfigure(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes);
-status_t ENDAT3_BG_Read(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t num_words, uint16_t *words, uint8_t fg_strobes);
-status_t ENDAT3_BG_Write(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, const uint16_t word, uint8_t fg_strobes);
-status_t ENDAT3_BG_Auth(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes);
-status_t ENDAT3_BG_Setpass(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes);
-status_t ENDAT3_BG_Protect(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t mode, const uint8_t acclevel, uint8_t *al_write, uint8_t *al_read, uint8_t fg_strobes);
-status_t ENDAT3_BG_Locate(ENDAT3_Type *base, uint8_t bus_addr, uint8_t ctrl, uint8_t fg_strobes);
+status_t ENDAT3_BG_WaitReqFinished_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, uint32_t timeout_ms, enum op_mode op);
+status_t ENDAT3_BG_GetRsp(ENDAT3_Type *base, uint64_t *rsp, uint32_t timeout_ms);
+status_t ENDAT3_BG_Req_Rsp_OP(ENDAT3_Type *base, uint8_t bus_addr, struct BGREQ *req, uint64_t *rsp, uint8_t fg_strobes, uint32_t timeout_ms, enum op_mode op);
+status_t ENDAT3_BG_Nop_OP(ENDAT3_Type *base, uint8_t bus_addr, uint64_t arbitrary, uint64_t *bg_rsp, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Reconfigure_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Read_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t num_words, uint16_t *words, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Write_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, const uint16_t word, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Auth_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Setpass_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t usrlevel, uint32_t pass, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Protect_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr, uint8_t mode, const uint8_t acclevel, uint8_t *al_write, uint8_t *al_read, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_BG_Locate_OP(ENDAT3_Type *base, uint8_t bus_addr, uint8_t ctrl, uint8_t fg_strobes, enum op_mode op);
 status_t ENDAT3_RxTxClkConfig(ENDAT3_Type *base, uint32_t clk_sys, uint8_t rate, uint16_t watchdag_us);
-status_t ENDAT3_memRead(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf, uint8_t fg_strobes);
-status_t ENDAT3_memWrite(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf, uint8_t fg_strobes);
-status_t ENDAT3_memCacheInit(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, endat3_mem_cache_t *cache, uint16_t *pbuf, uint32_t pbufSize, uint8_t fg_strobes);
-status_t ENDAT3_memCacheFlush(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes);
-status_t ENDAT3_memCacheFetch(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes);
-uint16_t ENDAT3_memGetRangeSize(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, uint8_t fg_strobes);
+status_t ENDAT3_memRead_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_memWrite_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t addr,  uint16_t n_words, uint16_t *pbuf, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_memCacheInit_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, endat3_mem_cache_t *cache, uint16_t *pbuf, uint32_t pbufSize, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_memCacheFlush_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_memCacheFetch_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes, enum op_mode op);
+uint16_t ENDAT3_memGetRangeSize_OP(ENDAT3_Type *base, uint8_t bus_addr, uint32_t mem_base, uint8_t fg_strobes, enum op_mode op);
 status_t ENDAT3_memCacheCheckCS(endat3_mem_cache_t *cache);
 status_t ENDAT3_memCacheUpdataCS(endat3_mem_cache_t *cache);
+void ENDAT3_memCacheSetDirty(endat3_mem_cache_t *cache, int word_index, int isDirty);
 uint16_t ENDAT3_lpfCacheGetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache);
 void ENDAT3_lpfCacheGetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t *xdim, uint8_t *y_dim);
 void ENDAT3_lpfCacheSetXdimYdim(uint8_t z, endat3_mem_cache_t *lpf_cache, uint8_t xdim, uint8_t y_dim);
@@ -774,11 +841,14 @@ void ENDAT3_lpfCacheSetPointer(uint8_t z, endat3_mem_cache_t *lpf_cache, uint16_
 void ENDAT3_lpfCacheListSetFid(endat3_mem_cache_t *cache, uint8_t xdim, uint8_t x, uint8_t y, uint16_t pointer, uint8_t fid);
 void ENDAT3_lpfCacheListSetSendlist(endat3_mem_cache_t *cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fids);
 uint8_t ENDAT3_lpfCacheListGetFid(endat3_mem_cache_t *cache, uint8_t xdim, uint8_t x, uint8_t y, uint16_t pointer);
-status_t ENDAT3_lpfCacheUpdateFromEnconder(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint16_t *pdat, uint32_t pdat_size, uint8_t from_set, uint8_t fg_strobes);
-status_t ENDAT3_lpfCacheFlushToEncoder(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes);
+status_t ENDAT3_lpfCacheUpdateFromEnconder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint16_t *pdat, uint32_t pdat_size, uint8_t from_set, uint8_t fg_strobes, enum op_mode op);
+status_t ENDAT3_lpfCacheFlushToEncoder_OP(ENDAT3_Type *base, uint8_t bus_addr, endat3_mem_cache_t *cache, uint8_t fg_strobes, enum op_mode op);
 void ENDAT3_lpfCacheListUpdate(endat3_mem_cache_t *global_cache, endat3_mem_cache_t *cache, uint8_t z, uint8_t xdim, uint8_t ydim, uint16_t pointer, uint8_t *fid);
-status_t ENDAT3_Bus_Assign_Address(ENDAT3_Type *base, uint8_t encoderNum);
 
+status_t ENDAT3_Bus_Assign_Address(ENDAT3_Type *base, uint8_t encoderNum);
+void ENDAT3_Bus_Init_ForAllParticipants(ENDAT3_Type *base, int nodes_num);
+status_t ENDAT3_Bus_Hello_ForAllParticipants(ENDAT3_Type *base, int nodes_num);
+status_t ENDAT3_FG_Bus_BC_Rate_Switch(ENDAT3_Type *base, uint8_t nodes_num, uint8_t rate);
 char* ENDAT3_FID2str(const uint8_t fid);
 char *ENDAT3_Err2str(uint16_t errCode);
 

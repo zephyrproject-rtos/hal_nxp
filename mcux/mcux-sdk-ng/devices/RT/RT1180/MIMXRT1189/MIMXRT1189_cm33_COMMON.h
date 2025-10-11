@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1189_cm33
@@ -395,6 +395,40 @@ typedef enum IRQn {
  */
 
 /** Mapping Information */
+/*!
+ * @addtogroup asrc_clock_source_mapping
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief The ASRC clock source
+ */
+typedef enum _asrc_clock_source
+{
+    kASRC_ClockSourceNotAvalible    = -1,          /**< not avalible */
+    kASRC_ClockSourceBitClock0_SAI1_TX = 0U,       /**< SAI1 TX */
+    kASRC_ClockSourceBitClock1_SAI1_RX = 1U,       /**< SAI1 RX */
+    kASRC_ClockSourceBitClock2_SAI2_TX = 2U,       /**< SAI2 TX */
+    kASRC_ClockSourceBitClock3_SAI2_RX = 3U,       /**< SAI2 RX */
+    kASRC_ClockSourceBitClock4_SAI3_TX = 4U,       /**< SAI3 TX */
+    kASRC_ClockSourceBitClock5_SAI3_RX = 5U,       /**< SAI3 RX */
+    kASRC_ClockSourceBitClock6_SAI4_TX = 6U,       /**< SAI4 TX */
+    kASRC_ClockSourceBitClock7_SAI4_RX = 7U,       /**< SAI4 RX */
+    kASRC_ClockSourceBitClock8_SPDIF_TX = 8U,      /**< SPDIF TX */
+    kASRC_ClockSourceBitClock9_SPDIF_RX = 9U,      /**< SPDIF RX */
+    kASRC_ClockSourceBitClocka_SAI2_CLOCK_ROOT = 10U, /**< SAI2 CLOCK ROOT */
+    kASRC_ClockSourceBitClockb_SAI3_CLOCK_ROOT = 11U, /**< SAI3 CLOCK ROOT */
+    kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
+    kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
+    kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
+} asrc_clock_source_t;
+
+/* @} */
+
 typedef enum _xbar_input_signal
 {
     kXBAR1_InputLogicLow            = 0|0x10000U,  /**< LOGIC_LOW output assigned to XBAR1_IN0 input. */
@@ -1365,35 +1399,6 @@ typedef enum _xbar_output_signal
   #define ANADIG_LDO_BBSM_BASE_ADDRS               { ANADIG_LDO_BBSM_BASE }
   /** Array initializer of ANADIG_LDO_BBSM peripheral base pointers */
   #define ANADIG_LDO_BBSM_BASE_PTRS                { ANADIG_LDO_BBSM }
-#endif
-
-/* ANADIG_MISC - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral ANADIG_MISC base address */
-  #define ANADIG_MISC_BASE                         (0x54480000u)
-  /** Peripheral ANADIG_MISC base address */
-  #define ANADIG_MISC_BASE_NS                      (0x44480000u)
-  /** Peripheral ANADIG_MISC base pointer */
-  #define ANADIG_MISC                              ((ANADIG_MISC_Type *)ANADIG_MISC_BASE)
-  /** Peripheral ANADIG_MISC base pointer */
-  #define ANADIG_MISC_NS                           ((ANADIG_MISC_Type *)ANADIG_MISC_BASE_NS)
-  /** Array initializer of ANADIG_MISC peripheral base addresses */
-  #define ANADIG_MISC_BASE_ADDRS                   { ANADIG_MISC_BASE }
-  /** Array initializer of ANADIG_MISC peripheral base pointers */
-  #define ANADIG_MISC_BASE_PTRS                    { ANADIG_MISC }
-  /** Array initializer of ANADIG_MISC peripheral base addresses */
-  #define ANADIG_MISC_BASE_ADDRS_NS                { ANADIG_MISC_BASE_NS }
-  /** Array initializer of ANADIG_MISC peripheral base pointers */
-  #define ANADIG_MISC_BASE_PTRS_NS                 { ANADIG_MISC_NS }
-#else
-  /** Peripheral ANADIG_MISC base address */
-  #define ANADIG_MISC_BASE                         (0x44480000u)
-  /** Peripheral ANADIG_MISC base pointer */
-  #define ANADIG_MISC                              ((ANADIG_MISC_Type *)ANADIG_MISC_BASE)
-  /** Array initializer of ANADIG_MISC peripheral base addresses */
-  #define ANADIG_MISC_BASE_ADDRS                   { ANADIG_MISC_BASE }
-  /** Array initializer of ANADIG_MISC peripheral base pointers */
-  #define ANADIG_MISC_BASE_PTRS                    { ANADIG_MISC }
 #endif
 
 /* ANADIG_OSC - Peripheral instance base addresses */
@@ -2698,25 +2703,25 @@ typedef enum _xbar_output_signal
   #define FlexSPI2_ATDF_BASE_NS                    (0x4DE10000u)
 #else
   /* FlexSPI AMBA base address array. */
-  #define FlexSPI_AMBA_BASE_ARRAY                  { {0u, 0u}, {0x28000000u, 0x2000000u}, {0x4000000u, 0x22000000u} }
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0u, 0u}, {0x38000000u, 0x12000000u}, {0x14000000u, 0x32000000u} }
   /* FlexSPI AMBA end address array. */
-  #define FlexSPI_AMBA_END_ARRAY                   { {0u, 0u}, {0x2FFFFFFFu, 0x3FFFFFFu}, {0x7FFFFFFu, 0x23FFFFFFu} }
+  #define FlexSPI_AMBA_END_ARRAY                   { {0u, 0u}, {0x3FFFFFFFu, 0x13FFFFFFu}, {0x17FFFFFFu, 0x33FFFFFFu} }
   /* FlexSPI1 AMBA address. */
-  #define FlexSPI1_AMBA_BASE                       (0x28000000u)
+  #define FlexSPI1_AMBA_BASE                       (0x38000000u)
   /* FlexSPI1 ASFM address. */
-  #define FlexSPI1_ASFM_BASE                       (0x28000000u)
+  #define FlexSPI1_ASFM_BASE                       (0x38000000u)
   /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI1_ARDF_BASE                       (0x47420000u)
+  #define FlexSPI1_ARDF_BASE                       (0x57420000u)
   /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI1_ATDF_BASE                       (0x47430000u)
+  #define FlexSPI1_ATDF_BASE                       (0x57430000u)
   /* FlexSPI2 AMBA address. */
-  #define FlexSPI2_AMBA_BASE                       (0x4000000u)
+  #define FlexSPI2_AMBA_BASE                       (0x14000000u)
   /* FlexSPI2 ASFM address. */
-  #define FlexSPI2_ASFM_BASE                       (0x4000000u)
+  #define FlexSPI2_ASFM_BASE                       (0x14000000u)
   /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI2_ARDF_BASE                       (0x4DE00000u)
+  #define FlexSPI2_ARDF_BASE                       (0x5DE00000u)
   /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI2_ATDF_BASE                       (0x4DE10000u)
+  #define FlexSPI2_ATDF_BASE                       (0x5DE10000u)
 #endif
 
 
@@ -5682,6 +5687,9 @@ typedef enum _xbar_output_signal
   /** Array initializer of TSTMR peripheral base pointers */
   #define TSTMR_BASE_PTRS                          { TSTMR1_TSTMRA, TSTMR2_TSTMRA }
 #endif
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
+
 
 /* USB - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

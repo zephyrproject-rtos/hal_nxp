@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
- * All rights reserved.
+ * Copyright 2016-2021, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,8 +23,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DAC12 driver version 2.1.1. */
-#define FSL_DAC12_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief DAC12 driver version 2.1.2. */
+#define FSL_DAC12_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 
 /*! @brief Define "write 1 to clear" flags. */

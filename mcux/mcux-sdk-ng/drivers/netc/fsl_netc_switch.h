@@ -1591,6 +1591,19 @@ status_t SWT_FMUpdateTableEntry(swt_handle_t *handle, netc_tb_fm_config_t *confi
 status_t SWT_FMDelTableEntry(swt_handle_t *handle, uint32_t entryID);
 
 /*!
+ * @brief Query table entry in Frame Modification Table
+ *
+ * The provided ID must be table index. Error return if the id is action encoded id.
+ *
+ * @param handle
+ * @param entryID
+ * @param config
+ * @return status_t
+ * @return See @ref netc_cmd_error_t
+ */
+status_t SWT_FMQueryTableEntry(swt_handle_t *handle, uint32_t entryID, netc_tb_fm_config_t *config);
+
+/*!
  * @brief Get word number (word size is 24  bytes) of Frame Modification data table
  * @note This is a static bounded index table, when update or query table, should satisifed:
  *       numBytes + ENTRY_ID <= 24 * wordNumber .

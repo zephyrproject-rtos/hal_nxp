@@ -783,6 +783,15 @@ static status_t USDHC_TransferDataBlocking(USDHC_Type *base, usdhc_data_t *data,
             *(data->rxData) = s_usdhcBootDummy;
         }
 
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
+        if (IS_USDHC_FLAG_SET(interruptStatus, kUSDHC_DataCompleteFlag))
+        {
+            if (data->rxData != NULL)
+            {
+                DCACHE_InvalidateByRange((uintptr_t)(data->rxData), (data->blockSize) * (data->blockCount));
+            }
+        }
+#endif
         USDHC_ClearInterruptStatusFlags(base, ((uint32_t)kUSDHC_DataDMAFlag | (uint32_t)kUSDHC_TuningErrorFlag));
     }
     else

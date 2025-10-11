@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXW235BIHNAR
+**     Processors:          MCXW235AIHNAR
+**                          MCXW235AIUKAR
+**                          MCXW235BIHNAR
 **                          MCXW235BIUKAR
 **
 **     Compilers:
@@ -9,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXW23x User manual Rev.0.1  1 September 2022
+**     Reference manual:    MCXW23x User manual Rev. 1.0 - 7 April 2025
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250819
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -93,11 +95,11 @@ __attribute__ ((weak)) void SystemInit (void)
     {
         if (irq == BLE_LL_IRQn || irq == BLE_SLP_TMR_IRQn)
         {
-            NVIC_SetPriority(irq, NVIC_LL_IRQ_PRIORITY);
+            NVIC_SetPriority((IRQn_Type)irq, NVIC_LL_IRQ_PRIORITY);
         }
         else
         {
-            NVIC_SetPriority(irq, NVIC_DEFAULT_PRIORITY);
+            NVIC_SetPriority((IRQn_Type)irq, NVIC_DEFAULT_PRIORITY);
         }
     }
 #endif
@@ -311,6 +313,7 @@ __attribute__((used)) void HardFaultHandler(uint32_t *hardfault_args)
     }
 }
 
+#ifndef CONFIG_TFM_BUILDING_SPE
 __attribute__((naked)) void HardFault_Handler(void)
 {
     __asm volatile(
@@ -340,3 +343,4 @@ __attribute__((naked)) void UsageFault_Handler(void)
 {
     __asm volatile(" b HardFault_Handler \n");
 }
+#endif

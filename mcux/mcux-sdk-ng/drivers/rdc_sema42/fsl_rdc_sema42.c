@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, 2022 NXP
+ * Copyright 2017-2020, 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,6 +25,8 @@
 /* Compatible remap. */
 #define RDC_SEMAPHORE_GATE_LDOM(x)    RDC_SEMAPHORE_GATE0_LDOM(x)
 #define RDC_SEMAPHORE_GATE_GTFSM(x)   RDC_SEMAPHORE_GATE0_GTFSM(x)
+#define RDC_SEMAPHORE_GATE_GTFSM_MASK RDC_SEMAPHORE_GATE0_GTFSM_MASK
+#define RDC_SEMAPHORE_GATE_GTFSM_SHIFT RDC_SEMAPHORE_GATE0_GTFSM_SHIFT
 #define RDC_SEMAPHORE_GATE_LDOM_MASK  RDC_SEMAPHORE_GATE0_LDOM_MASK
 #define RDC_SEMAPHORE_GATE_LDOM_SHIFT RDC_SEMAPHORE_GATE0_LDOM_SHIFT
 #endif
@@ -128,6 +130,7 @@ void RDC_SEMA42_Deinit(RDC_SEMAPHORE_Type *base)
 status_t RDC_SEMA42_TryLock(RDC_SEMAPHORE_Type *base, uint8_t gateNum, uint8_t masterIndex, uint8_t domainId)
 {
     assert(gateNum < RDC_SEMA42_GATE_COUNT);
+    assert(masterIndex < (RDC_SEMAPHORE_GATE_GTFSM_MASK >> RDC_SEMAPHORE_GATE_GTFSM_SHIFT));
 
     status_t status = kStatus_Success;
     uint8_t regGate;

@@ -811,7 +811,7 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer
     /* ========================== Prepare TX. ========================== */
     /* If xfer->sendDcsCmd is true, then the DCS command is not included in the
        xfer->txData, but specified by xfer->dcsCmd. */
-    txDataSize = xfer->sendDscCmd ? (uint32_t)xfer->txDataSize + 1U : (uint32_t)xfer->txDataSize;
+    txDataSize = xfer->sendDcsCmd ? (uint32_t)xfer->txDataSize + 1U : (uint32_t)xfer->txDataSize;
 
     /* Short packet. */
     if (txDataSize <= 2U)
@@ -824,10 +824,10 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer
         {
             txDataIndex = 0;
 
-            if (xfer->sendDscCmd)
+            if (xfer->sendDcsCmd)
             {
                 /* DCS command byte. */
-                wordCount = xfer->dscCmd;
+                wordCount = xfer->dcsCmd;
             }
             else
             {
@@ -846,7 +846,7 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer
     else
     {
         wordCount = (uint16_t)txDataSize;
-        DSI_WriteTxPayloadExt(base, xfer->txData, xfer->txDataSize, xfer->sendDscCmd, xfer->dscCmd);
+        DSI_WriteTxPayloadExt(base, xfer->txData, xfer->txDataSize, xfer->sendDcsCmd, xfer->dcsCmd);
     }
 
     /* Clear the interrupt flags set by previous transfer. */

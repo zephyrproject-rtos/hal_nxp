@@ -407,8 +407,9 @@ uint32_t LCDIC_FillByteToWord(const uint8_t *bytes, uint8_t len)
 {
     uint32_t word = 0U;
 
-    while ((len--) > 0u)
+    while (len != 0U)
     {
+        len--;
         word <<= 8U;
         word |= bytes[len];
     }
@@ -429,6 +430,8 @@ uint32_t LCDIC_FillByteToWord(const uint8_t *bytes, uint8_t len)
  */
 void LCDIC_ExtractByteFromWord(uint32_t word, uint8_t *bytes, uint8_t len)
 {
+    assert(len <= 4U);
+
     for (uint8_t i = 0; i < len; i++)
     {
         bytes[i] = (uint8_t)word;

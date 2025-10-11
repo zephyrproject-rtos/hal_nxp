@@ -94,11 +94,11 @@ __STATIC_INLINE void IOPCTL_PinMuxSet(uint8_t port, uint8_t pin, uint32_t modefu
 
     if (port >= 8U) /* IOPCTL_VDD1 */
     {
-        pioBase = (uint32_t)IOPCTL1 + (uint32_t)((port - 8U) * 32U + pin) * 4UL;
+        pioBase = (uint32_t)IOPCTL1 + ((uint32_t)(port - 8U) * 32U + (uint32_t)pin) * 4UL;
     }
     else if (port >= 4U) /* IOPCTL_VDDN */
     {
-        pioBase = (uint32_t)IOPCTL2 + (uint32_t)((port - 4U) * 32U + pin) * 4UL;
+        pioBase = (uint32_t)IOPCTL2 + ((uint32_t)(port - 4U) * 32U + (uint32_t)pin) * 4UL;
     }
     else /* IOPCTL_VDD2 */
     {
@@ -106,7 +106,7 @@ __STATIC_INLINE void IOPCTL_PinMuxSet(uint8_t port, uint8_t pin, uint32_t modefu
     defined(MIMXRT758S_cm33_core1_SERIES) || defined(MIMXRT735S_hifi1_SERIES) || defined(MIMXRT735S_cm33_core1_SERIES)
         assert(false);
 #else
-        pioBase = (uint32_t)IOPCTL0 + (uint32_t)(port * 32U + pin) * 4UL;
+        pioBase = (uint32_t)IOPCTL0 + ((uint32_t)port * 32U + (uint32_t)pin) * 4UL;
 #endif
     }
 

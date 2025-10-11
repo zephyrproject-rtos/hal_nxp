@@ -242,6 +242,11 @@ uint32_t LPSPI_GetInstance(LPSPI_Type *base)
     uint8_t instance = 0;
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_lpspiBases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
     for (instance = 0; instance < ARRAY_SIZE(s_lpspiBases); instance++)
     {
         if (MSDK_REG_SECURE_ADDR(s_lpspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
@@ -320,7 +325,7 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
 #if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
                   LPSPI_CFGR1_PCSCFG(masterConfig->pcsFunc) |
 #endif
-                  LPSPI_CFGR1_NOSTALL(0) | LPSPI_CFGR1_SAMPLE((uint32_t)masterConfig->enableInputDelay);
+                  LPSPI_CFGR1_NOSTALL(0) | LPSPI_CFGR1_SAMPLE(masterConfig->enableInputDelay ? 1U : 0U);
 
     if ((masterConfig->pinCfg == kLPSPI_SdiInSdiOut) || (masterConfig->pinCfg == kLPSPI_SdoInSdoOut))
     {
@@ -836,6 +841,7 @@ uint32_t LPSPI_MasterSetDelayTimes(LPSPI_Type *base,
     /* write the best scaler value for the delay */
     LPSPI_MasterSetDelayScaler(base, bestScaler, whichDelay);
 
+    assert(bestDelay <= UINT32_MAX);
     /* return the actual calculated delay value (in ns) */
     return (uint32_t)bestDelay;
 }
@@ -1003,6 +1009,10 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
                 }
                 else
                 {
+                    /*
+                     * $Branch Coverage Justification$
+                     * $ref fsl_lpspi_c_ref_2$
+                     */
                     if (!LPSPI_WaitTxFifoEmpty(base))
                     {
                         return false;
@@ -1039,13 +1049,23 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
          */
         if (((stateParams->rxData) != NULL) && ((stateParams->rxRemainingByteCount) != 0U))
         {
+#if SPI_RETRY_TIMES
+            uint32_t waitTimes = SPI_RETRY_TIMES;
+#endif
             /* To ensure parallel execution in 3-wire mode, after writting 1 to TXMSK to generate clock of
                bytesPerFrame's data wait until bytesPerFrame's data is received. */
             while ((stateParams->isTxMask) && (LPSPI_GetRxFifoCount(base) == 0U))
             {
-            }
 #if SPI_RETRY_TIMES
-            uint32_t waitTimes = SPI_RETRY_TIMES;
+                if (--waitTimes == 0U)
+                {
+                    return false;
+                }
+#endif
+            }
+
+#if SPI_RETRY_TIMES
+            waitTimes = SPI_RETRY_TIMES;
             while ((LPSPI_GetRxFifoCount(base) != 0U) && (--waitTimes != 0U))
 #else
             while (LPSPI_GetRxFifoCount(base) != 0U)
@@ -1177,16 +1197,16 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     assert(transfer != NULL);
 
     /* Check that LPSPI is not busy.*/
-    /*
-     * $Branch Coverage Justification$
-     * MBF state setting and clearing is done by hardware, the state is too fast to be overwritten.(will improve)
-     */
     if ((LPSPI_GetStatusFlags(base) & (uint32_t)kLPSPI_ModuleBusyFlag) != 0U)
     {
         return kStatus_LPSPI_Busy;
     }
 
     /* Check the SR[MBF] again - workaround for ERR010655 */
+    /*
+     * $Branch Coverage Justification$
+     * Depends on errata.
+     */
     if ((LPSPI_GetStatusFlags(base) & (uint32_t)kLPSPI_ModuleBusyFlag) != 0U)
     {
         return kStatus_LPSPI_Busy;
@@ -1516,6 +1536,10 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
          */
         base->TCR = LPSPI_GetTcr(base) | LPSPI_TCR_TXMSK_MASK;
         handle->txRemainingByteCount -= (uint32_t)handle->bytesPerFrame;
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpspi_c_ref_2$
+         */
         if (!LPSPI_WaitTxFifoEmpty(base))
         {
             return kStatus_LPSPI_Timeout;
@@ -1806,6 +1830,10 @@ void LPSPI_MasterTransferHandleIRQ(LPSPI_Type *base, lpspi_master_handle_t *hand
             }
             else
             {
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref fsl_lpspi_c_ref_2$
+                 */
                 if (!LPSPI_WaitTxFifoEmpty(base))
                 {
                     return;
@@ -2012,7 +2040,7 @@ status_t LPSPI_SlaveTransferNonBlocking(LPSPI_Type *base, lpspi_slave_handle_t *
     /*TCR is also shared the FIFO, so wait for TCR written.*/
     /*
      * $Branch Coverage Justification$
-     * $ref fsl_lpspi_c_ref_3$
+     * $ref fsl_lpspi_c_ref_2$
      */
     if (!LPSPI_WaitTxFifoEmpty(base))
     {

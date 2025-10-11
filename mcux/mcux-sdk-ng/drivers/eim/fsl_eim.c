@@ -1,7 +1,6 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
- *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,6 +30,11 @@ static EIM_Type *const s_eimBases[] = EIM_BASE_PTRS;
 /*! @brief Pointers to EIM clocks for each instance. */
 static const clock_ip_name_t s_eimClocks[] = EIM_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(EIM_RSTS_N)
+/*! @brief Pointers to EIM clocks for each instance. */
+static const clock_ip_name_t s_eimResets[] = EIM_RSTS_N;
+#endif
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -63,7 +67,10 @@ void EIM_Init(EIM_Type *base)
     /* Ungate EIM clock. */
     CLOCK_EnableClock(s_eimClocks[EIM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
+#if defined(EIM_RSTS_N)
+    /* Reset the EIM module */
+    RESET_PeripheralReset(s_eimResets[EIM_GetInstance(base)]);
+#endif
     base->EIMCR  = 0x00U;
     base->EICHEN = 0x00U;
 }
@@ -260,42 +267,42 @@ uint32_t EIM_GetDataBitMask(EIM_Type *base, eim_memory_channel_t channel)
     switch ((uint8_t)channel)
     {
         case 0U:
-            mask = (base->EICHD0_WORD0 & EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD0_WORD1 & EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 
 #ifdef EIM_EICHEN_EICH1EN_MASK
         case 1U:
-            mask = (base->EICHD1_WORD0 & EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD1_WORD1 & EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH2EN_MASK
         case 2U:
-            mask = (base->EICHD2_WORD0 & EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD2_WORD1 & EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH3EN_MASK
         case 3U:
-            mask = (base->EICHD3_WORD0 & EIM_EICHD3_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD3_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD3_WORD1 & EIM_EICHD3_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD3_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH4EN_MASK
         case 4U:
-            mask = (base->EICHD4_WORD0 & EIM_EICHD4_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD4_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD4_WORD1 & EIM_EICHD4_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD4_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH5EN_MASK
         case 5U:
-            mask = (base->EICHD5_WORD0 & EIM_EICHD5_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD5_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD5_WORD1 & EIM_EICHD5_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD5_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH6EN_MASK
         case 6U:
-            mask = (base->EICHD6_WORD0 & EIM_EICHD6_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD6_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD6_WORD1 & EIM_EICHD6_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD6_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH7EN_MASK
         case 7U:
-            mask = (base->EICHD7_WORD0 & EIM_EICHD7_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD7_WORD1_B0_3DATA_MASK_SHIFT;
+            mask = (base->EICHD7_WORD1 & EIM_EICHD7_WORD1_B0_3DATA_MASK_MASK) >> EIM_EICHD7_WORD1_B0_3DATA_MASK_SHIFT;
             break;
 #endif
 #ifdef EIM_EICHEN_EICH8EN_MASK

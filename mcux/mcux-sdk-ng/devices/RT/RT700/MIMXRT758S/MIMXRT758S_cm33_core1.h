@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT758SGAWAR_cm33_core1
-**                          MIMXRT758SGFOA_cm33_core1
+**     Processors:          MIMXRT758SGAWBR_cm33_core1
+**                          MIMXRT758SGFOB_cm33_core1
 **
-**     Compilers:           GNU C Compiler
+**     Compilers:
+**                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.2 DraftA, 05/2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    iMXRT700RM Rev.3, 05/2025
+**     Version:             rev. 4.0, 2025-06-06
+**     Build:               b250722
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core1
@@ -30,14 +31,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-06-06)
+**         B0 initial version
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT758S_cm33_core1.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-06-06
  * @brief CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core1
  *
  * CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core1

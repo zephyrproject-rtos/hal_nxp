@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPI DMA driver version 2.1.1. */
-#define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief SPI DMA driver version. */
+#define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*! @} */
 
 typedef struct _spi_dma_handle spi_dma_handle_t;
@@ -36,10 +36,13 @@ typedef void (*spi_dma_callback_t)(SPI_Type *base, spi_dma_handle_t *handle, sta
 /*! @brief SPI DMA transfer handle, users should not touch the content of the handle.*/
 struct _spi_dma_handle
 {
+    SPI_Type *base;              /*!< SPI base address */
     volatile bool txInProgress;  /*!< Send transfer finished */
     volatile bool rxInProgress;  /*!< Receive transfer finished */
     uint8_t bytesPerFrame;       /*!< Bytes in a frame for SPI transfer */
     uint8_t lastwordBytes;       /*!< The Bytes of lastword for master*/
+    uint16_t txDummy;            /*!< The dummy data for TX. */
+    uint32_t lastword;           /*!< The last word for master TX. */
     dma_handle_t *txHandle;      /*!< DMA handler for SPI send */
     dma_handle_t *rxHandle;      /*!< DMA handler for SPI receive */
     spi_dma_callback_t callback; /*!< Callback for SPI DMA transfer */
@@ -48,10 +51,10 @@ struct _spi_dma_handle
     size_t transferSize;         /*!< Bytes need to be transfer */
     uint32_t instance;           /*!< Index of SPI instance*/
     const uint8_t *txNextData;   /*!< The pointer of next time tx data*/
-    const uint8_t *txEndData;    /*!< The pointer of end of data*/
+    size_t txRemainingBytes;     /*!< lastwordBytes + txRemainingBytes is number of data to be send [in bytes] */
     uint8_t *rxNextData;         /*!< The pointer of next time rx data*/
-    uint8_t *rxEndData;          /*!< The pointer of end of rx data*/
-    uint32_t dataBytesEveryTime; /*!< Bytes in a time for DMA transfer, default is DMA_MAX_TRANSFER_COUNT */
+    size_t rxRemainingBytes;     /*!< Number of data to be received [in bytes] */
+    bool isSlave;                /*!< SPI work in slave mode. */
 };
 
 /*******************************************************************************
@@ -137,7 +140,9 @@ static inline status_t SPI_SlaveTransferCreateHandleDMA(SPI_Type *base,
                                                         dma_handle_t *txHandle,
                                                         dma_handle_t *rxHandle)
 {
-    return SPI_MasterTransferCreateHandleDMA(base, handle, callback, userData, txHandle, rxHandle);
+    status_t status = SPI_MasterTransferCreateHandleDMA(base, handle, callback, userData, txHandle, rxHandle);
+    handle->isSlave = true;
+    return status;
 }
 
 /*!
@@ -167,9 +172,9 @@ static inline status_t SPI_SlaveTransferDMA(SPI_Type *base, spi_dma_handle_t *ha
 void SPI_MasterTransferAbortDMA(SPI_Type *base, spi_dma_handle_t *handle);
 
 /*!
- * @brief Gets the master DMA transfer remaining bytes.
+ * @brief Gets the master DMA transfered bytes.
  *
- * This function gets the master DMA transfer remaining bytes.
+ * This function gets the master DMA transfered bytes.
  *
  * @param base SPI peripheral base address.
  * @param handle A pointer to the spi_dma_handle_t structure which stores the transfer state.
@@ -190,9 +195,9 @@ static inline void SPI_SlaveTransferAbortDMA(SPI_Type *base, spi_dma_handle_t *h
 }
 
 /*!
- * @brief Gets the slave DMA transfer remaining bytes.
+ * @brief Gets the slave DMA transfered bytes.
  *
- * This function gets the slave DMA transfer remaining bytes.
+ * This function gets the slave DMA transfered bytes.
  *
  * @param base SPI peripheral base address.
  * @param handle A pointer to the spi_dma_handle_t structure which stores the transfer state.

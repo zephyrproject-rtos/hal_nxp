@@ -971,10 +971,10 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_HOST_Type *base, dsi_transfer_t 
         }
 
         /* ========================== Prepare TX. ========================== */
-        /* If xfer->sendDscCmd is true, then the DCS command is not included in the
-           xfer->txData, but specified by xfer->dscCmd.
+        /* If xfer->sendDcsCmd is true, then the DCS command is not included in the
+           xfer->txData, but specified by xfer->dcsCmd.
          */
-        if (xfer->sendDscCmd)
+        if (xfer->sendDcsCmd)
         {
             txDataSize = (uint32_t)xfer->txDataSize + 1U;
         }
@@ -994,9 +994,9 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_HOST_Type *base, dsi_transfer_t 
             {
                 txDataIndex = 0;
 
-                if (xfer->sendDscCmd)
+                if (xfer->sendDcsCmd)
                 {
-                    wordCount = xfer->dscCmd;
+                    wordCount = xfer->dcsCmd;
                 }
                 else
                 {
@@ -1013,7 +1013,7 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_HOST_Type *base, dsi_transfer_t 
         else
         {
             wordCount = (uint16_t)txDataSize;
-            DSI_WriteApbTxPayloadExt(base, xfer->txData, xfer->txDataSize, xfer->sendDscCmd, xfer->dscCmd);
+            DSI_WriteApbTxPayloadExt(base, xfer->txData, xfer->txDataSize, xfer->sendDcsCmd, xfer->dcsCmd);
         }
 
         DSI_SetApbPacketControl(base, wordCount, xfer->virtualChannel, xfer->txDataType, xfer->flags);

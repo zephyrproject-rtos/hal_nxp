@@ -121,8 +121,8 @@
 **                          MIMX94398XVMM_cm7_core0
 **                          MIMX94398XVMM_cm7_core1
 **
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b250109
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for neutrons
@@ -157,21 +157,24 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
- * @file neutrons.h
- * @version 1.0
- * @date 2023-11-01
+ * @file PERI_neutrons.h
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for neutrons
  *
  * CMSIS Peripheral Access Layer for neutrons
  */
 
-#if !defined(neutrons_H_)
-#define neutrons_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(PERI_NEUTRONS_H_)
+#define PERI_NEUTRONS_H_                         /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMX94398AVKE_ca55) || defined(CPU_MIMX94398AVKJ_ca55) || defined(CPU_MIMX94398AVKM_ca55) || defined(CPU_MIMX94398AVME_ca55) || defined(CPU_MIMX94398AVMJ_ca55) || defined(CPU_MIMX94398AVMM_ca55) || defined(CPU_MIMX94398CVKE_ca55) || defined(CPU_MIMX94398CVKJ_ca55) || defined(CPU_MIMX94398CVKM_ca55) || defined(CPU_MIMX94398CVME_ca55) || defined(CPU_MIMX94398CVMJ_ca55) || defined(CPU_MIMX94398CVMM_ca55) || defined(CPU_MIMX94398DVKE_ca55) || defined(CPU_MIMX94398DVKJ_ca55) || defined(CPU_MIMX94398DVKM_ca55) || defined(CPU_MIMX94398DVME_ca55) || defined(CPU_MIMX94398DVMJ_ca55) || defined(CPU_MIMX94398DVMM_ca55) || defined(CPU_MIMX94398XVKE_ca55) || defined(CPU_MIMX94398XVKJ_ca55) || defined(CPU_MIMX94398XVKM_ca55) || defined(CPU_MIMX94398XVME_ca55) || defined(CPU_MIMX94398XVMJ_ca55) || defined(CPU_MIMX94398XVMM_ca55))
 #include "MIMX94398_ca55_COMMON.h"
@@ -987,50 +990,50 @@ typedef struct {
 #define neutrons_CONFIG_TTINT_MASK               (0x100U)
 #define neutrons_CONFIG_TTINT_SHIFT              (8U)
 /*! TTINT - TCM-to-TCM Channel Interrupt Status
- *  0b0..No interrupt generated
  *  0b0..No effect
- *  0b1..Interrupt generated
+ *  0b0..No interrupt generated
  *  0b1..Clear
+ *  0b1..Interrupt generated
  */
 #define neutrons_CONFIG_TTINT(x)                 (((uint32_t)(((uint32_t)(x)) << neutrons_CONFIG_TTINT_SHIFT)) & neutrons_CONFIG_TTINT_MASK)
 
 #define neutrons_CONFIG_FINT_MASK                (0x200U)
 #define neutrons_CONFIG_FINT_SHIFT               (9U)
 /*! FINT - Fetch Channel Interrupt Status
- *  0b0..No interrupt generated
  *  0b0..No effect
- *  0b1..Interrupt generated
+ *  0b0..No interrupt generated
  *  0b1..Clear
+ *  0b1..Interrupt generated
  */
 #define neutrons_CONFIG_FINT(x)                  (((uint32_t)(((uint32_t)(x)) << neutrons_CONFIG_FINT_SHIFT)) & neutrons_CONFIG_FINT_MASK)
 
 #define neutrons_CONFIG_PINT_MASK                (0x400U)
 #define neutrons_CONFIG_PINT_SHIFT               (10U)
 /*! PINT - Push Channel Interrupt Status
- *  0b0..No interrupt generated
  *  0b0..No effect
- *  0b1..Interrupt generated
+ *  0b0..No interrupt generated
  *  0b1..Clear
+ *  0b1..Interrupt generated
  */
 #define neutrons_CONFIG_PINT(x)                  (((uint32_t)(((uint32_t)(x)) << neutrons_CONFIG_PINT_SHIFT)) & neutrons_CONFIG_PINT_MASK)
 
 #define neutrons_CONFIG_WINT_MASK                (0x800U)
 #define neutrons_CONFIG_WINT_SHIFT               (11U)
 /*! WINT - Data Mover Weight Channel Interrupt
- *  0b0..No interrupt generated
  *  0b0..No effect
- *  0b1..Interrupt generated
+ *  0b0..No interrupt generated
  *  0b1..Clear
+ *  0b1..Interrupt generated
  */
 #define neutrons_CONFIG_WINT(x)                  (((uint32_t)(((uint32_t)(x)) << neutrons_CONFIG_WINT_SHIFT)) & neutrons_CONFIG_WINT_MASK)
 
 #define neutrons_CONFIG_EINT_MASK                (0x1000U)
 #define neutrons_CONFIG_EINT_SHIFT               (12U)
 /*! EINT - Data Mover Error Interrupt
- *  0b0..No interrupt generated
  *  0b0..No effect
- *  0b1..Interrupt generated
+ *  0b0..No interrupt generated
  *  0b1..Clear
+ *  0b1..Interrupt generated
  */
 #define neutrons_CONFIG_EINT(x)                  (((uint32_t)(((uint32_t)(x)) << neutrons_CONFIG_EINT_SHIFT)) & neutrons_CONFIG_EINT_MASK)
 
@@ -2582,5 +2585,5 @@ typedef struct {
  */ /* end of group Peripheral_access_layer */
 
 
-#endif  /* neutrons_H_ */
+#endif  /* PERI_NEUTRONS_H_ */
 

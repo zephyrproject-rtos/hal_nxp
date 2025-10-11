@@ -34,7 +34,7 @@
 **                          MIMXRT1189XVM8C_cm7
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b250721
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_PORT
@@ -556,7 +556,7 @@ typedef struct {
 
 #define NETC_PORT_PRXSDUOR_MACSEC_BCO_MASK       (0x1F00U)
 #define NETC_PORT_PRXSDUOR_MACSEC_BCO_SHIFT      (8U)
-/*! MACSEC_BCO - MACSec byte count overhead */
+/*! MACSEC_BCO - MACsec byte count overhead */
 #define NETC_PORT_PRXSDUOR_MACSEC_BCO(x)         (((uint32_t)(((uint32_t)(x)) << NETC_PORT_PRXSDUOR_MACSEC_BCO_SHIFT)) & NETC_PORT_PRXSDUOR_MACSEC_BCO_MASK)
 /*! @} */
 
@@ -570,7 +570,7 @@ typedef struct {
 
 #define NETC_PORT_PTXSDUOR_MACSEC_BCO_MASK       (0x1F00U)
 #define NETC_PORT_PTXSDUOR_MACSEC_BCO_SHIFT      (8U)
-/*! MACSEC_BCO - MACSec byte count overhead */
+/*! MACSEC_BCO - MACsec byte count overhead */
 #define NETC_PORT_PTXSDUOR_MACSEC_BCO(x)         (((uint32_t)(((uint32_t)(x)) << NETC_PORT_PTXSDUOR_MACSEC_BCO_SHIFT)) & NETC_PORT_PTXSDUOR_MACSEC_BCO_MASK)
 /*! @} */
 
@@ -937,14 +937,27 @@ typedef struct {
 
 #define NETC_PORT_PTCTMSDUR_MAXSDU_MASK          (0xFFFFU)
 #define NETC_PORT_PTCTMSDUR_MAXSDU_SHIFT         (0U)
+/*! MAXSDU - Tx Maximum Service Data Unit Size */
 #define NETC_PORT_PTCTMSDUR_MAXSDU(x)            (((uint32_t)(((uint32_t)(x)) << NETC_PORT_PTCTMSDUR_MAXSDU_SHIFT)) & NETC_PORT_PTCTMSDUR_MAXSDU_MASK)
 
 #define NETC_PORT_PTCTMSDUR_SDU_TYPE_MASK        (0x30000U)
 #define NETC_PORT_PTCTMSDUR_SDU_TYPE_SHIFT       (16U)
+/*! SDU_TYPE - SDU type
+ *  0b00..PPDU (Physical Layer PDU). Includes preamble, IPG, SFD along with MPDU. The overhead (number of bytes)
+ *        to be added to the actual length of each frame, to reflect the PPDU (Physical Layer PDU) frame length, is
+ *        specified in the register PTXSDUOR.
+ *  0b01..MPDU (MAC PDU). Includes MAC Header, MSDU and FCS. The frame length can be adjusted if a link has MACsec
+ *        enabled (such as MACsec enabled in a PHY). The MACsec overhead is specified in register PTXSDUOR.
+ *  0b10..MSDU (MAC SDU); MPDU minus 12B MAC Header and 4B FCS. The frame length is adjusted by subtracting 16 bytes from it.
+ */
 #define NETC_PORT_PTCTMSDUR_SDU_TYPE(x)          (((uint32_t)(((uint32_t)(x)) << NETC_PORT_PTCTMSDUR_SDU_TYPE_SHIFT)) & NETC_PORT_PTCTMSDUR_SDU_TYPE_MASK)
 
 #define NETC_PORT_PTCTMSDUR_SF_MAXSDU_DIS_MASK   (0x1000000U)
 #define NETC_PORT_PTCTMSDUR_SF_MAXSDU_DIS_SHIFT  (24U)
+/*! SF_MAXSDU_DIS
+ *  0b0..Enabled
+ *  0b1..Disabled
+ */
 #define NETC_PORT_PTCTMSDUR_SF_MAXSDU_DIS(x)     (((uint32_t)(((uint32_t)(x)) << NETC_PORT_PTCTMSDUR_SF_MAXSDU_DIS_SHIFT)) & NETC_PORT_PTCTMSDUR_SF_MAXSDU_DIS_MASK)
 /*! @} */
 
@@ -1069,8 +1082,8 @@ typedef struct {
 #define NETC_PORT_PPCPDEIMR_DRME_MASK            (0x100000U)
 #define NETC_PORT_PPCPDEIMR_DRME_SHIFT           (20U)
 /*! DRME
- *  0b0..Preserve the DR value in the outer VLAN.
- *  0b1..Update DR value in the outer VLAN based on DEnDEI field.
+ *  0b0..Preserve the DEI value in the outer VLAN.
+ *  0b1..Update DEI value in the outer VLAN based on DRnDEI field.
  */
 #define NETC_PORT_PPCPDEIMR_DRME(x)              (((uint32_t)(((uint32_t)(x)) << NETC_PORT_PPCPDEIMR_DRME_SHIFT)) & NETC_PORT_PPCPDEIMR_DRME_MASK)
 /*! @} */

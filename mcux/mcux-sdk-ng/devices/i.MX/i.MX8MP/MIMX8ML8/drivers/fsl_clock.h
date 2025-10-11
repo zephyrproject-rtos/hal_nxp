@@ -57,9 +57,9 @@
     }
 
 /*! @brief Clock ip name array for ENET. */
-#define ENET_CLOCKS   \
-    {                 \
-        kCLOCK_Enet1, \
+#define ENET_CLOCKS                     \
+    {                                   \
+        kCLOCK_IpInvalid, kCLOCK_Enet1, \
     }
 
 /*! @brief Clock ip name array for ENET_QOS. */

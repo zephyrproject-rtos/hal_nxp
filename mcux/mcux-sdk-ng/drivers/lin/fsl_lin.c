@@ -53,9 +53,10 @@ lin_user_config_t *g_linUserconfigPtr[FSL_FEATURE_SOC_LPUART_COUNT];
 
 static inline uint8_t BIT(const uint8_t A, uint8_t B)
 {
+    assert(B < 8U);
     uint8_t tmp = A;
 
-    tmp = (uint8_t)(((uint8_t)((uint8_t)(tmp) >> (uint8_t)(B))) & 0x01U);
+    tmp = ((tmp >> B) & 0x01U);
     return tmp;
 }
 
@@ -71,6 +72,7 @@ static inline uint8_t BIT(const uint8_t A, uint8_t B)
  */
 uint32_t LIN_CalcMaxHeaderTimeoutCnt(uint32_t baudRate)
 {
+    assert(baudRate <= (0xFFFFFFFFUL / LIN_TIME_OUT_UNIT_US));
     return (uint32_t)((14U * 2U * 1000000U / (LIN_TIME_OUT_UNIT_US * baudRate)) + 1U);
 }
 
@@ -85,6 +87,7 @@ uint32_t LIN_CalcMaxHeaderTimeoutCnt(uint32_t baudRate)
  */
 uint32_t LIN_CalcMaxResTimeoutCnt(uint32_t baudRate, uint8_t size)
 {
+    assert(baudRate <= (0xFFFFFFFFUL / LIN_TIME_OUT_UNIT_US));
     return (uint32_t)((14U * (1U + (uint32_t)size) * 1000000U / (LIN_TIME_OUT_UNIT_US * baudRate)) + 1U);
 }
 

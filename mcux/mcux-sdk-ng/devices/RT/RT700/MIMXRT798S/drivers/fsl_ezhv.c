@@ -60,7 +60,7 @@ void EZHV_InstallFirmware(ezhv_copy_image_t *ezhvCopyImage)
     srcAddr = ezhvCopyImage->srcAddr;
     size = ezhvCopyImage->size;
 
-    memcpy((void*)(uint32_t*)dstAddr, (const void*)(uint32_t*)srcAddr, size);
+    (void)memcpy((void*)(uint32_t*)dstAddr, (const void*)(uint32_t*)srcAddr, size);
 }
 
 void EZHV_Boot(uint32_t bootAddr)
@@ -75,7 +75,7 @@ void EZHV_Boot(uint32_t bootAddr)
 void EZHV_SetPara(ezhv_param_t *para)
 {
     assert(para != NULL);
-    memcpy((void*)EZHV_SHARED_DATA_ADDR, para, sizeof(ezhv_param_t));
+    (void)memcpy((void*)EZHV_SHARED_DATA_ADDR, (void const*)para, sizeof(ezhv_param_t));
 }
 
 uint32_t *EZHV_GetParaAddr(void)
@@ -120,7 +120,7 @@ static void EZHV_HandleIRQ(void)
     {
         for (uint32_t id = 0U; id < EZHV_INT_CHAN_NUM; id++)
         {
-            if ((0U != (intFlag & (1U << id))) && (NULL != s_ezhvCallback[id]))
+            if ((0U != (intFlag & (1UL << id))) && (NULL != s_ezhvCallback[id]))
             {
                 s_ezhvCallback[id](s_ezhvCallbackParam[id]);
             }

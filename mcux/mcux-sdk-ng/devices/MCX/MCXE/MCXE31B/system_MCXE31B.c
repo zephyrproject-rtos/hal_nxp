@@ -6,9 +6,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    MCXE31 RM Rev1
-**     Version:             rev. 0.1, 2024-11-19
-**     Build:               b250310
+**     Reference manual:    MCXE31 RM Rev2
+**     Version:             rev. 1.0, 2025-07-18
+**     Build:               b250811
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -25,6 +25,8 @@
 **     Revisions:
 **     - rev. 0.1 (2024-11-19)
 **         Initial version.
+**     - rev. 1.0 (2025-07-18)
+**         Rev2 RM.
 **
 ** ###################################################################
 */
@@ -32,7 +34,7 @@
 /*!
  * @file MCXE31B
  * @version 1.0
- * @date 2025-03-10
+ * @date 2025-08-11
  * @brief Device specific configuration file for MCXE31B (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -56,9 +58,18 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 void SystemInit(void)
 {
+#if (DISABLE_WDOG)
+    if ((SWT_0->CR & SWT_CR_WEN_MASK) != 0U)
+    {
+        SWT_0->SR = 0xC520;
+        SWT_0->SR = 0xD928;
+        SWT_0->CR &= ~SWT_CR_WEN_MASK;
+    }
+#endif /* (DISABLE_WDOG) */
+
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access */
-#endif                                                 /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
+    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2));    /* set CP10, CP11 Full Access */
+#endif                                                    /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
     /* Enable flash controller code and data line read and prefetch buffers */
     PFLASH->PFCR[0] =
@@ -80,9 +91,9 @@ void SystemInit(void)
    ---------------------------------------------------------------------------- */
 void SystemCoreClockUpdate(void)
 {
-    uint32_t div    = 0U;
-    uint32_t freq   = 0U;
-    uint32_t temp   = 0U;
+    uint32_t div  = 0U;
+    uint32_t freq = 0U;
+    uint32_t temp = 0U;
     uint64_t temp64 = 0U;
 
     switch (MC_CGM->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK)
@@ -98,8 +109,8 @@ void SystemCoreClockUpdate(void)
 
                 if ((PLL->PLLFD & PLL_PLLFD_SDMEN_MASK) != 0U) /* Fractional mode. */
                 {
-                    freq   = CLK_XTAL_OSC_CLK / 1000U / div;
-                    temp   = (PLL->PLLDV & PLL_PLLDV_MFI_MASK) >> PLL_PLLDV_MFI_SHIFT;
+                    freq = CLK_XTAL_OSC_CLK / 1000U / div;
+                    temp = (PLL->PLLDV & PLL_PLLDV_MFI_MASK) >> PLL_PLLDV_MFI_SHIFT;
                     temp64 = (uint64_t)temp * 18432U + (uint64_t)(PLL->PLLFD & PLL_PLLFD_MFN_MASK);
                     temp64 = temp64 * 1000U / 18432U;
                     freq   = (uint32_t)((uint64_t)freq * temp64);

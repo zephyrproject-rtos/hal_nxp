@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*! @} */
 
 /*!
@@ -250,6 +250,7 @@ static inline gpt_clock_source_t GPT_GetClockSource(GPT_Type *base)
  */
 static inline void GPT_SetClockDivider(GPT_Type *base, uint32_t divider)
 {
+    assert(divider > 0U);
     assert(divider - 1U <= GPT_PR_PRESCALER_MASK);
 
     base->PR = (base->PR & ~GPT_PR_PRESCALER_MASK) | GPT_PR_PRESCALER(divider - 1U);
@@ -274,6 +275,7 @@ static inline uint32_t GPT_GetClockDivider(GPT_Type *base)
  */
 static inline void GPT_SetOscClockDivider(GPT_Type *base, uint32_t divider)
 {
+    assert(divider > 0U);
     assert(divider - 1U <= (GPT_PR_PRESCALER24M_MASK >> GPT_PR_PRESCALER24M_SHIFT));
 
     base->PR = (base->PR & ~GPT_PR_PRESCALER24M_MASK) | GPT_PR_PRESCALER24M(divider - 1U);
