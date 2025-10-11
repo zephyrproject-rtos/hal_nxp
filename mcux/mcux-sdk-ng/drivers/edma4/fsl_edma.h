@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 6)) /*!< Version 2.10.6. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 10, 7)) /*!< Version 2.10.7. */
 /*! @} */
 
 /*! @brief eDMA driver name */
@@ -1578,8 +1578,11 @@ void EDMA_ClearChannelStatusFlags(EDMA_Type *base, uint32_t channel, uint32_t ma
  *               parameters.
  * @param base eDMA peripheral base address.
  * @param channel eDMA channel number.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_InvalidArgument
  */
-void EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel);
+status_t EDMA_CreateHandle(edma_handle_t *handle, EDMA_Type *base, uint32_t channel);
 
 /*!
  * @brief Installs the TCDs memory pool into the eDMA handle.
