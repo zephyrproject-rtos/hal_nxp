@@ -250,7 +250,7 @@ extern WPS_DATA wps_global;
     }
 
 OSA_MUTEX_HANDLE_DEFINE(reset_lock);
-#if defined(RW610) || defined(IW610)
+#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
 /* Mon thread */
 static bool mon_thread_init = 0;
 #endif
@@ -283,7 +283,7 @@ extern int wakeup_by;
 
 bool wlan_is_manual = false;
 
-#ifdef IW610
+#if defined(IW610) || defined(SD9177) || defined(SD8978)
 void (*wlan_hs_notify_cb)(void) = NULL;
 #endif
 #endif
@@ -430,7 +430,7 @@ static struct wps_config wps_conf = {
     .prov_session            = PROV_NON_SESSION_ATTEMPT,
 };
 #endif /* CONFIG_WPS2 */
-#if defined(RW610) || defined(IW610)
+#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
 static void wlcmgr_mon_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
@@ -1002,7 +1002,7 @@ int wlan_get_wakeup_reason(uint16_t *hs_wakeup_reason)
 #endif
 
 #if CONFIG_HOST_SLEEP
-#if defined(RW610) || defined(IW610)
+#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
 status_t wlan_hs_send_event(int id, void *data)
 {
     struct wlan_message msg;
@@ -8005,7 +8005,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         }
         reset_mutex_init = 1;
     }
-#if defined(RW610) || defined(IW610)
+#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
     if (!mon_thread_init)
     {
 
@@ -10610,7 +10610,7 @@ void wlan_reset(cli_reset_option ResetOption)
     PRINTF("--- Done ---\r\n");
 }
 
-#if defined(RW610) || defined(IW610)
+#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
 #if CONFIG_HOST_SLEEP
 void wlan_hs_hanshake_cfg(bool skip)
 {
@@ -10673,7 +10673,7 @@ static void wlcmgr_mon_task(void * data)
                 }
 #endif
 #endif
-#ifdef IW610
+#ifndef RW610
                 uint16_t hs_wakeup_reason = 0;
                 (void)wifi_get_wakeup_reason(&hs_wakeup_reason);
                 (void)wifi_print_wakeup_reason(hs_wakeup_reason);
