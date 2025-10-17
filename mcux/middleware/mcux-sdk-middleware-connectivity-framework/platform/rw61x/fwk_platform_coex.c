@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2024 NXP                          */
+/*                           Copyright 2021-2025 NXP                          */
 /*                            All rights reserved.                            */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
@@ -22,17 +22,17 @@
 #endif
 
 #if (defined gPlatformMonolithicApp_d && (gPlatformMonolithicApp_d != 0))
-#define WIFI_LD_TARGET LOAD_WIFI_FW_MONOLITHIC
+#define WIFI_LD_TARGET LOAD_WIFI_FIRMWARE
 #ifndef WIFI_FW_ADDRESS
 extern const uint32_t fw_cpu1[];
 #define WIFI_FW_ADDRESS ((uint32_t)&fw_cpu1[0])
 #endif
-#define BLE_LD_TARGET LOAD_BLE_FW_MONOLITHIC
+#define BLE_LD_TARGET LOAD_BLE_FIRMWARE
 #ifndef BLE_FW_ADDRESS
 extern const uint32_t fw_cpu2_ble[];
 #define BLE_FW_ADDRESS ((uint32_t)&fw_cpu2_ble[0])
 #endif
-#define COMBO_LD_TARGET LOAD_15D4_FW_MONOLITHIC
+#define COMBO_LD_TARGET LOAD_15D4_FIRMWARE
 #ifndef COMBO_FW_ADDRESS
 extern const uint32_t fw_cpu2_combo[];
 #define COMBO_FW_ADDRESS ((uint32_t)&fw_cpu2_combo[0])

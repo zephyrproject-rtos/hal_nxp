@@ -8,13 +8,16 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
+#ifndef __ZEPHYR__
+#include "FunctionLib.h"
+#include "fwk_debug.h"
+#endif
+
 #include "fsl_common.h"
 #include "fwk_config.h"
 #include "fwk_platform_ics.h"
 #include "fwk_platform.h"
-#include "FunctionLib.h"
 #include "fsl_adapter_rpmsg.h"
-#include "fwk_debug.h"
 
 #if defined(gPlatformIcsUseWorkqueueRxProcessing_d) && (gPlatformIcsUseWorkqueueRxProcessing_d > 0)
 #include "fwk_workq.h"
@@ -28,6 +31,10 @@
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
+#ifdef __ZEPHYR__
+#define PWR_DBG_LOG(...)
+#define FLib_MemCpy memcpy
+#endif
 
 /* Number of loops we spin waiting for NBU processor to respond */
 #define MAX_WAIT_NBU_RESPONSE_LOOPS 10000U
