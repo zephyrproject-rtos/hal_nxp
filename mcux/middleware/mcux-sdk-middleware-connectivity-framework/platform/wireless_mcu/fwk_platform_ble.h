@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2022, 2025 NXP                    */
+/*                           Copyright 2021-2022 NXP                          */
 /*                            All rights reserved.                            */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
@@ -38,6 +38,19 @@
 #define gAppMaxTxPowerDbm_c 10
 #endif /* gAppMaxTxPowerDbm_c */
 
+#if !defined(gPlatformUseUniqueDeviceIdForBdAddr_d)
+/*!
+ * \brief use the device unique Id for BD address
+ *
+ * \details 0 : Use the NXP OUI for the three first bytes and generate randomly the last three ones
+ *          1 : Use the NXP OUI for the three first bytes and the UID_LSB from RADIO_CTRL to define the last three ones
+ *          2 : Read full BD adress from IFR will fallback on RNG method if there is nothing in IFR
+ *
+ * \note Setting gPlatformUseUniqueDeviceIdForBdAddr_d to 2 is experimental and has not been validated on programmed samples.
+ */
+#define gPlatformUseUniqueDeviceIdForBdAddr_d 0
+#endif
+
 /* -------------------------------------------------------------------------- */
 /*                              Public prototypes                             */
 /* -------------------------------------------------------------------------- */
@@ -60,9 +73,8 @@ int PLATFORM_InitBle(void);
  *
  * \param[in] callback function pointer to callback. Can be NULL to unregister
  *            the callback.
- * \return int return status: >=0 for success, <0 for errors
  */
-int  PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len));
+void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len));
 
 /*!
  * \brief Sends a HCI message to Controller.
@@ -91,18 +103,40 @@ int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len);
  */
 int PLATFORM_SendHciMessageAlt(uint8_t packetType, uint8_t *msg, uint32_t len);
 
-/* \brief Shutdown BLE Controller
+/*!
+ * \brief retrieve BLE device address
  *
- * \return int return status: >=0 for success, <0 for errors
+ * \param[out] bleDeviceAddress pointer to BLE device address bytes
+ *
  */
-int PLATFORM_TerminateBle(void);
+void PLATFORM_GetBDAddr(uint8_t *bleDeviceAddress);
 
-/* \brief Extra procedures during HCI init from Host, likely to check if the
- *        HCI link is valid and execute Vendor specific init
+/*!
+ * \brief enable secure key management for BLE.
  *
- * \return int return status: >=0 for success, <0 for errors
+ * \return status of the operation, whether the security enabling was successful (=0) or failed.
+ *
  */
-int PLATFORM_StartHci(void);
+int32_t PLATFORM_EnableBleSecureKeyManagement(void);
+
+/*!
+ * \brief Check if there is a pending connectivity activity
+ * \note  Deprecated - shall use PLATFORM_GetRadioIdleDuration32K() API instead
+ *
+ * \return bool true  : No next connectivity activity
+ *                 false : Pending connectivity activity
+ */
+bool PLATFORM_CheckNextBleConnectivityActivity(void);
+
+/*!
+ * \brief Get number of microseconds elapsed between current value (now) and the argument of this function.
+ *
+ * \param[in] controllerTimestamp timestamp coming from BLE link layer controller expressed in microseconds.
+ *            This value is in the range [0 .. 2^30-1]
+ *
+ * \return uint64_t time difference expressed in microseconds, 0U in case of error.
+ */
+uint64_t PLATFORM_GetDeltaTimeStamp(uint32_t controllerTimestamp);
 
 #ifdef __cplusplus
 }

@@ -252,4 +252,15 @@ static inline uint32_t HAL_GetPowerOfTwoShift(uint32_t x)
 
 #define HAL_GETPOWEROF2SHIFT(x) HAL_GetPowerOfTwoShift(x)
 
+/*
+ * Macro to conditionally make static functions accessible for unit testing
+ * When FWK_UNIT_TEST is defined, static functions become non-static
+ * and can be accessed from test files
+ */
+#ifdef FWK_UNIT_TEST
+#define STATIC
+#else
+#define STATIC static
+#endif
+
 #endif

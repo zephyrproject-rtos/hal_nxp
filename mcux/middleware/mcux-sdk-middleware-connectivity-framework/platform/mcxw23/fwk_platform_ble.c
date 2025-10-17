@@ -13,6 +13,7 @@
 #include "fwk_platform_ble.h"
 #include "ble_controller.h"
 #include "fsl_rom_api.h"
+#include "fsl_debug_console.h"
 
 #ifdef SERIAL_BTSNOOP
 #include "sbtsnoop.h"
@@ -31,7 +32,6 @@ static blec_result_t PLATFORM_HciRxCallback(blec_hciPacketType_t packetType, voi
 /* -------------------------------------------------------------------------- */
 
 static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
-static bool is_initialized = false;
 
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
@@ -41,28 +41,19 @@ int PLATFORM_InitBle(void)
 {
     int ret = 0;
 
-    do
-    {
-        if (is_initialized)
-        {
-            ret = 1;
-            break;
-        }
-        /* Initialize the controller only when this flag is set, otherwise it means it
-        * will be initialized by upper layers */
+    /* Initialize the controller only when this flag is set, otherwise it means it
+     * will be initialized by upper layers */
 #if defined(gUseHciTransportDownward_d) && (gUseHciTransportDownward_d > 0)
-        if (kBLEC_Success != BLEController_Init(PLATFORM_HciRxCallback, gAppMaxTxPowerDbm_c, NULL))
-        {
-            ret = -1;
-        }
+    if (kBLEC_Success != BLEController_Init(PLATFORM_HciRxCallback, gAppMaxTxPowerDbm_c, NULL))
+    {
+        ret = 1;
+    }
 #else
-        uint8_t bdAddr[6];
+    uint8_t bdAddr[6];
 
-        PLATFORM_GetBDAddr(bdAddr);
-        (void)BLEController_WriteBdAddr(bdAddr);
+    PLATFORM_GetBDAddr(bdAddr);
+    (void)BLEController_WriteBdAddr(bdAddr);
 #endif
-        is_initialized = true;
-    } while (false);
 
     return ret;
 }
@@ -88,22 +79,70 @@ int PLATFORM_SendHciMessageAlt(uint8_t packetType, uint8_t *msg, uint32_t len)
     return ret;
 }
 
-int PLATFORM_StartHci(void)
+void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
 {
-    return 0;
-}
-
-int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
-{
-    int ret = 0;
     hci_rx_callback = callback;
     (void)hci_rx_callback;
-    return ret;
+}
+
+void PLATFORM_GetBDAddr(uint8_t *bleDeviceAddress)
+{
+    flash_config_t flashInstance;
+    status_t       status;
+
+    status = FLASH_Init(&flashInstance);
+    assert_equal(status, kStatus_Success);
+
+    if (status == kStatus_Success)
+    {
+        uint32_t location = kFFR_BdAddrLocationCmpa | kFFR_BdAddrLocationNmpa | kFFR_BdAddrLocationUuid;
+        status            = FFR_GetBdAddress(&flashInstance, bleDeviceAddress, &location);
+        assert_equal(status, kStatus_Success);
+        PRINTF("Using bdAddr from %s\r\n", location == kFFR_BdAddrLocationCmpa ? "CMPA" :
+                                           location == kFFR_BdAddrLocationNmpa ? "NMPA" :
+                                                                                 "UUID");
+    }
 }
 
 bool PLATFORM_CheckNextBleConnectivityActivity(void)
 {
     return true;
+}
+
+int PLATFORM_GetRadioIdleDuration32K(void)
+{
+    blec_result_t status;
+    int           ret;
+    uint32_t      remainingTimeUs  = 0U;
+    uint32_t      remainingTime32k = 0U;
+
+    do
+    {
+        status = BLEController_GetRemainingTimeForNextEvent(&remainingTimeUs);
+        if (status != kBLEC_Success)
+        {
+            ret = -2;
+            break;
+        }
+
+        if (remainingTimeUs == UINT32_MAX)
+        {
+            ret = PLATFORM_RADIO_IDLE_FOREVER;
+            break;
+        }
+
+        remainingTime32k = USEC_TO_COUNT(remainingTimeUs, 32768U);
+        if (remainingTime32k > INT32_MAX)
+        {
+            ret = PLATFORM_RADIO_IDLE_FOREVER;
+        }
+        else
+        {
+            ret = (int)remainingTime32k;
+        }
+    } while (0);
+
+    return ret;
 }
 
 /* -------------------------------------------------------------------------- */
