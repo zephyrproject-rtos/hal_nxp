@@ -52,6 +52,8 @@
 #define RL_USE_STATIC_API (1)
 #endif
 
+#define SH_MEM_TOTAL_SIZE (4352U)
+
 #define RL_USE_MCMGR_IPC_ISR_HANDLER (1)
 
 #define RL_ASSERT(x)     \

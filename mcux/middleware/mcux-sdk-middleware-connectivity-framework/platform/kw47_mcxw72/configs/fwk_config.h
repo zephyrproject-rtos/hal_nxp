@@ -183,7 +183,22 @@
  * thread stack (this can be configured).
  */
 #ifndef gPlatformIcsUseWorkqueueRxProcessing_d
-#define gPlatformIcsUseWorkqueueRxProcessing_d 0
+#define gPlatformIcsUseWorkqueueRxProcessing_d 1
+#endif
+
+/* Enable HCI RX processing in the system workqueue thread
+ * If enabled, the HCI transport will use the system workqueue to process its received data. This allows to reduce the
+ * time spent in the ISR and reduces impact on system activities.
+ * Note: the system workqueue requires a dedicated thread, so enabling this feature will consume a bit of RAM for the
+ * thread stack (this can be configured).
+ * It is not supported to use this feature if the application does not run an RTOS, as the workqueue will be unable to preempt other tasks.
+ */
+#ifndef gPlatformHciUseWorkqueueRxProcessing_d
+#if (defined(SDK_OS_FREE_RTOS))
+#define gPlatformHciUseWorkqueueRxProcessing_d 1
+#else
+#define gPlatformHciUseWorkqueueRxProcessing_d 0
+#endif
 #endif
 
 /* Address which can trigger a dummy interrupt on NBU. Used in PLATFORM_RemoteActiveReq() to ensure code is executed on
@@ -220,6 +235,14 @@
  */
 #ifndef gPlatformEnableFro6MCalLowpower_d
 #define gPlatformEnableFro6MCalLowpower_d 1
+#endif
+
+/*********************************************************************
+ *        Configuration check
+ *********************************************************************/
+
+#if (!defined(SDK_OS_FREE_RTOS)) && (gPlatformHciUseWorkqueueRxProcessing_d == 1)
+#error "Using gPlatformHciUseWorkqueueRxProcessing_d feature in baremetal is not supported"
 #endif
 
 #endif /* _FWK_CONFIG_H_ */

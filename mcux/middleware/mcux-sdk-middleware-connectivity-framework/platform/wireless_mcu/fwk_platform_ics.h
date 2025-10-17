@@ -71,6 +71,66 @@ typedef PACKED_STRUCT NbuDbgMemInfo_tag
     uint16_t bufferSize;
 }
 NbuDbgMemInfo_t;
+
+typedef enum
+{
+    gNbuInfoReserved_c = 0x0U, /* Info starting from 0x00U to 0x54U */
+    /* New Info events to be added here */
+    gNbuWarningReserved_c = 0x55U, /* Warnings starting from 0x55U to 0xA9U */
+    /* gNbuWarningXtal32MhzNotReadyAtWakeUp mentions that XTAL happens to be unready
+     * after low power exit. This indicates that the NBU requires some time
+     * on LP exit waiting for XTAL to be ready.
+     * 32MHz parameters needs to be checked. Refer to @BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT */
+    gNbuWarningXtal32MhzNotReadyAtWakeUp = 0x56U,
+    /* New warning events to be added here */
+    gNbuErrorReserved_c = 0xAAU /* Errors starting from 0xAAU */
+    /* New error events to be added here */
+} eNbuEventType;
+
+typedef PACKED_STRUCT
+{
+    union
+    {
+        /* No data for gNbuInfoReserved_c */
+        /* New info data to be added here */
+    };
+}
+NbuInfoData_t;
+
+typedef PACKED_STRUCT
+{
+    union
+    {
+        /* No data for gNbuWarningReserved_c */
+        /* No data for gNbuWarningXtal32MhzNotReadyAtWakeUp */
+        /* New warnings data to be added here */
+    };
+}
+NbuWarningData_t;
+
+typedef PACKED_STRUCT
+{
+    union
+    {
+        /* No data for gNbuErrorReserved_c */
+        /* New errors data to be added here */
+    };
+}
+NbuErrorData_t;
+
+typedef PACKED_STRUCT
+{
+    eNbuEventType eventType;
+    union
+    {
+        uint8_t          dummy; /* Ensures the union has a consistent non-zero size across compilers */
+        NbuInfoData_t    infoData;
+        NbuWarningData_t warningData;
+        NbuErrorData_t   errorData;
+    };
+}
+NbuEvent_t;
+
 /*! \brief  FWK ICS message type.
  *
  *  \details enumarated values for FWK ICS messages
@@ -89,7 +149,8 @@ typedef enum
     gFwkSrvNbuSecurityEventIndication_c         = 0x9U,
     gFwkSrvNbuRequestRngSeed_c                  = 0xAU,
     gFwkSrvNbuRequestNewTemperature_c           = 0xBU,
-    gFwkSrvNbu2HostLast_c                       = 0xCU,
+    gFwkSrvNbuEventIndication_c                 = 0xCU, /*!< Info - Warning - Error indications to Host */
+    gFwkSrvNbu2HostLast_c                       = 0xDU,
     gFwkSrvHost2NbuFirst_c                      = 0x80U,
     gFwkSrvNbuVersionRequest_c                  = 0x81U,
     gFwkSrvXtal32MTrimIndication_c              = 0x82U,
@@ -115,6 +176,7 @@ typedef struct
 
 typedef void (*nbu_memory_error_callback_t)(NbuDbgMemInfo_t *memInfo);
 typedef void (*nbu_issue_callback_t)(void);
+typedef void (*nbu_event_callback_t)(NbuEvent_t *event);
 typedef void (*nbu_security_event_callback_t)(uint32_t securityEventBitmask);
 typedef void (*nbu_temp_req_event_callback_t)(uint32_t periodic_interval_ms);
 typedef void (*PLATFORM_FroDebugCallback_t)(uint16_t freq, int16_t ppm_mean, int16_t ppm, uint16_t fro_trim);
@@ -209,6 +271,15 @@ void PLATFORM_RegisterFroNotificationCallback(PLATFORM_FroDebugCallback_t cb);
  *
  */
 void PLATFORM_RegisterNbuIssueCb(nbu_issue_callback_t cb);
+
+/*!
+ * \brief Register callback called when nbu has sent an event indication
+ *
+ * Events can be an information, a warning or a system error.
+ *
+ * \param[in] cb error callback for platform module
+ */
+void PLATFORM_RegisterNbuEventCb(nbu_event_callback_t cb);
 
 /*!
  * \brief Register callback called when nbu has detected a security issue (vulnerabilty attack).
