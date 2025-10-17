@@ -59,32 +59,32 @@ blobs:
 
 #For MCXW71
   - path: mcxw71/mcxw71_nbu_ble.sb3
-    sha256: b5d766a676f9646d2baab3b4b3ced8c9665ece952ccb373ed7c79eaf75785a8a
+    sha256: aa2c805b272c0d290da481017b4c29f586ad4129d65248cfaffaf85eb576d5dd
     type: img
-    version: '25.06.00'
+    version: '25.09.00'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/25.06.00/bin/mcxw71_nbu_ble_hosted.sb3
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/25.09.00/bin/mcxw71_nbu_ble_hosted.sb3
     description: "BLE Controller for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_ble_all_hosted.bin
-    sha256: 336ec94d63a28d68cf791c85cb76b0266d4834db8888e0ddd713ecc2e3e5f581
+    sha256: e597d64c94eea91349c015b0f6d0ad3a82edf8435669623b5128b67b2523e89a
     type: img
-    version: '25.06.00'
+    version: '25.09.00'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Online_Code_Hosting.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/25.06.00/bin/mcxw72_nbu_ble_all_hosted.bin
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-bluetooth-controller/raw/refs/heads/release/25.09.00/bin/mcxw72_nbu_ble_all_hosted.bin
     description: "BLE Controller for MCXW72 boards"
   - path: mcxw71/mcxw71_nbu_ble_15_4_dyn.sb3
-    sha256: a5b61fbb09fd89bad25046258c8c7e4ae2ce9fc57246671314b4924ac9442883
+    sha256: 72777c94badb0362656b1a491a446b4083dd62b66fc54f0de451a51153b68cbe
     type: img
-    version: '1.0.21b'
+    version: '25.09.00'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.06.00-pvw2/bin/k32w1_mcxw71/k32w1_mcxw71_nbu_ble_15_4_dyn.sb3
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/bin/k32w1_mcxw71/k32w1_mcxw71_nbu_ble_15_4_dyn.sb3
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
-    sha256: fe2de0a690f33128073103b208dbb8bbbb5a30bfb33521ebf16e52a751439073
+    sha256: 99e62329260f0f7d3981143f5fddb256e44fb2d4b0daaccc7e2226dd1319797f
     type: img
-    version: '1.0.21b'
+    version: '25.09.00'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.06.00-pvw2/bin/mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/bin/mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW72 boards"
 
 #For IW612
