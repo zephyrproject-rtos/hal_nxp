@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                           Copyright 2021-2024 NXP                          */
+/*                           Copyright 2021-2025 NXP                          */
 /*                            All rights reserved.                            */
 /*                    SPDX-License-Identifier: BSD-3-Clause                   */
 /* -------------------------------------------------------------------------- */
@@ -287,7 +287,7 @@ static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
 /*                                Public memory                               */
 /* -------------------------------------------------------------------------- */
 
-static const uint8_t hci_cal_data_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_LENGTH] = {
+const uint8_t hci_cal_data_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_LENGTH] = {
     0x00U,                            //  Sequence Number : 0x00
     0x00U,                            //  Action : 0x00
     0x01U,                            //  Type : Not use CheckSum
@@ -341,7 +341,7 @@ static const uint8_t hci_cal_data_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_LENGTH]
  *    2.diversity case(enable ant3)
  *    3.diversity case(enable ant4)
  */
-static const uint8_t hci_cal_data_annex100_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_ANNEX100_LENGTH] = {
+const uint8_t hci_cal_data_annex100_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_ANNEX100_LENGTH] = {
     /*                   BT_HW_INFO   START              */
     0x64U,                                       //  Annex Type : 0x64
     0x00U,                                       //  CheckSum: Annex100 ignores checksum
