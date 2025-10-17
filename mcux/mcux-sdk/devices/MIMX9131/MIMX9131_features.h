@@ -198,8 +198,8 @@
 #define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
 /* @brief Instance has channel mux */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(x) \
-    (((x) == EDMA4_2__TCD) ? (1) : \
-    (((x) == EDMA3_1__TCD) ? (0) : (-1)))
+    (((x) == DMA4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))
 /* @brief eDMA3 has channel mux */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (0)
 /* @brief Has register CH_SBR. */
@@ -216,38 +216,38 @@
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
 /* @brief Instance has register bit field CH_CSR[SWAP]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SWAP_SIZEn(x) \
-    (((x) == EDMA4_2__TCD) ? (1) : \
-    (((x) == EDMA3_1__TCD) ? (0) : (-1)))
+    (((x) == DMA4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))
 /* @brief Has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (1)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) \
-    (((x) == EDMA4_2__TCD) ? (1) : \
-    (((x) == EDMA3_1__TCD) ? (0) : (-1)))
+    (((x) == DMA4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))
 /* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE  (1)
 /* @brief Instance has register CH_MATTR. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) \
-    (((x) == EDMA4_2__TCD) ? (1) : \
-    (((x) == EDMA3_1__TCD) ? (0) : (-1)))
+    (((x) == DMA4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))
 /* @brief Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_SIGN_EXTENSION (1)
 /* @brief Instance Has register bit field CH_CSR[SIGNEXT]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SIGN_EXTENSIONn(x) \
-    (((x) == EDMA4_2__TCD) ? (1) : \
-    (((x) == EDMA3_1__TCD) ? (0) : (-1)))
+    (((x) == DMA4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))
 /* @brief Has register bit field TCD_CSR[BWC]. */
 #define FSL_FEATURE_EDMA_HAS_BANDWIDTH (1)
 /* @brief Instance has register bit field TCD_CSR[BWC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_BANDWIDTHn(x) \
-    (((x) == EDMA4_2__TCD) ? (0) : \
-    (((x) == EDMA3_1__TCD) ? (1) : (-1)))
+    (((x) == DMA4) ? (0) : \
+    (((x) == DMA3) ? (1) : (-1)))
 /* @brief Has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_HAS_TRANSFER_MODE (1)
 /* @brief Instance has register bit fields TCD_CSR[TMC]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) \
-    (((x) == EDMA4_2__TCD) ? (1) : \
-    (((x) == EDMA3_1__TCD) ? (0) : (-1)))
+    (((x) == DMA4) ? (1) : \
+    (((x) == DMA3) ? (0) : (-1)))
 
 /* ENET module features */
 
