@@ -1963,6 +1963,18 @@ void ENET_Ptp1588GetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
 void ENET_Ptp1588SetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_t *ptpTime);
 
 /*!
+ * @brief Adjusts the ENET PTP 1588 timer by jumping a relative time difference.
+ *
+ * Compared to ENET_Ptp1588SetTimer, this function yields more accurate results when
+ * the relative time difference between the PTP clock and the target clock is known
+ * (e.g., through a capture event retrieved by ENET_Ptp1588GetChannelCaptureValue).
+ *
+ * @param base  ENET peripheral base address.
+ * @param nanosecondDiff The offset that is added/subtracted from the current PTP time
+ */
+void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff);
+
+/*!
  * @brief The IEEE 1588 PTP time stamp interrupt handler.
  *
  * @param base  ENET peripheral base address.
