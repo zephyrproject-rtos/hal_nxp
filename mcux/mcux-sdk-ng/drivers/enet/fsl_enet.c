@@ -30,6 +30,11 @@
 /*! @brief NanoSecond in one second. */
 #define ENET_NANOSECOND_ONE_SECOND 1000000000U
 
+/* @brief Floor division which always rounds towards negative infinity.
+ * Note that, in contrast, integer division would round towards zero. */
+#define DIV_FLOOR(x, y)                                                        \
+  (((x) >= 0 || (x) % (y) == 0) ? (x) / (y) : (x) / (y) - 1)
+
 #if defined(ENET_RSTS_N)
 #define ENET_RESETS_ARRAY ENET_RSTS_N
 #elif defined(ENET_RSTS)
@@ -2943,17 +2948,12 @@ void ENET_Ptp1588StartTimer(ENET_Type *base, uint32_t ptpClkSrc)
 }
 
 /*!
- * brief Gets the current ENET time from the PTP 1588 timer.
- *       Interrupts are not disabled.
+ * @brief Initiates a PTP timer capture and blocks until the timestamp is available
  *
  * param base  ENET peripheral base address.
  * param handle The ENET state pointer. This is the same state pointer used in the ENET_Init.
- * param ptpTime The PTP timer structure.
  */
-void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_t *ptpTime)
-{
-    /* Get the current PTP time. */
-    ptpTime->second = handle->msTimerSecond;
+static void ENET_Ptp1588CaptureBlocking(ENET_Type *base, enet_handle_t *handle) {
     /* Get the nanosecond from the master timer. */
     base->ATCR |= ENET_ATCR_CAPTURE_MASK;
 
@@ -2971,6 +2971,23 @@ void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, en
     {
     }
 #endif
+}
+
+/*!
+ * brief Gets the current ENET time from the PTP 1588 timer.
+ *       Interrupts are not disabled.
+ *
+ * param base  ENET peripheral base address.
+ * param handle The ENET state pointer. This is the same state pointer used in the ENET_Init.
+ * param ptpTime The PTP timer structure.
+ */
+void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_t *ptpTime)
+{
+    /* Get the current PTP time. */
+    ptpTime->second = handle->msTimerSecond;
+
+    /* Capture current time in ATVR */
+    ENET_Ptp1588CaptureBlocking(base, handle);
 
     /* Get the captured time. */
     ptpTime->nanosecond = base->ATVR;
@@ -3024,6 +3041,82 @@ void ENET_Ptp1588SetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
     /* Sets PTP timer. */
     handle->msTimerSecond = ptpTime->second;
     base->ATVR            = ptpTime->nanosecond;
+
+    /* Enables the interrupt. */
+    EnableGlobalIRQ(primask);
+}
+
+/*!
+ * @brief Adjusts the ENET PTP 1588 timer by jumping a relative time difference.
+ *
+ * Compared to ENET_Ptp1588SetTimer, this function yields more accurate results when
+ * the relative time difference between the PTP clock and the target clock is known
+ * (e.g., through a capture event retrieved by ENET_Ptp1588GetChannelCaptureValue).
+ *
+ * @param base  ENET peripheral base address.
+ * @param nanosecondDiff The offset that is added/subtracted from the current PTP time
+ */
+void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
+{
+    uint32_t instance = ENET_GetInstance(base);
+    enet_handle_t *handle = s_ENETHandle[instance];
+
+    /* Disables interrupts */
+    uint32_t primask = DisableGlobalIRQ();
+    ENET_Ptp1588CaptureBlocking(base, handle);
+
+    if (nanosecondDiff >= 0)
+    {
+        uint32_t nanosecondTime = base->ATVR % ENET_NANOSECOND_ONE_SECOND;
+        uint64_t secondDiff = (uint64_t)nanosecondDiff / ENET_NANOSECOND_ONE_SECOND;
+
+        nanosecondTime += (uint32_t)nanosecondDiff % ENET_NANOSECOND_ONE_SECOND;
+
+        /* Increment secondDiff in case of nanosecond overflow */
+        if (nanosecondTime >= ENET_NANOSECOND_ONE_SECOND)
+        {
+            secondDiff++;
+        }
+
+        /* Abort without changes in case handle->msTimerSecond would overflow */
+        if (UINT64_MAX - secondDiff < handle->msTimerSecond)
+        {
+            /* Enables the interrupt. */
+            EnableGlobalIRQ(primask);
+
+            return;
+        }
+
+        handle->msTimerSecond += secondDiff;
+        base->ATVR = nanosecondTime % ENET_NANOSECOND_ONE_SECOND;
+    } else
+    {
+        /* Note that nanosecondDiff + (int64_t)nanosecondTime does not result in an overflow
+         * as nanosecondDiff < 0 and 0 <= nanosecondTime < 1e9. */
+        int32_t nanosecondTime = (int32_t)(base->ATVR % ENET_NANOSECOND_ONE_SECOND);
+        int64_t secondDiff = DIV_FLOOR(nanosecondDiff + (int64_t)nanosecondTime,
+                         (int64_t)ENET_NANOSECOND_ONE_SECOND);
+
+        nanosecondTime += (int32_t)(nanosecondDiff % (int64_t)ENET_NANOSECOND_ONE_SECOND);
+
+        /* Avoid negative overflow by setting PTP time to zero in this case */
+        if (handle->msTimerSecond < INT64_MAX && (int64_t)handle->msTimerSecond < -secondDiff)
+        {
+            handle->msTimerSecond = 0;
+            base->ATVR = 0;
+
+            /* Enables the interrupt. */
+            EnableGlobalIRQ(primask);
+
+            return;
+        }
+
+        /* Note that simply doing base->ATVR = nanosecondTime % ENET_NANOSECOND_ONE_SECOND
+         * could result in an uint32_t underflow if nanosecondDiff is negative. */
+        handle->msTimerSecond -= (uint64_t)(-secondDiff);
+        base->ATVR = ((uint32_t)nanosecondTime + ENET_NANOSECOND_ONE_SECOND) %
+               ENET_NANOSECOND_ONE_SECOND;
+    }
 
     /* Enables the interrupt. */
     EnableGlobalIRQ(primask);
