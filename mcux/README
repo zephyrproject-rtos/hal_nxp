@@ -32,7 +32,7 @@ Origin:
 
    NXP MCUXpresso SDK ieee_802.15.4 middleware
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4
-   TAG: MCUX_2.16.000
+   TAG: release/25.09.00
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core

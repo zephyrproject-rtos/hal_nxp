@@ -20,6 +20,8 @@
 * Public type definitions
 *************************************************************************************
 ************************************************************************************/
+#undef EXT_CMD_ID
+#define EXT_CMD_ID (unsigned char)(0xffu)
 
 /*! 802.15.4-2006 standard PHY PD and PLME API messages */
 typedef enum
@@ -39,6 +41,7 @@ typedef enum
     gPlmeEdCnf_c,           /*!< Channel Energy Detect Confirm */
 
     gPlmeSetTRxStateReq_c,  /*!< Set Transceiver State request */
+    gPlmeRxReq_c = gPlmeSetTRxStateReq_c,
 
     gPlmeSetReq_c,          /*!< Set PHY PIB request */
     gPlmeSetCnf_c,          /*!< Unused */
@@ -83,6 +86,12 @@ typedef enum
     gPlmeSetBeaconFiltering_c,         /* Filter beacon frame                      */
     gPlmeUpdateLocalWithExtAddr_c,     /* Link short address with ieee 64b address */
 
+    gPlmeClearNeighbourTable,          /* Clear the contents of the neighbour table */
+
+    gPlmeGetRxSensitivity,             /* Get the radio receive sensitivity */
+    gPlmeGetTxPowerCapabilities,       /* Get the radio tx power capabilties per channel */
+
+    gPhyExtCmd = EXT_CMD_ID
 } phyMessageId_t;
 
 #endif  /* _PHY_MESSAGES_H */
