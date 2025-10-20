@@ -67,12 +67,6 @@
 #define gPhyFlagRxFP_c          (1u << 2)
 /*! PHY flag that reflects the state of the FP bit of the last ACK frame transmitted */
 #define gPhyFlagTxAckFP_c       (1u << 3)
-/*! If set, a TX operation may be postponed if a packet reception is in progress */
-#define gPhyFlagDeferTx_c       (1u << 4)
-/*! PHY flag that indicate that the requested TX has been postponed */
-#define gPhyFlaqReqPostponed_c  (1u << 5)
-/*! PHY flag that indicate CSL RX: allow multipurpose frames, send Enh-ACKs */
-#define gPhyFlagCslRx_c         (1u << 6)
 /*! PHY flag that indicates FP was set as result of no neighbour table entry found */
 #define gPhyFlagNbTblRxAckFP_c  (1u << 7)
 
@@ -81,7 +75,7 @@
 #define gInvalidTimerId_c (0xFF)
 
 #define gPhyTimeShift_c   (24)          /* 24bit hw timer */
-#define gPhyTimeMask_c    (0x00FFFFFF)
+#define gPhyTimeMask_c    ((uint32_t)(1 << gPhyTimeShift_c) - 1)
 
 /* Security defines */
 #ifndef gSmacUseInlineDecrypt
@@ -199,6 +193,7 @@ typedef enum
     gPhyPibAckFramePending_c = 0x0C,       /*!< Used to copy its contents to the outgoing ACK frame's Frame Pending field as a response to a received Data Request frame with Source Address Matching disabled.*/
     gPhyPibRxOnWhenIdle      = 0x0D,       /*!< Enable RX when the radio is IDLE*/  
     gPhyPibFrameWaitTime_c   = 0x0E,       /*!< The number of symbols the RX should be on after receiving an ACK with FP=1 */
+    gPhyPibRxTimePoll_c = gPhyPibFrameWaitTime_c,
     gPhyPibDeferTxIfRxBusy_c = 0x0F,       /*!< If a packet is being received, transmission is deferred */
     gPhyPibLastTxAckFP_c     = 0x10,       /*!< Indicates, whether the last ACK sent to the MAC Data Request had the frame pending flag set. */
     gPhyPibCCAType_c         = 0x11,       /*!< Set the CCA3 Type */

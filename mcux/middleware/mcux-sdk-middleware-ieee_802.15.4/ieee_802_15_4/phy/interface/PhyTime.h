@@ -1,5 +1,5 @@
 /*! *********************************************************************************
-* Copyright 2022-2024 NXP
+* Copyright 2022-2025 NXP
 * All rights reserved.
 *
 * \file
@@ -51,7 +51,7 @@
     ZLL->IRQSTS = irq_sts;                          \
 } while(0)
 
-#define MASK_TMR_IRQ(__tmr__)  do {                             \
+#define MASK_AND_CLEAR_TMR_IRQ(__tmr__)  do {                   \
     uint32_t irq_sts;                                           \
                                                                 \
     irq_sts  = ZLL->IRQSTS & BM_ZLL_IRQSTS_TMRxMSK;             \
@@ -64,7 +64,7 @@
                                                        \
     DISABLE_TMR(__tmr__);                              \
     SET_TMR(__tmr__, __time__);                        \
-    CLEAR_TMR_IRQ(__tmr__);                            \
+    MASK_AND_CLEAR_TMR_IRQ(__tmr__);                   \
     ENABLE_TMR(__tmr__);                               \
                                                        \
     OSA_InterruptEnable();                             \
@@ -85,13 +85,13 @@
     OSA_InterruptDisable();        \
                                    \
     DISABLE_TMR(__tmr__);          \
-    MASK_TMR_IRQ(__tmr__);         \
+    MASK_AND_CLEAR_TMR_IRQ(__tmr__);\
                                    \
     OSA_InterruptEnable();         \
 } while(0)
 
-#define PhyTimeDisableEventTrigger() 		TMR_CLEAR(2)
-#define PhyTimeSetEventTrigger(__time__)    TMR_UNMASK_AND_SET(2, __time__)
+#define PhyTimeDisableEventTrigger()        TMR_CLEAR(2)
+#define PhyTimeSetEventTrigger(__time__)    TMR_SET(2, __time__)
 
 #define PhyTimeDisableEventTimeout()        TMR_CLEAR(3)
 #define PhyTimeSetEventTimeout(__time__)    TMR_SET(3, __time__)

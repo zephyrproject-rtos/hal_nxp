@@ -1,0 +1,13 @@
+NXP Software Content Register
+
+Package: IEEE_802_15_4
+Version: 1.0.21b
+Outgoing License: LA_OPT_Online_Code_Hosting
+License File: LICENSE.txt
+Type of Content: object code, source code, header files
+Description and comments: IEEE 802.15.4 MAC/PHY software
+Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4
+URL: None
+Origin: 
+      NXP
+

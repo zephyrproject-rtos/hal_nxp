@@ -53,6 +53,14 @@
 extern "C" {
 #endif
 
+#ifndef gMWS_Enabled_d
+#define gMWS_Enabled_d 0
+#endif
+
+#ifndef gMWS_UseCoexistence_d
+#define gMWS_UseCoexistence_d 0
+#endif
+
 
 #undef CTX_NO
 
@@ -83,6 +91,10 @@ typedef enum
 
 #endif /* CTX_SCHED */
 
+
+#define PHY_TMR_CMP_MIN 4   /* symbols (64 us). Comparator threshold */
+
+#define PHY_RX_TIME_POLL 6250   /* symbols */
 
 #define PHY_TEN_SYMBOLS_US 160
 #define PHY_SYMBOLS_US 16
@@ -127,9 +139,6 @@ static volatile uint8_t * const TX_PB = (uint8_t *)(TX_PACKET_RAM_BASE);
 static const uint32_t RX_WTMRK_START = 3;  /* frame length + FCF */
 
 
-/* XCVR idle power mode */
-#define gPhyDefaultIdlePwrMode_c   gPhyPwrIdle_c
-
 /*! *********************************************************************************
 *************************************************************************************
 * Public type definitions
@@ -173,37 +182,12 @@ enum
     g_ZSM_TSM_WD    = 0x1F
 };
 
-/* PHY channel state */
-enum
-{
-    gChannelIdle_c,
-    gChannelBusy_c
-};
-
 /* PANCORDNTR bit in PP */
 enum
 {
     gMacRole_DeviceOrCoord_c,
     gMacRole_PanCoord_c
 };
-
-/* Cca types */
-enum
-{
-    gCcaED_c,         /* energy detect - CCA bit not active, not to be used for T and CCCA sequences */
-    gCcaCCA_MODE1_c,  /* energy detect - CCA bit ACTIVE */
-    gCcaCCA_MODE2_c,  /* 802.15.4 compliant signal detect - CCA bit ACTIVE */
-    gCcaCCA_MODE3_c,  /* 802.15.4 compliant signal detect and energy detect - CCA bit ACTIVE */
-    gInvalidCcaType_c /* illegal type */
-};
-
-enum
-{
-    gNormalCca_c,
-    gContinuousCca_c
-};
-
-
 
 #ifdef CTX_SCHED
 
@@ -224,6 +208,14 @@ typedef enum
     ENH_ACK_RESET,
     ENH_ACK_READY
 } enh_ack_state_t;
+
+/* state machine for POLL */
+enum
+{
+    PS_NONE,
+    PS_DATA_REQ,
+    PS_RX
+};
 
 #if defined(FFU_DEVICE_LIMIT_VISIBILITY)
 
@@ -262,9 +254,9 @@ typedef struct Phy_PhyLocalStruct_tag
     PD_MAC_SapHandler_t         PD_MAC_SapHandler;
     PLME_MAC_SapHandler_t       PLME_MAC_SapHandler;
 
-#ifndef MEM_USE_ZEPHYR
+    PHY_ext_cmd_handler_t ext_cmd_handler;
+
     messaging_t                 macPhyInputQueue;
-#endif /* MEM_USE_ZEPHYR */
 
     phyTxParams_t               txParams;
     phyRxParams_t               rxParams;
@@ -305,6 +297,10 @@ typedef struct Phy_PhyLocalStruct_tag
     enh_ack_state_t enh_ack_state;
     bool_t neighbourTblEnabled;
 
+    uint32_t rx_time_poll;      /* symbols. rx duration after data req with ACK with FP=1 */
+    uint32_t rx_poll_to;        /* symbols. timeout for POLL reception */
+    uint8_t ps;                 /* POLL state machine */
+
 #if defined(FFU_DEVICE_LIMIT_VISIBILITY)
     visible_filter_t sFilter;
 #endif
@@ -313,7 +309,7 @@ typedef struct Phy_PhyLocalStruct_tag
     proto_state state;
     proto_op op;   /* rx / tx / CCA */
 
-    bool_t tx_cca_pending;
+    bool_t op_pending;
     bool_t rx_ongoing;
 
     pdDataReq_t tx_data_req;
@@ -545,6 +541,8 @@ uint8_t PhyPpGetState(void);
  ********************************************************************************** */
 void PhyAbort(void);
 
+void PHY_sw_abort();
+
 bool_t PHY_graceful_idle();
 
 /* PHY PLME & DATA primitives */
@@ -631,6 +629,22 @@ phyStatus_t PhyPlmeSetPwrLevelRequest(int8_t pwr_dbm);
  *
  ********************************************************************************** */
 int8_t PhyPlmeGetPwrLevelRequest(void);
+
+/*! *********************************************************************************
+ * \brief Get the TX power capabilities (min and max) in dBm
+ *
+ * \return status
+ *
+ ********************************************************************************** */
+phyStatus_t PhyGetTxPowerCapabilities(uint8_t channel, int8_t *max, int8_t *min);
+
+/*! *********************************************************************************
+ * \brief Get the RX sensitivity in dBm
+ *
+ * \return status, rx sensitivity in dBm
+ *
+ ********************************************************************************** */
+phyStatus_t PhyGetRxSensitivity(int8_t *rx_sensitivity);
 
 /*! *********************************************************************************
  * \brief Set a PHY PIB
@@ -911,7 +925,7 @@ void PhyPlmeSetRxOnWhenIdle(bool_t state, instanceId_t instanceId);
 * \param[in] seqDuration - sequence duration in symbols
 *
 ********************************************************************************** */
-void Phy_SetSequenceTiming(phyTime_t *startTime, uint32_t seqDuration, uint32_t overhead);
+void Phy_SetSequenceTiming(phyTime_t startTime, uint32_t seqDuration, uint32_t overhead);
 
 /*! *********************************************************************************
 * \brief  Scales energy level to 0-255
@@ -1020,8 +1034,6 @@ void Radio_Phy_AbortIndication(Phy_PhyLocalStruct_t *ctx);
 
 void Radio_Phy_PdDataIndication(Phy_PhyLocalStruct_t *ctx);
 
-void Radio_Phy_TimeStartEventIndication(Phy_PhyLocalStruct_t *ctx);
-
 void Radio_Phy_PlmeCcaConfirm(phyStatus_t phyChannelStatus, Phy_PhyLocalStruct_t *ctx);
 
 void Radio_Phy_PlmeEdConfirm(Phy_PhyLocalStruct_t *ctx, int8_t energyLeveldB);
@@ -1060,7 +1072,6 @@ void ctx_set_tx(Phy_PhyLocalStruct_t *ctx, macToPdDataMessage_t *pMsg);
 void ctx_set_cca(Phy_PhyLocalStruct_t *ctx);
 void ctx_set_none(Phy_PhyLocalStruct_t *ctx);
 
-bool_t PHY_ctx_can_sleep();
 bool_t PHY_ctx_all_disabled();
 
 #else /* CTX_SCHED */
@@ -1075,7 +1086,6 @@ bool_t PHY_ctx_all_disabled();
 #define ctx_set_tx(ctx, pMsg)
 #define ctx_set_cca(ctx)
 #define ctx_set_none(ctx)
-#define PHY_ctx_can_sleep() TRUE
 #define PHY_ctx_all_disabled() TRUE
 
 #endif /* CTX_SCHED */
