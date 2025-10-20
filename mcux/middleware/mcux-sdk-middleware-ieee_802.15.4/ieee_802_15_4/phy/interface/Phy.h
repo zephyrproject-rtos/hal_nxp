@@ -256,7 +256,9 @@ typedef struct Phy_PhyLocalStruct_tag
 
     PHY_ext_cmd_handler_t ext_cmd_handler;
 
+#ifndef __ZEPHYR__
     messaging_t                 macPhyInputQueue;
+#endif
 
     phyTxParams_t               txParams;
     phyRxParams_t               rxParams;

@@ -29,8 +29,12 @@
 ************************************************************************************/
 #include "PhyTypes.h"
 #include "PhyMessages.h"
+#ifndef __ZEPHYR__
 #include "fsl_component_messaging.h"
 #include "fsl_component_mem_manager.h"
+#else
+#include <stdbool.h>
+#endif
 
 #include <assert.h>
 #include <limits.h>
@@ -39,11 +43,13 @@
 * Public type definitions
 *************************************************************************************
 ********************************************************************************** */
+#ifndef __ZEPHYR__
 #ifndef CONCAT
 #define CONCAT(a, b) a ## b // Concatenate
 #endif
 #define CONCAT_EXPAND(a,b) CONCAT(a, b) // expand then paste
 #define _Static_assert(cond, STR) typedef char CONCAT_EXPAND(static_assert_line_, __LINE__)[(cond) ? 1 : -1] // Define _Static_assert for Backward Compatibility to support lower C11 C-Standard versions.
+#endif
 
 
 _Static_assert(sizeof(phyMessageId_t) == sizeof(uint8_t), "phyMessageId_t bigger than 1 byte");
