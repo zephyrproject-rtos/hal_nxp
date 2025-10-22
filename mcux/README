@@ -239,3 +239,10 @@ Patch List:
    - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
      This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/612/commits was created, so it
      did not enter PR#612 via cherry-pick but rather via rebasing onto the master branch.
+
+  - hal/nxp: s32K344: flash_c40: add C40 features, IP aliases
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits/be2df903f5a0365e7549ade63b79ac831f66db6f
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
+     This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits was created.
+     Also since the additions about C40 Flash geometry in S32K344_features.h and defining local Flash Aliases in
+     S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
