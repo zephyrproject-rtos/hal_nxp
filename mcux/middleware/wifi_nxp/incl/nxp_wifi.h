@@ -118,10 +118,6 @@ extern "C" {
 #define CONFIG_CSI 1
 #endif
 
-#if CONFIG_NXP_WIFI_CSI_AMI
-#define CONFIG_CSI_AMI 1
-#endif
-
 #if CONFIG_NXP_WIFI_RESET
 #define CONFIG_WIFI_RESET 1
 #endif
