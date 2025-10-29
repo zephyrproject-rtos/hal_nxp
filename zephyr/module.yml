@@ -102,6 +102,20 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/bin/k32w1_mcxw71/k32w1_mcxw71_nbu_ble_15_4_dyn.sb3
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
+  - path: mcxw71/mcxw71_nbu_ble_15_4_dyn_mac.sb3
+    sha256: 18f0cd186c935d468adad0611c4ac111fe3bef82bb5d8843493df38b4d9e9686
+    type: img
+    version: '25.09.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/bin/k32w1_mcxw71/k32w1_mcxw71_nbu_ble_15_4_dyn_mac.sb3
+    description: "BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW71 boards"
+  - path: mcxw71/libieee/libieee-802.15.4_MAC_intf.a
+    sha256: 75dad4fdd1b96d08284c1f0366aa49425a4530db8277ffd1c12af8260e66f71d
+    type: img
+    version: '25.09.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf.a
+    description: "IEEE 802.15.4 MAC & PHY library for MCXW71 boards"
   - path: mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
     sha256: 99e62329260f0f7d3981143f5fddb256e44fb2d4b0daaccc7e2226dd1319797f
     type: img
@@ -109,6 +123,20 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/bin/mcxw72/mcxw72_nbu_ble_15_4_dyn.bin
     description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW72 boards"
+  - path: mcxw72/mcxw72_nbu_ble_15_4_dyn_mac.bin
+    sha256: e3531e8458f1c34f424820b57fb3322b8caef03f102f40de2bb0a1a7af9452cd
+    type: img
+    version: '25.09.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/bin/mcxw72/mcxw72_nbu_ble_15_4_dyn_mac.bin
+    description: "BLE Controller and IEEE 802.15.4 MAC & PHY combo firmware for MCXW72 boards"
+  - path: mcxw72/libieee/libieee-802.15.4_MAC_intf.a
+    sha256: f90e1e4de5f0de4c237f4ab06937c48da231dc77ce78a525ae9a9b013eab09b7
+    type: img
+    version: '25.09.00'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4/raw/refs/heads/release/25.09.00/ieee_802_15_4/lib/libieee-802.15.4_MAC_intf_MCXW72.a
+    description: "IEEE 802.15.4 MAC & PHY library for MCXW72 boards"
 
 #For IW612
   - path: nw61x/sd_nw61x.bin.se
