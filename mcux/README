@@ -246,3 +246,6 @@ Patch List:
      This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits was created.
      Also since the additions about C40 Flash geometry in S32K344_features.h and defining local Flash Aliases in
      S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
+  - mcux-sdk-ng: drivers: xspi: cache64: Fix cache management issue.
+   - PR: https://github.com/zephyrproject-rtos/hal_nxp/pull/597
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.

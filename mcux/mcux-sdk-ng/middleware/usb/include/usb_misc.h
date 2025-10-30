@@ -363,16 +363,22 @@ _Pragma("diag_suppress=Pm120")
 
 #elif defined(__GNUC__)
 
+#if defined(__ARM_ARCH_8A__) /* This macro is ARMv8-A specific */
+#define CS "//"
+#else
+#define CS "@"
+#endif
+
 #define USB_WEAK_VAR                 __attribute__((weak))
 #define USB_WEAK_FUN                 __attribute__((weak))
 #define USB_RAM_ADDRESS_ALIGNMENT(n) __attribute__((aligned(n)))
 #define USB_LINK_DMA_INIT_DATA(sec)  __attribute__((section(#sec)))
-#define USB_LINK_USB_GLOBAL          __attribute__((section("m_usb_global, \"aw\", %nobits @")))
-#define USB_LINK_USB_BDT             __attribute__((section("m_usb_bdt, \"aw\", %nobits @")))
+#define USB_LINK_USB_GLOBAL          __attribute__((section("m_usb_global, \"aw\", %nobits " CS)))
+#define USB_LINK_USB_BDT             __attribute__((section("m_usb_bdt, \"aw\", %nobits " CS)))
 #define USB_LINK_USB_GLOBAL_BSS
 #define USB_LINK_USB_BDT_BSS
-#define USB_LINK_DMA_NONINIT_DATA      __attribute__((section("CacheLineData, \"aw\", %nobits @")))
-#define USB_LINK_NONCACHE_NONINIT_DATA __attribute__((section("NonCacheable, \"aw\", %nobits @")))
+#define USB_LINK_DMA_NONINIT_DATA      __attribute__((section("CacheLineData, \"aw\", %nobits " CS)))
+#define USB_LINK_NONCACHE_NONINIT_DATA __attribute__((section("NonCacheable, \"aw\", %nobits " CS)))
 
 #elif (defined(__DSC__) && defined(__CW__))
 #define MAX(a, b)                    (((a) > (b)) ? (a) : (b))

@@ -34,12 +34,13 @@
 /* Always keep this include at the end of all include files */
 #include <mlan_remap_mem_operations.h>
 
-#if (CONFIG_11MC) || (CONFIG_11AZ)
-#if CONFIG_WLS_CSI_PROC
-#include <wls_param_defines.h>
-#include <wls_api.h>
-#include <wls_structure_defs.h>
-#include <range_kalman.h>
+#if (CONFIG_11MC) || (CONFIG_11AZ) || (CONFIG_CSI)
+#if (CONFIG_WLS_CSI_PROC) || (CONFIG_CSI_AMI)
+#include "wls_param_defines.h"
+#include "wls_api.h"
+#include "wls_structure_defs.h"
+#include "range_kalman.h"
+#include "event.h"
 #endif
 #endif
 
@@ -48,8 +49,10 @@ static const char driver_version[]        = "702.1.0";
 
 static unsigned int mgmt_ie_index_bitmap = 0x0000000F;
 
+#if (CONFIG_11MC) || (CONFIG_11AZ) || (CONFIG_CSI)
 #if (CONFIG_11MC) || (CONFIG_11AZ)
 ftm_start_param ftm_param;
+#endif
 #if CONFIG_WLS_CSI_PROC
 #define NL_MAX_PAYLOAD (3 * 1024)
 unsigned int csi_res_array[8];
@@ -59,9 +62,36 @@ range_kalman_state range_input_str = {0};
 #define RANGE_MEASUREMENT_VAR 4e-2f // in meter^2
 #define RANGE_RATE_INIT       1e-3f // in (meter/s)^2
 #define CSI_TSF_LEN           6 * sizeof(uint32_t)
+#endif
+#if (CONFIG_WLS_CSI_PROC) || CONFIG_CSI_AMI
 #define FFT_INBUFFER_LEN_DW   (MAX_RX * MAX_TX + NUM_PROC_BUF) * (MAX_IFFT_SIZE_CSI)
+#endif
+#if CONFIG_WLS_CSI_PROC
 uint32_t fftInBuffer_t[FFT_INBUFFER_LEN_DW];
 #endif
+#endif
+
+#if (CONFIG_CSI) && ((CONFIG_CSI_AMI) || (CONFIG_WLS_CSI_PROC))
+#if defined __ICCARM__
+#define NO_INIT_AMI __no_init
+#else
+#define NO_INIT_AMI
+#endif
+extern ami_cfg_t g_ami_cfg;
+NO_INIT_AMI float referenceBuffer[2 * (MAX_RX * MAX_TX) * MAX_IFFT_SIZE_CSI];
+NO_INIT_AMI unsigned int fftInBuffer[FFT_INBUFFER_LEN_DW];
+#if STA_20_ONLY
+#define SCR_INBUFFER_LEN (3 * MAX_RX * MAX_TX + NUM_PROC_BUF) * (MAX_IFFT_SIZE_CSI)
+#else
+#define SCR_INBUFFER_LEN FFT_INBUFFER_LEN_DW
+#endif
+NO_INIT_AMI unsigned int scratchBuffer1[SCR_INBUFFER_LEN];
+#define LEG_RATE 0
+#define HT_RATE 1
+#define VHT_RATE 2
+#define HE_RATE 3
+t_u8 convertPktInfo[8] = {LEG_RATE, HT_RATE, HT_RATE, VHT_RATE, HE_RATE, LEG_RATE, LEG_RATE, LEG_RATE};
+#define AMI_CSI_RAW_DATA_OFFSET 8 /* interface header size + event type size */
 #endif
 
 /* This were static functions in mlan file */
@@ -6382,6 +6412,255 @@ int wifi_csi_cfg(wifi_csi_config_params_t *csi_params)
 
     return wifi_wait_for_cmdresp(NULL);
 }
+
+#if CONFIG_CSI_AMI
+static void set_csi_proc_filter(unsigned int *headerBuffer, hal_pktinfo_t *pktinfo, csi_filter_param_t *csi_filter_param_ptr)
+{
+    hal_csirxinfo_t *csirxinfo = (hal_csirxinfo_t*)headerBuffer;
+    t_u16 addr2_lo = csirxinfo->addr2_lo;
+    t_u32 addr2_hi = csirxinfo->addr2_hi;
+
+    // set sig format and BW
+    csi_filter_param_ptr->packet_bandwidth = pktinfo->sigBw;
+    csi_filter_param_ptr->num_rx = pktinfo->nRx;
+    csi_filter_param_ptr->num_tx = pktinfo->nTx;
+    csi_filter_param_ptr->packet_format = convertPktInfo[pktinfo->packetType];
+    // set MAC address
+    (void)memcpy(&(csi_filter_param_ptr->peer_mac[0]), &addr2_lo, sizeof(t_u16));
+    (void)memcpy(&(csi_filter_param_ptr->peer_mac[2]), &addr2_hi, sizeof(t_u32));
+
+    (void)PRINTF("Compare CSI filter set MAC: %02x.%02x.%02x.%02x.%02x.%02x, sig BW/format %d|%d\n",
+        csi_filter_param_ptr->peer_mac[0], csi_filter_param_ptr->peer_mac[1],
+        csi_filter_param_ptr->peer_mac[2], csi_filter_param_ptr->peer_mac[3],
+        csi_filter_param_ptr->peer_mac[4], csi_filter_param_ptr->peer_mac[5],
+        csi_filter_param_ptr->packet_bandwidth, csi_filter_param_ptr->packet_format);
+}
+
+static int check_csi_filter_partial(unsigned int *headerBuffer, hal_pktinfo_t *pktinfo, csi_filter_param_t *csi_filter_param_ptr)
+{
+    hal_csirxinfo_t *csirxinfo = (hal_csirxinfo_t*)headerBuffer;
+    t_u16 addr2_lo = csirxinfo->addr2_lo;
+    t_u32 addr2_hi = csirxinfo->addr2_hi;
+    t_u8 broadcast_mac[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+
+    // check sig format and BW
+    if ((csi_filter_param_ptr->packet_bandwidth != 0xff)
+        && (csi_filter_param_ptr->packet_bandwidth != pktinfo->sigBw))
+    {
+        return -WM_FAIL;
+    }
+
+    if ((csi_filter_param_ptr->packet_format != 0xff)
+        && (csi_filter_param_ptr->packet_format != convertPktInfo[pktinfo->packetType]))
+    {
+        return -WM_FAIL;
+    }
+
+    // check MIMO dimension
+    if ((csi_filter_param_ptr->num_rx != 0xff) && (csi_filter_param_ptr->num_rx != pktinfo->nRx))
+    {
+        return -WM_FAIL;
+    }
+
+    if ((csi_filter_param_ptr->num_tx != 0xff) && (csi_filter_param_ptr->num_tx != pktinfo->nTx))
+    {
+        return -WM_FAIL;
+    }
+
+    // check MAC address
+    if ( memcmp(&(broadcast_mac[0]), &(csi_filter_param_ptr->peer_mac[0]), sizeof(broadcast_mac))
+        && (memcmp(&addr2_lo, &(csi_filter_param_ptr->peer_mac[0]), sizeof(t_u16))
+        || memcmp(&addr2_hi, &(csi_filter_param_ptr->peer_mac[2]), sizeof(t_u32))) )
+    {
+        return -WM_FAIL;
+    }
+
+    return WM_SUCCESS;
+}
+
+static int check_csi_filter(unsigned int *headerBuffer, hal_pktinfo_t *pktinfo, csi_filter_param_t *csi_filter_param_ptr)
+{
+    hal_csirxinfo_t *csirxinfo = (hal_csirxinfo_t*)headerBuffer;
+    t_u16 addr2_lo = csirxinfo->addr2_lo;
+    t_u32 addr2_hi = csirxinfo->addr2_hi;
+
+    // check sig format and BW
+    if ((csi_filter_param_ptr->packet_bandwidth != pktinfo->sigBw)
+        || (csi_filter_param_ptr->packet_format != convertPktInfo[pktinfo->packetType]))
+    {
+        return -WM_FAIL;
+    }
+
+    // check MIMO dimension
+    if ((csi_filter_param_ptr->num_rx != pktinfo->nRx)
+        || (csi_filter_param_ptr->num_tx != pktinfo->nTx))
+    {
+        return -WM_FAIL;
+    }
+
+    // set MAC address
+    if (memcmp(&addr2_lo, &(csi_filter_param_ptr->peer_mac[0]), sizeof(t_u16))
+        || memcmp(&addr2_hi, &(csi_filter_param_ptr->peer_mac[2]), sizeof(t_u32)))
+    {
+        return -WM_FAIL;
+    }
+
+    return WM_SUCCESS;
+}
+
+/*
+* Function that handles CSI event processing for Ambient Motion Index calculation.
+*/
+static void proc_csi_event(void *p_data)
+{
+    unsigned char *rdPtr;
+    unsigned int *csiBuffer = NULL;
+    unsigned int csi_len;
+    int firstPathDelay, bufferSpacing;
+    float ambientMotionVal_dB= 0.0f;
+    unsigned int headerBuffer[HEADER_LEN];
+    unsigned int totalpower[MAX_RX * MAX_TX + 1];
+    unsigned int pktInfo[2];
+    hal_csirxinfo_t *csirxinfo;
+
+    (void)memset(headerBuffer, 0x00, sizeof(headerBuffer));
+    (void)memset(totalpower, 0x00, sizeof(totalpower));
+    (void)memset(pktInfo, 0x00, sizeof(pktInfo));
+
+    hal_pktinfo_t *pktInfoPtr = (hal_pktinfo_t *)(void *)pktInfo;
+
+    hal_wls_packet_params_t packetparams;
+
+    rdPtr = (unsigned char *)p_data;
+
+    (void)memcpy(headerBuffer, rdPtr, HEADER_LEN * sizeof(unsigned int));
+    csirxinfo = (hal_csirxinfo_t*)(void *)headerBuffer;
+
+    csi_len = csirxinfo->data_length;
+#if !CONFIG_MEM_POOLS
+    csiBuffer = (unsigned int *)OSA_MemoryAllocate(sizeof(unsigned int) * csi_len);
+#else
+    csiBuffer = (unsigned int *)OSA_MemoryPoolAllocate(buf_1024_MemoryPool);
+#endif
+
+    if(!csiBuffer)
+    {
+        wifi_e("%s: Failed to alloc csiBuffer",__func__);
+        return;
+    }
+
+    (void)memcpy(csiBuffer, rdPtr, sizeof(unsigned int) * csi_len);
+
+    (void)memset(fftInBuffer, 0x00, sizeof(fftInBuffer));
+    (void)memset(scratchBuffer1, 0x00, sizeof(scratchBuffer1));
+    (void)memset(&packetparams, 0x00, sizeof(hal_wls_packet_params_t));
+
+    packetparams.chNum = csirxinfo->chan;
+
+    bufferSpacing = wls_unpack_csi(csiBuffer, fftInBuffer, &packetparams, &g_ami_cfg.wls_processing_input,
+        totalpower, pktInfo);
+
+    if (g_ami_cfg.ami_reference_init == AMI_REF_UNINIT)
+    {
+        // initialize
+        if(g_ami_cfg.csiFilterSet == AMI_FILTER_NOT_SET)
+        {
+            wifi_w("Missing AMI filter set, setting filter following the first CSI/AMI packet");
+            set_csi_proc_filter(headerBuffer, pktInfoPtr, &g_ami_cfg.gcsi_filter_param);
+            g_ami_cfg.csiFilterSet = AMI_FILTER_AUTO_SET;
+        }
+
+        if(check_csi_filter_partial(headerBuffer, pktInfoPtr, &g_ami_cfg.gcsi_filter_param) == WM_SUCCESS)
+        {
+            firstPathDelay = wls_calculate_toa(pktInfo, bufferSpacing, fftInBuffer, scratchBuffer1, totalpower,
+                &packetparams, &g_ami_cfg.wls_processing_input);
+
+            if(g_ami_cfg.csiFilterSet == AMI_FILTER_SET)
+            {
+                set_csi_proc_filter(headerBuffer, pktInfoPtr, &g_ami_cfg.gcsi_filter_param);
+            }
+            wls_intialize_reference(headerBuffer, pktInfo, &g_ami_cfg.gcsi_filter_param, bufferSpacing,
+                fftInBuffer, referenceBuffer);
+            g_ami_cfg.ami_reference_init = AMI_REF_INITIALIZED;
+        }
+	}
+    else if (check_csi_filter(headerBuffer, pktInfoPtr, &g_ami_cfg.gcsi_filter_param) == WM_SUCCESS)
+    {
+        firstPathDelay = wls_calculate_toa(pktInfo, bufferSpacing, fftInBuffer, scratchBuffer1, totalpower,
+            &packetparams, &g_ami_cfg.wls_processing_input);
+
+        ambientMotionVal_dB= wls_update_cross_corr_ami_calc(headerBuffer, pktInfo, &g_ami_cfg.gcsi_filter_param,
+            bufferSpacing, fftInBuffer, referenceBuffer, scratchBuffer1);
+
+        {
+            char myStr[4] = {'V','H','T','\0'};
+            int l_BW = 20 << pktInfoPtr->sigBw;
+            int nRx = pktInfoPtr->nRx + 1;
+            int nTx = pktInfoPtr->nTx + 1;
+            t_u8 packet_format = convertPktInfo[pktInfoPtr->packetType];
+            // record TSF
+            UINT64 TSF = (((UINT64)headerBuffer[4]) << 32) + headerBuffer[3];
+            // calculate ToA in ns
+            float toa_ns = 1.e3f * firstPathDelay / (1 << 16);
+            if (packet_format == LEG_RATE)
+            {
+                myStr[0] = 'l';
+                myStr[1] = 'e';
+                myStr[2] = 'g';
+            }
+            else if ((packet_format == HT_RATE) || (packet_format == HE_RATE))
+            {
+                myStr[0] = 'H';
+                myStr[1] = (packet_format == HE_RATE)? 'E' : 'T';
+                myStr[2] = '\0';
+            }
+            else
+            {
+                /* do nothing */
+            }
+            mlan_adap->ami_num++;
+            PRINTF("NUM %d CSI Processing Results: %s(%d), RX/TX %d/%d, %-8.2f TSF %llx, Ambient Motion Index %0.1f dB\r\n",
+                mlan_adap->ami_num, myStr, l_BW, nRx, nTx, (double)toa_ns, TSF, (double)ambientMotionVal_dB);
+
+            if (g_ami_cfg.gcsi_filter_param.num_csi)
+            {
+                if (g_ami_cfg.gcsi_filter_param.num_csi > 1)
+                {
+                    g_ami_cfg.gcsi_filter_param.num_csi--;
+                }
+                else
+                {
+                    g_ami_cfg.gcsi_filter_param.num_csi--;
+                    g_ami_cfg.start                 = AMI_STOP;
+                    g_ami_cfg.ami_reference_init    = AMI_REF_UNINIT;
+                    mlan_adap->ami_num              = 0;
+                }
+            }
+        }
+    }
+    else
+    {
+        /* do nothing */
+    }
+
+#if !CONFIG_MEM_POOLS
+    OSA_MemoryFree(csiBuffer);
+#else
+    OSA_MemoryPoolFree(buf_1024_MemoryPool, csiBuffer);
+#endif
+
+    return;
+}
+
+void wifi_process_csi_data(void *p_data)
+{
+    mlan_adap->ami_ongoing = 1;
+    proc_csi_event(((t_u8 *)p_data + AMI_CSI_RAW_DATA_OFFSET));
+    mlan_adap->ami_ongoing = 0;
+    return;
+}
+
+#endif
 #endif
 
 #if CONFIG_WIFI_CHANNEL_LOAD
@@ -6831,7 +7110,7 @@ static int send_csi_ack(unsigned int *resArray)
     return ret;
 }
 
-static void proc_csi_event(void *event, unsigned int *resArray)
+static void proc_csi_event_wls(void *event, unsigned int *resArray)
 {
     uint8_t *csiBuffer = (uint8_t *)(event);
     hal_wls_packet_params_t packetparams;
@@ -6859,7 +7138,7 @@ static void proc_csi_event(void *event, unsigned int *resArray)
     resArray[2] = 0xffffffff;
     resArray[3] = 0xffffffff;
 
-    wls_process_csi((unsigned int *)csiBuffer, (unsigned int *)fftInBuffer_t, &packetparams, &inputVals, resArray);
+    wls_process_csi((unsigned int *)csiBuffer, (unsigned int *)fftInBuffer, &packetparams, &inputVals, resArray);
     // record TSF
     resArray[3] = tsf;
 
@@ -6872,7 +7151,7 @@ int wifi_process_wls_csi_event(void *p_data)
 {
     int ret;
 
-    proc_csi_event(((t_u8 *)p_data + sizeof(csi_event_t)), csi_res_array);
+    proc_csi_event_wls(((t_u8 *)p_data + sizeof(csi_event_t)), csi_res_array);
     // wifi_put_wls_csi_sem(); // After processing CSI raw data, release csi sem for next CSI event.
     ret = send_csi_ack(csi_res_array);
     return ret;
