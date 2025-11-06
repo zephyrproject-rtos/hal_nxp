@@ -243,3 +243,10 @@ Patch List:
   - mcux-sdk-ng: drivers: xspi: cache64: Fix cache management issue.
    - PR: https://github.com/zephyrproject-rtos/hal_nxp/pull/597
    - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
+
+Note:
+   - The SAI driver should not be updated during hal_nxp updates, since the latest SAI driver will cause runtime issues
+     on MCXN947 for Zephyr I2S-related test cases.
+     in Zephyr.
+   - The CAAM driver should not be updated during hal_nxp updates, since the latest CAAM driver will cause runtime issues
+     on RT1160/RT1170 for Zephyr NET-related test cases.
