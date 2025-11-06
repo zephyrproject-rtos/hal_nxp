@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2025 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,9 +20,33 @@
  * Definitions
  ******************************************************************************/
 
+/*! @brief Used to control whether SAI_RxSetFifoConfig()/SAI_TxSetFifoConfig()
+ * allows a NULL FIFO watermark.
+ *
+ * If this macro is set to 0 then SAI_RxSetFifoConfig()/SAI_TxSetFifoConfig()
+ * will set the watermark to half of the FIFO's depth if passed a NULL
+ * watermark.
+ */
+#ifndef MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK
+#define MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK 0
+#endif /* MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK */
+
+/*! @brief Disable implicit channel data configuration within SAI_TxSetConfig()/SAI_RxSetConfig().
+ *
+ * Use this macro to control whether SAI_RxSetConfig()/SAI_TxSetConfig() will
+ * attempt to implicitly configure the channel data. By channel data we mean
+ * the startChannel, channelMask, endChannel, and channelNums fields from the
+ * sai_transciever_t structure. By default, SAI_TxSetConfig()/SAI_RxSetConfig()
+ * will attempt to compute these fields, which may not be desired in cases where
+ * the user wants to set them before the call to said functions.
+ */
+#ifndef MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG
+#define MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG 0
+#endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
+
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 9)) /*!< Version 2.4.9 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3 */
 /*! @} */
 
 /*! @brief _sai_status_t, SAI return status.*/
@@ -123,7 +147,7 @@ typedef enum _sai_bclk_source
     kSAI_BclkSourceMclkOption1 = 0x1U, /*!< Bit clock MCLK option 1 */
     kSAI_BclkSourceMclkOption2 = 0x2U, /*!< Bit clock MCLK option2  */
     kSAI_BclkSourceMclkOption3 = 0x3U, /*!< Bit clock MCLK option3 */
-    /* Specific device (such as Kinetis and some MCXC) bit clock source definition */
+    /* Kinetis device bit clock source definition */
     kSAI_BclkSourceMclkDiv   = 0x1U, /*!< Bit clock using master clock divider */
     kSAI_BclkSourceOtherSai0 = 0x2U, /*!< Bit clock from other SAI device  */
     kSAI_BclkSourceOtherSai1 = 0x3U  /*!< Bit clock from other SAI device */
@@ -352,9 +376,7 @@ typedef struct _sai_fifo
 /*! @brief sai bit clock configurations */
 typedef struct _sai_bit_clock
 {
-#if defined(FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP) && FSL_FEATURE_SAI_HAS_BIT_CLOCK_SWAP
     bool bclkSrcSwap;    /*!< bit clock source swap */
-#endif
     bool bclkInputDelay; /*!< bit clock actually used by the transmitter is delayed by the pad output delay,
                            this has effect of decreasing the data input setup time, but increasing the data output valid
                            time .*/
@@ -1429,22 +1451,6 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
  * @param handle Pointer to the sai_handle_t structure.
  */
 void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
-
-/*! @} */
-
-/*!
- * @name Common IRQ Handler
- * @{
- */
-
-/*!
- * @brief SAI driver IRQ handler common entry.
- *
- * This function provides the common IRQ request entry for SAI.
- *
- * @param instance SAI instance.
- */
-void SAI_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 
