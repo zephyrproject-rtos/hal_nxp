@@ -329,6 +329,10 @@ extern "C" {
 #define CONFIG_HOST_SLEEP 1
 #endif
 
+#if CONFIG_NXP_WIFI_WAKE_TIMER_ENABLE
+#define CONFIG_WAKE_TIMER_ENABLE 1
+#endif
+
 #if CONFIG_PM
 #define CONFIG_POWER_MANAGER 1
 #endif
