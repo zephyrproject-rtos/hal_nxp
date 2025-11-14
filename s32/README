@@ -74,3 +74,12 @@ Patch List for S32Z/E:
    - Remove #include "S32Z2_SPI.h" from s32/drivers/s32ze/BaseNXP/header/S32Z2.h to support
      DSPI using the MCUX driver. This removal won't affect SPI shim driver because this header
      file is already included inside the RTD SPI driver
+
+Patch List for S32K5:
+   - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
+   - Rename fields and macros of FTM device headers to allow compatibility with MCUX FTM driver.
+   - Rename fields and macros of PIT device headers to allow compatibility with MCUX PIT driver.
+   - Remove 'u' suffix from macros so that they can be used with LISTIFY in shim drivers.
+   - Clear the EOC flag before Adc_Sar_CheckAndCallEocNotification() is called to avoid the
+     race condition that prevents the next end of conversion callback to be executed, when
+     a conversion is started inside the previous end of conversion completed callback.

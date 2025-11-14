@@ -88,7 +88,7 @@ typedef struct PIT_Struct {
     __I  uint32_t CVAL;                              /**< Current Timer Value, array offset: 0x104, array step: 0x10 */
     __IO uint32_t TCTRL;                             /**< Timer Control, array offset: 0x108, array step: 0x10 */
     __IO uint32_t TFLG;                              /**< Timer Flag, array offset: 0x10C, array step: 0x10 */
-  } TIMER[PIT_TIMER_COUNT];
+  } CHANNEL[PIT_TIMER_COUNT];
 } PIT_Type, *PIT_MemMapPtr;
 
 /** Number of instances of the PIT module. */

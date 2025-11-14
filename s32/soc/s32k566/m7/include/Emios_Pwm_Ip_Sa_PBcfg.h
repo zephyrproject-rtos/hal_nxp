@@ -25,6 +25,8 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
+
 #include "Emios_Pwm_Ip_Types.h"
 
 /*==================================================================================================
@@ -63,11 +65,45 @@ extern "C"{
 /*==================================================================================================
 *                                            CONSTANTS
 ==================================================================================================*/
-/* Emios instance index for configuration PwmEmios_0/PwmEmiosChannels_0 */
-#define EMIOS_PWM_IP_SA_I0_CH0_CFG      (0U)
+
+#define DT_DRV_COMPAT                     nxp_s32_emios_pwm
+
+#define EMIOS_OPWFMB_MODE_USED(node_id)                                                    \
+            COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
+                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwfmb)),                     \
+                       (0)) ||
+
+#define IS_EMIOS_OPWFMB_MODE_USED(n)                                                       \
+            DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWFMB_MODE_USED)
+
+#define EMIOS_OPWMB_MODE_USED(node_id)                                                     \
+            COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
+                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwmb)),                      \
+                       (0)) ||
+
+#define IS_EMIOS_OPWMB_MODE_USED(n)                                                        \
+            DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWMB_MODE_USED)
+
+#define EMIOS_OPWMCB_MODE_USED(node_id)                                                    \
+            COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
+                       (DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwmcb_trail_edge) ||         \
+                        DT_ENUM_HAS_VALUE(node_id, pwm_mode, opwmcb_lead_edge)             \
+                        ),(0)) ||
+
+#define IS_EMIOS_OPWMCB_MODE_USED(n)                                                       \
+            DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWMCB_MODE_USED)
+
 /* Macro to enable the mode operations. */
-#ifndef EMIOS_PWM_IP_MODE_OPWFMB_USED
+#if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWFMB_MODE_USED) 0
 #define EMIOS_PWM_IP_MODE_OPWFMB_USED
+#endif
+
+#if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWMB_MODE_USED) 0
+#define EMIOS_PWM_IP_MODE_OPWMB_USED
+#endif
+
+#if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWMCB_MODE_USED) 0
+#define EMIOS_PWM_IP_MODE_OPWMCB_USED
 #endif
 
 
@@ -86,17 +122,6 @@ extern "C"{
 /*==================================================================================================
 *                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
-#ifndef EMIOS_PWM_IP_PRECOMPILE_SUPPORT
-#define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Pwm_MemMap.h"
-
-/* Channel configurations for Emios instance 0 */
-/* Emios channel 0 configuration */
-extern const Emios_Pwm_Ip_ChannelConfigType Emios_Pwm_Ip_Sa_I0_Ch0;
-
-#define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Pwm_MemMap.h"
-#endif  /* EMIOS_PWM_IP_PRECOMPILE_SUPPORT */
 
 /*==================================================================================================
 *                                       FUNCTION PROTOTYPES
