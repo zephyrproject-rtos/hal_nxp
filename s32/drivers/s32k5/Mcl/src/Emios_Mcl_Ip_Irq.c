@@ -492,7 +492,7 @@ extern "C"{
 #include "Mcl_MemMap.h"
 
 /* Array with EMIOS bases addresses. */
-extern eMIOS_Type* const  Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT];
+extern eMIOS_Type *const  Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT];
 
 #define MCL_STOP_SEC_CONFIG_DATA_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"

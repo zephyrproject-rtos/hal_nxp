@@ -139,8 +139,6 @@
 #include "S32K566_SRAMCTL_1.h"
 #include "S32K566_SRAMCTL_2.h"
 #include "S32K566_SRAMCTL_CPE.h"
-#include "S32K566_STM.h"
-#include "S32K566_SWT.h"
 #include "S32K566_SW_GLOBAL.h"
 #include "S32K566_SW_PCI_HDR_TYPE0.h"
 #include "S32K566_SW_PORT.h"
