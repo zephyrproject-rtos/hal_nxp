@@ -281,7 +281,9 @@ int wlan_host_sleep_state = HOST_SLEEP_PERIODIC;
  */
 bool usart_suspend_flag = false;
 #endif
+#if CONFIG_WAKE_TIMER_ENABLE
 OSA_TIMER_HANDLE_DEFINE(wake_timer);
+#endif
 #endif
 int is_hs_handshake_done = 0;
 /* indicate that we did not notify FW after host sleep wake up */
@@ -1029,11 +1031,13 @@ status_t wlan_hs_send_event(int id, void *data)
 #endif
 
 #if CONFIG_POWER_MANAGER
+#if CONFIG_WAKE_TIMER_ENABLE
 static void wake_timer_cb(osa_timer_arg_t arg)
 {
     if(wakelock_isheld())
         wakelock_put();
 }
+#endif
 #endif
 
 #if CONFIG_MEF_CFG
@@ -1164,11 +1168,13 @@ void wlan_config_host_sleep(bool is_manual, t_u8 is_periodic)
 #if CONFIG_POWER_MANAGER
         /* Reset flag and stop timer if manual mode is selected without cancel periodic sleep */
         wlan_host_sleep_state = HOST_SLEEP_DISABLE;
+#if CONFIG_WAKE_TIMER_ENABLE
         if (OSA_TimerIsRunning((osa_timer_handle_t)wake_timer))
         {
             OSA_TimerDeactivate((osa_timer_handle_t)wake_timer);
             wakelock_put();
         }
+#endif
 #endif
     }
 }
@@ -1205,12 +1211,14 @@ void wlan_clear_host_sleep_config(void)
 #if CONFIG_UART_INTERRUPT
     usart_suspend_flag = MFALSE;
 #endif
+#if CONFIG_WAKE_TIMER_ENABLE
     if (OSA_TimerIsRunning((osa_timer_handle_t)wake_timer))
     {
         OSA_TimerDeactivate((osa_timer_handle_t)wake_timer);
         wakelock_put();
     }
     is_hs_handshake_done = 0;
+#endif
 #endif
 #if CONFIG_MEF_CFG
     memset(&g_flt_cfg, 0x0, sizeof(wlan_flt_cfg_t));
@@ -10746,12 +10754,14 @@ static void wlcmgr_mon_task(void * data)
     struct wlan_message msg;
 
 #if CONFIG_POWER_MANAGER
+#if CONFIG_WAKE_TIMER_ENABLE
     status = OSA_TimerCreate((osa_timer_handle_t)wake_timer, MSEC_TO_TICK(WAKE_TIMEOUT),
                           &wake_timer_cb, NULL, KOSA_TimerOnce, OSA_TIMER_NO_ACTIVATE);
     if (status != KOSA_StatusSuccess)
     {
         wlcm_e("Unable to create wake timer");
     }
+#endif
 #endif
     while (1)
     {
@@ -10775,11 +10785,13 @@ static void wlcmgr_mon_task(void * data)
             {
 #if CONFIG_POWER_MANAGER
 #ifndef CONFIG_BT
+#if CONFIG_WAKE_TIMER_ENABLE
                 if(!wlan_is_manual && wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
                 {
                     wakelock_get();
                     (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
                 }
+#endif
 #endif
 #endif
 #ifndef RW610
@@ -10796,6 +10808,7 @@ static void wlcmgr_mon_task(void * data)
 #endif
             }
 #ifndef CONFIG_BT
+#if CONFIG_WAKE_TIMER_ENABLE
             else if (msg.id == HOST_SLEEP_HANDSHAKE_SKIP)
             {
                 if(wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
@@ -10804,6 +10817,7 @@ static void wlcmgr_mon_task(void * data)
                     (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
                 }
             }
+#endif
 #endif
 #endif
 #if CONFIG_WIFI_RECOVERY
