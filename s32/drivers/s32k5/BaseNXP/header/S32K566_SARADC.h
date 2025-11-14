@@ -179,7 +179,7 @@ typedef struct SARADC_Struct {
 } SARADC_Type, *SARADC_MemMapPtr;
 
 /** Number of instances of the SARADC module. */
-#define SARADC_INSTANCE_COUNT                    (3u)
+#define SARADC_INSTANCE_COUNT                    3
 
 /* SARADC - Peripheral instance base addresses */
 /** Peripheral LPE_SARADC base address */

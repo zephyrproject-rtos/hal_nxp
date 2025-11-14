@@ -145,7 +145,7 @@ typedef struct {
 #define ADC_SAR_IP_INSTANCE_COUNT           (ADC_INSTANCE_COUNT)
 #define ADC_INSTANCE_COUNT                  (SARADC_INSTANCE_COUNT)
 #define ADC_SAR_IP_THRHLR_COUNT             (SARADC_THRHLN_COUNT)
-#define ADC_SAR_IP_MAX_RESOLUTION           (16U)
+#define ADC_SAR_IP_MAX_RESOLUTION           (11U)
 #define ADC_SAR_IP_RESULT_RESOLUTION        (16U) /* Resolution of the result written by the ADC module */
 #define ADC_SAR_IP_HAS_THRHLR_ARRAY         (1U)
 #define ADC_SAR_IP_CALIBRATION_USES_MCR     (0U)

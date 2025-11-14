@@ -215,7 +215,7 @@ static TEMPSENSE_Type * const Adc_Sar_Ip_apxTempsenseBase[TEMPSENSE_INSTANCE_COU
 #define ADC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Adc_MemMap.h"
 /* Global state structure */
-static Adc_Sar_Ip_StateStructType Adc_Sar_Ip_axAdcSarState[ADC_SAR_IP_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Adc_Sar_Ip_axAdcSarState) static Adc_Sar_Ip_StateStructType Adc_Sar_Ip_axAdcSarState[ADC_SAR_IP_INSTANCE_COUNT];
 
 #define ADC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Adc_MemMap.h"
@@ -1493,6 +1493,12 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
     EocFlag  = (*IMRAddr);
     EocFlag &= (*ISRAddr);
     EocFlag &= (ADC_ISR_EOC_MASK | ADC_ISR_JEOC_MASK);
+
+    /* Clear EOC Flag */
+    if (EocFlag != 0)
+    {
+        *ISRAddr = EocFlag;
+    }
 #endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 
     for (VectAdr = 0U; VectAdr < Adc_Sar_Ip_au8AdcGroupCount[Instance]; VectAdr++)
@@ -1513,13 +1519,6 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
         }
     }
 
-    /* CPR_RTD_00664 */
-#if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
-    if (TRUE == CeocfrFlag)
-    {
-        *ISRAddr = EocFlag;
-    }
-#endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
     if (WtisrMask != 0U)
     {
