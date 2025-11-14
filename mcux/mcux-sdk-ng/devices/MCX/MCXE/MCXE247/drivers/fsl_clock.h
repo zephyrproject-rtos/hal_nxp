@@ -201,6 +201,18 @@ extern volatile uint32_t g_xtal0Freq;
         kCLOCK_Mpu     \
     }
 
+/*! @brief Clock ip name array for EIM. */
+#define EIM_CLOCKS  \
+    {               \
+        kCLOCK_Eim  \
+    }
+
+/*! @brief Clock ip name array for ERM. */
+#define ERM_CLOCKS  \
+    {               \
+        kCLOCK_Erm  \
+    }
+
 /*!
  * @brief LPO clock frequency.
  */
