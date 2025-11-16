@@ -208,4 +208,24 @@
 #define FLEXIO_BASE_PTRS                        IP_FLEXIO_BASE_PTRS
 /** Interrupt vectors for the FLEXIO peripheral type */
 #define FLEXIO_IRQS                              { FLEXIO_IRQn }
+
+/* FLASH - Peripheral instance base addresses */
+/** Peripheral FLASH base address */
+#define FLASH_BASE                               IP_FLASH_BASE
+/** Peripheral FLASH base pointer */
+#define FLASH                                    IP_FLASH
+/** Array initializer of FLASH peripheral base addresses */
+#define FLASH_BASE_ADDRS                         IP_FLASH_BASE_ADDRS
+/** Array initializer of FLASH peripheral base pointers */
+#define FLASH_BASE_PTRS                          IP_FLASH_BASE_PTRS
+
+/* PFLASH - Peripheral instance base addresses */
+/** Peripheral PFLASH base address */
+#define PFLASH_BASE                              IP_PFLASH_BASE
+/** Peripheral PFLASH base pointer */
+#define PFLASH                                   IP_PFLASH
+/** Array initializer of PFLASH peripheral base addresses */
+#define PFLASH_BASE_ADDRS                        IP_PFLASH_BASE_ADDRS
+/** Array initializer of PFLASH peripheral base pointers */
+#define PFLASH_BASE_PTRS                         IP_PFLASH_BASE_PTRS
 #endif  /* _S32K344_GLUE_MCUX_H_ */

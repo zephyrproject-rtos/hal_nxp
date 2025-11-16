@@ -818,7 +818,7 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
 
 status_t FLASH_Program(flash_config_t *config, uint32_t start, uint32_t *src, uint32_t lengthInBytes)
 {
-    status_t ret;
+    status_t ret = kStatus_FLASH_Success;
     size_t chunkSize;
     size_t sizeLeft = lengthInBytes;
     uint8_t *src8 = (uint8_t *) src;

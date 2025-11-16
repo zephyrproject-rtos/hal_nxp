@@ -236,4 +236,13 @@
 /* @brief Memory map has offset between subsystems. */
 #define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
 
+/* FLASH Module features */
+
+/* @brief Code flash (PFLASH) implemented as 1 MiB blocks */
+#define FSL_FEATURE_FLASH_C40_BLOCK_SIZE_CODE     (1024u * 1024u)
+/* @brief Code flash (PFLASH) has 4 blocks of 1 MiB each total size = 4 MiB */
+#define FSL_FEATURE_FLASH_C40_BLOCK_COUNT_CODE    (4u)
+/* @brief Data flash (DFLASH) window: 256 KiB */
+#define FSL_FEATURE_FLASH_C40_BLOCK_SIZE_DATA     (256u * 1024u)
+
 #endif /* _S32K344_FEATURES_H_ */
