@@ -244,6 +244,13 @@ Patch List:
    - PR: https://github.com/zephyrproject-rtos/hal_nxp/pull/597
    - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
 
+  - hal/nxp: s32K344: flash_c40: add C40 features, IP aliases
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits/64395f565184964bbf21e247df6ca88dc4d7cf83
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
+     This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits was created.
+     Also since the additions about C40 Flash geometry in S32K344_features.h and defining local Flash Aliases in
+     S32K344_glue_mcux.h, are for S32K344 SoC so they are not present in the mcusdk-core repo.
+
 Note:
    - The SAI driver should not be updated during hal_nxp updates, since the latest SAI driver will cause runtime issues
      on MCXN947 for Zephyr I2S-related test cases.
