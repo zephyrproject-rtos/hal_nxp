@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Freescale
- * Copyright 2016,2020,2022 NXP
+ * Copyright 2016,2020,2022,2025 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -45,6 +45,10 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
 
     assert(bitPos < 32u);
 
+    if (regIndex >= SYSCON_PRESETCTRLSET_COUNT)
+    {
+        return;
+    }
     /* reset register is in SYSCON */
     /* set bit */
     SYSCON->PRESETCTRLSET[regIndex] = bitMask;
@@ -70,6 +74,10 @@ void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
 
     assert(bitPos < 32u);
 
+    if (regIndex >= SYSCON_PRESETCTRLCLR_COUNT)
+    {
+        return;
+    }
     /* reset register is in SYSCON */
 
     /* clear bit */

@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -126,7 +126,7 @@ typedef struct {
        uint8_t RESERVED_9[36];
   __IO uint32_t PULSECAPSYNC_BYPASS;               /**< Pulse Capture Logic Bypass, offset: 0x528 */
        uint8_t RESERVED_10[8];
-  __IO uint32_t PULSE_CAP_CMP_CLK_MUXSEL;          /**< Comparator Pulse Capture Clock MUX Select, offset: 0x534 */
+  __IO uint32_t PULSE_CAP_ACMP_CLK_MUXSEL;         /**< Comparator Pulse Capture Clock MUX Select, offset: 0x534 */
   __IO uint32_t FLASH_ADVC_PROTECT;                /**< FMU RF Active Control, offset: 0x538 */
        uint8_t RESERVED_11[8];
   __IO uint32_t AONAUXCLKDIV;                      /**< AON AUX Clock Divider Control, offset: 0x544 */
@@ -217,10 +217,9 @@ typedef struct {
 
 #define SYSCON_REMAP_LOCK_MASK                   (0x80000000U)
 #define SYSCON_REMAP_LOCK_SHIFT                  (31U)
-/*! LOCK - This 1-bit field provides a mechanism to limit writes to the this register to protect its
- *    contents. Once set, this bit remains asserted until the next reset.
- *  0b0..This register is not locked and can be altered.
- *  0b1..This register is locked and cannot be altered.
+/*! LOCK - LOCK
+ *  0b0..Register is not locked and can be altered.
+ *  0b1..Register is locked and cannot be altered.
  */
 #define SYSCON_REMAP_LOCK(x)                     (((uint32_t)(((uint32_t)(x)) << SYSCON_REMAP_LOCK_SHIFT)) & SYSCON_REMAP_LOCK_MASK)
 /*! @} */
@@ -338,12 +337,15 @@ typedef struct {
 
 #define SYSCON_NMISRC_IRQCM33_MASK               (0xFFU)
 #define SYSCON_NMISRC_IRQCM33_SHIFT              (0U)
-/*! IRQCM33 - The IRQ number of the interrupt that acts as the Non-Maskable Interrupt (NMI) for the CM33, if enabled by NMIENCM33. */
+/*! IRQCM33 - CM33 IRQ number */
 #define SYSCON_NMISRC_IRQCM33(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_NMISRC_IRQCM33_SHIFT)) & SYSCON_NMISRC_IRQCM33_MASK)
 
 #define SYSCON_NMISRC_NMIENCM33_MASK             (0x80000000U)
 #define SYSCON_NMISRC_NMIENCM33_SHIFT            (31U)
-/*! NMIENCM33 - Writing a 1 to this bit enables the Non-Maskable Interrupt (NMI) source selected by IRQCM33. */
+/*! NMIENCM33 - CM33 Non-Maskable Interrupt (NMI) Enable
+ *  0b0..Disables
+ *  0b1..Enables
+ */
 #define SYSCON_NMISRC_NMIENCM33(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_NMISRC_NMIENCM33_SHIFT)) & SYSCON_NMISRC_NMIENCM33_MASK)
 /*! @} */
 
@@ -522,13 +524,13 @@ typedef struct {
  */
 #define SYSCON_PULSECAPSYNC_BYPASS_LPUART1_0(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_LPUART1_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_LPUART1_0_MASK)
 
-#define SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_MASK   (0x4U)
-#define SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_SHIFT  (2U)
-/*! CMP0_0 - CMP0 Trigger Bypass Control Bit
+#define SYSCON_PULSECAPSYNC_BYPASS_ACMP0_0_MASK  (0x4U)
+#define SYSCON_PULSECAPSYNC_BYPASS_ACMP0_0_SHIFT (2U)
+/*! ACMP0_0 - ACMP0 Trigger Bypass Control Bit
  *  0b0..Pulse capture sync bypassed
  *  0b1..Pulse capture sync enabled
  */
-#define SYSCON_PULSECAPSYNC_BYPASS_CMP0_0(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_CMP0_0_MASK)
+#define SYSCON_PULSECAPSYNC_BYPASS_ACMP0_0(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_ACMP0_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_ACMP0_0_MASK)
 
 #define SYSCON_PULSECAPSYNC_BYPASS_CTIMER2_4_MASK (0x8U)
 #define SYSCON_PULSECAPSYNC_BYPASS_CTIMER2_4_SHIFT (3U)
@@ -651,18 +653,18 @@ typedef struct {
 #define SYSCON_PULSECAPSYNC_BYPASS_CTIMER0_0(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSECAPSYNC_BYPASS_CTIMER0_0_SHIFT)) & SYSCON_PULSECAPSYNC_BYPASS_CTIMER0_0_MASK)
 /*! @} */
 
-/*! @name PULSE_CAP_CMP_CLK_MUXSEL - Comparator Pulse Capture Clock MUX Select */
+/*! @name PULSE_CAP_ACMP_CLK_MUXSEL - Comparator Pulse Capture Clock MUX Select */
 /*! @{ */
 
-#define SYSCON_PULSE_CAP_CMP_CLK_MUXSEL_CMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_MASK (0x3U)
-#define SYSCON_PULSE_CAP_CMP_CLK_MUXSEL_CMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_SHIFT (0U)
-/*! CMP0_PULSE_CAP_SYNC_CLK_MUX_SEL - Clock source select for CMP0
+#define SYSCON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_MASK (0x3U)
+#define SYSCON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_SHIFT (0U)
+/*! ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL - Clock source select for ACMP0
  *  0b00..Clock Source 1
  *  0b01..Clock source 2
  *  0b10..Clock source 3
  *  0b11..Clock source 4
  */
-#define SYSCON_PULSE_CAP_CMP_CLK_MUXSEL_CMP0_PULSE_CAP_SYNC_CLK_MUX_SEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSE_CAP_CMP_CLK_MUXSEL_CMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_SHIFT)) & SYSCON_PULSE_CAP_CMP_CLK_MUXSEL_CMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_MASK)
+#define SYSCON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_SHIFT)) & SYSCON_PULSE_CAP_ACMP_CLK_MUXSEL_ACMP0_PULSE_CAP_SYNC_CLK_MUX_SEL_MASK)
 /*! @} */
 
 /*! @name FLASH_ADVC_PROTECT - FMU RF Active Control */
@@ -670,7 +672,7 @@ typedef struct {
 
 #define SYSCON_FLASH_ADVC_PROTECT_FLASH_ADVC_PROTECT_MASK (0x1U)
 #define SYSCON_FLASH_ADVC_PROTECT_FLASH_ADVC_PROTECT_SHIFT (0U)
-/*! FLASH_ADVC_PROTECT - Bit to gate CCOB commands while running ADVC. Use to prevent CCOB commands to run when ADVC is active.
+/*! FLASH_ADVC_PROTECT - ADVC Protection
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -715,9 +717,9 @@ typedef struct {
 
 #define SYSCON_HYPERVISORINTCTRL_HYPERVISOR_INT_CTRL_MASK (0x1U)
 #define SYSCON_HYPERVISORINTCTRL_HYPERVISOR_INT_CTRL_SHIFT (0U)
-/*! HYPERVISOR_INT_CTRL - Hypervisor interrupt control bit used to deassert hypervisor interrupt after interrupt sevice routine
- *  0b0..Interrupt will be enabled
- *  0b1..Interrupt will be disabled
+/*! HYPERVISOR_INT_CTRL - Hypervisor Interrupt Control
+ *  0b0..Enables interrupt
+ *  0b1..Disables interrupt
  */
 #define SYSCON_HYPERVISORINTCTRL_HYPERVISOR_INT_CTRL(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_HYPERVISORINTCTRL_HYPERVISOR_INT_CTRL_SHIFT)) & SYSCON_HYPERVISORINTCTRL_HYPERVISOR_INT_CTRL_MASK)
 /*! @} */
@@ -955,7 +957,7 @@ typedef struct {
 
 #define SYSCON_FLASH_CFG_IFR_ERASE_DIS_MASK      (0xFU)
 #define SYSCON_FLASH_CFG_IFR_ERASE_DIS_SHIFT     (0U)
-/*! IFR_ERASE_DIS - user IFR erase control
+/*! IFR_ERASE_DIS - User IFR erase control
  *  0b0000..bit N enable IFR sector N erase(N=0-3).
  *  0b1111..bit N disable IFR sector N erase(N=0-3), write one lock.
  */
@@ -1064,10 +1066,9 @@ typedef struct {
 
 #define SYSCON_SRAM_XEN_LOCK_MASK                (0x80000000U)
 #define SYSCON_SRAM_XEN_LOCK_SHIFT               (31U)
-/*! LOCK - This 1-bit field provides a mechanism to limit writes to the this register (and
- *    SRAM_XEN_DP) to protect its contents. Once set, this bit remains asserted until the next reset.
- *  0b0..This register is not locked and can be altered.
- *  0b1..This register is locked and cannot be altered.
+/*! LOCK - LOCK
+ *  0b0..Register is not locked and can be altered.
+ *  0b1..Register is locked and cannot be altered.
  */
 #define SYSCON_SRAM_XEN_LOCK(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_SRAM_XEN_LOCK_SHIFT)) & SYSCON_SRAM_XEN_LOCK_MASK)
 /*! @} */

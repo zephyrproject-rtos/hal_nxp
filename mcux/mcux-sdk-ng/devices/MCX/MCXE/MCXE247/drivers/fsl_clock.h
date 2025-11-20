@@ -755,12 +755,13 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type);
  */
 static inline void CLOCK_SetVlprModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
-    assert(config);
     union
     {
         const uint32_t *configInt;
         const scg_sys_clk_config_t *configPtr;
     } Config;
+
+    assert(config);
 
     Config.configPtr = config;
     SCG->VCCR        = *(Config.configInt);
@@ -775,12 +776,13 @@ static inline void CLOCK_SetVlprModeSysClkConfig(const scg_sys_clk_config_t *con
  */
 static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
-    assert(config);
     union
     {
         const uint32_t *configInt;
         const scg_sys_clk_config_t *configPtr;
     } Config;
+
+    assert(config);
 
     Config.configPtr = config;
     SCG->RCCR        = *(Config.configInt);
@@ -795,12 +797,13 @@ static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *conf
  */
 static inline void CLOCK_SetHsrunModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
-    assert(config);
     union
     {
         const uint32_t *configInt;
         const scg_sys_clk_config_t *configPtr;
     } Config;
+
+    assert(config);
 
     Config.configPtr = config;
     SCG->HCCR        = *(Config.configInt);
@@ -815,13 +818,13 @@ static inline void CLOCK_SetHsrunModeSysClkConfig(const scg_sys_clk_config_t *co
  */
 static inline void CLOCK_GetCurSysClkConfig(scg_sys_clk_config_t *config)
 {
-    assert(config);
-
     union
     {
         uint32_t *configInt;
         scg_sys_clk_config_t *configPtr;
     } Config;
+
+    assert(config);
 
     Config.configPtr = config;
     *(Config.configInt) = SCG->CSR;

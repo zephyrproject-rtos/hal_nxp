@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WUU
@@ -1527,7 +1527,7 @@ typedef struct {
 #define WUU_FMC_FILTM1_MASK                      (0x1U)
 #define WUU_FMC_FILTM1_SHIFT                     (0U)
 /*! FILTM1 - Filter Mode for FILTn
- *  0b0..Active only during Deep Sleep/Deep Power Down mode
+ *  0b0..Active only during Deep Sleep 1/Deep Power Down mode
  *  0b1..Active during all power modes
  */
 #define WUU_FMC_FILTM1(x)                        (((uint32_t)(((uint32_t)(x)) << WUU_FMC_FILTM1_SHIFT)) & WUU_FMC_FILTM1_MASK)
@@ -1535,7 +1535,7 @@ typedef struct {
 #define WUU_FMC_FILTM2_MASK                      (0x2U)
 #define WUU_FMC_FILTM2_SHIFT                     (1U)
 /*! FILTM2 - Filter Mode for FILTn
- *  0b0..Active only during Deep Sleep/Deep Power Down mode
+ *  0b0..Active only during Deep Sleep 1/Deep Power Down mode
  *  0b1..Active during all power modes
  */
 #define WUU_FMC_FILTM2(x)                        (((uint32_t)(((uint32_t)(x)) << WUU_FMC_FILTM2_SHIFT)) & WUU_FMC_FILTM2_MASK)

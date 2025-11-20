@@ -328,11 +328,25 @@ status_t PM_EnterLowPower(uint64_t wakeupTime, pm_mode_t *selectedMode)
          * might already be passed. Subtract the overhead it takes till the system will eventually go to
          * low power mode. This overhead includes calling the notifiers, searching for the deepest
          * power mode etc... */
-        int64_t durationInUs = (int64_t)wakeupTime - (int64_t)PMDEVICE_GetSleepTimer() - PRE_SLEEP_OVERHEAD_IN_US;
-        if (durationInUs <= 0)
+        int64_t durationInUs;
+        uint64_t nowPlusOverhead = (uint64_t)PMDEVICE_GetSleepTimer() + (uint64_t)PRE_SLEEP_OVERHEAD_IN_US;
+        if (wakeupTime <= nowPlusOverhead)
         {
             /* Set it to 1. 0 means infinite sleep */
             durationInUs = 1;
+        }
+        else
+        {
+            uint64_t delta = wakeupTime - nowPlusOverhead;
+            if (delta > (uint64_t)INT64_MAX)
+            {
+                assert(false); /* should never happen */
+                durationInUs = INT64_MAX;
+            }
+            else
+            {
+                durationInUs = (int64_t)delta;
+            }
         }
         /* Based on remaining time and required resources, compute the deepest power state. */
         state = PM_FindDeepestPossibleState(durationInUs);

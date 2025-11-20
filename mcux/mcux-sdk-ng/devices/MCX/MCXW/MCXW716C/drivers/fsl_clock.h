@@ -38,8 +38,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.4. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
+/*! @brief CLOCK driver version 2.2.5. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -701,6 +701,11 @@ static inline void CLOCK_DisableTPM2(void)
 static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
 {
     if (kCLOCK_NOGATE == name)
+    {
+        return;
+    }
+
+    if (src < kCLOCK_IpSrcFro6M || src > kCLOCK_IpSrc32kClk)
     {
         return;
     }

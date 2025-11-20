@@ -217,7 +217,22 @@ static void EnterDeepSleep(uint64_t wakeupTime, pm_board_resource_mask_t require
 {
     uint32_t exitLatencyInUs = DEEP_SLEEP_EXIT_LATENCY_IN_US +
                                (s_pmcEnabledResources & kLOWPOWERCFG_DCDC ? 0 : (s_dcdcUsed ? DCDC_STARTUP_TIME : 0));
-    int32_t sleepTimeInUs = (int32_t)((int64_t)wakeupTime - (int64_t)PMDEVICE_GetSleepTimer() - exitLatencyInUs);
+    uint32_t sleepTimeInUs;
+    int64_t delta = (int64_t)wakeupTime - (int64_t)PMDEVICE_GetSleepTimer() - (int64_t)exitLatencyInUs;
+    if (delta <= 0) 
+    {
+        assert(false); /* should never happen */
+        sleepTimeInUs = 0U;
+    } 
+    else if (delta > (int64_t)UINT32_MAX) 
+    {
+        assert(false); /* should never happen */
+        sleepTimeInUs = UINT32_MAX;
+    }
+    else 
+    {
+        sleepTimeInUs = (uint32_t)delta;
+    }
     if (sleepTimeInUs > MIN_LOW_POWER_TIME_IN_US)
     {
         /* Start the timer to wake up the system */
@@ -251,7 +266,21 @@ static void EnterPowerDownWithCpuRetention(uint64_t wakeupTime, pm_board_resourc
 {
     uint32_t exitLatencyInUs = POWER_DOWN_WITH_CPU_RETENTION_EXIT_LATENCY_IN_US +
                                (s_pmcEnabledResources & kLOWPOWERCFG_DCDC ? 0 : (s_dcdcUsed ? DCDC_STARTUP_TIME : 0));
-    int32_t sleepTimeInUs = (int32_t)((int64_t)wakeupTime - (int64_t)PMDEVICE_GetSleepTimer() - exitLatencyInUs);
+    uint32_t sleepTimeInUs;
+    int64_t delta = (int64_t)wakeupTime - (int64_t)PMDEVICE_GetSleepTimer() - (int64_t)exitLatencyInUs;
+    if (delta <= 0) 
+    {
+        assert(false); /* should never happen */
+        sleepTimeInUs = 0U;
+    } 
+    else if (delta > (int64_t)UINT32_MAX) 
+    {
+        assert(false); /* should never happen */
+        sleepTimeInUs = UINT32_MAX;
+    } else 
+    {
+        sleepTimeInUs = (uint32_t)delta;
+    }
     if (sleepTimeInUs > MIN_LOW_POWER_TIME_IN_US)
     {
         uint32_t enabledResources;
@@ -357,45 +386,44 @@ static void RequiredResourcesChanged(pm_board_resource_mask_t requiredResources,
                                         kResource_WakeupDma1,
                                         kResource_WakeupWakePad};
     /* Holds the masks for the pmc wakeup sources, this list must match the pmcWakeupSources */
-    const uint64_t pmcWakeupFlags[] = {kWAKEUP_SYS,
-                                       kWAKEUP_DMA0,
-                                       kWAKEUP_GINT0,
-                                       kWAKEUP_PIN_INT0,
-                                       kWAKEUP_PIN_INT1,
-                                       kWAKEUP_PIN_INT2,
-                                       kWAKEUP_PIN_INT3,
-                                       kWAKEUP_UTICK,
-                                       kWAKEUP_MRT,
-                                       kWAKEUP_CTIMER0,
-                                       kWAKEUP_CTIMER1,
-                                       kWAKEUP_SCT,
-                                       kWAKEUP_CTIMER3,
-                                       kWAKEUP_FLEXCOMM0,
-                                       kWAKEUP_FLEXCOMM1,
-                                       kWAKEUP_FLEXCOMM2,
-                                       kWAKEUP_BLE_LL,
-                                       kWAKEUP_BLE_SLP_TMR,
-                                       kWAKEUP_WDT,
-                                       kWAKEUP_BOD1,
-                                       kWAKEUP_BOD2,
-                                       kWAKEUP_RTC,
-                                       kWAKEUP_WAKE_DSLP,
-                                       kWAKEUP_PIN_INT4,
-                                       kWAKEUP_PIN_INT5,
-                                       kWAKEUP_PIN_INT6,
-                                       kWAKEUP_PIN_INT7,
-                                       kWAKEUP_CTIMER2,
-                                       kWAKEUP_CTIMER4,
-                                       kWAKEUP_OS_EVENT,
-                                       kWAKEUP_SPIFI,
-                                       kWAKEUP_SEC_GPIO_INT0_IRQ0,
-                                       kWAKEUP_SEC_GPIO_INT0_IRQ1,
-                                       kWAKEUP_PLU,
-                                       kWAKEUP_SEC_VIO,
-                                       kWAKEUP_TRNG,
-                                       kWAKEUP_DMA1,
-                                       kWAKEUP_WAKE_PAD};
-
+    const uint64_t pmcWakeupFlags[] = {(uint64_t)kWAKEUP_SYS,
+                                       (uint64_t)kWAKEUP_DMA0,
+                                       (uint64_t)kWAKEUP_GINT0,
+                                       (uint64_t)kWAKEUP_PIN_INT0,
+                                       (uint64_t)kWAKEUP_PIN_INT1,
+                                       (uint64_t)kWAKEUP_PIN_INT2,
+                                       (uint64_t)kWAKEUP_PIN_INT3,
+                                       (uint64_t)kWAKEUP_UTICK,
+                                       (uint64_t)kWAKEUP_MRT,
+                                       (uint64_t)kWAKEUP_CTIMER0,
+                                       (uint64_t)kWAKEUP_CTIMER1,
+                                       (uint64_t)kWAKEUP_SCT,
+                                       (uint64_t)kWAKEUP_CTIMER3,
+                                       (uint64_t)kWAKEUP_FLEXCOMM0,
+                                       (uint64_t)kWAKEUP_FLEXCOMM1,
+                                       (uint64_t)kWAKEUP_FLEXCOMM2,
+                                       (uint64_t)kWAKEUP_BLE_LL,
+                                       (uint64_t)kWAKEUP_BLE_SLP_TMR,
+                                       (uint64_t)kWAKEUP_WDT,
+                                       (uint64_t)kWAKEUP_BOD1,
+                                       (uint64_t)kWAKEUP_BOD2,
+                                       (uint64_t)kWAKEUP_RTC,
+                                       (uint64_t)kWAKEUP_WAKE_DSLP,
+                                       (uint64_t)kWAKEUP_PIN_INT4,
+                                       (uint64_t)kWAKEUP_PIN_INT5,
+                                       (uint64_t)kWAKEUP_PIN_INT6,
+                                       (uint64_t)kWAKEUP_PIN_INT7,
+                                       (uint64_t)kWAKEUP_CTIMER2,
+                                       (uint64_t)kWAKEUP_CTIMER4,
+                                       (uint64_t)kWAKEUP_OS_EVENT,
+                                       (uint64_t)kWAKEUP_SPIFI,
+                                       (uint64_t)kWAKEUP_SEC_GPIO_INT0_IRQ0,
+                                       (uint64_t)kWAKEUP_SEC_GPIO_INT0_IRQ1,
+                                       (uint64_t)kWAKEUP_PLU,
+                                       (uint64_t)kWAKEUP_SEC_VIO,
+                                       (uint64_t)kWAKEUP_TRNG,
+                                       (uint64_t)kWAKEUP_DMA1,
+                                       (uint64_t)kWAKEUP_WAKE_PAD};
     /* Each time the required resources change, the pmc mask is calculated and cached
      * to improve time to low power.
      */
@@ -450,8 +478,20 @@ void PMDEVICE_StopSleepTimer(void)
 uint64_t PMDEVICE_GetSleepTimer(void)
 {
 #ifdef TIMER_PORT_TYPE_CTIMER
-    return (uint64_t)(CTIMER_GetTimerCountValue(CTIMER0) * 1e6 / CLOCK_GetCTimerClkFreq(0));
+    uint32_t cnt = CTIMER_GetTimerCountValue(CTIMER0);
+    uint32_t freq = CLOCK_GetCTimerClkFreq(0);
+    if (freq == 0U)
+    {
+        return 0U;
+    }
+    return ((uint64_t)cnt * 1000000ULL) / (uint64_t)freq;
 #else
-    return (uint64_t)(OSTIMER_GetCurrentTimerValue(OSTIMER) * 1e6 / CLOCK_GetOSTimerClkFreq());
+    uint32_t cnt = OSTIMER_GetCurrentTimerValue(OSTIMER);
+    uint32_t freq = CLOCK_GetOSTimerClkFreq();
+    if (freq == 0U)
+    {
+        return 0U;
+    }
+    return ((uint64_t)cnt * 1000000ULL) / (uint64_t)freq;
 #endif /* TIMER_PORT_TYPE_CTIMER */
 }

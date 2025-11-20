@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief CLOCK driver version 2.1.5. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -475,7 +475,6 @@ typedef enum _clock_name
 
 typedef enum _clock_attach_id
 {
-
     kFRO12M_to_MAIN_CLK =
         MUX_A(CM_MAINCLKSELA, MAINCLKSELA_FRO_12MHz) | MUX_B(CM_MAINCLKSELB, MAINCLKSELB_MAINCLKAOUT, 0),
     kEXT_CLK_to_MAIN_CLK = MUX_A(CM_MAINCLKSELA, MAINCLKSELA_CLKIN) | MUX_B(CM_MAINCLKSELB, MAINCLKSELB_MAINCLKAOUT, 0),
@@ -628,6 +627,11 @@ extern "C" {
 static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 {
     uint32_t index               = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
+
+    if (index >= SYSCON_AHBCLKCTRLSET_COUNT)
+    {
+        return;
+    }
     SYSCON->AHBCLKCTRLSET[index] = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
 }
 /**
@@ -638,6 +642,11 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
     uint32_t index               = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
+
+    if (index >= SYSCON_AHBCLKCTRLCLR_COUNT)
+    {
+        return;
+    }
     SYSCON->AHBCLKCTRLCLR[index] = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
 }
 

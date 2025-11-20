@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b250813
+**     Build:               b251011
 **
 **     Abstract:
 **         Chip specific module features.
@@ -340,6 +340,37 @@
 /* @brief Is affected by errata with ID 51989. */
 #define FSL_FEATURE_PWM_HAS_ERRATA_51989 (0)
 
+/* FMU module features */
+
+/* @brief Is the flash module msf1? */
+#define FSL_FEATURE_FSL_FEATURE_FLASH_IS_MSF1 (1)
+/* @brief P-Flash block count. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_COUNT (1)
+/* @brief P-Flash block0 start address. */
+#define FSL_FEATURE_FLASH_PFLASH_START_ADDRESS (0x00000000U)
+/* @brief P-Flash block0 size. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (0x100000U)
+/* @brief P-Flash sector size. */
+#define FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE (0x2000U)
+/* @brief P-Flash page size. */
+#define FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE (128)
+/* @brief P-Flash phrase size. */
+#define FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE (16)
+/* @brief Has IFR memory. */
+#define FSL_FEATURE_FLASH_HAS_IFR (1)
+/* @brief flash BLOCK0 IFR0 start address. */
+#define FSL_FEATURE_FLASH_IFR0_START_ADDRESS (0x01000000u)
+/* @brief flash BLOCK0 IFR1 start address. */
+#define FSL_FEATURE_FLASH_IFR1_START_ADDRESS (0x02100000U)
+/* @brief flash block IFR0 size. */
+#define FSL_FEATURE_FLASH_IFR0_SIZE (0x8000U)
+/* @brief flash block IFR1 size. */
+#define FSL_FEATURE_FLASH_IFR1_SIZE (0x2000U)
+/* @brief IFR sector size. */
+#define FSL_FEATURE_FLASH_IFR_SECTOR_SIZE (0x2000U)
+/* @brief IFR page size. */
+#define FSL_FEATURE_FLASH_IFR_PAGE_SIZE (128)
+
 /* GLIKEY module features */
 
 /* @brief GLIKEY has 8 step FSM configuration */
@@ -393,6 +424,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPSPI module features */
 
@@ -406,6 +439,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -610,6 +645,8 @@
 #define FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT (1)
 /* @brief Has BLEED_EN */
 #define FSL_FEATURE_MCX_SPC_HAS_DCDC_CFG_BLEED_EN (0)
+/* @brief Support overdrive voltage */
+#define FSL_FEATURE_MCX_SPC_SUPPORT_OVERDRIVE_VOLTAGE (0)
 
 /* SYSCON module features */
 

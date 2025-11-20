@@ -19,9 +19,18 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.2 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief CLOCK driver version 2.2.0 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
+
+/*! @brief Retry times for waiting flag. */
+#ifndef CLOCK_RETRY_TIMES
+#ifdef CONFIG_CLOCK_RETRY_TIMES
+#define CLOCK_RETRY_TIMES CONFIG_CLOCK_RETRY_TIMES
+#else
+#define CLOCK_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#endif
+#endif
 
 /* Definition for delay API in clock driver, users can redefine it to the real
  * application. */
@@ -607,10 +616,10 @@ typedef enum _clock_attach_id
     kEMAC_RMII_TX_CLK_to_EMAC_TX =
         CLOCK_DIV_TUPLE(8U, CLOCK_EMAC_RMII_TX_CLK), /*!< Select EMAC_RMII_TX_CLK(pin) as EMAC_TX_CLK  clock source. */
 
-    kFIRC_CLK_to_EMAC_TS = CLOCK_DIV_TUPLE(9U, CLOCK_FIRC_CLK), /*!< Select FIRC as EMAC_TS_CLK clock source. */
+    kFIRC_CLK_to_EMAC_TS  = CLOCK_DIV_TUPLE(9U, CLOCK_FIRC_CLK),  /*!< Select FIRC as EMAC_TS_CLK clock source. */
     kFXOSC_CLK_to_EMAC_TS = CLOCK_DIV_TUPLE(9U, CLOCK_FXOSC_CLK), /*!< Select FXOSC as EMAC_TS_CLK clock source. */
     kPLL_PHI0_CLK_to_EMAC_TS =
-        CLOCK_DIV_TUPLE(9U, CLOCK_PLL_PHI0_CLK), /*!< Select PLL_PHI0_CLK as EMAC_TS_CLK clock source. */
+        CLOCK_DIV_TUPLE(9U, CLOCK_PLL_PHI0_CLK),     /*!< Select PLL_PHI0_CLK as EMAC_TS_CLK clock source. */
     kEMAC_RMII_TX_CLK_to_EMAC_TS =
         CLOCK_DIV_TUPLE(9U, CLOCK_EMAC_RMII_TX_CLK), /*!< Select EMAC_RMII_TX_CLK(pin) as EMAC_TS_CLK  clock source. */
     kEMAC_RX_CLK_to_EMAC_TS =
@@ -621,8 +630,8 @@ typedef enum _clock_attach_id
     kFIRC_CLK_to_QSPI_SFCK  = CLOCK_DIV_TUPLE(10U, CLOCK_FIRC_CLK),  /*!< Select FIRC as QSPI_SFCK clock source. */
     kFXOSC_CLK_to_QSPI_SFCK = CLOCK_DIV_TUPLE(10U, CLOCK_FXOSC_CLK), /*!< Select FXOSC as QSPI_SFCK clock source. */
     kPLL_PHI1_CLK_to_QSPI_SFCK =
-        CLOCK_DIV_TUPLE(10U, CLOCK_PLL_PHI1_CLK),     /*!< Select PLL_PHI1_CLK as QSPI_SFCK clock source. */
-#endif                                                /* FSL_FEATURE_CLOCK_HAS_QSPI */
+        CLOCK_DIV_TUPLE(10U, CLOCK_PLL_PHI1_CLK),                /*!< Select PLL_PHI1_CLK as QSPI_SFCK clock source. */
+#endif                                                           /* FSL_FEATURE_CLOCK_HAS_QSPI */
 
     kFIRC_CLK_to_TRACE  = CLOCK_DIV_TUPLE(11U, CLOCK_FIRC_CLK),  /*!< Select FIRC as TRACE clock source. */
     kFXOSC_CLK_to_TRACE = CLOCK_DIV_TUPLE(11U, CLOCK_FXOSC_CLK), /*!< Select FXOSC as TRACE clock source. */
@@ -859,7 +868,7 @@ extern "C" {
  * @brief Starts the hardware processes for the partition(s) clock change sequence.
  * @return  Nothing
  */
-inline static void CLOCK_McmeEnterKey(void)
+static inline void CLOCK_McmeEnterKey(void)
 {
     MC_ME->CTL_KEY = MC_ME_CTL_KEY_KEY(0x5AF0U);
     MC_ME->CTL_KEY = MC_ME_CTL_KEY_KEY(0xA50FU);
@@ -884,27 +893,27 @@ void CLOCK_SetEmacRxClkFreq(uint32_t freq);
 /**
  * @brief Enable the clock for specific IP.
  * @param clk : Clock to be enabled.
- * @return  Nothing
+ * @return  kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_EnableClock(clock_ip_name_t clk);
+status_t CLOCK_EnableClock(clock_ip_name_t clk);
 
 /**
  * @brief Disable the clock for specific IP.
  * @param clk : Clock to be disabled.
- * @return  Nothing
+*  @return  kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_DisableClock(clock_ip_name_t clk);
+status_t CLOCK_DisableClock(clock_ip_name_t clk);
 
 /**
  * @brief   Setup peripheral clock dividers trigger type.
- *     selects whether the dividers associated with clock mux 0 are updated immediately on writing to the corresponding
+ * Selects whether the dividers associated with clock mux 0 are updated immediately on writing to the corresponding
  * divider configuration register (referred to as immediate divider update) or only on writing to the
  * MC_CGM_MUX_0_DIV_TRIG register (referred to as common trigger update)
  * @param   div_name    : Clock divider name
- * @param   type     :
+ * @param   type     : divider trigger type
  * @return  Nothing
  */
-inline static void CLOCK_SetClkMux0DivTriggerType(clock_trigger_div_type_t type)
+static inline void CLOCK_SetClkMux0DivTriggerType(clock_trigger_div_type_t type)
 {
     if (type == KCLOCK_CommonTriggerUpdate)
     {
@@ -916,15 +925,31 @@ inline static void CLOCK_SetClkMux0DivTriggerType(clock_trigger_div_type_t type)
     }
 }
 
-inline static void CLOCK_CommonTriggerClkMux0DivUpdate(void)
+/**
+ * @brief Trigger MUX0 clock dividers update(referred to as common trigger update).
+ * When MC_CGM_MUX_0_DIV_TRIG_CTRL_TCTL = 1, use this API to trigger update for MUX0 dividers.
+ * @return  kStatus_Timeout for timeout, kStatus_Success for sucees operation. 
+ */
+static inline status_t CLOCK_CommonTriggerClkMux0DivUpdate(void)
 {
     MC_CGM->MUX_0_DIV_TRIG_CTRL = MC_CGM_MUX_0_DIV_TRIG_CTRL_TCTL_MASK | MC_CGM_MUX_0_DIV_TRIG_CTRL_HHEN_MASK;
     MC_CGM->MUX_0_DIV_TRIG      = MC_CGM_MUX_0_DIV_TRIG_TRIGGER(1u);
 
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
     /* Trigger clock transition for MC_CGM_MUX0 */
     while ((MC_CGM->MUX_0_DIV_UPD_STAT & MC_CGM_MUX_0_DIV_UPD_STAT_DIV_STAT_MASK) != 0)
     {
+#if (CLOCK_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+
+    return kStatus_Success;
 }
 
 /**
@@ -940,15 +965,15 @@ status_t CLOCK_SetFircDiv(clock_firc_div_t divider);
  * @param   div_name    : Clock divider name
  * @param   divider     : Value to be divided. Divider value 0 will disable the divider.
  * Undivided clock frequency / divider.
- * @return  Nothing
+ * @return  kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider);
+status_t CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider);
 
 /**
  * @brief Enable FIRC in standby mode.
  * @return  Nothing
  */
-inline static void CLOCK_EnableFircInStandbyMode(void)
+static inline void CLOCK_EnableFircInStandbyMode(void)
 {
     FIRC->STDBY_ENABLE |= FIRC_STDBY_ENABLE_STDBY_EN_MASK;
 }
@@ -957,7 +982,7 @@ inline static void CLOCK_EnableFircInStandbyMode(void)
  * @brief Disable FIRC in standby mode.
  * @return  Nothing
  */
-inline static void CLOCK_DisableFircInStandbyMode(void)
+static inline void CLOCK_DisableFircInStandbyMode(void)
 {
     FIRC->STDBY_ENABLE &= ~FIRC_STDBY_ENABLE_STDBY_EN_MASK;
 }
@@ -966,7 +991,7 @@ inline static void CLOCK_DisableFircInStandbyMode(void)
  * @brief Enable SIRC in standby mode.
  * @return  Nothing
  */
-inline static void CLOCK_EnableSircInStandbyMode(void)
+static inline void CLOCK_EnableSircInStandbyMode(void)
 {
     SIRC->MISCELLANEOUS_IN |= SIRC_MISCELLANEOUS_IN_STANDBY_ENABLE_MASK;
 }
@@ -975,7 +1000,7 @@ inline static void CLOCK_EnableSircInStandbyMode(void)
  * @brief Disable SIRC in standby mode.
  * @return  Nothing
  */
-inline static void CLOCK_DisableSircInStandbyMode(void)
+static inline void CLOCK_DisableSircInStandbyMode(void)
 {
     SIRC->MISCELLANEOUS_IN &= ~SIRC_MISCELLANEOUS_IN_STANDBY_ENABLE_MASK;
 }
@@ -983,24 +1008,24 @@ inline static void CLOCK_DisableSircInStandbyMode(void)
 /**
  * @brief Configure the clock selection muxes.
  * @param  connection  : Clock to be configured.
- * @return  Nothing
+ * @return kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_AttachClk(clock_attach_id_t connection);
+status_t CLOCK_AttachClk(clock_attach_id_t connection);
 
 /**
  * @brief Request safe clock switch to FIRC.
  * @param  connection  : Clock to be configured.
- * @return  Nothing
+ * @return kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_SelectSafeClock(clock_attach_id_t connection);
+status_t CLOCK_SelectSafeClock(clock_attach_id_t connection);
 
 /**
  * @brief Configure the Progressive Clock Frequency Switch(PCFS) for MC_CGM MUX0.
  * @param  connection  : Clock to be configured. Only MUX_0 clock supports PCFS, kPLL_PHI0_CLK_to_MUX0.
  * @param  config : PCFS configuration.
- * @return  Nothing
+ * @return kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_ProgressiveClockFrequencySwitch(clock_attach_id_t connection, clock_pcfs_config_t const *config);
+status_t CLOCK_ProgressiveClockFrequencySwitch(clock_attach_id_t connection, clock_pcfs_config_t const *config);
 
 /**
  * @brief Get the clock selection status.
@@ -1030,8 +1055,9 @@ uint32_t CLOCK_GetClkSwitchTriggerCause(clock_attach_id_t connection);
  *   CLOCK_InitFxosc(&config);
  * @endcode
  * @param config The FXOSC configuration structure, @ref fxosc_config_t.
+ * @return kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_InitFxosc(const fxosc_config_t *config);
+status_t CLOCK_InitFxosc(const fxosc_config_t *config);
 
 #if defined(FSL_FEATURE_MC_CGM_HAS_SXOSC) && (FSL_FEATURE_MC_CGM_HAS_SXOSC != 0U)
 /*!
@@ -1039,8 +1065,9 @@ void CLOCK_InitFxosc(const fxosc_config_t *config);
  * @param enable Enable or disable the SXOSC.
  * @param startupDelay The oscillator counter runs on a divided crystal clock (divide by 4) and counts up to 128
 times the EOCV value (EOCV * 128).
+ * @return kStatus_Sucess for suceessfully operation, kStatus_Timeout for timeout.
  */
-void CLOCK_InitSxosc(bool enable, uint8_t startupDelay);
+status_t CLOCK_InitSxosc(bool enable, uint8_t startupDelay);
 #endif /* FSL_FEATURE_MC_CGM_HAS_SXOSC */
 
 /*!
@@ -1071,12 +1098,12 @@ static inline void CLOCK_DinitFxosc(void)
  * @param config The PLL configuration structure, @ref pll_config_t.
  */
 
-void CLOCK_InitPll(const pll_config_t *config);
+status_t CLOCK_InitPll(const pll_config_t *config);
 
 /*!
  * @brief Deinit and disable the PLL.
  */
-inline static void CLOCK_DeinitPll(void)
+static inline void CLOCK_DeinitPll(void)
 {
     uint32_t i = 0U;
     for (i = 0U; i < PLL_PLLODIV_COUNT; i++)
@@ -1091,7 +1118,7 @@ inline static void CLOCK_DeinitPll(void)
  * @brief Check whether the PLL is loss of lock.
  * @return true: Loss of lock is detected, false: No loss of lock detected.
  */
-inline static bool CLOCK_IsPllLossOfLock(void)
+static inline bool CLOCK_IsPllLossOfLock(void)
 {
     return ((PLL->PLLSR & PLL_PLLSR_LOL_MASK) != 0U) ? true : false;
 }

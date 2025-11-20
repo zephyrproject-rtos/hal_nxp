@@ -52,6 +52,8 @@
 **                          MCXN547VPB_cm33_core1
 **                          MCXN556SCDF_cm33_core0
 **                          MCXN556SCDF_cm33_core1
+**                          MCXN557SCDF_cm33_core0
+**                          MCXN557SCDF_cm33_core1
 **                          MCXN946VAB_cm33_core0
 **                          MCXN946VAB_cm33_core1
 **                          MCXN946VDF_cm33_core0
@@ -74,7 +76,7 @@
 **                          MCXN947VPB_cm33_core1
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250811
+**     Build:               b251013
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
@@ -140,6 +142,10 @@
 #include "MCXN556S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN556SCDF_cm33_core1))
 #include "MCXN556S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN557SCDF_cm33_core0))
+#include "MCXN557S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN557SCDF_cm33_core1))
+#include "MCXN557S_cm33_core1_COMMON.h"
 #elif (defined(CPU_MCXN946VAB_cm33_core0) || defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VKL_cm33_core0) || defined(CPU_MCXN946VNL_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0))
 #include "MCXN946_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN946VAB_cm33_core1) || defined(CPU_MCXN946VDF_cm33_core1) || defined(CPU_MCXN946VKL_cm33_core1) || defined(CPU_MCXN946VNL_cm33_core1) || defined(CPU_MCXN946VPB_cm33_core1))
@@ -216,8 +222,6 @@ typedef enum _dma_request_source
     kDma1RequestMuxCtimer4M1        = 16U,         /**< CTIMER4 Match channel 1 request */
     kDma0RequestMuxWuu0             = 17U,         /**< WUU0 Wake up event */
     kDma1RequestMuxWuu0             = 17U,         /**< WUU0 Wake up event */
-    kDma0RequestMuxMicfil0FifoRequest = 18U,       /**< MICFIL0 FIFO_request */
-    kDma1RequestMuxMicfil0FifoRequest = 18U,       /**< MICFIL0 FIFO_request */
     kDma0RequestMuxSct0Dma0         = 19U,         /**< SCT0 DMA0 */
     kDma1RequestMuxSct0Dma0         = 19U,         /**< SCT0 DMA0 */
     kDma0RequestMuxSct0Dma1         = 20U,         /**< SCT0 DMA1 */
@@ -344,14 +348,6 @@ typedef enum _dma_request_source
     kDma1RequestMuxLpFlexcomm7Rx    = 83U,         /**< LP_FLEXCOMM7 Receive request */
     kDma0RequestMuxLpFlexcomm7Tx    = 84U,         /**< LP_FLEXCOMM7 Transmit request */
     kDma1RequestMuxLpFlexcomm7Tx    = 84U,         /**< LP_FLEXCOMM7 Transmit request */
-    kDma0RequestMuxLpFlexcomm8Rx    = 85U,         /**< LP_FLEXCOMM8 Receive request */
-    kDma1RequestMuxLpFlexcomm8Rx    = 85U,         /**< LP_FLEXCOMM8 Receive request */
-    kDma0RequestMuxLpFlexcomm8Tx    = 86U,         /**< LP_FLEXCOMM8 Transmit request */
-    kDma1RequestMuxLpFlexcomm8Tx    = 86U,         /**< LP_FLEXCOMM8 Transmit request */
-    kDma0RequestMuxLpFlexcomm9Rx    = 87U,         /**< LP_FLEXCOMM9 Receive request */
-    kDma1RequestMuxLpFlexcomm9Rx    = 87U,         /**< LP_FLEXCOMM9 Receive request */
-    kDma0RequestMuxLpFlexcomm9Tx    = 88U,         /**< LP_FLEXCOMM9 Transmit request */
-    kDma1RequestMuxLpFlexcomm9Tx    = 88U,         /**< LP_FLEXCOMM9 Transmit request */
     kDma0RequestMuxEmvSim0Rx        = 91U,         /**< EMVSIM0 Receive request */
     kDma1RequestMuxEmvSim0Rx        = 91U,         /**< EMVSIM0 Receive request */
     kDma0RequestMuxEmvSim0Tx        = 92U,         /**< EMVSIM0 Transmit request */
@@ -368,14 +364,6 @@ typedef enum _dma_request_source
     kDma1RequestMuxI3c1Rx           = 97U,         /**< I3C1 Receive request */
     kDma0RequestMuxI3c1Tx           = 98U,         /**< I3C1 Transmit request */
     kDma1RequestMuxI3c1Tx           = 98U,         /**< I3C1 Transmit request */
-    kDma0RequestMuxSai0Rx           = 99U,         /**< SAI0 Receive request */
-    kDma1RequestMuxSai0Rx           = 99U,         /**< SAI0 Receive request */
-    kDma0RequestMuxSai0Tx           = 100U,        /**< SAI0 Transmit request */
-    kDma1RequestMuxSai0Tx           = 100U,        /**< SAI0 Transmit request */
-    kDma0RequestMuxSai1Rx           = 101U,        /**< SAI1 Receive request */
-    kDma1RequestMuxSai1Rx           = 101U,        /**< SAI1 Receive request */
-    kDma0RequestMuxSai1Tx           = 102U,        /**< SAI1 Transmit request */
-    kDma1RequestMuxSai1Tx           = 102U,        /**< SAI1 Transmit request */
     kDma0RequestMuxSinc0IpdReqSincAlt0 = 103U,     /**< SINC0 ipd_req_sinc[0] or ipd_req_alt [0] */
     kDma1RequestMuxSinc0IpdReqSincAlt0 = 103U,     /**< SINC0 ipd_req_sinc[0] or ipd_req_alt [0] */
     kDma0RequestMuxSinc1IpdReqSincAlt1 = 104U,     /**< SINC0 ipd_req_sinc[1] or ipd_req_alt [1] */
@@ -412,6 +400,24 @@ typedef enum _dma_request_source
     kDma1RequestMuxGpio5PinEventRequest1 = 119U,   /**< GPIO5 Pin event request 1 */
     kDma0RequestMuxHsCmp2DmaRequest = 30U,         /**< CMP2 DMA_request */
     kDma1RequestMuxHsCmp2DmaRequest = 30U,         /**< CMP2 DMA_request */
+    kDma0RequestMuxLpFlexcomm8Rx    = 85U,         /**< LP_FLEXCOMM8 Receive request */
+    kDma1RequestMuxLpFlexcomm8Rx    = 85U,         /**< LP_FLEXCOMM8 Receive request */
+    kDma0RequestMuxLpFlexcomm8Tx    = 86U,         /**< LP_FLEXCOMM8 Transmit request */
+    kDma1RequestMuxLpFlexcomm8Tx    = 86U,         /**< LP_FLEXCOMM8 Transmit request */
+    kDma0RequestMuxLpFlexcomm9Rx    = 87U,         /**< LP_FLEXCOMM9 Receive request */
+    kDma1RequestMuxLpFlexcomm9Rx    = 87U,         /**< LP_FLEXCOMM9 Receive request */
+    kDma0RequestMuxLpFlexcomm9Tx    = 88U,         /**< LP_FLEXCOMM9 Transmit request */
+    kDma1RequestMuxLpFlexcomm9Tx    = 88U,         /**< LP_FLEXCOMM9 Transmit request */
+    kDma0RequestMuxMicfil0FifoRequest = 18U,       /**< MICFIL0 FIFO_request */
+    kDma1RequestMuxMicfil0FifoRequest = 18U,       /**< MICFIL0 FIFO_request */
+    kDma0RequestMuxSai0Rx           = 99U,         /**< SAI0 Receive request */
+    kDma1RequestMuxSai0Rx           = 99U,         /**< SAI0 Receive request */
+    kDma0RequestMuxSai0Tx           = 100U,        /**< SAI0 Transmit request */
+    kDma1RequestMuxSai0Tx           = 100U,        /**< SAI0 Transmit request */
+    kDma0RequestMuxSai1Rx           = 101U,        /**< SAI1 Receive request */
+    kDma1RequestMuxSai1Rx           = 101U,        /**< SAI1 Receive request */
+    kDma0RequestMuxSai1Tx           = 102U,        /**< SAI1 Transmit request */
+    kDma1RequestMuxSai1Tx           = 102U,        /**< SAI1 Transmit request */
     kDma0RequestMuxTsi0EndOfScan    = 120U,        /**< TSI0 End of Scan */
     kDma1RequestMuxTsi0EndOfScan    = 120U,        /**< TSI0 End of Scan */
     kDma0RequestMuxTsi0OutOfRange   = 121U,        /**< TSI0 Out of Range */

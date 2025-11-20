@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TMR
@@ -574,10 +574,7 @@ typedef struct {
 
 #define TMR_ENBL_ENBL_MASK                       (0xFU)
 #define TMR_ENBL_ENBL_SHIFT                      (0U)
-/*! ENBL - Timer Channel Enable
- *  0b0000..Timer channel is disabled.
- *  0b0001..Timer channel is enabled. (default)
- */
+/*! ENBL - Timer Channel Enable */
 #define TMR_ENBL_ENBL(x)                         (((uint32_t)(((uint32_t)(x)) << TMR_ENBL_ENBL_SHIFT)) & TMR_ENBL_ENBL_MASK)
 /*! @} */
 

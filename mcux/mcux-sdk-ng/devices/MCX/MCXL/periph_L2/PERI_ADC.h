@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
@@ -203,7 +203,7 @@ typedef struct {
 
 #define ADC_VERID_IADCKI_MASK                    (0x200U)
 #define ADC_VERID_IADCKI_SHIFT                   (9U)
-/*! IADCKI - Internal ADC Clock Implemented
+/*! IADCKI - Internal HSADC Clock Implemented
  *  0b0..Internal clock source not implemented.
  *  0b1..Internal clock source (and CFG[ADCKEN]) implemented.
  */
@@ -283,25 +283,25 @@ typedef struct {
 
 #define ADC_CTRL_ADCEN_MASK                      (0x1U)
 #define ADC_CTRL_ADCEN_SHIFT                     (0U)
-/*! ADCEN - ADC Enable
- *  0b0..ADC is disabled.
- *  0b1..ADC is enabled.
+/*! ADCEN - HSADC Enable
+ *  0b0..HSADC is disabled.
+ *  0b1..HSADC is enabled.
  */
 #define ADC_CTRL_ADCEN(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_CTRL_ADCEN_SHIFT)) & ADC_CTRL_ADCEN_MASK)
 
 #define ADC_CTRL_RST_MASK                        (0x2U)
 #define ADC_CTRL_RST_SHIFT                       (1U)
 /*! RST - Software Reset
- *  0b0..ADC logic is not reset.
- *  0b1..ADC logic is reset.
+ *  0b0..HSADC logic is not reset.
+ *  0b1..HSADC logic is reset.
  */
 #define ADC_CTRL_RST(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_CTRL_RST_SHIFT)) & ADC_CTRL_RST_MASK)
 
 #define ADC_CTRL_DOZEN_MASK                      (0x4U)
 #define ADC_CTRL_DOZEN_SHIFT                     (2U)
 /*! DOZEN - Doze Enable
- *  0b0..ADC is enabled in low power mode.
- *  0b1..ADC is disabled in low power mode.
+ *  0b0..HSADC is enabled in low power mode.
+ *  0b1..HSADC is disabled in low power mode.
  */
 #define ADC_CTRL_DOZEN(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_CTRL_DOZEN_SHIFT)) & ADC_CTRL_DOZEN_MASK)
 
@@ -401,8 +401,8 @@ typedef struct {
 #define ADC_STAT_ADC_ACTIVE_MASK                 (0x800U)
 #define ADC_STAT_ADC_ACTIVE_SHIFT                (11U)
 /*! ADC_ACTIVE - ADC Active
- *  0b0..The ADC is IDLE. There are no pending triggers to service and no active commands are being processed.
- *  0b1..The ADC is processing a conversion, running through the power up delay, or servicing a trigger.
+ *  0b0..The HSADC is IDLE. There are no pending triggers to service and no active commands are being processed.
+ *  0b1..The HSADC is processing a conversion, running through the power up delay, or servicing a trigger.
  */
 #define ADC_STAT_ADC_ACTIVE(x)                   (((uint32_t)(((uint32_t)(x)) << ADC_STAT_ADC_ACTIVE_SHIFT)) & ADC_STAT_ADC_ACTIVE_MASK)
 
@@ -483,7 +483,7 @@ typedef struct {
 
 #define ADC_CFG_TPRICTRL_MASK                    (0x3U)
 #define ADC_CFG_TPRICTRL_SHIFT                   (0U)
-/*! TPRICTRL - ADC Trigger Priority Control
+/*! TPRICTRL - HSADC Trigger Priority Control
  *  0b00..If a higher priority trigger is detected during command processing, the current conversion is aborted
  *        and the new command specified by the trigger is started.
  *  0b01..If a higher priority trigger is received during command processing, the current command is stopped after
@@ -544,12 +544,12 @@ typedef struct {
 
 #define ADC_CFG_PWREN_MASK                       (0x10000000U)
 #define ADC_CFG_PWREN_SHIFT                      (28U)
-/*! PWREN - ADC Analog Pre-Enable
- *  0b0..ADC analog circuits are only enabled while conversions are active. Performance is affected due to analog startup delays.
- *  0b1..ADC analog circuits are pre-enabled and ready to execute conversions without startup delays (at the cost
- *       of higher DC current consumption). Note that a single power up delay (CFG[PUDLY]) is executed immediately
- *       once PWREN is set, and any detected trigger does not begin ADC operation until the power up delay time has
- *       passed. After this initial delay expires the analog remains pre-enabled and no additional delays are
+/*! PWREN - HSADC Analog Pre-Enable
+ *  0b0..HSADC analog circuits are only enabled while conversions are active. Performance is affected due to analog startup delays.
+ *  0b1..HSADC analog circuits are pre-enabled and ready to execute conversions without startup delays (at the
+ *       cost of higher DC current consumption). Note that a single power up delay (CFG[PUDLY]) is executed
+ *       immediately once PWREN is set, and any detected trigger does not begin HSADC operation until the power up delay time
+ *       has passed. After this initial delay expires the analog remains pre-enabled and no additional delays are
  *       executed.
  */
 #define ADC_CFG_PWREN(x)                         (((uint32_t)(((uint32_t)(x)) << ADC_CFG_PWREN_SHIFT)) & ADC_CFG_PWREN_MASK)

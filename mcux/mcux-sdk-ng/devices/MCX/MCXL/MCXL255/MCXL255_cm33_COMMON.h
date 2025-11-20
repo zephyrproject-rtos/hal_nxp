@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCXL25xRM DraftH
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250812
+**     Build:               b250919
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXL255_cm33
@@ -555,6 +555,9 @@ typedef enum IRQn {
   /** Array initializer of DMA peripheral base pointers */
   #define DMA_BASE_PTRS                            { DMA0, DMA1 }
 #endif
+/** Interrupt vectors for the DMA peripheral type */
+#define DMA_IRQS                                 { { DMA0_CH0_IRQn, DMA0_CH1_IRQn, DMA0_CH2_IRQn, DMA0_CH3_IRQn }, { DMA1_CH0_IRQn, DMA1_CH1_IRQn, DMA1_CH2_IRQn, DMA1_CH3_IRQn } }
+#define DMA_ERROR_IRQS                           { { DMA0_CH0_IRQn, DMA0_CH1_IRQn, DMA0_CH2_IRQn, DMA0_CH3_IRQn }, { DMA1_CH0_IRQn, DMA1_CH1_IRQn, DMA1_CH2_IRQn, DMA1_CH3_IRQn } }
 
 /* ERM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -799,7 +802,7 @@ typedef enum IRQn {
   #define GPIO_BASE_PTRS                           { AON__GPIO0, GPIO1, GPIO2, GPIO3 }
 #endif
 /** Interrupt vectors for the GPIO peripheral type */
-#define GPIO_IRQS                                { NotAvail_IRQn, GPIO10_IRQn, GPIO20_IRQn, GPIO30_IRQn }
+#define GPIO_IRQS                                { GPIO00_AON_IRQn, GPIO10_IRQn, GPIO20_IRQn, GPIO30_IRQn }
 
 /* INPUTMUX_AON - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

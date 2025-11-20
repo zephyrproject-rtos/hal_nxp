@@ -84,7 +84,7 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
 /*!
  * brief Clear reset to peripheral.
  *
- * Clears reset signal to specified peripheral module, allows it to operate.
+ * Clears reset signal to specified peripheral module, peripheral is held in reset.
  *
  * param peripheral Clear reset to this peripheral. The enum argument contains encoding of reset register
  *                   and reset bit position in the reset register.

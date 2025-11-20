@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.1.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief power driver version 2.2.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #if __CORTEX_M == 33U
@@ -32,34 +32,50 @@
 #define POWER_SHARED_RAM_BASE_ADDR (0x0UL)
 #endif /* __CORTEX_M == 33U */
 
+#ifndef POWER_MU_TRANSFER_TIMEOUT
+#ifdef CONFIG_POWER_MU_TRANSFER_TIMEOUT
+#define POWER_MU_TRANSFER_TIMEOUT CONFIG_POWER_MU_TRANSFER_TIMEOUT
+#else
+#define POWER_MU_TRANSFER_TIMEOUT 0U
+#endif /* CONFIG_POWER_MU_TRANSFER_TIMEOUT */
+#endif /* POWER_MU_TRANSFER_TIMEOUT */
+
+#ifndef POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT
+#ifdef CONFIG_POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT
+#define POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT CONFIG_POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT
+#else
+#define POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT 0U
+#endif /* CONFIG_POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT */
+#endif /* POWER_CONTEXT_SAVING_DPD2_TO_DPD1_SYNC_TIMEOUT */
+
 enum
 {
-    kStatus_POWER_MuTransferError   = MAKE_STATUS(kStatusGroup_POWER, 0), /*!< Fail due to Mu transfer error. */
-    kStatus_POWER_RequestNotAllowed = MAKE_STATUS(kStatusGroup_POWER, 1), /*!< Request not allowed by another core. */
-    kStatus_Power_HandleDuplicated  = MAKE_STATUS(kStatusGroup_POWER, 2), /*!< Handle already be created. */
-    kStatus_Power_NotInTargetMode   = MAKE_STATUS(kStatusGroup_POWER, 3), /*!< Not in target low power mode. */
-    kStatus_Power_NackWithMultiReasons = MAKE_STATUS(kStatusGroup_POWER, 4), /*!< The response is NACK, and serval
-                                                                                reasons cause NACK response. */
-    kStatus_Power_SyncFailed = MAKE_STATUS(kStatusGroup_POWER, 5),           /*!< Failed to sync dual core. */
-    kStatus_Power_CM0PNotWFI = MAKE_STATUS(kStatusGroup_POWER, 6),           /*!< CM0P do not execute WFI after approve
-                                                                                  to enter target low power mode. */
-    kStatus_Power_WakeupFromDPD1 = MAKE_STATUS(kStatusGroup_POWER, 7),      /*!< Wakeup from DPD1 mode successfully. */
-    kStatus_Power_WakeupFromDPD2 = MAKE_STATUS(kStatusGroup_POWER, 8),      /*!< Wakeup from DPD2 mode successfully. */
+    kStatus_POWER_MuTransferError   = MAKE_STATUS(kStatusGroup_POWER, 0), /*!< Failed due to MU transfer error. */
+    kStatus_POWER_RequestNotAllowed = MAKE_STATUS(kStatusGroup_POWER, 1), /*!< Request not allowed by the other core. */
+    kStatus_Power_HandleDuplicated = MAKE_STATUS(kStatusGroup_POWER, 2), /*!< Shared handle has already been created. */
+    kStatus_Power_NotInTargetMode  = MAKE_STATUS(kStatusGroup_POWER, 3), /*!< Not in the target low-power mode. */
+    kStatus_Power_NackWithMultiReasons =
+        MAKE_STATUS(kStatusGroup_POWER, 4),                              /*!< NACK received with multiple reasons. */
+    kStatus_Power_SyncFailed = MAKE_STATUS(kStatusGroup_POWER, 5),       /*!< Failed to synchronize the two cores. */
+    kStatus_Power_CM0PNotWFI = MAKE_STATUS(kStatusGroup_POWER, 6),       /*!< CM0P did not execute WFI after approval
+                                                                           to enter the requested low-power mode. */
+    kStatus_Power_WakeupFromDPD1    = MAKE_STATUS(kStatusGroup_POWER, 7), /*!< Woke up from DPD1 successfully. */
+    kStatus_Power_WakeupFromDPD2    = MAKE_STATUS(kStatusGroup_POWER, 8), /*!< Woke up from DPD2 successfully. */
+    kStatus_Power_DualCoreNotSynced = MAKE_STATUS(kStatusGroup_POWER, 9), /*!< The two cores are not synchronized. */
 };
 
 /*!
  * @brief The enumeration of low power modes.
- *
  */
 typedef enum _power_low_power_mode
 {
     kPower_Sleep          = 0U, /*!< Sleep Mode. */
     kPower_DeepSleep      = 1U, /*!< Deep Sleep Mode. */
-    kPower_PowerDown1     = 2U, /*!< Power Down Mode 1. */
-    kPower_PowerDown2     = 3U, /*!< Power Down Mode 2.*/
-    kPower_DeepPowerDown1 = 4U, /*!< Deep Power Down Mode 1. */
-    kPower_DeepPowerDown2 = 5U, /*!< Deep Power Down Mode 2. */
-    kPower_DeepPowerDown3 = 6U, /*!< Deep Power Down Mode 3. */
+    kPower_PowerDown1     = 2U, /*!< Power Down 1 mode. */
+    kPower_PowerDown2     = 3U, /*!< Power Down 2 mode.*/
+    kPower_DeepPowerDown1 = 4U, /*!< Deep Power Down 1 mode. */
+    kPower_DeepPowerDown2 = 5U, /*!< Deep Power Down 2 mode. */
+    kPower_DeepPowerDown3 = 6U, /*!< Deep Power Down 3 mode. */
     kPower_ShutDown       = 7,  /*!< ShutDown Mode */
     kPower_Active         = 8U, /*!< Active Mode. */
 } power_low_power_mode_t;
@@ -67,13 +83,13 @@ typedef enum _power_low_power_mode
 typedef bool (*power_user_callback_t)(power_low_power_mode_t targetPowerMode, void *ptrPowerConfig, void *userData);
 
 /*!
- * @brief Encode wakeup source code.
+ * @brief Encodes a wakeup source into a 32-bit code.
  *
- * @note
- *    bit 7 - 0: aon control bit index;
- *    bit 23 - 20: external pin edge(1: rising edge, 2: falling edge, 3: any edge);
- *    bit 27 - 24: Wakeup domain(0: only Main, 1: only Aon, 2: Both Main and Aon), in some low power mode(such as PD2)
- *                  it is possible only wakeup Aon Domain.
+ * @note Bit field layout:
+ * - bits [7:0]   : AON control-bit index.
+ * - bits [23:20] : External pin edge (1 = rising, 2 = falling, 3 = both edges).
+ * - bits [27:24] : Wakeup domain (0 = Main only, 1 = AON only, 2 = both Main and AON).
+ *   In some low-power modes (e.g. PD2), only the AON domain can be woken.
  */
 #define POWER_ENCODE_WS(wakeupDomain, pinEdge, aonIndex)                                        \
     (uint32_t)(((uint32_t)(aonIndex) & 0xFFUL) | (((uint32_t)(pinEdge) << 20UL) & 0xF00000UL) | \
@@ -295,7 +311,7 @@ typedef struct _power_ds_config
 } power_ds_config_t;
 
 /*!
- * @brief Configuration structure for power down mode.
+ * @brief Configuration structure for power down 1 mode.
  */
 typedef struct _power_pd1_config
 {
@@ -307,10 +323,13 @@ typedef struct _power_pd1_config
                                              invoking Power_EnableWakeupSource().  */
     uint32_t mainRamArraysToRetain : 16U;   /*!< Bitmask representing the main domain RAM
                                                   arrays to retain during power down */
-    bool disableBandgap : 1U;               /*!< Flag to indicate whether to disable the bandgap during power down */
-    bool enableIVSMode : 1U;                /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
+    uint32_t disableBandgap : 1U;           /*!< Flag to indicate whether to disable the bandgap during power down */
+    uint32_t enableIVSMode : 1U;            /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
 } power_pd1_config_t;
 
+/*!
+ * @brief Configuration structure for power down 2 mode.
+ */
 typedef struct _power_pd2_config
 {
     power_wakeup_source_t mainWakeupSource; /* Specify the wakeup source to main domain. If the selected wakeup
@@ -329,9 +348,9 @@ typedef struct _power_pd2_config
                                               to retain during DPD2 mode */
     uint32_t aonRamArraysToRetain : 16U;    /*!< Bitmask representing the AON domain RAM arrays
                                               to retain during DPD2 mode */
-    bool enableIVSMode : 1U;                /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
-    bool disableBandgap : 1U;               /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
-    bool disableFRO10M : 1U; /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
+    uint32_t enableIVSMode : 1U;            /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
+    uint32_t disableBandgap : 1U;           /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
+    uint32_t disableFRO10M : 1U; /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
     power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< Specify output voltage of VDD_CORE_AON */
 } power_pd2_config_t;
 
@@ -359,10 +378,13 @@ typedef struct _power_dpd1_config
                                             invoking Power_EnableWakeupSource(). */
     uint32_t
         mainRamArraysToRetain : 16U; /*!< Bitmask representing the main domain RAM arrays to retain during power down */
-    bool disableBandgap : 1U;        /*!< Flag to indicate whether to disable the bandgap during power down */
-    bool enableIVSMode : 1U;         /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
+    uint32_t disableBandgap : 1U;    /*!< Flag to indicate whether to disable the bandgap during power down */
+    uint32_t enableIVSMode : 1U;     /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
     power_dpd1_transition_t
-        nextTrans : 2U;              /*!< Next transition after DPD1 mode, refer to @ref power_dpd1_transition_t */
+             nextTrans : 2U;         /*!< Next transition after DPD1 mode, refer to @ref power_dpd1_transition_t */
+    uint32_t saveContext : 1U;       /*!< True to save basic register context into stack, false to do not save. */
+    uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD1 mode */
+    uint32_t reserved : 2U;          /*!< Reserved for using. */
     power_vdd_core_output_voltage_t vddCoreAonVoltage : 8U; /*!< Specify output voltage of VDD_CORE_AON */
 } power_dpd1_config_t;
 
@@ -387,11 +409,14 @@ typedef struct _power_dpd2_config
         mainRamArraysToRetain : 16U; /*!< Bitmask representing the main domain RAM arrays to retain during DPD2 mode */
     uint32_t
         aonRamArraysToRetain : 16U;  /*!< Bitmask representing the AON domain RAM arrays to retain during DPD2 mode */
-    bool enableIVSMode : 1U;         /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
-    bool disableBandgap : 1U;        /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
-    bool switchToX32K : 1U;          /*!< Flag to indicate whether to switch to X32K clock source during DPD2 mode */
-    bool disableFRO10M : 1U;         /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
-    bool wakeToDpd1 : 1U;            /*!< Flag to indicate whether to wake up to DPD1 mode after DPD2 mode */
+    uint32_t enableIVSMode : 1U;     /*!< Enable/disable IVS mode for the Main domain SRAM retention. */
+    uint32_t disableBandgap : 1U;    /*!< Flag to indicate whether to disable the bandgap during DPD2 mode */
+    uint32_t switchToX32K : 1U;      /*!< Flag to indicate whether to switch to X32K clock source during DPD2 mode */
+    uint32_t disableFRO10M : 1U;     /*!< Flag to indicate whether to disable the FRO10M clock during DPD2 mode */
+    uint32_t wakeToDpd1 : 1U;        /*!< Flag to indicate whether to wake up to DPD1 mode after DPD2 mode */
+    uint32_t saveContext : 1U;       /*!< True to save basic register context into stack, false to do not save. */
+    uint32_t disableFRO2M : 1U;      /*!< True to disable FRO2M, false to do not disable. */
+    uint32_t reserved : 1U;          /*!< Reserved for using. */
     power_vdd_core_output_voltage_t
         dpd2VddCoreAonVoltage : 8U;  /*!< Specify output voltage of VDD_CORE AON in DPD2 mode,
                                      in type of @ref power_vdd_core_output_voltage_t. */
@@ -402,7 +427,7 @@ typedef struct _power_dpd2_config
  */
 typedef struct _power_dpd3_config
 {
-    power_wakeup_source_t wakeupSource; /* Specify the wakeup source to main and aon domain. If the selected wakeup
+    power_wakeup_source_t wakeupSource; /*!< Specify the wakeup source to main and aon domain. If the selected wakeup
                                             source is not already enabled, it will be enabled before entering DPD3 mode.
                                             Setting it to #kPower_WS_NONE indicates that this structure does not
                                             control any wakeup source. Pre-enabled wakeup sources are not affected.
@@ -415,7 +440,7 @@ typedef struct _power_dpd3_config
  */
 typedef struct _power_sd_config
 {
-    power_wakeup_source_t wakeupSource; /* Specify the wakeup source to main and aon domain. If the selected wakeup
+    power_wakeup_source_t wakeupSource; /*!< Specify the wakeup source to main and aon domain. If the selected wakeup
                                             source is not already enabled, it will be enabled before entering SD mode.
                                             Setting it to #kPower_WS_NONE indicates that this structure does not
                                             control any wakeup source. Pre-enabled wakeup sources are not affected.
@@ -438,21 +463,30 @@ typedef struct _power_wakeup_source_info
  */
 typedef struct _power_handle
 {
-    uint32_t lpConfig[4U];                    /*!< Array of two 32-bit values for low power configuration */
-    power_user_callback_t cm33Callback;       /*!< Callback function for CM33 core operations,
-                                                    in type of @ref power_user_callback_t */
-    void *cm33UserData;                       /*!< User data pointer for CM33 core operations */
-    power_user_callback_t cm0pCallback;       /*!< Callback function for CM0+ core operations,
-                                                    in type of @ref power_user_callback_t */
-    void *cm0pUserData;                       /*!< User data pointer for CM0+ core operations */
-    power_wakeup_source_info_t enabledWsInfo; /*!< Used to record all enabled wakeup sources. */
-    uint32_t muChannelId : 4U;                /*!< ID of the Message Unit (MU) channel used for power communication */
-    power_low_power_mode_t targetPowerMode : 4U;   /*!< Current low power mode of the system */
-    power_low_power_mode_t previousPowerMode : 4U; /*!< Used to record previous low power mode. */
-    bool dualCoreSynced : 1U;                      /*!< Flag indicating whether dual cores are synchronized */
-    bool requestCM33Start : 1U;                    /*!< Flag indicating whether a request to start CM33 core is made */
-    bool cm0pWFI : 1U;                             /*!< Flag indicating whether CM0P execute WFI. */
+    uint32_t lpConfig[4U]; /*!< Buffer (4 x 32-bit words) for storing the most recent low-power configuration. */
+    power_user_callback_t cm33Callback;                /*!< Callback function for CM33 core operations,
+                                                             in type of @ref power_user_callback_t */
+    void                 *cm33UserData;                /*!< User data pointer for CM33 core operations */
+    power_user_callback_t cm0pCallback;                /*!< Callback function for CM0+ core operations,
+                                                             in type of @ref power_user_callback_t */
+    void                      *cm0pUserData;           /*!< User data pointer for CM0+ core operations */
+    power_wakeup_source_info_t enabledWsInfo;          /*!< Used to record all enabled wakeup sources. */
+    uint32_t                   muChannelId : 4U;       /*!< MU channel ID used for power communication. */
+    power_low_power_mode_t     targetPowerMode : 4U;   /*!< Target low-power mode requested by this core. */
+    power_low_power_mode_t     previousPowerMode : 4U; /*!< Previously entered low-power mode. */
+    uint32_t                   dualCoreSynced : 1U;    /*!< Set when the two cores are synchronized. */
+    uint32_t                   requestCM33Start : 1U;  /*!< CM0P-side flag requesting CM33 to run the entry sequence. */
+    uint32_t                   cm0pWFI : 1U;           /*!< CM0P has executed WFI (used for PD2/DPD2/DPD3/SD). */
 } power_handle_t;
+
+/*!
+ * @brief Inform the other core that it attempts to create a handle.
+ */
+typedef struct _power_drv_config
+{
+    uint32_t muChannelId : 4U; /*!< MU channel ID used by the power driver. */
+    uint32_t noSyncCM0P : 1U;  /*!< If true, skip synchronizing with CM0P; if false, perform blocking sync. */
+} power_drv_config_t;
 
 /*******************************************************************************
  * API
@@ -462,28 +496,36 @@ extern "C" {
 #endif
 
 /*!
- * @brief Create shared power handle.
+ * @brief Create the shared power handle.
  *
- * @param[in] handle Pointer to a handle in type of @ref power_handle_t, must be in shared RAM.
- * @param[in] muChannelId MU channel ID used by power driver.
+ * This function initializes the shared @ref power_handle_t in the shared RAM and, unless
+ * @ref power_drv_config_t::noSyncCM0P is true, attempts to synchronize with the other core.
  *
- * @retval kStatus_POWER_MuTransferError Something error occurs during MU transfer.
- * @retval kStatus_Power_HandleDuplicated Shared power handle already be created.
- * @retval kStatus_Success Created handle successfully.
+ * @note Please invoke this function before using other APIs.
+ *
+ * @param[in] handle Pointer to @ref power_handle_t in **shared RAM**.
+ * @param[in] config Pointer to @ref power_drv_config_t.
+ *
+ * @retval kStatus_Success                 Handle created (and cores synchronized if requested).
+ * @retval kStatus_Power_HandleDuplicated  A shared handle has already been created by the peer.
+ * @retval kStatus_POWER_MuTransferError   MU synchronization/transfer error.
+ * @retval kStatus_Timeout                 Timed out while waiting for MU response (if timeout enabled).
  */
-status_t Power_CreateHandle(power_handle_t *handle, uint32_t muChannelId);
+status_t Power_CreateHandle(power_handle_t *handle, const power_drv_config_t *config);
 
 /*!
- * @brief Dump contents of handle.
+ * @brief Dump the current shared handle into a local buffer.
  *
- * @param[out] ptrDumpBuffer The pointer to a buffer in type of @ref power_handle_t to store dumped handle value.
+ * @param[out] ptrDumpBuffer Pointer to a @ref power_handle_t to receive the copy.
  */
 void Power_DumpHandleValue(power_handle_t *ptrDumpBuffer);
 
 /*!
- * @brief Get configurations of latest requested low power mode.
+ * @brief Get the configuration of the latest requested low-power mode.
  *
- * @param[out] config The pointer to a buffer to store configurations of latest requested low power mode
+ * @param[out] config Pointer to a buffer large enough to hold the configuration structure
+ *                    that matches @ref Power_GetTargetLowPowerMode().
+ *                    The actual type depends on the saved target mode (e.g. @ref power_pd2_config_t).
  */
 void Power_GetPowerModeConfig(void *config);
 
@@ -502,6 +544,16 @@ uint32_t Power_GetHandleOffset(void);
 void Power_RestoreHandleOffset(uint32_t offset);
 
 /*!
+ * @brief Synchronizes the two cores in a blocking manner.
+ *
+ * @retval kStatus_Success               Synchronized successfully.
+ * @retval kStatus_Power_HandleDuplicated The peer reports a duplicated handle.
+ * @retval kStatus_POWER_MuTransferError MU transfer error.
+ * @retval kStatus_Timeout               Timed out while waiting for MU response (if timeout enabled).
+ */
+status_t Power_SyncDualCoreBlocking(void);
+
+/*!
  * @name Wakeup Source Control Interfaces
  * @{
  */
@@ -510,6 +562,7 @@ void Power_RestoreHandleOffset(uint32_t offset);
  * @brief Enable input wakeup source, once enabled it will be effective until disabled.
  *
  * @details The enabled wakeup sources are recorded, and set to register before entering low power modes.
+ *
  * @note There are two ways to enable wakeup source: The first one is invoking Power_EnableWakeupSource(), the
  * way is used to enable more than one wakeup source; The second one is specify the wakeup source in configuration
  * of low power mode.
@@ -538,7 +591,7 @@ void Power_DisableAllWakeupSources(void);
 void Power_DumpEnabledWakeSource(power_wakeup_source_info_t *ptrWsInfo);
 
 /*!
- * @brief Get latest mask of wakeup sources which cause the wake-up to main CPU.
+ * @brief Get latest mask of wakeup sources which cause the wakeup to main CPU.
  *
  * @param[out] ptrWakeupSourceMask Pointer to the variable to store mask of wakeup sources.
  */
@@ -607,6 +660,12 @@ power_low_power_mode_t Power_GetPreviousPowerMode(void);
 void Power_ResetPreviousPowerMode(void);
 
 /*!
+ * @brief Update previous power mode as input low power mode.
+ *
+ * @param lpMode The low power mode to update, in type of @ref power_low_power_mode_t.
+ */
+void Power_UpdatePreviousPowerMode(power_low_power_mode_t lpMode);
+/*!
  * @brief Get current power mode.
  *
  * @param[out] ptrCurLpMode Pointer to store current low power mode
@@ -636,10 +695,13 @@ void Power_ClearLpPowerSettings(void);
  * @brief Enter selected low power mode.
  *
  * @param[in] lowpowerMode Indicate specific target low power mode.
- * @param config Point to low power configurations.
+ * @param[in] config Pointer to the matching configuration structure.
  *
- * @retval kStatus_POWER_MuTransferError Something error occurs during MU transfer.
- * @retval kStatus_POWER_RequestNotAllowed Request not allowed by another core.
+ * @retval kStatus_Success                   Entered the target mode (or queued the sequence on peer core).
+ * @retval kStatus_POWER_MuTransferError     MU transfer error.
+ * @retval kStatus_POWER_RequestNotAllowed   Request rejected by the peer.
+ * @retval kStatus_Power_DualCoreNotSynced   The two cores are not synchronized (for modes requiring sync).
+ * @retval kStatus_Timeout                   Timed out while waiting for MU response (if timeout enabled).
  */
 status_t Power_EnterLowPowerMode(power_low_power_mode_t lowpowerMode, void *config);
 
@@ -698,6 +760,8 @@ status_t Power_EnterPowerDown2(power_pd2_config_t *config);
  *
  * This function attempts to put the system into Deep Power Down 1 mode with the provided configuration.
  *
+ * @note If attempting to enable context saving feature, please ensure RAM blocks used by stack are retained.
+ *
  * @param[in] config Pointer to the Deep Power Down 1 mode configuration.
  *
  * @retval kStatus_Success Successfully entered Deep Power Down 1 mode.
@@ -718,11 +782,16 @@ power_dpd1_transition_t Power_GetDeepPowerDown1NextTransition(void);
  *
  * This function attempts to put the system into Deep Power Down 2 mode with the provided configuration.
  *
+ * @note If attempting to enable context saving feature, please ensure RAM blocks used by stack are retained.
+ *
  * @param[in] config Pointer to the Deep Power Down 2 mode configuration.
  *
- * @retval kStatus_Success Successfully entered Deep Power Down 2 mode.
- * @retval kStatus_POWER_MuTransferError Something error occurs during MU transfer.
- * @retval kStatus_POWER_RequestNotAllowed Request not allowed by another core.
+ * @retval kStatus_Success                 Entered DPD2 (or completed the request sequence).
+ * @retval kStatus_Power_WakeupFromDPD2    Returned from DPD2 with context restored (when context saving enabled).
+ * @retval kStatus_POWER_MuTransferError   MU transfer error.
+ * @retval kStatus_POWER_RequestNotAllowed Request rejected by the peer.
+ * @retval kStatus_Power_DualCoreNotSynced Cores are not synchronized.
+ * @retval kStatus_Timeout                 Timed out while waiting for MU response / cross-core sync.
  */
 status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config);
 
@@ -733,9 +802,11 @@ status_t Power_EnterDeepPowerDown2(power_dpd2_config_t *config);
  *
  * @param[in] config Pointer to the Deep Power Down 3 mode configuration.
  *
- * @retval kStatus_Success Successfully entered Deep Power Down 3 mode.
- * @retval kStatus_POWER_MuTransferError Something error occurs during MU transfer.
- * @retval kStatus_POWER_RequestNotAllowed Request not allowed by another core.
+ * @retval kStatus_Success                 Entered DPD3 (or completed the request sequence).
+ * @retval kStatus_POWER_MuTransferError   MU transfer error.
+ * @retval kStatus_POWER_RequestNotAllowed Request rejected by the peer.
+ * @retval kStatus_Power_DualCoreNotSynced Cores are not synchronized.
+ * @retval kStatus_Timeout                 Timed out while waiting for MU response (if timeout enabled).
  */
 status_t Power_EnterDeepPowerDown3(power_dpd3_config_t *config);
 
@@ -746,9 +817,11 @@ status_t Power_EnterDeepPowerDown3(power_dpd3_config_t *config);
  *
  * @param[in] config Pointer to the Shutdown mode configuration.
  *
- * @retval kStatus_Success Successfully entered Shutdown mode.
- * @retval kStatus_POWER_MuTransferError Something error occurs during MU transfer.
- * @retval kStatus_POWER_RequestNotAllowed Request not allowed by another core.
+ * @retval kStatus_Success                 Entered Shutdown (or completed the request sequence).
+ * @retval kStatus_POWER_MuTransferError   MU transfer error.
+ * @retval kStatus_POWER_RequestNotAllowed Request rejected by the peer.
+ * @retval kStatus_Power_DualCoreNotSynced Cores are not synchronized.
+ * @retval kStatus_Timeout                 Timed out while waiting for MU response (if timeout enabled).
  */
 status_t Power_EnterShutDown(power_sd_config_t *config);
 
@@ -805,20 +878,22 @@ status_t Power_EnterShutDown(power_sd_config_t *config);
         ---------
         |CONTROL|
         ---------  <------ SP Address saved in backup register
- * 
- * @note When use this function, please ensure the ram block which used as stack is retained in
- * target low power mode.
- * @note This function should used together with @ref Power_LowPowerBoot().
+ *
+ * @note User can use this function to save context before entering low power modes which will reset system.
+ * @note For CM33 project, LSB_BCKP1, LSB_BCKP2, MSB_BCKP2 are used.
+ * @note For CM0P project, MSB_BCKP1 is used.
  *
  * @param handleAddr The address of handle.
  *
- * @retval 0 Return 0 before entering low power modes. 
+ * @retval 0 Return 0 before entering low power modes.
  * @retval 1 Return 1 after waking up from low power modes.
  */
 uint32_t Power_PushContext(uint32_t handleAddr);
 
 /*!
  * @brief Restore saved context from stack.
+ *
+ * @note User can use this function to restore context after waking up from low power modes which reset system.
  */
 void Power_LowPowerBoot(void);
 
@@ -827,8 +902,8 @@ void Power_LowPowerBoot(void);
  *
  */
 
-/*!@name Power MU Transfer Callback
- @{
+/*! @name Power MU Transfer Callback
+ *  @{
  */
 
 /*!
@@ -872,14 +947,14 @@ status_t Power_MuSyncCallback(uint32_t message, uint32_t channelId);
 status_t Power_InterpretRequest(uint32_t message);
 
 /*!
- * @brief Interpret responce of message.
+ * @brief Interpret a MU response message.
  *
- * @param message The message which responce to requester.
+ * @param[in] message The response message sent to the requester.
  *
- * @retval kStatus_POWER_MuTransferError    Something wrong during transfer.
- * @retval kStatus_POWER_RequestNotAllowed  Request is not allowed.
- * @retval kStatus_Power_NackWithMultiReasons Responce as NACK with multiple reasons.
- * @retval kStatus_Success Interpret response message successfully.
+ * @retval kStatus_Success                 The response has been interpreted successfully (ACK).
+ * @retval kStatus_POWER_MuTransferError   Invalid message or MU error.
+ * @retval kStatus_POWER_RequestNotAllowed NACK due to target mode not allowed.
+ * @retval kStatus_Power_NackWithMultiReasons NACK with multiple reasons.
  */
 status_t Power_InterpretResponse(uint32_t message);
 
