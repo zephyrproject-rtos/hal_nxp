@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b250930
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1186_cm33
@@ -2620,7 +2620,7 @@ typedef enum _xbar_output_signal
 #define FLEXSPI_IRQS                             { NotAvail_IRQn, FLEXSPI1_IRQn, FLEXSPI2_IRQn }
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (2)
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2)) || defined(ROM_ENABLE_CMSE)
   /* FlexSPI AMBA base address array. */
   #define FlexSPI_AMBA_BASE_ARRAY                  { {0u, 0u}, {0x38000000u, 0x12000000u}, {0x14000000u, 0x32000000u} }
   #define FlexSPI_AMBA_BASE_ARRAY_NS               { {0u, 0u}, {0x28000000u, 0x2000000u}, {0x4000000u, 0x22000000u} }
@@ -2653,25 +2653,25 @@ typedef enum _xbar_output_signal
   #define FlexSPI2_ATDF_BASE_NS                    (0x4DE10000u)
 #else
   /* FlexSPI AMBA base address array. */
-  #define FlexSPI_AMBA_BASE_ARRAY                  { {0u, 0u}, {0x38000000u, 0x12000000u}, {0x14000000u, 0x32000000u} }
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0u, 0u}, {0x28000000u, 0x2000000u}, {0x4000000u, 0x22000000u} }
   /* FlexSPI AMBA end address array. */
-  #define FlexSPI_AMBA_END_ARRAY                   { {0u, 0u}, {0x3FFFFFFFu, 0x13FFFFFFu}, {0x17FFFFFFu, 0x33FFFFFFu} }
+  #define FlexSPI_AMBA_END_ARRAY                   { {0u, 0u}, {0x2FFFFFFFu, 0x3FFFFFFu}, {0x7FFFFFFu, 0x23FFFFFFu} }
   /* FlexSPI1 AMBA address. */
-  #define FlexSPI1_AMBA_BASE                       (0x38000000u)
+  #define FlexSPI1_AMBA_BASE                       (0x28000000u)
   /* FlexSPI1 ASFM address. */
-  #define FlexSPI1_ASFM_BASE                       (0x38000000u)
+  #define FlexSPI1_ASFM_BASE                       (0x28000000u)
   /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI1_ARDF_BASE                       (0x57420000u)
+  #define FlexSPI1_ARDF_BASE                       (0x47420000u)
   /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI1_ATDF_BASE                       (0x57430000u)
+  #define FlexSPI1_ATDF_BASE                       (0x47430000u)
   /* FlexSPI2 AMBA address. */
-  #define FlexSPI2_AMBA_BASE                       (0x14000000u)
+  #define FlexSPI2_AMBA_BASE                       (0x4000000u)
   /* FlexSPI2 ASFM address. */
-  #define FlexSPI2_ASFM_BASE                       (0x14000000u)
+  #define FlexSPI2_ASFM_BASE                       (0x4000000u)
   /* Base Address of AHB address space mapped to IP RX FIFO. */
-  #define FlexSPI2_ARDF_BASE                       (0x5DE00000u)
+  #define FlexSPI2_ARDF_BASE                       (0x4DE00000u)
   /* Base Address of AHB address space mapped to IP TX FIFO. */
-  #define FlexSPI2_ATDF_BASE                       (0x5DE10000u)
+  #define FlexSPI2_ATDF_BASE                       (0x4DE10000u)
 #endif
 
 

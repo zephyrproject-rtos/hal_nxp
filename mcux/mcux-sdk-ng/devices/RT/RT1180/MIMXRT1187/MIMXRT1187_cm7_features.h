@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.1, 2021-03-09
-**     Build:               b250812
+**     Build:               b250814
 **
 **     Abstract:
 **         Chip specific module features.
@@ -303,6 +303,8 @@
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341 (0)
 /* @brief Is affected by errata with ID 050443 (FlexCAN: : Receive Message Buffers may have its CODE Field corrupted if the Receive FIFO function is used in Classical CAN mode). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_050443 (0)
+/* @brief Support memory error interrupt (bitfield MECR[CEI_MSK]). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_INTERRUPT (1)
 
 /* SCB module features */
 

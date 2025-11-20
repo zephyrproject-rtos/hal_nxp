@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.0 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief CLOCK driver version 2.5.1 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
 
 #if defined(MIMXRT798S_hifi1_SERIES) || defined(MIMXRT798S_cm33_core1_SERIES) || \

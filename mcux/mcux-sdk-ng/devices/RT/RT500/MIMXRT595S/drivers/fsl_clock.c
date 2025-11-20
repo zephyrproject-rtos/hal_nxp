@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2024 NXP
+ * Copyright 2016-2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1673,6 +1673,8 @@ status_t CLOCK_FroTuneToFreq(uint32_t targetFreq)
     low      = ((((targetFreq * 2048U) / xtalFreq) * 99915U + 100000U) / 100000U) + 3U;
 
     /* Start tuning */
+    assert(up >= expected);
+    assert(low <= expected);
     CLKCTL0->FRO_CONTROL = CLKCTL0_FRO_CONTROL_EXP_COUNT(expected) |
                            CLKCTL0_FRO_CONTROL_THRESH_RANGE_UP(up - expected) |
                            CLKCTL0_FRO_CONTROL_THRESH_RANGE_LOW(expected - low) | CLKCTL0_FRO_CONTROL_ENA_TUNE_MASK;
@@ -1878,12 +1880,7 @@ bool CLOCK_EnableUsbHs0PhyPllClock(clock_attach_id_t src, uint32_t freq)
         must set this bit 15 us before setting PLL_POWER to avoid glitches on PLL
         output clock. */
         USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK;
-        uint32_t i          = 5000U;
-        while ((i--) != 0U)
-        {
-            __NOP();
-        }
-
+        SDK_DelayAtLeastUs(15U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
         USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_POWER(1);
         while ((USBPHY->PLL_SIC & USBPHY_PLL_SIC_PLL_POWER_MASK) == 0U)
         {

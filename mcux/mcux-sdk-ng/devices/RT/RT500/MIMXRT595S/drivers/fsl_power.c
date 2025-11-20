@@ -1047,6 +1047,7 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
     /* Wait OSC clock stable */
     if (((SYSCTL0->PDRUNCFG0 ^ SYSCTL0->PDSLEEPCFG0) & SYSCTL0_PDRUNCFG0_SYSXTAL_PD_MASK) != 0U)
     {
+        assert(oscSettlingTime < UINT32_MAX / 12U);
         delay(US2LOOP(deepSleepClk, oscSettlingTime));
     }
 

@@ -423,6 +423,13 @@ void POWER_EnableRunAFBB(uint32_t mask)
     PMC->PDRUNCFG0 |= mask;
 }
 
+void POWER_EnableSleepAFBB(uint32_t mask)
+{
+    /* clear AFBBxxx_PD, set RBBxxx_PD. No AFBBSRAM1 bit. */
+    PMC->PDSLEEPCFG0 &= ~POWER_AFBB_BITS_MASK(mask);
+    PMC->PDSLEEPCFG0 |= mask;
+}
+
 void POWER_EnableRunRBB(uint32_t mask)
 {
     PMC->PDRUNCFG0 &= ~mask; /* Clear RBB* bits, set AFBB* bits */
@@ -549,6 +556,9 @@ status_t POWER_ConfigRegulatorSetpointsForFreq(
             return kStatus_InvalidArgument;
         }
 
+        /* For the internal LDOs, the voltage accuracy is not 100%. The target voltage should be configured adding some
+         * margin in case the minimum voltage is still supplied to the chip. */
+        volt    = volt + POWER_LDO_SAFE_MARGIN(volt);
         preVolt = volt;
         POWER_SetRegulatorRegister(regulator, volt, volt - POWER_DEFAULT_LVD_VOLT, i);
     }
