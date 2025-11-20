@@ -1026,6 +1026,7 @@ power_status_t POWER_SRAMPowerModeControl(power_sram_bit_t sram_inst, power_sram
             } // switch( current_pwr_mode )
         }     // if ( (uint32_t)sram_inst & 0x1 )
 
+        assert(sram_index < kPOWER_SRAM_IDX_FLEXSPIH2PREG);
         // Move to next SRAM index
         sram_inst  = (power_sram_bit_t)((uint32_t)((uint32_t)sram_inst >> 1));
         sram_index = (power_sram_index_t)((uint32_t)((uint32_t)sram_index + 1U));
@@ -2829,7 +2830,7 @@ static void POWER_SetSystemVoltage(uint32_t system_voltage_mv)
         int32_t lv_ldo_ao_signed;
 
         ldo_ao_offset =
-            (int8_t)(uint32_t)(((FLASH_NMPA_LDO_AO & FLASH_NMPA_LDO_AO_VADJ_ACTIVE_MASK) >> FLASH_NMPA_LDO_AO_VADJ_ACTIVE_SHIFT));
+            (int8_t)((uint32_t)(((FLASH_NMPA_LDO_AO & FLASH_NMPA_LDO_AO_VADJ_ACTIVE_MASK) >> FLASH_NMPA_LDO_AO_VADJ_ACTIVE_SHIFT)) & 0xFFU);
         lv_ldo_ao_signed = (int32_t)((int32_t)lv_ldo_ao + (int32_t)ldo_ao_offset);
 
         if (lv_ldo_ao_signed < (int32_t)V_AO_0P960)
@@ -2865,8 +2866,8 @@ static void POWER_SetSystemVoltage(uint32_t system_voltage_mv)
         int8_t ldo_core_regref_offset;
         int32_t lv_ldo_core_signed;
 
-        ldo_core_regref_offset = (int8_t)((uint32_t)((FLASH_NMPA_BOD_LDOCORE & FLASH_NMPA_BOD_LDOCORE_REGREF_1P8V_OFFSET_MASK) >>
-                                          FLASH_NMPA_BOD_LDOCORE_REGREF_1P8V_OFFSET_SHIFT));
+        ldo_core_regref_offset = (int8_t)(((uint32_t)((FLASH_NMPA_BOD_LDOCORE & FLASH_NMPA_BOD_LDOCORE_REGREF_1P8V_OFFSET_MASK) >>
+                                          FLASH_NMPA_BOD_LDOCORE_REGREF_1P8V_OFFSET_SHIFT)) & 0xFFU);
         lv_ldo_core_signed     = (int32_t)((int32_t)lv_ldo_core + (int32_t)ldo_core_regref_offset);
 
         if (lv_ldo_core_signed < (int32_t)V_LDOCORE_HP_1P204)

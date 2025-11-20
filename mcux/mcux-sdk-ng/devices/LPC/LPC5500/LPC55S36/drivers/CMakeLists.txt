@@ -43,7 +43,7 @@ if (CONFIG_MCUX_COMPONENT_driver.reset)
 endif()
 
 if (CONFIG_MCUX_COMPONENT_driver.romapi_flash)
-    mcux_component_version(2.0.0)
+    mcux_component_version(2.0.1)
     mcux_add_source(
         SOURCES 
             ./romapi/flash/src/fsl_flash.c

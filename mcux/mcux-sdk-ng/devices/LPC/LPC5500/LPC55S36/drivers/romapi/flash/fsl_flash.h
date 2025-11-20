@@ -31,8 +31,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ROMAPI_FLASH driver version 2.0.0. */
-#define FSL_ROMAPI_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief ROMAPI_FLASH driver version 2.0.1. */
+#define FSL_ROMAPI_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief Flash driver version for ROM*/
