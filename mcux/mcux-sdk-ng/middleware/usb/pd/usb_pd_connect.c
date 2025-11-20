@@ -291,11 +291,9 @@ static void PD_ConnectSetupNewState(pd_instance_t *pdInstance)
                 (void)PD_PhyControl(pdInstance, PD_PHY_CONFIG_ATTACH_DETECTION, NULL);
                 /* drp toggle and sink accessory toggle */
 
-                if ((pdInstance->pdPowerPortConfig->typecRole == (uint8_t)kPowerConfig_DRPToggling)
-#if defined(PD_CONFIG_SINK_ACCESSORY_SUPPORT) && (PD_CONFIG_SINK_ACCESSORY_SUPPORT)
-                    || (true)
+#if !defined(PD_CONFIG_SINK_ACCESSORY_SUPPORT) && (PD_CONFIG_SINK_ACCESSORY_SUPPORT)
+                if (pdInstance->pdPowerPortConfig->typecRole == (uint8_t)kPowerConfig_DRPToggling)
 #endif
-                )
                 {
                     (void)PD_TimerStart(pdInstance, tDRPToggleTimer, T_DRP_TOGGLE_SNK);
                 }

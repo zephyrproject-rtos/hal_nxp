@@ -2,7 +2,11 @@
 @page middleware_log Middleware Change Log
 
 @section USB USB stack for MCUXpresso SDK
-  The current version of USB stack is 2.12.0.
+  The current version of USB stack is 2.12.1.
+  - 2.12.1
+    - Bug fixes:
+      - Fix the issue that linux cannot identify dev_cdc_ecm_nic. If the macro EXAMPLE_PHY_INTERFACE_RGMII is enabled, only 1Gbps speed ethernet can work, but cannot work if link speed is 100Mbps or other speed mode. The MII interface rate between the MAC and the PHY should be consistent with the rate negotiated by the PHY. Otherwise the MAC will not work properly then cause this issue. To fix this issue: (1) Split ETH_ADAPTER_HW_Init() into ETH_ADAPTER_PHY_Init() and ETH_ADAPTER_MAC_Init; (2) Add new function ETH_ADAPTER_PHY_Reset. ETH_ADAPTER_Init() is now used only for basic PHY and MAC initialization. ETH_ADAPTER_Reset() is used to configure the MAC if a new link is established. (3)Reconfigure MAC when ethernet link is changed to fix compatibility issue under different ethernet environment rates.
+      - Fix the issue that usb_pd_sink_battery cases cannot get source capability.
   - 2.12.0
     - Bug fixes:
       - Fix the dependency issue to meet NPW of CONFIG tool.

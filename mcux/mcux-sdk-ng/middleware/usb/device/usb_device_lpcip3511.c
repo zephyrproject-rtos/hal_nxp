@@ -750,6 +750,11 @@ static usb_status_t USB_DeviceLpc3511IpEndpointStall(usb_device_lpc3511ip_state_
     else
     {
         epState = USB_DeviceLpc3511IpGetEndpointStateStruct(lpc3511IpState, endpointIndex);
+        if (epState == NULL)
+        {
+            return kStatus_USB_Error;
+        }
+
         /* Set endpoint stall flag. */
         epState->stateUnion.stateBitField.stalled = 1U;
         /* lpc3511IpState->registerBase->EPINUSE &= (~(0x01u << endpointIndex)); */
@@ -820,6 +825,10 @@ static usb_status_t USB_DeviceLpc3511IpEndpointUnstall(usb_device_lpc3511ip_stat
     uint8_t endpointIndex = USB_LPC3511IP_ENDPOINT_DES_INDEX(ep);
     usb_device_lpc3511ip_endpoint_state_struct_t *epState =
         USB_DeviceLpc3511IpGetEndpointStateStruct(lpc3511IpState, endpointIndex);
+    if (epState == NULL)
+    {
+        return kStatus_USB_Error;
+    }
 
     /* Clear the endpoint stall state, the hardware resets the endpoint
      * toggle to one for both directions when a setup token is received */
@@ -1133,6 +1142,11 @@ static void USB_DeviceLpc3511IpInterruptToken(usb_device_lpc3511ip_state_struct_
 #endif
     usb_device_lpc3511ip_endpoint_state_struct_t *epState =
         USB_DeviceLpc3511IpGetEndpointStateStruct(lpc3511IpState, endpointIndex);
+    if (epState == NULL)
+    {
+        return;
+    }
+
 #if (defined USB_DEVICE_IP3511_DOUBLE_BUFFER_ENABLE) && (USB_DEVICE_IP3511_DOUBLE_BUFFER_ENABLE)
     uint32_t len = 0;
 #endif
@@ -2107,6 +2121,10 @@ usb_status_t USB_DeviceLpc3511IpSend(usb_device_controller_handle controllerHand
     uint8_t endpointIndex                               = USB_LPC3511IP_ENDPOINT_DES_INDEX(endpointAddress);
     usb_device_lpc3511ip_endpoint_state_struct_t *epState =
         USB_DeviceLpc3511IpGetEndpointStateStruct(lpc3511IpState, endpointIndex);
+    if (epState == NULL)
+    {
+        return kStatus_USB_Error;
+    }
 
     if (1U == epState->stateUnion.stateBitField.transferring)
     {
@@ -2479,6 +2497,12 @@ usb_status_t USB_DeviceLpc3511IpControl(usb_device_controller_handle controllerH
                 {
                     epState = USB_DeviceLpc3511IpGetEndpointStateStruct(
                         lpc3511IpState, USB_LPC3511IP_ENDPOINT_DES_INDEX(endpointStatus->endpointAddress));
+                    if (epState == NULL)
+                    {
+                        error = kStatus_USB_Error;
+                        break;
+                    }
+
                     /* In configured state (should stall in other states), device must STALL status stage of Synch Frame
                      * Request with Invalid wIndex */
                     if (0U == epState->stateUnion.stateBitField.isOpened)
