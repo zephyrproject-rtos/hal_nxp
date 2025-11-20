@@ -47,6 +47,7 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
     uint32_t volatile *pointPresetCtrl = &SYSCON->PRESETCTRL0;
 
     assert(bitPos < 32u);
+    assert(regIndex < SYSCON_PRESETCTRLSET_COUNT);
 
     /* reset register is in SYSCON */
     /* set bit */
@@ -73,6 +74,7 @@ void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
     uint32_t volatile *pointPresetCtrl = &SYSCON->PRESETCTRL0;
 
     assert(bitPos < 32u);
+    assert(regIndex < SYSCON_PRESETCTRLSET_COUNT);
 
     /* reset register is in SYSCON */
 

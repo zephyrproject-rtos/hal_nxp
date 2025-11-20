@@ -130,6 +130,8 @@ void POWER_EnterDeepPowerDownMode(void)
 
 void EnableDeepSleepIRQ(IRQn_Type interrupt)
 {
+    assert(interrupt < (IRQn_Type)(NUMBER_OF_INT_VECTORS - 16U));
+
     uint32_t intNumber = (uint32_t)interrupt;
 
     if (intNumber >= 24u)
@@ -148,6 +150,8 @@ void EnableDeepSleepIRQ(IRQn_Type interrupt)
 
 void DisableDeepSleepIRQ(IRQn_Type interrupt)
 {
+    assert(interrupt < (IRQn_Type)(NUMBER_OF_INT_VECTORS - 16U));
+
     uint32_t intNumber = (uint32_t)interrupt;
 
     /* also disable interrupt at NVIC */
