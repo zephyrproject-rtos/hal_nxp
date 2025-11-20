@@ -164,7 +164,7 @@ status_t FLASH_Init(flash_config_t *config)
     ret = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_init(config);
     if (kStatus_FLASH_Success == ret)
     {
-        /* Call ffr_init is required for A1 */
+        /* Call ffr_init is required for 1B. Also OK for 0A. */
         return BOOTLOADER_API_TREE_POINTER->flashDriver->ffr_init(config);
     }
     else

@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251010
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

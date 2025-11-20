@@ -135,6 +135,7 @@ extern "C" {
  */
 static inline void POWER_EnablePD(pd_bit_t en)
 {
+    assert(en != kPDRUNCFG_ForceUnsigned);
     SYSCON->PDRUNCFG |= (uint32_t)en;
 }
 
@@ -146,6 +147,7 @@ static inline void POWER_EnablePD(pd_bit_t en)
  */
 static inline void POWER_DisablePD(pd_bit_t en)
 {
+    assert(en != kPDRUNCFG_ForceUnsigned);
     SYSCON->PDRUNCFG &= ~(uint32_t)en;
 }
 
@@ -382,7 +384,7 @@ static inline uint32_t POWER_GetRetainData(power_gen_reg_t index)
 static inline void POWER_EnableWktClkIn(bool enable, bool enHysteresis)
 {
     PMU->DPDCTRL = (PMU->DPDCTRL & (~(PMU_DPDCTRL_WAKEUPCLKHYS_MASK | PMU_DPDCTRL_WAKECLKPAD_DISABLE_MASK))) |
-                   PMU_DPDCTRL_WAKECLKPAD_DISABLE(enable) | PMU_DPDCTRL_WAKEUPCLKHYS(enHysteresis);
+                   PMU_DPDCTRL_WAKECLKPAD_DISABLE(enable ? 1U : 0U) | PMU_DPDCTRL_WAKEUPCLKHYS(enHysteresis ? 1U : 0U);
 }
 
 /*!
@@ -394,7 +396,7 @@ static inline void POWER_EnableWktClkIn(bool enable, bool enHysteresis)
 static inline void POWER_EnableWakeupPinForDeepPowerDown(bool enable, bool enHysteresis)
 {
     PMU->DPDCTRL = (PMU->DPDCTRL & (~(PMU_DPDCTRL_WAKEUPHYS_MASK | PMU_DPDCTRL_WAKEPAD_DISABLE_MASK))) |
-                   PMU_DPDCTRL_WAKEPAD_DISABLE(!enable) | PMU_DPDCTRL_WAKEUPHYS(enHysteresis);
+                   PMU_DPDCTRL_WAKEPAD_DISABLE(enable ? 0U : 1U) | PMU_DPDCTRL_WAKEUPHYS(enHysteresis ? 1U : 0U);
 }
 
 /*!
@@ -406,7 +408,7 @@ static inline void POWER_EnableWakeupPinForDeepPowerDown(bool enable, bool enHys
 static inline void POWER_EnableResetPinForDeepPowerDown(bool enable, bool enHysteresis)
 {
     PMU->DPDCTRL = (PMU->DPDCTRL & (~(PMU_DPDCTRL_RESETHYS_MASK | PMU_DPDCTRL_RESET_DISABLE_MASK))) |
-                   PMU_DPDCTRL_RESET_DISABLE(!enable) | PMU_DPDCTRL_RESETHYS(enHysteresis);
+                   PMU_DPDCTRL_RESET_DISABLE(enable ? 0U : 1U) | PMU_DPDCTRL_RESETHYS(enHysteresis ? 1U : 0U);
 }
 
 /*!
@@ -421,7 +423,7 @@ static inline void POWER_SetBodLevel(power_bod_reset_level_t resetLevel,
                                      bool enable)
 {
     SYSCON->BODCTRL = SYSCON_BODCTRL_BODRSTLEV(resetLevel) | SYSCON_BODCTRL_BODINTVAL(interruptLevel) |
-                      SYSCON_BODCTRL_BODRSTENA(enable);
+                      SYSCON_BODCTRL_BODRSTENA(enable ? 1U : 0U);
 }
 /* @} */
 
