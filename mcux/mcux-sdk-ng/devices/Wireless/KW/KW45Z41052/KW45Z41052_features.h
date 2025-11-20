@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2020-05-12
-**     Build:               b250819
+**     Build:               b250916
 **
 **     Abstract:
 **         Chip specific module features.
@@ -360,6 +360,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -382,6 +384,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -633,6 +637,20 @@
 #define FSL_FEATURE_SPC_LDO_VOLTAGE_LEVEL_DECREASE (0)
 /* @brief Set DCDC_VDD_LVL to 0 then regulate to Low Under Voltage (1.25v). */
 #define FSL_FEATURE_SPC_DCDC_VOLTAGE_LEVEL_DECREASE (0)
+/* @brief Has SC REG_BUSY (register bit SC[REG_BUSY]). */
+#define FSL_FEATURE_SPC_HAS_SC_REG_BUSY (0)
+/* @brief Has HP_CFG register. */
+#define FSL_FEATURE_SPC_HAS_HP_CFG_REG (0)
+/* @brief SPC Power Mode Configuration Status Flag. */
+#define FSL_FEATURE_SPC_HAS_SC_SPC_LP_REQ_BIT (1)
+/* @brief Has DCDC_BURST_CFG register. */
+#define FSL_FEATURE_SPC_HAS_DCDC_BURST_CFG (1)
+/* @brief Has SYSLDO_CFG register. */
+#define FSL_FEATURE_SPC_HAS_SYS_LDO (1)
+/* @brief Has cmp bandgap buffer enable. */
+#define FSL_FEATURE_SPC_HAS_LPBUFF (1)
+/* @brief Has VD_SYS_CFG register. */
+#define FSL_FEATURE_SPC_HAS_VDD_SYS (1)
 
 /* SYSPM module features */
 
