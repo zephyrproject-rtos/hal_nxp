@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_MCM
@@ -659,7 +659,7 @@ typedef struct {
 
 #define AON_MCM_FATR_BEMN_MASK                   (0xF00U)
 #define AON_MCM_FATR_BEMN_SHIFT                  (8U)
-/*! BEMN - Bus Error Master Number */
+/*! BEMN - Bus Error Initiator Number */
 #define AON_MCM_FATR_BEMN(x)                     (((uint32_t)(((uint32_t)(x)) << AON_MCM_FATR_BEMN_SHIFT)) & AON_MCM_FATR_BEMN_MASK)
 
 #define AON_MCM_FATR_BEOVR_MASK                  (0x80000000U)

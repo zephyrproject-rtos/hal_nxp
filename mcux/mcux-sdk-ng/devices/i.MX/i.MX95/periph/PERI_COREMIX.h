@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for COREMIX
@@ -533,13 +533,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D0_SHIFT (0U)
 /*! LPM_SETTING_D0 - LPM setting of domain 0
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D0(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D0_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D0_MASK)
 
@@ -547,13 +547,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D1_SHIFT (4U)
 /*! LPM_SETTING_D1 - LPM setting of domain 1
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D1(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D1_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D1_MASK)
 
@@ -561,13 +561,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D2_SHIFT (8U)
 /*! LPM_SETTING_D2 - LPM setting of domain 2
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D2(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D2_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D2_MASK)
 
@@ -575,13 +575,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D3_SHIFT (12U)
 /*! LPM_SETTING_D3 - LPM setting of domain 3
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D3(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D3_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D3_MASK)
 
@@ -589,13 +589,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D4_SHIFT (16U)
 /*! LPM_SETTING_D4 - LPM setting of domain 4
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D4(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D4_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D4_MASK)
 
@@ -603,13 +603,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D5_SHIFT (20U)
 /*! LPM_SETTING_D5 - LPM setting of domain 5
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D5(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D5_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D5_MASK)
 
@@ -617,13 +617,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D6_SHIFT (24U)
 /*! LPM_SETTING_D6 - LPM setting of domain 6
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D6(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D6_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D6_MASK)
 
@@ -631,13 +631,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D7_SHIFT (28U)
 /*! LPM_SETTING_D7 - LPM setting of domain 7
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_1_LPM_SETTING_D7(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_1_LPM_SETTING_D7_SHIFT)) & COREMIX_LPM_SETTING_1_LPM_SETTING_D7_MASK)
 /*! @} */
@@ -649,13 +649,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D8_SHIFT (0U)
 /*! LPM_SETTING_D8 - LPM setting of domain 8
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D8(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D8_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D8_MASK)
 
@@ -663,13 +663,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D9_SHIFT (4U)
 /*! LPM_SETTING_D9 - LPM setting of domain 9
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D9(x)  (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D9_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D9_MASK)
 
@@ -677,13 +677,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D10_SHIFT (8U)
 /*! LPM_SETTING_D10 - LPM setting of domain 10
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D10(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D10_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D10_MASK)
 
@@ -691,13 +691,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D11_SHIFT (12U)
 /*! LPM_SETTING_D11 - LPM setting of domain 11
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D11(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D11_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D11_MASK)
 
@@ -705,13 +705,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D12_SHIFT (16U)
 /*! LPM_SETTING_D12 - LPM setting of domain 12
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D12(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D12_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D12_MASK)
 
@@ -719,13 +719,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D13_SHIFT (20U)
 /*! LPM_SETTING_D13 - LPM setting of domain 13
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D13(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D13_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D13_MASK)
 
@@ -733,13 +733,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D14_SHIFT (24U)
 /*! LPM_SETTING_D14 - LPM setting of domain 14
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D14(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D14_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D14_MASK)
 
@@ -747,13 +747,13 @@ typedef struct {
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D15_SHIFT (28U)
 /*! LPM_SETTING_D15 - LPM setting of domain 15
  *  0b000..Power always off
- *  0b001..power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
- *  0b010..power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
- *  0b011..power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
- *  0b100..power always on
- *  0b101..power always on
- *  0b110..power always on
- *  0b111..power always on
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100..Power always on
+ *  0b101..Power always on
+ *  0b110..Power always on
+ *  0b111..Power always on
  */
 #define COREMIX_LPM_SETTING_2_LPM_SETTING_D15(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_LPM_SETTING_2_LPM_SETTING_D15_SHIFT)) & COREMIX_LPM_SETTING_2_LPM_SETTING_D15_MASK)
 /*! @} */
@@ -764,7 +764,7 @@ typedef struct {
 #define COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_0_MASK (0x1U)
 #define COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_0_SHIFT (0U)
 /*! ISO_OVERRIDE_B_0 - Override contribution of switchable-VDD_SOC iso control to DRAM PHY internal iso control
- *  0b0..override power switched domain isolation
+ *  0b0..Override power switched domain isolation
  *  0b1..No override power switched domain isolation
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_0(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_0_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_0_MASK)
@@ -772,7 +772,7 @@ typedef struct {
 #define COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_1_MASK (0x2U)
 #define COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_1_SHIFT (1U)
 /*! ISO_OVERRIDE_B_1 - Override contribution of switchable-VDD_SOC iso control to DRAM PLL internal iso control
- *  0b0..override power switched domain isolation
+ *  0b0..Override power switched domain isolation
  *  0b1..No override power switched domain isolation
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_1(x) (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_1_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_OVERRIDE_B_1_MASK)
@@ -780,88 +780,88 @@ typedef struct {
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_0_MASK    (0x100000U)
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_0_SHIFT   (20U)
 /*! RST_RSTR_0 - Reset Control for Reset Region 0.
- *  0b0..no software control over reset of reset region 0
- *  0b1..assert reset of reset region 0
+ *  0b0..No software control over reset of reset region 0
+ *  0b1..Assert reset of reset region 0
  */
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_0(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_RST_RSTR_0_SHIFT)) & COREMIX_SLICE_SW_CTRL_RST_RSTR_0_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_1_MASK    (0x200000U)
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_1_SHIFT   (21U)
 /*! RST_RSTR_1 - Reset Control for Reset Region 1.
- *  0b0..no software control over reset of reset region 1
- *  0b1..assert reset of reset region 1
+ *  0b0..No software control over reset of reset region 1
+ *  0b1..Assert reset of reset region 1
  */
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_1(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_RST_RSTR_1_SHIFT)) & COREMIX_SLICE_SW_CTRL_RST_RSTR_1_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_2_MASK    (0x400000U)
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_2_SHIFT   (22U)
 /*! RST_RSTR_2 - Reset Control for Reset Region 2.
- *  0b0..no software control over reset of reset region 2
- *  0b1..assert reset of reset region 2
+ *  0b0..No software control over reset of reset region 2
+ *  0b1..Assert reset of reset region 2
  */
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_2(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_RST_RSTR_2_SHIFT)) & COREMIX_SLICE_SW_CTRL_RST_RSTR_2_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_3_MASK    (0x800000U)
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_3_SHIFT   (23U)
 /*! RST_RSTR_3 - Reset Control for Reset Region 3.
- *  0b0..no software control over reset of reset region 3
- *  0b1..assert reset of reset region 3
+ *  0b0..No software control over reset of reset region 3
+ *  0b1..Assert reset of reset region 3
  */
 #define COREMIX_SLICE_SW_CTRL_RST_RSTR_3(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_RST_RSTR_3_SHIFT)) & COREMIX_SLICE_SW_CTRL_RST_RSTR_3_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_0_MASK    (0x1000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_0_SHIFT   (24U)
 /*! ISO_CTRL_0 - MISC Isolation control for IP 0:
- *  0b0..disable isolation of IP 0
- *  0b1..enable isolation of IP 0
+ *  0b0..Disable isolation of IP 0
+ *  0b1..Enable isolation of IP 0
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_0(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_0_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_0_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_1_MASK    (0x2000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_1_SHIFT   (25U)
 /*! ISO_CTRL_1 - MISC Isolation control for IP 1:
- *  0b0..disable isolation of IP 1
- *  0b1..enable isolation of IP 1
+ *  0b0..Disable isolation of IP 1
+ *  0b1..Enable isolation of IP 1
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_1(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_1_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_1_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_2_MASK    (0x4000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_2_SHIFT   (26U)
 /*! ISO_CTRL_2 - MISC Isolation control for IP 2:
- *  0b0..disable isolation of IP 2
- *  0b1..enable isolation of IP 2
+ *  0b0..Disable isolation of IP 2
+ *  0b1..Enable isolation of IP 2
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_2(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_2_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_2_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_3_MASK    (0x8000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_3_SHIFT   (27U)
 /*! ISO_CTRL_3 - MISC Isolation control for IP 3:
- *  0b0..disable isolation of IP 3
- *  0b1..enable isolation of IP 3
+ *  0b0..Disable isolation of IP 3
+ *  0b1..Enable isolation of IP 3
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_3(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_3_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_3_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_4_MASK    (0x10000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_4_SHIFT   (28U)
 /*! ISO_CTRL_4 - MISC Isolation control for IP 4.
- *  0b0..disable isolation of IP 4
- *  0b1..enable isolation of IP 4
+ *  0b0..Disable isolation of IP 4
+ *  0b1..Enable isolation of IP 4
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_4(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_4_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_4_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_5_MASK    (0x20000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_5_SHIFT   (29U)
 /*! ISO_CTRL_5 - MISC Isolation control for IP 5:
- *  0b0..disable isolation of IP 5
- *  0b1..enable isolation of IP 5
+ *  0b0..Disable isolation of IP 5
+ *  0b1..Enable isolation of IP 5
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_5(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_5_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_5_MASK)
 
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_6_MASK    (0x40000000U)
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_6_SHIFT   (30U)
 /*! ISO_CTRL_6 - MISC Isolation control for IP 6.
- *  0b0..disable isolation of IP 6
- *  0b1..enable isolation of IP 6
+ *  0b0..Disable isolation of IP 6
+ *  0b1..Enable isolation of IP 6
  */
 #define COREMIX_SLICE_SW_CTRL_ISO_CTRL_6(x)      (((uint32_t)(((uint32_t)(x)) << COREMIX_SLICE_SW_CTRL_ISO_CTRL_6_SHIFT)) & COREMIX_SLICE_SW_CTRL_ISO_CTRL_6_MASK)
 
@@ -879,193 +879,193 @@ typedef struct {
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_0_MASK (0x1U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_0_SHIFT (0U)
-/*! RSTR_0_IRST_0 - reset request control for individual reset 0 in reset region 0
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_0_IRST_0 - Reset request control for individual reset 0 in reset region 0
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_0(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_0_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_0_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_1_MASK (0x2U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_1_SHIFT (1U)
-/*! RSTR_0_IRST_1 - reset request control for individual reset 1 in reset region 0
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_0_IRST_1 - Reset request control for individual reset 1 in reset region 0
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_1(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_1_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_1_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_2_MASK (0x4U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_2_SHIFT (2U)
-/*! RSTR_0_IRST_2 - reset request control for individual reset 2 in reset region 0
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_0_IRST_2 - Reset request control for individual reset 2 in reset region 0
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_2(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_2_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_2_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_3_MASK (0x8U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_3_SHIFT (3U)
-/*! RSTR_0_IRST_3 - reset request control for individual reset 3 in reset region 0
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_0_IRST_3 - Reset request control for individual reset 3 in reset region 0
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_3(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_3_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_3_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_4_MASK (0x10U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_4_SHIFT (4U)
-/*! RSTR_0_IRST_4 - reset request control for individual reset 4 in reset region 0
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_0_IRST_4 - Reset request control for individual reset 4 in reset region 0
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_4(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_4_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_4_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_5_MASK (0x20U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_5_SHIFT (5U)
-/*! RSTR_0_IRST_5 - reset request control for individual reset 5 in reset region 0
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_0_IRST_5 - Reset request control for individual reset 5 in reset region 0
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_5(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_5_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_0_IRST_5_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_0_MASK (0x100U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_0_SHIFT (8U)
-/*! RSTR_1_IRST_0 - reset request control for individual reset 0 in reset region 1
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_1_IRST_0 - Reset request control for individual reset 0 in reset region 1
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_0(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_0_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_0_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_1_MASK (0x200U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_1_SHIFT (9U)
-/*! RSTR_1_IRST_1 - reset request control for individual reset 1 in reset region 1
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_1_IRST_1 - Reset request control for individual reset 1 in reset region 1
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_1(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_1_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_1_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_2_MASK (0x400U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_2_SHIFT (10U)
-/*! RSTR_1_IRST_2 - reset request control for individual reset 2 in reset region 1
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_1_IRST_2 - Reset request control for individual reset 2 in reset region 1
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_2(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_2_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_2_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_3_MASK (0x800U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_3_SHIFT (11U)
-/*! RSTR_1_IRST_3 - reset request control for individual reset 3 in reset region 1
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_1_IRST_3 - Reset request control for individual reset 3 in reset region 1
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_3(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_3_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_3_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_4_MASK (0x1000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_4_SHIFT (12U)
-/*! RSTR_1_IRST_4 - reset request control for individual reset 4 in reset region 1
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_1_IRST_4 - Reset request control for individual reset 4 in reset region 1
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_4(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_4_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_4_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_5_MASK (0x2000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_5_SHIFT (13U)
-/*! RSTR_1_IRST_5 - reset request control for individual reset 5 in reset region 1
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_1_IRST_5 - Reset request control for individual reset 5 in reset region 1
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_5(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_5_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_1_IRST_5_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_0_MASK (0x10000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_0_SHIFT (16U)
-/*! RSTR_2_IRST_0 - reset request control for individual reset 0 in reset region 2
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_2_IRST_0 - Reset request control for individual reset 0 in reset region 2
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_0(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_0_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_0_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_1_MASK (0x20000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_1_SHIFT (17U)
-/*! RSTR_2_IRST_1 - reset request control for individual reset 1 in reset region 2
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_2_IRST_1 - Reset request control for individual reset 1 in reset region 2
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_1(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_1_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_1_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_2_MASK (0x40000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_2_SHIFT (18U)
-/*! RSTR_2_IRST_2 - reset request control for individual reset 2 in reset region 2
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_2_IRST_2 - Reset request control for individual reset 2 in reset region 2
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_2(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_2_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_2_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_3_MASK (0x80000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_3_SHIFT (19U)
-/*! RSTR_2_IRST_3 - reset request control for individual reset 3 in reset region 2
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_2_IRST_3 - Reset request control for individual reset 3 in reset region 2
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_3(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_3_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_3_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_4_MASK (0x100000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_4_SHIFT (20U)
-/*! RSTR_2_IRST_4 - reset request control for individual reset 4 in reset region 2
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_2_IRST_4 - Reset request control for individual reset 4 in reset region 2
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_4(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_4_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_4_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_5_MASK (0x200000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_5_SHIFT (21U)
-/*! RSTR_2_IRST_5 - reset request control for individual reset 5 in reset region 2
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_2_IRST_5 - Reset request control for individual reset 5 in reset region 2
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_5(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_5_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_2_IRST_5_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_0_MASK (0x1000000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_0_SHIFT (24U)
-/*! RSTR_3_IRST_0 - reset request control for individual reset 0 in reset region 3
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_3_IRST_0 - Reset request control for individual reset 0 in reset region 3
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_0(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_0_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_0_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_1_MASK (0x2000000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_1_SHIFT (25U)
-/*! RSTR_3_IRST_1 - reset request control for individual reset 1 in reset region 3
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_3_IRST_1 - Reset request control for individual reset 1 in reset region 3
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_1(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_1_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_1_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_2_MASK (0x4000000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_2_SHIFT (26U)
-/*! RSTR_3_IRST_2 - reset request control for individual reset 2 in reset region 3
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_3_IRST_2 - Reset request control for individual reset 2 in reset region 3
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_2(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_2_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_2_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_3_MASK (0x8000000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_3_SHIFT (27U)
-/*! RSTR_3_IRST_3 - reset request control for individual reset 3 in reset region 3
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_3_IRST_3 - Reset request control for individual reset 3 in reset region 3
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_3(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_3_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_3_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_4_MASK (0x10000000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_4_SHIFT (28U)
-/*! RSTR_3_IRST_4 - reset request control for individual reset 4 in reset region 3
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_3_IRST_4 - Reset request control for individual reset 4 in reset region 3
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_4(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_4_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_4_MASK)
 
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_5_MASK (0x20000000U)
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_5_SHIFT (29U)
-/*! RSTR_3_IRST_5 - reset request control for individual reset 5 in reset region 3
- *  0b0..de-assert reset request
- *  0b1..assert reset request
+/*! RSTR_3_IRST_5 - Reset request control for individual reset 5 in reset region 3
+ *  0b0..De-assert reset request
+ *  0b1..Assert reset request
  */
 #define COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_5(x)   (((uint32_t)(((uint32_t)(x)) << COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_5_SHIFT)) & COREMIX_IRST_REQ_CTRL_RSTR_3_IRST_5_MASK)
 /*! @} */
@@ -1190,7 +1190,7 @@ typedef struct {
 
 #define COREMIX_SSAR_ACK_STAT_SAVED_MASK         (0x20000000U)
 #define COREMIX_SSAR_ACK_STAT_SAVED_SHIFT        (29U)
-/*! SAVED - Indicate this mix power down info have accepted Edgelock Enclave ack */
+/*! SAVED - Indicates this mix power down info have accepted Edgelock Enclave ack */
 #define COREMIX_SSAR_ACK_STAT_SAVED(x)           (((uint32_t)(((uint32_t)(x)) << COREMIX_SSAR_ACK_STAT_SAVED_SHIFT)) & COREMIX_SSAR_ACK_STAT_SAVED_MASK)
 
 #define COREMIX_SSAR_ACK_STAT_BUSY_SAVED_MASK    (0x40000000U)

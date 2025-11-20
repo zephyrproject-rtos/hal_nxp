@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for HSIO_TCU
@@ -418,7 +418,9 @@ typedef struct {
   __IO uint32_t TCU_PCIE1_PHY_CONTROL_;            /**< TCU PCIE0 PHY test control register, offset: 0x920 */
        uint8_t RESERVED_3[12];
   __IO uint32_t TCU_DFT_BS;                        /**< PCIE PHY boundary scan control, offset: 0x930 */
-       uint8_t RESERVED_4[220];
+       uint8_t RESERVED_4[12];
+  __IO uint32_t TCU_DFT_BS_USB3;                   /**< USB3 boundary scan control, offset: 0x940 */
+       uint8_t RESERVED_5[204];
   struct {                                         /* offset: 0xA10 */
     __IO uint32_t RW;                                /**< TCU USB2 PHY control register, offset: 0xA10 */
     __IO uint32_t SET;                               /**< TCU USB2 PHY control register, offset: 0xA14 */
@@ -443,9 +445,9 @@ typedef struct {
     __I  uint32_t CLR;                               /**< test data out for usb3, offset: 0xA48 */
     __I  uint32_t TOG;                               /**< test data out for usb3, offset: 0xA4C */
   } USB3_PHY_TESTDATA;
-       uint8_t RESERVED_5[432];
+       uint8_t RESERVED_6[432];
   __IO uint32_t TCU_PLL_COUNTER;                   /**< tcu pll counter reg, offset: 0xC00 */
-       uint8_t RESERVED_6[60];
+       uint8_t RESERVED_7[60];
   __IO uint32_t TCU_DFT_FUSE;                      /**< observe MIX fuse state and override it, offset: 0xC40 */
 } HSIO_TCU_Type;
 
@@ -626,6 +628,80 @@ typedef struct {
 #define HSIO_TCU_TCU_DFT_BS_pcie1_bs_tdo_SHIFT   (24U)
 /*! pcie1_bs_tdo - BS TDO */
 #define HSIO_TCU_TCU_DFT_BS_pcie1_bs_tdo(x)      (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_pcie1_bs_tdo_SHIFT)) & HSIO_TCU_TCU_DFT_BS_pcie1_bs_tdo_MASK)
+/*! @} */
+
+/*! @name TCU_DFT_BS_USB3 - USB3 boundary scan control */
+/*! @{ */
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bs_tdi_MASK (0x1U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bs_tdi_SHIFT (0U)
+/*! usb3_bs_tdi - BS TDI */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bs_tdi(x)  (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_bs_tdi_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_bs_tdi_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_capturedr_MASK (0x2U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_capturedr_SHIFT (1U)
+/*! usb3_capturedr - BS CAPTURE DR */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_capturedr(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_capturedr_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_capturedr_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_clamp_MASK (0x4U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_clamp_SHIFT (2U)
+/*! usb3_clamp - BS CLAMP */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_clamp(x)   (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_clamp_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_clamp_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_extest_MASK (0x8U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_extest_SHIFT (3U)
+/*! usb3_extest - BS EXTEST */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_extest(x)  (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_extest_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_extest_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_extestac_MASK (0x10U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_extestac_SHIFT (4U)
+/*! usb3_extestac - BS EXTEST AC */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_extestac(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_extestac_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_extestac_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_highz_MASK (0x20U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_highz_SHIFT (5U)
+/*! usb3_highz - BS HIGHTZ */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_highz(x)   (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_highz_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_highz_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinit_MASK (0x40U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinit_SHIFT (6U)
+/*! usb3_bsinit - BS INIT */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinit(x)  (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinit_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinit_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinvert_MASK (0x80U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinvert_SHIFT (7U)
+/*! usb3_bsinvert - BS INVERT */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinvert(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinvert_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsinvert_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_preload_MASK (0x100U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_preload_SHIFT (8U)
+/*! usb3_preload - BS PRELOAD */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_preload(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_preload_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_preload_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_shiftdr_MASK (0x200U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_shiftdr_SHIFT (9U)
+/*! usb3_shiftdr - BS SHIFT DR */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_shiftdr(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_shiftdr_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_shiftdr_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_updatedr_MASK (0x400U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_updatedr_SHIFT (10U)
+/*! usb3_updatedr - BS UPDATE DR */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_updatedr(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_updatedr_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_updatedr_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_acjtlevel_MASK (0xF800U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_acjtlevel_SHIFT (11U)
+/*! usb3_acjtlevel - BS AC JT LEVEL */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_acjtlevel(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_acjtlevel_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_acjtlevel_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsrmode_MASK (0x10000U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsrmode_SHIFT (16U)
+/*! usb3_bsrmode - BSR MODE */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsrmode(x) (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsrmode_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_bsrmode_MASK)
+
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_tdo_MASK   (0x80000000U)
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_tdo_SHIFT  (31U)
+/*! usb3_tdo - BS TDO */
+#define HSIO_TCU_TCU_DFT_BS_USB3_usb3_tdo(x)     (((uint32_t)(((uint32_t)(x)) << HSIO_TCU_TCU_DFT_BS_USB3_usb3_tdo_SHIFT)) & HSIO_TCU_TCU_DFT_BS_USB3_usb3_tdo_MASK)
 /*! @} */
 
 /*! @name TCU_USB2_PHY_CONTROL_ - TCU USB2 PHY control register */

@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LDB
@@ -461,14 +461,6 @@ typedef struct {
  *  0b1..LVDS pixel mapper Di1 are not clocked
  */
 #define LDB_LVDS_PHY_CLOCK_CONTROL_PixelMapper_Di1_clock_Ctrl(x) (((uint32_t)(((uint32_t)(x)) << LDB_LVDS_PHY_CLOCK_CONTROL_PixelMapper_Di1_clock_Ctrl_SHIFT)) & LDB_LVDS_PHY_CLOCK_CONTROL_PixelMapper_Di1_clock_Ctrl_MASK)
-
-#define LDB_LVDS_PHY_CLOCK_CONTROL_LVDS_PLL_clock_ctrl_MASK (0x20U)
-#define LDB_LVDS_PHY_CLOCK_CONTROL_LVDS_PLL_clock_ctrl_SHIFT (5U)
-/*! LVDS_PLL_clock_ctrl - Control the clock gating logic of the LVDS PLL input clock
- *  0b0..LVDS PLL input clock are clocked
- *  0b1..LVDS PLL input clock are not clocked
- */
-#define LDB_LVDS_PHY_CLOCK_CONTROL_LVDS_PLL_clock_ctrl(x) (((uint32_t)(((uint32_t)(x)) << LDB_LVDS_PHY_CLOCK_CONTROL_LVDS_PLL_clock_ctrl_SHIFT)) & LDB_LVDS_PHY_CLOCK_CONTROL_LVDS_PLL_clock_ctrl_MASK)
 /*! @} */
 
 /*! @name PIXEL_MAPPER_CONTROL - Pixel mapper control */
@@ -566,6 +558,22 @@ typedef struct {
  */
 #define LDB_PIXEL_MAPPER_CONTROL_CH1_ASYNC_FIFO_RESET(x) (((uint32_t)(((uint32_t)(x)) << LDB_PIXEL_MAPPER_CONTROL_CH1_ASYNC_FIFO_RESET_SHIFT)) & LDB_PIXEL_MAPPER_CONTROL_CH1_ASYNC_FIFO_RESET_MASK)
 
+#define LDB_PIXEL_MAPPER_CONTROL_DI0_HSYNC_POLARITY_MASK (0x2000U)
+#define LDB_PIXEL_MAPPER_CONTROL_DI0_HSYNC_POLARITY_SHIFT (13U)
+/*! DI0_HSYNC_POLARITY - HSYNC polarity select for DI0
+ *  0b0..HSYNC is active high
+ *  0b1..HSYNC is active low
+ */
+#define LDB_PIXEL_MAPPER_CONTROL_DI0_HSYNC_POLARITY(x) (((uint32_t)(((uint32_t)(x)) << LDB_PIXEL_MAPPER_CONTROL_DI0_HSYNC_POLARITY_SHIFT)) & LDB_PIXEL_MAPPER_CONTROL_DI0_HSYNC_POLARITY_MASK)
+
+#define LDB_PIXEL_MAPPER_CONTROL_DI1_HSYNC_POLARITY_MASK (0x4000U)
+#define LDB_PIXEL_MAPPER_CONTROL_DI1_HSYNC_POLARITY_SHIFT (14U)
+/*! DI1_HSYNC_POLARITY - HSYNC polarity select for DI1
+ *  0b0..HSYNC is active high
+ *  0b1..HSYNC is active low
+ */
+#define LDB_PIXEL_MAPPER_CONTROL_DI1_HSYNC_POLARITY(x) (((uint32_t)(((uint32_t)(x)) << LDB_PIXEL_MAPPER_CONTROL_DI1_HSYNC_POLARITY_SHIFT)) & LDB_PIXEL_MAPPER_CONTROL_DI1_HSYNC_POLARITY_MASK)
+
 #define LDB_PIXEL_MAPPER_CONTROL_BGREF_RRMODE_MASK (0x8000U)
 #define LDB_PIXEL_MAPPER_CONTROL_BGREF_RRMODE_SHIFT (15U)
 /*! BGREF_RRMODE - Select reference resistor for bandgap
@@ -574,9 +582,17 @@ typedef struct {
  */
 #define LDB_PIXEL_MAPPER_CONTROL_BGREF_RRMODE(x) (((uint32_t)(((uint32_t)(x)) << LDB_PIXEL_MAPPER_CONTROL_BGREF_RRMODE_SHIFT)) & LDB_PIXEL_MAPPER_CONTROL_BGREF_RRMODE_MASK)
 
+#define LDB_PIXEL_MAPPER_CONTROL_VSYNC_ADJ_EN_MASK (0x80000U)
+#define LDB_PIXEL_MAPPER_CONTROL_VSYNC_ADJ_EN_SHIFT (19U)
+/*! VSYNC_ADJ_EN - Adjust the VSYNC edge to align HSYNC edge dor DI0 and DI1
+ *  0b0..disable
+ *  0b1..enable
+ */
+#define LDB_PIXEL_MAPPER_CONTROL_VSYNC_ADJ_EN(x) (((uint32_t)(((uint32_t)(x)) << LDB_PIXEL_MAPPER_CONTROL_VSYNC_ADJ_EN_SHIFT)) & LDB_PIXEL_MAPPER_CONTROL_VSYNC_ADJ_EN_MASK)
+
 #define LDB_PIXEL_MAPPER_CONTROL_ASYNC_FIFO_ENABLE_MASK (0x1000000U)
 #define LDB_PIXEL_MAPPER_CONTROL_ASYNC_FIFO_ENABLE_SHIFT (24U)
-/*! ASYNC_FIFO_ENABLE - Channel 0 and channel 1 async FIFO enable
+/*! ASYNC_FIFO_ENABLE - Channel 0 and channel 1 a sync FIFO enable
  *  0b0..Disable
  *  0b1..Enable async FIFO to buffer RGB data
  */

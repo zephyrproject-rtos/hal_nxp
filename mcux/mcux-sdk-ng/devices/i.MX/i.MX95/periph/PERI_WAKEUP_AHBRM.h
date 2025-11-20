@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WAKEUP_AHBRM
@@ -429,9 +429,9 @@ typedef struct {
 #define WAKEUP_AHBRM_CR_ENB_SHIFT                (0U)
 /*! ENB - Enable Remap.
  *  0b0..The module is disabled and all input AHB addresses & attributes are simply routed to the output AHB address & attributes buses.
- *  0b1..All AHB addresses from the designed bus master (typically a processor core) are remapped using the
- *       constant offset defined by the CR[RADDR] field. AHB accesses from other bus masters are simply passed through
- *       the module as if it was disabled.
+ *  0b1..All AHB addresses from the designed bus initiator (typically a processor core) are remapped using the
+ *       constant offset defined by the CR[RADDR] field. AHB accesses from other bus initiators are simply passed
+ *       through the module as if it was disabled.
  */
 #define WAKEUP_AHBRM_CR_ENB(x)                   (((uint32_t)(((uint32_t)(x)) << WAKEUP_AHBRM_CR_ENB_SHIFT)) & WAKEUP_AHBRM_CR_ENB_MASK)
 
@@ -458,9 +458,9 @@ typedef struct {
 #define WAKEUP_AHBRM_SR_ENB_SHIFT                (0U)
 /*! ENB - Enable Remap.
  *  0b0..The module is disabled and all input AHB addresses & attributes are simply routed to the output AHB address & attributes buses.
- *  0b1..All AHB addresses from the designed bus master (typically a processor core) are remapped using the
- *       constant offset defined by the CR[RADDR] field. AHB accesses from other bus masters are simply passed through
- *       the module as if it was disabled.
+ *  0b1..All AHB addresses from the designed bus initiator (typically a processor core) are remapped using the
+ *       constant offset defined by the CR[RADDR] field. AHB accesses from other bus initiators are simply passed
+ *       through the module as if it was disabled.
  */
 #define WAKEUP_AHBRM_SR_ENB(x)                   (((uint32_t)(((uint32_t)(x)) << WAKEUP_AHBRM_SR_ENB_SHIFT)) & WAKEUP_AHBRM_SR_ENB_MASK)
 

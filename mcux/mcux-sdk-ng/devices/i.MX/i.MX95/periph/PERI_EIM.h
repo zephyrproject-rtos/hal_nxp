@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EIM
@@ -606,7 +606,7 @@ typedef struct {
 
 #define EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (4, 12, 32), largest definition used */
 #define EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD0_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (4, 12, 32), largest definition used */
 /*! @} */
 
@@ -615,7 +615,7 @@ typedef struct {
 
 #define EIM_EICHD0_WORD2_B4_7DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD0_WORD2_B4_7DATA_MASK_SHIFT     (0U)
-/*! B4_7DATA_MASK - Data Mask Bytes 4-7 */
+/*! B4_7DATA_MASK - Data Mask Field */
 #define EIM_EICHD0_WORD2_B4_7DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD0_WORD2_B4_7DATA_MASK_SHIFT)) & EIM_EICHD0_WORD2_B4_7DATA_MASK_MASK)
 /*! @} */
 
@@ -624,7 +624,7 @@ typedef struct {
 
 #define EIM_EICHD0_WORD3_B8_11DATA_MASK_MASK     (0xFFFFFFFFU)
 #define EIM_EICHD0_WORD3_B8_11DATA_MASK_SHIFT    (0U)
-/*! B8_11DATA_MASK - Data Mask Bytes 8-11 */
+/*! B8_11DATA_MASK - Data Mask Field */
 #define EIM_EICHD0_WORD3_B8_11DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD0_WORD3_B8_11DATA_MASK_SHIFT)) & EIM_EICHD0_WORD3_B8_11DATA_MASK_MASK)
 /*! @} */
 
@@ -633,7 +633,7 @@ typedef struct {
 
 #define EIM_EICHD0_WORD4_B12_15DATA_MASK_MASK    (0xFFFFFFFFU)
 #define EIM_EICHD0_WORD4_B12_15DATA_MASK_SHIFT   (0U)
-/*! B12_15DATA_MASK - Data Mask Bytes 12-15 */
+/*! B12_15DATA_MASK - Data Mask Field */
 #define EIM_EICHD0_WORD4_B12_15DATA_MASK(x)      (((uint32_t)(((uint32_t)(x)) << EIM_EICHD0_WORD4_B12_15DATA_MASK_SHIFT)) & EIM_EICHD0_WORD4_B12_15DATA_MASK_MASK)
 /*! @} */
 
@@ -651,7 +651,7 @@ typedef struct {
 
 #define EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (1, 4, 32), largest definition used */
 #define EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD1_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 4, 32), largest definition used */
 /*! @} */
 
@@ -660,7 +660,7 @@ typedef struct {
 
 #define EIM_EICHD1_WORD2_B4_7DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD1_WORD2_B4_7DATA_MASK_SHIFT     (0U)
-/*! B4_7DATA_MASK - Data Mask Bytes 4-7 */
+/*! B4_7DATA_MASK - Data Mask Field */
 #define EIM_EICHD1_WORD2_B4_7DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD2_B4_7DATA_MASK_SHIFT)) & EIM_EICHD1_WORD2_B4_7DATA_MASK_MASK)
 /*! @} */
 
@@ -669,7 +669,7 @@ typedef struct {
 
 #define EIM_EICHD1_WORD3_B8_11DATA_MASK_MASK     (0xFFFFFFFFU)
 #define EIM_EICHD1_WORD3_B8_11DATA_MASK_SHIFT    (0U)
-/*! B8_11DATA_MASK - Data Mask Bytes 8-11 */
+/*! B8_11DATA_MASK - Data Mask Field */
 #define EIM_EICHD1_WORD3_B8_11DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD3_B8_11DATA_MASK_SHIFT)) & EIM_EICHD1_WORD3_B8_11DATA_MASK_MASK)
 /*! @} */
 
@@ -678,7 +678,7 @@ typedef struct {
 
 #define EIM_EICHD1_WORD4_B12_15DATA_MASK_MASK    (0xFFFFFFFFU)
 #define EIM_EICHD1_WORD4_B12_15DATA_MASK_SHIFT   (0U)
-/*! B12_15DATA_MASK - Data Mask Bytes 12-15 */
+/*! B12_15DATA_MASK - Data Mask Field */
 #define EIM_EICHD1_WORD4_B12_15DATA_MASK(x)      (((uint32_t)(((uint32_t)(x)) << EIM_EICHD1_WORD4_B12_15DATA_MASK_SHIFT)) & EIM_EICHD1_WORD4_B12_15DATA_MASK_MASK)
 /*! @} */
 
@@ -696,7 +696,7 @@ typedef struct {
 
 #define EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK      (0xFFU)  /* Merged from fields with different position or width, of widths (1, 4, 8), largest definition used */
 #define EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD2_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD2_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 4, 8), largest definition used */
 /*! @} */
 
@@ -705,7 +705,7 @@ typedef struct {
 
 #define EIM_EICHD2_WORD2_B4_7DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD2_WORD2_B4_7DATA_MASK_SHIFT     (0U)
-/*! B4_7DATA_MASK - Data Mask Bytes 4-7 */
+/*! B4_7DATA_MASK - Data Mask Field */
 #define EIM_EICHD2_WORD2_B4_7DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD2_B4_7DATA_MASK_SHIFT)) & EIM_EICHD2_WORD2_B4_7DATA_MASK_MASK)
 /*! @} */
 
@@ -714,7 +714,7 @@ typedef struct {
 
 #define EIM_EICHD2_WORD3_B8_11DATA_MASK_MASK     (0xFFFFFFFFU)
 #define EIM_EICHD2_WORD3_B8_11DATA_MASK_SHIFT    (0U)
-/*! B8_11DATA_MASK - Data Mask Bytes 8-11 */
+/*! B8_11DATA_MASK - Data Mask Field */
 #define EIM_EICHD2_WORD3_B8_11DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD3_B8_11DATA_MASK_SHIFT)) & EIM_EICHD2_WORD3_B8_11DATA_MASK_MASK)
 /*! @} */
 
@@ -723,7 +723,7 @@ typedef struct {
 
 #define EIM_EICHD2_WORD4_B12_15DATA_MASK_MASK    (0xFFFFFFFFU)
 #define EIM_EICHD2_WORD4_B12_15DATA_MASK_SHIFT   (0U)
-/*! B12_15DATA_MASK - Data Mask Bytes 12-15 */
+/*! B12_15DATA_MASK - Data Mask Field */
 #define EIM_EICHD2_WORD4_B12_15DATA_MASK(x)      (((uint32_t)(((uint32_t)(x)) << EIM_EICHD2_WORD4_B12_15DATA_MASK_SHIFT)) & EIM_EICHD2_WORD4_B12_15DATA_MASK_MASK)
 /*! @} */
 
@@ -741,7 +741,7 @@ typedef struct {
 
 #define EIM_EICHD3_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (4, 32), largest definition used */
 #define EIM_EICHD3_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD3_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD3_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD3_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (4, 32), largest definition used */
 /*! @} */
 
@@ -750,7 +750,7 @@ typedef struct {
 
 #define EIM_EICHD3_WORD2_B4_7DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD3_WORD2_B4_7DATA_MASK_SHIFT     (0U)
-/*! B4_7DATA_MASK - Data Mask Bytes 4-7 */
+/*! B4_7DATA_MASK - Data Mask Field */
 #define EIM_EICHD3_WORD2_B4_7DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD3_WORD2_B4_7DATA_MASK_SHIFT)) & EIM_EICHD3_WORD2_B4_7DATA_MASK_MASK)
 /*! @} */
 
@@ -759,7 +759,7 @@ typedef struct {
 
 #define EIM_EICHD3_WORD3_B8_11DATA_MASK_MASK     (0xFFFFFFFFU)
 #define EIM_EICHD3_WORD3_B8_11DATA_MASK_SHIFT    (0U)
-/*! B8_11DATA_MASK - Data Mask Bytes 8-11 */
+/*! B8_11DATA_MASK - Data Mask Field */
 #define EIM_EICHD3_WORD3_B8_11DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD3_WORD3_B8_11DATA_MASK_SHIFT)) & EIM_EICHD3_WORD3_B8_11DATA_MASK_MASK)
 /*! @} */
 
@@ -768,7 +768,7 @@ typedef struct {
 
 #define EIM_EICHD3_WORD4_B12_15DATA_MASK_MASK    (0xFFFFFFFFU)
 #define EIM_EICHD3_WORD4_B12_15DATA_MASK_SHIFT   (0U)
-/*! B12_15DATA_MASK - Data Mask Bytes 12-15 */
+/*! B12_15DATA_MASK - Data Mask Field */
 #define EIM_EICHD3_WORD4_B12_15DATA_MASK(x)      (((uint32_t)(((uint32_t)(x)) << EIM_EICHD3_WORD4_B12_15DATA_MASK_SHIFT)) & EIM_EICHD3_WORD4_B12_15DATA_MASK_MASK)
 /*! @} */
 
@@ -786,7 +786,7 @@ typedef struct {
 
 #define EIM_EICHD4_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD4_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD4_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD4_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD4_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -795,7 +795,7 @@ typedef struct {
 
 #define EIM_EICHD4_WORD2_B4_7DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD4_WORD2_B4_7DATA_MASK_SHIFT     (0U)
-/*! B4_7DATA_MASK - Data Mask Bytes 4-7 */
+/*! B4_7DATA_MASK - Data Mask Field */
 #define EIM_EICHD4_WORD2_B4_7DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD4_WORD2_B4_7DATA_MASK_SHIFT)) & EIM_EICHD4_WORD2_B4_7DATA_MASK_MASK)
 /*! @} */
 
@@ -804,7 +804,7 @@ typedef struct {
 
 #define EIM_EICHD4_WORD3_B8_11DATA_MASK_MASK     (0xFFFFFFFFU)
 #define EIM_EICHD4_WORD3_B8_11DATA_MASK_SHIFT    (0U)
-/*! B8_11DATA_MASK - Data Mask Bytes 8-11 */
+/*! B8_11DATA_MASK - Data Mask Field */
 #define EIM_EICHD4_WORD3_B8_11DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD4_WORD3_B8_11DATA_MASK_SHIFT)) & EIM_EICHD4_WORD3_B8_11DATA_MASK_MASK)
 /*! @} */
 
@@ -813,7 +813,7 @@ typedef struct {
 
 #define EIM_EICHD4_WORD4_B12_15DATA_MASK_MASK    (0xFFFFFFFFU)
 #define EIM_EICHD4_WORD4_B12_15DATA_MASK_SHIFT   (0U)
-/*! B12_15DATA_MASK - Data Mask Bytes 12-15 */
+/*! B12_15DATA_MASK - Data Mask Field */
 #define EIM_EICHD4_WORD4_B12_15DATA_MASK(x)      (((uint32_t)(((uint32_t)(x)) << EIM_EICHD4_WORD4_B12_15DATA_MASK_SHIFT)) & EIM_EICHD4_WORD4_B12_15DATA_MASK_MASK)
 /*! @} */
 
@@ -831,7 +831,7 @@ typedef struct {
 
 #define EIM_EICHD5_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD5_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD5_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD5_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD5_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -849,7 +849,7 @@ typedef struct {
 
 #define EIM_EICHD6_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (8, 32), largest definition used */
 #define EIM_EICHD6_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD6_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD6_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD6_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (8, 32), largest definition used */
 /*! @} */
 
@@ -867,7 +867,7 @@ typedef struct {
 
 #define EIM_EICHD7_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD7_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD7_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD7_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD7_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -876,7 +876,7 @@ typedef struct {
 
 #define EIM_EICHD7_WORD2_B4_7DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD7_WORD2_B4_7DATA_MASK_SHIFT     (0U)
-/*! B4_7DATA_MASK - Data Mask Bytes 4-7 */
+/*! B4_7DATA_MASK - Data Mask Field */
 #define EIM_EICHD7_WORD2_B4_7DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD7_WORD2_B4_7DATA_MASK_SHIFT)) & EIM_EICHD7_WORD2_B4_7DATA_MASK_MASK)
 /*! @} */
 
@@ -894,7 +894,7 @@ typedef struct {
 
 #define EIM_EICHD8_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (1, 32), largest definition used */
 #define EIM_EICHD8_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD8_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD8_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD8_WORD1_B0_3DATA_MASK_MASK)  /* Merged from fields with different position or width, of widths (1, 32), largest definition used */
 /*! @} */
 
@@ -912,7 +912,7 @@ typedef struct {
 
 #define EIM_EICHD9_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)
 #define EIM_EICHD9_WORD1_B0_3DATA_MASK_SHIFT     (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD9_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x)) << EIM_EICHD9_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD9_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -930,7 +930,7 @@ typedef struct {
 
 #define EIM_EICHD10_WORD1_B0_3DATA_MASK_MASK     (0x1U)
 #define EIM_EICHD10_WORD1_B0_3DATA_MASK_SHIFT    (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD10_WORD1_B0_3DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD10_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD10_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -948,7 +948,7 @@ typedef struct {
 
 #define EIM_EICHD11_WORD1_B0_3DATA_MASK_MASK     (0x1U)
 #define EIM_EICHD11_WORD1_B0_3DATA_MASK_SHIFT    (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD11_WORD1_B0_3DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD11_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD11_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -966,7 +966,7 @@ typedef struct {
 
 #define EIM_EICHD12_WORD1_B0_3DATA_MASK_MASK     (0x1U)
 #define EIM_EICHD12_WORD1_B0_3DATA_MASK_SHIFT    (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define EIM_EICHD12_WORD1_B0_3DATA_MASK(x)       (((uint32_t)(((uint32_t)(x)) << EIM_EICHD12_WORD1_B0_3DATA_MASK_SHIFT)) & EIM_EICHD12_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 

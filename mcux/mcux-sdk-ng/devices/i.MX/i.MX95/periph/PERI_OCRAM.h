@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OCRAM
@@ -421,7 +421,7 @@ typedef struct {
        uint8_t RESERVED_2[8];
   __IO uint32_t RAMMAXA;                           /**< RAM Maximum-Value Address, offset: 0x40 */
        uint8_t RESERVED_3[60];
-  __IO uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
+       uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
 } OCRAM_Type;
 
 /* ----------------------------------------------------------------------------
@@ -659,20 +659,6 @@ typedef struct {
 #define OCRAM_RAMMAXA_MAXA_SHIFT                 (0U)
 /*! MAXA - Maximum Address */
 #define OCRAM_RAMMAXA_MAXA(x)                    (((uint32_t)(((uint32_t)(x)) << OCRAM_RAMMAXA_MAXA_SHIFT)) & OCRAM_RAMMAXA_MAXA_MASK)
-/*! @} */
-
-/*! @name RAMCR2 - RAM Control 2 */
-/*! @{ */
-
-#define OCRAM_RAMCR2_WBUF_MASK                   (0x6U)
-#define OCRAM_RAMCR2_WBUF_SHIFT                  (1U)
-/*! WBUF - Write Buffer Control
- *  0b00..Disable write buffer for all write transactions
- *  0b01..Enable write buffer for write transactions that come with a bus attribute that allows writes to be buffered and merged
- *  0b10..Enable write buffer for write transactions that are not exclusive writes
- *  0b11..Reserved
- */
-#define OCRAM_RAMCR2_WBUF(x)                     (((uint32_t)(((uint32_t)(x)) << OCRAM_RAMCR2_WBUF_SHIFT)) & OCRAM_RAMCR2_WBUF_MASK)
 /*! @} */
 
 

@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WAKEUP_TRDC_MGR_MEGA
@@ -475,107 +475,107 @@ typedef struct {
   __IO uint32_t TRDC_FDID;                         /**< TRDC Fault Domain ID, offset: 0x1FC */
   __I  uint32_t TRDC_DERRLOC[WAKEUP_TRDC_MGR_MEGA_DERRLOC_COUNT]; /**< TRDC Domain Error Location Register, array offset: 0x200, array step: 0x4 */
        uint8_t RESERVED_4[1472];
-  __IO uint32_t MDA_W0_0_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x800 */
+  __IO uint32_t MDA_W0_0_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x800 */
        uint8_t RESERVED_5[28];
-  __IO uint32_t MDA_W0_1_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x820 */
+  __IO uint32_t MDA_W0_1_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x820 */
        uint8_t RESERVED_6[28];
-  __IO uint32_t MDA_W0_2_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x840 */
+  __IO uint32_t MDA_W0_2_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x840 */
        uint8_t RESERVED_7[28];
-  __IO uint32_t MDA_W0_3_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x860 */
+  __IO uint32_t MDA_W0_3_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x860 */
        uint8_t RESERVED_8[28];
-  __IO uint32_t MDA_W0_4_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x880 */
+  __IO uint32_t MDA_W0_4_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x880 */
        uint8_t RESERVED_9[28];
-  __IO uint32_t MDA_W0_5_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x8A0 */
+  __IO uint32_t MDA_W0_5_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x8A0 */
        uint8_t RESERVED_10[28];
-  __IO uint32_t MDA_W0_6_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x8C0 */
+  __IO uint32_t MDA_W0_6_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x8C0 */
        uint8_t RESERVED_11[28];
-  __IO uint32_t MDA_W0_7_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x8E0 */
+  __IO uint32_t MDA_W0_7_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x8E0 */
        uint8_t RESERVED_12[28];
-  __IO uint32_t MDA_W0_8_DFMT0;                    /**< DAC Master Domain Assignment Register, offset: 0x900 */
+  __IO uint32_t MDA_W0_8_DFMT0;                    /**< DAC Initiator Domain Assignment Register, offset: 0x900 */
        uint8_t RESERVED_13[28];
-  __IO uint32_t MDA_W0_9_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x920 */
+  __IO uint32_t MDA_W0_9_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x920 */
        uint8_t RESERVED_14[28];
-  __IO uint32_t MDA_W0_10_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0x940 */
+  __IO uint32_t MDA_W0_10_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0x940 */
        uint8_t RESERVED_15[28];
-  __IO uint32_t MDA_W0_11_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0x960 */
+  __IO uint32_t MDA_W0_11_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0x960 */
        uint8_t RESERVED_16[28];
-  __IO uint32_t MDA_W0_12_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0x980 */
+  __IO uint32_t MDA_W0_12_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0x980 */
        uint8_t RESERVED_17[28];
-  __IO uint32_t MDA_W0_13_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0x9A0 */
+  __IO uint32_t MDA_W0_13_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0x9A0 */
        uint8_t RESERVED_18[28];
-  __IO uint32_t MDA_W0_14_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0x9C0 */
+  __IO uint32_t MDA_W0_14_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0x9C0 */
        uint8_t RESERVED_19[28];
-  __IO uint32_t MDA_W0_15_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0x9E0 */
+  __IO uint32_t MDA_W0_15_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0x9E0 */
        uint8_t RESERVED_20[28];
-  __IO uint32_t MDA_W0_16_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xA00 */
+  __IO uint32_t MDA_W0_16_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xA00 */
        uint8_t RESERVED_21[28];
-  __IO uint32_t MDA_W0_17_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xA20 */
+  __IO uint32_t MDA_W0_17_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xA20 */
        uint8_t RESERVED_22[28];
-  __IO uint32_t MDA_W0_18_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xA40 */
+  __IO uint32_t MDA_W0_18_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xA40 */
        uint8_t RESERVED_23[28];
-  __IO uint32_t MDA_W0_19_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xA60 */
+  __IO uint32_t MDA_W0_19_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xA60 */
        uint8_t RESERVED_24[28];
-  __IO uint32_t MDA_W0_20_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xA80 */
+  __IO uint32_t MDA_W0_20_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xA80 */
        uint8_t RESERVED_25[28];
-  __IO uint32_t MDA_W0_21_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xAA0 */
+  __IO uint32_t MDA_W0_21_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xAA0 */
        uint8_t RESERVED_26[28];
-  __IO uint32_t MDA_W0_22_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xAC0 */
+  __IO uint32_t MDA_W0_22_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xAC0 */
        uint8_t RESERVED_27[28];
-  __IO uint32_t MDA_W0_23_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xAE0 */
+  __IO uint32_t MDA_W0_23_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xAE0 */
        uint8_t RESERVED_28[28];
-  __IO uint32_t MDA_W0_24_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xB00 */
+  __IO uint32_t MDA_W0_24_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xB00 */
        uint8_t RESERVED_29[28];
-  __IO uint32_t MDA_W0_25_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xB20 */
+  __IO uint32_t MDA_W0_25_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xB20 */
        uint8_t RESERVED_30[28];
-  __IO uint32_t MDA_W0_26_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xB40 */
+  __IO uint32_t MDA_W0_26_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xB40 */
        uint8_t RESERVED_31[28];
-  __IO uint32_t MDA_W0_27_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xB60 */
+  __IO uint32_t MDA_W0_27_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xB60 */
        uint8_t RESERVED_32[28];
-  __IO uint32_t MDA_W0_28_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xB80 */
+  __IO uint32_t MDA_W0_28_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xB80 */
        uint8_t RESERVED_33[28];
-  __IO uint32_t MDA_W0_29_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xBA0 */
+  __IO uint32_t MDA_W0_29_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xBA0 */
        uint8_t RESERVED_34[28];
-  __IO uint32_t MDA_W0_30_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xBC0 */
+  __IO uint32_t MDA_W0_30_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xBC0 */
        uint8_t RESERVED_35[28];
-  __IO uint32_t MDA_W0_31_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xBE0 */
+  __IO uint32_t MDA_W0_31_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xBE0 */
        uint8_t RESERVED_36[28];
-  __IO uint32_t MDA_W0_32_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xC00 */
+  __IO uint32_t MDA_W0_32_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xC00 */
        uint8_t RESERVED_37[28];
-  __IO uint32_t MDA_W0_33_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xC20 */
+  __IO uint32_t MDA_W0_33_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xC20 */
        uint8_t RESERVED_38[28];
-  __IO uint32_t MDA_W0_34_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xC40 */
+  __IO uint32_t MDA_W0_34_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xC40 */
        uint8_t RESERVED_39[28];
-  __IO uint32_t MDA_W0_35_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xC60 */
+  __IO uint32_t MDA_W0_35_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xC60 */
        uint8_t RESERVED_40[28];
-  __IO uint32_t MDA_W0_36_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xC80 */
+  __IO uint32_t MDA_W0_36_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xC80 */
        uint8_t RESERVED_41[28];
-  __IO uint32_t MDA_W0_37_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xCA0 */
+  __IO uint32_t MDA_W0_37_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xCA0 */
        uint8_t RESERVED_42[28];
-  __IO uint32_t MDA_W0_38_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xCC0 */
+  __IO uint32_t MDA_W0_38_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xCC0 */
        uint8_t RESERVED_43[28];
-  __IO uint32_t MDA_W0_39_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xCE0 */
+  __IO uint32_t MDA_W0_39_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xCE0 */
        uint8_t RESERVED_44[28];
-  __IO uint32_t MDA_W0_40_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xD00 */
+  __IO uint32_t MDA_W0_40_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xD00 */
        uint8_t RESERVED_45[28];
-  __IO uint32_t MDA_W0_41_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xD20 */
+  __IO uint32_t MDA_W0_41_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xD20 */
        uint8_t RESERVED_46[28];
-  __IO uint32_t MDA_W0_42_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xD40 */
+  __IO uint32_t MDA_W0_42_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xD40 */
        uint8_t RESERVED_47[28];
-  __IO uint32_t MDA_W0_43_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xD60 */
+  __IO uint32_t MDA_W0_43_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xD60 */
        uint8_t RESERVED_48[28];
-  __IO uint32_t MDA_W0_44_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xD80 */
+  __IO uint32_t MDA_W0_44_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xD80 */
        uint8_t RESERVED_49[28];
-  __IO uint32_t MDA_W0_45_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xDA0 */
+  __IO uint32_t MDA_W0_45_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xDA0 */
        uint8_t RESERVED_50[28];
-  __IO uint32_t MDA_W0_46_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xDC0 */
+  __IO uint32_t MDA_W0_46_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xDC0 */
        uint8_t RESERVED_51[28];
-  __IO uint32_t MDA_W0_47_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xDE0 */
+  __IO uint32_t MDA_W0_47_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xDE0 */
        uint8_t RESERVED_52[28];
-  __IO uint32_t MDA_W0_48_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xE00 */
+  __IO uint32_t MDA_W0_48_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xE00 */
        uint8_t RESERVED_53[28];
-  __IO uint32_t MDA_W0_49_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xE20 */
+  __IO uint32_t MDA_W0_49_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xE20 */
        uint8_t RESERVED_54[28];
-  __IO uint32_t MDA_W0_50_DFMT1;                   /**< DAC Master Domain Assignment Register, offset: 0xE40 */
+  __IO uint32_t MDA_W0_50_DFMT1;                   /**< DAC Initiator Domain Assignment Register, offset: 0xE40 */
 } WAKEUP_TRDC_MGR_MEGA_Type;
 
 /* ----------------------------------------------------------------------------
@@ -638,7 +638,7 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_TRDC_HWCFG0_NMSTR_MASK (0xFF00U)
 #define WAKEUP_TRDC_MGR_MEGA_TRDC_HWCFG0_NMSTR_SHIFT (8U)
-/*! NMSTR - Number of bus masters */
+/*! NMSTR - Number of bus initiators */
 #define WAKEUP_TRDC_MGR_MEGA_TRDC_HWCFG0_NMSTR(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_TRDC_HWCFG0_NMSTR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_TRDC_HWCFG0_NMSTR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_TRDC_HWCFG0_NMBC_MASK (0xF0000U)
@@ -689,14 +689,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG0_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG0_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG0_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG0_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG0_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG0_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG0_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG0_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG0_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG0_NCM_MASK)
 /*! @} */
@@ -706,14 +706,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG1_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG1_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG1_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG1_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG1_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG1_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG1_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG1_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG1_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG1_NCM_MASK)
 /*! @} */
@@ -723,14 +723,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG2_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG2_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG2_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG2_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG2_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG2_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG2_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG2_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG2_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG2_NCM_MASK)
 /*! @} */
@@ -740,14 +740,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG3_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG3_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG3_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG3_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG3_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG3_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG3_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG3_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG3_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG3_NCM_MASK)
 /*! @} */
@@ -757,14 +757,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG4_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG4_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG4_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG4_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG4_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG4_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG4_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG4_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG4_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG4_NCM_MASK)
 /*! @} */
@@ -774,14 +774,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG5_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG5_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG5_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG5_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG5_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG5_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG5_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG5_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG5_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG5_NCM_MASK)
 /*! @} */
@@ -791,14 +791,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG6_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG6_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG6_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG6_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG6_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG6_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG6_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG6_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG6_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG6_NCM_MASK)
 /*! @} */
@@ -808,14 +808,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG7_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG7_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG7_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG7_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG7_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG7_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG7_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG7_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG7_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG7_NCM_MASK)
 /*! @} */
@@ -825,14 +825,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG8_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG8_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG8_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG8_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG8_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG8_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG8_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG8_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG8_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG8_NCM_MASK)
 /*! @} */
@@ -842,14 +842,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG9_NMDAR_MASK   (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG9_NMDAR_SHIFT  (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG9_NMDAR(x)     (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG9_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG9_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG9_NCM_MASK     (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG9_NCM_SHIFT    (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG9_NCM(x)       (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG9_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG9_NCM_MASK)
 /*! @} */
@@ -859,14 +859,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG10_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG10_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG10_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG10_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG10_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG10_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG10_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG10_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG10_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG10_NCM_MASK)
 /*! @} */
@@ -876,14 +876,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG11_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG11_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG11_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG11_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG11_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG11_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG11_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG11_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG11_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG11_NCM_MASK)
 /*! @} */
@@ -893,14 +893,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG12_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG12_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG12_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG12_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG12_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG12_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG12_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG12_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG12_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG12_NCM_MASK)
 /*! @} */
@@ -910,14 +910,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG13_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG13_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG13_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG13_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG13_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG13_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG13_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG13_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG13_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG13_NCM_MASK)
 /*! @} */
@@ -927,14 +927,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG14_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG14_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG14_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG14_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG14_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG14_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG14_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG14_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG14_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG14_NCM_MASK)
 /*! @} */
@@ -944,14 +944,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG15_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG15_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG15_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG15_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG15_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG15_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG15_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG15_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG15_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG15_NCM_MASK)
 /*! @} */
@@ -961,14 +961,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG16_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG16_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG16_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG16_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG16_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG16_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG16_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG16_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG16_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG16_NCM_MASK)
 /*! @} */
@@ -978,14 +978,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG17_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG17_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG17_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG17_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG17_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG17_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG17_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG17_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG17_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG17_NCM_MASK)
 /*! @} */
@@ -995,14 +995,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG18_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG18_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG18_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG18_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG18_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG18_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG18_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG18_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG18_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG18_NCM_MASK)
 /*! @} */
@@ -1012,14 +1012,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG19_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG19_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG19_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG19_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG19_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG19_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG19_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG19_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG19_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG19_NCM_MASK)
 /*! @} */
@@ -1029,14 +1029,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG20_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG20_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG20_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG20_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG20_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG20_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG20_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG20_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG20_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG20_NCM_MASK)
 /*! @} */
@@ -1046,14 +1046,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG21_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG21_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG21_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG21_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG21_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG21_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG21_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG21_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG21_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG21_NCM_MASK)
 /*! @} */
@@ -1063,14 +1063,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG22_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG22_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG22_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG22_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG22_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG22_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG22_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG22_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG22_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG22_NCM_MASK)
 /*! @} */
@@ -1080,14 +1080,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG23_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG23_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG23_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG23_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG23_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG23_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG23_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG23_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG23_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG23_NCM_MASK)
 /*! @} */
@@ -1097,14 +1097,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG24_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG24_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG24_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG24_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG24_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG24_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG24_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG24_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG24_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG24_NCM_MASK)
 /*! @} */
@@ -1114,14 +1114,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG25_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG25_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG25_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG25_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG25_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG25_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG25_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG25_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG25_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG25_NCM_MASK)
 /*! @} */
@@ -1131,14 +1131,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG26_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG26_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG26_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG26_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG26_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG26_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG26_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG26_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG26_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG26_NCM_MASK)
 /*! @} */
@@ -1148,14 +1148,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG27_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG27_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG27_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG27_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG27_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG27_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG27_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG27_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG27_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG27_NCM_MASK)
 /*! @} */
@@ -1165,14 +1165,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG28_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG28_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG28_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG28_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG28_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG28_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG28_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG28_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG28_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG28_NCM_MASK)
 /*! @} */
@@ -1182,14 +1182,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG29_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG29_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG29_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG29_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG29_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG29_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG29_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG29_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG29_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG29_NCM_MASK)
 /*! @} */
@@ -1199,14 +1199,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG30_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG30_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG30_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG30_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG30_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG30_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG30_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG30_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG30_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG30_NCM_MASK)
 /*! @} */
@@ -1216,14 +1216,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG31_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG31_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG31_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG31_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG31_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG31_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG31_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG31_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG31_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG31_NCM_MASK)
 /*! @} */
@@ -1233,14 +1233,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG32_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG32_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG32_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG32_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG32_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG32_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG32_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG32_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG32_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG32_NCM_MASK)
 /*! @} */
@@ -1250,14 +1250,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG33_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG33_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG33_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG33_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG33_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG33_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG33_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG33_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG33_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG33_NCM_MASK)
 /*! @} */
@@ -1267,14 +1267,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG34_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG34_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG34_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG34_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG34_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG34_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG34_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG34_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG34_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG34_NCM_MASK)
 /*! @} */
@@ -1284,14 +1284,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG35_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG35_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG35_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG35_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG35_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG35_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG35_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG35_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG35_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG35_NCM_MASK)
 /*! @} */
@@ -1301,14 +1301,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG36_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG36_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG36_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG36_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG36_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG36_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG36_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG36_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG36_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG36_NCM_MASK)
 /*! @} */
@@ -1318,14 +1318,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG37_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG37_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG37_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG37_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG37_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG37_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG37_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG37_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG37_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG37_NCM_MASK)
 /*! @} */
@@ -1335,14 +1335,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG38_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG38_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG38_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG38_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG38_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG38_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG38_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG38_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG38_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG38_NCM_MASK)
 /*! @} */
@@ -1352,14 +1352,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG39_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG39_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG39_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG39_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG39_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG39_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG39_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG39_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG39_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG39_NCM_MASK)
 /*! @} */
@@ -1369,14 +1369,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG40_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG40_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG40_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG40_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG40_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG40_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG40_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG40_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG40_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG40_NCM_MASK)
 /*! @} */
@@ -1386,14 +1386,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG41_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG41_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG41_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG41_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG41_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG41_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG41_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG41_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG41_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG41_NCM_MASK)
 /*! @} */
@@ -1403,14 +1403,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG42_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG42_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG42_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG42_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG42_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG42_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG42_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG42_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG42_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG42_NCM_MASK)
 /*! @} */
@@ -1420,14 +1420,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG43_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG43_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG43_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG43_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG43_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG43_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG43_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG43_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG43_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG43_NCM_MASK)
 /*! @} */
@@ -1437,14 +1437,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG44_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG44_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG44_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG44_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG44_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG44_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG44_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG44_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG44_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG44_NCM_MASK)
 /*! @} */
@@ -1454,14 +1454,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG45_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG45_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG45_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG45_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG45_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG45_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG45_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG45_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG45_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG45_NCM_MASK)
 /*! @} */
@@ -1471,14 +1471,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG46_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG46_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG46_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG46_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG46_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG46_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG46_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG46_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG46_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG46_NCM_MASK)
 /*! @} */
@@ -1488,14 +1488,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG47_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG47_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG47_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG47_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG47_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG47_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG47_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG47_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG47_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG47_NCM_MASK)
 /*! @} */
@@ -1505,14 +1505,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG48_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG48_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG48_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG48_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG48_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG48_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG48_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG48_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG48_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG48_NCM_MASK)
 /*! @} */
@@ -1522,14 +1522,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG49_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG49_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG49_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG49_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG49_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG49_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG49_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG49_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG49_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG49_NCM_MASK)
 /*! @} */
@@ -1539,14 +1539,14 @@ typedef struct {
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG50_NMDAR_MASK  (0xFU)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG50_NMDAR_SHIFT (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG50_NMDAR(x)    (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG50_NMDAR_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG50_NMDAR_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_DACFG50_NCM_MASK    (0x80U)
 #define WAKEUP_TRDC_MGR_MEGA_DACFG50_NCM_SHIFT   (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define WAKEUP_TRDC_MGR_MEGA_DACFG50_NCM(x)      (((uint8_t)(((uint8_t)(x)) << WAKEUP_TRDC_MGR_MEGA_DACFG50_NCM_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_DACFG50_NCM_MASK)
 /*! @} */
@@ -1720,7 +1720,7 @@ typedef struct {
 /* The count of WAKEUP_TRDC_MGR_MEGA_TRDC_DERRLOC */
 #define WAKEUP_TRDC_MGR_MEGA_TRDC_DERRLOC_COUNT  (16U)
 
-/*! @name MDA_W0_0_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_0_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_DID_MASK (0xFU)
@@ -1731,20 +1731,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_SA_MASK)
 
@@ -1794,7 +1794,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_0_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_1_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_1_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_DID_MASK (0xFU)
@@ -1805,20 +1805,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_SA_MASK)
 
@@ -1868,7 +1868,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_1_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_2_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_2_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_DID_MASK (0xFU)
@@ -1879,20 +1879,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_SA_MASK)
 
@@ -1942,7 +1942,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_2_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_3_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_3_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_DID_MASK (0xFU)
@@ -1953,20 +1953,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_SA_MASK)
 
@@ -2016,7 +2016,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_3_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_4_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_4_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_DID_MASK (0xFU)
@@ -2027,20 +2027,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_SA_MASK)
 
@@ -2090,7 +2090,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_4_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_5_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_5_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_DID_MASK (0xFU)
@@ -2101,20 +2101,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_SA_MASK)
 
@@ -2164,7 +2164,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_5_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_6_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_6_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_DID_MASK (0xFU)
@@ -2175,20 +2175,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_SA_MASK)
 
@@ -2238,7 +2238,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_6_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_7_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_7_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_DID_MASK (0xFU)
@@ -2249,20 +2249,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_SA_MASK)
 
@@ -2312,7 +2312,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_7_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_8_DFMT0 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_8_DFMT0 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_DID_MASK (0xFU)
@@ -2348,10 +2348,10 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_SA_MASK (0xC000U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_SA_SHIFT (14U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_SA_MASK)
 
@@ -2398,7 +2398,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_8_DFMT0_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_9_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_9_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_DID_MASK (0xFU)
@@ -2409,20 +2409,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_SA_MASK)
 
@@ -2472,7 +2472,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_9_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_10_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_10_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_DID_MASK (0xFU)
@@ -2483,20 +2483,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_SA_MASK)
 
@@ -2546,7 +2546,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_10_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_11_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_11_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_DID_MASK (0xFU)
@@ -2557,20 +2557,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_SA_MASK)
 
@@ -2620,7 +2620,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_11_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_12_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_12_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_DID_MASK (0xFU)
@@ -2631,20 +2631,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_SA_MASK)
 
@@ -2694,7 +2694,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_12_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_13_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_13_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_DID_MASK (0xFU)
@@ -2705,20 +2705,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_SA_MASK)
 
@@ -2768,7 +2768,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_13_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_14_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_14_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_DID_MASK (0xFU)
@@ -2779,20 +2779,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_SA_MASK)
 
@@ -2842,7 +2842,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_14_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_15_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_15_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_DID_MASK (0xFU)
@@ -2853,20 +2853,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_SA_MASK)
 
@@ -2916,7 +2916,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_15_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_16_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_16_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_DID_MASK (0xFU)
@@ -2927,20 +2927,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_SA_MASK)
 
@@ -2990,7 +2990,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_16_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_17_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_17_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_DID_MASK (0xFU)
@@ -3001,20 +3001,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_SA_MASK)
 
@@ -3064,7 +3064,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_17_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_18_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_18_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_DID_MASK (0xFU)
@@ -3075,20 +3075,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_SA_MASK)
 
@@ -3138,7 +3138,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_18_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_19_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_19_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_DID_MASK (0xFU)
@@ -3149,20 +3149,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_SA_MASK)
 
@@ -3212,7 +3212,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_19_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_20_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_20_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_DID_MASK (0xFU)
@@ -3223,20 +3223,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_SA_MASK)
 
@@ -3286,7 +3286,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_20_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_21_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_21_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_DID_MASK (0xFU)
@@ -3297,20 +3297,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_SA_MASK)
 
@@ -3360,7 +3360,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_21_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_22_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_22_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_DID_MASK (0xFU)
@@ -3371,20 +3371,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_SA_MASK)
 
@@ -3434,7 +3434,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_22_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_23_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_23_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_DID_MASK (0xFU)
@@ -3445,20 +3445,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_SA_MASK)
 
@@ -3508,7 +3508,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_23_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_24_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_24_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_DID_MASK (0xFU)
@@ -3519,20 +3519,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_SA_MASK)
 
@@ -3582,7 +3582,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_24_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_25_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_25_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_DID_MASK (0xFU)
@@ -3593,20 +3593,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_SA_MASK)
 
@@ -3656,7 +3656,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_25_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_26_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_26_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_DID_MASK (0xFU)
@@ -3667,20 +3667,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_SA_MASK)
 
@@ -3730,7 +3730,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_26_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_27_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_27_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_DID_MASK (0xFU)
@@ -3741,20 +3741,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_SA_MASK)
 
@@ -3804,7 +3804,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_27_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_28_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_28_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_DID_MASK (0xFU)
@@ -3815,20 +3815,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_SA_MASK)
 
@@ -3878,7 +3878,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_28_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_29_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_29_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_DID_MASK (0xFU)
@@ -3889,20 +3889,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_SA_MASK)
 
@@ -3952,7 +3952,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_29_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_30_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_30_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_DID_MASK (0xFU)
@@ -3963,20 +3963,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_SA_MASK)
 
@@ -4026,7 +4026,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_30_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_31_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_31_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_DID_MASK (0xFU)
@@ -4037,20 +4037,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_SA_MASK)
 
@@ -4100,7 +4100,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_31_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_32_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_32_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_DID_MASK (0xFU)
@@ -4111,20 +4111,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_SA_MASK)
 
@@ -4174,7 +4174,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_32_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_33_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_33_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_DID_MASK (0xFU)
@@ -4185,20 +4185,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_SA_MASK)
 
@@ -4248,7 +4248,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_33_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_34_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_34_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_DID_MASK (0xFU)
@@ -4259,20 +4259,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_SA_MASK)
 
@@ -4322,7 +4322,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_34_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_35_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_35_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_DID_MASK (0xFU)
@@ -4333,20 +4333,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_SA_MASK)
 
@@ -4396,7 +4396,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_35_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_36_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_36_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_DID_MASK (0xFU)
@@ -4407,20 +4407,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_SA_MASK)
 
@@ -4470,7 +4470,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_36_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_37_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_37_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_DID_MASK (0xFU)
@@ -4481,20 +4481,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_SA_MASK)
 
@@ -4544,7 +4544,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_37_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_38_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_38_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_DID_MASK (0xFU)
@@ -4555,20 +4555,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_SA_MASK)
 
@@ -4618,7 +4618,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_38_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_39_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_39_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_DID_MASK (0xFU)
@@ -4629,20 +4629,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_SA_MASK)
 
@@ -4692,7 +4692,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_39_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_40_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_40_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_DID_MASK (0xFU)
@@ -4703,20 +4703,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_SA_MASK)
 
@@ -4766,7 +4766,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_40_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_41_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_41_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_DID_MASK (0xFU)
@@ -4777,20 +4777,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_SA_MASK)
 
@@ -4840,7 +4840,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_41_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_42_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_42_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_DID_MASK (0xFU)
@@ -4851,20 +4851,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_SA_MASK)
 
@@ -4914,7 +4914,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_42_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_43_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_43_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_DID_MASK (0xFU)
@@ -4925,20 +4925,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_SA_MASK)
 
@@ -4988,7 +4988,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_43_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_44_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_44_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_DID_MASK (0xFU)
@@ -4999,20 +4999,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_SA_MASK)
 
@@ -5062,7 +5062,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_44_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_45_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_45_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_DID_MASK (0xFU)
@@ -5073,20 +5073,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_SA_MASK)
 
@@ -5136,7 +5136,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_45_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_46_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_46_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_DID_MASK (0xFU)
@@ -5147,20 +5147,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_SA_MASK)
 
@@ -5210,7 +5210,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_46_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_47_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_47_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_DID_MASK (0xFU)
@@ -5221,20 +5221,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_SA_MASK)
 
@@ -5284,7 +5284,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_47_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_48_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_48_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_DID_MASK (0xFU)
@@ -5295,20 +5295,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_SA_MASK)
 
@@ -5358,7 +5358,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_48_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_49_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_49_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_DID_MASK (0xFU)
@@ -5369,20 +5369,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_SA_MASK)
 
@@ -5432,7 +5432,7 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_VLD(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_VLD_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_49_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_50_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_50_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_DID_MASK (0xFU)
@@ -5443,20 +5443,20 @@ typedef struct {
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_PA_MASK (0x30U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_PA_SHIFT (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_PA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_PA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_PA_MASK)
 
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_SA_MASK (0xC0U)
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_SA_SHIFT (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_SA(x) (((uint32_t)(((uint32_t)(x)) << WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_SA_SHIFT)) & WAKEUP_TRDC_MGR_MEGA_MDA_W0_50_DFMT1_SA_MASK)
 

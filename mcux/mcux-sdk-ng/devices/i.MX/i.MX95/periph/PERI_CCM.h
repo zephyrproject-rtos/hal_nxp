@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
@@ -799,9 +799,9 @@ typedef struct {
 
 #define CCM_GPR_SHARED2_DRAM_PLL_BYPASS_MASK     (0x1U)
 #define CCM_GPR_SHARED2_DRAM_PLL_BYPASS_SHIFT    (0U)
-/*! DRAM_PLL_BYPASS - Clock select signal between ccm clock root and DRAM PLL clock
- *  0b0..The clock output of DRAM PLL is selected.
- *  0b1..Dram_alt_clk_root is selected.
+/*! DRAM_PLL_BYPASS - Mode select signal between DDRPHY PLL Bypass Mode and DRAM Normal Mode
+ *  0b0..The DRAM Normal Mode with high data rate is selected.
+ *  0b1..The DDRPHY PLL Bypass Mode is selected.
  */
 #define CCM_GPR_SHARED2_DRAM_PLL_BYPASS(x)       (((uint32_t)(((uint32_t)(x)) << CCM_GPR_SHARED2_DRAM_PLL_BYPASS_SHIFT)) & CCM_GPR_SHARED2_DRAM_PLL_BYPASS_MASK)
 

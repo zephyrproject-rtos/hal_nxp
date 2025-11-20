@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_IERB
@@ -783,20 +783,20 @@ typedef struct {
 #define NETC_IERB_SBCR_WBS_MASK                  (0x3U)
 #define NETC_IERB_SBCR_WBS_SHIFT                 (0U)
 /*! WBS - System Bus Maximum Write Burst Size.
- *  0b00..16B; AWLEN = 1 (2 data transfers)
- *  0b01..32B; AWLEN = 3 (4 data transfers)
- *  0b10..64B; AWLEN = 7 (8 data transfers)
- *  0b11..128B; AWLEN = 15 (16 data transfers)
+ *  0b00..AWLEN = 1 (2 data transfers)
+ *  0b01..AWLEN = 3 (4 data transfers)
+ *  0b10..AWLEN = 7 (8 data transfers)
+ *  0b11..AWLEN = 15 (16 data transfers)
  */
 #define NETC_IERB_SBCR_WBS(x)                    (((uint32_t)(((uint32_t)(x)) << NETC_IERB_SBCR_WBS_SHIFT)) & NETC_IERB_SBCR_WBS_MASK)
 
 #define NETC_IERB_SBCR_RBS_MASK                  (0xCU)
 #define NETC_IERB_SBCR_RBS_SHIFT                 (2U)
 /*! RBS - System Bus Maximum Read Burst Size.
- *  0b00..16B; ARLEN = 1 (2 data transfers)
- *  0b01..32B; ARLEN = 3 (4 data transfers)
- *  0b10..64B; ARLEN = 7 (8 data transfers)
- *  0b11..128B; ARLEN = 15 (16 data transfers)
+ *  0b00..ARLEN = 1 (2 data transfers)
+ *  0b01..ARLEN = 3 (4 data transfers)
+ *  0b10..ARLEN = 7 (8 data transfers)
+ *  0b11..ARLEN = 15 (16 data transfers)
  */
 #define NETC_IERB_SBCR_RBS(x)                    (((uint32_t)(((uint32_t)(x)) << NETC_IERB_SBCR_RBS_SHIFT)) & NETC_IERB_SBCR_RBS_MASK)
 /*! @} */

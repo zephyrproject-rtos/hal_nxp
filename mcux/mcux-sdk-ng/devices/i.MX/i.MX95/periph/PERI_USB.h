@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB
@@ -452,7 +452,7 @@ typedef struct {
   __I  uint32_t CONFIGFLAG;                        /**< Configure Flag, offset: 0x180 */
   __IO uint32_t PORTSC1;                           /**< Port Status and Control, offset: 0x184 */
        uint8_t RESERVED_9[28];
-  __IO uint32_t OTGSC;                             /**< On-The-Go Status & Control, offset: 0x1A4 */
+  __IO uint32_t OTGSC;                             /**< On-The-Go Status and Control, offset: 0x1A4 */
   __IO uint32_t USBMODE;                           /**< USB Device Mode, offset: 0x1A8 */
   __IO uint32_t ENDPTSETUPSTAT;                    /**< Endpoint Setup Status, offset: 0x1AC */
   __IO uint32_t ENDPTPRIME;                        /**< Endpoint Prime, offset: 0x1B0 */
@@ -1557,7 +1557,7 @@ typedef struct {
 #define USB_PORTSC1_PTS_1(x)                     (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PTS_1_SHIFT)) & USB_PORTSC1_PTS_1_MASK)
 /*! @} */
 
-/*! @name OTGSC - On-The-Go Status & Control */
+/*! @name OTGSC - On-The-Go Status and Control */
 /*! @{ */
 
 #define USB_OTGSC_VD_MASK                        (0x1U)

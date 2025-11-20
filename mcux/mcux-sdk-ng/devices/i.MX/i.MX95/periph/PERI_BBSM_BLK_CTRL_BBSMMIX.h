@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BBSM_BLK_CTRL_BBSMMIX
@@ -430,25 +430,25 @@ typedef struct {
 
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_fast_MASK (0x2000U)
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_fast_SHIFT (13U)
-/*! tst_xtal_fast - Indicates fast external XTAL crystal
- *  0b0..Fast external XTAL crystal is disabled
- *  0b1..Fast external XTAL crystal is enabled
+/*! tst_xtal_fast - Indicates that XTAL clock frequency is higher than 32 kHz (out of range)
+ *  0b0..XTAL clock is not too fast
+ *  0b1..XTAL clock is too fast
  */
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_fast(x) (((uint32_t)(((uint32_t)(x)) << BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_fast_SHIFT)) & BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_fast_MASK)
 
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_slow_MASK (0x4000U)
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_slow_SHIFT (14U)
-/*! tst_xtal_slow - Indicates slow external XTAL crystal
- *  0b0..Slow external XTAL crystal is disabled
- *  0b1..Slow external XTAL crystal is enabled
+/*! tst_xtal_slow - Indicates that XTAL clock frequency is lower than 32 kHz (out of range)
+ *  0b0..XTAL clock is not too slow
+ *  0b1..XTAL clock is too slow
  */
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_slow(x) (((uint32_t)(((uint32_t)(x)) << BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_slow_SHIFT)) & BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_tst_xtal_slow_MASK)
 
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_xtal_ok_MASK (0x8000U)
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_xtal_ok_SHIFT (15U)
-/*! xtal_ok - Indicates XTAL clock is in frequency range and source of 32 kHz clock
- *  0b0..XTAL clock is not in frequency range and source of 32 KHz clock
- *  0b1..XTAL clock is in frequency range and source of 32 KHz clock
+/*! xtal_ok - Indicates XTAL clock is in frequency range and is the source of 32 kHz clock
+ *  0b0..XTAL clock is not in frequency range and is not source of 32 kHz clock
+ *  0b1..XTAL clock is in frequency range and is source of 32 kHz clock
  */
 #define BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_xtal_ok(x) (((uint32_t)(((uint32_t)(x)) << BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_xtal_ok_SHIFT)) & BBSM_BLK_CTRL_BBSMMIX_SNVS_CLKRST_CTRL_xtal_ok_MASK)
 /*! @} */
