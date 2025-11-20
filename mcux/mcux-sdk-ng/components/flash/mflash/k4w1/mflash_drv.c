@@ -111,6 +111,31 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
     return ret;
 }
 
+int32_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data)
+{
+    if ((phrase_addr % (uint32_t)MFLASH_PHRASE_SIZE) != 0UL)
+    {
+        return kStatus_InvalidArgument;
+    }
+    uint32_t primask = 0;
+    int32_t ret      = kStatus_Fail;
+
+    primask = DisableGlobalIRQ();
+
+    flash_cache_speculation_control(true, FLASH);
+
+    ret = FLASH_Program(&s_flashDriver, FLASH, phrase_addr, (uint8_t *)data, MFLASH_PHRASE_SIZE);
+
+    /* Clear code bus cache */
+    MCM_ClearCodeBusCache(MCM);
+
+    flash_cache_speculation_control(false, FLASH);
+
+    EnableGlobalIRQ(primask);
+
+    return ret;
+}
+
 /* API - Read data */
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
