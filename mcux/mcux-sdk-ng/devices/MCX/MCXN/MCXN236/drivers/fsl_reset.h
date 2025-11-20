@@ -36,6 +36,8 @@
  */
 typedef enum _SYSCON_RSTn
 {
+    kRST_None, /*!< None RESET gate. */
+
     kFMU_RST_SHIFT_RSTn     = 0 | 9U,  /**< Flash management unit reset control */
     kMUX_RST_SHIFT_RSTn     = 0 | 12U, /**< Input mux reset control */
     kPORT0_RST_SHIFT_RSTn   = 0 | 13U, /**< PORT0 reset control */

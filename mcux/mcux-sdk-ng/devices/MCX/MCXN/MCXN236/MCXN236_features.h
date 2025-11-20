@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b250814
+**     Build:               b251011
 **
 **     Abstract:
 **         Chip specific module features.
@@ -469,6 +469,25 @@
 /* @brief Has DOZEN bit(CTRL[DOZEN]) */
 #define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (1)
 
+/* FMU module features */
+
+/* @brief P-Flash block0 start address. */
+#define FSL_FEATURE_FLASH_PFLASH_START_ADDRESS (0x00000000U)
+/* @brief P-Flash block count. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_COUNT (2)
+/* @brief P-Flash block0 size. */
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (0x100000U)
+/* @brief flash BLOCK0 IFR0 start address. */
+#define FSL_FEATURE_FLASH_IFR0_START_ADDRESS (0x01000000u)
+/* @brief flash block IFR0 size. */
+#define FSL_FEATURE_FLASH_IFR0_SIZE (0x8000U)
+/* @brief P-Flash sector size. */
+#define FSL_FEATURE_FLASH_PFLASH_SECTOR_SIZE (0x2000U)
+/* @brief P-Flash phrase size. */
+#define FSL_FEATURE_FLASH_PFLASH_PHRASE_SIZE (16)
+/* @brief P-Flash page size. */
+#define FSL_FEATURE_FLASH_PFLASH_PAGE_SIZE (128)
+
 /* GPIO module features */
 
 /* @brief Has GPIO attribute checker register (GACR). */
@@ -529,6 +548,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (8)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (1)
 
 /* LPSPI module features */
 
@@ -542,6 +563,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (1)
 
 /* LPTMR module features */
 

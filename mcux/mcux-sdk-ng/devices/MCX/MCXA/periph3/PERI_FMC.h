@@ -10,7 +10,7 @@
 **                          MCXA344VLL
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250806
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FMC
@@ -94,16 +94,6 @@
 typedef struct {
        uint8_t RESERVED_0[32];
   __IO uint32_t REMAP;                             /**< Data Remap, offset: 0x20 */
-       uint8_t RESERVED_1[988];
-  __IO uint32_t FCCR;                              /**< Flash Cache Control Register, offset: 0x400 */
-  __IO uint32_t FCAR;                              /**< Flash Cache Access Register, offset: 0x404 */
-       uint8_t RESERVED_2[4];
-  __IO uint32_t FCTG;                              /**< Flash Cache Tag, offset: 0x40C */
-       uint8_t RESERVED_3[16];
-  __IO uint32_t FCLN0;                             /**< Flash Cache Line Num0, offset: 0x420 */
-  __IO uint32_t FCLN1;                             /**< Flash Cache Line Num1, offset: 0x424 */
-  __IO uint32_t FCLN2;                             /**< Flash Cache Line Num2, offset: 0x428 */
-  __IO uint32_t FCLN3;                             /**< Flash Cache Line Num3, offset: 0x42C */
 } FMC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -135,95 +125,6 @@ typedef struct {
 #define FMC_REMAP_LIMDP_SHIFT                    (24U)
 /*! LIMDP - LIMDP Remapping Address */
 #define FMC_REMAP_LIMDP(x)                       (((uint32_t)(((uint32_t)(x)) << FMC_REMAP_LIMDP_SHIFT)) & FMC_REMAP_LIMDP_MASK)
-/*! @} */
-
-/*! @name FCCR - Flash Cache Control Register */
-/*! @{ */
-
-#define FMC_FCCR_WAY_LOCK_MASK                   (0xFU)
-#define FMC_FCCR_WAY_LOCK_SHIFT                  (0U)
-/*! WAY_LOCK - Cache Way Lock */
-#define FMC_FCCR_WAY_LOCK(x)                     (((uint32_t)(((uint32_t)(x)) << FMC_FCCR_WAY_LOCK_SHIFT)) & FMC_FCCR_WAY_LOCK_MASK)
-
-#define FMC_FCCR_LOCK_MASK                       (0x80000000U)
-#define FMC_FCCR_LOCK_SHIFT                      (31U)
-/*! LOCK - Lock Flash Cache Control
- *  0b0..allows access and use of flash cache program model.
- *  0b1..blocks all flash cache peripheral accesses and Lock program model till next reset - the flash cache will
- *       continue to operate as configured before being locked, but no changes to the flash cache control are
- *       possible until the next reset and all reads of flash cache program model registers return zeros. FCCR: Support
- *       read, Write invalid. FCAR/FCTG/FCLN0/FCLN1/FCLN2/FCLN3: Read returns zeros, Write invalid.
- */
-#define FMC_FCCR_LOCK(x)                         (((uint32_t)(((uint32_t)(x)) << FMC_FCCR_LOCK_SHIFT)) & FMC_FCCR_LOCK_MASK)
-/*! @} */
-
-/*! @name FCAR - Flash Cache Access Register */
-/*! @{ */
-
-#define FMC_FCAR_CACHES_WAY_NUM_MASK             (0x3U)
-#define FMC_FCAR_CACHES_WAY_NUM_SHIFT            (0U)
-/*! CACHES_WAY_NUM - Flash Cache Way Number */
-#define FMC_FCAR_CACHES_WAY_NUM(x)               (((uint32_t)(((uint32_t)(x)) << FMC_FCAR_CACHES_WAY_NUM_SHIFT)) & FMC_FCAR_CACHES_WAY_NUM_MASK)
-
-#define FMC_FCAR_CACHES_SET_NUM_MASK             (0x10U)
-#define FMC_FCAR_CACHES_SET_NUM_SHIFT            (4U)
-/*! CACHES_SET_NUM - Flash Cache Set Number */
-#define FMC_FCAR_CACHES_SET_NUM(x)               (((uint32_t)(((uint32_t)(x)) << FMC_FCAR_CACHES_SET_NUM_SHIFT)) & FMC_FCAR_CACHES_SET_NUM_MASK)
-
-#define FMC_FCAR_TYPE_MASK                       (0xC0000000U)
-#define FMC_FCAR_TYPE_SHIFT                      (30U)
-/*! TYPE - Operation of cache type */
-#define FMC_FCAR_TYPE(x)                         (((uint32_t)(((uint32_t)(x)) << FMC_FCAR_TYPE_SHIFT)) & FMC_FCAR_TYPE_MASK)
-/*! @} */
-
-/*! @name FCTG - Flash Cache Tag */
-/*! @{ */
-
-#define FMC_FCTG_VALID_MASK                      (0x1U)
-#define FMC_FCTG_VALID_SHIFT                     (0U)
-/*! VALID - Flash Cache Tag Valid Bit */
-#define FMC_FCTG_VALID(x)                        (((uint32_t)(((uint32_t)(x)) << FMC_FCTG_VALID_SHIFT)) & FMC_FCTG_VALID_MASK)
-
-#define FMC_FCTG_ADDESS_MASK                     (0xFFFFC0U)
-#define FMC_FCTG_ADDESS_SHIFT                    (6U)
-/*! ADDESS - Flash Cache Tag Address Bit[23:6] */
-#define FMC_FCTG_ADDESS(x)                       (((uint32_t)(((uint32_t)(x)) << FMC_FCTG_ADDESS_SHIFT)) & FMC_FCTG_ADDESS_MASK)
-/*! @} */
-
-/*! @name FCLN0 - Flash Cache Line Num0 */
-/*! @{ */
-
-#define FMC_FCLN0_DATAWxSyLM_MASK                (0xFFFFFFFFU)
-#define FMC_FCLN0_DATAWxSyLM_SHIFT               (0U)
-/*! DATAWxSyLM - The lowermost word (bits [31:0]) of Flash Cache Line Data */
-#define FMC_FCLN0_DATAWxSyLM(x)                  (((uint32_t)(((uint32_t)(x)) << FMC_FCLN0_DATAWxSyLM_SHIFT)) & FMC_FCLN0_DATAWxSyLM_MASK)
-/*! @} */
-
-/*! @name FCLN1 - Flash Cache Line Num1 */
-/*! @{ */
-
-#define FMC_FCLN1_DATAWxSyML_MASK                (0xFFFFFFFFU)
-#define FMC_FCLN1_DATAWxSyML_SHIFT               (0U)
-/*! DATAWxSyML - The mid-lower word (bits [63:32]) of Flash Cache Line Data */
-#define FMC_FCLN1_DATAWxSyML(x)                  (((uint32_t)(((uint32_t)(x)) << FMC_FCLN1_DATAWxSyML_SHIFT)) & FMC_FCLN1_DATAWxSyML_MASK)
-/*! @} */
-
-/*! @name FCLN2 - Flash Cache Line Num2 */
-/*! @{ */
-
-#define FMC_FCLN2_DATAWxSyMU_MASK                (0xFFFFFFFFU)
-#define FMC_FCLN2_DATAWxSyMU_SHIFT               (0U)
-/*! DATAWxSyMU - The mid-upper word (bits [95:64]) of Flash Cache Line Data */
-#define FMC_FCLN2_DATAWxSyMU(x)                  (((uint32_t)(((uint32_t)(x)) << FMC_FCLN2_DATAWxSyMU_SHIFT)) & FMC_FCLN2_DATAWxSyMU_MASK)
-/*! @} */
-
-/*! @name FCLN3 - Flash Cache Line Num3 */
-/*! @{ */
-
-#define FMC_FCLN3_DATAWxSyUM_MASK                (0xFFFFFFFFU)
-#define FMC_FCLN3_DATAWxSyUM_SHIFT               (0U)
-/*! DATAWxSyUM - The uppermost word (bits [127:96]) of Flash Cache Line Data */
-#define FMC_FCLN3_DATAWxSyUM(x)                  (((uint32_t)(((uint32_t)(x)) << FMC_FCLN3_DATAWxSyUM_SHIFT)) & FMC_FCLN3_DATAWxSyUM_MASK)
 /*! @} */
 
 

@@ -69,9 +69,9 @@ typedef struct ADVC_SAFE_CONFIG_s
 /**
  * @brief defines optimal_mode_parameters
  */
-typedef struct ADVC_OPTIMAL_CONFIG_s
+typedef struct ADVC_OPTIMAL_CONFIG
 {
-    bool is_sw_mode; //
+    bool is_sw_mode;
     bool should_write_to_dc2dc;
     bool should_use_spare_function;
     bool is_external_temperature;
@@ -119,18 +119,51 @@ static bool ADVC_CheckAONApbClockEnabled(void)
 }
 
 /*!
+ * Check whether systick is enabled, if not enable it.
+ */
+static bool ADVC_CheckSystickEnabled(void)
+{
+  bool enabled = ((SysTick->CTRL & SysTick_CTRL_ENABLE_Msk) != 0UL) ? true : false;
+  
+  if (enabled == false)
+  {
+      SysTick->LOAD = 0xFFFFFFL;
+      SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
+  }
+  
+  return enabled;
+}
+
+/*!
+ * @brief Restore configuration of systick.
+ * 
+ * @param enabled Indicated if systick is pre-enabled.
+ */
+static void ADVC_RestoreSystickConfig(bool enabled)
+{
+   if (enabled == false)
+   {
+      SysTick->LOAD = 0U;
+      SysTick->CTRL &= ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
+   }
+}
+
+/*!
  * brief Load advc configuration table and initialize ADVC.
  */
 #if __CORTEX_M == 33U
 void ADVC_Init(void)
 {
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
+
     ADVC_DRIVER_init(FSL_FEATURE_ADVC_CFG_TABLE_ADDR);
 
     if (isAhbClockEnabled)
     {
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
     }
+    ADVC_RestoreSystickConfig(isSystickEnabled);
     g_advcState = kADVC_Initalized;
 }
 #endif /* __CORTEX_M == 33U */
@@ -179,6 +212,8 @@ advc_result_t ADVC_Enable(advc_mode_t mode, uint8_t *vddCode)
         /* To avoid violation of MISRA rule. */
     }
 
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+
     if (vddCode == NULL)
     {
         uint8_t tmp8 = 0U;
@@ -189,6 +224,7 @@ advc_result_t ADVC_Enable(advc_mode_t mode, uint8_t *vddCode)
     {
         status = ADVC_DRIVER_Enable((ADVC_MODE_t)mode, &advcEnableConfig, vddCode);
     }
+    ADVC_RestoreSystickConfig(isSystickEnabled);
 
     if (isAhbClockEnabled)
     {
@@ -208,9 +244,11 @@ bool ADVC_IsEnabled(void)
 {
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
     bool ret               = false;
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
 
     ret = ADVC_DRIVER_is_ADVC_enabled();
 
+    ADVC_RestoreSystickConfig(isSystickEnabled);
     if (isAhbClockEnabled)
     {
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
@@ -224,9 +262,11 @@ bool ADVC_IsEnabled(void)
 void ADVC_Disable(void)
 {
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
 
     ADVC_DRIVER_Disable();
 
+    ADVC_RestoreSystickConfig(isSystickEnabled);
     if (isAhbClockEnabled)
     {
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
@@ -243,9 +283,11 @@ bool ADVC_IsDisabled(void)
 {
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
     bool ret               = false;
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
 
     ret = !(ADVC_DRIVER_is_ADVC_enabled());
 
+    ADVC_RestoreSystickConfig(isSystickEnabled);
     if (isAhbClockEnabled)
     {
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;
@@ -268,12 +310,16 @@ advc_result_t ADVC_PreVoltageChangeRequest(uint32_t aonCpuFreq)
     ADVC_STATUS_t status;
 
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
+
     status                 = ADVC_DRIVER_convert_frequency_to_code(aonCpuFreq, &advcFreqCode);
 
     if (status == ADVC_STATUS_OK)
     {
         status = ADVC_DRIVER_pre_voltage_change_request(advcFreqCode);
     }
+
+    ADVC_RestoreSystickConfig(isSystickEnabled);
 
     if (isAhbClockEnabled)
     {
@@ -291,9 +337,11 @@ advc_result_t ADVC_PostVoltageChangeRequest(void)
 {
     ADVC_STATUS_t status;
     bool isAhbClockEnabled = ADVC_CheckAONApbClockEnabled();
+    bool isSystickEnabled = ADVC_CheckSystickEnabled();
 
     status = ADVC_DRIVER_post_voltage_change_request();
 
+    ADVC_RestoreSystickConfig(isSystickEnabled);
     if (isAhbClockEnabled)
     {
         AON__CGU->PER_CLK_EN |= CGU_PER_CLK_EN_APB_CLK_MASK;

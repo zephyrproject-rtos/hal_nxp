@@ -29,9 +29,8 @@
 
 /* BIAS configurations */
 #define PMC_PDSLEEPCFG0_PDEN_BIAS_0_66     (0 << PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT)
-#define PMC_PDSLEEPCFG0_PDEN_BIAS_0_63     (1 << PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT)
-#define PMC_PDSLEEPCFG0_PDEN_BIAS_DISABLED (2 << PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT)
-
+#define PMC_PDSLEEPCFG0_PDEN_BIAS_0_63     (1u << PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT)
+#define PMC_PDSLEEPCFG0_PDEN_BIAS_DISABLED (2u << PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT)
 /* Configuration values to select desired power mode in PMC->CTRL  */
 #define LOWPOWER_CTRL_LPMODE_ACTIVE        0
 #define LOWPOWER_CTRL_LPMODE_DEEPSLEEP     1
@@ -86,15 +85,13 @@
  * AOREG1 defines that match with bootloader
  */
 #define AOREG1_DCDC_MODE_XR_SM_SS_SHIFT (24)
-#define AOREG1_DCDC_MODE_XR_SM_SS_MASK  (1 << AOREG1_DCDC_MODE_XR_SM_SS_SHIFT)
+#define AOREG1_DCDC_MODE_XR_SM_SS_MASK  (1u << AOREG1_DCDC_MODE_XR_SM_SS_SHIFT)
 #define AOREG1_DCDC_MODE_XR_SM_DS_SHIFT (25)
-#define AOREG1_DCDC_MODE_XR_SM_DS_MASK  (1 << AOREG1_DCDC_MODE_XR_SM_DS_SHIFT)
-
+#define AOREG1_DCDC_MODE_XR_SM_DS_MASK  (1u << AOREG1_DCDC_MODE_XR_SM_DS_SHIFT)
 #define AOREG1_BOD1_SHIFT (26)
-#define AOREG1_BOD1_MASK  (1 << AOREG1_BOD1_SHIFT)
+#define AOREG1_BOD1_MASK  (1u << AOREG1_BOD1_SHIFT)
 #define AOREG1_BOD2_SHIFT (27)
-#define AOREG1_BOD2_MASK  (1 << AOREG1_BOD2_SHIFT)
-
+#define AOREG1_BOD2_MASK  (1u << AOREG1_BOD2_SHIFT)
 /* BLE state related defines */
 #define PMC_BLE_STATE                  ((PMC->STATUS & PMC_STATUS_FSMBLESTATE_MASK) >> PMC_STATUS_FSMBLESTATE_SHIFT)
 #define PMC_BLE_STATE_RADIO_ACTIVE     (6u)
@@ -203,7 +200,6 @@ typedef enum dcdc_hw_mode_s
 typedef status_t(*DcdcExcludeFunction_t)(uint32_t *excludeFromPd);
 
 static void DelayUs(uint32_t delay);
-static void DelayMs(uint32_t delay);
 static status_t DcdcBypass(uint32_t *excludeFromPd);
 static status_t DcdcOn(uint32_t *excludeFromPd);
 static status_t DcdcOff(uint32_t *excludeFromPd);
@@ -212,7 +208,7 @@ static status_t DcdcError(uint32_t *excludeFromPd);
 /*******************************************************************************
  * Global variables
  ******************************************************************************/
-static uint32_t s_xtalStartupTime = DEFAULT_XTAL_STARTUP_DELAY_MS;
+static uint32_t s_xtalStartupTimeMs = DEFAULT_XTAL_STARTUP_DELAY_MS;
 
 /* Lookup table for MCXW23xB (Buck and XRSM) silicon */
 static const DcdcExcludeFunction_t
@@ -276,7 +272,7 @@ static const DcdcExcludeFunction_t
         *cpuRetStorePtr++ = IOCON->PIO[0][i];
         /* Set all pins that are configured as output, temporary to FUNC12 before going to lower power
         to avoid a 120ns pulse during wakeup from power down. */
-        if ((pinsDir & (1 << i)) > 0)
+        if ((pinsDir & (1u << i)) != 0u)
         {
             IOCON->PIO[0][i] = (IOCON->PIO[0][i] & ~IOCON_PIO_FUNC_MASK) | (IOCON_FUNC12 & IOCON_PIO_FUNC_MASK);
         }
@@ -337,21 +333,21 @@ static void SetCoreSysClkConfiguration(uint32_t configuration)
 {
     PMC->PDRUNCFG0 = (PMC->PDRUNCFG0 & ~PMC_PDRUNCFG0_PDEN_FRO192M_MASK) |
                      ((configuration >> CONFIGURATION_PMC_PDRUNCFG0_PDEN_FRO192M_SHIFT) &
-                      ((1 << PMC_PDRUNCFG0_PDEN_FRO192M_BITS) - 1))
+                      ((1u << PMC_PDRUNCFG0_PDEN_FRO192M_BITS) - 1))
                          << PMC_PDRUNCFG0_PDEN_FRO192M_SHIFT;
 
     SYSCON->CLOCK_CTRL = (SYSCON->CLOCK_CTRL & ~SYSCON_CLOCK_CTRL_ANA_FRO12M_CLK_ENA_MASK) |
                          ((configuration >> CONFIGURATION_SYSCON_CLOCK_CTRL_ANA_FRO12M_CLK_ENA_SHIFT) &
-                          ((1 << SYSCON_CLOCK_CTRL_ANA_FRO12M_CLK_ENA_BITS) - 1))
+                          ((1u << SYSCON_CLOCK_CTRL_ANA_FRO12M_CLK_ENA_BITS) - 1))
                              << SYSCON_CLOCK_CTRL_ANA_FRO12M_CLK_ENA_SHIFT;
 
     SYSCON->CLOCK_CTRL = (SYSCON->CLOCK_CTRL & ~SYSCON_CLOCK_CTRL_CLKIN_ENA_MASK) |
                          ((configuration >> CONFIGURATION_SYSCON_CLOCK_CTRL_CLKIN_ENA_SHIFT) &
-                          ((1 << SYSCON_CLOCK_CTRL_CLKIN_ENA_BITS) - 1))
+                          ((1u << SYSCON_CLOCK_CTRL_CLKIN_ENA_BITS) - 1))
                              << SYSCON_CLOCK_CTRL_CLKIN_ENA_SHIFT;
 
     ANACTRL->FRO192M_CTRL =
-        ((configuration >> CONFIGURATION_ANACTRL_FRO192M_CTRL_ENA_SHIFT) & ((1 << ANACTRL_FRO192M_CTRL_ENA_BITS) - 1))
+        ((configuration >> CONFIGURATION_ANACTRL_FRO192M_CTRL_ENA_SHIFT) & ((1u << ANACTRL_FRO192M_CTRL_ENA_BITS) - 1))
         << ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_SHIFT;
     SYSCON->AHBCLKDIV   = (configuration >> CONFIGURATION_SYSCON_AHBCLKDIV_SHIFT) & SYSCON_AHBCLKDIV_DIV_MASK;
     SYSCON->MAINCLKSELB = (configuration >> CONFIGURATION_SYSCON_MAINCLKSELB_SHIFT) & SYSCON_MAINCLKSELB_SEL_MASK;
@@ -368,7 +364,7 @@ static status_t DcdcBypass(uint32_t *excludeFromPd)
     /* Set enable LPBS request */
     PMC->DCDC0 |= PMC_DCDC0_ENABLE_BYPASS_MASK;
     /* Disable DCDC during low power mode */
-    *excludeFromPd &= ~kLOWPOWERCFG_DCDC;
+    *excludeFromPd &= ~(uint32_t)kLOWPOWERCFG_DCDC;
     return kStatus_Success;
 }
 
@@ -391,7 +387,7 @@ static status_t DcdcOff(uint32_t *excludeFromPd)
     /* Disable LPBS */
     PMC->DCDC0 &= ~PMC_DCDC0_ENABLE_BYPASS_MASK;
     /* Disable DCDC during low power mode */
-    *excludeFromPd &= ~kLOWPOWERCFG_DCDC;
+    *excludeFromPd &= ~(uint32_t)kLOWPOWERCFG_DCDC;
     return kStatus_Success;
 }
 
@@ -506,7 +502,7 @@ static void DisableBOD1Resets(void)
 {
     uint32_t resetCtrl = PMC->RESETCTRL;
     resetCtrl &= (~(PMC_RESETCTRL_BOD1RESETENA_SECURE_MASK | PMC_RESETCTRL_BOD1RESETENA_SECURE_DP_MASK));
-    resetCtrl |= (2 << PMC_RESETCTRL_BOD1RESETENA_SECURE_SHIFT | 2 << PMC_RESETCTRL_BOD1RESETENA_SECURE_DP_SHIFT);
+    resetCtrl |= (2u << PMC_RESETCTRL_BOD1RESETENA_SECURE_SHIFT | 2u << PMC_RESETCTRL_BOD1RESETENA_SECURE_DP_SHIFT);
     PMC->RESETCTRL = resetCtrl;
 }
 
@@ -548,7 +544,7 @@ static void DisableBOD2Resets(void)
 {
     uint32_t resetCtrl = PMC->RESETCTRL;
     resetCtrl &= (~(PMC_RESETCTRL_BOD2RESETENA_SECURE_MASK | PMC_RESETCTRL_BOD2RESETENA_SECURE_DP_MASK));
-    resetCtrl |= (2 << PMC_RESETCTRL_BOD2RESETENA_SECURE_SHIFT | 2 << PMC_RESETCTRL_BOD2RESETENA_SECURE_DP_SHIFT);
+    resetCtrl |= (2u << PMC_RESETCTRL_BOD2RESETENA_SECURE_SHIFT | 2u << PMC_RESETCTRL_BOD2RESETENA_SECURE_DP_SHIFT);
     PMC->RESETCTRL = resetCtrl;
 }
 
@@ -560,7 +556,7 @@ static void DisableBOD2Resets(void)
  */
 static uint32_t AdjustedLevelRegisterSetting(bod_level_t level, uint8_t offset)
 {
-    int8_t signedOffset = offset;
+    int8_t signedOffset = (int8_t)(offset & 0x1Fu);
     int8_t adjustedHysteresis;
     uint8_t adjustedTriglvl = ((level & PMC_BOD1_TRIGLVL_MASK) >> PMC_BOD1_TRIGLVL_SHIFT);
     uint8_t adjustedLvlsel  = ((level & PMC_BOD1_LVLSEL_MASK) >> PMC_BOD1_LVLSEL_SHIFT);
@@ -653,9 +649,9 @@ static uint32_t AdjustedLevelRegisterSetting(bod_level_t level, uint8_t offset)
     {
         adjustedLvlsel = 0;
     }
-
-    return (uint32_t)((adjustedLvlsel << PMC_BOD1_LVLSEL_SHIFT) | (adjustedHysteresis << PMC_BOD1_HYST_SHIFT) |
-                      (adjustedTriglvl << PMC_BOD1_TRIGLVL_SHIFT));
+    return (uint32_t)(((uint32_t)adjustedLvlsel << PMC_BOD1_LVLSEL_SHIFT) |
+                      ((uint32_t)((uint8_t)adjustedHysteresis) << PMC_BOD1_HYST_SHIFT) |
+                      ((uint32_t)adjustedTriglvl << PMC_BOD1_TRIGLVL_SHIFT));
 }
 
 /**
@@ -688,86 +684,110 @@ static status_t MeasureVoltage(uint32_t instance, uint32_t *voltage)
         kBOD_LEVEL_2725mv, kBOD_LEVEL_2750mv, kBOD_LEVEL_2775mv, kBOD_LEVEL_2800mv, kBOD_LEVEL_2825mv,
         kBOD_LEVEL_2850mv, kBOD_LEVEL_2875mv, kBOD_LEVEL_2900mv, kBOD_LEVEL_2925mv, kBOD_LEVEL_2950mv,
         kBOD_LEVEL_2975mv, kBOD_LEVEL_3000mv, kBOD_LEVEL_3025mv, kBOD_LEVEL_3050mv, kBOD_LEVEL_3075mv,
-        kBOD_LEVEL_3100mv};
-    uint32_t intMask =
-        instance == 0 ? ANACTRL_BOD_DCDC_INT_CTRL_BOD1_INT_ENABLE_MASK : ANACTRL_BOD_DCDC_INT_CTRL_BOD2_INT_ENABLE_MASK;
-    uint32_t resetMask               = instance == 0 ?
-                                           PMC_RESETCTRL_BOD1RESETENA_SECURE_MASK | PMC_RESETCTRL_BOD1RESETENA_SECURE_DP_MASK :
-                                           PMC_RESETCTRL_BOD2RESETENA_SECURE_MASK | PMC_RESETCTRL_BOD2RESETENA_SECURE_DP_MASK;
-    IRQn_Type nvicBodIrq             = instance == 0 ? BOD1_IRQn : BOD2_IRQn;
-    void (*setBodLevel)(bod_level_t) = instance == 0 ? POWER_SetBod1Level : POWER_SetBod2Level;
-    bool (*isBodActive)(void)        = instance == 0 ? POWER_IsBOD1Active : POWER_IsBOD2Active;
-    uint32_t regValue;
-    int32_t direction;
-    uint32_t bodActive;
-    uint32_t previousBodActive;
-    /* Store previous measurement as a static variable. Always start from previous measurement */
-    static uint32_t currentSetting = ARRAY_SIZE(levelSettings) - 1;
+        kBOD_LEVEL_3100mv
+    };
 
-    if (instance > 1)
+    if (instance > 1U || voltage == NULL)
     {
         return kStatus_InvalidArgument;
     }
 
-    /* Store interrupt settings */
-    uint32_t storedIntVal = ANACTRL->BOD_DCDC_INT_CTRL & intMask;
-    /* Store NVIC interrupt setting */
-    uint32_t storedNvicBodIrq = NVIC_GetEnableIRQ(nvicBodIrq);
-    /* Store NVIC SYS interrupt setting */
-    uint32_t storedNvicSysIrq = NVIC_GetEnableIRQ(WDT_BOD_IRQn);
-    /* Store reset settings */
-    uint32_t storedResetVal = PMC->RESETCTRL & resetMask;
+    const uint32_t intMask = (instance == 0U)
+        ? ANACTRL_BOD_DCDC_INT_CTRL_BOD1_INT_ENABLE_MASK
+        : ANACTRL_BOD_DCDC_INT_CTRL_BOD2_INT_ENABLE_MASK;
 
-    /* Disable NVIC interrupt */
+    const uint32_t resetMask = (instance == 0U)
+        ? (PMC_RESETCTRL_BOD1RESETENA_SECURE_MASK | PMC_RESETCTRL_BOD1RESETENA_SECURE_DP_MASK)
+        : (PMC_RESETCTRL_BOD2RESETENA_SECURE_MASK | PMC_RESETCTRL_BOD2RESETENA_SECURE_DP_MASK);
+
+    IRQn_Type nvicBodIrq             = (instance == 0U) ? BOD1_IRQn : BOD2_IRQn;
+    void (*setBodLevel)(bod_level_t) = (instance == 0U) ? POWER_SetBod1Level : POWER_SetBod2Level;
+    bool (*isBodActive)(void)        = (instance == 0U) ? POWER_IsBOD1Active : POWER_IsBOD2Active;
+
+    int32_t direction;
+    uint32_t bodActive;
+    uint32_t previousBodActive;
+
+    /* Store previous measurement as a static variable. Always start from previous measurement */
+    static int32_t currentSetting = (int32_t)(ARRAY_SIZE(levelSettings) - 1U);
+    const  int32_t maxIndex       = (int32_t)(ARRAY_SIZE(levelSettings) - 1U);
+
+    /* Store interrupt settings */
+    const uint32_t storedIntVal     = ANACTRL->BOD_DCDC_INT_CTRL & intMask;
+    /* Store NVIC interrupt setting */
+    const uint32_t storedNvicBodIrq = NVIC_GetEnableIRQ(nvicBodIrq);
+    /* Store NVIC SYS interrupt setting */
+    const uint32_t storedNvicSysIrq = NVIC_GetEnableIRQ(WDT_BOD_IRQn);
+    /* Store reset settings */
+    const uint32_t storedResetVal   = PMC->RESETCTRL & resetMask;
+
+    /* Disable NVIC interrupts */
     NVIC_DisableIRQ(nvicBodIrq);
     NVIC_DisableIRQ(WDT_BOD_IRQn);
 
-    /* Enable interrupts */
-    (instance == 0 ? EnableBOD1Interrupts : EnableBOD2Interrupts)();
+    /* Enable BOD interrupts */
+    (instance == 0U ? EnableBOD1Interrupts : EnableBOD2Interrupts)();
 
-    /* Disable reset */
-    (instance == 0 ? DisableBOD1Resets : DisableBOD2Resets)();
+    /* Disable BOD resets while measuring */
+    (instance == 0U ? DisableBOD1Resets : DisableBOD2Resets)();
 
     /* Start from previous measurement */
-    setBodLevel((bod_level_t)levelSettings[currentSetting]);
+    if (currentSetting < 0) 
+    {
+        currentSetting = 0;
+    } 
+    else if (currentSetting > maxIndex) 
+    {
+        currentSetting = maxIndex;
+    }
+
+    setBodLevel((bod_level_t)levelSettings[(size_t)currentSetting]);
     DelayUs(STABILIZATION_TIME_IN_US);
 
-    /* The actual voltage is determined by changing the BOD trigger level until the level crosses Vbat_hv.
-     * Determine direction of change from bodActive: if Vbat_hv is higher than trigger level,
-     * the trigger level is increased each iteration until it is no longer below Vbat and vice versa.*/
-    bodActive = previousBodActive = isBodActive();
-    direction                     = bodActive ? -1 : 1;
+    /* Determine direction from current BOD state */
+    bodActive         = isBodActive();
+    previousBodActive = bodActive;
+    direction         = bodActive ? -1 : 1;
 
-    /* Change level until bodActive status changes or until end of range (based on direction) */
-    while ((bodActive == previousBodActive) && ((currentSetting < ARRAY_SIZE(levelSettings) - 1) || direction < 0) &&
-           ((currentSetting > 0) || direction > 0))
+    /* Walk the threshold until the status flips or bounds are reached */
+    while (bodActive == previousBodActive)
     {
-        /* Update trigger level */
-        currentSetting += direction;
-        setBodLevel((bod_level_t)levelSettings[currentSetting]);
+        int32_t next = currentSetting + direction;
+
+        /* Stop if the next step would go out of range */
+        if (next < 0 || next > maxIndex) 
+        {
+            break;
+        }
+
+        currentSetting = next;
+
+        setBodLevel((bod_level_t)levelSettings[(size_t)currentSetting]);
         DelayUs(STABILIZATION_TIME_IN_US);
+
         previousBodActive = bodActive;
         bodActive         = isBodActive();
     }
 
-    /* Is Vbat_hv higher? */
-    if (!bodActive && currentSetting < ARRAY_SIZE(levelSettings) - 1)
+    /* If Vbat_hv is above the last tested trigger, step up one (if possible) */
+    if ((!bodActive) && (currentSetting < maxIndex))
     {
-        /* Yes, this means that trigger level is one step below actual voltage level. Adjust level. */
         currentSetting++;
     }
 
-    /* Convert setting into voltage */
-    *voltage = 1100 + currentSetting * 25;
+    /* Convert index to millivolts: 1100 mV + N * 25 mV */
+    uint32_t mv = 1100u + (uint32_t)currentSetting * 25u;
+    *voltage    = mv;
 
     /* Restore reset settings */
-    regValue = PMC->RESETCTRL;
-    regValue = (regValue & ~resetMask) | storedResetVal;
-    /* Restore interrupt settings */
-    ANACTRL->BOD_DCDC_INT_CTRL |= storedIntVal;
-    /* Restore NVIC interrupt setting */
+    PMC->RESETCTRL = (PMC->RESETCTRL & ~resetMask) | storedResetVal;
+
+    /* Restore interrupt settings (clear then set only the masked bits) */
+    ANACTRL->BOD_DCDC_INT_CTRL =
+        (ANACTRL->BOD_DCDC_INT_CTRL & ~intMask) | storedIntVal;
+
+    /* Restore NVIC interrupt enables */
     (storedNvicBodIrq ? NVIC_EnableIRQ : NVIC_DisableIRQ)(nvicBodIrq);
-    /* Restore NVIC SYS interrupt setting */
     (storedNvicSysIrq ? NVIC_EnableIRQ : NVIC_DisableIRQ)(WDT_BOD_IRQn);
 
     return kStatus_Success;
@@ -780,15 +800,6 @@ static status_t MeasureVoltage(uint32_t instance, uint32_t *voltage)
 static void DelayUs(uint32_t delay)
 {
     SDK_DelayAtLeastUs(delay, SystemCoreClock);
-}
-
-/**
- * @brief Delay execution for milliseconds
- * @param delay Number of milliseconds to delay
- */
-static void DelayMs(uint32_t delay)
-{
-    DelayUs(delay * 1000);
 }
 
 /*******************************************************************************
@@ -807,7 +818,7 @@ void POWER_PowerCycleCpuAndFlash(void)
     uint32_t pdruncfg0 = PMC->PDRUNCFG0;
     uint32_t pdenBod1 = (pdruncfg0 & PMC_PDRUNCFG0_PDEN_BOD1_MASK) >> PMC_PDRUNCFG0_PDEN_BOD1_SHIFT;
     uint32_t pdenBod2 = (pdruncfg0 & PMC_PDRUNCFG0_PDEN_BOD2_MASK) >> PMC_PDRUNCFG0_PDEN_BOD2_SHIFT;
-    PMC->AOREG1 &= ~(AOREG1_BOD1_MASK | AOREG1_BOD2_MASK);
+    PMC->AOREG1 &= ~(uint32_t)(AOREG1_BOD1_MASK | AOREG1_BOD2_MASK);
     PMC->AOREG1 |= ((pdenBod1 << AOREG1_BOD1_SHIFT) | (pdenBod2 << AOREG1_BOD2_SHIFT));
     /* write values of PDEN_BOD1/2 bits from PDSLEEPCFG register to PDRUNCFG register. */
     uint32_t pdruncfg0_wo = pdruncfg0 & ~(PMC_PDRUNCFG0_PDEN_BOD1_MASK | PMC_PDRUNCFG0_PDEN_BOD2_MASK);
@@ -920,8 +931,7 @@ void POWER_Init(void)
     /* Clear XR_SM mode in AOREG1 to be able to recover next time in case supply is not connected anymore and there is a
      * hang further down */
     /* POWER_DCDC_SetSupplyMode() will set it back. */
-    PMC->AOREG1 &= ~(AOREG1_DCDC_MODE_XR_SM_SS_MASK | AOREG1_DCDC_MODE_XR_SM_DS_MASK);
-
+    PMC->AOREG1 &= ~(uint32_t)(AOREG1_DCDC_MODE_XR_SM_SS_MASK | AOREG1_DCDC_MODE_XR_SM_DS_MASK);
     if (aoreg1 & AOREG1_DCDC_MODE_XR_SM_SS_MASK)
     {
         POWER_DCDC_SetSupplyMode(kDCDC_MODE_XR_SM_SS);
@@ -961,7 +971,7 @@ void POWER_PeripheralPowerOff(power_config_bit_t powerConfigBit)
  */
 void POWER_XTAL32K_SetStartupTime(uint32_t startupTime)
 {
-    s_xtalStartupTime = startupTime;
+    s_xtalStartupTimeMs = startupTime;
 }
 
 /**
@@ -975,7 +985,7 @@ void POWER_PeripheralPowerOn(power_config_bit_t powerConfigBit)
         if (PMC->PDRUNCFG0 & kPOWERCFG_XTAL32K) /* Check 32K XTAL not on yet (1 means off in PDRUNCFG0)*/
         {
             PMC->PDRUNCFGCLR0 = powerConfigBit;
-            DelayMs(s_xtalStartupTime); /* Delay configurable with API, in case customer uses different XTAL
+            DelayUs(s_xtalStartupTimeMs * 1000); /* Delay configurable with API, in case customer uses different XTAL
                                                       configuration. */
         }
     }
@@ -984,7 +994,7 @@ void POWER_PeripheralPowerOn(power_config_bit_t powerConfigBit)
         if (PMC->PDRUNCFG0 & kPOWERCFG_FRO32K) /* Check 32K FRO not on yet (1 means off in PDRUNCFG0)*/
         {
             PMC->PDRUNCFGCLR0 = powerConfigBit;
-            DelayMs(DEFAULT_FRO_STARTUP_DELAY_MS); /* Delay NOT configurable with API, we assume FRO startup not to
+            DelayUs(DEFAULT_FRO_STARTUP_DELAY_MS * 1000); /* Delay NOT configurable with API, we assume FRO startup not to
                                                           vary too much. */
         }
     }
@@ -1327,7 +1337,7 @@ status_t POWER_EnterDeepSleep(uint32_t excludeFromPd, uint64_t wakeupInterrupts)
 
     /* Validate input. */
     /* Only the following peripherals can be excluded from power down */
-    if (excludeFromPd & ~kEXCLUDE_FROM_PD_LIMITATION_MASK_DEEPSLEEP)
+    if (excludeFromPd & ~(uint32_t)kEXCLUDE_FROM_PD_LIMITATION_MASK_DEEPSLEEP)
     {
         return kStatus_InvalidArgument;
     }
@@ -1535,7 +1545,7 @@ status_t POWER_EnterPowerDown(uint32_t excludeFromPd, uint64_t wakeupInterrupts,
 
     /* Validate input. */
     /* Only the following peripherals can be excluded from power down */
-    if (excludeFromPd & ~kEXCLUDE_FROM_PD_LIMITATION_MASK_POWERDOWN)
+    if (excludeFromPd & ~(uint32_t)kEXCLUDE_FROM_PD_LIMITATION_MASK_POWERDOWN)
     {
         return kStatus_InvalidArgument;
     }
@@ -1653,7 +1663,7 @@ status_t POWER_EnterPowerDown(uint32_t excludeFromPd, uint64_t wakeupInterrupts,
             /* Replace sleep timer irq (23) by wakeup state transition irq (31)
             and clear interrupt request flag to prevent isr execution at wakeup. */
             ANACTRL->BLE_CTRL = ANACTRL_BLE_CTRL_BLE_DST_INT_CLR_MASK;
-            interruptEnables0 &= ~kWAKEUP_BLE_SLP_TMR; /* Disable IRQ */
+            interruptEnables0 &= ~(uint32_t)kWAKEUP_BLE_SLP_TMR; /* Disable IRQ */
             interruptEnables0 |= kWAKEUP_WAKE_DSLP; /* Replace by state transition irq */
         }
         PMC->RESETCAUSE = PMC->RESETCAUSE; /* Clear reset cause */
@@ -1764,7 +1774,7 @@ status_t POWER_EnterDeepPowerDown(uint32_t excludeFromPd, uint64_t wakeupInterru
 {
     /* Validate input. */
     /* Only the following peripherals can be excluded from deep power down: */
-    if (excludeFromPd & ~kEXCLUDE_FROM_PD_LIMITATION_MASK_DEEPPOWERDOWN)
+    if (excludeFromPd & ~(uint32_t)kEXCLUDE_FROM_PD_LIMITATION_MASK_DEEPPOWERDOWN)
     {
         return kStatus_InvalidArgument;
     }
@@ -1846,7 +1856,7 @@ status_t POWER_EnterDeepPowerDown(uint32_t excludeFromPd, uint64_t wakeupInterru
     if (wakeupInterrupts & kWAKEUP_OS_EVENT)
     {
         PMC->OSTIMERr |= PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
-        wakeupInterrupts &= ~kWAKEUP_OS_EVENT;
+        wakeupInterrupts &= ~(uint32_t)kWAKEUP_OS_EVENT;
     }
 
     /* Enable wake-up sources */
@@ -1877,7 +1887,7 @@ status_t POWER_EnterPowerOff(uint32_t excludeFromPd, uint32_t wakeupIoCtrl)
 {
     /* Validate input. */
     /* Only the following peripherals can be excluded from power off: */
-    if (excludeFromPd & ~kEXCLUDE_FROM_PD_LIMITATION_MASK_POWEROFF)
+    if (excludeFromPd & ~(uint32_t)kEXCLUDE_FROM_PD_LIMITATION_MASK_POWEROFF)
     {
         return kStatus_InvalidArgument;
     }

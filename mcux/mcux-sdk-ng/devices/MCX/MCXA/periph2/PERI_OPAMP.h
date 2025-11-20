@@ -26,7 +26,7 @@
 **                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250804
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OPAMP
@@ -182,7 +182,7 @@ typedef struct {
  *  0b00..Default value. Keep power consumption constant
  *  0b01..Reduce power consumption to 1/4
  *  0b10..Reduce power consumption to 1/2
- *  0b11..Double the power consumption
+ *  0b11..Increase power consumption to 3/2
  */
 #define OPAMP_OPAMP_CTRL_OPA_BC_SEL(x)           (((uint32_t)(((uint32_t)(x)) << OPAMP_OPAMP_CTRL_OPA_BC_SEL_SHIFT)) & OPAMP_OPAMP_CTRL_OPA_BC_SEL_MASK)
 /*! @} */
