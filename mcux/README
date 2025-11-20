@@ -4,7 +4,7 @@ MCUXpresso SDK
 Origin:
    NXP MCUXpresso SDK
    https://github.com/nxp-mcuxpresso/mcuxsdk-manifests
-   SHA: 9039bbdc5b053d3155f1023caf65fb8305567041
+   SHA: 2152d8a72724ce6cd401911e1a5d6fb55a93d3ff
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
@@ -36,55 +36,55 @@ Origin:
 
    NXP MCUXpresso SDK Core
    https://github.com/nxp-mcuxpresso/mcuxsdk-core
-   SHA: e570f283a05a8cc291ac1165b405168250b9717a
+   SHA: 0c5c6b16deb211110e06bde896cdff59ab213e16
    Source folder: cmake/extension
    Destination folder: mcux-sdk-ng/cmake/extension
 
    NXP MCUXpresso SDK Component
    https://github.com/nxp-mcuxpresso/mcux-component
-   SHA: bcf7fef88d50f038ee6e500601ad0a2e18f83473
+   SHA: c141036165677db5aec59d5f69296b5cb4355979
    Source folder: Root folder of the NXP MCUXpresso SDK Component Repository
    Destination folder: mcux-sdk-ng/components
 
    NXP MCUXpresso SDK USB
-   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-usb/tree/release/25.09.00
-   SHA: fae72b7af511b5097c8b8e2c16337215c0bab058
+   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-usb/
+   Branch: release/25.12.00-pvw2
    Source folder: Root folder of the NXP MCUXpresso SDK USB Repository
    Destination folder: mcux-sdk-ng/middleware/usb
 
    NXP MCUXpresso SDK Device i.MX
    https://github.com/nxp-mcuxpresso/mcux-devices-imx
-   SHA: a999a1c98ec7fd058bd24416a7e4ff330235b09d
+   SHA: 0ad900b1d54d1164f31937c3d364eed76cf67371
    Source folder: Root folder of the NXP MCUXpresso SDK Device i.MX Repository
    Destination folder: mcux-sdk-ng/devices/i.MX
 
    NXP MCUXpresso SDK Device RT
    https://github.com/nxp-mcuxpresso/mcux-devices-rt
-   SHA: 6b306e8feca475462e7fd4cd682440513f570bc4
+   SHA: b156c39baa6b37097e1d0291d120e2908f7b3c9a
    Source folder: Root folder of the NXP MCUXpresso SDK Device RT Repository
    Destination folder: mcux-sdk-ng/devices/RT
 
    NXP MCUXpresso SDK Device Kinetis
    https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
-   SHA: 978c1f97060c884d548c68ac06836750426033e8
+   SHA: 3895c1fcba7df73d2535a7efb698f9c912f8fca3
    Source folder: Root folder of the NXP MCUXpresso SDK Device Kinetis Repository
    Destination folder: mcux-sdk-ng/devices/Kinetis
 
    NXP MCUXpresso SDK Device LPC
    https://github.com/nxp-mcuxpresso/mcux-devices-lpc
-   SHA: fe228b87e081a1938f6211b4c60926a333ed93fb
+   SHA: 8096b783ec09d0d1c8629025a5f9d8e7df26e520
    Source folder: Root folder of the NXP MCUXpresso SDK Device LPC Repository
    Destination folder: mcux-sdk-ng/devices/LPC
 
    NXP MCUXpresso SDK Device MCX
    https://github.com/nxp-mcuxpresso/mcux-devices-mcx
-   SHA: 6bbddd36a6efe653c4633b064705dd9f30e32ac8
+   SHA: ada1c97c761123ec0c179bb9bb9f744bf9a11475
    Source folder: Root folder of the NXP MCUXpresso SDK Device MCX Repository
    Destination folder: mcux-sdk-ng/devices/MCX
 
    NXP MCUXpresso SDK Device Wireless
    https://github.com/nxp-mcuxpresso/mcux-devices-wireless
-   SHA: 5eb6a44dfbc2b36f5a3a058a3e06985e99829b76
+   SHA: ff5e2e824d55e9320b957711a773db43c7480053
    Source folder: Root folder of the NXP MCUXpresso SDK Device Wireless Repository
    Destination folder: mcux-sdk-ng/devices/Wireless
 
@@ -205,44 +205,16 @@ Patch List:
       - The MKV56F24 device doesn't contain CAN2 peripheral. Remove it from the device header.
 
   - hal_nxp: undefine PAGESIZE macro before naming fields.
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/598/commits/c8b649a8af4d7235e67f67d5a6682df2c54c5c93
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/9fd51149146d87f689b8be8d204c244b83ac9440
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.12.00 pvw2.
 
   - devices: imx943: ca55: fix memory feature
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/578/commits/0145d78f5a68ac2ea1df5de165fb429ebf51c1da
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/61e9db9625e5e5d061fa37c2e5959c9f7bf25fe5
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.12.00 pvw2.
 
-  - devices: imx943: ca55: add definition of cpu frequency
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/578/commits/cf3d4d6721c1741c2d86d5dc564c1fe175e87969
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
-
-  - mcux-sdk-ng: drivers: netc: support rrt member in netc_tb_ipf_cfge_t
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/594/commits/49ccd7d3aafe178162de1f716888ebd3e5493239
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
-
-  - mcux-sdk-ng: drivers: netc: get right size of TX timestamp response frame
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/594/commits/3565235cb5968c9a70a0419b3330ab8d323159af
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
-
-  - hal_nxp: Expose Timestamp of 1588_EVENT_IN
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/588/commits/fa0da84a8cb1b4f324a93624f7b7ca8fcb71994c
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
-
-  - drivers: fsl_power.c: fix building warning
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/605/commits/584ebaab198efe281a4de3451f81132b0e373bad
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
-     This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/612/commits was created, so it
-     did not enter PR#612 via cherry-pick but rather via rebasing onto the master branch.
-
-  - Allow disable quickaccess section
-   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/605/commits/6b184471ec9eb0c32c07a2cc713baef170585f3e
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
-     This patch was merged after PR https://github.com/zephyrproject-rtos/hal_nxp/pull/612/commits was created, so it
-     did not enter PR#612 via cherry-pick but rather via rebasing onto the master branch.
-
-  - mcux-sdk-ng: drivers: xspi: cache64: Fix cache management issue.
-   - PR: https://github.com/zephyrproject-rtos/hal_nxp/pull/597
-   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.09.00.
+  - devices: MIMX9596: add ITCM support in MEMORY_ConvertMemoryMapAddress
+   - Commit: https://github.com/zephyrproject-rtos/hal_nxp/commit/80e2a56683ba0affaca504c9ef72b1023616a86d
+   - This patch is in hal_nxp but is not in mcux-sdk-ng 25.12.00 pvw2.
 
   - hal/nxp: s32K344: flash_c40: add C40 features, IP aliases
    - Commit: https://github.com/zephyrproject-rtos/hal_nxp/pull/618/commits/64395f565184964bbf21e247df6ca88dc4d7cf83
