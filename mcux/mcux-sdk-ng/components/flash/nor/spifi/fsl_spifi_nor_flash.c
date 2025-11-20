@@ -290,7 +290,8 @@ static uint8_t spifi_nor_read_status(SPIFI_Type *base, uint8_t readCmd)
     cmd.type              = kSPIFI_CommandOpcodeOnly;
     cmd.opcode            = readCmd;
     SPIFI_SetCommand(base, &cmd);
-    value = *(uint8_t *)&base->DATA;
+
+    value = SPIFI_ReadDataByte(base);
 
     return value;
 }
@@ -319,7 +320,7 @@ static status_t spifi_check_norflash_finish(SPIFI_Type *base, spifi_mem_nor_hand
     while ((base->STAT & SPIFI_STAT_INTRQ_MASK) == 0U)
     {
     }
-    value = *(uint8_t *)&base->DATA;
+    value = SPIFI_ReadDataByte(base);
 
     return (value & 0x01U) ? kStatus_Fail : kStatus_Success;
 }
@@ -464,7 +465,8 @@ static status_t spifi_nor_writeprotect_disable(SPIFI_Type *base, spifi_mem_nor_h
     cmd.type              = kSPIFI_CommandOpcodeOnly;
     cmd.opcode            = memHandle->commandSet.writeStatusCommand;
     SPIFI_SetCommand(base, &cmd);
-    *(uint8_t *)&base->DATA = 0x00;
+
+    SPIFI_WriteDataByte(base, 0x00);
 
     return spifi_check_norflash_finish(base, memHandle);
 }
