@@ -572,7 +572,7 @@ static usb_status_t _USB_HostKhciLinkTrRequestToList(usb_host_controller_handle 
     usb_host_transfer_t *temptransfer;
     usb_khci_host_state_struct_t *usbHostPointer = (usb_khci_host_state_struct_t *)controllerHandle;
 
-    if ((transfer == NULL))
+    if (transfer == NULL)
     {
         return kStatus_USB_InvalidParameter;
     }
@@ -719,7 +719,7 @@ static int32_t _USB_HostKhciTransactionDone(usb_khci_host_state_struct_t *usbHos
         {
             type = kTr_Ctrl;
         }
-        else if ((transfer->setupStatus == (uint8_t)kTransfer_Setup1))
+        else if (transfer->setupStatus == (uint8_t)kTransfer_Setup1)
         {
             if (0U != transfer->transferLength)
             {
@@ -821,7 +821,7 @@ static int32_t _USB_HostKhciTransactionDone(usb_khci_host_state_struct_t *usbHos
 #endif
             *bdPointer = 0U;
         }
-        if ((pipeDescPointer->pipeType == USB_ENDPOINT_ISOCHRONOUS))
+        if (pipeDescPointer->pipeType == USB_ENDPOINT_ISOCHRONOUS)
         {
             /*misra 10.8*/
             result         = ((bd >> 16) & 0x3ffU);
@@ -1048,7 +1048,7 @@ static khci_tr_state_t _USB_HostKhciStartTranfer(usb_host_controller_handle hand
 
     if (transfer->transferPipe->pipeType == USB_ENDPOINT_CONTROL)
     {
-        if ((transfer->setupStatus == (uint8_t)kTransfer_Setup0))
+        if (transfer->setupStatus == (uint8_t)kTransfer_Setup0)
         {
             transferResult = _USB_HostKhciAtomNonblockingTransaction(
                 usbHostPointer, (uint32_t)kTr_Ctrl, transfer->transferPipe, (uint8_t *)transfer->setupPacket, 8U);
@@ -1182,7 +1182,7 @@ static khci_tr_state_t _USB_HostKhciFinishTranfer(usb_host_controller_handle han
     }
     else
     {
-        if ((transferResult == USB_KHCI_ATOM_TR_NAK))
+        if (transferResult == USB_KHCI_ATOM_TR_NAK)
         {
             if (transfer->transferPipe->pipeType == USB_ENDPOINT_INTERRUPT)
             {

@@ -300,7 +300,7 @@ eth_adapter_err_t ETH_ADAPTER_SendFrame(eth_adapter_frame_buf_t *buffer)
 {
     enet_buffer_struct_t txBuff = {
         .buffer = buffer->payload,
-        .length = buffer->len,
+        .length = (uint16_t)buffer->len,
     };
 
     enet_tx_frame_struct_t txFrame = {

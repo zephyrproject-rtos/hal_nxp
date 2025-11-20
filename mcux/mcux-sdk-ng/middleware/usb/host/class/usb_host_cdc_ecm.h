@@ -260,7 +260,7 @@ usb_status_t USB_HostCdcEcmDataSend(usb_host_class_handle classHandle,
  * @returns An error code or kStatus_USB_Success.
  */
 usb_status_t USB_HostCdcEcmGetMacStringDescriptor(usb_host_class_handle classHandle,
-                                                  uint16_t index,
+                                                  uint8_t index,
                                                   uint16_t langID,
                                                   uint8_t *buffer,
                                                   uint16_t bufferLength,
