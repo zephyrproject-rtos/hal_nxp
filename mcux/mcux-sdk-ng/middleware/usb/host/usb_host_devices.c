@@ -230,7 +230,8 @@ static void USB_HostEnumerationTransferCallback(void *param, usb_host_transfer_t
     if (nextStep == 1U)
     {
         deviceInstance->stallRetries = USB_HOST_CONFIG_ENUMERATION_MAX_STALL_RETRIES;
-        if (deviceInstance->state > 0U)
+        if ((deviceInstance->state > 0U) && 
+            (deviceInstance->state <= (uint8_t)(sizeof(s_EnumEntries) / sizeof(s_EnumEntries[0]))))
         {
             if (s_EnumEntries[deviceInstance->state - 1U].process == NULL)
             {

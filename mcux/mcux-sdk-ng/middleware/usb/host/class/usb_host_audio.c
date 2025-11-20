@@ -1852,7 +1852,7 @@ usb_status_t USB_HostAudioFeatureUnitRequest(usb_host_class_handle classHandle,
     uint8_t atribute_index;
     usb_status_t status;
 
-    if ((classHandle == NULL))
+    if (classHandle == NULL)
     {
         return kStatus_USB_InvalidHandle;
     }
