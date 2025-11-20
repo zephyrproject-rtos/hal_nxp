@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+#define FSL_XSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*@{*/
 
 /*! @brief Formula to form XSPI instructions in LUT table. */
@@ -170,35 +170,35 @@ enum _xspi_error_flag
     kXSPI_ErrorNoFradMatch = XSPI_ERRSTAT_FRADMTCH_MASK, /*!< The transaction address does not lie within
                                                         the address range of any FRAD. */
     kXSPI_ErrorFrad0Access = XSPI_ERRSTAT_FRAD0ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD0 but it does not pass the access permission checks 
+                                                        the FRAD0 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad1Access = XSPI_ERRSTAT_FRAD1ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD1 but it does not pass the access permission checks 
+                                                        the FRAD1 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad2Access = XSPI_ERRSTAT_FRAD2ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD2 but it does not pass the access permission checks 
+                                                        the FRAD2 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad3Access = XSPI_ERRSTAT_FRAD3ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD3 but it does not pass the access permission checks 
+                                                        the FRAD3 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad4Access = XSPI_ERRSTAT_FRAD4ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD4 but it does not pass the access permission checks 
+                                                        the FRAD4 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad5Access = XSPI_ERRSTAT_FRAD5ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD5 but it does not pass the access permission checks 
+                                                        the FRAD5 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad6Access = XSPI_ERRSTAT_FRAD6ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD6 but it does not pass the access permission checks 
+                                                        the FRAD6 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorFrad7Access = XSPI_ERRSTAT_FRAD7ACC_MASK, /*!< The transaction address lies within the address range of
-                                                        the FRAD7 but it does not pass the access permission checks 
+                                                        the FRAD7 but it does not pass the access permission checks
                                                         for the FRAD or the FRAD is under exclusive lock by another
                                                         manager. */
     kXSPI_ErrorIpBusTransfer = XSPI_ERRSTAT_IPS_ERR_MASK, /*!< A common error has occurred and XSPI has generated an
@@ -248,8 +248,8 @@ enum _xspi_cmd_execution_arbitration_flag
 };
 
 /*!
- * @brief 
- * 
+ * @brief
+ *
  * @anchor xspi_interrupt_enable_t
  */
 enum _xspi_interrupt_enable
@@ -1005,7 +1005,7 @@ typedef enum  _xspi_cache64_policy
 } xspi_cache64_policy_t;
 
 /*!
- * @brief The structure of cache64 configuration. 
+ * @brief The structure of cache64 configuration.
  * @details Region0 range from base address to region0TopAddr[28:10] + 0x3FF,
  *          region1 range from region0TopAddr[28:10] + 0x400 to region1TopAddr[28:10] + 0x3FF,
  *          region1TopAddr[28:10] + 0x400 to end address.
@@ -1200,7 +1200,7 @@ void XSPI_SetHyperBusX16Mode(XSPI_Type *base, xspi_hyper_bus_x16_mode_t x16Mode)
 
 /*!
  * @brief Update address mode to access external device.
- * 
+ *
  * @param base XSPI peripheral base address.
  * @param addrMode Specify the address mode to update.
  *
@@ -1330,7 +1330,7 @@ static inline void XSPI_EnableInvertedSerialClockOutput(XSPI_Type *base, bool en
 
 /*!
  * @brief Update DLL configuration.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ptrDllConfig Pointer to the DLL configuration.
  * @param[in] enableDDR DDR mode is enabled or not.
@@ -1342,10 +1342,10 @@ void XSPI_UpdateDllValue( XSPI_Type *base, xspi_dll_config_t *ptrDllConfig,
 
 /*!
  * @brief Set Data learning configurations.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ptrDataLearningConfig Pointer to data learning configuration.
- * 
+ *
  * @retval kStatus_XSPI_AhbReadAccessAsserted Fail to set data learning configuration due to AHB read access asserted.
  * @retval kStatus_XSPI_IPAccessAsserted Fail to set data learning configuration due to a IP access already asserted.
  * @retval kStatus_XSPI_AhbWriteAccessAsserted Fail to set data learning configuration due to AHB write access asserted.
@@ -1388,7 +1388,7 @@ static inline void XSPI_GetDataLearningEdgeMatchSignature(XSPI_Type *base, uint8
 
 /*!
  * @brief Set device configuration.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] devConfig Pointer to device configuration.
  *
@@ -1504,9 +1504,9 @@ static inline uint32_t XSPI_GetRxFifoAddress(XSPI_Type *base)
 
 /*!
  * @brief Get error status flags.
- * 
+ *
  * @param base SPC peripheral base address.
- * 
+ *
  * @return All asserted error status flags, should be the OR'ed value of @ref XSPI_GetErrorStatusFlags.
  */
 static inline uint32_t XSPI_GetErrorStatusFlags(XSPI_Type *base)
@@ -1516,7 +1516,7 @@ static inline uint32_t XSPI_GetErrorStatusFlags(XSPI_Type *base)
 
 /*!
  * @brief Clear input error status flags.
- * 
+ *
  * @param base SPC peripheral base address.
  * @param flags Error flags to clear, the OR'ed value of @ref XSPI_GetErrorStatusFlags.
  */
@@ -1542,7 +1542,7 @@ static inline uint32_t XSPI_GetInterruptStatusFlags(XSPI_Type *base)
 /*!
  * @brief Check if the IP access request was granted access if enable corresponding interrupt source, the XSPI
  * IRQ will be asserted.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  *
  * @retval true Ip request granted.
@@ -1593,7 +1593,7 @@ static inline bool XSPI_CheckAhbWriteAccessAsserted(XSPI_Type *base)
 
 /*!
  * @brief Get asserted flags about SFM command execution and arbitration.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  *
  * @return The assert flags about SFM command execution and arbitration,
@@ -1606,7 +1606,7 @@ static inline uint32_t XSPI_GetCmdExecutionArbitrationStatusFlags(XSPI_Type *bas
 
 /*!
  * @brief Clear asserted flags about SFM command execution and arbitration.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] flags The mask of flags to clear, should be the OR'ed value of @ref xspi_cmd_execution_arbitration_flag_t.
  */
@@ -1769,9 +1769,9 @@ static inline bool XSPI_CheckRxBufferWaterMarkExceed(XSPI_Type *base)
 
 /*!
  * @brief Get RX buffer aviailable bytes count.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
- * 
+ *
  * @return The available counts if bytes in RX buffer.
  */
 static inline uint32_t XSPI_GetRxBufferAvailableBytesCount(XSPI_Type *base)
@@ -1781,9 +1781,9 @@ static inline uint32_t XSPI_GetRxBufferAvailableBytesCount(XSPI_Type *base)
 
 /*!
  * @brief Get counts of bytes already removed from RX buffer.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
- * 
+ *
  * @return Counts of removed bytes.
  */
 static inline uint32_t XSPI_GetRxBufferRemovedBytesCount(XSPI_Type *base)
@@ -1793,7 +1793,7 @@ static inline uint32_t XSPI_GetRxBufferRemovedBytesCount(XSPI_Type *base)
 
 /*!
  * @brief Set exclusive access lock mode for the specific frad..
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ealMode Specify the exclusive access lock mode.
  * @param[in] fradId Specify the frad.
@@ -1826,7 +1826,7 @@ static inline bool XSPI_CheckSFPFradEnabled(XSPI_Type *base)
 
 /*!
  * @brief Get MDAD check error reason for specific target group.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] tgId Specify the target group.
  *
@@ -1836,7 +1836,7 @@ xspi_mdad_error_reason_t XSPI_GetMdadErrorReason(XSPI_Type *base, xspi_target_gr
 
 /*!
  * @brief Get FARD latest transaction information.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[out] ptrInfo Pointer to the variable in type of @ref xspi_frad_transaction_info_t to store information.
  * @param[in] fradId Specify the frad Id.
@@ -1858,7 +1858,7 @@ status_t XSPI_UpdateSFPArbitrationLockTimeoutCounter(XSPI_Type *base, uint32_t c
 
 /*!
  * @brief Clear address write status for specific target group.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] tgId Specify the target group to clear address write status.
  */
@@ -1866,7 +1866,7 @@ void XSPI_ClearTgAddrWriteStatus(XSPI_Type *base, xspi_target_group_t tgId);
 
 /*!
  * @brief Get address write status for specific target group.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] tgId Specify the target group.
  * @param[out] ptrStatus Pointer to the variable in type of @ref xspi_tg_add_write_status_t
@@ -1876,7 +1876,7 @@ void XSPI_GetTgAddrWriteStatus(XSPI_Type *base, xspi_target_group_t tgId, xspi_t
 
 /*!
  * @brief Unlock Ip access arbitration.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] tgId Specify the target group.
  */
@@ -1888,7 +1888,7 @@ void XSPI_UnlockIpAccessArbitration(XSPI_Type *base, xspi_target_group_t tgId);
  * @param[in] base XSPI peripheral base address.
  *
  * @retval false The Access triggered by IP bus is not asserted.
- * @retval true The Access triggered by IP bus is asserted. 
+ * @retval true The Access triggered by IP bus is asserted.
  */
 static inline bool XSPI_CheckIPAccessAsserted(XSPI_Type *base)
 {
@@ -1897,7 +1897,7 @@ static inline bool XSPI_CheckIPAccessAsserted(XSPI_Type *base)
 
 /*!
  * @brief Clear Ip access sequence pointer.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  */
 static inline void XSPI_ClearIPAccessSeqPointer(XSPI_Type *base)
@@ -1937,7 +1937,7 @@ static inline bool XSPI_CheckIPAccessGranted(XSPI_Type *base)
 
 /*!
  * @brief Check if IP write access is triggered.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  *
  * @retval true The IP write access is granted arbitration.
@@ -1950,7 +1950,7 @@ static inline bool XSPI_CheckIpWriteTriggered(XSPI_Type *base)
 
 /*!
  * @brief Check if IP read access is triggered.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  *
  * @retval true The IP read access is granted arbitration.
@@ -1965,7 +1965,7 @@ static inline bool XSPI_CheckIpReadTriggered(XSPI_Type *base)
  * @brief Check if IPS transfer is granted arbitration or execution.
  *
  * @note The FSMSTAT[VLD] goes to 0 once the IPS transfer is completed and XSPI is IDLE.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  *
  * @retval true Valid, the IPS transfer is granted arbitration or execution.
@@ -1978,7 +1978,7 @@ static inline bool XSPI_CheckFSMValid(XSPI_Type *base)
 
 /*!
  * @brief Start IP access(including read and write) in blocking way.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] addr Address of external device to read/write.
  * @param[in] seqIndex Sequence Id of the pre-programmed LUT.
@@ -1995,14 +1995,14 @@ status_t XSPI_StartIpAccess(XSPI_Type *base, uint32_t addr, uint8_t seqIndex,
 
 /*!
  * @brief Start IP access in non-blocking way.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] addr Address of external device to read/write.
  * @param[in] seqIndex Sequence Id of the pre-programmed LUT.
  * @param[in] byteSize Size of data to transfer, the unit of byte.
  * @param[in] tgId Specify the target group to use.
  * @param[in] lockArbitration Lock arbitration or not.
- * 
+ *
  * @retval kStatus_Success Success to start Ip access.
  * @retval kStatus_XSPI_IpAccessIPCRInvalid Invalid to set IPCR register.
  * @retval kStatus_XSPI_IpAccessAddrSettingInvalid Invalid to set SFAR register.
@@ -2020,7 +2020,7 @@ status_t XSPI_StartIpAccessNonBlocking(XSPI_Type *base, uint32_t addr, uint8_t s
 /*!
  * @brief Set IP access configurations, including SFP configurations, sfp arbitration lock timeout value, Ip access
  * timeout value.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ptrIpAccessConfig Pointer to the variable which contains Ip access configurations.
  *
@@ -2168,13 +2168,13 @@ status_t XSPI_EnableAhbBufferWriteFlush(XSPI_Type *base, bool enable);
 
 /*!
  * @brief Set AHB buffer configurations.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ptrBuffer0Config Pointer to the variable which contain buffer0 configurations.
- * @param[in] ptrBuffer1Config Pointer to the variable which contain buffer1 configurations. 
+ * @param[in] ptrBuffer1Config Pointer to the variable which contain buffer1 configurations.
  * @param[in] ptrBuffer2Config Pointer to the variable which contain buffer2 configurations.
  * @param[in] ptrBuffer3Config Pointer to the variable which contain buffer3 configurations.
- * 
+ *
  * @retval kStatus_XSPI_AhbReadAccessAsserted Fail due to an AHB read access already asserted.
  * @retval kStatus_XSPI_AhbWriteAccessAsserted Fail due to an AHB write access already asserted.
  * @retval kStatus_Success Success to set AHB buffer configurations.
@@ -2216,7 +2216,7 @@ xspi_ahb_sub_buffer_status_t XSPI_GetAhbSubBufferStatus(XSPI_Type *base, uint8_t
 
 /*!
  * @brief Start AHB buffer performance monitor.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  */
 static inline void XSPI_StartAhbBufferPerfMonitor(XSPI_Type *base)
@@ -2226,7 +2226,7 @@ static inline void XSPI_StartAhbBufferPerfMonitor(XSPI_Type *base)
 
 /*!
  * @brief Enable AHB buffer performance monitor for selected AHB buffer's sub buffer.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ahbBufferId Specify the selected AHB buffer.
  * @param[in] subBufferId Specify the selected sub-buffer.
@@ -2235,7 +2235,7 @@ void XSPI_EnableAhbBufferPerfMonitor(XSPI_Type *base, uint8_t ahbBufferId, uint8
 
 /*!
  * @brief Disable AHB buffer performance monitor for selected AHB buffer.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ahbBufferId Specify the selected AHB buffer.
  */
@@ -2246,7 +2246,7 @@ static inline void XSPI_DisableAhbBufferPerfMonitor(XSPI_Type *base, uint8_t ahb
 
 /*!
  * @brief Stop AHB buffer performance monitor.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  */
 static inline void XSPI_StopAhbBufferPerfMonitor(XSPI_Type *base)
@@ -2256,7 +2256,7 @@ static inline void XSPI_StopAhbBufferPerfMonitor(XSPI_Type *base)
 
 /*!
  * @brief Get AHB buffer performance monitor result.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ahbBufferId Specify AHB buffer Id.
  * @param[out] ptrPerfMonitorResult Pointer to the variable to store selected AHB buffer's performance monitor result.
@@ -2274,7 +2274,7 @@ static inline void XSPI_GetAhbBufferPerfMonitorResult(XSPI_Type *base,
 
 /*!
  * @brief Check if AHB buffer performance monitor timeout counter is overflow.
- * 
+ *
  * @param base XSPI peripheral base address.
  *
  * @retval false AHB buffer performance monitor timeout counter is not overflow.
@@ -2287,7 +2287,7 @@ static inline bool XSPI_CheckAhbBufferPerfMonitorTimeCounterOverflow(XSPI_Type *
 
 /*!
  * @brief Check if AHB buffer performance monitor buffer hit counter is overflow.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ahbBufferId Specify the AHB buffer Id.
  *
@@ -2301,7 +2301,7 @@ static inline bool XSPI_CheckAhbBufferPerfMonitorHitOverflow(XSPI_Type *base, ui
 
 /*!
  * @brief Check if AHB buffer performance monitor buffer miss counter is overflow.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ahbBufferId Specify the AHB buffer Id.
  *
@@ -2371,7 +2371,7 @@ status_t XSPI_SetAhbAccessBoundary(XSPI_Type *base, xspi_ahb_alignment_t alignme
 
 /*!
  * @brief Set AHB read sequence Id.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] seqId Specify the sequence Id in LUT used for AHB read.
  *
@@ -2384,7 +2384,7 @@ status_t XSPI_SetAhbReadDataSeqId(XSPI_Type *base, uint8_t seqId);
 
 /*!
  * @brief Set AHB write sequence Id.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] seqId Specify the sequence Id in LUT used for AHB write.
  *
@@ -2429,7 +2429,7 @@ status_t XSPI_SetAhbErrorPayload(XSPI_Type *base, uint32_t highPayload, uint32_t
 
 /*!
  * @brief Return AHB read error information.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  *
  * @return Latest AHB read error information, in type of xspi_ahb_read_error_info_t.
@@ -2438,7 +2438,7 @@ xspi_ahb_read_error_info_t XSPI_ReturnAhbReadErrorInfo(XSPI_Type *base);
 
 /*!
  * @brief Clear AHB access sequence pointer.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  */
 static inline void XSPI_ClearAhbAccessSeqPointer(XSPI_Type *base)
@@ -2457,11 +2457,11 @@ void XSPI_GetAhbRequestSuspendInfo(XSPI_Type *base, xspi_ahb_request_suspend_inf
 
 /*!
  * @brief Enable/disable AHB Read Prefetch feature.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] enable Used to enable/disable AHB read prefetch:
  *               - \b false Disable AHB read prefetch;
- *               - \b true Enable AHB read prefetch.   
+ *               - \b true Enable AHB read prefetch.
  */
 static inline void XSPI_EnableAhbReadPrefetch(XSPI_Type *base, bool enable)
 {
@@ -2510,7 +2510,7 @@ status_t XSPI_BlockAccessAfterAhbWrite(XSPI_Type *base, bool blockSequentWrite, 
 
 /*!
  * @brief Set Page program wait flag clear policy.
- * 
+ *
  * @note If set as hardware policy, the device's WIP information should be set by invoking XSPI_SetSFMStatusRegInfo()
  *
  * @param[in] base XSPI peripheral base address.
@@ -2572,7 +2572,7 @@ static inline uint16_t XSPI_GetSFMStatusRegValue(XSPI_Type *base)
 
 /*!
  * @brief Set Serial flash memory status register information
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ptrStatusRegInfo Pointer to the variable which contain status register information.
  *
@@ -2592,7 +2592,7 @@ status_t XSPI_SetSFMStatusRegInfo(XSPI_Type *base, xspi_device_status_reg_info_t
 
 /*!
  * @brief Set AHB access configuration.
- * 
+ *
  * @param[in] base XSPI peripheral base address.
  * @param[in] ptrAhbAccessConfig Pointer to the variable which contains AHB access configurations.
  *
@@ -2608,34 +2608,34 @@ status_t XSPI_SetAhbAccessConfig(XSPI_Type *base, xspi_ahb_access_config_t *ptrA
 #if defined(CACHE64_CTRL0_BASE)
 
 /*!
- * @name CACHE64 Control Interfaces 
+ * @name CACHE64 Control Interfaces
  * @{
  */
 
 /*!
  * @brief Enable a Cache64 instance.
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  */
 void XSPI_Cache64_EnableCache(CACHE64_CTRL_Type *base);
 
 /*!
  * @brief Disable a Cache64 instance.
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  */
 void XSPI_Cache64_DisableCache(CACHE64_CTRL_Type *base);
 
 /*!
  * @brief Invalidate whole input cache64 instance.
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  */
 void XSPI_Cache64_InvalidateCache(CACHE64_CTRL_Type *base);
 
 /*!
  * @brief Invalidate cache64 instance based on address of size.
- * 
+ *
  * @param address The value of start physical address.
  * @param size Size of data in unit of byte.
  */
@@ -2643,14 +2643,14 @@ void XSPI_Cache64_InvalidateCacheByRange(uint32_t address, size_t size);
 
 /*!
  * @brief Clean whole input cache64 instance.
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  */
 void XSPI_Cache64_CleanCache(CACHE64_CTRL_Type *base);
 
 /*!
  * @brief Clean cache64 instance based on address of size.
- * 
+ *
  * @param address The value of start physical address.
  * @param size Size of data in unit of byte.
  */
@@ -2658,14 +2658,14 @@ void XSPI_Cache64_CleanCacheByRange(uint32_t address, size_t size);
 
 /*!
  * @brief Clean and Invalidate whole input cache64 instance.
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  */
 void XSPI_Cache64_CleanInvalidateCache(CACHE64_CTRL_Type *base);
 
 /*!
  * @brief Clean and invalidate cache64 instance based on address of size.
- * 
+ *
  * @param address The value of start physical address.
  * @param size Size of data in unit of byte.
  */
@@ -2673,7 +2673,7 @@ void XSPI_Cache64_CleanInvalidateByRange(uint32_t address, size_t size);
 
 /*!
  * @brief Force write through mode
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  * @param enable Specify whether all cacheable spaces to write through are forced,
  */
@@ -2691,7 +2691,7 @@ static inline void XSPI_Cache64_ForceWriteThrough(CACHE64_CTRL_Type *base, bool 
 
 /*!
  * @brief Force no allocation on cache misses.
- * 
+ *
  * @param base CACHE64_CTRL peripheral base address.
  * @param enable Specify whether force no allocation on cache misses.
  */
@@ -2709,7 +2709,7 @@ static inline void XSPI_Cache64_ForceNoAllocation(CACHE64_CTRL_Type *base, bool 
 
 /*!
  * @brief Read data from cache.
- * 
+ *
  * @param address The value of start physical address.
  *
  * @return uint32_t The data of input physical address stored in cache.
@@ -2722,7 +2722,7 @@ uint32_t XSPI_Cache64_ReadCache(uint32_t address);
 #if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
  * @brief Set policy of cache regions.
- * 
+ *
  * @param base CACHE64_POLSEL peripheral base address.
  * @param config Pointer to the structure @ref xspi_cache64_region_config_t.
  */

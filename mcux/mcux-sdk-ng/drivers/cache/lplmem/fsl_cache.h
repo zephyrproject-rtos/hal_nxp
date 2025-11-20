@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief cache driver version 2.1.1. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief cache driver version 2.1.2. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*! @} */
 /*******************************************************************************
  * API
@@ -43,7 +43,13 @@ extern "C" {
  */
 static inline void L1CACHE_EnableCodeCache(void)
 {
+    __DSB();
+    __ISB();
+
     MCM->CPCR2 &= ~MCM_CPCR2_DCC_MASK;
+
+    __DSB();
+    __ISB();
 }
 
 /*!
@@ -52,7 +58,13 @@ static inline void L1CACHE_EnableCodeCache(void)
  */
 static inline void L1CACHE_DisableCodeCache(void)
 {
+    __DSB();
+    __ISB();
+
     MCM->CPCR2 |= MCM_CPCR2_DCC_MASK;
+
+    __DSB();
+    __ISB();
 }
 
 /*!

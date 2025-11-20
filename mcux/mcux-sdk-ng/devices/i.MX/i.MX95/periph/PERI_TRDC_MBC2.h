@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC_MBC2
@@ -584,10 +584,10 @@ typedef struct {
   struct {                                         /* offset: 0x800, array step: 0x20 */
     union {                                          /* offset: 0x800, array step: 0x20 */
       struct {                                         /* offset: 0x800, array step: index*0x20, index2*0x4 */
-        __IO uint32_t MDA_W_DFMT0;                       /**< DAC Master Domain Assignment Register, array offset: 0x800, array step: index*0x20, index2*0x4, valid indices: [16][0-2] */
+        __IO uint32_t MDA_W_DFMT0;                       /**< DAC Initiator Domain Assignment Register, array offset: 0x800, array step: index*0x20, index2*0x4, valid indices: [16][0-2] */
       } MDA_Wx_DFMT0[TRDC_MBC2_MDA_Wx_y_DFMT_MDA_W_DFMT_DFMT0_MDA_Wx_DFMT0_COUNT];
       struct {                                         /* offset: 0x800, array step: index*0x20, index2*0x4 */
-        __IO uint32_t MDA_W_DFMT1;                       /**< DAC Master Domain Assignment Register, array offset: 0x800, array step: index*0x20, index2*0x4, valid indices: [0-15, 17-38][0] */
+        __IO uint32_t MDA_W_DFMT1;                       /**< DAC Initiator Domain Assignment Register, array offset: 0x800, array step: index*0x20, index2*0x4, valid indices: [0-15, 17-38][0] */
       } MDA_Wx_DFMT1[TRDC_MBC2_MDA_Wx_y_DFMT_MDA_W_DFMT_DFMT1_MDA_Wx_DFMT1_COUNT];
     } MDA_W_DFMT;
          uint8_t RESERVED_0[20];
@@ -927,7 +927,7 @@ typedef struct {
 
 #define TRDC_MBC2_TRDC_HWCFG0_NMSTR_MASK         (0xFF00U)
 #define TRDC_MBC2_TRDC_HWCFG0_NMSTR_SHIFT        (8U)
-/*! NMSTR - Number of bus masters */
+/*! NMSTR - Number of bus initiators */
 #define TRDC_MBC2_TRDC_HWCFG0_NMSTR(x)           (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_TRDC_HWCFG0_NMSTR_SHIFT)) & TRDC_MBC2_TRDC_HWCFG0_NMSTR_MASK)
 
 #define TRDC_MBC2_TRDC_HWCFG0_NMBC_MASK          (0xF0000U)
@@ -978,14 +978,14 @@ typedef struct {
 
 #define TRDC_MBC2_DACFG_NMDAR_MASK               (0xFU)
 #define TRDC_MBC2_DACFG_NMDAR_SHIFT              (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define TRDC_MBC2_DACFG_NMDAR(x)                 (((uint8_t)(((uint8_t)(x)) << TRDC_MBC2_DACFG_NMDAR_SHIFT)) & TRDC_MBC2_DACFG_NMDAR_MASK)
 
 #define TRDC_MBC2_DACFG_NCM_MASK                 (0x80U)
 #define TRDC_MBC2_DACFG_NCM_SHIFT                (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define TRDC_MBC2_DACFG_NCM(x)                   (((uint8_t)(((uint8_t)(x)) << TRDC_MBC2_DACFG_NCM_SHIFT)) & TRDC_MBC2_DACFG_NCM_MASK)
 /*! @} */
@@ -1179,6 +1179,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define TRDC_MBC2_W1_EDID(x)                     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_EDID_SHIFT)) & TRDC_MBC2_W1_EDID_MASK)
 
+#define TRDC_MBC2_W1_SLV_DID_ERR_MASK            (0x10U)
+#define TRDC_MBC2_W1_SLV_DID_ERR_SHIFT           (4U)
+/*! SLV_DID_ERR - DID check error */
+#define TRDC_MBC2_W1_SLV_DID_ERR(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_DID_ERR_SHIFT)) & TRDC_MBC2_W1_SLV_DID_ERR_MASK)
+
+#define TRDC_MBC2_W1_SLV_PA_ERR_MASK             (0x20U)
+#define TRDC_MBC2_W1_SLV_PA_ERR_SHIFT            (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define TRDC_MBC2_W1_SLV_PA_ERR(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_PA_ERR_SHIFT)) & TRDC_MBC2_W1_SLV_PA_ERR_MASK)
+
+#define TRDC_MBC2_W1_SLV_SA_ERR_MASK             (0x40U)
+#define TRDC_MBC2_W1_SLV_SA_ERR_SHIFT            (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define TRDC_MBC2_W1_SLV_SA_ERR(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_SA_ERR_SHIFT)) & TRDC_MBC2_W1_SLV_SA_ERR_MASK)
+
+#define TRDC_MBC2_W1_SLV_ABORT_MASK              (0x80U)
+#define TRDC_MBC2_W1_SLV_ABORT_SHIFT             (7U)
+/*! SLV_ABORT - Bus protect error */
+#define TRDC_MBC2_W1_SLV_ABORT(x)                (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_ABORT_SHIFT)) & TRDC_MBC2_W1_SLV_ABORT_MASK)
+
 #define TRDC_MBC2_W1_EATR_MASK                   (0x700U)
 #define TRDC_MBC2_W1_EATR_SHIFT                  (8U)
 /*! EATR - Error attributes
@@ -1258,6 +1278,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define TRDC_MBC2_W1_EDID(x)                     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_EDID_SHIFT)) & TRDC_MBC2_W1_EDID_MASK)
 
+#define TRDC_MBC2_W1_SLV_DID_ERR_MASK            (0x10U)
+#define TRDC_MBC2_W1_SLV_DID_ERR_SHIFT           (4U)
+/*! SLV_DID_ERR - DID check error */
+#define TRDC_MBC2_W1_SLV_DID_ERR(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_DID_ERR_SHIFT)) & TRDC_MBC2_W1_SLV_DID_ERR_MASK)
+
+#define TRDC_MBC2_W1_SLV_PA_ERR_MASK             (0x20U)
+#define TRDC_MBC2_W1_SLV_PA_ERR_SHIFT            (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define TRDC_MBC2_W1_SLV_PA_ERR(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_PA_ERR_SHIFT)) & TRDC_MBC2_W1_SLV_PA_ERR_MASK)
+
+#define TRDC_MBC2_W1_SLV_SA_ERR_MASK             (0x40U)
+#define TRDC_MBC2_W1_SLV_SA_ERR_SHIFT            (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define TRDC_MBC2_W1_SLV_SA_ERR(x)               (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_SA_ERR_SHIFT)) & TRDC_MBC2_W1_SLV_SA_ERR_MASK)
+
+#define TRDC_MBC2_W1_SLV_ABORT_MASK              (0x80U)
+#define TRDC_MBC2_W1_SLV_ABORT_SHIFT             (7U)
+/*! SLV_ABORT - Bus protect error */
+#define TRDC_MBC2_W1_SLV_ABORT(x)                (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_W1_SLV_ABORT_SHIFT)) & TRDC_MBC2_W1_SLV_ABORT_MASK)
+
 #define TRDC_MBC2_W1_EATR_MASK                   (0x700U)
 #define TRDC_MBC2_W1_EATR_SHIFT                  (8U)
 /*! EATR - Error attributes
@@ -1325,13 +1365,13 @@ typedef struct {
 /*! LK2 - Lock
  *  0b00..Register can be written by any secure privileged write.
  *  0b01..Register can be written by any secure privileged write.
- *  0b10..Register can only be written by a secure privileged write from the bus master that locked the register.
+ *  0b10..Register can only be written by a secure privileged write from the bus initiator that locked the register.
  *  0b11..Register is locked (read-only) until the next reset.
  */
 #define TRDC_MBC2_PID_LK2(x)                     (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_PID_LK2_SHIFT)) & TRDC_MBC2_PID_LK2_MASK)
 /*! @} */
 
-/*! @name MDA_W_DFMT0 - DAC Master Domain Assignment Register */
+/*! @name MDA_W_DFMT0 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define TRDC_MBC2_MDA_W_DFMT0_DID_MASK           (0xFU)
@@ -1367,10 +1407,10 @@ typedef struct {
 #define TRDC_MBC2_MDA_W_DFMT0_SA_MASK            (0xC000U)
 #define TRDC_MBC2_MDA_W_DFMT0_SA_SHIFT           (14U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define TRDC_MBC2_MDA_W_DFMT0_SA(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_MDA_W_DFMT0_SA_SHIFT)) & TRDC_MBC2_MDA_W_DFMT0_SA_MASK)
 
@@ -1423,7 +1463,7 @@ typedef struct {
 /* The count of TRDC_MBC2_MDA_W_DFMT0 */
 #define TRDC_MBC2_MDA_W_DFMT0_COUNT2             (3U)
 
-/*! @name MDA_W_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define TRDC_MBC2_MDA_W_DFMT1_DID_MASK           (0xFU)
@@ -1434,20 +1474,20 @@ typedef struct {
 #define TRDC_MBC2_MDA_W_DFMT1_PA_MASK            (0x30U)
 #define TRDC_MBC2_MDA_W_DFMT1_PA_SHIFT           (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define TRDC_MBC2_MDA_W_DFMT1_PA(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_MDA_W_DFMT1_PA_SHIFT)) & TRDC_MBC2_MDA_W_DFMT1_PA_MASK)
 
 #define TRDC_MBC2_MDA_W_DFMT1_SA_MASK            (0xC0U)
 #define TRDC_MBC2_MDA_W_DFMT1_SA_SHIFT           (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define TRDC_MBC2_MDA_W_DFMT1_SA(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC2_MDA_W_DFMT1_SA_SHIFT)) & TRDC_MBC2_MDA_W_DFMT1_SA_MASK)
 

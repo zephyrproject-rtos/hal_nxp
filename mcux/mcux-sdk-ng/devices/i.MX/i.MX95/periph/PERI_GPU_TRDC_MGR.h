@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPU_TRDC_MGR
@@ -432,39 +432,38 @@ typedef struct {
        uint8_t RESERVED_0[236];
   __I  uint32_t TRDC_HWCFG0;                       /**< TRDC Hardware Configuration Register 0, offset: 0xF0 */
   __I  uint32_t TRDC_HWCFG1;                       /**< TRDC Hardware Configuration Register 1, offset: 0xF4 */
-  __I  uint32_t TRDC_HWCFG2;                       /**< TRDC Hardware Configuration Register 2, offset: 0xF8 */
-  __I  uint32_t TRDC_HWCFG3;                       /**< TRDC Hardware Configuration Register 3, offset: 0xFC */
+       uint8_t RESERVED_1[8];
   __I  uint8_t DACFG0;                             /**< Domain Assignment Configuration Register, offset: 0x100 */
   __I  uint8_t DACFG1;                             /**< Domain Assignment Configuration Register, offset: 0x101 */
-       uint8_t RESERVED_1[190];
+       uint8_t RESERVED_2[190];
   __IO uint32_t TRDC_IDAU_CR;                      /**< TRDC IDAU Control Register, offset: 0x1C0 */
-       uint8_t RESERVED_2[28];
+       uint8_t RESERVED_3[28];
   __IO uint32_t TRDC_FLW_CTL;                      /**< TRDC FLW Control, offset: 0x1E0 */
   __I  uint32_t TRDC_FLW_PBASE;                    /**< TRDC FLW Physical Base, offset: 0x1E4 */
   __IO uint32_t TRDC_FLW_ABASE;                    /**< TRDC FLW Array Base, offset: 0x1E8 */
   __IO uint32_t TRDC_FLW_BCNT;                     /**< TRDC FLW Block Count, offset: 0x1EC */
-       uint8_t RESERVED_3[12];
+       uint8_t RESERVED_4[12];
   __IO uint32_t TRDC_FDID;                         /**< TRDC Fault Domain ID, offset: 0x1FC */
   __I  uint32_t TRDC_DERRLOC[GPU_TRDC_MGR_DERRLOC_COUNT]; /**< TRDC Domain Error Location Register, array offset: 0x200, array step: 0x4 */
-       uint8_t RESERVED_4[448];
+       uint8_t RESERVED_5[448];
   struct {                                         /* offset: 0x400, array step: 0x10 */
     __I  uint32_t W0;                                /**< MBC Domain Error Word0 Register, array offset: 0x400, array step: 0x10 */
     __I  uint32_t W1;                                /**< MBC Domain Error Word1 Register, array offset: 0x404, array step: 0x10 */
          uint8_t RESERVED_0[4];
     __IO uint32_t W3;                                /**< MBC Domain Error Word3 Register, array offset: 0x40C, array step: 0x10 */
   } MBC_DERR[GPU_TRDC_MGR_MBC_DERR_COUNT];
-       uint8_t RESERVED_5[112];
+       uint8_t RESERVED_6[112];
   struct {                                         /* offset: 0x480, array step: 0x10 */
     __I  uint32_t W0;                                /**< MRC Domain Error Word0 Register, array offset: 0x480, array step: 0x10 */
     __I  uint32_t W1;                                /**< MRC Domain Error Word1 Register, array offset: 0x484, array step: 0x10 */
          uint8_t RESERVED_0[4];
     __IO uint32_t W3;                                /**< MRC Domain Error Word3 Register, array offset: 0x48C, array step: 0x10 */
   } MRC_DERR[GPU_TRDC_MGR_MRC_DERR_COUNT];
-       uint8_t RESERVED_6[880];
-  __IO uint32_t MDA_W0_0_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x800 */
-       uint8_t RESERVED_7[28];
-  __IO uint32_t MDA_W0_1_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x820 */
-       uint8_t RESERVED_8[63452];
+       uint8_t RESERVED_7[880];
+  __IO uint32_t MDA_W0_0_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x800 */
+       uint8_t RESERVED_8[28];
+  __IO uint32_t MDA_W0_1_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x820 */
+       uint8_t RESERVED_9[63452];
   __I  uint32_t MBC0_MEM_GLBCFG[GPU_TRDC_MGR_MBC_MEM_GLBCFG0_COUNT]; /**< MBC Global Configuration Register, array offset: 0x10000, array step: 0x4 */
   __IO uint32_t MBC0_NSE_BLK_INDEX;                /**< MBC NonSecure Enable Block Index, offset: 0x10010 */
   __IO uint32_t MBC0_NSE_BLK_SET;                  /**< MBC NonSecure Enable Block Set, offset: 0x10014 */
@@ -472,71 +471,71 @@ typedef struct {
   __IO uint32_t MBC0_NSE_BLK_CLR_ALL;              /**< MBC NonSecure Enable Block Clear All, offset: 0x1001C */
   __IO uint32_t MBC0_MEMN_GLBAC[GPU_TRDC_MGR_MBC_MEMN_GLBAC0_COUNT]; /**< MBC Global Access Control, array offset: 0x10020, array step: 0x4 */
   __IO uint32_t MBC0_DOM0_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10040 */
-       uint8_t RESERVED_9[252];
-  __IO uint32_t MBC0_DOM0_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10140 */
        uint8_t RESERVED_10[252];
-  __IO uint32_t MBC0_DOM1_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10240 */
+  __IO uint32_t MBC0_DOM0_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10140 */
        uint8_t RESERVED_11[252];
-  __IO uint32_t MBC0_DOM1_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10340 */
+  __IO uint32_t MBC0_DOM1_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10240 */
        uint8_t RESERVED_12[252];
-  __IO uint32_t MBC0_DOM2_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10440 */
+  __IO uint32_t MBC0_DOM1_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10340 */
        uint8_t RESERVED_13[252];
-  __IO uint32_t MBC0_DOM2_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10540 */
+  __IO uint32_t MBC0_DOM2_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10440 */
        uint8_t RESERVED_14[252];
-  __IO uint32_t MBC0_DOM3_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10640 */
+  __IO uint32_t MBC0_DOM2_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10540 */
        uint8_t RESERVED_15[252];
-  __IO uint32_t MBC0_DOM3_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10740 */
+  __IO uint32_t MBC0_DOM3_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10640 */
        uint8_t RESERVED_16[252];
-  __IO uint32_t MBC0_DOM4_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10840 */
+  __IO uint32_t MBC0_DOM3_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10740 */
        uint8_t RESERVED_17[252];
-  __IO uint32_t MBC0_DOM4_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10940 */
+  __IO uint32_t MBC0_DOM4_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10840 */
        uint8_t RESERVED_18[252];
-  __IO uint32_t MBC0_DOM5_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10A40 */
+  __IO uint32_t MBC0_DOM4_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10940 */
        uint8_t RESERVED_19[252];
-  __IO uint32_t MBC0_DOM5_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10B40 */
+  __IO uint32_t MBC0_DOM5_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10A40 */
        uint8_t RESERVED_20[252];
-  __IO uint32_t MBC0_DOM6_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10C40 */
+  __IO uint32_t MBC0_DOM5_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10B40 */
        uint8_t RESERVED_21[252];
-  __IO uint32_t MBC0_DOM6_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10D40 */
+  __IO uint32_t MBC0_DOM6_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10C40 */
        uint8_t RESERVED_22[252];
-  __IO uint32_t MBC0_DOM7_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10E40 */
+  __IO uint32_t MBC0_DOM6_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10D40 */
        uint8_t RESERVED_23[252];
-  __IO uint32_t MBC0_DOM7_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10F40 */
+  __IO uint32_t MBC0_DOM7_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x10E40 */
        uint8_t RESERVED_24[252];
-  __IO uint32_t MBC0_DOM8_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x11040 */
+  __IO uint32_t MBC0_DOM7_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x10F40 */
        uint8_t RESERVED_25[252];
-  __IO uint32_t MBC0_DOM8_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x11140 */
+  __IO uint32_t MBC0_DOM8_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x11040 */
        uint8_t RESERVED_26[252];
-  __IO uint32_t MBC0_DOM9_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x11240 */
+  __IO uint32_t MBC0_DOM8_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x11140 */
        uint8_t RESERVED_27[252];
-  __IO uint32_t MBC0_DOM9_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x11340 */
+  __IO uint32_t MBC0_DOM9_MEM0_BLK_CFG_W0;         /**< MBC Memory Block Configuration Word, offset: 0x11240 */
        uint8_t RESERVED_28[252];
-  __IO uint32_t MBC0_DOM10_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11440 */
+  __IO uint32_t MBC0_DOM9_MEM0_BLK_NSE_W0;         /**< MBC Memory Block NonSecure Enable Word, offset: 0x11340 */
        uint8_t RESERVED_29[252];
-  __IO uint32_t MBC0_DOM10_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11540 */
+  __IO uint32_t MBC0_DOM10_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11440 */
        uint8_t RESERVED_30[252];
-  __IO uint32_t MBC0_DOM11_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11640 */
+  __IO uint32_t MBC0_DOM10_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11540 */
        uint8_t RESERVED_31[252];
-  __IO uint32_t MBC0_DOM11_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11740 */
+  __IO uint32_t MBC0_DOM11_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11640 */
        uint8_t RESERVED_32[252];
-  __IO uint32_t MBC0_DOM12_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11840 */
+  __IO uint32_t MBC0_DOM11_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11740 */
        uint8_t RESERVED_33[252];
-  __IO uint32_t MBC0_DOM12_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11940 */
+  __IO uint32_t MBC0_DOM12_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11840 */
        uint8_t RESERVED_34[252];
-  __IO uint32_t MBC0_DOM13_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11A40 */
+  __IO uint32_t MBC0_DOM12_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11940 */
        uint8_t RESERVED_35[252];
-  __IO uint32_t MBC0_DOM13_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11B40 */
+  __IO uint32_t MBC0_DOM13_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11A40 */
        uint8_t RESERVED_36[252];
-  __IO uint32_t MBC0_DOM14_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11C40 */
+  __IO uint32_t MBC0_DOM13_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11B40 */
        uint8_t RESERVED_37[252];
-  __IO uint32_t MBC0_DOM14_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11D40 */
+  __IO uint32_t MBC0_DOM14_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11C40 */
        uint8_t RESERVED_38[252];
-  __IO uint32_t MBC0_DOM15_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11E40 */
+  __IO uint32_t MBC0_DOM14_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11D40 */
        uint8_t RESERVED_39[252];
+  __IO uint32_t MBC0_DOM15_MEM0_BLK_CFG_W0;        /**< MBC Memory Block Configuration Word, offset: 0x11E40 */
+       uint8_t RESERVED_40[252];
   __IO uint32_t MBC0_DOM15_MEM0_BLK_NSE_W0;        /**< MBC Memory Block NonSecure Enable Word, offset: 0x11F40 */
-       uint8_t RESERVED_40[188];
+       uint8_t RESERVED_41[188];
   __I  uint32_t MRC0_GLBCFG;                       /**< MRC Global Configuration Register, offset: 0x12000 */
-       uint8_t RESERVED_41[12];
+       uint8_t RESERVED_42[12];
   __IO uint32_t MRC0_NSE_RGN_INDIRECT;             /**< MRC NonSecure Enable Region Indirect, offset: 0x12010 */
   __IO uint32_t MRC0_NSE_RGN_SET;                  /**< MRC NonSecure Enable Region Set, offset: 0x12014 */
   __IO uint32_t MRC0_NSE_RGN_CLR;                  /**< MRC NonSecure Enable Region Clear, offset: 0x12018 */
@@ -546,112 +545,112 @@ typedef struct {
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12040, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12044, array step: 0x8 */
   } MRC0_DOM0_RGD[GPU_TRDC_MGR_MRC0_DOM0_RGD_COUNT];
-       uint8_t RESERVED_42[96];
+       uint8_t RESERVED_43[96];
   __IO uint32_t MRC0_DOM0_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x120C0 */
-       uint8_t RESERVED_43[124];
+       uint8_t RESERVED_44[124];
   struct {                                         /* offset: 0x12140, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12140, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12144, array step: 0x8 */
   } MRC0_DOM1_RGD[GPU_TRDC_MGR_MRC0_DOM1_RGD_COUNT];
-       uint8_t RESERVED_44[96];
+       uint8_t RESERVED_45[96];
   __IO uint32_t MRC0_DOM1_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x121C0 */
-       uint8_t RESERVED_45[124];
+       uint8_t RESERVED_46[124];
   struct {                                         /* offset: 0x12240, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12240, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12244, array step: 0x8 */
   } MRC0_DOM2_RGD[GPU_TRDC_MGR_MRC0_DOM2_RGD_COUNT];
-       uint8_t RESERVED_46[96];
+       uint8_t RESERVED_47[96];
   __IO uint32_t MRC0_DOM2_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x122C0 */
-       uint8_t RESERVED_47[124];
+       uint8_t RESERVED_48[124];
   struct {                                         /* offset: 0x12340, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12340, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12344, array step: 0x8 */
   } MRC0_DOM3_RGD[GPU_TRDC_MGR_MRC0_DOM3_RGD_COUNT];
-       uint8_t RESERVED_48[96];
+       uint8_t RESERVED_49[96];
   __IO uint32_t MRC0_DOM3_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x123C0 */
-       uint8_t RESERVED_49[124];
+       uint8_t RESERVED_50[124];
   struct {                                         /* offset: 0x12440, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12440, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12444, array step: 0x8 */
   } MRC0_DOM4_RGD[GPU_TRDC_MGR_MRC0_DOM4_RGD_COUNT];
-       uint8_t RESERVED_50[96];
+       uint8_t RESERVED_51[96];
   __IO uint32_t MRC0_DOM4_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x124C0 */
-       uint8_t RESERVED_51[124];
+       uint8_t RESERVED_52[124];
   struct {                                         /* offset: 0x12540, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12540, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12544, array step: 0x8 */
   } MRC0_DOM5_RGD[GPU_TRDC_MGR_MRC0_DOM5_RGD_COUNT];
-       uint8_t RESERVED_52[96];
+       uint8_t RESERVED_53[96];
   __IO uint32_t MRC0_DOM5_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x125C0 */
-       uint8_t RESERVED_53[124];
+       uint8_t RESERVED_54[124];
   struct {                                         /* offset: 0x12640, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12640, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12644, array step: 0x8 */
   } MRC0_DOM6_RGD[GPU_TRDC_MGR_MRC0_DOM6_RGD_COUNT];
-       uint8_t RESERVED_54[96];
+       uint8_t RESERVED_55[96];
   __IO uint32_t MRC0_DOM6_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x126C0 */
-       uint8_t RESERVED_55[124];
+       uint8_t RESERVED_56[124];
   struct {                                         /* offset: 0x12740, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12740, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12744, array step: 0x8 */
   } MRC0_DOM7_RGD[GPU_TRDC_MGR_MRC0_DOM7_RGD_COUNT];
-       uint8_t RESERVED_56[96];
+       uint8_t RESERVED_57[96];
   __IO uint32_t MRC0_DOM7_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x127C0 */
-       uint8_t RESERVED_57[124];
+       uint8_t RESERVED_58[124];
   struct {                                         /* offset: 0x12840, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12840, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12844, array step: 0x8 */
   } MRC0_DOM8_RGD[GPU_TRDC_MGR_MRC0_DOM8_RGD_COUNT];
-       uint8_t RESERVED_58[96];
+       uint8_t RESERVED_59[96];
   __IO uint32_t MRC0_DOM8_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x128C0 */
-       uint8_t RESERVED_59[124];
+       uint8_t RESERVED_60[124];
   struct {                                         /* offset: 0x12940, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12940, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12944, array step: 0x8 */
   } MRC0_DOM9_RGD[GPU_TRDC_MGR_MRC0_DOM9_RGD_COUNT];
-       uint8_t RESERVED_60[96];
+       uint8_t RESERVED_61[96];
   __IO uint32_t MRC0_DOM9_RGD_NSE;                 /**< MRC Region Descriptor NonSecure Enable, offset: 0x129C0 */
-       uint8_t RESERVED_61[124];
+       uint8_t RESERVED_62[124];
   struct {                                         /* offset: 0x12A40, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12A40, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12A44, array step: 0x8 */
   } MRC0_DOM10_RGD[GPU_TRDC_MGR_MRC0_DOM10_RGD_COUNT];
-       uint8_t RESERVED_62[96];
+       uint8_t RESERVED_63[96];
   __IO uint32_t MRC0_DOM10_RGD_NSE;                /**< MRC Region Descriptor NonSecure Enable, offset: 0x12AC0 */
-       uint8_t RESERVED_63[124];
+       uint8_t RESERVED_64[124];
   struct {                                         /* offset: 0x12B40, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12B40, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12B44, array step: 0x8 */
   } MRC0_DOM11_RGD[GPU_TRDC_MGR_MRC0_DOM11_RGD_COUNT];
-       uint8_t RESERVED_64[96];
+       uint8_t RESERVED_65[96];
   __IO uint32_t MRC0_DOM11_RGD_NSE;                /**< MRC Region Descriptor NonSecure Enable, offset: 0x12BC0 */
-       uint8_t RESERVED_65[124];
+       uint8_t RESERVED_66[124];
   struct {                                         /* offset: 0x12C40, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12C40, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12C44, array step: 0x8 */
   } MRC0_DOM12_RGD[GPU_TRDC_MGR_MRC0_DOM12_RGD_COUNT];
-       uint8_t RESERVED_66[96];
+       uint8_t RESERVED_67[96];
   __IO uint32_t MRC0_DOM12_RGD_NSE;                /**< MRC Region Descriptor NonSecure Enable, offset: 0x12CC0 */
-       uint8_t RESERVED_67[124];
+       uint8_t RESERVED_68[124];
   struct {                                         /* offset: 0x12D40, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12D40, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12D44, array step: 0x8 */
   } MRC0_DOM13_RGD[GPU_TRDC_MGR_MRC0_DOM13_RGD_COUNT];
-       uint8_t RESERVED_68[96];
+       uint8_t RESERVED_69[96];
   __IO uint32_t MRC0_DOM13_RGD_NSE;                /**< MRC Region Descriptor NonSecure Enable, offset: 0x12DC0 */
-       uint8_t RESERVED_69[124];
+       uint8_t RESERVED_70[124];
   struct {                                         /* offset: 0x12E40, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12E40, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12E44, array step: 0x8 */
   } MRC0_DOM14_RGD[GPU_TRDC_MGR_MRC0_DOM14_RGD_COUNT];
-       uint8_t RESERVED_70[96];
+       uint8_t RESERVED_71[96];
   __IO uint32_t MRC0_DOM14_RGD_NSE;                /**< MRC Region Descriptor NonSecure Enable, offset: 0x12EC0 */
-       uint8_t RESERVED_71[124];
+       uint8_t RESERVED_72[124];
   struct {                                         /* offset: 0x12F40, array step: 0x8 */
     __IO uint32_t W0;                                /**< MRC Region Descriptor Word 0, array offset: 0x12F40, array step: 0x8 */
     __IO uint32_t W1;                                /**< MRC Region Descriptor Word 1, array offset: 0x12F44, array step: 0x8 */
   } MRC0_DOM15_RGD[GPU_TRDC_MGR_MRC0_DOM15_RGD_COUNT];
-       uint8_t RESERVED_72[96];
+       uint8_t RESERVED_73[96];
   __IO uint32_t MRC0_DOM15_RGD_NSE;                /**< MRC Region Descriptor NonSecure Enable, offset: 0x12FC0 */
 } GPU_TRDC_MGR_Type;
 
@@ -715,7 +714,7 @@ typedef struct {
 
 #define GPU_TRDC_MGR_TRDC_HWCFG0_NMSTR_MASK      (0xFF00U)
 #define GPU_TRDC_MGR_TRDC_HWCFG0_NMSTR_SHIFT     (8U)
-/*! NMSTR - Number of bus masters */
+/*! NMSTR - Number of bus initiators */
 #define GPU_TRDC_MGR_TRDC_HWCFG0_NMSTR(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_TRDC_HWCFG0_NMSTR_SHIFT)) & GPU_TRDC_MGR_TRDC_HWCFG0_NMSTR_MASK)
 
 #define GPU_TRDC_MGR_TRDC_HWCFG0_NMBC_MASK       (0xF0000U)
@@ -743,37 +742,19 @@ typedef struct {
 #define GPU_TRDC_MGR_TRDC_HWCFG1_DID(x)          (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_TRDC_HWCFG1_DID_SHIFT)) & GPU_TRDC_MGR_TRDC_HWCFG1_DID_MASK)
 /*! @} */
 
-/*! @name TRDC_HWCFG2 - TRDC Hardware Configuration Register 2 */
-/*! @{ */
-
-#define GPU_TRDC_MGR_TRDC_HWCFG2_PIDPn_MASK      (0xFFFFFFFFU)
-#define GPU_TRDC_MGR_TRDC_HWCFG2_PIDPn_SHIFT     (0U)
-/*! PIDPn - Process identifier present */
-#define GPU_TRDC_MGR_TRDC_HWCFG2_PIDPn(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_TRDC_HWCFG2_PIDPn_SHIFT)) & GPU_TRDC_MGR_TRDC_HWCFG2_PIDPn_MASK)
-/*! @} */
-
-/*! @name TRDC_HWCFG3 - TRDC Hardware Configuration Register 3 */
-/*! @{ */
-
-#define GPU_TRDC_MGR_TRDC_HWCFG3_PIDPn_MASK      (0xFFFFFFFFU)
-#define GPU_TRDC_MGR_TRDC_HWCFG3_PIDPn_SHIFT     (0U)
-/*! PIDPn - Process identifier present */
-#define GPU_TRDC_MGR_TRDC_HWCFG3_PIDPn(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_TRDC_HWCFG3_PIDPn_SHIFT)) & GPU_TRDC_MGR_TRDC_HWCFG3_PIDPn_MASK)
-/*! @} */
-
 /*! @name DACFG0 - Domain Assignment Configuration Register */
 /*! @{ */
 
 #define GPU_TRDC_MGR_DACFG0_NMDAR_MASK           (0xFU)
 #define GPU_TRDC_MGR_DACFG0_NMDAR_SHIFT          (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define GPU_TRDC_MGR_DACFG0_NMDAR(x)             (((uint8_t)(((uint8_t)(x)) << GPU_TRDC_MGR_DACFG0_NMDAR_SHIFT)) & GPU_TRDC_MGR_DACFG0_NMDAR_MASK)
 
 #define GPU_TRDC_MGR_DACFG0_NCM_MASK             (0x80U)
 #define GPU_TRDC_MGR_DACFG0_NCM_SHIFT            (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define GPU_TRDC_MGR_DACFG0_NCM(x)               (((uint8_t)(((uint8_t)(x)) << GPU_TRDC_MGR_DACFG0_NCM_SHIFT)) & GPU_TRDC_MGR_DACFG0_NCM_MASK)
 /*! @} */
@@ -783,14 +764,14 @@ typedef struct {
 
 #define GPU_TRDC_MGR_DACFG1_NMDAR_MASK           (0xFU)
 #define GPU_TRDC_MGR_DACFG1_NMDAR_SHIFT          (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define GPU_TRDC_MGR_DACFG1_NMDAR(x)             (((uint8_t)(((uint8_t)(x)) << GPU_TRDC_MGR_DACFG1_NMDAR_SHIFT)) & GPU_TRDC_MGR_DACFG1_NMDAR_MASK)
 
 #define GPU_TRDC_MGR_DACFG1_NCM_MASK             (0x80U)
 #define GPU_TRDC_MGR_DACFG1_NCM_SHIFT            (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define GPU_TRDC_MGR_DACFG1_NCM(x)               (((uint8_t)(((uint8_t)(x)) << GPU_TRDC_MGR_DACFG1_NCM_SHIFT)) & GPU_TRDC_MGR_DACFG1_NCM_MASK)
 /*! @} */
@@ -876,20 +857,6 @@ typedef struct {
  *  0b1..Disable writes to the SAU_CTRL, SAU_RNR, SAU_RBAR and SAU_RLAR registers from software or from a debug agent connected to the processor
  */
 #define GPU_TRDC_MGR_TRDC_IDAU_CR_LKSAU(x)       (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_TRDC_IDAU_CR_LKSAU_SHIFT)) & GPU_TRDC_MGR_TRDC_IDAU_CR_LKSAU_MASK)
-
-#define GPU_TRDC_MGR_TRDC_IDAU_CR_SME_MASK       (0x70000U)
-#define GPU_TRDC_MGR_TRDC_IDAU_CR_SME_SHIFT      (16U)
-/*! SME - SubMode Enable
- *  0b000..nonsecure[6,8,A,C], secure[7,9,B,D] - submodes disabled
- *  0b001..nonsecure[6-7,A,C], secure[8-9,B,D]
- *  0b010..nonsecure[6,8,A-B], secure[7,9,C-D]
- *  0b011..nonsecure[6-9], secure[A-D]
- *  0b100..nonsecure[6-9], secure[A-D]
- *  0b101..nonsecure[6-9], secure[A-D]
- *  0b110..nonsecure[6-9], secure[A-D]
- *  0b111..nonsecure[6-9], secure[A-D]
- */
-#define GPU_TRDC_MGR_TRDC_IDAU_CR_SME(x)         (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_TRDC_IDAU_CR_SME_SHIFT)) & GPU_TRDC_MGR_TRDC_IDAU_CR_SME_MASK)
 
 #define GPU_TRDC_MGR_TRDC_IDAU_CR_PCURRNS_MASK   (0x80000000U)
 #define GPU_TRDC_MGR_TRDC_IDAU_CR_PCURRNS_SHIFT  (31U)
@@ -998,6 +965,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define GPU_TRDC_MGR_W1_EDID(x)                  (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_EDID_SHIFT)) & GPU_TRDC_MGR_W1_EDID_MASK)
 
+#define GPU_TRDC_MGR_W1_SLV_DID_ERR_MASK         (0x10U)
+#define GPU_TRDC_MGR_W1_SLV_DID_ERR_SHIFT        (4U)
+/*! SLV_DID_ERR - DID check error */
+#define GPU_TRDC_MGR_W1_SLV_DID_ERR(x)           (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_DID_ERR_SHIFT)) & GPU_TRDC_MGR_W1_SLV_DID_ERR_MASK)
+
+#define GPU_TRDC_MGR_W1_SLV_PA_ERR_MASK          (0x20U)
+#define GPU_TRDC_MGR_W1_SLV_PA_ERR_SHIFT         (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define GPU_TRDC_MGR_W1_SLV_PA_ERR(x)            (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_PA_ERR_SHIFT)) & GPU_TRDC_MGR_W1_SLV_PA_ERR_MASK)
+
+#define GPU_TRDC_MGR_W1_SLV_SA_ERR_MASK          (0x40U)
+#define GPU_TRDC_MGR_W1_SLV_SA_ERR_SHIFT         (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define GPU_TRDC_MGR_W1_SLV_SA_ERR(x)            (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_SA_ERR_SHIFT)) & GPU_TRDC_MGR_W1_SLV_SA_ERR_MASK)
+
+#define GPU_TRDC_MGR_W1_SLV_ABORT_MASK           (0x80U)
+#define GPU_TRDC_MGR_W1_SLV_ABORT_SHIFT          (7U)
+/*! SLV_ABORT - Bus protect error */
+#define GPU_TRDC_MGR_W1_SLV_ABORT(x)             (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_ABORT_SHIFT)) & GPU_TRDC_MGR_W1_SLV_ABORT_MASK)
+
 #define GPU_TRDC_MGR_W1_EATR_MASK                (0x700U)
 #define GPU_TRDC_MGR_W1_EATR_SHIFT               (8U)
 /*! EATR - Error attributes
@@ -1077,6 +1064,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define GPU_TRDC_MGR_W1_EDID(x)                  (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_EDID_SHIFT)) & GPU_TRDC_MGR_W1_EDID_MASK)
 
+#define GPU_TRDC_MGR_W1_SLV_DID_ERR_MASK         (0x10U)
+#define GPU_TRDC_MGR_W1_SLV_DID_ERR_SHIFT        (4U)
+/*! SLV_DID_ERR - DID check error */
+#define GPU_TRDC_MGR_W1_SLV_DID_ERR(x)           (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_DID_ERR_SHIFT)) & GPU_TRDC_MGR_W1_SLV_DID_ERR_MASK)
+
+#define GPU_TRDC_MGR_W1_SLV_PA_ERR_MASK          (0x20U)
+#define GPU_TRDC_MGR_W1_SLV_PA_ERR_SHIFT         (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define GPU_TRDC_MGR_W1_SLV_PA_ERR(x)            (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_PA_ERR_SHIFT)) & GPU_TRDC_MGR_W1_SLV_PA_ERR_MASK)
+
+#define GPU_TRDC_MGR_W1_SLV_SA_ERR_MASK          (0x40U)
+#define GPU_TRDC_MGR_W1_SLV_SA_ERR_SHIFT         (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define GPU_TRDC_MGR_W1_SLV_SA_ERR(x)            (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_SA_ERR_SHIFT)) & GPU_TRDC_MGR_W1_SLV_SA_ERR_MASK)
+
+#define GPU_TRDC_MGR_W1_SLV_ABORT_MASK           (0x80U)
+#define GPU_TRDC_MGR_W1_SLV_ABORT_SHIFT          (7U)
+/*! SLV_ABORT - Bus protect error */
+#define GPU_TRDC_MGR_W1_SLV_ABORT(x)             (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_W1_SLV_ABORT_SHIFT)) & GPU_TRDC_MGR_W1_SLV_ABORT_MASK)
+
 #define GPU_TRDC_MGR_W1_EATR_MASK                (0x700U)
 #define GPU_TRDC_MGR_W1_EATR_SHIFT               (8U)
 /*! EATR - Error attributes
@@ -1131,7 +1138,7 @@ typedef struct {
 /* The count of GPU_TRDC_MGR_W3 */
 #define GPU_TRDC_MGR_MRC_DERR_W3_COUNT           (1U)
 
-/*! @name MDA_W0_0_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_0_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_DID_MASK     (0xFU)
@@ -1142,20 +1149,20 @@ typedef struct {
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_PA_MASK      (0x30U)
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_PA_SHIFT     (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_PA(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_MDA_W0_0_DFMT1_PA_SHIFT)) & GPU_TRDC_MGR_MDA_W0_0_DFMT1_PA_MASK)
 
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_SA_MASK      (0xC0U)
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_SA_SHIFT     (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_SA(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_MDA_W0_0_DFMT1_SA_SHIFT)) & GPU_TRDC_MGR_MDA_W0_0_DFMT1_SA_MASK)
 
@@ -1205,7 +1212,7 @@ typedef struct {
 #define GPU_TRDC_MGR_MDA_W0_0_DFMT1_VLD(x)       (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_MDA_W0_0_DFMT1_VLD_SHIFT)) & GPU_TRDC_MGR_MDA_W0_0_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_1_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_1_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_DID_MASK     (0xFU)
@@ -1216,20 +1223,20 @@ typedef struct {
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_PA_MASK      (0x30U)
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_PA_SHIFT     (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_PA(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_MDA_W0_1_DFMT1_PA_SHIFT)) & GPU_TRDC_MGR_MDA_W0_1_DFMT1_PA_MASK)
 
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_SA_MASK      (0xC0U)
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_SA_SHIFT     (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define GPU_TRDC_MGR_MDA_W0_1_DFMT1_SA(x)        (((uint32_t)(((uint32_t)(x)) << GPU_TRDC_MGR_MDA_W0_1_DFMT1_SA_SHIFT)) & GPU_TRDC_MGR_MDA_W0_1_DFMT1_SA_MASK)
 

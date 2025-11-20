@@ -172,14 +172,14 @@ static uint8_t SFA_GetInstance(SFA_Type *base)
      * (instance >= ARRAY_SIZE(s_sfaBases)) not covered.
      * $ref sfa_c_ref_1$.
      */
-    for (instance = 0U; instance < ARRAY_SIZE(s_sfaBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_sfaBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_sfaBases[instance] != base) not covered.
          * $ref sfa_c_ref_1$.
          */
-        if (MSDK_REG_SECURE_ADDR(s_sfaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_sfaBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -224,7 +224,7 @@ static status_t SFA_StartMeasureFrequency(SFA_Type *base)
      * $Branch Coverage Justification$
      * $ref sfa_c_ref_4$.
      */
-    while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U)
+    while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U) /* GCOVR_EXCL_BR_LINE */
     {
 #if SFA_CUT_COUNTER_STOP_TIMEOUT
         if ((--timeout) == 0U)
@@ -238,7 +238,7 @@ static status_t SFA_StartMeasureFrequency(SFA_Type *base)
      * $Branch Coverage Justification$
      * (true == triggerable) not covered. The trigger measurement function does not have enable.
      */
-    if (!triggerable)
+    if (!triggerable) /* GCOVR_EXCL_BR_LINE */
     {
 #if SFA_MEASUREMENT_START_TIMEOUT
         timeout = SFA_MEASUREMENT_START_TIMEOUT;
@@ -272,7 +272,7 @@ static status_t SFA_StartMeasurePeriod(SFA_Type *base)
      * $Branch Coverage Justification$
      * $ref sfa_c_ref_4$.
      */
-    while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U)
+    while ((base->CNT_STAT & SFA_CNT_STAT_CUT_STOPPED_MASK) != 0U) /* GCOVR_EXCL_BR_LINE */
     {
 #if SFA_CUT_COUNTER_STOP_TIMEOUT
         if ((--timeout) == 0U)
@@ -633,12 +633,12 @@ void SFA_SetMeasureConfig(SFA_Type *base, const sfa_config_t *config)
                  * $Line Coverage Justification$
                  * $ref sfa_c_ref_2$.
                  */
-                if (config->enableTrigMeasurement)
+                if (config->enableTrigMeasurement) /* GCOVR_EXCL_BR_LINE */
                 {
-                    base->CTRL |= SFA_CTRL_SFA_TRIG_MEAS_EN_MASK;
+                    base->CTRL |= SFA_CTRL_SFA_TRIG_MEAS_EN_MASK; /* GCOVR_EXCL_START */
                     base->CTRL |=
                         SFA_CTRL_TRIG_START_SEL(config->trigStart) | SFA_CTRL_TRIG_START_POL(config->startPolarity);
-                }
+                } /* GCOVR_EXCL_STOP */
                 else
                 {
                     base->CTRL &= ~SFA_CTRL_SFA_TRIG_MEAS_EN_MASK;
@@ -729,7 +729,7 @@ status_t SFA_MeasureBlocking(SFA_Type *base)
      * $Branch Coverage Justification$
      * $ref sfa_c_ref_5$.
      */
-    else if (mode == kSFA_CUTPeriodMeasurement || mode == kSFA_TriggerBasedMeasurement)
+    else if (mode == kSFA_CUTPeriodMeasurement || mode == kSFA_TriggerBasedMeasurement) /* GCOVR_EXCL_BR_LINE */
     {
         SFA_StartMeasurePeriod(base);
         status = SFA_MeasurePeriodBlocking(base);
@@ -769,7 +769,7 @@ void SFA_MeasureNonBlocking(SFA_Type *base)
      * $Branch Coverage Justification$
      * $ref sfa_c_ref_5$.
      */
-    else if (mode == kSFA_CUTPeriodMeasurement || mode == kSFA_TriggerBasedMeasurement)
+    else if (mode == kSFA_CUTPeriodMeasurement || mode == kSFA_TriggerBasedMeasurement) /* GCOVR_EXCL_BR_LINE */
     {
         SFA_StartMeasurePeriod(base);
     }
@@ -815,7 +815,7 @@ uint32_t SFA_CalculateFrequencyOrPeriod(SFA_Type *base, uint32_t refFrequency)
      * $Branch Coverage Justification$
      * $ref sfa_c_ref_6$.
      */
-    switch (mode)
+    switch (mode) /* GCOVR_EXCL_BR_LINE */
     {
         case kSFA_FrequencyMeasurement0:
         {
@@ -837,10 +837,10 @@ uint32_t SFA_CalculateFrequencyOrPeriod(SFA_Type *base, uint32_t refFrequency)
              * $Line Coverage Justification$
              * $ref sfa_c_ref_6$.
              */
-        default:
+        default: /* GCOVR_EXCL_START */
             assert(false);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
     return result;
 }
 
@@ -874,7 +874,7 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
          * $Branch Coverage Justification$
          * $ref sfa_c_ref_6$.
          */
-        switch (mode)
+        switch (mode) /* GCOVR_EXCL_BR_LINE */
         {
             case kSFA_FrequencyMeasurement0:
             {
@@ -884,7 +884,7 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
                  * unfeasible, the Reference counter stopped flag and CUT counter stopped flag state is too short to
                  * catch.
                  */
-                if ((flags & ((uint32_t)kSFA_RefStoppedFlag | (uint32_t)kSFA_CutStoppedFlag)) != 0U)
+                if ((flags & ((uint32_t)kSFA_RefStoppedFlag | (uint32_t)kSFA_CutStoppedFlag)) != 0U) /* GCOVR_EXCL_BR_LINE */
                 {
                     status = kStatus_SFA_MeasurementCompleted;
                 }
@@ -893,7 +893,7 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
                  * ((flags & (uint32_t)kSFA_ReferenceCounterTimeOutFlag) == 0U) not covered. Test unfeasible,
                  * the Reference counter time out flag state is too short to catch.
                  */
-                if ((flags & (uint32_t)kSFA_ReferenceCounterTimeOutFlag) != 0U)
+                if ((flags & (uint32_t)kSFA_ReferenceCounterTimeOutFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
                 {
                     status = kStatus_SFA_ReferenceCounterTimeout;
                 }
@@ -905,7 +905,7 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
                  * $Branch Coverage Justification$
                  * $ref sfa_c_ref_7$.
                  */
-                if ((flags & (uint32_t)kSFA_RefStoppedFlag) != 0U)
+                if ((flags & (uint32_t)kSFA_RefStoppedFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
                 {
                     status = kStatus_SFA_MeasurementCompleted;
                 }
@@ -922,7 +922,7 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
                  * $Branch Coverage Justification$
                  * $ref sfa_c_ref_7$.
                  */
-                if ((flags & (uint32_t)kSFA_RefStoppedFlag) != 0U)
+                if ((flags & (uint32_t)kSFA_RefStoppedFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
                 {
                     status = kStatus_SFA_MeasurementCompleted;
                 }
@@ -936,10 +936,10 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
                  * $Line Coverage Justification$
                  * $ref sfa_c_ref_6$.
                  */
-            default:
+            default: /* GCOVR_EXCL_START */
                 assert(false);
                 break;
-        }
+        } /* GCOVR_EXCL_STOP */
     }
     else if ((flags & (uint32_t)kSFA_FreqLessThanMinInterruptFlag) != 0U)
     {
@@ -951,7 +951,7 @@ static void SFA_CommonIRQHandler(SFA_Type *base)
      * $Branch Coverage Justification$
      * ((flags & (uint32_t)kSFA_FreqGreaterThanMaxInterruptFlag) == 0U) not covered. All status are covered above.
      */
-    else if ((flags & (uint32_t)kSFA_FreqGreaterThanMaxInterruptFlag) != 0U)
+    else if ((flags & (uint32_t)kSFA_FreqGreaterThanMaxInterruptFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
     {
         SFA_ClearStatusFlag(base, (uint32_t)kSFA_FreqGreaterThanMaxInterruptFlag);
         SFA_DisableInterrupts(base, (uint32_t)kSFA_FreqGreaterThanMaxInterruptEnable);
@@ -976,13 +976,13 @@ void SFA0_DriverIRQHandler(void)
 #endif
 
 #if defined(RF_SFA)
-/*
- * $Line Coverage Justification$
- * RF_SFA is not accessable in CM33 domain.
- */
 void RF_SFA_DriverIRQHandler(void);
-void RF_SFA_DriverIRQHandler(void)
+void RF_SFA_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
+    /*
+     * $Line Coverage Justification$
+     * RF_SFA is not accessable in CM33 domain.
+     */
     SFA_CommonIRQHandler(RF_SFA);
 }
 #endif

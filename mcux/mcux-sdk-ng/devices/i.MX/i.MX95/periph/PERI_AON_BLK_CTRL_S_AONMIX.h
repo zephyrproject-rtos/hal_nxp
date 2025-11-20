@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_BLK_CTRL_S_AONMIX
@@ -487,6 +487,8 @@ typedef struct {
   __I  uint32_t ELE_GPO_STATUS;                    /**< ELE gpo status register, offset: 0x1C8 */
   __I  uint32_t ELE_RST_REQ_STAT;                  /**< ELE Reset Request Status Register, offset: 0x1CC */
   __I  uint32_t ELE_IRQ_REQ_STAT;                  /**< ELE IRQ Request Status Register, offset: 0x1D0 */
+  __IO uint32_t VDET_CORE;                         /**< VDETECT Low and High Volatage IRQ Mask, offset: 0x1D4 */
+  __IO uint32_t AGDET;                             /**< Glitch Detect IRQ Mask, offset: 0x1D8 */
 } AON_BLK_CTRL_S_AONMIX_Type;
 
 /* ----------------------------------------------------------------------------
@@ -913,8 +915,8 @@ typedef struct {
 #define AON_BLK_CTRL_S_AONMIX_AXBS_AON_CTRL_FORCE_ROUND_ROBIN_MASK (0x1U)
 #define AON_BLK_CTRL_S_AONMIX_AXBS_AON_CTRL_FORCE_ROUND_ROBIN_SHIFT (0U)
 /*! FORCE_ROUND_ROBIN - AXBS_AON FORCE_ROUND_ROBIN
- *  0b0..Enable force round robin (default)
- *  0b1..Disable force round robin
+ *  0b0..Disable force round robin
+ *  0b1..Enable force round robin (default)
  */
 #define AON_BLK_CTRL_S_AONMIX_AXBS_AON_CTRL_FORCE_ROUND_ROBIN(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_S_AONMIX_AXBS_AON_CTRL_FORCE_ROUND_ROBIN_SHIFT)) & AON_BLK_CTRL_S_AONMIX_AXBS_AON_CTRL_FORCE_ROUND_ROBIN_MASK)
 
@@ -2401,6 +2403,29 @@ typedef struct {
 #define AON_BLK_CTRL_S_AONMIX_ELE_IRQ_REQ_STAT_GROUP_C_SHIFT (0U)
 /*! GROUP_C - Group C IRQ events */
 #define AON_BLK_CTRL_S_AONMIX_ELE_IRQ_REQ_STAT_GROUP_C(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_S_AONMIX_ELE_IRQ_REQ_STAT_GROUP_C_SHIFT)) & AON_BLK_CTRL_S_AONMIX_ELE_IRQ_REQ_STAT_GROUP_C_MASK)
+/*! @} */
+
+/*! @name VDET_CORE - VDETECT Low and High Volatage IRQ Mask */
+/*! @{ */
+
+#define AON_BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_MASK (0x1U)
+#define AON_BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_SHIFT (0U)
+/*! hvd_out_latch_lv_mask - HVD Out Latch LV Mask */
+#define AON_BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_SHIFT)) & AON_BLK_CTRL_S_AONMIX_VDET_CORE_hvd_out_latch_lv_mask_MASK)
+
+#define AON_BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_MASK (0x2U)
+#define AON_BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_SHIFT (1U)
+/*! lvd_out_latch_lv_mask - LVD Out Latch LV Mask */
+#define AON_BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_SHIFT)) & AON_BLK_CTRL_S_AONMIX_VDET_CORE_lvd_out_latch_lv_mask_MASK)
+/*! @} */
+
+/*! @name AGDET - Glitch Detect IRQ Mask */
+/*! @{ */
+
+#define AON_BLK_CTRL_S_AONMIX_AGDET_ipi_int_glitch_detected_mask_MASK (0x1U)
+#define AON_BLK_CTRL_S_AONMIX_AGDET_ipi_int_glitch_detected_mask_SHIFT (0U)
+/*! ipi_int_glitch_detected_mask - IPI int Glitch Detected Mask */
+#define AON_BLK_CTRL_S_AONMIX_AGDET_ipi_int_glitch_detected_mask(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_S_AONMIX_AGDET_ipi_int_glitch_detected_mask_SHIFT)) & AON_BLK_CTRL_S_AONMIX_AGDET_ipi_int_glitch_detected_mask_MASK)
 /*! @} */
 
 

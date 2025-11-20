@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(CONFIG_MCUX_COMPONENT_driver.ostimer)
-    mcux_component_version(2.2.5)
+    mcux_component_version(2.2.6)
 
     mcux_add_source(SOURCES fsl_ostimer.h fsl_ostimer.c)
 

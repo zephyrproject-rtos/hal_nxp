@@ -868,7 +868,7 @@ void EDMA_AD_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32
     assert(((uint32_t)tcdPool & 0x1FU) == 0U);
 
     /* Initialize tcd queue attibute. */
-    handle->header  = 1;
+    handle->header  = 0;
     handle->tail    = 0;
     handle->tcdUsed = 0;
     handle->tcdSize = (int8_t)tcdSize;
@@ -1347,7 +1347,7 @@ void EDMA_AD_AbortTransfer(edma_handle_t *handle)
     /* Handle the tcd */
     if (handle->tcdPool != NULL)
     {
-        handle->header  = 1;
+        handle->header  = 0;
         handle->tail    = 0;
         handle->tcdUsed = 0;
     }
@@ -1383,36 +1383,35 @@ void EDMA_AD_HandleIRQ(edma_handle_t *handle)
     else /* Use the TCD queue. */
     {
         uint32_t sga = handle->base->CH[handle->channel].TCD_DLAST_SGA;
+        edma_tcd_t *tcdRegs = (edma_tcd_t *)((uint32_t)&handle->base->CH[handle->channel] + 0x00000020U);
         uint32_t sga_index;
         int32_t tcds_done;
         uint8_t new_header;
         uint32_t temp = 0;
+        bool esg = ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0U);
 
-/* Get the offset of the current transfer TCD blocks. */
+        /* Get the offset of the next transfer TCD blocks. */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
         temp = MEMORY_ConvertMemoryMapAddress((uint32_t)handle->tcdPool, kMEMORY_Local2DMA);
 #else
         temp = (uint32_t)handle->tcdPool;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
         sga -= temp;
-        /* Get the index of the current transfer TCD blocks. */
+        /* Get the index of the next transfer TCD blocks. */
         sga_index = sga / sizeof(edma_tcd_t);
-        /* Adjust header positions. */
-        if (transfer_done)
-        {
-            /* New header shall point to the next TCD (current one is already
-             * finished) */
-            new_header = (uint8_t)sga_index;
-        }
-        else
-        {
-            /* New header shall point to this descriptor (not finished yet) */
-            new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
-        }
+        /* Adjust header positions, new_header should be the index of the current transfer TCD blocks. */
+        new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
+
         /* Calculate the number of finished TCDs */
         if (new_header == (uint8_t)handle->header)
         {
-            if (handle->tcdUsed == handle->tcdSize)
+            /* check esg here for the case that application submit only one request, once the request complete:
+             * new_header(1) = handle->header(1)
+             * tcdUsed(1) != tcdSize(>1)
+             * As the application submit only once, so scatter gather must not enabled, then tcds_done should be 1
+             * check transfer_done to handle the half interrupt or internal error occurs.
+             */
+            if (((handle->tcdUsed == handle->tcdSize) || !esg) && transfer_done)
             {
                 tcds_done = handle->tcdUsed;
             }

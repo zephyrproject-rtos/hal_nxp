@@ -30,14 +30,14 @@
 **                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    iMX943RM rev1 draftK
-**     Version:             rev. 1.0, 2023-11-01
-**     Build:               b241210
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250917
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX94398_ca55
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2024 NXP
+**     Copyright 2016-2025 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -66,14 +66,17 @@
 **         +---------------------------------------------------------------------+
 **         | ca55_core3 | a55, ca55, a55_3, ca55_3                               |
 **         +---------------------------------------------------------------------+
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX94398_ca55.h
- * @version 1.0
- * @date 2023-11-01
+ * @version 2.0
+ * @date 2024-10-29
  * @brief CMSIS Peripheral Access Layer for MIMX94398_ca55
  *
  * CMSIS Peripheral Access Layer for MIMX94398_ca55
@@ -121,9 +124,9 @@
 #include "PERI_CCMSRCGPC_TCU.h"
 #include "PERI_CORTEXA_TCU.h"
 #include "PERI_DCIF.h"
+#include "PERI_DDRC.h"
 #include "PERI_DDR_BLK_CTRL_DDRMIX.h"
 #include "PERI_DDR_CMU.h"
-#include "PERI_DDR_DDRC.h"
 #include "PERI_DDR_LSTCU.h"
 #include "PERI_DDR_TCU.h"
 #include "PERI_DISPLAY_BLK_CTRL_DISPLAYMIX.h"
@@ -150,7 +153,6 @@
 #include "PERI_EWM.h"
 #include "PERI_FLEXIO.h"
 #include "PERI_FRO.h"
-#include "PERI_GLITCHFILTER.h"
 #include "PERI_GPC_CPU_CTRL.h"
 #include "PERI_GPC_GLOBAL.h"
 #include "PERI_GPT.h"
@@ -163,6 +165,7 @@
 #include "PERI_IEPRC_IERB.h"
 #include "PERI_IEPRC_PCI.h"
 #include "PERI_IEPRC_PRB.h"
+#include "PERI_IGF.h"
 #include "PERI_IOMUXC.h"
 #include "PERI_IOMUXC_GPR.h"
 #include "PERI_IRQSTEER.h"
@@ -273,6 +276,7 @@
 #include "PERI_NPU_EIM.h"
 #include "PERI_NPU_LSTCU.h"
 #include "PERI_NPU_TCU.h"
+#include "PERI_OSC24M.h"
 #include "PERI_PCIE_DMA_IATU.h"
 #include "PERI_PCIE_EP.h"
 #include "PERI_PCIE_RC.h"
@@ -314,8 +318,6 @@
 #include "PERI_WAKEUP_DMA_CRC.h"
 #include "PERI_WAKEUP_EIM.h"
 #include "PERI_WAKEUP_ERM.h"
-#include "PERI_WAKEUP_GPT.h"
-#include "PERI_WAKEUP_SAI.h"
 #include "PERI_WAKEUP_TCW.h"
 #include "PERI_WAKEUP_TRDC_MGR_MEGA.h"
 #include "PERI_WAKEUP_USDHC.h"

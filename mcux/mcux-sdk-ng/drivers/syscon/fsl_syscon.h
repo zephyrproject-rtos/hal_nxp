@@ -1,7 +1,5 @@
 /*
- * Copyright  2018 NXP
- * All rights reserved.
- *
+ * Copyright 2018, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -29,8 +27,8 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Group syscon driver version for SDK */
-#define FSL_SYSON_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
-                                                         /*! @} */
+#define FSL_SYSON_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @} */
 
 /*******************************************************************************
  * API
@@ -51,7 +49,7 @@ extern "C" {
  *
  * @retval None.
  */
-void SYSCON_AttachSignal(SYSCON_Type *base, uint32_t index, syscon_connection_t connection);
+void SYSCON_AttachSignal(SYSCON_Type *base, uint16_t index, syscon_connection_t connection);
 
 #ifdef __cplusplus
 }

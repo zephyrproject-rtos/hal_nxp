@@ -75,6 +75,8 @@
 #define DMA_CH_CSR_SWAP_SHIFT          (12U)
 #define DMA_CH_SBR_INSTR_MASK          (0x2000U)
 #define DMA_CH_SBR_INSTR_SHIFT         (13U)
+#define DMA_CH_SBR_EMI_MASK            (0x10000U)
+#define DMA_CH_SBR_EMI_SHIFT           (16U)
 #define DMA_CH_MUX_SOURCE(x)           (((uint32_t)(((uint32_t)(x)) << (0U))) & (0xFFU))
 
 /*! @brief DMA error flag */

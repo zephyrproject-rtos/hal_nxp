@@ -919,7 +919,9 @@ usb_status_t USB_HostMsdInit(usb_device_handle deviceHandle, usb_host_class_hand
 #endif
     if (NULL == msdInstance->msdCommand.cbwBlock)
 	{
-		return kStatus_USB_AllocFail;
+        OSA_MemoryFree(msdInstance);
+
+        return kStatus_USB_AllocFail;
 	}
     /* initialize msd instance */
     msdInstance->deviceHandle    = deviceHandle;

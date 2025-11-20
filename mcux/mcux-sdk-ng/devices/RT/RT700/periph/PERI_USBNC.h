@@ -28,7 +28,7 @@
 **                          MIMXRT798SGFOB_hifi4
 **
 **     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Build:               b250916
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBNC
@@ -140,16 +140,18 @@
 typedef struct {
   __IO uint32_t CTRL1;                             /**< USB Control 1, offset: 0x0 */
   __IO uint32_t CTRL2;                             /**< USB Control 2, offset: 0x4 */
-       uint8_t RESERVED_0[152];
+       uint8_t RESERVED_0[36];
+  __IO uint32_t HSIC_DLL_CFG4;                     /**< HSIC DLL Configuration 4, offset: 0x2C */
+       uint8_t RESERVED_1[112];
   __IO uint32_t LPM_CSR0;                          /**< USB LPM Control and Status 0, offset: 0xA0 */
   __IO uint32_t LPM_CSR1;                          /**< USB LPM Control and Status 1, offset: 0xA4 */
   __IO uint32_t LPM_CSR2;                          /**< USB LPM Control and Status 2, offset: 0xA8 */
-       uint8_t RESERVED_1[84];
+       uint8_t RESERVED_2[84];
   __IO uint32_t EUSB_CTRL0;                        /**< eUSB Control 0, offset: 0x100, available only on: USBNC1 (missing on USBNC0) */
   __IO uint32_t EUSB_CTRL1;                        /**< eUSB Control 1, offset: 0x104, available only on: USBNC1 (missing on USBNC0) */
-       uint8_t RESERVED_2[4];
+       uint8_t RESERVED_3[4];
   __IO uint32_t EUSB_CTRL3;                        /**< eUSB Control 3, offset: 0x10C, available only on: USBNC1 (missing on USBNC0) */
-       uint8_t RESERVED_3[56];
+       uint8_t RESERVED_4[56];
   __IO uint32_t EUSB_RAP;                          /**< eUSB RAP Control and Status, offset: 0x148, available only on: USBNC1 (missing on USBNC0) */
 } USBNC_Type;
 
@@ -168,8 +170,8 @@ typedef struct {
 #define USBNC_CTRL1_OVER_CUR_DIS_MASK            (0x80U)
 #define USBNC_CTRL1_OVER_CUR_DIS_SHIFT           (7U)
 /*! OVER_CUR_DIS - Overcurrent Disable
- *  0b0..Enable
- *  0b1..Disable
+ *  0b0..Enables
+ *  0b1..Disables
  */
 #define USBNC_CTRL1_OVER_CUR_DIS(x)              (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL1_OVER_CUR_DIS_SHIFT)) & USBNC_CTRL1_OVER_CUR_DIS_MASK)
 
@@ -192,16 +194,16 @@ typedef struct {
 #define USBNC_CTRL1_WIE_MASK                     (0x400U)
 #define USBNC_CTRL1_WIE_SHIFT                    (10U)
 /*! WIE - Wake-Up Interrupt Enable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_CTRL1_WIE(x)                       (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL1_WIE_SHIFT)) & USBNC_CTRL1_WIE_MASK)
 
 #define USBNC_CTRL1_WKUP_SW_EN_MASK              (0x4000U)
 #define USBNC_CTRL1_WKUP_SW_EN_SHIFT             (14U)
 /*! WKUP_SW_EN - Software Wake-Up Enable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_CTRL1_WKUP_SW_EN(x)                (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL1_WKUP_SW_EN_SHIFT)) & USBNC_CTRL1_WKUP_SW_EN_MASK)
 
@@ -216,16 +218,16 @@ typedef struct {
 #define USBNC_CTRL1_WKUP_VBUS_EN_MASK            (0x20000U)
 #define USBNC_CTRL1_WKUP_VBUS_EN_SHIFT           (17U)
 /*! WKUP_VBUS_EN - Wake-Up After VBUS Change Enable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_CTRL1_WKUP_VBUS_EN(x)              (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL1_WKUP_VBUS_EN_SHIFT)) & USBNC_CTRL1_WKUP_VBUS_EN_MASK)
 
 #define USBNC_CTRL1_REMOTE_WAKEUP_EN_MASK        (0x10000000U)
 #define USBNC_CTRL1_REMOTE_WAKEUP_EN_SHIFT       (28U)
 /*! REMOTE_WAKEUP_EN - Remote Wake-Up Enable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_CTRL1_REMOTE_WAKEUP_EN(x)          (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL1_REMOTE_WAKEUP_EN_SHIFT)) & USBNC_CTRL1_REMOTE_WAKEUP_EN_MASK)
 
@@ -270,30 +272,42 @@ typedef struct {
 #define USBNC_CTRL2_UTMI_CLK_VLD(x)              (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL2_UTMI_CLK_VLD_SHIFT)) & USBNC_CTRL2_UTMI_CLK_VLD_MASK)
 /*! @} */
 
+/*! @name HSIC_DLL_CFG4 - HSIC DLL Configuration 4 */
+/*! @{ */
+
+#define USBNC_HSIC_DLL_CFG4_FS_ISO_B2B_FIXEN_MASK (0x80000000U)
+#define USBNC_HSIC_DLL_CFG4_FS_ISO_B2B_FIXEN_SHIFT (31U)
+/*! FS_ISO_B2B_FIXEN - FS Isochronous Back-to-Back Transfer Enable
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define USBNC_HSIC_DLL_CFG4_FS_ISO_B2B_FIXEN(x)  (((uint32_t)(((uint32_t)(x)) << USBNC_HSIC_DLL_CFG4_FS_ISO_B2B_FIXEN_SHIFT)) & USBNC_HSIC_DLL_CFG4_FS_ISO_B2B_FIXEN_MASK)
+/*! @} */
+
 /*! @name LPM_CSR0 - USB LPM Control and Status 0 */
 /*! @{ */
 
 #define USBNC_LPM_CSR0_LPM_EN_MASK               (0x1U)
 #define USBNC_LPM_CSR0_LPM_EN_SHIFT              (0U)
 /*! LPM_EN - Link Power Management Feature Enable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_LPM_CSR0_LPM_EN(x)                 (((uint32_t)(((uint32_t)(x)) << USBNC_LPM_CSR0_LPM_EN_SHIFT)) & USBNC_LPM_CSR0_LPM_EN_MASK)
 
 #define USBNC_LPM_CSR0_LPM_ERRATA_EN_MASK        (0x2U)
 #define USBNC_LPM_CSR0_LPM_ERRATA_EN_SHIFT       (1U)
 /*! LPM_ERRATA_EN - Link Power Management ECN Errata Feature Enable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_LPM_CSR0_LPM_ERRATA_EN(x)          (((uint32_t)(((uint32_t)(x)) << USBNC_LPM_CSR0_LPM_ERRATA_EN_SHIFT)) & USBNC_LPM_CSR0_LPM_ERRATA_EN_MASK)
 
 #define USBNC_LPM_CSR0_LPM_AUTO_PHCD_MASK        (0x8U)
 #define USBNC_LPM_CSR0_LPM_AUTO_PHCD_SHIFT       (3U)
 /*! LPM_AUTO_PHCD - Auto Low-Power Mode
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_LPM_CSR0_LPM_AUTO_PHCD(x)          (((uint32_t)(((uint32_t)(x)) << USBNC_LPM_CSR0_LPM_AUTO_PHCD_SHIFT)) & USBNC_LPM_CSR0_LPM_AUTO_PHCD_MASK)
 
@@ -412,8 +426,8 @@ typedef struct {
 #define USBNC_LPM_CSR2_LPM_HST_RWKEN_MASK        (0x1000U)
 #define USBNC_LPM_CSR2_LPM_HST_RWKEN_SHIFT       (12U)
 /*! LPM_HST_RWKEN - LPM Host Extension Token's bRemoteWake
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_LPM_CSR2_LPM_HST_RWKEN(x)          (((uint32_t)(((uint32_t)(x)) << USBNC_LPM_CSR2_LPM_HST_RWKEN_SHIFT)) & USBNC_LPM_CSR2_LPM_HST_RWKEN_MASK)
 
@@ -438,8 +452,8 @@ typedef struct {
 #define USBNC_EUSB_CTRL0_UN_TERMINATED_MODE_MASK (0x20U)
 #define USBNC_EUSB_CTRL0_UN_TERMINATED_MODE_SHIFT (5U)
 /*! UN_TERMINATED_MODE - HS Receiver Termination Option
- *  0b0..Enable
- *  0b1..Disable
+ *  0b0..Enables
+ *  0b1..Disables
  */
 #define USBNC_EUSB_CTRL0_UN_TERMINATED_MODE(x)   (((uint32_t)(((uint32_t)(x)) << USBNC_EUSB_CTRL0_UN_TERMINATED_MODE_SHIFT)) & USBNC_EUSB_CTRL0_UN_TERMINATED_MODE_MASK)
 
@@ -548,16 +562,16 @@ typedef struct {
 #define USBNC_EUSB_RAP_CM_RAP_INIT_EN_MASK       (0x10000U)
 #define USBNC_EUSB_RAP_CM_RAP_INIT_EN_SHIFT      (16U)
 /*! CM_RAP_INIT_EN - Enable CM.RAP Feature
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_EUSB_RAP_CM_RAP_INIT_EN(x)         (((uint32_t)(((uint32_t)(x)) << USBNC_EUSB_RAP_CM_RAP_INIT_EN_SHIFT)) & USBNC_EUSB_RAP_CM_RAP_INIT_EN_MASK)
 
 #define USBNC_EUSB_RAP_CM_RAP_START_MASK         (0x20000U)
 #define USBNC_EUSB_RAP_CM_RAP_START_SHIFT        (17U)
 /*! CM_RAP_START - CM.RAP Start
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disables
+ *  0b1..Enables
  */
 #define USBNC_EUSB_RAP_CM_RAP_START(x)           (((uint32_t)(((uint32_t)(x)) << USBNC_EUSB_RAP_CM_RAP_START_SHIFT)) & USBNC_EUSB_RAP_CM_RAP_START_MASK)
 

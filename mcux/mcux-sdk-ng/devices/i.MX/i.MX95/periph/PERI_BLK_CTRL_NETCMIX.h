@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_NETCMIX
@@ -645,12 +645,12 @@ typedef struct {
 #define BLK_CTRL_NETCMIX_CFG_LINK_MII_PROT_CFG_LINK_MII_PROT_0_MASK (0xFU)
 #define BLK_CTRL_NETCMIX_CFG_LINK_MII_PROT_CFG_LINK_MII_PROT_0_SHIFT (0U)
 /*! CFG_LINK_MII_PROT_0 - NETC MII protocol on link0
- *  0b0000..MII
+ *  0b0000..Reserved
  *  0b0001..RMII
  *  0b0010..RGMII
  *  0b0011..Reserved
- *  0b0100..SGMII
- *  0b0101..XGMII
+ *  0b0100..Reserved
+ *  0b0101..Reserved
  *  0b0110..Reserved
  *  0b0111..Reserved
  *  0b1000..Reserved
@@ -667,12 +667,12 @@ typedef struct {
 #define BLK_CTRL_NETCMIX_CFG_LINK_MII_PROT_CFG_LINK_MII_PROT_1_MASK (0xF0U)
 #define BLK_CTRL_NETCMIX_CFG_LINK_MII_PROT_CFG_LINK_MII_PROT_1_SHIFT (4U)
 /*! CFG_LINK_MII_PROT_1 - NETC MII protocol on link1
- *  0b0000..MII
+ *  0b0000..Reserved
  *  0b0001..RMII
  *  0b0010..RGMII
  *  0b0011..Reserved
- *  0b0100..SGMII
- *  0b0101..XGMII
+ *  0b0100..Reserved
+ *  0b0101..Reserved
  *  0b0110..Reserved
  *  0b0111..Reserved
  *  0b1000..Reserved
@@ -689,12 +689,12 @@ typedef struct {
 #define BLK_CTRL_NETCMIX_CFG_LINK_MII_PROT_CFG_LINK_MII_PROT_2_MASK (0xF00U)
 #define BLK_CTRL_NETCMIX_CFG_LINK_MII_PROT_CFG_LINK_MII_PROT_2_SHIFT (8U)
 /*! CFG_LINK_MII_PROT_2 - NETC MII protocol on link2
- *  0b0000..MII
+ *  0b0000..Reserved
  *  0b0001..RMII
  *  0b0010..RGMII
- *  0b0011..Reserved
- *  0b0100..SGMII
- *  0b0101..XGMII
+ *  0b0011..SGMII/XGMII
+ *  0b0100..Reserved
+ *  0b0101..Reserved
  *  0b0110..Reserved
  *  0b0111..Reserved
  *  0b1000..Reserved

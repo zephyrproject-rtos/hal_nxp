@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FLEXSPI driver version. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 8, 0))
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
 /*! @} */
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -504,7 +504,7 @@ static inline void FLEXSPI_EnableRemap(FLEXSPI_Type *base, bool enable)
 
 /*!
  * @brief Update all AHB buffers' settings, including buffer size, master ID.
- * 
+ *
  * @param base FLEXSPI peripheral base address.
  * @param ptrAhbBufferCtrl Pointer to structure @ref flexspi_ahbBuffers_ctrl_t which store all AHB buffers' settings.
  */

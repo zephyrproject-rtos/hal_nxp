@@ -28,7 +28,7 @@
 **                          MIMXRT798SGFOB_hifi4
 **
 **     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Build:               b250930
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ELS
@@ -190,26 +190,26 @@ typedef struct {
   __I  uint32_t ELS_SHA2_DOUT14;                   /**< SHA_DATA Out 14 Register, offset: 0x144 */
   __I  uint32_t ELS_SHA2_DOUT15;                   /**< SHA_DATA Out 15 Register, offset: 0x148 */
        uint8_t RESERVED_4[4];
-  __I  uint32_t ELS_KS0;                           /**< Status Register, offset: 0x150 */
-  __I  uint32_t ELS_KS1;                           /**< Status Register, offset: 0x154 */
-  __I  uint32_t ELS_KS2;                           /**< Status Register, offset: 0x158 */
-  __I  uint32_t ELS_KS3;                           /**< Status Register, offset: 0x15C */
-  __I  uint32_t ELS_KS4;                           /**< Status Register, offset: 0x160 */
-  __I  uint32_t ELS_KS5;                           /**< Status Register, offset: 0x164 */
-  __I  uint32_t ELS_KS6;                           /**< Status Register, offset: 0x168 */
-  __I  uint32_t ELS_KS7;                           /**< Status Register, offset: 0x16C */
-  __I  uint32_t ELS_KS8;                           /**< Status Register, offset: 0x170 */
-  __I  uint32_t ELS_KS9;                           /**< Status Register, offset: 0x174 */
-  __I  uint32_t ELS_KS10;                          /**< Status Register, offset: 0x178 */
-  __I  uint32_t ELS_KS11;                          /**< Status Register, offset: 0x17C */
-  __I  uint32_t ELS_KS12;                          /**< Status Register, offset: 0x180 */
-  __I  uint32_t ELS_KS13;                          /**< Status Register, offset: 0x184 */
-  __I  uint32_t ELS_KS14;                          /**< Status Register, offset: 0x188 */
-  __I  uint32_t ELS_KS15;                          /**< Status Register, offset: 0x18C */
-  __I  uint32_t ELS_KS16;                          /**< Status Register, offset: 0x190 */
-  __I  uint32_t ELS_KS17;                          /**< Status Register, offset: 0x194 */
-  __I  uint32_t ELS_KS18;                          /**< Status Register, offset: 0x198 */
-  __I  uint32_t ELS_KS19;                          /**< Status Register, offset: 0x19C */
+  __I  uint32_t ELS_KS0;                           /**< Key Status, offset: 0x150 */
+  __I  uint32_t ELS_KS1;                           /**< Key Status, offset: 0x154 */
+  __I  uint32_t ELS_KS2;                           /**< Key Status, offset: 0x158 */
+  __I  uint32_t ELS_KS3;                           /**< Key Status, offset: 0x15C */
+  __I  uint32_t ELS_KS4;                           /**< Key Status, offset: 0x160 */
+  __I  uint32_t ELS_KS5;                           /**< Key Status, offset: 0x164 */
+  __I  uint32_t ELS_KS6;                           /**< Key Status, offset: 0x168 */
+  __I  uint32_t ELS_KS7;                           /**< Key Status, offset: 0x16C */
+  __I  uint32_t ELS_KS8;                           /**< Key Status, offset: 0x170 */
+  __I  uint32_t ELS_KS9;                           /**< Key Status, offset: 0x174 */
+  __I  uint32_t ELS_KS10;                          /**< Key Status, offset: 0x178 */
+  __I  uint32_t ELS_KS11;                          /**< Key Status, offset: 0x17C */
+  __I  uint32_t ELS_KS12;                          /**< Key Status, offset: 0x180 */
+  __I  uint32_t ELS_KS13;                          /**< Key Status, offset: 0x184 */
+  __I  uint32_t ELS_KS14;                          /**< Key Status, offset: 0x188 */
+  __I  uint32_t ELS_KS15;                          /**< Key Status, offset: 0x18C */
+  __I  uint32_t ELS_KS16;                          /**< Key Status, offset: 0x190 */
+  __I  uint32_t ELS_KS17;                          /**< Key Status, offset: 0x194 */
+  __I  uint32_t ELS_KS18;                          /**< Key Status, offset: 0x198 */
+  __I  uint32_t ELS_KS19;                          /**< Key Status, offset: 0x19C */
        uint8_t RESERVED_5[4];
   __IO uint32_t RESERVED_LA4;                      /**< Reserved LA4, offset: 0x1A4 */
   __IO uint32_t RESERVED_LA8;                      /**< Reserved LA8, offset: 0x1A8 */
@@ -968,2244 +968,4324 @@ typedef struct {
 #define ELS_ELS_SHA2_DOUT15_SHA_DATA15(x)        (((uint32_t)(((uint32_t)(x)) << ELS_ELS_SHA2_DOUT15_SHA_DATA15_SHIFT)) & ELS_ELS_SHA2_DOUT15_SHA_DATA15_MASK)
 /*! @} */
 
-/*! @name ELS_KS0 - Status Register */
+/*! @name ELS_KS0 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS0_KS0_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS0_KS0_KSIZE_SHIFT              (0U)
-/*! KS0_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS0_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS0_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS0_KS0_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_KSIZE_SHIFT)) & ELS_ELS_KS0_KS0_KSIZE_MASK)
+#define ELS_ELS_KS0_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_KSIZE_SHIFT)) & ELS_ELS_KS0_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS0_KS0_KACT_MASK                (0x20U)
-#define ELS_ELS_KS0_KS0_KACT_SHIFT               (5U)
-#define ELS_ELS_KS0_KS0_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_KACT_SHIFT)) & ELS_ELS_KS0_KS0_KACT_MASK)
+#define ELS_ELS_KS0_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS0_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS0_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_KACT_SHIFT)) & ELS_ELS_KS0_KSN_KACT_MASK)
 
-#define ELS_ELS_KS0_KS0_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS0_KS0_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS0_KS0_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_KBASE_SHIFT)) & ELS_ELS_KS0_KS0_KBASE_MASK)
+#define ELS_ELS_KS0_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS0_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS0_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_KBASE_SHIFT)) & ELS_ELS_KS0_KSN_KBASE_MASK)
 
 #define ELS_ELS_KS0_KS0_FGP_MASK                 (0x80U)
 #define ELS_ELS_KS0_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
 #define ELS_ELS_KS0_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_FGP_SHIFT)) & ELS_ELS_KS0_KS0_FGP_MASK)
 
-#define ELS_ELS_KS0_KS0_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS0_KS0_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS0_KS0_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_FRTN_SHIFT)) & ELS_ELS_KS0_KS0_FRTN_MASK)
+#define ELS_ELS_KS0_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS0_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS0_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_FRTN_SHIFT)) & ELS_ELS_KS0_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS0_KS0_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS0_KS0_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS0_KS0_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_FHWO_SHIFT)) & ELS_ELS_KS0_KS0_FHWO_MASK)
+#define ELS_ELS_KS0_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS0_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS0_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_FHWO_SHIFT)) & ELS_ELS_KS0_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS0_KS0_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS0_KS0_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS0_KS0_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UKPUK_SHIFT)) & ELS_ELS_KS0_KS0_UKPUK_MASK)
+#define ELS_ELS_KS0_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS0_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS0_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UKPUK_SHIFT)) & ELS_ELS_KS0_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS0_KS0_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS0_KS0_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS0_KS0_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UTECDH_SHIFT)) & ELS_ELS_KS0_KS0_UTECDH_MASK)
+#define ELS_ELS_KS0_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS0_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS0_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UTECDH_SHIFT)) & ELS_ELS_KS0_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS0_KS0_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS0_KS0_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS0_KS0_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UCMAC_SHIFT)) & ELS_ELS_KS0_KS0_UCMAC_MASK)
+#define ELS_ELS_KS0_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS0_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS0_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UCMAC_SHIFT)) & ELS_ELS_KS0_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS0_KS0_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS0_KS0_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS0_KS0_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UKSK_SHIFT)) & ELS_ELS_KS0_KS0_UKSK_MASK)
+#define ELS_ELS_KS0_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS0_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS0_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UKSK_SHIFT)) & ELS_ELS_KS0_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS0_KS0_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS0_KS0_URTF_SHIFT               (15U)
-#define ELS_ELS_KS0_KS0_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_URTF_SHIFT)) & ELS_ELS_KS0_KS0_URTF_MASK)
+#define ELS_ELS_KS0_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS0_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS0_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_URTF_SHIFT)) & ELS_ELS_KS0_KSN_URTF_MASK)
 
-#define ELS_ELS_KS0_KS0_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS0_KS0_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS0_KS0_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UCKDF_SHIFT)) & ELS_ELS_KS0_KS0_UCKDF_MASK)
+#define ELS_ELS_KS0_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS0_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS0_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UCKDF_SHIFT)) & ELS_ELS_KS0_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS0_KS0_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS0_KS0_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS0_KS0_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UHKDF_SHIFT)) & ELS_ELS_KS0_KS0_UHKDF_MASK)
+#define ELS_ELS_KS0_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS0_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS0_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UHKDF_SHIFT)) & ELS_ELS_KS0_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS0_KS0_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS0_KS0_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS0_KS0_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UECSG_SHIFT)) & ELS_ELS_KS0_KS0_UECSG_MASK)
+#define ELS_ELS_KS0_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS0_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS0_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UECSG_SHIFT)) & ELS_ELS_KS0_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS0_KS0_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS0_KS0_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS0_KS0_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UECDH_SHIFT)) & ELS_ELS_KS0_KS0_UECDH_MASK)
+#define ELS_ELS_KS0_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS0_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS0_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UECDH_SHIFT)) & ELS_ELS_KS0_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS0_KS0_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS0_KS0_UAES_SHIFT               (20U)
-#define ELS_ELS_KS0_KS0_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UAES_SHIFT)) & ELS_ELS_KS0_KS0_UAES_MASK)
+#define ELS_ELS_KS0_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS0_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS0_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UAES_SHIFT)) & ELS_ELS_KS0_KSN_UAES_MASK)
 
-#define ELS_ELS_KS0_KS0_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS0_KS0_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS0_KS0_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UHMAC_SHIFT)) & ELS_ELS_KS0_KS0_UHMAC_MASK)
+#define ELS_ELS_KS0_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS0_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS0_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UHMAC_SHIFT)) & ELS_ELS_KS0_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS0_KS0_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS0_KS0_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS0_KS0_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UKWK_SHIFT)) & ELS_ELS_KS0_KS0_UKWK_MASK)
+#define ELS_ELS_KS0_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS0_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS0_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UKWK_SHIFT)) & ELS_ELS_KS0_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS0_KS0_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS0_KS0_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS0_KS0_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UKUOK_SHIFT)) & ELS_ELS_KS0_KS0_UKUOK_MASK)
+#define ELS_ELS_KS0_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS0_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS0_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UKUOK_SHIFT)) & ELS_ELS_KS0_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS0_KS0_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS0_KS0_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS0_KS0_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UTLSPMS_SHIFT)) & ELS_ELS_KS0_KS0_UTLSPMS_MASK)
+#define ELS_ELS_KS0_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS0_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS0_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS0_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS0_KS0_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS0_KS0_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS0_KS0_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UTLSMS_SHIFT)) & ELS_ELS_KS0_KS0_UTLSMS_MASK)
+#define ELS_ELS_KS0_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS0_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS0_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS0_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS0_KS0_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS0_KS0_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS0_KS0_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UKGSRC_SHIFT)) & ELS_ELS_KS0_KS0_UKGSRC_MASK)
+#define ELS_ELS_KS0_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS0_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS0_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS0_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS0_KS0_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS0_KS0_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS0_KS0_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UHWO_SHIFT)) & ELS_ELS_KS0_KS0_UHWO_MASK)
+#define ELS_ELS_KS0_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS0_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS0_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UHWO_SHIFT)) & ELS_ELS_KS0_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS0_KS0_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS0_KS0_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS0_KS0_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UWRPOK_SHIFT)) & ELS_ELS_KS0_KS0_UWRPOK_MASK)
+#define ELS_ELS_KS0_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS0_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS0_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS0_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS0_KS0_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS0_KS0_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS0_KS0_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UDUK_SHIFT)) & ELS_ELS_KS0_KS0_UDUK_MASK)
+#define ELS_ELS_KS0_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS0_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS0_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UDUK_SHIFT)) & ELS_ELS_KS0_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS0_KS0_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS0_KS0_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS0_KS0_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KS0_UPPROT_SHIFT)) & ELS_ELS_KS0_KS0_UPPROT_MASK)
+#define ELS_ELS_KS0_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS0_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS0_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS0_KSN_UPPROT_SHIFT)) & ELS_ELS_KS0_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS1 - Status Register */
+/*! @name ELS_KS1 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS1_KS1_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS1_KS1_KSIZE_SHIFT              (0U)
-/*! KS1_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS1_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS1_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS1_KS1_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_KSIZE_SHIFT)) & ELS_ELS_KS1_KS1_KSIZE_MASK)
+#define ELS_ELS_KS1_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_KSIZE_SHIFT)) & ELS_ELS_KS1_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS1_KS1_KACT_MASK                (0x20U)
-#define ELS_ELS_KS1_KS1_KACT_SHIFT               (5U)
-#define ELS_ELS_KS1_KS1_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_KACT_SHIFT)) & ELS_ELS_KS1_KS1_KACT_MASK)
+#define ELS_ELS_KS1_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS1_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS1_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_KACT_SHIFT)) & ELS_ELS_KS1_KSN_KACT_MASK)
 
-#define ELS_ELS_KS1_KS1_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS1_KS1_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS1_KS1_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_KBASE_SHIFT)) & ELS_ELS_KS1_KS1_KBASE_MASK)
+#define ELS_ELS_KS1_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS1_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS1_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_KBASE_SHIFT)) & ELS_ELS_KS1_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS1_KS1_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS1_KS1_FGP_SHIFT                (7U)
-#define ELS_ELS_KS1_KS1_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_FGP_SHIFT)) & ELS_ELS_KS1_KS1_FGP_MASK)
+#define ELS_ELS_KS1_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS1_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS1_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS0_FGP_SHIFT)) & ELS_ELS_KS1_KS0_FGP_MASK)
 
-#define ELS_ELS_KS1_KS1_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS1_KS1_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS1_KS1_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_FRTN_SHIFT)) & ELS_ELS_KS1_KS1_FRTN_MASK)
+#define ELS_ELS_KS1_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS1_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS1_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_FRTN_SHIFT)) & ELS_ELS_KS1_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS1_KS1_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS1_KS1_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS1_KS1_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_FHWO_SHIFT)) & ELS_ELS_KS1_KS1_FHWO_MASK)
+#define ELS_ELS_KS1_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS1_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS1_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_FHWO_SHIFT)) & ELS_ELS_KS1_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS1_KS1_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS1_KS1_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS1_KS1_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UKPUK_SHIFT)) & ELS_ELS_KS1_KS1_UKPUK_MASK)
+#define ELS_ELS_KS1_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS1_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS1_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UKPUK_SHIFT)) & ELS_ELS_KS1_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS1_KS1_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS1_KS1_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS1_KS1_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UTECDH_SHIFT)) & ELS_ELS_KS1_KS1_UTECDH_MASK)
+#define ELS_ELS_KS1_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS1_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS1_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UTECDH_SHIFT)) & ELS_ELS_KS1_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS1_KS1_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS1_KS1_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS1_KS1_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UCMAC_SHIFT)) & ELS_ELS_KS1_KS1_UCMAC_MASK)
+#define ELS_ELS_KS1_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS1_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS1_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UCMAC_SHIFT)) & ELS_ELS_KS1_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS1_KS1_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS1_KS1_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS1_KS1_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UKSK_SHIFT)) & ELS_ELS_KS1_KS1_UKSK_MASK)
+#define ELS_ELS_KS1_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS1_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS1_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UKSK_SHIFT)) & ELS_ELS_KS1_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS1_KS1_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS1_KS1_URTF_SHIFT               (15U)
-#define ELS_ELS_KS1_KS1_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_URTF_SHIFT)) & ELS_ELS_KS1_KS1_URTF_MASK)
+#define ELS_ELS_KS1_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS1_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS1_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_URTF_SHIFT)) & ELS_ELS_KS1_KSN_URTF_MASK)
 
-#define ELS_ELS_KS1_KS1_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS1_KS1_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS1_KS1_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UCKDF_SHIFT)) & ELS_ELS_KS1_KS1_UCKDF_MASK)
+#define ELS_ELS_KS1_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS1_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS1_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UCKDF_SHIFT)) & ELS_ELS_KS1_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS1_KS1_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS1_KS1_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS1_KS1_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UHKDF_SHIFT)) & ELS_ELS_KS1_KS1_UHKDF_MASK)
+#define ELS_ELS_KS1_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS1_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS1_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UHKDF_SHIFT)) & ELS_ELS_KS1_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS1_KS1_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS1_KS1_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS1_KS1_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UECSG_SHIFT)) & ELS_ELS_KS1_KS1_UECSG_MASK)
+#define ELS_ELS_KS1_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS1_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS1_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UECSG_SHIFT)) & ELS_ELS_KS1_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS1_KS1_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS1_KS1_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS1_KS1_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UECDH_SHIFT)) & ELS_ELS_KS1_KS1_UECDH_MASK)
+#define ELS_ELS_KS1_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS1_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS1_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UECDH_SHIFT)) & ELS_ELS_KS1_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS1_KS1_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS1_KS1_UAES_SHIFT               (20U)
-#define ELS_ELS_KS1_KS1_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UAES_SHIFT)) & ELS_ELS_KS1_KS1_UAES_MASK)
+#define ELS_ELS_KS1_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS1_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS1_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UAES_SHIFT)) & ELS_ELS_KS1_KSN_UAES_MASK)
 
-#define ELS_ELS_KS1_KS1_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS1_KS1_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS1_KS1_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UHMAC_SHIFT)) & ELS_ELS_KS1_KS1_UHMAC_MASK)
+#define ELS_ELS_KS1_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS1_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS1_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UHMAC_SHIFT)) & ELS_ELS_KS1_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS1_KS1_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS1_KS1_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS1_KS1_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UKWK_SHIFT)) & ELS_ELS_KS1_KS1_UKWK_MASK)
+#define ELS_ELS_KS1_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS1_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS1_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UKWK_SHIFT)) & ELS_ELS_KS1_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS1_KS1_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS1_KS1_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS1_KS1_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UKUOK_SHIFT)) & ELS_ELS_KS1_KS1_UKUOK_MASK)
+#define ELS_ELS_KS1_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS1_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS1_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UKUOK_SHIFT)) & ELS_ELS_KS1_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS1_KS1_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS1_KS1_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS1_KS1_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UTLSPMS_SHIFT)) & ELS_ELS_KS1_KS1_UTLSPMS_MASK)
+#define ELS_ELS_KS1_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS1_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS1_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS1_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS1_KS1_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS1_KS1_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS1_KS1_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UTLSMS_SHIFT)) & ELS_ELS_KS1_KS1_UTLSMS_MASK)
+#define ELS_ELS_KS1_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS1_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS1_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS1_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS1_KS1_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS1_KS1_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS1_KS1_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UKGSRC_SHIFT)) & ELS_ELS_KS1_KS1_UKGSRC_MASK)
+#define ELS_ELS_KS1_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS1_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS1_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS1_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS1_KS1_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS1_KS1_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS1_KS1_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UHWO_SHIFT)) & ELS_ELS_KS1_KS1_UHWO_MASK)
+#define ELS_ELS_KS1_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS1_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS1_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UHWO_SHIFT)) & ELS_ELS_KS1_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS1_KS1_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS1_KS1_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS1_KS1_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UWRPOK_SHIFT)) & ELS_ELS_KS1_KS1_UWRPOK_MASK)
+#define ELS_ELS_KS1_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS1_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS1_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS1_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS1_KS1_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS1_KS1_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS1_KS1_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UDUK_SHIFT)) & ELS_ELS_KS1_KS1_UDUK_MASK)
+#define ELS_ELS_KS1_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS1_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS1_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UDUK_SHIFT)) & ELS_ELS_KS1_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS1_KS1_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS1_KS1_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS1_KS1_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KS1_UPPROT_SHIFT)) & ELS_ELS_KS1_KS1_UPPROT_MASK)
+#define ELS_ELS_KS1_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS1_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS1_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS1_KSN_UPPROT_SHIFT)) & ELS_ELS_KS1_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS2 - Status Register */
+/*! @name ELS_KS2 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS2_KS2_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS2_KS2_KSIZE_SHIFT              (0U)
-/*! KS2_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS2_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS2_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS2_KS2_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_KSIZE_SHIFT)) & ELS_ELS_KS2_KS2_KSIZE_MASK)
+#define ELS_ELS_KS2_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_KSIZE_SHIFT)) & ELS_ELS_KS2_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS2_KS2_KACT_MASK                (0x20U)
-#define ELS_ELS_KS2_KS2_KACT_SHIFT               (5U)
-#define ELS_ELS_KS2_KS2_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_KACT_SHIFT)) & ELS_ELS_KS2_KS2_KACT_MASK)
+#define ELS_ELS_KS2_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS2_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS2_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_KACT_SHIFT)) & ELS_ELS_KS2_KSN_KACT_MASK)
 
-#define ELS_ELS_KS2_KS2_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS2_KS2_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS2_KS2_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_KBASE_SHIFT)) & ELS_ELS_KS2_KS2_KBASE_MASK)
+#define ELS_ELS_KS2_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS2_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS2_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_KBASE_SHIFT)) & ELS_ELS_KS2_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS2_KS2_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS2_KS2_FGP_SHIFT                (7U)
-#define ELS_ELS_KS2_KS2_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_FGP_SHIFT)) & ELS_ELS_KS2_KS2_FGP_MASK)
+#define ELS_ELS_KS2_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS2_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS2_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS0_FGP_SHIFT)) & ELS_ELS_KS2_KS0_FGP_MASK)
 
-#define ELS_ELS_KS2_KS2_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS2_KS2_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS2_KS2_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_FRTN_SHIFT)) & ELS_ELS_KS2_KS2_FRTN_MASK)
+#define ELS_ELS_KS2_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS2_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS2_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_FRTN_SHIFT)) & ELS_ELS_KS2_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS2_KS2_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS2_KS2_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS2_KS2_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_FHWO_SHIFT)) & ELS_ELS_KS2_KS2_FHWO_MASK)
+#define ELS_ELS_KS2_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS2_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS2_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_FHWO_SHIFT)) & ELS_ELS_KS2_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS2_KS2_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS2_KS2_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS2_KS2_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UKPUK_SHIFT)) & ELS_ELS_KS2_KS2_UKPUK_MASK)
+#define ELS_ELS_KS2_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS2_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS2_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UKPUK_SHIFT)) & ELS_ELS_KS2_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS2_KS2_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS2_KS2_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS2_KS2_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UTECDH_SHIFT)) & ELS_ELS_KS2_KS2_UTECDH_MASK)
+#define ELS_ELS_KS2_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS2_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS2_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UTECDH_SHIFT)) & ELS_ELS_KS2_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS2_KS2_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS2_KS2_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS2_KS2_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UCMAC_SHIFT)) & ELS_ELS_KS2_KS2_UCMAC_MASK)
+#define ELS_ELS_KS2_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS2_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS2_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UCMAC_SHIFT)) & ELS_ELS_KS2_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS2_KS2_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS2_KS2_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS2_KS2_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UKSK_SHIFT)) & ELS_ELS_KS2_KS2_UKSK_MASK)
+#define ELS_ELS_KS2_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS2_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS2_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UKSK_SHIFT)) & ELS_ELS_KS2_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS2_KS2_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS2_KS2_URTF_SHIFT               (15U)
-#define ELS_ELS_KS2_KS2_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_URTF_SHIFT)) & ELS_ELS_KS2_KS2_URTF_MASK)
+#define ELS_ELS_KS2_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS2_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS2_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_URTF_SHIFT)) & ELS_ELS_KS2_KSN_URTF_MASK)
 
-#define ELS_ELS_KS2_KS2_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS2_KS2_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS2_KS2_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UCKDF_SHIFT)) & ELS_ELS_KS2_KS2_UCKDF_MASK)
+#define ELS_ELS_KS2_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS2_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS2_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UCKDF_SHIFT)) & ELS_ELS_KS2_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS2_KS2_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS2_KS2_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS2_KS2_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UHKDF_SHIFT)) & ELS_ELS_KS2_KS2_UHKDF_MASK)
+#define ELS_ELS_KS2_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS2_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS2_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UHKDF_SHIFT)) & ELS_ELS_KS2_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS2_KS2_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS2_KS2_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS2_KS2_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UECSG_SHIFT)) & ELS_ELS_KS2_KS2_UECSG_MASK)
+#define ELS_ELS_KS2_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS2_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS2_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UECSG_SHIFT)) & ELS_ELS_KS2_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS2_KS2_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS2_KS2_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS2_KS2_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UECDH_SHIFT)) & ELS_ELS_KS2_KS2_UECDH_MASK)
+#define ELS_ELS_KS2_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS2_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS2_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UECDH_SHIFT)) & ELS_ELS_KS2_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS2_KS2_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS2_KS2_UAES_SHIFT               (20U)
-#define ELS_ELS_KS2_KS2_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UAES_SHIFT)) & ELS_ELS_KS2_KS2_UAES_MASK)
+#define ELS_ELS_KS2_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS2_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS2_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UAES_SHIFT)) & ELS_ELS_KS2_KSN_UAES_MASK)
 
-#define ELS_ELS_KS2_KS2_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS2_KS2_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS2_KS2_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UHMAC_SHIFT)) & ELS_ELS_KS2_KS2_UHMAC_MASK)
+#define ELS_ELS_KS2_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS2_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS2_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UHMAC_SHIFT)) & ELS_ELS_KS2_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS2_KS2_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS2_KS2_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS2_KS2_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UKWK_SHIFT)) & ELS_ELS_KS2_KS2_UKWK_MASK)
+#define ELS_ELS_KS2_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS2_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS2_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UKWK_SHIFT)) & ELS_ELS_KS2_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS2_KS2_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS2_KS2_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS2_KS2_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UKUOK_SHIFT)) & ELS_ELS_KS2_KS2_UKUOK_MASK)
+#define ELS_ELS_KS2_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS2_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS2_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UKUOK_SHIFT)) & ELS_ELS_KS2_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS2_KS2_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS2_KS2_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS2_KS2_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UTLSPMS_SHIFT)) & ELS_ELS_KS2_KS2_UTLSPMS_MASK)
+#define ELS_ELS_KS2_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS2_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS2_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS2_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS2_KS2_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS2_KS2_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS2_KS2_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UTLSMS_SHIFT)) & ELS_ELS_KS2_KS2_UTLSMS_MASK)
+#define ELS_ELS_KS2_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS2_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS2_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS2_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS2_KS2_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS2_KS2_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS2_KS2_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UKGSRC_SHIFT)) & ELS_ELS_KS2_KS2_UKGSRC_MASK)
+#define ELS_ELS_KS2_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS2_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS2_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS2_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS2_KS2_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS2_KS2_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS2_KS2_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UHWO_SHIFT)) & ELS_ELS_KS2_KS2_UHWO_MASK)
+#define ELS_ELS_KS2_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS2_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS2_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UHWO_SHIFT)) & ELS_ELS_KS2_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS2_KS2_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS2_KS2_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS2_KS2_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UWRPOK_SHIFT)) & ELS_ELS_KS2_KS2_UWRPOK_MASK)
+#define ELS_ELS_KS2_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS2_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS2_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS2_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS2_KS2_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS2_KS2_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS2_KS2_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UDUK_SHIFT)) & ELS_ELS_KS2_KS2_UDUK_MASK)
+#define ELS_ELS_KS2_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS2_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS2_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UDUK_SHIFT)) & ELS_ELS_KS2_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS2_KS2_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS2_KS2_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS2_KS2_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KS2_UPPROT_SHIFT)) & ELS_ELS_KS2_KS2_UPPROT_MASK)
+#define ELS_ELS_KS2_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS2_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS2_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS2_KSN_UPPROT_SHIFT)) & ELS_ELS_KS2_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS3 - Status Register */
+/*! @name ELS_KS3 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS3_KS3_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS3_KS3_KSIZE_SHIFT              (0U)
-/*! KS3_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS3_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS3_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS3_KS3_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_KSIZE_SHIFT)) & ELS_ELS_KS3_KS3_KSIZE_MASK)
+#define ELS_ELS_KS3_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_KSIZE_SHIFT)) & ELS_ELS_KS3_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS3_KS3_KACT_MASK                (0x20U)
-#define ELS_ELS_KS3_KS3_KACT_SHIFT               (5U)
-#define ELS_ELS_KS3_KS3_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_KACT_SHIFT)) & ELS_ELS_KS3_KS3_KACT_MASK)
+#define ELS_ELS_KS3_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS3_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS3_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_KACT_SHIFT)) & ELS_ELS_KS3_KSN_KACT_MASK)
 
-#define ELS_ELS_KS3_KS3_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS3_KS3_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS3_KS3_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_KBASE_SHIFT)) & ELS_ELS_KS3_KS3_KBASE_MASK)
+#define ELS_ELS_KS3_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS3_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS3_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_KBASE_SHIFT)) & ELS_ELS_KS3_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS3_KS3_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS3_KS3_FGP_SHIFT                (7U)
-#define ELS_ELS_KS3_KS3_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_FGP_SHIFT)) & ELS_ELS_KS3_KS3_FGP_MASK)
+#define ELS_ELS_KS3_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS3_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS3_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS0_FGP_SHIFT)) & ELS_ELS_KS3_KS0_FGP_MASK)
 
-#define ELS_ELS_KS3_KS3_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS3_KS3_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS3_KS3_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_FRTN_SHIFT)) & ELS_ELS_KS3_KS3_FRTN_MASK)
+#define ELS_ELS_KS3_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS3_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS3_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_FRTN_SHIFT)) & ELS_ELS_KS3_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS3_KS3_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS3_KS3_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS3_KS3_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_FHWO_SHIFT)) & ELS_ELS_KS3_KS3_FHWO_MASK)
+#define ELS_ELS_KS3_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS3_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS3_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_FHWO_SHIFT)) & ELS_ELS_KS3_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS3_KS3_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS3_KS3_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS3_KS3_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UKPUK_SHIFT)) & ELS_ELS_KS3_KS3_UKPUK_MASK)
+#define ELS_ELS_KS3_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS3_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS3_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UKPUK_SHIFT)) & ELS_ELS_KS3_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS3_KS3_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS3_KS3_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS3_KS3_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UTECDH_SHIFT)) & ELS_ELS_KS3_KS3_UTECDH_MASK)
+#define ELS_ELS_KS3_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS3_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS3_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UTECDH_SHIFT)) & ELS_ELS_KS3_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS3_KS3_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS3_KS3_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS3_KS3_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UCMAC_SHIFT)) & ELS_ELS_KS3_KS3_UCMAC_MASK)
+#define ELS_ELS_KS3_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS3_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS3_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UCMAC_SHIFT)) & ELS_ELS_KS3_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS3_KS3_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS3_KS3_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS3_KS3_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UKSK_SHIFT)) & ELS_ELS_KS3_KS3_UKSK_MASK)
+#define ELS_ELS_KS3_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS3_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS3_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UKSK_SHIFT)) & ELS_ELS_KS3_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS3_KS3_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS3_KS3_URTF_SHIFT               (15U)
-#define ELS_ELS_KS3_KS3_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_URTF_SHIFT)) & ELS_ELS_KS3_KS3_URTF_MASK)
+#define ELS_ELS_KS3_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS3_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS3_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_URTF_SHIFT)) & ELS_ELS_KS3_KSN_URTF_MASK)
 
-#define ELS_ELS_KS3_KS3_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS3_KS3_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS3_KS3_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UCKDF_SHIFT)) & ELS_ELS_KS3_KS3_UCKDF_MASK)
+#define ELS_ELS_KS3_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS3_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS3_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UCKDF_SHIFT)) & ELS_ELS_KS3_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS3_KS3_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS3_KS3_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS3_KS3_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UHKDF_SHIFT)) & ELS_ELS_KS3_KS3_UHKDF_MASK)
+#define ELS_ELS_KS3_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS3_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS3_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UHKDF_SHIFT)) & ELS_ELS_KS3_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS3_KS3_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS3_KS3_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS3_KS3_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UECSG_SHIFT)) & ELS_ELS_KS3_KS3_UECSG_MASK)
+#define ELS_ELS_KS3_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS3_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS3_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UECSG_SHIFT)) & ELS_ELS_KS3_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS3_KS3_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS3_KS3_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS3_KS3_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UECDH_SHIFT)) & ELS_ELS_KS3_KS3_UECDH_MASK)
+#define ELS_ELS_KS3_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS3_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS3_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UECDH_SHIFT)) & ELS_ELS_KS3_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS3_KS3_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS3_KS3_UAES_SHIFT               (20U)
-#define ELS_ELS_KS3_KS3_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UAES_SHIFT)) & ELS_ELS_KS3_KS3_UAES_MASK)
+#define ELS_ELS_KS3_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS3_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS3_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UAES_SHIFT)) & ELS_ELS_KS3_KSN_UAES_MASK)
 
-#define ELS_ELS_KS3_KS3_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS3_KS3_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS3_KS3_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UHMAC_SHIFT)) & ELS_ELS_KS3_KS3_UHMAC_MASK)
+#define ELS_ELS_KS3_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS3_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS3_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UHMAC_SHIFT)) & ELS_ELS_KS3_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS3_KS3_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS3_KS3_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS3_KS3_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UKWK_SHIFT)) & ELS_ELS_KS3_KS3_UKWK_MASK)
+#define ELS_ELS_KS3_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS3_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS3_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UKWK_SHIFT)) & ELS_ELS_KS3_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS3_KS3_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS3_KS3_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS3_KS3_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UKUOK_SHIFT)) & ELS_ELS_KS3_KS3_UKUOK_MASK)
+#define ELS_ELS_KS3_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS3_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS3_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UKUOK_SHIFT)) & ELS_ELS_KS3_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS3_KS3_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS3_KS3_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS3_KS3_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UTLSPMS_SHIFT)) & ELS_ELS_KS3_KS3_UTLSPMS_MASK)
+#define ELS_ELS_KS3_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS3_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS3_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS3_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS3_KS3_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS3_KS3_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS3_KS3_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UTLSMS_SHIFT)) & ELS_ELS_KS3_KS3_UTLSMS_MASK)
+#define ELS_ELS_KS3_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS3_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS3_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS3_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS3_KS3_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS3_KS3_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS3_KS3_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UKGSRC_SHIFT)) & ELS_ELS_KS3_KS3_UKGSRC_MASK)
+#define ELS_ELS_KS3_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS3_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS3_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS3_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS3_KS3_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS3_KS3_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS3_KS3_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UHWO_SHIFT)) & ELS_ELS_KS3_KS3_UHWO_MASK)
+#define ELS_ELS_KS3_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS3_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS3_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UHWO_SHIFT)) & ELS_ELS_KS3_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS3_KS3_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS3_KS3_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS3_KS3_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UWRPOK_SHIFT)) & ELS_ELS_KS3_KS3_UWRPOK_MASK)
+#define ELS_ELS_KS3_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS3_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS3_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS3_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS3_KS3_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS3_KS3_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS3_KS3_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UDUK_SHIFT)) & ELS_ELS_KS3_KS3_UDUK_MASK)
+#define ELS_ELS_KS3_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS3_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS3_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UDUK_SHIFT)) & ELS_ELS_KS3_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS3_KS3_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS3_KS3_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS3_KS3_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KS3_UPPROT_SHIFT)) & ELS_ELS_KS3_KS3_UPPROT_MASK)
+#define ELS_ELS_KS3_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS3_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS3_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS3_KSN_UPPROT_SHIFT)) & ELS_ELS_KS3_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS4 - Status Register */
+/*! @name ELS_KS4 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS4_KS4_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS4_KS4_KSIZE_SHIFT              (0U)
-/*! KS4_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS4_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS4_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS4_KS4_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_KSIZE_SHIFT)) & ELS_ELS_KS4_KS4_KSIZE_MASK)
+#define ELS_ELS_KS4_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_KSIZE_SHIFT)) & ELS_ELS_KS4_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS4_KS4_KACT_MASK                (0x20U)
-#define ELS_ELS_KS4_KS4_KACT_SHIFT               (5U)
-#define ELS_ELS_KS4_KS4_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_KACT_SHIFT)) & ELS_ELS_KS4_KS4_KACT_MASK)
+#define ELS_ELS_KS4_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS4_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS4_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_KACT_SHIFT)) & ELS_ELS_KS4_KSN_KACT_MASK)
 
-#define ELS_ELS_KS4_KS4_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS4_KS4_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS4_KS4_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_KBASE_SHIFT)) & ELS_ELS_KS4_KS4_KBASE_MASK)
+#define ELS_ELS_KS4_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS4_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS4_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_KBASE_SHIFT)) & ELS_ELS_KS4_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS4_KS4_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS4_KS4_FGP_SHIFT                (7U)
-#define ELS_ELS_KS4_KS4_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_FGP_SHIFT)) & ELS_ELS_KS4_KS4_FGP_MASK)
+#define ELS_ELS_KS4_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS4_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS4_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS0_FGP_SHIFT)) & ELS_ELS_KS4_KS0_FGP_MASK)
 
-#define ELS_ELS_KS4_KS4_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS4_KS4_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS4_KS4_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_FRTN_SHIFT)) & ELS_ELS_KS4_KS4_FRTN_MASK)
+#define ELS_ELS_KS4_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS4_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS4_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_FRTN_SHIFT)) & ELS_ELS_KS4_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS4_KS4_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS4_KS4_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS4_KS4_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_FHWO_SHIFT)) & ELS_ELS_KS4_KS4_FHWO_MASK)
+#define ELS_ELS_KS4_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS4_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS4_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_FHWO_SHIFT)) & ELS_ELS_KS4_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS4_KS4_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS4_KS4_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS4_KS4_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UKPUK_SHIFT)) & ELS_ELS_KS4_KS4_UKPUK_MASK)
+#define ELS_ELS_KS4_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS4_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS4_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UKPUK_SHIFT)) & ELS_ELS_KS4_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS4_KS4_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS4_KS4_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS4_KS4_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UTECDH_SHIFT)) & ELS_ELS_KS4_KS4_UTECDH_MASK)
+#define ELS_ELS_KS4_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS4_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS4_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UTECDH_SHIFT)) & ELS_ELS_KS4_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS4_KS4_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS4_KS4_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS4_KS4_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UCMAC_SHIFT)) & ELS_ELS_KS4_KS4_UCMAC_MASK)
+#define ELS_ELS_KS4_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS4_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS4_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UCMAC_SHIFT)) & ELS_ELS_KS4_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS4_KS4_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS4_KS4_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS4_KS4_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UKSK_SHIFT)) & ELS_ELS_KS4_KS4_UKSK_MASK)
+#define ELS_ELS_KS4_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS4_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS4_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UKSK_SHIFT)) & ELS_ELS_KS4_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS4_KS4_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS4_KS4_URTF_SHIFT               (15U)
-#define ELS_ELS_KS4_KS4_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_URTF_SHIFT)) & ELS_ELS_KS4_KS4_URTF_MASK)
+#define ELS_ELS_KS4_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS4_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS4_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_URTF_SHIFT)) & ELS_ELS_KS4_KSN_URTF_MASK)
 
-#define ELS_ELS_KS4_KS4_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS4_KS4_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS4_KS4_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UCKDF_SHIFT)) & ELS_ELS_KS4_KS4_UCKDF_MASK)
+#define ELS_ELS_KS4_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS4_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS4_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UCKDF_SHIFT)) & ELS_ELS_KS4_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS4_KS4_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS4_KS4_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS4_KS4_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UHKDF_SHIFT)) & ELS_ELS_KS4_KS4_UHKDF_MASK)
+#define ELS_ELS_KS4_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS4_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS4_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UHKDF_SHIFT)) & ELS_ELS_KS4_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS4_KS4_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS4_KS4_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS4_KS4_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UECSG_SHIFT)) & ELS_ELS_KS4_KS4_UECSG_MASK)
+#define ELS_ELS_KS4_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS4_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS4_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UECSG_SHIFT)) & ELS_ELS_KS4_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS4_KS4_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS4_KS4_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS4_KS4_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UECDH_SHIFT)) & ELS_ELS_KS4_KS4_UECDH_MASK)
+#define ELS_ELS_KS4_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS4_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS4_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UECDH_SHIFT)) & ELS_ELS_KS4_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS4_KS4_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS4_KS4_UAES_SHIFT               (20U)
-#define ELS_ELS_KS4_KS4_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UAES_SHIFT)) & ELS_ELS_KS4_KS4_UAES_MASK)
+#define ELS_ELS_KS4_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS4_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS4_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UAES_SHIFT)) & ELS_ELS_KS4_KSN_UAES_MASK)
 
-#define ELS_ELS_KS4_KS4_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS4_KS4_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS4_KS4_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UHMAC_SHIFT)) & ELS_ELS_KS4_KS4_UHMAC_MASK)
+#define ELS_ELS_KS4_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS4_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS4_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UHMAC_SHIFT)) & ELS_ELS_KS4_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS4_KS4_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS4_KS4_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS4_KS4_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UKWK_SHIFT)) & ELS_ELS_KS4_KS4_UKWK_MASK)
+#define ELS_ELS_KS4_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS4_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS4_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UKWK_SHIFT)) & ELS_ELS_KS4_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS4_KS4_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS4_KS4_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS4_KS4_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UKUOK_SHIFT)) & ELS_ELS_KS4_KS4_UKUOK_MASK)
+#define ELS_ELS_KS4_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS4_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS4_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UKUOK_SHIFT)) & ELS_ELS_KS4_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS4_KS4_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS4_KS4_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS4_KS4_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UTLSPMS_SHIFT)) & ELS_ELS_KS4_KS4_UTLSPMS_MASK)
+#define ELS_ELS_KS4_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS4_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS4_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS4_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS4_KS4_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS4_KS4_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS4_KS4_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UTLSMS_SHIFT)) & ELS_ELS_KS4_KS4_UTLSMS_MASK)
+#define ELS_ELS_KS4_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS4_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS4_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS4_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS4_KS4_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS4_KS4_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS4_KS4_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UKGSRC_SHIFT)) & ELS_ELS_KS4_KS4_UKGSRC_MASK)
+#define ELS_ELS_KS4_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS4_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS4_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS4_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS4_KS4_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS4_KS4_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS4_KS4_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UHWO_SHIFT)) & ELS_ELS_KS4_KS4_UHWO_MASK)
+#define ELS_ELS_KS4_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS4_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS4_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UHWO_SHIFT)) & ELS_ELS_KS4_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS4_KS4_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS4_KS4_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS4_KS4_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UWRPOK_SHIFT)) & ELS_ELS_KS4_KS4_UWRPOK_MASK)
+#define ELS_ELS_KS4_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS4_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS4_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS4_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS4_KS4_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS4_KS4_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS4_KS4_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UDUK_SHIFT)) & ELS_ELS_KS4_KS4_UDUK_MASK)
+#define ELS_ELS_KS4_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS4_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS4_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UDUK_SHIFT)) & ELS_ELS_KS4_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS4_KS4_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS4_KS4_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS4_KS4_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KS4_UPPROT_SHIFT)) & ELS_ELS_KS4_KS4_UPPROT_MASK)
+#define ELS_ELS_KS4_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS4_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS4_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS4_KSN_UPPROT_SHIFT)) & ELS_ELS_KS4_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS5 - Status Register */
+/*! @name ELS_KS5 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS5_KS5_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS5_KS5_KSIZE_SHIFT              (0U)
-/*! KS5_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS5_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS5_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS5_KS5_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_KSIZE_SHIFT)) & ELS_ELS_KS5_KS5_KSIZE_MASK)
+#define ELS_ELS_KS5_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_KSIZE_SHIFT)) & ELS_ELS_KS5_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS5_KS5_KACT_MASK                (0x20U)
-#define ELS_ELS_KS5_KS5_KACT_SHIFT               (5U)
-#define ELS_ELS_KS5_KS5_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_KACT_SHIFT)) & ELS_ELS_KS5_KS5_KACT_MASK)
+#define ELS_ELS_KS5_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS5_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS5_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_KACT_SHIFT)) & ELS_ELS_KS5_KSN_KACT_MASK)
 
-#define ELS_ELS_KS5_KS5_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS5_KS5_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS5_KS5_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_KBASE_SHIFT)) & ELS_ELS_KS5_KS5_KBASE_MASK)
+#define ELS_ELS_KS5_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS5_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS5_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_KBASE_SHIFT)) & ELS_ELS_KS5_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS5_KS5_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS5_KS5_FGP_SHIFT                (7U)
-#define ELS_ELS_KS5_KS5_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_FGP_SHIFT)) & ELS_ELS_KS5_KS5_FGP_MASK)
+#define ELS_ELS_KS5_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS5_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS5_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS0_FGP_SHIFT)) & ELS_ELS_KS5_KS0_FGP_MASK)
 
-#define ELS_ELS_KS5_KS5_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS5_KS5_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS5_KS5_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_FRTN_SHIFT)) & ELS_ELS_KS5_KS5_FRTN_MASK)
+#define ELS_ELS_KS5_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS5_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS5_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_FRTN_SHIFT)) & ELS_ELS_KS5_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS5_KS5_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS5_KS5_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS5_KS5_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_FHWO_SHIFT)) & ELS_ELS_KS5_KS5_FHWO_MASK)
+#define ELS_ELS_KS5_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS5_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS5_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_FHWO_SHIFT)) & ELS_ELS_KS5_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS5_KS5_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS5_KS5_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS5_KS5_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UKPUK_SHIFT)) & ELS_ELS_KS5_KS5_UKPUK_MASK)
+#define ELS_ELS_KS5_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS5_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS5_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UKPUK_SHIFT)) & ELS_ELS_KS5_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS5_KS5_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS5_KS5_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS5_KS5_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UTECDH_SHIFT)) & ELS_ELS_KS5_KS5_UTECDH_MASK)
+#define ELS_ELS_KS5_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS5_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS5_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UTECDH_SHIFT)) & ELS_ELS_KS5_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS5_KS5_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS5_KS5_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS5_KS5_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UCMAC_SHIFT)) & ELS_ELS_KS5_KS5_UCMAC_MASK)
+#define ELS_ELS_KS5_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS5_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS5_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UCMAC_SHIFT)) & ELS_ELS_KS5_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS5_KS5_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS5_KS5_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS5_KS5_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UKSK_SHIFT)) & ELS_ELS_KS5_KS5_UKSK_MASK)
+#define ELS_ELS_KS5_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS5_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS5_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UKSK_SHIFT)) & ELS_ELS_KS5_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS5_KS5_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS5_KS5_URTF_SHIFT               (15U)
-#define ELS_ELS_KS5_KS5_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_URTF_SHIFT)) & ELS_ELS_KS5_KS5_URTF_MASK)
+#define ELS_ELS_KS5_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS5_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS5_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_URTF_SHIFT)) & ELS_ELS_KS5_KSN_URTF_MASK)
 
-#define ELS_ELS_KS5_KS5_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS5_KS5_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS5_KS5_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UCKDF_SHIFT)) & ELS_ELS_KS5_KS5_UCKDF_MASK)
+#define ELS_ELS_KS5_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS5_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS5_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UCKDF_SHIFT)) & ELS_ELS_KS5_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS5_KS5_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS5_KS5_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS5_KS5_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UHKDF_SHIFT)) & ELS_ELS_KS5_KS5_UHKDF_MASK)
+#define ELS_ELS_KS5_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS5_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS5_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UHKDF_SHIFT)) & ELS_ELS_KS5_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS5_KS5_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS5_KS5_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS5_KS5_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UECSG_SHIFT)) & ELS_ELS_KS5_KS5_UECSG_MASK)
+#define ELS_ELS_KS5_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS5_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS5_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UECSG_SHIFT)) & ELS_ELS_KS5_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS5_KS5_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS5_KS5_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS5_KS5_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UECDH_SHIFT)) & ELS_ELS_KS5_KS5_UECDH_MASK)
+#define ELS_ELS_KS5_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS5_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS5_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UECDH_SHIFT)) & ELS_ELS_KS5_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS5_KS5_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS5_KS5_UAES_SHIFT               (20U)
-#define ELS_ELS_KS5_KS5_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UAES_SHIFT)) & ELS_ELS_KS5_KS5_UAES_MASK)
+#define ELS_ELS_KS5_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS5_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS5_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UAES_SHIFT)) & ELS_ELS_KS5_KSN_UAES_MASK)
 
-#define ELS_ELS_KS5_KS5_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS5_KS5_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS5_KS5_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UHMAC_SHIFT)) & ELS_ELS_KS5_KS5_UHMAC_MASK)
+#define ELS_ELS_KS5_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS5_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS5_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UHMAC_SHIFT)) & ELS_ELS_KS5_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS5_KS5_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS5_KS5_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS5_KS5_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UKWK_SHIFT)) & ELS_ELS_KS5_KS5_UKWK_MASK)
+#define ELS_ELS_KS5_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS5_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS5_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UKWK_SHIFT)) & ELS_ELS_KS5_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS5_KS5_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS5_KS5_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS5_KS5_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UKUOK_SHIFT)) & ELS_ELS_KS5_KS5_UKUOK_MASK)
+#define ELS_ELS_KS5_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS5_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS5_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UKUOK_SHIFT)) & ELS_ELS_KS5_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS5_KS5_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS5_KS5_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS5_KS5_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UTLSPMS_SHIFT)) & ELS_ELS_KS5_KS5_UTLSPMS_MASK)
+#define ELS_ELS_KS5_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS5_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS5_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS5_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS5_KS5_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS5_KS5_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS5_KS5_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UTLSMS_SHIFT)) & ELS_ELS_KS5_KS5_UTLSMS_MASK)
+#define ELS_ELS_KS5_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS5_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS5_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS5_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS5_KS5_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS5_KS5_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS5_KS5_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UKGSRC_SHIFT)) & ELS_ELS_KS5_KS5_UKGSRC_MASK)
+#define ELS_ELS_KS5_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS5_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS5_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS5_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS5_KS5_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS5_KS5_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS5_KS5_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UHWO_SHIFT)) & ELS_ELS_KS5_KS5_UHWO_MASK)
+#define ELS_ELS_KS5_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS5_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS5_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UHWO_SHIFT)) & ELS_ELS_KS5_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS5_KS5_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS5_KS5_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS5_KS5_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UWRPOK_SHIFT)) & ELS_ELS_KS5_KS5_UWRPOK_MASK)
+#define ELS_ELS_KS5_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS5_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS5_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS5_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS5_KS5_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS5_KS5_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS5_KS5_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UDUK_SHIFT)) & ELS_ELS_KS5_KS5_UDUK_MASK)
+#define ELS_ELS_KS5_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS5_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS5_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UDUK_SHIFT)) & ELS_ELS_KS5_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS5_KS5_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS5_KS5_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS5_KS5_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KS5_UPPROT_SHIFT)) & ELS_ELS_KS5_KS5_UPPROT_MASK)
+#define ELS_ELS_KS5_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS5_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS5_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS5_KSN_UPPROT_SHIFT)) & ELS_ELS_KS5_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS6 - Status Register */
+/*! @name ELS_KS6 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS6_KS6_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS6_KS6_KSIZE_SHIFT              (0U)
-/*! KS6_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS6_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS6_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS6_KS6_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_KSIZE_SHIFT)) & ELS_ELS_KS6_KS6_KSIZE_MASK)
+#define ELS_ELS_KS6_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_KSIZE_SHIFT)) & ELS_ELS_KS6_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS6_KS6_KACT_MASK                (0x20U)
-#define ELS_ELS_KS6_KS6_KACT_SHIFT               (5U)
-#define ELS_ELS_KS6_KS6_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_KACT_SHIFT)) & ELS_ELS_KS6_KS6_KACT_MASK)
+#define ELS_ELS_KS6_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS6_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS6_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_KACT_SHIFT)) & ELS_ELS_KS6_KSN_KACT_MASK)
 
-#define ELS_ELS_KS6_KS6_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS6_KS6_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS6_KS6_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_KBASE_SHIFT)) & ELS_ELS_KS6_KS6_KBASE_MASK)
+#define ELS_ELS_KS6_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS6_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS6_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_KBASE_SHIFT)) & ELS_ELS_KS6_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS6_KS6_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS6_KS6_FGP_SHIFT                (7U)
-#define ELS_ELS_KS6_KS6_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_FGP_SHIFT)) & ELS_ELS_KS6_KS6_FGP_MASK)
+#define ELS_ELS_KS6_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS6_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS6_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS0_FGP_SHIFT)) & ELS_ELS_KS6_KS0_FGP_MASK)
 
-#define ELS_ELS_KS6_KS6_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS6_KS6_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS6_KS6_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_FRTN_SHIFT)) & ELS_ELS_KS6_KS6_FRTN_MASK)
+#define ELS_ELS_KS6_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS6_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS6_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_FRTN_SHIFT)) & ELS_ELS_KS6_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS6_KS6_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS6_KS6_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS6_KS6_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_FHWO_SHIFT)) & ELS_ELS_KS6_KS6_FHWO_MASK)
+#define ELS_ELS_KS6_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS6_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS6_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_FHWO_SHIFT)) & ELS_ELS_KS6_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS6_KS6_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS6_KS6_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS6_KS6_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UKPUK_SHIFT)) & ELS_ELS_KS6_KS6_UKPUK_MASK)
+#define ELS_ELS_KS6_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS6_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS6_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UKPUK_SHIFT)) & ELS_ELS_KS6_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS6_KS6_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS6_KS6_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS6_KS6_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UTECDH_SHIFT)) & ELS_ELS_KS6_KS6_UTECDH_MASK)
+#define ELS_ELS_KS6_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS6_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS6_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UTECDH_SHIFT)) & ELS_ELS_KS6_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS6_KS6_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS6_KS6_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS6_KS6_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UCMAC_SHIFT)) & ELS_ELS_KS6_KS6_UCMAC_MASK)
+#define ELS_ELS_KS6_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS6_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS6_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UCMAC_SHIFT)) & ELS_ELS_KS6_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS6_KS6_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS6_KS6_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS6_KS6_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UKSK_SHIFT)) & ELS_ELS_KS6_KS6_UKSK_MASK)
+#define ELS_ELS_KS6_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS6_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS6_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UKSK_SHIFT)) & ELS_ELS_KS6_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS6_KS6_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS6_KS6_URTF_SHIFT               (15U)
-#define ELS_ELS_KS6_KS6_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_URTF_SHIFT)) & ELS_ELS_KS6_KS6_URTF_MASK)
+#define ELS_ELS_KS6_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS6_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS6_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_URTF_SHIFT)) & ELS_ELS_KS6_KSN_URTF_MASK)
 
-#define ELS_ELS_KS6_KS6_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS6_KS6_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS6_KS6_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UCKDF_SHIFT)) & ELS_ELS_KS6_KS6_UCKDF_MASK)
+#define ELS_ELS_KS6_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS6_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS6_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UCKDF_SHIFT)) & ELS_ELS_KS6_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS6_KS6_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS6_KS6_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS6_KS6_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UHKDF_SHIFT)) & ELS_ELS_KS6_KS6_UHKDF_MASK)
+#define ELS_ELS_KS6_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS6_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS6_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UHKDF_SHIFT)) & ELS_ELS_KS6_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS6_KS6_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS6_KS6_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS6_KS6_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UECSG_SHIFT)) & ELS_ELS_KS6_KS6_UECSG_MASK)
+#define ELS_ELS_KS6_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS6_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS6_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UECSG_SHIFT)) & ELS_ELS_KS6_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS6_KS6_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS6_KS6_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS6_KS6_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UECDH_SHIFT)) & ELS_ELS_KS6_KS6_UECDH_MASK)
+#define ELS_ELS_KS6_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS6_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS6_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UECDH_SHIFT)) & ELS_ELS_KS6_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS6_KS6_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS6_KS6_UAES_SHIFT               (20U)
-#define ELS_ELS_KS6_KS6_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UAES_SHIFT)) & ELS_ELS_KS6_KS6_UAES_MASK)
+#define ELS_ELS_KS6_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS6_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS6_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UAES_SHIFT)) & ELS_ELS_KS6_KSN_UAES_MASK)
 
-#define ELS_ELS_KS6_KS6_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS6_KS6_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS6_KS6_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UHMAC_SHIFT)) & ELS_ELS_KS6_KS6_UHMAC_MASK)
+#define ELS_ELS_KS6_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS6_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS6_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UHMAC_SHIFT)) & ELS_ELS_KS6_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS6_KS6_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS6_KS6_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS6_KS6_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UKWK_SHIFT)) & ELS_ELS_KS6_KS6_UKWK_MASK)
+#define ELS_ELS_KS6_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS6_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS6_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UKWK_SHIFT)) & ELS_ELS_KS6_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS6_KS6_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS6_KS6_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS6_KS6_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UKUOK_SHIFT)) & ELS_ELS_KS6_KS6_UKUOK_MASK)
+#define ELS_ELS_KS6_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS6_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS6_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UKUOK_SHIFT)) & ELS_ELS_KS6_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS6_KS6_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS6_KS6_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS6_KS6_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UTLSPMS_SHIFT)) & ELS_ELS_KS6_KS6_UTLSPMS_MASK)
+#define ELS_ELS_KS6_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS6_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS6_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS6_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS6_KS6_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS6_KS6_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS6_KS6_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UTLSMS_SHIFT)) & ELS_ELS_KS6_KS6_UTLSMS_MASK)
+#define ELS_ELS_KS6_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS6_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS6_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS6_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS6_KS6_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS6_KS6_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS6_KS6_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UKGSRC_SHIFT)) & ELS_ELS_KS6_KS6_UKGSRC_MASK)
+#define ELS_ELS_KS6_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS6_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS6_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS6_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS6_KS6_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS6_KS6_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS6_KS6_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UHWO_SHIFT)) & ELS_ELS_KS6_KS6_UHWO_MASK)
+#define ELS_ELS_KS6_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS6_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS6_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UHWO_SHIFT)) & ELS_ELS_KS6_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS6_KS6_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS6_KS6_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS6_KS6_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UWRPOK_SHIFT)) & ELS_ELS_KS6_KS6_UWRPOK_MASK)
+#define ELS_ELS_KS6_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS6_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS6_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS6_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS6_KS6_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS6_KS6_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS6_KS6_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UDUK_SHIFT)) & ELS_ELS_KS6_KS6_UDUK_MASK)
+#define ELS_ELS_KS6_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS6_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS6_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UDUK_SHIFT)) & ELS_ELS_KS6_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS6_KS6_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS6_KS6_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS6_KS6_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KS6_UPPROT_SHIFT)) & ELS_ELS_KS6_KS6_UPPROT_MASK)
+#define ELS_ELS_KS6_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS6_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS6_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS6_KSN_UPPROT_SHIFT)) & ELS_ELS_KS6_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS7 - Status Register */
+/*! @name ELS_KS7 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS7_KS7_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS7_KS7_KSIZE_SHIFT              (0U)
-/*! KS7_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS7_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS7_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS7_KS7_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_KSIZE_SHIFT)) & ELS_ELS_KS7_KS7_KSIZE_MASK)
+#define ELS_ELS_KS7_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_KSIZE_SHIFT)) & ELS_ELS_KS7_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS7_KS7_KACT_MASK                (0x20U)
-#define ELS_ELS_KS7_KS7_KACT_SHIFT               (5U)
-#define ELS_ELS_KS7_KS7_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_KACT_SHIFT)) & ELS_ELS_KS7_KS7_KACT_MASK)
+#define ELS_ELS_KS7_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS7_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS7_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_KACT_SHIFT)) & ELS_ELS_KS7_KSN_KACT_MASK)
 
-#define ELS_ELS_KS7_KS7_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS7_KS7_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS7_KS7_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_KBASE_SHIFT)) & ELS_ELS_KS7_KS7_KBASE_MASK)
+#define ELS_ELS_KS7_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS7_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS7_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_KBASE_SHIFT)) & ELS_ELS_KS7_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS7_KS7_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS7_KS7_FGP_SHIFT                (7U)
-#define ELS_ELS_KS7_KS7_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_FGP_SHIFT)) & ELS_ELS_KS7_KS7_FGP_MASK)
+#define ELS_ELS_KS7_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS7_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS7_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS0_FGP_SHIFT)) & ELS_ELS_KS7_KS0_FGP_MASK)
 
-#define ELS_ELS_KS7_KS7_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS7_KS7_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS7_KS7_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_FRTN_SHIFT)) & ELS_ELS_KS7_KS7_FRTN_MASK)
+#define ELS_ELS_KS7_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS7_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS7_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_FRTN_SHIFT)) & ELS_ELS_KS7_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS7_KS7_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS7_KS7_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS7_KS7_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_FHWO_SHIFT)) & ELS_ELS_KS7_KS7_FHWO_MASK)
+#define ELS_ELS_KS7_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS7_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS7_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_FHWO_SHIFT)) & ELS_ELS_KS7_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS7_KS7_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS7_KS7_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS7_KS7_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UKPUK_SHIFT)) & ELS_ELS_KS7_KS7_UKPUK_MASK)
+#define ELS_ELS_KS7_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS7_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS7_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UKPUK_SHIFT)) & ELS_ELS_KS7_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS7_KS7_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS7_KS7_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS7_KS7_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UTECDH_SHIFT)) & ELS_ELS_KS7_KS7_UTECDH_MASK)
+#define ELS_ELS_KS7_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS7_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS7_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UTECDH_SHIFT)) & ELS_ELS_KS7_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS7_KS7_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS7_KS7_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS7_KS7_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UCMAC_SHIFT)) & ELS_ELS_KS7_KS7_UCMAC_MASK)
+#define ELS_ELS_KS7_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS7_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS7_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UCMAC_SHIFT)) & ELS_ELS_KS7_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS7_KS7_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS7_KS7_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS7_KS7_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UKSK_SHIFT)) & ELS_ELS_KS7_KS7_UKSK_MASK)
+#define ELS_ELS_KS7_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS7_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS7_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UKSK_SHIFT)) & ELS_ELS_KS7_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS7_KS7_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS7_KS7_URTF_SHIFT               (15U)
-#define ELS_ELS_KS7_KS7_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_URTF_SHIFT)) & ELS_ELS_KS7_KS7_URTF_MASK)
+#define ELS_ELS_KS7_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS7_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS7_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_URTF_SHIFT)) & ELS_ELS_KS7_KSN_URTF_MASK)
 
-#define ELS_ELS_KS7_KS7_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS7_KS7_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS7_KS7_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UCKDF_SHIFT)) & ELS_ELS_KS7_KS7_UCKDF_MASK)
+#define ELS_ELS_KS7_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS7_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS7_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UCKDF_SHIFT)) & ELS_ELS_KS7_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS7_KS7_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS7_KS7_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS7_KS7_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UHKDF_SHIFT)) & ELS_ELS_KS7_KS7_UHKDF_MASK)
+#define ELS_ELS_KS7_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS7_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS7_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UHKDF_SHIFT)) & ELS_ELS_KS7_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS7_KS7_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS7_KS7_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS7_KS7_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UECSG_SHIFT)) & ELS_ELS_KS7_KS7_UECSG_MASK)
+#define ELS_ELS_KS7_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS7_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS7_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UECSG_SHIFT)) & ELS_ELS_KS7_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS7_KS7_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS7_KS7_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS7_KS7_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UECDH_SHIFT)) & ELS_ELS_KS7_KS7_UECDH_MASK)
+#define ELS_ELS_KS7_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS7_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS7_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UECDH_SHIFT)) & ELS_ELS_KS7_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS7_KS7_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS7_KS7_UAES_SHIFT               (20U)
-#define ELS_ELS_KS7_KS7_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UAES_SHIFT)) & ELS_ELS_KS7_KS7_UAES_MASK)
+#define ELS_ELS_KS7_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS7_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS7_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UAES_SHIFT)) & ELS_ELS_KS7_KSN_UAES_MASK)
 
-#define ELS_ELS_KS7_KS7_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS7_KS7_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS7_KS7_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UHMAC_SHIFT)) & ELS_ELS_KS7_KS7_UHMAC_MASK)
+#define ELS_ELS_KS7_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS7_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS7_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UHMAC_SHIFT)) & ELS_ELS_KS7_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS7_KS7_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS7_KS7_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS7_KS7_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UKWK_SHIFT)) & ELS_ELS_KS7_KS7_UKWK_MASK)
+#define ELS_ELS_KS7_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS7_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS7_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UKWK_SHIFT)) & ELS_ELS_KS7_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS7_KS7_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS7_KS7_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS7_KS7_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UKUOK_SHIFT)) & ELS_ELS_KS7_KS7_UKUOK_MASK)
+#define ELS_ELS_KS7_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS7_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS7_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UKUOK_SHIFT)) & ELS_ELS_KS7_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS7_KS7_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS7_KS7_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS7_KS7_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UTLSPMS_SHIFT)) & ELS_ELS_KS7_KS7_UTLSPMS_MASK)
+#define ELS_ELS_KS7_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS7_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS7_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS7_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS7_KS7_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS7_KS7_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS7_KS7_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UTLSMS_SHIFT)) & ELS_ELS_KS7_KS7_UTLSMS_MASK)
+#define ELS_ELS_KS7_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS7_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS7_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS7_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS7_KS7_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS7_KS7_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS7_KS7_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UKGSRC_SHIFT)) & ELS_ELS_KS7_KS7_UKGSRC_MASK)
+#define ELS_ELS_KS7_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS7_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS7_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS7_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS7_KS7_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS7_KS7_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS7_KS7_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UHWO_SHIFT)) & ELS_ELS_KS7_KS7_UHWO_MASK)
+#define ELS_ELS_KS7_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS7_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS7_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UHWO_SHIFT)) & ELS_ELS_KS7_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS7_KS7_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS7_KS7_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS7_KS7_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UWRPOK_SHIFT)) & ELS_ELS_KS7_KS7_UWRPOK_MASK)
+#define ELS_ELS_KS7_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS7_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS7_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS7_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS7_KS7_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS7_KS7_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS7_KS7_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UDUK_SHIFT)) & ELS_ELS_KS7_KS7_UDUK_MASK)
+#define ELS_ELS_KS7_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS7_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS7_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UDUK_SHIFT)) & ELS_ELS_KS7_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS7_KS7_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS7_KS7_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS7_KS7_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KS7_UPPROT_SHIFT)) & ELS_ELS_KS7_KS7_UPPROT_MASK)
+#define ELS_ELS_KS7_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS7_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS7_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS7_KSN_UPPROT_SHIFT)) & ELS_ELS_KS7_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS8 - Status Register */
+/*! @name ELS_KS8 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS8_KS8_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS8_KS8_KSIZE_SHIFT              (0U)
-/*! KS8_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS8_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS8_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS8_KS8_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_KSIZE_SHIFT)) & ELS_ELS_KS8_KS8_KSIZE_MASK)
+#define ELS_ELS_KS8_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_KSIZE_SHIFT)) & ELS_ELS_KS8_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS8_KS8_KACT_MASK                (0x20U)
-#define ELS_ELS_KS8_KS8_KACT_SHIFT               (5U)
-#define ELS_ELS_KS8_KS8_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_KACT_SHIFT)) & ELS_ELS_KS8_KS8_KACT_MASK)
+#define ELS_ELS_KS8_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS8_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS8_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_KACT_SHIFT)) & ELS_ELS_KS8_KSN_KACT_MASK)
 
-#define ELS_ELS_KS8_KS8_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS8_KS8_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS8_KS8_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_KBASE_SHIFT)) & ELS_ELS_KS8_KS8_KBASE_MASK)
+#define ELS_ELS_KS8_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS8_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS8_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_KBASE_SHIFT)) & ELS_ELS_KS8_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS8_KS8_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS8_KS8_FGP_SHIFT                (7U)
-#define ELS_ELS_KS8_KS8_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_FGP_SHIFT)) & ELS_ELS_KS8_KS8_FGP_MASK)
+#define ELS_ELS_KS8_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS8_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS8_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS0_FGP_SHIFT)) & ELS_ELS_KS8_KS0_FGP_MASK)
 
-#define ELS_ELS_KS8_KS8_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS8_KS8_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS8_KS8_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_FRTN_SHIFT)) & ELS_ELS_KS8_KS8_FRTN_MASK)
+#define ELS_ELS_KS8_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS8_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS8_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_FRTN_SHIFT)) & ELS_ELS_KS8_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS8_KS8_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS8_KS8_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS8_KS8_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_FHWO_SHIFT)) & ELS_ELS_KS8_KS8_FHWO_MASK)
+#define ELS_ELS_KS8_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS8_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS8_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_FHWO_SHIFT)) & ELS_ELS_KS8_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS8_KS8_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS8_KS8_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS8_KS8_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UKPUK_SHIFT)) & ELS_ELS_KS8_KS8_UKPUK_MASK)
+#define ELS_ELS_KS8_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS8_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS8_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UKPUK_SHIFT)) & ELS_ELS_KS8_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS8_KS8_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS8_KS8_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS8_KS8_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UTECDH_SHIFT)) & ELS_ELS_KS8_KS8_UTECDH_MASK)
+#define ELS_ELS_KS8_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS8_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS8_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UTECDH_SHIFT)) & ELS_ELS_KS8_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS8_KS8_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS8_KS8_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS8_KS8_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UCMAC_SHIFT)) & ELS_ELS_KS8_KS8_UCMAC_MASK)
+#define ELS_ELS_KS8_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS8_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS8_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UCMAC_SHIFT)) & ELS_ELS_KS8_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS8_KS8_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS8_KS8_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS8_KS8_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UKSK_SHIFT)) & ELS_ELS_KS8_KS8_UKSK_MASK)
+#define ELS_ELS_KS8_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS8_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS8_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UKSK_SHIFT)) & ELS_ELS_KS8_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS8_KS8_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS8_KS8_URTF_SHIFT               (15U)
-#define ELS_ELS_KS8_KS8_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_URTF_SHIFT)) & ELS_ELS_KS8_KS8_URTF_MASK)
+#define ELS_ELS_KS8_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS8_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS8_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_URTF_SHIFT)) & ELS_ELS_KS8_KSN_URTF_MASK)
 
-#define ELS_ELS_KS8_KS8_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS8_KS8_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS8_KS8_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UCKDF_SHIFT)) & ELS_ELS_KS8_KS8_UCKDF_MASK)
+#define ELS_ELS_KS8_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS8_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS8_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UCKDF_SHIFT)) & ELS_ELS_KS8_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS8_KS8_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS8_KS8_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS8_KS8_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UHKDF_SHIFT)) & ELS_ELS_KS8_KS8_UHKDF_MASK)
+#define ELS_ELS_KS8_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS8_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS8_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UHKDF_SHIFT)) & ELS_ELS_KS8_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS8_KS8_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS8_KS8_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS8_KS8_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UECSG_SHIFT)) & ELS_ELS_KS8_KS8_UECSG_MASK)
+#define ELS_ELS_KS8_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS8_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS8_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UECSG_SHIFT)) & ELS_ELS_KS8_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS8_KS8_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS8_KS8_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS8_KS8_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UECDH_SHIFT)) & ELS_ELS_KS8_KS8_UECDH_MASK)
+#define ELS_ELS_KS8_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS8_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS8_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UECDH_SHIFT)) & ELS_ELS_KS8_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS8_KS8_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS8_KS8_UAES_SHIFT               (20U)
-#define ELS_ELS_KS8_KS8_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UAES_SHIFT)) & ELS_ELS_KS8_KS8_UAES_MASK)
+#define ELS_ELS_KS8_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS8_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS8_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UAES_SHIFT)) & ELS_ELS_KS8_KSN_UAES_MASK)
 
-#define ELS_ELS_KS8_KS8_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS8_KS8_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS8_KS8_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UHMAC_SHIFT)) & ELS_ELS_KS8_KS8_UHMAC_MASK)
+#define ELS_ELS_KS8_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS8_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS8_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UHMAC_SHIFT)) & ELS_ELS_KS8_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS8_KS8_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS8_KS8_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS8_KS8_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UKWK_SHIFT)) & ELS_ELS_KS8_KS8_UKWK_MASK)
+#define ELS_ELS_KS8_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS8_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS8_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UKWK_SHIFT)) & ELS_ELS_KS8_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS8_KS8_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS8_KS8_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS8_KS8_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UKUOK_SHIFT)) & ELS_ELS_KS8_KS8_UKUOK_MASK)
+#define ELS_ELS_KS8_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS8_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS8_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UKUOK_SHIFT)) & ELS_ELS_KS8_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS8_KS8_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS8_KS8_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS8_KS8_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UTLSPMS_SHIFT)) & ELS_ELS_KS8_KS8_UTLSPMS_MASK)
+#define ELS_ELS_KS8_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS8_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS8_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS8_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS8_KS8_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS8_KS8_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS8_KS8_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UTLSMS_SHIFT)) & ELS_ELS_KS8_KS8_UTLSMS_MASK)
+#define ELS_ELS_KS8_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS8_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS8_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS8_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS8_KS8_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS8_KS8_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS8_KS8_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UKGSRC_SHIFT)) & ELS_ELS_KS8_KS8_UKGSRC_MASK)
+#define ELS_ELS_KS8_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS8_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS8_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS8_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS8_KS8_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS8_KS8_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS8_KS8_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UHWO_SHIFT)) & ELS_ELS_KS8_KS8_UHWO_MASK)
+#define ELS_ELS_KS8_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS8_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS8_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UHWO_SHIFT)) & ELS_ELS_KS8_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS8_KS8_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS8_KS8_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS8_KS8_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UWRPOK_SHIFT)) & ELS_ELS_KS8_KS8_UWRPOK_MASK)
+#define ELS_ELS_KS8_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS8_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS8_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS8_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS8_KS8_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS8_KS8_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS8_KS8_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UDUK_SHIFT)) & ELS_ELS_KS8_KS8_UDUK_MASK)
+#define ELS_ELS_KS8_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS8_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS8_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UDUK_SHIFT)) & ELS_ELS_KS8_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS8_KS8_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS8_KS8_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS8_KS8_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KS8_UPPROT_SHIFT)) & ELS_ELS_KS8_KS8_UPPROT_MASK)
+#define ELS_ELS_KS8_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS8_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS8_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS8_KSN_UPPROT_SHIFT)) & ELS_ELS_KS8_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS9 - Status Register */
+/*! @name ELS_KS9 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS9_KS9_KSIZE_MASK               (0x3U)
-#define ELS_ELS_KS9_KS9_KSIZE_SHIFT              (0U)
-/*! KS9_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS9_KSN_KSIZE_MASK               (0x3U)
+#define ELS_ELS_KS9_KSN_KSIZE_SHIFT              (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS9_KS9_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_KSIZE_SHIFT)) & ELS_ELS_KS9_KS9_KSIZE_MASK)
+#define ELS_ELS_KS9_KSN_KSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_KSIZE_SHIFT)) & ELS_ELS_KS9_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS9_KS9_KACT_MASK                (0x20U)
-#define ELS_ELS_KS9_KS9_KACT_SHIFT               (5U)
-#define ELS_ELS_KS9_KS9_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_KACT_SHIFT)) & ELS_ELS_KS9_KS9_KACT_MASK)
+#define ELS_ELS_KS9_KSN_KACT_MASK                (0x20U)
+#define ELS_ELS_KS9_KSN_KACT_SHIFT               (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS9_KSN_KACT(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_KACT_SHIFT)) & ELS_ELS_KS9_KSN_KACT_MASK)
 
-#define ELS_ELS_KS9_KS9_KBASE_MASK               (0x40U)
-#define ELS_ELS_KS9_KS9_KBASE_SHIFT              (6U)
-#define ELS_ELS_KS9_KS9_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_KBASE_SHIFT)) & ELS_ELS_KS9_KS9_KBASE_MASK)
+#define ELS_ELS_KS9_KSN_KBASE_MASK               (0x40U)
+#define ELS_ELS_KS9_KSN_KBASE_SHIFT              (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS9_KSN_KBASE(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_KBASE_SHIFT)) & ELS_ELS_KS9_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS9_KS9_FGP_MASK                 (0x80U)
-#define ELS_ELS_KS9_KS9_FGP_SHIFT                (7U)
-#define ELS_ELS_KS9_KS9_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_FGP_SHIFT)) & ELS_ELS_KS9_KS9_FGP_MASK)
+#define ELS_ELS_KS9_KS0_FGP_MASK                 (0x80U)
+#define ELS_ELS_KS9_KS0_FGP_SHIFT                (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS9_KS0_FGP(x)                   (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS0_FGP_SHIFT)) & ELS_ELS_KS9_KS0_FGP_MASK)
 
-#define ELS_ELS_KS9_KS9_FRTN_MASK                (0x100U)
-#define ELS_ELS_KS9_KS9_FRTN_SHIFT               (8U)
-#define ELS_ELS_KS9_KS9_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_FRTN_SHIFT)) & ELS_ELS_KS9_KS9_FRTN_MASK)
+#define ELS_ELS_KS9_KSN_FRTN_MASK                (0x100U)
+#define ELS_ELS_KS9_KSN_FRTN_SHIFT               (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS9_KSN_FRTN(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_FRTN_SHIFT)) & ELS_ELS_KS9_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS9_KS9_FHWO_MASK                (0x200U)
-#define ELS_ELS_KS9_KS9_FHWO_SHIFT               (9U)
-#define ELS_ELS_KS9_KS9_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_FHWO_SHIFT)) & ELS_ELS_KS9_KS9_FHWO_MASK)
+#define ELS_ELS_KS9_KSN_FHWO_MASK                (0x200U)
+#define ELS_ELS_KS9_KSN_FHWO_SHIFT               (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS9_KSN_FHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_FHWO_SHIFT)) & ELS_ELS_KS9_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS9_KS9_UKPUK_MASK               (0x800U)
-#define ELS_ELS_KS9_KS9_UKPUK_SHIFT              (11U)
-#define ELS_ELS_KS9_KS9_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UKPUK_SHIFT)) & ELS_ELS_KS9_KS9_UKPUK_MASK)
+#define ELS_ELS_KS9_KSN_UKPUK_MASK               (0x800U)
+#define ELS_ELS_KS9_KSN_UKPUK_SHIFT              (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS9_KSN_UKPUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UKPUK_SHIFT)) & ELS_ELS_KS9_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS9_KS9_UTECDH_MASK              (0x1000U)
-#define ELS_ELS_KS9_KS9_UTECDH_SHIFT             (12U)
-#define ELS_ELS_KS9_KS9_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UTECDH_SHIFT)) & ELS_ELS_KS9_KS9_UTECDH_MASK)
+#define ELS_ELS_KS9_KSN_UTECDH_MASK              (0x1000U)
+#define ELS_ELS_KS9_KSN_UTECDH_SHIFT             (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS9_KSN_UTECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UTECDH_SHIFT)) & ELS_ELS_KS9_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS9_KS9_UCMAC_MASK               (0x2000U)
-#define ELS_ELS_KS9_KS9_UCMAC_SHIFT              (13U)
-#define ELS_ELS_KS9_KS9_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UCMAC_SHIFT)) & ELS_ELS_KS9_KS9_UCMAC_MASK)
+#define ELS_ELS_KS9_KSN_UCMAC_MASK               (0x2000U)
+#define ELS_ELS_KS9_KSN_UCMAC_SHIFT              (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS9_KSN_UCMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UCMAC_SHIFT)) & ELS_ELS_KS9_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS9_KS9_UKSK_MASK                (0x4000U)
-#define ELS_ELS_KS9_KS9_UKSK_SHIFT               (14U)
-#define ELS_ELS_KS9_KS9_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UKSK_SHIFT)) & ELS_ELS_KS9_KS9_UKSK_MASK)
+#define ELS_ELS_KS9_KSN_UKSK_MASK                (0x4000U)
+#define ELS_ELS_KS9_KSN_UKSK_SHIFT               (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS9_KSN_UKSK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UKSK_SHIFT)) & ELS_ELS_KS9_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS9_KS9_URTF_MASK                (0x8000U)
-#define ELS_ELS_KS9_KS9_URTF_SHIFT               (15U)
-#define ELS_ELS_KS9_KS9_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_URTF_SHIFT)) & ELS_ELS_KS9_KS9_URTF_MASK)
+#define ELS_ELS_KS9_KSN_URTF_MASK                (0x8000U)
+#define ELS_ELS_KS9_KSN_URTF_SHIFT               (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS9_KSN_URTF(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_URTF_SHIFT)) & ELS_ELS_KS9_KSN_URTF_MASK)
 
-#define ELS_ELS_KS9_KS9_UCKDF_MASK               (0x10000U)
-#define ELS_ELS_KS9_KS9_UCKDF_SHIFT              (16U)
-#define ELS_ELS_KS9_KS9_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UCKDF_SHIFT)) & ELS_ELS_KS9_KS9_UCKDF_MASK)
+#define ELS_ELS_KS9_KSN_UCKDF_MASK               (0x10000U)
+#define ELS_ELS_KS9_KSN_UCKDF_SHIFT              (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS9_KSN_UCKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UCKDF_SHIFT)) & ELS_ELS_KS9_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS9_KS9_UHKDF_MASK               (0x20000U)
-#define ELS_ELS_KS9_KS9_UHKDF_SHIFT              (17U)
-#define ELS_ELS_KS9_KS9_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UHKDF_SHIFT)) & ELS_ELS_KS9_KS9_UHKDF_MASK)
+#define ELS_ELS_KS9_KSN_UHKDF_MASK               (0x20000U)
+#define ELS_ELS_KS9_KSN_UHKDF_SHIFT              (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS9_KSN_UHKDF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UHKDF_SHIFT)) & ELS_ELS_KS9_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS9_KS9_UECSG_MASK               (0x40000U)
-#define ELS_ELS_KS9_KS9_UECSG_SHIFT              (18U)
-#define ELS_ELS_KS9_KS9_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UECSG_SHIFT)) & ELS_ELS_KS9_KS9_UECSG_MASK)
+#define ELS_ELS_KS9_KSN_UECSG_MASK               (0x40000U)
+#define ELS_ELS_KS9_KSN_UECSG_SHIFT              (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS9_KSN_UECSG(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UECSG_SHIFT)) & ELS_ELS_KS9_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS9_KS9_UECDH_MASK               (0x80000U)
-#define ELS_ELS_KS9_KS9_UECDH_SHIFT              (19U)
-#define ELS_ELS_KS9_KS9_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UECDH_SHIFT)) & ELS_ELS_KS9_KS9_UECDH_MASK)
+#define ELS_ELS_KS9_KSN_UECDH_MASK               (0x80000U)
+#define ELS_ELS_KS9_KSN_UECDH_SHIFT              (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS9_KSN_UECDH(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UECDH_SHIFT)) & ELS_ELS_KS9_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS9_KS9_UAES_MASK                (0x100000U)
-#define ELS_ELS_KS9_KS9_UAES_SHIFT               (20U)
-#define ELS_ELS_KS9_KS9_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UAES_SHIFT)) & ELS_ELS_KS9_KS9_UAES_MASK)
+#define ELS_ELS_KS9_KSN_UAES_MASK                (0x100000U)
+#define ELS_ELS_KS9_KSN_UAES_SHIFT               (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS9_KSN_UAES(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UAES_SHIFT)) & ELS_ELS_KS9_KSN_UAES_MASK)
 
-#define ELS_ELS_KS9_KS9_UHMAC_MASK               (0x200000U)
-#define ELS_ELS_KS9_KS9_UHMAC_SHIFT              (21U)
-#define ELS_ELS_KS9_KS9_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UHMAC_SHIFT)) & ELS_ELS_KS9_KS9_UHMAC_MASK)
+#define ELS_ELS_KS9_KSN_UHMAC_MASK               (0x200000U)
+#define ELS_ELS_KS9_KSN_UHMAC_SHIFT              (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS9_KSN_UHMAC(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UHMAC_SHIFT)) & ELS_ELS_KS9_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS9_KS9_UKWK_MASK                (0x400000U)
-#define ELS_ELS_KS9_KS9_UKWK_SHIFT               (22U)
-#define ELS_ELS_KS9_KS9_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UKWK_SHIFT)) & ELS_ELS_KS9_KS9_UKWK_MASK)
+#define ELS_ELS_KS9_KSN_UKWK_MASK                (0x400000U)
+#define ELS_ELS_KS9_KSN_UKWK_SHIFT               (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS9_KSN_UKWK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UKWK_SHIFT)) & ELS_ELS_KS9_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS9_KS9_UKUOK_MASK               (0x800000U)
-#define ELS_ELS_KS9_KS9_UKUOK_SHIFT              (23U)
-#define ELS_ELS_KS9_KS9_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UKUOK_SHIFT)) & ELS_ELS_KS9_KS9_UKUOK_MASK)
+#define ELS_ELS_KS9_KSN_UKUOK_MASK               (0x800000U)
+#define ELS_ELS_KS9_KSN_UKUOK_SHIFT              (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS9_KSN_UKUOK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UKUOK_SHIFT)) & ELS_ELS_KS9_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS9_KS9_UTLSPMS_MASK             (0x1000000U)
-#define ELS_ELS_KS9_KS9_UTLSPMS_SHIFT            (24U)
-#define ELS_ELS_KS9_KS9_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UTLSPMS_SHIFT)) & ELS_ELS_KS9_KS9_UTLSPMS_MASK)
+#define ELS_ELS_KS9_KSN_UTLSPMS_MASK             (0x1000000U)
+#define ELS_ELS_KS9_KSN_UTLSPMS_SHIFT            (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS9_KSN_UTLSPMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS9_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS9_KS9_UTLSMS_MASK              (0x2000000U)
-#define ELS_ELS_KS9_KS9_UTLSMS_SHIFT             (25U)
-#define ELS_ELS_KS9_KS9_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UTLSMS_SHIFT)) & ELS_ELS_KS9_KS9_UTLSMS_MASK)
+#define ELS_ELS_KS9_KSN_UTLSMS_MASK              (0x2000000U)
+#define ELS_ELS_KS9_KSN_UTLSMS_SHIFT             (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS9_KSN_UTLSMS(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS9_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS9_KS9_UKGSRC_MASK              (0x4000000U)
-#define ELS_ELS_KS9_KS9_UKGSRC_SHIFT             (26U)
-#define ELS_ELS_KS9_KS9_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UKGSRC_SHIFT)) & ELS_ELS_KS9_KS9_UKGSRC_MASK)
+#define ELS_ELS_KS9_KSN_UKGSRC_MASK              (0x4000000U)
+#define ELS_ELS_KS9_KSN_UKGSRC_SHIFT             (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS9_KSN_UKGSRC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS9_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS9_KS9_UHWO_MASK                (0x8000000U)
-#define ELS_ELS_KS9_KS9_UHWO_SHIFT               (27U)
-#define ELS_ELS_KS9_KS9_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UHWO_SHIFT)) & ELS_ELS_KS9_KS9_UHWO_MASK)
+#define ELS_ELS_KS9_KSN_UHWO_MASK                (0x8000000U)
+#define ELS_ELS_KS9_KSN_UHWO_SHIFT               (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS9_KSN_UHWO(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UHWO_SHIFT)) & ELS_ELS_KS9_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS9_KS9_UWRPOK_MASK              (0x10000000U)
-#define ELS_ELS_KS9_KS9_UWRPOK_SHIFT             (28U)
-#define ELS_ELS_KS9_KS9_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UWRPOK_SHIFT)) & ELS_ELS_KS9_KS9_UWRPOK_MASK)
+#define ELS_ELS_KS9_KSN_UWRPOK_MASK              (0x10000000U)
+#define ELS_ELS_KS9_KSN_UWRPOK_SHIFT             (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS9_KSN_UWRPOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS9_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS9_KS9_UDUK_MASK                (0x20000000U)
-#define ELS_ELS_KS9_KS9_UDUK_SHIFT               (29U)
-#define ELS_ELS_KS9_KS9_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UDUK_SHIFT)) & ELS_ELS_KS9_KS9_UDUK_MASK)
+#define ELS_ELS_KS9_KSN_UDUK_MASK                (0x20000000U)
+#define ELS_ELS_KS9_KSN_UDUK_SHIFT               (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS9_KSN_UDUK(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UDUK_SHIFT)) & ELS_ELS_KS9_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS9_KS9_UPPROT_MASK              (0xC0000000U)
-#define ELS_ELS_KS9_KS9_UPPROT_SHIFT             (30U)
-#define ELS_ELS_KS9_KS9_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KS9_UPPROT_SHIFT)) & ELS_ELS_KS9_KS9_UPPROT_MASK)
+#define ELS_ELS_KS9_KSN_UPPROT_MASK              (0xC0000000U)
+#define ELS_ELS_KS9_KSN_UPPROT_SHIFT             (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS9_KSN_UPPROT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS9_KSN_UPPROT_SHIFT)) & ELS_ELS_KS9_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS10 - Status Register */
+/*! @name ELS_KS10 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS10_KS10_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS10_KS10_KSIZE_SHIFT            (0U)
-/*! KS10_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS10_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS10_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS10_KS10_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_KSIZE_SHIFT)) & ELS_ELS_KS10_KS10_KSIZE_MASK)
+#define ELS_ELS_KS10_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_KSIZE_SHIFT)) & ELS_ELS_KS10_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS10_KS10_KACT_MASK              (0x20U)
-#define ELS_ELS_KS10_KS10_KACT_SHIFT             (5U)
-#define ELS_ELS_KS10_KS10_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_KACT_SHIFT)) & ELS_ELS_KS10_KS10_KACT_MASK)
+#define ELS_ELS_KS10_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS10_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS10_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_KACT_SHIFT)) & ELS_ELS_KS10_KSN_KACT_MASK)
 
-#define ELS_ELS_KS10_KS10_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS10_KS10_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS10_KS10_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_KBASE_SHIFT)) & ELS_ELS_KS10_KS10_KBASE_MASK)
+#define ELS_ELS_KS10_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS10_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS10_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_KBASE_SHIFT)) & ELS_ELS_KS10_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS10_KS10_FGP_MASK               (0x80U)
-#define ELS_ELS_KS10_KS10_FGP_SHIFT              (7U)
-#define ELS_ELS_KS10_KS10_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_FGP_SHIFT)) & ELS_ELS_KS10_KS10_FGP_MASK)
+#define ELS_ELS_KS10_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS10_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS10_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS0_FGP_SHIFT)) & ELS_ELS_KS10_KS0_FGP_MASK)
 
-#define ELS_ELS_KS10_KS10_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS10_KS10_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS10_KS10_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_FRTN_SHIFT)) & ELS_ELS_KS10_KS10_FRTN_MASK)
+#define ELS_ELS_KS10_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS10_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS10_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_FRTN_SHIFT)) & ELS_ELS_KS10_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS10_KS10_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS10_KS10_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS10_KS10_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_FHWO_SHIFT)) & ELS_ELS_KS10_KS10_FHWO_MASK)
+#define ELS_ELS_KS10_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS10_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS10_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_FHWO_SHIFT)) & ELS_ELS_KS10_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS10_KS10_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS10_KS10_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS10_KS10_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UKPUK_SHIFT)) & ELS_ELS_KS10_KS10_UKPUK_MASK)
+#define ELS_ELS_KS10_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS10_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS10_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UKPUK_SHIFT)) & ELS_ELS_KS10_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS10_KS10_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS10_KS10_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS10_KS10_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UTECDH_SHIFT)) & ELS_ELS_KS10_KS10_UTECDH_MASK)
+#define ELS_ELS_KS10_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS10_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS10_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UTECDH_SHIFT)) & ELS_ELS_KS10_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS10_KS10_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS10_KS10_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS10_KS10_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UCMAC_SHIFT)) & ELS_ELS_KS10_KS10_UCMAC_MASK)
+#define ELS_ELS_KS10_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS10_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS10_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UCMAC_SHIFT)) & ELS_ELS_KS10_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS10_KS10_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS10_KS10_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS10_KS10_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UKSK_SHIFT)) & ELS_ELS_KS10_KS10_UKSK_MASK)
+#define ELS_ELS_KS10_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS10_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS10_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UKSK_SHIFT)) & ELS_ELS_KS10_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS10_KS10_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS10_KS10_URTF_SHIFT             (15U)
-#define ELS_ELS_KS10_KS10_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_URTF_SHIFT)) & ELS_ELS_KS10_KS10_URTF_MASK)
+#define ELS_ELS_KS10_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS10_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS10_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_URTF_SHIFT)) & ELS_ELS_KS10_KSN_URTF_MASK)
 
-#define ELS_ELS_KS10_KS10_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS10_KS10_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS10_KS10_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UCKDF_SHIFT)) & ELS_ELS_KS10_KS10_UCKDF_MASK)
+#define ELS_ELS_KS10_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS10_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS10_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UCKDF_SHIFT)) & ELS_ELS_KS10_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS10_KS10_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS10_KS10_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS10_KS10_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UHKDF_SHIFT)) & ELS_ELS_KS10_KS10_UHKDF_MASK)
+#define ELS_ELS_KS10_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS10_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS10_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UHKDF_SHIFT)) & ELS_ELS_KS10_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS10_KS10_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS10_KS10_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS10_KS10_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UECSG_SHIFT)) & ELS_ELS_KS10_KS10_UECSG_MASK)
+#define ELS_ELS_KS10_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS10_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS10_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UECSG_SHIFT)) & ELS_ELS_KS10_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS10_KS10_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS10_KS10_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS10_KS10_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UECDH_SHIFT)) & ELS_ELS_KS10_KS10_UECDH_MASK)
+#define ELS_ELS_KS10_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS10_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS10_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UECDH_SHIFT)) & ELS_ELS_KS10_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS10_KS10_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS10_KS10_UAES_SHIFT             (20U)
-#define ELS_ELS_KS10_KS10_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UAES_SHIFT)) & ELS_ELS_KS10_KS10_UAES_MASK)
+#define ELS_ELS_KS10_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS10_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS10_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UAES_SHIFT)) & ELS_ELS_KS10_KSN_UAES_MASK)
 
-#define ELS_ELS_KS10_KS10_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS10_KS10_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS10_KS10_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UHMAC_SHIFT)) & ELS_ELS_KS10_KS10_UHMAC_MASK)
+#define ELS_ELS_KS10_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS10_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS10_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UHMAC_SHIFT)) & ELS_ELS_KS10_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS10_KS10_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS10_KS10_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS10_KS10_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UKWK_SHIFT)) & ELS_ELS_KS10_KS10_UKWK_MASK)
+#define ELS_ELS_KS10_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS10_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS10_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UKWK_SHIFT)) & ELS_ELS_KS10_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS10_KS10_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS10_KS10_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS10_KS10_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UKUOK_SHIFT)) & ELS_ELS_KS10_KS10_UKUOK_MASK)
+#define ELS_ELS_KS10_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS10_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS10_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UKUOK_SHIFT)) & ELS_ELS_KS10_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS10_KS10_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS10_KS10_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS10_KS10_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UTLSPMS_SHIFT)) & ELS_ELS_KS10_KS10_UTLSPMS_MASK)
+#define ELS_ELS_KS10_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS10_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS10_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS10_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS10_KS10_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS10_KS10_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS10_KS10_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UTLSMS_SHIFT)) & ELS_ELS_KS10_KS10_UTLSMS_MASK)
+#define ELS_ELS_KS10_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS10_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS10_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS10_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS10_KS10_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS10_KS10_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS10_KS10_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UKGSRC_SHIFT)) & ELS_ELS_KS10_KS10_UKGSRC_MASK)
+#define ELS_ELS_KS10_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS10_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS10_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS10_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS10_KS10_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS10_KS10_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS10_KS10_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UHWO_SHIFT)) & ELS_ELS_KS10_KS10_UHWO_MASK)
+#define ELS_ELS_KS10_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS10_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS10_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UHWO_SHIFT)) & ELS_ELS_KS10_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS10_KS10_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS10_KS10_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS10_KS10_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UWRPOK_SHIFT)) & ELS_ELS_KS10_KS10_UWRPOK_MASK)
+#define ELS_ELS_KS10_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS10_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS10_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS10_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS10_KS10_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS10_KS10_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS10_KS10_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UDUK_SHIFT)) & ELS_ELS_KS10_KS10_UDUK_MASK)
+#define ELS_ELS_KS10_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS10_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS10_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UDUK_SHIFT)) & ELS_ELS_KS10_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS10_KS10_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS10_KS10_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS10_KS10_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KS10_UPPROT_SHIFT)) & ELS_ELS_KS10_KS10_UPPROT_MASK)
+#define ELS_ELS_KS10_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS10_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS10_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS10_KSN_UPPROT_SHIFT)) & ELS_ELS_KS10_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS11 - Status Register */
+/*! @name ELS_KS11 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS11_KS11_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS11_KS11_KSIZE_SHIFT            (0U)
-/*! KS11_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS11_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS11_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS11_KS11_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_KSIZE_SHIFT)) & ELS_ELS_KS11_KS11_KSIZE_MASK)
+#define ELS_ELS_KS11_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_KSIZE_SHIFT)) & ELS_ELS_KS11_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS11_KS11_KACT_MASK              (0x20U)
-#define ELS_ELS_KS11_KS11_KACT_SHIFT             (5U)
-#define ELS_ELS_KS11_KS11_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_KACT_SHIFT)) & ELS_ELS_KS11_KS11_KACT_MASK)
+#define ELS_ELS_KS11_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS11_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS11_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_KACT_SHIFT)) & ELS_ELS_KS11_KSN_KACT_MASK)
 
-#define ELS_ELS_KS11_KS11_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS11_KS11_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS11_KS11_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_KBASE_SHIFT)) & ELS_ELS_KS11_KS11_KBASE_MASK)
+#define ELS_ELS_KS11_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS11_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS11_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_KBASE_SHIFT)) & ELS_ELS_KS11_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS11_KS11_FGP_MASK               (0x80U)
-#define ELS_ELS_KS11_KS11_FGP_SHIFT              (7U)
-#define ELS_ELS_KS11_KS11_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_FGP_SHIFT)) & ELS_ELS_KS11_KS11_FGP_MASK)
+#define ELS_ELS_KS11_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS11_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS11_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS0_FGP_SHIFT)) & ELS_ELS_KS11_KS0_FGP_MASK)
 
-#define ELS_ELS_KS11_KS11_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS11_KS11_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS11_KS11_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_FRTN_SHIFT)) & ELS_ELS_KS11_KS11_FRTN_MASK)
+#define ELS_ELS_KS11_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS11_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS11_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_FRTN_SHIFT)) & ELS_ELS_KS11_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS11_KS11_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS11_KS11_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS11_KS11_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_FHWO_SHIFT)) & ELS_ELS_KS11_KS11_FHWO_MASK)
+#define ELS_ELS_KS11_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS11_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS11_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_FHWO_SHIFT)) & ELS_ELS_KS11_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS11_KS11_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS11_KS11_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS11_KS11_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UKPUK_SHIFT)) & ELS_ELS_KS11_KS11_UKPUK_MASK)
+#define ELS_ELS_KS11_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS11_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS11_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UKPUK_SHIFT)) & ELS_ELS_KS11_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS11_KS11_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS11_KS11_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS11_KS11_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UTECDH_SHIFT)) & ELS_ELS_KS11_KS11_UTECDH_MASK)
+#define ELS_ELS_KS11_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS11_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS11_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UTECDH_SHIFT)) & ELS_ELS_KS11_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS11_KS11_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS11_KS11_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS11_KS11_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UCMAC_SHIFT)) & ELS_ELS_KS11_KS11_UCMAC_MASK)
+#define ELS_ELS_KS11_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS11_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS11_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UCMAC_SHIFT)) & ELS_ELS_KS11_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS11_KS11_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS11_KS11_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS11_KS11_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UKSK_SHIFT)) & ELS_ELS_KS11_KS11_UKSK_MASK)
+#define ELS_ELS_KS11_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS11_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS11_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UKSK_SHIFT)) & ELS_ELS_KS11_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS11_KS11_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS11_KS11_URTF_SHIFT             (15U)
-#define ELS_ELS_KS11_KS11_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_URTF_SHIFT)) & ELS_ELS_KS11_KS11_URTF_MASK)
+#define ELS_ELS_KS11_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS11_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS11_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_URTF_SHIFT)) & ELS_ELS_KS11_KSN_URTF_MASK)
 
-#define ELS_ELS_KS11_KS11_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS11_KS11_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS11_KS11_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UCKDF_SHIFT)) & ELS_ELS_KS11_KS11_UCKDF_MASK)
+#define ELS_ELS_KS11_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS11_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS11_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UCKDF_SHIFT)) & ELS_ELS_KS11_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS11_KS11_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS11_KS11_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS11_KS11_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UHKDF_SHIFT)) & ELS_ELS_KS11_KS11_UHKDF_MASK)
+#define ELS_ELS_KS11_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS11_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS11_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UHKDF_SHIFT)) & ELS_ELS_KS11_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS11_KS11_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS11_KS11_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS11_KS11_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UECSG_SHIFT)) & ELS_ELS_KS11_KS11_UECSG_MASK)
+#define ELS_ELS_KS11_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS11_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS11_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UECSG_SHIFT)) & ELS_ELS_KS11_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS11_KS11_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS11_KS11_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS11_KS11_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UECDH_SHIFT)) & ELS_ELS_KS11_KS11_UECDH_MASK)
+#define ELS_ELS_KS11_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS11_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS11_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UECDH_SHIFT)) & ELS_ELS_KS11_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS11_KS11_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS11_KS11_UAES_SHIFT             (20U)
-#define ELS_ELS_KS11_KS11_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UAES_SHIFT)) & ELS_ELS_KS11_KS11_UAES_MASK)
+#define ELS_ELS_KS11_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS11_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS11_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UAES_SHIFT)) & ELS_ELS_KS11_KSN_UAES_MASK)
 
-#define ELS_ELS_KS11_KS11_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS11_KS11_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS11_KS11_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UHMAC_SHIFT)) & ELS_ELS_KS11_KS11_UHMAC_MASK)
+#define ELS_ELS_KS11_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS11_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS11_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UHMAC_SHIFT)) & ELS_ELS_KS11_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS11_KS11_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS11_KS11_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS11_KS11_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UKWK_SHIFT)) & ELS_ELS_KS11_KS11_UKWK_MASK)
+#define ELS_ELS_KS11_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS11_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS11_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UKWK_SHIFT)) & ELS_ELS_KS11_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS11_KS11_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS11_KS11_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS11_KS11_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UKUOK_SHIFT)) & ELS_ELS_KS11_KS11_UKUOK_MASK)
+#define ELS_ELS_KS11_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS11_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS11_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UKUOK_SHIFT)) & ELS_ELS_KS11_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS11_KS11_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS11_KS11_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS11_KS11_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UTLSPMS_SHIFT)) & ELS_ELS_KS11_KS11_UTLSPMS_MASK)
+#define ELS_ELS_KS11_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS11_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS11_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS11_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS11_KS11_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS11_KS11_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS11_KS11_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UTLSMS_SHIFT)) & ELS_ELS_KS11_KS11_UTLSMS_MASK)
+#define ELS_ELS_KS11_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS11_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS11_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS11_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS11_KS11_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS11_KS11_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS11_KS11_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UKGSRC_SHIFT)) & ELS_ELS_KS11_KS11_UKGSRC_MASK)
+#define ELS_ELS_KS11_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS11_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS11_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS11_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS11_KS11_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS11_KS11_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS11_KS11_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UHWO_SHIFT)) & ELS_ELS_KS11_KS11_UHWO_MASK)
+#define ELS_ELS_KS11_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS11_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS11_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UHWO_SHIFT)) & ELS_ELS_KS11_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS11_KS11_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS11_KS11_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS11_KS11_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UWRPOK_SHIFT)) & ELS_ELS_KS11_KS11_UWRPOK_MASK)
+#define ELS_ELS_KS11_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS11_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS11_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS11_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS11_KS11_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS11_KS11_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS11_KS11_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UDUK_SHIFT)) & ELS_ELS_KS11_KS11_UDUK_MASK)
+#define ELS_ELS_KS11_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS11_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS11_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UDUK_SHIFT)) & ELS_ELS_KS11_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS11_KS11_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS11_KS11_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS11_KS11_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KS11_UPPROT_SHIFT)) & ELS_ELS_KS11_KS11_UPPROT_MASK)
+#define ELS_ELS_KS11_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS11_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS11_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS11_KSN_UPPROT_SHIFT)) & ELS_ELS_KS11_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS12 - Status Register */
+/*! @name ELS_KS12 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS12_KS12_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS12_KS12_KSIZE_SHIFT            (0U)
-/*! KS12_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS12_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS12_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS12_KS12_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_KSIZE_SHIFT)) & ELS_ELS_KS12_KS12_KSIZE_MASK)
+#define ELS_ELS_KS12_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_KSIZE_SHIFT)) & ELS_ELS_KS12_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS12_KS12_KACT_MASK              (0x20U)
-#define ELS_ELS_KS12_KS12_KACT_SHIFT             (5U)
-#define ELS_ELS_KS12_KS12_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_KACT_SHIFT)) & ELS_ELS_KS12_KS12_KACT_MASK)
+#define ELS_ELS_KS12_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS12_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS12_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_KACT_SHIFT)) & ELS_ELS_KS12_KSN_KACT_MASK)
 
-#define ELS_ELS_KS12_KS12_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS12_KS12_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS12_KS12_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_KBASE_SHIFT)) & ELS_ELS_KS12_KS12_KBASE_MASK)
+#define ELS_ELS_KS12_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS12_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS12_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_KBASE_SHIFT)) & ELS_ELS_KS12_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS12_KS12_FGP_MASK               (0x80U)
-#define ELS_ELS_KS12_KS12_FGP_SHIFT              (7U)
-#define ELS_ELS_KS12_KS12_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_FGP_SHIFT)) & ELS_ELS_KS12_KS12_FGP_MASK)
+#define ELS_ELS_KS12_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS12_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS12_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS0_FGP_SHIFT)) & ELS_ELS_KS12_KS0_FGP_MASK)
 
-#define ELS_ELS_KS12_KS12_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS12_KS12_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS12_KS12_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_FRTN_SHIFT)) & ELS_ELS_KS12_KS12_FRTN_MASK)
+#define ELS_ELS_KS12_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS12_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS12_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_FRTN_SHIFT)) & ELS_ELS_KS12_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS12_KS12_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS12_KS12_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS12_KS12_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_FHWO_SHIFT)) & ELS_ELS_KS12_KS12_FHWO_MASK)
+#define ELS_ELS_KS12_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS12_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS12_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_FHWO_SHIFT)) & ELS_ELS_KS12_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS12_KS12_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS12_KS12_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS12_KS12_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UKPUK_SHIFT)) & ELS_ELS_KS12_KS12_UKPUK_MASK)
+#define ELS_ELS_KS12_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS12_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS12_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UKPUK_SHIFT)) & ELS_ELS_KS12_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS12_KS12_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS12_KS12_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS12_KS12_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UTECDH_SHIFT)) & ELS_ELS_KS12_KS12_UTECDH_MASK)
+#define ELS_ELS_KS12_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS12_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS12_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UTECDH_SHIFT)) & ELS_ELS_KS12_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS12_KS12_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS12_KS12_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS12_KS12_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UCMAC_SHIFT)) & ELS_ELS_KS12_KS12_UCMAC_MASK)
+#define ELS_ELS_KS12_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS12_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS12_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UCMAC_SHIFT)) & ELS_ELS_KS12_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS12_KS12_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS12_KS12_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS12_KS12_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UKSK_SHIFT)) & ELS_ELS_KS12_KS12_UKSK_MASK)
+#define ELS_ELS_KS12_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS12_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS12_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UKSK_SHIFT)) & ELS_ELS_KS12_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS12_KS12_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS12_KS12_URTF_SHIFT             (15U)
-#define ELS_ELS_KS12_KS12_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_URTF_SHIFT)) & ELS_ELS_KS12_KS12_URTF_MASK)
+#define ELS_ELS_KS12_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS12_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS12_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_URTF_SHIFT)) & ELS_ELS_KS12_KSN_URTF_MASK)
 
-#define ELS_ELS_KS12_KS12_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS12_KS12_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS12_KS12_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UCKDF_SHIFT)) & ELS_ELS_KS12_KS12_UCKDF_MASK)
+#define ELS_ELS_KS12_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS12_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS12_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UCKDF_SHIFT)) & ELS_ELS_KS12_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS12_KS12_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS12_KS12_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS12_KS12_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UHKDF_SHIFT)) & ELS_ELS_KS12_KS12_UHKDF_MASK)
+#define ELS_ELS_KS12_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS12_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS12_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UHKDF_SHIFT)) & ELS_ELS_KS12_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS12_KS12_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS12_KS12_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS12_KS12_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UECSG_SHIFT)) & ELS_ELS_KS12_KS12_UECSG_MASK)
+#define ELS_ELS_KS12_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS12_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS12_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UECSG_SHIFT)) & ELS_ELS_KS12_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS12_KS12_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS12_KS12_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS12_KS12_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UECDH_SHIFT)) & ELS_ELS_KS12_KS12_UECDH_MASK)
+#define ELS_ELS_KS12_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS12_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS12_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UECDH_SHIFT)) & ELS_ELS_KS12_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS12_KS12_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS12_KS12_UAES_SHIFT             (20U)
-#define ELS_ELS_KS12_KS12_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UAES_SHIFT)) & ELS_ELS_KS12_KS12_UAES_MASK)
+#define ELS_ELS_KS12_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS12_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS12_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UAES_SHIFT)) & ELS_ELS_KS12_KSN_UAES_MASK)
 
-#define ELS_ELS_KS12_KS12_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS12_KS12_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS12_KS12_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UHMAC_SHIFT)) & ELS_ELS_KS12_KS12_UHMAC_MASK)
+#define ELS_ELS_KS12_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS12_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS12_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UHMAC_SHIFT)) & ELS_ELS_KS12_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS12_KS12_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS12_KS12_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS12_KS12_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UKWK_SHIFT)) & ELS_ELS_KS12_KS12_UKWK_MASK)
+#define ELS_ELS_KS12_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS12_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS12_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UKWK_SHIFT)) & ELS_ELS_KS12_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS12_KS12_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS12_KS12_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS12_KS12_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UKUOK_SHIFT)) & ELS_ELS_KS12_KS12_UKUOK_MASK)
+#define ELS_ELS_KS12_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS12_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS12_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UKUOK_SHIFT)) & ELS_ELS_KS12_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS12_KS12_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS12_KS12_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS12_KS12_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UTLSPMS_SHIFT)) & ELS_ELS_KS12_KS12_UTLSPMS_MASK)
+#define ELS_ELS_KS12_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS12_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS12_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS12_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS12_KS12_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS12_KS12_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS12_KS12_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UTLSMS_SHIFT)) & ELS_ELS_KS12_KS12_UTLSMS_MASK)
+#define ELS_ELS_KS12_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS12_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS12_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS12_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS12_KS12_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS12_KS12_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS12_KS12_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UKGSRC_SHIFT)) & ELS_ELS_KS12_KS12_UKGSRC_MASK)
+#define ELS_ELS_KS12_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS12_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS12_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS12_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS12_KS12_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS12_KS12_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS12_KS12_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UHWO_SHIFT)) & ELS_ELS_KS12_KS12_UHWO_MASK)
+#define ELS_ELS_KS12_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS12_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS12_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UHWO_SHIFT)) & ELS_ELS_KS12_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS12_KS12_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS12_KS12_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS12_KS12_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UWRPOK_SHIFT)) & ELS_ELS_KS12_KS12_UWRPOK_MASK)
+#define ELS_ELS_KS12_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS12_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS12_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS12_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS12_KS12_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS12_KS12_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS12_KS12_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UDUK_SHIFT)) & ELS_ELS_KS12_KS12_UDUK_MASK)
+#define ELS_ELS_KS12_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS12_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS12_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UDUK_SHIFT)) & ELS_ELS_KS12_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS12_KS12_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS12_KS12_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS12_KS12_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KS12_UPPROT_SHIFT)) & ELS_ELS_KS12_KS12_UPPROT_MASK)
+#define ELS_ELS_KS12_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS12_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS12_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS12_KSN_UPPROT_SHIFT)) & ELS_ELS_KS12_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS13 - Status Register */
+/*! @name ELS_KS13 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS13_KS13_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS13_KS13_KSIZE_SHIFT            (0U)
-/*! KS13_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS13_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS13_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS13_KS13_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_KSIZE_SHIFT)) & ELS_ELS_KS13_KS13_KSIZE_MASK)
+#define ELS_ELS_KS13_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_KSIZE_SHIFT)) & ELS_ELS_KS13_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS13_KS13_KACT_MASK              (0x20U)
-#define ELS_ELS_KS13_KS13_KACT_SHIFT             (5U)
-#define ELS_ELS_KS13_KS13_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_KACT_SHIFT)) & ELS_ELS_KS13_KS13_KACT_MASK)
+#define ELS_ELS_KS13_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS13_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS13_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_KACT_SHIFT)) & ELS_ELS_KS13_KSN_KACT_MASK)
 
-#define ELS_ELS_KS13_KS13_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS13_KS13_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS13_KS13_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_KBASE_SHIFT)) & ELS_ELS_KS13_KS13_KBASE_MASK)
+#define ELS_ELS_KS13_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS13_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS13_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_KBASE_SHIFT)) & ELS_ELS_KS13_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS13_KS13_FGP_MASK               (0x80U)
-#define ELS_ELS_KS13_KS13_FGP_SHIFT              (7U)
-#define ELS_ELS_KS13_KS13_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_FGP_SHIFT)) & ELS_ELS_KS13_KS13_FGP_MASK)
+#define ELS_ELS_KS13_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS13_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS13_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS0_FGP_SHIFT)) & ELS_ELS_KS13_KS0_FGP_MASK)
 
-#define ELS_ELS_KS13_KS13_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS13_KS13_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS13_KS13_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_FRTN_SHIFT)) & ELS_ELS_KS13_KS13_FRTN_MASK)
+#define ELS_ELS_KS13_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS13_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS13_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_FRTN_SHIFT)) & ELS_ELS_KS13_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS13_KS13_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS13_KS13_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS13_KS13_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_FHWO_SHIFT)) & ELS_ELS_KS13_KS13_FHWO_MASK)
+#define ELS_ELS_KS13_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS13_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS13_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_FHWO_SHIFT)) & ELS_ELS_KS13_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS13_KS13_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS13_KS13_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS13_KS13_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UKPUK_SHIFT)) & ELS_ELS_KS13_KS13_UKPUK_MASK)
+#define ELS_ELS_KS13_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS13_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS13_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UKPUK_SHIFT)) & ELS_ELS_KS13_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS13_KS13_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS13_KS13_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS13_KS13_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UTECDH_SHIFT)) & ELS_ELS_KS13_KS13_UTECDH_MASK)
+#define ELS_ELS_KS13_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS13_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS13_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UTECDH_SHIFT)) & ELS_ELS_KS13_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS13_KS13_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS13_KS13_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS13_KS13_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UCMAC_SHIFT)) & ELS_ELS_KS13_KS13_UCMAC_MASK)
+#define ELS_ELS_KS13_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS13_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS13_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UCMAC_SHIFT)) & ELS_ELS_KS13_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS13_KS13_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS13_KS13_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS13_KS13_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UKSK_SHIFT)) & ELS_ELS_KS13_KS13_UKSK_MASK)
+#define ELS_ELS_KS13_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS13_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS13_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UKSK_SHIFT)) & ELS_ELS_KS13_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS13_KS13_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS13_KS13_URTF_SHIFT             (15U)
-#define ELS_ELS_KS13_KS13_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_URTF_SHIFT)) & ELS_ELS_KS13_KS13_URTF_MASK)
+#define ELS_ELS_KS13_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS13_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS13_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_URTF_SHIFT)) & ELS_ELS_KS13_KSN_URTF_MASK)
 
-#define ELS_ELS_KS13_KS13_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS13_KS13_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS13_KS13_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UCKDF_SHIFT)) & ELS_ELS_KS13_KS13_UCKDF_MASK)
+#define ELS_ELS_KS13_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS13_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS13_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UCKDF_SHIFT)) & ELS_ELS_KS13_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS13_KS13_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS13_KS13_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS13_KS13_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UHKDF_SHIFT)) & ELS_ELS_KS13_KS13_UHKDF_MASK)
+#define ELS_ELS_KS13_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS13_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS13_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UHKDF_SHIFT)) & ELS_ELS_KS13_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS13_KS13_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS13_KS13_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS13_KS13_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UECSG_SHIFT)) & ELS_ELS_KS13_KS13_UECSG_MASK)
+#define ELS_ELS_KS13_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS13_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS13_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UECSG_SHIFT)) & ELS_ELS_KS13_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS13_KS13_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS13_KS13_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS13_KS13_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UECDH_SHIFT)) & ELS_ELS_KS13_KS13_UECDH_MASK)
+#define ELS_ELS_KS13_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS13_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS13_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UECDH_SHIFT)) & ELS_ELS_KS13_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS13_KS13_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS13_KS13_UAES_SHIFT             (20U)
-#define ELS_ELS_KS13_KS13_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UAES_SHIFT)) & ELS_ELS_KS13_KS13_UAES_MASK)
+#define ELS_ELS_KS13_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS13_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS13_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UAES_SHIFT)) & ELS_ELS_KS13_KSN_UAES_MASK)
 
-#define ELS_ELS_KS13_KS13_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS13_KS13_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS13_KS13_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UHMAC_SHIFT)) & ELS_ELS_KS13_KS13_UHMAC_MASK)
+#define ELS_ELS_KS13_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS13_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS13_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UHMAC_SHIFT)) & ELS_ELS_KS13_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS13_KS13_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS13_KS13_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS13_KS13_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UKWK_SHIFT)) & ELS_ELS_KS13_KS13_UKWK_MASK)
+#define ELS_ELS_KS13_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS13_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS13_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UKWK_SHIFT)) & ELS_ELS_KS13_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS13_KS13_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS13_KS13_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS13_KS13_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UKUOK_SHIFT)) & ELS_ELS_KS13_KS13_UKUOK_MASK)
+#define ELS_ELS_KS13_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS13_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS13_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UKUOK_SHIFT)) & ELS_ELS_KS13_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS13_KS13_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS13_KS13_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS13_KS13_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UTLSPMS_SHIFT)) & ELS_ELS_KS13_KS13_UTLSPMS_MASK)
+#define ELS_ELS_KS13_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS13_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS13_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS13_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS13_KS13_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS13_KS13_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS13_KS13_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UTLSMS_SHIFT)) & ELS_ELS_KS13_KS13_UTLSMS_MASK)
+#define ELS_ELS_KS13_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS13_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS13_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS13_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS13_KS13_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS13_KS13_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS13_KS13_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UKGSRC_SHIFT)) & ELS_ELS_KS13_KS13_UKGSRC_MASK)
+#define ELS_ELS_KS13_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS13_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS13_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS13_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS13_KS13_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS13_KS13_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS13_KS13_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UHWO_SHIFT)) & ELS_ELS_KS13_KS13_UHWO_MASK)
+#define ELS_ELS_KS13_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS13_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS13_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UHWO_SHIFT)) & ELS_ELS_KS13_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS13_KS13_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS13_KS13_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS13_KS13_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UWRPOK_SHIFT)) & ELS_ELS_KS13_KS13_UWRPOK_MASK)
+#define ELS_ELS_KS13_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS13_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS13_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS13_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS13_KS13_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS13_KS13_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS13_KS13_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UDUK_SHIFT)) & ELS_ELS_KS13_KS13_UDUK_MASK)
+#define ELS_ELS_KS13_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS13_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS13_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UDUK_SHIFT)) & ELS_ELS_KS13_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS13_KS13_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS13_KS13_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS13_KS13_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KS13_UPPROT_SHIFT)) & ELS_ELS_KS13_KS13_UPPROT_MASK)
+#define ELS_ELS_KS13_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS13_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS13_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS13_KSN_UPPROT_SHIFT)) & ELS_ELS_KS13_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS14 - Status Register */
+/*! @name ELS_KS14 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS14_KS14_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS14_KS14_KSIZE_SHIFT            (0U)
-/*! KS14_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS14_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS14_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS14_KS14_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_KSIZE_SHIFT)) & ELS_ELS_KS14_KS14_KSIZE_MASK)
+#define ELS_ELS_KS14_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_KSIZE_SHIFT)) & ELS_ELS_KS14_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS14_KS14_KACT_MASK              (0x20U)
-#define ELS_ELS_KS14_KS14_KACT_SHIFT             (5U)
-#define ELS_ELS_KS14_KS14_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_KACT_SHIFT)) & ELS_ELS_KS14_KS14_KACT_MASK)
+#define ELS_ELS_KS14_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS14_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS14_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_KACT_SHIFT)) & ELS_ELS_KS14_KSN_KACT_MASK)
 
-#define ELS_ELS_KS14_KS14_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS14_KS14_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS14_KS14_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_KBASE_SHIFT)) & ELS_ELS_KS14_KS14_KBASE_MASK)
+#define ELS_ELS_KS14_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS14_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS14_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_KBASE_SHIFT)) & ELS_ELS_KS14_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS14_KS14_FGP_MASK               (0x80U)
-#define ELS_ELS_KS14_KS14_FGP_SHIFT              (7U)
-#define ELS_ELS_KS14_KS14_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_FGP_SHIFT)) & ELS_ELS_KS14_KS14_FGP_MASK)
+#define ELS_ELS_KS14_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS14_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS14_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS0_FGP_SHIFT)) & ELS_ELS_KS14_KS0_FGP_MASK)
 
-#define ELS_ELS_KS14_KS14_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS14_KS14_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS14_KS14_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_FRTN_SHIFT)) & ELS_ELS_KS14_KS14_FRTN_MASK)
+#define ELS_ELS_KS14_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS14_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS14_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_FRTN_SHIFT)) & ELS_ELS_KS14_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS14_KS14_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS14_KS14_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS14_KS14_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_FHWO_SHIFT)) & ELS_ELS_KS14_KS14_FHWO_MASK)
+#define ELS_ELS_KS14_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS14_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS14_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_FHWO_SHIFT)) & ELS_ELS_KS14_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS14_KS14_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS14_KS14_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS14_KS14_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UKPUK_SHIFT)) & ELS_ELS_KS14_KS14_UKPUK_MASK)
+#define ELS_ELS_KS14_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS14_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS14_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UKPUK_SHIFT)) & ELS_ELS_KS14_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS14_KS14_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS14_KS14_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS14_KS14_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UTECDH_SHIFT)) & ELS_ELS_KS14_KS14_UTECDH_MASK)
+#define ELS_ELS_KS14_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS14_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS14_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UTECDH_SHIFT)) & ELS_ELS_KS14_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS14_KS14_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS14_KS14_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS14_KS14_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UCMAC_SHIFT)) & ELS_ELS_KS14_KS14_UCMAC_MASK)
+#define ELS_ELS_KS14_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS14_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS14_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UCMAC_SHIFT)) & ELS_ELS_KS14_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS14_KS14_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS14_KS14_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS14_KS14_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UKSK_SHIFT)) & ELS_ELS_KS14_KS14_UKSK_MASK)
+#define ELS_ELS_KS14_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS14_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS14_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UKSK_SHIFT)) & ELS_ELS_KS14_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS14_KS14_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS14_KS14_URTF_SHIFT             (15U)
-#define ELS_ELS_KS14_KS14_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_URTF_SHIFT)) & ELS_ELS_KS14_KS14_URTF_MASK)
+#define ELS_ELS_KS14_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS14_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS14_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_URTF_SHIFT)) & ELS_ELS_KS14_KSN_URTF_MASK)
 
-#define ELS_ELS_KS14_KS14_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS14_KS14_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS14_KS14_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UCKDF_SHIFT)) & ELS_ELS_KS14_KS14_UCKDF_MASK)
+#define ELS_ELS_KS14_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS14_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS14_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UCKDF_SHIFT)) & ELS_ELS_KS14_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS14_KS14_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS14_KS14_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS14_KS14_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UHKDF_SHIFT)) & ELS_ELS_KS14_KS14_UHKDF_MASK)
+#define ELS_ELS_KS14_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS14_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS14_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UHKDF_SHIFT)) & ELS_ELS_KS14_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS14_KS14_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS14_KS14_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS14_KS14_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UECSG_SHIFT)) & ELS_ELS_KS14_KS14_UECSG_MASK)
+#define ELS_ELS_KS14_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS14_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS14_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UECSG_SHIFT)) & ELS_ELS_KS14_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS14_KS14_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS14_KS14_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS14_KS14_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UECDH_SHIFT)) & ELS_ELS_KS14_KS14_UECDH_MASK)
+#define ELS_ELS_KS14_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS14_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS14_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UECDH_SHIFT)) & ELS_ELS_KS14_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS14_KS14_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS14_KS14_UAES_SHIFT             (20U)
-#define ELS_ELS_KS14_KS14_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UAES_SHIFT)) & ELS_ELS_KS14_KS14_UAES_MASK)
+#define ELS_ELS_KS14_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS14_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS14_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UAES_SHIFT)) & ELS_ELS_KS14_KSN_UAES_MASK)
 
-#define ELS_ELS_KS14_KS14_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS14_KS14_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS14_KS14_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UHMAC_SHIFT)) & ELS_ELS_KS14_KS14_UHMAC_MASK)
+#define ELS_ELS_KS14_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS14_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS14_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UHMAC_SHIFT)) & ELS_ELS_KS14_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS14_KS14_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS14_KS14_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS14_KS14_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UKWK_SHIFT)) & ELS_ELS_KS14_KS14_UKWK_MASK)
+#define ELS_ELS_KS14_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS14_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS14_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UKWK_SHIFT)) & ELS_ELS_KS14_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS14_KS14_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS14_KS14_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS14_KS14_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UKUOK_SHIFT)) & ELS_ELS_KS14_KS14_UKUOK_MASK)
+#define ELS_ELS_KS14_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS14_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS14_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UKUOK_SHIFT)) & ELS_ELS_KS14_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS14_KS14_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS14_KS14_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS14_KS14_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UTLSPMS_SHIFT)) & ELS_ELS_KS14_KS14_UTLSPMS_MASK)
+#define ELS_ELS_KS14_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS14_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS14_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS14_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS14_KS14_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS14_KS14_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS14_KS14_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UTLSMS_SHIFT)) & ELS_ELS_KS14_KS14_UTLSMS_MASK)
+#define ELS_ELS_KS14_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS14_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS14_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS14_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS14_KS14_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS14_KS14_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS14_KS14_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UKGSRC_SHIFT)) & ELS_ELS_KS14_KS14_UKGSRC_MASK)
+#define ELS_ELS_KS14_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS14_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS14_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS14_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS14_KS14_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS14_KS14_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS14_KS14_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UHWO_SHIFT)) & ELS_ELS_KS14_KS14_UHWO_MASK)
+#define ELS_ELS_KS14_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS14_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS14_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UHWO_SHIFT)) & ELS_ELS_KS14_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS14_KS14_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS14_KS14_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS14_KS14_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UWRPOK_SHIFT)) & ELS_ELS_KS14_KS14_UWRPOK_MASK)
+#define ELS_ELS_KS14_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS14_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS14_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS14_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS14_KS14_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS14_KS14_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS14_KS14_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UDUK_SHIFT)) & ELS_ELS_KS14_KS14_UDUK_MASK)
+#define ELS_ELS_KS14_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS14_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS14_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UDUK_SHIFT)) & ELS_ELS_KS14_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS14_KS14_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS14_KS14_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS14_KS14_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KS14_UPPROT_SHIFT)) & ELS_ELS_KS14_KS14_UPPROT_MASK)
+#define ELS_ELS_KS14_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS14_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS14_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS14_KSN_UPPROT_SHIFT)) & ELS_ELS_KS14_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS15 - Status Register */
+/*! @name ELS_KS15 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS15_KS15_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS15_KS15_KSIZE_SHIFT            (0U)
-/*! KS15_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS15_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS15_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS15_KS15_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_KSIZE_SHIFT)) & ELS_ELS_KS15_KS15_KSIZE_MASK)
+#define ELS_ELS_KS15_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_KSIZE_SHIFT)) & ELS_ELS_KS15_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS15_KS15_KACT_MASK              (0x20U)
-#define ELS_ELS_KS15_KS15_KACT_SHIFT             (5U)
-#define ELS_ELS_KS15_KS15_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_KACT_SHIFT)) & ELS_ELS_KS15_KS15_KACT_MASK)
+#define ELS_ELS_KS15_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS15_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS15_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_KACT_SHIFT)) & ELS_ELS_KS15_KSN_KACT_MASK)
 
-#define ELS_ELS_KS15_KS15_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS15_KS15_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS15_KS15_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_KBASE_SHIFT)) & ELS_ELS_KS15_KS15_KBASE_MASK)
+#define ELS_ELS_KS15_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS15_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS15_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_KBASE_SHIFT)) & ELS_ELS_KS15_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS15_KS15_FGP_MASK               (0x80U)
-#define ELS_ELS_KS15_KS15_FGP_SHIFT              (7U)
-#define ELS_ELS_KS15_KS15_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_FGP_SHIFT)) & ELS_ELS_KS15_KS15_FGP_MASK)
+#define ELS_ELS_KS15_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS15_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS15_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS0_FGP_SHIFT)) & ELS_ELS_KS15_KS0_FGP_MASK)
 
-#define ELS_ELS_KS15_KS15_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS15_KS15_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS15_KS15_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_FRTN_SHIFT)) & ELS_ELS_KS15_KS15_FRTN_MASK)
+#define ELS_ELS_KS15_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS15_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS15_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_FRTN_SHIFT)) & ELS_ELS_KS15_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS15_KS15_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS15_KS15_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS15_KS15_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_FHWO_SHIFT)) & ELS_ELS_KS15_KS15_FHWO_MASK)
+#define ELS_ELS_KS15_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS15_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS15_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_FHWO_SHIFT)) & ELS_ELS_KS15_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS15_KS15_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS15_KS15_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS15_KS15_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UKPUK_SHIFT)) & ELS_ELS_KS15_KS15_UKPUK_MASK)
+#define ELS_ELS_KS15_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS15_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS15_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UKPUK_SHIFT)) & ELS_ELS_KS15_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS15_KS15_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS15_KS15_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS15_KS15_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UTECDH_SHIFT)) & ELS_ELS_KS15_KS15_UTECDH_MASK)
+#define ELS_ELS_KS15_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS15_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS15_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UTECDH_SHIFT)) & ELS_ELS_KS15_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS15_KS15_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS15_KS15_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS15_KS15_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UCMAC_SHIFT)) & ELS_ELS_KS15_KS15_UCMAC_MASK)
+#define ELS_ELS_KS15_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS15_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS15_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UCMAC_SHIFT)) & ELS_ELS_KS15_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS15_KS15_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS15_KS15_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS15_KS15_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UKSK_SHIFT)) & ELS_ELS_KS15_KS15_UKSK_MASK)
+#define ELS_ELS_KS15_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS15_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS15_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UKSK_SHIFT)) & ELS_ELS_KS15_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS15_KS15_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS15_KS15_URTF_SHIFT             (15U)
-#define ELS_ELS_KS15_KS15_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_URTF_SHIFT)) & ELS_ELS_KS15_KS15_URTF_MASK)
+#define ELS_ELS_KS15_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS15_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS15_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_URTF_SHIFT)) & ELS_ELS_KS15_KSN_URTF_MASK)
 
-#define ELS_ELS_KS15_KS15_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS15_KS15_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS15_KS15_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UCKDF_SHIFT)) & ELS_ELS_KS15_KS15_UCKDF_MASK)
+#define ELS_ELS_KS15_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS15_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS15_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UCKDF_SHIFT)) & ELS_ELS_KS15_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS15_KS15_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS15_KS15_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS15_KS15_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UHKDF_SHIFT)) & ELS_ELS_KS15_KS15_UHKDF_MASK)
+#define ELS_ELS_KS15_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS15_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS15_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UHKDF_SHIFT)) & ELS_ELS_KS15_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS15_KS15_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS15_KS15_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS15_KS15_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UECSG_SHIFT)) & ELS_ELS_KS15_KS15_UECSG_MASK)
+#define ELS_ELS_KS15_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS15_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS15_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UECSG_SHIFT)) & ELS_ELS_KS15_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS15_KS15_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS15_KS15_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS15_KS15_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UECDH_SHIFT)) & ELS_ELS_KS15_KS15_UECDH_MASK)
+#define ELS_ELS_KS15_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS15_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS15_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UECDH_SHIFT)) & ELS_ELS_KS15_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS15_KS15_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS15_KS15_UAES_SHIFT             (20U)
-#define ELS_ELS_KS15_KS15_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UAES_SHIFT)) & ELS_ELS_KS15_KS15_UAES_MASK)
+#define ELS_ELS_KS15_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS15_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS15_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UAES_SHIFT)) & ELS_ELS_KS15_KSN_UAES_MASK)
 
-#define ELS_ELS_KS15_KS15_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS15_KS15_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS15_KS15_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UHMAC_SHIFT)) & ELS_ELS_KS15_KS15_UHMAC_MASK)
+#define ELS_ELS_KS15_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS15_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS15_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UHMAC_SHIFT)) & ELS_ELS_KS15_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS15_KS15_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS15_KS15_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS15_KS15_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UKWK_SHIFT)) & ELS_ELS_KS15_KS15_UKWK_MASK)
+#define ELS_ELS_KS15_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS15_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS15_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UKWK_SHIFT)) & ELS_ELS_KS15_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS15_KS15_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS15_KS15_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS15_KS15_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UKUOK_SHIFT)) & ELS_ELS_KS15_KS15_UKUOK_MASK)
+#define ELS_ELS_KS15_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS15_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS15_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UKUOK_SHIFT)) & ELS_ELS_KS15_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS15_KS15_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS15_KS15_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS15_KS15_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UTLSPMS_SHIFT)) & ELS_ELS_KS15_KS15_UTLSPMS_MASK)
+#define ELS_ELS_KS15_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS15_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS15_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS15_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS15_KS15_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS15_KS15_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS15_KS15_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UTLSMS_SHIFT)) & ELS_ELS_KS15_KS15_UTLSMS_MASK)
+#define ELS_ELS_KS15_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS15_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS15_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS15_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS15_KS15_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS15_KS15_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS15_KS15_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UKGSRC_SHIFT)) & ELS_ELS_KS15_KS15_UKGSRC_MASK)
+#define ELS_ELS_KS15_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS15_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS15_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS15_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS15_KS15_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS15_KS15_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS15_KS15_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UHWO_SHIFT)) & ELS_ELS_KS15_KS15_UHWO_MASK)
+#define ELS_ELS_KS15_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS15_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS15_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UHWO_SHIFT)) & ELS_ELS_KS15_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS15_KS15_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS15_KS15_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS15_KS15_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UWRPOK_SHIFT)) & ELS_ELS_KS15_KS15_UWRPOK_MASK)
+#define ELS_ELS_KS15_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS15_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS15_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS15_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS15_KS15_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS15_KS15_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS15_KS15_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UDUK_SHIFT)) & ELS_ELS_KS15_KS15_UDUK_MASK)
+#define ELS_ELS_KS15_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS15_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS15_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UDUK_SHIFT)) & ELS_ELS_KS15_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS15_KS15_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS15_KS15_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS15_KS15_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KS15_UPPROT_SHIFT)) & ELS_ELS_KS15_KS15_UPPROT_MASK)
+#define ELS_ELS_KS15_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS15_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS15_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS15_KSN_UPPROT_SHIFT)) & ELS_ELS_KS15_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS16 - Status Register */
+/*! @name ELS_KS16 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS16_KS16_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS16_KS16_KSIZE_SHIFT            (0U)
-/*! KS16_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS16_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS16_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS16_KS16_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_KSIZE_SHIFT)) & ELS_ELS_KS16_KS16_KSIZE_MASK)
+#define ELS_ELS_KS16_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_KSIZE_SHIFT)) & ELS_ELS_KS16_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS16_KS16_KACT_MASK              (0x20U)
-#define ELS_ELS_KS16_KS16_KACT_SHIFT             (5U)
-#define ELS_ELS_KS16_KS16_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_KACT_SHIFT)) & ELS_ELS_KS16_KS16_KACT_MASK)
+#define ELS_ELS_KS16_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS16_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS16_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_KACT_SHIFT)) & ELS_ELS_KS16_KSN_KACT_MASK)
 
-#define ELS_ELS_KS16_KS16_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS16_KS16_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS16_KS16_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_KBASE_SHIFT)) & ELS_ELS_KS16_KS16_KBASE_MASK)
+#define ELS_ELS_KS16_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS16_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS16_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_KBASE_SHIFT)) & ELS_ELS_KS16_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS16_KS16_FGP_MASK               (0x80U)
-#define ELS_ELS_KS16_KS16_FGP_SHIFT              (7U)
-#define ELS_ELS_KS16_KS16_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_FGP_SHIFT)) & ELS_ELS_KS16_KS16_FGP_MASK)
+#define ELS_ELS_KS16_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS16_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS16_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS0_FGP_SHIFT)) & ELS_ELS_KS16_KS0_FGP_MASK)
 
-#define ELS_ELS_KS16_KS16_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS16_KS16_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS16_KS16_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_FRTN_SHIFT)) & ELS_ELS_KS16_KS16_FRTN_MASK)
+#define ELS_ELS_KS16_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS16_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS16_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_FRTN_SHIFT)) & ELS_ELS_KS16_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS16_KS16_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS16_KS16_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS16_KS16_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_FHWO_SHIFT)) & ELS_ELS_KS16_KS16_FHWO_MASK)
+#define ELS_ELS_KS16_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS16_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS16_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_FHWO_SHIFT)) & ELS_ELS_KS16_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS16_KS16_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS16_KS16_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS16_KS16_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UKPUK_SHIFT)) & ELS_ELS_KS16_KS16_UKPUK_MASK)
+#define ELS_ELS_KS16_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS16_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS16_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UKPUK_SHIFT)) & ELS_ELS_KS16_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS16_KS16_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS16_KS16_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS16_KS16_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UTECDH_SHIFT)) & ELS_ELS_KS16_KS16_UTECDH_MASK)
+#define ELS_ELS_KS16_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS16_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS16_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UTECDH_SHIFT)) & ELS_ELS_KS16_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS16_KS16_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS16_KS16_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS16_KS16_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UCMAC_SHIFT)) & ELS_ELS_KS16_KS16_UCMAC_MASK)
+#define ELS_ELS_KS16_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS16_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS16_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UCMAC_SHIFT)) & ELS_ELS_KS16_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS16_KS16_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS16_KS16_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS16_KS16_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UKSK_SHIFT)) & ELS_ELS_KS16_KS16_UKSK_MASK)
+#define ELS_ELS_KS16_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS16_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS16_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UKSK_SHIFT)) & ELS_ELS_KS16_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS16_KS16_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS16_KS16_URTF_SHIFT             (15U)
-#define ELS_ELS_KS16_KS16_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_URTF_SHIFT)) & ELS_ELS_KS16_KS16_URTF_MASK)
+#define ELS_ELS_KS16_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS16_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS16_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_URTF_SHIFT)) & ELS_ELS_KS16_KSN_URTF_MASK)
 
-#define ELS_ELS_KS16_KS16_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS16_KS16_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS16_KS16_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UCKDF_SHIFT)) & ELS_ELS_KS16_KS16_UCKDF_MASK)
+#define ELS_ELS_KS16_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS16_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS16_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UCKDF_SHIFT)) & ELS_ELS_KS16_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS16_KS16_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS16_KS16_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS16_KS16_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UHKDF_SHIFT)) & ELS_ELS_KS16_KS16_UHKDF_MASK)
+#define ELS_ELS_KS16_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS16_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS16_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UHKDF_SHIFT)) & ELS_ELS_KS16_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS16_KS16_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS16_KS16_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS16_KS16_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UECSG_SHIFT)) & ELS_ELS_KS16_KS16_UECSG_MASK)
+#define ELS_ELS_KS16_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS16_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS16_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UECSG_SHIFT)) & ELS_ELS_KS16_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS16_KS16_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS16_KS16_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS16_KS16_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UECDH_SHIFT)) & ELS_ELS_KS16_KS16_UECDH_MASK)
+#define ELS_ELS_KS16_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS16_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS16_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UECDH_SHIFT)) & ELS_ELS_KS16_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS16_KS16_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS16_KS16_UAES_SHIFT             (20U)
-#define ELS_ELS_KS16_KS16_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UAES_SHIFT)) & ELS_ELS_KS16_KS16_UAES_MASK)
+#define ELS_ELS_KS16_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS16_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS16_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UAES_SHIFT)) & ELS_ELS_KS16_KSN_UAES_MASK)
 
-#define ELS_ELS_KS16_KS16_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS16_KS16_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS16_KS16_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UHMAC_SHIFT)) & ELS_ELS_KS16_KS16_UHMAC_MASK)
+#define ELS_ELS_KS16_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS16_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS16_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UHMAC_SHIFT)) & ELS_ELS_KS16_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS16_KS16_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS16_KS16_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS16_KS16_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UKWK_SHIFT)) & ELS_ELS_KS16_KS16_UKWK_MASK)
+#define ELS_ELS_KS16_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS16_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS16_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UKWK_SHIFT)) & ELS_ELS_KS16_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS16_KS16_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS16_KS16_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS16_KS16_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UKUOK_SHIFT)) & ELS_ELS_KS16_KS16_UKUOK_MASK)
+#define ELS_ELS_KS16_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS16_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS16_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UKUOK_SHIFT)) & ELS_ELS_KS16_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS16_KS16_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS16_KS16_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS16_KS16_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UTLSPMS_SHIFT)) & ELS_ELS_KS16_KS16_UTLSPMS_MASK)
+#define ELS_ELS_KS16_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS16_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS16_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS16_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS16_KS16_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS16_KS16_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS16_KS16_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UTLSMS_SHIFT)) & ELS_ELS_KS16_KS16_UTLSMS_MASK)
+#define ELS_ELS_KS16_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS16_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS16_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS16_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS16_KS16_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS16_KS16_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS16_KS16_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UKGSRC_SHIFT)) & ELS_ELS_KS16_KS16_UKGSRC_MASK)
+#define ELS_ELS_KS16_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS16_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS16_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS16_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS16_KS16_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS16_KS16_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS16_KS16_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UHWO_SHIFT)) & ELS_ELS_KS16_KS16_UHWO_MASK)
+#define ELS_ELS_KS16_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS16_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS16_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UHWO_SHIFT)) & ELS_ELS_KS16_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS16_KS16_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS16_KS16_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS16_KS16_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UWRPOK_SHIFT)) & ELS_ELS_KS16_KS16_UWRPOK_MASK)
+#define ELS_ELS_KS16_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS16_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS16_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS16_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS16_KS16_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS16_KS16_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS16_KS16_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UDUK_SHIFT)) & ELS_ELS_KS16_KS16_UDUK_MASK)
+#define ELS_ELS_KS16_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS16_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS16_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UDUK_SHIFT)) & ELS_ELS_KS16_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS16_KS16_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS16_KS16_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS16_KS16_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KS16_UPPROT_SHIFT)) & ELS_ELS_KS16_KS16_UPPROT_MASK)
+#define ELS_ELS_KS16_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS16_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS16_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS16_KSN_UPPROT_SHIFT)) & ELS_ELS_KS16_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS17 - Status Register */
+/*! @name ELS_KS17 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS17_KS17_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS17_KS17_KSIZE_SHIFT            (0U)
-/*! KS17_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS17_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS17_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS17_KS17_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_KSIZE_SHIFT)) & ELS_ELS_KS17_KS17_KSIZE_MASK)
+#define ELS_ELS_KS17_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_KSIZE_SHIFT)) & ELS_ELS_KS17_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS17_KS17_KACT_MASK              (0x20U)
-#define ELS_ELS_KS17_KS17_KACT_SHIFT             (5U)
-#define ELS_ELS_KS17_KS17_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_KACT_SHIFT)) & ELS_ELS_KS17_KS17_KACT_MASK)
+#define ELS_ELS_KS17_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS17_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS17_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_KACT_SHIFT)) & ELS_ELS_KS17_KSN_KACT_MASK)
 
-#define ELS_ELS_KS17_KS17_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS17_KS17_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS17_KS17_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_KBASE_SHIFT)) & ELS_ELS_KS17_KS17_KBASE_MASK)
+#define ELS_ELS_KS17_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS17_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS17_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_KBASE_SHIFT)) & ELS_ELS_KS17_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS17_KS17_FGP_MASK               (0x80U)
-#define ELS_ELS_KS17_KS17_FGP_SHIFT              (7U)
-#define ELS_ELS_KS17_KS17_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_FGP_SHIFT)) & ELS_ELS_KS17_KS17_FGP_MASK)
+#define ELS_ELS_KS17_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS17_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS17_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS0_FGP_SHIFT)) & ELS_ELS_KS17_KS0_FGP_MASK)
 
-#define ELS_ELS_KS17_KS17_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS17_KS17_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS17_KS17_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_FRTN_SHIFT)) & ELS_ELS_KS17_KS17_FRTN_MASK)
+#define ELS_ELS_KS17_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS17_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS17_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_FRTN_SHIFT)) & ELS_ELS_KS17_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS17_KS17_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS17_KS17_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS17_KS17_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_FHWO_SHIFT)) & ELS_ELS_KS17_KS17_FHWO_MASK)
+#define ELS_ELS_KS17_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS17_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS17_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_FHWO_SHIFT)) & ELS_ELS_KS17_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS17_KS17_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS17_KS17_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS17_KS17_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UKPUK_SHIFT)) & ELS_ELS_KS17_KS17_UKPUK_MASK)
+#define ELS_ELS_KS17_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS17_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS17_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UKPUK_SHIFT)) & ELS_ELS_KS17_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS17_KS17_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS17_KS17_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS17_KS17_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UTECDH_SHIFT)) & ELS_ELS_KS17_KS17_UTECDH_MASK)
+#define ELS_ELS_KS17_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS17_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS17_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UTECDH_SHIFT)) & ELS_ELS_KS17_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS17_KS17_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS17_KS17_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS17_KS17_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UCMAC_SHIFT)) & ELS_ELS_KS17_KS17_UCMAC_MASK)
+#define ELS_ELS_KS17_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS17_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS17_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UCMAC_SHIFT)) & ELS_ELS_KS17_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS17_KS17_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS17_KS17_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS17_KS17_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UKSK_SHIFT)) & ELS_ELS_KS17_KS17_UKSK_MASK)
+#define ELS_ELS_KS17_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS17_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS17_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UKSK_SHIFT)) & ELS_ELS_KS17_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS17_KS17_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS17_KS17_URTF_SHIFT             (15U)
-#define ELS_ELS_KS17_KS17_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_URTF_SHIFT)) & ELS_ELS_KS17_KS17_URTF_MASK)
+#define ELS_ELS_KS17_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS17_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS17_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_URTF_SHIFT)) & ELS_ELS_KS17_KSN_URTF_MASK)
 
-#define ELS_ELS_KS17_KS17_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS17_KS17_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS17_KS17_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UCKDF_SHIFT)) & ELS_ELS_KS17_KS17_UCKDF_MASK)
+#define ELS_ELS_KS17_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS17_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS17_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UCKDF_SHIFT)) & ELS_ELS_KS17_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS17_KS17_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS17_KS17_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS17_KS17_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UHKDF_SHIFT)) & ELS_ELS_KS17_KS17_UHKDF_MASK)
+#define ELS_ELS_KS17_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS17_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS17_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UHKDF_SHIFT)) & ELS_ELS_KS17_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS17_KS17_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS17_KS17_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS17_KS17_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UECSG_SHIFT)) & ELS_ELS_KS17_KS17_UECSG_MASK)
+#define ELS_ELS_KS17_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS17_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS17_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UECSG_SHIFT)) & ELS_ELS_KS17_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS17_KS17_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS17_KS17_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS17_KS17_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UECDH_SHIFT)) & ELS_ELS_KS17_KS17_UECDH_MASK)
+#define ELS_ELS_KS17_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS17_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS17_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UECDH_SHIFT)) & ELS_ELS_KS17_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS17_KS17_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS17_KS17_UAES_SHIFT             (20U)
-#define ELS_ELS_KS17_KS17_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UAES_SHIFT)) & ELS_ELS_KS17_KS17_UAES_MASK)
+#define ELS_ELS_KS17_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS17_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS17_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UAES_SHIFT)) & ELS_ELS_KS17_KSN_UAES_MASK)
 
-#define ELS_ELS_KS17_KS17_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS17_KS17_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS17_KS17_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UHMAC_SHIFT)) & ELS_ELS_KS17_KS17_UHMAC_MASK)
+#define ELS_ELS_KS17_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS17_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS17_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UHMAC_SHIFT)) & ELS_ELS_KS17_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS17_KS17_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS17_KS17_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS17_KS17_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UKWK_SHIFT)) & ELS_ELS_KS17_KS17_UKWK_MASK)
+#define ELS_ELS_KS17_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS17_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS17_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UKWK_SHIFT)) & ELS_ELS_KS17_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS17_KS17_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS17_KS17_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS17_KS17_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UKUOK_SHIFT)) & ELS_ELS_KS17_KS17_UKUOK_MASK)
+#define ELS_ELS_KS17_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS17_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS17_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UKUOK_SHIFT)) & ELS_ELS_KS17_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS17_KS17_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS17_KS17_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS17_KS17_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UTLSPMS_SHIFT)) & ELS_ELS_KS17_KS17_UTLSPMS_MASK)
+#define ELS_ELS_KS17_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS17_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS17_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS17_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS17_KS17_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS17_KS17_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS17_KS17_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UTLSMS_SHIFT)) & ELS_ELS_KS17_KS17_UTLSMS_MASK)
+#define ELS_ELS_KS17_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS17_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS17_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS17_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS17_KS17_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS17_KS17_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS17_KS17_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UKGSRC_SHIFT)) & ELS_ELS_KS17_KS17_UKGSRC_MASK)
+#define ELS_ELS_KS17_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS17_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS17_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS17_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS17_KS17_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS17_KS17_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS17_KS17_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UHWO_SHIFT)) & ELS_ELS_KS17_KS17_UHWO_MASK)
+#define ELS_ELS_KS17_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS17_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS17_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UHWO_SHIFT)) & ELS_ELS_KS17_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS17_KS17_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS17_KS17_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS17_KS17_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UWRPOK_SHIFT)) & ELS_ELS_KS17_KS17_UWRPOK_MASK)
+#define ELS_ELS_KS17_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS17_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS17_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS17_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS17_KS17_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS17_KS17_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS17_KS17_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UDUK_SHIFT)) & ELS_ELS_KS17_KS17_UDUK_MASK)
+#define ELS_ELS_KS17_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS17_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS17_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UDUK_SHIFT)) & ELS_ELS_KS17_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS17_KS17_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS17_KS17_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS17_KS17_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KS17_UPPROT_SHIFT)) & ELS_ELS_KS17_KS17_UPPROT_MASK)
+#define ELS_ELS_KS17_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS17_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS17_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS17_KSN_UPPROT_SHIFT)) & ELS_ELS_KS17_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS18 - Status Register */
+/*! @name ELS_KS18 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS18_KS18_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS18_KS18_KSIZE_SHIFT            (0U)
-/*! KS18_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS18_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS18_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS18_KS18_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_KSIZE_SHIFT)) & ELS_ELS_KS18_KS18_KSIZE_MASK)
+#define ELS_ELS_KS18_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_KSIZE_SHIFT)) & ELS_ELS_KS18_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS18_KS18_KACT_MASK              (0x20U)
-#define ELS_ELS_KS18_KS18_KACT_SHIFT             (5U)
-#define ELS_ELS_KS18_KS18_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_KACT_SHIFT)) & ELS_ELS_KS18_KS18_KACT_MASK)
+#define ELS_ELS_KS18_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS18_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS18_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_KACT_SHIFT)) & ELS_ELS_KS18_KSN_KACT_MASK)
 
-#define ELS_ELS_KS18_KS18_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS18_KS18_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS18_KS18_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_KBASE_SHIFT)) & ELS_ELS_KS18_KS18_KBASE_MASK)
+#define ELS_ELS_KS18_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS18_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS18_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_KBASE_SHIFT)) & ELS_ELS_KS18_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS18_KS18_FGP_MASK               (0x80U)
-#define ELS_ELS_KS18_KS18_FGP_SHIFT              (7U)
-#define ELS_ELS_KS18_KS18_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_FGP_SHIFT)) & ELS_ELS_KS18_KS18_FGP_MASK)
+#define ELS_ELS_KS18_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS18_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS18_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS0_FGP_SHIFT)) & ELS_ELS_KS18_KS0_FGP_MASK)
 
-#define ELS_ELS_KS18_KS18_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS18_KS18_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS18_KS18_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_FRTN_SHIFT)) & ELS_ELS_KS18_KS18_FRTN_MASK)
+#define ELS_ELS_KS18_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS18_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS18_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_FRTN_SHIFT)) & ELS_ELS_KS18_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS18_KS18_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS18_KS18_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS18_KS18_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_FHWO_SHIFT)) & ELS_ELS_KS18_KS18_FHWO_MASK)
+#define ELS_ELS_KS18_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS18_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS18_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_FHWO_SHIFT)) & ELS_ELS_KS18_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS18_KS18_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS18_KS18_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS18_KS18_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UKPUK_SHIFT)) & ELS_ELS_KS18_KS18_UKPUK_MASK)
+#define ELS_ELS_KS18_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS18_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS18_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UKPUK_SHIFT)) & ELS_ELS_KS18_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS18_KS18_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS18_KS18_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS18_KS18_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UTECDH_SHIFT)) & ELS_ELS_KS18_KS18_UTECDH_MASK)
+#define ELS_ELS_KS18_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS18_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS18_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UTECDH_SHIFT)) & ELS_ELS_KS18_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS18_KS18_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS18_KS18_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS18_KS18_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UCMAC_SHIFT)) & ELS_ELS_KS18_KS18_UCMAC_MASK)
+#define ELS_ELS_KS18_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS18_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS18_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UCMAC_SHIFT)) & ELS_ELS_KS18_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS18_KS18_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS18_KS18_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS18_KS18_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UKSK_SHIFT)) & ELS_ELS_KS18_KS18_UKSK_MASK)
+#define ELS_ELS_KS18_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS18_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS18_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UKSK_SHIFT)) & ELS_ELS_KS18_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS18_KS18_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS18_KS18_URTF_SHIFT             (15U)
-#define ELS_ELS_KS18_KS18_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_URTF_SHIFT)) & ELS_ELS_KS18_KS18_URTF_MASK)
+#define ELS_ELS_KS18_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS18_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS18_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_URTF_SHIFT)) & ELS_ELS_KS18_KSN_URTF_MASK)
 
-#define ELS_ELS_KS18_KS18_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS18_KS18_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS18_KS18_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UCKDF_SHIFT)) & ELS_ELS_KS18_KS18_UCKDF_MASK)
+#define ELS_ELS_KS18_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS18_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS18_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UCKDF_SHIFT)) & ELS_ELS_KS18_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS18_KS18_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS18_KS18_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS18_KS18_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UHKDF_SHIFT)) & ELS_ELS_KS18_KS18_UHKDF_MASK)
+#define ELS_ELS_KS18_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS18_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS18_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UHKDF_SHIFT)) & ELS_ELS_KS18_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS18_KS18_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS18_KS18_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS18_KS18_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UECSG_SHIFT)) & ELS_ELS_KS18_KS18_UECSG_MASK)
+#define ELS_ELS_KS18_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS18_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS18_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UECSG_SHIFT)) & ELS_ELS_KS18_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS18_KS18_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS18_KS18_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS18_KS18_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UECDH_SHIFT)) & ELS_ELS_KS18_KS18_UECDH_MASK)
+#define ELS_ELS_KS18_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS18_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS18_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UECDH_SHIFT)) & ELS_ELS_KS18_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS18_KS18_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS18_KS18_UAES_SHIFT             (20U)
-#define ELS_ELS_KS18_KS18_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UAES_SHIFT)) & ELS_ELS_KS18_KS18_UAES_MASK)
+#define ELS_ELS_KS18_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS18_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS18_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UAES_SHIFT)) & ELS_ELS_KS18_KSN_UAES_MASK)
 
-#define ELS_ELS_KS18_KS18_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS18_KS18_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS18_KS18_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UHMAC_SHIFT)) & ELS_ELS_KS18_KS18_UHMAC_MASK)
+#define ELS_ELS_KS18_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS18_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS18_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UHMAC_SHIFT)) & ELS_ELS_KS18_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS18_KS18_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS18_KS18_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS18_KS18_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UKWK_SHIFT)) & ELS_ELS_KS18_KS18_UKWK_MASK)
+#define ELS_ELS_KS18_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS18_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS18_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UKWK_SHIFT)) & ELS_ELS_KS18_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS18_KS18_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS18_KS18_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS18_KS18_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UKUOK_SHIFT)) & ELS_ELS_KS18_KS18_UKUOK_MASK)
+#define ELS_ELS_KS18_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS18_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS18_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UKUOK_SHIFT)) & ELS_ELS_KS18_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS18_KS18_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS18_KS18_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS18_KS18_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UTLSPMS_SHIFT)) & ELS_ELS_KS18_KS18_UTLSPMS_MASK)
+#define ELS_ELS_KS18_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS18_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS18_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS18_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS18_KS18_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS18_KS18_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS18_KS18_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UTLSMS_SHIFT)) & ELS_ELS_KS18_KS18_UTLSMS_MASK)
+#define ELS_ELS_KS18_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS18_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS18_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS18_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS18_KS18_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS18_KS18_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS18_KS18_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UKGSRC_SHIFT)) & ELS_ELS_KS18_KS18_UKGSRC_MASK)
+#define ELS_ELS_KS18_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS18_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS18_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS18_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS18_KS18_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS18_KS18_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS18_KS18_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UHWO_SHIFT)) & ELS_ELS_KS18_KS18_UHWO_MASK)
+#define ELS_ELS_KS18_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS18_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS18_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UHWO_SHIFT)) & ELS_ELS_KS18_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS18_KS18_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS18_KS18_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS18_KS18_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UWRPOK_SHIFT)) & ELS_ELS_KS18_KS18_UWRPOK_MASK)
+#define ELS_ELS_KS18_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS18_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS18_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS18_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS18_KS18_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS18_KS18_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS18_KS18_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UDUK_SHIFT)) & ELS_ELS_KS18_KS18_UDUK_MASK)
+#define ELS_ELS_KS18_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS18_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS18_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UDUK_SHIFT)) & ELS_ELS_KS18_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS18_KS18_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS18_KS18_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS18_KS18_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KS18_UPPROT_SHIFT)) & ELS_ELS_KS18_KS18_UPPROT_MASK)
+#define ELS_ELS_KS18_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS18_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS18_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS18_KSN_UPPROT_SHIFT)) & ELS_ELS_KS18_KSN_UPPROT_MASK)
 /*! @} */
 
-/*! @name ELS_KS19 - Status Register */
+/*! @name ELS_KS19 - Key Status */
 /*! @{ */
 
-#define ELS_ELS_KS19_KS19_KSIZE_MASK             (0x3U)
-#define ELS_ELS_KS19_KS19_KSIZE_SHIFT            (0U)
-/*! KS19_KSIZE
- *  0b00..128
- *  0b01..256
+#define ELS_ELS_KS19_KSN_KSIZE_MASK              (0x3U)
+#define ELS_ELS_KS19_KSN_KSIZE_SHIFT             (0U)
+/*! KSn_KSIZE
+ *  0b00..Key size is 128 bits (1 slot)
+ *  0b01..Key size is 256 bits (2 slots)
+ *  0b10..Reserved
+ *  0b11..Key size is 512 bits (4 slots)
  */
-#define ELS_ELS_KS19_KS19_KSIZE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_KSIZE_SHIFT)) & ELS_ELS_KS19_KS19_KSIZE_MASK)
+#define ELS_ELS_KS19_KSN_KSIZE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_KSIZE_SHIFT)) & ELS_ELS_KS19_KSN_KSIZE_MASK)
 
-#define ELS_ELS_KS19_KS19_KACT_MASK              (0x20U)
-#define ELS_ELS_KS19_KS19_KACT_SHIFT             (5U)
-#define ELS_ELS_KS19_KS19_KACT(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_KACT_SHIFT)) & ELS_ELS_KS19_KS19_KACT_MASK)
+#define ELS_ELS_KS19_KSN_KACT_MASK               (0x20U)
+#define ELS_ELS_KS19_KSN_KACT_SHIFT              (5U)
+/*! KSn_KACT
+ *  0b0..Key slot is not in use by a key
+ *  0b1..Key is in use by a key
+ */
+#define ELS_ELS_KS19_KSN_KACT(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_KACT_SHIFT)) & ELS_ELS_KS19_KSN_KACT_MASK)
 
-#define ELS_ELS_KS19_KS19_KBASE_MASK             (0x40U)
-#define ELS_ELS_KS19_KS19_KBASE_SHIFT            (6U)
-#define ELS_ELS_KS19_KS19_KBASE(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_KBASE_SHIFT)) & ELS_ELS_KS19_KS19_KBASE_MASK)
+#define ELS_ELS_KS19_KSN_KBASE_MASK              (0x40U)
+#define ELS_ELS_KS19_KSN_KBASE_SHIFT             (6U)
+/*! KSn_KBASE
+ *  0b0..Key is not a base slot of a multi slot key
+ *  0b1..Key is a base slot of a multi slot key
+ */
+#define ELS_ELS_KS19_KSN_KBASE(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_KBASE_SHIFT)) & ELS_ELS_KS19_KSN_KBASE_MASK)
 
-#define ELS_ELS_KS19_KS19_FGP_MASK               (0x80U)
-#define ELS_ELS_KS19_KS19_FGP_SHIFT              (7U)
-#define ELS_ELS_KS19_KS19_FGP(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_FGP_SHIFT)) & ELS_ELS_KS19_KS19_FGP_MASK)
+#define ELS_ELS_KS19_KS0_FGP_MASK                (0x80U)
+#define ELS_ELS_KS19_KS0_FGP_SHIFT               (7U)
+/*! KS0_FGP
+ *  0b0..Slot is not a general purpose type key slot
+ *  0b1..Slot is a general purpose type key slot
+ */
+#define ELS_ELS_KS19_KS0_FGP(x)                  (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS0_FGP_SHIFT)) & ELS_ELS_KS19_KS0_FGP_MASK)
 
-#define ELS_ELS_KS19_KS19_FRTN_MASK              (0x100U)
-#define ELS_ELS_KS19_KS19_FRTN_SHIFT             (8U)
-#define ELS_ELS_KS19_KS19_FRTN(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_FRTN_SHIFT)) & ELS_ELS_KS19_KS19_FRTN_MASK)
+#define ELS_ELS_KS19_KSN_FRTN_MASK               (0x100U)
+#define ELS_ELS_KS19_KSN_FRTN_SHIFT              (8U)
+/*! KSn_FRTN
+ *  0b0..Slot is not a retention type key slot
+ *  0b1..Slot is a retention type key slot
+ */
+#define ELS_ELS_KS19_KSN_FRTN(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_FRTN_SHIFT)) & ELS_ELS_KS19_KSN_FRTN_MASK)
 
-#define ELS_ELS_KS19_KS19_FHWO_MASK              (0x200U)
-#define ELS_ELS_KS19_KS19_FHWO_SHIFT             (9U)
-#define ELS_ELS_KS19_KS19_FHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_FHWO_SHIFT)) & ELS_ELS_KS19_KS19_FHWO_MASK)
+#define ELS_ELS_KS19_KSN_FHWO_MASK               (0x200U)
+#define ELS_ELS_KS19_KSN_FHWO_SHIFT              (9U)
+/*! KSn_FHWO
+ *  0b0..Slot is not a hardware out type key slot
+ *  0b1..Slot is a hardware out type key slot
+ */
+#define ELS_ELS_KS19_KSN_FHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_FHWO_SHIFT)) & ELS_ELS_KS19_KSN_FHWO_MASK)
 
-#define ELS_ELS_KS19_KS19_UKPUK_MASK             (0x800U)
-#define ELS_ELS_KS19_KS19_UKPUK_SHIFT            (11U)
-#define ELS_ELS_KS19_KS19_UKPUK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UKPUK_SHIFT)) & ELS_ELS_KS19_KS19_UKPUK_MASK)
+#define ELS_ELS_KS19_KSN_UKPUK_MASK              (0x800U)
+#define ELS_ELS_KS19_KSN_UKPUK_SHIFT             (11U)
+/*! KSn_UKPUK
+ *  0b0..Key is not a trusted public key
+ *  0b1..Key is a trusted public key
+ */
+#define ELS_ELS_KS19_KSN_UKPUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UKPUK_SHIFT)) & ELS_ELS_KS19_KSN_UKPUK_MASK)
 
-#define ELS_ELS_KS19_KS19_UTECDH_MASK            (0x1000U)
-#define ELS_ELS_KS19_KS19_UTECDH_SHIFT           (12U)
-#define ELS_ELS_KS19_KS19_UTECDH(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UTECDH_SHIFT)) & ELS_ELS_KS19_KS19_UTECDH_MASK)
+#define ELS_ELS_KS19_KSN_UTECDH_MASK             (0x1000U)
+#define ELS_ELS_KS19_KSN_UTECDH_SHIFT            (12U)
+/*! KSn_UTECDH
+ *  0b0..Key is not a UTECDH key
+ *  0b1..Key is a UTECDH key
+ */
+#define ELS_ELS_KS19_KSN_UTECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UTECDH_SHIFT)) & ELS_ELS_KS19_KSN_UTECDH_MASK)
 
-#define ELS_ELS_KS19_KS19_UCMAC_MASK             (0x2000U)
-#define ELS_ELS_KS19_KS19_UCMAC_SHIFT            (13U)
-#define ELS_ELS_KS19_KS19_UCMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UCMAC_SHIFT)) & ELS_ELS_KS19_KS19_UCMAC_MASK)
+#define ELS_ELS_KS19_KSN_UCMAC_MASK              (0x2000U)
+#define ELS_ELS_KS19_KSN_UCMAC_SHIFT             (13U)
+/*! KSn_UCMAC
+ *  0b0..Key is not a CMAC key
+ *  0b1..Key is a CMAC key
+ */
+#define ELS_ELS_KS19_KSN_UCMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UCMAC_SHIFT)) & ELS_ELS_KS19_KSN_UCMAC_MASK)
 
-#define ELS_ELS_KS19_KS19_UKSK_MASK              (0x4000U)
-#define ELS_ELS_KS19_KS19_UKSK_SHIFT             (14U)
-#define ELS_ELS_KS19_KS19_UKSK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UKSK_SHIFT)) & ELS_ELS_KS19_KS19_UKSK_MASK)
+#define ELS_ELS_KS19_KSN_UKSK_MASK               (0x4000U)
+#define ELS_ELS_KS19_KSN_UKSK_SHIFT              (14U)
+/*! KSn_UKSK
+ *  0b0..Key is not a public key signing Key
+ *  0b1..Key is a public key signing key
+ */
+#define ELS_ELS_KS19_KSN_UKSK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UKSK_SHIFT)) & ELS_ELS_KS19_KSN_UKSK_MASK)
 
-#define ELS_ELS_KS19_KS19_URTF_MASK              (0x8000U)
-#define ELS_ELS_KS19_KS19_URTF_SHIFT             (15U)
-#define ELS_ELS_KS19_KS19_URTF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_URTF_SHIFT)) & ELS_ELS_KS19_KS19_URTF_MASK)
+#define ELS_ELS_KS19_KSN_URTF_MASK               (0x8000U)
+#define ELS_ELS_KS19_KSN_URTF_SHIFT              (15U)
+/*! KSn_URTF
+ *  0b0..Key is not a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ *  0b1..Key is a ECC signing key that can be used as the input private key to ECSIGN command when SIGNRTF command parameter is set
+ */
+#define ELS_ELS_KS19_KSN_URTF(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_URTF_SHIFT)) & ELS_ELS_KS19_KSN_URTF_MASK)
 
-#define ELS_ELS_KS19_KS19_UCKDF_MASK             (0x10000U)
-#define ELS_ELS_KS19_KS19_UCKDF_SHIFT            (16U)
-#define ELS_ELS_KS19_KS19_UCKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UCKDF_SHIFT)) & ELS_ELS_KS19_KS19_UCKDF_MASK)
+#define ELS_ELS_KS19_KSN_UCKDF_MASK              (0x10000U)
+#define ELS_ELS_KS19_KSN_UCKDF_SHIFT             (16U)
+/*! KSn_UCKDF
+ *  0b0..Key is not a CMAC based derivation key
+ *  0b1..Key is a CMAC based derivation key
+ */
+#define ELS_ELS_KS19_KSN_UCKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UCKDF_SHIFT)) & ELS_ELS_KS19_KSN_UCKDF_MASK)
 
-#define ELS_ELS_KS19_KS19_UHKDF_MASK             (0x20000U)
-#define ELS_ELS_KS19_KS19_UHKDF_SHIFT            (17U)
-#define ELS_ELS_KS19_KS19_UHKDF(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UHKDF_SHIFT)) & ELS_ELS_KS19_KS19_UHKDF_MASK)
+#define ELS_ELS_KS19_KSN_UHKDF_MASK              (0x20000U)
+#define ELS_ELS_KS19_KSN_UHKDF_SHIFT             (17U)
+/*! KSn_UHKDF
+ *  0b0..Key is not a HKDF key
+ *  0b1..Key is a HKDF key
+ */
+#define ELS_ELS_KS19_KSN_UHKDF(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UHKDF_SHIFT)) & ELS_ELS_KS19_KSN_UHKDF_MASK)
 
-#define ELS_ELS_KS19_KS19_UECSG_MASK             (0x40000U)
-#define ELS_ELS_KS19_KS19_UECSG_SHIFT            (18U)
-#define ELS_ELS_KS19_KS19_UECSG(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UECSG_SHIFT)) & ELS_ELS_KS19_KS19_UECSG_MASK)
+#define ELS_ELS_KS19_KSN_UECSG_MASK              (0x40000U)
+#define ELS_ELS_KS19_KSN_UECSG_SHIFT             (18U)
+/*! KSn_UECSG
+ *  0b0..Key is not a ECC signing key
+ *  0b1..Key is a ECC signing key
+ */
+#define ELS_ELS_KS19_KSN_UECSG(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UECSG_SHIFT)) & ELS_ELS_KS19_KSN_UECSG_MASK)
 
-#define ELS_ELS_KS19_KS19_UECDH_MASK             (0x80000U)
-#define ELS_ELS_KS19_KS19_UECDH_SHIFT            (19U)
-#define ELS_ELS_KS19_KS19_UECDH(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UECDH_SHIFT)) & ELS_ELS_KS19_KS19_UECDH_MASK)
+#define ELS_ELS_KS19_KSN_UECDH_MASK              (0x80000U)
+#define ELS_ELS_KS19_KSN_UECDH_SHIFT             (19U)
+/*! KSn_UECDH
+ *  0b0..Key is not a Diffie hellman key exchange private key
+ *  0b1..Key is a Diffie hellman key exchange private key
+ */
+#define ELS_ELS_KS19_KSN_UECDH(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UECDH_SHIFT)) & ELS_ELS_KS19_KSN_UECDH_MASK)
 
-#define ELS_ELS_KS19_KS19_UAES_MASK              (0x100000U)
-#define ELS_ELS_KS19_KS19_UAES_SHIFT             (20U)
-#define ELS_ELS_KS19_KS19_UAES(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UAES_SHIFT)) & ELS_ELS_KS19_KS19_UAES_MASK)
+#define ELS_ELS_KS19_KSN_UAES_MASK               (0x100000U)
+#define ELS_ELS_KS19_KSN_UAES_SHIFT              (20U)
+/*! KSn_UAES
+ *  0b0..Key is not a AES key
+ *  0b1..Key is a AES key
+ */
+#define ELS_ELS_KS19_KSN_UAES(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UAES_SHIFT)) & ELS_ELS_KS19_KSN_UAES_MASK)
 
-#define ELS_ELS_KS19_KS19_UHMAC_MASK             (0x200000U)
-#define ELS_ELS_KS19_KS19_UHMAC_SHIFT            (21U)
-#define ELS_ELS_KS19_KS19_UHMAC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UHMAC_SHIFT)) & ELS_ELS_KS19_KS19_UHMAC_MASK)
+#define ELS_ELS_KS19_KSN_UHMAC_MASK              (0x200000U)
+#define ELS_ELS_KS19_KSN_UHMAC_SHIFT             (21U)
+/*! KSn_UHMAC
+ *  0b0..Key is not a HMAC key
+ *  0b1..Key is a HMAC key
+ */
+#define ELS_ELS_KS19_KSN_UHMAC(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UHMAC_SHIFT)) & ELS_ELS_KS19_KSN_UHMAC_MASK)
 
-#define ELS_ELS_KS19_KS19_UKWK_MASK              (0x400000U)
-#define ELS_ELS_KS19_KS19_UKWK_SHIFT             (22U)
-#define ELS_ELS_KS19_KS19_UKWK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UKWK_SHIFT)) & ELS_ELS_KS19_KS19_UKWK_MASK)
+#define ELS_ELS_KS19_KSN_UKWK_MASK               (0x400000U)
+#define ELS_ELS_KS19_KSN_UKWK_SHIFT              (22U)
+/*! KSn_UKWK
+ *  0b0..Key is not a RFC3394 key wrap plus unwrap only key
+ *  0b1..Key is a RFC3394 key wrap plus unwrap only key
+ */
+#define ELS_ELS_KS19_KSN_UKWK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UKWK_SHIFT)) & ELS_ELS_KS19_KSN_UKWK_MASK)
 
-#define ELS_ELS_KS19_KS19_UKUOK_MASK             (0x800000U)
-#define ELS_ELS_KS19_KS19_UKUOK_SHIFT            (23U)
-#define ELS_ELS_KS19_KS19_UKUOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UKUOK_SHIFT)) & ELS_ELS_KS19_KS19_UKUOK_MASK)
+#define ELS_ELS_KS19_KSN_UKUOK_MASK              (0x800000U)
+#define ELS_ELS_KS19_KSN_UKUOK_SHIFT             (23U)
+/*! KSn_UKUOK
+ *  0b0..Key is not a RFC3394 key unwrap only key
+ *  0b1..Key is a RFC3394 key unwrap only key
+ */
+#define ELS_ELS_KS19_KSN_UKUOK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UKUOK_SHIFT)) & ELS_ELS_KS19_KSN_UKUOK_MASK)
 
-#define ELS_ELS_KS19_KS19_UTLSPMS_MASK           (0x1000000U)
-#define ELS_ELS_KS19_KS19_UTLSPMS_SHIFT          (24U)
-#define ELS_ELS_KS19_KS19_UTLSPMS(x)             (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UTLSPMS_SHIFT)) & ELS_ELS_KS19_KS19_UTLSPMS_MASK)
+#define ELS_ELS_KS19_KSN_UTLSPMS_MASK            (0x1000000U)
+#define ELS_ELS_KS19_KSN_UTLSPMS_SHIFT           (24U)
+/*! KSn_UTLSPMS
+ *  0b0..Key is not a TLS pre master secret key
+ *  0b1..Key is a TLS pre master secret key
+ */
+#define ELS_ELS_KS19_KSN_UTLSPMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UTLSPMS_SHIFT)) & ELS_ELS_KS19_KSN_UTLSPMS_MASK)
 
-#define ELS_ELS_KS19_KS19_UTLSMS_MASK            (0x2000000U)
-#define ELS_ELS_KS19_KS19_UTLSMS_SHIFT           (25U)
-#define ELS_ELS_KS19_KS19_UTLSMS(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UTLSMS_SHIFT)) & ELS_ELS_KS19_KS19_UTLSMS_MASK)
+#define ELS_ELS_KS19_KSN_UTLSMS_MASK             (0x2000000U)
+#define ELS_ELS_KS19_KSN_UTLSMS_SHIFT            (25U)
+/*! KSn_UTLSMS
+ *  0b0..Key is not a TLS master secret key
+ *  0b1..Key is a TLS master secret key
+ */
+#define ELS_ELS_KS19_KSN_UTLSMS(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UTLSMS_SHIFT)) & ELS_ELS_KS19_KSN_UTLSMS_MASK)
 
-#define ELS_ELS_KS19_KS19_UKGSRC_MASK            (0x4000000U)
-#define ELS_ELS_KS19_KS19_UKGSRC_SHIFT           (26U)
-#define ELS_ELS_KS19_KS19_UKGSRC(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UKGSRC_SHIFT)) & ELS_ELS_KS19_KS19_UKGSRC_MASK)
+#define ELS_ELS_KS19_KSN_UKGSRC_MASK             (0x4000000U)
+#define ELS_ELS_KS19_KSN_UKGSRC_SHIFT            (26U)
+/*! KSn_UKGSRC
+ *  0b0..Key cannot be used as a key material source for deterministic ECC keygen
+ *  0b1..Key can be used as a key material source for deterministic ECC keygen
+ */
+#define ELS_ELS_KS19_KSN_UKGSRC(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UKGSRC_SHIFT)) & ELS_ELS_KS19_KSN_UKGSRC_MASK)
 
-#define ELS_ELS_KS19_KS19_UHWO_MASK              (0x8000000U)
-#define ELS_ELS_KS19_KS19_UHWO_SHIFT             (27U)
-#define ELS_ELS_KS19_KS19_UHWO(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UHWO_SHIFT)) & ELS_ELS_KS19_KS19_UHWO_MASK)
+#define ELS_ELS_KS19_KSN_UHWO_MASK               (0x8000000U)
+#define ELS_ELS_KS19_KSN_UHWO_SHIFT              (27U)
+/*! KSn_UHWO
+ *  0b0..Key can exist in any slot
+ *  0b1..Key can only exist in a hardware out slot
+ */
+#define ELS_ELS_KS19_KSN_UHWO(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UHWO_SHIFT)) & ELS_ELS_KS19_KSN_UHWO_MASK)
 
-#define ELS_ELS_KS19_KS19_UWRPOK_MASK            (0x10000000U)
-#define ELS_ELS_KS19_KS19_UWRPOK_SHIFT           (28U)
-#define ELS_ELS_KS19_KS19_UWRPOK(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UWRPOK_SHIFT)) & ELS_ELS_KS19_KS19_UWRPOK_MASK)
+#define ELS_ELS_KS19_KSN_UWRPOK_MASK             (0x10000000U)
+#define ELS_ELS_KS19_KSN_UWRPOK_SHIFT            (28U)
+/*! KSn_UWRPOK
+ *  0b0..Key cannot be RFC3394 wrapped
+ *  0b1..Key can be RFC3394 wrapped
+ */
+#define ELS_ELS_KS19_KSN_UWRPOK(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UWRPOK_SHIFT)) & ELS_ELS_KS19_KSN_UWRPOK_MASK)
 
-#define ELS_ELS_KS19_KS19_UDUK_MASK              (0x20000000U)
-#define ELS_ELS_KS19_KS19_UDUK_SHIFT             (29U)
-#define ELS_ELS_KS19_KS19_UDUK(x)                (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UDUK_SHIFT)) & ELS_ELS_KS19_KS19_UDUK_MASK)
+#define ELS_ELS_KS19_KSN_UDUK_MASK               (0x20000000U)
+#define ELS_ELS_KS19_KSN_UDUK_SHIFT              (29U)
+/*! KSn_UDUK
+ *  0b0..Key is not a device unique key
+ *  0b1..Key is a device unique key
+ */
+#define ELS_ELS_KS19_KSN_UDUK(x)                 (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UDUK_SHIFT)) & ELS_ELS_KS19_KSN_UDUK_MASK)
 
-#define ELS_ELS_KS19_KS19_UPPROT_MASK            (0xC0000000U)
-#define ELS_ELS_KS19_KS19_UPPROT_SHIFT           (30U)
-#define ELS_ELS_KS19_KS19_UPPROT(x)              (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KS19_UPPROT_SHIFT)) & ELS_ELS_KS19_KS19_UPPROT_MASK)
+#define ELS_ELS_KS19_KSN_UPPROT_MASK             (0xC0000000U)
+#define ELS_ELS_KS19_KSN_UPPROT_SHIFT            (30U)
+/*! KSn_UPPROT
+ *  0b00..Non-privileged, secure
+ *  0b01..Privileged, secure
+ *  0b10..Non-privileged, non-secure
+ *  0b11..Privileged, non-secure
+ */
+#define ELS_ELS_KS19_KSN_UPPROT(x)               (((uint32_t)(((uint32_t)(x)) << ELS_ELS_KS19_KSN_UPPROT_SHIFT)) & ELS_ELS_KS19_KSN_UPPROT_MASK)
 /*! @} */
 
 /*! @name RESERVED_LA4 - Reserved LA4 */

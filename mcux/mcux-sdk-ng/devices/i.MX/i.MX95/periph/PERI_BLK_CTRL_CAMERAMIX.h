@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_CAMERAMIX
@@ -404,19 +404,19 @@
 
 /** BLK_CTRL_CAMERAMIX - Size of Registers Arrays */
 #define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_COUNT 8u
 #define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_COUNT 8u
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_COUNT 8u
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_COUNT 8u
 
 /** BLK_CTRL_CAMERAMIX - Register Layout Typedef */
 typedef struct {
@@ -437,12 +437,12 @@ typedef struct {
   __IO uint32_t CSI0_STREAM_FENCING_CTRL;          /**< Stream fencing control., offset: 0x54 */
   __I  uint32_t CSI0_STREAM_FENCING_STATUS;        /**< Stream fencing status., offset: 0x58 */
        uint8_t RESERVED_2[4];
-  __IO uint32_t CSI0_NP_data_type_VC[BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_COUNT]; /**< CSI0 VC0 non-pixel data type..CSI0 VC7 non-pixel data type, array offset: 0x60, array step: 0x4 */
-  __IO uint32_t CSI0_Pixel_data_ctrl_VC[BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_COUNT]; /**< CSI0 Pixel Data Control VC0..CSI0 Pixel Data Control VC7, array offset: 0x80, array step: 0x4 */
-  __IO uint32_t CSI0_Route_Pixel_data_type_VC[BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_COUNT]; /**< CSI0 Route Pixel Data Type VC0..CSI0 Route Pixel Data Type VC7, array offset: 0xA0, array step: 0x4 */
-  __IO uint32_t CSI0_Non_Pixel_data_ctrl_VC[BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_COUNT]; /**< CSI0 Non-Pixel Data Control VC0..CSI0 Non-Pixel Data Control VC7, array offset: 0xC0, array step: 0x4 */
-  __IO uint32_t CSI0_Pixel_data_type_VC[BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_COUNT]; /**< CSI0 Pixel Data Type VC0..CSI0 Pixel Data Type VC7, array offset: 0xE0, array step: 0x4 */
-  __IO uint32_t CSI0_Pixel_data_type_err_VC[BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_COUNT]; /**< CSI0 Pixel Data Type Error VC0..CSI0 Pixel Data Type Error VC7, array offset: 0x100, array step: 0x4 */
+  __IO uint32_t CSI0_NP_DATA_TYPE_VC[BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_COUNT]; /**< CSI0 VC0 non-pixel data type..CSI0 VC7 non-pixel data type, array offset: 0x60, array step: 0x4 */
+  __IO uint32_t CSI0_PIXEL_DATA_CTRL_VC[BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_COUNT]; /**< CSI0 Pixel Data Control VC0..CSI0 Pixel Data Control VC7, array offset: 0x80, array step: 0x4 */
+  __IO uint32_t CSI0_ROUTE_PIXEL_DATA_TYPE_VC[BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_COUNT]; /**< CSI0 Route Pixel Data Type VC0..CSI0 Route Pixel Data Type VC7, array offset: 0xA0, array step: 0x4 */
+  __IO uint32_t CSI0_NON_PIXEL_DATA_CTRL_VC[BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_COUNT]; /**< CSI0 Non-Pixel Data Control VC0..CSI0 Non-Pixel Data Control VC7, array offset: 0xC0, array step: 0x4 */
+  __IO uint32_t CSI0_PIXEL_DATA_TYPE_VC[BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_COUNT]; /**< CSI0 Pixel Data Type VC0..CSI0 Pixel Data Type VC7, array offset: 0xE0, array step: 0x4 */
+  __IO uint32_t CSI0_PIXEL_DATA_TYPE_ERR_VC[BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_COUNT]; /**< CSI0 Pixel Data Type Error VC0..CSI0 Pixel Data Type Error VC7, array offset: 0x100, array step: 0x4 */
   __IO uint32_t CSI1_VC_INTERLACED_LINE_COUNT_SET[BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_COUNT]; /**< Virtual Channel interlaced Line count, array offset: 0x120, array step: 0x4 */
   __IO uint32_t CSI1_VC_INTERLACED_CTRL;           /**< CSI1 VC Interlaced Control, offset: 0x140 */
   __IO uint32_t CSI1_VC_INTERLACED_ERROR;          /**< CSI1 VC Interlaced Error, offset: 0x144 */
@@ -452,22 +452,17 @@ typedef struct {
   __IO uint32_t CSI1_STREAM_FENCING_CTRL;          /**< Stream fencing control., offset: 0x154 */
   __I  uint32_t CSI1_STREAM_FENCING_STATUS;        /**< Stream fencing status., offset: 0x158 */
        uint8_t RESERVED_4[4];
-  __IO uint32_t CSI1_NP_data_type_VC[BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_COUNT]; /**< CSI1 VC0 non-pixel data type..CSI1 VC7 non-pixel data type, array offset: 0x160, array step: 0x4 */
-  __IO uint32_t CSI1_Pixel_data_ctrl_VC[BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_COUNT]; /**< Control of the routing of the pixel data on Pixel link virtual channel., array offset: 0x180, array step: 0x4 */
-  __IO uint32_t CSI1_Route_Pixel_data_type_VC[BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_COUNT]; /**< CSI1 Route Pixel Data Type VC0..CSI1 Route Pixel Data Type VC7, array offset: 0x1A0, array step: 0x4 */
-  __IO uint32_t CSI1_Non_Pixel_data_ctrl_VC[BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_COUNT]; /**< CSI1 Non-Pixel Data Control VC0..CSI1 Non-Pixel Data Control VC7, array offset: 0x1C0, array step: 0x4 */
-  __IO uint32_t CSI1_Pixel_data_type_VC[BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_COUNT]; /**< CSI1 Pixel Data Type VC0..CSI1 Pixel Data Type VC7, array offset: 0x1E0, array step: 0x4 */
-  __IO uint32_t CSI1_Pixel_data_type_err_VC[BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_COUNT]; /**< CSI1 Pixel Data Type Error VC0..CSI1 Pixel Data Type Error VC7, array offset: 0x200, array step: 0x4 */
+  __IO uint32_t CSI1_NP_DATA_TYPE_VC[BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_COUNT]; /**< CSI1 VC0 non-pixel data type..CSI1 VC7 non-pixel data type, array offset: 0x160, array step: 0x4 */
+  __IO uint32_t CSI1_PIXEL_DATA_CTRL_VC[BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_COUNT]; /**< Control of the routing of the pixel data on Pixel link virtual channel., array offset: 0x180, array step: 0x4 */
+  __IO uint32_t CSI1_ROUTE_PIXEL_DATA_TYPE_VC[BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_COUNT]; /**< CSI1 Route Pixel Data Type VC0..CSI1 Route Pixel Data Type VC7, array offset: 0x1A0, array step: 0x4 */
+  __IO uint32_t CSI1_NON_PIXEL_DATA_CTRL_VC[BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_COUNT]; /**< CSI1 Non-Pixel Data Control VC0..CSI1 Non-Pixel Data Control VC7, array offset: 0x1C0, array step: 0x4 */
+  __IO uint32_t CSI1_PIXEL_DATA_TYPE_VC[BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_COUNT]; /**< CSI1 Pixel Data Type VC0..CSI1 Pixel Data Type VC7, array offset: 0x1E0, array step: 0x4 */
+  __IO uint32_t CSI1_PIXEL_DATA_TYPE_ERR_VC[BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_COUNT]; /**< CSI1 Pixel Data Type Error VC0..CSI1 Pixel Data Type Error VC7, array offset: 0x200, array step: 0x4 */
   __IO uint32_t CSI0_PIXEL_LINK_RAW10_FORMAT;      /**< Pixel link RAW10 format, offset: 0x220 */
   __IO uint32_t CSI1_PIXEL_LINK_RAW10_FORMAT;      /**< Pixel link RAW10 format, offset: 0x224 */
   __IO uint32_t CSI0_BUFFER_OVERFLOW;              /**< Buffer Overflow, offset: 0x228 */
   __IO uint32_t CSI1_BUFFER_OVERFLOW;              /**< Buffer Overflow, offset: 0x22C */
-       uint8_t RESERVED_5[208];
-  __IO uint32_t CM0P_ADDR_OFFSET1;                 /**< Cortex-M0+ Address Offset 1, offset: 0x300 */
-  __IO uint32_t CM0P_ADDR_OFFSET2;                 /**< Cortex-M0+ Address Offset 2, offset: 0x304 */
-  __IO uint32_t CM0P_CPUWAIT;                      /**< Cortex-M0+ CPUWAIT, offset: 0x308 */
-  __IO uint32_t CM0P_CTL;                          /**< Cortex-M0+ Control, offset: 0x30C */
-  __I  uint32_t CM0P_STAT;                         /**< Cortex-M0+ Status, offset: 0x310 */
+       uint8_t RESERVED_5[228];
   __IO uint32_t LPCAC_ERROR;                       /**< LPCAC Error, offset: 0x314 */
   __IO uint32_t LPCAC_ERROR_ADDR;                  /**< LPCAC Error Address, offset: 0x318 */
   __IO uint32_t LPCAC_ERROR_DATA;                  /**< LPCAC Error Data, offset: 0x31C */
@@ -486,301 +481,276 @@ typedef struct {
 /*! @name ISP_CLOCK_GATING_CONTROL - ISP Clock gating control */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_0_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_0_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_0_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_0_SHIFT (0U)
 /*! CSI2_pixel_formatting_0 - Pixel link clock gate control of the CSI2 pixel formatting 0 (Standalone)
  *  0b0..Do not gate the Pixel link clock of the CSI2 pixel formatting 0
  *  0b1..Gate the Pixel link clock of the CSI2 pixel formatting 0
  */
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_0_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_0_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_0_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_0_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_1_MASK (0x2U)
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_1_SHIFT (1U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_1_MASK (0x2U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_1_SHIFT (1U)
 /*! CSI2_pixel_formatting_1 - Pixel link clock gate control of the CSI2 pixel formatting 1 (Combo)
  *  0b0..Do not gate the Pixel link clock of the CSI2 pixel formatting 1
  *  0b1..Gate the Pixel link clock of the CSI2 pixel formatting 1
  */
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_1_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_pixel_formatting_1_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_1_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_CSI2_PIXEL_FORMATTING_1_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_clock_MASK (0x10U)
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_clock_SHIFT (4U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_CLOCK_MASK (0x10U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_CLOCK_SHIFT (4U)
 /*! ISP_AXI_clock - AXI clock gate control of the ISP
  *  0b0..Do not gate the AXI clock of the ISP
  *  0b1..Gate the AXI clock of the ISP
  */
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_clock(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_clock_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_clock_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_CLOCK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_CLOCK_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_AXI_CLOCK_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_Pixel_clock_MASK (0x20U)
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_Pixel_clock_SHIFT (5U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_PIXEL_CLOCK_MASK (0x20U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_PIXEL_CLOCK_SHIFT (5U)
 /*! ISP_Pixel_clock - Pixel clock gate control of the ISP
  *  0b0..Do not gate the Pixel clock of the ISP
  *  0b1..Gate the Pixel clock of the ISP
  */
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_Pixel_clock(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_Pixel_clock_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_Pixel_clock_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_PIXEL_CLOCK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_PIXEL_CLOCK_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_PIXEL_CLOCK_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_clock_MASK (0x40U)
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_clock_SHIFT (6U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_CLOCK_MASK (0x40U)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_CLOCK_SHIFT (6U)
 /*! ISP_ISP_clock - ISP clock gate control of the ISP
  *  0b0..Do not gate the ISP clock of the ISP
  *  0b1..Gate the ISP clock of the ISP
  */
-#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_clock(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_clock_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_clock_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_CLOCK(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_CLOCK_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CLOCK_GATING_CONTROL_ISP_ISP_CLOCK_MASK)
 /*! @} */
 
 /*! @name ISP_AXCACHE_CONTROL - ISP AxCache control */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ArCache_MASK (0xFU)
-#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ArCache_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ARCACHE_MASK (0xFU)
+#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ARCACHE_SHIFT (0U)
 /*! ArCache - Set the AXI ArCache signal for the AXI read master ports */
-#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ArCache(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ArCache_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ArCache_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ARCACHE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ARCACHE_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_ARCACHE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AwCache_MASK (0xF00U)
-#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AwCache_SHIFT (8U)
+#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AWCACHE_MASK (0xF00U)
+#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AWCACHE_SHIFT (8U)
 /*! AwCache - Set the AXI AwCache signal for the AXI write master ports */
-#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AwCache(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AwCache_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AwCache_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AWCACHE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AWCACHE_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_AXCACHE_CONTROL_AWCACHE_MASK)
 /*! @} */
 
 /*! @name ISP_QOS_SETTING - ISP QoS setting */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AwQoS_MASK (0x7U)
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AwQoS_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AWQOS_MASK (0x7U)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AWQOS_SHIFT (0U)
 /*! AwQoS - Set the AXI AwQoS signal for all ISP AXI write ports. */
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AwQoS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AwQoS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AwQoS_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AWQOS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AWQOS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AWQOS_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ArQoS_MASK (0x700U)
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ArQoS_SHIFT (8U)
-/*! ArQoS - Set the AXI ArQoS signal for all ISP AXI write ports. */
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ArQoS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ArQoS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ArQoS_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ARQOS_MASK (0x700U)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ARQOS_SHIFT (8U)
+/*! ArQoS - Set the AXI ArQoS signal for all ISP AXI read ports. */
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ARQOS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ARQOS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ARQOS_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_Ar_local_panic_QoS_MASK (0x7000U)
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_Ar_local_panic_QoS_SHIFT (12U)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AR_LOCAL_PANIC_QOS_MASK (0x7000U)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AR_LOCAL_PANIC_QOS_SHIFT (12U)
 /*! Ar_local_panic_QoS - Set the AXI Hurry/Pressure QoS signal when the o_arpostqos of the AXI read port are set to '1'. */
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_Ar_local_panic_QoS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_Ar_local_panic_QoS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_Ar_local_panic_QoS_MASK)
-
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ISP_Traffic_MASK (0x10000U)
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ISP_Traffic_SHIFT (16U)
-/*! ISP_Traffic - Set the ISP Traffic as real-time.
- *  0b0..ISP write traffic is configured as best effort. ISP contribution to panic signal through AWQoS_panic is
- *       gated. Set this bit in case of memory to memory ISP processing.
- *  0b1..ISP write traffic is configured as real time. ISP contribute to panic signal. Set this bit in case of real time streaming.
- */
-#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ISP_Traffic(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ISP_Traffic_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_ISP_Traffic_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AR_LOCAL_PANIC_QOS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AR_LOCAL_PANIC_QOS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_QOS_SETTING_AR_LOCAL_PANIC_QOS_MASK)
 /*! @} */
 
 /*! @name ISI_AXCACHE_CONTROL - ISI AxCache control */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ArCache_MASK (0xFU)
-#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ArCache_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ARCACHE_MASK (0xFU)
+#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ARCACHE_SHIFT (0U)
 /*! ArCache - Set the AXI ArCache signal for the AXI read master ports */
-#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ArCache(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ArCache_SHIFT)) & BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ArCache_MASK)
+#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ARCACHE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ARCACHE_SHIFT)) & BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_ARCACHE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AwCache_MASK (0xF00U)
-#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AwCache_SHIFT (8U)
+#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AWCACHE_MASK (0xF00U)
+#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AWCACHE_SHIFT (8U)
 /*! AwCache - Set the AXI AwCache signal for the AXI write master ports */
-#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AwCache(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AwCache_SHIFT)) & BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AwCache_MASK)
+#define BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AWCACHE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AWCACHE_SHIFT)) & BLK_CTRL_CAMERAMIX_ISI_AXCACHE_CONTROL_AWCACHE_MASK)
 /*! @} */
 
 /*! @name ISI_QOS_SETTING - ISI QoS setting */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AwQoS_MASK (0x7U)
-#define BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AwQoS_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AWQOS_MASK (0x7U)
+#define BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AWQOS_SHIFT (0U)
 /*! AwQoS - Set the AXI AwQoS signal for all ISI AXI read and write ports. */
-#define BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AwQoS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AwQoS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AwQoS_MASK)
+#define BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AWQOS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AWQOS_SHIFT)) & BLK_CTRL_CAMERAMIX_ISI_QOS_SETTING_AWQOS_MASK)
 /*! @} */
 
 /*! @name PANIC_QOS - ISI Panic QoS setting */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_PANIC_QOS_Panic_QoS_MASK (0x7U)
-#define BLK_CTRL_CAMERAMIX_PANIC_QOS_Panic_QoS_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_PANIC_QOS_PANIC_QOS_MASK (0x7U)
+#define BLK_CTRL_CAMERAMIX_PANIC_QOS_PANIC_QOS_SHIFT (0U)
 /*! Panic_QoS - Set the AXI Hurry AwQoS signal for all ISI and ISP AXI write ports, when corresponding panic signals are active. */
-#define BLK_CTRL_CAMERAMIX_PANIC_QOS_Panic_QoS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_PANIC_QOS_Panic_QoS_SHIFT)) & BLK_CTRL_CAMERAMIX_PANIC_QOS_Panic_QoS_MASK)
+#define BLK_CTRL_CAMERAMIX_PANIC_QOS_PANIC_QOS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_PANIC_QOS_PANIC_QOS_SHIFT)) & BLK_CTRL_CAMERAMIX_PANIC_QOS_PANIC_QOS_MASK)
 /*! @} */
 
 /*! @name INIT_PENDING_TX - Init_pending_Tx */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_0_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_0_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_0_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_0_SHIFT (0U)
 /*! Read_AXI_ISP_0 - Read_AXI_ISP_0 pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_0_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_0_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_0_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_0_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_1_MASK (0x2U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_1_SHIFT (1U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_1_MASK (0x2U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_1_SHIFT (1U)
 /*! Read_AXI_ISP_1 - Read_AXI_ISP_1 pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_1_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_AXI_ISP_1_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_1_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_AXI_ISP_1_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_0_MASK (0x4U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_0_SHIFT (2U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_0_MASK (0x4U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_0_SHIFT (2U)
 /*! Write_AXI_ISP_0 - Write_AXI_ISP_0 pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_0_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_0_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_0(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_0_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_0_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_1_MASK (0x8U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_1_SHIFT (3U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_1_MASK (0x8U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_1_SHIFT (3U)
 /*! Write_AXI_ISP_1 - Write_AXI_ISP_1 pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_1_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_AXI_ISP_1_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_1(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_1_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_AXI_ISP_1_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_ISI_MASK (0x10U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_ISI_SHIFT (4U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_ISI_MASK (0x10U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_ISI_SHIFT (4U)
 /*! Read_ISI - Read_ISI pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Read_ISI_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_READ_ISI_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_Y_ISI_MASK (0x20U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_Y_ISI_SHIFT (5U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_Y_ISI_MASK (0x20U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_Y_ISI_SHIFT (5U)
 /*! Write_Y_ISI - Write_Y_ISI pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_Y_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_Y_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_Y_ISI_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_Y_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_Y_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_Y_ISI_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_U_ISI_MASK (0x40U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_U_ISI_SHIFT (6U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_U_ISI_MASK (0x40U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_U_ISI_SHIFT (6U)
 /*! Write_U_ISI - Write_U_ISI pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_U_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_U_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_U_ISI_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_U_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_U_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_U_ISI_MASK)
 
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_V_ISI_MASK (0x80U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_V_ISI_SHIFT (7U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_V_ISI_MASK (0x80U)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_V_ISI_SHIFT (7U)
 /*! Write_V_ISI - Write_V_ISI pending transaction
  *  0b0..No pending transaction
  *  0b1..Pending transaction
  */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_V_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_V_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_Write_V_ISI_MASK)
-
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_CM0P_MASK (0x100U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_CM0P_SHIFT (8U)
-/*! CM0P - CM0P pending transaction
- *  0b0..No pending transaction
- *  0b1..Pending transaction
- */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_CM0P(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_CM0P_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_CM0P_MASK)
-
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_eDMA_MASK (0x200U)
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_eDMA_SHIFT (9U)
-/*! eDMA - eDMA pending transaction
- *  0b0..No pending transaction
- *  0b1..Pending transaction
- */
-#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_eDMA(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_eDMA_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_eDMA_MASK)
+#define BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_V_ISI(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_V_ISI_SHIFT)) & BLK_CTRL_CAMERAMIX_INIT_PENDING_TX_WRITE_V_ISI_MASK)
 /*! @} */
 
 /*! @name CSI0_VC_INTERLACED_LINE_COUNT_SET - Virtual Channel interlaced Line count */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_MASK (0x3FFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_MASK (0x3FFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_SHIFT (0U)
 /*! Odd_line_count - Odd line count */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_MASK (0x3FFF0000U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_SHIFT (16U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_MASK (0x3FFF0000U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_SHIFT (16U)
 /*! Even_line_count - Even line count */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Even_line_count(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_MASK)
 /*! @} */
 
 /*! @name CSI0_VC_INTERLACED_CTRL - CSI0 VC Interlaced Control */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_interlace_mode_MASK (0x3U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_interlace_mode_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_INTERLACE_MODE_MASK (0x3U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_INTERLACE_MODE_SHIFT (0U)
 /*! CSI0_VC0_interlace_mode - CSI0 VC0 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC0_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_interlace_mode_MASK (0xCU)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_interlace_mode_SHIFT (2U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_INTERLACE_MODE_MASK (0xCU)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_INTERLACE_MODE_SHIFT (2U)
 /*! CSI0_VC1_interlace_mode - CSI0 VC1 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC1_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_interlace_mode_MASK (0x30U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_interlace_mode_SHIFT (4U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_INTERLACE_MODE_MASK (0x30U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_INTERLACE_MODE_SHIFT (4U)
 /*! CSI0_VC2_interlace_mode - CSI0 VC2 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC2_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_interlace_mode_MASK (0xC0U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_interlace_mode_SHIFT (6U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_INTERLACE_MODE_MASK (0xC0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_INTERLACE_MODE_SHIFT (6U)
 /*! CSI0_VC3_interlace_mode - CSI0 VC3 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC3_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_interlace_mode_MASK (0x300U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_interlace_mode_SHIFT (8U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_INTERLACE_MODE_MASK (0x300U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_INTERLACE_MODE_SHIFT (8U)
 /*! CSI0_VC4_interlace_mode - CSI0 VC4 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC4_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_interlace_mode_MASK (0xC00U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_interlace_mode_SHIFT (10U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_INTERLACE_MODE_MASK (0xC00U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_INTERLACE_MODE_SHIFT (10U)
 /*! CSI0_VC5_interlace_mode - CSI0 VC5 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC5_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_interlace_mode_MASK (0x3000U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_interlace_mode_SHIFT (12U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_INTERLACE_MODE_MASK (0x3000U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_INTERLACE_MODE_SHIFT (12U)
 /*! CSI0_VC6_interlace_mode - CSI0 VC6 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC6_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_interlace_mode_MASK (0xC000U)
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_interlace_mode_SHIFT (14U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_INTERLACE_MODE_MASK (0xC000U)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_INTERLACE_MODE_SHIFT (14U)
 /*! CSI0_VC7_interlace_mode - CSI0 VC7 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_VC_INTERLACED_CTRL_CSI0_VC7_INTERLACE_MODE_MASK)
 /*! @} */
 
 /*! @name CSI0_VC_INTERLACED_ERROR - CSI0 VC Interlaced Error */
@@ -995,232 +965,232 @@ typedef struct {
 /*! @name CSI0_STREAM_FENCING_CTRL - Stream fencing control. */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Fencing_Control_MASK (0xFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Fencing_Control_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_FENCING_CONTROL_MASK (0xFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_FENCING_CONTROL_SHIFT (0U)
 /*! CSI0_Fencing_Control - [0] Fence VC0...[7] Fence VC7 */
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Fencing_Control(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Fencing_Control_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Fencing_Control_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_FENCING_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_FENCING_CONTROL_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_FENCING_CONTROL_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Reset_Fencing_SM_MASK (0xFF00U)
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Reset_Fencing_SM_SHIFT (8U)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_RESET_FENCING_SM_MASK (0xFF00U)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_RESET_FENCING_SM_SHIFT (8U)
 /*! CSI0_Reset_Fencing_SM - SW reset of Fencing state machine. One per Virtual channel.[8] : Virtual channel 0...[15]: Virtual channel 7 */
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Reset_Fencing_SM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Reset_Fencing_SM_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_Reset_Fencing_SM_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_RESET_FENCING_SM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_RESET_FENCING_SM_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_CTRL_CSI0_RESET_FENCING_SM_MASK)
 /*! @} */
 
 /*! @name CSI0_STREAM_FENCING_STATUS - Stream fencing status. */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_Fencing_Status_MASK (0xFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_Fencing_Status_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_FENCING_STATUS_MASK (0xFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_FENCING_STATUS_SHIFT (0U)
 /*! CSI0_Fencing_Status - Indicates when a virtual channel is fenced when set to '1'. [0] VC0 is fenced...[7] VC7 is fenced */
-#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_Fencing_Status(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_Fencing_Status_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_Fencing_Status_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_FENCING_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_FENCING_STATUS_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_STREAM_FENCING_STATUS_CSI0_FENCING_STATUS_MASK)
 /*! @} */
 
-/*! @name CSI0_NP_data_type_VC - CSI0 VC0 non-pixel data type..CSI0 VC7 non-pixel data type */
+/*! @name CSI0_NP_DATA_TYPE_VC - CSI0 VC0 non-pixel data type..CSI0 VC7 non-pixel data type */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC0_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC0_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC0_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC0_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC0_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC0_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC0_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC0_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC0_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC0_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC0_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC1_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC1_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC1_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC1_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC1_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC1_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC1_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC1_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC1_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC1_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC1_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC2_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC2_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC2_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC2_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC2_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC2_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC2_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC2_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC2_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC2_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC2_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC3_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC3_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC3_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC3_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC3_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC3_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC3_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC3_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC3_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC3_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC3_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC4_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC4_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC4_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC4_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC4_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC4_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC4_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC4_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC4_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC4_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC4_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC5_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC5_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC5_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC5_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC5_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC5_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC5_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC5_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC5_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC5_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC5_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC6_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC6_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC6_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC6_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC6_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC6_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC6_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC6_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC6_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC6_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC6_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC7_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC7_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC7_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC7_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI0_VC7_NP_data_type_en - Enables transport of non-pixel data on pixel link. */
-#define BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC7_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC7_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_data_type_VC_CSI0_VC7_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC7_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC7_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NP_DATA_TYPE_VC_CSI0_VC7_NP_DATA_TYPE_EN_MASK)
 /*! @} */
 
-/*! @name CSI0_Pixel_data_ctrl_VC - CSI0 Pixel Data Control VC0..CSI0 Pixel Data Control VC7 */
+/*! @name CSI0_PIXEL_DATA_CTRL_VC - CSI0 Pixel Data Control VC0..CSI0 Pixel Data Control VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT (0U)
 /*! Reroute_VC - Defines if the pixel data are routed to another VC or not
  *  0b0..Pixel data are not re-routed.
  *  0b1..Pixel are routed to VC defined by New_VC.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC_MASK (0xEU)
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC_SHIFT (1U)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC_MASK (0xEU)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT (1U)
 /*! New_VC - Defines the virtual channel on which the pixel data are transported */
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC_MASK)
 /*! @} */
 
-/*! @name CSI0_Route_Pixel_data_type_VC - CSI0 Route Pixel Data Type VC0..CSI0 Route Pixel Data Type VC7 */
+/*! @name CSI0_ROUTE_PIXEL_DATA_TYPE_VC - CSI0 Route Pixel Data Type VC0..CSI0 Route Pixel Data Type VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_Others_MASK (0x1FFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_Others_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_MASK (0x1FFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_SHIFT (0U)
 /*! Others - Route other pixel data type enable */
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_Others(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_Others_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_Others_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_RAW_MASK (0xFF8000U)
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_RAW_SHIFT (15U)
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_RAW_MASK (0xFF8000U)
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_RAW_SHIFT (15U)
 /*! RAW - Route RAW pixel data type enable */
-#define BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_RAW(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_RAW_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Route_Pixel_data_type_VC_RAW_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_RAW(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_RAW_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_ROUTE_PIXEL_DATA_TYPE_VC_RAW_MASK)
 /*! @} */
 
-/*! @name CSI0_Non_Pixel_data_ctrl_VC - CSI0 Non-Pixel Data Control VC0..CSI0 Non-Pixel Data Control VC7 */
+/*! @name CSI0_NON_PIXEL_DATA_CTRL_VC - CSI0 Non-Pixel Data Control VC0..CSI0 Non-Pixel Data Control VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT (0U)
 /*! Reroute_VC - Defines if the non-pixel data are routed to another VC or not
  *  0b0..Non-pixel data are not re-routed.
  *  0b1..Non-pixel data are routed to VC defined by New_VC.
  */
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC_MASK (0xEU)
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC_SHIFT (1U)
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC_MASK (0xEU)
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT (1U)
 /*! New_VC - Defines the virtual channel on which the non-pixel data are transported */
-#define BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC_MASK)
 /*! @} */
 
-/*! @name CSI0_Pixel_data_type_VC - CSI0 Pixel Data Type VC0..CSI0 Pixel Data Type VC7 */
+/*! @name CSI0_PIXEL_DATA_TYPE_VC - CSI0 Pixel Data Type VC0..CSI0 Pixel Data Type VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_type_enable_MASK (0xFFFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_type_enable_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_MASK (0xFFFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_SHIFT (0U)
 /*! type_enable - Pixel data type enable */
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_type_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_type_enable_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_VC_type_enable_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_TYPE_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_MASK)
 /*! @} */
 
-/*! @name CSI0_Pixel_data_type_err_VC - CSI0 Pixel Data Type Error VC0..CSI0 Pixel Data Type Error VC7 */
+/*! @name CSI0_PIXEL_DATA_TYPE_ERR_VC - CSI0 Pixel Data Type Error VC0..CSI0 Pixel Data Type Error VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_type_error_MASK (0xFFFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_type_error_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_MASK (0xFFFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_SHIFT (0U)
 /*! type_error - Pixel data type error */
-#define BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_type_error(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_type_error_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_type_err_VC_type_error_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_MASK)
 /*! @} */
 
 /*! @name CSI1_VC_INTERLACED_LINE_COUNT_SET - Virtual Channel interlaced Line count */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_MASK (0x3FFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_MASK (0x3FFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_SHIFT (0U)
 /*! Odd_line_count - Odd line count */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Odd_line_count_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_ODD_LINE_COUNT_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_MASK (0x3FFF0000U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_SHIFT (16U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_MASK (0x3FFF0000U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_SHIFT (16U)
 /*! Even_line_count - Even line count */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Even_line_count(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_Even_line_count_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_LINE_COUNT_SET_EVEN_LINE_COUNT_MASK)
 /*! @} */
 
 /*! @name CSI1_VC_INTERLACED_CTRL - CSI1 VC Interlaced Control */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_interlace_mode_MASK (0x3U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_interlace_mode_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_INTERLACE_MODE_MASK (0x3U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_INTERLACE_MODE_SHIFT (0U)
 /*! CSI1_VC0_interlace_mode - CSI1 VC0 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC0_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_interlace_mode_MASK (0xCU)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_interlace_mode_SHIFT (2U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_INTERLACE_MODE_MASK (0xCU)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_INTERLACE_MODE_SHIFT (2U)
 /*! CSI1_VC1_interlace_mode - CSI1 VC1 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC1_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_interlace_mode_MASK (0x30U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_interlace_mode_SHIFT (4U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_INTERLACE_MODE_MASK (0x30U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_INTERLACE_MODE_SHIFT (4U)
 /*! CSI1_VC2_interlace_mode - CSI1 VC2 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC2_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_interlace_mode_MASK (0xC0U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_interlace_mode_SHIFT (6U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_INTERLACE_MODE_MASK (0xC0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_INTERLACE_MODE_SHIFT (6U)
 /*! CSI1_VC3_interlace_mode - CSI1 VC3 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC3_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_interlace_mode_MASK (0x300U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_interlace_mode_SHIFT (8U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_INTERLACE_MODE_MASK (0x300U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_INTERLACE_MODE_SHIFT (8U)
 /*! CSI1_VC4_interlace_mode - CSI1 VC4 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC4_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_interlace_mode_MASK (0xC00U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_interlace_mode_SHIFT (10U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_INTERLACE_MODE_MASK (0xC00U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_INTERLACE_MODE_SHIFT (10U)
 /*! CSI1_VC5_interlace_mode - CSI1 VC5 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC5_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_interlace_mode_MASK (0x3000U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_interlace_mode_SHIFT (12U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_INTERLACE_MODE_MASK (0x3000U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_INTERLACE_MODE_SHIFT (12U)
 /*! CSI1_VC6_interlace_mode - CSI1 VC6 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC6_INTERLACE_MODE_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_interlace_mode_MASK (0xC000U)
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_interlace_mode_SHIFT (14U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_INTERLACE_MODE_MASK (0xC000U)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_INTERLACE_MODE_SHIFT (14U)
 /*! CSI1_VC7_interlace_mode - CSI1 VC7 interlace mode
  *  0b00..Virtual Channel is not interlaced : pixel link interlaced/not control field is set 2b00
  *  0b01..Virtual Channel is interlaced and generation done according to the CSI2 frame number
  *  0b10..Virtual Channel is interlaced and generation done according to the number of lines received during one frame
  *  0b11..Virtual Channel is interlaced. First received frame is considered as ODD.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_interlace_mode(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_interlace_mode_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_interlace_mode_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_INTERLACE_MODE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_INTERLACE_MODE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_VC_INTERLACED_CTRL_CSI1_VC7_INTERLACE_MODE_MASK)
 /*! @} */
 
 /*! @name CSI1_VC_INTERLACED_ERROR - CSI1 VC Interlaced Error */
@@ -1432,130 +1402,130 @@ typedef struct {
 /*! @name CSI1_STREAM_FENCING_CTRL - Stream fencing control. */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Fencing_Control_MASK (0xFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Fencing_Control_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_FENCING_CONTROL_MASK (0xFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_FENCING_CONTROL_SHIFT (0U)
 /*! CSI1_Fencing_Control - [0] Fence VC0...[7] Fence VC7 */
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Fencing_Control(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Fencing_Control_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Fencing_Control_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_FENCING_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_FENCING_CONTROL_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_FENCING_CONTROL_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Reset_Fencing_SM_MASK (0xFF00U)
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Reset_Fencing_SM_SHIFT (8U)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_RESET_FENCING_SM_MASK (0xFF00U)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_RESET_FENCING_SM_SHIFT (8U)
 /*! CSI1_Reset_Fencing_SM - SW reset of Fencing state machine. One per Virtual channel.[8] : Virtual channel 0...[15]: Virtual channel 7 */
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Reset_Fencing_SM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Reset_Fencing_SM_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_Reset_Fencing_SM_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_RESET_FENCING_SM(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_RESET_FENCING_SM_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_CTRL_CSI1_RESET_FENCING_SM_MASK)
 /*! @} */
 
 /*! @name CSI1_STREAM_FENCING_STATUS - Stream fencing status. */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_Fencing_Status_MASK (0xFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_Fencing_Status_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_FENCING_STATUS_MASK (0xFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_FENCING_STATUS_SHIFT (0U)
 /*! CSI1_Fencing_Status - Indicates when a virtual channel is fenced when set to '1'. [0] VC0 is fenced...[7] VC7 is fenced */
-#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_Fencing_Status(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_Fencing_Status_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_Fencing_Status_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_FENCING_STATUS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_FENCING_STATUS_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_STREAM_FENCING_STATUS_CSI1_FENCING_STATUS_MASK)
 /*! @} */
 
-/*! @name CSI1_NP_data_type_VC - CSI1 VC0 non-pixel data type..CSI1 VC7 non-pixel data type */
+/*! @name CSI1_NP_DATA_TYPE_VC - CSI1 VC0 non-pixel data type..CSI1 VC7 non-pixel data type */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC0_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC0_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC0_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC0_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC0_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC0_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC0_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC0_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC0_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC0_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC0_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC1_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC1_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC1_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC1_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC1_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC1_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC1_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC1_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC1_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC1_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC1_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC2_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC2_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC2_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC2_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC2_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC2_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC2_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC2_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC2_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC2_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC2_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC3_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC3_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC3_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC3_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC3_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC3_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC3_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC3_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC3_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC3_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC3_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC4_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC4_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC4_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC4_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC4_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC4_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC4_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC4_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC4_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC4_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC4_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC5_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC5_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC5_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC5_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC5_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC5_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC5_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC5_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC5_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC5_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC5_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC6_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC6_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC6_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC6_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC6_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC6_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC6_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC6_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC6_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC6_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC6_NP_DATA_TYPE_EN_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC7_NP_data_type_en_MASK (0x3FFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC7_NP_data_type_en_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC7_NP_DATA_TYPE_EN_MASK (0x3FFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC7_NP_DATA_TYPE_EN_SHIFT (0U)
 /*! CSI1_VC7_NP_data_type_en - Enables transport of non-pixel data on pixel link */
-#define BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC7_NP_data_type_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC7_NP_data_type_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_data_type_VC_CSI1_VC7_NP_data_type_en_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC7_NP_DATA_TYPE_EN(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC7_NP_DATA_TYPE_EN_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NP_DATA_TYPE_VC_CSI1_VC7_NP_DATA_TYPE_EN_MASK)
 /*! @} */
 
-/*! @name CSI1_Pixel_data_ctrl_VC - Control of the routing of the pixel data on Pixel link virtual channel. */
+/*! @name CSI1_PIXEL_DATA_CTRL_VC - Control of the routing of the pixel data on Pixel link virtual channel. */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_Reroute_VC_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_Reroute_VC_SHIFT (0U)
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_Reroute_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_Reroute_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_Reroute_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_REROUTE_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_New_VC_MASK (0xEU)
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_New_VC_SHIFT (1U)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_NEW_VC_MASK (0xEU)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT (1U)
 /*! New_VC - Defines the virtual channel on which the pixel data are transported */
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_New_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_New_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_ctrl_VC_New_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_NEW_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_CTRL_VC_NEW_VC_MASK)
 /*! @} */
 
-/*! @name CSI1_Route_Pixel_data_type_VC - CSI1 Route Pixel Data Type VC0..CSI1 Route Pixel Data Type VC7 */
+/*! @name CSI1_ROUTE_PIXEL_DATA_TYPE_VC - CSI1 Route Pixel Data Type VC0..CSI1 Route Pixel Data Type VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_Others_MASK (0x1FFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_Others_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_MASK (0x1FFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_SHIFT (0U)
 /*! Others - Route other pixel data type enable */
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_Others(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_Others_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_Others_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_OTHERS_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_RAW_MASK (0xFF8000U)
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_RAW_SHIFT (15U)
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_RAW_MASK (0xFF8000U)
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_RAW_SHIFT (15U)
 /*! RAW - Route RAW pixel data type enable */
-#define BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_RAW(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_RAW_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Route_Pixel_data_type_VC_RAW_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_RAW(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_RAW_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_ROUTE_PIXEL_DATA_TYPE_VC_RAW_MASK)
 /*! @} */
 
-/*! @name CSI1_Non_Pixel_data_ctrl_VC - CSI1 Non-Pixel Data Control VC0..CSI1 Non-Pixel Data Control VC7 */
+/*! @name CSI1_NON_PIXEL_DATA_CTRL_VC - CSI1 Non-Pixel Data Control VC0..CSI1 Non-Pixel Data Control VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_Reroute_VC_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_Reroute_VC_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT (0U)
 /*! Reroute_VC - Defines if the non-pixel data are routed to another VC or not
  *  0b0..Non-pixel data are not re-routed.
  *  0b1..Non-pixel data are routed to VC defined by New_VC.
  */
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_Reroute_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_Reroute_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_Reroute_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC_MASK)
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_New_VC_MASK (0xEU)
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_New_VC_SHIFT (1U)
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_NEW_VC_MASK (0xEU)
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT (1U)
 /*! New_VC - Defines the virtual channel on which the non-pixel data are transported */
-#define BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_New_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_New_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Non_Pixel_data_ctrl_VC_New_VC_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_NEW_VC(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_NEW_VC_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_NON_PIXEL_DATA_CTRL_VC_NEW_VC_MASK)
 /*! @} */
 
-/*! @name CSI1_Pixel_data_type_VC - CSI1 Pixel Data Type VC0..CSI1 Pixel Data Type VC7 */
+/*! @name CSI1_PIXEL_DATA_TYPE_VC - CSI1 Pixel Data Type VC0..CSI1 Pixel Data Type VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_type_enable_MASK (0xFFFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_type_enable_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_MASK (0xFFFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_SHIFT (0U)
 /*! type_enable - Pixel data type enable */
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_type_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_type_enable_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_VC_type_enable_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_TYPE_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_VC_TYPE_ENABLE_MASK)
 /*! @} */
 
-/*! @name CSI1_Pixel_data_type_err_VC - CSI1 Pixel Data Type Error VC0..CSI1 Pixel Data Type Error VC7 */
+/*! @name CSI1_PIXEL_DATA_TYPE_ERR_VC - CSI1 Pixel Data Type Error VC0..CSI1 Pixel Data Type Error VC7 */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_type_error_MASK (0xFFFFFFU)
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_type_error_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_MASK (0xFFFFFFU)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_SHIFT (0U)
 /*! type_error - Pixel data type error */
-#define BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_type_error(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_type_error_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_Pixel_data_type_err_VC_type_error_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_PIXEL_DATA_TYPE_ERR_VC_TYPE_ERROR_MASK)
 /*! @} */
 
 /*! @name CSI0_PIXEL_LINK_RAW10_FORMAT - Pixel link RAW10 format */
@@ -1579,147 +1549,19 @@ typedef struct {
 /*! @name CSI0_BUFFER_OVERFLOW - Buffer Overflow */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_Buffer_Overflow_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_Buffer_Overflow_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_BUFFER_OVERFLOW_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_BUFFER_OVERFLOW_SHIFT (0U)
 /*! Buffer_Overflow - Set when the rate adaptation buffer overflows */
-#define BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_Buffer_Overflow(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_Buffer_Overflow_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_Buffer_Overflow_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_BUFFER_OVERFLOW(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_BUFFER_OVERFLOW_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI0_BUFFER_OVERFLOW_BUFFER_OVERFLOW_MASK)
 /*! @} */
 
 /*! @name CSI1_BUFFER_OVERFLOW - Buffer Overflow */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_Buffer_Overflow_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_Buffer_Overflow_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_BUFFER_OVERFLOW_MASK (0x1U)
+#define BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_BUFFER_OVERFLOW_SHIFT (0U)
 /*! Buffer_Overflow - Set when the rate adaptation buffer overflows */
-#define BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_Buffer_Overflow(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_Buffer_Overflow_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_Buffer_Overflow_MASK)
-/*! @} */
-
-/*! @name CM0P_ADDR_OFFSET1 - Cortex-M0+ Address Offset 1 */
-/*! @{ */
-
-#define BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET1_OFFSET_MASK (0xFFFFFF00U)
-#define BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET1_OFFSET_SHIFT (8U)
-/*! OFFSET - CM0P_ADDR_OFFSET1 */
-#define BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET1_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET1_OFFSET_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET1_OFFSET_MASK)
-/*! @} */
-
-/*! @name CM0P_ADDR_OFFSET2 - Cortex-M0+ Address Offset 2 */
-/*! @{ */
-
-#define BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET2_OFFSET_MASK (0xFFFFFF00U)
-#define BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET2_OFFSET_SHIFT (8U)
-/*! OFFSET - CM0P_ADDR_OFFSET2 */
-#define BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET2_OFFSET(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET2_OFFSET_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_ADDR_OFFSET2_OFFSET_MASK)
-/*! @} */
-
-/*! @name CM0P_CPUWAIT - Cortex-M0+ CPUWAIT */
-/*! @{ */
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_CPW_MASK (0x1U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_CPW_SHIFT (0U)
-/*! CPW - Controls CM0P CPUWAIT input signal
- *  0b0..Processor is running
- *  0b1..Processor is waiting
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_CPW(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_CPW_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_CPW_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_RST_MASK (0x2U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_RST_SHIFT (1U)
-/*! RST - Software reset of CM0P core and LPCAC
- *  0b0..CM0P logic is held in reset
- *  0b1..CM0P logic is not in reset
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_RST(x)   (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_RST_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CPUWAIT_RST_MASK)
-/*! @} */
-
-/*! @name CM0P_CTL - Cortex-M0+ Control */
-/*! @{ */
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_ILT_MASK     (0x3FCU)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_ILT_SHIFT    (2U)
-/*! ILT - Controls the CM0Px IRQLATENCY[7:0] input */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_ILT(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_ILT_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_ILT_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_CLR_MASK     (0x400U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_CLR_SHIFT    (10U)
-/*! CLR - Clear LPCAC data cache (clr_lpcac)
- *  0b0..Disable clear of LPCAC data cache
- *  0b1..Enable clear LPCAC data cache
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_CLR(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_CLR_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_CLR_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_NAL_MASK     (0x800U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_NAL_SHIFT    (11U)
-/*! NAL - Disable LPCAC data cache allocation (frc_no_alloc)
- *  0b0..Enable LPCAC data cache allocation
- *  0b1..Disable LPCAC data cache allocation (Bit DWB also needs to be set to '1')
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_NAL(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_NAL_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_NAL_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_DWB_MASK     (0x1000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_DWB_SHIFT    (12U)
-/*! DWB - Disable LPCAC write buffer (dis_lpcac_wtbf)
- *  0b0..Enable write buffer
- *  0b1..Disable write buffer
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_DWB(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_DWB_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_DWB_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_DIS_MASK     (0x2000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_DIS_SHIFT    (13U)
-/*! DIS - Disable LPCAC (dis_lpcac)
- *  0b0..Enable LPCAC
- *  0b1..Disable LPCAC
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_DIS(x)       (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_DIS_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_DIS_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_Boot_MASK    (0x8000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_Boot_SHIFT   (15U)
-/*! Boot - Boot source
- *  0b0..Boot from OCRAM_L
- *  0b1..Boot from DDR
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_Boot(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_Boot_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_Boot_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_lim_lpcac_wtbf_MASK (0x10000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_lim_lpcac_wtbf_SHIFT (16U)
-/*! lim_lpcac_wtbf - Limit write buffer (lim_lpcac_wtbf)
- *  0b0..If write buffer is enabled, buffer all writes to spaces that are bufferable.
- *  0b1..If write buffer is enabled, buffer all writes to spaces that are both bufferable and cacheable.
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_lim_lpcac_wtbf(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_lim_lpcac_wtbf_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_lim_lpcac_wtbf_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_miss_en_MASK (0x20000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_miss_en_SHIFT (17U)
-/*! parity_miss_en - Miss on error (parity_miss_en)
- *  0b0..Disable parity generation, parity checking, and recovery from parity faults
- *  0b1..Enable parity generation, parity checking, and recovery from parity faults
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_miss_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_miss_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_miss_en_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_fault_en_MASK (0x40000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_fault_en_SHIFT (18U)
-/*! parity_fault_en - Enable parity error reporting
- *  0b0..Disable parity errors and parity error related information reporting
- *  0b1..Enable parity errors and parity error related information reporting
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_fault_en(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_fault_en_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_parity_fault_en_MASK)
-
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_OCRAM__in_init_req_MASK (0x80000U)
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_OCRAM__in_init_req_SHIFT (19U)
-/*! OCRAM__in_init_req - OCRAM Initialization request */
-#define BLK_CTRL_CAMERAMIX_CM0P_CTL_OCRAM__in_init_req(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_CTL_OCRAM__in_init_req_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_CTL_OCRAM__in_init_req_MASK)
-/*! @} */
-
-/*! @name CM0P_STAT - Cortex-M0+ Status */
-/*! @{ */
-
-#define BLK_CTRL_CAMERAMIX_CM0P_STAT_LKP_MASK    (0x1U)
-#define BLK_CTRL_CAMERAMIX_CM0P_STAT_LKP_SHIFT   (0U)
-/*! LKP - CM0P LOCKUP output signal value
- *  0b0..Processor is not in lockup state
- *  0b1..Processor is in lockup state, as a result of an unrecoverable exception
- */
-#define BLK_CTRL_CAMERAMIX_CM0P_STAT_LKP(x)      (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CM0P_STAT_LKP_SHIFT)) & BLK_CTRL_CAMERAMIX_CM0P_STAT_LKP_MASK)
+#define BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_BUFFER_OVERFLOW(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_BUFFER_OVERFLOW_SHIFT)) & BLK_CTRL_CAMERAMIX_CSI1_BUFFER_OVERFLOW_BUFFER_OVERFLOW_MASK)
 /*! @} */
 
 /*! @name LPCAC_ERROR - LPCAC Error */
@@ -1766,13 +1608,13 @@ typedef struct {
 /*! @name ISP_CONFIG - ISP Configuration */
 /*! @{ */
 
-#define BLK_CTRL_CAMERAMIX_ISP_CONFIG_Pixel_link_sel_MASK (0x3U)
-#define BLK_CTRL_CAMERAMIX_ISP_CONFIG_Pixel_link_sel_SHIFT (0U)
+#define BLK_CTRL_CAMERAMIX_ISP_CONFIG_PIXEL_LINK_SEL_MASK (0x3U)
+#define BLK_CTRL_CAMERAMIX_ISP_CONFIG_PIXEL_LINK_SEL_SHIFT (0U)
 /*! Pixel_link_sel - Select the pixel link connected to the ISP
  *  0b00..CSI Pixel Link 0 is connected to the ISP
  *  0b01..CSI Pixel Link 1 is connected to the ISP
  */
-#define BLK_CTRL_CAMERAMIX_ISP_CONFIG_Pixel_link_sel(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CONFIG_Pixel_link_sel_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CONFIG_Pixel_link_sel_MASK)
+#define BLK_CTRL_CAMERAMIX_ISP_CONFIG_PIXEL_LINK_SEL(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_CAMERAMIX_ISP_CONFIG_PIXEL_LINK_SEL_SHIFT)) & BLK_CTRL_CAMERAMIX_ISP_CONFIG_PIXEL_LINK_SEL_MASK)
 /*! @} */
 
 

@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for M7_A7_PPB_MCM
@@ -424,17 +424,17 @@ typedef struct {
 
 #define M7_A7_PPB_MCM_ISCR_WABS_MASK             (0x20U)
 #define M7_A7_PPB_MCM_ISCR_WABS_SHIFT            (5U)
-/*! WABS - Write Abort on Slave
- *  0b0..No abort
- *  0b1..Abort
+/*! WABS - Write Stop on Target
+ *  0b0..Not stopped
+ *  0b1..Stopped
  */
 #define M7_A7_PPB_MCM_ISCR_WABS(x)               (((uint32_t)(((uint32_t)(x)) << M7_A7_PPB_MCM_ISCR_WABS_SHIFT)) & M7_A7_PPB_MCM_ISCR_WABS_MASK)
 
 #define M7_A7_PPB_MCM_ISCR_WABSO_MASK            (0x40U)
 #define M7_A7_PPB_MCM_ISCR_WABSO_SHIFT           (6U)
-/*! WABSO - Write Abort on Slave Overrun
- *  0b0..No write abort overrun
- *  0b1..Write abort overrun occurred
+/*! WABSO - Write Stop on Target Overrun
+ *  0b0..No write stop overrun
+ *  0b1..Write stop overrun occurred
  */
 #define M7_A7_PPB_MCM_ISCR_WABSO(x)              (((uint32_t)(((uint32_t)(x)) << M7_A7_PPB_MCM_ISCR_WABSO_SHIFT)) & M7_A7_PPB_MCM_ISCR_WABSO_MASK)
 
@@ -488,7 +488,7 @@ typedef struct {
 
 #define M7_A7_PPB_MCM_ISCR_WABE_MASK             (0x200000U)
 #define M7_A7_PPB_MCM_ISCR_WABE_SHIFT            (21U)
-/*! WABE - TCM Write Abort Interrupt Enable
+/*! WABE - TCM Write Stop Interrupt Enable
  *  0b0..Disable interrupt
  *  0b1..Enable interrupt
  */

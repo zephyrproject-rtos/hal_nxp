@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -258,10 +258,27 @@ void DCIF_SetCscMode(DCIF_Type *base, dcif_csc_mode_t mode)
 void DCIF_SetLayerBufferConfig(DCIF_Type *base, uint8_t layerIndex, const dcif_buffer_config_t *config)
 {
     assert(NULL != config);
+    assert(layerIndex < 2U);
     uint32_t reg;
-    base->CTRLDESC3_L1 = config->strideBytes;
-    reg = base->CTRLDESC0_L1;
-    reg = (reg & ~(DCIF_CTRLDESC0_L1_FORMAT_MASK | DCIF_CTRLDESC0_L1_YUV_FORMAT_MASK | DCIF_CTRLDESC0_L1_GLOBAL_ALPHA_MASK | DCIF_CTRLDESC0_L1_AB_MODE_MASK))
-	    | (uint32_t)config->pixelFormat | DCIF_CTRLDESC0_L1_GLOBAL_ALPHA(config->globalAlpha) | DCIF_CTRLDESC0_L1_AB_MODE(1U);
-    base->CTRLDESC0_L1 = reg;
+    if (layerIndex == 0U)
+    {
+        base->CTRLDESC3_L0 = config->strideBytes;
+        reg = base->CTRLDESC0_L0;
+        reg = (reg & ~(DCIF_CTRLDESC0_L0_FORMAT_MASK | DCIF_CTRLDESC0_L0_YUV_FORMAT_MASK | DCIF_CTRLDESC0_L0_GLOBAL_ALPHA_MASK | DCIF_CTRLDESC0_L0_AB_MODE_MASK))
+                | (uint32_t)config->pixelFormat | DCIF_CTRLDESC0_L0_GLOBAL_ALPHA(config->globalAlpha) | DCIF_CTRLDESC0_L0_AB_MODE(1U);
+        base->CTRLDESC0_L0 = reg;
+    }
+    else if (layerIndex == 1U)
+    {
+        base->CTRLDESC3_L1 = config->strideBytes;
+        reg = base->CTRLDESC0_L1;
+        reg = (reg & ~(DCIF_CTRLDESC0_L1_FORMAT_MASK | DCIF_CTRLDESC0_L1_YUV_FORMAT_MASK | DCIF_CTRLDESC0_L1_GLOBAL_ALPHA_MASK | DCIF_CTRLDESC0_L1_AB_MODE_MASK))
+                | (uint32_t)config->pixelFormat | DCIF_CTRLDESC0_L1_GLOBAL_ALPHA(config->globalAlpha) | DCIF_CTRLDESC0_L1_AB_MODE(1U);
+        base->CTRLDESC0_L1 = reg;
+    }
+    else
+    {
+        return;
+    }
+
 }

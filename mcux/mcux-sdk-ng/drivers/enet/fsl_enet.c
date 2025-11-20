@@ -3089,7 +3089,8 @@ void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
 
         handle->msTimerSecond += secondDiff;
         base->ATVR = nanosecondTime % ENET_NANOSECOND_ONE_SECOND;
-    } else
+    }
+    else
     {
         /* Note that nanosecondDiff + (int64_t)nanosecondTime does not result in an overflow
          * as nanosecondDiff < 0 and 0 <= nanosecondTime < 1e9. */
@@ -3100,7 +3101,7 @@ void ENET_Ptp1588JumpTimer(ENET_Type *base, int64_t nanosecondDiff)
         nanosecondTime += (int32_t)(nanosecondDiff % (int64_t)ENET_NANOSECOND_ONE_SECOND);
 
         /* Avoid negative overflow by setting PTP time to zero in this case */
-        if (handle->msTimerSecond < INT64_MAX && (int64_t)handle->msTimerSecond < -secondDiff)
+        if (handle->msTimerSecond < (uint64_t)INT64_MAX && (int64_t)handle->msTimerSecond < -secondDiff)
         {
             handle->msTimerSecond = 0;
             base->ATVR = 0;

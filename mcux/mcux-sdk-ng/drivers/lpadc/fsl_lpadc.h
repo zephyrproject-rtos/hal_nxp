@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LPADC driver version 2.9.3. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 9, 3))
+/*! @brief LPADC driver version 2.9.4. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 9, 4))
 /*! @} */
 
 /*! @name Configuration */
@@ -445,6 +445,7 @@ typedef enum _lpadc_conversion_average_mode
     kLPADC_ConversionAverage1024 = 10U, /*!< 1024 conversions averaged. */
 #endif                                  /*  (defined(FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH) && \
                                             (FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH == 4U))*/
+    kLPADC_ConversionAverageMax,
 } lpadc_conversion_average_mode_t;
 #endif /* defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
 

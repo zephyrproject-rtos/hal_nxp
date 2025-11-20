@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief POWER driver version 2.5.3. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
+/*! @brief POWER driver version 2.6.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /*!
@@ -225,6 +225,11 @@ typedef struct _power_gdet_data
  * @brief Glitch detector configuration load function.
  */
 typedef bool (*power_load_gdet_cfg)(power_gdet_data_t *data);
+
+/*!
+ * @brief Brown-out detector callback function type
+ */
+typedef void (*power_bod_callback)(void *userParam);
 
 #if defined(__cplusplus)
 extern "C" {
@@ -487,6 +492,19 @@ AT_QUICKACCESS_SECTION_CODE(bool POWER_EnableGDetVSensors(void));
  * @param   pack     : Device package type: 0 - QFN, 1 - CSP, 2 - BGA
  */
 uint32_t POWER_TrimSvc(uint32_t gdetTrim, uint32_t pack);
+
+/**
+ * @brief   Enable Brown-out Detection (BoD) monitor with callback functions. The callback will be called in ISR context.
+ * @param   drop    : callback function called when voltage drops below threshold
+ * @param   recover : callback function called when voltage recovers above threshold
+ * @param   userParam : user parameter passed to callback functions
+ */
+void POWER_EnableBodMonitor(power_bod_callback drop, power_bod_callback recover, void *userParam);
+
+/**
+ * @brief   Disable Brown-out Detection (BoD) monitor
+ */
+void POWER_DisableBodMonitor(void);
 
 #if defined(__cplusplus)
 }

@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TMPSNS
@@ -453,15 +453,6 @@ typedef struct {
   __IO uint32_t PUD_ST_CTRL_SET;                   /**< Power-Up Delay Control, offset: 0x2B4 */
   __IO uint32_t PUD_ST_CTRL_CLR;                   /**< Power-Up Delay Control, offset: 0x2B8 */
   __IO uint32_t PUD_ST_CTRL_TOG;                   /**< Power-Up Delay Control, offset: 0x2BC */
-       uint8_t RESERVED_4[32];
-  __IO uint32_t TRIM1;                             /**< Trim Control 1, offset: 0x2E0 */
-  __IO uint32_t TRIM1_SET;                         /**< Trim Control 1, offset: 0x2E4 */
-  __IO uint32_t TRIM1_CLR;                         /**< Trim Control 1, offset: 0x2E8 */
-  __IO uint32_t TRIM1_TOG;                         /**< Trim Control 1, offset: 0x2EC */
-  __IO uint32_t TRIM2;                             /**< Trim Control 2, offset: 0x2F0 */
-  __IO uint32_t TRIM2_SET;                         /**< Trim Control 2, offset: 0x2F4 */
-  __IO uint32_t TRIM2_CLR;                         /**< Trim Control 2, offset: 0x2F8 */
-  __IO uint32_t TRIM2_TOG;                         /**< Trim Control 2, offset: 0x2FC */
 } TMPSNS_Type;
 
 /* ----------------------------------------------------------------------------
@@ -1727,118 +1718,6 @@ typedef struct {
 #define TMPSNS_PUD_ST_CTRL_TOG_PUD_SHIFT         (16U)
 /*! PUD - Power-Up Delay */
 #define TMPSNS_PUD_ST_CTRL_TOG_PUD(x)            (((uint32_t)(((uint32_t)(x)) << TMPSNS_PUD_ST_CTRL_TOG_PUD_SHIFT)) & TMPSNS_PUD_ST_CTRL_TOG_PUD_MASK)
-/*! @} */
-
-/*! @name TRIM1 - Trim Control 1 */
-/*! @{ */
-
-#define TMPSNS_TRIM1_VAL_A_MASK                  (0xFFFFU)
-#define TMPSNS_TRIM1_VAL_A_SHIFT                 (0U)
-/*! VAL_A - VAL_A */
-#define TMPSNS_TRIM1_VAL_A(x)                    (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_VAL_A_SHIFT)) & TMPSNS_TRIM1_VAL_A_MASK)
-
-#define TMPSNS_TRIM1_VAL_B_MASK                  (0xFFFF0000U)
-#define TMPSNS_TRIM1_VAL_B_SHIFT                 (16U)
-/*! VAL_B - VAL_B */
-#define TMPSNS_TRIM1_VAL_B(x)                    (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_VAL_B_SHIFT)) & TMPSNS_TRIM1_VAL_B_MASK)
-/*! @} */
-
-/*! @name TRIM1_SET - Trim Control 1 */
-/*! @{ */
-
-#define TMPSNS_TRIM1_SET_VAL_A_MASK              (0xFFFFU)
-#define TMPSNS_TRIM1_SET_VAL_A_SHIFT             (0U)
-/*! VAL_A - VAL_A */
-#define TMPSNS_TRIM1_SET_VAL_A(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_SET_VAL_A_SHIFT)) & TMPSNS_TRIM1_SET_VAL_A_MASK)
-
-#define TMPSNS_TRIM1_SET_VAL_B_MASK              (0xFFFF0000U)
-#define TMPSNS_TRIM1_SET_VAL_B_SHIFT             (16U)
-/*! VAL_B - VAL_B */
-#define TMPSNS_TRIM1_SET_VAL_B(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_SET_VAL_B_SHIFT)) & TMPSNS_TRIM1_SET_VAL_B_MASK)
-/*! @} */
-
-/*! @name TRIM1_CLR - Trim Control 1 */
-/*! @{ */
-
-#define TMPSNS_TRIM1_CLR_VAL_A_MASK              (0xFFFFU)
-#define TMPSNS_TRIM1_CLR_VAL_A_SHIFT             (0U)
-/*! VAL_A - VAL_A */
-#define TMPSNS_TRIM1_CLR_VAL_A(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_CLR_VAL_A_SHIFT)) & TMPSNS_TRIM1_CLR_VAL_A_MASK)
-
-#define TMPSNS_TRIM1_CLR_VAL_B_MASK              (0xFFFF0000U)
-#define TMPSNS_TRIM1_CLR_VAL_B_SHIFT             (16U)
-/*! VAL_B - VAL_B */
-#define TMPSNS_TRIM1_CLR_VAL_B(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_CLR_VAL_B_SHIFT)) & TMPSNS_TRIM1_CLR_VAL_B_MASK)
-/*! @} */
-
-/*! @name TRIM1_TOG - Trim Control 1 */
-/*! @{ */
-
-#define TMPSNS_TRIM1_TOG_VAL_A_MASK              (0xFFFFU)
-#define TMPSNS_TRIM1_TOG_VAL_A_SHIFT             (0U)
-/*! VAL_A - VAL_A */
-#define TMPSNS_TRIM1_TOG_VAL_A(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_TOG_VAL_A_SHIFT)) & TMPSNS_TRIM1_TOG_VAL_A_MASK)
-
-#define TMPSNS_TRIM1_TOG_VAL_B_MASK              (0xFFFF0000U)
-#define TMPSNS_TRIM1_TOG_VAL_B_SHIFT             (16U)
-/*! VAL_B - VAL_B */
-#define TMPSNS_TRIM1_TOG_VAL_B(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM1_TOG_VAL_B_SHIFT)) & TMPSNS_TRIM1_TOG_VAL_B_MASK)
-/*! @} */
-
-/*! @name TRIM2 - Trim Control 2 */
-/*! @{ */
-
-#define TMPSNS_TRIM2_VAL_ALPHA_MASK              (0xFFFFU)
-#define TMPSNS_TRIM2_VAL_ALPHA_SHIFT             (0U)
-/*! VAL_ALPHA - VAL_ALPHA */
-#define TMPSNS_TRIM2_VAL_ALPHA(x)                (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_VAL_ALPHA_SHIFT)) & TMPSNS_TRIM2_VAL_ALPHA_MASK)
-
-#define TMPSNS_TRIM2_VAL_OFFSET_MASK             (0xFFFF0000U)
-#define TMPSNS_TRIM2_VAL_OFFSET_SHIFT            (16U)
-/*! VAL_OFFSET - VAL_OFFSET */
-#define TMPSNS_TRIM2_VAL_OFFSET(x)               (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_VAL_OFFSET_SHIFT)) & TMPSNS_TRIM2_VAL_OFFSET_MASK)
-/*! @} */
-
-/*! @name TRIM2_SET - Trim Control 2 */
-/*! @{ */
-
-#define TMPSNS_TRIM2_SET_VAL_ALPHA_MASK          (0xFFFFU)
-#define TMPSNS_TRIM2_SET_VAL_ALPHA_SHIFT         (0U)
-/*! VAL_ALPHA - VAL_ALPHA */
-#define TMPSNS_TRIM2_SET_VAL_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_SET_VAL_ALPHA_SHIFT)) & TMPSNS_TRIM2_SET_VAL_ALPHA_MASK)
-
-#define TMPSNS_TRIM2_SET_VAL_OFFSET_MASK         (0xFFFF0000U)
-#define TMPSNS_TRIM2_SET_VAL_OFFSET_SHIFT        (16U)
-/*! VAL_OFFSET - VAL_OFFSET */
-#define TMPSNS_TRIM2_SET_VAL_OFFSET(x)           (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_SET_VAL_OFFSET_SHIFT)) & TMPSNS_TRIM2_SET_VAL_OFFSET_MASK)
-/*! @} */
-
-/*! @name TRIM2_CLR - Trim Control 2 */
-/*! @{ */
-
-#define TMPSNS_TRIM2_CLR_VAL_ALPHA_MASK          (0xFFFFU)
-#define TMPSNS_TRIM2_CLR_VAL_ALPHA_SHIFT         (0U)
-/*! VAL_ALPHA - VAL_ALPHA */
-#define TMPSNS_TRIM2_CLR_VAL_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_CLR_VAL_ALPHA_SHIFT)) & TMPSNS_TRIM2_CLR_VAL_ALPHA_MASK)
-
-#define TMPSNS_TRIM2_CLR_VAL_OFFSET_MASK         (0xFFFF0000U)
-#define TMPSNS_TRIM2_CLR_VAL_OFFSET_SHIFT        (16U)
-/*! VAL_OFFSET - VAL_OFFSET */
-#define TMPSNS_TRIM2_CLR_VAL_OFFSET(x)           (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_CLR_VAL_OFFSET_SHIFT)) & TMPSNS_TRIM2_CLR_VAL_OFFSET_MASK)
-/*! @} */
-
-/*! @name TRIM2_TOG - Trim Control 2 */
-/*! @{ */
-
-#define TMPSNS_TRIM2_TOG_VAL_ALPHA_MASK          (0xFFFFU)
-#define TMPSNS_TRIM2_TOG_VAL_ALPHA_SHIFT         (0U)
-/*! VAL_ALPHA - VAL_ALPHA */
-#define TMPSNS_TRIM2_TOG_VAL_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_TOG_VAL_ALPHA_SHIFT)) & TMPSNS_TRIM2_TOG_VAL_ALPHA_MASK)
-
-#define TMPSNS_TRIM2_TOG_VAL_OFFSET_MASK         (0xFFFF0000U)
-#define TMPSNS_TRIM2_TOG_VAL_OFFSET_SHIFT        (16U)
-/*! VAL_OFFSET - VAL_OFFSET */
-#define TMPSNS_TRIM2_TOG_VAL_OFFSET(x)           (((uint32_t)(((uint32_t)(x)) << TMPSNS_TRIM2_TOG_VAL_OFFSET_SHIFT)) & TMPSNS_TRIM2_TOG_VAL_OFFSET_MASK)
 /*! @} */
 
 

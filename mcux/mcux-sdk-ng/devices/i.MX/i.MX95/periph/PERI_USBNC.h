@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USBNC
@@ -408,6 +408,9 @@ typedef struct {
   __IO uint32_t CTRL2;                             /**< USB OTG Control 2, offset: 0x4 */
        uint8_t RESERVED_0[40];
   __IO uint32_t UTMIPHY_CFG1;                      /**< PHY Configure 1, offset: 0x30 */
+  __IO uint32_t UTMIPHY_CFG2;                      /**< PHY Configure Register 2, offset: 0x34 */
+       uint8_t RESERVED_1[4];
+  __I  uint32_t UTMIPHY_STATUS;                    /**< PHY Status Register, offset: 0x3C */
 } USBNC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -532,19 +535,19 @@ typedef struct {
 
 #define USBNC_CTRL2_OPMODE_OVERRIDE_MASK         (0xC0U)
 #define USBNC_CTRL2_OPMODE_OVERRIDE_SHIFT        (6U)
-/*! OPMODE_OVERRIDE - utmi_OpMode[1:0] override value
- *  0b00..utmi_OpMode[1:0] override to 2'b00.
- *  0b01..utmi_OpMode[1:0] override to 2'b01.
- *  0b10..utmi_OpMode[1:0] override to 2'b10.
- *  0b11..utmi_OpMode[1:0] override to 2'b11.
+/*! OPMODE_OVERRIDE - UTMI_OpMode[1:0] Override Value
+ *  0b00..Override to 2'b00
+ *  0b01..Override to 2'b01
+ *  0b10..Override to 2'b10
+ *  0b11..Override to 2'b11
  */
 #define USBNC_CTRL2_OPMODE_OVERRIDE(x)           (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL2_OPMODE_OVERRIDE_SHIFT)) & USBNC_CTRL2_OPMODE_OVERRIDE_MASK)
 
 #define USBNC_CTRL2_OPMODE_OVERRIDEEN_MASK       (0x100U)
 #define USBNC_CTRL2_OPMODE_OVERRIDEEN_SHIFT      (8U)
-/*! OPMODE_OVERRIDEEN - utmi_OpMode[1:0] override enable
- *  0b0..utmi_OpMode[1:0] override disable.
- *  0b1..utmi_OpMode[1:0] override enable.
+/*! OPMODE_OVERRIDEEN - UTMI_OpMode[1:0] Override Enable
+ *  0b0..Override disable
+ *  0b1..Override enable
  */
 #define USBNC_CTRL2_OPMODE_OVERRIDEEN(x)         (((uint32_t)(((uint32_t)(x)) << USBNC_CTRL2_OPMODE_OVERRIDEEN_SHIFT)) & USBNC_CTRL2_OPMODE_OVERRIDEEN_MASK)
 
@@ -565,6 +568,15 @@ typedef struct {
 
 /*! @name UTMIPHY_CFG1 - PHY Configure 1 */
 /*! @{ */
+
+#define USBNC_UTMIPHY_CFG1_COMMONONN_MASK        (0x1U)
+#define USBNC_UTMIPHY_CFG1_COMMONONN_SHIFT       (0U)
+/*! COMMONONN - Common Block Power-Down Control
+ *  0b0..In Suspend or Sleep modes, the REFCLK_LOGIC, Bias, and PLL blocks remain powered. With this setting, the
+ *       input reference clock must remain on and valid during suspend or sleep.
+ *  0b1..In Suspend mode, the REFCLK_LOGIC, Bias, and PLL blocks are powered down. In Sleep mode, the Bias and PLL blocks are powered down.
+ */
+#define USBNC_UTMIPHY_CFG1_COMMONONN(x)          (((uint32_t)(((uint32_t)(x)) << USBNC_UTMIPHY_CFG1_COMMONONN_SHIFT)) & USBNC_UTMIPHY_CFG1_COMMONONN_MASK)
 
 #define USBNC_UTMIPHY_CFG1_COMPDISTUNE0_MASK     (0x70U)
 #define USBNC_UTMIPHY_CFG1_COMPDISTUNE0_SHIFT    (4U)
@@ -672,10 +684,10 @@ typedef struct {
 #define USBNC_UTMIPHY_CFG1_TXRESTUNE0_MASK       (0xC000000U)
 #define USBNC_UTMIPHY_CFG1_TXRESTUNE0_SHIFT      (26U)
 /*! TXRESTUNE0 - USB Source Impedance Adjustment
- *  0b00..Source impedance is increased by approximately 1.3 ohm
+ *  0b00..Source impedance increased by approximately 1.3 ohm
  *  0b01..0, design default
- *  0b10..Source impedance is decreased by approximately 3.6 ohm
- *  0b11..Source impedance is decreased by approximately 5.6 ohm
+ *  0b10..Source impedance decreased by approximately 3.6 ohm
+ *  0b11..Source impedance decreased by approximately 5.6 ohm
  */
 #define USBNC_UTMIPHY_CFG1_TXRESTUNE0(x)         (((uint32_t)(((uint32_t)(x)) << USBNC_UTMIPHY_CFG1_TXRESTUNE0_SHIFT)) & USBNC_UTMIPHY_CFG1_TXRESTUNE0_MASK)
 
@@ -696,6 +708,27 @@ typedef struct {
  *  0b1..Short pre-emphasis current duration
  */
 #define USBNC_UTMIPHY_CFG1_TXPREEMPPULSETUNE0(x) (((uint32_t)(((uint32_t)(x)) << USBNC_UTMIPHY_CFG1_TXPREEMPPULSETUNE0_SHIFT)) & USBNC_UTMIPHY_CFG1_TXPREEMPPULSETUNE0_MASK)
+/*! @} */
+
+/*! @name UTMIPHY_CFG2 - PHY Configure Register 2 */
+/*! @{ */
+
+#define USBNC_UTMIPHY_CFG2_DRVVBUS0_MASK         (0x10000U)
+#define USBNC_UTMIPHY_CFG2_DRVVBUS0_SHIFT        (16U)
+/*! DRVVBUS0 - Drive VBUS
+ *  0b0..The VBUS Valid comparator is disabled.
+ *  0b1..The VBUS Valid comparator is enabled.
+ */
+#define USBNC_UTMIPHY_CFG2_DRVVBUS0(x)           (((uint32_t)(((uint32_t)(x)) << USBNC_UTMIPHY_CFG2_DRVVBUS0_SHIFT)) & USBNC_UTMIPHY_CFG2_DRVVBUS0_MASK)
+/*! @} */
+
+/*! @name UTMIPHY_STATUS - PHY Status Register */
+/*! @{ */
+
+#define USBNC_UTMIPHY_STATUS_VBUS_VALID_MASK     (0x8U)
+#define USBNC_UTMIPHY_STATUS_VBUS_VALID_SHIFT    (3U)
+/*! VBUS_VALID - VBUS Valid Signal */
+#define USBNC_UTMIPHY_STATUS_VBUS_VALID(x)       (((uint32_t)(((uint32_t)(x)) << USBNC_UTMIPHY_STATUS_VBUS_VALID_SHIFT)) & USBNC_UTMIPHY_STATUS_VBUS_VALID_MASK)
 /*! @} */
 
 

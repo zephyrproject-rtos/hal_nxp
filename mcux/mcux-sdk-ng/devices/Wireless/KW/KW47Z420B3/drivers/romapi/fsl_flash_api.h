@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 3)) /*!< Version 1.2.3. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(1, 2, 5)) /*!< Version 1.2.5. */
 /*@}*/
 
 /*! @brief Constructs the four character code for the Flash driver API key. */

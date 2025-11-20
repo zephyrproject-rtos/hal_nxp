@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
+ * Copyright 2018-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -33,14 +33,14 @@
     POWERQUAD->TMPBASE   = 0xE0000000U
 
 #define PQ_SET_Q31_CONFIG                                                                               \
-    POWERQUAD->OUTFORMAT = ((uint32_t)(-31) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | (uint32_t)kPQ_Float; \
+    POWERQUAD->OUTFORMAT = ( 0xFFFFFFE1UL << 8U) | ((uint32_t)kPQ_32Bit << 4U) | (uint32_t)kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | (uint32_t)kPQ_Float;   \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | (uint32_t)kPQ_Float;   \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | (uint32_t)kPQ_Float;   \
     POWERQUAD->TMPBASE   = 0xE0000000U
 
 #define PQ_SET_Q15_CONFIG                                                                               \
-    POWERQUAD->OUTFORMAT = ((uint32_t)(-15) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | (uint32_t)kPQ_Float; \
+    POWERQUAD->OUTFORMAT = ( 0xFFFFFFF1UL << 8U) | ((uint32_t)kPQ_16Bit << 4U) | (uint32_t)kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | (uint32_t)kPQ_Float;   \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | (uint32_t)kPQ_Float;   \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | (uint32_t)kPQ_Float;   \
@@ -102,6 +102,9 @@ static void _arm_fir_increment(const void *pSrc,
                                uint32_t offset,
                                uint32_t elemSize)
 {
+    assert((UINT32_MAX / elemSize) >= offset);
+    assert((uintptr_t)pSrc >= (offset * elemSize));
+
     POWERQUAD->INABASE = ((uint32_t)(const uint32_t *)pSrc) - (offset * elemSize);
     POWERQUAD->INBBASE = (uint32_t)(const uint32_t *)pTap;
     POWERQUAD->LENGTH  = (((uint32_t)tapLen & 0xFFFFUL) << 16U) + (srcLen & 0xFFFFUL);
@@ -264,7 +267,7 @@ arm_status arm_rfft_init_q31(arm_rfft_instance_q31 *S, uint32_t fftLenReal, uint
     arm_status status = ARM_MATH_SUCCESS;
 
     /*  Initialize the Real FFT length */
-    S->fftLenReal = (uint16_t)fftLenReal;
+    S->fftLenReal = fftLenReal;
 
     /*  Initialize the Flag for selection of RFFT or RIFFT */
     S->ifftFlagR = (uint8_t)ifftFlagR;
@@ -297,7 +300,7 @@ arm_status arm_rfft_init_q15(arm_rfft_instance_q15 *S, uint32_t fftLenReal, uint
     arm_status status = ARM_MATH_SUCCESS;
 
     /*  Initialize the Real FFT length */
-    S->fftLenReal = (uint16_t)fftLenReal;
+    S->fftLenReal = fftLenReal;
 
     /*  Initialize the Flag for selection of RFFT or RIFFT */
     S->ifftFlagR = (uint8_t)ifftFlagR;
@@ -385,7 +388,7 @@ arm_status arm_dct4_init_q31(arm_dct4_instance_q31 *S,
 void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineBuffer)
 {
     /* Calculate DCT-II for N-point input */
-    uint16_t i;           /* Loop counter */
+    uint32_t i;           /* Loop counter */
     const q31_t *weights; /* Pointer to the Weights table */
     q31_t *pOut;          /* Temporary pointers for output buffer */
     q31_t *pS1, *pbuff;   /* Temporary pointers for input buffer and pState buffer */
@@ -394,7 +397,7 @@ void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineB
     uint32_t length;
     uint8_t matRow;
     uint8_t matCol;
-    uint8_t matLoop;
+    uint16_t matLoop;
     uint16_t lenPerMatLoop;
 
     /*
@@ -449,7 +452,7 @@ void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineB
      */
     lenPerMatLoop = S->N >= 128U ? 128U : S->N;
     matCol        = (uint8_t)(lenPerMatLoop / 8U);
-    matLoop       = (uint8_t)(((S->N - 1U) >> 7U) + 1U);
+    matLoop       = (uint16_t)(((S->N - 1U) >> 7U) + 1U);
     weights       = S->pTwiddle;
     pOut          = pState;
 
@@ -867,6 +870,7 @@ void arm_fir_f32(const arm_fir_instance_f32 *S, const float32_t *pSrc, float32_t
     assert(NULL != S);
     assert(NULL != pSrc);
     assert(NULL != pDst);
+    assert(blockSize <= UINT16_MAX);
 
     uint32_t curOffset;
     PQ_SET_F32_CONFIG;
@@ -892,6 +896,7 @@ void arm_fir_q31(const arm_fir_instance_q31 *S, const q31_t *pSrc, q31_t *pDst, 
     assert(NULL != S);
     assert(NULL != pSrc);
     assert(NULL != pDst);
+    assert(blockSize <= UINT16_MAX);
 
     uint32_t curOffset;
     PQ_SET_Q31_CONFIG;
@@ -900,7 +905,7 @@ void arm_fir_q31(const arm_fir_instance_q31 *S, const q31_t *pSrc, q31_t *pDst, 
 
     if (curOffset == 0U)
     {
-        PQ_FIR(POWERQUAD, pSrc, (int32_t)blockSize, &(S->pState[1]), (int32_t)S->numTaps, pDst, PQ_FIR_FIR);
+        PQ_FIR(POWERQUAD, pSrc, (uint16_t)blockSize, &(S->pState[1]), (uint16_t)S->numTaps, pDst, PQ_FIR_FIR);
     }
     else
     {
@@ -917,6 +922,7 @@ void arm_fir_q15(const arm_fir_instance_q15 *S, const q15_t *pSrc, q15_t *pDst, 
     assert(NULL != S);
     assert(NULL != pSrc);
     assert(NULL != pDst);
+    assert(blockSize <= UINT16_MAX);
 
     uint32_t curOffset;
 
@@ -926,7 +932,7 @@ void arm_fir_q15(const arm_fir_instance_q15 *S, const q15_t *pSrc, q15_t *pDst, 
 
     if (curOffset == 0U)
     {
-        PQ_FIR(POWERQUAD, pSrc, (int32_t)blockSize, &(S->pState[2]), (int32_t)S->numTaps, pDst, PQ_FIR_FIR);
+        PQ_FIR(POWERQUAD, pSrc, (uint16_t)blockSize, &(S->pState[2]), (uint16_t)S->numTaps, pDst, PQ_FIR_FIR);
     }
     else
     {
@@ -943,10 +949,11 @@ void arm_conv_f32(const float32_t *pSrcA, uint32_t srcALen, const float32_t *pSr
     assert(NULL != pSrcA);
     assert(NULL != pSrcB);
     assert(NULL != pDst);
+    assert((srcALen <= UINT16_MAX) && (srcBLen <= UINT16_MAX));
 
     PQ_SET_F32_CONFIG;
 
-    PQ_FIR(POWERQUAD, pSrcA, (int32_t)srcALen, pSrcB, (int32_t)srcBLen, pDst, PQ_FIR_CONVOLUTION);
+    PQ_FIR(POWERQUAD, pSrcA, (uint16_t)srcALen, pSrcB, (uint16_t)srcBLen, pDst, PQ_FIR_CONVOLUTION);
     PQ_WaitDone(POWERQUAD);
 }
 
@@ -955,10 +962,11 @@ void arm_conv_q31(const q31_t *pSrcA, uint32_t srcALen, const q31_t *pSrcB, uint
     assert(NULL != pSrcA);
     assert(NULL != pSrcB);
     assert(NULL != pDst);
+    assert((srcALen <= UINT16_MAX) && (srcBLen <= UINT16_MAX));
 
     PQ_SET_Q31_CONFIG;
 
-    PQ_FIR(POWERQUAD, pSrcA, (int32_t)srcALen, pSrcB, (int32_t)srcBLen, pDst, PQ_FIR_CONVOLUTION);
+    PQ_FIR(POWERQUAD, pSrcA, (uint16_t)srcALen, pSrcB, (uint16_t)srcBLen, pDst, PQ_FIR_CONVOLUTION);
     PQ_WaitDone(POWERQUAD);
 }
 
@@ -967,10 +975,11 @@ void arm_conv_q15(const q15_t *pSrcA, uint32_t srcALen, const q15_t *pSrcB, uint
     assert(NULL != pSrcA);
     assert(NULL != pSrcB);
     assert(NULL != pDst);
+    assert((srcALen <= UINT16_MAX) && (srcBLen <= UINT16_MAX));
 
     PQ_SET_Q15_CONFIG;
 
-    PQ_FIR(POWERQUAD, pSrcA, (int32_t)srcALen, pSrcB, (int32_t)srcBLen, pDst, PQ_FIR_CONVOLUTION);
+    PQ_FIR(POWERQUAD, pSrcA, (uint16_t)srcALen, pSrcB, (uint16_t)srcBLen, pDst, PQ_FIR_CONVOLUTION);
     PQ_WaitDone(POWERQUAD);
 }
 
@@ -980,10 +989,11 @@ void arm_correlate_f32(
     assert(NULL != pSrcA);
     assert(NULL != pSrcB);
     assert(NULL != pDst);
+    assert((srcALen <= UINT16_MAX) && (srcBLen <= UINT16_MAX));
 
     PQ_SET_F32_CONFIG;
 
-    PQ_FIR(POWERQUAD, pSrcA, (int32_t)srcALen, pSrcB, (int32_t)srcBLen, pDst, PQ_FIR_CORRELATION);
+    PQ_FIR(POWERQUAD, pSrcA, (uint16_t)srcALen, pSrcB, (uint16_t)srcBLen, pDst, PQ_FIR_CORRELATION);
     PQ_WaitDone(POWERQUAD);
 }
 
@@ -992,10 +1002,11 @@ void arm_correlate_q31(const q31_t *pSrcA, uint32_t srcALen, const q31_t *pSrcB,
     assert(NULL != pSrcA);
     assert(NULL != pSrcB);
     assert(NULL != pDst);
+    assert((srcALen <= UINT16_MAX) && (srcBLen <= UINT16_MAX));
 
     PQ_SET_Q31_CONFIG;
 
-    PQ_FIR(POWERQUAD, pSrcA, (int32_t)srcALen, pSrcB, (int32_t)srcBLen, pDst, PQ_FIR_CORRELATION);
+    PQ_FIR(POWERQUAD, pSrcA, (uint16_t)srcALen, pSrcB, (uint16_t)srcBLen, pDst, PQ_FIR_CORRELATION);
     PQ_WaitDone(POWERQUAD);
 }
 
@@ -1004,10 +1015,11 @@ void arm_correlate_q15(const q15_t *pSrcA, uint32_t srcALen, const q15_t *pSrcB,
     assert(NULL != pSrcA);
     assert(NULL != pSrcB);
     assert(NULL != pDst);
+    assert((srcALen <= UINT16_MAX) && (srcBLen <= UINT16_MAX));
 
     PQ_SET_Q15_CONFIG;
 
-    PQ_FIR(POWERQUAD, pSrcA, (int32_t)srcALen, pSrcB, (int32_t)srcBLen, pDst, PQ_FIR_CORRELATION);
+    PQ_FIR(POWERQUAD, pSrcA, (uint16_t)srcALen, pSrcB, (uint16_t)srcBLen, pDst, PQ_FIR_CORRELATION);
     PQ_WaitDone(POWERQUAD);
 }
 

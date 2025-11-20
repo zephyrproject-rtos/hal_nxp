@@ -344,6 +344,7 @@ struct _ep_handle
     netc_enetc_hw_t hw;                                       /*!< Hardware register map resource. */
     netc_enetc_cap_t capability;                              /*!< ENETC capability. */
     ep_config_const_t cfg;                                    /*!< Endpoint configuration constant. */
+    uint8_t ringShift;                                        /*!< Endpoint Tx ring shift. */
     netc_rx_bdr_t rxBdRing[FSL_FEATURE_NETC_SI_RING_NUM_MAX]; /*!< Receive buffer descriptor ring. */
     netc_tx_bdr_t txBdRing[FSL_FEATURE_NETC_SI_RING_NUM_MAX]; /*!< Transmit buffer descriptor ring. */
     netc_cmd_bdr_t cmdBdRing;                                 /*!< Command BD ring handle for endpoint. */
@@ -1477,12 +1478,13 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
 static inline void EP_WaitUnitilTxComplete(ep_handle_t *handle, uint8_t ring)
 {
     uint8_t hwRing = ring;
+
 #if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
-        hwRing++;
+        hwRing += handle->ringShift;
     }
 #endif
     while (handle->hw.si->BDR[hwRing].TBCIR != handle->txBdRing[ring].producerIndex)

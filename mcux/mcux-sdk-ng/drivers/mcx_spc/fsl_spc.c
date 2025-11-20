@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,7 +33,7 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_REG) && (FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_REG == 0U))
 /*!
  * brief Gets selected power domain's requested low power mode.
  *
@@ -51,6 +51,7 @@ spc_power_domain_low_power_mode_t SPC_GetPowerDomainLowPowerMode(SPC_Type *base,
     val = ((base->PD_STATUS[(uint8_t)powerDomainId] & SPC_PD_STATUS_LP_MODE_MASK) >> SPC_PD_STATUS_LP_MODE_SHIFT);
     return (spc_power_domain_low_power_mode_t)val;
 }
+#endif /* FSL_FEATURE_MCX_SPC_HAS_PD_STATUS_REG */
 
 /*!
  * brief Gets Isolation status for each power domains.
@@ -126,6 +127,7 @@ void SPC_ConfigVddCoreGlitchDetector(SPC_Type *base, const spc_vdd_core_glitch_d
 }
 #endif
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_SRAMCTL_REG) && (FSL_FEATURE_MCX_SPC_HAS_SRAMCTL_REG == 0U))
 /*!
  * brief Set SRAM operate voltage.
  *
@@ -149,6 +151,7 @@ void SPC_SetSRAMOperateVoltage(SPC_Type *base, const spc_sram_voltage_config_t *
         base->SRAMCTL &= ~SPC_SRAMCTL_REQ_MASK;
     }
 }
+#endif /* FSL_FEATURE_MCX_SPC_HAS_SRAMCTL_REG */
 
 /*!
  * brief Configs Bandgap mode in Active mode.
@@ -833,13 +836,7 @@ status_t SPC_SetActiveModeCoreLDORegulatorConfig(SPC_Type *base, const spc_activ
     }
 
     /* Check input parameters. */
-    /*  1. Bandgap must not be disabled. */
-    if (SPC_GetActiveModeBandgapMode(base) == kSPC_BandgapDisabled)
-    {
-        return kStatus_SPC_BandgapModeWrong;
-    }
-
-    /*  2. To set to low drive strength, all LVDs/HVDs must be disabled previously. */
+    /*  To set to low drive strength, all LVDs/HVDs must be disabled previously. */
     if ((SPC_GetActiveModeVoltageDetectStatus(base) != 0UL) &&
         (option->CoreLDODriveStrength == kSPC_CoreLDO_LowDriveStrength))
     {

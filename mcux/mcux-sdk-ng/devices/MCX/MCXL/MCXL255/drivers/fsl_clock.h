@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 1.1.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 1, 0))
+/*! @brief CLOCK driver version 1.2.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 2, 0))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -52,31 +52,20 @@
 #endif
 #endif
 
-/*! @brief External XTAL32/EXTAL32 clock frequency.
- *
- * The XTAL32/EXTAL32 clock frequency in Hz. When the clock is set up, use the
- * function CLOCK_SetXtal32Freq to set the value in the clock driver.
- *
- * This is important for the multicore platforms where only one core needs to set up
- * the clock. All other cores need to call the CLOCK_SetXtal32Freq
- * to get a valid clock frequency.
- */
-extern volatile uint32_t g_xtal32Freq;
-
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 /*------------------------------------------------------------------------------
  clock_ip_name_t definition:
 ------------------------------------------------------------------------------*/
+/*! @brief The offset of the registers MRCC_GLB_ACC0 and MRCC_GLB_ACC1. */
+#define CLK_GATE_REG_ACC_OFFSET(value) ((((uint32_t)(value)) >> 16U) & 0x000000FFU)
 /*! @brief The offset of the registers MRCC_GLB_PR0 and MRCC_GLB_PR1. */
 #define CLK_GATE_REG_PR_OFFSET(value) ((((uint32_t)(value)) >> 16U) & 0x000000FFU)
 /*! @brief The offset of the registers MRCC_GLB_CC0 and MRCC_GLB_CC1. */
 #define CLK_GATE_REG_CC_OFFSET(value) ((((uint32_t)(value)) >> 8U) & 0x000000FFU)
-/*! @brief Bit definitions for the peripherals in MRCC_GLB_PR and MRCC_GLB_CC */
+/*! @brief Bit definitions for the peripherals in MRCC_GLB_PR, MRCC_GLB_CC and MRCC_GLB_ACC */
 #define CLK_PERIPHERAL_BIT_SHIFT(value) (((uint32_t)(value)) & 0x000000FFU)
 /*! @brief True when clock gate belongs to AON domain */
 #define CLK_OF_AON(value) (((uint32_t)(value)) & (1U<<24U))
-
-#define REG_PWM0SUBCTL (250U)
 
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 typedef enum _clock_ip_name
@@ -96,6 +85,9 @@ typedef enum _clock_ip_name
     kCLOCK_GateCrc           = (0x00U | (9U)),                         /*!< Clock gate name: CRC            */
     kCLOCK_Crc0              = (0x00U | (9U)),                         /*!< Clock gate name: CRC (Alias)    */
     kCLOCK_GateERM0          = (0x00U | (10U)),                        /*!< Clock gate name: ERM0           */
+    kCLOCK_GateNVMMBC        = (0x00U | (11U)),                        /*!< Clock gate name: NVM_MBC        */
+    kCLOCK_GateNVMNXPCTL     = (0x00U | (12U)),                        /*!< Clock gate name: NVM_NXP_CTL    */
+    kCLOCK_GateFMU0          = (0x00U | (13U)),                        /*!< Clock gate name: FMU0           */
     kCLOCK_GateLPI2C0        = (0x00U | (14U)),                        /*!< Clock gate name: LPI2C0         */
     kCLOCK_GateLPI2C1        = (0x00U | (15U)),                        /*!< Clock gate name: LPI2C0         */
     kCLOCK_GateLPSPI0        = (0x00U | (16U)),                        /*!< Clock gate name: LPSPI0         */
@@ -143,6 +135,7 @@ typedef enum _clock_ip_name
     kCLOCK_GateAonLCD        = ((1U<<24U) | (14U)),                    /*!< Clock gate name: AON LCD        */
     kCLOCK_GateAonAVDC2P0    = ((1U<<24U) | (15U)),                    /*!< Clock gate name: AON AVDC2P0    */
     kCLOCK_GateAonINPUTMUX1  = ((1U<<24U) | (16U)),                    /*!< Clock gate name: AON INPUTMUX   */
+    kCLOCK_GateAonRootAux    = ((1U<<24U) | (17U)),                    /*!< Clock gate name: AON Root Aux CLK*/
 
     kCLOCK_GateNotAvail      = (0xFFFFFFFFU),                          /**< Clock gate name: None           */
 } clock_ip_name_t;
@@ -607,13 +600,14 @@ typedef enum _clock_div_name
     kCLOCK_DivFRO_HF_DIV   = (0x10CU), /*!< FRO_HF_DIV clock divider */
     kCLOCK_DivAHBAIPSCLK   = (0x378U), /*!< AHB2AIPS   clock divider */
     kCLOCK_DivAHBCLK       = (0x380U), /*!< System     clock divider */
+    kCLOCK_DivAONAUXCLK    = (0x544U), /*!< AON auxiliary clock divider. */
 #endif
-    kCLOCK_DIVAonCPU       = (0x400U), /*!< Aon CPU    clock divider */
-    kCLOCK_DIVAonCMP       = (0x401U), /*!< Aon Comp grp clock divider */
-    kCLOCK_DIVAonSYS       = (0x402U), /*!< Aon SYSTICK clock divider */
-    kCLOCK_DIVAonACMP0CLK0  = (0x410U), /*!< Aon CMP0 CLK0 clock divider */
-    kCLOCK_DIVAonACMP0CLK1  = (0x411U), /*!< Aon CMP0 CLK1 clock divider */
-    kCLOCK_DivMax          = (0x411U), /*!< MAX        clock divider */
+    kCLOCK_DIVAonCPU       = (0x800U), /*!< Aon CPU    clock divider */
+    kCLOCK_DIVAonCMP       = (0x801U), /*!< Aon Comp grp clock divider */
+    kCLOCK_DIVAonSYS       = (0x802U), /*!< Aon SYSTICK clock divider */
+    kCLOCK_DIVAonACMP0CLK0 = (0x810U), /*!< Aon CMP0 CLK0 clock divider */
+    kCLOCK_DIVAonACMP0CLK1 = (0x811U), /*!< Aon CMP0 CLK1 clock divider */
+    kCLOCK_DivMax          = (0x811U), /*!< MAX clock divider */
 } clock_div_name_t;
 
 #if __CORTEX_M == (33U) /* Building on the main core */
@@ -752,13 +746,17 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
         {
             AON__SYSCON_AON->INPUTMUXCLKCTRL = SYSCON_AON_INPUTMUXCLKCTRL_INPUTMUX_CLK_CTRL(0);
         }
+        else if(clk == kCLOCK_GateAonRootAux) 
+        {
+            AON__CGU->CLK_CONFIG |= CGU_CLK_CONFIG_ROOT_AUX_CLK_EN_MASK;
+        }
         else
         {
             AON__CGU->PER_CLK_EN |= (1UL << bit_shift);
         }
     }
 #if __CORTEX_M == (33U) /* Building on the main core */
-    else
+    else if (clk != kCLOCK_GateFMU0 && clk != kCLOCK_GateNVMNXPCTL && clk != kCLOCK_GateNVMMBC)
     {
         uint32_t reg_cc_offset               = CLK_GATE_REG_CC_OFFSET(clk);
         uint32_t reg_pr_offset               = CLK_GATE_REG_PR_OFFSET(clk);
@@ -774,16 +772,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
             *pPeripheralEnCtrl |= (1UL << bit_shift);
         }
 
-        if (reg_cc_offset == REG_PWM0SUBCTL)
-        {
-            SYSCON->PWM0SUBCTL |= (1UL << bit_shift);
-            //MRCC->MRCC_GLB_PR0 |= MRCC_MRCC_GLB_PR0_FLEXPWM0_MASK;
-            //MRCC->MRCC_GLB_CCSET0 = MRCC_MRCC_GLB_CC0_FLEXPWM0_MASK; FIXME
-        }
-        else
-        {
-            *pClkCtrl = (1UL << bit_shift);
-        }
+        *pClkCtrl = (1UL << bit_shift);
 
         /* Freeze clock configuration */
         SYSCON->CLKUNLOCK |= SYSCON_CLKUNLOCK_CLKGEN_LOCKOUT_MASK;
@@ -808,10 +797,17 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 
     if (CLK_OF_AON(clk))
     {
-        AON__CGU->PER_CLK_EN &= ~(1UL << bit_shift);
+        if(clk == kCLOCK_GateAonRootAux) 
+        {
+            AON__CGU->CLK_CONFIG &= ~(CGU_CLK_CONFIG_ROOT_AUX_CLK_EN_MASK);
+        }
+        else
+        {
+            AON__CGU->PER_CLK_EN &= ~(1UL << bit_shift);
+        }
     }
 #if __CORTEX_M == (33U) /* Building on the main core */
-    else
+    else if (clk != kCLOCK_GateFMU0 && clk != kCLOCK_GateNVMNXPCTL && clk != kCLOCK_GateNVMMBC)
     {
         uint32_t reg_cc_offset               = CLK_GATE_REG_CC_OFFSET(clk);
         uint32_t reg_pr_offset               = CLK_GATE_REG_PR_OFFSET(clk);
@@ -822,20 +818,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
         /* Unlock clock configuration */
         SYSCON->CLKUNLOCK &= ~SYSCON_CLKUNLOCK_CLKGEN_LOCKOUT_MASK;
 
-        if (reg_cc_offset == REG_PWM0SUBCTL)
-        {
-            SYSCON->PWM0SUBCTL &= ~(1UL << bit_shift);
-
-            /*if (0U == (SYSCON->PWM0SUBCTL & 0xFU))
-            {
-                MRCC->MRCC_GLB_CCCLR0 = MRCC_MRCC_GLB_CC0_FLEXPWM0_MASK;
-                MRCC->MRCC_GLB_PR0 &= ~(MRCC_MRCC_GLB_PR0_FLEXPWM0_MASK);
-            }FIXME */
-        }
-        else
-        {
-            *pClkCtrl = (1UL << bit_shift);
-        }
+        *pClkCtrl = (1UL << bit_shift);
 
         if (clk != kCLOCK_GateWWDT0 && clk != kCLOCK_GateSRAMA0A1 && clk != kCLOCK_GateROMCP)
         {
@@ -933,21 +916,31 @@ status_t CLOCK_SetupFROHFClocking(uint32_t iFreq, uint8_t div_sel);
  */
 status_t CLOCK_SetupFRO12MClocking(void);
 
-/*!
- * brief Initializes the SCG ROSC.
- *
- * This function enables the SCG ROSC clock according to the
- * configuration.
- *
- * param config   Pointer to the configuration structure.
- * retval kStatus_Success ROSC is initialized.
- * retval kStatus_SCG_Busy ROSC has been enabled and is used by the system clock.
- * retval kStatus_ReadOnly ROSC control register is locked.
- *
- * note This function can't detect whether the system OSC has been enabled and
- * used by an IP.
+/**
+ * @brief Enable automatic clock control for an IP.
+ * @param clk : IP identifier.
+ * @return  Nothing
  */
-status_t CLOCK_InitRosc(const scg_rosc_config_t *config);
+void CLOCK_EnableAutoClockGate(clock_ip_name_t clk);
+
+/**
+ * @brief Disable automatic clock control for an IP.
+ * @param clk : IP identifier.
+ * @return  Nothing
+ */
+void CLOCK_DisableAutoClockGate(clock_ip_name_t clk);
+
+#endif /* Building on the main core */
+
+/*!
+ * @brief Initializes the ROSC (xtal32k).
+ *
+ * @param vbat_over3V  Set to true is vbat voltage is greater than 3V
+ * @retval kStatus_Success ROSC is initialized.
+ *        kStatus_Fail ROSC init failed.
+ *        kStatus_Busy ROSC is used as core clock.
+ */
+status_t CLOCK_InitRosc(bool vbat_over3V);
 
 /*!
  * brief De-initializes the SCG ROSC.
@@ -955,14 +948,9 @@ status_t CLOCK_InitRosc(const scg_rosc_config_t *config);
  * This function disables the SCG ROSC clock.
  *
  * retval kStatus_Success System OSC is deinitialized.
- * retval kStatus_SCG_Busy System OSC is used by the system clock.
- * retval kStatus_ReadOnly System OSC control register is locked.
- *
- * note This function can't detect whether the ROSC is used by an IP.
+ * retval kStatus_Busy ROSC is used by core.
  */
 status_t CLOCK_DeinitRosc(void);
-
-#endif /* Building on the main core */
 
 /*! @brief  Return Frequency of selected clock
  *  @return Frequency of selected clock
@@ -996,6 +984,17 @@ uint32_t CLOCK_GetLpspiClkFreq(uint32_t id);
  */
 uint32_t CLOCK_GetLpi2cClkFreq(uint32_t id);
 
+/*! @brief  Return Frequency of QTMR functional Clock
+ *  @return Frequency of QTMR functional Clock
+ */
+uint32_t CLOCK_GetQtmrClkFreq(void);
+
+/*!
+ *  @brief  Return Frequency of LPTMR functional Clock
+ *  @return Frequency of LPTMR functional Clock
+ */
+uint32_t CLOCK_GetLptmrClkFreq(void);
+
 /*! @brief  Return Frequency of LPUART functional Clock
  *  @return Frequency of LPUART functional Clock
  */
@@ -1013,12 +1012,6 @@ uint32_t CLOCK_GetUtickClkFreq(void);
  *  @return Frequency of WWDT0 functional Clock
  */
 uint32_t CLOCK_GetWwdtClkFreq(void);
-
-/*!
- *  @brief  Return Frequency of LPTMR functional Clock
- *  @return Frequency of LPTMR functional Clock
- */
-uint32_t CLOCK_GetLptmrClkFreq(void);
 
 /*! @brief  Return Frequency of OSTIMER
  *  @return Frequency of OSTIMER Clock
@@ -1117,15 +1110,6 @@ static inline void CLOCK_LockRoscControlStatusReg(void)
 
 #endif /* Building on the main core */
 
-/*!
- * @brief Sets the XTAL32 frequency based on board settings.
- *
- * @param freq The XTAL32/EXTAL32 input clock frequency in Hz.
- */
-static inline void CLOCK_SetXtal32Freq(uint32_t freq)
-{
-    g_xtal32Freq = freq;
-}
 
 #if __CORTEX_M == (33U) /* Building on the main core */
 /*!
@@ -1145,6 +1129,29 @@ void CLOCK_SetFlashWaitStateBasedOnFreq(uint32_t freq);
  * @return Returns flash wait state.
  */
 uint8_t CLOCK_GetFlashWaitState(void);
+
+/*!
+ * @brief Enable/disable FRO12M(SIRC) Auto trim feature
+ *
+ * This requires ROSC (xtal32) initialized.
+ *
+ * @see CLOCK_InitRosc()
+ *
+ * @return kStatus_Fail on error, kStatus_Success otherwise.
+ */
+status_t CLOCK_FRO12MAutoTrimEnable(bool enable);
+
+/*!
+ * @brief Enable/disable FROHF(FRO96M/FIRC) Auto trim feature
+ *
+ * This requires ROSC (xtal32) initialized.
+ *
+ * @see CLOCK_InitRosc()
+ *
+ * @return kStatus_Fail on error, kStatus_Success otherwise.
+ */
+status_t CLOCK_FROHFAutoTrimEnable(bool enable);
+
 #endif /* Building on the main core */
 
 

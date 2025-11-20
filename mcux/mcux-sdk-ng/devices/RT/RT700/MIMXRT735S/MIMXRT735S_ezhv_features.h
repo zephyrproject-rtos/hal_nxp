@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 3.0, 2025-06-06
-**     Build:               b250813
+**     Build:               b251024
 **
 **     Abstract:
 **         Chip specific module features.
@@ -897,6 +897,12 @@
 #define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_T_DIV16_OFFSET_DELAY_ELEMENT_COUNT (0U)
 /* @brief Delay Elements in autoupdate offset */
 #define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_OFFSET_DELAY_ELEMENT_COUNT (0U)
+/* @brief XSPI has DQS Latency Enable */
+#define FSL_FEATURE_XSPI_HAS_DQS_LAT_EN (1)
+/* @brief XSPI has END_CFG - Byte Order */
+#define FSL_FEATURE_XSPI_HAS_END_CFG (1)
+/* @brief XSPI has Doze Enable */
+#define FSL_FEATURE_XSPI_HAS_DOZE_MODE (1)
 
 #endif /* _MIMXRT735S_ezhv_FEATURES_H_ */
 

@@ -34,7 +34,7 @@
 **                          MCXA266VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250804
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WUU
@@ -511,21 +511,21 @@ typedef struct {
 
 #define WUU_PE2_WUPE30_MASK                      (0x30000000U)
 #define WUU_PE2_WUPE30_SHIFT                     (28U)
-/*! WUPE30 - Wake-up Pin Enable for WUU_Pn
- *  0b00..Disable
- *  0b01..Enable (detect on rising edge or high level)
- *  0b10..Enable (detect on falling edge or low level)
- *  0b11..Enable (detect on any edge)
+/*! WUPE30 - Reserved
+ *  0b00..Not supported
+ *  0b01..Not supported
+ *  0b10..Not supported
+ *  0b11..Not supported
  */
 #define WUU_PE2_WUPE30(x)                        (((uint32_t)(((uint32_t)(x)) << WUU_PE2_WUPE30_SHIFT)) & WUU_PE2_WUPE30_MASK)
 
 #define WUU_PE2_WUPE31_MASK                      (0xC0000000U)
 #define WUU_PE2_WUPE31_SHIFT                     (30U)
-/*! WUPE31 - Wake-up Pin Enable for WUU_Pn
- *  0b00..Disable
- *  0b01..Enable (detect on rising edge or high level)
- *  0b10..Enable (detect on falling edge or low level)
- *  0b11..Enable (detect on any edge)
+/*! WUPE31 - Reserved
+ *  0b00..Not supported
+ *  0b01..Not supported
+ *  0b10..Not supported
+ *  0b11..Not supported
  */
 #define WUU_PE2_WUPE31(x)                        (((uint32_t)(((uint32_t)(x)) << WUU_PE2_WUPE31_SHIFT)) & WUU_PE2_WUPE31_MASK)
 /*! @} */
@@ -855,17 +855,17 @@ typedef struct {
 
 #define WUU_PF_WUF30_MASK                        (0x40000000U)
 #define WUU_PF_WUF30_SHIFT                       (30U)
-/*! WUF30 - Wake-up Flag for WUU_Pn
- *  0b0..No
- *  0b1..Yes
+/*! WUF30 - Reserved
+ *  0b0..Not supported
+ *  0b1..Not supported
  */
 #define WUU_PF_WUF30(x)                          (((uint32_t)(((uint32_t)(x)) << WUU_PF_WUF30_SHIFT)) & WUU_PF_WUF30_MASK)
 
 #define WUU_PF_WUF31_MASK                        (0x80000000U)
 #define WUU_PF_WUF31_SHIFT                       (31U)
-/*! WUF31 - Wake-up Flag for WUU_Pn
- *  0b0..No
- *  0b1..Yes
+/*! WUF31 - Reserved
+ *  0b0..Not supported
+ *  0b1..Not supported
  */
 #define WUU_PF_WUF31(x)                          (((uint32_t)(((uint32_t)(x)) << WUU_PF_WUF31_SHIFT)) & WUU_PF_WUF31_MASK)
 /*! @} */
@@ -1229,20 +1229,20 @@ typedef struct {
 
 #define WUU_PDC2_WUPDC30_MASK                    (0x30000000U)
 #define WUU_PDC2_WUPDC30_SHIFT                   (28U)
-/*! WUPDC30 - Wake-up Pin Configuration for WUU_Pn
- *  0b00..Interrupt
- *  0b01..DMA request
- *  0b10..Trigger event
+/*! WUPDC30 - Reserved
+ *  0b00..Not supported
+ *  0b01..Not supported
+ *  0b10..Not supported
  *  0b11..Reserved
  */
 #define WUU_PDC2_WUPDC30(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_WUPDC30_SHIFT)) & WUU_PDC2_WUPDC30_MASK)
 
 #define WUU_PDC2_WUPDC31_MASK                    (0xC0000000U)
 #define WUU_PDC2_WUPDC31_SHIFT                   (30U)
-/*! WUPDC31 - Wake-up Pin Configuration for WUU_Pn
- *  0b00..Interrupt
- *  0b01..DMA request
- *  0b10..Trigger event
+/*! WUPDC31 - Reserved
+ *  0b00..Not supported
+ *  0b01..Not supported
+ *  0b10..Not supported
  *  0b11..Reserved
  */
 #define WUU_PDC2_WUPDC31(x)                      (((uint32_t)(((uint32_t)(x)) << WUU_PDC2_WUPDC31_SHIFT)) & WUU_PDC2_WUPDC31_MASK)
@@ -1547,19 +1547,17 @@ typedef struct {
 
 #define WUU_PMC_WUPMC30_MASK                     (0x40000000U)
 #define WUU_PMC_WUPMC30_SHIFT                    (30U)
-/*! WUPMC30 - Wake-up Pin Mode Configuration for WUU_Pn
- *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
- *       Pin DMA/Trigger Configuration (PDCn).
- *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
+/*! WUPMC30 - Reserved
+ *  0b0..Not supported
+ *  0b1..Not supported
  */
 #define WUU_PMC_WUPMC30(x)                       (((uint32_t)(((uint32_t)(x)) << WUU_PMC_WUPMC30_SHIFT)) & WUU_PMC_WUPMC30_MASK)
 
 #define WUU_PMC_WUPMC31_MASK                     (0x80000000U)
 #define WUU_PMC_WUPMC31_SHIFT                    (31U)
-/*! WUPMC31 - Wake-up Pin Mode Configuration for WUU_Pn
- *  0b0..Active only during a low-leakage mode. You can modify the corresponding fields within Pin Enable (PEn) or
- *       Pin DMA/Trigger Configuration (PDCn).
- *  0b1..Active during all power modes. Do not modify the corresponding fields within Pin Enable (PEn) or Pin DMA/Trigger Configuration (PDCn).
+/*! WUPMC31 - Reserved
+ *  0b0..Not supported
+ *  0b1..Not supported
  */
 #define WUU_PMC_WUPMC31(x)                       (((uint32_t)(((uint32_t)(x)) << WUU_PMC_WUPMC31_SHIFT)) & WUU_PMC_WUPMC31_MASK)
 /*! @} */

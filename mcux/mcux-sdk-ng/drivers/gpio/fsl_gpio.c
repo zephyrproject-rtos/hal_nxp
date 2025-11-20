@@ -113,7 +113,7 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
      * (instance >= ARRAY_SIZE(s_gpioBases)) not covered.
      * $ref gpio_c_ref_1$.
      */
-    for (instance = 0; instance < ARRAY_SIZE(s_gpioBases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_gpioBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         if (MSDK_REG_SECURE_ADDR(s_gpioBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {

@@ -224,7 +224,8 @@ status_t NETC_PortConfigEthMac(NETC_ETH_LINK_Type *base, const netc_port_ethmac_
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051994) && FSL_FEATURE_NETC_HAS_ERRATA_051994
     /* ERRATA051994: The NETC does not always obey the wakeup time in PMn_LPWAKETIMER. and as a result may transmit
        frames before the PHY has woken up from low power state. Such frames would be lost. Disable autonomous low power
-       idle on Tx in case this issue. */
+       idle on Tx in case this issue. Note: Latest RT1180 Errata doc removed this Errata number as it's de-featured
+       in the latest silicon revision C0. However, driver still needs to use this macro to avoid using related registers. */
     if (config->txSleepTimeCycleEEE != 0U)
     {
         return kStatus_NETC_Unsupported;

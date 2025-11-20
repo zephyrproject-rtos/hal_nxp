@@ -117,6 +117,9 @@ pd_status_t PDPTN5110_HalInit(pd_handle pdHandle)
     /* Reset fault control to default value. */
     Reg_BusWriteByte(pdInstance, fault_control, 0x00U);
 
+    /* Disable VCONN */
+    Reg_BusModifyByteField(pdInstance, power_control, TCPC_POWER_CONTROL_ENABLE_VCONN_MASK | TCPC_POWER_CONTROL_VCONN_POWER_SUPPORTED_MASK, 0);
+
     /* Sync register */
     PDPTN5110_RegCacheSynC(pdInstance, kRegModule_All);
 

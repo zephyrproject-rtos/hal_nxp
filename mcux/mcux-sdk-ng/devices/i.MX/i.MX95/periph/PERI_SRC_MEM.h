@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC_MEM
@@ -467,32 +467,32 @@ typedef struct {
 #define SRC_MEM_MEM_STAT_RET2N_STAT_MASK         (0x10U)
 #define SRC_MEM_MEM_STAT_RET2N_STAT_SHIFT        (4U)
 /*! RET2N_STAT - RET2N status
- *  0b0..Memory RET2N pin is low
- *  0b1..Memory RET2N pin is high
+ *  0b0..Memory RET2N pin is low.
+ *  0b1..Memory RET2N pin is high.
  */
 #define SRC_MEM_MEM_STAT_RET2N_STAT(x)           (((uint32_t)(((uint32_t)(x)) << SRC_MEM_MEM_STAT_RET2N_STAT_SHIFT)) & SRC_MEM_MEM_STAT_RET2N_STAT_MASK)
 
 #define SRC_MEM_MEM_STAT_RET1N_STAT_MASK         (0x20U)
 #define SRC_MEM_MEM_STAT_RET1N_STAT_SHIFT        (5U)
 /*! RET1N_STAT - RET1N status
- *  0b0..Memory RET1N pin is low
- *  0b1..Memory RET1N pin is high
+ *  0b0..Memory RET1N pin is low.
+ *  0b1..Memory RET1N pin is high.
  */
 #define SRC_MEM_MEM_STAT_RET1N_STAT(x)           (((uint32_t)(((uint32_t)(x)) << SRC_MEM_MEM_STAT_RET1N_STAT_SHIFT)) & SRC_MEM_MEM_STAT_RET1N_STAT_MASK)
 
 #define SRC_MEM_MEM_STAT_PGEN_STAT_MASK          (0x40U)
 #define SRC_MEM_MEM_STAT_PGEN_STAT_SHIFT         (6U)
 /*! PGEN_STAT - Power gate enable status
- *  0b0..Memory PGEN pin is low
- *  0b1..Memory PGEN pin is high
+ *  0b0..Memory PGEN pin is low.
+ *  0b1..Memory PGEN pin is high.
  */
 #define SRC_MEM_MEM_STAT_PGEN_STAT(x)            (((uint32_t)(((uint32_t)(x)) << SRC_MEM_MEM_STAT_PGEN_STAT_SHIFT)) & SRC_MEM_MEM_STAT_PGEN_STAT_MASK)
 
 #define SRC_MEM_MEM_STAT_MEM_STAT_MASK           (0x100U)
 #define SRC_MEM_MEM_STAT_MEM_STAT_SHIFT          (8U)
 /*! MEM_STAT - MEM status
- *  0b0..MEM exit low power
- *  0b1..MEM enter low power - retention1 mode or power down mode
+ *  0b0..MEM exit low power.
+ *  0b1..MEM enter low power - retention1 mode or power down mode.
  */
 #define SRC_MEM_MEM_STAT_MEM_STAT(x)             (((uint32_t)(((uint32_t)(x)) << SRC_MEM_MEM_STAT_MEM_STAT_SHIFT)) & SRC_MEM_MEM_STAT_MEM_STAT_MASK)
 /*! @} */

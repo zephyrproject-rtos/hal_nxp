@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NEUTRON_NPU
@@ -900,8 +900,8 @@ typedef struct {
 /*! START - Start trace event
  *  0b00000001..Neutron
  *  0b00000010..Data fetch by Data Mover
- *  0b00000011..Data push by Data Mover
- *  0b00000100..Weight fetch by Data Mover
+ *  0b00000100..Data push by Data Mover
+ *  0b00001000..Weight fetch by Data Mover
  */
 #define NEUTRON_NPU_EVTRCCFG_START(x)            (((uint32_t)(((uint32_t)(x)) << NEUTRON_NPU_EVTRCCFG_START_SHIFT)) & NEUTRON_NPU_EVTRCCFG_START_MASK)
 

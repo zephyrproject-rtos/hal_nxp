@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -30,7 +30,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version. */
+#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version. */
 /*! @} */
 
 /* For backword compatibility. */
@@ -2660,9 +2660,9 @@ void PQ_BiquadCascadeDf2Fixed16(const pq_biquad_cascade_df2_instance *S,
  */
 void PQ_FIR(POWERQUAD_Type *base,
             const void *pAData,
-            int32_t ALength,
+            uint16_t ALength,
             const void *pBData,
-            int32_t BLength,
+            uint16_t BLength,
             void *pResult,
             uint32_t opType);
 
@@ -2676,7 +2676,7 @@ void PQ_FIR(POWERQUAD_Type *base,
  * @param BLength number of taps
  * @param xOffset offset for number of input samples
  */
-void PQ_FIRIncrement(POWERQUAD_Type *base, int32_t ALength, int32_t BLength, int32_t xOffset);
+void PQ_FIRIncrement(POWERQUAD_Type *base, uint16_t ALength, uint16_t BLength, int32_t xOffset);
 
 /*!
  * @brief Processing function for the matrix addition.

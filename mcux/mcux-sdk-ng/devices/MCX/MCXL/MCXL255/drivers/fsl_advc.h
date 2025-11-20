@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief advc driver version 2.0.1. */
-#define FSL_ADVC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief advc driver version 2.0.2. */
+#define FSL_ADVC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
@@ -64,6 +64,9 @@ extern "C" {
 #if __CORTEX_M == 33U
 /*!
  * @brief Load advc configuration table and initialize ADVC.
+ *
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
  */
 void ADVC_Init(void);
 #endif /* __CORTEX_M == 33U */
@@ -82,12 +85,17 @@ bool ADVC_IsInitialized(void);
  * @param[in] mode Specify the mode of advc, please refer to @ref advc_mode_t.
  * @param[out] vddCode The value of VDD_AON, NULL means do not care voltage of VDD_AON.
  *
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
+ *
  * @return The result outcome with enabling ADVC.
  */
 advc_result_t ADVC_Enable(advc_mode_t mode, uint8_t *vddCode);
 
 /*!
  * @brief Check if ADVC is enabled.
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
  *
  * @retval false ADVC is not enabled.
  * @retval true ADVC is enabled.
@@ -96,11 +104,16 @@ bool ADVC_IsEnabled(void);
 
 /*!
  * @brief Disable ADVC.
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
+ *
  */
 void ADVC_Disable(void);
 
 /*!
  * @brief Check if ADVC is disabled.
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
  *
  * @retval true ADVC is not disabled.
  * @retval false ADVC is enabled.
@@ -113,6 +126,8 @@ bool ADVC_IsDisabled(void);
  * @note This should be done every time we want to change frequency of any ADVC related clock.
  * @note  Pre Voltage request should be called before any clock change which is derived from CGU.
  * The paramter we pass is the the future cpu frequency, since we move to safe voltage according to that.
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
  *
  * @param aonCpuFreq The frequency of AON CPU, only 10MHz, 5MHz, 3.3MHz, 2.5MHz, 2MHz, 1MHz are allowed.
  *
@@ -122,6 +137,8 @@ advc_result_t ADVC_PreVoltageChangeRequest(uint32_t aonCpuFreq);
 
 /*!
  * @brief Move back to optimal after changing any ADVC related clock frequency.
+ * @note This function checks if SysTick is enabled. If not, it temporarily 
+ * enables SysTick and disables it before exiting.
  *
  * @return The observed result following the post-frequency change.
  */

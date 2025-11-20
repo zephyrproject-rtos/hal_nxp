@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_ROMCP
@@ -599,7 +599,7 @@ typedef struct {
  */
 #define AON_ROMCP_ROMPATCHA_THUMBX(x)            (((uint32_t)(((uint32_t)(x)) << AON_ROMCP_ROMPATCHA_THUMBX_SHIFT)) & AON_ROMCP_ROMPATCHA_THUMBX_MASK)
 
-#define AON_ROMCP_ROMPATCHA_ADDRX_MASK           (0x7FFFFEU)
+#define AON_ROMCP_ROMPATCHA_ADDRX_MASK           (0xFFFFFEU)
 #define AON_ROMCP_ROMPATCHA_ADDRX_SHIFT          (1U)
 /*! ADDRX - Address Comparator Registers */
 #define AON_ROMCP_ROMPATCHA_ADDRX(x)             (((uint32_t)(((uint32_t)(x)) << AON_ROMCP_ROMPATCHA_ADDRX_SHIFT)) & AON_ROMCP_ROMPATCHA_ADDRX_MASK)

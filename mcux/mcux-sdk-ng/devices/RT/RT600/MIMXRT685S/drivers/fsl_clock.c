@@ -1553,7 +1553,14 @@ bool CLOCK_EnableUsbHs0PhyPllClock(clock_attach_id_t src, uint32_t freq)
 
     if (retVal)
     {
-        USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_POWER(1) | USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK);
+
+        /* This field controls the USB PLL regulator, set to enable the regulator. SW
+        must set this bit 15 us before setting PLL_POWER to avoid glitches on PLL
+        output clock. */
+        USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK;
+        SDK_DelayAtLeastUs(15U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_POWER(1);
+
         USBPHY->PLL_SIC     = (USBPHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)) | phyPllDiv;
         USBPHY->PLL_SIC_CLR = USBPHY_PLL_SIC_PLL_BYPASS_MASK;
         USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);

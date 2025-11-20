@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_TRDC_MGR
@@ -441,21 +441,21 @@ typedef struct {
     __IO uint32_t W3;                                /**< MBC Domain Error Word3 Register, array offset: 0x40C, array step: 0x10 */
   } MBC_DERR[NETC_TRDC_MGR_MBC_DERR_COUNT];
        uint8_t RESERVED_6[1008];
-  __IO uint32_t MDA_W0_0_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x800 */
+  __IO uint32_t MDA_W0_0_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x800 */
        uint8_t RESERVED_7[28];
-  __IO uint32_t MDA_W0_1_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x820 */
+  __IO uint32_t MDA_W0_1_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x820 */
        uint8_t RESERVED_8[28];
-  __IO uint32_t MDA_W0_2_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x840 */
+  __IO uint32_t MDA_W0_2_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x840 */
        uint8_t RESERVED_9[28];
-  __IO uint32_t MDA_W0_3_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x860 */
+  __IO uint32_t MDA_W0_3_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x860 */
        uint8_t RESERVED_10[28];
-  __IO uint32_t MDA_W0_4_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x880 */
+  __IO uint32_t MDA_W0_4_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x880 */
        uint8_t RESERVED_11[28];
-  __IO uint32_t MDA_W0_5_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x8A0 */
+  __IO uint32_t MDA_W0_5_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x8A0 */
        uint8_t RESERVED_12[28];
-  __IO uint32_t MDA_W0_6_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x8C0 */
+  __IO uint32_t MDA_W0_6_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x8C0 */
        uint8_t RESERVED_13[28];
-  __IO uint32_t MDA_W0_7_DFMT1;                    /**< DAC Master Domain Assignment Register, offset: 0x8E0 */
+  __IO uint32_t MDA_W0_7_DFMT1;                    /**< DAC Initiator Domain Assignment Register, offset: 0x8E0 */
        uint8_t RESERVED_14[63260];
   __I  uint32_t MBC0_MEM_GLBCFG[NETC_TRDC_MGR_MBC_MEM_GLBCFG0_COUNT]; /**< MBC Global Configuration Register, array offset: 0x10000, array step: 0x4 */
   __IO uint32_t MBC0_NSE_BLK_INDEX;                /**< MBC NonSecure Enable Block Index, offset: 0x10010 */
@@ -780,7 +780,7 @@ typedef struct {
 
 #define NETC_TRDC_MGR_TRDC_HWCFG0_NMSTR_MASK     (0xFF00U)
 #define NETC_TRDC_MGR_TRDC_HWCFG0_NMSTR_SHIFT    (8U)
-/*! NMSTR - Number of bus masters */
+/*! NMSTR - Number of bus initiators */
 #define NETC_TRDC_MGR_TRDC_HWCFG0_NMSTR(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_TRDC_HWCFG0_NMSTR_SHIFT)) & NETC_TRDC_MGR_TRDC_HWCFG0_NMSTR_MASK)
 
 #define NETC_TRDC_MGR_TRDC_HWCFG0_NMBC_MASK      (0xF0000U)
@@ -813,14 +813,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG0_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG0_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG0_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG0_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG0_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG0_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG0_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG0_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG0_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG0_NCM_MASK)
 /*! @} */
@@ -830,14 +830,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG1_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG1_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG1_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG1_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG1_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG1_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG1_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG1_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG1_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG1_NCM_MASK)
 /*! @} */
@@ -847,14 +847,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG2_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG2_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG2_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG2_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG2_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG2_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG2_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG2_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG2_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG2_NCM_MASK)
 /*! @} */
@@ -864,14 +864,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG3_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG3_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG3_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG3_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG3_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG3_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG3_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG3_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG3_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG3_NCM_MASK)
 /*! @} */
@@ -881,14 +881,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG4_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG4_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG4_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG4_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG4_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG4_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG4_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG4_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG4_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG4_NCM_MASK)
 /*! @} */
@@ -898,14 +898,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG5_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG5_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG5_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG5_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG5_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG5_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG5_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG5_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG5_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG5_NCM_MASK)
 /*! @} */
@@ -915,14 +915,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG6_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG6_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG6_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG6_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG6_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG6_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG6_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG6_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG6_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG6_NCM_MASK)
 /*! @} */
@@ -932,14 +932,14 @@ typedef struct {
 
 #define NETC_TRDC_MGR_DACFG7_NMDAR_MASK          (0xFU)
 #define NETC_TRDC_MGR_DACFG7_NMDAR_SHIFT         (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define NETC_TRDC_MGR_DACFG7_NMDAR(x)            (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG7_NMDAR_SHIFT)) & NETC_TRDC_MGR_DACFG7_NMDAR_MASK)
 
 #define NETC_TRDC_MGR_DACFG7_NCM_MASK            (0x80U)
 #define NETC_TRDC_MGR_DACFG7_NCM_SHIFT           (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define NETC_TRDC_MGR_DACFG7_NCM(x)              (((uint8_t)(((uint8_t)(x)) << NETC_TRDC_MGR_DACFG7_NCM_SHIFT)) & NETC_TRDC_MGR_DACFG7_NCM_MASK)
 /*! @} */
@@ -1133,6 +1133,26 @@ typedef struct {
 /*! EDID - Error domain identifier */
 #define NETC_TRDC_MGR_W1_EDID(x)                 (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_W1_EDID_SHIFT)) & NETC_TRDC_MGR_W1_EDID_MASK)
 
+#define NETC_TRDC_MGR_W1_SLV_DID_ERR_MASK        (0x10U)
+#define NETC_TRDC_MGR_W1_SLV_DID_ERR_SHIFT       (4U)
+/*! SLV_DID_ERR - DID check error */
+#define NETC_TRDC_MGR_W1_SLV_DID_ERR(x)          (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_W1_SLV_DID_ERR_SHIFT)) & NETC_TRDC_MGR_W1_SLV_DID_ERR_MASK)
+
+#define NETC_TRDC_MGR_W1_SLV_PA_ERR_MASK         (0x20U)
+#define NETC_TRDC_MGR_W1_SLV_PA_ERR_SHIFT        (5U)
+/*! SLV_PA_ERR - Privilege attribute check error */
+#define NETC_TRDC_MGR_W1_SLV_PA_ERR(x)           (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_W1_SLV_PA_ERR_SHIFT)) & NETC_TRDC_MGR_W1_SLV_PA_ERR_MASK)
+
+#define NETC_TRDC_MGR_W1_SLV_SA_ERR_MASK         (0x40U)
+#define NETC_TRDC_MGR_W1_SLV_SA_ERR_SHIFT        (6U)
+/*! SLV_SA_ERR - Secure attribute check error */
+#define NETC_TRDC_MGR_W1_SLV_SA_ERR(x)           (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_W1_SLV_SA_ERR_SHIFT)) & NETC_TRDC_MGR_W1_SLV_SA_ERR_MASK)
+
+#define NETC_TRDC_MGR_W1_SLV_ABORT_MASK          (0x80U)
+#define NETC_TRDC_MGR_W1_SLV_ABORT_SHIFT         (7U)
+/*! SLV_ABORT - Bus protect error */
+#define NETC_TRDC_MGR_W1_SLV_ABORT(x)            (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_W1_SLV_ABORT_SHIFT)) & NETC_TRDC_MGR_W1_SLV_ABORT_MASK)
+
 #define NETC_TRDC_MGR_W1_EATR_MASK               (0x700U)
 #define NETC_TRDC_MGR_W1_EATR_SHIFT              (8U)
 /*! EATR - Error attributes
@@ -1192,7 +1212,7 @@ typedef struct {
 /* The count of NETC_TRDC_MGR_W3 */
 #define NETC_TRDC_MGR_W3_COUNT                   (1U)
 
-/*! @name MDA_W0_0_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_0_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_DID_MASK    (0xFU)
@@ -1203,20 +1223,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_0_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_0_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_0_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_0_DFMT1_SA_MASK)
 
@@ -1266,7 +1286,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_0_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_0_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_0_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_1_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_1_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_DID_MASK    (0xFU)
@@ -1277,20 +1297,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_1_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_1_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_1_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_1_DFMT1_SA_MASK)
 
@@ -1340,7 +1360,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_1_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_1_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_1_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_2_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_2_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_DID_MASK    (0xFU)
@@ -1351,20 +1371,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_2_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_2_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_2_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_2_DFMT1_SA_MASK)
 
@@ -1414,7 +1434,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_2_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_2_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_2_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_3_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_3_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_DID_MASK    (0xFU)
@@ -1425,20 +1445,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_3_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_3_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_3_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_3_DFMT1_SA_MASK)
 
@@ -1488,7 +1508,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_3_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_3_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_3_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_4_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_4_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_DID_MASK    (0xFU)
@@ -1499,20 +1519,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_4_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_4_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_4_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_4_DFMT1_SA_MASK)
 
@@ -1562,7 +1582,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_4_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_4_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_4_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_5_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_5_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_DID_MASK    (0xFU)
@@ -1573,20 +1593,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_5_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_5_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_5_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_5_DFMT1_SA_MASK)
 
@@ -1636,7 +1656,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_5_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_5_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_5_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_6_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_6_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_DID_MASK    (0xFU)
@@ -1647,20 +1667,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_6_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_6_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_6_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_6_DFMT1_SA_MASK)
 
@@ -1710,7 +1730,7 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_6_DFMT1_VLD(x)      (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_6_DFMT1_VLD_SHIFT)) & NETC_TRDC_MGR_MDA_W0_6_DFMT1_VLD_MASK)
 /*! @} */
 
-/*! @name MDA_W0_7_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W0_7_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_DID_MASK    (0xFU)
@@ -1721,20 +1741,20 @@ typedef struct {
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_PA_MASK     (0x30U)
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_PA_SHIFT    (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_PA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_7_DFMT1_PA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_7_DFMT1_PA_MASK)
 
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_SA_MASK     (0xC0U)
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_SA_SHIFT    (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define NETC_TRDC_MGR_MDA_W0_7_DFMT1_SA(x)       (((uint32_t)(((uint32_t)(x)) << NETC_TRDC_MGR_MDA_W0_7_DFMT1_SA_SHIFT)) & NETC_TRDC_MGR_MDA_W0_7_DFMT1_SA_MASK)
 

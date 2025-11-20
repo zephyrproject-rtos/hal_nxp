@@ -103,14 +103,14 @@ static uint32_t EDMA_GetInstance(DMA_Type *base)
      * (instance >= ARRAY_SIZE(s_edmaBases)) not covered.
      * $ref edma_c_edma_1$.
      */
-    for (instance = 0; instance < ARRAY_SIZE(s_edmaBases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_edmaBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_edmaBases[instance] != base) not covered.
          * $ref edma_c_ref_1$.
          */
-        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -899,7 +899,7 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
     assert(((uint32_t)tcdPool & 0x1FU) == 0U);
 
     /* Initialize tcd queue attibute. */
-    handle->header  = 1;
+    handle->header  = 0;
     handle->tail    = 0;
     handle->tcdUsed = 0;
     handle->tcdSize = (int8_t)tcdSize;
@@ -1202,13 +1202,13 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
                  * (tcdRegs->DLAST_SGA == temp) not covered.
                  * $ref edma_c_ref_2$.
                  */
-                if (tcdRegs->DLAST_SGA == temp)
+                if (tcdRegs->DLAST_SGA == temp) /* GCOVR_EXCL_BR_LINE */
                 {
                     /*
                      * $Line Coverage Justification$
                      * $ref edma_c_ref_2$.
                      */
-                    return kStatus_Success;
+                    return kStatus_Success; /* GCOVR_EXCL_LINE */
                 }
                 /*
                     If go to this, means the previous transfer finished, and the DONE
@@ -1284,7 +1284,7 @@ void EDMA_StartTransfer(edma_handle_t *handle)
                  * $ref edma_c_ref_3$.
                  */
                 if ((!((handle->base->CH[handle->channel].CH_CSR & DMA_CH_CSR_DONE_MASK) != 0U)) ||
-                    ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u))
+                    ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0u)) /* GCOVR_EXCL_BR_LINE */
                 {
                     /*
                         Re-enable channel request must be as soon as possible, so must put
@@ -1350,7 +1350,7 @@ void EDMA_AbortTransfer(edma_handle_t *handle)
     /* Handle the tcd */
     if (handle->tcdPool != NULL)
     {
-        handle->header  = 1;
+        handle->header  = 0;
         handle->tail    = 0;
         handle->tcdUsed = 0;
     }
@@ -1386,41 +1386,35 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
     else /* Use the TCD queue. */
     {
         uint32_t sga = handle->base->CH[handle->channel].TCD_DLAST_SGA;
+        edma_tcd_t *tcdRegs = (edma_tcd_t *)((uint32_t)&handle->base->CH[handle->channel] + 0x00000020U);
         uint32_t sga_index;
         int32_t tcds_done;
         uint8_t new_header;
         uint32_t temp = 0;
+        bool esg = ((tcdRegs->CSR & DMA_TCD_CSR_ESG_MASK) != 0U);
 
-/* Get the offset of the current transfer TCD blocks. */
+        /* Get the offset of the next transfer TCD blocks. */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
         temp = MEMORY_ConvertMemoryMapAddress((uint32_t)handle->tcdPool, kMEMORY_Local2DMA);
 #else
         temp = (uint32_t)handle->tcdPool;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
         sga -= temp;
-        /* Get the index of the current transfer TCD blocks. */
+        /* Get the index of the next transfer TCD blocks. */
         sga_index = sga / sizeof(edma_tcd_t);
-        /* Adjust header positions. */
-        if (transfer_done)
-        {
-            /* New header shall point to the next TCD (current one is already
-             * finished) */
-            new_header = (uint8_t)sga_index;
-        }
-        else
-        {
-            /* New header shall point to this descriptor (not finished yet) */
-            /*
-             * $Branch Coverage Justification$
-             * (sga_index != 0U) not covered.
-             * $ref edma_c_ref_4$.
-             */
-            new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
-        }
+        /* Adjust header positions. new_header should be the index of the current transfer TCD blocks. */
+        new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
+
         /* Calculate the number of finished TCDs */
         if (new_header == (uint8_t)handle->header)
         {
-            if (handle->tcdUsed == handle->tcdSize)
+            /* check esg here for the case that application submit only one request, once the request complete:
+             * new_header(1) = handle->header(1)
+             * tcdUsed(1) != tcdSize(>1)
+             * As the application submit only once, so scatter gather must not enabled, then tcds_done should be 1
+             * check transfer_done to handle the half interrupt or internal error occurs.
+             */
+            if (((handle->tcdUsed == handle->tcdSize) || !esg) && transfer_done)
             {
                 tcds_done = handle->tcdUsed;
             }
@@ -1447,7 +1441,7 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
              * (transfer_done) not covered. Test unfeasible,
              * The transfer_done will be false when (new_header == (uint8_t)handle->header) is false.
              */
-            if (transfer_done)
+            if (transfer_done) /* GCOVR_EXCL_BR_LINE */
             {
                 handle->base->CH[handle->channel].CH_CSR |= DMA_CH_CSR_DONE_MASK;
             }
@@ -1530,7 +1524,7 @@ void DMA0_DriverIRQHandler(void)
              * (EDMA_GetChannelStatusFlags(DMA0, i) & (uint32_t)kEDMA_InterruptFlag) == 0U) not covered. Test
              * unfeasible, the Reference interrupt flag state is too short to catch.
              */
-            if ((EDMA_GetChannelStatusFlags(DMA0, i) & (uint32_t)kEDMA_InterruptFlag) != 0U)
+            if ((EDMA_GetChannelStatusFlags(DMA0, i) & (uint32_t)kEDMA_InterruptFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
             {
                 EDMA_HandleIRQ(s_EDMAHandle[prevChannel + i]);
             }

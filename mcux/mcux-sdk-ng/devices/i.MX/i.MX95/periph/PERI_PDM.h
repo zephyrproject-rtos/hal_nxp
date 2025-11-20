@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PDM
@@ -1371,7 +1371,8 @@ typedef struct {
  *  0b000..PDM Microphone 0 Left
  *  0b001..PDM Microphone 0 Right
  *  0b010..PDM Microphone 1 Left
- *  0b011-0b101.....
+ *  0b011..PDM Microphone 1 Right
+ *  0b100-0b101.....
  *  0b110..PDM Microphone 3 Left
  *  0b111..PDM Microphone 3 Right
  */

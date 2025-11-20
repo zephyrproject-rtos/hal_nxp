@@ -2,7 +2,7 @@
 ** ###################################################################
 **     Processor:           MCXE31BMPB
 **     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250718
+**     Build:               b250924
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for EMAC
@@ -334,7 +334,7 @@ typedef struct {
   __I  uint32_t MTL_RXP_DROP_CNT;                  /**< MTL Rx Parser Drop Count, offset: 0xCA8 */
   __I  uint32_t MTL_RXP_ERROR_CNT;                 /**< MTL Rx Parser Error Count, offset: 0xCAC */
   __IO uint32_t MTL_RXP_INDIRECT_ACC_CONTROL_STATUS; /**< MTL Rx Parser Indirect Access Control Status, offset: 0xCB0 */
-  __I  uint32_t MTL_RXP_INDIRECT_ACC_DATA;         /**< MTL Rx Parser Indirect Access Data, offset: 0xCB4 */
+  __IO uint32_t MTL_RXP_INDIRECT_ACC_DATA;         /**< MTL Rx Parser Indirect Access Data, offset: 0xCB4 */
        uint8_t RESERVED_42[8];
   __IO uint32_t MTL_ECC_CONTROL;                   /**< MTL ECC Control, offset: 0xCC0 */
   __I  uint32_t MTL_SAFETY_INTERRUPT_STATUS;       /**< MTL Safety Interript Status, offset: 0xCC4 */

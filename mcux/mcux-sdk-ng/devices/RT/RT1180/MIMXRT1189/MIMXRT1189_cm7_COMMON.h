@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b250930
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1189_cm7

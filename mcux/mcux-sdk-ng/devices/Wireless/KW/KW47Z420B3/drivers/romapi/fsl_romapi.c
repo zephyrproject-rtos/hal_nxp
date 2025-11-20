@@ -722,22 +722,6 @@ nboot_status_t NBOOT_SB3LoaderBlock(nboot_context_t *context, uint32_t *block)
 }
 
 /*!
- * @brief Authenticate and load Sentinel200 firmware at once
- *
- * This function verifies and decrypts SB3.1 file with S200 firmware. Decryption is performed to S200 RAM and firmware
- * automaticly started after sucessfull load. The NBOOT context has to be initialized by the function nboot_context_init
- * before calling this function.
- */
-nboot_status_t NBOOT_SB3LoaderS200Fw(nboot_context_t *context, uint32_t *sb3Data)
-{
-    assert(BOOTLOADER_API_TREE_POINTER);
-    assert(context);
-    assert(sb3Data);
-
-    return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_load_s200_fw(context, sb3Data);
-}
-
-/*!
  * @brief Secure boot image authentication
  *
  * This function authenticates image with asymmetric cryptography.
@@ -822,4 +806,31 @@ nboot_status_t NBOOT_PropertyGet(nboot_context_t *context, uint32_t propertyId, 
     assert(dataLen);
 
     return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_property_get(context, propertyId, destData, dataLen);
+}
+
+/*!
+ * @brief Switch ELE to specified secure level access for next command.
+ */
+nboot_status_t NBOOT_ForceOneShotSecureLevel(nboot_context_t *context, nboot_security_level_t secLvl)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(context);
+
+    return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_force_one_shot_secure_level(context, secLvl);
+}
+
+/*!
+ * @brief Authenticate SB3 header and verifies consistency of blocks.
+ *
+ * This function authenticates SB3 header and verifies consistency of all data blocks to avoid processing of corrupted
+ * data.
+ */
+nboot_status_t NBOOT_Sb3ConsistencyVerify(nboot_context_t *context, uint8_t sb3Data[], nboot_bool_t *isConsistent)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    assert(context);
+    assert(sb3Data);
+    assert(isConsistent);
+
+    return BOOTLOADER_API_TREE_POINTER->nbootAuthenticate->nboot_sb3_consistency_verify(context, sb3Data, isConsistent);
 }

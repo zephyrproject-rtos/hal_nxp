@@ -34,7 +34,7 @@ volatile uint32_t g_emacRxClkFreq     = 0U;
  * Functions
  *****************************************************************************/
 
-void CLOCK_EnableClock(clock_ip_name_t clk)
+status_t CLOCK_EnableClock(clock_ip_name_t clk)
 {
     uint32_t bitMask = 1UL << MC_ME_COFB_CLKEN_BIT(clk);
 
@@ -49,17 +49,29 @@ void CLOCK_EnableClock(clock_ip_name_t clk)
 
         CLOCK_McmeEnterKey();
 
+#if (CLOCK_RETRY_TIMES != 0U)
+        uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
         while (MC_ME_PRTN_PUPD_REG(clk) & MC_ME_PRTN0_PUPD_PCUD_MASK)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                assert(false);
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
     else
     {
         /* Already enabled. */
     }
+
+    return kStatus_Success;
 }
 
-void CLOCK_DisableClock(clock_ip_name_t clk)
+status_t CLOCK_DisableClock(clock_ip_name_t clk)
 {
     uint32_t bitMask = 1UL << MC_ME_COFB_CLKEN_BIT(clk);
 
@@ -72,18 +84,29 @@ void CLOCK_DisableClock(clock_ip_name_t clk)
         MC_ME_PRTN_PUPD_REG(clk) |= MC_ME_PRTN0_PUPD_PCUD_MASK; /* Enable partition clock update. */
 
         CLOCK_McmeEnterKey();
-
+#if (CLOCK_RETRY_TIMES != 0U)
+        uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
         while (MC_ME_PRTN_PUPD_REG(clk) & MC_ME_PRTN0_PUPD_PCUD_MASK)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                assert(false);
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
     else
     {
         /* Already disabled, nothing to do. */
     }
+    
+    return kStatus_Success;
 }
 
-void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider)
+status_t CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider)
 {
     if (0U == divider)
     {
@@ -93,11 +116,21 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider)
     {
         CLOCK_TUPLE_DIV_DC_REG(div_name) = MC_CGM_MUX_0_DC_0_DE_MASK | ((divider - 1U) << MC_CGM_MUX_0_DC_0_DIV_SHIFT);
 
+#if (CLOCK_RETRY_TIMES != 0U)
+        uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
         /* Check update finished. */
         while ((CLOCK_TUPLE_DIV_UPD_STAT_REG(div_name) & MC_CGM_MUX_0_DIV_UPD_STAT_DIV_STAT_MASK) != 0U)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
+    return kStatus_Success;
 }
 
 status_t CLOCK_SetFircDiv(clock_firc_div_t divider)
@@ -117,24 +150,52 @@ status_t CLOCK_SetFircDiv(clock_firc_div_t divider)
     return ret;
 }
 
-void CLOCK_AttachClk(clock_attach_id_t connection)
+status_t CLOCK_AttachClk(clock_attach_id_t connection)
 {
     uint32_t mux = (connection & 0xFF00U) >> 8U;
     uint32_t src = connection & 0xFFU;
 
     assert(mux < 12U);
 
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
+
     if ((mux != 5U) && (mux != 6U) && (mux != 11U)) /* For hardware-controlled clock multiplexer. */
     {
         while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_SWIP_MASK) != 0)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
         CLOCK_TUPLE_MUX_CSC_REG(connection) = (src << MC_CGM_MUX_0_CSC_SELCTL_SHIFT) | MC_CGM_MUX_0_CSC_CLK_SW_MASK;
+#if (CLOCK_RETRY_TIMES != 0U)
+        waitTimes = CLOCK_RETRY_TIMES;
+#endif
         while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_CLK_SW_MASK) == 0)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
+#if (CLOCK_RETRY_TIMES != 0U)
+        waitTimes = CLOCK_RETRY_TIMES;
+#endif
         while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_SWIP_MASK) != 0)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
     else /* For software-controlled clock multiplexer. */
@@ -148,10 +209,12 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
             CLOCK_TUPLE_MUX_CSC_REG(connection) = MC_CGM_MUX_5_CSC_SELCTL(src);
         }
     }
+
+    return kStatus_Success;
 }
 
 /* ProgressiveClockFrequencySwitch */
-void CLOCK_ProgressiveClockFrequencySwitch(clock_attach_id_t connection, clock_pcfs_config_t const *config)
+status_t CLOCK_ProgressiveClockFrequencySwitch(clock_attach_id_t connection, clock_pcfs_config_t const *config)
 {
     assert(config != NULL);
 
@@ -237,31 +300,71 @@ void CLOCK_ProgressiveClockFrequencySwitch(clock_attach_id_t connection, clock_p
     assert(divStartValue <= MC_CGM_PCFS_DIVS8_DIVS_MASK);
     MC_CGM->PCFS_DIVS8 = MC_CGM_PCFS_DIVS8_DIVS((uint32_t)divStartValue);
 
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
     while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_SWIP_MASK) != 0)
     {
+#if (CLOCK_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
     CLOCK_TUPLE_MUX_CSC_REG(connection) = (src << MC_CGM_MUX_0_CSC_SELCTL_SHIFT) | MC_CGM_MUX_0_CSC_CLK_SW_MASK |
                                           MC_CGM_MUX_0_CSC_RAMPDOWN_MASK | MC_CGM_MUX_0_CSC_RAMPUP_MASK;
+
+#if (CLOCK_RETRY_TIMES != 0U)
+    waitTimes = CLOCK_RETRY_TIMES;
+#endif
     while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_CLK_SW_MASK) == 0)
     {
+#if (CLOCK_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+#if (CLOCK_RETRY_TIMES != 0U)
+    waitTimes = CLOCK_RETRY_TIMES;
+#endif
     while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_SWIP_MASK) != 0)
     {
+#if (CLOCK_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
+
+    return kStatus_Success;
 }
 
-void CLOCK_SelectSafeClock(clock_attach_id_t connection)
+status_t CLOCK_SelectSafeClock(clock_attach_id_t connection)
 {
     uint32_t mux = (connection & 0xFF00U) >> 8U;
-
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
     if ((mux != 5U) && (mux != 6U) && (mux != 11U)) /* For hardware-controlled clock multiplexer. */
     {
         CLOCK_TUPLE_MUX_CSC_REG(connection) |= MC_CGM_MUX_0_CSC_SAFE_SW_MASK;
 
         while ((CLOCK_TUPLE_MUX_CSS_REG(connection) & MC_CGM_MUX_0_CSS_SAFE_SW_MASK) == 0)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
+
+    return kStatus_Success;
 }
 
 uint32_t CLOCK_GetClkSelectState(clock_attach_id_t connection)
@@ -282,7 +385,7 @@ uint32_t CLOCK_GetClkSwitchTriggerCause(clock_attach_id_t connection)
     return trigger;
 }
 
-void CLOCK_InitFxosc(const fxosc_config_t *config)
+status_t CLOCK_InitFxosc(const fxosc_config_t *config)
 {
     CLOCK_EnableClock(kCLOCK_Fxosc);
     if ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) != 0U)
@@ -296,16 +399,29 @@ void CLOCK_InitFxosc(const fxosc_config_t *config)
     FXOSC->CTRL = config->workMode | FXOSC_CTRL_OSCON_MASK | FXOSC_CTRL_GM_SEL(config->overdriveProtect) |
                   FXOSC_CTRL_EOCV(config->startupDelay);
 
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
     while ((FXOSC->STAT & FXOSC_STAT_OSC_STAT_MASK) == 0U)
     {
+#if (CLOCK_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     g_xtal0Freq = config->freqHz;
+    return kStatus_Success;
 }
 
 #if defined(FSL_FEATURE_MC_CGM_HAS_SXOSC) && (FSL_FEATURE_MC_CGM_HAS_SXOSC != 0U)
-void CLOCK_InitSxosc(bool enable, uint8_t startupDelay)
+status_t CLOCK_InitSxosc(bool enable, uint8_t startupDelay)
 {
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
     if (enable)
     {
         CLOCK_EnableClock(kCLOCK_Sxosc); /* Check and enable SXOSC clock in MC_ME. */
@@ -317,6 +433,12 @@ void CLOCK_InitSxosc(bool enable, uint8_t startupDelay)
 
         while ((SXOSC->SXOSC_STAT & SXOSC_SXOSC_STAT_OSC_STAT_MASK) == 0U)
         {
+#if (CLOCK_RETRY_TIMES != 0U)
+            if (--waitTimes == 0U)
+            {
+                return kStatus_Timeout;
+            }
+#endif
         }
     }
     else
@@ -324,10 +446,12 @@ void CLOCK_InitSxosc(bool enable, uint8_t startupDelay)
         SXOSC->SXOSC_CTRL &= ~SXOSC_SXOSC_CTRL_OSCON_MASK;
         /* CLOCK_DisableClock(kCLOCK_Sxosc); */
     }
+
+    return kStatus_Success;
 }
 #endif /* FSL_FEATURE_MC_CGM_HAS_SXOSC */
 
-void CLOCK_InitPll(const pll_config_t *config)
+status_t CLOCK_InitPll(const pll_config_t *config)
 {
     uint32_t i;
 
@@ -384,8 +508,17 @@ void CLOCK_InitPll(const pll_config_t *config)
 
     PLL->PLLCR &= ~PLL_PLLCR_PLLPD_MASK; /* Enable PLL.*/
 
+#if (CLOCK_RETRY_TIMES != 0U)
+    uint32_t waitTimes = CLOCK_RETRY_TIMES;
+#endif
     while ((PLL->PLLSR & PLL_PLLSR_LOCK_MASK) == 0U)
     {
+#if (CLOCK_RETRY_TIMES != 0U)
+        if (--waitTimes == 0U)
+        {
+            return kStatus_Timeout;
+        }
+#endif
     }
 
     for (i = 0U; i < PLL_PLLODIV_COUNT; i++)
@@ -399,6 +532,7 @@ void CLOCK_InitPll(const pll_config_t *config)
             PLL->PLLODIV[i] &= ~PLL_PLLODIV_DE_MASK;
         }
     }
+    return kStatus_Success;
 }
 
 uint32_t CLOCK_GetPllPhiClkFreq(uint32_t index)
@@ -420,8 +554,9 @@ uint32_t CLOCK_GetPllPhiClkFreq(uint32_t index)
             freq   = CLOCK_GetFxoscFreq() / 1000U / div;
             temp   = (PLL->PLLDV & PLL_PLLDV_MFI_MASK) >> PLL_PLLDV_MFI_SHIFT;
             temp64 = (uint64_t)temp * 18432U + (uint64_t)(PLL->PLLFD & PLL_PLLFD_MFN_MASK);
-            temp64 = temp64 * 1000U / 18432U;
-            freq   = (uint32_t)((uint64_t)freq * temp64);
+            temp64 = temp64 * 1000U / 18432U * freq;
+            assert(temp64 <= 0xFFFFFFFFU);
+            freq = (uint32_t)temp64;
         }
         else
         {

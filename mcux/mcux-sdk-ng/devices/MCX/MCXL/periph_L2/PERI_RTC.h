@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTC
@@ -165,17 +165,26 @@ typedef struct {
 
 #define RTC_CONFIG_ALARM0_DIS_MASK               (0x40U)
 #define RTC_CONFIG_ALARM0_DIS_SHIFT              (6U)
-/*! ALARM0_DIS - Alarm0 Disable */
+/*! ALARM0_DIS - Alarm0 Disable
+ *  0b0..No effect
+ *  0b1..Alarm Disable
+ */
 #define RTC_CONFIG_ALARM0_DIS(x)                 (((uint32_t)(((uint32_t)(x)) << RTC_CONFIG_ALARM0_DIS_SHIFT)) & RTC_CONFIG_ALARM0_DIS_MASK)
 
 #define RTC_CONFIG_ALARM1_DIS_MASK               (0x80U)
 #define RTC_CONFIG_ALARM1_DIS_SHIFT              (7U)
-/*! ALARM1_DIS - Alarm1 Disable */
+/*! ALARM1_DIS - Alarm1 Disable
+ *  0b0..No effect
+ *  0b1..Alarm Disable
+ */
 #define RTC_CONFIG_ALARM1_DIS(x)                 (((uint32_t)(((uint32_t)(x)) << RTC_CONFIG_ALARM1_DIS_SHIFT)) & RTC_CONFIG_ALARM1_DIS_MASK)
 
 #define RTC_CONFIG_ALARM2_DIS_MASK               (0x100U)
 #define RTC_CONFIG_ALARM2_DIS_SHIFT              (8U)
-/*! ALARM2_DIS - Alarm2 Disable */
+/*! ALARM2_DIS - Alarm2 Disable
+ *  0b0..No effect
+ *  0b1..Alarm Disable
+ */
 #define RTC_CONFIG_ALARM2_DIS(x)                 (((uint32_t)(((uint32_t)(x)) << RTC_CONFIG_ALARM2_DIS_SHIFT)) & RTC_CONFIG_ALARM2_DIS_MASK)
 
 #define RTC_CONFIG_IF_READY_MASK                 (0x200U)
@@ -307,27 +316,37 @@ typedef struct {
 
 #define RTC_INT_ALARM0_IF_MASK                   (0x1U)
 #define RTC_INT_ALARM0_IF_SHIFT                  (0U)
-/*! ALARM0_IF - Alarm 0 interrupt flag, write 1 to this bit will reset the flag */
+/*! ALARM0_IF - Alarm0 Interrupt Flag
+ *  0b1..Reset
+ */
 #define RTC_INT_ALARM0_IF(x)                     (((uint32_t)(((uint32_t)(x)) << RTC_INT_ALARM0_IF_SHIFT)) & RTC_INT_ALARM0_IF_MASK)
 
 #define RTC_INT_ALARM1_IF_MASK                   (0x2U)
 #define RTC_INT_ALARM1_IF_SHIFT                  (1U)
-/*! ALARM1_IF - Alarm 1 interrupt flag, write 1 to this bit will reset the flag */
+/*! ALARM1_IF - Alarm1 Interrupt Flag
+ *  0b1..Reset
+ */
 #define RTC_INT_ALARM1_IF(x)                     (((uint32_t)(((uint32_t)(x)) << RTC_INT_ALARM1_IF_SHIFT)) & RTC_INT_ALARM1_IF_MASK)
 
 #define RTC_INT_ALARM2_IF_MASK                   (0x4U)
 #define RTC_INT_ALARM2_IF_SHIFT                  (2U)
-/*! ALARM2_IF - Alarm 2 interrupt flag, write 1 to this bit will reset the flag */
+/*! ALARM2_IF - Alarm2 Interrupt Flag
+ *  0b1..Reset
+ */
 #define RTC_INT_ALARM2_IF(x)                     (((uint32_t)(((uint32_t)(x)) << RTC_INT_ALARM2_IF_SHIFT)) & RTC_INT_ALARM2_IF_MASK)
 
 #define RTC_INT_XTAL_FAIL_IF_MASK                (0x8U)
 #define RTC_INT_XTAL_FAIL_IF_SHIFT               (3U)
-/*! XTAL_FAIL_IF - XTAL failed interrupt flag, write 1 to this bit will reset the flag */
+/*! XTAL_FAIL_IF - XTAL Failed Interrupt Flag
+ *  0b1..Reset
+ */
 #define RTC_INT_XTAL_FAIL_IF(x)                  (((uint32_t)(((uint32_t)(x)) << RTC_INT_XTAL_FAIL_IF_SHIFT)) & RTC_INT_XTAL_FAIL_IF_MASK)
 
 #define RTC_INT_WDT_IF_MASK                      (0x10U)
 #define RTC_INT_WDT_IF_SHIFT                     (4U)
-/*! WDT_IF - Watch Dog Interrupt Flag */
+/*! WDT_IF - Watch Dog Interrupt Flag
+ *  0b1..Reset
+ */
 #define RTC_INT_WDT_IF(x)                        (((uint32_t)(((uint32_t)(x)) << RTC_INT_WDT_IF_SHIFT)) & RTC_INT_WDT_IF_MASK)
 
 #define RTC_INT_TAMP_DET_PIN0_MASK               (0x20U)
@@ -379,10 +398,10 @@ typedef struct {
 /*! @name ALARM_H - Alarm High */
 /*! @{ */
 
-#define RTC_ALARM_H_ALARM_MASK                   (0xFFU)
-#define RTC_ALARM_H_ALARM_SHIFT                  (0U)
-/*! ALARM - ALARMN */
-#define RTC_ALARM_H_ALARM(x)                     (((uint32_t)(((uint32_t)(x)) << RTC_ALARM_H_ALARM_SHIFT)) & RTC_ALARM_H_ALARM_MASK)
+#define RTC_ALARM_H_ALARM_N_MASK                 (0xFFU)
+#define RTC_ALARM_H_ALARM_N_SHIFT                (0U)
+/*! ALARM_N - Alarm_N */
+#define RTC_ALARM_H_ALARM_N(x)                   (((uint32_t)(((uint32_t)(x)) << RTC_ALARM_H_ALARM_N_SHIFT)) & RTC_ALARM_H_ALARM_N_MASK)
 
 #define RTC_ALARM_H_ALARM_NUM_MASK               (0x6000U)
 #define RTC_ALARM_H_ALARM_NUM_SHIFT              (13U)
@@ -444,10 +463,10 @@ typedef struct {
  */
 #define RTC_BCD_ALARM_H_MONTH(x)                 (((uint32_t)(((uint32_t)(x)) << RTC_BCD_ALARM_H_MONTH_SHIFT)) & RTC_BCD_ALARM_H_MONTH_MASK)
 
-#define RTC_BCD_ALARM_H_USE_MO_MASK              (0x1000U)
-#define RTC_BCD_ALARM_H_USE_MO_SHIFT             (12U)
-/*! USE_MO - Alarm Use Month */
-#define RTC_BCD_ALARM_H_USE_MO(x)                (((uint32_t)(((uint32_t)(x)) << RTC_BCD_ALARM_H_USE_MO_SHIFT)) & RTC_BCD_ALARM_H_USE_MO_MASK)
+#define RTC_BCD_ALARM_H_USE_MONTH_MASK           (0x1000U)
+#define RTC_BCD_ALARM_H_USE_MONTH_SHIFT          (12U)
+/*! USE_MONTH - Alarm Use Month */
+#define RTC_BCD_ALARM_H_USE_MONTH(x)             (((uint32_t)(((uint32_t)(x)) << RTC_BCD_ALARM_H_USE_MONTH_SHIFT)) & RTC_BCD_ALARM_H_USE_MONTH_MASK)
 
 #define RTC_BCD_ALARM_H_NUM_MASK                 (0x6000U)
 #define RTC_BCD_ALARM_H_NUM_SHIFT                (13U)
@@ -473,10 +492,10 @@ typedef struct {
 /*! HOUR - Alarm Hour */
 #define RTC_BCD_ALARM_MIN_HOUR(x)                (((uint32_t)(((uint32_t)(x)) << RTC_BCD_ALARM_MIN_HOUR_SHIFT)) & RTC_BCD_ALARM_MIN_HOUR_MASK)
 
-#define RTC_BCD_ALARM_MIN_DAY_MO_MASK            (0xF800U)
-#define RTC_BCD_ALARM_MIN_DAY_MO_SHIFT           (11U)
-/*! DAY_MO - Alarm Day of Month */
-#define RTC_BCD_ALARM_MIN_DAY_MO(x)              (((uint32_t)(((uint32_t)(x)) << RTC_BCD_ALARM_MIN_DAY_MO_SHIFT)) & RTC_BCD_ALARM_MIN_DAY_MO_MASK)
+#define RTC_BCD_ALARM_MIN_DAY_MONTH_MASK         (0xF800U)
+#define RTC_BCD_ALARM_MIN_DAY_MONTH_SHIFT        (11U)
+/*! DAY_MONTH - Alarm Day of Month */
+#define RTC_BCD_ALARM_MIN_DAY_MONTH(x)           (((uint32_t)(((uint32_t)(x)) << RTC_BCD_ALARM_MIN_DAY_MONTH_SHIFT)) & RTC_BCD_ALARM_MIN_DAY_MONTH_MASK)
 /*! @} */
 
 /*! @name BCD_ALARM_L - BCD Alarm Low */
@@ -522,27 +541,33 @@ typedef struct {
 
 #define RTC_TAMP_CTRL_TAMP_LOG_EN_MASK           (0x1U)
 #define RTC_TAMP_CTRL_TAMP_LOG_EN_SHIFT          (0U)
-/*! TAMP_LOG_EN - Tamper Logic Enable */
+/*! TAMP_LOG_EN - Tamper Logic Enable
+ *  0b0..Off
+ *  0b1..On
+ */
 #define RTC_TAMP_CTRL_TAMP_LOG_EN(x)             (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_LOG_EN_SHIFT)) & RTC_TAMP_CTRL_TAMP_LOG_EN_MASK)
 
 #define RTC_TAMP_CTRL_TAMP_EN_MASK               (0x6U)
 #define RTC_TAMP_CTRL_TAMP_EN_SHIFT              (1U)
-/*! TAMP_EN - Tamper Enable */
+/*! TAMP_EN - Tamper Enable
+ *  0b00..Off
+ *  0b01..On
+ */
 #define RTC_TAMP_CTRL_TAMP_EN(x)                 (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_EN_SHIFT)) & RTC_TAMP_CTRL_TAMP_EN_MASK)
 
 #define RTC_TAMP_CTRL_TAMP_POL_MASK              (0x18U)
 #define RTC_TAMP_CTRL_TAMP_POL_SHIFT             (3U)
 /*! TAMP_POL - Tamper Polarity
- *  0b00..Active Low Tamper
- *  0b01..Active High Tamper
+ *  0b00..Active Low
+ *  0b01..Active High
  */
 #define RTC_TAMP_CTRL_TAMP_POL(x)                (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_POL_SHIFT)) & RTC_TAMP_CTRL_TAMP_POL_MASK)
 
 #define RTC_TAMP_CTRL_TAMP_PULL_CTRL_MASK        (0x60U)
 #define RTC_TAMP_CTRL_TAMP_PULL_CTRL_SHIFT       (5U)
 /*! TAMP_PULL_CTRL - Tamper Pull Control
- *  0b00..Pull up is enabled
- *  0b01..Pull up is disabled
+ *  0b00..Enabled
+ *  0b01..Disabled
  */
 #define RTC_TAMP_CTRL_TAMP_PULL_CTRL(x)          (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_PULL_CTRL_SHIFT)) & RTC_TAMP_CTRL_TAMP_PULL_CTRL_MASK)
 
@@ -568,7 +593,9 @@ typedef struct {
 
 #define RTC_TAMP_CTRL_WRITE_LCK_MASK             (0x800U)
 #define RTC_TAMP_CTRL_WRITE_LCK_SHIFT            (11U)
-/*! WRITE_LCK - Write Lock */
+/*! WRITE_LCK - Write Lock
+ *  0b1..Lock
+ */
 #define RTC_TAMP_CTRL_WRITE_LCK(x)               (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_WRITE_LCK_SHIFT)) & RTC_TAMP_CTRL_WRITE_LCK_MASK)
 
 #define RTC_TAMP_CTRL_TAMP_DET_MASK              (0x3000U)
@@ -579,8 +606,8 @@ typedef struct {
 #define RTC_TAMP_CTRL_TAMP_CTRL_MASK             (0xC000U)
 #define RTC_TAMP_CTRL_TAMP_CTRL_SHIFT            (14U)
 /*! TAMP_CTRL - Tamper Control
- *  0b00..Filter is disabled
- *  0b01..Filter is disabled
+ *  0b00..Filter Disabled
+ *  0b01..Filter Enabled
  */
 #define RTC_TAMP_CTRL_TAMP_CTRL(x)               (((uint32_t)(((uint32_t)(x)) << RTC_TAMP_CTRL_TAMP_CTRL_SHIFT)) & RTC_TAMP_CTRL_TAMP_CTRL_MASK)
 /*! @} */

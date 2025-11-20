@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, 2021, 2023-2024 NXP
+ * Copyright 2019, 2021, 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,8 +7,8 @@
 #ifndef _FSL_FLEXIO_QSPI_SMARTDMA_H_
 #define _FSL_FLEXIO_QSPI_SMARTDMA_H_
 
-#include "fsl_smartdma.h"
 #include "fsl_flexio_qspi.h"
+#include "fsl_smartdma.h"
 
 /*!
  * @addtogroup flexio_smartdma_qspi
@@ -21,7 +21,7 @@
 
 /*@{*/
 /*! @brief FlexIO QSPI SMARTDMA driver version. */
-#define FSL_FLEXIO_QSPI_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_FLEXIO_QSPI_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief  typedef for flexio_qspi_smartdma_handle_t in advance. */

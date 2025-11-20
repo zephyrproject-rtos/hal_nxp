@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2023-2024 NXP
+ * Copyright 2016-2021, 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Group interrupt driver version for SDK */
-#define FSL_INPUTMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 9))
+#define FSL_INPUTMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 10))
 /*! @} */
 
 /*******************************************************************************
@@ -66,7 +66,7 @@ void INPUTMUX_Init(void *base);
  *
  * @retval None.
  */
-void INPUTMUX_AttachSignal(void *base, uint32_t index, inputmux_connection_t connection);
+void INPUTMUX_AttachSignal(void *base, uint16_t index, inputmux_connection_t connection);
 
 #if defined(FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA) && FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA
 /*!

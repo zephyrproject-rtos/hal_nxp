@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPC_GLOBAL
@@ -569,7 +569,6 @@ typedef struct {
 #define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE_MASK (0xC0000000U)
 #define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE_SHIFT (30U)
 /*! STBY_OFF_CNT_MODE - PMIC standby off acknowledge count mode. Locked by LOCK_CFG field.
- *  0b00..Finish the process once pmic_standby signal changes
  *  0b01..Finish the process once getting acknowledge from PMIC
  *  0b10..Ignore PMIC acknowledge, the delay counter starts to count once pmic_standby changes
  *  0b11..Time out mode, the counter starts to count once pmic_standby changes, then finishes the process when

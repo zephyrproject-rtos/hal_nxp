@@ -1,0 +1,5 @@
+# Copyright 2025 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+include(../../../MCXL255/drivers/romapi/CMakeLists.txt)

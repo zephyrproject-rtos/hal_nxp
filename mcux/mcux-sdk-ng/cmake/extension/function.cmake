@@ -1068,7 +1068,6 @@ function(mcux_add_riscvllvm_configuration)
 
 endfunction()
 
-
 function(_mcux_add_linker_script)
   set(single_value LINKER BASE_PATH TOOLCHAIN)
   set(multi_value TARGETS)
@@ -1090,13 +1089,17 @@ function(_mcux_add_linker_script)
     return()
   endif()
 
-  if(__BASE_PATH)
-    set(linker_path ${__BASE_PATH}/${__LINKER})
+  if(IS_ABSOLUTE "${__LINKER}")
+    set(linker_path "${__LINKER}")
   else()
-    set(linker_path ${CMAKE_CURRENT_LIST_DIR}/${__LINKER})
+    if(__BASE_PATH)
+      set(linker_path "${__BASE_PATH}/${__LINKER}")
+    else()
+      set(linker_path "${CMAKE_CURRENT_LIST_DIR}/${__LINKER}")
+    endif()
   endif()
-
-  get_filename_component(linker_path ${linker_path} ABSOLUTE)
+  file(TO_CMAKE_PATH "${linker_path}" linker_path)
+  get_filename_component(linker_path "${linker_path}" ABSOLUTE)
 
   if(${CONFIG_TOOLCHAIN} STREQUAL "iar")
     set(ld_cmd "--config ${linker_path}")
@@ -1112,56 +1115,93 @@ function(_mcux_add_linker_script)
 
   mcux_get_property(TO_BE_REMOVED_LD_FLAGS INTERFACE_LD_TO_BE_REMOVED_FLAGS)
 
+  set(_ld_removed FALSE)
   if(TO_BE_REMOVED_LD_FLAGS)
-    string(FIND "${TO_BE_REMOVED_LD_FLAGS}" "${ld_cmd}" index)
-    if(${index} GREATER -1)
-      log_debug("Linker flag ${ld_cmd} has been set to be removed, do not add it.")
-    else()
-      mcux_append_single_compiler_flags_variable("LD" "${ld_cmd}")
-      mcux_set_property(${MCUX_SDK_PROJECT_NAME}_LINKER_PATH ${linker_path})
-      log_debug("Add linker flag ${ld_cmd} to LD flags" ${CMAKE_CURRENT_LIST_FILE})
+    list(FIND TO_BE_REMOVED_LD_FLAGS "${ld_cmd}" _idx)
+    if(_idx GREATER -1)
+      set(_ld_removed TRUE)
     endif()
+  endif()
+
+  if(_ld_removed)
+    log_debug("Linker flag ${ld_cmd} has been set to be removed, do not add it.")
   else()
     mcux_append_single_compiler_flags_variable("LD" "${ld_cmd}")
+    mcux_set_property(${MCUX_SDK_PROJECT_NAME}_LINKER_PATH "${linker_path}")
     log_debug("Add linker flag ${ld_cmd} to LD flags" ${CMAKE_CURRENT_LIST_FILE})
-    mcux_set_property(${MCUX_SDK_PROJECT_NAME}_LINKER_PATH ${linker_path})
   endif()
 
 endfunction()
 
 function(mcux_add_armgcc_linker_script)
-  set(single_value LINKER BASE_PATH)
-  set(multi_value TARGETS)
+  set(single_value LINKER BASE_PATH PROCESSED_LINKER PREPROCESSED)
+  set(multi_value TARGETS INCLUDES PARAMETERS)
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
   if(${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
-    _mcux_add_linker_script(TARGETS ${__TARGETS} BASE_PATH ${__BASE_PATH}
+    if(__PREPROCESSED)
+      _mcux_preprocess_and_add_linker(
+              TOOLCHAIN armgcc
+              TARGETS ${__TARGETS}
+              BASE_PATH ${__BASE_PATH}
+              RAW_LINKER ${__LINKER}
+              PARAMETERS ${__PARAMETERS}
+              PROCESSED_LINKER ${__PROCESSED_LINKER}
+              INCLUDES ${__INCLUDES}
+      )
+    else ()
+      _mcux_add_linker_script(TARGETS ${__TARGETS} BASE_PATH ${__BASE_PATH}
                             LINKER ${__LINKER})
+    endif ()
   endif()
 endfunction()
 
 function(mcux_add_iar_linker_script)
-  set(single_value LINKER BASE_PATH)
-  set(multi_value TARGETS)
+  set(single_value LINKER BASE_PATH PROCESSED_LINKER PREPROCESSED)
+  set(multi_value TARGETS INCLUDES PARAMETERS)
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
   if(${CONFIG_TOOLCHAIN} STREQUAL "iar")
-    _mcux_add_linker_script(TARGETS ${__TARGETS} BASE_PATH ${__BASE_PATH}
+    if (__PREPROCESSED)
+      _mcux_preprocess_and_add_linker(
+              TOOLCHAIN iar
+              TARGETS ${__TARGETS}
+              BASE_PATH ${__BASE_PATH}
+              RAW_LINKER ${__LINKER}
+              PARAMETERS ${__PARAMETERS}
+              PROCESSED_LINKER ${__PROCESSED_LINKER}
+              INCLUDES ${__INCLUDES}
+      )
+    else ()
+      _mcux_add_linker_script(TARGETS ${__TARGETS} BASE_PATH ${__BASE_PATH}
                             LINKER ${__LINKER})
+    endif ()
   endif()
 endfunction()
 
 function(mcux_add_mdk_linker_script)
-  set(single_value LINKER BASE_PATH)
-  set(multi_value TARGETS)
+  set(single_value LINKER BASE_PATH PROCESSED_LINKER PREPROCESSED)
+  set(multi_value TARGETS INCLUDES PARAMETERS)
   cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
                         ${ARGN})
 
   if(${CONFIG_TOOLCHAIN} STREQUAL "mdk")
-    _mcux_add_linker_script(TARGETS ${__TARGETS} BASE_PATH ${__BASE_PATH}
-                            LINKER ${__LINKER})
+    if(__PREPROCESSED)
+      _mcux_preprocess_and_add_linker(
+              TOOLCHAIN mdk
+              TARGETS ${__TARGETS}
+              BASE_PATH ${__BASE_PATH}
+              RAW_LINKER ${__LINKER}
+              PARAMETERS ${__PARAMETERS}
+              PROCESSED_LINKER ${__PROCESSED_LINKER}
+              INCLUDES ${__INCLUDES}
+      )
+    else ()
+      _mcux_add_linker_script(TARGETS ${__TARGETS} BASE_PATH ${__BASE_PATH}
+                              LINKER ${__LINKER})
+    endif()
   endif()
 endfunction()
 
@@ -1553,14 +1593,30 @@ function(_mcux_remove_linker_script)
     return()
   endif()
 
-  # In cmake, linker is just a flag,
-  if(__BASE_PATH)
-    set(linker_path ${__BASE_PATH}/${__LINKER})
+  if(IS_ABSOLUTE "${__LINKER}")
+    set(linker_path "${__LINKER}")
   else()
-    set(linker_path ${CMAKE_CURRENT_LIST_DIR}/${__LINKER})
+    if(__BASE_PATH)
+      set(linker_path "${__BASE_PATH}/${__LINKER}")
+    else()
+      set(linker_path "${CMAKE_CURRENT_LIST_DIR}/${__LINKER}")
+    endif()
   endif()
-
+  file(TO_CMAKE_PATH "${linker_path}" linker_path)
   get_filename_component(linker_path ${linker_path} ABSOLUTE)
+
+  # Check if the linker_path is preprocessed linker_path
+  mcux_get_property(preprocessed_linker_paths INTERFACE_PREPROCESS_LINKER)
+  if(preprocessed_linker_paths)
+    list(FIND preprocessed_linker_paths ${linker_path} index)
+    if(${index} GREATER -1)
+      log_error("Linker script ${linker_path} is set to be a preprocessed linker script in previous cmake file, \
+                  but it is set to be removed here. Build system does not allow removing preprocessed linker script.\
+                  Please fix the conflict."
+                ${CMAKE_CURRENT_LIST_LINE})
+      return()
+    endif()
+  endif()
 
   if(${CONFIG_TOOLCHAIN} STREQUAL "iar")
     set(ld_cmd "--config ${linker_path}")
@@ -2709,4 +2765,206 @@ function(mcux_add_config_mex_path)
   get_filename_component(mex_dir "${mex_file}" DIRECTORY)
   set(MCUXPRESSO_CONFIG_TOOL_MEX_PATH "${mex_dir}" CACHE STRING "Directory containing the MEX file consumed by MCUXpresso Config Tool" FORCE)
   log_debug("Set MCUXPRESSO_CONFIG_TOOL_MEX_PATH ${mex_dir}" ${CMAKE_CURRENT_LIST_FILE})
+endfunction()
+
+function(_mcux_preprocess_and_add_linker)
+  set(single_value TOOLCHAIN BASE_PATH RAW_LINKER PROCESSED_LINKER)
+  set(multi_value INCLUDES TARGETS PARAMETERS)
+  cmake_parse_arguments(_ "${options}" "${single_value}" "${multi_value}"
+                        ${ARGN})
+
+  # Check that TOOLCHAIN argument is provided
+  if(NOT __TOOLCHAIN)
+    log_error(
+      "TOOLCHAIN parameter is required for _mcux_preprocess_and_add_linker"
+      ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  # only support iar/mdk/armgcc toolchain
+  if(NOT (${__TOOLCHAIN} STREQUAL "iar" OR ${__TOOLCHAIN} STREQUAL "armgcc" OR ${__TOOLCHAIN} STREQUAL "mdk"))
+    log_error(
+      "Unsupported TOOLCHAIN value ${__TOOLCHAIN} for _mcux_preprocess_and_add_linker, only iar/armgcc/mdk is supported"
+      ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  if(NOT __RAW_LINKER)
+    log_error(
+      "RAW_LINKER parameter is required for _mcux_preprocess_and_add_linker"
+      ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  if(NOT __PROCESSED_LINKER)
+    if(${CONFIG_TOOLCHAIN} STREQUAL "iar")
+      set(linker_file "linker.icf")
+    elseif(${CONFIG_TOOLCHAIN} STREQUAL "armgcc")
+      set(linker_file "linker.ld")
+    elseif(${CONFIG_TOOLCHAIN} STREQUAL "mdk")
+      set(linker_file "linker.scf")
+    endif()
+    set(__PROCESSED_LINKER ${APPLICATION_BINARY_DIR}/${linker_file})
+    log_status(
+      "Use ${__PROCESSED_LINKER} as the preprocessed linker file.")
+  endif()
+
+  set(match_target false)
+  if(__TARGETS)
+    foreach(item ${__TARGETS})
+      if(${item} STREQUAL ${CMAKE_BUILD_TYPE})
+        set(match_target true)
+      endif()
+    endforeach()
+  else()
+    set(match_target true)
+  endif()
+
+  if(NOT ${match_target})
+    return()
+  endif()
+
+  set(match_toolchain false)
+
+  if(${CONFIG_TOOLCHAIN} STREQUAL ${__TOOLCHAIN})
+    set(match_toolchain true)
+  endif()
+
+  if(NOT ${match_toolchain})
+    return()
+  endif()
+
+  # Resolve raw linker
+  if(IS_ABSOLUTE "${__RAW_LINKER}")
+    set(raw_linker_abs_path "${__RAW_LINKER}")
+  else()
+    if(__BASE_PATH)
+      set(raw_linker_abs_path "${__BASE_PATH}/${__RAW_LINKER}")
+    else()
+      set(raw_linker_abs_path "${CMAKE_CURRENT_LIST_DIR}/${__RAW_LINKER}")
+    endif()
+  endif()
+  file(TO_CMAKE_PATH "${raw_linker_abs_path}" raw_linker_abs_path)
+  get_filename_component(raw_linker_abs_path "${raw_linker_abs_path}" ABSOLUTE)
+  if(NOT EXISTS "${raw_linker_abs_path}")
+    log_error("Raw linker file not found: ${raw_linker_abs_path}"
+              ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  mcux_set_property(INTERFACE_PREPROCESS_LINKER ${raw_linker_abs_path} APPEND)
+
+  # Check if the raw linker is already in the to be removed list
+  mcux_get_property(TO_BE_REMOVED_LD_FLAGS INTERFACE_LD_TO_BE_REMOVED_FLAGS)
+  set(_linker_conflict FALSE)
+  if(TO_BE_REMOVED_LD_FLAGS)
+    foreach(_rm_flag ${TO_BE_REMOVED_LD_FLAGS})
+      if(NOT _rm_flag)
+        continue()
+      endif()
+      # Each item may look like: "--config <path>" or "-T <path>" etc.
+      # raw_linker_abs_path is just the path; detect containment.
+      string(FIND "${_rm_flag}" "${raw_linker_abs_path}" _pos)
+      if(_pos GREATER -1)
+        set(_linker_conflict TRUE)
+        break()
+      endif()
+    endforeach()
+  endif()
+  if(_linker_conflict)
+    log_error("The linker ${raw_linker_abs_path} has been set to be removed in previous cmake file with mcux_remove_${CONFIG_TOOLCHAIN}_linker_script function, \
+        but it is set to a to be preprocessed linker with mcux_add_${CONFIG_TOOLCHAIN}_linker_script function. Build system does not support removing preprocessed linker. \
+        Please update your cmake files to avoid this conflict."
+              ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  # Resolve processed linker
+  if(IS_ABSOLUTE "${__PROCESSED_LINKER}")
+    set(processed_linker_abs_path "${__PROCESSED_LINKER}")
+  else()
+    if(__BASE_PATH)
+      set(processed_linker_abs_path "${__BASE_PATH}/${__PROCESSED_LINKER}")
+    else()
+      set(processed_linker_abs_path
+          "${CMAKE_CURRENT_LIST_DIR}/${__PROCESSED_LINKER}")
+    endif()
+  endif()
+  file(TO_CMAKE_PATH "${processed_linker_abs_path}" processed_linker_abs_path)
+  get_filename_component(processed_linker_abs_path
+                         "${processed_linker_abs_path}" ABSOLUTE)
+
+  # Build args lists
+  set(pp_args)
+  if(__PARAMETERS)
+    foreach(p ${__PARAMETERS})
+      list(APPEND pp_args "${p}")
+    endforeach()
+  endif()
+
+  set(include_args)
+  if(__INCLUDES)
+    foreach(inc ${__INCLUDES})
+      if(NOT IS_ABSOLUTE "${inc}")
+        if(__BASE_PATH)
+          set(inc "${__BASE_PATH}/${inc}")
+        else()
+          set(inc "${CMAKE_CURRENT_LIST_DIR}/${inc}")
+        endif()
+      endif()
+      file(TO_CMAKE_PATH "${inc}" inc)
+      list(APPEND include_args "-I${inc}")
+    endforeach()
+  endif()
+
+  if(${__TOOLCHAIN} STREQUAL "iar")
+    # iccarm --preprocess=ns <out> <in>
+    set(cmd ${CC} --silent)
+    list(
+      APPEND
+      cmd
+      ${pp_args}
+      ${include_args}
+      --preprocess=ns
+      "${processed_linker_abs_path}"
+      "${raw_linker_abs_path}")
+  elseif(${__TOOLCHAIN} STREQUAL "armgcc")
+    # arm-none-eabi-gcc -E -P -xc [params] -I... raw -o processed
+    set(cmd ${CC} -E -P -xc)
+    list(
+      APPEND
+      cmd
+      ${pp_args}
+      ${include_args}
+      "${raw_linker_abs_path}"
+      -o
+      "${processed_linker_abs_path}")
+  elseif(${__TOOLCHAIN} STREQUAL "mdk")
+    # armclang preprocessing
+    set(cmd ${CC} --target=arm-arm-none-eabi -E -P -xc)
+    list(
+      APPEND
+      cmd
+      ${pp_args}
+      ${include_args}
+      "${raw_linker_abs_path}"
+      -o
+      "${processed_linker_abs_path}")
+  else()
+    log_error("Unsupported toolchain for preprocessing: ${__TOOLCHAIN}"
+              ${CMAKE_CURRENT_LIST_FILE})
+    return()
+  endif()
+
+  # Generate script before link; VERBATIM preserves arg boundaries
+  add_custom_command(
+    TARGET ${MCUX_SDK_PROJECT_NAME}
+    PRE_LINK
+    COMMAND ${cmd}
+    WORKING_DIRECTORY "${__WORKING_DIRECTORY}"
+    VERBATIM)
+
+  _mcux_add_linker_script(TARGETS ${__TARGETS} LINKER
+                          ${processed_linker_abs_path})
+
 endfunction()

@@ -42,12 +42,9 @@ static uint32_t s_PLU_ClkIn_Freq = 0U;
 void CLOCK_AttachClk(clock_attach_id_t connection)
 {
     uint8_t mux;
-    uint8_t sel;
+    uint32_t sel;
     uint16_t item;
     uint32_t i;
-    volatile uint32_t *pClkSel;
-
-    pClkSel = &(SYSCON->SYSTICKCLKSELX[0]);
 
     if (connection != kNONE_to_NONE)
     {
@@ -62,18 +59,172 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
             {
                 mux = GET_ID_ITEM_MUX(item);
                 sel = GET_ID_ITEM_SEL(item);
-                if (mux == CM_RTCOSC32KCLKSEL)
+
+                switch (mux)
                 {
-                    PMC->RTCOSC32K |= sel;
-                }
-                else
-                {
-                    pClkSel[mux] = sel;
+                    case CM_RTCOSC32KCLKSEL:
+                      PMC->RTCOSC32K |= sel;
+                      break;
+                    case CM_MAINCLKSELB:
+                      SYSCON->MAINCLKSELB = sel;
+                      break;
+                    case CM_MAINCLKSELA:
+                      SYSCON->MAINCLKSELA = sel;
+                      break;
+                    case CM_CLKOUTCLKSEL:
+                      SYSCON->CLKOUTSEL = sel;
+                      break;
+                    case CM_FXCOMCLKSEL0:
+                      SYSCON->FCCLKSELX[0] = sel;
+                      break;
+                    case CM_FXCOMCLKSEL1:
+                      SYSCON->FCCLKSELX[1] = sel;
+                      break;
+                    case CM_FXCOMCLKSEL2:
+                      SYSCON->FCCLKSELX[2] = sel;
+                      break;
+                    case CM_SCTCLKSEL:
+                      SYSCON->SCTCLKSEL = sel;
+                      break;
+                    case CM_TRACECLKSEL:
+                      SYSCON->TRACECLKSEL = sel;
+                      break;
+                    case CM_SYSTICKCLKSEL:
+                      SYSCON->SYSTICKCLKSELX[0] = sel;
+                      break;
+                    case CM_CTIMERCLKSEL0:
+                      SYSCON->CTIMERCLKSELX[0] = sel;
+                      break;
+                    case CM_CTIMERCLKSEL1:
+                      SYSCON->CTIMERCLKSELX[1] = sel;
+                      break;
+                    case CM_CTIMERCLKSEL2:
+                      SYSCON->CTIMERCLKSELX[2] = sel;
+                      break;
+                    case CM_CTIMERCLKSEL3:
+                      SYSCON->CTIMERCLKSELX[3] = sel;
+                      break;
+                    case CM_CTIMERCLKSEL4:
+                      SYSCON->CTIMERCLKSELX[4] = sel;
+                      break;
+                    case CM_SPIFICLKSEL:
+                      SYSCON->SPIFICLKSEL = sel;
+                      break;
+                    default:
+                      break;
                 }
             }
             connection = GET_ID_NEXT_ITEM(connection); /* pick up next descriptor */
         }
     }
+}
+
+/**
+ * brief   Validate the attachID.
+ * This fuction checks the attachId to see if it is valid.
+ * param   attachId  : Clock attach id to get.
+ * return  true   : the attachId is valid..
+ *         false  : the attachId is out of range.
+ */
+static bool CLOCK_CheckAttachId(clock_attach_id_t attachId)
+{
+    bool ret = false;
+
+    switch (attachId)
+    {
+        case kFRO12M_to_MAIN_CLK:
+        case kEXT_CLK_to_MAIN_CLK:
+        case kFRO1M_to_MAIN_CLK:
+        case kFRO_HF_to_MAIN_CLK:
+        case kFRO24M_to_MAIN_CLK:
+        case kOSC32K_to_MAIN_CLK:
+        case kMAIN_CLK_to_CLKOUT:
+        case kEXT_CLK_to_CLKOUT:
+        case kFRO_HF_to_CLKOUT:
+        case kFRO1M_to_CLKOUT:
+        case kFRO24M_to_CLKOUT:
+        case kOSC32K_to_CLKOUT:
+        case kNONE_to_SYS_CLKOUT:
+        case kMAIN_CLK_to_FLEXCOMM0:
+        case kFRO12M_to_FLEXCOMM0:
+        case kFRO_HF_DIV_to_FLEXCOMM0:
+        case kFRO1M_to_FLEXCOMM0:
+        case kFRO24M_to_FLEXCOMM0:
+        case kOSC32K_to_FLEXCOMM0:
+        case kNONE_to_FLEXCOMM0:
+        case kMAIN_CLK_to_FLEXCOMM1:
+        case kFRO12M_to_FLEXCOMM1:
+        case kFRO_HF_DIV_to_FLEXCOMM1:
+        case kFRO1M_to_FLEXCOMM1:
+        case kFRO24M_to_FLEXCOMM1:
+        case kOSC32K_to_FLEXCOMM1:
+        case kNONE_to_FLEXCOMM1:
+        case kMAIN_CLK_to_FLEXCOMM2:
+        case kFRO12M_to_FLEXCOMM2:
+        case kFRO_HF_DIV_to_FLEXCOMM2:
+        case kFRO1M_to_FLEXCOMM2:
+        case kFRO24M_to_FLEXCOMM2:
+        case kOSC32K_to_FLEXCOMM2:
+        case kNONE_to_FLEXCOMM2:
+        case kMAIN_CLK_to_SCT_CLK:
+        case kEXT_CLK_to_SCT_CLK:
+        case kFRO_HF_to_SCT_CLK:
+        case kFRO24M_to_SCT_CLK:
+        case kNONE_to_SCT_CLK:
+        case kFRO32K_to_OSC32K:
+        case kXTAL32K_to_OSC32K:
+        case kTRACE_DIV_to_TRACE:
+        case kFRO1M_to_TRACE:
+        case kOSC32K_to_TRACE:
+        case kNONE_to_TRACE:
+        case kSYSTICK_DIV_to_SYSTICK:
+        case kFRO1M_to_SYSTICK:
+        case kOSC32K_to_SYSTICK:
+        case kNONE_to_SYSTICK:
+        case kMAIN_CLK_to_CTIMER0:
+        case kFRO_HF_to_CTIMER0:
+        case kFRO1M_to_CTIMER0:
+        case kFRO24M_to_CTIMER0:
+        case kOSC32K_to_CTIMER0:
+        case kNONE_to_CTIMER0:
+        case kMAIN_CLK_to_CTIMER1:
+        case kFRO_HF_to_CTIMER1:
+        case kFRO1M_to_CTIMER1:
+        case kFRO24M_to_CTIMER1:
+        case kOSC32K_to_CTIMER1:
+        case kNONE_to_CTIMER1:
+        case kMAIN_CLK_to_CTIMER2:
+        case kFRO_HF_to_CTIMER2:
+        case kFRO1M_to_CTIMER2:
+        case kFRO24M_to_CTIMER2:
+        case kOSC32K_to_CTIMER2:
+        case kNONE_to_CTIMER2:
+        case kMAIN_CLK_to_CTIMER3:
+        case kFRO_HF_to_CTIMER3:
+        case kFRO1M_to_CTIMER3:
+        case kFRO24M_to_CTIMER3:
+        case kOSC32K_to_CTIMER3:
+        case kNONE_to_CTIMER3:
+        case kMAIN_CLK_to_CTIMER4:
+        case kFRO_HF_to_CTIMER4:
+        case kFRO1M_to_CTIMER4:
+        case kFRO24M_to_CTIMER4:
+        case kOSC32K_to_CTIMER4:
+        case kNONE_to_CTIMER4:
+        case kMAIN_CLK_to_SPIFI:
+        case kFRO64M_to_SPIFI:
+        case kFRO_HF_to_SPIFI:
+        case kFRO_HF_DIV_to_SPIFI:
+        case kFRO48M_to_SPIFI:
+        case kNONE_to_NONE:
+            ret = true;
+            break;
+        default:
+            ret = false;
+            break;
+    }
+
+    return ret;
 }
 
 /* Return the actual clock attach id */
@@ -87,15 +238,21 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
 clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 {
     uint8_t mux;
-    uint8_t actualSel;
+    uint32_t actualSel = 0;
     uint32_t i;
-    uint32_t actualAttachId = 0U;
-    uint32_t selector       = GET_ID_SELECTOR(attachId);
-    volatile uint32_t *pClkSel;
-
-    pClkSel = &(SYSCON->SYSTICKCLKSELX[0]);
+    clock_attach_id_t actualAttachId = kNONE_to_NONE;
+    uint32_t selector;
 
     if (attachId == kNONE_to_NONE)
+    {
+        return kNONE_to_NONE;
+    }
+
+    if (CLOCK_CheckAttachId(attachId))
+    {
+        selector = GET_ID_SELECTOR(attachId);
+    }
+    else
     {
         return kNONE_to_NONE;
     }
@@ -105,15 +262,64 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
         mux = GET_ID_ITEM_MUX(attachId);
         if (attachId)
         {
-            if (mux == CM_RTCOSC32KCLKSEL)
+            switch (mux)
             {
-                actualSel = PMC->RTCOSC32K;
-            }
-            else
-            {
-                actualSel = pClkSel[mux];
+                case CM_RTCOSC32KCLKSEL:
+                  actualSel = PMC->RTCOSC32K;
+                  break;
+                case CM_MAINCLKSELB:
+                  actualSel = SYSCON->MAINCLKSELB;
+                  break;
+                case CM_MAINCLKSELA:
+                  actualSel = SYSCON->MAINCLKSELA;
+                  break;
+                case CM_CLKOUTCLKSEL:
+                  actualSel = SYSCON->CLKOUTSEL;
+                  break;
+                case CM_FXCOMCLKSEL0:
+                  actualSel = SYSCON->FCCLKSELX[0];
+                  break;
+                case CM_FXCOMCLKSEL1:
+                  actualSel = SYSCON->FCCLKSELX[1];
+                  break;
+                case CM_FXCOMCLKSEL2:
+                  actualSel = SYSCON->FCCLKSELX[2];
+                  break;
+                case CM_SCTCLKSEL:
+                  actualSel = SYSCON->SCTCLKSEL;
+                  break;
+                case CM_TRACECLKSEL:
+                  actualSel = SYSCON->TRACECLKSEL;
+                  break;
+                case CM_SYSTICKCLKSEL:
+                  actualSel = SYSCON->SYSTICKCLKSELX[0];
+                  break;
+                case CM_CTIMERCLKSEL0:
+                  actualSel = SYSCON->CTIMERCLKSELX[0];
+                  break;
+                case CM_CTIMERCLKSEL1:
+                  actualSel = SYSCON->CTIMERCLKSELX[1];
+                  break;
+                case CM_CTIMERCLKSEL2:
+                  actualSel = SYSCON->CTIMERCLKSELX[2];
+                  break;
+                case CM_CTIMERCLKSEL3:
+                  actualSel = SYSCON->CTIMERCLKSELX[3];
+                  break;
+                case CM_CTIMERCLKSEL4:
+                  actualSel = SYSCON->CTIMERCLKSELX[4];
+                  break;
+                case CM_SPIFICLKSEL:
+                  actualSel = SYSCON->SPIFICLKSEL;
+                  break;
+                default:
+                  break;
             }
 
+            if (actualSel >= UINT32_MAX)
+            {
+                return kNONE_to_NONE;
+            }
             /* Consider the combination of two registers */
             actualAttachId |= CLK_ATTACH_ID(mux, actualSel, i);
         }
@@ -122,7 +328,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 
     actualAttachId |= selector;
 
-    return (clock_attach_id_t)actualAttachId;
+    return actualAttachId;
 }
 
 /* Set IP Clock Divider */
@@ -142,18 +348,57 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value, bool 
         return;
     }
 
-    pClkDiv = &(SYSCON->SYSTICKCLKDIV0);
+    switch (div_name)
+    {
+        case kCLOCK_DivSystickClk:
+            pClkDiv = &(SYSCON->SYSTICKCLKDIV0);
+            break;
+        case kCLOCK_DivArmTrClkDiv:
+            pClkDiv = &(SYSCON->TRACECLKDIV);
+            break;
+        case kCLOCK_DivFlexFrg0:
+            pClkDiv = &(SYSCON->FLEXFRGCTRL.FLEXFRG0CTRL);
+            break;
+        case kCLOCK_DivFlexFrg1:
+            pClkDiv = &(SYSCON->FLEXFRGCTRL.FLEXFRG1CTRL);
+            break;
+        case kCLOCK_DivFlexFrg2:
+            pClkDiv = &(SYSCON->FLEXFRGCTRL.FLEXFRG2CTRL);
+            break;
+        case kCLOCK_DivAhbClk:
+            pClkDiv = &(SYSCON->AHBCLKDIV);
+            break;
+        case kCLOCK_DivClkOut:
+            pClkDiv = &(SYSCON->CLKOUTDIV);
+            break;
+        case kCLOCK_DivFrohfClk:
+            pClkDiv = &(SYSCON->FROHFDIV);
+            break;
+        case kCLOCK_DivWdtClk:
+            pClkDiv = &(SYSCON->WDTCLKDIV);
+            break;
+        case kCLOCK_DivSctClk:
+            pClkDiv = &(SYSCON->SCTCLKDIV);
+            break;
+        case kCLOCK_DivSpifiClk:
+            pClkDiv = &(SYSCON->SPIFICLKDIV);
+            break;
+        default:
+            return;
+            break;
+    }
+
     if (reset)
     {
-        pClkDiv[div_name] = 1U << 29U;
+        *pClkDiv = 1U << 29U;
     }
     if (divided_by_value == 0U) /* halt */
     {
-        pClkDiv[div_name] = 1U << 30U;
+        *pClkDiv = 1U << 30U;
     }
     else
     {
-        pClkDiv[div_name] = (divided_by_value - 1U);
+        *pClkDiv = (divided_by_value - 1U);
     }
 
     __ISB();
@@ -169,6 +414,12 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value, bool 
 void CLOCK_SetRtc1khzClkDiv(uint32_t divided_by_value)
 {
     uint32_t rtcOsk32K = PMC->RTCOSC32K & ~(PMC_RTCOSC32K_CLK1KHZDIV_MASK);
+
+    if (divided_by_value < 28U)
+    {
+        return;
+    }
+
     PMC->RTCOSC32K     = rtcOsk32K | ((divided_by_value - 28U) << PMC_RTCOSC32K_CLK1KHZDIV_SHIFT);
 }
 
@@ -549,11 +800,21 @@ uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
     uint32_t freq   = 0U;
     uint32_t frgMul = 0U;
     uint32_t frgDiv = 0U;
+    uint64_t result = 0U;
 
     freq   = CLOCK_GetFlexCommInputClock(id);
     frgMul = (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) >> 8U;
     frgDiv = SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_DIV_MASK;
-    return (uint32_t)(((uint64_t)freq * ((uint64_t)frgDiv + 1ULL)) / (frgMul + frgDiv + 1UL));
+    result = ((uint64_t)freq * ((uint64_t)frgDiv + 1ULL)) / (frgMul + frgDiv + 1UL);
+
+    if (result > UINT32_MAX)
+    {
+        return 0;
+    }
+    else
+    {
+        return (uint32_t)result;
+    }
 }
 
 /* Get SPIFI Clk */
@@ -665,6 +926,7 @@ uint32_t CLOCK_SetFlexCommClock(uint32_t id, uint32_t freq)
 {
     uint32_t input = CLOCK_GetFlexCommClkFreq(id);
     uint32_t mul;
+    uint64_t temp = ((uint64_t)(input - freq) * 256U) / ((uint64_t)freq);
 
     if ((freq > kFreq_32MHz) || (freq > input) || (input / freq >= 2))
     {
@@ -673,9 +935,17 @@ uint32_t CLOCK_SetFlexCommClock(uint32_t id, uint32_t freq)
     }
     else
     {
-        mul                      = ((uint64_t)(input - freq) * 256) / ((uint64_t)freq);
-        SYSCON->FLEXFRGXCTRL[id] = (mul << 8U) | 0xFFU;
-        return 1;
+        if (temp > UINT32_MAX)
+        {
+            /* Overflow, cannot safely assign to uint32_t */
+            return 0;
+        }
+        else
+        {
+            mul = (uint32_t)temp;
+            SYSCON->FLEXFRGXCTRL[id] = (mul << 8U) | 0xFFU;
+            return 1;
+        }
     }
 }
 

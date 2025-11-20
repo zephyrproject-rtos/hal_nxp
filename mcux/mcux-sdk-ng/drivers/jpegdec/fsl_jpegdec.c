@@ -327,39 +327,43 @@ status_t JPEGDEC_ParseHeader(jpegdec_decoder_config_t *config)
     /* Get the height and width. */
     height = JPEG_GET_U16(&imageBuf[3]);
     width  = JPEG_GET_U16(&imageBuf[5]);
-    if ((height > 0x2000U) || (width > 0x2000U) || (height < 64U) || (width < 64U))
+
+    if ((height > 0x2000U) || (width > 0x2000U))
     {
-        /* Max support 8K width/height, min support 64 width/height. Picture with width/height that is
-           smaller than 64 will corrupt the next frame to be decoded. Errata ERR050135. */
+        /* Max support 8K width/height. */
         return kStatus_JPEGDEC_NotSupported;
     }
 
-    config->height = (uint32_t)height;
-    config->width  = (uint32_t)width;
-
     if (config->pixelFormat == (uint32_t)kJPEGDEC_PixelFormatYUV420)
     {
-        if (((height & 0xFU) != 0U) || ((width & 0xFU) != 0U))
+        if (((height & 0xFU) != 0U) || ((width & 0xFU) != 0U) || (height < 64U) || (width < 64U))
         {
+            /* For YUV420, width and height shall all be divisible by 16
+               and cannot be smaller than 64. */
             result = kStatus_JPEGDEC_NotSupported;
         }
     }
     else if (config->pixelFormat == (uint32_t)kJPEGDEC_PixelFormatYUV422)
     {
-        /* For YUV422, width and height shall be divisible by 16 and 8. */
-        if (((height & 0x7U) != 0U) || ((width & 0xFU) != 0U))
+        /* For YUV422, width and height shall be divisible by 16/8,
+           and cannot be smaller than 64/32. */
+        if (((height & 0x7U) != 0U) || ((width & 0xFU) != 0U) || (height < 32U) || (width < 64U))
         {
             result = kStatus_JPEGDEC_NotSupported;
         }
     }
     else
     {
-        /* For YUV420, width and height shall all be divisible by 8. */
-        if (((height & 0x7U) != 0U) || ((width & 0x7U) != 0U))
+        /* For other formats, width and height shall all be divisible by 8,
+           and cannot be smaller than 32. */
+        if (((height & 0x7U) != 0U) || ((width & 0x7U) != 0U) || (height < 32U) || (width < 32U))
         {
             result = kStatus_JPEGDEC_NotSupported;
         }
     }
+
+    config->height = (uint32_t)height;
+    config->width  = (uint32_t)width;
 
     return result;
 }

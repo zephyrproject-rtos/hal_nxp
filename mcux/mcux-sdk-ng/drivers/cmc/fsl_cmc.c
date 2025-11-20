@@ -262,7 +262,7 @@ void CMC_PostExitLowPowerMode(void)
  * param lowPowerMode The low power mode to be entered. See @ref cmc_low_power_mode_t for the details.
  *
  */
-void CMC_GlobalEnterLowPowerMode(CMC_Type *base, cmc_low_power_mode_t lowPowerMode)
+void CMC_GlobalEnterLowPowerMode(CMC_Type *base, cmc_low_power_mode_t lowPowerMode) /* GCOVR_EXCL_FUNCTION */
 {
     /*
      * $Line Coverage Justification$
@@ -291,7 +291,7 @@ void CMC_GlobalEnterLowPowerMode(CMC_Type *base, cmc_low_power_mode_t lowPowerMo
  * param base CMC peripheral base address.
  * param base config Pointer to the cmc_power_domain_config_t structure.
  */
-void CMC_EnterLowPowerMode(CMC_Type *base, const cmc_power_domain_config_t *config)
+void CMC_EnterLowPowerMode(CMC_Type *base, const cmc_power_domain_config_t *config) /* GCOVR_EXCL_FUNCTION */
 {
     /*
      * $Line Coverage Justification$

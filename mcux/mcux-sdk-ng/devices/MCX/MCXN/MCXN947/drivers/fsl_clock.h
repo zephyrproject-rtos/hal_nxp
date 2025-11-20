@@ -543,7 +543,7 @@ typedef enum _clock_name
 #define GET_ID_ITEM(connection)      ((connection)&0xFFFFU)
 #define GET_ID_NEXT_ITEM(connection) ((connection) >> 16U)
 #define GET_ID_ITEM_MUX(connection)  (((uint16_t)connection) & 0xFFFU)
-#define GET_ID_ITEM_SEL(connection)  ((uint8_t)((((uint32_t)(connection)&0xF000U) >> 12U) - 1U))
+#define GET_ID_ITEM_SEL(connection)  ((uint8_t)(((((uint32_t)(connection)&0xF000U) >> 12U) - 1U) & 0xFFU))
 #define GET_ID_SELECTOR(connection)  ((connection)&0xF000000U)
 
 #define CM_SYSTICKCLKSEL0   0U
@@ -1044,7 +1044,7 @@ typedef enum _clock_attach_id
     kCLK_1M_to_I3C1FCLKS = MUX_A(CM_I3C1FCLKSSEL, 0),            /*!< Attach CLK_1M to I3C1FCLKS. */
     kNONE_to_I3C1FCLKS   = MUX_A(CM_I3C1FCLKSSEL, 7),            /*!< Attach NONE to I3C1FCLKS. */
 
-    kNONE_to_NONE = (int)0x80000000U,                            /*!< Attach NONE to NONE. */
+    kNONE_to_NONE = (0xFFFFFFFFU),                               /*!< Attach NONE to NONE. */
 
 } clock_attach_id_t;
 
@@ -1511,6 +1511,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     }
     else
     {
+        assert(index < SYSCON_AHBCLKCTRLSET_COUNT);
         SYSCON->AHBCLKCTRLSET[index] = (1UL << bit);
     }
 }
@@ -1548,6 +1549,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
     }
     else
     {
+        assert(index < SYSCON_AHBCLKCTRLSET_COUNT);
         SYSCON->AHBCLKCTRLCLR[index] = (1UL << bit);
     }
 }

@@ -63,6 +63,21 @@
 
 #define XO_SLAVE_EN (1)
 
+/* int32 multiplication overflow judgment */
+#define INT32_MULTIPLY_OVERFLOW(a, b) ( \
+    ((a) == 0 || (b) == 0) ? false : \
+    (((a) > 0) ? \
+        (((b) > 0) ? ((a) > INT32_MAX / (b)) : ((b) < INT32_MIN / (a))) : \
+        (((b) > 0) ? ((a) < INT32_MIN / (b)) : ((a) < INT32_MAX / (b))) \
+    ) \
+)
+
+/* int32 addition overflow judgment */
+#define INT32_ADD_OVERFLOW(a, b) ( \
+    (((b) > 0) && ((a) > INT32_MAX - (b))) || \
+    (((b) < 0) && ((a) < INT32_MIN - (b))) \
+)
+
 /* Saved value of PLL output rate, computed whenever needed to save run-time
    computation on each call to retrive the PLL rate. */
 static uint32_t s_Pll0_Freq;
@@ -120,6 +135,8 @@ static void CLOCK_SetXtalHfLdo(void);
  */
 void CLOCK_AttachClk(clock_attach_id_t connection)
 {
+    assert(connection < kNONE_to_NONE);
+    
     uint16_t mux;
     uint8_t sel;
     uint16_t item;
@@ -140,7 +157,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
             item = (uint16_t)GET_ID_ITEM(tmp32);
             if (item != 0U)
             {
-                mux = (uint16_t)GET_ID_ITEM_MUX(item);
+                mux = (uint16_t)(GET_ID_ITEM_MUX(item) & 0xFFFFU);
                 sel = (uint8_t)GET_ID_ITEM_SEL(item);
                 if (mux == CM_RTCOSC32KCLKSEL)
                 {
@@ -153,6 +170,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
                 }
                 else
                 {
+                    assert(mux <= CM_FRGCLKSEL7);
                     ((volatile uint32_t *)pClkSel)[mux] = sel;
                 }
             }
@@ -171,6 +189,8 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
  */
 clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 {
+    assert(attachId < kNONE_to_NONE);
+
     uint16_t mux;
     uint32_t actualSel;
     uint32_t tmp32 = (uint32_t)attachId;
@@ -188,7 +208,7 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
 
     for (i = 0U; i < 2U; i++)
     {
-        mux = (uint16_t)GET_ID_ITEM_MUX(tmp32);
+        mux = (uint16_t)(GET_ID_ITEM_MUX(tmp32) & 0xFFFFU);
         if (tmp32 != 0UL)
         {
             if (mux == CM_RTCOSC32KCLKSEL)
@@ -201,16 +221,19 @@ clock_attach_id_t CLOCK_GetClockAttachId(clock_attach_id_t attachId)
             }
             else
             {
+                assert(mux <= CM_FRGCLKSEL7);
                 actualSel = (uint32_t)((volatile uint32_t *)pClkSel)[mux];
             }
 
             /* Consider the combination of two registers */
+            assert(actualSel < UINT32_MAX);
             actualAttachId |= CLK_ATTACH_ID(mux, actualSel, i);
         }
         tmp32 = GET_ID_NEXT_ITEM(tmp32); /*!<  pick up next descriptor */
     }
 
     actualAttachId |= selector;
+    assert(actualAttachId < kNONE_to_NONE);
 
     return (clock_attach_id_t)actualAttachId;
 }
@@ -227,7 +250,7 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value, bool 
 {
     volatile uint32_t *pClkDiv;
 
-    pClkDiv = &(SYSCON->SYSTICKCLKDIV[0]);
+    pClkDiv = (volatile uint32_t *)(SYSCON_BASE + 0x300U); /* SYSTICKCLKDIV[0] offset 0x300 */
     if ((div_name >= kCLOCK_DivFlexFrg0) && (div_name <= kCLOCK_DivFlexFrg7))
     {
         /*!<  Flexcomm Interface function clock = (clock selected via FCCLKSEL) / (1+ MULT /DIV), DIV = 0xFF */
@@ -804,9 +827,9 @@ uint32_t CLOCK_GetFrgFreq(uint32_t id)
             freq = 0U;
             break;
     }
-    return (uint32_t)(((uint64_t)freq * (SYSCON_FRGCTRL_DIV_MASK + 1U)) /
+    return (uint32_t)((((uint64_t)freq * (SYSCON_FRGCTRL_DIV_MASK + 1U)) /
                       ((SYSCON_FRGCTRL_DIV_MASK + 1U) +
-                       ((SYSCON->FRGCTRL[id] & SYSCON_FRGCTRL_MULT_MASK) >> SYSCON_FRGCTRL_MULT_SHIFT)));
+                       ((SYSCON->FRGCTRL[id] & SYSCON_FRGCTRL_MULT_MASK) >> SYSCON_FRGCTRL_MULT_SHIFT))) & 0xFFFFFFFFU);
 }
 
 /* Get FLEXCOMM Clk */
@@ -1510,7 +1533,7 @@ static pll_error_t CLOCK_GetPll0ConfigInternal(uint32_t finHz, uint32_t foutHz, 
         fc = ((uint64_t)(uint32_t)(fccoHz % nDivOutHz) << 25UL) / nDivOutHz;
 
         /* Set multiplier */
-        pSetup->pllsscg[0] = (uint32_t)(PLL0_SSCG_MD_INT_SET(pllMultiplier) | PLL0_SSCG_MD_FRACT_SET((uint32_t)fc));
+        pSetup->pllsscg[0] = (uint32_t)((PLL0_SSCG_MD_INT_SET(pllMultiplier) | PLL0_SSCG_MD_FRACT_SET((uint32_t)fc)) & 0xFFFFFFFFU);
         pSetup->pllsscg[1] = (uint32_t)(PLL0_SSCG_MD_INT_SET(pllMultiplier) >> 32U);
     }
 
@@ -1584,6 +1607,7 @@ static pll_error_t CLOCK_GetPll0Config(uint32_t finHz, uint32_t foutHz, pll_setu
     s_PllSetupCacheStruct[s_PllSetupCacheIdx].pllsscg[0] = pSetup->pllsscg[0];
     s_PllSetupCacheStruct[s_PllSetupCacheIdx].pllsscg[1] = pSetup->pllsscg[1];
     /* Update the index for next available buffer. */
+    assert(s_PllSetupCacheIdx <= UINT32_MAX - 1U);
     s_PllSetupCacheIdx = (s_PllSetupCacheIdx + 1U) % CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT;
 #endif /* CLOCK_USR_CFG_PLL_CONFIG_CACHE_COUNT */
 
@@ -1721,6 +1745,7 @@ uint32_t CLOCK_GetPLL1OutFromSetup(pll_setup_t *pSetup)
         /* Adjust input clock */
         clkRate = clkRate / prediv;
         /* MDEC used for rate */
+        assert(clkRate <= UINT32_MAX / findPll1MMult());
         workRate = clkRate * findPll1MMult();
         workRate /= postdiv;
     }
@@ -1880,6 +1905,7 @@ pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
 
             /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is stable.
                The lock bit could be used to shorten the wait time when freq<20MHZ */
+            assert((400000000U / clkRate) <= UINT32_MAX - 500U);
             max_pll_lock_wait_time = 500U + (400000000U / clkRate);
 
             if (clkRate < 20000000UL)
@@ -1961,6 +1987,7 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
 
             /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is
                stable. The lock bit could be used to shorten the wait time when freq<20MHZ */
+            assert((400000000U / clkRate) <= UINT32_MAX - 500U);
             max_pll_lock_wait_time = 500U + (400000000U / clkRate);
 
             if (clkRate < 20000000UL)
@@ -2030,6 +2057,7 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
 
         /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is stable.
            The lock bit could be used to shorten the wait time when freq<20MHZ */
+        assert((400000000U / clkRate) <= UINT32_MAX - 500U);
         max_pll_lock_wait_time = 500U + (400000000U / clkRate);
 
         if (clkRate < 20000000UL)
@@ -2298,6 +2326,8 @@ void CLOCK_XtalHfCapabankTrim(int32_t pi32_hfXtalIecLoadpF_x100,
     int32_t iXOCapInpF_x100, iXOCapOutpF_x100;
     uint8_t u8XOCapInCtrl, u8XOCapOutCtrl;
     uint32_t u32RegVal;
+    int32_t i32Tmp;
+    int64_t i64Tmp;
 
     /* Enable and set LDO, if not already done */
     CLOCK_SetXtalHfLdo();
@@ -2327,13 +2357,29 @@ void CLOCK_XtalHfCapabankTrim(int32_t pi32_hfXtalIecLoadpF_x100,
         ibXout    = -13; // offset in LSB
         u8XOSlave = 0;
     }
+
     /* In & out load cap calculation with derating */
-    iXOCapInpF_x100 =
-        (int32_t)(2 * pi32_hfXtalIecLoadpF_x100 - pi32_hfXtalNPcbParCappF_x100 + 39 * (XO_SLAVE_EN - (int8_t)u8XOSlave) - 15);
-    iXOCapOutpF_x100 = 2 * pi32_hfXtalIecLoadpF_x100 - pi32_hfXtalPPcbParCappF_x100 - 21;
+    i64Tmp = 2 * (int64_t)pi32_hfXtalIecLoadpF_x100 - (int64_t)pi32_hfXtalNPcbParCappF_x100 +
+             39 * ((int64_t)XO_SLAVE_EN - (int64_t)u8XOSlave) - 15;
+    assert((i64Tmp <= INT32_MAX) && (i64Tmp >= INT32_MIN));
+    iXOCapInpF_x100 = (int32_t)i64Tmp;
+    i64Tmp = 2 * (int64_t)pi32_hfXtalIecLoadpF_x100 - (int64_t)pi32_hfXtalPPcbParCappF_x100 - 21;
+    assert((i64Tmp <= INT32_MAX) && (i64Tmp >= INT32_MIN));    
+    iXOCapOutpF_x100 = (int32_t)i64Tmp;
+
     /* In & out XO_OSC_CAP_Code_CTRL calculation, with rounding */
-    u8XOCapInCtrl  = (uint8_t)(int32_t)((((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400));
-    u8XOCapOutCtrl = (uint8_t)(int32_t)((((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400));
+    assert(!INT32_MULTIPLY_OVERFLOW(iXOCapInpF_x100, iaXin_x4));
+    assert(!INT32_ADD_OVERFLOW(iXOCapInpF_x100 * iaXin_x4, ibXin * 400));
+    i32Tmp         = ((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400;
+    assert((i32Tmp >= 0) && (i32Tmp <= UINT8_MAX));
+    u8XOCapInCtrl  = (uint8_t)i32Tmp;
+
+    assert(!INT32_MULTIPLY_OVERFLOW(iXOCapOutpF_x100, iaXout_x4));
+    assert(!INT32_ADD_OVERFLOW(iXOCapOutpF_x100 * iaXout_x4, ibXout * 400));
+    i32Tmp         = ((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400;
+    assert((i32Tmp >= 0) && (i32Tmp <= UINT8_MAX));
+    u8XOCapOutCtrl = (uint8_t)i32Tmp;
+
     /* Read register and clear fields to be written */
     u32RegVal = ANACTRL->XO32M_CTRL;
     u32RegVal &= ~(ANACTRL_XO32M_CTRL_OSC_CAP_IN_MASK | ANACTRL_XO32M_CTRL_OSC_CAP_OUT_MASK);
@@ -2371,6 +2417,8 @@ void CLOCK_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
     int32_t iXOCapInpF_x100, iXOCapOutpF_x100;
     uint8_t u8XOCapInCtrl, u8XOCapOutCtrl;
     uint32_t u32RegVal;
+    int32_t i32Tmp;
+    int64_t i64Tmp;
     /* Get Cal values from Flash */
     u32XOTrimValue = GET_32KXO_TRIM();
     /* check validity and apply */
@@ -2396,12 +2444,25 @@ void CLOCK_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
     }
 
     /* In & out load cap calculation with derating */
-    iXOCapInpF_x100  = 2 * pi32_32kfXtalIecLoadpF_x100 - pi32_32kfXtalNPcbParCappF_x100 - 130;
-    iXOCapOutpF_x100 = 2 * pi32_32kfXtalIecLoadpF_x100 - pi32_32kfXtalPPcbParCappF_x100 - 41;
+    i64Tmp = 2 * (int64_t)pi32_32kfXtalIecLoadpF_x100 - (int64_t)pi32_32kfXtalNPcbParCappF_x100 - 130;
+    assert((i64Tmp <= INT32_MAX) && (i64Tmp >= INT32_MIN));
+    iXOCapInpF_x100  = (int32_t)i64Tmp;
+    i64Tmp = 2 * (int64_t)pi32_32kfXtalIecLoadpF_x100 - (int64_t)pi32_32kfXtalPPcbParCappF_x100 - 41;
+    assert((i64Tmp <= INT32_MAX) && (i64Tmp >= INT32_MIN));
+    iXOCapOutpF_x100 = (int32_t)i64Tmp;
 
     /* In & out XO_OSC_CAP_Code_CTRL calculation, with rounding */
-    u8XOCapInCtrl  = (uint8_t)(int32_t)((((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400));
-    u8XOCapOutCtrl = (uint8_t)(int32_t)((((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400));
+    assert(!INT32_MULTIPLY_OVERFLOW(iXOCapInpF_x100, iaXin_x4));
+    assert(!INT32_ADD_OVERFLOW(iXOCapInpF_x100 * iaXin_x4, ibXin * 400));
+    i32Tmp         = ((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400;
+    assert((i32Tmp >= 0) && (i32Tmp <= UINT8_MAX));
+    u8XOCapInCtrl  = (uint8_t)i32Tmp;
+
+    assert(!INT32_MULTIPLY_OVERFLOW(iXOCapOutpF_x100, iaXout_x4));
+    assert(!INT32_ADD_OVERFLOW(iXOCapOutpF_x100 * iaXout_x4, ibXout * 400));
+    i32Tmp         = ((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400;
+    assert((i32Tmp >= 0) && (i32Tmp <= UINT8_MAX));
+    u8XOCapOutCtrl = (uint8_t)i32Tmp;
 
     /* Read register and clear fields to be written */
     u32RegVal = PMC->XTAL32K;
@@ -2461,6 +2522,8 @@ static void CLOCK_SetXtalHfLdo(void)
  */
 static uint8_t CLOCK_u8OscCapConvert(uint8_t u8OscCap, uint8_t u8CapBankDiscontinuity)
 {
+    uint16_t uint16Tmp;
+
     /* Compensate for discontinuity in the capacitor banks */
     if (u8OscCap < 64U)
     {
@@ -2475,9 +2538,11 @@ static uint8_t CLOCK_u8OscCapConvert(uint8_t u8OscCap, uint8_t u8CapBankDisconti
     }
     else
     {
+        assert(u8CapBankDiscontinuity <= 127U);
         if (u8OscCap <= (127U - u8CapBankDiscontinuity))
         {
-            u8OscCap += u8CapBankDiscontinuity;
+            uint16Tmp = u8OscCap + u8CapBankDiscontinuity;
+            u8OscCap = (uint8_t)(uint16Tmp & 0xFFU);
         }
         else
         {

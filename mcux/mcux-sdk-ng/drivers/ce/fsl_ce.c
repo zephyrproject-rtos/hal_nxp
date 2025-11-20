@@ -40,12 +40,12 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
      * The CE images released in the SDK use the STCM6 as the stack and the STCM7 as the data RAM.
      * In this case, the CE core cannot boot from the STCM6 and STCM7.
      */
-    switch (ceCopyImage->destAddr)
+    switch (ceCopyImage->destAddr) /* GCOVR_EXCL_BR_LINE */
     {
         case CE_STCM5_BASE:
             MU_BootOtherCore(MUA, kMU_CoreBootFromSTCM5);
             break;
-        case CE_STCM6_BASE:
+        case CE_STCM6_BASE: /* GCOVR_EXCL_START */
             MU_BootOtherCore(MUA, kMU_CoreBootFromSTCM6);
             break;
         case CE_STCM7_BASE:
@@ -54,7 +54,7 @@ void CE_Init(ce_copy_image_t *ceCopyImage)
         default:
             MU_BootOtherCore(MUA, kMU_CoreBootFromSTCM5);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 #endif
 }
 

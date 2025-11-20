@@ -628,6 +628,15 @@ _Pragma("diag_suppress=Pm120")
 #endif
 
 /*!
+ * @brief The chip supports DWT CYCCNT or not.
+ */
+#if (defined(DWT) && defined(DWT_CTRL_CYCCNTENA_Msk))
+#define MSDK_HAS_DWT_CYCCNT 1
+#else
+#define MSDK_HAS_DWT_CYCCNT 0
+#endif
+
+/*!
  * @brief Invalid IRQ handler address.
  */
 #define MSDK_INVALID_IRQ_HANDLER UINT32_MAX
@@ -1000,7 +1009,7 @@ void DisableDeepSleepIRQ(IRQn_Type interrupt);
 #endif /* FSL_FEATURE_POWERLIB_EXTEND */
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT */
 
-#if defined(DWT)
+#if MSDK_HAS_DWT_CYCCNT
 /*!
  * @brief Enable the counter to get CPU cycles.
  */

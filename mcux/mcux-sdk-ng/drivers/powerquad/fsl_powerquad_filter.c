@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
+ * Copyright 2018-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -271,9 +271,9 @@ void PQ_BiquadRestoreInternalState(POWERQUAD_Type *base, int32_t biquad_num, pq_
 
 void PQ_FIR(POWERQUAD_Type *base,
             const void *pAData,
-            int32_t ALength,
+            uint16_t ALength,
             const void *pBData,
-            int32_t BLength,
+            uint16_t BLength,
             void *pResult,
             uint32_t opType)
 {
@@ -288,7 +288,7 @@ void PQ_FIR(POWERQUAD_Type *base,
     base->CONTROL = (CP_FIR << 4U) | opType;
 }
 
-void PQ_FIRIncrement(POWERQUAD_Type *base, int32_t ALength, int32_t BLength, int32_t xOffset)
+void PQ_FIRIncrement(POWERQUAD_Type *base, uint16_t ALength, uint16_t BLength, int32_t xOffset)
 {
     base->MISC    = (uint32_t)xOffset;
     base->LENGTH  = ((uint32_t)BLength << 16U) + (uint32_t)ALength;
@@ -305,6 +305,8 @@ void PQ_BiquadCascadeDf2F32(const pq_biquad_cascade_df2_instance *S, float *pSrc
 {
     uint32_t stage            = S->numStages;
     pq_biquad_state_t *states = S->pState;
+
+    assert(blockSize <= (UINT32_MAX / 4U));
 
     if (pDst != pSrc)
     {
@@ -349,6 +351,8 @@ void PQ_BiquadCascadeDf2Fixed32(const pq_biquad_cascade_df2_instance *S,
     uint32_t stage            = S->numStages;
     pq_biquad_state_t *states = S->pState;
 
+    assert(blockSize <= (UINT32_MAX / 4U));
+
     if (pDst != pSrc)
     {
         (void)memcpy(pDst, pSrc, 4U * blockSize);
@@ -391,6 +395,8 @@ void PQ_BiquadCascadeDf2Fixed16(const pq_biquad_cascade_df2_instance *S,
 {
     uint32_t stage            = S->numStages;
     pq_biquad_state_t *states = S->pState;
+
+    assert(blockSize <= (UINT32_MAX / 2U));
 
     if (pDst != pSrc)
     {

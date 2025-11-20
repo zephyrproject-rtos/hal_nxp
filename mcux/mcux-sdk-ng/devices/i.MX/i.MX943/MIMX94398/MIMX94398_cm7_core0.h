@@ -31,7 +31,7 @@
 **
 **     Reference manual:    iMX943RM rev1 draftK
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b250917
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX94398_cm7_core0
@@ -153,7 +153,6 @@
 #include "PERI_EWM.h"
 #include "PERI_FLEXIO.h"
 #include "PERI_FRO.h"
-#include "PERI_GLITCHFILTER.h"
 #include "PERI_GPC_CPU_CTRL.h"
 #include "PERI_GPC_GLOBAL.h"
 #include "PERI_GPT.h"
@@ -166,6 +165,7 @@
 #include "PERI_IEPRC_IERB.h"
 #include "PERI_IEPRC_PCI.h"
 #include "PERI_IEPRC_PRB.h"
+#include "PERI_IGF.h"
 #include "PERI_IOMUXC.h"
 #include "PERI_IOMUXC_GPR.h"
 #include "PERI_IRQSTEER.h"

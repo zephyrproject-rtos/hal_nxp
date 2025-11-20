@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -42,7 +42,7 @@ typedef struct pixel_link_transfer_pixel_data
 /*! @name Driver version */
 /*@{*/
 /*! @brief Camera Csr driver version. */
-#define FSL_Camera_Csr_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_Camera_Csr_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*******************************************************************************

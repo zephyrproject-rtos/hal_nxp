@@ -429,6 +429,11 @@ osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle)
     /*Change priority to avoid context switches*/
     oldPriority = OSA_TaskGetPriority(OSA_TaskGetCurrentHandle());
     (void)OSA_TaskSetPriority(OSA_TaskGetCurrentHandle(), OSA_PRIORITY_REAL_TIME);
+    /* Before the thread is deleted, the thread must be in a terminated or completed state */
+    if (TX_SUCCESS != tx_thread_terminate(&ptask->taskHandle))
+    {
+        status = KOSA_StatusError;
+    }
     if (TX_SUCCESS != tx_thread_delete(&ptask->taskHandle))
     {
         status = KOSA_StatusError;

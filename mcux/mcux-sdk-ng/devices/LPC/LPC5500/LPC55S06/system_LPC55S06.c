@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC55S0x/LPC550x User manual Rev.0.3  14 August 2020
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b251010
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -340,7 +340,7 @@ void SystemCoreClockUpdate (void) {
                 clkRate = clkRate / prediv;
                 /* MDEC used for rate */
                 workRate = (uint64_t)clkRate * (uint64_t)findPll0MMult();
-                clkRate = (uint32_t)(workRate / ((uint64_t)postdiv));
+                clkRate = (uint32_t)((workRate / ((uint64_t)postdiv)) & 0xFFFFFFFFUL);
             }
             break;
         case 0x02: /* PLL1 clock (pll1_clk)*/
@@ -372,7 +372,7 @@ void SystemCoreClockUpdate (void) {
 
                 /* MDEC used for rate */
                 workRate1 = (uint64_t)clkRate * (uint64_t)findPll1MMult();
-                clkRate = (uint32_t)(workRate1 / ((uint64_t)postdiv));
+                clkRate = (uint32_t)((workRate1 / ((uint64_t)postdiv)) & 0xFFFFFFFFUL);
             }
             break;
         case 0x03: /* RTC oscillator 32 kHz output (32k_clk) */

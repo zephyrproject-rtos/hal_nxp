@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_TCU
@@ -422,9 +422,11 @@ typedef struct {
   __IO uint32_t TCU_MTR_MCT_ACCESS__MCT_LAUNCH_BISTSEL3; /**< MCT Launch BISTSEL2 Reg, offset: 0x62C */
        uint8_t RESERVED_6[32];
   __IO uint32_t TCU_MTR_DIRECT_BIST_ACCESS_;       /**< Direct BIST Access CTRL Reg, offset: 0x650 */
-       uint8_t RESERVED_7[1452];
+       uint8_t RESERVED_7[300];
+  __IO uint32_t TCU_IOMUX_CONTROL;                 /**< IPT control signal for IOMUX, offset: 0x780 */
+       uint8_t RESERVED_8[1148];
   __IO uint32_t TCU_PLL_COUNTER;                   /**< tcu pll counter reg, offset: 0xC00 */
-       uint8_t RESERVED_8[60];
+       uint8_t RESERVED_9[60];
   __IO uint32_t TCU_DFT_FUSE;                      /**< observe MIX fuse state and override it, offset: 0xC40 */
 } AON_TCU_Type;
 
@@ -556,6 +558,17 @@ typedef struct {
 #define AON_TCU_TCU_MTR_DIRECT_BIST_ACCESS__bist_burnin_loop_start_SHIFT (2U)
 /*! bist_burnin_loop_start - start burnin BIST signal */
 #define AON_TCU_TCU_MTR_DIRECT_BIST_ACCESS__bist_burnin_loop_start(x) (((uint32_t)(((uint32_t)(x)) << AON_TCU_TCU_MTR_DIRECT_BIST_ACCESS__bist_burnin_loop_start_SHIFT)) & AON_TCU_TCU_MTR_DIRECT_BIST_ACCESS__bist_burnin_loop_start_MASK)
+/*! @} */
+
+/*! @name TCU_IOMUX_CONTROL - IPT control signal for IOMUX */
+/*! @{ */
+
+#define AON_TCU_TCU_IOMUX_CONTROL_tb_iomuxc_ovr_bits_MASK (0xFFFFFFU)
+#define AON_TCU_TCU_IOMUX_CONTROL_tb_iomuxc_ovr_bits_SHIFT (0U)
+/*! tb_iomuxc_ovr_bits - For using MCT test mode through the TCU, this bit has to be set first which
+ *    enables all the muxes related to this test mode
+ */
+#define AON_TCU_TCU_IOMUX_CONTROL_tb_iomuxc_ovr_bits(x) (((uint32_t)(((uint32_t)(x)) << AON_TCU_TCU_IOMUX_CONTROL_tb_iomuxc_ovr_bits_SHIFT)) & AON_TCU_TCU_IOMUX_CONTROL_tb_iomuxc_ovr_bits_MASK)
 /*! @} */
 
 /*! @name TCU_PLL_COUNTER - tcu pll counter reg */
