@@ -45,7 +45,7 @@ if (CONFIG_MCUX_COMPONENT_driver.ocotp_rw61x)
 endif()
 
 if (CONFIG_MCUX_COMPONENT_driver.power)
-    mcux_component_version(2.5.3)
+    mcux_component_version(2.6.0)
     mcux_add_source( SOURCES fsl_power.c fsl_power.h )
     mcux_add_include( INCLUDES . )
 endif()

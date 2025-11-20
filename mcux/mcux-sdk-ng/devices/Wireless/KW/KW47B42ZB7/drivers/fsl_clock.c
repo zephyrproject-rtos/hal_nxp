@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2025 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -266,7 +266,7 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type)
      *   kSCG_SysClkSrcFirc || kSCG_SysClkSrcRosc)) not covered.
      * $ref clock_c_ref_1$.
      */
-    switch ((scg_sys_clk_src_t)sysClkConfig.src)
+    switch ((scg_sys_clk_src_t)sysClkConfig.src) /* GCOVR_EXCL_BR_LINE */
     {
         case kSCG_SysClkSrcSysOsc:
             freq = CLOCK_GetSysOscFreq();
@@ -280,10 +280,10 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type)
         case kSCG_SysClkSrcRosc:
             freq = CLOCK_GetRtcOscFreq();
             break;
-        default:
+        default: /* GCOVR_EXCL_START */
             freq = 24000000U;
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 
     freq /= (sysClkConfig.divCore + 1U); /* Divided by the DIVCORE firstly. */
 
@@ -435,7 +435,7 @@ status_t CLOCK_InitSirc(const scg_sirc_config_t *config)
      * not covered.
      * $ref clock_c_ref_2$.
      */
-    while ((CLOCK_REG(&SCG0->SIRCCSR) & SCG_SIRCCSR_SIRCVLD_MASK) != SCG_SIRCCSR_SIRCVLD_MASK)
+    while ((CLOCK_REG(&SCG0->SIRCCSR) & SCG_SIRCCSR_SIRCVLD_MASK) != SCG_SIRCCSR_SIRCVLD_MASK) /* GCOVR_EXCL_BR_LINE */
     {
     }
 
@@ -487,13 +487,13 @@ uint32_t CLOCK_GetSircFreq(void)
      * not covered.
      * $ref clock_c_ref_2$.
      */
-    if ((CLOCK_REG(&SCG0->SIRCCSR) & SCG_SIRCCSR_SIRCVLD_MASK) == SCG_SIRCCSR_SIRCVLD_MASK) /* SIRC is valid. */
+    if ((CLOCK_REG(&SCG0->SIRCCSR) & SCG_SIRCCSR_SIRCVLD_MASK) == SCG_SIRCCSR_SIRCVLD_MASK) /* SIRC is valid. */ /* GCOVR_EXCL_BR_LINE */
     {
         return SCG_SIRC_FREQ;
     }
     else
     {
-        return 0U;
+        return 0U; /* GCOVR_EXCL_LINE */
     }
 }
 
@@ -545,9 +545,9 @@ status_t CLOCK_InitFirc(const scg_firc_config_t *config)
          * not covered.
          * $ref clock_c_ref_3$.
          */
-        if ((CLOCK_REG(&SCG0->FIRCCSR) & SCG_FIRCCSR_FIRCERR_MASK) == SCG_FIRCCSR_FIRCERR_MASK)
+        if ((CLOCK_REG(&SCG0->FIRCCSR) & SCG_FIRCCSR_FIRCERR_MASK) == SCG_FIRCCSR_FIRCERR_MASK) /* GCOVR_EXCL_BR_LINE */
         {
-            return (status_t)kStatus_Fail;
+            return (status_t)kStatus_Fail; /* GCOVR_EXCL_LINE */
         }
     }
 
@@ -725,7 +725,7 @@ status_t CLOCK_InitRfFro192M(const fro192m_rf_clk_config_t *config)
      * not covered.
      * $ref clock_c_ref_4$.
      */
-    while ((CLOCK_REG(&FRO192M0->FROCCSR) & FRO192M_FROCCSR_VALID_MASK) != FRO192M_FROCCSR_VALID_MASK)
+    while ((CLOCK_REG(&FRO192M0->FROCCSR) & FRO192M_FROCCSR_VALID_MASK) != FRO192M_FROCCSR_VALID_MASK) /* GCOVR_EXCL_BR_LINE */
     {
     }
 
@@ -747,12 +747,12 @@ uint32_t CLOCK_GetRfFro192MFreq(void)
      * not covered.
      * $ref clock_c_ref_4$.
      */
-    if ((CLOCK_REG(&FRO192M0->FROCCSR) & FRO192M_FROCCSR_VALID_MASK) == FRO192M_FROCCSR_VALID_MASK)
+    if ((CLOCK_REG(&FRO192M0->FROCCSR) & FRO192M_FROCCSR_VALID_MASK) == FRO192M_FROCCSR_VALID_MASK) /* GCOVR_EXCL_BR_LINE */
     {
         return fro192mFreq[FRO192M_FROCCSR_POSTDIV_SEL_VAL];
     }
     else
     {
-        return 0U;
+        return 0U; /* GCOVR_EXCL_LINE */
     }
 }

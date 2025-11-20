@@ -106,6 +106,13 @@ typedef struct _power_threshold_params
     uint32_t margin;
 } power_threshold_params_t;
 
+typedef struct _bod_config
+{
+    power_bod_callback drop;
+    power_bod_callback recover;
+    void *param;
+} bod_config_t;
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -123,6 +130,7 @@ static const uint8_t s_droTable[19] = {0x40U, 0x43U, 0x46U, 0x48U, 0x4CU, 0x4FU,
                                        0x5DU, 0x5FU, 0x62U, 0x65U, 0x67U, 0x69U, 0x69U, 0x69U, 0x69U};
 static power_load_gdet_cfg s_gdetCfgloadFunc;
 static power_gdet_data_t s_gdetCfgData;
+static bod_config_t s_bodConfig;
 
 /*******************************************************************************
  * Prototypes
@@ -326,6 +334,35 @@ void CAPT_PULSE_DriverIRQHandler(void)
     {
         s_captPulseCb(s_captPulseCbParam);
     }
+}
+
+void PMIP_DriverIRQHandler(void);
+void PMIP_DriverIRQHandler(void)
+{
+    /* Brown-out Detect (BoD) event occurred */
+    /* Disable the Brown-out Detect interrupt to prevent endless handler. */
+    (void)DisableIRQ(PMIP_IRQn);
+    /* Perform necessary actions or call a user-defined callback */
+    if (s_bodConfig.drop != NULL)
+    {
+        s_bodConfig.drop(s_bodConfig.param);
+    }
+}
+
+void PMIP_CHANGE_DriverIRQHandler(void);
+void PMIP_CHANGE_DriverIRQHandler(void)
+{
+    /* Clear the Brown-out Detect interrupt status */
+    PMU->BOD |= PMU_BOD__1_85_INT_CLR_NEG_MASK;
+    /* BoD recovers in this interrupt handler */
+    if (s_bodConfig.recover != NULL)
+    {
+        s_bodConfig.recover(s_bodConfig.param);
+    }
+
+    /* Enable BoD drop detection again */
+    NVIC_ClearPendingIRQ(PMIP_IRQn);
+    (void)EnableIRQ(PMIP_IRQn);
 }
 
 /**
@@ -1498,4 +1535,36 @@ uint32_t POWER_TrimSvc(uint32_t gdetTrim, uint32_t pack)
     }
 
     return trimSvc;
+}
+
+void POWER_EnableBodMonitor(power_bod_callback drop, power_bod_callback recover, void *userParam)
+{
+    /* Set the callback functions */
+    s_bodConfig.drop    = drop;
+    s_bodConfig.recover = recover;
+    s_bodConfig.param   = userParam;
+
+    PMU->BOD = PMU_BOD__1_85_INT_CLR_NEG_MASK;
+    NVIC_ClearPendingIRQ(PMIP_IRQn);
+    NVIC_ClearPendingIRQ(PMIP_CHANGE_IRQn);
+    /* Enable the related IRQs */
+    (void)EnableIRQ(PMIP_IRQn);
+    (void)EnableIRQ(PMIP_CHANGE_IRQn);
+
+    /* Enable Brown-out Detection */
+    PMU->BOD = PMU_BOD_EN_MASK;
+}
+
+void POWER_DisableBodMonitor(void)
+{
+    /* Disable Brown-out Detection and clear interrupt status */
+    PMU->BOD = PMU_BOD__1_85_INT_CLR_NEG_MASK;
+
+    /* Disable the related IRQs */
+    (void)DisableIRQ(PMIP_IRQn);
+    (void)DisableIRQ(PMIP_CHANGE_IRQn);
+    /* Clear the callback functions */
+    s_bodConfig.drop    = NULL;
+    s_bodConfig.recover = NULL;
+    s_bodConfig.param   = NULL;
 }
