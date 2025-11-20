@@ -338,7 +338,7 @@ status_t MU_TriggerInterrupts(MU_Type *base, uint32_t mask)
  */
 void MU_BootCoreB(MU_Type *base, mu_core_boot_mode_t mode)
 {
-#if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
+#if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT)
     /* Clean the reset de-assert pending flag. */
     base->SR = MU_SR_RDIP_MASK;
 #endif
@@ -557,7 +557,7 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
 #if (defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
     resetFlag |= MU_SR_RAIP_MASK;
 #endif
-#if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
+#if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT)
     resetFlag |= MU_SR_RDIP_MASK;
 #endif
     /* Clean the reset assert pending flag. */
@@ -591,7 +591,7 @@ status_t MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset
             /* Clear CR[HR]. */
             base->CR = cr;
 
-#if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_ASSERT_INT)
+#if (defined(FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT) && FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT)
 #if MU_BUSY_POLL_COUNT
             poll_count = MU_BUSY_POLL_COUNT;
 #endif /* MU_BUSY_POLL_COUNT */

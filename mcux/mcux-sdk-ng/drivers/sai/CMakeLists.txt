@@ -30,7 +30,7 @@ if(CONFIG_MCUX_COMPONENT_driver.sai_sdma)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.sai)
-    mcux_component_version(2.4.8)
+    mcux_component_version(2.4.10)
 
     mcux_add_source(SOURCES fsl_sai.h fsl_sai.c)
 

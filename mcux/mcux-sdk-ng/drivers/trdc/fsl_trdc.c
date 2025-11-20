@@ -253,6 +253,7 @@ void TRDC_SetNonProcessorDomainAssignment(TRDC_Type *base,
 #if defined(FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT) && (FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT > 1)
     base->MDA_DFMT1[master].MDA_W_DFMT1[0] = pid._u32 | TRDC_MDA_W_DFMT1_VLD_MASK;
 #else
+    assert(master != 0U);
     base->MDA_W0_DFMT1[master - 1U].MDA_W0_x_DFMT1 = pid._u32 | TRDC_MDA_W0_x_DFMT1_VLD_MASK;
 #endif
 }
@@ -370,6 +371,7 @@ void TRDC_GetDefaultFlashLogicalWindowConfig(trdc_flw_config_t *flwConfiguration
 void TRDC_SetFlashLogicalWindow(TRDC_Type *base, const trdc_flw_config_t *flwConfiguration)
 {
     assert(NULL != flwConfiguration);
+    assert((base->TRDC_FLW_CTL & TRDC_TRDC_FLW_CTL_LK_MASK) == 0U);
 
     base->TRDC_FLW_ABASE = flwConfiguration->arrayBaseAddr;
     base->TRDC_FLW_BCNT  = flwConfiguration->blockCount;
@@ -572,6 +574,9 @@ void TRDC_MrcSetMemoryAccessConfig(TRDC_Type *base,
 {
     assert(NULL != base);
     assert(NULL != config);
+    assert(regIdx < 8U);
+    /* Check if this access config register has already been locked. */
+    assert((base->MRC_INDEX[mrcIdx].MRC_GLBAC[regIdx] & TRDC_MRC_GLBAC_LK_MASK) == 0U);
 
     trdc_reg32_convert_t pid;
 
@@ -686,14 +691,20 @@ void TRDC_MrcSetRegionDescriptorConfig(TRDC_Type *base, const trdc_mrc_region_de
 
     /* Set configuration for word 0 */
     uint32_t data = TRDC_MRC_DOM0_RGD_W_MRACSEL(config->memoryAccessControlSelect) |
-                    ((config->startAddr) & ~(TRDC_MRC_DOM0_RGD_W_MRACSEL_MASK));
+                    (config->startAddr & TRDC_MRC_DOM0_RGD_W_STRT_ADDR_MASK);
     *(uint32_t *)regAddr = data;
+
+    /* Check whether the register is set according to configuration. */
+    assert(*(uint32_t *)regAddr == data);
 
     /* Set configuration for word 1 */
     regAddr += 4U;
     data = TRDC_MRC_DOM0_RGD_W_VLD(config->valid ? 1U : 0U) | TRDC_MRC_DOM0_RGD_W_NSE(config->nseEnable ? 1U : 0U) |
-           ((config->endAddr) & ~(TRDC_MRC_DOM0_RGD_W_VLD_MASK | TRDC_MRC_DOM0_RGD_W_NSE_MASK));
+           (config->endAddr & TRDC_MRC_DOM0_RGD_W_END_ADDR_MASK);
     *(uint32_t *)regAddr = data;
+
+    /* Check whether the register is set according to configuration. */
+    assert(*(uint32_t *)regAddr == data);
 }
 
 /*!
@@ -805,6 +816,9 @@ void TRDC_MbcSetMemoryAccessConfig(TRDC_Type *base,
 {
     assert(NULL != base);
     assert(NULL != config);
+    assert(rgdIdx < 8U);
+    /* Check if this access config register has already been locked. */
+    assert((base->MBC_INDEX[mbcIdx].MBC_MEMN_GLBAC[rgdIdx] & TRDC_MBC_MEMN_GLBAC_LK_MASK) == 0U);
 
     trdc_reg32_convert_t pid;
 
@@ -843,4 +857,7 @@ void TRDC_MbcSetMemoryBlockConfig(TRDC_Type *base, const trdc_mbc_memory_block_c
                ((uint32_t)config->memoryBlockIdx / 8U) * sizeof(uint32_t);
     configWord           = configWord | (*(uint32_t *)regAddr & ~(0xFUL << shift));
     *(uint32_t *)regAddr = configWord;
+
+    /* Check whether the register is set according to configuration. */
+    assert(*(uint32_t *)regAddr == configWord);
 }

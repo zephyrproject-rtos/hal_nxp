@@ -114,8 +114,11 @@ void emitvers(uint32_t *p_cis_addr, uint8_t *s, uint32_t subs)
         {
             if ((i < ((uint32_t)slen - 2U)) && (s[i] == (uint8_t)'X' && s[i + 1U] == (uint8_t)'X'))
             {
-                REG8(addr + i)      = (uint8_t)tohex((uint8_t)((id >> 4U) & 0xfU));
-                REG8(addr + i + 1U) = (uint8_t)tohex((uint8_t)(id & 0xfU));
+                if (addr < UINT32_MAX - i)
+                {
+                    REG8(addr + i)      = (uint8_t)tohex((uint8_t)((id >> 4U) & 0xfU));
+                    REG8(addr + i + 1U) = (uint8_t)tohex((uint8_t)(id & 0xfU));
+                }
             }
         }
     }

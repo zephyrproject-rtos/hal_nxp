@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -95,7 +95,7 @@ static void LPUART_SendEDMACallback(edma_handle_t *handle, void *param, bool tra
      * $Branch Coverage Justification$
      * $ref fsl_lpuart_edma_c_ref_1$
      */
-    if (transferDone)
+    if (transferDone) /* GCOVR_EXCL_BR_LINE */
     {
         /* Disable LPUART TX EDMA. */
         LPUART_EnableTxDMA(lpuartPrivateHandle->base, false);
@@ -121,7 +121,7 @@ static void LPUART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool 
      * $Branch Coverage Justification$
      * $ref fsl_lpuart_edma_c_ref_1$
      */
-    if (transferDone)
+    if (transferDone) /* GCOVR_EXCL_BR_LINE */
     {
         /* Disable transfer. */
         LPUART_TransferAbortReceiveEDMA(lpuartPrivateHandle->base, lpuartPrivateHandle->handle);
@@ -452,7 +452,7 @@ void LPUART_TransferEdmaHandleIRQ(LPUART_Type *base, void *lpuartEdmaHandle)
      * $Branch Coverage Justification$
      * $ref fsl_lpuart_edma_c_ref_2$
      */
-    if (((uint32_t)kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base)) != 0U)
+    if (((uint32_t)kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base)) != 0U) /* GCOVR_EXCL_BR_LINE */
     {
         lpuart_edma_handle_t *handle = (lpuart_edma_handle_t *)lpuartEdmaHandle;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024 NXP
+ * Copyright 2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,7 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 
 #if defined(FSL_FEATURE_XBAR_DSC_REG_WIDTH) && (FSL_FEATURE_XBAR_DSC_REG_WIDTH == 32)
 typedef uint32_t xbar_reg_t;
@@ -168,6 +168,30 @@ status_t XBAR_GetOutputStatusFlag(xbar_output_signal_t output, bool *flag);
  * @retval kStatus_InvalidArgument Failed because of invalid argument.
  */
 status_t XBAR_SetOutputSignalConfig(xbar_output_signal_t output, const xbar_control_config_t *controlConfig);
+
+#if (defined(FSL_FEATURE_XBAR_DSC_HAS_REG_WP) && FSL_FEATURE_XBAR_DSC_HAS_REG_WP)
+/*!
+ * @brief Lock the XBAR SEL register
+ *
+ * When locked, the register can't be written until reset the XBAR module.
+ *
+ * @param output XBAR output signal.
+ * @retval kStatus_Success Register locked successfully.
+ * @retval kStatus_InvalidArgument Failed because of invalid argument.
+ */
+status_t XBAR_LockSelReg(xbar_output_signal_t output);
+
+/*!
+ * @brief Lock the XBAR CTRL register
+ *
+ * When locked, the register can't be written until reset the XBAR module.
+ *
+ * @param output XBAR output signal.
+ * @retval kStatus_Success Register locked successfully.
+ * @retval kStatus_InvalidArgument Failed because of invalid argument.
+ */
+status_t XBAR_LockCtrlReg(xbar_output_signal_t output);
+#endif /* FSL_FEATURE_XBAR_DSC_HAS_REG_WP */
 
 #if defined(__cplusplus)
 }

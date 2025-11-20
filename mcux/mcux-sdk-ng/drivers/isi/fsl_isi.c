@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -198,7 +198,7 @@ void ISI_Init(ISI_Type *base)
 
     /* Enable channel clock. */
     ISI_Reset(base);
-    base->CHNL_CTRL = ISI_CHNL_CTRL_CLK_EN_MASK;
+    base->CHNL[ISI_CHNL_INDEX].CTRL = ISI_CTRL_CLK_EN_MASK;
 }
 
 /*!
@@ -212,7 +212,7 @@ void ISI_Deinit(ISI_Type *base)
 {
     ISI_Reset(base);
     /* Stop channel, disable the channel clock. */
-    base->CHNL_CTRL = 0U;
+    base->CHNL[ISI_CHNL_INDEX].CTRL = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the clock. */
@@ -230,14 +230,14 @@ void ISI_Deinit(ISI_Type *base)
  */
 void ISI_Reset(ISI_Type *base)
 {
-    base->CHNL_CTRL |= ISI_CHNL_CTRL_SW_RST_MASK;
+    base->CHNL[ISI_CHNL_INDEX].CTRL |= ISI_CTRL_SW_RST_MASK;
     __NOP();
     __NOP();
     __NOP();
     __NOP();
     __NOP();
     __NOP();
-    base->CHNL_CTRL &= ~ISI_CHNL_CTRL_SW_RST_MASK;
+    base->CHNL[ISI_CHNL_INDEX].CTRL &= ~ISI_CTRL_SW_RST_MASK;
 }
 
 /*!
@@ -256,46 +256,46 @@ void ISI_SetConfig(ISI_Type *base, const isi_config_t *config)
 
     uint32_t reg;
 
-    /* Set control bit fields in register CHNL_CTRL. */
-    reg = base->CHNL_CTRL;
-    reg &= ~(ISI_CHNL_CTRL_CHNL_BYPASS_MASK | ISI_CHNL_CTRL_CHAIN_BUF_MASK | ISI_CHNL_CTRL_MIPI_VC_ID_MASK | ISI_CHNL_CTRL_SRC_TYPE_MASK | ISI_CHNL_CTRL_SRC_MASK);
+    /* Set control bit fields in register CTRL. */
+    reg = base->CHNL[ISI_CHNL_INDEX].CTRL;
+    reg &= ~(ISI_CTRL_CHNL_BYPASS_MASK | ISI_CTRL_CHAIN_BUF_MASK | ISI_CTRL_VC_ID_0_MASK | ISI_CTRL_SRC_TYPE_MASK | ISI_CTRL_SRC_MASK);
 
-#if defined(ISI_CHNL_CTRL_BLANK_PXL_MASK)
-    reg &= ~(ISI_CHNL_CTRL_BLANK_PXL_MASK);
+#if defined(ISI_CTRL_BLANK_PXL_MASK)
+    reg &= ~(ISI_CTRL_BLANK_PXL_MASK);
 #endif
 
-    reg |= ISI_CHNL_CTRL_CHNL_BYPASS(config->isChannelBypassed ? 1 : 0) | ISI_CHNL_CTRL_CHAIN_BUF(config->chainMode) |
-           ISI_CHNL_CTRL_MIPI_VC_ID(config->mipiChannel) | ISI_CHNL_CTRL_SRC_TYPE(config->isSourceMemory) | ISI_CHNL_CTRL_SRC(config->sourcePort);
+    reg |= ISI_CTRL_CHNL_BYPASS(config->isChannelBypassed ? 1 : 0) | ISI_CTRL_CHAIN_BUF(config->chainMode) |
+           ISI_CTRL_VC_ID_0(config->mipiChannel) | ISI_CTRL_SRC_TYPE(config->isSourceMemory) | ISI_CTRL_SRC(config->sourcePort);
 
-#if defined(ISI_CHNL_CTRL_BLANK_PXL_MASK)
-    reg |= ISI_CHNL_CTRL_BLANK_PXL(config->blankPixel);
+#if defined(ISI_CTRL_BLANK_PXL_MASK)
+    reg |= ISI_CTRL_BLANK_PXL(config->blankPixel);
 #endif
-    base->CHNL_CTRL = reg;
+    base->CHNL[ISI_CHNL_INDEX].CTRL = reg;
 
-    /* Set control bit fields in register CHNL_IMG_CTRL. */
-    reg = base->CHNL_IMG_CTRL;
-    reg &= ~(ISI_CHNL_IMG_CTRL_FORMAT_MASK | ISI_CHNL_IMG_CTRL_DEINT_MASK | ISI_CHNL_IMG_CTRL_YCBCR_MODE_MASK);
-    reg |= ISI_CHNL_IMG_CTRL_FORMAT(config->outputFormat) | ISI_CHNL_IMG_CTRL_DEINT(config->deintMode) |
-           ISI_CHNL_IMG_CTRL_YCBCR_MODE(config->isYCbCr ? 1 : 0);
-    base->CHNL_IMG_CTRL = reg;
+    /* Set control bit fields in register IMG_CTRL. */
+    reg = base->CHNL[ISI_CHNL_INDEX].IMG_CTRL;
+    reg &= ~(ISI_IMG_CTRL_FORMAT_MASK | ISI_IMG_CTRL_DEINT_MASK | ISI_IMG_CTRL_YCBCR_MODE_MASK);
+    reg |= ISI_IMG_CTRL_FORMAT(config->outputFormat) | ISI_IMG_CTRL_DEINT(config->deintMode) |
+           ISI_IMG_CTRL_YCBCR_MODE(config->isYCbCr ? 1 : 0);
+    base->CHNL[ISI_CHNL_INDEX].IMG_CTRL = reg;
 
-    base->CHNL_IMG_CFG = ((uint32_t)(config->inputHeight) << ISI_CHNL_IMG_CFG_HEIGHT_SHIFT) |
-                         ((uint32_t)(config->inputWidth) << ISI_CHNL_IMG_CFG_WIDTH_SHIFT);
+    base->CHNL[ISI_CHNL_INDEX].IMG_CFG = ((uint32_t)(config->inputHeight) << ISI_IMG_CFG_HEIGHT_SHIFT) |
+                         ((uint32_t)(config->inputWidth) << ISI_IMG_CFG_WIDTH_SHIFT);
 
-    base->CHNL_SCL_IMG_CFG =
-        ISI_CHNL_SCL_IMG_CFG_WIDTH(config->inputWidth) | ISI_CHNL_SCL_IMG_CFG_HEIGHT(config->inputHeight);
+    base->CHNL[ISI_CHNL_INDEX].SCL_IMG_CFG =
+        ISI_SCL_IMG_CFG_WIDTH(config->inputWidth) | ISI_SCL_IMG_CFG_HEIGHT(config->inputHeight);
 
     /* Set output buffer configuration. */
-    base->CHNL_OUT_BUF_PITCH = config->outputLinePitchBytes;
+    base->CHNL[ISI_CHNL_INDEX].OUT_BUF_PITCH = config->outputLinePitchBytes;
 
     /* Set channel buffer panic threshold. */
-    reg = base->CHNL_OUT_BUF_CTRL;
-    reg &= ~(ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_V_MASK | ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_U_MASK |
-             ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_Y_MASK);
-    reg |= ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_V(config->thresholdV) |
-           ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_U(config->thresholdU) |
-           ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_Y(config->thresholdY);
-    base->CHNL_OUT_BUF_CTRL = reg;
+    reg = base->CHNL[ISI_CHNL_INDEX].OUT_BUF_CTRL;
+    reg &= ~(ISI_OUT_BUF_CTRL_PANIC_SET_THD_V_MASK | ISI_OUT_BUF_CTRL_PANIC_SET_THD_U_MASK |
+             ISI_OUT_BUF_CTRL_PANIC_SET_THD_Y_MASK);
+    reg |= ISI_OUT_BUF_CTRL_PANIC_SET_THD_V(config->thresholdV) |
+           ISI_OUT_BUF_CTRL_PANIC_SET_THD_U(config->thresholdU) |
+           ISI_OUT_BUF_CTRL_PANIC_SET_THD_Y(config->thresholdY);
+    base->CHNL[ISI_CHNL_INDEX].OUT_BUF_CTRL = reg;
 }
 
 /*!
@@ -371,14 +371,14 @@ void ISI_SetScalerConfig(
     ISI_GetScalerParam(inputHeight, outputHeight, &decY, &scaleY);
 
     /* Set the pre-decimation configuration. */
-    base->CHNL_IMG_CTRL = (base->CHNL_IMG_CTRL & ~(ISI_CHNL_IMG_CTRL_DEC_X_MASK | ISI_CHNL_IMG_CTRL_DEC_Y_MASK)) |
-                          ISI_CHNL_IMG_CTRL_DEC_X(decX) | ISI_CHNL_IMG_CTRL_DEC_Y(decY);
+    base->CHNL[ISI_CHNL_INDEX].IMG_CTRL = (base->CHNL[ISI_CHNL_INDEX].IMG_CTRL & ~(ISI_IMG_CTRL_DEC_X_MASK | ISI_IMG_CTRL_DEC_Y_MASK)) |
+                          ISI_IMG_CTRL_DEC_X(decX) | ISI_IMG_CTRL_DEC_Y(decY);
 
     /* Set the bilinear scaler engine configuration. */
     /* The scaler factor is represented as ##.####_####_#### in register. */
-    base->CHNL_SCALE_FACTOR = ISI_CHNL_SCALE_FACTOR_X_SCALE(scaleX) | ISI_CHNL_SCALE_FACTOR_Y_SCALE(scaleY);
+    base->CHNL[ISI_CHNL_INDEX].SCALE_FACTOR = ISI_SCALE_FACTOR_X_SCALE(scaleX) | ISI_SCALE_FACTOR_Y_SCALE(scaleY);
 
-    base->CHNL_SCL_IMG_CFG = ISI_CHNL_SCL_IMG_CFG_WIDTH(outputWidth) | ISI_CHNL_SCL_IMG_CFG_HEIGHT(outputHeight);
+    base->CHNL[ISI_CHNL_INDEX].SCL_IMG_CFG = ISI_SCL_IMG_CFG_WIDTH(outputWidth) | ISI_SCL_IMG_CFG_HEIGHT(outputHeight);
 }
 
 /*!
@@ -401,28 +401,28 @@ void ISI_SetColorSpaceConversionConfig(ISI_Type *base, const isi_csc_config_t *c
      * The CSC coefficient has a sign bit, 2 bits integer, and 8 bits of fraction as ###.####_####.
      * This function converts the float value to the register format.
      */
-    coeff = (ISI_ConvertFloat(config->A1, 2, 8) << ISI_CHNL_CSC_COEFF0_A1_SHIFT);
-    coeff |= (ISI_ConvertFloat(config->A2, 2, 8) << ISI_CHNL_CSC_COEFF0_A2_SHIFT);
-    base->CHNL_CSC_COEFF0 = coeff;
+    coeff = (ISI_ConvertFloat(config->A1, 2, 8) << ISI_CSC_COEFF0_A1_SHIFT);
+    coeff |= (ISI_ConvertFloat(config->A2, 2, 8) << ISI_CSC_COEFF0_A2_SHIFT);
+    base->CHNL[ISI_CHNL_INDEX].CSC_COEFF0 = coeff;
 
-    coeff = (ISI_ConvertFloat(config->A3, 2, 8) << ISI_CHNL_CSC_COEFF1_A3_SHIFT);
-    coeff |= (ISI_ConvertFloat(config->B1, 2, 8) << ISI_CHNL_CSC_COEFF1_B1_SHIFT);
-    base->CHNL_CSC_COEFF1 = coeff;
+    coeff = (ISI_ConvertFloat(config->A3, 2, 8) << ISI_CSC_COEFF1_A3_SHIFT);
+    coeff |= (ISI_ConvertFloat(config->B1, 2, 8) << ISI_CSC_COEFF1_B1_SHIFT);
+    base->CHNL[ISI_CHNL_INDEX].CSC_COEFF1 = coeff;
 
-    coeff = (ISI_ConvertFloat(config->B2, 2, 8) << ISI_CHNL_CSC_COEFF2_B2_SHIFT);
-    coeff |= (ISI_ConvertFloat(config->B3, 2, 8) << ISI_CHNL_CSC_COEFF2_B3_SHIFT);
-    base->CHNL_CSC_COEFF2 = coeff;
+    coeff = (ISI_ConvertFloat(config->B2, 2, 8) << ISI_CSC_COEFF2_B2_SHIFT);
+    coeff |= (ISI_ConvertFloat(config->B3, 2, 8) << ISI_CSC_COEFF2_B3_SHIFT);
+    base->CHNL[ISI_CHNL_INDEX].CSC_COEFF2 = coeff;
 
-    coeff = (ISI_ConvertFloat(config->C1, 2, 8) << ISI_CHNL_CSC_COEFF3_C1_SHIFT);
-    coeff |= (ISI_ConvertFloat(config->C2, 2, 8) << ISI_CHNL_CSC_COEFF3_C2_SHIFT);
-    base->CHNL_CSC_COEFF3 = coeff;
+    coeff = (ISI_ConvertFloat(config->C1, 2, 8) << ISI_CSC_COEFF3_C1_SHIFT);
+    coeff |= (ISI_ConvertFloat(config->C2, 2, 8) << ISI_CSC_COEFF3_C2_SHIFT);
+    base->CHNL[ISI_CHNL_INDEX].CSC_COEFF3 = coeff;
 
-    base->CHNL_CSC_COEFF4 =
-        (ISI_ConvertFloat(config->C3, 2, 8) << ISI_CHNL_CSC_COEFF4_C3_SHIFT) | ISI_CHNL_CSC_COEFF4_D1(config->D1);
-    base->CHNL_CSC_COEFF5 = ISI_CHNL_CSC_COEFF5_D2(config->D2) | ISI_CHNL_CSC_COEFF5_D3(config->D3);
+    base->CHNL[ISI_CHNL_INDEX].CSC_COEFF4 =
+        (ISI_ConvertFloat(config->C3, 2, 8) << ISI_CSC_COEFF4_C3_SHIFT) | ISI_CSC_COEFF4_D1(config->D1);
+    base->CHNL[ISI_CHNL_INDEX].CSC_COEFF5 = ISI_CSC_COEFF5_D2(config->D2) | ISI_CSC_COEFF5_D3(config->D3);
 
-    base->CHNL_IMG_CTRL =
-        (base->CHNL_IMG_CTRL & ~ISI_CHNL_IMG_CTRL_CSC_MODE_MASK) | ISI_CHNL_IMG_CTRL_CSC_MODE(config->mode);
+    base->CHNL[ISI_CHNL_INDEX].IMG_CTRL =
+        (base->CHNL[ISI_CHNL_INDEX].IMG_CTRL & ~ISI_IMG_CTRL_CSC_MODE_MASK) | ISI_IMG_CTRL_CSC_MODE(config->mode);
 }
 
 /*!
@@ -485,8 +485,8 @@ void ISI_SetCropConfig(ISI_Type *base, const isi_crop_config_t *config)
 {
     assert(NULL != config);
 
-    base->CHNL_CROP_ULC = ISI_CHNL_CROP_ULC_X(config->upperLeftX) | ISI_CHNL_CROP_ULC_Y(config->upperLeftY);
-    base->CHNL_CROP_LRC = ISI_CHNL_CROP_LRC_X(config->lowerRightX) | ISI_CHNL_CROP_LRC_Y(config->lowerRightY);
+    base->CHNL[ISI_CHNL_INDEX].CROP_ULC = ISI_CROP_ULC_X(config->upperLeftX) | ISI_CROP_ULC_Y(config->upperLeftY);
+    base->CHNL[ISI_CHNL_INDEX].CROP_LRC = ISI_CROP_LRC_X(config->lowerRightX) | ISI_CROP_LRC_Y(config->lowerRightY);
 }
 
 /*!
@@ -533,11 +533,37 @@ void ISI_SetRegionAlphaConfig(ISI_Type *base, uint8_t index, const isi_region_al
     assert(NULL != config);
     assert(index < ISI_ROI_NUM);
 
-    uint32_t reg                    = base->ROI[index].CHNL_ROI_ALPHA & ~ISI_CHNL_ROI_ALPHA_ALPHA_MASK;
-    base->ROI[index].CHNL_ROI_ALPHA = reg | ISI_CHNL_ROI_ALPHA_ALPHA(config->alpha);
-
-    base->ROI[index].CHNL_ROI_ULC = ISI_CHNL_ROI_ULC_X(config->upperLeftX) | ISI_CHNL_ROI_ULC_Y(config->upperLeftY);
-    base->ROI[index].CHNL_ROI_LRC = ISI_CHNL_ROI_LRC_X(config->lowerRightX) | ISI_CHNL_ROI_LRC_Y(config->lowerRightY);
+    switch (index)
+    {
+        case ISI_ROI_INDEX_0:
+            base->CHNL[ISI_CHNL_INDEX].ROI_0_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_0_ALPHA & ~ISI_ROI_0_ALPHA_ALPHA_EN_MASK) |
+                                                     ISI_ROI_0_ALPHA_ALPHA(config->alpha);
+                    
+            base->CHNL[ISI_CHNL_INDEX].ROI_0_ULC = ISI_ROI_0_ULC_X(config->upperLeftX) | ISI_ROI_0_ULC_Y(config->upperLeftY);
+            base->CHNL[ISI_CHNL_INDEX].ROI_0_LRC = ISI_ROI_0_LRC_X(config->lowerRightX) | ISI_ROI_0_LRC_Y(config->lowerRightY);
+            break;
+        case ISI_ROI_INDEX_1:
+            base->CHNL[ISI_CHNL_INDEX].ROI_1_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_1_ALPHA & ~ISI_ROI_1_ALPHA_ALPHA_EN_MASK) |
+                                                     ISI_ROI_1_ALPHA_ALPHA(config->alpha);
+                    
+            base->CHNL[ISI_CHNL_INDEX].ROI_1_ULC = ISI_ROI_1_ULC_X(config->upperLeftX) | ISI_ROI_1_ULC_Y(config->upperLeftY);
+            base->CHNL[ISI_CHNL_INDEX].ROI_1_LRC = ISI_ROI_1_LRC_X(config->lowerRightX) | ISI_ROI_1_LRC_Y(config->lowerRightY);
+            break;
+        case ISI_ROI_INDEX_2:
+            base->CHNL[ISI_CHNL_INDEX].ROI_2_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_2_ALPHA & ~ISI_ROI_2_ALPHA_ALPHA_EN_MASK) |
+                                                     ISI_ROI_2_ALPHA_ALPHA(config->alpha);
+                    
+            base->CHNL[ISI_CHNL_INDEX].ROI_2_ULC = ISI_ROI_2_ULC_X(config->upperLeftX) | ISI_ROI_2_ULC_Y(config->upperLeftY);
+            base->CHNL[ISI_CHNL_INDEX].ROI_2_LRC = ISI_ROI_2_LRC_X(config->lowerRightX) | ISI_ROI_2_LRC_Y(config->lowerRightY);
+            break;
+        case ISI_ROI_INDEX_3:
+            base->CHNL[ISI_CHNL_INDEX].ROI_3_ALPHA = (base->CHNL[ISI_CHNL_INDEX].ROI_3_ALPHA & ~ISI_ROI_3_ALPHA_ALPHA_EN_MASK) |
+                                                     ISI_ROI_3_ALPHA_ALPHA(config->alpha);
+                    
+            base->CHNL[ISI_CHNL_INDEX].ROI_3_ULC = ISI_ROI_3_ULC_X(config->upperLeftX) | ISI_ROI_3_ULC_Y(config->upperLeftY);
+            base->CHNL[ISI_CHNL_INDEX].ROI_3_LRC = ISI_ROI_3_LRC_X(config->lowerRightX) | ISI_ROI_3_LRC_Y(config->lowerRightY);
+            break;
+    }
 }
 
 /*!
@@ -581,13 +607,48 @@ void ISI_EnableRegionAlpha(ISI_Type *base, uint8_t index, bool enable)
 {
     assert(index < ISI_ROI_NUM);
 
-    if (enable)
+    switch (index)
     {
-        base->ROI[index].CHNL_ROI_ALPHA |= ISI_CHNL_ROI_ALPHA_ALPHA_EN_MASK;
-    }
-    else
-    {
-        base->ROI[index].CHNL_ROI_ALPHA &= ~ISI_CHNL_ROI_ALPHA_ALPHA_EN_MASK;
+        case ISI_ROI_INDEX_0:
+            if (enable)
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_0_ALPHA |= ISI_ROI_0_ALPHA_ALPHA_EN_MASK;
+            }
+            else
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_0_ALPHA &= ~ISI_ROI_0_ALPHA_ALPHA_EN_MASK;
+            }
+            break;
+        case ISI_ROI_INDEX_1:
+            if (enable)
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_1_ALPHA |= ISI_ROI_1_ALPHA_ALPHA_EN_MASK;
+            }
+            else
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_1_ALPHA &= ~ISI_ROI_1_ALPHA_ALPHA_EN_MASK;
+            }
+            break;
+        case ISI_ROI_INDEX_2:
+            if (enable)
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_2_ALPHA |= ISI_ROI_2_ALPHA_ALPHA_EN_MASK;
+            }
+            else
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_2_ALPHA &= ~ISI_ROI_2_ALPHA_ALPHA_EN_MASK;
+            }
+            break;
+        case ISI_ROI_INDEX_3:
+            if (enable)
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_3_ALPHA |= ISI_ROI_3_ALPHA_ALPHA_EN_MASK;
+            }
+            else
+            {
+                base->CHNL[ISI_CHNL_INDEX].ROI_3_ALPHA &= ~ISI_ROI_3_ALPHA_ALPHA_EN_MASK;
+            }
+            break;
     }
 }
 
@@ -603,14 +664,14 @@ void ISI_SetInputMemConfig(ISI_Type *base, const isi_input_mem_config_t *config)
 
     uint32_t reg;
 
-    base->CHNL_IN_BUF_ADDR  = config->adddr;
-    base->CHNL_IN_BUF_PITCH = ISI_CHNL_IN_BUF_PITCH_FRM_PITCH(config->framePitchBytes) |
-                              ISI_CHNL_IN_BUF_PITCH_LINE_PITCH(config->linePitchBytes);
+    base->CHNL[ISI_CHNL_INDEX].IN_BUF_ADDR  = config->adddr;
+    base->CHNL[ISI_CHNL_INDEX].IN_BUF_PITCH = ISI_IN_BUF_PITCH_FRM_PITCH(config->framePitchBytes) |
+                              ISI_IN_BUF_PITCH_LINE_PITCH(config->linePitchBytes);
 
-    reg = base->CHNL_MEM_RD_CTRL;
-    reg &= ~ISI_CHNL_MEM_RD_CTRL_IMG_TYPE_MASK;
-    reg |= ISI_CHNL_MEM_RD_CTRL_IMG_TYPE(config->format);
-    base->CHNL_MEM_RD_CTRL = reg;
+    reg = base->CHNL[ISI_CHNL_INDEX].MEM_RD_CTRL;
+    reg &= ~ISI_MEM_RD_CTRL_IMG_TYPE_MASK;
+    reg |= ISI_MEM_RD_CTRL_IMG_TYPE(config->format);
+    base->CHNL[ISI_CHNL_INDEX].MEM_RD_CTRL = reg;
 }
 
 /*!
@@ -648,11 +709,11 @@ void ISI_TriggerInputMemRead(ISI_Type *base)
 {
     uint32_t reg;
 
-    reg = base->CHNL_MEM_RD_CTRL;
-    /* Clear CHNL_MEM_RD_CTRL[READ_MEM]. */
-    base->CHNL_MEM_RD_CTRL = reg & ~ISI_CHNL_MEM_RD_CTRL_READ_MEM_MASK;
-    /* Set CHNL_MEM_RD_CTRL[READ_MEM]. */
-    base->CHNL_MEM_RD_CTRL = reg | ISI_CHNL_MEM_RD_CTRL_READ_MEM_MASK;
+    reg = base->CHNL[ISI_CHNL_INDEX].MEM_RD_CTRL;
+    /* Clear MEM_RD_CTRL[READ_MEM]. */
+    base->CHNL[ISI_CHNL_INDEX].MEM_RD_CTRL = reg & ~ISI_MEM_RD_CTRL_READ_MEM_MASK;
+    /* Set MEM_RD_CTRL[READ_MEM]. */
+    base->CHNL[ISI_CHNL_INDEX].MEM_RD_CTRL = reg | ISI_MEM_RD_CTRL_READ_MEM_MASK;
 }
 
 /*!
@@ -673,16 +734,16 @@ void ISI_SetOutputBufferAddr(ISI_Type *base, uint8_t index, uint32_t addrY, uint
 
     if (0U == index)
     {
-        base->CHNL_OUT_BUF1_ADDR_Y = addrY;
-        base->CHNL_OUT_BUF1_ADDR_U = addrU;
-        base->CHNL_OUT_BUF1_ADDR_V = addrV;
-        base->CHNL_OUT_BUF_CTRL ^= ISI_CHNL_OUT_BUF_CTRL_LOAD_BUF1_ADDR_MASK;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF1_ADDR_Y = addrY;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF1_ADDR_U = addrU;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF1_ADDR_V = addrV;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF_CTRL ^= ISI_OUT_BUF_CTRL_LOAD_BUF1_ADDR_MASK;
     }
     else
     {
-        base->CHNL_OUT_BUF2_ADDR_Y = addrY;
-        base->CHNL_OUT_BUF2_ADDR_U = addrU;
-        base->CHNL_OUT_BUF2_ADDR_V = addrV;
-        base->CHNL_OUT_BUF_CTRL ^= ISI_CHNL_OUT_BUF_CTRL_LOAD_BUF2_ADDR_MASK;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF2_ADDR_Y = addrY;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF2_ADDR_U = addrU;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF2_ADDR_V = addrV;
+        base->CHNL[ISI_CHNL_INDEX].OUT_BUF_CTRL ^= ISI_OUT_BUF_CTRL_LOAD_BUF2_ADDR_MASK;
     }
 }

@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_FLEXIO_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #define FLEXIO_QSPI_BUF_MAX 3
@@ -66,6 +66,7 @@ typedef struct _flexio_qspi_type
     uint8_t CSnPinIndex;     /*!< Pin select for enable. */
 } FLEXIO_QSPI_Type;
 
+#define FLEXIO_QSPI_BUF_T
 /*! @brief Define FlexIO SPI transfer structure. */
 typedef struct _flexio_qspi_buf
 {

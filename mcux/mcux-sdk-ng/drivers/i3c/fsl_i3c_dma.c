@@ -429,6 +429,8 @@ static void I3C_MasterRunDMATransfer(I3C_Type *base, i3c_master_dma_handle_t *ha
 
 static status_t I3C_MasterInitTransferStateMachineDMA(I3C_Type *base, i3c_master_dma_handle_t *handle)
 {
+    assert(handle->transfer.subaddressSize <= sizeof(handle->transfer.subaddress));
+
     i3c_master_transfer_t *xfer = &handle->transfer;
     status_t result             = kStatus_Success;
     i3c_direction_t direction   = xfer->direction;
@@ -439,13 +441,14 @@ static status_t I3C_MasterInitTransferStateMachineDMA(I3C_Type *base, i3c_master
     {
         for (uint32_t i = xfer->subaddressSize; i > 0U; i--)
         {
-            handle->subaddressBuffer[handle->subaddressCount++] = (uint8_t)((xfer->subaddress) >> (8U * (i - 1U)));
+            handle->subaddressBuffer[handle->subaddressCount++] =
+                (uint8_t)(((xfer->subaddress) >> (8U * (i - 1U))) & 0xFFU);
         }
     }
 
     if (xfer->busType != kI3C_TypeI3CDdr)
     {
-        direction = (0UL != xfer->subaddressSize) ? kI3C_Write : xfer->direction;
+        direction = (0UL != xfer->subaddressSize) ? (i3c_direction_t)kI3C_Write : xfer->direction;
     }
 
     /* For combination of write address and read data, need to do ReSTART after write. */
@@ -591,7 +594,7 @@ static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_
                     {
                         handle->callback.ibiCallback(base, handle, kI3C_IbiNormal, kI3C_IbiDataBuffNeed);
                     }
-                    uint8_t tempData = (uint8_t)base->MRDATAB;
+                    uint8_t tempData = (uint8_t)(base->MRDATAB & 0xFFU);
                     if (handle->ibiBuff != NULL)
                     {
                         handle->ibiBuff[handle->ibiPayloadSize++] = tempData;
@@ -772,7 +775,6 @@ status_t I3C_MasterTransferDMA(I3C_Type *base, i3c_master_dma_handle_t *handle, 
 {
     assert(NULL != handle);
     assert(NULL != transfer);
-    assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
 
     i3c_master_state_t masterState = I3C_MasterGetState(base);
     bool checkDdrState;
@@ -818,7 +820,7 @@ status_t I3C_MasterTransferDMA(I3C_Type *base, i3c_master_dma_handle_t *handle, 
     /* Enable I3C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
     I3C_MasterEnableInterrupts(base, (uint32_t)kMasterDMAIrqFlags
 #if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
-    | (uint32_t)kI3C_MasterTxReadyFlag
+                                         | (uint32_t)kI3C_MasterTxReadyFlag
 #endif
     );
 

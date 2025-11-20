@@ -57,9 +57,10 @@ static uint32_t KPP_GetInstance(KPP_Type *base)
 }
 static void KPP_Mdelay(uint64_t tickets)
 {
-    while ((tickets--) != 0UL)
+    while (tickets > 0UL)
     {
         __NOP();
+        tickets--;
     }
 }
 
@@ -151,7 +152,7 @@ status_t KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_H
     uint8_t column;
 
     /* Initialize row data to zero. */
-    (void)memset(&rowData[0][0], 0, sizeof(rowData));
+    (void)memset(rowData, 0, sizeof(rowData));
 
     /* Scanning. */
     /* Configure the column data to 1 according to column numbers. */

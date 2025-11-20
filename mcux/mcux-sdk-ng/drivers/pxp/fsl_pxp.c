@@ -2283,6 +2283,9 @@ void PXP_SetPath(PXP_Type *base, pxp_path_t path)
         /* FSL_FEATURE_PXP_V4 do not support DATA_PATH_CTRL1 */
         pathReg = &(base->DATA_PATH_CTRL1);
         mux -= 15U;
+#else
+        /* return early to avoid pathReg being null pointer */
+        return;
 #endif
     }
     else

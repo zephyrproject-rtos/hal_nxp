@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023-2024 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -638,6 +637,7 @@ void ACMP_SetDiscreteModeConfig(CMP_Type *base, const acmp_discrete_mode_config_
 {
     uint32_t tmp32 = 0U;
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE) && (FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE==0U))
     if (!config->enablePositiveChannelDiscreteMode)
     {
         tmp32 |= CMP_C3_PCHCTEN_MASK;
@@ -646,12 +646,29 @@ void ACMP_SetDiscreteModeConfig(CMP_Type *base, const acmp_discrete_mode_config_
     {
         tmp32 |= CMP_C3_NCHCTEN_MASK;
     }
+#else
+    if (config->bypassPositiveChannelResistorDivider)
+    {
+        tmp32 |= CMP_C3_PCH_RDIV_BYP_MASK;
+    }
+    if (config->bypassNegativeChannelResistorDivider)
+    {
+        tmp32 |= CMP_C3_NCH_RDIV_BYP_MASK;
+    }
+#endif
+
 #if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
+#if !(defined(FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE) && (FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE==0U))
     if (config->enableResistorDivider)
     {
         tmp32 |= CMP_C3_RDIVE_MASK;
     }
-
+#else
+    if (config->enableHysteresisDivider)
+    {
+        tmp32 |= CMP_C3_HYST_DIVEN_MASK;
+    }
+#endif
     tmp32 |= CMP_C3_DMCS(config->clockSource)      /* Select the clock. */
              | CMP_C3_ACSAT(config->sampleTime)    /* Sample time period. */
              | CMP_C3_ACPH1TC(config->phase1Time)  /* Phase 1 sample time. */

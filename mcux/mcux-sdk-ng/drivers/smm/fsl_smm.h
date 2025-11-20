@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief smm driver version 2.1.0. */
-#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief smm driver version 2.1.1. */
+#define FSL_SMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
@@ -35,12 +35,17 @@
  */
 enum _smm_interrupt_enable
 {
-    kSMM_QChannelTimeoutInt = 1UL << 12UL,
-    kSMM_QChannelDenyInt = 1UL << 14UL,
-    kSMM_DeepSleepCounterInt = 1UL << 9UL,
-    kSMM_ComparatorMatchInt = 1UL << 8UL,
+    kSMM_QChannelTimeoutInt = 1UL << 12UL,  /*!< Enable or disable the QChannel timeout interrupt. */
+
+    /*
+     * Note: Due to the errata, bit 13 is used to enable/disable the QChannel deny interrupt.
+     */
+    kSMM_QChannelDenyInt = 1UL << 13UL,     /*!< Enable or disable the QChannel deny interrupt. */
+    kSMM_DeepSleepCounterInt = 1UL << 9UL,  /*!< Enable or disable the deep sleep counter interrupt. */
+    kSMM_ComparatorMatchInt = 1UL << 8UL,   /*!< Enable or disable the comparator match interrupt. */
     kSMM_AllSupportedInts = (kSMM_QChannelTimeoutInt | kSMM_QChannelDenyInt | \
-                            kSMM_DeepSleepCounterInt | kSMM_ComparatorMatchInt),
+                            kSMM_DeepSleepCounterInt | kSMM_ComparatorMatchInt), /*!< Enable or disable all support
+                                                                                    interrupts. */
 };
 
 /*!
@@ -49,10 +54,10 @@ enum _smm_interrupt_enable
  */
 enum _smm_interrupt_flag
 {
-    kSMM_QChannelTimeoutIntFlag = 1UL << 13UL,
-    kSMM_QChannelDenyIntFlag = 1UL << 15UL,
+    kSMM_QChannelTimeoutIntFlag = 1UL << 13UL,      /*!< Indicates that the QChannel timeout interrupt has occurred. */
+    kSMM_QChannelDenyIntFlag = 1UL << 15UL,         /*!< Indicates that the Q channel deny interrupt has occurred. */
 
-    kSMM_AllIntFlags = kSMM_QChannelTimeoutIntFlag | kSMM_QChannelDenyIntFlag,
+    kSMM_AllIntFlags = kSMM_QChannelTimeoutIntFlag | kSMM_QChannelDenyIntFlag, /*!< All supported interrupt flags */
 };
 
 /*!
@@ -60,8 +65,8 @@ enum _smm_interrupt_flag
  */
 typedef enum _smm_ext_int_polarity
 {
-    kSMM_ExtIntRisingEdge = 0U, /*!< Detect rising edge of External Interrupt Pin. */
-    kSMM_ExtIntFallingEdge,     /*!< Detect falling edge of External Interrupt Pin. */
+    kSMM_ExtIntRisingEdge = 0U, /*!< Trigger on rising edge of the external interrupt pin. */
+    kSMM_ExtIntFallingEdge,     /*!< Trigger on falling edge of the external interrupt pin. */
 } smm_ext_int_polarity_t;
 
 /*!
@@ -69,7 +74,7 @@ typedef enum _smm_ext_int_polarity
  */
 typedef struct _smm_ext_int_config
 {
-    bool maskExtIntPin; /*!< True to mask external interrupt pin, false to unmask. */
+    bool maskExtIntPin; /*!< Set to true to mask the external interrupt pin; false to unmask. */
     smm_ext_int_polarity_t extIntPolarity; /*!< External interrupt polarity. */
 } smm_ext_int_config_t;
 
@@ -87,8 +92,8 @@ typedef struct _smm_backup_reg_content
  */
 typedef enum _smm_watchdog_alarm_use
 {
-    kSMM_WatchdogAlarmAsReset = 0U,       /*!< Watchdog alarm as reset. */
-    kSMM_WatchdogAlarmAsInterrupt = 1U    /*!< Watchdog alarm as interrupt. */
+    kSMM_WatchdogAlarmAsReset = 0U,       /*!< Use watchdog alarm to trigger system reset. */
+    kSMM_WatchdogAlarmAsInterrupt = 1U    /*!< Use watchdog alarm to trigger interrupt. */
 } smm_watchdog_alarm_use_t;
 
 /*******************************************************************************
@@ -107,7 +112,7 @@ extern "C" {
 void SMM_SetExtInterruptConfig(SMM_Type *base, const smm_ext_int_config_t *ptrConfig);
 
 /*!
- * @brief Disable the AON CPU I/O signals on exist from DPD2.
+ * @brief Disable the AON CPU I/O signals on exit from DPD2.
  * 
  * @param base SMM base address.
  */
@@ -117,7 +122,7 @@ static inline void SMM_DisableAonCpuIsoSingal(SMM_Type *base)
 }
 
 /*!
- * @brief Disable the Main CPU I/O signals on exist from DPD1.
+ * @brief Disable the Main CPU I/O signals on exit from DPD1.
  * 
  * @param base SMM base address.
  */
@@ -217,12 +222,12 @@ static inline void SMM_ShutDownBandgapInLowPowerModes(SMM_Type *base, bool shutd
     if (shutdown)
     {
         base->PWDN_CONFIG |= SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK;
-        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_MASK;
+        base->PWDN_CONFIG |= SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK;
     }
     else
     {
         base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK;
-        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_MASK;
+        base->PWDN_CONFIG &= ~SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK;
     }
 }
 
@@ -333,7 +338,7 @@ static inline void SMM_DisableAonSramAutoControl(SMM_Type *base, uint8_t sramCut
  * @brief Write data to backup registers.
  * 
  * @param base SMM base address.
- * @param[in] ptrBackupRegContent Pointer of the content will write to backup registers.
+ * @param[in] ptrBackupRegContent Pointer to the data to be written to the backup registers.
  */
 void SMM_WriteToBackupReg(SMM_Type *base, const smm_backup_reg_content_t *ptrBackupRegContent);
 
@@ -563,7 +568,7 @@ static inline void SMM_ResetAndDisableDeepSleepCounter(SMM_Type *base)
 }
 
 /*!
- * @brief Enable the countdown start of the deep sleep counter when at sofware use.
+ * @brief Enable the countdown start of the deep sleep counter when at software use.
  * 
  * @param base SMM base address.
  */
@@ -592,20 +597,20 @@ static inline void SMM_UpdateDeepSleepCounter(SMM_Type *base, uint16_t value)
  */
 static inline uint16_t SMM_ReadDeepSleepCounter(SMM_Type *base)
 {
-    return (uint16_t)(base->DPSLP_COUNT);
+    return (uint16_t)((base->DPSLP_COUNT) & SMM_DPSLP_COUNT_DPSLP_CNT_MASK);
 }
 
 /*!
  * @brief Enable specific interrupts.
  * 
  * @param base SMM base address.
- * @param masks The mask of interrupts to enable, should be OR'ed value of @ref smm_interrupt_enable_t.
+ * @param masks Bitmask of interrupts to enable. Use OR'ed values from @ref s
  */
 static inline void SMM_EnableInterrupts(SMM_Type *base, uint32_t masks)
 {
     uint32_t tmp32 = base->STAT;
 
-    tmp32 &= ~(kSMM_AllSupportedInts);
+    tmp32 &= (uint32_t)(~(kSMM_AllSupportedInts));
     base->STAT = (tmp32 | (masks & kSMM_AllSupportedInts));
 }
 
@@ -613,13 +618,13 @@ static inline void SMM_EnableInterrupts(SMM_Type *base, uint32_t masks)
  * @brief Disable specific interrupts.
  * 
  * @param base SMM base address.
- * @param masks The mask of interrupts to disable, should be OR'ed value of @ref smm_interrupt_enable_t.
+ * @param masks Bitmask of interrupts to disable, should be OR'ed value of @ref smm_interrupt_enable_t.
  */
 static inline void SMM_DisableInterrupts(SMM_Type *base, uint32_t masks)
 {
     uint32_t tmp32 = base->STAT;
 
-     tmp32 &= ~(kSMM_AllSupportedInts);
+     tmp32 &= (uint32_t)(~(kSMM_AllSupportedInts));
     base->STAT = tmp32 & (~(masks & kSMM_AllSupportedInts));
 }
 
@@ -643,7 +648,16 @@ static inline uint32_t SMM_GetInterruptFlags(SMM_Type *base)
  */
 static inline void SMM_ClearInterruptFlags(SMM_Type *base, uint32_t flags)
 {
-    base->STAT = (flags & kSMM_AllIntFlags);
+    if ((flags & (uint32_t)kSMM_QChannelTimeoutIntFlag) != 0UL)
+    {
+        base->STAT = (uint32_t)kSMM_QChannelTimeoutIntFlag;
+    }
+
+    /* Due to the errata, write bit 14 to clear Q channel Deny interrupt flag */
+    if ((flags & (uint32_t)kSMM_QChannelDenyIntFlag) != 0UL)
+    {
+        base->STAT = (uint32_t)(1UL << 14UL);
+    }
 }
 
 /*!

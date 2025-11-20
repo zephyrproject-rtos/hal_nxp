@@ -30,11 +30,17 @@ void L1CACHE_EnableCodeCache(void)
 {
     if (0U == (LMEM->PCCCR & LMEM_PCCCR_ENCACHE_MASK))
     {
+        __DSB();
+        __ISB();
+
         /* First, invalidate the entire cache. */
         L1CACHE_InvalidateCodeCache();
 
         /* Now enable the cache. */
         LMEM->PCCCR |= LMEM_PCCCR_ENCACHE_MASK;
+
+        __DSB();
+        __ISB();
     }
 }
 
@@ -44,11 +50,17 @@ void L1CACHE_EnableCodeCache(void)
  */
 void L1CACHE_DisableCodeCache(void)
 {
+    __DSB();
+    __ISB();
+
     /* First, push any modified contents. */
     L1CACHE_CleanCodeCache();
 
     /* Now disable the cache. */
     LMEM->PCCCR &= ~LMEM_PCCCR_ENCACHE_MASK;
+
+    __DSB();
+    __ISB();
 }
 
 /*!
@@ -219,11 +231,17 @@ void L1CACHE_EnableSystemCache(void)
     /* Only enable when not enabled. */
     if (0U == (LMEM->PSCCR & LMEM_PSCCR_ENCACHE_MASK))
     {
+        __DSB();
+        __ISB();
+
         /* First, invalidate the entire cache. */
         L1CACHE_InvalidateSystemCache();
 
         /* Now enable the cache. */
         LMEM->PSCCR |= LMEM_PSCCR_ENCACHE_MASK;
+
+        __DSB();
+        __ISB();
     }
 }
 
@@ -233,11 +251,17 @@ void L1CACHE_EnableSystemCache(void)
  */
 void L1CACHE_DisableSystemCache(void)
 {
+    __DSB();
+    __ISB();
+
     /* First, push any modified contents. */
     L1CACHE_CleanSystemCache();
 
     /* Now disable the cache. */
     LMEM->PSCCR &= ~LMEM_PSCCR_ENCACHE_MASK;
+
+    __DSB();
+    __ISB();
 }
 
 /*!

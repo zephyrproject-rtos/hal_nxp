@@ -3827,7 +3827,6 @@ status_t ENET_QOS_ReadRxParser(ENET_QOS_Type *base, enet_qos_rxp_config_t *rxpCo
     return result;
 }
 
-#ifndef ENET_QOS_EMAC_USED_AS_ENET_QOS
 /*!
  * brief Configure flexible rx parser.
  *
@@ -3931,7 +3930,6 @@ status_t ENET_QOS_ConfigureRxParser(ENET_QOS_Type *base, enet_qos_rxp_config_t *
 
     return result;
 }
-#endif /* ENET_QOS_EMAC_USED_AS_ENET_QOS */
 
 /*!
  * brief Gets statistical data in transfer.

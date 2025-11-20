@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023-2024 NXP
- * All rights reserved.
+ * Copyright 2016-2020, 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief ACMP driver version 2.3.0. */
-#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief ACMP driver version 2.4.0. */
+#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 /*! @brief The mask of status flags cleared by writing 1. */
@@ -232,13 +231,24 @@ typedef enum _acmp_discrete_phase_time
 /*! @brief Configuration for discrete mode. */
 typedef struct _acmp_discrete_mode_config
 {
+#if !(defined(FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE) && (FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE==0U))
     bool enablePositiveChannelDiscreteMode; /*!< Positive Channel Continuous Mode Enable. By default, the continuous
                                                  mode is used. */
     bool enableNegativeChannelDiscreteMode; /*!< Negative Channel Continuous Mode Enable. By default, the continuous
                                                  mode is used. */
+#else
+    bool bypassPositiveChannelResistorDivider; /*!< Bypass the positive channel resistor divider for the inputs when
+                                                 they come from 3v domain and their values are above 1.8v. */
+    bool bypassNegativeChannelResistorDivider; /*!< Bypass the negative channel resistor divider for the inputs when
+                                                 they come from 3v domain and their values are above 1.8v. */
+#endif /* FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE */
 #if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
+#if !(defined(FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE) && (FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE==0U))
     bool enableResistorDivider; /*!< Resistor Divider Enable is used to enable the resistor divider for the inputs when
                                      they come from 3v domain and their values are above 1.8v. */
+#else
+    bool enableHysteresisDivider; /*!< Enables hysteresis divided by 2. */
+#endif
     acmp_discrete_clock_source_t clockSource; /*!< Select the clock source in order to generate the requiried timing for
                                                    comparator to work in discrete mode.  */
     acmp_discrete_sample_time_t sampleTime;   /*!< Select the ACMP total sampling time period. */

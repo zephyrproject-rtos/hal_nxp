@@ -20,7 +20,7 @@
  * @{
  */
 /*! @brief LPI2C EDMA driver version. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 5))
 /*! @} */
 
 /*!

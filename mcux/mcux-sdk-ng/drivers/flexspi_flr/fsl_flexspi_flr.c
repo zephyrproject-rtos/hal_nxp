@@ -239,6 +239,12 @@ void FLEXSPI_SLV_HandleIRQ(FLEXSPI_SLV_Type *base, flexspi_slv_handle_t *handle)
 void FLEXSPI_SLV_DriverIRQHandler(void);
 void FLEXSPI_SLV_DriverIRQHandler(void)
 {
+#if defined(FLEXSPI_SLV)
     s_flexspiSlvIsr(FLEXSPI_SLV, s_flexspiSlvHandle[0]);
+#elif defined(COMM_FLEXSPI_FLR)
+    s_flexspiSlvIsr(COMM_FLEXSPI_FLR, s_flexspiSlvHandle[0]);
+#else
+#error "No valid FLEXSPI_SLV instance found!"
+#endif
     SDK_ISR_EXIT_BARRIER;
 }

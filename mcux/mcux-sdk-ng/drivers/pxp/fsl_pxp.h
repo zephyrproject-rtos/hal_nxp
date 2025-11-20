@@ -1455,7 +1455,7 @@ static inline void PXP_EnableAlphaSurfaceOverlayColorKey(PXP_Type *base, uint32_
     {
         case 0:
             base->AS_CTRL =
-                (base->AS_CTRL & ~PXP_AS_CTRL_ENABLE_COLORKEY_MASK) | PXP_AS_CTRL_ENABLE_COLORKEY((uint32_t)enable);
+                (base->AS_CTRL & ~PXP_AS_CTRL_ENABLE_COLORKEY_MASK) | PXP_AS_CTRL_ENABLE_COLORKEY(enable ? 1U : 0U);
             break;
 
         case 1:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2024 NXP.
+ * Copyright 2019-2025 NXP.
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,8 +18,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines WUU driver version 2.4.0. */
-#define FSL_WUU_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief Defines WUU driver version 2.4.1. */
+#define FSL_WUU_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*! @} */
 
 /*!
@@ -48,7 +48,10 @@ typedef enum _wuu_external_wakeup_pin_event
  */
 typedef enum _wuu_external_wakeup_pin_mode
 {
-    kWUU_ExternalPinActiveDSPD   = 0x0U, /*!< External input Pin is active only during Deep Sleep/Power Down Mode. */
+    kWUU_ExternalPinActiveDSPD   = 0x0U, /*!< External input Pin is active only during Deep Sleep/Power Down Mode.
+                                              NOTE: This enumerations has been deprecated, please switch to
+                                              kWUU_ExternalPinActiveLowLeakage. */
+    kWUU_ExternalPinActiveLowLeakageMode = 0x0U, /*!< External input Pin is active only during low-leakage power modes. */
     kWUU_ExternalPinActiveAlways = 0x1U, /*!< External input Pin is active during all power modes. */
 } wuu_external_wakeup_pin_mode_t;
 
@@ -87,7 +90,10 @@ typedef enum _wuu_filter_event
  */
 typedef enum _wuu_filter_mode
 {
-    kWUU_FilterActiveDSPD   = 0x0U, /*!< External input pin filter is active only during Deep Sleep/Power Down Mode. */
+    kWUU_FilterActiveDSPD   = 0x0U, /*!< External input pin filter is active only during Deep Sleep/Power Down Mode.
+                                         NOTE: This enumerations has been deprecated, please switch to
+                                         kWUU_FilterActiveLowLeakage. */
+    kWUU_FilterActiveLowLeakageMode = 0x0U, /*!< External input pin filter is active only during low-leakage power modes. */
     kWUU_FilterActiveAlways = 0x1U, /*!< External input Pin filter is active during all power modes. */
 } wuu_filter_mode_t;
 

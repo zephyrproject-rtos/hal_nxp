@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2024 NXP
+ * Copyright 2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -42,6 +42,8 @@
 #define XBAR_CTRL_ALL_STAT_MASK (XBAR_CTRL_STAT_MASK | (XBAR_CTRL_STAT_MASK << 8U))
 #define XBAR_SEL_MAX_MASK  (0xFFU)
 #endif
+
+#define XBAR_CTRL_WP_MASK ((uint32_t)(1UL << 31U))
 
 /* Array of XBAR clock name. */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -315,3 +317,63 @@ status_t XBAR_SetOutputSignalConfig(xbar_output_signal_t output, const xbar_cont
 
     return status;
 }
+
+#if (defined(FSL_FEATURE_XBAR_DSC_HAS_REG_WP) && FSL_FEATURE_XBAR_DSC_HAS_REG_WP)
+
+#if !(defined(FSL_FEATURE_XBAR_DSC_REG_WIDTH) && (FSL_FEATURE_XBAR_DSC_REG_WIDTH == 32))
+#error Only 32-bit registers support write protection
+#endif
+
+/*
+ * brief Lock the XBAR SEL register
+ *
+ * When locked, the register can't be written until reset the XBAR module.
+ *
+ * param output XBAR output signal.
+ * retval kStatus_Success Register locked successfully.
+ * retval kStatus_InvalidArgument Failed because of invalid argument.
+ */
+status_t XBAR_LockSelReg(xbar_output_signal_t output)
+{
+    status_t status;
+    uint16_t inst        = XBAR_INST_FROM_OUTPUT(output);
+    uint16_t outputIndex = XBAR_EXTRACT_OUTPUT(output);
+    volatile xbar_reg_t *selRegAddr;
+
+    if ((inst > ARRAY_SIZE(s_xbarInfo)) || (outputIndex > (s_xbarInfo[inst - 1U].regSelNum)))
+    {
+        status = kStatus_InvalidArgument;
+    }
+    else
+    {
+        selRegAddr   = s_xbarInfo[inst - 1U].baseAddr + ((s_xbarInfo[inst - 1U].regSelOffset + outputIndex));
+        *selRegAddr |= XBAR_CTRL_WP_MASK;
+        status       = kStatus_Success;
+    }
+
+    return status;
+}
+
+/*
+ * brief Lock the XBAR CTRL register
+ *
+ * When locked, the register can't be written until reset the XBAR module.
+ *
+ * param output XBAR output signal.
+ * retval kStatus_Success Register locked successfully.
+ * retval kStatus_InvalidArgument Failed because of invalid argument.
+ */
+status_t XBAR_LockCtrlReg(xbar_output_signal_t output)
+{
+    status_t status;
+    volatile xbar_reg_t *ctrlRegAddr;
+    status = XBAR_GetCtrlReg(output, &ctrlRegAddr);
+
+    if (status == kStatus_Success)
+    {
+        *ctrlRegAddr |= XBAR_CTRL_WP_MASK;
+    }
+
+    return status;
+}
+#endif /* FSL_FEATURE_XBAR_DSC_HAS_REG_WP */

@@ -96,7 +96,7 @@ static void LPSPI_SeparateEdmaReadData(uint8_t *rxData, uint32_t readData, uint3
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_edma_c_ref_1$
      */
-    switch (bytesEachRead)
+    switch (bytesEachRead) /* GCOVR_EXCL_BR_LINE */
     {
         case 1:
             if (!isByteSwap)
@@ -128,10 +128,10 @@ static void LPSPI_SeparateEdmaReadData(uint8_t *rxData, uint32_t readData, uint3
             }
             break;
 
-        default:
+        default: /* GCOVR_EXCL_START */
             assert(false);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 }
 
 /*!
@@ -236,13 +236,13 @@ status_t LPSPI_MasterTransferPrepareEDMALite(LPSPI_Type *base, lpspi_master_edma
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_edma_c_ref_3$
      */
-    if (handle->fifoSize >= 1U)
+    if (handle->fifoSize >= 1U) /* GCOVR_EXCL_BR_LINE */
     {
         LPSPI_SetFifoWatermarks(base, handle->fifoSize - 1U, 0U);
     }
     else
     {
-        LPSPI_SetFifoWatermarks(base, 0U, 0U);
+        LPSPI_SetFifoWatermarks(base, 0U, 0U); /* GCOVR_EXCL_LINE */
     }
 
     /* Transfers will stall when transmit FIFO is empty or receive FIFO is full. */
@@ -406,7 +406,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_edma_c_ref_1$
      */
-    switch (handle->bytesEachRead)
+    switch (handle->bytesEachRead) /* GCOVR_EXCL_BR_LINE */
     {
         case (1U):
             transferConfigRx.srcTransferSize = kEDMA_TransferSize1Bytes;
@@ -431,12 +431,12 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
             transferConfigRx.minorLoopBytes  = 4;
             break;
 
-        default:
+        default: /* GCOVR_EXCL_START */
             transferConfigRx.srcTransferSize = kEDMA_TransferSize1Bytes;
             transferConfigRx.minorLoopBytes  = 1;
             assert(false);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 
     transferConfigRx.srcAddr   = (uint32_t)rxAddr + addrOffset;
     transferConfigRx.srcOffset = 0;
@@ -476,7 +476,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_edma_c_ref_1$
          */
-        switch (bytesLastWrite)
+        switch (bytesLastWrite) /* GCOVR_EXCL_BR_LINE */
         {
             case (1U):
                 transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
@@ -496,12 +496,12 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
                 }
                 break;
 
-            default:
+            default: /* GCOVR_EXCL_START */
                 transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
                 transferConfigTx.minorLoopBytes   = 1;
                 assert(false);
                 break;
-        }
+        } /* GCOVR_EXCL_STOP */
 
         transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
         transferConfigTx.majorLoopCounts = 1;
@@ -577,7 +577,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_edma_c_ref_1$
      */
-    switch (handle->bytesEachRead)
+    switch (handle->bytesEachRead) /* GCOVR_EXCL_BR_LINE */
     {
         case (1U):
             transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
@@ -603,12 +603,12 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
             transferConfigTx.minorLoopBytes   = 4;
             break;
 
-        default:
+        default: /* GCOVR_EXCL_START */
             transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
             transferConfigTx.minorLoopBytes   = 1;
             assert(false);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 
     transferConfigTx.destAddr = (uint32_t)txAddr + addrOffset;
 
@@ -634,11 +634,11 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
          * $Branch Coverage Justification$
          * Pcs-continuous mode is not supported in Multi DMA transfer.
          */
-        if (handle->isPcsContinuous)
+        if (handle->isPcsContinuous) /* GCOVR_EXCL_BR_LINE */
         {
             /* Pcs-continuous mode is not supported in Multi DMA.
                Please use no-continue mode and use GPIO control CS pin*/
-            LPSPI_SetPCSContinous(base, false);
+            LPSPI_SetPCSContinous(base, false); /* GCOVR_EXCL_LINE */
             assert(false);
         }
 
@@ -990,13 +990,13 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_edma_c_ref_3$
      */
-    if (handle->fifoSize >= 1U)
+    if (handle->fifoSize >= 1U) /* GCOVR_EXCL_BR_LINE */
     {
         LPSPI_SetFifoWatermarks(base, handle->fifoSize - 1U, 0U);
     }
     else
     {
-        LPSPI_SetFifoWatermarks(base, 0U, 0U);
+        LPSPI_SetFifoWatermarks(base, 0U, 0U); /* GCOVR_EXCL_LINE */
     }
 
     /* Transfers will stall when transmit FIFO is empty or receive FIFO is full. */
@@ -1017,9 +1017,9 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_edma_c_ref_2$
          */
-        if (!LPSPI_WaitTxFifoEmpty(base))
+        if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
         {
-            return kStatus_LPSPI_Error;
+            return kStatus_LPSPI_Error; /* GCOVR_EXCL_LINE */
         }
     }
 
@@ -1059,7 +1059,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
      * $Branch Coverage Justification$
      * LPSPI_CheckTransferArgument will check parameters, here readRegRemainingTimes cannot be 0.
      */
-    if (handle->readRegRemainingTimes > 0U)
+    if (handle->readRegRemainingTimes > 0U) /* GCOVR_EXCL_BR_LINE */
     {
         EDMA_ResetChannel(handle->edmaRxRegToRxDataHandle->base, handle->edmaRxRegToRxDataHandle->channel);
 
@@ -1080,7 +1080,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_edma_c_ref_1$
          */
-        switch (handle->bytesEachRead)
+        switch (handle->bytesEachRead) /* GCOVR_EXCL_BR_LINE */
         {
             case (1U):
                 transferConfigRx.srcTransferSize = kEDMA_TransferSize1Bytes;
@@ -1105,12 +1105,12 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
                 transferConfigRx.minorLoopBytes  = 4;
                 break;
 
-            default:
+            default: /* GCOVR_EXCL_START */
                 transferConfigRx.srcTransferSize = kEDMA_TransferSize1Bytes;
                 transferConfigRx.minorLoopBytes  = 1;
                 assert(false);
                 break;
-        }
+        } /* GCOVR_EXCL_STOP */
 
         transferConfigRx.srcAddr   = (uint32_t)rxAddr + addrOffset;
         transferConfigRx.srcOffset = 0;
@@ -1142,7 +1142,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
              * $Branch Coverage Justification$
              * $ref fsl_lpspi_edma_c_ref_1$
              */
-            switch (bytesLastWrite)
+            switch (bytesLastWrite) /* GCOVR_EXCL_BR_LINE */
             {
                 case (1U):
                     transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
@@ -1162,12 +1162,12 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
                     }
                     break;
 
-                default:
+                default: /* GCOVR_EXCL_START */
                     transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
                     transferConfigTx.minorLoopBytes   = 1;
                     assert(false);
                     break;
-            }
+            } /* GCOVR_EXCL_STOP */
 
             transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
             transferConfigTx.majorLoopCounts = 1;
@@ -1191,7 +1191,7 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_edma_c_ref_1$
          */
-        switch (handle->bytesEachRead)
+        switch (handle->bytesEachRead) /* GCOVR_EXCL_BR_LINE */
         {
             case (1U):
                 transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
@@ -1217,12 +1217,12 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
                 transferConfigTx.minorLoopBytes   = 4;
                 break;
 
-            default:
+            default: /* GCOVR_EXCL_START */
                 transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
                 transferConfigTx.minorLoopBytes   = 1;
                 assert(false);
                 break;
-        }
+        } /* GCOVR_EXCL_STOP */
 
         transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
         transferConfigTx.majorLoopCounts = handle->writeRegRemainingTimes;

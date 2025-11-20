@@ -185,7 +185,6 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
     assert(bdrConfig != NULL);
 
     status_t result  = kStatus_Success;
-    uint8_t idxStart = 0U;
     uint8_t ring;
 
 #if !(defined(FSL_FEATURE_NETC_HAS_SWITCH_TAG) && FSL_FEATURE_NETC_HAS_SWITCH_TAG)
@@ -193,12 +192,17 @@ static status_t EP_DescriptorInit(ep_handle_t *handle, const ep_config_t *config
     if (NETC_EnetcHasManagement(handle->hw.base) && (getSiNum(handle->cfg.si) == 0U))
     {
         /* For management ENETC, the SI 0 hardware Tx ring index 0 has been keep for direct switch enqueue feature */
-        idxStart = 1;
+        handle->ringShift = 1;
     }
+    else
 #endif
+    {
+        handle->ringShift = 0;
+    }
+
     for (ring = 0; ring < config->siConfig.txRingUse; ring++)
     {
-        if (NETC_SIConfigTxBDR(handle->hw.si, ring + idxStart, &bdrConfig->txBdrConfig[ring]) != kStatus_Success)
+        if (NETC_SIConfigTxBDR(handle->hw.si, ring + handle->ringShift, &bdrConfig->txBdrConfig[ring]) != kStatus_Success)
         {
             return kStatus_Fail;
         }
@@ -862,6 +866,7 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
                 txDesTemp->standard.isExtended = (uint32_t)isExtEnable;
                 txDesTemp->standard.enableInterrupt =
                     (uint32_t)((handle->hw.si->BDR[hwRing].TBIER & ENETC_SI_TBIER_TXFIE_MASK) != 0U);
+
                 if (isExtEnable)
                 {
                     /* Increase producer index when first BD is extension BD. */
@@ -901,8 +906,8 @@ status_t EP_SendFrameCommon(ep_handle_t *handle,
 status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *frame, void *context, ep_tx_opt *opt)
 {
     assert(handle != NULL);
-    netc_tx_bd_t txDesc[2] = {0};
-    uint8_t hwRing         = ring;
+    uint8_t hwRing = ring;
+    netc_tx_bd_t txDesc[2];
 
     NETC_ClearTxDescriptor(&txDesc[0]);
     NETC_ClearTxDescriptor(&txDesc[1]);
@@ -918,7 +923,7 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
-        hwRing = ring + 1U;
+        hwRing += handle->ringShift;
     }
 #endif
 
@@ -1068,9 +1073,10 @@ void EP_ReclaimTxDescriptor(ep_handle_t *handle, uint8_t ring)
     {
         /* Switch management ENETC Tx BD hardware ring 0 can't be used to send regular frame, so the index need increase
          * 1 */
-        hwRing = ring + 1U;
+        hwRing += handle->ringShift;
     }
 #endif
+
     do
     {
         frameInfo =

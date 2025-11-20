@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020, 2024 NXP
+ * Copyright 2016-2017, 2020-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,6 +11,10 @@
 #include "fsl_common.h"
 
 #define ISI_ROI_NUM 4U /* The Number of "Region Of Interest (ROI)" */
+
+#ifndef ISI_CHNL_INDEX
+#define ISI_CHNL_INDEX 0 /* The Index of selected isi channel which can be updated according into application level */
+#endif
 
 /*!
  * @addtogroup isi
@@ -24,37 +28,55 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief ISI driver version */
-#define FSL_ISI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_ISI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*! @} */
 
 /*! @brief ISI interrupts. */
 enum _isi_interrupt
 {
-    kISI_MemReadCompletedInterrupt = ISI_CHNL_IER_MEM_RD_DONE_EN_MASK, /*!< Input memory read completed. */
-    kISI_LineReceivedInterrupt     = ISI_CHNL_IER_LINE_RCVD_EN_MASK,   /*!< Line received. */
-    kISI_FrameReceivedInterrupt    = ISI_CHNL_IER_FRM_RCVD_EN_MASK,    /*!< Frame received. */
+    kISI_MemReadCompletedInterrupt = ISI_IER_MEM_RD_DONE_EN_MASK, /*!< Input memory read completed. */
+    kISI_LineReceivedInterrupt     = ISI_IER_LINE_RCVD_EN_MASK,   /*!< Line received. */
+    kISI_FrameReceivedInterrupt    = ISI_IER_FRM_RCVD_EN_MASK,    /*!< Frame received. */
     kISI_AxiWriteErrorVInterrupt =
-        ISI_CHNL_IER_AXI_WR_ERR_V_EN_MASK, /*!< AXI Bus write error when storing V data to memory. */
+        ISI_IER_AXI_WR_ERR_V_EN_MASK, /*!< AXI Bus write error when storing V data to memory. */
     kISI_AxiWriteErrorUInterrupt =
-        ISI_CHNL_IER_AXI_WR_ERR_U_EN_MASK, /*!< AXI Bus write error when storing U data to memory. */
+        ISI_IER_AXI_WR_ERR_U_EN_MASK, /*!< AXI Bus write error when storing U data to memory. */
     kISI_AxiWriteErrorYInterrupt =
-        ISI_CHNL_IER_AXI_WR_ERR_Y_EN_MASK, /*!< AXI Bus write error when storing Y data to memory. */
-    kISI_AxiReadErrorInterrupt = ISI_CHNL_IER_AXI_RD_ERR_EN_MASK, /*!< AXI Bus error when reading the input memory. */
+        ISI_IER_AXI_WR_ERR_Y_EN_MASK, /*!< AXI Bus write error when storing Y data to memory. */
+    kISI_AxiReadErrorInterrupt = ISI_IER_AXI_RD_ERR_EN_MASK, /*!< AXI Bus error when reading the input memory. */
+#if defined(ISI_CHNL_IER_OFLW_PANIC_V_BUF_EN_MASK) && (0 != ISI_CHNL_IER_OFLW_PANIC_V_BUF_EN_MASK)
     kISI_OverflowAlertVInterrupt =
         ISI_CHNL_IER_OFLW_PANIC_V_BUF_EN_MASK, /*!< V output buffer overflow threshold accrossed. */
+#endif
+#if defined(ISI_CHNL_IER_EXCS_OFLW_V_BUF_EN_MASK) && (0 != ISI_CHNL_IER_EXCS_OFLW_V_BUF_EN_MASK)
     kISI_ExcessOverflowVInterrupt =
         ISI_CHNL_IER_EXCS_OFLW_V_BUF_EN_MASK,                  /*!< V output buffer excess overflow interrupt. */
+#endif
+#if defined(ISI_CHNL_IER_OFLW_V_BUF_EN_MASK) && (0 != ISI_CHNL_IER_OFLW_V_BUF_EN_MASK)
     kISI_OverflowVInterrupt = ISI_CHNL_IER_OFLW_V_BUF_EN_MASK, /*!< V output buffer overflow interrupt. */
+#endif
+#if defined(ISI_CHNL_IER_OFLW_PANIC_U_BUF_EN_MASK) && (0 != ISI_CHNL_IER_OFLW_PANIC_U_BUF_EN_MASK)
     kISI_OverflowAlertUInterrupt =
         ISI_CHNL_IER_OFLW_PANIC_U_BUF_EN_MASK, /*!< U output buffer overflow threshold accrossed. */
+#endif
+#if defined(ISI_CHNL_IER_EXCS_OFLW_U_BUF_EN_MASK) && (0 != ISI_CHNL_IER_EXCS_OFLW_U_BUF_EN_MASK)
     kISI_ExcessOverflowUInterrupt =
         ISI_CHNL_IER_EXCS_OFLW_U_BUF_EN_MASK,                  /*!< U output buffer excess overflow interrupt. */
+#endif
+#if defined(ISI_CHNL_IER_OFLW_U_BUF_EN_MASK) && (0 != ISI_CHNL_IER_OFLW_U_BUF_EN_MASK)
     kISI_OverflowUInterrupt = ISI_CHNL_IER_OFLW_U_BUF_EN_MASK, /*!< U output buffer overflow interrupt. */
+#endif
+#if defined(ISI_CHNL_IER_OFLW_PANIC_Y_BUF_EN_MASK) && (0 != ISI_CHNL_IER_OFLW_PANIC_Y_BUF_EN_MASK)
     kISI_OverflowAlertYInterrupt =
         ISI_CHNL_IER_OFLW_PANIC_Y_BUF_EN_MASK, /*!< V output buffer overflow threshold accrossed. */
+#endif
+#if defined(ISI_CHNL_IER_EXCS_OFLW_Y_BUF_EN_MASK) && (0 != ISI_CHNL_IER_EXCS_OFLW_Y_BUF_EN_MASK)
     kISI_ExcessOverflowYInterrupt =
         ISI_CHNL_IER_EXCS_OFLW_Y_BUF_EN_MASK,                  /*!< V output buffer excess overflow interrupt. */
+#endif
+#if defined(ISI_CHNL_IER_OFLW_Y_BUF_EN_MASK) && (0 != ISI_CHNL_IER_OFLW_Y_BUF_EN_MASK)
     kISI_OverflowYInterrupt = ISI_CHNL_IER_OFLW_Y_BUF_EN_MASK, /*!< V output buffer overflow interrupt. */
+#endif
 };
 
 /*! @brief ISI output image format. */
@@ -230,10 +252,10 @@ typedef struct _isi_csc_config
 /*! @brief ISI flipping mode. */
 typedef enum _isi_flip_mode
 {
-    kISI_FlipDisable    = 0U,                                                               /*!< Flip disabled. */
-    kISI_FlipHorizontal = ISI_CHNL_IMG_CTRL_HFLIP_EN_MASK,                                  /*!< Horizontal flip. */
-    kISI_FlipVertical   = ISI_CHNL_IMG_CTRL_VFLIP_EN_MASK,                                  /*!< Vertical flip. */
-    kISI_FlipBoth       = ISI_CHNL_IMG_CTRL_VFLIP_EN_MASK | ISI_CHNL_IMG_CTRL_HFLIP_EN_MASK /*!< Flip both direction. */
+    kISI_FlipDisable    = 0U,                                                          /*!< Flip disabled. */
+    kISI_FlipHorizontal = ISI_IMG_CTRL_HFLIP_EN_MASK,                                  /*!< Horizontal flip. */
+    kISI_FlipVertical   = ISI_IMG_CTRL_VFLIP_EN_MASK,                                  /*!< Vertical flip. */
+    kISI_FlipBoth       = ISI_IMG_CTRL_VFLIP_EN_MASK | ISI_IMG_CTRL_HFLIP_EN_MASK      /*!< Flip both direction. */
 } isi_flip_mode_t;
 
 /*! @brief ISI cropping configurations. */
@@ -296,6 +318,16 @@ typedef struct _isi_input_mem_config
     isi_input_mem_format_t format; /*!< Image format of the input memory. */
 } isi_input_mem_config_t;
 
+/*! @brief ISI roi index number*/
+typedef enum _isi_roi_index
+{
+    ISI_ROI_INDEX_0 = 0, /*!< ISI ROI index 0 */
+    ISI_ROI_INDEX_1 = 1, /*!< ISI ROI index 1 */
+    ISI_ROI_INDEX_2 = 2, /*!< ISI ROI index 2 */
+    ISI_ROI_INDEX_3 = 3, /*!< ISI ROI index 3 */
+}isi_roi_index_t;
+
+
 /*******************************************************************************
  * APIs
  ******************************************************************************/
@@ -353,8 +385,8 @@ void ISI_Reset(ISI_Type *base);
  */
 static inline uint32_t ISI_EnableInterrupts(ISI_Type *base, uint32_t mask)
 {
-    uint32_t reg   = base->CHNL_IER;
-    base->CHNL_IER = reg | mask;
+    uint32_t reg   = base->CHNL[ISI_CHNL_INDEX].IER;
+    base->CHNL[ISI_CHNL_INDEX].IER = reg | mask;
     return reg;
 }
 
@@ -367,8 +399,8 @@ static inline uint32_t ISI_EnableInterrupts(ISI_Type *base, uint32_t mask)
  */
 static inline uint32_t ISI_DisableInterrupts(ISI_Type *base, uint32_t mask)
 {
-    uint32_t reg   = base->CHNL_IER;
-    base->CHNL_IER = reg & ~mask;
+    uint32_t reg   = base->CHNL[ISI_CHNL_INDEX].IER;
+    base->CHNL[ISI_CHNL_INDEX].IER = reg & ~mask;
     return reg;
 }
 
@@ -391,9 +423,9 @@ static inline uint32_t ISI_DisableInterrupts(ISI_Type *base, uint32_t mask)
  */
 static inline uint32_t ISI_GetInterruptStatus(ISI_Type *base)
 {
-    uint32_t reg = base->CHNL_STS;
-#if defined(ISI_CHNL_STS_OFLW_BYTES_MASK)
-    reg & ~ISI_CHNL_STS_OFLW_BYTES_MASK;
+    uint32_t reg = base->CHNL[ISI_CHNL_INDEX].STS;
+#if defined(ISI_STS_OFLW_BYTES_MASK)
+    reg & ~ISI_STS_OFLW_BYTES_MASK;
 #endif
     return reg;
 }
@@ -413,7 +445,7 @@ static inline uint32_t ISI_GetInterruptStatus(ISI_Type *base)
  */
 static inline void ISI_ClearInterruptStatus(ISI_Type *base, uint32_t mask)
 {
-    base->CHNL_STS = mask;
+    base->CHNL[ISI_CHNL_INDEX].STS = mask;
 }
 
 /*! @} */
@@ -430,7 +462,7 @@ static inline void ISI_ClearInterruptStatus(ISI_Type *base, uint32_t mask)
  */
 static inline uint8_t ISI_GetOverflowBytes(ISI_Type *base)
 {
-    return (uint8_t)(base->CHNL_STS & ISI_CHNL_STS_OFLW_BYTES_MASK);
+    return (uint8_t)(base->CHNL[ISI_CHNL_INDEX].STS & ISI_STS_OFLW_BYTES_MASK);
 }
 #endif
 
@@ -553,11 +585,11 @@ static inline void ISI_EnableColorSpaceConversion(ISI_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CHNL_IMG_CTRL &= ~ISI_CHNL_IMG_CTRL_CSC_BYP_MASK;
+        base->CHNL[ISI_CHNL_INDEX].IMG_CTRL &= ~ISI_IMG_CTRL_CSC_BYP_MASK;
     }
     else
     {
-        base->CHNL_IMG_CTRL |= ISI_CHNL_IMG_CTRL_CSC_BYP_MASK;
+        base->CHNL[ISI_CHNL_INDEX].IMG_CTRL |= ISI_IMG_CTRL_CSC_BYP_MASK;
     }
 }
 
@@ -609,11 +641,11 @@ static inline void ISI_EnableCrop(ISI_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CHNL_IMG_CTRL |= ISI_CHNL_IMG_CTRL_CROP_EN_MASK;
+        base->CHNL[ISI_CHNL_INDEX].IMG_CTRL |= ISI_IMG_CTRL_CROP_EN_MASK;
     }
     else
     {
-        base->CHNL_IMG_CTRL &= ~ISI_CHNL_IMG_CTRL_CROP_EN_MASK;
+        base->CHNL[ISI_CHNL_INDEX].IMG_CTRL &= ~ISI_IMG_CTRL_CROP_EN_MASK;
     }
 }
 
@@ -632,8 +664,8 @@ static inline void ISI_EnableCrop(ISI_Type *base, bool enable)
  */
 static inline void ISI_SetGlobalAlpha(ISI_Type *base, uint8_t alpha)
 {
-    base->CHNL_IMG_CTRL =
-        (base->CHNL_IMG_CTRL & ~ISI_CHNL_IMG_CTRL_GBL_ALPHA_VAL_MASK) | ISI_CHNL_IMG_CTRL_GBL_ALPHA_VAL(alpha);
+    base->CHNL[ISI_CHNL_INDEX].IMG_CTRL =
+        (base->CHNL[ISI_CHNL_INDEX].IMG_CTRL & ~ISI_IMG_CTRL_GBL_ALPHA_VAL_MASK) | ISI_IMG_CTRL_GBL_ALPHA_VAL(alpha);
 }
 
 /*!
@@ -648,11 +680,11 @@ static inline void ISI_EnableGlobalAlpha(ISI_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CHNL_IMG_CTRL |= ISI_CHNL_IMG_CTRL_GBL_ALPHA_EN_MASK;
+        base->CHNL[ISI_CHNL_INDEX].IMG_CTRL |= ISI_IMG_CTRL_GBL_ALPHA_EN_MASK;
     }
     else
     {
-        base->CHNL_IMG_CTRL &= ~ISI_CHNL_IMG_CTRL_GBL_ALPHA_EN_MASK;
+        base->CHNL[ISI_CHNL_INDEX].IMG_CTRL &= ~ISI_IMG_CTRL_GBL_ALPHA_EN_MASK;
     }
 }
 
@@ -738,7 +770,7 @@ void ISI_InputMemGetDefaultConfig(isi_input_mem_config_t *config);
  */
 static inline void ISI_SetInputMemAddr(ISI_Type *base, uint32_t addr)
 {
-    base->CHNL_IN_BUF_ADDR = addr;
+    base->CHNL[ISI_CHNL_INDEX].IN_BUF_ADDR = addr;
 }
 
 /*!
@@ -763,8 +795,8 @@ void ISI_TriggerInputMemRead(ISI_Type *base);
  */
 static inline void ISI_SetFlipMode(ISI_Type *base, isi_flip_mode_t mode)
 {
-    base->CHNL_IMG_CTRL =
-        (base->CHNL_IMG_CTRL & ~(ISI_CHNL_IMG_CTRL_VFLIP_EN_MASK | ISI_CHNL_IMG_CTRL_HFLIP_EN_MASK)) | (uint32_t)mode;
+    base->CHNL[ISI_CHNL_INDEX].IMG_CTRL =
+        (base->CHNL[ISI_CHNL_INDEX].IMG_CTRL & ~(ISI_IMG_CTRL_VFLIP_EN_MASK | ISI_IMG_CTRL_HFLIP_EN_MASK)) | (uint32_t)mode;
 }
 
 /*!
@@ -791,7 +823,7 @@ void ISI_SetOutputBufferAddr(ISI_Type *base, uint8_t index, uint32_t addrY, uint
  */
 static inline void ISI_Start(ISI_Type *base)
 {
-    base->CHNL_CTRL |= ISI_CHNL_CTRL_CHNL_EN_MASK;
+    base->CHNL[ISI_CHNL_INDEX].CTRL |= ISI_CTRL_CHNL_EN_MASK;
 }
 
 /*!
@@ -801,7 +833,7 @@ static inline void ISI_Start(ISI_Type *base)
  */
 static inline void ISI_Stop(ISI_Type *base)
 {
-    base->CHNL_CTRL &= ~ISI_CHNL_CTRL_CHNL_EN_MASK;
+    base->CHNL[ISI_CHNL_INDEX].CTRL &= ~ISI_CTRL_CHNL_EN_MASK;
 }
 
 /*! @} */

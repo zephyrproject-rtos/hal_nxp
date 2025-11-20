@@ -59,11 +59,11 @@ static inline void PMU_EnableFixedDCDC(PMU_Type *base, bool enable)
 {
     if (enable)
     {
-        base->PCTRL |= PMU_PCTRL_VDDP_EN_MASK;
+        base->PCTRL |= PMU_PCTRL_VDD_CORE_AON_EN_MASK;
     }
     else
     {
-        base->PCTRL &= ~PMU_PCTRL_VDDP_EN_MASK;
+        base->PCTRL &= ~PMU_PCTRL_VDD_CORE_AON_EN_MASK;
     }
 }
 
@@ -75,8 +75,8 @@ static inline void PMU_EnableFixedDCDC(PMU_Type *base, bool enable)
  */
 static inline void PMU_UpdateVDDCoreInActiveMode(PMU_Type *base, uint8_t value)
 {
-    base->VDD_CORE_PCONFIG = ((base->VDD_CORE_PCONFIG) & ~(PMU_VDD_CORE_PCONFIG_VDD_ACONFIG_MASK)) | \
-                            PMU_VDD_CORE_PCONFIG_VDD_ACONFIG(value);
+    base->VDD_CORE_AON_CONFIG = ((base->VDD_CORE_AON_CONFIG) & ~(PMU_VDD_CORE_AON_CONFIG_VDD_CORE_AON_ACONFIG_MASK)) | \
+                            PMU_VDD_CORE_AON_CONFIG_VDD_CORE_AON_ACONFIG(value);
 }
 
 /*!
@@ -87,8 +87,8 @@ static inline void PMU_UpdateVDDCoreInActiveMode(PMU_Type *base, uint8_t value)
  */
 static inline void PMU_UpdateVDDCoreInLpMode(PMU_Type *base, uint8_t value)
 {
-    base->VDD_CORE_PCONFIG = ((base->VDD_CORE_PCONFIG) & ~(PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG_MASK)) | \
-                            PMU_VDD_CORE_PCONFIG_VDD_DSCONFIG(value);
+    base->VDD_CORE_AON_CONFIG = ((base->VDD_CORE_AON_CONFIG) & ~(PMU_VDD_CORE_AON_CONFIG_VDD_CORE_AON_DSCONFIG_MASK)) | \
+                            PMU_VDD_CORE_AON_CONFIG_VDD_CORE_AON_DSCONFIG(value);
 }
 
 /*!
@@ -99,8 +99,8 @@ static inline void PMU_UpdateVDDCoreInLpMode(PMU_Type *base, uint8_t value)
  */
 static inline void PMU_UpdateVDDCore1P1InActiveMode(PMU_Type *base, uint8_t value)
 {
-    base->VDD_CORE_1P1_CONFIG = ((base->VDD_CORE_1P1_CONFIG) & ~PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG_MASK) | \
-                            PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_ACONFIG(value);
+    base->VDD_CORE_MAIN_CONFIG = ((base->VDD_CORE_MAIN_CONFIG) & ~PMU_VDD_CORE_MAIN_CONFIG_VDD_CORE_MAIN_ACONFIG_MASK) | \
+                            PMU_VDD_CORE_MAIN_CONFIG_VDD_CORE_MAIN_ACONFIG(value);
 }
 
 /*!
@@ -111,8 +111,8 @@ static inline void PMU_UpdateVDDCore1P1InActiveMode(PMU_Type *base, uint8_t valu
  */
 static inline void PMU_UpdateVDDCore1P1InLpMode(PMU_Type *base, uint8_t value)
 {
-    base->VDD_CORE_1P1_CONFIG = ((base->VDD_CORE_1P1_CONFIG) & ~PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR_MASK) | \
-    PMU_VDD_CORE_1P1_CONFIG_VDD_CORE_1P1_VOUTSEL_LPWR(value);
+    base->VDD_CORE_MAIN_CONFIG = ((base->VDD_CORE_MAIN_CONFIG) & ~PMU_VDD_CORE_MAIN_CONFIG_VDD_CORE_MAIN_VOUTSEL_LPWR_MASK) | \
+    PMU_VDD_CORE_MAIN_CONFIG_VDD_CORE_MAIN_VOUTSEL_LPWR(value);
 }
 
 /*!
@@ -159,8 +159,8 @@ static inline void PMU_UpdateFRO16KFreq(PMU_Type *base, pmu_fro16k_output_freq_t
  */
 static inline void PMU_UpdateDCDCWakeupWatchdogCounterValue(PMU_Type *base, uint16_t timeoutValue)
 {
-    base->VDD_WKUP_WDTC = ((base->VDD_WKUP_WDTC) & ~PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG_MASK) | \
-                        PMU_VDD_WKUP_WDTC_DCDC_WKUP_WDOG(timeoutValue);
+    base->PMU_DPD3_CTRL = ((base->PMU_DPD3_CTRL) & ~PMU_VDD_CORE_AON_WKUP_WDTC_DCDC_AON_WKUP_WDOG_MASK) | \
+                        PMU_VDD_CORE_AON_WKUP_WDTC_DCDC_AON_WKUP_WDOG(timeoutValue);
 }
 
 /*!

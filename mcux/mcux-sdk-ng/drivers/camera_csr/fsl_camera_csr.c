@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -91,19 +91,19 @@ void CAMERACSR_PixelFormatting(BLK_CTRL_CAMERAMIX_Type *camera_csr, camera_csr_p
          * Non-Pixel data type can be transported to Pixel Link, If the corresponding bit is set to '1', the non-pixel data type is transported on the pixel link. 
          * If set to '0', non-pixel data type are not transported on pixel line.
          */
-        camera_csr->CSI0_NP_data_type_VC[vc] = npdatatype;
+        camera_csr->CSI0_NP_DATA_TYPE_VC[vc] = npdatatype;
         if (config->enableNonPixelDataRoute != false)
         {
             /* Route Non-Pixel data type to a new virtual channel for ISI */
-            camera_csr->CSI0_Non_Pixel_data_ctrl_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC(npnewvc) 
-                                                         | BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC(npdataroute);
+            camera_csr->CSI0_NON_PIXEL_DATA_CTRL_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC(npnewvc)
+                                                         | BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC(npdataroute);
         }
-        camera_csr->CSI0_Pixel_data_type_VC[vc] |= CAMERACSR_PIXEL_DATATYPE(pdatatype);
+        camera_csr->CSI0_PIXEL_DATA_TYPE_VC[vc] |= CAMERACSR_PIXEL_DATATYPE(pdatatype);
         if (config->enablePixelDataRoute != false)
         {
             /* Route Non-Pixel data type to a new virtual channel for ISI */
-            camera_csr->CSI0_Pixel_data_ctrl_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC(pnewvc) 
-                                                         | BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC(pdataroute);
+            camera_csr->CSI0_PIXEL_DATA_CTRL_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC(pnewvc)
+                                                         | BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC(pdataroute);
         }
         if (config->enableRAW32 != false)
         {
@@ -113,19 +113,19 @@ void CAMERACSR_PixelFormatting(BLK_CTRL_CAMERAMIX_Type *camera_csr, camera_csr_p
     else if (csiinterface == (uint8_t)1)
     {
         /* CSI1 host interface */
-        camera_csr->CSI1_NP_data_type_VC[vc] = npdatatype;
+        camera_csr->CSI1_NP_DATA_TYPE_VC[vc] = npdatatype;
         if (config->enableNonPixelDataRoute != false)
         {
             /* Route Non-Pixel data type to a new virtual channel for ISI */
-            camera_csr->CSI1_Non_Pixel_data_ctrl_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_Reroute_VC(npnewvc) 
-                                                         | BLK_CTRL_CAMERAMIX_CSI0_Non_Pixel_data_ctrl_VC_New_VC(npdataroute);
+            camera_csr->CSI1_NON_PIXEL_DATA_CTRL_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_REROUTE_VC(npnewvc)
+                                                         | BLK_CTRL_CAMERAMIX_CSI0_NON_PIXEL_DATA_CTRL_VC_NEW_VC(npdataroute);
         }
-        camera_csr->CSI1_Pixel_data_type_VC[vc] |= CAMERACSR_PIXEL_DATATYPE(pdatatype);
+        camera_csr->CSI1_PIXEL_DATA_TYPE_VC[vc] |= CAMERACSR_PIXEL_DATATYPE(pdatatype);
         if (config->enablePixelDataRoute != false)
         {
             /* Route Non-Pixel data type to a new virtual channel for ISI */
-            camera_csr->CSI1_Pixel_data_ctrl_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_Reroute_VC(pnewvc) 
-                                                         | BLK_CTRL_CAMERAMIX_CSI0_Pixel_data_ctrl_VC_New_VC(pdataroute);
+            camera_csr->CSI1_PIXEL_DATA_CTRL_VC[vc] |= BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_REROUTE_VC(pnewvc)
+                                                         | BLK_CTRL_CAMERAMIX_CSI0_PIXEL_DATA_CTRL_VC_NEW_VC(pdataroute);
         }
         if (config->enableRAW32 != false)
         {
