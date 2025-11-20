@@ -52,6 +52,8 @@
 **                          MCXN547VPB_cm33_core1
 **                          MCXN556SCDF_cm33_core0
 **                          MCXN556SCDF_cm33_core1
+**                          MCXN557SCDF_cm33_core0
+**                          MCXN557SCDF_cm33_core1
 **                          MCXN946VAB_cm33_core0
 **                          MCXN946VAB_cm33_core1
 **                          MCXN946VDF_cm33_core0
@@ -74,7 +76,7 @@
 **                          MCXN947VPB_cm33_core1
 **
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250811
+**     Build:               b251013
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FMU
@@ -140,6 +142,10 @@
 #include "MCXN556S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN556SCDF_cm33_core1))
 #include "MCXN556S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MCXN557SCDF_cm33_core0))
+#include "MCXN557S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MCXN557SCDF_cm33_core1))
+#include "MCXN557S_cm33_core1_COMMON.h"
 #elif (defined(CPU_MCXN946VAB_cm33_core0) || defined(CPU_MCXN946VDF_cm33_core0) || defined(CPU_MCXN946VKL_cm33_core0) || defined(CPU_MCXN946VNL_cm33_core0) || defined(CPU_MCXN946VPB_cm33_core0))
 #include "MCXN946_cm33_core0_COMMON.h"
 #elif (defined(CPU_MCXN946VAB_cm33_core1) || defined(CPU_MCXN946VDF_cm33_core1) || defined(CPU_MCXN946VKL_cm33_core1) || defined(CPU_MCXN946VNL_cm33_core1) || defined(CPU_MCXN946VPB_cm33_core1))

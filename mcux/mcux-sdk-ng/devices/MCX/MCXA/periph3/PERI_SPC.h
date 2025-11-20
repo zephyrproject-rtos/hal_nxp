@@ -10,7 +10,7 @@
 **                          MCXA344VLL
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250806
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SPC
@@ -127,7 +127,7 @@ typedef struct {
   __IO uint32_t EVD_CFG;                           /**< External Voltage Domain Configuration, offset: 0x140 */
   __IO uint32_t GLITCH_DETECT_SC;                  /**< Glitch Detect Status Control, offset: 0x144 */
        uint8_t RESERVED_10[440];
-       uint32_t CORELDO_CFG;                       /**< LDO_CORE Configuration, offset: 0x300 */
+  __IO uint32_t CORELDO_CFG;                       /**< LDO_CORE Configuration, offset: 0x300 */
 } SPC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -279,8 +279,8 @@ typedef struct {
 /*! VSM - Voltage Select Margin
  *  0b00..
  *  0b01..1.0 V
- *  0b10..1.1 V
- *  0b11..
+ *  0b10..
+ *  0b11..SRAM configured for "1.2" V operation
  */
 #define SPC_SRAMCTL_VSM(x)                       (((uint32_t)(((uint32_t)(x)) << SPC_SRAMCTL_VSM_SHIFT)) & SPC_SRAMCTL_VSM_MASK)
 
@@ -371,8 +371,8 @@ typedef struct {
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
  *  0b00..
  *  0b01..Regulate to mid voltage (1 V)
- *  0b10..Regulate to normal voltage (1.1 V)
- *  0b11..Regulate to overdrive voltage (1.15 V)
+ *  0b10..
+ *  0b11..Regulate to overdrive voltage (1.2 V)
  */
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL(x)        (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -444,8 +444,8 @@ typedef struct {
 /*! CORELDO_VDD_LVL - LDO_CORE VDD Regulator Voltage Level
  *  0b00..Reserved
  *  0b01..Mid voltage (1 V)
- *  0b10..Normal voltage (1.1 V)
- *  0b11..Overdrive voltage (1.15 V)
+ *  0b10..
+ *  0b11..Overdrive voltage (1.2 V)
  */
 #define SPC_LP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_LP_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -534,7 +534,7 @@ typedef struct {
  *  0b00..
  *  0b01..Regulate to mid voltage (1 V)
  *  0b10..Regulate to normal voltage (1.1 V)
- *  0b11..Regulate to overdrive voltage (1.15 V)
+ *  0b11..Regulate to overdrive voltage (1.2 V)
  */
 #define SPC_HP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_HP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_HP_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -778,6 +778,18 @@ typedef struct {
  *  0b1..Writes to RE are ignored.
  */
 #define SPC_GLITCH_DETECT_SC_LOCK(x)             (((uint32_t)(((uint32_t)(x)) << SPC_GLITCH_DETECT_SC_LOCK_SHIFT)) & SPC_GLITCH_DETECT_SC_LOCK_MASK)
+/*! @} */
+
+/*! @name CORELDO_CFG - LDO_CORE Configuration */
+/*! @{ */
+
+#define SPC_CORELDO_CFG_CORELDO_SPARE_MASK       (0x1F0000U)
+#define SPC_CORELDO_CFG_CORELDO_SPARE_SHIFT      (16U)
+/*! CORELDO_SPARE - CORELDO_SPARE
+ *  0b00000..TBD.
+ *  0b00001..TBD.
+ */
+#define SPC_CORELDO_CFG_CORELDO_SPARE(x)         (((uint32_t)(((uint32_t)(x)) << SPC_CORELDO_CFG_CORELDO_SPARE_SHIFT)) & SPC_CORELDO_CFG_CORELDO_SPARE_MASK)
 /*! @} */
 
 

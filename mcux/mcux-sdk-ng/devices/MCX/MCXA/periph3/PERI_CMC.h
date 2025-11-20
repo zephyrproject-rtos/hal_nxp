@@ -10,7 +10,7 @@
 **                          MCXA344VLL
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250806
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CMC

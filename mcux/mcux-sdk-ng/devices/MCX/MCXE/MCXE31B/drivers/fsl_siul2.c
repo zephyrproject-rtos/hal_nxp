@@ -187,7 +187,7 @@ static uint16_t SIUL2_Reverse_Bit_16(uint16_t value)
 
     for (i = 0U; i < 8U; i++)
     {
-        temp = (((value >> i) & 1U) << (15U - i)) | (((value << i) & 0x8000U) >> (15U - i));
+        temp = ((((uint32_t)value >> i) & 1U) << (15U - i)) | ((((uint32_t)value << i) & 0x8000U) >> (15U - i));
         ret |= (uint16_t)(temp & 0xFFFFU);
     }
 
@@ -368,7 +368,7 @@ void SIUL2_SetDmaInterruptConfig(SIUL2_Type *base, uint32_t req, siul2_interrupt
 void SIUL2_EnableExtInterrupt(SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config, int8_t filterCount)
 {
     assert(req < SIUL2_NUMBER_OF_EIRQ);
-    base->DISR0 = 1 << req;       /* Clear interrupt flag. */
+    base->DISR0 = 1U << req;      /* Clear interrupt flag. */
     base->DIRER0 |= (1U << req);  /* Enable Int/DMA request. */
     base->DIRSR0 &= ~(1U << req); /* Select interrupt. */
 
@@ -380,7 +380,7 @@ void SIUL2_EnableExtInterrupt(SIUL2_Type *base, uint32_t req, siul2_interrupt_co
 void SIUL2_EnableExtDma(SIUL2_Type *base, uint32_t req, siul2_interrupt_config_t config, int8_t filterCount)
 {
     assert(req < SIUL2_NUMBER_OF_EIRQ);
-    base->DISR0 = 1 << req;      /* Clear flag. */
+    base->DISR0 = 1U << req;     /* Clear flag. */
     base->DIRER0 |= (1U << req); /* Enable Int/DMA request. */
     base->DIRSR0 |= (1U << req); /* Select DMA. */
 

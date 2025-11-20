@@ -26,7 +26,7 @@
 **                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250804
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSCON
@@ -174,7 +174,6 @@ typedef struct {
   __I  uint32_t JTAG_ID;                           /**< JTAG Chip ID, offset: 0xFF0 */
   __I  uint32_t DEVICE_TYPE;                       /**< Device Type, offset: 0xFF4 */
   __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
-  __I  uint32_t DIEID;                             /**< Chip Revision ID and Number, offset: 0xFFC */
 } SYSCON_Type;
 
 /* ----------------------------------------------------------------------------
@@ -1432,29 +1431,10 @@ typedef struct {
 #define SYSCON_DEVICE_ID0_SECURITY_MASK          (0xF000000U)
 #define SYSCON_DEVICE_ID0_SECURITY_SHIFT         (24U)
 /*! SECURITY
- *  0b0101..Secure version.
+ *  0b0101..Secure version. (All values other than 1010b represent the secure version.)
  *  0b1010..Non secure version.
  */
 #define SYSCON_DEVICE_ID0_SECURITY(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_SECURITY_SHIFT)) & SYSCON_DEVICE_ID0_SECURITY_MASK)
-/*! @} */
-
-/*! @name DIEID - Chip Revision ID and Number */
-/*! @{ */
-
-#define SYSCON_DIEID_MINOR_REVISION_MASK         (0xFU)
-#define SYSCON_DIEID_MINOR_REVISION_SHIFT        (0U)
-/*! MINOR_REVISION - Chip minor revision */
-#define SYSCON_DIEID_MINOR_REVISION(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_DIEID_MINOR_REVISION_SHIFT)) & SYSCON_DIEID_MINOR_REVISION_MASK)
-
-#define SYSCON_DIEID_MAJOR_REVISION_MASK         (0xF0U)
-#define SYSCON_DIEID_MAJOR_REVISION_SHIFT        (4U)
-/*! MAJOR_REVISION - Chip major revision */
-#define SYSCON_DIEID_MAJOR_REVISION(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_DIEID_MAJOR_REVISION_SHIFT)) & SYSCON_DIEID_MAJOR_REVISION_MASK)
-
-#define SYSCON_DIEID_MCO_NUM_IN_DIE_ID_MASK      (0xFFFFF00U)
-#define SYSCON_DIEID_MCO_NUM_IN_DIE_ID_SHIFT     (8U)
-/*! MCO_NUM_IN_DIE_ID - Chip number */
-#define SYSCON_DIEID_MCO_NUM_IN_DIE_ID(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_DIEID_MCO_NUM_IN_DIE_ID_SHIFT)) & SYSCON_DIEID_MCO_NUM_IN_DIE_ID_MASK)
 /*! @} */
 
 

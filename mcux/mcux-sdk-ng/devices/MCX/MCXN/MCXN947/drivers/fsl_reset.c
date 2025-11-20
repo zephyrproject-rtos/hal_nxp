@@ -46,6 +46,7 @@ void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
     volatile uint32_t *pResetCtrl;
 
     assert(bitPos < 32u);
+    assert(regIndex < SYSCON_PRESETCTRLSET_COUNT);
 
     if (peripheral == kRST_None)
     {
@@ -78,6 +79,7 @@ void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
     volatile uint32_t *pResetCtrl;
 
     assert(bitPos < 32u);
+    assert(regIndex < SYSCON_PRESETCTRLSET_COUNT);
 
     if (peripheral == kRST_None)
     {

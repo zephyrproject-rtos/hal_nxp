@@ -34,7 +34,7 @@
 **                          MCXA266VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250804
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MRCC
@@ -223,8 +223,6 @@ typedef struct {
   __IO uint32_t MRCC_DBG_TRACE_CLKDIV;             /**< DBG_TRACE clock divider control, offset: 0x1AC */
   __IO uint32_t MRCC_CLKOUT_CLKSEL;                /**< CLKOUT clock selection control, offset: 0x1B0 */
   __IO uint32_t MRCC_CLKOUT_CLKDIV;                /**< CLKOUT clock divider control, offset: 0x1B4 */
-  __IO uint32_t MRCC_SYSTICK_CLKSEL;               /**< SYSTICK clock selection control, offset: 0x1B8 */
-  __IO uint32_t MRCC_SYSTICK_CLKDIV;               /**< SYSTICK clock divider control, offset: 0x1BC */
 } MRCC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -3623,53 +3621,6 @@ typedef struct {
  *  0b1..Clock frequency isn't stable
  */
 #define MRCC_MRCC_CLKOUT_CLKDIV_UNSTAB(x)        (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_CLKOUT_CLKDIV_UNSTAB_SHIFT)) & MRCC_MRCC_CLKOUT_CLKDIV_UNSTAB_MASK)
-/*! @} */
-
-/*! @name MRCC_SYSTICK_CLKSEL - SYSTICK clock selection control */
-/*! @{ */
-
-#define MRCC_MRCC_SYSTICK_CLKSEL_MUX_MASK        (0x3U)
-#define MRCC_MRCC_SYSTICK_CLKSEL_MUX_SHIFT       (0U)
-/*! MUX - Functional Clock Mux Select
- *  0b00..CPU_CLK
- *  0b01..CLK_1M
- *  0b10..CLK_16K
- *  0b11..Reserved1(NO Clock)
- */
-#define MRCC_MRCC_SYSTICK_CLKSEL_MUX(x)          (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_SYSTICK_CLKSEL_MUX_SHIFT)) & MRCC_MRCC_SYSTICK_CLKSEL_MUX_MASK)
-/*! @} */
-
-/*! @name MRCC_SYSTICK_CLKDIV - SYSTICK clock divider control */
-/*! @{ */
-
-#define MRCC_MRCC_SYSTICK_CLKDIV_DIV_MASK        (0xFU)
-#define MRCC_MRCC_SYSTICK_CLKDIV_DIV_SHIFT       (0U)
-/*! DIV - Functional Clock Divider */
-#define MRCC_MRCC_SYSTICK_CLKDIV_DIV(x)          (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_SYSTICK_CLKDIV_DIV_SHIFT)) & MRCC_MRCC_SYSTICK_CLKDIV_DIV_MASK)
-
-#define MRCC_MRCC_SYSTICK_CLKDIV_RESET_MASK      (0x20000000U)
-#define MRCC_MRCC_SYSTICK_CLKDIV_RESET_SHIFT     (29U)
-/*! RESET - Reset divider counter
- *  0b0..Divider isn't reset
- *  0b1..Divider is reset
- */
-#define MRCC_MRCC_SYSTICK_CLKDIV_RESET(x)        (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_SYSTICK_CLKDIV_RESET_SHIFT)) & MRCC_MRCC_SYSTICK_CLKDIV_RESET_MASK)
-
-#define MRCC_MRCC_SYSTICK_CLKDIV_HALT_MASK       (0x40000000U)
-#define MRCC_MRCC_SYSTICK_CLKDIV_HALT_SHIFT      (30U)
-/*! HALT - Halt divider counter
- *  0b0..Divider clock is running
- *  0b1..Divider clock is stopped
- */
-#define MRCC_MRCC_SYSTICK_CLKDIV_HALT(x)         (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_SYSTICK_CLKDIV_HALT_SHIFT)) & MRCC_MRCC_SYSTICK_CLKDIV_HALT_MASK)
-
-#define MRCC_MRCC_SYSTICK_CLKDIV_UNSTAB_MASK     (0x80000000U)
-#define MRCC_MRCC_SYSTICK_CLKDIV_UNSTAB_SHIFT    (31U)
-/*! UNSTAB - Divider status flag
- *  0b0..Divider clock is stable
- *  0b1..Clock frequency isn't stable
- */
-#define MRCC_MRCC_SYSTICK_CLKDIV_UNSTAB(x)       (((uint32_t)(((uint32_t)(x)) << MRCC_MRCC_SYSTICK_CLKDIV_UNSTAB_SHIFT)) & MRCC_MRCC_SYSTICK_CLKDIV_UNSTAB_MASK)
 /*! @} */
 
 

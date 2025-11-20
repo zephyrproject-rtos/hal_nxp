@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI

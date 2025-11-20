@@ -34,7 +34,7 @@
 **                          MCXA266VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250804
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SCG
@@ -550,17 +550,17 @@ typedef struct {
 
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK     (0x10U)
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT    (4U)
-/*! FIRC_SCLK_PERIPH_EN - FIRC 45 MHz Clock to peripherals Enable
- *  0b0..FIRC 45 MHz to peripherals is disabled
- *  0b1..FIRC 45 MHz to peripherals is enabled
+/*! FIRC_SCLK_PERIPH_EN - FIRC_45MHz Clock to Peripherals Enable
+ *  0b0..FIRC_45MHz disabled
+ *  0b1..FIRC_45MHz enabled
  */
 #define SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_SCLK_PERIPH_EN_MASK)
 
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK     (0x20U)
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT    (5U)
-/*! FIRC_FCLK_PERIPH_EN - FRO_HF Clock to peripherals Enable
- *  0b0..FRO_HF to peripherals is disabled
- *  0b1..FRO_HF to peripherals is enabled
+/*! FIRC_FCLK_PERIPH_EN - FRO_HF_GATED to Peripherals Enable
+ *  0b0..FRO_HF_GATED disabled
+ *  0b1..FRO_HF_GATED enabled
  */
 #define SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN(x)       (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_SHIFT)) & SCG_FIRCCSR_FIRC_FCLK_PERIPH_EN_MASK)
 
@@ -628,11 +628,8 @@ typedef struct {
 #define SCG_FIRCCFG_FREQ_SEL_SHIFT               (1U)
 /*! FREQ_SEL - Frequency select
  *  0b001..45 MHz FIRC clock selected, divided from 180 MHz
- *  0b010..80MHz FIRC clock selected
  *  0b011..60 MHz FIRC clock selected
- *  0b100..120MHz FIRC clock selected
  *  0b101..90 MHz FIRC clock selected
- *  0b110..240MHz FIRC clock selected
  *  0b111..180 MHz FIRC clock selected
  */
 #define SCG_FIRCCFG_FREQ_SEL(x)                  (((uint32_t)(((uint32_t)(x)) << SCG_FIRCCFG_FREQ_SEL_SHIFT)) & SCG_FIRCCFG_FREQ_SEL_MASK)

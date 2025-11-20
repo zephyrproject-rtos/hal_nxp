@@ -14,7 +14,7 @@
 **                          MCXL255VLL_cm33
 **
 **     Version:             rev. 1.0, 2025-06-13
-**     Build:               b250723
+**     Build:               b250901
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SMM
@@ -119,7 +119,8 @@ typedef struct {
   __IO uint32_t MSB_BCKP1;                         /**< Backup MSB1, offset: 0x30 */
   __IO uint32_t LSB_BCKP2;                         /**< Backup LSB2, offset: 0x34 */
   __IO uint32_t MSB_BCKP2;                         /**< Backup MSB2, offset: 0x38 */
-       uint8_t RESERVED_1[12];
+       uint8_t RESERVED_1[8];
+  __IO uint32_t RTC_ANLG_XTAL;                     /**< RTC analog XTAL, offset: 0x44 */
   __IO uint32_t MEMORY_RTN;                        /**< Memory retain, offset: 0x48 */
   __IO uint32_t BIAS_CTRL;                         /**< RTC analog XTAL bias control, offset: 0x4C */
        uint8_t RESERVED_2[12];
@@ -283,7 +284,7 @@ typedef struct {
 
 #define SMM_STAT_QCH_DNY_IE_MASK                 (0x4000U)
 #define SMM_STAT_QCH_DNY_IE_SHIFT                (14U)
-/*! QCH_DNY_IE - Q channel deny interrupt enable */
+/*! QCH_DNY_IE - Q channel deny interrupt enable flag read only */
 #define SMM_STAT_QCH_DNY_IE(x)                   (((uint32_t)(((uint32_t)(x)) << SMM_STAT_QCH_DNY_IE_SHIFT)) & SMM_STAT_QCH_DNY_IE_MASK)
 
 #define SMM_STAT_QCH_DNY_INT_MASK                (0x8000U)
@@ -300,13 +301,13 @@ typedef struct {
 /*! DPD_STRT - Start */
 #define SMM_PWDN_CONFIG_DPD_STRT(x)              (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD_STRT_SHIFT)) & SMM_PWDN_CONFIG_DPD_STRT_MASK)
 
-#define SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_MASK     (0x2U)
-#define SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_SHIFT    (1U)
-/*! DPD1_VDD1P1_SRC - DPD1_MAIN power supply
+#define SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK (0x2U)
+#define SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_SHIFT (1U)
+/*! DPD1_VDD_CORE_MAIN_SRC - DPD1_MAIN power supply
  *  0b0..Keep as is
  *  0b1..Move to Low Power mode of the DCDC fixed.
  */
-#define SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC(x)       (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_SHIFT)) & SMM_PWDN_CONFIG_DPD1_VDD1P1_SRC_MASK)
+#define SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC(x) (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_SHIFT)) & SMM_PWDN_CONFIG_DPD1_VDD_CORE_MAIN_SRC_MASK)
 
 #define SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_MASK    (0x4U)
 #define SMM_PWDN_CONFIG_ADVC2P0_DPD2_ACT_SHIFT   (2U)
@@ -316,8 +317,8 @@ typedef struct {
 #define SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK     (0x8U)
 #define SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_SHIFT    (3U)
 /*! BGR_DSBL_DPD_PD - BGR disable
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disable shutdown of BGR at DPD / PD modes
+ *  0b1..Enable shutdown of BGR at DPD / PD modes
  */
 #define SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD(x)       (((uint32_t)(((uint32_t)(x)) << SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_SHIFT)) & SMM_PWDN_CONFIG_BGR_DSBL_DPD_PD_MASK)
 
@@ -426,6 +427,16 @@ typedef struct {
 /*! AMPSEL - XTAL AMPSEL */
 #define SMM_RTC_XTAL_CONFG1_AMPSEL(x)            (((uint32_t)(((uint32_t)(x)) << SMM_RTC_XTAL_CONFG1_AMPSEL_SHIFT)) & SMM_RTC_XTAL_CONFG1_AMPSEL_MASK)
 
+#define SMM_RTC_XTAL_CONFG1_CB_XI_MASK           (0x78U)
+#define SMM_RTC_XTAL_CONFG1_CB_XI_SHIFT          (3U)
+/*! CB_XI - Capacitance on XI or XTAL pin */
+#define SMM_RTC_XTAL_CONFG1_CB_XI(x)             (((uint32_t)(((uint32_t)(x)) << SMM_RTC_XTAL_CONFG1_CB_XI_SHIFT)) & SMM_RTC_XTAL_CONFG1_CB_XI_MASK)
+
+#define SMM_RTC_XTAL_CONFG1_CB_XO_MASK           (0x780U)
+#define SMM_RTC_XTAL_CONFG1_CB_XO_SHIFT          (7U)
+/*! CB_XO - Capacitance on XO or XTAL pin */
+#define SMM_RTC_XTAL_CONFG1_CB_XO(x)             (((uint32_t)(((uint32_t)(x)) << SMM_RTC_XTAL_CONFG1_CB_XO_SHIFT)) & SMM_RTC_XTAL_CONFG1_CB_XO_MASK)
+
 #define SMM_RTC_XTAL_CONFG1_CMP_IBIAS_SOX_MASK   (0x3800U)
 #define SMM_RTC_XTAL_CONFG1_CMP_IBIAS_SOX_SHIFT  (11U)
 /*! CMP_IBIAS_SOX - XTAL CMP IBIAS SOX */
@@ -522,6 +533,23 @@ typedef struct {
 #define SMM_MSB_BCKP2_MSB2(x)                    (((uint32_t)(((uint32_t)(x)) << SMM_MSB_BCKP2_MSB2_SHIFT)) & SMM_MSB_BCKP2_MSB2_MASK)
 /*! @} */
 
+/*! @name RTC_ANLG_XTAL - RTC analog XTAL */
+/*! @{ */
+
+#define SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN_MASK    (0x100U)
+#define SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN_SHIFT   (8U)
+/*! RTC_ALV_INDCTN - RTC alive indictation
+ *  0b0..Not working
+ *  0b1..Working
+ */
+#define SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN(x)      (((uint32_t)(((uint32_t)(x)) << SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN_SHIFT)) & SMM_RTC_ANLG_XTAL_RTC_ALV_INDCTN_MASK)
+
+#define SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_MASK   (0x8000U)
+#define SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_SHIFT  (15U)
+/*! RTC_ALV_DTCT_EN - RTC alive detection enable */
+#define SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN(x)     (((uint32_t)(((uint32_t)(x)) << SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_SHIFT)) & SMM_RTC_ANLG_XTAL_RTC_ALV_DTCT_EN_MASK)
+/*! @} */
+
 /*! @name MEMORY_RTN - Memory retain */
 /*! @{ */
 
@@ -559,20 +587,20 @@ typedef struct {
 /*! COARSE - Coarse value */
 #define SMM_BIAS_CTRL_COARSE(x)                  (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_COARSE_SHIFT)) & SMM_BIAS_CTRL_COARSE_MASK)
 
-#define SMM_BIAS_CTRL_en_osc_iref_cm_trim_1na_MASK (0x400U)
-#define SMM_BIAS_CTRL_en_osc_iref_cm_trim_1na_SHIFT (10U)
-/*! en_osc_iref_cm_trim_1na - en_osc_iref_cm_trim_1na */
-#define SMM_BIAS_CTRL_en_osc_iref_cm_trim_1na(x) (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_en_osc_iref_cm_trim_1na_SHIFT)) & SMM_BIAS_CTRL_en_osc_iref_cm_trim_1na_MASK)
+#define SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_1NA_MASK (0x400U)
+#define SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_1NA_SHIFT (10U)
+/*! EN_OSC_IREF_CM_TRIM_1NA - OSC IREF CM TRIM 1NA enable */
+#define SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_1NA(x) (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_1NA_SHIFT)) & SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_1NA_MASK)
 
-#define SMM_BIAS_CTRL_en_osc_iref_cm_trim_2na_MASK (0x800U)
-#define SMM_BIAS_CTRL_en_osc_iref_cm_trim_2na_SHIFT (11U)
-/*! en_osc_iref_cm_trim_2na - en_osc_iref_cm_trim_2na */
-#define SMM_BIAS_CTRL_en_osc_iref_cm_trim_2na(x) (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_en_osc_iref_cm_trim_2na_SHIFT)) & SMM_BIAS_CTRL_en_osc_iref_cm_trim_2na_MASK)
+#define SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_2NA_MASK (0x800U)
+#define SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_2NA_SHIFT (11U)
+/*! EN_OSC_IREF_CM_TRIM_2NA - OSC IREF CM TRIM 2NA enable */
+#define SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_2NA(x) (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_2NA_SHIFT)) & SMM_BIAS_CTRL_EN_OSC_IREF_CM_TRIM_2NA_MASK)
 
-#define SMM_BIAS_CTRL_xtal_sox_4p_dis_MASK       (0x1000U)
-#define SMM_BIAS_CTRL_xtal_sox_4p_dis_SHIFT      (12U)
-/*! xtal_sox_4p_dis - xtal_sox_4p_dis */
-#define SMM_BIAS_CTRL_xtal_sox_4p_dis(x)         (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_xtal_sox_4p_dis_SHIFT)) & SMM_BIAS_CTRL_xtal_sox_4p_dis_MASK)
+#define SMM_BIAS_CTRL_XTAL_SOX_4P_DIS_MASK       (0x1000U)
+#define SMM_BIAS_CTRL_XTAL_SOX_4P_DIS_SHIFT      (12U)
+/*! XTAL_SOX_4P_DIS - XTAL_SOX_4P_DIS */
+#define SMM_BIAS_CTRL_XTAL_SOX_4P_DIS(x)         (((uint32_t)(((uint32_t)(x)) << SMM_BIAS_CTRL_XTAL_SOX_4P_DIS_SHIFT)) & SMM_BIAS_CTRL_XTAL_SOX_4P_DIS_MASK)
 /*! @} */
 
 /*! @name XTAL_TRIM - XTAL Trim */

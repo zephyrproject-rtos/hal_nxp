@@ -144,13 +144,6 @@ static timermanager_state_t s_timermanager = {0};
 ******************************************************************************
 *****************************************************************************/
 
-#define IncrementActiveTimerNumber(type)                                                                     \
-    ((((type) & (uint8_t)kTimerModeLowPowerTimer) != 0U) ? (++s_timermanager.numberOfLowPowerActiveTimers) : \
-                                                           (++s_timermanager.numberOfActiveTimers))
-#define DecrementActiveTimerNumber(type)                                                                     \
-    ((((type) & (uint8_t)kTimerModeLowPowerTimer) != 0U) ? (--s_timermanager.numberOfLowPowerActiveTimers) : \
-                                                           (--s_timermanager.numberOfActiveTimers))
-
 /*
  * \brief Detect if the timer is a low-power timer
  */
@@ -172,6 +165,59 @@ static OSA_TASK_DEFINE(TimerManagerTask, TM_TASK_PRIORITY, 1, TM_TASK_STACK_SIZE
 * Private functions
 ******************************************************************************
 *****************************************************************************/
+
+/*!-------------------------------------------------------------------------
+ * \brief Increment the number of active timers of the given type.
+ *
+ * This function increments either the low-power active timer counter
+ * or the regular active timer counter, depending on the @p type parameter.
+ * The increment is saturating at 0xFF to avoid wraparound.
+ *
+ * An assertion will fire if the counter is already saturated.
+ *
+ * \param type Timer type mask. If @p type includes kTimerModeLowPowerTimer,
+ *             the low-power active timer counter is incremented;
+ *             otherwise, the regular active timer counter is incremented.
+ *---------------------------------------------------------------------------*/
+static inline void IncrementActiveTimerNumber(uint8_t type)
+{
+    volatile uint8_t *cnt = ((type & (uint8_t)kTimerModeLowPowerTimer) != 0U)
+                 ? &s_timermanager.numberOfLowPowerActiveTimers
+                 : &s_timermanager.numberOfActiveTimers;
+
+    assert(*cnt < 0xFFU); /* Ensure no overflow */
+    if (*cnt != 0xFFU)
+    {
+        ++*cnt;
+    }
+}
+
+/*!-------------------------------------------------------------------------
+ * \brief Decrement the number of active timers of the given type.
+ *
+ * This function decrements either the low-power active timer counter
+ * or the regular active timer counter, depending on the @p type parameter.
+ * The decrement stops at 0 to avoid underflow.
+ *
+ * An assertion will fire if the counter is already zero.
+ *
+ * \param type Timer type mask. If @p type includes kTimerModeLowPowerTimer,
+ *             the low-power active timer counter is decremented;
+ *             otherwise, the regular active timer counter is decremented.
+ *---------------------------------------------------------------------------*/
+static inline void DecrementActiveTimerNumber(uint8_t type)
+{
+    volatile uint8_t *cnt = ((type & (uint8_t)kTimerModeLowPowerTimer) != 0U)
+                 ? &s_timermanager.numberOfLowPowerActiveTimers
+                 : &s_timermanager.numberOfActiveTimers;
+
+    assert(*cnt > 0U); /* Ensure no underflow */
+    if (*cnt != 0U)
+    {
+        --*cnt;
+    }
+}
+
 /*!-------------------------------------------------------------------------
  * \brief     Checks whether a is greater than b.
  *
@@ -252,7 +298,7 @@ static uint8_t TimerGetTimerStatus(timer_handle_t timerHandle)
 static void TimerSetTimerStatus(timer_handle_t timerHandle, uint8_t status)
 {
     timer_handle_struct_t *timer = (timer_handle_struct_t *)timerHandle;
-    timer->tmrStatus &= (uint8_t)(~kTimerStateMask_c);
+    timer->tmrStatus &= (uint8_t)(~(uint8_t)kTimerStateMask_c);
     timer->tmrStatus |= status;
 }
 
@@ -275,7 +321,7 @@ static uint8_t TimerGetTimerType(timer_handle_t timerHandle)
 static void TimerSetTimerType(timer_handle_t timerHandle, uint8_t timerType)
 {
     timer_handle_struct_t *timer = (timer_handle_struct_t *)timerHandle;
-    timer->tmrType &= (uint8_t)(~kTimerModeMask_c);
+    timer->tmrType &= (uint8_t)(~(uint8_t)kTimerModeMask_c);
     timer->tmrType |= timerType;
 }
 
@@ -367,14 +413,14 @@ static void UpdateMatch()
         If this situation is detected, we add a few ticks to the new match value to make sure the match value is in the
         future, and a timer interrupt is not missed. */
         currentTimeInTicks = HAL_TimerGetCurrentTicks((hal_timer_handle_t)s_timermanager.halTimerHandle);
-        if (IsGreaterThan(firstFutureTime, currentTimeInTicks + s_timermanager.updateMatchProcTimeTicks))
+        if (IsGreaterThan(firstFutureTime, ( (currentTimeInTicks + s_timermanager.updateMatchProcTimeTicks) & GetTimerResolutionMask() )))
         {
             HAL_TimerUpdateMatchValueInTicks((hal_timer_handle_t)s_timermanager.halTimerHandle, firstFutureTime);
         }
         else
         {
             HAL_TimerUpdateMatchValueInTicks((hal_timer_handle_t)s_timermanager.halTimerHandle,
-                                      currentTimeInTicks + s_timermanager.updateMatchProcTimeTicks);
+                                      ( (currentTimeInTicks + s_timermanager.updateMatchProcTimeTicks) & GetTimerResolutionMask() ));
         }
 
         s_timermanager.hardwareTimerIsRunning = (uint8_t) true;
@@ -908,16 +954,14 @@ timer_status_t TM_StartWithDelay(timer_handle_t timerHandle,
     }
 
     TimerSetTimerType(timerHandle, timerType);
-    th->intervalInTicks = USEC_TO_COUNT((hal_timer_time_t)multiplier * timerIntervalMs, freq);
-    delayInTicks               = USEC_TO_COUNT((hal_timer_time_t)multiplier * timerDelayMs, freq);
 
+    th->intervalInTicks = (hal_timer_time_t)USEC_TO_COUNT((uint64_t)multiplier * (uint64_t)timerIntervalMs, freq);
+    delayInTicks               = (hal_timer_time_t)USEC_TO_COUNT((uint64_t)multiplier * (uint64_t)timerDelayMs, freq);
     if (!(s_timermanager.hardwareTimerAlwaysOn))
     {
         HAL_TimerEnable(s_timermanager.halTimerHandle);
     }
-
-    th->scheduledTimeInTicks = (delayInTicks + currentTimeInTicks) & GetTimerResolutionMask();
-
+    th->scheduledTimeInTicks = ((delayInTicks + currentTimeInTicks) & GetTimerResolutionMask());
     /* Enable timer, the timer task will do the rest of the work. */
     TimerActivate(timerHandle);
 

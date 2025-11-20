@@ -26,7 +26,7 @@
 **                          MCXA366VPN
 **
 **     Version:             rev. 1.0, 2024-11-21
-**     Build:               b250804
+**     Build:               b251028
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PWM
@@ -289,6 +289,11 @@ typedef struct {
  *  0b1..PWM_A and PWM_B outputs are independent PWMs.
  */
 #define PWM_CTRL2_INDEP(x)                       (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_INDEP_SHIFT)) & PWM_CTRL2_INDEP_MASK)
+
+#define PWM_CTRL2_WAITEN_MASK                    (0x4000U)
+#define PWM_CTRL2_WAITEN_SHIFT                   (14U)
+/*! WAITEN - Sleep Enable */
+#define PWM_CTRL2_WAITEN(x)                      (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_WAITEN_SHIFT)) & PWM_CTRL2_WAITEN_MASK)
 
 #define PWM_CTRL2_DBGEN_MASK                     (0x8000U)
 #define PWM_CTRL2_DBGEN_SHIFT                    (15U)

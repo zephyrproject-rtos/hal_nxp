@@ -14,13 +14,13 @@
 #define BITMASK_OFFSET(x) ((uint32_t)(x / 32))
 
 /** Sets the bit in the given bitmask array */
-#define BITMASK_SET(arr, x) ((arr)[(x) / 32] |= (1 << ((x) % 32)))
+#define BITMASK_SET(arr, x) ((arr)[(x) / 32] |= ((uint32_t)1U << ((x) % 32U)))
 
 /** Sets the bit in the given bitmask array */
-#define BITMASK_CLEAR(arr, x) ((arr)[(x) / 32] &= ~(1 << ((x) % 32)))
+#define BITMASK_CLEAR(arr, x) ((arr)[(x) / 32] &= ~((uint32_t)1U << ((x) % 32U)))
 
 /** Checks whether a bit is set */
-#define BITMASK_ISSET(arr, x) ((arr)[(x) / 32] & (1 << ((x) % 32)))
+#define BITMASK_ISSET(arr, x) ((arr)[(x) / 32] & ((uint32_t)1U << ((x) % 32U)))
 
 typedef enum
 {

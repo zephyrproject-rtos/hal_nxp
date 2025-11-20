@@ -791,6 +791,8 @@
 #define FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT (1)
 /* @brief Has BLEED_EN */
 #define FSL_FEATURE_MCX_SPC_HAS_DCDC_CFG_BLEED_EN (0)
+/* @brief Support overdrive voltage */
+#define FSL_FEATURE_MCX_SPC_SUPPORT_OVERDRIVE_VOLTAGE (0)
 
 /* SYSCON module features */
 

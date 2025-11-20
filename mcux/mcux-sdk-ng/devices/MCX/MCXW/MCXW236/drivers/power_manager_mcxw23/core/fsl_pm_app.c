@@ -44,8 +44,13 @@ status_t PMAPP_EnterLowPower(uint32_t sleepDuration)
 #endif /* SDK_OS_FREE_RTOS */
 
     /* Calculate the expected wake up time */
-    expectedWakeUpTime = s_systickStopTimeUs + sleepDuration;
-
+    if ((UINT64_MAX - s_systickStopTimeUs) < (uint64_t)sleepDuration) 
+    {
+        assert(false); /* should never happen */
+        expectedWakeUpTime = UINT64_MAX;
+    } else {
+        expectedWakeUpTime = s_systickStopTimeUs + (uint64_t)sleepDuration;
+    }
     /* Now enter low power mode till the first event, being OS or radio. */
     status = PM_EnterLowPower(expectedWakeUpTime, &sleepMode);
     assert_equal(status, kStatus_Success);

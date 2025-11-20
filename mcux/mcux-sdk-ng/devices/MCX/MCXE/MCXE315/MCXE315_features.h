@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2025-07-18
-**     Build:               b250829
+**     Version:             rev. 2.0, 2025-10-23
+**     Build:               b251023
 **
 **     Abstract:
 **         Chip specific module features.
@@ -18,6 +18,8 @@
 **
 **     - rev. 1.0 (2025-07-18)
 **         Rev2 RM.
+**     - rev. 2.0 (2025-10-23)
+**         Fixed FlexCAN Features.
 **
 ** ###################################################################
 */
@@ -323,9 +325,9 @@
 /* @brief Init memory size 1 */
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1 (0xA60)
 /* @brief Init memory base 2 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xC20)
 /* @brief Init memory size 2 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0x25E0)
 /* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (1)
 /* @brief Has Pretended Networking mode support. */
@@ -459,6 +461,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPSPI module features */
 
@@ -474,6 +478,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 /* @brief Has ERRATA050456. */
 #define FSL_FEATURE_LPSPI_HAS_ERRATA_050456 (1)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPUART module features */
 
