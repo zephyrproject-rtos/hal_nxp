@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SerDes_SS
@@ -1534,10 +1534,18 @@ typedef struct {
 #define SerDes_SS_SS_RW_REG_1_CLKREQ_SW_OVRD_VAL_MASK (0x200U)
 #define SerDes_SS_SS_RW_REG_1_CLKREQ_SW_OVRD_VAL_SHIFT (9U)
 /*! CLKREQ_SW_OVRD_VAL - CLKREQ Software Override Value
- *  0b0..Drive 0 on CLKREQ
- *  0b1..Drive 1 on CLKREQ
+ *  0b0..Deassert CLKREQ
+ *  0b1..Assert CLKREQ
  */
 #define SerDes_SS_SS_RW_REG_1_CLKREQ_SW_OVRD_VAL(x) (((uint32_t)(((uint32_t)(x)) << SerDes_SS_SS_RW_REG_1_CLKREQ_SW_OVRD_VAL_SHIFT)) & SerDes_SS_SS_RW_REG_1_CLKREQ_SW_OVRD_VAL_MASK)
+
+#define SerDes_SS_SS_RW_REG_1_CLKREQ_GATE_REF_OUT_CLK_EN_MASK (0x400U)
+#define SerDes_SS_SS_RW_REG_1_CLKREQ_GATE_REF_OUT_CLK_EN_SHIFT (10U)
+/*! CLKREQ_GATE_REF_OUT_CLK_EN - PCIe reference clock gating via CLKREQ
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define SerDes_SS_SS_RW_REG_1_CLKREQ_GATE_REF_OUT_CLK_EN(x) (((uint32_t)(((uint32_t)(x)) << SerDes_SS_SS_RW_REG_1_CLKREQ_GATE_REF_OUT_CLK_EN_SHIFT)) & SerDes_SS_SS_RW_REG_1_CLKREQ_GATE_REF_OUT_CLK_EN_MASK)
 
 #define SerDes_SS_SS_RW_REG_1_SYS_AUX_PWR_DET_MASK (0x80000000U)
 #define SerDes_SS_SS_RW_REG_1_SYS_AUX_PWR_DET_SHIFT (31U)

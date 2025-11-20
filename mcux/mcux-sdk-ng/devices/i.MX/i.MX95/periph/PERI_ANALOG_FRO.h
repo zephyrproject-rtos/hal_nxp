@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ANALOG_FRO
@@ -682,7 +682,7 @@ typedef struct {
 
 #define ANALOG_FRO_TRIMCNT_TRIMCNT_MASK          (0xFFFFFFFFU)
 #define ANALOG_FRO_TRIMCNT_TRIMCNT_SHIFT         (0U)
-/*! TRIMCNT - Trim Expected Count */
+/*! TRIMCNT - Trim Count */
 #define ANALOG_FRO_TRIMCNT_TRIMCNT(x)            (((uint32_t)(((uint32_t)(x)) << ANALOG_FRO_TRIMCNT_TRIMCNT_SHIFT)) & ANALOG_FRO_TRIMCNT_TRIMCNT_MASK)
 /*! @} */
 

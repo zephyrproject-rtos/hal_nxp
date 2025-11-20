@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDRC
@@ -461,53 +461,57 @@ typedef struct {
   __IO uint32_t TIMING_CFG_10;                     /**< DDR SDRAM Timing Configuration 10, offset: 0x258 */
   __IO uint32_t TIMING_CFG_11;                     /**< DDR SDRAM Timing Configuration 11, offset: 0x25C */
   __IO uint32_t DDR_SDRAM_CFG_3;                   /**< DDR SDRAM Control Configuration 3, offset: 0x260 */
-  __IO uint32_t DDR_SDRAM_CFG_4;                   /**< DDR SDRAM Control Configuration 4, offset: 0x264 */
+       uint8_t RESERVED_7[4];
   __IO uint32_t DDR_SDRAM_CFG_5;                   /**< DDR SDRAM Control Configuration 5, offset: 0x268 */
   __IO uint32_t DDR_SDRAM_CFG_6;                   /**< DDR SDRAM Control Configuration 6, offset: 0x26C */
   __IO uint32_t DDR_SDRAM_MD_CNTL2;                /**< DDR SDRAM mode control 2, offset: 0x270 */
-       uint8_t RESERVED_7[24];
+       uint8_t RESERVED_8[4];
+  __IO uint32_t DDR_SDRAM_CFG_7;                   /**< DDR SDRAM Control Configuration 7, offset: 0x278 */
+       uint8_t RESERVED_9[16];
   __I  uint32_t DDR_SDRAM_MPR4;                    /**< DDR SDRAM multi-purpose register 4, offset: 0x28C */
   __IO uint32_t DDR_SDRAM_MPR5;                    /**< DDR SDRAM multi-purpose register 5, offset: 0x290 */
-       uint8_t RESERVED_8[44];
+       uint8_t RESERVED_10[44];
   __I  uint32_t DDR_SDRAM_REF_RATE;                /**< DDR Refresh Rate, offset: 0x2C0 */
-       uint8_t RESERVED_9[60];
+       uint8_t RESERVED_11[60];
   __IO uint32_t TIMING_CFG_12;                     /**< DDR SDRAM Timing Configuration 12, offset: 0x300 */
   __IO uint32_t TIMING_CFG_13;                     /**< DDR SDRAM Timing Configuration 13, offset: 0x304 */
   __IO uint32_t TIMING_CFG_14;                     /**< DDR SDRAM Timing Configuration 14, offset: 0x308 */
   __IO uint32_t TIMING_CFG_15;                     /**< DDR SDRAM Timing Configuration 15, offset: 0x30C */
   __IO uint32_t TIMING_CFG_16;                     /**< DDR SDRAM Timing Configuration 16, offset: 0x310 */
   __IO uint32_t TIMING_CFG_17;                     /**< DDR SDRAM Timing Configuration 17, offset: 0x314 */
-       uint8_t RESERVED_10[1256];
+       uint8_t RESERVED_12[1256];
   __IO uint32_t TX_CFG_1;                          /**< Transaction Configuration Register 1, offset: 0x800 */
   __IO uint32_t TX_CFG_2;                          /**< Transaction Configuration Register 2, offset: 0x804 */
-       uint8_t RESERVED_11[796];
+       uint8_t RESERVED_13[8];
+  __IO uint32_t TX_CFG_5;                          /**< Transaction Configuration Register 5., offset: 0x810 */
+       uint8_t RESERVED_14[784];
   __IO uint32_t DDRDSR_2;                          /**< DDR SDRAM Debug Status 2, offset: 0xB24 */
-       uint8_t RESERVED_12[208];
+       uint8_t RESERVED_15[208];
   __I  uint32_t DDR_IP_REV1;                       /**< DDRC Revision 1, offset: 0xBF8 */
-       uint8_t RESERVED_13[260];
+       uint8_t RESERVED_16[260];
   __IO uint32_t DDR_MTCR;                          /**< DDR SDRAM Memory Test Control, offset: 0xD00 */
-       uint8_t RESERVED_14[28];
+       uint8_t RESERVED_17[28];
   __IO uint32_t DDR_MTP[DDRC_DDR_MTP_COUNT];       /**< DDR SDRAM Memory Test Pattern n, array offset: 0xD20, array step: 0x4 */
-       uint8_t RESERVED_15[24];
+       uint8_t RESERVED_18[24];
   __IO uint32_t DDR_MT_ST_EXT_ADDR;                /**< DDR SDRAM Memory Test Start Extended Address, offset: 0xD60 */
   __IO uint32_t DDR_MT_ST_ADDR;                    /**< DDR SDRAM Memory Test Start Address, offset: 0xD64 */
   __IO uint32_t DDR_MT_END_EXT_ADDR;               /**< DDR SDRAM Memory Test End Extended Address, offset: 0xD68 */
   __IO uint32_t DDR_MT_END_ADDR;                   /**< DDR SDRAM Memory Test End Address, offset: 0xD6C */
-       uint8_t RESERVED_16[656];
+       uint8_t RESERVED_19[656];
   __IO uint32_t ERR_EN;                            /**< Error Enable, offset: 0x1000 */
-       uint8_t RESERVED_17[252];
+       uint8_t RESERVED_20[252];
   __IO uint32_t DATA_ERR_INJECT_HI;                /**< Memory Data Path Error Injection Mask High, offset: 0x1100 */
   __IO uint32_t DATA_ERR_INJECT_LO;                /**< Memory Data Path Error Injection Mask Low, offset: 0x1104 */
   __IO uint32_t ERR_INJECT;                        /**< Memory Data Path Error Injection Mask ECC, offset: 0x1108 */
   __IO uint32_t ADDR_ERR_INJ;                      /**< Address Error Inject, offset: 0x110C */
   __IO uint32_t EXT_ADDR_ERR_INJ;                  /**< Extended Address Error Inject, offset: 0x1110 */
-       uint8_t RESERVED_18[4];
+       uint8_t RESERVED_21[4];
   __IO uint32_t CAPTURE_EXT_DATA_HI;               /**< Memory Extended Data Path Read Capture High, offset: 0x1118 */
   __IO uint32_t CAPTURE_EXT_DATA_LO;               /**< Memory Extended Data Path Read Capture Low, offset: 0x111C */
   __IO uint32_t CAPTURE_DATA_HI;                   /**< Memory Data Path Read Capture High, offset: 0x1120 */
   __IO uint32_t CAPTURE_DATA_LO;                   /**< Memory Data Path Read Capture Low, offset: 0x1124 */
   __IO uint32_t CAPTURE_ECC;                       /**< Memory Data Path Read Capture ECC, offset: 0x1128 */
-       uint8_t RESERVED_19[20];
+       uint8_t RESERVED_22[20];
   __IO uint32_t ERR_DETECT;                        /**< Memory Error Detect, offset: 0x1140 */
   __IO uint32_t ERR_DISABLE;                       /**< Memory Error Disable, offset: 0x1144 */
   __IO uint32_t ERR_INT_EN;                        /**< Memory Error Interrupt Enable, offset: 0x1148 */
@@ -515,10 +519,10 @@ typedef struct {
   __IO uint32_t CAPTURE_ADDRESS;                   /**< Memory Error Address Capture, offset: 0x1150 */
   __IO uint32_t CAPTURE_EXT_ADDRESS;               /**< Memory Error Extended Address Capture, offset: 0x1154 */
   __IO uint32_t ERR_SBE;                           /**< Single-Bit ECC Memory Error Management, offset: 0x1158 */
-       uint8_t RESERVED_20[180];
+       uint8_t RESERVED_23[180];
   __IO uint32_t REG_CRC_GRP_1;                     /**< Register CRC Code For Group 1, offset: 0x1210 */
   __IO uint32_t REG_CRC_GRP_2;                     /**< Register CRC Code For Group 2, offset: 0x1214 */
-       uint8_t RESERVED_21[8];
+       uint8_t RESERVED_24[8];
   __IO uint32_t ECC_EXT_REG_0;                     /**< ECC Extended Region 0 Configuration, offset: 0x1220 */
   __IO uint32_t ECC_EXT_REG_1;                     /**< ECC Extended Region 1 Configuration, offset: 0x1224 */
   __IO uint32_t ECC_EXT_REG_2;                     /**< ECC Extended Region 2 Configuration, offset: 0x1228 */
@@ -535,9 +539,9 @@ typedef struct {
   __IO uint32_t ECC_REG_5;                         /**< ECC Region 5 Configuration, offset: 0x1254 */
   __IO uint32_t ECC_REG_6;                         /**< ECC Region 6 Configuration, offset: 0x1258 */
   __IO uint32_t ECC_REG_7;                         /**< ECC Region 7 Configuration, offset: 0x125C */
-       uint8_t RESERVED_22[64416];
+       uint8_t RESERVED_25[64416];
   __IO uint32_t PMGC0;                             /**< Performance Monitor Global Control, offset: 0x10E00 */
-       uint8_t RESERVED_23[12];
+       uint8_t RESERVED_26[12];
   __IO uint32_t PMLCA0;                            /**< Performance Monitor Local Control A0, offset: 0x10E10 */
   __IO uint32_t PMLCB0;                            /**< Performance Monitor Local Control B0, offset: 0x10E14 */
   __IO uint32_t PMC0A;                             /**< PMC 0a, offset: 0x10E18 */
@@ -545,39 +549,39 @@ typedef struct {
   __IO uint32_t PMLCA1;                            /**< Performance Monitor Local Control A, offset: 0x10E20 */
   __IO uint32_t PMLCB1;                            /**< Performance Monitor Local Control B, offset: 0x10E24 */
   __IO uint32_t PMC1;                              /**< Performance Monitor Counter, offset: 0x10E28 */
-       uint8_t RESERVED_24[4];
+       uint8_t RESERVED_27[4];
   __IO uint32_t PMLCA2;                            /**< Performance Monitor Local Control A, offset: 0x10E30 */
   __IO uint32_t PMLCB2;                            /**< Performance Monitor Local Control B, offset: 0x10E34 */
   __IO uint32_t PMC2;                              /**< Performance Monitor Counter, offset: 0x10E38 */
-       uint8_t RESERVED_25[4];
+       uint8_t RESERVED_28[4];
   __IO uint32_t PMLCA3;                            /**< Performance Monitor Local Control A, offset: 0x10E40 */
   __IO uint32_t PMLCB3;                            /**< Performance Monitor Local Control B, offset: 0x10E44 */
   __IO uint32_t PMC3;                              /**< Performance Monitor Counter, offset: 0x10E48 */
-       uint8_t RESERVED_26[4];
+       uint8_t RESERVED_29[4];
   __IO uint32_t PMLCA4;                            /**< Performance Monitor Local Control A, offset: 0x10E50 */
   __IO uint32_t PMLCB4;                            /**< Performance Monitor Local Control B, offset: 0x10E54 */
   __IO uint32_t PMC4;                              /**< Performance Monitor Counter, offset: 0x10E58 */
-       uint8_t RESERVED_27[4];
+       uint8_t RESERVED_30[4];
   __IO uint32_t PMLCA5;                            /**< Performance Monitor Local Control A, offset: 0x10E60 */
   __IO uint32_t PMLCB5;                            /**< Performance Monitor Local Control B, offset: 0x10E64 */
   __IO uint32_t PMC5;                              /**< Performance Monitor Counter, offset: 0x10E68 */
-       uint8_t RESERVED_28[4];
+       uint8_t RESERVED_31[4];
   __IO uint32_t PMLCA6;                            /**< Performance Monitor Local Control A, offset: 0x10E70 */
   __IO uint32_t PMLCB6;                            /**< Performance Monitor Local Control B, offset: 0x10E74 */
   __IO uint32_t PMC6;                              /**< Performance Monitor Counter, offset: 0x10E78 */
-       uint8_t RESERVED_29[4];
+       uint8_t RESERVED_32[4];
   __IO uint32_t PMLCA7;                            /**< Performance Monitor Local Control A, offset: 0x10E80 */
   __IO uint32_t PMLCB7;                            /**< Performance Monitor Local Control B, offset: 0x10E84 */
   __IO uint32_t PMC7;                              /**< Performance Monitor Counter, offset: 0x10E88 */
-       uint8_t RESERVED_30[4];
+       uint8_t RESERVED_33[4];
   __IO uint32_t PMLCA8;                            /**< Performance Monitor Local Control A, offset: 0x10E90 */
   __IO uint32_t PMLCB8;                            /**< Performance Monitor Local Control B, offset: 0x10E94 */
   __IO uint32_t PMC8;                              /**< Performance Monitor Counter, offset: 0x10E98 */
-       uint8_t RESERVED_31[4];
+       uint8_t RESERVED_34[4];
   __IO uint32_t PMLCA9;                            /**< Performance Monitor Local Control A, offset: 0x10EA0 */
   __IO uint32_t PMLCB9;                            /**< Performance Monitor Local Control B, offset: 0x10EA4 */
   __IO uint32_t PMC9;                              /**< Performance Monitor Counter, offset: 0x10EA8 */
-       uint8_t RESERVED_32[4];
+       uint8_t RESERVED_35[4];
   __IO uint32_t PMLCA10;                           /**< Performance Monitor Local Control A, offset: 0x10EB0 */
   __IO uint32_t PMLCB10;                           /**< Performance Monitor Local Control B, offset: 0x10EB4 */
   __IO uint32_t PMC10;                             /**< Performance Monitor Counter, offset: 0x10EB8 */
@@ -1055,7 +1059,7 @@ typedef struct {
 /*! BG_BITS_CS - Bank Group Bits
  *  0b00..0
  *  0b01..Must be set to 1 to enable the 3rd bank address bit for LPDDR4x memories.
- *  0b10..Reserved for LPDDR4 ,2 BG bits for LPDDR5
+ *  0b10..Reserved for LPDDR4 ,2 BG bits for LPDDR5 LPDDR5x
  *  0b11..Reserved
  */
 #define DDRC_CS_CONFIG_BG_BITS_CS(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_CS_CONFIG_BG_BITS_CS_SHIFT)) & DDRC_CS_CONFIG_BG_BITS_CS_MASK)
@@ -1113,10 +1117,10 @@ typedef struct {
 /*! EXT_CKE_PLS - Extended MCKE Pulse */
 #define DDRC_TIMING_CFG_3_EXT_CKE_PLS(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_3_EXT_CKE_PLS_SHIFT)) & DDRC_TIMING_CFG_3_EXT_CKE_PLS_MASK)
 
-#define DDRC_TIMING_CFG_3_EXT_WRREC_MASK         (0x300U)
+#define DDRC_TIMING_CFG_3_EXT_WRREC_MASK         (0x700U)
 #define DDRC_TIMING_CFG_3_EXT_WRREC_SHIFT        (8U)
 /*! EXT_WRREC - Extended Write Recovery
- *  0b11..
+ *  0b111..
  *  *..Clock cycles as defined in the description
  */
 #define DDRC_TIMING_CFG_3_EXT_WRREC(x)           (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_3_EXT_WRREC_SHIFT)) & DDRC_TIMING_CFG_3_EXT_WRREC_MASK)
@@ -1357,7 +1361,7 @@ typedef struct {
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_MASK       (0x7000000U)
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_SHIFT      (24U)
 /*! SDRAM_TYPE - DDR SDRAM Type
- *  0b001..LPDDR5 SDRAM
+ *  0b001..LPDDR5 LPDDR5x SDRAM
  *  0b100..LPDDR4x SDRAM
  */
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_SHIFT)) & DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_MASK)
@@ -1404,6 +1408,11 @@ typedef struct {
  */
 #define DDRC_DDR_SDRAM_CFG_2_NUM_PR(x)           (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_2_NUM_PR_SHIFT)) & DDRC_DDR_SDRAM_CFG_2_NUM_PR_MASK)
 
+#define DDRC_DDR_SDRAM_CFG_2_BYTE_MODE_MASK      (0x200000U)
+#define DDRC_DDR_SDRAM_CFG_2_BYTE_MODE_SHIFT     (21U)
+/*! BYTE_MODE - Byte Mode. */
+#define DDRC_DDR_SDRAM_CFG_2_BYTE_MODE(x)        (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_2_BYTE_MODE_SHIFT)) & DDRC_DDR_SDRAM_CFG_2_BYTE_MODE_MASK)
+
 #define DDRC_DDR_SDRAM_CFG_2_MCK_DIS_MASK        (0xF000000U)
 #define DDRC_DDR_SDRAM_CFG_2_MCK_DIS_SHIFT       (24U)
 /*! MCK_DIS - MCK Disable */
@@ -1432,9 +1441,9 @@ typedef struct {
  *  0b00..Not forced
  *  0b01..Forced to a lower value
  *  0b10..Forced to a higher value
- *  0b11..Force a powerdown exit command. You may only use this decoding when using LPDDR5 DDR SDRAM. If using
- *        this setting before DDR_SDRAM_CFG[MEM_EN] is set, then you must first set DDR_SDRAM_CFG[BI] to allow the
- *        powerdown exit command to be issued.
+ *  0b11..Force a powerdown exit command. You may only use this decoding when using LPDDR5 LPDDR5x DDR SDRAM. If
+ *        using this setting before DDR_SDRAM_CFG[MEM_EN] is set, then you must first set DDR_SDRAM_CFG[BI] to allow
+ *        the powerdown exit command to be issued.
  */
 #define DDRC_DDR_SDRAM_MD_CNTL_CKE_CNTL(x)       (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_MD_CNTL_CKE_CNTL_SHIFT)) & DDRC_DDR_SDRAM_MD_CNTL_CKE_CNTL_MASK)
 
@@ -1571,42 +1580,42 @@ typedef struct {
 #define DDRC_TIMING_CFG_7_CKSRX_MASK             (0xF00000U)
 #define DDRC_TIMING_CFG_7_CKSRX_SHIFT            (20U)
 /*! CKSRX - Clock After Self-Refresh Exit
- *  0b0000, 0b1010..15 for LPDDR4x 19 for LPDDR5
- *  0b0001..6 for LPDDR4x 10 for LPDDR5
- *  0b0010..7 for LPDDR4x 11 for LPDDR5
- *  0b0011..8 for LPDDR4x 12 for LPDDR5
- *  0b0100..9 for LPDDR4x 13 for LPDDR5
- *  0b0101..10 for LPDDR4x 14 for LPDDR5
- *  0b0110..11 for LPDDR4x 15 for LPDDR5
- *  0b0111..12 for LPDDR4x 16 for LPDDR5
- *  0b1000..13 for LPDDR4x 17 for LPDDR5
- *  0b1001..14 for LPDDR4x 18 for LPDDR5
- *  0b1011..16 for LPDDR4x 20 for LPDDR5
- *  0b1100..17 for LPDDR4x 21 for LPDDR5
- *  0b1101..18 for LPDDR4x 22 for LPDDR5
- *  0b1110..19 for LPDDR4x 23 for LPDDR5
- *  0b1111..116 for LPDDR4x 31 for LPDDR5
+ *  0b0000, 0b1010..15 for LPDDR4x 19 for LPDDR5 LPDDR5x
+ *  0b0001..6 for LPDDR4x 10 for LPDDR5 LPDDR5x
+ *  0b0010..7 for LPDDR4x 11 for LPDDR5 LPDDR5x
+ *  0b0011..8 for LPDDR4x 12 for LPDDR5 LPDDR5x
+ *  0b0100..9 for LPDDR4x 13 for LPDDR5 LPDDR5x
+ *  0b0101..10 for LPDDR4x 14 for LPDDR5 LPDDR5x
+ *  0b0110..11 for LPDDR4x 15 for LPDDR5 LPDDR5x
+ *  0b0111..12 for LPDDR4x 16 for LPDDR5 LPDDR5x
+ *  0b1000..13 for LPDDR4x 17 for LPDDR5 LPDDR5x
+ *  0b1001..14 for LPDDR4x 18 for LPDDR5 LPDDR5x
+ *  0b1011..16 for LPDDR4x 20 for LPDDR5 LPDDR5x
+ *  0b1100..17 for LPDDR4x 21 for LPDDR5 LPDDR5x
+ *  0b1101..18 for LPDDR4x 22 for LPDDR5 LPDDR5x
+ *  0b1110..19 for LPDDR4x 23 for LPDDR5 LPDDR5x
+ *  0b1111..116 for LPDDR4x 31 for LPDDR5 LPDDR5x
  */
 #define DDRC_TIMING_CFG_7_CKSRX(x)               (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_7_CKSRX_SHIFT)) & DDRC_TIMING_CFG_7_CKSRX_MASK)
 
 #define DDRC_TIMING_CFG_7_CKSRE_MASK             (0xF000000U)
 #define DDRC_TIMING_CFG_7_CKSRE_SHIFT            (24U)
 /*! CKSRE - Clock After Self-Refresh Entry
- *  0b0000, 0b1010..15 for LPDDR4x 20 for LPDDR5
- *  0b0001..6 for LPDDR4x 11 for LPDDR5
- *  0b0010..7 for LPDDR4x 12 for LPDDR5
- *  0b0011..8 for LPDDR4x 13 for LPDDR5
- *  0b0100..9 for LPDDR4x 14 for LPDDR5
- *  0b0101..10 for LPDDR4x 15 for LPDDR5
- *  0b0110..11 for LPDDR4x 16 for LPDDR5
- *  0b0111..12 for LPDDR4x 17 for LPDDR5
- *  0b1000..13 for LPDDR4x 18 for LPDDR5
- *  0b1001..14 for LPDDR4x 19 for LPDDR5
- *  0b1011..16 for LPDDR4x 21 for LPDDR5
- *  0b1100..17 for LPDDR4x 22 for LPDDR5
- *  0b1101..18 for LPDDR4x 23 for LPDDR5
- *  0b1110..19 for LPDDR4x 24 for LPDDR5
- *  0b1111..32 for LPDDR4x 31 for LPDDR5
+ *  0b0000, 0b1010..15 for LPDDR4x 20 for LPDDR5 LPDDR5x
+ *  0b0001..6 for LPDDR4x 11 for LPDDR5 LPDDR5x
+ *  0b0010..7 for LPDDR4x 12 for LPDDR5 LPDDR5x
+ *  0b0011..8 for LPDDR4x 13 for LPDDR5 LPDDR5x
+ *  0b0100..9 for LPDDR4x 14 for LPDDR5 LPDDR5x
+ *  0b0101..10 for LPDDR4x 15 for LPDDR5 LPDDR5x
+ *  0b0110..11 for LPDDR4x 16 for LPDDR5 LPDDR5x
+ *  0b0111..12 for LPDDR4x 17 for LPDDR5 LPDDR5x
+ *  0b1000..13 for LPDDR4x 18 for LPDDR5 LPDDR5x
+ *  0b1001..14 for LPDDR4x 19 for LPDDR5 LPDDR5x
+ *  0b1011..16 for LPDDR4x 21 for LPDDR5 LPDDR5x
+ *  0b1100..17 for LPDDR4x 22 for LPDDR5 LPDDR5x
+ *  0b1101..18 for LPDDR4x 23 for LPDDR5 LPDDR5x
+ *  0b1110..19 for LPDDR4x 24 for LPDDR5 LPDDR5x
+ *  0b1111..32 for LPDDR4x 31 for LPDDR5 LPDDR5x
  */
 #define DDRC_TIMING_CFG_7_CKSRE(x)               (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_7_CKSRE_SHIFT)) & DDRC_TIMING_CFG_7_CKSRE_MASK)
 
@@ -1668,7 +1677,7 @@ typedef struct {
  *  0b1011..2048
  *  0b1100..4096
  *  0b1101..8192
- *  0b1110..2200 cycles when using LPDDR4x DDR_SDRAM; Reserved for LPDDR5 DDR_SDRAM
+ *  0b1110..2200 cycles when using ,LPDDR4x DDR_SDRAM; 2416 cycles when using LPDDR5 LPDDR5x DDR_SDRAM
  */
 #define DDRC_DDR_ZQ_CNTL_ZQOPER(x)               (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_ZQ_CNTL_ZQOPER_SHIFT)) & DDRC_DDR_ZQ_CNTL_ZQOPER_MASK)
 
@@ -1682,7 +1691,7 @@ typedef struct {
  *  0b1011..2048
  *  0b1100..4096
  *  0b1101..8192
- *  0b1110..2200 cycles when using LPDDR4x DDR_SDRAM; Reserved for LPDDR5 DDR_SDRAM
+ *  0b1110..2200 cycles when using LPDDR4x DDR_SDRAM; 2416 cycles when using LPDDR5 LPDDR5x DDR_SDRAM
  */
 #define DDRC_DDR_ZQ_CNTL_ZQINIT(x)               (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_ZQ_CNTL_ZQINIT_SHIFT)) & DDRC_DDR_ZQ_CNTL_ZQINIT_MASK)
 
@@ -1998,15 +2007,6 @@ typedef struct {
 #define DDRC_DDR_SDRAM_CFG_3_DDRC_RST(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_3_DDRC_RST_SHIFT)) & DDRC_DDR_SDRAM_CFG_3_DDRC_RST_MASK)
 /*! @} */
 
-/*! @name DDR_SDRAM_CFG_4 - DDR SDRAM Control Configuration 4 */
-/*! @{ */
-
-#define DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_MASK      (0x1F000U)
-#define DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_SHIFT     (12U)
-/*! FRQCH_RET - Frequency Change and Retention Setup */
-#define DDRC_DDR_SDRAM_CFG_4_FRQCH_RET(x)        (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_SHIFT)) & DDRC_DDR_SDRAM_CFG_4_FRQCH_RET_MASK)
-/*! @} */
-
 /*! @name DDR_SDRAM_CFG_5 - DDR SDRAM Control Configuration 5 */
 /*! @{ */
 
@@ -2050,6 +2050,28 @@ typedef struct {
 /*! RRO - Refresh rate option. */
 #define DDRC_DDR_SDRAM_CFG_6_RRO(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_6_RRO_SHIFT)) & DDRC_DDR_SDRAM_CFG_6_RRO_MASK)
 
+#define DDRC_DDR_SDRAM_CFG_6_ALT_TRN_INT_MASK    (0xF00U)
+#define DDRC_DDR_SDRAM_CFG_6_ALT_TRN_INT_SHIFT   (8U)
+/*! ALT_TRN_INT - Force dfi_init_start low.
+ *  0b0000..Alternate training is not enabled.
+ *  0b0001..Alternate training will be issued every 8 refresh sequences.
+ *  0b0010..Alternate training will be issued every 16 refresh sequences.
+ *  0b0011..Alternate training will be issued every 32 refresh sequences.
+ *  0b0100..Alternate training will be issued every 48 refresh sequences.
+ *  0b0101..Alternate training will be issued every 80 refresh sequences.
+ *  0b0110..Alternate training will be issued every 240 refresh sequences.
+ *  0b0111..Alternate training will be issued every 496 refresh sequences.
+ *  0b1000..Alternate training will be issued every 1,008 refresh sequences.
+ *  0b1001..Alternate training will be issued every 2,032 refresh sequences.
+ *  0b1010..Alternate training will be issued every 4,080 refresh sequences.
+ *  0b1011..Alternate training will be issued every 8,176 refresh sequences.
+ *  0b1100..Alternate training will be issued every 16,368 refresh sequences.
+ *  0b1101..Alternate training will be issued every 32,752 refresh sequences.
+ *  0b1110..Alternate training will be issued every 32,768 refresh sequences.
+ *  0b1111..Alternate training will be issued every 32,768 refresh sequences.
+ */
+#define DDRC_DDR_SDRAM_CFG_6_ALT_TRN_INT(x)      (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_6_ALT_TRN_INT_SHIFT)) & DDRC_DDR_SDRAM_CFG_6_ALT_TRN_INT_MASK)
+
 #define DDRC_DDR_SDRAM_CFG_6_ADDR_SZL_EN_MASK    (0x1000U)
 #define DDRC_DDR_SDRAM_CFG_6_ADDR_SZL_EN_SHIFT   (12U)
 /*! ADDR_SZL_EN - Address swizzle enable.
@@ -2080,6 +2102,77 @@ typedef struct {
  *  0b1..A multi-purpose register read will be issued after DDR_SDRAM_MD_CNTL[MD_EN] is set.
  */
 #define DDRC_DDR_SDRAM_MD_CNTL2_MPRR(x)          (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_MD_CNTL2_MPRR_SHIFT)) & DDRC_DDR_SDRAM_MD_CNTL2_MPRR_MASK)
+/*! @} */
+
+/*! @name DDR_SDRAM_CFG_7 - DDR SDRAM Control Configuration 7 */
+/*! @{ */
+
+#define DDRC_DDR_SDRAM_CFG_7_UPD_INT_MASK        (0x7U)
+#define DDRC_DDR_SDRAM_CFG_7_UPD_INT_SHIFT       (0U)
+/*! UPD_INT - Update interval.
+ *  0b000..Default mode, uses per-bank refresh enable and refresh rate for calculating. Update requests will be
+ *         sent every 8 refreshes in all-bank refresh mode (or 64 refreshes in per-bank refresh mode) when using 1x
+ *         refresh or less. If using 2x/4x/8x refresh, then an update request will be sent every refresh in all-bank
+ *         refresh mode (or 8 refreshes in per-bank refresh mode).
+ *  0b001..Update every refresh sequence
+ *  0b010..Update every 2 refresh sequences
+ *  0b011..Update every 4 refresh sequences
+ *  0b100..Update every 8 refresh sequences
+ *  0b101..Update every 32 refresh sequences
+ *  0b110..Update every 64 refresh sequences
+ *  0b111..Update every 256 refresh sequences
+ */
+#define DDRC_DDR_SDRAM_CFG_7_UPD_INT(x)          (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_UPD_INT_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_UPD_INT_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_BYP_DIS_MASK        (0x10U)
+#define DDRC_DDR_SDRAM_CFG_7_BYP_DIS_SHIFT       (4U)
+/*! BYP_DIS - Bypass Disable.
+ *  0b0..Bypass path is enabled..
+ *  0b1..Bypass path is disabled.
+ */
+#define DDRC_DDR_SDRAM_CFG_7_BYP_DIS(x)          (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_BYP_DIS_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_BYP_DIS_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_FRC_AB_REF_MASK     (0x20U)
+#define DDRC_DDR_SDRAM_CFG_7_FRC_AB_REF_SHIFT    (5U)
+/*! FRC_AB_REF - Force All-Bank Refresh.
+ *  0b0..Force all-bank refresh is disabled.
+ *  0b1..Force all-bank refresh is enabled.
+ */
+#define DDRC_DDR_SDRAM_CFG_7_FRC_AB_REF(x)       (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_FRC_AB_REF_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_FRC_AB_REF_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_UPD_CKSTP_EN_MASK   (0x800U)
+#define DDRC_DDR_SDRAM_CFG_7_UPD_CKSTP_EN_SHIFT  (11U)
+/*! UPD_CKSTP_EN - Update Clock Stop Enable.
+ *  0b0..Clock stop support is disabled.
+ *  0b1..Clock stop support is enabled.
+ */
+#define DDRC_DDR_SDRAM_CFG_7_UPD_CKSTP_EN(x)     (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_UPD_CKSTP_EN_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_UPD_CKSTP_EN_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_RCOV_MASK           (0x3F0000U)
+#define DDRC_DDR_SDRAM_CFG_7_RCOV_SHIFT          (16U)
+/*! RCOV - Read Collision Override Value. */
+#define DDRC_DDR_SDRAM_CFG_7_RCOV(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_RCOV_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_RCOV_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_RCOE_MASK           (0x400000U)
+#define DDRC_DDR_SDRAM_CFG_7_RCOE_SHIFT          (22U)
+/*! RCOE - Read Collision Override Enable.
+ *  0b0..Override is disabled.
+ *  0b1..Override is enabled.
+ */
+#define DDRC_DDR_SDRAM_CFG_7_RCOE(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_RCOE_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_RCOE_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_RBOV_MASK           (0x3F000000U)
+#define DDRC_DDR_SDRAM_CFG_7_RBOV_SHIFT          (24U)
+/*! RBOV - Read Block Override Value. */
+#define DDRC_DDR_SDRAM_CFG_7_RBOV(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_RBOV_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_RBOV_MASK)
+
+#define DDRC_DDR_SDRAM_CFG_7_RBOE_MASK           (0x40000000U)
+#define DDRC_DDR_SDRAM_CFG_7_RBOE_SHIFT          (30U)
+/*! RBOE - Read Block Override Enable.
+ *  0b0..Override is disabled.
+ *  0b1..Override is enabled.
+ */
+#define DDRC_DDR_SDRAM_CFG_7_RBOE(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_7_RBOE_SHIFT)) & DDRC_DDR_SDRAM_CFG_7_RBOE_MASK)
 /*! @} */
 
 /*! @name DDR_SDRAM_MPR4 - DDR SDRAM multi-purpose register 4 */
@@ -2238,6 +2331,14 @@ typedef struct {
 /*! T_STAB_HS - Stabilization Wait Time at Half Speed */
 #define DDRC_TIMING_CFG_16_T_STAB_HS(x)          (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_16_T_STAB_HS_SHIFT)) & DDRC_TIMING_CFG_16_T_STAB_HS_MASK)
 
+#define DDRC_TIMING_CFG_16_LNK_ECC_EN_HS_MASK    (0x8000U)
+#define DDRC_TIMING_CFG_16_LNK_ECC_EN_HS_SHIFT   (15U)
+/*! LNK_ECC_EN_HS - Link ECC Enable at Half Speed.
+ *  0b0..Link ECC is disabled.
+ *  0b1..Link ECC is enabled.
+ */
+#define DDRC_TIMING_CFG_16_LNK_ECC_EN_HS(x)      (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_16_LNK_ECC_EN_HS_SHIFT)) & DDRC_TIMING_CFG_16_LNK_ECC_EN_HS_MASK)
+
 #define DDRC_TIMING_CFG_16_WCK_CNFGS_HS_MASK     (0xFFFF0000U)
 #define DDRC_TIMING_CFG_16_WCK_CNFGS_HS_SHIFT    (16U)
 /*! WCK_CNFGS_HS - WCK Configuration Settings at Half Speed */
@@ -2317,6 +2418,16 @@ typedef struct {
 /*! TS_DEPTH - Transaction Scheduler Depth */
 #define DDRC_TX_CFG_1_TS_DEPTH(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_1_TS_DEPTH_SHIFT)) & DDRC_TX_CFG_1_TS_DEPTH_MASK)
 
+#define DDRC_TX_CFG_1_RD_URG_DIS_MASK            (0x1000U)
+#define DDRC_TX_CFG_1_RD_URG_DIS_SHIFT           (12U)
+/*! RD_URG_DIS - Disable read urgent mode capability */
+#define DDRC_TX_CFG_1_RD_URG_DIS(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_1_RD_URG_DIS_SHIFT)) & DDRC_TX_CFG_1_RD_URG_DIS_MASK)
+
+#define DDRC_TX_CFG_1_WR_URG_DIS_MASK            (0x2000U)
+#define DDRC_TX_CFG_1_WR_URG_DIS_SHIFT           (13U)
+/*! WR_URG_DIS - Disable write urgent mode capability */
+#define DDRC_TX_CFG_1_WR_URG_DIS(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_1_WR_URG_DIS_SHIFT)) & DDRC_TX_CFG_1_WR_URG_DIS_MASK)
+
 #define DDRC_TX_CFG_1_HPR_MASK                   (0x200000U)
 #define DDRC_TX_CFG_1_HPR_SHIFT                  (21U)
 /*! HPR - High Priority Read.
@@ -2349,6 +2460,11 @@ typedef struct {
 /*! RD_CNT - Read Bandwidth Count. */
 #define DDRC_TX_CFG_2_RD_CNT(x)                  (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_2_RD_CNT_SHIFT)) & DDRC_TX_CFG_2_RD_CNT_MASK)
 
+#define DDRC_TX_CFG_2_RT_OPT_DIS_MASK            (0x20000000U)
+#define DDRC_TX_CFG_2_RT_OPT_DIS_SHIFT           (29U)
+/*! RT_OPT_DIS - Real Time Traffic Optimizaiton Disable. */
+#define DDRC_TX_CFG_2_RT_OPT_DIS(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_2_RT_OPT_DIS_SHIFT)) & DDRC_TX_CFG_2_RT_OPT_DIS_MASK)
+
 #define DDRC_TX_CFG_2_RD_EPA_DIS_MASK            (0x40000000U)
 #define DDRC_TX_CFG_2_RD_EPA_DIS_SHIFT           (30U)
 /*! RD_EPA_DIS - Read Precharge to Activate Disable. */
@@ -2358,6 +2474,108 @@ typedef struct {
 #define DDRC_TX_CFG_2_WR_EPA_DIS_SHIFT           (31U)
 /*! WR_EPA_DIS - Write Precharge to Activate Disable. */
 #define DDRC_TX_CFG_2_WR_EPA_DIS(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_2_WR_EPA_DIS_SHIFT)) & DDRC_TX_CFG_2_WR_EPA_DIS_MASK)
+/*! @} */
+
+/*! @name TX_CFG_5 - Transaction Configuration Register 5. */
+/*! @{ */
+
+#define DDRC_TX_CFG_5_BIAS_THRSHLD_MASK          (0x30U)
+#define DDRC_TX_CFG_5_BIAS_THRSHLD_SHIFT         (4U)
+/*! BIAS_THRSHLD - Bias Threshold Value.
+ *  0b00..The queue for the current bias has less than 4 entries and the other queue has more than 15 entries.
+ *  0b01..The queue for the current bias has less than 6 entries and the other queue has more than 15 entries.
+ *  0b10..The queue for the current bias has less than 4 entries and the other queue has more than 11 entries.
+ *  0b11..The queue for the current bias has less than 6 entries and the other queue has more than 11 entries.
+ */
+#define DDRC_TX_CFG_5_BIAS_THRSHLD(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_BIAS_THRSHLD_SHIFT)) & DDRC_TX_CFG_5_BIAS_THRSHLD_MASK)
+
+#define DDRC_TX_CFG_5_DEF_RSRV_VAL_MASK          (0xC0U)
+#define DDRC_TX_CFG_5_DEF_RSRV_VAL_SHIFT         (6U)
+/*! DEF_RSRV_VAL - Default Reserve Value.
+ *  0b00..4 entries reserved for reads and writes.
+ *  0b01..6 entries reserved for reads and writes.
+ *  0b10..8 entries reserved for reads and writes.
+ *  0b11..10 entries reserved for reads and writes.
+ */
+#define DDRC_TX_CFG_5_DEF_RSRV_VAL(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_DEF_RSRV_VAL_SHIFT)) & DDRC_TX_CFG_5_DEF_RSRV_VAL_MASK)
+
+#define DDRC_TX_CFG_5_CMDQ_THRSHLD_MASK          (0xF00U)
+#define DDRC_TX_CFG_5_CMDQ_THRSHLD_SHIFT         (8U)
+/*! CMDQ_THRSHLD - Command Queue Threshold.
+ *  0b0000..3 or fewer entries valid.
+ *  0b0001..1 or fewer entries valid.
+ *  0b0010..2 or fewer entries valid.
+ *  0b0011..3 or fewer entries valid.
+ *  0b0100..4 or fewer entries valid.
+ *  0b0101..5 or fewer entries valid.
+ *  0b0110..6 or fewer entries valid.
+ *  0b0111..7 or fewer entries valid.
+ *  0b1000..8 or fewer entries valid.
+ *  0b1001..9 or fewer entries valid.
+ */
+#define DDRC_TX_CFG_5_CMDQ_THRSHLD(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_CMDQ_THRSHLD_SHIFT)) & DDRC_TX_CFG_5_CMDQ_THRSHLD_MASK)
+
+#define DDRC_TX_CFG_5_AP_TMOUT_MASK              (0x180000U)
+#define DDRC_TX_CFG_5_AP_TMOUT_SHIFT             (19U)
+/*! AP_TMOUT - Activate to Precharge Timeout.
+ *  0b00..511 cycles of blocking allowed.
+ *  0b01..255 cycles of blocking allowed.
+ *  0b10..127 cycles of blocking allowed.
+ *  0b11..63 cycles cycles of blocking allowed.
+ */
+#define DDRC_TX_CFG_5_AP_TMOUT(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_AP_TMOUT_SHIFT)) & DDRC_TX_CFG_5_AP_TMOUT_MASK)
+
+#define DDRC_TX_CFG_5_RDQ2_TMOUT_MASK            (0xE00000U)
+#define DDRC_TX_CFG_5_RDQ2_TMOUT_SHIFT           (21U)
+/*! RDQ2_TMOUT - Read Queue 2 Timeout.
+ *  0b000..127 bypasses create a timeout.
+ *  0b001..3 bypasses create a timeout.
+ *  0b010..7 bypasses create a timeout.
+ *  0b011..11 bypasses create a timeout.
+ *  0b100..15 bypasses create a timeout.
+ *  0b101..19 bypasses create a timeout.
+ *  0b110..23 bypasses create a timeout.
+ *  0b111..27 bypasses create a timeout.
+ */
+#define DDRC_TX_CFG_5_RDQ2_TMOUT(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_RDQ2_TMOUT_SHIFT)) & DDRC_TX_CFG_5_RDQ2_TMOUT_MASK)
+
+#define DDRC_TX_CFG_5_RDQ1_TMOUT_MASK            (0x7000000U)
+#define DDRC_TX_CFG_5_RDQ1_TMOUT_SHIFT           (24U)
+/*! RDQ1_TMOUT - Read Queue 1 Timeout.
+ *  0b000..127 bypasses create a timeout.
+ *  0b001..3 bypasses create a timeout.
+ *  0b010..7 bypasses create a timeout.
+ *  0b011..11 bypasses create a timeout.
+ *  0b100..15 bypasses create a timeout.
+ *  0b101..19 bypasses create a timeout.
+ *  0b110..23 bypasses create a timeout.
+ *  0b111..27 bypasses create a timeout.
+ */
+#define DDRC_TX_CFG_5_RDQ1_TMOUT(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_RDQ1_TMOUT_SHIFT)) & DDRC_TX_CFG_5_RDQ1_TMOUT_MASK)
+
+#define DDRC_TX_CFG_5_RDQ0_TMOUT_MASK            (0x38000000U)
+#define DDRC_TX_CFG_5_RDQ0_TMOUT_SHIFT           (27U)
+/*! RDQ0_TMOUT - Read Queue 0 Timeout.
+ *  0b000..127 bypasses create a timeout.
+ *  0b001..3 bypasses create a timeout.
+ *  0b010..7 bypasses create a timeout.
+ *  0b011..11 bypasses create a timeout.
+ *  0b100..15 bypasses create a timeout.
+ *  0b101..19 bypasses create a timeout.
+ *  0b110..23 bypasses create a timeout.
+ *  0b111..27 bypasses create a timeout.
+ */
+#define DDRC_TX_CFG_5_RDQ0_TMOUT(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_RDQ0_TMOUT_SHIFT)) & DDRC_TX_CFG_5_RDQ0_TMOUT_MASK)
+
+#define DDRC_TX_CFG_5_AP_LVL_MASK                (0xC0000000U)
+#define DDRC_TX_CFG_5_AP_LVL_SHIFT               (30U)
+/*! AP_LVL - Auto Precharge Level
+ *  0b00..Current read queue had valid entries up to the full scheduler depth minus 2.
+ *  0b01..Current read queue had valid entries up to the full scheduler depth minus 4.
+ *  0b10..Current read queue had valid entries up to the full scheduler depth minus 6.
+ *  0b11..Reserved
+ */
+#define DDRC_TX_CFG_5_AP_LVL(x)                  (((uint32_t)(((uint32_t)(x)) << DDRC_TX_CFG_5_AP_LVL_SHIFT)) & DDRC_TX_CFG_5_AP_LVL_MASK)
 /*! @} */
 
 /*! @name DDRDSR_2 - DDR SDRAM Debug Status 2 */
@@ -2820,6 +3038,14 @@ typedef struct {
  *  0b1..A refresh rate error has been detected.
  */
 #define DDRC_ERR_DETECT_REFRATEE(x)              (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_REFRATEE_SHIFT)) & DDRC_ERR_DETECT_REFRATEE_MASK)
+
+#define DDRC_ERR_DETECT_LKSTP4E_MASK             (0x800U)
+#define DDRC_ERR_DETECT_LKSTP4E_SHIFT            (11U)
+/*! LKSTP4E - Lockstep 4 error.
+ *  0b0..A Lockstep 4 error has not been detected.
+ *  0b1..A Lockstep 4 error has been detected.
+ */
+#define DDRC_ERR_DETECT_LKSTP4E(x)               (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_LKSTP4E_SHIFT)) & DDRC_ERR_DETECT_LKSTP4E_MASK)
 
 #define DDRC_ERR_DETECT_SSBE_MASK                (0x1000U)
 #define DDRC_ERR_DETECT_SSBE_SHIFT               (12U)

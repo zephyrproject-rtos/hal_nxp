@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC_GENERAL_REG
@@ -532,112 +532,112 @@ typedef struct {
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_0_MODE_MASK (0x1U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_0_MODE_SHIFT (0U)
 /*! RST_EVT_0_MODE - Mode configuration bit for reset event CM33_LOCKUP_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as CM33_LOCKUP_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when CM33_LOCKUP_RST_EVT becomes active and will leave reset even if event is active
+ *  0b0..Level mode: Affected region enters and stays in reset as long as CM33_LOCKUP_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when CM33_LOCKUP_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_0_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_0_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_0_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_1_MODE_MASK (0x2U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_1_MODE_SHIFT (1U)
-/*! RST_EVT_1_MODE - mode configuration bit for reset event CM33_SYS_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as CM33_SYS_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when CM33_SYS_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_1_MODE - Mode configuration bit for reset event CM33_SYS_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as CM33_SYS_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when CM33_SYS_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_1_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_1_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_1_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_2_MODE_MASK (0x4U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_2_MODE_SHIFT (2U)
-/*! RST_EVT_2_MODE - mode configuration bit for reset event CM7_LOCKUP_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as CM7_LOCKUP_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when CM7_LOCKUP_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_2_MODE - Mode configuration bit for reset event CM7_LOCKUP_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as CM7_LOCKUP_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when CM7_LOCKUP_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_2_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_2_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_2_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_3_MODE_MASK (0x8U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_3_MODE_SHIFT (3U)
-/*! RST_EVT_3_MODE - mode configuration bit for reset event CM7_SYS_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as CM7_SYS_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when CM7_SYS_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_3_MODE - Mode configuration bit for reset event CM7_SYS_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as CM7_SYS_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when CM7_SYS_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_3_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_3_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_3_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_4_MODE_MASK (0x10U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_4_MODE_SHIFT (4U)
-/*! RST_EVT_4_MODE - mode configuration bit for reset event FCCU_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as FCCU_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when FCCU_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_4_MODE - Mode configuration bit for reset event FCCU_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as FCCU_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when FCCU_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_4_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_4_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_4_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_5_MODE_MASK (0x20U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_5_MODE_SHIFT (5U)
-/*! RST_EVT_5_MODE - mode configuration bit for reset event JTAG_SW_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as JTAG_SW_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when JTAG_SW_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_5_MODE - Mode configuration bit for reset event JTAG_SW_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as JTAG_SW_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when JTAG_SW_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_5_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_5_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_5_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_6_MODE_MASK (0x40U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_6_MODE_SHIFT (6U)
-/*! RST_EVT_6_MODE - mode configuration bit for reset event SENTINEL_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as SENTINEL_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when SENTINEL_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_6_MODE - Mode configuration bit for reset event ELE_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as ELE_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when ELE_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_6_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_6_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_6_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_7_MODE_MASK (0x80U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_7_MODE_SHIFT (7U)
-/*! RST_EVT_7_MODE - mode configuration bit for reset event TEMPSENSE_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as TEMPSENSE_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when TEMPSENSE_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_7_MODE - Mode configuration bit for reset event TEMPSENSE_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as TEMPSENSE_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when TEMPSENSE_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_7_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_7_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_7_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_8_MODE_MASK (0x100U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_8_MODE_SHIFT (8U)
-/*! RST_EVT_8_MODE - mode configuration bit for reset event WDOG1_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as WDOG1_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when WDOG1_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_8_MODE - Mode configuration bit for reset event WDOG1_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as WDOG1_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when WDOG1_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_8_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_8_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_8_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_9_MODE_MASK (0x200U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_9_MODE_SHIFT (9U)
-/*! RST_EVT_9_MODE - mode configuration bit for reset event WDOG2_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as WDOG2_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when WDOG2_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_9_MODE - Mode configuration bit for reset event WDOG2_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as WDOG2_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when WDOG2_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_9_MODE(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_9_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_9_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_10_MODE_MASK (0x400U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_10_MODE_SHIFT (10U)
-/*! RST_EVT_10_MODE - mode configuration bit for reset event WDOG3_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as WDOG3_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when WDOG3_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_10_MODE - Mode configuration bit for reset event WDOG3_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as WDOG3_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when WDOG3_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_10_MODE(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_10_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_10_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_11_MODE_MASK (0x800U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_11_MODE_SHIFT (11U)
-/*! RST_EVT_11_MODE - mode configuration bit for reset event WDOG4_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as WDOG4_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when WDOG4_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_11_MODE - Mode configuration bit for reset event WDOG4_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as WDOG4_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when WDOG4_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_11_MODE(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_11_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_11_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_12_MODE_MASK (0x1000U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_12_MODE_SHIFT (12U)
-/*! RST_EVT_12_MODE - mode configuration bit for reset event WDOG5_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as WDOG5_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when WDOG5_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_12_MODE - Mode configuration bit for reset event WDOG5_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as WDOG5_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when WDOG5_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_12_MODE(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_12_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_12_MODE_MASK)
 
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_13_MODE_MASK (0x2000U)
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_13_MODE_SHIFT (13U)
-/*! RST_EVT_13_MODE - mode configuration bit for reset event JTAG_RST_B_RST_EVT
- *  0b0..level mode : affected region enters and stays in reset as long as JTAG_RST_B_RST_EVT is active
- *  0b1..edge mode : affected region enters reset when JTAG_RST_B_RST_EVT becomes active and will leave reset even if event is active
+/*! RST_EVT_13_MODE - Mode configuration bit for reset event JTAG_RST_B_RST_EVT
+ *  0b0..Level mode: Affected region enters and stays in reset as long as JTAG_RST_B_RST_EVT is active
+ *  0b1..Edge mode: Affected region enters reset when JTAG_RST_B_RST_EVT becomes active and will leave reset even if event is active
  */
 #define SRC_GENERAL_REG_SRTMR_RST_EVT_13_MODE(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRTMR_RST_EVT_13_MODE_SHIFT)) & SRC_GENERAL_REG_SRTMR_RST_EVT_13_MODE_MASK)
 /*! @} */
@@ -647,113 +647,113 @@ typedef struct {
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_0_MASK_MASK (0x1U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_0_MASK_SHIFT (0U)
-/*! RST_EVT_0_MASK - mask bit for reset event CM33_LOCKUP_RST_EVT
- *  0b0..reset event CM33_LOCKUP_RST_EVT is not masked
- *  0b1..reset event CM33_LOCKUP_RST_EVT is masked
+/*! RST_EVT_0_MASK - Mask bit for reset event CM33_LOCKUP_RST_EVT
+ *  0b0..Reset event CM33_LOCKUP_RST_EVT is not masked
+ *  0b1..Reset event CM33_LOCKUP_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_0_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_0_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_0_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_1_MASK_MASK (0x2U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_1_MASK_SHIFT (1U)
-/*! RST_EVT_1_MASK - mask bit for reset event CM33_SYS_RST_EVT
- *  0b0..reset event CM33_SYS_RST_EVT is not masked
- *  0b1..reset event CM33_SYS_RST_EVT is masked
+/*! RST_EVT_1_MASK - Mask bit for reset event CM33_SYS_RST_EVT
+ *  0b0..Reset event CM33_SYS_RST_EVT is not masked
+ *  0b1..Reset event CM33_SYS_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_1_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_1_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_1_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_2_MASK_MASK (0x4U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_2_MASK_SHIFT (2U)
-/*! RST_EVT_2_MASK - mask bit for reset event CM7_LOCKUP_RST_EVT
- *  0b0..reset event CM7_LOCKUP_RST_EVT is not masked
- *  0b1..reset event CM7_LOCKUP_RST_EVT is masked
+/*! RST_EVT_2_MASK - Mask bit for reset event CM7_LOCKUP_RST_EVT
+ *  0b0..Reset event CM7_LOCKUP_RST_EVT is not masked
+ *  0b1..Reset event CM7_LOCKUP_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_2_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_2_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_2_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_3_MASK_MASK (0x8U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_3_MASK_SHIFT (3U)
-/*! RST_EVT_3_MASK - mask bit for reset event CM7_SYS_RST_EVT
- *  0b0..reset event CM7_SYS_RST_EVT is not masked
- *  0b1..reset event CM7_SYS_RST_EVT is masked
+/*! RST_EVT_3_MASK - Mask bit for reset event CM7_SYS_RST_EVT
+ *  0b0..Reset event CM7_SYS_RST_EVT is not masked
+ *  0b1..Reset event CM7_SYS_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_3_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_3_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_3_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_4_MASK_MASK (0x10U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_4_MASK_SHIFT (4U)
-/*! RST_EVT_4_MASK - mask bit for reset event FCCU_RST_EVT
- *  0b0..reset event FCCU_RST_EVT is not masked
- *  0b1..reset event FCCU_RST_EVT is masked
+/*! RST_EVT_4_MASK - Mask bit for reset event FCCU_RST_EVT
+ *  0b0..Reset event FCCU_RST_EVT is not masked
+ *  0b1..Reset event FCCU_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_4_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_4_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_4_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_5_MASK_MASK (0x20U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_5_MASK_SHIFT (5U)
-/*! RST_EVT_5_MASK - mask bit for reset event JTAG_SW_RST_EVT
- *  0b0..reset event JTAG_SW_RST_EVT is not masked
- *  0b1..reset event JTAG_SW_RST_EVT is masked
+/*! RST_EVT_5_MASK - Mask bit for reset event JTAG_SW_RST_EVT
+ *  0b0..Reset event JTAG_SW_RST_EVT is not masked
+ *  0b1..Reset event JTAG_SW_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_5_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_5_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_5_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_6_MASK_MASK (0x40U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_6_MASK_SHIFT (6U)
-/*! RST_EVT_6_MASK - mask bit for reset event SENTINEL_RST_EVT
- *  0b0..reset event SENTINEL_RST_EVT is not masked
- *  0b1..reset event SENTINEL_RST_EVT is masked
+/*! RST_EVT_6_MASK - Mask bit for reset event ELE_RST_EVT
+ *  0b0..Reset event ELE_RST_EVT is not masked
+ *  0b1..Reset event ELE_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_6_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_6_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_6_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_7_MASK_MASK (0x80U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_7_MASK_SHIFT (7U)
-/*! RST_EVT_7_MASK - mask bit for reset event TEMPSENSE_RST_EVT
- *  0b0..reset event TEMPSENSE_RST_EVT is not masked
- *  0b1..reset event TEMPSENSE_RST_EVT is masked
+/*! RST_EVT_7_MASK - Mask bit for reset event TEMPSENSE_RST_EVT
+ *  0b0..Reset event TEMPSENSE_RST_EVT is not masked
+ *  0b1..Reset event TEMPSENSE_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_7_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_7_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_7_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_8_MASK_MASK (0x100U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_8_MASK_SHIFT (8U)
-/*! RST_EVT_8_MASK - mask bit for reset event WDOG1_RST_EVT
- *  0b0..reset event WDOG1_RST_EVT is not masked
- *  0b1..reset event WDOG1_RST_EVT is masked
+/*! RST_EVT_8_MASK - Mask bit for reset event WDOG1_RST_EVT
+ *  0b0..Reset event WDOG1_RST_EVT is not masked
+ *  0b1..Reset event WDOG1_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_8_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_8_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_8_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_9_MASK_MASK (0x200U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_9_MASK_SHIFT (9U)
-/*! RST_EVT_9_MASK - mask bit for reset event WDOG2_RST_EVT
- *  0b0..reset event WDOG2_RST_EVT is not masked
- *  0b1..reset event WDOG2_RST_EVT is masked
+/*! RST_EVT_9_MASK - Mask bit for reset event WDOG2_RST_EVT
+ *  0b0..Reset event WDOG2_RST_EVT is not masked
+ *  0b1..Reset event WDOG2_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_9_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_9_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_9_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_10_MASK_MASK (0x400U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_10_MASK_SHIFT (10U)
-/*! RST_EVT_10_MASK - mask bit for reset event WDOG3_RST_EVT
- *  0b0..reset event WDOG3_RST_EVT is not masked
- *  0b1..reset event WDOG3_RST_EVT is masked
+/*! RST_EVT_10_MASK - Mask bit for reset event WDOG3_RST_EVT
+ *  0b0..Reset event WDOG3_RST_EVT is not masked
+ *  0b1..Reset event WDOG3_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_10_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_10_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_10_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_11_MASK_MASK (0x800U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_11_MASK_SHIFT (11U)
-/*! RST_EVT_11_MASK - mask bit for reset event WDOG4_RST_EVT
- *  0b0..reset event WDOG4_RST_EVT is not masked
- *  0b1..reset event WDOG4_RST_EVT is masked
+/*! RST_EVT_11_MASK - Mask bit for reset event WDOG4_RST_EVT
+ *  0b0..Reset event WDOG4_RST_EVT is not masked
+ *  0b1..Reset event WDOG4_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_11_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_11_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_11_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_12_MASK_MASK (0x1000U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_12_MASK_SHIFT (12U)
-/*! RST_EVT_12_MASK - mask bit for reset event WDOG5_RST_EVT
- *  0b0..reset event WDOG5_RST_EVT is not masked
- *  0b1..reset event WDOG5_RST_EVT is masked
+/*! RST_EVT_12_MASK - Mask bit for reset event WDOG5_RST_EVT
+ *  0b0..Reset event WDOG5_RST_EVT is not masked
+ *  0b1..Reset event WDOG5_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_12_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_12_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_12_MASK_MASK)
 
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_13_MASK_MASK (0x2000U)
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_13_MASK_SHIFT (13U)
-/*! RST_EVT_13_MASK - mask bit for reset event JTAG_RST_B_RST_EVT
- *  0b0..reset event JTAG_RST_B_RST_EVT is not masked
- *  0b1..reset event JTAG_RST_B_RST_EVT is masked
+/*! RST_EVT_13_MASK - Mask bit for reset event JTAG_RST_B_RST_EVT
+ *  0b0..Reset event JTAG_RST_B_RST_EVT is not masked
+ *  0b1..Reset event JTAG_RST_B_RST_EVT is masked
  */
 #define SRC_GENERAL_REG_SRMASK_RST_EVT_13_MASK(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMASK_RST_EVT_13_MASK_SHIFT)) & SRC_GENERAL_REG_SRMASK_RST_EVT_13_MASK_MASK)
 /*! @} */
@@ -863,9 +863,9 @@ typedef struct {
 
 #define SRC_GENERAL_REG_SRESR_RST_EVT_6_FLAG_MASK (0x40U)
 #define SRC_GENERAL_REG_SRESR_RST_EVT_6_FLAG_SHIFT (6U)
-/*! RST_EVT_6_FLAG - SENTINEL_RST_EVT reset event flag
- *  0b0..SENTINEL_RST_EVT reset event not occurred
- *  0b1..SENTINEL_RST_EVT reset event occurred
+/*! RST_EVT_6_FLAG - ELE_RST_EVT reset event flag
+ *  0b0..ELE_RST_EVT reset event not occurred
+ *  0b1..ELE_RST_EVT reset event occurred
  */
 #define SRC_GENERAL_REG_SRESR_RST_EVT_6_FLAG(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRESR_RST_EVT_6_FLAG_SHIFT)) & SRC_GENERAL_REG_SRESR_RST_EVT_6_FLAG_MASK)
 
@@ -1119,7 +1119,7 @@ typedef struct {
 
 #define SRC_GENERAL_REG_RESET_EVENT_SSAR_ACK_CTRL_SSAR_CNT_CFG_MASK (0x3FFFU)
 #define SRC_GENERAL_REG_RESET_EVENT_SSAR_ACK_CTRL_SSAR_CNT_CFG_SHIFT (0U)
-/*! SSAR_CNT_CFG - ssar count configure. Usage depends on CNT_MODE */
+/*! SSAR_CNT_CFG - SSAR count configure. Usage depends on CNT_MODE */
 #define SRC_GENERAL_REG_RESET_EVENT_SSAR_ACK_CTRL_SSAR_CNT_CFG(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_RESET_EVENT_SSAR_ACK_CTRL_SSAR_CNT_CFG_SHIFT)) & SRC_GENERAL_REG_RESET_EVENT_SSAR_ACK_CTRL_SSAR_CNT_CFG_MASK)
 
 #define SRC_GENERAL_REG_RESET_EVENT_SSAR_ACK_CTRL_CNT_MODE_MASK (0xC0000000U)
@@ -1196,229 +1196,229 @@ typedef struct {
 
 #define SRC_GENERAL_REG_SRMR_RSTR_0_MASK         (0x1U)
 #define SRC_GENERAL_REG_SRMR_RSTR_0_SHIFT        (0U)
-/*! RSTR_0 - configuration bit for independent reset of reset region ANAMIX by event <a>
- *  0b0..independent reset of reset region ANAMIX by event <a> is disabled
+/*! RSTR_0 - Configuration bit for independent reset of reset region ANAMIX by event <a>
+ *  0b0..Independent reset of reset region ANAMIX by event <a> is disabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_0(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_0_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_0_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_1_MASK         (0x2U)
 #define SRC_GENERAL_REG_SRMR_RSTR_1_SHIFT        (1U)
-/*! RSTR_1 - configuration bit for independent reset of reset region AONMIX_TOP by event <a>
- *  0b0..independent reset of reset region AONMIX_TOP by event <a> is disabled
- *  0b1..independent reset of reset region AONMIX_TOP by event <a> is enabled
+/*! RSTR_1 - Configuration bit for independent reset of reset region AONMIX_TOP by event <a>
+ *  0b0..Independent reset of reset region AONMIX_TOP by event <a> is disabled
+ *  0b1..Independent reset of reset region AONMIX_TOP by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_1(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_1_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_1_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_2_MASK         (0x4U)
 #define SRC_GENERAL_REG_SRMR_RSTR_2_SHIFT        (2U)
-/*! RSTR_2 - configuration bit for independent reset of reset region AONMIX_M33 by event <a>
- *  0b0..independent reset of reset region AONMIX_M33 by event <a> is disabled
- *  0b1..independent reset of reset region AONMIX_M33 by event <a> is enabled
+/*! RSTR_2 - Configuration bit for independent reset of reset region AONMIX_M33 by event <a>
+ *  0b0..Independent reset of reset region AONMIX_M33 by event <a> is disabled
+ *  0b1..Independent reset of reset region AONMIX_M33 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_2(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_2_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_2_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_3_MASK         (0x8U)
 #define SRC_GENERAL_REG_SRMR_RSTR_3_SHIFT        (3U)
-/*! RSTR_3 - configuration bit for independent reset of reset region AONMIX_SENTINEL by event <a>
- *  0b0..independent reset of reset region AONMIX_SENTINEL by event <a> is disabled
+/*! RSTR_3 - Configuration bit for independent reset of reset region AONMIX_ELE by event <a>
+ *  0b0..Independent reset of reset region AONMIX_ELE by event <a> is disabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_3(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_3_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_3_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_4_MASK         (0x10U)
 #define SRC_GENERAL_REG_SRMR_RSTR_4_SHIFT        (4U)
-/*! RSTR_4 - configuration bit for independent reset of reset region BBSMMIX by event <a>
- *  0b0..independent reset of reset region BBSMMIX by event <a> is disabled
+/*! RSTR_4 - Configuration bit for independent reset of reset region BBSMMIX by event <a>
+ *  0b0..Independent reset of reset region BBSMMIX by event <a> is disabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_4(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_4_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_4_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_5_MASK         (0x20U)
 #define SRC_GENERAL_REG_SRMR_RSTR_5_SHIFT        (5U)
-/*! RSTR_5 - configuration bit for independent reset of reset region CAMERAMIX by event <a>
- *  0b0..independent reset of reset region CAMERAMIX by event <a> is disabled
- *  0b1..independent reset of reset region CAMERAMIX by event <a> is enabled
+/*! RSTR_5 - Configuration bit for independent reset of reset region CAMERAMIX by event <a>
+ *  0b0..Independent reset of reset region CAMERAMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region CAMERAMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_5(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_5_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_5_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_6_MASK         (0x40U)
 #define SRC_GENERAL_REG_SRMR_RSTR_6_SHIFT        (6U)
-/*! RSTR_6 - configuration bit for independent reset of reset region CCMSRCGPCMIX by event <a>
- *  0b0..independent reset of reset region CCMSRCGPCMIX by event <a> is disabled
+/*! RSTR_6 - Configuration bit for independent reset of reset region CCMSRCGPCMIX by event <a>
+ *  0b0..Independent reset of reset region CCMSRCGPCMIX by event <a> is disabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_6(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_6_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_6_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_7_MASK         (0x80U)
 #define SRC_GENERAL_REG_SRMR_RSTR_7_SHIFT        (7U)
-/*! RSTR_7 - configuration bit for independent reset of reset region CORTEXAMIX_CORE0 by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_CORE0 by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_CORE0 by event <a> is enabled
+/*! RSTR_7 - Configuration bit for independent reset of reset region CORTEXAMIX_CORE0 by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_CORE0 by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_CORE0 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_7(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_7_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_7_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_8_MASK         (0x100U)
 #define SRC_GENERAL_REG_SRMR_RSTR_8_SHIFT        (8U)
-/*! RSTR_8 - configuration bit for independent reset of reset region CORTEXAMIX_CORE1 by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_CORE1 by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_CORE1 by event <a> is enabled
+/*! RSTR_8 - Configuration bit for independent reset of reset region CORTEXAMIX_CORE1 by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_CORE1 by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_CORE1 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_8(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_8_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_8_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_9_MASK         (0x200U)
 #define SRC_GENERAL_REG_SRMR_RSTR_9_SHIFT        (9U)
-/*! RSTR_9 - configuration bit for independent reset of reset region CORTEXAMIX_CORE2 by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_CORE2 by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_CORE2 by event <a> is enabled
+/*! RSTR_9 - Configuration bit for independent reset of reset region CORTEXAMIX_CORE2 by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_CORE2 by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_CORE2 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_9(x)           (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_9_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_9_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_10_MASK        (0x400U)
 #define SRC_GENERAL_REG_SRMR_RSTR_10_SHIFT       (10U)
-/*! RSTR_10 - configuration bit for independent reset of reset region CORTEXAMIX_CORE3 by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_CORE3 by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_CORE3 by event <a> is enabled
+/*! RSTR_10 - Configuration bit for independent reset of reset region CORTEXAMIX_CORE3 by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_CORE3 by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_CORE3 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_10(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_10_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_10_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_11_MASK        (0x800U)
 #define SRC_GENERAL_REG_SRMR_RSTR_11_SHIFT       (11U)
-/*! RSTR_11 - configuration bit for independent reset of reset region CORTEXAMIX_CORE4 by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_CORE4 by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_CORE4 by event <a> is enabled
+/*! RSTR_11 - Configuration bit for independent reset of reset region CORTEXAMIX_CORE4 by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_CORE4 by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_CORE4 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_11(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_11_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_11_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_12_MASK        (0x1000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_12_SHIFT       (12U)
-/*! RSTR_12 - configuration bit for independent reset of reset region CORTEXAMIX_CORE5 by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_CORE5 by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_CORE5 by event <a> is enabled
+/*! RSTR_12 - Configuration bit for independent reset of reset region CORTEXAMIX_CORE5 by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_CORE5 by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_CORE5 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_12(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_12_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_12_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_13_MASK        (0x2000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_13_SHIFT       (13U)
-/*! RSTR_13 - configuration bit for independent reset of reset region CORTEXAMIX_PLATFORM by event <a>
- *  0b0..independent reset of reset region CORTEXAMIX_PLATFORM by event <a> is disabled
- *  0b1..independent reset of reset region CORTEXAMIX_PLATFORM by event <a> is enabled
+/*! RSTR_13 - Configuration bit for independent reset of reset region CORTEXAMIX_PLATFORM by event <a>
+ *  0b0..Independent reset of reset region CORTEXAMIX_PLATFORM by event <a> is disabled
+ *  0b1..Independent reset of reset region CORTEXAMIX_PLATFORM by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_13(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_13_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_13_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_14_MASK        (0x4000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_14_SHIFT       (14U)
-/*! RSTR_14 - configuration bit for independent reset of reset region DDRMIX_TOP by event <a>
- *  0b0..independent reset of reset region DDRMIX_TOP by event <a> is disabled
- *  0b1..independent reset of reset region DDRMIX_TOP by event <a> is enabled
+/*! RSTR_14 - Configuration bit for independent reset of reset region DDRMIX_TOP by event <a>
+ *  0b0..Independent reset of reset region DDRMIX_TOP by event <a> is disabled
+ *  0b1..Independent reset of reset region DDRMIX_TOP by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_14(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_14_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_14_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_15_MASK        (0x8000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_15_SHIFT       (15U)
-/*! RSTR_15 - configuration bit for independent reset of reset region DDRMIX_PHY by event <a>
- *  0b0..independent reset of reset region DDRMIX_PHY by event <a> is disabled
- *  0b1..independent reset of reset region DDRMIX_PHY by event <a> is enabled
+/*! RSTR_15 - Configuration bit for independent reset of reset region DDRMIX_PHY by event <a>
+ *  0b0..Independent reset of reset region DDRMIX_PHY by event <a> is disabled
+ *  0b1..Independent reset of reset region DDRMIX_PHY by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_15(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_15_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_15_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_16_MASK        (0x10000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_16_SHIFT       (16U)
-/*! RSTR_16 - configuration bit for independent reset of reset region DISPLAYMIX by event <a>
- *  0b0..independent reset of reset region DISPLAYMIX by event <a> is disabled
- *  0b1..independent reset of reset region DISPLAYMIX by event <a> is enabled
+/*! RSTR_16 - Configuration bit for independent reset of reset region DISPLAYMIX by event <a>
+ *  0b0..Independent reset of reset region DISPLAYMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region DISPLAYMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_16(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_16_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_16_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_17_MASK        (0x20000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_17_SHIFT       (17U)
-/*! RSTR_17 - configuration bit for independent reset of reset region GPUMIX by event <a>
- *  0b0..independent reset of reset region GPUMIX by event <a> is disabled
- *  0b1..independent reset of reset region GPUMIX by event <a> is enabled
+/*! RSTR_17 - Configuration bit for independent reset of reset region GPUMIX by event <a>
+ *  0b0..Independent reset of reset region GPUMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region GPUMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_17(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_17_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_17_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_18_MASK        (0x40000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_18_SHIFT       (18U)
-/*! RSTR_18 - configuration bit for independent reset of reset region HSIOMIX_TOP by event <a>
- *  0b0..independent reset of reset region HSIOMIX_TOP by event <a> is disabled
- *  0b1..independent reset of reset region HSIOMIX_TOP by event <a> is enabled
+/*! RSTR_18 - Configuration bit for independent reset of reset region HSIOMIX_TOP by event <a>
+ *  0b0..Independent reset of reset region HSIOMIX_TOP by event <a> is disabled
+ *  0b1..Independent reset of reset region HSIOMIX_TOP by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_18(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_18_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_18_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_19_MASK        (0x80000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_19_SHIFT       (19U)
-/*! RSTR_19 - configuration bit for independent reset of reset region HSIOMIX_WAON by event <a>
- *  0b0..independent reset of reset region HSIOMIX_WAON by event <a> is disabled
- *  0b1..independent reset of reset region HSIOMIX_WAON by event <a> is enabled
+/*! RSTR_19 - Configuration bit for independent reset of reset region HSIOMIX_WAON by event <a>
+ *  0b0..Independent reset of reset region HSIOMIX_WAON by event <a> is disabled
+ *  0b1..Independent reset of reset region HSIOMIX_WAON by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_19(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_19_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_19_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_20_MASK        (0x100000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_20_SHIFT       (20U)
-/*! RSTR_20 - configuration bit for independent reset of reset region M7MIX by event <a>
- *  0b0..independent reset of reset region M7MIX by event <a> is disabled
- *  0b1..independent reset of reset region M7MIX by event <a> is enabled
+/*! RSTR_20 - Configuration bit for independent reset of reset region M7MIX by event <a>
+ *  0b0..Independent reset of reset region M7MIX by event <a> is disabled
+ *  0b1..Independent reset of reset region M7MIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_20(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_20_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_20_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_21_MASK        (0x200000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_21_SHIFT       (21U)
-/*! RSTR_21 - configuration bit for independent reset of reset region NETCMIX by event <a>
- *  0b0..independent reset of reset region NETCMIX by event <a> is disabled
- *  0b1..independent reset of reset region NETCMIX by event <a> is enabled
+/*! RSTR_21 - Configuration bit for independent reset of reset region NETCMIX by event <a>
+ *  0b0..Independent reset of reset region NETCMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region NETCMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_21(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_21_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_21_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_22_MASK        (0x400000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_22_SHIFT       (22U)
-/*! RSTR_22 - configuration bit for independent reset of reset region NOCMIX by event <a>
- *  0b0..independent reset of reset region NOCMIX by event <a> is disabled
- *  0b1..independent reset of reset region NOCMIX by event <a> is enabled
+/*! RSTR_22 - Configuration bit for independent reset of reset region NOCMIX by event <a>
+ *  0b0..Independent reset of reset region NOCMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region NOCMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_22(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_22_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_22_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_23_MASK        (0x800000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_23_SHIFT       (23U)
-/*! RSTR_23 - configuration bit for independent reset of reset region NPUMIX by event <a>
- *  0b0..independent reset of reset region NPUMIX by event <a> is disabled
- *  0b1..independent reset of reset region NPUMIX by event <a> is enabled
+/*! RSTR_23 - Configuration bit for independent reset of reset region NPUMIX by event <a>
+ *  0b0..Independent reset of reset region NPUMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region NPUMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_23(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_23_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_23_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_24_MASK        (0x1000000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_24_SHIFT       (24U)
-/*! RSTR_24 - configuration bit for independent reset of reset region VPUMIX by event <a>
- *  0b0..independent reset of reset region VPUMIX by event <a> is disabled
- *  0b1..independent reset of reset region VPUMIX by event <a> is enabled
+/*! RSTR_24 - Configuration bit for independent reset of reset region VPUMIX by event <a>
+ *  0b0..Independent reset of reset region VPUMIX by event <a> is disabled
+ *  0b1..Independent reset of reset region VPUMIX by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_24(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_24_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_24_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_25_MASK        (0x2000000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_25_SHIFT       (25U)
-/*! RSTR_25 - configuration bit for independent reset of reset region WAKEUPMIX_TOP by event <a>
- *  0b0..independent reset of reset region WAKEUPMIX_TOP by event <a> is disabled
- *  0b1..independent reset of reset region WAKEUPMIX_TOP by event <a> is enabled
+/*! RSTR_25 - Configuration bit for independent reset of reset region WAKEUPMIX_TOP by event <a>
+ *  0b0..Independent reset of reset region WAKEUPMIX_TOP by event <a> is disabled
+ *  0b1..Independent reset of reset region WAKEUPMIX_TOP by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_25(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_25_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_25_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_26_MASK        (0x4000000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_26_SHIFT       (26U)
-/*! RSTR_26 - configuration bit for independent reset of reset region WAKEUPMIX_JTAG by event <a>
- *  0b0..independent reset of reset region WAKEUPMIX_JTAG by event <a> is disabled
- *  0b1..independent reset of reset region WAKEUPMIX_JTAG by event <a> is enabled
+/*! RSTR_26 - Configuration bit for independent reset of reset region WAKEUPMIX_JTAG by event <a>
+ *  0b0..Independent reset of reset region WAKEUPMIX_JTAG by event <a> is disabled
+ *  0b1..Independent reset of reset region WAKEUPMIX_JTAG by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_26(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_26_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_26_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_27_MASK        (0x8000000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_27_SHIFT       (27U)
-/*! RSTR_27 - configuration bit for independent reset of reset region WAKEUPMIX_WDOG_3_4 by event <a>
- *  0b0..independent reset of reset region WAKEUPMIX_WDOG_3_4 by event <a> is disabled
- *  0b1..independent reset of reset region WAKEUPMIX_WDOG_3_4 by event <a> is enabled
+/*! RSTR_27 - Configuration bit for independent reset of reset region WAKEUPMIX_WDOG_3_4 by event <a>
+ *  0b0..Independent reset of reset region WAKEUPMIX_WDOG_3_4 by event <a> is disabled
+ *  0b1..Independent reset of reset region WAKEUPMIX_WDOG_3_4 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_27(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_27_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_27_MASK)
 
 #define SRC_GENERAL_REG_SRMR_RSTR_28_MASK        (0x10000000U)
 #define SRC_GENERAL_REG_SRMR_RSTR_28_SHIFT       (28U)
-/*! RSTR_28 - configuration bit for independent reset of reset region WAKEUPMIX_WDOG_5 by event <a>
- *  0b0..independent reset of reset region WAKEUPMIX_WDOG_5 by event <a> is disabled
- *  0b1..independent reset of reset region WAKEUPMIX_WDOG_5 by event <a> is enabled
+/*! RSTR_28 - Configuration bit for independent reset of reset region WAKEUPMIX_WDOG_5 by event <a>
+ *  0b0..Independent reset of reset region WAKEUPMIX_WDOG_5 by event <a> is disabled
+ *  0b1..Independent reset of reset region WAKEUPMIX_WDOG_5 by event <a> is enabled
  */
 #define SRC_GENERAL_REG_SRMR_RSTR_28(x)          (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRMR_RSTR_28_SHIFT)) & SRC_GENERAL_REG_SRMR_RSTR_28_MASK)
 /*! @} */
@@ -1431,198 +1431,198 @@ typedef struct {
 
 #define SRC_GENERAL_REG_SRDR_RSTR_0_RDIS_MASK    (0x1U)
 #define SRC_GENERAL_REG_SRDR_RSTR_0_RDIS_SHIFT   (0U)
-/*! RSTR_0_RDIS - configuration bit to disbale reset of reset region ANAMIX by reset event
- *  0b0..reset of reset region ANAMIX by reset event is not disabled
+/*! RSTR_0_RDIS - Configuration bit to disable reset of reset region ANAMIX by reset event
+ *  0b0..Reset of reset region ANAMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_0_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_0_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_0_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_1_RDIS_MASK    (0x2U)
 #define SRC_GENERAL_REG_SRDR_RSTR_1_RDIS_SHIFT   (1U)
-/*! RSTR_1_RDIS - configuration bit to disbale reset of reset region AONMIX_TOP by reset event
- *  0b0..reset of reset region AONMIX_TOP by reset event is not disabled
+/*! RSTR_1_RDIS - Configuration bit to disable reset of reset region AONMIX_TOP by reset event
+ *  0b0..Reset of reset region AONMIX_TOP by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_1_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_1_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_1_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_2_RDIS_MASK    (0x4U)
 #define SRC_GENERAL_REG_SRDR_RSTR_2_RDIS_SHIFT   (2U)
-/*! RSTR_2_RDIS - configuration bit to disbale reset of reset region AONMIX_M33 by reset event
- *  0b0..reset of reset region AONMIX_M33 by reset event is not disabled
+/*! RSTR_2_RDIS - Configuration bit to disable reset of reset region AONMIX_M33 by reset event
+ *  0b0..Reset of reset region AONMIX_M33 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_2_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_2_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_2_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_3_RDIS_MASK    (0x8U)
 #define SRC_GENERAL_REG_SRDR_RSTR_3_RDIS_SHIFT   (3U)
-/*! RSTR_3_RDIS - configuration bit to disbale reset of reset region AONMIX_SENTINEL by reset event
- *  0b0..reset of reset region AONMIX_SENTINEL by reset event is not disabled
+/*! RSTR_3_RDIS - Configuration bit to disable reset of reset region AONMIX_ELE by reset event
+ *  0b0..Reset of reset region AONMIX_ELE by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_3_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_3_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_3_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_4_RDIS_MASK    (0x10U)
 #define SRC_GENERAL_REG_SRDR_RSTR_4_RDIS_SHIFT   (4U)
-/*! RSTR_4_RDIS - configuration bit to disbale reset of reset region BBSMMIX by reset event
- *  0b0..reset of reset region BBSMMIX by reset event is not disabled
+/*! RSTR_4_RDIS - Configuration bit to disable reset of reset region BBSMMIX by reset event
+ *  0b0..Reset of reset region BBSMMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_4_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_4_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_4_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_5_RDIS_MASK    (0x20U)
 #define SRC_GENERAL_REG_SRDR_RSTR_5_RDIS_SHIFT   (5U)
-/*! RSTR_5_RDIS - configuration bit to disbale reset of reset region CAMERAMIX by reset event
- *  0b0..reset of reset region CAMERAMIX by reset event is not disabled
+/*! RSTR_5_RDIS - Configuration bit to disable reset of reset region CAMERAMIX by reset event
+ *  0b0..Reset of reset region CAMERAMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_5_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_5_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_5_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_7_RDIS_MASK    (0x80U)
 #define SRC_GENERAL_REG_SRDR_RSTR_7_RDIS_SHIFT   (7U)
-/*! RSTR_7_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_CORE0 by reset event
- *  0b0..reset of reset region CORTEXAMIX_CORE0 by reset event is not disabled
+/*! RSTR_7_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_CORE0 by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_CORE0 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_7_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_7_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_7_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_8_RDIS_MASK    (0x100U)
 #define SRC_GENERAL_REG_SRDR_RSTR_8_RDIS_SHIFT   (8U)
-/*! RSTR_8_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_CORE1 by reset event
- *  0b0..reset of reset region CORTEXAMIX_CORE1 by reset event is not disabled
+/*! RSTR_8_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_CORE1 by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_CORE1 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_8_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_8_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_8_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_9_RDIS_MASK    (0x200U)
 #define SRC_GENERAL_REG_SRDR_RSTR_9_RDIS_SHIFT   (9U)
-/*! RSTR_9_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_CORE2 by reset event
- *  0b0..reset of reset region CORTEXAMIX_CORE2 by reset event is not disabled
+/*! RSTR_9_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_CORE2 by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_CORE2 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_9_RDIS(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_9_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_9_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_10_RDIS_MASK   (0x400U)
 #define SRC_GENERAL_REG_SRDR_RSTR_10_RDIS_SHIFT  (10U)
-/*! RSTR_10_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_CORE3 by reset event
- *  0b0..reset of reset region CORTEXAMIX_CORE3 by reset event is not disabled
+/*! RSTR_10_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_CORE3 by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_CORE3 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_10_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_10_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_10_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_11_RDIS_MASK   (0x800U)
 #define SRC_GENERAL_REG_SRDR_RSTR_11_RDIS_SHIFT  (11U)
-/*! RSTR_11_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_CORE4 by reset event
- *  0b0..reset of reset region CORTEXAMIX_CORE4 by reset event is not disabled
+/*! RSTR_11_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_CORE4 by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_CORE4 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_11_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_11_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_11_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_12_RDIS_MASK   (0x1000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_12_RDIS_SHIFT  (12U)
-/*! RSTR_12_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_CORE5 by reset event
- *  0b0..reset of reset region CORTEXAMIX_CORE5 by reset event is not disabled
+/*! RSTR_12_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_CORE5 by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_CORE5 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_12_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_12_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_12_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_13_RDIS_MASK   (0x2000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_13_RDIS_SHIFT  (13U)
-/*! RSTR_13_RDIS - configuration bit to disbale reset of reset region CORTEXAMIX_PLATFORM by reset event
- *  0b0..reset of reset region CORTEXAMIX_PLATFORM by reset event is not disabled
+/*! RSTR_13_RDIS - Configuration bit to disable reset of reset region CORTEXAMIX_PLATFORM by reset event
+ *  0b0..Reset of reset region CORTEXAMIX_PLATFORM by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_13_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_13_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_13_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_14_RDIS_MASK   (0x4000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_14_RDIS_SHIFT  (14U)
-/*! RSTR_14_RDIS - configuration bit to disbale reset of reset region DDRMIX_TOP by reset event
- *  0b0..reset of reset region DDRMIX_TOP by reset event is not disabled
+/*! RSTR_14_RDIS - Configuration bit to disable reset of reset region DDRMIX_TOP by reset event
+ *  0b0..Reset of reset region DDRMIX_TOP by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_14_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_14_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_14_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_15_RDIS_MASK   (0x8000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_15_RDIS_SHIFT  (15U)
-/*! RSTR_15_RDIS - configuration bit to disbale reset of reset region DDRMIX_PHY by reset event
- *  0b0..reset of reset region DDRMIX_PHY by reset event is not disabled
+/*! RSTR_15_RDIS - Configuration bit to disable reset of reset region DDRMIX_PHY by reset event
+ *  0b0..Reset of reset region DDRMIX_PHY by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_15_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_15_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_15_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_16_RDIS_MASK   (0x10000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_16_RDIS_SHIFT  (16U)
-/*! RSTR_16_RDIS - configuration bit to disbale reset of reset region DISPLAYMIX by reset event
- *  0b0..reset of reset region DISPLAYMIX by reset event is not disabled
+/*! RSTR_16_RDIS - Configuration bit to disable reset of reset region DISPLAYMIX by reset event
+ *  0b0..Reset of reset region DISPLAYMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_16_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_16_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_16_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_17_RDIS_MASK   (0x20000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_17_RDIS_SHIFT  (17U)
-/*! RSTR_17_RDIS - configuration bit to disbale reset of reset region GPUMIX by reset event
- *  0b0..reset of reset region GPUMIX by reset event is not disabled
+/*! RSTR_17_RDIS - Configuration bit to disable reset of reset region GPUMIX by reset event
+ *  0b0..Reset of reset region GPUMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_17_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_17_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_17_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_18_RDIS_MASK   (0x40000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_18_RDIS_SHIFT  (18U)
-/*! RSTR_18_RDIS - configuration bit to disbale reset of reset region HSIOMIX_TOP by reset event
- *  0b0..reset of reset region HSIOMIX_TOP by reset event is not disabled
+/*! RSTR_18_RDIS - Configuration bit to disable reset of reset region HSIOMIX_TOP by reset event
+ *  0b0..Reset of reset region HSIOMIX_TOP by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_18_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_18_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_18_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_19_RDIS_MASK   (0x80000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_19_RDIS_SHIFT  (19U)
-/*! RSTR_19_RDIS - configuration bit to disbale reset of reset region HSIOMIX_WAON by reset event
- *  0b0..reset of reset region HSIOMIX_WAON by reset event is not disabled
+/*! RSTR_19_RDIS - Configuration bit to disable reset of reset region HSIOMIX_WAON by reset event
+ *  0b0..Reset of reset region HSIOMIX_WAON by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_19_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_19_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_19_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_20_RDIS_MASK   (0x100000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_20_RDIS_SHIFT  (20U)
-/*! RSTR_20_RDIS - configuration bit to disbale reset of reset region M7MIX by reset event
- *  0b0..reset of reset region M7MIX by reset event is not disabled
+/*! RSTR_20_RDIS - Configuration bit to disable reset of reset region M7MIX by reset event
+ *  0b0..Reset of reset region M7MIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_20_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_20_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_20_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_21_RDIS_MASK   (0x200000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_21_RDIS_SHIFT  (21U)
-/*! RSTR_21_RDIS - configuration bit to disbale reset of reset region NETCMIX by reset event
- *  0b0..reset of reset region NETCMIX by reset event is not disabled
+/*! RSTR_21_RDIS - Configuration bit to disable reset of reset region NETCMIX by reset event
+ *  0b0..Reset of reset region NETCMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_21_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_21_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_21_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_22_RDIS_MASK   (0x400000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_22_RDIS_SHIFT  (22U)
-/*! RSTR_22_RDIS - configuration bit to disbale reset of reset region NOCMIX by reset event
- *  0b0..reset of reset region NOCMIX by reset event is not disabled
+/*! RSTR_22_RDIS - Configuration bit to disable reset of reset region NOCMIX by reset event
+ *  0b0..Reset of reset region NOCMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_22_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_22_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_22_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_23_RDIS_MASK   (0x800000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_23_RDIS_SHIFT  (23U)
-/*! RSTR_23_RDIS - configuration bit to disbale reset of reset region NPUMIX by reset event
- *  0b0..reset of reset region NPUMIX by reset event is not disabled
+/*! RSTR_23_RDIS - Configuration bit to disable reset of reset region NPUMIX by reset event
+ *  0b0..Reset of reset region NPUMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_23_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_23_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_23_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_24_RDIS_MASK   (0x1000000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_24_RDIS_SHIFT  (24U)
-/*! RSTR_24_RDIS - configuration bit to disbale reset of reset region VPUMIX by reset event
- *  0b0..reset of reset region VPUMIX by reset event is not disabled
+/*! RSTR_24_RDIS - Configuration bit to disable reset of reset region VPUMIX by reset event
+ *  0b0..Reset of reset region VPUMIX by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_24_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_24_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_24_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_25_RDIS_MASK   (0x2000000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_25_RDIS_SHIFT  (25U)
-/*! RSTR_25_RDIS - configuration bit to disbale reset of reset region WAKEUPMIX_TOP by reset event
- *  0b0..reset of reset region WAKEUPMIX_TOP by reset event is not disabled
+/*! RSTR_25_RDIS - Configuration bit to disable reset of reset region WAKEUPMIX_TOP by reset event
+ *  0b0..Reset of reset region WAKEUPMIX_TOP by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_25_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_25_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_25_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_26_RDIS_MASK   (0x4000000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_26_RDIS_SHIFT  (26U)
-/*! RSTR_26_RDIS - configuration bit to disbale reset of reset region WAKEUPMIX_JTAG by reset event
- *  0b0..reset of reset region WAKEUPMIX_JTAG by reset event is not disabled
- *  0b1..reset of reset region WAKEUPMIX_JTAG by reset event is disabled
+/*! RSTR_26_RDIS - Configuration bit to disable reset of reset region WAKEUPMIX_JTAG by reset event
+ *  0b0..Reset of reset region WAKEUPMIX_JTAG by reset event is not disabled
+ *  0b1..Reset of reset region WAKEUPMIX_JTAG by reset event is disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_26_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_26_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_26_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_27_RDIS_MASK   (0x8000000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_27_RDIS_SHIFT  (27U)
-/*! RSTR_27_RDIS - configuration bit to disbale reset of reset region WAKEUPMIX_WDOG_3_4 by reset event
- *  0b0..reset of reset region WAKEUPMIX_WDOG_3_4 by reset event is not disabled
+/*! RSTR_27_RDIS - Configuration bit to disable reset of reset region WAKEUPMIX_WDOG_3_4 by reset event
+ *  0b0..Reset of reset region WAKEUPMIX_WDOG_3_4 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_27_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_27_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_27_RDIS_MASK)
 
 #define SRC_GENERAL_REG_SRDR_RSTR_28_RDIS_MASK   (0x10000000U)
 #define SRC_GENERAL_REG_SRDR_RSTR_28_RDIS_SHIFT  (28U)
-/*! RSTR_28_RDIS - configuration bit to disbale reset of reset region WAKEUPMIX_WDOG_5 by reset event
- *  0b0..reset of reset region WAKEUPMIX_WDOG_5 by reset event is not disabled
+/*! RSTR_28_RDIS - Configuration bit to disable reset of reset region WAKEUPMIX_WDOG_5 by reset event
+ *  0b0..Reset of reset region WAKEUPMIX_WDOG_5 by reset event is not disabled
  */
 #define SRC_GENERAL_REG_SRDR_RSTR_28_RDIS(x)     (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRDR_RSTR_28_RDIS_SHIFT)) & SRC_GENERAL_REG_SRDR_RSTR_28_RDIS_MASK)
 /*! @} */
@@ -1632,27 +1632,27 @@ typedef struct {
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_HF_19_MASK (0x1U)
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_HF_19_SHIFT (0U)
-/*! PWRCTRL_XSPR_SOG_OFF_HF_19 - indicate NOC MIX power status */
+/*! PWRCTRL_XSPR_SOG_OFF_HF_19 - Indicates NOC MIX power status */
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_HF_19(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_HF_19_SHIFT)) & SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_HF_19_MASK)
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_LF_19_MASK (0x2U)
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_LF_19_SHIFT (1U)
-/*! PWRCTRL_XSPR_SOG_OFF_LF_19 - indicate NOC MIX power status */
+/*! PWRCTRL_XSPR_SOG_OFF_LF_19 - Indicates NOCMIX power status */
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_LF_19(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_LF_19_SHIFT)) & SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_PWRCTRL_XSPR_SOG_OFF_LF_19_MASK)
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_RSTCTRL_XSPR_FUNC_RESET_B_22_MASK (0x4U)
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_RSTCTRL_XSPR_FUNC_RESET_B_22_SHIFT (2U)
-/*! RSTCTRL_XSPR_FUNC_RESET_B_22 - indicate NOC MIX reset status */
+/*! RSTCTRL_XSPR_FUNC_RESET_B_22 - Indicates NOCMIX reset status */
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_RSTCTRL_XSPR_FUNC_RESET_B_22(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_RSTCTRL_XSPR_FUNC_RESET_B_22_SHIFT)) & SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_RSTCTRL_XSPR_FUNC_RESET_B_22_MASK)
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_ACCEPT_N_21_22_23_MASK (0x38U)
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_ACCEPT_N_21_22_23_SHIFT (3U)
-/*! Q_ACCEPT_N_21_22_23 - indicate Q_channel status of NOCMIX and WEAKUPMIX */
+/*! Q_ACCEPT_N_21_22_23 - Indicates Q_channel status of NOCMIX and WEAKUPMIX */
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_ACCEPT_N_21_22_23(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_ACCEPT_N_21_22_23_SHIFT)) & SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_ACCEPT_N_21_22_23_MASK)
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_REQ_N_21_22_23_MASK (0x1C0U)
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_REQ_N_21_22_23_SHIFT (6U)
-/*! Q_REQ_N_21_22_23 - indicate Q_channel status of NOCMIX and WEAKUPMIX */
+/*! Q_REQ_N_21_22_23 - Indicates Q_channel status of NOCMIX and WEAKUPMIX */
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_REQ_N_21_22_23(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_REQ_N_21_22_23_SHIFT)) & SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_Q_REQ_N_21_22_23_MASK)
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_RSTCTRL_XSPR_IRST_RESET_B_29_MASK (0x200U)
@@ -1662,7 +1662,7 @@ typedef struct {
 
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_SMMU_OPERATIONAL_MASK (0x400U)
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_SMMU_OPERATIONAL_SHIFT (10U)
-/*! SMMU_OPERATIONAL - smmu operational status for smmu bypass logical. */
+/*! SMMU_OPERATIONAL - SMMU operational status for SMMU bypass logical. */
 #define SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_SMMU_OPERATIONAL(x) (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_SMMU_OPERATIONAL_SHIFT)) & SRC_GENERAL_REG_SMMU_OPERATIONAL_STAT_SMMU_OPERATIONAL_MASK)
 /*! @} */
 

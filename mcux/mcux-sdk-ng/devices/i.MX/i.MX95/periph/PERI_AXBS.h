@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AXBS
@@ -408,26 +408,26 @@
 /** AXBS - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x100 */
-    __IO uint32_t PRS;                               /**< Priority Slave Registers, array offset: 0x0, array step: 0x100 */
+    __IO uint32_t PRS;                               /**< Priority Target Registers, array offset: 0x0, array step: 0x100 */
          uint8_t RESERVED_0[12];
     __IO uint32_t CRS;                               /**< Control Register, array offset: 0x10, array step: 0x100 */
          uint8_t RESERVED_1[236];
   } SLAVE[AXBS_SLAVE_COUNT];
-  __IO uint32_t MGPCR0;                            /**< Master General Purpose Control Register, offset: 0x800 */
+  __IO uint32_t MGPCR0;                            /**< Initiator General Purpose Control Register, offset: 0x800 */
        uint8_t RESERVED_0[252];
-  __IO uint32_t MGPCR1;                            /**< Master General Purpose Control Register, offset: 0x900 */
+  __IO uint32_t MGPCR1;                            /**< Initiator General Purpose Control Register, offset: 0x900 */
        uint8_t RESERVED_1[252];
-  __IO uint32_t MGPCR2;                            /**< Master General Purpose Control Register, offset: 0xA00 */
+  __IO uint32_t MGPCR2;                            /**< Initiator General Purpose Control Register, offset: 0xA00 */
        uint8_t RESERVED_2[252];
-  __IO uint32_t MGPCR3;                            /**< Master General Purpose Control Register, offset: 0xB00 */
+  __IO uint32_t MGPCR3;                            /**< Initiator General Purpose Control Register, offset: 0xB00 */
        uint8_t RESERVED_3[252];
-  __IO uint32_t MGPCR4;                            /**< Master General Purpose Control Register, offset: 0xC00 */
+  __IO uint32_t MGPCR4;                            /**< Initiator General Purpose Control Register, offset: 0xC00 */
        uint8_t RESERVED_4[252];
-  __IO uint32_t MGPCR5;                            /**< Master General Purpose Control Register, offset: 0xD00 */
+  __IO uint32_t MGPCR5;                            /**< Initiator General Purpose Control Register, offset: 0xD00 */
        uint8_t RESERVED_5[252];
-  __IO uint32_t MGPCR6;                            /**< Master General Purpose Control Register, offset: 0xE00 */
+  __IO uint32_t MGPCR6;                            /**< Initiator General Purpose Control Register, offset: 0xE00 */
        uint8_t RESERVED_6[252];
-  __IO uint32_t MGPCR7;                            /**< Master General Purpose Control Register, offset: 0xF00 */
+  __IO uint32_t MGPCR7;                            /**< Initiator General Purpose Control Register, offset: 0xF00 */
 } AXBS_Type;
 
 /* ----------------------------------------------------------------------------
@@ -439,118 +439,118 @@ typedef struct {
  * @{
  */
 
-/*! @name PRS - Priority Slave Registers */
+/*! @name PRS - Priority Target Registers */
 /*! @{ */
 
 #define AXBS_PRS_M0_MASK                         (0x7U)
 #define AXBS_PRS_M0_SHIFT                        (0U)
-/*! M0 - Master 0 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8 or the lowest priority when accessing the slave port.
+/*! M0 - Initiator 0 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8 or the lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M0(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M0_SHIFT)) & AXBS_PRS_M0_MASK)
 
 #define AXBS_PRS_M1_MASK                         (0x70U)
 #define AXBS_PRS_M1_SHIFT                        (4U)
-/*! M1 - Master 1 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8 or lowest priority when accessing the slave port.
+/*! M1 - Initiator 1 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M1(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M1_SHIFT)) & AXBS_PRS_M1_MASK)
 
 #define AXBS_PRS_M2_MASK                         (0x700U)
 #define AXBS_PRS_M2_SHIFT                        (8U)
-/*! M2 - Master 2 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8the or lowest priority when accessing the slave port.
+/*! M2 - Initiator 2 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M2(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M2_SHIFT)) & AXBS_PRS_M2_MASK)
 
 #define AXBS_PRS_M3_MASK                         (0x7000U)
 #define AXBS_PRS_M3_SHIFT                        (12U)
-/*! M3 - Master 3 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8the or lowest priority when accessing the slave port.
+/*! M3 - Initiator 3 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M3(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M3_SHIFT)) & AXBS_PRS_M3_MASK)
 
 #define AXBS_PRS_M4_MASK                         (0x70000U)
 #define AXBS_PRS_M4_SHIFT                        (16U)
-/*! M4 - Master 4 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8 or lowest priority when accessing the slave port.
+/*! M4 - Initiator 4 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M4(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M4_SHIFT)) & AXBS_PRS_M4_MASK)
 
 #define AXBS_PRS_M5_MASK                         (0x700000U)
 #define AXBS_PRS_M5_SHIFT                        (20U)
-/*! M5 - Master 5 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8 or lowest priority when accessing the slave port.
+/*! M5 - Initiator 5 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M5(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M5_SHIFT)) & AXBS_PRS_M5_MASK)
 
 #define AXBS_PRS_M6_MASK                         (0x7000000U)
 #define AXBS_PRS_M6_SHIFT                        (24U)
-/*! M6 - Master 6 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8the or lowest priority when accessing the slave port.
+/*! M6 - Initiator 6 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8the or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M6(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M6_SHIFT)) & AXBS_PRS_M6_MASK)
 
 #define AXBS_PRS_M7_MASK                         (0x70000000U)
 #define AXBS_PRS_M7_SHIFT                        (28U)
-/*! M7 - Master 7 Priority
- *  0b000..This master has level 1 or highest priority when accessing the slave port.
- *  0b001..This master has level 2 priority when accessing the slave port.
- *  0b010..This master has level 3 priority when accessing the slave port.
- *  0b011..This master has level 4 priority when accessing the slave port.
- *  0b100..This master has level 5 priority when accessing the slave port.
- *  0b101..This master has level 6 priority when accessing the slave port.
- *  0b110..This master has level 7 priority when accessing the slave port.
- *  0b111..This master has level 8 or lowest priority when accessing the slave port.
+/*! M7 - Initiator 7 Priority
+ *  0b000..This initiator has level 1 or highest priority when accessing the target port.
+ *  0b001..This initiator has level 2 priority when accessing the target port.
+ *  0b010..This initiator has level 3 priority when accessing the target port.
+ *  0b011..This initiator has level 4 priority when accessing the target port.
+ *  0b100..This initiator has level 5 priority when accessing the target port.
+ *  0b101..This initiator has level 6 priority when accessing the target port.
+ *  0b110..This initiator has level 7 priority when accessing the target port.
+ *  0b111..This initiator has level 8 or lowest priority when accessing the target port.
  */
 #define AXBS_PRS_M7(x)                           (((uint32_t)(((uint32_t)(x)) << AXBS_PRS_M7_SHIFT)) & AXBS_PRS_M7_MASK)
 /*! @} */
@@ -564,24 +564,24 @@ typedef struct {
 #define AXBS_CRS_PARK_MASK                       (0x7U)
 #define AXBS_CRS_PARK_SHIFT                      (0U)
 /*! PARK - Park
- *  0b000..Park on master port M0
- *  0b001..Park on master port M1
- *  0b010..Park on master port M2
- *  0b011..Park on master port M3
- *  0b100..Park on master port M4
- *  0b101..Park on master port M5
- *  0b110..Park on master port M6
- *  0b111..Park on master port M7
+ *  0b000..Park on initiator port M0
+ *  0b001..Park on initiator port M1
+ *  0b010..Park on initiator port M2
+ *  0b011..Park on initiator port M3
+ *  0b100..Park on initiator port M4
+ *  0b101..Park on initiator port M5
+ *  0b110..Park on initiator port M6
+ *  0b111..Park on initiator port M7
  */
 #define AXBS_CRS_PARK(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_PARK_SHIFT)) & AXBS_CRS_PARK_MASK)
 
 #define AXBS_CRS_PCTL_MASK                       (0x30U)
 #define AXBS_CRS_PCTL_SHIFT                      (4U)
 /*! PCTL - Parking Control
- *  0b00..When no master makes a request, the arbiter parks the slave port on the master port defined by the PARK bit field.
- *  0b01..When no master makes a request, the arbiter parks the slave port on the last master to be in control of the slave port.
- *  0b10..Low-power park. When no master makes a request, the slave port is not parked on a master and the arbiter
- *        drives all outputs to a constant safe state.
+ *  0b00..When no initiator makes a request, the arbiter parks the target port on the initiator port defined by the PARK bit field.
+ *  0b01..When no initiator makes a request, the arbiter parks the target port on the last initiator to be in control of the target port.
+ *  0b10..Low-power park. When no initiator makes a request, the target port is not parked on a initiator and the
+ *        arbiter drives all outputs to a constant safe state.
  *  0b11..Reserved
  */
 #define AXBS_CRS_PCTL(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_PCTL_SHIFT)) & AXBS_CRS_PCTL_MASK)
@@ -599,72 +599,72 @@ typedef struct {
 #define AXBS_CRS_HPE0_MASK                       (0x10000U)
 #define AXBS_CRS_HPE0_SHIFT                      (16U)
 /*! HPE0 - High Priority Elevation 0
- *  0b0..Master high-priority elevation for master 0. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 0. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 0 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 0 is enabled on this target port.
  */
 #define AXBS_CRS_HPE0(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE0_SHIFT)) & AXBS_CRS_HPE0_MASK)
 
 #define AXBS_CRS_HPE1_MASK                       (0x20000U)
 #define AXBS_CRS_HPE1_SHIFT                      (17U)
 /*! HPE1 - High Priority Elevation 1
- *  0b0..Master high-priority elevation for master 1. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 1. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 1 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 1 is enabled on this target port.
  */
 #define AXBS_CRS_HPE1(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE1_SHIFT)) & AXBS_CRS_HPE1_MASK)
 
 #define AXBS_CRS_HPE2_MASK                       (0x40000U)
 #define AXBS_CRS_HPE2_SHIFT                      (18U)
 /*! HPE2 - High Priority Elevation 2
- *  0b0..Master high-priority elevation for master 2. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 2. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 2 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 2 is enabled on this target port.
  */
 #define AXBS_CRS_HPE2(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE2_SHIFT)) & AXBS_CRS_HPE2_MASK)
 
 #define AXBS_CRS_HPE3_MASK                       (0x80000U)
 #define AXBS_CRS_HPE3_SHIFT                      (19U)
 /*! HPE3 - High Priority Elevation 3
- *  0b0..Master high-priority elevation for master 3. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 3. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 3 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 3 is enabled on this target port.
  */
 #define AXBS_CRS_HPE3(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE3_SHIFT)) & AXBS_CRS_HPE3_MASK)
 
 #define AXBS_CRS_HPE4_MASK                       (0x100000U)
 #define AXBS_CRS_HPE4_SHIFT                      (20U)
 /*! HPE4 - High Priority Elevation 4
- *  0b0..Master high-priority elevation for master 4. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 4. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 4 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 4 is enabled on this target port.
  */
 #define AXBS_CRS_HPE4(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE4_SHIFT)) & AXBS_CRS_HPE4_MASK)
 
 #define AXBS_CRS_HPE5_MASK                       (0x200000U)
 #define AXBS_CRS_HPE5_SHIFT                      (21U)
 /*! HPE5 - High Priority Elevation 5
- *  0b0..Master high-priority elevation for master 5. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 5. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 5 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 5 is enabled on this target port.
  */
 #define AXBS_CRS_HPE5(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE5_SHIFT)) & AXBS_CRS_HPE5_MASK)
 
 #define AXBS_CRS_HPE6_MASK                       (0x400000U)
 #define AXBS_CRS_HPE6_SHIFT                      (22U)
 /*! HPE6 - High Priority Elevation 6
- *  0b0..Master high-priority elevation for master 6. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 6. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 6 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 6 is enabled on this target port.
  */
 #define AXBS_CRS_HPE6(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE6_SHIFT)) & AXBS_CRS_HPE6_MASK)
 
 #define AXBS_CRS_HPE7_MASK                       (0x800000U)
 #define AXBS_CRS_HPE7_SHIFT                      (23U)
 /*! HPE7 - High Priority Elevation 7
- *  0b0..Master high-priority elevation for master 7. is disabled on this slave port.
- *  0b1..Master high-priority elevation for master 7. is enabled on this slave port.
+ *  0b0..Initiator high-priority elevation for initiator 7 is disabled on this target port.
+ *  0b1..Initiator high-priority elevation for initiator 7 is enabled on this target port.
  */
 #define AXBS_CRS_HPE7(x)                         (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HPE7_SHIFT)) & AXBS_CRS_HPE7_MASK)
 
 #define AXBS_CRS_HLP_MASK                        (0x40000000U)
 #define AXBS_CRS_HLP_SHIFT                       (30U)
 /*! HLP - Halt Low Priority
- *  0b0..The low-power mode request has the highest priority for arbitration on this slave port.
- *  0b1..The low-power mode request has the lowest initial priority for arbitration on this slave port.
+ *  0b0..The low-power mode request has the highest priority for arbitration on this target port.
+ *  0b1..The low-power mode request has the lowest initial priority for arbitration on this target port.
  */
 #define AXBS_CRS_HLP(x)                          (((uint32_t)(((uint32_t)(x)) << AXBS_CRS_HLP_SHIFT)) & AXBS_CRS_HLP_MASK)
 
@@ -681,7 +681,7 @@ typedef struct {
 /* The count of AXBS_CRS */
 #define AXBS_CRS_COUNT                           (8U)
 
-/*! @name MGPCR0 - Master General Purpose Control Register */
+/*! @name MGPCR0 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR0_AULB_MASK                    (0x7U)
@@ -699,7 +699,7 @@ typedef struct {
 #define AXBS_MGPCR0_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR0_AULB_SHIFT)) & AXBS_MGPCR0_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR1 - Master General Purpose Control Register */
+/*! @name MGPCR1 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR1_AULB_MASK                    (0x7U)
@@ -717,7 +717,7 @@ typedef struct {
 #define AXBS_MGPCR1_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR1_AULB_SHIFT)) & AXBS_MGPCR1_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR2 - Master General Purpose Control Register */
+/*! @name MGPCR2 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR2_AULB_MASK                    (0x7U)
@@ -735,7 +735,7 @@ typedef struct {
 #define AXBS_MGPCR2_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR2_AULB_SHIFT)) & AXBS_MGPCR2_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR3 - Master General Purpose Control Register */
+/*! @name MGPCR3 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR3_AULB_MASK                    (0x7U)
@@ -753,7 +753,7 @@ typedef struct {
 #define AXBS_MGPCR3_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR3_AULB_SHIFT)) & AXBS_MGPCR3_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR4 - Master General Purpose Control Register */
+/*! @name MGPCR4 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR4_AULB_MASK                    (0x7U)
@@ -771,7 +771,7 @@ typedef struct {
 #define AXBS_MGPCR4_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR4_AULB_SHIFT)) & AXBS_MGPCR4_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR5 - Master General Purpose Control Register */
+/*! @name MGPCR5 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR5_AULB_MASK                    (0x7U)
@@ -789,7 +789,7 @@ typedef struct {
 #define AXBS_MGPCR5_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR5_AULB_SHIFT)) & AXBS_MGPCR5_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR6 - Master General Purpose Control Register */
+/*! @name MGPCR6 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR6_AULB_MASK                    (0x7U)
@@ -807,7 +807,7 @@ typedef struct {
 #define AXBS_MGPCR6_AULB(x)                      (((uint32_t)(((uint32_t)(x)) << AXBS_MGPCR6_AULB_SHIFT)) & AXBS_MGPCR6_AULB_MASK)
 /*! @} */
 
-/*! @name MGPCR7 - Master General Purpose Control Register */
+/*! @name MGPCR7 - Initiator General Purpose Control Register */
 /*! @{ */
 
 #define AXBS_MGPCR7_AULB_MASK                    (0x7U)

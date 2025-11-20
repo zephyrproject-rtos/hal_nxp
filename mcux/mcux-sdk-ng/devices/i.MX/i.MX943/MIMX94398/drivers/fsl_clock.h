@@ -93,7 +93,7 @@
 #define CLOCK_ROOT_ADC                      0U
 #define CLOCK_ROOT_BUSAON                   1U
 #define CLOCK_ROOT_CAN1                     2U
-#define CLOCK_ROOT_GLITCHFILTER             3U
+#define CLOCK_ROOT_IGF                      3U
 #define CLOCK_ROOT_GPT1                     4U
 #define CLOCK_ROOT_I3C1SLOW                 5U
 #define CLOCK_ROOT_LPI2C1                   6U
@@ -317,7 +317,7 @@ typedef enum _clock_ip_name
     kCLOCK_Adc = CLOCK_NUM_SRC + 0, /* clock id for ADC */
     kCLOCK_Busaon = CLOCK_NUM_SRC + 1, /* clock id for BUS AON */
     kCLOCK_Can1 = CLOCK_NUM_SRC + 2, /* clock id for CAN1 */
-    kCLOCK_Glitchfilter = CLOCK_NUM_SRC + 3, /* clock id for GLITCHFILTER */
+    kCLOCK_Igf = CLOCK_NUM_SRC + 3, /* clock id for IGF */
     kCLOCK_Gpt1 = CLOCK_NUM_SRC + 4, /* clock id for GPT1 */
     kCLOCK_I3c1slow = CLOCK_NUM_SRC + 5, /* clock id for I3C1 SLOW */
     kCLOCK_Lpi2c1 = CLOCK_NUM_SRC + 6, /* clock id for LPI2C1 */
@@ -506,7 +506,7 @@ typedef enum _clock_root
     kCLOCK_Root_Adc,
     kCLOCK_Root_BusAon,
     kCLOCK_Root_Can1,
-    kCLOCK_Root_Glitchfilter,
+    kCLOCK_Root_Igf,
     kCLOCK_Root_Gpt1,
     kCLOCK_Root_I3c1Slow,
     kCLOCK_Root_Lpi2c1,
@@ -656,11 +656,11 @@ typedef enum _clock_root_mux_source
     kCLOCK_CAN1_ClockRoot_MuxSysPll1Dfs1Div2 = 2U,
     kCLOCK_CAN1_ClockRoot_MuxFro = 3U,
 
-    /* glitchfilter_clk_root */
-    kCLOCK_GLITCHFILTER_ClockRoot_MuxOsc24M = 0U,
-    kCLOCK_GLITCHFILTER_ClockRoot_MuxSysPll1Dfs0Div2 = 1U,
-    kCLOCK_GLITCHFILTER_ClockRoot_MuxSysPll1Dfs1Div2 = 2U,
-    kCLOCK_GLITCHFILTER_ClockRoot_MuxFro = 3U,
+    /* igf_clk_root */
+    kCLOCK_IGF_ClockRoot_MuxOsc24M = 0U,
+    kCLOCK_IGF_ClockRoot_MuxSysPll1Dfs0Div2 = 1U,
+    kCLOCK_IGF_ClockRoot_MuxSysPll1Dfs1Div2 = 2U,
+    kCLOCK_IGF_ClockRoot_MuxFro = 3U,
 
     /* gpt1_clk_root */
     kCLOCK_GPT1_ClockRoot_MuxOsc24M = 0U,
@@ -1611,6 +1611,13 @@ typedef enum _clock_gate_value
         kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid  \
     }
 
+/*
+ *! @brief Clock ip name array for IGF.
+ */
+#define IGF_CLOCKS                                                \
+    {                                                              \
+        kCLOCK_Igf \
+    }
 
 #ifdef CONFIG_DIRECT
 /*******************************************************************************

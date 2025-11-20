@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_BLK_CTRL_NS_AONMIX
@@ -488,10 +488,10 @@ typedef struct {
 /*! ELE - address bit [35:32] for ELE */
 #define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_ELE(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_ELE_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_ELE_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma1_MASK (0xF0U)
-#define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma1_SHIFT (4U)
-/*! edma1 - address bit [35:32] for edma1 */
-#define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma3_1_MASK (0xF0U)
+#define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma3_1_SHIFT (4U)
+/*! edma3_1 - Address bit [35:32] for eDMA3_1 */
+#define AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_UPPER_ADDR_edma3_1_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CM33 - IPG DEBUG MASK BIT for cm33 */
@@ -505,13 +505,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM33_lpi2c1_SHIFT (2U)
@@ -637,13 +637,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C0_lpi2c1_SHIFT (2U)
@@ -769,13 +769,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C1_lpi2c1_SHIFT (2U)
@@ -901,13 +901,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C2_lpi2c1_SHIFT (2U)
@@ -1033,13 +1033,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C3_lpi2c1_SHIFT (2U)
@@ -1165,13 +1165,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C4_lpi2c1_SHIFT (2U)
@@ -1297,13 +1297,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CA55C5_lpi2c1_SHIFT (2U)
@@ -1429,13 +1429,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_can1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_can1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_can1_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma1_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma1_SHIFT (1U)
-/*! edma1 - Mask bit for debug halted mode
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma3_1_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma3_1_SHIFT (1U)
+/*! edma3_1 - Mask bit for debug halted mode
  *  0b0..Block does not enter debug halted mode with CA55
  *  0b1..Block enters debug halted mode when CA55 is debug halted
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma1_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma3_1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma3_1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_edma3_1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_lpi2c1_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_DEBUG_CM7_lpi2c1_SHIFT (2U)
@@ -1847,13 +1847,13 @@ typedef struct {
  */
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_can1_stop_MASK)
 
-#define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_MASK (0x2U)
-#define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_SHIFT (1U)
-/*! edma1_stop - EDMA1 ipg_stop control
+#define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma3_1_stop_MASK (0x2U)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma3_1_stop_SHIFT (1U)
+/*! edma3_1_stop - eDMA3_1 ipg_stop control
  *  0b0..Disable stop
  *  0b1..Enable stop
  */
-#define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma1_stop_MASK)
+#define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma3_1_stop(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma3_1_stop_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_edma3_1_stop_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_pdm_stop_MASK (0x200U)
 #define AON_BLK_CTRL_NS_AONMIX_IPG_STOP_CTL_pdm_stop_SHIFT (9U)
@@ -1997,72 +1997,114 @@ typedef struct {
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c1_MASK (0x2U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c1_SHIFT (1U)
-/*! lpi2c1 - lpi2c1 */
+/*! lpi2c1 - lpi2c1
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c1(x)  (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c2_MASK (0x4U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c2_SHIFT (2U)
-/*! lpi2c2 - lpi2c2 */
+/*! lpi2c2 - lpi2c2
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c2(x)  (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpi2c2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi1_MASK (0x10U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi1_SHIFT (4U)
-/*! lpspi1 - lpspi1 */
+/*! lpspi1 - lpspi1
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi1(x)  (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi2_MASK (0x20U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi2_SHIFT (5U)
-/*! lpspi2 - lpspi2 */
+/*! lpspi2 - lpspi2
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi2(x)  (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpspi2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart1_MASK (0x40U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart1_SHIFT (6U)
-/*! lpuart1 - lpuart1 */
+/*! lpuart1 - lpuart1
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart2_MASK (0x80U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart2_SHIFT (7U)
-/*! lpuart2 - lpuart2 */
+/*! lpuart2 - lpuart2
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_lpuart2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c1_MASK (0x100U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c1_SHIFT (8U)
-/*! ips_lpi2c1 - ips_lpi2c1 */
+/*! ips_lpi2c1 - ips_lpi2c1
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c2_MASK (0x200U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c2_SHIFT (9U)
-/*! ips_lpi2c2 - ips_lpi2c2 */
+/*! ips_lpi2c2 - ips_lpi2c2
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpi2c2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ahb_gpio_MASK (0x400U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ahb_gpio_SHIFT (10U)
-/*! ahb_gpio - ahb_gpio */
+/*! ahb_gpio - ahb_gpio
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ahb_gpio(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_ahb_gpio_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_ahb_gpio_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi1_MASK (0x800U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi1_SHIFT (11U)
-/*! ips_lpspi1 - ips_lpspi1 */
+/*! ips_lpspi1 - ips_lpspi1
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi2_MASK (0x1000U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi2_SHIFT (12U)
-/*! ips_lpspi2 - ips_lpspi2 */
+/*! ips_lpspi2 - ips_lpspi2
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_lpspi2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart1_MASK (0x2000U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart1_SHIFT (13U)
-/*! apb_lpuart1 - apb_lpuart1 */
+/*! apb_lpuart1 - apb_lpuart1
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart1(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart1_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart1_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart2_MASK (0x4000U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart2_SHIFT (14U)
-/*! apb_lpuart2 - apb_lpuart2 */
+/*! apb_lpuart2 - apb_lpuart2
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart2(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart2_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_apb_lpuart2_MASK)
 
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_sai_MASK (0x8000U)
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_sai_SHIFT (15U)
-/*! ips_sai - ips_sai */
+/*! ips_sai - ips_sai
+ *  0b0..Request asserted
+ *  0b1..Request not asserted
+ */
 #define AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_sai(x) (((uint32_t)(((uint32_t)(x)) << AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_sai_SHIFT)) & AON_BLK_CTRL_NS_AONMIX_QREQ_N_ips_sai_MASK)
 /*! @} */
 

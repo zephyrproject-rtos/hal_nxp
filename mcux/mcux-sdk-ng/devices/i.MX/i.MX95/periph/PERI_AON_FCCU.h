@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for AON_FCCU
@@ -1413,12 +1413,12 @@ typedef struct {
 #define AON_FCCU_GEOUTMC_EOUTM_MASK              (0x7U)
 #define AON_FCCU_GEOUTMC_EOUTM_SHIFT             (0U)
 /*! EOUTM - EOUT Pin Mode
- *  0b000..Input-only (high-Z, default, and safe-state)
- *  0b001..Push-pull (drive 1 for fault, 0 for normal)
- *  0b010..Open-drain (drive 0 for fault, high-Z for normal)
- *  0b011..Open-collector (drive 1 for fault, high-Z for normal)
+ *  0b000..Input-Only (high-Z, default, and safe-state)
+ *  0b001..Push-Pull (drive 1 for fault, 0 for normal)
+ *  0b010..Open-Drain (drive 0 for fault, high-Z for normal)
+ *  0b011..Open-Collector (drive 1 for fault, high-Z for normal)
  *  0b100..Bistable (configure only the even index pin in this case; do not configure the odd pin)
- *  0b101..Fault-toggle
+ *  0b101..Fault-Toggle
  */
 #define AON_FCCU_GEOUTMC_EOUTM(x)                (((uint32_t)(((uint32_t)(x)) << AON_FCCU_GEOUTMC_EOUTM_SHIFT)) & AON_FCCU_GEOUTMC_EOUTM_MASK)
 
@@ -1463,7 +1463,7 @@ typedef struct {
 
 #define AON_FCCU_GDBGCFG_FRZ_MASK                (0x10000U)
 #define AON_FCCU_GDBGCFG_FRZ_SHIFT               (16U)
-/*! FRZ - Freeze On First Fault
+/*! FRZ - Freeze on First Fault
  *  0b0..Disable
  *  0b1..Enable
  */

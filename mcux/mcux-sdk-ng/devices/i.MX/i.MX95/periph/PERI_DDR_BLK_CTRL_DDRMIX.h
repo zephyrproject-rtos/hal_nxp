@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDR_BLK_CTRL_DDRMIX
@@ -405,20 +405,18 @@
 /** DDR_BLK_CTRL_DDRMIX - Register Layout Typedef */
 typedef struct {
   __IO uint32_t HWFFC_CTRL;                        /**< DDRPHY DfiClk, DflCtlClk HWFFC Control, offset: 0x0 */
-  __IO uint32_t CA55_SEL_CTRL;                     /**< CA55 Arm Pll Observe Select, offset: 0x4 */
-  __IO uint32_t VREF_PSW_CTRL;                     /**< DRAM_VREF power switch, offset: 0x8 */
+       uint8_t RESERVED_0[8];
   __IO uint32_t DDRC_STOP_CTRL;                    /**< DDR Controller ipg_stop SW control, offset: 0xC */
   __IO uint32_t AUTO_CG_CTRL;                      /**< DDR Controller automatic clock gating control when no AXI transmit, offset: 0x10 */
-  __IO uint32_t SSI_PWR_CTRL;                      /**< NOC2DDR SSI slave power control, offset: 0x14 */
+       uint8_t RESERVED_1[4];
   __IO uint32_t DDRC_EXCLUSIVE_EN;                 /**< DDRC AXI exclusive access monitor enable, offset: 0x18 */
   __IO uint32_t DDRC_URGENT_EN;                    /**< DDRC real_time read urgent and read urgent enable, offset: 0x1C */
-  __IO uint32_t RT_MASTER_ID_0_1;                  /**< DDRC real_time master 6bit extend-ID range 0 and range 1, offset: 0x20 */
-  __IO uint32_t RT_MASTER_ID_2_3;                  /**< DDRC real_time master 6bit extend-ID range 2 and range 3, offset: 0x24 */
-  __IO uint32_t AXI_PARITY_ERR_CLR;                /**< DDRMIX AXI parity check clear register, offset: 0x28 */
+  __IO uint32_t RT_MASTER_ID_0_1;                  /**< DDRC real_time initiator (master) 6bit extend-ID range 0 and range 1, offset: 0x20 */
+  __IO uint32_t RT_MASTER_ID_2_3;                  /**< DDRC real_time initiator (master) 6bit extend-ID range 2 and range 3, offset: 0x24 */
+       uint8_t RESERVED_2[4];
   __IO uint32_t AXI_PARITY_ERR_INJECT;             /**< DDRMIX AXI parity error injection register, offset: 0x2C */
-  __IO uint32_t RT_MASTER_ID_4_5;                  /**< DDRC real_time master 6bit extend-ID range 4 and range 5, offset: 0x30 */
-  __IO uint32_t RT_MASTER_ID_6_7;                  /**< DDRC real_time master 6bit extend-ID range 6 and range 7, offset: 0x34 */
-  __I  uint32_t FUSE_DISABLE_DDRMIX;               /**< Fuse to ddrmix_blk_ctrl, offset: 0x38 */
+  __IO uint32_t RT_MASTER_ID_4_5;                  /**< DDRC real_time initiator (master) 6bit extend-ID range 4 and range 5, offset: 0x30 */
+  __IO uint32_t RT_MASTER_ID_6_7;                  /**< DDRC real_time initiator (master) 6bit extend-ID range 6 and range 7, offset: 0x34 */
 } DDR_BLK_CTRL_DDRMIX_Type;
 
 /* ----------------------------------------------------------------------------
@@ -442,24 +440,6 @@ typedef struct {
 #define DDR_BLK_CTRL_DDRMIX_HWFFC_CTRL_HWFFC_SEL_SHIFT (1U)
 /*! HWFFC_SEL - DDRPHY DfiClk, DfiCtlClk HWFFC Select */
 #define DDR_BLK_CTRL_DDRMIX_HWFFC_CTRL_HWFFC_SEL(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_HWFFC_CTRL_HWFFC_SEL_SHIFT)) & DDR_BLK_CTRL_DDRMIX_HWFFC_CTRL_HWFFC_SEL_MASK)
-/*! @} */
-
-/*! @name CA55_SEL_CTRL - CA55 Arm Pll Observe Select */
-/*! @{ */
-
-#define DDR_BLK_CTRL_DDRMIX_CA55_SEL_CTRL_CA55_SEL_MASK (0x1U)
-#define DDR_BLK_CTRL_DDRMIX_CA55_SEL_CTRL_CA55_SEL_SHIFT (0U)
-/*! CA55_SEL - CA55 Arm Pll select into DDRPHY */
-#define DDR_BLK_CTRL_DDRMIX_CA55_SEL_CTRL_CA55_SEL(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_CA55_SEL_CTRL_CA55_SEL_SHIFT)) & DDR_BLK_CTRL_DDRMIX_CA55_SEL_CTRL_CA55_SEL_MASK)
-/*! @} */
-
-/*! @name VREF_PSW_CTRL - DRAM_VREF power switch */
-/*! @{ */
-
-#define DDR_BLK_CTRL_DDRMIX_VREF_PSW_CTRL_VREF_PSW_MASK (0x1U)
-#define DDR_BLK_CTRL_DDRMIX_VREF_PSW_CTRL_VREF_PSW_SHIFT (0U)
-/*! VREF_PSW - DDRPHY DRAM_VREF Power Switch */
-#define DDR_BLK_CTRL_DDRMIX_VREF_PSW_CTRL_VREF_PSW(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_VREF_PSW_CTRL_VREF_PSW_SHIFT)) & DDR_BLK_CTRL_DDRMIX_VREF_PSW_CTRL_VREF_PSW_MASK)
 /*! @} */
 
 /*! @name DDRC_STOP_CTRL - DDR Controller ipg_stop SW control */
@@ -530,20 +510,6 @@ typedef struct {
 #define DDR_BLK_CTRL_DDRMIX_AUTO_CG_CTRL_GATE_DDRPHY_APBCLK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_AUTO_CG_CTRL_GATE_DDRPHY_APBCLK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_AUTO_CG_CTRL_GATE_DDRPHY_APBCLK_MASK)
 /*! @} */
 
-/*! @name SSI_PWR_CTRL - NOC2DDR SSI slave power control */
-/*! @{ */
-
-#define DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_POWER_CONTROL_MASK (0x1U)
-#define DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_POWER_CONTROL_SHIFT (0U)
-/*! POWER_CONTROL - NOC2DDR SSI slave power_control signal */
-#define DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_POWER_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_POWER_CONTROL_SHIFT)) & DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_POWER_CONTROL_MASK)
-
-#define DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_ISO_CONTROL_MASK (0x2U)
-#define DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_ISO_CONTROL_SHIFT (1U)
-/*! ISO_CONTROL - NOC2DDR SSI slave iso_control signal */
-#define DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_ISO_CONTROL(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_ISO_CONTROL_SHIFT)) & DDR_BLK_CTRL_DDRMIX_SSI_PWR_CTRL_ISO_CONTROL_MASK)
-/*! @} */
-
 /*! @name DDRC_EXCLUSIVE_EN - DDRC AXI exclusive access monitor enable */
 /*! @{ */
 
@@ -567,96 +533,72 @@ typedef struct {
 #define DDR_BLK_CTRL_DDRMIX_DDRC_URGENT_EN_AR_RT_URGENT_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_DDRC_URGENT_EN_AR_RT_URGENT_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_DDRC_URGENT_EN_AR_RT_URGENT_EN_MASK)
 /*! @} */
 
-/*! @name RT_MASTER_ID_0_1 - DDRC real_time master 6bit extend-ID range 0 and range 1 */
+/*! @name RT_MASTER_ID_0_1 - DDRC real_time initiator (master) 6bit extend-ID range 0 and range 1 */
 /*! @{ */
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_ID_MASK (0x3FU)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_ID_SHIFT (0U)
-/*! RANGE_0_ID - DDRC real_time master ID range 0 ID */
+/*! RANGE_0_ID - DDRC real_time initiator ID range 0 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_MASK_MASK (0x3F00U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_MASK_SHIFT (8U)
-/*! RANGE_0_MASK - DDRC real_time master ID range 0 ID mask */
+/*! RANGE_0_MASK - DDRC real_time initiator ID range 0 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_EN_MASK (0x8000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_EN_SHIFT (15U)
-/*! RANGE_0_EN - DDRC real_time master ID range 0 enable */
+/*! RANGE_0_EN - DDRC real_time initiator ID range 0 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_0_EN_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_ID_MASK (0x3F0000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_ID_SHIFT (16U)
-/*! RANGE_1_ID - DDRC real_time master ID range 1 ID */
+/*! RANGE_1_ID - DDRC real_time initiator ID range 1 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_MASK_MASK (0x3F000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_MASK_SHIFT (24U)
-/*! RANGE_1_MASK - DDRC real_time master ID range 1 ID mask */
+/*! RANGE_1_MASK - DDRC real_time initiator ID range 1 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_EN_MASK (0x80000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_EN_SHIFT (31U)
-/*! RANGE_1_EN - DDRC real_time master ID range 1 enable */
+/*! RANGE_1_EN - DDRC real_time initiator ID range 1 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_0_1_RANGE_1_EN_MASK)
 /*! @} */
 
-/*! @name RT_MASTER_ID_2_3 - DDRC real_time master 6bit extend-ID range 2 and range 3 */
+/*! @name RT_MASTER_ID_2_3 - DDRC real_time initiator (master) 6bit extend-ID range 2 and range 3 */
 /*! @{ */
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_ID_MASK (0x3FU)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_ID_SHIFT (0U)
-/*! RANGE_2_ID - DDRC real_time master ID range 2 ID */
+/*! RANGE_2_ID - DDRC real_time initiator ID range 2 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_MASK_MASK (0x3F00U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_MASK_SHIFT (8U)
-/*! RANGE_2_MASK - DDRC real_time master ID range 2 ID mask */
+/*! RANGE_2_MASK - DDRC real_time initiator ID range 2 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_EN_MASK (0x8000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_EN_SHIFT (15U)
-/*! RANGE_2_EN - DDRC real_time master ID range 2 enable */
+/*! RANGE_2_EN - DDRC real_time initiator ID range 2 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_2_EN_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_ID_MASK (0x3F0000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_ID_SHIFT (16U)
-/*! RANGE_3_ID - DDRC real_time master ID range 3 ID */
+/*! RANGE_3_ID - DDRC real_time initiator ID range 3 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_MASK_MASK (0x3F000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_MASK_SHIFT (24U)
-/*! RANGE_3_MASK - DDRC real_time master ID range 3 ID mask */
+/*! RANGE_3_MASK - DDRC real_time initiator ID range 3 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_EN_MASK (0x80000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_EN_SHIFT (31U)
-/*! RANGE_3_EN - DDRC real_time master ID range 3 enable */
+/*! RANGE_3_EN - DDRC real_time initiator ID range 3 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_2_3_RANGE_3_EN_MASK)
-/*! @} */
-
-/*! @name AXI_PARITY_ERR_CLR - DDRMIX AXI parity check clear register */
-/*! @{ */
-
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_MST_ERR_CLR_MASK (0x1U)
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_MST_ERR_CLR_SHIFT (0U)
-/*! MST_ERR_CLR - DDRMIX AXI parity master d_ip_axi_parity_master error clear */
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_MST_ERR_CLR(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_MST_ERR_CLR_SHIFT)) & DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_MST_ERR_CLR_MASK)
-
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_SLV_ERR_CLR_MASK (0x100U)
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_SLV_ERR_CLR_SHIFT (8U)
-/*! SLV_ERR_CLR - DDRMIX AXI parity slave d_ip_axi_parity_slave error clear */
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_SLV_ERR_CLR(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_SLV_ERR_CLR_SHIFT)) & DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_SLV_ERR_CLR_MASK)
-
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_MASK (0x70000U)
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_SHIFT (16U)
-/*! ERR_HOLD - DDRMIX AXI parity error hold time */
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_SHIFT)) & DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_MASK)
-
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_EN_MASK (0x80000U)
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_EN_SHIFT (19U)
-/*! ERR_HOLD_EN - DDRMIX DDRC error hold enable */
-#define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_CLR_ERR_HOLD_EN_MASK)
 /*! @} */
 
 /*! @name AXI_PARITY_ERR_INJECT - DDRMIX AXI parity error injection register */
@@ -678,81 +620,72 @@ typedef struct {
 #define DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_INJECT_RDATA_ERR_INJ_DDRC(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_INJECT_RDATA_ERR_INJ_DDRC_SHIFT)) & DDR_BLK_CTRL_DDRMIX_AXI_PARITY_ERR_INJECT_RDATA_ERR_INJ_DDRC_MASK)
 /*! @} */
 
-/*! @name RT_MASTER_ID_4_5 - DDRC real_time master 6bit extend-ID range 4 and range 5 */
+/*! @name RT_MASTER_ID_4_5 - DDRC real_time initiator (master) 6bit extend-ID range 4 and range 5 */
 /*! @{ */
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_ID_MASK (0x3FU)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_ID_SHIFT (0U)
-/*! RANGE_4_ID - DDRC real_time master ID range 4 ID */
+/*! RANGE_4_ID - DDRC real_time initiator ID range 4 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_MASK_MASK (0x3F00U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_MASK_SHIFT (8U)
-/*! RANGE_4_MASK - DDRC real_time master ID range 4 ID mask */
+/*! RANGE_4_MASK - DDRC real_time initiator ID range 4 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_EN_MASK (0x8000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_EN_SHIFT (15U)
-/*! RANGE_4_EN - DDRC real_time master ID range 4 enable */
+/*! RANGE_4_EN - DDRC real_time initiator ID range 4 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_4_EN_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_ID_MASK (0x3F0000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_ID_SHIFT (16U)
-/*! RANGE_5_ID - DDRC real_time master ID range 5 ID */
+/*! RANGE_5_ID - DDRC real_time initiator ID range 5 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_MASK_MASK (0x3F000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_MASK_SHIFT (24U)
-/*! RANGE_5_MASK - DDRC real_time master ID range 5 ID mask */
+/*! RANGE_5_MASK - DDRC real_time initiator ID range 5 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_EN_MASK (0x80000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_EN_SHIFT (31U)
-/*! RANGE_5_EN - DDRC real_time master ID range 5 enable */
+/*! RANGE_5_EN - DDRC real_time initiator ID range 5 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_4_5_RANGE_5_EN_MASK)
 /*! @} */
 
-/*! @name RT_MASTER_ID_6_7 - DDRC real_time master 6bit extend-ID range 6 and range 7 */
+/*! @name RT_MASTER_ID_6_7 - DDRC real_time initiator (master) 6bit extend-ID range 6 and range 7 */
 /*! @{ */
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_ID_MASK (0x3FU)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_ID_SHIFT (0U)
-/*! RANGE_6_ID - DDRC real_time master ID range 6 ID */
+/*! RANGE_6_ID - DDRC real_time initiator ID range 6 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_MASK_MASK (0x3F00U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_MASK_SHIFT (8U)
-/*! RANGE_6_MASK - DDRC real_time master ID range 6 ID mask */
+/*! RANGE_6_MASK - DDRC real_time initiator ID range 6 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_EN_MASK (0x8000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_EN_SHIFT (15U)
-/*! RANGE_6_EN - DDRC real_time master ID range 6 enable */
+/*! RANGE_6_EN - DDRC real_time initiator ID range 6 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_6_EN_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_ID_MASK (0x3F0000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_ID_SHIFT (16U)
-/*! RANGE_7_ID - DDRC real_time master ID range 7 ID */
+/*! RANGE_7_ID - DDRC real_time initiator ID range 7 ID */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_ID(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_ID_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_ID_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_MASK_MASK (0x3F000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_MASK_SHIFT (24U)
-/*! RANGE_7_MASK - DDRC real_time master ID range 7 ID mask */
+/*! RANGE_7_MASK - DDRC real_time initiator ID range 7 ID mask */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_MASK(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_MASK_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_MASK_MASK)
 
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_EN_MASK (0x80000000U)
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_EN_SHIFT (31U)
-/*! RANGE_7_EN - DDRC real_time master ID range 7 enable */
+/*! RANGE_7_EN - DDRC real_time initiator ID range 7 enable */
 #define DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_EN(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_EN_SHIFT)) & DDR_BLK_CTRL_DDRMIX_RT_MASTER_ID_6_7_RANGE_7_EN_MASK)
-/*! @} */
-
-/*! @name FUSE_DISABLE_DDRMIX - Fuse to ddrmix_blk_ctrl */
-/*! @{ */
-
-#define DDR_BLK_CTRL_DDRMIX_FUSE_DISABLE_DDRMIX_FUSE_DISABLE_DDRMIX_MASK (0x3U)
-#define DDR_BLK_CTRL_DDRMIX_FUSE_DISABLE_DDRMIX_FUSE_DISABLE_DDRMIX_SHIFT (0U)
-/*! FUSE_DISABLE_DDRMIX - Read only reg for fuse mapped to ddrmix_blk_ctrl. */
-#define DDR_BLK_CTRL_DDRMIX_FUSE_DISABLE_DDRMIX_FUSE_DISABLE_DDRMIX(x) (((uint32_t)(((uint32_t)(x)) << DDR_BLK_CTRL_DDRMIX_FUSE_DISABLE_DDRMIX_FUSE_DISABLE_DDRMIX_SHIFT)) & DDR_BLK_CTRL_DDRMIX_FUSE_DISABLE_DDRMIX_FUSE_DISABLE_DDRMIX_MASK)
 /*! @} */
 
 

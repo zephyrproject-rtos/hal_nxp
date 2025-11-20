@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for M7_A7_APB_MCM
@@ -520,7 +520,7 @@ typedef struct {
  *  0b0000..Instruction fetch.
  *  0b0001..Data access.
  *  0b0010..Vector fetch on automated exception entry.
- *  0b0011..AHB slave access.
+ *  0b0011..AHB target access.
  *  0b0100..Debugger access.
  *  0b0101..MBIST access.
  *  0b0110..
@@ -528,7 +528,7 @@ typedef struct {
  *  0b1000..
  *  0b1001..Software data access from store queue.
  *  0b1010..
- *  0b1011..AHB slave access from store queue.
+ *  0b1011..AHB target access from store queue.
  *  0b1100..Debugger access from store queue.
  *  0b1101..
  *  0b1110..
@@ -594,7 +594,7 @@ typedef struct {
 
 #define M7_A7_APB_MCM_ITCM_ECC_MULTI_ERROR_INFO_ITCM_ECCM_EFMST_MASK (0xF0U)
 #define M7_A7_APB_MCM_ITCM_ECC_MULTI_ERROR_INFO_ITCM_ECCM_EFMST_SHIFT (4U)
-/*! ITCM_ECCM_EFMST - ITCM multi-bit ECC error corresponding tcm_master */
+/*! ITCM_ECCM_EFMST - ITCM multi-bit ECC error corresponding tcm_controller */
 #define M7_A7_APB_MCM_ITCM_ECC_MULTI_ERROR_INFO_ITCM_ECCM_EFMST(x) (((uint32_t)(((uint32_t)(x)) << M7_A7_APB_MCM_ITCM_ECC_MULTI_ERROR_INFO_ITCM_ECCM_EFMST_SHIFT)) & M7_A7_APB_MCM_ITCM_ECC_MULTI_ERROR_INFO_ITCM_ECCM_EFMST_MASK)
 
 #define M7_A7_APB_MCM_ITCM_ECC_MULTI_ERROR_INFO_ITCM_ECCM_EFPRT_MASK (0xF00U)
@@ -650,7 +650,7 @@ typedef struct {
 
 #define M7_A7_APB_MCM_D0TCM_ECC_SINGLE_ERROR_INFO_D0TCM_ECCS_EFMST_MASK (0xF0U)
 #define M7_A7_APB_MCM_D0TCM_ECC_SINGLE_ERROR_INFO_D0TCM_ECCS_EFMST_SHIFT (4U)
-/*! D0TCM_ECCS_EFMST - D0TCM single-bit ECC error corresponding tcm_master */
+/*! D0TCM_ECCS_EFMST - D0TCM single-bit ECC error corresponding tcm_controller */
 #define M7_A7_APB_MCM_D0TCM_ECC_SINGLE_ERROR_INFO_D0TCM_ECCS_EFMST(x) (((uint32_t)(((uint32_t)(x)) << M7_A7_APB_MCM_D0TCM_ECC_SINGLE_ERROR_INFO_D0TCM_ECCS_EFMST_SHIFT)) & M7_A7_APB_MCM_D0TCM_ECC_SINGLE_ERROR_INFO_D0TCM_ECCS_EFMST_MASK)
 
 #define M7_A7_APB_MCM_D0TCM_ECC_SINGLE_ERROR_INFO_D0TCM_ECCS_EFPRT_MASK (0xF00U)
@@ -697,7 +697,7 @@ typedef struct {
 
 #define M7_A7_APB_MCM_D0TCM_ECC_MULTI_ERROR_INFO_D0TCM_ECCM_EFMST_MASK (0xF0U)
 #define M7_A7_APB_MCM_D0TCM_ECC_MULTI_ERROR_INFO_D0TCM_ECCM_EFMST_SHIFT (4U)
-/*! D0TCM_ECCM_EFMST - D0TCM multi-bit ECC error corresponding tcm_master */
+/*! D0TCM_ECCM_EFMST - D0TCM multi-bit ECC error corresponding tcm_controller */
 #define M7_A7_APB_MCM_D0TCM_ECC_MULTI_ERROR_INFO_D0TCM_ECCM_EFMST(x) (((uint32_t)(((uint32_t)(x)) << M7_A7_APB_MCM_D0TCM_ECC_MULTI_ERROR_INFO_D0TCM_ECCM_EFMST_SHIFT)) & M7_A7_APB_MCM_D0TCM_ECC_MULTI_ERROR_INFO_D0TCM_ECCM_EFMST_MASK)
 
 #define M7_A7_APB_MCM_D0TCM_ECC_MULTI_ERROR_INFO_D0TCM_ECCM_EFPRT_MASK (0xF00U)
@@ -744,7 +744,7 @@ typedef struct {
 
 #define M7_A7_APB_MCM_D1TCM_ECC_SINGLE_ERROR_INFO_D1TCM_ECCS_EFMST_MASK (0xF0U)
 #define M7_A7_APB_MCM_D1TCM_ECC_SINGLE_ERROR_INFO_D1TCM_ECCS_EFMST_SHIFT (4U)
-/*! D1TCM_ECCS_EFMST - D1TCM single-bit ECC error corresponding tcm_master */
+/*! D1TCM_ECCS_EFMST - D1TCM single-bit ECC error corresponding tcm_controller */
 #define M7_A7_APB_MCM_D1TCM_ECC_SINGLE_ERROR_INFO_D1TCM_ECCS_EFMST(x) (((uint32_t)(((uint32_t)(x)) << M7_A7_APB_MCM_D1TCM_ECC_SINGLE_ERROR_INFO_D1TCM_ECCS_EFMST_SHIFT)) & M7_A7_APB_MCM_D1TCM_ECC_SINGLE_ERROR_INFO_D1TCM_ECCS_EFMST_MASK)
 
 #define M7_A7_APB_MCM_D1TCM_ECC_SINGLE_ERROR_INFO_D1TCM_ECCS_EFPRT_MASK (0xF00U)
@@ -791,7 +791,7 @@ typedef struct {
 
 #define M7_A7_APB_MCM_D1TCM_ECC_MULTI_ERROR_INFO_D1TCM_ECCM_EFMST_MASK (0xF0U)
 #define M7_A7_APB_MCM_D1TCM_ECC_MULTI_ERROR_INFO_D1TCM_ECCM_EFMST_SHIFT (4U)
-/*! D1TCM_ECCM_EFMST - D1TCM multi-bit ECC error corresponding tcm_master */
+/*! D1TCM_ECCM_EFMST - D1TCM multi-bit ECC error corresponding tcm_controller */
 #define M7_A7_APB_MCM_D1TCM_ECC_MULTI_ERROR_INFO_D1TCM_ECCM_EFMST(x) (((uint32_t)(((uint32_t)(x)) << M7_A7_APB_MCM_D1TCM_ECC_MULTI_ERROR_INFO_D1TCM_ECCM_EFMST_SHIFT)) & M7_A7_APB_MCM_D1TCM_ECC_MULTI_ERROR_INFO_D1TCM_ECCM_EFMST_MASK)
 
 #define M7_A7_APB_MCM_D1TCM_ECC_MULTI_ERROR_INFO_D1TCM_ECCM_EFPRT_MASK (0xF00U)

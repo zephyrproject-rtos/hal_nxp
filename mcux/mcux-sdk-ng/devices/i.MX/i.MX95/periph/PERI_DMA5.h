@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA5
@@ -413,17 +413,17 @@ typedef struct {
   __IO uint32_t MP_CSR;                            /**< Management Page Control, offset: 0x0 */
   __I  uint32_t MP_ES;                             /**< Management Page Error Status, offset: 0x4 */
   __I  uint32_t MP_INT_LOW;                        /**< Management Page Interrupt Request Status, offset: 0x8 */
-  __I  uint32_t MP_INT_HIGH;                       /**< Management Page Interrupt Request Status, offset: 0xC, available only on: WAKEUP.EDMA5_MP2/EDMA5_2, WAKEUP.EDMA5_MP3/EDMA5_3 (missing on CAMERA.EDMA5_MPC/EDMA5_4) */
+  __I  uint32_t MP_INT_HIGH;                       /**< Management Page Interrupt Request Status, offset: 0xC, available only on: WAKEUP.EDMA5_2_MP/EDMA5_2, WAKEUP.EDMA5_3_MP/EDMA5_3 (missing on CAMERA.EDMA5_4_MP/EDMA5_4) */
   __I  uint32_t MP_HRS_LOW;                        /**< Hardware Request Status, offset: 0x10 */
-  __I  uint32_t MP_HRS_HIGH;                       /**< Hardware Request Status, offset: 0x14, available only on: WAKEUP.EDMA5_MP2/EDMA5_2, WAKEUP.EDMA5_MP3/EDMA5_3 (missing on CAMERA.EDMA5_MPC/EDMA5_4) */
+  __I  uint32_t MP_HRS_HIGH;                       /**< Hardware Request Status, offset: 0x14, available only on: WAKEUP.EDMA5_2_MP/EDMA5_2, WAKEUP.EDMA5_3_MP/EDMA5_3 (missing on CAMERA.EDMA5_4_MP/EDMA5_4) */
        uint8_t RESERVED_0[8];
   __IO uint32_t MP_STOPCH;                         /**< Stop Channel, offset: 0x20 */
        uint8_t RESERVED_1[12];
   __I  uint32_t MP_SSR_LOW;                        /**< Stop Status, offset: 0x30 */
-  __I  uint32_t MP_SSR_HIGH;                       /**< Stop Status, offset: 0x34, available only on: WAKEUP.EDMA5_MP2/EDMA5_2, WAKEUP.EDMA5_MP3/EDMA5_3 (missing on CAMERA.EDMA5_MPC/EDMA5_4) */
+  __I  uint32_t MP_SSR_HIGH;                       /**< Stop Status, offset: 0x34, available only on: WAKEUP.EDMA5_2_MP/EDMA5_2, WAKEUP.EDMA5_3_MP/EDMA5_3 (missing on CAMERA.EDMA5_4_MP/EDMA5_4) */
        uint8_t RESERVED_2[200];
   __IO uint32_t CH_GRPRI[DMA5_MP_GRPRI_COUNT];     /**< Channel Arbitration Group, array offset: 0x100, array step: 0x4, irregular array, not all indices are valid */
-  __IO uint32_t CH_MUX[DMA5_MP_CHMUX_COUNT];       /**< Channel Multiplexor Configuration, array offset: 0x200, array step: 0x4, available only on: WAKEUP.EDMA5_MP2/EDMA5_2, WAKEUP.EDMA5_MP3/EDMA5_3 (missing on CAMERA.EDMA5_MPC/EDMA5_4) */
+  __IO uint32_t CH_MUX[DMA5_MP_CHMUX_COUNT];       /**< Channel Multiplexor Configuration, array offset: 0x200, array step: 0x4, available only on: WAKEUP.EDMA5_2_MP/EDMA5_2, WAKEUP.EDMA5_3_MP/EDMA5_3 (missing on CAMERA.EDMA5_4_MP/EDMA5_4) */
        uint8_t RESERVED_3[256];
   __IO uint32_t CH_PROT[DMA5_MP_CHPROT_COUNT];     /**< Channel Protection, array offset: 0x400, array step: 0x4, irregular array, not all indices are valid */
        uint8_t RESERVED_4[64256];
@@ -526,7 +526,7 @@ typedef struct {
 
 #define DMA5_MP_CSR_GMRC_MASK                    (0x80U)
 #define DMA5_MP_CSR_GMRC_SHIFT                   (7U)
-/*! GMRC - Global Master ID Replication Control
+/*! GMRC - Global Initiator ID Replication Control
  *  0b0..Disabled
  *  0b1..Available
  */
@@ -748,7 +748,7 @@ typedef struct {
 
 #define DMA5_CH_PROT_MID_MASK                    (0x1FU)  /* Merged from fields with different position or width, of widths (4, 5), largest definition used */
 #define DMA5_CH_PROT_MID_SHIFT                   (0U)
-/*! MID - Master ID */
+/*! MID - Initiator ID */
 #define DMA5_CH_PROT_MID(x)                      (((uint32_t)(((uint32_t)(x)) << DMA5_CH_PROT_MID_SHIFT)) & DMA5_CH_PROT_MID_MASK)  /* Merged from fields with different position or width, of widths (4, 5), largest definition used */
 
 #define DMA5_CH_PROT_INSTR_MASK                  (0x2000U)
@@ -777,7 +777,7 @@ typedef struct {
 
 #define DMA5_CH_PROT_EMI_MASK                    (0x10000U)
 #define DMA5_CH_PROT_EMI_SHIFT                   (16U)
-/*! EMI - Enable Master ID Replication
+/*! EMI - Enable Initiator ID Replication
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -993,7 +993,7 @@ typedef struct {
 
 #define DMA5_CH_SBR_MID_MASK                     (0x1FU)  /* Merged from fields with different position or width, of widths (4, 5), largest definition used */
 #define DMA5_CH_SBR_MID_SHIFT                    (0U)
-/*! MID - Master ID */
+/*! MID - Initiator ID */
 #define DMA5_CH_SBR_MID(x)                       (((uint32_t)(((uint32_t)(x)) << DMA5_CH_SBR_MID_SHIFT)) & DMA5_CH_SBR_MID_MASK)  /* Merged from fields with different position or width, of widths (4, 5), largest definition used */
 
 #define DMA5_CH_SBR_INSTR_MASK                   (0x2000U)
@@ -1014,7 +1014,7 @@ typedef struct {
 
 #define DMA5_CH_SBR_EMI_MASK                     (0x10000U)
 #define DMA5_CH_SBR_EMI_SHIFT                    (16U)
-/*! EMI - Enable Master ID Replication
+/*! EMI - Enable Initiator ID Replication
  *  0b0..Disable
  *  0b1..Enable
  */

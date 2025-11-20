@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_WAKEUPMIX
@@ -794,10 +794,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM33_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C0 - IPG DEBUG mask bit for CA55 core0 */
@@ -958,10 +958,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C0_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C1 - IPG DEBUG mask bit for CA55 core1 */
@@ -1122,10 +1122,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C1_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C2 - IPG DEBUG mask bit for CA55 core2 */
@@ -1286,10 +1286,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C2_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C3 - IPG DEBUG mask bit for CA55 core3 */
@@ -1450,10 +1450,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C3_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C4 - IPG DEBUG mask bit for CA55 core4 */
@@ -1614,10 +1614,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C4_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CA55C5 - IPG DEBUG mask bit for CA55 core5 */
@@ -1778,10 +1778,10 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CA55C5_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_CM7 - IPG DEBUG mask bit */
@@ -1942,82 +1942,82 @@ typedef struct {
 /*! sai5 - SAI5 debug */
 #define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_sai5(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_sai5_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_sai5_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma2_MASK (0x80000000U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma2_SHIFT (31U)
-/*! edma2 - EDMA2 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma2_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma5_2_MASK (0x80000000U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma5_2_SHIFT (31U)
+/*! edma5_2 - eDMA5_2 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma5_2(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma5_2_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_CM7_edma5_2_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CM33 - IPG DEBUG mask bit */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM33_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CA55C0 - IPG DEBUG mask bit for CA55 core0 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C0_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CA55C1 - IPG DEBUG mask bit for CA55 core1 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C1_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CA55C2 - IPG DEBUG mask bit for CA55 core2 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C2_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CA55C3 - IPG DEBUG mask bit for CA55 core3 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C3_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CA55C4 - IPG DEBUG mask bit for CA55 core4 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C4_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CA55C5 - IPG DEBUG mask bit for CA55 core5 */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CA55C5_edma5_3_MASK)
 /*! @} */
 
 /*! @name IPG_DEBUG_2_CM7 - IPG DEBUG mask bit */
 /*! @{ */
 
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma3_MASK (0x1U)
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma3_SHIFT (0U)
-/*! edma3 - EDMA3 debug */
-#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma3_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma5_3_MASK (0x1U)
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma5_3_SHIFT (0U)
+/*! edma5_3 - eDMA5_3 debug */
+#define BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma5_3(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma5_3_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_DEBUG_2_CM7_edma5_3_MASK)
 /*! @} */
 
 /*! @name DBG_TRACE_CTL - DEBUG TRACE control */
@@ -2550,15 +2550,15 @@ typedef struct {
 /*! can5_stop_enable - CAN5 ipg_stop control */
 #define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_can5_stop_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_can5_stop_enable_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_can5_stop_enable_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma2_stop_enable_MASK (0x10U)
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma2_stop_enable_SHIFT (4U)
-/*! edma2_stop_enable - EDMA2 ipg_stop control */
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma2_stop_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma2_stop_enable_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma2_stop_enable_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_2_stop_enable_MASK (0x10U)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_2_stop_enable_SHIFT (4U)
+/*! edma5_2_stop_enable - eDMA5_2 ipg_stop control */
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_2_stop_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_2_stop_enable_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_2_stop_enable_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma3_stop_enable_MASK (0x20U)
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma3_stop_enable_SHIFT (5U)
-/*! edma3_stop_enable - EDMA3 ipg_stop control */
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma3_stop_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma3_stop_enable_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma3_stop_enable_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_3_stop_enable_MASK (0x20U)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_3_stop_enable_SHIFT (5U)
+/*! edma5_3_stop_enable - eDMA5_3 ipg_stop control */
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_3_stop_enable(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_3_stop_enable_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_edma5_3_stop_enable_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_flexspi1_stop_enable_MASK (0x100U)
 #define BLK_CTRL_WAKEUPMIX_IPG_STOP_CTL_0_flexspi1_stop_enable_SHIFT (8U)
@@ -2589,15 +2589,15 @@ typedef struct {
 /*! can5_stop_ack - CAN5 ipg_stop_ack status */
 #define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_can5_stop_ack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_can5_stop_ack_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_can5_stop_ack_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma2_stop_ack_MASK (0x10U)
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma2_stop_ack_SHIFT (4U)
-/*! edma2_stop_ack - EDMA2 ipg_stop_ack status */
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma2_stop_ack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma2_stop_ack_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma2_stop_ack_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_2_stop_ack_MASK (0x10U)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_2_stop_ack_SHIFT (4U)
+/*! edma5_2_stop_ack - eDMA5_2 ipg_stop_ack status */
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_2_stop_ack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_2_stop_ack_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_2_stop_ack_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma3_stop_ack_MASK (0x20U)
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma3_stop_ack_SHIFT (5U)
-/*! edma3_stop_ack - EDMA3 ipg_stop_ack status */
-#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma3_stop_ack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma3_stop_ack_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma3_stop_ack_MASK)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_3_stop_ack_MASK (0x20U)
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_3_stop_ack_SHIFT (5U)
+/*! edma5_3_stop_ack - eDMA5_3 ipg_stop_ack status */
+#define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_3_stop_ack(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_3_stop_ack_SHIFT)) & BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_edma5_3_stop_ack_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_flexspi1_stop_ack_MASK (0x100U)
 #define BLK_CTRL_WAKEUPMIX_IPG_STOP_ACK_STATUS_0_flexspi1_stop_ack_SHIFT (8U)
@@ -2844,15 +2844,15 @@ typedef struct {
 /*! can5_qreq_n - CAN5 qreq_n control */
 #define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_can5_qreq_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_can5_qreq_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_can5_qreq_n_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma2_qreq_n_MASK (0x10U)
-#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma2_qreq_n_SHIFT (4U)
-/*! edma2_qreq_n - EDMA2 qreq_n control */
-#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma2_qreq_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma2_qreq_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma2_qreq_n_MASK)
+#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_2_qreq_n_MASK (0x10U)
+#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_2_qreq_n_SHIFT (4U)
+/*! edma5_2_qreq_n - eDMA5_2 qreq_n control */
+#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_2_qreq_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_2_qreq_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_2_qreq_n_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma3_qreq_n_MASK (0x20U)
-#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma3_qreq_n_SHIFT (5U)
-/*! edma3_qreq_n - EDMA3 qreq_n control */
-#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma3_qreq_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma3_qreq_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma3_qreq_n_MASK)
+#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_3_qreq_n_MASK (0x20U)
+#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_3_qreq_n_SHIFT (5U)
+/*! edma5_3_qreq_n - eDMA5_3 qreq_n control */
+#define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_3_qreq_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_3_qreq_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_edma5_3_qreq_n_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_flexio1_qreq_n_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_QREQ_CTL_0_flexio1_qreq_n_SHIFT (6U)
@@ -3008,15 +3008,15 @@ typedef struct {
 /*! can5_qaccept_n - CAN5 qaccept_n status */
 #define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_can5_qaccept_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_can5_qaccept_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_can5_qaccept_n_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma2_qaccept_n_MASK (0x10U)
-#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma2_qaccept_n_SHIFT (4U)
-/*! edma2_qaccept_n - EDMA2 qaccept_n status */
-#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma2_qaccept_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma2_qaccept_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma2_qaccept_n_MASK)
+#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_2_qaccept_n_MASK (0x10U)
+#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_2_qaccept_n_SHIFT (4U)
+/*! edma5_2_qaccept_n - eDMA5_2 qaccept_n status */
+#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_2_qaccept_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_2_qaccept_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_2_qaccept_n_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma3_qaccept_n_MASK (0x20U)
-#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma3_qaccept_n_SHIFT (5U)
-/*! edma3_qaccept_n - EDMA3 qaccept_n status */
-#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma3_qaccept_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma3_qaccept_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma3_qaccept_n_MASK)
+#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_3_qaccept_n_MASK (0x20U)
+#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_3_qaccept_n_SHIFT (5U)
+/*! edma5_3_qaccept_n - eDMA5_3 qaccept_n status */
+#define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_3_qaccept_n(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_3_qaccept_n_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_edma5_3_qaccept_n_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_flexio1_qaccept_n_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_QACCEPT_STATUS_0_flexio1_qaccept_n_SHIFT (6U)
@@ -3172,15 +3172,15 @@ typedef struct {
 /*! can5_qdeny - CAN5 qdeny status */
 #define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_can5_qdeny(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_can5_qdeny_SHIFT)) & BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_can5_qdeny_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma2_qdeny_MASK (0x10U)
-#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma2_qdeny_SHIFT (4U)
-/*! edma2_qdeny - EDMA2 qdeny status */
-#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma2_qdeny(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma2_qdeny_SHIFT)) & BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma2_qdeny_MASK)
+#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_2_qdeny_MASK (0x10U)
+#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_2_qdeny_SHIFT (4U)
+/*! edma5_2_qdeny - eDMA5_2 qdeny status */
+#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_2_qdeny(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_2_qdeny_SHIFT)) & BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_2_qdeny_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma3_qdeny_MASK (0x20U)
-#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma3_qdeny_SHIFT (5U)
-/*! edma3_qdeny - EDMA3 qdeny status */
-#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma3_qdeny(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma3_qdeny_SHIFT)) & BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma3_qdeny_MASK)
+#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_3_qdeny_MASK (0x20U)
+#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_3_qdeny_SHIFT (5U)
+/*! edma5_3_qdeny - eDMA5_3 qdeny status */
+#define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_3_qdeny(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_3_qdeny_SHIFT)) & BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_edma5_3_qdeny_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_flexio1_qdeny_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_QDENY_STATUS_0_flexio1_qdeny_SHIFT (6U)
@@ -3336,15 +3336,15 @@ typedef struct {
 /*! can5_qactive - CAN5 qactive status */
 #define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_can5_qactive(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_can5_qactive_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_can5_qactive_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma2_qactive_MASK (0x10U)
-#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma2_qactive_SHIFT (4U)
-/*! edma2_qactive - EDMA2 qactive status */
-#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma2_qactive(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma2_qactive_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma2_qactive_MASK)
+#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_2_qactive_MASK (0x10U)
+#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_2_qactive_SHIFT (4U)
+/*! edma5_2_qactive - eDMA5_2 qactive status */
+#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_2_qactive(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_2_qactive_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_2_qactive_MASK)
 
-#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma3_qactive_MASK (0x20U)
-#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma3_qactive_SHIFT (5U)
-/*! edma3_qactive - EDMA3 qactive status */
-#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma3_qactive(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma3_qactive_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma3_qactive_MASK)
+#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_3_qactive_MASK (0x20U)
+#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_3_qactive_SHIFT (5U)
+/*! edma5_3_qactive - eDMA5_3 qactive status */
+#define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_3_qactive(x) (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_3_qactive_SHIFT)) & BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_edma5_3_qactive_MASK)
 
 #define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_flexio1_qactive_MASK (0x40U)
 #define BLK_CTRL_WAKEUPMIX_QACTIVE_STATUS_0_flexio1_qactive_SHIFT (6U)
