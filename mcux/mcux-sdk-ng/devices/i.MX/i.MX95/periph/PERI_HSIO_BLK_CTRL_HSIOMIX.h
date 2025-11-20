@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for HSIO_BLK_CTRL_HSIOMIX
@@ -1033,6 +1033,11 @@ typedef struct {
 
 /*! @name LFAST_IO_REG - GPR registers for LFAST IO */
 /*! @{ */
+
+#define HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_FUNC_OUPUT_EN_MASK (0x4U)
+#define HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_FUNC_OUPUT_EN_SHIFT (2U)
+/*! FUNC_OUPUT_EN - functional output transmitter enable */
+#define HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_FUNC_OUPUT_EN(x) (((uint32_t)(((uint32_t)(x)) << HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_FUNC_OUPUT_EN_SHIFT)) & HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_FUNC_OUPUT_EN_MASK)
 
 #define HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_CREF_EN_MASK (0x40U)
 #define HSIO_BLK_CTRL_HSIOMIX_LFAST_IO_REG_CREF_EN_SHIFT (6U)

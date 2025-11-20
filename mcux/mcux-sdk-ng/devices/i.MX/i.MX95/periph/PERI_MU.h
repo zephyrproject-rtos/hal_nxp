@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
@@ -564,8 +564,8 @@ typedef struct {
 #define MU_SR_TEP_MASK                           (0x20U)
 #define MU_SR_TEP_SHIFT                          (5U)
 /*! TEP - MUB Transmit Empty Pending
- *  0b0..Not pending; MUA is reading no Receive (RRn) register
- *  0b1..Pending; MUA is reading a Receive (RRn) register
+ *  0b0..No MUA transmit empty event pending
+ *  0b1..Pending; any TCR[TIEn] field is 1 and TSR[TEn] flag is set
  */
 #define MU_SR_TEP(x)                             (((uint32_t)(((uint32_t)(x)) << MU_SR_TEP_SHIFT)) & MU_SR_TEP_MASK)
 

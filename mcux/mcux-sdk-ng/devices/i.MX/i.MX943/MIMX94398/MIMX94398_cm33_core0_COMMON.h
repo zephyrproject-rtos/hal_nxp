@@ -31,7 +31,7 @@
 **
 **     Reference manual:    iMX943RM rev1 draftK
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b250917
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX94398_cm33_core0
@@ -3161,7 +3161,7 @@ typedef enum _xbar_output_signal
 #define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
 #define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
 #define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
-#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN1_IRQn, CAN2_IRQn, CAN2_IRQn, CAN3_IRQn, CAN3_IRQn, CAN4_IRQn, CAN4_IRQn, CAN5_IRQn, CAN5_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
 
 /* CCM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -4470,35 +4470,6 @@ typedef enum _xbar_output_signal
   #define FRO_BASE_PTRS                            { FRO }
 #endif
 
-/* GLITCHFILTER - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral AON__GLITCHFILTER__IGF base address */
-  #define AON__GLITCHFILTER__IGF_BASE              (0x546E0000u)
-  /** Peripheral AON__GLITCHFILTER__IGF base address */
-  #define AON__GLITCHFILTER__IGF_BASE_NS           (0x446E0000u)
-  /** Peripheral AON__GLITCHFILTER__IGF base pointer */
-  #define AON__GLITCHFILTER__IGF                   ((GLITCHFILTER_Type *)AON__GLITCHFILTER__IGF_BASE)
-  /** Peripheral AON__GLITCHFILTER__IGF base pointer */
-  #define AON__GLITCHFILTER__IGF_NS                ((GLITCHFILTER_Type *)AON__GLITCHFILTER__IGF_BASE_NS)
-  /** Array initializer of GLITCHFILTER peripheral base addresses */
-  #define GLITCHFILTER_BASE_ADDRS                  { AON__GLITCHFILTER__IGF_BASE }
-  /** Array initializer of GLITCHFILTER peripheral base pointers */
-  #define GLITCHFILTER_BASE_PTRS                   { AON__GLITCHFILTER__IGF }
-  /** Array initializer of GLITCHFILTER peripheral base addresses */
-  #define GLITCHFILTER_BASE_ADDRS_NS               { AON__GLITCHFILTER__IGF_BASE_NS }
-  /** Array initializer of GLITCHFILTER peripheral base pointers */
-  #define GLITCHFILTER_BASE_PTRS_NS                { AON__GLITCHFILTER__IGF_NS }
-#else
-  /** Peripheral AON__GLITCHFILTER__IGF base address */
-  #define AON__GLITCHFILTER__IGF_BASE              (0x446E0000u)
-  /** Peripheral AON__GLITCHFILTER__IGF base pointer */
-  #define AON__GLITCHFILTER__IGF                   ((GLITCHFILTER_Type *)AON__GLITCHFILTER__IGF_BASE)
-  /** Array initializer of GLITCHFILTER peripheral base addresses */
-  #define GLITCHFILTER_BASE_ADDRS                  { AON__GLITCHFILTER__IGF_BASE }
-  /** Array initializer of GLITCHFILTER peripheral base pointers */
-  #define GLITCHFILTER_BASE_PTRS                   { AON__GLITCHFILTER__IGF }
-#endif
-
 /* GPC_CPU_CTRL - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral CCMSRCGPC__GPC__GPC_CTRL_CA55_0 base address */
@@ -4956,6 +4927,35 @@ typedef enum _xbar_output_signal
 #endif
 /** Interrupt vectors for the I3C peripheral type */
 #define I3C_IRQS                                 { NotAvail_IRQn, I3C1_IRQn, I3C2_IRQn }
+
+/* IGF - Peripheral instance base addresses */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral IGF base address */
+  #define IGF_BASE                                 (0x546E0000u)
+  /** Peripheral IGF base address */
+  #define IGF_BASE_NS                              (0x446E0000u)
+  /** Peripheral IGF base pointer */
+  #define IGF                                      ((IGF_Type *)IGF_BASE)
+  /** Peripheral IGF base pointer */
+  #define IGF_NS                                   ((IGF_Type *)IGF_BASE_NS)
+  /** Array initializer of IGF peripheral base addresses */
+  #define IGF_BASE_ADDRS                           { IGF_BASE }
+  /** Array initializer of IGF peripheral base pointers */
+  #define IGF_BASE_PTRS                            { IGF }
+  /** Array initializer of IGF peripheral base addresses */
+  #define IGF_BASE_ADDRS_NS                        { IGF_BASE_NS }
+  /** Array initializer of IGF peripheral base pointers */
+  #define IGF_BASE_PTRS_NS                         { IGF_NS }
+#else
+  /** Peripheral IGF base address */
+  #define IGF_BASE                                 (0x446E0000u)
+  /** Peripheral IGF base pointer */
+  #define IGF                                      ((IGF_Type *)IGF_BASE)
+  /** Array initializer of IGF peripheral base addresses */
+  #define IGF_BASE_ADDRS                           { IGF_BASE }
+  /** Array initializer of IGF peripheral base pointers */
+  #define IGF_BASE_PTRS                            { IGF }
+#endif
 
 /* IOMUXC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

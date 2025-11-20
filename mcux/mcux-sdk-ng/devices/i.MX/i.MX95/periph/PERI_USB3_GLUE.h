@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB3_GLUE
@@ -1099,14 +1099,14 @@ typedef struct {
  */
 #define USB3_GLUE_PHY_CTRL3_LOS_BIAS(x)          (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_LOS_BIAS_SHIFT)) & USB3_GLUE_PHY_CTRL3_LOS_BIAS_MASK)
 
-#define USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_MASK   (0xE0000000U)
-#define USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_SHIFT  (29U)
-/*! TX_VBOOST_lvl - TX Voltage Boost Level
- *  0b000..Corresponds to a launch amplitude of 0.88 V
- *  0b010..Corresponds to a launch amplitude of 1.04 V
- *  0b011..Corresponds to a launch amplitude of 1.12 V
+#define USB3_GLUE_PHY_CTRL3_TX_VBOOST_LVL_MASK   (0xE0000000U)
+#define USB3_GLUE_PHY_CTRL3_TX_VBOOST_LVL_SHIFT  (29U)
+/*! TX_VBOOST_LVL - TX Voltage Boost Level
+ *  0b011..Corresponds to a launch amplitude of 0.844 V
+ *  0b100..Corresponds to a launch amplitude of 1.008 V
+ *  0b101..Corresponds to a launch amplitude of 1.156 V
  */
-#define USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_SHIFT)) & USB3_GLUE_PHY_CTRL3_TX_VBOOST_lvl_MASK)
+#define USB3_GLUE_PHY_CTRL3_TX_VBOOST_LVL(x)     (((uint32_t)(((uint32_t)(x)) << USB3_GLUE_PHY_CTRL3_TX_VBOOST_LVL_SHIFT)) & USB3_GLUE_PHY_CTRL3_TX_VBOOST_LVL_MASK)
 /*! @} */
 
 /*! @name PHY_CTRL4 - USBPHY Control 4 */

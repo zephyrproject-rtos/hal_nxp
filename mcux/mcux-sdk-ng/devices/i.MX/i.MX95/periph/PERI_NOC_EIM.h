@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NOC_EIM
@@ -458,7 +458,7 @@ typedef struct {
 
 #define NOC_EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK  (0x1FU)
 #define NOC_EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define NOC_EIM_EICHD0_WORD1_B0_3DATA_MASK(x)    (((uint32_t)(((uint32_t)(x)) << NOC_EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT)) & NOC_EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 
@@ -467,7 +467,7 @@ typedef struct {
 
 #define NOC_EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK  (0xFFU)
 #define NOC_EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT (0U)
-/*! B0_3DATA_MASK - Data Mask Bytes 0-3 */
+/*! B0_3DATA_MASK - Data Mask Field */
 #define NOC_EIM_EICHD1_WORD1_B0_3DATA_MASK(x)    (((uint32_t)(((uint32_t)(x)) << NOC_EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT)) & NOC_EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK)
 /*! @} */
 

@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
@@ -487,6 +487,7 @@ typedef struct {
   __IO uint32_t STAW4R;                            /**< Self-Test Analog Watchdog 4, offset: 0x394 */
   __IO uint32_t STAW5R;                            /**< Self-Test Analog Watchdog 5, offset: 0x398 */
   __I  uint32_t CALSTAT;                           /**< Calibration Status, offset: 0x39C */
+  __IO uint32_t CALCFG0;                           /**< Calibration Configuration 0, offset: 0x3A0 */
 } ADC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -3256,6 +3257,27 @@ typedef struct {
 #define ADC_CALSTAT_TEST_RESULT_SHIFT            (16U)
 /*! TEST_RESULT - TEST_RESULT */
 #define ADC_CALSTAT_TEST_RESULT(x)               (((uint32_t)(((uint32_t)(x)) << ADC_CALSTAT_TEST_RESULT_SHIFT)) & ADC_CALSTAT_TEST_RESULT_MASK)
+/*! @} */
+
+/*! @name CALCFG0 - Calibration Configuration 0 */
+/*! @{ */
+
+#define ADC_CALCFG0_LDFAIL_MASK                  (0x10U)
+#define ADC_CALCFG0_LDFAIL_SHIFT                 (4U)
+/*! LDFAIL - Load calibrated values in fail condition
+ *  0b0..Load calibrated values only if the calibration step passes (retain existing values in case of fail) (default)
+ *  0b1..Enable loading of calibrated values in fail condition also
+ */
+#define ADC_CALCFG0_LDFAIL(x)                    (((uint32_t)(((uint32_t)(x)) << ADC_CALCFG0_LDFAIL_SHIFT)) & ADC_CALCFG0_LDFAIL_MASK)
+
+#define ADC_CALCFG0_BNDFLCNT_MASK                (0xF00U)
+#define ADC_CALCFG0_BNDFLCNT_SHIFT               (8U)
+/*! BNDFLCNT - Boundary condition fail count
+ *  0b0000..Single occurrence
+ *  0b0001..Double occurrence
+ *  0b0010..Four occurrence
+ */
+#define ADC_CALCFG0_BNDFLCNT(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CALCFG0_BNDFLCNT_SHIFT)) & ADC_CALCFG0_BNDFLCNT_MASK)
 /*! @} */
 
 

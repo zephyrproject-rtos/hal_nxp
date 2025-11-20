@@ -31,7 +31,7 @@
 **
 **     Reference manual:    iMX943RM rev1 draftK
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250721
+**     Build:               b250917
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX94398_cm7_core1
@@ -2706,7 +2706,7 @@ typedef enum _xbar_output_signal
 #define CAN_Wake_Up_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
 #define CAN_Error_IRQS                           { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
 #define CAN_Bus_Off_IRQS                         { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
-#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN1_IRQn, CAN2_IRQn, CAN2_IRQn, CAN3_IRQn, CAN3_IRQn, CAN4_IRQn, CAN4_IRQn, CAN5_IRQn, CAN5_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { NotAvail_IRQn, CAN1_IRQn, CAN2_IRQn, CAN3_IRQn, CAN4_IRQn, CAN5_IRQn }
 
 /* CCM - Peripheral instance base addresses */
 /** Peripheral CCM_CTRL base address */
@@ -3156,16 +3156,6 @@ typedef enum _xbar_output_signal
 /** Array initializer of FRO peripheral base pointers */
 #define FRO_BASE_PTRS                            { FRO }
 
-/* GLITCHFILTER - Peripheral instance base addresses */
-/** Peripheral AON__GLITCHFILTER__IGF base address */
-#define AON__GLITCHFILTER__IGF_BASE              (0x446E0000u)
-/** Peripheral AON__GLITCHFILTER__IGF base pointer */
-#define AON__GLITCHFILTER__IGF                   ((GLITCHFILTER_Type *)AON__GLITCHFILTER__IGF_BASE)
-/** Array initializer of GLITCHFILTER peripheral base addresses */
-#define GLITCHFILTER_BASE_ADDRS                  { AON__GLITCHFILTER__IGF_BASE }
-/** Array initializer of GLITCHFILTER peripheral base pointers */
-#define GLITCHFILTER_BASE_PTRS                   { AON__GLITCHFILTER__IGF }
-
 /* GPC_CPU_CTRL - Peripheral instance base addresses */
 /** Peripheral CCMSRCGPC__GPC__GPC_CTRL_CA55_0 base address */
 #define CCMSRCGPC__GPC__GPC_CTRL_CA55_0_BASE     (0x44471000u)
@@ -3324,6 +3314,16 @@ typedef enum _xbar_output_signal
 #define I3C_BASE_PTRS                            { (I3C_Type *)0u, I3C1, I3C2 }
 /** Interrupt vectors for the I3C peripheral type */
 #define I3C_IRQS                                 { NotAvail_IRQn, I3C1_IRQn, I3C2_IRQn }
+
+/* IGF - Peripheral instance base addresses */
+/** Peripheral IGF base address */
+#define IGF_BASE                                 (0x446E0000u)
+/** Peripheral IGF base pointer */
+#define IGF                                      ((IGF_Type *)IGF_BASE)
+/** Array initializer of IGF peripheral base addresses */
+#define IGF_BASE_ADDRS                           { IGF_BASE }
+/** Array initializer of IGF peripheral base pointers */
+#define IGF_BASE_PTRS                            { IGF }
 
 /* IOMUXC - Peripheral instance base addresses */
 /** Peripheral IOMUXC base address */

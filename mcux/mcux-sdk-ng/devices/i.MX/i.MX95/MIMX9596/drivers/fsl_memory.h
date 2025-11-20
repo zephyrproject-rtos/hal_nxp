@@ -30,19 +30,12 @@
 
 #define FSL_MEM_M33_TCM_OFFSET 0x200000U
 #elif (__CORTEX_M == 7U)
-/* The CM7 subsystem local ITCM start address, refer to Reference Manual for detailed information */
-#define FSL_MEM_M7_ITCM_BEGIN 0x00000000U
-/* The CM7 subsystem local ITCM end address, refer to Reference Manual for detailed information */
-#define FSL_MEM_M7_ITCM_END 0x0003FFFFU
+/* The CM7 subsystem local TCM start address, refer to Reference Manual for detailed information */
+#define FSL_MEM_M7_TCM_BEGIN 0x20000000U
+/* The CM7 subsystem local TCM end address, refer to Reference Manual for detailed information */
+#define FSL_MEM_M7_TCM_END 0x2007FFFFU
 
-#define FSL_MEM_M7_ITCM_OFFSET 0x203C0000U
-
-/* The CM7 subsystem local DTCM start address, refer to Reference Manual for detailed information */
-#define FSL_MEM_M7_DTCM_BEGIN 0x20000000U
-/* The CM7 subsystem local DTCM end address, refer to Reference Manual for detailed information */
-#define FSL_MEM_M7_DTCM_END 0x2007FFFFU
-
-#define FSL_MEM_M7_DTCM_OFFSET 0x400000U
+#define FSL_MEM_M7_TCM_OFFSET 0x400000U
 #else
 #error "Device is not supported by this driver!"
 #endif
@@ -83,19 +76,9 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
                 dest = addr + FSL_MEM_M33_TCM_OFFSET;
             }
 #elif (__CORTEX_M == 7U)
-/*
- * Remove redundant lower bound check for ITCM range.
- * Since FSL_MEM_M7_ITCM_BEGIN is 0x00000000U and addr is unsigned,
- * the condition (addr >= 0) is always true and triggers compiler warning Pe186.
- * NOTE: Restore lower bound check if FSL_MEM_M7_ITCM_BEGIN becomes non-zero.
- * if ((addr >= FSL_MEM_M7_ITCM_BEGIN) && (addr <= FSL_MEM_M7_ITCM_END))
- */
-            if (addr <= FSL_MEM_M7_ITCM_END)
+            if ((addr >= FSL_MEM_M7_TCM_BEGIN) && (addr <= FSL_MEM_M7_TCM_END))
             {
-                dest = addr + FSL_MEM_M7_ITCM_OFFSET;
-            } else if ((addr >= FSL_MEM_M7_DTCM_BEGIN) && (addr <= FSL_MEM_M7_DTCM_END))
-            {
-                dest = addr + FSL_MEM_M7_DTCM_OFFSET;
+                dest = addr + FSL_MEM_M7_TCM_OFFSET;
             }
 #endif
             else
@@ -113,14 +96,10 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
                 dest = addr - FSL_MEM_M33_TCM_OFFSET;
             }
 #elif (__CORTEX_M == 7U)
-            if ((addr >= (FSL_MEM_M7_ITCM_BEGIN + FSL_MEM_M7_ITCM_OFFSET)) &&
-                (addr <= (FSL_MEM_M7_ITCM_END + FSL_MEM_M7_ITCM_OFFSET)))
+            if ((addr >= (FSL_MEM_M7_TCM_BEGIN + FSL_MEM_M7_TCM_OFFSET)) &&
+                (addr <= (FSL_MEM_M7_TCM_END + FSL_MEM_M7_TCM_OFFSET)))
             {
-                dest = addr - FSL_MEM_M7_ITCM_OFFSET;
-            } else if ((addr >= (FSL_MEM_M7_DTCM_BEGIN + FSL_MEM_M7_DTCM_OFFSET)) &&
-                (addr <= (FSL_MEM_M7_DTCM_END + FSL_MEM_M7_DTCM_OFFSET)))
-            {
-                dest = addr - FSL_MEM_M7_DTCM_OFFSET;
+                dest = addr - FSL_MEM_M7_TCM_OFFSET;
             }
 #endif
             else

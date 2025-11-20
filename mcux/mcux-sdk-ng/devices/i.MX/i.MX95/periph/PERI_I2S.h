@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I2S
@@ -656,7 +656,7 @@ typedef struct {
 /*! TFW - Transmit FIFO Watermark
  *  0b0000000..0
  *  0b0000001..1
- *  0b0000010-0b1111110..(TFW)
+ *  0b0000010-0b1111110..(TFW value)
  *  0b1111111..127
  */
 #define I2S_TCR1_TFW(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR1_TFW_SHIFT)) & I2S_TCR1_TFW_MASK)  /* Merged from fields with different position or width, of widths (5, 7), largest definition used */
@@ -698,9 +698,9 @@ typedef struct {
 #define I2S_TCR2_MSEL_SHIFT                      (26U)
 /*! MSEL - MCLK Select
  *  0b00..Bus clock
- *  0b01..Controller clock (MCLK) option 1
- *  0b10..Controller clock (MCLK) option 2
- *  0b11..Controller clock (MCLK) option 3
+ *  0b01..Audio clock (MCLK) option 1
+ *  0b10..Audio clock (MCLK) option 2
+ *  0b11..Audio clock (MCLK) option 3
  */
 #define I2S_TCR2_MSEL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_TCR2_MSEL_SHIFT)) & I2S_TCR2_MSEL_MASK)
 
@@ -1191,9 +1191,9 @@ typedef struct {
 #define I2S_RCR2_MSEL_SHIFT                      (26U)
 /*! MSEL - MCLK Select
  *  0b00..Bus clock
- *  0b01..Controller clock (MCLK) option 1
- *  0b10..Controller clock (MCLK) option 2
- *  0b11..Controller clock (MCLK) option 3
+ *  0b01..Audio clock (MCLK) option 1
+ *  0b10..Audio clock (MCLK) option 2
+ *  0b11..Audio clock (MCLK) option 3
  */
 #define I2S_RCR2_MSEL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_RCR2_MSEL_SHIFT)) & I2S_RCR2_MSEL_MASK)
 
@@ -1506,10 +1506,10 @@ typedef struct {
 #define I2S_MCR_MSEL_MASK                        (0x3000000U)
 #define I2S_MCR_MSEL_SHIFT                       (24U)
 /*! MSEL - MCLK Select
- *  0b00..Controller clock (MCLK) option 1
+ *  0b00..Audio clock (MCLK) option 1
  *  0b01..Reserved
- *  0b10..Controller clock (MCLK) option 2
- *  0b11..Controller clock (MCLK) option 3
+ *  0b10..Audio clock (MCLK) option 2
+ *  0b11..Audio clock (MCLK) option 3
  */
 #define I2S_MCR_MSEL(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_MCR_MSEL_SHIFT)) & I2S_MCR_MSEL_MASK)
 

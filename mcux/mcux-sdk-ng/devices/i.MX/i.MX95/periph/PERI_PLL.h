@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PLL
@@ -562,18 +562,7 @@ typedef struct {
 
 #define PLL_DIV_ODIV_MASK                        (0xFFU)
 #define PLL_DIV_ODIV_SHIFT                       (0U)
-/*! ODIV - Output Frequency Divider for Clock Output
- *  0b00000000..Divide by 2
- *  0b00000001..Divide by 3
- *  0b00000010..Divide by 2
- *  0b00000011..Divide by 3
- *  0b00000100..Divide by 4
- *  0b00000101..Divide by 5
- *  0b00000110..Divide by 6
- *  0b00001010..Divide by 10
- *  0b10000010..Divide by 130
- *  0b11111111..Divide by 255
- */
+/*! ODIV - Output Frequency Divider for Clock Output */
 #define PLL_DIV_ODIV(x)                          (((uint32_t)(((uint32_t)(x)) << PLL_DIV_ODIV_SHIFT)) & PLL_DIV_ODIV_MASK)
 
 #define PLL_DIV_RDIV_MASK                        (0xE000U)

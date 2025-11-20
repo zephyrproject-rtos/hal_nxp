@@ -248,7 +248,7 @@
 **                          MIMX95N6XVZXN_cm7
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250522
+**     Build:               b250904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NETC_ETH_LINK
@@ -867,6 +867,11 @@ typedef struct {
 #define NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_SHIFT  (7U)
 /*! LI_FAULT - Link Interruption fault event (XGMII) */
 #define NETC_ETH_LINK_PM0_IEVENT_LI_FAULT(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_LI_FAULT_MASK)
+
+#define NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_MASK    (0x300U)
+#define NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_SHIFT   (8U)
+/*! TX_LOWP - Transmit low power status */
+#define NETC_ETH_LINK_PM0_IEVENT_TX_LOWP(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_SHIFT)) & NETC_ETH_LINK_PM0_IEVENT_TX_LOWP_MASK)
 
 #define NETC_ETH_LINK_PM0_IEVENT_TX_OVFL_MASK    (0x400U)
 #define NETC_ETH_LINK_PM0_IEVENT_TX_OVFL_SHIFT   (10U)
@@ -1577,10 +1582,6 @@ typedef struct {
 
 #define NETC_ETH_LINK_PM0_IF_MODE_M10_MASK       (0x10U)
 #define NETC_ETH_LINK_PM0_IF_MODE_M10_SHIFT      (4U)
-/*! M10
- *  0b0..100 Mbps
- *  0b1..10 Mbps
- */
 #define NETC_ETH_LINK_PM0_IF_MODE_M10(x)         (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM0_IF_MODE_M10_SHIFT)) & NETC_ETH_LINK_PM0_IF_MODE_M10_MASK)
 
 #define NETC_ETH_LINK_PM0_IF_MODE_HD_MASK        (0x40U)
@@ -1764,6 +1765,11 @@ typedef struct {
 #define NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY_SHIFT  (6U)
 /*! RX_EMPTY - Receive idle event */
 #define NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY(x)     (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_RX_EMPTY_MASK)
+
+#define NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_MASK    (0x300U)
+#define NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_SHIFT   (8U)
+/*! TX_LOWP - Transmit low power status */
+#define NETC_ETH_LINK_PM1_IEVENT_TX_LOWP(x)      (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_SHIFT)) & NETC_ETH_LINK_PM1_IEVENT_TX_LOWP_MASK)
 
 #define NETC_ETH_LINK_PM1_IEVENT_TX_OVFL_MASK    (0x400U)
 #define NETC_ETH_LINK_PM1_IEVENT_TX_OVFL_SHIFT   (10U)
@@ -2429,10 +2435,6 @@ typedef struct {
 
 #define NETC_ETH_LINK_PM1_IF_MODE_M10_MASK       (0x10U)
 #define NETC_ETH_LINK_PM1_IF_MODE_M10_SHIFT      (4U)
-/*! M10
- *  0b0..100 Mbps
- *  0b1..10 Mbps
- */
 #define NETC_ETH_LINK_PM1_IF_MODE_M10(x)         (((uint32_t)(((uint32_t)(x)) << NETC_ETH_LINK_PM1_IF_MODE_M10_SHIFT)) & NETC_ETH_LINK_PM1_IF_MODE_M10_MASK)
 
 #define NETC_ETH_LINK_PM1_IF_MODE_HD_MASK        (0x40U)
