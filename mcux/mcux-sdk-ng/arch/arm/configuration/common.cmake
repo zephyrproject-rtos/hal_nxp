@@ -17,4 +17,10 @@ if (CONFIG_MCUX_PRJSEG_config.arm.shared)
         mcux_add_mdk_configuration(
                 LD "--list output.map"
         )
+
+        # Output stack usage information on a per-function
+        mcux_add_armgcc_configuration(
+                CC "-fstack-usage"
+                CX "-fstack-usage"
+        )
 endif()

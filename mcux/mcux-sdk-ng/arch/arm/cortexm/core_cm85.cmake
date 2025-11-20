@@ -6,10 +6,10 @@
 if (CONFIG_MCUX_PRJSEG_config.arm.core.cm85)
 
     mcux_add_iar_configuration(
-        AS "--cpu=cortex-m85.no_se"
-        CC "--cpu=cortex-m85.no_se"
-        CX "--cpu=cortex-m85.no_se"
-        LD "--cpu=cortex-m85.no_se"
+        AS "--cpu=Cortex-M85"
+        CC "--cpu=Cortex-M85"
+        CX "--cpu=Cortex-M85"
+        LD "--cpu=Cortex-M85"
     )
 
     mcux_add_mdk_configuration(
@@ -32,10 +32,10 @@ endif()
 if (CONFIG_MCUX_PRJSEG_config.arm.core.cm85_nodsp_nosau)
 
     mcux_add_iar_configuration(
-        AS "--cpu=cortex-m85.no_dsp.no_se"
-        CC "--cpu=cortex-m85.no_dsp.no_se"
-        CX "--cpu=cortex-m85.no_dsp.no_se"
-        LD "--cpu=cortex-m85.no_dsp.no_se"
+        AS "--cpu=Cortex-M85"
+        CC "--cpu=Cortex-M85"
+        CX "--cpu=Cortex-M85"
+        LD "--cpu=Cortex-M85"
     )
 
     mcux_add_mdk_configuration(
@@ -58,10 +58,10 @@ endif()
 if (CONFIG_MCUX_PRJSEG_config.arm.core.cm85_dsp_nosau)
 
     mcux_add_iar_configuration(
-        AS "--cpu=cortex-m85.no_se"
-        CC "--cpu=cortex-m85.no_se"
-        CX "--cpu=cortex-m85.no_se"
-        LD "--cpu=cortex-m85.no_se"
+        AS "--cpu=Cortex-M85"
+        CC "--cpu=Cortex-M85"
+        CX "--cpu=Cortex-M85"
+        LD "--cpu=Cortex-M85"
     )
 
     mcux_add_mdk_configuration(
@@ -84,10 +84,10 @@ endif()
 if (CONFIG_MCUX_PRJSEG_config.arm.core.cm85_nodsp_sau)
 
     mcux_add_iar_configuration(
-        AS "--cpu=Cortex-m85.no_dsp"
-        CC "--cpu=Cortex-m85.no_dsp"
-        CX "--cpu=Cortex-m85.no_dsp"
-        LD "--cpu=Cortex-m85.no_dsp"
+        AS "--cpu=Cortex-M85"
+        CC "--cpu=Cortex-M85"
+        CX "--cpu=Cortex-M85"
+        LD "--cpu=Cortex-M85"
     )
 
     mcux_add_mdk_configuration(
