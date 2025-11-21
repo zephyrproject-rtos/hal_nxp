@@ -367,3 +367,17 @@ void EnableGlobalIRQEx(uint32_t primask)
     EnableGlobalIRQ(primask);
 }
 #endif /* FSL_FEATURE_MEASURE_CRITICAL_SECTION */
+
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+__attribute__((weak)) void IRQSTEER_EnableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt)
+{
+    (void)irqsteerInstIdx;
+    (void)interrupt;
+}
+
+__attribute__((weak)) void IRQSTEER_DisableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt)
+{
+    (void)irqsteerInstIdx;
+    (void)interrupt;
+}
+#endif

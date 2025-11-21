@@ -651,8 +651,8 @@ _Pragma("diag_suppress=Pm120")
 #endif
 
 #if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
-void IRQSTEER_EnableInterrupt(int32_t instIdx, IRQn_Type irq);
-void IRQSTEER_DisableInterrupt(int32_t instIdx, IRQn_Type irq);
+void IRQSTEER_EnableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt);
+void IRQSTEER_DisableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt);
 #endif
 
 /*******************************************************************************
