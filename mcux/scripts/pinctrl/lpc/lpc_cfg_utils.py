@@ -679,7 +679,7 @@ class NXPSdkUtil:
             " */\n"
             "\n")
 
-        if self._imx_rt:
+        if self._imx_rt == 'MIMXRT7XX':
             # Notes on the below macro:
             # Due to IOPCTL instance number is nonunique, index variable is
             # introduced to represent the label of IOPCTL instance. We use
@@ -693,8 +693,21 @@ class NXPSdkUtil:
             # Store the mux value at the offset it will actually be written to the
             # configuration register
             mux_macro = ("#define IOPCTL_MUX(index, offset, mux)\t\t\\\n"
-                "\t((((index) & 0xF) << 16) |\t\t\\\n"
+                "\t((((index) & 0x7) << 15) |\t\t\\\n"
                 "\t(((offset) & 0xFFF) << 20) |\t\t\\\n"
+                "\t(((mux) & 0xF) << 0))\n\n")
+        elif self._imx_rt == 'MIMXRT5/6XX':
+            # Notes on the below macro:
+            # We store the pin and port values as an offset, because some pins
+            # do not follow a consistent offset. We use 12 bits to store this
+            # offset.
+            # Mux values range from 0-15, so we give 4 bits
+            # shift the offset to the MSBs of the mux value, so they
+            # don't conflict with pin configuration settings
+            # Store the mux value at the offset it will actually be written to the
+            # configuration register
+            mux_macro = ("#define IOPCTL_MUX(offset, mux)\t\t\\\n"
+                "\t((((offset) & 0xFFF) << 20) |\t\t\\\n"
                 "\t(((mux) & 0xF) << 0))\n\n")
         else:
             # Notes on the below macro:
@@ -740,8 +753,11 @@ class NXPSdkUtil:
                     offset = mux.get_offset()
                     label = mux.get_name()
                     mux = mux.get_mux()
-                    if self._imx_rt:
+                    if self._imx_rt == 'MIMXRT7XX':
                         file.write(f"#define {label} IOPCTL_MUX({index}, {offset}, {mux}) "
+                            f"/* PIO{sig_port}_{sig_pin} */\n")
+                    elif self._imx_rt == 'MIMXRT5/6XX':
+                        file.write(f"#define {label} IOPCTL_MUX({offset}, {mux}) "
                             f"/* PIO{sig_port}_{sig_pin} */\n")
                     else:
                         file.write(f"#define {label} IOCON_MUX({offset}, {pin_type}, {mux}) "
