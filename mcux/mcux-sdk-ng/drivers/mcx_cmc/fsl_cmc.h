@@ -16,8 +16,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CMC driver version 2.3.0. */
-#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief CMC driver version 2.5.0. */
+#define FSL_CMC_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /* @} */
 
 #if (defined(FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT) && FSL_FEATURE_MCX_CMC_HAS_BSR_SCR_BIT)
@@ -73,8 +73,13 @@ enum _cmc_system_reset_interrupt_enable
     kCMC_DAPResetInterruptEnable                        = CMC_SRIE_DAP_MASK,   /*!< DAP Reset interrupt enable. */
     kCMC_LowPowerAcknowledgeTimeoutResetInterruptEnable = CMC_SRIE_LPACK_MASK, /*!< Low Power Acknowledge Timeout
                                                                                     Reset interrupt enable. */
+#if defined(CMC_SRIE_WWDT0_MASK)
     kCMC_WindowedWatchdog0ResetInterruptEnable = CMC_SRIE_WWDT0_MASK,          /*!< Windowed Watchdog 0 reset
                                                                                  interrupt enable. */
+#endif
+#if defined(CMC_SRIE_WDOG0_MASK)
+    kCMC_Watchdog0ResetInterruptEnable = CMC_SRIE_WDOG0_MASK,          /*!< Watchdog 0 reset interrupt enable. */
+#endif
     kCMC_SoftwareResetInterruptEnable = CMC_SRIE_SW_MASK,                      /*!< Software Reset interrupt enable. */
     kCMC_LockupResetInterruptEnable   = CMC_SRIE_LOCKUP_MASK,                  /*!< Lockup Reset interrupt enable. */
 #if defined(CMC_SRIE_CPU1_MASK)
@@ -90,7 +95,12 @@ enum _cmc_system_reset_interrupt_enable
     kCMC_WindowedWatchdog1ResetInterruptEnable = CMC_SRIE_WWDT1_MASK,          /*!< Windowed Watchdog 1 reset
                                                                                      interrupt enable. */
 #endif                                                                         /* CMC_SRIE_WWDT1_MASK */
+#if defined(CMC_SRIE_WDOG1_MASK)
+    kCMC_Watchdog1ResetInterruptEnable = CMC_SRIE_WDOG1_MASK,          /*!< Watchdog 1 reset interrupt enable. */
+#endif
+#if defined(CMC_SRIE_CDOG0_MASK)
     kCMC_CodeWatchDog0ResetInterruptEnable = CMC_SRIE_CDOG0_MASK, /*!< Code watchdog 0 reset interrupt enable. */
+#endif
 #if defined(CMC_SRIE_CDOG1_MASK)
     kCMC_CodeWatchDog1ResetInterruptEnable = CMC_SRIE_CDOG1_MASK, /*!< Code watchdog 1 reset interrupt enable. */
 #endif                                                            /* CMC_SRIE_CDOG1_MASK */
@@ -105,7 +115,12 @@ enum _cmc_system_reset_interrupt_flag
     kCMC_DAPResetInterruptFlag               = CMC_SRIF_DAP_MASK,    /*!< DAP Reset interrupt flag. */
     kCMC_LowPowerAcknowledgeTimeoutResetFlag = CMC_SRIF_LPACK_MASK,  /*!< Low Power Acknowledge
                                                                          Timeout Reset interrupt flag.  */
+#if defined(CMC_SRIF_WWDT0_MASK)
     kCMC_WindowedWatchdog0ResetInterruptFlag = CMC_SRIF_WWDT0_MASK,  /*!< Windowned Watchdog 0 Reset interrupt flag. */
+#endif
+#if defined(CMC_SRIF_WDOG0_MASK)
+    kCMC_Watchdog0ResetInterruptFlag = CMC_SRIF_WDOG0_MASK,  /*!< Watchdog 0 Reset interrupt flag. */
+#endif
     kCMC_SoftwareResetInterruptFlag          = CMC_SRIF_SW_MASK,     /*!< Software Reset interrupt flag. */
     kCMC_LockupResetInterruptFlag            = CMC_SRIF_LOCKUP_MASK, /*!< Lock up Reset interrupt flag. */
 #if defined(CMC_SRIF_CPU1_MASK)
@@ -120,7 +135,12 @@ enum _cmc_system_reset_interrupt_flag
 #if defined(CMC_SRIF_WWDT1_MASK)
     kCMC_WindowedWatchdog1ResetInterruptFlag = CMC_SRIF_WWDT1_MASK,  /*!< Windowned Watchdog 1 Reset interrupt flag. */
 #endif                                                               /* CMC_SRIF_WWDT1_MASK */
+#if defined(CMC_SRIF_WDOG1_MASK)
+    kCMC_Watchdog1ResetInterruptFlag = CMC_SRIF_WDOG1_MASK,  /*!< Watchdog 1 Reset interrupt flag. */
+#endif
+#if defined(CMC_SRIF_CDOG0_MASK)
     kCMC_CodeWatchdog0ResetInterruptFlag = CMC_SRIF_CDOG0_MASK,      /*!< Code watchdog0 reset interrupt flag. */
+#endif
 #if defined(CMC_SRIF_CDOG1_MASK)
     kCMC_CodeWatchdog1ResetInterruptFlag = CMC_SRIF_CDOG1_MASK,      /*!< Code watchdog1 reset interrupt flag. */
 #endif                                                               /* CMC_SRIF_CDOG1_MASK */
@@ -169,7 +189,15 @@ enum _cmc_system_reset_sources
     kCMC_WakeUpReset = CMC_SRS_WAKEUP_MASK,  /*!< The reset caused by a wakeup from Power Down or
                                                  Deep Power Down mode. */
     kCMC_PORReset     = CMC_SRS_POR_MASK,    /*!< The reset caused by power on reset detection logic. */
+#if defined(CMC_SRS_VD_MASK)
     kCMC_VDReset      = CMC_SRS_VD_MASK,     /*!< The reset caused by an LVD or HVD. */
+#endif
+#if defined(CMC_SRS_LVD_MASK)
+    kCMC_LVDReset      = CMC_SRS_LVD_MASK,     /*!< The reset caused by an LVD. */
+#endif
+#if defined(CMC_SRS_HVD_MASK)
+    kCMC_HVDReset      = CMC_SRS_HVD_MASK,     /*!< The reset caused by an HVD. */
+#endif
     kCMC_WarmReset    = CMC_SRS_WARM_MASK,   /*!< The last reset source is a warm reset source. */
     kCMC_FatalReset   = CMC_SRS_FATAL_MASK,  /*!< The last reset source is a fatal reset source. */
     kCMC_PinReset     = CMC_SRS_PIN_MASK,    /*!< The reset caused by the RESET_b pin. */
@@ -179,7 +207,12 @@ enum _cmc_system_reset_sources
     kCMC_LowPowerAcknowledgeTimeoutReset = CMC_SRS_LPACK_MASK, /*!< The reset caused by a timeout in
                                                                     low power mode entry logic. */
     kCMC_SCGReset = CMC_SRS_SCG_MASK, /*!< The reset caused by a loss of clock or loss of lock event in the SCG. */
+#if defined(CMC_SRS_WWDT0_MASK)
     kCMC_WindowedWatchdog0Reset = CMC_SRS_WWDT0_MASK, /*!< The reset caused by the Windowed WatchDog 0 timeout. */
+#endif
+#if defined(CMC_SRS_WDOG0_MASK)
+    kCMC_Watchdog0Reset = CMC_SRS_WDOG0_MASK, /*!< The reset caused by the WatchDog 0 timeout. */
+#endif
     kCMC_SoftwareReset          = CMC_SRS_SW_MASK,    /*!< The reset caused by a software reset request. */
     kCMC_LockUoReset = CMC_SRS_LOCKUP_MASK, /*!< The reset caused by the ARM core indication of a LOCKUP event. */
 #if defined(CMC_SRS_CPU1_MASK)
@@ -194,7 +227,12 @@ enum _cmc_system_reset_sources
 #if defined(CMC_SRS_WWDT1_MASK)
     kCMC_WindowedWatchdog1Reset = CMC_SRS_WWDT1_MASK,  /*!< The reset caused by the Windowed WatchDog 1 timeout. */
 #endif                                                 /* CMC_SRS_WWDT1_MASK */
+#if defined(CMC_SRS_WDOG1_MASK)
+    kCMC_Watchdog1Reset = CMC_SRS_WDOG1_MASK,  /*!< The reset caused by the WatchDog 1 timeout. */
+#endif
+#if defined(CMC_SRS_CDOG0_MASK)
     kCMC_CodeWatchDog0Reset = CMC_SRS_CDOG0_MASK,      /*!< The reset caused by the code watchdog0 fault. */
+#endif
 #if defined(CMC_SRS_CDOG1_MASK)
     kCMC_CodeWatchDog1Reset = CMC_SRS_CDOG1_MASK,      /*!< The reset caused by the code watchdog1 fault. */
 #endif                                                 /* CMC_SRS_CDOG1_MASK */
