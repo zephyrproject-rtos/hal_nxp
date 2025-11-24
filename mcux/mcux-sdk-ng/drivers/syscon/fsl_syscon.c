@@ -1,7 +1,5 @@
 /*
- * Copyright  2018 NXP
- * All rights reserved.
- *
+ * Copyright 2018, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -36,7 +34,7 @@
  *
  * retval None.
  */
-void SYSCON_AttachSignal(SYSCON_Type *base, uint32_t index, syscon_connection_t connection)
+void SYSCON_AttachSignal(SYSCON_Type *base, uint16_t index, syscon_connection_t connection)
 {
     uint32_t syscon_id;
     uint32_t output_id;

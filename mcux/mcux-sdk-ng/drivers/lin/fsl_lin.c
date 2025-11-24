@@ -1,5 +1,5 @@
 /*
- * Copyright  2016-2019 NXP
+ * Copyright  2016-2019, 2025 NXP
  * All rights reserved.
  *
  *
@@ -551,14 +551,14 @@ void LIN_TimeoutService(uint32_t instance)
                     linCurrentState->timeoutCounterFlag = true;
                     /* Callback to handle timeout Counter flag */
                     /* $Branch Coverage Justification$ $ref lin_c_ref_1$ */
-                    if (linCurrentState->Callback != NULL)
+                    if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
 
                     /* Check if the transmission is non-blocking */
                     /* $Branch Coverage Justification$ $ref lin_c_ref_2$ */
-                    if (linCurrentState->isTxBlocking == false)
+                    if (linCurrentState->isTxBlocking == false) /* GCOVR_EXCL_BR_LINE */
                     {
                         /* Clear Bus busy flag */
                         linCurrentState->isBusBusy   = false;
@@ -585,14 +585,14 @@ void LIN_TimeoutService(uint32_t instance)
 
                     /* Callback to handle timeout Counter flag */
                     /* $Branch Coverage Justification$ $ref lin_c_ref_1$ */
-                    if (linCurrentState->Callback != NULL)
+                    if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
 
                     /* Check if the reception is non-blocking */
                     /* $Branch Coverage Justification$ $ref lin_c_ref_2$ */
-                    if (linCurrentState->isRxBlocking == false)
+                    if (linCurrentState->isRxBlocking == false) /* GCOVR_EXCL_BR_LINE */
                     {
                         /* Clear Bus busy flag */
                         linCurrentState->isBusBusy   = false;

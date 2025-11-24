@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2022 NXP
+ * Copyright 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,9 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
-                                                        /*! @{ */
+#define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
+/*! @} */
+
 /*! @brief Delay used in LPIT_Reset
  *
  * The macro value should be larger than 4 * core clock / LPIT peripheral clock.
@@ -391,7 +392,6 @@ static inline void LPIT_StopTimer(LPIT_Type *base, lpit_chnl_t channel)
  *
  * After clear or set LPIT_EN, there should be delay longer than 4 LPIT
  * functional clock.
- * @param count Delay count.
  */
 static void LPIT_ResetStateDelay(void)
 {

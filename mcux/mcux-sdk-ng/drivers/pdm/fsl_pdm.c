@@ -138,22 +138,8 @@ void PDM_ReadNonBlocking(PDM_Type *base, uint32_t startChannel, uint32_t channel
     {
         for (j = 0; j < channelNums; j++)
         {
-            uint32_t dataValue = base->DATACH[startChannel + j];
-
-            if (dataValue > INT16_MAX)
-            {
-                // Handle overflow: saturate to INT16_MAX or use an error handling mechanism
-                *buffer++ = INT16_MAX;
-            }
-            else if (dataValue < INT16_MIN)
-            {
-                // Handle underflow: saturate to INT16_MIN
-                *buffer++ = INT16_MIN;
-            }
-            else
-            {
-                *buffer++ = (int16_t)dataValue;
-            }
+            /* Extract lower 16 bits of valid data and interpret as signed int */
+            *buffer++ = (int16_t)(uint16_t)(base->DATACH[startChannel + j] & 0xFFFFU);
         }
     }
 }

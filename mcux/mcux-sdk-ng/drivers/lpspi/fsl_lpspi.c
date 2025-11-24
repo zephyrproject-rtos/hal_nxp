@@ -1013,9 +1013,9 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
                      * $Branch Coverage Justification$
                      * $ref fsl_lpspi_c_ref_2$
                      */
-                    if (!LPSPI_WaitTxFifoEmpty(base))
+                    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
                     {
-                        return false;
+                        return false; /* GCOVR_EXCL_LINE */
                     }
                 }
                 txRemainingByteCount -= bytesPerFrame;
@@ -1047,7 +1047,7 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
          * $Branch Coverage Justification$
          * Data will be transferred in the inner loop until complete, after which the interrupt will end.(will improve)
          */
-        if (((stateParams->rxData) != NULL) && ((stateParams->rxRemainingByteCount) != 0U))
+        if (((stateParams->rxData) != NULL) && ((stateParams->rxRemainingByteCount) != 0U)) /* GCOVR_EXCL_BR_LINE */
         {
 #if SPI_RETRY_TIMES
             uint32_t waitTimes = SPI_RETRY_TIMES;
@@ -1077,9 +1077,9 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
                  * rxRemainingByteCount must be an integer multiple of bytesEachRead, otherwise it cannot pass the check
                  * of #LPSPI_CheckTransferArgument,so it doesn't happen here.(will improve)
                  */
-                if ((stateParams->rxRemainingByteCount) < (stateParams->bytesEachRead))
+                if ((stateParams->rxRemainingByteCount) < (stateParams->bytesEachRead)) /* GCOVR_EXCL_BR_LINE */
                 {
-                    (stateParams->bytesEachRead) = (uint8_t)(stateParams->rxRemainingByteCount);
+                    (stateParams->bytesEachRead) = (uint8_t)(stateParams->rxRemainingByteCount); /* GCOVR_EXCL_LINE */
                 }
 
                 LPSPI_SeparateReadData((stateParams->rxData), readData, (stateParams->bytesEachRead), isByteSwap);
@@ -1207,9 +1207,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
      * $Branch Coverage Justification$
      * Depends on errata.
      */
-    if ((LPSPI_GetStatusFlags(base) & (uint32_t)kLPSPI_ModuleBusyFlag) != 0U)
+    if ((LPSPI_GetStatusFlags(base) & (uint32_t)kLPSPI_ModuleBusyFlag) != 0U) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Busy;
+        return kStatus_LPSPI_Busy; /* GCOVR_EXCL_LINE */
     }
 
     LPSPI_Enable(base, false);
@@ -1272,9 +1272,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_WaitTxFifoEmpty(base))
+    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Timeout;
+        return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
     }
 
     /* PCS should be configured separately from the other bits, otherwise it will not take effect. */
@@ -1287,9 +1287,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_WaitTxFifoEmpty(base))
+    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Timeout;
+        return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
     }
 
     if (bytesPerFrame <= 4U)
@@ -1307,9 +1307,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (false == LPSPI_MasterTransferWriteAllTxData(base, transfer, &stateParams))
+    if (false == LPSPI_MasterTransferWriteAllTxData(base, transfer, &stateParams)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Timeout;
+        return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
     }
 
     if (stateParams.isPcsContinuous && !stateParams.isTxMask)
@@ -1321,9 +1321,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_c_ref_2$
          */
-        if (false == LPSPI_MasterTransferClearTCR(base, &stateParams))
+        if (false == LPSPI_MasterTransferClearTCR(base, &stateParams)) /* GCOVR_EXCL_BR_LINE */
         {
-            return kStatus_LPSPI_Timeout;
+            return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
         }
     }
 
@@ -1334,9 +1334,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_c_ref_2$
          */
-        if (false == LPSPI_MasterTransferReadDataInFifo(base, transfer, &stateParams))
+        if (false == LPSPI_MasterTransferReadDataInFifo(base, transfer, &stateParams)) /* GCOVR_EXCL_BR_LINE */
         {
-            return kStatus_LPSPI_Timeout;
+            return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
         }
     }
     else
@@ -1346,9 +1346,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_c_ref_2$
          */
-        if (false == LPSPI_MasterTransferReadDataInFifoNoBuf(base, &stateParams))
+        if (false == LPSPI_MasterTransferReadDataInFifoNoBuf(base, &stateParams)) /* GCOVR_EXCL_BR_LINE */
         {
-            return kStatus_LPSPI_Timeout;
+            return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
         }
     }
 
@@ -1452,15 +1452,15 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_3$
      */
-    if (handle->fifoSize > 1U)
+    if (handle->fifoSize > 1U) /* GCOVR_EXCL_BR_LINE */
     {
         txWatermark         = 1U;
         handle->rxWatermark = handle->fifoSize - 2U;
     }
     else
     {
-        txWatermark         = 0U;
-        handle->rxWatermark = 0U;
+        txWatermark         = 0U; /* GCOVR_EXCL_LINE */
+        handle->rxWatermark = 0U; /* GCOVR_EXCL_LINE */
     }
     LPSPI_SetFifoWatermarks(base, txWatermark, handle->rxWatermark);
 
@@ -1502,9 +1502,9 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_WaitTxFifoEmpty(base))
+    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Timeout;
+        return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
     }
 
     /* PCS should be configured separately from the other bits, otherwise it will not take effect. */
@@ -1523,9 +1523,9 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_WaitTxFifoEmpty(base))
+    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Timeout;
+        return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
     }
 
     if (handle->isTxMask)
@@ -1540,9 +1540,9 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_c_ref_2$
          */
-        if (!LPSPI_WaitTxFifoEmpty(base))
+        if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
         {
-            return kStatus_LPSPI_Timeout;
+            return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
         }
     }
     else
@@ -1834,9 +1834,9 @@ void LPSPI_MasterTransferHandleIRQ(LPSPI_Type *base, lpspi_master_handle_t *hand
                  * $Branch Coverage Justification$
                  * $ref fsl_lpspi_c_ref_2$
                  */
-                if (!LPSPI_WaitTxFifoEmpty(base))
+                if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
                 {
-                    return;
+                    return; /* GCOVR_EXCL_LINE */
                 }
             }
             handle->txRemainingByteCount -= (uint32_t)handle->bytesPerFrame;
@@ -1997,15 +1997,15 @@ status_t LPSPI_SlaveTransferNonBlocking(LPSPI_Type *base, lpspi_slave_handle_t *
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_3$
      */
-    if (handle->fifoSize > 1U)
+    if (handle->fifoSize > 1U) /* GCOVR_EXCL_BR_LINE */
     {
         txWatermark         = 1U;
         handle->rxWatermark = handle->fifoSize / 2U;
     }
     else
     {
-        txWatermark         = 0U;
-        handle->rxWatermark = 0U;
+        txWatermark         = 0U; /* GCOVR_EXCL_LINE */
+        handle->rxWatermark = 0U; /* GCOVR_EXCL_LINE */
     }
     LPSPI_SetFifoWatermarks(base, txWatermark, handle->rxWatermark);
 
@@ -2042,9 +2042,9 @@ status_t LPSPI_SlaveTransferNonBlocking(LPSPI_Type *base, lpspi_slave_handle_t *
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_WaitTxFifoEmpty(base))
+    if (!LPSPI_WaitTxFifoEmpty(base)) /* GCOVR_EXCL_BR_LINE */
     {
-        return kStatus_LPSPI_Timeout;
+        return kStatus_LPSPI_Timeout; /* GCOVR_EXCL_LINE */
     }
 
     /* Fill up the TX data in FIFO */
@@ -2306,7 +2306,7 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
      * $ref fsl_lpspi_c_ref_4$
      */
     if (((LPSPI_GetStatusFlags(base) & (uint32_t)kLPSPI_TransmitErrorFlag) != 0U) &&
-        ((base->IER & LPSPI_IER_TEIE_MASK) != 0U))
+        ((base->IER & LPSPI_IER_TEIE_MASK) != 0U)) /* GCOVR_EXCL_BR_LINE */
     {
         LPSPI_ClearStatusFlags(base, (uint32_t)kLPSPI_TransmitErrorFlag);
         /* Change state to error and clear flag */
@@ -2332,7 +2332,7 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
          * $Branch Coverage Justification$
          * This error happens on receive, so rxData won't be empty.(will improve)
          */
-        if (handle->rxData != NULL)
+        if (handle->rxData != NULL) /* GCOVR_EXCL_BR_LINE */
         {
             handle->state = (uint8_t)kLPSPI_Error;
         }
@@ -2436,7 +2436,7 @@ static void LPSPI_SeparateReadData(uint8_t *rxData, uint32_t readData, uint8_t b
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_1$
      */
-    switch (bytesEachRead)
+    switch (bytesEachRead) /* GCOVR_EXCL_BR_LINE */
     {
         case 1:
             *rxData = (uint8_t)readData;
@@ -2506,10 +2506,10 @@ static void LPSPI_SeparateReadData(uint8_t *rxData, uint32_t readData, uint8_t b
             }
             break;
 
-        default:
+        default: /* GCOVR_EXCL_START */
             assert(false);
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 }
 
 /*!

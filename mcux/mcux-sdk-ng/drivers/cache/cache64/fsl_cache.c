@@ -182,11 +182,17 @@ void CACHE64_EnableCache(CACHE64_CTRL_Type *base)
     /* if CACHE is not enabled */
     if ((base->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) == 0x00U)
     {
+        __DSB();
+        __ISB();
+        
         /* First, invalidate the entire cache. */
         CACHE64_InvalidateCache(base);
 
         /* Now enable the cache. */
         base->CCR |= CACHE64_CTRL_CCR_ENCACHE_MASK;
+
+        __DSB();
+        __ISB();
     }
 }
 
@@ -199,11 +205,17 @@ void CACHE64_DisableCache(CACHE64_CTRL_Type *base)
     /* if CACHE is enabled */
     if ((base->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) != 0x00U)
     {
+        __DSB();
+        __ISB();
+
         /* First, push any modified contents. */
         CACHE64_CleanCache(base);
 
         /* Now disable the cache. */
         base->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK;
+
+        __DSB();
+        __ISB();
     }
 }
 

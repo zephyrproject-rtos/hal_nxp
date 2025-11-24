@@ -1,5 +1,5 @@
 /*
- * Copyright 2020,2023 NXP
+ * Copyright 2020,2023,2025 NXP
  * All rights reserved.
  *
  *
@@ -64,6 +64,7 @@ static status_t puf_waitForInit(PUF_Type *base)
     return status;
 }
 
+#if defined(PUF_PUF_MEM_CTRL_POWERON_MASK)
 static void puf_delayLoop(uint32_t count)
 {
     __ASM volatile("    MOV    R0, %0" : : "r"(count));
@@ -81,6 +82,7 @@ static void puf_delayLoop(uint32_t count)
         :
         : "r0");
 }
+#endif /* defined(PUF_PUF_MEM_CTRL_POWERON_MASK) */
 
 static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
 {

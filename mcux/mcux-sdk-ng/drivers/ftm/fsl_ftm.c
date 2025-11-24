@@ -290,7 +290,7 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 #endif  /* FSL_FEATURE_FTM_HAS_FILTER_PRESCALER */
 
     /* Setup the counter operation */
-    base->CONF = (FTM_CONF_BDMMODE(config->bdmMode) | FTM_CONF_GTBEEN(config->useGlobalTimeBase));
+    base->CONF = (FTM_CONF_BDMMODE(config->bdmMode) | (config->useGlobalTimeBase ? FTM_CONF_GTBEEN_MASK : 0U));
 
     /* Initial state of channel output */
     base->OUTINIT = config->chnlInitState;
@@ -491,8 +491,8 @@ status_t FTM_SetupPwm(FTM_Type *base,
     for (i = 0; i < numOfChnls; i++)
     {
         /* Return error if requested chnlNumber is greater than the max allowed */
-        if (((uint8_t)chnlParams->chnlNumber >= (uint8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
-            (-1 == (int8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
+        if (((int)chnlParams->chnlNumber >= FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
+            (-1 == FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
         {
             return kStatus_InvalidArgument;
         }
@@ -626,8 +626,8 @@ status_t FTM_UpdatePwmDutycycle(FTM_Type *base,
     uint32_t cnv, cnvFirstEdge = 0, mod;
 
     /* Return error if requested chnlNumber is greater than the max allowed */
-    if (((uint8_t)chnlNumber >= (uint8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
-        (-1 == (int8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
+    if (((int)chnlNumber >= FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
+        (-1 == FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
     {
         return kStatus_InvalidArgument;
     }
@@ -638,13 +638,20 @@ status_t FTM_UpdatePwmDutycycle(FTM_Type *base,
     {
         return kStatus_OutOfRange;
     }
+
     if (dutyCyclePercent == 100U)
     {
         /* For 100% duty cycle */
+        assert(mod < 0xFFFFFFFFU);
         cnv = mod + 1U;
+    }
+    else if (dutyCyclePercent == 0U)
+    {
+        cnv = 0U;
     }
     else
     {
+        assert(mod <= 0xFFFFFFFFU / dutyCyclePercent);
         cnv = (mod * dutyCyclePercent) / 100U;
     }
 
@@ -666,6 +673,7 @@ status_t FTM_UpdatePwmDutycycle(FTM_Type *base,
         }
         else
         {
+            assert(mod < 0xFFFFFFFFU);
             cnvFirstEdge = base->CONTROLS[((uint32_t)chnlNumber) * 2U].CnV;
             if (((cnvFirstEdge != 0U) && (cnv == (mod + 1U))) || (((cnvFirstEdge + cnv) > mod) && (cnv < mod)))
             {
@@ -784,6 +792,7 @@ status_t FTM_SetupPwmMode(FTM_Type *base,
             }
             else if (mode == kFTM_CenterAlignedCombinedPwm)
             {
+                assert(mod >= chnlParams->dutyValue);
                 cnvFirstEdge = (mod - chnlParams->dutyValue) / 2U;
             }
             else
@@ -867,7 +876,7 @@ void FTM_ConfigSinglePWM(FTM_Type *base,
 
     assert((chnlParams->mode == kFTM_EdgeAlignedPwm) || (chnlParams->mode == kFTM_CenterAlignedPwm));
     assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
-    assert(chnlNumber < FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
+    assert((int)chnlNumber < FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
 
     if (chnlParams->mode == kFTM_CenterAlignedPwm)
     {
@@ -932,7 +941,7 @@ void FTM_ConfigCombinePWM(FTM_Type *base,
 
     assert((chnlParams->mode != kFTM_EdgeAlignedPwm) && (chnlParams->mode != kFTM_CenterAlignedPwm));
     assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
-    assert(chnlPairNumber < FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2);
+    assert((int)chnlPairNumber < (int)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2);
 
     /* Clear Center-Aligned PWM Select for FTM */
     base->SC &= ~FTM_SC_CPWMS_MASK;
@@ -1234,7 +1243,7 @@ void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ft
 #endif
 
 #if defined(FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn)
-    assert(((uint32_t)faultNumber + 1U) <= (uint32_t)FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(base));
+    assert(((int)faultNumber + 1) <= FSL_FEATURE_FTM_INSTANCE_FAULT_INPUT_NUMBERn(base));
 #endif
 
     if (faultParams->useFaultFilter)
@@ -1280,8 +1289,10 @@ void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ft
  */
 void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
 {
+    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
     uint32_t chnlInts  = (mask & 0xFFU);
-    uint8_t chnlNumber = 0;
+    uint32_t chnlCount = (uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
+    uint32_t i = 0;
 
     /* Enable the timer overflow interrupt */
     if ((mask & (uint32_t)kFTM_TimeOverflowInterruptEnable) != 0U)
@@ -1316,14 +1327,12 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
 #endif
 
     /* Enable the channel interrupts */
-    while (chnlInts != 0U)
+    for (i = 0; i < chnlCount; i++)
     {
-        if ((chnlInts & 0x1U) != 0U)
+        if ((chnlInts & (1UL << i)) != 0U)
         {
-            base->CONTROLS[chnlNumber].CnSC |= FTM_CnSC_CHIE_MASK;
+            base->CONTROLS[i].CnSC |= FTM_CnSC_CHIE_MASK;
         }
-        chnlNumber++;
-        chnlInts = chnlInts >> 1U;
     }
 }
 
@@ -1336,8 +1345,10 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
  */
 void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
 {
+    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
     uint32_t chnlInts  = (mask & 0xFFU);
-    uint8_t chnlNumber = 0;
+    uint32_t chnlCount = (uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
+    uint32_t i = 0;
 
     /* Disable the timer overflow interrupt */
     if ((mask & (uint32_t)kFTM_TimeOverflowInterruptEnable) != 0U)
@@ -1371,14 +1382,12 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
 #endif
 
     /* Disable the channel interrupts */
-    while (chnlInts != 0U)
+    for (i = 0; i < chnlCount; i++)
     {
-        if ((chnlInts & 0x01U) != 0U)
+        if ((chnlInts & (1UL << i)) != 0U)
         {
-            base->CONTROLS[chnlNumber].CnSC &= ~FTM_CnSC_CHIE_MASK;
+            base->CONTROLS[i].CnSC &= ~FTM_CnSC_CHIE_MASK;
         }
-        chnlNumber++;
-        chnlInts = chnlInts >> 1U;
     }
 }
 
@@ -1392,11 +1401,11 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
  */
 uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
 {
-    uint32_t enabledInterrupts = 0;
-    int8_t chnlCount           = FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
-
     /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
-    assert(chnlCount != -1);
+    assert(FSL_FEATURE_FTM_CHANNEL_COUNTn(base) != -1);
+    uint32_t enabledInterrupts = 0;
+    uint32_t chnlCount = (uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
+    uint32_t i = 0;
 
     /* Check if timer overflow interrupt is enabled */
     if ((base->SC & FTM_SC_TOIE_MASK) != 0U)
@@ -1430,12 +1439,11 @@ uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
 #endif
 
     /* Check if the channel interrupts are enabled */
-    while (chnlCount > 0)
+    for (i = 0; i < chnlCount; i++)
     {
-        chnlCount--;
-        if ((base->CONTROLS[chnlCount].CnSC & FTM_CnSC_CHIE_MASK) != 0x00U)
+        if ((base->CONTROLS[i].CnSC & FTM_CnSC_CHIE_MASK) != 0U)
         {
-            enabledInterrupts |= (1UL << (uint32_t)chnlCount);
+            enabledInterrupts |= (1UL << i);
         }
     }
 

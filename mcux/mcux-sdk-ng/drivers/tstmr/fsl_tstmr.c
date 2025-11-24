@@ -29,8 +29,10 @@ uint32_t TSTMR_GetInstance(TSTMR_Type *base);
 /*! @brief Pointers to Timer bases for each instance. */
 static TSTMR_Type *const s_tstmrBases[FSL_FEATURE_SOC_TSTMR_COUNT] = TSTMR_BASE_PTRS;
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Clock mapping for each TSTMR instance. Use kCLOCK_NOGATE for instances without clocks */
 static const clock_ip_name_t s_tstmrClockMap[FSL_FEATURE_SOC_TSTMR_COUNT] = TSTMR_CLOCKS;
+#endif /* ! FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * Code

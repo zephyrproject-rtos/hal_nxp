@@ -745,13 +745,13 @@ status_t RTC_ConfigureBCDAlarm(RTC_Type *base, rtc_alarm_id_t alarmId, const rtc
     /* Configure mask bits */
     if ((alarmConfig->mask & kRTC_AlarmMaskIgnoreMonth) == 0U)
     {
-        bcdAlarmH |= RTC_BCD_ALARM_H_USE_MO_MASK;
+        bcdAlarmH |= RTC_BCD_ALARM_H_USE_MONTH_MASK;
         bcdAlarmH |= RTC_BCD_ALARM_H_MONTH(alarmConfig->month - 1);
     }
     if ((alarmConfig->mask & kRTC_AlarmMaskIgnoreDay) == 0U)
     {
         bcdAlarmH |= RTC_BCD_ALARM_H_USE_DAY_MO_MASK;
-        bcdAlarmMin = RTC_BCD_ALARM_MIN_DAY_MO(alarmConfig->day - 1);
+        bcdAlarmMin = RTC_BCD_ALARM_MIN_DAY_MONTH(alarmConfig->day - 1);
     }
 
     if ((alarmConfig->mask & kRTC_AlarmMaskIgnoreHour) == 0U)
@@ -863,7 +863,7 @@ status_t RTC_ConfigureFreeRunningAlarm(RTC_Type *base,
     {
         /* All 40 bits are used (absolute value) */
         /* bits 39:32 */
-        alarmH |= RTC_ALARM_H_ALARM((uint32_t)((alarmConfig->alarmCounter >> 32) & 0xFFU));
+        alarmH |= RTC_ALARM_H_ALARM_N((uint32_t)((alarmConfig->alarmCounter >> 32) & 0xFFU));
         /* bits 31:16 */
         alarmMid = RTC_ALARM_MID_ALARM_M((uint32_t)((alarmConfig->alarmCounter >> 16) & 0xFFFFU));
         /* bits 15:0 */

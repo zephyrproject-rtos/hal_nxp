@@ -5,38 +5,32 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-
 #include "fsl_smm.h"
 
-
 /*******************************************************************************
-* Definitions
-******************************************************************************/
-
+ * Definitions
+ ******************************************************************************/
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.smm"
 #endif
 
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
 
 /*******************************************************************************
-* Prototypes
-******************************************************************************/
-
-
-/*******************************************************************************
-* Variables
-******************************************************************************/
-
+ * Variables
+ ******************************************************************************/
 
 /*******************************************************************************
-* Code
-******************************************************************************/
+ * Code
+ ******************************************************************************/
 
 /*!
  * brief Set external interrupt configuration.
- * 
+ *
  * param base SMM base address.
  * param ptrConfig Pointer to configuration in type of smm_ext_int_config_t.
  */
@@ -45,14 +39,15 @@ void SMM_SetExtInterruptConfig(SMM_Type *base, const smm_ext_int_config_t *ptrCo
     uint32_t tmp32 = 0UL;
 
     tmp32 = (base->CNFG) & ~(SMM_CNFG_EXT_INTP_POL_MASK | SMM_CNFG_EXT_INTP_MASK_MASK);
-    tmp32 |= SMM_CNFG_EXT_INTP_MASK(ptrConfig->maskExtIntPin) | SMM_CNFG_EXT_INTP_POL(ptrConfig->extIntPolarity);
+    tmp32 |= (ptrConfig->maskExtIntPin ? SMM_CNFG_EXT_INTP_MASK_MASK : 0UL) |
+             SMM_CNFG_EXT_INTP_POL(ptrConfig->extIntPolarity);
 
     base->CNFG = tmp32;
 }
 
 /*!
  * brief Write data to backup registers.
- * 
+ *
  * param base SMM base address.
  * param[in] ptrBackupRegContent Pointer of the content will write to backup registers.
  */
@@ -66,7 +61,7 @@ void SMM_WriteToBackupReg(SMM_Type *base, const smm_backup_reg_content_t *ptrBac
 
 /*!
  * brief Read data from backup registers.
- * 
+ *
  * param base SMM base address.
  * param[out] ptrBackupRegContent Pointer of the content will read from backup registers.
  */
@@ -78,7 +73,7 @@ void SMM_ReadFromBackupReg(SMM_Type *base, smm_backup_reg_content_t *ptrBackupRe
 
 /*!
  * brief Enable memory retention at low power modes for main CPU.
- * 
+ *
  * param base SMM base address.
  * param sramCuts Mask of sram cuts to retained.
  */

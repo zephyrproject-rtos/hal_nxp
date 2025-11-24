@@ -220,7 +220,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
      * (instance >= ARRAY_SIZE(s_lpuartBases)) not covered. The peripheral base
      * address is always valid and checked by assert.
      */
-    for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         if (MSDK_REG_SECURE_ADDR(s_lpuartBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
@@ -471,7 +471,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
          * $Branch Coverage Justification$
          * $ref fsl_lpuart_c_ref_1$
          */
-        if ((osr > 3U) && (osr < 8U))
+        if ((osr > 3U) && (osr < 8U)) /* GCOVR_EXCL_BR_LINE */
         {
             temp |= LPUART_BAUD_BOTHEDGE_MASK;
         }
@@ -827,7 +827,7 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
          * $Branch Coverage Justification$
          * $ref fsl_lpuart_c_ref_1$
          */
-        if ((osr > 3U) && (osr < 8U))
+        if ((osr > 3U) && (osr < 8U)) /* GCOVR_EXCL_BR_LINE */
         {
             temp |= LPUART_BAUD_BOTHEDGE_MASK;
         }
@@ -1289,7 +1289,7 @@ static status_t LPUART_WaitForReadData(LPUART_Type *base)
              * $ref fsl_lpuart_c_ref_2$.
              */
             status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_RxOverrunFlag)) ?
-                          (kStatus_LPUART_RxHardwareOverrun) :
+                          (kStatus_LPUART_RxHardwareOverrun) : /* GCOVR_EXCL_BR_LINE */
                           (kStatus_LPUART_FlagCannotClearManually));
             /* Other error flags(FE, NF, and PF) are prevented from setting once OR is set, no need to check other
              * error flags*/
@@ -1303,7 +1303,7 @@ static status_t LPUART_WaitForReadData(LPUART_Type *base)
              * $ref fsl_lpuart_c_ref_2$.
              */
             status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_ParityErrorFlag)) ?
-                          (kStatus_LPUART_ParityError) :
+                          (kStatus_LPUART_ParityError) : /* GCOVR_EXCL_BR_LINE */
                           (kStatus_LPUART_FlagCannotClearManually));
         }
 
@@ -1314,7 +1314,7 @@ static status_t LPUART_WaitForReadData(LPUART_Type *base)
              * $ref fsl_lpuart_c_ref_2$.
              */
             status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_FramingErrorFlag)) ?
-                          (kStatus_LPUART_FramingError) :
+                          (kStatus_LPUART_FramingError) : /* GCOVR_EXCL_BR_LINE */
                           (kStatus_LPUART_FlagCannotClearManually));
         }
 
@@ -1325,7 +1325,7 @@ static status_t LPUART_WaitForReadData(LPUART_Type *base)
              * $ref fsl_lpuart_c_ref_2$.
              */
             status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_NoiseErrorFlag)) ?
-                          (kStatus_LPUART_NoiseError) :
+                          (kStatus_LPUART_NoiseError) : /* GCOVR_EXCL_BR_LINE */
                           (kStatus_LPUART_FlagCannotClearManually));
         }
 

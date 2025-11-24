@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief DCIF driver version */
-#define FSL_DCIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_DCIF_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 #if defined(FSL_FEATURE_DCIF_LAYER_COUNT) && (!defined(DCIF_LAYER_COUNT))
@@ -408,11 +408,33 @@ static inline void DCIF_EnableLayer(DCIF_Type *base, uint8_t layerIndex, bool en
 {
     if (enable)
     {
-        base->CTRLDESC0_L1 |= DCIF_CTRLDESC0_L1_EN_MASK;
+        if (layerIndex == 0U)
+        {
+	    base->CTRLDESC0_L0 |= DCIF_CTRLDESC0_L0_EN_MASK;
+        }
+        else if (layerIndex == 1U)
+        {
+            base->CTRLDESC0_L1 |= DCIF_CTRLDESC0_L1_EN_MASK;
+        }
+        else
+        {
+            return;
+        }
     }
     else
     {
-        base->CTRLDESC0_L1 &= ~DCIF_CTRLDESC0_L1_EN_MASK;
+        if (layerIndex == 0U)
+        {
+            base->CTRLDESC0_L0 &= ~DCIF_CTRLDESC0_L0_EN_MASK;
+        }
+        else if (layerIndex == 1U)
+        {
+            base->CTRLDESC0_L1 &= ~DCIF_CTRLDESC0_L1_EN_MASK;
+        }
+        else
+        {
+            return;
+        }
     }
 }
 

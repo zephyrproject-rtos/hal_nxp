@@ -576,11 +576,11 @@ static inline void RTC_EnableClockOutput(RTC_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CR |= RTC_CR_CLKO_MASK;
+        base->CR &= ~RTC_CR_CLKO_MASK;
     }
     else
     {
-        base->CR &= ~RTC_CR_CLKO_MASK;
+        base->CR |= RTC_CR_CLKO_MASK;
     }
 }
 #endif /* FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT */

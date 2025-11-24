@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2022 NXP
+ * Copyright 2016-2017, 2022, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -68,14 +68,14 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
      * (instance >= ARRAY_SIZE(s_lpitBases)) not covered. The peripheral base
      * address is always valid and checked by assert.
      */
-    for (instance = 0U; instance < ARRAY_SIZE(s_lpitBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_lpitBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_lpitBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_lpitBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_lpitBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }

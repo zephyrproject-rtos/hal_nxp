@@ -561,7 +561,7 @@ static inline status_t TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
          *           (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)))
          * not covered.  $ref tpm_h_ref_1$.
          */
-    } while (0U != (base->CONTROLS[chnlNumber].CnSC &
+    } while (0U != (base->CONTROLS[chnlNumber].CnSC & /* GCOVR_EXCL_BR_LINE */
                     (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
 
     return kStatus_Success;
@@ -609,7 +609,7 @@ static inline status_t TPM_EnableChannel(TPM_Type *base, tpm_chnl_t chnlNumber, 
          * not covered. $ref tpm_h_ref_1$.
          */
     } while ((control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) !=
-             (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
+             (uint8_t)(base->CONTROLS[chnlNumber].CnSC & /* GCOVR_EXCL_BR_LINE */
                        (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
 
     return kStatus_Success;
@@ -921,7 +921,7 @@ static inline status_t TPM_SetTimerPeriod(TPM_Type *base, uint32_t ticks)
          * $Branch Coverage Justification$
          * (ticks != base->MOD) not covered. $ref tpm_h_ref_2$.
          */
-    } while (ticks != base->MOD);
+    } while (ticks != base->MOD); /* GCOVR_EXCL_BR_LINE */
 
     return kStatus_Success;
 }

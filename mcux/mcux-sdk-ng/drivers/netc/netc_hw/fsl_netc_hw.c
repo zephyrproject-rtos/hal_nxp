@@ -686,6 +686,15 @@ status_t NETC_GetISCStatistic(netc_cbdr_handle_t *handle, uint32_t entryID, netc
            Starting offset from defined is 7-bits. */
         statistic->sgDropCount >>= 7U;
         statistic->sgDropCount += ((statistic->res3 & 0x7FU) << 25U);
+#else
+#if (defined(FSL_FEATURE_NETC_HAS_ERRATA_052134) && FSL_FEATURE_NETC_HAS_ERRATA_052134)
+        /* ERR052134: The actual offset of the SG_DROP_COUNT in the Ingress Stream Count Table STSE_DATA element is bit
+           200 or the offset within the entire Ingress Stream Count Table Response Data Buffer format is bit 232.
+           Starting offset is 8-bits.
+           Note: For i.MXRT1189 the ERR052134 is described in the Reference Manual NETC section. */
+        statistic->sgDropCount >>= 8U;
+        statistic->sgDropCount += ((statistic->res3 & 0xFFU) << 24U);
+#endif
 #endif
     }
     return status;

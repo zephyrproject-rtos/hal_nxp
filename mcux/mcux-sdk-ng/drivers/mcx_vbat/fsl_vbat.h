@@ -1,6 +1,5 @@
 /*
- * Copyright 2022-2024 NXP
- * All rights reserved.
+ * Copyright 2022-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief VBAT driver version 2.3.1. */
-#define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @brief VBAT driver version 2.5.0. */
+#define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 #if !defined(VBAT_LDORAMC_RET_MASK)
@@ -64,7 +63,9 @@ enum _vbat_status_flag
 #if defined(VBAT_STATUSA_CLOCK_DET_MASK)
     kVBAT_StatusFlagClockDetect = VBAT_STATUSA_CLOCK_DET_MASK,   /*!< The clock monitor has detected an error. */
 #endif                                                           /* VBAT_STATUSA_CLOCK_DET_MASK */
+#if defined(VBAT_STATUSA_CONFIG_DET_MASK)
     kVBAT_StatusFlagConfigDetect = VBAT_STATUSA_CONFIG_DET_MASK, /*!< Configuration error detected. */
+#endif
 #if defined(VBAT_STATUSA_VOLT_DET_MASK)
     kVBAT_StatusFlagVoltageDetect = VBAT_STATUSA_VOLT_DET_MASK, /*!< Voltage monitor has detected
                                                                     an error with VBAT supply. */
@@ -100,8 +101,10 @@ enum _vbat_interrupt_enable
 #if defined(VBAT_IRQENA_CLOCK_DET_MASK)
     kVBAT_InterruptEnableClockDetect = VBAT_IRQENA_CLOCK_DET_MASK, /*!< Enable clock monitor detect interrupt. */
 #endif                                                             /* VBAT_IRQENA_CLOCK_DET_MASK */
+#if defined(VBAT_IRQENA_CONFIG_DET_MASK)
     kVBAT_InterruptEnableConfigDetect =
         VBAT_IRQENA_CONFIG_DET_MASK, /*!< Enable configuration error detected interrupt. */
+#endif
 #if defined(VBAT_IRQENA_VOLT_DET_MASK)
     kVBAT_InterruptEnableVoltageDetect = VBAT_IRQENA_VOLT_DET_MASK, /*!< Enable voltage monitor detect interrupt. */
 #endif                                                              /* VBAT_IRQENA_VOLT_DET_MASK */
@@ -120,7 +123,10 @@ enum _vbat_interrupt_enable
     kVBAT_AllInterruptsEnable =
         (VBAT_IRQENA_POR_DET_MASK | VBAT_IRQENA_WAKEUP_FLAG_MASK | VBAT_IRQENA_TIMER0_FLAG_MASK |
          VBAT_IRQENA_TIMER1_FLAG_MASK | VBAT_IRQENA_LDO_RDY_MASK | VBAT_IRQENA_OSC_RDY_MASK |
-         VBAT_IRQENA_CONFIG_DET_MASK | VBAT_IRQENA_IRQ0_DET_MASK | VBAT_IRQENA_IRQ1_DET_MASK |
+#if defined(VBAT_IRQENA_CONFIG_DET_MASK)
+         VBAT_IRQENA_CONFIG_DET_MASK |
+#endif
+         VBAT_IRQENA_IRQ0_DET_MASK | VBAT_IRQENA_IRQ1_DET_MASK |
          VBAT_IRQENA_IRQ2_DET_MASK | VBAT_IRQENA_IRQ3_DET_MASK), /*!< Enable all interrupts. */
 };
 
@@ -144,8 +150,10 @@ enum _vbat_wakeup_enable
     kVBAT_WakeupEnableClockDetect =
         VBAT_WAKENA_CLOCK_DET_MASK, /*!< Enable wakeup when clock monitor detect an error. */
 #endif                              /* VBAT_WAKENA_CLOCK_DET_MASK */
+#if defined(VBAT_WAKENA_CONFIG_DET_MASK)
     kVBAT_WakeupEnableConfigDetect = VBAT_WAKENA_CONFIG_DET_MASK, /*!< Enable wakeup when
                                                                       configuration error detected. */
+#endif
 #if defined(VBAT_WAKENA_VOLT_DET_MASK)
     kVBAT_WakeupEnableVoltageDetect = VBAT_WAKENA_VOLT_DET_MASK, /*!< Enable wakeup when voltage monitor detect an
                                                                      error. */
@@ -165,7 +173,10 @@ enum _vbat_wakeup_enable
 
     kVBAT_AllWakeupsEnable = (VBAT_WAKENA_POR_DET_MASK | VBAT_WAKENA_WAKEUP_FLAG_MASK | VBAT_WAKENA_TIMER0_FLAG_MASK |
                               VBAT_WAKENA_TIMER1_FLAG_MASK | VBAT_WAKENA_LDO_RDY_MASK | VBAT_WAKENA_OSC_RDY_MASK |
-                              VBAT_WAKENA_CONFIG_DET_MASK | VBAT_WAKENA_IRQ0_DET_MASK | VBAT_WAKENA_IRQ1_DET_MASK |
+#if defined(VBAT_WAKENA_CONFIG_DET_MASK)
+                              VBAT_WAKENA_CONFIG_DET_MASK |
+#endif
+                              VBAT_WAKENA_IRQ0_DET_MASK | VBAT_WAKENA_IRQ1_DET_MASK |
                               VBAT_WAKENA_IRQ2_DET_MASK | VBAT_WAKENA_IRQ3_DET_MASK
 
 #if defined(VBAT_WAKENA_CLOCK_DET_MASK)
@@ -529,16 +540,21 @@ static inline void VBAT_EnableCrystalOsc32k(VBAT_Type *base, bool enable)
     if (enable)
     {
         base->OSCCTLA |= VBAT_OSCCTLA_OSC_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->OSCCTLB &= ~VBAT_OSCCTLA_OSC_EN_MASK;
-
+#endif
+#if (defined(FSL_FEATURE_MCX_VBAT_HAS_STATUS_REG) && FSL_FEATURE_MCX_VBAT_HAS_STATUS_REG)
         /* Polling status register to check clock is ready. */
         while ((base->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0UL)
         {}
+#endif
     }
     else
     {
         base->OSCCTLA &= ~VBAT_OSCCTLA_OSC_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->OSCCTLB |= VBAT_OSCCTLA_OSC_EN_MASK;
+#endif
     }
 }
 
@@ -558,12 +574,16 @@ static inline void VBAT_BypassCrystalOsc32k(VBAT_Type *base, bool enableBypass)
     if (enableBypass)
     {
         base->OSCCTLA |= (VBAT_OSCCTLA_OSC_EN_MASK | VBAT_OSCCTLA_OSC_BYP_EN_MASK);
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->OSCCTLB &= ~(VBAT_OSCCTLA_OSC_EN_MASK | VBAT_OSCCTLA_OSC_BYP_EN_MASK);
+#endif
     }
     else
     {
         base->OSCCTLA &= ~(VBAT_OSCCTLA_OSC_EN_MASK | VBAT_OSCCTLA_OSC_BYP_EN_MASK);
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->OSCCTLB |= (VBAT_OSCCTLA_OSC_EN_MASK | VBAT_OSCCTLA_OSC_BYP_EN_MASK);
+#endif
     }
 }
 
@@ -579,8 +599,10 @@ static inline void VBAT_AdjustCrystalOsc32kAmplifierGain(VBAT_Type *base, uint8_
 {
     base->OSCCTLA = ((base->OSCCTLA & ~(VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK | VBAT_OSCCTLA_FINE_AMP_GAIN_MASK)) |
                      (VBAT_OSCCTLA_COARSE_AMP_GAIN(coarse) | VBAT_OSCCTLA_FINE_AMP_GAIN(fine)));
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCCTLB = ((base->OSCCTLB & ~(VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK | VBAT_OSCCTLA_FINE_AMP_GAIN_MASK)) |
                      (VBAT_OSCCTLA_COARSE_AMP_GAIN(~coarse) | VBAT_OSCCTLA_FINE_AMP_GAIN(~fine)));
+#endif
 }
 #else
 /*!
@@ -592,7 +614,9 @@ static inline void VBAT_AdjustCrystalOsc32kAmplifierGain(VBAT_Type *base, uint8_
 static inline void VBAT_AdjustCrystalOsc32kAmplifierGain(VBAT_Type *base, uint8_t coarse)
 {
     base->OSCCTLA = (base->OSCCTLA & ~VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK) | (VBAT_OSCCTLA_COARSE_AMP_GAIN(coarse));
-    base->OSCCTLB = (base->OSCCTLB & ~VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK) | (VBAT_OSCCTLA_COARSE_AMP_GAIN(~(uint32_t)coarse));        
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
+    base->OSCCTLB = (base->OSCCTLB & ~VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK) | (VBAT_OSCCTLA_COARSE_AMP_GAIN(~(uint32_t)coarse));
+#endif
 }
 
 #endif /*  */
@@ -623,7 +647,9 @@ status_t VBAT_SetCrystalOsc32kModeAndLoadCapacitance(VBAT_Type *base,
 static inline void VBAT_TrimCrystalOsc32kStartupTime(VBAT_Type *base, vbat_osc32k_start_up_time_t startupTime)
 {
     base->OSCCFGA = ((base->OSCCFGA & ~(VBAT_OSCCFGA_INIT_TRIM_MASK)) | VBAT_OSCCFGA_INIT_TRIM(startupTime));
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCCFGB = ((base->OSCCFGB & ~(VBAT_OSCCFGA_INIT_TRIM_MASK)) | VBAT_OSCCFGA_INIT_TRIM(~((uint32_t)startupTime)));
+#endif
 }
 
 /*!
@@ -635,7 +661,9 @@ static inline void VBAT_TrimCrystalOsc32kStartupTime(VBAT_Type *base, vbat_osc32
 static inline void VBAT_SetOsc32kSwitchModeComparatorTrimValue(VBAT_Type *base, uint8_t comparatorTrimValue)
 {
     base->OSCCFGA = ((base->OSCCFGA & ~VBAT_OSCCFGA_CMP_TRIM_MASK) | VBAT_OSCCFGA_CMP_TRIM(comparatorTrimValue));
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCCFGB = ((base->OSCCFGB & ~VBAT_OSCCFGA_CMP_TRIM_MASK) | VBAT_OSCCFGA_CMP_TRIM(~((uint32_t)comparatorTrimValue)));
+#endif
 }
 
 /*!
@@ -647,7 +675,9 @@ static inline void VBAT_SetOsc32kSwitchModeComparatorTrimValue(VBAT_Type *base, 
 static inline void VBAT_SetOsc32kSwitchModeDelayTrimValue(VBAT_Type *base, uint8_t delayTrimValue)
 {
     base->OSCCFGA = ((base->OSCCFGA & ~VBAT_OSCCFGA_DLY_TRIM_MASK) | VBAT_OSCCFGA_DLY_TRIM(delayTrimValue));
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCCFGB = ((base->OSCCFGB & ~VBAT_OSCCFGA_DLY_TRIM_MASK) | VBAT_OSCCFGA_DLY_TRIM(~((uint32_t)delayTrimValue)));
+#endif
 }
 
 /*!
@@ -659,7 +689,9 @@ static inline void VBAT_SetOsc32kSwitchModeDelayTrimValue(VBAT_Type *base, uint8
 static inline void VBAT_SetOsc32kSwitchModeCapacitorTrimValue(VBAT_Type *base, uint8_t capacitorTrimValue)
 {
     base->OSCCFGA = ((base->OSCCFGA & ~VBAT_OSCCFGA_CAP_TRIM_MASK) | VBAT_OSCCFGA_CAP_TRIM(capacitorTrimValue));
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCCFGB = ((base->OSCCFGB & ~VBAT_OSCCFGA_CAP_TRIM_MASK) | VBAT_OSCCFGA_CAP_TRIM(~((uint32_t)capacitorTrimValue)));
+#endif
 }
 
 /*!
@@ -670,7 +702,9 @@ static inline void VBAT_SetOsc32kSwitchModeCapacitorTrimValue(VBAT_Type *base, u
 static inline void VBAT_LookOsc32kSettings(VBAT_Type *base)
 {
     base->OSCLCKA |= VBAT_OSCLCKA_LOCK_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCLCKB &= ~VBAT_OSCLCKB_LOCK_MASK;
+#endif
 }
 
 /*!
@@ -681,7 +715,9 @@ static inline void VBAT_LookOsc32kSettings(VBAT_Type *base)
 static inline void VBAT_UnlockOsc32kSettings(VBAT_Type *base)
 {
     base->OSCLCKA &= ~VBAT_OSCLCKA_LOCK_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->OSCLCKB |= VBAT_OSCLCKB_LOCK_MASK;
+#endif
 }
 
 /*!
@@ -771,12 +807,16 @@ static inline void VBAT_EnableBandgapRefreshMode(VBAT_Type *base, bool enableRef
     if (enableRefreshMode)
     {
         base->LDOCTLA |= VBAT_LDOCTLA_REFRESH_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->LDOCTLB &= ~VBAT_LDOCTLA_REFRESH_EN_MASK;
+#endif
     }
     else
     {
         base->LDOCTLA &= ~VBAT_LDOCTLA_REFRESH_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->LDOCTLB |= VBAT_LDOCTLA_REFRESH_EN_MASK;
+#endif
     }
 }
 
@@ -806,7 +846,9 @@ status_t VBAT_EnableBackupSRAMRegulator(VBAT_Type *base, bool enable);
 static inline void VBAT_LockRamLdoSettings(VBAT_Type *base)
 {
     base->LDOLCKA |= VBAT_LDOLCKA_LOCK_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->LDOLCKB &= ~VBAT_LDOLCKA_LOCK_MASK;
+#endif
 }
 
 /*!
@@ -954,12 +996,16 @@ static inline void VBAT_SwitchVBATModuleSupplyActiveMode(VBAT_Type *base, vbat_i
     if (supply == kVBAT_ModuleSuppliedByVddBat)
     {
         base->SWICTLA &= ~VBAT_SWICTLA_SWI_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->SWICTLB |= VBAT_SWICTLA_SWI_EN_MASK;
+#endif
     }
     else
     {
         base->SWICTLA |= VBAT_SWICTLA_SWI_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->SWICTLB &= ~VBAT_SWICTLA_SWI_EN_MASK;
+#endif
     }
 }
 
@@ -989,14 +1035,20 @@ static inline void VBAT_SwitchVBATModuleSupplyLowPowerMode(VBAT_Type *base, vbat
     if (supply == kVBAT_ModuleSuppliedByVddBat)
     {
         base->SWICTLA &= ~VBAT_SWICTLA_LP_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->SWICTLB |= VBAT_SWICTLA_LP_EN_MASK;
+#endif
     }
     else
     {
         base->SWICTLA |= VBAT_SWICTLA_SWI_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->SWICTLB &= ~VBAT_SWICTLA_SWI_EN_MASK;
+#endif
         base->SWICTLA |= VBAT_SWICTLA_LP_EN_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
         base->SWICTLB &= ~VBAT_SWICTLA_LP_EN_MASK;
+#endif
     }
 }
 
@@ -1008,7 +1060,9 @@ static inline void VBAT_SwitchVBATModuleSupplyLowPowerMode(VBAT_Type *base, vbat
 static inline void VBAT_LockSwitchControl(VBAT_Type *base)
 {
     base->SWILCKA |= VBAT_SWILCKA_LOCK_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->SWILCKB &= ~VBAT_SWILCKB_LOCK_MASK;
+#endif
 }
 
 /*!
@@ -1019,7 +1073,9 @@ static inline void VBAT_LockSwitchControl(VBAT_Type *base)
 static inline void VBAT_UnlockSwitchControl(VBAT_Type *base)
 {
     base->SWILCKA &= ~VBAT_SWILCKA_LOCK_MASK;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->SWILCKB |= VBAT_SWILCKB_LOCK_MASK;
+#endif
 }
 
 /*!
@@ -1291,7 +1347,9 @@ static inline uint32_t VBAT_GetStatusFlags(VBAT_Type *base)
 static inline void VBAT_ClearStatusFlags(VBAT_Type *base, uint32_t mask)
 {
     base->STATUSA = mask;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->STATUSB = ~mask;
+#endif
 }
 
 /*!
@@ -1303,7 +1361,9 @@ static inline void VBAT_ClearStatusFlags(VBAT_Type *base, uint32_t mask)
 static inline void VBAT_EnableInterrupts(VBAT_Type *base, uint32_t mask)
 {
     base->IRQENA |= mask;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->IRQENB &= (uint32_t)~mask;
+#endif
 }
 
 /*!
@@ -1315,7 +1375,9 @@ static inline void VBAT_EnableInterrupts(VBAT_Type *base, uint32_t mask)
 static inline void VBAT_DisableInterrupts(VBAT_Type *base, uint32_t mask)
 {
     base->IRQENA &= ~mask;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->IRQENB |= mask;
+#endif
 }
 
 /*!
@@ -1327,7 +1389,9 @@ static inline void VBAT_DisableInterrupts(VBAT_Type *base, uint32_t mask)
 static inline void VBAT_EnableWakeup(VBAT_Type *base, uint32_t mask)
 {
     base->WAKENA |= mask;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->WAKENB &= ~mask;
+#endif
 }
 
 /*!
@@ -1339,7 +1403,9 @@ static inline void VBAT_EnableWakeup(VBAT_Type *base, uint32_t mask)
 static inline void VBAT_DisableWakeup(VBAT_Type *base, uint32_t mask)
 {
     base->WAKENA &= ~mask;
+#if !(defined(FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG) && (FSL_FEATURE_MCX_VBAT_HAS_B_SIDE_REG==0U))
     base->WAKENB |= mask;
+#endif
 }
 
 /*!

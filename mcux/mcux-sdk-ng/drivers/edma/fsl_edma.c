@@ -135,8 +135,10 @@ void EDMA_Init(DMA_Type *base, const edma_config_t *config)
     /* Configure EDMA peripheral according to the configuration structure. */
     tmpreg = base->CR;
     tmpreg &= ~(DMA_CR_ERCA_MASK | DMA_CR_HOE_MASK | DMA_CR_CLM_MASK | DMA_CR_EDBG_MASK);
-    tmpreg |= (DMA_CR_ERCA(config->enableRoundRobinArbitration) | DMA_CR_HOE(config->enableHaltOnError) |
-               DMA_CR_CLM(config->enableContinuousLinkMode) | DMA_CR_EDBG(config->enableDebugMode) | DMA_CR_EMLM(1U));
+    tmpreg |= ((config->enableRoundRobinArbitration ? DMA_CR_ERCA_MASK : 0UL) |
+               (config->enableHaltOnError ? DMA_CR_HOE_MASK : 0UL) |
+               (config->enableContinuousLinkMode ? DMA_CR_CLM_MASK : 0UL) |
+               (config->enableContinuousLinkMode ? DMA_CR_CLM_MASK : 0UL) | DMA_CR_EMLM(1U));
     base->CR = tmpreg;
 }
 
@@ -911,7 +913,7 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
      * During first submit, the header should be assigned to 1, since 0 is current one and 1 is next TCD to be loaded,
      * but software cannot know which submission is the first one, so assign 1 to header here.
      */
-    handle->header  = 1;
+    handle->header  = 0;
     handle->tcdUsed = 0;
     handle->tcdSize = (int8_t)tcdSize;
     handle->flags   = 0;
@@ -1364,7 +1366,7 @@ void EDMA_AbortTransfer(edma_handle_t *handle)
     /* Handle the tcd */
     if (handle->tcdPool != NULL)
     {
-        handle->header  = 1;
+        handle->header  = 0;
         handle->tail    = 0;
         handle->tcdUsed = 0;
     }
@@ -1432,17 +1434,9 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
         /* Get the index of the next transfer TCD blocks to be loaded into the eDMA engine. */
         sga_index = sga / sizeof(edma_tcd_t);
-        /* Adjust header positions. */
-        if (transfer_done)
-        {
-            /* New header shall point to the next TCD to be loaded (current one is already finished) */
-            new_header = (uint8_t)sga_index;
-        }
-        else
-        {
-            /* New header shall point to this descriptor currently loaded (not finished yet) */
-            new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
-        }
+        /* Adjust header positions, new_header should be the index of the current transfer TCD blocks. */
+        new_header = sga_index != 0U ? (uint8_t)sga_index - 1U : (uint8_t)handle->tcdSize - 1U;
+
         /* Calculate the number of finished TCDs */
         if (new_header == (uint8_t)handle->header)
         {
@@ -1453,10 +1447,12 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
              * new_header(1) = handle->header(1)
              * tcdUsed(1) != tcdSize(>1)
              * As the application submit only once, so scatter gather must not enabled, then tcds_done should be 1
+             * check transfer_done to handle the half interrupt or internal error occurs.
              */
-            if ((tmpTcdUsed == tmpTcdSize) || (!esg))
+            if (((tmpTcdUsed == tmpTcdSize) || (!esg)) && transfer_done)
             {
                 tcds_done = handle->tcdUsed;
+
             }
             else
             {
