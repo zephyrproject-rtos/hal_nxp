@@ -63,7 +63,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 #define MU_GET_CORE_FLAG(flags) (((uint32_t)(flags) >> 0U) & 0xFFUL)

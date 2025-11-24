@@ -94,14 +94,14 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
      * (instance >= ARRAY_SIZE(s_lpadcBases)) not covered. The peripheral base
      * address is always valid and checked by assert.
      */
-    for (instance = 0; instance < ARRAY_SIZE(s_lpadcBases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_lpadcBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_lpadcBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_lpadcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_lpadcBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -261,7 +261,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
  * This function initializes the converter configuration structure with an available settings. The default values are:
  * code
  *   config->enableInDozeMode        = true;
- *   config->conversionAverageMode   = kLPADC_ConversionAverage1;
+ *   config->conversionAverageMode   = kLPADC_ConversionAverageMax - 1; //Set calibration average mode to max by default.
  *   config->enableAnalogPreliminary = false;
  *   config->powerUpDelay            = 0x80;
  *   config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
@@ -288,8 +288,11 @@ void LPADC_GetDefaultConfig(lpadc_config_t *config)
 #endif /* FSL_FEATURE_LPADC_HAS_CFG_VREF1RNG */
     config->enableInDozeMode = true;
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS
-    /* Set calibration average mode. */
-    config->conversionAverageMode = kLPADC_ConversionAverage1;
+    /* Set calibration average mode to max by default,
+     * kLPADC_ConversionAverage128 for 3 bit width.
+     * kLPADC_ConversionAverage1024 fot 4 bit width.
+     */
+    config->conversionAverageMode = (lpadc_conversion_average_mode_t)(kLPADC_ConversionAverageMax - 1);
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
     config->enableAnalogPreliminary = false;
     config->powerUpDelay            = 0x80;
@@ -590,7 +593,7 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
      * $Branch Coverage Justification$
      * For some chips, the LPADC command compare function is always supported.
      */
-    if ((kLPADC_HardwareCompareDisabled != config->hardwareCompareMode) && (commandId < ADC_CV_COUNT))
+    if ((kLPADC_HardwareCompareDisabled != config->hardwareCompareMode) && (commandId < ADC_CV_COUNT)) /* GCOVR_EXCL_BR_LINE */
     {
         /* Set CV register. */
         base->CV[commandId] = (ADC_CV_CVH(config->hardwareCompareValueHigh)    /* Compare value high. */
@@ -1030,7 +1033,7 @@ void LPADC_GetCalibrationValue(ADC_Type *base, lpadc_calibration_value_t *ptrCal
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
 
     ptrCalibrationValue->gainCalibrationResultA = (uint16_t)(base->GCR[0] & ADC_GCR_GCALR_MASK);
-#if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2U))
+#if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
     ptrCalibrationValue->gainCalibrationResultB = (uint16_t)(base->GCR[1] & ADC_GCR_GCALR_MASK);
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
 
@@ -1094,7 +1097,7 @@ status_t LPADC_SetCalibrationValue(ADC_Type *base, const lpadc_calibration_value
      * while ((base->STAT & ADC_STAT_CAL_RDY_MASK) == ADC_STAT_CAL_RDY_MASK) not covered. Test unfeasible,
      * the calibration ready state is too short not to catch.
      */
-    while (ADC_STAT_CAL_RDY_MASK != (base->STAT & ADC_STAT_CAL_RDY_MASK))
+    while (ADC_STAT_CAL_RDY_MASK != (base->STAT & ADC_STAT_CAL_RDY_MASK)) /* GCOVR_EXCL_BR_LINE */
     {
 #if LPADC_CALIBRATION_READY_TIMEOUT
         if ((--timeout) == 0U)

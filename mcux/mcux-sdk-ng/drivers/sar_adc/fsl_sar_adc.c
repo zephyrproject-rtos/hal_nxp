@@ -188,7 +188,7 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
     base->CTR0 = ((base->CTR0 & (~ADC_CTR0_INPSAMP_MASK)) | ADC_CTR0_INPSAMP(config->samplePhaseDuration[0U]));
     base->CTR1 = ((base->CTR1 & (~ADC_CTR1_INPSAMP_MASK)) | ADC_CTR1_INPSAMP(config->samplePhaseDuration[1U]));
 #if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
-    if(1U == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
+    if(1 == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
     {
         base->CTR2 = ((base->CTR2 & (~ADC_CTR2_INPSAMP_MASK)) | ADC_CTR2_INPSAMP(config->samplePhaseDuration[2U]));
     }
@@ -200,7 +200,7 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
                   | ADC_PSCR_PRECONV(config->enableConvertPresampleVal ? 1U : 0U)));
 
 #if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
-    if(1U == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
+    if(1 == FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
     {
         base->PSCR = ((base->PSCR & (~ADC_PSCR_PREVAL2_MASK)) | ADC_PSCR_PREVAL1(config->presampleVoltageSrc[2U]));
     }
@@ -266,7 +266,7 @@ void ADC_SetConvChainConfig(ADC_Type *base, const adc_chain_config_t *config)
     for (uint8_t index = 0U; index < (uint8_t)ADC_GROUP_COUNTS; ++index)
     {
 #if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
-        if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
+        if(1 != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
         {
             break;
         }
@@ -292,7 +292,7 @@ void ADC_SetConvChainConfig(ADC_Type *base, const adc_chain_config_t *config)
         for (uint8_t index = 0U; index < (uint8_t)ADC_GROUP_COUNTS; ++index)
         {
 #if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
-            if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
+            if(1 != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
             {
                 break;
             }
@@ -314,7 +314,7 @@ void ADC_SetConvChainConfig(ADC_Type *base, const adc_chain_config_t *config)
         for (uint8_t index = 0U; index < (uint8_t)ADC_GROUP_COUNTS; ++index)
         {
 #if defined (FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n)
-            if(1U != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
+            if(1 != FSL_FEATURE_ADC_INSTANCE_SUPPORT_GROUP3n(base))
             {
                 break;
             }

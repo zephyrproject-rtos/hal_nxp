@@ -63,14 +63,14 @@ static uint32_t LPCMP_GetInstance(LPCMP_Type *base)
      * (instance >= ARRAY_SIZE(s_lpcmpBases)) not covered. The peripheral base
      * address is always valid and checked by assert.
      */
-    for (instance = 0; instance < ARRAY_SIZE(s_lpcmpBases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_lpcmpBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_lpcmpBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_lpcmpBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_lpcmpBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }

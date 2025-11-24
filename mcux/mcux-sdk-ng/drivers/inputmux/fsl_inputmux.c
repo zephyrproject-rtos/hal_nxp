@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, 2023-2024 NXP
+ * Copyright 2016-2021, 2023-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -130,7 +130,7 @@ void INPUTMUX_Init(void *base)
  *
  * retval None.
  */
-void INPUTMUX_AttachSignal(void *base, uint32_t index, inputmux_connection_t connection)
+void INPUTMUX_AttachSignal(void *base, uint16_t index, inputmux_connection_t connection)
 {
     uint32_t pmux_id;
     uint32_t output_id;

@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief cache driver version */
-#define FSL_CACHE_LPCAC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_CACHE_LPCAC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 /*******************************************************************************
  * API
@@ -42,7 +42,13 @@ extern "C" {
  */
 static inline void L1CACHE_EnableCodeCache(void)
 {
+    __DSB();
+    __ISB();
+
     SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
+
+    __DSB();
+    __ISB();
 }
 
 /*!
@@ -51,7 +57,13 @@ static inline void L1CACHE_EnableCodeCache(void)
  */
 static inline void L1CACHE_DisableCodeCache(void)
 {
+    __DSB();
+    __ISB();
+
     SYSCON->LPCAC_CTRL |= SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
+
+    __DSB();
+    __ISB();
 }
 
 /*!

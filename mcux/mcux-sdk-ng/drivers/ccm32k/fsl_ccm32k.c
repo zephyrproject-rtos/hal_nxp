@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2023, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -134,7 +134,7 @@ void CCM32K_Set32kOscConfig(CCM32K_Type *base, ccm32k_osc_mode_t mode, const ccm
          * $Branch Coverage Justification$
          * (config == NULL) not covered. The conifg memory space value cannot set to null.
          */
-        if (config != NULL)
+        if (config != NULL) /* GCOVR_EXCL_BR_LINE */
         {
             if (config->enableInternalCapBank)
             {

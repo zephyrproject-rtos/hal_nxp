@@ -136,7 +136,7 @@ status_t MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg)
  * @brief Blocks to receive a message with timeout protection.
  *
  * This function waits until the RX register is full and receives the message.
- * If MU_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * If MU1_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
  * after the specified number of polling iterations and return kStatus_Timeout.
  *
  * This function provides the same blocking behavior as MU_ReceiveMsg() but
@@ -165,19 +165,19 @@ status_t MU_ReceiveMsgTimeout(MU_Type *base, uint32_t regIndex, uint32_t *readVa
         return kStatus_InvalidArgument;
     }
 
-#if MU_BUSY_POLL_COUNT
-    uint32_t poll_count = MU_BUSY_POLL_COUNT;
-#endif /* MU_BUSY_POLL_COUNT */
+#if MU1_BUSY_POLL_COUNT
+    uint32_t poll_count = MU1_BUSY_POLL_COUNT;
+#endif /* MU1_BUSY_POLL_COUNT */
 
     /* Wait RX register to be full. */
     while (0U == (base->RSR & (1UL << regIndex)))
     {
-#if MU_BUSY_POLL_COUNT
+#if MU1_BUSY_POLL_COUNT
         if ((--poll_count) == 0u)
         {
             return kStatus_Timeout;
         }
-#endif /* MU_BUSY_POLL_COUNT */
+#endif /* MU1_BUSY_POLL_COUNT */
     }
 
     *readValue = base->RR[regIndex];

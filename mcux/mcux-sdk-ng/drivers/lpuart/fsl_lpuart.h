@@ -825,7 +825,7 @@ static inline uint8_t LPUART_ReadByte(LPUART_Type *base)
      * If ctrl & LPUART_CTRL_M7_MASK is 0, it can't be !0 in next judge.
      */
     bool isSevenDataBits = (((ctrl & LPUART_CTRL_M7_MASK) != 0U) ||
-                            (((ctrl & LPUART_CTRL_M7_MASK) == 0U) && ((ctrl & LPUART_CTRL_M_MASK) == 0U) &&
+                            (((ctrl & LPUART_CTRL_M7_MASK) == 0U) && ((ctrl & LPUART_CTRL_M_MASK) == 0U) && /* GCOVR_EXCL_BR_LINE */
                              ((ctrl & LPUART_CTRL_PE_MASK) != 0U)));
 
     if (isSevenDataBits)

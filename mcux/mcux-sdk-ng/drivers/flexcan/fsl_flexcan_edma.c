@@ -72,7 +72,7 @@ static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, 
      * $Branch Coverage Justification$
      * (!transferDone) not covered. Unable to simulate DMA transfer error.
      */
-    if (transferDone)
+    if (transferDone) /* GCOVR_EXCL_BR_LINE */
     {
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
         if (0U != (flexcanPrivateHandle->base->ERFCR & CAN_ERFCR_ERFEN_MASK))

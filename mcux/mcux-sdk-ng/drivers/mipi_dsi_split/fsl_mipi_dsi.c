@@ -291,7 +291,7 @@ static uint32_t DSI_DphyGetPllDivider(
     uint8_t *cn, uint8_t *cm, uint8_t *co, uint32_t refClkFreq_Hz, uint32_t desiredOutFreq_Hz)
 {
     uint8_t cnCur;
-    uint8_t cmCur;
+    uint16_t cmCur;
     uint8_t coShiftCur;
     uint32_t pllFreqCur;
     uint32_t diffCur;
@@ -337,7 +337,7 @@ static uint32_t DSI_DphyGetPllDivider(
             }
 
             /* Get the CM most close. */
-            cmCur = (uint8_t)((vcoFreq + (refClk_CN / 2U)) / refClk_CN);
+            cmCur = (uint16_t)((vcoFreq + (refClk_CN / 2U)) / refClk_CN);
 
             /* If calculated value is (DSI_DPHY_PLL_CM_MAX + 1), use DSI_DPHY_PLL_CM_MAX. */
             if ((DSI_DPHY_PLL_CM_MAX + 1U) == cmCur)
@@ -366,7 +366,7 @@ static uint32_t DSI_DphyGetPllDivider(
             if (diffCur < diff)
             {
                 diff             = diffCur;
-                *cm              = cmCur;
+                *cm              = (uint8_t)cmCur;
                 *cn              = cnCur;
                 *co              = coShiftCur;
                 pllFreqCandidate = pllFreqCur;

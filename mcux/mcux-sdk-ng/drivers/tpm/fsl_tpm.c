@@ -96,7 +96,7 @@ uint32_t TPM_GetInstance(TPM_Type *base)
      * (instance >= tpmArrayCount) not covered.
      * The peripheral base address is always valid.
      */
-    for (instance = 0; instance < tpmArrayCount; instance++)
+    for (instance = 0; instance < tpmArrayCount; instance++) /* GCOVR_EXCL_BR_LINE */
     {
         if (MSDK_REG_SECURE_ADDR(s_tpmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
@@ -326,12 +326,12 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
      * This function is called inside the TPM_SetupPwm() function.
      * If you enter an invalid base, the function will not work properly.
      */
-    if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
+    if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) || /* GCOVR_EXCL_BR_LINE */
         /*
          * $Branch Coverage Justification$
          * (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) not covered.  $ref tpm_c_ref_2$.
          */
-        (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
+        (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base))) /* GCOVR_EXCL_LINE */
     {
         return kStatus_InvalidArgument;
     }
@@ -341,7 +341,7 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
      * $Branch Coverage Justification$
      * (mod == counterMax) not covered. $ref tpm_c_ref_3$.
      */
-    if (((chnlParams.dutyCyclePercent == 100U) && (mod == counterMax)) || (chnlParams.dutyCyclePercent > 100U))
+    if (((chnlParams.dutyCyclePercent == 100U) && (mod == counterMax)) || (chnlParams.dutyCyclePercent > 100U)) /* GCOVR_EXCL_BR_LINE */
     {
         return kStatus_OutOfRange;
     }
@@ -354,7 +354,7 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
          * $Branch Coverage Justification$
          * (chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) not covered. $ref tpm_c_ref_2$.
          */
-        if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) ||
+        if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) || /* GCOVR_EXCL_BR_LINE */
             (1U != (uint8_t)FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base)))
         {
             /* The instance should support combine mode and the channel number should be the pair number */
@@ -423,7 +423,7 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
              * $Branch Coverage Justification$
              * (cnvFirstEdge != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
              */
-        } while (cnvFirstEdge != base->CONTROLS[chnlId].CnV);
+        } while (cnvFirstEdge != base->CONTROLS[chnlId].CnV); /* GCOVR_EXCL_BR_LINE */
 
 #if TPM_TIMEOUT
         timeout = TPM_TIMEOUT;
@@ -462,7 +462,7 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
              * $Branch Coverage Justification$
              * ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
              */
-        } while ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV);
+        } while ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV); /* GCOVR_EXCL_BR_LINE */
     }
     else
     {
@@ -507,7 +507,7 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
              * $Branch Coverage Justification$
              * (cnv != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
              */
-        } while (cnv != base->CONTROLS[chnlId].CnV);
+        } while (cnv != base->CONTROLS[chnlId].CnV); /* GCOVR_EXCL_BR_LINE */
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
     }
@@ -567,7 +567,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
              * $Branch Coverage Justification$
              * (mod > counterMax) not covered. $ref tpm_c_tpm_3$.
              */
-            if ((mod > counterMax) || (mod == 0U))
+            if ((mod > counterMax) || (mod == 0U)) /* GCOVR_EXCL_BR_LINE */
             {
                 /*  The MOD greater than the maximum allowed (some instanse only support 16-bit counter) or smaller than
                 1, probably would require changing clock source to get the desired frequency. */
@@ -581,7 +581,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
              * $Branch Coverage Justification$
              * (mod > counterMax >> 1U) not covered. $ref tpm_c_tpm_3$.
              */
-            if ((mod > (counterMax >> 1U)) || (mod == 0U))
+            if ((mod > (counterMax >> 1U)) || (mod == 0U)) /* GCOVR_EXCL_BR_LINE */
             {
                 /* MOD values have additional requirements under center-aligned MODE, it must be kept in the range
                  * of 0x1 ~ 0x7FFF (under 16-bit counter). */
@@ -620,7 +620,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
          * $Branch Coverage Justification$
          * (mod != base->MOD) not covered. $ref tpm_c_ref_5$.
          */
-    } while (mod != base->MOD);
+    } while (mod != base->MOD); /* GCOVR_EXCL_BR_LINE */
 
     /* Setup each TPM channel */
     for (uint8_t i = 0; i < numOfChnls; i++)
@@ -696,7 +696,7 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
          * $Branch Coverage Justification$
          * (chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) not covered. $ref tpm_c_ref_2$.
          */
-        if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) ||
+        if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) || /* GCOVR_EXCL_BR_LINE */
             (1U != (uint8_t)FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base)))
         {
             /* The instance should support combine mode and the channel number should be the pair number */
@@ -749,7 +749,7 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
              * $Branch Coverage Justification$
              * (cnvFirstEdge != base->CONTROLS[chnlId * 2U].CnV) not covered. $ref tpm_c_ref_1$.
              */
-        } while (cnvFirstEdge != base->CONTROLS[chnlId * 2U].CnV);
+        } while (cnvFirstEdge != base->CONTROLS[chnlId * 2U].CnV);  /* GCOVR_EXCL_BR_LINE */
 #if TPM_TIMEOUT
         timeout = TPM_TIMEOUT;
 #endif
@@ -794,7 +794,7 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
              * $Branch Coverage Justification$
              * (cnv != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
              */
-        } while (cnv != base->CONTROLS[chnlId].CnV);
+        } while (cnv != base->CONTROLS[chnlId].CnV); /* GCOVR_EXCL_BR_LINE */
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
     }
@@ -932,7 +932,7 @@ status_t TPM_SetupOutputCompare(TPM_Type *base,
          * $Branch Coverage Justification$
          * (compareValue != base->CONTROLS[chnlNumber].CnV) not covered. $ref tpm_c_ref_1$.
          */
-    } while (compareValue != base->CONTROLS[chnlNumber].CnV);
+    } while (compareValue != base->CONTROLS[chnlNumber].CnV); /* GCOVR_EXCL_BR_LINE */
 
     return kStatus_Success;
 }
@@ -1237,7 +1237,7 @@ void TPM_RegisterCallBack(TPM_Type *base, tpm_callback_t callback)
  *
  * @param instance TPM instance.
  */
-void TPM_DriverIRQHandler(uint32_t instance)
+void TPM_DriverIRQHandler(uint32_t instance) /* GCOVR_EXCL_FUNCTION */
 {
     if (instance < ARRAY_SIZE(s_tpmBases))
     {
@@ -1269,7 +1269,7 @@ void TPM1_DriverIRQHandler(void)
 
 #if defined(TPM2)
 void TPM2_DriverIRQHandler(void);
-void TPM2_DriverIRQHandler(void)
+void TPM2_DriverIRQHandler(void) /* GCOVR_EXCL_FUNCTION */
 {
     assert(NULL != s_tpmCallback[2]);
     s_tpmCallback[2](TPM2);

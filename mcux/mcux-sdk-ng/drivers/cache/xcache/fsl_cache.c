@@ -68,11 +68,17 @@ void XCACHE_EnableCache(XCACHE_Type *base)
     /* Return if XCACHE is already enabled */
     if ((base->CCR & XCACHE_CCR_ENCACHE_MASK) == 0x00U)
     {
+        __DSB();
+        __ISB();
+
         /* First, invalidate the entire cache. */
         XCACHE_InvalidateCache(base);
 
         /* Now enable the cache. */
         base->CCR |= XCACHE_CCR_ENCACHE_MASK;
+
+        __DSB();
+        __ISB();
     }
 }
 
@@ -84,11 +90,17 @@ void XCACHE_DisableCache(XCACHE_Type *base)
 {
     if (XCACHE_CCR_ENCACHE_MASK == (XCACHE_CCR_ENCACHE_MASK & base->CCR))
     {
+        __DSB();
+        __ISB();
+
         /* First, push any modified contents. */
         XCACHE_CleanCache(base);
 
         /* Now disable the cache. */
         base->CCR &= ~XCACHE_CCR_ENCACHE_MASK;
+
+        __DSB();
+        __ISB();
     }
 }
 

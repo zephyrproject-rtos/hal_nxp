@@ -22,7 +22,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
 /*! @} */
 
 #define MU_CORE_INTR(intr) ((uint32_t)(intr) << 0U)
@@ -483,7 +483,7 @@ static inline uint32_t MU_ReceiveMsgNonBlocking(MU_Type *base, uint32_t regIndex
  * @brief Blocks to receive a message with timeout protection.
  *
  * This function waits until the RX register is full and receives the message.
- * If MU_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
+ * If MU1_BUSY_POLL_COUNT is defined and non-zero, the function will timeout
  * after the specified number of polling iterations and return kStatus_Timeout.
  *
  * This function provides the same blocking behavior as MU_ReceiveMsg() but
@@ -696,19 +696,20 @@ static inline uint32_t MU_GetInterruptsPending(MU_Type *base)
  *
  * @param base MU peripheral base address.
  * @param flags Bit mask of the MU status flags. See _mu_status_flags. Only the
- * following flags can be cleared by software, other flags are cleared by hardware:
- * - #kMU_GenInt0Flag
- * - #kMU_GenInt1Flag
- * - #kMU_GenInt2Flag
- * - #kMU_GenInt3Flag
- * - #kMU_MuResetInterruptFlag
- * - #kMU_OtherSideEnterRunInterruptFlag
- * - #kMU_OtherSideEnterHaltInterruptFlag
- * - #kMU_OtherSideEnterWaitInterruptFlag
- * - #kMU_OtherSideEnterStopInterruptFlag
- * - #kMU_OtherSideEnterPowerDownInterruptFlag
- * - #kMU_ResetAssertInterruptFlag
- * - #kMU_HardwareResetInterruptFlag
+ * following flags can be cleared by software (if applicable for particular device), 
+ * other flags are cleared by hardware:
+ * - kMU_GenInt0Flag
+ * - kMU_GenInt1Flag
+ * - kMU_GenInt2Flag
+ * - kMU_GenInt3Flag
+ * - kMU_MuResetInterruptFlag
+ * - kMU_OtherSideEnterRunInterruptFlag
+ * - kMU_OtherSideEnterHaltInterruptFlag
+ * - kMU_OtherSideEnterWaitInterruptFlag
+ * - kMU_OtherSideEnterStopInterruptFlag
+ * - kMU_OtherSideEnterPowerDownInterruptFlag
+ * - kMU_ResetAssertInterruptFlag
+ * - kMU_HardwareResetInterruptFlag
  */
 static inline void MU_ClearStatusFlags(MU_Type *base, uint32_t flags)
 {

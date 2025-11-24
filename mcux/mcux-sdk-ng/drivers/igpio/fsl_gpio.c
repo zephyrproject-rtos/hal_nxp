@@ -160,6 +160,9 @@ void GPIO_PinSetInterruptConfig(GPIO_Type *base, uint32_t pin, gpio_interrupt_mo
         icr = &(base->ICR2);
         icrShift -= 16U;
     }
+
+    assert(icrShift < 16U);
+
     switch (pinInterruptMode)
     {
         case (kGPIO_IntLowLevel):

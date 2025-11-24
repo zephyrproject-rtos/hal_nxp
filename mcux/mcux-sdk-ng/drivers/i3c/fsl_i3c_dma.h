@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C DMA driver version. */
-#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 8))
+#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 9))
 /*@}*/
 
 /*!

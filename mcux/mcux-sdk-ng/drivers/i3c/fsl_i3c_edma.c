@@ -141,7 +141,7 @@ static status_t I3C_MasterEDMAPrepareStart(I3C_Type *base, i3c_master_edma_handl
 
     if (xfer->busType != kI3C_TypeI3CDdr)
     {
-        direction = (0UL != xfer->subaddressSize) ? kI3C_Write : xfer->direction;
+        direction = (0UL != xfer->subaddressSize) ? (i3c_direction_t)kI3C_Write : xfer->direction;
     }
 
     /* Handle no start option. */
@@ -187,6 +187,8 @@ static status_t I3C_MasterEDMAPrepareStart(I3C_Type *base, i3c_master_edma_handl
  */
 static status_t I3C_MasterInitTransferStateMachineEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle)
 {
+    assert(handle->transfer.subaddressSize <= sizeof(handle->transfer.subaddress));
+
     i3c_master_transfer_t *xfer = &handle->transfer;
     status_t result             = kStatus_Success;
 
@@ -196,7 +198,8 @@ static status_t I3C_MasterInitTransferStateMachineEDMA(I3C_Type *base, i3c_maste
     {
         for (uint32_t i = xfer->subaddressSize; i > 0U; i--)
         {
-            handle->subaddressBuffer[handle->subaddressCount++] = (uint8_t)((xfer->subaddress) >> (8U * (i - 1U)));
+            handle->subaddressBuffer[handle->subaddressCount++] =
+                (uint8_t)(((xfer->subaddress) >> (8U * (i - 1U))) & 0xFFU);
         }
     }
 
@@ -240,7 +243,7 @@ static void I3C_SetEDMATcd(i3c_master_edma_handle_t *handle,
 #if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
     EDMA_TcdSetTransferConfigExt(edmaBase, &s_edma_tcd[instance][tcdIdx], xferConfig, edmaTcd);
 #else
-    EDMA_TcdSetTransferConfig(&s_edma_tcd[tcdIdx], xferConfig, edmaTcd);
+    EDMA_TcdSetTransferConfig(&s_edma_tcd[instance][tcdIdx], xferConfig, edmaTcd);
 #endif
 
     if (isEndTcd)
@@ -514,12 +517,12 @@ static void I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master_edm
 
                         do
                         {
-                            uint8_t tempData = (uint8_t)base->MRDATAB;
+                            uint8_t tempData = (uint8_t)(base->MRDATAB & 0xFFU);
                             if (handle->ibiBuff != NULL)
                             {
                                 handle->ibiBuff[handle->ibiPayloadSize++] = tempData;
                             }
-                        } while (--rxCount);
+                        } while (--rxCount != 0U);
                     }
 
                     handle->ibiType    = I3C_GetIBIType(base);
@@ -574,7 +577,7 @@ static void I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master_edm
                             {
                                 count = handle->transferCount - count;
                                 *(uint8_t *)((uint32_t)(uint32_t *)handle->transfer.data + count - 1U) =
-                                    (uint8_t)handle->base->MRDATAB;
+                                    (uint8_t)(handle->base->MRDATAB & 0xFFU);
                             }
                         }
                     }
@@ -689,7 +692,6 @@ status_t I3C_MasterTransferEDMA(I3C_Type *base, i3c_master_edma_handle_t *handle
 {
     assert(NULL != handle);
     assert(NULL != transfer);
-    assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
     assert(!((0UL != (transfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr)) &&
              (0UL != (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))));
     assert(!((0UL != (transfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr)) &&
@@ -1116,8 +1118,9 @@ void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 
                 if (rxCount > 0U)
                 {
-                    count                                                         = handle->transfer.rxDataSize - count;
-                    *(uint8_t *)((uintptr_t)handle->transfer.rxData + count - 1U) = (uint8_t)handle->base->SRDATAB;
+                    count = handle->transfer.rxDataSize - count;
+                    *(uint8_t *)((uintptr_t)handle->transfer.rxData + count - 1U) =
+                        (uint8_t)(handle->base->SRDATAB & 0xFFU);
                 }
             }
             handle->isDdrMode = false;

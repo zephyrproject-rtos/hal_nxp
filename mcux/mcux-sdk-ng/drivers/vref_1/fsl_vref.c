@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022, 2024 NXP
+ * Copyright 2019-2022, 2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -51,14 +51,14 @@ static uint32_t VREF_GetInstance(VREF_Type *base)
      * (instance >= ARRAY_SIZE(s_vrefBases)) not covered. The peripheral base
      * address is always valid and checked by assert.
      */
-    for (instance = 0; instance < ARRAY_SIZE(s_vrefBases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_vrefBases); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         /*
          * $Branch Coverage Justification$
          * (s_vrefBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (MSDK_REG_SECURE_ADDR(s_vrefBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (MSDK_REG_SECURE_ADDR(s_vrefBases[instance]) == MSDK_REG_SECURE_ADDR(base)) /* GCOVR_EXCL_BR_LINE */
         {
             break;
         }
@@ -231,7 +231,7 @@ void VREF_SetVrefTrimVal(VREF_Type *base, uint8_t trimValue)
          * while ((base->CSR & VREF_CSR_VREFST_MASK) != 0U) not covered. Test unfeasible,
          * the internal HC voltage stable state is too short not to catch.
          */
-        while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U)
+        while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U) /* GCOVR_EXCL_BR_LINE */
         {
         }
     }
@@ -272,7 +272,7 @@ void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
          * while ((base->CSR & VREF_CSR_VREFST_MASK) != 0U) not covered. Test unfeasible,
          * the internal HC voltage stable state is too short not to catch.
          */
-        while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U)
+        while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U) /* GCOVR_EXCL_BR_LINE */
         {
         }
     }

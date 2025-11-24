@@ -22,8 +22,9 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief OSTIMER driver version. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
 /*! @} */
+
 
 /*!
  * @brief OSTIMER status flags.
@@ -118,8 +119,7 @@ void OSTIMER_ClearStatusFlags(OSTIMER_Type *base, uint32_t mask);
  * @param count  OSTIMER timer match value.(Value may be gray-code format)
  *
  * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
- * @retval kStatus_Success - Set match raw value and enable interrupt Successfully.
- * @retval kStatus_Fail    - Set match raw value fail.
+ * @retval kStatus_Success                    - Set match raw value and enable interrupt Successfully.
  */
 status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
 
@@ -134,8 +134,7 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
  * in API if the IP counter is gray encoded.)
  *
  * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
- * @retval kStatus_Success - Set match value and enable interrupt Successfully.
- * @retval kStatus_Fail    - Set match value fail.
+ * @retval kStatus_Success                    - Set match raw value and enable interrupt Successfully.
  */
 status_t OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
 

@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C EDMA driver version. */
-#define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 10))
+#define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 12))
 /*! @} */
 
 /*!

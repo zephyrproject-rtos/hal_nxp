@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 9, 3))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 11, 0))
 /*! @} */
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -149,7 +149,8 @@
 #define ENET_ERR_INTERRUPT                                                                             \
     ((uint32_t)kENET_BabrInterrupt | (uint32_t)kENET_BabtInterrupt | (uint32_t)kENET_EBusERInterrupt | \
      (uint32_t)kENET_LateCollisionInterrupt | (uint32_t)kENET_RetryLimitInterrupt |                    \
-     (uint32_t)kENET_UnderrunInterrupt | (uint32_t)kENET_PayloadRxInterrupt) /*!< Enet error interrupt flag. */
+     (uint32_t)kENET_UnderrunInterrupt | (uint32_t)kENET_PayloadRxInterrupt |                          \
+     (uint32_t)kENET_WakeupInterrupt) /*!< Enet error interrupt flag. */
 /*! @} */
 
 /*! @brief Defines the status return codes for transaction. */

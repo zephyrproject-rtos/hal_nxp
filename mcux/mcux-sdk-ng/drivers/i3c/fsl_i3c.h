@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 2))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 14, 3))
 /*! @} */
 
 /*!
@@ -620,7 +620,7 @@ struct _i3c_slave_handle
     uint32_t transferredCount;              /*!< Count of bytes transferred. */
     i3c_slave_transfer_callback_t callback; /*!< Callback function called at transfer event. */
     void *userData;                         /*!< Callback parameter passed to callback. */
-    uint8_t txFifoSize;                     /*!< Tx Fifo size */
+    size_t txFifoSize;                      /*!< Tx Fifo size */
 };
 
 /*! @brief Typedef for slave interrupt handler. */
@@ -1439,8 +1439,6 @@ status_t I3C_MasterTransferGetCount(I3C_Type *base, i3c_master_handle_t *handle,
  *
  * @param base The I3C peripheral base address.
  * @param handle Pointer to the I3C master driver handle.
- * @retval #kStatus_Success A transaction was successfully aborted.
- * @retval #kStatus_I3C_Idle There is not a non-blocking transaction currently in progress.
  */
 void I3C_MasterTransferAbort(I3C_Type *base, i3c_master_handle_t *handle);
 
@@ -1516,7 +1514,7 @@ void I3C_SlaveDeinit(I3C_Type *base);
  */
 static inline void I3C_SlaveEnable(I3C_Type *base, bool isEnable)
 {
-    base->SCONFIG = (base->SCONFIG & ~I3C_SCONFIG_SLVENA_MASK) | I3C_SCONFIG_SLVENA(isEnable);
+    base->SCONFIG = (base->SCONFIG & ~I3C_SCONFIG_SLVENA_MASK) | (isEnable ? I3C_SCONFIG_SLVENA_MASK : 0UL);
 }
 
 /*! @} */
@@ -1875,8 +1873,6 @@ status_t I3C_SlaveTransferGetCount(I3C_Type *base, i3c_slave_handle_t *handle, s
  * @note This API could be called at any time to stop slave for handling the bus events.
  * @param base The I3C peripheral base address.
  * @param handle Pointer to struct: _i3c_slave_handle structure which stores the transfer state.
- * @retval #kStatus_Success
- * @retval #kStatus_I3C_Idle
  */
 void I3C_SlaveTransferAbort(I3C_Type *base, i3c_slave_handle_t *handle);
 

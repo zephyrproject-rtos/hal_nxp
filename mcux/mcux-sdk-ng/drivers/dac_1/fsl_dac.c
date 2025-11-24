@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -150,7 +149,10 @@ void DAC_Init(LPDAC_Type *base, const dac_config_t *config)
 #endif /* LPDAC_GCR_BUF_SPD_CTRL_MASK */
 
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN) && FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN
-    tmp32 |= LPDAC_GCR_BUF_EN_MASK; /* Opamp is used as buffer. */
+    if (config->enableOpampBuffer)
+    {
+        tmp32 |= LPDAC_GCR_BUF_EN_MASK; /* Opamp is used as buffer. */
+    }
 #endif                              /* FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN */
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_LATCH_CYC) && FSL_FEATURE_LPDAC_HAS_GCR_LATCH_CYC
     /* Configure DAC sync cycles. */
@@ -194,6 +196,10 @@ void DAC_GetDefaultConfig(dac_config_t *config)
     config->fifoTriggerMode    = kDAC_FIFOTriggerByHardwareMode;
     config->fifoWorkMode       = kDAC_FIFODisabled;
 
+#if defined(FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN) && FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN
+    config->enableOpampBuffer = true; /* Set to true, keep the peripheral configuration
+    					consistent before adding the control switch */
+#endif /* FSL_FEATURE_LPDAC_HAS_GCR_BUF_EN */
 #if defined(FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG) && FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG
     config->enableExternalTriggerSource = false;
 #endif /* FSL_FEATURE_LPDAC_HAS_GCR_RCV_TRG */

@@ -1,5 +1,5 @@
 /*
- * Copyright  2016-2019 NXP
+ * Copyright  2016-2019, 2025 NXP
  * All rights reserved.
  *
  *
@@ -10,6 +10,15 @@
  * Includes
  ******************************************************************************/
 #include "fsl_lin_lpuart.h"
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.lin_lpuart"
+#endif
 
 /*
  * $Coverage Justification Reference$
@@ -307,7 +316,7 @@ static uint32_t LIN_LPUART_GetInstance(LPUART_Type *base)
 
     /* Find the instance index from base address mappings. */
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_1$ */
-    for (instance = 0; instance <= ((uint32_t)FSL_FEATURE_SOC_LPUART_COUNT - 1UL); instance++)
+    for (instance = 0; instance <= ((uint32_t)FSL_FEATURE_SOC_LPUART_COUNT - 1UL); instance++) /* GCOVR_EXCL_BR_LINE */
     {
         if (MSDK_REG_SECURE_ADDR(g_linLpuartBase[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
@@ -362,7 +371,7 @@ static void LIN_LPUART_ProcessBreakDetect(uint32_t instance)
         if (linUserConfig->nodeFunction == (bool)LIN_MASTER) /* Master */
         {
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_2$ */
-            if (linCurrentState->currentNodeState == LIN_NODE_STATE_SEND_BREAK_FIELD)
+            if (linCurrentState->currentNodeState == LIN_NODE_STATE_SEND_BREAK_FIELD) /* GCOVR_EXCL_BR_LINE */
             {
                 /* Change the node's current state to SENDING PID */
                 linCurrentState->currentNodeState = LIN_NODE_STATE_SEND_PID;
@@ -383,7 +392,7 @@ static void LIN_LPUART_ProcessBreakDetect(uint32_t instance)
 
                 /* Callback function */
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                if (linCurrentState->Callback != NULL)
+                if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                 {
                     linCurrentState->Callback(instance, linCurrentState);
                 }
@@ -393,7 +402,7 @@ static void LIN_LPUART_ProcessBreakDetect(uint32_t instance)
 
             /* Callback function */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-            if (linCurrentState->Callback != NULL)
+            if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
             {
                 linCurrentState->Callback(instance, linCurrentState);
             }
@@ -420,9 +429,9 @@ static void LIN_LPUART_CheckWakeupSignal(uint32_t instance)
     {
         /* Start measure time */
         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_4 $ */
-        if (linUserConfig->timerGetTimeIntervalCallback == NULL)
+        if (linUserConfig->timerGetTimeIntervalCallback == NULL) /* GCOVR_EXCL_BR_LINE */
         {
-            return;
+            return; /* GCOVR_EXCL_LINE */
         }
         (void)linUserConfig->timerGetTimeIntervalCallback(&wakeupSignalLength);
 
@@ -446,7 +455,7 @@ static void LIN_LPUART_CheckWakeupSignal(uint32_t instance)
 
                 /* Callback to handle event: Received a wakeup signal */
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                if (linCurrentState->Callback != NULL)
+                if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                 {
                     linCurrentState->Callback(instance, linCurrentState);
                 }
@@ -478,7 +487,7 @@ static void LIN_LPUART_AutobaudTimerValEval(uint32_t instance, uint32_t twoBitTi
     bool checkNodeState = (linCurrentState->currentNodeState == LIN_NODE_STATE_RECV_SYNC);
 
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_5 $ */
-    if (checkNodeState)
+    if (checkNodeState) /* GCOVR_EXCL_BR_LINE */
     {
         /* Evaluate average value against baudrate */
         LIN_LPUART_EvalTwoBitTimeLength(instance, twoBitTimeLength);
@@ -486,28 +495,28 @@ static void LIN_LPUART_AutobaudTimerValEval(uint32_t instance, uint32_t twoBitTi
         if (linCurrentState->fallingEdgeInterruptCount > 4U)
         {
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
-            if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_19200) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_19200))
+            if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_19200) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_19200)) /* GCOVR_EXCL_BR_LINE */
             {
                 MasterBaudrate = 19200U;
             }
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
-            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_14400) &&
+            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_14400) && /* GCOVR_EXCL_BR_LINE */
                      (twoBitTimeLength <= TWO_BIT_DURATION_MAX_14400))
             {
                 MasterBaudrate = 14400U;
             }
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
-            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_9600) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_9600))
+            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_9600) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_9600)) /* GCOVR_EXCL_BR_LINE */
             {
                 MasterBaudrate = 9600U;
             }
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
-            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_4800) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_4800))
+            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_4800) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_4800)) /* GCOVR_EXCL_BR_LINE */
             {
                 MasterBaudrate = 4800U;
             }
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
-            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_2400) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_2400))
+            else if ((twoBitTimeLength >= TWO_BIT_DURATION_MIN_2400) && (twoBitTimeLength <= TWO_BIT_DURATION_MAX_2400)) /* GCOVR_EXCL_BR_LINE */
             {
                 MasterBaudrate = 2400U;
             }
@@ -518,7 +527,7 @@ static void LIN_LPUART_AutobaudTimerValEval(uint32_t instance, uint32_t twoBitTi
 
             /* Check Master Baudrate against node's current baudrate */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_7 $ */
-            if (MasterBaudrate != 0U)
+            if (MasterBaudrate != 0U) /* GCOVR_EXCL_BR_LINE */
             {
                 if (linUserConfig->baudRate != MasterBaudrate)
                 {
@@ -551,7 +560,7 @@ static void LIN_LPUART_AutobaudTimerValEval(uint32_t instance, uint32_t twoBitTi
                 linCurrentState->baudrateEvalEnable = false;
                 /* Callback function to handle this event */
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                if (linCurrentState->Callback != NULL)
+                if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                 {
                     linCurrentState->Callback(instance, linCurrentState);
                 }
@@ -561,11 +570,11 @@ static void LIN_LPUART_AutobaudTimerValEval(uint32_t instance, uint32_t twoBitTi
                 linCurrentState->currentEventId   = LIN_SYNC_OK;
             }
             else
-            {
+            { /* GCOVR_EXCL_START */
                 /* cancel capturing if baudrate not supported. */
                 (void)LIN_LPUART_GotoIdleState(base);
                 linCurrentState->fallingEdgeInterruptCount = 0U;
-            }
+            } /* GCOVR_EXCL_STOP */
         }
     }
 }
@@ -577,12 +586,12 @@ static void LIN_LPUART_EvalTwoBitTimeLength(uint32_t instance, uint32_t twoBitTi
     lin_state_t *linCurrentState = g_linStatePtr[instance];
 
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_8 $ */
-    if (linCurrentState->fallingEdgeInterruptCount < 5U)
+    if (linCurrentState->fallingEdgeInterruptCount < 5U) /* GCOVR_EXCL_BR_LINE */
     {
         if (linCurrentState->fallingEdgeInterruptCount > 0U)
         {
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
-            if ((twoBitTimeLength < TWO_BIT_DURATION_MIN_19200) ||
+            if ((twoBitTimeLength < TWO_BIT_DURATION_MIN_19200) || /* GCOVR_EXCL_BR_LINE */
                 ((twoBitTimeLength > TWO_BIT_DURATION_MAX_19200) && (twoBitTimeLength < TWO_BIT_DURATION_MIN_14400)) ||
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_6 $ */
                 ((twoBitTimeLength > TWO_BIT_DURATION_MAX_14400) && (twoBitTimeLength < TWO_BIT_DURATION_MIN_9600)) ||
@@ -601,14 +610,14 @@ static void LIN_LPUART_EvalTwoBitTimeLength(uint32_t instance, uint32_t twoBitTi
                 {
                     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_7 $ */
                     if ((twoBitTimeLength <
-                         ((100U - BIT_RATE_TOLERANCE_UNSYNC) * (s_previousTwoBitTimeLength[instance] / 100U))) ||
+                         ((100U - BIT_RATE_TOLERANCE_UNSYNC) * (s_previousTwoBitTimeLength[instance] / 100U))) || /* GCOVR_EXCL_BR_LINE */
                         (twoBitTimeLength >
-                         ((100U + BIT_RATE_TOLERANCE_UNSYNC) * (s_previousTwoBitTimeLength[instance] / 100U))))
-                    {
+                         ((100U + BIT_RATE_TOLERANCE_UNSYNC) * (s_previousTwoBitTimeLength[instance] / 100U)))) /* GCOVR_EXCL_BR_LINE */
+                    { /* GCOVR_EXCL_START */
                         /* cancel capturing */
                         (void)LIN_LPUART_GotoIdleState(base);
                         linCurrentState->fallingEdgeInterruptCount = 0U;
-                    }
+                    } /* GCOVR_EXCL_STOP */
                 }
             }
             s_previousTwoBitTimeLength[instance] = twoBitTimeLength;
@@ -661,7 +670,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
 
     /* Check node's current state */
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_10 $ */
-    switch (linCurrentState->currentNodeState)
+    switch (linCurrentState->currentNodeState) /* GCOVR_EXCL_BR_LINE */
     {
         /* if current state is RECEIVE SYNC FIELD */
         case LIN_NODE_STATE_RECV_SYNC:
@@ -678,7 +687,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
 
                 /* Callback function to handle event RECEIVED SYNC FIELD ERROR */
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                if (linCurrentState->Callback != NULL)
+                if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                 {
                     linCurrentState->Callback(instance, linCurrentState);
                 }
@@ -694,7 +703,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
         case LIN_NODE_STATE_SEND_PID:
             /* Check if master node sent SYNC byte correctly before send PID */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-            if (tmpByte == 0x55U)
+            if (tmpByte == 0x55U) /* GCOVR_EXCL_BR_LINE */
             {
                 /* Change node's current state to RECEIVING PID */
                 linCurrentState->currentNodeState = LIN_NODE_STATE_RECV_PID;
@@ -707,7 +716,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
              * By default, LIN Driver set isBusBusy to false, and change node's state to IDLE.
              */
             else
-            {
+            { /* GCOVR_EXCL_START */
                 linCurrentState->currentEventId = LIN_SYNC_ERROR;
                 /* Clear Bus busy flag */
                 linCurrentState->isBusBusy = false;
@@ -718,7 +727,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
                 {
                     linCurrentState->Callback(instance, linCurrentState);
                 }
-            }
+            } /* GCOVR_EXCL_STOP */
             break;
         /* if current state is RECEIVE PID */
         case LIN_NODE_STATE_RECV_PID:
@@ -727,7 +736,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
             {
                 /* Check if master node sent PID correctly */
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-                if (tmpByte == linCurrentState->currentPid)
+                if (tmpByte == linCurrentState->currentPid) /* GCOVR_EXCL_BR_LINE */
                 {
                     /* Set current event ID to PID correct */
                     linCurrentState->currentEventId = LIN_PID_OK;
@@ -736,7 +745,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
                     linCurrentState->isBusBusy = false;
 
                     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                    if (linCurrentState->Callback != NULL)
+                    if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
@@ -747,7 +756,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
                  * By default, LIN Driver set isBusBusy to false, and change node's state to IDLE.
                  */
                 else
-                {
+                { /* GCOVR_EXCL_START */
                     /* Set current event ID to PID incorrect */
                     linCurrentState->currentEventId = LIN_PID_ERROR;
                     /* Clear bus busy flag */
@@ -759,7 +768,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
-                }
+                } /* GCOVR_EXCL_STOP */
             }
             /* If the node is SLAVE */
             else
@@ -777,7 +786,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
 
                     /* Callback function to handle correct PID */
                     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                    if (linCurrentState->Callback != NULL)
+                    if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
@@ -789,7 +798,7 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
 
                     /* Callback function to handle correct PID */
                     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                    if (linCurrentState->Callback != NULL)
+                    if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
@@ -802,10 +811,10 @@ static void LIN_LPUART_ProcessFrameHeader(uint32_t instance, uint8_t tmpByte)
                 }
             }
             break;
-        default:
+        default: /* GCOVR_EXCL_START */
             /* Other node state */
             break;
-    }
+    } /* GCOVR_EXCL_STOP */
 }
 
 static void LIN_LPUART_ProcessReceiveFrameData(uint32_t instance, uint8_t tmpByte)
@@ -838,7 +847,7 @@ static void LIN_LPUART_ProcessReceiveFrameData(uint32_t instance, uint8_t tmpByt
 
             /* callback function to handle RX COMPLETED */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-            if (linCurrentState->Callback != NULL)
+            if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
             {
                 linCurrentState->Callback(instance, linCurrentState);
             }
@@ -854,7 +863,7 @@ static void LIN_LPUART_ProcessReceiveFrameData(uint32_t instance, uint8_t tmpByt
             /* In case of receiving a go to sleep request, after callback, node is in SLEEP MODE */
             /* In this case, node is in SLEEP MODE state */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_11 $ */
-            if (linCurrentState->currentNodeState != LIN_NODE_STATE_SLEEP_MODE)
+            if (linCurrentState->currentNodeState != LIN_NODE_STATE_SLEEP_MODE) /* GCOVR_EXCL_BR_LINE */
             {
                 (void)LIN_LPUART_GotoIdleState(base);
             }
@@ -865,7 +874,7 @@ static void LIN_LPUART_ProcessReceiveFrameData(uint32_t instance, uint8_t tmpByt
 
             /* callback function to handle checksum error */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-            if (linCurrentState->Callback != NULL)
+            if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
             {
                 linCurrentState->Callback(instance, linCurrentState);
             }
@@ -891,8 +900,8 @@ static void LIN_LPUART_ProcessSendFrameData(uint32_t instance, uint8_t tmpByte)
     lin_state_t *linCurrentState = g_linStatePtr[instance];
 
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-    if (0U == (LIN_LPUART_GetStatusFlags(base) & (uint32_t)kLPUART_TxDataRegEmptyFlag))
-    {
+    if (0U == (LIN_LPUART_GetStatusFlags(base) & (uint32_t)kLPUART_TxDataRegEmptyFlag)) /* GCOVR_EXCL_BR_LINE */
+    { /* GCOVR_EXCL_START */
         linCurrentState->currentEventId = LIN_READBACK_ERROR;
 
         /* callback function to handle Readback error */
@@ -909,20 +918,20 @@ static void LIN_LPUART_ProcessSendFrameData(uint32_t instance, uint8_t tmpByte)
             (void)LIN_LPUART_GotoIdleState(base);
         }
         sendFlag = false;
-    }
+    } /* GCOVR_EXCL_STOP */
     else
     {
         /* Remaining tx count. */
         tmpSize = linCurrentState->txSize - linCurrentState->cntByte;
         /* In send checksum state but the readback data is not equal to checksum */
         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-        tmpCheckSumAndSize = (tmpSize == 1U) && (linCurrentState->checkSum != tmpByte);
+        tmpCheckSumAndSize = (tmpSize == 1U) && (linCurrentState->checkSum != tmpByte); /* GCOVR_EXCL_BR_LINE */
         /* In send data state but the readback data is not equal to data to send */
         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-        tmpBuffAndSize = (*linCurrentState->txBuff != tmpByte) && (tmpSize != 1U);
+        tmpBuffAndSize = (*linCurrentState->txBuff != tmpByte) && (tmpSize != 1U); /* GCOVR_EXCL_BR_LINE */
         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-        if (tmpBuffAndSize || tmpCheckSumAndSize)
-        {
+        if (tmpBuffAndSize || tmpCheckSumAndSize) /* GCOVR_EXCL_BR_LINE */
+        { /* GCOVR_EXCL_START */
             linCurrentState->currentEventId = LIN_READBACK_ERROR;
 
             /* callback function to handle Readback error */
@@ -939,7 +948,7 @@ static void LIN_LPUART_ProcessSendFrameData(uint32_t instance, uint8_t tmpByte)
                 (void)LIN_LPUART_GotoIdleState(base);
             }
             sendFlag = false;
-        }
+        } /* GCOVR_EXCL_STOP */
         else
         {
             linCurrentState->txBuff++;
@@ -948,7 +957,7 @@ static void LIN_LPUART_ProcessSendFrameData(uint32_t instance, uint8_t tmpByte)
     }
 
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_9 $ */
-    if (sendFlag == true)
+    if (sendFlag == true) /* GCOVR_EXCL_BR_LINE */
     {
         if (linCurrentState->cntByte < linCurrentState->txSize)
         {
@@ -971,7 +980,7 @@ static void LIN_LPUART_ProcessSendFrameData(uint32_t instance, uint8_t tmpByte)
             LIN_LPUART_DisableInterrupts(base, (uint32_t)kLPUART_RxDataRegFullFlag);
             /* callback function to handle event TX COMPLETED */
             /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-            if (linCurrentState->Callback != NULL)
+            if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
             {
                 linCurrentState->Callback(instance, linCurrentState);
             }
@@ -1898,7 +1907,7 @@ lin_status_t LIN_LPUART_AutoBaudCapture(uint32_t instance)
 
                         /* Callback to handle event: Received a wakeup signal */
                         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                        if (linCurrentState->Callback != NULL)
+                        if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                         {
                             linCurrentState->Callback(instance, linCurrentState);
                         }
@@ -1932,7 +1941,7 @@ lin_status_t LIN_LPUART_AutoBaudCapture(uint32_t instance)
 
                         /* Callback function */
                         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                        if (linCurrentState->Callback != NULL)
+                        if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                         {
                             linCurrentState->Callback(instance, linCurrentState);
                         }
@@ -1973,7 +1982,7 @@ lin_status_t LIN_LPUART_AutoBaudCapture(uint32_t instance)
     else
     {
         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_12 $ */
-        if (linCurrentState->fallingEdgeInterruptCount > 4U)
+        if (linCurrentState->fallingEdgeInterruptCount > 4U) /* GCOVR_EXCL_BR_LINE */
         {
             /* Enable the LPUART transmitter and receiver */
             base->CTRL |= (LPUART_CTRL_TE_MASK | LPUART_CTRL_RE_MASK);
@@ -2044,20 +2053,20 @@ void LIN_LPUART_IRQHandler(LPUART_Type *base)
                 {
                     /* Callback function to handle Framing Error Event */
                     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                    if (linCurrentState->Callback != NULL)
+                    if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                     {
                         linCurrentState->Callback(instance, linCurrentState);
                     }
                 }
 
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_13 $ */
-                if (linCurrentState->isRxBlocking == false)
+                if (linCurrentState->isRxBlocking == false) /* GCOVR_EXCL_BR_LINE */
                 {
                     if (linCurrentState->currentNodeState == LIN_NODE_STATE_RECV_DATA)
                     {
                         /* Callback function to handle Framing Error Event */
                         /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_3$ */
-                        if (linCurrentState->Callback != NULL)
+                        if (linCurrentState->Callback != NULL) /* GCOVR_EXCL_BR_LINE */
                         {
                             linCurrentState->Callback(instance, linCurrentState);
                         }
@@ -2072,7 +2081,7 @@ void LIN_LPUART_IRQHandler(LPUART_Type *base)
             else
             {
                 /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_14$ */
-                if (0U != (LIN_LPUART_GetStatusFlags(base) & (uint32_t)kLPUART_RxDataRegFullFlag))
+                if (0U != (LIN_LPUART_GetStatusFlags(base) & (uint32_t)kLPUART_RxDataRegFullFlag)) /* GCOVR_EXCL_BR_LINE */
                 {
                     (void)LIN_LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_RxDataRegFullFlag);
                     /* Get data from Data Register & Clear LPUART_RX_DATA_REG_FULL flag */

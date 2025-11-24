@@ -30,7 +30,7 @@ if(CONFIG_MCUX_COMPONENT_driver.netc_imx943)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_driver.netc)
-    mcux_component_version(2.10.2)
+    mcux_component_version(2.10.3)
 
     mcux_add_source(
         SOURCES

@@ -109,7 +109,7 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
     /* Voltage trim. */
     gcrReg |= LCD_GCR_VLL2TRIM(configure->voltageTrimVLL2) | LCD_GCR_VLL1TRIM(configure->voltageTrimVLL1);
     /* Low power waveform. */
-    gcrReg |= LCD_GCR_LCDLP(configure->lowPowerWaveform);
+    gcrReg |= LCD_GCR_LCDLP(configure->lowPowerWaveform ? 1U : 0U);
 
     gcrMsk |= LCD_GCR_LCLK_MASK | LCD_GCR_SHCYCLE_MASK | LCD_GCR_SHEN_MASK | LCD_GCR_VLL2TRIM_MASK |
              LCD_GCR_VLL1TRIM_MASK | LCD_GCR_LCDLP_MASK;

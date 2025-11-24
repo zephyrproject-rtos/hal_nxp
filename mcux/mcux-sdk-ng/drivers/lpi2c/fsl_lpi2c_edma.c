@@ -19,6 +19,9 @@
  * $Justification fsl_lpi2c_edma_c_ref_2$
  * FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(X) is a constant.
  *
+ * $Justification fsl_lpi2c_edma_c_ref_3$
+ * Depends on FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn
+ *
  */
 
 /*******************************************************************************
@@ -282,9 +285,9 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
      * $Branch Coverage Justification$
      * $ref fsl_lpi2c_edma_c_ref_1$
      */
-    if (result != kStatus_Success)
+    if (result != kStatus_Success) /* GCOVR_EXCL_BR_LINE */
     {
-        return result;
+        return result; /* GCOVR_EXCL_LINE */
     }
 
     /* We're now busy. */
@@ -453,6 +456,11 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
             handle->remainingCommand = commandCount - minCommandCount;
             handle->commandIndex = maxTxFifo;
         }
+
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpi2c_edma_c_ref_3$
+         */
         if(handle->remainingCommand > 0)
         {
             handle->enableTxReadyFlag = true;
@@ -479,7 +487,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
      * $Branch Coverage Justification$
      * $ref fsl_lpi2c_edma_c_ref_2$
      */
-    if ((hasSendData || (commandCount != 0U)) && (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0))
+    if ((hasSendData || (commandCount != 0U)) && (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0)) /* GCOVR_EXCL_BR_LINE */
     {
         EDMA_StartTransfer(handle->tx);
     }
@@ -631,7 +639,12 @@ static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMaste
     lpi2c_master_edma_handle_t *handle = (lpi2c_master_edma_handle_t *)lpi2cMasterEdmaHandle;
     uint32_t status                    = LPI2C_MasterGetStatusFlags(base);
     status_t result                    = kStatus_Success;
-    if(0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag))
+
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpi2c_edma_c_ref_3$
+     */
+    if((0U != (LPI2C_MasterGetEnabledInterrupts(base) & kLPI2C_MasterTxReadyFlag)) && (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag)))
     {
         if(handle->remainingCommand > 0)
         {
@@ -670,10 +683,6 @@ static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMaste
         {
             result = kStatus_LPI2C_PinLowTimeout;
         }
-        /*
-        * $Branch Coverage Justification$
-        * $ref fsl_lpi2c_edma_c_ref_1$
-        */
         else if (0U != (status & (uint32_t)kLPI2C_MasterArbitrationLostFlag))
         {
             result = kStatus_LPI2C_ArbitrationLost;
@@ -682,11 +691,15 @@ static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMaste
         {
             result = kStatus_LPI2C_Nak;
         }
-        else if (0U != (status & (uint32_t)kLPI2C_MasterFifoErrFlag))
+        /*
+         * $Branch Coverage Justification$
+         * Check of last possible flag - shouldn't be false
+         */
+        else if (0U != (status & (uint32_t)kLPI2C_MasterFifoErrFlag)) /* GCOVR_EXCL_BR_START */
         {
             result = kStatus_LPI2C_FifoError;
         }
-        else
+        else /* GCOVR_EXCL_BR_STOP */
         {
             ; /* Intentional empty */
         }
