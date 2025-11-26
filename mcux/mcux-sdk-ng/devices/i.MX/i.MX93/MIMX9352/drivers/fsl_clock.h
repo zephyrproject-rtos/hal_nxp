@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1254,6 +1254,7 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
+    assert(name < 127);
     CCM_CTRL->LPCG[name].AUTHEN |= CCM_LPCG_AUTHEN_CPULPM_MODE(1U);
     CCM_CTRL->LPCG[name].LPM_CUR = CCM_LPCG_LPM_CUR_LPM_SETTING_CUR(value);
     __DSB();
