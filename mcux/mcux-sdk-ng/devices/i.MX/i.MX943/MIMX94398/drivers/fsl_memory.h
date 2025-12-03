@@ -54,35 +54,65 @@
 
 #elif defined(CPU_MIMX94398AVKM_cm33_core1)
 /* For cm33 core1 system tcm from edma view */
+#define FSL_MEM_M33_CODE_TCM_BEGIN_FROM_EDMA_VIEW (0x209C0000U)
+#define FSL_MEM_M33_CODE_TCM_END_FROM_EDMA_VIEW   (0x209FFFFFU)
+
+/* For cm33 core1 system tcm from edma view */
 #define FSL_MEM_M33_SYS_TCM_BEGIN_FROM_EDMA_VIEW (0x20A00000U)
 #define FSL_MEM_M33_SYS_TCM_END_FROM_EDMA_VIEW   (0x20A3FFFFU)
+
+/* For cm33 core1 code tcm from cortex-m33 core1 view */
+#define FSL_MEM_M33_CODE_TCM_BEGIN (0x0FFC0000U)
+#define FSL_MEM_M33_CODE_TCM_END   (0x0FFFFFFFU)
 
 /* For cm33 core1 system tcm from cortex-m33 core1 view */
 #define FSL_MEM_M33_SYS_TCM_BEGIN (0x20000000U)
 #define FSL_MEM_M33_SYS_TCM_END   (0x2003FFFFU)
 
+#define FSL_MEM_M33_CODE_TCM_OFFSET (FSL_MEM_M33_CODE_TCM_BEGIN_FROM_EDMA_VIEW - FSL_MEM_M33_CODE_TCM_BEGIN)
+
 #define FSL_MEM_M33_SYS_TCM_OFFSET (FSL_MEM_M33_SYS_TCM_BEGIN_FROM_EDMA_VIEW - FSL_MEM_M33_SYS_TCM_BEGIN)
 
 #elif defined(CPU_MIMX94398AVKM_cm7_core0)
+
+/* For cm7 core0 itcm from edma view */
+#define FSL_MEM_M7_ITCM_BEGIN_FROM_EDMA_VIEW (0x203C0000U)
+#define FSL_MEM_M7_ITCM_END_FROM_EDMA_VIEW   (0x203FFFFFU)
 
 /* For cm7 core0 dtcm from edma view */
 #define FSL_MEM_M7_DTCM_BEGIN_FROM_EDMA_VIEW (0x20400000U)
 #define FSL_MEM_M7_DTCM_END_FROM_EDMA_VIEW   (0x2043FFFFU)
 
+/* For cm7 core0 itcm from cortex-m7 core0 view */
+#define FSL_MEM_M7_ITCM_BEGIN (0x00000000U)
+#define FSL_MEM_M7_ITCM_END   (0x0003FFFFU)
+
 /* For cm7 core0 dtcm from cortex-m7 core0 view */
 #define FSL_MEM_M7_DTCM_BEGIN (0x20000000U)
 #define FSL_MEM_M7_DTCM_END   (0x2003FFFFU)
 
+#define FSL_MEM_M7_ITCM_OFFSET (FSL_MEM_M7_ITCM_BEGIN_FROM_EDMA_VIEW - FSL_MEM_M7_ITCM_BEGIN)
+
 #define FSL_MEM_M7_DTCM_OFFSET (FSL_MEM_M7_DTCM_BEGIN_FROM_EDMA_VIEW - FSL_MEM_M7_DTCM_BEGIN)
 
 #elif defined(CPU_MIMX94398AVKM_cm7_core1)
+/* For cm7 core1 itcm from edma view */
+#define FSL_MEM_M7_ITCM_BEGIN_FROM_EDMA_VIEW (0x202C0000U)
+#define FSL_MEM_M7_ITCM_END_FROM_EDMA_VIEW (0x202FFFFFU)
+
 /* For cm7 core1 dtcm from edma view */
 #define FSL_MEM_M7_DTCM_BEGIN_FROM_EDMA_VIEW (0x20300000U)
 #define FSL_MEM_M7_DTCM_END_FROM_EDMA_VIEW (0x2033FFFFU)
 
+/* For cm7 core1 itcm from cortex-m7 core1 view */
+#define FSL_MEM_M7_ITCM_BEGIN (0x00000000U)
+#define FSL_MEM_M7_ITCM_END (0x0003FFFFU)
+
 /* For cm7 core1 dtcm from cortex-m7 core1 view */
 #define FSL_MEM_M7_DTCM_BEGIN (0x20000000U)
 #define FSL_MEM_M7_DTCM_END (0x2003FFFFU)
+
+#define FSL_MEM_M7_ITCM_OFFSET (FSL_MEM_M7_ITCM_BEGIN_FROM_EDMA_VIEW - FSL_MEM_M7_ITCM_BEGIN)
 
 #define FSL_MEM_M7_DTCM_OFFSET (FSL_MEM_M7_DTCM_BEGIN_FROM_EDMA_VIEW - FSL_MEM_M7_DTCM_BEGIN)
 
@@ -121,12 +151,20 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
         case kMEMORY_Local2DMA:
         {
 #if (__CORTEX_M == 33U)
-            if ((addr >= FSL_MEM_M33_SYS_TCM_BEGIN) && (addr <= FSL_MEM_M33_SYS_TCM_END))
+            if ((addr >= FSL_MEM_M33_CODE_TCM_BEGIN) && (addr <= FSL_MEM_M33_CODE_TCM_END))
+            {
+                dest = addr + FSL_MEM_M33_CODE_TCM_OFFSET;
+            }
+            else if ((addr >= FSL_MEM_M33_SYS_TCM_BEGIN) && (addr <= FSL_MEM_M33_SYS_TCM_END))
             {
                 dest = addr + FSL_MEM_M33_SYS_TCM_OFFSET;
             }
 #elif (__CORTEX_M == 7U)
-            if ((addr > FSL_MEM_M7_DTCM_BEGIN) && (addr <= FSL_MEM_M7_DTCM_END))
+            if ((addr > FSL_MEM_M7_ITCM_BEGIN) && (addr <= FSL_MEM_M7_ITCM_END))
+            {
+                dest = addr + FSL_MEM_M7_ITCM_OFFSET;
+            }
+            else if ((addr > FSL_MEM_M7_DTCM_BEGIN) && (addr <= FSL_MEM_M7_DTCM_END))
             {
                 dest = addr + FSL_MEM_M7_DTCM_OFFSET;
             }
@@ -140,13 +178,23 @@ static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_directi
         case kMEMORY_DMA2Local:
         {
 #if (__CORTEX_M == 33U)
-            if ((addr >= (FSL_MEM_M33_SYS_TCM_BEGIN + FSL_MEM_M33_SYS_TCM_OFFSET)) &&
+            if ((addr >= (FSL_MEM_M33_CODE_TCM_BEGIN + FSL_MEM_M33_CODE_TCM_OFFSET)) &&
+                (addr <= (FSL_MEM_M33_CODE_TCM_END + FSL_MEM_M33_CODE_TCM_OFFSET)))
+            {
+                dest = addr - FSL_MEM_M33_CODE_TCM_OFFSET;
+            }
+            else if ((addr >= (FSL_MEM_M33_SYS_TCM_BEGIN + FSL_MEM_M33_SYS_TCM_OFFSET)) &&
                 (addr <= (FSL_MEM_M33_SYS_TCM_END + FSL_MEM_M33_SYS_TCM_OFFSET)))
             {
                 dest = addr - FSL_MEM_M33_SYS_TCM_OFFSET;
             }
 #elif (__CORTEX_M == 7U)
-            if ((addr >= (FSL_MEM_M7_DTCM_BEGIN + FSL_MEM_M7_DTCM_OFFSET)) &&
+            if ((addr >= (FSL_MEM_M7_ITCM_BEGIN + FSL_MEM_M7_ITCM_OFFSET)) &&
+                (addr <= (FSL_MEM_M7_ITCM_END + FSL_MEM_M7_ITCM_OFFSET)))
+            {
+                dest = addr - FSL_MEM_M7_ITCM_OFFSET;
+            }
+            else if ((addr >= (FSL_MEM_M7_DTCM_BEGIN + FSL_MEM_M7_DTCM_OFFSET)) &&
                 (addr <= (FSL_MEM_M7_DTCM_END + FSL_MEM_M7_DTCM_OFFSET)))
             {
                 dest = addr - FSL_MEM_M7_DTCM_OFFSET;
