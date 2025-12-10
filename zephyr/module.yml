@@ -241,3 +241,11 @@ blobs:
     click-through: True
     url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx91evk-boot-firmware-6.12.34-2.1.0.bin
     description: "Boot firmware for i.MX 91 EVK board"
+  - path: imx-boot-firmware/imx943-evk-boot-firmware-6.12.34-2.1.0.bin
+    sha256: cbc7df5b47816001c14e9d067a5aa0b8cc91c919ec7c6e3d219ca1d253e0f23b
+    type: img
+    version: '6.12.34-2.1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    click-through: True
+    url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx943-evk-boot-firmware-6.12.34-2.1.0.bin
+    description: "Boot firmware for i.MX 943 evk board"
