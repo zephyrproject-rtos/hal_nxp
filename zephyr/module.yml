@@ -207,11 +207,11 @@ blobs:
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
 
 #For imx-boot-firmware
-  - path: imx-boot-firmware/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
-    sha256: ce9618f16d0898fb377ddedccdf5fec0fd1bdc6363b7b0cadc7e77e1d0f2d9c6
+  - path: imx-boot-firmware/imx95-evk-boot-firmware-6.12.34-2.1.0.bin
+    sha256: c64413394db04d302587886edb3eb58b19ac8a02286d44963cbe86209b05399a
     type: img
     version: '0.1'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     click-through: True
-    url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx95-19x19-lpddr5-evk-boot-firmware-0.1.bin
-    description: "Boot firmware for imx95-19x19-lpddr5-evk board"
+    url: https://www.nxp.com.cn/lgfiles/NMG/MAD/YOCTO/imx95-evk-boot-firmware-6.12.34-2.1.0.bin
+    description: "Boot firmware for i.MX 95 EVK board"
