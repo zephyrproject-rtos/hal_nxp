@@ -3000,8 +3000,8 @@ mlan_status wlan_ret_802_11_scan(IN mlan_private *pmpriv, IN HostCmd_DS_COMMAND 
     {
         /* Barriers are normally not required but do ensure the code is
          * completely within the specified behaviour for the architecture. */
-        __asm volatile("dsb" ::: "memory");
-        __asm volatile("isb");
+        __DSB();
+        __ISB();
         tlv_type = wlan_le16_to_cpu(pcurrent_tlv->header.type);
         tlv_len  = wlan_le16_to_cpu(pcurrent_tlv->header.len);
 
@@ -4155,8 +4155,8 @@ static mlan_status wlan_parse_ext_scan_result(IN mlan_private *pmpriv,
         {
             /* Barriers are normally not required but do ensure the code is
              * completely within the specified behaviour for the architecture. */
-            __asm volatile("dsb" ::: "memory");
-            __asm volatile("isb");
+            __DSB();
+            __ISB();
             tlv_type = wlan_le16_to_cpu(ptlv->header.type);
             tlv_len  = wlan_le16_to_cpu(ptlv->header.len);
             if (bytes_left_for_tlv < sizeof(MrvlIEtypesHeader_t) + tlv_len)
