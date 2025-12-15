@@ -6037,6 +6037,10 @@ int wifi_handle_fw_event(struct bus_message *msg)
 #if CONFIG_EXT_SCAN_SUPPORT
     mlan_event_scan_result *pext_scan_result;
 #endif
+#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+    int16_t *curr_rssi;
+#endif
+
     if (evt == NULL)
     {
         wevt_d("No mem allocated for msg.data");
@@ -6296,9 +6300,9 @@ int wifi_handle_fw_event(struct bus_message *msg)
         case EVENT_RSSI_LOW:
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
 #if !CONFIG_MEM_POOLS
-            t_s16 *curr_rssi = (t_s16 *)OSA_MemoryAllocate(sizeof(t_s16));
+            curr_rssi = (t_s16 *)OSA_MemoryAllocate(sizeof(t_s16));
 #else
-            t_s16 *curr_rssi = (t_s16 *)OSA_MemoryPoolAllocate(buf_32_MemoryPool);
+            curr_rssi = (t_s16 *)OSA_MemoryPoolAllocate(buf_32_MemoryPool);
 #endif
             if (curr_rssi == MNULL)
             {

@@ -8,11 +8,27 @@
 #ifndef _OSA_ZEPHYR_H_
 #define _OSA_ZEPHYR_H_
 
+#include <assert.h>
 #include <zephyr/kernel.h>
 
 //#define CONFIG_MEM_POOLS 1
 
 //#include <mem_pool_config.h>
+
+#ifndef SDK_ALIGN
+#define SDK_ALIGN(var, alignbytes) __attribute__((aligned(alignbytes))) var
+#endif
+
+#ifndef __DSB
+#define __DSB()
+#endif
+#ifndef __ISB
+#define __ISB()
+#endif
+
+#ifndef __get_IPSR
+#define __get_IPSR() k_is_in_isr()
+#endif
 
 /*** Timer Management ***/
 

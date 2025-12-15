@@ -6921,6 +6921,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
     int ret = WM_SUCCESS;
 #endif
     struct netif *netif = net_get_sta_interface();
+    int state;
 #endif
 
     network = &wlan.networks[wlan.cur_network_idx];
@@ -6972,7 +6973,7 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
 #endif
         case CM_STA_USER_REQUEST_PS_ENTER:
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            int state = wifi_nxp_supp_state();
+            state = wifi_nxp_supp_state();
 
             if ((state >= WPA_SCANNING) && (state < WPA_COMPLETED))
 #else

@@ -10,8 +10,6 @@
 
 #include <mlan_sdio_api.h>
 #include <osa.h>
-#include <fsl_common.h>
-#include <fsl_gpio.h>
 #include <zephyr/sd/sdio.h>
 
 #define SDIO_CMD_TIMEOUT 2000
