@@ -15,6 +15,7 @@
 #if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 #include "fsl_common.h"
 #else
+#include <stdint.h>
 #endif
 
 #include "fsl_os_abstraction_config.h"
