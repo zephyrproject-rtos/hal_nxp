@@ -28,7 +28,7 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Xspi_Ip_Types.h"
-
+#include <zephyr/devicetree.h>
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -69,7 +69,7 @@ extern "C"{
 ==================================================================================================*/
 
 /* Number of serial flash devices */
-#define XSPI_IP_MEM_INSTANCE_COUNT        (1U)
+#define XSPI_IP_MEM_INSTANCE_COUNT        (DT_NUM_INST_STATUS_OKAY(nxp_s32_xspi_hyperram))
 
 /* Maximum number of retries for Write Enable command */
 #define XSPI_IP_MAX_RETRY                 (3U)
