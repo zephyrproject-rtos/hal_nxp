@@ -14,7 +14,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250930
+**     Build:               b251217
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1187_cm7
@@ -427,6 +427,7 @@ typedef enum _asrc_clock_source
     kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
     kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
     kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
+    kASRC_ClockSourceMax            = 14U,         /**< max value */
 } asrc_clock_source_t;
 
 /* @} */
@@ -1817,6 +1818,8 @@ typedef enum _xbar_output_signal
 #define FLEXSPI_SLV_BASE_ADDRS                   { FLEXSPI_SLV_BASE }
 /** Array initializer of FLEXSPI_SLV peripheral base pointers */
 #define FLEXSPI_SLV_BASE_PTRS                    { FLEXSPI_SLV }
+/** Interrupt vectors for the FLEXSPI_SLV peripheral type */
+#define FLEXSPI_SLV_IRQS                         { FLEXSPI_SLV_IRQn }
 
 /* GPC_CPU_CTRL - Peripheral instance base addresses */
 /** Peripheral GPC_CPU_CTRL base address */

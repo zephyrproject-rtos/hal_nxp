@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250930
+**     Build:               b251217
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1182
@@ -425,6 +425,7 @@ typedef enum _asrc_clock_source
     kASRC_ClockSourceBitClockc_SAI4_CLOCK_ROOT = 12U, /**< SAI4 CLOCK ROOT */
     kASRC_ClockSourceBitClockd_MIC_CLOCK_ROOT = 13U, /**< MIC CLOCK ROOT */
     kASRC_ClockSourceBitClocke_MQS_CLOCK_ROOT = 14U, /**< MQS CLOCK ROOT */
+    kASRC_ClockSourceMax            = 14U,         /**< max value */
 } asrc_clock_source_t;
 
 /* @} */
@@ -2705,6 +2706,8 @@ typedef enum _xbar_output_signal
   /** Array initializer of FLEXSPI_SLV peripheral base pointers */
   #define FLEXSPI_SLV_BASE_PTRS                    { FLEXSPI_SLV }
 #endif
+/** Interrupt vectors for the FLEXSPI_SLV peripheral type */
+#define FLEXSPI_SLV_IRQS                         { FLEXSPI_SLV_IRQn }
 
 /* GPC_CPU_CTRL - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -5584,10 +5587,21 @@ typedef enum _xbar_output_signal
   /** Array initializer of XCACHE peripheral base pointers */
   #define XCACHE_BASE_PTRS                         { XCACHE_PC, XCACHE_PS }
 #endif
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
 /** XCACHE physical memory base address */
-#define XCACHE_PHYMEM_BASES                        { 0x00000000u, 0x20000000u }
+ #define XCACHE_PHYMEM_BASES                       { 0x10000000u, 0x30000000u }
 /** XCACHE physical memory size */
-#define XCACHE_PHYMEM_SIZES                        { 0x20000000u, 0xE0000000u }
+ #define XCACHE_PHYMEM_SIZES                       { 0x20000000u, 0xE0000000u }
+/** XCACHE physical memory base address */
+ #define XCACHE_PHYMEM_BASES_NS                    { 0x00000000u, 0x20000000u }
+/** XCACHE physical memory size */
+ #define XCACHE_PHYMEM_SIZES_NS                    { 0x20000000u, 0xE0000000u }
+#else
+/** XCACHE physical memory base address */
+ #define XCACHE_PHYMEM_BASES                       { 0x00000000u, 0x20000000u }
+/** XCACHE physical memory size */
+ #define XCACHE_PHYMEM_SIZES                       { 0x20000000u, 0xE0000000u }
+#endif
 
 
 /* ----------------------------------------------------------------------------

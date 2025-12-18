@@ -3,9 +3,9 @@
 **     Processors:          MIMXRT735SGAWBR_ezhv
 **                          MIMXRT735SGFOB_ezhv
 **
-**     Reference manual:    iMXRT700RM Rev.3, 05/2025
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Reference manual:    iMXRT700RM Rev.5, 10/2025
+**     Version:             rev. 5.1, 2025-12-08
+**     Build:               b251217
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT735S_ezhv
@@ -27,14 +27,18 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT735S_ezhv_COMMON.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 5.1
+ * @date 2025-12-08
  * @brief Peripheral Access Layer for MIMXRT735S_ezhv
  *
  * Peripheral Access Layer for MIMXRT735S_ezhv
@@ -45,9 +49,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0400U
+#define MCU_MEM_MAP_VERSION 0x0500U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 /* ----------------------------------------------------------------------------
    --
@@ -204,6 +208,10 @@ typedef enum IRQn {
  #define CACHE64_CTRL_PHYMEM_SIZES                { 0x08000000u, 0x08000000u }
 /* Backward compatibility */
 #define CACHE64_CTRL_CSAR_PHYADDR_MASK (CACHE64_CTRL_CSAR_PHYADDR27_1_MASK | CACHE64_CTRL_CSAR_PHYADDR31_29_MASK)
+#ifdef FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE
+#undef FSL_FEATURE_CACHE64_LINESIZE_BYTE
+#define FSL_FEATURE_CACHE64_LINESIZE_BYTE FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE
+#endif
 
 
 /* CACHE64_POLSEL - Peripheral instance base addresses */
