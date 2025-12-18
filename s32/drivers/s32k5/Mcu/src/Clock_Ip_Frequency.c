@@ -1766,8 +1766,8 @@ static uint64 Clock_Ip_PLL_VCO(const PLL_Type *Base)
 /* Return DFS_OUTPUT frequency */
 static uint64 DFS_OUTPUT(const PLL_Type *Base, uint32 Channel, uint64 Fin)
 {
-    uint32 Mfi;
-    uint32 Mfn;
+    uint32 Mfi = 0U;
+    uint32 Mfn = 0U;
     uint32 Divider;
 
     switch (Channel)
