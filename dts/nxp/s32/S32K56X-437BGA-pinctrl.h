@@ -440,7 +440,7 @@
 #define PE14_LPSPI1_SIN_I               NXP_SIUL2_PINMUX(0, 0, 78, 0, 56, 6)
 
 /* XSPI */
-#define PA9_XSPI_SCKFA#                 NXP_SIUL2_PINMUX(0, 0, 9, 1, 0, 0)
+#define PA9_XSPI_SCKFA                  NXP_SIUL2_PINMUX(0, 0, 9, 1, 0, 0)
 #define PA10_XSPI_INTA                  NXP_SIUL2_PINMUX(0, 0, 10, 0, 98, 1)
 #define PA11_XSPI_IOFA7_O               NXP_SIUL2_PINMUX(0, 0, 11, 1, 0, 0)
 #define PA11_XSPI_IOFA7_I               NXP_SIUL2_PINMUX(0, 0, 11, 0, 106, 1)

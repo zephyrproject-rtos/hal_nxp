@@ -113,7 +113,7 @@ extern "C"{
 #define XSPI_IP_ERASE_TYPES                 (4U)
 
 /*! @brief Number of AHB buffers in the device */
-#define XSPI_IP_AHB_BUFFERS                 (4U)
+#define XSPI_IP_AHB_BUFFERS                 4
 
 /*! @brief Number of AHB sub-buffers per AHB buffer */
 #define XSPI_IP_AHB_SUB_BUFFERS              (4U)
