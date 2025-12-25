@@ -196,4 +196,101 @@
 /* @brief Has chain mode (related to existence of register bit field TCTRLn[CHN]). */
 #define FSL_FEATURE_PIT_HAS_CHAIN_MODE (1)
 
+/* EDMA module features */
+/* @brief EDMA availability on the SoC. */
+#define FSL_FEATURE_SOC_EDMA_COUNT (2)
+/* @brief DMAMUX availability on the SoC. */
+#define FSL_FEATURE_SOC_DMAMUX_COUNT (3)
+/* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL (32)
+/* @brief If 8 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
+/* @brief Number of channel for each EDMA instance, (only defined for soc with different channel numbers for difference instance) */
+#define FSL_FEATURE_EDMA_INSTANCE_CHANNELn(x)  (32)
+/* @brief Has register CH_CSR. */
+/* @brief If 16 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (1)
+/* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (0)
+/* @brief Has register bit fields MP_CSR[GMRC]. */
+#define FSL_FEATURE_EDMA_HAS_GLOBAL_MASTER_ID_REPLICATION (1)
+/* @brief If 64 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_64_BYTES_TRANSFER (1)
+/* @brief Has DMA_Error interrupt vector. */
+#define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (1)
+/* @brief Has register bit fields CR[CLM]. */
+#define FSL_FEATURE_EDMA_HAS_CONTINUOUS_LINK_MODE (0)
+/* @brief If 128 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_128_BYTES_TRANSFER (0)
+/* @brief Has register access permission. */
+#define FSL_FEATURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION (1)
+/* @brief NBYTES must be multiple of 8 when using scatter gather. */
+#define FSL_FEATURE_EDMA_HAS_ERRATA_51327 (0)
+/* @brief If 128 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_INSTANCE_SUPPORT_128_BYTES_TRANSFERn(x) (0)
+/* @brief If channel clock controlled independently */
+#define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
+/* @brief NBYTES must be multiple of 8 when using scatter gather. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_ERRATA_51327n(x) (0)
+/* @brief Has register CH_CSR. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG (1)
+/* @brief Has channel mux */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (0)
+/* @brief Has no register bit fields MP_CSR[EBW]. */
+#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (0)
+/* @brief Instance has channel mux */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(x) (0)
+/* @brief If dma has common clock gate */
+#define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
+/* @brief Has register CH_SBR. */
+#define FSL_FEATURE_EDMA_HAS_SBR (1)
+/* @brief If dma channel IRQ support parameter */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
+/* @brief Has no register bit fields CH_SBR[ATTR]. */
+#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (1)
+/* @brief Has register bit field CH_CSR[SWAP]. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_SWAP_SIZE (0)
+/* @brief Instance has register bit field CH_CSR[SWAP]. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SWAP_SIZEn(x) (0)
+/* @brief Has register bit field CH_SBR[INSTR]. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (0)
+/* @brief Whether has prot register. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
+/* @brief Instance has register bit field CH_SBR[INSTR]. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) (0)
+/* @brief Whether has MP channel mux. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
+/* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE (0)
+/* @brief Instance has register CH_MATTR. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MEMORY_ATTRIBUTEn(x) (0)
+/* @brief Has register bit field CH_CSR[SIGNEXT]. */
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_SIGN_EXTENSION (0)
+/* @brief Instance Has register bit field CH_CSR[SIGNEXT]. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SIGN_EXTENSIONn(x) (0)
+/* @brief Has register bit field TCD_CSR[BWC]. */
+#define FSL_FEATURE_EDMA_HAS_BANDWIDTH (1)
+/* @brief Instance has register bit field TCD_CSR[BWC]. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_BANDWIDTHn(x) (1)
+/* @brief Has register bit fields TCD_CSR[TMC]. */
+#define FSL_FEATURE_EDMA_HAS_TRANSFER_MODE (0)
+/* @brief Instance has register bit fields TCD_CSR[TMC]. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) (0)
+/* @brief edma5 has different tcd type. */
+#define FSL_FEATURE_EDMA_TCD_TYPEn(x) \
+    (((x) == DMA3) ? (0) : \
+    (((x) == EDMA5) ? (1) : (-1)))
+/* @brief Has no register bit fields CH_SBR[SEC]. */
+#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (1)
+
+/* DMAMUX module features */
+/* @brief Number of DMA channels (related to number of register CHCFGn). */
+#define FSL_FEATURE_DMAMUX_MODULE_CHANNEL (16)
+/* @brief Has the periodic trigger capability for the triggered DMA channel (register bit CHCFG0[TRIG]). */
+#define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
+/* @brief Register CHCFGn width. */
+#define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
+/* @brief Has DMA Channel Always ON function */
+#define FSL_FEATURE_DMAMUX_HAS_A_ON (1)
+
 #endif /* _S32K566_FEATURES_H_ */

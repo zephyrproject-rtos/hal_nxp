@@ -258,4 +258,38 @@
 
 #define CAN_ORed_Message_buffer_IRQS             CAN_ORed_Message_buffer_0_96_IRQS
 
+/* DMA - Peripheral instance base addresses */
+
+/** Peripheral DMA0 base pointer */
+#define DMA3_BASE                                 IP_LPE_EDMA3_BASE
+
+#define DMA3                                      ((DMA_Type*)DMA3_BASE)
+
+#define DMA_BASE_ADDRS                            { IP_LPE_EDMA3_BASE }
+
+/* DMAMUX - Peripheral instance base addresses */
+/** Peripheral DMAMUX0 base address */
+#define DMAMUX0_BASE                             IP_DMAMUX_0_BASE
+/** Peripheral DMAMUX0 base pointer */
+#define DMAMUX0                                  IP_DMAMUX_0
+/** Peripheral DMAMUX1 base address */
+#define DMAMUX1_BASE                             IP_DMAMUX_1_BASE
+/** Peripheral DMAMUX1 base pointer */
+#define DMAMUX1                                  IP_DMAMUX_1
+/** Peripheral LPE_DMAMUX base address */
+#define LPE_DMAMUX_BASE                          IP_LPE_DMAMUX_BASE
+/** Peripheral LPE_DMAMUX base pointer */
+#define LPE_DMAMUX                               IP_LPE_DMAMUX
+/** Array initializer of DMAMUX peripheral base addresses */
+#define DMAMUX_BASE_ADDRS                        IP_DMAMUX_BASE_ADDRS
+/** Array initializer of DMAMUX peripheral base pointers */
+#define DMAMUX_BASE_PTRS                         IP_DMAMUX_BASE_PTRS
+
+/* DMA5 - Peripheral instance base addresses */
+#define EDMA5_BASE                               IP_EDMA5_BASE
+/* DMA5 - Peripheral instance base addresses */
+#define EDMA5                                    ((DMA5_Type *)EDMA5_BASE)
+/* DMA5 - Peripheral instance base addresses */
+#define DMA5_BASE_ADDRS                          { IP_EDMA5_BASE }
+
 #endif  /* _S32K566_GLUE_MCUX_H_ */
