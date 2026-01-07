@@ -101,7 +101,7 @@ typedef struct CANXL_SIC_Struct {
 } CANXL_SIC_Type, *CANXL_SIC_MemMapPtr;
 
 /** Number of instances of the CANXL_SIC module. */
-#define CANXL_SIC_INSTANCE_COUNT                 (1u)
+#define CANXL_SIC_INSTANCE_COUNT                 (1)
 
 /* CANXL_SIC - Peripheral instance base addresses */
 /** Peripheral CANEXCEL__SIC base address */
