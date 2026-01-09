@@ -1,6 +1,4 @@
 if(CONFIG_NET_L2_OPENTHREAD OR CONFIG_NXP_NBU)
-    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk-middleware-connectivity-framework)
-    include(connectivity_framework)
     if(CONFIG_SOC_SERIES_MCXW7XX)
         zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src)
 
