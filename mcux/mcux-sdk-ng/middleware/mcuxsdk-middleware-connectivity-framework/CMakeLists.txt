@@ -1,0 +1,25 @@
+# Copyright 2022-2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/Common)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/FactoryDataProvider)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/DBG)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/FunctionLib)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/HWParameter)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/ModuleInfo)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/MWSCoexistence)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/NVM)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/OtaSupport)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/PDM)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/PDUM)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/platform)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/SecLib_RNG)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/Sensors)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/LowPower)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/zephyr)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/FSCI)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/SFC)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/FileSystem)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/OTW)
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/services/WorkQ)
+
