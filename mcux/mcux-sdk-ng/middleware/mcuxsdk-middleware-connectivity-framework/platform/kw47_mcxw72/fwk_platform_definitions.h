@@ -8,6 +8,7 @@
 #define _FWK_PLAT_DEFS_H_
 
 #include "fsl_device_registers.h"
+#include <zephyr/sys/util.h>
 
 #define FWK_KW47_MCXW72_FAMILIES 1
 

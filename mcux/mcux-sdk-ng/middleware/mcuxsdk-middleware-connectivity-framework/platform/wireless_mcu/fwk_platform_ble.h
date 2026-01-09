@@ -73,8 +73,9 @@ int PLATFORM_InitBle(void);
  *
  * \param[in] callback function pointer to callback. Can be NULL to unregister
  *            the callback.
+ * \return int return status: >=0 for success, <0 for errors
  */
-void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len));
+int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len));
 
 /*!
  * \brief Sends a HCI message to Controller.
@@ -137,6 +138,13 @@ bool PLATFORM_CheckNextBleConnectivityActivity(void);
  * \return uint64_t time difference expressed in microseconds, 0U in case of error.
  */
 uint64_t PLATFORM_GetDeltaTimeStamp(uint32_t controllerTimestamp);
+
+/* \brief Extra procedures during HCI init from Host, likely to check if the
+ *        HCI link is valid and execute Vendor specific init
+ *
+ * \return int return status: >=0 for success, <0 for errors
+ */
+int PLATFORM_StartHci(void);
 
 #ifdef __cplusplus
 }

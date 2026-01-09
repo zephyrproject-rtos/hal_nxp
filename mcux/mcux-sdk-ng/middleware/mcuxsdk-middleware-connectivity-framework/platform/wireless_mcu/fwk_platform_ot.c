@@ -4,18 +4,21 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifndef __ZEPHYR__
 #include "board_platform.h"
-#include "fsl_common.h"
-#include "fsl_adapter_rpmsg.h"
 #include "pin_mux.h"
-#include "fwk_platform_definitions.h"
-#include "fwk_platform.h"
-#include "fwk_platform_ics.h"
-#include "fwk_platform_ot.h"
 #include "SecLib.h"
 #include "RNG_Interface.h"
 #include "HWParameter.h"
 #include "FunctionLib.h"
+#endif
+
+#include "fsl_common.h"
+#include "fsl_adapter_rpmsg.h"
+#include "fwk_platform_definitions.h"
+#include "fwk_platform.h"
+#include "fwk_platform_ics.h"
+#include "fwk_platform_ot.h"
 
 /* Default IEE EIU64 OUI */
 #ifndef IEEE802_15_4_ADDR_OUI
@@ -28,7 +31,9 @@
 #define gPlatformUseOuiFromIfr 0
 #endif
 
+#ifndef __ZEPHYR__
 static const uint8_t gIeee802_15_4_ADDR_OUI_c[MAC_ADDR_OUI_PART_SIZE] = {IEEE802_15_4_ADDR_OUI};
+#endif
 
 /* Check if __st is negative,  if true, apply 4 bits shit and add new __error_code,
     assert in debug and break
@@ -94,6 +99,7 @@ int PLATFORM_InitOT(void)
 
 static void PLATFORM_GenerateNewEui64Addr(uint8_t *eui64_address)
 {
+#ifndef __ZEPHYR__
     uint8_t macAddr[EUI_64_SZ - MAC_ADDR_OUI_PART_SIZE] = {0U};
 #if (gPlatformUseUniqueDeviceIdFor15_4Addr_d != 0)
     uint32_t uid_lsb = RADIO_CTRL->UID_LSB;
@@ -142,10 +148,12 @@ static void PLATFORM_GenerateNewEui64Addr(uint8_t *eui64_address)
         FLib_MemCpy((void *)&eui64_address[EUI_64_SZ - MAC_ADDR_OUI_PART_SIZE], (const void *)gIeee802_15_4_ADDR_OUI_c,
                     MAC_ADDR_OUI_PART_SIZE);
     }
+#endif
 }
 
 void PLATFORM_GetIeee802_15_4Addr(uint8_t *eui64_address)
 {
+#ifndef __ZEPHYR__
     hardwareParameters_t *pHWParams = NULL;
     uint32_t              status;
 
@@ -175,4 +183,7 @@ void PLATFORM_GetIeee802_15_4Addr(uint8_t *eui64_address)
         (void)NV_WriteHWParameters();
         EnableGlobalIRQ(regPrimask);
     }
+#else
+    PLATFORM_GenerateNewEui64Addr(eui64_address);
+#endif
 }
