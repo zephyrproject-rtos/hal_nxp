@@ -32,7 +32,7 @@
  *********************************************************************/
 
 #if !defined(gPlatformUseHwParameter_d)
-#define gPlatformUseHwParameter_d 1
+#define gPlatformUseHwParameter_d 0
 #endif
 /*
  * gHwParamsProdDataMainFlashMode_c HWParameters PROD_DATA remain at top of main flash,
@@ -170,7 +170,7 @@
  *      in non secure mode.
  * */
 #if !defined(gPlatformNbuDebugGpioDAccessEnabled_d)
-#define gPlatformNbuDebugGpioDAccessEnabled_d 1
+#define gPlatformNbuDebugGpioDAccessEnabled_d 0
 #endif
 
 /*********************************************************************
@@ -183,7 +183,7 @@
  * thread stack (this can be configured).
  */
 #ifndef gPlatformIcsUseWorkqueueRxProcessing_d
-#define gPlatformIcsUseWorkqueueRxProcessing_d 1
+#define gPlatformIcsUseWorkqueueRxProcessing_d 0
 #endif
 
 /* Enable HCI RX processing in the system workqueue thread

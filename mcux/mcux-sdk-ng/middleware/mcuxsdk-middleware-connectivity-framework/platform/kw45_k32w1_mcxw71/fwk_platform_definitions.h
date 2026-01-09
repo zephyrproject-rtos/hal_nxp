@@ -8,6 +8,7 @@
 #define _FWK_PLAT_DEFS_H_
 
 #include "fsl_device_registers.h"
+#include <zephyr/sys/util.h>
 
 #ifndef KB
 #define KB(x) (((uint32_t)x) << 10u)

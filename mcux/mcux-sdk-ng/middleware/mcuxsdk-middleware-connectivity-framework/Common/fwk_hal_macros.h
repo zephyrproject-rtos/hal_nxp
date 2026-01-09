@@ -11,6 +11,10 @@
 /* Required for __REV definition */
 #include "cmsis_compiler.h"
 
+#ifdef __ZEPHYR__
+#include <zephyr/sys/util.h>
+#endif
+
 /*============================================================================
                          USEFUL MACROS
 =============================================================================*/
@@ -181,7 +185,10 @@ static inline uint8_t __hal_ctz(uint32_t x)
 /* Neither BUILD_ASSERT nor  SAME_TYPE defined for IAR */
 #endif /* __IAR_SYSTEMS_ICC__ */
 
+#ifndef _DO_CONCAT
 #define _DO_CONCAT(x, y) x##y
+#endif
+
 #define _CONCAT(x, y)    _DO_CONCAT(x, y)
 
 #define DECL_ALIGN(type) __aligned(__alignof(type)) type
@@ -207,11 +214,13 @@ static inline uint8_t __hal_ctz(uint32_t x)
  * @param field the name of the field within the struct @p ptr points to
  * @return a pointer to the structure that contains @p ptr
  */
+#ifndef CONTAINER_OF
 #define CONTAINER_OF(_PTR_, _TYPE_, _FIELD_)                                 \
     ({                                                                       \
         CONTAINER_OF_VALIDATE(_PTR_, _TYPE_, _FIELD_)                        \
         ((_TYPE_ *)(void *)(((char *)(_PTR_)) - offsetof(_TYPE_, _FIELD_))); \
     })
+#endif
 
 static inline uint32_t HAL_GetPowerOfTwoShift(uint32_t x)
 {

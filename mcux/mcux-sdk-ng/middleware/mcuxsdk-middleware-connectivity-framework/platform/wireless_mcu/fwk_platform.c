@@ -7,8 +7,15 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
+#ifndef __ZEPHYR__
 /* Get some BOARD_***_DEFAULT macro values if defined in board.h for 32kHz settings */
 #include "board_platform.h"
+#include "fsl_trdc.h"
+#include "FunctionLib.h"
+#include "fsl_component_timer_manager.h"
+#include "fwk_debug.h"
+#endif
+
 #include "fwk_platform_definitions.h"
 #include "fwk_platform.h"
 #include "fwk_config.h"
@@ -20,11 +27,8 @@
 #if !defined(FPGA_TARGET) || (FPGA_TARGET == 0)
 #include "fsl_ccm32k.h"
 #include "fsl_spc.h"
-#include "fsl_trdc.h"
 #endif
 
-#include "FunctionLib.h"
-#include "fsl_component_timer_manager.h"
 #include "fsl_os_abstraction.h"
 #include "fsl_adapter_rpmsg.h"
 
@@ -38,12 +42,17 @@
 #include "fwk_platform_mws.h"
 #endif
 
-#include "fwk_debug.h"
 #include "mcmgr_imu_internal.h"
 
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
+
+#ifdef __ZEPHYR__
+#define BOARD_DBGLPIOSET(...)
+#define DBG_NBU_GPIOD_ACCESS(...)
+#define FLib_MemCpy memcpy
+#endif
 
 /*! @brief XTAL 32Mhz clock source start up timeout */
 #ifndef FWK_PLATFORM_XTAL32M_STARTUP_TIMEOUT
@@ -271,6 +280,7 @@ int PLATFORM_IsNbuStarted(void)
 
 void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
 {
+#ifndef __ZEPHYR__
     uint32_t           val = 0UL;
     extern uint32_t    m_lowpower_flag_start[]; /* defined by linker */
     volatile uint32_t *p_lp_flag = (volatile uint32_t *)(uint32_t)m_lowpower_flag_start;
@@ -281,6 +291,7 @@ void PLATFORM_SetLowPowerFlag(bool PwrDownOngoing)
         val = PLATFORM_HOST_USE_POWER_DOWN;
     }
     *p_lp_flag = val;
+#endif
 }
 
 int PLATFORM_InitNbu(void)
@@ -478,8 +489,9 @@ int PLATFORM_InitOsc32K(void)
 
 int PLATFORM_GetOscCap32KValue(uint8_t *xtalCap32K)
 {
+    int status = 0;
+#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
     hardwareParameters_t *pHWParams = NULL;
-    int                   status;
 
     status = (int)NV_ReadHWParameters(&pHWParams);
 
@@ -491,6 +503,7 @@ int PLATFORM_GetOscCap32KValue(uint8_t *xtalCap32K)
         EnableGlobalIRQ(regPrimask);
     }
     else
+#endif
     {
         *xtalCap32K = BOARD_32KHZ_XTAL_CLOAD_DEFAULT;
     }
@@ -500,19 +513,22 @@ int PLATFORM_GetOscCap32KValue(uint8_t *xtalCap32K)
 
 int PLATFORM_SetOscCap32KValue(uint8_t xtalCap32K)
 {
-    hardwareParameters_t *pHWParams = NULL;
     int                   status;
     ccm32k_osc_config_t   osc32k_config;
+#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
+    uint32_t regPrimask;
+    hardwareParameters_t *pHWParams = NULL;
+#endif
 
     do
     {
-        uint32_t regPrimask;
         if (xtalCap32K > BOARD_32KHZ_XTAL_CAPACITANCE_MAX_VALUE)
         {
             status = -1;
             break;
         }
 
+#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
         status = (int)NV_ReadHWParameters(&pHWParams);
         if (status != 0)
         {
@@ -523,6 +539,7 @@ int PLATFORM_SetOscCap32KValue(uint8_t xtalCap32K)
         pHWParams->xtalCap32K = xtalCap32K;
         (void)NV_WriteHWParameters();
         EnableGlobalIRQ(regPrimask);
+#endif
 
         osc32k_config.enableInternalCapBank = true;
         osc32k_config.coarseAdjustment      = (ccm32k_osc_coarse_adjustment_value_t)BOARD_32KHZ_XTAL_COARSE_ADJ_DEFAULT;
@@ -595,8 +612,9 @@ uint8_t PLATFORM_GetXtal32MhzTrim(bool_t regRead)
 /* Calling this function assumes HWParameters in flash have been read */
 void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
 {
-    uint32_t              status;
     uint32_t              rfmc_xo;
+#if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
+    uint32_t              status;
     hardwareParameters_t *pHWParams = NULL;
     status                          = NV_ReadHWParameters(&pHWParams);
     if ((TRUE == saveToHwParams) && (status == 0U))
@@ -605,6 +623,7 @@ void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
         pHWParams->xtalTrim = trimValue;
         (void)NV_WriteHWParameters();
     }
+#endif
 
     /* Apply a trim value to the crystal oscillator */
     rfmc_xo = RFMC->XO_TEST;
@@ -619,6 +638,7 @@ void PLATFORM_SetXtal32MhzTrim(uint8_t trimValue, bool_t saveToHwParams)
 int PLATFORM_InitTimerManager(void)
 {
     int status = 0;
+#ifndef __ZEPHYR__
 
     if (timer_manager_initialized == 0)
     {
@@ -652,6 +672,9 @@ int PLATFORM_InitTimerManager(void)
         /* Timer Manager already initialized */
         status = 1;
     }
+#else
+    timer_manager_initialized = 1;
+#endif
     return status;
 }
 
@@ -659,7 +682,9 @@ void PLATFORM_DeinitTimerManager(void)
 {
     if (timer_manager_initialized == 1)
     {
+#ifndef __ZEPHYR__
         TM_Deinit();
+#endif
         timer_manager_initialized = 0;
     }
 }

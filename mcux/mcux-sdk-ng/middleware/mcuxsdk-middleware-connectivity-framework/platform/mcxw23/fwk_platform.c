@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifndef __ZEPHYR__
+
 /* -------------------------------------------------------------------------- */
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
@@ -182,3 +184,5 @@ int PLATFORM_ResetCrypto(void)
     /* Not implemented */
     return 0;
 }
+
+#endif /* __ZEPHYR__ */

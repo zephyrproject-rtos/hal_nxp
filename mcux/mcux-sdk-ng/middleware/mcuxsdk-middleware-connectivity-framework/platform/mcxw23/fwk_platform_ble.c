@@ -10,10 +10,14 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
-#include "fwk_platform_ble.h"
-#include "ble_controller.h"
+#ifndef __ZEPHYR__
 #include "fsl_rom_api.h"
 #include "fsl_debug_console.h"
+#endif
+
+#include "fsl_common.h"
+#include "fwk_platform_ble.h"
+#include "ble_controller.h"
 
 #ifdef SERIAL_BTSNOOP
 #include "sbtsnoop.h"
@@ -32,6 +36,7 @@ static blec_result_t PLATFORM_HciRxCallback(blec_hciPacketType_t packetType, voi
 /* -------------------------------------------------------------------------- */
 
 static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
+static bool is_initialized = false;
 
 /* -------------------------------------------------------------------------- */
 /*                              Public functions                              */
@@ -41,19 +46,30 @@ int PLATFORM_InitBle(void)
 {
     int ret = 0;
 
-    /* Initialize the controller only when this flag is set, otherwise it means it
-     * will be initialized by upper layers */
-#if defined(gUseHciTransportDownward_d) && (gUseHciTransportDownward_d > 0)
-    if (kBLEC_Success != BLEController_Init(PLATFORM_HciRxCallback, gAppMaxTxPowerDbm_c, NULL))
+    do
     {
-        ret = 1;
-    }
-#else
-    uint8_t bdAddr[6];
+        if (is_initialized)
+        {
+            ret = 1;
+            break;
+        }
 
-    PLATFORM_GetBDAddr(bdAddr);
-    (void)BLEController_WriteBdAddr(bdAddr);
-#endif
+        /* Initialize the controller only when this flag is set, otherwise it means it
+        * will be initialized by upper layers */
+    #if defined(gUseHciTransportDownward_d) && (gUseHciTransportDownward_d > 0)
+        if (kBLEC_Success != BLEController_Init(PLATFORM_HciRxCallback, gAppMaxTxPowerDbm_c, NULL))
+        {
+            ret = -1;
+        }
+    #else
+        uint8_t bdAddr[6];
+
+        PLATFORM_GetBDAddr(bdAddr);
+        (void)BLEController_WriteBdAddr(bdAddr);
+    #endif
+
+        is_initialized = true;
+    } while (false);
 
     return ret;
 }
@@ -79,14 +95,21 @@ int PLATFORM_SendHciMessageAlt(uint8_t packetType, uint8_t *msg, uint32_t len)
     return ret;
 }
 
-void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
+int PLATFORM_StartHci(void)
+{
+    return 0;
+}
+
+int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
 {
     hci_rx_callback = callback;
     (void)hci_rx_callback;
+    return 0;
 }
 
 void PLATFORM_GetBDAddr(uint8_t *bleDeviceAddress)
 {
+#ifndef __ZEPHYR__
     flash_config_t flashInstance;
     status_t       status;
 
@@ -102,6 +125,7 @@ void PLATFORM_GetBDAddr(uint8_t *bleDeviceAddress)
                                            location == kFFR_BdAddrLocationNmpa ? "NMPA" :
                                                                                  "UUID");
     }
+#endif
 }
 
 bool PLATFORM_CheckNextBleConnectivityActivity(void)

@@ -7,9 +7,15 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
+#ifndef __ZEPHYR__
 /* Get BOARD_LL_32MHz_WAKEUP_ADVANCE_HSLOT if defined in board.h for 32MHz settings
  * BOARD_FRO32K_PPM_TARGET and BOARD_FRO32K_FILTER_SIZE for fro32k calibration settings */
+#include "FunctionLib.h"
 #include "board_platform.h"
+#include "fwk_debug.h"
+#include "RNG_Interface.h"
+#include "controller_api.h"
+#endif
 
 #include "fwk_hal_macros.h"
 #include "fsl_common.h"
@@ -18,10 +24,6 @@
 #include "fwk_platform_ble.h"
 #include "fwk_platform.h"
 #include "fwk_platform_ics.h"
-#include "FunctionLib.h"
-#include "RNG_Interface.h"
-#include "fwk_debug.h"
-#include "controller_api.h"
 
 #if defined(gPlatformUseHwParameter_d) && (gPlatformUseHwParameter_d > 0)
 #include "HWParameter.h"
@@ -44,6 +46,12 @@
 /* -------------------------------------------------------------------------- */
 /*                               Private macros                               */
 /* -------------------------------------------------------------------------- */
+#ifdef __ZEPHYR__
+#define DBG_LOG_DUMP(...)
+#define BOARD_DBGCONFIGINITNBU(...)
+#define FLib_MemCpy memcpy
+#endif
+
 #define PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE 3U
 #define PLATFORM_BLE_BD_ADDR_OUI_PART_SIZE  3U
 #define PLATFORM_BLE_BD_ADDR_FULL_SIZE      6U
@@ -191,7 +199,11 @@ STATIC uint32_t PLATFORM_ComputeTimeDiffNbu2HostTstmr(uint64_t tstmr0);
 /* -------------------------------------------------------------------------- */
 /*                         Private memory declarations                        */
 /* -------------------------------------------------------------------------- */
+#ifndef __ZEPHYR__
 STATIC const uint8_t gBD_ADDR_OUI_c[PLATFORM_BLE_BD_ADDR_OUI_PART_SIZE] = {BD_ADDR_OUI};
+#endif
+
+static bool is_initialized = false;
 
 /* RPMSG related variables */
 
@@ -254,6 +266,12 @@ int PLATFORM_InitBle(void)
 
     do
     {
+        if (is_initialized)
+        {
+            status = 1;
+            break;
+        }
+
         /* When waking up from deep power down mode (following Deep power down reset), it is necessary to release IO
          * isolation. this is usually done in Low power initialization but it is necessary also
          * to be done if the Application does not support low power */
@@ -299,10 +317,11 @@ int PLATFORM_InitBle(void)
         BOARD_DBGCONFIGINITNBU(TRUE);
         // DBG_LOG_DUMP();
 
+        is_initialized = true;
     } while (false);
 
     /* Error callback set by PLATFORM_RegisterBleErrorCallback() */
-    if ((status != 0) && (pfPlatformErrorCallback != NULL))
+    if ((status < 0) && (pfPlatformErrorCallback != NULL))
     {
         pfPlatformErrorCallback(PLATFORM_INIT_BLE_ID, status);
     }
@@ -310,9 +329,10 @@ int PLATFORM_InitBle(void)
     return status;
 }
 
-void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
+int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
 {
     hci_rx_callback = callback;
+    return 0;
 }
 
 int PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
@@ -432,10 +452,12 @@ uint64_t PLATFORM_GetDeltaTimeStamp(uint32_t controllerTimestamp)
         {
             break;
         }
+#ifndef __ZEPHYR__
         if (Controller_GetTimestampEx(&ll_timing_slot, &ll_timing_us, &tstmr0) != KOSA_StatusSuccess)
         {
             break;
         }
+#endif
         /* Sanitize returned timestamp value, although not really useful since overflow would happen after 2284 years */
         tstmr0 &= PLATFORM_TSTMR_MASK;
 
@@ -463,6 +485,11 @@ uint64_t PLATFORM_GetDeltaTimeStamp(uint32_t controllerTimestamp)
     } while (false);
     /* if delta time difference is 0 it points out an error */
     return delta;
+}
+
+int PLATFORM_StartHci(void)
+{
+    return 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -602,7 +629,7 @@ static void PLATFORM_HciRxWorkHandler(fwk_work_t *work)
 
 STATIC void PLATFORM_SetBleMaxTxPower(int8_t max_tx_power)
 {
-#ifndef LATENCY_TESTS
+#if !defined(LATENCY_TESTS) && !defined(__ZEPHYR__)
     uint8_t ldo_ana_trim;
 
     if (max_tx_power == 0)
@@ -623,6 +650,7 @@ STATIC void PLATFORM_SetBleMaxTxPower(int8_t max_tx_power)
         }
         ldo_ana_trim = 15U;
     }
+
     /* configure max tx power in controller */
     (void)Controller_SetMaxTxPower(max_tx_power, ldo_ana_trim);
 #else
@@ -640,6 +668,7 @@ static void PLATFORM_SendWakeupDelay(uint8_t wakeupDelayToBeSendToNbu)
 
 STATIC void PLATFORM_GenerateNewBDAddr(uint8_t *bleDeviceAddress)
 {
+#ifndef __ZEPHYR__
     uint8_t macAddr[PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE] = {0U};
 
 #if defined(gPlatformUseUniqueDeviceIdForBdAddr_d) && (gPlatformUseUniqueDeviceIdForBdAddr_d == 1)
@@ -698,6 +727,7 @@ STATIC void PLATFORM_GenerateNewBDAddr(uint8_t *bleDeviceAddress)
         FLib_MemCpy((void *)&bleDeviceAddress[PLATFORM_BLE_BD_ADDR_RAND_PART_SIZE], (const void *)gBD_ADDR_OUI_c,
                     PLATFORM_BLE_BD_ADDR_OUI_PART_SIZE);
     }
+#endif
 }
 
 /*!

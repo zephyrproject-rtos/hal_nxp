@@ -11,6 +11,8 @@
 /*                                  Includes                                  */
 /* -------------------------------------------------------------------------- */
 
+#ifndef __ZEPHYR__
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -164,3 +166,5 @@ int PLATFORM_SendRngSeed(uint8_t *seed, uint16_t seed_size)
     (void)seed_size;
     return 1;
 }
+
+#endif /* __ZEPHYR__ */
