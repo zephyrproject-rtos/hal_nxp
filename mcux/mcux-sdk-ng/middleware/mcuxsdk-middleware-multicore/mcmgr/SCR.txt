@@ -1,0 +1,8 @@
+Name: mcux-mcmgr
+Version: v5.0.1
+Outgoing License: BSD-3-Clause
+License File: LICENSE
+Format: source code
+Description: Multicore Manager to control secondary cores and handle events.
+Location: https://github.com/nxp-mcuxpresso/mcux-mcmgr
+Origin: NXP (BSD-3-Clause)

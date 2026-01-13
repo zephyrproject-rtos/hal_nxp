@@ -1,0 +1,35 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "created": "2025-09-02T10:00:22Z",
+    "creators": [
+      "Organization: NXP"
+    ],
+    "licenseListVersion": "3.20"
+  },
+  "name": "mcux-mcmgr-v5.0.1",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://nxp.com/spdx/16dcbcbb-0653-4225-93ba-8a333f473ca3",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-package-16dcbcbb-0653-4225-93ba-8a333f473ca3",
+      "name": "mcux-mcmgr",
+      "versionInfo": "v5.0.1",
+      "licenseConcluded": "(BSD-3-Clause)",
+      "licenseDeclared": "(BSD-3-Clause)",
+      "downloadLocation": "https://github.com/nxp-mcuxpresso/mcux-mcmgr",
+      "originator": "Organization: NXP",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-package-16dcbcbb-0653-4225-93ba-8a333f473ca3"
+    }
+  ]
+}
