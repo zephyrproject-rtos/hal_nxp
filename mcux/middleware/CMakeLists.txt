@@ -1,34 +1,5 @@
 if(CONFIG_NET_L2_OPENTHREAD OR CONFIG_NXP_NBU)
     if(CONFIG_SOC_SERIES_MCXW7XX)
-        zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src)
-
-        zephyr_library_sources(
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src/mcmgr_internal_core_api_mcxw716_ext.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src/mcmgr_internal_core_api_mcxw716.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src/mcmgr.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/src/mcmgr_imu_internal.c
-        )
-
-        zephyr_include_directories(
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/inc
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/mcmgr/inc/platform/mcxw716
-        )
-
-        zephyr_include_directories(
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/include
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/include/platform/kw45b41
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/include/environment/zephyr
-        )
-
-        zephyr_library_sources(
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/common/llist.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/virtio/virtqueue.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/rpmsg_lite/porting/platform/kw45b41/rpmsg_platform_ext.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/rpmsg_lite/porting/environment/rpmsg_env_zephyr.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/rpmsg_lite/porting/platform/kw45b41/rpmsg_platform.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/rpmsg_lite/rpmsg_lite.c
-        )
-
         if(CONFIG_IEEE802154)
             zephyr_include_directories(
                 ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/phy/interface
