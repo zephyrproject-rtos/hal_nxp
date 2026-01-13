@@ -19,12 +19,16 @@ Origin:
    BRANCH: release/25.09.00
 
    NXP MCUXpresso SDK Multicore middleware
-   https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-multicore
-   TAG: MCUX_2.16.000
+   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-multicore
+   TAG: v25.09.00
+
+   NXP MCUXpresso SDK Multicore Manager middleware
+   https://github.com/nxp-mcuxpresso/mcux-mcmgr
+   TAG: v5.0.1
 
    RPMsg Component
    https://github.com/nxp-mcuxpresso/rpmsg-lite
-   TAG: v5.1.2
+   TAG: v5.2.1
 
    NXP MCUXpresso SDK secure subsystem
    https://github.com/nxp-mcuxpresso/mcux-secure-subsystem
