@@ -538,7 +538,9 @@ status_t PWM_SetupPwm(PWM_Type *base,
     pwmClock = (srcClock_Hz / (1UL << ((base->SM[subModule].CTRL & PWM_CTRL_PRSC_MASK) >> PWM_CTRL_PRSC_SHIFT)));
 
     ticksTemp = pwmClock / pwmFreq_Hz;
-    assert(ticksTemp <= 0xFFFFU);
+    if (ticksTemp > 0xFFFFU) {
+        return kStatus_InvalidArgument;
+    }
     pulseCnt = (uint16_t)ticksTemp;
 
     /* Update register about period */
