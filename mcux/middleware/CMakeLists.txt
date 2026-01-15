@@ -57,11 +57,6 @@ if(CONFIG_NET_L2_OPENTHREAD OR CONFIG_NXP_NBU)
     endif()
 endif()
 
-if(CONFIG_SOC_SERIES_MCXW2XX AND CONFIG_BT)
-    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk-middleware-bluetooth-controller)
-    include(bluetooth_controller)
-endif()
-
 if(CONFIG_ENTROPY_NXP_ELE_TRNG)
     zephyr_include_directories(
         ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc
