@@ -1,0 +1,112 @@
+# Copyright 2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+mcux_set_list(MCXW23_FAMILY "MCXW236 MCXW235")
+
+if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll)
+    function(add_snps_ll_common)
+        mcux_add_configuration(
+            CC "-DBLE -DSUPPORT_MASTER_CONNECTION -DSUPPORT_SLAVE_CONNECTION"
+        )
+        mcux_add_source(
+            SOURCES interface/snps_controller/sdk_integration/ble_controller.h
+                    src/snps/sdk_integration/ble_controller.c
+                    interface/snps_controller/sdk_integration/ble_controller_lowlevel.h
+                    src/snps/sdk_integration/ble_controller_debug.c
+                    interface/snps_controller/ble_controller/hci.h
+                    interface/snps_controller/ble_controller/ll_intf.h
+                    interface/snps_controller/ble_controller/ll_error.h
+                    interface/snps_controller/shrd_utils/bsp.h
+                    interface/snps_controller/shrd_utils/_40nm_reg_files/DWC_ble154combo.h
+                    interface/snps_controller/shrd_utils/common_types.h
+                    interface/snps_controller/shrd_utils/event_manager.h
+                    interface/snps_controller/shrd_utils/ll_fw_config.h
+                    interface/snps_controller/shrd_utils/ll_mem.h
+                    interface/snps_controller/shrd_utils/mem_intf.h
+                    interface/snps_controller/shrd_utils/os_wrapper.h
+                    interface/snps_controller/shrd_utils/power_table.h
+                    interface/snps_controller/shrd_utils/hci_transport.h
+        )
+        mcux_add_include(
+            INCLUDES interface/snps_controller/sdk_integration
+                     interface/snps_controller/ble_controller
+                     interface/snps_controller/shrd_utils
+        )
+        # Link layer is compiled with wchart-32, while default MDK setting is wchart-16.
+        mcux_remove_mdk_configuration(
+            CC "-fshort-wchar"
+            CX "-fshort-wchar"
+        )
+    endfunction()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_bm)
+        add_snps_ll_common()
+        mcux_add_library(
+            LIBS lib/snps_controller/libble_ll_bm.a
+                 lib/snps_controller/libble_ll_utils_bm.a
+            TOOLCHAINS mdk armgcc mcux iar
+            DEVICE_IDS ${MCXW23_FAMILY}
+        )
+    endif()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_bm_uart)
+        add_snps_ll_common()
+        mcux_add_library(
+            LIBS lib/snps_controller/libble_ll_bm.a
+                 lib/snps_controller/libble_ll_utils_bm_uart.a
+            TOOLCHAINS mdk armgcc mcux iar
+            DEVICE_IDS ${MCXW23_FAMILY}
+        )
+    endif()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_os)
+        add_snps_ll_common()
+
+        mcux_add_source(
+            SOURCES src/snps/sdk_integration/os_interface.c
+        )
+
+        mcux_add_library(
+            LIBS lib/snps_controller/libble_ll_os.a
+                 lib/snps_controller/libble_ll_utils_os.a
+            TOOLCHAINS mdk armgcc mcux iar
+            DEVICE_IDS ${MCXW23_FAMILY}
+        )
+    endif()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_os_uart)
+        add_snps_ll_common()
+
+        mcux_add_source(
+            SOURCES src/snps/sdk_integration/os_interface.c
+        )
+
+        mcux_add_library(
+            LIBS lib/snps_controller/libble_ll_os.a
+                lib/snps_controller/libble_ll_utils_os_uart.a
+            TOOLCHAINS mdk armgcc mcux iar
+            DEVICE_IDS ${MCXW23_FAMILY}
+        )
+    endif()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_nxp_hoststack_adapter)
+        mcux_add_source(
+            SOURCES src/snps/sdk_integration/nxp_hoststack_adapter/nxp_hoststack_adapter.c
+            SOURCES interface/snps_controller/sdk_integration/nxp_hoststack_adapter/nxp_hoststack_adapter.h
+        )
+        mcux_add_include(
+            INCLUDES interface/snps_controller/sdk_integration/nxp_hoststack_adapter
+        )
+    endif()
+
+    if(CONFIG_MCUX_COMPONENT_middleware.wireless.snps_ll_controller_api)
+        mcux_add_source(
+            SOURCES interface/controller_api.h
+            SOURCES interface/snps_controller/sdk_integration/controller_api/controller_interface.h
+            SOURCES src/snps/sdk_integration/controller_api/controller_api.c
+        )
+        mcux_add_include(
+            INCLUDES interface/snps_controller/sdk_integration/controller_api
+            INCLUDES interface/
+        )
+    endif()
+endif()
