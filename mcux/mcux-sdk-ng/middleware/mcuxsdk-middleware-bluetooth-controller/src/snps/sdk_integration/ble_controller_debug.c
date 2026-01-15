@@ -4,10 +4,13 @@
  */
 
 #include "bsp.h"
-#include "fsl_debug_console.h"
 #include "ble_controller.h"
 #include "fsl_iocon.h"
 #include "fsl_gpio.h"
+
+#ifdef BLECONTROLLER_ENABLE_WARNINGS
+#include "fsl_debug_console.h"
+#endif
 
 #ifdef BLECONTROLLER_ENABLE_WARNINGS
 #define SEVERITY_HIGH 1
