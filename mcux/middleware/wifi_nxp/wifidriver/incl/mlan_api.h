@@ -481,6 +481,7 @@ typedef struct
     t_u8 status;
 } ftm_start_param;
 
+int wifi_unassoc_ftm_cfg(const t_u16 action, const t_u16 config);
 int wifi_ftm_start_stop(const t_u16 action, const t_u8 loop_cnt, const t_u8 *mac, const t_u8 channel);
 int wifi_ftm_start(const t_u16 action, const t_u8 *mac, const t_u8 channel);
 int wifi_ftm_stop(const t_u16 action, const t_u8 *mac, const t_u8 channel);
@@ -495,6 +496,7 @@ void wifi_ftm_process_event(void *p_data);
 #if CONFIG_WLS_CSI_PROC
 int wifi_process_wls_csi_event(void *p_data);
 void wls_csi_process_event(void *p_data);
+extern t_u8 g_csi_event_for_wls;
 #endif
 #endif
 

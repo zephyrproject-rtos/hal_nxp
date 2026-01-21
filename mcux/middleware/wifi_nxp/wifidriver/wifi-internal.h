@@ -86,7 +86,6 @@ typedef struct
     /** Thread handle for sending data */
     OSA_TASK_HANDLE_DEFINE(wifi_drv_tx_task_Handle);
 #endif
-    OSA_TASK_HANDLE_DEFINE(wifi_powersave_task_Handle);
 
     OSA_EVENT_HANDLE_DEFINE(wifi_event_Handle);
 
@@ -112,6 +111,10 @@ typedef struct
 
     OSA_SEMAPHORE_HANDLE_DEFINE(command_resp_sem);
 
+#if CONFIG_WIFI_FW_DEBUG
+    OSA_SEMAPHORE_HANDLE_DEFINE(fw_dump_event);
+#endif
+
     OSA_MUTEX_HANDLE_DEFINE(mcastf_mutex);
 
 #if CONFIG_WMM
@@ -124,7 +127,6 @@ typedef struct
 
     /* Queue for events/data from low level interface driver */
     OSA_MSGQ_HANDLE_DEFINE(io_events, MAX_EVENTS, sizeof(struct bus_message));
-    OSA_MSGQ_HANDLE_DEFINE(powersave_queue, MAX_EVENTS, sizeof(struct bus_message));
 
     mcast_filter *start_list;
 

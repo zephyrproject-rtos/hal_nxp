@@ -631,19 +631,6 @@ void wifi_nxp_wpa_supp_event_proc_disassoc(void *if_priv, nxp_wifi_event_mlme_t 
     wifi_if_ctx_rtos->supp_callbk_fns.disassoc(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
 }
 
-#if 0
-void wifi_nxp_wpa_supp_event_proc_remain_on_channel(void *if_priv, int cancel_channel)
-{
-    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
-    wifi_if_ctx_rtos                           = (struct wifi_nxp_ctx_rtos *)if_priv;
-    union wpa_event_data event;
-    os_memset(&event, 0, sizeof(event));
-    event.remain_on_channel.freq     = wifi_if_ctx_rtos->remain_on_channel_freq;
-    event.remain_on_channel.duration = wifi_if_ctx_rtos->remain_on_channel_duration;
-    wifi_if_ctx_rtos->supp_callbk_fns.remain_on_channel(wifi_if_ctx_rtos->supp_drv_if_ctx, cancel_channel, &event);
-}
-#endif
-
 int wifi_nxp_supp_state(void)
 {
     struct net_if *iface = (struct net_if *)(void *)net_get_sta_interface();
@@ -2555,7 +2542,7 @@ out:
     return ret;
 }
 
-int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsigned int duration)
+int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsigned int duration, u64 host_cookie)
 {
     int status                                 = -WM_FAIL;
     int ret                                    = -1;
@@ -2578,6 +2565,12 @@ int wifi_nxp_wpa_supp_remain_on_channel(void *if_priv, unsigned int freq, unsign
 
     wifi_if_ctx_rtos->supp_called_remain_on_chan = true;
     wifi_if_ctx_rtos->remain_on_chan_is_canceled = false;
+    wifi_if_ctx_rtos->remain_on_channel_cookie   = (u64)(OSA_Rand() | host_cookie);
+    if (wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn != NULL)
+    {
+        wm_wifi.supp_if_callbk_fns->cookie_rsp_callbk_fn(wifi_if_ctx_rtos);
+    }
+
     status                                       = wifi_remain_on_channel(true, channel, duration);
 
     if (status != WM_SUCCESS)
@@ -2594,7 +2587,7 @@ out:
     return ret;
 }
 
-int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv)
+int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv, u64 rpu_cookie)
 {
     int status                                 = -WM_FAIL;
     int ret                                    = -1;
@@ -2629,6 +2622,45 @@ int wifi_nxp_wpa_supp_cancel_remain_on_channel(void *if_priv)
     }
 out:
     return ret;
+}
+
+void wifi_nxp_wpa_supp_event_proc_remain_on_channel(void *if_priv, int cancel_channel)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
+    if (cancel_channel)
+    {
+        if (wifi_if_ctx_rtos && wifi_if_ctx_rtos->supp_callbk_fns.roc_cancel_complete)
+        {
+            wifi_if_ctx_rtos->supp_callbk_fns.roc_cancel_complete(wifi_if_ctx_rtos->supp_drv_if_ctx,
+                                                                  (int)wifi_if_ctx_rtos->remain_on_channel_freq,
+                                                                  wifi_if_ctx_rtos->remain_on_channel_cookie);
+        }
+    }
+    else
+    {
+        if (wifi_if_ctx_rtos && wifi_if_ctx_rtos->supp_callbk_fns.roc_complete)
+        {
+            wifi_if_ctx_rtos->supp_callbk_fns.roc_complete(wifi_if_ctx_rtos->supp_drv_if_ctx,
+                                                           (int)wifi_if_ctx_rtos->remain_on_channel_freq,
+                                                           wifi_if_ctx_rtos->remain_on_channel_duration,
+                                                           wifi_if_ctx_rtos->remain_on_channel_cookie);
+        }
+    }
+}
+
+void wifi_nxp_wpa_supp_event_proc_cookie_rsp(void *if_priv)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
+    if (wifi_if_ctx_rtos && wifi_if_ctx_rtos->supp_callbk_fns.cookie_event)
+    {
+        wifi_if_ctx_rtos->supp_callbk_fns.cookie_event(wifi_if_ctx_rtos->supp_drv_if_ctx,
+                                                       0,
+                                                       wifi_if_ctx_rtos->remain_on_channel_cookie);
+    }
 }
 
 void wifi_nxp_wpa_supp_event_proc_mgmt_rx(void *if_priv, nxp_wifi_event_mlme_t *mgmt_rx,

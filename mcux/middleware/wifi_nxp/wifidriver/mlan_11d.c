@@ -214,6 +214,36 @@ const t_u8 *wlan_11d_code_2_region(pmlan_adapter pmadapter, t_u8 code)
     return ((const t_u8 *)region_code_mapping[0].region);
 }
 
+/**
+ *  @brief This function validate whether region code is valid
+ *
+ *  @param code         Region code
+ *
+ *  @return             MTRUE or MFALSE
+ */
+t_bool wlan_11d_is_region_code_valid(t_u8 code)
+{
+    t_u8 i;
+    t_u8 size = sizeof(region_code_mapping) / sizeof(region_code_mapping_t);
+
+    ENTER();
+
+    /* Look for code in mapping table */
+    for (i = 0; i < size; i++)
+    {
+        if (region_code_mapping[i].code == code)
+        {
+            LEAVE();
+            return MTRUE;
+        }
+    }
+
+    PRINTM(MERROR, "Invalid region code 0x%x\n", code);
+
+    LEAVE();
+    return MFALSE;
+}
+
 #ifdef STA_SUPPORT
 /**
  *  @brief This function Checks if channel txpwr is learned from AP/IBSS

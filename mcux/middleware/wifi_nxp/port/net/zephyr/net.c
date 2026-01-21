@@ -108,8 +108,10 @@ interface_t g_uap;
 #endif
 
 static int net_wlan_init_done = 0;
+#if defined(CONFIG_NET_DHCPV4)
 OSA_TIMER_HANDLE_DEFINE(dhcp_timer);
 static void dhcp_timer_cb(osa_timer_arg_t arg);
+#endif
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
 static void set_supp_ready_state(bool ready)
 {
@@ -424,9 +426,7 @@ static void process_data_packet(const t_u8 *rcvdata, const t_u16 datalen)
     switch (header_type)
     {
         case NET_ETH_PTYPE_IP:
-#if CONFIG_IPV6
         case NET_ETH_PTYPE_IPV6:
-#endif
         /* Unicast ARP also need do rx reorder */
         case NET_ETH_PTYPE_ARP:
             /* To avoid processing of unwanted udp broadcast packets, adding
@@ -985,6 +985,7 @@ int net_get_if_name_netif(char *pif_name, struct netif *iface)
     return WM_SUCCESS;
 }
 
+#if defined(CONFIG_NET_DHCPV4)
 void net_stop_dhcp_timer(void)
 {
     (void)OSA_TimerDeactivate((osa_timer_handle_t)dhcp_timer);
@@ -1007,6 +1008,7 @@ static void dhcp_timer_cb(osa_timer_arg_t arg)
 
     (void)wlan_wlcmgr_send_msg(WIFI_EVENT_NET_DHCP_CONFIG, WIFI_EVENT_REASON_FAILURE, NULL);
 }
+#endif
 
 void net_interface_up(void *intrfc_handle)
 {
@@ -1041,7 +1043,9 @@ void net_interface_down(void *intrfc_handle)
 
 void net_interface_dhcp_stop(void *intrfc_handle)
 {
+#if defined(CONFIG_NET_DHCPV4)
     net_dhcpv4_stop(((interface_t *)intrfc_handle)->netif);
+#endif
 }
 
 static void ipv4_mcast_add(struct net_mgmt_event_callback *cb, struct net_if *iface)
@@ -1069,14 +1073,14 @@ static void ipv6_mcast_delete(struct net_mgmt_event_callback *cb, struct net_if 
 static void wifi_net_event_handler(struct net_mgmt_event_callback *cb, uint64_t mgmt_event, struct net_if *iface)
 {
     // const struct wifi_status *status = (const struct wifi_status *)cb->info;
-    enum wifi_event_reason wifi_event_reason;
 
     switch (mgmt_event)
     {
+#if defined(CONFIG_NET_DHCPV4)
         case NET_EVENT_IPV4_DHCP_BOUND:
-            wifi_event_reason = WIFI_EVENT_REASON_SUCCESS;
-            wlan_wlcmgr_send_msg(WIFI_EVENT_NET_DHCP_CONFIG, wifi_event_reason, NULL);
+            wlan_wlcmgr_send_msg(WIFI_EVENT_NET_DHCP_CONFIG, WIFI_EVENT_REASON_SUCCESS, NULL);
             break;
+#endif
         case NET_EVENT_IPV4_MADDR_ADD:
             ipv4_mcast_add(cb, iface);
             break;
@@ -1145,16 +1149,21 @@ int net_configure_address(struct net_ip_config *addr, void *intrfc_handle)
     switch (addr->ipv4.addr_type)
     {
         case NET_ADDR_TYPE_STATIC:
-            NET_IPV4_ADDR_U32(if_handle->ipaddr) = addr->ipv4.address;
-            NET_IPV4_ADDR_U32(if_handle->nmask)  = addr->ipv4.netmask;
-            NET_IPV4_ADDR_U32(if_handle->gw)     = addr->ipv4.gw;
-            net_if_ipv4_addr_add(if_handle->netif, &if_handle->ipaddr.in_addr, NET_ADDR_MANUAL, 0);
-            net_if_ipv4_set_gw(if_handle->netif, &if_handle->gw.in_addr);
-            net_if_ipv4_set_netmask_by_addr(if_handle->netif, &if_handle->ipaddr.in_addr, &if_handle->nmask.in_addr);
+            if (addr->ipv4.address != 0)
+            {
+                NET_IPV4_ADDR_U32(if_handle->ipaddr) = addr->ipv4.address;
+                NET_IPV4_ADDR_U32(if_handle->nmask)  = addr->ipv4.netmask;
+                NET_IPV4_ADDR_U32(if_handle->gw)     = addr->ipv4.gw;
+                net_if_ipv4_addr_add(if_handle->netif, &if_handle->ipaddr.in_addr, NET_ADDR_MANUAL, 0);
+                net_if_ipv4_set_gw(if_handle->netif, &if_handle->gw.in_addr);
+                net_if_ipv4_set_netmask_by_addr(if_handle->netif, &if_handle->ipaddr.in_addr, &if_handle->nmask.in_addr);
+            }
             break;
         case NET_ADDR_TYPE_DHCP:
+#if defined(CONFIG_NET_DHCPV4)
             (void)OSA_TimerActivate((osa_timer_handle_t)dhcp_timer);
             net_dhcpv4_restart(if_handle->netif);
+#endif
             break;
         case NET_ADDR_TYPE_LLA:
             /* For dhcp, instead of netifapi_netif_set_up, a
@@ -1172,11 +1181,10 @@ int net_configure_address(struct net_ip_config *addr, void *intrfc_handle)
 #endif
     )
     {
+        (void)wlan_wlcmgr_send_msg(WIFI_EVENT_NET_STA_ADDR_CONFIG, WIFI_EVENT_REASON_SUCCESS, NULL);
 #if CONFIG_IPV6
         (void)wlan_wlcmgr_send_msg(WIFI_EVENT_NET_IPV6_CONFIG, WIFI_EVENT_REASON_SUCCESS, NULL);
 #endif
-        (void)wlan_wlcmgr_send_msg(WIFI_EVENT_NET_STA_ADDR_CONFIG, WIFI_EVENT_REASON_SUCCESS, NULL);
-
         /* XXX For DHCP, the above event will only indicate that the
          * DHCP address obtaining process has started. Once the DHCP
          * address has been obtained, another event,
@@ -1332,11 +1340,12 @@ int net_get_if_ipv6_addr(struct net_ip_config *addr, void *intrfc_handle)
     return WM_SUCCESS;
 }
 
-uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf)
+uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf, uint32_t buf_size)
 {
     struct net_if_ipv6 *ipv6 = NULL;
     struct net_if_addr *unicast;
     uint8_t count = 0, i;
+    uint32_t offset = 0;
 
     STRUCT_SECTION_FOREACH(net_if, iface)
     {
@@ -1349,8 +1358,13 @@ uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf)
                 continue;
             }
 
-            (void)memcpy(buf, &unicast->address.in6_addr, 16);
-            buf += 16;
+            if (offset + 16 > buf_size)
+            {
+                return count;
+            }
+
+            (void)memcpy(buf + offset, &unicast->address.in6_addr, 16);
+            offset +=16;
             count ++;
         }
     }
@@ -1512,8 +1526,9 @@ static void cleanup_mgmt_events(void)
 int net_wlan_init(void)
 {
     int ret;
+#if defined(CONFIG_NET_DHCPV4)
     osa_status_t status;
-
+#endif
     wifi_register_data_input_callback(&handle_data_packet);
     wifi_register_amsdu_data_input_callback(&handle_amsdu_data_packet);
     wifi_register_deliver_packet_above_callback(&handle_deliver_packet_above);
@@ -1550,7 +1565,7 @@ int net_wlan_init(void)
         ethernet_init(g_uap.netif);
 #endif
         net_wlan_init_done = 1;
-
+#if defined(CONFIG_NET_DHCPV4)
         status = OSA_TimerCreate((osa_timer_handle_t)dhcp_timer, MSEC_TO_TICK(DHCP_TIMEOUT), &dhcp_timer_cb, NULL, KOSA_TimerOnce,
                                  OSA_TIMER_NO_ACTIVATE);
         if (status != KOSA_StatusSuccess)
@@ -1558,6 +1573,7 @@ int net_wlan_init(void)
             net_e("Unable to start dhcp timer");
             return -WM_FAIL;
         }
+#endif
     }
 
     setup_mgmt_events();
@@ -1633,8 +1649,9 @@ static int net_netif_deinit(struct net_if *netif)
 int net_wlan_deinit(void)
 {
     int ret;
+#if defined(CONFIG_NET_DHCPV4)
     osa_status_t status;
-
+#endif
     if (net_wlan_init_done != 1)
     {
         return -WM_FAIL;
@@ -1655,13 +1672,14 @@ int net_wlan_deinit(void)
         return -WM_FAIL;
     }
 #endif
+#if defined(CONFIG_NET_DHCPV4)
     status = OSA_TimerDestroy((osa_timer_handle_t)dhcp_timer);
     if (status != KOSA_StatusSuccess)
     {
         net_e("DHCP timer deletion failed");
         return -WM_FAIL;
     }
-
+#endif
     cleanup_mgmt_events();
 
     net_wlan_init_done = 0;

@@ -372,6 +372,20 @@ typedef struct _mlan_802_11_ssid
     t_u8 ssid[MLAN_MAX_SSID_LENGTH];
 } mlan_802_11_ssid, *pmlan_802_11_ssid;
 
+#if CONFIG_WIFI_FW_DEBUG
+typedef MLAN_PACK_START struct _fw_dump_info_event
+{
+    /** Sequence number of firmware memory dump */
+    t_u16 seq;
+    /** Reserved */
+    t_u16 rsvd;
+    /** Type of firmware memory dump in this event */
+    t_u16 type;
+    /** Length of memory dump in this event */
+    t_u16 len;
+} MLAN_PACK_END fw_dump_info_event;
+#endif
+
 typedef MLAN_PACK_START struct _tx_status_event
 {
     /** packet type */

@@ -96,6 +96,13 @@ mlan_status sd_wifi_post_init(enum wlan_type type);
 
 void sd_wifi_reset_ports();
 
+/** Check if SDIO firmware is ready/running
+ *
+ * \param[in] card_poll Number of polling attempts
+ * \return true if firmware is ready, false otherwise
+ */
+bool wlan_sdio_check_fw_status(t_u32 card_poll);
+
 void sd_wifi_deinit(void);
 
 /*
@@ -123,6 +130,8 @@ int wifi_send_vdllcmdbuffer(t_u32 tx_blocks, t_u32 len);
 HostCmd_DS_COMMAND *wifi_get_vdllcommand_buffer(void);
 int wlan_send_sdio_vdllcmd(t_u8 *buf, t_u32 tx_blocks, t_u32 buflen);
 #endif
+HostCmd_DS_COMMAND *wifi_get_sleep_cfm_command_buffer(void);
+int wifi_send_sleep_cfm_cmdbuffer(t_u32 tx_blocks, t_u32 len);
 
 mlan_status wlan_process_int_status(mlan_adapter *pmadapter);
 mlan_status wlan_xmit_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 tx_control);
@@ -149,6 +158,7 @@ void process_pkt_hdrs(void *pbuf, t_u32 payloadlen, t_u8 interface, t_u8 tid, t_
 
 #if CONFIG_WIFI_FW_DEBUG
 extern void wifi_dump_firmware_info();
+extern void wifi_dump_firmware_info_via_event();
 extern void wifi_sdio_reg_dbg();
 #endif /* CONFIG_WIFI_FW_DEBUG */
 

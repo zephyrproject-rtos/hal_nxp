@@ -156,6 +156,16 @@ static mlan_status wlan_radio_ioctl_band_cfg(IN pmlan_adapter pmadapter, IN pmla
             LEAVE();
             return MLAN_STATUS_FAILURE;
         }
+#if CONFIG_11AX
+        if ((infra_band & MBIT(8)) && (infra_band & MBIT(9)))
+        {
+            pmadapter->usr_dot_11ax_enable = MTRUE;
+        }
+        else
+        {
+            pmadapter->usr_dot_11ax_enable = MFALSE;
+        }
+#endif
         pmpriv->config_bands    = infra_band;
         pmadapter->config_bands = global_band;
     }

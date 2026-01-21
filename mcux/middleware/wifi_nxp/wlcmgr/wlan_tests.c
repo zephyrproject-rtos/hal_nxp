@@ -1104,18 +1104,79 @@ static void test_wlan_set_frag(int argc, char **argv)
 #endif
 
 #if (CONFIG_11MC) || (CONFIG_11AZ)
+
+static void dump_wlan_unassoc_ftm_cfg_usage()
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("wlan-unassoc-ftm-cfg <action> config <1/0>\r\n");
+    (void)PRINTF("action: 1 -> Set\r\n");
+    (void)PRINTF("config: 1 -> Enable; 0 -> Disable \r\n");
+}
+
+static void test_wlan_unassoc_ftm_cfg(int argc, char **argv)
+{
+    unsigned int action, config;
+    int arg = 2;
+
+    if (argc < 2 || argc > 4)
+    {
+        (void)PRINTF("Error: invalid number of arguments\r\n");
+        dump_wlan_unassoc_ftm_cfg_usage();
+        return;
+    }
+
+    action = a2hex_or_atoi(argv[1]);
+    if (action != 1)
+    {
+        dump_wlan_unassoc_ftm_cfg_usage();
+        return;
+    }
+
+    while (arg < argc)
+    {
+        if (string_equal("config", argv[arg]))
+        {
+            if (get_uint(argv[arg + 1], &config, strlen(argv[arg + 1])))
+            {
+                (void)PRINTF("Error: invalid config argument\r\n");
+                dump_wlan_unassoc_ftm_cfg_usage();
+                return;
+            }
+        }
+        else
+        {
+            (void)PRINTF("Error: invalid [%s] argument\r\n", argv[arg]);
+            dump_wlan_unassoc_ftm_cfg_usage();
+            return;
+        }
+        arg += 2;
+    }
+    wlan_unassoc_ftm_cfg(action, config);
+}
+
 static void dump_wlan_ftm_ctrl_usage()
 {
     (void)PRINTF("Usage:\r\n");
     (void)PRINTF("wlan-ftm-ctrl <action> loop_cnt <count> channel <channel> mac <peer_mac>\r\n");
-    (void)PRINTF("action: 1 start 2: stop \r\n");
+    (void)PRINTF("action:\r\n");
+    (void)PRINTF(" 1: Start non-secure 11mc/11az FTM with associated Peer AP\r\n");
+    (void)PRINTF(" 2: Stop FTM session\r\n");
+    (void)PRINTF(" 3: Start secure 11az FTM with associated Peer AP\r\n");
+    (void)PRINTF(" 4: Start non-secure 11az/11mc FTM with unassoc Peer\r\n");
+    (void)PRINTF(" 5: Start secure 11az FTM with unassociated & pre-authenticated Peer\r\n");
     (void)PRINTF("loop_cnt: number of ftm sessions to run repeatedly (default:1, 0:non-stop, n:times>)\r\n");
     (void)PRINTF("channel: Channel on which FTM must be started\r\n");
-    (void)PRINTF("mac: Mac address of the peer with whom FTM session is required\r\n");
+    (void)PRINTF("mac: Mac address of the peer with whom FTM session is required\r\n\r\n");
     (void)PRINTF("Example:\r\n");
-    (void)PRINTF("Start ftm:\r\n");
-    (void)PRINTF("wlan-ftm-ctrl 1 loop_cnt 2 channel 36 mac 00:50:43:20:bc:44\r\n");
-    (void)PRINTF("Stop ftm:\r\n");
+    (void)PRINTF("Run non-secure FTM session:\r\n");
+    (void)PRINTF("wlan-ftm-ctrl 1 loop_cnt 1 channel 36 mac 00:50:43:20:bc:44\r\n");
+    (void)PRINTF("Runs secure 11az FTM session:\r\n");
+    (void)PRINTF("wlan-ftm-ctrl 3 loop_cnt 1 channel 36 mac 00:50:43:20:bc:44\r\n");
+    (void)PRINTF("Runs non-secure FTM session with unassoc peer until user terminate:\r\n");
+    (void)PRINTF("wlan-ftm-ctrl 4 loop_cnt 1 channel 36 mac 00:50:43:20:bc:44\r\n");
+    (void)PRINTF("Runs Secure FTM session with unassociated Peer AP:\r\n");
+    (void)PRINTF("wlan-ftm-ctrl 5 loop_cnt 1 channel 36 mac 00:50:43:20:bc:44\r\n");
+    (void)PRINTF("Stop the FTM session:\r\n");
     (void)PRINTF("wlan-ftm-ctrl 2\r\n");
 }
 static void test_wlan_ftm_ctrl(int argc, char **argv)
@@ -1140,7 +1201,7 @@ static void test_wlan_ftm_ctrl(int argc, char **argv)
     }
 
     action = a2hex_or_atoi(argv[1]);
-    if (action != 1 && action != 2)
+    if (action < 1 && action > 5)
     {
         dump_wlan_ftm_ctrl_usage();
         return;
@@ -1383,10 +1444,10 @@ static void test_wlan_loc_cfg(int argc, char **argv)
 
 static void test_wlan_civ_cfg(int argc, char **argv)
 {
-    unsigned civ_req, loc_type, addr_type, addr_len, country_code;
+    unsigned civ_req, loc_type, addr_type, /*addr_len,*/ country_code;
     location_civic_rep_t lcr;
     int arg        = 1;
-    char *civ_addr = CIVIC_ADDRESS;
+    //char *civ_addr = CIVIC_ADDRESS;
     if (argc != 9)
     {
         (void)PRINTF("Error: invalid number of arguments\r\n");
@@ -1460,7 +1521,7 @@ static void test_wlan_11mc_nego_cfg(int argc, char **argv)
     unsigned burst_exp, burst_dur, min_delta, asap, ftm_per_burst, bw, burst_period;
     ftm_11mc_nego_cfg_t dot11mc_cfg;
     int arg        = 1;
-    char *civ_addr = CIVIC_ADDRESS;
+    //char *civ_addr = CIVIC_ADDRESS;
     if (argc != 13)
     {
         (void)PRINTF("Error: invalid number of arguments\r\n");
@@ -3944,13 +4005,13 @@ static void test_wlan_reset(int argc, char **argv)
 #if CONFIG_CSI
     if (option == 2)
     {
-        (void)memset((void*)&g_csi_params, 0, sizeof(g_csi_params));
+        (void)memset((void *)&g_csi_params, 0, sizeof(g_csi_params));
     }
 #endif
 #if CONFIG_NET_MONITOR
     if (option == 2)
     {
-        (void)memset((void*)&g_net_monitor_param, 0, sizeof(g_net_monitor_param));
+        (void)memset((void *)&g_net_monitor_param, 0, sizeof(g_net_monitor_param));
     }
 #endif
 
@@ -4977,8 +5038,11 @@ static void test_wlan_set_csi_param_header(int argc, char **argv)
         }
     }
 
+    memcpy((void *)&g_csi_params, (void *)wlan_get_csi_cfg_param_default(),
+            sizeof(wlan_csi_config_params_t));
     set_csi_param_header(bss_type, csi_enable, head_id, tail_id, chip_id, band_config, channel, csi_monitor_enable,
                          ra4us);
+    wlan_set_csi_cfg_param_default(&g_csi_params);
 }
 
 static void test_wlan_set_csi_filter(int argc, char **argv)
@@ -5043,7 +5107,10 @@ static void test_wlan_set_csi_filter(int argc, char **argv)
         return;
     }
 
+    memcpy((void *)&g_csi_params, (void *)wlan_get_csi_cfg_param_default(),
+            sizeof(wlan_csi_config_params_t));
     set_csi_filter(pkt_type, subtype, flags, op_index, raw_mac);
+    wlan_set_csi_cfg_param_default(&g_csi_params);
 }
 
 static void test_wlan_csi_cfg(int argc, char **argv)
@@ -8031,15 +8098,17 @@ static void dump_wlan_auto_null_tx_usage(void)
     (void)PRINTF("        <interval> bit15:14 unit: 00-s 01-us 10-ms 11-one_shot  bit13-0: interval\r\n");
     (void)PRINTF("                   Please set interval Hexadecimal value. For example: 0x8064\r\n");
     (void)PRINTF("        <dst_mac> Destination MAC address\r\n");
-    (void)PRINTF("                  Please specify dst_mac if bss_type is uAP, and dst_mac should be of STA which connected to uAP\r\n");
+    (void)PRINTF(
+        "                  Please specify dst_mac if bss_type is uAP, and dst_mac should be of STA which connected to "
+        "uAP\r\n");
     (void)PRINTF("                  If bss_type is not uAP, no need to input dst_mac\r\n");
     (void)PRINTF("    wlan-auto-null-tx sta stop\r\n");
 }
 
 static void test_wlan_auto_null_tx(int argc, char **argv)
 {
-    int ret = -WM_FAIL;
-    int arg = 2;
+    int ret                = -WM_FAIL;
+    int arg                = 2;
     mlan_bss_type bss_type = (mlan_bss_type)0;
 
     wlan_auto_null_tx_t auto_null_tx;
@@ -8121,7 +8190,7 @@ static void test_wlan_auto_null_tx(int argc, char **argv)
                 if (string_equal("dst_mac", argv[arg]))
                 {
                     unsigned int mac_matched = 0;
-                    ret = get_mac(argv[arg + 1], (char *)&auto_null_tx.dst_mac, ':');
+                    ret                      = get_mac(argv[arg + 1], (char *)&auto_null_tx.dst_mac, ':');
                     if (ret != 0)
                     {
                         dump_wlan_auto_null_tx_usage();
@@ -8858,7 +8927,7 @@ static void wlan_start_detect_ant(void)
     else
     {
         ant_mode = 1;
-        ret = wlan_set_antcfg(ant_mode, evaluate_time, evaluate_mode);
+        ret      = wlan_set_antcfg(ant_mode, evaluate_time, evaluate_mode);
         (void)PRINTF("\nFailed to detect antenna\r\n");
     }
 }
@@ -9068,6 +9137,7 @@ static struct cli_command tests[] = {
     {"wlan-frag", "<sta/uap> <fragment threshold>", test_wlan_set_frag},
 #endif
 #if (CONFIG_11MC) || (CONFIG_11AZ)
+    {"wlan-unassoc-ftm-cfg", "<set_get> <on_off>", test_wlan_unassoc_ftm_cfg},
     {"wlan-ftm-ctrl", "<action> <loop_cnt> <peer_mac> <channel>", test_wlan_ftm_ctrl},
     {"wlan-11mc-nego-cfg", "<burst_inst> <burst_dur> <min_delta> <asap> <ftm_per_burst> <bw> <burst_period>",
      test_wlan_11mc_nego_cfg},
@@ -9170,6 +9240,7 @@ static struct cli_command tests[] = {
      test_wlan_set_ami_cfg},
     {"wlan-start-stop-ami", "<start/stop>", test_wlan_start_stop_ami},
 #endif
+
 #endif
 #if CONFIG_TX_RX_HISTOGRAM
     {"wlan-txrx-histogram", "<action> <enable>", test_wlan_txrx_histogram},

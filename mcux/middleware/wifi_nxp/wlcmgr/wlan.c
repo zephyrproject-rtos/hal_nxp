@@ -259,7 +259,7 @@ extern WPS_DATA wps_global;
     }
 
 OSA_MUTEX_HANDLE_DEFINE(reset_lock);
-#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(IW610)|| defined(SD9177) || defined(SD8978)
 /* Mon thread */
 static bool mon_thread_init = 0;
 #endif
@@ -646,6 +646,10 @@ wlan_cloud_keep_alive_t cloud_keep_alive_param[MAX_KEEP_ALIVE_ID];
 
 void wlan_wake_up_card(void);
 
+#if CONFIG_CSI
+wlan_csi_config_params_t g_csi_params_default = {0};
+#endif
+
 #if CONFIG_WLCMGR_DEBUG
 static char *dbg_sta_state_name(enum cm_sta_state state)
 {
@@ -718,6 +722,10 @@ static void dbg_lock_info(void)
 #define dbg_sta_state_name(...)
 #define dbg_uap_state_name(...)
 #endif /* CONFIG_WLCMGR_DEBUG */
+
+#if CONFIG_WLS_CSI_PROC
+t_u8 g_csi_event_for_wls;
+#endif
 
 /*
  * Utility Functions
@@ -1013,7 +1021,7 @@ int wlan_get_wakeup_reason(uint16_t *hs_wakeup_reason)
 #endif
 
 #if CONFIG_HOST_SLEEP
-#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(IW610) || defined(SD8978) || defined(SD9177)
 status_t wlan_hs_send_event(int id, void *data)
 {
     struct wlan_message msg;
@@ -1217,8 +1225,8 @@ void wlan_clear_host_sleep_config(void)
         OSA_TimerDeactivate((osa_timer_handle_t)wake_timer);
         wakelock_put();
     }
-    is_hs_handshake_done = 0;
 #endif
+    is_hs_handshake_done = 0;
 #endif
 #if CONFIG_MEF_CFG
     memset(&g_flt_cfg, 0x0, sizeof(wlan_flt_cfg_t));
@@ -3152,7 +3160,10 @@ static void wlcm_process_sta_addr_config_event(struct wifi_message *msg,
     } /* end of switch */
 #if CONFIG_IPV6
     /* Set the ipv6 state to obtaining address */
-    wlan.sta_ipv6_state = CM_STA_OBTAINING_ADDRESS;
+    if (wlan.sta_ipv6_state < CM_STA_OBTAINING_ADDRESS)
+    {
+        wlan.sta_ipv6_state = CM_STA_OBTAINING_ADDRESS;
+    }
 #endif
 }
 
@@ -4727,10 +4738,11 @@ static void wlcm_process_link_loss_event(struct wifi_message *msg,
     }
     else
     {
+#if defined(CONFIG_NET_DHCPV4)
         /* Stop the dhcp timer first after link lost occurs, as the dhcp timer
          * callback may lead to that the connection state is out-of-sync with FW */
         net_stop_dhcp_timer();
-
+#endif
         /* we were attempting a connection and lost the link,
          * so treat this as a connection attempt failure
          */
@@ -4889,7 +4901,7 @@ static void wlcm_process_deauthentication_event(struct wifi_message *msg,
 #endif
 #endif
 }
-
+#if defined(CONFIG_NET_DHCPV4)
 static void wlcm_process_net_dhcp_config(struct wifi_message *msg,
                                          enum cm_sta_state *next,
                                          struct wlan_network *network)
@@ -5054,7 +5066,7 @@ static void wlcm_process_net_dhcp_config(struct wifi_message *msg,
         wlan.sta_ipv4_state = CM_STA_CONNECTED;
     }
 }
-
+#endif
 #if CONFIG_IPV6
 static void wlcm_process_net_ipv6_config(struct wifi_message *msg,
                                          enum cm_sta_state *next,
@@ -6420,7 +6432,9 @@ static void wlcm_request_disconnect(enum cm_sta_state *next, struct wlan_network
         wlcm_w("No interface is up\r\n");
         return;
     }
+#if defined(CONFIG_NET_DHCPV4)
     net_stop_dhcp_timer();
+#endif
     /* Forcefully stop dhcp on given interface.
      * net_interface_dhcp_stop internally does nothing
      * if dhcp client is not started.
@@ -7227,13 +7241,14 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             wlcm_d("got event: Interfaces configured");
             wlcm_process_net_if_config_event(msg, &next);
             break;
-
+#if defined(CONFIG_NET_DHCPV4)
         case WIFI_EVENT_NET_DHCP_CONFIG:
             if (wlan.cur_network_idx >= WLAN_MAX_KNOWN_NETWORKS)
                 break;
 
             wlcm_process_net_dhcp_config(msg, &next, network);
             break;
+#endif
 #if CONFIG_IPV6
         case WIFI_EVENT_NET_IPV6_CONFIG:
             wlcm_d("got event: net ipv6 config");
@@ -7405,7 +7420,10 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
 #if CONFIG_WLS_CSI_PROC
         case WIFI_EVENT_WLS_CSI:
             wlcm_d("got event: receive WLS csi data");
-            wlcm_process_wls_csi_event(msg->data);
+            if (g_csi_event_for_wls)
+            {
+                wlcm_process_wls_csi_event(msg->data);
+            }
             break;
 #endif
 #endif
@@ -7678,15 +7696,44 @@ static void copy_network(struct wlan_network *dst, struct wlan_network *src)
 
 static int wifi_wakeup_card_cb(osa_rw_lock_t *plock, unsigned int wait_time)
 {
+    int pm_wakeup_retry     = 0;
+    mlan_private *pmpriv    = (mlan_private *)mlan_adap->priv[0];
+    mlan_adapter *pmadapter = pmpriv->adapter;
+
     osa_status_t status = OSA_SemaphoreWait((osa_semaphore_handle_t)plock->rw_lock, 0);
-    if (status != KOSA_StatusSuccess)
+
+    do
     {
-        wlan_wake_up_card();
-        status = OSA_SemaphoreWait((osa_semaphore_handle_t)plock->rw_lock, wait_time);
-    }
+        if (status != KOSA_StatusSuccess)
+        {
+            if (pmadapter->ps_state == PS_STATE_SLEEP)
+            {
+#if CONFIG_WIFI_PS_DEBUG
+                wifi_w("Wake up card attempt: %d, ps_state=%d", pm_wakeup_retry + 1, pmadapter->ps_state);
+#endif
+                wlan_wake_up_card();
+                status = OSA_SemaphoreWait((osa_semaphore_handle_t)plock->rw_lock, wait_time);
+                pm_wakeup_retry++;
+            }
+            else
+            {
+#if CONFIG_WIFI_PS_DEBUG
+                wifi_w("Firmware woke up via another path (e.g., interrupt)");
+#endif
+                status = KOSA_StatusSuccess;
+                break;
+            }
+        }
+        else
+        {
+            break;
+        }
+
+    } while (pm_wakeup_retry < 3);
 
     if (status != KOSA_StatusSuccess)
     {
+        wifi_e("Failed to wakeup card after %d attempts, ps_state=%d", pm_wakeup_retry, pmadapter->ps_state);
         return -WM_FAIL;
     }
 
@@ -7832,6 +7879,9 @@ void wlan_deinit(int action)
     {
         wlcm_deinit(action);
     }
+#if CONFIG_CSI
+    wlan_reset_csi_filter_data();
+#endif
 #ifndef RW610
     OSA_RWLockDestroy(&sleep_rwlock);
 #endif
@@ -7959,6 +8009,14 @@ static void temperature_mon_cb(osa_timer_arg_t arg)
     if (wifi_recovery_enable || wifi_fw_is_hang())
     {
         struct wlan_message msg;
+        (void)PRINTF("recovery_enable: %u, wifi_fw_is_hang: %u, reset_in_progress:%u\r\n",
+                      wifi_recovery_enable, wifi_fw_is_hang(), wifi_reset_in_progress());
+        /* Avoid repeatedly triggering recovery */
+        if (wifi_reset_in_progress())
+        {
+            return;
+        }
+
         (void)memset(&msg, 0U, sizeof(struct wlan_message));
         msg.data = NULL;
         msg.id  = WIFI_RECOVERY_REQ;
@@ -8029,7 +8087,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     wlan.rssi_low_threshold = 70;
 #endif
 
-#if defined(RW610) || defined(IW610)
+#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
     wlan.wakeup_conditions = 0;
 #else
     wlan.wakeup_conditions = (unsigned int)WAKE_ON_UNICAST | (unsigned int)WAKE_ON_MAC_EVENT |
@@ -8123,7 +8181,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
         }
         reset_mutex_init = 1;
     }
-#if defined(RW610) || defined(IW610) || defined(SD9177) || defined(SD8978)
+#if defined(RW610) || defined(IW610) || defined(SD8978) || defined(SD9177)
     if (!mon_thread_init)
     {
 
@@ -8164,7 +8222,7 @@ int wlan_start(int (*cb)(enum wlan_event_reason reason, void *data))
     }
 #ifdef RW610
     cau_temperature_enable();
-    status = OSA_TimerCreate((osa_timer_handle_t)temperature_mon_timer, TEMPERATURE_MON_TIMEOUT,
+    status = OSA_TimerCreate((osa_timer_handle_t)temperature_mon_timer, MSEC_TO_TICK(TEMPERATURE_MON_TIMEOUT),
                              &temperature_mon_cb, NULL, KOSA_TimerPeriodic, OSA_TIMER_AUTO_ACTIVATE);
     if (status != KOSA_StatusSuccess)
     {
@@ -8498,8 +8556,10 @@ void wlan_initialize_sta_network(struct wlan_network *net)
     net->type = WLAN_BSS_TYPE_STA;
     /* Set network role to sta */
     net->role = WLAN_BSS_ROLE_STA;
+#if defined(CONFIG_NET_DHCPV4)
     /* Specify address type as dynamic assignment */
     net->ip.ipv4.addr_type = ADDR_TYPE_DHCP;
+#endif
 }
 
 static bool isHexNumber(const char *str, const uint8_t len)
@@ -9126,11 +9186,15 @@ int wlan_add_network(struct wlan_network *network)
     if (network->role == WLAN_BSS_ROLE_UAP)
     {
 #if CONFIG_WIFI_CAPA
+#if CONFIG_11AX
+        wlan_bandcfg_t bandcfg_get = {0};
+        int ret = WM_SUCCESS;
+#endif
         if (network->channel != 14)
         {
-        /* If no capability was configured, set capa up to 11ax by default */
-        if (!network->wlan_capa)
-            network->wlan_capa =
+            /* If no capability was configured, set capa up to 11ax by default */
+            if (!network->wlan_capa)
+                network->wlan_capa =
 #if CONFIG_11AX
                 WIFI_SUPPORT_11AX |
 #endif
@@ -9138,6 +9202,25 @@ int wlan_add_network(struct wlan_network *network)
                 WIFI_SUPPORT_11AC |
 #endif
                 WIFI_SUPPORT_11N | WIFI_SUPPORT_LEGACY;
+#if CONFIG_11AX
+            ret = wlan_get_bandcfg(&bandcfg_get);
+            if (ret == WM_SUCCESS)
+            {
+                if ((bandcfg_get.config_bands & MBIT(8)) &&
+                    (bandcfg_get.config_bands & MBIT(9)))
+                {
+                    network->wlan_capa |= WIFI_SUPPORT_11AX;
+                }
+                else
+                {
+                    network->wlan_capa &= ~WIFI_SUPPORT_11AX;
+                }
+            }
+            else
+            {
+                wifi_e("Failed to get Wi-Fi bandcfg");
+            }
+#endif
         }
         else
         {
@@ -10772,63 +10855,67 @@ static void wlcmgr_mon_task(void * data)
             /*Elements of wlan is not avaliable during wlan reset, so wait ending of wlan reset*/
             while(wifi_reset_in_progress() == true)
                 OSA_TimeDelay(10);
+
+            wlcm_d("got mon thread event: %d", msg.id);
+
+            switch (msg.id)
+            {
 #if CONFIG_HOST_SLEEP
-             wlcm_d("got mon thread event: %d", msg.id);
-            if (msg.id == HOST_SLEEP_HANDSHAKE)
-            {
-                ret = wlan_send_host_sleep_int();
-                if (ret != WM_SUCCESS)
-                {
-                   is_hs_handshake_done = WLAN_HOSTSLEEP_FAIL;
-                }
-            }
-            else if (msg.id == HOST_SLEEP_EXIT)
-            {
+                case HOST_SLEEP_HANDSHAKE:
+                    ret = wlan_send_host_sleep_int();
+                    if (ret != WM_SUCCESS)
+                    {
+                       is_hs_handshake_done = WLAN_HOSTSLEEP_FAIL;
+                    }
+                    break;
+                case HOST_SLEEP_EXIT:
 #if CONFIG_POWER_MANAGER
 #ifndef CONFIG_BT
 #if CONFIG_WAKE_TIMER_ENABLE
-                if(!wlan_is_manual && wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
-                {
-                    wakelock_get();
-                    (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
-                }
+                    if(!wlan_is_manual && wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
+                    {
+                        wakelock_get();
+                        (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
+                    }
 #endif
 #endif
 #endif
 #ifndef RW610
-                uint16_t hs_wakeup_reason = 0;
-                (void)wifi_get_wakeup_reason(&hs_wakeup_reason);
-                (void)wifi_print_wakeup_reason(hs_wakeup_reason);
-                wifi_clear_wakeup_reason();
+                    uint16_t hs_wakeup_reason = 0;
+                    (void)wifi_get_wakeup_reason(&hs_wakeup_reason);
+                    (void)wifi_print_wakeup_reason(hs_wakeup_reason);
+                    wifi_clear_wakeup_reason();
 #endif
-                wlan_cancel_host_sleep();
+                    wlan_cancel_host_sleep();
 #ifdef RW610
-                /* Check fw status and write temperature to firmware after waking up */
-                temperature_mon_cb(NULL);
-                (void)OSA_TimerActivate((osa_timer_handle_t)temperature_mon_timer);
+                    /* Check fw status and write temperature to firmware after waking up */
+                    temperature_mon_cb(NULL);
+                    (void)OSA_TimerActivate((osa_timer_handle_t)temperature_mon_timer);
 #endif
-            }
+                    break;
 #ifndef CONFIG_BT
 #if CONFIG_WAKE_TIMER_ENABLE
-            else if (msg.id == HOST_SLEEP_HANDSHAKE_SKIP)
-            {
-                if(wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
-                {
-                    wakelock_get();
-                    (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
-                }
-            }
+                case HOST_SLEEP_HANDSHAKE_SKIP:
+                    if(wlan_host_sleep_state == HOST_SLEEP_PERIODIC)
+                    {
+                        wakelock_get();
+                        (void)OSA_TimerActivate((osa_timer_handle_t)wake_timer);
+                    }
+                    break;
 #endif
 #endif
 #endif
 #if CONFIG_WIFI_RECOVERY
-            else if (msg.id == WIFI_RECOVERY_REQ)
-            {
-                CONNECTION_EVENT(WLAN_REASON_FW_HANG, NULL);
-                wlan_reset(CLI_RESET_WIFI);
-                wifi_recovery_cnt ++;
-            }
+                case WIFI_RECOVERY_REQ:
+                    CONNECTION_EVENT(WLAN_REASON_FW_HANG, NULL);
+                    wlan_reset(CLI_RESET_WIFI);
+                    wifi_recovery_cnt ++;
+                    break;
 #endif
+                default:
+                    wlcm_d("Unknown mon thread event: %d", msg.id);
+                    break;
+            }
         }
         else
         {
@@ -13243,9 +13330,13 @@ int wlan_mbo_peferch_cfg(t_u8 ch0, t_u8 pefer0, t_u8 ch1, t_u8 pefer1)
 #endif
 
 #if (CONFIG_11MC) || (CONFIG_11AZ)
+int wlan_unassoc_ftm_cfg(const t_u16 action, const t_u16 config)
+{
+	return wifi_unassoc_ftm_cfg(action, config);
+}
+
 int wlan_ftm_start_stop(const t_u16 action, const t_u8 loop_cnt, const t_u8 *mac, const t_u8 channel)
 {
-
 	return wifi_ftm_start_stop(action, loop_cnt, mac, channel);
 }
 
@@ -13914,7 +14005,11 @@ static wlan_twt_setup_config_t g_twt_setup_cfg_default[] = {{
 #define TWT_SLEEP_MIN               (756 + TWT_EARLY_WAKEUP_ADJUSTMENT) // us
 int wlan_set_twt_setup_cfg(const wlan_twt_setup_config_t *twt_setup)
 {
-    if (((twt_setup->twt_mantissa << twt_setup->twt_exponent) - (twt_setup->twt_wakeup_duration * 256)) < TWT_SLEEP_MIN)
+    uint32_t twt_interval = (uint32_t)twt_setup->twt_mantissa << (uint32_t)twt_setup->twt_exponent;
+    uint32_t wakeup_us = (uint32_t)twt_setup->twt_wakeup_duration * 256;
+    uint32_t sleep_time = twt_interval - wakeup_us;
+    
+    if (sleep_time < TWT_SLEEP_MIN)    
     {
         wlcm_e("TWT interval is : %u us", twt_setup->twt_mantissa << twt_setup->twt_exponent);
         wlcm_e("Wakeup duration (WD) value is : %u us", twt_setup->twt_wakeup_duration * 256);
@@ -14485,6 +14580,9 @@ int wlan_get_mmsf(t_u8 *enable, t_u8 *Density, t_u8 *MMSF)
 #if CONFIG_WIFI_RECOVERY
 int wlan_recovery_test(void)
 {
+    /* Block TX data as FW will be in exception state */
+    wifi_set_tx_status(WIFI_DATA_BLOCK);
+
     return wifi_recovery_test();
 }
 #endif
@@ -15082,6 +15180,27 @@ int wlan_config_mef(int type, t_u8 mef_action)
 #endif
 
 #if CONFIG_CSI
+wlan_csi_config_params_t * wlan_get_csi_cfg_param_default(void)
+{
+    return &g_csi_params_default;
+}
+
+int wlan_set_csi_cfg_param_default(wlan_csi_config_params_t *in_csi_cfg)
+{
+    if (in_csi_cfg)
+    {
+        memcpy((void *)&g_csi_params_default, (void *)in_csi_cfg, sizeof(wlan_csi_config_params_t));
+        return MTRUE;
+    }
+    else
+        return MFALSE;
+}
+
+void wlan_reset_csi_filter_data(void)
+{
+    (void)memset((void*)&g_csi_params_default, 0, sizeof(wlan_csi_config_params_t));
+}
+
 int wlan_register_csi_user_callback(int (*csi_data_recv_callback)(void *buffer, size_t len))
 {
     return register_csi_user_callback(csi_data_recv_callback);
@@ -15987,8 +16106,22 @@ static int wlan_trigger_oob_ind_reset()
 
     GPIO_PinWrite(IR_OUTBAND_TRIGGER_GPIO, IR_OUTBAND_TRIGGER_GPIO_PIN, 1);
 #endif
+    if (wifi_trigger_oob_indrst() != WM_SUCCESS)
+    {
+        (void)wlan_ieeeps_on(1);
 
-    return wifi_trigger_oob_indrst();
+        OSA_TimeDelay(1000);
+
+        (void)wlan_deepsleepps_on();
+
+        OSA_TimeDelay(1000);
+
+        return -WM_FAIL;
+    }
+    else
+    {
+        return WM_SUCCESS;
+    }
 }
 
 int wlan_independent_reset()
