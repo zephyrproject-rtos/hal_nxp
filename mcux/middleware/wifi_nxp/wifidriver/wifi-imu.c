@@ -25,6 +25,7 @@
 
 /* Buffer pointers to point to command and, command response buffer */
 static uint8_t cmd_buf[WIFI_FW_CMDBUF_SIZE];
+static uint8_t sleep_cfm_cmd_buf[WIFI_FW_CMDBUF_SIZE];
 // static t_u32 seqnum;
 // static int pm_handle;
 #define IMU_OUTBUF_LEN       3072
@@ -1154,6 +1155,18 @@ uint8_t *wifi_get_amsdu_outbuf(uint32_t offset)
     return (amsdu_outbuf + offset);
 }
 #endif
+
+HostCmd_DS_COMMAND *wifi_get_sleep_cfm_command_buffer(void)
+{
+    /* First 4 bytes reserved for SDIO pkt header */
+    return (HostCmd_DS_COMMAND *)(void *)(sleep_cfm_cmd_buf + INTF_HEADER_LEN);
+}
+
+int wifi_send_sleep_cfm_cmdbuffer(void)
+{
+    return wlan_send_imu_cmd(sleep_cfm_cmd_buf);
+}
+
 t_u16 get_mp_end_port(void);
 mlan_status wlan_xmit_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 tx_control)
 {
@@ -1180,18 +1193,15 @@ mlan_status wlan_xmit_bypass_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface)
 
     wifi_io_info_d("OUT: i/f: %d len: %d", interface, txlen);
 
-    wifi_imu_lock();
     /* send tx data via imu */
     ret = wifi_send_fw_data(buffer, txlen);
 
     if (ret != kStatus_HAL_ImumcSuccess)
     {
         wifi_io_e("Send tx data via imu failed (%d)", ret);
-        wifi_imu_unlock();
         return MLAN_STATUS_FAILURE;
     }
 
-    wifi_imu_unlock();
     return MLAN_STATUS_SUCCESS;
 }
 #endif
@@ -1206,7 +1216,6 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
 
     wifi_io_info_d("OUT: i/f: %d len: %d", interface, txlen);
 
-    wifi_imu_lock();
 #if CONFIG_WMM_UAPSD
     if (mlan_adap->priv[interface]->adapter->pps_uapsd_mode &&
         wifi_check_last_packet_indication(mlan_adap->priv[interface]))
@@ -1238,8 +1247,6 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
 #endif
         }
 #endif
-
-        wifi_imu_unlock();
         return MLAN_STATUS_FAILURE;
     }
 
@@ -1251,7 +1258,6 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
     }
 #endif
 
-    wifi_imu_unlock();
     return MLAN_STATUS_SUCCESS;
 }
 

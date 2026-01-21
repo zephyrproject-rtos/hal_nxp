@@ -565,8 +565,8 @@ static void dump_wlan_set_txratecfg_usage(void)
     (void)PRINTF("wlan-set-txratecfg <sta/uap> <format> <index> ");
 #if (CONFIG_11AC) || (CONFIG_11AX)
     (void)PRINTF("<nss> ");
-    (void)PRINTF("<rate_setting> ");
 #endif
+    (void)PRINTF("<rate_setting> ");
 #if CONFIG_AUTO_NULL_TX
     (void)PRINTF("<autoTx_set>\r\n");
 #endif
@@ -646,30 +646,92 @@ static void dump_wlan_set_txratecfg_usage(void)
     (void)PRINTF("\t        2       NSS2\r\n");
 #endif
 #endif
-    (void)PRINTF("\t<rate_setting> - This parameter can only specifies the GI types now.\r\n");
-    (void)PRINTF("\tIf <format> is 1 (HT),\r\n");
-    (void)PRINTF("\t        0x0000  Long GI\r\n");
-    (void)PRINTF("\t        0x0020  Short GI\r\n");
+    (void)PRINTF("\t<rate_setting> \r\n");
+    (void)PRINTF("\tBit0 - 1: indicate preambleType \r\n");
+    (void)PRINTF("\t        For legacy 11b: preemble type \r\n");
+    (void)PRINTF("\t            00    = long\r\n");
+    (void)PRINTF("\t            01    = short\r\n");
+    (void)PRINTF("\t            10/11  = reserved\r\n");
+    (void)PRINTF("\t        For legacy 11g: reserved \r\n");
+    (void)PRINTF("\t        For 11n: Green field PPDU indicator \r\n");
+    (void)PRINTF("\t            00 = HT-mix \r\n");
+    (void)PRINTF("\t            01 = HT-GF \r\n");
+    (void)PRINTF("\t            10/11 = reserved \r\n");
 #if CONFIG_11AC
-    (void)PRINTF("\tIf <format> is 2 (VHT),\r\n");
-    (void)PRINTF("\t        0x0000  Long GI\r\n");
-    (void)PRINTF("\t        0x0020  Short GI\r\n");
-    (void)PRINTF("\t        0x0060  Short GI and Nsym mod 10=9\r\n");
+    (void)PRINTF("\t        For 11ac: reserved \r\n");
 #endif
 #if CONFIG_11AX
-    (void)PRINTF("\tIf <format> is 3 (HE),\r\n");
-    (void)PRINTF("\t        0x0000  1xHELTF + GI0.8us\r\n");
-    (void)PRINTF("\t        0x0020  2xHELTF + GI0.8us\r\n");
-    (void)PRINTF("\t        0x0040  2xHELTF + GI1.6us\r\n");
-    (void)PRINTF("\t        0x0060  4xHELTF + GI0.8us if DCM = 1 and STBC = 1\r\n");
-    (void)PRINTF("\t                4xHELTF + GI3.2us, otherwise\r\n");
+    (void)PRINTF("\t        For 11ax: \r\n");
+    (void)PRINTF("\t            00 = HE-SU \r\n");
+    (void)PRINTF("\t            01 = HE-EXT-SU \r\n");
+    (void)PRINTF("\t            others are reserved \r\n");
 #endif
+    (void)PRINTF("\tBit 2 - 4 : indicate BW: \r\n");
+#if CONFIG_11AX
+    (void)PRINTF("\t        For HE ER: \r\n");
+    (void)PRINTF("\t            0 = 242-tone RU \r\n");
+    (void)PRINTF("\t            1 =  upper frequency 106-tone RU within the primary 20 MHz \r\n");
+#endif
+    (void)PRINTF("\t        Otherwise: \r\n");
+    (void)PRINTF("\t            0 = 20 MHz \r\n");
+#if !defined(RW610) && !defined(IW610)
+    (void)PRINTF("\t            1 = 40 MHz \r\n");
+#if (CONFIG_11AX) || (CONFIG_11AC)
+    (void)PRINTF("\t            2 = 80 MHz \r\n");
+//    (void)PRINTF("\t            3 = 160 MHz \r\n");
+#endif
+#endif
+    (void)PRINTF("\tBit 5 -6: indicate LTF + GI size \r\n");
+    (void)PRINTF("\t        For HT: \r\n");
+    (void)PRINTF("\t            0 = normal \r\n");
+    (void)PRINTF("\t            1 = Short GI \r\n");
+#if CONFIG_11AC
+    (void)PRINTF("\t        For VHT: \r\n");
+    (void)PRINTF("\t            01 = Short GI \r\n");
+    (void)PRINTF("\t            11 = Short GI and Nsym mod 10=9 \r\n");
+    (void)PRINTF("\t            00 = otherwise \r\n");
+#endif
+#if CONFIG_11AX
+    (void)PRINTF("\t        For HE: \r\n");
+    (void)PRINTF("\t            0 = 1xHELTF + GI0.8us \r\n");
+    (void)PRINTF("\t            1 = 2xHELTF + GI0.8us \r\n");
+    (void)PRINTF("\t            2 = 2xHELTF + GI1.6us \r\n");
+    (void)PRINTF("\t            3 = 4xHELTF + GI0.8us if DCM = 1 and STBC = 1 \r\n");
+    (void)PRINTF("\t                4xHELTF + GI3.2us, otherwise \r\n");
+#endif
+    (void)PRINTF("\tBit 7: Indicate  STBC: \r\n");
+    (void)PRINTF("\t            0 = no STBC \r\n");
+    (void)PRINTF("\t            1 = STBC \r\n");
+#if CONFIG_11AX
+    (void)PRINTF("\tBit 8: indicate DCM: \r\n");
+    (void)PRINTF("\t            0 = no DCM \r\n");
+    (void)PRINTF("\t            1 = DCM \r\n");
+#endif
+    (void)PRINTF("\tBit 9: indicate coding: \r\n");
+    (void)PRINTF("\t            0 = BCC \r\n");
+    (void)PRINTF("\t            1 = LDPC \r\n");
+    (void)PRINTF("\tBit 10 - 11: reserved \r\n");
+#if CONFIG_11AX
+    (void)PRINTF("\tBit 12 - 13: Indicate maxPE \r\n");
+    (void)PRINTF("\t            Max packet extension \r\n");
+    (void)PRINTF("\t            0 - 0 usec \r\n");
+    (void)PRINTF("\t            1 - 8 usec\r\n");
+    (void)PRINTF("\t            2 - 16 usec \r\n");
+#endif
+    (void)PRINTF("\tBit 14 - 15: reserved \r\n");
+    (void)PRINTF("\t0xffff: Auto \r\n");
+
 #if CONFIG_AUTO_NULL_TX
     (void)PRINTF(
         "\t<autoTx_set> - This parameter specifies whether only fix auto tx data rate, this parameter is optional "
         "\r\n");
     (void)PRINTF("\t        0:    not fix auto tx data rate\r\n");
     (void)PRINTF("\t        1:    only fix auto tx data rate\r\n");
+    (void)PRINTF("\tNOTE: BW configuration in <rate_setting> parameter is compulsory \r\n");
+    (void)PRINTF("\t        Bit 2 - 4 : indicate BW: \r\n");
+    (void)PRINTF("\t            0 = 20 MHz\r\n");
+    (void)PRINTF("\t            1 = 40 MHz\r\n");
+    (void)PRINTF("\t            2 = 80 MHz \r\n");
 #endif
 }
 
@@ -677,7 +739,7 @@ static void test_wlan_set_txratecfg(int argc, char **argv)
 {
     mlan_bss_type bss_type = (mlan_bss_type)0;
     wlan_ds_rate ds_rate;
-#if CONFIG_11AX
+#if (CONFIG_11AC) || (CONFIG_11AX)
     wlan_txrate_setting *rate_setting = NULL;
 #endif
     int rv = WM_SUCCESS;
@@ -919,6 +981,19 @@ static void test_wlan_set_txratecfg(int argc, char **argv)
                         (void)PRINTF("Invalid MCS configuration if DCM is supported\r\n");
                         goto done;
                     }
+                }
+            }
+#endif
+#if CONFIG_11AC
+            rate_setting = (wlan_txrate_setting *)&ds_rate.param.rate_cfg.rate_setting;
+
+            if (ds_rate.param.rate_cfg.rate_format == MLAN_RATE_FORMAT_VHT
+                && ds_rate.param.rate_cfg.rate_index == MLAN_RATE_INDEX_MCS9)
+            {
+                if (rate_setting->bandwidth == 0)
+                {
+                    (void)PRINTF("Invalid rate and MCS or NSS configuration. \r\nVHT20, MCS9 is not valid\r\n");
+                    goto done;
                 }
             }
 #endif

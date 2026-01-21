@@ -385,6 +385,13 @@ t_void wlan_init_adapter(pmlan_adapter pmadapter)
     /* pmadapter->pscan_channels = MNULL; */
     pmadapter->fw_release_number = 0;
     pmadapter->fw_cap_info       = 0;
+#if CONFIG_WIFI_FW_DEBUG
+#if defined(SD9177)
+    pmadapter->event_fw_dump     = MTRUE;
+#else
+    pmadapter->event_fw_dump     = MFALSE;
+#endif
+#endif
     (void)__memset(pmadapter, &pmadapter->region_channel, 0, sizeof(pmadapter->region_channel));
     pmadapter->region_code = MRVDRV_DEFAULT_REGION_CODE;
     (void)__memcpy(pmadapter, pmadapter->country_code, MRVDRV_DEFAULT_COUNTRY_CODE, COUNTRY_CODE_LEN);

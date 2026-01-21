@@ -190,7 +190,7 @@ struct net_ip_config
      * associated with this interface. */
     struct net_ipv4_config ipv4;
 };
-
+#if defined(CONFIG_NET_DHCPV4)
 /** Set hostname for network interface
  *
  * \param[in] hostname Hostname to be set.
@@ -213,6 +213,7 @@ void net_stop_dhcp_timer(void);
  *
  * \return WM_SUCESS otherwise standard LWIP error codes.
  */
+#endif
 static inline int net_socket_blocking(int sock, int state)
 {
     /* TODO: implement */
@@ -578,10 +579,11 @@ char *ipv6_addr_type_to_desc(struct net_ipv6_config *ipv6_conf);
  * This function will get the IPv6 addresses and the count of all interfaces.
  *
  * \param[out] buf buffer to saving the IPv6 addresses.
+ * \param[in] buf_size the size of buffer can save the IPv6 address.
  *
  * \return IPv6 address count.
  */
-uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf);
+uint8_t net_get_all_if_ipv6_addr_and_cnt(char *buf, uint32_t buf_size);
 #endif /* CONFIG_IPV6 */
 
 /** Get interface Name string containing name and number

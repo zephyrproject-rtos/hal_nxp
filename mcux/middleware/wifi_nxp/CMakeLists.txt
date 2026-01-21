@@ -12,7 +12,7 @@ else()
     set(MCUX_SDK_DIR ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng)
 endif()
 
-if(CONFIG_NXP_WIFI_CSI_AMI)
+if(CONFIG_NXP_WIFI_CSI_AMI OR CONFIG_NXP_WIFI_WLS)
 add_library(libcsi STATIC IMPORTED)
 if(CONFIG_NXP_LIBCSI_CM33)
     set_target_properties(libcsi PROPERTIES IMPORTED_LOCATION ${ZEPHYR_HAL_NXP_MODULE_DIR}/zephyr/blobs/libcsi/cm33/libcsi.a)
@@ -364,29 +364,145 @@ endif()
 zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/drivers/flexspi/fsl_flexspi.c
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/flash/mflash/${drv_folder}/mflash_drv.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+                     LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
 endif()
 
 if(CONFIG_SPEED_OPTIMIZATIONS OR CONFIG_SIZE_OPTIMIZATIONS)
 # critical path code relocated to SRAM
+zephyr_code_relocate(FILES port/osa/osa.c
+                     FILTER ".*\\.OSA_RWLockReadLock|.*\\.OSA_RWLockReadUnlock"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_PORT_NET_FILTER
+       ".*\\.deliver_packet_above|"
+       ".*\\.gen_pkt_from_data|"
+       ".*\\.gen_tx_pkt_from_data|"
+       ".*\\.gen_pkt_from_data_for_zerocopy|"
+       ".*\\.process_data_packet|"
+       ".*\\.handle_data_packet|"
+       ".*\\.handle_amsdu_data_packet|"
+       ".*\\.handle_deliver_packet_above|"
+       ".*\\.nxp_wifi_internal_tx|"
+       ".*\\.net_wifi_packet_send|"
+       ".*\\.net_stack_buffer_copy_partial|"
+       ".*\\.net_tx_zerocopy_process_cb"
+)
+
+zephyr_code_relocate(FILES port/net/zephyr/net.c
+                     FILTER "${NXP_PORT_NET_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_WIFIDRIVER_WIFI_FILTER
+       ".*\\.wifi_core_task|"
+       ".*\\.wifi_low_level_input|"
+       ".*\\.wifi_tx_card_awake_lock|"
+       ".*\\.wifi_tx_card_awake_unlock|"
+       ".*\\.wifi_wmm_get_pkt_prio|"
+       ".*\\.wifi_txbuf_available|"
+       ".*\\.wifi_xmit_pkts|"
+       ".*\\.wifi_xmit_ralist_pkts|"
+       ".*\\.wifi_xmit_wmm_ac_pkts_enh|"
+       ".*\\.wlan_process_bypass_txq|"
+       ".*\\.notify_wifi_driver_tx_event|"
+       ".*\\.send_wifi_driver_tx_data_event|"
+       ".*\\.send_wifi_driver_bypass_data_event|"
+       ".*\\.wifi_drv_tx_task|"
+       ".*\\.wifi_add_to_bypassq|"
+       ".*\\.wifi_low_level_output|"
+       ".*\\.wifi_get_outbuf"
+)
+
+zephyr_code_relocate(FILES wifidriver/wifi.c
+                     FILTER "${NXP_WIFIDRIVER_WIFI_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_WIFIDRIVER_RXREORDER_FILTER
+       ".*\\.wlan_11n_dispatch_amsdu_pkt|"
+       ".*\\.wlan_11n_dispatch_pkt|"
+       ".*\\.mlan_11n_rxreorder_timer_restart|"
+       ".*\\.wlan_11n_dispatch_pkt_until_start_win|"
+       ".*\\.wlan_11n_scan_and_dispatch|"
+       ".*\\.wlan_11n_get_rxreorder_tbl|"
+       ".*\\.mlan_11n_rxreorder_pkt"
+)
+
+zephyr_code_relocate(FILES wifidriver/mlan_11n_rxreorder.c
+                     FILTER "${NXP_WIFIDRIVER_RXREORDER_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_WIFIDRIVER_MLAN_WMM_FILTER
+       ".*\\.wlan_wmm_get_ralist_node|"
+       ".*\\.wifi_wmm_da_to_ra|"
+       ".*\\.wifi_wmm_is_tx_pause|"
+       ".*\\.wifi_wmm_get_alter_buf_from_txqueue|"
+       ".*\\.wifi_wmm_get_outbuf_enh|"
+       ".*\\.wlan_wmm_get_queue_raptr_enh|"
+       ".*\\.wlan_wmm_add_buf_txqueue_enh|"
+       ".*\\.wifi_wmm_buf_get|"
+       ".*\\.wifi_wmm_buf_put|"
+       ".*\\.wlan_ralist_pkts_free_enh|"
+       ".*\\.wlan_ralist_free_enh|"
+       ".*\\.wlan_ralist_alloc_enh|"
+       ".*\\.wlan_ralist_add_enh|"
+       ".*\\.wlan_get_bypass_lock|"
+       ".*\\.wlan_put_bypass_lock|"
+       ".*\\.wlan_add_buf_bypass_txq|"
+       ".*\\.wlan_bypass_txq_empty"
+)
+
+zephyr_code_relocate(FILES wifidriver/mlan_wmm.c
+                     FILTER "${NXP_WIFIDRIVER_MLAN_WMM_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+string(JOIN "" NXP_WIFIDRIVER_MLAN_GLUE_FILTER
+       ".*\\.wrapper_moal_semaphore_get|"
+       ".*\\.wrapper_moal_semaphore_put|"
+       ".*\\.wrapper_deliver_amsdu_subframe|"
+       ".*\\.wrapper_wlan_handle_rx_packet|"
+       ".*\\.wrapper_moal_recv_packet"
+)
+
+zephyr_code_relocate(FILES wifidriver/mlan_glue.c
+                     FILTER "${NXP_WIFIDRIVER_MLAN_GLUE_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
 zephyr_code_relocate(FILES
-                     port/osa/osa.c
-                     port/osa/osa_zephyr.c
-                     port/net/zephyr/net.c
-                     wifidriver/mlan_11n.c
                      wifidriver/mlan_11n_aggr.c
-                     wifidriver/mlan_11n_rxreorder.c
-                     wifidriver/mlan_wmm.c
-                     wifidriver/wifi.c
+                     wifidriver/mlan_txrx.c
+                     wifidriver/mlan_sta_rx.c
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 if(CONFIG_SDIO_STACK)
+string(JOIN "" NXP_WIFIDRIVER_WIFI_SDIO_FILTER
+       ".*\\.wifi_sdio_lock|"
+       ".*\\.wifi_sdio_unlock|"
+       ".*\\.process_pkt_hdrs|"
+       ".*\\.process_pkt_hdrs_flags|"
+       ".*\\.wlan_read_rcv_packet|"
+       ".*\\.wlan_get_wr_port_data|"
+       ".*\\.wifi_tx_data|"
+       ".*\\.wlan_xmit_wmm_pkt|"
+       ".*\\.wlan_flush_wmm_pkt|"
+       ".*\\.wlan_xmit_pkt|"
+       ".*\\.wlan_interrupt|"
+       ".*\\.wlan_get_rd_port|"
+       ".*\\._handle_sdio_packet_read|"
+       ".*\\.handle_sdio_cmd_read|"
+       ".*\\.handle_sdio_packet_read|"
+       ".*\\.wlan_process_int_status|"
+       ".*\\.handle_cdint"
+)
+
+zephyr_code_relocate(FILES wifidriver/wifi-sdio.c
+                     FILTER "${NXP_WIFIDRIVER_WIFI_SDIO_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
 zephyr_code_relocate(FILES
                      sdio_nxp_abs/mlan_sdio.c
-                     wifidriver/wifi-sdio.c
-                     wifidriver/sdio.c
                      ${ZEPHYR_BASE}/subsys/sd/sdio.c
-                     LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
+                     ${ZEPHYR_BASE}/drivers/sdhc/imx_usdhc.c
+                     ${MCUX_SDK_DIR}/drivers/usdhc/fsl_usdhc.c
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 zephyr_code_relocate(FILES ${ZEPHYR_BASE}/drivers/wifi/nxp/nxp_wifi_drv.c
                      FILTER ".*\\.nxp_wifi_send|.*\\.nxp_wifi_recv"
@@ -394,15 +510,55 @@ zephyr_code_relocate(FILES ${ZEPHYR_BASE}/drivers/wifi/nxp/nxp_wifi_drv.c
 endif()
 
 if(CONFIG_NXP_RW610)
+string(JOIN "" NXP_WIFIDRIVER_WIFI_IMU_FILTER
+       ".*\\.wifi_send_fw_data|"
+       ".*\\.wifi_imu_lock|"
+       ".*\\.wifi_imu_unlock|"
+       ".*\\.process_pkt_hdrs|"
+       ".*\\.process_pkt_hdrs_flags|"
+       ".*\\.wlan_xmit_pkt|"
+       ".*\\.wlan_xmit_bypass_pkt|"
+       ".*\\.wlan_xmit_wmm_pkt|"
+       ".*\\.wlan_flush_wmm_pkt|"
+       ".*\\.imumc_rxpkt_handler"
+)
+
+zephyr_code_relocate(FILES wifidriver/wifi-imu.c
+                     FILTER "${NXP_WIFIDRIVER_WIFI_IMU_FILTER}"
+                     LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
 zephyr_code_relocate(FILES
-                     wifidriver/wifi-imu.c
                      ${MCUX_SDK_DIR}/drivers/imu/fsl_imu.c
                      ${MCUX_SDK_DIR}/components/imu_adapter/fsl_adapter_imu.c
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 endif()
 
-zephyr_code_relocate(FILES
-                     ${MCUX_SDK_DIR}/components/osa/fsl_os_abstraction_zephyr.c
+string(JOIN "" NXP_OSA_ABS_ZEPHYR_FILTER
+       ".*\\.OSA_MemoryAllocate|"
+       ".*\\.OSA_MemoryFree|"
+       ".*\\.OSA_EnterCritical|"
+       ".*\\.OSA_ExitCritical|"
+       ".*\\.OSA_InterruptEnable|"
+       ".*\\.OSA_InterruptDisable|"
+       ".*\\.OSA_EnableIRQGlobal|"
+       ".*\\.OSA_DisableIRQGlobal|"
+       ".*\\.OSA_TimeDelay|"
+       ".*\\.OSA_TaskYield|"
+       ".*\\.OSA_TaskGetCurrentHandle|"
+       ".*\\.OSA_MutexLock|"
+       ".*\\.OSA_MutexUnlock|"
+       ".*\\.OSA_EventSet|"
+       ".*\\.OSA_EventWait|"
+       ".*\\.OSA_MsgQPut|"
+       ".*\\.OSA_MsgQGet|"
+       ".*\\.OSA_SemaphoreWait|"
+       ".*\\.OSA_SemaphorePost|"
+       ".*\\.OSA_TaskNotifyGet|"
+       ".*\\.OSA_TaskNotifyPost"
+)
+
+zephyr_code_relocate(FILES ${MCUX_SDK_DIR}/components/osa/fsl_os_abstraction_zephyr.c
+                     FILTER "${NXP_OSA_ABS_ZEPHYR_FILTER}"
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
 
 if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
@@ -427,7 +583,7 @@ zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/subsys/net/ip/connection.c
                      ${ZEPHYR_BASE}/subsys/net/ip/packet_socket.c
                      ${ZEPHYR_BASE}/subsys/net/ip/utils.c
-                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_packet.c
+                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_inet.c
                      ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets.c
                      ${ZEPHYR_BASE}/subsys/net/ip/ipv4.c
                      ${ZEPHYR_BASE}/subsys/net/ip/ipv6.c
@@ -453,6 +609,11 @@ zephyr_code_relocate(FILES
                      ${ZEPHYR_BASE}/kernel/thread.c
                      ${ZEPHYR_BASE}/kernel/work.c
                      LOCATION ${QUICK_ACCESS_CODE_AREA} NOKEEP)
+
+zephyr_code_relocate(FILES
+                     ${ZEPHYR_BASE}/lib/net_buf/buf_simple.c
+                     ${ZEPHYR_BASE}/subsys/net/lib/sockets/sockets_service.c
+                     LOCATION ${QUICK_ACCESS_CODE_AREA_2} NOKEEP)
 endif()
 endif()
 

@@ -226,7 +226,8 @@ int wifi_set_ipv6_ra_offload(t_u8 enable)
     cmd->command = wlan_cpu_to_le16(HostCmd_CMD_IPV6_RA_OFFLOAD_CFG);
     ipv6_ra_cfg->action = wlan_cpu_to_le16(HostCmd_ACT_GEN_SET);
     ipv6_ra_cfg->enable = wlan_cpu_to_le16(enable);
-    ipv6_ra_cfg->ipv6_addr_count = net_get_all_if_ipv6_addr_and_cnt((char *)(&ipv6_ra_cfg->ipv6_addr_param.ipv6_addrs));
+    ipv6_ra_cfg->ipv6_addr_count = net_get_all_if_ipv6_addr_and_cnt((char *)(&ipv6_ra_cfg->ipv6_addr_param.ipv6_addrs),
+                WIFI_FW_CMDBUF_SIZE - INTF_HEADER_LEN - ((char *)&ipv6_ra_cfg->ipv6_addr_param.ipv6_addrs - (char *)cmd));
     if (ipv6_ra_cfg->ipv6_addr_count == 0)
     {
         wifi_d("No IPv6 address configured");
@@ -2343,7 +2344,7 @@ int wifi_send_scan_cmd(t_u8 bss_mode,
     wm_wifi.wpa_supp_scan              = MFALSE;
 #endif
     if (ssid_num > MRVDRV_MAX_SSID_LIST_LENGTH)
-         return -WM_E_INVAL;
+        return -WM_E_INVAL;
     tmp_ssid = ssid;
     for (i = 0; i < ssid_num; i++)
     {
@@ -2997,7 +2998,7 @@ int wifi_set_antenna(t_u32 ant_mode, t_u16 evaluate_time, t_u8 evaluate_mode)
 #if CONFIG_WIFI_GET_LOG
 static int wifi_send_get_log_cmd(wlan_pkt_stats_t *stats, mlan_bss_type bss_type)
 {
-    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[0];
+    mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[bss_type];
 
     wifi_get_command_lock();
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
@@ -3271,11 +3272,11 @@ int wifi_set_mac_multicast_addr(const char *mlist, t_u32 num_of_addr)
     }
 
     mlan_multicast_list *mcast_list = (mlan_multicast_list *)OSA_MemoryAllocate(sizeof(mlan_multicast_list));
-    if(mcast_list == NULL)
+    if (mcast_list == NULL)
     {
         return -WM_FAIL;
     }
-	
+
     (void)memset(mcast_list, 0x0, sizeof(mlan_multicast_list));
     (void)memcpy(mcast_list->mac_list, (const void *)mlist, num_of_addr * MLAN_MAC_ADDR_LENGTH);
     mcast_list->num_multicast_addr = num_of_addr;
@@ -3292,7 +3293,7 @@ int wifi_set_mac_multicast_addr(const char *mlist, t_u32 num_of_addr)
     }
     (void)wifi_wait_for_cmdresp(NULL);
     OSA_MemoryFree(mcast_list);
-    
+
     return WM_SUCCESS;
 }
 
@@ -4199,7 +4200,7 @@ int wifi_get_mgmt_ie_by_index(mlan_bss_type bss_type, void *buf, unsigned int *b
         }
         if (tlv->length < (sizeof(custom_ie) - MAX_IE_SIZE))
         {
-            wifi_e("%s: invalid tlv len=%u", __FUNCTION__, tlv->length);
+            wifi_d("%s: invalid tlv len=%u", __FUNCTION__, tlv->length);
             return -WM_FAIL;
         }
         *buf_len = sizeof(tlvbuf_custom_ie) + tlv->length;
@@ -6355,7 +6356,7 @@ int wifi_recovery_test(void)
 
     cmd->command = wlan_cpu_to_le16(HostCmd_CMD_DBGS_CFG);
     cmd->size    = S_DS_GEN;
-    //HostCmd_DS_TMRC_CFG tmrc_cfg;
+    // HostCmd_DS_TMRC_CFG tmrc_cfg;
 
     HostCmd_DS_TMRC_CFG *tmrc_cfg = (HostCmd_DS_TMRC_CFG *)&cmd->params.tmrc_cfg;
     tmrc_cfg->action              = wlan_cpu_to_le16(HostCmd_ACT_GEN_GET);
@@ -6363,7 +6364,7 @@ int wifi_recovery_test(void)
 
     cmd->size += sizeof(HostCmd_DS_TMRC_CFG);
     cmd->size = wlan_cpu_to_le16(cmd->size);
-    
+
     return wifi_wait_for_cmdresp(NULL);
 }
 #endif
@@ -6654,7 +6655,6 @@ static void proc_csi_event(void *p_data)
 
 void wifi_process_csi_data(void *p_data)
 {
-    mlan_adap->ami_ongoing = 1;
     proc_csi_event(((t_u8 *)p_data + AMI_CSI_RAW_DATA_OFFSET));
     mlan_adap->ami_ongoing = 0;
     return;
@@ -6931,44 +6931,71 @@ int wlan_get_set_turbo_mode(t_u16 action, t_u8 *mode, mlan_bss_type bss_type)
 #endif
 
 #if (CONFIG_11MC) || (CONFIG_11AZ)
+int wifi_unassoc_ftm_cfg(const t_u16 action, const t_u16 config)
+{
+    wifi_get_command_lock();
+    HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
+
+    cmd->command                       = wlan_cpu_to_le16(HostCmd_CMD_DOT11MC_UNASSOC_FTM_CFG);
+    cmd->size                          = S_DS_GEN + sizeof(HostCmd_DOT11MC_UNASSOC_FTM_CFG);
+    cmd->size                          = wlan_cpu_to_le16(cmd->size);
+    cmd->params.unassoc_ftm_cfg.action = wlan_cpu_to_le16(action);
+    cmd->params.unassoc_ftm_cfg.config = wlan_cpu_to_le16(config);
+
+    return wifi_wait_for_cmdresp(NULL);
+}
+
 int wifi_ftm_start_stop(const t_u16 action, const t_u8 loop_cnt, const t_u8 *mac, const t_u8 channel)
 {
-    if (action == FTM_ACTION_START)
+    if (action != FTM_ACTION_STOP)
     {
         ftm_param.channel = channel;
         (void)memcpy(ftm_param.peer_mac, mac, MLAN_MAC_ADDR_LENGTH);
         ftm_param.loop_cnt = loop_cnt;
         ftm_param.status   = (ftm_param.loop_cnt == 0) ? 1 : 0;
-        return wifi_ftm_start(FTM_ACTION_START, mac, channel);
+#if CONFIG_WLS_CSI_PROC
+        g_csi_event_for_wls = 1;
+#endif
+        return wifi_ftm_start(action, mac, channel);
     }
     else
     {
         ftm_param.loop_cnt = 0;
         ftm_param.status   = 0;
+#if CONFIG_WLS_CSI_PROC
+        g_csi_event_for_wls = 0;
+#endif
         return wifi_ftm_stop(FTM_ACTION_STOP, ftm_param.peer_mac, ftm_param.channel);
     }
 }
 
 int wifi_ftm_start(const t_u16 action, const t_u8 *mac, const t_u8 channel)
 {
-    if (!is_sta_connected())
+    /*if (is_sta_connected() || is_sta_ipv4_connected()
+#if CONFIG_IPV6
+        || is_sta_ipv6_connected()
+#endif
+    )*/
     {
-        PRINTF("Cannot Start FTM, STA not associated !\r\n");
-        return -WM_FAIL;
+        wifi_get_command_lock();
+        HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
+
+        cmd->command                             = wlan_cpu_to_le16(HostCmd_CMD_FTM_SESSION_CTRL);
+        cmd->size                                = S_DS_GEN + sizeof(HostCmd_FTM_SESSION_CTRL);
+        cmd->size                                = wlan_cpu_to_le16(cmd->size);
+        cmd->params.ftm_session_ctrl.action      = wlan_cpu_to_le16(action);
+        cmd->params.ftm_session_ctrl.for_ranging = wlan_cpu_to_le16(FOR_RANGING);
+        (void)memcpy(cmd->params.ftm_session_ctrl.peer_mac, mac, MLAN_MAC_ADDR_LENGTH);
+        cmd->params.ftm_session_ctrl.chan     = wlan_cpu_to_le16(channel);
+        cmd->params.ftm_session_ctrl.chanBand = (cmd->params.ftm_session_ctrl.chan < 32) ? 0 : 1;
+
+        return wifi_wait_for_cmdresp(NULL);
     }
-    wifi_get_command_lock();
-    HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
-
-    cmd->command                             = wlan_cpu_to_le16(HostCmd_CMD_FTM_SESSION_CTRL);
-    cmd->size                                = S_DS_GEN + sizeof(HostCmd_FTM_SESSION_CTRL);
-    cmd->size                                = wlan_cpu_to_le16(cmd->size);
-    cmd->params.ftm_session_ctrl.action      = wlan_cpu_to_le16(action);
-    cmd->params.ftm_session_ctrl.for_ranging = wlan_cpu_to_le16(FOR_RANGING);
-    (void)memcpy(cmd->params.ftm_session_ctrl.peer_mac, mac, MLAN_MAC_ADDR_LENGTH);
-    cmd->params.ftm_session_ctrl.chan = wlan_cpu_to_le16(channel);
-
-    dump_hex(cmd, cmd->size);
-    return wifi_wait_for_cmdresp(NULL);
+    /*    else
+        {
+            PRINTF("Cannot Start FTM, STA not associated !\r\n");
+            return -WM_FAIL;
+        }*/
 }
 
 int wifi_ftm_stop(const t_u16 action, const t_u8 *mac, const t_u8 channel)

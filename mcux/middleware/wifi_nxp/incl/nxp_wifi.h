@@ -130,6 +130,12 @@ extern "C" {
 #define CONFIG_CSI_AMI 1
 #endif
 
+#if CONFIG_NXP_WIFI_WLS
+#define CONFIG_11MC 1
+#define CONFIG_11AZ 1
+#define CONFIG_WLS_CSI_PROC 1
+#endif
+
 #if CONFIG_NXP_WIFI_RESET
 #define CONFIG_WIFI_RESET 1
 #endif
@@ -279,6 +285,8 @@ extern "C" {
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_hi_iso.h"
 #elif defined(CONFIG_WLAN_CALDATA_2ANT_LO_ISO)
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_lo_iso.h"
+#elif defined(CONFIG_WLAN_CALDATA_2ANT_HI_ISO_41DB)
+#define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_iw612_2ant_hi_iso_41db.h"
 #else
 #define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_override.h"
 #endif

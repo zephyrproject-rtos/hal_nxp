@@ -38,7 +38,7 @@
 #define CLOSEST_DTIM_TO_LISTEN_INTERVAL 65534
 /** To enable PreAsleep in firmware set CONFIG_ENABLE_PRESLEEP to '1' */
 /** **WAR** PreAsleep is disabled in driver due to issues seen on mcux toolchain. */
-#define CONFIG_ENABLE_PRESLEEP          0
+#define CONFIG_ENABLE_PRESLEEP          1
 
 static bool ieeeps_enabled;
 static bool deepsleepps_enabled;

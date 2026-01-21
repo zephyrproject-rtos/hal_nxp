@@ -41,6 +41,7 @@ static uint8_t ctrl_cmd_buf[WIFI_FW_CMDBUF_SIZE];
 #if CONFIG_FW_VDLL
 static uint8_t vdll_cmd_buf[WIFI_FW_CMDBUF_SIZE] = {0};
 #endif
+static uint8_t sleep_cfm_cmd_buf[WIFI_FW_CMDBUF_SIZE] = {0};
 static int seqnum;
 // static int pm_handle;
 #ifdef IW610
@@ -1595,6 +1596,11 @@ int wifi_send_vdllcmdbuffer(t_u32 tx_blocks, t_u32 len)
 }
 #endif
 
+int wifi_send_sleep_cfm_cmdbuffer(t_u32 tx_blocks, t_u32 len)
+{
+    return wlan_send_sdio_cmd(sleep_cfm_cmd_buf, tx_blocks, len);
+}
+
 #if CONFIG_WMM
 
 #if CONFIG_SDIO_MULTI_PORT_TX_AGGR
@@ -2993,8 +2999,6 @@ mlan_status sd_wifi_reinit(enum wlan_type type, const uint8_t *fw_start_addr, co
         sdio_disable_interrupt();
 
         OSA_EXIT_CRITICAL();
-
-        sdio_ioport_init();
     }
 
     ret = (mlan_status)firmware_download(fw_start_addr, size, intf, fw_reload);
@@ -3067,6 +3071,12 @@ HostCmd_DS_COMMAND *wifi_get_vdllcommand_buffer(void)
     return (HostCmd_DS_COMMAND *)(void *)(vdll_cmd_buf + INTF_HEADER_LEN);
 }
 #endif
+
+HostCmd_DS_COMMAND *wifi_get_sleep_cfm_command_buffer(void)
+{
+    /* First 4 bytes reserved for SDIO pkt header */
+    return (HostCmd_DS_COMMAND *)(void *)(sleep_cfm_cmd_buf + INTF_HEADER_LEN);
+}
 
 HostCmd_DS_COMMAND *wifi_get_command_buffer(void)
 {

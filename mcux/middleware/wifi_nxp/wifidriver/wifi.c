@@ -168,11 +168,6 @@ static void wifi_drv_tx_task(osa_task_param_t arg);
 static OSA_TASK_DEFINE(wifi_drv_tx_task, CONFIG_NXP_WIFI_TX_TASK_PRIO, 1, CONFIG_NXP_WIFI_TX_TASK_STACK_SIZE, 0);
 #endif
 
-static void wifi_powersave_task(osa_task_param_t arg);
-
-/* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wifi_powersave_task, CONFIG_NXP_WIFI_POWERSAVE_TASK_PRIO, 1, CONFIG_NXP_WIFI_POWERSAVE_TASK_STACK_SIZE, 0);
-
 int wifi_set_mac_multicast_addr(const char *mlist, t_u32 num_of_addr);
 int wrapper_get_wpa_ie_in_assoc(uint8_t *wpa_ie);
 
@@ -387,23 +382,70 @@ int wifi_wait_for_vdllcmdresp(void *cmd_resp_priv)
 }
 #endif
 
+/* calling it only when FW is in presleep state but receives command that needs event */
+static void send_sleep_cfm_no_wait(void)
+{
+    OPT_Confirm_Sleep *ps_cfm_sleep;
+    HostCmd_DS_COMMAND *cmd = wifi_get_sleep_cfm_command_buffer();
+#ifndef RW610
+    t_u32 buf_len = MLAN_SDIO_BLOCK_SIZE;
+    t_u32 tx_blocks;
+#endif
+
+    ps_cfm_sleep = (OPT_Confirm_Sleep *)(void *)(cmd);
+
+    (void)memset(ps_cfm_sleep, 0x00, sizeof(OPT_Confirm_Sleep));
+    ps_cfm_sleep->command = HostCmd_CMD_802_11_PS_MODE_ENH;
+    ps_cfm_sleep->seq_num = HostCmd_SET_SEQ_NO_BSS_INFO((t_u16)0 /* seq_num */, (t_u16)0 /* bss_num */, (t_u16)0);
+
+    ps_cfm_sleep->size                = (t_u16)sizeof(OPT_Confirm_Sleep);
+    ps_cfm_sleep->result              = 0;
+    ps_cfm_sleep->action              = (t_u16)SLEEP_CONFIRM;
+    ps_cfm_sleep->sleep_cfm.resp_ctrl = (t_u16)RESP_NEEDED;
+
+#ifndef RW610
+    /* First 4 bytes reserved for SDIO pkt header */
+    tx_blocks = ((t_u32)cmd->size + INTF_HEADER_LEN + MLAN_SDIO_BLOCK_SIZE - 1U) / MLAN_SDIO_BLOCK_SIZE;
+#endif
+
+#if defined(RW610)
+    (void)wifi_send_sleep_cfm_cmdbuffer();
+#else
+    (void)wifi_send_sleep_cfm_cmdbuffer(tx_blocks, buf_len);
+#endif
+    mlan_adap->ps_state = PS_STATE_SLEEP_CFM;
+#if CONFIG_WIFI_PS_DEBUG
+    wcmdr_d("++");
+#endif
+}
+
 #if (CONFIG_WIFI_IND_DNLD)
 t_u8 wifi_rx_block_cnt;
 t_u8 wifi_tx_block_cnt;
 
-void wlan_process_hang(uint8_t fw_reload)
+int wlan_process_hang(uint8_t fw_reload)
 {
-    int i, ret = WM_SUCCESS;
+    int i, ret = WM_SUCCESS, poll_num = 10;
 
     if (mlan_adap->in_reset == true)
     {
         wifi_d("Already in process hanging");
-        return;
+        return WM_SUCCESS;
     }
 
     wifi_d("Start to process hanging");
 
 #if CONFIG_WIFI_IND_RESET
+    if (fw_reload == FW_RELOAD_NO_EMULATION)
+    {
+        if(wlan_sdio_check_fw_status(poll_num) == true)
+        {
+            PRINTF("WLAN FW already running! Skip FW download\r\n");
+            PRINTF("FW download skipped because fly wire is not connected from MCU to Wi-Fi SoC\r\n");
+
+            return -WM_FAIL;
+        }
+    }
     wifi_ind_reset_start();
 #endif
 
@@ -446,7 +488,7 @@ void wlan_process_hang(uint8_t fw_reload)
 
     ret = wifi_reinit(wm_wifi.fw_start_addr, wm_wifi.size, fw_reload);
 
-    if (ret != WM_SUCCESS)
+    if (ret != WM_SUCCESS && ret != -WIFI_ERROR_FW_DNLD_SKIP)
     {
         ASSERT(0);
     }
@@ -467,7 +509,13 @@ void wlan_process_hang(uint8_t fw_reload)
         mlan_adap->ps_state = PS_STATE_AWAKE;
     }
 
-    (void)wifi_event_completion(WIFI_EVENT_FW_RESET, WIFI_EVENT_REASON_SUCCESS, NULL);
+    /* Only send FW_RESET event if FW was actually reloaded */
+    if (ret == WM_SUCCESS)
+    {
+        (void)wifi_event_completion(WIFI_EVENT_FW_RESET, WIFI_EVENT_REASON_SUCCESS, NULL);
+    }
+
+    return ret;
 }
 #endif
 
@@ -475,13 +523,14 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
 {
     int ret;
     HostCmd_DS_COMMAND *cmd = wifi_get_command_buffer();
+    mlan_private *pmpriv    = (mlan_private *)mlan_adap->priv[0];
+    mlan_adapter *pmadapter = pmpriv->adapter;
 #ifndef RW610
     t_u32 buf_len = MLAN_SDIO_BLOCK_SIZE;
     t_u32 tx_blocks;
 #endif
-    mlan_private *pmpriv    = (mlan_private *)mlan_adap->priv[0];
-    mlan_adapter *pmadapter = pmpriv->adapter;
 
+resend:
 #ifndef RW610
 #if (CONFIG_ENABLE_WARNING_LOGS) || (CONFIG_WIFI_CMD_RESP_DEBUG)
 
@@ -552,28 +601,30 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
     ret = OSA_RWLockReadLock(&sleep_rwlock, MAX_WAIT_TIME);
     if (ret != WM_SUCCESS)
     {
-#if CONFIG_WIFI_PS_DEBUG
         wifi_e("Failed to wakeup card");
-#endif
         // wakelock_put(WL_ID_LL_OUTPUT);
         (void)wifi_put_command_lock();
 #if CONFIG_WIFI_FW_DEBUG
-#ifndef RW610
-        wifi_sdio_reg_dbg();
-#endif
-        if (wm_wifi.wifi_usb_mount_cb != NULL)
+        if (mlan_adap->event_fw_dump == MFALSE)
         {
-            ret = wm_wifi.wifi_usb_mount_cb();
-            if (ret == WM_SUCCESS)
-                wifi_dump_firmware_info();
+            if (wm_wifi.wifi_usb_mount_cb != NULL)
+            {
+                ret = wm_wifi.wifi_usb_mount_cb();
+                if (ret == WM_SUCCESS)
+                    wifi_dump_firmware_info();
+                else
+                {
+                    wifi_e("USB mounting failed");
+                }
+            }
             else
             {
-                wifi_e("USB mounting failed");
+                wifi_dump_firmware_info();
             }
         }
         else
         {
-            wifi_dump_firmware_info();
+            wifi_dump_firmware_info_via_event();
         }
 #endif
 #if CONFIG_WIFI_RECOVERY
@@ -627,34 +678,40 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
             (HostCmd_DS_COMMAND *)((t_u8 *)wifi_get_outbuf((uint32_t *)(&outbuf_len)) + INTF_HEADER_LEN);
         wifi_w("Command response timed out. command 0x%x, len %d, seqno 0x%x", tmo_cmd->command, tmo_cmd->size,
                tmo_cmd->seq_num);
+        wifi_dump_driver_info();
 #endif /* CONFIG_ENABLE_WARNING_LOGS */
 #if CONFIG_WIFI_FW_DEBUG
-#ifndef RW610
-        wifi_sdio_reg_dbg();
-#endif
-        if (wm_wifi.wifi_usb_mount_cb != NULL)
+        if (mlan_adap->event_fw_dump == MFALSE)
         {
-            ret = wm_wifi.wifi_usb_mount_cb();
-            if (ret == WM_SUCCESS)
-                wifi_dump_firmware_info();
+            if (wm_wifi.wifi_usb_mount_cb != NULL)
+            {
+                ret = wm_wifi.wifi_usb_mount_cb();
+                if (ret == WM_SUCCESS)
+                    wifi_dump_firmware_info();
+                else
+                {
+                    wifi_e("USB mounting failed");
+                }
+            }
             else
             {
-                wifi_e("USB mounting failed");
+                wifi_dump_firmware_info();
             }
         }
         else
         {
-            wifi_dump_firmware_info();
+            wifi_dump_firmware_info_via_event();
         }
 #endif
 #if CONFIG_WIFI_RECOVERY
+#ifdef RW610
         wifi_recovery_enable = true;
-#ifndef RW610
+#else
         /* assert as command flow cannot work anymore */
 #if CONFIG_WIFI_IND_DNLD
         wlan_process_hang(FW_RELOAD_SDIO_INBAND_RESET);
 #endif /* CONFIG_WIFI_IND_DNLD */
-#endif /* !RW610 */
+#endif /* RW610 */
 #else
         ASSERT(0);
 #endif /* CONFIG_WIFI_RECOVERY */
@@ -666,6 +723,19 @@ int wifi_wait_for_cmdresp(void *cmd_resp_priv)
     }
 
     wm_wifi.cmd_resp_priv = NULL;
+
+    /* FW is in presleep state. So we send sleep confirm first and then resend this command */
+    if (pmadapter->cmd_reject_presleep)
+    {
+        /* Driver just completed the PS sleep handshake with FW,
+         * add a short delay here to ensure the wakeup interrupt
+         * is re-enabled by FW before driver resends the command.
+         */
+        OSA_TimeDelay(1);
+        pmadapter->cmd_reject_presleep = false;
+        goto resend;
+    }
+
     wifi_set_xfer_pending(false);
     (void)wifi_put_command_lock();
     return ret;
@@ -1093,6 +1163,7 @@ static void wifi_drv_task(void *argv)
 {
     osa_status_t status;
     struct bus_message msg;
+    int ret;
 
     (void)memset((void *)&msg, 0, sizeof(struct bus_message));
 
@@ -1118,7 +1189,15 @@ static void wifi_drv_task(void *argv)
             }
             else if (msg.event == MLAN_TYPE_CMD)
             {
-                (void)wifi_process_cmd_response((HostCmd_DS_COMMAND *)(void *)((uint8_t *)msg.data + INTF_HEADER_LEN));
+                ret = wifi_process_cmd_response((HostCmd_DS_COMMAND *)(void *)((uint8_t *)msg.data + INTF_HEADER_LEN));
+                if (ret == WIFI_EVENT_CMD_BLOCK_PRE_ASLEEP)
+                {
+                    mlan_adap->cmd_reject_presleep = true;
+                    send_sleep_cfm_no_wait();
+                    wifi_update_last_cmd_sent_ms();
+                    continue;
+                }
+
                 wifi_update_last_cmd_sent_ms();
                 (void)wifi_put_command_resp_sem();
             }
@@ -1220,34 +1299,17 @@ static void wifi_scan_task(void *argv)
                 (void)wifi_event_completion(WIFI_EVENT_SCAN_RESULT, WIFI_EVENT_REASON_FAILURE, NULL);
             }
         }
+#if CONFIG_WPA_SUPP
+        else
+        {
+            wifi_nxp_reset_scan_flag();
+        }
+#endif
         scan_thread_in_process = false;
     } /* for ;; */
     while (true)
     {
         OSA_TimeDelay(60000);
-    }
-}
-
-static void wifi_powersave_task(void *data)
-{
-    osa_status_t status;
-    struct wifi_message msg;
-
-    while (1)
-    {
-        status = OSA_MsgQGet((osa_msgq_handle_t)wm_wifi.powersave_queue, &msg, osaWaitForever_c);
-        if (status == KOSA_StatusSuccess)
-        {
-            switch (msg.event)
-            {
-                case WIFI_EVENT_SLEEP:
-                    wifi_event_completion(WIFI_EVENT_SLEEP, WIFI_EVENT_REASON_SUCCESS, NULL);
-                    break;
-                default:
-                    wifi_w("got unknown message: %d", msg.event);
-                    break;
-            }
-        }
     }
 }
 
@@ -1299,6 +1361,17 @@ static int wifi_core_init(void)
         goto fail;
     }
     OSA_SemaphorePost((osa_semaphore_handle_t)wm_wifi.command_resp_sem);
+
+#if CONFIG_WIFI_FW_DEBUG
+    status = OSA_SemaphoreCreateBinary((osa_semaphore_handle_t)wm_wifi.fw_dump_event);
+    if (status != KOSA_StatusSuccess)
+    {
+        wifi_e("Create fw dump event sem failed");
+        goto fail;
+    }
+    OSA_SemaphorePost((osa_semaphore_handle_t)wm_wifi.fw_dump_event);
+#endif
+
     status = OSA_MutexCreate((osa_mutex_handle_t)wm_wifi.mcastf_mutex);
     if (status != KOSA_StatusSuccess)
     {
@@ -1401,20 +1474,6 @@ static int wifi_core_init(void)
     }
 #endif
 
-    status = OSA_MsgQCreate((osa_msgq_handle_t)wm_wifi.powersave_queue, MAX_EVENTS, sizeof(struct bus_message));
-    if (status != KOSA_StatusSuccess)
-    {
-        PRINTF("Create power save queue failed");
-        goto fail;
-    }
-
-    status = OSA_TaskCreate((osa_task_handle_t)wm_wifi.wifi_powersave_task_Handle, OSA_TASK(wifi_powersave_task), NULL);
-    if (status != KOSA_StatusSuccess)
-    {
-        PRINTF("Create power save thread failed");
-        goto fail;
-    }
-
 #if CONFIG_CSI
     /* Semaphore to protect data parameters */
     status = OSA_SemaphoreCreateBinary((osa_semaphore_handle_t)csi_buff_stat.csi_data_sem);
@@ -1476,8 +1535,6 @@ static void wifi_core_deinit(void)
 
     (void)OSA_MsgQDestroy((osa_msgq_handle_t)wm_wifi.io_events);
 
-    (void)OSA_MsgQDestroy((osa_msgq_handle_t)wm_wifi.powersave_queue);
-
 #if CONFIG_WMM
     (void)OSA_MsgQDestroy((osa_msgq_handle_t)wm_wifi.tx_data);
     wifi_wmm_buf_pool_deinit();
@@ -1490,6 +1547,9 @@ static void wifi_core_deinit(void)
 
     (void)OSA_MutexDestroy((osa_mutex_handle_t)wm_wifi.mcastf_mutex);
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wm_wifi.command_resp_sem);
+#if CONFIG_WIFI_FW_DEBUG
+    (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wm_wifi.fw_dump_event);
+#endif
 
 #if CONFIG_WMM
     (void)OSA_SemaphoreDestroy((osa_semaphore_handle_t)wm_wifi.tx_data_sem);
@@ -1500,7 +1560,6 @@ static void wifi_core_deinit(void)
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_drv_task_Handle);
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_core_task_Handle);
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_scan_task_Handle);
-    (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_powersave_task_Handle);
 #if CONFIG_WMM
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_drv_tx_task_Handle);
 #endif
@@ -1644,7 +1703,7 @@ int wifi_reinit(const uint8_t *fw_start_addr, const size_t size, uint8_t fw_relo
                 ret = -WIFI_ERROR_FW_NOT_READY;
                 break;
             case MLAN_STATUS_FW_DNLD_SKIP:
-                ret = WM_SUCCESS;
+                ret = -WIFI_ERROR_FW_DNLD_SKIP;
                 break;
             default:
                 PRINTM(MINFO, "Unexpected MLAN FW Status \n");
@@ -1779,7 +1838,7 @@ void wifi_destroy_wifidriver_tasks(void)
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_core_task_Handle);
 #endif
     (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_scan_task_Handle);
-    (void)OSA_TaskDestroy((osa_task_handle_t)wm_wifi.wifi_powersave_task_Handle);
+
 #ifdef RW610
     imu_uninstall_callback();
 #endif
@@ -2366,7 +2425,14 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
                     memcmp(zero_mac, (t_u8 *)priv->curr_bss_params.bss_descriptor.mac_address,
                            MLAN_MAC_ADDR_LENGTH)) ||
                     memcmp(pieee_pkt_hdr->addr3, (t_u8 *)priv->curr_bss_params.attemp_bssid,
-                           MLAN_MAC_ADDR_LENGTH))
+                           MLAN_MAC_ADDR_LENGTH)
+#if CONFIG_NET_MONITOR
+                    || (priv->adapter->enable_net_mon && unicast &&
+                        !memcmp(pieee_pkt_hdr->addr3, (t_u8 *)priv->curr_bss_params.bss_descriptor.mac_address,
+                                MLAN_MAC_ADDR_LENGTH) &&
+                        memcmp(pieee_pkt_hdr->addr1, (t_u8 *)priv->curr_addr, MLAN_MAC_ADDR_LENGTH))
+#endif
+                   )
                 {
                     wifi_d("Dropping Deauth frame from other bssid: type=%d " MACSTR "\r\n", sub_type,
                            MAC2STR(pieee_pkt_hdr->addr3));
@@ -2838,26 +2904,28 @@ void wifi_tx_card_awake_lock(void)
     (void)OSA_MutexUnlock((osa_mutex_handle_t)sleep_rwlock.write_mutex);
     if (ret != WM_SUCCESS)
     {
-#if CONFIG_WIFI_PS_DEBUG
         wifi_e("Failed to wakeup card for Tx");
-#endif
 #if CONFIG_WIFI_FW_DEBUG
-#ifndef RW610
-        wifi_sdio_reg_dbg();
-#endif
-        if (wm_wifi.wifi_usb_mount_cb != NULL)
+        if (mlan_adap->event_fw_dump == MFALSE)
         {
-            ret = wm_wifi.wifi_usb_mount_cb();
-            if (ret == WM_SUCCESS)
-                wifi_dump_firmware_info();
+            if (wm_wifi.wifi_usb_mount_cb != NULL)
+            {
+                ret = wm_wifi.wifi_usb_mount_cb();
+                if (ret == WM_SUCCESS)
+                    wifi_dump_firmware_info();
+                else
+                {
+                    wifi_e("USB mounting failed");
+                }
+            }
             else
             {
-                wifi_e("USB mounting failed");
+                wifi_dump_firmware_info();
             }
         }
         else
         {
-            wifi_dump_firmware_info();
+            wifi_dump_firmware_info_via_event();
         }
 #endif
 #if CONFIG_WIFI_RECOVERY
@@ -3207,7 +3275,21 @@ t_void wlan_process_bypass_txq(t_u8 interface)
     wifi_tx_card_awake_lock();
 #ifndef RW610
     wifi_sdio_lock();
+#else
+    wifi_imu_lock();
 #endif
+
+    if (priv->adapter->ps_state == PS_STATE_SLEEP_CFM || priv->adapter->ps_state == PS_STATE_SLEEP)
+    {
+#ifndef RW610
+        wifi_sdio_unlock();
+#else
+        wifi_imu_unlock();
+#endif
+        wifi_tx_card_awake_unlock();
+        send_wifi_driver_bypass_data_event(interface);
+        return;
+    }
 
     while (!wlan_bypass_txq_empty(interface) && (wifi_txbuf_available() == MTRUE))
     {
@@ -3233,6 +3315,8 @@ t_void wlan_process_bypass_txq(t_u8 interface)
 
 #ifndef RW610
     wifi_sdio_unlock();
+#else
+    wifi_imu_unlock();
 #endif
     wifi_tx_card_awake_unlock();
 }
@@ -3392,10 +3476,26 @@ static void wifi_drv_tx_task(osa_task_param_t arg)
                     wifi_tx_card_awake_lock();
 #ifndef RW610
                     wifi_sdio_lock();
+#else
+                    wifi_imu_lock();
 #endif
+                    if (pmadapter->ps_state == PS_STATE_SLEEP_CFM || pmadapter->ps_state == PS_STATE_SLEEP)
+                    {
+#ifndef RW610
+                        wifi_sdio_unlock();
+#else
+                        wifi_imu_unlock();
+#endif
+                        wifi_tx_card_awake_unlock();
+                        send_wifi_driver_tx_data_event(i);
+                        break;
+                    }
+
                     wifi_xmit_wmm_ac_pkts_enh(pmpriv);
 #ifndef RW610
                     wifi_sdio_unlock();
+#else
+                    wifi_imu_unlock();
 #endif
                     wifi_tx_card_awake_unlock();
                 }

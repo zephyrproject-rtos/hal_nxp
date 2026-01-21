@@ -861,17 +861,6 @@ typedef struct _mlan_tx_param
     t_u32 next_pkt_len;
 } mlan_tx_param;
 
-#if 0
-/** PS_STATE */
-typedef enum _PS_STATE
-{
-    PS_STATE_AWAKE,
-    PS_STATE_PRE_SLEEP,
-    PS_STATE_SLEEP_CFM,
-    PS_STATE_SLEEP
-} PS_STATE;
-#endif
-
 /** Minimum flush timer for win size of 1 is 50 ms */
 #define MIN_FLUSH_TIMER_MS 50U
 /** Tx BA stream table */
@@ -2211,6 +2200,10 @@ struct _mlan_adapter
     t_u32 fw_cap_info;
     /** Extended firmware capability information */
     t_u32 fw_cap_ext;
+#if CONFIG_WIFI_FW_DEBUG
+    /** Event fw dump */
+    bool event_fw_dump;
+#endif
 #if CONFIG_FW_VDLL
     /** vdll ctrl */
     vdll_dnld_ctrl vdll_ctrl;
@@ -2350,6 +2343,8 @@ struct _mlan_adapter
 #endif
     /** Power Save state */
     enum wlan_ps_state ps_state;
+    /** Command needs response as event is rejected as firmware is in presleep state */
+    bool cmd_reject_presleep;
     /** keep_wakeup */
     t_u8 keep_wakeup;
     /** Multiple DTIM */
@@ -2394,10 +2389,8 @@ struct _mlan_adapter
     t_u32 usr_dot_11n_dev_cap_a;
     /** MIMO abstraction of MCSs supported by device */
     t_u8 usr_dev_mcs_support;
-#if CONFIG_WIFI_CAPA
     /** user configured 11n enable/disable */
     t_u8 usr_dot_11n_enable;
-#endif
 #ifdef STA_SUPPORT
     /** Enable 11n support for adhoc start */
     bool adhoc_11n_enabled;
@@ -2413,10 +2406,8 @@ struct _mlan_adapter
     t_u8 tx_vhtinfo;
     /** rxpd_vhtinfo */
     t_u8 rxpd_vhtinfo;
-#if CONFIG_WIFI_CAPA
     /** user configured 11ac enable/disable */
     t_u8 usr_dot_11ac_enable;
-#endif
     /** 802.11ac Device Capabilities for 2.4GHz */
     t_u32 usr_dot_11ac_dev_cap_bg;
     /** 802.11ac Device Capabilities for 5GHz */
@@ -2439,10 +2430,8 @@ struct _mlan_adapter
     t_u8 hw_2g_hecap_len;
     /** 802.11ax 2.4G HE capability */
     t_u8 hw_2g_he_cap[54];
-#if CONFIG_WIFI_CAPA
     /** user configured 11ax enable/disable */
     t_u8 usr_dot_11ax_enable;
-#endif
 #endif
     /** max mgmt IE index in device */
     t_u16 max_mgmt_ie_index;
@@ -2503,6 +2492,10 @@ struct _mlan_adapter
     t_u8 ami_ongoing;
     /** Number of processed CSI event data. */
     t_u32 ami_num;
+#endif
+#if CONFIG_NET_MONITOR
+    /** NetMon enabled */
+    t_u16 enable_net_mon;
 #endif
 };
 
@@ -2835,6 +2828,8 @@ t_bool wlan_11d_is_enabled(mlan_private *pmpriv);
 const t_u8 *wlan_11d_code_2_region(pmlan_adapter pmadapter, t_u8 code);
 /**converts region string to integer code*/
 mlan_status wlan_11d_region_2_code(pmlan_adapter pmadapter, t_u8 *region, OUT t_u8 *code);
+/** Validate whether region code is valid */
+t_bool wlan_11d_is_region_code_valid(t_u8 code);
 /** Store 11D domain info */
 mlan_status wlan_11d_set_domain_info(mlan_private *pmpriv,
                                      t_u16 band,

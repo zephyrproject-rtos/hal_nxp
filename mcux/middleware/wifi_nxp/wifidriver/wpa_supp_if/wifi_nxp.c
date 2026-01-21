@@ -111,21 +111,6 @@ static void wifi_nxp_event_proc_scan_done(void *if_priv, int aborted, int extern
     }
     wifi_nxp_wpa_supp_event_proc_scan_done(if_priv, aborted, external_scan);
 }
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-static void wifi_nxp_event_reamin_on_channel(void *if_priv, int cancel_channel)
-{
-    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
-
-    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
-
-    if (wifi_if_ctx_rtos == NULL)
-    {
-        wifi_e("%s: wifi_if_ctx_rtos is NULL", __func__);
-        return;
-    }
-    wifi_nxp_wpa_supp_event_proc_remain_on_channel(if_priv, cancel_channel);
-}
-#endif
 
 static int wifi_nxp_wpa_is_supp_scan_in_progress(void *if_priv)
 {
@@ -145,11 +130,8 @@ static const wifi_nxp_callbk_fns_t supp_callbk_fns = {
     .mac_changed_callbk_fn              = wifi_nxp_wpa_supp_event_proc_mac_changed,
     .chan_list_changed_callbk_fn        = wifi_nxp_wpa_supp_event_proc_chan_list_changed,
     .acs_channel_sel_callbk_fn          = wifi_nxp_wpa_supp_event_acs_channel_selected,
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    .survey_res_callbk_fn               = wifi_nxp_wpa_supp_event_proc_survey_res,
-    .remain_on_channel_callbk_fn        = wifi_nxp_event_reamin_on_channel,
-    .eapol_rx_callbk_fn                 = wifi_nxp_wpa_supp_event_proc_eapol_rx,
-#endif
+    .remain_on_channel_callbk_fn        = wifi_nxp_wpa_supp_event_proc_remain_on_channel,
+    .cookie_rsp_callbk_fn               = wifi_nxp_wpa_supp_event_proc_cookie_rsp,
     .dfs_cac_started_callbk_fn          = wifi_nxp_wpa_supp_event_proc_dfs_cac_started,
     .dfs_cac_finished_callbk_fn         = wifi_nxp_wpa_supp_event_proc_dfs_cac_finished,
     .ecsa_complete_callbk_fn            = wifi_nxp_wpa_supp_event_proc_ecsa_complete,

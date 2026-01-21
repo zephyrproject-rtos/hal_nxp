@@ -1493,8 +1493,9 @@ typedef enum _ENH_PS_MODES
 
 #if (CONFIG_11MC) || (CONFIG_11AZ)
 /** Host Command ID : FTM session config and control */
-#define HostCmd_CMD_FTM_SESSION_CFG  0x024d
-#define HostCmd_CMD_FTM_SESSION_CTRL 0x024e
+#define HostCmd_CMD_FTM_SESSION_CFG         0x024d
+#define HostCmd_CMD_FTM_SESSION_CTRL        0x024e
+#define HostCmd_CMD_DOT11MC_UNASSOC_FTM_CFG 0x0275
 #endif
 
 /* Define action or option for HostCmd_CMD_802_11_SCAN */
@@ -1764,6 +1765,7 @@ typedef enum _ENH_PS_MODES
 #if CONFIG_WIFI_FW_DEBUG
 /** Event definition : FW debug information */
 #define EVENT_FW_DEBUG_INFO 0x00000063
+#define EVENT_FW_DEBUG_DUMP 0x00000073
 #endif
 
 #if (CONFIG_11MC) || (CONFIG_11AZ)
@@ -1773,6 +1775,8 @@ typedef enum _ENH_PS_MODES
 #define WLS_SUB_EVENT_RADIO_RECEIVED     1
 #define WLS_SUB_EVENT_RADIO_RPT_RECEIVED 2
 #define WLS_SUB_EVENT_ANQP_RESP_RECEIVED 3
+#define WLS_SUB_EVENT_RTT_RESULTS        4
+#define WLS_SUB_EVENT_FTM_FAIL           5
 
 #endif
 
@@ -3331,6 +3335,15 @@ typedef struct __sleep_confirm_param
 
 /* bit define for pre_asleep*/
 #define BLOCK_CMD_IN_PRE_ASLEEP MBIT(0)
+
+/** cmd is blocked by pre_asleep */
+#define HostCmd_RESULT_PRE_ASLEEP 0x0007
+/** Event for command blocked in pre_asleep
+ * This is specifically kept after all user request
+ * so as to avoid conflict with user requests.
+ */
+#define WIFI_EVENT_CMD_BLOCK_PRE_ASLEEP 0x0046
+
 /** MrvlIEtypes_ext_ps_param_t */
 typedef MLAN_PACK_START struct _MrvlIEtypes_ext_ps_param_t
 {
@@ -7555,6 +7568,15 @@ typedef MLAN_PACK_START struct _HostCmd_FTM_SESSION_CFG
     } tlv;
 } MLAN_PACK_END HostCmd_FTM_SESSION_CFG;
 
+/** Type definition for hostcmd_unassoc_ftm_cfg */
+typedef MLAN_PACK_START struct _Hostcmd_DOT11MC_UNASSOC_FTM_CFG
+{
+    /** 0: Get, 1: Set */
+    t_u16 action;
+    /** 0: Disable, 1: Enable */
+    t_u16 config;
+} MLAN_PACK_END HostCmd_DOT11MC_UNASSOC_FTM_CFG;
+
 /** Type definition for hostcmd_ftm_session_ctrl */
 typedef MLAN_PACK_START struct _Hostcmd_FTM_SESSION_CTRL
 {
@@ -7566,6 +7588,8 @@ typedef MLAN_PACK_START struct _Hostcmd_FTM_SESSION_CTRL
     t_u8 peer_mac[MLAN_MAC_ADDR_LENGTH];
     /** Channel on which FTM must be started */
     t_u8 chan;
+    /** Band on which FTM must be started */
+    t_u8 chanBand;
 } MLAN_PACK_END HostCmd_FTM_SESSION_CTRL;
 
 #if CONFIG_WLS_CSI_PROC
@@ -8172,6 +8196,8 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCmd_DS_HOST_CLOCK_CFG host_clock_cfg;
 #endif
 #if (CONFIG_11MC) || (CONFIG_11AZ)
+        /** hostcmd for unassociated FTM configuration user command */
+        HostCmd_DOT11MC_UNASSOC_FTM_CFG unassoc_ftm_cfg;
         /** hostcmd for session_ctrl user command */
         HostCmd_FTM_SESSION_CTRL ftm_session_ctrl;
         /** hostcmd for session_cfg user command */
