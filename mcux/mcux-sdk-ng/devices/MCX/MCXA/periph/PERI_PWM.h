@@ -292,6 +292,11 @@ typedef struct {
  */
 #define PWM_CTRL2_INDEP(x)                       (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_INDEP_SHIFT)) & PWM_CTRL2_INDEP_MASK)
 
+#define PWM_CTRL2_WAITEN_MASK                    (0x4000U)
+#define PWM_CTRL2_WAITEN_SHIFT                   (14U)
+/*! WAITEN - Sleep Enable */
+#define PWM_CTRL2_WAITEN(x)                      (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_WAITEN_SHIFT)) & PWM_CTRL2_WAITEN_MASK)
+
 #define PWM_CTRL2_DBGEN_MASK                     (0x8000U)
 #define PWM_CTRL2_DBGEN_SHIFT                    (15U)
 /*! DBGEN - Debug Enable */
