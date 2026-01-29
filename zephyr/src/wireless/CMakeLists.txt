@@ -58,7 +58,7 @@ if(CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_BT_H4_NXP_CTLR)
   if (CONFIG_BT_H4_NXP_CTLR)
     if(CONFIG_BT_NXP_NW612)
       list(APPEND output_includes_list ${ZEPHYR_BINARY_DIR}/include/generated/nw61x_bt_fw.bin.inc)
-      set(bt_binary_blob_name uart_nw61x.bin.se)
+      set(bt_binary_blob_name  uartspi_n61x.bin.se)
       zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu2.c)
       set_source_files_properties(
 		${CMAKE_CURRENT_LIST_DIR}/nw61x/nw61x_cpu2.c
