@@ -138,7 +138,7 @@ blobs:
     description: "Wi-Fi firmware for NW61x A1 boards"
     doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v4.3.1/readme.txt
   - path: nw61x/uartspi_n61x.bin.se
-    sha256: 9e114c62196f1839a80170f1a0b1f88d2a022ece135511b98d694f6a4ef1bdff
+    sha256: 2c86126faa1fdc25402ed6e982b794d07d016f4822bb807bd6a9ef5908475bf1
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
