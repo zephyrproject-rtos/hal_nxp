@@ -362,6 +362,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT (1)
 /* @brief FlexSPI AHB RX buffer size (byte) */
 #define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
+/* @brief FlexSPI Array Length */
+#define FSL_FEATURE_FLEXSPI_ARRAY_LEN (1)
 
 /* RGPIO module features */
 
