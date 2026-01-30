@@ -736,7 +736,7 @@ void FLEXSPI_UpdateLUT(FLEXSPI_Type *base, uint32_t index, const uint32_t *cmd, 
     uint32_t i = 0UL;
     volatile uint32_t *lutBase;
 
-    if (FLEXSPI_CheckInputLutLocation(base, (uint32_t)cmd) == false)
+    if (FLEXSPI_CheckInputLutLocation(base, (uint32_t)(uintptr_t)cmd) == false)
     {
         /* Input LUT address is not allowed. */
         assert(false);

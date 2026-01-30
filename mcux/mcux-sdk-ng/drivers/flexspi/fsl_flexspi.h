@@ -587,7 +587,7 @@ static inline void FLEXSPI_EnableRxDMA(FLEXSPI_Type *base, bool enable)
  */
 static inline uint32_t FLEXSPI_GetTxFifoAddress(FLEXSPI_Type *base)
 {
-    return (uint32_t)&base->TFDR[0];
+    return (uint32_t)(uintptr_t)&base->TFDR[0];
 }
 
 /*!
@@ -598,7 +598,7 @@ static inline uint32_t FLEXSPI_GetTxFifoAddress(FLEXSPI_Type *base)
  */
 static inline uint32_t FLEXSPI_GetRxFifoAddress(FLEXSPI_Type *base)
 {
-    return (uint32_t)&base->RFDR[0];
+    return (uint32_t)(uintptr_t)&base->RFDR[0];
 }
 
 /*! @} */
