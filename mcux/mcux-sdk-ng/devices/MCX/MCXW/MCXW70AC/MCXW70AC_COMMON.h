@@ -1604,6 +1604,9 @@ typedef enum IRQn {
   #define MU_BASE_PTRS                             { MU_0__MUA, MU_0__MUB, MU_1__MUA, MU_1__MUB }
 #endif
 
+#define MU0_MUA MU_0__MUA
+#define MU0_MUB MU_0__MUB
+
 /* PKC - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral PKC base address */
