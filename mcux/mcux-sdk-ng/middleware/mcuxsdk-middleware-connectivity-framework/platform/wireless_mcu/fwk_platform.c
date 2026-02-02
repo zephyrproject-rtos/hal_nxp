@@ -16,9 +16,9 @@
 #include "fwk_platform.h"
 #include "fwk_config.h"
 #include "fwk_platform_ics.h"
-#if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
-#include "fwk_platform_fpga.h"
-#endif
+// #if (defined(FPGA_TARGET) && (FPGA_TARGET != 0))
+// #include "fwk_platform_fpga.h"
+// #endif
 
 #if !(defined(FPGA_TARGET) && (FPGA_TARGET != 0))
 #include "fsl_ccm32k.h"
