@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2023, 2026 NXP
  *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -802,6 +802,12 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_PrePowerMode(uint32_t mode, const 
             PMU->MEM_CFG = (PMU->MEM_CFG & ~PMU_MEM_CFG_MEM_RET_MASK) | (config->memPdCfg & PMU_MEM_CFG_MEM_RET_MASK);
             PMU->PMIP_BUCK_CTRL = (PMU->PMIP_BUCK_CTRL & ~((uint32_t)kPOWER_Pm3BuckAll)) |
                                   (config->pm3BuckCfg & (uint32_t)kPOWER_Pm3BuckAll);
+            wlanPowerStatus = POWER_WLAN_POWER_STATUS();
+            blePowerStatus  = POWER_BLE_POWER_STATUS();
+            if ((wlanPowerStatus != POWER_WLAN_BLE_POWER_ON) && (blePowerStatus != POWER_WLAN_BLE_POWER_ON))
+            {
+                BUCK18->BUCK_CTRL_ELEVEN_REG |= BUCK18_BUCK_CTRL_ELEVEN_REG_USE_EXT_SUP(1);
+            }
             /* Clear reset status */
             PMU->SYS_RST_CLR = 0x7FU;
         }
@@ -816,6 +822,10 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_PrePowerMode(uint32_t mode, const 
             {
                 /* pm422, LDO 0.8V, 1.8V */
                 PMU->PMIP_LDO_LVL = PMU_PMIP_LDO_LVL_LDO18_SEL(4) | PMU_PMIP_LDO_LVL_LDO11_SEL(1);
+            }
+            if ((wlanPowerStatus != POWER_WLAN_BLE_POWER_ON) && (blePowerStatus != POWER_WLAN_BLE_POWER_ON))
+            {
+                BUCK18->BUCK_CTRL_ELEVEN_REG |= BUCK18_BUCK_CTRL_ELEVEN_REG_USE_EXT_SUP(1);
             }
             /* Clear reset status */
             PMU->SYS_RST_CLR = 0x7FU;
@@ -858,6 +868,7 @@ AT_QUICKACCESS_SECTION_CODE(static bool POWER_PostPowerMode(uint32_t mode))
         SystemInit();
         POWER_RestoreNvicState();
         initXip();
+        BUCK18->BUCK_CTRL_ELEVEN_REG &= ~(BUCK18_BUCK_CTRL_ELEVEN_REG_USE_EXT_SUP(1));
     }
     else
     {
