@@ -138,6 +138,9 @@ mlan_status wlan_xmit_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 tx_co
 int raw_process_pkt_hdrs(void *pbuf, t_u32 payloadlen, t_u8 interface);
 uint32_t wifi_get_device_value1(void);
 
+#if CONFIG_TX_RX_ZERO_COPY
+mlan_status wlan_xmit_pkt_sg(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 tx_control);
+#endif
 #if CONFIG_WMM
 uint8_t *wifi_wmm_get_sdio_outbuf(uint32_t *outbuf_len, mlan_wmm_ac_e queue);
 mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf);

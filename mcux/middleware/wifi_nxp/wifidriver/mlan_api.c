@@ -3367,7 +3367,6 @@ void wifi_request_get_fw_info(mlan_private *priv, mlan_fw_info *fw_info)
 }
 #endif
 
-#if CONFIG_WIFI_CAPA
 void wifi_get_fw_info(mlan_bss_type type, t_u16 *fw_bands)
 {
     mlan_fw_info fw_info;
@@ -3380,7 +3379,6 @@ void wifi_get_fw_info(mlan_bss_type type, t_u16 *fw_bands)
 
     *fw_bands = fw_info.fw_bands;
 }
-#endif
 
 int wifi_get_firmware_version_ext(wifi_fw_version_ext_t *version_ext)
 {
@@ -5554,6 +5552,15 @@ int wifi_get_set_bandcfg(wifi_bandcfg_t *bandcfg, mlan_act_ioctl action)
         return -WM_FAIL;
     }
 
+#if UAP_SUPPORT
+    if (action == MLAN_ACT_SET)
+    {
+        /* Set config bands for uAP interface */
+        /* The config bands for STA interface will be updated in ioctl handler */
+        mlan_adap->priv[1]->config_bands = bandcfg->config_bands;
+    }
+#endif
+
     if (action == MLAN_ACT_GET)
     {
         bandcfg->config_bands = radio_cfg.param.band_cfg.config_bands;
@@ -6656,7 +6663,6 @@ static void proc_csi_event(void *p_data)
 void wifi_process_csi_data(void *p_data)
 {
     proc_csi_event(((t_u8 *)p_data + AMI_CSI_RAW_DATA_OFFSET));
-    mlan_adap->ami_ongoing = 0;
     return;
 }
 

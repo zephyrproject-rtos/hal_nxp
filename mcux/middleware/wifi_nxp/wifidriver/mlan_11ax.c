@@ -321,19 +321,27 @@ t_u16 wlan_11ax_bandconfig_allowed(mlan_private *pmpriv, t_u16 bss_band)
     if (pmpriv->bss_mode == MLAN_BSS_MODE_IBSS)
     {
         if (bss_band & BAND_G)
+        {
             return (pmpriv->adapter->adhoc_start_band & BAND_GAX);
+        }
 #if CONFIG_5GHz_SUPPORT
         else if (bss_band & BAND_A)
+        {
             return (pmpriv->adapter->adhoc_start_band & BAND_AAX);
+        }
 #endif
     }
     else
     {
         if (bss_band & BAND_G)
+        {
             return (pmpriv->config_bands & BAND_GAX);
+        }
 #if CONFIG_5GHz_SUPPORT
         else if (bss_band & BAND_A)
+        {
             return (pmpriv->config_bands & BAND_AAX);
+        }
 #endif
     }
     return MFALSE;

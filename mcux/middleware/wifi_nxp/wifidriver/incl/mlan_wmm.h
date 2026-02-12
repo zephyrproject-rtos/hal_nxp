@@ -202,7 +202,11 @@ mlan_status wlan_ret_wmm_param_config(pmlan_private pmpriv, const HostCmd_DS_COM
 
 #if CONFIG_WMM
 /* wmm enhance buffer pool */
+#if CONFIG_TX_RX_ZERO_COPY
+#define MAX_WMM_BUF_NUM 32
+#else
 #define MAX_WMM_BUF_NUM 16
+#endif
 #define WMM_DATA_LEN    1580
 #define OUTBUF_WMM_LEN  (sizeof(outbuf_t))
 
@@ -220,6 +224,12 @@ typedef struct
     t_u8 *payload;
     /* Packet buffer structure pointer */
     void *buffer;
+    /* Flag to Indicate whether Header is in Payload */
+    int is_hdr_in_payload;
+    /* Aligned buffer for DMA */
+    void *cache_buffer;
+    /* Padding size after txpd */
+    int padding_size;
 #else
     t_u8 data[WMM_DATA_LEN];
 #endif

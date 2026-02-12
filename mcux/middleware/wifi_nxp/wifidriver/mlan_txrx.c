@@ -124,7 +124,7 @@ mlan_status wlan_process_uap_rx_packet(mlan_private *priv, pmlan_buffer pmbuf)
                 ret = MLAN_STATUS_FAILURE;
             }
             net_stack_buffer_free(pmbuf->lwip_pbuf);
-#if !(CONFIG_TX_RX_ZERO_COPY) && !(FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER)
+#if !(CONFIG_TX_RX_ZERO_COPY)
 #if !CONFIG_MEM_POOLS
             /* Free RxPD */
             OSA_MemoryFree(pmbuf->pbuf);

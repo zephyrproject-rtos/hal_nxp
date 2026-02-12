@@ -2389,8 +2389,6 @@ struct _mlan_adapter
     t_u32 usr_dot_11n_dev_cap_a;
     /** MIMO abstraction of MCSs supported by device */
     t_u8 usr_dev_mcs_support;
-    /** user configured 11n enable/disable */
-    t_u8 usr_dot_11n_enable;
 #ifdef STA_SUPPORT
     /** Enable 11n support for adhoc start */
     bool adhoc_11n_enabled;
@@ -2406,8 +2404,6 @@ struct _mlan_adapter
     t_u8 tx_vhtinfo;
     /** rxpd_vhtinfo */
     t_u8 rxpd_vhtinfo;
-    /** user configured 11ac enable/disable */
-    t_u8 usr_dot_11ac_enable;
     /** 802.11ac Device Capabilities for 2.4GHz */
     t_u32 usr_dot_11ac_dev_cap_bg;
     /** 802.11ac Device Capabilities for 5GHz */
@@ -2430,8 +2426,6 @@ struct _mlan_adapter
     t_u8 hw_2g_hecap_len;
     /** 802.11ax 2.4G HE capability */
     t_u8 hw_2g_he_cap[54];
-    /** user configured 11ax enable/disable */
-    t_u8 usr_dot_11ax_enable;
 #endif
     /** max mgmt IE index in device */
     t_u16 max_mgmt_ie_index;

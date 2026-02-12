@@ -95,13 +95,6 @@ int sdio_drv_creg_write(int addr, int fn, uint8_t data, uint32_t *resp);
  */
 int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp);
 
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-void sg_init_table();
-void sg_set_num(size_t num_sg);
-void sg_set_buf(uint32_t *buf, size_t len);
-int sdio_drv_read_mb(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize);
-#endif
-
 /** Write Data to SDIO
  *
  * This is used to write data to SDIO card using CMD53.
@@ -116,6 +109,16 @@ int sdio_drv_read_mb(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize);
  *  \return true on success, false otherwise
  */
 int sdio_drv_write(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp);
+
+#if CONFIG_TX_RX_ZERO_COPY
+/** SDIO Scatter and Gather DMA transfer apis
+ *
+ * This is used to read or write scattered dest memory.
+ * For contiguous memory still can use legacy apis.
+ */
+int sdio_drv_read_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list);
+int sdio_drv_write_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list);
+#endif
 
 /** Initialize the SDIO Driver
  *

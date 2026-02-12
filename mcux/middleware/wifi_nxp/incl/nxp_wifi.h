@@ -106,10 +106,6 @@ extern "C" {
 #define CONFIG_TX_RX_ZERO_COPY 1
 #endif
 
-#if CONFIG_NXP_WIFI_CAPA
-#define CONFIG_WIFI_CAPA 1
-#endif
-
 #if CONFIG_NXP_WIFI_WMM_UAPSD
 #define CONFIG_WMM_UAPSD 1
 #endif

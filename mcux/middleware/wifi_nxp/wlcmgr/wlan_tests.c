@@ -6458,21 +6458,23 @@ static void test_wlan_get_signal(int argc, char **argv)
 }
 #endif
 
+#define WLAN_BANDCFG_11N MBIT(0)
+#if CONFIG_11AC
+#define WLAN_BANDCFG_11AC MBIT(1)
+#endif
+#if CONFIG_11AX
+#define WLAN_BANDCFG_11AX MBIT(2)
+#endif
+
 static void dump_wlan_bandcfg_bit_usage(void)
 {
     (void)PRINTF("        Bits in Band:\r\n");
-    (void)PRINTF("        bit 0: B (Not support set)\r\n");
-    (void)PRINTF("        bit 1: G (Not support set)\r\n");
-    (void)PRINTF("        bit 2: A (Not support set)\r\n");
-    (void)PRINTF("        bit 3: GN (Not support set)\r\n");
-    (void)PRINTF("        bit 4: AN (Not support set)\r\n");
+    (void)PRINTF("        bit 0: 11N\r\n");
 #if CONFIG_11AC
-    (void)PRINTF("        bit 5: AC 2.4G (Not support set)\r\n");
-    (void)PRINTF("        bit 6: AC 5G (Not support set)\r\n");
+    (void)PRINTF("        bit 1: 11AC\r\n");
 #endif
 #if CONFIG_11AX
-    (void)PRINTF("        bit 8: AX 2.4G\r\n");
-    (void)PRINTF("        bit 9: AX 5G\r\n");
+    (void)PRINTF("        bit 2: 11AX\r\n");
 #endif
 }
 
@@ -6480,6 +6482,8 @@ static void test_wlan_get_bandcfg(int argc, char **argv)
 {
     wlan_bandcfg_t bandcfg;
     int ret = WM_SUCCESS;
+    uint32_t val = 0;
+    uint32_t hw_val = 0;
 
     (void)memset(&bandcfg, 0, sizeof(bandcfg));
 
@@ -6489,34 +6493,59 @@ static void test_wlan_get_bandcfg(int argc, char **argv)
         (void)PRINTF("Unable to get bandcfg\r\n");
         return;
     }
-    (void)PRINTF("\tconfig band: 0x%x\r\n", bandcfg.config_bands);
-    (void)PRINTF("\tfw band: 0x%x\r\n", bandcfg.fw_bands);
+
+    if (bandcfg.config_bands & (BAND_AN | BAND_GN))
+    {
+        val |= WLAN_BANDCFG_11N;
+    }
+    if (bandcfg.fw_bands & (BAND_AN | BAND_GN))
+    {
+        hw_val |= WLAN_BANDCFG_11N;
+    }
+#if CONFIG_11AC
+    if (bandcfg.config_bands & (BAND_AAC | BAND_GAC))
+    {
+        val |= WLAN_BANDCFG_11AC;
+    }
+    if (bandcfg.fw_bands & (BAND_AAC | BAND_GAC))
+    {
+        hw_val |= WLAN_BANDCFG_11AC;
+    }
+#endif
+#if CONFIG_11AX
+    if (bandcfg.config_bands & (BAND_AAX | BAND_GAX))
+    {
+        val |= WLAN_BANDCFG_11AX;
+    }
+    if (bandcfg.fw_bands & (BAND_AAX | BAND_GAX))
+    {
+        hw_val |= WLAN_BANDCFG_11AX;
+    }
+#endif
+
+    (void)PRINTF("\tconfig band: 0x%x\r\n", val);
+    (void)PRINTF("\tfw band: 0x%x\r\n", hw_val);
     dump_wlan_bandcfg_bit_usage();
 }
 
-#if CONFIG_11AX
 static void dump_wlan_set_bandcfg(void)
 {
     (void)PRINTF("Usage:\r\n");
     (void)PRINTF("    wlan-set-bandcfg <value>\r\n");
     dump_wlan_bandcfg_bit_usage();
 }
-#endif
 
 static void test_wlan_set_bandcfg(int argc, char **argv)
 {
-#if CONFIG_11AX
     wlan_bandcfg_t bandcfg;
-    uint32_t bandcfg_11ax_2G = 0;
-    uint32_t bandcfg_11ax_5G = 0;
     uint32_t val = 0;
     int ret = WM_SUCCESS;
-#endif
 
-#if !CONFIG_11AX
-    (void)PRINTF("Block set bandcfg when 11AX is not supported.\r\n");
-    return;
-#else
+    if (is_sta_connected() || is_uap_started())
+    {
+        (void)PRINTF("Error: set-bandcfg command is not allowed when STA has connection or uAP is started\r\n");
+        return;
+    }
 
     if (argc != 2)
     {
@@ -6526,18 +6555,6 @@ static void test_wlan_set_bandcfg(int argc, char **argv)
     }
 
     val = a2hex_or_atoi(argv[1]);
-
-    bandcfg_11ax_2G = (val & MBIT(8));
-    bandcfg_11ax_5G = (val & MBIT(9));
-
-    if ((bandcfg_11ax_2G && !bandcfg_11ax_5G) ||
-        (!bandcfg_11ax_2G && bandcfg_11ax_5G))
-    {
-        (void)PRINTF("Please set 11ax 2G/5G bit both 0 or both 1.\r\n");
-        dump_wlan_set_bandcfg();
-        return;
-    }
-
     (void)memset(&bandcfg, 0, sizeof(bandcfg));
     ret = wlan_get_bandcfg(&bandcfg);
     if (ret != WM_SUCCESS)
@@ -6546,23 +6563,34 @@ static void test_wlan_set_bandcfg(int argc, char **argv)
         return;
     }
 
-    if (bandcfg_11ax_2G)
+    if (!(val & WLAN_BANDCFG_11N))
     {
-        bandcfg.config_bands |= (MBIT(8));
+        bandcfg.config_bands &= ~(BAND_AN | BAND_GN);
     }
     else
     {
-        bandcfg.config_bands &= ~(MBIT(8));
+        bandcfg.config_bands |= (BAND_AN | BAND_GN);
     }
-
-    if (bandcfg_11ax_5G)
+#if CONFIG_11AC
+    if (!(val & WLAN_BANDCFG_11AC))
     {
-        bandcfg.config_bands |= (MBIT(9));
+        bandcfg.config_bands &= ~(BAND_AAC | BAND_GAC);
     }
     else
     {
-        bandcfg.config_bands &= ~(MBIT(9));
+        bandcfg.config_bands |= (BAND_AAC | BAND_GAC);
     }
+#endif
+#if CONFIG_11AX
+    if (!(val & WLAN_BANDCFG_11AX))
+    {
+        bandcfg.config_bands &= ~(BAND_AAX | BAND_GAX);
+    }
+    else
+    {
+        bandcfg.config_bands |= (BAND_AAX | BAND_GAX);
+    }
+#endif
 
     ret = wlan_set_bandcfg(&bandcfg);
     if (ret != WM_SUCCESS)
@@ -6570,7 +6598,6 @@ static void test_wlan_set_bandcfg(int argc, char **argv)
         (void)PRINTF("Unable to set bandcfg\r\n");
         return;
     }
-#endif
 }
 
 static void dump_wlan_set_multiple_dtim_usage(void)

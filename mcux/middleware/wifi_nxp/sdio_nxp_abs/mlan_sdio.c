@@ -9,6 +9,7 @@
  */
 
 #include <mlan_sdio_api.h>
+#include <mlan_sdio_defs.h>
 #include <osa.h>
 #include <zephyr/sd/sdio.h>
 
@@ -64,14 +65,143 @@ int sdio_drv_read(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uin
 int sdio_drv_write(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, uint8_t *buf, uint32_t *resp)
 {
     struct sdio_func *func = &g_sdio_funcs[fn];
+    uint32_t sd_retry = 0;
+    uint32_t sd_status = 0;
 
+retry:
     if (sdio_write_addr(func, addr, buf, bcnt * bsize) != 0)
+    {
+        /* issue abort cmd52 command through Fn0 */
+        (void)sdio_drv_creg_write(IO_ABORT, 0, 0x01, &sd_status);
+        /* issue terminate CMD53 */
+        (void)sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, HOST_TERM_CMD53, &sd_status);
+
+        if (sd_retry < MAX_WRITE_IOMEM_RETRY)
+        {
+            sd_retry++;
+            goto retry;
+        }
+        return 0;
+    }
+
+    return 1;
+}
+
+#if CONFIG_TX_RX_ZERO_COPY
+static void *sg_to_net_buf(void *sg_list)
+{
+    sg_dma_list_t *head = (sg_dma_list_t *)sg_list;
+    sg_dma_list_t *node = head;
+    sg_dma_list_t *next = NULL;
+
+    while (node != NULL)
+    {
+        next = node->dataList;
+
+        node->buf.data = (uint8_t *)(void *)node->dataAddr;
+        node->buf.len = node->dataSize;
+        if (next != NULL)
+        {
+            node->buf.frags = &next->buf;
+        }
+        else
+        {
+            node->buf.frags = NULL;
+        }
+
+        node = next;
+    }
+
+    return (void *)&head->buf;
+}
+
+static int sdio_drv_request_sg(uint32_t reg_addr,
+                               uint32_t func,
+                               uint32_t blocks,
+                               uint32_t block_size,
+                               void *buf,
+                               int direction)
+{
+    int ret;
+    struct sdhc_command cmd = {0};
+    struct sdhc_data data = {0};
+
+    ret = k_mutex_lock(&wm_g_sd.lock, K_MSEC(CONFIG_SD_DATA_TIMEOUT));
+    if (ret)
+    {
+        sdio_e("cannot get card lock");
+        return -1;
+    }
+
+    cmd.opcode = SDIO_RW_EXTENDED;
+    cmd.arg = (func << SDIO_CMD_ARG_FUNC_NUM_SHIFT) |
+        ((reg_addr & SDIO_CMD_ARG_REG_ADDR_MASK) << SDIO_CMD_ARG_REG_ADDR_SHIFT);
+    cmd.arg |= (direction == SDIO_IO_WRITE) ? BIT(SDIO_CMD_ARG_RW_SHIFT) : 0;
+    cmd.arg |= BIT(SDIO_EXTEND_CMD_ARG_OP_CODE_SHIFT);
+    cmd.response_type = (SD_RSP_TYPE_R5 | SD_SPI_RSP_TYPE_R5);
+    cmd.timeout_ms = CONFIG_SD_CMD_TIMEOUT;
+    cmd.arg |= BIT(SDIO_EXTEND_CMD_ARG_BLK_SHIFT) | blocks;
+
+    data.block_size = block_size;
+    data.blocks = blocks;
+    data.data = buf;
+    data.timeout_ms = CONFIG_SD_DATA_TIMEOUT;
+    data.is_sg_data = true;
+
+    ret = sdhc_request(sdhc_dev, &cmd, &data);
+    (void)k_mutex_unlock(&wm_g_sd.lock);
+    return ret;
+}
+
+int sdio_drv_read_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list)
+{
+    struct net_buf *buf;
+
+    buf = sg_to_net_buf(sg_list);
+    if (!buf)
+    {
+        return 0;
+    }
+
+    if (sdio_drv_request_sg(addr, fn, bcnt, bsize, (void *)buf, SDIO_IO_READ) != 0)
     {
         return 0;
     }
 
     return 1;
 }
+
+int sdio_drv_write_sg(uint32_t addr, uint32_t fn, uint32_t bcnt, uint32_t bsize, void *sg_list)
+{
+    uint32_t sd_retry = 0;
+    uint32_t sd_status = 0;
+    struct net_buf *buf;
+
+    buf = sg_to_net_buf(sg_list);
+    if (!buf)
+    {
+        return 0;
+    }
+
+retry:
+    if (sdio_drv_request_sg(addr, fn, bcnt, bsize, (void *)buf, SDIO_IO_WRITE) != 0)
+    {
+        /* issue abort cmd52 command through Fn0 */
+        (void)sdio_drv_creg_write(IO_ABORT, 0, 0x01, &sd_status);
+        /* issue terminate CMD53 */
+        (void)sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, HOST_TERM_CMD53, &sd_status);
+
+        if (sd_retry < MAX_WRITE_IOMEM_RETRY)
+        {
+            sd_retry++;
+            goto retry;
+        }
+        return 0;
+    }
+
+    return 1;
+}
+#endif
 
 extern void handle_cdint(int error);
 

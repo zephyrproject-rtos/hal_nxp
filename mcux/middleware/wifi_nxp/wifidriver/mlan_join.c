@@ -1068,7 +1068,9 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
 
     if (IS_SUPPORT_MULTI_BANDS(pmadapter) && (pbss_desc->bss_band & pmpriv->config_bands) &&
         !(ISSUPP_11NENABLED(pmadapter->fw_cap_info) && (!pbss_desc->disable_11n) &&
-          (pmpriv->config_bands & BAND_GN || pmpriv->config_bands & BAND_AN) && (pbss_desc->pht_cap != MNULL)))
+          (((pbss_desc->bss_band == BAND_G) && (pmpriv->config_bands & BAND_GN)) ||
+           ((pbss_desc->bss_band == BAND_A) && (pmpriv->config_bands & BAND_AN)))
+          && (pbss_desc->pht_cap != MNULL)))
     {
         /* Append a channel TLV for the channel the attempted AP was found on */
         pchan_tlv              = (MrvlIEtypes_ChanListParamSet_t *)(void *)pos;
@@ -1190,8 +1192,8 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
     }
 
     if (ISSUPP_11NENABLED(pmadapter->fw_cap_info) && (!pbss_desc->disable_11n) &&
-        (pmpriv->config_bands & BAND_GN || pmpriv->config_bands & BAND_AN) && wmsdk_is_11N_enabled() &&
-        (!pmpriv->sec_info.is_wpa_tkip))
+        wlan_11n_bandconfig_allowed(pmpriv, pbss_desc->bss_band) &&
+        wmsdk_is_11N_enabled() && (!pmpriv->sec_info.is_wpa_tkip))
     {
         (void)wlan_cmd_append_11n_tlv(pmpriv, pbss_desc, &pos);
     }
@@ -1213,9 +1215,11 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
 #endif
 
 #if CONFIG_11AX
-    if ((IS_FW_SUPPORT_11AX(pmadapter)) && (!pbss_desc->disable_11n) &&
+    if ((IS_FW_SUPPORT_11AX(pmadapter)) &&
         wlan_11ax_bandconfig_allowed(pmpriv, pbss_desc->bss_band))
+    {
         wlan_cmd_append_11ax_tlv(pmpriv, pbss_desc, &pos);
+    }
 #endif
 
     (void)wlan_wmm_process_association_req(pmpriv, &pos, &pbss_desc->wmm_ie, pbss_desc->pht_cap);

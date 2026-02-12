@@ -910,7 +910,6 @@ static void test_wlan_set_txratecfg(int argc, char **argv)
 
             rate_setting = (wlan_txrate_setting *)&ds_rate.param.rate_cfg.rate_setting;
 
-#if defined(RW610) || defined(IW610)
             if(ds_rate.param.rate_cfg.rate_setting != 0xffff)
             {
                 if(rate_setting->stbc != 0)
@@ -919,6 +918,7 @@ static void test_wlan_set_txratecfg(int argc, char **argv)
                     (void)PRINTF("This chip does not support STBC\r\n");
                     goto done;
                 }
+#if defined(RW610) || defined(IW610)
                 if(rate_setting->adv_coding != 0)
                 {
                     (void)PRINTF("Invalid coding setting\r\n");
@@ -943,8 +943,19 @@ static void test_wlan_set_txratecfg(int argc, char **argv)
                         goto done;
                     }
                 }
-            }
+#else
+#if CONFIG_11AX || CONFIG_11AC
+                if(rate_setting->bandwidth > MLAN_VHT_BW80)
+#else
+                if(rate_setting->bandwidth > MLAN_HT_BW40)
 #endif
+                {
+                     (void)PRINTF("Invalid BW setting\r\n");
+                     goto done;
+                }
+#endif
+            }
+
             if (ds_rate.param.rate_cfg.rate_format == MLAN_RATE_FORMAT_HE)
             {
                 if (rate_setting->preamble == HE_ER_PREAMBLE)

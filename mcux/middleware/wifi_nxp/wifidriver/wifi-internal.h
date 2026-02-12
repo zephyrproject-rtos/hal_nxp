@@ -94,9 +94,6 @@ typedef struct
 #if !CONFIG_WIFI_RX_REORDER
     void (*data_input_callback)(const uint8_t interface, const uint8_t *buffer, const uint16_t len);
 #endif
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-    void *(*wifi_get_rxbuf_desc)(t_u16 rx_len);
-#endif
     void (*amsdu_data_input_callback)(uint8_t interface, uint8_t *buffer, uint16_t len);
     void (*deliver_packet_above_callback)(void *rxpd, t_u8 interface, t_void *lwip_pbuf);
     bool (*wrapper_net_is_ip_or_ipv6_callback)(const t_u8 *buffer);

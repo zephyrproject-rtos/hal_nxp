@@ -19,7 +19,7 @@
 #include <wifi_events.h>
 #include <wifi.h>
 
-#define WLAN_DRV_VERSION "v1.3.r53.z_up.p2"
+#define WLAN_DRV_VERSION "v1.3.r53.z_up.p3"
 
 #if CONFIG_WPA2_ENTP
 #include <wm_mbedtls_helper_api.h>
@@ -91,7 +91,6 @@ typedef enum
 #define WLAN_RECONNECT_LIMIT CONFIG_MAX_RECONNECT_LIMIT
 
 #define WLAN_11D_SCAN_LIMIT 3U
-/** Minimum length for network names, see \ref wlan_network. */
 #define WLAN_NETWORK_NAME_MIN_LENGTH 1U
 /** Maximum length for network names, see \ref wlan_network */
 #define WLAN_NETWORK_NAME_MAX_LENGTH 32U
@@ -2007,10 +2006,6 @@ struct wlan_network
     uint16_t beacon_period;
     /** DTIM period of associated BSS */
     uint8_t dtim_period;
-#if CONFIG_WIFI_CAPA
-    /** Wi-Fi capabilities of the uAP network 802.11n, 802.11ac or/and 802.11ax */
-    uint8_t wlan_capa;
-#endif
 #if CONFIG_11V
     /** BTM mode */
     uint8_t btm_mode;
@@ -6983,32 +6978,6 @@ void wlan_deregister_net_monitor_user_callback(void);
 int wlan_mgmtframe_tx_cfg(wlan_host_tx_frame_params_t *mgmtframe);
 #endif
 
-#if CONFIG_WIFI_CAPA
-/** Check if Wi-Fi hardware support 802.11n for on 2.4G or 5G bands.
- *
- * \param[in] channel: Channel number.
- *
- * \return true if 802.11n is supported or false if not.
- */
-uint8_t wlan_check_11n_capa(unsigned int channel);
-
-/** Check if Wi-Fi hardware support 802.11ac for on 2.4G or 5G bands.
- *
- * \param[in] channel: Channel number.
- *
- * \return true if 802.11ac is supported or false if not.
- */
-uint8_t wlan_check_11ac_capa(unsigned int channel);
-
-/** Check if Wi-Fi hardware support 802.11ax for on 2.4G or 5G bands.
- *
- * \param[in] channel: Channel number.
- *
- * \return true if 802.11ax is supported or false if not.
- */
-uint8_t wlan_check_11ax_capa(unsigned int channel);
-#endif
-
 #if (CONFIG_IPS)
 /**
  * Config IEEE power save mode (IPS). If the option is 1, the IPS hardware listens to beacon frames after Wi-Fi CPU enters
@@ -7046,6 +7015,11 @@ int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg);
  * \return WM_SUCCESS if successful otherwise return -WM_FAIL.
  */
 int wlan_get_bandcfg(wlan_bandcfg_t *bandcfg);
+
+/**
+ * Re-configure the bandcfg for uAP
+ */
+void wlan_uap_bandcfg_recfg(void);
 
 #if (CONFIG_COMPRESS_TX_PWTBL)
 /**

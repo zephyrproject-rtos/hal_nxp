@@ -246,7 +246,7 @@ retry:
     return pkt;
 }
 #endif
-#if CONFIG_TX_RX_ZERO_COPY
+#if CONFIG_TX_RX_ZERO_COPY && defined(RW610)
 static struct net_pkt *gen_pkt_from_data_for_zerocopy(t_u8 interface, t_u8 *payload, t_u16 datalen)
 {
     struct net_pkt *pkt = NULL;
@@ -295,7 +295,11 @@ retry:
  */
 static mlan_status process_mgmt_packet(t_u8 *data)
 {
-    RxPD *rxpd = (RxPD *)(void *)data;
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+    RxPD *rxpd = (RxPD *)(void *)net_stack_buffer_skip((void *)data, INTF_HEADER_LEN);
+#else
+    RxPD *rxpd = (RxPD *)(void *)((t_u8 *)data + INTF_HEADER_LEN);
+#endif
     struct net_pkt *p = NULL;
     t_u16 plen;
 
@@ -309,9 +313,13 @@ static mlan_status process_mgmt_packet(t_u8 *data)
         return MLAN_STATUS_RESOURCE;
     }
 
-#if (CONFIG_TX_RX_ZERO_COPY) || (FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER)
+#if (CONFIG_TX_RX_ZERO_COPY)
     plen = rxpd->rx_pkt_offset + rxpd->rx_pkt_length + sizeof(mlan_buffer);
+#ifdef RW610
     p = gen_pkt_from_data_for_zerocopy(MLAN_BSS_TYPE_STA, data, plen);
+#else
+    p = (struct net_pkt *)(void *)data;
+#endif
 #else
     plen = rxpd->rx_pkt_offset + rxpd->rx_pkt_length;
     p = gen_pkt_from_data(MLAN_BSS_TYPE_STA, data, plen);
@@ -335,7 +343,11 @@ static mlan_status process_mgmt_packet(t_u8 *data)
 
 static void process_data_packet(const t_u8 *rcvdata, const t_u16 datalen)
 {
-    RxPD *rxpd                   = (RxPD *)(void *)((t_u8 *)rcvdata + INTF_HEADER_LEN);
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+    RxPD *rxpd = (RxPD *)(void *)net_stack_buffer_skip((void *)rcvdata, INTF_HEADER_LEN);
+#else
+    RxPD *rxpd = (RxPD *)(void *)((t_u8 *)rcvdata + INTF_HEADER_LEN);
+#endif
     mlan_bss_type recv_interface = (mlan_bss_type)(rxpd->bss_type);
     t_u16 header_type;
 
@@ -346,6 +358,9 @@ static void process_data_packet(const t_u8 *rcvdata, const t_u16 datalen)
         if (memcmp(mlan_adap->priv[recv_interface]->curr_addr, eth803hdr->dest_addr, MLAN_MAC_ADDR_LENGTH) &&
             ((eth803hdr->dest_addr[0] & 0x01) == 0))
         {
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+            net_stack_buffer_free((void *)rcvdata);
+#endif
             return;
         }
     }
@@ -357,9 +372,12 @@ static void process_data_packet(const t_u8 *rcvdata, const t_u16 datalen)
     }
 
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    mlan_status status = process_mgmt_packet((t_u8 *)rcvdata + INTF_HEADER_LEN);
+    mlan_status status = process_mgmt_packet((t_u8 *)rcvdata);
     if (status != MLAN_STATUS_RESOURCE)
     {
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+        net_stack_buffer_free((void *)rcvdata);
+#endif
         return;
     }
 #endif
@@ -367,8 +385,12 @@ static void process_data_packet(const t_u8 *rcvdata, const t_u16 datalen)
     t_u8 *payload     = (t_u8 *)rxpd + rxpd->rx_pkt_offset;
 #if CONFIG_TX_RX_ZERO_COPY
     t_u16 header_len  = INTF_HEADER_LEN + rxpd->rx_pkt_offset;
+#ifdef RW610
     struct net_pkt *p = gen_pkt_from_data_for_zerocopy(recv_interface, (t_u8 *)rcvdata,
                                                        rxpd->rx_pkt_length + header_len + sizeof(mlan_buffer));
+#else
+    struct net_pkt *p = (struct net_pkt *)(void *)rcvdata;
+#endif
 #else
     struct net_pkt *p = gen_pkt_from_data(recv_interface, payload, rxpd->rx_pkt_length);
 #endif
@@ -1748,3 +1770,124 @@ void net_tx_zerocopy_process_cb(void *destAddr, void *srcAddr, uint32_t len)
 }
 #endif
 
+void *net_stack_buffer_alloc_rx(int offset, int len)
+{
+    struct net_pkt *pkt;
+    struct net_buf *p;
+    size_t alloc_len;
+
+    if (offset > 0)
+    {
+        offset = NAL_SIZE_ALIGN(offset, 32);
+    }
+    alloc_len = len + offset;
+
+    /* set STA iface for now and change it later */
+    pkt = net_pkt_rx_alloc_with_buffer(g_mlan.netif, alloc_len, AF_INET, 0, K_NO_WAIT);
+    if (pkt == NULL)
+    {
+        return NULL;
+    }
+
+    p = (struct net_buf *)NAL_PKT_2_BUF(pkt);
+    while (p != NULL)
+    {
+        if (likely(p->size >= alloc_len))
+        {
+            net_buf_add(p, alloc_len);
+            net_buf_pull(p, offset);
+            break;
+        }
+        else
+        {
+            net_buf_add(p, p->size);
+            net_buf_pull(p, offset);
+            alloc_len -= p->len;
+            offset = 0;
+            p = p->frags;
+        }
+    }
+
+    return pkt;
+}
+
+void *net_stack_buffer_clone_tx_frag(void *pkt, void *p, int offset)
+{
+    struct net_pkt *clone_pkt;
+    struct net_buf *clone_buf;
+    size_t tot_len = NAL_BUF_TOT_LEN(p) + offset;
+    void *payload;
+
+    clone_pkt = net_pkt_alloc_with_buffer(net_pkt_iface(pkt),
+        tot_len, AF_INET, 0, K_NO_WAIT);
+    if (clone_pkt == NULL)
+    {
+        return NULL;
+    }
+
+    clone_buf = clone_pkt->buffer;
+    net_buf_push(clone_buf, net_buf_headroom(clone_buf));
+    clone_buf->len = 0;
+    clone_pkt->cursor.pos = clone_buf->data + offset;
+
+    if (NAL_PKT_2_BUF(pkt) == p)
+    {
+        payload = NAL_PKT_HEAD_ADDR(pkt);
+    }
+    else
+    {
+        payload = NAL_BUF_PAYLOAD(p);
+    }
+
+    while (p != NULL)
+    {
+        net_pkt_write(clone_pkt, payload, NAL_BUF_LEN(p));
+        p = NAL_BUF_NEXT(p);
+        if (p != NULL)
+        {
+            payload = NAL_BUF_PAYLOAD(p);
+        }
+    }
+    net_pkt_cursor_init(clone_pkt);
+    return clone_pkt;
+}
+
+int net_stack_buffer_push(void *p, int len)
+{
+    struct net_pkt *pkt = (struct net_pkt *)p;
+    struct net_buf *buf;
+    uint8_t *new_pos;
+
+    if (!p || len < 0 || pkt->cursor.pos - pkt->cursor.buf->__buf < len)
+    {
+        return -1;
+    }
+
+    buf = pkt->cursor.buf;
+    new_pos = pkt->cursor.pos - len;
+
+    if (new_pos < buf->data)
+    {
+        /* exceed old headroom, add new headroom and move cursor */
+        buf->len += (uintptr_t)(void *)buf->data - (uintptr_t)(void *)new_pos;
+        buf->data = new_pos;
+        pkt->cursor.pos = new_pos;
+    }
+    else
+    {
+        /* not exceed old headroom, only move cursor */
+        pkt->cursor.pos = new_pos;
+    }
+
+    return 0;
+}
+
+void net_stack_buffer_set_iface(void *p, int interface)
+{
+#if CONFIG_WIFI_SOFTAP_SUPPORT
+    if (interface == WLAN_BSS_TYPE_UAP)
+        net_pkt_set_iface((struct net_pkt *)p, g_uap.netif);
+    else
+#endif
+        net_pkt_set_iface((struct net_pkt *)p, g_mlan.netif);
+}

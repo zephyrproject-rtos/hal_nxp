@@ -692,6 +692,7 @@ uint8_t *wifi_wmm_get_outbuf_enh(
     *outbuf_len = 0;
     return MNULL;
 SUCC:
+    memset(buf, 0x0, sizeof(outbuf_t));
     *outbuf_len = OUTBUF_WMM_LEN;
     return (uint8_t *)buf;
 }
@@ -811,6 +812,12 @@ void wifi_wmm_buf_put(outbuf_t *buf)
 #if CONFIG_TX_RX_ZERO_COPY
     /* Free driver's reference count for network buffer */
     net_stack_buffer_free(buf->buffer);
+#if !defined(RW610)
+    if (buf->cache_buffer != NULL)
+    {
+        net_stack_buffer_free(buf->cache_buffer);
+    }
+#endif
 #endif
 
     util_enqueue_list_tail(mlan_adap->pmoal_handle, &mlan_adap->outbuf_pool.free_list, &buf->entry, MNULL, MNULL);

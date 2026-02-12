@@ -54,19 +54,18 @@ static bool wifi_check_11ac_capability(mlan_private *pmpriv, t_u8 band)
     bool enable_11ac        = MFALSE;
 
     ENTER();
-#if CONFIG_WIFI_CAPA
-    if (!pmadapter->usr_dot_11ac_enable)
-    {
-        return enable_11ac;
-    }
-#endif
-    if ((band == BAND_CONFIG_5GHZ) && !(pmadapter->fw_bands & BAND_AAC))
+
+    if ((band == BAND_CONFIG_5GHZ) &&
+        (!(pmadapter->fw_bands & BAND_AAC) ||
+         !(pmpriv->config_bands & BAND_AAC)))
     {
         PRINTM(MCMND, "FW don't support 5G AC\n");
         LEAVE();
         return enable_11ac;
     }
-    if ((band == BAND_CONFIG_ACS_MODE || band == BAND_CONFIG_MANUAL) && !(pmadapter->fw_bands & BAND_GAC))
+    if ((band == BAND_CONFIG_ACS_MODE || band == BAND_CONFIG_MANUAL) &&
+        (!(pmadapter->fw_bands & BAND_GAC) ||
+         !(pmpriv->config_bands & BAND_GAC)))
     {
         PRINTM(MCMND, "FW don't support 2G AC");
         LEAVE();
@@ -168,19 +167,18 @@ static t_u8 wifi_check_11ax_capability(mlan_private *pmpriv, t_u8 band)
     t_u8 enable_11ax        = MFALSE;
 
     ENTER();
-#if CONFIG_WIFI_CAPA
-    if (!pmadapter->usr_dot_11ax_enable)
-    {
-        return enable_11ax;
-    }
-#endif
-    if ((band == BAND_CONFIG_5GHZ) && !(pmadapter->fw_bands & BAND_AAX))
+
+    if ((band == BAND_CONFIG_5GHZ) &&
+        (!(pmadapter->fw_bands & BAND_AAX) ||
+         !(pmpriv->config_bands & BAND_AAX)))
     {
         PRINTM(MCMND, "FW don't support 5G AX\n");
         LEAVE();
         return enable_11ax;
     }
-    if ((band == BAND_CONFIG_ACS_MODE || band == BAND_CONFIG_MANUAL) && !(pmadapter->fw_bands & BAND_GAX))
+    if ((band == BAND_CONFIG_ACS_MODE || band == BAND_CONFIG_MANUAL) &&
+        (!(pmadapter->fw_bands & BAND_GAX) ||
+         !(pmpriv->config_bands & BAND_GAX)))
     {
         PRINTM(MCMND, "FW don't support 2G AX\n");
         LEAVE();
@@ -703,54 +701,76 @@ static int wifi_cmd_uap_config(char *ssid,
 #endif
 #if (CONFIG_UAP_AMPDU_TX) || (CONFIG_UAP_AMPDU_RX)
     bss.param.bss_config.ht_cap_info = wm_wifi.ht_cap_info == 0 ? (t_u16)0x112c : wm_wifi.ht_cap_info;
-    wm_wifi.ht_tx_cfg                = wm_wifi.ht_tx_cfg == 0 ? (t_u16)0x002c : wm_wifi.ht_tx_cfg;
-
-    if (bandwidth == BANDWIDTH_40MHZ
-#if CONFIG_11AC
-        || bandwidth == BANDWIDTH_80MHZ
-#endif
-    )
+    wm_wifi.ht_tx_cfg = wm_wifi.ht_tx_cfg == 0 ? (t_u16)0x002c : wm_wifi.ht_tx_cfg;
+    (void)memcpy((void *)bss.param.bss_config.supported_mcs_set, (const void *)supported_mcs_set,
+                 sizeof(bss.param.bss_config.supported_mcs_set));
+    if (((bss.param.bss_config.band_cfg == BAND_5GHZ) &&
+        (!(pmpriv->config_bands & BAND_AN))) ||
+        ((bss.param.bss_config.band_cfg == BAND_2GHZ) &&
+        (!(pmpriv->config_bands & BAND_GN))))
     {
-        if (ISSUPP_CHANWIDTH40(mlan_adap->hw_dot_11n_dev_cap) != 0U)
+        wm_wifi.ht_tx_cfg = 0;
+        ret = wifi_uap_set_httxcfg_int(wm_wifi.ht_tx_cfg);
+        if (ret != WM_SUCCESS)
         {
-            bss.param.bss_config.ht_cap_info |= MBIT(1);
-            wm_wifi.ht_tx_cfg |= MBIT(1);
-            if (ISSUPP_SHORTGI40(mlan_adap->hw_dot_11n_dev_cap) != 0U)
-            {
-                bss.param.bss_config.ht_cap_info |= MBIT(6);
-                wm_wifi.ht_tx_cfg |= MBIT(6);
-            }
+            wuap_e("Cannot set uAP HT TX Cfg:%x", wm_wifi.ht_tx_cfg);
+            return -WM_E_INVAL;
         }
-    }
-    else if (bandwidth == BANDWIDTH_20MHZ)
-    {
-        wm_wifi.ht_tx_cfg &= ~MBIT(1);
-        wm_wifi.ht_tx_cfg &= ~MBIT(6);
-        bss.param.bss_config.ht_cap_info &= ~MBIT(12);
+        bss.param.bss_config.supported_mcs_set[0] = 0;
+        bss.param.bss_config.supported_mcs_set[4] = 0;
+#ifdef STREAM_2X2
+        bss.param.bss_config.supported_mcs_set[1] = 0;
+#endif
     }
     else
     {
-        /*Do Nothing*/
-    }
+        if (bandwidth == BANDWIDTH_40MHZ
+#if CONFIG_11AC
+            || bandwidth == BANDWIDTH_80MHZ
+#endif
+           )
+        {
+            if (ISSUPP_CHANWIDTH40(mlan_adap->hw_dot_11n_dev_cap) != 0U)
+            {
+                bss.param.bss_config.ht_cap_info |= MBIT(1);
+                wm_wifi.ht_tx_cfg |= MBIT(1);
+                if (ISSUPP_SHORTGI40(mlan_adap->hw_dot_11n_dev_cap) != 0U)
+                {
+                    bss.param.bss_config.ht_cap_info |= MBIT(6);
+                    wm_wifi.ht_tx_cfg |= MBIT(6);
+                }
+            }
+        }
+        else if (bandwidth == BANDWIDTH_20MHZ)
+        {
+            wm_wifi.ht_tx_cfg &= ~MBIT(1);
+            wm_wifi.ht_tx_cfg &= ~MBIT(6);
+            bss.param.bss_config.ht_cap_info &= ~MBIT(12);
+        }
+        else
+        {
+            /*Do Nothing*/
+        }
 
-    if (ISSUPP_RXLDPC(mlan_adap->hw_dot_11n_dev_cap) != 0U)
-    {
-        SETHT_LDPCCODINGCAP(bss.param.bss_config.ht_cap_info);
-        SETHT_LDPCCODINGCAP(wm_wifi.ht_tx_cfg);
-    }
-    ret = wifi_uap_set_httxcfg_int(wm_wifi.ht_tx_cfg);
-    if (ret != WM_SUCCESS)
-    {
-        wuap_e("Cannot set uAP HT TX Cfg:%x", wm_wifi.ht_tx_cfg);
-        return -WM_E_INVAL;
-    }
+        if (ISSUPP_RXLDPC(mlan_adap->hw_dot_11n_dev_cap) != 0U)
+        {
+            SETHT_LDPCCODINGCAP(bss.param.bss_config.ht_cap_info);
+            SETHT_LDPCCODINGCAP(wm_wifi.ht_tx_cfg);
+        }
+        ret = wifi_uap_set_httxcfg_int(wm_wifi.ht_tx_cfg);
+        if (ret != WM_SUCCESS)
+        {
+            wuap_e("Cannot set uAP HT TX Cfg:%x", wm_wifi.ht_tx_cfg);
+            return -WM_E_INVAL;
+        }
 
-    if (!ISSUPP_TXSTBC(mlan_adap->hw_dot_11n_dev_cap))
-        bss.param.bss_config.ht_cap_info &= (~MBIT(7));
-    if (!ISSUPP_RXSTBC(mlan_adap->hw_dot_11n_dev_cap))
-        bss.param.bss_config.ht_cap_info &= (~(MBIT(8) | MBIT(9)));
-    if (!ISSUPP_CHANWIDTH40(mlan_adap->hw_dot_11n_dev_cap))
-        bss.param.bss_config.ht_cap_info &= (~MBIT(12));
+        if (!ISSUPP_TXSTBC(mlan_adap->hw_dot_11n_dev_cap))
+            bss.param.bss_config.ht_cap_info &= (~MBIT(7));
+        if (!ISSUPP_RXSTBC(mlan_adap->hw_dot_11n_dev_cap))
+            bss.param.bss_config.ht_cap_info &= (~(MBIT(8) | MBIT(9)));
+        if (!ISSUPP_CHANWIDTH40(mlan_adap->hw_dot_11n_dev_cap))
+            bss.param.bss_config.ht_cap_info &= (~MBIT(12));
+    }
 
 #if defined(RW610) || defined(IW610)
     /* Set Tx Beam Forming Cap */
@@ -782,8 +802,6 @@ static int wifi_cmd_uap_config(char *ssid,
 #else
     bss.param.bss_config.ampdu_param = 0x03;
 #endif
-    (void)memcpy((void *)bss.param.bss_config.supported_mcs_set, (const void *)supported_mcs_set,
-                 sizeof(bss.param.bss_config.supported_mcs_set));
 #endif
     /*
      * Note that we are leaving htcap info set to zero by default. This
@@ -793,9 +811,10 @@ static int wifi_cmd_uap_config(char *ssid,
     memset(&bss.param.bss_config.wmm_para, 0x00, sizeof(wmm_parameter_t));
 
     memcpy(&bss.param.bss_config.wmm_para.ouitype, wmm_oui, sizeof(wmm_oui));
-#if CONFIG_WIFI_CAPA
-    if (pmpriv->adapter->usr_dot_11n_enable)
-#endif
+	if (((bss.param.bss_config.band_cfg == BAND_5GHZ) &&
+          (pmpriv->config_bands & BAND_AN)) ||
+         ((bss.param.bss_config.band_cfg == BAND_2GHZ) &&
+          (pmpriv->config_bands & BAND_GN)))
     {
         bss.param.bss_config.wmm_para.ouisubtype = 0x01;
         bss.param.bss_config.wmm_para.version    = 0x01;
@@ -990,59 +1009,6 @@ t_u8 wifi_get_sec_channel_offset(unsigned int chan)
 #endif
 
     return chan_offset;
-}
-#endif
-
-#if CONFIG_WIFI_CAPA
-void wifi_uap_config_wifi_capa(uint8_t wlan_capa)
-{
-    if (wlan_capa & WIFI_SUPPORT_LEGACY)
-    {
-        if (wlan_capa & WIFI_SUPPORT_11N)
-        {
-            mlan_adap->usr_dot_11n_enable = MTRUE;
-#if CONFIG_11AC
-            if (wlan_capa & WIFI_SUPPORT_11AC)
-            {
-                mlan_adap->usr_dot_11ac_enable = MTRUE;
-#if CONFIG_11AX
-                if (wlan_capa & WIFI_SUPPORT_11AX)
-                {
-                    mlan_adap->usr_dot_11ax_enable = MTRUE;
-                }
-                else
-                {
-                    mlan_adap->usr_dot_11ax_enable = MFALSE;
-                }
-#endif
-            }
-            else
-#endif
-            {
-#if CONFIG_11AC
-                mlan_adap->usr_dot_11ac_enable = MFALSE;
-#endif
-#if CONFIG_11AX
-                mlan_adap->usr_dot_11ax_enable = MFALSE;
-#endif
-            }
-        }
-        else
-        {
-            mlan_adap->usr_dot_11n_enable = MFALSE;
-#if CONFIG_11AC
-            mlan_adap->usr_dot_11ac_enable = MFALSE;
-#endif
-#if CONFIG_11AX
-            mlan_adap->usr_dot_11ax_enable = MFALSE;
-#endif
-        }
-    }
-    else
-    {
-        wuap_e("Invalid wifi capaibility setting\n");
-    }
-    return;
 }
 #endif
 
@@ -2348,9 +2314,8 @@ static t_void wifi_set_wmm_ies(mlan_private *priv, const t_u8 *ie, int len, mlan
                 {
                     if (total_ie_len == sizeof(IEEEtypes_WmmParameter_t))
                     {
-#if CONFIG_WIFI_CAPA
-                        if (priv->adapter->usr_dot_11n_enable)
-#endif
+                        if (((sys_config->channel > MAX_CHANNELS_BG) && (priv->config_bands & BAND_AN))||
+                             ((sys_config->channel < MAX_CHANNELS_BG)&& (priv->config_bands & BAND_GN)))
                         {
                             /*
                              * Only accept and copy the WMM IE if
@@ -2365,12 +2330,10 @@ static t_void wifi_set_wmm_ies(mlan_private *priv, const t_u8 *ie, int len, mlan
                             /** set uap_host_based_config to true */
                             sys_config->uap_host_based_config = MTRUE;
                         }
-#if CONFIG_WIFI_CAPA
                         else
                         {
                             memset(sys_config->wmm_para.ac_params, 0x00, sizeof(wmm_ac_parameters_t) * MAX_AC_QUEUES);
                         }
-#endif
                     }
                 }
 
@@ -2672,6 +2635,12 @@ static t_u16 wifi_filter_beacon_ies(mlan_private *priv,
                 ext_id = *(pos + 2);
 #if UAP_SUPPORT
 #if CONFIG_11AX
+                if ((ext_id == HE_CAPABILITY || ext_id == HE_OPERATION) && !IS_FW_SUPPORT_11AX(mlan_adap))
+                {
+                    /* Ignore HE-cap and HE-op if FW doesn't support HE */
+                    break;
+                }
+
                 if (ext_id == HE_CAPABILITY)
                 {
                     mlan_ds_11ax_he_cfg he_cfg;
@@ -3607,7 +3576,13 @@ int wifi_nxp_beacon_config(nxp_wifi_ap_info_t *params)
         }
 #endif
 
-        if (params->chan.ht_enabled != 1)
+        if (params->chan.ht_enabled != 1 ||
+            !ISSUPP_11NENABLED(priv->adapter->fw_cap_info) ||
+            ((bandcfg.chanBand == BAND_2GHZ) && !(priv->config_bands & BAND_GN))
+#if CONFIG_5GHz_SUPPORT
+            || ((bandcfg.chanBand == BAND_5GHZ) && !(priv->config_bands & BAND_AN))
+#endif
+           )
         {
             enable_11n = MFALSE;
         }

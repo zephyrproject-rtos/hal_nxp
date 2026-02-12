@@ -4912,9 +4912,9 @@ mlan_status wlan_cmd_bgscan_config(IN mlan_private *pmpriv,
     }
     if (ISSUPP_11NENABLED(pmpriv->adapter->fw_cap_info) && (pmpriv->config_bands & BAND_GN
 #if CONFIG_5GHz_SUPPORT
-                                                            || pmpriv->config_bands & BAND_AN
+        || pmpriv->config_bands & BAND_AN
 #endif
-                                                            ))
+        ))
     {
         pht_cap = (MrvlIETypes_HTCap_t *)tlv;
         (void)__memset(pmadapter, pht_cap, 0, sizeof(MrvlIETypes_HTCap_t));
@@ -4942,11 +4942,11 @@ mlan_status wlan_cmd_bgscan_config(IN mlan_private *pmpriv,
 #endif
 
 #if CONFIG_11AX
-    if (IS_FW_SUPPORT_11AX(pmadapter) && ((pmpriv->config_bands & BAND_GAX)
+    if (IS_FW_SUPPORT_11AX(pmadapter) && (pmpriv->config_bands & BAND_GAX
 #if CONFIG_5GHz_SUPPORT
-                                       || (pmpriv->config_bands & BAND_AAX)
+        || pmpriv->config_bands & BAND_AAX
 #endif
-                                              ))
+        ))
     {
         phe_cap = (MrvlIEtypes_Extension_t *)tlv;
         len     = wlan_fill_he_cap_tlv(pmpriv, pmpriv->config_bands, phe_cap, MFALSE);

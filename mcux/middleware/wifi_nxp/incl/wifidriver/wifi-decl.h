@@ -38,13 +38,6 @@
 #define OWE_TRANS_MODE_OWE 2U
 #endif
 
-#if CONFIG_WIFI_CAPA
-#define WIFI_SUPPORT_11AX   (1 << 3)
-#define WIFI_SUPPORT_11AC   (1 << 2)
-#define WIFI_SUPPORT_11N    (1 << 1)
-#define WIFI_SUPPORT_LEGACY (1 << 0)
-#endif
-
 #if 0
 /** channel_field.flags */
 #define CHANNEL_FLAGS_TURBO                   0x0010

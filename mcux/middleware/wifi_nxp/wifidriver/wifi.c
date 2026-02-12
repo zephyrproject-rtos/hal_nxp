@@ -2023,25 +2023,6 @@ t_u8 wifi_uap_ampdu_rx_enable_per_tid_is_allowed(t_u8 tid)
 }
 #endif /* CONFIG_STA_AMPDU_RX */
 
-#if ((FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER) && FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER > 0U)
-int wifi_register_get_rxbuf_desc_callback(void *(*wifi_get_rxbuf_desc)(t_u16 rx_len))
-{
-    if (wm_wifi.wifi_get_rxbuf_desc != NULL)
-    {
-        return -WM_FAIL;
-    }
-
-    wm_wifi.wifi_get_rxbuf_desc = wifi_get_rxbuf_desc;
-
-    return WM_SUCCESS;
-}
-
-void wifi_deregister_get_rxbuf_desc_callback(void)
-{
-    wm_wifi.wifi_get_rxbuf_desc = NULL;
-}
-#endif
-
 #if !CONFIG_WIFI_RX_REORDER
 int wifi_register_data_input_callback(void (*data_input_callback)(const uint8_t interface,
                                                                   const uint8_t *buffer,
@@ -2761,8 +2742,12 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
 void wifi_is_wpa_supplicant_input(const uint8_t interface, const uint8_t *buffer, const uint16_t len)
 {
     mlan_private *priv           = (mlan_private *)mlan_adap->priv[interface];
-    RxPD *prx_pd                 = (RxPD *)(void *)((t_u8 *)buffer + INTF_HEADER_LEN);
     wlan_mgmt_pkt *pmgmt_pkt_hdr = MNULL;
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+    RxPD *prx_pd = (RxPD *)(void *)net_stack_buffer_skip((void *)buffer, INTF_HEADER_LEN);
+#else
+    RxPD *prx_pd = (RxPD *)(void *)((t_u8 *)buffer + INTF_HEADER_LEN);
+#endif
 
     /* Check if this is mgmt packet and needs to
      * forwarded to app as an event
@@ -2805,57 +2790,40 @@ static t_u8 rfc1042_eth_hdr[MLAN_MAC_ADDR_LENGTH] = {0xaa, 0xaa, 0x03, 0x00, 0x0
 
 static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, const uint16_t len)
 {
+    int ret = WM_SUCCESS;
+#if CONFIG_WPA_SUPP
+    RxPD *prx_pd;
+#endif
 #if !UAP_SUPPORT
     if (interface > MLAN_BSS_ROLE_STA)
     {
         wifi_w("wifi_low_level_input receive UAP packet when UAP not supported");
-        return -WM_FAIL;
+        ret = -WM_FAIL;
+        goto consumed;
     }
 #endif
-#if CONFIG_WPA_SUPP
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    RxPD *prx_pd  = (RxPD *)(void *)((t_u8 *)buffer + INTF_HEADER_LEN);
-    eth_hdr *ethh = MNULL;
-    t_u16 eth_proto;
-    t_u8 offset = 0;
-#endif
-    if (*((t_u16 *)buffer + RX_PKT_TYPE_OFFSET) == PKT_TYPE_MGMT_FRAME)
-    {
-        wifi_is_wpa_supplicant_input(interface, buffer, len);
-        return WM_SUCCESS;
-    }
-
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    ethh = (eth_hdr *)((t_u8 *)prx_pd + prx_pd->rx_pkt_offset);
-
-    eth_proto = mlan_ntohs(ethh->h_proto);
-
-    if (memcmp((t_u8 *)prx_pd + prx_pd->rx_pkt_offset + WIFI_SIZEOF_ETH_HDR, rfc1042_eth_hdr,
-               sizeof(rfc1042_eth_hdr)) == 0U)
-    {
-        eth_llc_hdr *ethllchdr = (eth_llc_hdr *)(void *)((t_u8 *)prx_pd + prx_pd->rx_pkt_offset + WIFI_SIZEOF_ETH_HDR);
-        eth_proto              = mlan_ntohs(ethllchdr->type);
-        offset                 = sizeof(eth_llc_hdr);
-    }
-
-    if (eth_proto == ETH_PROTO_EAPOL)
-    {
-        wifi_wpa_supplicant_eapol_input(interface, ethh->src_addr, (uint8_t *)(ethh + 1) + offset,
-                                        prx_pd->rx_pkt_length - sizeof(eth_hdr) - offset);
-        return WM_SUCCESS;
-    }
-#endif
-#endif
-    if (wifi_rx_status == WIFI_DATA_BLOCK)
-    {
-        wifi_rx_block_cnt++;
-        return WM_SUCCESS;
-    }
-
     if (mlan_adap->ps_state == PS_STATE_SLEEP)
     {
         OSA_RWLockWriteUnlock(&sleep_rwlock);
         mlan_adap->ps_state = PS_STATE_AWAKE;
+    }
+#if CONFIG_WPA_SUPP
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+    prx_pd = (RxPD *)(void *)net_stack_buffer_skip((void *)buffer, INTF_HEADER_LEN);
+#else
+    prx_pd = (RxPD *)(void *)((t_u8 *)buffer + INTF_HEADER_LEN);
+#endif
+
+    if (prx_pd->rx_pkt_type == PKT_TYPE_MGMT_FRAME)
+    {
+        wifi_is_wpa_supplicant_input(interface, buffer, len);
+        goto consumed;
+    }
+#endif
+    if (wifi_rx_status == WIFI_DATA_BLOCK)
+    {
+        wifi_rx_block_cnt++;
+        goto consumed;
     }
 
 #if CONFIG_WIFI_RX_REORDER
@@ -2873,7 +2841,10 @@ static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, 
         p = wm_wifi.gen_pbuf_from_data2(payload, payload_len, &p_payload);
 
         if (p == MNULL)
-            return -WM_FAIL;
+        {
+            ret = -WM_FAIL;
+            goto consumed;
+        }
 
         return wrapper_wlan_handle_rx_packet(len, rxpd, p, p_payload);
     }
@@ -2886,7 +2857,14 @@ static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, 
 
 #endif
 
-    return -WM_FAIL;
+consumed:
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+    if (buffer != NULL)
+    {
+        net_stack_buffer_free((void *)buffer);
+    }
+#endif
+    return ret;
 }
 
 #define ERR_INPROGRESS -5
@@ -3167,7 +3145,9 @@ static mlan_status wifi_xmit_pkts(mlan_private *priv, t_u8 ac, raListTbl *ralist
 #endif
     }
 
+#if !(!defined(RW610) && CONFIG_TX_RX_ZERO_COPY)
     wifi_wmm_buf_put(buf);
+#endif
     priv->wmm.pkts_queued[ac]--;
 
     return MLAN_STATUS_SUCCESS;
@@ -3682,6 +3662,52 @@ int wifi_add_to_bypassq(const t_u8 interface, void *pkt, t_u32 len)
 }
 #endif
 
+#if CONFIG_11AX
+#if CONFIG_TCP_ACK_ENH
+static bool wifi_is_uap_11ac_enabled(mlan_private *pmpriv)
+{
+    bool enabled = MFALSE;
+
+    if (pmpriv->uap_channel > MAX_CHANNELS_BG)
+    {
+        if (pmpriv->config_bands & BAND_AAC)
+        {
+            enabled = MTRUE;
+        }
+    }
+    else
+    {
+        if (pmpriv->config_bands & BAND_GAC)
+        {
+            enabled = MTRUE;
+        }
+    }
+    return enabled;
+}
+
+static bool wifi_is_uap_11ax_enabled(mlan_private *pmpriv)
+{
+    bool enabled = MFALSE;
+
+    if (pmpriv->uap_channel > MAX_CHANNELS_BG)
+    {
+        if (pmpriv->config_bands & BAND_AAX)
+        {
+            enabled = MTRUE;
+        }
+    }
+    else
+    {
+        if (pmpriv->config_bands & BAND_GAX)
+        {
+            enabled = MTRUE;
+        }
+    }
+    return enabled;
+}
+#endif /** CONFIG_TCP_ACK_ENH */
+#endif /** CONFIG_11AX */
+
 int wifi_low_level_output(const t_u8 interface,
                           const t_u8 *sd_buffer,
                           const t_u16 len
@@ -3794,33 +3820,33 @@ int wifi_low_level_output(const t_u8 interface,
         {
             if (wm_wifi.bandwidth == BANDWIDTH_80MHZ)
             {
-                if (mlan_adap->usr_dot_11ax_enable == MTRUE)
+                if (wifi_is_uap_11ax_enabled(pmpriv) == MTRUE)
                 {
                     tx_control = (RATEID_HE_MCS9_1SS_BW80 << 16) | TXPD_TXRATE_ENABLE;
                 }
-                else if (mlan_adap->usr_dot_11ac_enable == MTRUE)
+                else if (wifi_is_uap_11ac_enabled(pmpriv) == MTRUE)
                 {
                     tx_control = (RATEID_VHT_MCS9_1SS_BW80 << 16) | TXPD_TXRATE_ENABLE;
                 }
             }
             else if (wm_wifi.bandwidth == BANDWIDTH_40MHZ)
             {
-                if (mlan_adap->usr_dot_11ax_enable == MTRUE)
+                if (wifi_is_uap_11ax_enabled(pmpriv) == MTRUE)
                 {
                     tx_control = (RATEID_HE_MCS8_1SS_BW40 << 16) | TXPD_TXRATE_ENABLE;
                 }
-                else if (mlan_adap->usr_dot_11ac_enable == MTRUE)
+                else if (wifi_is_uap_11ac_enabled(pmpriv) == MTRUE)
                 {
                     tx_control = (RATEID_VHT_MCS8_1SS_BW40 << 16) | TXPD_TXRATE_ENABLE;
                 }
             }
             else if (wm_wifi.bandwidth == BANDWIDTH_20MHZ)
             {
-                if (mlan_adap->usr_dot_11ax_enable == MTRUE)
+                if (wifi_is_uap_11ax_enabled(pmpriv) == MTRUE)
                 {
                     tx_control = (RATEID_HE_MCS7_1SS_BW20 << 16) | TXPD_TXRATE_ENABLE;
                 }
-                else if (mlan_adap->usr_dot_11ac_enable == MTRUE)
+                else if (wifi_is_uap_11ac_enabled(pmpriv) == MTRUE)
                 {
                     tx_control = (RATEID_VHT_MCS7_1SS_BW20 << 16) | TXPD_TXRATE_ENABLE;
                 }
@@ -3854,7 +3880,11 @@ int wifi_low_level_output(const t_u8 interface,
 
     while (true)
     {
+#if CONFIG_TX_RX_ZERO_COPY && !defined(RW610)
+        i = wlan_xmit_pkt_sg((t_u8 *)sd_buffer, len, interface, tx_control);
+#else
         i = wlan_xmit_pkt((t_u8 *)sd_buffer, len, interface, tx_control);
+#endif
 #if defined(RW610)
         wifi_imu_unlock();
 #else
@@ -3901,6 +3931,17 @@ int wifi_low_level_output(const t_u8 interface,
     }     /* while(true) */
 
     wifi_tx_card_awake_unlock();
+#endif
+
+#if !CONFIG_WMM && CONFIG_TX_RX_ZERO_COPY
+    /* Free driver's reference count for network buffer */
+    net_stack_buffer_free(((outbuf_t *)sd_buffer)->buffer);
+#if !defined(RW610)
+    if (((outbuf_t *)sd_buffer)->cache_buffer)
+    {
+        net_stack_buffer_free(((outbuf_t *)sd_buffer)->cache_buffer);
+    }
+#endif
 #endif
 
 #if CONFIG_STA_AMPDU_TX

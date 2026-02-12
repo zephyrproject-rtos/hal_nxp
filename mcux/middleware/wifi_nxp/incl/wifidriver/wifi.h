@@ -26,10 +26,6 @@
 #endif
 #if defined(SD9177) || defined(IW610) || defined(SD8978)
 #define CONFIG_FW_VDLL     1
-#if !CONFIG_WIFI_CAPA
-#undef CONFIG_WIFI_CAPA
-#define CONFIG_WIFI_CAPA 1
-#endif
 #endif
 
 #include <wifi-decl.h>
@@ -274,14 +270,6 @@ int wifi_register_gen_pbuf_from_data2_callback(void *(*gen_pbuf_from_data2)(t_u8
                                                                             void **p_payload));
 
 void wifi_deregister_gen_pbuf_from_data2_callback(void);
-#endif
-
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-
-int wifi_register_get_rxbuf_desc_callback(void *(*wifi_get_rxbuf_desc)(t_u16 rx_len));
-
-void wifi_deregister_get_rxbuf_desc_callback(void);
-
 #endif
 
 /**
@@ -2050,22 +2038,6 @@ int wifi_uap_stop();
 int wifi_uap_do_acs(const int *freq_list);
 #endif
 
-#if CONFIG_WIFI_CAPA
-/**
- * Set uAP capability
- *
- * User can set uAP capability of 11ax/11ac/11n/legacy. Default is 11ax.
- *
- * @param[in] wlan_capa uAP capability bitmap.
- *                      1111 - 11AX
- *                      0111 - 11AC
- *                      0011 - 11N
- *                      0001 - legacy
- *
- */
-void wifi_uap_config_wifi_capa(uint8_t wlan_capa);
-#endif
-
 int wifi_uap_set_bandwidth(const t_u8 bandwidth);
 
 t_u8 wifi_uap_get_bandwidth();
@@ -2080,7 +2052,5 @@ void wifi_uap_client_assoc(t_u8 *sta_addr, unsigned char is_11n_enabled);
 void wifi_uap_client_deauth(t_u8 *sta_addr);
 #endif
 #endif /* UAP_SUPPORT */
-#if CONFIG_WIFI_CAPA
 void wifi_get_fw_info(mlan_bss_type type, t_u16 *fw_bands);
-#endif
 #endif /* __WIFI_H__ */

@@ -303,17 +303,6 @@ static mlan_status wlan_uap_cmd_ap_config(pmlan_private pmpriv,
         tlv_htcap->ht_cap.ampdu_param = bss->param.bss_config.ampdu_param;
         (void)__memcpy(pmpriv->adapter, tlv_htcap->ht_cap.supported_mcs_set, bss->param.bss_config.supported_mcs_set,
                        16);
-#if CONFIG_WIFI_CAPA
-        /* Disable 802.11n */
-        if (!pmpriv->adapter->usr_dot_11n_enable)
-        {
-            tlv_htcap->ht_cap.supported_mcs_set[0] = 0;
-            tlv_htcap->ht_cap.supported_mcs_set[4] = 0;
-#ifdef STREAM_2X2
-            tlv_htcap->ht_cap.supported_mcs_set[1] = 0;
-#endif
-        }
-#endif
         tlv_htcap->ht_cap.ht_ext_cap = wlan_cpu_to_le16(bss->param.bss_config.ht_ext_cap);
         tlv_htcap->ht_cap.tx_bf_cap  = wlan_cpu_to_le32(bss->param.bss_config.tx_bf_cap);
         tlv_htcap->ht_cap.asel       = bss->param.bss_config.asel;

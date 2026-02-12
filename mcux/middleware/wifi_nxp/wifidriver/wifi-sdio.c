@@ -27,14 +27,11 @@
 #include "sdio.h"
 #include "firmware_dnld.h"
 #include "fwdnld_sdio.h"
+#if CONFIG_TX_RX_ZERO_COPY
+#include "wm_net.h"
+#endif
 
 #define SDIO_COMMAND_RESPONSE_WAIT_MS 20000
-
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-SDK_ALIGN(uint8_t rx_bufs[SDIO_MP_AGGR_DEF_PKT_LIMIT][2 * DATA_BUFFER_SIZE], BOARD_SDMMC_DATA_BUFFER_ALIGN_SIZE);
-
-static size_t num_sg = 0;
-#endif
 
 /* Buffer pointers to point to command and, command response buffer */
 static uint8_t ctrl_cmd_buf[WIFI_FW_CMDBUF_SIZE];
@@ -104,6 +101,746 @@ static uint8_t dev_fw_ver_ext[MLAN_MAX_VER_STR_LEN];
 extern int is_hs_handshake_done;
 extern bool skip_hs_handshake;
 extern void wlan_hs_hanshake_cfg(bool skip);
+#endif
+
+#if CONFIG_TX_RX_ZERO_COPY
+typedef struct _sg_data_list_t {
+    sg_dma_list_t sg_data;
+    t_u32 is_hdr;
+    void* pkt_addr;
+    struct _sg_data_list_t *free_next;
+    t_u32 used;
+} sg_data_list_t;
+
+#define SG_DATA_DMA_DESC_POOL_NUM (16U)
+#define SG_DATA_TX_ALIGN_SIZE (4U)
+#define SG_DATA_RX_ALIGN_SIZE (32U)
+#define SG_DATA_ALIGN(val, align) (((t_u32)(val) + align - 1U) & ~(align - 1U))
+#define SG_DATA_IS_ALIGNED(val, align) (!((t_u32)(val) & (align - 1)))
+
+#define SG_DATA_NEXT(node) ((void *)(((sg_data_list_t *)(node))->sg_data.dataList))
+#define SG_DATA_SET_NEXT(prev, next) \
+    (((sg_data_list_t *)(prev))->sg_data.dataList) = (void *)next
+#define SG_DATA_SIZE(node) (((sg_data_list_t *)(node))->sg_data.dataSize)
+#define SG_DATA_ADDR(node) (((sg_data_list_t *)(node))->sg_data.dataAddr)
+
+sg_data_list_t g_tx_sg_data_free;
+sg_data_list_t g_rx_sg_data_free;
+sg_data_list_t g_tx_sg_data_pool[SG_DATA_DMA_DESC_POOL_NUM];
+sg_data_list_t g_rx_sg_data_pool[SG_DATA_DMA_DESC_POOL_NUM];
+
+sg_data_list_t g_tx_sg_data_head;
+sg_data_list_t *p_tx_sg_data_tail = &g_tx_sg_data_head;
+sg_data_list_t g_rx_sg_data_head;
+sg_data_list_t *p_rx_sg_data_tail = &g_rx_sg_data_head;
+
+#if (CONFIG_NET_BUF_DATA_SIZE % MLAN_SDIO_BLOCK_SIZE)
+#error "SDIO zero copy should work under block aligned net bufsize"
+#endif
+
+static void sg_data_dma_desc_pool_init(void)
+{
+    int i;
+    sg_data_list_t *tx_free = &g_tx_sg_data_free;
+    sg_data_list_t *rx_free = &g_rx_sg_data_free;
+
+    memset(g_tx_sg_data_pool, 0x0, SG_DATA_DMA_DESC_POOL_NUM * sizeof(sg_data_list_t));
+    memset(g_rx_sg_data_pool, 0x0, SG_DATA_DMA_DESC_POOL_NUM * sizeof(sg_data_list_t));
+    for (i = 0; i < SG_DATA_DMA_DESC_POOL_NUM; i++)
+    {
+        tx_free->free_next = &g_tx_sg_data_pool[i];
+        tx_free = &g_tx_sg_data_pool[i];
+        rx_free->free_next = &g_rx_sg_data_pool[i];
+        rx_free = &g_rx_sg_data_pool[i];
+    }
+}
+
+static sg_data_list_t *sg_data_new_tx(void)
+{
+    sg_data_list_t *node = g_tx_sg_data_free.free_next;
+
+    if (node == NULL)
+    {
+        return NULL;
+    }
+
+    assert(node->used == 0);
+    g_tx_sg_data_free.free_next = node->free_next;
+    memset(node, 0x0, sizeof(sg_data_list_t));
+    node->used = 1;
+    return node;
+}
+
+static sg_data_list_t *sg_data_new_rx(void)
+{
+    sg_data_list_t *node = g_rx_sg_data_free.free_next;
+
+    if (node == NULL)
+    {
+        return NULL;
+    }
+
+    assert(node->used == 0);
+    g_rx_sg_data_free.free_next = node->free_next;
+    memset(node, 0x0, sizeof(sg_data_list_t));
+    node->used = 1;
+    return node;
+}
+
+static void sg_data_free_tx(sg_data_list_t *p)
+{
+    assert(p != NULL);
+    assert(p->used == 1);
+
+    p->used = 0;
+    p->free_next = g_tx_sg_data_free.free_next;
+    g_tx_sg_data_free.free_next = p;
+}
+
+static void sg_data_free_rx(sg_data_list_t *p)
+{
+    assert(p != NULL);
+    assert(p->used == 1);
+
+    p->used = 0;
+    p->free_next = g_rx_sg_data_free.free_next;
+    g_rx_sg_data_free.free_next = p;
+}
+
+static void sg_data_enqueue_rx(sg_data_list_t *node)
+{
+    assert(SG_DATA_NEXT(p_rx_sg_data_tail) == NULL);
+
+    if (node == NULL)
+    {
+        return;
+    }
+
+    SG_DATA_SET_NEXT(p_rx_sg_data_tail, node);
+    while (SG_DATA_NEXT(p_rx_sg_data_tail) != NULL)
+    {
+        p_rx_sg_data_tail = SG_DATA_NEXT(p_rx_sg_data_tail);
+    }
+}
+
+#if CONFIG_WMM
+static void sg_data_enqueue_tx(sg_data_list_t *node)
+{
+    assert(SG_DATA_NEXT(p_tx_sg_data_tail) == NULL);
+
+    if (node == NULL)
+    {
+        return;
+    }
+
+    SG_DATA_SET_NEXT(p_tx_sg_data_tail, node);
+    while (SG_DATA_NEXT(p_tx_sg_data_tail) != NULL)
+    {
+        p_tx_sg_data_tail = SG_DATA_NEXT(p_tx_sg_data_tail);
+    }
+}
+#endif
+
+static void sg_data_list_clear_rx(void)
+{
+    sg_data_list_t *cur = SG_DATA_NEXT(&g_rx_sg_data_head);
+    sg_data_list_t *next;
+
+    while (cur != NULL)
+    {
+        next = SG_DATA_NEXT(cur);
+        SG_DATA_SET_NEXT(cur, NULL);
+        if (cur->is_hdr == 1)
+        {
+            net_stack_buffer_free(cur->pkt_addr);
+        }
+        sg_data_free_rx(cur);
+        cur = next;
+    }
+    SG_DATA_SET_NEXT(&g_rx_sg_data_head, NULL);
+    p_rx_sg_data_tail = &g_rx_sg_data_head;
+}
+
+static void sg_data_list_clear_tx(void)
+{
+    sg_data_list_t *cur = SG_DATA_NEXT(&g_tx_sg_data_head);
+    sg_data_list_t *next;
+#if CONFIG_WMM
+    outbuf_t *buf;
+#endif
+
+    while (cur != NULL)
+    {
+        next = SG_DATA_NEXT(cur);
+        SG_DATA_SET_NEXT(cur, NULL);
+#if CONFIG_WMM
+        if (cur->is_hdr == 1)
+        {
+            buf = (outbuf_t *)cur->pkt_addr;
+            wifi_wmm_buf_put(buf);
+        }
+#endif
+        sg_data_free_tx(cur);
+        cur = next;
+    }
+    SG_DATA_SET_NEXT(&g_tx_sg_data_head, NULL);
+    p_tx_sg_data_tail = &g_tx_sg_data_head;
+}
+
+static sg_data_list_t* sg_data_rx_prepare(t_u32 len)
+{
+    void *p;
+    void *pkt;
+    t_u8 retry_cnt = 3;
+    sg_data_list_t *head;
+    sg_data_list_t *node;
+    sg_data_list_t *tail;
+
+retry:
+    /* reserve mlan buffer space */
+    pkt = net_stack_buffer_alloc_rx(sizeof(mlan_buffer), len);
+    if (pkt == NULL)
+    {
+        if (retry_cnt)
+        {
+            retry_cnt--;
+#if defined(IW610)
+            OSA_TaskYield();
+#else
+            OSA_TimeDelay(2);
+#endif
+            goto retry;
+        }
+        wifi_io_d("None RX buf for sg data");
+        return NULL;
+    }
+
+    head = sg_data_new_rx();
+    if (head == NULL)
+    {
+        wifi_io_d("None RX sg data head pkt 0x%x", (t_u32)pkt);
+        goto fail;
+    }
+
+    p = NAL_PKT_2_BUF(pkt);
+
+    SG_DATA_ADDR(head) = (uint32_t *)NAL_BUF_PAYLOAD(p);
+    SG_DATA_SIZE(head) = (uint32_t)NAL_BUF_LEN(p);
+    head->is_hdr = 1;
+    head->pkt_addr = pkt;
+
+    p = NAL_BUF_NEXT(p);
+    tail = head;
+    while (p != NULL)
+    {
+        node = sg_data_new_rx();
+        if (node == NULL)
+        {
+            goto fail;
+        }
+
+        SG_DATA_ADDR(node) = (uint32_t *)NAL_BUF_PAYLOAD(p);
+        SG_DATA_SIZE(node) = NAL_BUF_LEN(p);
+        node->pkt_addr = p;
+        SG_DATA_SET_NEXT(tail, node);
+        tail = node;
+
+        p = NAL_BUF_NEXT(p);
+    }
+    return head;
+
+fail:
+    while (head != NULL)
+    {
+        tail = SG_DATA_NEXT(head);
+        sg_data_free_rx(head);
+        head = tail;
+    }
+
+    if (pkt != NULL)
+    {
+        net_stack_buffer_free(pkt);
+    }
+    return NULL;
+}
+
+static int inbuf_2_sg_data(t_u32 len)
+{
+    sg_data_list_t *pkt_hd = sg_data_rx_prepare(len);
+
+    if (pkt_hd == NULL)
+    {
+        return -WM_E_NOMEM;
+    }
+    sg_data_enqueue_rx(pkt_hd);
+    return WM_SUCCESS;
+}
+
+static void sg_data_rx_deliver(sg_data_list_t *head)
+{
+    void *p = NAL_PKT_2_BUF(head->pkt_addr);
+    RxPD *rxpd;
+    t_u32 len;
+
+    if (wifi_rx_status == WIFI_DATA_BLOCK)
+    {
+        wifi_rx_block_cnt++;
+        net_stack_buffer_free(head->pkt_addr);
+        return;
+    }
+
+    rxpd = (RxPD *)(void *)((t_u8 *)NAL_BUF_PAYLOAD(p) + INTF_HEADER_LEN);
+    len = INTF_HEADER_LEN + rxpd->rx_pkt_offset + rxpd->rx_pkt_length;
+    if (NAL_BUF_TOT_LEN(p) > len)
+    {
+        net_stack_buffer_size_adjust(head->pkt_addr, len);
+    }
+    net_stack_buffer_set_iface(head->pkt_addr, rxpd->bss_type);
+
+    /*
+     * In some cases, wifi_low_level_input dispatches packets like mgmt and eapol,
+     * and needs them to be contiguous.
+     * So we should set RX net stack pool buffer size 2048 bytes to make sure this.
+     *
+     */
+    (void)bus.wifi_low_level_input(rxpd->bss_type, (t_u8 *)head->pkt_addr, len);
+}
+
+static void sg_data_rx_process(void)
+{
+    sg_data_list_t *cur = SG_DATA_NEXT(&g_rx_sg_data_head);
+
+    while (cur != NULL)
+    {
+        if (cur->is_hdr == 1)
+        {
+            sg_data_rx_deliver(cur);
+            /* clear pkt header mark as it is delivered */
+            cur->is_hdr = 0;
+        }
+
+        cur = SG_DATA_NEXT(cur);
+    }
+
+    sg_data_list_clear_rx();
+}
+
+static int sg_data_total_len_tx(sg_data_list_t *hdr)
+{
+    sg_data_list_t *cur = hdr;
+    int sum = 0;
+
+    while (cur != NULL && SG_DATA_SIZE(cur) != 0)
+    {
+        sum += SG_DATA_SIZE(cur);
+        cur = SG_DATA_NEXT(cur);
+    }
+    return sum;
+}
+
+static sg_data_list_t *sg_data_tx_prepare(t_u8 *out_buf)
+{
+    outbuf_t *buf = (outbuf_t *)out_buf;
+    void *pkt = buf->buffer;
+    void *clone_pkt;
+    void *p;
+    void *q;
+    void *prev = NULL;
+    sg_data_list_t *head = NULL;
+    sg_data_list_t *node;
+    sg_data_list_t *tail;
+    t_u32 pkt_len = 0;
+    t_u32 trim;
+    /* 4 bytes align */
+    const t_u32 hdr_size = SG_DATA_ALIGN(INTF_HEADER_LEN + sizeof(TxPD) + ETH_HDR_LEN, SG_DATA_TX_ALIGN_SIZE);
+    void *payload;
+    SDIOPkt *intf_hdr;
+
+    p = NAL_PKT_2_BUF(pkt);
+    payload = NAL_PKT_HEAD_ADDR(pkt);
+
+    /*
+     * 1. skip adding header when it is already in payload, in case this packet is prepared before,
+     * but put back to wmm queue, due to interface queue full.
+     */
+    if (buf->is_hdr_in_payload == 0)
+    {
+        /* 2. add header for interface header, TxPD and ETH header, to save one SG DMA desc */
+        if (net_stack_buffer_push(pkt, hdr_size) == 0)
+        {
+            buf->is_hdr_in_payload = 1;
+        }
+    }
+
+    /* 3. check if address is aligned */
+    trim = ((t_u32)(void *)payload & (SG_DATA_TX_ALIGN_SIZE - 1));
+    if (trim != 0)
+    {
+        if (buf->is_hdr_in_payload)
+        {
+            if (net_stack_buffer_push(pkt, trim) == 0)
+            {
+                /*
+                 * 4a. add header for address alignment. Payload address remains the same.
+                 * So the payload offset needs to increase by added size
+                 */
+                buf->padding_size += trim;
+            }
+            else
+            {
+                /*
+                 * 4b. header in payload and not enough headroom, clone packet with 0 headroom.
+                 * The cloned packet will be 4 bytes aligned by address and length.
+                 * And it will contain hdr_size in payload.
+                 */
+                clone_pkt = net_stack_buffer_clone_tx(pkt, 0);
+                if (clone_pkt == NULL)
+                {
+                    goto fail;
+                }
+                buf->buffer = clone_pkt;
+                net_stack_buffer_free(pkt);
+                pkt = clone_pkt;
+                p = NAL_PKT_2_BUF(pkt);
+            }
+        }
+        else
+        {
+            /*
+             * 4c. header not in payload and not enough headroom, clone packet with hdr_size headroom.
+             * The cloned packet will be 4 bytes aligned by address and length.
+             * And it will contain hdr_size in headroom. So need to add header after clone.
+             */
+            clone_pkt = net_stack_buffer_clone_tx(pkt, hdr_size);
+            if (clone_pkt == NULL)
+            {
+                goto fail;
+            }
+            buf->buffer = clone_pkt;
+            buf->is_hdr_in_payload = 1;
+            net_stack_buffer_free(pkt);
+            pkt = clone_pkt;
+            net_stack_buffer_push(pkt, hdr_size);
+            p = NAL_PKT_2_BUF(pkt);
+        }
+    }
+
+    if (buf->padding_size)
+    {
+        buf->tx_pd.tx_pkt_offset += buf->padding_size;
+        intf_hdr = (SDIOPkt *)(void *)&buf->intf_header[0];
+        intf_hdr->size += buf->padding_size;
+#if CONFIG_WMM
+        buf->padding_size = 0;
+#endif
+    }
+
+    payload = NAL_PKT_HEAD_ADDR(pkt);
+    if (buf->is_hdr_in_payload)
+    {
+        /* 5. always copy hdr in case it is updated  */
+        memcpy(payload, &buf->intf_header[0], INTF_HEADER_LEN + sizeof(TxPD));
+        /* skip alignment padding */
+        memcpy((t_u8 *)payload + INTF_HEADER_LEN + buf->tx_pd.tx_pkt_offset,
+               &buf->eth_header[0], ETH_HDR_LEN);
+    }
+
+    /*
+     * 6. address is aligned, now check if length is aligned.
+     * When length is not aligned, if it is single buffer, ignore and force align
+     * it by extending the length by padding. The padding will be ignored by device.
+     * If it is not single buffer, need to clone packet.
+     */
+    if (NAL_BUF_NEXT(p) != NULL && !SG_DATA_IS_ALIGNED(NAL_BUF_LEN(p), SG_DATA_TX_ALIGN_SIZE))
+    {
+        clone_pkt = net_stack_buffer_clone_tx(pkt, 0);
+        if (clone_pkt == NULL)
+        {
+            goto fail;
+        }
+
+        buf->buffer = clone_pkt;
+        net_stack_buffer_free(pkt);
+        pkt = clone_pkt;
+        p = NAL_PKT_2_BUF(clone_pkt);
+    }
+
+    /* 7. alloc header sg_desc */
+    head = sg_data_new_tx();
+    if (head == NULL)
+    {
+        return NULL;
+    }
+
+    if (buf->is_hdr_in_payload)
+    {
+        /*
+         * 8a. if header in payload, the header sg_desc includes both header and payload.
+         * Then the p cursor can move to next buffer.
+         */
+        SG_DATA_ADDR(head) = (uint32_t *)payload;
+        SG_DATA_SIZE(head) = SG_DATA_ALIGN(NAL_BUF_LEN(p), SG_DATA_TX_ALIGN_SIZE);
+        prev = p;
+        p = NAL_BUF_NEXT(p);
+        if (p != NULL)
+        {
+            payload = NAL_BUF_PAYLOAD(p);
+        }
+    }
+    else
+    {
+        /*
+         * 8b. if net_buf does not have enough headroom for hdr_size,
+         * but payload address and payload size is SG_DATA_SIZE aligned,
+         * so need extra SG DESC to transfer hdr_size sperately.
+         * The header sg_desc includes only header.
+         */
+        SG_DATA_ADDR(head) = (uint32_t *)(void *)&buf->intf_header[0];
+        SG_DATA_SIZE(head) = SG_DATA_ALIGN(hdr_size, SG_DATA_TX_ALIGN_SIZE);
+    }
+
+    /* 9. set the packet header flag and relation to outbuf, to free outbuf after DMA is done */
+    head->is_hdr = 1;
+    head->pkt_addr = (void *)buf;
+    pkt_len = SG_DATA_SIZE(head);
+
+    tail = head;
+
+    /* 10. iterate remaining chained buffers to check if they are aligned by address and length */
+    while (p != NULL)
+    {
+        /*
+         * 11. if address is not aligned, clone packet.
+         * If length is not aligned, and it is not the last chained buffer, clone packet.
+         * If length is not aligned, but it is the last chained buffer, ignore and force align
+         * it with padding. The padding will be ignored by device.
+         */
+        if ((NAL_BUF_NEXT(p) != NULL && !SG_DATA_IS_ALIGNED(NAL_BUF_LEN(p), SG_DATA_TX_ALIGN_SIZE)) ||
+            (!SG_DATA_IS_ALIGNED((t_u32)payload, SG_DATA_TX_ALIGN_SIZE)))
+        {
+            goto clone;
+        }
+
+        node = sg_data_new_tx();
+        if (node == NULL)
+        {
+            goto fail;
+        }
+
+        SG_DATA_ADDR(node) = (uint32_t *)payload;
+        SG_DATA_SIZE(node) = (uint32_t)SG_DATA_ALIGN(NAL_BUF_LEN(p), SG_DATA_TX_ALIGN_SIZE);
+        pkt_len += SG_DATA_SIZE(node);
+
+        SG_DATA_SET_NEXT(tail, node);
+        tail = node;
+        prev = p;
+        p = NAL_BUF_NEXT(p);
+        if (p != NULL)
+        {
+            payload = NAL_BUF_PAYLOAD(p);
+        }
+    }
+
+    /* 12. add sdio block size padding */
+    if ((pkt_len & (MLAN_SDIO_BLOCK_SIZE - 1)) != 0)
+    {
+        SG_DATA_SIZE(tail) += MLAN_SDIO_BLOCK_SIZE - (pkt_len & (MLAN_SDIO_BLOCK_SIZE - 1));
+    }
+    return head;
+
+clone:
+    /*
+     * 13. Use cache_buffer to store the cloned packet, so that we don't affect
+     * original buffer in TCP or other reference buffer case.
+     * If cache_buffer is already set, eg. this packet is already prepared but
+     * put back to queue interface queue full, directly use it without clone again.
+     */
+    /* to improve: only clone unaligned part */
+    if (buf->cache_buffer != NULL)
+    {
+        if (NAL_BUF_TOT_LEN(NAL_PKT_2_BUF(buf->cache_buffer)) == NAL_BUF_TOT_LEN(p))
+        {
+            clone_pkt = buf->cache_buffer;
+            goto skip_alloc;
+        }
+        else
+        {
+            /* error handling */
+            net_stack_buffer_free(buf->cache_buffer);
+        }
+    }
+
+    /* 14. clone from current cursor buffer p, to the last chained buffer */
+    clone_pkt = net_stack_buffer_clone_tx_frag(pkt, p, 0);
+    if (clone_pkt == NULL)
+    {
+        goto fail;
+    }
+
+    /*
+     * 15. if no prev, means current cursor is the first buffer,
+     * replace buffer with cloned buffer.
+     * If there is prev, means current cursor is not the first buffer,
+     * Use cache buffer to store cloned packet, for later free usage.
+     */
+    if (prev == NULL)
+    {
+        buf->buffer = clone_pkt;
+        net_stack_buffer_free(pkt);
+    }
+    else
+    {
+        /*
+         * clone_pkt is transparent for network stack,
+         * it will be freed by driver after SG DMA done.
+         */
+        buf->cache_buffer = clone_pkt;
+    }
+
+    /* 16. make sure cloned buffer is aligned by zero copy default net config */
+skip_alloc:
+    q = NAL_PKT_2_BUF(clone_pkt);
+    payload = NAL_PKT_HEAD_ADDR(clone_pkt);
+    while (q != NULL)
+    {
+        node = sg_data_new_tx();
+        if (node == NULL)
+        {
+            goto fail;
+        }
+
+        SG_DATA_ADDR(node) = (uint32_t *)payload;
+        SG_DATA_SIZE(node) = (uint32_t)SG_DATA_ALIGN(NAL_BUF_LEN(q), SG_DATA_TX_ALIGN_SIZE);
+        pkt_len += SG_DATA_SIZE(node);
+
+        SG_DATA_SET_NEXT(tail, node);
+        tail = node;
+        prev = q;
+        q = NAL_BUF_NEXT(q);
+        if (q != NULL)
+        {
+            payload = NAL_BUF_PAYLOAD(q);
+        }
+    }
+
+    /* 17. add sdio block size padding */
+    if ((pkt_len & (MLAN_SDIO_BLOCK_SIZE - 1)) != 0)
+    {
+        SG_DATA_SIZE(tail) += MLAN_SDIO_BLOCK_SIZE - (pkt_len & (MLAN_SDIO_BLOCK_SIZE - 1));
+    }
+    return head;
+
+fail:
+    while (head != NULL)
+    {
+        tail = SG_DATA_NEXT(head);
+        sg_data_free_tx(head);
+        head = tail;
+    }
+    return NULL;
+}
+
+static mlan_status wifi_send_fw_data_sg(t_u8 *data, t_u32 txlen)
+{
+    t_u32 tx_blocks = 0, buflen = 0;
+    bool ret;
+
+#if CONFIG_WIFI_IND_RESET
+    /* IR is in progress so any data sent during progress should be ignored */
+    if (wifi_ind_reset_in_progress() == true)
+    {
+        return MLAN_STATUS_SUCCESS;
+    }
+#endif
+
+    if (data == NULL || txlen == 0)
+        return MLAN_STATUS_FAILURE;
+
+    w_pkt_d("Data TX SIG: Driver=>FW, len %d", txlen);
+
+    calculate_sdio_write_params(txlen, &tx_blocks, &buflen);
+
+#if CONFIG_WIFI_IO_DEBUG
+    (void)PRINTF("%s: txportno = %d mlan_adap->mp_wr_bitmap: %x\n\r", __func__, txportno, mlan_adap->mp_wr_bitmap);
+#endif /* CONFIG_WIFI_IO_DEBUG */
+    /* Check if the port is available */
+    if (!((1U << txportno) & mlan_adap->mp_wr_bitmap))
+    {
+        /*
+         * fixme: This condition is triggered in legacy as well as
+         * this new code. Check this out later.
+         */
+#if CONFIG_WIFI_IO_DEBUG
+        wifi_io_e(
+            "txportno out of sync txportno "
+            "= (%d) mp_wr_bitmap = (0x%x)",
+            txportno, mlan_adap->mp_wr_bitmap);
+#endif /* CONFIG_WIFI_IO_DEBUG */
+        return MLAN_STATUS_RESOURCE;
+    }
+    else
+    {
+        /* Mark the port number we will use */
+        mlan_adap->mp_wr_bitmap &= ~(1U << txportno);
+    }
+
+    ret = sdio_drv_write_sg(mlan_adap->ioport + txportno, 1, tx_blocks, buflen, (void *)data);
+
+    txportno++;
+    if (txportno == mlan_adap->mp_end_port)
+    {
+#if defined(SD8801)
+        txportno = 1;
+#elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
+        txportno   = 0;
+#endif
+    }
+
+    if (ret == false)
+    {
+        wifi_io_e("sdio_drv_write failed (%d)", ret);
+        return MLAN_STATUS_RESOURCE;
+    }
+    return MLAN_STATUS_SUCCESS;
+}
+
+mlan_status wlan_xmit_pkt_sg(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 tx_control)
+{
+    mlan_status ret;
+    sg_data_list_t *hdr;
+    sg_data_list_t *cur;
+    sg_data_list_t *next;
+
+    wifi_io_info_d("OUT: i/f: %d len: %d", interface, txlen);
+
+    process_pkt_hdrs((void *)(buffer + sizeof(mlan_linked_list)), txlen, interface, 0, tx_control);
+
+    hdr = sg_data_tx_prepare(buffer);
+    if (hdr == NULL)
+    {
+        wifi_io_d("wlan_xmit_pkt no sg_dma_desc");
+        return MLAN_STATUS_FAILURE;
+    }
+
+    txlen = sg_data_total_len_tx(hdr);
+
+    ret = wifi_send_fw_data_sg((void *)hdr, txlen);
+    if (ret != MLAN_STATUS_SUCCESS)
+    {
+        wifi_io_d("wlan_xmit_pkt_sg send fail ret %d", ret);
+    }
+
+    cur = hdr;
+    while (cur != NULL)
+    {
+        next = SG_DATA_NEXT(cur);
+        SG_DATA_SET_NEXT(cur, NULL);
+        sg_data_free_tx(cur);
+        cur = next;
+    }
+
+    return ret;
+}
 #endif
 
 static mlan_status wifi_send_fw_data(t_u8 *data, t_u32 txlen)
@@ -682,13 +1419,65 @@ static mlan_status wlan_decode_rx_packet(t_u8 *pmbuf, t_u32 upld_type)
     return MLAN_STATUS_SUCCESS;
 }
 
-#if 0
-static t_u32 get_ioport(void)
+#if CONFIG_TX_RX_ZERO_COPY
+static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u32 *type, bool aggr)
 {
-    return mlan_adap->ioport;
-}
+    uint32_t resp;
+    int ret;
+    t_u32 blksize = MLAN_SDIO_BLOCK_SIZE;
+    int i = 0;
+
+#if CONFIG_WIFI_IND_RESET
+    /* IR is in progress so any data received during progress should be ignored */
+    if (wifi_ind_reset_in_progress() == true)
+    {
+        return NULL;
+    }
 #endif
 
+    /* cmd, evt or single port data packet */
+    if ((aggr == false) && (port & (CMD_PORT_SLCT | MLAN_SDIO_BYTE_MODE_MASK)))
+    {
+        ret = sdio_drv_read(port, 1, rx_blocks, MLAN_SDIO_BLOCK_SIZE, inbuf, &resp);
+        SDIOPkt *insdiopkt = (SDIOPkt *)(void *)inbuf;
+        *type              = insdiopkt->pkttype;
+
+#if CONFIG_WIFI_IO_DUMP
+        if (insdiopkt->pkttype != 0)
+        {
+            //(void)PRINTF("wlan_read_rcv_packet: DUMP: %d", insdiopkt->pkttype);
+            //dump_hex((t_u8 *)inbuf, rx_blocks * blksize);
+        }
+#endif
+        return inbuf;
+    }
+
+    /* aggregated ports */
+    while (true)
+    {
+        ret = sdio_drv_read_sg(port, 1, rx_blocks, blksize, SG_DATA_NEXT(&g_rx_sg_data_head));
+        *type = MLAN_TYPE_DATA;
+
+        if (aggr && !ret)
+        {
+            PRINTF("sdio mp cmd53 read failed: %d ioport=0x%x retry=%d\r\n", ret, port, i);
+            i++;
+            if (sdio_drv_creg_write(HOST_TO_CARD_EVENT_REG, 1, HOST_TERM_CMD53, &resp) == false)
+            {
+                wifi_d("Set Term cmd53 failed\r\n");
+            }
+            if (i > MAX_READ_IOMEM_RETRY)
+            {
+                wifi_io_e("sdio_drv_read failed (%d)", ret);
+                return NULL;
+            } /* if (i > MAX_READ_IOMEM_RETRY) */
+            continue;
+        } /* if (aggr && !ret) */
+        break;
+    }
+    return inbuf;
+}
+#else
 static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u32 *type, bool aggr)
 {
     t_u32 blksize = MLAN_SDIO_BLOCK_SIZE;
@@ -709,20 +1498,7 @@ static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u3
     while (true)
     {
         /* addr = 0 fn = 1 */
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-        if (aggr == true)
-        {
-            ret = sdio_drv_read_mb(port, 1, rx_blocks, blksize);
-        }
-        else
-        {
-            ret = sdio_drv_read(port, 1, rx_blocks, blksize, inbuf, &resp);
-        }
-#else
-        {
-            ret = sdio_drv_read(port, 1, rx_blocks, blksize, inbuf, &resp);
-        }
-#endif
+        ret = sdio_drv_read(port, 1, rx_blocks, blksize, inbuf, &resp);
         if (aggr && !ret)
         {
             PRINTF("sdio mp cmd53 read failed: %d ioport=0x%x retry=%d\r\n", ret, port, i);
@@ -750,14 +1526,8 @@ static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u3
     }
 #endif
 
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-#if defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
-    if ((aggr == false) && (port & (CMD_PORT_SLCT | MLAN_SDIO_BYTE_MODE_MASK)))
-#endif
-#endif
-    {
-        SDIOPkt *insdiopkt = (SDIOPkt *)(void *)inbuf;
-        *type              = insdiopkt->pkttype;
+    SDIOPkt *insdiopkt = (SDIOPkt *)(void *)inbuf;
+    *type              = insdiopkt->pkttype;
 
 #if CONFIG_WIFI_IO_DUMP
         if (insdiopkt->pkttype != 0)
@@ -766,10 +1536,10 @@ static t_u8 *wlan_read_rcv_packet(t_u32 port, t_u32 rxlen, t_u32 rx_blocks, t_u3
             //dump_hex((t_u8 *)inbuf, rx_blocks * blksize);
         }
 #endif /* CONFIG_WIFI_IO_DUMP */
-    }
 
     return inbuf;
 }
+#endif
 
 static int wlan_get_next_seq_num(void)
 {
@@ -1604,10 +2374,12 @@ int wifi_send_sleep_cfm_cmdbuffer(t_u32 tx_blocks, t_u32 len)
 #if CONFIG_WMM
 
 #if CONFIG_SDIO_MULTI_PORT_TX_AGGR
-static t_u32 buf_block_len = 0;
 static t_u8 start_port     = -1;
 static t_u8 ports          = 0;
+#if !CONFIG_TX_RX_ZERO_COPY
 static t_u8 pkt_cnt        = 0;
+static t_u32 buf_block_len = 0;
+#endif
 
 /**
  *  @brief This function gets available SDIO port for writing data
@@ -1663,6 +2435,137 @@ mlan_status wlan_get_wr_port_data(t_u8 *pport)
     return MLAN_STATUS_SUCCESS;
 }
 
+#if CONFIG_TX_RX_ZERO_COPY
+mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
+{
+    int ret;
+    t_u8 port = 0;
+    sg_data_list_t *hdr;
+    sg_data_list_t *next;
+#if CONFIG_WMM_UAPSD
+    bool last_packet = 0;
+#endif
+
+#if CONFIG_WMM_UAPSD
+    if (mlan_adap->pps_uapsd_mode &&
+        mlan_adap->priv[interface]->wmm_qosinfo &&
+        mlan_adap->priv[interface]->curr_bss_params.wmm_uapsd_enabled &&
+        (wifi_wmm_get_packet_cnt() == ports + 1))
+    {
+        process_pkt_hdrs_flags(&((outbuf_t *)tx_buf)->intf_header[0], MRVDRV_TxPD_POWER_MGMT_LAST_PACKET);
+        last_packet = 1;
+    }
+#endif
+
+    /* prepare adma desc lists */
+    hdr = sg_data_tx_prepare(tx_buf);
+    if (hdr == NULL)
+    {
+#if CONFIG_WMM_UAPSD
+        if (last_packet)
+        {
+            process_pkt_hdrs_flags(&((outbuf_t *)tx_buf)->intf_header[0], 0);
+        }
+#endif
+        return MLAN_STATUS_FAILURE;
+    }
+
+    ret = wlan_get_wr_port_data(&port);
+    if (ret != MLAN_STATUS_SUCCESS)
+    {
+#if CONFIG_WMM_UAPSD
+        if (last_packet)
+        {
+            process_pkt_hdrs_flags(&((outbuf_t *)tx_buf)->intf_header[0], 0);
+        }
+#endif
+        goto fail;
+    }
+
+    sg_data_enqueue_tx(hdr);
+    if (ports == 0)
+    {
+        start_port = port;
+    }
+    ports++;
+
+#if CONFIG_WMM_UAPSD
+    if (last_packet)
+    {
+        mlan_adap->priv[interface]->adapter->tx_lock_flag = MTRUE;
+        OSA_SemaphoreWait((osa_semaphore_handle_t)uapsd_sem, osaWaitForever_c);
+        return MLAN_STATUS_PENDING;
+    }
+#endif
+
+    return MLAN_STATUS_SUCCESS;
+
+fail:
+    while (hdr != NULL)
+    {
+        next = SG_DATA_NEXT(hdr);
+        sg_data_free_tx(hdr);
+        hdr = next;
+    }
+    return MLAN_STATUS_FAILURE;
+}
+
+mlan_status wlan_flush_wmm_pkt(t_u8 pkt_count)
+{
+    bool ret;
+    t_u32 reg = 0;
+    t_u32 tx_blocks = 0;
+    t_u32 blksize = 0;
+    t_u32 buflen = 0;
+#ifndef SD8801
+    t_u32 port_count = 0;
+#endif
+
+#if CONFIG_WIFI_IND_RESET
+    /* IR is in progress so any data sent during progress should be ignored */
+    if (wifi_ind_reset_in_progress() == true)
+    {
+        return MLAN_STATUS_SUCCESS;
+    }
+#endif
+
+    if (pkt_count == 0 || ports == 0)
+        return MLAN_STATUS_SUCCESS;
+
+    if (ports == 1)
+    {
+        reg = mlan_adap->ioport + start_port;
+    }
+    else
+    {
+#if defined(SD8801)
+        reg = (mlan_adap->ioport | SDIO_MPA_ADDR_BASE | (ports << 4)) + start_port;
+#else
+        port_count = ports - 1U;
+        reg = (mlan_adap->ioport | SDIO_MPA_ADDR_BASE | (port_count << 8)) + start_port;
+#endif
+    }
+
+    buflen = sg_data_total_len_tx(SG_DATA_NEXT(&g_tx_sg_data_head));
+
+    calculate_sdio_write_params(buflen, &tx_blocks, &blksize);
+
+    ret = sdio_drv_write_sg(reg, 1, tx_blocks, blksize, SG_DATA_NEXT(&g_tx_sg_data_head));
+
+    ports = 0;
+    /* clear sg list */
+    sg_data_list_clear_tx();
+
+    if (ret != true)
+    {
+        wifi_e("TX sg ret %d", ret);
+        return MLAN_STATUS_RESOURCE;
+    }
+
+    return MLAN_STATUS_SUCCESS;
+}
+
+#else
 static mlan_status wifi_tx_data(t_u8 start_port, t_u8 ports, t_u8 pkt_cnt, t_u32 txlen)
 {
     t_u32 cmd53_port;
@@ -1749,11 +2652,7 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
     if (mlan_adap->priv[interface]->adapter->pps_uapsd_mode &&
         wifi_check_last_packet_indication(mlan_adap->priv[interface]))
     {
-#if CONFIG_TX_RX_ZERO_COPY
-        process_pkt_hdrs_flags(&((outbuf_t *)tx_buf)->intf_header[0], MRVDRV_TxPD_POWER_MGMT_LAST_PACKET);
-#else
         process_pkt_hdrs_flags((t_u8 *)tx_buf, MRVDRV_TxPD_POWER_MGMT_LAST_PACKET);
-#endif
         last_packet = 1;
     }
 #endif
@@ -1763,11 +2662,7 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
         start_port = port;
     }
 
-#if CONFIG_TX_RX_ZERO_COPY
-    net_tx_zerocopy_process_cb(outbuf + buf_block_len, tx_buf, txlen);
-#else
     memcpy(outbuf + buf_block_len, tx_buf, txlen);
-#endif
 
     buf_block_len += tx_blocks * buflen;
 
@@ -1815,6 +2710,7 @@ mlan_status wlan_flush_wmm_pkt(t_u8 pkt_count)
 
     return MLAN_STATUS_SUCCESS;
 }
+#endif
 #else
 extern int retry_attempts;
 
@@ -1859,6 +2755,27 @@ mlan_status wlan_xmit_wmm_pkt(t_u8 interface, t_u32 txlen, t_u8 *tx_buf)
 #endif /* CONFIG_WIFI_IO_DEBUG */
 
 retry_xmit:
+#if CONFIG_TX_RX_ZERO_COPY
+    ret = wlan_xmit_pkt_sg(tx_buf, txlen, interface, 0);
+    if (ret != MLAN_STATUS_SUCCESS)
+    {
+        if (!retry)
+        {
+            ret = MLAN_STATUS_FAILURE;
+            goto exit_fn;
+        }
+        else
+        {
+            retry--;
+            /* Allow the other thread to run and hence
+             * update the write bitmap so that pkt
+             * can be sent to FW */
+            OSA_TimeDelay(1);
+            goto retry_xmit;
+        }
+    }
+    wifi_wmm_buf_put((outbuf_t *)tx_buf);
+#else
     ret = get_free_port();
     if (ret == -WM_FAIL)
     {
@@ -1921,6 +2838,7 @@ retry_xmit:
 #endif
 
     ret = MLAN_STATUS_SUCCESS;
+#endif /* CONFIG_TX_RX_ZERO_COPY */
 
 exit_fn:
 
@@ -2066,6 +2984,9 @@ static t_u32 bitcount(t_u32 num)
 static t_u8 start_check = 0;
 static t_u8 skip_int = 0;
 #endif
+#if CONFIG_TX_RX_ZERO_COPY
+static t_u16 sdrx_memerr_drop;
+#endif
 
 /* returns port number from rd_bitmap. if ctrl port, then it clears
  * the bit and does nothing else
@@ -2086,9 +3007,6 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport, t_u32
     t_u32 cmd53_port = 0;
 #if defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
     t_u32 port_count = 0;
-#endif
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-    uint32_t *rxdataAddr = NULL;
 #endif
 
     *pport    = -1;
@@ -2158,24 +3076,21 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport, t_u32
 #endif
         while ((pmadapter->mp_rd_bitmap & (1U << pmadapter->curr_rd_port)) != 0U)
         {
-            *pport = pmadapter->curr_rd_port;
-
-            len_reg_l = RD_LEN_P0_L + (*pport << 1U);
-            len_reg_u = RD_LEN_P0_U + (*pport << 1U);
+            len_reg_l = RD_LEN_P0_L + (pmadapter->curr_rd_port << 1U);
+            len_reg_u = RD_LEN_P0_U + (pmadapter->curr_rd_port << 1U);
             rx_len    = ((t_u16)pmadapter->mp_regs[len_reg_u]) << 8;
             rx_len |= (t_u16)pmadapter->mp_regs[len_reg_l];
             rx_blocks = (rx_len + MLAN_SDIO_BLOCK_SIZE - 1U) / MLAN_SDIO_BLOCK_SIZE;
             rx_len    = (t_u16)(rx_blocks * MLAN_SDIO_BLOCK_SIZE);
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-            if (wm_wifi.wifi_get_rxbuf_desc != NULL)
+#if CONFIG_TX_RX_ZERO_COPY
+            if (inbuf_2_sg_data(rx_len) != WM_SUCCESS)
             {
-                rxdataAddr = (uint32_t *)wm_wifi.wifi_get_rxbuf_desc(rx_len);
-
-                if (rxdataAddr == NULL)
+                if (pkt_cnt == 0)
                 {
-                    PRINTF("No pbuf\r\n");
-                    break;
+                    /* out of memory, try again next loop */
+                    return MLAN_STATUS_RESOURCE;
                 }
+                break;
             }
 #else
             if ((*rxlen + rx_len) > INBUF_SIZE)
@@ -2184,6 +3099,7 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport, t_u32
             }
 #endif
 
+            *pport = pmadapter->curr_rd_port;
             pmadapter->mp_rd_bitmap &=
 #if defined(SD8801)
                 (t_u16)(~(1 << pmadapter->curr_rd_port));
@@ -2209,13 +3125,6 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport, t_u32
             else
             {
                 ports |= (1 << (pkt_cnt + 1));
-            }
-#endif
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-            if (rxdataAddr)
-            {
-                sg_set_buf(rxdataAddr, rx_len);
-                num_sg++;
             }
 #endif
 
@@ -2296,6 +3205,49 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport, t_u32
     return MLAN_STATUS_SUCCESS;
 }
 
+#if CONFIG_TX_RX_ZERO_COPY
+static mlan_status wlan_get_single_data_rd_port(mlan_adapter *pmadapter, t_u32 *pport, t_u32 *rxlen, t_u32 *rxblocks)
+{
+    t_u32 rx_len;
+
+    if ((pmadapter->mp_rd_bitmap & (1 << pmadapter->curr_rd_port)) != 0U)
+    {
+        t_u32 len_reg_l = RD_LEN_P0_L + (pmadapter->curr_rd_port << 1);
+        t_u32 len_reg_u = RD_LEN_P0_U + (pmadapter->curr_rd_port << 1);
+
+        rx_len = ((t_u16)pmadapter->mp_regs[len_reg_u]) << 8;
+        *rxlen = rx_len |= (t_u16)pmadapter->mp_regs[len_reg_l];
+
+        *rxblocks = (rx_len + MLAN_SDIO_BLOCK_SIZE - 1) / MLAN_SDIO_BLOCK_SIZE;
+        rx_len = (t_u16)((*rxblocks) * MLAN_SDIO_BLOCK_SIZE);
+
+        /* mask rd_bitmap and step curr_port */
+        pmadapter->mp_rd_bitmap &=
+#if defined(SD8801)
+            (t_u16)(~(1 << pmadapter->curr_rd_port));
+#elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
+            (t_u32)(~(1 << pmadapter->curr_rd_port));
+#endif
+        *pport = pmadapter->ioport + pmadapter->curr_rd_port;
+
+        if (++pmadapter->curr_rd_port == MAX_PORT)
+#if defined(SD8801)
+            pmadapter->curr_rd_port = 1;
+#elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
+            pmadapter->curr_rd_port = 0;
+#endif
+    }
+    else
+    {
+        wifi_io_e("wlan_get_single_data_rd_port empty port %d", pmadapter->curr_rd_port);
+        return MLAN_STATUS_FAILURE;
+    }
+
+    wifi_io_d("port=%d mp_rd_bitmap=0x%x -> 0x%x\n", *pport, rd_bitmap, pmadapter->mp_rd_bitmap);
+    return MLAN_STATUS_SUCCESS;
+}
+#endif
+
 /*
  * Assumes that pmadapter->mp_rd_bitmap contains latest values
  */
@@ -2306,6 +3258,22 @@ static mlan_status _handle_sdio_packet_read(mlan_adapter *pmadapter, t_u8 **pack
     bool aggr = false;
 
     mlan_status ret = wlan_get_rd_port(pmadapter, &port, &rx_len, &rx_blocks, &aggr);
+
+#if CONFIG_TX_RX_ZERO_COPY
+    if (ret == MLAN_STATUS_RESOURCE)
+    {
+        /* here we have no net buffer to restore receive packet, so we have to drop it */
+        ret = wlan_get_single_data_rd_port(pmadapter, &port, &rx_len, &rx_blocks);
+        if (ret != MLAN_STATUS_SUCCESS)
+        {
+            return ret;
+        }
+        (void)sdio_drv_read(port, 1, rx_blocks, MLAN_SDIO_BLOCK_SIZE, inbuf, NULL);
+        sdrx_memerr_drop++;
+        wifi_io_d("drop data packet on net packet alloc fail cnt %hu", sdrx_memerr_drop);
+        return MLAN_STATUS_RESOURCE;
+    }
+#endif
 
     /* nothing to read */
     if (ret != MLAN_STATUS_SUCCESS)
@@ -2335,6 +3303,7 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport)
 #elif defined(SD8978) || defined(SD8987) || defined(SD8997) || defined(SD9097) || defined(SD9098) || defined(SD9177) || defined(IW610)
     t_u32 rd_bitmap = pmadapter->mp_rd_bitmap;
 #endif
+    t_u32 rx_len;
 
     wifi_io_d(
         "wlan_get_rd_port: mp_rd_bitmap=0x%x"
@@ -2362,6 +3331,22 @@ static mlan_status wlan_get_rd_port(mlan_adapter *pmadapter, t_u32 *pport)
         /* Data */
         if ((pmadapter->mp_rd_bitmap & (1 << pmadapter->curr_rd_port)) != 0U)
         {
+            t_u32 len_reg_l = RD_LEN_P0_L + (pmadapter->curr_rd_port << 1);
+            t_u32 len_reg_u = RD_LEN_P0_U + (pmadapter->curr_rd_port << 1);
+
+            rx_len = ((t_u16)pmadapter->mp_regs[len_reg_u]) << 8;
+            *rxlen = rx_len |= (t_u16)pmadapter->mp_regs[len_reg_l];
+
+            *rxblocks = (rx_len + MLAN_SDIO_BLOCK_SIZE - 1) / MLAN_SDIO_BLOCK_SIZE;
+            rx_len = (t_u16)((*rxblocks) * MLAN_SDIO_BLOCK_SIZE);
+
+#if CONFIG_TX_RX_ZERO_COPY
+            if (inbuf_2_sg_data(rx_len) != WM_SUCCESS)
+            {
+                return MLAN_STATUS_RESOURCE;
+            }
+#endif
+
             pmadapter->mp_rd_bitmap &=
 #if defined(SD8801)
                 (t_u16)(~(1 << pmadapter->curr_rd_port));
@@ -2416,7 +3401,11 @@ static mlan_status _handle_sdio_packet_read(mlan_adapter *pmadapter, t_u8 **pack
 
     port = mlan_adap->ioport + port;
 
+#if CONFIG_TX_RX_ZERO_COPY
+    *packet = wlan_read_rcv_packet(port, rx_len, rx_blocks, pkt_type, true);
+#else
     *packet = wlan_read_rcv_packet(port, rx_len, rx_blocks, pkt_type, false);
+#endif
 
     if (!*packet)
         return MLAN_STATUS_FAILURE;
@@ -2483,17 +3472,18 @@ static void handle_sdio_packet_read(mlan_adapter *pmadapter)
     while (true)
     {
         t_u32 pkt_type = 0;
-#if !FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
         t_u8 interface;
         t_u32 rx_blocks;
         t_u32 total_size = 0;
         t_u32 size       = 0;
-#endif
         t_u8 *packet     = NULL;
 
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-        num_sg = 0;
-        sg_init_table();
+#if CONFIG_TX_RX_ZERO_COPY
+        if (wifi_rx_status == WIFI_DATA_BLOCK)
+        {
+            wifi_rx_block_cnt++;
+            return;
+        }
 #endif
 
         ret = _handle_sdio_packet_read(pmadapter, &packet, &datalen, &pkt_type);
@@ -2503,37 +3493,37 @@ static void handle_sdio_packet_read(mlan_adapter *pmadapter)
             break;
         }
 
+#if CONFIG_TX_RX_ZERO_COPY
+        if (ret == MLAN_STATUS_RESOURCE)
+        {
+            /* no resource. yield and continue to try again */
+#if defined(IW610)
+            OSA_TaskYield();
+#else
+            OSA_TimeDelay(2);
+#endif
+            continue;
+        }
+#endif
+
         if (pkt_type == MLAN_TYPE_DATA)
         {
-
-#if FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
-            if (num_sg > 0)
+#if CONFIG_TX_RX_ZERO_COPY
+            if (g_rx_sg_data_head.sg_data.dataList != NULL)
             {
-//                extern void net_rx_notify();
 
-//                net_rx_notify();
-                wm_wifi.data_input_callback(0, NULL, 0);
-#if 0
-                for (sg_idx = 0; sg_idx < num_sg; sg_idx++)
+                if (mlan_adap->ps_state == PS_STATE_SLEEP)
                 {
-                    SDIOPkt *insdiopkt = (SDIOPkt *)(void *)rx_bufs[sg_idx];
-                    size               = insdiopkt->size;
-                    pkt_type           = insdiopkt->pkttype;
-
-                    interface = *((t_u8 *)packet + INTF_HEADER_LEN);
-
-                    //PRINTF("IN: i/f: %d len: %d\r\n", interface, size);
-
-                    if (bus.wifi_low_level_input != NULL)
-                    {
-                        (void)bus.wifi_low_level_input(interface, rx_bufs[sg_idx], size);
-                    }
+                    OSA_RWLockWriteUnlock(&sleep_rwlock);
+                    mlan_adap->ps_state = PS_STATE_AWAKE;
                 }
-#endif
+
+                sg_data_rx_process();
             }
-#else
+            else
+#endif
             {
-                while (total_size < datalen)
+		while (total_size < datalen)
                 {
                     SDIOPkt *insdiopkt = (SDIOPkt *)(void *)packet;
                     size               = insdiopkt->size;
@@ -2560,7 +3550,6 @@ static void handle_sdio_packet_read(mlan_adapter *pmadapter)
                     total_size += size;
                 }
             }
-#endif
         }
         else
         {
@@ -2875,6 +3864,9 @@ static mlan_status sd_wifi_preinit(void)
     //		       sd_wifi_ps_cb, NULL);
 
     (void)mlan_subsys_init();
+#if CONFIG_TX_RX_ZERO_COPY
+     sg_data_dma_desc_pool_init();
+#endif
     seqnum   = 0;
     txportno = 0;
     return mlanstatus;
@@ -3048,6 +4040,10 @@ void sd_wifi_deinit(void)
     //	pm_deregister_cb(pm_handle);
 
     // (void)wlan_cmd_shutdown();
+#if CONFIG_TX_RX_ZERO_COPY
+    sg_data_list_clear_rx();
+    sg_data_list_clear_tx();
+#endif
 #if (CONFIG_WIFI_IND_DNLD) && (CONFIG_WIFI_IND_RESET)
     if (wifi_reset_in_progress() == true)
     { /* wifi_reset is based on inband IR, which does not do SDIO device re-enumerate,

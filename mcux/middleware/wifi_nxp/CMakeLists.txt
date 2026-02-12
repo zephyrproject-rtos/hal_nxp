@@ -385,7 +385,11 @@ string(JOIN "" NXP_PORT_NET_FILTER
        ".*\\.nxp_wifi_internal_tx|"
        ".*\\.net_wifi_packet_send|"
        ".*\\.net_stack_buffer_copy_partial|"
-       ".*\\.net_tx_zerocopy_process_cb"
+       ".*\\.net_tx_zerocopy_process_cb|"
+       ".*\\.net_stack_buffer_alloc_rx|"
+       ".*\\.net_stack_buffer_clone_tx_frag|"
+       ".*\\.net_stack_buffer_push|"
+       ".*\\.net_stack_buffer_set_iface"
 )
 
 zephyr_code_relocate(FILES port/net/zephyr/net.c
@@ -490,7 +494,23 @@ string(JOIN "" NXP_WIFIDRIVER_WIFI_SDIO_FILTER
        ".*\\.handle_sdio_cmd_read|"
        ".*\\.handle_sdio_packet_read|"
        ".*\\.wlan_process_int_status|"
-       ".*\\.handle_cdint"
+       ".*\\.handle_cdint|"
+       ".*\\.sg_data_new_tx|"
+       ".*\\.sg_data_new_rx|"
+       ".*\\.sg_data_free_tx|"
+       ".*\\.sg_data_free_rx|"
+       ".*\\.sg_data_enqueue_rx|"
+       ".*\\.sg_data_enqueue_tx|"
+       ".*\\.sg_data_list_clear_rx|"
+       ".*\\.sg_data_list_clear_tx|"
+       ".*\\.sg_data_rx_prepare|"
+       ".*\\.inbuf_2_sg_data|"
+       ".*\\.sg_data_rx_deliver|"
+       ".*\\.sg_data_rx_process|"
+       ".*\\.sg_data_total_len_tx|"
+       ".*\\.sg_data_tx_prepare|"
+       ".*\\.wifi_send_fw_data_sg|"
+       ".*\\.wlan_xmit_pkt_sg"
 )
 
 zephyr_code_relocate(FILES wifidriver/wifi-sdio.c

@@ -15,6 +15,9 @@ Change log:
 #define _MLAN_SDIO_DEFS_H
 
 #include <wifi_config_default.h>
+#if CONFIG_TX_RX_ZERO_COPY
+#include <zephyr/net_buf.h>
+#endif
 
 /** Block mode */
 #define BLOCK_MODE 1
@@ -420,6 +423,19 @@ Change log:
 #define IO_PORT_1_REG 0x79
 /** Host Control Registers : I/O port 2 */
 #define IO_PORT_2_REG 0x7A
+#endif
+
+#define MAX_WRITE_IOMEM_RETRY 10
+#define IO_ABORT 0x06
+
+#if CONFIG_TX_RX_ZERO_COPY
+typedef struct _sg_dma_list
+{
+    uint32_t *dataAddr;
+    uint32_t dataSize;
+    struct _sg_dma_list *dataList;
+    struct net_buf buf;
+} sg_dma_list_t;
 #endif
 
 #endif /* _MLAN_SDIO_DEFS_H */
