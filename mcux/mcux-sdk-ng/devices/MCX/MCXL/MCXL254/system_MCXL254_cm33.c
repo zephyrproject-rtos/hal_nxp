@@ -68,12 +68,14 @@ __attribute__ ((weak)) void SystemInit (void) {
   #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
+#if !defined(__ZEPHYR__)
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
 #else
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
+#endif
 #endif
   SystemInitHook();
 }

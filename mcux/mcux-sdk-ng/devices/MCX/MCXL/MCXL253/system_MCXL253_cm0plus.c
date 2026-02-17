@@ -62,12 +62,14 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 __attribute__ ((weak)) void SystemInit (void) {
 
+#if !defined(__ZEPHYR__)
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
 #else
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
+#endif
 #endif
   SystemInitHook();
 }
