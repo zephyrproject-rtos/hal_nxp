@@ -318,6 +318,7 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Clear the channel enable bits until do a send/receive */
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
 #if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    assert(FSL_FEATURE_SAI_FIFO_COUNTn(base) != -1);
     uint32_t tempCount = (uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - saiConfig->fifo.fifoWatermark;
     if (tempCount > UINT8_MAX)
     {
