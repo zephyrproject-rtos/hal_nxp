@@ -795,6 +795,8 @@
 #define FSL_FEATURE_NETC_HAS_PORT_PSRCR (1)
 /* @brief NXP Switch port group support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PGCR (1)
+/* @brief SG_DROP_COUNT value in the Ingress Stream Count STSE_DATA response begins at an incorrect bit offset, causing it to be read incorrectly. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052134 (0)
 
 /* PDM module features */
 

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC_GENERAL_REG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -201,12 +201,26 @@ typedef struct {
   __I  uint32_t SBMR2;                             /**< SRC Boot Mode Register 2, offset: 0x44 */
        uint8_t RESERVED_4[8];
   __IO uint32_t SRSR;                              /**< SRC Reset Status Register, offset: 0x50 */
-       uint8_t RESERVED_5[60];
+  __IO uint32_t GPR1;                              /**< SRC General Purpose Register 1, offset: 0x54 */
+  __IO uint32_t GPR2;                              /**< SRC General Purpose Register 2, offset: 0x58 */
+  __IO uint32_t GPR3;                              /**< SRC General Purpose Register 3, offset: 0x5C */
+  __IO uint32_t GPR4;                              /**< SRC General Purpose Register 4, offset: 0x60 */
+  __IO uint32_t GPR5;                              /**< SRC General Purpose Register 5, offset: 0x64 */
+  __IO uint32_t GPR6;                              /**< SRC General Purpose Register 6, offset: 0x68 */
+  __IO uint32_t GPR7;                              /**< SRC General Purpose Register 7, offset: 0x6C */
+  __IO uint32_t GPR8;                              /**< SRC General Purpose Register 8, offset: 0x70 */
+  __IO uint32_t GPR9;                              /**< SRC General Purpose Register 9, offset: 0x74 */
+  __IO uint32_t GPR10;                             /**< SRC General Purpose Register 10, offset: 0x78 */
+  __IO uint32_t GPR11;                             /**< SRC General Purpose Register 11, offset: 0x7C */
+  __IO uint32_t GPR12;                             /**< SRC General Purpose Register 12, offset: 0x80 */
+  __IO uint32_t GPR13;                             /**< SRC General Purpose Register 13, offset: 0x84 */
+  __IO uint32_t GPR14;                             /**< SRC General Purpose Register 14, offset: 0x88 */
+  __IO uint32_t GPR15;                             /**< SRC General Purpose Register 15, offset: 0x8C */
   __IO uint32_t GPR16;                             /**< SRC General Purpose Register 16, offset: 0x90 */
   __IO uint32_t GPR17;                             /**< SRC General Purpose Register 17, offset: 0x94 */
   __IO uint32_t GPR18;                             /**< SRC General Purpose Register 18, offset: 0x98 */
   __IO uint32_t GPR19;                             /**< SRC General Purpose Register 19, offset: 0x9C */
-       uint8_t RESERVED_6[96];
+       uint8_t RESERVED_5[96];
   __IO uint32_t GPR20;                             /**< SRC General Purpose Register 20, offset: 0x100 */
   __IO uint32_t CM_QUIESCE;                        /**< SRC_CORTEX_M_QUIESCE, offset: 0x104 */
   __IO uint32_t COLD_RESET_SSAR_ACK_CTRL;          /**< Cold reset SSAR acknowledge control, offset: 0x108 */
@@ -970,6 +984,141 @@ typedef struct {
 #define SRC_GENERAL_REG_SRSR_A55PMIX_RST(x)      (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_SRSR_A55PMIX_RST_SHIFT)) & SRC_GENERAL_REG_SRSR_A55PMIX_RST_MASK)
 /*! @} */
 
+/*! @name GPR1 - SRC General Purpose Register 1 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR1_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR1_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR1_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR1_GPR_SHIFT)) & SRC_GENERAL_REG_GPR1_GPR_MASK)
+/*! @} */
+
+/*! @name GPR2 - SRC General Purpose Register 2 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR2_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR2_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR2_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR2_GPR_SHIFT)) & SRC_GENERAL_REG_GPR2_GPR_MASK)
+/*! @} */
+
+/*! @name GPR3 - SRC General Purpose Register 3 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR3_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR3_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR3_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR3_GPR_SHIFT)) & SRC_GENERAL_REG_GPR3_GPR_MASK)
+/*! @} */
+
+/*! @name GPR4 - SRC General Purpose Register 4 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR4_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR4_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR4_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR4_GPR_SHIFT)) & SRC_GENERAL_REG_GPR4_GPR_MASK)
+/*! @} */
+
+/*! @name GPR5 - SRC General Purpose Register 5 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR5_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR5_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR5_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR5_GPR_SHIFT)) & SRC_GENERAL_REG_GPR5_GPR_MASK)
+/*! @} */
+
+/*! @name GPR6 - SRC General Purpose Register 6 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR6_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR6_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR6_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR6_GPR_SHIFT)) & SRC_GENERAL_REG_GPR6_GPR_MASK)
+/*! @} */
+
+/*! @name GPR7 - SRC General Purpose Register 7 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR7_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR7_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR7_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR7_GPR_SHIFT)) & SRC_GENERAL_REG_GPR7_GPR_MASK)
+/*! @} */
+
+/*! @name GPR8 - SRC General Purpose Register 8 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR8_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR8_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR8_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR8_GPR_SHIFT)) & SRC_GENERAL_REG_GPR8_GPR_MASK)
+/*! @} */
+
+/*! @name GPR9 - SRC General Purpose Register 9 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR9_GPR_MASK            (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR9_GPR_SHIFT           (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR9_GPR(x)              (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR9_GPR_SHIFT)) & SRC_GENERAL_REG_GPR9_GPR_MASK)
+/*! @} */
+
+/*! @name GPR10 - SRC General Purpose Register 10 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR10_GPR_MASK           (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR10_GPR_SHIFT          (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR10_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR10_GPR_SHIFT)) & SRC_GENERAL_REG_GPR10_GPR_MASK)
+/*! @} */
+
+/*! @name GPR11 - SRC General Purpose Register 11 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR11_GPR_MASK           (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR11_GPR_SHIFT          (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR11_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR11_GPR_SHIFT)) & SRC_GENERAL_REG_GPR11_GPR_MASK)
+/*! @} */
+
+/*! @name GPR12 - SRC General Purpose Register 12 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR12_GPR_MASK           (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR12_GPR_SHIFT          (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR12_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR12_GPR_SHIFT)) & SRC_GENERAL_REG_GPR12_GPR_MASK)
+/*! @} */
+
+/*! @name GPR13 - SRC General Purpose Register 13 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR13_GPR_MASK           (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR13_GPR_SHIFT          (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR13_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR13_GPR_SHIFT)) & SRC_GENERAL_REG_GPR13_GPR_MASK)
+/*! @} */
+
+/*! @name GPR14 - SRC General Purpose Register 14 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR14_GPR_MASK           (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR14_GPR_SHIFT          (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR14_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR14_GPR_SHIFT)) & SRC_GENERAL_REG_GPR14_GPR_MASK)
+/*! @} */
+
+/*! @name GPR15 - SRC General Purpose Register 15 */
+/*! @{ */
+
+#define SRC_GENERAL_REG_GPR15_GPR_MASK           (0xFFFFFFFFU)
+#define SRC_GENERAL_REG_GPR15_GPR_SHIFT          (0U)
+/*! GPR - General Purpose */
+#define SRC_GENERAL_REG_GPR15_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR15_GPR_SHIFT)) & SRC_GENERAL_REG_GPR15_GPR_MASK)
+/*! @} */
+
 /*! @name GPR16 - SRC General Purpose Register 16 */
 /*! @{ */
 
@@ -1009,10 +1158,41 @@ typedef struct {
 /*! @name GPR20 - SRC General Purpose Register 20 */
 /*! @{ */
 
-#define SRC_GENERAL_REG_GPR20_GPR_MASK           (0xFFFFFFFFU)
-#define SRC_GENERAL_REG_GPR20_GPR_SHIFT          (0U)
-/*! GPR - General Purpose */
-#define SRC_GENERAL_REG_GPR20_GPR(x)             (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR20_GPR_SHIFT)) & SRC_GENERAL_REG_GPR20_GPR_MASK)
+#define SRC_GENERAL_REG_GPR20_ANAMIX_REF_SEL_MASK (0x60U)
+#define SRC_GENERAL_REG_GPR20_ANAMIX_REF_SEL_SHIFT (5U)
+/*! ANAMIX_REF_SEL - ANAMIX reference clock select
+ *  0b00..OSC24M
+ *  0b01..CLKIN1
+ *  0b10..CLKIN2
+ *  0b11..Reserved
+ */
+#define SRC_GENERAL_REG_GPR20_ANAMIX_REF_SEL(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR20_ANAMIX_REF_SEL_SHIFT)) & SRC_GENERAL_REG_GPR20_ANAMIX_REF_SEL_MASK)
+
+#define SRC_GENERAL_REG_GPR20_CCM_24MCLK_SEL_MASK (0x180U)
+#define SRC_GENERAL_REG_GPR20_CCM_24MCLK_SEL_SHIFT (7U)
+/*! CCM_24MCLK_SEL - ANAMIX reference clock select
+ *  0b00..OSC24M
+ *  0b01..CLKIN1
+ *  0b10..CLKIN2
+ *  0b11..CLKIN1 or CLKIN2
+ */
+#define SRC_GENERAL_REG_GPR20_CCM_24MCLK_SEL(x)  (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR20_CCM_24MCLK_SEL_SHIFT)) & SRC_GENERAL_REG_GPR20_CCM_24MCLK_SEL_MASK)
+
+#define SRC_GENERAL_REG_GPR20_CLKIN1_ENABLE_MASK (0x200U)
+#define SRC_GENERAL_REG_GPR20_CLKIN1_ENABLE_SHIFT (9U)
+/*! CLKIN1_ENABLE - CLKIN1 input buffer enable
+ *  0b0..Input buffer disable
+ *  0b1..Input buffer enabled. Needed to enable CLKIN1 as an input.
+ */
+#define SRC_GENERAL_REG_GPR20_CLKIN1_ENABLE(x)   (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR20_CLKIN1_ENABLE_SHIFT)) & SRC_GENERAL_REG_GPR20_CLKIN1_ENABLE_MASK)
+
+#define SRC_GENERAL_REG_GPR20_CLKIN2_ENABLE_MASK (0x400U)
+#define SRC_GENERAL_REG_GPR20_CLKIN2_ENABLE_SHIFT (10U)
+/*! CLKIN2_ENABLE - CLKIN2 input buffer enable
+ *  0b0..Input buffer disable
+ *  0b1..Input buffer enabled. Needed to enable CLKIN2 as an input.
+ */
+#define SRC_GENERAL_REG_GPR20_CLKIN2_ENABLE(x)   (((uint32_t)(((uint32_t)(x)) << SRC_GENERAL_REG_GPR20_CLKIN2_ENABLE_SHIFT)) & SRC_GENERAL_REG_GPR20_CLKIN2_ENABLE_MASK)
 /*! @} */
 
 /*! @name CM_QUIESCE - SRC_CORTEX_M_QUIESCE */

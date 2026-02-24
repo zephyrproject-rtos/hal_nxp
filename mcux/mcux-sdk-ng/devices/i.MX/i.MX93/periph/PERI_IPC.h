@@ -66,7 +66,7 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251112
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for IPC

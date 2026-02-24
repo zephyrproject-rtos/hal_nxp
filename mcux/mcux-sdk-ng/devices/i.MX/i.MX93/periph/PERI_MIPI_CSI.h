@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIPI_CSI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -233,7 +233,31 @@ typedef struct {
   __I  uint32_t INT_ST_IPI_FATAL;                  /**< Fatal Interruption Caused by IPI Interface, offset: 0x140 */
   __IO uint32_t INT_MSK_IPI_FATAL;                 /**< Mask for Fatal Interruption Caused by IPI Interface, offset: 0x144 */
   __IO uint32_t INT_FORCE_IPI_FATAL;               /**< Force for Fatal Interruption Caused by IPI Interface, offset: 0x148 */
-       uint8_t RESERVED_8[436];
+       uint8_t RESERVED_8[308];
+  __I  uint32_t INT_ST_BNDRY_FRAME_FATAL;          /**< Fatal Interruption Caused by Frame Boundaries, offset: 0x280 */
+  __IO uint32_t INT_MSK_BNDRY_FRAME_FATAL;         /**< Mask for Fatal Interruption Caused by Frame Boundaries, offset: 0x284 */
+  __IO uint32_t INT_FORCE_BNDRY_FRAME_FATAL;       /**< Force for Fatal Interruption Caused by Frame Boundaries, offset: 0x288 */
+       uint8_t RESERVED_9[4];
+  __I  uint32_t INT_ST_SEQ_FRAME_FATAL;            /**< Fatal Interruption Caused by Frame Sequence, offset: 0x290 */
+  __IO uint32_t INT_MSK_SEQ_FRAME_FATAL;           /**< Mask for Fatal Interruption Caused by Frame Sequence, offset: 0x294 */
+  __IO uint32_t INT_FORCE_SEQ_FRAME_FATAL;         /**< Force for Fatal Interruption Caused by Frame Sequence, offset: 0x298 */
+       uint8_t RESERVED_10[4];
+  __I  uint32_t INT_ST_CRC_FRAME_FATAL;            /**< Fatal Interruption Caused by Frame CRC, offset: 0x2A0 */
+  __IO uint32_t INT_MSK_CRC_FRAME_FATAL;           /**< Mask for Fatal Interruption Caused by Frame CRC, offset: 0x2A4 */
+  __IO uint32_t INT_FORCE_CRC_FRAME_FATAL;         /**< Force for Fatal Interruption Caused by Frame CRC, offset: 0x2A8 */
+       uint8_t RESERVED_11[4];
+  __I  uint32_t INT_ST_PLD_CRC_FATAL;              /**< Fatal Interruption Caused by Payload CRC, offset: 0x2B0 */
+  __IO uint32_t INT_MSK_PLD_CRC_FATAL;             /**< Mask for Fatal Interruption Caused by Payload CRC, offset: 0x2B4 */
+  __IO uint32_t INT_FORCE_PLD_CRC_FATAL;           /**< Force for Fatal Interruption Caused by Payload CRC, offset: 0x2B8 */
+       uint8_t RESERVED_12[4];
+  __I  uint32_t INT_ST_DATA_ID;                    /**< Interruption Caused by Data Type, offset: 0x2C0 */
+  __IO uint32_t INT_MSK_DATA_ID;                   /**< Mask for Interruption Caused by Data Type, offset: 0x2C4 */
+  __IO uint32_t INT_FORCE_DATA_ID;                 /**< Force for Interruption Caused by Data Type, offset: 0x2C8 */
+       uint8_t RESERVED_13[4];
+  __I  uint32_t INT_ST_ECC_CORRECTED;              /**< Interruption Caused by Header Single Bit Errors, offset: 0x2D0 */
+  __IO uint32_t INT_MSK_ECC_CORRECTED;             /**< Mask for Interruption Caused by Header Single Bit Errors, offset: 0x2D4 */
+  __IO uint32_t INT_FORCE_ECC_CORRECTED;           /**< Force for Interruption Caused by Header Single Bit Errors, offset: 0x2D8 */
+       uint8_t RESERVED_14[36];
   __IO uint32_t SCRAMBLING;                        /**< Data De-Scrambling, offset: 0x300 */
   __IO uint32_t SCRAMBLING_SEED1;                  /**< De-scrambler Seed for Lane 1, offset: 0x304 */
   __IO uint32_t SCRAMBLING_SEED2;                  /**< De-scrambler Seed for Lane 2, offset: 0x308 */
@@ -253,7 +277,7 @@ typedef struct {
 
 #define MIPI_CSI_VERSION_version_MASK            (0xFFFFFFFFU)
 #define MIPI_CSI_VERSION_version_SHIFT           (0U)
-/*! version - Indicates the version of the mipi_csi2_host. */
+/*! version - Indicates the version of the MIPI_CSI2 host. */
 #define MIPI_CSI_VERSION_version(x)              (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_VERSION_version_SHIFT)) & MIPI_CSI_VERSION_version_MASK)
 /*! @} */
 
@@ -280,7 +304,7 @@ typedef struct {
 
 #define MIPI_CSI_CSI2_RESETN_csi2_resetn_MASK    (0x1U)
 #define MIPI_CSI_CSI2_RESETN_csi2_resetn_SHIFT   (0U)
-/*! csi2_resetn - mipi_csi2_host reset output. */
+/*! csi2_resetn - MIPI_CSI2 host reset output. */
 #define MIPI_CSI_CSI2_RESETN_csi2_resetn(x)      (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_CSI2_RESETN_csi2_resetn_SHIFT)) & MIPI_CSI_CSI2_RESETN_csi2_resetn_MASK)
 /*! @} */
 
@@ -289,52 +313,52 @@ typedef struct {
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_phy_fatal_MASK (0x1U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_phy_fatal_SHIFT (0U)
-/*! status_int_phy_fatal - Status of int_st_phy_fatal. */
+/*! status_int_phy_fatal - Status of Fatal Interrupt caused by PHY */
 #define MIPI_CSI_INT_ST_MAIN_status_int_phy_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_phy_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_phy_fatal_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_pkt_fatal_MASK (0x2U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_pkt_fatal_SHIFT (1U)
-/*! status_int_pkt_fatal - Status of int_st_pkt_fatal. */
+/*! status_int_pkt_fatal - Status of Fatal Interrupt caused during Packet Construction. */
 #define MIPI_CSI_INT_ST_MAIN_status_int_pkt_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_pkt_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_pkt_fatal_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_bndry_frame_fatal_MASK (0x4U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_bndry_frame_fatal_SHIFT (2U)
-/*! status_int_bndry_frame_fatal - Status of int_st_bndry_frame_fatal. */
+/*! status_int_bndry_frame_fatal - Status of Fatal Interrupt caused by Frame Boundaries */
 #define MIPI_CSI_INT_ST_MAIN_status_int_bndry_frame_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_bndry_frame_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_bndry_frame_fatal_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_seq_frame_fatal_MASK (0x8U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_seq_frame_fatal_SHIFT (3U)
-/*! status_int_seq_frame_fatal - Status of status_int_seq_frame_fatal. */
+/*! status_int_seq_frame_fatal - Status of Interrupt caused by Frame Sequence */
 #define MIPI_CSI_INT_ST_MAIN_status_int_seq_frame_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_seq_frame_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_seq_frame_fatal_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_crc_frame_fatal_MASK (0x10U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_crc_frame_fatal_SHIFT (4U)
-/*! status_int_crc_frame_fatal - Status of status_int_crc_frame_fatal. */
+/*! status_int_crc_frame_fatal - Status of Fatal Interrupt caused by Frame CRC */
 #define MIPI_CSI_INT_ST_MAIN_status_int_crc_frame_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_crc_frame_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_crc_frame_fatal_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_pld_crc_fatal_MASK (0x20U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_pld_crc_fatal_SHIFT (5U)
-/*! status_int_pld_crc_fatal - Status of status_int_pld_crc_fatal. */
+/*! status_int_pld_crc_fatal - Status of Fatal Interrupt caused by Payload CRC */
 #define MIPI_CSI_INT_ST_MAIN_status_int_pld_crc_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_pld_crc_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_pld_crc_fatal_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_data_id_MASK (0x40U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_data_id_SHIFT (6U)
-/*! status_int_data_id - Status of status_int_data_id. */
+/*! status_int_data_id - Status of Interrupt caused by Data Type */
 #define MIPI_CSI_INT_ST_MAIN_status_int_data_id(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_data_id_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_data_id_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_ecc_corrected_MASK (0x80U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_ecc_corrected_SHIFT (7U)
-/*! status_int_ecc_corrected - Status of status_int_ecc_corrected. */
+/*! status_int_ecc_corrected - Status of Interrupt caused by header error detected and corrected */
 #define MIPI_CSI_INT_ST_MAIN_status_int_ecc_corrected(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_ecc_corrected_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_ecc_corrected_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_phy_MASK (0x10000U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_phy_SHIFT (16U)
-/*! status_int_phy - Status of int_st_phy. */
+/*! status_int_phy - Status of Interrupt caused by PHY */
 #define MIPI_CSI_INT_ST_MAIN_status_int_phy(x)   (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_phy_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_phy_MASK)
 
 #define MIPI_CSI_INT_ST_MAIN_status_int_ipi_fatal_MASK (0x40000U)
 #define MIPI_CSI_INT_ST_MAIN_status_int_ipi_fatal_SHIFT (18U)
-/*! status_int_ipi_fatal - Status of int_st_ipi_fatal */
+/*! status_int_ipi_fatal - Status of Fatal Interrupt caused by IPI Interrupt */
 #define MIPI_CSI_INT_ST_MAIN_status_int_ipi_fatal(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_MAIN_status_int_ipi_fatal_SHIFT)) & MIPI_CSI_INT_ST_MAIN_status_int_ipi_fatal_MASK)
 /*! @} */
 
@@ -870,20 +894,10 @@ typedef struct {
 /*! pixel_if_fifo_overflow - The FIFO of pixel interface has lost information because some data arrived and FIFO is already full. */
 #define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_overflow(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_overflow_SHIFT)) & MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_overflow_MASK)
 
-#define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_frame_sync_err_MASK (0x4U)
-#define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_frame_sync_err_SHIFT (2U)
-/*! pixel_if_frame_sync_err - Whenever in Controller mode, notifies if a new frame is received but previous has not been completed. */
-#define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_frame_sync_err(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_frame_sync_err_SHIFT)) & MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_frame_sync_err_MASK)
-
 #define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_nempty_fs_MASK (0x8U)
 #define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_nempty_fs_SHIFT (3U)
 /*! pixel_if_fifo_nempty_fs - Pixel interface FIFO is not empty */
 #define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_nempty_fs(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_nempty_fs_SHIFT)) & MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_fifo_nempty_fs_MASK)
-
-#define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_hline_err_MASK (0x10U)
-#define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_hline_err_SHIFT (4U)
-/*! pixel_if_hline_err - Horizontal line time error (only available in controller mode). */
-#define MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_hline_err(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_hline_err_SHIFT)) & MIPI_CSI_INT_ST_IPI_FATAL_pixel_if_hline_err_MASK)
 
 #define MIPI_CSI_INT_ST_IPI_FATAL_int_event_fifo_overflow_MASK (0x20U)
 #define MIPI_CSI_INT_ST_IPI_FATAL_int_event_fifo_overflow_SHIFT (5U)
@@ -909,20 +923,10 @@ typedef struct {
 /*! msk_pixel_if_fifo_overflow - Mask for pixel_if_fifo_overflow. */
 #define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_overflow(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_overflow_SHIFT)) & MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_overflow_MASK)
 
-#define MIPI_CSI_INT_MSK_IPI_FATAL_msk_frame_sync_err_MASK (0x4U)
-#define MIPI_CSI_INT_MSK_IPI_FATAL_msk_frame_sync_err_SHIFT (2U)
-/*! msk_frame_sync_err - Mask for pixel_if_frame_sync_err. */
-#define MIPI_CSI_INT_MSK_IPI_FATAL_msk_frame_sync_err(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_IPI_FATAL_msk_frame_sync_err_SHIFT)) & MIPI_CSI_INT_MSK_IPI_FATAL_msk_frame_sync_err_MASK)
-
 #define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_nempty_fs_MASK (0x8U)
 #define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_nempty_fs_SHIFT (3U)
 /*! msk_pixel_if_fifo_nempty_fs - Mask pixel_if_fifo_nempty_fs. */
 #define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_nempty_fs(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_nempty_fs_SHIFT)) & MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_fifo_nempty_fs_MASK)
-
-#define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_hline_err_MASK (0x10U)
-#define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_hline_err_SHIFT (4U)
-/*! msk_pixel_if_hline_err - Mask pixel_if_hline_err. */
-#define MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_hline_err(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_hline_err_SHIFT)) & MIPI_CSI_INT_MSK_IPI_FATAL_msk_pixel_if_hline_err_MASK)
 
 #define MIPI_CSI_INT_MSK_IPI_FATAL_msk_int_event_fifo_overflow_MASK (0x20U)
 #define MIPI_CSI_INT_MSK_IPI_FATAL_msk_int_event_fifo_overflow_SHIFT (5U)
@@ -948,20 +952,10 @@ typedef struct {
 /*! pixel_if_fifo_overflow - Force for pixel_if_fifo_overflow. */
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_overflow(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_overflow_SHIFT)) & MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_overflow_MASK)
 
-#define MIPI_CSI_INT_FORCE_IPI_FATAL_frame_sync_err_MASK (0x4U)
-#define MIPI_CSI_INT_FORCE_IPI_FATAL_frame_sync_err_SHIFT (2U)
-/*! frame_sync_err - Force for frame_sync_err. */
-#define MIPI_CSI_INT_FORCE_IPI_FATAL_frame_sync_err(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_IPI_FATAL_frame_sync_err_SHIFT)) & MIPI_CSI_INT_FORCE_IPI_FATAL_frame_sync_err_MASK)
-
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_nempty_fs_MASK (0x8U)
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_nempty_fs_SHIFT (3U)
 /*! pixel_if_fifo_nempty_fs - Force pixel_if_fifo_nempty_fs. */
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_nempty_fs(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_nempty_fs_SHIFT)) & MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_fifo_nempty_fs_MASK)
-
-#define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_hline_err_MASK (0x10U)
-#define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_hline_err_SHIFT (4U)
-/*! pixel_if_hline_err - Force pixel_if_hline_err. */
-#define MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_hline_err(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_hline_err_SHIFT)) & MIPI_CSI_INT_FORCE_IPI_FATAL_pixel_if_hline_err_MASK)
 
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_int_event_fifo_overflow_MASK (0x20U)
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_int_event_fifo_overflow_SHIFT (5U)
@@ -972,6 +966,168 @@ typedef struct {
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_int_pulse_delay_overflow_SHIFT (6U)
 /*! int_pulse_delay_overflow - Force int_pulse_delay_overflow. */
 #define MIPI_CSI_INT_FORCE_IPI_FATAL_int_pulse_delay_overflow(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_IPI_FATAL_int_pulse_delay_overflow_SHIFT)) & MIPI_CSI_INT_FORCE_IPI_FATAL_int_pulse_delay_overflow_MASK)
+/*! @} */
+
+/*! @name INT_ST_BNDRY_FRAME_FATAL - Fatal Interruption Caused by Frame Boundaries */
+/*! @{ */
+
+#define MIPI_CSI_INT_ST_BNDRY_FRAME_FATAL_err_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_ST_BNDRY_FRAME_FATAL_err_vc0_SHIFT (0U)
+/*! err_vc0 - Error matching Frame Start with Frame End for virtual channel 0. */
+#define MIPI_CSI_INT_ST_BNDRY_FRAME_FATAL_err_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_BNDRY_FRAME_FATAL_err_vc0_SHIFT)) & MIPI_CSI_INT_ST_BNDRY_FRAME_FATAL_err_vc0_MASK)
+/*! @} */
+
+/*! @name INT_MSK_BNDRY_FRAME_FATAL - Mask for Fatal Interruption Caused by Frame Boundaries */
+/*! @{ */
+
+#define MIPI_CSI_INT_MSK_BNDRY_FRAME_FATAL_err_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_MSK_BNDRY_FRAME_FATAL_err_vc0_SHIFT (0U)
+/*! err_vc0 - Mask for err_f_bndry_match_vc0. */
+#define MIPI_CSI_INT_MSK_BNDRY_FRAME_FATAL_err_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_BNDRY_FRAME_FATAL_err_vc0_SHIFT)) & MIPI_CSI_INT_MSK_BNDRY_FRAME_FATAL_err_vc0_MASK)
+/*! @} */
+
+/*! @name INT_FORCE_BNDRY_FRAME_FATAL - Force for Fatal Interruption Caused by Frame Boundaries */
+/*! @{ */
+
+#define MIPI_CSI_INT_FORCE_BNDRY_FRAME_FATAL_err_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_FORCE_BNDRY_FRAME_FATAL_err_vc0_SHIFT (0U)
+/*! err_vc0 - Force err_f_bndry_match_vc0. */
+#define MIPI_CSI_INT_FORCE_BNDRY_FRAME_FATAL_err_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_BNDRY_FRAME_FATAL_err_vc0_SHIFT)) & MIPI_CSI_INT_FORCE_BNDRY_FRAME_FATAL_err_vc0_MASK)
+/*! @} */
+
+/*! @name INT_ST_SEQ_FRAME_FATAL - Fatal Interruption Caused by Frame Sequence */
+/*! @{ */
+
+#define MIPI_CSI_INT_ST_SEQ_FRAME_FATAL_err_f_seq_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_ST_SEQ_FRAME_FATAL_err_f_seq_vc0_SHIFT (0U)
+/*! err_f_seq_vc0 - Incorrect Frame sequence detected in virtual channel 0. */
+#define MIPI_CSI_INT_ST_SEQ_FRAME_FATAL_err_f_seq_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_SEQ_FRAME_FATAL_err_f_seq_vc0_SHIFT)) & MIPI_CSI_INT_ST_SEQ_FRAME_FATAL_err_f_seq_vc0_MASK)
+/*! @} */
+
+/*! @name INT_MSK_SEQ_FRAME_FATAL - Mask for Fatal Interruption Caused by Frame Sequence */
+/*! @{ */
+
+#define MIPI_CSI_INT_MSK_SEQ_FRAME_FATAL_err_f_seq_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_MSK_SEQ_FRAME_FATAL_err_f_seq_vc0_SHIFT (0U)
+/*! err_f_seq_vc0 - Mask for err_f_seq_vc0. */
+#define MIPI_CSI_INT_MSK_SEQ_FRAME_FATAL_err_f_seq_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_SEQ_FRAME_FATAL_err_f_seq_vc0_SHIFT)) & MIPI_CSI_INT_MSK_SEQ_FRAME_FATAL_err_f_seq_vc0_MASK)
+/*! @} */
+
+/*! @name INT_FORCE_SEQ_FRAME_FATAL - Force for Fatal Interruption Caused by Frame Sequence */
+/*! @{ */
+
+#define MIPI_CSI_INT_FORCE_SEQ_FRAME_FATAL_err_f_seq_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_FORCE_SEQ_FRAME_FATAL_err_f_seq_vc0_SHIFT (0U)
+/*! err_f_seq_vc0 - Force err_f_seq_vc0. */
+#define MIPI_CSI_INT_FORCE_SEQ_FRAME_FATAL_err_f_seq_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_SEQ_FRAME_FATAL_err_f_seq_vc0_SHIFT)) & MIPI_CSI_INT_FORCE_SEQ_FRAME_FATAL_err_f_seq_vc0_MASK)
+/*! @} */
+
+/*! @name INT_ST_CRC_FRAME_FATAL - Fatal Interruption Caused by Frame CRC */
+/*! @{ */
+
+#define MIPI_CSI_INT_ST_CRC_FRAME_FATAL_err_frame_data_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_ST_CRC_FRAME_FATAL_err_frame_data_vc0_SHIFT (0U)
+/*! err_frame_data_vc0 - Last received Frame in virtual channel 0, had at least one CRC error. */
+#define MIPI_CSI_INT_ST_CRC_FRAME_FATAL_err_frame_data_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_CRC_FRAME_FATAL_err_frame_data_vc0_SHIFT)) & MIPI_CSI_INT_ST_CRC_FRAME_FATAL_err_frame_data_vc0_MASK)
+/*! @} */
+
+/*! @name INT_MSK_CRC_FRAME_FATAL - Mask for Fatal Interruption Caused by Frame CRC */
+/*! @{ */
+
+#define MIPI_CSI_INT_MSK_CRC_FRAME_FATAL_err_frame_data_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_MSK_CRC_FRAME_FATAL_err_frame_data_vc0_SHIFT (0U)
+/*! err_frame_data_vc0 - Mask for err_frame_data_vc0. */
+#define MIPI_CSI_INT_MSK_CRC_FRAME_FATAL_err_frame_data_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_CRC_FRAME_FATAL_err_frame_data_vc0_SHIFT)) & MIPI_CSI_INT_MSK_CRC_FRAME_FATAL_err_frame_data_vc0_MASK)
+/*! @} */
+
+/*! @name INT_FORCE_CRC_FRAME_FATAL - Force for Fatal Interruption Caused by Frame CRC */
+/*! @{ */
+
+#define MIPI_CSI_INT_FORCE_CRC_FRAME_FATAL_err_frame_data_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_FORCE_CRC_FRAME_FATAL_err_frame_data_vc0_SHIFT (0U)
+/*! err_frame_data_vc0 - Force err_frame_data_vc0. */
+#define MIPI_CSI_INT_FORCE_CRC_FRAME_FATAL_err_frame_data_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_CRC_FRAME_FATAL_err_frame_data_vc0_SHIFT)) & MIPI_CSI_INT_FORCE_CRC_FRAME_FATAL_err_frame_data_vc0_MASK)
+/*! @} */
+
+/*! @name INT_ST_PLD_CRC_FATAL - Fatal Interruption Caused by Payload CRC */
+/*! @{ */
+
+#define MIPI_CSI_INT_ST_PLD_CRC_FATAL_err_crc_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_ST_PLD_CRC_FATAL_err_crc_vc0_SHIFT (0U)
+/*! err_crc_vc0 - Payload Checksum error detected on virtual channel 0. */
+#define MIPI_CSI_INT_ST_PLD_CRC_FATAL_err_crc_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_PLD_CRC_FATAL_err_crc_vc0_SHIFT)) & MIPI_CSI_INT_ST_PLD_CRC_FATAL_err_crc_vc0_MASK)
+/*! @} */
+
+/*! @name INT_MSK_PLD_CRC_FATAL - Mask for Fatal Interruption Caused by Payload CRC */
+/*! @{ */
+
+#define MIPI_CSI_INT_MSK_PLD_CRC_FATAL_err_crc_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_MSK_PLD_CRC_FATAL_err_crc_vc0_SHIFT (0U)
+/*! err_crc_vc0 - Mask for err_crc_vc0. */
+#define MIPI_CSI_INT_MSK_PLD_CRC_FATAL_err_crc_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_PLD_CRC_FATAL_err_crc_vc0_SHIFT)) & MIPI_CSI_INT_MSK_PLD_CRC_FATAL_err_crc_vc0_MASK)
+/*! @} */
+
+/*! @name INT_FORCE_PLD_CRC_FATAL - Force for Fatal Interruption Caused by Payload CRC */
+/*! @{ */
+
+#define MIPI_CSI_INT_FORCE_PLD_CRC_FATAL_err_crc_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_FORCE_PLD_CRC_FATAL_err_crc_vc0_SHIFT (0U)
+/*! err_crc_vc0 - Force err_crc_vc0. */
+#define MIPI_CSI_INT_FORCE_PLD_CRC_FATAL_err_crc_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_PLD_CRC_FATAL_err_crc_vc0_SHIFT)) & MIPI_CSI_INT_FORCE_PLD_CRC_FATAL_err_crc_vc0_MASK)
+/*! @} */
+
+/*! @name INT_ST_DATA_ID - Interruption Caused by Data Type */
+/*! @{ */
+
+#define MIPI_CSI_INT_ST_DATA_ID_err_id_vc0_MASK  (0x1U)
+#define MIPI_CSI_INT_ST_DATA_ID_err_id_vc0_SHIFT (0U)
+/*! err_id_vc0 - Unrecognized or unimplemented data type detected in virtual channel 0. */
+#define MIPI_CSI_INT_ST_DATA_ID_err_id_vc0(x)    (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_DATA_ID_err_id_vc0_SHIFT)) & MIPI_CSI_INT_ST_DATA_ID_err_id_vc0_MASK)
+/*! @} */
+
+/*! @name INT_MSK_DATA_ID - Mask for Interruption Caused by Data Type */
+/*! @{ */
+
+#define MIPI_CSI_INT_MSK_DATA_ID_err_id_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_MSK_DATA_ID_err_id_vc0_SHIFT (0U)
+/*! err_id_vc0 - Mask for err_id_vc0. */
+#define MIPI_CSI_INT_MSK_DATA_ID_err_id_vc0(x)   (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_DATA_ID_err_id_vc0_SHIFT)) & MIPI_CSI_INT_MSK_DATA_ID_err_id_vc0_MASK)
+/*! @} */
+
+/*! @name INT_FORCE_DATA_ID - Force for Interruption Caused by Data Type */
+/*! @{ */
+
+#define MIPI_CSI_INT_FORCE_DATA_ID_err_id_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_FORCE_DATA_ID_err_id_vc0_SHIFT (0U)
+/*! err_id_vc0 - Force err_id_vc0. */
+#define MIPI_CSI_INT_FORCE_DATA_ID_err_id_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_DATA_ID_err_id_vc0_SHIFT)) & MIPI_CSI_INT_FORCE_DATA_ID_err_id_vc0_MASK)
+/*! @} */
+
+/*! @name INT_ST_ECC_CORRECTED - Interruption Caused by Header Single Bit Errors */
+/*! @{ */
+
+#define MIPI_CSI_INT_ST_ECC_CORRECTED_err_ecc_corrected_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_ST_ECC_CORRECTED_err_ecc_corrected_vc0_SHIFT (0U)
+/*! err_ecc_corrected_vc0 - Header error detected and corrected on virtual channel 0. */
+#define MIPI_CSI_INT_ST_ECC_CORRECTED_err_ecc_corrected_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_ST_ECC_CORRECTED_err_ecc_corrected_vc0_SHIFT)) & MIPI_CSI_INT_ST_ECC_CORRECTED_err_ecc_corrected_vc0_MASK)
+/*! @} */
+
+/*! @name INT_MSK_ECC_CORRECTED - Mask for Interruption Caused by Header Single Bit Errors */
+/*! @{ */
+
+#define MIPI_CSI_INT_MSK_ECC_CORRECTED_err_ecc_corrected_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_MSK_ECC_CORRECTED_err_ecc_corrected_vc0_SHIFT (0U)
+/*! err_ecc_corrected_vc0 - Mask for err_ecc_corrected_vc0. */
+#define MIPI_CSI_INT_MSK_ECC_CORRECTED_err_ecc_corrected_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_MSK_ECC_CORRECTED_err_ecc_corrected_vc0_SHIFT)) & MIPI_CSI_INT_MSK_ECC_CORRECTED_err_ecc_corrected_vc0_MASK)
+/*! @} */
+
+/*! @name INT_FORCE_ECC_CORRECTED - Force for Interruption Caused by Header Single Bit Errors */
+/*! @{ */
+
+#define MIPI_CSI_INT_FORCE_ECC_CORRECTED_err_ecc_corrected_vc0_MASK (0x1U)
+#define MIPI_CSI_INT_FORCE_ECC_CORRECTED_err_ecc_corrected_vc0_SHIFT (0U)
+/*! err_ecc_corrected_vc0 - Force err_ecc_corrected_vc0. */
+#define MIPI_CSI_INT_FORCE_ECC_CORRECTED_err_ecc_corrected_vc0(x) (((uint32_t)(((uint32_t)(x)) << MIPI_CSI_INT_FORCE_ECC_CORRECTED_err_ecc_corrected_vc0_SHIFT)) & MIPI_CSI_INT_FORCE_ECC_CORRECTED_err_ecc_corrected_vc0_MASK)
 /*! @} */
 
 /*! @name SCRAMBLING - Data De-Scrambling */

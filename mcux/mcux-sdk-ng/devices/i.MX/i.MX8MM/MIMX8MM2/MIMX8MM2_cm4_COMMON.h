@@ -9,7 +9,7 @@
 **
 **     Reference manual:    MX8MMRM, Rev. 0, 02/2019
 **     Version:             rev. 5.0, 2024-10-29
-**     Build:               b250815
+**     Build:               b251201
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MM2_cm4
@@ -528,9 +528,9 @@ typedef enum IRQn {
 /** Array initializer of GPIO peripheral base pointers */
 #define GPIO_BASE_PTRS                           { (GPIO_Type *)0u, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5 }
 /** Interrupt vectors for the GPIO peripheral type */
-#define GPIO_IRQS                                { NotAvail_IRQn, GPIO1_INT0_IRQn, GPIO1_INT1_IRQn, GPIO1_INT2_IRQn, GPIO1_INT3_IRQn, GPIO1_INT4_IRQn, GPIO1_INT5_IRQn, GPIO1_INT6_IRQn, GPIO1_INT7_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 #define GPIO_COMBINED_LOW_IRQS                   { NotAvail_IRQn, GPIO1_Combined_0_15_IRQn, GPIO2_Combined_0_15_IRQn, GPIO3_Combined_0_15_IRQn, GPIO4_Combined_0_15_IRQn, GPIO5_Combined_0_15_IRQn }
 #define GPIO_COMBINED_HIGH_IRQS                  { NotAvail_IRQn, GPIO1_Combined_16_31_IRQn, GPIO2_Combined_16_31_IRQn, GPIO3_Combined_16_31_IRQn, GPIO4_Combined_16_31_IRQn, GPIO5_Combined_16_31_IRQn }
+#define GPIO_IRQS                                { NotAvail_IRQn, GPIO1_INT0_IRQn, GPIO1_INT1_IRQn, GPIO1_INT2_IRQn, GPIO1_INT3_IRQn, GPIO1_INT4_IRQn, GPIO1_INT5_IRQn, GPIO1_INT6_IRQn, GPIO1_INT7_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
 /* GPMI - Peripheral instance base addresses */
 /** Peripheral GPMI base address */
@@ -748,6 +748,11 @@ typedef enum IRQn {
 #define PDM_BASE_ADDRS                           { PDM_BASE }
 /** Array initializer of PDM peripheral base pointers */
 #define PDM_BASE_PTRS                            { PDM }
+/** Interrupt vectors for the PDM peripheral type */
+#define PDM_HWVAD_Event_IRQS                     { PDM_HWVAD_EVENT_IRQn }
+#define PDM_HWVAD_Error_IRQS                     { PDM_HWVAD_ERROR_IRQn }
+#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
+#define PDM_Error_IRQS                           { PDM_ERROR_IRQn }
 
 /* PWM - Peripheral instance base addresses */
 /** Peripheral PWM1 base address */

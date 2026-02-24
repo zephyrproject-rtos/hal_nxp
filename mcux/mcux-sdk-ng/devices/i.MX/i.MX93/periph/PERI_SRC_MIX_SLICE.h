@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SRC_MIX_SLICE
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -312,7 +312,13 @@ typedef struct {
 
 #define SRC_MIX_SLICE_LPM_SETTING_0_LPM_SETTING_CD_MASK (0x7U)
 #define SRC_MIX_SLICE_LPM_SETTING_0_LPM_SETTING_CD_SHIFT (0U)
-/*! LPM_SETTING_CD - LPM setting of current domain */
+/*! LPM_SETTING_CD - LPM setting of current domain
+ *  0b000..Power always off
+ *  0b001..Power on when domain n is in RUN, off in WAIT/STOP/SUSPEND
+ *  0b010..Power on when domain n is in RUN/WAIT, off in STOP/SUSPEND
+ *  0b011..Power on when domain n is in RUN/WAIT/STOP, off in SUSPEND
+ *  0b100-0b111..Power always on
+ */
 #define SRC_MIX_SLICE_LPM_SETTING_0_LPM_SETTING_CD(x) (((uint32_t)(((uint32_t)(x)) << SRC_MIX_SLICE_LPM_SETTING_0_LPM_SETTING_CD_SHIFT)) & SRC_MIX_SLICE_LPM_SETTING_0_LPM_SETTING_CD_MASK)
 /*! @} */
 

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USDHC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -579,14 +579,14 @@ typedef struct {
 #define USDHC_PRES_STATE_DLSL_MASK               (0xFF000000U)
 #define USDHC_PRES_STATE_DLSL_SHIFT              (24U)
 /*! DLSL - DATA[7:0] line signal level
- *  0b00000000..Data 0 line signal level
- *  0b00000001..Data 1 line signal level
- *  0b00000010..Data 2 line signal level
- *  0b00000011..Data 3 line signal level
- *  0b00000100..Data 4 line signal level
- *  0b00000101..Data 5 line signal level
- *  0b00000110..Data 6 line signal level
- *  0b00000111..Data 7 line signal level
+ *  0b00000001..Data 0 line signal level
+ *  0b00000010..Data 1 line signal level
+ *  0b00000100..Data 2 line signal level
+ *  0b00001000..Data 3 line signal level
+ *  0b00010000..Data 4 line signal level
+ *  0b00100000..Data 5 line signal level
+ *  0b01000000..Data 6 line signal level
+ *  0b10000000..Data 7 line signal level
  */
 #define USDHC_PRES_STATE_DLSL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_DLSL_SHIFT)) & USDHC_PRES_STATE_DLSL_MASK)
 /*! @} */
@@ -621,22 +621,6 @@ typedef struct {
  *  0b11..Reserved
  */
 #define USDHC_PROT_CTRL_EMODE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_EMODE_SHIFT)) & USDHC_PROT_CTRL_EMODE_MASK)
-
-#define USDHC_PROT_CTRL_CDTL_MASK                (0x40U)
-#define USDHC_PROT_CTRL_CDTL_SHIFT               (6U)
-/*! CDTL - Card detect test level
- *  0b0..Card detect test level is 0, no card inserted
- *  0b1..Card detect test level is 1, card inserted
- */
-#define USDHC_PROT_CTRL_CDTL(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CDTL_SHIFT)) & USDHC_PROT_CTRL_CDTL_MASK)
-
-#define USDHC_PROT_CTRL_CDSS_MASK                (0x80U)
-#define USDHC_PROT_CTRL_CDSS_SHIFT               (7U)
-/*! CDSS - Card detect signal selection
- *  0b0..Card detection level is selected (for normal purpose).
- *  0b1..Card detection test level is selected (for test purpose).
- */
-#define USDHC_PROT_CTRL_CDSS(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CDSS_SHIFT)) & USDHC_PROT_CTRL_CDSS_MASK)
 
 #define USDHC_PROT_CTRL_DMASEL_MASK              (0x300U)
 #define USDHC_PROT_CTRL_DMASEL_SHIFT             (8U)
@@ -748,6 +732,11 @@ typedef struct {
  *  0b1111..SDCLK x 2 31, recommend to use for HS400 mode
  */
 #define USDHC_SYS_CTRL_DTOCV(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_DTOCV_SHIFT)) & USDHC_SYS_CTRL_DTOCV_MASK)
+
+#define USDHC_SYS_CTRL_RST_FIFO_MASK             (0x400000U)
+#define USDHC_SYS_CTRL_RST_FIFO_SHIFT            (22U)
+/*! RST_FIFO - Reset the async FIFO */
+#define USDHC_SYS_CTRL_RST_FIFO(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_RST_FIFO_SHIFT)) & USDHC_SYS_CTRL_RST_FIFO_MASK)
 
 #define USDHC_SYS_CTRL_IPP_RST_N_MASK            (0x800000U)
 #define USDHC_SYS_CTRL_IPP_RST_N_SHIFT           (23U)
@@ -1379,7 +1368,7 @@ typedef struct {
 #define USDHC_AUTOCMD12_ERR_STATUS_EXECUTE_TUNING_MASK (0x400000U)
 #define USDHC_AUTOCMD12_ERR_STATUS_EXECUTE_TUNING_SHIFT (22U)
 /*! EXECUTE_TUNING - Execute tuning
- *  0b0..Tuning procedure is aborted
+ *  0b0..Tuning procedure is stopped
  *  0b1..Start tuning procedure
  */
 #define USDHC_AUTOCMD12_ERR_STATUS_EXECUTE_TUNING(x) (((uint32_t)(((uint32_t)(x)) << USDHC_AUTOCMD12_ERR_STATUS_EXECUTE_TUNING_SHIFT)) & USDHC_AUTOCMD12_ERR_STATUS_EXECUTE_TUNING_MASK)
@@ -1476,14 +1465,6 @@ typedef struct {
  *  0b1..3.0 V supported
  */
 #define USDHC_HOST_CTRL_CAP_VS30(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_VS30_SHIFT)) & USDHC_HOST_CTRL_CAP_VS30_MASK)
-
-#define USDHC_HOST_CTRL_CAP_VS18_MASK            (0x4000000U)
-#define USDHC_HOST_CTRL_CAP_VS18_SHIFT           (26U)
-/*! VS18 - Voltage support 1.8 V
- *  0b0..1.8 V not supported
- *  0b1..1.8 V supported
- */
-#define USDHC_HOST_CTRL_CAP_VS18(x)              (((uint32_t)(((uint32_t)(x)) << USDHC_HOST_CTRL_CAP_VS18_SHIFT)) & USDHC_HOST_CTRL_CAP_VS18_MASK)
 /*! @} */
 
 /*! @name WTMK_LVL - Watermark Level */
@@ -1739,12 +1720,12 @@ typedef struct {
 
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_FORCE_UPD_MASK (0x4U)
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_FORCE_UPD_SHIFT (2U)
-/*! DLL_CTRL_SLV_FORCE_UPD - DLL slave delay line */
+/*! DLL_CTRL_SLV_FORCE_UPD - DLL target delay line */
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_FORCE_UPD(x) (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_CTRL_DLL_CTRL_SLV_FORCE_UPD_SHIFT)) & USDHC_DLL_CTRL_DLL_CTRL_SLV_FORCE_UPD_MASK)
 
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET0_MASK (0x78U)
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET0_SHIFT (3U)
-/*! DLL_CTRL_SLV_DLY_TARGET0 - DLL slave delay target0 */
+/*! DLL_CTRL_SLV_DLY_TARGET0 - DLL target delay target0 */
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET0(x) (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET0_SHIFT)) & USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET0_MASK)
 
 #define USDHC_DLL_CTRL_DLL_CTRL_GATE_UPDATE_MASK (0x80U)
@@ -1754,22 +1735,22 @@ typedef struct {
 
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_MASK (0x100U)
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_SHIFT (8U)
-/*! DLL_CTRL_SLV_OVERRIDE - DLL slave override */
+/*! DLL_CTRL_SLV_OVERRIDE - DLL target override */
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE(x)  (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_SHIFT)) & USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_MASK)
 
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_VAL_MASK (0xFE00U)
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_VAL_SHIFT (9U)
-/*! DLL_CTRL_SLV_OVERRIDE_VAL - DLL slave override val */
+/*! DLL_CTRL_SLV_OVERRIDE_VAL - DLL target override val */
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_VAL(x) (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_VAL_SHIFT)) & USDHC_DLL_CTRL_DLL_CTRL_SLV_OVERRIDE_VAL_MASK)
 
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET1_MASK (0x70000U)
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET1_SHIFT (16U)
-/*! DLL_CTRL_SLV_DLY_TARGET1 - DLL slave delay target1 */
+/*! DLL_CTRL_SLV_DLY_TARGET1 - DLL target delay target1 */
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET1(x) (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET1_SHIFT)) & USDHC_DLL_CTRL_DLL_CTRL_SLV_DLY_TARGET1_MASK)
 
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_UPDATE_INT_MASK (0xFF00000U)
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_UPDATE_INT_SHIFT (20U)
-/*! DLL_CTRL_SLV_UPDATE_INT - Slave delay line update interval */
+/*! DLL_CTRL_SLV_UPDATE_INT - Target delay line update interval */
 #define USDHC_DLL_CTRL_DLL_CTRL_SLV_UPDATE_INT(x) (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_CTRL_DLL_CTRL_SLV_UPDATE_INT_SHIFT)) & USDHC_DLL_CTRL_DLL_CTRL_SLV_UPDATE_INT_MASK)
 
 #define USDHC_DLL_CTRL_DLL_CTRL_REF_UPDATE_INT_MASK (0xF0000000U)
@@ -1783,7 +1764,7 @@ typedef struct {
 
 #define USDHC_DLL_STATUS_DLL_STS_SLV_LOCK_MASK   (0x1U)
 #define USDHC_DLL_STATUS_DLL_STS_SLV_LOCK_SHIFT  (0U)
-/*! DLL_STS_SLV_LOCK - Slave delay-line lock status */
+/*! DLL_STS_SLV_LOCK - Target delay-line lock status */
 #define USDHC_DLL_STATUS_DLL_STS_SLV_LOCK(x)     (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_STATUS_DLL_STS_SLV_LOCK_SHIFT)) & USDHC_DLL_STATUS_DLL_STS_SLV_LOCK_MASK)
 
 #define USDHC_DLL_STATUS_DLL_STS_REF_LOCK_MASK   (0x2U)
@@ -1793,7 +1774,7 @@ typedef struct {
 
 #define USDHC_DLL_STATUS_DLL_STS_SLV_SEL_MASK    (0x1FCU)
 #define USDHC_DLL_STATUS_DLL_STS_SLV_SEL_SHIFT   (2U)
-/*! DLL_STS_SLV_SEL - Slave delay line select status */
+/*! DLL_STS_SLV_SEL - Target delay line select status */
 #define USDHC_DLL_STATUS_DLL_STS_SLV_SEL(x)      (((uint32_t)(((uint32_t)(x)) << USDHC_DLL_STATUS_DLL_STS_SLV_SEL_SHIFT)) & USDHC_DLL_STATUS_DLL_STS_SLV_SEL_MASK)
 
 #define USDHC_DLL_STATUS_DLL_STS_REF_SEL_MASK    (0xFE00U)
@@ -1861,12 +1842,12 @@ typedef struct {
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_FORCE_UPD_MASK (0x4U)
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_FORCE_UPD_SHIFT (2U)
-/*! STROBE_DLL_CTRL_SLV_FORCE_UPD - Strobe DLL control slave force updated */
+/*! STROBE_DLL_CTRL_SLV_FORCE_UPD - Strobe DLL control target force updated */
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_FORCE_UPD(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_FORCE_UPD_SHIFT)) & USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_FORCE_UPD_MASK)
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET_MASK (0x78U)
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET_SHIFT (3U)
-/*! STROBE_DLL_CTRL_SLV_DLY_TARGET - Strobe DLL Control Slave Delay Target */
+/*! STROBE_DLL_CTRL_SLV_DLY_TARGET - Strobe DLL Control Target Delay Target */
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET_SHIFT)) & USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET_MASK)
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_GATE_UPDATE_MASK (0x80U)
@@ -1876,17 +1857,17 @@ typedef struct {
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_MASK (0x100U)
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_SHIFT (8U)
-/*! STROBE_DLL_CTRL_SLV_OVERRIDE - Strobe DLL control slave override */
+/*! STROBE_DLL_CTRL_SLV_OVERRIDE - Strobe DLL control target override */
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_SHIFT)) & USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_MASK)
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_VAL_MASK (0xFE00U)
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_VAL_SHIFT (9U)
-/*! STROBE_DLL_CTRL_SLV_OVERRIDE_VAL - Strobe DLL control slave Override value */
+/*! STROBE_DLL_CTRL_SLV_OVERRIDE_VAL - Strobe DLL control target Override value */
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_VAL(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_VAL_SHIFT)) & USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_OVERRIDE_VAL_MASK)
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_UPDATE_INT_MASK (0xFF00000U)
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_UPDATE_INT_SHIFT (20U)
-/*! STROBE_DLL_CTRL_SLV_UPDATE_INT - Strobe DLL control slave update interval */
+/*! STROBE_DLL_CTRL_SLV_UPDATE_INT - Strobe DLL control target update interval */
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_UPDATE_INT(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_UPDATE_INT_SHIFT)) & USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_UPDATE_INT_MASK)
 
 #define USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_REF_UPDATE_INT_MASK (0xF0000000U)
@@ -1900,7 +1881,7 @@ typedef struct {
 
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK_MASK (0x1U)
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK_SHIFT (0U)
-/*! STROBE_DLL_STS_SLV_LOCK - Strobe DLL status slave lock */
+/*! STROBE_DLL_STS_SLV_LOCK - Strobe DLL status target lock */
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK_SHIFT)) & USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK_MASK)
 
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_REF_LOCK_MASK (0x2U)
@@ -1910,7 +1891,7 @@ typedef struct {
 
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_SEL_MASK (0x1FCU)
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_SEL_SHIFT (2U)
-/*! STROBE_DLL_STS_SLV_SEL - Strobe DLL status slave select */
+/*! STROBE_DLL_STS_SLV_SEL - Strobe DLL status target select */
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_SEL(x) (((uint32_t)(((uint32_t)(x)) << USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_SEL_SHIFT)) & USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_SEL_MASK)
 
 #define USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_REF_SEL_MASK (0xFE00U)
@@ -1926,7 +1907,7 @@ typedef struct {
 #define USDHC_VEND_SPEC_VSELECT_SHIFT            (1U)
 /*! VSELECT - Voltage selection
  *  0b0..Change the voltage to high voltage range, around 3.0 V
- *  0b1..Change the voltage to low voltage range , around 1.8 V
+ *  0b1..Change the voltage to low voltage range
  */
 #define USDHC_VEND_SPEC_VSELECT(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_VEND_SPEC_VSELECT_SHIFT)) & USDHC_VEND_SPEC_VSELECT_MASK)
 
@@ -2074,7 +2055,10 @@ typedef struct {
 
 #define USDHC_VEND_SPEC2_EN_32K_CLK_MASK         (0x8000U)
 #define USDHC_VEND_SPEC2_EN_32K_CLK_SHIFT        (15U)
-/*! EN_32K_CLK - Enable 32 kHz clock for card detection */
+/*! EN_32K_CLK - Select the clock source for host card detection.
+ *  0b0..Use the peripheral clock (ipg_clk) for card detection.
+ *  0b1..Use the low power clock (ipg_clk_lp) for card detection.
+ */
 #define USDHC_VEND_SPEC2_EN_32K_CLK(x)           (((uint32_t)(((uint32_t)(x)) << USDHC_VEND_SPEC2_EN_32K_CLK_SHIFT)) & USDHC_VEND_SPEC2_EN_32K_CLK_MASK)
 
 #define USDHC_VEND_SPEC2_FBCLK_TAP_SEL_MASK      (0xFFFF0000U)

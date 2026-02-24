@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXIO
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -207,7 +207,7 @@ typedef struct {
   __I  uint32_t PIN;                               /**< Pin State, offset: 0xC */
   __IO uint32_t SHIFTSTAT;                         /**< Shifter Status, offset: 0x10 */
   __IO uint32_t SHIFTERR;                          /**< Shifter Error, offset: 0x14 */
-  __IO uint32_t TIMSTAT;                           /**< Timer Status, offset: 0x18 */
+  __IO uint32_t TIMSTAT;                           /**< Timer Status Flag, offset: 0x18 */
        uint8_t RESERVED_0[4];
   __IO uint32_t SHIFTSIEN;                         /**< Shifter Status Interrupt Enable, offset: 0x20 */
   __IO uint32_t SHIFTEIEN;                         /**< Shifter Error Interrupt Enable, offset: 0x24 */
@@ -232,35 +232,35 @@ typedef struct {
   __IO uint32_t PINOUTSET;                         /**< Pin Output Set, offset: 0x70 */
   __IO uint32_t PINOUTTOG;                         /**< Pin Output Toggle, offset: 0x74 */
        uint8_t RESERVED_5[8];
-  __IO uint32_t SHIFTCTL[FLEXIO_SHIFTCTL_COUNT];   /**< Shifter Control N, array offset: 0x80, array step: 0x4 */
+  __IO uint32_t SHIFTCTL[FLEXIO_SHIFTCTL_COUNT];   /**< Shifter Control, array offset: 0x80, array step: 0x4 */
        uint8_t RESERVED_6[96];
-  __IO uint32_t SHIFTCFG[FLEXIO_SHIFTCFG_COUNT];   /**< Shifter Configuration N, array offset: 0x100, array step: 0x4 */
+  __IO uint32_t SHIFTCFG[FLEXIO_SHIFTCFG_COUNT];   /**< Shifter Configuration, array offset: 0x100, array step: 0x4 */
        uint8_t RESERVED_7[224];
-  __IO uint32_t SHIFTBUF[FLEXIO_SHIFTBUF_COUNT];   /**< Shifter Buffer N, array offset: 0x200, array step: 0x4 */
+  __IO uint32_t SHIFTBUF[FLEXIO_SHIFTBUF_COUNT];   /**< Shifter Buffer, array offset: 0x200, array step: 0x4 */
        uint8_t RESERVED_8[96];
-  __IO uint32_t SHIFTBUFBIS[FLEXIO_SHIFTBUFBIS_COUNT]; /**< Shifter Buffer N Bit Swapped, array offset: 0x280, array step: 0x4 */
+  __IO uint32_t SHIFTBUFBIS[FLEXIO_SHIFTBUFBIS_COUNT]; /**< Shifter Buffer Bit Swapped, array offset: 0x280, array step: 0x4 */
        uint8_t RESERVED_9[96];
-  __IO uint32_t SHIFTBUFBYS[FLEXIO_SHIFTBUFBYS_COUNT]; /**< Shifter Buffer N Byte Swapped, array offset: 0x300, array step: 0x4 */
+  __IO uint32_t SHIFTBUFBYS[FLEXIO_SHIFTBUFBYS_COUNT]; /**< Shifter Buffer Byte Swapped, array offset: 0x300, array step: 0x4 */
        uint8_t RESERVED_10[96];
-  __IO uint32_t SHIFTBUFBBS[FLEXIO_SHIFTBUFBBS_COUNT]; /**< Shifter Buffer N Bit Byte Swapped, array offset: 0x380, array step: 0x4 */
+  __IO uint32_t SHIFTBUFBBS[FLEXIO_SHIFTBUFBBS_COUNT]; /**< Shifter Buffer Bit Byte Swapped, array offset: 0x380, array step: 0x4 */
        uint8_t RESERVED_11[96];
-  __IO uint32_t TIMCTL[FLEXIO_TIMCTL_COUNT];       /**< Timer Control N, array offset: 0x400, array step: 0x4 */
+  __IO uint32_t TIMCTL[FLEXIO_TIMCTL_COUNT];       /**< Timer Control, array offset: 0x400, array step: 0x4 */
        uint8_t RESERVED_12[96];
-  __IO uint32_t TIMCFG[FLEXIO_TIMCFG_COUNT];       /**< Timer Configuration N, array offset: 0x480, array step: 0x4 */
+  __IO uint32_t TIMCFG[FLEXIO_TIMCFG_COUNT];       /**< Timer Configuration, array offset: 0x480, array step: 0x4 */
        uint8_t RESERVED_13[96];
-  __IO uint32_t TIMCMP[FLEXIO_TIMCMP_COUNT];       /**< Timer Compare N, array offset: 0x500, array step: 0x4 */
+  __IO uint32_t TIMCMP[FLEXIO_TIMCMP_COUNT];       /**< Timer Compare, array offset: 0x500, array step: 0x4 */
        uint8_t RESERVED_14[352];
-  __IO uint32_t SHIFTBUFNBS[FLEXIO_SHIFTBUFNBS_COUNT]; /**< Shifter Buffer N Nibble Byte Swapped, array offset: 0x680, array step: 0x4 */
+  __IO uint32_t SHIFTBUFNBS[FLEXIO_SHIFTBUFNBS_COUNT]; /**< Shifter Buffer Nibble Byte Swapped, array offset: 0x680, array step: 0x4 */
        uint8_t RESERVED_15[96];
-  __IO uint32_t SHIFTBUFHWS[FLEXIO_SHIFTBUFHWS_COUNT]; /**< Shifter Buffer N Halfword Swapped, array offset: 0x700, array step: 0x4 */
+  __IO uint32_t SHIFTBUFHWS[FLEXIO_SHIFTBUFHWS_COUNT]; /**< Shifter Buffer Halfword Swapped, array offset: 0x700, array step: 0x4 */
        uint8_t RESERVED_16[96];
-  __IO uint32_t SHIFTBUFNIS[FLEXIO_SHIFTBUFNIS_COUNT]; /**< Shifter Buffer N Nibble Swapped, array offset: 0x780, array step: 0x4 */
+  __IO uint32_t SHIFTBUFNIS[FLEXIO_SHIFTBUFNIS_COUNT]; /**< Shifter Buffer Nibble Swapped, array offset: 0x780, array step: 0x4 */
        uint8_t RESERVED_17[96];
-  __IO uint32_t SHIFTBUFOES[FLEXIO_SHIFTBUFOES_COUNT]; /**< Shifter Buffer N Odd Even Swapped, array offset: 0x800, array step: 0x4 */
+  __IO uint32_t SHIFTBUFOES[FLEXIO_SHIFTBUFOES_COUNT]; /**< Shifter Buffer Odd Even Swapped, array offset: 0x800, array step: 0x4 */
        uint8_t RESERVED_18[96];
-  __IO uint32_t SHIFTBUFEOS[FLEXIO_SHIFTBUFEOS_COUNT]; /**< Shifter Buffer N Even Odd Swapped, array offset: 0x880, array step: 0x4 */
+  __IO uint32_t SHIFTBUFEOS[FLEXIO_SHIFTBUFEOS_COUNT]; /**< Shifter Buffer Even Odd Swapped, array offset: 0x880, array step: 0x4 */
        uint8_t RESERVED_19[96];
-  __IO uint32_t SHIFTBUFHBS[FLEXIO_SHIFTBUFHBS_COUNT]; /**< Shifter Buffer N Halfword Byte Swapped, array offset: 0x900, array step: 0x4 */
+  __IO uint32_t SHIFTBUFHBS[FLEXIO_SHIFTBUFHBS_COUNT]; /**< Shifter Buffer Halfword Byte Swapped, array offset: 0x900, array step: 0x4 */
 } FLEXIO_Type;
 
 /* ----------------------------------------------------------------------------
@@ -278,10 +278,10 @@ typedef struct {
 #define FLEXIO_VERID_FEATURE_MASK                (0xFFFFU)
 #define FLEXIO_VERID_FEATURE_SHIFT               (0U)
 /*! FEATURE - Feature Specification Number
- *  0b0000000000000000..Standard features implemented.
- *  0b0000000000000001..Supports state, logic, and parallel modes.
- *  0b0000000000000010..Supports pin control registers.
- *  0b0000000000000011..Supports state, logic, and parallel modes, plus pin control registers.
+ *  0b0000000000000000..Standard features implemented
+ *  0b0000000000000001..State, logic, and parallel modes supported
+ *  0b0000000000000010..Pin control registers supported
+ *  0b0000000000000011..State, logic, and parallel modes, plus pin control registers supported
  */
 #define FLEXIO_VERID_FEATURE(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_VERID_FEATURE_SHIFT)) & FLEXIO_VERID_FEATURE_MASK)
 
@@ -326,40 +326,40 @@ typedef struct {
 #define FLEXIO_CTRL_FLEXEN_MASK                  (0x1U)
 #define FLEXIO_CTRL_FLEXEN_SHIFT                 (0U)
 /*! FLEXEN - FLEXIO Enable
- *  0b0..FLEXIO module is disabled.
- *  0b1..FLEXIO module is enabled.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXIO_CTRL_FLEXEN(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXIO_CTRL_FLEXEN_SHIFT)) & FLEXIO_CTRL_FLEXEN_MASK)
 
 #define FLEXIO_CTRL_SWRST_MASK                   (0x2U)
 #define FLEXIO_CTRL_SWRST_SHIFT                  (1U)
 /*! SWRST - Software Reset
- *  0b0..Software reset is disabled
- *  0b1..Software reset is enabled. All FLEXIO registers except the Control Register are reset.
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define FLEXIO_CTRL_SWRST(x)                     (((uint32_t)(((uint32_t)(x)) << FLEXIO_CTRL_SWRST_SHIFT)) & FLEXIO_CTRL_SWRST_MASK)
 
 #define FLEXIO_CTRL_FASTACC_MASK                 (0x4U)
 #define FLEXIO_CTRL_FASTACC_SHIFT                (2U)
 /*! FASTACC - Fast Access
- *  0b0..Configures for normal register accesses to FLEXIO
- *  0b1..Configures for fast register accesses to FLEXIO
+ *  0b0..Normal
+ *  0b1..Fast
  */
 #define FLEXIO_CTRL_FASTACC(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_CTRL_FASTACC_SHIFT)) & FLEXIO_CTRL_FASTACC_MASK)
 
 #define FLEXIO_CTRL_DBGE_MASK                    (0x40000000U)
 #define FLEXIO_CTRL_DBGE_SHIFT                   (30U)
 /*! DBGE - Debug Enable
- *  0b0..FLEXIO is disabled in Debug modes.
- *  0b1..FLEXIO is enabled in Debug modes.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define FLEXIO_CTRL_DBGE(x)                      (((uint32_t)(((uint32_t)(x)) << FLEXIO_CTRL_DBGE_SHIFT)) & FLEXIO_CTRL_DBGE_MASK)
 
 #define FLEXIO_CTRL_DOZEN_MASK                   (0x80000000U)
 #define FLEXIO_CTRL_DOZEN_SHIFT                  (31U)
 /*! DOZEN - Doze Enable
- *  0b0..FLEXIO enabled in Doze modes.
- *  0b1..FLEXIO disabled in Doze modes.
+ *  0b0..Enable
+ *  0b1..Disable
  */
 #define FLEXIO_CTRL_DOZEN(x)                     (((uint32_t)(((uint32_t)(x)) << FLEXIO_CTRL_DOZEN_SHIFT)) & FLEXIO_CTRL_DOZEN_MASK)
 /*! @} */
@@ -378,7 +378,12 @@ typedef struct {
 
 #define FLEXIO_SHIFTSTAT_SSF_MASK                (0xFFU)
 #define FLEXIO_SHIFTSTAT_SSF_SHIFT               (0U)
-/*! SSF - Shifter Status Flag */
+/*! SSF - Shifter Status Flag
+ *  0b00000000..Clear
+ *  0b00000000..No effect
+ *  0b00000001..Clear the flag
+ *  0b00000001..Set
+ */
 #define FLEXIO_SHIFTSTAT_SSF(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTSTAT_SSF_SHIFT)) & FLEXIO_SHIFTSTAT_SSF_MASK)
 /*! @} */
 
@@ -387,16 +392,26 @@ typedef struct {
 
 #define FLEXIO_SHIFTERR_SEF_MASK                 (0xFFU)
 #define FLEXIO_SHIFTERR_SEF_SHIFT                (0U)
-/*! SEF - Shifter Error Flags */
+/*! SEF - Shifter Error Flag
+ *  0b00000000..Clear
+ *  0b00000000..No effect
+ *  0b00000001..Clear the flag
+ *  0b00000001..Set
+ */
 #define FLEXIO_SHIFTERR_SEF(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTERR_SEF_SHIFT)) & FLEXIO_SHIFTERR_SEF_MASK)
 /*! @} */
 
-/*! @name TIMSTAT - Timer Status */
+/*! @name TIMSTAT - Timer Status Flag */
 /*! @{ */
 
 #define FLEXIO_TIMSTAT_TSF_MASK                  (0xFFU)
 #define FLEXIO_TIMSTAT_TSF_SHIFT                 (0U)
-/*! TSF - Timer Status Flags */
+/*! TSF - Timer Status Flag
+ *  0b00000000..Clear
+ *  0b00000000..No effect
+ *  0b00000001..Clear the flag
+ *  0b00000001..Set
+ */
 #define FLEXIO_TIMSTAT_TSF(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMSTAT_TSF_SHIFT)) & FLEXIO_TIMSTAT_TSF_MASK)
 /*! @} */
 
@@ -459,7 +474,12 @@ typedef struct {
 
 #define FLEXIO_TRGSTAT_ETSF_MASK                 (0xFU)
 #define FLEXIO_TRGSTAT_ETSF_SHIFT                (0U)
-/*! ETSF - External Trigger Status Flags */
+/*! ETSF - External Trigger Status Flag
+ *  0b0000..Clear
+ *  0b0000..No effect
+ *  0b0001..Clear the flag
+ *  0b0001..Set
+ */
 #define FLEXIO_TRGSTAT_ETSF(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_TRGSTAT_ETSF_SHIFT)) & FLEXIO_TRGSTAT_ETSF_MASK)
 /*! @} */
 
@@ -477,7 +497,12 @@ typedef struct {
 
 #define FLEXIO_PINSTAT_PSF_MASK                  (0xFFFFFFFFU)
 #define FLEXIO_PINSTAT_PSF_SHIFT                 (0U)
-/*! PSF - Pin Status Flags */
+/*! PSF - Pin Status Flag
+ *  0b00000000000000000000000000000000..Clear
+ *  0b00000000000000000000000000000000..No effect
+ *  0b00000000000000000000000000000001..Clear the flag
+ *  0b00000000000000000000000000000001..Set
+ */
 #define FLEXIO_PINSTAT_PSF(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXIO_PINSTAT_PSF_SHIFT)) & FLEXIO_PINSTAT_PSF_MASK)
 /*! @} */
 
@@ -562,28 +587,28 @@ typedef struct {
 #define FLEXIO_PINOUTTOG_OUTTOG(x)               (((uint32_t)(((uint32_t)(x)) << FLEXIO_PINOUTTOG_OUTTOG_SHIFT)) & FLEXIO_PINOUTTOG_OUTTOG_MASK)
 /*! @} */
 
-/*! @name SHIFTCTL - Shifter Control N */
+/*! @name SHIFTCTL - Shifter Control */
 /*! @{ */
 
 #define FLEXIO_SHIFTCTL_SMOD_MASK                (0x7U)
 #define FLEXIO_SHIFTCTL_SMOD_SHIFT               (0U)
 /*! SMOD - Shifter Mode
- *  0b000..Disabled.
- *  0b001..Receive mode. Captures the current shifter content into the SHIFTBUF on expiration of the timer.
- *  0b010..Transmit mode. Load SHIFTBUF contents into the shifter on expiration of the timer.
- *  0b011..Reserved.
- *  0b100..Match Store mode. Shifter data is compared to SHIFTBUF content on expiration of the timer.
- *  0b101..Match Continuous mode. Shifter data is continuously compared to SHIFTBUF contents.
- *  0b110..State mode. SHIFTBUF contents are used for storing programmable state attributes.
- *  0b111..Logic mode. SHIFTBUF contents are used for implementing programmable logic lookup table.
+ *  0b000..Disable
+ *  0b001..Receive mode; capture the current shifter content into SHIFTBUF on expiration of the timer
+ *  0b010..Transmit mode; load SHIFTBUF contents into the shifter on expiration of the timer
+ *  0b011..Reserved
+ *  0b100..Match Store mode; shifter data is compared to SHIFTBUF content on expiration of the timer
+ *  0b101..Match Continuous mode; shifter data is continuously compared to SHIFTBUF contents
+ *  0b110..State mode; SHIFTBUF contents store programmable state attributes
+ *  0b111..Logic mode; SHIFTBUF contents implement programmable logic lookup table
  */
 #define FLEXIO_SHIFTCTL_SMOD(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCTL_SMOD_SHIFT)) & FLEXIO_SHIFTCTL_SMOD_MASK)
 
 #define FLEXIO_SHIFTCTL_PINPOL_MASK              (0x80U)
 #define FLEXIO_SHIFTCTL_PINPOL_SHIFT             (7U)
 /*! PINPOL - Shifter Pin Polarity
- *  0b0..Pin is active high
- *  0b1..Pin is active low
+ *  0b0..Active high
+ *  0b1..Active low
  */
 #define FLEXIO_SHIFTCTL_PINPOL(x)                (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCTL_PINPOL_SHIFT)) & FLEXIO_SHIFTCTL_PINPOL_MASK)
 
@@ -605,8 +630,8 @@ typedef struct {
 #define FLEXIO_SHIFTCTL_TIMPOL_MASK              (0x800000U)
 #define FLEXIO_SHIFTCTL_TIMPOL_SHIFT             (23U)
 /*! TIMPOL - Timer Polarity
- *  0b0..Shift on posedge of shift clock
- *  0b1..Shift on negedge of shift clock
+ *  0b0..Positive edge
+ *  0b1..Negative edge
  */
 #define FLEXIO_SHIFTCTL_TIMPOL(x)                (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCTL_TIMPOL_SHIFT)) & FLEXIO_SHIFTCTL_TIMPOL_MASK)
 
@@ -616,31 +641,33 @@ typedef struct {
 #define FLEXIO_SHIFTCTL_TIMSEL(x)                (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCTL_TIMSEL_SHIFT)) & FLEXIO_SHIFTCTL_TIMSEL_MASK)
 /*! @} */
 
-/*! @name SHIFTCFG - Shifter Configuration N */
+/*! @name SHIFTCFG - Shifter Configuration */
 /*! @{ */
 
 #define FLEXIO_SHIFTCFG_SSTART_MASK              (0x3U)
 #define FLEXIO_SHIFTCFG_SSTART_SHIFT             (0U)
-/*! SSTART - Shifter Start Bit
- *  0b00..Start bit disabled for transmitter/receiver/match store. Transmitter loads data on enable.
- *  0b01..Start bit disabled for transmitter/receiver/match store. Transmitter loads data on first shift.
- *  0b10..Transmitter outputs start bit value 0 before loading data on first shift. If start bit is not 0, receiver/match store sets error flag.
- *  0b11..Transmitter outputs start bit value 1 before loading data on first shift. If start bit is not 1, receiver/match store sets error flag.
+/*! SSTART - Shifter Start
+ *  0b00..Start bit disabled for Transmitter, Receiver, and Match Store modes; Transmitter mode loads data on enable
+ *  0b01..Start bit disabled for Transmitter, Receiver, and Match Store modes; Transmitter mode loads data on first shift
+ *  0b10..Transmitter mode outputs start bit value 0 before loading data on first shift; if start bit is not 0,
+ *        Receiver and Match Store modes set error flag
+ *  0b11..Transmitter mode outputs start bit value 1 before loading data on first shift; if start bit is not 1,
+ *        Receiver and Match Store modes set error flag
  */
 #define FLEXIO_SHIFTCFG_SSTART(x)                (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCFG_SSTART_SHIFT)) & FLEXIO_SHIFTCFG_SSTART_MASK)
 
 #define FLEXIO_SHIFTCFG_SSTOP_MASK               (0x30U)
 #define FLEXIO_SHIFTCFG_SSTOP_SHIFT              (4U)
-/*! SSTOP - Shifter Stop bit
- *  0b00..Stop bit disabled for transmitter/receiver/match store
- *  0b01..Stop bit disabled for transmitter/receiver/match store. When timer is in stop condition, receiver/match
- *        store stores receive data on the configured shift edge.
- *  0b10..Transmitter outputs stop bit value 0 on store. If stop bit is not 0, receiver/match store sets error
- *        flag. When timer is in stop condition, receiver/match stores also store receive data on the configured shift
- *        edge.
- *  0b11..Transmitter outputs stop bit value 1 on store. If stop bit is not 1, receiver/match store sets error
- *        flag. When timer is in stop condition, receiver/match store also stores receive data on the configured shift
- *        edge.
+/*! SSTOP - Shifter Stop
+ *  0b00..Stop bit disabled for Transmitter, Receiver, and Match Store modes
+ *  0b01..Stop bit disabled for Transmitter, Receiver, and Match Store modes; when timer is in stop condition,
+ *        Receiver and Match Store modes store receive data on the configured shift edge
+ *  0b10..Transmitter mode outputs stop bit value 0 in Match Store mode; if stop bit is not 0, Receiver and Match
+ *        Store modes set error flag (when timer is in stop condition, these modes also store receive data on the
+ *        configured shift edge)
+ *  0b11..Transmitter mode outputs stop bit value 1 in Match Store mode; if stop bit is not 1, Receiver and Match
+ *        Store modes set error flag (when timer is in stop condition, these modes also store receive data on the
+ *        configured shift edge)
  */
 #define FLEXIO_SHIFTCFG_SSTOP(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCFG_SSTOP_SHIFT)) & FLEXIO_SHIFTCFG_SSTOP_MASK)
 
@@ -648,23 +675,23 @@ typedef struct {
 #define FLEXIO_SHIFTCFG_INSRC_SHIFT              (8U)
 /*! INSRC - Input Source
  *  0b0..Pin
- *  0b1..Shifter N+1 Output
+ *  0b1..Shifter n+1 output
  */
 #define FLEXIO_SHIFTCFG_INSRC(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCFG_INSRC_SHIFT)) & FLEXIO_SHIFTCFG_INSRC_MASK)
 
 #define FLEXIO_SHIFTCFG_LATST_MASK               (0x200U)
 #define FLEXIO_SHIFTCFG_LATST_SHIFT              (9U)
 /*! LATST - Late Store
- *  0b0..Shift register stores the pre-shift register state.
- *  0b1..Shift register stores the post-shift register state.
+ *  0b0..Store the pre-shift register state
+ *  0b1..Store the post-shift register state
  */
 #define FLEXIO_SHIFTCFG_LATST(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCFG_LATST_SHIFT)) & FLEXIO_SHIFTCFG_LATST_MASK)
 
 #define FLEXIO_SHIFTCFG_SSIZE_MASK               (0x1000U)
 #define FLEXIO_SHIFTCFG_SSIZE_SHIFT              (12U)
 /*! SSIZE - Shifter Size
- *  0b0..Shift register is 32-bit.
- *  0b1..Shift register is 24-bit.
+ *  0b0..32-bit
+ *  0b1..24-bit
  */
 #define FLEXIO_SHIFTCFG_SSIZE(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCFG_SSIZE_SHIFT)) & FLEXIO_SHIFTCFG_SSIZE_MASK)
 
@@ -674,7 +701,7 @@ typedef struct {
 #define FLEXIO_SHIFTCFG_PWIDTH(x)                (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTCFG_PWIDTH_SHIFT)) & FLEXIO_SHIFTCFG_PWIDTH_MASK)
 /*! @} */
 
-/*! @name SHIFTBUF - Shifter Buffer N */
+/*! @name SHIFTBUF - Shifter Buffer */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUF_SHIFTBUF_MASK            (0xFFFFFFFFU)
@@ -683,7 +710,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUF_SHIFTBUF(x)              (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUF_SHIFTBUF_SHIFT)) & FLEXIO_SHIFTBUF_SHIFTBUF_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFBIS - Shifter Buffer N Bit Swapped */
+/*! @name SHIFTBUFBIS - Shifter Buffer Bit Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFBIS_SHIFTBUFBIS_MASK      (0xFFFFFFFFU)
@@ -692,7 +719,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFBIS_SHIFTBUFBIS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFBIS_SHIFTBUFBIS_SHIFT)) & FLEXIO_SHIFTBUFBIS_SHIFTBUFBIS_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFBYS - Shifter Buffer N Byte Swapped */
+/*! @name SHIFTBUFBYS - Shifter Buffer Byte Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFBYS_SHIFTBUFBYS_MASK      (0xFFFFFFFFU)
@@ -701,7 +728,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFBYS_SHIFTBUFBYS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFBYS_SHIFTBUFBYS_SHIFT)) & FLEXIO_SHIFTBUFBYS_SHIFTBUFBYS_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFBBS - Shifter Buffer N Bit Byte Swapped */
+/*! @name SHIFTBUFBBS - Shifter Buffer Bit Byte Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFBBS_SHIFTBUFBBS_MASK      (0xFFFFFFFFU)
@@ -710,44 +737,44 @@ typedef struct {
 #define FLEXIO_SHIFTBUFBBS_SHIFTBUFBBS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFBBS_SHIFTBUFBBS_SHIFT)) & FLEXIO_SHIFTBUFBBS_SHIFTBUFBBS_MASK)
 /*! @} */
 
-/*! @name TIMCTL - Timer Control N */
+/*! @name TIMCTL - Timer Control */
 /*! @{ */
 
 #define FLEXIO_TIMCTL_TIMOD_MASK                 (0x7U)
 #define FLEXIO_TIMCTL_TIMOD_SHIFT                (0U)
 /*! TIMOD - Timer Mode
- *  0b000..Timer disabled.
- *  0b001..Dual 8-bit counters baud mode.
- *  0b010..Dual 8-bit counters PWM high mode.
- *  0b011..Single 16-bit counter mode.
- *  0b100..Single 16-bit counter disable mode.
- *  0b101..Dual 8-bit counters word mode.
- *  0b110..Dual 8-bit counters PWM low mode.
- *  0b111..Single 16-bit input capture mode.
+ *  0b000..Timer disabled
+ *  0b001..Dual 8-bit counters baud mode
+ *  0b010..Dual 8-bit counters PWM high mode
+ *  0b011..Single 16-bit counter mode
+ *  0b100..Single 16-bit counter disable mode
+ *  0b101..Dual 8-bit counters word mode
+ *  0b110..Dual 8-bit counters PWM low mode
+ *  0b111..Single 16-bit input capture mode
  */
 #define FLEXIO_TIMCTL_TIMOD(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_TIMOD_SHIFT)) & FLEXIO_TIMCTL_TIMOD_MASK)
 
 #define FLEXIO_TIMCTL_ONETIM_MASK                (0x20U)
 #define FLEXIO_TIMCTL_ONETIM_SHIFT               (5U)
 /*! ONETIM - Timer One Time Operation
- *  0b0..The timer enable event is generated as normal.
- *  0b1..The timer enable event is blocked unless timer status flag is clear.
+ *  0b0..Generate the timer enable event as normal
+ *  0b1..Block the timer enable event unless the timer status flag is clear
  */
 #define FLEXIO_TIMCTL_ONETIM(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_ONETIM_SHIFT)) & FLEXIO_TIMCTL_ONETIM_MASK)
 
 #define FLEXIO_TIMCTL_PININS_MASK                (0x40U)
 #define FLEXIO_TIMCTL_PININS_SHIFT               (6U)
 /*! PININS - Timer Pin Input Select
- *  0b0..Timer pin input and output are selected by PINSEL.
- *  0b1..Timer pin input is selected by PINSEL+1. Timer pin output remains selected by PINSEL.
+ *  0b0..PINSEL selects timer pin input and output
+ *  0b1..PINSEL + 1 selects the timer pin input; timer pin output remains selected by PINSEL
  */
 #define FLEXIO_TIMCTL_PININS(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_PININS_SHIFT)) & FLEXIO_TIMCTL_PININS_MASK)
 
 #define FLEXIO_TIMCTL_PINPOL_MASK                (0x80U)
 #define FLEXIO_TIMCTL_PINPOL_SHIFT               (7U)
 /*! PINPOL - Timer Pin Polarity
- *  0b0..Pin is active high
- *  0b1..Pin is active low
+ *  0b0..Active high
+ *  0b1..Active low
  */
 #define FLEXIO_TIMCTL_PINPOL(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_PINPOL_SHIFT)) & FLEXIO_TIMCTL_PINPOL_MASK)
 
@@ -769,16 +796,16 @@ typedef struct {
 #define FLEXIO_TIMCTL_TRGSRC_MASK                (0x400000U)
 #define FLEXIO_TIMCTL_TRGSRC_SHIFT               (22U)
 /*! TRGSRC - Trigger Source
- *  0b0..External trigger selected
- *  0b1..Internal trigger selected
+ *  0b0..External
+ *  0b1..Internal
  */
 #define FLEXIO_TIMCTL_TRGSRC(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_TRGSRC_SHIFT)) & FLEXIO_TIMCTL_TRGSRC_MASK)
 
 #define FLEXIO_TIMCTL_TRGPOL_MASK                (0x800000U)
 #define FLEXIO_TIMCTL_TRGPOL_SHIFT               (23U)
 /*! TRGPOL - Trigger Polarity
- *  0b0..Trigger active high
- *  0b1..Trigger active low
+ *  0b0..Active high
+ *  0b1..Active low
  */
 #define FLEXIO_TIMCTL_TRGPOL(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_TRGPOL_SHIFT)) & FLEXIO_TIMCTL_TRGPOL_MASK)
 
@@ -788,24 +815,24 @@ typedef struct {
 #define FLEXIO_TIMCTL_TRGSEL(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCTL_TRGSEL_SHIFT)) & FLEXIO_TIMCTL_TRGSEL_MASK)
 /*! @} */
 
-/*! @name TIMCFG - Timer Configuration N */
+/*! @name TIMCFG - Timer Configuration */
 /*! @{ */
 
 #define FLEXIO_TIMCFG_TSTART_MASK                (0x2U)
 #define FLEXIO_TIMCFG_TSTART_SHIFT               (1U)
-/*! TSTART - Timer Start Bit
- *  0b0..Start bit disabled
- *  0b1..Start bit enabled
+/*! TSTART - Timer Start
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define FLEXIO_TIMCFG_TSTART(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCFG_TSTART_SHIFT)) & FLEXIO_TIMCFG_TSTART_MASK)
 
 #define FLEXIO_TIMCFG_TSTOP_MASK                 (0x30U)
 #define FLEXIO_TIMCFG_TSTOP_SHIFT                (4U)
-/*! TSTOP - Timer Stop Bit
- *  0b00..Stop bit disabled
- *  0b01..Stop bit is enabled on timer compare
- *  0b10..Stop bit is enabled on timer disable
- *  0b11..Stop bit is enabled on timer compare and timer disable
+/*! TSTOP - Timer Stop
+ *  0b00..Disabled
+ *  0b01..Enabled on timer compare
+ *  0b10..Enabled on timer disable
+ *  0b11..Enabled on timer compare and timer disable
  */
 #define FLEXIO_TIMCFG_TSTOP(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCFG_TSTOP_SHIFT)) & FLEXIO_TIMCFG_TSTOP_MASK)
 
@@ -813,13 +840,13 @@ typedef struct {
 #define FLEXIO_TIMCFG_TIMENA_SHIFT               (8U)
 /*! TIMENA - Timer Enable
  *  0b000..Timer always enabled
- *  0b001..Timer enabled on Timer N-1 enable
- *  0b010..Timer enabled on Trigger high
- *  0b011..Timer enabled on Trigger high and Pin high
- *  0b100..Timer enabled on Pin rising edge
- *  0b101..Timer enabled on Pin rising edge and Trigger high
- *  0b110..Timer enabled on Trigger rising edge
- *  0b111..Timer enabled on Trigger rising or falling edge
+ *  0b001..Timer enabled on timer n-1 enable
+ *  0b010..Timer enabled on trigger high
+ *  0b011..Timer enabled on trigger high and pin high
+ *  0b100..Timer enabled on pin rising edge
+ *  0b101..Timer enabled on pin rising edge and trigger high
+ *  0b110..Timer enabled on trigger rising edge
+ *  0b111..Timer enabled on trigger rising or falling edge
  */
 #define FLEXIO_TIMCFG_TIMENA(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCFG_TIMENA_SHIFT)) & FLEXIO_TIMCFG_TIMENA_MASK)
 
@@ -827,9 +854,9 @@ typedef struct {
 #define FLEXIO_TIMCFG_TIMDIS_SHIFT               (12U)
 /*! TIMDIS - Timer Disable
  *  0b000..Timer never disabled
- *  0b001..Timer disabled on Timer N-1 disable
- *  0b010..Timer disabled on timer compare (upper 8-bits match and decrement)
- *  0b011..Timer disabled on timer compare (upper 8-bits match and decrement) and trigger low
+ *  0b001..Timer disabled on timer n-1 disable
+ *  0b010..Timer disabled on timer compare (upper 8 bits match and decrement)
+ *  0b011..Timer disabled on timer compare (upper 8 bits match and decrement) and trigger low
  *  0b100..Timer disabled on pin rising or falling edge
  *  0b101..Timer disabled on pin rising or falling edge provided trigger is high
  *  0b110..Timer disabled on trigger falling edge
@@ -840,7 +867,7 @@ typedef struct {
 #define FLEXIO_TIMCFG_TIMRST_MASK                (0x70000U)
 #define FLEXIO_TIMCFG_TIMRST_SHIFT               (16U)
 /*! TIMRST - Timer Reset
- *  0b000..Timer never reset
+ *  0b000..Never reset timer
  *  0b001..Timer reset on timer output high.
  *  0b010..Timer reset on timer pin equal to timer output
  *  0b011..Timer reset on timer trigger equal to timer output
@@ -854,29 +881,29 @@ typedef struct {
 #define FLEXIO_TIMCFG_TIMDEC_MASK                (0x700000U)
 #define FLEXIO_TIMCFG_TIMDEC_SHIFT               (20U)
 /*! TIMDEC - Timer Decrement
- *  0b000..Decrement counter on FLEXIO clock. Shift clock equals timer output.
- *  0b001..Decrement counter on trigger input (both edges). Shift clock equals timer output.
- *  0b010..Decrement counter on pin input (both edges). Shift clock equals pin input.
- *  0b011..Decrement counter on trigger input (both edges). Shift clock equals trigger input.
- *  0b100..Decrement counter on FLEXIO clock divided by 16. Shift clock equals timer output.
- *  0b101..Decrement counter on FLEXIO clock divided by 256. Shift clock equals timer output.
- *  0b110..Decrement counter on pin input (rising edge). Shift clock equals pin input.
- *  0b111..Decrement counter on trigger input (rising edge). Shift clock equals trigger input.
+ *  0b000..Decrement counter on FLEXIO clock; shift clock equals timer output
+ *  0b001..Decrement counter on trigger input (both edges); shift clock equals timer output
+ *  0b010..Decrement counter on pin input (both edges); shift clock equals pin input
+ *  0b011..Decrement counter on trigger input (both edges); shift clock equals trigger input
+ *  0b100..Decrement counter on FLEXIO clock divided by 16; shift clock equals timer output
+ *  0b101..Decrement counter on FLEXIO clock divided by 256; shift clock equals timer output
+ *  0b110..Decrement counter on pin input (rising edge); shift clock equals pin input
+ *  0b111..Decrement counter on trigger input (rising edge); shift clock equals trigger input
  */
 #define FLEXIO_TIMCFG_TIMDEC(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCFG_TIMDEC_SHIFT)) & FLEXIO_TIMCFG_TIMDEC_MASK)
 
 #define FLEXIO_TIMCFG_TIMOUT_MASK                (0x3000000U)
 #define FLEXIO_TIMCFG_TIMOUT_SHIFT               (24U)
 /*! TIMOUT - Timer Output
- *  0b00..Timer output is logic one when enabled and is not affected by timer reset
- *  0b01..Timer output is logic zero when enabled and is not affected by timer reset
- *  0b10..Timer output is logic one when enabled and on timer reset
- *  0b11..Timer output is logic zero when enabled and on timer reset
+ *  0b00..Logic one when enabled; not affected by timer reset
+ *  0b01..Logic zero when enabled; not affected by timer reset
+ *  0b10..Logic one when enabled and on timer reset
+ *  0b11..Logic zero when enabled and on timer reset
  */
 #define FLEXIO_TIMCFG_TIMOUT(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCFG_TIMOUT_SHIFT)) & FLEXIO_TIMCFG_TIMOUT_MASK)
 /*! @} */
 
-/*! @name TIMCMP - Timer Compare N */
+/*! @name TIMCMP - Timer Compare */
 /*! @{ */
 
 #define FLEXIO_TIMCMP_CMP_MASK                   (0xFFFFU)
@@ -885,7 +912,7 @@ typedef struct {
 #define FLEXIO_TIMCMP_CMP(x)                     (((uint32_t)(((uint32_t)(x)) << FLEXIO_TIMCMP_CMP_SHIFT)) & FLEXIO_TIMCMP_CMP_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFNBS - Shifter Buffer N Nibble Byte Swapped */
+/*! @name SHIFTBUFNBS - Shifter Buffer Nibble Byte Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFNBS_SHIFTBUFNBS_MASK      (0xFFFFFFFFU)
@@ -894,7 +921,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFNBS_SHIFTBUFNBS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFNBS_SHIFTBUFNBS_SHIFT)) & FLEXIO_SHIFTBUFNBS_SHIFTBUFNBS_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFHWS - Shifter Buffer N Halfword Swapped */
+/*! @name SHIFTBUFHWS - Shifter Buffer Halfword Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFHWS_SHIFTBUFHWS_MASK      (0xFFFFFFFFU)
@@ -903,7 +930,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFHWS_SHIFTBUFHWS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFHWS_SHIFTBUFHWS_SHIFT)) & FLEXIO_SHIFTBUFHWS_SHIFTBUFHWS_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFNIS - Shifter Buffer N Nibble Swapped */
+/*! @name SHIFTBUFNIS - Shifter Buffer Nibble Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFNIS_SHIFTBUFNIS_MASK      (0xFFFFFFFFU)
@@ -912,7 +939,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFNIS_SHIFTBUFNIS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFNIS_SHIFTBUFNIS_SHIFT)) & FLEXIO_SHIFTBUFNIS_SHIFTBUFNIS_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFOES - Shifter Buffer N Odd Even Swapped */
+/*! @name SHIFTBUFOES - Shifter Buffer Odd Even Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFOES_SHIFTBUFOES_MASK      (0xFFFFFFFFU)
@@ -921,7 +948,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFOES_SHIFTBUFOES(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFOES_SHIFTBUFOES_SHIFT)) & FLEXIO_SHIFTBUFOES_SHIFTBUFOES_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFEOS - Shifter Buffer N Even Odd Swapped */
+/*! @name SHIFTBUFEOS - Shifter Buffer Even Odd Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFEOS_SHIFTBUFEOS_MASK      (0xFFFFFFFFU)
@@ -930,7 +957,7 @@ typedef struct {
 #define FLEXIO_SHIFTBUFEOS_SHIFTBUFEOS(x)        (((uint32_t)(((uint32_t)(x)) << FLEXIO_SHIFTBUFEOS_SHIFTBUFEOS_SHIFT)) & FLEXIO_SHIFTBUFEOS_SHIFTBUFEOS_MASK)
 /*! @} */
 
-/*! @name SHIFTBUFHBS - Shifter Buffer N Halfword Byte Swapped */
+/*! @name SHIFTBUFHBS - Shifter Buffer Halfword Byte Swapped */
 /*! @{ */
 
 #define FLEXIO_SHIFTBUFHBS_SHIFTBUFHBS_MASK      (0xFFFFFFFFU)

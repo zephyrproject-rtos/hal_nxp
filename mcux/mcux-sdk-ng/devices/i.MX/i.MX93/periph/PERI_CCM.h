@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -199,7 +199,7 @@ typedef struct {
       __IO uint32_t TOG;                               /**< Clock Root Control Register, offset: 0xC */
     } CLOCK_ROOT_CONTROL;
          uint8_t RESERVED_0[16];
-    __I  uint32_t STATUS0;                           /**< Clock root working status, array offset: 0x20, array step: 0x80 */
+    __IO uint32_t STATUS0;                           /**< Clock root working status, array offset: 0x20, array step: 0x80 */
          uint8_t RESERVED_1[12];
     struct {                                         /* offset: 0x30 */
       __IO uint32_t RW;                                /**< Clock root access control, offset: 0x30 */

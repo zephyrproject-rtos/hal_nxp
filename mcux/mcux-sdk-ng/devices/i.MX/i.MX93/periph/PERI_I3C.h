@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I3C
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -197,8 +197,8 @@ typedef struct {
   __IO uint32_t SDATACTRL;                         /**< Target Data Control, offset: 0x2C */
   __O  uint32_t SWDATAB;                           /**< Target Write Data Byte, offset: 0x30 */
   __O  uint32_t SWDATABE;                          /**< Target Write Data Byte End, offset: 0x34 */
-  __O  uint32_t SWDATAH;                           /**< Target Write Data Half-word, offset: 0x38 */
-  __O  uint32_t SWDATAHE;                          /**< Target Write Data Half-word End, offset: 0x3C */
+  __O  uint32_t SWDATAH;                           /**< Target Write Data Halfword, offset: 0x38 */
+  __O  uint32_t SWDATAHE;                          /**< Target Write Data Halfword End, offset: 0x3C */
   __I  uint32_t SRDATAB;                           /**< Target Read Data Byte, offset: 0x40 */
        uint8_t RESERVED_1[4];
   union {                                          /* offset: 0x48 */
@@ -234,7 +234,7 @@ typedef struct {
   __O  uint32_t MWDATAHE;                          /**< Controller Write Data Halfword End, offset: 0xBC */
   __I  uint32_t MRDATAB;                           /**< Controller Read Data Byte, offset: 0xC0 */
        uint8_t RESERVED_6[8];
-  __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1(to bus), offset: 0xCC */
+  __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1 (to Bus), offset: 0xCC */
   union {                                          /* offset: 0xD0 */
     __O  uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
     __O  uint32_t MWMSG_SDR_DATA;                    /**< Controller Write Message Data in SDR mode, offset: 0xD0 */
@@ -242,14 +242,14 @@ typedef struct {
   __I  uint32_t MRMSG_SDR;                         /**< Controller Read Message in SDR mode, offset: 0xD4 */
   union {                                          /* offset: 0xD8 */
     __O  uint32_t MWMSG_DDR_CONTROL;                 /**< Controller Write Message in DDR mode: First Control Word, offset: 0xD8 */
-    __O  uint32_t MWMSG_DDR_CONTROL2;                /**< Controller Write Message in DDR mode Control 2, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_CONTROL2;                /**< Controller Write Message in DDR Mode Control 2, offset: 0xD8 */
     __O  uint32_t MWMSG_DDR_DATA;                    /**< Controller Write Message Data in DDR mode, offset: 0xD8 */
   };
   __I  uint32_t MRMSG_DDR;                         /**< Controller Read Message in DDR mode, offset: 0xDC */
        uint8_t RESERVED_7[4];
   __IO uint32_t MDYNADDR;                          /**< Controller Dynamic Address, offset: 0xE4 */
        uint8_t RESERVED_8[24];
-  __IO uint32_t SRSTACTTIME;                       /**< Timing Rules for TargetReset Recovery, offset: 0x100 */
+  __IO uint32_t SRSTACTTIME;                       /**< Timing Rules for Target Reset Recovery, offset: 0x100 */
        uint8_t RESERVED_9[8];
   __IO uint32_t SCCCMASK;                          /**< CCC Mask for Unhandled CCCs, offset: 0x10C */
   __IO uint32_t SERRWARNMASK;                      /**< Target Errors and Warnings Mask, offset: 0x110 */
@@ -288,27 +288,26 @@ typedef struct {
 #define I3C_MCONFIG_DISTO_MASK                   (0x8U)
 #define I3C_MCONFIG_DISTO_SHIFT                  (3U)
 /*! DISTO - Disable Timeout
- *  0b0..Timeout enabled
- *  0b1..Timeout disabled, if timeout is configured
+ *  0b0..Enabled
+ *  0b1..Disabled
  */
 #define I3C_MCONFIG_DISTO(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_DISTO_SHIFT)) & I3C_MCONFIG_DISTO_MASK)
 
 #define I3C_MCONFIG_HKEEP_MASK                   (0x30U)
 #define I3C_MCONFIG_HKEEP_SHIFT                  (4U)
 /*! HKEEP - High-Keeper
- *  0b00..NONE
+ *  0b00..None
  *  0b01..WIRED_IN
- *  0b10..PASSIVE_SDA
- *  0b11..PASSIVE_ON_SDA_SCL
+ *  0b10..PASSIVE_SDA (I2C mode, no clock stretches mode)
+ *  0b11..
  */
 #define I3C_MCONFIG_HKEEP(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_HKEEP_SHIFT)) & I3C_MCONFIG_HKEEP_MASK)
 
 #define I3C_MCONFIG_ODSTOP_MASK                  (0x40U)
 #define I3C_MCONFIG_ODSTOP_SHIFT                 (6U)
-/*! ODSTOP - Open Drain Stop
- *  0b0..Disable open-drain stop. ODSTOP must be disabled when sending an HDR exit pattern.
- *  0b1..Enable open-drain stop. STOP is emitted at open-drain speeds even for I3C messages. In legacy devices,
- *       this feature can ensure that the legacy devices see the STOP.
+/*! ODSTOP - Open-drain Stop
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_MCONFIG_ODSTOP(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_ODSTOP_SHIFT)) & I3C_MCONFIG_ODSTOP_MASK)
 
@@ -324,16 +323,14 @@ typedef struct {
 
 #define I3C_MCONFIG_ODBAUD_MASK                  (0xFF0000U)
 #define I3C_MCONFIG_ODBAUD_SHIFT                 (16U)
-/*! ODBAUD - Open Drain Baud Rate */
+/*! ODBAUD - Open-drain Baud Rate */
 #define I3C_MCONFIG_ODBAUD(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_ODBAUD_SHIFT)) & I3C_MCONFIG_ODBAUD_MASK)
 
 #define I3C_MCONFIG_ODHPP_MASK                   (0x1000000U)
 #define I3C_MCONFIG_ODHPP_SHIFT                  (24U)
-/*! ODHPP - Open Drain High Push-Pull
- *  0b0..ODHPP disabled. Open-Drain SCL High half-clock period is the same as the Open-Drain Low SCL half-period.
- *  0b1..ODHPP enabled. Open-Drain High SCL half-lock period is one PPBAUD count for I3C messages. This setting is
- *       faster (and works for I3C devices). Any legacy I2C devices on the bus will not see the SCL High at all
- *       (less than the spike filter period).
+/*! ODHPP - Open-drain High Push-Pull
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_MCONFIG_ODHPP(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_ODHPP_SHIFT)) & I3C_MCONFIG_ODHPP_MASK)
 
@@ -354,45 +351,40 @@ typedef struct {
 #define I3C_SCONFIG_SLVENA_MASK                  (0x1U)
 #define I3C_SCONFIG_SLVENA_SHIFT                 (0U)
 /*! SLVENA - Target Enable
- *  0b0..Target ignores the I2C or I3C bus
- *  0b1..Target can operate on the I2C or I3C bus
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SCONFIG_SLVENA(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SCONFIG_SLVENA_SHIFT)) & I3C_SCONFIG_SLVENA_MASK)
 
 #define I3C_SCONFIG_NACK_MASK                    (0x2U)
 #define I3C_SCONFIG_NACK_SHIFT                   (1U)
 /*! NACK - Not Acknowledge
- *  0b0..Always NACK disable
- *  0b1..Always NACK enable. The target rejects all requests to it, except for a Common Command Code (CCC)
- *       broadcast. NACK = 1 should be used with caution, because the controller may decide that the target is missing, if
- *       NACK is overused.
+ *  0b0..Always disable NACK mode
+ *  0b1..Always enable NACK mode (works normally)
  */
 #define I3C_SCONFIG_NACK(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_SCONFIG_NACK_SHIFT)) & I3C_SCONFIG_NACK_MASK)
 
 #define I3C_SCONFIG_MATCHSS_MASK                 (0x4U)
 #define I3C_SCONFIG_MATCHSS_SHIFT                (2U)
-/*! MATCHSS - Match START or STOP
- *  0b0..Match START or STOP disable
- *  0b1..Match START or STOP enable. START and STOP sticky SSTATUS bits only become 1 when SSTATUS[MATCHED] is 1.
- *       This setting allows START and STOP to be used to detect the end of a message to/from this target.
+/*! MATCHSS - Match Start or Stop
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SCONFIG_MATCHSS(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SCONFIG_MATCHSS_SHIFT)) & I3C_SCONFIG_MATCHSS_MASK)
 
 #define I3C_SCONFIG_S0IGNORE_MASK                (0x8U)
 #define I3C_SCONFIG_S0IGNORE_SHIFT               (3U)
-/*! S0IGNORE - Ignore TE0/TE1 Errors
- *  0b0..Do not ignore TE0/TE1 errors
- *  0b1..Ignore TE0/TE1 errors. Target does not detect TE0 or TE1 errors, so it does not lock up waiting on an
- *       Exit Pattern. This setting should only be used when the bus does not use HDR mode.
+/*! S0IGNORE - Ignore TE0 or TE1 Errors
+ *  0b0..Do not ignore TE0 or TE1 errors
+ *  0b1..Ignore TE0 or TE1 errors
  */
 #define I3C_SCONFIG_S0IGNORE(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SCONFIG_S0IGNORE_SHIFT)) & I3C_SCONFIG_S0IGNORE_MASK)
 
 #define I3C_SCONFIG_HDROK_MASK                   (0x10U)
 #define I3C_SCONFIG_HDROK_SHIFT                  (4U)
 /*! HDROK - HDR OK
- *  0b0..Disable HDR OK.
- *  0b1..Enable HDR OK. Allow HDR-DDR and/or HDR-BT messaging if available by setting the corresponding
- *       SIDEXT[BCR] bit to say HDR is available, and the corresponding GETCAPS bit for DDR and/or BT bit permitting use.
+ *  0b0..Disable HDR OK
+ *  0b1..Enable HDR OK
  */
 #define I3C_SCONFIG_HDROK(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SCONFIG_HDROK_SHIFT)) & I3C_SCONFIG_HDROK_MASK)
 
@@ -400,7 +392,7 @@ typedef struct {
 #define I3C_SCONFIG_OFFLINE_SHIFT                (9U)
 /*! OFFLINE - Offline
  *  0b0..Disable
- *  0b1..Enables wait to ensure the bus is not in HDR mode.
+ *  0b1..Enable
  */
 #define I3C_SCONFIG_OFFLINE(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SCONFIG_OFFLINE_SHIFT)) & I3C_SCONFIG_OFFLINE_MASK)
 
@@ -420,49 +412,49 @@ typedef struct {
 
 #define I3C_SSTATUS_STNOTSTOP_MASK               (0x1U)
 #define I3C_SSTATUS_STNOTSTOP_SHIFT              (0U)
-/*! STNOTSTOP - Status Not Stop
- *  0b0..I3C module is in a STOP condition.
- *  0b1..The bus is busy (has activity).
+/*! STNOTSTOP - Status not Stop
+ *  0b0..In STOP condition
+ *  0b1..Busy
  */
 #define I3C_SSTATUS_STNOTSTOP(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STNOTSTOP_SHIFT)) & I3C_SSTATUS_STNOTSTOP_MASK)
 
 #define I3C_SSTATUS_STMSG_MASK                   (0x2U)
 #define I3C_SSTATUS_STMSG_SHIFT                  (1U)
-/*! STMSG - Status message
- *  0b0..Bus target not listening or responding.
- *  0b1..This bus target is listening to the bus traffic or responding.
+/*! STMSG - Status Message
+ *  0b0..Idle
+ *  0b1..Busy
  */
 #define I3C_SSTATUS_STMSG(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STMSG_SHIFT)) & I3C_SSTATUS_STMSG_MASK)
 
 #define I3C_SSTATUS_STCCCH_MASK                  (0x4U)
 #define I3C_SSTATUS_STCCCH_SHIFT                 (2U)
 /*! STCCCH - Status Common Command Code Handler
- *  0b0..No CCC message is being handled.
- *  0b1..A CCC message is being handled automatically.
+ *  0b0..No CCC message handled
+ *  0b1..Handled automatically
  */
 #define I3C_SSTATUS_STCCCH(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STCCCH_SHIFT)) & I3C_SSTATUS_STCCCH_MASK)
 
 #define I3C_SSTATUS_STREQRD_MASK                 (0x8U)
 #define I3C_SSTATUS_STREQRD_SHIFT                (3U)
 /*! STREQRD - Status Request Read
- *  0b0..REQ in process is not an SDR read from this target.
- *  0b1..The REQ in process is an SDR read from this target, or an In-Band Interrupt (IBI) is being pushed out.
+ *  0b0..Not an SDR read
+ *  0b1..SDR read from this target or an IBI is being pushed out
  */
 #define I3C_SSTATUS_STREQRD(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STREQRD_SHIFT)) & I3C_SSTATUS_STREQRD_MASK)
 
 #define I3C_SSTATUS_STREQWR_MASK                 (0x10U)
 #define I3C_SSTATUS_STREQWR_SHIFT                (4U)
 /*! STREQWR - Status Request Write
- *  0b0..REQ in process is not SDR write data from the controller.
- *  0b1..REQ in process is SDR write data from the controller to this bus target (or all I3C targets), but not in ENTDAA mode.
+ *  0b0..Not an SDR write
+ *  0b1..SDR write data from the controller, but not in ENTDAA mode
  */
 #define I3C_SSTATUS_STREQWR(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STREQWR_SHIFT)) & I3C_SSTATUS_STREQWR_MASK)
 
 #define I3C_SSTATUS_STDAA_MASK                   (0x20U)
 #define I3C_SSTATUS_STDAA_SHIFT                  (5U)
 /*! STDAA - Status Dynamic Address Assignment
- *  0b0..Not in ENTDAA mode.
- *  0b1..I3C bus is in Enter Dynamic Address Assignment (ENTDAA) mode, regardless of whether this bus target has a Dynamic Address or not.
+ *  0b0..Not in ENTDAA mode
+ *  0b1..In ENTDAA mode
  */
 #define I3C_SSTATUS_STDAA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STDAA_SHIFT)) & I3C_SSTATUS_STDAA_MASK)
 
@@ -470,46 +462,51 @@ typedef struct {
 #define I3C_SSTATUS_STHDR_SHIFT                  (6U)
 /*! STHDR - Status High Data Rate
  *  0b0..I3C bus not in HDR-DDR mode
- *  0b1..The I3C bus is in HDR-DDR mode, regardless of whether HDR mode is supported by this module or not, and
- *       regardless of whether the message is to this module or to some other module.
+ *  0b1..I3C bus in HDR-DDR mode
  */
 #define I3C_SSTATUS_STHDR(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STHDR_SHIFT)) & I3C_SSTATUS_STHDR_MASK)
 
 #define I3C_SSTATUS_START_MASK                   (0x100U)
 #define I3C_SSTATUS_START_SHIFT                  (8U)
-/*! START - Start
- *  0b0..No START seen.
- *  0b1..A START or repeated START was seen after the START bit was last cleared.
+/*! START - Start Flag
+ *  0b0..No effect
+ *  0b0..Not detected
+ *  0b1..Clear the flag
+ *  0b1..Detected
  */
 #define I3C_SSTATUS_START(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_START_SHIFT)) & I3C_SSTATUS_START_MASK)
 
 #define I3C_SSTATUS_MATCHED_MASK                 (0x200U)
 #define I3C_SSTATUS_MATCHED_SHIFT                (9U)
-/*! MATCHED - Matched
- *  0b0..No header matched.
- *  0b1..An incoming header matched the I3C Dynamic or I2C Static address of this device (if any) since the bus was last cleared.
+/*! MATCHED - Matched Flag
+ *  0b0..Header not matched
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Header matched
  */
 #define I3C_SSTATUS_MATCHED(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_MATCHED_SHIFT)) & I3C_SSTATUS_MATCHED_MASK)
 
 #define I3C_SSTATUS_STOP_MASK                    (0x400U)
 #define I3C_SSTATUS_STOP_SHIFT                   (10U)
-/*! STOP - Stop
- *  0b0..No STOP detected.
- *  0b1..Stopped state detected. A STOP state was present on the bus since the bus was last cleared.
+/*! STOP - Stop Flag
+ *  0b0..No Stopped state detected
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Stopped state detected
  */
 #define I3C_SSTATUS_STOP(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_STOP_SHIFT)) & I3C_SSTATUS_STOP_MASK)
 
 #define I3C_SSTATUS_RX_PEND_MASK                 (0x800U)
 #define I3C_SSTATUS_RX_PEND_SHIFT                (11U)
 /*! RX_PEND - Received Message Pending
- *  0b0..No received message is pending.
- *  0b1..Received message is pending.
+ *  0b0..No received message pending
+ *  0b1..Received message pending
  */
 #define I3C_SSTATUS_RX_PEND(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_RX_PEND_SHIFT)) & I3C_SSTATUS_RX_PEND_MASK)
 
 #define I3C_SSTATUS_TXNOTFULL_MASK               (0x1000U)
 #define I3C_SSTATUS_TXNOTFULL_SHIFT              (12U)
-/*! TXNOTFULL - Transmit Buffer Is Not Full
+/*! TXNOTFULL - Transmit Buffer Not Full
  *  0b0..Transmit buffer full
  *  0b1..Transmit buffer not full
  */
@@ -517,17 +514,21 @@ typedef struct {
 
 #define I3C_SSTATUS_DACHG_MASK                   (0x2000U)
 #define I3C_SSTATUS_DACHG_SHIFT                  (13U)
-/*! DACHG - Dynamic Address Change
- *  0b0..No DA change detected.
- *  0b1..DA change detected. The target DA has been assigned, re-assigned, or reset (lost) and is now in the state of being valid or none.
+/*! DACHG - Dynamic Address Change Flag
+ *  0b0..No DA change detected
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..DA change detected
  */
 #define I3C_SSTATUS_DACHG(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_DACHG_SHIFT)) & I3C_SSTATUS_DACHG_MASK)
 
 #define I3C_SSTATUS_CCC_MASK                     (0x4000U)
 #define I3C_SSTATUS_CCC_SHIFT                    (14U)
-/*! CCC - Common Command Code
- *  0b0..No CCC received.
- *  0b1..CCC received.
+/*! CCC - Common Command Code Flag
+ *  0b0..CCC not received
+ *  0b0..No effect
+ *  0b1..CCC received
+ *  0b1..Clear the flag
  */
 #define I3C_SSTATUS_CCC(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_CCC_SHIFT)) & I3C_SSTATUS_CCC_MASK)
 
@@ -538,84 +539,90 @@ typedef struct {
 
 #define I3C_SSTATUS_HDRMATCH_MASK                (0x10000U)
 #define I3C_SSTATUS_HDRMATCH_SHIFT               (16U)
-/*! HDRMATCH - High Data Rate Command Match
- *  0b0..HDR command did not match.
- *  0b1..HDR command matched the I3C Dynamic Address of this device.
+/*! HDRMATCH - High Data Rate Command Match Flag
+ *  0b0..Did not match
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Matched the I3C dynamic address
  */
 #define I3C_SSTATUS_HDRMATCH(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_HDRMATCH_SHIFT)) & I3C_SSTATUS_HDRMATCH_MASK)
 
 #define I3C_SSTATUS_CHANDLED_MASK                (0x20000U)
 #define I3C_SSTATUS_CHANDLED_SHIFT               (17U)
-/*! CHANDLED - Common Command Code Handled
- *  0b0..CCC handling not in progress.
- *  0b1..CCC handling in progress.
+/*! CHANDLED - Common Command Code Handled Flag
+ *  0b0..CCC handling not in progress
+ *  0b0..No effect
+ *  0b1..CCC handling in progress
+ *  0b1..Clear the flag
  */
 #define I3C_SSTATUS_CHANDLED(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_CHANDLED_SHIFT)) & I3C_SSTATUS_CHANDLED_MASK)
 
 #define I3C_SSTATUS_EVENT_MASK                   (0x40000U)
 #define I3C_SSTATUS_EVENT_SHIFT                  (18U)
-/*! EVENT - Event
- *  0b0..No event has occurred.
- *  0b1..An IBI, CR, or HJ has occurred.
+/*! EVENT - Event Flag
+ *  0b0..No effect
+ *  0b0..No event occurred
+ *  0b1..Clear the flag
+ *  0b1..IBI, CR, or HJ occurred
  */
 #define I3C_SSTATUS_EVENT(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_EVENT_SHIFT)) & I3C_SSTATUS_EVENT_MASK)
 
 #define I3C_SSTATUS_SLVRST_MASK                  (0x80000U)
 #define I3C_SSTATUS_SLVRST_SHIFT                 (19U)
-/*! SLVRST - Target Reset */
+/*! SLVRST - Target Reset Flag */
 #define I3C_SSTATUS_SLVRST(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_SLVRST_SHIFT)) & I3C_SSTATUS_SLVRST_MASK)
 
 #define I3C_SSTATUS_EVDET_MASK                   (0x300000U)
 #define I3C_SSTATUS_EVDET_SHIFT                  (20U)
 /*! EVDET - Event Details
- *  0b00..NONE
- *  0b01..NO_REQUEST
- *  0b10..NACKED
- *  0b11..ACKED
+ *  0b00..NONE (no event or no pending event)
+ *  0b01..NO_REQUEST (request is not sent yet; either there is no START condition yet, or is waiting for Bus-Available or Bus-Idle (HJ))
+ *  0b10..NACKed (not acknowledged, request sent and rejected); I3C tries again
+ *  0b11..ACKed (acknowledged; request sent and accepted), so done (unless the time control data is still being sent)
  */
 #define I3C_SSTATUS_EVDET(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_EVDET_SHIFT)) & I3C_SSTATUS_EVDET_MASK)
 
 #define I3C_SSTATUS_IBIDIS_MASK                  (0x1000000U)
 #define I3C_SSTATUS_IBIDIS_SHIFT                 (24U)
-/*! IBIDIS - In-Band Interrupts Are Disabled
- *  0b0..In-Band Interrupts not disabled
- *  0b1..In-Band Interrupts disabled
+/*! IBIDIS - In-Band Interrupts Disable
+ *  0b0..Enabled
+ *  0b1..Disabled
  */
 #define I3C_SSTATUS_IBIDIS(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_IBIDIS_SHIFT)) & I3C_SSTATUS_IBIDIS_MASK)
 
 #define I3C_SSTATUS_MRDIS_MASK                   (0x2000000U)
 #define I3C_SSTATUS_MRDIS_SHIFT                  (25U)
-/*! MRDIS - Controller Requests Are Disabled
- *  0b0..Controller Requests not disabled
- *  0b1..Controller Requests disabled
+/*! MRDIS - Controller Requests Disable
+ *  0b0..Enabled
+ *  0b1..Disabled
  */
 #define I3C_SSTATUS_MRDIS(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_MRDIS_SHIFT)) & I3C_SSTATUS_MRDIS_MASK)
 
 #define I3C_SSTATUS_HJDIS_MASK                   (0x8000000U)
 #define I3C_SSTATUS_HJDIS_SHIFT                  (27U)
 /*! HJDIS - Hot-Join Disabled
- *  0b0..Hot-Join not disabled
- *  0b1..Hot-Join disabled
+ *  0b0..Enabled
+ *  0b1..Disabled
  */
 #define I3C_SSTATUS_HJDIS(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_HJDIS_SHIFT)) & I3C_SSTATUS_HJDIS_MASK)
 
 #define I3C_SSTATUS_ACTSTATE_MASK                (0x30000000U)
 #define I3C_SSTATUS_ACTSTATE_SHIFT               (28U)
 /*! ACTSTATE - Activity State from Common Command Codes (CCC)
- *  0b00..NO_LATENCY
- *  0b01..LATENCY_1MS
- *  0b10..LATENCY_100MS
- *  0b11..LATENCY_10S
+ *  0b00..NO_LATENCY (normal bus operations)
+ *  0b01..LATENCY_1MS (1 ms of latency)
+ *  0b10..LATENCY_100MS (100 ms of latency)
+ *  0b11..LATENCY_10S (10 seconds of latency)
  */
 #define I3C_SSTATUS_ACTSTATE(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_ACTSTATE_SHIFT)) & I3C_SSTATUS_ACTSTATE_MASK)
 
 #define I3C_SSTATUS_TIMECTRL_MASK                (0xC0000000U)
 #define I3C_SSTATUS_TIMECTRL_SHIFT               (30U)
 /*! TIMECTRL - Time Control
- *  0b00..NO_TIME_CONTROL
- *  0b01..SYNC_MODE
- *  0b10..ASYNC_MODE
- *  0b11..BOTHSYNCASYNC
+ *  0b00..NO_TIME_CONTROL (no time control is enabled)
+ *  0b01..SYNC_MODE (Synchronous mode is enabled)
+ *  0b10..ASYNC_MODE (Asynchronous standard mode (0 or 1) is enabled)
+ *  0b11..BOTHSYNCASYNC (both Synchronous and Asynchronous modes are enabled)
  */
 #define I3C_SSTATUS_TIMECTRL(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SSTATUS_TIMECTRL_SHIFT)) & I3C_SSTATUS_TIMECTRL_MASK)
 /*! @} */
@@ -636,8 +643,8 @@ typedef struct {
 #define I3C_SCTRL_EXTDATA_MASK                   (0x8U)
 #define I3C_SCTRL_EXTDATA_SHIFT                  (3U)
 /*! EXTDATA - Extended Data
- *  0b0..Extended data disabled.
- *  0b1..Extended data enabled. After IBIDATA is emitted, extended data is taken from IBIEXT1 and IBIEXT2 if configured.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SCTRL_EXTDATA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SCTRL_EXTDATA_SHIFT)) & I3C_SCTRL_EXTDATA_MASK)
 
@@ -673,96 +680,96 @@ typedef struct {
 #define I3C_SINTSET_START_MASK                   (0x100U)
 #define I3C_SINTSET_START_SHIFT                  (8U)
 /*! START - Start Interrupt Enable
- *  0b0..Disable START interrupt
- *  0b1..Enable START interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_START(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_START_SHIFT)) & I3C_SINTSET_START_MASK)
 
 #define I3C_SINTSET_MATCHED_MASK                 (0x200U)
 #define I3C_SINTSET_MATCHED_SHIFT                (9U)
-/*! MATCHED - Match interrupt enable
- *  0b0..Disable match interrupt
- *  0b1..Enable match interrupt
+/*! MATCHED - Match Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_MATCHED(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_MATCHED_SHIFT)) & I3C_SINTSET_MATCHED_MASK)
 
 #define I3C_SINTSET_STOP_MASK                    (0x400U)
 #define I3C_SINTSET_STOP_SHIFT                   (10U)
 /*! STOP - Stop Interrupt Enable
- *  0b0..Disable STOP interrupt
- *  0b1..Enable STOP interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_STOP(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_STOP_SHIFT)) & I3C_SINTSET_STOP_MASK)
 
 #define I3C_SINTSET_RXPEND_MASK                  (0x800U)
 #define I3C_SINTSET_RXPEND_SHIFT                 (11U)
 /*! RXPEND - Receive Interrupt Enable
- *  0b0..Disable Receive interrupt
- *  0b1..Enable Receive interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_RXPEND(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_RXPEND_SHIFT)) & I3C_SINTSET_RXPEND_MASK)
 
 #define I3C_SINTSET_TXSEND_MASK                  (0x1000U)
 #define I3C_SINTSET_TXSEND_SHIFT                 (12U)
 /*! TXSEND - Transmit Interrupt Enable
- *  0b0..Disable Transmit interrupt
- *  0b1..Enable Transmit interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_TXSEND(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_TXSEND_SHIFT)) & I3C_SINTSET_TXSEND_MASK)
 
 #define I3C_SINTSET_DACHG_MASK                   (0x2000U)
 #define I3C_SINTSET_DACHG_SHIFT                  (13U)
 /*! DACHG - Dynamic Address Change Interrupt Enable
- *  0b0..Disable DA Change interrupt
- *  0b1..Enable DA Change interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_DACHG(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_DACHG_SHIFT)) & I3C_SINTSET_DACHG_MASK)
 
 #define I3C_SINTSET_CCC_MASK                     (0x4000U)
 #define I3C_SINTSET_CCC_SHIFT                    (14U)
-/*! CCC - CCC (that was not handled by I3C module) Interrupt Enable
- *  0b0..Disable CCC interrupt
- *  0b1..Enable CCC interrupt
+/*! CCC - Common Command Code (CCC) Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_CCC(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_CCC_SHIFT)) & I3C_SINTSET_CCC_MASK)
 
 #define I3C_SINTSET_ERRWARN_MASK                 (0x8000U)
 #define I3C_SINTSET_ERRWARN_SHIFT                (15U)
 /*! ERRWARN - Error or Warning Interrupt Enable
- *  0b0..Disable error or warning interrupt
- *  0b1..Enable error or warning interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_ERRWARN(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_ERRWARN_SHIFT)) & I3C_SINTSET_ERRWARN_MASK)
 
 #define I3C_SINTSET_DDRMATCHED_MASK              (0x10000U)
 #define I3C_SINTSET_DDRMATCHED_SHIFT             (16U)
 /*! DDRMATCHED - Double Data Rate Interrupt Enable
- *  0b0..Disable DDR interrupt
- *  0b1..Enable DDR interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_DDRMATCHED(x)                (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_DDRMATCHED_SHIFT)) & I3C_SINTSET_DDRMATCHED_MASK)
 
 #define I3C_SINTSET_CHANDLED_MASK                (0x20000U)
 #define I3C_SINTSET_CHANDLED_SHIFT               (17U)
 /*! CHANDLED - Common Command Code (CCC) Interrupt Enable
- *  0b0..Disable CCC Handled interrupt
- *  0b1..Enable CCC Handled interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_CHANDLED(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_CHANDLED_SHIFT)) & I3C_SINTSET_CHANDLED_MASK)
 
 #define I3C_SINTSET_EVENT_MASK                   (0x40000U)
 #define I3C_SINTSET_EVENT_SHIFT                  (18U)
 /*! EVENT - Event Interrupt Enable
- *  0b0..Disable Event interrupt
- *  0b1..Enable Event interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_EVENT(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_EVENT_SHIFT)) & I3C_SINTSET_EVENT_MASK)
 
 #define I3C_SINTSET_SLVRST_MASK                  (0x80000U)
 #define I3C_SINTSET_SLVRST_SHIFT                 (19U)
 /*! SLVRST - Target Reset
- *  0b0..Disable Target Reset interrupt
- *  0b1..Enable Target Reset interrupt
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_SINTSET_SLVRST(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SINTSET_SLVRST_SHIFT)) & I3C_SINTSET_SLVRST_MASK)
 /*! @} */
@@ -772,62 +779,62 @@ typedef struct {
 
 #define I3C_SINTCLR_START_MASK                   (0x100U)
 #define I3C_SINTCLR_START_SHIFT                  (8U)
-/*! START - START Interrupt Enable Clear */
+/*! START - START Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_START(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_START_SHIFT)) & I3C_SINTCLR_START_MASK)
 
 #define I3C_SINTCLR_MATCHED_MASK                 (0x200U)
 #define I3C_SINTCLR_MATCHED_SHIFT                (9U)
-/*! MATCHED - MATCHED Interrupt Enable Clear */
+/*! MATCHED - Matched Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_MATCHED(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_MATCHED_SHIFT)) & I3C_SINTCLR_MATCHED_MASK)
 
 #define I3C_SINTCLR_STOP_MASK                    (0x400U)
 #define I3C_SINTCLR_STOP_SHIFT                   (10U)
-/*! STOP - STOP Interrupt Enable Clear */
+/*! STOP - STOP Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_STOP(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_STOP_SHIFT)) & I3C_SINTCLR_STOP_MASK)
 
 #define I3C_SINTCLR_RXPEND_MASK                  (0x800U)
 #define I3C_SINTCLR_RXPEND_SHIFT                 (11U)
-/*! RXPEND - RXPEND Interrupt Enable Clear */
+/*! RXPEND - RXPEND Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_RXPEND(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_RXPEND_SHIFT)) & I3C_SINTCLR_RXPEND_MASK)
 
 #define I3C_SINTCLR_TXSEND_MASK                  (0x1000U)
 #define I3C_SINTCLR_TXSEND_SHIFT                 (12U)
-/*! TXSEND - TXSEND Interrupt Enable Clear */
+/*! TXSEND - TXSEND Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_TXSEND(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_TXSEND_SHIFT)) & I3C_SINTCLR_TXSEND_MASK)
 
 #define I3C_SINTCLR_DACHG_MASK                   (0x2000U)
 #define I3C_SINTCLR_DACHG_SHIFT                  (13U)
-/*! DACHG - DACHG Interrupt Enable Clear */
+/*! DACHG - DACHG Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_DACHG(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_DACHG_SHIFT)) & I3C_SINTCLR_DACHG_MASK)
 
 #define I3C_SINTCLR_CCC_MASK                     (0x4000U)
 #define I3C_SINTCLR_CCC_SHIFT                    (14U)
-/*! CCC - CCC Interrupt Enable Clear */
+/*! CCC - CCC Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_CCC(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_CCC_SHIFT)) & I3C_SINTCLR_CCC_MASK)
 
 #define I3C_SINTCLR_ERRWARN_MASK                 (0x8000U)
 #define I3C_SINTCLR_ERRWARN_SHIFT                (15U)
-/*! ERRWARN - ERRWARN Interrupt Enable Clear */
+/*! ERRWARN - ERRWARN Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_ERRWARN(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_ERRWARN_SHIFT)) & I3C_SINTCLR_ERRWARN_MASK)
 
 #define I3C_SINTCLR_DDRMATCHED_MASK              (0x10000U)
 #define I3C_SINTCLR_DDRMATCHED_SHIFT             (16U)
-/*! DDRMATCHED - DDRMATCHED Interrupt Enable Clear */
+/*! DDRMATCHED - DDRMATCHED Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_DDRMATCHED(x)                (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_DDRMATCHED_SHIFT)) & I3C_SINTCLR_DDRMATCHED_MASK)
 
 #define I3C_SINTCLR_CHANDLED_MASK                (0x20000U)
 #define I3C_SINTCLR_CHANDLED_SHIFT               (17U)
-/*! CHANDLED - CHANDLED Interrupt Enable Clear */
+/*! CHANDLED - CHANDLED Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_CHANDLED(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_CHANDLED_SHIFT)) & I3C_SINTCLR_CHANDLED_MASK)
 
 #define I3C_SINTCLR_EVENT_MASK                   (0x40000U)
 #define I3C_SINTCLR_EVENT_SHIFT                  (18U)
-/*! EVENT - EVENT Interrupt Enable Clear */
+/*! EVENT - EVENT Interrupt Enable Clear Flag */
 #define I3C_SINTCLR_EVENT(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_EVENT_SHIFT)) & I3C_SINTCLR_EVENT_MASK)
 
 #define I3C_SINTCLR_SLVRST_MASK                  (0x80000U)
 #define I3C_SINTCLR_SLVRST_SHIFT                 (19U)
-/*! SLVRST - Target Reset */
+/*! SLVRST - Target Reset Flag (SLVRST Interrupt Enable Clear) */
 #define I3C_SINTCLR_SLVRST(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SINTCLR_SLVRST_SHIFT)) & I3C_SINTCLR_SLVRST_MASK)
 /*! @} */
 
@@ -836,7 +843,7 @@ typedef struct {
 
 #define I3C_SINTMASKED_START_MASK                (0x100U)
 #define I3C_SINTMASKED_START_SHIFT               (8U)
-/*! START - START interrupt mask */
+/*! START - START Interrupt Mask */
 #define I3C_SINTMASKED_START(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SINTMASKED_START_SHIFT)) & I3C_SINTMASKED_START_MASK)
 
 #define I3C_SINTMASKED_MATCHED_MASK              (0x200U)
@@ -888,6 +895,11 @@ typedef struct {
 #define I3C_SINTMASKED_EVENT_SHIFT               (18U)
 /*! EVENT - EVENT Interrupt Mask */
 #define I3C_SINTMASKED_EVENT(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SINTMASKED_EVENT_SHIFT)) & I3C_SINTMASKED_EVENT_MASK)
+
+#define I3C_SINTMASKED_SLVRST_MASK               (0x80000U)
+#define I3C_SINTMASKED_SLVRST_SHIFT              (19U)
+/*! SLVRST - Target Reset Interrupt Mask */
+#define I3C_SINTMASKED_SLVRST(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SINTMASKED_SLVRST_SHIFT)) & I3C_SINTMASKED_SLVRST_MASK)
 /*! @} */
 
 /*! @name SERRWARN - Target Errors and Warnings */
@@ -895,88 +907,110 @@ typedef struct {
 
 #define I3C_SERRWARN_ORUN_MASK                   (0x1U)
 #define I3C_SERRWARN_ORUN_SHIFT                  (0U)
-/*! ORUN - Overrun Error
+/*! ORUN - Overrun Error Flag
+ *  0b0..No effect
  *  0b0..No overrun error
+ *  0b1..Clear the flag
  *  0b1..Overrun error
  */
 #define I3C_SERRWARN_ORUN(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_ORUN_SHIFT)) & I3C_SERRWARN_ORUN_MASK)
 
 #define I3C_SERRWARN_URUN_MASK                   (0x2U)
 #define I3C_SERRWARN_URUN_SHIFT                  (1U)
-/*! URUN - Underrun Error
+/*! URUN - Underrun Error Flag
+ *  0b0..No effect
  *  0b0..No underrun error
+ *  0b1..Clear the flag
  *  0b1..Underrun error
  */
 #define I3C_SERRWARN_URUN(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_URUN_SHIFT)) & I3C_SERRWARN_URUN_MASK)
 
 #define I3C_SERRWARN_URUNNACK_MASK               (0x4U)
 #define I3C_SERRWARN_URUNNACK_SHIFT              (2U)
-/*! URUNNACK - Underrun and Not Acknowledged (NACKED) Error
- *  0b0..No underrun and not acknowledged error
- *  0b1..Underrun and not acknowledged error
+/*! URUNNACK - Underrun and Not Acknowledged (NACKed) Error Flag
+ *  0b0..No effect
+ *  0b0..No underrun; not acknowledged error
+ *  0b1..Clear the flag
+ *  0b1..Underrun; not acknowledged error
  */
 #define I3C_SERRWARN_URUNNACK(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_URUNNACK_SHIFT)) & I3C_SERRWARN_URUNNACK_MASK)
 
 #define I3C_SERRWARN_TERM_MASK                   (0x8U)
 #define I3C_SERRWARN_TERM_SHIFT                  (3U)
-/*! TERM - Terminated Error
+/*! TERM - Terminated Error Flag
+ *  0b0..No effect
  *  0b0..No terminated error
+ *  0b1..Clear the flag
  *  0b1..Terminated error
  */
 #define I3C_SERRWARN_TERM(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_TERM_SHIFT)) & I3C_SERRWARN_TERM_MASK)
 
 #define I3C_SERRWARN_INVSTART_MASK               (0x10U)
 #define I3C_SERRWARN_INVSTART_SHIFT              (4U)
-/*! INVSTART - Invalid Start Error
+/*! INVSTART - Invalid Start Error Flag
+ *  0b0..No effect
  *  0b0..No invalid start error
+ *  0b1..Clear the flag
  *  0b1..Invalid start error
  */
 #define I3C_SERRWARN_INVSTART(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_INVSTART_SHIFT)) & I3C_SERRWARN_INVSTART_MASK)
 
 #define I3C_SERRWARN_SPAR_MASK                   (0x100U)
 #define I3C_SERRWARN_SPAR_SHIFT                  (8U)
-/*! SPAR - SDR Parity Error
- *  0b0..No SDR Parity error
- *  0b1..SDR Parity error
+/*! SPAR - SDR Parity Error Flag
+ *  0b0..No SDR parity error
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..SDR parity error
  */
 #define I3C_SERRWARN_SPAR(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_SPAR_SHIFT)) & I3C_SERRWARN_SPAR_MASK)
 
 #define I3C_SERRWARN_HPAR_MASK                   (0x200U)
 #define I3C_SERRWARN_HPAR_SHIFT                  (9U)
-/*! HPAR - HDR Parity Error
- *  0b0..No HDR Parity error
- *  0b1..HDR Parity error
+/*! HPAR - HDR Parity Error Flag
+ *  0b0..No HDR parity error
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..HDR parity error
  */
 #define I3C_SERRWARN_HPAR(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_HPAR_SHIFT)) & I3C_SERRWARN_HPAR_MASK)
 
 #define I3C_SERRWARN_HCRC_MASK                   (0x400U)
 #define I3C_SERRWARN_HCRC_SHIFT                  (10U)
-/*! HCRC - HDR-DDR CRC Error
- *  0b0..No HDR-DDR CRC error
- *  0b1..HDR-DDR CRC error
+/*! HCRC - HDR-DDR CRC Error Flag
+ *  0b0..No HDR-DDR CRC error occurred
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..HDR-DDR CRC error occurred
  */
 #define I3C_SERRWARN_HCRC(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_HCRC_SHIFT)) & I3C_SERRWARN_HCRC_MASK)
 
 #define I3C_SERRWARN_S0S1_MASK                   (0x800U)
 #define I3C_SERRWARN_S0S1_SHIFT                  (11U)
-/*! S0S1 - TE0 or TE1 Error
- *  0b0..No TE0 or TE1 error
- *  0b1..TE0 or TE1 error
+/*! S0S1 - TE0 or TE1 Error Flag
+ *  0b0..No TE0 or TE1 error occurred
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..TE0 or TE1 error occurred
  */
 #define I3C_SERRWARN_S0S1(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_S0S1_SHIFT)) & I3C_SERRWARN_S0S1_MASK)
 
 #define I3C_SERRWARN_OREAD_MASK                  (0x10000U)
 #define I3C_SERRWARN_OREAD_SHIFT                 (16U)
-/*! OREAD - Over-read Error
- *  0b0..No Over-read error
+/*! OREAD - Over-Read Error Flag
+ *  0b0..No effect
+ *  0b0..No over-read error
+ *  0b1..Clear the flag
  *  0b1..Over-read error
  */
 #define I3C_SERRWARN_OREAD(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_OREAD_SHIFT)) & I3C_SERRWARN_OREAD_MASK)
 
 #define I3C_SERRWARN_OWRITE_MASK                 (0x20000U)
 #define I3C_SERRWARN_OWRITE_SHIFT                (17U)
-/*! OWRITE - Over-write Error
- *  0b0..No Overwrite error
+/*! OWRITE - Over-Write Error Flag
+ *  0b0..No effect
+ *  0b0..No overwrite error
+ *  0b1..Clear the flag
  *  0b1..Overwrite error
  */
 #define I3C_SERRWARN_OWRITE(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SERRWARN_OWRITE_SHIFT)) & I3C_SERRWARN_OWRITE_MASK)
@@ -987,9 +1021,9 @@ typedef struct {
 
 #define I3C_SDMACTRL_DMAFB_MASK                  (0x3U)
 #define I3C_SDMACTRL_DMAFB_SHIFT                 (0U)
-/*! DMAFB - DMA Read (From-bus) Trigger
+/*! DMAFB - DMA Read (From-Bus) Trigger
  *  0b00..DMA not used
- *  0b01..DMA is enabled for one frame
+ *  0b01..DMA enabled for one frame
  *  0b10..DMA enabled until turned off
  *  0b11..
  */
@@ -997,9 +1031,9 @@ typedef struct {
 
 #define I3C_SDMACTRL_DMATB_MASK                  (0xCU)
 #define I3C_SDMACTRL_DMATB_SHIFT                 (2U)
-/*! DMATB - DMA Write (To-bus) Trigger
+/*! DMATB - DMA Write (To-Bus) Trigger
  *  0b00..DMA not used
- *  0b01..DMA enabled for one frame (ended by DMA or terminated)
+ *  0b01..DMA enabled for one frame
  *  0b10..DMA enabled until turned off
  *  0b11..
  */
@@ -1009,7 +1043,7 @@ typedef struct {
 #define I3C_SDMACTRL_DMAWIDTH_SHIFT              (4U)
 /*! DMAWIDTH - Width of DMA Operations
  *  0b00, 0b01..Byte
- *  0b10..Half word (16 bits)
+ *  0b10..Halfword (16 bits) (this value ensures that two bytes are available in the FIFO)
  *  0b11..
  */
 #define I3C_SDMACTRL_DMAWIDTH(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDMACTRL_DMAWIDTH_SHIFT)) & I3C_SDMACTRL_DMAWIDTH_MASK)
@@ -1020,19 +1054,25 @@ typedef struct {
 
 #define I3C_SDATACTRL_FLUSHTB_MASK               (0x1U)
 #define I3C_SDATACTRL_FLUSHTB_SHIFT              (0U)
-/*! FLUSHTB - Flush the To-bus Buffer or FIFO */
+/*! FLUSHTB - Flush To-Bus Buffer or FIFO
+ *  0b0..No action
+ *  0b1..Flush the buffer
+ */
 #define I3C_SDATACTRL_FLUSHTB(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_FLUSHTB_SHIFT)) & I3C_SDATACTRL_FLUSHTB_MASK)
 
 #define I3C_SDATACTRL_FLUSHFB_MASK               (0x2U)
 #define I3C_SDATACTRL_FLUSHFB_SHIFT              (1U)
-/*! FLUSHFB - Flush the From-bus Buffer or FIFO */
+/*! FLUSHFB - Flush From-Bus Buffer or FIFO
+ *  0b0..No action
+ *  0b1..Flush the buffer
+ */
 #define I3C_SDATACTRL_FLUSHFB(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_FLUSHFB_SHIFT)) & I3C_SDATACTRL_FLUSHFB_MASK)
 
 #define I3C_SDATACTRL_UNLOCK_MASK                (0x8U)
 #define I3C_SDATACTRL_UNLOCK_SHIFT               (3U)
 /*! UNLOCK - Unlock
- *  0b0..RXTRIG and TXTRIG fields cannot be changed on a write.
- *  0b1..RXTRIG and TXTRIG fields can be changed on a write.
+ *  0b0..Cannot be changed
+ *  0b1..Can be changed
  */
 #define I3C_SDATACTRL_UNLOCK(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_UNLOCK_SHIFT)) & I3C_SDATACTRL_UNLOCK_MASK)
 
@@ -1042,14 +1082,14 @@ typedef struct {
  *  0b00..Trigger when empty
  *  0b01..Trigger when 1/4 full or less
  *  0b10..Trigger when 1/2 full or less
- *  0b11..Default. Trigger when 1 less than full or less
+ *  0b11..Default (trigger when 1 less than full or less)
  */
 #define I3C_SDATACTRL_TXTRIG(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_TXTRIG_SHIFT)) & I3C_SDATACTRL_TXTRIG_MASK)
 
 #define I3C_SDATACTRL_RXTRIG_MASK                (0xC0U)
 #define I3C_SDATACTRL_RXTRIG_SHIFT               (6U)
 /*! RXTRIG - Receive Trigger Level
- *  0b00..Trigger when not empty
+ *  0b00..Trigger when not empty (default)
  *  0b01..Trigger when 1/4 or more full
  *  0b10..Trigger when 1/2 or more full
  *  0b11..Trigger when 3/4 or more full
@@ -1058,17 +1098,17 @@ typedef struct {
 
 #define I3C_SDATACTRL_TXCOUNT_MASK               (0x1F0000U)
 #define I3C_SDATACTRL_TXCOUNT_SHIFT              (16U)
-/*! TXCOUNT - Count of Bytes in Transmit */
+/*! TXCOUNT - Count of Entries in Transmit */
 #define I3C_SDATACTRL_TXCOUNT(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_TXCOUNT_SHIFT)) & I3C_SDATACTRL_TXCOUNT_MASK)
 
 #define I3C_SDATACTRL_RXCOUNT_MASK               (0x1F000000U)
 #define I3C_SDATACTRL_RXCOUNT_SHIFT              (24U)
-/*! RXCOUNT - Count of Bytes in Receive */
+/*! RXCOUNT - Count of Entries in Receive */
 #define I3C_SDATACTRL_RXCOUNT(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_SDATACTRL_RXCOUNT_SHIFT)) & I3C_SDATACTRL_RXCOUNT_MASK)
 
 #define I3C_SDATACTRL_TXFULL_MASK                (0x40000000U)
 #define I3C_SDATACTRL_TXFULL_SHIFT               (30U)
-/*! TXFULL - Transmit Is Full
+/*! TXFULL - Transmit is Full
  *  0b0..Not full
  *  0b1..Full
  */
@@ -1076,7 +1116,7 @@ typedef struct {
 
 #define I3C_SDATACTRL_RXEMPTY_MASK               (0x80000000U)
 #define I3C_SDATACTRL_RXEMPTY_SHIFT              (31U)
-/*! RXEMPTY - Receive Is Empty
+/*! RXEMPTY - Receive is Empty
  *  0b0..Not empty
  *  0b1..Empty
  */
@@ -1094,16 +1134,16 @@ typedef struct {
 #define I3C_SWDATAB_END_MASK                     (0x100U)
 #define I3C_SWDATAB_END_SHIFT                    (8U)
 /*! END - End
- *  0b0..Not the end. There are more bytes in the message.
- *  0b1..End. This bit marks the last byte of the message.
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_SWDATAB_END(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SWDATAB_END_SHIFT)) & I3C_SWDATAB_END_MASK)
 
 #define I3C_SWDATAB_END_ALSO_MASK                (0x10000U)
 #define I3C_SWDATAB_END_ALSO_SHIFT               (16U)
 /*! END_ALSO - End Also
- *  0b0..Not the end. There are more bytes in the message.
- *  0b1..End. This bit marks the last byte of the message.
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_SWDATAB_END_ALSO(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SWDATAB_END_ALSO_SHIFT)) & I3C_SWDATAB_END_ALSO_MASK)
 /*! @} */
@@ -1117,7 +1157,7 @@ typedef struct {
 #define I3C_SWDATABE_DATA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SWDATABE_DATA_SHIFT)) & I3C_SWDATABE_DATA_MASK)
 /*! @} */
 
-/*! @name SWDATAH - Target Write Data Half-word */
+/*! @name SWDATAH - Target Write Data Halfword */
 /*! @{ */
 
 #define I3C_SWDATAH_DATA0_MASK                   (0xFFU)
@@ -1132,14 +1172,14 @@ typedef struct {
 
 #define I3C_SWDATAH_END_MASK                     (0x10000U)
 #define I3C_SWDATAH_END_SHIFT                    (16U)
-/*! END - End of message
- *  0b0..Not the end. There are more bytes in the message.
- *  0b1..End. This bit marks the last byte of the message.
+/*! END - End of Message
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_SWDATAH_END(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SWDATAH_END_SHIFT)) & I3C_SWDATAH_END_MASK)
 /*! @} */
 
-/*! @name SWDATAHE - Target Write Data Half-word End */
+/*! @name SWDATAHE - Target Write Data Halfword End */
 /*! @{ */
 
 #define I3C_SWDATAHE_DATA0_MASK                  (0xFFU)
@@ -1167,12 +1207,12 @@ typedef struct {
 
 #define I3C_MRDATAH_LSB_MASK                     (0xFFU)
 #define I3C_MRDATAH_LSB_SHIFT                    (0U)
-/*! LSB - LSB */
+/*! LSB - Low Byte */
 #define I3C_MRDATAH_LSB(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_MRDATAH_LSB_SHIFT)) & I3C_MRDATAH_LSB_MASK)
 
 #define I3C_MRDATAH_MSB_MASK                     (0xFF00U)
 #define I3C_MRDATAH_MSB_SHIFT                    (8U)
-/*! MSB - MSB */
+/*! MSB - High Byte */
 #define I3C_MRDATAH_MSB(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_MRDATAH_MSB_SHIFT)) & I3C_MRDATAH_MSB_MASK)
 /*! @} */
 
@@ -1181,12 +1221,12 @@ typedef struct {
 
 #define I3C_SRDATAH_LSB_MASK                     (0xFFU)
 #define I3C_SRDATAH_LSB_SHIFT                    (0U)
-/*! LSB - The first byte read from the target */
+/*! LSB - Low Byte */
 #define I3C_SRDATAH_LSB(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SRDATAH_LSB_SHIFT)) & I3C_SRDATAH_LSB_MASK)
 
 #define I3C_SRDATAH_MSB_MASK                     (0xFF00U)
 #define I3C_SRDATAH_MSB_SHIFT                    (8U)
-/*! MSB - The second byte read from the target */
+/*! MSB - High Byte */
 #define I3C_SRDATAH_MSB(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_SRDATAH_MSB_SHIFT)) & I3C_SRDATAH_MSB_MASK)
 /*! @} */
 
@@ -1210,74 +1250,66 @@ typedef struct {
 #define I3C_SCAPABILITIES2_I2C10B_MASK           (0x10U)
 #define I3C_SCAPABILITIES2_I2C10B_SHIFT          (4U)
 /*! I2C10B - I2C 10-bit Address
- *  0b0..Does not support 10-bit I2C address
- *  0b1..Supports 10-bit I2C address
+ *  0b0..Not supported
+ *  0b1..Supported
  */
 #define I3C_SCAPABILITIES2_I2C10B(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_I2C10B_SHIFT)) & I3C_SCAPABILITIES2_I2C10B_MASK)
-
-#define I3C_SCAPABILITIES2_I2CRST_MASK           (0x20U)
-#define I3C_SCAPABILITIES2_I2CRST_SHIFT          (5U)
-/*! I2CRST - I2C Software Reset
- *  0b0..Does not support I2C software reset
- *  0b1..Supports I2C software reset
- */
-#define I3C_SCAPABILITIES2_I2CRST(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_I2CRST_SHIFT)) & I3C_SCAPABILITIES2_I2CRST_MASK)
 
 #define I3C_SCAPABILITIES2_I2CDEVID_MASK         (0x40U)
 #define I3C_SCAPABILITIES2_I2CDEVID_SHIFT        (6U)
 /*! I2CDEVID - I2C Device ID
- *  0b0..Does not support I2C device ID
- *  0b1..Supports I2C device ID
+ *  0b0..Not supported
+ *  0b1..Supported
  */
 #define I3C_SCAPABILITIES2_I2CDEVID(x)           (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_I2CDEVID_SHIFT)) & I3C_SCAPABILITIES2_I2CDEVID_MASK)
 
 #define I3C_SCAPABILITIES2_IBIEXT_MASK           (0x100U)
 #define I3C_SCAPABILITIES2_IBIEXT_SHIFT          (8U)
 /*! IBIEXT - In-Band Interrupt EXTDATA
- *  0b0..Does not support IBIEXT
- *  0b1..Supports IBIEXT
+ *  0b0..Not supported
+ *  0b1..Supported
  */
 #define I3C_SCAPABILITIES2_IBIEXT(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_IBIEXT_SHIFT)) & I3C_SCAPABILITIES2_IBIEXT_MASK)
 
 #define I3C_SCAPABILITIES2_IBIXREG_MASK          (0x200U)
 #define I3C_SCAPABILITIES2_IBIXREG_SHIFT         (9U)
 /*! IBIXREG - In-Band Interrupt Extended Register
- *  0b0..Does not support extended registers for IBIs
- *  0b1..Supports extended registers for IBIs
+ *  0b0..Not supported
+ *  0b1..Supported
  */
 #define I3C_SCAPABILITIES2_IBIXREG(x)            (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_IBIXREG_SHIFT)) & I3C_SCAPABILITIES2_IBIXREG_MASK)
 
 #define I3C_SCAPABILITIES2_V1_1_MASK             (0x10000U)
 #define I3C_SCAPABILITIES2_V1_1_SHIFT            (16U)
 /*! V1_1 - Version 1.1
- *  0b0..Does not support GETCAPS
- *  0b1..Supports GETCAPS
+ *  0b0..Not supported
+ *  0b1..Supported
  */
 #define I3C_SCAPABILITIES2_V1_1(x)               (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_V1_1_SHIFT)) & I3C_SCAPABILITIES2_V1_1_MASK)
 
 #define I3C_SCAPABILITIES2_SLVRST_MASK           (0x20000U)
 #define I3C_SCAPABILITIES2_SLVRST_SHIFT          (17U)
 /*! SLVRST - Target Reset
- *  0b0..Does not support Target Reset
- *  0b1..Supports Target Reset
+ *  0b0..Not supported
+ *  0b1..Supported
  */
 #define I3C_SCAPABILITIES2_SLVRST(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_SLVRST_SHIFT)) & I3C_SCAPABILITIES2_SLVRST_MASK)
 
 #define I3C_SCAPABILITIES2_GROUP_MASK            (0xC0000U)
 #define I3C_SCAPABILITIES2_GROUP_SHIFT           (18U)
 /*! GROUP - Group
- *  0b00..Does not supports v1.1 Group addressing
- *  0b01..Supports one group
- *  0b10..Supports two groups
- *  0b11..Supports three groups
+ *  0b00..v1.1 group addressing not supported
+ *  0b01..One group supported
+ *  0b10..Two groups supported
+ *  0b11..Three groups supported
  */
 #define I3C_SCAPABILITIES2_GROUP(x)              (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_GROUP_SHIFT)) & I3C_SCAPABILITIES2_GROUP_MASK)
 
 #define I3C_SCAPABILITIES2_AASA_MASK             (0x200000U)
 #define I3C_SCAPABILITIES2_AASA_SHIFT            (21U)
-/*! AASA - Supports SETAASA
- *  0b0..Does not support SETAASA
- *  0b1..Supports SETAASA
+/*! AASA - SETAASA
+ *  0b0..SETAASA not supported
+ *  0b1..SETAASA supported
  */
 #define I3C_SCAPABILITIES2_AASA(x)               (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES2_AASA_SHIFT)) & I3C_SCAPABILITIES2_AASA_MASK)
 
@@ -1314,11 +1346,11 @@ typedef struct {
 #define I3C_SCAPABILITIES_IDREG_MASK             (0x3CU)
 #define I3C_SCAPABILITIES_IDREG_SHIFT            (2U)
 /*! IDREG - ID Register
- *  0b0000..All ID register features below are disabled.
- *  0b1xxx..A Bus Characteristics Register (BCR) is available.
- *  0bx1xx..A Device Characteristic Register (DCR) is available.
- *  0bxx1x..An ID Random field is available.
- *  0bxxx1..ID Instance is a register, and is used if there is no PARTNO register.
+ *  0b0000..All ID register features disabled
+ *  0b1xxx..A Bus Characteristics Register (BCR) is available
+ *  0bx1xx..A Device Characteristic Register (DCR) is available
+ *  0bxx1x..An ID Random field is available
+ *  0bxxx1..ID Instance is a register; used if there is no PARTNO register
  */
 #define I3C_SCAPABILITIES_IDREG(x)               (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_IDREG_SHIFT)) & I3C_SCAPABILITIES_IDREG_MASK)
 
@@ -1326,7 +1358,7 @@ typedef struct {
 #define I3C_SCAPABILITIES_HDRSUPP_SHIFT          (6U)
 /*! HDRSUPP - High Data Rate Support
  *  0b00..No HDR modes supported
- *  0b01..Double Data Rate mode supported
+ *  0b01..DDR mode supported
  */
 #define I3C_SCAPABILITIES_HDRSUPP(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_HDRSUPP_SHIFT)) & I3C_SCAPABILITIES_HDRSUPP_MASK)
 
@@ -1351,30 +1383,30 @@ typedef struct {
 #define I3C_SCAPABILITIES_CCCHANDLE_MASK         (0xF000U)
 #define I3C_SCAPABILITIES_CCCHANDLE_SHIFT        (12U)
 /*! CCCHANDLE - Common Command Codes Handling
- *  0b0000..All handling features below are disabled.
- *  0b1xxx..GETSTATUS CCC returns SCTRL[VENDINFO] value.
- *  0bx1xx..GETSTATUS CCC returns SCTRL[PENDINT] and SCTRL[ACTSTATE] values.
- *  0bxx1x..The block manages maximum read and write lengths, and max data speed.
- *  0bxxx1..The block (I3C module) manages events, activities, status, HDR, and if enabled for it, ID and static-address-related items.
+ *  0b0000..All handling features disabled
+ *  0b1xxx..GETSTATUS CCC returns the value of SCTRL[VENDINFO]
+ *  0bx1xx..GETSTATUS CCC returns the values of SCTRL[PENDINT] and SCTRL[ACTSTATE]
+ *  0bxx1x..The I3C module manages maximum read and write lengths, and max data speed
+ *  0bxxx1..The I3C module manages events, activities, status, HDR, and if enabled for it, ID and static-address-related items
  */
 #define I3C_SCAPABILITIES_CCCHANDLE(x)           (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_CCCHANDLE_SHIFT)) & I3C_SCAPABILITIES_CCCHANDLE_MASK)
 
 #define I3C_SCAPABILITIES_IBI_MR_HJ_MASK         (0x1F0000U)
 #define I3C_SCAPABILITIES_IBI_MR_HJ_SHIFT        (16U)
 /*! IBI_MR_HJ - In-Band Interrupts, Controller Requests, Hot-Join Events
- *  0b00000..Application cannot generate IBI, CR, or HJ.
- *  0b1xxxx..Application can use SCONFIG[BAMATCH] for bus-available timing.
- *  0bx1xxx..Application can generate a Hot-Join event.
- *  0bxx1xx..Application can generate a Controller Request for a secondary controller.
- *  0bxxx1x..When bit 0 = 1, the IBI has data from the SCTRL register.
- *  0bxxxx1..Application can generate an IBI.
+ *  0b00000..Application cannot generate IBI, CR, or HJ
+ *  0b1xxxx..Application can use SCONFIG[BAMATCH] for bus-available timing
+ *  0bx1xxx..Application can generate a Hot-Join event
+ *  0bxx1xx..Application can generate a controller request for a secondary controller
+ *  0bxxx1x..When bit 0 = 1, the IBI has data from the SCTRL register
+ *  0bxxxx1..Application can generate an IBI
  */
 #define I3C_SCAPABILITIES_IBI_MR_HJ(x)           (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_IBI_MR_HJ_SHIFT)) & I3C_SCAPABILITIES_IBI_MR_HJ_MASK)
 
 #define I3C_SCAPABILITIES_TIMECTRL_MASK          (0x200000U)
 #define I3C_SCAPABILITIES_TIMECTRL_SHIFT         (21U)
 /*! TIMECTRL - Time Control
- *  0b0..No time control enabled
+ *  0b0..No time control supported
  *  0b1..At least one time-control type supported
  */
 #define I3C_SCAPABILITIES_TIMECTRL(x)            (((uint32_t)(((uint32_t)(x)) << I3C_SCAPABILITIES_TIMECTRL_SHIFT)) & I3C_SCAPABILITIES_TIMECTRL_MASK)
@@ -1382,7 +1414,7 @@ typedef struct {
 #define I3C_SCAPABILITIES_EXTFIFO_MASK           (0x3800000U)
 #define I3C_SCAPABILITIES_EXTFIFO_SHIFT          (23U)
 /*! EXTFIFO - External FIFO
- *  0b000..No external FIFO is available
+ *  0b000..No external FIFO available
  *  0b001..Standard available or free external FIFO
  *  0b010..Request track external FIFO
  */
@@ -1444,7 +1476,7 @@ typedef struct {
 
 #define I3C_SIDPARTNO_PARTNO_MASK                (0xFFFFFFFFU)
 #define I3C_SIDPARTNO_PARTNO_SHIFT               (0U)
-/*! PARTNO - Part number */
+/*! PARTNO - Part Number */
 #define I3C_SIDPARTNO_PARTNO(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_SIDPARTNO_PARTNO_SHIFT)) & I3C_SIDPARTNO_PARTNO_MASK)
 /*! @} */
 
@@ -1517,7 +1549,7 @@ typedef struct {
 
 #define I3C_MCONFIG_EXT_I2CBLOW_MASK             (0xFU)
 #define I3C_MCONFIG_EXT_I2CBLOW_SHIFT            (0U)
-/*! I2CBLOW - I2C BAUD Low */
+/*! I2CBLOW - I2C Baud Low */
 #define I3C_MCONFIG_EXT_I2CBLOW(x)               (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_EXT_I2CBLOW_SHIFT)) & I3C_MCONFIG_EXT_I2CBLOW_MASK)
 
 #define I3C_MCONFIG_EXT_I2CHS_MASK               (0x10U)
@@ -1528,8 +1560,8 @@ typedef struct {
 #define I3C_MCONFIG_EXT_I2C_A10B_MASK            (0x100U)
 #define I3C_MCONFIG_EXT_I2C_A10B_SHIFT           (8U)
 /*! I2C_A10B - I2C_A10B
- *  0b0..Disabled
- *  0b1..Enabled for 10-bit addressing.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define I3C_MCONFIG_EXT_I2C_A10B(x)              (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_EXT_I2C_A10B_SHIFT)) & I3C_MCONFIG_EXT_I2C_A10B_MASK)
 
@@ -1540,21 +1572,21 @@ typedef struct {
 
 #define I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK         (0x30000U)
 #define I3C_MCONFIG_EXT_I3C_CAS_DEL_SHIFT        (16U)
-/*! I3C_CAS_DEL - I3C CAS Delay after START
- *  0b00..No Delay
- *  0b01..Increases SCL clock period by 1/2.
- *  0b10..Increases SCL clock period by 1.
- *  0b11..Increases SCL clock period by 1 1/2.
+/*! I3C_CAS_DEL - I3C CAS Delay After START
+ *  0b00..No delay
+ *  0b01..Increases SCL clock period by 1/2
+ *  0b10..Increases SCL clock period by 1
+ *  0b11..Increases SCL clock period by 3/2
  */
 #define I3C_MCONFIG_EXT_I3C_CAS_DEL(x)           (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_EXT_I3C_CAS_DEL_SHIFT)) & I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK)
 
 #define I3C_MCONFIG_EXT_I3C_CASR_DEL_MASK        (0xC0000U)
 #define I3C_MCONFIG_EXT_I3C_CASR_DEL_SHIFT       (18U)
 /*! I3C_CASR_DEL - I3C CAS Delay After Repeated START
- *  0b00..No Delay
- *  0b01..Increases SCL clock period by 1/2.
- *  0b10..Increases SCL clock period by 1.
- *  0b11..Increases SCL clock period by 1 1/2.
+ *  0b00..No delay
+ *  0b01..Increases SCL clock period by 1/2
+ *  0b10..Increases SCL clock period by 1
+ *  0b11..Increases SCL clock period by 1 1/2
  */
 #define I3C_MCONFIG_EXT_I3C_CASR_DEL(x)          (((uint32_t)(((uint32_t)(x)) << I3C_MCONFIG_EXT_I3C_CASR_DEL_SHIFT)) & I3C_MCONFIG_EXT_I3C_CASR_DEL_MASK)
 /*! @} */
@@ -1620,9 +1652,9 @@ typedef struct {
 
 #define I3C_MSTATUS_STATE_MASK                   (0x7U)
 #define I3C_MSTATUS_STATE_SHIFT                  (0U)
-/*! STATE - State Of The Controller
- *  0b000..IDLE
- *  0b001..SLVREQ
+/*! STATE - State of the Controller
+ *  0b000..IDLE (bus has stopped)
+ *  0b001..SLVREQ (target request)
  *  0b010..MSGSDR
  *  0b011..NORMACT
  *  0b100..MSGDDR
@@ -1635,7 +1667,7 @@ typedef struct {
 #define I3C_MSTATUS_BETWEEN_MASK                 (0x10U)
 #define I3C_MSTATUS_BETWEEN_SHIFT                (4U)
 /*! BETWEEN - Between
- *  0b0..Inactive
+ *  0b0..Inactive (for other cases)
  *  0b1..Active
  */
 #define I3C_MSTATUS_BETWEEN(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_BETWEEN_SHIFT)) & I3C_MSTATUS_BETWEEN_MASK)
@@ -1651,33 +1683,39 @@ typedef struct {
 #define I3C_MSTATUS_IBITYPE_MASK                 (0xC0U)
 #define I3C_MSTATUS_IBITYPE_SHIFT                (6U)
 /*! IBITYPE - In-Band Interrupt (IBI) Type
- *  0b00..NONE
- *  0b01..In-Band Interrupt
- *  0b10..Controller Request
- *  0b11..Hot-Join
+ *  0b00..NONE (no IBI: this status occurs when MSTATUS[IBIWON] becomes 0)
+ *  0b01..IBI
+ *  0b10..CR
+ *  0b11..HJ
  */
 #define I3C_MSTATUS_IBITYPE(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_IBITYPE_SHIFT)) & I3C_MSTATUS_IBITYPE_MASK)
 
 #define I3C_MSTATUS_SLVSTART_MASK                (0x100U)
 #define I3C_MSTATUS_SLVSTART_SHIFT               (8U)
-/*! SLVSTART - Target Start
+/*! SLVSTART - Target Start Flag
+ *  0b0..No effect
  *  0b0..Target not requesting START
+ *  0b1..Clear the flag
  *  0b1..Target requesting START
  */
 #define I3C_MSTATUS_SLVSTART(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_SLVSTART_SHIFT)) & I3C_MSTATUS_SLVSTART_MASK)
 
 #define I3C_MSTATUS_MCTRLDONE_MASK               (0x200U)
 #define I3C_MSTATUS_MCTRLDONE_SHIFT              (9U)
-/*! MCTRLDONE - Controller Control Done
+/*! MCTRLDONE - Controller Control Done Flag
+ *  0b0..No effect
  *  0b0..Not done
+ *  0b1..Clear the flag
  *  0b1..Done
  */
 #define I3C_MSTATUS_MCTRLDONE(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_MCTRLDONE_SHIFT)) & I3C_MSTATUS_MCTRLDONE_MASK)
 
 #define I3C_MSTATUS_COMPLETE_MASK                (0x400U)
 #define I3C_MSTATUS_COMPLETE_SHIFT               (10U)
-/*! COMPLETE - Complete
+/*! COMPLETE - Complete Flag
+ *  0b0..No effect
  *  0b0..Not complete
+ *  0b1..Clear the flag
  *  0b1..Complete
  */
 #define I3C_MSTATUS_COMPLETE(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_COMPLETE_SHIFT)) & I3C_MSTATUS_COMPLETE_MASK)
@@ -1700,15 +1738,17 @@ typedef struct {
 
 #define I3C_MSTATUS_IBIWON_MASK                  (0x2000U)
 #define I3C_MSTATUS_IBIWON_SHIFT                 (13U)
-/*! IBIWON - In-Band Interrupt (IBI) Won
+/*! IBIWON - In-Band Interrupt (IBI) Won Flag
  *  0b0..No IBI arbitration won
+ *  0b0..No effect
+ *  0b1..Clear the flag
  *  0b1..IBI arbitration won
  */
 #define I3C_MSTATUS_IBIWON(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_IBIWON_SHIFT)) & I3C_MSTATUS_IBIWON_MASK)
 
 #define I3C_MSTATUS_ERRWARN_MASK                 (0x8000U)
 #define I3C_MSTATUS_ERRWARN_SHIFT                (15U)
-/*! ERRWARN - Error Or Warning
+/*! ERRWARN - Error or Warning
  *  0b0..No error or warning
  *  0b1..Error or warning
  */
@@ -1716,9 +1756,11 @@ typedef struct {
 
 #define I3C_MSTATUS_NOWMASTER_MASK               (0x80000U)
 #define I3C_MSTATUS_NOWMASTER_SHIFT              (19U)
-/*! NOWMASTER - Module Is Now Controller
- *  0b0..Module has not become controller
- *  0b1..Module has become controller
+/*! NOWMASTER - Module is now Controller Flag
+ *  0b0..No effect
+ *  0b0..Not a controller
+ *  0b1..Clear the flag
+ *  0b1..Controller
  */
 #define I3C_MSTATUS_NOWMASTER(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MSTATUS_NOWMASTER_SHIFT)) & I3C_MSTATUS_NOWMASTER_MASK)
 
@@ -1758,9 +1800,9 @@ typedef struct {
 
 #define I3C_MIBIRULES_MSB0_MASK                  (0x40000000U)
 #define I3C_MIBIRULES_MSB0_SHIFT                 (30U)
-/*! MSB0 - Most Significant Address Bit Is 0
- *  0b0..MSB is not 0.
- *  0b1..For all I3C dynamic addresses, MSB is 0.
+/*! MSB0 - Most Significant Address Bit is 0
+ *  0b0..MSB is not 0
+ *  0b1..MSB is 0
  */
 #define I3C_MIBIRULES_MSB0(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MIBIRULES_MSB0_SHIFT)) & I3C_MIBIRULES_MSB0_MASK)
 
@@ -1802,12 +1844,12 @@ typedef struct {
 
 #define I3C_MINTSET_RXPEND_MASK                  (0x800U)
 #define I3C_MINTSET_RXPEND_SHIFT                 (11U)
-/*! RXPEND - Rx Pending Interrupt Enable */
+/*! RXPEND - Receive Pending Interrupt Enable */
 #define I3C_MINTSET_RXPEND(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MINTSET_RXPEND_SHIFT)) & I3C_MINTSET_RXPEND_MASK)
 
 #define I3C_MINTSET_TXNOTFULL_MASK               (0x1000U)
 #define I3C_MINTSET_TXNOTFULL_SHIFT              (12U)
-/*! TXNOTFULL - TX buffer/FIFO is not full interrupt enable
+/*! TXNOTFULL - Transmit Buffer/FIFO Not Full Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -1815,7 +1857,7 @@ typedef struct {
 
 #define I3C_MINTSET_IBIWON_MASK                  (0x2000U)
 #define I3C_MINTSET_IBIWON_SHIFT                 (13U)
-/*! IBIWON - In-Band Interrupt (IBI) Won Interrupt Enable
+/*! IBIWON - IBI Won Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -1831,7 +1873,7 @@ typedef struct {
 
 #define I3C_MINTSET_NOWMASTER_MASK               (0x80000U)
 #define I3C_MINTSET_NOWMASTER_SHIFT              (19U)
-/*! NOWMASTER - Now Controller (now this I3C module is a controller) Interrupt Enable
+/*! NOWMASTER - Now Controller Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -1843,65 +1885,81 @@ typedef struct {
 
 #define I3C_MINTCLR_SLVSTART_MASK                (0x100U)
 #define I3C_MINTCLR_SLVSTART_SHIFT               (8U)
-/*! SLVSTART - SLVSTART Interrupt Enable Clear
+/*! SLVSTART - SLVSTART Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_SLVSTART(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_SLVSTART_SHIFT)) & I3C_MINTCLR_SLVSTART_MASK)
 
 #define I3C_MINTCLR_MCTRLDONE_MASK               (0x200U)
 #define I3C_MINTCLR_MCTRLDONE_SHIFT              (9U)
-/*! MCTRLDONE - MCTRLDONE Interrupt Enable Clear
+/*! MCTRLDONE - MCTRLDONE Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_MCTRLDONE(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_MCTRLDONE_SHIFT)) & I3C_MINTCLR_MCTRLDONE_MASK)
 
 #define I3C_MINTCLR_COMPLETE_MASK                (0x400U)
 #define I3C_MINTCLR_COMPLETE_SHIFT               (10U)
-/*! COMPLETE - COMPLETE Interrupt Enable Clear
+/*! COMPLETE - COMPLETE Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_COMPLETE(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_COMPLETE_SHIFT)) & I3C_MINTCLR_COMPLETE_MASK)
 
 #define I3C_MINTCLR_RXPEND_MASK                  (0x800U)
 #define I3C_MINTCLR_RXPEND_SHIFT                 (11U)
-/*! RXPEND - RXPEND Interrupt Enable Clear
+/*! RXPEND - RXPEND Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_RXPEND(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_RXPEND_SHIFT)) & I3C_MINTCLR_RXPEND_MASK)
 
 #define I3C_MINTCLR_TXNOTFULL_MASK               (0x1000U)
 #define I3C_MINTCLR_TXNOTFULL_SHIFT              (12U)
-/*! TXNOTFULL - TXNOTFULL Interrupt Enable Clear
+/*! TXNOTFULL - TXNOTFULL Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_TXNOTFULL(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_TXNOTFULL_SHIFT)) & I3C_MINTCLR_TXNOTFULL_MASK)
 
 #define I3C_MINTCLR_IBIWON_MASK                  (0x2000U)
 #define I3C_MINTCLR_IBIWON_SHIFT                 (13U)
-/*! IBIWON - IBIWON Interrupt Enable Clear
+/*! IBIWON - IBIWON Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_IBIWON(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_IBIWON_SHIFT)) & I3C_MINTCLR_IBIWON_MASK)
 
 #define I3C_MINTCLR_ERRWARN_MASK                 (0x8000U)
 #define I3C_MINTCLR_ERRWARN_SHIFT                (15U)
-/*! ERRWARN - ERRWARN Interrupt Enable Clear
+/*! ERRWARN - ERRWARN Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_ERRWARN(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_ERRWARN_SHIFT)) & I3C_MINTCLR_ERRWARN_MASK)
 
 #define I3C_MINTCLR_NOWMASTER_MASK               (0x80000U)
 #define I3C_MINTCLR_NOWMASTER_SHIFT              (19U)
-/*! NOWMASTER - NOWCONTROLLER Interrupt Enable Clear
+/*! NOWMASTER - NOWCONTROLLER Interrupt Enable Clear Flag
  *  0b0..No effect
- *  0b1..Corresponding interrupt enable becomes 0
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Interrupt enable cleared
  */
 #define I3C_MINTCLR_NOWMASTER(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MINTCLR_NOWMASTER_SHIFT)) & I3C_MINTCLR_NOWMASTER_MASK)
 /*! @} */
@@ -1912,24 +1970,24 @@ typedef struct {
 #define I3C_MINTMASKED_SLVSTART_MASK             (0x100U)
 #define I3C_MINTMASKED_SLVSTART_SHIFT            (8U)
 /*! SLVSTART - SLVSTART Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_SLVSTART(x)               (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_SLVSTART_SHIFT)) & I3C_MINTMASKED_SLVSTART_MASK)
 
 #define I3C_MINTMASKED_MCTRLDONE_MASK            (0x200U)
 #define I3C_MINTMASKED_MCTRLDONE_SHIFT           (9U)
 /*! MCTRLDONE - MCTRLDONE Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_MCTRLDONE(x)              (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_MCTRLDONE_SHIFT)) & I3C_MINTMASKED_MCTRLDONE_MASK)
 
 #define I3C_MINTMASKED_COMPLETE_MASK             (0x400U)
 #define I3C_MINTMASKED_COMPLETE_SHIFT            (10U)
 /*! COMPLETE - COMPLETE Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_COMPLETE(x)               (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_COMPLETE_SHIFT)) & I3C_MINTMASKED_COMPLETE_MASK)
 
@@ -1941,32 +1999,32 @@ typedef struct {
 #define I3C_MINTMASKED_TXNOTFULL_MASK            (0x1000U)
 #define I3C_MINTMASKED_TXNOTFULL_SHIFT           (12U)
 /*! TXNOTFULL - TXNOTFULL Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_TXNOTFULL(x)              (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_TXNOTFULL_SHIFT)) & I3C_MINTMASKED_TXNOTFULL_MASK)
 
 #define I3C_MINTMASKED_IBIWON_MASK               (0x2000U)
 #define I3C_MINTMASKED_IBIWON_SHIFT              (13U)
 /*! IBIWON - IBIWON Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_IBIWON(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_IBIWON_SHIFT)) & I3C_MINTMASKED_IBIWON_MASK)
 
 #define I3C_MINTMASKED_ERRWARN_MASK              (0x8000U)
 #define I3C_MINTMASKED_ERRWARN_SHIFT             (15U)
 /*! ERRWARN - ERRWARN Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_ERRWARN(x)                (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_ERRWARN_SHIFT)) & I3C_MINTMASKED_ERRWARN_MASK)
 
 #define I3C_MINTMASKED_NOWMASTER_MASK            (0x80000U)
 #define I3C_MINTMASKED_NOWMASTER_SHIFT           (19U)
 /*! NOWMASTER - NOWCONTROLLER Interrupt Mask
- *  0b0..Interrupt not enabled and/or not active
- *  0b1..Interrupt enabled and active
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_MINTMASKED_NOWMASTER(x)              (((uint32_t)(((uint32_t)(x)) << I3C_MINTMASKED_NOWMASTER_SHIFT)) & I3C_MINTMASKED_NOWMASTER_MASK)
 /*! @} */
@@ -1976,88 +2034,110 @@ typedef struct {
 
 #define I3C_MERRWARN_URUN_MASK                   (0x2U)
 #define I3C_MERRWARN_URUN_SHIFT                  (1U)
-/*! URUN - Underrun error
+/*! URUN - Underrun Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_URUN(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_URUN_SHIFT)) & I3C_MERRWARN_URUN_MASK)
 
 #define I3C_MERRWARN_NACK_MASK                   (0x4U)
 #define I3C_MERRWARN_NACK_SHIFT                  (2U)
-/*! NACK - Not Acknowledge Error
+/*! NACK - Not Acknowledge Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_NACK(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_NACK_SHIFT)) & I3C_MERRWARN_NACK_MASK)
 
 #define I3C_MERRWARN_WRABT_MASK                  (0x8U)
 #define I3C_MERRWARN_WRABT_SHIFT                 (3U)
-/*! WRABT - Write Abort Error
+/*! WRABT - Write Abort Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_WRABT(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_WRABT_SHIFT)) & I3C_MERRWARN_WRABT_MASK)
 
 #define I3C_MERRWARN_TERM_MASK                   (0x10U)
 #define I3C_MERRWARN_TERM_SHIFT                  (4U)
-/*! TERM - Terminate Error
+/*! TERM - Terminate Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_TERM(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_TERM_SHIFT)) & I3C_MERRWARN_TERM_MASK)
 
 #define I3C_MERRWARN_HPAR_MASK                   (0x200U)
 #define I3C_MERRWARN_HPAR_SHIFT                  (9U)
-/*! HPAR - High Data Rate Parity
+/*! HPAR - High Data Rate Parity Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_HPAR(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_HPAR_SHIFT)) & I3C_MERRWARN_HPAR_MASK)
 
 #define I3C_MERRWARN_HCRC_MASK                   (0x400U)
 #define I3C_MERRWARN_HCRC_SHIFT                  (10U)
-/*! HCRC - High Data Rate CRC Error
+/*! HCRC - High Data Rate CRC Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_HCRC(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_HCRC_SHIFT)) & I3C_MERRWARN_HCRC_MASK)
 
 #define I3C_MERRWARN_OREAD_MASK                  (0x10000U)
 #define I3C_MERRWARN_OREAD_SHIFT                 (16U)
-/*! OREAD - Over-read Error
+/*! OREAD - Overread Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_OREAD(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_OREAD_SHIFT)) & I3C_MERRWARN_OREAD_MASK)
 
 #define I3C_MERRWARN_OWRITE_MASK                 (0x20000U)
 #define I3C_MERRWARN_OWRITE_SHIFT                (17U)
-/*! OWRITE - Over-write Error
+/*! OWRITE - Overwrite Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_OWRITE(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_OWRITE_SHIFT)) & I3C_MERRWARN_OWRITE_MASK)
 
 #define I3C_MERRWARN_MSGERR_MASK                 (0x40000U)
 #define I3C_MERRWARN_MSGERR_SHIFT                (18U)
-/*! MSGERR - Message Error
+/*! MSGERR - Message Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_MSGERR(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_MSGERR_SHIFT)) & I3C_MERRWARN_MSGERR_MASK)
 
 #define I3C_MERRWARN_INVREQ_MASK                 (0x80000U)
 #define I3C_MERRWARN_INVREQ_SHIFT                (19U)
-/*! INVREQ - Invalid Request Error
+/*! INVREQ - Invalid Request Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_INVREQ(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_INVREQ_SHIFT)) & I3C_MERRWARN_INVREQ_MASK)
 
 #define I3C_MERRWARN_TIMEOUT_MASK                (0x100000U)
 #define I3C_MERRWARN_TIMEOUT_SHIFT               (20U)
-/*! TIMEOUT - Timeout Error
+/*! TIMEOUT - Timeout Error Flag
+ *  0b0..No effect
  *  0b0..No error
+ *  0b1..Clear the flag
  *  0b1..Error
  */
 #define I3C_MERRWARN_TIMEOUT(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MERRWARN_TIMEOUT_SHIFT)) & I3C_MERRWARN_TIMEOUT_MASK)
@@ -2068,8 +2148,8 @@ typedef struct {
 
 #define I3C_MDMACTRL_DMAFB_MASK                  (0x3U)
 #define I3C_MDMACTRL_DMAFB_SHIFT                 (0U)
-/*! DMAFB - DMA From Bus
- *  0b00..DMA is not used
+/*! DMAFB - DMA from Bus
+ *  0b00..DMA not used
  *  0b01..Enable DMA for one frame
  *  0b10..Enable DMA until DMA is turned off
  *  0b11..
@@ -2078,9 +2158,9 @@ typedef struct {
 
 #define I3C_MDMACTRL_DMATB_MASK                  (0xCU)
 #define I3C_MDMACTRL_DMATB_SHIFT                 (2U)
-/*! DMATB - DMA To Bus
- *  0b00..DMA is not used
- *  0b01..Enable DMA for one frame (ended by DMA or Terminated)
+/*! DMATB - DMA to Bus
+ *  0b00..DMA not used
+ *  0b01..Enable DMA for one frame (ended by DMA or terminated)
  *  0b10..Enable DMA until DMA is turned off
  *  0b11..
  */
@@ -2101,7 +2181,7 @@ typedef struct {
 
 #define I3C_MDATACTRL_FLUSHTB_MASK               (0x1U)
 #define I3C_MDATACTRL_FLUSHTB_SHIFT              (0U)
-/*! FLUSHTB - Flush To-bus Buffer or FIFO
+/*! FLUSHTB - Flush To-Bus Buffer or FIFO
  *  0b0..No action
  *  0b1..Flush the buffer
  */
@@ -2109,7 +2189,7 @@ typedef struct {
 
 #define I3C_MDATACTRL_FLUSHFB_MASK               (0x2U)
 #define I3C_MDATACTRL_FLUSHFB_SHIFT              (1U)
-/*! FLUSHFB - Flush From-bus Buffer or FIFO
+/*! FLUSHFB - Flush From-Bus Buffer or FIFO
  *  0b0..No action
  *  0b1..Flush the buffer
  */
@@ -2118,8 +2198,8 @@ typedef struct {
 #define I3C_MDATACTRL_UNLOCK_MASK                (0x8U)
 #define I3C_MDATACTRL_UNLOCK_SHIFT               (3U)
 /*! UNLOCK - Unlock
- *  0b0..Locked. RXTRIG and TXTRIG fields cannot be changed on a write.
- *  0b1..Unlocked. RXTRIG and TXTRIG fields can be changed on a write.
+ *  0b0..Locked
+ *  0b1..Unlocked
  */
 #define I3C_MDATACTRL_UNLOCK(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_UNLOCK_SHIFT)) & I3C_MDATACTRL_UNLOCK_MASK)
 
@@ -2129,14 +2209,14 @@ typedef struct {
  *  0b00..Trigger when empty
  *  0b01..Trigger when 1/4 full or less
  *  0b10..Trigger when 1/2 full or less
- *  0b11..Default. Trigger when 1 less than full or less
+ *  0b11..Trigger when 1 less than full or less (default)
  */
 #define I3C_MDATACTRL_TXTRIG(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_TXTRIG_SHIFT)) & I3C_MDATACTRL_TXTRIG_MASK)
 
 #define I3C_MDATACTRL_RXTRIG_MASK                (0xC0U)
 #define I3C_MDATACTRL_RXTRIG_SHIFT               (6U)
 /*! RXTRIG - Receive Trigger Level
- *  0b00..Trigger when not empty
+ *  0b00..Trigger when not empty (default)
  *  0b01..Trigger when 1/4 full or more
  *  0b10..Trigger when 1/2 full or more
  *  0b11..Trigger when 3/4 full or more
@@ -2145,27 +2225,27 @@ typedef struct {
 
 #define I3C_MDATACTRL_TXCOUNT_MASK               (0x1F0000U)
 #define I3C_MDATACTRL_TXCOUNT_SHIFT              (16U)
-/*! TXCOUNT - Transmit Byte Count */
+/*! TXCOUNT - Transmit Entry Count */
 #define I3C_MDATACTRL_TXCOUNT(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_TXCOUNT_SHIFT)) & I3C_MDATACTRL_TXCOUNT_MASK)
 
 #define I3C_MDATACTRL_RXCOUNT_MASK               (0x1F000000U)
 #define I3C_MDATACTRL_RXCOUNT_SHIFT              (24U)
-/*! RXCOUNT - Receive Byte Count */
+/*! RXCOUNT - Receive Entry Count */
 #define I3C_MDATACTRL_RXCOUNT(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_RXCOUNT_SHIFT)) & I3C_MDATACTRL_RXCOUNT_MASK)
 
 #define I3C_MDATACTRL_TXFULL_MASK                (0x40000000U)
 #define I3C_MDATACTRL_TXFULL_SHIFT               (30U)
-/*! TXFULL - Transmit Is Full
- *  0b0..Transmit FIFO or buffer is not yet full.
- *  0b1..Transmit FIFO or buffer is full.
+/*! TXFULL - Transmit is Full
+ *  0b0..Not full
+ *  0b1..Full
  */
 #define I3C_MDATACTRL_TXFULL(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_TXFULL_SHIFT)) & I3C_MDATACTRL_TXFULL_MASK)
 
 #define I3C_MDATACTRL_RXEMPTY_MASK               (0x80000000U)
 #define I3C_MDATACTRL_RXEMPTY_SHIFT              (31U)
-/*! RXEMPTY - Receive Is Empty
- *  0b0..Receive FIFO or buffer is not yet empty.
- *  0b1..Receive FIFO or buffer is empty.
+/*! RXEMPTY - Receive is Empty
+ *  0b0..Not empty
+ *  0b1..Empty
  */
 #define I3C_MDATACTRL_RXEMPTY(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_RXEMPTY_SHIFT)) & I3C_MDATACTRL_RXEMPTY_MASK)
 /*! @} */
@@ -2181,16 +2261,16 @@ typedef struct {
 #define I3C_MWDATAB_END_MASK                     (0x100U)
 #define I3C_MWDATAB_END_SHIFT                    (8U)
 /*! END - End of Message
- *  0b0..Not the end. More bytes are assumed to be in the message.
- *  0b1..End. The END bit marks the last byte of the message.
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_MWDATAB_END(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_MWDATAB_END_SHIFT)) & I3C_MWDATAB_END_MASK)
 
 #define I3C_MWDATAB_END_ALSO_MASK                (0x10000U)
 #define I3C_MWDATAB_END_ALSO_SHIFT               (16U)
-/*! END_ALSO - End of Message Also
- *  0b0..Not the end. More bytes are assumed to be in the message.
- *  0b1..End. The END bit marks the last byte of the message.
+/*! END_ALSO - End of Message ALSO
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_MWDATAB_END_ALSO(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MWDATAB_END_ALSO_SHIFT)) & I3C_MWDATAB_END_ALSO_MASK)
 /*! @} */
@@ -2219,9 +2299,9 @@ typedef struct {
 
 #define I3C_MWDATAH_END_MASK                     (0x10000U)
 #define I3C_MWDATAH_END_SHIFT                    (16U)
-/*! END - End of message
- *  0b0..Not the end. More bytes are assumed to be in the message.
- *  0b1..End. The END bit marks the last byte of the message.
+/*! END - End of Message
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_MWDATAH_END(x)                       (((uint32_t)(((uint32_t)(x)) << I3C_MWDATAH_END_SHIFT)) & I3C_MWDATAH_END_MASK)
 /*! @} */
@@ -2249,7 +2329,7 @@ typedef struct {
 #define I3C_MRDATAB_VALUE(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_MRDATAB_VALUE_SHIFT)) & I3C_MRDATAB_VALUE_MASK)
 /*! @} */
 
-/*! @name MWDATAB1 - Controller Write Byte Data 1(to bus) */
+/*! @name MWDATAB1 - Controller Write Byte Data 1 (to Bus) */
 /*! @{ */
 
 #define I3C_MWDATAB1_VALUE_MASK                  (0xFFU)
@@ -2277,8 +2357,8 @@ typedef struct {
 #define I3C_MWMSG_SDR_CONTROL_END_MASK           (0x100U)
 #define I3C_MWMSG_SDR_CONTROL_END_SHIFT          (8U)
 /*! END - End of SDR Message
- *  0b0..Not the end. SDR message ends waiting for a new SDR message (issues a repeated START for a new message).
- *  0b1..End. SDR message ends at the STOP.
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_MWMSG_SDR_CONTROL_END(x)             (((uint32_t)(((uint32_t)(x)) << I3C_MWMSG_SDR_CONTROL_END_SHIFT)) & I3C_MWMSG_SDR_CONTROL_END_MASK)
 
@@ -2323,7 +2403,7 @@ typedef struct {
 #define I3C_MWMSG_DDR_CONTROL_ADDRCMD(x)         (((uint32_t)(((uint32_t)(x)) << I3C_MWMSG_DDR_CONTROL_ADDRCMD_SHIFT)) & I3C_MWMSG_DDR_CONTROL_ADDRCMD_MASK)
 /*! @} */
 
-/*! @name MWMSG_DDR_CONTROL2 - Controller Write Message in DDR mode Control 2 */
+/*! @name MWMSG_DDR_CONTROL2 - Controller Write Message in DDR Mode Control 2 */
 /*! @{ */
 
 #define I3C_MWMSG_DDR_CONTROL2_LEN_MASK          (0x3FFU)
@@ -2333,9 +2413,9 @@ typedef struct {
 
 #define I3C_MWMSG_DDR_CONTROL2_END_MASK          (0x4000U)
 #define I3C_MWMSG_DDR_CONTROL2_END_SHIFT         (14U)
-/*! END - End of message
- *  0b0..Not the end. DDR message ends waiting for a new DDR message (will issue a HDR Restart for the new message).
- *  0b1..End. DDR message ends on HDR Exit.
+/*! END - End of Message
+ *  0b0..Not the end
+ *  0b1..End
  */
 #define I3C_MWMSG_DDR_CONTROL2_END(x)            (((uint32_t)(((uint32_t)(x)) << I3C_MWMSG_DDR_CONTROL2_END_SHIFT)) & I3C_MWMSG_DDR_CONTROL2_END_MASK)
 /*! @} */
@@ -2363,7 +2443,7 @@ typedef struct {
 
 #define I3C_MDYNADDR_DAVALID_MASK                (0x1U)
 #define I3C_MDYNADDR_DAVALID_SHIFT               (0U)
-/*! DAVALID - Dynamic address valid
+/*! DAVALID - Dynamic Address Valid
  *  0b0..No valid DA assigned
  *  0b1..Valid DA assigned
  */
@@ -2371,27 +2451,22 @@ typedef struct {
 
 #define I3C_MDYNADDR_DADDR_MASK                  (0xFEU)
 #define I3C_MDYNADDR_DADDR_SHIFT                 (1U)
-/*! DADDR - Dynamic address */
+/*! DADDR - Dynamic Address */
 #define I3C_MDYNADDR_DADDR(x)                    (((uint32_t)(((uint32_t)(x)) << I3C_MDYNADDR_DADDR_SHIFT)) & I3C_MDYNADDR_DADDR_MASK)
 /*! @} */
 
-/*! @name SRSTACTTIME - Timing Rules for TargetReset Recovery */
+/*! @name SRSTACTTIME - Timing Rules for Target Reset Recovery */
 /*! @{ */
 
 #define I3C_SRSTACTTIME_PERRSTTIM_MASK           (0xFFU)
 #define I3C_SRSTACTTIME_PERRSTTIM_SHIFT          (0U)
-/*! PERRSTTIM - Time to Recover from the I3C peripheral */
+/*! PERRSTTIM - Time to Recover from the I3C Peripheral */
 #define I3C_SRSTACTTIME_PERRSTTIM(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SRSTACTTIME_PERRSTTIM_SHIFT)) & I3C_SRSTACTTIME_PERRSTTIM_MASK)
 
 #define I3C_SRSTACTTIME_SYSRSTTIM_MASK           (0xFF00U)
 #define I3C_SRSTACTTIME_SYSRSTTIM_SHIFT          (8U)
 /*! SYSRSTTIM - Time to Recover from Chip Reset */
 #define I3C_SRSTACTTIME_SYSRSTTIM(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SRSTACTTIME_SYSRSTTIM_SHIFT)) & I3C_SRSTACTTIME_SYSRSTTIM_MASK)
-
-#define I3C_SRSTACTTIME_CUSRSTTIM_MASK           (0xFF0000U)
-#define I3C_SRSTACTTIME_CUSRSTTIM_SHIFT          (16U)
-/*! CUSRSTTIM - Custom Time to Recover */
-#define I3C_SRSTACTTIME_CUSRSTTIM(x)             (((uint32_t)(((uint32_t)(x)) << I3C_SRSTACTTIME_CUSRSTTIM_SHIFT)) & I3C_SRSTACTTIME_CUSRSTTIM_MASK)
 /*! @} */
 
 /*! @name SCCCMASK - CCC Mask for Unhandled CCCs */
@@ -2459,7 +2534,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_ORUN_MASK               (0x1U)
 #define I3C_SERRWARNMASK_ORUN_SHIFT              (0U)
-/*! ORUN - ORUN mask
+/*! ORUN - ORUN Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2467,7 +2542,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_URUN_MASK               (0x2U)
 #define I3C_SERRWARNMASK_URUN_SHIFT              (1U)
-/*! URUN - URUN mask
+/*! URUN - URUN Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2475,7 +2550,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_URUNNACK_MASK           (0x4U)
 #define I3C_SERRWARNMASK_URUNNACK_SHIFT          (2U)
-/*! URUNNACK - URUNNACK mask
+/*! URUNNACK - URUNNACK Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2483,7 +2558,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_TERM_MASK               (0x8U)
 #define I3C_SERRWARNMASK_TERM_SHIFT              (3U)
-/*! TERM - TERM mask
+/*! TERM - TERM Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2491,7 +2566,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_INVSTART_MASK           (0x10U)
 #define I3C_SERRWARNMASK_INVSTART_SHIFT          (4U)
-/*! INVSTART - INVSTART mask
+/*! INVSTART - INVSTART Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2499,7 +2574,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_SPAR_MASK               (0x100U)
 #define I3C_SERRWARNMASK_SPAR_SHIFT              (8U)
-/*! SPAR - SPAR mask
+/*! SPAR - SPAR Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2507,7 +2582,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_HPAR_MASK               (0x200U)
 #define I3C_SERRWARNMASK_HPAR_SHIFT              (9U)
-/*! HPAR - HPAR mask
+/*! HPAR - HPAR Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2515,7 +2590,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_HCRC_MASK               (0x400U)
 #define I3C_SERRWARNMASK_HCRC_SHIFT              (10U)
-/*! HCRC - HCRC mask
+/*! HCRC - HCRC Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2523,7 +2598,7 @@ typedef struct {
 
 #define I3C_SERRWARNMASK_S0S1_MASK               (0x800U)
 #define I3C_SERRWARNMASK_S0S1_SHIFT              (11U)
-/*! S0S1 - S0S1 mask
+/*! S0S1 - S0S1 Mask
  *  0b0..Deny
  *  0b1..Allow
  */
@@ -2536,8 +2611,8 @@ typedef struct {
 #define I3C_SMAPCTRL0_ENA_MASK                   (0x1U)
 #define I3C_SMAPCTRL0_ENA_SHIFT                  (0U)
 /*! ENA - Enable Primary Dynamic Address
- *  0b0..Disable
- *  0b1..Enable
+ *  0b0..Disabled
+ *  0b1..Enabled
  */
 #define I3C_SMAPCTRL0_ENA(x)                     (((uint32_t)(((uint32_t)(x)) << I3C_SMAPCTRL0_ENA_SHIFT)) & I3C_SMAPCTRL0_ENA_MASK)
 
@@ -2549,12 +2624,11 @@ typedef struct {
 #define I3C_SMAPCTRL0_CAUSE_MASK                 (0x700U)
 #define I3C_SMAPCTRL0_CAUSE_SHIFT                (8U)
 /*! CAUSE - Cause
- *  0b000..No information. This value occurs when not configured to write DA.
+ *  0b000..No information (this value occurs when not configured to write DA)
  *  0b001..Set using ENTDAA
  *  0b010..Set using SETDASA, SETAASA, or SETNEWDA
  *  0b011..Cleared using RSTDAA
- *  0b100..Auto MAP change happened last. The change may have changed this DA as well (for example, ENTDAA, and
- *         SETAASA), but at least one MAP entry automatically changed after.
+ *  0b100..Auto MAP change happened last
  */
 #define I3C_SMAPCTRL0_CAUSE(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SMAPCTRL0_CAUSE_SHIFT)) & I3C_SMAPCTRL0_CAUSE_MASK)
 /*! @} */
@@ -2578,14 +2652,14 @@ typedef struct {
 #define I3C_SMAPCTRL1_MAPSA_MASK                 (0x100U)
 #define I3C_SMAPCTRL1_MAPSA_SHIFT                (8U)
 /*! MAPSA - MAP Static Address
- *  0b0..I3C Dynamic Address
- *  0b1..Static Address (I2C style)
+ *  0b0..I3C dynamic address
+ *  0b1..Static address (I2C style)
  */
 #define I3C_SMAPCTRL1_MAPSA(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SMAPCTRL1_MAPSA_SHIFT)) & I3C_SMAPCTRL1_MAPSA_MASK)
 
 #define I3C_SMAPCTRL1_SA10B_MASK                 (0xE00U)
 #define I3C_SMAPCTRL1_SA10B_SHIFT                (9U)
-/*! SA10B - Static Address 10-bit Extension */
+/*! SA10B - Static Address 10-Bit Extension */
 #define I3C_SMAPCTRL1_SA10B(x)                   (((uint32_t)(((uint32_t)(x)) << I3C_SMAPCTRL1_SA10B_SHIFT)) & I3C_SMAPCTRL1_SA10B_MASK)
 
 #define I3C_SMAPCTRL1_NACK_MASK                  (0x1000U)
@@ -2625,17 +2699,17 @@ typedef struct {
 
 #define I3C_IBIEXT1_EXT1_MASK                    (0xFF00U)
 #define I3C_IBIEXT1_EXT1_SHIFT                   (8U)
-/*! EXT1 - Extra byte 1 */
+/*! EXT1 - Extra Byte 1 */
 #define I3C_IBIEXT1_EXT1(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT1_EXT1_SHIFT)) & I3C_IBIEXT1_EXT1_MASK)
 
 #define I3C_IBIEXT1_EXT2_MASK                    (0xFF0000U)
 #define I3C_IBIEXT1_EXT2_SHIFT                   (16U)
-/*! EXT2 - Extra byte 2 */
+/*! EXT2 - Extra Byte 2 */
 #define I3C_IBIEXT1_EXT2(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT1_EXT2_SHIFT)) & I3C_IBIEXT1_EXT2_MASK)
 
 #define I3C_IBIEXT1_EXT3_MASK                    (0xFF000000U)
 #define I3C_IBIEXT1_EXT3_SHIFT                   (24U)
-/*! EXT3 - Extra byte 3 */
+/*! EXT3 - Extra Byte 3 */
 #define I3C_IBIEXT1_EXT3(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT1_EXT3_SHIFT)) & I3C_IBIEXT1_EXT3_MASK)
 /*! @} */
 
@@ -2644,22 +2718,22 @@ typedef struct {
 
 #define I3C_IBIEXT2_EXT4_MASK                    (0xFFU)
 #define I3C_IBIEXT2_EXT4_SHIFT                   (0U)
-/*! EXT4 - Extra byte 4 */
+/*! EXT4 - Extra Byte 4 */
 #define I3C_IBIEXT2_EXT4(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT2_EXT4_SHIFT)) & I3C_IBIEXT2_EXT4_MASK)
 
 #define I3C_IBIEXT2_EXT5_MASK                    (0xFF00U)
 #define I3C_IBIEXT2_EXT5_SHIFT                   (8U)
-/*! EXT5 - Extra byte 5 */
+/*! EXT5 - Extra Byte 5 */
 #define I3C_IBIEXT2_EXT5(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT2_EXT5_SHIFT)) & I3C_IBIEXT2_EXT5_MASK)
 
 #define I3C_IBIEXT2_EXT6_MASK                    (0xFF0000U)
 #define I3C_IBIEXT2_EXT6_SHIFT                   (16U)
-/*! EXT6 - Extra byte 6 */
+/*! EXT6 - Extra Byte 6 */
 #define I3C_IBIEXT2_EXT6(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT2_EXT6_SHIFT)) & I3C_IBIEXT2_EXT6_MASK)
 
 #define I3C_IBIEXT2_EXT7_MASK                    (0xFF000000U)
 #define I3C_IBIEXT2_EXT7_SHIFT                   (24U)
-/*! EXT7 - Extra byte 7 */
+/*! EXT7 - Extra Byte 7 */
 #define I3C_IBIEXT2_EXT7(x)                      (((uint32_t)(((uint32_t)(x)) << I3C_IBIEXT2_EXT7_SHIFT)) & I3C_IBIEXT2_EXT7_MASK)
 /*! @} */
 

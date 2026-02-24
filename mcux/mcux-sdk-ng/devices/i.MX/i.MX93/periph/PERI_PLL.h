@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PLL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -226,10 +226,10 @@ typedef struct {
       __IO uint32_t TOG;                               /**< DFS Control, offset: 0x7C, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
     } DFS_CTRL;
     struct {                                         /* offset: 0x80 */
-      __IO uint32_t RW;                                /**< DFS Division_0..DFS Division_2, offset: 0x80, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
-      __IO uint32_t SET;                               /**< DFS Division_0..DFS Division_2, offset: 0x84, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
-      __IO uint32_t CLR;                               /**< DFS Division_0..DFS Division_2, offset: 0x88, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
-      __IO uint32_t TOG;                               /**< DFS Division_0..DFS Division_2, offset: 0x8C, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
+      __IO uint32_t RW;                                /**< DFS Division_N, offset: 0x80, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
+      __IO uint32_t SET;                               /**< DFS Division_N, offset: 0x84, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
+      __IO uint32_t CLR;                               /**< DFS Division_N, offset: 0x88, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
+      __IO uint32_t TOG;                               /**< DFS Division_N, offset: 0x8C, available only on: SYSPLL (missing on ARMPLL, AUDIOPLL, DRAMPLL, VIDEOPLL) */
     } DFS_DIV;
   } DFS[PLL_DFS_COUNT];
        uint8_t RESERVED_1[32];
@@ -252,16 +252,16 @@ typedef struct {
 #define PLL_CTRL_POWERUP_MASK                    (0x1U)
 #define PLL_CTRL_POWERUP_SHIFT                   (0U)
 /*! POWERUP - Power Up
- *  0b0..Disables PLL.
- *  0b1..Enables PLL
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_CTRL_POWERUP(x)                      (((uint32_t)(((uint32_t)(x)) << PLL_CTRL_POWERUP_SHIFT)) & PLL_CTRL_POWERUP_MASK)
 
 #define PLL_CTRL_CLKMUX_EN_MASK                  (0x2U)
 #define PLL_CTRL_CLKMUX_EN_SHIFT                 (1U)
 /*! CLKMUX_EN - CLKMUX Enable
- *  0b0..Disables output clock mux.
- *  0b1..Enables output clock mux.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_CTRL_CLKMUX_EN(x)                    (((uint32_t)(((uint32_t)(x)) << PLL_CTRL_CLKMUX_EN_SHIFT)) & PLL_CTRL_CLKMUX_EN_MASK)
 
@@ -269,31 +269,31 @@ typedef struct {
 #define PLL_CTRL_CLKMUX_BYPASS_SHIFT             (2U)
 /*! CLKMUX_BYPASS - CLKMUX_Bypass
  *  0b0..Normal mode
- *  0b1..PLL bypass mode
+ *  0b1..PLL Bypass mode
  */
 #define PLL_CTRL_CLKMUX_BYPASS(x)                (((uint32_t)(((uint32_t)(x)) << PLL_CTRL_CLKMUX_BYPASS_SHIFT)) & PLL_CTRL_CLKMUX_BYPASS_MASK)
 
 #define PLL_CTRL_SPREADCTL_MASK                  (0x100U)
 #define PLL_CTRL_SPREADCTL_SHIFT                 (8U)
 /*! SPREADCTL - Modulation Type Select
- *  0b0..Modulation is centered around nominal frequency.
- *  0b1..Modulation is spread below nominal frequency.
+ *  0b0..Centered around nominal frequency
+ *  0b1..Spread below nominal frequency
  */
 #define PLL_CTRL_SPREADCTL(x)                    (((uint32_t)(((uint32_t)(x)) << PLL_CTRL_SPREADCTL_SHIFT)) & PLL_CTRL_SPREADCTL_MASK)
 
 #define PLL_CTRL_HW_CTRL_SEL_MASK                (0x10000U)
 #define PLL_CTRL_HW_CTRL_SEL_SHIFT               (16U)
 /*! HW_CTRL_SEL - Hardware Control Select
- *  0b0..Disables hardware control. PLL is controlled by register.
- *  0b1..Enables hardware control. PLL is controlled by hardware inputs.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_CTRL_HW_CTRL_SEL(x)                  (((uint32_t)(((uint32_t)(x)) << PLL_CTRL_HW_CTRL_SEL_SHIFT)) & PLL_CTRL_HW_CTRL_SEL_MASK)
 
 #define PLL_CTRL_LOCK_BYPASS_MASK                (0x80000000U)
 #define PLL_CTRL_LOCK_BYPASS_SHIFT               (31U)
 /*! LOCK_BYPASS - Lock Bypass
- *  0b0..Disables bypass for the lock detector.
- *  0b1..Enables bypass for the lock detector.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_CTRL_LOCK_BYPASS(x)                  (((uint32_t)(((uint32_t)(x)) << PLL_CTRL_LOCK_BYPASS_SHIFT)) & PLL_CTRL_LOCK_BYPASS_MASK)
 /*! @} */
@@ -309,8 +309,8 @@ typedef struct {
 #define PLL_SPREAD_SPECTRUM_ENABLE_MASK          (0x8000U)
 #define PLL_SPREAD_SPECTRUM_ENABLE_SHIFT         (15U)
 /*! ENABLE - Enable
- *  0b0..Disables the spread spectrum modulation.
- *  0b1..Enables the spread spectrum modulation.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_SPREAD_SPECTRUM_ENABLE(x)            (((uint32_t)(((uint32_t)(x)) << PLL_SPREAD_SPECTRUM_ENABLE_SHIFT)) & PLL_SPREAD_SPECTRUM_ENABLE_MASK)
 
@@ -343,18 +343,7 @@ typedef struct {
 
 #define PLL_DIV_ODIV_MASK                        (0xFFU)
 #define PLL_DIV_ODIV_SHIFT                       (0U)
-/*! ODIV - Output Frequency Divider for Clock Output
- *  0b00000000..Divide by 2
- *  0b00000001..Divide by 3
- *  0b00000010..Divide by 2
- *  0b00000011..Divide by 3
- *  0b00000100..Divide by 4
- *  0b00000101..Divide by 5
- *  0b00000110..Divide by 6
- *  0b00001010..Divide by 10
- *  0b10000010..Divide by 130
- *  0b11111111..Divide by 255
- */
+/*! ODIV - Output Frequency Divider for Clock Output */
 #define PLL_DIV_ODIV(x)                          (((uint32_t)(((uint32_t)(x)) << PLL_DIV_ODIV_SHIFT)) & PLL_DIV_ODIV_MASK)
 
 #define PLL_DIV_RDIV_MASK                        (0xE000U)
@@ -383,53 +372,55 @@ typedef struct {
 #define PLL_DFS_HW_CTRL_SEL_MASK                 (0x10000U)
 #define PLL_DFS_HW_CTRL_SEL_SHIFT                (16U)
 /*! HW_CTRL_SEL - Hardware Control Select
- *  0b0..Disables hardware control. DFS is controlled by register
- *  0b1..Enables hardware control.DFS is controlled by hardware inputs.
+ *  0b0..Controlled by register
+ *  0b1..Controlled by hardware inputs
  */
 #define PLL_DFS_HW_CTRL_SEL(x)                   (((uint32_t)(((uint32_t)(x)) << PLL_DFS_HW_CTRL_SEL_SHIFT)) & PLL_DFS_HW_CTRL_SEL_MASK)
 
 #define PLL_DFS_BYPASS_EN_MASK                   (0x800000U)
 #define PLL_DFS_BYPASS_EN_SHIFT                  (23U)
 /*! BYPASS_EN - Bypass Enable
- *  0b0..Disables bypass for DFS.
- *  0b1..Enables bypass for DFS.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_DFS_BYPASS_EN(x)                     (((uint32_t)(((uint32_t)(x)) << PLL_DFS_BYPASS_EN_SHIFT)) & PLL_DFS_BYPASS_EN_MASK)
 
 #define PLL_DFS_CLKOUT_DIVBY2_EN_MASK            (0x20000000U)
 #define PLL_DFS_CLKOUT_DIVBY2_EN_SHIFT           (29U)
 /*! CLKOUT_DIVBY2_EN - DFS Clock Output Divide by 2 Enable
- *  0b0..Disables DFS divide by 2 clock output.
- *  0b1..Enables DFS divide by 2 clock output.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_DFS_CLKOUT_DIVBY2_EN(x)              (((uint32_t)(((uint32_t)(x)) << PLL_DFS_CLKOUT_DIVBY2_EN_SHIFT)) & PLL_DFS_CLKOUT_DIVBY2_EN_MASK)
 
 #define PLL_DFS_CLKOUT_EN_MASK                   (0x40000000U)
 #define PLL_DFS_CLKOUT_EN_SHIFT                  (30U)
 /*! CLKOUT_EN - DFS Clock Output Enable
- *  0b0..Disables DFS clock output.
- *  0b1..Enables DFS clock output.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_DFS_CLKOUT_EN(x)                     (((uint32_t)(((uint32_t)(x)) << PLL_DFS_CLKOUT_EN_SHIFT)) & PLL_DFS_CLKOUT_EN_MASK)
 
 #define PLL_DFS_ENABLE_MASK                      (0x80000000U)
 #define PLL_DFS_ENABLE_SHIFT                     (31U)
 /*! ENABLE - DFS Block Enable
- *  0b0..Disables DFS Block.
- *  0b1..Enables DFS Block.
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define PLL_DFS_ENABLE(x)                        (((uint32_t)(((uint32_t)(x)) << PLL_DFS_ENABLE_SHIFT)) & PLL_DFS_ENABLE_MASK)
 /*! @} */
 
-/*! @name DFS - DFS Division_0..DFS Division_2 */
+/*! @name DFS - DFS Division_N */
 /*! @{ */
 
 #define PLL_DFS_MFN_MASK                         (0x7U)
 #define PLL_DFS_MFN_SHIFT                        (0U)
+/*! MFN - MFN */
 #define PLL_DFS_MFN(x)                           (((uint32_t)(((uint32_t)(x)) << PLL_DFS_MFN_SHIFT)) & PLL_DFS_MFN_MASK)
 
 #define PLL_DFS_MFI_MASK                         (0xFF00U)
 #define PLL_DFS_MFI_SHIFT                        (8U)
+/*! MFI - MFI */
 #define PLL_DFS_MFI(x)                           (((uint32_t)(((uint32_t)(x)) << PLL_DFS_MFI_SHIFT)) & PLL_DFS_MFI_MASK)
 /*! @} */
 
@@ -458,8 +449,8 @@ typedef struct {
 #define PLL_DFS_STATUS_DFS_OK_MASK               (0x7U)
 #define PLL_DFS_STATUS_DFS_OK_SHIFT              (0U)
 /*! DFS_OK - DFS OK
- *  0b000..The corresponding DFS output clock is not valid.
- *  0b001..The corresponding DFS output clock is valid.
+ *  0b000..Invalid
+ *  0b001..Valid
  */
 #define PLL_DFS_STATUS_DFS_OK(x)                 (((uint32_t)(((uint32_t)(x)) << PLL_DFS_STATUS_DFS_OK_SHIFT)) & PLL_DFS_STATUS_DFS_OK_MASK)
 /*! @} */

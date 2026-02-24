@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TPM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -306,7 +306,7 @@ typedef struct {
  *  0b00..TPM counter is disabled
  *  0b01..TPM counter increments on every TPM counter clock
  *  0b10..TPM counter increments on the rising edge of EXTCLK synchronized to the TPM counter clock
- *  0b11..TPM counter increments on the rising edge of the selected external input trigger
+ *  0b11..TPM counter increments on both edges of EXTCLK synchronized to the TPM counter clock
  */
 #define TPM_SC_CMOD(x)                           (((uint32_t)(((uint32_t)(x)) << TPM_SC_CMOD_SHIFT)) & TPM_SC_CMOD_MASK)
 
@@ -341,6 +341,11 @@ typedef struct {
  *  0b1..Enable
  */
 #define TPM_SC_DMA(x)                            (((uint32_t)(((uint32_t)(x)) << TPM_SC_DMA_SHIFT)) & TPM_SC_DMA_MASK)
+
+#define TPM_SC_CTRIGSEL_MASK                     (0x3000000U)
+#define TPM_SC_CTRIGSEL_SHIFT                    (24U)
+/*! CTRIGSEL - Clock Trigger Select */
+#define TPM_SC_CTRIGSEL(x)                       (((uint32_t)(((uint32_t)(x)) << TPM_SC_CTRIGSEL_SHIFT)) & TPM_SC_CTRIGSEL_MASK)
 /*! @} */
 
 /*! @name CNT - Counter */
@@ -538,6 +543,11 @@ typedef struct {
  *  0b1..Configures trigger input 1 to be used by channel 3
  */
 #define TPM_TRIG_TRIG3(x)                        (((uint32_t)(((uint32_t)(x)) << TPM_TRIG_TRIG3_SHIFT)) & TPM_TRIG_TRIG3_MASK)
+
+#define TPM_TRIG_TRIGSEL_MASK                    (0x3000000U)
+#define TPM_TRIG_TRIGSEL_SHIFT                   (24U)
+/*! TRIGSEL - Channel Trigger Select */
+#define TPM_TRIG_TRIGSEL(x)                      (((uint32_t)(((uint32_t)(x)) << TPM_TRIG_TRIGSEL_SHIFT)) & TPM_TRIG_TRIGSEL_MASK)
 /*! @} */
 
 /*! @name POL - Channel Polarity */
@@ -662,14 +672,6 @@ typedef struct {
  *  0b1..Enable
  */
 #define TPM_CONF_GTBSYNC(x)                      (((uint32_t)(((uint32_t)(x)) << TPM_CONF_GTBSYNC_SHIFT)) & TPM_CONF_GTBSYNC_MASK)
-
-#define TPM_CONF_GTBEEN_MASK                     (0x200U)
-#define TPM_CONF_GTBEEN_SHIFT                    (9U)
-/*! GTBEEN - GTB Enable
- *  0b0..Internally generated TPM counter
- *  0b1..Externally generated GTB counter
- */
-#define TPM_CONF_GTBEEN(x)                       (((uint32_t)(((uint32_t)(x)) << TPM_CONF_GTBEEN_SHIFT)) & TPM_CONF_GTBEEN_MASK)
 
 #define TPM_CONF_CSOT_MASK                       (0x10000U)
 #define TPM_CONF_CSOT_SHIFT                      (16U)

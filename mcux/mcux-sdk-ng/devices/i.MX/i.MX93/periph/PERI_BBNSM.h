@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BBNSM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -411,14 +411,6 @@ typedef struct {
  *  0b1..The power on interrupt has been requested.
  */
 #define BBNSM_BBNSM_EVENTS_PWR_ON(x)             (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_EVENTS_PWR_ON_SHIFT)) & BBNSM_BBNSM_EVENTS_PWR_ON_MASK)
-
-#define BBNSM_BBNSM_EVENTS_BTN_MASK              (0x80U)
-#define BBNSM_BBNSM_EVENTS_BTN_SHIFT             (7U)
-/*! BTN - Button
- *  0b0..BTN not pressed
- *  0b1..BTN pressed
- */
-#define BBNSM_BBNSM_EVENTS_BTN(x)                (((uint32_t)(((uint32_t)(x)) << BBNSM_BBNSM_EVENTS_BTN_SHIFT)) & BBNSM_BBNSM_EVENTS_BTN_MASK)
 /*! @} */
 
 /*! @name BBNSM_PAD_CTRL - BBNSM External Pad Control Register */

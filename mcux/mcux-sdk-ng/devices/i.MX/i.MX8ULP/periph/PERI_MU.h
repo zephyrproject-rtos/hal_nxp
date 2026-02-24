@@ -62,7 +62,7 @@
 **                          MIMX8US5DVP08_dsp1
 **
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251112
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
@@ -178,16 +178,6 @@
 #else
   #error Not supported compiler type
 #endif
-/*!
- * @brief Core boot mode.
- */
-typedef enum _mu_core_boot_mode
-{
-    kMU_CoreBootFromAddr0 = 0x00U, /*!< Boot from 0x00.      */
-    kMU_CoreBootFromFlash = 0x01U, /*!< Boot from Flash base. */
-    kMU_CoreBootFromItcm  = 0x02U, /*!< Boot from ITCM base. */
-} mu_core_boot_mode_t;
-
 
 /* ----------------------------------------------------------------------------
    -- MU Peripheral Access Layer

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMA
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -350,9 +350,9 @@ typedef struct {
 
 #define DMA_MP_CSR_GMRC_MASK                     (0x80U)
 #define DMA_MP_CSR_GMRC_SHIFT                    (7U)
-/*! GMRC - Global Master ID Replication Control
- *  0b0..Master ID replication disabled for all channels
- *  0b1..Master ID replication available and controlled by each channel's CHn_SBR[EMI] setting
+/*! GMRC - Global Initiator ID Replication Control
+ *  0b0..Initiator ID replication disabled for all channels
+ *  0b1..Initiator ID replication available and controlled by each channel's CHn_SBR[EMI] setting
  */
 #define DMA_MP_CSR_GMRC(x)                       (((uint32_t)(((uint32_t)(x)) << DMA_MP_CSR_GMRC_SHIFT)) & DMA_MP_CSR_GMRC_MASK)
 
@@ -487,7 +487,7 @@ typedef struct {
 /*! @name MP_HRS - Management Page Hardware Request Status */
 /*! @{ */
 
-#define DMA_MP_HRS_HRS_MASK                      (0xFFFFFFFFU)
+#define DMA_MP_HRS_HRS_MASK                      (0x7FFFFFFFU)
 #define DMA_MP_HRS_HRS_SHIFT                     (0U)
 /*! HRS - Hardware Request Status */
 #define DMA_MP_HRS_HRS(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_MP_HRS_HRS_SHIFT)) & DMA_MP_HRS_HRS_MASK)
@@ -653,7 +653,7 @@ typedef struct {
 
 #define DMA_CH_SBR_MID_MASK                      (0xFU)
 #define DMA_CH_SBR_MID_SHIFT                     (0U)
-/*! MID - Master ID */
+/*! MID - Initiator ID */
 #define DMA_CH_SBR_MID(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_CH_SBR_MID_SHIFT)) & DMA_CH_SBR_MID_MASK)
 
 #define DMA_CH_SBR_SEC_MASK                      (0x4000U)
@@ -674,9 +674,9 @@ typedef struct {
 
 #define DMA_CH_SBR_EMI_MASK                      (0x10000U)
 #define DMA_CH_SBR_EMI_SHIFT                     (16U)
-/*! EMI - Enable Master ID Replication
- *  0b0..Master ID replication is disabled
- *  0b1..Master ID replication is enabled
+/*! EMI - Enable Initiator ID Replication
+ *  0b0..Initiator ID replication is disabled
+ *  0b1..Initiator ID replication is enabled
  */
 #define DMA_CH_SBR_EMI(x)                        (((uint32_t)(((uint32_t)(x)) << DMA_CH_SBR_EMI_SHIFT)) & DMA_CH_SBR_EMI_MASK)
 
@@ -772,7 +772,6 @@ typedef struct {
 #define DMA_TCD_ATTR_SMOD_SHIFT                  (11U)
 /*! SMOD - Source Address Modulo
  *  0b00000..Source address modulo feature disabled
- *  0b00001..Source address modulo feature enabled for any non-zero value [1-31]
  */
 #define DMA_TCD_ATTR_SMOD(x)                     (((uint16_t)(((uint16_t)(x)) << DMA_TCD_ATTR_SMOD_SHIFT)) & DMA_TCD_ATTR_SMOD_MASK)
 /*! @} */

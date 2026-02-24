@@ -786,6 +786,8 @@
 #define FSL_FEATURE_NETC_HAS_PORT_PSRCR (1)
 /* @brief NXP Switch port group support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PGCR (1)
+/* @brief SG_DROP_COUNT value in the Ingress Stream Count STSE_DATA response begins at an incorrect bit offset, causing it to be read incorrectly. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052134 (0)
 
 /* PDM module features */
 
@@ -1017,13 +1019,27 @@
 /* @brief Autoupdate frequency threshold */
 #define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_FREQ_THRESHOLD (130000000UL)
 /* @brief Reference counts of autoupdate */
-#define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_REF_COUNTER (2U)
+#define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_REF_COUNTER (8U)
 /* @brief autoupdate resolution */
-#define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_RES (4U)
+#define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_RES (2U)
 /* @brief Delay Elements in autoupdate_t_div16 offset */
 #define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_T_DIV16_OFFSET_DELAY_ELEMENT_COUNT (0U)
 /* @brief Delay Elements in autoupdate offset */
 #define FSL_FEATURE_XSPI_DLL_REF_VALUE_AUTOUPDATE_OFFSET_DELAY_ELEMENT_COUNT (0U)
+/* @brief XSPI has DQS Latency Enable */
+#define FSL_FEATURE_XSPI_HAS_DQS_LAT_EN (1)
+/* @brief XSPI has END_CFG - Byte Order */
+#define FSL_FEATURE_XSPI_HAS_END_CFG (0)
+/* @brief XSPI has Doze Enable */
+#define FSL_FEATURE_XSPI_HAS_DOZE_MODE (0)
+/* @brief XSPI has Write Terminate Enable */
+#define FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT (0)
+/* @brief Multi IRQ count for one instance */
+#define FSL_FEATURE_XSPI_MULTI_IRQ_COUNT (5U)
+
+#define FSL_FEATURE_XSPI_HAS_DDR 1
+
+#define FSL_FEATURE_XSPI_HAS_EENV 1
 
 #endif /* _MIMX94398_cm7_core1_FEATURES_H_ */
 

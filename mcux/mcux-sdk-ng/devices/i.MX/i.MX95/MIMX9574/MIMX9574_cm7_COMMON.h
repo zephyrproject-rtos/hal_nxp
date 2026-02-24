@@ -12,9 +12,9 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
-**     Reference manual:    iMX95RM rev1 draftM
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250904
+**     Reference manual:    iMX95RM rev3
+**     Version:             rev. 3.0, 2025-11-24
+**     Build:               b251126
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9574_cm7
@@ -32,14 +32,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX9574_cm7_COMMON.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-24
  * @brief CMSIS Peripheral Access Layer for MIMX9574_cm7
  *
  * CMSIS Peripheral Access Layer for MIMX9574_cm7
@@ -50,7 +52,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0200U
+#define MCU_MEM_MAP_VERSION 0x0300U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -2741,6 +2743,11 @@ typedef enum IRQn {
 #define PDM_BASE_ADDRS                           { PDM_BASE }
 /** Array initializer of PDM peripheral base pointers */
 #define PDM_BASE_PTRS                            { PDM }
+/** Interrupt vectors for the PDM peripheral type */
+#define PDM_HWVAD_Event_IRQS                     { PDM_HWVAD_EVENT_IRQn }
+#define PDM_HWVAD_Error_IRQS                     { PDM_HWVAD_ERROR_IRQn }
+#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
+#define PDM_Error_IRQS                           { PDM_ERROR_IRQn }
 
 /* PIPE_CONF - Peripheral instance base addresses */
 /** Peripheral CAMERA__ISP__PIPE_CONF base address */

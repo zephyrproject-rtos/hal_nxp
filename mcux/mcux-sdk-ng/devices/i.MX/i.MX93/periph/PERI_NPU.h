@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for NPU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -397,13 +397,8 @@ typedef struct {
 /*! power_q_enable - power_q_enable */
 #define NPU_CMD_power_q_enable(x)                (((uint32_t)(((uint32_t)(x)) << NPU_CMD_power_q_enable_SHIFT)) & NPU_CMD_power_q_enable_MASK)
 
-#define NPU_CMD_stop_request_MASK                (0x10U)
-#define NPU_CMD_stop_request_SHIFT               (4U)
-/*! stop_request - stop_request */
-#define NPU_CMD_stop_request(x)                  (((uint32_t)(((uint32_t)(x)) << NPU_CMD_stop_request_SHIFT)) & NPU_CMD_stop_request_MASK)
-
-#define NPU_CMD_RES0_MASK                        (0xFFE0U)
-#define NPU_CMD_RES0_SHIFT                       (5U)
+#define NPU_CMD_RES0_MASK                        (0xFFF0U)
+#define NPU_CMD_RES0_SHIFT                       (4U)
 /*! RES0 - Reserved */
 #define NPU_CMD_RES0(x)                          (((uint32_t)(((uint32_t)(x)) << NPU_CMD_RES0_SHIFT)) & NPU_CMD_RES0_MASK)
 

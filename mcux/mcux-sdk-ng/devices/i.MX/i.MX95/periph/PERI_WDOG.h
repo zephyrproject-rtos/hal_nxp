@@ -247,8 +247,8 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250904
+**     Version:             rev. 3.0, 2025-11-24
+**     Build:               b251124
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for WDOG
@@ -266,14 +266,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_WDOG.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-24
  * @brief CMSIS Peripheral Access Layer for WDOG
  *
  * CMSIS Peripheral Access Layer for WDOG
@@ -536,6 +538,14 @@ typedef struct {
  *  0b1..Enable
  */
 #define WDOG_CS_WIN(x)                           (((uint32_t)(((uint32_t)(x)) << WDOG_CS_WIN_SHIFT)) & WDOG_CS_WIN_MASK)
+
+#define WDOG_CS_CLEAR_MASK                       (0x10000U)
+#define WDOG_CS_CLEAR_SHIFT                      (16U)
+/*! CLEAR - WDOG Reset Clear
+ *  0b0..No effect
+ *  0b1..Clears WDOG reset.
+ */
+#define WDOG_CS_CLEAR(x)                         (((uint32_t)(((uint32_t)(x)) << WDOG_CS_CLEAR_SHIFT)) & WDOG_CS_CLEAR_MASK)
 /*! @} */
 
 /*! @name CNT - WDOG Counter */

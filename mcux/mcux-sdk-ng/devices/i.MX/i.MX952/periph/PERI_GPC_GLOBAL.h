@@ -1,0 +1,366 @@
+/*
+** ###################################################################
+**     Processors:          MIMX95294AVTN_ca55
+**                          MIMX95294AVTN_cm33
+**                          MIMX95294AVTN_cm7
+**                          MIMX95294AVYN_ca55
+**                          MIMX95294AVYN_cm33
+**                          MIMX95294AVYN_cm7
+**                          MIMX95294AVZN_ca55
+**                          MIMX95294AVZN_cm33
+**                          MIMX95294AVZN_cm7
+**                          MIMX95294CVTN_ca55
+**                          MIMX95294CVTN_cm33
+**                          MIMX95294CVTN_cm7
+**                          MIMX95294CVYN_ca55
+**                          MIMX95294CVYN_cm33
+**                          MIMX95294CVYN_cm7
+**                          MIMX95294CVZN_ca55
+**                          MIMX95294CVZN_cm33
+**                          MIMX95294CVZN_cm7
+**                          MIMX95294DVTN_ca55
+**                          MIMX95294DVTN_cm33
+**                          MIMX95294DVTN_cm7
+**                          MIMX95294DVYN_ca55
+**                          MIMX95294DVYN_cm33
+**                          MIMX95294DVYN_cm7
+**                          MIMX95294DVZN_ca55
+**                          MIMX95294DVZN_cm33
+**                          MIMX95294DVZN_cm7
+**                          MIMX95294XVTN_ca55
+**                          MIMX95294XVTN_cm33
+**                          MIMX95294XVTN_cm7
+**                          MIMX95294XVYN_ca55
+**                          MIMX95294XVYN_cm33
+**                          MIMX95294XVYN_cm7
+**                          MIMX95294XVZN_ca55
+**                          MIMX95294XVZN_cm33
+**                          MIMX95294XVZN_cm7
+**
+**     Version:             rev. 2.0, 2024-10-29
+**     Build:               b250903
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for GPC_GLOBAL
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2025 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2023-01-10)
+**         Initial version.
+**     - rev. 2.0 (2024-10-29)
+**         Change the device header file from single flat file to multiple files based on peripherals,
+**         each peripheral with dedicated header file located in periphN folder.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_GPC_GLOBAL.h
+ * @version 2.0
+ * @date 2024-10-29
+ * @brief CMSIS Peripheral Access Layer for GPC_GLOBAL
+ *
+ * CMSIS Peripheral Access Layer for GPC_GLOBAL
+ */
+
+#if !defined(PERI_GPC_GLOBAL_H_)
+#define PERI_GPC_GLOBAL_H_                       /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMX95294AVTN_ca55) || defined(CPU_MIMX95294AVYN_ca55) || defined(CPU_MIMX95294AVZN_ca55) || defined(CPU_MIMX95294CVTN_ca55) || defined(CPU_MIMX95294CVYN_ca55) || defined(CPU_MIMX95294CVZN_ca55) || defined(CPU_MIMX95294DVTN_ca55) || defined(CPU_MIMX95294DVYN_ca55) || defined(CPU_MIMX95294DVZN_ca55) || defined(CPU_MIMX95294XVTN_ca55) || defined(CPU_MIMX95294XVYN_ca55) || defined(CPU_MIMX95294XVZN_ca55))
+#include "MIMX95294_ca55_COMMON.h"
+#elif (defined(CPU_MIMX95294AVTN_cm33) || defined(CPU_MIMX95294AVYN_cm33) || defined(CPU_MIMX95294AVZN_cm33) || defined(CPU_MIMX95294CVTN_cm33) || defined(CPU_MIMX95294CVYN_cm33) || defined(CPU_MIMX95294CVZN_cm33) || defined(CPU_MIMX95294DVTN_cm33) || defined(CPU_MIMX95294DVYN_cm33) || defined(CPU_MIMX95294DVZN_cm33) || defined(CPU_MIMX95294XVTN_cm33) || defined(CPU_MIMX95294XVYN_cm33) || defined(CPU_MIMX95294XVZN_cm33))
+#include "MIMX95294_cm33_COMMON.h"
+#elif (defined(CPU_MIMX95294AVTN_cm7) || defined(CPU_MIMX95294AVYN_cm7) || defined(CPU_MIMX95294AVZN_cm7) || defined(CPU_MIMX95294CVTN_cm7) || defined(CPU_MIMX95294CVYN_cm7) || defined(CPU_MIMX95294CVZN_cm7) || defined(CPU_MIMX95294DVTN_cm7) || defined(CPU_MIMX95294DVYN_cm7) || defined(CPU_MIMX95294DVZN_cm7) || defined(CPU_MIMX95294XVTN_cm7) || defined(CPU_MIMX95294XVYN_cm7) || defined(CPU_MIMX95294XVZN_cm7))
+#include "MIMX95294_cm7_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- GPC_GLOBAL Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup GPC_GLOBAL_Peripheral_Access_Layer GPC_GLOBAL Peripheral Access Layer
+ * @{
+ */
+
+/** GPC_GLOBAL - Size of Registers Arrays */
+#define GPC_GLOBAL_GPC_DOMAIN_ASSIGNMENT_COUNT    7u
+
+/** GPC_GLOBAL - Register Layout Typedef */
+typedef struct {
+       uint8_t RESERVED_0[4];
+  __IO uint32_t GPC_GLOB_AUTHEN_CTRL;              /**< GPC Global Authentication Control, offset: 0x4 */
+       uint8_t RESERVED_1[20];
+  __IO uint32_t GPC_MASTER;                        /**< GPC initiator CPU configuration, offset: 0x1C */
+       uint8_t RESERVED_2[32];
+  __IO uint32_t GPC_SYS_SLEEP;                     /**< GPC system sleep control, offset: 0x40 */
+       uint8_t RESERVED_3[12];
+  __IO uint32_t GPC_CPU_DOMAIN_ASSIGNMENT[GPC_GLOBAL_GPC_DOMAIN_ASSIGNMENT_COUNT]; /**< GPC domain assignment, array offset: 0x50, array step: 0x4 */
+       uint8_t RESERVED_4[148];
+  __IO uint32_t GPC_PMIC_CTRL;                     /**< PMIC standby control from GPC, offset: 0x100 */
+       uint8_t RESERVED_5[4];
+  __IO uint32_t GPC_PMIC_STBY_ACK_CTRL;            /**< PMIC standby acknowledge control, offset: 0x108 */
+       uint8_t RESERVED_6[244];
+  __IO uint32_t GPC_ROSC_CTRL;                     /**< RCOSC control, offset: 0x200 */
+       uint8_t RESERVED_7[8];
+  __IO uint32_t GPC_ELE_HDSK_CTRL;                 /**< ELE Handshake control, offset: 0x20C */
+} GPC_GLOBAL_Type;
+
+/* ----------------------------------------------------------------------------
+   -- GPC_GLOBAL Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup GPC_GLOBAL_Register_Masks GPC_GLOBAL Register Masks
+ * @{
+ */
+
+/*! @name GPC_GLOB_AUTHEN_CTRL - GPC Global Authentication Control */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_CFG_MASK (0x80U)
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_CFG_SHIFT (7U)
+/*! LOCK_CFG - Configuration lock
+ *  0b0..The value of low power configuration fields are not locked.
+ *  0b1..The value of low power configuration fields are locked. Refer to the function field of each gpc_global registers.
+ */
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_CFG(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_CFG_SHIFT)) & GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_CFG_MASK)
+
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_USER_MASK (0x100U)
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_USER_SHIFT (8U)
+/*! USER - Allow user mode access
+ *  0b0..Allow only privilege mode to access CPU mode control registers
+ *  0b1..Allow both privilege and user mode to access CPU mode control registers
+ */
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_USER(x)  (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_USER_SHIFT)) & GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_USER_MASK)
+
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_NONSECURE_MASK (0x200U)
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_NONSECURE_SHIFT (9U)
+/*! NONSECURE - Allow non-secure mode access
+ *  0b0..Allow only secure mode to access CPU mode registers
+ *  0b1..Allow both secure and non-secure mode to access CPU mode control registers.
+ */
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_NONSECURE(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_NONSECURE_SHIFT)) & GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_NONSECURE_MASK)
+
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_SETTING_MASK (0x800U)
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_SETTING_SHIFT (11U)
+/*! LOCK_SETTING - Lock NONSECURE and USER
+ *  0b0..NONSECURE and USER fields are not locked
+ *  0b1..NONSECURE and USER fields are locked
+ */
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_SETTING(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_SETTING_SHIFT)) & GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_SETTING_MASK)
+
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_LIST_MASK (0x8000U)
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_LIST_SHIFT (15U)
+/*! LOCK_LIST - Allow list lock
+ *  0b0..WHITE_LIST is not locked
+ *  0b1..WHITE_LIST is locked
+ */
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_LIST(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_LIST_SHIFT)) & GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_LOCK_LIST_MASK)
+
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_WHITE_LIST_MASK (0xFFFF0000U)
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_WHITE_LIST_SHIFT (16U)
+/*! WHITE_LIST - Domain ID allow list */
+#define GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_WHITE_LIST(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_WHITE_LIST_SHIFT)) & GPC_GLOBAL_GPC_GLOB_AUTHEN_CTRL_WHITE_LIST_MASK)
+/*! @} */
+
+/*! @name GPC_MASTER - GPC initiator CPU configuration */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_MASTER_CPU_MASTER_MASK    (0x7FU)
+#define GPC_GLOBAL_GPC_MASTER_CPU_MASTER_SHIFT   (0U)
+/*! CPU_MASTER - Setting to 1 means CPU is the initiator CPU of its domain */
+#define GPC_GLOBAL_GPC_MASTER_CPU_MASTER(x)      (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_MASTER_CPU_MASTER_SHIFT)) & GPC_GLOBAL_GPC_MASTER_CPU_MASTER_MASK)
+/*! @} */
+
+/*! @name GPC_SYS_SLEEP - GPC system sleep control */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_SYS_SLEEP_SYSTEM_SLEEP_EN_MASK (0x1U)
+#define GPC_GLOBAL_GPC_SYS_SLEEP_SYSTEM_SLEEP_EN_SHIFT (0U)
+/*! SYSTEM_SLEEP_EN - Run into system sleep
+ *  0b0..run into system sleep
+ *  0b1..do not run into system sleep
+ */
+#define GPC_GLOBAL_GPC_SYS_SLEEP_SYSTEM_SLEEP_EN(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_SYS_SLEEP_SYSTEM_SLEEP_EN_SHIFT)) & GPC_GLOBAL_GPC_SYS_SLEEP_SYSTEM_SLEEP_EN_MASK)
+
+#define GPC_GLOBAL_GPC_SYS_SLEEP_FORCE_CPU_DISABLE_MASK (0x7F0000U)
+#define GPC_GLOBAL_GPC_SYS_SLEEP_FORCE_CPU_DISABLE_SHIFT (16U)
+/*! FORCE_CPU_DISABLE - Force CPU into a system sleep status */
+#define GPC_GLOBAL_GPC_SYS_SLEEP_FORCE_CPU_DISABLE(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_SYS_SLEEP_FORCE_CPU_DISABLE_SHIFT)) & GPC_GLOBAL_GPC_SYS_SLEEP_FORCE_CPU_DISABLE_MASK)
+/*! @} */
+
+/*! @name GPC_CPU_DOMAIN_ASSIGNMENT - GPC domain assignment */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT_CPU_DOMAIN_MASK (0xFU)
+#define GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT_CPU_DOMAIN_SHIFT (0U)
+/*! CPU_DOMAIN - CPU domain assignment
+ *  0b0000..Domain 0
+ *  0b0001..Domain 1
+ *  0b0010..Domain 2
+ *  0b0011..Domain 3
+ *  0b0100..Domain 4
+ *  0b0101..Domain 5
+ *  0b0110..Domain 6
+ *  0b0111..Domain 7
+ *  0b1000..Domain 8
+ *  0b1001..Domain 9
+ *  0b1010..Domain 10
+ *  0b1011..Domain 11
+ *  0b1100..Domain 12
+ *  0b1101..Domain 13
+ *  0b1110..Domain 14
+ *  0b1111..Domain 15
+ */
+#define GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT_CPU_DOMAIN(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT_CPU_DOMAIN_SHIFT)) & GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT_CPU_DOMAIN_MASK)
+/*! @} */
+
+/* The count of GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT */
+#define GPC_GLOBAL_GPC_CPU_DOMAIN_ASSIGNMENT_COUNT (7U)
+
+/*! @name GPC_PMIC_CTRL - PMIC standby control from GPC */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_PMIC_CTRL_PMIC_STBY_EN_MASK (0x1U)
+#define GPC_GLOBAL_GPC_PMIC_CTRL_PMIC_STBY_EN_SHIFT (0U)
+/*! PMIC_STBY_EN - Assert the PMIC_STBY_REQ when system sleep
+ *  0b0..Exit PMIC standby request
+ *  0b1..Enter PMIC standby request
+ */
+#define GPC_GLOBAL_GPC_PMIC_CTRL_PMIC_STBY_EN(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_PMIC_CTRL_PMIC_STBY_EN_SHIFT)) & GPC_GLOBAL_GPC_PMIC_CTRL_PMIC_STBY_EN_MASK)
+/*! @} */
+
+/*! @name GPC_PMIC_STBY_ACK_CTRL - PMIC standby acknowledge control */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_CFG_MASK (0xFFFU)
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_CFG_SHIFT (0U)
+/*! STBY_ON_CNT_CFG - PMIC standby on acknowledge count configure. Usage depends on STBY_ON_CNT_MODE. Locked by LOCK_CFG field. */
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_CFG(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_CFG_SHIFT)) & GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_CFG_MASK)
+
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_MODE_MASK (0xC000U)
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_MODE_SHIFT (14U)
+/*! STBY_ON_CNT_MODE - PMIC standby on acknowledge count mode. Locked by LOCK_CFG field.
+ *  0b00..Finish the process once pmic_standby signal changes
+ *  0b01..Finish the process once getting acknowledge from PMIC
+ *  0b10..Ignore PMIC acknowledge, the delay counter starts to count once pmic_standby changes
+ *  0b11..Time out mode, the counter starts to count once pmic_standby changes, then finishes the process when
+ *        either acknowledge received or counting to CNT_CFG value
+ */
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_MODE(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_MODE_SHIFT)) & GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_ON_CNT_MODE_MASK)
+
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_CFG_MASK (0xFFF0000U)
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_CFG_SHIFT (16U)
+/*! STBY_OFF_CNT_CFG - PMIC standby off acknowledge count configure. Usage depends on STBY_OFF_CNT_MODE. Locked by LOCK_CFG field. */
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_CFG(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_CFG_SHIFT)) & GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_CFG_MASK)
+
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE_MASK (0xC0000000U)
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE_SHIFT (30U)
+/*! STBY_OFF_CNT_MODE - PMIC standby off acknowledge count mode. Locked by LOCK_CFG field.
+ *  0b00..Finish the process once pmic_standby signal changes
+ *  0b01..Finish the process once getting acknowledge from PMIC
+ *  0b10..Ignore PMIC acknowledge, the delay counter starts to count once pmic_standby changes
+ *  0b11..Time out mode, the counter starts to count once pmic_standby changes, then finishes the process when
+ *        either acknowledge received or counting to CNT_CFG value
+ */
+#define GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE_SHIFT)) & GPC_GLOBAL_GPC_PMIC_STBY_ACK_CTRL_STBY_OFF_CNT_MODE_MASK)
+/*! @} */
+
+/*! @name GPC_ROSC_CTRL - RCOSC control */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_ROSC_CTRL_ROSC_OFF_EN_MASK (0x1U)
+#define GPC_GLOBAL_GPC_ROSC_CTRL_ROSC_OFF_EN_SHIFT (0U)
+/*! ROSC_OFF_EN - Shut off the 24 MHz RCOSC clock when system sleep
+ *  0b0..Keep 24 MHz ROSC clock running during system sleep
+ *  0b1..Shut off 24 MHz ROSC clock during system sleep
+ */
+#define GPC_GLOBAL_GPC_ROSC_CTRL_ROSC_OFF_EN(x)  (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_ROSC_CTRL_ROSC_OFF_EN_SHIFT)) & GPC_GLOBAL_GPC_ROSC_CTRL_ROSC_OFF_EN_MASK)
+/*! @} */
+
+/*! @name GPC_ELE_HDSK_CTRL - ELE Handshake control */
+/*! @{ */
+
+#define GPC_GLOBAL_GPC_ELE_HDSK_CTRL_ELE_HDSK_EN_MASK (0x1U)
+#define GPC_GLOBAL_GPC_ELE_HDSK_CTRL_ELE_HDSK_EN_SHIFT (0U)
+/*! ELE_HDSK_EN - GPC-to-ELE handshake enable
+ *  0b0..Disable GPC-to-ELE handshake during system sleep sequence
+ *  0b1..Enable GPC-to-ELE handshake during system sleep sequence
+ */
+#define GPC_GLOBAL_GPC_ELE_HDSK_CTRL_ELE_HDSK_EN(x) (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_GPC_ELE_HDSK_CTRL_ELE_HDSK_EN_SHIFT)) & GPC_GLOBAL_GPC_ELE_HDSK_CTRL_ELE_HDSK_EN_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group GPC_GLOBAL_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group GPC_GLOBAL_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_GPC_GLOBAL_H_ */
+

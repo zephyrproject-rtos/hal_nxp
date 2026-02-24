@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PXP
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -538,10 +538,15 @@ typedef struct {
 /*! NEXT_IRQ_ENABLE - NEXT_IRQ_ENABLE */
 #define PXP_CTRL_NEXT_IRQ_ENABLE(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_NEXT_IRQ_ENABLE_SHIFT)) & PXP_CTRL_NEXT_IRQ_ENABLE_MASK)
 
-#define PXP_CTRL_RSVD0_MASK                      (0xF8U)
-#define PXP_CTRL_RSVD0_SHIFT                     (3U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CTRL_RSVD0(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_RSVD0_SHIFT)) & PXP_CTRL_RSVD0_MASK)
+#define PXP_CTRL_ENABLE_LCD0_HANDSHAKE_MASK      (0x10U)
+#define PXP_CTRL_ENABLE_LCD0_HANDSHAKE_SHIFT     (4U)
+/*! ENABLE_LCD0_HANDSHAKE - ENABLE_LCD0_HANDSHAKE */
+#define PXP_CTRL_ENABLE_LCD0_HANDSHAKE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_ENABLE_LCD0_HANDSHAKE_SHIFT)) & PXP_CTRL_ENABLE_LCD0_HANDSHAKE_MASK)
+
+#define PXP_CTRL_HANDSHAKE_ABORT_SKIP_MASK       (0x20U)
+#define PXP_CTRL_HANDSHAKE_ABORT_SKIP_SHIFT      (5U)
+/*! HANDSHAKE_ABORT_SKIP - HANDSHAKE_ABORT_SKIP */
+#define PXP_CTRL_HANDSHAKE_ABORT_SKIP(x)         (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_HANDSHAKE_ABORT_SKIP_SHIFT)) & PXP_CTRL_HANDSHAKE_ABORT_SKIP_MASK)
 
 #define PXP_CTRL_ROTATE0_MASK                    (0x300U)
 #define PXP_CTRL_ROTATE0_SHIFT                   (8U)
@@ -588,11 +593,6 @@ typedef struct {
 /*! ENABLE_PS_AS_OUT - ENABLE_PS_AS_OUT */
 #define PXP_CTRL_ENABLE_PS_AS_OUT(x)             (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_ENABLE_PS_AS_OUT_SHIFT)) & PXP_CTRL_ENABLE_PS_AS_OUT_MASK)
 
-#define PXP_CTRL_RSVD6_MASK                      (0xE0000U)
-#define PXP_CTRL_RSVD6_SHIFT                     (17U)
-/*! RSVD6 - RSVD6 */
-#define PXP_CTRL_RSVD6(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_RSVD6_SHIFT)) & PXP_CTRL_RSVD6_MASK)
-
 #define PXP_CTRL_ENABLE_INPUT_FETCH_STORE_MASK   (0x100000U)
 #define PXP_CTRL_ENABLE_INPUT_FETCH_STORE_SHIFT  (20U)
 /*! ENABLE_INPUT_FETCH_STORE - ENABLE_INPUT_FETCH_STORE */
@@ -602,11 +602,6 @@ typedef struct {
 #define PXP_CTRL_ENABLE_ALPHA_B_SHIFT            (21U)
 /*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
 #define PXP_CTRL_ENABLE_ALPHA_B(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL_ENABLE_ALPHA_B_MASK)
-
-#define PXP_CTRL_RSVD1_MASK                      (0x400000U)
-#define PXP_CTRL_RSVD1_SHIFT                     (22U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CTRL_RSVD1(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_RSVD1_SHIFT)) & PXP_CTRL_RSVD1_MASK)
 
 #define PXP_CTRL_BLOCK_SIZE_MASK                 (0x800000U)
 #define PXP_CTRL_BLOCK_SIZE_SHIFT                (23U)
@@ -621,11 +616,6 @@ typedef struct {
 /*! ENABLE_CSC2 - ENABLE_CSC2 */
 #define PXP_CTRL_ENABLE_CSC2(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_ENABLE_CSC2_SHIFT)) & PXP_CTRL_ENABLE_CSC2_MASK)
 
-#define PXP_CTRL_RSVD5_MASK                      (0x2000000U)
-#define PXP_CTRL_RSVD5_SHIFT                     (25U)
-/*! RSVD5 - RSVD5 */
-#define PXP_CTRL_RSVD5(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_RSVD5_SHIFT)) & PXP_CTRL_RSVD5_MASK)
-
 #define PXP_CTRL_ENABLE_ROTATE0_MASK             (0x4000000U)
 #define PXP_CTRL_ENABLE_ROTATE0_SHIFT            (26U)
 /*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
@@ -635,16 +625,6 @@ typedef struct {
 #define PXP_CTRL_ENABLE_ROTATE1_SHIFT            (27U)
 /*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
 #define PXP_CTRL_ENABLE_ROTATE1(x)               (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL_ENABLE_ROTATE1_MASK)
-
-#define PXP_CTRL_RSVD2_MASK                      (0x10000000U)
-#define PXP_CTRL_RSVD2_SHIFT                     (28U)
-/*! RSVD2 - RSVD2 */
-#define PXP_CTRL_RSVD2(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_RSVD2_SHIFT)) & PXP_CTRL_RSVD2_MASK)
-
-#define PXP_CTRL_RSVD4_MASK                      (0x20000000U)
-#define PXP_CTRL_RSVD4_SHIFT                     (29U)
-/*! RSVD4 - RSVD4 */
-#define PXP_CTRL_RSVD4(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_CTRL_RSVD4_SHIFT)) & PXP_CTRL_RSVD4_MASK)
 
 #define PXP_CTRL_CLKGATE_MASK                    (0x40000000U)
 #define PXP_CTRL_CLKGATE_SHIFT                   (30U)
@@ -685,11 +665,6 @@ typedef struct {
 /*! AXI_ERROR_ID_0 - AXI_ERROR_ID_0 */
 #define PXP_STAT_AXI_ERROR_ID_0(x)               (((uint32_t)(((uint32_t)(x)) << PXP_STAT_AXI_ERROR_ID_0_SHIFT)) & PXP_STAT_AXI_ERROR_ID_0_MASK)
 
-#define PXP_STAT_RSVD1_MASK                      (0x100U)
-#define PXP_STAT_RSVD1_SHIFT                     (8U)
-/*! RSVD1 - RSVD1 */
-#define PXP_STAT_RSVD1(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_RSVD1_SHIFT)) & PXP_STAT_RSVD1_MASK)
-
 #define PXP_STAT_AXI_WRITE_ERROR_1_MASK          (0x200U)
 #define PXP_STAT_AXI_WRITE_ERROR_1_SHIFT         (9U)
 /*! AXI_WRITE_ERROR_1 - AXI_WRITE_ERROR_1 */
@@ -699,11 +674,6 @@ typedef struct {
 #define PXP_STAT_AXI_READ_ERROR_1_SHIFT          (10U)
 /*! AXI_READ_ERROR_1 - AXI_READ_ERROR_1 */
 #define PXP_STAT_AXI_READ_ERROR_1(x)             (((uint32_t)(((uint32_t)(x)) << PXP_STAT_AXI_READ_ERROR_1_SHIFT)) & PXP_STAT_AXI_READ_ERROR_1_MASK)
-
-#define PXP_STAT_RSVD2_MASK                      (0x800U)
-#define PXP_STAT_RSVD2_SHIFT                     (11U)
-/*! RSVD2 - RSVD2 */
-#define PXP_STAT_RSVD2(x)                        (((uint32_t)(((uint32_t)(x)) << PXP_STAT_RSVD2_SHIFT)) & PXP_STAT_RSVD2_MASK)
 
 #define PXP_STAT_AXI_ERROR_ID_1_MASK             (0xF000U)
 #define PXP_STAT_AXI_ERROR_ID_1_SHIFT            (12U)
@@ -727,14 +697,14 @@ typedef struct {
 #define PXP_OUT_CTRL_FORMAT_MASK                 (0x1FU)
 #define PXP_OUT_CTRL_FORMAT_SHIFT                (0U)
 /*! FORMAT - FORMAT
- *  0b00000..ARGB8888 : 32-bit pixels
- *  0b00100..RGB888 : 32-bit pixels (unpacked 24-bit pixel in 32 bit DWORD.)
- *  0b00101..RGB888P : 24-bit pixels (packed 24-bit format)
- *  0b01000..ARGB1555 : 16-bit pixels
- *  0b01001..ARGB4444 : 16-bit pixels
- *  0b01100..RGB555 : 16-bit pixels
- *  0b01101..RGB444 : 16-bit pixels
- *  0b01110..RGB565 : 16-bit pixels
+ *  0b00000..ARGB8888 : 32-bit RGB format with blue in LSB
+ *  0b00100..RGB888 : 32-bit RGB format with blue in LSB (unpacked 24-bit pixel in 32 bit DWORD)
+ *  0b00101..RGB888P : 24-bit RGB format with blue in LSB (packed 24-bit format)
+ *  0b01000..ARGB1555 : 16-bit RGB format with blue in LSB
+ *  0b01001..ARGB4444 : 16-bit RGB format with blue in LSB
+ *  0b01100..RGB555 : 16-bit RGB format with blue in LSB
+ *  0b01101..RGB444 : 16-bit RGB format with blue in LSB
+ *  0b01110..RGB565 : 16-bit RGB format with blue in LSB
  *  0b10000..YUV1P444 : 32-bit pixels (1-plane XYUV unpacked)
  *  0b10010..UYVY1P422 : 16-bit pixels (1-plane U0,Y0,V0,Y1 interleaved bytes)
  *  0b10011..VYUY1P422 : 16-bit pixels (1-plane V0,Y0,U0,Y1 interleaved bytes)
@@ -747,11 +717,6 @@ typedef struct {
  */
 #define PXP_OUT_CTRL_FORMAT(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_FORMAT_SHIFT)) & PXP_OUT_CTRL_FORMAT_MASK)
 
-#define PXP_OUT_CTRL_RSVD0_MASK                  (0xE0U)
-#define PXP_OUT_CTRL_RSVD0_SHIFT                 (5U)
-/*! RSVD0 - RSVD0 */
-#define PXP_OUT_CTRL_RSVD0(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_RSVD0_SHIFT)) & PXP_OUT_CTRL_RSVD0_MASK)
-
 #define PXP_OUT_CTRL_INTERLACED_OUTPUT_MASK      (0x300U)
 #define PXP_OUT_CTRL_INTERLACED_OUTPUT_SHIFT     (8U)
 /*! INTERLACED_OUTPUT - INTERLACED_OUTPUT
@@ -761,11 +726,6 @@ typedef struct {
  *  0b11..INTERLACED : Interlaced output: data for field 0 is written to OUTBUF and data for field 1 is written to OUTBUF2.
  */
 #define PXP_OUT_CTRL_INTERLACED_OUTPUT(x)        (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_INTERLACED_OUTPUT_SHIFT)) & PXP_OUT_CTRL_INTERLACED_OUTPUT_MASK)
-
-#define PXP_OUT_CTRL_RSVD1_MASK                  (0x7FFC00U)
-#define PXP_OUT_CTRL_RSVD1_SHIFT                 (10U)
-/*! RSVD1 - RSVD1 */
-#define PXP_OUT_CTRL_RSVD1(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_CTRL_RSVD1_SHIFT)) & PXP_OUT_CTRL_RSVD1_MASK)
 
 #define PXP_OUT_CTRL_ALPHA_OUTPUT_MASK           (0x800000U)
 #define PXP_OUT_CTRL_ALPHA_OUTPUT_SHIFT          (23U)
@@ -803,11 +763,6 @@ typedef struct {
 #define PXP_OUT_PITCH_PITCH_SHIFT                (0U)
 /*! PITCH - PITCH */
 #define PXP_OUT_PITCH_PITCH(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PITCH_PITCH_SHIFT)) & PXP_OUT_PITCH_PITCH_MASK)
-
-#define PXP_OUT_PITCH_RSVD_MASK                  (0xFFFF0000U)
-#define PXP_OUT_PITCH_RSVD_SHIFT                 (16U)
-/*! RSVD - RSVD */
-#define PXP_OUT_PITCH_RSVD(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PITCH_RSVD_SHIFT)) & PXP_OUT_PITCH_RSVD_MASK)
 /*! @} */
 
 /*! @name OUT_LRC - Output Surface Lower Right Coordinate Register */
@@ -818,20 +773,10 @@ typedef struct {
 /*! Y - Y */
 #define PXP_OUT_LRC_Y(x)                         (((uint32_t)(((uint32_t)(x)) << PXP_OUT_LRC_Y_SHIFT)) & PXP_OUT_LRC_Y_MASK)
 
-#define PXP_OUT_LRC_RSVD0_MASK                   (0xC000U)
-#define PXP_OUT_LRC_RSVD0_SHIFT                  (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_OUT_LRC_RSVD0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_OUT_LRC_RSVD0_SHIFT)) & PXP_OUT_LRC_RSVD0_MASK)
-
 #define PXP_OUT_LRC_X_MASK                       (0x3FFF0000U)
 #define PXP_OUT_LRC_X_SHIFT                      (16U)
 /*! X - X */
 #define PXP_OUT_LRC_X(x)                         (((uint32_t)(((uint32_t)(x)) << PXP_OUT_LRC_X_SHIFT)) & PXP_OUT_LRC_X_MASK)
-
-#define PXP_OUT_LRC_RSVD1_MASK                   (0xC0000000U)
-#define PXP_OUT_LRC_RSVD1_SHIFT                  (30U)
-/*! RSVD1 - RSVD1 */
-#define PXP_OUT_LRC_RSVD1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_OUT_LRC_RSVD1_SHIFT)) & PXP_OUT_LRC_RSVD1_MASK)
 /*! @} */
 
 /*! @name OUT_PS_ULC - Processed Surface Upper Left Coordinate Register */
@@ -842,20 +787,10 @@ typedef struct {
 /*! Y - Y */
 #define PXP_OUT_PS_ULC_Y(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_ULC_Y_SHIFT)) & PXP_OUT_PS_ULC_Y_MASK)
 
-#define PXP_OUT_PS_ULC_RSVD0_MASK                (0xC000U)
-#define PXP_OUT_PS_ULC_RSVD0_SHIFT               (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_OUT_PS_ULC_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_ULC_RSVD0_SHIFT)) & PXP_OUT_PS_ULC_RSVD0_MASK)
-
 #define PXP_OUT_PS_ULC_X_MASK                    (0x3FFF0000U)
 #define PXP_OUT_PS_ULC_X_SHIFT                   (16U)
 /*! X - X */
 #define PXP_OUT_PS_ULC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_ULC_X_SHIFT)) & PXP_OUT_PS_ULC_X_MASK)
-
-#define PXP_OUT_PS_ULC_RSVD1_MASK                (0xC0000000U)
-#define PXP_OUT_PS_ULC_RSVD1_SHIFT               (30U)
-/*! RSVD1 - RSVD1 */
-#define PXP_OUT_PS_ULC_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_ULC_RSVD1_SHIFT)) & PXP_OUT_PS_ULC_RSVD1_MASK)
 /*! @} */
 
 /*! @name OUT_PS_LRC - Processed Surface Lower Right Coordinate Register */
@@ -866,20 +801,10 @@ typedef struct {
 /*! Y - Y */
 #define PXP_OUT_PS_LRC_Y(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_LRC_Y_SHIFT)) & PXP_OUT_PS_LRC_Y_MASK)
 
-#define PXP_OUT_PS_LRC_RSVD0_MASK                (0xC000U)
-#define PXP_OUT_PS_LRC_RSVD0_SHIFT               (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_OUT_PS_LRC_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_LRC_RSVD0_SHIFT)) & PXP_OUT_PS_LRC_RSVD0_MASK)
-
 #define PXP_OUT_PS_LRC_X_MASK                    (0x3FFF0000U)
 #define PXP_OUT_PS_LRC_X_SHIFT                   (16U)
 /*! X - X */
 #define PXP_OUT_PS_LRC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_LRC_X_SHIFT)) & PXP_OUT_PS_LRC_X_MASK)
-
-#define PXP_OUT_PS_LRC_RSVD1_MASK                (0xC0000000U)
-#define PXP_OUT_PS_LRC_RSVD1_SHIFT               (30U)
-/*! RSVD1 - RSVD1 */
-#define PXP_OUT_PS_LRC_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_PS_LRC_RSVD1_SHIFT)) & PXP_OUT_PS_LRC_RSVD1_MASK)
 /*! @} */
 
 /*! @name OUT_AS_ULC - Alpha Surface Upper Left Coordinate Register */
@@ -890,20 +815,10 @@ typedef struct {
 /*! Y - Y */
 #define PXP_OUT_AS_ULC_Y(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_ULC_Y_SHIFT)) & PXP_OUT_AS_ULC_Y_MASK)
 
-#define PXP_OUT_AS_ULC_RSVD0_MASK                (0xC000U)
-#define PXP_OUT_AS_ULC_RSVD0_SHIFT               (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_OUT_AS_ULC_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_ULC_RSVD0_SHIFT)) & PXP_OUT_AS_ULC_RSVD0_MASK)
-
 #define PXP_OUT_AS_ULC_X_MASK                    (0x3FFF0000U)
 #define PXP_OUT_AS_ULC_X_SHIFT                   (16U)
 /*! X - X */
 #define PXP_OUT_AS_ULC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_ULC_X_SHIFT)) & PXP_OUT_AS_ULC_X_MASK)
-
-#define PXP_OUT_AS_ULC_RSVD1_MASK                (0xC0000000U)
-#define PXP_OUT_AS_ULC_RSVD1_SHIFT               (30U)
-/*! RSVD1 - RSVD1 */
-#define PXP_OUT_AS_ULC_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_ULC_RSVD1_SHIFT)) & PXP_OUT_AS_ULC_RSVD1_MASK)
 /*! @} */
 
 /*! @name OUT_AS_LRC - Alpha Surface Lower Right Coordinate Register */
@@ -914,20 +829,10 @@ typedef struct {
 /*! Y - Y */
 #define PXP_OUT_AS_LRC_Y(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_LRC_Y_SHIFT)) & PXP_OUT_AS_LRC_Y_MASK)
 
-#define PXP_OUT_AS_LRC_RSVD0_MASK                (0xC000U)
-#define PXP_OUT_AS_LRC_RSVD0_SHIFT               (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_OUT_AS_LRC_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_LRC_RSVD0_SHIFT)) & PXP_OUT_AS_LRC_RSVD0_MASK)
-
 #define PXP_OUT_AS_LRC_X_MASK                    (0x3FFF0000U)
 #define PXP_OUT_AS_LRC_X_SHIFT                   (16U)
 /*! X - X */
 #define PXP_OUT_AS_LRC_X(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_LRC_X_SHIFT)) & PXP_OUT_AS_LRC_X_MASK)
-
-#define PXP_OUT_AS_LRC_RSVD1_MASK                (0xC0000000U)
-#define PXP_OUT_AS_LRC_RSVD1_SHIFT               (30U)
-/*! RSVD1 - RSVD1 */
-#define PXP_OUT_AS_LRC_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_OUT_AS_LRC_RSVD1_SHIFT)) & PXP_OUT_AS_LRC_RSVD1_MASK)
 /*! @} */
 
 /*! @name PS_CTRL - Processed Surface (PS) Control Register */
@@ -936,10 +841,10 @@ typedef struct {
 #define PXP_PS_CTRL_FORMAT_MASK                  (0x3FU)
 #define PXP_PS_CTRL_FORMAT_SHIFT                 (0U)
 /*! FORMAT - FORMAT
- *  0b000100..RGB888 : 32-bit pixels (unpacked 24-bit format)
- *  0b001100..RGB555 : 16-bit pixels
- *  0b001101..RGB444 : 16-bit pixels
- *  0b001110..RGB565 : 16-bit pixels
+ *  0b000100..RGB888 : 32-bit RGB format with blue in LSB (unpacked 24-bit pixel in 32 bit DWORD)
+ *  0b001100..RGB555 : 16-bit RGB format with blue in LSB
+ *  0b001101..RGB444 : 16-bit RGB format with blue in LSB
+ *  0b001110..RGB565 : 16-bit RGB format with blue in LSB
  *  0b010000..YUV1P444 : 32-bit pixels (1-plane XYUV unpacked)
  *  0b010010..UYVY1P422 : 16-bit pixels (1-plane U0,Y0,V0,Y1 interleaved bytes)
  *  0b010011..VYUY1P422 : 16-bit pixels (1-plane V0,Y0,U0,Y1 interleaved bytes)
@@ -958,11 +863,6 @@ typedef struct {
 #define PXP_PS_CTRL_WB_SWAP_SHIFT                (6U)
 /*! WB_SWAP - WB_SWAP */
 #define PXP_PS_CTRL_WB_SWAP(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_WB_SWAP_SHIFT)) & PXP_PS_CTRL_WB_SWAP_MASK)
-
-#define PXP_PS_CTRL_RSVD0_MASK                   (0x80U)
-#define PXP_PS_CTRL_RSVD0_SHIFT                  (7U)
-/*! RSVD0 - RSVD0 */
-#define PXP_PS_CTRL_RSVD0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_RSVD0_SHIFT)) & PXP_PS_CTRL_RSVD0_MASK)
 
 #define PXP_PS_CTRL_DECY_MASK                    (0x300U)
 #define PXP_PS_CTRL_DECY_SHIFT                   (8U)
@@ -983,11 +883,6 @@ typedef struct {
  *  0b11..DECX8 : Decimate PS by 8.
  */
 #define PXP_PS_CTRL_DECX(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_DECX_SHIFT)) & PXP_PS_CTRL_DECX_MASK)
-
-#define PXP_PS_CTRL_RSVD1_MASK                   (0xFFFFF000U)
-#define PXP_PS_CTRL_RSVD1_SHIFT                  (12U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_CTRL_RSVD1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_PS_CTRL_RSVD1_SHIFT)) & PXP_PS_CTRL_RSVD1_MASK)
 /*! @} */
 
 /*! @name PS_BUF - PS Input Buffer Address Register */
@@ -1024,11 +919,6 @@ typedef struct {
 #define PXP_PS_PITCH_PITCH_SHIFT                 (0U)
 /*! PITCH - PITCH */
 #define PXP_PS_PITCH_PITCH(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_PS_PITCH_PITCH_SHIFT)) & PXP_PS_PITCH_PITCH_MASK)
-
-#define PXP_PS_PITCH_RSVD_MASK                   (0xFFFF0000U)
-#define PXP_PS_PITCH_RSVD_SHIFT                  (16U)
-/*! RSVD - RSVD */
-#define PXP_PS_PITCH_RSVD(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_PS_PITCH_RSVD_SHIFT)) & PXP_PS_PITCH_RSVD_MASK)
 /*! @} */
 
 /*! @name PS_BACKGROUND_0 - PS Background Color Register */
@@ -1038,11 +928,6 @@ typedef struct {
 #define PXP_PS_BACKGROUND_0_COLOR_SHIFT          (0U)
 /*! COLOR - COLOR */
 #define PXP_PS_BACKGROUND_0_COLOR(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_BACKGROUND_0_COLOR_SHIFT)) & PXP_PS_BACKGROUND_0_COLOR_MASK)
-
-#define PXP_PS_BACKGROUND_0_RSVD_MASK            (0xFF000000U)
-#define PXP_PS_BACKGROUND_0_RSVD_SHIFT           (24U)
-/*! RSVD - RSVD */
-#define PXP_PS_BACKGROUND_0_RSVD(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_BACKGROUND_0_RSVD_SHIFT)) & PXP_PS_BACKGROUND_0_RSVD_MASK)
 /*! @} */
 
 /*! @name PS_SCALE - PS Scale Factor Register */
@@ -1053,20 +938,10 @@ typedef struct {
 /*! XSCALE - XSCALE */
 #define PXP_PS_SCALE_XSCALE(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_PS_SCALE_XSCALE_SHIFT)) & PXP_PS_SCALE_XSCALE_MASK)
 
-#define PXP_PS_SCALE_RSVD1_MASK                  (0x8000U)
-#define PXP_PS_SCALE_RSVD1_SHIFT                 (15U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_SCALE_RSVD1(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_PS_SCALE_RSVD1_SHIFT)) & PXP_PS_SCALE_RSVD1_MASK)
-
 #define PXP_PS_SCALE_YSCALE_MASK                 (0x7FFF0000U)
 #define PXP_PS_SCALE_YSCALE_SHIFT                (16U)
 /*! YSCALE - YSCALE */
 #define PXP_PS_SCALE_YSCALE(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_PS_SCALE_YSCALE_SHIFT)) & PXP_PS_SCALE_YSCALE_MASK)
-
-#define PXP_PS_SCALE_RSVD2_MASK                  (0x80000000U)
-#define PXP_PS_SCALE_RSVD2_SHIFT                 (31U)
-/*! RSVD2 - RSVD2 */
-#define PXP_PS_SCALE_RSVD2(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_PS_SCALE_RSVD2_SHIFT)) & PXP_PS_SCALE_RSVD2_MASK)
 /*! @} */
 
 /*! @name PS_OFFSET - PS Scale Offset Register */
@@ -1077,20 +952,10 @@ typedef struct {
 /*! XOFFSET - XOFFSET */
 #define PXP_PS_OFFSET_XOFFSET(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_PS_OFFSET_XOFFSET_SHIFT)) & PXP_PS_OFFSET_XOFFSET_MASK)
 
-#define PXP_PS_OFFSET_RSVD1_MASK                 (0xF000U)
-#define PXP_PS_OFFSET_RSVD1_SHIFT                (12U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_OFFSET_RSVD1(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_PS_OFFSET_RSVD1_SHIFT)) & PXP_PS_OFFSET_RSVD1_MASK)
-
 #define PXP_PS_OFFSET_YOFFSET_MASK               (0xFFF0000U)
 #define PXP_PS_OFFSET_YOFFSET_SHIFT              (16U)
 /*! YOFFSET - YOFFSET */
 #define PXP_PS_OFFSET_YOFFSET(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_PS_OFFSET_YOFFSET_SHIFT)) & PXP_PS_OFFSET_YOFFSET_MASK)
-
-#define PXP_PS_OFFSET_RSVD2_MASK                 (0xF0000000U)
-#define PXP_PS_OFFSET_RSVD2_SHIFT                (28U)
-/*! RSVD2 - RSVD2 */
-#define PXP_PS_OFFSET_RSVD2(x)                   (((uint32_t)(((uint32_t)(x)) << PXP_PS_OFFSET_RSVD2_SHIFT)) & PXP_PS_OFFSET_RSVD2_MASK)
 /*! @} */
 
 /*! @name PS_CLRKEYLOW_0 - PS Color Key Low Register */
@@ -1100,11 +965,6 @@ typedef struct {
 #define PXP_PS_CLRKEYLOW_0_PIXEL_SHIFT           (0U)
 /*! PIXEL - PIXEL */
 #define PXP_PS_CLRKEYLOW_0_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYLOW_0_PIXEL_SHIFT)) & PXP_PS_CLRKEYLOW_0_PIXEL_MASK)
-
-#define PXP_PS_CLRKEYLOW_0_RSVD1_MASK            (0xFF000000U)
-#define PXP_PS_CLRKEYLOW_0_RSVD1_SHIFT           (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_CLRKEYLOW_0_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYLOW_0_RSVD1_SHIFT)) & PXP_PS_CLRKEYLOW_0_RSVD1_MASK)
 /*! @} */
 
 /*! @name PS_CLRKEYHIGH_0 - PS Color Key High Register */
@@ -1114,20 +974,10 @@ typedef struct {
 #define PXP_PS_CLRKEYHIGH_0_PIXEL_SHIFT          (0U)
 /*! PIXEL - PIXEL */
 #define PXP_PS_CLRKEYHIGH_0_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYHIGH_0_PIXEL_SHIFT)) & PXP_PS_CLRKEYHIGH_0_PIXEL_MASK)
-
-#define PXP_PS_CLRKEYHIGH_0_RSVD1_MASK           (0xFF000000U)
-#define PXP_PS_CLRKEYHIGH_0_RSVD1_SHIFT          (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_CLRKEYHIGH_0_RSVD1(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYHIGH_0_RSVD1_SHIFT)) & PXP_PS_CLRKEYHIGH_0_RSVD1_MASK)
 /*! @} */
 
 /*! @name AS_CTRL - Alpha Surface Control Register */
 /*! @{ */
-
-#define PXP_AS_CTRL_RSVD0_MASK                   (0x1U)
-#define PXP_AS_CTRL_RSVD0_SHIFT                  (0U)
-/*! RSVD0 - RSVD0 */
-#define PXP_AS_CTRL_RSVD0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_AS_CTRL_RSVD0_SHIFT)) & PXP_AS_CTRL_RSVD0_MASK)
 
 #define PXP_AS_CTRL_ALPHA_CTRL_MASK              (0x6U)
 #define PXP_AS_CTRL_ALPHA_CTRL_SHIFT             (1U)
@@ -1148,14 +998,14 @@ typedef struct {
 #define PXP_AS_CTRL_FORMAT_MASK                  (0xF0U)
 #define PXP_AS_CTRL_FORMAT_SHIFT                 (4U)
 /*! FORMAT - FORMAT
- *  0b0000..ARGB8888 : 32-bit pixels with alpha
- *  0b0001..RGBA8888 : 32-bit pixels with alpha
- *  0b0100..RGB888 : 32-bit pixels without alpha (unpacked 24-bit format)
- *  0b1000..ARGB1555 : 16-bit pixels with alpha
- *  0b1001..ARGB4444 : 16-bit pixels with alpha
- *  0b1100..RGB555 : 16-bit pixels without alpha
- *  0b1101..RGB444 : 16-bit pixels without alpha
- *  0b1110..RGB565 : 16-bit pixels without alpha
+ *  0b0000..ARGB8888 : 32-bit RGB format with blue in LSB
+ *  0b0001..RGBA8888 : 32-bit RGB format with alpha in LSB
+ *  0b0100..RGB888 : 32-bit RGB format with blue in LSB (unpacked 24-bit pixel in 32 bit DWORD)
+ *  0b1000..ARGB1555 : 16-bit RGB format with blue in LSB
+ *  0b1001..ARGB4444 : 16-bit RGB format with blue in LSB
+ *  0b1100..RGB555 : 16-bit RGB format with blue in LSB
+ *  0b1101..RGB444 : 16-bit RGB format with blue in LSB
+ *  0b1110..RGB565 : 16-bit RGB format with blue in LSB
  */
 #define PXP_AS_CTRL_FORMAT(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_AS_CTRL_FORMAT_SHIFT)) & PXP_AS_CTRL_FORMAT_MASK)
 
@@ -1191,11 +1041,6 @@ typedef struct {
 #define PXP_AS_CTRL_ALPHA1_INVERT_SHIFT          (21U)
 /*! ALPHA1_INVERT - ALPHA1_INVERT */
 #define PXP_AS_CTRL_ALPHA1_INVERT(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CTRL_ALPHA1_INVERT_SHIFT)) & PXP_AS_CTRL_ALPHA1_INVERT_MASK)
-
-#define PXP_AS_CTRL_RSVD1_MASK                   (0xFFC00000U)
-#define PXP_AS_CTRL_RSVD1_SHIFT                  (22U)
-/*! RSVD1 - RSVD1 */
-#define PXP_AS_CTRL_RSVD1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_AS_CTRL_RSVD1_SHIFT)) & PXP_AS_CTRL_RSVD1_MASK)
 /*! @} */
 
 /*! @name AS_BUF - Alpha Surface Buffer Pointer Register */
@@ -1214,11 +1059,6 @@ typedef struct {
 #define PXP_AS_PITCH_PITCH_SHIFT                 (0U)
 /*! PITCH - PITCH */
 #define PXP_AS_PITCH_PITCH(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_AS_PITCH_PITCH_SHIFT)) & PXP_AS_PITCH_PITCH_MASK)
-
-#define PXP_AS_PITCH_RSVD_MASK                   (0xFFFF0000U)
-#define PXP_AS_PITCH_RSVD_SHIFT                  (16U)
-/*! RSVD - RSVD */
-#define PXP_AS_PITCH_RSVD(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_AS_PITCH_RSVD_SHIFT)) & PXP_AS_PITCH_RSVD_MASK)
 /*! @} */
 
 /*! @name AS_CLRKEYLOW_0 - Overlay Color Key Low Register */
@@ -1228,11 +1068,6 @@ typedef struct {
 #define PXP_AS_CLRKEYLOW_0_PIXEL_SHIFT           (0U)
 /*! PIXEL - PIXEL */
 #define PXP_AS_CLRKEYLOW_0_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYLOW_0_PIXEL_SHIFT)) & PXP_AS_CLRKEYLOW_0_PIXEL_MASK)
-
-#define PXP_AS_CLRKEYLOW_0_RSVD1_MASK            (0xFF000000U)
-#define PXP_AS_CLRKEYLOW_0_RSVD1_SHIFT           (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_AS_CLRKEYLOW_0_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYLOW_0_RSVD1_SHIFT)) & PXP_AS_CLRKEYLOW_0_RSVD1_MASK)
 /*! @} */
 
 /*! @name AS_CLRKEYHIGH_0 - Overlay Color Key High Register */
@@ -1242,11 +1077,6 @@ typedef struct {
 #define PXP_AS_CLRKEYHIGH_0_PIXEL_SHIFT          (0U)
 /*! PIXEL - PIXEL */
 #define PXP_AS_CLRKEYHIGH_0_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYHIGH_0_PIXEL_SHIFT)) & PXP_AS_CLRKEYHIGH_0_PIXEL_MASK)
-
-#define PXP_AS_CLRKEYHIGH_0_RSVD1_MASK           (0xFF000000U)
-#define PXP_AS_CLRKEYHIGH_0_RSVD1_SHIFT          (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_AS_CLRKEYHIGH_0_RSVD1(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYHIGH_0_RSVD1_SHIFT)) & PXP_AS_CLRKEYHIGH_0_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC1_COEF0 - Color Space Conversion 1 Coefficient 0 Register */
@@ -1267,11 +1097,6 @@ typedef struct {
 /*! C0 - C0 */
 #define PXP_CSC1_COEF0_C0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF0_C0_SHIFT)) & PXP_CSC1_COEF0_C0_MASK)
 
-#define PXP_CSC1_COEF0_RSVD1_MASK                (0x20000000U)
-#define PXP_CSC1_COEF0_RSVD1_SHIFT               (29U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC1_COEF0_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF0_RSVD1_SHIFT)) & PXP_CSC1_COEF0_RSVD1_MASK)
-
 #define PXP_CSC1_COEF0_BYPASS_MASK               (0x40000000U)
 #define PXP_CSC1_COEF0_BYPASS_SHIFT              (30U)
 /*! BYPASS - BYPASS */
@@ -1291,20 +1116,10 @@ typedef struct {
 /*! C4 - C4 */
 #define PXP_CSC1_COEF1_C4(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF1_C4_SHIFT)) & PXP_CSC1_COEF1_C4_MASK)
 
-#define PXP_CSC1_COEF1_RSVD0_MASK                (0xF800U)
-#define PXP_CSC1_COEF1_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC1_COEF1_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF1_RSVD0_SHIFT)) & PXP_CSC1_COEF1_RSVD0_MASK)
-
 #define PXP_CSC1_COEF1_C1_MASK                   (0x7FF0000U)
 #define PXP_CSC1_COEF1_C1_SHIFT                  (16U)
 /*! C1 - C1 */
 #define PXP_CSC1_COEF1_C1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF1_C1_SHIFT)) & PXP_CSC1_COEF1_C1_MASK)
-
-#define PXP_CSC1_COEF1_RSVD1_MASK                (0xF8000000U)
-#define PXP_CSC1_COEF1_RSVD1_SHIFT               (27U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC1_COEF1_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF1_RSVD1_SHIFT)) & PXP_CSC1_COEF1_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC1_COEF2 - Color Space Conversion 1 Coefficient 2 Register */
@@ -1315,20 +1130,10 @@ typedef struct {
 /*! C3 - C3 */
 #define PXP_CSC1_COEF2_C3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF2_C3_SHIFT)) & PXP_CSC1_COEF2_C3_MASK)
 
-#define PXP_CSC1_COEF2_RSVD0_MASK                (0xF800U)
-#define PXP_CSC1_COEF2_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC1_COEF2_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF2_RSVD0_SHIFT)) & PXP_CSC1_COEF2_RSVD0_MASK)
-
 #define PXP_CSC1_COEF2_C2_MASK                   (0x7FF0000U)
 #define PXP_CSC1_COEF2_C2_SHIFT                  (16U)
 /*! C2 - C2 */
 #define PXP_CSC1_COEF2_C2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF2_C2_SHIFT)) & PXP_CSC1_COEF2_C2_MASK)
-
-#define PXP_CSC1_COEF2_RSVD1_MASK                (0xF8000000U)
-#define PXP_CSC1_COEF2_RSVD1_SHIFT               (27U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC1_COEF2_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC1_COEF2_RSVD1_SHIFT)) & PXP_CSC1_COEF2_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC2_CTRL - Color Space Conversion 2 Control Register */
@@ -1348,11 +1153,6 @@ typedef struct {
  *  0b11..RGB2YCbCr : Convert from RGB to YCbCr.
  */
 #define PXP_CSC2_CTRL_CSC_MODE(x)                (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_CTRL_CSC_MODE_SHIFT)) & PXP_CSC2_CTRL_CSC_MODE_MASK)
-
-#define PXP_CSC2_CTRL_RSVD_MASK                  (0xFFFFFFF8U)
-#define PXP_CSC2_CTRL_RSVD_SHIFT                 (3U)
-/*! RSVD - RSVD */
-#define PXP_CSC2_CTRL_RSVD(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_CTRL_RSVD_SHIFT)) & PXP_CSC2_CTRL_RSVD_MASK)
 /*! @} */
 
 /*! @name CSC2_COEF0 - Color Space Conversion 2 Coefficient 0 Register */
@@ -1363,20 +1163,10 @@ typedef struct {
 /*! A1 - A1 */
 #define PXP_CSC2_COEF0_A1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF0_A1_SHIFT)) & PXP_CSC2_COEF0_A1_MASK)
 
-#define PXP_CSC2_COEF0_RSVD0_MASK                (0xF800U)
-#define PXP_CSC2_COEF0_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC2_COEF0_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF0_RSVD0_SHIFT)) & PXP_CSC2_COEF0_RSVD0_MASK)
-
 #define PXP_CSC2_COEF0_A2_MASK                   (0x7FF0000U)
 #define PXP_CSC2_COEF0_A2_SHIFT                  (16U)
 /*! A2 - A2 */
 #define PXP_CSC2_COEF0_A2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF0_A2_SHIFT)) & PXP_CSC2_COEF0_A2_MASK)
-
-#define PXP_CSC2_COEF0_RSVD1_MASK                (0xF8000000U)
-#define PXP_CSC2_COEF0_RSVD1_SHIFT               (27U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC2_COEF0_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF0_RSVD1_SHIFT)) & PXP_CSC2_COEF0_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC2_COEF1 - Color Space Conversion 2 Coefficient 1 Register */
@@ -1387,20 +1177,10 @@ typedef struct {
 /*! A3 - A3 */
 #define PXP_CSC2_COEF1_A3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF1_A3_SHIFT)) & PXP_CSC2_COEF1_A3_MASK)
 
-#define PXP_CSC2_COEF1_RSVD0_MASK                (0xF800U)
-#define PXP_CSC2_COEF1_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC2_COEF1_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF1_RSVD0_SHIFT)) & PXP_CSC2_COEF1_RSVD0_MASK)
-
 #define PXP_CSC2_COEF1_B1_MASK                   (0x7FF0000U)
 #define PXP_CSC2_COEF1_B1_SHIFT                  (16U)
 /*! B1 - B1 */
 #define PXP_CSC2_COEF1_B1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF1_B1_SHIFT)) & PXP_CSC2_COEF1_B1_MASK)
-
-#define PXP_CSC2_COEF1_RSVD1_MASK                (0xF8000000U)
-#define PXP_CSC2_COEF1_RSVD1_SHIFT               (27U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC2_COEF1_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF1_RSVD1_SHIFT)) & PXP_CSC2_COEF1_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC2_COEF2 - Color Space Conversion 2 Coefficient 2 Register */
@@ -1411,20 +1191,10 @@ typedef struct {
 /*! B2 - B2 */
 #define PXP_CSC2_COEF2_B2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF2_B2_SHIFT)) & PXP_CSC2_COEF2_B2_MASK)
 
-#define PXP_CSC2_COEF2_RSVD0_MASK                (0xF800U)
-#define PXP_CSC2_COEF2_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC2_COEF2_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF2_RSVD0_SHIFT)) & PXP_CSC2_COEF2_RSVD0_MASK)
-
 #define PXP_CSC2_COEF2_B3_MASK                   (0x7FF0000U)
 #define PXP_CSC2_COEF2_B3_SHIFT                  (16U)
 /*! B3 - B3 */
 #define PXP_CSC2_COEF2_B3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF2_B3_SHIFT)) & PXP_CSC2_COEF2_B3_MASK)
-
-#define PXP_CSC2_COEF2_RSVD1_MASK                (0xF8000000U)
-#define PXP_CSC2_COEF2_RSVD1_SHIFT               (27U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC2_COEF2_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF2_RSVD1_SHIFT)) & PXP_CSC2_COEF2_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC2_COEF3 - Color Space Conversion 2 Coefficient 3 Register */
@@ -1435,20 +1205,10 @@ typedef struct {
 /*! C1 - C1 */
 #define PXP_CSC2_COEF3_C1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF3_C1_SHIFT)) & PXP_CSC2_COEF3_C1_MASK)
 
-#define PXP_CSC2_COEF3_RSVD0_MASK                (0xF800U)
-#define PXP_CSC2_COEF3_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC2_COEF3_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF3_RSVD0_SHIFT)) & PXP_CSC2_COEF3_RSVD0_MASK)
-
 #define PXP_CSC2_COEF3_C2_MASK                   (0x7FF0000U)
 #define PXP_CSC2_COEF3_C2_SHIFT                  (16U)
 /*! C2 - C2 */
 #define PXP_CSC2_COEF3_C2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF3_C2_SHIFT)) & PXP_CSC2_COEF3_C2_MASK)
-
-#define PXP_CSC2_COEF3_RSVD1_MASK                (0xF8000000U)
-#define PXP_CSC2_COEF3_RSVD1_SHIFT               (27U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC2_COEF3_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF3_RSVD1_SHIFT)) & PXP_CSC2_COEF3_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC2_COEF4 - Color Space Conversion 2 Coefficient 4 Register */
@@ -1459,20 +1219,10 @@ typedef struct {
 /*! C3 - C3 */
 #define PXP_CSC2_COEF4_C3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF4_C3_SHIFT)) & PXP_CSC2_COEF4_C3_MASK)
 
-#define PXP_CSC2_COEF4_RSVD0_MASK                (0xF800U)
-#define PXP_CSC2_COEF4_RSVD0_SHIFT               (11U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC2_COEF4_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF4_RSVD0_SHIFT)) & PXP_CSC2_COEF4_RSVD0_MASK)
-
 #define PXP_CSC2_COEF4_D1_MASK                   (0x1FF0000U)
 #define PXP_CSC2_COEF4_D1_SHIFT                  (16U)
 /*! D1 - D1 */
 #define PXP_CSC2_COEF4_D1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF4_D1_SHIFT)) & PXP_CSC2_COEF4_D1_MASK)
-
-#define PXP_CSC2_COEF4_RSVD1_MASK                (0xFE000000U)
-#define PXP_CSC2_COEF4_RSVD1_SHIFT               (25U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC2_COEF4_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF4_RSVD1_SHIFT)) & PXP_CSC2_COEF4_RSVD1_MASK)
 /*! @} */
 
 /*! @name CSC2_COEF5 - Color Space Conversion 2 Coefficient 5 Register */
@@ -1483,20 +1233,10 @@ typedef struct {
 /*! D2 - D2 */
 #define PXP_CSC2_COEF5_D2(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF5_D2_SHIFT)) & PXP_CSC2_COEF5_D2_MASK)
 
-#define PXP_CSC2_COEF5_RSVD0_MASK                (0xFE00U)
-#define PXP_CSC2_COEF5_RSVD0_SHIFT               (9U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CSC2_COEF5_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF5_RSVD0_SHIFT)) & PXP_CSC2_COEF5_RSVD0_MASK)
-
 #define PXP_CSC2_COEF5_D3_MASK                   (0x1FF0000U)
 #define PXP_CSC2_COEF5_D3_SHIFT                  (16U)
 /*! D3 - D3 */
 #define PXP_CSC2_COEF5_D3(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF5_D3_SHIFT)) & PXP_CSC2_COEF5_D3_MASK)
-
-#define PXP_CSC2_COEF5_RSVD1_MASK                (0xFE000000U)
-#define PXP_CSC2_COEF5_RSVD1_SHIFT               (25U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CSC2_COEF5_RSVD1(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_CSC2_COEF5_RSVD1_SHIFT)) & PXP_CSC2_COEF5_RSVD1_MASK)
 /*! @} */
 
 /*! @name ALPHA_A_CTRL - Alpha Engine A Control Register */
@@ -1546,11 +1286,6 @@ typedef struct {
  */
 #define PXP_ALPHA_A_CTRL_S0_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S0_COLOR_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S0_COLOR_MODE_MASK)
 
-#define PXP_ALPHA_A_CTRL_RSVD1_MASK              (0x80U)
-#define PXP_ALPHA_A_CTRL_RSVD1_SHIFT             (7U)
-/*! RSVD1 - RSVD1 */
-#define PXP_ALPHA_A_CTRL_RSVD1(x)                (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_RSVD1_SHIFT)) & PXP_ALPHA_A_CTRL_RSVD1_MASK)
-
 #define PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE_MASK  (0x300U)
 #define PXP_ALPHA_A_CTRL_S1_S0_FACTOR_MODE_SHIFT (8U)
 /*! S1_S0_FACTOR_MODE - S1_S0_FACTOR_MODE
@@ -1586,11 +1321,6 @@ typedef struct {
  *  0b1..multiply mode for s1 color
  */
 #define PXP_ALPHA_A_CTRL_S1_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_S1_COLOR_MODE_SHIFT)) & PXP_ALPHA_A_CTRL_S1_COLOR_MODE_MASK)
-
-#define PXP_ALPHA_A_CTRL_RSVD0_MASK              (0xC000U)
-#define PXP_ALPHA_A_CTRL_RSVD0_SHIFT             (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_ALPHA_A_CTRL_RSVD0(x)                (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_A_CTRL_RSVD0_SHIFT)) & PXP_ALPHA_A_CTRL_RSVD0_MASK)
 
 #define PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_MASK    (0xFF0000U)
 #define PXP_ALPHA_A_CTRL_S0_GLOBAL_ALPHA_SHIFT   (16U)
@@ -1650,11 +1380,6 @@ typedef struct {
  */
 #define PXP_ALPHA_B_CTRL_S0_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S0_COLOR_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S0_COLOR_MODE_MASK)
 
-#define PXP_ALPHA_B_CTRL_RSVD1_MASK              (0x80U)
-#define PXP_ALPHA_B_CTRL_RSVD1_SHIFT             (7U)
-/*! RSVD1 - RSVD1 */
-#define PXP_ALPHA_B_CTRL_RSVD1(x)                (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_RSVD1_SHIFT)) & PXP_ALPHA_B_CTRL_RSVD1_MASK)
-
 #define PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE_MASK  (0x300U)
 #define PXP_ALPHA_B_CTRL_S1_S0_FACTOR_MODE_SHIFT (8U)
 /*! S1_S0_FACTOR_MODE - S1_S0_FACTOR_MODE
@@ -1691,11 +1416,6 @@ typedef struct {
  */
 #define PXP_ALPHA_B_CTRL_S1_COLOR_MODE(x)        (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_S1_COLOR_MODE_SHIFT)) & PXP_ALPHA_B_CTRL_S1_COLOR_MODE_MASK)
 
-#define PXP_ALPHA_B_CTRL_RSVD0_MASK              (0xC000U)
-#define PXP_ALPHA_B_CTRL_RSVD0_SHIFT             (14U)
-/*! RSVD0 - RSVD0 */
-#define PXP_ALPHA_B_CTRL_RSVD0(x)                (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_RSVD0_SHIFT)) & PXP_ALPHA_B_CTRL_RSVD0_MASK)
-
 #define PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_MASK    (0xFF0000U)
 #define PXP_ALPHA_B_CTRL_S0_GLOBAL_ALPHA_SHIFT   (16U)
 /*! S0_GLOBAL_ALPHA - S0_GLOBAL_ALPHA */
@@ -1720,11 +1440,6 @@ typedef struct {
 /*! OL_CLRKEY_ENABLE - OL_CLRKEY_ENABLE */
 #define PXP_ALPHA_B_CTRL_1_OL_CLRKEY_ENABLE(x)   (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_1_OL_CLRKEY_ENABLE_SHIFT)) & PXP_ALPHA_B_CTRL_1_OL_CLRKEY_ENABLE_MASK)
 
-#define PXP_ALPHA_B_CTRL_1_RSVD1_MASK            (0xCU)
-#define PXP_ALPHA_B_CTRL_1_RSVD1_SHIFT           (2U)
-/*! RSVD1 - RSVD1 */
-#define PXP_ALPHA_B_CTRL_1_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_1_RSVD1_SHIFT)) & PXP_ALPHA_B_CTRL_1_RSVD1_MASK)
-
 #define PXP_ALPHA_B_CTRL_1_ROP_MASK              (0xF0U)
 #define PXP_ALPHA_B_CTRL_1_ROP_SHIFT             (4U)
 /*! ROP - ROP
@@ -1742,11 +1457,6 @@ typedef struct {
  *  0b1011..NOTXORAS : AS XNOR PS
  */
 #define PXP_ALPHA_B_CTRL_1_ROP(x)                (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_1_ROP_SHIFT)) & PXP_ALPHA_B_CTRL_1_ROP_MASK)
-
-#define PXP_ALPHA_B_CTRL_1_RSVD0_MASK            (0xFFFFFF00U)
-#define PXP_ALPHA_B_CTRL_1_RSVD0_SHIFT           (8U)
-/*! RSVD0 - RSVD0 */
-#define PXP_ALPHA_B_CTRL_1_RSVD0(x)              (((uint32_t)(((uint32_t)(x)) << PXP_ALPHA_B_CTRL_1_RSVD0_SHIFT)) & PXP_ALPHA_B_CTRL_1_RSVD0_MASK)
 /*! @} */
 
 /*! @name PS_BACKGROUND_1 - PS Background Color 1 Register */
@@ -1756,11 +1466,6 @@ typedef struct {
 #define PXP_PS_BACKGROUND_1_COLOR_SHIFT          (0U)
 /*! COLOR - COLOR */
 #define PXP_PS_BACKGROUND_1_COLOR(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_BACKGROUND_1_COLOR_SHIFT)) & PXP_PS_BACKGROUND_1_COLOR_MASK)
-
-#define PXP_PS_BACKGROUND_1_RSVD_MASK            (0xFF000000U)
-#define PXP_PS_BACKGROUND_1_RSVD_SHIFT           (24U)
-/*! RSVD - RSVD */
-#define PXP_PS_BACKGROUND_1_RSVD(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_BACKGROUND_1_RSVD_SHIFT)) & PXP_PS_BACKGROUND_1_RSVD_MASK)
 /*! @} */
 
 /*! @name PS_CLRKEYLOW_1 - PS Color Key Low Register */
@@ -1770,11 +1475,6 @@ typedef struct {
 #define PXP_PS_CLRKEYLOW_1_PIXEL_SHIFT           (0U)
 /*! PIXEL - PIXEL */
 #define PXP_PS_CLRKEYLOW_1_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYLOW_1_PIXEL_SHIFT)) & PXP_PS_CLRKEYLOW_1_PIXEL_MASK)
-
-#define PXP_PS_CLRKEYLOW_1_RSVD1_MASK            (0xFF000000U)
-#define PXP_PS_CLRKEYLOW_1_RSVD1_SHIFT           (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_CLRKEYLOW_1_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYLOW_1_RSVD1_SHIFT)) & PXP_PS_CLRKEYLOW_1_RSVD1_MASK)
 /*! @} */
 
 /*! @name PS_CLRKEYHIGH_1 - PS Color Key High Register */
@@ -1784,11 +1484,6 @@ typedef struct {
 #define PXP_PS_CLRKEYHIGH_1_PIXEL_SHIFT          (0U)
 /*! PIXEL - PIXEL */
 #define PXP_PS_CLRKEYHIGH_1_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYHIGH_1_PIXEL_SHIFT)) & PXP_PS_CLRKEYHIGH_1_PIXEL_MASK)
-
-#define PXP_PS_CLRKEYHIGH_1_RSVD1_MASK           (0xFF000000U)
-#define PXP_PS_CLRKEYHIGH_1_RSVD1_SHIFT          (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_PS_CLRKEYHIGH_1_RSVD1(x)             (((uint32_t)(((uint32_t)(x)) << PXP_PS_CLRKEYHIGH_1_RSVD1_SHIFT)) & PXP_PS_CLRKEYHIGH_1_RSVD1_MASK)
 /*! @} */
 
 /*! @name AS_CLRKEYLOW_1 - Overlay Color Key Low Register */
@@ -1798,11 +1493,6 @@ typedef struct {
 #define PXP_AS_CLRKEYLOW_1_PIXEL_SHIFT           (0U)
 /*! PIXEL - PIXEL */
 #define PXP_AS_CLRKEYLOW_1_PIXEL(x)              (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYLOW_1_PIXEL_SHIFT)) & PXP_AS_CLRKEYLOW_1_PIXEL_MASK)
-
-#define PXP_AS_CLRKEYLOW_1_RSVD1_MASK            (0xFF000000U)
-#define PXP_AS_CLRKEYLOW_1_RSVD1_SHIFT           (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_AS_CLRKEYLOW_1_RSVD1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYLOW_1_RSVD1_SHIFT)) & PXP_AS_CLRKEYLOW_1_RSVD1_MASK)
 /*! @} */
 
 /*! @name AS_CLRKEYHIGH_1 - Overlay Color Key High Register */
@@ -1812,11 +1502,6 @@ typedef struct {
 #define PXP_AS_CLRKEYHIGH_1_PIXEL_SHIFT          (0U)
 /*! PIXEL - PIXEL */
 #define PXP_AS_CLRKEYHIGH_1_PIXEL(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYHIGH_1_PIXEL_SHIFT)) & PXP_AS_CLRKEYHIGH_1_PIXEL_MASK)
-
-#define PXP_AS_CLRKEYHIGH_1_RSVD1_MASK           (0xFF000000U)
-#define PXP_AS_CLRKEYHIGH_1_RSVD1_SHIFT          (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_AS_CLRKEYHIGH_1_RSVD1(x)             (((uint32_t)(((uint32_t)(x)) << PXP_AS_CLRKEYHIGH_1_RSVD1_SHIFT)) & PXP_AS_CLRKEYHIGH_1_RSVD1_MASK)
 /*! @} */
 
 /*! @name CTRL2 - Control Register 2 */
@@ -1826,11 +1511,6 @@ typedef struct {
 #define PXP_CTRL2_ENABLE_SHIFT                   (0U)
 /*! ENABLE - ENABLE */
 #define PXP_CTRL2_ENABLE(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_SHIFT)) & PXP_CTRL2_ENABLE_MASK)
-
-#define PXP_CTRL2_RSVD0_MASK                     (0xFEU)
-#define PXP_CTRL2_RSVD0_SHIFT                    (1U)
-/*! RSVD0 - RSVD0 */
-#define PXP_CTRL2_RSVD0(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_RSVD0_SHIFT)) & PXP_CTRL2_RSVD0_MASK)
 
 #define PXP_CTRL2_ROTATE0_MASK                   (0x300U)
 #define PXP_CTRL2_ROTATE0_SHIFT                  (8U)
@@ -1872,11 +1552,6 @@ typedef struct {
 /*! VFLIP1 - VFLIP1 */
 #define PXP_CTRL2_VFLIP1(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_VFLIP1_SHIFT)) & PXP_CTRL2_VFLIP1_MASK)
 
-#define PXP_CTRL2_RSVD1_MASK                     (0xF0000U)
-#define PXP_CTRL2_RSVD1_SHIFT                    (16U)
-/*! RSVD1 - RSVD1 */
-#define PXP_CTRL2_RSVD1(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_RSVD1_SHIFT)) & PXP_CTRL2_RSVD1_MASK)
-
 #define PXP_CTRL2_ENABLE_INPUT_FETCH_STORE_MASK  (0x100000U)
 #define PXP_CTRL2_ENABLE_INPUT_FETCH_STORE_SHIFT (20U)
 /*! ENABLE_INPUT_FETCH_STORE - ENABLE_INPUT_FETCH_STORE */
@@ -1886,11 +1561,6 @@ typedef struct {
 #define PXP_CTRL2_ENABLE_ALPHA_B_SHIFT           (21U)
 /*! ENABLE_ALPHA_B - ENABLE_ALPHA_B */
 #define PXP_CTRL2_ENABLE_ALPHA_B(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_ALPHA_B_SHIFT)) & PXP_CTRL2_ENABLE_ALPHA_B_MASK)
-
-#define PXP_CTRL2_RSVD2_MASK                     (0x400000U)
-#define PXP_CTRL2_RSVD2_SHIFT                    (22U)
-/*! RSVD2 - RSVD2 */
-#define PXP_CTRL2_RSVD2(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_RSVD2_SHIFT)) & PXP_CTRL2_RSVD2_MASK)
 
 #define PXP_CTRL2_BLOCK_SIZE_MASK                (0x800000U)
 #define PXP_CTRL2_BLOCK_SIZE_SHIFT               (23U)
@@ -1905,11 +1575,6 @@ typedef struct {
 /*! ENABLE_CSC2 - ENABLE_CSC2 */
 #define PXP_CTRL2_ENABLE_CSC2(x)                 (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_CSC2_SHIFT)) & PXP_CTRL2_ENABLE_CSC2_MASK)
 
-#define PXP_CTRL2_RSVD4_MASK                     (0x2000000U)
-#define PXP_CTRL2_RSVD4_SHIFT                    (25U)
-/*! RSVD4 - RSVD4 */
-#define PXP_CTRL2_RSVD4(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_RSVD4_SHIFT)) & PXP_CTRL2_RSVD4_MASK)
-
 #define PXP_CTRL2_ENABLE_ROTATE0_MASK            (0x4000000U)
 #define PXP_CTRL2_ENABLE_ROTATE0_SHIFT           (26U)
 /*! ENABLE_ROTATE0 - ENABLE_ROTATE0 */
@@ -1919,20 +1584,10 @@ typedef struct {
 #define PXP_CTRL2_ENABLE_ROTATE1_SHIFT           (27U)
 /*! ENABLE_ROTATE1 - ENABLE_ROTATE1 */
 #define PXP_CTRL2_ENABLE_ROTATE1(x)              (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_ENABLE_ROTATE1_SHIFT)) & PXP_CTRL2_ENABLE_ROTATE1_MASK)
-
-#define PXP_CTRL2_RSVD3_MASK                     (0xF0000000U)
-#define PXP_CTRL2_RSVD3_SHIFT                    (28U)
-/*! RSVD3 - RSVD3 */
-#define PXP_CTRL2_RSVD3(x)                       (((uint32_t)(((uint32_t)(x)) << PXP_CTRL2_RSVD3_SHIFT)) & PXP_CTRL2_RSVD3_MASK)
 /*! @} */
 
 /*! @name POWER_REG0 - Power Control Register 0 */
 /*! @{ */
-
-#define PXP_POWER_REG0_RSVD0_MASK                (0x1FFU)
-#define PXP_POWER_REG0_RSVD0_SHIFT               (0U)
-/*! RSVD0 - RSVD0 */
-#define PXP_POWER_REG0_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_POWER_REG0_RSVD0_SHIFT)) & PXP_POWER_REG0_RSVD0_MASK)
 
 #define PXP_POWER_REG0_ROT0_MEM_LP_STATE_MASK    (0xE00U)
 #define PXP_POWER_REG0_ROT0_MEM_LP_STATE_SHIFT   (9U)
@@ -1962,11 +1617,6 @@ typedef struct {
  *  0b100..SD : Shut Down Mode. Shut Down periphery and core, no memory retention.
  */
 #define PXP_POWER_REG1_ROT1_MEM_LP_STATE(x)      (((uint32_t)(((uint32_t)(x)) << PXP_POWER_REG1_ROT1_MEM_LP_STATE_SHIFT)) & PXP_POWER_REG1_ROT1_MEM_LP_STATE_MASK)
-
-#define PXP_POWER_REG1_RSVD0_MASK                (0xFFFFFFF8U)
-#define PXP_POWER_REG1_RSVD0_SHIFT               (3U)
-/*! RSVD0 - RSVD0 */
-#define PXP_POWER_REG1_RSVD0(x)                  (((uint32_t)(((uint32_t)(x)) << PXP_POWER_REG1_RSVD0_SHIFT)) & PXP_POWER_REG1_RSVD0_MASK)
 /*! @} */
 
 /*! @name DATA_PATH_CTRL0 - Data Path Control 0 Register */
@@ -2095,8 +1745,8 @@ typedef struct {
 #define PXP_DATA_PATH_CTRL0_MUX13_SEL_MASK       (0xC000000U)
 #define PXP_DATA_PATH_CTRL0_MUX13_SEL_SHIFT      (26U)
 /*! MUX13_SEL - MUX13_SEL
- *  0b00..No output
- *  0b01..Input stage Fetch engine, Channel 1
+ *  0b00..Input stage Fetch engine, Channel 1
+ *  0b01..No output
  *  0b10..No output
  *  0b11..No Output
  */
@@ -2146,20 +1796,10 @@ typedef struct {
 /*! FIRST_CH1_STORE_IRQ_EN - FIRST_CH1_STORE_IRQ_EN */
 #define PXP_IRQ_MASK_FIRST_CH1_STORE_IRQ_EN(x)   (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_FIRST_CH1_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_FIRST_CH1_STORE_IRQ_EN_MASK)
 
-#define PXP_IRQ_MASK_RSVD0_MASK                  (0xFF0U)
-#define PXP_IRQ_MASK_RSVD0_SHIFT                 (4U)
-/*! RSVD0 - RSVD0 */
-#define PXP_IRQ_MASK_RSVD0(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_RSVD0_SHIFT)) & PXP_IRQ_MASK_RSVD0_MASK)
-
 #define PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_MASK     (0x1000U)
 #define PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_SHIFT    (12U)
 /*! FIRST_STORE_IRQ_EN - FIRST_STORE_IRQ_EN */
 #define PXP_IRQ_MASK_FIRST_STORE_IRQ_EN(x)       (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_SHIFT)) & PXP_IRQ_MASK_FIRST_STORE_IRQ_EN_MASK)
-
-#define PXP_IRQ_MASK_RSVD1_MASK                  (0xFFFFE000U)
-#define PXP_IRQ_MASK_RSVD1_SHIFT                 (13U)
-/*! RSVD1 - RSVD1 */
-#define PXP_IRQ_MASK_RSVD1(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_MASK_RSVD1_SHIFT)) & PXP_IRQ_MASK_RSVD1_MASK)
 /*! @} */
 
 /*! @name IRQ - Interrupt Register */
@@ -2185,20 +1825,10 @@ typedef struct {
 /*! FIRST_CH1_STORE_IRQ - FIRST_CH1_STORE_IRQ */
 #define PXP_IRQ_FIRST_CH1_STORE_IRQ(x)           (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_FIRST_CH1_STORE_IRQ_SHIFT)) & PXP_IRQ_FIRST_CH1_STORE_IRQ_MASK)
 
-#define PXP_IRQ_RSVD0_MASK                       (0xFF0U)
-#define PXP_IRQ_RSVD0_SHIFT                      (4U)
-/*! RSVD0 - RSVD0 */
-#define PXP_IRQ_RSVD0(x)                         (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_RSVD0_SHIFT)) & PXP_IRQ_RSVD0_MASK)
-
 #define PXP_IRQ_FIRST_STORE_IRQ_MASK             (0x1000U)
 #define PXP_IRQ_FIRST_STORE_IRQ_SHIFT            (12U)
 /*! FIRST_STORE_IRQ - FIRST_STORE_IRQ */
 #define PXP_IRQ_FIRST_STORE_IRQ(x)               (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_FIRST_STORE_IRQ_SHIFT)) & PXP_IRQ_FIRST_STORE_IRQ_MASK)
-
-#define PXP_IRQ_RSVD1_MASK                       (0xFFFFE000U)
-#define PXP_IRQ_RSVD1_SHIFT                      (13U)
-/*! RSVD1 - RSVD1 */
-#define PXP_IRQ_RSVD1(x)                         (((uint32_t)(((uint32_t)(x)) << PXP_IRQ_RSVD1_SHIFT)) & PXP_IRQ_RSVD1_MASK)
 /*! @} */
 
 /*! @name NEXT - Next Frame Pointer Register */
@@ -2208,11 +1838,6 @@ typedef struct {
 #define PXP_NEXT_ENABLED_SHIFT                   (0U)
 /*! ENABLED - ENABLED */
 #define PXP_NEXT_ENABLED(x)                      (((uint32_t)(((uint32_t)(x)) << PXP_NEXT_ENABLED_SHIFT)) & PXP_NEXT_ENABLED_MASK)
-
-#define PXP_NEXT_RSVD_MASK                       (0x2U)
-#define PXP_NEXT_RSVD_SHIFT                      (1U)
-/*! RSVD - RSVD */
-#define PXP_NEXT_RSVD(x)                         (((uint32_t)(((uint32_t)(x)) << PXP_NEXT_RSVD_SHIFT)) & PXP_NEXT_RSVD_MASK)
 
 #define PXP_NEXT_POINTER_MASK                    (0xFFFFFFFCU)
 #define PXP_NEXT_POINTER_SHIFT                   (2U)
@@ -2271,11 +1896,6 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_HIGH_BYTE(x)    (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_HIGH_BYTE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_HIGH_BYTE_MASK)
 
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD4_MASK      (0x1C0U)
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD4_SHIFT     (6U)
-/*! RSVD4 - RSVD4 */
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD4(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RSVD4_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RSVD4_MASK)
-
 #define PXP_INPUT_FETCH_CTRL_CH0_HFLIP_MASK      (0x200U)
 #define PXP_INPUT_FETCH_CTRL_CH0_HFLIP_SHIFT     (9U)
 /*! HFLIP - HFLIP
@@ -2292,11 +1912,6 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_VFLIP(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_VFLIP_MASK)
 
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD3_MASK      (0x800U)
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD3_SHIFT     (11U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD3(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RSVD3_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_FETCH_CTRL_CH0_ROTATION_ANGLE_MASK (0x3000U)
 #define PXP_INPUT_FETCH_CTRL_CH0_ROTATION_ANGLE_SHIFT (12U)
 /*! ROTATION_ANGLE - ROTATION_ANGLE
@@ -2307,25 +1922,15 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_ROTATION_ANGLE_MASK)
 
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD2_MASK      (0xC000U)
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD2_SHIFT     (14U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD2(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RSVD2_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RSVD2_MASK)
-
 #define PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES_MASK (0x30000U)
 #define PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES_SHIFT (16U)
 /*! RD_NUM_BYTES - RD_NUM_BYTES
- *  0b00..NUM_8_BYTES : 8 bytes.
- *  0b01..NUM_16_BYTES : 16 bytes.
- *  0b10..NUM_32_BYTES : 32 bytes.
- *  0b11..NUM_64_BYTES : 64 bytes.
+ *  0b00..NUM_8_BYTES : 8 bytes
+ *  0b01..NUM_16_BYTES : 16 bytes
+ *  0b10..NUM_32_BYTES : 32 bytes
+ *  0b11..NUM_64_BYTES : 64 bytes
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RD_NUM_BYTES_MASK)
-
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD1_MASK      (0xFC0000U)
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD1_SHIFT     (18U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RSVD1_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RSVD1_MASK)
 
 #define PXP_INPUT_FETCH_CTRL_CH0_HANDSHAKE_SCAN_LINE_NUM_MASK (0x3000000U)
 #define PXP_INPUT_FETCH_CTRL_CH0_HANDSHAKE_SCAN_LINE_NUM_SHIFT (24U)
@@ -2336,11 +1941,6 @@ typedef struct {
  *  0b11..16 lines
  */
 #define PXP_INPUT_FETCH_CTRL_CH0_HANDSHAKE_SCAN_LINE_NUM(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_HANDSHAKE_SCAN_LINE_NUM_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_HANDSHAKE_SCAN_LINE_NUM_MASK)
-
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD0_MASK      (0x7C000000U)
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD0_SHIFT     (26U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_CTRL_CH0_RSVD0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH0_RSVD0_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH0_RSVD0_MASK)
 
 #define PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_MASK   (0x80000000U)
 #define PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_SHIFT  (31U)
@@ -2394,11 +1994,6 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_BYPASS_PIXEL_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_BYPASS_PIXEL_EN_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_BYPASS_PIXEL_EN_MASK)
 
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD4_MASK      (0x1E0U)
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD4_SHIFT     (5U)
-/*! RSVD4 - RSVD4 */
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD4(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RSVD4_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RSVD4_MASK)
-
 #define PXP_INPUT_FETCH_CTRL_CH1_HFLIP_MASK      (0x200U)
 #define PXP_INPUT_FETCH_CTRL_CH1_HFLIP_SHIFT     (9U)
 /*! HFLIP - HFLIP
@@ -2415,11 +2010,6 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_VFLIP(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_VFLIP_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_VFLIP_MASK)
 
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD3_MASK      (0x800U)
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD3_SHIFT     (11U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD3(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RSVD3_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RSVD3_MASK)
-
 #define PXP_INPUT_FETCH_CTRL_CH1_ROTATION_ANGLE_MASK (0x3000U)
 #define PXP_INPUT_FETCH_CTRL_CH1_ROTATION_ANGLE_SHIFT (12U)
 /*! ROTATION_ANGLE - ROTATION_ANGLE
@@ -2430,25 +2020,15 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_ROTATION_ANGLE(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_ROTATION_ANGLE_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_ROTATION_ANGLE_MASK)
 
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD2_MASK      (0xC000U)
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD2_SHIFT     (14U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD2(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RSVD2_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RSVD2_MASK)
-
 #define PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_MASK (0x30000U)
 #define PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_SHIFT (16U)
 /*! RD_NUM_BYTES - RD_NUM_BYTES
- *  0b00..NUM_8_BYTES : 8 bytes.
- *  0b01..NUM_16_BYTES : 16 bytes.
- *  0b10..NUM_32_BYTES : 32 bytes.
- *  0b11..NUM_64_BYTES : 64 bytes.
+ *  0b00..NUM_8_BYTES : 8 bytes
+ *  0b01..NUM_16_BYTES : 16 bytes
+ *  0b10..NUM_32_BYTES : 32 bytes
+ *  0b11..NUM_64_BYTES : 64 bytes
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RD_NUM_BYTES_MASK)
-
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD1_MASK      (0xFC0000U)
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD1_SHIFT     (18U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RSVD1_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RSVD1_MASK)
 
 #define PXP_INPUT_FETCH_CTRL_CH1_HANDSHAKE_SCAN_LINE_NUM_MASK (0x3000000U)
 #define PXP_INPUT_FETCH_CTRL_CH1_HANDSHAKE_SCAN_LINE_NUM_SHIFT (24U)
@@ -2459,11 +2039,6 @@ typedef struct {
  *  0b11..16 lines
  */
 #define PXP_INPUT_FETCH_CTRL_CH1_HANDSHAKE_SCAN_LINE_NUM(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_HANDSHAKE_SCAN_LINE_NUM_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_HANDSHAKE_SCAN_LINE_NUM_MASK)
-
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD0_MASK      (0xFC000000U)
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD0_SHIFT     (26U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_CTRL_CH1_RSVD0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_CTRL_CH1_RSVD0_SHIFT)) & PXP_INPUT_FETCH_CTRL_CH1_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_STATUS_CH0 - Input Fetch Status Channel 0 Register */
@@ -2623,11 +2198,6 @@ typedef struct {
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_INPUT_ACTIVE_BPP_MASK)
 
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD1_MASK (0xFCU)
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD1_SHIFT (2U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD1(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_FORMAT_MASK (0x700U)
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_EXPAND_FORMAT_SHIFT (8U)
 /*! EXPAND_FORMAT - EXPAND_FORMAT
@@ -2657,11 +2227,6 @@ typedef struct {
  *  0b1..channel0 will bypass shift function
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD0_MASK (0xFFFFE000U)
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD0_SHIFT (13U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD0(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH0_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_SHIFT_CTRL_CH1 - Input Fetch Shift Control Channel 1 Register */
@@ -2676,11 +2241,6 @@ typedef struct {
  *  0b11..32 bits
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_INPUT_ACTIVE_BPP(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_INPUT_ACTIVE_BPP_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_INPUT_ACTIVE_BPP_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD1_MASK (0xFCU)
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD1_SHIFT (2U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD1(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD1_MASK)
 
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_FORMAT_MASK (0x700U)
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_EXPAND_FORMAT_SHIFT (8U)
@@ -2711,11 +2271,6 @@ typedef struct {
  *  0b1..channel1 will bypass shift function
  */
 #define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_SHIFT_BYPASS_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD0_MASK (0xFFFFE000U)
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD0_SHIFT (13U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD0(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_CTRL_CH1_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_SHIFT_OFFSET_CH0 - Input Fetch Shift Offset Channel 0 Register */
@@ -2726,40 +2281,20 @@ typedef struct {
 /*! OFFSET0 - OFFSET0 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET0_MASK)
 
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD3_MASK (0xE0U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD3_SHIFT (5U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET1_MASK (0x1F00U)
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET1_SHIFT (8U)
 /*! OFFSET1 - OFFSET1 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET1_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD2_MASK (0xE000U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD2_SHIFT (13U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD2_MASK)
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET2_MASK (0x1F0000U)
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET2_SHIFT (16U)
 /*! OFFSET2 - OFFSET2 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET2_MASK)
 
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD1_MASK (0xE00000U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD1_SHIFT (21U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_MASK (0x1F000000U)
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_SHIFT (24U)
 /*! OFFSET3 - OFFSET3 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_OFFSET3_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD0_MASK (0xE0000000U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD0_SHIFT (29U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH0_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_SHIFT_OFFSET_CH1 - Input Fetch Shift Offset Channel 1 Register */
@@ -2770,40 +2305,20 @@ typedef struct {
 /*! OFFSET0 - OFFSET0 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET0_MASK)
 
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD3_MASK (0xE0U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD3_SHIFT (5U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD3_MASK)
-
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET1_MASK (0x1F00U)
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET1_SHIFT (8U)
 /*! OFFSET1 - OFFSET1 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET1_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD2_MASK (0xE000U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD2_SHIFT (13U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD2_MASK)
 
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET2_MASK (0x1F0000U)
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET2_SHIFT (16U)
 /*! OFFSET2 - OFFSET2 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET2_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET2_MASK)
 
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD1_MASK (0xE00000U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD1_SHIFT (21U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD1_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD1_MASK)
-
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_MASK (0x1F000000U)
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_SHIFT (24U)
 /*! OFFSET3 - OFFSET3 */
 #define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_OFFSET3_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD0_MASK (0xE0000000U)
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD0_SHIFT (29U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_OFFSET_CH1_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_SHIFT_WIDTH_CH0 - Input Fetch Shift Width Channel 0 Register */
@@ -2828,11 +2343,6 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_SHIFT (12U)
 /*! WIDTH3 - WIDTH3 */
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_WIDTH3_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_RSVD0_MASK (0xFFFF0000U)
-#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_RSVD0_SHIFT (16U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_RSVD0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_RSVD0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH0_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_SHIFT_WIDTH_CH1 - Input Fetch Shift Width Channel 1 Register */
@@ -2857,11 +2367,6 @@ typedef struct {
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_SHIFT (12U)
 /*! WIDTH3 - WIDTH3 */
 #define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_WIDTH3_MASK)
-
-#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_RSVD0_MASK (0xFFFF0000U)
-#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_RSVD0_SHIFT (16U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_RSVD0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_RSVD0_SHIFT)) & PXP_INPUT_FETCH_SHIFT_WIDTH_CH1_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_FETCH_ADDR_0_CH0 - Input Fetch Address 0 Channel 0 Register */
@@ -2953,11 +2458,6 @@ typedef struct {
  */
 #define PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM_MASK)
 
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD3_MASK      (0x80U)
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD3_SHIFT     (7U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD3(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_RSVD3_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_STORE_CTRL_CH0_STORE_BYPASS_EN_MASK (0x100U)
 #define PXP_INPUT_STORE_CTRL_CH0_STORE_BYPASS_EN_SHIFT (8U)
 /*! STORE_BYPASS_EN - STORE_BYPASS_EN
@@ -2990,11 +2490,6 @@ typedef struct {
  */
 #define PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_FILL_DATA_EN_MASK)
 
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD2_MASK      (0xF000U)
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD2_SHIFT     (12U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD2(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_RSVD2_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_RSVD2_MASK)
-
 #define PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES_MASK (0x30000U)
 #define PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES_SHIFT (16U)
 /*! WR_NUM_BYTES - WR_NUM_BYTES
@@ -3005,11 +2500,6 @@ typedef struct {
  */
 #define PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_WR_NUM_BYTES_MASK)
 
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD1_MASK      (0xFC0000U)
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD1_SHIFT     (18U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_RSVD1_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_CTRL_CH0_COMBINE_2CHANNEL_MASK (0x1000000U)
 #define PXP_INPUT_STORE_CTRL_CH0_COMBINE_2CHANNEL_SHIFT (24U)
 /*! COMBINE_2CHANNEL - COMBINE_2CHANNEL
@@ -3017,11 +2507,6 @@ typedef struct {
  *  0b1..combine 2 channel enable
  */
 #define PXP_INPUT_STORE_CTRL_CH0_COMBINE_2CHANNEL(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_COMBINE_2CHANNEL_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_COMBINE_2CHANNEL_MASK)
-
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD0_MASK      (0x7E000000U)
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD0_SHIFT     (25U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_CTRL_CH0_RSVD0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH0_RSVD0_SHIFT)) & PXP_INPUT_STORE_CTRL_CH0_RSVD0_MASK)
 
 #define PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_MASK   (0x80000000U)
 #define PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_SHIFT  (31U)
@@ -3085,11 +2570,6 @@ typedef struct {
  */
 #define PXP_INPUT_STORE_CTRL_CH1_ARRAY_LINE_NUM(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_ARRAY_LINE_NUM_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_ARRAY_LINE_NUM_MASK)
 
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD3_MASK      (0x80U)
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD3_SHIFT     (7U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD3(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_RSVD3_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_RSVD3_MASK)
-
 #define PXP_INPUT_STORE_CTRL_CH1_STORE_BYPASS_EN_MASK (0x100U)
 #define PXP_INPUT_STORE_CTRL_CH1_STORE_BYPASS_EN_SHIFT (8U)
 /*! STORE_BYPASS_EN - STORE_BYPASS_EN
@@ -3114,11 +2594,6 @@ typedef struct {
  */
 #define PXP_INPUT_STORE_CTRL_CH1_PACK_IN_SEL(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_PACK_IN_SEL_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_PACK_IN_SEL_MASK)
 
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD1_MASK      (0xF800U)
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD1_SHIFT     (11U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD1(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_RSVD1_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_MASK (0x30000U)
 #define PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_SHIFT (16U)
 /*! WR_NUM_BYTES - WR_NUM_BYTES
@@ -3128,11 +2603,6 @@ typedef struct {
  *  0b11..NUM_64_BYTES : 64 bytes
  */
 #define PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_WR_NUM_BYTES_MASK)
-
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD0_MASK      (0xFFFC0000U)
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD0_SHIFT     (18U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_CTRL_CH1_RSVD0(x)        (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_CTRL_CH1_RSVD0_SHIFT)) & PXP_INPUT_STORE_CTRL_CH1_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_STATUS_CH0 - Input Store Status Channel 0 Register */
@@ -3208,11 +2678,6 @@ typedef struct {
 /*! @name INPUT_STORE_SHIFT_CTRL_CH0 - Input Store Shift Control Channel 0 Register */
 /*! @{ */
 
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD2_MASK (0x3U)
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD2_SHIFT (0U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD2(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD2_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD2_MASK)
-
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUTPUT_ACTIVE_BPP_MASK (0xCU)
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUTPUT_ACTIVE_BPP_SHIFT (2U)
 /*! OUTPUT_ACTIVE_BPP - OUTPUT_ACTIVE_BPP
@@ -3239,11 +2704,6 @@ typedef struct {
  */
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUT_YUV422_2P_EN_MASK)
 
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD1_MASK (0x40U)
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD1_SHIFT (6U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD1(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD1_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK (0x80U)
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT (7U)
 /*! SHIFT_BYPASS - SHIFT_BYPASS
@@ -3251,20 +2711,10 @@ typedef struct {
  *  0b1..data will bypass shift module.
  */
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS_MASK)
-
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD0_MASK (0xFFFFFF00U)
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD0_SHIFT (8U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD0(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD0_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH0_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_SHIFT_CTRL_CH1 - Input Store Shift Control Channel 1 Register */
 /*! @{ */
-
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD2_MASK (0x3U)
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD2_SHIFT (0U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD2(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD2_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD2_MASK)
 
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUTPUT_ACTIVE_BPP_MASK (0xCU)
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUTPUT_ACTIVE_BPP_SHIFT (2U)
@@ -3291,11 +2741,6 @@ typedef struct {
  *  0b1..YUYV422 2 plane enabled.
  */
 #define PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_OUT_YUV422_2P_EN_MASK)
-
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD0_MASK (0xFFFFFFC0U)
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD0_SHIFT (6U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD0(x)  (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD0_SHIFT)) & PXP_INPUT_STORE_SHIFT_CTRL_CH1_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_ADDR_0_CH0 - Input Store Address 0 Channel 0 Register */
@@ -3495,11 +2940,6 @@ typedef struct {
 /*! D_SHIFT_WIDTH0 - D_SHIFT_WIDTH0 */
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH0_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH0_MASK)
 
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD3_MASK (0x40U)
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD3_SHIFT (6U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD3(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD3_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG0_MASK (0x80U)
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG0_SHIFT (7U)
 /*! D_SHIFT_FLAG0 - D_SHIFT_FLAG0 */
@@ -3509,11 +2949,6 @@ typedef struct {
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH1_SHIFT (8U)
 /*! D_SHIFT_WIDTH1 - D_SHIFT_WIDTH1 */
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH1_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH1_MASK)
-
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD2_MASK (0x4000U)
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD2_SHIFT (14U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD2(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD2_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD2_MASK)
 
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG1_MASK (0x8000U)
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG1_SHIFT (15U)
@@ -3525,11 +2960,6 @@ typedef struct {
 /*! D_SHIFT_WIDTH2 - D_SHIFT_WIDTH2 */
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH2_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH2_MASK)
 
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD1_MASK (0x400000U)
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD1_SHIFT (22U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD1(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD1_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG2_MASK (0x800000U)
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG2_SHIFT (23U)
 /*! D_SHIFT_FLAG2 - D_SHIFT_FLAG2 */
@@ -3539,11 +2969,6 @@ typedef struct {
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH3_SHIFT (24U)
 /*! D_SHIFT_WIDTH3 - D_SHIFT_WIDTH3 */
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH3_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_WIDTH3_MASK)
-
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD0_MASK (0x40000000U)
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD0_SHIFT (30U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD0(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD0_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_L_CH0_RSVD0_MASK)
 
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG3_MASK (0x80000000U)
 #define PXP_INPUT_STORE_D_SHIFT_L_CH0_D_SHIFT_FLAG3_SHIFT (31U)
@@ -3559,11 +2984,6 @@ typedef struct {
 /*! D_SHIFT_WIDTH4 - D_SHIFT_WIDTH4 */
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH4(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH4_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH4_MASK)
 
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD3_MASK (0x40U)
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD3_SHIFT (6U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD3(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD3_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG4_MASK (0x80U)
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG4_SHIFT (7U)
 /*! D_SHIFT_FLAG4 - D_SHIFT_FLAG4 */
@@ -3573,11 +2993,6 @@ typedef struct {
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH5_SHIFT (8U)
 /*! D_SHIFT_WIDTH5 - D_SHIFT_WIDTH5 */
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH5(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH5_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH5_MASK)
-
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD2_MASK (0x4000U)
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD2_SHIFT (14U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD2(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD2_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD2_MASK)
 
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG5_MASK (0x8000U)
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG5_SHIFT (15U)
@@ -3589,11 +3004,6 @@ typedef struct {
 /*! D_SHIFT_WIDTH6 - D_SHIFT_WIDTH6 */
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH6(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH6_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH6_MASK)
 
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD1_MASK (0x400000U)
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD1_SHIFT (22U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD1(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD1_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG6_MASK (0x800000U)
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG6_SHIFT (23U)
 /*! D_SHIFT_FLAG6 - D_SHIFT_FLAG6 */
@@ -3603,11 +3013,6 @@ typedef struct {
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH7_SHIFT (24U)
 /*! D_SHIFT_WIDTH7 - D_SHIFT_WIDTH7 */
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH7(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH7_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_WIDTH7_MASK)
-
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD0_MASK (0x40000000U)
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD0_SHIFT (30U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD0(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD0_SHIFT)) & PXP_INPUT_STORE_D_SHIFT_H_CH0_RSVD0_MASK)
 
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG7_MASK (0x80000000U)
 #define PXP_INPUT_STORE_D_SHIFT_H_CH0_D_SHIFT_FLAG7_SHIFT (31U)
@@ -3628,11 +3033,6 @@ typedef struct {
 /*! F_SHIFT_FLAG0 - F_SHIFT_FLAG0 */
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG0(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG0_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG0_MASK)
 
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD3_MASK (0x80U)
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD3_SHIFT (7U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD3(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD3_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_WIDTH1_MASK (0x3F00U)
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_WIDTH1_SHIFT (8U)
 /*! F_SHIFT_WIDTH1 - F_SHIFT_WIDTH1 */
@@ -3642,11 +3042,6 @@ typedef struct {
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG1_SHIFT (14U)
 /*! F_SHIFT_FLAG1 - F_SHIFT_FLAG1 */
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG1(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG1_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG1_MASK)
-
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD2_MASK (0x8000U)
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD2_SHIFT (15U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD2(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD2_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD2_MASK)
 
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_WIDTH2_MASK (0x3F0000U)
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_WIDTH2_SHIFT (16U)
@@ -3658,11 +3053,6 @@ typedef struct {
 /*! F_SHIFT_FLAG2 - F_SHIFT_FLAG2 */
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG2(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG2_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG2_MASK)
 
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD1_MASK (0x800000U)
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD1_SHIFT (23U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD1(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD1_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_WIDTH3_MASK (0x3F000000U)
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_WIDTH3_SHIFT (24U)
 /*! F_SHIFT_WIDTH3 - F_SHIFT_WIDTH3 */
@@ -3672,11 +3062,6 @@ typedef struct {
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG3_SHIFT (30U)
 /*! F_SHIFT_FLAG3 - F_SHIFT_FLAG3 */
 #define PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG3(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG3_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_F_SHIFT_FLAG3_MASK)
-
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD0_MASK (0x80000000U)
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD0_SHIFT (31U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD0(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD0_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_L_CH0_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_F_SHIFT_H_CH0 - Input Store Flag Shift High Channel 0 Register */
@@ -3692,11 +3077,6 @@ typedef struct {
 /*! F_SHIFT_FLAG4 - F_SHIFT_FLAG4 */
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG4(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG4_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG4_MASK)
 
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD3_MASK (0x80U)
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD3_SHIFT (7U)
-/*! RSVD3 - RSVD3 */
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD3(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD3_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD3_MASK)
-
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_WIDTH5_MASK (0x3F00U)
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_WIDTH5_SHIFT (8U)
 /*! F_SHIFT_WIDTH5 - F_SHIFT_WIDTH5 */
@@ -3706,11 +3086,6 @@ typedef struct {
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG5_SHIFT (14U)
 /*! F_SHIFT_FLAG5 - F_SHIFT_FLAG5 */
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG5(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG5_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG5_MASK)
-
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD2_MASK (0x8000U)
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD2_SHIFT (15U)
-/*! RSVD2 - RSVD2 */
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD2(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD2_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD2_MASK)
 
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_WIDTH6_MASK (0x3F0000U)
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_WIDTH6_SHIFT (16U)
@@ -3722,11 +3097,6 @@ typedef struct {
 /*! F_SHIFT_FLAG6 - F_SHIFT_FLAG6 */
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG6(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG6_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG6_MASK)
 
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD1_MASK (0x800000U)
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD1_SHIFT (23U)
-/*! RSVD1 - RSVD1 */
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD1(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD1_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD1_MASK)
-
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_WIDTH7_MASK (0x3F000000U)
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_WIDTH7_SHIFT (24U)
 /*! F_SHIFT_WIDTH7 - F_SHIFT_WIDTH7 */
@@ -3736,11 +3106,6 @@ typedef struct {
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG7_SHIFT (30U)
 /*! F_SHIFT_FLAG7 - F_SHIFT_FLAG7 */
 #define PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG7(x) (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG7_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_F_SHIFT_FLAG7_MASK)
-
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD0_MASK (0x80000000U)
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD0_SHIFT (31U)
-/*! RSVD0 - RSVD0 */
-#define PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD0(x)   (((uint32_t)(((uint32_t)(x)) << PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD0_SHIFT)) & PXP_INPUT_STORE_F_SHIFT_H_CH0_RSVD0_MASK)
 /*! @} */
 
 /*! @name INPUT_STORE_F_MASK_L_CH0 - Input Store Flag Mask Low Channel 0 Register */
@@ -3799,20 +3164,10 @@ typedef struct {
 /*! RD_SEL - RD_SEL */
 #define PXP_BUS_MUX_RD_SEL(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_BUS_MUX_RD_SEL_SHIFT)) & PXP_BUS_MUX_RD_SEL_MASK)
 
-#define PXP_BUS_MUX_RSVD0_MASK                   (0xFF00U)
-#define PXP_BUS_MUX_RSVD0_SHIFT                  (8U)
-/*! RSVD0 - RSVD0 */
-#define PXP_BUS_MUX_RSVD0(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_BUS_MUX_RSVD0_SHIFT)) & PXP_BUS_MUX_RSVD0_MASK)
-
 #define PXP_BUS_MUX_WR_SEL_MASK                  (0xFF0000U)
 #define PXP_BUS_MUX_WR_SEL_SHIFT                 (16U)
 /*! WR_SEL - WR_SEL */
 #define PXP_BUS_MUX_WR_SEL(x)                    (((uint32_t)(((uint32_t)(x)) << PXP_BUS_MUX_WR_SEL_SHIFT)) & PXP_BUS_MUX_WR_SEL_MASK)
-
-#define PXP_BUS_MUX_RSVD1_MASK                   (0xFF000000U)
-#define PXP_BUS_MUX_RSVD1_SHIFT                  (24U)
-/*! RSVD1 - RSVD1 */
-#define PXP_BUS_MUX_RSVD1(x)                     (((uint32_t)(((uint32_t)(x)) << PXP_BUS_MUX_RSVD1_SHIFT)) & PXP_BUS_MUX_RSVD1_MASK)
 /*! @} */
 
 /*! @name HANDSHAKE_READY_MUX0 - Handshake Ready MUX 0 Register */
@@ -4023,11 +3378,6 @@ typedef struct {
  */
 #define PXP_HANDSHAKE_CPU_FETCH_SW0_BUF_LINES(x) (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_FETCH_SW0_BUF_LINES_SHIFT)) & PXP_HANDSHAKE_CPU_FETCH_SW0_BUF_LINES_MASK)
 
-#define PXP_HANDSHAKE_CPU_FETCH_RSVD0_MASK       (0x7FC0U)
-#define PXP_HANDSHAKE_CPU_FETCH_RSVD0_SHIFT      (6U)
-/*! RSVD0 - RSVD0 */
-#define PXP_HANDSHAKE_CPU_FETCH_RSVD0(x)         (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_FETCH_RSVD0_SHIFT)) & PXP_HANDSHAKE_CPU_FETCH_RSVD0_MASK)
-
 #define PXP_HANDSHAKE_CPU_FETCH_SW0_HSK_EN_MASK  (0x8000U)
 #define PXP_HANDSHAKE_CPU_FETCH_SW0_HSK_EN_SHIFT (15U)
 /*! SW0_HSK_EN - SW0_HSK_EN */
@@ -4061,11 +3411,6 @@ typedef struct {
  *  0b10..LINE_16 : Buffer lines is 16 lines.
  */
 #define PXP_HANDSHAKE_CPU_FETCH_SW1_BUF_LINES(x) (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_FETCH_SW1_BUF_LINES_SHIFT)) & PXP_HANDSHAKE_CPU_FETCH_SW1_BUF_LINES_MASK)
-
-#define PXP_HANDSHAKE_CPU_FETCH_RSVD1_MASK       (0x7FC00000U)
-#define PXP_HANDSHAKE_CPU_FETCH_RSVD1_SHIFT      (22U)
-/*! RSVD1 - RSVD1 */
-#define PXP_HANDSHAKE_CPU_FETCH_RSVD1(x)         (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_FETCH_RSVD1_SHIFT)) & PXP_HANDSHAKE_CPU_FETCH_RSVD1_MASK)
 
 #define PXP_HANDSHAKE_CPU_FETCH_SW1_HSK_EN_MASK  (0x80000000U)
 #define PXP_HANDSHAKE_CPU_FETCH_SW1_HSK_EN_SHIFT (31U)
@@ -4105,11 +3450,6 @@ typedef struct {
  */
 #define PXP_HANDSHAKE_CPU_STORE_SW0_BUF_LINES(x) (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_STORE_SW0_BUF_LINES_SHIFT)) & PXP_HANDSHAKE_CPU_STORE_SW0_BUF_LINES_MASK)
 
-#define PXP_HANDSHAKE_CPU_STORE_RSVD0_MASK       (0x7FC0U)
-#define PXP_HANDSHAKE_CPU_STORE_RSVD0_SHIFT      (6U)
-/*! RSVD0 - RSVD0 */
-#define PXP_HANDSHAKE_CPU_STORE_RSVD0(x)         (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_STORE_RSVD0_SHIFT)) & PXP_HANDSHAKE_CPU_STORE_RSVD0_MASK)
-
 #define PXP_HANDSHAKE_CPU_STORE_SW0_HSK_EN_MASK  (0x8000U)
 #define PXP_HANDSHAKE_CPU_STORE_SW0_HSK_EN_SHIFT (15U)
 /*! SW0_HSK_EN - SW0_HSK_EN */
@@ -4143,11 +3483,6 @@ typedef struct {
  *  0b10..LINE_16 : Buffer lines is 16 lines.
  */
 #define PXP_HANDSHAKE_CPU_STORE_SW1_BUF_LINES(x) (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_STORE_SW1_BUF_LINES_SHIFT)) & PXP_HANDSHAKE_CPU_STORE_SW1_BUF_LINES_MASK)
-
-#define PXP_HANDSHAKE_CPU_STORE_RSVD1_MASK       (0x7FC00000U)
-#define PXP_HANDSHAKE_CPU_STORE_RSVD1_SHIFT      (22U)
-/*! RSVD1 - RSVD1 */
-#define PXP_HANDSHAKE_CPU_STORE_RSVD1(x)         (((uint32_t)(((uint32_t)(x)) << PXP_HANDSHAKE_CPU_STORE_RSVD1_SHIFT)) & PXP_HANDSHAKE_CPU_STORE_RSVD1_MASK)
 
 #define PXP_HANDSHAKE_CPU_STORE_SW1_HSK_EN_MASK  (0x80000000U)
 #define PXP_HANDSHAKE_CPU_STORE_SW1_HSK_EN_SHIFT (31U)

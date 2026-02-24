@@ -11,13 +11,13 @@
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9352_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -72,7 +72,7 @@
 #include "PERI_I2S.h"
 #include "PERI_I3C.h"
 #include "PERI_IOMUXC1.h"
-#include "PERI_IPC.h"
+#include "PERI_IOMUXC_GPR.h"
 #include "PERI_ISI.h"
 #include "PERI_LCDIF.h"
 #include "PERI_LPI2C.h"

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for SYSPM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -184,22 +184,21 @@
 
 /** SYSPM - Size of Registers Arrays */
 #define SYSPM_PMCR_PMECTR_COUNT                   3u
-#define SYSPM_PMCR_COUNT                          2u
+#define SYSPM_PMCR_COUNT                          1u
 
 /** SYSPM - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x100 */
-    __IO uint32_t PMCR;                              /**< Performance Monitor Control, array offset: 0x0, array step: 0x100 */
+  struct {                                         /* offset: 0x0, array step: 0x30 */
+    __IO uint32_t PMCR;                              /**< Performance Monitor Control, array offset: 0x0, array step: 0x30 */
          uint8_t RESERVED_0[12];
-    __I  uint8_t PMICTR_HI;                          /**< Performance Monitor Instruction Counter, array offset: 0x10, array step: 0x100 */
+    __I  uint8_t PMICTR_HI;                          /**< Performance Monitor Instruction Counter, array offset: 0x10, array step: 0x30 */
          uint8_t RESERVED_1[3];
-    __I  uint32_t PMICTR_LO;                         /**< Performance Monitor Instruction Counter, array offset: 0x14, array step: 0x100 */
-    struct {                                         /* offset: 0x18, array step: index*0x100, index2*0x8 */
-      __I  uint8_t HI;                                 /**< Performance Monitor Event Counter, array offset: 0x18, array step: index*0x100, index2*0x8 */
+    __I  uint32_t PMICTR_LO;                         /**< Performance Monitor Instruction Counter, array offset: 0x14, array step: 0x30 */
+    struct {                                         /* offset: 0x18, array step: index*0x30, index2*0x8 */
+      __I  uint8_t HI;                                 /**< Performance Monitor Event Counter, array offset: 0x18, array step: index*0x30, index2*0x8 */
            uint8_t RESERVED_0[3];
-      __I  uint32_t LO;                                /**< Performance Monitor Event Counter, array offset: 0x1C, array step: index*0x100, index2*0x8 */
+      __I  uint32_t LO;                                /**< Performance Monitor Event Counter, array offset: 0x1C, array step: index*0x30, index2*0x8 */
     } PMECTR[SYSPM_PMCR_PMECTR_COUNT];
-         uint8_t RESERVED_2[208];
   } PMCR[SYSPM_PMCR_COUNT];
 } SYSPM_Type;
 
@@ -240,8 +239,8 @@ typedef struct {
 /*! CMODE - Count Mode
  *  0b00..Counted in both User and Privileged modes
  *  0b01..
- *  0b10..Counted only in User mode
- *  0b11..Counted only in Privileged mode
+ *  0b10..
+ *  0b11..
  */
 #define SYSPM_PMCR_CMODE(x)                      (((uint32_t)(((uint32_t)(x)) << SYSPM_PMCR_CMODE_SHIFT)) & SYSPM_PMCR_CMODE_MASK)
 
@@ -311,7 +310,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SYSPM_PMICTR_HI */
-#define SYSPM_PMICTR_HI_COUNT                    (2U)
+#define SYSPM_PMICTR_HI_COUNT                    (1U)
 
 /*! @name PMICTR_LO - Performance Monitor Instruction Counter */
 /*! @{ */
@@ -323,7 +322,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SYSPM_PMICTR_LO */
-#define SYSPM_PMICTR_LO_COUNT                    (2U)
+#define SYSPM_PMICTR_LO_COUNT                    (1U)
 
 /*! @name HI - Performance Monitor Event Counter */
 /*! @{ */
@@ -335,7 +334,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SYSPM_HI */
-#define SYSPM_HI_COUNT                           (2U)
+#define SYSPM_HI_COUNT                           (1U)
 
 /* The count of SYSPM_HI */
 #define SYSPM_HI_COUNT2                          (3U)
@@ -350,7 +349,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SYSPM_LO */
-#define SYSPM_LO_COUNT                           (2U)
+#define SYSPM_LO_COUNT                           (1U)
 
 /* The count of SYSPM_LO */
 #define SYSPM_LO_COUNT2                          (3U)

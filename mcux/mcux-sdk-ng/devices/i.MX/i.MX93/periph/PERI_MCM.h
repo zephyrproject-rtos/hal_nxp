@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -439,7 +439,7 @@ typedef struct {
 
 #define MCM_FATR_BEMN_MASK                       (0xF00U)
 #define MCM_FATR_BEMN_SHIFT                      (8U)
-/*! BEMN - Bus Error Master Number */
+/*! BEMN - Bus Error Initiator Number */
 #define MCM_FATR_BEMN(x)                         (((uint32_t)(((uint32_t)(x)) << MCM_FATR_BEMN_SHIFT)) & MCM_FATR_BEMN_MASK)
 
 #define MCM_FATR_BEOVR_MASK                      (0x80000000U)

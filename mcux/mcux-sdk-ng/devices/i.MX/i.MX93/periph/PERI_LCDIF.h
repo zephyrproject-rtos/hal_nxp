@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LCDIF
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -343,7 +343,7 @@ typedef struct {
  *  0b0101..BGR.
  *  0b0110..RGB555.
  *  0b0111..RGB565.
- *  0b1000..YUYV at [15:0].
+ *  0b1000..YUYV at [15:0]. For line pattern with "1000 - YUYV at [15:0]，Y is [15:8], U is [7:0], and next 16th bit is Y and V.
  *  0b1001..UYVY at [15:0].
  *  0b1010..YVYU at [15:0].
  *  0b1011..YUYV at [15:0].

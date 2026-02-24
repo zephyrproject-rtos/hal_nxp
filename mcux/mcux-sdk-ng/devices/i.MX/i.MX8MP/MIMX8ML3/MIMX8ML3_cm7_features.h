@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 5.0, 2021-03-01
-**     Build:               b250814
+**     Version:             rev. 6.0, 2025-11-12
+**     Build:               b251112
 **
 **     Abstract:
 **         Chip specific module features.
@@ -24,6 +24,8 @@
 **         Rev.D Header.
 **     - rev. 5.0 (2021-03-01)
 **         Rev.D Header Final.
+**     - rev. 6.0 (2025-11-12)
+**         Add pdm features for common addtional updates
 **
 ** ###################################################################
 */
@@ -247,7 +249,7 @@
 
 /* ENET_QOS module features */
 
-/* @brief ENET QOS Queue Tx checksum offload support bit map.  */
+/* @brief ENET QOS Queue Tx checksum offload support bit map. */
 #define FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP (0x0)
 
 /* FLEXCAN module features */
@@ -453,12 +455,22 @@
 #define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (19)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (0)
+/* @brief PDM has no minimum clkdiv. */
+#define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (0)
 /* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (0)
 /* @brief PDM Has no DOZEN Bitfield In PDM CTRL_1 Register */
 #define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
 /* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
 #define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (0)
+/* @brief PDM Has DC_OUT_CTRL. */
+#define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (0)
+/* @brief PDM Has Fixed DC CTRL VALUE. */
+#define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (0)
+/* @brief PDM Has no independent error IRQ. */
+#define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (0)
+/* @brief PDM has no hardware Voice Activity Detector */
+#define FSL_FEATURE_PDM_HAS_NO_HWVAD (0)
 
 /* RDC module features */
 

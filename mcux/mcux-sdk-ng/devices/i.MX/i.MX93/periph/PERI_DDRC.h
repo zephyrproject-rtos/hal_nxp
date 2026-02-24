@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DDRC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -733,9 +733,9 @@ typedef struct {
 #define DDRC_CS_CONFIG_BG_BITS_CS_SHIFT          (4U)
 /*! BG_BITS_CS - Bank Group Bits
  *  0b00..0
- *  0b01..Must be set to 1 to enable the 3rd bank address bit for LPDDR4 memories.
- *  0b10..Reserved
- *  0b11..
+ *  0b01..Must be set to 1 to enable the 3rd bank address bit for LPDDR4, LPDDR4x memories.
+ *  0b10..Reserved for LPDDR4
+ *  0b11..Reserved
  */
 #define DDRC_CS_CONFIG_BG_BITS_CS(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_CS_CONFIG_BG_BITS_CS_SHIFT)) & DDRC_CS_CONFIG_BG_BITS_CS_MASK)
 
@@ -879,12 +879,12 @@ typedef struct {
 
 #define DDRC_TIMING_CFG_0_WRT_MASK               (0x30000000U)
 #define DDRC_TIMING_CFG_0_WRT_SHIFT              (28U)
-/*! WRT - Write-To-Read Turnaround To Different Ranks */
+/*! WRT - Write-To-Read Turnaround */
 #define DDRC_TIMING_CFG_0_WRT(x)                 (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_0_WRT_SHIFT)) & DDRC_TIMING_CFG_0_WRT_MASK)
 
 #define DDRC_TIMING_CFG_0_RWT_MASK               (0xC0000000U)
 #define DDRC_TIMING_CFG_0_RWT_SHIFT              (30U)
-/*! RWT - Read-To-Write Turnaround To Different Ranks */
+/*! RWT - Read-To-Write Turnaround */
 #define DDRC_TIMING_CFG_0_RWT(x)                 (((uint32_t)(((uint32_t)(x)) << DDRC_TIMING_CFG_0_RWT_SHIFT)) & DDRC_TIMING_CFG_0_RWT_MASK)
 /*! @} */
 
@@ -1026,7 +1026,7 @@ typedef struct {
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_MASK       (0x7000000U)
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_SHIFT      (24U)
 /*! SDRAM_TYPE - DDR SDRAM Type
- *  0b100..LPDDR4X SDRAM
+ *  0b100..LPDDR4, LPDDR4x SDRAM
  */
 #define DDRC_DDR_SDRAM_CFG_SDRAM_TYPE(x)         (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_SHIFT)) & DDRC_DDR_SDRAM_CFG_SDRAM_TYPE_MASK)
 
@@ -1349,8 +1349,8 @@ typedef struct {
 #define DDRC_DDR_ZQ_CNTL_ZQ_EN_MASK              (0x80000000U)
 #define DDRC_DDR_ZQ_CNTL_ZQ_EN_SHIFT             (31U)
 /*! ZQ_EN - ZQ Calibration Enable
- *  0b0..Used
- *  0b1..Not used
+ *  0b0..Not used
+ *  0b1..Used
  */
 #define DDRC_DDR_ZQ_CNTL_ZQ_EN(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_ZQ_CNTL_ZQ_EN_SHIFT)) & DDRC_DDR_ZQ_CNTL_ZQ_EN_MASK)
 /*! @} */
@@ -3273,7 +3273,7 @@ typedef struct {
  *  0b00..Reserved
  *  0b01..Write
  *  0b10..Read
- *  0b11..Read-modify-write
+ *  0b11..Reserved
  */
 #define DDRC_CAPTURE_ATTRIBUTES_TTYP(x)          (((uint32_t)(((uint32_t)(x)) << DDRC_CAPTURE_ATTRIBUTES_TTYP_SHIFT)) & DDRC_CAPTURE_ATTRIBUTES_TTYP_MASK)
 

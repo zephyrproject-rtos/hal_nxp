@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -326,7 +326,7 @@ typedef struct {
 #define LPSPI_SR_TDF_SHIFT                       (0U)
 /*! TDF - Transmit Data Flag
  *  0b0..Transmit data not requested
- *  0b1..Transmit data is requested
+ *  0b1..Transmit data requested
  */
 #define LPSPI_SR_TDF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_TDF_SHIFT)) & LPSPI_SR_TDF_MASK)
 
@@ -334,14 +334,16 @@ typedef struct {
 #define LPSPI_SR_RDF_SHIFT                       (1U)
 /*! RDF - Receive Data Flag
  *  0b0..Receive data not ready
- *  0b1..Receive data is ready
+ *  0b1..Receive data ready
  */
 #define LPSPI_SR_RDF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_RDF_SHIFT)) & LPSPI_SR_RDF_MASK)
 
 #define LPSPI_SR_WCF_MASK                        (0x100U)
 #define LPSPI_SR_WCF_SHIFT                       (8U)
 /*! WCF - Word Complete Flag
+ *  0b0..No effect
  *  0b0..Not complete
+ *  0b1..Clear the flag
  *  0b1..Complete
  */
 #define LPSPI_SR_WCF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_WCF_SHIFT)) & LPSPI_SR_WCF_MASK)
@@ -349,7 +351,9 @@ typedef struct {
 #define LPSPI_SR_FCF_MASK                        (0x200U)
 #define LPSPI_SR_FCF_SHIFT                       (9U)
 /*! FCF - Frame Complete Flag
+ *  0b0..No effect
  *  0b0..Not complete
+ *  0b1..Clear the flag
  *  0b1..Complete
  */
 #define LPSPI_SR_FCF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_FCF_SHIFT)) & LPSPI_SR_FCF_MASK)
@@ -357,7 +361,9 @@ typedef struct {
 #define LPSPI_SR_TCF_MASK                        (0x400U)
 #define LPSPI_SR_TCF_SHIFT                       (10U)
 /*! TCF - Transfer Complete Flag
+ *  0b0..No effect
  *  0b0..Not complete
+ *  0b1..Clear the flag
  *  0b1..Complete
  */
 #define LPSPI_SR_TCF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_TCF_SHIFT)) & LPSPI_SR_TCF_MASK)
@@ -365,7 +371,9 @@ typedef struct {
 #define LPSPI_SR_TEF_MASK                        (0x800U)
 #define LPSPI_SR_TEF_SHIFT                       (11U)
 /*! TEF - Transmit Error Flag
+ *  0b0..No effect
  *  0b0..No underrun
+ *  0b1..Clear the flag
  *  0b1..Underrun
  */
 #define LPSPI_SR_TEF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_TEF_SHIFT)) & LPSPI_SR_TEF_MASK)
@@ -373,7 +381,9 @@ typedef struct {
 #define LPSPI_SR_REF_MASK                        (0x1000U)
 #define LPSPI_SR_REF_SHIFT                       (12U)
 /*! REF - Receive Error Flag
+ *  0b0..No effect
  *  0b0..No overflow
+ *  0b1..Clear the flag
  *  0b1..Overflow
  */
 #define LPSPI_SR_REF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_REF_SHIFT)) & LPSPI_SR_REF_MASK)
@@ -381,7 +391,9 @@ typedef struct {
 #define LPSPI_SR_DMF_MASK                        (0x2000U)
 #define LPSPI_SR_DMF_SHIFT                       (13U)
 /*! DMF - Data Match Flag
+ *  0b0..No effect
  *  0b0..No match
+ *  0b1..Clear the flag
  *  0b1..Match
  */
 #define LPSPI_SR_DMF(x)                          (((uint32_t)(((uint32_t)(x)) << LPSPI_SR_DMF_SHIFT)) & LPSPI_SR_DMF_MASK)
@@ -516,9 +528,9 @@ typedef struct {
 
 #define LPSPI_CFGR1_MASTER_MASK                  (0x1U)
 #define LPSPI_CFGR1_MASTER_SHIFT                 (0U)
-/*! MASTER - Master Mode
- *  0b0..Slave mode
- *  0b1..Master mode
+/*! MASTER - Controller Mode
+ *  0b0..Peripheral mode
+ *  0b1..Controller mode
  */
 #define LPSPI_CFGR1_MASTER(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_MASTER_SHIFT)) & LPSPI_CFGR1_MASTER_MASK)
 
@@ -556,7 +568,10 @@ typedef struct {
 
 #define LPSPI_CFGR1_PCSPOL_MASK                  (0x700U)  /* Merged from fields with different position or width, of widths (2, 3), largest definition used */
 #define LPSPI_CFGR1_PCSPOL_SHIFT                 (8U)
-/*! PCSPOL - Peripheral Chip Select Polarity */
+/*! PCSPOL - Peripheral Chip Select Polarity
+ *  0b000..Active low
+ *  0b001..Active high
+ */
 #define LPSPI_CFGR1_PCSPOL(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_PCSPOL_SHIFT)) & LPSPI_CFGR1_PCSPOL_MASK)  /* Merged from fields with different position or width, of widths (2, 3), largest definition used */
 
 #define LPSPI_CFGR1_MATCFG_MASK                  (0x70000U)
@@ -576,18 +591,18 @@ typedef struct {
 #define LPSPI_CFGR1_PINCFG_MASK                  (0x3000000U)
 #define LPSPI_CFGR1_PINCFG_SHIFT                 (24U)
 /*! PINCFG - Pin Configuration
- *  0b00..SIN is used for input data; SOUT is used for output data.
- *  0b01..SIN is used for both input and output data. Only half-duplex serial transfers are supported.
- *  0b10..SOUT is used for both input and output data. Only half-duplex serial transfers are supported.
- *  0b11..SOUT is used for input data; SIN is used for output data.
+ *  0b00..SIN is used for input data; SOUT is used for output data
+ *  0b01..SIN is used for both input and output data; only half-duplex serial transfers are supported
+ *  0b10..SOUT is used for both input and output data; only half-duplex serial transfers are supported
+ *  0b11..SOUT is used for input data; SIN is used for output data
  */
 #define LPSPI_CFGR1_PINCFG(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_PINCFG_SHIFT)) & LPSPI_CFGR1_PINCFG_MASK)
 
 #define LPSPI_CFGR1_OUTCFG_MASK                  (0x4000000U)
 #define LPSPI_CFGR1_OUTCFG_SHIFT                 (26U)
 /*! OUTCFG - Output Configuration
- *  0b0..Output data retains last value.
- *  0b1..Output data is 3-stated.
+ *  0b0..Retain last value
+ *  0b1..3-stated
  */
 #define LPSPI_CFGR1_OUTCFG(x)                    (((uint32_t)(((uint32_t)(x)) << LPSPI_CFGR1_OUTCFG_SHIFT)) & LPSPI_CFGR1_OUTCFG_MASK)
 /*! @} */
@@ -649,7 +664,7 @@ typedef struct {
 
 #define LPSPI_CCR1_PCSPCS_MASK                   (0xFF0000U)
 #define LPSPI_CCR1_PCSPCS_SHIFT                  (16U)
-/*! PCSPCS - PCS to PCS delay */
+/*! PCSPCS - PCS to PCS Delay */
 #define LPSPI_CCR1_PCSPCS(x)                     (((uint32_t)(((uint32_t)(x)) << LPSPI_CCR1_PCSPCS_SHIFT)) & LPSPI_CCR1_PCSPCS_MASK)
 
 #define LPSPI_CCR1_SCKSCK_MASK                   (0xFF000000U)
@@ -706,7 +721,7 @@ typedef struct {
 #define LPSPI_TCR_RXMSK_SHIFT                    (19U)
 /*! RXMSK - Receive Data Mask
  *  0b0..Normal transfer
- *  0b1..Receive data is masked
+ *  0b1..Mask receive data
  */
 #define LPSPI_TCR_RXMSK(x)                       (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_RXMSK_SHIFT)) & LPSPI_TCR_RXMSK_MASK)
 
@@ -721,24 +736,24 @@ typedef struct {
 #define LPSPI_TCR_CONT_MASK                      (0x200000U)
 #define LPSPI_TCR_CONT_SHIFT                     (21U)
 /*! CONT - Continuous Transfer
- *  0b0..Continuous transfer is disabled
- *  0b1..Continuous transfer is enabled
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPSPI_TCR_CONT(x)                        (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_CONT_SHIFT)) & LPSPI_TCR_CONT_MASK)
 
 #define LPSPI_TCR_BYSW_MASK                      (0x400000U)
 #define LPSPI_TCR_BYSW_SHIFT                     (22U)
 /*! BYSW - Byte Swap
- *  0b0..Disabled
- *  0b1..Enabled
+ *  0b0..Disable byte swap
+ *  0b1..Enable byte swap
  */
 #define LPSPI_TCR_BYSW(x)                        (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_BYSW_SHIFT)) & LPSPI_TCR_BYSW_MASK)
 
 #define LPSPI_TCR_LSBF_MASK                      (0x800000U)
 #define LPSPI_TCR_LSBF_SHIFT                     (23U)
 /*! LSBF - LSB First
- *  0b0..Data is transferred MSB first
- *  0b1..Data is transferred LSB first
+ *  0b0..MSB first
+ *  0b1..LSB first
  */
 #define LPSPI_TCR_LSBF(x)                        (((uint32_t)(((uint32_t)(x)) << LPSPI_TCR_LSBF_SHIFT)) & LPSPI_TCR_LSBF_MASK)
 
@@ -796,8 +811,8 @@ typedef struct {
 
 #define LPSPI_RSR_SOF_MASK                       (0x1U)
 #define LPSPI_RSR_SOF_SHIFT                      (0U)
-/*! SOF - Start Of Frame
- *  0b0..Subsequent data word
+/*! SOF - Start of Frame
+ *  0b0..Subsequent data word or RX FIFO is empty (RXEMPTY=1).
  *  0b1..First data word
  */
 #define LPSPI_RSR_SOF(x)                         (((uint32_t)(((uint32_t)(x)) << LPSPI_RSR_SOF_SHIFT)) & LPSPI_RSR_SOF_MASK)

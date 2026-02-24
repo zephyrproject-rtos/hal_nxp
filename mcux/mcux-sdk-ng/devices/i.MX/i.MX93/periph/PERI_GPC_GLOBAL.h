@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GPC_GLOBAL
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -349,7 +349,7 @@ typedef struct {
 
 #define GPC_GLOBAL_PMIC_CTRL_PMIC_STBY_EN_MASK   (0x1U)
 #define GPC_GLOBAL_PMIC_CTRL_PMIC_STBY_EN_SHIFT  (0U)
-/*! PMIC_STBY_EN - Assert the pmic standby request when system sleep */
+/*! PMIC_STBY_EN - Assert the PMIC_STBY_REQ when system sleep */
 #define GPC_GLOBAL_PMIC_CTRL_PMIC_STBY_EN(x)     (((uint32_t)(((uint32_t)(x)) << GPC_GLOBAL_PMIC_CTRL_PMIC_STBY_EN_SHIFT)) & GPC_GLOBAL_PMIC_CTRL_PMIC_STBY_EN_MASK)
 /*! @} */
 

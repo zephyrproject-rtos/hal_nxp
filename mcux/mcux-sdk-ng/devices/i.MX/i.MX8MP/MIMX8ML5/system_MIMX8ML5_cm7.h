@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MPRM, Rev.D, 12/2020
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251112
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -44,7 +44,7 @@
 /*!
  * @file MIMX8ML5_cm7
  * @version 1.0
- * @date 210525
+ * @date 121125
  * @brief Device specific configuration file for MIMX8ML5_cm7 (header file)
  *
  * Provides a system configuration function and a global variable that contains

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for OTFAD
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -265,8 +265,8 @@ typedef struct {
 #define OTFAD_CR_GE_MASK                         (0x80000000U)
 #define OTFAD_CR_GE_SHIFT                        (31U)
 /*! GE - Global OTFAD Enable
- *  0b0..OTFAD has decryption disabled. All data fetched by the QuadSPI bypasses OTFAD processing.
- *  0b1..OTFAD has decryption enabled, and processes data fetched by the QuadSPI as defined by the hardware configuration.
+ *  0b0..OTFAD has decryption disabled. All data fetched by the FLEXSPI bypasses OTFAD processing.
+ *  0b1..OTFAD has decryption enabled, and processes data fetched by the FLEXSPI as defined by the hardware configuration.
  */
 #define OTFAD_CR_GE(x)                           (((uint32_t)(((uint32_t)(x)) << OTFAD_CR_GE_SHIFT)) & OTFAD_CR_GE_MASK)
 /*! @} */
@@ -382,8 +382,8 @@ typedef struct {
 #define OTFAD_SR_GEM_MASK                        (0x20000000U)
 #define OTFAD_SR_GEM_SHIFT                       (29U)
 /*! GEM - Global Enable Mode
- *  0b0..OTFAD is disabled. All data fetched by the QuadSPI bypasses OTFAD processing.
- *  0b1..OTFAD is enabled, and processes data fetched by the QuadSPI as defined by the hardware configuration.
+ *  0b0..OTFAD is disabled. All data fetched by the FLEXSPI bypasses OTFAD processing.
+ *  0b1..OTFAD is enabled, and processes data fetched by the FLEXSPI as defined by the hardware configuration.
  */
 #define OTFAD_SR_GEM(x)                          (((uint32_t)(((uint32_t)(x)) << OTFAD_SR_GEM_SHIFT)) & OTFAD_SR_GEM_MASK)
 

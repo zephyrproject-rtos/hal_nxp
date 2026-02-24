@@ -756,10 +756,24 @@
 #define FSL_FEATURE_NETC_HAS_NO_XGMII (1)
 /* @brief NXP Switch Tag support. */
 #define FSL_FEATURE_NETC_HAS_SWITCH_TAG (1)
+/* @brief Actual MAC Tx IPG is longer than configured when transmitting back-to-back packets in MII half duplex mode. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052167 (0)
+/* @brief The actual offset of the SG_DROP_COUNT in the Ingress Stream Count Table STSE_DATA element is not as document. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052206 (0)
+/* @brief The receiving NETC MAC cannot reliably detect the frame when IPG length and flexiable preamble are set to the minimum value. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052129 (0)
+/* @brief PTCaTSDR registers are implemented in the wrong order within the memory map. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052031 (0)
+/* @brief The NETC does not always obey the wakeup time in PMn_LPWAKETIMER. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_051994 (0)
+/* @brief MAC Tx FIFO status may not report empty after FLR when operating in RGMII half duplex mode. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_051936 (0)
 /* @brief NXP Switch port seamless redundacy support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PSRCR (1)
 /* @brief NXP Switch port group support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PGCR (1)
+/* @brief SG_DROP_COUNT value in the Ingress Stream Count STSE_DATA response begins at an incorrect bit offset, causing it to be read incorrectly. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052134 (0)
 
 /* PDM module features */
 

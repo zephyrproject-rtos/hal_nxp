@@ -12,9 +12,9 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
-**     Reference manual:    iMX95RM rev1 draftM
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250904
+**     Reference manual:    iMX95RM rev3
+**     Version:             rev. 3.0, 2025-11-24
+**     Build:               b251124
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9556_cm7
@@ -32,14 +32,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMX9556_cm7.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-24
  * @brief CMSIS Peripheral Access Layer for MIMX9556_cm7
  *
  * CMSIS Peripheral Access Layer for MIMX9556_cm7

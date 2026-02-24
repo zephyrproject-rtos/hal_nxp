@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPUART
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -308,72 +308,72 @@ typedef struct {
 #define LPUART_BAUD_RXEDGIE_MASK                 (0x4000U)
 #define LPUART_BAUD_RXEDGIE_SHIFT                (14U)
 /*! RXEDGIE - RX Input Active Edge Interrupt Enable
- *  0b0..Disables hardware interrupts from STAT[RXEDGIF]
- *  0b1..Requests hardware interrupts when STAT[RXEDGIF] is 1
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_RXEDGIE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_RXEDGIE_SHIFT)) & LPUART_BAUD_RXEDGIE_MASK)
 
 #define LPUART_BAUD_LBKDIE_MASK                  (0x8000U)
 #define LPUART_BAUD_LBKDIE_SHIFT                 (15U)
 /*! LBKDIE - LIN Break Detect Interrupt Enable
- *  0b0..Disables hardware interrupts from STAT[LBKDIF] (uses polling)
- *  0b1..Requests hardware interrupt when STAT[LBKDIF] is 1
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_LBKDIE(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_LBKDIE_SHIFT)) & LPUART_BAUD_LBKDIE_MASK)
 
 #define LPUART_BAUD_RESYNCDIS_MASK               (0x10000U)
 #define LPUART_BAUD_RESYNCDIS_SHIFT              (16U)
 /*! RESYNCDIS - Resynchronization Disable
- *  0b0..Enables resynchronization
- *  0b1..Disables resynchronization
+ *  0b0..Enable
+ *  0b1..Disable
  */
 #define LPUART_BAUD_RESYNCDIS(x)                 (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_RESYNCDIS_SHIFT)) & LPUART_BAUD_RESYNCDIS_MASK)
 
 #define LPUART_BAUD_BOTHEDGE_MASK                (0x20000U)
 #define LPUART_BAUD_BOTHEDGE_SHIFT               (17U)
 /*! BOTHEDGE - Both Edge Sampling
- *  0b0..Receiver samples input data using the rising edge of the baud rate clock
- *  0b1..Receiver samples input data using the rising and falling edges of the baud rate clock
+ *  0b0..Rising edge
+ *  0b1..Both rising and falling edges
  */
 #define LPUART_BAUD_BOTHEDGE(x)                  (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_BOTHEDGE_SHIFT)) & LPUART_BAUD_BOTHEDGE_MASK)
 
 #define LPUART_BAUD_MATCFG_MASK                  (0xC0000U)
 #define LPUART_BAUD_MATCFG_SHIFT                 (18U)
 /*! MATCFG - Match Configuration
- *  0b00..Address match wakeup
- *  0b01..Idle match wakeup
+ *  0b00..Address match wake-up
+ *  0b01..Idle match wake-up
  *  0b10..Match on and match off
- *  0b11..Enables RWU on data match and match on/off for the transmitter CTS input
+ *  0b11..Enables RWU on data match and match on or off for the transmitter CTS input
  */
 #define LPUART_BAUD_MATCFG(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_MATCFG_SHIFT)) & LPUART_BAUD_MATCFG_MASK)
 
 #define LPUART_BAUD_RIDMAE_MASK                  (0x100000U)
 #define LPUART_BAUD_RIDMAE_SHIFT                 (20U)
 /*! RIDMAE - Receiver Idle DMA Enable
- *  0b0..DMA request disabled
- *  0b1..DMA request enabled
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_RIDMAE(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_RIDMAE_SHIFT)) & LPUART_BAUD_RIDMAE_MASK)
 
 #define LPUART_BAUD_RDMAE_MASK                   (0x200000U)
 #define LPUART_BAUD_RDMAE_SHIFT                  (21U)
 /*! RDMAE - Receiver Full DMA Enable
- *  0b0..Disables DMA request
- *  0b1..Enables DMA request
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_RDMAE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_RDMAE_SHIFT)) & LPUART_BAUD_RDMAE_MASK)
 
 #define LPUART_BAUD_TDMAE_MASK                   (0x800000U)
 #define LPUART_BAUD_TDMAE_SHIFT                  (23U)
 /*! TDMAE - Transmitter DMA Enable
- *  0b0..Disables DMA request
- *  0b1..Enables DMA request
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_TDMAE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_TDMAE_SHIFT)) & LPUART_BAUD_TDMAE_MASK)
 
 #define LPUART_BAUD_OSR_MASK                     (0x1F000000U)
 #define LPUART_BAUD_OSR_SHIFT                    (24U)
-/*! OSR - Oversampling Ratio (OSR)
+/*! OSR - Oversampling Ratio
  *  0b00000..Results in an OSR of 16
  *  0b00001..Reserved
  *  0b00010..Reserved
@@ -420,16 +420,16 @@ typedef struct {
 #define LPUART_BAUD_MAEN2_MASK                   (0x40000000U)
 #define LPUART_BAUD_MAEN2_SHIFT                  (30U)
 /*! MAEN2 - Match Address Mode Enable 2
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_MAEN2(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_MAEN2_SHIFT)) & LPUART_BAUD_MAEN2_MASK)
 
 #define LPUART_BAUD_MAEN1_MASK                   (0x80000000U)
 #define LPUART_BAUD_MAEN1_SHIFT                  (31U)
 /*! MAEN1 - Match Address Mode Enable 1
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_BAUD_MAEN1(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_BAUD_MAEN1_SHIFT)) & LPUART_BAUD_MAEN1_MASK)
 /*! @} */
@@ -440,16 +440,16 @@ typedef struct {
 #define LPUART_STAT_LBKFE_MASK                   (0x1U)
 #define LPUART_STAT_LBKFE_SHIFT                  (0U)
 /*! LBKFE - LIN Break Flag Enable
- *  0b0..Disables LIN break detect
- *  0b1..Enables LIN break detect
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_STAT_LBKFE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_LBKFE_SHIFT)) & LPUART_STAT_LBKFE_MASK)
 
 #define LPUART_STAT_AME_MASK                     (0x2U)
 #define LPUART_STAT_AME_SHIFT                    (1U)
 /*! AME - Address Mark Enable
- *  0b0..Address mark in character is MSB
- *  0b1..Address mark in character is the last bit before the stop bit (or parity bit when enabled)
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_STAT_AME(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_AME_SHIFT)) & LPUART_STAT_AME_MASK)
 
@@ -472,7 +472,9 @@ typedef struct {
 #define LPUART_STAT_MA2F_MASK                    (0x4000U)
 #define LPUART_STAT_MA2F_SHIFT                   (14U)
 /*! MA2F - Match 2 Flag
+ *  0b0..No effect
  *  0b0..Not equal to MA2
+ *  0b1..Clear the flag
  *  0b1..Equal to MA2
  */
 #define LPUART_STAT_MA2F(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_MA2F_SHIFT)) & LPUART_STAT_MA2F_MASK)
@@ -480,31 +482,39 @@ typedef struct {
 #define LPUART_STAT_MA1F_MASK                    (0x8000U)
 #define LPUART_STAT_MA1F_SHIFT                   (15U)
 /*! MA1F - Match 1 Flag
+ *  0b0..No effect
  *  0b0..Not equal to MA1
+ *  0b1..Clear the flag
  *  0b1..Equal to MA1
  */
 #define LPUART_STAT_MA1F(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_MA1F_SHIFT)) & LPUART_STAT_MA1F_MASK)
 
 #define LPUART_STAT_PF_MASK                      (0x10000U)
 #define LPUART_STAT_PF_SHIFT                     (16U)
-/*! PF - Parity Error Flag (PF)
+/*! PF - Parity Error Flag
+ *  0b0..No effect
  *  0b0..No parity error detected
+ *  0b1..Clear the flag
  *  0b1..Parity error detected
  */
 #define LPUART_STAT_PF(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_PF_SHIFT)) & LPUART_STAT_PF_MASK)
 
 #define LPUART_STAT_FE_MASK                      (0x20000U)
 #define LPUART_STAT_FE_SHIFT                     (17U)
-/*! FE - Framing Error Flag (FE)
+/*! FE - Framing Error Flag
+ *  0b0..No effect
  *  0b0..No framing error detected (this does not guarantee that the framing is correct)
+ *  0b1..Clear the flag
  *  0b1..Framing error detected
  */
 #define LPUART_STAT_FE(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_FE_SHIFT)) & LPUART_STAT_FE_MASK)
 
 #define LPUART_STAT_NF_MASK                      (0x40000U)
 #define LPUART_STAT_NF_SHIFT                     (18U)
-/*! NF - Noise Flag (NF)
+/*! NF - Noise Flag
+ *  0b0..No effect
  *  0b0..No noise detected
+ *  0b1..Clear the flag
  *  0b1..Noise detected
  */
 #define LPUART_STAT_NF(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_NF_SHIFT)) & LPUART_STAT_NF_MASK)
@@ -512,16 +522,20 @@ typedef struct {
 #define LPUART_STAT_OR_MASK                      (0x80000U)
 #define LPUART_STAT_OR_SHIFT                     (19U)
 /*! OR - Receiver Overrun Flag
+ *  0b0..No effect
  *  0b0..No overrun
- *  0b1..Receive overrun (new LPUART data lost)
+ *  0b1..Clear the flag
+ *  0b1..Receive overrun (new LPUART data is lost)
  */
 #define LPUART_STAT_OR(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_OR_SHIFT)) & LPUART_STAT_OR_MASK)
 
 #define LPUART_STAT_IDLE_MASK                    (0x100000U)
 #define LPUART_STAT_IDLE_SHIFT                   (20U)
 /*! IDLE - Idle Line Flag
- *  0b0..No idle line detected
- *  0b1..Idle line detected
+ *  0b0..Idle line detected
+ *  0b0..No effect
+ *  0b1..Clear the flag
+ *  0b1..Idle line not detected
  */
 #define LPUART_STAT_IDLE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_IDLE_SHIFT)) & LPUART_STAT_IDLE_MASK)
 
@@ -536,8 +550,8 @@ typedef struct {
 #define LPUART_STAT_TC_MASK                      (0x400000U)
 #define LPUART_STAT_TC_SHIFT                     (22U)
 /*! TC - Transmission Complete Flag
- *  0b0..Transmitter active (sending data, a preamble, or a break)
- *  0b1..Transmitter idle (transmission activity complete)
+ *  0b0..Transmitter active
+ *  0b1..Transmitter idle
  */
 #define LPUART_STAT_TC(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_TC_SHIFT)) & LPUART_STAT_TC_MASK)
 
@@ -560,8 +574,8 @@ typedef struct {
 #define LPUART_STAT_LBKDE_MASK                   (0x2000000U)
 #define LPUART_STAT_LBKDE_SHIFT                  (25U)
 /*! LBKDE - LIN Break Detection Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_STAT_LBKDE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_LBKDE_SHIFT)) & LPUART_STAT_LBKDE_MASK)
 
@@ -600,7 +614,9 @@ typedef struct {
 #define LPUART_STAT_RXEDGIF_MASK                 (0x40000000U)
 #define LPUART_STAT_RXEDGIF_SHIFT                (30U)
 /*! RXEDGIF - RXD Pin Active Edge Interrupt Flag
+ *  0b0..No effect
  *  0b0..Not occurred
+ *  0b1..Clear the flag
  *  0b1..Occurred
  */
 #define LPUART_STAT_RXEDGIF(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_RXEDGIF_SHIFT)) & LPUART_STAT_RXEDGIF_MASK)
@@ -608,7 +624,9 @@ typedef struct {
 #define LPUART_STAT_LBKDIF_MASK                  (0x80000000U)
 #define LPUART_STAT_LBKDIF_SHIFT                 (31U)
 /*! LBKDIF - LIN Break Detect Interrupt Flag
+ *  0b0..No effect
  *  0b0..Not detected
+ *  0b1..Clear the flag
  *  0b1..Detected
  */
 #define LPUART_STAT_LBKDIF(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_LBKDIF_SHIFT)) & LPUART_STAT_LBKDIF_MASK)
@@ -628,8 +646,8 @@ typedef struct {
 #define LPUART_CTRL_PE_MASK                      (0x2U)
 #define LPUART_CTRL_PE_SHIFT                     (1U)
 /*! PE - Parity Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_PE(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_PE_SHIFT)) & LPUART_CTRL_PE_MASK)
 
@@ -643,17 +661,17 @@ typedef struct {
 
 #define LPUART_CTRL_WAKE_MASK                    (0x8U)
 #define LPUART_CTRL_WAKE_SHIFT                   (3U)
-/*! WAKE - Receiver Wakeup Method Select
- *  0b0..Configures CTRL[RWU] for idle-line wakeup
- *  0b1..Configures CTRL[RWU] with address-mark wakeup
+/*! WAKE - Receiver Wake-Up Method Select
+ *  0b0..Idle
+ *  0b1..Mark
  */
 #define LPUART_CTRL_WAKE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_WAKE_SHIFT)) & LPUART_CTRL_WAKE_MASK)
 
 #define LPUART_CTRL_M_MASK                       (0x10U)
 #define LPUART_CTRL_M_SHIFT                      (4U)
 /*! M - 9-Bit Or 8-Bit Mode Select
- *  0b0..8-bit data characters
- *  0b1..9-bit data characters
+ *  0b0..8-bit
+ *  0b1..9-bit
  */
 #define LPUART_CTRL_M(x)                         (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_M_SHIFT)) & LPUART_CTRL_M_MASK)
 
@@ -667,9 +685,9 @@ typedef struct {
 
 #define LPUART_CTRL_DOZEEN_MASK                  (0x40U)
 #define LPUART_CTRL_DOZEEN_SHIFT                 (6U)
-/*! DOZEEN - Enables LPUART in Doze mode.
- *  0b0..Enables
- *  0b1..Disables
+/*! DOZEEN - Doze Mode
+ *  0b0..Enable
+ *  0b1..Disable
  */
 #define LPUART_CTRL_DOZEEN(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_DOZEEN_SHIFT)) & LPUART_CTRL_DOZEEN_MASK)
 
@@ -698,24 +716,24 @@ typedef struct {
 #define LPUART_CTRL_M7_MASK                      (0x800U)
 #define LPUART_CTRL_M7_SHIFT                     (11U)
 /*! M7 - 7-Bit Mode Select
- *  0b0..8-bit to 10-bit data characters
- *  0b1..7-bit data characters
+ *  0b0..8-bit to 10-bit
+ *  0b1..7-bit
  */
 #define LPUART_CTRL_M7(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_M7_SHIFT)) & LPUART_CTRL_M7_MASK)
 
 #define LPUART_CTRL_MA2IE_MASK                   (0x4000U)
 #define LPUART_CTRL_MA2IE_SHIFT                  (14U)
 /*! MA2IE - Match 2 (MA2F) Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_MA2IE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_MA2IE_SHIFT)) & LPUART_CTRL_MA2IE_MASK)
 
 #define LPUART_CTRL_MA1IE_MASK                   (0x8000U)
 #define LPUART_CTRL_MA1IE_SHIFT                  (15U)
 /*! MA1IE - Match 1 (MA1F) Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_MA1IE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_MA1IE_SHIFT)) & LPUART_CTRL_MA1IE_MASK)
 
@@ -729,89 +747,89 @@ typedef struct {
 
 #define LPUART_CTRL_RWU_MASK                     (0x20000U)
 #define LPUART_CTRL_RWU_SHIFT                    (17U)
-/*! RWU - Receiver Wakeup Control
+/*! RWU - Receiver Wake-Up Control
  *  0b0..Normal receiver operation
- *  0b1..LPUART receiver in standby, waiting for a wakeup condition
+ *  0b1..LPUART receiver in standby, waiting for a wake-up condition
  */
 #define LPUART_CTRL_RWU(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_RWU_SHIFT)) & LPUART_CTRL_RWU_MASK)
 
 #define LPUART_CTRL_RE_MASK                      (0x40000U)
 #define LPUART_CTRL_RE_SHIFT                     (18U)
 /*! RE - Receiver Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_RE(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_RE_SHIFT)) & LPUART_CTRL_RE_MASK)
 
 #define LPUART_CTRL_TE_MASK                      (0x80000U)
 #define LPUART_CTRL_TE_SHIFT                     (19U)
 /*! TE - Transmitter Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_TE(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_TE_SHIFT)) & LPUART_CTRL_TE_MASK)
 
 #define LPUART_CTRL_ILIE_MASK                    (0x100000U)
 #define LPUART_CTRL_ILIE_SHIFT                   (20U)
 /*! ILIE - Idle Line Interrupt Enable
- *  0b0..Disables hardware interrupts from STAT[IDLE]; use polling
- *  0b1..Enables hardware interrupts when STAT[IDLE] = 1
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_ILIE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_ILIE_SHIFT)) & LPUART_CTRL_ILIE_MASK)
 
 #define LPUART_CTRL_RIE_MASK                     (0x200000U)
 #define LPUART_CTRL_RIE_SHIFT                    (21U)
 /*! RIE - Receiver Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_RIE(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_RIE_SHIFT)) & LPUART_CTRL_RIE_MASK)
 
 #define LPUART_CTRL_TCIE_MASK                    (0x400000U)
 #define LPUART_CTRL_TCIE_SHIFT                   (22U)
 /*! TCIE - Transmission Complete Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_TCIE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_TCIE_SHIFT)) & LPUART_CTRL_TCIE_MASK)
 
 #define LPUART_CTRL_TIE_MASK                     (0x800000U)
 #define LPUART_CTRL_TIE_SHIFT                    (23U)
 /*! TIE - Transmit Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_TIE(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_TIE_SHIFT)) & LPUART_CTRL_TIE_MASK)
 
 #define LPUART_CTRL_PEIE_MASK                    (0x1000000U)
 #define LPUART_CTRL_PEIE_SHIFT                   (24U)
 /*! PEIE - Parity Error Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_PEIE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_PEIE_SHIFT)) & LPUART_CTRL_PEIE_MASK)
 
 #define LPUART_CTRL_FEIE_MASK                    (0x2000000U)
 #define LPUART_CTRL_FEIE_SHIFT                   (25U)
 /*! FEIE - Framing Error Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_FEIE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_FEIE_SHIFT)) & LPUART_CTRL_FEIE_MASK)
 
 #define LPUART_CTRL_NEIE_MASK                    (0x4000000U)
 #define LPUART_CTRL_NEIE_SHIFT                   (26U)
 /*! NEIE - Noise Error Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_NEIE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_NEIE_SHIFT)) & LPUART_CTRL_NEIE_MASK)
 
 #define LPUART_CTRL_ORIE_MASK                    (0x8000000U)
 #define LPUART_CTRL_ORIE_SHIFT                   (27U)
 /*! ORIE - Overrun Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_CTRL_ORIE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_ORIE_SHIFT)) & LPUART_CTRL_ORIE_MASK)
 
@@ -826,8 +844,8 @@ typedef struct {
 #define LPUART_CTRL_TXDIR_MASK                   (0x20000000U)
 #define LPUART_CTRL_TXDIR_SHIFT                  (29U)
 /*! TXDIR - TXD Pin Direction in Single-Wire Mode
- *  0b0..TXD pin is an input in Single-Wire mode
- *  0b1..TXD pin is an output in Single-Wire mode
+ *  0b0..Input
+ *  0b1..Output
  */
 #define LPUART_CTRL_TXDIR(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_CTRL_TXDIR_SHIFT)) & LPUART_CTRL_TXDIR_MASK)
 
@@ -847,75 +865,75 @@ typedef struct {
 
 #define LPUART_DATA_R0T0_MASK                    (0x1U)
 #define LPUART_DATA_R0T0_SHIFT                   (0U)
-/*! R0T0 - Read Receive FIFO Bit 0 Or Write Transmit FIFO Bit 0 */
+/*! R0T0 - Read receive FIFO bit 0 or write transmit FIFO bit 0 */
 #define LPUART_DATA_R0T0(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R0T0_SHIFT)) & LPUART_DATA_R0T0_MASK)
 
 #define LPUART_DATA_R1T1_MASK                    (0x2U)
 #define LPUART_DATA_R1T1_SHIFT                   (1U)
-/*! R1T1 - Read Receive FIFO Bit 1 Or Write Transmit FIFO Bit 1 */
+/*! R1T1 - Read receive FIFO bit 1 or write transmit FIFO bit 1 */
 #define LPUART_DATA_R1T1(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R1T1_SHIFT)) & LPUART_DATA_R1T1_MASK)
 
 #define LPUART_DATA_R2T2_MASK                    (0x4U)
 #define LPUART_DATA_R2T2_SHIFT                   (2U)
-/*! R2T2 - Read Receive FIFO Bit 2 Or Write Transmit FIFO Bit 2 */
+/*! R2T2 - Read receive FIFO bit 2 or write transmit FIFO bit 2 */
 #define LPUART_DATA_R2T2(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R2T2_SHIFT)) & LPUART_DATA_R2T2_MASK)
 
 #define LPUART_DATA_R3T3_MASK                    (0x8U)
 #define LPUART_DATA_R3T3_SHIFT                   (3U)
-/*! R3T3 - Read Receive FIFO Bit 3 Or Write Transmit FIFO Bit 3 */
+/*! R3T3 - Read receive FIFO bit 3 or write transmit FIFO bit 3 */
 #define LPUART_DATA_R3T3(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R3T3_SHIFT)) & LPUART_DATA_R3T3_MASK)
 
 #define LPUART_DATA_R4T4_MASK                    (0x10U)
 #define LPUART_DATA_R4T4_SHIFT                   (4U)
-/*! R4T4 - Read Receive FIFO Bit 4 Or Write Transmit FIFO Bit 4 */
+/*! R4T4 - Read receive FIFO bit 4 or write transmit FIFO bit 4 */
 #define LPUART_DATA_R4T4(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R4T4_SHIFT)) & LPUART_DATA_R4T4_MASK)
 
 #define LPUART_DATA_R5T5_MASK                    (0x20U)
 #define LPUART_DATA_R5T5_SHIFT                   (5U)
-/*! R5T5 - Read Receive FIFO Bit 5 Or Write Transmit FIFO Bit 5 */
+/*! R5T5 - Read receive FIFO bit 5 or write transmit FIFO bit 5 */
 #define LPUART_DATA_R5T5(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R5T5_SHIFT)) & LPUART_DATA_R5T5_MASK)
 
 #define LPUART_DATA_R6T6_MASK                    (0x40U)
 #define LPUART_DATA_R6T6_SHIFT                   (6U)
-/*! R6T6 - Read Receive FIFO Bit 6 Or Write Transmit FIFO Bit 6 */
+/*! R6T6 - Read receive FIFO bit 6 or write transmit FIFO bit 6 */
 #define LPUART_DATA_R6T6(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R6T6_SHIFT)) & LPUART_DATA_R6T6_MASK)
 
 #define LPUART_DATA_R7T7_MASK                    (0x80U)
 #define LPUART_DATA_R7T7_SHIFT                   (7U)
-/*! R7T7 - Read Receive FIFO Bit 7 Or Write Transmit FIFO Bit 7 */
+/*! R7T7 - Read receive FIFO bit 7 or write transmit FIFO bit 7 */
 #define LPUART_DATA_R7T7(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R7T7_SHIFT)) & LPUART_DATA_R7T7_MASK)
 
 #define LPUART_DATA_R8T8_MASK                    (0x100U)
 #define LPUART_DATA_R8T8_SHIFT                   (8U)
-/*! R8T8 - Read Receive FIFO Bit 8 Or Write Transmit FIFO Bit 8 */
+/*! R8T8 - Read receive FIFO bit 8 or write transmit FIFO bit 8 */
 #define LPUART_DATA_R8T8(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R8T8_SHIFT)) & LPUART_DATA_R8T8_MASK)
 
 #define LPUART_DATA_R9T9_MASK                    (0x200U)
 #define LPUART_DATA_R9T9_SHIFT                   (9U)
-/*! R9T9 - Read Receive FIFO Bit 9 Or Write Transmit FIFO Bit 9 */
+/*! R9T9 - Read receive FIFO bit 9 or write transmit FIFO bit 9 */
 #define LPUART_DATA_R9T9(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_R9T9_SHIFT)) & LPUART_DATA_R9T9_MASK)
 
 #define LPUART_DATA_LINBRK_MASK                  (0x400U)
 #define LPUART_DATA_LINBRK_SHIFT                 (10U)
 /*! LINBRK - LIN Break
- *  0b0..LIN break not detected or LIN break detect circuitry disabled
- *  0b1..LIN break detected
+ *  0b0..Not detected
+ *  0b1..Detected
  */
 #define LPUART_DATA_LINBRK(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_LINBRK_SHIFT)) & LPUART_DATA_LINBRK_MASK)
 
 #define LPUART_DATA_IDLINE_MASK                  (0x800U)
 #define LPUART_DATA_IDLINE_SHIFT                 (11U)
 /*! IDLINE - Idle Line
- *  0b0..Received was not idle
- *  0b1..Receiver was idle
+ *  0b0..Not idle
+ *  0b1..Idle
  */
 #define LPUART_DATA_IDLINE(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_IDLINE_SHIFT)) & LPUART_DATA_IDLINE_MASK)
 
 #define LPUART_DATA_RXEMPT_MASK                  (0x1000U)
 #define LPUART_DATA_RXEMPT_SHIFT                 (12U)
 /*! RXEMPT - Receive Buffer Empty
- *  0b0..Contains valid data
- *  0b1..Contains invalid data and is empty
+ *  0b0..Valid data
+ *  0b1..Invalid data and empty
  */
 #define LPUART_DATA_RXEMPT(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_DATA_RXEMPT_SHIFT)) & LPUART_DATA_RXEMPT_MASK)
 
@@ -964,32 +982,32 @@ typedef struct {
 #define LPUART_MODIR_TXCTSE_MASK                 (0x1U)
 #define LPUART_MODIR_TXCTSE_SHIFT                (0U)
 /*! TXCTSE - Transmitter CTS Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_MODIR_TXCTSE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_TXCTSE_SHIFT)) & LPUART_MODIR_TXCTSE_MASK)
 
 #define LPUART_MODIR_TXRTSE_MASK                 (0x2U)
 #define LPUART_MODIR_TXRTSE_SHIFT                (1U)
 /*! TXRTSE - Transmitter RTS Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_MODIR_TXRTSE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_TXRTSE_SHIFT)) & LPUART_MODIR_TXRTSE_MASK)
 
 #define LPUART_MODIR_TXRTSPOL_MASK               (0x4U)
 #define LPUART_MODIR_TXRTSPOL_SHIFT              (2U)
 /*! TXRTSPOL - Transmitter RTS Polarity
- *  0b0..Transmitter RTS is active low
- *  0b1..Transmitter RTS is active high
+ *  0b0..Active low
+ *  0b1..Active high
  */
 #define LPUART_MODIR_TXRTSPOL(x)                 (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_TXRTSPOL_SHIFT)) & LPUART_MODIR_TXRTSPOL_MASK)
 
 #define LPUART_MODIR_RXRTSE_MASK                 (0x8U)
 #define LPUART_MODIR_RXRTSE_SHIFT                (3U)
 /*! RXRTSE - Receiver RTS Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_MODIR_RXRTSE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_RXRTSE_SHIFT)) & LPUART_MODIR_RXRTSE_MASK)
 
@@ -1027,8 +1045,8 @@ typedef struct {
 #define LPUART_MODIR_IREN_MASK                   (0x40000U)
 #define LPUART_MODIR_IREN_SHIFT                  (18U)
 /*! IREN - IR Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_MODIR_IREN(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_IREN_SHIFT)) & LPUART_MODIR_IREN_MASK)
 /*! @} */
@@ -1039,74 +1057,74 @@ typedef struct {
 #define LPUART_FIFO_RXFIFOSIZE_MASK              (0x7U)
 #define LPUART_FIFO_RXFIFOSIZE_SHIFT             (0U)
 /*! RXFIFOSIZE - Receive FIFO Buffer Depth
- *  0b000..Receive FIFO buffer depth = 1 dataword
- *  0b001..Receive FIFO buffer depth = 4 datawords
- *  0b010..Receive FIFO buffer depth = 8 datawords
- *  0b011..Receive FIFO buffer depth = 16 datawords
- *  0b100..Receive FIFO buffer depth = 32 datawords
- *  0b101..Receive FIFO buffer depth = 64 datawords
- *  0b110..Receive FIFO buffer depth = 128 datawords
- *  0b111..Receive FIFO buffer depth = 256 datawords
+ *  0b000..1
+ *  0b001..4
+ *  0b010..8
+ *  0b011..16
+ *  0b100..32
+ *  0b101..64
+ *  0b110..128
+ *  0b111..256
  */
 #define LPUART_FIFO_RXFIFOSIZE(x)                (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXFIFOSIZE_SHIFT)) & LPUART_FIFO_RXFIFOSIZE_MASK)
 
 #define LPUART_FIFO_RXFE_MASK                    (0x8U)
 #define LPUART_FIFO_RXFE_SHIFT                   (3U)
 /*! RXFE - Receive FIFO Enable
- *  0b0..Disables; buffer depth is 1
- *  0b1..Enables; FIFO[RXFIFOSIZE] indicates the buffer depth
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_FIFO_RXFE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXFE_SHIFT)) & LPUART_FIFO_RXFE_MASK)
 
 #define LPUART_FIFO_TXFIFOSIZE_MASK              (0x70U)
 #define LPUART_FIFO_TXFIFOSIZE_SHIFT             (4U)
 /*! TXFIFOSIZE - Transmit FIFO Buffer Depth
- *  0b000..Transmit FIFO buffer depth = 1 dataword
- *  0b001..Transmit FIFO buffer depth = 4 datawords
- *  0b010..Transmit FIFO buffer depth = 8 datawords
- *  0b011..Transmit FIFO buffer depth = 16 datawords
- *  0b100..Transmit FIFO buffer depth = 32 datawords
- *  0b101..Transmit FIFO buffer depth = 64 datawords
- *  0b110..Transmit FIFO buffer depth = 128 datawords
- *  0b111..Transmit FIFO buffer depth = 256 datawords
+ *  0b000..1
+ *  0b001..4
+ *  0b010..8
+ *  0b011..16
+ *  0b100..32
+ *  0b101..64
+ *  0b110..128
+ *  0b111..256
  */
 #define LPUART_FIFO_TXFIFOSIZE(x)                (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_TXFIFOSIZE_SHIFT)) & LPUART_FIFO_TXFIFOSIZE_MASK)
 
 #define LPUART_FIFO_TXFE_MASK                    (0x80U)
 #define LPUART_FIFO_TXFE_SHIFT                   (7U)
 /*! TXFE - Transmit FIFO Enable
- *  0b0..Disables; buffer depth is 1
- *  0b1..Enables; FIFO[TXFIFOSIZE] indicates the buffer depth
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_FIFO_TXFE(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_TXFE_SHIFT)) & LPUART_FIFO_TXFE_MASK)
 
 #define LPUART_FIFO_RXUFE_MASK                   (0x100U)
 #define LPUART_FIFO_RXUFE_SHIFT                  (8U)
 /*! RXUFE - Receive FIFO Underflow Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_FIFO_RXUFE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXUFE_SHIFT)) & LPUART_FIFO_RXUFE_MASK)
 
 #define LPUART_FIFO_TXOFE_MASK                   (0x200U)
 #define LPUART_FIFO_TXOFE_SHIFT                  (9U)
 /*! TXOFE - Transmit FIFO Overflow Interrupt Enable
- *  0b0..Disables
- *  0b1..Enables
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define LPUART_FIFO_TXOFE(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_TXOFE_SHIFT)) & LPUART_FIFO_TXOFE_MASK)
 
 #define LPUART_FIFO_RXIDEN_MASK                  (0x1C00U)
 #define LPUART_FIFO_RXIDEN_SHIFT                 (10U)
 /*! RXIDEN - Receiver Idle Empty Enable
- *  0b000..Disables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle
- *  0b001..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for one character
- *  0b010..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for two characters
- *  0b011..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for four characters
- *  0b100..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for eight characters
- *  0b101..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for 16 characters
- *  0b110..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for 32 characters
- *  0b111..Enables STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for 64 characters
+ *  0b000..Disable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle
+ *  0b001..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for one character
+ *  0b010..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for two characters
+ *  0b011..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for four characters
+ *  0b100..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for eight characters
+ *  0b101..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for 16 characters
+ *  0b110..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for 32 characters
+ *  0b111..Enable STAT[RDRF] to become 1 because of partially filled FIFO when the receiver is idle for 64 characters
  */
 #define LPUART_FIFO_RXIDEN(x)                    (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXIDEN_SHIFT)) & LPUART_FIFO_RXIDEN_MASK)
 
@@ -1114,7 +1132,7 @@ typedef struct {
 #define LPUART_FIFO_RXFLUSH_SHIFT                (14U)
 /*! RXFLUSH - Receive FIFO Flush
  *  0b0..No effect
- *  0b1..All data is flushed out
+ *  0b1..All data flushed out
  */
 #define LPUART_FIFO_RXFLUSH(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXFLUSH_SHIFT)) & LPUART_FIFO_RXFLUSH_MASK)
 
@@ -1122,14 +1140,16 @@ typedef struct {
 #define LPUART_FIFO_TXFLUSH_SHIFT                (15U)
 /*! TXFLUSH - Transmit FIFO Flush
  *  0b0..No effect
- *  0b1..All data is flushed out
+ *  0b1..All data flushed out
  */
 #define LPUART_FIFO_TXFLUSH(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_TXFLUSH_SHIFT)) & LPUART_FIFO_TXFLUSH_MASK)
 
 #define LPUART_FIFO_RXUF_MASK                    (0x10000U)
 #define LPUART_FIFO_RXUF_SHIFT                   (16U)
 /*! RXUF - Receiver FIFO Underflow Flag
+ *  0b0..No effect
  *  0b0..No underflow
+ *  0b1..Clear the flag
  *  0b1..Underflow
  */
 #define LPUART_FIFO_RXUF(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_RXUF_SHIFT)) & LPUART_FIFO_RXUF_MASK)
@@ -1137,7 +1157,9 @@ typedef struct {
 #define LPUART_FIFO_TXOF_MASK                    (0x20000U)
 #define LPUART_FIFO_TXOF_SHIFT                   (17U)
 /*! TXOF - Transmitter FIFO Overflow Flag
+ *  0b0..No effect
  *  0b0..No overflow
+ *  0b1..Clear the flag
  *  0b1..Overflow
  */
 #define LPUART_FIFO_TXOF(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_FIFO_TXOF_SHIFT)) & LPUART_FIFO_TXOF_MASK)
@@ -1198,48 +1220,48 @@ typedef struct {
 #define LPUART_MCR_CTS_MASK                      (0x1U)
 #define LPUART_MCR_CTS_SHIFT                     (0U)
 /*! CTS - Clear To Send
- *  0b0..Interrupt disabled
- *  0b1..Interrupt enabled
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
  */
 #define LPUART_MCR_CTS(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MCR_CTS_SHIFT)) & LPUART_MCR_CTS_MASK)
 
 #define LPUART_MCR_DSR_MASK                      (0x2U)
 #define LPUART_MCR_DSR_SHIFT                     (1U)
 /*! DSR - Data Set Ready
- *  0b0..Interrupt disabled
- *  0b1..Interrupt enabled
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
  */
 #define LPUART_MCR_DSR(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MCR_DSR_SHIFT)) & LPUART_MCR_DSR_MASK)
 
 #define LPUART_MCR_RIN_MASK                      (0x4U)
 #define LPUART_MCR_RIN_SHIFT                     (2U)
 /*! RIN - Ring Indicator
- *  0b0..Interrupt disabled
- *  0b1..Interrupt enabled
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
  */
 #define LPUART_MCR_RIN(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MCR_RIN_SHIFT)) & LPUART_MCR_RIN_MASK)
 
 #define LPUART_MCR_DCD_MASK                      (0x8U)
 #define LPUART_MCR_DCD_SHIFT                     (3U)
 /*! DCD - Data Carrier Detect
- *  0b0..Interrupt disabled
- *  0b1..Interrupt enabled
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
  */
 #define LPUART_MCR_DCD(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MCR_DCD_SHIFT)) & LPUART_MCR_DCD_MASK)
 
 #define LPUART_MCR_DTR_MASK                      (0x100U)
 #define LPUART_MCR_DTR_SHIFT                     (8U)
 /*! DTR - Data Terminal Ready
- *  0b0..Default state is logic one
- *  0b1..Default state is logic zero
+ *  0b0..Logic one
+ *  0b1..Logic zero
  */
 #define LPUART_MCR_DTR(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MCR_DTR_SHIFT)) & LPUART_MCR_DTR_MASK)
 
 #define LPUART_MCR_RTS_MASK                      (0x200U)
 #define LPUART_MCR_RTS_SHIFT                     (9U)
 /*! RTS - Request To Send
- *  0b0..Default state is logic one
- *  0b1..Default state is logic zero
+ *  0b0..Logic one
+ *  0b1..Logic zero
  */
 #define LPUART_MCR_RTS(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MCR_RTS_SHIFT)) & LPUART_MCR_RTS_MASK)
 /*! @} */
@@ -1251,7 +1273,9 @@ typedef struct {
 #define LPUART_MSR_DCTS_SHIFT                    (0U)
 /*! DCTS - Delta Clear To Send
  *  0b0..Did not change state
+ *  0b0..No effect
  *  0b1..Changed state
+ *  0b1..Clear the flag
  */
 #define LPUART_MSR_DCTS(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DCTS_SHIFT)) & LPUART_MSR_DCTS_MASK)
 
@@ -1259,7 +1283,9 @@ typedef struct {
 #define LPUART_MSR_DDSR_SHIFT                    (1U)
 /*! DDSR - Delta Data Set Ready
  *  0b0..Did not change state
+ *  0b0..No effect
  *  0b1..Changed state
+ *  0b1..Clear the flag
  */
 #define LPUART_MSR_DDSR(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DDSR_SHIFT)) & LPUART_MSR_DDSR_MASK)
 
@@ -1267,7 +1293,9 @@ typedef struct {
 #define LPUART_MSR_DRI_SHIFT                     (2U)
 /*! DRI - Delta Ring Indicator
  *  0b0..Did not change state
+ *  0b0..No effect
  *  0b1..Changed state
+ *  0b1..Clear the flag
  */
 #define LPUART_MSR_DRI(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DRI_SHIFT)) & LPUART_MSR_DRI_MASK)
 
@@ -1275,39 +1303,41 @@ typedef struct {
 #define LPUART_MSR_DDCD_SHIFT                    (3U)
 /*! DDCD - Delta Data Carrier Detect
  *  0b0..Did not change state
+ *  0b0..No effect
  *  0b1..Changed state
+ *  0b1..Clear the flag
  */
 #define LPUART_MSR_DDCD(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DDCD_SHIFT)) & LPUART_MSR_DDCD_MASK)
 
 #define LPUART_MSR_CTS_MASK                      (0x10U)
 #define LPUART_MSR_CTS_SHIFT                     (4U)
 /*! CTS - Clear To Send
- *  0b0..The CTS_B pin is logic one
- *  0b1..The CTS_B pin is logic zero
+ *  0b0..Logic one
+ *  0b1..Logic zero
  */
 #define LPUART_MSR_CTS(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_CTS_SHIFT)) & LPUART_MSR_CTS_MASK)
 
 #define LPUART_MSR_DSR_MASK                      (0x20U)
 #define LPUART_MSR_DSR_SHIFT                     (5U)
 /*! DSR - Data Set Ready
- *  0b0..The DSR_B pin is logic one
- *  0b1..The DSR_B pin is logic zero
+ *  0b0..Logic one
+ *  0b1..Logic zero
  */
 #define LPUART_MSR_DSR(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DSR_SHIFT)) & LPUART_MSR_DSR_MASK)
 
 #define LPUART_MSR_RIN_MASK                      (0x40U)
 #define LPUART_MSR_RIN_SHIFT                     (6U)
 /*! RIN - Ring Indicator
- *  0b0..The RIN_B pin is logic one
- *  0b1..The RIN_B pin is logic zero
+ *  0b0..Logic one
+ *  0b1..Logic zero
  */
 #define LPUART_MSR_RIN(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_RIN_SHIFT)) & LPUART_MSR_RIN_MASK)
 
 #define LPUART_MSR_DCD_MASK                      (0x80U)
 #define LPUART_MSR_DCD_SHIFT                     (7U)
 /*! DCD - Data Carrier Detect
- *  0b0..The DCD_B pin is logic one
- *  0b1..The DCD_B pin is logic zero
+ *  0b0..Logic one
+ *  0b1..Logic zero
  */
 #define LPUART_MSR_DCD(x)                        (((uint32_t)(((uint32_t)(x)) << LPUART_MSR_DCD_SHIFT)) & LPUART_MSR_DCD_MASK)
 /*! @} */
@@ -1352,16 +1382,16 @@ typedef struct {
 #define LPUART_HDCR_RXWRMSK_MASK                 (0x4U)
 #define LPUART_HDCR_RXWRMSK_SHIFT                (2U)
 /*! RXWRMSK - Receive FIFO Write Mask
- *  0b0..Does not mask
- *  0b1..Masks
+ *  0b0..Do not mask
+ *  0b1..Mask
  */
 #define LPUART_HDCR_RXWRMSK(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_HDCR_RXWRMSK_SHIFT)) & LPUART_HDCR_RXWRMSK_MASK)
 
 #define LPUART_HDCR_RXMSK_MASK                   (0x8U)
 #define LPUART_HDCR_RXMSK_SHIFT                  (3U)
 /*! RXMSK - Receive Mask
- *  0b0..Does not mask
- *  0b1..Masks
+ *  0b0..Do not mask
+ *  0b1..Mask
  */
 #define LPUART_HDCR_RXMSK(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_HDCR_RXMSK_SHIFT)) & LPUART_HDCR_RXMSK_MASK)
 
@@ -1395,7 +1425,12 @@ typedef struct {
 
 #define LPUART_TOSR_TOF_MASK                     (0xF00U)
 #define LPUART_TOSR_TOF_SHIFT                    (8U)
-/*! TOF - Timeout Flag */
+/*! TOF - Timeout Flag
+ *  0b0000..No effect
+ *  0b0000..Not occurred
+ *  0b0001..Clear the flag
+ *  0b0001..Occurred
+ */
 #define LPUART_TOSR_TOF(x)                       (((uint32_t)(((uint32_t)(x)) << LPUART_TOSR_TOF_SHIFT)) & LPUART_TOSR_TOF_MASK)
 /*! @} */
 

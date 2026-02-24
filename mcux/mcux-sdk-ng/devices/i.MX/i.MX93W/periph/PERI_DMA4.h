@@ -1,0 +1,1159 @@
+/*
+** ###################################################################
+**     Processors:          MIMX93W32610GCM_ca55
+**                          MIMX93W32610GCM_cm33
+**                          MIMX93W52610GCM_ca55
+**                          MIMX93W52610GCM_cm33
+**
+**     Version:             rev. 1.0, 2025-12-13
+**     Build:               b260114
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for DMA4
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2026 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2025-12-13)
+**         Initial version.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file PERI_DMA4.h
+ * @version 1.0
+ * @date 2025-12-13
+ * @brief CMSIS Peripheral Access Layer for DMA4
+ *
+ * CMSIS Peripheral Access Layer for DMA4
+ */
+
+#if !defined(PERI_DMA4_H_)
+#define PERI_DMA4_H_                             /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMX93W32610GCM_ca55))
+#include "MIMX93W32_ca55_COMMON.h"
+#elif (defined(CPU_MIMX93W32610GCM_cm33))
+#include "MIMX93W32_cm33_COMMON.h"
+#elif (defined(CPU_MIMX93W52610GCM_ca55))
+#include "MIMX93W52_ca55_COMMON.h"
+#elif (defined(CPU_MIMX93W52610GCM_cm33))
+#include "MIMX93W52_cm33_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Mapping Information
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Mapping_Information Mapping Information
+ * @{
+ */
+
+/** Mapping Information */
+#if !defined(DMA4_REQUEST_SOURCE_T_)
+#define DMA4_REQUEST_SOURCE_T_
+/*!
+ * @addtogroup edma_request
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*!
+ * @brief Structure for the DMA4 hardware request
+ *
+ * Defines the structure for the DMA hardware request collections. The user can configure the
+ * hardware request into DMAMUX to trigger the DMA transfer accordingly. The index
+ * of the hardware request varies according  to the to SoC.
+ */
+typedef enum _dma4_request_source
+{
+    kDma4RequestMuxCAN2             = 1U,          /**< CAN2 */
+    kDma4RequestMuxGPIO2Request0    = 2U,          /**< GPIO2 channel 0 */
+    kDma4RequestMuxGPIO2Request1    = 3U,          /**< GPIO2 channel 1 */
+    kDma4RequestMuxGPIO3Request0    = 4U,          /**< GPIO3 channel 0 */
+    kDma4RequestMuxGPIO3Request1    = 5U,          /**< GPIO3 channel 1 */
+    kDma4RequestMuxI3C2ToBusRequest = 6U,          /**< I3C2 To-bus Request */
+    kDma4RequestMuxI3C2FromBusRequest = 7U,        /**< I3C2 From-bus Request */
+    kDma4RequestMuxLPI2C3Tx         = 8U,          /**< LPI2C3 */
+    kDma4RequestMuxLPI2C3Rx         = 9U,          /**< LPI2C3 */
+    kDma4RequestMuxLPI2C4Tx         = 10U,         /**< LPI2C4 */
+    kDma4RequestMuxLPI2C4Rx         = 11U,         /**< LPI2C4 */
+    kDma4RequestMuxLPSPI3Tx         = 12U,         /**< LPSPI3 Transmit */
+    kDma4RequestMuxLPSPI3Rx         = 13U,         /**< LPSPI3 Receive */
+    kDma4RequestMuxLPSPI4Tx         = 14U,         /**< LPSPI4 Transmit */
+    kDma4RequestMuxLPSPI4Rx         = 15U,         /**< LPSPI4 Receive */
+    kDma4RequestMuxLPTMR2Request    = 16U,         /**< LPTMR2 Request */
+    kDma4RequestMuxLPUART3Tx        = 17U,         /**< LPUART3 Transmit */
+    kDma4RequestMuxLPUART3Rx        = 18U,         /**< LPUART3 Receive */
+    kDma4RequestMuxLPUART4Tx        = 19U,         /**< LPUART4 Transmit */
+    kDma4RequestMuxLPUART4Rx        = 20U,         /**< LPUART4 Receive */
+    kDma4RequestMuxLPUART5Tx        = 21U,         /**< LPUART5 Transmit */
+    kDma4RequestMuxLPUART5Rx        = 22U,         /**< LPUART5 Receive */
+    kDma4RequestMuxLPUART6Tx        = 23U,         /**< LPUART6 Transmit */
+    kDma4RequestMuxLPUART6Rx        = 24U,         /**< LPUART6 Receive */
+    kDma4RequestMuxTPM3Request0Request2 = 25U,     /**< TPM3 request 0 and request 2 */
+    kDma4RequestMuxTPM3Request1Request3 = 26U,     /**< TPM3 request 1 and request 3 */
+    kDma4RequestMuxTPM3OverflowRequest = 27U,      /**< TPM3 Overflow request */
+    kDma4RequestMuxTPM4Request0Request2 = 28U,     /**< TPM4 request 0 and request 2 */
+    kDma4RequestMuxTPM4Request1Request3 = 29U,     /**< TPM4 request 1 and request 3 */
+    kDma4RequestMuxTPM4OverflowRequest = 30U,      /**< TPM4 Overflow request */
+    kDma4RequestMuxTPM5Request0Request2 = 31U,     /**< TPM5 request 0 and request 2 */
+    kDma4RequestMuxTPM5Request1Request3 = 32U,     /**< TPM5 request 1 and request 3 */
+    kDma4RequestMuxTPM5OverflowRequest = 33U,      /**< TPM5 Overflow request */
+    kDma4RequestMuxTPM6Request0Request2 = 34U,     /**< TPM6 request 0 and request 2 */
+    kDma4RequestMuxTPM6Request1Request3 = 35U,     /**< TPM6 request 1 and request 3 */
+    kDma4RequestMuxTPM6OverflowRequest = 36U,      /**< TPM6 Overflow request */
+    kDma4RequestMuxFlexIO1Request0  = 37U,         /**< FlexIO1 Request0 */
+    kDma4RequestMuxFlexIO1Request1  = 38U,         /**< FlexIO1 Request1 */
+    kDma4RequestMuxFlexIO1Request2  = 39U,         /**< FlexIO1 Request2 */
+    kDma4RequestMuxFlexIO1Request3  = 40U,         /**< FlexIO1 Request3 */
+    kDma4RequestMuxFlexIO1Request4  = 41U,         /**< FlexIO1 Request4 */
+    kDma4RequestMuxFlexIO1Request5  = 42U,         /**< FlexIO1 Request5 */
+    kDma4RequestMuxFlexIO1Request6  = 43U,         /**< FlexIO1 Request6 */
+    kDma4RequestMuxFlexIO1Request7  = 44U,         /**< FlexIO1 Request7 */
+    kDma4RequestMuxFlexIO2Request0  = 45U,         /**< FlexIO2 Request0 */
+    kDma4RequestMuxFlexIO2Request1  = 46U,         /**< FlexIO2 Request1 */
+    kDma4RequestMuxFlexIO2Request2  = 47U,         /**< FlexIO2 Request2 */
+    kDma4RequestMuxFlexIO2Request3  = 48U,         /**< FlexIO2 Request3 */
+    kDma4RequestMuxFlexIO2Request4  = 49U,         /**< FlexIO2 Request4 */
+    kDma4RequestMuxFlexIO2Request5  = 50U,         /**< FlexIO2 Request5 */
+    kDma4RequestMuxFlexIO2Request6  = 51U,         /**< FlexIO2 Request6 */
+    kDma4RequestMuxFlexIO2Request7  = 52U,         /**< FlexIO2 Request7 */
+    kDma4RequestMuxFlexSPI1Tx       = 53U,         /**< FlexSPI1 Transmit */
+    kDma4RequestMuxFlexSPI1Rx       = 54U,         /**< FlexSPI1 Receive */
+    kDma4RequestMuxSai2Tx           = 58U,         /**< SAI2 Transmit */
+    kDma4RequestMuxSai2Rx           = 59U,         /**< SAI2 Receive */
+    kDma4RequestMuxSai3Tx           = 60U,         /**< SAI3 Transmit */
+    kDma4RequestMuxSai3Rx           = 61U,         /**< SAI3 Receive */
+    kDma4RequestMuxGPIO4Request0    = 62U,         /**< GPIO4 channel 0 */
+    kDma4RequestMuxGPIO4Request1    = 63U,         /**< GPIO4 channel 1 */
+    kDma4RequestMuxSPDIFRequest     = 65U,         /**< SPDIF */
+    kDma4RequestMuxSPDIFRequest1    = 66U,         /**< SPDIF */
+    kDma4RequestMuxENETRequest      = 67U,         /**< ENET */
+    kDma4RequestMuxENETRequest1     = 68U,         /**< ENET */
+    kDma4RequestMuxENETRequest2     = 69U,         /**< ENET */
+    kDma4RequestMuxENETRequest3     = 70U,         /**< ENET */
+    kDma4RequestMuxLPI2C5Tx         = 71U,         /**< LPI2C5 */
+    kDma4RequestMuxLPI2C5Rx         = 72U,         /**< LPI2C5 */
+    kDma4RequestMuxLPI2C6Tx         = 73U,         /**< LPI2C6 */
+    kDma4RequestMuxLPI2C6Rx         = 74U,         /**< LPI2C6 */
+    kDma4RequestMuxLPI2C7Tx         = 75U,         /**< LPI2C7 */
+    kDma4RequestMuxLPI2C7Rx         = 76U,         /**< LPI2C7 */
+    kDma4RequestMuxLPI2C8Tx         = 77U,         /**< LPI2C8 */
+    kDma4RequestMuxLPI2C8Rx         = 78U,         /**< LPI2C8 */
+    kDma4RequestMuxLPSPI5Tx         = 79U,         /**< LPSPI5 Transmit */
+    kDma4RequestMuxLPSPI5Rx         = 80U,         /**< LPSPI5 Receive */
+    kDma4RequestMuxLPSPI6Tx         = 81U,         /**< LPSPI6 Transmit */
+    kDma4RequestMuxLPSPI6Rx         = 82U,         /**< LPSPI6 Receive */
+    kDma4RequestMuxLPSPI7Tx         = 83U,         /**< LPSPI7 Transmit */
+    kDma4RequestMuxLPSPI7Rx         = 84U,         /**< LPSPI7 Receive */
+    kDma4RequestMuxLPSPI8Tx         = 85U,         /**< LPSPI8 Transmit */
+    kDma4RequestMuxLPSPI8Rx         = 86U,         /**< LPSPI8 Receive */
+    kDma4RequestMuxLPUART7Tx        = 87U,         /**< LPUART7 Transmit */
+    kDma4RequestMuxLPUART7Rx        = 88U,         /**< LPUART7 Receive */
+    kDma4RequestMuxLPUART8Tx        = 89U,         /**< LPUART8 Transmit */
+    kDma4RequestMuxLPUART8Rx        = 90U,         /**< LPUART8 Receive */
+    kDma4RequestMuxENET_QOSRequest  = 91U,         /**< ENET_QOS */
+    kDma4RequestMuxENET_QOSRequest1 = 92U,         /**< ENET_QOS */
+    kDma4RequestMuxENET_QOSRequest2 = 93U,         /**< ENET_QOS */
+    kDma4RequestMuxENET_QOSRequest3 = 94U,         /**< ENET_QOS */
+} dma4_request_source_t;
+
+/* @} */
+#endif /* DMA4_REQUEST_SOURCE_T_ */
+
+
+/*!
+ * @}
+ */ /* end of group Mapping_Information */
+
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- DMA4 Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DMA4_Peripheral_Access_Layer DMA4 Peripheral Access Layer
+ * @{
+ */
+
+/** DMA4 - Size of Registers Arrays */
+#define DMA4_MP_GRPRI_COUNT                       64u
+#define DMA4_TCD_COUNT                            64u
+
+/** DMA4 - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t CSR;                               /**< Management Page Control, offset: 0x0 */
+  __I  uint32_t ES;                                /**< Management Page Error Status, offset: 0x4 */
+  __I  uint32_t INT_LOW;                           /**< Management Page Interrupt Request Status Register - Low, offset: 0x8 */
+  __I  uint32_t INT_HIGH;                          /**< Management Page Interrupt Request Status Register- High, offset: 0xC */
+  __I  uint32_t HRS_LOW;                           /**< Management Page Hardware Request Status Register - Low, offset: 0x10 */
+  __I  uint32_t HRS_HIGH;                          /**< Management Page Hardware Request Status Register - High, offset: 0x14 */
+       uint8_t RESERVED_0[232];
+  __IO uint32_t CH_GRPRI[DMA4_MP_GRPRI_COUNT];     /**< Channel Arbitration Group, array offset: 0x100, array step: 0x4 */
+       uint8_t RESERVED_1[65024];
+  struct {                                         /* offset: 0x10000, array step: 0x1000 */
+    __IO uint32_t CH_CSR;                            /**< Channel Control and Status, array offset: 0x10000, array step: 0x1000 */
+    __IO uint32_t CH_ES;                             /**< Channel Error Status, array offset: 0x10004, array step: 0x1000 */
+    __IO uint32_t CH_INT;                            /**< Channel Interrupt Status, array offset: 0x10008, array step: 0x1000 */
+    __IO uint32_t CH_SBR;                            /**< Channel System Bus, array offset: 0x1000C, array step: 0x1000 */
+    __IO uint32_t CH_PRI;                            /**< Channel Priority, array offset: 0x10010, array step: 0x1000 */
+    __IO uint32_t CH_MUX;                            /**< Channel Multiplexor Configuration, array offset: 0x10014, array step: 0x1000 */
+    __IO uint16_t CH_MATTR;                          /**< Memory Attributes, array offset: 0x10018, array step: 0x1000 */
+         uint8_t RESERVED_0[6];
+    __IO uint32_t SADDR;                             /**< TCD Source Address, array offset: 0x10020, array step: 0x1000 */
+    __IO uint16_t SOFF;                              /**< TCD Signed Source Address Offset, array offset: 0x10024, array step: 0x1000 */
+    __IO uint16_t ATTR;                              /**< TCD Transfer Attributes, array offset: 0x10026, array step: 0x1000 */
+    union {                                          /* offset: 0x10028, array step: 0x1000 */
+      __IO uint32_t NBYTES_MLOFFNO;                    /**< TCD Transfer Size Without Minor Loop Offsets, array offset: 0x10028, array step: 0x1000 */
+      __IO uint32_t NBYTES_MLOFFYES;                   /**< TCD Transfer Size with Minor Loop Offsets, array offset: 0x10028, array step: 0x1000 */
+    };
+    __IO uint32_t SLAST_SDA;                         /**< TCD Last Source Address Adjustment and Store DADDR Address, array offset: 0x1002C, array step: 0x1000 */
+    __IO uint32_t DADDR;                             /**< TCD Destination Address, array offset: 0x10030, array step: 0x1000 */
+    __IO uint16_t DOFF;                              /**< TCD Signed Destination Address Offset, array offset: 0x10034, array step: 0x1000 */
+    union {                                          /* offset: 0x10036, array step: 0x1000 */
+      __IO uint16_t CITER_ELINKNO;                     /**< TCD Current Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x10036, array step: 0x1000 */
+      __IO uint16_t CITER_ELINKYES;                    /**< TCD Current Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x10036, array step: 0x1000 */
+    };
+    __IO uint32_t DLAST_SGA;                         /**< TCD Last Destination Address Adjustment / Scatter Gather Address, array offset: 0x10038, array step: 0x1000 */
+    __IO uint16_t CSR;                               /**< TCD Control and Status, array offset: 0x1003C, array step: 0x1000 */
+    union {                                          /* offset: 0x1003E, array step: 0x1000 */
+      __IO uint16_t BITER_ELINKNO;                     /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x1003E, array step: 0x1000 */
+      __IO uint16_t BITER_ELINKYES;                    /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x1003E, array step: 0x1000 */
+    };
+         uint8_t RESERVED_1[4032];
+  } TCD[DMA4_TCD_COUNT];
+} DMA4_Type;
+
+/* ----------------------------------------------------------------------------
+   -- DMA4 Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DMA4_Register_Masks DMA4 Register Masks
+ * @{
+ */
+
+/*! @name CSR - Management Page Control */
+/*! @{ */
+
+#define DMA4_CSR_EDBG_MASK                       (0x2U)
+#define DMA4_CSR_EDBG_SHIFT                      (1U)
+/*! EDBG - Enable Debug
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_EDBG(x)                         (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_EDBG_SHIFT)) & DMA4_CSR_EDBG_MASK)
+
+#define DMA4_CSR_ERCA_MASK                       (0x4U)
+#define DMA4_CSR_ERCA_SHIFT                      (2U)
+/*! ERCA - Enable Round-Robin Channel Arbitration
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_ERCA(x)                         (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_ERCA_SHIFT)) & DMA4_CSR_ERCA_MASK)
+
+#define DMA4_CSR_HAE_MASK                        (0x10U)
+#define DMA4_CSR_HAE_SHIFT                       (4U)
+/*! HAE - Halt after Error
+ *  0b0..Normal operation
+ *  0b1..Halt
+ */
+#define DMA4_CSR_HAE(x)                          (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_HAE_SHIFT)) & DMA4_CSR_HAE_MASK)
+
+#define DMA4_CSR_HALT_MASK                       (0x20U)
+#define DMA4_CSR_HALT_SHIFT                      (5U)
+/*! HALT - Halt DMA Operations
+ *  0b0..Normal operation
+ *  0b1..Halt
+ */
+#define DMA4_CSR_HALT(x)                         (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_HALT_SHIFT)) & DMA4_CSR_HALT_MASK)
+
+#define DMA4_CSR_GCLC_MASK                       (0x40U)
+#define DMA4_CSR_GCLC_SHIFT                      (6U)
+/*! GCLC - Global Channel Linking Control
+ *  0b0..Disable
+ *  0b1..Available
+ */
+#define DMA4_CSR_GCLC(x)                         (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_GCLC_SHIFT)) & DMA4_CSR_GCLC_MASK)
+
+#define DMA4_CSR_GMRC_MASK                       (0x80U)
+#define DMA4_CSR_GMRC_SHIFT                      (7U)
+/*! GMRC - Global Master ID Replication Control
+ *  0b0..Not available
+ *  0b1..Available
+ */
+#define DMA4_CSR_GMRC(x)                         (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_GMRC_SHIFT)) & DMA4_CSR_GMRC_MASK)
+
+#define DMA4_CSR_ECX_MASK                        (0x100U)
+#define DMA4_CSR_ECX_SHIFT                       (8U)
+/*! ECX - Cancel Transfer with Error
+ *  0b0..Normal operation
+ *  0b1..Cancel transfer
+ */
+#define DMA4_CSR_ECX(x)                          (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_ECX_SHIFT)) & DMA4_CSR_ECX_MASK)
+
+#define DMA4_CSR_CX_MASK                         (0x200U)
+#define DMA4_CSR_CX_SHIFT                        (9U)
+/*! CX - Cancel Transfer
+ *  0b0..Normal operation
+ *  0b1..Cancel transfer
+ */
+#define DMA4_CSR_CX(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_CX_SHIFT)) & DMA4_CSR_CX_MASK)
+
+#define DMA4_CSR_VER_MASK                        (0xFF0000U)
+#define DMA4_CSR_VER_SHIFT                       (16U)
+/*! VER - eDMA Version */
+#define DMA4_CSR_VER(x)                          (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_VER_SHIFT)) & DMA4_CSR_VER_MASK)
+
+#define DMA4_CSR_ACTIVE_ID_MASK                  (0x3F000000U)
+#define DMA4_CSR_ACTIVE_ID_SHIFT                 (24U)
+/*! ACTIVE_ID - Active Channel ID */
+#define DMA4_CSR_ACTIVE_ID(x)                    (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_ACTIVE_ID_SHIFT)) & DMA4_CSR_ACTIVE_ID_MASK)
+
+#define DMA4_CSR_ACTIVE_MASK                     (0x80000000U)
+#define DMA4_CSR_ACTIVE_SHIFT                    (31U)
+/*! ACTIVE - DMA Active Status
+ *  0b0..Idle
+ *  0b1..Executing
+ */
+#define DMA4_CSR_ACTIVE(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CSR_ACTIVE_SHIFT)) & DMA4_CSR_ACTIVE_MASK)
+/*! @} */
+
+/*! @name ES - Management Page Error Status */
+/*! @{ */
+
+#define DMA4_ES_DBE_MASK                         (0x1U)
+#define DMA4_ES_DBE_SHIFT                        (0U)
+/*! DBE - Destination Bus Error
+ *  0b0..No error
+ *  0b1..Error
+ */
+#define DMA4_ES_DBE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_DBE_SHIFT)) & DMA4_ES_DBE_MASK)
+
+#define DMA4_ES_SBE_MASK                         (0x2U)
+#define DMA4_ES_SBE_SHIFT                        (1U)
+/*! SBE - Source Bus Error
+ *  0b0..No error
+ *  0b1..Error
+ */
+#define DMA4_ES_SBE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_SBE_SHIFT)) & DMA4_ES_SBE_MASK)
+
+#define DMA4_ES_SGE_MASK                         (0x4U)
+#define DMA4_ES_SGE_SHIFT                        (2U)
+/*! SGE - Scatter/Gather Configuration Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_ES_SGE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_SGE_SHIFT)) & DMA4_ES_SGE_MASK)
+
+#define DMA4_ES_NCE_MASK                         (0x8U)
+#define DMA4_ES_NCE_SHIFT                        (3U)
+/*! NCE - NBYTES or CITER Configuration Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_ES_NCE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_NCE_SHIFT)) & DMA4_ES_NCE_MASK)
+
+#define DMA4_ES_DOE_MASK                         (0x10U)
+#define DMA4_ES_DOE_SHIFT                        (4U)
+/*! DOE - Destination Offset Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_ES_DOE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_DOE_SHIFT)) & DMA4_ES_DOE_MASK)
+
+#define DMA4_ES_DAE_MASK                         (0x20U)
+#define DMA4_ES_DAE_SHIFT                        (5U)
+/*! DAE - Destination Address Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_ES_DAE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_DAE_SHIFT)) & DMA4_ES_DAE_MASK)
+
+#define DMA4_ES_SOE_MASK                         (0x40U)
+#define DMA4_ES_SOE_SHIFT                        (6U)
+/*! SOE - Source Offset Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_ES_SOE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_SOE_SHIFT)) & DMA4_ES_SOE_MASK)
+
+#define DMA4_ES_SAE_MASK                         (0x80U)
+#define DMA4_ES_SAE_SHIFT                        (7U)
+/*! SAE - Source Address Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_ES_SAE(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_SAE_SHIFT)) & DMA4_ES_SAE_MASK)
+
+#define DMA4_ES_ECX_MASK                         (0x100U)
+#define DMA4_ES_ECX_SHIFT                        (8U)
+/*! ECX - Transfer Canceled
+ *  0b0..No canceled transfers
+ *  0b1..Canceled transfers
+ */
+#define DMA4_ES_ECX(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_ECX_SHIFT)) & DMA4_ES_ECX_MASK)
+
+#define DMA4_ES_ERRCHN_MASK                      (0x3F000000U)
+#define DMA4_ES_ERRCHN_SHIFT                     (24U)
+/*! ERRCHN - Error Channel Number or Canceled Channel Number */
+#define DMA4_ES_ERRCHN(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_ES_ERRCHN_SHIFT)) & DMA4_ES_ERRCHN_MASK)
+
+#define DMA4_ES_VLD_MASK                         (0x80000000U)
+#define DMA4_ES_VLD_SHIFT                        (31U)
+/*! VLD - Valid
+ *  0b0..No bits are set
+ *  0b1..At least one bit is set
+ */
+#define DMA4_ES_VLD(x)                           (((uint32_t)(((uint32_t)(x)) << DMA4_ES_VLD_SHIFT)) & DMA4_ES_VLD_MASK)
+/*! @} */
+
+/*! @name INT_LOW - Management Page Interrupt Request Status Register - Low */
+/*! @{ */
+
+#define DMA4_INT_LOW_INT_MASK                    (0xFFFFFFFFU)
+#define DMA4_INT_LOW_INT_SHIFT                   (0U)
+/*! INT - Interrupt Request Status for channels 31 - 0 */
+#define DMA4_INT_LOW_INT(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_INT_LOW_INT_SHIFT)) & DMA4_INT_LOW_INT_MASK)
+/*! @} */
+
+/*! @name INT_HIGH - Management Page Interrupt Request Status Register- High */
+/*! @{ */
+
+#define DMA4_INT_HIGH_INT_MASK                   (0xFFFFFFFFU)
+#define DMA4_INT_HIGH_INT_SHIFT                  (0U)
+/*! INT - Interrupt Request Status for channels 63-32 */
+#define DMA4_INT_HIGH_INT(x)                     (((uint32_t)(((uint32_t)(x)) << DMA4_INT_HIGH_INT_SHIFT)) & DMA4_INT_HIGH_INT_MASK)
+/*! @} */
+
+/*! @name HRS_LOW - Management Page Hardware Request Status Register - Low */
+/*! @{ */
+
+#define DMA4_HRS_LOW_HRS_MASK                    (0xFFFFFFFFU)
+#define DMA4_HRS_LOW_HRS_SHIFT                   (0U)
+/*! HRS - Hardware Request Status for channels 31 - 0
+ *  0b00000000000000000000000000000000..A hardware service request for the channel is not present
+ *  0b00000000000000000000000000000001..A hardware service request for channel 0 is present
+ */
+#define DMA4_HRS_LOW_HRS(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_HRS_LOW_HRS_SHIFT)) & DMA4_HRS_LOW_HRS_MASK)
+/*! @} */
+
+/*! @name HRS_HIGH - Management Page Hardware Request Status Register - High */
+/*! @{ */
+
+#define DMA4_HRS_HIGH_HRS_MASK                   (0xFFFFFFFFU)
+#define DMA4_HRS_HIGH_HRS_SHIFT                  (0U)
+/*! HRS - Hardware Request Status for channels 63-32
+ *  0b00000000000000000000000000000000..A hardware service request for the channel is not present
+ *  0b00000000000000000000000000000001..A hardware service request for channel 0 is present
+ */
+#define DMA4_HRS_HIGH_HRS(x)                     (((uint32_t)(((uint32_t)(x)) << DMA4_HRS_HIGH_HRS_SHIFT)) & DMA4_HRS_HIGH_HRS_MASK)
+/*! @} */
+
+/*! @name CH_GRPRI - Channel Arbitration Group */
+/*! @{ */
+
+#define DMA4_CH_GRPRI_GRPRI_MASK                 (0x3FU)
+#define DMA4_CH_GRPRI_GRPRI_SHIFT                (0U)
+/*! GRPRI - Arbitration Group Per Channel */
+#define DMA4_CH_GRPRI_GRPRI(x)                   (((uint32_t)(((uint32_t)(x)) << DMA4_CH_GRPRI_GRPRI_SHIFT)) & DMA4_CH_GRPRI_GRPRI_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_GRPRI */
+#define DMA4_CH_GRPRI_COUNT                      (64U)
+
+/*! @name CH_CSR - Channel Control and Status */
+/*! @{ */
+
+#define DMA4_CH_CSR_ERQ_MASK                     (0x1U)
+#define DMA4_CH_CSR_ERQ_SHIFT                    (0U)
+/*! ERQ - Enable DMA Request
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CH_CSR_ERQ(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_ERQ_SHIFT)) & DMA4_CH_CSR_ERQ_MASK)
+
+#define DMA4_CH_CSR_EARQ_MASK                    (0x2U)
+#define DMA4_CH_CSR_EARQ_SHIFT                   (1U)
+/*! EARQ - Enable Asynchronous DMA Request
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CH_CSR_EARQ(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_EARQ_SHIFT)) & DMA4_CH_CSR_EARQ_MASK)
+
+#define DMA4_CH_CSR_EEI_MASK                     (0x4U)
+#define DMA4_CH_CSR_EEI_SHIFT                    (2U)
+/*! EEI - Enable Error Interrupt
+ *  0b0..Do not generate
+ *  0b1..Generate
+ */
+#define DMA4_CH_CSR_EEI(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_EEI_SHIFT)) & DMA4_CH_CSR_EEI_MASK)
+
+#define DMA4_CH_CSR_SWAP_MASK                    (0xF000U)
+#define DMA4_CH_CSR_SWAP_SHIFT                   (12U)
+/*! SWAP - Swap Size
+ *  0b0000..Disabled
+ *  0b0001..Read with 8-bit swap
+ *  0b0010..Read with 16-bit swap
+ *  0b0011..Read with 32-bit swap
+ *  0b0100-0b1000..Reserved
+ *  0b1001..Write with 8-bit swap
+ *  0b1010..Write with 16-bit swap
+ *  0b1011..Write with 32-bit swap
+ *  0b1100-0b1111..Reserved
+ */
+#define DMA4_CH_CSR_SWAP(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_SWAP_SHIFT)) & DMA4_CH_CSR_SWAP_MASK)
+
+#define DMA4_CH_CSR_SIGNEXT_MASK                 (0x3F0000U)
+#define DMA4_CH_CSR_SIGNEXT_SHIFT                (16U)
+/*! SIGNEXT - Sign Extension
+ *  0b000000..Sign extension disabled
+ *  0b000001..Nonzero value specifying the sign extend bit position
+ */
+#define DMA4_CH_CSR_SIGNEXT(x)                   (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_SIGNEXT_SHIFT)) & DMA4_CH_CSR_SIGNEXT_MASK)
+
+#define DMA4_CH_CSR_DONE_MASK                    (0x40000000U)
+#define DMA4_CH_CSR_DONE_SHIFT                   (30U)
+/*! DONE - Channel Done
+ *  0b0..No effect
+ *  0b0..Not done
+ *  0b1..Clear the flag
+ *  0b1..Done
+ */
+#define DMA4_CH_CSR_DONE(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_DONE_SHIFT)) & DMA4_CH_CSR_DONE_MASK)
+
+#define DMA4_CH_CSR_ACTIVE_MASK                  (0x80000000U)
+#define DMA4_CH_CSR_ACTIVE_SHIFT                 (31U)
+/*! ACTIVE - Channel Active */
+#define DMA4_CH_CSR_ACTIVE(x)                    (((uint32_t)(((uint32_t)(x)) << DMA4_CH_CSR_ACTIVE_SHIFT)) & DMA4_CH_CSR_ACTIVE_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_CSR */
+#define DMA4_CH_CSR_COUNT                        (64U)
+
+/*! @name CH_ES - Channel Error Status */
+/*! @{ */
+
+#define DMA4_CH_ES_DBE_MASK                      (0x1U)
+#define DMA4_CH_ES_DBE_SHIFT                     (0U)
+/*! DBE - Destination Bus Error
+ *  0b0..No error
+ *  0b1..Error
+ */
+#define DMA4_CH_ES_DBE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_DBE_SHIFT)) & DMA4_CH_ES_DBE_MASK)
+
+#define DMA4_CH_ES_SBE_MASK                      (0x2U)
+#define DMA4_CH_ES_SBE_SHIFT                     (1U)
+/*! SBE - Source Bus Error
+ *  0b0..No error
+ *  0b1..Error
+ */
+#define DMA4_CH_ES_SBE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_SBE_SHIFT)) & DMA4_CH_ES_SBE_MASK)
+
+#define DMA4_CH_ES_SGE_MASK                      (0x4U)
+#define DMA4_CH_ES_SGE_SHIFT                     (2U)
+/*! SGE - Scatter/Gather Configuration Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_CH_ES_SGE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_SGE_SHIFT)) & DMA4_CH_ES_SGE_MASK)
+
+#define DMA4_CH_ES_NCE_MASK                      (0x8U)
+#define DMA4_CH_ES_NCE_SHIFT                     (3U)
+/*! NCE - NBYTES/CITER Configuration Error
+ *  0b0..No error occurred
+ *  0b1..Error occurred
+ */
+#define DMA4_CH_ES_NCE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_NCE_SHIFT)) & DMA4_CH_ES_NCE_MASK)
+
+#define DMA4_CH_ES_DOE_MASK                      (0x10U)
+#define DMA4_CH_ES_DOE_SHIFT                     (4U)
+/*! DOE - Destination Offset Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_CH_ES_DOE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_DOE_SHIFT)) & DMA4_CH_ES_DOE_MASK)
+
+#define DMA4_CH_ES_DAE_MASK                      (0x20U)
+#define DMA4_CH_ES_DAE_SHIFT                     (5U)
+/*! DAE - Destination Address Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_CH_ES_DAE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_DAE_SHIFT)) & DMA4_CH_ES_DAE_MASK)
+
+#define DMA4_CH_ES_SOE_MASK                      (0x40U)
+#define DMA4_CH_ES_SOE_SHIFT                     (6U)
+/*! SOE - Source Offset Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_CH_ES_SOE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_SOE_SHIFT)) & DMA4_CH_ES_SOE_MASK)
+
+#define DMA4_CH_ES_SAE_MASK                      (0x80U)
+#define DMA4_CH_ES_SAE_SHIFT                     (7U)
+/*! SAE - Source Address Error
+ *  0b0..No error detected
+ *  0b1..Error detected
+ */
+#define DMA4_CH_ES_SAE(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_SAE_SHIFT)) & DMA4_CH_ES_SAE_MASK)
+
+#define DMA4_CH_ES_ERR_MASK                      (0x80000000U)
+#define DMA4_CH_ES_ERR_SHIFT                     (31U)
+/*! ERR - Error in Channel
+ *  0b0..No effect
+ *  0b0..Not occurred
+ *  0b1..Clear the flag
+ *  0b1..Occurred
+ */
+#define DMA4_CH_ES_ERR(x)                        (((uint32_t)(((uint32_t)(x)) << DMA4_CH_ES_ERR_SHIFT)) & DMA4_CH_ES_ERR_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_ES */
+#define DMA4_CH_ES_COUNT                         (64U)
+
+/*! @name CH_INT - Channel Interrupt Status */
+/*! @{ */
+
+#define DMA4_CH_INT_INT_MASK                     (0x1U)
+#define DMA4_CH_INT_INT_SHIFT                    (0U)
+/*! INT - Interrupt Request
+ *  0b0..Cleared
+ *  0b0..No effect
+ *  0b1..Active
+ *  0b1..Clear the flag
+ */
+#define DMA4_CH_INT_INT(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_INT_INT_SHIFT)) & DMA4_CH_INT_INT_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_INT */
+#define DMA4_CH_INT_COUNT                        (64U)
+
+/*! @name CH_SBR - Channel System Bus */
+/*! @{ */
+
+#define DMA4_CH_SBR_MID_MASK                     (0xFU)
+#define DMA4_CH_SBR_MID_SHIFT                    (0U)
+/*! MID - Master ID */
+#define DMA4_CH_SBR_MID(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_SBR_MID_SHIFT)) & DMA4_CH_SBR_MID_MASK)
+
+#define DMA4_CH_SBR_INSTR_MASK                   (0x2000U)
+#define DMA4_CH_SBR_INSTR_SHIFT                  (13U)
+/*! INSTR - Instruction/Data Access
+ *  0b0..Data access for DMA transfers
+ *  0b1..Instruction access for DMA transfers
+ */
+#define DMA4_CH_SBR_INSTR(x)                     (((uint32_t)(((uint32_t)(x)) << DMA4_CH_SBR_INSTR_SHIFT)) & DMA4_CH_SBR_INSTR_MASK)
+
+#define DMA4_CH_SBR_SEC_MASK                     (0x4000U)
+#define DMA4_CH_SBR_SEC_SHIFT                    (14U)
+/*! SEC - Security Level
+ *  0b0..Nonsecure protection level for DMA transfers
+ *  0b1..Secure protection level for DMA transfers
+ */
+#define DMA4_CH_SBR_SEC(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_SBR_SEC_SHIFT)) & DMA4_CH_SBR_SEC_MASK)
+
+#define DMA4_CH_SBR_PAL_MASK                     (0x8000U)
+#define DMA4_CH_SBR_PAL_SHIFT                    (15U)
+/*! PAL - Privileged Access Level
+ *  0b0..User protection level for DMA transfers
+ *  0b1..Privileged protection level for DMA transfers
+ */
+#define DMA4_CH_SBR_PAL(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_SBR_PAL_SHIFT)) & DMA4_CH_SBR_PAL_MASK)
+
+#define DMA4_CH_SBR_EMI_MASK                     (0x10000U)
+#define DMA4_CH_SBR_EMI_SHIFT                    (16U)
+/*! EMI - Enable Master ID Replication
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CH_SBR_EMI(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_SBR_EMI_SHIFT)) & DMA4_CH_SBR_EMI_MASK)
+
+#define DMA4_CH_SBR_ATTR_MASK                    (0x7E0000U)
+#define DMA4_CH_SBR_ATTR_SHIFT                   (17U)
+/*! ATTR - Attribute Output */
+#define DMA4_CH_SBR_ATTR(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_CH_SBR_ATTR_SHIFT)) & DMA4_CH_SBR_ATTR_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_SBR */
+#define DMA4_CH_SBR_COUNT                        (64U)
+
+/*! @name CH_PRI - Channel Priority */
+/*! @{ */
+
+#define DMA4_CH_PRI_APL_MASK                     (0x7U)
+#define DMA4_CH_PRI_APL_SHIFT                    (0U)
+/*! APL - Arbitration Priority Level */
+#define DMA4_CH_PRI_APL(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_PRI_APL_SHIFT)) & DMA4_CH_PRI_APL_MASK)
+
+#define DMA4_CH_PRI_DPA_MASK                     (0x40000000U)
+#define DMA4_CH_PRI_DPA_SHIFT                    (30U)
+/*! DPA - Disable Preempt Ability
+ *  0b0..Can suspend a lower-priority channel
+ *  0b1..Cannot suspend any other channel
+ */
+#define DMA4_CH_PRI_DPA(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_PRI_DPA_SHIFT)) & DMA4_CH_PRI_DPA_MASK)
+
+#define DMA4_CH_PRI_ECP_MASK                     (0x80000000U)
+#define DMA4_CH_PRI_ECP_SHIFT                    (31U)
+/*! ECP - Enable Channel Preemption
+ *  0b0..Do not suspend
+ *  0b1..Suspend temporarily
+ */
+#define DMA4_CH_PRI_ECP(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_PRI_ECP_SHIFT)) & DMA4_CH_PRI_ECP_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_PRI */
+#define DMA4_CH_PRI_COUNT                        (64U)
+
+/*! @name CH_MUX - Channel Multiplexor Configuration */
+/*! @{ */
+
+#define DMA4_CH_MUX_SRC_MASK                     (0x7FU)
+#define DMA4_CH_MUX_SRC_SHIFT                    (0U)
+/*! SRC - Service Request Source */
+#define DMA4_CH_MUX_SRC(x)                       (((uint32_t)(((uint32_t)(x)) << DMA4_CH_MUX_SRC_SHIFT)) & DMA4_CH_MUX_SRC_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_MUX */
+#define DMA4_CH_MUX_COUNT                        (64U)
+
+/*! @name CH_MATTR - Memory Attributes */
+/*! @{ */
+
+#define DMA4_CH_MATTR_RCACHE_MASK                (0xFU)
+#define DMA4_CH_MATTR_RCACHE_SHIFT               (0U)
+/*! RCACHE - Read Cache Attributes */
+#define DMA4_CH_MATTR_RCACHE(x)                  (((uint16_t)(((uint16_t)(x)) << DMA4_CH_MATTR_RCACHE_SHIFT)) & DMA4_CH_MATTR_RCACHE_MASK)
+
+#define DMA4_CH_MATTR_WCACHE_MASK                (0xF0U)
+#define DMA4_CH_MATTR_WCACHE_SHIFT               (4U)
+/*! WCACHE - Write Cache Attributes */
+#define DMA4_CH_MATTR_WCACHE(x)                  (((uint16_t)(((uint16_t)(x)) << DMA4_CH_MATTR_WCACHE_SHIFT)) & DMA4_CH_MATTR_WCACHE_MASK)
+/*! @} */
+
+/* The count of DMA4_CH_MATTR */
+#define DMA4_CH_MATTR_COUNT                      (64U)
+
+/*! @name SADDR - TCD Source Address */
+/*! @{ */
+
+#define DMA4_SADDR_SADDR_MASK                    (0xFFFFFFFFU)
+#define DMA4_SADDR_SADDR_SHIFT                   (0U)
+/*! SADDR - Source Address */
+#define DMA4_SADDR_SADDR(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_SADDR_SADDR_SHIFT)) & DMA4_SADDR_SADDR_MASK)
+/*! @} */
+
+/* The count of DMA4_SADDR */
+#define DMA4_SADDR_COUNT                         (64U)
+
+/*! @name SOFF - TCD Signed Source Address Offset */
+/*! @{ */
+
+#define DMA4_SOFF_SOFF_MASK                      (0xFFFFU)
+#define DMA4_SOFF_SOFF_SHIFT                     (0U)
+/*! SOFF - Source Address Signed Offset */
+#define DMA4_SOFF_SOFF(x)                        (((uint16_t)(((uint16_t)(x)) << DMA4_SOFF_SOFF_SHIFT)) & DMA4_SOFF_SOFF_MASK)
+/*! @} */
+
+/* The count of DMA4_SOFF */
+#define DMA4_SOFF_COUNT                          (64U)
+
+/*! @name ATTR - TCD Transfer Attributes */
+/*! @{ */
+
+#define DMA4_ATTR_DSIZE_MASK                     (0x7U)
+#define DMA4_ATTR_DSIZE_SHIFT                    (0U)
+/*! DSIZE - Destination Data Transfer Size
+ *  0b000..8-bit
+ *  0b001..16-bit
+ *  0b010..32-bit
+ *  0b011..64-bit
+ *  0b100..16-byte
+ *  0b101..32-byte
+ *  0b110..64-byte
+ *  0b111..128-byte
+ */
+#define DMA4_ATTR_DSIZE(x)                       (((uint16_t)(((uint16_t)(x)) << DMA4_ATTR_DSIZE_SHIFT)) & DMA4_ATTR_DSIZE_MASK)
+
+#define DMA4_ATTR_DMOD_MASK                      (0xF8U)
+#define DMA4_ATTR_DMOD_SHIFT                     (3U)
+/*! DMOD - Destination Address Modulo */
+#define DMA4_ATTR_DMOD(x)                        (((uint16_t)(((uint16_t)(x)) << DMA4_ATTR_DMOD_SHIFT)) & DMA4_ATTR_DMOD_MASK)
+
+#define DMA4_ATTR_SSIZE_MASK                     (0x700U)
+#define DMA4_ATTR_SSIZE_SHIFT                    (8U)
+/*! SSIZE - Source Data Transfer Size
+ *  0b000..8-bit
+ *  0b001..16-bit
+ *  0b010..32-bit
+ *  0b011..64-bit
+ *  0b100..16-byte
+ *  0b101..32-byte
+ *  0b110..64-byte
+ *  0b111..128-byte
+ */
+#define DMA4_ATTR_SSIZE(x)                       (((uint16_t)(((uint16_t)(x)) << DMA4_ATTR_SSIZE_SHIFT)) & DMA4_ATTR_SSIZE_MASK)
+
+#define DMA4_ATTR_SMOD_MASK                      (0xF800U)
+#define DMA4_ATTR_SMOD_SHIFT                     (11U)
+/*! SMOD - Source Address Modulo
+ *  0b00000..Disable
+ *  0b00001..Enable
+ */
+#define DMA4_ATTR_SMOD(x)                        (((uint16_t)(((uint16_t)(x)) << DMA4_ATTR_SMOD_SHIFT)) & DMA4_ATTR_SMOD_MASK)
+/*! @} */
+
+/* The count of DMA4_ATTR */
+#define DMA4_ATTR_COUNT                          (64U)
+
+/*! @name NBYTES_MLOFFNO - TCD Transfer Size Without Minor Loop Offsets */
+/*! @{ */
+
+#define DMA4_NBYTES_MLOFFNO_NBYTES_MASK          (0x3FFFFFFFU)
+#define DMA4_NBYTES_MLOFFNO_NBYTES_SHIFT         (0U)
+/*! NBYTES - Number of Bytes to Transfer Per Service Request */
+#define DMA4_NBYTES_MLOFFNO_NBYTES(x)            (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFNO_NBYTES_SHIFT)) & DMA4_NBYTES_MLOFFNO_NBYTES_MASK)
+
+#define DMA4_NBYTES_MLOFFNO_DMLOE_MASK           (0x40000000U)
+#define DMA4_NBYTES_MLOFFNO_DMLOE_SHIFT          (30U)
+/*! DMLOE - Destination Minor Loop Offset Enable
+ *  0b0..Do not apply
+ *  0b1..Apply
+ */
+#define DMA4_NBYTES_MLOFFNO_DMLOE(x)             (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFNO_DMLOE_SHIFT)) & DMA4_NBYTES_MLOFFNO_DMLOE_MASK)
+
+#define DMA4_NBYTES_MLOFFNO_SMLOE_MASK           (0x80000000U)
+#define DMA4_NBYTES_MLOFFNO_SMLOE_SHIFT          (31U)
+/*! SMLOE - Source Minor Loop Offset Enable
+ *  0b0..Do not apply
+ *  0b1..Apply
+ */
+#define DMA4_NBYTES_MLOFFNO_SMLOE(x)             (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFNO_SMLOE_SHIFT)) & DMA4_NBYTES_MLOFFNO_SMLOE_MASK)
+/*! @} */
+
+/* The count of DMA4_NBYTES_MLOFFNO */
+#define DMA4_NBYTES_MLOFFNO_COUNT                (64U)
+
+/*! @name NBYTES_MLOFFYES - TCD Transfer Size with Minor Loop Offsets */
+/*! @{ */
+
+#define DMA4_NBYTES_MLOFFYES_NBYTES_MASK         (0x3FFU)
+#define DMA4_NBYTES_MLOFFYES_NBYTES_SHIFT        (0U)
+/*! NBYTES - Number of Bytes to Transfer Per Service Request */
+#define DMA4_NBYTES_MLOFFYES_NBYTES(x)           (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFYES_NBYTES_SHIFT)) & DMA4_NBYTES_MLOFFYES_NBYTES_MASK)
+
+#define DMA4_NBYTES_MLOFFYES_MLOFF_MASK          (0x3FFFFC00U)
+#define DMA4_NBYTES_MLOFFYES_MLOFF_SHIFT         (10U)
+/*! MLOFF - Minor Loop Offset */
+#define DMA4_NBYTES_MLOFFYES_MLOFF(x)            (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFYES_MLOFF_SHIFT)) & DMA4_NBYTES_MLOFFYES_MLOFF_MASK)
+
+#define DMA4_NBYTES_MLOFFYES_DMLOE_MASK          (0x40000000U)
+#define DMA4_NBYTES_MLOFFYES_DMLOE_SHIFT         (30U)
+/*! DMLOE - Destination Minor Loop Offset Enable
+ *  0b0..Do not apply
+ *  0b1..Apply
+ */
+#define DMA4_NBYTES_MLOFFYES_DMLOE(x)            (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFYES_DMLOE_SHIFT)) & DMA4_NBYTES_MLOFFYES_DMLOE_MASK)
+
+#define DMA4_NBYTES_MLOFFYES_SMLOE_MASK          (0x80000000U)
+#define DMA4_NBYTES_MLOFFYES_SMLOE_SHIFT         (31U)
+/*! SMLOE - Source Minor Loop Offset Enable
+ *  0b0..Do not apply
+ *  0b1..Apply
+ */
+#define DMA4_NBYTES_MLOFFYES_SMLOE(x)            (((uint32_t)(((uint32_t)(x)) << DMA4_NBYTES_MLOFFYES_SMLOE_SHIFT)) & DMA4_NBYTES_MLOFFYES_SMLOE_MASK)
+/*! @} */
+
+/* The count of DMA4_NBYTES_MLOFFYES */
+#define DMA4_NBYTES_MLOFFYES_COUNT               (64U)
+
+/*! @name SLAST_SDA - TCD Last Source Address Adjustment and Store DADDR Address */
+/*! @{ */
+
+#define DMA4_SLAST_SDA_SLAST_SDA_MASK            (0xFFFFFFFFU)
+#define DMA4_SLAST_SDA_SLAST_SDA_SHIFT           (0U)
+/*! SLAST_SDA - Last Source Address Adjustment and Store DADDR Address */
+#define DMA4_SLAST_SDA_SLAST_SDA(x)              (((uint32_t)(((uint32_t)(x)) << DMA4_SLAST_SDA_SLAST_SDA_SHIFT)) & DMA4_SLAST_SDA_SLAST_SDA_MASK)
+/*! @} */
+
+/* The count of DMA4_SLAST_SDA */
+#define DMA4_SLAST_SDA_COUNT                     (64U)
+
+/*! @name DADDR - TCD Destination Address */
+/*! @{ */
+
+#define DMA4_DADDR_DADDR_MASK                    (0xFFFFFFFFU)
+#define DMA4_DADDR_DADDR_SHIFT                   (0U)
+/*! DADDR - Destination Address */
+#define DMA4_DADDR_DADDR(x)                      (((uint32_t)(((uint32_t)(x)) << DMA4_DADDR_DADDR_SHIFT)) & DMA4_DADDR_DADDR_MASK)
+/*! @} */
+
+/* The count of DMA4_DADDR */
+#define DMA4_DADDR_COUNT                         (64U)
+
+/*! @name DOFF - TCD Signed Destination Address Offset */
+/*! @{ */
+
+#define DMA4_DOFF_DOFF_MASK                      (0xFFFFU)
+#define DMA4_DOFF_DOFF_SHIFT                     (0U)
+/*! DOFF - Destination Address Signed Offset */
+#define DMA4_DOFF_DOFF(x)                        (((uint16_t)(((uint16_t)(x)) << DMA4_DOFF_DOFF_SHIFT)) & DMA4_DOFF_DOFF_MASK)
+/*! @} */
+
+/* The count of DMA4_DOFF */
+#define DMA4_DOFF_COUNT                          (64U)
+
+/*! @name CITER_ELINKNO - TCD Current Major Loop Count (Minor Loop Channel Linking Disabled) */
+/*! @{ */
+
+#define DMA4_CITER_ELINKNO_CITER_MASK            (0x7FFFU)
+#define DMA4_CITER_ELINKNO_CITER_SHIFT           (0U)
+/*! CITER - Current Major Iteration Count */
+#define DMA4_CITER_ELINKNO_CITER(x)              (((uint16_t)(((uint16_t)(x)) << DMA4_CITER_ELINKNO_CITER_SHIFT)) & DMA4_CITER_ELINKNO_CITER_MASK)
+
+#define DMA4_CITER_ELINKNO_ELINK_MASK            (0x8000U)
+#define DMA4_CITER_ELINKNO_ELINK_SHIFT           (15U)
+/*! ELINK - Enable Channel-to-Channel Linking after Minor Loop Completion
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CITER_ELINKNO_ELINK(x)              (((uint16_t)(((uint16_t)(x)) << DMA4_CITER_ELINKNO_ELINK_SHIFT)) & DMA4_CITER_ELINKNO_ELINK_MASK)
+/*! @} */
+
+/* The count of DMA4_CITER_ELINKNO */
+#define DMA4_CITER_ELINKNO_COUNT                 (64U)
+
+/*! @name CITER_ELINKYES - TCD Current Major Loop Count (Minor Loop Channel Linking Enabled) */
+/*! @{ */
+
+#define DMA4_CITER_ELINKYES_CITER_MASK           (0x1FFU)
+#define DMA4_CITER_ELINKYES_CITER_SHIFT          (0U)
+/*! CITER - Current Major Iteration Count */
+#define DMA4_CITER_ELINKYES_CITER(x)             (((uint16_t)(((uint16_t)(x)) << DMA4_CITER_ELINKYES_CITER_SHIFT)) & DMA4_CITER_ELINKYES_CITER_MASK)
+
+#define DMA4_CITER_ELINKYES_LINKCH_MASK          (0x7E00U)
+#define DMA4_CITER_ELINKYES_LINKCH_SHIFT         (9U)
+/*! LINKCH - Minor Loop Link Channel Number */
+#define DMA4_CITER_ELINKYES_LINKCH(x)            (((uint16_t)(((uint16_t)(x)) << DMA4_CITER_ELINKYES_LINKCH_SHIFT)) & DMA4_CITER_ELINKYES_LINKCH_MASK)
+
+#define DMA4_CITER_ELINKYES_ELINK_MASK           (0x8000U)
+#define DMA4_CITER_ELINKYES_ELINK_SHIFT          (15U)
+/*! ELINK - Enable Channel-to-Channel Linking on Minor-Loop Complete
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CITER_ELINKYES_ELINK(x)             (((uint16_t)(((uint16_t)(x)) << DMA4_CITER_ELINKYES_ELINK_SHIFT)) & DMA4_CITER_ELINKYES_ELINK_MASK)
+/*! @} */
+
+/* The count of DMA4_CITER_ELINKYES */
+#define DMA4_CITER_ELINKYES_COUNT                (64U)
+
+/*! @name DLAST_SGA - TCD Last Destination Address Adjustment / Scatter Gather Address */
+/*! @{ */
+
+#define DMA4_DLAST_SGA_DLAST_SGA_MASK            (0xFFFFFFFFU)
+#define DMA4_DLAST_SGA_DLAST_SGA_SHIFT           (0U)
+/*! DLAST_SGA - Final Destination Address Adjustment and Scatter/Gather Address */
+#define DMA4_DLAST_SGA_DLAST_SGA(x)              (((uint32_t)(((uint32_t)(x)) << DMA4_DLAST_SGA_DLAST_SGA_SHIFT)) & DMA4_DLAST_SGA_DLAST_SGA_MASK)
+/*! @} */
+
+/* The count of DMA4_DLAST_SGA */
+#define DMA4_DLAST_SGA_COUNT                     (64U)
+
+/*! @name CSR - TCD Control and Status */
+/*! @{ */
+
+#define DMA4_CSR_START_MASK                      (0x1U)
+#define DMA4_CSR_START_SHIFT                     (0U)
+/*! START - Channel Start
+ *  0b0..Do not start
+ *  0b1..Start
+ */
+#define DMA4_CSR_START(x)                        (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_START_SHIFT)) & DMA4_CSR_START_MASK)
+
+#define DMA4_CSR_INTMAJOR_MASK                   (0x2U)
+#define DMA4_CSR_INTMAJOR_SHIFT                  (1U)
+/*! INTMAJOR - Interrupt Enable after Major Iteration Count Completion
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_INTMAJOR(x)                     (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_INTMAJOR_SHIFT)) & DMA4_CSR_INTMAJOR_MASK)
+
+#define DMA4_CSR_INTHALF_MASK                    (0x4U)
+#define DMA4_CSR_INTHALF_SHIFT                   (2U)
+/*! INTHALF - Interrupt Enable after Major Counter is Half Complete
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_INTHALF(x)                      (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_INTHALF_SHIFT)) & DMA4_CSR_INTHALF_MASK)
+
+#define DMA4_CSR_DREQ_MASK                       (0x8U)
+#define DMA4_CSR_DREQ_SHIFT                      (3U)
+/*! DREQ - Disable Request
+ *  0b0..No operation
+ *  0b1..Clear ERQ
+ */
+#define DMA4_CSR_DREQ(x)                         (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_DREQ_SHIFT)) & DMA4_CSR_DREQ_MASK)
+
+#define DMA4_CSR_ESG_MASK                        (0x10U)
+#define DMA4_CSR_ESG_SHIFT                       (4U)
+/*! ESG - Enable Scatter/Gather Processing
+ *  0b0..Normal format
+ *  0b1..Scatter/gather format
+ */
+#define DMA4_CSR_ESG(x)                          (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_ESG_SHIFT)) & DMA4_CSR_ESG_MASK)
+
+#define DMA4_CSR_MAJORELINK_MASK                 (0x20U)
+#define DMA4_CSR_MAJORELINK_SHIFT                (5U)
+/*! MAJORELINK - Enable Channel-to-Channel Linking on Major Loop Complete
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_MAJORELINK(x)                   (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_MAJORELINK_SHIFT)) & DMA4_CSR_MAJORELINK_MASK)
+
+#define DMA4_CSR_EEOP_MASK                       (0x40U)
+#define DMA4_CSR_EEOP_SHIFT                      (6U)
+/*! EEOP - Enable End-of-Packet Processing
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_EEOP(x)                         (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_EEOP_SHIFT)) & DMA4_CSR_EEOP_MASK)
+
+#define DMA4_CSR_ESDA_MASK                       (0x80U)
+#define DMA4_CSR_ESDA_SHIFT                      (7U)
+/*! ESDA - Enable Store Destination Address
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_CSR_ESDA(x)                         (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_ESDA_SHIFT)) & DMA4_CSR_ESDA_MASK)
+
+#define DMA4_CSR_MAJORLINKCH_MASK                (0x3F00U)
+#define DMA4_CSR_MAJORLINKCH_SHIFT               (8U)
+/*! MAJORLINKCH - Major Loop Link Channel Number */
+#define DMA4_CSR_MAJORLINKCH(x)                  (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_MAJORLINKCH_SHIFT)) & DMA4_CSR_MAJORLINKCH_MASK)
+
+#define DMA4_CSR_TMC_MASK                        (0xC000U)
+#define DMA4_CSR_TMC_SHIFT                       (14U)
+/*! TMC - Transfer Mode Control
+ *  0b00..Read/Write
+ *  0b01..Read-Only
+ *  0b10..Write-Only
+ *  0b11..Reserved
+ */
+#define DMA4_CSR_TMC(x)                          (((uint16_t)(((uint16_t)(x)) << DMA4_CSR_TMC_SHIFT)) & DMA4_CSR_TMC_MASK)
+/*! @} */
+
+/* The count of DMA4_CSR */
+#define DMA4_CSR_COUNT                           (64U)
+
+/*! @name BITER_ELINKNO - TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled) */
+/*! @{ */
+
+#define DMA4_BITER_ELINKNO_BITER_MASK            (0x7FFFU)
+#define DMA4_BITER_ELINKNO_BITER_SHIFT           (0U)
+/*! BITER - Starting Major Iteration Count */
+#define DMA4_BITER_ELINKNO_BITER(x)              (((uint16_t)(((uint16_t)(x)) << DMA4_BITER_ELINKNO_BITER_SHIFT)) & DMA4_BITER_ELINKNO_BITER_MASK)
+
+#define DMA4_BITER_ELINKNO_ELINK_MASK            (0x8000U)
+#define DMA4_BITER_ELINKNO_ELINK_SHIFT           (15U)
+/*! ELINK - Channel-to-Channel Linking after Minor Loop Completion
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_BITER_ELINKNO_ELINK(x)              (((uint16_t)(((uint16_t)(x)) << DMA4_BITER_ELINKNO_ELINK_SHIFT)) & DMA4_BITER_ELINKNO_ELINK_MASK)
+/*! @} */
+
+/* The count of DMA4_BITER_ELINKNO */
+#define DMA4_BITER_ELINKNO_COUNT                 (64U)
+
+/*! @name BITER_ELINKYES - TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled) */
+/*! @{ */
+
+#define DMA4_BITER_ELINKYES_BITER_MASK           (0x1FFU)
+#define DMA4_BITER_ELINKYES_BITER_SHIFT          (0U)
+/*! BITER - Starting Major Iteration Count */
+#define DMA4_BITER_ELINKYES_BITER(x)             (((uint16_t)(((uint16_t)(x)) << DMA4_BITER_ELINKYES_BITER_SHIFT)) & DMA4_BITER_ELINKYES_BITER_MASK)
+
+#define DMA4_BITER_ELINKYES_LINKCH_MASK          (0x7E00U)
+#define DMA4_BITER_ELINKYES_LINKCH_SHIFT         (9U)
+/*! LINKCH - Link Channel Number */
+#define DMA4_BITER_ELINKYES_LINKCH(x)            (((uint16_t)(((uint16_t)(x)) << DMA4_BITER_ELINKYES_LINKCH_SHIFT)) & DMA4_BITER_ELINKYES_LINKCH_MASK)
+
+#define DMA4_BITER_ELINKYES_ELINK_MASK           (0x8000U)
+#define DMA4_BITER_ELINKYES_ELINK_SHIFT          (15U)
+/*! ELINK - Channel-to-Channel Linking after Minor Loop Completion
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define DMA4_BITER_ELINKYES_ELINK(x)             (((uint16_t)(((uint16_t)(x)) << DMA4_BITER_ELINKYES_ELINK_SHIFT)) & DMA4_BITER_ELINKYES_ELINK_MASK)
+/*! @} */
+
+/* The count of DMA4_BITER_ELINKYES */
+#define DMA4_BITER_ELINKYES_COUNT                (64U)
+
+
+/*!
+ * @}
+ */ /* end of group DMA4_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group DMA4_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* PERI_DMA4_H_ */
+

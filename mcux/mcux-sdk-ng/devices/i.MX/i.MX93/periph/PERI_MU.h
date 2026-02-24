@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -172,16 +172,6 @@
 #else
   #error Not supported compiler type
 #endif
-/*!
- * @brief Core boot mode.
- */
-typedef enum _mu_core_boot_mode
-{
-    kMU_CoreBootFromAddr0 = 0x00U, /*!< Boot from 0x00.      */
-    kMU_CoreBootFromFlash = 0x01U, /*!< Boot from Flash base. */
-    kMU_CoreBootFromItcm  = 0x02U, /*!< Boot from ITCM base. */
-} mu_core_boot_mode_t;
-
 
 /* ----------------------------------------------------------------------------
    -- MU Peripheral Access Layer
@@ -199,28 +189,28 @@ typedef enum _mu_core_boot_mode
 /** MU - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VER;                               /**< Version ID, offset: 0x0 */
-  __I  uint32_t PAR;                               /**< Parameter Register, offset: 0x4 */
-  __IO uint32_t CR;                                /**< Control Register, offset: 0x8 */
-  __IO uint32_t SR;                                /**< Status Register, offset: 0xC */
-  __IO uint32_t CCR0;                              /**< Core Control Register 0, offset: 0x10 */
-  __IO uint32_t CIER0;                             /**< Core Interrupt Enable Register 0, offset: 0x14 */
-  __IO uint32_t CSSR0;                             /**< Core Sticky Status Register 0, offset: 0x18 */
+  __I  uint32_t PAR;                               /**< Parameter, offset: 0x4 */
+  __IO uint32_t CR;                                /**< Control, offset: 0x8 */
+  __IO uint32_t SR;                                /**< Status, offset: 0xC */
+  __IO uint32_t CCR0;                              /**< Core Control 0, offset: 0x10 */
+  __IO uint32_t CIER0;                             /**< Core Interrupt Enable 0, offset: 0x14 */
+  __IO uint32_t CSSR0;                             /**< Core Sticky Status 0, offset: 0x18 */
        uint8_t RESERVED_0[228];
-  __IO uint32_t FCR;                               /**< Flag Control Register, offset: 0x100 */
-  __I  uint32_t FSR;                               /**< Flag Status Register, offset: 0x104 */
+  __IO uint32_t FCR;                               /**< Flag Control, offset: 0x100 */
+  __I  uint32_t FSR;                               /**< Flag Status, offset: 0x104 */
        uint8_t RESERVED_1[8];
-  __IO uint32_t GIER;                              /**< General-purpose Interrupt Enable Register, offset: 0x110 */
-  __IO uint32_t GCR;                               /**< General-purpose Control Register, offset: 0x114 */
-  __IO uint32_t GSR;                               /**< General-purpose Status Register, offset: 0x118 */
+  __IO uint32_t GIER;                              /**< General-Purpose Interrupt Enable, offset: 0x110 */
+  __IO uint32_t GCR;                               /**< General-Purpose Control, offset: 0x114 */
+  __IO uint32_t GSR;                               /**< General-purpose Status, offset: 0x118 */
        uint8_t RESERVED_2[4];
-  __IO uint32_t TCR;                               /**< Transmit Control Register, offset: 0x120 */
-  __I  uint32_t TSR;                               /**< Transmit Status Register, offset: 0x124 */
-  __IO uint32_t RCR;                               /**< Receive Control Register, offset: 0x128 */
-  __I  uint32_t RSR;                               /**< Receive Status Register, offset: 0x12C */
+  __IO uint32_t TCR;                               /**< Transmit Control, offset: 0x120 */
+  __I  uint32_t TSR;                               /**< Transmit Status, offset: 0x124 */
+  __IO uint32_t RCR;                               /**< Receive Control, offset: 0x128 */
+  __I  uint32_t RSR;                               /**< Receive Status, offset: 0x12C */
        uint8_t RESERVED_3[208];
-  __IO uint32_t TR[MU_TR_COUNT];                   /**< Transmit Register, array offset: 0x200, array step: 0x4 */
+  __IO uint32_t TR[MU_TR_COUNT];                   /**< Transmit, array offset: 0x200, array step: 0x4 */
        uint8_t RESERVED_4[112];
-  __I  uint32_t RR[MU_RR_COUNT];                   /**< Receive Register, array offset: 0x280, array step: 0x4 */
+  __I  uint32_t RR[MU_RR_COUNT];                   /**< Receive, array offset: 0x280, array step: 0x4 */
 } MU_Type;
 
 /* ----------------------------------------------------------------------------
@@ -251,7 +241,7 @@ typedef struct {
 #define MU_VER_MAJOR(x)                          (((uint32_t)(((uint32_t)(x)) << MU_VER_MAJOR_SHIFT)) & MU_VER_MAJOR_MASK)
 /*! @} */
 
-/*! @name PAR - Parameter Register */
+/*! @name PAR - Parameter */
 /*! @{ */
 
 #define MU_PAR_TR_NUM_MASK                       (0xFFU)
@@ -266,7 +256,7 @@ typedef struct {
 
 #define MU_PAR_GIR_NUM_MASK                      (0xFF0000U)
 #define MU_PAR_GIR_NUM_SHIFT                     (16U)
-/*! GIR_NUM - General-purpose Interrupt Request Number */
+/*! GIR_NUM - General-Purpose Interrupt Request Number */
 #define MU_PAR_GIR_NUM(x)                        (((uint32_t)(((uint32_t)(x)) << MU_PAR_GIR_NUM_SHIFT)) & MU_PAR_GIR_NUM_MASK)
 
 #define MU_PAR_FLAG_WIDTH_MASK                   (0xFF000000U)
@@ -275,7 +265,7 @@ typedef struct {
 #define MU_PAR_FLAG_WIDTH(x)                     (((uint32_t)(((uint32_t)(x)) << MU_PAR_FLAG_WIDTH_SHIFT)) & MU_PAR_FLAG_WIDTH_MASK)
 /*! @} */
 
-/*! @name CR - Control Register */
+/*! @name CR - Control */
 /*! @{ */
 
 #define MU_CR_MUR_MASK                           (0x1U)
@@ -295,22 +285,24 @@ typedef struct {
 #define MU_CR_MURIE(x)                           (((uint32_t)(((uint32_t)(x)) << MU_CR_MURIE_SHIFT)) & MU_CR_MURIE_MASK)
 /*! @} */
 
-/*! @name SR - Status Register */
+/*! @name SR - Status */
 /*! @{ */
 
 #define MU_SR_MURS_MASK                          (0x1U)
 #define MU_SR_MURS_SHIFT                         (0U)
 /*! MURS - MUA and MUB Reset State
- *  0b0..MUA and MUB are out of reset state.
- *  0b1..MUA or MUB is in reset state.
+ *  0b0..Out of reset
+ *  0b1..In reset
  */
 #define MU_SR_MURS(x)                            (((uint32_t)(((uint32_t)(x)) << MU_SR_MURS_SHIFT)) & MU_SR_MURS_MASK)
 
 #define MU_SR_MURIP_MASK                         (0x2U)
 #define MU_SR_MURIP_SHIFT                        (1U)
-/*! MURIP - MU Reset Interrupt Pending
- *  0b0..Processor A did not issue MU reset.
- *  0b1..Processor A issued MU reset.
+/*! MURIP - MU Reset Interrupt Pending Flag
+ *  0b0..No effect
+ *  0b0..Reset not issued
+ *  0b1..Clear the flag
+ *  0b1..Reset issued
  */
 #define MU_SR_MURIP(x)                           (((uint32_t)(((uint32_t)(x)) << MU_SR_MURIP_SHIFT)) & MU_SR_MURIP_MASK)
 
@@ -324,7 +316,7 @@ typedef struct {
 
 #define MU_SR_FUP_MASK                           (0x8U)
 #define MU_SR_FUP_SHIFT                          (3U)
-/*! FUP - MUB Flags Update Pending
+/*! FUP - MUB Flag Update Pending
  *  0b0..No pending update flags (initiated by MUA)
  *  0b1..Pending update flags (initiated by MUA)
  */
@@ -332,7 +324,7 @@ typedef struct {
 
 #define MU_SR_GIRP_MASK                          (0x10U)
 #define MU_SR_GIRP_SHIFT                         (4U)
-/*! GIRP - MUB General-purpose Interrupt Pending
+/*! GIRP - MUB General-Purpose Interrupt Pending
  *  0b0..No request sent
  *  0b1..Request sent
  */
@@ -341,35 +333,35 @@ typedef struct {
 #define MU_SR_TEP_MASK                           (0x20U)
 #define MU_SR_TEP_SHIFT                          (5U)
 /*! TEP - MUB Transmit Empty Pending
- *  0b0..Not pending. MUA is reading no RRn register.
- *  0b1..Pending. MUA is reading an RRn register.
+ *  0b0..No MUA transmit empty event pending
+ *  0b1..Pending; any TCR[TIEn] field is 1 and TSR[TEn] flag is set
  */
 #define MU_SR_TEP(x)                             (((uint32_t)(((uint32_t)(x)) << MU_SR_TEP_SHIFT)) & MU_SR_TEP_MASK)
 
 #define MU_SR_RFP_MASK                           (0x40U)
 #define MU_SR_RFP_SHIFT                          (6U)
-/*! RFP - MUB Receive Full Pending Flag
- *  0b0..Not pending. MUA is not writing to a TRn register.
- *  0b1..Pending. MUA is writing to a TRn register.
+/*! RFP - MUB Receive Full Pending
+ *  0b0..Not pending; MUA is not writing to a Transmit register
+ *  0b1..Pending; MUA is writing to a Transmit register
  */
 #define MU_SR_RFP(x)                             (((uint32_t)(((uint32_t)(x)) << MU_SR_RFP_SHIFT)) & MU_SR_RFP_MASK)
 /*! @} */
 
-/*! @name CCR0 - Core Control Register 0 */
+/*! @name CCR0 - Core Control 0 */
 /*! @{ */
 
 #define MU_CCR0_NMI_MASK                         (0x1U)
 #define MU_CCR0_NMI_SHIFT                        (0U)
-/*! NMI - MUB Non-maskable Interrupt Request
- *  0b0..Non-maskable interrupt issued
- *  0b1..Non-maskable interrupt not issued
+/*! NMI - MUB Nonmaskable Interrupt Request
+ *  0b0..Nonmaskable interrupt not issued
+ *  0b1..Nonmaskable interrupt issued
  */
 #define MU_CCR0_NMI(x)                           (((uint32_t)(((uint32_t)(x)) << MU_CCR0_NMI_SHIFT)) & MU_CCR0_NMI_MASK)
 
 #define MU_CCR0_HR_MASK                          (0x2U)
 #define MU_CCR0_HR_SHIFT                         (1U)
 /*! HR - Processor B Hardware Reset
- *  0b0..De-assert hardware reset to processor A.
+ *  0b0..Deassert hardware reset to processor A.
  *  0b1..Assert hardware reset to processor A.
  */
 #define MU_CCR0_HR(x)                            (((uint32_t)(((uint32_t)(x)) << MU_CCR0_HR_SHIFT)) & MU_CCR0_HR_MASK)
@@ -377,16 +369,16 @@ typedef struct {
 #define MU_CCR0_HRM_MASK                         (0x4U)
 #define MU_CCR0_HRM_SHIFT                        (2U)
 /*! HRM - Processor B Hardware Reset Mask
- *  0b0..MUA_CCR0[HR] is not masked, and the hardware reset to the processor B is enabled.
- *  0b1..MUA_CCR0[HR] is masked, and the hardware reset request to processor B is disabled.
+ *  0b0..Enable
+ *  0b1..Disable
  */
 #define MU_CCR0_HRM(x)                           (((uint32_t)(((uint32_t)(x)) << MU_CCR0_HRM_SHIFT)) & MU_CCR0_HRM_MASK)
 
 #define MU_CCR0_CLKE_MASK                        (0x8U)
 #define MU_CCR0_CLKE_SHIFT                       (3U)
-/*! CLKE - Processor B clock enable
- *  0b0..Disabled
- *  0b1..Enabled
+/*! CLKE - Processor B Clock Enable
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define MU_CCR0_CLKE(x)                          (((uint32_t)(((uint32_t)(x)) << MU_CCR0_CLKE_SHIFT)) & MU_CCR0_CLKE_MASK)
 
@@ -400,7 +392,7 @@ typedef struct {
 
 #define MU_CCR0_BOOT_MASK                        (0x60U)
 #define MU_CCR0_BOOT_SHIFT                       (5U)
-/*! BOOT - Slave Processor B Boot Config
+/*! BOOT - Target Processor B Boot Configuration
  *  0b00..Processor Boot option 0
  *  0b01..Processor Boot option 1
  *  0b10..Processor Boot option 2
@@ -409,24 +401,24 @@ typedef struct {
 #define MU_CCR0_BOOT(x)                          (((uint32_t)(((uint32_t)(x)) << MU_CCR0_BOOT_SHIFT)) & MU_CCR0_BOOT_MASK)
 /*! @} */
 
-/*! @name CIER0 - Core Interrupt Enable Register 0 */
+/*! @name CIER0 - Core Interrupt Enable 0 */
 /*! @{ */
 
 #define MU_CIER0_HRIE_MASK                       (0x2U)
 #define MU_CIER0_HRIE_SHIFT                      (1U)
 /*! HRIE - Processor B Hardware Reset Interrupt Enable
- *  0b0..Disabled
- *  0b1..Enabled
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define MU_CIER0_HRIE(x)                         (((uint32_t)(((uint32_t)(x)) << MU_CIER0_HRIE_SHIFT)) & MU_CIER0_HRIE_MASK)
 /*! @} */
 
-/*! @name CSSR0 - Core Sticky Status Register 0 */
+/*! @name CSSR0 - Core Sticky Status 0 */
 /*! @{ */
 
 #define MU_CSSR0_NMIC_MASK                       (0x1U)
 #define MU_CSSR0_NMIC_SHIFT                      (0U)
-/*! NMIC - Processor B Non-Maskable-Interrupt Clear
+/*! NMIC - Processor B Nonmaskable Interrupt Clear
  *  0b0..Default
  *  0b1..Clear MUA_CCR0[NMI]
  */
@@ -434,75 +426,75 @@ typedef struct {
 
 #define MU_CSSR0_HRIP_MASK                       (0x2U)
 #define MU_CSSR0_HRIP_SHIFT                      (1U)
-/*! HRIP - Processor B Hardware Reset Interrupt Pending
- *  0b0..MUA didn't issue hardware reset to processor B
- *  0b1..MUA had initiated a hardware reset to processor B through HR bit.
+/*! HRIP - Processor B Hardware Reset Interrupt Pending Flag
+ *  0b0..No hardware reset initiated
+ *  0b1..Hardware reset initiated
  */
 #define MU_CSSR0_HRIP(x)                         (((uint32_t)(((uint32_t)(x)) << MU_CSSR0_HRIP_SHIFT)) & MU_CSSR0_HRIP_MASK)
 /*! @} */
 
-/*! @name FCR - Flag Control Register */
+/*! @name FCR - Flag Control */
 /*! @{ */
 
 #define MU_FCR_F0_MASK                           (0x1U)
 #define MU_FCR_F0_SHIFT                          (0U)
-/*! F0 - MUB to MUA Flag n
- *  0b0..Clear MUA_FSR[Fn].
- *  0b1..Set MUA_FSR[Fn].
+/*! F0 - MUB to MUA Flag
+ *  0b0..Clear MUA_FSR[Fn]
+ *  0b1..Set MUA_FSR[Fn]
  */
 #define MU_FCR_F0(x)                             (((uint32_t)(((uint32_t)(x)) << MU_FCR_F0_SHIFT)) & MU_FCR_F0_MASK)
 
 #define MU_FCR_F1_MASK                           (0x2U)
 #define MU_FCR_F1_SHIFT                          (1U)
-/*! F1 - MUB to MUA Flag n
- *  0b0..Clear MUA_FSR[Fn].
- *  0b1..Set MUA_FSR[Fn].
+/*! F1 - MUB to MUA Flag
+ *  0b0..Clear MUA_FSR[Fn]
+ *  0b1..Set MUA_FSR[Fn]
  */
 #define MU_FCR_F1(x)                             (((uint32_t)(((uint32_t)(x)) << MU_FCR_F1_SHIFT)) & MU_FCR_F1_MASK)
 
 #define MU_FCR_F2_MASK                           (0x4U)
 #define MU_FCR_F2_SHIFT                          (2U)
-/*! F2 - MUB to MUA Flag n
- *  0b0..Clear MUA_FSR[Fn].
- *  0b1..Set MUA_FSR[Fn].
+/*! F2 - MUB to MUA Flag
+ *  0b0..Clear MUA_FSR[Fn]
+ *  0b1..Set MUA_FSR[Fn]
  */
 #define MU_FCR_F2(x)                             (((uint32_t)(((uint32_t)(x)) << MU_FCR_F2_SHIFT)) & MU_FCR_F2_MASK)
 /*! @} */
 
-/*! @name FSR - Flag Status Register */
+/*! @name FSR - Flag Status */
 /*! @{ */
 
 #define MU_FSR_F0_MASK                           (0x1U)
 #define MU_FSR_F0_SHIFT                          (0U)
-/*! F0 - MUB to MUA-Side Flag n
- *  0b0..MUA_FCR[Fn] = 0.
- *  0b1..MUA_FCR[Fn] = 1.
+/*! F0 - MUB to MUA-Side Flag
+ *  0b0..MUA_FCR[Fn] = 0
+ *  0b1..MUA_FCR[Fn] = 1
  */
 #define MU_FSR_F0(x)                             (((uint32_t)(((uint32_t)(x)) << MU_FSR_F0_SHIFT)) & MU_FSR_F0_MASK)
 
 #define MU_FSR_F1_MASK                           (0x2U)
 #define MU_FSR_F1_SHIFT                          (1U)
-/*! F1 - MUB to MUA-Side Flag n
- *  0b0..MUA_FCR[Fn] = 0.
- *  0b1..MUA_FCR[Fn] = 1.
+/*! F1 - MUB to MUA-Side Flag
+ *  0b0..MUA_FCR[Fn] = 0
+ *  0b1..MUA_FCR[Fn] = 1
  */
 #define MU_FSR_F1(x)                             (((uint32_t)(((uint32_t)(x)) << MU_FSR_F1_SHIFT)) & MU_FSR_F1_MASK)
 
 #define MU_FSR_F2_MASK                           (0x4U)
 #define MU_FSR_F2_SHIFT                          (2U)
-/*! F2 - MUB to MUA-Side Flag n
- *  0b0..MUA_FCR[Fn] = 0.
- *  0b1..MUA_FCR[Fn] = 1.
+/*! F2 - MUB to MUA-Side Flag
+ *  0b0..MUA_FCR[Fn] = 0
+ *  0b1..MUA_FCR[Fn] = 1
  */
 #define MU_FSR_F2(x)                             (((uint32_t)(((uint32_t)(x)) << MU_FSR_F2_SHIFT)) & MU_FSR_F2_MASK)
 /*! @} */
 
-/*! @name GIER - General-purpose Interrupt Enable Register */
+/*! @name GIER - General-Purpose Interrupt Enable */
 /*! @{ */
 
 #define MU_GIER_GIE0_MASK                        (0x1U)
 #define MU_GIER_GIE0_SHIFT                       (0U)
-/*! GIE0 - MUB General-purpose Interrupt Enable n
+/*! GIE0 - MUB General-purpose Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -510,7 +502,7 @@ typedef struct {
 
 #define MU_GIER_GIE1_MASK                        (0x2U)
 #define MU_GIER_GIE1_SHIFT                       (1U)
-/*! GIE1 - MUB General-purpose Interrupt Enable n
+/*! GIE1 - MUB General-purpose Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -518,7 +510,7 @@ typedef struct {
 
 #define MU_GIER_GIE2_MASK                        (0x4U)
 #define MU_GIER_GIE2_SHIFT                       (2U)
-/*! GIE2 - MUB General-purpose Interrupt Enable n
+/*! GIE2 - MUB General-purpose Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -526,19 +518,19 @@ typedef struct {
 
 #define MU_GIER_GIE3_MASK                        (0x8U)
 #define MU_GIER_GIE3_SHIFT                       (3U)
-/*! GIE3 - MUB General-purpose Interrupt Enable n
+/*! GIE3 - MUB General-purpose Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
 #define MU_GIER_GIE3(x)                          (((uint32_t)(((uint32_t)(x)) << MU_GIER_GIE3_SHIFT)) & MU_GIER_GIE3_MASK)
 /*! @} */
 
-/*! @name GCR - General-purpose Control Register */
+/*! @name GCR - General-Purpose Control */
 /*! @{ */
 
 #define MU_GCR_GIR0_MASK                         (0x1U)
 #define MU_GCR_GIR0_SHIFT                        (0U)
-/*! GIR0 - MUB General-purpose Interrupt Request n
+/*! GIR0 - MUB General-Purpose Interrupt Request
  *  0b0..Not requested
  *  0b1..Requested
  */
@@ -546,7 +538,7 @@ typedef struct {
 
 #define MU_GCR_GIR1_MASK                         (0x2U)
 #define MU_GCR_GIR1_SHIFT                        (1U)
-/*! GIR1 - MUB General-purpose Interrupt Request n
+/*! GIR1 - MUB General-Purpose Interrupt Request
  *  0b0..Not requested
  *  0b1..Requested
  */
@@ -554,7 +546,7 @@ typedef struct {
 
 #define MU_GCR_GIR2_MASK                         (0x4U)
 #define MU_GCR_GIR2_SHIFT                        (2U)
-/*! GIR2 - MUB General-purpose Interrupt Request n
+/*! GIR2 - MUB General-Purpose Interrupt Request
  *  0b0..Not requested
  *  0b1..Requested
  */
@@ -562,55 +554,63 @@ typedef struct {
 
 #define MU_GCR_GIR3_MASK                         (0x8U)
 #define MU_GCR_GIR3_SHIFT                        (3U)
-/*! GIR3 - MUB General-purpose Interrupt Request n
+/*! GIR3 - MUB General-Purpose Interrupt Request
  *  0b0..Not requested
  *  0b1..Requested
  */
 #define MU_GCR_GIR3(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GCR_GIR3_SHIFT)) & MU_GCR_GIR3_MASK)
 /*! @} */
 
-/*! @name GSR - General-purpose Status Register */
+/*! @name GSR - General-purpose Status */
 /*! @{ */
 
 #define MU_GSR_GIP0_MASK                         (0x1U)
 #define MU_GSR_GIP0_SHIFT                        (0U)
-/*! GIP0 - MUB General-purpose Interrupt Request Pending n
+/*! GIP0 - MUB General-Purpose Interrupt Request Pending
+ *  0b0..No effect
  *  0b0..Not pending
+ *  0b1..Clear the flag
  *  0b1..Pending
  */
 #define MU_GSR_GIP0(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP0_SHIFT)) & MU_GSR_GIP0_MASK)
 
 #define MU_GSR_GIP1_MASK                         (0x2U)
 #define MU_GSR_GIP1_SHIFT                        (1U)
-/*! GIP1 - MUB General-purpose Interrupt Request Pending n
+/*! GIP1 - MUB General-Purpose Interrupt Request Pending
+ *  0b0..No effect
  *  0b0..Not pending
+ *  0b1..Clear the flag
  *  0b1..Pending
  */
 #define MU_GSR_GIP1(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP1_SHIFT)) & MU_GSR_GIP1_MASK)
 
 #define MU_GSR_GIP2_MASK                         (0x4U)
 #define MU_GSR_GIP2_SHIFT                        (2U)
-/*! GIP2 - MUB General-purpose Interrupt Request Pending n
+/*! GIP2 - MUB General-Purpose Interrupt Request Pending
+ *  0b0..No effect
  *  0b0..Not pending
+ *  0b1..Clear the flag
  *  0b1..Pending
  */
 #define MU_GSR_GIP2(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP2_SHIFT)) & MU_GSR_GIP2_MASK)
 
 #define MU_GSR_GIP3_MASK                         (0x8U)
 #define MU_GSR_GIP3_SHIFT                        (3U)
-/*! GIP3 - MUB General-purpose Interrupt Request Pending n
+/*! GIP3 - MUB General-Purpose Interrupt Request Pending
+ *  0b0..No effect
  *  0b0..Not pending
+ *  0b1..Clear the flag
  *  0b1..Pending
  */
 #define MU_GSR_GIP3(x)                           (((uint32_t)(((uint32_t)(x)) << MU_GSR_GIP3_SHIFT)) & MU_GSR_GIP3_MASK)
 /*! @} */
 
-/*! @name TCR - Transmit Control Register */
+/*! @name TCR - Transmit Control */
 /*! @{ */
 
 #define MU_TCR_TIE0_MASK                         (0x1U)
 #define MU_TCR_TIE0_SHIFT                        (0U)
-/*! TIE0 - MUB Transmit Interrupt Enable n
+/*! TIE0 - MUB Transmit Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -618,7 +618,7 @@ typedef struct {
 
 #define MU_TCR_TIE1_MASK                         (0x2U)
 #define MU_TCR_TIE1_SHIFT                        (1U)
-/*! TIE1 - MUB Transmit Interrupt Enable n
+/*! TIE1 - MUB Transmit Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -626,7 +626,7 @@ typedef struct {
 
 #define MU_TCR_TIE2_MASK                         (0x4U)
 #define MU_TCR_TIE2_SHIFT                        (2U)
-/*! TIE2 - MUB Transmit Interrupt Enable n
+/*! TIE2 - MUB Transmit Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -634,19 +634,19 @@ typedef struct {
 
 #define MU_TCR_TIE3_MASK                         (0x8U)
 #define MU_TCR_TIE3_SHIFT                        (3U)
-/*! TIE3 - MUB Transmit Interrupt Enable n
+/*! TIE3 - MUB Transmit Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
 #define MU_TCR_TIE3(x)                           (((uint32_t)(((uint32_t)(x)) << MU_TCR_TIE3_SHIFT)) & MU_TCR_TIE3_MASK)
 /*! @} */
 
-/*! @name TSR - Transmit Status Register */
+/*! @name TSR - Transmit Status */
 /*! @{ */
 
 #define MU_TSR_TE0_MASK                          (0x1U)
 #define MU_TSR_TE0_SHIFT                         (0U)
-/*! TE0 - MUB Transmit Register n Empty
+/*! TE0 - MUB Transmit Empty
  *  0b0..Not empty
  *  0b1..Empty
  */
@@ -654,7 +654,7 @@ typedef struct {
 
 #define MU_TSR_TE1_MASK                          (0x2U)
 #define MU_TSR_TE1_SHIFT                         (1U)
-/*! TE1 - MUB Transmit Register n Empty
+/*! TE1 - MUB Transmit Empty
  *  0b0..Not empty
  *  0b1..Empty
  */
@@ -662,7 +662,7 @@ typedef struct {
 
 #define MU_TSR_TE2_MASK                          (0x4U)
 #define MU_TSR_TE2_SHIFT                         (2U)
-/*! TE2 - MUB Transmit Register n Empty
+/*! TE2 - MUB Transmit Empty
  *  0b0..Not empty
  *  0b1..Empty
  */
@@ -670,19 +670,19 @@ typedef struct {
 
 #define MU_TSR_TE3_MASK                          (0x8U)
 #define MU_TSR_TE3_SHIFT                         (3U)
-/*! TE3 - MUB Transmit Register n Empty
+/*! TE3 - MUB Transmit Empty
  *  0b0..Not empty
  *  0b1..Empty
  */
 #define MU_TSR_TE3(x)                            (((uint32_t)(((uint32_t)(x)) << MU_TSR_TE3_SHIFT)) & MU_TSR_TE3_MASK)
 /*! @} */
 
-/*! @name RCR - Receive Control Register */
+/*! @name RCR - Receive Control */
 /*! @{ */
 
 #define MU_RCR_RIE0_MASK                         (0x1U)
 #define MU_RCR_RIE0_SHIFT                        (0U)
-/*! RIE0 - MUB Receive Interrupt Enable n
+/*! RIE0 - MUB Receive Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -690,7 +690,7 @@ typedef struct {
 
 #define MU_RCR_RIE1_MASK                         (0x2U)
 #define MU_RCR_RIE1_SHIFT                        (1U)
-/*! RIE1 - MUB Receive Interrupt Enable n
+/*! RIE1 - MUB Receive Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -698,7 +698,7 @@ typedef struct {
 
 #define MU_RCR_RIE2_MASK                         (0x4U)
 #define MU_RCR_RIE2_SHIFT                        (2U)
-/*! RIE2 - MUB Receive Interrupt Enable n
+/*! RIE2 - MUB Receive Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -706,50 +706,50 @@ typedef struct {
 
 #define MU_RCR_RIE3_MASK                         (0x8U)
 #define MU_RCR_RIE3_SHIFT                        (3U)
-/*! RIE3 - MUB Receive Interrupt Enable n
+/*! RIE3 - MUB Receive Interrupt Enable
  *  0b0..Disable
  *  0b1..Enable
  */
 #define MU_RCR_RIE3(x)                           (((uint32_t)(((uint32_t)(x)) << MU_RCR_RIE3_SHIFT)) & MU_RCR_RIE3_MASK)
 /*! @} */
 
-/*! @name RSR - Receive Status Register */
+/*! @name RSR - Receive Status */
 /*! @{ */
 
 #define MU_RSR_RF0_MASK                          (0x1U)
 #define MU_RSR_RF0_SHIFT                         (0U)
-/*! RF0 - MUB Receive Register n Full
+/*! RF0 - MUB Receive Register Full
  *  0b0..Not full
- *  0b1..MUA_RRn register has received data from MUB TRn register and is ready for MUA to read it.
+ *  0b1..Full
  */
 #define MU_RSR_RF0(x)                            (((uint32_t)(((uint32_t)(x)) << MU_RSR_RF0_SHIFT)) & MU_RSR_RF0_MASK)
 
 #define MU_RSR_RF1_MASK                          (0x2U)
 #define MU_RSR_RF1_SHIFT                         (1U)
-/*! RF1 - MUB Receive Register n Full
+/*! RF1 - MUB Receive Register Full
  *  0b0..Not full
- *  0b1..MUA_RRn register has received data from MUB TRn register and is ready for MUA to read it.
+ *  0b1..Full
  */
 #define MU_RSR_RF1(x)                            (((uint32_t)(((uint32_t)(x)) << MU_RSR_RF1_SHIFT)) & MU_RSR_RF1_MASK)
 
 #define MU_RSR_RF2_MASK                          (0x4U)
 #define MU_RSR_RF2_SHIFT                         (2U)
-/*! RF2 - MUB Receive Register n Full
+/*! RF2 - MUB Receive Register Full
  *  0b0..Not full
- *  0b1..MUA_RRn register has received data from MUB TRn register and is ready for MUA to read it.
+ *  0b1..Full
  */
 #define MU_RSR_RF2(x)                            (((uint32_t)(((uint32_t)(x)) << MU_RSR_RF2_SHIFT)) & MU_RSR_RF2_MASK)
 
 #define MU_RSR_RF3_MASK                          (0x8U)
 #define MU_RSR_RF3_SHIFT                         (3U)
-/*! RF3 - MUB Receive Register n Full
+/*! RF3 - MUB Receive Register Full
  *  0b0..Not full
- *  0b1..MUA_RRn register has received data from MUB TRn register and is ready for MUA to read it.
+ *  0b1..Full
  */
 #define MU_RSR_RF3(x)                            (((uint32_t)(((uint32_t)(x)) << MU_RSR_RF3_SHIFT)) & MU_RSR_RF3_MASK)
 /*! @} */
 
-/*! @name TR - Transmit Register */
+/*! @name TR - Transmit */
 /*! @{ */
 
 #define MU_TR_TR_DATA_MASK                       (0xFFFFFFFFU)
@@ -758,7 +758,7 @@ typedef struct {
 #define MU_TR_TR_DATA(x)                         (((uint32_t)(((uint32_t)(x)) << MU_TR_TR_DATA_SHIFT)) & MU_TR_TR_DATA_MASK)
 /*! @} */
 
-/*! @name RR - Receive Register */
+/*! @name RR - Receive */
 /*! @{ */
 
 #define MU_RR_RR_DATA_MASK                       (0xFFFFFFFFU)

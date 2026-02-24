@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250619
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for FLEXSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -212,7 +212,8 @@ typedef struct {
        uint8_t RESERVED_2[8];
   __IO uint32_t IPCR0;                             /**< IP Control 0, offset: 0xA0 */
   __IO uint32_t IPCR1;                             /**< IP Control 1, offset: 0xA4 */
-       uint8_t RESERVED_3[8];
+  __IO uint32_t IPCR2;                             /**< IP Control 2, offset: 0xA8 */
+       uint8_t RESERVED_3[4];
   __IO uint32_t IPCMD;                             /**< IP Command, offset: 0xB0 */
   __IO uint32_t DLPR;                              /**< Data Learning Pattern, offset: 0xB4 */
   __IO uint32_t IPRXFCR;                           /**< IP Receive FIFO Control, offset: 0xB8 */
@@ -450,7 +451,7 @@ typedef struct {
 #define FLEXSPI_AHBCR_RESUMEDISABLE_SHIFT        (7U)
 /*! RESUMEDISABLE - AHB Read Resume Disable
  *  0b0..Suspended AHB read prefetch resumes when AHB is IDLE.
- *  0b1..Suspended AHB read prefetch does not resume once aborted,
+ *  0b1..Suspended AHB read prefetch does not resume once aborted.
  */
 #define FLEXSPI_AHBCR_RESUMEDISABLE(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_RESUMEDISABLE_SHIFT)) & FLEXSPI_AHBCR_RESUMEDISABLE_MASK)
 
@@ -962,6 +963,34 @@ typedef struct {
 #define FLEXSPI_IPCR1_ISEQNUM(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_IPCR1_ISEQNUM_SHIFT)) & FLEXSPI_IPCR1_ISEQNUM_MASK)
 /*! @} */
 
+/*! @name IPCR2 - IP Control 2 */
+/*! @{ */
+
+#define FLEXSPI_IPCR2_IPBLKAHBREQ_MASK           (0x1U)
+#define FLEXSPI_IPCR2_IPBLKAHBREQ_SHIFT          (0U)
+/*! IPBLKAHBREQ - IP Command Blocking AHB Command Request Enable
+ *  0b0..IP commands do not block AHB command requests.
+ *  0b1..IP commands block AHB command requests.
+ */
+#define FLEXSPI_IPCR2_IPBLKAHBREQ(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_IPCR2_IPBLKAHBREQ_SHIFT)) & FLEXSPI_IPCR2_IPBLKAHBREQ_MASK)
+
+#define FLEXSPI_IPCR2_IPBLKAHBACK_MASK           (0x2U)
+#define FLEXSPI_IPCR2_IPBLKAHBACK_SHIFT          (1U)
+/*! IPBLKAHBACK - IP Command Blocking AHB Command Acknowledgment Enable
+ *  0b0..IP commands do not block AHB command acknowledgment.
+ *  0b1..IP commands block AHB command acknowledgment.
+ */
+#define FLEXSPI_IPCR2_IPBLKAHBACK(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_IPCR2_IPBLKAHBACK_SHIFT)) & FLEXSPI_IPCR2_IPBLKAHBACK_MASK)
+
+#define FLEXSPI_IPCR2_IPBLKALLAHB_MASK           (0x4U)
+#define FLEXSPI_IPCR2_IPBLKALLAHB_SHIFT          (2U)
+/*! IPBLKALLAHB - IP Command Blocking All AHB Command Enable
+ *  0b0..
+ *  0b1..IP commands block all AHB commands.
+ */
+#define FLEXSPI_IPCR2_IPBLKALLAHB(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_IPCR2_IPBLKALLAHB_SHIFT)) & FLEXSPI_IPCR2_IPBLKALLAHB_MASK)
+/*! @} */
+
 /*! @name IPCMD - IP Command */
 /*! @{ */
 
@@ -1074,6 +1103,11 @@ typedef struct {
 #define FLEXSPI_DLLCR_REFPHASEGAP_SHIFT          (15U)
 /*! REFPHASEGAP - Reference Clock Delay Line Phase Adjust Gap. REFPHASEGAP setting of 2h is recommended if DLLEN is set. */
 #define FLEXSPI_DLLCR_REFPHASEGAP(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_DLLCR_REFPHASEGAP_SHIFT)) & FLEXSPI_DLLCR_REFPHASEGAP_MASK)
+
+#define FLEXSPI_DLLCR_REFPHASESTART_MASK         (0xE0000U)
+#define FLEXSPI_DLLCR_REFPHASESTART_SHIFT        (17U)
+/*! REFPHASESTART - Reference Clock Delay Line Start Phase */
+#define FLEXSPI_DLLCR_REFPHASESTART(x)           (((uint32_t)(((uint32_t)(x)) << FLEXSPI_DLLCR_REFPHASESTART_SHIFT)) & FLEXSPI_DLLCR_REFPHASESTART_MASK)
 /*! @} */
 
 /*! @name STS0 - Status 0 */

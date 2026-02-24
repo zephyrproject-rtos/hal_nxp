@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 7.0, 2018-11-05
-**     Build:               b250723
+**     Version:             rev. 8.0, 2025-11-11
+**     Build:               b251111
 **
 **     Abstract:
 **         Chip specific module features.
@@ -28,6 +28,8 @@
 **         RevB(B0) Header GA
 **     - rev. 7.0 (2018-11-05)
 **         RevA(B1) Header
+**     - rev. 8.0 (2025-11-11)
+**         Add "belong to flexcomm" feature for LPI2C/LPSPI, add support eUSB PHY feature for USBHS.
 **
 ** ###################################################################
 */
@@ -652,6 +654,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -678,6 +682,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -1491,16 +1497,14 @@
     (((x) == TPM6) ? (1) : \
     (((x) == TPM7) ? (0) : (-1)))))))))
 
-/* TRNG module features */
-
-/* No feature definitions */
-
 /* USBHS module features */
 
 /* @brief EHCI module instance count */
 #define FSL_FEATURE_USBHS_EHCI_COUNT (2)
 /* @brief Number of endpoints supported */
 #define FSL_FEATURE_USBHS_ENDPT_COUNT (8)
+/* @brief If the USB controller support eUSB PHY */
+#define FSL_FEATURE_USBHS_SUPPORT_EUSBn(x) (0)
 
 /* USBPHY module features */
 

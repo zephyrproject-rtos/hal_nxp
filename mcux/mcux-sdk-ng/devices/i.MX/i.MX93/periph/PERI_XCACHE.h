@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XCACHE
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -213,16 +213,16 @@ typedef struct {
 #define XCACHE_CCR_FRCWT_MASK                    (0x4U)
 #define XCACHE_CCR_FRCWT_SHIFT                   (2U)
 /*! FRCWT - Force Write Through Mode
- *  0b0..Does not force
+ *  0b0..Not force
  *  0b1..Force
  */
 #define XCACHE_CCR_FRCWT(x)                      (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_FRCWT_SHIFT)) & XCACHE_CCR_FRCWT_MASK)
 
 #define XCACHE_CCR_FRCNOALLC_MASK                (0x8U)
 #define XCACHE_CCR_FRCNOALLC_SHIFT               (3U)
-/*! FRCNOALLC - Forces No Allocation on Cache Misses
- *  0b0..Allocation on cache misses
- *  0b1..Forces no allocation on cache misses (must also have FRCWT asserted)
+/*! FRCNOALLC - Force No Allocation on Cache Misses
+ *  0b0..Allocate on cache misses
+ *  0b1..Force no allocation on cache misses
  */
 #define XCACHE_CCR_FRCNOALLC(x)                  (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_FRCNOALLC_SHIFT)) & XCACHE_CCR_FRCNOALLC_MASK)
 
@@ -230,7 +230,7 @@ typedef struct {
 #define XCACHE_CCR_INVW0_SHIFT                   (24U)
 /*! INVW0 - Invalidate Way 0
  *  0b0..No operation
- *  0b1..When you write 1 to GO, invalidates all lines in way 0.
+ *  0b1..Invalidate all lines in way 0
  */
 #define XCACHE_CCR_INVW0(x)                      (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_INVW0_SHIFT)) & XCACHE_CCR_INVW0_MASK)
 
@@ -238,7 +238,7 @@ typedef struct {
 #define XCACHE_CCR_PUSHW0_SHIFT                  (25U)
 /*! PUSHW0 - Push Way 0
  *  0b0..No operation
- *  0b1..When you write 1 to GO, push all modified lines in way 0
+ *  0b1..Pushes all modified lines in way 0
  */
 #define XCACHE_CCR_PUSHW0(x)                     (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_PUSHW0_SHIFT)) & XCACHE_CCR_PUSHW0_MASK)
 
@@ -246,7 +246,7 @@ typedef struct {
 #define XCACHE_CCR_INVW1_SHIFT                   (26U)
 /*! INVW1 - Invalidate Way 1
  *  0b0..No operation
- *  0b1..When you write 1 to GO, invalidates all lines in way 1
+ *  0b1..Invalidate all lines in way 1
  */
 #define XCACHE_CCR_INVW1(x)                      (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_INVW1_SHIFT)) & XCACHE_CCR_INVW1_MASK)
 
@@ -254,15 +254,15 @@ typedef struct {
 #define XCACHE_CCR_PUSHW1_SHIFT                  (27U)
 /*! PUSHW1 - Push Way 1
  *  0b0..No operation
- *  0b1..When you write 1 to GO, push all modified lines in way 1
+ *  0b1..Push all modified lines in way 1
  */
 #define XCACHE_CCR_PUSHW1(x)                     (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_PUSHW1_SHIFT)) & XCACHE_CCR_PUSHW1_MASK)
 
 #define XCACHE_CCR_GO_MASK                       (0x80000000U)
 #define XCACHE_CCR_GO_SHIFT                      (31U)
 /*! GO - Initiate Cache Command
- *  0b0..Write: no effect. Read: no cache command active
- *  0b1..Write: initiates command; Read: cache command active
+ *  0b0..Write: no effect; Read: no cache command active
+ *  0b1..Write: initiate command; Read: cache command active
  */
 #define XCACHE_CCR_GO(x)                         (((uint32_t)(((uint32_t)(x)) << XCACHE_CCR_GO_SHIFT)) & XCACHE_CCR_GO_MASK)
 /*! @} */
@@ -273,8 +273,8 @@ typedef struct {
 #define XCACHE_CLCR_LGO_MASK                     (0x1U)
 #define XCACHE_CLCR_LGO_SHIFT                    (0U)
 /*! LGO - Initiate Cache Line Command
- *  0b0..Write: no effect. Read: no line command active.
- *  0b1..Write: initiate line command. Read: line command active.
+ *  0b0..Write: no effect; Read: no line command active
+ *  0b1..Write: initiate line command; Read: line command active
  */
 #define XCACHE_CLCR_LGO(x)                       (((uint32_t)(((uint32_t)(x)) << XCACHE_CLCR_LGO_SHIFT)) & XCACHE_CLCR_LGO_MASK)
 
@@ -347,8 +347,8 @@ typedef struct {
 #define XCACHE_CSAR_LGO_MASK                     (0x1U)
 #define XCACHE_CSAR_LGO_SHIFT                    (0U)
 /*! LGO - Initiate Cache Line Command
- *  0b0..Write: no effect. Read: no line command active.
- *  0b1..Write: initiate line command. Read: line command active.
+ *  0b0..Write: no effect; Read: no line command active
+ *  0b1..Write: initiate line command; Read: line command active
  */
 #define XCACHE_CSAR_LGO(x)                       (((uint32_t)(((uint32_t)(x)) << XCACHE_CSAR_LGO_SHIFT)) & XCACHE_CSAR_LGO_MASK)
 

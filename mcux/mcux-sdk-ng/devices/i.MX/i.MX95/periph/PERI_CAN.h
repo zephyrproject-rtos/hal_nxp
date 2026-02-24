@@ -247,8 +247,8 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250904
+**     Version:             rev. 3.0, 2025-11-24
+**     Build:               b251124
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
@@ -266,14 +266,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_CAN.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-24
  * @brief CMSIS Peripheral Access Layer for CAN
  *
  * CMSIS Peripheral Access Layer for CAN

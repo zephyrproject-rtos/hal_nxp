@@ -247,8 +247,8 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250904
+**     Version:             rev. 3.0, 2025-11-24
+**     Build:               b251124
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MU
@@ -266,14 +266,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_MU.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-24
  * @brief CMSIS Peripheral Access Layer for MU
  *
  * CMSIS Peripheral Access Layer for MU
@@ -392,16 +394,6 @@
 #else
   #error Not supported compiler type
 #endif
-/*!
- * @brief Core boot mode.
- */
-typedef enum _mu_core_boot_mode
-{
-    kMU_CoreBootFromAddr0 = 0x00U, /*!< Boot from 0x00.      */
-    kMU_CoreBootFromFlash = 0x01U, /*!< Boot from Flash base. */
-    kMU_CoreBootFromItcm  = 0x02U, /*!< Boot from ITCM base. */
-} mu_core_boot_mode_t;
-
 
 /* ----------------------------------------------------------------------------
    -- MU Peripheral Access Layer

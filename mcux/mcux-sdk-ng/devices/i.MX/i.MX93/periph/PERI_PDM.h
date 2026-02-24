@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for PDM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -297,7 +297,7 @@ typedef struct {
  *  0b00..Disables DMA and interrupt requests
  *  0b01..Enables DMA requests
  *  0b10..Enables interrupt requests
- *  0b11..Reserved
+ *  0b11..
  */
 #define PDM_CTRL_1_DISEL(x)                      (((uint32_t)(((uint32_t)(x)) << PDM_CTRL_1_DISEL_SHIFT)) & PDM_CTRL_1_DISEL_MASK)
 
@@ -332,6 +332,14 @@ typedef struct {
  *  0b1..Starts MICFIL operation
  */
 #define PDM_CTRL_1_PDMIEN(x)                     (((uint32_t)(((uint32_t)(x)) << PDM_CTRL_1_PDMIEN_SHIFT)) & PDM_CTRL_1_PDMIEN_MASK)
+
+#define PDM_CTRL_1_DOZEN_MASK                    (0x40000000U)
+#define PDM_CTRL_1_DOZEN_SHIFT                   (30U)
+/*! DOZEN - Stop Enable
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define PDM_CTRL_1_DOZEN(x)                      (((uint32_t)(((uint32_t)(x)) << PDM_CTRL_1_DOZEN_SHIFT)) & PDM_CTRL_1_DOZEN_MASK)
 
 #define PDM_CTRL_1_MDIS_MASK                     (0x80000000U)
 #define PDM_CTRL_1_MDIS_SHIFT                    (31U)
@@ -1013,7 +1021,7 @@ typedef struct {
 #define PDM_PARAM_FIFO_PTRWID_SHIFT              (4U)
 /*! FIFO_PTRWID - FIFO Pointer Width
  *  0b0000..0 bits
- *  0b0001..1 bits
+ *  0b0001..1 bit
  *  0b0010..2 bits
  *  0b0011-0b1110.....
  *  0b1111..15 bits
@@ -1070,7 +1078,7 @@ typedef struct {
 
 #define PDM_PARAM_HWVAD_ZCD_MASK                 (0x80000U)
 #define PDM_PARAM_HWVAD_ZCD_SHIFT                (19U)
-/*! HWVAD_ZCD - HWVAD Zero-Crossing Detector Active
+/*! HWVAD_ZCD - HWVAD ZCD Active
  *  0b0..Disabled
  *  0b1..Active
  */
@@ -1087,7 +1095,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_1_VADEN_MASK               (0x1U)
 #define PDM_VAD0_CTRL_1_VADEN_SHIFT              (0U)
-/*! VADEN - Voice Activity Detector Enable
+/*! VADEN - HWVAD Enable
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1095,12 +1103,12 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_1_VADRST_MASK              (0x2U)
 #define PDM_VAD0_CTRL_1_VADRST_SHIFT             (1U)
-/*! VADRST - Voice Activity Detector Reset */
+/*! VADRST - HWVAD Reset */
 #define PDM_VAD0_CTRL_1_VADRST(x)                (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_CTRL_1_VADRST_SHIFT)) & PDM_VAD0_CTRL_1_VADRST_MASK)
 
 #define PDM_VAD0_CTRL_1_VADIE_MASK               (0x4U)
 #define PDM_VAD0_CTRL_1_VADIE_SHIFT              (2U)
-/*! VADIE - Voice Activity Detector Interruption Enable
+/*! VADIE - Interruption Enable
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1108,7 +1116,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_1_VADERIE_MASK             (0x8U)
 #define PDM_VAD0_CTRL_1_VADERIE_SHIFT            (3U)
-/*! VADERIE - Voice Activity Detector Error Interruption Enable
+/*! VADERIE - Error Interruption Enable
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1116,7 +1124,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_1_VADST10_MASK             (0x10U)
 #define PDM_VAD0_CTRL_1_VADST10_SHIFT            (4U)
-/*! VADST10 - Voice Activity Detector Internal Filters Initialization
+/*! VADST10 - Internal Filters Initialization
  *  0b0..Normal operation
  *  0b1..Filters initialized
  */
@@ -1124,26 +1132,27 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_1_VADINITT_MASK            (0x1F00U)
 #define PDM_VAD0_CTRL_1_VADINITT_SHIFT           (8U)
-/*! VADINITT - Voice Activity Detector Initialization Time
- *  0b00000..VADINITT = 0
- *  0b00001..VADINITT = 1
+/*! VADINITT - Initialization Time
+ *  0b00000..0
+ *  0b00001..1
  *  0b00010-0b11110.....
- *  0b11111..VADINITT = 31
+ *  0b11111..31
  */
 #define PDM_VAD0_CTRL_1_VADINITT(x)              (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_CTRL_1_VADINITT_SHIFT)) & PDM_VAD0_CTRL_1_VADINITT_MASK)
 
 #define PDM_VAD0_CTRL_1_VADCICOSR_MASK           (0xF0000U)
 #define PDM_VAD0_CTRL_1_VADCICOSR_SHIFT          (16U)
-/*! VADCICOSR - Voice Activity Detector CIC Oversampling Rate */
+/*! VADCICOSR - CIC Oversampling Rate */
 #define PDM_VAD0_CTRL_1_VADCICOSR(x)             (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_CTRL_1_VADCICOSR_SHIFT)) & PDM_VAD0_CTRL_1_VADCICOSR_MASK)
 
 #define PDM_VAD0_CTRL_1_VADCHSEL_MASK            (0x7000000U)
 #define PDM_VAD0_CTRL_1_VADCHSEL_SHIFT           (24U)
-/*! VADCHSEL - Voice Activity Detector Channel Selector
+/*! VADCHSEL - Channel Selector
  *  0b000..PDM Microphone 0 Left
  *  0b001..PDM Microphone 0 Right
  *  0b010..PDM Microphone 1 Left
- *  0b011-0b101.....
+ *  0b011..PDM Microphone 1 Right
+ *  0b100-0b101.....
  *  0b110..PDM Microphone 3 Left
  *  0b111..PDM Microphone 3 Right
  */
@@ -1155,7 +1164,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_2_VADHPF_MASK              (0x3U)
 #define PDM_VAD0_CTRL_2_VADHPF_SHIFT             (0U)
-/*! VADHPF - Voice Activity Detector High-Pass Filter
+/*! VADHPF - High-Pass Filter
  *  0b00..Filter bypassed
  *  0b01..Cut-off frequency at 1750 Hz
  *  0b10..Cut-off frequency at 215 Hz
@@ -1165,7 +1174,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_2_VADINPGAIN_MASK          (0xF00U)
 #define PDM_VAD0_CTRL_2_VADINPGAIN_SHIFT         (8U)
-/*! VADINPGAIN - Voice Activity Detector Input Gain
+/*! VADINPGAIN - Input Gain
  *  0b0000..No shift
  *  0b0001..Shift 1 bit to the left
  *  0b0010..Shift 2 bits to the left
@@ -1180,17 +1189,17 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_2_VADFRAMET_MASK           (0x3F0000U)
 #define PDM_VAD0_CTRL_2_VADFRAMET_SHIFT          (16U)
-/*! VADFRAMET - Voice Activity Detector Frame Time
- *  0b000000..VADFRAMET = 1
- *  0b000001..VADFRAMET = 2
+/*! VADFRAMET - Frame Time
+ *  0b000000..1
+ *  0b000001..2
  *  0b000010-0b111110.....
- *  0b111111..VADFRAMET = 63
+ *  0b111111..63
  */
 #define PDM_VAD0_CTRL_2_VADFRAMET(x)             (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_CTRL_2_VADFRAMET_SHIFT)) & PDM_VAD0_CTRL_2_VADFRAMET_MASK)
 
 #define PDM_VAD0_CTRL_2_VADFOUTDIS_MASK          (0x10000000U)
 #define PDM_VAD0_CTRL_2_VADFOUTDIS_SHIFT         (28U)
-/*! VADFOUTDIS - Voice Activity Detector Force Output Disable
+/*! VADFOUTDIS - Force Output Disable
  *  0b0..Enables
  *  0b1..Disables
  */
@@ -1198,7 +1207,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_2_VADPREFEN_MASK           (0x40000000U)
 #define PDM_VAD0_CTRL_2_VADPREFEN_SHIFT          (30U)
-/*! VADPREFEN - Voice Activity Detector Pre Filter Enable
+/*! VADPREFEN - Pre Filter Enable
  *  0b0..Pre-filter bypassed
  *  0b1..Pre-filter enabled
  */
@@ -1206,7 +1215,7 @@ typedef struct {
 
 #define PDM_VAD0_CTRL_2_VADFRENDIS_MASK          (0x80000000U)
 #define PDM_VAD0_CTRL_2_VADFRENDIS_SHIFT         (31U)
-/*! VADFRENDIS - Voice Activity Detector Frame Energy Disable
+/*! VADFRENDIS - Frame Energy Disable
  *  0b0..Enables
  *  0b1..Disables
  */
@@ -1218,7 +1227,7 @@ typedef struct {
 
 #define PDM_VAD0_STAT_VADIF_MASK                 (0x1U)
 #define PDM_VAD0_STAT_VADIF_SHIFT                (0U)
-/*! VADIF - Voice Activity Detector Interrupt Flag
+/*! VADIF - Interrupt Flag
  *  0b0..Not detected
  *  0b1..Detected
  */
@@ -1226,7 +1235,7 @@ typedef struct {
 
 #define PDM_VAD0_STAT_VADINSATF_MASK             (0x10000U)
 #define PDM_VAD0_STAT_VADINSATF_SHIFT            (16U)
-/*! VADINSATF - Voice Activity Detector Input Saturation Flag
+/*! VADINSATF - Input Saturation Flag
  *  0b0..No exception
  *  0b1..Exception
  */
@@ -1234,7 +1243,7 @@ typedef struct {
 
 #define PDM_VAD0_STAT_VADINITF_MASK              (0x80000000U)
 #define PDM_VAD0_STAT_VADINITF_SHIFT             (31U)
-/*! VADINITF - Voice Activity Detector Initialization Flag
+/*! VADINITF - Initialization Flag
  *  0b0..Not being initialized
  *  0b1..Being initialized
  */
@@ -1246,7 +1255,7 @@ typedef struct {
 
 #define PDM_VAD0_SCONFIG_VADSGAIN_MASK           (0xFU)
 #define PDM_VAD0_SCONFIG_VADSGAIN_SHIFT          (0U)
-/*! VADSGAIN - Voice Activity Detector Signal Gain
+/*! VADSGAIN - Signal Gain
  *  0b0000, 0b0001..Multiplier = 1
  *  0b0010..Multiplier = 2
  *  0b0011-0b1110.....
@@ -1256,7 +1265,7 @@ typedef struct {
 
 #define PDM_VAD0_SCONFIG_VADSMAXEN_MASK          (0x40000000U)
 #define PDM_VAD0_SCONFIG_VADSMAXEN_SHIFT         (30U)
-/*! VADSMAXEN - Voice Activity Detector Signal Maximum Enable
+/*! VADSMAXEN - Signal Maximum Enable
  *  0b0..Maximum block bypassed
  *  0b1..Maximum block enabled
  */
@@ -1264,7 +1273,7 @@ typedef struct {
 
 #define PDM_VAD0_SCONFIG_VADSFILEN_MASK          (0x80000000U)
 #define PDM_VAD0_SCONFIG_VADSFILEN_SHIFT         (31U)
-/*! VADSFILEN - Voice Activity Detector Signal Filter Enable
+/*! VADSFILEN - Signal Filter Enable
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1276,7 +1285,7 @@ typedef struct {
 
 #define PDM_VAD0_NCONFIG_VADNGAIN_MASK           (0xFU)
 #define PDM_VAD0_NCONFIG_VADNGAIN_SHIFT          (0U)
-/*! VADNGAIN - Voice Activity Detector Noise Gain
+/*! VADNGAIN - Noise Gain
  *  0b0000, 0b0001..Multiplier = 1
  *  0b0010..Multiplier = 2
  *  0b0011-0b1110.....
@@ -1286,17 +1295,17 @@ typedef struct {
 
 #define PDM_VAD0_NCONFIG_VADNFILADJ_MASK         (0x1F00U)
 #define PDM_VAD0_NCONFIG_VADNFILADJ_SHIFT        (8U)
-/*! VADNFILADJ - Voice Activity Detector Noise Filter Adjustment
- *  0b00000..Adjustment value = 0
- *  0b00001..Adjustment value = 1
+/*! VADNFILADJ - Noise Filter Adjustment
+ *  0b00000..0
+ *  0b00001..1
  *  0b00010-0b11110.....
- *  0b11111..Adjustment value = 31
+ *  0b11111..31
  */
 #define PDM_VAD0_NCONFIG_VADNFILADJ(x)           (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_NCONFIG_VADNFILADJ_SHIFT)) & PDM_VAD0_NCONFIG_VADNFILADJ_MASK)
 
 #define PDM_VAD0_NCONFIG_VADNOREN_MASK           (0x10000000U)
 #define PDM_VAD0_NCONFIG_VADNOREN_SHIFT          (28U)
-/*! VADNOREN - Voice Activity Detector Noise OR Enable
+/*! VADNOREN - Noise OR Enable
  *  0b0..Not decimated
  *  0b1..Decimated
  */
@@ -1304,7 +1313,7 @@ typedef struct {
 
 #define PDM_VAD0_NCONFIG_VADNDECEN_MASK          (0x20000000U)
 #define PDM_VAD0_NCONFIG_VADNDECEN_SHIFT         (29U)
-/*! VADNDECEN - Voice Activity Detector Noise Decimation Enable
+/*! VADNDECEN - Noise Decimation Enable
  *  0b0..Not decimated
  *  0b1..Decimated
  */
@@ -1312,7 +1321,7 @@ typedef struct {
 
 #define PDM_VAD0_NCONFIG_VADNMINEN_MASK          (0x40000000U)
 #define PDM_VAD0_NCONFIG_VADNMINEN_SHIFT         (30U)
-/*! VADNMINEN - Voice Activity Detector Noise Minimum Enable
+/*! VADNMINEN - Noise Minimum Enable
  *  0b0..Minimum block bypassed
  *  0b1..Minimum block enabled
  */
@@ -1320,9 +1329,9 @@ typedef struct {
 
 #define PDM_VAD0_NCONFIG_VADNFILAUTO_MASK        (0x80000000U)
 #define PDM_VAD0_NCONFIG_VADNFILAUTO_SHIFT       (31U)
-/*! VADNFILAUTO - Voice Activity Detector Noise Filter Auto
- *  0b0..Noise filter always enabled
- *  0b1..Noise filter enabled/disabled based on voice activity information
+/*! VADNFILAUTO - Noise Filter Auto
+ *  0b0..Always enabled
+ *  0b1..Enabled or disabled based on voice activity information
  */
 #define PDM_VAD0_NCONFIG_VADNFILAUTO(x)          (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_NCONFIG_VADNFILAUTO_SHIFT)) & PDM_VAD0_NCONFIG_VADNFILAUTO_MASK)
 /*! @} */
@@ -1332,7 +1341,7 @@ typedef struct {
 
 #define PDM_VAD0_NDATA_VADNDATA_MASK             (0xFFFFU)
 #define PDM_VAD0_NDATA_VADNDATA_SHIFT            (0U)
-/*! VADNDATA - Voice Activity Detector Noise Data */
+/*! VADNDATA - Noise Data */
 #define PDM_VAD0_NDATA_VADNDATA(x)               (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_NDATA_VADNDATA_SHIFT)) & PDM_VAD0_NDATA_VADNDATA_MASK)
 /*! @} */
 
@@ -1341,7 +1350,7 @@ typedef struct {
 
 #define PDM_VAD0_ZCD_VADZCDEN_MASK               (0x1U)
 #define PDM_VAD0_ZCD_VADZCDEN_SHIFT              (0U)
-/*! VADZCDEN - Zero-Crossing Detector Enable
+/*! VADZCDEN - ZCD Enable
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1349,7 +1358,7 @@ typedef struct {
 
 #define PDM_VAD0_ZCD_VADZCDAUTO_MASK             (0x4U)
 #define PDM_VAD0_ZCD_VADZCDAUTO_SHIFT            (2U)
-/*! VADZCDAUTO - Zero-Crossing Detector Automatic Threshold
+/*! VADZCDAUTO - ZCD Automatic Threshold
  *  0b0..Disables
  *  0b1..Enables
  */
@@ -1357,7 +1366,7 @@ typedef struct {
 
 #define PDM_VAD0_ZCD_VADZCDAND_MASK              (0x10U)
 #define PDM_VAD0_ZCD_VADZCDAND_SHIFT             (4U)
-/*! VADZCDAND - Zero-Crossing Detector AND Behavior
+/*! VADZCDAND - ZCD AND Behavior
  *  0b0..OR
  *  0b1..AND
  */
@@ -1365,17 +1374,17 @@ typedef struct {
 
 #define PDM_VAD0_ZCD_VADZCDADJ_MASK              (0xF00U)
 #define PDM_VAD0_ZCD_VADZCDADJ_SHIFT             (8U)
-/*! VADZCDADJ - Zero-Crossing Detector Adjustment
- *  0b0000..Adjustment value = 0
- *  0b0001..Adjustment value = 1
+/*! VADZCDADJ - ZCD Adjustment
+ *  0b0000..0
+ *  0b0001..1
  *  0b0010-0b1110.....
- *  0b1111..Adjustment value = 15
+ *  0b1111..15
  */
 #define PDM_VAD0_ZCD_VADZCDADJ(x)                (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_ZCD_VADZCDADJ_SHIFT)) & PDM_VAD0_ZCD_VADZCDADJ_MASK)
 
 #define PDM_VAD0_ZCD_VADZCDTH_MASK               (0x3FF0000U)
 #define PDM_VAD0_ZCD_VADZCDTH_SHIFT              (16U)
-/*! VADZCDTH - Zero-Crossing Detector Threshold */
+/*! VADZCDTH - ZCD Threshold */
 #define PDM_VAD0_ZCD_VADZCDTH(x)                 (((uint32_t)(((uint32_t)(x)) << PDM_VAD0_ZCD_VADZCDTH_SHIFT)) & PDM_VAD0_ZCD_VADZCDTH_MASK)
 /*! @} */
 

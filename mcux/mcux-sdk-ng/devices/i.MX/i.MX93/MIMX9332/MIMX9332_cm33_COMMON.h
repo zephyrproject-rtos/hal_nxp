@@ -11,13 +11,13 @@
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250818
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX9332_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1303,33 +1303,33 @@ typedef enum IRQn {
   #define IOMUXC1_BASE_PTRS                        { IOMUXC1 }
 #endif
 
-/* IPC - Peripheral instance base addresses */
+/* IOMUXC_GPR - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral IPC base address */
-  #define IPC_BASE                                 (0x543D0000u)
-  /** Peripheral IPC base address */
-  #define IPC_BASE_NS                              (0x443D0000u)
-  /** Peripheral IPC base pointer */
-  #define IPC                                      ((IPC_Type *)IPC_BASE)
-  /** Peripheral IPC base pointer */
-  #define IPC_NS                                   ((IPC_Type *)IPC_BASE_NS)
-  /** Array initializer of IPC peripheral base addresses */
-  #define IPC_BASE_ADDRS                           { IPC_BASE }
-  /** Array initializer of IPC peripheral base pointers */
-  #define IPC_BASE_PTRS                            { IPC }
-  /** Array initializer of IPC peripheral base addresses */
-  #define IPC_BASE_ADDRS_NS                        { IPC_BASE_NS }
-  /** Array initializer of IPC peripheral base pointers */
-  #define IPC_BASE_PTRS_NS                         { IPC_NS }
+  /** Peripheral IOMUXC_GPR base address */
+  #define IOMUXC_GPR_BASE                          (0x543C0000u)
+  /** Peripheral IOMUXC_GPR base address */
+  #define IOMUXC_GPR_BASE_NS                       (0x443C0000u)
+  /** Peripheral IOMUXC_GPR base pointer */
+  #define IOMUXC_GPR                               ((IOMUXC_GPR_Type *)IOMUXC_GPR_BASE)
+  /** Peripheral IOMUXC_GPR base pointer */
+  #define IOMUXC_GPR_NS                            ((IOMUXC_GPR_Type *)IOMUXC_GPR_BASE_NS)
+  /** Array initializer of IOMUXC_GPR peripheral base addresses */
+  #define IOMUXC_GPR_BASE_ADDRS                    { IOMUXC_GPR_BASE }
+  /** Array initializer of IOMUXC_GPR peripheral base pointers */
+  #define IOMUXC_GPR_BASE_PTRS                     { IOMUXC_GPR }
+  /** Array initializer of IOMUXC_GPR peripheral base addresses */
+  #define IOMUXC_GPR_BASE_ADDRS_NS                 { IOMUXC_GPR_BASE_NS }
+  /** Array initializer of IOMUXC_GPR peripheral base pointers */
+  #define IOMUXC_GPR_BASE_PTRS_NS                  { IOMUXC_GPR_NS }
 #else
-  /** Peripheral IPC base address */
-  #define IPC_BASE                                 (0x443D0000u)
-  /** Peripheral IPC base pointer */
-  #define IPC                                      ((IPC_Type *)IPC_BASE)
-  /** Array initializer of IPC peripheral base addresses */
-  #define IPC_BASE_ADDRS                           { IPC_BASE }
-  /** Array initializer of IPC peripheral base pointers */
-  #define IPC_BASE_PTRS                            { IPC }
+  /** Peripheral IOMUXC_GPR base address */
+  #define IOMUXC_GPR_BASE                          (0x443C0000u)
+  /** Peripheral IOMUXC_GPR base pointer */
+  #define IOMUXC_GPR                               ((IOMUXC_GPR_Type *)IOMUXC_GPR_BASE)
+  /** Array initializer of IOMUXC_GPR peripheral base addresses */
+  #define IOMUXC_GPR_BASE_ADDRS                    { IOMUXC_GPR_BASE }
+  /** Array initializer of IOMUXC_GPR peripheral base pointers */
+  #define IOMUXC_GPR_BASE_PTRS                     { IOMUXC_GPR }
 #endif
 
 /* ISI - Peripheral instance base addresses */
@@ -1977,6 +1977,16 @@ typedef enum IRQn {
 #endif
 /** Interrupt vectors for the MU peripheral type */
 #define MU_IRQS                                  { MU1_A_IRQn, MU2_A_IRQn }
+/*!
+ * @brief Core boot mode.
+ */
+typedef enum _mu_core_boot_mode
+{
+    kMU_CoreBootFromAddr0 = 0x00U, /*!< Boot from 0x00.      */
+    kMU_CoreBootFromFlash = 0x01U, /*!< Boot from Flash base. */
+    kMU_CoreBootFromItcm  = 0x02U, /*!< Boot from ITCM base. */
+} mu_core_boot_mode_t;
+
 
 /* NPU - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2093,6 +2103,11 @@ typedef enum IRQn {
   /** Array initializer of PDM peripheral base pointers */
   #define PDM_BASE_PTRS                            { PDM }
 #endif
+/** Interrupt vectors for the PDM peripheral type */
+#define PDM_HWVAD_Event_IRQS                     { PDM_HWVAD_EVENT_IRQn }
+#define PDM_HWVAD_Error_IRQS                     { PDM_HWVAD_ERROR_IRQn }
+#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
+#define PDM_Error_IRQS                           { PDM_ERROR_IRQn }
 
 /* PLL - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2797,9 +2812,9 @@ typedef enum IRQn {
 /* SYS_CTR_COMPARE - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral SYS_CTR_COMPARE base address */
-  #define SYS_CTR_COMPARE_BASE                     (0x54292000u)
+  #define SYS_CTR_COMPARE_BASE                     (0x542A0000u)
   /** Peripheral SYS_CTR_COMPARE base address */
-  #define SYS_CTR_COMPARE_BASE_NS                  (0x44292000u)
+  #define SYS_CTR_COMPARE_BASE_NS                  (0x442A0000u)
   /** Peripheral SYS_CTR_COMPARE base pointer */
   #define SYS_CTR_COMPARE                          ((SYS_CTR_COMPARE_Type *)SYS_CTR_COMPARE_BASE)
   /** Peripheral SYS_CTR_COMPARE base pointer */
@@ -2814,7 +2829,7 @@ typedef enum IRQn {
   #define SYS_CTR_COMPARE_BASE_PTRS_NS             { SYS_CTR_COMPARE_NS }
 #else
   /** Peripheral SYS_CTR_COMPARE base address */
-  #define SYS_CTR_COMPARE_BASE                     (0x44292000u)
+  #define SYS_CTR_COMPARE_BASE                     (0x442A0000u)
   /** Peripheral SYS_CTR_COMPARE base pointer */
   #define SYS_CTR_COMPARE                          ((SYS_CTR_COMPARE_Type *)SYS_CTR_COMPARE_BASE)
   /** Array initializer of SYS_CTR_COMPARE peripheral base addresses */
@@ -2855,9 +2870,9 @@ typedef enum IRQn {
 /* SYS_CTR_READ - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral SYS_CTR_READ base address */
-  #define SYS_CTR_READ_BASE                        (0x54291000u)
+  #define SYS_CTR_READ_BASE                        (0x542B0000u)
   /** Peripheral SYS_CTR_READ base address */
-  #define SYS_CTR_READ_BASE_NS                     (0x44291000u)
+  #define SYS_CTR_READ_BASE_NS                     (0x442B0000u)
   /** Peripheral SYS_CTR_READ base pointer */
   #define SYS_CTR_READ                             ((SYS_CTR_READ_Type *)SYS_CTR_READ_BASE)
   /** Peripheral SYS_CTR_READ base pointer */
@@ -2872,7 +2887,7 @@ typedef enum IRQn {
   #define SYS_CTR_READ_BASE_PTRS_NS                { SYS_CTR_READ_NS }
 #else
   /** Peripheral SYS_CTR_READ base address */
-  #define SYS_CTR_READ_BASE                        (0x44291000u)
+  #define SYS_CTR_READ_BASE                        (0x442B0000u)
   /** Peripheral SYS_CTR_READ base pointer */
   #define SYS_CTR_READ                             ((SYS_CTR_READ_Type *)SYS_CTR_READ_BASE)
   /** Array initializer of SYS_CTR_READ peripheral base addresses */
@@ -3255,6 +3270,9 @@ typedef enum IRQn {
   /** Array initializer of TSTMR peripheral base pointers */
   #define TSTMR_BASE_PTRS                          { TSTMR1__TSTMRA, TSTMR2__TSTMRA }
 #endif
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (24U)
+
 
 /* USB - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -3396,9 +3414,9 @@ typedef enum IRQn {
 /* WAKEUP_AHBRM - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
   /** Peripheral AHBRM1 base address */
-  #define AHBRM1_BASE                              (0x525E0000u)
+  #define AHBRM1_BASE                              (0x105E0000u)
   /** Peripheral AHBRM1 base address */
-  #define AHBRM1_BASE_NS                           (0x425E0000u)
+  #define AHBRM1_BASE_NS                           (0x5E0000u)
   /** Peripheral AHBRM1 base pointer */
   #define AHBRM1                                   ((WAKEUP_AHBRM_Type *)AHBRM1_BASE)
   /** Peripheral AHBRM1 base pointer */
@@ -3413,7 +3431,7 @@ typedef enum IRQn {
   #define WAKEUP_AHBRM_BASE_PTRS_NS                { AHBRM1_NS }
 #else
   /** Peripheral AHBRM1 base address */
-  #define AHBRM1_BASE                              (0x425E0000u)
+  #define AHBRM1_BASE                              (0x5E0000u)
   /** Peripheral AHBRM1 base pointer */
   #define AHBRM1                                   ((WAKEUP_AHBRM_Type *)AHBRM1_BASE)
   /** Array initializer of WAKEUP_AHBRM peripheral base addresses */

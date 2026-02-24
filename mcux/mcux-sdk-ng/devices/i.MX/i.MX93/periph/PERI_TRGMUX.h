@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRGMUX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -184,7 +184,7 @@
 
 /** TRGMUX - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t REG0;                              /**< TRGMUX REG0 Configuration, offset: 0x0 */
+  __IO uint32_t REG0;                              /**< TRGMUX REG0, offset: 0x0 */
 } TRGMUX_Type;
 
 /* ----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ typedef struct {
  * @{
  */
 
-/*! @name REG0 - TRGMUX REG0 Configuration */
+/*! @name REG0 - TRGMUX REG0 */
 /*! @{ */
 
 #define TRGMUX_REG0_SEL0_MASK                    (0xFU)

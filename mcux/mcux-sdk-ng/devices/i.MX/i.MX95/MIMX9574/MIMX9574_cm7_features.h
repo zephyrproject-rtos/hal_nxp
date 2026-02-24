@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b250904
+**     Build:               b251124
 **
 **     Abstract:
 **         Chip specific module features.
@@ -134,12 +134,16 @@
 #define FSL_FEATURE_MU_SIDE_A (1)
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_B (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE] . */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
 /* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (0)
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+#define FSL_FEATURE_MU_NO_NMI (0)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (1)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
@@ -152,20 +156,16 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (0)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (0)
-/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
-#define FSL_FEATURE_MU_NO_CLKE (1)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (0)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
-#define FSL_FEATURE_MU_NO_CEP (1)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (1)
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+#define FSL_FEATURE_MU_NO_CLKE (1)
 /* @brief MU has bit CCR0[RSTH]. */
 #define FSL_FEATURE_MU_HAS_RSTH (0)
 /* @brief MU has bit CCR0[RSTH] by instance. */
 #define FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn(x) (0)
 /* @brief MU has bit CCR0[BOOT]. */
-#define FSL_FEATURE_MU_HAS_BOOT (1)
+#define FSL_FEATURE_MU_HAS_BOOT (0)
 /* @brief MU has bit CCR0[BOOT] by instance. */
 #define FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn(x) (0)
 /* @brief MU supports MU reset, CR[MUR]. */
@@ -680,7 +680,7 @@
 
 /* @brief Cache Line size in byte. */
 #define FSL_FEATURE_XCACHE_LINESIZE_BYTE (16)
-/* @brief Cache doesn't support write buffer. */
+/* @brief Cache does not support write buffer. */
 #define FSL_FEATURE_XCACHE_HAS_NO_WRITE_BUF (1)
 
 /* MEMORY module features */
@@ -750,6 +750,19 @@
 #define FSL_FEATURE_NETC_HAS_PORT_PSRCR (0)
 /* @brief NXP Switch port group support. */
 #define FSL_FEATURE_NETC_HAS_PORT_PGCR (0)
+/* @brief SG_DROP_COUNT value in the Ingress Stream Count STSE_DATA response begins at an incorrect bit offset, causing it to be read incorrectly. */
+#define FSL_FEATURE_NETC_HAS_ERRATA_052134 (0)
+
+/* OTFAD module features */
+
+/* @brief OTFAD has Security Violation Mode (SVM) */
+#define FSL_FEATURE_OTFAD_HAS_SVM_MODE (0)
+/* @brief OTFAD has Key Blob Processing */
+#define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (1)
+/* @brief OTFAD has interrupt request enable */
+#define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (0)
+/* @brief OTFAD has Force Error */
+#define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (1)
 
 /* PDM module features */
 
@@ -771,12 +784,22 @@
 #define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (43)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (1)
+/* @brief PDM has no minimum clkdiv. */
+#define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (0)
 /* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (0)
 /* @brief PDM Has no DOZEN Bitfield In PDM CTRL_1 Register */
 #define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
 /* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
 #define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (0)
+/* @brief PDM Has DC_OUT_CTRL. */
+#define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (0)
+/* @brief PDM Has Fixed DC CTRL VALUE. */
+#define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (0)
+/* @brief PDM Has no independent error IRQ. */
+#define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (0)
+/* @brief PDM has no hardware Voice Activity Detector */
+#define FSL_FEATURE_PDM_HAS_NO_HWVAD (0)
 
 /* SAI module features */
 

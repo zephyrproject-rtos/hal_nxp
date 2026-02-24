@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ADC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -267,6 +267,7 @@ typedef struct {
   __IO uint32_t STAW4R;                            /**< Self-Test Analog Watchdog 4, offset: 0x394 */
   __IO uint32_t STAW5R;                            /**< Self-Test Analog Watchdog 5, offset: 0x398 */
   __I  uint32_t CALSTAT;                           /**< Calibration Status, offset: 0x39C */
+  __IO uint32_t CALCFG0;                           /**< Calibration Configuration 0, offset: 0x3A0 */
 } ADC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -370,6 +371,22 @@ typedef struct {
 /*! JSTART - Start Injection Conversion */
 #define ADC_MCR_JSTART(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MCR_JSTART_SHIFT)) & ADC_MCR_JSTART_MASK)
 
+#define ADC_MCR_JEDGE_MASK                       (0x200000U)
+#define ADC_MCR_JEDGE_SHIFT                      (21U)
+/*! JEDGE - Injection Trigger Edge Selection
+ *  0b0..Falling edge is trigger
+ *  0b1..Rising edge is trigger
+ */
+#define ADC_MCR_JEDGE(x)                         (((uint32_t)(((uint32_t)(x)) << ADC_MCR_JEDGE_SHIFT)) & ADC_MCR_JEDGE_MASK)
+
+#define ADC_MCR_JTRGEN_MASK                      (0x400000U)
+#define ADC_MCR_JTRGEN_SHIFT                     (22U)
+/*! JTRGEN - Injection External Trigger Enable
+ *  0b0..Injected conversion not started by external trigger
+ *  0b1..Injected conversion started by external trigger
+ */
+#define ADC_MCR_JTRGEN(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MCR_JTRGEN_SHIFT)) & ADC_MCR_JTRGEN_MASK)
+
 #define ADC_MCR_NSTART_MASK                      (0x1000000U)
 #define ADC_MCR_NSTART_SHIFT                     (24U)
 /*! NSTART - Normal Conversion Start */
@@ -450,14 +467,11 @@ typedef struct {
  *  0b0000101..Channel 5 selected
  *  0b0000110..Channel 6 selected
  *  0b0000111..Channel 7 selected
- *  0b0001000..Reserved
- *  0b0001001..Reserved
- *  0b0001010..Reserved
- *  0b0001011..Bandgap input selected
- *  0b0001100..Pre-sample voltage - 1 : DVDD1P0/2
- *  0b0001101..Pre-sample voltage - 2 : AVDD1p8/4
- *  0b0001110..Pre-sample voltage - 3 : VREFL_1p8
- *  0b0001111..Pre-sample voltage - 4 : VREFH_1p8
+ *  0b0100000..Bandgap input selected
+ *  0b0100001..Pre-sample voltage - 1 : DVDD1P0/2
+ *  0b0100010..Pre-sample voltage - 2 : AVDD1p8
+ *  0b0100011..Pre-sample voltage - 3 : VREFL_1p8
+ *  0b0100100..Pre-sample voltage - 4 : VREFH_1p8
  */
 #define ADC_MSR_CHADDR(x)                        (((uint32_t)(((uint32_t)(x)) << ADC_MSR_CHADDR_SHIFT)) & ADC_MSR_CHADDR_MASK)
 
@@ -2911,7 +2925,7 @@ typedef struct {
 
 #define ADC_STAW5R_THRL_MASK                     (0xFFFU)
 #define ADC_STAW5R_THRL_SHIFT                    (0U)
-/*! THRL - Low Threshold Value for Step0 of Algorithm C */
+/*! THRL - Low Threshold Value for Step N of Algorithm C */
 #define ADC_STAW5R_THRL(x)                       (((uint32_t)(((uint32_t)(x)) << ADC_STAW5R_THRL_SHIFT)) & ADC_STAW5R_THRL_MASK)
 
 #define ADC_STAW5R_THRH_MASK                     (0xFFF0000U)
@@ -3023,6 +3037,27 @@ typedef struct {
 #define ADC_CALSTAT_TEST_RESULT_SHIFT            (16U)
 /*! TEST_RESULT - TEST_RESULT */
 #define ADC_CALSTAT_TEST_RESULT(x)               (((uint32_t)(((uint32_t)(x)) << ADC_CALSTAT_TEST_RESULT_SHIFT)) & ADC_CALSTAT_TEST_RESULT_MASK)
+/*! @} */
+
+/*! @name CALCFG0 - Calibration Configuration 0 */
+/*! @{ */
+
+#define ADC_CALCFG0_LDFAIL_MASK                  (0x10U)
+#define ADC_CALCFG0_LDFAIL_SHIFT                 (4U)
+/*! LDFAIL - Load calibrated values in fail condition
+ *  0b0..Load calibrated values only if the calibration step passes (retain existing values in case of fail) (default)
+ *  0b1..Enable loading of calibrated values in fail condition also
+ */
+#define ADC_CALCFG0_LDFAIL(x)                    (((uint32_t)(((uint32_t)(x)) << ADC_CALCFG0_LDFAIL_SHIFT)) & ADC_CALCFG0_LDFAIL_MASK)
+
+#define ADC_CALCFG0_BNDFLCNT_MASK                (0xF00U)
+#define ADC_CALCFG0_BNDFLCNT_SHIFT               (8U)
+/*! BNDFLCNT - Boundary condition fail count
+ *  0b0000..Single occurrence
+ *  0b0001..Double occurrence
+ *  0b0010..Four occurrence
+ */
+#define ADC_CALCFG0_BNDFLCNT(x)                  (((uint32_t)(((uint32_t)(x)) << ADC_CALCFG0_BNDFLCNT_SHIFT)) & ADC_CALCFG0_BNDFLCNT_MASK)
 /*! @} */
 
 

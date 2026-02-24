@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for CAN
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -223,7 +223,7 @@ typedef struct {
        uint8_t RESERVED_3[4];
   __IO uint32_t IFLAG3;                            /**< Interrupt Flags 3, offset: 0x74 */
   __I  uint32_t ET;                                /**< External Timer, offset: 0x78 */
-       uint8_t RESERVED_4[4];
+  __IO uint32_t FLTCONF_IE;                        /**< Fault Confinement Interrupt Enable, offset: 0x7C */
   union {                                          /* offset: 0x80 */
     struct {                                         /* offset: 0x80, array step: 0x10 */
       __IO uint32_t CS;                                /**< Message Buffer 0 CS Register..Message Buffer 95 CS Register, array offset: 0x80, array step: 0x10 */
@@ -252,9 +252,9 @@ typedef struct {
       __IO uint32_t WORD1;                             /**< Message Buffer 0 WORD1 Register..Message Buffer 95 WORD1 Register, array offset: 0x8C, array step: 0x10 */
     } MB[CAN_MB_SIZE_MB_GROUP_MB_COUNT];
   };
-       uint8_t RESERVED_5[512];
+       uint8_t RESERVED_4[512];
   __IO uint32_t RXIMR[CAN_RXIMR_COUNT];            /**< Receive Individual Mask, array offset: 0x880, array step: 0x4 */
-       uint8_t RESERVED_6[224];
+       uint8_t RESERVED_5[224];
   __IO uint32_t MECR;                              /**< Memory Error Control, offset: 0xAE0 */
   __IO uint32_t ERRIAR;                            /**< Error Injection Address, offset: 0xAE4 */
   __IO uint32_t ERRIDPR;                           /**< Error Injection Data Pattern, offset: 0xAE8 */
@@ -263,7 +263,7 @@ typedef struct {
   __I  uint32_t RERRDR;                            /**< Error Report Data, offset: 0xAF4 */
   __I  uint32_t RERRSYNR;                          /**< Error Report Syndrome, offset: 0xAF8 */
   __IO uint32_t ERRSR;                             /**< Error Status, offset: 0xAFC */
-       uint8_t RESERVED_7[240];
+       uint8_t RESERVED_6[240];
   __IO uint32_t EPRS;                              /**< Enhanced CAN Bit Timing Prescalers, offset: 0xBF0 */
   __IO uint32_t ENCBT;                             /**< Enhanced Nominal CAN Bit Timing, offset: 0xBF4 */
   __IO uint32_t EDCBT;                             /**< Enhanced Data Phase CAN Bit Timing, offset: 0xBF8 */
@@ -274,9 +274,10 @@ typedef struct {
   __IO uint32_t ERFCR;                             /**< Enhanced RX FIFO Control, offset: 0xC0C */
   __IO uint32_t ERFIER;                            /**< Enhanced RX FIFO Interrupt Enable, offset: 0xC10 */
   __IO uint32_t ERFSR;                             /**< Enhanced RX FIFO Status, offset: 0xC14 */
-       uint8_t RESERVED_8[24];
+  __IO uint32_t FDLCR;                             /**< CANFD Light Module Control, offset: 0xC18 */
+       uint8_t RESERVED_7[20];
   __IO uint32_t HR_TIME_STAMP[CAN_HR_TIME_STAMP_COUNT]; /**< High-Resolution Timestamp, array offset: 0xC30, array step: 0x4 */
-       uint8_t RESERVED_9[8784];
+       uint8_t RESERVED_8[8784];
   __IO uint32_t ERFFEL[CAN_ERFFEL_COUNT];          /**< Enhanced RX FIFO Filter Element, array offset: 0x3000, array step: 0x4 */
 } CAN_Type;
 
@@ -405,7 +406,7 @@ typedef struct {
 
 #define CAN_MCR_SLFWAK_MASK                      (0x400000U)
 #define CAN_MCR_SLFWAK_SHIFT                     (22U)
-/*! SLFWAK - Self Wake-Up
+/*! SLFWAK - Self-Wake-Up Feature
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -437,7 +438,7 @@ typedef struct {
 
 #define CAN_MCR_WAKMSK_MASK                      (0x4000000U)
 #define CAN_MCR_WAKMSK_SHIFT                     (26U)
-/*! WAKMSK - Wake-Up Interrupt Mask
+/*! WAKMSK - Wake-up Interrupt Mask
  *  0b0..Disabled
  *  0b1..Enabled
  */
@@ -568,8 +569,8 @@ typedef struct {
 #define CAN_CTRL1_CLKSRC_MASK                    (0x2000U)
 #define CAN_CTRL1_CLKSRC_SHIFT                   (13U)
 /*! CLKSRC - CAN Engine Clock Source
- *  0b0..Oscillator clock
- *  0b1..Peripheral clock
+ *  0b0..Peripheral clock
+ *  0b1..Bus clock
  */
 #define CAN_CTRL1_CLKSRC(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_CLKSRC_SHIFT)) & CAN_CTRL1_CLKSRC_MASK)
 
@@ -675,7 +676,7 @@ typedef struct {
 
 #define CAN_ESR1_WAKINT_MASK                     (0x1U)
 #define CAN_ESR1_WAKINT_SHIFT                    (0U)
-/*! WAKINT - Wake-Up Interrupt Flag
+/*! WAKINT - Wake-up Interrupt Flag
  *  0b0..No such occurrence.
  *  0b1..Indicates that a recessive-to-dominant transition was received on the CAN bus.
  */
@@ -758,7 +759,7 @@ typedef struct {
 #define CAN_ESR1_FRMERR_SHIFT                    (11U)
 /*! FRMERR - Form Error Flag
  *  0b0..No error
- *  0b1..A Form Error occurred since last read of this register.
+ *  0b1..Error occurred since last read of this register.
  */
 #define CAN_ESR1_FRMERR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_FRMERR_SHIFT)) & CAN_ESR1_FRMERR_MASK)
 
@@ -766,7 +767,7 @@ typedef struct {
 #define CAN_ESR1_CRCERR_SHIFT                    (12U)
 /*! CRCERR - Cyclic Redundancy Check Error Flag
  *  0b0..No error
- *  0b1..A CRC error occurred since last read of this register.
+ *  0b1..Error occurred since last read of this register.
  */
 #define CAN_ESR1_CRCERR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_CRCERR_SHIFT)) & CAN_ESR1_CRCERR_MASK)
 
@@ -774,7 +775,7 @@ typedef struct {
 #define CAN_ESR1_ACKERR_SHIFT                    (13U)
 /*! ACKERR - Acknowledge Error Flag
  *  0b0..No error
- *  0b1..An ACK error occurred since last read of this register.
+ *  0b1..Error occurred since last read of this register.
  */
 #define CAN_ESR1_ACKERR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_ACKERR_SHIFT)) & CAN_ESR1_ACKERR_MASK)
 
@@ -842,6 +843,22 @@ typedef struct {
  */
 #define CAN_ESR1_ERROVR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_ERROVR_SHIFT)) & CAN_ESR1_ERROVR_MASK)
 
+#define CAN_ESR1_ATP_MASK                        (0x400000U)
+#define CAN_ESR1_ATP_SHIFT                       (22U)
+/*! ATP - Active to Passive State
+ *  0b0..Does not transition
+ *  0b1..Transitions
+ */
+#define CAN_ESR1_ATP(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_ATP_SHIFT)) & CAN_ESR1_ATP_MASK)
+
+#define CAN_ESR1_PTA_MASK                        (0x800000U)
+#define CAN_ESR1_PTA_SHIFT                       (23U)
+/*! PTA - Passive to Active State
+ *  0b0..Does not transition
+ *  0b1..Transitions
+ */
+#define CAN_ESR1_PTA(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_PTA_SHIFT)) & CAN_ESR1_PTA_MASK)
+
 #define CAN_ESR1_STFERR_FAST_MASK                (0x4000000U)
 #define CAN_ESR1_STFERR_FAST_SHIFT               (26U)
 /*! STFERR_FAST - Fast Stuffing Error Flag
@@ -870,7 +887,7 @@ typedef struct {
 #define CAN_ESR1_BIT0ERR_FAST_SHIFT              (30U)
 /*! BIT0ERR_FAST - Fast Bit0 Error Flag
  *  0b0..No such occurrence.
- *  0b1..At least one bit sent as dominant is received as recessive.
+ *  0b1..At least one bit transmitted as dominant is received as recessive.
  */
 #define CAN_ESR1_BIT0ERR_FAST(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_BIT0ERR_FAST_SHIFT)) & CAN_ESR1_BIT0ERR_FAST_MASK)
 
@@ -878,7 +895,7 @@ typedef struct {
 #define CAN_ESR1_BIT1ERR_FAST_SHIFT              (31U)
 /*! BIT1ERR_FAST - Fast Bit1 Error Flag
  *  0b0..No such occurrence.
- *  0b1..At least one bit sent as recessive is received as dominant.
+ *  0b1..At least one bit transmitted as recessive is received as dominant.
  */
 #define CAN_ESR1_BIT1ERR_FAST(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_BIT1ERR_FAST_SHIFT)) & CAN_ESR1_BIT1ERR_FAST_MASK)
 /*! @} */
@@ -1012,8 +1029,8 @@ typedef struct {
 #define CAN_CTRL2_ISOCANFDEN_MASK                (0x1000U)
 #define CAN_CTRL2_ISOCANFDEN_SHIFT               (12U)
 /*! ISOCANFDEN - ISO CAN FD Enable
- *  0b0..Disable. FlexCAN operates using the non-ISO CAN FD protocol.
- *  0b1..Enable. FlexCAN operates using the ISO CAN FD protocol (ISO 11898-1:2015).
+ *  0b0..Disable
+ *  0b1..Enable
  */
 #define CAN_CTRL2_ISOCANFDEN(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_ISOCANFDEN_SHIFT)) & CAN_CTRL2_ISOCANFDEN_MASK)
 
@@ -1235,6 +1252,26 @@ typedef struct {
 #define CAN_ET_TIMER_SHIFT                       (0U)
 /*! TIMER - Timer */
 #define CAN_ET_TIMER(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_ET_TIMER_SHIFT)) & CAN_ET_TIMER_MASK)
+/*! @} */
+
+/*! @name FLTCONF_IE - Fault Confinement Interrupt Enable */
+/*! @{ */
+
+#define CAN_FLTCONF_IE_ATP_IE_MASK               (0x1U)
+#define CAN_FLTCONF_IE_ATP_IE_SHIFT              (0U)
+/*! ATP_IE - Active to Passive Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define CAN_FLTCONF_IE_ATP_IE(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_FLTCONF_IE_ATP_IE_SHIFT)) & CAN_FLTCONF_IE_ATP_IE_MASK)
+
+#define CAN_FLTCONF_IE_PTA_IE_MASK               (0x2U)
+#define CAN_FLTCONF_IE_PTA_IE_SHIFT              (1U)
+/*! PTA_IE - Passive to Active Interrupt Enable
+ *  0b0..Disable
+ *  0b1..Enable
+ */
+#define CAN_FLTCONF_IE_PTA_IE(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_FLTCONF_IE_PTA_IE_SHIFT)) & CAN_FLTCONF_IE_PTA_IE_MASK)
 /*! @} */
 
 /* The count of CAN_CS */
@@ -1761,9 +1798,9 @@ typedef struct {
 
 #define CAN_MECR_NCEFAFRZ_MASK                   (0x80U)
 #define CAN_MECR_NCEFAFRZ_SHIFT                  (7U)
-/*! NCEFAFRZ - Non-Correctable Errors in FlexCAN Access Put Device in Freeze Mode
- *  0b0..Keep normal operation.
- *  0b1..Put FlexCAN in Freeze mode (see section "Freeze mode").
+/*! NCEFAFRZ - Noncorrectable Errors in FlexCAN Access Put Chip in Freeze Mode
+ *  0b0..Normal operation
+ *  0b1..Freeze mode
  */
 #define CAN_MECR_NCEFAFRZ(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_MECR_NCEFAFRZ_SHIFT)) & CAN_MECR_NCEFAFRZ_MASK)
 
@@ -1817,7 +1854,7 @@ typedef struct {
 
 #define CAN_MECR_FANCEI_MSK_MASK                 (0x40000U)
 #define CAN_MECR_FANCEI_MSK_SHIFT                (18U)
-/*! FANCEI_MSK - FlexCAN Access with Non-Correctable Errors Interrupt Mask
+/*! FANCEI_MSK - FlexCAN Access with Noncorrectable Errors Interrupt Mask
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -1825,7 +1862,7 @@ typedef struct {
 
 #define CAN_MECR_HANCEI_MSK_MASK                 (0x80000U)
 #define CAN_MECR_HANCEI_MSK_SHIFT                (19U)
-/*! HANCEI_MSK - Host Access with Non-Correctable Errors Interrupt Mask
+/*! HANCEI_MSK - Host Access with Noncorrectable Errors Interrupt Mask
  *  0b0..Disable
  *  0b1..Enable
  */
@@ -1902,9 +1939,9 @@ typedef struct {
 
 #define CAN_RERRAR_NCE_MASK                      (0x1000000U)
 #define CAN_RERRAR_NCE_SHIFT                     (24U)
-/*! NCE - Non-Correctable Error
+/*! NCE - Noncorrectable Error
  *  0b0..Reporting a correctable error
- *  0b1..Reporting a non-correctable error
+ *  0b1..Reporting a noncorrectable error
  */
 #define CAN_RERRAR_NCE(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_RERRAR_NCE_SHIFT)) & CAN_RERRAR_NCE_MASK)
 /*! @} */
@@ -1987,7 +2024,7 @@ typedef struct {
 
 #define CAN_ERRSR_FANCEIOF_MASK                  (0x4U)
 #define CAN_ERRSR_FANCEIOF_SHIFT                 (2U)
-/*! FANCEIOF - FlexCAN Access with Non-Correctable Error Interrupt Overrun Flag
+/*! FANCEIOF - FlexCAN Access with Noncorrectable Error Interrupt Overrun Flag
  *  0b0..No errors detected
  *  0b1..Error detected
  */
@@ -1995,7 +2032,7 @@ typedef struct {
 
 #define CAN_ERRSR_HANCEIOF_MASK                  (0x8U)
 #define CAN_ERRSR_HANCEIOF_SHIFT                 (3U)
-/*! HANCEIOF - Host Access With Non-Correctable Error Interrupt Overrun Flag
+/*! HANCEIOF - Host Access with Noncorrectable Error Interrupt Overrun Flag
  *  0b0..No errors detected
  *  0b1..Error detected
  */
@@ -2011,7 +2048,7 @@ typedef struct {
 
 #define CAN_ERRSR_FANCEIF_MASK                   (0x40000U)
 #define CAN_ERRSR_FANCEIF_SHIFT                  (18U)
-/*! FANCEIF - FlexCAN Access with Non-Correctable Error Interrupt Flag
+/*! FANCEIF - FlexCAN Access with Noncorrectable Error Interrupt Flag
  *  0b0..No errors detected
  *  0b1..Error detected
  */
@@ -2358,6 +2395,50 @@ typedef struct {
  *  0b1..Underflow
  */
 #define CAN_ERFSR_ERFUFW(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ERFSR_ERFUFW_SHIFT)) & CAN_ERFSR_ERFUFW_MASK)
+/*! @} */
+
+/*! @name FDLCR - CANFD Light Module Control */
+/*! @{ */
+
+#define CAN_FDLCR_CMDR_HS_MASK                   (0x1U)
+#define CAN_FDLCR_CMDR_HS_SHIFT                  (0U)
+/*! CMDR_HS - Commander High-Speed Mode
+ *  0b0..CAN FD Light commander disabled
+ *  0b1..CAN FD Light commander enabled
+ */
+#define CAN_FDLCR_CMDR_HS(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_CMDR_HS_SHIFT)) & CAN_FDLCR_CMDR_HS_MASK)
+
+#define CAN_FDLCR_RSDR_HS_MASK                   (0x2U)
+#define CAN_FDLCR_RSDR_HS_SHIFT                  (1U)
+/*! RSDR_HS - Responder High-Speed Mode
+ *  0b0..CAN FD Light responder disabled
+ *  0b1..CAN FD Light responder enabled
+ */
+#define CAN_FDLCR_RSDR_HS(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_RSDR_HS_SHIFT)) & CAN_FDLCR_RSDR_HS_MASK)
+
+#define CAN_FDLCR_ACK_RESP_MASK                  (0x10U)
+#define CAN_FDLCR_ACK_RESP_SHIFT                 (4U)
+/*! ACK_RESP - ACK Response Configuration
+ *  0b0..Disabled ACK response
+ *  0b1..Enabled ACK response
+ */
+#define CAN_FDLCR_ACK_RESP(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_ACK_RESP_SHIFT)) & CAN_FDLCR_ACK_RESP_MASK)
+
+#define CAN_FDLCR_ACK_TOL_MASK                   (0x20U)
+#define CAN_FDLCR_ACK_TOL_SHIFT                  (5U)
+/*! ACK_TOL - ACK Tolerance Configuration
+ *  0b0..Disabled ACK tolerance
+ *  0b1..Enabled ACK tolerance
+ */
+#define CAN_FDLCR_ACK_TOL(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_ACK_TOL_SHIFT)) & CAN_FDLCR_ACK_TOL_MASK)
+
+#define CAN_FDLCR_TX_SYNC_MASK                   (0x40U)
+#define CAN_FDLCR_TX_SYNC_SHIFT                  (6U)
+/*! TX_SYNC - TX Synchronization Configuration
+ *  0b0..Disable Tx Synchronization
+ *  0b1..Enable Tx Synchronization
+ */
+#define CAN_FDLCR_TX_SYNC(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_FDLCR_TX_SYNC_SHIFT)) & CAN_FDLCR_TX_SYNC_MASK)
 /*! @} */
 
 /*! @name HR_TIME_STAMP - High-Resolution Timestamp */

@@ -7,7 +7,7 @@
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    IMX8ULPRM, Rev. D, December. 2022
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250815
+**     Build:               b251201
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMX8UD7_dsp0
@@ -743,6 +743,16 @@ typedef enum IRQn {
 #define MU_BASE_PTRS                             { MU1_MUB }
 /** Interrupt vectors for the MU peripheral type */
 #define MU_IRQS                                  { MU1_B_IRQn }
+/*!
+ * @brief Core boot mode.
+ */
+typedef enum _mu_core_boot_mode
+{
+    kMU_CoreBootFromAddr0 = 0x00U, /*!< Boot from 0x00.      */
+    kMU_CoreBootFromFlash = 0x01U, /*!< Boot from Flash base. */
+    kMU_CoreBootFromItcm  = 0x02U, /*!< Boot from ITCM base. */
+} mu_core_boot_mode_t;
+
 
 /* PCC0 - Peripheral instance base addresses */
 /** Peripheral PCC0 base address */
@@ -813,6 +823,9 @@ typedef enum IRQn {
 #define PDM_BASE_ADDRS                           { PDM_BASE }
 /** Array initializer of PDM peripheral base pointers */
 #define PDM_BASE_PTRS                            { PDM }
+/** Interrupt vectors for the PDM peripheral type */
+#define PDM_HWVAD_Event_IRQS                     { PDM_HWVAD_EVENT_IRQn }
+#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
 
 /* POWERQUAD - Peripheral instance base addresses */
 /** Peripheral POWERQUAD base address */

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for BLK_CTRL_S_AONMIX
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -182,23 +182,16 @@
  * @{
  */
 
+/** BLK_CTRL_S_AONMIX - Size of Registers Arrays */
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_COUNT          7u
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_COUNT          6u
+
 /** BLK_CTRL_S_AONMIX - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t CM33_IRQ_MASK0;                    /**< CM33_IRQ_MASK0, offset: 0x0 */
-  __IO uint32_t CM33_IRQ_MASK1;                    /**< CM33_IRQ_MASK1, offset: 0x4 */
-  __IO uint32_t CM33_IRQ_MASK2;                    /**< CM33_IRQ_MASK2, offset: 0x8 */
-  __IO uint32_t CM33_IRQ_MASK3;                    /**< CM33_IRQ_MASK3, offset: 0xC */
-  __IO uint32_t CM33_IRQ_MASK4;                    /**< CM33_IRQ_MASK4, offset: 0x10 */
-  __IO uint32_t CM33_IRQ_MASK5;                    /**< CM33_IRQ_MASK5, offset: 0x14 */
-  __IO uint32_t CM33_IRQ_MASK6;                    /**< CM33_IRQ_MASK6, offset: 0x18 */
+  __IO uint32_t CM33_IRQ_MASK[BLK_CTRL_S_AONMIX_CM33_IRQ_COUNT]; /**< CM33_IRQ_MASK0..CM33_IRQ_MASK6, array offset: 0x0, array step: 0x4 */
   __IO uint32_t INITNSVTOR;                        /**< M33 restart non-secure address, offset: 0x1C */
        uint8_t RESERVED_0[32];
-  __IO uint32_t CA55_IRQ_MASK0;                    /**< CA55_IRQ_MASK0, offset: 0x40 */
-  __IO uint32_t CA55_IRQ_MASK1;                    /**< CA55_IRQ_MASK1, offset: 0x44 */
-  __IO uint32_t CA55_IRQ_MASK2;                    /**< CA55_IRQ_MASK2, offset: 0x48 */
-  __IO uint32_t CA55_IRQ_MASK3;                    /**< CA55_IRQ_MASK3, offset: 0x4C */
-  __IO uint32_t CA55_IRQ_MASK4;                    /**< CA55_IRQ_MASK4, offset: 0x50 */
-  __IO uint32_t CA55_IRQ_MASK5;                    /**< CA55_IRQ_MASK5, offset: 0x54 */
+  __IO uint32_t CA55_IRQ_MASK[BLK_CTRL_S_AONMIX_CA55_IRQ_COUNT]; /**< CA55_IRQ_MASK0..CA55_IRQ_MASK5, array offset: 0x40, array step: 0x4 */
   __IO uint32_t CA55_IRQ_MASK6;                    /**< CA55_IRQ_MASK6, offset: 0x58 */
   __IO uint32_t INITSVTOR;                         /**< M33 restart secure address, offset: 0x5C */
   __IO uint32_t M33_CFG;                           /**< M33 Configure, offset: 0x60 */
@@ -231,89 +224,20 @@ typedef struct {
  * @{
  */
 
-/*! @name CM33_IRQ_MASK0 - CM33_IRQ_MASK0 */
+/*! @name CM33_IRQ_MASK - CM33_IRQ_MASK0..CM33_IRQ_MASK6 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK0_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK0_M_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_MASK   (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_SHIFT  (0U)
 /*! M - CM33 IRQ MASK
  *  0b00000000000000000000000000000000..IRQ masked
  *  0b00000000000000000000000000000001..IRQ not masked
  */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK0_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK0_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK0_M_MASK)
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_M_MASK)
 /*! @} */
 
-/*! @name CM33_IRQ_MASK1 - CM33_IRQ_MASK1 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK1_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK1_M_SHIFT (0U)
-/*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK1_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK1_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK1_M_MASK)
-/*! @} */
-
-/*! @name CM33_IRQ_MASK2 - CM33_IRQ_MASK2 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK2_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK2_M_SHIFT (0U)
-/*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK2_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK2_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK2_M_MASK)
-/*! @} */
-
-/*! @name CM33_IRQ_MASK3 - CM33_IRQ_MASK3 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK3_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK3_M_SHIFT (0U)
-/*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK3_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK3_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK3_M_MASK)
-/*! @} */
-
-/*! @name CM33_IRQ_MASK4 - CM33_IRQ_MASK4 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK4_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK4_M_SHIFT (0U)
-/*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK4_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK4_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK4_M_MASK)
-/*! @} */
-
-/*! @name CM33_IRQ_MASK5 - CM33_IRQ_MASK5 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK5_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK5_M_SHIFT (0U)
-/*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK5_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK5_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK5_M_MASK)
-/*! @} */
-
-/*! @name CM33_IRQ_MASK6 - CM33_IRQ_MASK6 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK6_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK6_M_SHIFT (0U)
-/*! M - CM33 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK6_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CM33_IRQ_MASK6_M_SHIFT)) & BLK_CTRL_S_AONMIX_CM33_IRQ_MASK6_M_MASK)
-/*! @} */
+/* The count of BLK_CTRL_S_AONMIX_CM33_IRQ_MASK */
+#define BLK_CTRL_S_AONMIX_CM33_IRQ_MASK_COUNT    (7U)
 
 /*! @name INITNSVTOR - M33 restart non-secure address */
 /*! @{ */
@@ -324,77 +248,20 @@ typedef struct {
 #define BLK_CTRL_S_AONMIX_INITNSVTOR_M(x)        (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_INITNSVTOR_M_SHIFT)) & BLK_CTRL_S_AONMIX_INITNSVTOR_M_MASK)
 /*! @} */
 
-/*! @name CA55_IRQ_MASK0 - CA55_IRQ_MASK0 */
+/*! @name CA55_IRQ_MASK - CA55_IRQ_MASK0..CA55_IRQ_MASK5 */
 /*! @{ */
 
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK0_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK0_M_SHIFT (0U)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_MASK   (0xFFFFFFFFU)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_SHIFT  (0U)
 /*! M - CA55 IRQ MASK
  *  0b00000000000000000000000000000000..IRQ masked
  *  0b00000000000000000000000000000001..IRQ not masked
  */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK0_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK0_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK0_M_MASK)
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M(x)     (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_M_MASK)
 /*! @} */
 
-/*! @name CA55_IRQ_MASK1 - CA55_IRQ_MASK1 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK1_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK1_M_SHIFT (0U)
-/*! M - CA55 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK1_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK1_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK1_M_MASK)
-/*! @} */
-
-/*! @name CA55_IRQ_MASK2 - CA55_IRQ_MASK2 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK2_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK2_M_SHIFT (0U)
-/*! M - CA55 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK2_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK2_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK2_M_MASK)
-/*! @} */
-
-/*! @name CA55_IRQ_MASK3 - CA55_IRQ_MASK3 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK3_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK3_M_SHIFT (0U)
-/*! M - CA55 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK3_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK3_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK3_M_MASK)
-/*! @} */
-
-/*! @name CA55_IRQ_MASK4 - CA55_IRQ_MASK4 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK4_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK4_M_SHIFT (0U)
-/*! M - CA55 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK4_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK4_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK4_M_MASK)
-/*! @} */
-
-/*! @name CA55_IRQ_MASK5 - CA55_IRQ_MASK5 */
-/*! @{ */
-
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK5_M_MASK  (0xFFFFFFFFU)
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK5_M_SHIFT (0U)
-/*! M - CA55 IRQ MASK
- *  0b00000000000000000000000000000000..IRQ masked
- *  0b00000000000000000000000000000001..IRQ not masked
- */
-#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK5_M(x)    (((uint32_t)(((uint32_t)(x)) << BLK_CTRL_S_AONMIX_CA55_IRQ_MASK5_M_SHIFT)) & BLK_CTRL_S_AONMIX_CA55_IRQ_MASK5_M_MASK)
-/*! @} */
+/* The count of BLK_CTRL_S_AONMIX_CA55_IRQ_MASK */
+#define BLK_CTRL_S_AONMIX_CA55_IRQ_MASK_COUNT    (6U)
 
 /*! @name CA55_IRQ_MASK6 - CA55_IRQ_MASK6 */
 /*! @{ */

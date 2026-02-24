@@ -1512,7 +1512,7 @@ typedef enum _clock_gate_value
 /*! @brief Clock ip name array for I3C. */
 #define I3C_CLOCKS                                 \
     {                                              \
-        kCLOCK_IpInvalid, kCLOCK_I3c1, kCLOCK_I3c2 \
+        kCLOCK_IpInvalid, kCLOCK_I3c1slow, kCLOCK_I3c2slow \
     }
 
 /*

@@ -66,13 +66,13 @@
 **                          MIMX9352XVVXM_cm33
 **
 **     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b260113
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for TRDC_MBC0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -209,7 +209,7 @@ typedef struct {
        uint8_t RESERVED_5[1472];
   struct {                                         /* offset: 0x800, array step: 0x20 */
     struct {                                         /* offset: 0x800, array step: index*0x20, index2*0x4 */
-      __IO uint32_t MDA_W_DFMT1;                       /**< DAC Master Domain Assignment Register, array offset: 0x800, array step: index*0x20, index2*0x4, irregular array, not all indices are valid */
+      __IO uint32_t MDA_W_DFMT1;                       /**< DAC Initiator Domain Assignment Register, array offset: 0x800, array step: index*0x20, index2*0x4, irregular array, not all indices are valid */
     } MDA_Wx_DFMT1[TRDC_MBC0_MDA_Wx_y_DFMT_MDA_W_DFMT_DFMT1_MDA_Wx_DFMT1_COUNT];
          uint8_t RESERVED_0[28];
   } MDA_Wx_y_DFMT[TRDC_MBC0_MDA_Wx_y_DFMT_COUNT];
@@ -275,7 +275,7 @@ typedef struct {
 
 #define TRDC_MBC0_TRDC_HWCFG0_NMSTR_MASK         (0xFF00U)
 #define TRDC_MBC0_TRDC_HWCFG0_NMSTR_SHIFT        (8U)
-/*! NMSTR - Number of bus masters */
+/*! NMSTR - Number of bus initiators */
 #define TRDC_MBC0_TRDC_HWCFG0_NMSTR(x)           (((uint32_t)(((uint32_t)(x)) << TRDC_MBC0_TRDC_HWCFG0_NMSTR_SHIFT)) & TRDC_MBC0_TRDC_HWCFG0_NMSTR_MASK)
 
 #define TRDC_MBC0_TRDC_HWCFG0_NMBC_MASK          (0xF0000U)
@@ -308,14 +308,14 @@ typedef struct {
 
 #define TRDC_MBC0_DACFG_NMDAR_MASK               (0xFU)
 #define TRDC_MBC0_DACFG_NMDAR_SHIFT              (0U)
-/*! NMDAR - Number of master domain assignment registers for bus master m */
+/*! NMDAR - Number of initiator domain assignment registers for bus initiator m */
 #define TRDC_MBC0_DACFG_NMDAR(x)                 (((uint8_t)(((uint8_t)(x)) << TRDC_MBC0_DACFG_NMDAR_SHIFT)) & TRDC_MBC0_DACFG_NMDAR_MASK)
 
 #define TRDC_MBC0_DACFG_NCM_MASK                 (0x80U)
 #define TRDC_MBC0_DACFG_NCM_SHIFT                (7U)
-/*! NCM - Non-CPU Master
- *  0b0..Bus master is a processor.
- *  0b1..Bus master is a non-processor.
+/*! NCM - Non-CPU Initiator
+ *  0b0..Bus initiator is a processor.
+ *  0b1..Bus initiator is a non-processor.
  */
 #define TRDC_MBC0_DACFG_NCM(x)                   (((uint8_t)(((uint8_t)(x)) << TRDC_MBC0_DACFG_NCM_SHIFT)) & TRDC_MBC0_DACFG_NCM_MASK)
 /*! @} */
@@ -331,8 +331,8 @@ typedef struct {
 #define TRDC_MBC0_TRDC_IDAU_CR_CFGSECEXT_MASK    (0x8U)
 #define TRDC_MBC0_TRDC_IDAU_CR_CFGSECEXT_SHIFT   (3U)
 /*! CFGSECEXT - Configure Security Extension
- *  0b0..ARMv8M Security Extension is disabled
- *  0b1..ARMv8-M Security Extension is enabled
+ *  0b0..Armv8M Security Extension is disabled
+ *  0b1..Armv8-M Security Extension is enabled
  */
 #define TRDC_MBC0_TRDC_IDAU_CR_CFGSECEXT(x)      (((uint32_t)(((uint32_t)(x)) << TRDC_MBC0_TRDC_IDAU_CR_CFGSECEXT_SHIFT)) & TRDC_MBC0_TRDC_IDAU_CR_CFGSECEXT_MASK)
 
@@ -489,7 +489,7 @@ typedef struct {
 /* The count of TRDC_MBC0_TRDC_DERRLOC */
 #define TRDC_MBC0_TRDC_DERRLOC_COUNT             (16U)
 
-/*! @name MDA_W_DFMT1 - DAC Master Domain Assignment Register */
+/*! @name MDA_W_DFMT1 - DAC Initiator Domain Assignment Register */
 /*! @{ */
 
 #define TRDC_MBC0_MDA_W_DFMT1_DID_MASK           (0xFU)
@@ -500,20 +500,20 @@ typedef struct {
 #define TRDC_MBC0_MDA_W_DFMT1_PA_MASK            (0x30U)
 #define TRDC_MBC0_MDA_W_DFMT1_PA_SHIFT           (4U)
 /*! PA - Privileged attribute
- *  0b00..Force the bus attribute for this master to user.
- *  0b01..Force the bus attribute for this master to privileged.
- *  0b10..Use the bus master's privileged/user attribute directly.
- *  0b11..Use the bus master's privileged/user attribute directly.
+ *  0b00..Force the bus attribute for this initiator to user.
+ *  0b01..Force the bus attribute for this initiator to privileged.
+ *  0b10..Use the bus initiator's privileged/user attribute directly.
+ *  0b11..Use the bus initiator's privileged/user attribute directly.
  */
 #define TRDC_MBC0_MDA_W_DFMT1_PA(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC0_MDA_W_DFMT1_PA_SHIFT)) & TRDC_MBC0_MDA_W_DFMT1_PA_MASK)
 
 #define TRDC_MBC0_MDA_W_DFMT1_SA_MASK            (0xC0U)
 #define TRDC_MBC0_MDA_W_DFMT1_SA_SHIFT           (6U)
 /*! SA - Secure attribute
- *  0b00..Force the bus attribute for this master to secure.
- *  0b01..Force the bus attribute for this master to nonsecure.
- *  0b10..Use the bus master's secure/nonsecure attribute directly.
- *  0b11..Use the bus master's secure/nonsecure attribute directly.
+ *  0b00..Force the bus attribute for this initiator to secure.
+ *  0b01..Force the bus attribute for this initiator to nonsecure.
+ *  0b10..Use the bus initiator's secure/nonsecure attribute directly.
+ *  0b11..Use the bus initiator's secure/nonsecure attribute directly.
  */
 #define TRDC_MBC0_MDA_W_DFMT1_SA(x)              (((uint32_t)(((uint32_t)(x)) << TRDC_MBC0_MDA_W_DFMT1_SA_SHIFT)) & TRDC_MBC0_MDA_W_DFMT1_SA_MASK)
 

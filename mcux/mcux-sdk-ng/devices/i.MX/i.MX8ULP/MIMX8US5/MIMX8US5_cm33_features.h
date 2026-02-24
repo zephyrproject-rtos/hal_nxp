@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
-**     Version:             rev. 5.0, 2023-04-27
-**     Build:               b250814
+**     Version:             rev. 6.0, 2025-11-12
+**     Build:               b251112
 **
 **     Abstract:
 **         Chip specific module features.
@@ -24,6 +24,8 @@
 **         Base on rev B RM
 **     - rev. 5.0 (2023-04-27)
 **         Base on rev D RM
+**     - rev. 6.0 (2025-11-12)
+**         Update PDM/MU/USBHS feature for common add updates
 **
 ** ###################################################################
 */
@@ -217,7 +219,7 @@
 
 /* @brief Cache Line size in byte. */
 #define FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE (16)
-/* @brief Cache doesn't support write buffer. */
+/* @brief Cache does not support write buffer. */
 #define FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF (1)
 
 /* CACHEC module features */
@@ -618,7 +620,7 @@
 
 /* LCDIF module features */
 
-/* @brief Support D/CX Pin polarity. */
+/* @brief Support D/CX Pin polarity */
 #define FSL_FEATURE_LCDIF_HAS_DBIX_POLARITY (1)
 /* @brief Has DBI Type C Option. */
 #define FSL_FEATURE_LCDIF_HAS_TYPEC (1)
@@ -631,6 +633,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (0)
 
 /* LPIT module features */
 
@@ -659,6 +663,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (0)
 
 /* LPTMR module features */
 
@@ -781,12 +787,16 @@
 
 /* @brief MU side for current core */
 #define FSL_FEATURE_MU_SIDE_A (1)
-/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE] . */
+/* @brief MU supports reset assert interrupt. CIER0[RAIE] or CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (0)
 /* @brief MU does not support core status. Register CSSR0 or CSR0. */
 #define FSL_FEATURE_MU_NO_CORE_STATUS (0)
+/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
+#define FSL_FEATURE_MU_NO_NMI (0)
+/* @brief MU does not support core event pending. Register bit SR[CEP]. */
+#define FSL_FEATURE_MU_NO_CEP (0)
 /* @brief MU supports Power-Down mode entry interrupt. CIER0[PDIE] */
 #define FSL_FEATURE_MU_HAS_PD_INT (1)
 /* @brief MU supports STOP mode entry interrupt. CIER0[STOPIE] */
@@ -799,14 +809,10 @@
 #define FSL_FEATURE_MU_HAS_RUN_INT (1)
 /* @brief MU supports hardware reset interrupt. CSSR0[HRIP] or CSR0[HRIP]. */
 #define FSL_FEATURE_MU_HAS_SR_HRIP (1)
-/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
-#define FSL_FEATURE_MU_NO_CLKE (0)
-/* @brief MU does not support NMI. Register bit CCR0[NMI]. */
-#define FSL_FEATURE_MU_NO_NMI (0)
-/* @brief MU does not support core event pending. Register bit SR[CEP]. */
-#define FSL_FEATURE_MU_NO_CEP (0)
 /* @brief MU supports reset interrupt. Register bit SR[MURIP]. */
 #define FSL_FEATURE_MU_HAS_SR_MURIP (1)
+/* @brief MU does not support enable clock of the other core, CR[CLKE] or CCR[CLKE]. */
+#define FSL_FEATURE_MU_NO_CLKE (0)
 /* @brief MU has bit CCR0[RSTH]. */
 #define FSL_FEATURE_MU_HAS_RSTH (1)
 /* @brief MU has bit CCR0[RSTH] by instance. */
@@ -847,7 +853,7 @@
 #define FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ (0)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (1)
-/* @brief PDM Has no minimum clkdiv */
+/* @brief PDM has no minimum clkdiv. */
 #define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (1)
 /* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (1)
@@ -855,12 +861,14 @@
 #define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
 /* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
 #define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (0)
-/* @brief PDM Has DC_OUT_CTRL */
+/* @brief PDM Has DC_OUT_CTRL. */
 #define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (1)
 /* @brief PDM Has Fixed DC CTRL VALUE. */
 #define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (1)
 /* @brief PDM Has no independent error IRQ. */
 #define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (1)
+/* @brief PDM has no hardware Voice Activity Detector */
+#define FSL_FEATURE_PDM_HAS_NO_HWVAD (0)
 
 /* PXP module features */
 
@@ -1011,6 +1019,8 @@
 #define FSL_FEATURE_USBHS_EHCI_COUNT (3)
 /* @brief Number of endpoints supported */
 #define FSL_FEATURE_USBHS_ENDPT_COUNT (8)
+/* @brief If the USB controller support eUSB PHY */
+#define FSL_FEATURE_USBHS_SUPPORT_EUSBn(x) (0)
 
 /* USBPHY module features */
 

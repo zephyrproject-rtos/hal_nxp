@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MDQLQRM, Rev. 0, Jan. 2018
 **     Version:             rev. 5.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251111
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -41,9 +41,10 @@
 
 /*!
  * @file MIMX8MD7_cm4
- * @version 1.0
- * @date 210525
- * @brief Device specific configuration file for MIMX8MD7_cm4 (implementation file)
+ * @version 5.0
+ * @date 2024-10-29
+ * @brief Device specific configuration file for MIMX8MD7_cm4 (implementation
+ *        file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator

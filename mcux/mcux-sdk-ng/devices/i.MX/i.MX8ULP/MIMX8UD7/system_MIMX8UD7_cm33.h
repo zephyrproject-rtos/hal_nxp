@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMX8ULPRM, Rev. D, December. 2022
 **     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250521
+**     Build:               b251112
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -44,14 +44,16 @@
 
 /*!
  * @file MIMX8UD7_cm33
- * @version 1.0
- * @date 210525
- * @brief Device specific configuration file for MIMX8UD7_cm33 (header file)
+ * @version 6.0
+ * @date 2024-10-29
+ * @brief Device specific configuration file for MIMX8UD7_cm33 (implementation
+ *        file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
  * (PLL) that is part of the microcontroller device.
  */
+
 #ifndef _SYSTEM_MIMX8UD7_cm33_H_
 #define _SYSTEM_MIMX8UD7_cm33_H_                    /**< Symbol preventing repeated inclusion */
 
